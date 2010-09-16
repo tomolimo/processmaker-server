@@ -1,0 +1,97 @@
+{if $printTemplate}
+{* this is the xmlform template *}
+<form id="{$form->id}" name="{$form->id}" action="{$form->action}" method="post">
+<table class="basicTable" width='{$form->width}'>
+  <tr><td valign='top'>
+{if isset($form->title) && $form->title !=='' }
+   <table class="Header" >
+     <tr>
+      <th>{$form->title}</th>
+     </tr>
+   </table>
+{/if}
+   <table class='Record' >
+{foreach from=$form->fields item=field}
+{if ($field->type==='title')}
+     <tr>
+      <td class='FormTitle' colspan="2">{$field->field}</td>
+     </tr>
+{elseif ($field->type==='subtitle')}
+     <tr>
+      <td class='FormSubTitle' colspan="2">{$field->field}</td>
+     </tr>
+{elseif ($field->type==='button') || ($field->type==='submit') || ($field->type==='reset')}
+     <tr>
+      <td class='FormButton' colspan="2">{$field->field}</td>
+     </tr>
+{elseif ($field->type==='grid')}
+     <tr>
+      <td class='FormField' colspan="2">{$field->field}</td>
+     </tr>
+{elseif ($field->type==='javascript')}
+      {$field->field}
+{elseif ($field->type==='phpvariable')}
+{elseif ($field->type==='private')}
+{elseif ($field->type==='')}
+{else}
+     <tr>
+      <td class='FormLabel'>{$field->label}</td>
+      <td class='FormField'>{$field->field}</td>
+     </tr>
+{/if}
+{/foreach}
+   </table>
+  </td></tr>
+</form>
+</table>
+{/if}
+{if $printJSFile}
+var form_{$form->id};
+var i;
+function loadForm_{$form->id}(ajaxServer)
+{literal}{{/literal}
+if (typeof(G_Form)==='undefined') return alert('form.js was not loaded');
+  form_{$form->id}=new G_Form(document.getElementById('{$form->id}'),'{$form->id}');
+  var myForm=form_{$form->id};
+  myForm.ajaxServer=ajaxServer;
+  {foreach from=$form->fields item=field key=name}
+    {if ($field->type==='dropdown')}
+      i = myForm.aElements.length;
+      myForm.aElements[i] = new G_DropDown(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+    {elseif ($field->type==='text')}
+      i = myForm.aElements.length;
+      myForm.aElements[i] = new G_Text(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+    {elseif ($field->type==='percentage')}
+      myForm.aElements[myForm.aElements.length] = new G_Percentage(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+    {elseif ($field->type==='currency')}
+      myForm.aElements[myForm.aElements.length] = new G_Currency(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+    {elseif ($field->type==='date')}
+      myForm.aElements[myForm.aElements.length] = new G_Date(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+    {elseif ($field->type==='grid')}
+      myForm.aElements[myForm.aElements.length] = new G_Grid(myForm, '{$name}');
+      grid_{$field->id}(myForm.aElements[myForm.aElements.length-1]);
+    {/if}
+  {/foreach}
+  {foreach from=$form->fields item=field key=name}
+    {if isset($field->dependentFields) && ($field->dependentFields!='')}
+      {if ($field->type==='dropdown')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {elseif ($field->type==='text')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {elseif ($field->type==='percentage')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {elseif ($field->type==='currency')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {/if}
+    {/if}
+  {/foreach}
+{literal}}{/literal}
+{/if}
+{if $printJavaScript}
+leimnud.event.add(window,'load',function(){literal}{{/literal}loadForm_{$form->id}('{$form->ajaxServer}');{literal}}{/literal});
+{/if}

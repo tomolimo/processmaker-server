@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm width="100%" rowsPerPage="1000">
+
+<Checkbox type="text" colWidth="120" titleAlign="left" align="left" enableHtml="1" onclick="return false;">
+  <en><![CDATA[<span onclick="selectAll();">[SELECT-ALL]</span>]]></en>
+</Checkbox>
+
+<FullName type="text" colWidth="170" titleAlign="left" align="left">
+  <en>Name</en>
+</FullName>
+
+<Email type="text" colWidth="50" titleAlign="left" align="left">
+  <en>E-Mail</en>
+</Email>
+
+<DistinguishedName type="text" colWidth="330" titleAlign="left" align="left">
+  <en>Distinguished Name</en>
+</DistinguishedName>
+
+</dynaForm>  

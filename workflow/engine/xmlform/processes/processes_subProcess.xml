@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="processes_subProcess" width="650px" labelWidth="200px" mode="edit" enableTemplate="1" ajaxSubmit="1" >
+
+<TITLE1 type="title">
+  <en>Sub-Process</en>
+</TITLE1>
+
+<SP_UID type="hidden"/>
+
+<PRO_PARENT type="hidden"/>
+
+<TAS_PARENT type="hidden"/>
+
+<INDEX type="hidden"/>
+
+<SPROCESS_NAME type="text" size="30">
+<en>SubProcess name</en>
+</SPROCESS_NAME>
+
+<TASKS type="dropdown" style="width:350px" sqlConnection="dbarray">
+  SELECT * FROM NewCase
+  <en>Process<option name="">Select a process</option></en>
+</TASKS>
+
+<PROCESSES type="dropdown" style="width:350px;display:none;" sqlConnection="dbarray">
+  SELECT * FROM TheProcesses
+  <en><option name=""/></en>
+</PROCESSES>
+
+<SP_SYNCHRONOUS type="dropdown" defaultvalue="0">
+  <en>Type<option name="">Asynchronous</option><option name="1">Synchronous</option></en>
+</SP_SYNCHRONOUS>
+
+<SUBTITLE1 type="subtitle">
+  <en>Variables Out</en>
+</SUBTITLE1>
+<grid1 type="grid" xmlgrid="processes/processes_subProcess_Out" addrow="1" deleterow="1" mode="edit"/>
+
+<SUBTITLE2 type="subtitle">
+  <en>Variables In</en>
+</SUBTITLE2>
+<grid2 type="grid" xmlgrid="processes/processes_subProcess_In" addrow="1" deleterow="1" mode="edit"/>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<SAVE type="button" onclick="processes_subProcessSave(this.form);">
+  <en>Save</en>
+</SAVE>
+
+<JS type="javascript"><![CDATA[
+
+if(getField('SP_SYNCHRONOUS').value!=1){
+hideRowById('SUBTITLE2')
+hideRowById('grid2');
+}
+leimnud.event.add(getField('SP_SYNCHRONOUS'), 'change', function() {
+  if (getField('SP_SYNCHRONOUS').value==1)
+	  { showRowById('grid1');
+	    showRowById('grid2');
+	    showRowById('SUBTITLE1');
+  	  showRowById('SUBTITLE2');
+	  }
+  else
+  	{ //hideRowById(grid1);
+  	  hideRowById('grid2');
+  	  //hideRowById(SUBTITLE1);
+  	  hideRowById('SUBTITLE2');
+  	}
+ });
+
+var processes_subProcessSave = function(oForm) {
+ //var a = getField('TASKS');
+  var a = getField('SPROCESS_NAME');
+ ans = ajax_post('../processes/processes_checkProperties', oForm, 'POST');
+ if(ans==1){
+  msgBox("@G::LoadTranslation(ID_ASSIGN_RULES)", "alert");
+ return false;
+ }
+ ajax_post(oForm.action, oForm, 'POST');
+  //Pm.data.db.task[getField('INDEX').value].object.elements.label.innerHTML = a.options[a.selectedIndex].text;
+  Pm.data.db.task[getField('INDEX').value].object.elements.label.innerHTML = a.value;
+  Pm.tmp.subProcessPanel.remove();
+};
+
+//var dynaformOnload = function(){
+  /*var grid1 = getField('grid1');
+  var grid2 = getField('grid2');
+  var SUBTITLE1 = getField('SUBTITLE1');
+  var SUBTITLE2 = getField('SUBTITLE2');
+                                         
+  if(getField('SP_SYNCHRONOUS').value==1)
+  	{ showRowById('grid1');
+  	  showRowById('grid2');
+  	  showRowById('SUBTITLE1');
+  	  showRowById('SUBTITLE2');
+  	}
+  else
+  	{ 
+  	  hideRowById('SUBTITLE2');
+  	  hideRowById(grid2);
+  	  
+  	  
+  	}*/
+//};
+
+
+
+var _oVarsPanel_;
+var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
+   if (sProcess == '') {
+     var sAux = getField('PROCESSES').options[getField('TASKS').selectedIndex].value;
+     var aAux = sAux.split('_');
+     sProcess = aAux[0];
+   }
+	_oVarsPanel_ = new leimnud.module.panel();
+	_oVarsPanel_.options = {
+    limit    : true,
+    size     : {w:400,h:600},
+    position : {x:0,y:0,center:true},
+    title    : '',
+    theme    : 'processmaker',
+    statusBar: false,
+    control  : {drag:false,resize:true,close:true},
+    fx       : {opacity:true,rolled:false,modal:true}
+  };
+  _oVarsPanel_.make();
+  _oVarsPanel_.events = {
+    remove:function() {
+      delete _oVarsPanel_;
+    }.extend(this)
+  };
+  _oVarsPanel_.loader.show();
+  oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : sAjaxServer,
+    method: 'POST',
+    args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sNoShowLeyend=1'
+  });
+  oRPC.callback = function(oRPC) {
+    _oVarsPanel_.loader.hide();
+    var scs = oRPC.xmlhttp.responseText.extractScript();
+    _oVarsPanel_.addContent(oRPC.xmlhttp.responseText);
+    scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var insertFormVar = function(sFieldName, sValue) {
+	oAux = document.getElementById(sFieldName);
+	if (oAux.setSelectionRange) {
+	  oAux.value     = '';
+		var rangeStart = oAux.selectionStart;
+    var rangeEnd   = oAux.selectionEnd;
+    var tempStr1   = oAux.value.substring(0,rangeStart);
+    var tempStr2   = oAux.value.substring(rangeEnd);
+    oAux.value     = tempStr1 + sValue + tempStr2;
+	}
+	else {
+	  if (document.selection) {
+	    oAux.focus();
+      document.selection.createRange().text = sValue;
+	  }
+	}
+	_oVarsPanel_.remove();
+};
+
+function cancel(){
+    Pm.tmp.subProcessPanel.remove();
+}
+
+]]></JS>
+</dynaForm> 

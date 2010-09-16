@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="additionalTables/additionalTablesEdit" type="xmlform" width="900" mode="" enableTemplate="1">
+
+<TITLE1 type="title">
+  <en>Table Information</en>
+</TITLE1>
+
+<ADD_TAB_UID type="hidden" />
+
+<ADD_TAB_NAME type="text" size="60" maxlength="64" validate="Field" required="1" mode="view">
+  <en>Table Name</en>
+</ADD_TAB_NAME>
+<!-- renamed text by hidden -->
+<ADD_TAB_CLASS_NAME type="hidden" size="60" maxlength="100" validate="Field" required="1" mode="view">
+  <en>PHP Class Name</en>
+</ADD_TAB_CLASS_NAME>
+
+<ADD_TAB_DESCRIPTION type="textarea" cols="70" rows="5" required="0">
+  <en>Description</en>
+</ADD_TAB_DESCRIPTION>
+
+<TITLE2 type="title">
+  <en>Log Configuration</en>
+</TITLE2>
+
+<ADD_TAB_SDW_LOG_INSERT type="checkbox" defaultValue="on">
+  <en>Save log for insert actions</en>
+</ADD_TAB_SDW_LOG_INSERT>
+
+<ADD_TAB_SDW_LOG_UPDATE type="checkbox" defaultValue="on">
+  <en>Save log for update actions</en>
+</ADD_TAB_SDW_LOG_UPDATE>
+
+<ADD_TAB_SDW_LOG_DELETE type="checkbox" defaultValue="on">
+  <en>Save log for delete actions</en>
+</ADD_TAB_SDW_LOG_DELETE>
+
+<!--<ADD_TAB_SDW_LOG_SELECT type="checkbox" defaultValue="off">
+  <en>Save log for select actions</en>
+</ADD_TAB_SDW_LOG_SELECT>
+
+<ADD_TAB_SDW_MAX_LENGTH type="text" size="5" maxlength="10" required="1" defaultValue="-1">
+  <en>Maximun rows to store (-1 for unlimited)</en>
+</ADD_TAB_SDW_MAX_LENGTH>-->
+
+<ADD_TAB_SDW_AUTO_DELETE type="checkbox" defaultValue="off">
+  <en>Delete related log when table is deleted</en>
+</ADD_TAB_SDW_AUTO_DELETE>
+
+<!--<ADD_TAB_STATUS type="hidden" defaultValue="ACTIVE" />-->
+
+<TITLE3 type="title">
+  <en>Fields</en>
+</TITLE3>
+
+<FIELDS type="grid" xmlgrid="additionalTables/additionalTablesFields2" addrow="1" deleterow="1" mode="edit" />
+
+<btnSave type="button" onclick="verifyData(this.form);">
+  <en>Save</en>
+</btnSave>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<JS type="javascript">
+<![CDATA[
+var changeToUpper = function() {
+  this.value = this.value.toUpperCase();
+};
+
+var onChangeType = function(iRow, bEmpty) {
+  var iRow = iRow | this.name.split('][')[1];
+  var oAux;
+  switch (getGridField('FIELDS', iRow, 'FLD_TYPE').value) {
+    case 'VARCHAR':
+      oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
+      oAux.readOnly = '';
+      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
+      oAux.checked  = false;
+      oAux.disabled = true;
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
+      if (bEmpty) {
+        oAux.checked = false;
+        oAux.disabled = false;
+      }
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
+      if (!getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY').checked) {
+        oAux.disabled = true;
+        oAux.value = '';
+      }*/
+    break;
+    case 'TEXT':
+      oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
+      oAux.value = '';
+      oAux.readOnly = 'readOnly';
+      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
+      oAux.checked  = false;
+      oAux.disabled = true;
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
+      if (bEmpty) {
+        oAux.checked = false;
+        oAux.disabled = true;
+      }
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
+      oAux.disabled = true;
+      oAux.value = '';*/
+    break;
+    case 'DATE':
+      oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
+      oAux.value = '';
+      oAux.readOnly = 'readOnly';
+      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
+      oAux.checked  = false;
+      oAux.disabled = true;
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
+      oAux.checked = false;
+      oAux.disabled = true;
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
+      oAux.disabled = true;
+      oAux.value = '';*/
+    break;
+    case 'INT':
+      oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
+      oAux.readOnly = '';
+      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
+      if (bEmpty) {
+        oAux.checked  = false;
+        oAux.disabled = false;
+      }
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
+      if (bEmpty) {
+        oAux.checked = false;
+        oAux.disabled = false;
+      }
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
+      if (bEmpty) {
+        oAux.disabled = true;
+        oAux.value = '';
+      }*/
+    break;
+    case 'FLOAT':
+      oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
+      oAux.readOnly = '';
+      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
+      oAux.checked  = false;
+      oAux.disabled = true;
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
+      oAux.checked = false;
+      oAux.disabled = true;
+      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
+      oAux.disabled = true;
+      oAux.value = '';*/
+    break;
+  }
+};
+
+var onClickForeignKey = function(iRow) {
+  var iRow = iRow | this.name.split('][')[1];
+  var oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
+  if (getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY').checked) {
+    oAux.disabled = false;
+    oAux.value = '';
+  }
+  else {
+    oAux.disabled = true;
+    oAux.value = '';
+  }
+};
+
+var verifyData = function(oForm) {
+  if (oForm.onsubmit()) {
+    var bContinue = true;
+    var iMessage  = 0;
+    var iRows     = Number_Rows_Grid('FIELDS', 'FLD_UID');
+    var fieldsTmp = [];    
+    var words = '';
+    var aReservedWords = new Array('ADD','ALL','ALTER','ANALYZE','AND','AS','ASC','ASENSITIVE','BEFORE',
+                                   'BETWEEN','BIGINT','BINARY','BLOB','BOTH','BY','CALL','CASCADE','CASE',
+                                   'CHANGE','CHAR','CHARACTER','CHECK','COLLATE','COLUMN','CONDITION',
+                                   'CONSTRAINT','CONTINUE','CONVERT','CREATE','CROSS','CURRENT_DATE',
+                                   'CURRENT_TIME','CURRENT_TIMESTAMP','CURRENT_USER','CURSOR','DATABASE',
+                                   'DATABASES','DAY_HOUR','DAY_MICROSECOND','DAY_MINUTE','DAY_SECOND','DEC',
+                                   'DECIMAL','DECLARE','DEFAULT','DELAYED','DELETE','DESC','DESCRIBE',
+                                   'DETERMINISTIC','DISTINCT','DISTINCTROW','DIV','DOUBLE','DROP','DUAL',
+                                   'EACH','ELSE','ELSEIF','ENCLOSED','ESCAPED','EXISTS','EXIT','EXPLAIN',
+                                   'FALSE','FETCH','FLOAT','FLOAT4','FLOAT8','FOR','FORCE','FOREIGN','FROM',
+                                   'FULLTEXT','GRANT','GROUP','HAVING','HIGH_PRIORITY','HOUR_MICROSECOND',
+                                   'HOUR_MINUTE','HOUR_SECOND','IF','IGNORE','IN','INDEX','INFILE','INNER',
+                                   'INOUT','INSENSITIVE','INSERT','INT','INT1','INT2','INT3','INT4','INT8',
+                                   'INTEGER','INTERVAL','INTO','IS','ITERATE','JOIN','KEY','KEYS','KILL',
+                                   'LEADING','LEAVE','LEFT','LIKE','LIMIT','LINES','LOAD','LOCALTIME',
+                                   'LOCALTIMESTAMP','LOCK','LONG','LONGBLOB','LONGTEXT','LOOP','LOW_PRIORITY',
+                                   'MATCH','MEDIUMBLOB','MEDIUMINT','MEDIUMTEXT','MIDDLEINT','MINUTE_MICROSECOND',
+                                   'MINUTE_SECOND','MOD','MODIFIES','NATURAL','NOT','NO_WRITE_TO_BINLOG','NULL',
+                                   'NUMERIC','ON','OPTIMIZE','OPTION','OPTIONALLY','OR','ORDER','OUT','OUTER',
+                                   'OUTFILE','PRECISION','PRIMARY','PROCEDURE','PURGE','READ','READS','REAL',
+                                   'REFERENCES','REGEXP','RELEASE','RENAME','REPEAT','REPLACE','REQUIRE',
+                                   'RESTRICT','RETURN','REVOKE','RIGHT','RLIKE','SCHEMA','SCHEMAS','SECOND_MICROSECOND',
+                                   'SELECT','SENSITIVE','SEPARATOR','SET','SHOW','SMALLINT','SONAME','SPATIAL',
+                                   'SPECIFIC','SQL','SQLEXCEPTION','SQLSTATE','SQLWARNING','SQL_BIG_RESULT',
+                                   'SQL_CALC_FOUND_ROWS','SQL_SMALL_RESULT','SSL','STARTING','STRAIGHT_JOIN',
+                                   'TABLE','TERMINATED','THEN','TINYBLOB','TINYINT','TINYTEXT','TO','TRAILING',
+                                   'TRIGGER','TRUE','UNDO','UNION','UNIQUE','UNLOCK','UNSIGNED','UPDATE','USAGE',
+                                   'USE','USING','UTC_DATE','UTC_TIME','UTC_TIMESTAMP','VALUES','VARBINARY',
+                                   'VARCHAR','VARCHARACTER','VARYING','WHEN','WHERE','WHILE','WITH','WRITE',
+                                   'XOR','YEAR_MONTH','ZEROFILL','ASENSITIVE','CALL','CONDITION','CONTINUE',
+                                   'CURSOR','DECLARE','DETERMINISTIC','EACH','ELSEIF','EXIT','FETCH','INOUT',
+                                   'INSENSITIVE','ITERATE','LEAVE','LOOP','MODIFIES','OUT','READS','RELEASE',
+                                   'REPEAT','RETURN','SCHEMA','SCHEMAS','SENSITIVE','SPECIFIC','SQL',
+                                   'SQLEXCEPTION','SQLSTATE','SQLWARNING','TRIGGER','UNDO','WHILE');
+    for (var i = 1; i <= iRows; i++) {
+      for(var j = 0; j < aReservedWords.length; j++ ) {
+        if(getGridField('FIELDS', i, 'FLD_NAME').value == aReservedWords[j]) {
+          words = words +" "+getGridField('FIELDS', i, 'FLD_NAME').value;
+        }
+     }
+   }
+   if (words != ''){
+     new leimnud.module.app.alert().make({
+        label:G_STRINGS.ID_FIELDS_RESERVED_WORDS + ' ' + words
+     });
+     words='';
+     bContinue = false;
+   }
+    for (var i = 1; i <= iRows; i++) {
+      if (getGridField('FIELDS', i, 'FLD_NAME').value == '') {
+        bContinue = false;
+        iMessage  = 1;
+      }
+      if (bContinue) {
+        switch (getGridField('FIELDS', i, 'FLD_TYPE').value) {
+          case 'VARCHAR':
+            if (getGridField('FIELDS', i, 'FLD_SIZE').value == '') {
+              bContinue = false;
+              iMessage  = 2;
+            }
+          break;
+          case 'TEXT':
+            if (getGridField('FIELDS', i, 'FLD_KEY').checked ) {
+              bContinue = false;
+              iMessage  = 4;
+            }
+          break;
+          case 'DATE':
+          break;
+          case 'INT':
+            if (getGridField('FIELDS', i, 'FLD_SIZE').value == '') {
+              bContinue = false;
+              iMessage  = 2;
+            }
+          break;
+          case 'FLOAT':
+            if (getGridField('FIELDS', i, 'FLD_SIZE').value == '') {
+              bContinue = false;
+              iMessage  = 2;
+            }
+          break;
+        }
+      }
+      /*if (bContinue) {
+        if (getGridField('FIELDS', i, 'FLD_FOREIGN_KEY').checked) {
+          if (getGridField('FIELDS', i, 'FLD_FOREIGN_KEY_TABLE').value == '') {
+            bContinue = false;
+            iMessage  = 3;
+          }
+        }
+      }*/
+      // Check duplicate fields 
+      if(bContinue) {
+        if(!(getGridField('FIELDS', i, 'FLD_NAME').value in fieldsTmp)) {
+            fieldsTmp[getGridField('FIELDS', i, 'FLD_NAME').value]++; 
+        } else {
+            bContinue = false;
+            iMessage  = 5;
+            sDuplicate = getGridField('FIELDS', i, 'FLD_NAME').value;
+        }
+      }
+      if(bContinue){
+      	 var sFldName = getGridField('FIELDS', i, 'FLD_NAME').value;
+      	 var sFirstCharFldName = sFldName.charAt(0);
+      	 pattern =/[A-Za-z_]/; 
+ 	     if(pattern.test(sFirstCharFldName) == false) {
+            bContinue = false;
+            iMessage  = 6;
+            sInvalidField = getGridField('FIELDS', i, 'FLD_NAME').value;
+	     }
+      }
+    }
+    var bContinueKey = false;
+    for (var i = 1; i <= iRows; i++) {
+      if (getGridField('FIELDS', i, 'FLD_KEY').checked) {
+        bContinueKey = true;
+      }
+    }
+    if (bContinue && bContinueKey) {
+      oForm.submit();
+    }
+    else {
+      if (!bContinue) {
+        switch (iMessage) {
+          case 1:
+            new leimnud.module.app.alert().make({
+              label:"@G::LoadTranslation(ID_FIELD_NAME_REQUIRED)"
+            });
+          break;
+          case 2:
+            new leimnud.module.app.alert().make({
+              label:"@G::LoadTranslation(ID_FIELD_SIZE_REQUIRED)"
+            });
+          break;
+          case 3:
+            new leimnud.module.app.alert().make({
+              label:G_STRINGS.ID_FIELD_FOREIGN_TABLE
+            });
+          break;
+          case 4:
+            new leimnud.module.app.alert().make({
+              label:"@G::LoadTranslation(ID_FIELD_CANNOT_BE_PRIMARY_KEY)"
+            });
+          break;
+          case 5:
+            new leimnud.module.app.alert().make({
+              label:"@G::LoadTranslation(ID_FIELD_DUPLICATE)" +  " " + sDuplicate
+            });
+          break;
+          case 6:
+            new leimnud.module.app.alert().make({
+              label:"@G::LoadTranslation(ID_FIELD_INVALID)" +  " " + sInvalidField
+            });
+          break;
+        }
+      }
+      else {
+        new leimnud.module.app.alert().make({
+          label:"@G::LoadTranslation(ID_FIELD_KEY_TABLE)"
+        });
+      }
+    }
+  }
+};
+
+var changeValues = function(iRow, sType) {
+  iRow = parseInt(iRow);
+
+  switch (sType) {
+    case 'UP':
+      if (iRow == 1) {
+        return;
+      }
+      var iOtherRow = iRow - 1;
+    break;
+    case 'DOWN':
+      if (iRow == Number_Rows_Grid('FIELDS', 'FLD_UID')) {
+        return;
+      }
+      var iOtherRow = iRow + 1;
+    break;
+  }
+
+  var FLD_UID         = getGridField('FIELDS', iOtherRow, 'FLD_UID').value;
+  var FLD_NAME        = getGridField('FIELDS', iOtherRow, 'FLD_NAME').value;
+  var FLD_DESCRIPTION = getGridField('FIELDS', iOtherRow, 'FLD_DESCRIPTION').value;
+  var FLD_TYPE        = getGridField('FIELDS', iOtherRow, 'FLD_TYPE').value;
+  var FLD_SIZE        = getGridField('FIELDS', iOtherRow, 'FLD_SIZE').value;
+  var FLD_NULL        = getGridField('FIELDS', iOtherRow, 'FLD_NULL').checked;
+  var FLD_KEY         = getGridField('FIELDS', iOtherRow, 'FLD_KEY').checked;
+
+  getGridField('FIELDS', iOtherRow, 'FLD_UID').value         = getGridField('FIELDS', iRow, 'FLD_UID').value;
+  getGridField('FIELDS', iOtherRow, 'FLD_NAME').value        = getGridField('FIELDS', iRow, 'FLD_NAME').value;
+  getGridField('FIELDS', iOtherRow, 'FLD_DESCRIPTION').value = getGridField('FIELDS', iRow, 'FLD_DESCRIPTION').value;
+  getGridField('FIELDS', iOtherRow, 'FLD_TYPE').value        = getGridField('FIELDS', iRow, 'FLD_TYPE').value;
+  getGridField('FIELDS', iOtherRow, 'FLD_SIZE').value        = getGridField('FIELDS', iRow, 'FLD_SIZE').value;
+  getGridField('FIELDS', iOtherRow, 'FLD_NULL').checked      = getGridField('FIELDS', iRow, 'FLD_NULL').checked;
+  getGridField('FIELDS', iOtherRow, 'FLD_KEY').checked       = getGridField('FIELDS', iRow, 'FLD_KEY').checked;
+
+  getGridField('FIELDS', iRow, 'FLD_UID').value         = FLD_UID;
+  getGridField('FIELDS', iRow, 'FLD_NAME').value        = FLD_NAME;
+  getGridField('FIELDS', iRow, 'FLD_DESCRIPTION').value = FLD_DESCRIPTION;
+  getGridField('FIELDS', iRow, 'FLD_TYPE').value        = FLD_TYPE;
+  getGridField('FIELDS', iRow, 'FLD_SIZE').value        = FLD_SIZE;
+  getGridField('FIELDS', iRow, 'FLD_NULL').checked      = FLD_NULL;
+  getGridField('FIELDS', iRow, 'FLD_KEY').checked       = FLD_KEY;
+
+  onChangeType(iRow, false);
+  onChangeType(iOtherRow, false);
+};
+
+var dynaformOnload = function() {
+  //Adding events for the grid fields
+  var iRows = Number_Rows_Grid('FIELDS', 'FLD_UID');
+  var oAux;
+  for (var i = 1; i <= iRows; i++) {
+    oAux = getGridField('FIELDS', i, 'FLD_NAME');
+    leimnud.event.add(oAux, 'change', {method:changeToUpper,instance:oAux,event:true});
+    oAux = getGridField('FIELDS', i, 'FLD_TYPE');
+    leimnud.event.add(oAux, 'change', {method:onChangeType,instance:oAux,event:true});
+    //oAux = getGridField('FIELDS', i, 'FLD_FOREIGN_KEY');
+    //leimnud.event.add(oAux, 'click', {method:onClickForeignKey,instance:oAux,event:true});
+    onChangeType(i, false);
+    //onClickForeignKey(i, false);
+  }
+  getObject('FIELDS').onaddrow = function(iRow) {
+    oAux = getGridField('FIELDS', iRow, 'FLD_NAME');
+    leimnud.event.add(oAux, 'change', {method:changeToUpper,instance:oAux,event:true});
+    oAux = getGridField('FIELDS', iRow, 'FLD_TYPE');
+    leimnud.event.add(oAux, 'change', {method:onChangeType,instance:oAux,event:true});
+    //oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
+    //leimnud.event.add(oAux, 'click', {method:onClickForeignKey,instance:oAux,event:true});
+    onChangeType(iRow, true);
+    //onClickForeignKey(iRow, true);
+
+    document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[8].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[8].innerHTML.replace('[1]', '[' + iRow + ']');
+    document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[9].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[9].innerHTML.replace('[1]', '[' + iRow + ']');
+  };
+  //
+};
+
+function cancel(){
+    window.location = 'additionalTablesList';
+}
+]]>
+
+</JS>
+
+</dynaForm>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+
+<MNU_ADD type="link" value="" link="#" onclick="newObjectPermission(@@PRO_UID);return false;" colAlign="left" colWidth="45">
+  <en>New</en>
+<es>Nuevo</es></MNU_ADD>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript"><![CDATA[
+
+var oPanel;
+var newObjectPermission = function(PRO_UID) {
+  oPanel = new leimnud.module.panel();
+  oPanel.options = {
+  	size	:{w:500,h:330},
+  	position:{x:0,y:0,center:true},
+  	title	:'',
+  	theme	:'processmaker',
+  	statusBar:false,
+  	control	:{resize:false,roll:false},
+  	fx	:{modal:true,opacity:true,blinkToFront:true,fadeIn:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+  oPanel.make();
+  oPanel.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+  	url : 'processes_Ajax',
+  	args: 'action=newObjectPermission&data=' + {pro_uid:PRO_UID}.toJSONString()
+  });
+  oRPC.callback = function(rpc){
+  	oPanel.loader.hide();
+  	var scs = rpc.xmlhttp.responseText.extractScript();
+  	oPanel.addContent(rpc.xmlhttp.responseText);
+  	scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var editObjectPermission = function(OP_UID) {
+  // we also need the PRO_UID variable from the private field
+  var PRO_UID = @@PRO_UID;
+  oPanel = new leimnud.module.panel();
+  oPanel.options = {
+  	size	:{w:500,h:300},
+  	position:{x:0,y:0,center:true},
+  	title	:'',
+  	theme	:'processmaker',
+  	statusBar:false,
+  	control	:{resize:false,roll:false},
+  	fx	:{modal:true,opacity:true,blinkToFront:true,fadeIn:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+  oPanel.make();
+  oPanel.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+  	url : 'processes_Ajax',
+  	args: 'action=editObjectPermission&data=' + {op_uid:OP_UID,pro_uid:PRO_UID}.toJSONString()
+  });
+  oRPC.callback = function(rpc){
+  	oPanel.loader.hide();
+  	var scs = rpc.xmlhttp.responseText.extractScript();
+  	oPanel.addContent(rpc.xmlhttp.responseText);
+  	scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var saveObjectPermission = function(form) {
+  /*if (getField('GROUP_USER').value == '') {
+    new leimnud.module.app.alert().make({
+      label:G_STRINGS.ID_PLEASE_SELECT_OTHER_OBJECT_TYPE
+    });
+    return;
+  }*/
+  /*switch (getField('OP_OBJ_TYPE').value) {
+    case 'DYNAFORM':
+      if (getField('DYNAFORMS').value == '') {
+        new leimnud.module.app.alert().make({
+          label:G_STRINGS.ID_PLEASE_SELECT_OTHER_OBJECT_TYPE
+        });
+        return;
+      }
+    break;
+    case 'INPUT':
+      if (getField('INPUTS').value == '') {
+        new leimnud.module.app.alert().make({
+          label:G_STRINGS.ID_PLEASE_SELECT_OTHER_OBJECT_TYPE
+        });
+        return;
+      }
+    break;
+    case 'OUTPUT':
+      if (getField('OUTPUTS').value == '') {
+        new leimnud.module.app.alert().make({
+          label:G_STRINGS.ID_PLEASE_SELECT_OTHER_OBJECT_TYPE
+        });
+        return;
+      }
+    break;
+  }*/
+  ajax_post(form.action, form, 'POST');
+  oPanel.remove();
+  @#PAGED_TABLE_ID.refresh();
+};
+
+var deleteObjectPermission = function(sURL) {
+  new leimnud.module.app.confirm().make({
+    label:G_STRINGS.ID_MSG_CONFIRM_DELETE_OBJECT_PERMISSION,
+    action:function() {
+      ajax_function(sURL, '', '', 'POST');
+      @#PAGED_TABLE_ID.refresh();
+    }.extend(this)
+  });
+};
+
+]]></JS>
+
+</dynaForm> 

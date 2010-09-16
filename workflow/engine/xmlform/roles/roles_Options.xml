@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value="" link="javascript:newRol();" onclick="" colAlign="left" colWidth="35">
+  <en>New</en>
+<es>Nuevo</es><pt>Novo</pt></MNU_ADD>
+
+<PAGED_TABLE_ID type="private"/>
+<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+
+<SEARCH_FILTER_FORM type="private"/>
+
+
+<CONFIRM type="private"/>
+
+<JS type="javascript"><![CDATA[
+
+
+PROCESS_REQUEST_FILE = '../roles/roles_Ajax';
+
+function newRol() {
+	popupWindow('', '../roles/roles_Ajax?request=newRole', 350, 225);
+}
+
+
+function saveNewRole()
+{
+	code = $('form[ROL_CODE]').value;
+	name = $('form[ROL_NAME]').value;
+	if(code == '') {
+		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG1});
+		return false;
+	} else if(name == '') {
+		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG3});
+		return false;
+	}
+	
+	var uri = 'request=verifyNewRole&code='+code;
+	var ajax = AJAX();
+	ajax.open("POST", PROCESS_REQUEST_FILE, true);
+	ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");		
+	ajax.onreadystatechange = function() { 
+		if(ajax.readyState == 4) {
+			
+			if(eval(ajax.responseText.trim())){
+		  		try{
+					parent = $('form[ROL_PARENT]').value;
+				}catch(e){}
+				code = $('form[ROL_CODE]').value;
+				status = $('form[ROL_STATUS]').value;
+			    var uri = 'request=saveNewRole&code='+code+'&parent='+parent+'&status='+status+'&name='+name;	
+		  
+			  	var oRPC = new leimnud.module.rpc.xmlhttp({
+			  		url : PROCESS_REQUEST_FILE,
+			  		args: uri
+			  	});
+				
+			  	oRPC.callback = function(rpc){
+				  	var oRPC = new leimnud.module.rpc.xmlhttp({
+					    url   : PROCESS_REQUEST_FILE,
+					    async : false,
+					    method: 'POST',
+					    args  : 'request=show&r='+Math.random()
+				  	});
+					oRPC.make();
+					$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;	
+				}.extend(this);
+				oRPC.make();
+				currentPopupWindow.remove();
+		  	}
+		  	else{
+			 	new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG2});
+				return false;
+		  	}
+		} 
+	}
+	ajax.send(uri);
+
+}
+
+
+function editRole(ROL_UID)
+{  	
+	if(ROL_UID!='00000000000000000000000000000002')
+	 {	 
+    	var uri = 'request=editRole&ROL_UID='+ROL_UID;	
+    	popupWindow('', '../roles/roles_Ajax?'+uri, 350, 225);
+   }
+   else
+   {  
+   		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG});			
+   }		
+}
+
+function updateRole(ROL_UID) {
+  
+  	code = $('form[ROL_CODE]').value;
+	name = $('form[ROL_NAME]').value;
+	if(code == '') {
+		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG1});
+		return false;
+	} else if(name == '') {
+		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG3});
+		return false;
+	}
+	
+  	try{
+	parent = $('form[ROL_PARENT]').value;
+	}catch(e){}
+	
+	status = $('form[ROL_STATUS]').value;
+	
+    var uri = 'request=updateRole&code='+code+'&parent='+parent+'&status='+status+'&rol_uid='+ROL_UID+'&name='+name;		
+  
+  	var oRPC = new leimnud.module.rpc.xmlhttp({
+  		url : PROCESS_REQUEST_FILE,
+  		args: uri
+  	});
+	
+  	oRPC.callback = function(rpc){
+	  	var oRPC = new leimnud.module.rpc.xmlhttp({
+		    url   : PROCESS_REQUEST_FILE,
+		    async : false,
+		    method: 'POST',
+		    args  : 'request=show'
+	  	});
+		oRPC.make();
+		$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;
+		currentPopupWindow.remove();
+	}.extend(this);
+	oRPC.make();
+};
+
+function deleteRole(ROL_UID) {		
+	 		var uri = 'request=canDeleteRole&ROL_UID='+ROL_UID;
+			var ajax = AJAX();
+			ajax.open("POST", PROCESS_REQUEST_FILE, true);
+			ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");		
+			ajax.onreadystatechange = function() { 
+				if(ajax.readyState == 4) {
+					
+					if(eval(ajax.responseText.trim())){	
+					  new leimnud.module.app.confirm().make({
+					  	label:G_STRINGS.ID_REMOVE_ROLE,
+					  	action:function() {
+					  		var uri = 'request=deleteRole&ROL_UID='+ROL_UID;	
+					  
+						  	var oRPC = new leimnud.module.rpc.xmlhttp({
+						  		url : PROCESS_REQUEST_FILE,
+						  		args: uri
+						  	});
+							
+						  	oRPC.callback = function(rpc){
+							  	var oRPC = new leimnud.module.rpc.xmlhttp({
+								    url   : PROCESS_REQUEST_FILE,
+								    async : false,
+								    method: 'POST',
+								    args  : 'request=show'
+							  	});
+								oRPC.make();
+								$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;
+							}.extend(this);
+							oRPC.make();
+							
+					  	}.extend(this)
+					  });
+					} 
+					else
+					{
+						new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_CAN_NOT_DELETE});
+						return false;
+					}
+			 	} 
+			}
+			ajax.send(uri);
+};
+
+function usersIntoRole(ROL_UID)
+{
+	var uri = 'request=usersIntoRole&ROL_UID='+ROL_UID;
+	popupWindow('', '../roles/roles_Ajax?'+uri, 500, 450);
+}
+
+function deleteUserRole(ROL_UID, USR_UID){
+	
+	new leimnud.module.app.confirm().make({
+    	label:G_STRINGS.ID_MSG_CONFIRM,
+    	action:function(){
+	        var oRPC = new leimnud.module.rpc.xmlhttp({
+				url   : PROCESS_REQUEST_FILE,
+				async : false,
+				method: 'POST',
+				args  : 'request=deleteUserRole&ROL_UID=' + ROL_UID + '&USR_UID=' + USR_UID
+	        });
+	        oRPC.make();
+	        currentPopupWindow.clearContent();
+			currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+		}.extend(this)
+    });
+};
+
+function showUsers(ROL_UID)
+{
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : PROCESS_REQUEST_FILE,
+		async : false,
+		method: 'POST',
+		args  : 'request=showUsers&ROL_UID=' + ROL_UID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);	
+}
+
+function assignUserToRole(ROL_UID, USR_UID)
+{
+	
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : PROCESS_REQUEST_FILE,
+		async : false,
+		method: 'POST',
+		args  : 'request=assignUserToRole&ROL_UID=' + ROL_UID + '&USR_UID=' + USR_UID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);	
+}
+
+function viewPermitions(ROL_UID)
+{
+	var uri = 'request=viewPermitions&ROL_UID='+ROL_UID;
+	popupWindow('', '../roles/roles_Ajax?'+uri, 500, 450);	
+}
+
+function showPermissions(ROL_UID)
+{
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : PROCESS_REQUEST_FILE,
+		async : false,
+		method: 'POST',
+		args  : 'request=showPermissions&ROL_UID=' + ROL_UID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+}
+
+function assignPermissionToRole(ROL_UID, PER_UID)
+{
+	
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : PROCESS_REQUEST_FILE,
+		async : false,
+		method: 'POST',
+		args  : 'request=assignPermissionToRole&ROL_UID=' + ROL_UID + '&PER_UID=' + PER_UID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);	
+}
+
+function deletePermissionRole(ROL_UID, PER_UID){
+	
+	new leimnud.module.app.confirm().make({
+    	label:G_STRINGS.ID_MSG_CONFIRM,
+    	action:function(){
+	        var oRPC = new leimnud.module.rpc.xmlhttp({
+				url   : PROCESS_REQUEST_FILE,
+				async : false,
+				method: 'POST',
+				args  : 'request=deletePermissionRole&ROL_UID=' + ROL_UID + '&PER_UID=' + PER_UID
+	        });
+	        oRPC.make();
+	        currentPopupWindow.clearContent();
+			currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+		}.extend(this)
+    });
+};
+
+function backPermissions(ROL_UID)
+{
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : PROCESS_REQUEST_FILE,
+		async : false,
+		method: 'POST',
+		args  : 'request=viewPermitions&ROL_UID=' + ROL_UID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+}
+
+function backUsers(ROL_UID)
+{
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : PROCESS_REQUEST_FILE,
+		async : false,
+		method: 'POST',
+		args  : 'request=usersIntoRole&ROL_UID=' + ROL_UID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+}
+  
+  
+  
+function AJAX() 
+{
+	try	{
+		xmlhttp = new XMLHttpRequest();
+	} 
+	catch(generic_error) {
+		try {
+			xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (microsoft_old_error) {
+			try {
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (microsoft_error) {
+				xmlhttp = false;
+			}
+		}
+	}
+	return xmlhttp;
+}
+  
+String.prototype.trim = function() 
+{
+	return this.replace(/^\s+|\s+get/g,"");
+}
+
+function $(id){
+	return document.getElementById(id);
+}
+
+]]></JS>
+
+</dynaForm>

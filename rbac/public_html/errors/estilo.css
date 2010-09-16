@@ -1,0 +1,78 @@
+body {
+	COLOR: #004474;
+	FONT-FAMILY: Verdana,  Arial, Helvetica, sans-serif; 
+	FONT-SIZE: 11px;
+	font-weight: normal;
+	margin: 0px;
+	background-color: #efeff0;
+	}
+
+a:link, a:visited { 
+	color: #000000; 
+	text-decoration: none; 
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 12px; 
+	font-style: normal; 
+	font-weight: none;
+	background-color: none; }
+a:hover {
+	color: #000000; 
+	text-decoration: underline; 
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 12px; 
+	font-style: normal; 
+	font-weight: none;
+	background-color: none; 
+	}
+
+INPUT {
+
+background-color: #FFFFCC;
+
+border: #FFCC00 1px solid;
+
+color: #333333;
+
+font-family: verdana;
+
+font-size: 8pt
+
+} 
+
+
+
+.altButtonFormat {
+
+background-color: #FFCC00;
+
+font-family: verdana;
+
+border: #FFCC00 1px solid;
+
+font-weight: bold;
+
+font-size: 10px;
+
+color: #333333
+} 
+
+.mxbOnlineTextBlue { 
+font-family: Arial, Helvetica, sans-serif; 
+font-size: 16px;
+ font-style: normal; 
+font-weight: bold; 
+color: #004474; 
+text-decoration: none 
+}
+
+
+.langLink {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; font-weight: normal; color: #003366; text-decoration: none}
+.navOff { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: normal; color: #003366; text-decoration: none }
+.navOn { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: normal; color: #6699CC; text-decoration: none }
+.news { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: normal; color: #336699; text-decoration: none }
+.newsArchive { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: normal; color: #669933; text-decoration: none }
+.mainBackgr {  background-attachment: scroll; background-image: url(../images/mainBackgr.gif); background-repeat: no-repeat; background-position: right top}
+.mxbOnlineText { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-style: normal; font-weight: bold; color: #FFFFFF; text-decoration: none }
+.mxbOnlineLink { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; font-weight: normal; color: #FFCC00; text-decoration: none }
+.mainCopy {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: normal; color: #333333}
+.copyright {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; font-weight: normal; color: #999999}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dynaForm name="fields_Toolbar" version="1.0" type="toolbar" align="left" width="894px">
+
+<separator1 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+
+<saveDyna type="toolButton" onclick="dynaformEditor.save()" file="images/dynamicForm/save.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>save</en>
+</saveDyna>
+
+<separators type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<saveasDyna type="toolButton" onclick="dynaformEditor.save_as()" file="images/dynamicForm/save_as.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>save as</en>
+</saveasDyna>
+
+<separator2 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<!--.-->
+<text type="toolButton" onclick="fieldsAdd('text')" file="images/dynamicForm/text.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>text</en>
+</text>
+<currency type="toolButton" onclick="fieldsAdd('currency')" file="images/dynamicForm/currency.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>currency</en>
+</currency>
+<percentage type="toolButton" onclick="fieldsAdd('percentage')" file="images/dynamicForm/percentage.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>percentage</en>
+</percentage>
+<!--<password type="toolButton" onclick="fieldsAdd('password')" file="images/dynamicForm/password.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>password</en>
+</password>-->
+<textarea type="toolButton" onclick="fieldsAdd('textarea')" file="images/dynamicForm/textarea.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>textarea</en>
+</textarea>
+<!--.-->
+<separator5 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<dropdown type="toolButton" onclick="fieldsAdd('dropdown')" file="images/dynamicForm/dropdown.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>dropdown</en>
+</dropdown>
+<yesno type="toolButton" onclick="fieldsAdd('yesno')" file="images/dynamicForm/yes_no.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>yesno</en>
+</yesno>
+<!--.-->
+<!--<separator6 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<checkbox type="toolButton" onclick="fieldsAdd('checkbox')" file="images/dynamicForm/checkbox.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>checkbox</en>
+</checkbox>-->
+<!--.-->
+<separator7 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<date type="toolButton" onclick="fieldsAdd('date')" file="images/dynamicForm/date.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>date</en>
+</date>
+<hidden type="toolButton" onclick="fieldsAdd('hidden')" file="images/dynamicForm/hidden.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>hidden</en>
+</hidden>
+<link type="toolButton" onclick="fieldsAdd('link')" file="images/dynamicForm/link.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+  <en>link</en>
+</link>
+</dynaForm>  

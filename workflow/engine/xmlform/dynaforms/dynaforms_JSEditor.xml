@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm
+  name="dynaforms_JSEditor"
+  type="xmlform"
+  width="98%"
+  border="0"
+>
+<!--<toolbar type="toolbar" xmlfile="dynaforms/dynaforms_Toolbar"/>-->
+
+<JS_TITLE type="title" enablehtml="0" align="center" style="display:none">
+<en>There is no javascript code</en>
+</JS_TITLE>
+
+<JS_LIST withoutLabel="1" type="dropdown" sqlconnection="XMLDB">
+SELECT XMLNODE_NAME AS UID, XMLNODE_NAME AS NAME FROM dynaForm WHERE TYPE = "javascript"
+  <en>Section</en>
+</JS_LIST>
+
+<JS withoutLabel="1" type="textarea" rows="25" cols="60" sqlconnection="XMLDB" style="width:100%">
+  <en>Code</en>
+</JS>
+
+<PME_RESIZE_JS type="javascript">
+getField('JS_TITLE').style.font ="9pt tahoma";
+function resizeJSEditor(){
+  try{
+    getField('JS','dynaforms_JSEditor').style.height=
+    document.getElementById('dynaformEditor[4]').parentNode.clientHeight-32-32;
+   }catch(e){
+   }
+}
+resizeJSEditor();
+var JSCodePress=false;
+function startJSCodePress()
+{
+  var code=getField("JS").value;
+  getField("JS").className="codepress javascript linenumbers-on";
+  JSCodePress=new CodePress(getField("JS"));
+  getField("JS").parentNode.insertBefore(JSCodePress,getField("JS"));
+  JSCodePress.edit(code,'javascript');
+  getField("JS_LIST").onchange=function(){
+  	dynaformEditor.changeJavascriptCode();
+	};
+}
+</PME_RESIZE_JS>
+
+</dynaForm>  

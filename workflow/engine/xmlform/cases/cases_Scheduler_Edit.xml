@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="cases_schedulerNew" width="500" enabletemplate="1" mode="edit">
+
+<menuUser type="xmlmenu" xmlfile="cases/cases_Scheduler_NewOptions">
+  <en></en>
+</menuUser>
+<GENERAL_INF type="title" enablehtml="1">
+<en>General Information</en>
+</GENERAL_INF>
+<PROPERTIES_INF type="subtitle" enablehtml="1">
+<en>Please insert a valid processmaker user name and password.</en>
+</PROPERTIES_INF>
+<SCH_UID type="hidden" >
+<en></en>
+</SCH_UID>
+<PREV_SCH_END_DATE type="hidden" >
+<en></en>
+</PREV_SCH_END_DATE>
+<PREV_SCH_START_DATE type="hidden" >
+<en></en>
+</PREV_SCH_START_DATE>
+<PREV_SCH_START_TIME type="hidden" >
+<en></en>
+</PREV_SCH_START_TIME>
+<PRO_UID_TMP type="hidden" required="1"  style="width:300px" dependentfields="TAS_UID" mode="edit">
+</PRO_UID_TMP>
+
+<PHP_START_DATE type="phpVariable" />
+<PHP_END_DATE type="phpVariable" />
+
+<SCH_USER_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" >
+<en>User Name</en>
+</SCH_USER_NAME>
+<SCH_USER_PASSWORD type="password" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" defaultValue="">
+<en>Password</en>
+</SCH_USER_PASSWORD>
+<SCH_USER_UID type="hidden" dependentfields="PRO_UID"></SCH_USER_UID>
+<TEST_CONNECTION type="button" onclick="case_userSchedulerValidate(getField('SCH_USER_NAME').value,getField('SCH_USER_PASSWORD').value);">
+  <en>Test User</en>
+</TEST_CONNECTION>
+<EDIT_USER type="button" onclick="resetForm();">
+  <en>Edit User</en>
+</EDIT_USER>
+
+<PERFORM_TASK type="subtitle" enablehtml="1">
+<en>Properties </en>
+</PERFORM_TASK>
+
+
+<SCH_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
+<en>Description</en>
+</SCH_NAME>
+<PRO_UID type="dropdown" required="1"  style="width:300px" options="Array" dependentfields="TAS_UID">
+<![CDATA[	SELECT DISTINCT(TASK.PRO_UID) AS PRO_UID, CONTENT.CON_VALUE as PRO_TITLE FROM TASK
+  LEFT JOIN PROCESS ON (PROCESS.PRO_UID=TASK.PRO_UID)
+  LEFT JOIN TASK_USER ON (TASK.TAS_UID=TASK_USER.TAS_UID)
+  LEFT JOIN CONTENT ON (PROCESS.PRO_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='PRO_TITLE')
+WHERE USR_UID = '@#SCH_USER_UID']]>
+<en>Process </en>
+</PRO_UID>
+<TAS_UID type="dropdown" required="1"  style="width:300px" options="Array"  >
+<![CDATA[	SELECT DISTINCT A.TAS_UID, B.CON_VALUE AS TAS_TITLE 
+FROM TASK A INNER JOIN CONTENT B ON A.TAS_UID = B.CON_ID AND B.CON_CATEGORY='TAS_TITLE' 
+WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
+<en>Task </en>
+</TAS_UID>
+
+<!--<SCH_OPTION type="dropdown" required="1" readonly="0" savelabel="0" mode="view" options="Array">
+<en>Perform this task
+<option name="0">-Select-</option>
+<option name="1">Daily</option>
+<option name="2">Weekly</option>
+<option name="3">Monthly</option>
+<option name="4">One time only</option>
+</en>
+</SCH_OPTION>
+-->
+<SCH_OPTION type="hidden" required="1" readonly="0" savelabel="0" mode="edit"></SCH_OPTION>
+
+<SCH_OPTION_VIEW type="text" readonly="1">
+    <en>Perform this task</en>
+</SCH_OPTION_VIEW>
+
+<SELECT_TIME_DAY type="subtitle" enablehtml="1">
+<en>Select the time and day you want this task to start.</en>
+</SELECT_TIME_DAY>
+
+<SCH_START_TIME type="text" maxlength="5" validate="Any" required="1" readonly="0" size="5"  mode="edit" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">
+<en>Execution time</en>
+</SCH_START_TIME>
+
+<SELECT_DATE type="subtitle" enablehtml="1">
+<en>Select date</en>
+</SELECT_DATE>
+
+<SCH_START_DATE type="date" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+<en>Start date</en>
+</SCH_START_DATE>
+
+<SELECT_1 type="subtitle" enablehtml="1">
+<en> Daily</en>
+</SELECT_1> 
+<!--
+<SCH_DAYS_PERFORM_TASK type="radiogroup" required="0" defaultValue="1" mode="edit" options="Array">
+<en>Perform this task 
+<option name="1">Every Day</option>
+<option name="2">Weekdays</option>
+<option name="3">Every</option>
+</en>
+</SCH_DAYS_PERFORM_TASK>-->
+<SCH_DAYS_PERFORM_TASK type="hidden" defaultValue="1" value="1" required="0" mode="edit" options="Array">
+</SCH_DAYS_PERFORM_TASK>
+<!--<SCH_DAYS_PERFORM_TASK_OPT_3 type="text" maxlength="3" validate="Int" required="0" readonly="0" defaultvalue="1" size="3" mode="edit">
+<en>Days</en>
+</SCH_DAYS_PERFORM_TASK_OPT_3>-->
+
+<SELECT_2 type="subtitle" enablehtml="1">
+<en> Weekly</en>
+</SELECT_2>
+
+<SCH_EVERY_DAYS type="text" maxlength="2" validate="Int" required="0" readonly="0" size="2" mode="edit">
+<en>Every</en>
+</SCH_EVERY_DAYS>
+
+<SCH_WEEK_DAYS type="checkgroup" required="0" mode="edit" options="Array" COLS="2" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
+<en>Select the day(s) of the week below 
+		<option name="1">Monday</option>
+		<option name="2">Tuesday</option>
+		<option name="3">Wednesday</option>
+		<option name="4">Thursday</option> </en>
+</SCH_WEEK_DAYS>
+
+<SCH_WEEK_DAYS_2 type="checkgroup" required="0" mode="edit" options="Array" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
+<en> 
+		<option name="5">Friday</option>
+		<option name="6">Saturday</option>
+		<option name="7">Sunday</option></en>
+</SCH_WEEK_DAYS_2>
+
+<SELECT_3 type="subtitle" enablehtml="1">
+<en> Monthly</en>
+</SELECT_3>
+
+<SCH_START_DAY type="radiogroup" required="0" mode="edit" options="Array">
+<en>Day <option name="1">Day</option>
+<option name="2">The</option>
+</en>
+</SCH_START_DAY>
+<SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Any" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
+<en/>
+</SCH_START_DAY_OPT_1>
+<SCH_START_DAY_OPT_2_WEEKS type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array" dependentfields="" defaultvalue="" hint="" sqlconnection="">
+<en>
+<option name="1">First</option>
+<option name="2">Second</option>
+<option name="3">Third</option>
+<option name="4">Fourth</option>
+<option name="5">Last</option>
+</en>
+</SCH_START_DAY_OPT_2_WEEKS>
+<SCH_START_DAY_OPT_2_DAYS_WEEK type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
+<en>
+<option name="1">Monday</option>
+<option name="2">Tuesday</option>
+<option name="3">Wednesday</option>
+<option name="4">Thursday</option>
+<option name="5">Friday</option>
+<option name="6">Saturday</option>
+<option name="7">Sunday</option>
+</en>
+</SCH_START_DAY_OPT_2_DAYS_WEEK>
+
+<SCH_MONTHS type="checkgroup" mode="edit" options="Array">
+<en>Of the month(s) 
+<option name="1">Jan</option>
+<option name="2">Feb</option>
+<option name="3">Mar</option>
+<option name="4">Apr</option>
+</en>
+</SCH_MONTHS>
+
+<SCH_MONTHS_2 type="checkgroup" mode="edit" options="Array">
+<en>
+<option name="5">May</option>
+<option name="6">Jun</option>
+<option name="7">Jul</option>
+<option name="8">Aug</option>
+</en>
+</SCH_MONTHS_2>
+
+<SCH_MONTHS_3 type="checkgroup" mode="edit" options="Array">
+<en>
+<option name="9">Sep</option>
+<option name="10">Oct</option>
+<option name="11">Nov</option>
+<option name="12">Dec</option>
+</en>
+</SCH_MONTHS_3>
+
+
+<!-- Advanced Options  //-->
+<ADVANCED_4 type="subtitle" enablehtml="1">
+<en>Advanced Options</en>
+</ADVANCED_4>
+<!--
+<SCH_START_DATE type="date" relativedate="1" beforedate="0m" afterdate="1y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+<en>Start Date</en>
+</SCH_START_DATE>
+//-->
+<SCH_END_DATE_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
+<en>End Date</en>
+</SCH_END_DATE_CHK>
+<SCH_END_DATE type="date" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit"/>
+<SCH_REPEAT_TASK_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
+<en>Repeat Task</en>
+</SCH_REPEAT_TASK_CHK>
+<SCH_REPEAT_EVERY type="text" maxlength="4" validate="Int" required="0" readonly="0" size="4" mode="edit">
+<en>Every</en>
+</SCH_REPEAT_EVERY>
+
+<SCH_ADVANCED type="hidden" >
+<en></en>
+</SCH_ADVANCED>
+
+<SCH_REPEAT_EVERY_OPT type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
+<en> <option name="1">Minutes</option>
+<option name="2">Hours</option>
+</en>
+</SCH_REPEAT_EVERY_OPT>
+
+<!--   
+<SCH_REPEAT_UNTIL type="text" maxlength="5" validate="Any" required="0" readonly="0" size="5"  mode="edit" mask="##:##" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">
+<en>Until Hours/Minutes(HH:MM)</en>
+</SCH_REPEAT_UNTIL>
+
+<SCH_REPEAT_STOP_IF_RUNNING type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
+<en>If the task is still running, stop it at this time</en>
+</SCH_REPEAT_STOP_IF_RUNNING>
+//-->
+
+<UPDATE type="submit" onClick="if(validateSchedulerFields()) {return true;} else {return false;}">
+<en>Update</en>
+</UPDATE>
+
+<SHOW_HIDE_JS type="javascript"><![CDATA[
+
+// hideAll();
+// hideProperties();
+document.getElementById('form[EDIT_USER]').style.display='none';
+switch (getField('SCH_OPTION').value){
+    case '1':
+    getField('SCH_OPTION_VIEW').value = 'Daily';
+    break;
+    case '2':
+    getField('SCH_OPTION_VIEW').value = 'Weekly';
+    break;
+    case '3':
+    getField('SCH_OPTION_VIEW').value = 'Monthly';
+    break;
+    case '4':
+    getField('SCH_OPTION_VIEW').value = 'One Time Only';
+    break;
+}
+
+showProperties();
+document.getElementById('processLabel').innerHTML = document.getElementById('form[PRO_UID]')[document.getElementById('form[PRO_UID]').selectedIndex].innerHTML;
+;
+//hideAll();
+/*
+if (getField('SCH_ADVANCED').value=='false'){
+    contractSubtitle('ADVANCED_4');
+    document.getElementById('checkAdvanced').checked=false;
+}
+*/
+
+function hideProperties(){
+        //hiddeRow('EDIT_USER');
+        // whenever a user is logged then the following section must be enabled
+        contractSubtitle('PERFORM_TASK');
+        // end of enabling
+
+        // whenever a user is logged then the following 3 subtitles must be enabled
+        document.getElementById('form[EDIT_USER]').style.display='none';
+        document.getElementById('form[PERFORM_TASK]').style.display='none';
+        document.getElementById('form[SELECT_TIME_DAY]').style.display='none';
+        // end of enabling
+}
+
+function showProperties(){
+    expandSubtitle('PERFORM_TASK');
+    document.getElementById('form[TEST_CONNECTION]').style.display='none';
+    document.getElementById('form[SCH_USER_NAME]').readOnly=true;
+    document.getElementById('form[SCH_USER_PASSWORD]').readOnly=true;
+    document.getElementById('form[EDIT_USER]').style.display='';
+    document.getElementById('form[PERFORM_TASK]').style.display='';
+    document.getElementById('form[SELECT_TIME_DAY]').style.display='';
+
+}
+
+
+
+var opt = getField('SCH_OPTION').value;
+showSelection(opt);
+disableAdvanced();
+getField('UPDATE').disabled=false;
+
+/*
+if (getField('SCH_END_DATE').value!=''){
+    getField('SCH_END_DATE_CHK').checked = true;
+    enable(getField('SCH_END_DATE'));
+}
+
+
+if (getField('SCH_REPEAT_EVERY').value!=''){
+    getField('SCH_REPEAT_TASK_CHK').checked = true;
+    enable(getField('SCH_REPEAT_EVERY'));
+    enable(getField('SCH_REPEAT_EVERY_OPT'));
+}
+*/
+function disableAdvanced(){
+	//disable(getField('SCH_END_DATE'));
+
+	disable(getField('SCH_REPEAT_EVERY'));		
+	disable(getField('SCH_REPEAT_EVERY_OPT'));		
+	// disable(getField('SCH_REPEAT_UNTIL'));		
+	// disable(getField('SCH_REPEAT_STOP_IF_RUNNING'));
+	getField('UPDATE').disabled=true;
+		
+	document.getElementById('form[SELECT_DATE]').style.display='none';
+	document.getElementById('form[SELECT_1]').style.display='none';
+	document.getElementById('form[SELECT_2]').style.display='none';
+	document.getElementById('form[SELECT_3]').style.display='none';
+	
+}
+
+function hideAll() {
+	contractSubtitle('SELECT_TIME_DAY');
+	contractSubtitle('SELECT_DATE');
+	contractSubtitle('SELECT_1');
+	contractSubtitle('SELECT_2');
+	contractSubtitle('SELECT_3');
+	//contractSubtitle('ADVANCED_4');
+
+}
+
+function showSelection(opt) {
+	if (opt!=0) {
+		expandSubtitle('SELECT_TIME_DAY');
+		getField('UPDATE').disabled=false;	
+	} else {
+		contractSubtitle('SELECT_TIME_DAY');
+		getField('UPDATE').disabled=true;	
+	}
+	switch(opt){
+		case '0' : 	hideAll(); 
+                                break;
+		case '1' :	expandSubtitle('SELECT_DATE');
+                                expandSubtitle('SELECT_1');
+                                contractSubtitle('SELECT_2');
+                                contractSubtitle('SELECT_3');
+                                document.getElementById('endDateTable').style.display='';
+                                // SCH_START_DATE
+                                break;
+		case '2' : 	contractSubtitle('SELECT_DATE');
+                                contractSubtitle('SELECT_1');
+                                expandSubtitle('SELECT_2');
+                                contractSubtitle('SELECT_3');
+                                hideRow('SCH_EVERY_DAYS');
+                                document.getElementById('endDateTable').style.display='';
+                                break;
+		case '3' : 	contractSubtitle('SELECT_DATE');
+                                contractSubtitle('SELECT_1');
+                                contractSubtitle('SELECT_2');
+                                expandSubtitle('SELECT_3');
+                                document.getElementById('endDateTable').style.display='';
+                                if (getField('SCH_START_DAY][1').checked){
+                                    getField('SCH_START_DAY_OPT_1').disabled=false;
+                                    getField('SCH_START_DAY_OPT_1').style.display="";
+                                    getField('SCH_START_DAY_OPT_2_WEEKS').disabled=true;
+                                    getField('SCH_START_DAY_OPT_2_WEEKS').style.display="none";
+                                    getField('SCH_START_DAY_OPT_2_DAYS_WEEK').disabled=true;
+                                    getField('SCH_START_DAY_OPT_2_DAYS_WEEK').style.display="none";
+                                } else {
+                                    getField('SCH_START_DAY_OPT_1').disabled=true;
+                                    getField('SCH_START_DAY_OPT_1').style.display="none";
+                                    getField('SCH_START_DAY_OPT_2_WEEKS').disabled=false;
+                                    getField('SCH_START_DAY_OPT_2_WEEKS').style.display="";
+                                    getField('SCH_START_DAY_OPT_2_DAYS_WEEK').disabled=false;
+                                    getField('SCH_START_DAY_OPT_2_DAYS_WEEK').style.display="";
+                                }
+                                break;
+		case '4' : 	expandSubtitle('SELECT_DATE');
+                                contractSubtitle('SELECT_1');
+                                contractSubtitle('SELECT_2');
+                                contractSubtitle('SELECT_3');
+                                document.getElementById('endDateTable').style.display='none';
+                                break;
+	
+	}
+
+}
+
+leimnud.event.add(getField('SCH_OPTION'), 'change', function() {
+		var opt = getField('SCH_OPTION').value;
+		showSelection(opt);
+		
+});
+
+leimnud.event.add(getField('SCH_START_DAY][1'), 'click', function() {
+		getField('SCH_START_DAY_OPT_1').disabled=false;
+		getField('SCH_START_DAY_OPT_1').style.display="";
+		getField('SCH_START_DAY_OPT_2_WEEKS').disabled=true;
+                getField('SCH_START_DAY_OPT_2_WEEKS').style.display="none";
+		getField('SCH_START_DAY_OPT_2_DAYS_WEEK').disabled=true;
+		getField('SCH_START_DAY_OPT_2_DAYS_WEEK').style.display="none";
+});
+leimnud.event.add(getField('SCH_START_DAY][2'), 'click', function() {
+		getField('SCH_START_DAY_OPT_1').disabled=true;
+		getField('SCH_START_DAY_OPT_1').style.display="none";
+		getField('SCH_START_DAY_OPT_2_WEEKS').disabled=false;
+		getField('SCH_START_DAY_OPT_2_WEEKS').style.display="";
+		getField('SCH_START_DAY_OPT_2_DAYS_WEEK').disabled=false;
+		getField('SCH_START_DAY_OPT_2_DAYS_WEEK').style.display="";
+});
+
+leimnud.event.add(getField('SCH_DAYS_PERFORM_TASK][1'), 'change', function() {
+		getField('SCH_DAYS_PERFORM_TASK_OPT_3').disabled=true;
+});
+leimnud.event.add(getField('SCH_DAYS_PERFORM_TASK][2'), 'change', function() {
+		getField('SCH_DAYS_PERFORM_TASK_OPT_3').disabled=true;
+});
+leimnud.event.add(getField('SCH_DAYS_PERFORM_TASK][3'), 'change', function() {
+		getField('SCH_DAYS_PERFORM_TASK_OPT_3').disabled=false;
+});
+
+
+leimnud.event.add(getField('SCH_DAYS_PERFORM_TASK_OPT_3'), 'change', function() {
+		days = getField('SCH_DAYS_PERFORM_TASK_OPT_3').value;
+		if(!(days>=1 && days<=365)){
+			msgBox('Days must be between 1 and 365', 'alert'); // confirm, info
+			getField('SCH_DAYS_PERFORM_TASK_OPT_3').value = '1';
+		}
+});
+
+leimnud.event.add(getField('SCH_EVERY_DAYS'), 'change', function() {
+		weeks = getField('SCH_EVERY_DAYS').value;
+		if(!(weeks>=1 && weeks<=52) ) {
+			msgBox('Weeks must be between 1 and 52', 'alert');
+			getField('SCH_EVERY_DAYS').value = ''; 
+		}
+});
+
+leimnud.event.add(getField('SCH_START_DAY_OPT_1'), 'change', function() {
+		days = getField('SCH_START_DAY_OPT_1').value;
+		if(!(days>=1 && days<=31) ) {
+			msgBox('The days must be between 1 and 31', 'alert');
+			getField('SCH_START_DAY_OPT_1').value = '1'; 
+		}
+});
+
+
+
+// for advanced
+
+leimnud.event.add(getField('SCH_END_DATE_CHK'), 'click', function() {
+		if(getField('SCH_END_DATE_CHK').checked){
+                    enable(getField('SCH_END_DATE'));
+                }
+		else {
+                    document.getElementById('form[SCH_END_DATE]').value = '';
+                    document.getElementById('form[SCH_END_DATE][div]').innerHTML = '';
+                    disable(getField('SCH_END_DATE'));
+                }
+
+});
+
+leimnud.event.add(getField('SCH_REPEAT_TASK_CHK'), 'click', function() {
+	if(getField('SCH_REPEAT_TASK_CHK').checked){
+		enable(getField('SCH_REPEAT_EVERY'));		
+		enable(getField('SCH_REPEAT_EVERY_OPT'));		
+		// enable(getField('SCH_REPEAT_UNTIL'));		
+		// enable(getField('SCH_REPEAT_STOP_IF_RUNNING'));		
+	}	else {
+		disable(getField('SCH_REPEAT_EVERY'));		
+		disable(getField('SCH_REPEAT_EVERY_OPT'));		
+		// disable(getField('SCH_REPEAT_UNTIL'));		
+		// disable(getField('SCH_REPEAT_STOP_IF_RUNNING'));		
+	}
+
+});
+
+
+leimnud.event.add(getField('SCH_START_TIME'), 'change', function() {
+	hours = getField('SCH_START_TIME').value;
+    answer = hours;
+    var parties = answer.split(':');
+
+    if(parties[0]>23){
+        msgBox('The time can not be increased to 23:59', 'alert');
+        getField('SCH_REPEAT_UNTIL').value='';
+        getField('SCH_REPEAT_UNTIL').focus();
+    } 
+    if(parties[1]>59){ 
+        msgBox('The mininutos can not be greater than about 59', 'alert');
+        getField('SCH_REPEAT_UNTIL').value='';
+        getField('SCH_REPEAT_UNTIL').focus();
+    }
+});
+
+
+
+leimnud.event.add(getField('SCH_REPEAT_UNTIL'), 'change', function() {
+	hours = getField('SCH_REPEAT_UNTIL').value;
+    answer = hours;
+    var parties = answer.split(':');
+
+    if(parties[0]>23){
+        msgBox('The time can not be increased to 23:59', 'alert');
+        getField('SCH_REPEAT_UNTIL').value='';
+        getField('SCH_REPEAT_UNTIL').focus();
+    } 
+    if(parties[1]>59){ 
+        msgBox('The mininutos can not be greater than about 59', 'alert');
+        getField('SCH_REPEAT_UNTIL').value='';
+        getField('SCH_REPEAT_UNTIL').focus();
+    }
+});
+/*
+ * @function case_userSchedulerValidate
+ * @author gustavo cruz gustavo[at]colsoa[dot]com
+ * @desc This function makes an Ajax call in order to validate if a user is registered in the system.
+ * @return void
+ */
+function case_userSchedulerValidate(username, password) {
+    //G.alert(username);
+    //G.alert(password);
+    var user_uid;
+
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../cases/cases_SchedulerValidateUser',
+             async : true,
+             method: 'POST',
+             args  : "USERNAME="+username+"&PASSWORD="+password
+    });
+
+    oRPC.callback = function(rpc){
+       //msgBox(rpc.xmlhttp.responseText,"alert");
+       getField('SCH_USER_UID').value = rpc.xmlhttp.responseText;
+       user_uid = rpc.xmlhttp.responseText;
+       //alert(user_uid);
+
+       var oRPCProcess = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../cases/cases_SchedulerGetProcesses',
+             async : true,
+             method: 'POST',
+             args  : "USR_UID="+user_uid
+       });
+
+       oRPCProcess.callback = function(rpc){
+          document.getElementById("processListDropdown").innerHTML = rpc.xmlhttp.responseText;
+          if (getField('PRO_UID')!=null){
+            var process_uid = getField('PRO_UID').value;
+            loadTasksDropdown(process_uid,user_uid);
+            document.getElementById('form[UPDATE]').disabled=false;
+            showProperties();
+          } else {
+             msgBox("The User login data seems to be invalid.","alert");
+          }
+       }.extend(this);
+
+       oRPCProcess.make();
+
+       /*  if(rpc.xmlhttp.responseText>=1){
+           //getField('SEARCH').disabled = false;
+           msgBox("User successfully logged","alert");
+           getField('SCH_USR_UID').value = rpc.xmlhttp.responseText;
+         } else {
+           //getField('SEARCH').disabled = true;
+           msgBox(rpc.xmlhttp.responseText,"alert");
+         }
+       */
+      }.extend(this);
+    oRPC.make();
+
+
+}
+
+function resetForm(){
+document.getElementById('form[UPDATE]').disabled=true;
+document.getElementById('form[SCH_USER_NAME]').readOnly=false;
+document.getElementById('form[SCH_USER_PASSWORD]').readOnly=false;
+document.getElementById('form[SCH_USER_PASSWORD]').value='';
+document.getElementById('form[TEST_CONNECTION]').style.display='';
+document.getElementById('form[EDIT_USER]').style.display='none';
+//hideAll();
+//hideProperties();
+}
+/**
+ * @desc   Load Tasks Dropdown
+ * @author gustavo cruz gustavo[at]colosa[dot]com
+ * @desc This function loads the Task Dropdown filtered by process.
+ * @return void
+ */
+function loadTasksDropdown(process,user_uid){
+    //alert(process);
+    var oRPCTasks = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../cases/cases_SchedulerGetTasks',
+             async : true,
+             method: 'POST',
+             args  : "USR_UID="+user_uid+"&PRO_UID="+process
+    });
+
+    oRPCTasks.callback = function(rpc){
+       document.getElementById("taskListDropdown").innerHTML = rpc.xmlhttp.responseText;
+    }.extend(this);
+    oRPCTasks.make();
+}
+/*
+ * @function collapseAdvancedOption
+ * @author gustavo cruz gustavo[at]colsoa[dot]com
+ * @desc This function collapses the Advanced Options Fields.
+ * @return void
+ */
+
+function collapseAdvancedOptions(){
+   var flag = document.getElementById('EditLogAdvancedOptions').innerHTML;
+   if (flag=='visible'){
+        //contractSubtitle('ADVANCED_4');
+        document.getElementById('EditLogAdvancedOptions').innerHTML = 'hidden';
+        document.getElementById('checkAdvanced').checked = false;
+        document.getElementById('form[SCH_END_DATE_CHK]').checked = false;
+        document.getElementById('form[SCH_END_DATE]').value = '';
+        document.getElementById('form[SCH_END_DATE][div]').innerHTML = '';
+        document.getElementById('form[SCH_REPEAT_TASK_CHK]').checked = false;
+
+
+   } else {
+        //expandSubtitle('ADVANCED_4');
+        document.getElementById('checkAdvanced').checked = true;
+        document.getElementById('EditLogAdvancedOptions').innerHTML = 'visible';
+   }
+}
+
+/**
+ * @function validateSchedulerFields
+ * @author gustavo cruz gustavo[at]colsoa[dot]com
+ * @desc This function validates the special cases for the scheduler data fields.
+ * @return true/false boolean
+ */
+
+function validateSchedulerFields(){
+
+var validFields = true;
+var requiredFields = '';
+var badFormatFields = '';
+var startDate = document.getElementById('form[SCH_START_DATE]').value;
+var endDate = document.getElementById('form[SCH_END_DATE]').value;
+
+startDate = startDate.split("-");
+endDate = endDate.split("-");
+startDate = new Date(startDate[0],startDate[1],startDate[2]);
+endDate   = new Date(endDate[0],endDate[1],endDate[2]);
+
+    if (document.getElementById('form[SCH_START_DATE]').value==''){
+        requiredFields = requiredFields + 'Start Date,';
+        validFields = false;
+    } else {
+        if (document.getElementById('form[SCH_END_DATE]').value!='')
+            if (startDate>endDate){
+                badFormatFields = badFormatFields + 'Start Date can\'t be greater than End Date';
+                validFields = false;
+            }
+    }
+
+    if (document.getElementById('form[SCH_START_TIME]').value==''){
+        requiredFields = requiredFields + 'Start Time,';
+        validFields = false;
+    }
+    // check if the field time is compliant with the regular expression
+    // for time format hh:mm
+    var regExpString = "([0-1]\\d|2[0-3]):([0-5]\\d)";
+    var timeRegexp = new RegExp(regExpString);
+    if (!timeRegexp.test(document.getElementById('form[SCH_START_TIME]').value)){
+        msgBox('The time format is invalid','alert');
+        return false;
+    }
+    switch(document.getElementById('form[SCH_OPTION]').value){
+        // daily
+        case '1':
+            
+//                if(document.getElementById('form[SCH_DAYS_PERFORM_TASK][1]').checked==true||document.getElementById('form[SCH_DAYS_PERFORM_TASK][2]').checked==true||document.getElementById('form[SCH_DAYS_PERFORM_TASK][3]').checked==true){
+                if(document.getElementById('form[SCH_DAYS_PERFORM_TASK]').value!=''){
+                    validFields = true;
+                } else {
+                    requiredFields = requiredFields + 'Weekdays,';
+                    validFields = false;
+                }
+            
+        break;
+        // weekly
+        case '2':
+            if (document.getElementById('form[SCH_EVERY_DAYS]').value==''){
+                requiredFields = requiredFields + 'Number of Weeks,';
+                validFields = false;
+            } else {
+                for (week=1;week<=4;week++){
+                    weekIdOne = 'form[SCH_WEEK_DAYS]['+week+']';
+                    if (document.getElementById(weekIdOne).checked==true){
+                        validFields = true;
+                        break;
+                    } else {
+                        validFields = false;
+                    }
+                }
+                if (!validFields){
+                    for (week=1;week<=3;week++){
+                        weekIdTwo = 'form[SCH_WEEK_DAYS_2]['+(week+4)+']';
+                        if (document.getElementById(weekIdTwo).checked==true){
+                            validFields = true;
+                            break;
+                        } else {
+                            validFields = false;
+                        }
+                    }
+                }
+                if (!validFields){
+                    requiredFields = requiredFields + 'Weeks,';
+                    validFields = false;
+                }
+            }
+        break;
+        //monthly
+        case '3':
+            if (document.getElementById('form[SCH_START_DAY][1]').checked==true||document.getElementById('form[SCH_START_DAY][2]').checked==true){
+                for (month=1;month<=4;month++){
+                    monthIdOne = 'form[SCH_MONTHS]['+month+']';
+                    monthIdTwo = 'form[SCH_MONTHS_2]['+(month+4)+']';
+                    monthIdThree = 'form[SCH_MONTHS_3]['+(month+8)+']';
+
+                    if (document.getElementById(monthIdOne).checked==true||document.getElementById(monthIdTwo).checked==true||document.getElementById(monthIdThree).checked==true){
+                        validFields = true;
+                        break;
+                    } else {
+                        validFields = false;
+                    }
+                }
+                if (!validFields){
+                    requiredFields = requiredFields + 'Months,';
+                    validFields = false;
+                }
+            } else {
+                requiredFields = requiredFields + 'Start Day,';
+                validFields = false;
+            }
+
+
+        break;
+        //run once
+        case '4':
+            
+                validFields = true;
+            
+        break;
+        default:
+            validFields = false;
+        break;
+    }
+    if (requiredFields!='') {
+        var message = "The fields "+requiredFields+" can\'t be empty";
+        msgBox(message, 'alert');
+        return false;
+    } else {
+        if (badFormatFields!=''){
+            var message =  badFormatFields;
+            msgBox(message, 'alert');
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
+]]></SHOW_HIDE_JS>
+</dynaForm>

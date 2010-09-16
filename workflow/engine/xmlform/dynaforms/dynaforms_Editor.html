@@ -1,0 +1,28 @@
+<div id="div[panelEditor]">
+<table class="basicTable" width='100%'>
+  <tr><td valign='top'>
+   <table class='Record' cellspacing="0" cellpadding="0">
+     <tr style="display:none;">
+      <td class='FormTitle'>
+        {$form.title}
+      </td>
+     </tr>
+     <tr>
+      <td class='FormField' colspan="2" style="display:none">
+        {$form.toolbar}
+      </td>
+     </tr>
+     <tr>
+      <td class=''>
+        <div id="editorPreview" align="center"></div>
+      </td>
+     </tr>
+   </table>
+  </td></tr>
+</table>
+<form id="{$_form->id}" name="{$_form->name}" action="" method="post" encType="multipart/form-data">
+</form>
+<script type="text/javascript">
+{$form.SCRIPT}
+</script>
+</div>

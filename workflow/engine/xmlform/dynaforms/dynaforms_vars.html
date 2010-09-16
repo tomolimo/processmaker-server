@@ -1,0 +1,27 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="height:{$form_height};" >
+	  <table width="99%">
+      <tr>
+        <td valign='top'>
+        <input type="hidden" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" />
+        <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value='{$form_objectRequiredFields}' />
+           <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$vars}</td>
+              <td class='FormFieldContent' >{$form.vars}</td>
+              </tr>
+                                 </table>
+        </td>
+      </tr>
+    </table>
+    		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+  </form>
+
+
+<script type="text/javascript">
+	try {literal}{{/literal} dynaformSetFocus();}catch(e){literal}{{/literal}}
+</script>
+

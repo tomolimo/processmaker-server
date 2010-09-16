@@ -1,0 +1,408 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href='/skins/wf5/style.css' />
+  {$header}
+</head>
+<body >
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+	<td><table width='100%' cellpadding=3 cellspacing=0 border=0><tr>
+	<th background="http://tasks.colosa.net/style/dp-grey-theme/images/titlegrad.jpg" class="banner" align="left"><strong>
+	  <a style='color: white' href='http://tasks.colosa.net/'>COLOSA Tasks</a>	</strong></th>
+	<th align="right" width='50'><a href='http://www.dotproject.net/' ><img src="http://tasks.colosa.net/style/dp-grey-theme/images/dp_icon.gif" border=0></a></th>
+	</tr></table></td>
+</tr>
+<tr>
+	<td class="nav" align="left">
+	<table width="100%" cellpadding="3" cellspacing="0" width="100%">
+	<tr class="nav">
+		<td>
+		<a href="?m=companies">Companies</a> | <a href="?m=projects">Projects</a> | <a href="?m=tasks">Tasks</a> | <a href="?m=calendar">Calendar</a> | <a href="?m=files">Files</a> | <a href="?m=contacts">Contacts</a> | <a href="?m=forums">Forums</a> | <a href="?m=ticketsmith">Tickets</a> | <a href="?m=history">History</a> | <a href="?m=risks">Risks^</a>
+		</td>
+		<form name="frm_new" method=GET action="./index.php">
+        <td nowrap="nowrap" align="right">
+<select name="m" style="font-size:10px" onChange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if(mod) f.submit();">
+	<option value="" selected="selected">- New Item -</option>
+	<option value="contacts">Contact</option>
+	<option value="calendar">Event</option>
+	<option value="files">File</option>
+</select>
+        <input type="hidden" name="a" value="addedit" />
+		</td>
+		</form>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td>
+		<table cellspacing="0" cellpadding="3" border="0" width="100%">
+		<tr>
+			<td width="100%">Welcome Fernando Ontiveros</td>
+			<td nowrap="nowrap">
+				<a href="#" onClick="javascript:window.open('?m=help&dialog=1&hid=', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')">Help</a> |
+				<a href="./index.php?m=admin&a=viewuser&user_id=13">My Info</a> |
+				<b><a href="./index.php?m=tasks&a=todo">Todo</a></b> |
+				<a href="./index.php?m=calendar&a=day_view&date=20070419">Today</a> |
+				<a href="./index.php?logout=-1">Logout</a>
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+
+<table width="100%" cellspacing="0" cellpadding="4" border="0">
+<tr>
+<td valign="top" align="left" width="98%">
+
+<table width="100%" border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td width="42"><img src='http://tasks.colosa.net/modules/calendar/images/myevo-appointments.png' align='center' border='0'></td>
+<td align="left" width="100%" nowrap="nowrap"><h1>Day View</h1></td>
+<form action="?m=calendar&a=addedit&date=20070419" method="post">
+<td align="right" nowrap="nowrap">
+	<input type="submit" class="button" value="new event">
+</td>
+</form><td nowrap="nowrap" width="20" align="right">
+	<a href="#calendar.day_view" onClick="javascript:window.open('?m=help&dialog=1&hid=calendar.day_view', 'contexthelp', 'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes')" title="Help">
+		<img src='http://tasks.colosa.net/images/icons/stock_help-16.png' align='center' width='16' height='16' alt='Help' border='0'>
+	</a>
+</td>
+</tr>
+</table>
+<table width="100%" cellspacing="0" cellpadding="4">
+                </table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
+<table width="100%" border="0" cellpadding="1" cellspacing="0">
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="tbl">
+
+
+	<td colspan="9" align="center" height="30">
+	</td>
+	<td colspan="3" align="center">
+
+	</td>
+</table>
+<table>
+<tr>
+	<td>Key:</td>
+	<td>&nbsp; &nbsp;</td>
+	<td bgcolor="#ffffff">&nbsp; &nbsp;</td>
+	<td>=Future Task</td>
+	<td>&nbsp; &nbsp;</td>
+	<td bgcolor="#CCECAC">&nbsp; &nbsp;</td>
+	<td>=Started and on time</td>
+	<td bgcolor="#FFDD88">&nbsp; &nbsp;</td>
+	<td>=Should have started</td>
+	<td>&nbsp; &nbsp;</td>
+	<td bgcolor="#CC6666">&nbsp; &nbsp;</td>
+	<td>=Overdue</td>
+</tr>
+</table>
+</td></tr></table>        </td>
+        <td valign="top" width="175">
+<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" >
+<table border="0" cellspacing="0" cellpadding="3" width="100%" class="minititle">
+	<tr>
+	<th width="99%" align="center"><a href="index.php?m=calendar&date=20070301">March 2007</th>
+	</tr>
+</table><table border="0" cellspacing="1" cellpadding="2" width="100%" class="minical">
+
+<tr>
+		<th width="14%">Sun</th>
+		<th width="14%">Mon</th>
+		<th width="14%">Tue</th>
+		<th width="14%">Wed</th>
+		<th width="14%">Thu</th>
+		<th width="14%">Fri</th>
+		<th width="14%">Sat</th>
+</tr>
+<tr>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070301','03/01/2007')" class="day">1</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070302','03/02/2007')" class="day">2</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070303','03/03/2007')" class="weekend">3</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070304','03/04/2007')" class="weekend">4</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070305','03/05/2007')" class="day">5</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070306','03/06/2007')" class="day">6</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070307','03/07/2007')" class="day">7</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070308','03/08/2007')" class="day">8</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070309','03/09/2007')" class="day">9</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070310','03/10/2007')" class="weekend">10</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070311','03/11/2007')" class="weekend">11</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070312','03/12/2007')" class="day">12</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070313','03/13/2007')" class="day">13</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070314','03/14/2007')" class="day">14</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070315','03/15/2007')" class="day">15</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070316','03/16/2007')" class="day">16</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070317','03/17/2007')" class="weekend">17</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070318','03/18/2007')" class="weekend">18</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070319','03/19/2007')" class="day">19</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070320','03/20/2007')" class="day">20</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070321','03/21/2007')" class="day">21</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070322','03/22/2007')" class="day">22</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070323','03/23/2007')" class="day">23</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070324','03/24/2007')" class="weekend">24</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070325','03/25/2007')" class="weekend">25</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070326','03/26/2007')" class="day">26</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070327','03/27/2007')" class="day">27</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070328','03/28/2007')" class="day">28</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070329','03/29/2007')" class="day">29</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070330','03/30/2007')" class="day">30</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070331','03/31/2007')" class="weekend">31</a>
+	</td>
+</tr></table>
+</td></tr></table><hr noshade size="1"><table cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" >
+<table border="0" cellspacing="0" cellpadding="3" width="100%" class="minititle">
+	<tr>
+	<th width="99%" align="center"><a href="index.php?m=calendar&date=20070401">April 2007</th>
+	</tr>
+</table><table border="0" cellspacing="1" cellpadding="2" width="100%" class="minical">
+
+<tr>
+		<th width="14%">Sun</th>
+		<th width="14%">Mon</th>
+		<th width="14%">Tue</th>
+		<th width="14%">Wed</th>
+		<th width="14%">Thu</th>
+		<th width="14%">Fri</th>
+		<th width="14%">Sat</th>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070401','04/01/2007')" class="weekend">1</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070402','04/02/2007')" class="day">2</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070403','04/03/2007')" class="day">3</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070404','04/04/2007')" class="day">4</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070405','04/05/2007')" class="day">5</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070406','04/06/2007')" class="day">6</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070407','04/07/2007')" class="weekend">7</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070408','04/08/2007')" class="weekend">8</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070409','04/09/2007')" class="day">9</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070410','04/10/2007')" class="day">10</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070411','04/11/2007')" class="day">11</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070412','04/12/2007')" class="day">12</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070413','04/13/2007')" class="day">13</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070414','04/14/2007')" class="weekend">14</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070415','04/15/2007')" class="weekend">15</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070416','04/16/2007')" class="day">16</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070417','04/17/2007')" class="day">17</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070418','04/18/2007')" class="day">18</a>
+	</td>
+	<td class="today"><a href="javascript:clickDay('20070419','04/19/2007')" class="today">19</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070420','04/20/2007')" class="day">20</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070421','04/21/2007')" class="weekend">21</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070422','04/22/2007')" class="weekend">22</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070423','04/23/2007')" class="day">23</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070424','04/24/2007')" class="day">24</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070425','04/25/2007')" class="day">25</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070426','04/26/2007')" class="day">26</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070427','04/27/2007')" class="day">27</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070428','04/28/2007')" class="weekend">28</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070429','04/29/2007')" class="weekend">29</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070430','04/30/2007')" class="day">30</a>
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+</tr></table>
+</td></tr></table><hr noshade size="1"><table cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" >
+<table border="0" cellspacing="0" cellpadding="3" width="100%" class="minititle">
+	<tr>
+	<th width="99%" align="center"><a href="index.php?m=calendar&date=20070501">May 2007</th>
+	</tr>
+</table><table border="0" cellspacing="1" cellpadding="2" width="100%" class="minical">
+
+<tr>
+		<th width="14%">Sun</th>
+		<th width="14%">Mon</th>
+		<th width="14%">Tue</th>
+		<th width="14%">Wed</th>
+		<th width="14%">Thu</th>
+		<th width="14%">Fri</th>
+		<th width="14%">Sat</th>
+</tr>
+<tr>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070501','05/01/2007')" class="day">1</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070502','05/02/2007')" class="day">2</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070503','05/03/2007')" class="day">3</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070504','05/04/2007')" class="day">4</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070505','05/05/2007')" class="weekend">5</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070506','05/06/2007')" class="weekend">6</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070507','05/07/2007')" class="day">7</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070508','05/08/2007')" class="day">8</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070509','05/09/2007')" class="day">9</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070510','05/10/2007')" class="day">10</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070511','05/11/2007')" class="day">11</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070512','05/12/2007')" class="weekend">12</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070513','05/13/2007')" class="weekend">13</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070514','05/14/2007')" class="day">14</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070515','05/15/2007')" class="day">15</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070516','05/16/2007')" class="day">16</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070517','05/17/2007')" class="day">17</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070518','05/18/2007')" class="day">18</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070519','05/19/2007')" class="weekend">19</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070520','05/20/2007')" class="weekend">20</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070521','05/21/2007')" class="day">21</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070522','05/22/2007')" class="day">22</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070523','05/23/2007')" class="day">23</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070524','05/24/2007')" class="day">24</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070525','05/25/2007')" class="day">25</a>
+	</td>
+	<td class="weekend"><a href="javascript:clickDay('20070526','05/26/2007')" class="weekend">26</a>
+	</td>
+</tr>
+<tr>
+	<td class="weekend"><a href="javascript:clickDay('20070527','05/27/2007')" class="weekend">27</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070528','05/28/2007')" class="day">28</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070529','05/29/2007')" class="day">29</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070530','05/30/2007')" class="day">30</a>
+	</td>
+	<td class="day"><a href="javascript:clickDay('20070531','05/31/2007')" class="day">31</a>
+	</td>
+	<td class="empty">
+	</td>
+	<td class="empty">
+	</td>
+</tr></table>
+
+</td></tr></table>        {php}
+  global $G_TEMPLATE;
+  if( $G_TEMPLATE != "" ) G::LoadTemplate($G_TEMPLATE);
+{/php}
+
+</td>
+ </tr>
+</table>
+</tr>
+</table>
+
+</body>
+</html>

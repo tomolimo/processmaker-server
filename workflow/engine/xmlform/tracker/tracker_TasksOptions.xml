@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu"> 
+
+<PRO_UID type="private"/>
+
+<STG_UID type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="availableTasksForTheStage(@QPRO_UID, @QSTG_UID);return false;" colAlign="left" colWidth="50">
+  <en>Assign</en>
+</MNU_ASSIGN>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var oPanelStages;
+var availableTasksForTheStage = function(sProcessUID, sStageUID) {
+  oPanelStages = new leimnud.module.panel();
+	oPanelStages.options = {
+		size	:{w:400,h:350},
+		position:{x:0,y:0,center:true},
+		title	:G_STRINGS.ID_ASSIGN_CASE_TRACKER_OBJECT,
+		theme	:'processmaker',
+		statusBar:false,
+		control	:{resize:false,roll:false},
+		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
+  };
+  oPanelStages.events = {
+  	remove: function() { delete(oPanelStages); }.extend(this)
+  };
+	oPanelStages.make();
+	oPanelStages.loader.show();
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url : '../tracker/tracker_Ajax',
+		args: 'action=availableTasksForTheStage&PRO_UID=' + sProcessUID + '&STG_UID=' + sStageUID
+  });
+  oRPC.callback = function(rpc) {
+		oPanelStages.loader.hide();
+		oPanelStages.addContent(rpc.xmlhttp.responseText);
+		var scs = rpc.xmlhttp.responseText.extractScript();
+		scs.evalScript();
+  }.extend(this);
+	oRPC.make();
+};
+
+var assignTaskToStage = function(sStageUID, sTaskUID) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../tracker/tracker_Ajax',
+		async: false,
+		args : 'action=assignTaskToStage&STG_UID=' + sStageUID + '&TAS_UID=' + sTaskUID
+  });
+  oRPC.make();
+  oPanelStages.remove();
+  tracker_StageTasks.refresh();
+};
+
+var removeTaskFromTheStage = function(sTaskUID) {
+  new leimnud.module.app.confirm().make({
+  	label:G_STRINGS.ID_MSG_CONFIRM_REMOVE_TASK,
+  	action:function()
+  	{
+      var oRPC = new leimnud.module.rpc.xmlhttp({
+	    	url  : '../tracker/tracker_Ajax',
+	    	async: false,
+	    	args : 'action=removeTaskFromTheStage&TAS_UID=' + sTaskUID
+      });
+      oRPC.make();
+      tracker_StageTasks.refresh();
+    }.extend(this)
+  });
+};
+
+]]></JS>
+
+</dynaForm>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="105px">
+
+<SESSION_ID type="text" size="36" maxlength="32">
+  <en>Session Id</en>
+<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
+
+<USER_ID type="dropdown" sqlConnection="dbarray">
+  SELECT * from user
+  <en>User ID</en>
+<es>ID User</es></USER_ID>
+
+<GROUP_ID type="dropdown" sqlConnection="dbarray">
+   SELECT * from group
+  <en>Group ID</en>
+<es>ID Group</es></GROUP_ID>
+
+<ACTION type="hidden">
+</ACTION>
+
+<ACTIONB type="button" onclick="submitThisForm(this.form);">
+  <en>AssignUserToGroup</en>
+  <es>Usuario Asignado para un Grupo</es>
+</ACTIONB>
+
+</dynaForm>  

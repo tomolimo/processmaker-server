@@ -1,0 +1,127 @@
+{if ($node->nodeType==='base')}
+{* This is the default "html" for any type of node *}
+<div class="treeBase" style="width:{$node->contentWidth}">
+	<div class="boxTop">
+		<div class="a"></div>
+		<div class="b"></div>
+		<div class="c"></div>
+	</div>
+
+  <div class="content">  	
+  <table id="treeNode[{$node->name}]" cellspacing="0" cellpadding="0" border="0" style="width:{$node->width};">
+  <tr {if $node->value==''}style="display:none"{/if}>
+  	<td class="a" name="treeNode[plus][{$node->name}]" style="background-color:white;">
+  		{$node->printPlus()}
+  	</td>
+  	<td class="b" name="treeNode[label][{$node->name}]">
+  	  {$node->printLabel()}
+  	</td>
+  </tr>
+  <tr {if $node->contracted}style="display:none"{/if}>
+  	<td class="c"></td>
+	  <td class="d" name="treeNode[content][{$node->name}]">
+  	  {$node->printContent()}
+  	</td>
+  </tr>
+  </table>
+  </div>
+	
+	<div class="boxBottom">	
+		<div class="a"></div>
+		<div class="b"></div>
+		<div class="c"></div>	
+	</div>
+</div>
+{elseif ($node->nodeType==='parent')}
+{* This is the default "html" for node with nodeType="parent" *}
+<div class="treeParent">
+	<table id="treeNode[{$node->name}]" cellspacing="0" cellpadding="0" border="0" style="width:{$node->width};border-collapse:collapse;">
+	 <tr {if $node->value==''}style="display:none"{/if}>
+	 	<td class="xa" name="treeNode[plus][{$node->name}]" width="15px">
+	 		{$node->printPlus()}
+	 	</td>
+	 	<td class="xb" name="treeNode[label][{$node->name}]">
+	  	  {$node->printLabel()}
+	  	</td>
+	  </tr>
+	  <tr {if $node->contracted}style="display:none"{/if}>
+	  	<td class="d"></td>
+		  <td class="xd" name="treeNode[content][{$node->name}]">
+  		  {$node->printContent()}
+  		</td>
+	  </tr>
+	 </table>
+ </div>
+{elseif ($node->nodeType==='parentBlue')}
+{* This is the default "html" for node with nodeType="parent" *}
+<div class="treeParentBlue">
+<div class="boxTopBlue">
+	<div class="a"></div>
+	<div class="b"></div>
+	<div class="c"></div>
+</div>
+<div class="boxContentBlue">
+	<table id="treeNode[{$node->name}]" cellspacing="0" cellpadding="0" border="0" style="width:{$node->width};border-collapse:collapse;">
+	 <tr {if $node->value==''}style="display:none"{/if}>
+	 	<td class="xa" name="treeNode[plus][{$node->name}]" width="15px">
+	 		{$node->printPlus()}
+	 	</td>
+	 	<td class='xb' name="treeNode[label][{$node->name}]">
+	  	  {$node->printLabel()}
+	  	</td>
+	  </tr>
+	  <tr {if $node->contracted}style="display:none"{/if}>
+	  	<td class="d"></td>
+		  <td class="xd" name="treeNode[content][{$node->name}]">
+  		  {$node->printContent()}
+  		</td>
+	  </tr>
+  </table>
+	</div>
+	<div class="boxBottomBlue">	
+		<div class="a"></div>
+		<div class="b"></div>
+		<div class="c"></div>	
+	</div>
+</div>
+{elseif ($node->nodeType==='child')}
+{* This is the default "html" for node with nodeType="child" *}
+<div class="treeChild">
+<table id="treeNode[{$node->name}]" cellspacing="0" cellpadding="0" border="0" style="width:{$node->width};border-collapse:collapse;">
+  <tr {if $node->value==''}style="display:none"{/if}>
+  	<td class="a" name="treeNode[plus][{$node->name}]" width="1px">
+  		{$node->printPlus()}
+  	</td>
+  	<td class="b" name="treeNode[label][{$node->name}]">
+ 	  {$node->printLabel()}
+  	</td>
+  </tr>
+  <tr {if $node->contracted}style="display:none"{/if}>
+  	<td class="xc"></td>
+	  <td class="xd" name="treeNode[content][{$node->name}]">
+  	  {$node->printContent()}
+  	</td>
+  </tr>
+</table>
+</div>
+{elseif ($node->nodeType==='blank')}
+{* This is the default "html" for node with nodeType="child" *}
+<div class="treeBlank">
+<table id="treeNode[{$node->name}]" cellspacing="0" cellpadding="0" border="0" style="width:{$node->width};border-collapse:collapse;">
+  <tr {if $node->value==''}style="display:none"{/if}>
+  	<td class="a" name="treeNode[plus][{$node->name}]" width="1px">
+  		{$node->printPlus()}
+  	</td>
+  	<td class="b" name="treeNode[label][{$node->name}]">
+ 	  {$node->printLabel()}
+  	</td>
+  </tr>
+  <tr {if $node->contracted}style="display:none"{/if}>
+  	<td class="xc"></td>
+	  <td class="xd" name="treeNode[content][{$node->name}]">
+  	  {$node->printContent()}
+  	</td>
+  </tr>
+ </table>
+</div>
+{/if}

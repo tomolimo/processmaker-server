@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="tasks_Permissions" width="99%" mode="edit" enableTemplate="0" border="0" height="305px">
+
+<TAS_UID type="hidden"/>
+
+<INDEX type="hidden"/>
+
+<IFORM type="hidden"/>
+
+<TAS_SUBTITLE1 type="subtitle" value="1" group="1">
+  <en>Exceptions Handling</en>
+</TAS_SUBTITLE1>
+
+
+
+
+
+<TAS_TYPE type="checkbox" value="ADHOC" group="1">
+  <en>Allow arbitrary transfer (Ad hoc)</en>
+</TAS_TYPE>
+
+
+
+
+
+<JS type="javascript"><![CDATA[
+/* Recovery data */
+if (aTaskFlag[4])
+{
+  /*getField('TAS_CAN_CANCEL').checked                    = (oTaskData.TAS_CAN_CANCEL == 'TRUE' ? true : false);
+  getField('TAS_CAN_PAUSE').checked                     = (oTaskData.TAS_CAN_PAUSE == 'TRUE' ? true : false);*/
+  getField('TAS_TYPE').checked                          = (oTaskData.TAS_TYPE == 'ADHOC' ? true : false);
+  /*getField('TAS_CAN_SEND_MESSAGE').checked              = (oTaskData.TAS_CAN_SEND_MESSAGE == 'TRUE' ? true : false);
+  getField('TAS_CAN_UPLOAD').checked                    = (oTaskData.TAS_CAN_UPLOAD == 'TRUE' ? true : false);
+  getField('TAS_VIEW_UPLOAD').checked                   = (oTaskData.TAS_VIEW_UPLOAD == 'TRUE' ? true : false);
+  getField('TAS_VIEW_ADDITIONAL_DOCUMENTATION').checked = (oTaskData.TAS_VIEW_ADDITIONAL_DOCUMENTATION == 'TRUE' ? true : false);
+  getField('TAS_CAN_DELETE_DOCS').value                 = oTaskData.TAS_CAN_DELETE_DOCS;*/
+}
+else
+{
+  saveDataTaskTemporal(5);
+  aTaskFlag[4] = true;
+}
+]]></JS>
+
+</dynaForm>  

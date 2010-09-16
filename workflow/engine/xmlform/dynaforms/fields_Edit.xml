@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="fields_Edit" type="xmlform" width="100%">
+<A type="hidden"/>
+<XMLNODE_NAME type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="XMLNODE_NAME" dataCompareType="contains">
+  <en>Field name</en>
+</XMLNODE_NAME>
+<TYPE type="dropdown" colWidth="120" titleAlign="left" align="left" dataCompareField="TYPE" dataCompareType="=">
+
+  <en>Type<option name="title">Title</option><option name="subtitle">Subtitle</option><option name="text">Text</option><option name="password">Password</option><option name="textarea">Text Area</option><option name="currency">Currency</option><option name="percentage">Percentage</option><option name="date">date</option><option name="yesno">Yes/No</option><option name="link">link</option><option name="file">file</option><option name="checkbox">Check Box</option><option name="button">Button</option><option name="reset">Reset</option><option name="submit">Submit</option><option name="hidden">Hidden</option><option name="dropdown">Dropdown</option><option name="listbox">List Box</option><option name="radiogroup">Radio Group</option><option name="checkgroup">Check Group</option><option name="grid">grid</option><option name="javascript">Java Script</option><option name="private">Private</option></en>
+</TYPE>
+
+<DEFAULTVALUE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="DEFAULTVALUE" dataCompareType="contains">
+  <en>Default value</en>
+</DEFAULTVALUE>
+
+<LABEL type="text" maxlength="50" size="50">
+  <en>Label</en>
+</LABEL>
+
+<ACCEPT type="button" onclick="fieldsSave( this.form );">
+  <en>Save</en>
+</ACCEPT>
+
+</dynaForm> 

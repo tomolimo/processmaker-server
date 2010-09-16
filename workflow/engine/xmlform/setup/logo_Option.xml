@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+
+
+<JS type="javascript">
+
+	
+
+
+function deleteLogo(nameLogo) {
+
+new leimnud.module.app.confirm().make({
+label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_CASES)',
+action:function(){ 
+ajax_function('logo_Delete','','NAMELOGO='+nameLogo,'GET') ;
+window.location = 'uplogo';
+
+}});
+
+return false;
+  
+}
+
+function changeLogo(nameLogo)
+{ 
+	ajax_function('replacementLogo','','NAMELOGO='+nameLogo,'GET') ;
+	window.location = 'uplogo';
+}
+
+</JS>
+</dynaForm>

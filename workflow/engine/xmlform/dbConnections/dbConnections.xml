@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="pagetable" menu="dbConnections/dbConnections_Options">
+
+<DBS_UID type="private" showInTable="0"/>
+
+<PRO_UID type="hidden" showInTable="0"/>
+
+<DBS_TYPE type="text" titlealign="left" colWidth="50">
+  <en>Type</en>
+</DBS_TYPE>
+
+<DBS_SERVER type="text" titlealign="left" colWidth="100">
+  <en>Server</en>
+</DBS_SERVER>
+
+<DBS_DATABASE_NAME type="text" titlealign="left" colWidth="100">
+  <en>Database Name</en>
+</DBS_DATABASE_NAME>
+
+<DBS_DESCRIPTION type="text" titlealign="left" colWidth="200">
+  <en>Description</en>
+</DBS_DESCRIPTION>
+
+<DBS_EDIT type="link" colWidth="50" link="javascript:editDbConnection(&#039;@#DBS_UID&#039;)">
+  <en>Edit</en>
+</DBS_EDIT>
+
+<DBS_DELETE type="link" colWidth="50" link="javascript:deleteDbConnection(&#039;@#DBS_UID&#039;)">
+  <en>Delete</en>
+</DBS_DELETE>
+
+<GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox(&#039;UID: &#039;+@QDBS_UID, &#039;info&#039;);return false;"/>
+
+</dynaForm>  

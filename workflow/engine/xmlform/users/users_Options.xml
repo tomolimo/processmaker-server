@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value="" link="#" onclick="window.location = &#039;users_New&#039;;return false;" colAlign="left" colWidth="35">
+  <en>New</en>
+</MNU_ADD>
+
+<PAGED_TABLE_ID type="private"/>
+<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+
+<SEARCH_FILTER_FORM type="private"/>
+
+
+<CONFIRM type="private"/>
+
+<JS type="javascript"><![CDATA[
+
+var simpleUserDelete = function(sUser) {
+  new leimnud.module.app.confirm().make({
+  	label:'@#CONFIRM',
+  	action:function() {
+  		window.location = 'users_Delete?USR_UID=' + sUser;
+  	}.extend(this)
+  });
+};
+
+
+var panel;
+var gUSER_UID;
+var deleteUser=function(sUser){  
+  if (sUser == '00000000000000000000000000000001')
+  {
+    new leimnud.module.app.alert().make({
+	    label: "@G::LoadTranslation(ID_CANNOT_DELETE_ADMIN_USER)"
+  	});
+  }
+  else
+  {
+  gUSER_UID = sUser;
+  panel =new leimnud.module.panel();
+  panel.options={
+  	size	:{w:450,h:250},
+  	position:{x:50,y:50,center:true},
+  	statusBarButtons:[
+  	 {value:'@G::LoadTranslation(ID_DELETE)'},
+  	 {value: G_STRINGS.CANCEL}
+  	 ],
+  	title	:G_STRINGS.ID_PROSESSESCASE,
+  	control	:{close:true,resize:false},fx:{modal:true},
+  	statusBar:false,
+  	fx	:{shadow:true,modal:true}
+  };
+  panel.make();
+  panel.elements.statusBarButtons[0].onmouseup=function(){
+  	var todoCount = parseInt(getField('TO_DO').value);
+  	var draftCount = parseInt(getField('DRAFT').value);
+  	var cancelledCount = parseInt(getField('CANCELLED').value);
+  	var completedCount = parseInt(getField('COMPLETED').value);
+
+  	if(todoCount== 0 && draftCount==0){
+  		if(cancelledCount== 0 && completedCount==0){
+  			location.href = "users_Delete?USR_UID="+gUSER_UID;
+  		} else {
+  			new leimnud.module.app.confirm().make({
+		  		label:G_STRINGS.USERS_DELETE_WITH_HISTORY,
+		  		width:350,
+		  		height:130,
+		    	action:function(){
+					location.href = "users_Delete?USR_UID="+gUSER_UID;
+				}.extend(this)
+		  	});
+  		}
+  	} else {
+  		new leimnud.module.app.confirm().make({
+	  		label:G_STRINGS.USERS_REASSIGN,
+	  		width:350,
+	  		height:135,
+	    	action:function(){
+				   /*location.href = "../cases/cases_ReassignByUser";*/
+				   userReassing(gUSER_UID);
+			  }.extend(this)
+	  	});
+  	}
+  };
+  panel.elements.statusBarButtons[1].onmouseup=panel.remove;
+  panel.loader.show();
+
+  var r = new leimnud.module.rpc.xmlhttp({
+  	url:"users_DeleteAssign.php",
+  	method:"GET",
+  	args:"USR_UID=" + sUser
+  });
+  r.callback=function(rpc)
+  {
+  	panel.loader.hide();
+  	panel.addContent(rpc.xmlhttp.responseText);
+  };
+  r.make();
+ }
+}
+
+
+
+function viewUserGroups(sUserUID){
+	popupWindow('' , 'users_Groups?sUserUID='+sUserUID , 400 , 330 );
+    /*refreshTree();*/
+};
+
+function showUserGroups(sUserUID){
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : '../users/users_Ajax',
+		async : false,
+		method: 'POST',
+		args  : 'function=showUserGroups'+ '&sUserUID=' + sUserUID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+};
+
+function deleteGroup(sGroup, sUser){
+
+	new leimnud.module.app.confirm().make({
+    	label:G_STRINGS.ID_MSG_CONFIRM_REMOVE_USERGROUP,
+    	action:function(){
+	        var oRPC = new leimnud.module.rpc.xmlhttp({
+				url   : '../users/users_Ajax',
+				async : false,
+				method: 'POST',
+				args  : 'function=deleteGroup&GRP_UID=' + sGroup + '&USR_UID=' + sUser
+	        });
+	        oRPC.make();
+	        currentPopupWindow.clearContent();
+			currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+		}.extend(this)
+    });
+};
+
+function showUserGroupInterface(sUserUID){
+
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url   : '../users/users_Ajax',
+		async : false,
+		method: 'POST',
+		args  : 'function=showUserGroupInterface'+ '&sUserUID=' + sUserUID
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+    //currentPopupWindow.remove();
+};
+
+function saveUserGroup(sGroup, sUser){
+
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : '../users/users_Ajax',
+      async : false,
+      method: 'POST',
+      args  : 'function=assignUserToGroup&GRP_UID=' + sGroup + '&USR_UID=' + sUser
+    });
+    oRPC.make();
+    currentPopupWindow.clearContent();
+    currentPopupWindow.addContent(oRPC.xmlhttp.responseText);
+    setTimeout('showUserGroups(\''+sUser+'\')',1500);
+  }
+
+var reassignCases = function(sUser) {
+  window.location = 'users_ReassignCases?sUser=' + sUser;
+};
+
+var reassignCases2 = function(USR_UID) {
+	popupWindow('' , 'users_ReassignCases?USR_UID=' + USR_UID + '&iStep=1' , 500, 350);
+};
+
+function userReassing(USR_UID){
+  var panel =new leimnud.module.panel();
+  var width = 1000;
+  var height= 700;
+  
+  panel.options={
+    size  :{w:width, h:height},
+    position:{x:50,y:50,center:true},
+    statusBarButtons:[{value: G_STRINGS.CANCEL}],
+    title :G_STRINGS.ID_REASSIGNMENT,
+    control :{close:true,resize:false},fx:{modal:true},
+    statusBar:false,
+    fx  :{shadow:true,modal:true}
+  };
+  panel.make();
+  
+  ifrm = document.createElement("iframe");
+	ifrm.setAttribute("name", "userReassing");
+	ifrm.setAttribute("id","userReassing");
+	ifrm.setAttribute("src", "../cases/cases_ReassignByUser?REASSIGN_USER="+USR_UID);
+	
+  ifrm.style.width = "100%";
+  ifrm.style.height = "99%";
+  ifrm.style.border = "0";
+  panel.addContent(ifrm);
+  
+  panel.elements.statusBarButtons[0].onmouseup=function(){
+    panel.remove();
+  };
+}
+
+]]></JS>
+
+</dynaForm>

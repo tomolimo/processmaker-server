@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="showMessage" version="1.0" basedir="" xmlform_type="NORMAL" width="520px" labelwidth="0">
+<TITLE type="title">
+  <en>Information</en>
+</TITLE>
+
+<USR_UID type="hidden">
+  <en/>
+</USR_UID>
+
+<EVA type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
+  <en/>
+</EVA>
+
+<MESSAGE type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
+  <en/>
+</MESSAGE>
+
+<DELETE type="button" onclick="deleteUser(&#039;@#USR_UID&#039;);">
+  <en>Delete</en>
+</DELETE>
+
+
+<JS type="javascript"><![CDATA[
+var dynaformOnload = function()
+{ var oAux = getField('DELETE');
+  if(getField('EVA').value=='')		
+  	showRowById(oAux);
+  else
+  	hideRowById(oAux);	
+};
+
+leimnud.event.add(getField('EVA'), 'change', function() {
+  var oAux = getField('DELETE');
+  if (getField('EVA').value=='')  
+		showRowById(oAux);
+  else
+  	hideRowById(oAux);
+});
+
+var deleteUser = function(sUser) {
+  new leimnud.module.app.confirm().make({
+  	label:'@#ID_MSG_CONFIRM',
+  	action:function() {
+  		window.location = 'users_Delete?USR_UID=' + sUser;
+  	}.extend(this)
+  });
+};
+]]></JS>
+</dynaForm> 

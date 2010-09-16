@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value='' link="#" onclick="triggerFromLibrary(); return false;" colAlign="left" colWidth="70">
+  <en>New</en>
+</MNU_ADD>
+
+
+
+
+<PRO_UID type="private"/>
+
+<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+
+<triggersEditCustom type="private" defaultValue="../triggers/triggers_EditCustom"/>
+
+<triggersDelete type="private" defaultValue="../triggers/triggers_Delete"/>
+
+<triggersProperties type="private" defaultValue="../triggers/triggersProperties"/>
+
+<triggersOptionList type="private" defaultValue="../triggers/triggersTree"/>
+
+<triggerNewWizard type="private" defaultValue="../triggers/triggers_CreateWizard"/>
+
+<triggerNewTalend type="private" defaultValue="../triggers/triggers_CreateTalend"/>
+
+<triggerNewGoogleWebContent type="private" defaultValue="../triggers/triggers_CreateGoogleWebContent"/>
+
+<triggerNewGoogleCreateEvent type="private" defaultValue="../triggers/triggers_CreateGoogleEvent"/>
+
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1">
+<![CDATA[
+
+  function triggerEditWizardSource (sUID){
+    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' , 770, 510);
+  }
+
+  function triggerNew() {
+    popupWindow('@G::LoadTranslation(ID_NEW_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?PRO_UID=@%PRO_UID' , 600, 340);
+  }
+  function triggerNewCustom() {  
+    popupWindow('@G::LoadTranslation(ID_NEW_TRIGGERS)', '@G::encryptlink(@#triggersEditCustom)?PRO_UID=@%PRO_UID' , 600, 460);
+  }
+  
+  function triggerFromLibrary() {
+    popupWindow('@G::LoadTranslation(ID_NEW_TRIGGERS)', '@G::encryptlink(@#triggersOptionList)?PRO_UID=@%PRO_UID' , 600, 340);
+  }
+  
+  function triggerEdit(sUID) {
+    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID , 770, 510);
+  }
+
+  function triggerProperties( sUID ) {
+		popupWindow('@G::LoadTranslation(ID_TRIGGERS)', '@G::encryptlink(@#triggersProperties)?TRI_UID='+ sUID , 600, 340);
+  }
+  
+  function triggerPropertiesSave( form ) {
+    var doc = getField("OUT_DOC_FILENAME");    
+    if(doc.value=='')
+     { alert(G_STRINGS.ID_FILEGENERATED);
+     }
+    else  
+     { ajax_post( form.action, form, 'POST' );
+       currentPopupWindow.remove();
+       @#PAGED_TABLE_ID.refresh();
+     }  
+  }  
+
+  function triggerSave(form)
+  {
+   ajax_post(form.action, form, 'POST');
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+  }
+
+  function triggerDelete(sUID) {
+    var validateResult;
+    
+    oRPC = XHRequest();
+    oRPC.options = {
+      url   : '../triggers/triggers_Ajax',
+      method: 'POST',
+      args  : 'request=verifyDependencies&TRI_UID='+sUID
+    }
+    oRPC.callback = function(response) {
+      try{
+	      validateResult = eval("(" + response.xmlhttp.responseText + ")");
+	      if(validateResult.code != 0) {
+	        alert(validateResult.message + G_STRINGS.ID_TRIGGERS_VALIDATE_EERR1);
+	      } else {
+          new leimnud.module.app.confirm().make({
+            label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_TRIGGER)',
+            action:function(){
+              ajax_function('@G::encryptlink(@#triggersDelete)', '', 'TRI_UID=' + sUID, 'POST');
+              @#PAGED_TABLE_ID.refresh();
+            }.extend(this)
+          });
+        }
+      } catch(e){
+        alert("Unreachable response=> "+ response.xmlhttp.responseText);
+      }
+    }.extend(this);
+    oRPC.make();
+  }
+  function triggerNewWizard(nameFunction, library) {//alert('@G::encryptlink(@#triggerNewWizard)?PRO_UID=@%PRO_UID&amp;NAME_FUN='+nameFunction+'&amp;PARAMETERS_FUN='+parametersFunct+'&amp;PAGED_TABLE_ID='+@#PAGED_TABLE_ID);return;
+    popupWindow('@G::LoadTranslation(ID_NEW_TRIGGERS)', '@G::encryptlink(@#triggerNewWizard)?PRO_UID=@%PRO_UID&NAME_FUN='+nameFunction+'&LIBRARY='+library+'&PAGED_TABLE_ID='+@#PAGED_TABLE_ID , 600, 600);
+  }
+  
+]]>
+</JS>
+
+<!-- Default Search option -->
+<!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this);return false;" colAlign="right" colWidth="130">
+  <en>Advanced Search</en>
+</MNU_SEARCH>-->
+
+<SEARCH_FILTER_FORM type="private"/>
+
+</dynaForm> 

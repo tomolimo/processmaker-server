@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value="" link="#" onclick="eventsNew(); return false;" colAlign="left" colWidth="60">
+  <en>New</en>
+</MNU_ADD>
+
+<MNU_PENDING type="link" value="" link="#" onclick="eventsPending(); return false;" colAlign="left" colWidth="80">
+  <en>Pending</en>
+</MNU_PENDING>
+
+<MNU_COMPLETED type="link" value="" link="#" onclick="eventsCompleted(); return false;" colAlign="left" colWidth="80">
+  <en>Completed</en>
+</MNU_COMPLETED>
+
+<PRO_UID type="private"/>
+<EVN_TYPE type="private"/>
+
+<eventsNew type="private" defaultValue="../events/eventsNew"/>
+
+<eventsPending type="private" defaultValue="../events/eventsPending"/>
+
+<eventsCompleted type="private" defaultValue="../events/eventsCompleted"/>
+
+<eventsEdit type="private" defaultValue="../events/eventsEdit"/>
+
+<eventsEditAction type="private" defaultValue="../events/eventsEditAction"/>
+
+<eventsDelete type="private" defaultValue="../events/eventsDelete"/>
+
+<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var triggerEditWizardSource = function (sUID){
+    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' + '&PRO_UID=@%PRO_UID' , 770, 510);
+  }
+
+var triggerSave = function (form){
+   ajax_post(form.action, form, 'POST');
+    currentPopupWindow.remove();
+  }
+  
+var eventsNew = function() {
+  popupWindow('@G::LoadTranslation(ID_NEW_EVENT)', '@G::encryptlink(@#eventsNew)?PRO_UID=@%PRO_UID&EVN_TYPE=@%EVN_TYPE' , 540, 500);
+};
+
+var eventsPending = function() {
+  popupWindow('@G::LoadTranslation(ID_PENDING)', '@G::encryptlink(@#eventsPending)?PRO_UID=@%PRO_UID&EVN_TYPE=@%EVN_TYPE' , 800, 400);
+};
+
+var eventsCompleted = function() {
+  popupWindow('@G::LoadTranslation(ID_COMPLETED)', '@G::encryptlink(@#eventsCompleted)?PRO_UID=@%PRO_UID&EVN_TYPE=@%EVN_TYPE' , 800, 400);
+};
+
+var eventsEdit = function(sUID) {
+  popupWindow('@G::LoadTranslation(ID_EDIT_EVENT)', '@G::encryptlink(@#eventsEdit)?EVN_UID=' + sUID ,  540, 500);
+};
+
+var eventsEditAction = function(sUID) {
+  popupWindow('@G::LoadTranslation(ID_EDIT_ACTION)', '@G::encryptlink(@#eventsEditAction)?EVN_UID=' + sUID , 640, 500);
+};
+
+var eventsSave = function(oForm) {
+  if (oForm.onsubmit()) {
+    res = ajax_post(oForm.action, oForm, 'POST');
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+  }
+};
+
+var eventsTriggerSave = function(oForm) {
+  if (oForm.onsubmit()) {
+    res = ajax_post(oForm.action, oForm, 'POST');
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+  }
+};
+
+var eventsDelete = function(sUID) {
+  new leimnud.module.app.confirm().make({
+    label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_EVENT)',
+    action:function()
+    {
+      ajax_function('@G::encryptlink(@#eventsDelete)', '', 'EVN_UID=' + sUID, 'POST');
+      @#PAGED_TABLE_ID.refresh();
+    }.extend(this)
+  });
+};
+
+var refreshEventList = function(sUID) {
+  @#PAGED_TABLE_ID.refresh();
+};
+
+
+var _oVarsPanel_;
+var showDynavars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
+	_oVarsPanel_ = new leimnud.module.panel();
+	_oVarsPanel_.options = {
+    limit    : true,
+    size     : {w:350,h:400},
+    position : {x:0,y:0,center:true},
+    title    : '',
+    theme    : 'processmaker',
+    statusBar: false,
+    control  : {drag:false,resize:true,close:true},
+    fx       : {opacity:true,rolled:false,modal:true}
+  };
+  _oVarsPanel_.make();
+  _oVarsPanel_.events = {
+    remove:function() {
+      delete _oVarsPanel_;
+    }.extend(this)
+  };
+  _oVarsPanel_.loader.show();
+  oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : sAjaxServer,
+    method: 'POST',
+    args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sNoShowLeyend=1'
+  });
+  oRPC.callback = function(oRPC) {
+    _oVarsPanel_.loader.hide();
+    var scs = oRPC.xmlhttp.responseText.extractScript();
+    _oVarsPanel_.addContent(oRPC.xmlhttp.responseText);
+    scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var insertFormVar = function(sFieldName, sValue) {
+	oAux = document.getElementById(sFieldName);
+	if (oAux.setSelectionRange) {
+		var rangeStart = oAux.selectionStart;
+    var rangeEnd   = oAux.selectionEnd;
+    var tempStr1   = oAux.value.substring(0,rangeStart);
+    var tempStr2   = oAux.value.substring(rangeEnd);
+    oAux.value     = tempStr1 + sValue + tempStr2;
+	}
+	else {
+	  if (document.selection) {
+	    oAux.focus();
+      document.selection.createRange().text = sValue;
+	  }
+	}
+	_oVarsPanel_.remove();
+};
+function saveTriggerCondition(oForm)
+{
+  ajax_post(oForm.action, oForm, 'POST');
+  currentPopupWindow.remove();
+}
+
+]]></JS>
+
+</dynaForm>  

@@ -1,0 +1,56 @@
+<form id="{$form_id}" name="" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="height:{$form_height};" >
+	  <table width="99%">
+      <tr>
+        <td valign='top'>
+           <table cellspacing="0" cellpadding="0" border="0" width="100%">
+
+              <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$PROCESS}</td>
+              <td class='FormFieldContent' >{$form.PROCESS}</td>
+              <td class='FormLabel' width="{$form_labelWidth}">{$TASKS}</td>
+              <td class='FormFieldContent' >{$form.TASKS}</td>
+              </tr>
+         
+              <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$CURRENT_USER}</td>
+              <td class='FormFieldContent' >{$form.CURRENT_USER}</td>
+              <td class='FormLabel' width="{$form_labelWidth}">{$SENT_BY}</td>
+              <td class='FormFieldContent' >{$form.SENT_BY}</td>
+              
+              </tr>
+
+              <tr>
+                <td class='FormLabel' width="{$form_labelWidth}">{$CASE_NUMBER}</td>
+                <td class='FormFieldContent' >{$form.CASE_NUMBER}</td>
+                <td class='FormLabel' width="{$form_labelWidth}">{$APP_STATUS}</td>
+                <td class='FormFieldContent' >{$form.APP_STATUS}</td>
+              </tr>
+              
+              <tr>
+                  <td colspan="4" align="center">
+                      <table border="0"><tr>
+                  <td class='FormLabel' width="{$form_labelWidth}">{$LAST_MODIFICATION_F}</td>
+                  <td  width="{$form_labelWidth}">{$form.LAST_MODIFICATION_F}</td>
+                  <td class='FormLabel' width="{$form_labelWidth}">{$LAST_MODIFICATION_T}</td>
+                  <td  width="{$form_labelWidth}">{$form.LAST_MODIFICATION_T}</td>
+                  </tr></table>
+                  </td>
+              </td>
+              </tr>
+                           
+              <tr>
+              
+              </tr>
+             <tr>
+              <td class='FormButton' colspan="4" align="">{$form.FILTER}</td>
+             </tr>
+           </table>
+        </td>
+      </tr>
+    </table>
+    		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+</form>

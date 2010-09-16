@@ -1,0 +1,69 @@
+var form_{$form->id};
+var i;
+function loadForm_{$form->id}(ajaxServer)
+{literal}{{/literal}
+if (typeof(G_Form)==='undefined') return alert('form.js was not loaded');
+  form_{$form->id}=new G_Form(document.getElementById('{$form->id}'),'{$form->id}');
+  var myForm=form_{$form->id};
+  myForm.ajaxServer=ajaxServer;
+  {if isset($form->ajaxSubmit) && ($form->ajaxSubmit)}
+  {literal}
+    var sub = new leimnud.module.app.submit({
+        form    : myForm.element
+      });
+    sub.sendObj = false;
+  {/literal}
+  {/if}
+  {foreach from=$form->fields item=field key=name}
+    i = myForm.aElements.length;
+    {if ($field->type==='dropdown')}
+      myForm.aElements[i] = new G_DropDown(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='text')}
+      myForm.aElements[i] = new G_Text(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='percentage')}
+      myForm.aElements[i] = new G_Percentage(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='currency')}
+      myForm.aElements[i] = new G_Currency(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='textarea')}
+      myForm.aElements[i] = new G_TextArea(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='date')}
+      myForm.aElements[i] = new G_Date(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='hidden')}
+      myForm.aElements[i] = new G_Text(myForm, myForm.element.elements['form[{$name}]'],'{$name}');
+      myForm.aElements[i].setAttributes({$field->getAttributes()});
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {elseif ($field->type==='grid')}
+      myForm.aElements[i] = new G_Grid(myForm, '{$name}');
+      grid_{$field->id}(myForm.aElements[i]);
+      {$field->attachEvents("myForm.aElements[i].element")}
+    {else}
+      var element = getField("{$name}");
+      {$field->attachEvents("element")}
+    {/if}
+  {/foreach}
+  {foreach from=$form->fields item=field key=name}
+    {if isset($field->dependentFields) && ($field->dependentFields!='')}
+      {if ($field->type==='dropdown')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {elseif ($field->type==='text')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {elseif ($field->type==='percentage')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {elseif ($field->type==='currency')}
+          myForm.getElementByName('{$name}').setDependentFields('{$field->dependentFields}');
+      {/if}
+    {/if}
+  {/foreach}
+{literal}}{/literal}

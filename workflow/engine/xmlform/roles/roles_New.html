@@ -1,0 +1,43 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  
+ <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="">
+	  <table width="99%">
+      <tbody><tr>
+        <td valign="top">
+        <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
+        <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                   <tbody><tr>
+              <td class="FormTitle" colspan="2" align="">{$form.title}</td>
+             </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$ROL_CODE}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.ROL_CODE} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.ROL_CODE}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$ROL_NAME}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.ROL_NAME} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.ROL_NAME}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$ROL_STATUS}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.ROL_STATUS} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.ROL_STATUS}</td> 
+              </tr>
+                                               <tr>
+              <td class="FormButton" colspan="2" align="center"><br/> {$form.CREATE} &nbsp; {$form.BTN_CANCEL} </td>
+             </tr>
+                                                                   </tbody></table>
+        </td>
+      </tr>
+    </tbody></table><div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}	</div>
+    		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+                <script type="text/javascript">
+    {$form.JS}
+  </script>
+</form>
+  

@@ -1,0 +1,2391 @@
+body
+{
+	margin		:0px;
+	background-color:#ECECEC;
+	color		:#808080;
+	font-family	:normal 8pt Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+	direction : rtl;
+	font-size : small;
+}
+
+body .panel_content___processmaker {
+        position: relative;
+	color: black;
+	font: normal 8pt Tahoma,MiscFixed;
+	text-align: justify;
+	border: 1px solid #A3A2BC;
+	border: 1px solid #FF9900;
+	border: 1px solid #919B9C;
+        direction: rtl;
+	/*border-left:1px solid #1983BD;
+	border-top:1px solid #1983BD;
+	border-right:1px solid #59A5D9;
+	border-bottom:1px solid #59A5D9;*/
+	background-color: #E8F2F7;
+	background-color: #FFFFFF;
+	background-color: #F9F9F9;
+	background-color: #FFF;
+	overflow: auto;
+	padding:0px;
+}
+
+body .panel_frontend___processmaker{
+	/*width: 100%;*/
+	height: 100%;
+	position: absolute;
+	background-color: #E8F2F7;
+	background-color: #E0DFE3;
+	/*background-color:#59A5D9;*/
+        direction: ltr;
+	overflow: hidden;
+	z-index: 2;
+	top: 0px;
+	left: 0px;
+}
+
+.Footer
+{
+	font-family    :normal 8pt Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+	color		:#000;
+	height		:150px;
+	text-align	:center;
+}
+.Footer .image
+{
+	/*background-image: url(/skins/green/images/bf.jpg);
+	background-repeat: repeat-x;
+	height:10px;*/
+
+}
+.Footer .content
+{
+	color		:black;
+	padding		:10px;
+}
+.Footer .content a
+{
+	color		:#006699;
+	text-decoration	:none;
+}
+.Footer .content a:hover
+{
+	color		:orange;
+}
+.logout a
+{
+	font-family    :normal 8pt Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+	color:#006699;
+	text-decoration:none;
+}
+.logout a:hover
+{
+	color:orange;
+}
+.temporalMessage
+{
+	color	:red;
+	font-family    :normal 8pt Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+	text-decoration:none;
+	direction : rtl;
+}
+.userGroupTitle
+{
+	color	:black;
+	font-family    :normal 8pt Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+	padding-left:10px;
+	direction : rtl;
+}
+.userGroupLink
+{
+	padding:0px;
+	padding-left:10px;
+	padding-bottom:10px;
+	direction : rtl;
+}
+.userGroupLink a
+{
+	color	:#006699;
+	text-decoration:none;
+	font	:bold 8pt Tahoma,sans-serif,MiscFixed;
+	direction : rtl;
+}
+.userGroupLink a:hover
+{
+	color	:orange;
+}
+span.treePlusLink
+{
+	background-color:#E68B2C;
+	color:white;
+	font:normal 7pt Tahoma,MiscFixed;
+	text-decoration:none;
+	padding-left:1px;
+	padding-right:1px;
+	overflow:hidden;
+	cursor:pointer;
+}
+span.treePlusLink:hover
+{
+	:#EFC395;
+}
+span.XtreeMinus
+{
+	background-color:#006699;
+	color:white;
+	font:normal 7pt Tahoma,MiscFixed;
+	text-decoration:none;
+	padding-left:1px;
+	padding-right:1px;
+	overflow:hidden;
+	cursor:pointer;
+}
+span.XtreeMinus:hover
+{
+	background-color:#EFC395;
+}
+
+/* leimnud.app.menuRight CSS begin */
+
+/* Processmaker CSS  begin */
+.pm_separator___processmaker
+{
+
+}
+.pm_separatorOn___processmaker
+{
+
+}
+.pm_separatorOff___processmaker,.pm_separatorOn___processmaker
+{
+	height: 7px;
+	cursor:pointer;
+	text-align:center;
+	overflow:hidden;
+}
+.pm_separatorDOff___processmaker,.pm_separatorDOn___processmaker, .pm_separatorOver___processmaker, .pm_separatorOut___processmaker
+{
+	height:7px;
+	width:100%;
+	background-color:#C1D2EE;
+	background-color:buttonface;
+	border-color:buttonhighlight buttonshadow buttonshadow buttonhighlight;
+	border-style:solid;
+	border-width:1px 0pt;
+	overflow:hidden;
+}
+.pm_separatorDOff___processmaker
+{
+	background:url(/js/maborak/core/images/separator.up.gif);
+	background-repeat:no-repeat;
+	background-position:50% 2;
+
+}
+.pm_separatorDOn___processmaker
+{
+	background:url(/js/maborak/core/images/separator.down.gif);
+	background-repeat:no-repeat;
+	background-position:50% 50%;
+}
+.pm_separatorOver___processmaker
+{
+	background-color:#C1D2EE;
+}
+.pm_separatorOut___processmaker
+{
+	background-color:buttonface;
+}
+
+/* Processmaker CSS  end */
+/* processmap Theme.Task begin */
+/*theme firefox begin*/
+.processmap_task___firefox
+{
+	position	: absolute;
+	height		: 30px;
+	width		: 150px;
+	background-color: #006699;
+	border		: 1px solid #006699;
+	z-index		: 10;
+	overflow	: hidden;
+	cursor		: move;
+}
+.processmap_task_label___firefox
+{
+	color:white;
+	text-align:center;
+	cursor:text;
+	padding-top:11;
+}
+.processmap_text___firefox
+{
+	position	: absolute;
+	cursor		: move;
+	background-color:red;
+}
+.processmap_title___firefox
+{
+
+}
+	/*theme firefox end*/
+
+	/*theme processmap begin*/
+.processmap_task___processmaker
+{
+	position	: absolute;
+	height		: 40px;
+	height		: 38px;
+	width		: 171px;
+	width		: 164px;
+	z-index		: 10;
+	overflow	: hidden;
+	cursor		: move;
+	/*background	: url(/js/processmap/core/images/bg_task.gif);
+	background	: url(/images/fondotask.png);*/
+	//background-color:#006699;
+	//background-color:#6F6F6F;
+	background	: url(/images/borderTask.gif);
+	background-color:#0576C4;
+	background-color:#006699;
+	vertical-align:middle;
+	display:table-cell;
+}
+.processmap_task_label___processmaker
+{
+	color:#FFF;
+	text-align:center;
+	/*position:absolute;*/
+	margin:10;
+	vertical-align:middle;
+	cursor:move;
+}
+.processmap_text___processmaker
+{
+	position	: absolute;
+	z-index		: 10;
+	cursor		: move;
+	font		: bold 8pt Tahoma,MiscFixed;
+}
+.processmap_title___processmaker
+{
+	position	:absolute;
+	cursor		:move;
+	font		:bold 13pt Tahoma,MiscFixed;
+}
+	/*theme processmap end*/
+
+.pm__toolbar{
+    align:right;
+    font-size:1;
+    line-height:31px;
+}
+
+.processmap_toolbarItem___processmaker
+{
+	margin:0px;
+	border:1px solid #CEC6B5;
+	background:#EFEFEF url(/images/dynamicForm/toolbar.buttonbg.gif) repeat-x scroll 0%;
+}
+.processmap_toolbarItem___processmaker:hover
+{
+	margin:0px;
+	background-color:buttonface;
+	border-color:buttonhighlight buttonshadow buttonshadow buttonhighlight;
+	border-style:solid;
+	/*border-width:1px 0pt;*/
+	border:1px solid #316AC5;
+	background:#C1D2EE;
+	background-color: #C1D2EE;
+
+
+}
+/* processmap Theme.Task end */
+
+/* processmap Theme.Panels begin */
+/* processmap Theme.Panels end */
+
+
+/*	Theme leimnud.module.grid	BEGIN */
+
+/*	Theme leimnud.module.grid	END */
+
+
+/* Menues */
+
+
+TD.mainMenu {
+	background-image: url(/skins/green/images/bm.jpg);
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+	font-size : short;
+	background-repeat: repeat-x;
+	height: 25px;
+	left: 46px;
+	top: 72px;
+	direction: rtl;
+	text-align: right;
+}
+
+A.mainMenu {
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : small;
+	color: #FFFFFF;
+	font-weight: bold;
+	padding-top: 6px;
+	text-transform:uppercase;
+    text-decoration: none;
+	direction: rtl;
+    text-align: right;
+}
+A.mainMenu:hover {
+    color: #D3D3D3;
+    font-weight: bold;
+    text-decoration: none;
+	direction: rtl;
+    text-align: right;
+}
+
+TD.SelectedMenu{
+	background-image: url(/skins/green/images/bsms.jpg);
+	background-repeat: repeat-x;
+	top: 72px;
+	height: 26px;
+	direction: rtl;
+    text-align: right;
+}
+A.SelectedMenu {
+	vertical-align: middle;
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : medium;
+	font-weight: bold;
+	color: #000;
+	text-align: center;
+	padding-top: 6px;
+	text-transform:uppercase;
+    text-decoration: none;
+	direction: rtl;
+    text-align: right;
+}
+
+.SelectedMenu:hover {
+	vertical-align: middle;
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : medium;
+	font-weight: bold;
+	color: #005791;
+	text-align: center;
+	padding-top: 6px;
+	text-transform:uppercase;
+    text-decoration: none;
+    direction: rtl;
+    text-align: right;
+}
+
+
+TD.subMenu {
+	background-image: url('/skins/green/images/bsm.jpg');
+	background-repeat: repeat-x;
+	height: 25px;
+	direction: rtl;
+    text-align: right;
+}
+
+A.subMenu {
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : small;
+	color: #005791;
+	padding-top: 5px;
+	text-transform:uppercase;
+	text-decoration: none;
+	direction: rtl;
+}
+
+A.subMenu:hover {
+    font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : small;
+	color: #092148;
+	font-weight: bold;
+	padding-top: 5px;
+	text-transform:uppercase;
+	text-decoration: none;
+	direction: rtl;
+}
+
+TD.selectedSubMenu {
+	background-image: url('/js/maborak/core/images/silverBackgroundSubMenu.jpg');
+	background-repeat: repeat-x;
+	height: 26px;
+	left: 46px;
+	top: 98px;
+	direction: rtl;
+}
+
+A.selectedSubMenu {
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : small;
+	color: #005791;
+	font-weight: bold;
+	padding-top: 5px;
+	text-transform:uppercase;
+	text-decoration: none;
+	direction: rtl;
+}
+
+A.selectedSubMenu:hover {
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : small;
+	color: #005791;
+	font-weight: bold;
+	padding-top: 5px;
+	text-transform:uppercase;
+	text-decoration: none;
+	direction: rtl;
+}
+
+
+/* Menues END */
+
+/* Box Top Model BEGIN */
+.boxTop, .boxTopBlue
+{
+	height:9px;
+	padding-left:8px;
+	padding-right:8px;
+	position:relative;
+	overflow:hidden;
+}
+.boxTop div, .boxTopBlue div
+{
+	background-color:#FFF;
+}
+.boxTop div.a, .boxTop div.c, .boxTopBlue div.a, .boxTopBlue div.c
+{
+	position:absolute;
+	width:9px;
+	height:9px;
+}
+.boxTop div.a, .boxTopBlue div.a
+{
+	left:0px;
+	top:0px;
+	background-image:url(/skins/green/images/ftl.png);
+	background-color:transparent;
+}
+.boxTop div.c, .boxTopBlue div.c
+{
+	top:0px;
+	right:0px;
+	background-image:url(/skins/green/images/ftr.png);
+	background-color:transparent;
+}
+.boxTop div.b, .boxTopBlue div.b
+{
+	width:100%;
+	height:9px;
+	border-top:1px solid #DADADA;
+	background-color:#FFF;
+}
+/* Box Top Model END */
+
+/* Box Top Model Blue BEGIN */
+.boxTopBlue div.c
+{
+	background-image:url(/skins/green/images/ftr.blue.gif);
+	background-color:transparent;
+}
+.boxTopBlue div.a
+{
+	background-image:url(/skins/green/images/ftl.blue.gif);
+	background-color:transparent;
+}
+.boxTopBlue div.b
+{
+	border-top:1px solid #99BBE8;
+	background-color:#D0DEF0;
+}
+
+/* Box Top Model Blue END */
+
+/* Box Bottom Model BEGIN */
+.boxBottom, .boxBottomBlue
+{
+	height:15px;
+	padding-left:24px;
+	padding-right:24px;
+	position:relative;
+	overflow:hidden;
+}
+.boxBottom div.a, .boxBottom div.c, .boxBottomBlue div.a, .boxBottomBlue div.c
+{
+	position:absolute;
+	width:25px;
+	height:15px;
+}
+.boxBottom div.a, .boxBottomBlue div.a
+{
+	left:0px;
+	top:0px;
+	background-image:url(/skins/green/images/fbl.png);
+	background-color:transparent;
+}
+.boxBottom div.c, .boxBottomBlue div.c
+{
+	top:0px;
+	right:0px;
+	background-image:url(/skins/green/images/fbr.png);
+	background-color:transparent;
+}
+.boxBottom div.b, .boxBottomBlue div.b
+{
+	width:100%;
+	height:16px;
+	border-bottom:1px solid #DADADA;
+	background: transparent url(/skins/green/images/fbc.png) repeat-x;
+}
+/* Box Bottom Model END */
+/* Box Bottom Model Blue BEGIN */
+.boxBottomBlue div.c
+{
+	background-image:url(/skins/green/images/fbr.blue.png);
+	background-color:transparent;
+}
+.boxBottomBlue div.a
+{
+	background-image:url(/skins/green/images/fbl.blue.png);
+	background-color:transparent;
+}
+.boxBottomBlue div.b
+{
+	width:100%;
+	height:16px;
+	border-bottom:1px solid #DADADA;
+	background: transparent url(/skins/green/images/fbc.blue.png) repeat-x;
+}
+.boxContentBlue
+{
+	border-left:1px solid #99BBE8;
+	border-right:1px solid #99BBE8;
+	padding-right:5px;
+	padding-left:5px;
+	background-color:#D0DEF0;
+}
+a.linkInBlue
+{
+	font:normal 8pt Tahoma,MiscFixed;
+	color:#006699;
+	text-decoration:none;
+}
+
+a.linkInBlue:hover
+{
+	color:orange;
+}
+/* Box Bottom Model Blue END */
+
+/* BoxPanel Bottom Model BEGIN */
+.boxTopPanel
+{
+	height:15px;
+	padding-left:24px;
+	padding-right:24px;
+	position:relative;
+	overflow:hidden;
+}
+.boxTopPanel div.a, .boxTopPanel div.c
+{
+	position:absolute;
+	width:25px;
+	height:15px;
+}
+.boxTopPanel div.a
+{
+	left:0px;
+	top:0px;
+	background-image:url(/skins/green/images/ftlL.png);
+	background-color:transparent;
+}
+.boxTopPanel div.c
+{
+	top:0px;
+	right:0px;
+	background-image:url(/skins/green/images/ftrL.png);
+	background-color:transparent;
+}
+.boxTopPanel div.b
+{
+	width:100%;
+	height:16px;
+	background: transparent url(/skins/green/images/ftc.png) repeat-x;
+}
+
+/* BoxPanel Bottom Model END */
+
+
+
+/* XmlForm BEGIN  */
+	 /* form BEGIN  */
+form{
+	font:normal 11px sans-serif,MiscFixed;
+	color:#808080;
+}
+form table{
+	font:normal 11px sans-serif,MiscFixed;
+	color:#808080;
+}
+form.formDefault select
+{
+	font:normal 11px sans-serif,MiscFixed;
+	color:#000;
+}
+form.formDefault table
+{
+	font:normal 11px sans-serif,MiscFixed;
+	color:#808080;
+	line-height:180%;
+}
+form.formDefault td
+{
+	padding:2px;
+}
+form.formDefault .content
+{
+	background-color:#FFF;
+	border-left:1px solid #dadada;
+	border-right:1px solid #dadada;
+}
+form.formDefault input.FormField
+{
+	border: 1px solid #CCC;
+	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	color:#333333;
+	font:normal 11px Arial,Helvetica,sans-serif;
+}
+form.formDefault input.FormFieldInvalid
+{
+	border: 1px solid red;
+}
+form.formDefault input.FormFieldValid
+{
+	border: 1px solid green;
+}
+form.formDefault .FormLabel
+{
+	color:#808080;
+	text-align:left;
+}
+form.formDefault .FormFieldContent
+{
+    color:#000;
+	background-color:#EFEFEF;
+	padding-left:5px;
+	direction: rtl;
+}
+form.formDefault textarea.FormTextArea
+{
+	border: 1px solid #CCC;
+	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	color:#333333;
+	font:normal 11px Arial,Helvetica,sans-serif;
+	overflow:auto;
+}
+form.formDefault textarea.FormTextPM
+{
+    border: 1px solid #CCC;
+    background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+    color:#333333;
+    font:normal 12 Courier New, monospace ;
+    overflow:auto;
+}
+form.formDefault .FormTitle
+{
+	color:#000;
+	padding-left:5px;
+	font-weight:bold;
+	background-color:#E0EFE6;
+}
+form.formDefault .FormSubTitle
+{
+	background-color:#D1DEDF;
+	color:black;
+	align: right;
+}
+form.formDefault .FormButton
+{
+	text-align:center;
+}
+
+form.formDefault a
+{
+	text-decoration:none;
+	color:#006699;
+	font-family : Ezra Sil,Ezra Sil SR,CODE2000,Times New Roman,times,serif;
+    font-size : small;
+}
+form.formDefault a:hover
+{
+	color:orange;
+}
+form.formDefault td.withoutLabel, form.formDefault td.withoutLabel table td
+{
+	padding:0px;
+	height:8px;
+}
+
+	 /* form END  */
+	 /* formSearch BEGIN  */
+form.formSearch input, input
+{
+	font-size:8pt;
+}
+form.formSearch a
+{
+	color:#006699;
+	text-decoration:none;
+}
+form.formSearch a:hover
+{
+	color:orange;
+}
+form.formSearch
+{
+	padding-top:5px;
+	padding-bottom:5px;
+/*	width:100%;*/
+	padding-left:10px;
+	padding-right:10px;
+/*	padding-left:10%;
+	padding-right:10%;*/
+}
+form.formSearch .content
+{
+	border-left:1px solid #99BBE8;
+	border-right:1px solid #99BBE8;
+	background-color:#D0DEF0;
+	padding:10px;
+}
+form.formSearch input.FormField
+{
+	border: 1px solid #99BBE8;
+	color:#333333;
+	font:normal 11px Arial,Helvetica,sans-serif;
+	width:200px;
+}
+form.formSearch .FormLabel
+{
+	color:#000;
+	text-align:center;
+	padding-right:10px;
+	width:40%;
+}
+form.formSearch .FormFieldContent
+{
+	color:#000;
+	background-color:#EFEFEF;
+	padding-left:5px;
+	width:60%;
+}
+
+form.formSearch .Record
+{
+	width:80%;
+}
+	 /* formSearch END  */
+
+
+	 /* pagedTable BEGIN  */
+.pagedTableDefault
+{
+	border-left:1px solid #DADADA;
+	border-right:1px solid #DADADA;
+	background-color:#FFF;
+	padding-left:5px;
+	padding-right:5px;
+}
+.pagedTableDefault, .pagedTableDefault table
+{
+	font:normal 11px sans-serif,MiscFixed;
+	color:#808080;
+}
+.pagedTableDefault, .pagedTableDefault .headerContent .tableOption a
+{
+	color:#2078A8;
+	text-decoration:none;
+}
+.pagedTableDefault, .pagedTableDefault .headerContent .tableOption a:hover
+{
+	color:orange;
+}
+.pagedTableDefault td
+{
+	padding:0px;
+}
+.pagedTableDefault .pagedTable td
+{
+	padding:5px;
+}
+.pagedTableDefault .pagedTable
+{
+	border:1px solid #DFDFDF;
+	border-collapse:collapse;
+	color:#27373F;
+}
+.pagedTable td{
+    text-align:right;
+    direction:rtl;
+}
+.pagedTableDefault .pagedTable .Row1
+{
+	background-color:#FFF;
+}
+.pagedTableDefault .pagedTable .Row2
+{
+	background-color:#EEE;
+}
+tr.Selected
+{
+	background-color:#D8DDFF;
+}
+.pagedTableDefault .pagedTable .RowPointer
+{
+	background-color:#E0EAEF;
+}
+.pagedTableDefault .cellSelected1
+{
+font-weight:bold;
+}
+.pagedTableDefault .cellSelected2
+{
+font-weight:bold;
+}
+.pagedTableDefault .pagedTable a
+{
+	color:#FFF;
+	text-decoration:none;
+	font-size:short;
+}
+.pagedTableDefault .pagedTable a:hover
+{
+	color:orange;
+}
+.pagedTableDefault .pagedTable .pagedTableHeader
+{
+	border-bottom:0px solid #DFDFDF;
+	background-color:#E0E9EF;
+	background-color:#6F7F75;
+	color:#5B5B5B;
+	font-weight:bold;
+	background-image:url(/js/maborak/core/images/silverBackgroundTableTitle.jpg);
+	background-repeat:repeat-x;
+	height:26px;
+	padding:0px;
+	overflow:hidden;
+	direction: rtl;
+    text-align: right;
+}
+.pagedTableDefault .pagedTable .pagedTableHeader a
+{
+	text-decoration:none;
+	color:#5B5B5B;
+	padding-left:5px;
+	font:normal 8pt Tahoma, sans-serif,MiscFixed;
+	direction: rtl;
+    text-align: right;
+}
+.pagedTableDefault .pagedTable .pagedTableHeader a:hover
+{
+	color:orange;
+	direction: rtl;
+    text-align: right;
+}
+
+/*Adicion Rube*/
+
+.pagedTableDefault .pagedTable .masterDetailMain
+{
+	background-image:url(/images/masterDetailMain.png);
+    background-repeat: repeat-x;
+	text-decoration:none;
+	color:#5B5B5B;
+	padding-left:5px;
+	font:normal 8pt Tahoma, sans-serif,MiscFixed;
+	font-weight: bold;
+	direction: rtl;
+    text-align: right;
+}
+
+.pagedTableDefault .pagedTable .masterDetailOther
+{
+	background-image:url(/images/masterDetailOther.png);
+    background-repeat: repeat-x;
+	text-decoration:none;
+	color:#5B5B5B;
+	padding-left:5px;
+	font:normal 8pt Tahoma, sans-serif,MiscFixed;
+	font-weight: bold;
+}
+
+/*Fin Adicion Rube*/
+.pagedTableDefault .pagedTable .RowLink
+{
+	background-color:#6F7F75;
+	text-align	:center;
+	direction: rtl;
+    text-align: right;
+}
+A.firstPage {
+	background-image: url('/images/lastPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.noFirstPage {
+	background-image: url('/images/lastPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.previousPage {
+	background-image: url('/images/nextPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.noPreviousPage {
+	background-image: url('/images/nextPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.nextPage {
+	background-image: url('/images/previousPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.noNextPage {
+	background-image: url('/images/previousPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.lastPage {
+	background-image: url('/images/firstPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+	direction: rtl;
+    text-align: right;
+}
+A.noLastPage {
+	background-image: url('/images/firstPage.gif');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-left:21px;
+	padding-top:20px;
+	line-height:40px;
+	text-decoration:none;
+}
+
+	 /* pagedTable END  */
+ 	 /* Grid BEGIN */
+div.pattern .content
+{
+	padding-left:5px;
+	padding-right:5px;
+	border-left:1px solid #DADADA;
+	border-right:1px solid #DADADA;
+	background-color:#FFF;
+	direction: rtl;
+    text-align: right;
+}
+div.pattern .FormTitle
+{
+	font-weight:bold;
+	color: black;
+	background-color:#E0EFE6;
+	padding:2px;
+	direction: rtl;
+    text-align: right;
+}
+
+
+div.grid
+{
+	font:normal 11px sans-serif,MiscFixed;
+	padding-left:10px;
+	padding-right:10px;
+	margin-top:7px;
+	direction: rtl;
+    text-align: right;
+}
+
+div.grid .content
+{
+	padding-left:5px;
+	padding-right:5px;
+	border-left:1px solid #DADADA;
+	border-right:1px solid #DADADA;
+	background-color:#FFF;
+	direction: rtl;
+    text-align: right;
+}
+
+div.grid .tableGrid
+{
+	width:100%;
+}
+div.grid .tableGrid .vFormTitle
+{
+/*	color:#006699;*/
+}
+	 /* Grid END */
+	 /* Tree BEGIN */
+
+div.treeBase .content
+{
+	padding-left:5px;
+	padding-right:5px;
+	border-left:1px solid #DADADA;
+	border-right:1px solid #DADADA;
+	background-color:#FFF;
+}
+.treeNode
+{
+	padding-bottom:10px;
+	font:normal 8pt Tahoma,sans-serif,MiscFixed;
+	color:#808080;
+}
+div.treeBase table td.a
+{
+	width:16px;
+	height:10px;
+}
+div.treeBase table td.b
+{
+	font:normal 8pt Tahoma,sans-serif,MiscFixed;
+	color:black;
+	text-align:left;
+}
+/* TreeParent BEGIN */
+div.treeParent
+{
+
+}
+div.treeParent table
+{
+	font:normal 8pt Tahoma,sans-serif,MiscFixed;
+	color:black;
+}
+
+div.treeParent .treeMinus
+{
+	width:16px;
+	height:22px;
+	display:block;
+	position:relative;
+	background-image:url(/images/minus.gif);
+	background-repeat:no-repeat;
+	overflow:hidden;
+}
+div.treeParent .treePlus
+{
+	width:16px;
+	height:22px;
+	background-image:url(/images/plus.gif);
+	background-repeat:no-repeat;
+	display:block;
+}
+div.treeParent .treePointer
+{
+	width:1px;
+	height:22px;
+	display:block;
+}
+div.treeParent td.c
+{
+	background-image:url(/images/ftv2vertline.gif);
+	background-repeat:repeat-y;
+}
+div.treeParent td.d
+{
+	background-image:url(/images/ftv2node.gif);
+	background-repeat:repeat-y;
+}
+div.treeParent .treeNode
+{
+	padding:2px;
+	padding-bottom:1px;
+	font-weight:bold;
+}
+
+
+
+div.treeParent .treeNode a, div.treeBase .treeNode a
+{
+	color:#006699;
+	font-weight:normal;
+	text-decoration:none;
+}
+div.treeParent .treeNode a:hover, div.treeBase .treeNode a:hover
+{
+	color:orange;
+}
+div.treeParent .FormField
+{
+	background-color:#FFF;
+	padding-bottom:10px;
+}
+div.treeParent .FormField a
+{
+	font-size:8pt !important;
+	color:red;
+}
+div.treeParent .FormTitle
+{
+/*	font:bold 8pt sans-serif,Tahoma,MiscFixed;
+	font:normal 11px sans-serif,MiscFixed;*/
+	font-weight:bold;
+	color: black;
+	background-color:#E0EFE6;
+	padding:2px;
+}
+/* TreeParent END */
+
+/* TreeChild BEGIN */
+div.treeChild td.b
+{
+	padding-right:10px;
+}
+div.treeChild td.a
+{
+	width:10px;
+	height:22px;
+	background:none;
+}
+div.treeChild .c
+{
+	background-image:url(/images/ftv2vertline.gif);
+	background-repeat:repeat-y;
+}
+/* TreeChild END */
+
+
+div.treeChild
+{
+	padding-left:1px;
+}
+div.treeParent .content .treeNode a.selected
+{
+	color:white;
+	background-color:#006699;
+}
+
+/*div.treeParent div.treeParent .content
+{
+	border-left:1px solid #99BBE8;
+	border-right:1px solid #99BBE8;
+	background-color:#D0DEF0;
+}
+div.treeParent div.treeParent .boxTop div.a
+{
+	background-image:url(/skins/green/images/ftl.blue.gif);
+}
+div.treeParent div.treeParent .boxTop div.b
+{
+	border-top:1px solid #99BBE8;
+	background-color:#D0DEF0;
+}
+div.treeParent div.treeParent .boxTop div.c
+{
+	background-image:url(/skins/green/images/ftr.blue.gif);
+}
+div.treeParent div.treeParent .boxBottom div.a
+{
+	background-image:url(/skins/green/images/fbl.blue.png);
+}
+div.treeParent div.treeParent .boxBottom div.b
+{
+	background-image:url(/skins/green/images/fbc.blue.png);
+}
+div.treeParent div.treeParent .boxBottom div.c
+{
+	background-image:url(/skins/green/images/fbr.blue.png);
+}*/
+
+
+
+
+div.treeParent table
+{
+
+}
+div.treeParent .subcontent
+{
+	padding-left:5px;
+	padding-right:5px;
+	border-left:1px solid #99BBE8;
+	border-right:1px solid #99BBE8;
+	background-color:#D0DEF0;
+}
+	 /* Tree END */
+/* XmlForm END  */
+
+
+/**************************** Start -> JSCalendar Widget by Erik Amaru Ortiz <erik@colosa.com> *********************************/
+
+/* The main calendar widget.  DIV containing a table. */
+
+div.calendar { position: relative; }
+
+.calendar, .calendar table {
+  border: 1px solid #6F7F75;
+  font-size: 11px;
+  color: #000;
+  cursor: default;
+  background: #F0F2F0;
+  font-family: tahoma,verdana,sans-serif;
+  z-index:1000;
+}
+
+/* Header part -- contains navigation buttons and day names. */
+
+.calendar .button { /* "<<", "<", ">", ">>" buttons have this class */
+  text-align: center;    /* They are the navigation buttons */
+  padding: 2px;          /* Make the buttons seem like they're pressing */
+}
+
+.calendar .nav {
+  background: #6F7F75 url(menuarrow2.gif) no-repeat 100% 100%;
+}
+
+.calendar thead .title { /* This holds the current "month, year" */
+  font-weight: bold;      /* Pressing it will take you to the current date */
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 2px;
+}
+
+.calendar thead tr { /* Row <TR> containing navigation buttons */
+  background: #6F7F75; /*e*/
+  color: #fff;
+}
+
+.calendar thead .daynames { /* Row <TR> containing the day names */
+  background: #E9F2E9;
+}
+
+.calendar thead .name { /* Cells <TD> containing the day names */
+  border-bottom: 1px solid #B5CFBF;
+  padding: 2px;
+  text-align: center;
+  color: #000;
+}
+
+.calendar thead .weekend { /* How a weekend day name shows in header */
+  color: #a66;
+}
+
+.calendar thead .hilite { /* How do the buttons in header appear when hover */
+  background-color: #B5CFBF; /*e*/
+  color: #000;
+  border: 1px solid #000;
+  padding: 1px;
+}
+
+.calendar thead .active { /* Active (pressed) buttons in header */
+  background-color: #6F7F75; /*e*/
+  border: 1px solid #FFF;
+  color: #FFF;
+  padding: 2px 0px 0px 2px;
+}
+
+/* The body part -- contains all the days in month. */
+
+.calendar tbody .day { /* Cells <TD> containing month days dates */
+  width: 2em;
+  color: #456;
+  text-align: right;
+  padding: 2px 4px 2px 2px;
+}
+.calendar tbody .day.othermonth {
+  font-size: 80%;
+  color: #bbb;
+}
+.calendar tbody .day.othermonth.oweekend {
+  color: #fbb;
+}
+
+.calendar table .wn {
+  padding: 2px 3px 2px 2px;
+  border-right: 1px solid #000;
+  background: #A4BBAD; /*here*/
+}
+
+.calendar tbody .rowhilite td { /* the rowwwwwww*/
+  background: #C9E5D4;
+}
+
+.calendar tbody .rowhilite td.wn {
+  background: #F1F8FC;
+}
+
+.calendar tbody td.hilite { /* Hovered cells <TD> */
+  background: #E9F2E9;
+  padding: 1px 3px 1px 1px;
+  border: 1px solid #6F7F75;
+}
+
+.calendar tbody td.active { /* Active (pressed) cells <TD> */
+  background: #6F7F75;
+  color: #FFF;
+  padding: 2px 2px 0px 2px;
+}
+
+.calendar tbody td.selected { /* Cell showing today date */
+  font-weight: bold;
+  border: 1px solid #000;
+  padding: 1px 3px 1px 1px;
+  background: #fff;
+  color: #000;
+}
+
+.calendar tbody td.weekend { /* Cells showing weekend days */
+  color: #a66;
+}
+
+.calendar tbody td.today { /* Cell showing selected date */
+  font-weight: bold;
+  color: #D50000;
+}
+
+.calendar tbody .disabled { color: #999; }
+
+.calendar tbody .emptycell { /* Empty cells (the best is to hide them) */
+  visibility: hidden;
+}
+
+.calendar tbody .emptyrow { /* Empty row (some months need less than 6 rows) */
+  display: none;
+}
+
+/* The footer part -- status bar and "Close" button */
+
+.calendar tfoot .footrow { /* The <TR> in footer (only one right now) */
+  text-align: center;
+  background: #206A9B;
+  color: #fff;
+}
+
+.calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
+  background: #000;
+  color: #fff;
+  border-top: 1px solid #206A9B;
+  padding: 1px;
+}
+
+.calendar tfoot .hilite { /* Hover style for buttons in footer */
+  background: #B8DAF0;
+  border: 1px solid #178AEB;
+  color: #000;
+  padding: 1px;
+}
+
+.calendar tfoot .active { /* Active (pressed) style for buttons in footer */
+  background: #006AA9;
+  padding: 2px 0px 0px 2px;
+}
+
+/* Combo boxes (menus that display months/years for direct selection) */
+
+.calendar .combo {
+  position: absolute;
+  display: none;
+  top: 0px;
+  left: 0px;
+  width: 4em;
+  cursor: default;
+  border: 1px solid #655;
+  background: #def;
+  color: #000;
+  font-size: 90%;
+  z-index: 100;
+}
+
+.calendar .combo .label,
+.calendar .combo .label-IEfix {
+  text-align: center;
+  padding: 1px;
+}
+
+.calendar .combo .label-IEfix {
+  width: 4em;
+}
+
+.calendar .combo .hilite {
+  background: #34ABFA;
+  border-top: 1px solid #46a;
+  border-bottom: 1px solid #46a;
+  font-weight: bold;
+}
+
+.calendar .combo .active {
+  border-top: 1px solid #46a;
+  border-bottom: 1px solid #46a;
+  background: #F1F8FC;
+  font-weight: bold;
+}
+
+.calendar td.time {
+  border-top: 1px solid #000;
+  padding: 1px 0px;
+  text-align: center;
+  background-color: #E9F2E9;
+}
+
+.calendar td.time .hour,
+.calendar td.time .minute,
+.calendar td.time .ampm {
+  padding: 0px 3px 0px 4px;
+  border: 1px solid #889;
+  font-weight: bold;
+  background-color: #E9F2E9;
+}
+
+.calendar td.time .ampm {
+  text-align: center;
+}
+
+.calendar td.time .colon {
+  padding: 0px 2px 0px 3px;
+  font-weight: bold;
+}
+
+.calendar td.time span.hilite { /*e*/
+  border-color: #000;
+  background-color: #6F7F75;
+  color: #fff;
+}
+
+.calendar td.time span.active {
+  border-color: red;
+  background-color: #000;
+  color: #A5FF00;
+}
+
+/**************************** End -> JSCalendar Widget by Erik Amaru Ortiz <erik@colosa.com> *********************************/
+
+/**************************** Start -> Suggest Widget by Erik Amaru Ortiz <erik@colosa.com>  *********************************/
+/*
+================================================
+autosuggest, inquisitor style
+================================================
+*/
+
+body
+{
+	position: relative;
+}
+
+
+div.autosuggest
+{
+	position: absolute;
+	/*background-image: url(/skins/green/img_inquisitor/as_pointer.gif);*/
+	background-position: top;
+	background-repeat: no-repeat;
+	padding: 10px 0 0 0;
+	z-index:1000;
+
+	border-bottom: 1px #708090 solid;
+	/*border-left	 : 1px #708090 solid;*/
+	border-right : 1px #708090 solid;
+	/*border-top	 : 1px #708090 solid;*/
+}
+
+/*div.autosuggest div.as_header,
+div.autosuggest div.as_footer
+{
+	position: relative;
+	height: 6px;
+	padding: 0 6px;
+	/*background-image: url(/skins/green/img_inquisitor/ul_corner_tr.gif);*/
+	/*background-position: top right;*/
+	background-repeat: no-repeat;
+	overflow: hidden;
+}*/
+div.autosuggest div.as_footer
+{
+	/*background-image: url(/skins/green/img_inquisitor/ul_corner_br.gif);*/
+}
+
+div.autosuggest div.as_header div.as_corner,
+div.autosuggest div.as_footer div.as_corner
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 6px;
+	width: 6px;
+	/*background-image: url(/skins/green/img_inquisitor/ul_corner_tl.gif);*/
+	/*background-position: top left;*/
+	background-repeat: no-repeat;
+}
+div.autosuggest div.as_footer div.as_corner
+{
+	/*background-image: url(/skins/green/img_inquisitor/ul_corner_bl.gif);*/
+}
+div.autosuggest div.as_header div.as_bar,
+
+div.autosuggest div.as_footer div.as_bar
+{
+	height: 6px;
+	overflow: hidden;
+	/*background-color: #000*/
+	background-color: #E0DFE3;
+}
+
+
+div.autosuggest ul
+{
+	list-style: none;
+	margin: 0 0 -4px 0;
+	padding: 0;
+	overflow: hidden;
+	/*background-color: #000;*/
+	background-color: #E0DFE3;
+}
+
+div.autosuggest ul li
+{
+	color: #ccc;
+	padding: 0;
+	margin: 0 4px 4px;
+	text-align: left;
+}
+
+/*celda*/
+div.autosuggest ul li a
+{
+
+	/*color: #ccc;*/
+	color: #000;
+
+
+	display: block;
+	text-decoration: none;
+	background-color: transparent;
+	text-shadow: #000 0px 0px 5px;
+	position: relative;
+	padding: 0;
+	width: 100%;
+}
+div.autosuggest ul li a:hover
+{
+	background-color: #444;
+}
+
+/*al pasar por encima*/
+div.autosuggest ul li.as_highlight a:hover
+{
+
+	/*background-color: #1B5CCD;*/
+	background-color: #EFEFEF;
+}
+
+div.autosuggest ul li a span
+{
+	display: block;
+	padding: 3px 6px;
+	font-weight: bold;
+}
+
+div.autosuggest ul li a span small
+{
+	font-weight: normal;
+	color: #999;
+}
+
+div.autosuggest ul li.as_highlight a span small
+{
+	color: #ccc;
+}
+
+/*al cambiar entre celdas*/
+div.autosuggest ul li.as_highlight a
+{
+	/*color: #fff;*/
+	color: #000;
+	/*background-color: #1B5CCD;*/
+	background-color: #EFEFEF;
+
+	/*background-image: url(/skins/green/img_inquisitor/hl_corner_br.gif);*/
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}
+
+div.autosuggest ul li.as_highlight a span
+{
+	/*background-image: url(/skins/green/img_inquisitor/hl_corner_bl.gif);*/
+	background-position: bottom left;
+	background-repeat: no-repeat;
+}
+
+div.autosuggest ul li a .tl,
+div.autosuggest ul li a .tr
+{
+	background-image: transparent;
+	background-repeat: no-repeat;
+	width: 6px;
+	height: 6px;
+	position: absolute;
+	top: 0;
+	padding: 0;
+	margin: 0;
+}
+div.autosuggest ul li a .tr
+{
+	right: 0;
+}
+
+div.autosuggest ul li.as_highlight a .tl
+{
+	left: 0;
+	/*background-image: url(/skins/green/img_inquisitor/hl_corner_tl.gif);*/
+	background-position: bottom left;
+}
+
+div.autosuggest ul li.as_highlight a .tr
+{
+	right: 0;
+	/*background-image: url(/skins/green/img_inquisitor/hl_corner_tr.gif);*/
+	background-position: bottom right;
+}
+
+
+
+div.autosuggest ul li.as_warning
+{
+	font-weight: bold;
+	text-align: center;
+}
+
+div.autosuggest ul em
+{
+	font-style: normal;
+	color: red;
+}
+
+/**************************** End -> Suggest Widget by Erik Amaru Ortiz <erik@colosa.com>  *********************************/
+
+.tableGrid_view
+{
+	width: 100%;
+	border-top: 0px solid #DADADA;
+	border-bottom: 0px solid #DADADA;
+	border-left: 0px solid #DADADA;
+	border-right: 0px solid #DADADA;
+	padding: 0px;
+	
+}
+
+table.tableGrid_view td 
+{
+	border-top: 1px solid #DADADA;
+	border-bottom: 1px solid #DADADA;
+	border-left: 0px solid #DADADA;
+	border-right: 0px solid #DADADA;
+	padding: 0px;
+	
+}
+
+.ui-widget-header {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:#5C9CCC url(/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png) repeat-x scroll 50% 50%;
+	border:1px solid #4297D7;
+	color:#FFFFFF;
+	font-weight:bold;
+	font-size: 11px;
+}
+
+
+/**************************** new calendar **********************************************/
+
+.DHTMLSuite_calendar{	/* Main div for the calendar */
+	border:1px solid #8F8F8F;
+	background-color:#FFF;
+	width:220px;
+	position:relative;	
+	overflow:hidden;
+	font-size: 11px;
+	
+}
+.DHTMLSuite_calendarContent{	/* Sub div inside DHTMLSuite_calendar - this is the div where content is added */
+	position:relative;	/* IMPORTANT - This must always be like this in order to make it possible to position sub elements correctly, especially the iframe */
+	z-index:10;	/* IMPORTANT - This must always be like this in order to make it possible to position sub elements correctly, especially the iframe */
+	background-color:#FFF;
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+	font-size: 11px;
+}
+
+
+/*******************
+
+ START CSS FOR THE HEADER ROW - WHERE YOU SEE MONTH AND YEAR
+ 
+********************/
+.DHTMLSuite_calendar .DHTMLSuite_calendarHeading{	/* Heading of calendar, where you see the month and year */
+	background-image:url(/images/calendar/calendar_heading.png);
+	background-repeat:repeat-x;
+	height:21px;
+	border-bottom:1px solid #8F8F8F;
+	font-size: 11px;
+}
+.DHTMLSuite_calendarHeadingTxt{	/* Inner div in the heading  */
+	padding:1px;
+	text-align:center;
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendarCloseButton{	/* Close button at the top right corner of the calendar */
+	background-image:url(/images/calendar/calendar-close.gif);
+	background-repeat:no-repeat;
+	width:13px;
+	height:13px;
+	position:absolute;
+	right:3px;
+	top:3px;
+	padding:1px;
+	background-position:center center;
+	cursor:pointer;
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendarHeaderMonthAndYear{	/* Div elements for year and month in the heading */
+	padding:1px;
+	padding-right:2px;
+	padding-left:2px;
+	cursor:pointer;
+	line-height:17px;
+	font-size: 11px;
+	font-weight: bold;
+	font-size: 11px;
+}
+.DHTMLSuite_calendarHeaderMonthAndYearOver{	/* Mouse over effect - month and year in the heading */
+	background-color:#FFF;
+	border:1px solid #8F8F8F;
+	padding:0px;
+	padding-left:1px;
+	padding-right:1px;
+	font-size: 11px;
+}
+
+
+/*******************
+
+ START CSS FOR THE TIME BAR - THE DIV WHERE YOU SEE "Time: " and the hour and minute
+ 
+********************/
+
+.DHTMLSuite_calendar_timeBar{	/* Time bar - where users can select hour and minutes */
+	background-color:#D3D3D3;
+	height:21px;
+	border-top:1px solid #8F8F8F;
+	text-align:center;
+	position:relative;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_timeBarHourAndMinute{	/* General rules for the displayed hours and minutes - the ones you can click on the bring out the drop down boxes */
+	padding:1px;
+	padding-left:2px;
+	padding-right:2px;
+	margin-right:2px;
+	cursor:pointer;
+	font-size: 11px;
+}
+.DHTMLSuite_calendarTimeBarHourAndMinuteOver{	/* Mouse over effect for the hour and minute displayed in the time bar */
+	background-color:#FFF;
+	border:1px solid #8F8F8F;
+	padding:0px;
+	padding-left:1px;
+	padding-right:1px;
+	font-size: 11px;
+}
+.DHTMLSuite_calendarTimeBarTimeString{	/* String "Time:" */
+	position:absolute;
+	left:2px;
+	top:2px;
+	font-size: 11px;
+}
+
+/*******************
+
+ START CSS FOR THE NAVIGATION BAR - THE DIV WITH THE LEFT AND RIGHT ARROWS
+ 
+********************/
+
+.DHTMLSuite_calendar_navigationBar{	/* Navigation bar below the heading */
+	background-color:#D3D3D3;
+	height:17px;
+	border-bottom:1px solid #8F8F8F;
+	position:relative;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_navigationBarToday{	/* Div for the string "Today" in the navigation bar */
+	text-align:center;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_navigationBarToday span{	/* The "Today" string inside the navigation bar */
+	cursor:pointer;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_btnNextYear,.DHTMLSuite_calendar_btnPreviousYear,.DHTMLSuite_calendar_btnNextMonth,.DHTMLSuite_calendar_btnPreviousMonth{	/* Buttons - previous/next month and year */
+	position:absolute;
+	background-repeat:no-repeat;
+	background-position:center center;
+	width:13px;
+	height:13px;
+	padding:1px;
+	top:1px;
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendar_btnNextYear{	/* Next year button */
+	background-image:url(/images/calendar/calendar-next-year.gif);
+	right:2px;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_btnPreviousYear{	/* Previous year button */
+	background-image:url(/images/calendar/calendar-previous-year.gif);
+	left:2px;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_btnNextMonth{	/* Next month button */
+	background-image:url(/images/calendar/calendar-next-month.gif);
+	right:18px;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_btnPreviousMonth{	/* Previous month button */
+	background-image:url(/images/calendar/calendar-previous-month.gif);
+	left:18px;
+	font-size: 11px;
+}
+
+/*******************
+
+ START CSS FOR THE MAIN DIV CONTAINING ALL THE DAYS WITHIN A MONTH AND HEADINGS (weeks, days(Mon-Sun) etc.)
+ 
+********************/
+
+
+.DHTMLSuite_calendar_monthView{	/* Main div element for the days in a month */
+
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendar_monthView_headerCell{	/* Main div element for the days in a month */
+	background-color:#FFF;
+	border-bottom:1px solid #8F8F8F;
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendar_monthView_firstColumn{	/* First column - the week column */
+	background-color:#D3D3D3;
+	border-right:1px solid #8F8F8F; 
+	text-align:left;
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendar_monthView td{	/* Default css for all the cells inside the calendar, i.e. week heading, label for the days, and the days */
+	text-align:center;
+	cursor:default;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_headerSunday{	/* Sunday in the header */
+	color:red;
+	border-bottom:1px solid #8F8F8F;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_daysInOtherMonths{	/* Days in previous or next month, i.e. before start of current displayed month or after days in the currently displayed month */
+	color:#999;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_daysInThisMonth{	/* Layout - ordinary days(mon-sat) in this month */
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_sundayInThisMonth{	/* Layout - sundays in current displayed month */
+	color:red;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_initialDate{	/* Inital set date, example: the date in an input field which you are populating with the calendar */
+	background-color:#8F8F8F;
+	color:white;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_invalidDate{	/* Inital set date, example: the date in an input field which you are populating with the calendar */
+	color:#AAA;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_monthView_currentDate{	/* Date of today */
+	background-color:#dfe9fa;
+	font-size: 11px;
+	font-weight: bold;
+}
+/***************************************************
+*
+* START CSS -  DROP DOWN BOXES 
+*
+*
+***************************************************/
+
+/*** MINUTES ***/
+.DHTMLSuite_calendar_minuteDropDown{	/* Drop down box for minutes */
+	background-color:#D3D3D3;
+	border:1px solid #8F8F8F;
+	width:23px;
+	padding:1px;
+	text-align:center;
+	/* You shouldn't change these 3 options */	
+	position:absolute;	
+	z-index:152000;
+	cursor:pointer;
+	font-size: 11px;
+	
+}
+.DHTMLSuite_calendar_minuteDropDownCurrentMinute{	/* Minute in drop down when it's equal to current minute of the display, i.e. the minute you see where you click on the drop down */
+	color:red;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_dropdownAMinuteOver{
+	background-color:#dfe9fa;
+	font-size: 11px;
+}
+
+/*** HOURS ***/
+.DHTMLSuite_calendar_hourDropDown{	/* Drop down box for hours */
+	background-color:#D3D3D3;
+	border:1px solid #8F8F8F;
+	width:23px;
+	position:absolute;	
+	z-index:152000;
+	padding:1px;
+	cursor:pointer;
+	font-size:11px;	
+	text-align:center;
+}
+.DHTMLSuite_calendar_dropdownAnHourOver{
+	background-color:#dfe9fa;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_hourDropDownCurrentHour{
+	color:red;
+	font-size: 11px;
+}
+
+/*** MONTHS ***/
+.DHTMLSuite_calendar_monthDropDown{
+	background-color:#D3D3D3;
+	border:1px solid #8F8F8F;
+	width:70px;
+	position:absolute;	
+	z-index:152000;
+	cursor:pointer;
+	padding:1px;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_dropDownAMonth{
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_dropdownAMonthOver{
+	background-color:#dfe9fa;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_yearDropDownCurrentMonth{
+	color:red;
+	font-size: 11px;
+}
+
+/***** YEAR ****/
+.DHTMLSuite_calendar_yearDropDown{
+	background-color:#D3D3D3;
+	border:1px solid #8F8F8F;
+	width:30px;
+	position:absolute;	
+	z-index:152000;
+	cursor:pointer;
+	padding:1px;
+	font-size:12px;	
+	text-align:center;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_dropDownAYear{
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_dropdownAYearOver{
+	background-color:#dfe9fa;
+	font-size: 11px;
+}
+.DHTMLSuite_calendar_yearDropDownCurrentYear{	/* Current year */
+	color:red;
+	font-size: 11px;
+}
+
+
+
+/* UP AND DOWN ARROWS INSIDE DROP DOWNS **/
+.DHTMLSuite_calendar_dropDown_arrowUp{	/* Drop down - moving to previous year */
+	background-image:url(/images/calendar/calendar-dropdown-up.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
+	height:8px;
+	font-size: 11px;
+}
+
+.DHTMLSuite_calendar_dropDown_arrowDown{	/* Drop down - moving to previous year */
+	background-image:url(/images/calendar/calendar-dropdown-down.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
+	height:8px;
+	font-size: 11px;
+}
+.DHTMLSuite_calendarDropDown_dropDownArrowOver{
+	background-color:#dfe9fa;
+	font-size: 11px;
+}
+
+
+
+
+/* IT'S IMPORTANT TO HAVE THIS CSS RULE AT THE BOTTOM IN ORDER TO MAKE THE PADDING OVERRIDE PADDING OF OTHER ELEMENTS */
+.DHTMLSuite_calendarButtonOver{	/* Mouse over effect for the close button */
+	background-color:#FFF;	/* White background color */
+	border:1px solid #8F8F8F;	/* Blue border */
+	padding:0px;	/* The sum border+padding of this element should be the same as border+padding of .DHTMLSuite_calendarCloseButton */
+	font-size: 11px;
+}
+.DHTMLSuite_calendarDayOver{	/* Mouse over effect - days in the calendar, i.e. days in current displayed month */
+	background-color:#D3D3D3;
+	font-size: 11px;
+}
+
+/* YOU SHOULD NEVER MODIFY THIS ONE */
+.DHTMLSuite_calendar_iframe{	/* Iframe used to cover select boxes below in older IE browsers(version 6 and prior) */
+	position:absolute;
+	top:1px;
+	left:1px;
+	z-index:1;
+	font-size: 11px;
+}
+
+.calendar_picker_min{
+	cursor:pointer; 
+	background-image:url(/images/btncal_min.png); 
+	float:left; width:96px; height:23px;
+	/*font-weight: bold;*/
+	color:#fff;
+	font-size: 11px;
+}
+.calendar_picker{
+	cursor:pointer; 
+	background-image:url(/images/btncal.png); 
+	float:left; width:121px; height:23px;
+	/*font-weight: bold;*/
+	color:#fff;
+	font-size: 11px;
+}
+
+/*@start:  PM tooltip -> neyek <erik@colosa.com> */
+#pmtooltip{
+        background-color:#EEE;
+        border:1px solid #000;
+        position:absolute;
+        display:none;
+        z-index:20000;
+        padding:2px;
+        font-size:0.9em;
+        -moz-border-radius:6px; /* Rounded edges in Firefox */
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", Arial, sans-serif;
+
+}
+#pmtooltipShadow{
+        position:absolute;
+        background-color:#555;
+        display:none;
+        z-index:10000;
+        opacity:0.7;
+        filter:alpha(opacity=70);
+        -khtml-opacity: 0.7;
+        -moz-opacity: 0.7;
+        -moz-border-radius:6px; /* Rounded edges in Firefox */
+}
+/*@end:  PM tooltip */
+
+/**
+ * (init) Dynaform Handler styles */
+
+#sortable {list-style-type: none;margin: 2; padding: 0; width: 700px;}
+#sortable li {margin: 1px 1px 1px 1px;padding: 1px;padding-left: 1px;font-size: 13px;height: 28px;}
+/*#sortable li:hover {background: orange;}*/
+#sortable li span {position: absolute;margin-left: -1.3em;}
+.dtext{padding-top: 0px;font-size: 13px;color:blue;}
+.dynalist td{font-size: 10px;color: #000;}
+#jq-siteContain {width: 910px;margin: 0 auto;}
+#jq-content {background: #181c21 url(images/bg_home_content.gif) top repeat-x;padding: 4em 40px;border-bottom: 1px solid #000;}
+#jq-intro {padding-top: 1em;width: 515px;margin-bottom: 3.5em;}
+#jq-intro li {float: left;font-size: 1.4em;}
+#jq-intro li a { color: #5DB0E6; font-weight: bold; text-decoration: underline; float: left; background: url(images/icon_check_whiteOnDarkBlue.gif) left no-repeat; padding: 0 30px 0 23px;}
+#jq-intro li p {font-size: .9em;}
+body.jq-enhanced #jq-intro li {position: relative;}
+html.js div.jq-checkpointSubhead {display: none;}
+body.jq-enhanced #jq-intro li div.jq-checkpointSubhead { position: absolute; width: 253px; height: 54px; background: url(/images/bg_ctaTooltip.png) 0 0 no-repeat; top: -1.5em; left: -35%; z-index: 100;}
+body.jq-enhanced #jq-intro li div.jq-checkpointSubhead p{font-size: 1em; padding: 10px 5px 0 50px; color: #AE0001; font-weight: bold; line-height: 1.3em; margin: 0; cursor: pointer;}
+.toggler { font-size:10px;height: 200px; position: relative;}
+#effect { width:180px;font-size:10px;height: 135px; padding: 0.4em; position: relative; background: #fff; }
+#effect h3 { font-size:10px;margin: 0; padding: 0.4em; text-align: center; }
+
+.current_selected_item{
+   border:2px solid orange;
+   background: #dfeffc url(images/ui-bg_glass_85_dfeffc_1x400.png) 50% 50% repeat-x;
+   font-weight: bold;
+   color: #2e6e9e;
+   outline: none;
+
+}
+
+/* 
+ *  (end) Dybaform Handler styles **/
+
+/*extendend fields styles*/
+#fieldshandler_items_table{
+    direction: rtl;
+}
+
+.fieldshandler_item{
+    direction: ltr;
+}
+
+.htmleditor{
+	-x-system-font:none;
+	background:#FFFFFF url(../images/input_back.gif) repeat-x scroll 0 0;
+	border:1px solid #AAAAAA;
+	color:#333333;
+	font-family:sans-serif;
+	font-size:8pt;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	padding:1px 1px 1px 3px;
+	direction:ltr;
+}
+
+.FormTextPM{
+    direction: ltr;
+}
+
+.directionSide1{
+    direction: rtl;
+    align: right;
+}
+
+.directionSide2{
+    direction: ltr;
+    align: left;
+}
+
+.pm__dynavars{
+	direction:ltr; 
+	font-weight:bold;	
+}
+
+/*
+*  OUTER LAYOUT RESIZERS & TOGGLERS --resizable panel
+*  By. Erik <erik@colosa.com>
+*/
+
+/* north-pane is not resizable
+.resizer-north-dragging ,
+.resizer-north:hover		{ background: url(../img/resizable-n.gif) repeat-x center; }*/
+.resizer-south-dragging ,
+.resizer-south:hover		{ background: url(../img/resizable-s.gif) repeat-x center; }
+
+.resizer-west-dragging ,
+.resizer-west-open:hover	{ background: url(../img/resizable-w.gif) repeat-y center; }
+.resizer-east-dragging ,
+.resizer-east-open:hover	{ background: url(../img/resizable-e.gif) repeat-y center; }
+
+.resizer-west-open ,
+.resizer-east-open {
+	background-color: #999;
+	opacity: 0.1;
+	filter: alpha(opacity=10);
+}
+.resizer-west-open:hover ,
+.resizer-east-open:hover {
+	opacity: 1;
+	filter: alpha(opacity=100);
+}
+.resizer-dragging {
+	/* see draggable.opacity option
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	*/
+}
+.resizer-dragging-limit	{ background: #FF3300 !important; }
+
+/* IE6 * HACK - always show resizer graphics because IE6 cannot understand elem:hover */
+/** html .resizer-north		{ background: url(../img/resizable-n.gif) repeat-x center !important; } */
+* html .resizer-south		{ background: url(../img/resizable-s.gif) repeat-x center !important; }
+* html .resizer-west-open	{ background: url(../img/resizable-w.gif) repeat-y center !important; }
+* html .resizer-east-open	{ background: url(../img/resizable-e.gif) repeat-y center !important; }
+/** html .resizer-north , */
+* html .resizer-south ,
+* html .resizer-west-open ,
+* html .resizer-east-open {
+	opacity: 0.1 !important;
+	filter: alpha(opacity=10) !important;
+}
+
+/*
+*	SIMPLE TOGGLER BUTTONS (used on Outer Layout North/South only)
+*/
+
+.toggler-north-open ,
+.toggler-south-closed 		{ background: url(../img/toggle-up.gif) no-repeat center bottom; }
+.toggler-north-closed ,
+.toggler-south-open   		{ background: url(../img/toggle-dn.gif) no-repeat center top; }
+/*
+.toggler-east-closed ,
+.toggler-west-open    { background: url(../img/toggle-lt.gif) no-repeat center right; }
+.toggler-west-closed ,
+.toggler-east-open    { background: url(../img/toggle-rt.gif) no-repeat center left; }
+*/
+
+/*
+*	extJS-STYLE RESIZER/SLIDER-BAR (CLOSED)
+*/
+.resizer-west-closed ,
+.resizer-east-closed {
+	background: #B4B4B4 url(/images/separator-v.gif) center no-repeat ;
+	border-top: 1px solid #777;
+	border-bottom: 1px solid #777;
+}
+.resizer-west-closed:hover ,
+.resizer-east-closed:hover {
+	background: #D1E6FC;
+}
+
+span.button-pin ,
+span.button-close {
+	position:	absolute;
+	top:		0;
+	width: 		20px;
+	height:		20px;
+	z-index:	2;
+	display:	block;
+	cursor: 	pointer;
+}
+span.button-close-west	{ left:	 0; }
+span.button-close-east	{ right: 0; }
+span.button-pin-west	{ right: 1px; }
+span.button-pin-east	{ left:	 1px; }
+
+/* CUSTOM pin-buttons */
+span.button-pin-up 		  		{ background: url(/images/pin-up-off.gif) no-repeat center; }
+span.button-pin-up:hover   		{ background: url(/images/pin-up-on.gif)  no-repeat center; }
+span.button-pin-down 	  		{ background: url(/images/pin-dn-off.gif) no-repeat center; }
+span.button-pin-down:hover 		{ background: url(/images/pin-dn-on.gif)  no-repeat center; }
+
+/* CUSTOM close-buttons */
+span.button-close-west			{ background: url(/images/go-lt-off.gif) no-repeat center; }
+span.button-close-west:hover	{ background: url(/images/go-lt-on.gif)  no-repeat center; }
+span.button-close-east			{ background: url(/images/go-rt-off.gif) no-repeat center; }
+span.button-close-east:hover	{ background: url(/images/go-rt-on.gif)  no-repeat center; }
+
+/* STANDARD toggler-buttons - when the east/west panes are 'closed' */
+    .toggler-west-closed		{ background: url(/images/go-rt-off.gif) no-repeat center; }
+.toggler-west-closed:hover	{ background: url(/images/go-rt-on.gif)  no-repeat center; }
+.toggler-east-closed		{ background: url(/images/go-lt-off.gif) no-repeat center; }
+.toggler-east-closed:hover	{ background: url(/images/go-lt-on.gif)  no-repeat center; }
+
+
+/*
+*	INNER LAYOUT RESIZERS & TOGGLERS
+*
+*	These styles target 'children of center pane', so only affect the Inner Layout
+*	This layout has applyDefaultCSS=true, so use !important to override defaults
+*/
+
+.ui-layout-center .ui-layout-resizer-closed:hover	{ background: #FFEDCA !important; }
+.ui-layout-center .ui-layout-resizer-open:hover ,
+.ui-layout-center .ui-layout-resizer-dragging		{ background: #C4E1A4 !important; }
+.ui-layout-center .ui-layout-resizer-dragging-limit	{ background: #FF3300 !important; }
+
+.ui-layout-center .ui-layout-resizer-north ,
+.ui-layout-center .ui-layout-resizer-south		{ border-left:  1px solid #BBB !important;
+											  border-right: 1px solid #BBB !important; }
+.ui-layout-center .ui-layout-resizer-north-closed{ border-top:   1px solid #BBB !important; }
+.ui-layout-center .ui-layout-resizer-south-closed{ border-bottom:1px solid #BBB !important; }
+.ui-layout-center .ui-layout-resizer-west-closed	{ border-left:  1px solid #BBB !important; }
+.ui-layout-center .ui-layout-resizer-east-closed	{ border-right: 1px solid #BBB !important; }
+
+.ui-layout-center .ui-layout-resizer:hover .ui-layout-toggler {
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+}
+.ui-layout-center .ui-layout-resizer:hover .ui-layout-toggler:hover {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	background: #FD9 !important;
+	border-color: #CB7 !important;
+}
+
+.ui-layout-center .ui-layout-resizer-sliding {
+	opacity: 0.3;
+	filter: alpha(opacity=30);
+}
+.ui-layout-center .ui-layout-resizer-sliding:hover {
+	opacity: 1;
+	filter: alpha(opacity=100);
+}
+.ui-layout-center .ui-layout-resizer-sliding .ui-layout-toggler {
+	display: none !important;
+}
+.ui-layout-center .ui-layout-resizer-sliding:hover .ui-layout-toggler {
+	display: block !important;
+}

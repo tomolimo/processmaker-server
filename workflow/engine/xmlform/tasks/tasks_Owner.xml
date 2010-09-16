@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="tasks_Owner" width="99%" mode="edit" enableTemplate="0" border="0">
+
+<TAS_UID type="hidden"/>
+
+<INDEX type="hidden"/>
+
+<TAS_OWNER_APP type="dropdown" group="1">
+  <en>Set task performer as<option name="">(No ownership changes)</option><option name="1">First case owner</option><option name="2">Second case owner</option><option name="3">Third case owner</option><option name="4">Fourth case owner</option><option name="5">Fifth case owner</option><option name="6">Sixth case owner</option><option name="7">Seventh case owner</option><option name="8">Eighth case owner</option><option name="9">Ninth case owner</option><option name="10">Tenth case owner</option></en>
+</TAS_OWNER_APP>
+
+</dynaForm>  

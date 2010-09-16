@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="availableSupervisorDynaforms(@QPRO_UID);return false;" colAlign="left" colWidth="50">
+  <en>Assign</en>
+</MNU_ASSIGN>
+
+<PAGED_TABLE_ID type="private"/>
+
+<PRO_UID type="private"/>
+<dynaformsEdit type="private" defaultValue="../dynaforms/dynaforms_Edit"/>
+<dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
+<dynaformsEditor type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
+<dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
+<dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var oPanel;
+var availableSupervisorDynaforms = function(sProcessUID) {
+  oPanel = new leimnud.module.panel();
+	oPanel.options = {
+		size	:{w:400,h:350},
+		position:{x:0,y:0,center:true},
+		title	:G_STRINGS.ID_ASSIGN_DYNAFORM,
+		theme	:'processmaker',
+		statusBar:false,
+		control	:{resize:false,roll:false},
+		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+	oPanel.make();
+	oPanel.loader.show();
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url : '../steps/steps_SupervisorAjax',
+		args: 'action=availableSupervisorDynaforms&PRO_UID=' + sProcessUID
+  });
+  oRPC.callback = function(rpc) {
+		oPanel.loader.hide();
+		oPanel.addContent(rpc.xmlhttp.responseText);
+		var scs = rpc.xmlhttp.responseText.extractScript();
+		scs.evalScript();
+  }.extend(this);
+	oRPC.make();
+};
+
+var assignSupervisorDynaform = function(sProcessUID, sDynaformUID) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../steps/steps_SupervisorAjax',
+		async: false,
+		args : 'action=assignSupervisorDynaform&PRO_UID=' + sProcessUID + '&DYN_UID=' + sDynaformUID
+  });
+  oRPC.make();
+  oPanel.remove();
+  dynaforms_SupervisorOptions.refresh();
+};
+
+var removeSupervisorDynaform = function(sStepUID, sProcessUID, sDynaformUID, iPosition) {
+  new leimnud.module.app.confirm().make({
+  	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_SUPERVISOR_DYNAFORM)',
+  	action:function()
+  	{
+      var oRPC = new leimnud.module.rpc.xmlhttp({
+	    	url  : '../steps/steps_SupervisorAjax',
+	    	async: false,
+	    	args : 'action=removeSupervisorDynaform&STEP_UID=' + sStepUID + '&PRO_UID=' + sProcessUID + '&DYN_UID=' + sDynaformUID + '&STEP_POSITION=' + iPosition
+      });
+      oRPC.make();
+      dynaforms_SupervisorOptions.refresh();
+    }.extend(this)
+  });
+};
+
+]]></JS>
+
+</dynaForm> 

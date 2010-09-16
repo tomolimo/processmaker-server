@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="" type="popupMenu" theme="processmaker">
+<PAGED_TABLE_ID type="private"/>
+<js type="javascript"><![CDATA[
+
+function loadPopupMenu_@#PAGED_TABLE_ID(){
+popupMenu_@#PAGED_TABLE_ID(document.getElementById('table[@#PAGED_TABLE_ID]').rows[0]);
+for(var k=0,l=oPopupMenu_@#PAGED_TABLE_ID.options.menu.length;k<l;k++){
+  var img='';
+  img='/images/unchecked.gif';
+  for(var i=0,j=@#PAGED_TABLE_ID.shownFields.length;i<j;i++){
+    if (@#PAGED_TABLE_ID.shownFields[i]===oPopupMenu_@#PAGED_TABLE_ID.options.menu[k].name)
+    {
+      img='/images/checked.gif';break;
+    }
+    
+  }
+  oPopupMenu_@#PAGED_TABLE_ID.options.menu[k].image=img;
+};
+}
+]]></js>
+</dynaForm>

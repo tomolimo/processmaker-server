@@ -1,0 +1,62 @@
+<form id="{$form_id}" name="{$form_id}" action="{$form_action}" method="post" encType="multipart/form-data" style="margin:0px" class="formDefault">
+	<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+	<div class="content">
+		<table width='{$form_width}'>
+  		<tr>
+			<td valign='top'>
+					<table class='Record' cellspacing="0" cellpadding="0" border="0" width="100%">
+						<tr style="display: none">
+      				<td colspan="2">{$form.action}</td>
+     			  </tr>
+						<tr style="display: none">
+      				<td colspan="2">{$form.ROU_UID}</td>
+     			  </tr>
+						<tr style="display: none">
+      				<td colspan="2">{$form.PROCESS}</td>
+     			  </tr>
+						<tr style="display: none">
+      				<td colspan="2">{$form.TASK}</td>
+     			  </tr>
+						<tr style="display: none">
+      				<td colspan="2">{$form.ROU_TYPE_OLD}</td>
+     			  </tr>
+     			  <tr>
+      				<td class='FormTitle' colspan="2">{$form.TITLE}</td>
+     			  </tr>
+						<tr>
+	      			<td class='FormLabel' width="{$form_labelWidth}">{$ROU_TYPE}</td>
+	      			<td class='FormFieldContent'>{$form.ROU_TYPE}</td>
+     			 	</tr>
+						<tr style="display: none">
+	      			<td class='FormLabel' width="{$form_labelWidth}">{$ROU_NEXT_TASK}</td>
+	      			<td class='FormFieldContent'>{$form.ROU_NEXT_TASK}</td>
+     			 	</tr>
+						<tr style="display: none">
+	      			<td class='FormLabel' width="{$form_labelWidth}">{$ROU_TO_LAST_USER}</td>
+	      			<td class='FormFieldContent'>{$form.ROU_TO_LAST_USER}</td>
+     			 	</tr>
+						<tr style="display: none">
+      				<td class='FormFieldContent' colspan="2">{$form.GRID_SELECT_TYPE}</td>
+     				</tr>
+     				<tr style="display: none">
+      				<td class='FormFieldContent' colspan="2">{$form.GRID_EVALUATE_TYPE}</td>
+     				</tr>
+     				<tr style="display: none">
+      				<td class='FormFieldContent' colspan="2">{$form.GRID_PARALLEL_TYPE}</td>
+     				</tr>
+     				<tr style="display: none">
+      					<td class='FormFieldContent' colspan="2">{$form.GRID_PARALLEL_EVALUATION_TYPE}</td>
+     				</tr>
+				<tr>
+	      				<td class='FormButton' colspan="2" align="">{$form.SAVE}</td>
+     				</tr>
+          </table>
+  			</td>
+  		</tr>
+	</table>
+	</div>
+	<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+</form>
+<script type="text/javascript">
+{$form.JS}
+</script>

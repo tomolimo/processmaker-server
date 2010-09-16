@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="tracker_Configuration" width="100%" labelWidth="35%" enableTemplate="1">
+ 
+<PRO_UID type="hidden"/>
+
+<CT_MAP_TYPE type="dropdown">
+  <en>Map type <option name="NONE">None</option><option name="PROCESSMAP">Process Map</option><option name="STAGES">Stages Map</option></en>
+</CT_MAP_TYPE>
+
+<CT_STAGES_MAP_EDIT type="link" link="#" onclick="editStagesMap(@QPRO_UID);">
+  <en>Edit</en>
+</CT_STAGES_MAP_EDIT>
+
+<CT_DERIVATION_HISTORY type="checkbox" value="1">
+  <en>Derivation History</en>
+</CT_DERIVATION_HISTORY>
+
+<CT_MESSAGE_HISTORY type="checkbox" value="1">
+  <en>Messages History</en>
+</CT_MESSAGE_HISTORY>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<SAVE type="button" onclick="updateCaseTracker(this.form);">
+  <en>Save</en>
+</SAVE>
+
+<JS type="javascript"><![CDATA[
+
+var CT_MAP_TYPE = getField('CT_MAP_TYPE');
+switch (CT_MAP_TYPE.value) {
+  case 'NONE':
+  case 'PROCESSMAP':
+    document.getElementById('MAP_EDIT_LINK').style.display = 'none';
+  break;
+  case 'STAGES':
+    document.getElementById('MAP_EDIT_LINK').style.display = '';
+  break;
+}
+
+leimnud.event.add(CT_MAP_TYPE, 'change', function() {
+  switch (getField('CT_MAP_TYPE').value) {
+    case 'NONE':
+    case 'PROCESSMAP':
+      document.getElementById('MAP_EDIT_LINK').style.display = 'none';
+    break;
+    case 'STAGES':
+      document.getElementById('MAP_EDIT_LINK').style.display = '';
+    break;
+  }
+});
+
+var updateCaseTracker = function(oForm) {
+  ajax_post(oForm.action, oForm, 'POST');
+  Pm.tmp.caseTrackerPanel.remove();
+};
+
+var oPanel;
+var editStagesMap = function(sProcessUID) {
+  oPanel = new leimnud.module.panel();
+	oPanel.options = {
+		size	:{w:800,h:580},
+		position:{x:0,y:0,center:true},
+		title	:G_STRINGS.ID_EDIT_STAGES_MAP,
+		theme	:'processmaker',
+		statusBar:false,
+		control	:{resize:false,roll:false},
+		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+	oPanel.make();
+	oPanel.loader.show();
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url : '../tracker/tracker_Ajax',
+		args: 'action=editStagesMap&PRO_UID=' + sProcessUID
+  });
+  oRPC.callback = function(rpc) {
+		oPanel.loader.hide();
+		oPanel.addContent(rpc.xmlhttp.responseText);
+		var scs = rpc.xmlhttp.responseText.extractScript();
+		scs.evalScript();
+  }.extend(this);
+	oRPC.make();
+};
+
+function cancel(){
+    Pm.tmp.caseTrackerPanel.remove();
+}
+
+]]></JS>
+
+</dynaForm>

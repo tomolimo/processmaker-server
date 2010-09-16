@@ -1,0 +1,188 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/skins/styles/simple/style.css"/>
+  {$header}
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#000000" vlink="#000000" alink="#999999" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" rightmargin="0">
+<table background="/skins/wf/topBackgr.jpg" width="100%" height="48" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="50%" rowspan="2" height="48" valign="top"><img src="/skins/wf/test.gif" width="125" height="48"><font color=white><? /*acá iba el nombre*/ ?></font></td>
+  </tr>
+</table>
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr>
+		<td width="100%" align="center">
+			<table width="70%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+			  {php}
+          global $G_MAIN_MENU;
+          global $G_MENU_SELECTED;
+          global $G_ID_MENU_SELECTED;
+          $externalInitiation = (isset($_SESSION['EXTERNAL_INITIATION_TYPE']) ? $_SESSION['EXTERNAL_INITIATION_TYPE'] : '');
+          if ($externalInitiation != 'PLATAFORM')
+          {
+            if ($G_MAIN_MENU != '')
+            {
+            	$G_MENU = new Menu;
+            	$G_MENU->Load($G_MAIN_MENU);
+            	$G_MENU->optionOn = $G_MENU_SELECTED;
+            	$G_MENU->id_optionOn = $G_ID_MENU_SELECTED;
+            	$G_MENU->Class = 'mnu';
+            	if (is_array($G_MENU->Options))
+            	{
+            		for ($ncount = 0; $ncount < $G_MENU->OptionCount(); $ncount++)
+            		{
+            			$target = $G_MENU->Options[$ncount];
+            			if ($G_MENU->Types[$ncount] == 'absolute')
+            			{
+            			  $target = G::encryptLink(str_replace('sys' . SYS_TEMP, SYS_TEMP, $G_MENU->Options[$ncount]));
+            			}
+            			if ($G_MENU->Types[$ncount] != 'absolute')
+            			{
+            			  if (defined('SYS_SYS'))
+            			  {
+            				  $target = '/sys' . SYS_TEMP . G::encryptLink('/' . SYS_LANG . '/' . SYS_SKIN . '/' . $G_MENU->Options[$ncount]);
+            				}
+            				else
+            				{
+            				  $target = '/sys/' . G::encryptLink(SYS_LANG . '/' . SYS_SKIN . '/' . $G_MENU->Options[$ncount]);
+            				}
+            			}
+            			$label = $G_MENU->Labels[$ncount];
+            			if ($G_MENU->id_optionOn != '')
+            			{
+            				$onMenu = ($G_MENU->Id[$ncount] == $G_MENU->id_optionOn ? true : false);
+            			}
+            			else
+            			{
+            				$onMenu = ($ncount == $G_MENU->optionOn ? true : false);
+            			}
+            			$classname = ($onMenu ? 'SelectedTab' : 'Tab');
+            			if ( $G_MENU->Classes[$ncount] != '')
+            			{
+            			  $classname = $G_MENU->Classes[$ncount];
+            			}
+            	    if ($onMenu)
+            	    {
+            	    {/php}
+                    <td width="8%" height="23" align="center" valign="middle" nowrap="nowrap" class="{php}echo $classname;{/php}">
+                      <a href="{php}echo $target;{/php}" class="{php}echo $classname;{/php}">&nbsp;&nbsp;<b>{php}echo strtoupper($label);{/php}<b>&nbsp;&nbsp;</a>
+                    </td>
+              	  {php}
+              	  }
+              		else
+              		{
+              	  {/php}
+                    <td width="8%" height="23" align="center" valign="middle" nowrap="nowrap" class="{php}echo $classname;{/php}">
+                      <a href="{php}echo $target;{/php}" class="{php}echo $classname;{/php}">&nbsp;&nbsp;{php}echo strtoupper($label);{/php}&nbsp;&nbsp;</a>
+                    </td>
+                  {php}
+                  }
+                }
+              }
+            }
+          }
+        {/php}
+        </tr>
+      </table>
+		</td>
+	</tr>
+	<!--.-->
+	<tr>
+		<td width="100%" align="center">
+			<table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+			  {php}
+          global $G_SUB_MENU;
+          global $G_MENU_SELECTED;
+          global $G_ID_MENU_SELECTED;
+          global $G_SUB_MENU_SELECTED;
+          global $G_ID_SUB_MENU_SELECTED;
+          $externalInitiation = (isset($_SESSION['EXTERNAL_INITIATION_TYPE']) ? $_SESSION['EXTERNAL_INITIATION_TYPE'] : '');
+          if ($externalInitiation != 'PLATAFORM')
+          {
+            if ($G_SUB_MENU != '')
+            {
+            	$G_MENU = new Menu;
+            	$G_MENU->Load($G_SUB_MENU);
+            	$G_MENU->optionOn = $G_SUB_MENU_SELECTED;
+            	$G_MENU->id_optionOn = $G_ID_SUB_MENU_SELECTED;
+            	$G_MENU->Class = 'subMnu';
+            	if (is_array($G_MENU->Options))
+            	{
+            		for ($ncount = 0; $ncount < $G_MENU->OptionCount(); $ncount++)
+            		{
+            			$target = $G_MENU->Options[$ncount];
+            			if ($G_MENU->Types[$ncount] == 'absolute')
+            			{
+            			  $target = G::encryptLink(str_replace('sys' . SYS_TEMP, SYS_TEMP, $G_MENU->Options[$ncount]));
+            			}
+            			if ($G_MENU->Types[$ncount] != 'absolute')
+            			{
+            			  if (defined('SYS_SYS'))
+            			  {
+            				  $target = '/sys' . SYS_TEMP . G::encryptLink('/' . SYS_LANG . '/' . SYS_SKIN . '/' . $G_MENU->Options[$ncount]);
+            				}
+            				else
+            				{
+            				  $target = '/sys/' . G::encryptLink(SYS_LANG . '/' . SYS_SKIN . '/' . $G_MENU->Options[$ncount]);
+            				}
+            			}
+            			$label = $G_MENU->Labels[$ncount];
+            			if ($G_MENU->id_optionOn != '')
+            			{
+            				$onMenu = ($G_MENU->Id[$ncount] == $G_MENU->id_optionOn ? true : false);
+            			}
+            			else
+            			{
+            				$onMenu = ($ncount == $G_MENU->optionOn ? true : false);
+            			}
+            			$classname = ($onMenu ? 'selectedSubMenu' : 'subMenu');
+            			if ( $G_MENU->Classes[$ncount] != '')
+            			{
+            			  $classname = $G_MENU->Classes[$ncount];
+            			}
+            	    if ($onMenu)
+            	    {
+            	    {/php}
+                    <td height="23" align="center" valign="middle" nowrap="nowrap" class="{php}echo $classname;{/php}">
+                      <a href="{php}echo $target;{/php}" class="{php}echo $classname;{/php}">&nbsp;&nbsp;<b>{php}echo strtoupper($label);{/php}<b>&nbsp;&nbsp;</a>
+                    </td>
+              	  {php}
+              	  }
+              		else
+              		{
+              	  {/php}
+                    <td height="23" align="center" valign="middle" nowrap="nowrap" class="{php}echo $classname;{/php}">
+                      <a href="{php}echo $target;{/php}" class="{php}echo $classname;{/php}">&nbsp;&nbsp;{php}echo strtoupper($label);{/php}&nbsp;&nbsp;</a>
+                    </td>
+                  {php}
+                  }
+                  if (($ncount + 1) < $G_MENU->OptionCount())
+                  {
+  					        print '<td align="left" class="pipeWhite">|</td>';
+  					      }
+                }
+              }
+            }
+          }
+        {/php}
+        </tr>
+      </table>
+		</td>
+	</tr>
+	<!--.-->
+	<tr>
+		<td width="100%" align="center">
+		{php}
+      global $G_TEMPLATE;
+      if ($G_TEMPLATE != '')
+      {
+        G::LoadTemplate($G_TEMPLATE);
+      }
+    {/php}
+		</td>
+	</tr>
+</table>
+</body>
+</html>

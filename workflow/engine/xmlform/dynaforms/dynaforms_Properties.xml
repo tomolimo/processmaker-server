@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm
+  name="dynaforms_Properties"
+  type="xmlform"
+  width="450"
+>
+
+<PME_PROPERTIES_TITLE type="title">
+  <en>Properties</en>
+</PME_PROPERTIES_TITLE>
+
+<DYN_UID type="hidden" showInTable="0"/>
+<PRO_UID type="hidden" showInTable="0"/>
+<DYN_TYPE_PREVIOUS type="hidden" showInTable="0"/>
+<A type="hidden" showInTable="0"/>
+
+<DYN_TITLE type="text" maxlength="32" size ="32">
+  <en>Dynaform</en>
+</DYN_TITLE>
+
+<DYN_TYPE type="dropdown" colWidth="80" align="center">
+  <en>Type
+  <option name="xmlform">Master Form</option>
+  <option name="grid">Grid</option>
+  </en>
+</DYN_TYPE>
+
+<DYN_DESCRIPTION type="textarea" cols="32" rows="12">
+  <en>Description</en>
+</DYN_DESCRIPTION>
+
+<SUBTITLE type="subtitle" enableHTML="1">
+  <en>Others</en>
+</SUBTITLE>
+
+<WIDTH type="text" maxlength="10" size ="15">
+  <en>Width</en>
+</WIDTH>
+
+<MODE type="dropdown" colWidth="80" align="center">
+  <en>Mode
+  <option name="edit">Edit</option>
+  <option name="view">View</option>
+  </en>
+</MODE>
+
+<NEXTSTEPSAVE type="dropdown" colWidth="80" align="center">
+  <en>Next Step Link
+  <option name=""><![CDATA[No save & Continue]]></option>
+  <option name="save"><![CDATA[Save & Continue]]></option>
+  <option name="prompt">Show prompt</option>
+  </en>
+</NEXTSTEPSAVE>
+
+<PRINTDYNAFORM type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
+<en>Show print dynaform button</en>
+</PRINTDYNAFORM>
+
+<!--<ENABLETEMPLATE type="checkbox" value="1" defaultvalue="0" labelOnRight="0">
+  <en>Enable Template</en>
+</ENABLETEMPLATE>-->
+
+<PME_PROP_APPLY type="button" onclick="dynaformEditor.saveProperties();">
+  <en>Apply</en>
+</PME_PROP_APPLY>
+<PME_PROP_REVERT type="button" onclick="dynaformEditor.refreshProperties();">
+  <en>Revert</en>
+</PME_PROP_REVERT>
+<sdfsdf type="javascript">
+
+<![CDATA[
+// added by gustavo cruz gustavo-at-colosa.com
+// function getElementsByClassNameCrossBrowser
+// CrossBrowser implemetation of the getElementsByClassName firefox function
+// @param searchClass class wanted
+// @param node element or node
+// @param tag tag of the class
+
+function getElementsByClassNameCrossBrowser(searchClass,node,tag) {
+
+       var classElements = new Array();
+       if ( node == null )
+               node = document;
+       if ( tag == null )
+               tag = '*';
+       var els = node.getElementsByTagName(tag);
+       var elsLen = els.length;
+       var pattern = new RegExp("(^|\\s)"+searchClass+"(\\s|$)");
+       for (i = 0, j = 0; i < elsLen; i++) {
+               if ( pattern.test(els[i].className) ) {
+                       classElements[j] = els[i];
+                       j++;
+               }
+       }
+       return classElements;
+}
+
+// adding an event change to the dynaform type dropdown
+// this evaluates whenever a change is made and if its posible to convert
+// a dynaform grid into a normal dynaform and vice versa.
+
+leimnud.event.add(getField('DYN_TYPE'), 'change', function() {
+  var proUid = document.getElementById("form[PRO_UID]").value;
+  var dynUid = document.getElementById("form[DYN_UID]").value;
+
+  if(document.getElementById("form[DYN_TYPE]").value=="grid"){
+    validateGridConversion(proUid,dynUid);
+  } else {
+    changeToolbar("xmlform");
+  }
+});
+
+// function validateGridConversion
+// @param proUid process id
+// @param dynUid dynaform id
+// @return isTrue true or false response
+// @desc this function evaluates if the conversion is valid if there are
+//       some fields that can not be converted between dynaforms types
+//
+
+function validateGridConversion(proUid,dynUid){
+    var isTrue;
+    oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : "../dynaforms/fieldsGetterAjax",
+      method: 'POST',
+      async : true,
+      args  : 'FILENAME=' + proUid + '/' + dynUid
+    });
+    oRPC.callback = function(oRPC) {
+      var response = oRPC.xmlhttp.responseText;
+      if (response=="ok"){
+         changeToolbar("grid");
+    
+      } else {
+         setDropdownSelection("form[DYN_TYPE]" , "xmlform");
+         msgBox("Grid forms can not contain the following fields: <br>" + response,"alert");
+         return false;
+    
+      }
+    
+
+    }.extend(this);
+    isTrue = oRPC.make();  
+    return isTrue;
+};
+
+// function setDropdownSelection made a selection in a dropdown element
+function setDropdownSelection(id, value){
+    document.getElementById(id).value = value;
+};
+
+// function changeToolbar
+// @param type
+// @desc this function change by Ajax, the toolbar located in the superior part
+//       of the dynaform editor
+function changeToolbar(type){
+    var proUid = document.getElementById("form[PRO_UID]").value;
+    var dynUid = document.getElementById("form[DYN_UID]").value;
+    var file = proUid + "/" + dynUid;
+    var dynTitle = "New Dynaform";
+    oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : "../dynaforms/dynaforms_ToolbarAjax",
+      method: 'POST',
+      async : true,
+      args  : 'TOOLBAR=' + type + '&FILE=' + file + '&PRO_UID=' + proUid + '&DYN_UID=' + dynUid + '&DYN_TITLE=' + dynTitle
+    });
+    oRPC.callback = function(oRPC) {
+      
+      getElementsByClassNameCrossBrowser("panel_headerBar___processmaker",document,"div")[0].innerHTML = oRPC.xmlhttp.responseText;
+      document.getElementById("publisherContent[0]").style.display = "inline";
+      document.getElementById("publisherContent[0]").style.position = "absolute";
+      document.getElementById("publisherContent[0]").style.top = "0";
+      document.getElementById("publisherContent[0]").style.left = "0";
+    }.extend(this);
+    oRPC.make();
+
+};
+
+// end added code
+
+function orderButtons() {
+  var propertiesDiv = document.getElementById('dynaformEditor[8]');
+  var a=getField('PME_PROP_REVERT','dynaforms_Properties');
+  var b=getField('PME_PROP_APPLY','dynaforms_Properties');
+  a.parentNode.insertBefore(b,a);
+  propertiesDiv.style.visibility='';
+}
+orderButtons();
+/*getField("ENABLETEMPLATE","dynaforms_Properties").onclick=function()
+{
+  var oAux;
+  if (oAux = getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor")) {
+	  oAux.checked=this.checked;
+	}
+}*/
+]]>
+</sdfsdf>
+</dynaForm> 

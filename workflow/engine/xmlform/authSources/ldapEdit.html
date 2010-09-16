@@ -1,0 +1,103 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  
+  <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt; width:60%">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="">
+	  <table width="99%">
+      <tbody><tr>
+        <td valign="top">
+        <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
+        <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                   <tbody><tr>
+              <td class="FormTitle" colspan="2" align="">{$form.TITLE}</td>
+             </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.AUTH_SOURCE_UID}</td>
+             </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_NAME}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_NAME} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_NAME}</td> 
+              </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.AUTH_SOURCE_PROVIDER}</td>
+             </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$LDAP_TYPE}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.LDAP_TYPE} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.LDAP_TYPE}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_SERVER_NAME}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_SERVER_NAME} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_SERVER_NAME}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_PORT}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_PORT} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_PORT}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$AUTH_SOURCE_ENABLED_TLS}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_ENABLED_TLS} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_ENABLED_TLS}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$AUTH_SOURCE_VERSION}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_VERSION} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_VERSION}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_BASE_DN}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_BASE_DN} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_BASE_DN}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$AUTH_ANONYMOUS}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_ANONYMOUS} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_ANONYMOUS}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$AUTH_SOURCE_SEARCH_USER}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_SEARCH_USER} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_SEARCH_USER}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$AUTH_SOURCE_PASSWORD}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_PASSWORD} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_PASSWORD}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_IDENTIFIER_FOR_USER}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_IDENTIFIER_FOR_USER} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_IDENTIFIER_FOR_USER}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_OBJECT_CLASSES}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_OBJECT_CLASSES} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_OBJECT_CLASSES}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$AUTH_SOURCE_ADDITIONAL_FILTER}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_ADDITIONAL_FILTER} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_ADDITIONAL_FILTER}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$AUTH_SOURCE_ATTRIBUTES}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.AUTH_SOURCE_ATTRIBUTES} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.AUTH_SOURCE_ATTRIBUTES}</td> 
+              </tr>
+                                               <tr>
+              <td class="FormButton" colspan="2" align="">{$form.btnSave} &nbsp; {$form.BTN_CANCEL}</td>
+             </tr>
+                                                                   </tbody></table>
+        </td>
+      </tr>
+    </tbody></table>
+    <div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+                                          <script type="text/javascript">
+    {$form.JS}
+  </script>
+</form>  

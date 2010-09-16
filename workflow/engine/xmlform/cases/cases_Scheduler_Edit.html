@@ -1,0 +1,236 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  
+ <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+ 
+  <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="">
+	  <table width="99%">
+      <tbody><tr>
+        <td valign="top">
+        <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
+        <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                  <tbody><tr>
+              <td colspan="2" class="withoutLabel">{$form.menuUser}</td>
+             </tr>
+                                               <tr>
+              <td class="FormTitle" colspan="2" align="">{$form.GENERAL_INF}</td>
+             </tr>
+             <tr>
+             <td class="FormSubTitle" colspan="2" align="">{$form.PROPERTIES_INF}</td>
+             </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.SCH_UID}</td>
+             </tr>
+             <tr style="display: none">
+              <td colspan="2">{$form.SCH_ADVANCED}</td>
+             </tr>
+              <tr style="display: none;">
+              <td colspan="2">{$form.SCH_USER_UID}</td>
+              </tr>
+              <tr style="display: none;">
+              <td colspan="2">{$form.PREV_SCH_END_DATE}</td>
+              </tr>
+              <tr style="display: none;">
+              <td colspan="2">{$form.PREV_SCH_START_DATE}</td>
+              </tr>
+              <tr style="display: none;">
+              <td colspan="2">{$form.PREV_SCH_START_TIME}</td>
+              </tr>
+              <tr style="display: none;">
+              <td colspan="2">{$form.PRO_UID_TMP}</td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$SCH_USER_NAME}</td>
+              <td class="FormFieldContent">{$form.SCH_USER_NAME}</td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$SCH_USER_PASSWORD}</td>
+              <td class="FormFieldContent">{$form.SCH_USER_PASSWORD}</td>
+              </tr>
+              <tr>
+              <td class="FormButton" colspan="2">{$form.TEST_CONNECTION}</td>
+              </tr>
+              <tr>
+              <td class="FormButton" colspan="2">{$form.EDIT_USER}</td>
+              </tr>
+              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[PERFORM_TASK]" align="">
+                <span>{$form.PERFORM_TASK}</span>
+              </td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}" style=""></td>
+              <td class="FormFieldContent"><div id="processLabel"></div><div style="display:none;" id="processListDropdown">{$form.PRO_UID}</div></td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$TAS_UID}</td>
+              <td class="FormFieldContent"><div id="taskListDropdown">{$form.TAS_UID}</div></td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$SCH_NAME}</td>
+              <td class="FormFieldContent">{$form.SCH_NAME}</td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$SCH_OPTION_VIEW}</td>
+              <td class="FormFieldContent">{$form.SCH_OPTION} {$form.SCH_OPTION_VIEW}</td>
+              </tr>
+              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SELECT_TIME_DAY]" align="">
+                <span>{$form.SELECT_TIME_DAY}</span>
+              </td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font> {$SCH_START_DATE} </td>
+              <td class="FormFieldContent">{$form.SCH_START_DATE}
+                  <table id="endDateTable">
+                      <tr>
+                          <td class="FormFieldContent" width="{$form_labelWidth}" align="right" valign="top">{$SCH_END_DATE} End Date</td>
+                        <td class="FormFieldContent">{$form.SCH_END_DATE}</td>
+                    </tr>
+                  </table>
+              </td>
+              </tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font> {$SCH_START_TIME} </td>
+              <td class="FormFieldContent">{$form.SCH_START_TIME}</td>
+              </tr>
+              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SELECT_DATE]" align="">
+                <span>{$form.SELECT_DATE}</span>
+                                </td>
+             </tr>
+              
+                                              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SELECT_1]" align="">
+                <span>{$form.SELECT_1}</span>
+                                </td>
+             </tr>
+                                                <tr>
+              <td style="display:none;" class="FormLabel" width="{$form_labelWidth}">{$SCH_DAYS_PERFORM_TASK}</td>
+              <td style="display:none;" class="FormFieldContent">
+              	<table style="width: 100%">
+													<tr>
+														<td style="width: 30%">{$form.SCH_DAYS_PERFORM_TASK} </td>
+														<td style="vertical-align: bottom">{$form.SCH_DAYS_PERFORM_TASK_OPT_3} {$SCH_DAYS_PERFORM_TASK_OPT_3} </td>
+													</tr>
+												</table>
+              </td>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"> </td>
+              <td class="FormFieldContent"> </td>
+              </tr>
+                                              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SELECT_2]" align="">
+                <span>{$form.SELECT_2}</span>
+                                </td>
+             </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"></td>
+              <td class="FormFieldContent">{$form.SCH_EVERY_DAYS}</td>
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$SCH_WEEK_DAYS}</td>
+              <td class="FormFieldContent">
+              	<table style="width: 100%">
+													<tr>
+														<td > {$form.SCH_WEEK_DAYS} </td>
+														<td style="vertical-align: top"> {$form.SCH_WEEK_DAYS_2} {$SCH_WEEK_DAYS_2} </td>
+													</tr>
+												</table>
+              	
+              </td>
+              </tr>
+                                              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SELECT_3]" align="">
+                <span>{$form.SELECT_3}</span>
+                                </td>
+             </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$SCH_START_DAY}</td>
+              <td class="FormFieldContent">
+              	<table style="width: 100%">
+													<tr>
+														<td style="width: 20%">{$form.SCH_START_DAY}</td>
+														<td> {$SCH_START_DAY_OPT_1} {$form.SCH_START_DAY_OPT_1} <br/> 
+															{$SCH_START_DAY_OPT_2_WEEKS} {$SCH_START_DAY_OPT_2_DAYS_WEEK} 
+															{$form.SCH_START_DAY_OPT_2_WEEKS} {$form.SCH_START_DAY_OPT_2_DAYS_WEEK} 
+														</td>
+													</tr>
+												</table>
+              </td>
+              
+              
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"> </td>
+              <td class="FormFieldContent"> </td>
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"> </td>
+              <td class="FormFieldContent"> </td>
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"> </td>
+              <td class="FormFieldContent"> </td>
+              </tr>
+              
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$SCH_MONTHS}</td>
+              <td class="FormFieldContent">
+              	<table style="width: 100%">
+													<tr>
+														<td >{$form.SCH_MONTHS} </td>
+														<td style="vertical-align: top"> {$form.SCH_MONTHS_2} {$SCH_MONTHS_2} </td>
+														<td style="vertical-align: top"> {$form.SCH_MONTHS_3} {$SCH_MONTHS_3} </td>
+													</tr>
+												</table>
+              </td>
+              </tr>
+              
+
+                                               <tr>
+              <td style="display:none;" class="FormLabel" width="{$form_labelWidth}"><br></td>
+              <td style="display:none;">{$form.SCH_REPEAT_TASK_CHK}</td>
+             </tr>
+                                                <tr>
+              <td style="display:none;" class="FormLabel" width="{$form_labelWidth}">{$SCH_REPEAT_EVERY}</td>
+              <td style="display:none;" class="FormFieldContent">
+              	<table style="width: 100%" style="display:none;">
+													<tr>
+														<td style="width: 30%"> {$form.SCH_REPEAT_EVERY} </td>
+														<td > {$form.SCH_REPEAT_EVERY_OPT} {$SCH_REPEAT_EVERY_OPT} </td>
+													</tr>
+												</table>
+              	</td>
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"></td>
+              <td class="FormFieldContent"></td>
+              </tr>
+<!--               
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$SCH_REPEAT_UNTIL}</td>
+              <td class="FormFieldContent">{$form.SCH_REPEAT_UNTIL}</td>
+              </tr>
+                                               <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><br></td>
+              <td>{$form.SCH_REPEAT_STOP_IF_RUNNING}</td>
+             </tr>
+ -->             
+                                               <tr>
+              <td class="FormButton" colspan="2" align="">{$form.UPDATE}</td>
+             </tr>
+                                                                   </tbody></table>
+        </td>
+      </tr>
+    </tbody></table>
+    <div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+  <script type="text/javascript">
+    {$form.SHOW_HIDE_JS}
+  </script>
+  
+  </div>
+  </form>
+  

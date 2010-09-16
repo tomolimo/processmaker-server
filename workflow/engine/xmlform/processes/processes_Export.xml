@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="processes_Export" type="xmlform" width="400px" labelWidth="100px">
+
+<TITLE type="title">
+  <en>processes Info</en>
+</TITLE>
+
+<PRO_TITLE type="caption">
+  <en>Process Title</en>
+</PRO_TITLE>
+
+<PRO_DESCRIPTION type="caption">
+  <en>Description</en>
+</PRO_DESCRIPTION>
+
+<SIZE type="caption">
+  <en>Size in bytes</en>
+</SIZE>
+
+<FILENAME type="phpVariable"/>
+<FILENAME_LINK type="phpVariable"/>
+
+<FILENAME_LABEL type="link" value="@#FILENAME" link="@#FILENAME_LINK" target="_blank">
+  <en>File</en>
+</FILENAME_LABEL>
+
+<JS type="javascript"><![CDATA[
+var nextStep = function(oForm)
+{
+  oForm.action = 'cases_NextStep';
+  oForm.submit();
+};
+]]></JS>
+
+</dynaForm>  

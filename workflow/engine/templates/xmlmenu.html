@@ -1,0 +1,117 @@
+{if $printTemplate}
+<table width='100%' cellspacing="0" cellpadding="0">
+ <tr>
+{*  LEFT MENU  *}
+  <td valign='top' class='tableOption' width='' align="left">
+   <table cellspacing="0" cellpadding="0" width='100%' >
+    <tr>
+{foreach from=$form->fields item=field}
+{if (strcasecmp($field->colAlign,'left')===0) || ($field->colAlign==='')}
+{if ($field->type==='javascript')}
+{elseif ($field->type==='phpvariable')}
+{elseif ($field->type==='private')}
+{elseif ($field->type==='hidden')}
+{elseif ($field->type==='')}
+{elseif ($field->type==='print')}
+	 <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}">{$field->field}</td>
+{elseif ($field->type==='button')}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}">{$field->field}</td>
+{elseif ($field->type==='link') || ($field->type==='menu')}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}"><img src="/images/bulletButton.gif" width="6" />&nbsp;{$field->field}</td>
+{else}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}"><img src="/images/bulletButton.gif" width="6" />&nbsp;{$field->label}&nbsp;{$field->field}</td>
+{/if}
+{/if}
+{/foreach}
+     <td class='tableOption'>&nbsp;</td>
+    </tr>
+   </table>
+  </td>
+{*  CENTER MENU  *}
+  <td valign='top'  class='tableOption'>
+   <table cellspacing="0" cellpadding="0" width='100%'>
+    <tr>
+{foreach from=$form->fields item=field}
+{if (strcasecmp($field->colAlign,'center')===0)}
+{if ($field->type==='javascript')}
+{elseif ($field->type==='phpvariable')}
+{elseif ($field->type==='private')}
+{elseif ($field->type==='hidden')}
+{elseif ($field->type==='')}
+{elseif ($field->type==='button')}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}">{$field->field}</td>
+{elseif ($field->type==='link') || ($field->type==='menu')}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}">{$field->field}</td>
+{else}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}"><img src="/images/bulletButton.gif" width="6" />&nbsp;{$field->label}&nbsp;{$field->field}</td>
+{/if}
+{/if}
+{/foreach}
+    </tr>
+   </table>
+  </td>
+{*  RIGHT MENU  *}
+  <td valign='top'>
+   <table cellspacing="0" cellpadding="0" align="right" >
+    <tr>
+{foreach from=$form->fields item=field}
+{if (strcasecmp($field->colAlign,'right')===0)}
+{if ($field->type==='javascript')}
+{elseif ($field->type==='phpvariable')}
+{elseif ($field->type==='private')}
+{elseif ($field->type==='hidden')}
+{elseif ($field->type==='')}
+{elseif ($field->type==='button')}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}">{$field->field}</td>
+{elseif ($field->type==='link') || ($field->type==='menu')}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}"><img id="form[{$field->name}][bullet]" src="/images/bulletButton.gif" />&nbsp;{$field->field}</td>
+{else}
+     <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}"><img id="form[{$field->name}][bullet]" src="/images/bulletButton.gif" />&nbsp;{$field->label}&nbsp;{$field->field}</td>
+{/if}
+{/if}
+{/foreach}
+    </tr>
+   </table>
+  </td>
+</tr>
+
+{*  BOTTOM MENU  *}
+<tr>
+<td valign='top'  class='tableOption' colspan="5">
+   <table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <td class='tableOption' align="{$field->colAlign}" width="{$field->colWidth}">
+{foreach from=$form->fields item=field}
+
+{if (strcasecmp($field->colAlign,'bottom')===0)}
+{if ($field->type==='javascript')}
+{elseif ($field->type==='phpvariable')}
+{elseif ($field->type==='private')}
+{elseif ($field->type==='hidden')}
+{elseif ($field->type==='')}
+{elseif ($field->type==='button')}
+     <span>{$field->field}</span>
+{elseif ($field->type==='link') || ($field->type==='menu')}
+     <div style="padding-left: 6px; padding-top: 8px; float: left;">{$field->field}</div>
+{else}
+     <span><img src="/images/bulletButton.gif" width="6" />&nbsp;{$field->label}&nbsp;{$field->field}</span>
+{/if}
+{/if}
+{/foreach}
+    </td>
+    </tr>
+   </table>
+  </td>
+</tr>
+
+</table>
+<script type="text/javascript">
+{foreach from=$form->fields item=field}
+{if ($field->type==='javascript')}
+    {$field->field}
+{elseif (isset($field->urlAlt) && ($field->urlAlt!==''))}
+    MM_preloadImages('$field->urlAlt');
+{/if}
+{/foreach}
+</script>
+{/if}

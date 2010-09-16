@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value="" link="#" onclick="reportTablesNew(); return false;" colAlign="left" colWidth="35">
+  <en>New</en>
+</MNU_ADD>
+
+
+
+<PRO_UID type="private"/>
+
+<reportTablesEdit type="private" defaultValue="../reportTables/reportTables_Edit"/>
+
+<reportTablesDelete type="private" defaultValue="../reportTables/reportTables_Delete"/>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+function reportTablesNew()
+{
+  popupWindow('@G::LoadTranslation(ID_NEW_REPORT_TABLE)', '@G::encryptlink(@#reportTablesEdit)?PRO_UID=@%PRO_UID' , 500, 550);
+}
+
+function reportTablesEdit(sUID)
+{
+  popupWindow('@G::LoadTranslation(ID_EDIT_REPORT_TABLE)', '@G::encryptlink(@#reportTablesEdit)?REP_TAB_UID=' + sUID , 500, 550);
+}
+
+function reportTablesSave(form)
+{
+  var bContinue = true;
+  if (getField('REP_TAB_TITLE').value == '') {
+    bContinue = false;
+  }
+  if (getField('REP_TAB_NAME').value == '') {
+    bContinue = false;
+  }
+  var j = 0;
+  if (getField('REP_TAB_TYPE').value == 'NORMAL') {
+    var i;
+    var oAux = getField('FIELDS');
+    var iMax = oAux.length;
+    for (i = 0; i < oAux.length; i++) {
+      if (oAux.options[i].selected) {
+        j++;
+      }
+    }
+    if ((j < 1) || (j > 80)) {
+      bContinue = false;
+    }
+  }
+  else {
+    if (getField('REP_TAB_GRID').value == '') {
+      bContinue = false;
+    }
+  }
+  if (bContinue) {
+    ajax_post(form.action, form, 'POST');
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+  }
+  else {
+    if (getField('REP_TAB_TYPE').value == 'NORMAL') {
+      if (j == 0) {
+        new leimnud.module.app.alert().make({
+          label:'@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)'
+        });
+      }
+      else {
+        new leimnud.module.app.alert().make({
+          label:'@G::LoadTranslation(ID_PLEASE_SELECT_MAX_X_FIELDS)'
+        });
+      }
+    }
+    else {
+      new leimnud.module.app.alert().make({
+        label:'@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)'
+      });
+    }
+  }
+}
+
+function reportTablesDelete(sUID)
+{
+  new leimnud.module.app.confirm().make({
+    label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_REPORT_TABLE)',
+    action:function()
+    {
+      ajax_function('@G::encryptlink(@#reportTablesDelete)', '', 'REP_TAB_UID=' + sUID, 'POST');
+      @#PAGED_TABLE_ID.refresh();
+    }.extend(this)
+  });
+}
+
+]]></JS>
+
+
+<SEARCH_FILTER_FORM type="private"/>
+
+</dynaForm>

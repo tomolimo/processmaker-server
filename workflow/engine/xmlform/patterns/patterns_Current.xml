@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="patterns_Current" type="xmlform" width="100%" enableTemplate="1">
+
+<action type="hidden"/>
+
+<LANG type="private"/>
+
+<ROU_UID type="hidden"/>
+
+<PROCESS type="hidden"/>
+
+<TASK type="hidden"/>
+
+<ROU_TYPE_OLD type="hidden"/>
+
+<TITLE type="title" showInTable="0">
+  <en>Workflow Pattern</en>
+</TITLE>
+
+<ROU_TYPE type="dropdown">
+  <en>Type<option name="">- Select - </option><option name="SEQUENTIAL">Sequential</option><option name="SELECT">Selection</option><option name="EVALUATE">Evaluation</option><option name="PARALLEL">Parallel (fork)</option><option name="PARALLEL-BY-EVALUATION">Parallel by evaluation (fork)</option><option name="SEC-JOIN">Parallel (join)</option></en>
+</ROU_TYPE>
+
+<ROU_NEXT_TASK type="dropdown"><![CDATA[
+SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = '@#LANG') WHERE PRO_UID = '@#PROCESS'
+  ]]><en>Next Task<option name="-1">End of process</option><option name="-2">Leaf task</option></en>
+</ROU_NEXT_TASK>
+
+<ROU_TO_LAST_USER type="dropdown">
+  <en>Selection of executant<option name="FALSE">Rules and user groups</option><option name="TRUE">Last executant of the task</option></en>
+</ROU_TO_LAST_USER>
+
+<GRID_SELECT_TYPE type="grid" xmlgrid="patterns/patterns_GridSelectType" addRow="1" deleteRow="1" editRow=""/>
+
+<GRID_EVALUATE_TYPE type="grid" xmlgrid="patterns/patterns_GridEvaluateType" addRow="1" deleteRow="1" editRow=""/>
+
+<GRID_PARALLEL_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelType" addRow="1" deleteRow="1" editRow=""/>
+
+<GRID_PARALLEL_EVALUATION_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelByEvaluationType" addRow="1" deleteRow="1" editRow=""/>
+
+<SAVE type="button" onclick="savePattern(this.form);">
+  <en>Save</en>
+</SAVE>
+
+<JS type="javascript"><![CDATA[
+var savePattern = function(oForm)
+{
+  var oAux;
+  var oType     = getField('ROU_TYPE');
+  var oOldType  = getField('ROU_TYPE_OLD');
+  var i         = 1;
+  var aData     = {};
+  var bContinue = true;
+  if (oType.value != oOldType.value)
+  {
+    if (!confirm('You are changing the pattern, are you sure?'))
+    {
+      return false;
+    }
+  }
+  switch (oType.value)
+  {
+    case 'SELECT':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_SELECT_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+    case 'EVALUATE':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_EVALUATE_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+    case 'PARALLEL':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_PARALLEL_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+    case 'PARALLEL-BY-EVALUATION':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_PARALLEL_EVALUATION_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+  }
+  if (!bContinue)
+  {
+    alert('You cannot select to the same task several times!');
+    return bContinue;
+  }
+  i             = 1;
+  aData.tas_uid = getField('TASK').value;
+  aData.data    = [];
+  switch (oType.value)
+  {
+    case 'SEQUENTIAL':
+      aData.type = 0;
+      aData.data.push(getField('ROU_NEXT_TASK').value);
+    break;
+    case 'SELECT':
+      aData.type = 1;
+      while (oAux = document.getElementById('form[GRID_SELECT_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+
+    break;
+    case 'EVALUATE':
+      aData.type = 2;
+      while (oAux = document.getElementById('form[GRID_EVALUATE_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+    break;
+    case 'PARALLEL':
+      aData.type = 3;
+      while (oAux = document.getElementById('form[GRID_PARALLEL_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+    break;
+    case 'PARALLEL-BY-EVALUATION':
+      aData.type = 4;
+      while (oAux = document.getElementById('form[GRID_PARALLEL_EVALUATION_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+    break;
+    case 'SEC-JOIN':
+      aData.type = 5;
+      aData.data.push(getField('ROU_NEXT_TASK').value);
+    break;
+  }
+  Pm.data.build.derivation(aData);
+  ajax_post(oForm.action, oForm, 'POST');
+  Pm.tmp.derivationsPanel.remove();
+};
+
+var onChangePattern = function(oEvent, oType)
+{
+  oType = (oType ? oType : oEvent.target || window.event.srcElement);
+  switch (oType.value)
+  {
+    case '':
+      hideRowById('ROU_NEXT_TASK');
+      hideRowById('ROU_TO_LAST_USER');
+      hideRowById('GRID_SELECT_TYPE');
+      hideRowById('GRID_EVALUATE_TYPE');
+      hideRowById('GRID_PARALLEL_TYPE');
+      hideRowById('GRID_PARALLEL_EVALUATION_TYPE');
+    break;
+    case 'SEQUENTIAL':
+    case 'SEC-JOIN':
+      showRowById('ROU_NEXT_TASK');
+      showRowById('ROU_TO_LAST_USER');
+      hideRowById('GRID_SELECT_TYPE');
+      hideRowById('GRID_EVALUATE_TYPE');
+      hideRowById('GRID_PARALLEL_TYPE');
+      hideRowById('GRID_PARALLEL_EVALUATION_TYPE');
+    break;
+    case 'SELECT':
+      hideRowById('ROU_NEXT_TASK');
+      hideRowById('ROU_TO_LAST_USER');
+      showRowById('GRID_SELECT_TYPE');
+      hideRowById('GRID_EVALUATE_TYPE');
+      hideRowById('GRID_PARALLEL_TYPE');
+      hideRowById('GRID_PARALLEL_EVALUATION_TYPE');
+    break;
+    case 'EVALUATE':
+      hideRowById('ROU_NEXT_TASK');
+      hideRowById('ROU_TO_LAST_USER');
+      hideRowById('GRID_SELECT_TYPE');
+      showRowById('GRID_EVALUATE_TYPE');
+      hideRowById('GRID_PARALLEL_TYPE');
+      hideRowById('GRID_PARALLEL_EVALUATION_TYPE');
+    break;
+    case 'PARALLEL':
+      hideRowById('ROU_NEXT_TASK');
+      hideRowById('ROU_TO_LAST_USER');
+      hideRowById('GRID_SELECT_TYPE');
+      hideRowById('GRID_EVALUATE_TYPE');
+      showRowById('GRID_PARALLEL_TYPE');
+      hideRowById('GRID_PARALLEL_EVALUATION_TYPE');
+    break;
+    case 'PARALLEL-BY-EVALUATION':
+      hideRowById('ROU_NEXT_TASK');
+      hideRowById('ROU_TO_LAST_USER');
+      hideRowById('GRID_SELECT_TYPE');
+      hideRowById('GRID_EVALUATE_TYPE');
+      hideRowById('GRID_PARALLEL_TYPE');
+      showRowById('GRID_PARALLEL_EVALUATION_TYPE');
+    break;
+  }
+};
+leimnud.event.add(getField('ROU_TYPE'), 'change', {method:onChangePattern, instance:this, event:true});
+onChangePattern(null, getField('ROU_TYPE'));
+]]></JS>
+
+</dynaForm> 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="availableProcessesUser(&#039;@#PRO_UID&#039;);return false;" colAlign="left" colWidth="50">
+  <en>Assign</en>
+</MNU_ASSIGN>
+
+<js type="javascript"><![CDATA[
+
+var oPanel1;
+
+var availableProcessesUser = function(PRO_UID) {  
+  oPanel1 = new leimnud.module.panel();
+  oPanel1.options = {
+  	size	:{w:500,h:400},
+  	position:{x:0,y:0,center:true},
+  	title	:G_STRINGS.ID_ASSIGN_SUPERVISOR,  	
+  	statusBar:true,
+  	control	:{resize:false,roll:false},
+  	fx	:{modal:true,opacity:true,blinkToFront:true,fadeIn:false}
+  };
+  oPanel1.events = {
+  	remove: function() { delete(oPanel1); }.extend(this)
+  };
+  oPanel1.make();
+  oPanel1.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({  	    	    
+  	    url   : '../processes/processes_Ajax',
+        async : true,
+        method: 'POST',        
+        args  : "action=availableProcessesUser&data="+{PRO_UID:PRO_UID}.toJSONString()
+  });
+  oRPC.callback = function(rpc){
+  	oPanel1.loader.hide();
+  	var scs=rpc.xmlhttp.responseText.extractScript();
+  	oPanel1.addContent(rpc.xmlhttp.responseText);
+  	scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var assignProcessUser = function(sProcessUID, sUserUID) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../processes/processes_Ajax',
+		async: false,
+		args : "action=assignProcessUser&data="+{PRO_UID:sProcessUID,USR_UID:sUserUID}.toJSONString() 		      
+  });
+  oRPC.make();
+  oPanel1.remove(); 
+  processes_User.refresh();
+};
+
+
+var removeProcessUser = function(sPUUID) {
+  new leimnud.module.app.confirm().make({
+  	label:G_STRINGS.ID_MSG_CONFIRM_DELETE_SUPERVISOR_PROCESSUSER,
+  	action:function()
+  	{
+      var oRPC = new leimnud.module.rpc.xmlhttp({
+	    	url  : '../processes/processes_Ajax',
+	    	async: false,
+	    	args : "action=removeProcessUser&data="+{PU_UID:sPUUID}.toJSONString()
+      });
+      oRPC.make();
+      processes_User.refresh();
+    }.extend(this)
+  });
+};
+
+]]></js>
+
+</dynaForm>  

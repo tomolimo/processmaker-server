@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:ns1="http://org.apache.axis2/xsd"
+ xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+ xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+ xmlns:ns0="http://processmaker.com"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+ targetNamespace="http://processmaker.com">
+    <wsdl:types>
+        <xs:schema xmlns:ns="http://processmaker.com" xmlns:ns1="http://processmaker.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://processmaker.com">
+            <xs:element name="pmResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="status_code" type="xs:integer"/>
+                        <xs:element name="message" type="xs:string"/>
+                        <xs:element name="timestamp" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="login">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="userid" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="processListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="processList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="processListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="processes" maxOccurs="unbounded" type="ns0:processListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="roleListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="roleList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="roleListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="roles" maxOccurs="unbounded" type="ns0:roleListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groupListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groupList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groupListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="groups" maxOccurs="unbounded" type="ns0:groupListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="userListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="userList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="userListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="users" maxOccurs="unbounded" type="ns0:userListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="caseListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="status" type="xs:string"/>
+                        <xs:element name="delIndex" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="caseList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="caseListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="cases" maxOccurs="unbounded" type="ns0:caseListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="userId" type="xs:string"/>
+                        <xs:element name="firstname" type="xs:string"/>
+                        <xs:element name="lastname" type="xs:string"/>
+                        <xs:element name="email" type="xs:string"/>
+                        <xs:element name="role" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="assignUserToGroup">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="userId" type="xs:string"/>
+                        <xs:element name="groupId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="variableStruct">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sendVariables">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="variables" maxOccurs="unbounded" type="ns0:variableStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="variableListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="value" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="variableListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="variables" maxOccurs="unbounded" type="ns0:variableListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getVariables">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="variables" maxOccurs="unbounded" type="ns0:variableStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="newCase">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="processId" type="xs:string"/>
+                        <xs:element name="taskId" type="xs:string"/>
+                        <xs:element name="variables" maxOccurs="unbounded" type="ns0:variableStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="newCaseResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="status_code" type="xs:integer"/>
+                        <xs:element name="message" type="xs:string"/>
+                        <xs:element name="caseId" minOccurs="0" type="xs:string"/>
+                        <xs:element name="caseNumber" minOccurs="0" type="xs:string"/>
+                        <xs:element name="timestamp" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reassignCase">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="delIndex" type="xs:string"/>
+                        <xs:element name="userIdSource" type="xs:string"/>
+                        <xs:element name="userIdTarget" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="newCaseImpersonate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="processId" type="xs:string"/>
+                        <xs:element name="userId" type="xs:string"/>
+                       <xs:element name="variables" maxOccurs="unbounded" type="ns0:variableStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="derivateListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="processId" type="xs:string"/>
+                        <xs:element name="processTitle" type="xs:string"/>
+                        <xs:element name="taskId" type="xs:string"/>
+                        <xs:element name="taskTitle" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="caseNumber" type="xs:string"/>
+                        <xs:element name="userId" type="xs:string"/>
+                        <xs:element name="userName" type="xs:string"/>
+                        <xs:element name="userFullname" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="derivateCase">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="delIndex" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="derivateCaseResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="status_code" type="xs:integer"/>
+                        <xs:element name="message" type="xs:string"/>
+                        <xs:element name="timestamp" type="xs:string"/>
+                        <xs:element name="derivation" minOccurs="0" maxOccurs="unbounded" type="ns0:derivateListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="executeTrigger">
+            <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="triggerIndex" type="xs:string"/>
+                        <xs:element name="delIndex"  minOccurs="0" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sendMessage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="from" type="xs:string"/>
+                        <xs:element name="to" type="xs:string"/>
+                        <xs:element name="cc" type="xs:string"/>
+                        <xs:element name="bcc" type="xs:string"/>
+                        <xs:element name="subject" type="xs:string"/>
+                        <xs:element name="template" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getCaseInfo">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                        <xs:element name="delIndex" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getCaseInfoResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="status_code" type="xs:integer"/>
+                        <xs:element name="message" type="xs:string"/>
+                        <xs:element name="caseId" minOccurs="0" type="xs:string"/>
+                        <xs:element name="caseNumber" minOccurs="0" type="xs:string"/>
+                        <xs:element name="caseStatus" minOccurs="0" type="xs:string"/>
+                        <xs:element name="caseParalell" minOccurs="0" type="xs:string"/>
+                        <xs:element name="caseCurrentUser" minOccurs="0" type="xs:string"/>
+                        <xs:element name="timestamp" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="taskListStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="taskList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="taskListResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="tasks" maxOccurs="unbounded" type="ns0:taskListStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="taskCaseStruct" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="guid" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="taskCase">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sessionId" type="xs:string"/>
+                        <xs:element name="caseId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="taskCaseResponse" >
+                <xs:complexType >
+                    <xs:sequence >
+                        <xs:element name="taskCases" maxOccurs="unbounded" type="ns0:taskCaseStruct"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="loginRequest">
+        <wsdl:part name="parameters" element="ns0:login"/>
+    </wsdl:message>
+    <wsdl:message name="pmResponse">
+        <wsdl:part name="parameters" element="ns0:pmResponse"/>
+    </wsdl:message>
+    <wsdl:message name="processListRequest">
+        <wsdl:part name="parameters" element="ns0:processList"/>
+    </wsdl:message>
+    <wsdl:message name="processListResponse">
+        <wsdl:part name="parameters" element="ns0:processListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="roleListRequest">
+        <wsdl:part name="parameters" element="ns0:roleList"/>
+    </wsdl:message>
+    <wsdl:message name="roleListResponse">
+        <wsdl:part name="parameters" element="ns0:roleListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="groupListRequest">
+        <wsdl:part name="parameters" element="ns0:groupList"/>
+    </wsdl:message>
+    <wsdl:message name="groupListResponse">
+        <wsdl:part name="parameters" element="ns0:groupListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="variableListRequest">
+        <wsdl:part name="parameters" element="ns0:variableList"/>
+    </wsdl:message>
+    <wsdl:message name="userListRequest">
+        <wsdl:part name="parameters" element="ns0:userList"/>
+    </wsdl:message>
+    <wsdl:message name="userListResponse">
+        <wsdl:part name="parameters" element="ns0:userListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="caseListRequest">
+        <wsdl:part name="parameters" element="ns0:caseList"/>
+    </wsdl:message>
+    <wsdl:message name="caseListResponse">
+        <wsdl:part name="parameters" element="ns0:caseListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createUserRequest">
+        <wsdl:part name="parameters" element="ns0:createUser"/>
+    </wsdl:message>
+    <wsdl:message name="createUserResponse">
+        <wsdl:part name="parameters" element="ns0:createUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="assignUserToGroupRequest">
+        <wsdl:part name="parameters" element="ns0:assignUserToGroup"/>
+    </wsdl:message>
+    <wsdl:message name="newCaseRequest">
+        <wsdl:part name="parameters" element="ns0:newCase"/>
+    </wsdl:message>
+    <wsdl:message name="newCaseResponse">
+        <wsdl:part name="parameters" element="ns0:newCaseResponse"/>
+    </wsdl:message>
+    <wsdl:message name="reassignCaseRequest">
+        <wsdl:part name="parameters" element="ns0:reassignCase"/>
+    </wsdl:message>
+    <wsdl:message name="newCaseImpersonateRequest">
+        <wsdl:part name="parameters" element="ns0:newCaseImpersonate"/>
+    </wsdl:message>
+    <wsdl:message name="derivateCaseRequest">
+        <wsdl:part name="parameters" element="ns0:derivateCase"/>
+    </wsdl:message>    
+    <wsdl:message name="derivateCaseResponse">
+        <wsdl:part name="parameters" element="ns0:derivateCaseResponse"/>
+    </wsdl:message>
+    <wsdl:message name="executeTriggerRequest">
+        <wsdl:part name="parameters" element="ns0:executeTrigger"/>
+    </wsdl:message>
+    <wsdl:message name="sendVariablesRequest">
+        <wsdl:part name="parameters" element="ns0:sendVariables"/>
+    </wsdl:message>
+    <wsdl:message name="getVariablesRequest">
+        <wsdl:part name="parameters" element="ns0:getVariables"/>
+    </wsdl:message>
+    <wsdl:message name="variableListResponse">
+        <wsdl:part name="parameters" element="ns0:variableListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="sendMessageRequest">
+        <wsdl:part name="parameters" element="ns0:sendMessage"/>
+    </wsdl:message>
+    <wsdl:message name="getCaseInfoRequest">
+        <wsdl:part name="parameters" element="ns0:getCaseInfo"/>
+    </wsdl:message>
+    <wsdl:message name="getCaseInfoResponse">
+        <wsdl:part name="parameters" element="ns0:getCaseInfoResponse"/>
+    </wsdl:message>
+    <wsdl:message name="taskListRequest">
+        <wsdl:part name="parameters" element="ns0:taskList"/>
+    </wsdl:message>
+    <wsdl:message name="taskListResponse">
+        <wsdl:part name="parameters" element="ns0:taskListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="taskCaseRequest">
+        <wsdl:part name="parameters" element="ns0:taskCase"/>
+    </wsdl:message>
+    <wsdl:message name="taskCaseResponse">
+        <wsdl:part name="parameters" element="ns0:taskCaseResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="processListPortType">
+        <wsdl:operation name="login">
+            <wsdl:input message="ns0:loginRequest" wsaw:Action="urn:login"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="processList">
+            <wsdl:input message="ns0:processListRequest" wsaw:Action="urn:processList"/>
+            <wsdl:output message="ns0:processListResponse" wsaw:Action="urn:processListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="roleList">
+            <wsdl:input message="ns0:roleListRequest" wsaw:Action="urn:roleList"/>
+            <wsdl:output message="ns0:roleListResponse" wsaw:Action="urn:roleListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="groupList">
+            <wsdl:input message="ns0:groupListRequest" wsaw:Action="urn:groupList"/>
+            <wsdl:output message="ns0:groupListResponse" wsaw:Action="urn:groupListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="userList">
+            <wsdl:input message="ns0:userListRequest" wsaw:Action="urn:userList"/>
+            <wsdl:output message="ns0:userListResponse" wsaw:Action="urn:userListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="caseList">
+            <wsdl:input message="ns0:caseListRequest" wsaw:Action="urn:caseList"/>
+            <wsdl:output message="ns0:caseListResponse" wsaw:Action="urn:caseListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <wsdl:input message="ns0:createUserRequest" wsaw:Action="urn:createUser"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="assignUserToGroup">
+            <wsdl:input message="ns0:assignUserToGroupRequest" wsaw:Action="urn:assignUserToGroup"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="newCase">
+            <wsdl:input message="ns0:newCaseRequest" wsaw:Action="urn:newCase"/>
+            <wsdl:output message="ns0:newCaseResponse" wsaw:Action="urn:newCaseResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="reassignCase">
+            <wsdl:input message="ns0:reassignCaseRequest" wsaw:Action="urn:reassignCase"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="newCaseImpersonate">
+            <wsdl:input message="ns0:newCaseImpersonateRequest" wsaw:Action="urn:newCaseImpersonate"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="derivateCase">
+            <wsdl:input message="ns0:derivateCaseRequest" wsaw:Action="urn:derivateCase"/>
+            <wsdl:output message="ns0:derivateCaseResponse" wsaw:Action="urn:derivateCaseResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="executeTrigger">
+            <wsdl:input message="ns0:executeTriggerRequest" wsaw:Action="urn:executeTrigger"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="sendVariables">
+            <wsdl:input message="ns0:sendVariablesRequest" wsaw:Action="urn:sendVariables"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getVariables">
+            <wsdl:input message="ns0:getVariablesRequest" wsaw:Action="urn:getVariables"/>
+            <wsdl:output message="ns0:variableListResponse" wsaw:Action="urn:variableListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="sendMessage">
+            <wsdl:input message="ns0:sendMessageRequest" wsaw:Action="urn:sendMessage"/>
+            <wsdl:output message="ns0:pmResponse" wsaw:Action="urn:pmResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getCaseInfo">
+            <wsdl:input message="ns0:getCaseInfoRequest" wsaw:Action="urn:getCaseInfo"/>
+            <wsdl:output message="ns0:getCaseInfoResponse" wsaw:Action="urn:getCaseInfo"/>
+        </wsdl:operation>
+        <wsdl:operation name="taskList">
+            <wsdl:input message="ns0:taskListRequest" wsaw:Action="urn:taskList"/>
+            <wsdl:output message="ns0:taskListResponse" wsaw:Action="urn:taskListResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="taskCase">
+            <wsdl:input message="ns0:taskCaseRequest" wsaw:Action="urn:taskCase"/>
+            <wsdl:output message="ns0:taskCaseResponse" wsaw:Action="urn:taskCaseResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="processListSOAP12Binding" type="ns0:processListPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="login">
+            <soap12:operation soapAction="urn:login" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="processList">
+            <soap12:operation soapAction="urn:processList" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="roleList">
+            <soap12:operation soapAction="urn:roleList" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="groupList">
+            <soap12:operation soapAction="urn:groupList" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="userList">
+            <soap12:operation soapAction="urn:userList" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="caseList">
+            <soap12:operation soapAction="urn:caseList" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <soap12:operation soapAction="urn:createUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="assignUserToGroup">
+            <soap12:operation soapAction="urn:assignUserToGroup" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="newCase">
+            <soap12:operation soapAction="urn:newCase" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="reassignCase">
+            <soap12:operation soapAction="urn:reassignCase" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="newCaseImpersonate">
+            <soap12:operation soapAction="urn:newCase" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="derivateCase">
+            <soap12:operation soapAction="urn:derivateCase" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="executeTrigger">
+            <soap12:operation soapAction="urn:executeTrigger" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendVariables">
+            <soap12:operation soapAction="urn:sendVariables" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getVariables">
+            <soap12:operation soapAction="urn:getVariables" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendMessage">
+            <soap12:operation soapAction="urn:sendMessage" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getCaseInfo">
+            <soap12:operation soapAction="urn:getCaseInfo" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="taskList">
+            <soap12:operation soapAction="urn:taskList" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="taskCase">
+            <soap12:operation soapAction="urn:taskCase" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="processList">
+        <wsdl:port name="processListSOAP12port_http" binding="ns0:processListSOAP12Binding">
+            <soap12:address location="___SOAP_ADDRESS___" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

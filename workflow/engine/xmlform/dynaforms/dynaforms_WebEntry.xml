@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="" width="450" enabletemplate="0" mode="edit">
+
+<PRO_UID type="hidden" showInTable="0"/>
+<LANG type="private" showInTable="0"/>
+<subtitle1 type="subtitle">
+  <en>Properties</en>
+</subtitle1>
+
+<TASKS type="dropdown" defaultvalue="" dependentfields="DYNAFORM" mode="edit" options="Array"><![CDATA[
+  SELECT TASK.TAS_UID AS TUID, CONTENT.CON_VALUE AS TVALUE FROM TASK
+  LEFT JOIN PROCESS ON (PROCESS.PRO_UID=TASK.PRO_UID)
+  LEFT JOIN CONTENT ON (TASK.TAS_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='TAS_TITLE' AND CONTENT.CON_LANG='@#LANG')
+  WHERE TASK.PRO_UID=@@PRO_UID AND TASK.TAS_START='TRUE' ORDER BY CONTENT.CON_VALUE
+  ]]><en>Initial Task</en>
+</TASKS>
+
+<DYNAFORM type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
+  SELECT DYNAFORM.DYN_UID, CONTENT.CON_VALUE FROM DYNAFORM
+  LEFT JOIN PROCESS ON (PROCESS.PRO_UID=DYNAFORM.PRO_UID)
+  LEFT JOIN CONTENT ON (DYNAFORM.DYN_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='DYN_TITLE' AND CONTENT.CON_LANG='@#LANG')
+  LEFT JOIN STEP ON (DYNAFORM.DYN_UID=STEP.STEP_UID_OBJ)
+  WHERE DYNAFORM.PRO_UID=@@PRO_UID AND DYNAFORM.DYN_TYPE!='grid' AND STEP.TAS_UID="@#TASKS" ORDER BY CONTENT.CON_VALUE
+  ]]><en>Initial Dynaform</en>
+</DYNAFORM>
+
+<WE_TYPE type="dropdown" defaultvalue="" mode="edit">
+  <en>Method<option name="WS">PHP pages with Web Services</option><option name="SINGLE">Single HTML </option></en>
+</WE_TYPE>
+
+<WE_USR type="dropdown" defaultvalue="" mode="edit">
+  <en>Input Documents Access<option name="1">No Restriction</option><option name="2">Restricted to process permissions</option></en>
+</WE_USR>
+
+<subtitle2 type="subtitle">
+  <en><![CDATA[PHP & Web Service options]]></en>
+</subtitle2>
+<WS_USER type="text" defaultvalue="" mode="edit" options="Array">
+  <en>Web Service User</en>
+</WS_USER>
+<WS_PASS type="password" defaultvalue="" mode="edit" options="Array">
+  <en>Web Service Passsword</en>
+</WS_PASS>
+
+<WS_ROUNDROBIN type="yesno" defaultvalue="" mode="edit" options="Array">
+  <en>Cyclical Assignment</en>
+</WS_ROUNDROBIN>
+
+<TEST type="button" onclick="webEntry_validate(@QPRO_UID);">
+  <en>Test Configuration</en>
+</TEST>
+
+<SEARCH type="button" onclick="webEntry_generate(@QPRO_UID);">
+  <en>Generate Web Entry Page</en>
+</SEARCH>
+
+
+<js type="javascript"><![CDATA[
+var oPanel1;
+getField('SEARCH').disabled = true;
+
+  //hideRowById('WS_USER');
+  //hideRowById('WS_PASS');
+  //hideRowById('WS_ROUNDROBIN');
+  //hideRowById('subtitle2');
+
+/**/
+leimnud.event.add(getField('TASKS'), 'change', function() {
+    if (getField('WS_USER')!=""&&getField('WS_PASS')!=""){
+        getField('SEARCH').disabled = true;
+    }
+});
+/**/
+leimnud.event.add(getField('WE_TYPE'), 'change', function() {
+  if (getField('WE_TYPE').value=='WS') {
+    showRowById('WE_USR');
+    showRowById('WS_USER');
+    showRowById('WS_PASS');
+    showRowById('WS_ROUNDROBIN');
+    showRowById('subtitle2');
+  }
+  else {
+    hideRowById('WS_USER');
+    hideRowById('WS_PASS');
+    hideRowById('WS_ROUNDROBIN');
+    hideRowById('subtitle2');
+    
+  }hideRowById('WS_ROUNDROBIN');
+}.extend(getField('WE_TYPE')));
+
+/* function webEntry_validate
+ * @param PRO_UID process id
+ * @param TASKS task id
+ * @param DYNAFORM dynaform id
+ * @makes a rpc to processes_webEntryValidate in order to validate if the
+ * process user has the permissions to create and use a webentry
+ */
+ 
+var webEntry_validate = function(PRO_UID, TASKS, DYNAFORM) {
+    //G.alert(PRO_UID);
+    //G.alert(getField('DYNAFORM').value);
+    //G.alert(getField('TASKS').value);
+
+    var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
+    
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../processes/processes_Ajax',
+             async : true,
+             method: 'POST',
+             args  : "action=webEntry_validate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value, TASKS_NAME:tasksName }.toJSONString()
+       });
+       oRPC.callback = function(rpc){
+       //var scs=rpc.xmlhttp.responseText.extractScript();
+       //scs.evalScript();
+         if(rpc.xmlhttp.responseText>=1){
+           getField('SEARCH').disabled = false;
+           //webEntry_generate(PRO_UID);
+         } else {
+           getField('SEARCH').disabled = true;
+           msgBox(rpc.xmlhttp.responseText,"alert");
+         }
+       }.extend(this);
+       oRPC.make(); 
+}
+
+var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
+	//alert(PRO_UID+" ** "+getField('TASKS').value+" ** "+getField('DYNAFORM').value);return;
+  otask = getField('TASKS');
+  odynaform = getField('DYNAFORM');
+  sw=0;
+  if(otask.value=='')
+  {  if(odynaform.value=='')
+  		{  alert(G_STRINGS.ID_WEBENTRY);
+  		}
+  }
+  else
+  {  if(odynaform.value=='')
+  		{  alert('This process has any assigned dynaform');
+  		}
+  		else
+  		{  sw=1;
+  		}
+  }
+  if(sw==1)
+  {
+  	if(getField('WE_TYPE').value=='SINGLE')
+     { oPanel1 = new leimnud.module.panel();
+       oPanel1.options = {
+       	size	:{w:600,h:400},
+       	position:{x:0,y:0,center:true},
+       	title	:"Web Entry",
+       	statusBar:true,
+       	control	:{resize:false,roll:false},
+       	fx	:{modal:true,opacity:true,blinkToFront:true,fadeIn:false}
+       };
+       oPanel1.events = {
+       	remove: function() { delete(oPanel1); }.extend(this)
+       };
+       oPanel1.make();
+       oPanel1.loader.show();
+       var oRPC = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../processes/processes_Ajax',
+             async : true,
+             method: 'POST',
+             args  : "action=webEntry_generate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value }.toJSONString()
+       });
+       oRPC.callback = function(rpc){
+       	oPanel1.loader.hide();
+       	var scs=rpc.xmlhttp.responseText.extractScript();
+       	oPanel1.addContent(rpc.xmlhttp.responseText);
+       	scs.evalScript();
+       }.extend(this);
+       oRPC.make();
+     } 
+    else
+     {
+     	 var k = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../processes/processes_Ajax',
+             async : true,
+             method: 'POST',
+             args  : "action=webEntry_Val_Assig&data="+{
+             	PRO_UID:PRO_UID, 
+             	TASKS:getField('TASKS').value, 
+             	DYNAFORM:getField('DYNAFORM').value
+             	}.toJSONString()
+       });
+       
+       k.callback = function(rpc){
+       if(rpc.xmlhttp.responseText!=1){
+         	msgBox(G_STRINGS.WEBEN_ONLY_BALANCEDJS,"alert");
+         } 
+       }.extend(this);
+       k.make(); 
+     	 
+     		var oRPC = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../processes/processes_Ajax',
+             async : true,
+             method: 'POST',
+             args  : "action=webEntry_generate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value  }.toJSONString()
+       	});       	
+       	oRPC.make();
+       	oPanel.remove();  
+       	Pm.tmp.editProcessPanel.clearContent();     	
+        Pm.tmp.editProcessPanel.loader.show();
+        var r = new leimnud.module.rpc.xmlhttp({
+					url:'../processes/processes_Ajax',
+					args:"action=webEntry&data="+{
+						pro_uid	:PRO_UID
+					}.toJSONString()
+				});
+				r.callback=function(rpc,panel)
+				{
+					Pm.tmp.editProcessPanel.loader.hide();
+					var scs = rpc.xmlhttp.responseText.extractScript();
+					Pm.tmp.editProcessPanel.addContent(rpc.xmlhttp.responseText);
+					scs.evalScript();					
+				}.extend(this,panel);
+				r.make();
+     }
+  }
+};
+
+hideRowById('WS_ROUNDROBIN');
+]]></js>
+
+</dynaForm> 

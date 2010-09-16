@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value="" link="#" onclick="outputdocsAdd(); return false;" colAlign="left" colWidth="35">
+  <en>New</en>
+</MNU_ADD>
+<PAGED_TABLE_ID type="private"/>
+
+<PRO_UID type="private"/><![CDATA[>
+]]><outputdocs_New type="private" defaultValue="../outputdocs/outputdocs_New"/>
+<outputdocs_Edit type="private" defaultValue="../outputdocs/outputdocs_Edit"/>
+<outputdocs_Properties type="private" defaultValue="../outputdocs/outputdocs_Properties"/>
+<outputdocs_Delete type="private" defaultValue="../outputdocs/outputdocs_Delete"/>
+<js type="javascript" replaceTags="1"><![CDATA[
+var currentPagedTable = @#PAGED_TABLE_ID;
+  function outputdocsAdd(){
+		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_New)?PRO_UID=@%PRO_UID' , 600, 410);
+  }
+  function outputdocsEdit( uid, typ ) {
+    wi=770; he=510;
+    if ( typ == 'JRXML' ||  typ == 'ACROFORM' ) { wi=500; he=310; }
+		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Edit)?OUT_DOC_UID='+ uid , wi, he);
+  }
+  function outputdocsProperties( uid ) {
+		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Properties)?OUT_DOC_UID='+ uid , 600, 410);
+  }
+  
+  function outputdocsPropertiesSave( form ) {
+    var doc = getField("OUT_DOC_FILENAME");    
+    if(doc.value=='')
+     { alert(G_STRINGS.ID_FILEGENERATED);
+     }
+    else  
+     { 
+        ajax_post( form.action, form, 'POST', function(){
+       		  currentPopupWindow.remove();
+       		  @#PAGED_TABLE_ID.refresh();
+     			},
+     			true 
+     	  );
+       
+     }  
+  }
+  
+  function outputdocsSave( form ) {
+    ajax_post( form.action, form, 'POST' );
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+      
+  }
+
+  function outputdocsDelete( uid ) {
+    new leimnud.module.app.confirm().make({
+    	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_OUTDOC)',
+    	action:function()
+    	{
+        ajax_function('@G::encryptlink(@#outputdocs_Delete)','','OUT_DOC_UID='+uid,'POST');
+        @#PAGED_TABLE_ID.refresh();
+      }.extend(this)
+    });
+  }
+]]></js>
+
+
+<SEARCH_FILTER_FORM type="private"/>
+</dynaForm>  

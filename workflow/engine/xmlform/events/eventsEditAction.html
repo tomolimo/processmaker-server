@@ -1,0 +1,150 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit="return validateForm('{$form_objectRequiredFields}');">  
+<div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="height:{$form_height};" >
+	  <table width="99%">
+      <tr>
+        <td valign='top'>
+        <input type="hidden" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" />
+        <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" />
+           <table cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr style="display: none">
+              <td colspan="2">{$form.EVN_UID}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.PRO_UID}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_DESCRIPTION}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_RELATED_TO}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.TAS_UID}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_TAS_UID_FROM}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_TAS_UID_TO}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_TAS_ESTIMATED_DURATION}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_WHEN_OCCURS}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_STATUS}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_WHEN}</td>
+             </tr>
+                                              <tr style="display: none">
+              <td colspan="2">{$form.EVN_ACTION}</td>
+             </tr>
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}"><font color="red">*  </font>{$EVN_MESSAGE_SUBJECT}</td>
+              <td class='FormFieldContent' >{$form.EVN_MESSAGE_SUBJECT}</td>
+             </tr>
+             <tr>
+              <td class="FormTitle" colspan="2" align="">{$form.title1}</td>
+             </tr>
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$EVN_MESSAGE_TO_TO}</td>
+              <td class='FormFieldContent' >
+                <table>
+                  <tr>
+                    <td rowspan="3">{$form.EVN_MESSAGE_TO_TO_SIMPLEADD}<br/>{$form.EVN_MESSAGE_TO_TO}</td>
+                    <td><a title="Add" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_TO');e.add();return false;"><img src="/images/addc.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add current task user" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_TO');e.toAdd('-1', '(Current Task User)', 'usr'); return false;"><img src="/images/user-id-32x32.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add users" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_TO');e.showUsers(event); return false;"><img src="/images/add-user-32x32.png" width="15px" height="15px" border="0"/></a></td>
+                  </tr>
+                  <tr>
+                  	<td><a title="Remove selected" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_TO');e.dropSel();return false;"><img src="/images/delete-icon.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add dynavar" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_TO');e.showDynavars(event); return false;"><img src="/images/dynavars.png" width="18px" height="15px" border="0"/></a></td>
+                    <td><a title="Add groups" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_TO');e.showGroups(event); return false;"><img src="/images/group_add.png" width="15px" height="15px" border="0"/></a></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>          
+                  </tr>
+                </table>
+              </td>
+             </tr>
+             <tr>
+              <td class="FormTitle" colspan="2" align="">{$form.title2}</td>
+             </tr>
+             
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$EVN_MESSAGE_TO_CC}</td>
+              
+              <td class='FormFieldContent' >
+                <table>
+                  <tr>
+                    <td rowspan="3">{$form.EVN_MESSAGE_TO_CC_SIMPLEADD}<br/>{$form.EVN_MESSAGE_TO_CC}</td>
+                    <td><a title="Add" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_CC');e.add();return false;"><img src="/images/addc.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add current task user" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_CC');e.toAdd('-1', '(Current Task User)', 'usr'); return false;"><img src="/images/user-id-32x32.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add users" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_CC');e.showUsers(event); return false;"><img src="/images/add-user-32x32.png" width="15px" height="15px" border="0"/></a></td>
+                  </tr>
+                  <tr>
+                  	<td><a title="Remove selected" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_CC');e.dropSel();return false;"><img src="/images/delete-icon.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add dynavar" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_CC');e.showDynavars(event); return false;"><img src="/images/dynavars.png" width="18px" height="15px" border="0"/></a></td>
+                    <td><a title="Add groups" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_CC');e.showGroups(event); return false;"><img src="/images/group_add.png" width="15px" height="15px" border="0"/></a></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>          
+                  </tr>
+                </table>
+              </td>
+             </tr>
+             <tr>
+              <td class="FormTitle" colspan="2" align="">{$form.title3}</td>
+             </tr>
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$EVN_MESSAGE_TO_BCC}</td>
+              
+              <td class='FormFieldContent' >
+                <table>
+                  <tr>
+                    <td rowspan="3">{$form.EVN_MESSAGE_TO_BCC_SIMPLEADD}<br/>{$form.EVN_MESSAGE_TO_BCC}</td>
+                    <td><a title="Add" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_BCC');e.add();return false;"><img src="/images/addc.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add current task user" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_BCC');e.toAdd('-1', '(Current Task User)', 'usr'); return false;"><img src="/images/user-id-32x32.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add users" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_BCC');e.showUsers(event); return false;"><img src="/images/add-user-32x32.png" width="15px" height="15px" border="0"/></a></td>
+                  </tr>
+                  <tr>
+                  	<td><a title="Remove selected" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_BCC');e.dropSel();return false;"><img src="/images/delete-icon.png" width="15px" height="15px" border="0"/></a></td>
+                    <td><a title="Add dynavar" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_BCC');e.showDynavars(event); return false;"><img src="/images/dynavars.png" width="18px" height="15px" border="0"/></a></td>
+                    <td><a title="Add groups" href="#" onclick="e=new EventCompose('EVN_MESSAGE_TO_BCC');e.showGroups(event); return false;"><img src="/images/group_add.png" width="15px" height="15px" border="0"/></a></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>          
+                  </tr>
+                </table>
+              </td>
+             </tr>
+                                                <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$EVN_MESSAGE_TEMPLATE}</td>
+              <td class='FormFieldContent' >{$form.EVN_MESSAGE_TEMPLATE}</td>
+              </tr>
+                                                <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$TRI_UID}</td>
+              <td class='FormFieldContent' >{$form.TRI_UID}</td>
+              </tr>
+                                               <tr>
+              <td class='FormButton' colspan="2" align="center"> {$form.SAVE} &nbsp; {$form.BTN_CANCEL} </td>
+             </tr>
+                                                                   </table>
+        </td>
+      </tr>
+    </table>
+    <div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+                                          <script type="text/javascript">
+    {$form.JS}
+  </script>
+  </form>
+
+<script type="text/javascript">dynaformSetFocus();</script>
+

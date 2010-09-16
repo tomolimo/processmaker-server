@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="CalendarDefinition" width="600" enabletemplate="1" mode="edit">
+<CALENDAR_UID type="hidden" size='32' maxlength='32' >
+  <en>Ndar Uid
+  </en>
+</CALENDAR_UID>
+
+<DEFINITION_TITLE type="title" enablehtml="0">
+
+<en>Calendar Definition</en>
+</DEFINITION_TITLE>
+<CALENDAR_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="15" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
+<en>Name</en>
+</CALENDAR_NAME>
+<CALENDAR_DESCRIPTION type="textarea" required="0" readonly="0" rows="2" cols="32" mode="edit">
+<en>Description</en>
+</CALENDAR_DESCRIPTION>
+<CALENDAR_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="ACTIVE" labelonright="1" enablehtml="0">
+<en>Active</en>
+</CALENDAR_STATUS>
+
+<WorkDays type="title" enablehtml="0">
+<en>Work Days</en>
+</WorkDays>
+<CALENDAR_WORK_DAYS type="checkgroup" defaultvalue="1|2|3|4|5" mode="edit" options="Array">
+<en> <option name="0">SUN</option>
+<option name="1">MON</option>
+<option name="2">TUE</option>
+<option name="3">WED</option>
+<option name="4">THU</option>
+<option name="5">FRI</option>
+<option name="6">SAT</option>
+</en>
+</CALENDAR_WORK_DAYS>
+<BUSINESS_DAY_TITLE type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
+<en>Work Hours</en>
+</BUSINESS_DAY_TITLE>
+<BUSINESS_DAY type="grid" xmlgrid="setup/calendarEdit_BusinessHours" addrow="1" deleterow="1"/>
+<HOLIDAY_LABEL type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
+<en>Holidays</en>
+</HOLIDAY_LABEL>
+<HOLIDAY type="grid" xmlgrid="setup/calendarEdit_Holidays" addrow="1" deleterow="1"/>
+<SUBMIT type="submit" onclick="return validateForm(this.form);">
+<en>Save</en>
+</SUBMIT>
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+<DEFAULT_CALENDAR_JS type="javascript">
+<![CDATA[
+
+if((getField("CALENDAR_UID").value=="00000000000000000000000000000001")||(getField("CALENDAR_UID").value=="00000000000000000000000000000002")){
+	getField("CALENDAR_STATUS").disabled=true;
+	getField("CALENDAR_NAME").disabled=true;	
+	getField("CALENDAR_NAME").style.background="none";
+	getField("CALENDAR_NAME").style.border="0";
+	
+}
+	
+var dynaformOnload = function() {
+
+rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY"); 
+
+
+for(i=1;i<=rowsCount;i++){	
+	timeValidatorWrap(i);
+	}
+	grid_BUSINESS_DAY.onaddrow = function (iRow) {
+		timeValidatorWrap(iRow);
+	} 
+}
+
+function timeValidatorWrap(iRow){
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START").onchange=function startValidation(){
+		validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START"));
+	}
+	
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START").onblur=function startValidation(){
+		validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START"));
+	}
+
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END").onchange=function startValidation(){
+		validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END"));
+	}
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END").onblur=function startValidation(){
+		validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END"));
+	}
+
+	
+	
+}
+function validateForm(form){
+	rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
+	msg="";
+	
+	for(i=1;i<=rowsCount;i++){		
+		msgStart="";	
+		msgStart=validateTime(getGridField("BUSINESS_DAY", i, "CALENDAR_BUSINESS_START"));
+		
+		if(msgStart!=""){
+			msg+="- "+msgStart+"\n";
+		}
+		msgEnd="";
+		msgEnd=validateTime(getGridField("BUSINESS_DAY", i, "CALENDAR_BUSINESS_END"));
+		if(msgEnd!=""){
+			msg+="- "+msgEnd+"\n";
+		}
+		
+	}
+	var flag=true;
+	var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
+	//alert(rowsHoliday);return false;
+	var j=0;
+	for(var j =1 j<= rowsHoliday;j++){
+		msgHolidays = getGridField("HOLIDAY", j, "CALENDAR_HOLIDAY_START");
+		if(msgHolidays.value==''){
+		flag=false;
+		}
+	}
+	if(!flag){
+	msgBox(G_STRINGS.ID_REQUIRED_FIELDS + ": \n Start Date ","alert"); return false;
+	}
+	if(msg!=""){
+		alert(msg);
+		return false;
+	}
+	
+	return true;
+
+}
+
+function validateTime(object){
+		timeToValidate=object.value;			
+		msgError="";
+		if(!isValidTime(timeToValidate)){
+			G.highLight(object);
+			msgError="Invalid: "+object.value;
+		}else{
+			object.style.background="";
+			msgError="";
+		}
+		return msgError;
+}
+
+function isValidTime(value) {
+   var hasMeridian = false;
+   var re = /^\d{1,2}[:]\d{2}([:]\d{2})?( [aApP][mM]?)?$/;
+   if (!re.test(value)) { return false; }
+   if (value.toLowerCase().indexOf("p") != -1) { hasMeridian = true; }
+   if (value.toLowerCase().indexOf("a") != -1) { hasMeridian = true; }
+   var values = value.split(":");
+   if ( (parseFloat(values[0]) < 0) || (parseFloat(values[0]) > 23) ) { return false; }
+   if (hasMeridian) {
+      if ( (parseFloat(values[0]) < 1) || (parseFloat(values[0]) > 12) ) { return false; }
+   }
+   if ( (parseFloat(values[1]) < 0) || (parseFloat(values[1]) > 59) ) { return false; }
+   if (values.length > 2) {
+      if ( (parseFloat(values[2]) < 0) || (parseFloat(values[2]) > 59) ) { return false; }
+   }
+   return true;
+}
+
+function cancel(){
+    window.location = 'calendarList';
+}
+
+]]>
+</DEFAULT_CALENDAR_JS>
+</dynaForm>  

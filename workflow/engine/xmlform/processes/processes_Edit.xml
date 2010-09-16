@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="processes_Edit" width="500px" labelWidth="250px" mode="edit" enableTemplate="1" ajaxSubmit="1" >
+
+<TITLE1 type="title" group="1">
+  <en>Process Information </en>
+</TITLE1>
+
+<PRO_UID type="hidden"/>
+
+<THETYPE type="hidden"/>
+
+<PRO_TITLE type="text" size="50" maxlength="255" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Title</en>
+</PRO_TITLE>
+
+
+<PRO_DESCRIPTION type="textarea" rows="8" cols="60">
+  <en>Description</en>
+</PRO_DESCRIPTION>
+<PRO_CALENDAR type="dropdown" sqlconnection="dbarray">
+SELECT CALENDAR_UID, CALENDAR_NAME FROM availableCalendars
+<en>Calendar<option name="">- None -</option></en>
+</PRO_CALENDAR>
+
+<PRO_CATEGORY type="dropdown" >
+SELECT CATEGORY_UID, CATEGORY_NAME FROM PROCESS_CATEGORY
+<en>Process Category<option name="">- None -</option></en>
+</PRO_CATEGORY>
+
+<PRO_DEBUG type="checkbox" value="1" falsevalue="0" defaultvalue="1" labelonright="0">
+  <en>Debug</en>
+</PRO_DEBUG>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<SUBMIT type="button" onclick="verifyProcessInformation(this.form);" group="1">
+  <en>Save</en>
+</SUBMIT>
+
+<MESSAGE1 type="phpvariable"/>
+
+<JS type="javascript" replacetags="1"><![CDATA[
+var verifyProcessInformation = function(oForm)
+{
+	var oAux;
+	var bContinue = true;
+	oAux = oForm.elements['form[PRO_TITLE]'];
+	if (oAux.value == '')
+	{
+		alert("@#MESSAGE1");
+		oAux.focus();
+		bContinue = false;
+	}
+	if (bContinue)
+	{
+		ajax_post(oForm.action, oForm, 'POST');
+		Pm.data.db.title.label = Pm.data.db.title.object.elements.label.innerHTML = getField('PRO_TITLE').value.escapeHTML();
+    Pm.tmp.editProcessPanel.remove();
+	}
+};
+
+function cancel(){
+    Pm.tmp.editProcessPanel.remove();
+}
+
+]]></JS>
+
+</dynaForm> 

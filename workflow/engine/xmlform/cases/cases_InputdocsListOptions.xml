@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+<DOC_UID type="private"/>
+<upload_New type="private" defaultValue="javascript:uploadInputDocument('@#DOC_UID');"/>
+<PAGED_TABLE_ID type="private"/>
+
+<!-- Default Search option -->
+
+<MNU_NEW type="link" label="@G::LoadTranslation(ID_ATTACH)" value='' link="@G::encryptLink(@#upload_New)" colAlign="left" colWidth="85">
+  <!--<en>@G::LoadTranslation(ID_START_CASE)</en>-->
+</MNU_NEW>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript">
+
+</JS>
+</dynaForm>

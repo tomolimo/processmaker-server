@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dynaForm name="login.xml" basedir="" width='400'>Login to system
+
+<title type="title" >
+  <es>You don't have permission</es>
+  <en>You don't have permission</en>
+</title>
+
+<subtitle1 type="subtitle" >
+  <es>The account you are logged in under does not have enough security privileges to view this page</es>
+  <en>The account you are logged in under does not have enough security privileges to view this page</en>
+</subtitle1>
+
+<subtitle2 type='subtitle'>
+    <en>Please press back button to continue working with this system.</en>
+    <es>Por favor presione el boton Regresar.</es>
+</subtitle2>
+
+</dynaForm>

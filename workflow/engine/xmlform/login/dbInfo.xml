@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="dbInfo" basedir="" width="450">
+<DYNA_HEADER type="title">
+  <en>System Information</en>
+<es><![CDATA[Información del sistema]]></es></DYNA_HEADER>
+<FLUID type="caption" group="5">
+  <en>ProcessMaker</en>
+<es>ProcessMaker</es></FLUID>
+<SYSTEM type="caption">
+  <en>Operating System</en>
+<es>Sistema operativo</es></SYSTEM>
+
+<SERVER_SOFTWARE type="caption">
+  <en>Web Server</en>
+<es>Servidor Web</es></SERVER_SOFTWARE>
+<SERVER_NAME type="caption" group="4">
+  <en>Server Name</en>
+<es>Nombre del servidor</es></SERVER_NAME>
+<SERVER_ADDR type="caption">
+  <en>Server IP Address</en>
+<es>IP del servidor</es></SERVER_ADDR>
+<PHP type="caption">
+  <en>PHP version</en>
+<es><![CDATA[Versión PHP]]></es></PHP>
+<DATABASE type="caption">
+  <en>Database</en>
+<es>Base de Datos</es></DATABASE>
+<DATABASE_SERVER type="caption">
+  <en>Database Server IP Address</en>
+<es><![CDATA[Dirección IP de la Base de Datos]]></es></DATABASE_SERVER>
+<DATABASE_NAME type="caption">
+  <en>Database Name</en>
+<es>Nombre de la Base de Datos</es></DATABASE_NAME>
+<AVAILABLE_DB type="caption">
+  <en>Available Databases</en>
+<es>Bases de datos disponibles</es></AVAILABLE_DB>
+<HTTP_USER_AGENT type="caption">
+  <en><![CDATA[User's Browser]]></en>
+<es>Navegador del usuario</es></HTTP_USER_AGENT>
+<IP type="caption">
+  <en><![CDATA[User's Ip Address]]></en>
+<es>IP del usuario</es></IP>
+</dynaForm>  

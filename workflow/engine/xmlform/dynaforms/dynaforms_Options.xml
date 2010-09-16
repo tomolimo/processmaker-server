@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value='' link="#" onclick="dynaformAdd(); return false;" colAlign="left" colWidth="35">
+  <en>New</en>
+</MNU_ADD>
+
+<PAGED_TABLE_ID type="private"/>
+<PRO_UID type="private"/>
+
+<dynaformsEdit type="private" defaultValue="../dynaforms/dynaforms_Edit"/>
+
+<dynaformsChoseType type="private" defaultValue="../dynaforms/dynaforms_ChoseType"/>
+
+<dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
+
+<dynaformsEditor    type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
+
+<dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
+
+<dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
+
+<js type="javascript" replaceTags="1"><![CDATA[
+  function dynaformAdd(){
+                popupWindow('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsChoseType)?PRO_UID=@%PRO_UID' , 500, 200);
+	        //popupWindow('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsNewPlugin)?PRO_UID=@%PRO_UID' , 500, 350);
+  }
+  function dynaformPluginAdd(){
+		popupWindow('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsEdit)?PRO_UID=@%PRO_UID' , 500, 350);
+  }
+  function dynaformProperties( uid ){
+		popupWindow('@G::LoadTranslation(ID_EDIT_DYNAFORM)', '@G::encryptlink(@#dynaformsEdit)?DYN_UID='+ uid , 500, 400);
+  }
+  function dynaformEdit( uid ){
+		window.location.href = "@G::encryptlink(@#dynaformsEditor)?PRO_UID=@%PRO_UID&DYN_UID="+uid;
+  }
+  function dynaformFlatEdit( uid ){
+		var rr1;
+    var divEditor=document.getElementById('DynaformsEditorDiv');
+    if (!divEditor) divEditor=createDivEditor('DynaformsEditorDiv');
+    divEditor.innerHTML=ajax_function("@G::encryptlink(@#dynaformsFlatEditor)","","DYN_UID="+uid+"&PRO_UID="+"@#PRO_UID");
+		var myScripts = divEditor.getElementsByTagName('SCRIPT');
+		var code=[];
+		for(rr1=0; rr1<myScripts.length ; rr1++){
+		  code[rr1]=myScripts[rr1].innerHTML
+		}
+		for(rr1=0; rr1<code.length ; rr1++){
+		  try {
+	      if (window.execScript)
+  		    window.execScript( code[rr1] ,'javascript');
+        else
+          window.setTimeout( code[rr1], 0 );
+		  } catch (e) {
+		    alert(e.description);
+		  }
+		}
+		delete code;
+		delete divEditor;
+		delete myScripts;
+  }
+  function createDivEditor(id) {
+
+     var newdiv = document.createElement('div');
+     newdiv.setAttribute('id', id);
+
+     newdiv.style.position = "absolute";
+     newdiv.style.left = 0;
+     newdiv.style.top = 0;
+
+     newdiv.style.visibility="hidden";
+
+     document.body.appendChild(newdiv);
+
+     return document.getElementById(id);
+  }
+
+  function dynaformSave ( form, bOpen ) {
+    if (!bOpen) {
+      ajax_post( form.action, form, 'POST' );
+      lastPopupWindow.remove();
+      @#PAGED_TABLE_ID.refresh();
+    }
+    else {
+      ajax_post( form.action, form, 'POST', openDynaform );
+    }
+  }
+
+  function dynaformSavePMBasedForm ( form, bOpen ) {
+    if (!bOpen) {
+      ajax_post( form.action, form, 'POST' );
+      oPanel.remove();
+      @#PAGED_TABLE_ID.refresh();
+      //location.reload(true);
+    }
+    else {
+      ajax_post( form.action, form, 'POST', openDynaform );
+    }
+  }
+  function openDynaform(sUID) {
+    dynaformEdit(sUID);
+  }
+  
+  function dynaformDelete ( uid ){
+    new leimnud.module.app.confirm().make({
+    	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DYNAFORM)',
+    	action:function()
+    	{
+        ajax_function('@G::encryptlink(@#dynaformsDelete)','','DYN_UID='+uid,'POST');
+        @#PAGED_TABLE_ID.refresh();
+      }.extend(this)
+    });
+  }
+  
+  function getStyle(oElm, strCssRule){
+	var strValue = "";
+	if(document.defaultView && document.defaultView.getComputedStyle){
+		strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(strCssRule);
+	}
+	else if(oElm.currentStyle){
+		strCssRule = strCssRule.replace(/-(w)/g, function (strMatch, p1){
+			return p1.toUpperCase();
+		});
+		strValue = oElm.currentStyle[strCssRule];
+	}
+	return strValue;
+}
+]]></js>
+
+<SEARCH_FILTER_FORM type="private"/>
+</dynaForm> 

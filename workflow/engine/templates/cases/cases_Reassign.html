@@ -1,0 +1,58 @@
+<html>
+<head>
+  <title>Cases Reassign</title>  
+</head>
+<body>
+	<form method="POST" action="cases_Reassign_save.php" class="formDefault">
+	<div class="borderForm" style="width:300; padding-left:0; padding-right:0; border-width:1;">
+  <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  <div class="pagedTableDefault" style="height:100%;" >
+  
+	<table width="280">
+  <tr><td class="FormTitle" colspan="2" align="center" >{labels:ID_REASSIGN_USERS}</td></tr>
+  <tr><td colspan="2" align="center">.</td></tr>
+ 
+  <tr>
+  		<td>{labels:ID_USER_TO_REASSIGN}</td>
+  		<td>
+  	  	<select name="USERS" id="USERS" onclick="Reassign()">
+          <option value="">{ID_NO_REASSIGN}</option>
+          <!-- START BLOCK : users -->            
+          <option value="{USR_UID}">{USERS}</option>
+          <!-- END BLOCK : users -->         
+        </select>	
+  		</td>
+  </tr>
+
+  
+  <tr><td colspan="2" align="center">.</td></tr>
+  <tr>  	
+  <td colspan="2" align="center">  
+  	<input type="hidden" name="US" value="{US}"/> 
+  	<input type="hidden" name="APP_UID" value="{APP_UID}"/> 
+  	<input type="hidden" name="DEL_INDEX" value="{DEL_INDEX}"/> 
+      <input type="submit" id="reassign" value="{labels:ID_REASSIGN}" class="module_app_button___gray"/>
+  </td>
+  </tr>
+  </table>
+  
+  </div>
+  <div class="boxBottom"><div class="a"></div>
+  <div class="b"></div><div class="c"></div></div>
+  </form>
+  <script type="text/javascript">
+   var dd = document.getElementById("USERS").value;
+   if(dd=='')
+   			document.getElementById("reassign").disabled=true;
+   
+   function Reassign()
+		{ var dd = document.getElementById("USERS").value;
+			if(dd=='')
+   			document.getElementById("reassign").disabled=true;
+   		else
+   			document.getElementById("reassign").disabled=false;	   
+		}
+		   
+  </script>
+</body>
+</html> 

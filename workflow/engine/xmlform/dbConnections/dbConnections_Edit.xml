@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="languages_ImportForm" type="xmlform" width="100%" labelWidth="40%" enableTemplate="1">
+
+<PRO_UID type="hidden"/>
+<DBS_UID type="text" size="25" maxlength="100" defaultvalue="" required="true" mode="view">
+  <en>UID</en>
+</DBS_UID>
+
+<DBS_TYPE type="dropdown" sqlconnection="dbarray">
+ SELECT * FROM BDCONNECTIONS 
+ <en>Engine<option name="">...</option></en>
+</DBS_TYPE>
+
+<DBS_ENCODE type="dropdown"> 
+ <en>Encode<option name="">...</option></en>
+</DBS_ENCODE> 
+
+<DBS_SERVER type="text" size="25" maxlength="100" defaultvalue="" required="true">
+  <en>Server</en>
+</DBS_SERVER>
+
+<DBS_DATABASE_NAME type="text" size="25" maxlength="100" defaultvalue="" required="true">
+  <en>Database Name</en>
+</DBS_DATABASE_NAME>
+
+<DBS_USERNAME type="text" size="25" maxlength="32" defaultvalue="" required="true">
+  <en>Username</en>
+</DBS_USERNAME>
+
+<DBS_PASSWORD type="password" size="25" maxlength="32" defaultvalue="">
+  <en>Password</en>
+</DBS_PASSWORD>
+
+<DBS_PORT type="text" size="25" maxlength="10" defaultvalue="" required="true">
+  <en>Port</en>
+</DBS_PORT>
+
+<DBS_DESCRIPTION type="textarea" rows="2" cols="22" maxlength="30" defaultvalue="">
+  <en>Description</en>
+</DBS_DESCRIPTION>
+
+<TEST type="button" onclick="javascript:testDBConnection();">
+  <en>Test Connection</en>
+</TEST>
+
+<CREATE type="button" onclick="javascript:saveEditDBConnection(&#039;@#DBS_UID&#039;);">
+  <en>Save</en>
+</CREATE>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<JS type="javascript"><![CDATA[
+	hideRowById('DBS_ENCODE');
+	
+	leimnud.event.add(getField('DBS_TYPE'), 'change', function() {
+		showEncodes('@#DBS_ENCODE');
+		onChangeType();
+	}.extend(getField('DBS_TYPE')));
+	showEncodes('@#DBS_ENCODE');
+	
+    function cancel(){
+        oPanel.remove();
+    }		
+	
+]]></JS>
+
+</dynaForm> 

@@ -1,0 +1,328 @@
+<?php
+
+require_once 'classes/model/om/BaseCalendarDefinition.php';
+require_once 'classes/model/CalendarBusinessHours.php';
+require_once 'classes/model/CalendarHolidays.php';
+require_once 'classes/model/CalendarAssignments.php';
+
+/**
+ * Skeleton subclass for representing a row from the 'CALENDAR_DEFINITION' table.
+ *
+ *
+ *
+ * You should add additional methods to this class to meet the
+ * application requirements.  This class will only be generated as
+ * long as it does not already exist in the output directory.
+ *
+ * @package    classes.model
+ */
+class CalendarDefinition extends BaseCalendarDefinition {
+  public $calendarLog = '';
+  function getCalendarList($onlyActive = false, $arrayMode = false) {
+    $Criteria = new Criteria ( 'workflow' );
+    $Criteria->clearSelectColumns ();
+
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UID );
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_NAME );
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_CREATE_DATE );
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UPDATE_DATE );
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_DESCRIPTION );
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_STATUS );
+    // Note: This list doesn't show deleted items (STATUS = DELETED)
+    if ($onlyActive) { // Show only active. Used on assignment lists
+      $Criteria->add ( calendarDefinitionPeer::CALENDAR_STATUS, "ACTIVE", CRITERIA::EQUAL );
+    } else { // Show Active and Inactive calendars. USed in main list
+      $Criteria->add ( calendarDefinitionPeer::CALENDAR_STATUS, array ("ACTIVE", "INACTIVE" ), CRITERIA::IN );
+    }
+    if(class_exists('pmLicenseManager')){
+      $pmLicenseManagerO =& pmLicenseManager::getSingleton();
+      $expireIn=$pmLicenseManagerO->getExpireIn();
+      if($expireIn>0){
+        $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "xx", CRITERIA::NOT_EQUAL );
+      }else{
+        $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "00000000000000000000000000000001", CRITERIA::EQUAL );
+      }
+    }else{
+      $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "00000000000000000000000000000001", CRITERIA::EQUAL );
+
+    }
+    if (! $arrayMode) {
+      return $Criteria;
+    } else {
+      $oDataset = calendarDefinitionPeer::doSelectRS ( $Criteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $calendarA = array (0 => 'dummy' );
+      $calendarCount = 0;
+      while ( is_array ( $aRow = $oDataset->getRow () ) ) {
+        $calendarCount ++;
+        $calendarA [$calendarCount] = $aRow;
+        $oDataset->next ();
+      }
+      $return ['criteria'] = $Criteria;
+      $return ['array'] = $calendarA;
+      return $return;
+    }
+  }
+  function getCalendarInfo($CalendarUid) {
+    //if exists the row in the database propel will update it, otherwise will insert.
+    $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+
+    if ((is_object ( $tr ) && get_class ( $tr ) == 'CalendarDefinition')) {
+      $fields ['CALENDAR_UID'] = $tr->getCalendarUid ();
+      $fields ['CALENDAR_NAME'] = $tr->getCalendarName ();
+      $fields ['CALENDAR_CREATE_DATE'] = $tr->getCalendarCreateDate ();
+      $fields ['CALENDAR_UPDATE_DATE'] = $tr->getCalendarUpdateDate ();
+      $fields ['CALENDAR_DESCRIPTION'] = $tr->getCalendarDescription ();
+      $fields ['CALENDAR_STATUS'] = $tr->getCalendarStatus ();
+      $fields ['CALENDAR_WORK_DAYS'] = $tr->getCalendarWorkDays ();
+      $fields ['CALENDAR_WORK_DAYS_A'] = explode ( "|", $tr->getCalendarWorkDays () );
+    } else {
+      $fields ['CALENDAR_UID'] = "00000000000000000000000000000001";
+      $fields ['CALENDAR_NAME'] = "Default";
+      $fields ['CALENDAR_CREATE_DATE'] = date ( "Y-m-d" );
+      $fields ['CALENDAR_UPDATE_DATE'] = date ( "Y-m-d" );
+      $fields ['CALENDAR_DESCRIPTION'] = "Default";
+      $fields ['CALENDAR_STATUS'] = "ACTIVE";
+      $fields ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
+      $fields ['CALENDAR_WORK_DAYS'] = explode ( "|", "1|2|3|4|5" );
+      $fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_DAY'] = 7;
+      $fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_START'] = "09:00";
+      $fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_END'] = "17:00";
+      $fields ['HOLIDAY'] = array ();
+      $this->saveCalendarInfo ( $fields );
+      $fields ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
+      $fields ['CALENDAR_WORK_DAYS_A'] = explode ( "|", "1|2|3|4|5" );
+      $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+    }
+    $CalendarBusinessHoursObj = new CalendarBusinessHours ( );
+    $CalendarBusinessHours = $CalendarBusinessHoursObj->getCalendarBusinessHours ( $CalendarUid );
+    $fields ['BUSINESS_DAY'] = $CalendarBusinessHours;
+
+    $CalendarHolidaysObj = new CalendarHolidays ( );
+    $CalendarHolidays = $CalendarHolidaysObj->getCalendarHolidays ( $CalendarUid );
+    $fields ['HOLIDAY'] = $CalendarHolidays;
+
+    return $fields;
+
+  }
+  function saveCalendarInfo($aData) {
+    $CalendarUid = $aData ['CALENDAR_UID'];
+    $CalendarName = $aData ['CALENDAR_NAME'];
+    $CalendarDescription = $aData ['CALENDAR_DESCRIPTION'];
+    $CalendarStatus = isset ( $aData ['CALENDAR_STATUS'] ) ? $aData ['CALENDAR_STATUS'] : "INACTIVE";
+    $defaultCalendars [] = '00000000000000000000000000000001';
+    if (in_array ( $aData ['CALENDAR_UID'], $defaultCalendars )) {
+      $CalendarStatus = 'ACTIVE';
+      $CalendarName = 'Default';
+    }
+    $CalendarWorkDays = isset ( $aData ['CALENDAR_WORK_DAYS'] ) ? implode ( "|", $aData ['CALENDAR_WORK_DAYS'] ) : "";
+
+    //if exists the row in the database propel will update it, otherwise will insert.
+    $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+    if (! (is_object ( $tr ) && get_class ( $tr ) == 'CalendarDefinition')) {
+      $tr = new CalendarDefinition ( );
+      $tr->setCalendarCreateDate ( 'now' );
+    }
+    $tr->setCalendarUid ( $CalendarUid );
+    $tr->setCalendarName ( $CalendarName );
+
+    $tr->setCalendarUpdateDate ( 'now' );
+    $tr->setCalendarDescription ( $CalendarDescription );
+    $tr->setCalendarStatus ( $CalendarStatus );
+    $tr->setCalendarWorkDays ( $CalendarWorkDays );
+
+    if ($tr->validate ()) {
+      // we save it, since we get no validation errors, or do whatever else you like.
+      $res = $tr->save ();
+      //Calendar Business Hours Save code.
+      //First Delete all current records
+      $CalendarBusinessHoursObj = new CalendarBusinessHours ( );
+      $CalendarBusinessHoursObj->deleteAllCalendarBusinessHours ( $CalendarUid );
+      //Save all the sent records
+      foreach ( $aData ['BUSINESS_DAY'] as $key => $objData ) {
+        $objData ['CALENDAR_UID'] = $CalendarUid;
+        $CalendarBusinessHoursObj->saveCalendarBusinessHours ( $objData );
+      }
+
+      //Holiday Save code.
+      //First Delete all current records
+      $CalendarHolidayObj = new CalendarHolidays ( );
+      $CalendarHolidayObj->deleteAllCalendarHolidays ( $CalendarUid );
+      //Save all the sent records
+      foreach ( $aData ['HOLIDAY'] as $key => $objData ) {
+        if (($objData ['CALENDAR_HOLIDAY_NAME'] != "") && ($objData ['CALENDAR_HOLIDAY_START'] != "") && ($objData ['CALENDAR_HOLIDAY_END'] != "")) {
+          $objData ['CALENDAR_UID'] = $CalendarUid;
+          $CalendarHolidayObj->saveCalendarHolidays ( $objData );
+        }
+      }
+    } else {
+      // Something went wrong. We can now get the validationFailures and handle them.
+      $msg = '';
+      $validationFailuresArray = $tr->getValidationFailures ();
+      foreach ( $validationFailuresArray as $objValidationFailure ) {
+        $msg .= $objValidationFailure->getMessage () . "<br/>";
+      }
+      //return array ( 'codError' => -100, 'rowsAffected' => 0, 'message' => $msg );
+    }
+    //return array ( 'codError' => 0, 'rowsAffected' => $res, 'message' => '');
+
+
+  //to do: uniform  coderror structures for all classes
+
+
+  //if ( $res['codError'] < 0 ) {
+  //  G::SendMessageText ( $res['message'] , 'error' );
+  //}
+
+
+  }
+  function deleteCalendar($CalendarUid) {
+    //if exists the row in the database propel will update it, otherwise will insert.
+    $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+
+    if (! (is_object ( $tr ) && get_class ( $tr ) == 'CalendarDefinition')) {
+      //
+      return false;
+    }
+
+    $defaultCalendars [] = '00000000000000000000000000000001';
+    if (in_array ( $tr->getCalendarUid(), $defaultCalendars )) {
+      return false;
+    }
+
+    $tr->setCalendarStatus ( 'DELETED' );
+    $tr->setCalendarUpdateDate ( 'now' );
+    if ($tr->validate ()) {
+      // we save it, since we get no validation errors, or do whatever else you like.
+      $res = $tr->save ();
+
+    } else {
+      // Something went wrong. We can now get the validationFailures and handle them.
+      $msg = '';
+      $validationFailuresArray = $tr->getValidationFailures ();
+      foreach ( $validationFailuresArray as $objValidationFailure ) {
+        $msg .= $objValidationFailure->getMessage () . "<br/>";
+      }
+      G::SendMessage ( "ERROR", $msg );
+      //return array ( 'codError' => -100, 'rowsAffected' => 0, 'message' => $msg );
+    }
+    //return array ( 'codError' => 0, 'rowsAffected' => $res, 'message' => '');
+
+
+  //to do: uniform  coderror structures for all classes
+
+
+  //if ( $res['codError'] < 0 ) {
+  //  G::SendMessageText ( $res['message'] , 'error' );
+  //}
+
+
+  }
+  function getCalendarFor($userUid, $proUid, $tasUid) {
+    $Criteria = new Criteria ( 'workflow' );
+
+    //Default Calendar
+    $calendarUid = "00000000000000000000000000000001";
+    $calendarOwner = "DEFAULT";
+
+    //Try to load a User Calendar if exist
+    $objectID = $userUid;
+    $Criteria->clearSelectColumns ();
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::CALENDAR_UID );
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_UID );
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_TYPE );
+    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, $objectID, CRITERIA::EQUAL );
+    if (CalendarAssignmentsPeer::doCount ( $Criteria ) > 0) {
+      $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $aRow = $oDataset->getRow ();
+      $calendarUid = $aRow ['CALENDAR_UID'];
+      $calendarOwner = "USER";
+    }
+
+    //Try to load a Process Calendar if exist
+    $objectID = $proUid;
+    $Criteria->clearSelectColumns ();
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::CALENDAR_UID );
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_UID );
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_TYPE );
+    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, $objectID, CRITERIA::EQUAL );
+    if (CalendarAssignmentsPeer::doCount ( $Criteria ) > 0) {
+      $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $aRow = $oDataset->getRow ();
+      $calendarUid = $aRow ['CALENDAR_UID'];
+      $calendarOwner = "PROCESS";
+    }
+
+    //Try to load a Task Calendar if exist
+    $objectID = $tasUid;
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::CALENDAR_UID );
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_UID );
+    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_TYPE );
+    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, $objectID, CRITERIA::EQUAL );
+    $Criteria->clearSelectColumns ();
+    if (CalendarAssignmentsPeer::doCount ( $Criteria ) > 0) {
+      $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $aRow = $oDataset->getRow ();
+      $calendarUid = $aRow ['CALENDAR_UID'];
+      $calendarOwner = "TASK";
+    }
+
+    if(class_exists('pmLicenseManager')){
+      $pmLicenseManagerO =& pmLicenseManager::getSingleton();
+      $expireIn=$pmLicenseManagerO->getExpireIn();
+      if($expireIn>0){
+        $calendarUid=$calendarUid;
+      }else{
+        $calendarUid = "00000000000000000000000000000001";
+      }
+    }else{
+      $calendarUid = "00000000000000000000000000000001";
+    }
+
+    //print "<h1>$calendarUid</h1>";
+    $calendarDefinition = $this->getCalendarInfo ( $calendarUid );
+    $calendarDefinition ['CALENDAR_APPLIED'] = $calendarOwner;
+    $this->addCalendarLog ( "--=== Calendar Applied: " . $calendarDefinition ['CALENDAR_NAME'] . " -> $calendarOwner" );
+    return $calendarDefinition;
+  }
+
+  function assignCalendarTo($objectUid, $calendarUid, $objectType) {
+    //if exists the row in the database propel will update it, otherwise will insert.
+    $tr = CalendarAssignmentsPeer::retrieveByPK ( $objectUid );
+    if ($calendarUid != "") {
+      if (! (is_object ( $tr ) && get_class ( $tr ) == 'CalendarAssignments')) {
+        $tr = new CalendarAssignments ( );
+
+      }
+      $tr->setObjectUid ( $objectUid );
+      $tr->setCalendarUid ( $calendarUid );
+      $tr->setObjectType ( $objectType );
+
+      if ($tr->validate ()) {
+        // we save it, since we get no validation errors, or do whatever else you like.
+        $res = $tr->save ();
+
+      } else {
+        // Something went wrong. We can now get the validationFailures and handle them.
+        $msg = '';
+        $validationFailuresArray = $tr->getValidationFailures ();
+        foreach ( $validationFailuresArray as $objValidationFailure ) {
+          $msg .= $objValidationFailure->getMessage () . "<br/>";
+        }
+        //return array ( 'codError' => -100, 'rowsAffected' => 0, 'message' => $msg );
+      }
+    } else { //Delete record
+      if ((is_object ( $tr ) && get_class ( $tr ) == 'CalendarAssignments')) {
+        $tr->delete ();
+      }
+    }
+
+  }
+} // CalendarDefinition

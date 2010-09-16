@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" value='' link="#" onclick="{$pack->name}Add(); return false;" colAlign="left" colWidth="35">
+  <en>New</en>
+  <es>Nuevo</es>
+</MNU_ADD>
+<PRO_UID type="private"/>
+<{$pack->name}_Edit type="private" defaultValue="../{$pack->name}/{$pack->name}_Edit"/>
+<{$pack->name}_Delete type="private" defaultValue="../{$pack->name}/{$pack->name}_Delete"/>
+<PAGED_TABLE_ID type="private"/>
+<js type="javascript" replaceTags="1">
+var currentPagedTable = @#PAGED_TABLE_ID;
+  function {$pack->name}Add(){literal}{{/literal}
+		popupWindow('@G::LoadXmlLabel(ID_NEW_{$pack->name|upper})', '@G::encryptlink(@#{$pack->name}_Edit)?PRO_UID=@%PRO_UID' , 500, 400);
+  {literal}}{/literal}
+  function {$pack->name}Edit( uid ) {literal}{{/literal}
+		popupWindow('@G::LoadXmlLabel(ID_EDIT_{$pack->name|upper})', '@G::encryptlink(@#{$pack->name}_Edit)?{$pack->key}='+ uid , 500, 400);
+  {literal}}{/literal}
+  function {$pack->name}Save( form ) {literal}{{/literal}
+    ajax_post( form.action, form, 'POST' );
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+  {literal}}{/literal}
+  function {$pack->name}Delete( uid ) {literal}{{/literal}
+    ajax_function('@G::encryptlink(@#{$pack->name}_Delete)','','{$pack->key}='+uid,'POST');
+    @#PAGED_TABLE_ID.refresh();
+  {literal}}{/literal}
+</js>
+<!-- Default Search option -->
+<SEARCH_FILTER_FORM type="private"/>
+<MNU_SEARCH type="link" value='' link="#" onclick="showHideElement('@#SEARCH_FILTER_FORM'); return false;" colAlign="right" colWidth="35">
+  <en>Search</en>
+  <es>Buscar</es>
+</MNU_SEARCH>
+</dynaForm>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="tasks_TimingControl" width="99%" mode="edit" enableTemplate="0" border="0" height="305px">
+
+<TAS_UID type="hidden"/>
+
+<INDEX type="hidden"/>
+
+<IFORM type="hidden"/>
+
+<TAS_DURATION type="text" size="3" maxlength="3" defaultvalue="1" required="1" validate="Int" group="1" dependentfields="" linkfield="" strto="UPPER" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Task duration</en>
+</TAS_DURATION>
+
+<TAS_TIMEUNIT type="dropdown" defaultvalue="DAYS" group="1">
+  <en>Time unit<option name="HOURS">Hours</option><option name="DAYS">Days</option></en>
+</TAS_TIMEUNIT>
+
+<TAS_TYPE_DAY type="dropdown" defaultvalue="1" group="1">
+  <en>Count days by<option name="1">Work Days</option><option name="2">Calendar Days</option></en>
+</TAS_TYPE_DAY>
+<TAS_CALENDAR type="dropdown" sqlconnection="dbarray">
+SELECT CALENDAR_UID, CALENDAR_NAME FROM availableCalendars
+<en>Calendar<option name="">- None -</option></en>
+</TAS_CALENDAR>
+
+
+<JS type="javascript"><![CDATA[
+/* Recovery data */
+if (aTaskFlag[2])
+{
+  getField('TAS_DURATION').value       = oTaskData.TAS_DURATION;
+  getField('TAS_TIMEUNIT').value       = oTaskData.TAS_TIMEUNIT;
+  getField('TAS_TYPE_DAY').value       = oTaskData.TAS_TYPE_DAY;
+  getField('TAS_CALENDAR').value       = oTaskData.TAS_CALENDAR;
+  //getField('TAS_TRANSFER_FLY').checked = (oTaskData.TAS_TRANSFER_FLY == 'TRUE' ? true : false);
+}
+else
+{
+  saveDataTaskTemporal(3);
+  aTaskFlag[2] = true;
+}
+]]></JS>
+
+</dynaForm>  

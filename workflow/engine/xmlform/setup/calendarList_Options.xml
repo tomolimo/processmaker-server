@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="calendarList_Options" type="xmlmenu">
+
+  <calendarNew type="private" defaultValue="../setup/calendarEdit"/>
+  
+  <MNU_NEW type="link" label="New" value="" link="@G::encryptLink(@#calendarNew)" colAlign="left" colWidth="85"><en>New</en></MNU_NEW>
+
+</dynaForm> 

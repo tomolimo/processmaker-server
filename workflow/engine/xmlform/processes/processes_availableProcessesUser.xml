@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="pagetable" sqlConnection="" menu="" rowsPerPage="10">
+<PRO_UID type="hidden" showInTable="0"/>
+
+<USR_UID type="hidden" showInTable="0"/>
+
+<USR_FIRSTNAME type="text" titlealign="left" colWidth="100">
+  <en>First name</en>
+</USR_FIRSTNAME>
+
+<USR_LASTNAME type="text" align="right" colWidth="100">
+  <en>Last name</en>
+</USR_LASTNAME>
+
+<ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignProcessUser(@QPRO_UID, @QUSR_UID);return false;"/>
+
+</dynaForm>  
