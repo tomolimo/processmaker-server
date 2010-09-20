@@ -20,7 +20,7 @@ var debugVarTpl = new Ext.Template(
 );
 debugVarTpl.compile();
 
-var detailsText = '<i>...</i>';
+var detailsText = '<i></i>';
 var menuTreeDetailsTpl = new Ext.Template(
   '<span style="font-size:10">',
   '<h2 class="title">{title}</h2>',
@@ -178,6 +178,50 @@ Ext.onReady(function(){
     deferredRender: false,
     contentEl:'casesSubFrame'
   }
+
+  function reloadx(){
+    tMenu.root.reload();
+  }
+
+  var tMenu = {
+      xtype: 'treepanel',
+      height: 350,
+      id: 'tree-panel',
+      region: 'center',
+      margins: '2 2 0 2',
+       tbar: [
+       {text: 'Reload', handler: reloadx}
+      ],
+      autoScroll: true,
+      rootVisible: false,
+      clearOnReLoad: false,
+      root: new Ext.tree.AsyncTreeNode(),
+
+      // Our custom TreeLoader:
+      loader: new Ext.app.menuLoader({
+        dataUrl:'cases_menuLoader'
+      }),
+
+      listeners: {
+        'render': function(tp){
+          tp.getSelectionModel().on('selectionchange', function(tree, node){
+            //alert(node.attributes.id); //erik
+            //return;
+
+            if( node.attributes.url )
+              document.getElementById('casesSubFrame').src = node.attributes.url;
+
+            var el = Ext.getCmp('details-panel').body;
+            if(node.attributes.tagName == 'option' && node.attributes.cases_count ){
+              Ext.getCmp('details-panel').setTitle(node.attributes.title);
+              menuTreeDetailsTpl.overwrite(el, node.attributes);
+            } else {
+              el.update(detailsText);
+            }
+          })
+        }
+      }
+    }
   
   //tree
   menuTree = new Ext.Panel({
@@ -193,45 +237,8 @@ Ext.onReady(function(){
     split: true,
     collapsible: true,
     collapseMode: 'mini',
-    margins: '0 0 0 5',
-    items: [{
-      xtype: 'treepanel',
-      height: 350,
-      id: 'tree-panel',
-      region: 'center',
-      margins: '2 2 0 2',
-      autoScroll: true,
-      rootVisible: false,
-      root: new Ext.tree.AsyncTreeNode(),
-
-      // Our custom TreeLoader:
-      loader: new Ext.app.menuLoader({
-        dataUrl:'cases_menuLoader'
-      }),
-
-      listeners: {
-        'render': function(tp){
-          tp.getSelectionModel().on('selectionchange', function(tree, node){
-            //alert(node.attributes.node.attributes.url);
-        
-            if( node.attributes.url )
-              document.getElementById('casesSubFrame').src = node.attributes.url;
-            
-            var el = Ext.getCmp('details-panel').body;
-            
-            if(node && node.leaf){
-              //alert(node.attributes.title);
-              Ext.getCmp('details-panel').title = node.attributes.title;
-              
-              menuTreeDetailsTpl.overwrite(el, node.attributes);
-              
-            } else {
-              el.update(detailsText);
-            }
-          })
-        }
-      }
-    },{
+    margins: '0 0 0 2',
+    items: [tMenu,{
         region: 'south',
         title: '',
         id: 'details-panel',
@@ -273,9 +280,9 @@ Ext.onReady(function(){
       store: triggerStore,
       
       columns: [
-          {id:'name',header: "Name", width: 60, sortable: true, dataIndex: 'name'},
-          {header: "Execution", width: 30, sortable: true, dataIndex: 'execution_time'},
-          {header: "Code", width: 30, sortable: false, dataIndex: 'code', hidden: true}
+        {id:'name',header: "Name", width: 60, sortable: true, dataIndex: 'name'},
+        {header: "Execution", width: 30, sortable: true, dataIndex: 'execution_time'},
+        {header: "Code", width: 30, sortable: false, dataIndex: 'code', hidden: true}
       ],
 
       view: new Ext.grid.GroupingView({
@@ -299,8 +306,6 @@ Ext.onReady(function(){
   debugTriggers.getSelectionModel().on('rowselect', function(sm, rowIdx, r) {
     var detailPanel = Ext.getCmp('debug-details-panel');
     debugTriggersDetailTpl.overwrite(detailPanel.body, r.data);
-    
-    
   });
   
   function show1() {
@@ -391,17 +396,17 @@ Ext.onReady(function(){
 
 
 
-  Ext.grid.dummyData = [
-      ['3m Co','after'],
-      ['Alcoa Inc','before'],
-   
-      
-  ];
+Ext.grid.dummyData = [
+    ['3m Co','after'],
+    ['Alcoa Inc','before'],
 
-  // add in some dummy descriptions
-  for(var i = 0; i < Ext.grid.dummyData.length; i++){
-      Ext.grid.dummyData[i].push('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla vel, urna.<br/><br/>Aliquam commodo ullamcorper erat. Nullam vel justo in neque porttitor laoreet. Aenean lacus dui, consequat eu, adipiscing eget, nonummy non, nisi. Morbi nunc est, dignissim non, ornare sed, luctus eu, massa. Vivamus eget quam. Vivamus tincidunt diam nec urna. Curabitur velit.');
-  }
+
+];
+
+// add in some dummy descriptions
+for(var i = 0; i < Ext.grid.dummyData.length; i++){
+  Ext.grid.dummyData[i].push('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla vel, urna.<br/><br/>Aliquam commodo ullamcorper erat. Nullam vel justo in neque porttitor laoreet. Aenean lacus dui, consequat eu, adipiscing eget, nonummy non, nisi. Morbi nunc est, dignissim non, ornare sed, luctus eu, massa. Vivamus eget quam. Vivamus tincidunt diam nec urna. Curabitur velit.');
+}
 
 Ext.data.DynamicJsonReader = function(config){
   Ext.data.DynamicJsonReader.superclass.constructor.call(this, config, []);
@@ -438,11 +443,11 @@ Ext.extend(Ext.data.DynamicJsonReader, Ext.data.JsonReader, {
         var values = {};
         var id = (n[sid] !== undefined && n[sid] !== "" ? n[sid] : null);
         for(var j = 0, jlen = fields.length; j < jlen; j++){
-            var f = fields.items[j];
-            var map = f.mapping || f.name;
-            var v = n[map] !== undefined ? n[map] : f.defaultValue;
-            v = f.convert(v);
-            values[f.name] = v;
+          var f = fields.items[j];
+          var map = f.mapping || f.name;
+          var v = n[map] !== undefined ? n[map] : f.defaultValue;
+          v = f.convert(v);
+          values[f.name] = v;
         }
         var record = new recordType(values, id);
         record.json = n;
@@ -450,8 +455,8 @@ Ext.extend(Ext.data.DynamicJsonReader, Ext.data.JsonReader, {
     }
 
     return {
-        records : records,
-        totalRecords : totalRecords || records.length
+      records : records,
+      totalRecords : totalRecords || records.length
     };
   }
 });
@@ -463,13 +468,17 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;
       attr.expanded = true;
-    }
-    else if(attr.title){ 
+    } else if(attr.title){ 
       attr.text = attr.title;
       if( attr.cases_count )
         attr.text += ' (' + attr.cases_count + ')';
       
       attr.iconCls = 'ICON_' + attr.id;
+      attr.loaded = true;
+      attr.expanded = false;
+
+    } else if(attr.PRO_UID){
+      attr.loaded = true;
       attr.leaf = true;
     }
   }
