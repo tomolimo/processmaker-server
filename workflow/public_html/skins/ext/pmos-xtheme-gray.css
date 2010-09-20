@@ -73,6 +73,10 @@
 .ICON_CASES_TO_REASSIGN {
     background-image: url(/images/cases-reassing.png) !important;
 }
+
+.ICON_CASES_START_PAGE {
+    background-image: url(/images/pm.gif) !important;
+}
  
 /**
  * style for case list grid
@@ -91,4 +95,3 @@
 .x-grid3-col-openLink a:hover {
     background: #0ee;
 }
-
