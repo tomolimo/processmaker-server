@@ -26,6 +26,7 @@
   $oHeadPublisher =& headPublisher::getSingleton();
   //$oHeadPublisher->setExtSkin( 'xtheme-gray');   
   $oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
+  $oHeadPublisher->usingExtJs('ux/Ext.ux.codepress');
   
   $oHeadPublisher->addExtJsScript('cases/main', true );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/main'); //adding a html file  .html.
