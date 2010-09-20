@@ -269,6 +269,11 @@ class headPublisher
   	$head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
   	$head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
 
+  	$head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
+  	$head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
+  	$head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
+  	$head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+
     if ( !isset( $this->extJsSkin ) || $this->extJsSkin == '' ) {
     	$this->extJsSkin = 'xtheme-gray';
     }
