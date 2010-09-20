@@ -2269,6 +2269,15 @@ function printInfoSites($aSitebck, $aSiterestared) {
 global $aFiles;
 
 function checkFileStandardCode ( $file ) {
+/*
+$str = file_get_contents('file.utf8.csv');
+$bom = pack("CCC", 0xef, 0xbb, 0xbf);
+if (0 == strncmp($str, $bom, 3)) {
+	echo "BOM detected - file is UTF-8\n";
+	$str = substr($str, 3);
+}
+*/
+
   global $aFiles;
   
 	if (  strpos ($file, 'workflow/engine/classes/model/om/') !== false ) {

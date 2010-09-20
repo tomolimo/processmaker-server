@@ -1157,7 +1157,8 @@ class G
 
     //if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
     $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
-    if ( ereg("msie", $userAgent)) {
+    if ( preg_match("/msie/i", $userAgent)) {
+    //if ( ereg("msie", $userAgent)) {
       header('Pragma: cache');
 
       $mtime = filemtime($filename);
@@ -1864,7 +1865,8 @@ class G
   {
     global $translation;      
     if ( isset ( $translation[$msgID] ) ){
-      return eregi_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
+      //return eregi_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
+      return preg_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
     }else{
       if(defined("UNTRANSLATED_MARK")){
         $untranslatedMark = strip_tags(UNTRANSLATED_MARK);

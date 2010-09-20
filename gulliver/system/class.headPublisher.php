@@ -3,7 +3,7 @@
  * class.headPublisher.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2008 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependenciesnone
+ * @dependencies none
  */
 class headPublisher
 {
@@ -36,6 +36,15 @@ class headPublisher
   var $maborakLoaderFiles = array();
   var $scriptFiles  = array();
   var $leimnudLoad  = array();
+  
+  /* extJsSkin  store the current skin for the ExtJs*/
+  var $extJsSkin = '';
+  
+  /* extJsScript Array, to store the file to be include  */
+  var $extJsScript = array();
+
+  /* extJsContent Array, to store the file to be include in the skin content  */
+  var $extJsContent = array();
 
   var $leimnudInitString = '  var leimnud = new maborak();
   leimnud.make({
@@ -242,4 +251,126 @@ class headPublisher
     $this->leimnudInitString = '';
     $this->headerScript = '';
   }
+
+  /**
+   * Function includeExtJs
+   * with this function we are using the ExtJs library, this library is not compatible with 
+   * previous libraries, for that reason oHeadPublisher will clear previous libraries like maborak
+   * we need to check if we need the language file
+   * this function returns the header needed to render a page using ExtJs
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function includeExtJs(){
+    $this->clearScripts();
+    $head = '';
+  	$head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
+  	$head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
+
+    if ( !isset( $this->extJsSkin ) || $this->extJsSkin == '' ) {
+    	$this->extJsSkin = 'xtheme-gray';
+    }
+    	
+	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
+ 	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin . ".css' />\n";
+    if ( isset( $this->extJsScript ) && is_array ( $this->extJsScript ) ) {
+    	foreach ( $this->extJsScript as $key => $file ) {
+        $head .= "  <script type='text/javascript' src='" . $file . ".js'></script>\n";
+  	  }
+    }
+    return $head;    
+  }
+  
+  
+  /**
+   * Function setExtSkin
+   * with this function we are using the ExtJs library, this library is not compatible with 
+   * previous libraries, for that reason oHeadPublisher will clear previous libraries like maborak
+   * we need to check if we need the language file
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function setExtSkin( $skin){
+    $this->extJsSkin = $skin;
+  }
+  
+  /**
+   * Function addExtJsScript
+   * adding a javascript file  .js
+   * add a js file in the extension Javascript Array,
+   * later, when we use the includeExtJs function, all the files in this array will be included in the output
+   * if the second argument is true, the file will not be minified, this is useful for debug purposes.
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function addExtJsScript( $filename , $debug = false){
+  	$jsFilename = PATH_TPL . $filename . '.js';
+  	if ( ! file_exists( $jsFilename ) ) {
+  		return;
+  	}
+
+		$mtime = filemtime($jsFilename);
+    G::mk_dir(PATH_C . 'ExtJs');
+    if ( $debug ) {
+      $cacheName = str_replace('/','_', $filename);
+      $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $cacheName . '.js';
+      file_put_contents ( $cacheFilename, file_get_contents( $jsFilename) );
+    }
+    else {
+      $cacheName = md5 ($mtime . $jsFilename );
+      $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $cacheName . '.js';
+      
+    	if ( ! file_exists( $cacheFilename ) ) {
+    		require_once ( PATH_THIRDPARTY . 'jsmin/jsmin.php' );
+        $content = JSMin::minify( file_get_contents( $jsFilename) );
+        file_put_contents ( $cacheFilename, $content );
+  	  }
+    }
+
+    $this->extJsScript[] = '/extjs/' . $cacheName;
+  }
+  
+  /**
+   * Function AddContent
+   * adding a html file  .html.
+   * the main idea for this function, is to be a replacement to homonymous function in Publisher class.
+   * with this function you are adding Content to the output, the class HeadPublisher will maintain a list of
+   * files to render in the body of the output page
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function AddContent( $templateHtml) {
+    $this->extJsContent[] = $templateHtml;
+  }
+    
+  /**
+   * Function renderExtJs
+   * this function returns the content rendered using ExtJs
+   * extJsContent have an array, and we iterate this array to draw the content
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function renderExtJs(){
+	  $body = '';
+    if ( isset( $this->extJsContent ) && is_array ( $this->extJsContent ) ) {
+    	foreach ( $this->extJsContent as $key => $file ) {
+        $template = new TemplatePower(  PATH_TPL . $file . '.html' );
+        $template->prepare();
+        $body .= $template->getOutputContent();        
+  	  }
+    }
+    return $body;    
+  }
+    
+  
 }
