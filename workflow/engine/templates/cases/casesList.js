@@ -4,24 +4,25 @@ Ext.onReady ( function() {
   function openLink(value, p, r){
     return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>Open</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
-   
-  function showDate (value,p,r) {
+
+  function converDate ( value ) {
     if(!Ext.isDate( value )){
     	var myArray = value.split(' '); 
     	var myArrayDate = myArray[0].split('-'); 
-    	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2]);
+    	var myArrayHour = myArray[1].split(':'); 
+    	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2],myArrayHour[0],myArrayHour[1],myArrayHour[2]);
     }
-    return String.format("{0}", myDate.dateFormat( 'm/d/Y'));
+    return myDate;
+  }   
+  function showDate (value,p,r) {
+    var myDate = converDate( value );
+    return String.format("{0}", myDate.dateFormat( PMDateFormat ));
   } 
   
   function dueDate(value, p, r){
-    if(!Ext.isDate( value )){
-    	var myArray = value.split(' '); 
-    	var myArrayDate = myArray[0].split('-'); 
-    	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2]);
-    }
+    var myDate = converDate( value );
     var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;'; 
-    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat( 'm/d/Y'), myColor );
+    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
   }
    
 	columns.push ( { header: "", width: 50, dataIndex: 'DEL_PRIORITY', sortable: false, renderer: openLink, menuDisabled: true, id: 'openLink'});
@@ -43,7 +44,7 @@ Ext.onReady ( function() {
   // Create HttpProxy instance, all CRUD requests will be directed to single proxy url.
   var proxyCasesList = new Ext.data.HttpProxy({
     api: {
-      read :   'proxyCasesList?t=new',
+      read :   'proxyCasesList',
     }
   });
 
@@ -171,10 +172,8 @@ Ext.onReady ( function() {
       location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
     }
   });
-
-  var tb = new Ext.Toolbar({
-    height: 35,
-    items: [
+  
+  var toolbarTodo = [
       btnRead,
       '-',
       btnUnread,
@@ -191,7 +190,24 @@ Ext.onReady ( function() {
       btnJump,
       ' ',
       ' '
-    ]
+    ];
+
+  var toolbarDraft = [
+      'process', 
+      comboProcess,
+      '->', // begin using the right-justified button container 
+      textSearch,
+      btnSearch,
+      '-',
+      textJump,
+      btnJump,
+      ' ',
+      ' '
+    ];
+
+  var tb = new Ext.Toolbar({
+    height: 35,
+    items: ( action == 'todo' ? toolbarTodo : toolbarDraft )
   });
 
 
@@ -223,6 +239,7 @@ Ext.onReady ( function() {
 
   
     // manually trigger the data store load
+    storeCases.setBaseParam( 'action', action );
     storeCases.load({params:{start:0, limit: pageSize }});
     storeProcesses.load();
 
