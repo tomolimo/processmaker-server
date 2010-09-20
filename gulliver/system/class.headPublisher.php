@@ -42,6 +42,9 @@ class headPublisher
   
   /* extJsScript Array, to store the file to be include  */
   var $extJsScript = array();
+  
+  /* extJsLibrary Array, to store extended ExtJs lybraries  */
+  var $extJsLibrary = array();
 
   /* extJsContent Array, to store the file to be include in the skin content  */
   var $extJsContent = array();
@@ -268,6 +271,12 @@ class headPublisher
     $head = '';
   	$head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
   	$head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
+  	
+    if ( isset( $this->extJsLibrary ) && is_array ( $this->extJsLibrary ) ) {
+    	foreach ( $this->extJsLibrary as $file ) {
+        $head .= "  <script type='text/javascript' src='/js/ext/" . $file . ".js'></script>\n";
+  	  }
+    }
 
   	$head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
   	$head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
@@ -286,6 +295,21 @@ class headPublisher
   	  }
     }
     return $head;    
+  }
+  
+  /**
+   * add a ExtJS extended library
+   *
+   * @author Erik A. Ortiz <erik@colosa.com>
+   * @access public
+   * @param (String) http js path library
+   * @return none
+   */
+  function usingExtJs($library){
+  	if( ! is_string($library) ){
+  	  throw new Exception('headPublisher::usingExt->ERROR - the parameter should be a js path string' );
+  	} 
+  	array_push($this->extJsLibrary, $library);
   }
   
   

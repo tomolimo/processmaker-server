@@ -71,25 +71,26 @@ body {
 </style>
 </head>
 <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
-<div id="fade" class="overlay"></div>
+<!-- <div id="fade" class="overlay"></div>
 <div class="modal" id="light">
   <div class="header"><?=G::LoadTranslation('ID_LOADING')?></div>
   <div class="body">
     <img src="/images/activity.gif" />
   </div>
-</div>
+</div> -->
 <iframe name="casesFrame" id="casesFrame" src ="../cases/main_init" width="99%" height="200" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>
 </body>
 <script>
+
   oClientWinSize = getClientWindowSize();
   h = getStyle(document.getElementById('pm_menu'),'top');
   h = h.replace("px", "");
   h = parseInt(h) + 18;
 
-  document.getElementById('fade').style.top = h+"px";
-  document.getElementById('fade').style.height = oClientWinSize.height;
+  //document.getElementById('fade').style.top = h+"px";
+  //document.getElementById('fade').style.height = oClientWinSize.height;
   
   document.getElementById('pm_submenu').style.display = 'none';
   document.documentElement.style.overflowY = 'hidden';
@@ -99,9 +100,8 @@ body {
     oClientWinSize = getClientWindowSize();
     height = oClientWinSize.height-105;
     oCasesFrame.style.height = height;
+    
     oCasesSubFrame = oCasesFrame.contentWindow.document.getElementById('casesSubFrame');
-    oCasesFrame = oCasesFrame.contentWindow.document.getElementById('mainPane');
-    oCasesFrame.style.height = height-10;
     oCasesSubFrame.style.height = height-10;
   }
 
@@ -113,6 +113,6 @@ body {
     }
   }
   
-  
+
 </script>
 </html>

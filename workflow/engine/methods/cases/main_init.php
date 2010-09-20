@@ -23,6 +23,16 @@
  *
  */
 
+  $oHeadPublisher =& headPublisher::getSingleton();
+  //$oHeadPublisher->setExtSkin( 'xtheme-gray');   
+  $oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
+  
+  $oHeadPublisher->addExtJsScript('cases/main', true );    //adding a javascript file .js
+  $oHeadPublisher->addContent( 'cases/main'); //adding a html file  .html.
+
+  G::RenderPage('publish', 'extJs');
+  
+die;
 global $RBAC;
 G::LoadClass('case');
 G::LoadClass('configuration');
@@ -74,16 +84,16 @@ $aCount = array (
   'paused' => 0, 
   'cancelled' => 0 
 );
-$_CASES_MENU = Array ();
+$menum = Array ();
 $_CASES_MENU_BLOCK = Array ();
 
 foreach( $oMenu->Options as $i => $option ) {
   if( $oMenu->Types[$i] == 'blockHeader' ) {
     $CurrentBlockID = $oMenu->Id[$i];
-    $_CASES_MENU[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
+    $menum[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
   } 
   else {
-    $_CASES_MENU[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = Array (
+    $menum[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = Array (
       'label' => $oMenu->Labels[$i], 
       'link' => $oMenu->Options[$i], 
       'icon' => (isset($oMenu->Icons[$i]) && $oMenu->Icons[$i] != '') ? $oMenu->Icons[$i] : 'kcmdf.png' 
@@ -92,7 +102,7 @@ foreach( $oMenu->Options as $i => $option ) {
    
     $notifier = "";
     if( isset($notifier) ) {
-      $_CASES_MENU[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]]['notifier'] = $notifier;
+      $menum[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]]['notifier'] = $notifier;
     }
   }
 }
@@ -113,7 +123,7 @@ else {
 
 $tpl->assign('cases_url', $cases_url);
 
-foreach( $_CASES_MENU as $menu => $aMenuBlock ) {
+foreach( $menum as $menu => $aMenuBlock ) {
   //$tpl->( 'menu' );
   if( isset($aMenuBlock['blockItems']) && sizeof($aMenuBlock['blockItems']) > 0 ) {
     $tpl->newBlock('menu');
