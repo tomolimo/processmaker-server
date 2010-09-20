@@ -1,9 +1,53 @@
 Ext.onReady(function(){
 
-    var myData = {
+  var myData = {
     records : availableFields
   };
 
+  var remoteProxy = new Ext.data.HttpProxy({
+     url : 'proxyPMTablesList'
+  });
+
+  var recordFields = [
+     { name : 'ADD_TAB_UID',             mapping : 'ADD_TAB_UID' },
+     { name : 'ADD_TAB_NAME',            mapping : 'ADD_TAB_NAME' },
+     { name : 'ADD_TAB_CLASS_NAME',      mapping : 'ADD_TAB_CLASS_NAME' },
+     { name : 'ADD_TAB_DESCRIPTION',     mapping : 'ADD_TAB_DESCRIPTION' },
+     { name : 'ADD_TAB_SDW_LOG_INSERT',  mapping : 'ADD_TAB_SDW_LOG_INSERT' },
+     { name : 'ADD_TAB_SDW_LOG_UPDATE',  mapping : 'ADD_TAB_SDW_LOG_UPDATE' },
+     { name : 'ADD_TAB_SDW_LOG_DELETE',  mapping : 'ADD_TAB_SDW_LOG_DELETE' },
+     { name : 'ADD_TAB_SDW_LOG_SELECT',  mapping : 'ADD_TAB_SDW_LOG_SELECT' },
+     { name : 'ADD_TAB_SDW_MAX_LENGTH',  mapping : 'ADD_TAB_SDW_MAX_LENGTH' },
+     { name : 'ADD_TAB_SDW_AUTO_DELETE', mapping : 'ADD_TAB_SDW_AUTO_DELETE' },
+     { name : 'ADD_TAB_PLG_UID',         mapping : 'ADD_TAB_PLG_UID' },
+     { name : 'DBS_UID',                 mapping : 'DBS_UID' }
+  ];
+
+  var remotePmTableStore = new Ext.data.JsonStore({
+     root            : 'data',
+     proxy           : remoteProxy,
+     totalProperty   : 'totalCount',
+     idProperty      : 'index',
+     remoteSort      : true,
+     autoLoad        : false,
+     fields          : [
+       'ADD_TAB_UID','ADD_TAB_NAME'
+     ]
+  });
+  remotePmTableStore.setDefaultSort('ADD_TAB_NAME', 'asc');
+
+   // create the Data Store for processes
+
+  var pmTablesDropdown = {
+     width        : '180',
+     xtype        : 'combo',
+     emptyText    : 'Select a configuration...',
+     store        : remotePmTableStore,
+     displayField : 'ADD_TAB_NAME',
+//     displayField : 'APP_PRO_TITLE',
+     //typeAhead    : true,
+     triggerAction: 'all'
+  }
 
   // Generic fields array to use in both store defs.
   var fields = [
@@ -12,12 +56,12 @@ Ext.onReady(function(){
     {name: 'column2', mapping : 'column2'}
   ];
 
-    // create the data store
-    var firstGridStore = new Ext.data.JsonStore({
-          fields : fields,
+  // create the data store
+  var firstGridStore = new Ext.data.JsonStore({
+    fields : fields,
     data   : myData,
     root   : 'records'
-    });
+  });
 
 
   // Column Model shortcut array
@@ -39,8 +83,8 @@ Ext.onReady(function(){
     });
 
     var secondGridStore = new Ext.data.JsonStore({
-        fields : fields,
-    root   : 'records'
+      fields : fields,
+      root   : 'records'
     });
 
     // create the destination Grid
@@ -54,7 +98,20 @@ Ext.onReady(function(){
     });
 
 
-  //Simple 'border layout' panel to house both grids
+  // Simple 'border layout' panel to house both grids
+  var filterPanel = new Ext.Panel({
+    title        : 'Select Additional Fields',
+    width        : 200,
+    height       : 50,
+    layout       : 'hbox',
+    renderTo     : 'panel',
+    defaults     : { flex : 1 }, //auto stretch
+    layoutConfig : { align : 'center' },
+    items        : [
+      pmTablesDropdown
+    ]
+  });
+
   var displayPanel = new Ext.Panel({
     width        : 650,
     height       : 400,
@@ -78,6 +135,19 @@ Ext.onReady(function(){
           secondGridStore.removeAll();
         }
       }
+    ]
+  });
+
+  var mainPanel = new Ext.Panel({
+    width        : 650,
+    height       : 450,
+    layout       : 'vbox',
+    renderTo     : 'panel',
+    defaults     : { flex : 1 }, //auto stretch
+    layoutConfig : { align : 'center' },
+    items        : [
+      filterPanel,
+      displayPanel
     ]
   });
 
