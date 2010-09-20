@@ -74,21 +74,29 @@ function getDashboardItems(){
 
 
 	dashboardItems=[
-
 	{
+	  xtype:'window',
+	  title:'Start Case',
+	  closable:true,
+    collapsible:true,
+    autoshow:true,
+    expandOnShow:true,
+    hidden:false,
+    x:0,
+    y:50,
+    items:
+    {
 		xtype:'treepanel',
 		width:450,
 		autoHeight:true,
 		boxMaxHeight:300,
-		maxHeight:300,
-		title:'Start Case',
+		maxHeight:300,		
 		useArrows: true,
     autoScroll: true,
     animate: true,
     enableDD: true,
     containerScroll: true,
-    closable:true,
-    collapsible:true,
+    
     border: true,
     split:true,
     draggable:true,
@@ -165,12 +173,31 @@ function getDashboardItems(){
         }]
 
 
-	},
-                {
+	}
+	
+	}
+
+	,
+	{
+	  xtype:'window',
+	  title:'Graph 1',
+	  closable:true,
+    collapsible:true,
+    autoshow:true,
+    expandOnShow:true,
+    hidden:false,
+    bodyBorder:false,
+    border:false,
+    hideBorders:true,
+    stateful:true,
+    
+    y:50,
+    items:
+          {
 				            store: store,
 				            xtype: 'piechart',
 				            dataField: 'total',
-				            categoryField: 'caseStatus',
+				            categoryField: 'caseStatus',				            
 				            width : 250,
 				            height : 250,
 				            draggable:true,
@@ -191,8 +218,20 @@ function getDashboardItems(){
 				                }
 				            }
 
-				        },
-				        {
+				        }
+	},
+	
+     {
+      xtype:'window',
+	  title:'Graph 1',
+	  closable:true,
+    collapsible:true,
+    autoshow:true,
+    expandOnShow:true,
+    hidden:false,
+    x:0,
+    items:
+    {
 				        	xtype: 'columnchart',
 			            store: store2,
 			            width : 350,
@@ -211,8 +250,21 @@ function getDashboardItems(){
 			                    labelRotation: -90
 			                }
 			            }
-				        },
+				        }
+    }     
+				        
+				        
+				        ,
 				        {
+				          xtype:'window',
+	  title:'Graph 1',
+	  closable:true,
+    collapsible:true,
+    autoshow:true,
+    expandOnShow:true,
+    hidden:false,
+    items:
+     {
 				        	xtype: 'columnchart',
 			            store: store,
 			            width : 350,
@@ -232,6 +284,10 @@ function getDashboardItems(){
 			                }
 			            }
 				        }
+				        }
+				        
+				        
+				       
 				        
 				        ];
 	 return dashboardItems;
@@ -257,7 +313,7 @@ Ext.onReady(function(){
     var dashboardTabPanels = new Ext.TabPanel({
         renderTo: 'containerStartpage',
         activeTab: '',
-        plain:true,
+        //plain:true,
         autoHeight:true,
         autoWidth:true,
         enableTabScroll:true,
@@ -278,7 +334,9 @@ Ext.onReady(function(){
                 title: 'Dashboard',
                 id: 'mainDashboard',
                 iconCls: 'ICON_CASES_START_PAGE',
-                xtype: 'panel',
+                xtype: 'container',
+                layout:'border',
+                autoHeight:true,
                 enableDD: true,              
                 items: getDashboardItems()
             }
