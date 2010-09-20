@@ -292,7 +292,9 @@ class headPublisher
     	
 	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
  	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin . ".css' />\n";
- 	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
+ 	  if( file_exists( PATH_HTML . 'skins' . PATH_SEP . 'ext' . PATH_SEP . 'pmos-' . $this->extJsSkin . '.css')) {
+ 	    $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
+ 	  }
  	  
     if ( isset( $this->extJsScript ) && is_array ( $this->extJsScript ) ) {
     	foreach ( $this->extJsScript as $key => $file ) {
