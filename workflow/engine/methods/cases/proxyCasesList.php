@@ -5,6 +5,7 @@
   $start    = isset($_POST['start'])  ? $_POST['start']  : '0';
   $limit    = isset($_POST['limit'])  ? $_POST['limit']  : '25';
   $filter   = isset($_POST['filter']) ? $_POST['filter'] : '';
+  $search   = isset($_POST['search']) ? $_POST['search'] : '';
   $process  = isset($_POST['process']) ? $_POST['process'] : '';
   //$action = isset($_GET['action']) ? $_GET['action'] : 'read';
   $option = '';
@@ -84,6 +85,10 @@
         $Criteria->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
         break;
   	}
+  }  
+
+  if ( $search != '' ) {
+    $Criteria->add (AppCacheViewPeer::APP_TITLE, $search . '%', Criteria::LIKE );
   }  
 
   $totalCount = GulliverBasePeer::doCount( $Criteria );

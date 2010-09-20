@@ -74,3 +74,21 @@
     background-image: url(/images/cases-reassing.png) !important;
 }
  
+/**
+ * style for case list grid
+ */
+.x-grid3-col-openLink {
+    padding: 1px;
+    background: #eee;
+    text-align: center;
+}
+
+.x-grid3-col-openLink a {
+    color: black; 
+    border-color:#ff0;
+}
+
+.x-grid3-col-openLink a:hover {
+    background: #0ee;
+}
+

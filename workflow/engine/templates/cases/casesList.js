@@ -1,6 +1,38 @@
 Ext.onReady ( function() {
   var filterProcess = '';
+
+  function openLink(value, p, r){
+    return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>Open</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+  }
    
+  function showDate (value,p,r) {
+    if(!Ext.isDate( value )){
+    	var myArray = value.split(' '); 
+    	var myArrayDate = myArray[0].split('-'); 
+    	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2]);
+    }
+    return String.format("{0}", myDate.dateFormat( 'm/d/Y'));
+  } 
+  
+  function dueDate(value, p, r){
+    if(!Ext.isDate( value )){
+    	var myArray = value.split(' '); 
+    	var myArrayDate = myArray[0].split('-'); 
+    	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2]);
+    }
+    var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;'; 
+    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat( 'm/d/Y'), myColor );
+  }
+   
+	columns.push ( { header: "", width: 50, dataIndex: 'DEL_PRIORITY', sortable: false, renderer: openLink, menuDisabled: true, id: 'openLink'});
+
+  for(var i = 0, len = columns.length; i < len; i++){
+    var c = columns[i];
+      if( c.dataIndex == 'DEL_TASK_DUE_DATE') c.renderer = dueDate;
+      if( c.dataIndex == 'APP_UPDATE_DATE') c.renderer = showDate;
+  };
+
+	
   var cm = new Ext.grid.ColumnModel({
     defaults: {
       sortable: true // columns are sortable by default           
@@ -103,16 +135,43 @@ Ext.onReady ( function() {
     getListParent: function() {
       return this.el.up('.x-menu');
     },
-    iconCls: 'no-icon' //use iconCls if placing within menu to shift to right side of menu
+    listeners:{
+      scope: this,
+      'select': function() {
+        filterProcess = comboProcess.value;
+        storeCases.setBaseParam( 'process', filterProcess);
+        storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
+      }},
+    iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
-  comboProcess.on('select', onComboProcess, this );
-
-  function onComboProcess( scope ){
-  	filterProcess = comboProcess.value;
-  	storeCases.setBaseParam( 'process', filterProcess);
-    storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
-  };
   
+  var textSearch = new Ext.form.TextField ({
+    allowBlank: false,
+    emptyText: 'enter search term'
+  });
+
+  var btnSearch = new Ext.Button ({
+    text: 'search',
+    handler: function(){
+      searchText = textSearch.getValue();
+      storeCases.setBaseParam( 'search', searchText);
+      storeCases.load({params:{ start : 0 , limit : pageSize }});
+    }
+  });
+
+  var textJump = new Ext.form.TextField ({
+    allowBlank: false,
+    emptyText: 'case Id'
+  });
+
+  var btnJump = new Ext.Button ({
+    text: 'jump',
+    handler: function(){
+      jump = textJump.getValue();
+      location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
+    }
+  });
+
   var tb = new Ext.Toolbar({
     height: 35,
     items: [
@@ -125,22 +184,13 @@ Ext.onReady ( function() {
       'process', 
       comboProcess,
       '->', // begin using the right-justified button container 
-      {
-        xtype: 'textfield',
-        name: 'search',
-        emptyText: 'enter search term'
-      }, {
-        text: 'search'
-      }, 
+      textSearch,
+      btnSearch,
       '-',
-      {
-        xtype: 'textfield',
-        width: 80,
-        name: 'jump',
-        emptyText: 'case id'
-      }, {
-        text: 'jump'
-      }
+      textJump,
+      btnJump,
+      ' ',
+      ' '
     ]
   });
 
@@ -154,6 +204,11 @@ Ext.onReady ( function() {
     autoHeight:true,
     minHeight:400,
     layout: 'fit',
+/*
+    viewConfig: {
+      forceFit:true
+  },
+*/
     tbar: tb,
     // paging bar on the bottom
     bbar: new Ext.PagingToolbar({
