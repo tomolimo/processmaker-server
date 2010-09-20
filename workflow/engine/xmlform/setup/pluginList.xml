@@ -26,6 +26,10 @@
   <en/>
 </enabled>
 
+<remove type="link" value="Remove" link="@#urlRemove" colWidth="20" align="right" >
+  <en></en>
+</remove>
+
 <linkEditValue type="link" value="@#linkEditValue" link="@#urlEdit" colWidth="40" align="center">
   <en/>
 </linkEditValue>
