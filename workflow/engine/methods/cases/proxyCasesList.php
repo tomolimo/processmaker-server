@@ -109,12 +109,14 @@
     $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
     $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
 //JUST TO TEST DAYTOP
+/*
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
     $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
+*/
 //JUST TO TEST DAYTOP
     
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "TO_DO" , CRITERIA::EQUAL );
@@ -146,12 +148,14 @@
     $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
     
 //JUST TO TEST DAYTOP
+/*
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
     $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
+*/
 //JUST TO TEST DAYTOP
         
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
