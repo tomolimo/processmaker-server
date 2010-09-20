@@ -24,7 +24,7 @@
  */
 
   $oHeadPublisher =& headPublisher::getSingleton();
-  //$oHeadPublisher->setExtSkin( 'xtheme-gray');   
+  //$oHeadPublisher->setExtSkin( 'xtheme-blue');   
   $oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
   $oHeadPublisher->usingExtJs('ux/Ext.ux.codepress');
   

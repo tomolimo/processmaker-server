@@ -2,15 +2,14 @@
   $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
   $dir    = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
   $sort   = isset($_POST['sort'])   ? $_POST['sort']   : '';
-  //$start  = isset($_POST['start'])  ? $_POST['start']  : '0';
-  //$limit  = isset($_POST['limit'])  ? $_POST['limit']  : '25';
-  $filter = isset($_POST['filter']) ? $_POST['filter'] : '';
+  $query  = isset($_POST['query']) ? $_POST['query'] : '';
   //$action = isset($_GET['action']) ? $_GET['action'] : 'read';
   $option = '';
   if ( isset($_GET['t'] ) ) $option = $_GET['t'];
   try {  	
 
   G::LoadClass("BasePeer" );
+  require_once ( "classes/model/Process.php" );
   require_once ( "classes/model/AppCacheView.php" );
   
   $sUIDUserLogged = $_SESSION['USER_LOGGED'];
@@ -22,18 +21,10 @@
   $Criteria->addSelectColumn ( AppCacheViewPeer::PRO_UID );
   $Criteria->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
 
-/*
-  if ( $filter != '' ) {
-  	switch ( $filter ) {
-  		case 'read' : 
-        $Criteria->add (ProcessPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
-        break;
-  		case 'unread' : 
-        $Criteria->add (ProcessPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
-        break;
-  	}
+  if ( $query != '' ) {
+    $Criteria->add (AppCacheViewPeer::APP_PRO_TITLE, $query . '%', Criteria::LIKE);
   }  
-*/
+
   $Criteria->add (AppCacheViewPeer::APP_STATUS, "TO_DO" , CRITERIA::EQUAL );
   $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
 
@@ -49,7 +40,7 @@
     else
       $Criteria->addAscendingOrderByColumn( $sort );
     }
-  $oDataset = ProcessPeer::doSelectRS($Criteria);
+  $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
   $oDataset->next();
       

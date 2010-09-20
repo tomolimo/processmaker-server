@@ -1,10 +1,11 @@
 <?php
   $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
-  $dir    = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
-  $sort   = isset($_POST['sort'])   ? $_POST['sort']   : '';
-  $start  = isset($_POST['start'])  ? $_POST['start']  : '0';
-  $limit  = isset($_POST['limit'])  ? $_POST['limit']  : '25';
-  $filter = isset($_POST['filter']) ? $_POST['filter'] : '';
+  $dir      = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
+  $sort     = isset($_POST['sort'])   ? $_POST['sort']   : '';
+  $start    = isset($_POST['start'])  ? $_POST['start']  : '0';
+  $limit    = isset($_POST['limit'])  ? $_POST['limit']  : '25';
+  $filter   = isset($_POST['filter']) ? $_POST['filter'] : '';
+  $process  = isset($_POST['process']) ? $_POST['process'] : '';
   //$action = isset($_GET['action']) ? $_GET['action'] : 'read';
   $option = '';
   if ( isset($_GET['t'] ) ) $option = $_GET['t'];
@@ -70,6 +71,10 @@
   $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
   $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
   
+  if ( $process != '' ) {
+    $Criteria->add (AppCacheViewPeer::APP_PRO_TITLE, $process, Criteria::EQUAL );
+  }  
+
   if ( $filter != '' ) {
   	switch ( $filter ) {
   		case 'read' : 
