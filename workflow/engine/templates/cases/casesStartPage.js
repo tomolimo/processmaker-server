@@ -35,7 +35,7 @@ function getOtherDashboards(dashboardTabPanels) {
 			scripts : true
 		}
 	// disabled:true,
-			});	
+			});
 }
 
 var reloadTree = function() {
@@ -59,8 +59,8 @@ function getProcesses() {
 		success : function(responseObject) {
 			// showHistoryDialog(responseObject.responseText);
 		// grid.getGridEl().unmask(true);
-		//Ext.Msg.alert('Status', responseObject.responseText);
-			console.log(responseObject.responseText);
+		// Ext.Msg.alert('Status', responseObject.responseText);
+		console.log(responseObject.responseText);
 	},
 	failure : function() {
 		// grid.getGridEl().unmask(true);
@@ -71,7 +71,7 @@ function getProcesses() {
 }
 
 function getDashboardItems() {
-	 getProcesses();
+	getProcesses();
 
 	dashboardItems = [
 			{
@@ -82,23 +82,23 @@ function getDashboardItems() {
 				autoshow : true,
 				expandOnShow : true,
 				hidden : false,
-				boxMaxHeight:350,
+				boxMaxHeight : 350,
 				maxHeight : 300,
-				autoScroll:true,
+				autoScroll : true,
 				x : 0,
 				y : 50,
 				items : {
 					xtype : 'treepanel',
 					width : 450,
-					autoHeight : true,					
+					autoHeight : true,
 					useArrows : true,
 					autoScroll : true,
 					animate : true,
 					enableDD : true,
 					containerScroll : true,
-					constrain:true,
-					//border : true,
-					//split : true,
+					constrain : true,
+					// border : true,
+					// split : true,
 					draggable : true,
 					itemId : 'startCaseTreePanel',
 					id : 'startCaseTreePanel',
