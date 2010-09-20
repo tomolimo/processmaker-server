@@ -25,7 +25,17 @@
 
 //  G::LoadSystem('templatePower');
 
+
+  G::LoadClass('serverConfiguration');
+  $oServerConf =& serverConf::getSingleton();
+
   $oHeadPublisher =& headPublisher::getSingleton();
+ 
+  $extSkin=$oServerConf->getProperty("extSkin");
+  if(isset($extSkin[SYS_SKIN])){
+    $oHeadPublisher->setExtSkin( $extSkin[SYS_SKIN]); 
+  }
+
   $header = $oHeadPublisher->includeExtJs();
   $body   = $oHeadPublisher->renderExtJs();
 

@@ -288,6 +288,7 @@ class headPublisher
 
     if ( !isset( $this->extJsSkin ) || $this->extJsSkin == '' ) {
     	$this->extJsSkin = 'xtheme-gray';
+    	//$this->extJsSkin = 'gtheme';
     }
     	
 	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";

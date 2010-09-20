@@ -20,8 +20,19 @@ $smarty->cache_dir = PATH_SMARTY_CACHE;
 $smarty->config_dir = PATH_THIRDPARTY . 'smarty/configs';
 
 $oHeadPublisher = & headPublisher::getSingleton();
+
 global $G_ENABLE_BLANK_SKIN;
 
+//To setup en extJS Theme for this Skin
+G::LoadClass('serverConfiguration');
+$oServerConf =& serverConf::getSingleton();
+$extSkin=$oServerConf->getProperty("extSkin");
+if(!$extSkin) $extSkin=array();
+$extSkin[SYS_SKIN]="xtheme-gray";
+$oServerConf->setProperty("extSkin",$extSkin);
+//End of extJS Theme setup
+
+//G::pr($oHeadPublisher);
   if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
     $smarty->display('blank.html');
   } 
