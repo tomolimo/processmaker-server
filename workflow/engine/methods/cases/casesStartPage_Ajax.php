@@ -48,18 +48,31 @@ function getProcessList(){
     		$tempTree['text']=$key;
     		$tempTree['id']=$key;
     		$tempTree['cls']='folder';
-    		if($key != 'No Category')
-    		$tempTree['expanded']=true;
+    		$tempTree['draggable']=true;
+    		$tempTree['optionType']="category";
+    		//$tempTree['allowDrop']=false;
+    		$tempTree['singleClickExpand']=true;
+    		if($key != "No Category"){
+    		  $tempTree['expanded']=true;
+    	  }else{
+    	    $tempTree['expanded']=false;
+    	  }
     		$processListTree[]=$tempTree;
     	}
     }else{
     	foreach($processList[$node] as $key => $processInfo){
+    	  //print_r($processInfo);
     		$tempTree['text']=$key;
     		$tempTree['id']=$key;
-    		$tempTree['expanded']=true;
     		$tempTree['draggable']=true;
-    	
-    		//$tempTree['leaf']=false;
+        $tempTree['leaf']=true;
+    		$tempTree['icon']='/images/icon.trigger.png';
+    		$tempTree['allowChildren']=false;
+    		$tempTree['optionType']="startProcess";
+    		$tempTree['pro_uid']=$processInfo['pro_uid'];
+    		$tempTree['tas_uid']=$processInfo['uid'];
+    		
+    		
     		//$tempTree['cls']='file';
     		$processListTree[]=$tempTree;
     	}
@@ -74,6 +87,48 @@ function getProcessList(){
 	die;
 }
 
+function startCase(){
+  /* Includes */
+  G::LoadClass('case');
+
+  /* GET , POST & $_SESSION Vars */
+
+  /* unset any variable, because we are starting a new case */
+  if (isset($_SESSION['APPLICATION']))   unset($_SESSION['APPLICATION']);
+  if (isset($_SESSION['PROCESS']))       unset($_SESSION['PROCESS']);
+  if (isset($_SESSION['TASK']))          unset($_SESSION['TASK']);
+  if (isset($_SESSION['INDEX']))         unset($_SESSION['INDEX']);
+  if (isset($_SESSION['STEP_POSITION'])) unset($_SESSION['STEP_POSITION']);
+
+  /* Process */
+  try {  	
+    $oCase = new Cases();
+    $aData = $oCase->startCase( $_POST['taskId'], $_SESSION['USER_LOGGED'] );
+    $_SESSION['APPLICATION']   = $aData['APPLICATION'];
+    $_SESSION['INDEX']         = $aData['INDEX'];
+    $_SESSION['PROCESS']       = $aData['PROCESS'];
+    $_SESSION['TASK']          = $_POST['taskId'];
+    $_SESSION['STEP_POSITION'] = 0;
+    
+    $_SESSION['CASES_REFRESH'] = true;
+
+    $oCase     = new Cases();
+    $aNextStep = $oCase->getNextStep($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION']);
+   	$_SESSION['BREAKSTEP']['NEXT_STEP'] = $aNextStep;
+   	$aData['status']='success';
+   	$aData['openCase']=$aNextStep;
+   	print(json_encode($aData) );
+    //G::header('location: ' . $aNextStep['PAGE']);
+  }
+  catch ( Exception $e ) {
+    $_SESSION['G_MESSAGE']      = $e->getMessage();
+    $_SESSION['G_MESSAGE_TYPE'] = 'error';
+    //G::header('location: cases_New' );
+    $aData['status']='failure';
+    $aData['message']=$e->getMessage();
+    print_r(json_encode($aData));
+  }
+}
   try{
 
 

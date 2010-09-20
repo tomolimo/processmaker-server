@@ -39,6 +39,15 @@ function getOtherDashboards(dashboardTabPanels){
                 disabled:true
             });
 }
+
+ var reloadTree = function() {
+  console.log(Ext.getCmp('startCaseTreePanel'));
+        tree=Ext.getCmp('startCaseTreePanel');
+        tree.enable();
+        tree.getLoader().dataUrl = 'get-nodes2.php';
+        tree.getLoader().load(tree.root);
+    };
+
 function getProcesses() {
 
             //metaID = record.get("MetaID");
@@ -68,27 +77,81 @@ function getDashboardItems(){
 
 	{
 		xtype:'treepanel',
+		width:450,
+		autoHeight:true,
+		boxMaxHeight:300,
+		title:'Start Case',
 		useArrows: true,
-        autoScroll: true,
-        animate: true,
-        enableDD: true,
-        containerScroll: true,
-        border: false,
-        // auto create TreeLoader
- 				loader: new Ext.tree.TreeLoader({
-            dataUrl:'casesStartPage_Ajax.php',
-            baseParams: {action:'getProcessList'} // custom http params
-          }),
+    autoScroll: true,
+    animate: true,
+    enableDD: true,
+    containerScroll: true,
+    closable:true,
+    collapsible:true,
+    border: true,
+    split:true,
+    draggable:true,
+    itemId: 'startCaseTreePanel',
+    id: 'startCaseTreePanel',
+    rootVisible: false,
+
+    loader: new Ext.tree.TreeLoader({
+        dataUrl:'casesStartPage_Ajax.php',
+        baseParams: {action:'getProcessList'} // custom http params
+      }),
+    listeners:{
+      click: function(n) {
+        if(n.attributes.optionType=="startProcess"){
+            //Ext.Msg.alert('Start Case', 'Starting... "' + n.attributes.text + '"');
+            Ext.Msg.show({
+              title:'Start Case',
+              msg:'Starting new case<br><br> "' + n.attributes.text + '"',
+              icon:Ext.MessageBox.INFO
+            });
+            Ext.Ajax.request({
+              url:'casesStartPage_Ajax.php',
+              params:{
+                action:'startCase',
+                processId:n.attributes.pro_uid,
+                taskId:n.attributes.tas_uid
+                },
+                success: function(responseObject) {
+                    //showHistoryDialog(responseObject.responseText);
+                    //grid.getGridEl().unmask(true);
+                    var response=Ext.util.JSON.decode(responseObject.responseText);
+                    Ext.Msg.show({
+                      title:'Open Case',
+                      msg:'Case number <b>' +response.CASE_NUMBER + '</b>',
+                      icon:Ext.MessageBox.INFO
+                    });                   
+                    window.location=response.openCase.PAGE;
+                    //Ext.Msg.alert('Status', responseObject.responseText);
+                },
+                failure: function() {
+                    //grid.getGridEl().unmask(true);
+                    Ext.Msg.alert('Error', 'Unable to start a case');
+                }
+            });
+          }
+        }
 
       
+    },
+    root: {
+        nodeType: 'async',
+        draggable: false,
+        //allowDrop:false,
+        id: 'root',
+        expanded: true
+    },
+    tbar: [{
+            text: 'Refresh',
+            handler: function(){
+              tree=Ext.getCmp('startCaseTreePanel');              
+              tree.getLoader().load(tree.root);
+            }
+        }]
 
-        root: {
-            nodeType: 'async',
-            text: 'Start Case',
-            draggable: false,
-            id: 'root',
-            expanded: true
-        }
 
 	},
 /*
@@ -189,6 +252,8 @@ titleCollapse:true,
 				            width : 250,
 				            height : 250,
 				            draggable:true,
+				            disableCaching:true,
+				            expressInstall:true,
 				            //extra styles get applied to the chart defaults
 				            extraStyle:
 				            {
@@ -257,6 +322,8 @@ function getDefaultDashboard(){
 	return defaultDashboard;
 }
 Ext.chart.Chart.CHART_URL = '/images/charts.swf';
+Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
+
 	 var structure = {
         Asia: ['Beijing', 'Tokyo'],
         Europe: ['Berlin', 'London', 'Paris']
@@ -369,6 +436,7 @@ Ext.onReady(function(){
                 id: 'mainDashboard',
                 iconCls: 'ICON_CASES_START_PAGE',
                 xtype: 'panel',
+              
                 items: getDashboardItems()
             }
         ]
