@@ -1,26 +1,16 @@
-Ext.app.BookLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
+Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
     processAttributes : function(attr){
-        if(attr.blockTitle){ // is it an author node?
-
-            // Set the node text that will show in the tree since our raw data does not include a text attribute:
+        if(attr.blockTitle){
             attr.text = attr.blockTitle;
-
-            // Author icon, using the gender flag to choose a specific icon:
             attr.iconCls = 'ICON_' + attr.id;
-
-            // Override these values for our folder nodes because we are loading all data at once.  If we were
-            // loading each node asynchronously (the default) we would not want to do this:
             attr.loaded = true;
             attr.expanded = true;
         }
-        else if(attr.title){ // is it a book node?
-
-            // Set the node text that will show in the tree since our raw data does not include a text attribute:
-            attr.text = attr.title
+        else if(attr.title){ 
+            attr.text = attr.title;
             if( attr.cases_count )
               attr.text += ' (' + attr.cases_count + ')';
 
-            // Book icon:
             attr.iconCls = 'ICON_' + attr.id;
 
             // Tell the tree this is a leaf node.  This could also be passed as an attribute in the original XML,
@@ -33,11 +23,6 @@ Ext.app.BookLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
 
 Ext.onReady(function(){
 
-// NOTE: This is an example showing simple state management. During development,
-// it is generally best to disable state management as dynamically-generated ids
-// can change across page loads, leading to unpredictable results.  The developer
-// should ensure that stable state ids are set for stateful components in real apps.
-
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
   var eastPanel;
@@ -48,8 +33,9 @@ Ext.onReady(function(){
   var centerPanel;
   
   var menuTree;
-
-  var o = {uid:1, name:'erik'}; 
+  
+  var winSize = parent.getClientWindowSize(); 
+  
   //alert(o.name);
   eastPanelNortSubPanel = new Ext.TabPanel({
     border: false, // already wrapped so don't add another border
@@ -83,7 +69,6 @@ Ext.onReady(function(){
           created2: new Date(Date.parse('10/15/2006')),
           tested2: false,
           version2: 0.01,
-          obj1: o,
           borderWidth: 1
         }
       }),
@@ -191,6 +176,8 @@ Ext.onReady(function(){
   
   tpl.compile();
 
+  detailsMenuTreePanelHeight = winSize.height - 420;
+  
   menuTree = new Ext.Panel({
     title: '',
     region: 'west',
@@ -206,6 +193,7 @@ Ext.onReady(function(){
     margins: '0 0 0 5',
     items: [{
       xtype: 'treepanel',
+      height: 350,
       id: 'tree-panel',
       region: 'center',
       margins: '2 2 0 2',
@@ -214,22 +202,19 @@ Ext.onReady(function(){
       root: new Ext.tree.AsyncTreeNode(),
 
       // Our custom TreeLoader:
-      loader: new Ext.app.BookLoader({
+      loader: new Ext.app.menuLoader({
         dataUrl:'cases_menuLoader'
       }),
 
       listeners: {
         'render': function(tp){
           tp.getSelectionModel().on('selectionchange', function(tree, node){
-            
             //alert(node.attributes.node.attributes.url);
         
             if( node.attributes.url )
               document.getElementById('casesSubFrame').src = node.attributes.url;
             
-            
             var el = Ext.getCmp('details-panel').body;
-            
             
             if(node && node.leaf){
               //alert(node.attributes.title);
@@ -245,14 +230,14 @@ Ext.onReady(function(){
       }
     },{
         region: 'south',
-        title: 's',
+        title: '',
         id: 'details-panel',
         autoScroll: true,
         collapsible: true,
         split: true,
         margins: '0 2 2 2',
         cmargins: '2 2 2 2',
-        height: 220,
+        height: detailsMenuTreePanelHeight,
         html: detailsText
     }]  
   });
@@ -268,5 +253,10 @@ Ext.onReady(function(){
   var w = Ext.getCmp('east-panel');
   //w.collapse();
   
-
+ 
+  setDefaultOption();
 });
+
+function setDefaultOption(){
+  document.getElementById('casesSubFrame').src = "casesStartPage";
+}
