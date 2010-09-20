@@ -1,124 +1,17 @@
-<html>
-<head>
-  <title>Complex Layout</title>
-    
-    
-    <style type="text/css">
-    html, body {
-        font:normal 12px verdana;
-        margin:0;
-        padding:0;
-        border:0 none;
-        overflow:hidden;
-        height:100%;
-    }
-    p {
-        margin:5px;
-    }
-    .settings {
-        background-image:url(../shared/icons/fam/folder_wrench.png);
-    }
-    .nav {
-        background-image:url(../shared/icons/fam/folder_go.png);
-    }
-    
-    
-/***/
 
-#details-panel .x-panel-body {
-    padding: 10px;
-    background: #eee;
-    color: #555;
-}
-#details-panel a:link, #details-panel a:visited {
-    color: #369;
-}
-#details-panel h2 {
-    color: #369;
-    font-size: 15px;
-}
-#details-panel p {
-    margin-bottom: 5px;
-}
+<!-- use class="x-hide-display" to prevent a brief flicker of the content -->
+<div id="west" class="x-hide-display">
+    <div id="tree"></div>
+</div>
 
+<div id="props-panel" class="x-hide-display" style="width:200px;height:200px;overflow:hidden;">
+</div>
+<div id="south" class="x-hide-display">
+    <p>south - generally for informational stuff, also could be for status bar</p>
+</div>
 
-.ICON_FOLDERS {
-    background-image: url(/images/cases-folders.png) !important;
-}
-
-.ICON_CASES_FOLDERS {
-    background-image: url(/images/cases-inbox.png) !important;
-}
-
-.ICON_CASES_INBOX {
-    background-image: url(/images/cases-inbox.png) !important;
-}
-
-.ICON_CASES_DRAFT {
-    background-image: url(/images/cases-draft.png) !important;
-}
-
-.ICON_CASES_SENT {
-    background-image: url(/images/cases-outbox.png) !important;
-}
-
-.ICON_CASES_SELFSERVICE {
-    background-image: url(/images/cases-selfservice.png) !important;
-}
-
-.ICON_CASES_PAUSED {
-    background-image: url(/images/cases-paused.png) !important;
-}
-
-.ICON_CASES_COMPLETED {
-    background-image: url(/images/cases-completed1.png) !important;
-}
-
-.ICON_CASES_CANCELLED {
-    background-image: url(/images/cases-cancelled.png) !important;
-}
-
-.ICON_CASES_FOLDERS {
-    background-image: url(/images/cases-documents.png) !important;
-}
-
-.ICON_SEARCHS {
-    background-image: url(/images/cases-search.png) !important;
-}
-
-.ICON_ADMIN {
-    background-image: url(/images/cases-admin.png) !important;
-}
-
-.ICON_CASES_TO_REVISE {
-    background-image: url(/images/cases_torevise.png) !important;
-}
-
-.ICON_CASES_TO_REASSIGN {
-    background-image: url(/images/cases-reassing.png) !important;
-}
-
-</style>    
-</head>
-<body >
-    <!-- use class="x-hide-display" to prevent a brief flicker of the content -->
-    <div id="west" class="x-hide-display">
-        <div id="tree"></div>
-    </div>
-    
-    <div id="props-panel" class="x-hide-display" style="width:200px;height:200px;overflow:hidden;">
-    </div>
-    <div id="south" class="x-hide-display">
-        <p>south - generally for informational stuff, also could be for status bar</p>
-    </div>
-    
-    <iframe  name="casesSubFrame" id="casesSubFrame" src ="" width="100%" frameborder="0">
-      <p>Your browser does not support iframes.</p>
-    </iframe>
-</body>
-<script>
-//oCasesSubFrame = document.getElementById('casesSubFrame').style.height = 100;
-</script>
-</html>
+<iframe  name="casesSubFrame" id="casesSubFrame" src ="" width="100%" frameborder="0">
+  <p>Your browser does not support iframes.</p>
+</iframe>
 
   

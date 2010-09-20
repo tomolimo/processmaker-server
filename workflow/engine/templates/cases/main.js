@@ -182,12 +182,10 @@ Ext.onReady(function(){
   var tpl = new Ext.Template(
     '<span style="font-size:10">',
     '<h2 class="title">{title}</h2>',
-    '<p><b>Related Cases</b>: {cases_count}</b></p>',
-    '<p><b>Related Processes</b>: {processes_count}</b></p>',
+    'Related Processes</b>: {processes_count}<br/>',
     '<span style="font-size:9">',
-    '<pre>{innerText}</pre>',
+    '{innerText}',
     '</span>',
-    '<p><a href="{url}" target="_blank">link</a></p>',
     '</span>'
   );
   
@@ -232,7 +230,10 @@ Ext.onReady(function(){
             
             var el = Ext.getCmp('details-panel').body;
             
+            
             if(node && node.leaf){
+              //alert(node.attributes.title);
+              Ext.getCmp('details-panel').title = node.attributes.title;
               
               tpl.overwrite(el, node.attributes);
               
@@ -244,7 +245,7 @@ Ext.onReady(function(){
       }
     },{
         region: 'south',
-        title: '',
+        title: 's',
         id: 'details-panel',
         autoScroll: true,
         collapsible: true,

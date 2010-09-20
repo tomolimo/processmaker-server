@@ -292,6 +292,8 @@ class headPublisher
     	
 	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
  	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin . ".css' />\n";
+ 	  $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
+ 	  
     if ( isset( $this->extJsScript ) && is_array ( $this->extJsScript ) ) {
     	foreach ( $this->extJsScript as $key => $file ) {
         $head .= "  <script type='text/javascript' src='" . $file . ".js'></script>\n";
