@@ -48,6 +48,9 @@ class headPublisher
 
   /* extJsContent Array, to store the file to be include in the skin content  */
   var $extJsContent = array();
+  
+  /* extVariable array, to store the variables generated in PHP, and used in JavaScript */
+  var $extVariable = array();
 
   var $leimnudInitString = '  var leimnud = new maborak();
   leimnud.make({
@@ -294,6 +297,19 @@ class headPublisher
         $head .= "  <script type='text/javascript' src='" . $file . ".js'></script>\n";
   	  }
     }
+    if ( count( $this->extVariable ) > 0 ) {
+    	$head .= "<script language='javascript'>\n";
+    	foreach ( $this->extVariable as $key => $val ) {
+    		$name = $val['name'];
+    		$value = $val['value'];
+    		if ( $val['type'] == 'number' )
+    		  $head .= "  var $name = $value;\n"; 
+    		else
+    		  $head .= "  var $name = '$value';\n"; 
+    	}
+    	$head .= "</script>\n";
+    	
+    }
     return $head;    
   }
   
@@ -379,7 +395,33 @@ class headPublisher
   function AddContent( $templateHtml) {
     $this->extJsContent[] = $templateHtml;
   }
+
+  /**
+   * Function assign
+   * assign a STRING value to a JS variable
+   * use this function to send from PHP variables to be used in JavaScript
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function Assign( $variable, $value) {
+    $this->extVariable[] = array ( 'name' => $variable, 'value' => $value , 'type' => 'string');
+  }
     
+
+  /**
+   * Function assignNumber
+   * assign a Number value to a JS variable
+   * use this function to send from PHP variables to be used in JavaScript
+   *
+   * @author Fernando Ontiveros <fernando@colosa.com>
+   * @access public
+   * @return string
+   */
+  function AssignNumber( $variable, $value) {
+    $this->extVariable[] = array ( 'name' => $variable, 'value' => $value , 'type' => 'number');
+  }
   /**
    * Function renderExtJs
    * this function returns the content rendered using ExtJs
