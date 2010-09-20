@@ -55,7 +55,22 @@
     $caseReaderFields[] = array( 'name' => 'DEL_TASK_DUE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
+ 
+ // TEST test in daytop   
+    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
     
+    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
+    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
+    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
+    $caseReaderFields[] = array( 'name' => 'AGE' );
+    $caseReaderFields[] = array( 'name' => 'GENDER' );
+ // TEST test in daytop   
+   
+        
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );  
     
     
@@ -83,11 +98,24 @@
     $caseReaderFields[] = array( 'name' => 'DEL_TASK_DUE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
+
+ // TEST test in daytop   
+    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
     
+    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
+    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
+    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
+    $caseReaderFields[] = array( 'name' => 'AGE' );
+    $caseReaderFields[] = array( 'name' => 'GENDER' );
+ // TEST test in daytop   
+     
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );  
     
-    
-  }
+   }
   
   
   
