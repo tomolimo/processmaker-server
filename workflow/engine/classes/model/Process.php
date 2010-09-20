@@ -25,6 +25,7 @@
 
 require_once 'classes/model/om/BaseProcess.php';
 require_once 'classes/model/Content.php';
+require_once 'classes/model/ProcessCategory.php';
 
 
 /**
@@ -295,6 +296,14 @@ class Process extends BaseProcess {
           $oPro->setProParent ( $oPro->getProUid() );
           $oPro->save();
         }
+        
+        //Get category Name, by default No category
+        $aFields['PRO_CATEGORY_LABEL']=G::LoadTranslation("ID_PROCESS_NO_CATEGORY");
+        if($aFields['PRO_CATEGORY']!=""){
+        	$oProCat = ProcessCategoryPeer::retrieveByPk( $aFields['PRO_CATEGORY'] );        	
+        	$aFields['PRO_CATEGORY_LABEL']=$oProCat->getCategoryName();
+        }        
+        
         return $aFields;
       }
       else {

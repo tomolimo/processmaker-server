@@ -2487,17 +2487,20 @@ class processMap
   function getConditionProcessList() 
   {
     $aProcesses    = array ();
-    $aProcesses [] = array ('PRO_UID' => 'char', 'PRO_TITLE' => 'char', 'PRO_DESCRIPTION' => 'char', 'PRO_STATUS' => 'char' );
+    $aProcesses [] = array ('PRO_UID' => 'char', 'PRO_TITLE' => 'char', 'PRO_DESCRIPTION' => 'char', 'PRO_STATUS' => 'char', 'PRO_CATEGORY' => 'char', 'PRO_CATEGORY_LABEL' => 'char' );
     $oCriteria     = new Criteria ( 'workflow' );
     $oCriteria->addSelectColumn ( ProcessPeer::PRO_UID );
     $oCriteria->add ( ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL );
     $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    
+    
+    
     $oDataset->next ();
     $oProcess = new Process ( );
     while ( $aRow = $oDataset->getRow () ) {
       $aProcess = $oProcess->load ( $aRow ['PRO_UID'] );
-      $aProcesses [] = array ('PRO_UID' => $aProcess ['PRO_UID'], 'PRO_TITLE' => $aProcess ['PRO_TITLE'], 'PRO_DESCRIPTION' => $aProcess ['PRO_DESCRIPTION'], 'PRO_STATUS' => ($aProcess ['PRO_STATUS'] == 'ACTIVE' ? G::LoadTranslation ( 'ID_ACTIVE' ) : G::LoadTranslation ( 'ID_INACTIVE' )) );
+      $aProcesses [] = array ('PRO_UID' => $aProcess ['PRO_UID'], 'PRO_TITLE' => $aProcess ['PRO_TITLE'], 'PRO_DESCRIPTION' => $aProcess ['PRO_DESCRIPTION'], 'PRO_STATUS' => ($aProcess ['PRO_STATUS'] == 'ACTIVE' ? G::LoadTranslation ( 'ID_ACTIVE' ) : G::LoadTranslation ( 'ID_INACTIVE' )),'PRO_CATEGORY' => $aProcess ['PRO_CATEGORY'],'PRO_CATEGORY_LABEL' => $aProcess ['PRO_CATEGORY_LABEL'] );
       $oDataset->next ();
     }
     global $_DBArray;

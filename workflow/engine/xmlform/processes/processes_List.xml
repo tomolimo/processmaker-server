@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm type="pagetable" sqlConnection="" menu="processes/processes_Options" searchBy="PRO_TITLE" filterForm="processes/processes_Search">
+<dynaForm type="pagetable" sqlConnection="" menu="processes/processes_Options" searchBy="PRO_TITLE" filterForm="processes/processes_Search" masterdetail="PRO_CATEGORY_LABEL">
 <PRO_UID type="private" showInTable="0"/>
+<PRO_CATEGORY_LABEL type="text" titlealign="left" colWidth="300">
+  <en>Category</en>
+</PRO_CATEGORY_LABEL>
 <PRO_TITLE type="text" titlealign="left" colWidth="300">
   <en>Title</en>
 </PRO_TITLE>
