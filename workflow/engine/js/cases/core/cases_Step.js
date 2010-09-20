@@ -888,10 +888,13 @@ function showdebug(){
       w.show();
       w.ownerCt.doLayout();
       w.expand();     
-      resetGrid();
+      
+      parent.propStore.load();
+      parent.triggerStore.load();
+      
     }
   } catch(e){
-    //alert("Error: "+e)
+    alert("Error: "+e)
   }
   return;
     

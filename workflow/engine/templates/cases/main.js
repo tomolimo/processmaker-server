@@ -37,6 +37,14 @@ var debugTriggersDetailTpl = new Ext.Template(
 );
 debugTriggersDetailTpl.compile();
   
+  
+var propStore;
+var triggerStore;
+
+var debugVariablesFilter;
+
+
+ 
 Ext.onReady(function(){
 
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
@@ -44,12 +52,20 @@ Ext.onReady(function(){
   var resetGrid = function() {
     propStore.load();
   };
-  
-  var resetTriggers = function(){
-    store.load();
+
+  var debugVariablesFilterDynaform = function(){
+    propStore.load({params:{filter:'dyn'}});
+  }
+
+  var debugVariablesFilterSystem = function(){
+    propStore.load({params:{filter:'sys'}});
   }
   
-  var propStore = new Ext.data.Store({
+  var resetTriggers = function(){
+    triggerStore.load();
+  }
+  
+  propStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({url: 'debug_vars'}),
     reader: new Ext.data.DynamicJsonReader({root: 'data'})
   });
@@ -60,6 +76,7 @@ Ext.onReady(function(){
   });
   
   var debugVariables = new Ext.grid.PropertyGrid({
+    id: 'debugVariables',
     title:'Variables',
     autoHeight: false,
     height: 300,
@@ -75,7 +92,9 @@ Ext.onReady(function(){
       }
     }, 
     tbar: [
-      {text: 'Update', handler: resetGrid}
+      {text: 'All', handler: resetGrid},
+      {text: 'Dynaform', handler: debugVariablesFilterDynaform},
+      {text: 'System', handler: debugVariablesFilterSystem}
     ],
     sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     viewConfig: {
@@ -243,7 +262,7 @@ Ext.onReady(function(){
     ]
   );
 
-  var store = new Ext.data.GroupingStore({
+  triggerStore = new Ext.data.GroupingStore({
     reader: reader,
     sortInfo:{field: 'name', direction: "ASC"},
     groupField:'execution_time',
@@ -251,7 +270,7 @@ Ext.onReady(function(){
   });
 
   var debugTriggers = new xg.GridPanel({
-      store: store,
+      store: triggerStore,
       
       columns: [
           {id:'name',header: "Name", width: 60, sortable: true, dataIndex: 'name'},
@@ -269,8 +288,7 @@ Ext.onReady(function(){
       title: 'Triggers',
       iconCls: 'icon-grid',
       tbar: [
-       {text: 'Update', handler: resetTriggers},
-       {text: 'show code', handler: show1}
+       {text: 'Open in a popp', handler: show1}
       ],
       sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
       viewConfig: {
@@ -359,8 +377,8 @@ Ext.onReady(function(){
   //w.collapse();
   
   /**hide*/
-  //menuPanelC.hide(); 
-  //menuPanelC.ownerCt.doLayout(); 
+  menuPanelC.hide(); 
+  menuPanelC.ownerCt.doLayout(); 
   
   /**show*/
   //w.show();
