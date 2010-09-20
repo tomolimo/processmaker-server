@@ -44,7 +44,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-
 G::LoadClass('processMap');
 $oProcessMap = new ProcessMap();
 //$oProcessMap->deleteProcess($_POST['form']['PRO_UID']);

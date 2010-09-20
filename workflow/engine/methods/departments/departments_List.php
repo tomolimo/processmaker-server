@@ -22,8 +22,6 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-
-
 $access = $RBAC->userCanAccess('PM_USERS');
 if( $access != 1 ){
   switch ($access)

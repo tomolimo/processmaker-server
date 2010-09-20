@@ -44,8 +44,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-
-
 require_once 'classes/model/ObjectPermission.php';
 $oOP = new ObjectPermission();
 $oOP = ObjectPermissionPeer::retrieveByPK($_GET['OP_UID']);

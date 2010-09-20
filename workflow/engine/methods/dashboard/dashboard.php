@@ -25,6 +25,8 @@
 
 if (($RBAC_Response=$RBAC->userCanAccess('PM_LOGIN'))!=1) return $RBAC_Response;
 
+global $RBAC;
+
 $access = $RBAC->userCanAccess('PM_USERS');
 if( $access != 1 ){
   switch ($access)
@@ -46,27 +48,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-global $RBAC;
-
-switch ($RBAC->userCanAccess('PM_USERS'))
-{
-	case -1:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	case -2:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	case -3:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	
-}
 
 try {
   $G_MAIN_MENU        = 'processmaker';

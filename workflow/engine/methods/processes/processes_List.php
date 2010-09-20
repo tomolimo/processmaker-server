@@ -45,7 +45,6 @@ if( $access != 1 ){
   }
 }  
 
-
   $G_MAIN_MENU            = 'processmaker';
   $G_SUB_MENU             = 'process';
   $G_ID_MENU_SELECTED     = 'PROCESSES';

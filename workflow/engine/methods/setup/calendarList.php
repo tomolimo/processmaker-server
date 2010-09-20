@@ -22,6 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
 $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
 if( $access != 1 ){
   switch ($access)
@@ -43,6 +44,7 @@ if( $access != 1 ){
   	break;  	
   }
 }  
+
 if(class_exists('pmLicenseManager')){
     	$pmLicenseManagerO =& pmLicenseManager::getSingleton();
     	$expireIn=$pmLicenseManagerO->getExpireIn();

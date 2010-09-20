@@ -23,8 +23,7 @@
  *
  */
 global $RBAC;
-
-$access = $RBAC->userCanAccess('PM_FACTORY');
+$access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
 if( $access != 1 ){
   switch ($access)
   {
@@ -45,7 +44,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-
 try {
   if(!is_writable(PATH_XMLFORM)){
     throw new Exception(G::LoadTranslation('IMPORT_LANGUAGE_ERR_NO_WRITABLE'));

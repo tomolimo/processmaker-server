@@ -24,6 +24,7 @@
  */
  
 global $RBAC;
+
 $access = $RBAC->userCanAccess('PM_FACTORY');
 if( $access != 1 ){
   switch ($access)

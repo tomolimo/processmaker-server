@@ -44,7 +44,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-
 if (($RBAC_Response=$RBAC->userCanAccess("PM_SETUP"))!=1) return $RBAC_Response;
 	
   $dbc = new DBConnection;

@@ -1,8 +1,7 @@
 <?php
     
-
-  $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
-  if( $access != 1 ){
+$access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
+if( $access != 1 ){
   switch ($access)
   {
   	case -1:

@@ -44,7 +44,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-
 $processUID = $_GET['PRO_UID'];
 $_SESSION['PROCESS'] = $processUID;
 

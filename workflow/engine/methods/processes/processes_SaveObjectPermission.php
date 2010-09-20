@@ -44,8 +44,6 @@ if( $access != 1 ){
   	break;  	
   }
 }  
-
-
 list($iRelation, $sUserGroup) = explode('|', $_POST['form']['GROUP_USER']);
 $sObjectUID = '';
 switch ($_POST['form']['OP_OBJ_TYPE']) {

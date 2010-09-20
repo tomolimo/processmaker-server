@@ -24,6 +24,7 @@
  */
 if (($RBAC_Response=$RBAC->userCanAccess("PM_LOGIN"))!=1) return $RBAC_Response;
 global $RBAC;
+
 $access = $RBAC->userCanAccess('PM_USERS');
 if( $access != 1 ){
   switch ($access)
@@ -45,8 +46,6 @@ if( $access != 1 ){
   	break;  	
   }
 }
-
-
 $G_MAIN_MENU            = 'processmaker';
 $G_SUB_MENU             = 'users';
 $G_ID_MENU_SELECTED     = 'USERS';
