@@ -185,7 +185,7 @@ Ext.onReady(function(){
     '<p><b>Related Cases</b>: {cases_count}</b></p>',
     '<p><b>Related Processes</b>: {processes_count}</b></p>',
     '<span style="font-size:9">',
-    '<p>{innerText}</p>',
+    '<pre>{innerText}</pre>',
     '</span>',
     '<p><a href="{url}" target="_blank">link</a></p>',
     '</span>'
