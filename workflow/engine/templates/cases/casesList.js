@@ -110,7 +110,7 @@ Ext.onReady ( function() {
   function onComboProcess( scope ){
   	filterProcess = comboProcess.value;
   	storeCases.setBaseParam( 'process', filterProcess);
-    storeCases.load({params:{process: filterProcess, start : 0 }});
+    storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
   };
   
   var tb = new Ext.Toolbar({
