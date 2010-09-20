@@ -80,6 +80,7 @@ function getDashboardItems(){
 		width:450,
 		autoHeight:true,
 		boxMaxHeight:300,
+		maxHeight:300,
 		title:'Start Case',
 		useArrows: true,
     autoScroll: true,
@@ -94,11 +95,10 @@ function getDashboardItems(){
     itemId: 'startCaseTreePanel',
     id: 'startCaseTreePanel',
     rootVisible: false,
-
     loader: new Ext.tree.TreeLoader({
-        dataUrl:'casesStartPage_Ajax.php',
-        baseParams: {action:'getProcessList'} // custom http params
-      }),
+      dataUrl:'casesStartPage_Ajax.php',
+      baseParams: {action:'getProcessList'} // custom http params
+    }),
     listeners:{
       click: function(n) {
         if(n.attributes.optionType=="startProcess"){
@@ -134,8 +134,6 @@ function getDashboardItems(){
             });
           }
         }
-
-      
     },
     root: {
         nodeType: 'async',
@@ -144,106 +142,30 @@ function getDashboardItems(){
         id: 'root',
         expanded: true
     },
-    tbar: [{
+    tbar: [
+     {
+            xtype: 'textfield',
+            name: 'field1',
+            emptyText: 'enter search term',
+            enableKeyEvents:true,
+            listeners:{
+              keyup: function(filterText){
+                //console.log(filterText.getValue());
+              }
+            }
+        },
+ {xtype: 'tbfill'},
+    {
             text: 'Refresh',
+            
             handler: function(){
-              tree=Ext.getCmp('startCaseTreePanel');              
+              tree=Ext.getCmp('startCaseTreePanel');                            
               tree.getLoader().load(tree.root);
             }
         }]
 
 
 	},
-/*
-{
-	xtype:'grid',
-	autoWidth: true,
-        autoHeight: true,
-        store: new Ext.data.ArrayStore({
-            fields: fields,
-            data: data
-        }),
-        columns: columns,
-        viewConfig: {
-            forceFit: true
-        },
-        plugins: group
-
-},
-
-{
-
-
-	xtype:'panel',
-	title:'Start case',
-	autoWidth: true,
-autoScroll:true,
-closable:true,
-
-collapsible:true,
-
-
-layout:'fit',
-
-titleCollapse:true,
-        autoHeight:false,
-        tbar: [{
-            xtype: 'buttongroup',
-            title: 'Finance',
-            columns: 1,
-            defaults: {
-                scale: 'small'
-            },
-            items: [{
-
-                autoWidth:true,
-                text: 'Process 1 (task a)'
-
-            },{
-
-                autoWidth:true,
-                text: 'Process 1 (task b)'
-            },{
-                text: 'Process 2 with a long name of process (and a long name of task)',
-                autoWidth:true
-            },{
-                text: 'Process 2 with a long name of process (and other task)',
-                autoWidth:true
-            },{
-                text: 'Process 3  (with long task name)',
-                autoWidth:true
-            }]
-        },{
-            xtype: 'buttongroup',
-            autoWidth:true,
-            title: 'Human Resources',
-            columns: 1,
-            defaults: {
-                scale: 'small'
-            },
-            items: [{
-
-                text: 'Process 4 (task)'
-
-            },{
-
-                text: 'Process 5 (task)'
-
-            },{
-                text: 'Process 6 (task)'
-
-            },{
-                text: 'Process 7 (task)'
-
-            },{
-                text: 'Process 8 (task)'
-
-            }]
-        }]
-    },
-
-*/
-
                 {
 				            store: store,
 				            xtype: 'piechart',
@@ -324,88 +246,9 @@ function getDefaultDashboard(){
 Ext.chart.Chart.CHART_URL = '/images/charts.swf';
 Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
 
-	 var structure = {
-        Asia: ['Beijing', 'Tokyo'],
-        Europe: ['Berlin', 'London', 'Paris']
-    },
-    products = ['ProductX', 'ProductY'],
-    fields = [],
-    columns = [],
-    data = [],
-    continentGroupRow = [],
-    cityGroupRow = [];
-
-      var group = new Ext.ux.grid.ColumnHeaderGroup({
-        rows: [continentGroupRow, cityGroupRow]
-    });
 Ext.onReady(function(){
 
 
-
-
-    /*
-     * Example method that generates:
-     * 1) The column configuration for the grid
-     * 2) The column grouping configuration
-     * 3) The data for the store
-     * 4) The fields for the store
-     */
-    function generateConfig(){
-        var arr,
-            numProducts = products.length;
-
-        Ext.iterate(structure, function(continent, cities){
-            continentGroupRow.push({
-                header: continent,
-                align: 'center',
-                colspan: cities.length * numProducts
-            });
-            Ext.each(cities, function(city){
-                cityGroupRow.push({
-                    header: city,
-                    colspan: numProducts,
-                    align: 'center'
-                });
-                Ext.each(products, function(product){
-                    fields.push({
-                        type: 'int',
-                        name: city + product
-                    });
-                    columns.push({
-                        dataIndex: city + product,
-                        header: product,
-                        renderer: Ext.util.Format.usMoney
-                    });
-                });
-                arr = [];
-                for(var i = 0; i < 20; ++i){
-                    arr.push((Math.floor(Math.random()*11) + 1) * 100000);
-                }
-                data.push(arr);
-            });
-        })
-    }
-
-    // Run method to generate columns, fields, row grouping
-    generateConfig();
-
-
-    /*
-     * continentGroupRow at this point is:
-     * [
-     *     {header: 'Asia', colspan: 4, align: 'center'},
-     *     {header: 'Europe', colspan: 6, align: 'center'}
-     * ]
-     *
-     * cityGroupRow at this point is:
-     * [
-     *     {header: 'Beijing', colspan: 2, align: 'center'},
-     *     {header: 'Tokyo', colspan: 2, align: 'center'},
-     *     {header: 'Berlin', colspan: 2, align: 'center'},
-     *     {header: 'London', colspan: 2, align: 'center'},
-     *     {header: 'Paris', colspan: 2, align: 'center'}
-     * ]
-     */
 
 
 
@@ -436,7 +279,7 @@ Ext.onReady(function(){
                 id: 'mainDashboard',
                 iconCls: 'ICON_CASES_START_PAGE',
                 xtype: 'panel',
-              
+                enableDD: true,              
                 items: getDashboardItems()
             }
         ]

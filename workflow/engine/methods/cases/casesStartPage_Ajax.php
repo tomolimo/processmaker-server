@@ -62,7 +62,8 @@ function getProcessList(){
     }else{
     	foreach($processList[$node] as $key => $processInfo){
     	  //print_r($processInfo);
-    		$tempTree['text']=$key;
+    		$tempTree['text']=ellipsis($key,50);
+    		//$tempTree['text']=$key;
     		$tempTree['id']=$key;
     		$tempTree['draggable']=true;
         $tempTree['leaf']=true;
@@ -86,7 +87,21 @@ function getProcessList(){
 	print json_encode( $processList ) ;
 	die;
 }
+function ellipsis($text,$numb) {
+$text = html_entity_decode($text, ENT_QUOTES);
+if (strlen($text) > $numb) {
+$text = substr($text, 0, $numb);
+$text = substr($text,0,strrpos($text," "));
+    //This strips the full stop:
+    if ((substr($text, -1)) == ".") {
+        $text = substr($text,0,(strrpos($text,".")));
+    }
+$etc = "...";
+$text = $text.$etc;
+}
 
+return $text;
+}
 function startCase(){
   /* Includes */
   G::LoadClass('case');
@@ -129,14 +144,40 @@ function startCase(){
     print_r(json_encode($aData));
   }
 }
-  try{
 
 
 
-  }
-  catch ( Exception $e ) {
-    $G_PUBLISH = new Publisher;
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish', 'blank' );
-  }
+G::LoadClass("BasePeer" );
+require_once ( "classes/model/AppCacheView.php" );
+
+function getSimpleDashboardData(){
+  
+  $sUIDUserLogged = $_SESSION['USER_LOGGED'];
+  
+  $Criteria = new Criteria('workflow');
+  
+  $Criteria->clearSelectColumns ( );
+  
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
+  $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
+  
+  $Criteria->add (AppCacheViewPeer::APP_STATUS, "TO_DO" , CRITERIA::EQUAL );
+  $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
+
+  $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+  $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+  $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+  
+  
+  
+  
+}
