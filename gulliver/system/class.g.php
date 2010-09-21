@@ -2528,10 +2528,8 @@ class G
         // note by gustavo cruz gustavo[at]colosa[dot]com
         // minor adjustments to validate if an open node have a value attribute.
         // for example a dropdown has many childs, but also can have a value attribute.
-        if (isset($r['value'])){
-          if (trim($r['value'])!=''){
-            $cv['__VALUE__'] = $r['value'];
-          }
+        if (trim($r['value'])!=''){
+          $cv['__VALUE__'] = $r['value'];
         }
         // end added code
         $cv['__CONTENT__']       = array();
@@ -2885,6 +2883,55 @@ class G
     }
     return false;
   }
+  
+  /**
+   * Get the type of a variable
+   * Returns the type of the PHP variable var. 
+   *
+   * @author Erik A. Ortiz. <erik@colosa.com>
+   * @return (string) type of variable
+   */ 
+  public function gettype($var) {
+      switch ($var) {
+        case is_null($var):
+          $type='NULL';
+          break;
+           
+        case is_bool($var):
+          $type='boolean';
+          break;
+
+        case is_float($var):
+          $type='double';
+          break;
+
+        case is_int($var):
+          $type='integer';
+          break;
+
+        case is_string($var):
+          $type='string';
+          break;
+
+        case is_array($var):
+          $type='array';
+          break;
+
+        case is_object($var):
+          $type='object';
+          break;
+
+        case is_resource($var):
+          $type='resource';
+          break;
+
+        default:
+          $type='unknown type';
+          break;
+      }
+
+      return $type;
+    }
 
 };
 

@@ -25,6 +25,9 @@
   global $G_TMP_MENU;
   global $RBAC;
 
+  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../cases/casesListSetup', 'Cases List Setup', "",'', 'admToolsContent');
+  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../setup/appCacheViewConf', 'Application Cache Conf.', "",'', 'admToolsContent');
+  
   if ($RBAC->userCanAccess('PM_SETUP') == 1) {
     $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'admToolsContent');
   }
@@ -44,7 +47,7 @@
   $G_TMP_MENU->AddIdRawOption('CALENDAR',        'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'admToolsContent' );
   $G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_LOG_CASE_SCHEDULER'), "icon-logs-list.png",'', 'admToolsContent');
   
-  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'admToolsContent');
+  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'admToolsContent');    
   
   /*$G_TMP_MENU->AddIdRawOption('WORKSPACE',          'workspaceList', G::LoadTranslation('ID_WORKSPACES') );*/
   //$G_TMP_MENU->AddIdRawOption('SELFSERVICE',    'selfService', G::LoadTranslation('ID_SELF_SERVICE') );

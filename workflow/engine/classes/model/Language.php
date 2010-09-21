@@ -77,4 +77,22 @@ class Language extends BaseLanguage {
       throw($e);
     }
   }
+  //SELECT LAN_ID, LAN_NAME FROM LANGUAGE WHERE LAN_ENABLED = '1' ORDER BY LAN_WEIGHT DESC
+  function getActiveLanguages(){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(LanguagePeer::LAN_ID);
+    $oCriteria->addSelectColumn(LanguagePeer::LAN_NAME);
+    $oCriteria->add(LanguagePeer::LAN_ENABLED , '1');
+    $oCriteria->addDescendingOrderByColumn(LanguagePeer::LAN_WEIGHT);
+    
+    $oDataset = ContentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+    $oContent = new Content();
+    $rows = Array();
+    while ($oDataset->next()) 
+      array_push($rows, $oDataset->getRow());
+    
+    return $rows;
+  }
 } // Language

@@ -321,10 +321,14 @@ class headPublisher {
       foreach ( $this->extVariable as $key => $val ) {
         $name = $val ['name'];
         $value = $val ['value'];
+        
+        $script .= "  var $name = ".G::json_encode($value).";\n";          
+        /*
         if ($val ['type'] == 'number')
           $script .= "  var $name = $value;\n";
         else
           $script .= "  var $name = '$value';\n";
+        */
       }
       $script .= "</script>\n";
     }

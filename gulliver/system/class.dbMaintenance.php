@@ -200,6 +200,7 @@ class DataBaseMaintenance
   public function query($sql) 
   {
     $this->result = @mysql_query($sql);
+    if(!$this->result) echo mysql_error($this->link);
     $aRows = Array();
     while( $aRow = @mysql_fetch_assoc($this->result) ) {
       array_push($aRows, $aRow);
@@ -520,10 +521,10 @@ class DataBaseMaintenance
  *
  * @return boolean false or true
  */   
-  function restoreFromSql($sqlfile) 
+  function restoreFromSql($sqlfile, $type='file') 
   {
     ini_set('memory_limit', '64M');
-    if( ! is_file($sqlfile) ) {
+    if( $type == 'file' && !is_file($sqlfile) ) {
       throw new Exception("the $sqlfile doesn't exist!");
     }
     
@@ -544,37 +545,47 @@ class DataBaseMaintenance
       }
     
     } else {
-      
-      $mysqli = new mysqli($this->host, $this->user, $this->passwd, $this->dbName);
-      /* check connection */
-      if( mysqli_connect_errno() ) {
-        printf("Connect failed: %s\n", mysqli_connect_error());
-        exit();
-      }
-      
-      $query = file_get_contents($sqlfile);
-      if( trim($query) == "" )
-        return false;
+      try{
+        $mysqli = new mysqli($this->host, $this->user, $this->passwd, $this->dbName);
+        /* check connection */
+        if( mysqli_connect_errno() ) {
+          printf("Connect failed: %s\n", mysqli_connect_error());
+          exit();
+        }
+        if($type == 'file'){
+          $query = file_get_contents($sqlfile); 
+        } else if($type == 'string'){
+          $query = $sqlfile;
+        } else {
+          return false;
+        }
         
-      /* execute multi query */
-      if( $mysqli->multi_query($query) ) {
-        do {
-          /* store first result set */
-          if( $result = $mysqli->store_result() ) {
-            while( $row = $result->fetch_row() ) {
-              //printf("%s\n", $row[0]);
+        if( trim($query) == "" )
+          return false;
+          
+        /* execute multi query */
+        if( $mysqli->multi_query($query) ) {
+          do {
+            /* store first result set */
+            if( $result = $mysqli->store_result() ) {
+              while( $row = $result->fetch_row() ) {
+                //printf("%s\n", $row[0]);
+              }
+              $result->free();
             }
-            $result->free();
-          }
-          /* print divider */
-          if( $mysqli->more_results() ) {
-            //printf("-----------------\n");
-          }
-        } while( $mysqli->next_result() );
+            /* print divider */
+            if( $mysqli->more_results() ) {
+              //printf("-----------------\n");
+            }
+          } while( $mysqli->next_result() );
+        } else throw new Exception(mysqli_error($mysqli));
+        
+        /* close connection */
+        $mysqli->close();
+      } catch(Exception $e){
+        echo $query;
+        echo $e->getMessage();
       }
-      
-      /* close connection */
-      $mysqli->close();
     }
   }
   
