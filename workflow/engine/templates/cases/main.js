@@ -306,7 +306,7 @@ Ext.onReady(function(){
       title: 'Triggers',
       iconCls: 'icon-grid',
       tbar: [
-        {text: 'Open in a popp', handler: show1}
+        {text: 'Open in a popup', handler: show1}
       ],
       sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
       viewConfig: {
@@ -429,6 +429,8 @@ function updateCasesView(){
           //alert(oldValue +'!='+ newValue);
           if( oldValue != newValue){
             document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
+          } else {
+            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
           }
         }
         Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
@@ -442,18 +444,6 @@ function updateCasesView(){
 function Timer(){
   updateCasesView();
   setTimeout('Timer()', 60*1000);
-}
-
-Ext.grid.dummyData = [
-    ['3m Co','after'],
-    ['Alcoa Inc','before'],
-
-
-];
-
-// add in some dummy descriptions
-for(var i = 0; i < Ext.grid.dummyData.length; i++){
-  Ext.grid.dummyData[i].push('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla vel, urna.<br/><br/>Aliquam commodo ullamcorper erat. Nullam vel justo in neque porttitor laoreet. Aenean lacus dui, consequat eu, adipiscing eget, nonummy non, nisi. Morbi nunc est, dignissim non, ornare sed, luctus eu, massa. Vivamus eget quam. Vivamus tincidunt diam nec urna. Curabitur velit.');
 }
 
 Ext.data.DynamicJsonReader = function(config){
