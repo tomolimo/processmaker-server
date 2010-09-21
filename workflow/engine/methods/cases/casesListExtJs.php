@@ -2,6 +2,10 @@
   //get the action from GET or POST, default is todo
   $action   = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
 
+  G::LoadClass ( "BasePeer" );
+  G::LoadClass ( 'configuration' );
+  require_once ( "classes/model/Fields.php" );
+
   $oHeadPublisher   =& headPublisher::getSingleton();
   // oHeadPublisher->setExtSkin( 'xtheme-blue');
 
@@ -11,11 +15,11 @@
   $columns      = json_encode($config['caseColumns']);
   $readerFields = json_encode( $config['caseReaderFields']);
     	
-  $oHeadPublisher->assignNumber( 'pageSize',     20 ); //sending the page size
+  $oHeadPublisher->assignNumber( 'pageSize',     $config['rowsperpage'] ); //sending the page size
   $oHeadPublisher->assignNumber( 'columns',      $columns ); //sending the columns to display in grid
   $oHeadPublisher->assignNumber( 'readerFields', $readerFields ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'action',       $action ); //sending the fields to get from proxy
-  $oHeadPublisher->assign( 'PMDateFormat', 'M d, Y' ); //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'PMDateFormat', $config['dateformat'] ); //sending the fields to get from proxy
 
   $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
 
@@ -51,7 +55,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
  
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );  
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y' );  
   }
   
   function getDraft() {
@@ -80,7 +84,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
   
   function getParticipated() {
@@ -110,7 +114,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
    }
   
   function getUnassigned() {
@@ -138,7 +142,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
   function getPaused() {
@@ -165,7 +169,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
   function getCompleted() {
@@ -196,7 +200,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
   function getCancelled() {
@@ -225,7 +229,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
   /**
@@ -237,20 +241,17 @@
 function getAdditionalFields($action){
   $caseColumns = array();
   $caseReaderFields = array();
-  G::LoadClass ( "BasePeer" );
-  G::LoadClass ( 'configuration' );
-  require_once ( "classes/model/Fields.php" );
 
   $conf = new Configurations();
   $confCasesList = $conf->loadObject('casesList',$action,'','','');
-  if (count($confCasesList)>1){
+  if ( count($confCasesList)>1 ){
     foreach($confCasesList['second']['data'] as $fieldData){
       if ( $fieldData['fieldType']!='key' ) {
-        $caseColumns[]      = array( 'header' => $fieldData['name'], 'dataIndex' => $fieldData['name'], 'width' => 100, 'align' => 'center' );
+        $caseColumns[]      = array( 'header' => $fieldData['label'], 'dataIndex' => $fieldData['name'], 'width' => $fieldData['width'], 'align' => $fieldData['align'] );
         $caseReaderFields[] = array( 'name'   => $fieldData['name'] );
       }
     }
-    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => $confCasesList['rowsperpage'], 'dateformat' => $confCasesList['dateformat'] );
   } 
   else {
     switch ( $action ) {

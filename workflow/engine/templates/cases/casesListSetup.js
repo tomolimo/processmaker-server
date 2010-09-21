@@ -55,6 +55,38 @@ Ext.onReady(function(){
       }
     }
   });
+
+  // create the Dropdown for rows per page
+  var pmRowsPerPage = new Ext.form.ComboBox ({
+    width         : 60,
+    boxMaxWidth   : 70,
+    editable      : false,
+    triggerAction : 'all',
+    mode          : 'local',    
+    store        : new Ext.data.ArrayStore({
+      fields: ['id'],
+      data  : [[5], [6], [7], [8], [9], [10], [12], [15], [18], [20], [25], [30], [50], [100] ]
+    }),
+    valueField    : 'id',
+    displayField  : 'id',
+    triggerAction : 'all',
+  });
+  
+  // create the Dropdown for date formats
+  var pmDateFormat = new Ext.form.ComboBox ({
+    width         : 80,
+    boxMaxWidth   : 90,
+    editable      : false,
+    triggerAction : 'all',
+    mode          : 'local',    
+    store        : new Ext.data.ArrayStore({
+      fields: ['id'],
+      data  : [['M d, Y'],['M d Y'],['M d Y H:i:s'],['d M Y'],['d M Y H:i:s'],['Y-m-d'],['Y-m-d H:i:s'],['Y/m/d '],['Y/m/d H:i:s'],['D d M Y'] ]
+    }),
+    valueField    : 'id',
+    displayField  : 'id',
+    triggerAction : 'all',
+  });
   
   PmTableStore.setDefaultSort('ADD_TAB_NAME', 'asc');
   PmTableStore.load();
@@ -187,16 +219,13 @@ Ext.onReady(function(){
       selModel         : new Ext.grid.RowSelectionModel({singleSelect:true}),
       store            : secondGridStore,
       //columns          : colsSecond,
-      clicksToEdit: 2,
+      clicksToEdit: 1,
       cm          : colsSecond,
       stripeRows       : true,
       title            : 'Case List Fields'
   });
 
-  var tbar = new Ext.Toolbar({
-    items: [pmTablesDropdown]
-  });
-
+ 
   // Simple 'border layout' panel to house both grids
 
   function sendGridFieldsRequest(action) {
@@ -210,6 +239,9 @@ Ext.onReady(function(){
         //remove APP_UID and DEL_INDEX from second grid, this is only to avoid display in this grid
         if ( secondGrid.store.data.items[1].data['name'] == 'DEL_INDEX' ) secondGrid.store.removeAt(1); //del_index
         if ( secondGrid.store.data.items[0].data['name'] == 'APP_UID'   ) secondGrid.store.removeAt(0); //app_uid
+
+        pmRowsPerPage.setValue(dataResponse.rowsperpage);
+        pmDateFormat.setValue (dataResponse.dateformat );
       },
       failure: function(){},
       params: {xaction: 'read', action: action}
@@ -238,11 +270,33 @@ Ext.onReady(function(){
         //remove APP_UID and DEL_INDEX from second grid, this is only to avoid display in this grid
         if ( secondGrid.store.data.items[1].data['name'] == 'DEL_INDEX' ) secondGrid.store.removeAt(1); //del_index
         if ( secondGrid.store.data.items[0].data['name'] == 'APP_UID'   ) secondGrid.store.removeAt(0); //app_uid
+        pmRowsPerPage.setValue(dataResponse.rowsperpage);
+        pmDateFormat.setValue (dataResponse.dateformat );
 
         Ext.Msg.alert( 'info', 'saved' );
       },
       failure: function(){},
-      params: {xaction: 'applyChanges', action: currentAction, first: Ext.util.JSON.encode(fv), second: Ext.util.JSON.encode(sv), pmtable: pmTablesDropdown.getValue() }
+      params: {xaction: 'applyChanges', action: currentAction, first: Ext.util.JSON.encode(fv), second: Ext.util.JSON.encode(sv), pmtable: pmTablesDropdown.getValue(), rowsperpage: pmRowsPerPage.getValue(), dateformat: pmDateFormat.getValue() }
+    });
+
+  };
+  
+  function resetGrids() {
+    Ext.Ajax.request({
+      url: 'proxyPMTablesFieldList',
+      success: function(response) {
+        var dataResponse = Ext.util.JSON.decode(response.responseText);
+        remotePmFieldsStore.loadData(dataResponse.first);
+        secondGridStore.loadData(dataResponse.second);
+        //remove APP_UID and DEL_INDEX from second grid, this is only to avoid display in this grid
+        if ( secondGrid.store.data.items[1].data['name'] == 'DEL_INDEX' ) secondGrid.store.removeAt(1); //del_index
+        if ( secondGrid.store.data.items[0].data['name'] == 'APP_UID'   ) secondGrid.store.removeAt(0); //app_uid
+        pmTablesDropdown.setValue('');
+        pmRowsPerPage.setValue(dataResponse.rowsperpage);
+        pmDateFormat.setValue (dataResponse.dateformat );
+      },
+      failure: function(){},
+      params: {xaction: 'reset', action: currentAction }
     });
 
   };
@@ -304,7 +358,16 @@ Ext.onReady(function(){
     layout       : 'hbox',
     layoutConfig : {align : 'stretch'},
     tbar         : new Ext.Toolbar({
-      items: ['PM Table', pmTablesDropdown]
+      items: [
+        'PM Table', 
+        pmTablesDropdown,
+        ' ',
+        'Rows per page',
+        pmRowsPerPage,
+        ' ',
+        'Date format',
+        pmDateFormat
+      ]
     }),
     items        : [
       firstGrid,
@@ -313,8 +376,11 @@ Ext.onReady(function(){
     bbar         : [
       '->',
       {
-        text    : 'Reset both grids'
-      },
+        text    : 'Reset',
+        handler: function(){
+          resetGrids();
+        }
+      }, ' ',
       {
         text    : 'Apply changes',
         handler: function(){
