@@ -24,7 +24,12 @@
  */
 global $RBAC;
 global $G_TMP_MENU;
-$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',         'casesStartPage',             G::LoadTranslation('ID_CASES_START_PAGE'),   'pm.gif');
+//$G_TMP_MENU->AddIdRawOption('CASES_HOME',         'casesStartPage',             G::LoadTranslation('ID_CASES_START_PAGE'),   'pm.gif');
+$G_TMP_MENU->AddIdRawOption('CASES_HOME',           '',                           G::LoadTranslation('ID_CASES_START_PAGE'), '',                   '', 'blockHeader');
+$G_TMP_MENU->AddIdRawOption('CASES_START_CASE',       'casesStartPage?action=startCase',  G::LoadTranslation('ID_START_CASE'),              '' );
+$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',       'casesStartPage?action=todo',  G::LoadTranslation('ID_START_PAGE'),              '' );
+
+
 $G_TMP_MENU->AddIdRawOption('FOLDERS',           '',                           G::LoadTranslation('ID_CASES_MENU_FOLDERS'), '',                   '', 'blockHeader');
 $G_TMP_MENU->AddIdRawOption('CASES_INBOX',       'casesListExtJs?action=todo',  G::LoadTranslation('ID_INBOX'),              'icon-cases-inbox.png' );
 $G_TMP_MENU->AddIdRawOption('CASES_DRAFT',       'casesListExtJs?action=draft', G::LoadTranslation('ID_DRAFT'),              'mail-mark-task.png'   );

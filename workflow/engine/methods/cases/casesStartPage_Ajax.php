@@ -56,7 +56,8 @@ function getProcessList() {
         if ($key != "No Category") {
           $tempTree ['expanded'] = true;
         } else {
-          $tempTree ['expanded'] = false;
+          //$tempTree ['expanded'] = false;
+          $tempTree ['expanded'] = true;
         }
         $processListTree [] = $tempTree;
       }
@@ -217,7 +218,7 @@ function getSimpleDashboardData() {
   foreach($rows as $processID => $processInfo){
   	$i++;
   	if($i<=10){
-  	$rowsResponse['caseStatusByProcess'][]=array('process'=>$processID,'inbox'=>isset($processInfo['TO_DO']['count'])?$processInfo['TO_DO']['count']:0,'draft'=>isset($processInfo['DRAFT']['count'])?$processInfo['DRAFT']['count']:0,'unassigned'=>isset($processInfo['UNASSIGNED']['count'])?$processInfo['UNASSIGNED']['count']:0);
+     $rowsResponse['caseStatusByProcess'][]=array('process'=>$processID,'inbox'=>isset($processInfo['TO_DO']['count'])?$processInfo['TO_DO']['count']:0,'draft'=>isset($processInfo['DRAFT']['count'])?$processInfo['DRAFT']['count']:0,'unassigned'=>isset($processInfo['UNASSIGNED']['count'])?$processInfo['UNASSIGNED']['count']:0);
   	
   	}
   }
