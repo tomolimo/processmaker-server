@@ -1638,9 +1638,10 @@ class Cases
 
         //appDelegation
         $AppDelegation   = new AppDelegation;
-        $iAppThreadIndex = 1; // Start Thread
+        $iAppThreadIndex = 1; //start thread
         $iAppDelPrio     = 3; // Priority
         $iDelIndex       = $AppDelegation->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex, $iAppDelPrio, $isSubprocess);
+
 
         //appThread
         $AppThread       = new AppThread;
@@ -2340,7 +2341,7 @@ class Cases
           $c->add(ApplicationPeer::APP_STATUS, 'COMPLETED');
           $c->add(AppDelegationPeer::DEL_PREVIOUS, '0', Criteria::NOT_EQUAL);
           //$c->addAsColumn('DEL_FINISH_DATE', 'max('.AppDelegationPeer::DEL_FINISH_DATE.')');
-          //$c->addGroupByColumn(ApplicationPeer::APP_UID);
+          $c->addGroupByColumn(ApplicationPeer::APP_UID);
           $c->addDescendingOrderByColumn(ApplicationPeer::APP_NUMBER);
 
           break;
@@ -4903,6 +4904,7 @@ class Cases
     return $c;
   }
 
+//**DEPRECATED
   /*
   * this function gets a condition rule
   *
@@ -4911,31 +4913,39 @@ class Cases
   * @return int
   */
   function getConditionCasesCount($type, $sumary=NULL){
-      $nCount = 0;
-      list($aCriteria,$xmlfile) = $this->getConditionCasesList($type, $_SESSION['USER_LOGGED'], false);
-      $rs = ApplicationPeer::doSelectRS($aCriteria);
-      $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  	$result = 0;
+  	return $result;
+  	
+  	
+    $nCount = 0;
+    
+    list($aCriteria,$xmlfile) = $this->getConditionCasesList($type, $_SESSION['USER_LOGGED'], false);
+    $rs = ApplicationPeer::doSelectRS($aCriteria);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-      if( isset($sumary) && $sumary === true ) {
-        $sumary = Array();
-        while( $rs->next() ) {
-          $nCount++;
-          $row = $rs->getRow();
-          if( isset($sumary[$row['PRO_UID']]) ){
-            $sumary[$row['PRO_UID']]['count'] += 1;  
-          } else {
-            $sumary[$row['PRO_UID']]['count'] = 1;
-            $sumary[$row['PRO_UID']]['name'] = $row['APP_PRO_TITLE']; 
-          }
+    if( isset($sumary) && $sumary === true ) {
+      $sumary = Array();
+      while( $rs->next() ) {
+        $nCount++;
+        $row = $rs->getRow();
+        if( isset($sumary[$row['PRO_UID']]) ){
+          $sumary[$row['PRO_UID']]['count'] += 1;  
+        } 
+        else {
+          $sumary[$row['PRO_UID']]['count'] = 1;
+          $sumary[$row['PRO_UID']]['name'] = $row['APP_PRO_TITLE']; 
         }
-        return Array('count'=>$nCount, 'sumary'=>$sumary);
-      } else {
-        while( $rs->next() ) $nCount++;
-        
-        return $nCount;
       }
+      return Array('count'=>$nCount, 'sumary'=>$sumary);
+    } 
+    else {
+      while( $rs->next() ) $nCount++;
+      
+      return $nCount;
+    }
   }
 
+//**DEPRECATED
   /*
   * this function gets all conditions rules
   *

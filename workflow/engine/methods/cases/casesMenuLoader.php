@@ -105,6 +105,7 @@
     print $xml; 
   }
   
+  // get the process summary of specific case list type,
   function getProcess () {
   	global $G_TMP_MENU;
     if ( !isset($_GET['item']) ) {
@@ -147,20 +148,12 @@
   }
   
   function getAllCounters() {
-    $oCases = new Cases();
+  	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
+    $oAppCache = new AppCacheView();
     //$aTypes = Array('to_do', 'draft', 'cancelled', 'sent', 'paused', 'completed','selfservice','to_revise','to_reassign');
     $aTypes = Array('to_do'=>'CASES_INBOX', 'draft'=>'CASES_DRAFT', 'cancelled'=>'CASES_CANCELLED', 'sent'=>'CASES_SENT', 'paused'=>'CASES_PAUSED', 'completed'=>'CASES_COMPLETED','selfservice'=>'CASES_SELFSERVICE','to_revise'=>'CASES_TO_REVISE','to_reassign'=>'CASES_TO_REASSIGN');
 
-    $list = array();
-    $list['count']  = ' ';
-     
-    $empty = array();
-    foreach ( $aTypes as $key => $val ) {
-      $empty[$key] = rand(0,5);
-    }
- 
-    $aCount = $empty;
-//    $aCount = $oCases->getAllConditionCasesCount(array_keys($aTypes));
+    $aCount = $oAppCache->getAllCounters( array_keys($aTypes), $userUid );
 
     $response = Array();
     $i = 0;
