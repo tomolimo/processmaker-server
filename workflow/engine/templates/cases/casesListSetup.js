@@ -94,7 +94,6 @@ Ext.onReady(function(){
     {name: 'column2', mapping : 'column2'}
   ];
 
-
   // create the data store
   var firstGridStore = new Ext.data.JsonStore({
     fields : fields,
@@ -137,22 +136,13 @@ Ext.onReady(function(){
         title            : 'Case List Fields'
     });
 
-
-  // Simple 'border layout' panel to house both grids
-  var filterPanel = new Ext.Panel({
-    title        : 'Select Additional Fields',
-    width        : 200,
-    height       : 50,
-    layout       : 'hbox',
-    renderTo     : 'panel',
-    defaults     : {flex : 1}, //auto stretch
-    layoutConfig : {align : 'center'},
-    items        : [
-      pmTablesDropdown
-    ]
+  var tbar = new Ext.Toolbar({
+    items: [pmTablesDropdown]
   });
 
-  var displayPanel = new Ext.Panel({
+  // Simple 'border layout' panel to house both grids
+
+var displayPanel = new Ext.Panel({
     width        : 650,
     height       : 400,
     layout       : 'hbox',
@@ -163,6 +153,7 @@ Ext.onReady(function(){
       firstGrid,
       secondGrid
     ],
+    tbar    : tbar,
     bbar    : [
       '->', // Fill
       {
@@ -170,6 +161,7 @@ Ext.onReady(function(){
         handler : function() {
           //refresh source grid
           var tableUid  =  pmTablesDropdown.value;
+          pmTablesDropdown.value = '';
           // alert (tableUid);
           remotePmFieldsStore.setBaseParam( 'tab', tableUid);
           remotePmFieldsStore.load({params:{tab: tableUid}});
@@ -180,18 +172,6 @@ Ext.onReady(function(){
     ]
   });
 
-  var mainPanel = new Ext.Panel({
-    width        : 650,
-    height       : 450,
-    layout       : 'vbox',
-    renderTo     : 'panel',
-    defaults     : {flex : 1}, //auto stretch
-    layoutConfig : {align : 'center'},
-    items        : [
-      filterPanel,
-      displayPanel
-    ]
-  });
 
 // used to add records to the destination stores
 //  var blankRecord =  Ext.data.Record.create(fields);
