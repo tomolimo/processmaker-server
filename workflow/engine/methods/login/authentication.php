@@ -48,6 +48,10 @@ try {
     //The password is incorrect
     case -2:
       G::SendTemporalMessage ('ID_WRONG_PASS', "warning");
+      if(isset($_SESSION['__AUTH_ERROR__'])){
+      	G::SendMessageText($_SESSION['__AUTH_ERROR__'], "warning");
+      	unset($_SESSION['__AUTH_ERROR__']);
+      }
       break;
     //The user is inactive
     case -3:
