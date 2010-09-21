@@ -389,14 +389,13 @@ Ext.onReady(function(){
  
   setDefaultOption();
 
-  //timer
-  setTimeout('Timer()', 60*1000);
+  //the starting timer will be triggered after 2 seconds
+  setTimeout('Timer()', 2*1000);
 });
 
 function updateCasesView(){
   try{
     //treeMenuItems.root.reload();
-    //document.getElementById('ext-gen39').style.backgroundImage = 'url(/images/loader.gif)';
     Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
     document.getElementById('ext-gen35').focus();
     
@@ -409,23 +408,30 @@ function updateCasesView(){
       ReloadTreeMenuItemDetail({item:currentSelectedTreeMenuItem});
     }
     Ext.Ajax.request({
-      url: 'cases_menuLoader?action=getAllCouters',
+      url: 'cases_menuLoader?action=getAllCounters',
       success: function(response){
-        result = eval('('+response.responseText+')');
-        for(i=0; i<result.length; i++){
-          oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
-          oldValue = oldValue.replace('<b>', '');
-          oldValue = oldValue.replace('</b>', '');
-          newValue = result[i].count;
-          //alert(oldValue +'!='+ newValue);
-          if( oldValue != newValue){
-            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
-            NOTIFIER_FLAG = true;
-          } else if(NOTIFIER_FLAG === false){
-            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
-          }
-        }
-        Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
+      	try{
+	        result = eval('('+response.responseText+')');
+	        for(i=0; i<result.length; i++){
+	        	if( document.getElementById('NOTIFIER_'+result[i].item ) ){
+	        	
+		          oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
+		          oldValue = oldValue.replace('<b>', '');
+		          oldValue = oldValue.replace('</b>', '');
+		          newValue = result[i].count;
+		          //alert(oldValue +'!='+ newValue);
+		          if( oldValue != newValue){
+		            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
+		            NOTIFIER_FLAG = true;
+		          } else if(NOTIFIER_FLAG === false){
+		            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
+		          }
+		        } else continue;
+	        }
+	        Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
+	      } catch (e){
+	      	//alert('NOTIFIER_'+result[i].item+" - "+e);
+	      }
       },
       failure: function(){},
       params: {foo: 'bar'}
@@ -433,9 +439,10 @@ function updateCasesView(){
   } catch(e){alert(' '+e)}
 }
 
+//the timer function will be called after 2 minutes;
 function Timer(){
   updateCasesView();
-  setTimeout('Timer()', 60*1000);
+  setTimeout('Timer()', 2*60*1000);
 }
 
 Ext.data.DynamicJsonReader = function(config){
@@ -515,6 +522,6 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
 });
 
 function setDefaultOption(){
-  document.getElementById('casesSubFrame').src = "casesStartPage";
+  document.getElementById('casesSubFrame').src = "casesListExtJs";
 }
 
