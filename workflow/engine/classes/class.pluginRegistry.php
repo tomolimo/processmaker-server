@@ -75,6 +75,7 @@ class PMPluginRegistry {
   private $_aPmFunctions = array();
   private $_aRedirectLogin = array();
   private $_aSteps = array();
+  private $_aDashboardPages = array();
 
   static private $instance = NULL;
 
@@ -331,6 +332,37 @@ class PMPluginRegistry {
       $this->_aDashboards[] = $sNamespace;
     }
   }
+  
+/**
+   * Register a dashboard page for cases in the singleton
+   *
+   * @param unknown_type $sNamespace
+   * @param unknown_type $sPage
+   */
+  function registerDashboardPage($sNamespace, $sPage, $sName, $sIcon ) {
+  $found = false;
+     foreach ( $this->_aDashboardPages as $row=>$detail ) {
+      if ( $sPage == $detail->sPage && $sNamespace == $detail->sNamespace ){
+        $detail->sName=$sName;
+        $detail->sIcon=$sIcon;
+      	$found = true;
+      }
+     }
+    if ( !$found ) {
+      $dashboardPage = new dashboardPage ($sNamespace, $sPage, $sName, $sIcon);
+      $this->_aDashboardPages[] = $dashboardPage;
+    }
+  }
+  
+  /**
+   * return all dashboard pages
+   *
+   * @return array
+   */
+  function getDashboardPages() {
+    return  $this->_aDashboardPages;
+  }
+  
 
   /**
    * Register a reports class in the singleton

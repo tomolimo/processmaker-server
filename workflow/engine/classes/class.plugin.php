@@ -59,6 +59,25 @@ class menuDetail {
   }
  }
 
+ class dashboardPage {
+  var $sNamespace;
+  var $sPage;
+  var $sName;  
+  var $sIcon;    
+  /**
+  * This function is the constructor of the dashboardPage class
+  * @param string $sNamespace
+  * @param string $sPage  
+  * @return void
+  */
+  function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
+    $this->sNamespace = $sNamespace;
+    $this->sPage    = $sPage;    
+    $this->sName    = $sName;
+    $this->sIcon    = $sIcon;
+  }
+ }
+ 
 class triggerDetail {
   var $sNamespace;
   var $sTriggerId;
@@ -398,5 +417,14 @@ class PMPlugin {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $sPageFilename = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $templateFilename;
     $oPluginRegistry->registerBreakPageTemplate ( $this->sNamespace, $pageId, $sPageFilename);
+  }
+/**
+  * With this function we can register a Dashboard Page for Cases Dashboard
+  * @param string $sPage
+  * @return void
+  */
+  function registerDashboardPage( $sPage, $sName, $sIcon="") {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $oPluginRegistry->registerDashboardPage ( $this->sNamespace, $sPage, $sName, $sIcon );
   }
 }
