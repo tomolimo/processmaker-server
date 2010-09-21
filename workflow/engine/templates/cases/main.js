@@ -1,9 +1,6 @@
 var PANEL_EAST_OPEN = false;
-var eastPanel;
-var eastPanelNortSubPanel;
-var eastPanelCenterSubPanel;
-var eastPanel;
-var westPanel;
+
+var currentSelectedTreeMenuItem = null;
 var centerPanel;
 
 var menuTree;
@@ -42,7 +39,7 @@ var propStore;
 var triggerStore;
 
 var debugVariablesFilter;
-
+var ReloadTreeMenuItemDetail;
 
  
 Ext.onReady(function(){
@@ -109,69 +106,6 @@ Ext.onReady(function(){
     detailPanel.setTitle(r.data.name);
   });
   
-  eastPanelNortSubPanel = new Ext.TabPanel({
-    border: false, // already wrapped so don't add another border
-    activeTab: 0, // second tab initially active
-    tabPosition: 'top',
-    region:'north',
-    split: true,
-    height:detailsdebugVariablesHeight,
-    items: [
-      debugVariables,
-      {
-        html: '<p>trigger 1.',
-        title: 'Trigers',
-        autoScroll: true
-      }
-    ]
-  });
-
-  eastPanelCenterSubPanel = {
-    id: 'debug-details-panel',
-    title: '',
-    id: 'debug-details',
-    height:10,
-    split: true,
-    collapseMode: 'mini',
-    margins: '5 0 0 0',
-    region: 'center',
-    autoScroll: true,
-    xtype:'panel',
-    html: ''
-  }
-  //bodyStyle: 'padding-bottom:15px;background:#eee;',
-
-  eastPanel = {
-    layout: 'border',
-    id: 'east-panel',
-    region:'east',
-    border: false,
-    split:true,
-    margins: '2 0 5 5',
-    width: 250,
-    minSize: 100,
-    maxSize: 500,
-    
-    collapsible: true,
-    collapseMode: 'mini',
-    items: [eastPanelNortSubPanel, eastPanelCenterSubPanel]
-  };
-  
-  westPanel = {
-      region: 'west',
-      id: 'west-panel', // see Ext.getCmp() below
-      title: 'User Cases',
-      contentEl:'west',
-      split: true,
-      width: 200,
-      minSize: 175,
-      maxSize: 400,
-      collapsible: true,
-      collapseMode: 'mini',
-      margins: '0 0 0 5',
-      items: []
-    }
-
   centerPanel = {
     region: 'center', // a center region is ALWAYS required for border layout
     xtype:'panel',
@@ -179,52 +113,134 @@ Ext.onReady(function(){
     contentEl:'casesSubFrame'
   }
 
-  function reloadx(){
-    tMenu.root.reload();
-  }
 
-  var tMenu = {
-      xtype: 'treepanel',
-      height: 350,
-      id: 'tree-panel',
-      region: 'center',
-      margins: '2 2 0 2',
-       tbar: [
-       {text: 'Reload', handler: reloadx}
-      ],
-      autoScroll: true,
-      rootVisible: false,
-      clearOnReLoad: false,
-      root: new Ext.tree.AsyncTreeNode(),
+  /**
+   * Menu Panel
+   */
+  
+  var treeMenuItems = {
+    xtype: 'treepanel',
+    height: 350,
+    id: 'tree-panel',
+    region: 'center',
+    margins: '0 0 0 0',
+    tbar: [ /*bbar: [*/
+      {
+        text: 'Start Case',
+        xtype: 'tbbutton'
+      },
+      {
+        xtype: 'tbfill'
+      },
+      {
+      id:'refreshNotifiers',
+      xtype: 'tbbutton',
+      cls: 'x-btn-icon',
+      icon: '/images/refresh.gif',
+      /*text: 'Reload notifiers',*/
+      handler: updateCasesView
+    }],
+    animate:true,
+    autoScroll: true,
+    rootVisible: false,
+    clearOnReLoad: false,
+    root: new Ext.tree.AsyncTreeNode(),
 
-      // Our custom TreeLoader:
-      loader: new Ext.app.menuLoader({
-        dataUrl:'cases_menuLoader'
-      }),
+    // Our custom TreeLoader:
+    loader: new Ext.app.menuLoader({
+      dataUrl:'cases_menuLoader',
+      clearOnLoad: false
+    }),
 
-      listeners: {
-        'render': function(tp){
-          tp.getSelectionModel().on('selectionchange', function(tree, node){
-            //alert(node.attributes.id); //erik
-            //return;
-
-            if( node.attributes.url )
-              document.getElementById('casesSubFrame').src = node.attributes.url;
-
-            var el = Ext.getCmp('details-panel').body;
-            if(node.attributes.tagName == 'option' && node.attributes.cases_count ){
-              Ext.getCmp('details-panel').setTitle(node.attributes.title);
-              menuTreeDetailsTpl.overwrite(el, node.attributes);
-            } else {
-              el.update(detailsText);
-            }
-          })
-        }
+    listeners: {
+      'render': function(tp){
+        tp.getSelectionModel().on('selectionchange', function(tree, node){
+          //alert(node.attributes.id); //erik
+          //return;
+          //alert(node.attributes.url);
+          if( node.attributes.url ){
+            document.getElementById('casesSubFrame').src = node.attributes.url;
+          }
+          //var el = Ext.getCmp('details-panel').body;
+          if(node.attributes.tagName == 'option' && node.attributes.cases_count ){
+            //Ext.getCmp('details-panel').setTitle(node.attributes.title);
+            //menuTreeDetailsTpl.overwrite(el, node.attributes);
+            ReloadTreeMenuItemDetail({item:node.attributes.id});
+            currentSelectedTreeMenuItem = node.attributes.id;
+            Ext.getCmp('tree_menuItem_detail').setTitle(node.attributes.title.toUpperCase() + ' - Related processes: '+node.attributes.processes_count);
+          } else {
+            //el.update(detailsText);
+            Ext.getCmp('tree_menuItem_detail').setTitle('');
+            currentSelectedTreeMenuItem = null;
+            ReloadTreeMenuItemDetail({item:''});
+          }
+          
+          
+        })
       }
     }
+  }
   
-  //tree
-  menuTree = new Ext.Panel({
+  var treeMenuItemDetail2 = {
+    region: 'south',
+    title: '',
+    id: 'details-panel',
+    autoScroll: true,
+    collapsible: true,
+    split: true,
+    margins: '0 2 2 2',
+    cmargins: '2 2 2 2',
+    height: detailsMenuTreePanelHeight,
+    html: detailsText
+  }
+
+  var treeMenuItemDetail = new Ext.tree.TreePanel({
+      id: 'tree_menuItem_detail',
+      region: 'south',
+      animate:true,
+      autoScroll:true,
+      loader: new Ext.tree.TreeLoader({
+        dataUrl:'cases_menuLoader?action=getProcess'
+      }),
+      enableDD:true,
+      containerScroll: true,
+      border: false,
+      width: 250,
+      height: 120,
+      dropConfig: {appendOnly:true},
+      collapsible: true,
+      split: true,
+      margins: '0 2 2 2',
+      cmargins: '2 2 2 2',
+      rootVisible: false,
+      root: new Ext.tree.AsyncTreeNode()/*,
+      tbar: [{
+        text: 'reload',
+        handler: ReloadTreeMenuItemDetail
+      }]*/
+  });
+
+  ReloadTreeMenuItemDetail = function(params){
+    treeMenuItemDetail.loader.dataUrl = 'cases_menuLoader?action=getProcess&item='+params.item;
+    treeMenuItemDetail.root.reload();
+  }
+
+  // add a tree sorter in folder mode
+  //new Ext.tree.TreeSorter(tree, {folderSort:true});
+
+  // set the root node
+  var root = new Ext.tree.AsyncTreeNode({
+      text: 'Ext JS',
+      draggable:false, // disable root node dragging
+      id:'src',
+      loaded:false,
+      expanded:true
+  });
+  
+  treeMenuItemDetail.setRootNode(root);
+
+
+  mainMenu = new Ext.Panel({
     id:'menuTreePanel',
     title: '',
     region: 'west',
@@ -238,20 +254,15 @@ Ext.onReady(function(){
     collapsible: true,
     collapseMode: 'mini',
     margins: '0 0 0 2',
-    items: [tMenu,{
-        region: 'south',
-        title: '',
-        id: 'details-panel',
-        autoScroll: true,
-        collapsible: true,
-        split: true,
-        margins: '0 2 2 2',
-        cmargins: '2 2 2 2',
-        height: detailsMenuTreePanelHeight,
-        html: detailsText
-    }]  
+    items: [
+      treeMenuItems,
+      treeMenuItemDetail
+    ]
   });
-  
+
+  /**
+   * Triggers Panel
+   */
   Ext.QuickTips.init();
 
   var xg = Ext.grid;
@@ -295,7 +306,7 @@ Ext.onReady(function(){
       title: 'Triggers',
       iconCls: 'icon-grid',
       tbar: [
-       {text: 'Open in a popp', handler: show1}
+        {text: 'Open in a popp', handler: show1}
       ],
       sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
       viewConfig: {
@@ -324,11 +335,6 @@ Ext.onReady(function(){
     }
   };
 
-
-//////////////////////////
-
-  
-  
   debugPanel = new Ext.Panel({
     id:'debugPanel',
     title: '',
@@ -373,7 +379,7 @@ Ext.onReady(function(){
   
   var viewport = new Ext.Viewport({
     layout: 'border',
-    items: [ menuTree, centerPanel, debugPanel]
+    items: [ mainMenu, centerPanel, debugPanel]
   });
 
   
@@ -392,9 +398,51 @@ Ext.onReady(function(){
   
  
   setDefaultOption();
+
+  //timer
+  setTimeout('Timer()', 60*1000);
 });
 
+function updateCasesView(){
+  try{
+    //treeMenuItems.root.reload();
+    //document.getElementById('ext-gen39').style.backgroundImage = 'url(/images/loader.gif)';
+    Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
+    document.getElementById('ext-gen35').focus();
+    
+    itemsTypes = Array('CASES_INBOX', 'CASES_DRAFT', 'CASES_CANCELLED', 'CASES_SENT', 'CASES_PAUSED', 'CASES_COMPLETED','CASES_SELFSERVICE','CASES_TO_REVISE','CASES_TO_REASSIGN');
+    //for(i=0; i<itemsTypes.length; i++){
+      //document.getElementById('NOTIFIER_'+itemsTypes[i]).innerHTML = '<b>'+document.getElementById('NOTIFIER_'+itemsTypes[i]).innerHTML+'</b>';
+    //}
 
+    if(currentSelectedTreeMenuItem){
+      ReloadTreeMenuItemDetail({item:currentSelectedTreeMenuItem});
+    }
+    Ext.Ajax.request({
+      url: 'cases_menuLoader?action=getAllCouters',
+      success: function(response){
+        //alert(response.responseText);
+        result = eval('('+response.responseText+')');
+        for(i=0; i<result.length; i++){
+          oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
+          newValue = result[i].count;
+          //alert(oldValue +'!='+ newValue);
+          if( oldValue != newValue){
+            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
+          }
+        }
+        Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
+      },
+      failure: function(){},
+      params: {foo: 'bar'}
+    });
+  } catch(e){alert(' '+e)}
+}
+
+function Timer(){
+  updateCasesView();
+  setTimeout('Timer()', 60*1000);
+}
 
 Ext.grid.dummyData = [
     ['3m Co','after'],
@@ -416,7 +464,7 @@ Ext.extend(Ext.data.DynamicJsonReader, Ext.data.JsonReader, {
   getRecordType : function(data) {
   var i = 0, arr = [];
 
-  for (var name in data[0]) { arr[i++] = name; } // is there a built-in to do this?
+  for (var name in data[0]) {arr[i++] = name;} // is there a built-in to do this?
     this.recordType = Ext.data.Record.create(arr);
     return this.recordType;
   },
@@ -471,7 +519,7 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
     } else if(attr.title){ 
       attr.text = attr.title;
       if( attr.cases_count )
-        attr.text += ' (' + attr.cases_count + ')';
+        attr.text += ' (<label id="NOTIFIER_'+attr.id+'">' + attr.cases_count + '</label>)';
       
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;
