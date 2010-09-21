@@ -223,8 +223,15 @@ try {
   }
   else {
     $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
-  }
-  G::header('Location: ' . $sLocation);
+  }  
+  
+  $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->extJsInit = true;
+  
+  $oHeadPublisher->addExtJsScript('login/init', true);    //adding a javascript file .js
+  $oHeadPublisher->assign('uriReq', $sLocation);
+  G::RenderPage('publish', 'extJs');
+  //G::header('Location: ' . $sLocation);
   die;
 
 }

@@ -35,16 +35,26 @@
   if(isset($extSkin[SYS_SKIN])){
     $oHeadPublisher->setExtSkin( $extSkin[SYS_SKIN]); 
   }
-
-  $header = $oHeadPublisher->includeExtJs();
-  $body   = $oHeadPublisher->renderExtJs();
-
-  $template = new TemplatePower( PATH_SKINS . 'extJs.html' );
-  $template->prepare();
   
+  if( $oHeadPublisher->extJsInit === true){
+    $header = $oHeadPublisher->getExtJsVariablesScript();
+    $styles = $oHeadPublisher->getExtJsStylesheets();
+    $body   = $oHeadPublisher->getExtJsScripts();
+    
+    $templateFile = 'extJsInitLoad.html';
+  } else {
+    $header = $oHeadPublisher->includeExtJs();
+    $styles = '';
+    $body   = $oHeadPublisher->renderExtJs();
+    
+    $templateFile = 'extJs.html';
+  }
+  $template = new TemplatePower( PATH_SKINS . $templateFile );
+  $template->prepare();
   $template->assign( 'header', $header );
+  $template->assign( 'styles', $styles );
   $template->assign( 'bodyTemplate', $body);
-
   $content = $template->getOutputContent();  
+  
   print $content;
   

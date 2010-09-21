@@ -36,6 +36,9 @@ class headPublisher {
   var $scriptFiles = array ();
   var $leimnudLoad = array ();
   
+  /* extJsSkin  init coreLoad flag*/
+  var $extJsInit = 'false';
+  
   /* extJsSkin  store the current skin for the ExtJs*/
   var $extJsSkin = '';
   
@@ -284,31 +287,49 @@ class headPublisher {
       //$this->extJsSkin = 'gtheme';
     }
     
-    $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
-    $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin . ".css' />\n";
+    $head .= $this->getExtJsStylesheets();
+    $head .= $this->getExtJsScripts();
+    $head .= $this->getExtJsVariablesScript();
+      
+    return $head;
+  }
+  
+  function getExtJsStylesheets(){
+    $script = "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
+    $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin . ".css' />\n";
     if (file_exists ( PATH_HTML . 'skins' . PATH_SEP . 'ext' . PATH_SEP . 'pmos-' . $this->extJsSkin . '.css' )) {
-      $head .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
+      $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
     }
-    
+    return $script;
+  }
+  
+  function getExtJsScripts(){
+    $script = '';
     if (isset ( $this->extJsScript ) && is_array ( $this->extJsScript )) {
       foreach ( $this->extJsScript as $key => $file ) {
-        $head .= "  <script type='text/javascript' src='" . $file . ".js'></script>\n";
+        $script .= "  <script type='text/javascript' src='" . $file . ".js'></script>\n";
       }
     }
+    return $script;
+  }
+  
+  function getExtJsVariablesScript(){
+    $script = '';
+    
     if (count ( $this->extVariable ) > 0) {
-      $head .= "<script language='javascript'>\n";
+      $script = "<script language='javascript'>\n";
       foreach ( $this->extVariable as $key => $val ) {
         $name = $val ['name'];
         $value = $val ['value'];
         if ($val ['type'] == 'number')
-          $head .= "  var $name = $value;\n";
+          $script .= "  var $name = $value;\n";
         else
-          $head .= "  var $name = '$value';\n";
+          $script .= "  var $name = '$value';\n";
       }
-      $head .= "</script>\n";
-    
+      $script .= "</script>\n";
     }
-    return $head;
+    
+    return $script;
   }
   
   /**
