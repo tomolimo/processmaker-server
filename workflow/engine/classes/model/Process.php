@@ -298,10 +298,12 @@ class Process extends BaseProcess {
         }
         
         //Get category Name, by default No category
-        $aFields['PRO_CATEGORY_LABEL']=G::LoadTranslation("ID_PROCESS_NO_CATEGORY");
-        if($aFields['PRO_CATEGORY']!=""){
+        $aFields['PRO_CATEGORY_LABEL']=G::LoadTranslation("ID_PROCESS_NO_CATEGORY");        
+        if($aFields['PRO_CATEGORY']!=""){        	
         	$oProCat = ProcessCategoryPeer::retrieveByPk( $aFields['PRO_CATEGORY'] );        	
+        	if ( get_class ($oProCat) == 'ProcessCategory' ) {
         	$aFields['PRO_CATEGORY_LABEL']=$oProCat->getCategoryName();
+        	}
         }        
         
         return $aFields;
