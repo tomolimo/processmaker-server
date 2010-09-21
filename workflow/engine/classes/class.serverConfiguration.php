@@ -94,7 +94,7 @@ class serverConf {
       self::$instance = new serverConf ( );
     }
 
-    if($instance = @unserialize ( $serialized )){
+ 	if($instance = @unserialize ( $serialized )){
     	self::$instance = $instance;
   	}
   }
@@ -389,8 +389,6 @@ class serverConf {
    * @return void
    */
   function postHeartBeat() {
-    return false;
-    /*
     $this->index = intval ( $this->index ) + 1;
     $heartBeatUrl = 'http://heartbeat.processmaker.com/syspmLicenseSrv/en/green/services/beat';
 
@@ -427,10 +425,10 @@ class serverConf {
     //To avoid SSL error
     curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
     curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-
+    
     curl_setopt ( $ch, CURLOPT_POST, 1 );
-    curl_setopt ( $ch, CURLOPT_POSTFIELDS, $params );    
-
+    curl_setopt ( $ch, CURLOPT_POSTFIELDS, $params );
+    
     //To avoid timeouts
     curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
     curl_setopt ( $ch, CURLOPT_TIMEOUT, 20 );
@@ -448,13 +446,13 @@ class serverConf {
       //Reset Errors
       $this->errors=array();
     } else {
-    	//Catch the error
+      //Catch the error
     	$this->errors[]=curl_getinfo($curl_session);
       $this->nextBeatDate = strtotime ( "+1 day" ); //retry in 30 mins
     }
 
     $this->saveSingleton ();
-    */
+
   }
   /**
    * Will reset all the logins' count
