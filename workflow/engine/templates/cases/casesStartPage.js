@@ -1,55 +1,22 @@
-var store2 = new Ext.data.ArrayStore( {
-	fields : [ 'month', 'hits' ],
-	data : generateData()
-});
-
-var store = new Ext.data.JsonStore( {
-	fields : [ 'caseStatus', 'total' ],
-	data : [ {
-		caseStatus : 'Inbox',
-		total : 150
-	}, {
-		caseStatus : 'Draft',
-		total : 245
-	}, {
-		caseStatus : 'Unassigned',
-		total : 117
-	} ]
-});
-function generateData() {
-	var data = [];
-	for ( var i = 0; i < 12; ++i) {
-		data.push( [ Date.monthNames[i],
-				(Math.floor(Math.random() * 11) + 1) * 100 ]);
-	}
-	return data;
-}
-
 var conn = new Ext.data.Connection();
-function getOtherDashboards(dashboardTabPanels) {
-	dashboardTabPanels.add( {
-		title : 'Pentaho',
-		id : 'pentaho',
-		autoLoad : {
-			url : '../../blank/pentahoreports/dashboard',
-			scripts : true
-		}
-	// disabled:true,
-			});
-}
 
-var reloadTree = function() {
-	console.log(Ext.getCmp('startCaseTreePanel'));
-	tree = Ext.getCmp('startCaseTreePanel');
-	tree.enable();
-	tree.getLoader().dataUrl = 'get-nodes2.php';
-	tree.getLoader().load(tree.root);
-};
 
-function getProcesses() {
+var caseStatusByProcess = new Ext.data.JsonStore({
+	fields : [ 'process','inbox', 'draft', 'unassigned' ],
+    root : 'caseStatusByProcess'
+});
 
-	// metaID = record.get("MetaID");
-	// grid.getGridEl().mask('Loading history...');
+var caseDelayed = new Ext.data.JsonStore({
+	fields : [ 'delayed','total' ],
+    root : 'caseDelayed'
+});
+
+// function that loads store when it is called
+function getDashboardData() {
+
+    var parameters = {       
+       action : 'getSimpleDashboardData'
+    }
 	conn.request( {
 		url : 'casesStartPage_Ajax.php',
 		method : 'POST',
@@ -60,18 +27,59 @@ function getProcesses() {
 			// showHistoryDialog(responseObject.responseText);
 		// grid.getGridEl().unmask(true);
 		// Ext.Msg.alert('Status', responseObject.responseText);
-		console.log(responseObject.responseText);
+		var responseData = Ext.decode(responseObject.responseText);		
+		// Load store from here
+        caseStatusByProcess.loadData(responseData);
+        caseDelayed.loadData(responseData);
 	},
 	failure : function() {
 		// grid.getGridEl().unmask(true);
 		Ext.Msg.alert('Status', 'Unable to get list of Process');
 	}
 	});
+   
 
 }
 
-function getDashboardItems() {
-	getProcesses();
+
+function getOtherDashboards(dashboardTabPanels) {
+
+	conn.request( {
+		url : 'casesStartPage_Ajax.php',
+		method : 'POST',
+		params : {
+			"action" : 'getRegisteredDashboards'
+		},
+		success : function(responseObject) {
+
+			var response = Ext.util.JSON.decode(responseObject.responseText);
+			for ( var i = 0; i < response.length; i++) {
+				tabInfo = response[i];
+				if (tabInfo.sName) {
+					dashboardTabPanels.add( {
+						title : tabInfo.sName,
+						id : tabInfo.sNamespace + "-" + tabInfo.sName,
+						iconCls : tabInfo.sIcon,// 'ICON_CASES_START_PAGE',
+						autoLoad : {
+							url : tabInfo.sPage,
+							scripts : true
+						}
+					// disabled:true,
+							});
+				}
+			}
+		},
+		failure : function() {
+			// grid.getGridEl().unmask(true);
+		Ext.Msg.alert('Status', 'Unable to get Dashboards');
+	}
+	});
+}
+
+
+
+function getDashboardItems() {	
+	
 
 	dashboardItems = [
 			{
@@ -187,7 +195,7 @@ function getDashboardItems() {
 
 			, {
 				xtype : 'window',
-				title : 'Graph 1',
+				title : 'Cases',
 				closable : true,
 				collapsible : true,
 				autoshow : true,
@@ -198,12 +206,13 @@ function getDashboardItems() {
 				hideBorders : true,
 				stateful : true,
 
+				x: 480,
 				y : 50,
 				items : {
-					store : store,
+					store : caseDelayed,
 					xtype : 'piechart',
 					dataField : 'total',
-					categoryField : 'caseStatus',
+					categoryField : 'delayed',
 					width : 250,
 					height : 250,
 					draggable : true,
@@ -223,69 +232,49 @@ function getDashboardItems() {
 
 				}
 			},
-
-			{
+			
+			 {
 				xtype : 'window',
-				title : 'Graph 1',
-				closable : true,
-				collapsible : true,
+				title : 'Status by Process',
+				closable : false,
+				collapsible : false,
 				autoshow : true,
 				expandOnShow : true,
 				hidden : false,
-				x : 0,
+				x:480,
+				y:330,
 				items : {
 					xtype : 'columnchart',
-					store : store2,
-					width : 350,
-					height : 250,
-					yField : 'hits',
-					xField : 'month',
+					store : caseStatusByProcess,
+					width : 450,
+					height : 400,
+					series : [{yField:'inbox',displayName:'Inbox'},{yField:'draft',displayName:'Draft'},{yField:'unassigned',displayName:'Unassigned'}],
+					xField : 'process',
 					draggable : true,
 					xAxis : new Ext.chart.CategoryAxis( {
-						title : 'Month'
+						// title : 'Case Status',
+						labelRenderer:  this.customFormat
+						 
 					}),
-					yAxis : new Ext.chart.NumericAxis( {
-						title : 'Hits'
-					}),
-					extraStyle : {
-						xAxis : {
-							labelRotation : -90
-						}
-					}
-				}
-			}
-
-			, {
-				xtype : 'window',
-				title : 'Graph 1',
-				closable : true,
-				collapsible : true,
-				autoshow : true,
-				expandOnShow : true,
-				hidden : false,
-				items : {
-					xtype : 'columnchart',
-					store : store,
-					width : 350,
-					height : 250,
-					yField : 'total',
-					xField : 'caseStatus',
-					draggable : true,
-					xAxis : new Ext.chart.CategoryAxis( {
-						title : 'Case Status'
-					}),
+					customFormat:function(value){  
+					    return 'Year: ';  
+					},
 					yAxis : new Ext.chart.NumericAxis( {
 						title : 'Total'
 					}),
 					extraStyle : {
 						xAxis : {
-							labelRotation : -90
-						}
+							labelRotation : -45,							
+						},
+					legend:{        
+				             display: 'right'  
+				         } 
 					}
 				}
 			}
 
 	];
+	getDashboardData();
 	return dashboardItems;
 }
 function getDefaultDashboard() {

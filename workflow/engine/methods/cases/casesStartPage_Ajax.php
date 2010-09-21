@@ -1,20 +1,20 @@
 <?php
 
-if (! isset ( $_POST ['action'] )) {
+if (! isset ( $_REQUEST ['action'] )) {
   $ruturn ['success'] = 'failure';
   $ruturn ['message'] = 'You may request an action';
   print json_encode ( $ruturn );
   die ();
 }
-if (! function_exists ( $_POST ['action'] )) {
+if (! function_exists ( $_REQUEST ['action'] )) {
   $ruturn ['success'] = 'failure';
   $ruturn ['message'] = 'The requested action doesn\'t exists';
   print json_encode ( $ruturn );
   die ();
 }
 
-$functionName = $_POST ['action'];
-$functionParams = isset ( $_POST ['params'] ) ? $_POST ['params'] : array ();
+$functionName = $_REQUEST ['action'];
+$functionParams = isset ( $_REQUEST ['params'] ) ? $_REQUEST ['params'] : array ();
 
 $functionName ( $functionParams );
 
@@ -37,10 +37,10 @@ function getProcessList() {
       ksort ( $processList [$key] );
     }
     
-    if (! isset ( $_POST ['node'] )) {
+    if (! isset ( $_REQUEST ['node'] )) {
       $node = 'root';
     } else {
-      $node = $_POST ['node'];
+      $node = $_REQUEST ['node'];
     }
     
     $processListTree = array ();
@@ -123,11 +123,11 @@ function startCase() {
   /* Process */
   try {
     $oCase = new Cases ( );
-    $aData = $oCase->startCase ( $_POST ['taskId'], $_SESSION ['USER_LOGGED'] );
+    $aData = $oCase->startCase ( $_REQUEST ['taskId'], $_SESSION ['USER_LOGGED'] );
     $_SESSION ['APPLICATION'] = $aData ['APPLICATION'];
     $_SESSION ['INDEX'] = $aData ['INDEX'];
     $_SESSION ['PROCESS'] = $aData ['PROCESS'];
-    $_SESSION ['TASK'] = $_POST ['taskId'];
+    $_SESSION ['TASK'] = $_REQUEST ['taskId'];
     $_SESSION ['STEP_POSITION'] = 0;
     
     $_SESSION ['CASES_REFRESH'] = true;
@@ -149,12 +149,10 @@ function startCase() {
   }
 }
 
-
-
 function getSimpleDashboardData() {
-G::LoadClass ( "BasePeer" );
-require_once ("classes/model/AppCacheView.php");  
-require_once 'classes/model/Process.php';
+  G::LoadClass ( "BasePeer" );
+  require_once ("classes/model/AppCacheView.php");
+  require_once 'classes/model/Process.php';
   $sUIDUserLogged = $_SESSION ['USER_LOGGED'];
   
   $Criteria = new Criteria ( 'workflow' );
@@ -177,41 +175,59 @@ require_once 'classes/model/Process.php';
   $Criteria->addSelectColumn ( AppCacheViewPeer::USR_UID );
   $Criteria->addSelectColumn ( AppCacheViewPeer::APP_THREAD_STATUS );
   
-  
-  
-  $Criteria->add ( AppCacheViewPeer::APP_STATUS, array("TO_DO","DRAFT"), CRITERIA::IN );
-  $Criteria->add ( AppCacheViewPeer::USR_UID, array($sUIDUserLogged,""), CRITERIA::IN );
+  $Criteria->add ( AppCacheViewPeer::APP_STATUS, array ("TO_DO", "DRAFT" ), CRITERIA::IN );
+  $Criteria->add ( AppCacheViewPeer::USR_UID, array ($sUIDUserLogged, "" ), CRITERIA::IN );
   
   $Criteria->add ( AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL );
   
   //$Criteria->add ( AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN' );
   
+
   $Criteria->add ( AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN' );
   
   //execute the query      
-  $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
-  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-  $oDataset->next();
+  $oDataset = AppCacheViewPeer::doSelectRS ( $Criteria );
+  $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+  $oDataset->next ();
   
   $oProcess = new Process ( );
   
-  $rows=array();
-  $processNames=array();
-  while($aRow = $oDataset->getRow()){
- // G::pr($aRow);
-  	if(!isset($processNames[$aRow ['PRO_UID']])){
-  		$aProcess = $oProcess->load ( $aRow ['PRO_UID'] );
-  		$processNames[$aRow ['PRO_UID']]=$aProcess ['PRO_TITLE'];
-  	}
-  	
-  	if($aRow['USR_UID']=="") $aRow['APP_STATUS'] = "UNASSIGNED";  	
-  	if(((in_array($aRow['APP_STATUS'],array("TO_DO","UNASSIGNED")))&&($aRow['APP_THREAD_STATUS']=="OPEN"))||($aRow['APP_STATUS']=="DRAFT")){
-  		$rows[$processNames[$aRow ['PRO_UID']]][$aRow['APP_STATUS']][$aRow['DEL_DELAYED']][]=$aRow['APP_UID'];
-  	}
-  	
-  	
-  	$oDataset->next();
+  $rows = array ();
+  $processNames = array ();
+  while ( $aRow = $oDataset->getRow () ) {
+    // G::pr($aRow);
+    if (! isset ( $processNames [$aRow ['PRO_UID']] )) {
+      $aProcess = $oProcess->load ( $aRow ['PRO_UID'] );
+      $processNames [$aRow ['PRO_UID']] = $aProcess ['PRO_TITLE'];
+    }
+    
+    if ($aRow ['USR_UID'] == "")
+      $aRow ['APP_STATUS'] = "UNASSIGNED";
+    if (((in_array ( $aRow ['APP_STATUS'], array ("TO_DO", "UNASSIGNED" ) )) && ($aRow ['APP_THREAD_STATUS'] == "OPEN")) || ($aRow ['APP_STATUS'] == "DRAFT")) {
+      $rows [$processNames [$aRow ['PRO_UID']]] [$aRow ['APP_STATUS']] [$aRow ['DEL_DELAYED']] [] = $aRow ['APP_UID'];
+      if(!isset($rows [$processNames [$aRow ['PRO_UID']]] [$aRow ['APP_STATUS']]['count'])) $rows [$processNames [$aRow ['PRO_UID']]] [$aRow ['APP_STATUS']]['count']=0;
+      $rows [$processNames [$aRow ['PRO_UID']]][$aRow ['APP_STATUS']]['count']++;
+    }
+    
+    $oDataset->next ();
   }
+  //Generate different groups of data for graphs
+  $rowsResponse=array();
+  $i=0;
+  foreach($rows as $processID => $processInfo){
+  	$i++;
+  	if($i<=10){
+  	$rowsResponse['caseStatusByProcess'][]=array('process'=>$processID,'inbox'=>isset($processInfo['TO_DO']['count'])?$processInfo['TO_DO']['count']:0,'draft'=>isset($processInfo['DRAFT']['count'])?$processInfo['DRAFT']['count']:0,'unassigned'=>isset($processInfo['UNASSIGNED']['count'])?$processInfo['UNASSIGNED']['count']:0);
+  	
+  	}
+  }
+  $rowsResponse['caseDelayed'][]=array('delayed'=>'On Time','total'=>100);
+  $rowsResponse['caseDelayed'][]=array('delayed'=>'Delayed','total'=>50);
   
-  print_r(json_encode($rows));
+  print_r ( json_encode ( $rowsResponse ) );
+}
+function getRegisteredDashboards() {
+  $oPluginRegistry = & PMPluginRegistry::getSingleton ();
+  $dashBoardPages = $oPluginRegistry->getDashboardPages ();
+  print_r ( json_encode ( $dashBoardPages ) );
 }
