@@ -401,7 +401,8 @@ class headPublisher {
       $cacheName = str_replace ( '/', '_', $filename );
       $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $cacheName . '.js';
       file_put_contents ( $cacheFilename, file_get_contents ( $jsFilename ) );
-    } else {
+    } 
+    else {
       $cacheName = md5 ( $mtime . $jsFilename );
       $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $cacheName . '.js';
       
