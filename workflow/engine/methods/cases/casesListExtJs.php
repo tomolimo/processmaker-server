@@ -1,44 +1,12 @@
 <?php
-
+  //get the action from GET or POST, default is todo
   $action   = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
 
   $oHeadPublisher   =& headPublisher::getSingleton();
-  $configurationFields = getAdditionalFields($action);
-  //die();
-  
   // oHeadPublisher->setExtSkin( 'xtheme-blue');
+
   // evaluates an action and the list that will be rendered
-  switch ( $action ) {
-  	case 'draft' :
-      $config = getDraft();
-    break;
-  	case 'participated' :
-      $config = getParticipated();
-    break;
-  	case 'unassigned' :
-      $config = getUnassigned();
-    break;
-  	case 'paused' :
-      $config = getPaused();
-    break;
-  	case 'completed' :
-      $config = getCompleted();
-    break;
-  	case 'cancelled' :
-      $config = getCancelled();
-    break;
-    case 'todo' :
-  	default : 
-  	  $action = 'todo';
-      $config = getToDo();
-    break;
-  }
-//  g::pr($configurationFields);
-  if (count($configurationFields)>1){
-    $config = $configurationFields;
-  }
-//  $config['caseColumns'] = array_merge( $config['caseColumns'], $configurationFields['caseColumns'] );
-//  $config['caseReaderFields'] = array_merge( $config['caseReaderFields'], $configurationFields['caseReaderFields'] );
+  $config = getAdditionalFields($action);
 
   $columns      = json_encode($config['caseColumns']);
   $readerFields = json_encode( $config['caseReaderFields']);
@@ -46,7 +14,7 @@
   $oHeadPublisher->assignNumber( 'pageSize',     20 ); //sending the page size
   $oHeadPublisher->assignNumber( 'columns',      $columns ); //sending the columns to display in grid
   $oHeadPublisher->assignNumber( 'readerFields', $readerFields ); //sending the fields to get from proxy
-  $oHeadPublisher->assign( 'action', $action ); //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'action',       $action ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'PMDateFormat', 'M d, Y' ); //sending the fields to get from proxy
 
   $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
@@ -83,24 +51,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
  
- // TEST test in daytop   
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-    
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop   
-
-
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );  
-    
-    
   }
   
   function getDraft() {
@@ -128,20 +79,6 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-
- // TEST test in daytop   
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-    
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop   
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
   }
@@ -173,20 +110,6 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
- // TEST test in daytop
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop
-
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
    }
   
@@ -215,22 +138,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
- // TEST test in daytop
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop
-
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
-
   }
 
   function getPaused() {
@@ -257,21 +165,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
- // TEST test in daytop
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
-
   }
 
   function getCompleted() {
@@ -302,21 +196,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
- // TEST test in daytop
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
-
   }
 
   function getCancelled() {
@@ -345,21 +225,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
 
- // TEST test in daytop
-    $caseColumns[] = array( 'header' =>'Screener',   'dataIndex' => 'NAME_OF_PHONE_SCREENER',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'lastname',   'dataIndex' => 'LAST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'firstname',   'dataIndex' => 'FIRST_NAME',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'age',   'dataIndex' => 'AGE',      'width' => 50 );
-    $caseColumns[] = array( 'header' =>'gender',   'dataIndex' => 'GENDER',      'width' => 50 );
-
-    $caseReaderFields[] = array( 'name' => 'NAME_OF_PHONE_SCREENER' );
-    $caseReaderFields[] = array( 'name' => 'LAST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'FIRST_NAME' );
-    $caseReaderFields[] = array( 'name' => 'AGE' );
-    $caseReaderFields[] = array( 'name' => 'GENDER' );
- // TEST test in daytop
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
-
   }
 
 function getAdditionalFields($action){
@@ -373,14 +239,39 @@ function getAdditionalFields($action){
   $confCasesList = $conf->loadObject('casesList',$action,'','','');
   if (count($confCasesList)>1){
     foreach($confCasesList['second']['data'] as $fieldData){
-      if ($fieldData['name']!='APP_UID'){
+      if ( $fieldData['fieldType']!='key' ) {
         $caseColumns[]      = array( 'header' => $fieldData['name'], 'dataIndex' => $fieldData['name'], 'width' => 100, 'align' => 'center' );
         $caseReaderFields[] = array( 'name'   => $fieldData['name'] );
       }
     }
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
-  } else {
-    return array ();
+  } 
+  else {
+    switch ( $action ) {
+    	case 'draft' :
+        $config = getDraft();
+      break;
+    	case 'participated' :
+        $config = getParticipated();
+      break;
+    	case 'unassigned' :
+        $config = getUnassigned();
+      break;
+    	case 'paused' :
+        $config = getPaused();
+      break;
+    	case 'completed' :
+        $config = getCompleted();
+      break;
+    	case 'cancelled' :
+        $config = getCancelled();
+      break;
+      case 'todo' :
+    	default : 
+    	  $action = 'todo';
+        $config = getToDo();
+      break;
+    }
+    return $config;
   }
 }
-

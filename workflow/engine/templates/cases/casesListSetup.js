@@ -6,7 +6,10 @@ Ext.onReady(function(){
   var pmFields = [
     {name: 'name', mapping : 'name'},
     {name: 'gridIndex', mapping : 'gridIndex'},
-    {name: 'fieldType', mapping : 'fieldType'}
+    {name: 'fieldType', mapping : 'fieldType'},
+    {name: 'label', mapping : 'label'},
+    {name: 'width', mapping : 'width'},
+    {name: 'align', mapping : 'align'}
   ];
 
   //Dropdown to select the PMTable
@@ -88,51 +91,98 @@ Ext.onReady(function(){
     autoSave   : false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
   
-  // Generic fields array to use in both store defs.
+  // fields array used in first grid
   var fields = [
     {name: 'name', mapping : 'name'},
     {name: 'gridIndex', mapping : 'gridIndex'},
     {name: 'fieldType', mapping : 'fieldType'}
   ];
 
+  // fields array used in second grid
+  var fieldsSecond = [
+    {name: 'name', mapping : 'name'},
+    {name: 'gridIndex', mapping : 'gridIndex'},
+    {name: 'fieldType', mapping : 'fieldType'},
+    {name: 'label', mapping : 'label'},
+    {name: 'width', mapping : 'width'},
+    {name: 'align', mapping : 'align'}
+  ];
+
   // Column Model shortcut array
   var cols = [
     {header: "#",          width: 25,  sortable: false, dataIndex: 'gridIndex', hidden: true},
     {header: "Field Name", width: 160, sortable: false, dataIndex: 'name'},
-    {header: "Field Type", width: 120,  sortable: false, dataIndex: 'fieldType'}
+    {header: "Field Type", width: 70,  sortable: false, dataIndex: 'fieldType'}
   ];
 
-  // declare the source Grid
-    var firstGrid = new Ext.grid.GridPanel({
-      enableDragDrop   : true,
-      width            : 300,
-      ddGroup          : 'secondGridDDGroup',
-      ddText           : '{0} selected field{1}',
-      store            : remotePmFieldsStore,
-      columns          : cols,
-      stripeRows       : true,
-      title            : 'Available Fields'
+  var labelTextField = new Ext.form.TextField ({
+    allowBlank: true,
+  });
+
+  var alignComboBox = new Ext.form.ComboBox ({
+    typeAhead: true,
+    triggerAction: 'all',
+  });
+
+  var widthTextField = new Ext.form.NumberField({
+    allowBlank: false,
+    allowNegative: false,
+    maxValue: 800,
+    minValue: 0
+  });
+
+  // Column Model shortcut array
+//  var colsSecond = [
+  var colsSecond = new Ext.grid.ColumnModel({
+        // specify any defaults for each column
+        defaults: {
+            sortable: false // columns are not sortable by default           
+        },
+        columns: [
+    {header: "#",          width: 25,  dataIndex: 'gridIndex', hidden: true},
+    {header: "Field Name", width: 160, dataIndex: 'name'},
+    {header: "Field Type", width: 70,  dataIndex: 'fieldType'},
+    {header: "Label",      width: 160, dataIndex: 'label',  editor: labelTextField },
+    {header: "Width",      width: 40,  dataIndex: 'width',  editor: new Ext.form.NumberField({
+    allowBlank: false,
+    allowNegative: false,
+    maxValue: 800,
+    minValue: 0
+  })},
+    {header: "Align",      width: 60,  dataIndex: 'align',  editor: alignComboBox},
+  ]
     });
+  
+  // declare the source Grid
+  var firstGrid = new Ext.grid.GridPanel({
+    enableDragDrop   : true,
+    width            : 240,
+    ddGroup          : 'secondGridDDGroup',
+    ddText           : '{0} selected field{1}',
+    store            : remotePmFieldsStore,
+    columns          : cols,
+    stripeRows       : true,
+    title            : 'Available Fields'
+  });
 
   var secondGridStore = new Ext.data.JsonStore({
     root            : 'data',
     totalProperty   : 'totalCount',
-    fields          : fields,
+    fields          : fieldsSecond,
     remoteSort      : false, 
     successProperty : 'success'
   });
   
   // create the destination Grid
-  var secondGrid = new Ext.grid.GridPanel({
+  var secondGrid = new Ext.grid.EditorGridPanel({
       enableDragDrop   : true,
       ddGroup          : 'firstGridDDGroup',
       store            : secondGridStore,
-      columns          : cols,
+      //columns          : colsSecond,
+      clicksToEdit: 1,
+      cm          : colsSecond,
       stripeRows       : true,
       title            : 'Case List Fields'
-      /*listener         : {
-        ''
-      }*/
   });
 
   var tbar = new Ext.Toolbar({
@@ -236,7 +286,7 @@ Ext.onReady(function(){
   var mainPanel = new Ext.Panel({
     title        : '',
     renderTo     : 'alt-panel',
-    width        : 650,
+    width        : 750,
     height       : 460,
     layout       : 'hbox',
     layoutConfig : {align : 'stretch'},
@@ -264,7 +314,7 @@ Ext.onReady(function(){
 var tabs = new Ext.TabPanel({
 	renderTo       : 'panel',
 	activeTab      : 0,
-  width          : 650,
+  width          : 750,
 //  height         : 10,
 	//deferredRender : false,
 	//autoTabs       : true,

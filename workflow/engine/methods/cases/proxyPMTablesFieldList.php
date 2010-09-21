@@ -267,20 +267,27 @@
         
     
     //get complete domain of fields, if there is a pmtable, get all values from that pmtable.
+    $defaults = getDefaultFields ( $action );
     
     //normalize tables, before work with them
     $i = 0;
     foreach ( $first as $key => $val ) {
-    	$fieldType = 'case field';
-    	if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) $fieldType = 'key';
+    	$fieldType = 'PM Table';
+    	foreach ( $defaults as $defkey => $defval ) {
+    		if ( $defval['name'] == $val ) $fieldType = $defval['fieldType'];
+    	}
+    	//if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) $fieldType = 'key';
     	$newFirst[$i] = array ( 'name' => $val, 'gridIndex' => $i, 'fieldType' => $fieldType );
     	$i++;
     }
     $i = 0;
     foreach ( $second as $key => $val ) {
-    	$fieldType = 'case field';
-    	if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) $fieldType = 'key';
-    	$newSecond[$i] = array ( 'name' => $val, 'gridIndex' => $i, 'fieldType' => $fieldType );
+    	$fieldType = 'PM Table';
+    	foreach ( $defaults as $defkey => $defval ) {
+    		if ( $defval['name'] == $val ) $fieldType = $defval['fieldType'];
+    	}
+    	//if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) $fieldType = 'key';
+    	$newSecond[$i] = array ( 'name' => $val, 'gridIndex' => $i, 'fieldType' => $fieldType, 'align' => 'left', 'label' => $val, 'width' => 90 );
     	$i++;
     }
     
