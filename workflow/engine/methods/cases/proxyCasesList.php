@@ -16,7 +16,10 @@
   require_once ( "classes/model/AppCacheView.php" );
   require_once ( "classes/model/AppDelegation.php" );
   require_once ( "classes/model/AppDelay.php" );
-  
+  G::LoadClass ( "BasePeer" );
+  G::LoadClass ( 'configuration' );
+  require_once ( "classes/model/Fields.php" );
+
   $sUIDUserLogged = $_SESSION['USER_LOGGED'];
 
   switch ( $action ) {
@@ -24,7 +27,7 @@
          $Criteria = getToDo(); 
          break;
   	case 'draft' :
-         $Criteria = getDraft(); 
+         $Criteria = getDraft();
          break;
   	case 'participated' :
          $Criteria = getParticipated();
@@ -127,8 +130,10 @@
     $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
     $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
     $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
+//    $Criteria = addPMFieldsToCriteria('todo',$Criteria);
 //JUST TO TEST DAYTOP
 /*
+ *
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
     $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
@@ -144,45 +149,19 @@
     $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
     $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-
+//    g::pr($Criteria);
     return $Criteria;
   }
   
   function getDraft() {
   	global $sUIDUserLogged ;
     $Criteria = new Criteria('workflow');
-  
     $Criteria->clearSelectColumns ( );
-    
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
-    
-//JUST TO TEST DAYTOP
-/*
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
+
+    $Criteria = addPMFieldsToCriteria('draft');
         
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
-
     $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
 
@@ -381,6 +360,66 @@
     $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
     return $Criteria;
   }
+
+function addPMFieldsToCriteria($action){
+  $caseColumns = array();
+  $caseReaderFields = array();
+  $oCriteria  = new Criteria('workflow');
+  $oCriteria->clearSelectColumns ( );
+  // default configuration fields array
+  $defaultFields = array (
+                  'APP_UID',
+                  'DEL_INDEX',
+                  'APP_NUMBER',
+                  'APP_STATUS',
+                  'USR_UID',
+                  'PREVIOUS_USR_UID',
+                  'TAS_UID',
+                  'PRO_UID',
+                  'DEL_DELEGATE_DATE',
+                  'DEL_INIT_DATE',
+                  'DEL_TASK_DUE_DATE',
+                  'DEL_FINISH_DATE',
+                  'DEL_THREAD_STATUS',
+                  'APP_THREAD_STATUS',
+                  'APP_TITLE',
+                  'APP_PRO_TITLE',
+                  'APP_TAS_TITLE',
+                  'APP_CURRENT_USER',
+                  'APP_DEL_PREVIOUS_USER',
+                  'DEL_PRIORITY',
+                  'DEL_DURATION',
+                  'DEL_QUEUE_DURATION',
+                  'DEL_DELAY_DURATION',
+                  'DEL_STARTED',
+                  'DEL_FINISHED',
+                  'DEL_DELAYED',
+                  'APP_CREATE_DATE',
+                  'APP_FINISH_DATE',
+                  'APP_UPDATE_DATE',
+                  'APP_OVERDUE_PERCENTAGE'
+                );
+  
+  $conf = new Configurations();
+  $confCasesList = $conf->loadObject('casesList',$action,'','','');
+  if (count($confCasesList)>1){
+  $tableName = 'JUDGEMENT';
+    foreach($confCasesList['second']['data'] as $fieldData){
+      if (!in_array($fieldData['name'],$defaultFields)){
+        $fieldName = $tableName.'.'.$fieldData['name'];
+        $oCriteria->addSelectColumn (  $fieldName );
+      } else {
+        $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
+        $oCriteria->addSelectColumn (  $fieldName );
+      }
+    }
+    $oCriteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
+    return $oCriteria;
+  } else {
+    return $oCriteria;
+  }
+}
+
 /**
   function getCancelled(){
    	global $sUIDUserLogged ;

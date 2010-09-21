@@ -20,7 +20,7 @@
     switch ( $xaction ) {
       case 'read'         : xActionRead(); break;
       case 'applyChanges' : xActionApplyChanges(); break;
-      case 'getFieldsFromPMTable' : xgetFieldsFromPMTable(); break;
+      case 'getFieldsFromPMTable' : xgetFieldsFromPMTable($tabUid); break;
       case 'create'       : xActionCreate(); break;
     }
     die;
@@ -291,16 +291,41 @@
     die;
   }
   
-  function xgetFieldsFromPMTable() {
+  function xgetFieldsFromPMTable( $tabUid ) {
     $rows = array();
-    $rows[] = array ( 'name' => 'val 1', 'gridIndex' => '21', 'fieldType' => 'PM Table' );
-    $rows[] = array ( 'name' => 'val 2', 'gridIndex' => '22', 'fieldType' => 'PM Table' );
-    $rows[] = array ( 'name' => 'val 3', 'gridIndex' => '23', 'fieldType' => 'PM Table' );
+    $result = array();
+//    $rows[] = array ( 'name' => 'val 1', 'gridIndex' => '21', 'fieldType' => 'PM Table' );
+//    $rows[] = array ( 'name' => 'val 2', 'gridIndex' => '22', 'fieldType' => 'PM Table' );
+//    $rows[] = array ( 'name' => 'val 3', 'gridIndex' => '23', 'fieldType' => 'PM Table' );
   	
     //$result['success']    = true;
     //$result['totalCount']  =  count($rows);
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->clearSelectColumns ( );
+    $oCriteria->setDistinct();
+    $oCriteria->addSelectColumn ( FieldsPeer::FLD_NAME );
+    $oCriteria->addSelectColumn ( FieldsPeer::FLD_UID );
+    $oCriteria->addSelectColumn ( FieldsPeer::FLD_INDEX );
+
+    $oCriteria->add (FieldsPeer::ADD_TAB_UID, $tabUid , CRITERIA::EQUAL );
+    $oCriteria->add (FieldsPeer::FLD_NAME, 'APP_UID' , CRITERIA::NOT_EQUAL );
+    $oCriteria->addDescendingOrderByColumn('FLD_INDEX');
+
+    $oDataset = FieldsPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $index =  count($rows);
+
+    while($aRow = $oDataset->getRow()){
+      $aRow['index'] = ++$index;
+      $aTempRow['name'] = $aRow['FLD_NAME'];
+      $aTempRow['gridIndex'] = $aRow['index'];
+      $aTempRow['fieldType'] = 'PM Table';
+      $rows[] = $aTempRow;
+      $oDataset->next();
+    }
+
     $result['data']    = $rows;
-    
     print json_encode( $result ) ;
     die;
   }

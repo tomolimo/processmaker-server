@@ -2,11 +2,15 @@
 
   $action   = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
 
-  $oHeadPublisher =& headPublisher::getSingleton();
-  //$oHeadPublisher->setExtSkin( 'xtheme-blue');
+  $oHeadPublisher   =& headPublisher::getSingleton();
+  $configurationFields = getAdditionalFields($action);
+  //die();
+  
+  // oHeadPublisher->setExtSkin( 'xtheme-blue');
+  // evaluates an action and the list that will be rendered
   switch ( $action ) {
   	case 'draft' :
-      $config = getDraft(); 
+      $config = getDraft();
     break;
   	case 'participated' :
       $config = getParticipated();
@@ -25,10 +29,16 @@
     break;
     case 'todo' :
   	default : 
-  	     $action = 'todo';
-         $config = getToDo(); 
-         break;
+  	  $action = 'todo';
+      $config = getToDo();
+    break;
   }
+//  g::pr($configurationFields);
+  if (count($configurationFields)>1){
+    $config = $configurationFields;
+  }
+//  $config['caseColumns'] = array_merge( $config['caseColumns'], $configurationFields['caseColumns'] );
+//  $config['caseReaderFields'] = array_merge( $config['caseReaderFields'], $configurationFields['caseReaderFields'] );
 
   $columns      = json_encode($config['caseColumns']);
   $readerFields = json_encode( $config['caseReaderFields']);
@@ -351,4 +361,26 @@
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
 
   }
+
+function getAdditionalFields($action){
+  $caseColumns = array();
+  $caseReaderFields = array();
+  G::LoadClass ( "BasePeer" );
+  G::LoadClass ( 'configuration' );
+  require_once ( "classes/model/Fields.php" );
+
+  $conf = new Configurations();
+  $confCasesList = $conf->loadObject('casesList',$action,'','','');
+  if (count($confCasesList)>1){
+    foreach($confCasesList['second']['data'] as $fieldData){
+      if ($fieldData['name']!='APP_UID'){
+        $caseColumns[]      = array( 'header' => $fieldData['name'], 'dataIndex' => $fieldData['name'], 'width' => 100, 'align' => 'center' );
+        $caseReaderFields[] = array( 'name'   => $fieldData['name'] );
+      }
+    }
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
+  } else {
+    return array ();
+  }
+}
 
