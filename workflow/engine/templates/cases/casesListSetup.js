@@ -169,8 +169,10 @@ Ext.onReady(function(){
         text    : 'Reset both grids',
         handler : function() {
           //refresh source grid
-          firstGridStore.loadData(myData);
-
+          var tableUid  =  pmTablesDropdown.value;
+          // alert (tableUid);
+          remotePmFieldsStore.setBaseParam( 'tab', tableUid);
+          remotePmFieldsStore.load({params:{tab: tableUid}});
           //purge destination grid
           secondGridStore.removeAll();
         }
