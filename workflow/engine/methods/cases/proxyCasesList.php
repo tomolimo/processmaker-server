@@ -15,6 +15,7 @@
   G::LoadClass("BasePeer" );
   require_once ( "classes/model/AppCacheView.php" );
   require_once ( "classes/model/AppDelegation.php" );
+  require_once ( "classes/model/AdditionalTables.php" );
   require_once ( "classes/model/AppDelay.php" );
   G::LoadClass ( "BasePeer" );
   G::LoadClass ( 'configuration' );
@@ -403,7 +404,9 @@ function addPMFieldsToCriteria($action){
   $conf = new Configurations();
   $confCasesList = $conf->loadObject('casesList',$action,'','','');
   if (count($confCasesList)>1){
-  $tableName = 'JUDGEMENT';
+  // getting the table name
+  $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
+  $tableName = $oAdditionalTables->getAddTabName();
     foreach($confCasesList['second']['data'] as $fieldData){
       if (!in_array($fieldData['name'],$defaultFields)){
         $fieldName = $tableName.'.'.$fieldData['name'];
