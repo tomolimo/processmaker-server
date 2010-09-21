@@ -52,6 +52,7 @@ class AppDelegation extends BaseAppDelegation {
    * @return delegation index of the application delegation.
    */
   function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess=false ) {
+
     if (!isset($sProUid) || strlen($sProUid) == 0 ) {
       throw ( new Exception ( 'Column "PRO_UID" cannot be null.' ) );
     }
@@ -74,6 +75,7 @@ class AppDelegation extends BaseAppDelegation {
     $c = new Criteria ();
     $c->clearSelectColumns();
     $c->addSelectColumn ( 'MAX(' . AppDelegationPeer::DEL_INDEX . ') ' );
+    $c->addSelectColumn ( AppDelegationPeer::DEL_STARTED );
     $c->add ( AppDelegationPeer::APP_UID, $sAppUid );
     $rs = AppDelegationPeer::doSelectRS ( $c );
     $rs->next();
@@ -98,8 +100,8 @@ class AppDelegation extends BaseAppDelegation {
     $this->setDelData  ( $delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
 
     // this condition assures that an internal delegation like a subprocess dont have an initial date setted
-    if ( $delIndex == 1 && !$isSubprocess )  //the first delegation, init date this should be now for draft applications, in other cases, should be null.
-      $this->setDelInitDate ('now');
+    if ( $delIndex == 1 &&  !$isSubprocess )  //the first delegation, init date this should be now for draft applications, in other cases, should be null.
+      $this->setDelInitDate     ('now' );
     
 
     if ($this->validate() ) {
