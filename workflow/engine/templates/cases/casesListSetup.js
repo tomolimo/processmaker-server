@@ -120,8 +120,20 @@ Ext.onReady(function(){
   });
 
   var alignComboBox = new Ext.form.ComboBox ({
-    typeAhead: true,
+    editable : false,
     triggerAction: 'all',
+    lazyRender:true,
+    mode: 'local',
+    store: new Ext.data.ArrayStore({
+        id: 0,
+        fields: [
+            'id',
+            'label'
+        ],
+        data: [['left', 'left'], ['center', 'center'], ['right', 'right']]
+    }),
+    valueField: 'id',
+    displayField: 'label'
   });
 
   var widthTextField = new Ext.form.NumberField({
@@ -139,18 +151,13 @@ Ext.onReady(function(){
             sortable: false // columns are not sortable by default           
         },
         columns: [
-    {header: "#",          width: 25,  dataIndex: 'gridIndex', hidden: true},
-    {header: "Field Name", width: 160, dataIndex: 'name'},
-    {header: "Field Type", width: 70,  dataIndex: 'fieldType'},
-    {header: "Label",      width: 160, dataIndex: 'label',  editor: labelTextField },
-    {header: "Width",      width: 40,  dataIndex: 'width',  editor: new Ext.form.NumberField({
-    allowBlank: false,
-    allowNegative: false,
-    maxValue: 800,
-    minValue: 0
-  })},
-    {header: "Align",      width: 60,  dataIndex: 'align',  editor: alignComboBox},
-  ]
+          {header: "#",          width: 25,  dataIndex: 'gridIndex', hidden: true},
+          {header: "Field Name", width: 160, dataIndex: 'name'},
+          {header: "Field Type", width: 70,  dataIndex: 'fieldType'},
+          {header: "Label",      width: 160, dataIndex: 'label',  editor: labelTextField },
+          {header: "Width",      width: 40,  dataIndex: 'width',  editor: widthTextField },
+          {header: "Align",      width: 60,  dataIndex: 'align',  editor: alignComboBox},
+        ]
     });
   
   // declare the source Grid
@@ -177,9 +184,10 @@ Ext.onReady(function(){
   var secondGrid = new Ext.grid.EditorGridPanel({
       enableDragDrop   : true,
       ddGroup          : 'firstGridDDGroup',
+      selModel         : new Ext.grid.RowSelectionModel({singleSelect:true}),
       store            : secondGridStore,
       //columns          : colsSecond,
-      clicksToEdit: 1,
+      clicksToEdit: 2,
       cm          : colsSecond,
       stripeRows       : true,
       title            : 'Case List Fields'
@@ -199,8 +207,9 @@ Ext.onReady(function(){
         var dataResponse = Ext.util.JSON.decode(response.responseText);
         remotePmFieldsStore.loadData(dataResponse.first);
         secondGridStore.loadData(dataResponse.second);
-        
-        pmTablesDropdown.setValue(dataResponse.PMTable);
+        //remove APP_UID and DEL_INDEX from second grid, this is only to avoid display in this grid
+        if ( secondGrid.store.data.items[1].data['name'] == 'DEL_INDEX' ) secondGrid.store.removeAt(1); //del_index
+        if ( secondGrid.store.data.items[0].data['name'] == 'APP_UID'   ) secondGrid.store.removeAt(0); //app_uid
       },
       failure: function(){},
       params: {xaction: 'read', action: action}
@@ -216,7 +225,8 @@ Ext.onReady(function(){
     var rs = secondGrid.store.data.items;
     var sv = [];
     for(var i = 0; i <= rs.length-1; i++){
-      sv[i]= rs[i].data['name'];
+      //sv[i]= rs[i].data['name'];
+      sv[i]= rs[i].data;
     }
 
     Ext.Ajax.request({
@@ -225,6 +235,9 @@ Ext.onReady(function(){
         var dataResponse = Ext.util.JSON.decode(response.responseText);
         remotePmFieldsStore.loadData(dataResponse.first);
         secondGridStore.loadData(dataResponse.second);
+        //remove APP_UID and DEL_INDEX from second grid, this is only to avoid display in this grid
+        if ( secondGrid.store.data.items[1].data['name'] == 'DEL_INDEX' ) secondGrid.store.removeAt(1); //del_index
+        if ( secondGrid.store.data.items[0].data['name'] == 'APP_UID'   ) secondGrid.store.removeAt(0); //app_uid
 
         Ext.Msg.alert( 'info', 'saved' );
       },

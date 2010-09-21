@@ -126,14 +126,6 @@
   * @return $response a json string
   */
   function genericJsonResponse($pmtable, $first, $second) {
-/*
-  	//normalize first array
-    foreach ( $first as $key => $val) {
-    	if ( count($first) == 1 ) {
-    		$first[ $key ] = array ( 'name' => $val, 'fieldType' => 'case field', 'gridIndex' => $key );
-    	}
-    };
-*/
     $firstGrid['totalCount']  = count($first);
     $firstGrid['data']        = $first;
     $secondGrid['totalCount'] = count($second);
@@ -165,7 +157,7 @@
     global $confCasesList;
 
     if ( is_array($confCasesList) ) {
-      $validConfig = ( /* isset($confCasesList['PMTable']) && */ isset($confCasesList['first']) && isset($confCasesList['second']) );
+      $validConfig = ( isset($confCasesList['first']) && isset($confCasesList['second']) );
     }
     else
       $validConfig = false;
@@ -180,67 +172,6 @@
       print json_encode( $confCasesList ) ;
     }
     die;
-    
-    $oCriteria = new Criteria('workflow');
-
-    $oCriteria->clearSelectColumns ( );
-    $oCriteria->setDistinct();
-    $oCriteria->addSelectColumn ( FieldsPeer::FLD_NAME );
-    $oCriteria->addSelectColumn ( FieldsPeer::FLD_UID );
-    $oCriteria->addSelectColumn ( FieldsPeer::FLD_INDEX );
-
-
-    if ( $query != '' ) {
-      $oCriteria->add (FieldsPeer::FLD_NAME, $query . '%', Criteria::LIKE);
-    }
-    $oCriteria->add (FieldsPeer::ADD_TAB_UID, $tabUid , CRITERIA::EQUAL );
-    $oCriteria->add (FieldsPeer::FLD_NAME, 'APP_UID' , CRITERIA::NOT_EQUAL );
-
-    if ( $sort != '' ) {
-      if ( $dir == 'DESC' )
-        $oCriteria->addDescendingOrderByColumn( $sort );
-      else
-        $oCriteria->addAscendingOrderByColumn( $sort );
-    } 
-    else {
-      $oCriteria->addDescendingOrderByColumn('FLD_INDEX');
-    }
-    $oDataset = FieldsPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-
-    $result = array();
-
-
-    $index =  count($rows);
-
-    while($aRow = $oDataset->getRow()){
-      $aRow['index'] = ++$index;
-      $aTempRow['name'] = $aRow['FLD_NAME'];
-      $aTempRow['gridIndex'] = $aRow['index'];
-      $aTempRow['fieldType'] = 'field from PM Table';
-      $rows[] = $aTempRow;
-      $oDataset->next();
-    }
-    
-    $firstGrid['totalCount'] = count($rows);
-    $firstGrid['data']       = $rows;
-    $firstGrid['secondGrid'] = $rows;
-
-    $rows = array();
-    $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'fieldType' => 'key' );
-    $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '1', 'fieldType' => 'key' );
-  
-    $secondGrid['totalCount'] = count($rows);
-    $secondGrid['data']       = $rows;
-    $secondGrid['secondGrid'] = $rows;
-    
-    $result['first']  = $firstGrid;
-    $result['second'] = $secondGrid;
-    
-    
-    print json_encode( $result ) ;
-    die;
   }
 
   function xActionApplyChanges() {
@@ -251,43 +182,58 @@
     $first   = json_decode(isset($_POST['first'])    ? $_POST['first']   : json_encode(array()));
     $second  = json_decode(isset($_POST['second'])   ? $_POST['second']  : json_encode(array()));
     $pmtable = isset($_POST['pmtable'])  ? $_POST['pmtable'] : '';
-    
     //now apply validations
     //remove app_uid and del_index from both arrays
     foreach ( $first as $key => $val ) {
     	if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) unset ( $first[$key] );
     }
     foreach ( $second as $key => $val ) {
-    	if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) unset ( $second[$key] );
+    	if ( $val->name == 'APP_UID' || $val->name == 'DEL_INDEX' ) unset ( $second[$key] );
     }
 
     //adding the key fields to second array //put APP_UID and DEL_INDEX like first fields
-    array_unshift ($second, 'DEL_INDEX' );    
-    array_unshift ($second, 'APP_UID' );    
-        
+    $appUid = new stdClass();
+    $appUid->name = 'APP_UID';
+    $appUid->gridIndex = 0;
+    $appUid->label = '';
+    $appUid->align = '';
+    $appUid->width = 1;
+
+    $delIndex = new stdClass();
+    $delIndex->name = 'DEL_INDEX';
+    $delIndex->gridIndex = 0;
+    $delIndex->label = '';
+    $delIndex->align = '';
+    $delIndex->width = 1;
+
+    array_unshift ($second, $delIndex );    
+    array_unshift ($second, $appUid );    
     
     //get complete domain of fields, if there is a pmtable, get all values from that pmtable.
     $defaults = getDefaultFields ( $action );
     
     //normalize tables, before work with them
     $i = 0;
+    $newFirst = array();
     foreach ( $first as $key => $val ) {
     	$fieldType = 'PM Table';
     	foreach ( $defaults as $defkey => $defval ) {
     		if ( $defval['name'] == $val ) $fieldType = $defval['fieldType'];
     	}
-    	//if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) $fieldType = 'key';
     	$newFirst[$i] = array ( 'name' => $val, 'gridIndex' => $i, 'fieldType' => $fieldType );
     	$i++;
     }
     $i = 0;
     foreach ( $second as $key => $val ) {
     	$fieldType = 'PM Table';
+    	$fieldName = $val->name;
+    	$fieldLabel = $val->label;
+    	$fieldAlign = isset($val->align) && strlen(trim($val->align)) > 1 ? $val->align : 'left';
+    	$fieldWidth = isset($val->width) && strlen(trim($val->width)) > 1 ? $val->width : 100;
     	foreach ( $defaults as $defkey => $defval ) {
-    		if ( $defval['name'] == $val ) $fieldType = $defval['fieldType'];
+    		if ( $defval['name'] == $fieldName ) $fieldType = $defval['fieldType'];
     	}
-    	//if ( $val == 'APP_UID' || $val == 'DEL_INDEX' ) $fieldType = 'key';
-    	$newSecond[$i] = array ( 'name' => $val, 'gridIndex' => $i, 'fieldType' => $fieldType, 'align' => 'left', 'label' => $val, 'width' => 90 );
+    	$newSecond[$i] = array ( 'name' => $fieldName, 'gridIndex' => $i, 'fieldType' => $fieldType, 'align' => $fieldAlign, 'label' => $fieldLabel, 'width' => $fieldWidth);
     	$i++;
     }
     
