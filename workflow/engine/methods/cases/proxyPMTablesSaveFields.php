@@ -1,11 +1,17 @@
 <?php
+
+/**
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
   $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
   $dir      = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
   $sort     = isset($_POST['sort'])   ? $_POST['sort']   : '';
   $query    = isset($_POST['query'])  ? $_POST['query']  : '';
   $tabUid   = isset($_POST['table'])  ? $_POST['table']  : '';
   $action   = isset($_POST['action']) ? $_POST['action'] : 'todo';
-  
+
   try {
     G::LoadClass("BasePeer" );
     require_once ( "classes/model/Fields.php" );
@@ -98,7 +104,7 @@
         $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '6', 'column2' => '6' );
 //        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
         break;
-    	case 'paused' : 
+    	case 'paused' :
         $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
         $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
 //        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
@@ -111,7 +117,7 @@
 //        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
 //        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
         break;
-    	case 'completed' : 
+    	case 'completed' :
         $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
         $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
 //        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
@@ -124,7 +130,7 @@
         $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '6', 'column2' => '6' );
 //        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
         break;
-    	case 'cancelled' : 
+    	case 'cancelled' :
         $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
         $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
 //        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );

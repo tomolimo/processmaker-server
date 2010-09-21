@@ -1,9 +1,5 @@
 Ext.onReady(function(){
 
-  var myData = {
-    records : availableFields
-  };
-
   // defining the remote proxies for each case
   var remoteTableProxy = new Ext.data.HttpProxy({
      url : 'proxyPMTablesList'
@@ -25,7 +21,7 @@ Ext.onReady(function(){
      remoteSort      : true,
      autoLoad        : false,
      fields          : [
-       'ADD_TAB_UID','ADD_TAB_NAME'
+       'ADD_TAB_UID', 'ADD_TAB_NAME'
      ]
   });
   remotePmTableStore.setDefaultSort('ADD_TAB_NAME', 'asc');
@@ -99,7 +95,7 @@ Ext.onReady(function(){
         remotePmFieldsStore.setBaseParam( 'table', tableUid);
         remotePmFieldsStore.load();
 //        remotePmFieldsStore.load({params:{table: tableUid}});
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }
   }
@@ -110,14 +106,6 @@ Ext.onReady(function(){
     {name: 'gridIndex', mapping : 'gridIndex'},
     {name: 'column2', mapping : 'column2'}
   ];
-
-  // create the data store
-  var firstGridStore = new Ext.data.JsonStore({
-    fields : fields,
-    data   : myData,
-    root   : 'records'
-  });
- 
 
   // Column Model shortcut array
   var cols = [
@@ -138,55 +126,65 @@ Ext.onReady(function(){
       title            : 'Available Fields'
     });
 
+  var savingFieldsProxy = new Ext.data.HttpProxy({
+    api : {
+      read    : 'proxyPMTablesSaveFields?action=read',
+      create  : 'proxyPMTablesSaveFields?action=create',
+      update  : 'proxyPMTablesSaveFields?action=update',
+      destroy : 'proxyPMTablesSaveFields?action=destroy'
+    }
+  });
 /*
     remotePmFieldsStore.setBaseParam( 'action', 'todo');
     remotePmFieldsStore.load();
-*/    
-    var secondGridStore = new Ext.data.JsonStore({
-      fields : fields,
-      root   : 'records'
-    });
+*/
+  /*var savingPmFieldsReader = new Ext.data.JsonReader({
+    totalProperty : 'totalCount',
+    idProperty    : 'index',
+    root          : 'data'
+    }, pmFields
+  );*/
 
-    // create the destination Grid
-    var secondGrid = new Ext.grid.GridPanel({
-        enableDragDrop   : true,
-        ddGroup          : 'firstGridDDGroup',
-        store            : secondGridStore,
-        columns          : cols,
-        stripeRows       : true,
-        title            : 'Case List Fields'
-    });
+  // The new DataWriter component.
+  // currently we are not using this , but it is here just for complete definition
+  var savingPmFieldsWriter = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true
+  });
 
-/*
-    var firstDraftGrid = new Ext.grid.GridPanel({
+  var savingFieldsStore = new Ext.data.JsonStore({
+    root            : 'data',
+    totalProperty   : 'totalCount',
+    fields          : fields,
+    remoteSort      : true,
+    proxy           : savingFieldsProxy,
+    //reader        : savingPmFieldsReader,
+    writer          : savingPmFieldsWriter,  // <-- plug a DataWriter into the store just as you would a Reader
+    //storeId         : 'ourRemoteStore',
+
+    successProperty : 'success'
+  });
+
+  var secondGridStore = new Ext.data.JsonStore({
+      fields     : fields,
+      proxy      : savingFieldsProxy,
+      //reader     : savingPmFieldsReader,
+      writer     : savingPmFieldsWriter,
+      root       : 'data'
+  });
+  // create the destination Grid
+  var secondGrid = new Ext.grid.GridPanel({
       enableDragDrop   : true,
-      //ddGroup          : 'secondGridDDGroup',
-      //ddText           : '{0} selected field{1}',
-      store            : remotePmFieldsStore,
+      ddGroup          : 'firstGridDDGroup',
+      store            : savingFieldsStore,
       columns          : cols,
       stripeRows       : true,
-      title            : 'Available Fields'
-    });
-    remotePmFieldsStore.load();
+      title            : 'Case List Fields'
+      /*listener         : {
+        ''
+      }*/
+  });
 
-    var secondDraftGridStore = new Ext.data.JsonStore({
-      fields : [
-        {name: 'name', mapping : 'name'},
-        {name: 'gridIndex', mapping : 'gridIndex'},
-        {name: 'column2', mapping : 'column2'}
-      ],
-      root   : 'records'
-    });
-
-    var secondDraftGrid = new Ext.grid.GridPanel({
-        enableDragDrop   : true,
-        //ddGroup          : 'firstGridDDGroup',
-        store            : secondDraftGridStore,
-        columns          : cols,
-        stripeRows       : true,
-        title            : 'Case List Fields'
-    });
-*/
   var tbar = new Ext.Toolbar({
     items: [pmTablesDropdown]
   });
@@ -198,7 +196,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'todo');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -208,7 +206,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'draft');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -218,7 +216,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'sent');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -228,7 +226,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'unassigned');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -238,7 +236,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'paused');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -248,7 +246,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'completed');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -258,7 +256,7 @@ Ext.onReady(function(){
     listeners: {'activate': function() {
         remotePmFieldsStore.setBaseParam( 'action', 'cancelled');
         remotePmFieldsStore.load();
-        secondGridStore.removeAll();
+        savingFieldsStore.removeAll();
       }
     }  
   });
@@ -278,9 +276,18 @@ Ext.onReady(function(){
       secondGrid
     ],
     bbar         : [
+      '->',
       {
         text    : 'Reset both grids'
+      },
+      {
+        text    : 'Save',
+        handler: function(){
+          //Ext.Msg.alert('Saving Data...');
+          savingFieldsStore.commitChanges();
+        }
       }]
+
   });
 
 var tabs = new Ext.TabPanel({
@@ -298,7 +305,7 @@ var tabs = new Ext.TabPanel({
     pausedPanel,
     completedPanel,
     cancelledPanel
-	],
+	]
 });
 
 // used to add records to the destination stores
