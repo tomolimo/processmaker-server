@@ -40,7 +40,7 @@ var triggerStore;
 
 var debugVariablesFilter;
 var ReloadTreeMenuItemDetail;
-
+var NOTIFIER_FLAG = false;
  
 Ext.onReady(function(){
 
@@ -117,7 +117,6 @@ Ext.onReady(function(){
   /**
    * Menu Panel
    */
-  
   var treeMenuItems = {
     xtype: 'treepanel',
     height: 350,
@@ -125,10 +124,10 @@ Ext.onReady(function(){
     region: 'center',
     margins: '0 0 0 0',
     tbar: [ /*bbar: [*/
-      {
+      /*{
         text: 'Start Case',
         xtype: 'tbbutton'
-      },
+      },*/
       {
         xtype: 'tbfill'
       },
@@ -155,9 +154,7 @@ Ext.onReady(function(){
     listeners: {
       'render': function(tp){
         tp.getSelectionModel().on('selectionchange', function(tree, node){
-          //alert(node.attributes.id); //erik
-          //return;
-          //alert(node.attributes.url);
+
           if( node.attributes.url ){
             document.getElementById('casesSubFrame').src = node.attributes.url;
           }
@@ -174,8 +171,6 @@ Ext.onReady(function(){
             currentSelectedTreeMenuItem = null;
             ReloadTreeMenuItemDetail({item:''});
           }
-          
-          
         })
       }
     }
@@ -225,9 +220,6 @@ Ext.onReady(function(){
     treeMenuItemDetail.root.reload();
   }
 
-  // add a tree sorter in folder mode
-  //new Ext.tree.TreeSorter(tree, {folderSort:true});
-
   // set the root node
   var root = new Ext.tree.AsyncTreeNode({
       text: 'Ext JS',
@@ -238,7 +230,6 @@ Ext.onReady(function(){
   });
   
   treeMenuItemDetail.setRootNode(root);
-
 
   mainMenu = new Ext.Panel({
     id:'menuTreePanel',
@@ -395,7 +386,6 @@ Ext.onReady(function(){
   //w.show();
   //w.ownerCt.doLayout();
   //w.expand();       
-  
  
   setDefaultOption();
 
@@ -421,15 +411,17 @@ function updateCasesView(){
     Ext.Ajax.request({
       url: 'cases_menuLoader?action=getAllCouters',
       success: function(response){
-        //alert(response.responseText);
         result = eval('('+response.responseText+')');
         for(i=0; i<result.length; i++){
           oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
+          oldValue = oldValue.replace('<b>', '');
+          oldValue = oldValue.replace('</b>', '');
           newValue = result[i].count;
           //alert(oldValue +'!='+ newValue);
           if( oldValue != newValue){
             document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
-          } else {
+            NOTIFIER_FLAG = true;
+          } else if(NOTIFIER_FLAG === false){
             document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
           }
         }
