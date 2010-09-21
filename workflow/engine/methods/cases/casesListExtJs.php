@@ -23,7 +23,7 @@
 
   G::RenderPage('publish', 'extJs');
  
- 
+  // needing to improve the assembling of the configuration
   function getToDo() {
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',          'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
@@ -228,6 +228,12 @@
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields );
   }
 
+  /**
+   * loads the PM Table field list from the database based in an action parameter
+   * then assemble the List of fields with these data, for the configuration in cases list.
+   * @param  String $action
+   * @return Criteria object $Criteria
+   */
 function getAdditionalFields($action){
   $caseColumns = array();
   $caseReaderFields = array();

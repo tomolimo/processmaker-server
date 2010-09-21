@@ -1,4 +1,6 @@
 <?php
+
+  // getting the extJs parameters
   $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
   $dir      = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
   $sort     = isset($_POST['sort'])   ? $_POST['sort']   : '';
@@ -8,7 +10,7 @@
   $search   = isset($_POST['search']) ? $_POST['search'] : '';
   $process  = isset($_POST['process']) ? $_POST['process'] : '';
   $action   = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
- 
+  $type   = isset($_GET['type']) ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
 
   try {  	
 
@@ -22,18 +24,15 @@
   require_once ( "classes/model/Fields.php" );
 
   $sUIDUserLogged = $_SESSION['USER_LOGGED'];
-
+// get the action based list
   switch ( $action ) {
-  	case 'todo' :
-         $Criteria = getToDo(); 
-         break;
   	case 'draft' :
          $Criteria = getDraft();
          break;
-  	case 'participated' :
+  	case 'sent' :
          $Criteria = getParticipated();
          break;
-  	case 'unassigned' :
+  	case 'selfservice' :
          $Criteria = getUnassigned();
          break;
   	case 'paused' :
@@ -45,12 +44,33 @@
   	case 'cancelled' :
          $Criteria = getCancelled();
          break;
+    case 'todo' :
+    default:
+         $Criteria = getToDo();
+    break;
   }
-   
+  // VERY IMPORTANT
+  // Above Development debugging code needed to be removed previously to be deployed or commited
+  // TODO: remove this code if the list for both the new and original functions
+  //       get the exactly same results
+  G::LoadClass("case" );
+  $oCases = new Cases();
+
+//  $type='old'; // can uncomment this line to populate the list with the old cases methods
+  if ($type=='old'){
+    $action = $action=='todo' ? 'to_do' : $action;
+    $aCasesData = $oCases->getConditionCasesList($action,$sUIDUserLogged);
+    $Criteria = $aCasesData[0];
+    //g::pr($Criteria);
+  }
+  //
+  //  end test code
+  // VERY IMPORTANT
+
   //add the process filter
   if ( $process != '' ) {
     $Criteria->add (AppCacheViewPeer::APP_PRO_TITLE, $process, Criteria::EQUAL );
-  }  
+  }
 
   //add the filter 
   if ( $filter != '' ) {
@@ -95,12 +115,14 @@
   $index = $start;
   while($aRow = $oDataset->getRow()){
     //$aRow['index'] = ++$index;
+//    g::pr($aRow);
+    $aRow['DEL_TASK_DUE_DATE'] = strip_tags($aRow['DEL_TASK_DUE_DATE']);
     $rows[] = $aRow;
       
     $oDataset->next();
   }
   $result['data'] = $rows;
-
+ // print the result in json format
   print json_encode( $result ) ;
   
   }
@@ -111,39 +133,36 @@
     G::RenderPage( 'publish', 'blank' );
   }      
 
+  /**
+   * gets the todo cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getToDo () {
   	global $sUIDUserLogged ;
     $Criteria = new Criteria('workflow');
   
     $Criteria->clearSelectColumns ( );
-    
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
-//    $Criteria = addPMFieldsToCriteria('todo',$Criteria);
-//JUST TO TEST DAYTOP
-/*
- *
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
-    
+   // $Criteria = addPMFieldsToCriteria('todo');
+//
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
+//    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
+
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    $Criteria = addPMFieldsToCriteria('todo',$Criteria);
+
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "TO_DO" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
 
@@ -153,123 +172,75 @@
 //    g::pr($Criteria);
     return $Criteria;
   }
-  
+
+  /**
+   * gets the draft cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getDraft() {
   	global $sUIDUserLogged ;
     $Criteria = new Criteria('workflow');
     $Criteria->clearSelectColumns ( );
 
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+
     $Criteria = addPMFieldsToCriteria('draft');
         
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
-    $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
-    $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, CRITERIA::ISNULL);
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-
+    $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
+    $Criteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
+    
     return $Criteria;
   }
-
+  /**
+   * gets the participated cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getParticipated() {
-
     global $sUIDUserLogged;
     $Criteria = new Criteria('workflow');
-
     $Criteria->clearSelectColumns ( );
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    $Criteria = addPMFieldsToCriteria('sent');
 
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
-
-//JUST TO TEST DAYTOP
-/*
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
     return $Criteria;
   }
-  
+  /**
+   * gets the unassigned cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getUnassigned() {
 
     global $sUIDUserLogged;
     $Criteria = new Criteria('workflow');
 
     $Criteria->clearSelectColumns ( );
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
 
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
+    $Criteria = addPMFieldsToCriteria('selfservice');
 
-//JUST TO TEST DAYTOP
-/*
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
     return $Criteria;
   }
 
+  /**
+   * gets the paused cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getPaused(){
     global $sUIDUserLogged ;
     $Criteria = new Criteria('workflow');
 
     $Criteria->clearSelectColumns ( );
 
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    $Criteria = addPMFieldsToCriteria('paused');
 
-//JUST TO TEST DAYTOP
-/*
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
     $appDelayConds[] = array(AppCacheViewPeer::APP_UID, AppDelayPeer::APP_UID);
     $appDelayConds[] = array(AppDelegationPeer::DEL_INDEX, AppDelayPeer::APP_DEL_INDEX);
 //    $appDelayConds[] = array(AppDelegationPeer::DEL_INDEX, AppDelayPeer::APP_DEL_INDEX);
@@ -284,37 +255,20 @@
     return $Criteria;
   }
 
+  /**
+   * gets the completed cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getCompleted(){
     global $sUIDUserLogged ;
     $Criteria = new Criteria('workflow');
 
     $Criteria->clearSelectColumns ( );
 
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    $Criteria = addPMFieldsToCriteria('completed');
 
-//JUST TO TEST DAYTOP
-/*
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
     $Criteria->addJoin(AppCacheViewPeer::APP_UID, AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
     $Criteria->add(AppCacheViewPeer::APP_STATUS, 'COMPLETED');
     $Criteria->add(AppDelegationPeer::DEL_PREVIOUS, '0', Criteria::NOT_EQUAL);
@@ -325,43 +279,32 @@
     return $Criteria;
   }
 
+  /**
+   * gets the cancelled cases list criteria
+   * @return Criteria object $Criteria
+   */
   function getCancelled(){
     global $sUIDUserLogged ;
     $Criteria = new Criteria('workflow');
 
     $Criteria->clearSelectColumns ( );
 
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UID );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_NUMBER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_INDEX );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_PRO_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_TAS_TITLE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_DEL_PREVIOUS_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_CURRENT_USER );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_TASK_DUE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_UPDATE_DATE );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::DEL_PRIORITY );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_STATUS );
-    $Criteria->addSelectColumn (  AppCacheViewPeer::APP_FINISH_DATE );
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    $Criteria = addPMFieldsToCriteria('cancelled');
 
-//JUST TO TEST DAYTOP
-/*
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.NAME_OF_PHONE_SCREENER' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.LAST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.FIRST_NAME' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.AGE' );
-    $Criteria->addSelectColumn (  'PATIENT_INFORMATION.GENDER' );
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'PATIENT_INFORMATION.APP_UID', Criteria::LEFT_JOIN);
-*/
-//JUST TO TEST DAYTOP
     $Criteria->add($Criteria->getNewCriterion(AppCacheViewPeer::APP_THREAD_STATUS, 'CLOSED')->addAnd($Criteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'CANCELLED')));
     $Criteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
     $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
     return $Criteria;
   }
 
+  /**
+   * loads the configuration fields from the database based in an action parameter
+   * then assemble the Criteria object with these data.
+   * @param  String $action
+   * @return Criteria object $Criteria
+   */
 function addPMFieldsToCriteria($action){
   $caseColumns = array();
   $caseReaderFields = array();
@@ -403,10 +346,11 @@ function addPMFieldsToCriteria($action){
   
   $conf = new Configurations();
   $confCasesList = $conf->loadObject('casesList',$action,'','','');
-  if (count($confCasesList)>1){
+  if (count($confCasesList)>1&&isset($confCasesList['PMTable'])&&trim($confCasesList['PMTable'])!=''){
   // getting the table name
-  $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
-  $tableName = $oAdditionalTables->getAddTabName();
+    $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
+    $tableName = $oAdditionalTables->getAddTabName();
+
     foreach($confCasesList['second']['data'] as $fieldData){
       if (!in_array($fieldData['name'],$defaultFields)){
         $fieldName = $tableName.'.'.$fieldData['name'];
@@ -423,28 +367,3 @@ function addPMFieldsToCriteria($action){
   }
 }
 
-/**
-  function getCancelled(){
-   	global $sUIDUserLogged ;
-    $sTypeList = 'cancelled';
-    $aAdditionalFilter = array();
-    $oCases = new Cases();
-    return $oCases->getConditionCasesList( $sTypeList, $sUIDUserLogged, true, $aAdditionalFilter );
-  }
-  function getPaused(){
-   	global $sUIDUserLogged ;
-    $sTypeList = 'paused';
-    $aAdditionalFilter = array();
-    $oCases = new Cases();
-    return $oCases->getConditionCasesList( $sTypeList, $sUIDUserLogged, true, $aAdditionalFilter );
-
-  }
-  function getCompleted(){
-   	global $sUIDUserLogged ;
-    $sTypeList = 'completed';
-    $aAdditionalFilter = array();
-    $oCases = new Cases();
-    return $oCases->getConditionCasesList( $sTypeList, $sUIDUserLogged, true, $aAdditionalFilter );
-  }
- * */
- 
