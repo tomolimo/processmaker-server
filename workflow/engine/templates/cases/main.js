@@ -147,7 +147,7 @@ Ext.onReady(function(){
 
     // Our custom TreeLoader:
     loader: new Ext.app.menuLoader({
-      dataUrl:'cases_menuLoader',
+      dataUrl:'casesMenuLoader',
       clearOnLoad: false
     }),
 
@@ -195,7 +195,7 @@ Ext.onReady(function(){
       animate:true,
       autoScroll:true,
       loader: new Ext.tree.TreeLoader({
-        dataUrl:'cases_menuLoader?action=getProcess'
+        dataUrl:'casesMenuLoader?action=getProcess'
       }),
       enableDD:true,
       containerScroll: true,
@@ -216,7 +216,7 @@ Ext.onReady(function(){
   });
 
   ReloadTreeMenuItemDetail = function(params){
-    treeMenuItemDetail.loader.dataUrl = 'cases_menuLoader?action=getProcess&item='+params.item;
+    treeMenuItemDetail.loader.dataUrl = 'casesMenuLoader?action=getProcess&item='+params.item;
     treeMenuItemDetail.root.reload();
   }
 
@@ -408,7 +408,7 @@ function updateCasesView(){
       ReloadTreeMenuItemDetail({item:currentSelectedTreeMenuItem});
     }
     Ext.Ajax.request({
-      url: 'cases_menuLoader?action=getAllCounters',
+      url: 'casesMenuLoader?action=getAllCounters',
       success: function(response){
       	try{
 	        result = eval('('+response.responseText+')');
