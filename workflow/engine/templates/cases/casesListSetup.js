@@ -8,19 +8,11 @@ Ext.onReady(function(){
      url : 'proxyPMTablesList'
   });
 
-  var recordFields = [
-     { name : 'ADD_TAB_UID',             mapping : 'ADD_TAB_UID' },
-     { name : 'ADD_TAB_NAME',            mapping : 'ADD_TAB_NAME' },
-     { name : 'ADD_TAB_CLASS_NAME',      mapping : 'ADD_TAB_CLASS_NAME' },
-     { name : 'ADD_TAB_DESCRIPTION',     mapping : 'ADD_TAB_DESCRIPTION' },
-     { name : 'ADD_TAB_SDW_LOG_INSERT',  mapping : 'ADD_TAB_SDW_LOG_INSERT' },
-     { name : 'ADD_TAB_SDW_LOG_UPDATE',  mapping : 'ADD_TAB_SDW_LOG_UPDATE' },
-     { name : 'ADD_TAB_SDW_LOG_DELETE',  mapping : 'ADD_TAB_SDW_LOG_DELETE' },
-     { name : 'ADD_TAB_SDW_LOG_SELECT',  mapping : 'ADD_TAB_SDW_LOG_SELECT' },
-     { name : 'ADD_TAB_SDW_MAX_LENGTH',  mapping : 'ADD_TAB_SDW_MAX_LENGTH' },
-     { name : 'ADD_TAB_SDW_AUTO_DELETE', mapping : 'ADD_TAB_SDW_AUTO_DELETE' },
-     { name : 'ADD_TAB_PLG_UID',         mapping : 'ADD_TAB_PLG_UID' },
-     { name : 'DBS_UID',                 mapping : 'DBS_UID' }
+  // Generic fields array to use in both store defs.
+  var pmFields = [
+    {name: 'name', mapping : 'name'},
+    {name: 'gridIndex', mapping : 'gridIndex'},
+    {name: 'column2', mapping : 'column2'}
   ];
 
   var remotePmTableStore = new Ext.data.JsonStore({
@@ -36,17 +28,63 @@ Ext.onReady(function(){
   });
   remotePmTableStore.setDefaultSort('ADD_TAB_NAME', 'asc');
 
-   // create the Data Store for processes
+  var remoteFieldsProxy = new Ext.data.HttpProxy({
+    url : 'proxyPMTablesFieldList'
+  });
 
+  var readerCasesList = new Ext.data.JsonReader({
+    totalProperty : 'totalCount',
+    idProperty    : 'index',
+    root          : 'data'
+    }, pmFields
+  );
+
+  // The new DataWriter component.
+  //currently we are not using this in casesList, but it is here just for complete definition
+  var writerCasesList = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true
+  });
+
+  var remotePmFieldsStore = new Ext.data.Store({
+    remoteSort : true,
+    proxy      : remoteFieldsProxy,
+    reader     : readerCasesList,
+    writer     : writerCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave   : true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+  });
+
+  // create the Data Store for processes
   var pmTablesDropdown = {
-     width        : '180',
-     xtype        : 'combo',
-     emptyText    : 'Select a configuration...',
-     store        : remotePmTableStore,
-     displayField : 'ADD_TAB_NAME',
-//     displayField : 'APP_PRO_TITLE',
+    width        : '180',
+    xtype        : 'combo',
+    emptyText    : 'Select a configuration...',
+    store        : remotePmTableStore,
+    displayField : 'ADD_TAB_NAME',
+    valueField   : 'ADD_TAB_UID',
+
+  //     displayField : 'APP_PRO_TITLE',
      //typeAhead    : true,
-     triggerAction: 'all'
+    triggerAction: 'all',
+    listeners: {
+      'select': function() {
+        var tableUid  =  this.value;
+        //alert (tableUid);
+        remotePmFieldsStore.setBaseParam( 'tab', tableUid);
+        remotePmFieldsStore.load({params:{tab: tableUid}});
+
+//        firstGridStore.loadData(myData);
+        //firstGridStore.loadData(remotePmFieldsStore);
+           //purge destination grid
+        secondGridStore.removeAll();
+        /*firstGridStore.add(new Field({
+          name: 'Ned',
+          gridIndex: '3',
+          column2 : '1'
+        }));*/
+         //firstGridStore.add (remotePmFieldsStore);
+      }
+    }
   }
 
   // Generic fields array to use in both store defs.
@@ -56,13 +94,14 @@ Ext.onReady(function(){
     {name: 'column2', mapping : 'column2'}
   ];
 
+
   // create the data store
   var firstGridStore = new Ext.data.JsonStore({
     fields : fields,
     data   : myData,
     root   : 'records'
   });
-
+ 
 
   // Column Model shortcut array
   var cols = [
@@ -73,15 +112,16 @@ Ext.onReady(function(){
 
   // declare the source Grid
     var firstGrid = new Ext.grid.GridPanel({
-        enableDragDrop   : true,
-        ddGroup          : 'secondGridDDGroup',
-        ddText           : '{0} selected field{1}',
-        store            : firstGridStore,
-        columns          : cols,
-        stripeRows       : true, 
-        title            : 'Available Fields'
+      enableDragDrop   : true,
+      ddGroup          : 'secondGridDDGroup',
+      ddText           : '{0} selected field{1}',
+      store            : remotePmFieldsStore,
+      columns          : cols,
+      stripeRows       : true,
+      title            : 'Available Fields'
     });
-
+    remotePmFieldsStore.load();
+    
     var secondGridStore = new Ext.data.JsonStore({
       fields : fields,
       root   : 'records'
@@ -105,8 +145,8 @@ Ext.onReady(function(){
     height       : 50,
     layout       : 'hbox',
     renderTo     : 'panel',
-    defaults     : { flex : 1 }, //auto stretch
-    layoutConfig : { align : 'center' },
+    defaults     : {flex : 1}, //auto stretch
+    layoutConfig : {align : 'center'},
     items        : [
       pmTablesDropdown
     ]
@@ -117,8 +157,8 @@ Ext.onReady(function(){
     height       : 400,
     layout       : 'hbox',
     renderTo     : 'panel',
-    defaults     : { flex : 1 }, //auto stretch
-    layoutConfig : { align : 'stretch' },
+    defaults     : {flex : 1}, //auto stretch
+    layoutConfig : {align : 'stretch'},
     items        : [
       firstGrid,
       secondGrid
@@ -143,8 +183,8 @@ Ext.onReady(function(){
     height       : 450,
     layout       : 'vbox',
     renderTo     : 'panel',
-    defaults     : { flex : 1 }, //auto stretch
-    layoutConfig : { align : 'center' },
+    defaults     : {flex : 1}, //auto stretch
+    layoutConfig : {align : 'center'},
     items        : [
       filterPanel,
       displayPanel
@@ -200,7 +240,7 @@ Ext.onReady(function(){
               isBrecord = 0;
               if ( record.get('gridIndex') == valTarget ) isBrecord = true;
               
-              if ( isBrecord && newIndex == record.get('gridIndex') ) { newIndex++; incIndexB = false; }
+              if ( isBrecord && newIndex == record.get('gridIndex') ) {newIndex++;incIndexB = false;}
               record.set('gridIndex', newIndex);    	
               newIndex++;
               if ( isBrecord && incIndexB ) newIndex++;

@@ -44,7 +44,7 @@ Ext.onReady ( function() {
   // Create HttpProxy instance, all CRUD requests will be directed to single proxy url.
   var proxyCasesList = new Ext.data.HttpProxy({
     api: {
-      read :   'proxyCasesList',
+      read :   'proxyCasesList'
     }
   });
 
@@ -232,7 +232,7 @@ Ext.onReady ( function() {
       store: storeCases,
       displayInfo: true,
       displayMsg: 'Displaying items {0} - {1} of {2}',
-      emptyMsg: "No items to display",
+      emptyMsg: "No items to display"
     })
 
     });
