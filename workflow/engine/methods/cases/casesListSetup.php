@@ -4,8 +4,8 @@
     	
   $oHeadPublisher->assignNumber( 'pageSize',     20 ); //sending the page size
 
-  $oHeadPublisher->addExtJsScript('cases/casesListSetup', false );    //adding a javascript file .js
-
+  $oHeadPublisher->addExtJsScript('cases/casesListSetup', true );    //adding a javascript file .js
+/*
   $availableFields = array();
   $availableFields[] = array( 'name' => 'APP_UID',               'column1' =>  '0', 'column2' => '0' );
   $availableFields[] = array( 'name' => 'APP_NUMBER',            'column1' =>  '1', 'column2' => '1' );
@@ -19,6 +19,9 @@
   $availableFields[] = array( 'name' => 'APP_UPDATE_DATE',       'column1' =>  '9', 'column2' => '9' );
   $availableFields[] = array( 'name' => 'DEL_PRIORITY',          'column1' => '10', 'column2' =>'10' );
 
+  $oHeadPublisher->assignNumber( 'availableFields', json_encode($availableFields) ); 
+*/
+  $availableFields = array();
   $oHeadPublisher->assignNumber( 'availableFields', json_encode($availableFields) ); 
 
   $oHeadPublisher->addContent( 'cases/casesListSetup'); //adding a html file  .html.

@@ -6,7 +6,9 @@
   //$action = isset($_GET['action']) ? $_GET['action'] : 'read';
   $option = '';
   if ( isset($_GET['t'] ) ) $option = $_GET['t'];
+
   try {
+
     G::LoadClass("BasePeer" );
     require_once ( "classes/model/AdditionalTables.php" );
     require_once ( "classes/model/Fields.php" );
@@ -33,7 +35,7 @@
 
 
     if ( $query != '' ) {
-      $oCriteria->add (AppCacheViewPeer::ADD_TAB_NAME, $query . '%', Criteria::LIKE);
+      $oCriteria->add (AdditionalTablesPeer::ADD_TAB_NAME, $query . '%', Criteria::LIKE);
     }
 
     $oCriteria->addJoin(AdditionalTablesPeer::ADD_TAB_UID, FieldsPeer::ADD_TAB_UID);
@@ -71,10 +73,5 @@
     print json_encode( $result ) ;
   }
   catch ( Exception $e ) {
-    $G_PUBLISH = new Publisher;
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish', 'blank' );
+  	print json_encode ( $e->getMessage() );
   }
-
-?>

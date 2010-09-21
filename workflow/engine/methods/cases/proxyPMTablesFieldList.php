@@ -3,17 +3,14 @@
   $dir      = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
   $sort     = isset($_POST['sort'])   ? $_POST['sort']   : '';
   $query    = isset($_POST['query'])  ? $_POST['query']  : '';
-  $tabUid   = isset($_POST['tab'])    ? $_POST['tab']    : '';
-  $tabUid   = isset($_GET['tab'])     ? $_GET['tab']     : $tabUid;
-  //$action = isset($_GET['action']) ? $_GET['action'] : 'read';
-  $option = '';
-  if ( isset($_GET['t'] ) ) $option = $_GET['t'];
+  $tabUid   = isset($_POST['table'])  ? $_POST['table']  : '';
+  $action   = isset($_POST['action']) ? $_POST['action'] : 'todo';
   
   try {
     G::LoadClass("BasePeer" );
     require_once ( "classes/model/Fields.php" );
 
-    $sUIDUserLogged = $_SESSION['USER_LOGGED'];
+    //$sUIDUserLogged = $_SESSION['USER_LOGGED'];
 
     $oCriteria = new Criteria('workflow');
 
@@ -33,8 +30,8 @@
 //    $oCriteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
     //$totalCount = AppCacheViewPeer::doCount( $Criteria );
 
-    if ( isset($limit) ) $oCriteria->setLimit  ( $limit );
-    if ( isset($start) ) $oCriteria->setOffset ( $start );
+//    if ( isset($limit) ) $oCriteria->setLimit  ( $limit );
+//    if ( isset($start) ) $oCriteria->setOffset ( $start );
 
     if ( $sort != '' ) {
       if ( $dir == 'DESC' )
@@ -50,19 +47,99 @@
 
     $result = array();
     $rows = array();
-    $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
-    $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
-    $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
-    $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
-    $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
-    $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
-    $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
-    $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
-    $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
-    $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
-    $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
-    $start = 10;
-    $index =  isset($start) ? $start : 0;
+    switch ( $action ) {
+    	case 'todo' : // #, Case, task, process, sent by, due date, Last Modify, Priority
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    	case 'draft' :    //#, Case, task, process, due date, Last Modify, Priority },
+
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    	case 'sent' : // #, Case, task, process, current user, sent by, Last Modify, Status
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    	case 'unassigned' : 
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    	case 'paused' : 
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    	case 'completed' : 
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    	case 'cancelled' : 
+        $rows[] = array( 'name' => 'APP_UID',               'gridIndex' =>  '0', 'column2' => '0' );
+        $rows[] = array( 'name' => 'APP_NUMBER',            'gridIndex' =>  '1', 'column2' => '1' );
+        $rows[] = array( 'name' => 'APP_STATUS',            'gridIndex' =>  '2', 'column2' => '2' );
+        $rows[] = array( 'name' => 'DEL_INDEX',             'gridIndex' =>  '3', 'column2' => '3' );
+        $rows[] = array( 'name' => 'APP_TITLE',             'gridIndex' =>  '4', 'column2' => '4' );
+        $rows[] = array( 'name' => 'APP_PRO_TITLE',         'gridIndex' =>  '5', 'column2' => '5' );
+        $rows[] = array( 'name' => 'APP_TAS_TITLE',         'gridIndex' =>  '6', 'column2' => '6' );
+        $rows[] = array( 'name' => 'APP_DEL_PREVIOUS_USER', 'gridIndex' =>  '7', 'column2' => '7' );
+        $rows[] = array( 'name' => 'DEL_TASK_DUE_DATE',     'gridIndex' =>  '8', 'column2' => '8' );
+        $rows[] = array( 'name' => 'APP_UPDATE_DATE',       'gridIndex' =>  '9', 'column2' => '9' );
+        $rows[] = array( 'name' => 'DEL_PRIORITY',          'gridIndex' => '10', 'column2' =>'10' );
+        break;
+    }
+
+    $index =  count($rows);
 
     while($aRow = $oDataset->getRow()){
       $aRow['index'] = ++$index;
@@ -78,10 +155,5 @@
     print json_encode( $result ) ;
   }
   catch ( Exception $e ) {
-    $G_PUBLISH = new Publisher;
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish', 'blank' );
+  	print json_encode ( $e->getMessage() );
   }
-
-?>
