@@ -2,7 +2,7 @@
 <dynaForm name="processesdc" type="xmlform" width="100%">
 
 <MESSAGE type="title" group="1">
-  <en>Are you sure thay you want to delete this process?</en>
+  <en>Are you sure that you want to delete this process?</en>
 </MESSAGE>
 
 <PRO_UID type="hidden">
