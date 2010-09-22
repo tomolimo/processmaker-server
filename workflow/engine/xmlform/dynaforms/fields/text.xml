@@ -69,9 +69,6 @@ select XMLNODE_NAME, XMLNODE_NAME AS NAME FROM dynaForm WHERE	XMLNODE_NAME <> @@
   <en>Mode<option name="edit">Edit</option><option name="view">View</option></en>
 </PME_MODE>
 
-
-
-
 <PME_SUBTITLE_OP type="title" enableHTML="1">
   <en>Operations</en>
 </PME_SUBTITLE_OP>
@@ -86,8 +83,8 @@ select XMLNODE_NAME, XMLNODE_NAME AS NAME FROM dynaForm WHERE	XMLNODE_NAME <> @@
   <en>Data</en>
 </PME_SUBTITLE2>
 
-<PME_SQLCONNECTION type="dropdown" sqlconnection=""><![CDATA[
-  SELECT DBS_UID, CONCAT('[',DBS_SERVER,'] ',DBS_TYPE,': ',DBS_DATABASE_NAME) AS CVALUE FROM DB_SOURCE WHERE PRO_UID = @@PME_PRO_UID
+<PME_SQLCONNECTION type="dropdown" sqlconnection="dbarray"><![CDATA[
+  SELECT * FROM DB_CONNECTIONS
   ]]><en>Sql Connection<option name="">(none)</option></en>
 </PME_SQLCONNECTION>
 
