@@ -1886,6 +1886,26 @@ class G
 
   }
 
+
+  /**
+   * Function getTranslations
+   * @author Erik Amaru O. <erik@colosa.com>
+   * @access public
+   * @parameter array msgIDs
+   * @parameter string file
+   * @return string
+   */
+  function getTranslations($msgIDs , $lang = SYS_LANG)
+  {
+    if ( ! is_array($msgIDs) ) return null;
+
+    $translations = Array();
+    foreach( $msgIDs as $mID ) {
+      $translations[$mID] = self::LoadTranslation($mID , $lang);
+    }
+    
+    return $translations;
+  }
   /**
    * Load an array File Content
    *

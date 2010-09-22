@@ -22,6 +22,16 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+/*require_once "classes/model/Language.php";
+
+$language = new Language();
+$langName = 'Chinese';
+$langRecord = $language->findByLanName($langName);
+
+g::pr($langRecord);
+
+die;*/
+
 global $RBAC;
 $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
 if( $access != 1 ){
@@ -49,9 +59,10 @@ $oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('setup/languages', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('setup/languages'); //adding a html file  .html.
 
-$translations = Array(
-  'ID_PREDETERMINED' => 'Predetermined'
-);
+$translations = G::getTranslations(Array(
+  'ID_LAN_PREDETERMINED', 'ID_LANG_INSTALL_UPDATE', 'ID_LAN_LANGUAGE', 'ID_LAN_COUNTRY', 'ID_LAN_UPDATE_DATE',
+  'ID_LAN_REV_DATE', 'ID_LAN_FILE', 'ID_LAN_REV_DATE', 'ID_LAN_VERSION', 'ID_LAN_GRID_TITLE', 'ID_LAN_UPLOAD_TITLE', 'ID_LAN_FILE_WATER_LABEL'
+));
 
 $oHeadPublisher->assign('TRANSLATIONS', $translations);
 
