@@ -257,22 +257,25 @@ class languages {
 
       /*getting the PO Language definition*/
       $countryName = $POHeaders['X-Poedit-Country'];
-      $isoCountry = new IsoCountry();
-      $countryRecord = $isoCountry->findByIcName($countryName);
+      if( $countryName != '.' ) {
+        $isoCountry = new IsoCountry();
+        $countryRecord = $isoCountry->findByIcName($countryName);
 
-      if( ! isset($countryRecord['IC_UID']) ) //if the language doesn't exist abort
-        throw new Exception('The .po file has a invalid X-Poedit-Country definition!');
+        if( ! isset($countryRecord['IC_UID']) ) //if the language doesn't exist abort
+          throw new Exception('The .po file has a invalid X-Poedit-Country definition!');
 
-      $countryID = $countryRecord['IC_UID'];
-
-      //define locale
-      $LOCALE = "$languageID-$countryID";
+        $countryID = $countryRecord['IC_UID'];
+        //define locale
+        $LOCALE = "$languageID-$countryID";
+      } else {
+        $LOCALE = $languageID;
+      }
       
       $oTranslation = new Translation();
       $countItems = 0;
       $countItemsSuccess = 0;
       
-      while( $translation = $POFile->getTranslation() ) {
+      while( $rowTranslation = $POFile->getTranslation() ) {
         $countItems++;
         
         if ( ! isset($POFile->translatorComments[0]) || ! isset($POFile->translatorComments[1]) || ! isset($POFile->references[0]) ) {
@@ -290,7 +293,7 @@ class languages {
             $category,
             $id,
             $LOCALE,
-            trim(str_replace(chr(10), '', $translation['msgstr']))
+            trim(str_replace(chr(10), '', $rowTranslation['msgstr']))
           );
           if( $result['codError'] == 0 )
             $countItemsSuccess++;
@@ -307,11 +310,11 @@ class languages {
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
           
           if( sizeof($codes) == 2 ) { //is a normal node
-            $dynaform->addChilds($fieldName, Array($LOCALE=>$translation['msgstr']));
+            $dynaform->addChilds($fieldName, Array($LOCALE=>$rowTranslation['msgstr']));
           } else if( sizeof($codes) == 3 ) { //is a node child for a language node
             $name = trim($codes[2]);
             $childNode = Array(
-              Array('name'=>'option', 'value'=>$translation['msgstr'], 'attributes'=>Array('name'=>$name))
+              Array('name'=>'option', 'value'=>$rowTranslation['msgstr'], 'attributes'=>Array('name'=>$name))
             );
 
             $dynaform->addChilds($fieldName, Array($LOCALE=>NULL), $childNode);

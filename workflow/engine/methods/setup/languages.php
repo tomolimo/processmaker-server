@@ -64,12 +64,14 @@ $oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('setup/languages', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('setup/languages'); //adding a html file  .html.
 
-$translations = G::getTranslations(Array(
+$labels = G::getTranslations(Array(
   'ID_LAN_PREDETERMINED', 'ID_LANG_INSTALL_UPDATE', 'ID_LAN_LANGUAGE', 'ID_LAN_COUNTRY', 'ID_LAN_UPDATE_DATE',
-  'ID_LAN_REV_DATE', 'ID_LAN_FILE', 'ID_LAN_REV_DATE', 'ID_LAN_VERSION', 'ID_LAN_GRID_TITLE', 'ID_LAN_UPLOAD_TITLE', 'ID_LAN_FILE_WATER_LABEL', 'ID_EXPORT', 'ID_UPLOAD', 'ID_CANCEL'
+  'ID_LAN_REV_DATE', 'ID_LAN_FILE', 'ID_LAN_REV_DATE', 'ID_LAN_VERSION', 'ID_LAN_GRID_TITLE', 'ID_LAN_UPLOAD_TITLE', 
+  'ID_LAN_FILE_WATER_LABEL', 'ID_EXPORT', 'ID_UPLOAD', 'ID_CANCEL', 'ID_DELETE_LANGUAGE', 'ID_DELETE_LANGUAGE_CONFIRM',
+  'ID_DELETE_LANGUAGE_WARNING'
 ));
 
-$oHeadPublisher->assign('TRANSLATIONS', $translations);
+$oHeadPublisher->assign('TRANSLATIONS', $labels);
 
 G::RenderPage('publish', 'extJs');
   

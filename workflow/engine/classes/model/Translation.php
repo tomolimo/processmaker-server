@@ -39,7 +39,8 @@ require_once 'classes/model/om/BaseTranslation.php';
  */
 class Translation extends BaseTranslation {
 
-  public $meta;
+  public static $meta;
+  public static $localeSeparator = '-';
 
   function getAllCriteria(){
     
@@ -162,16 +163,29 @@ class Translation extends BaseTranslation {
     $environment['NUM_RECORDS'] = $numRecords;
     $environment['LANGUAGE'] = $headers['X-Poedit-Language'];
     $environment['COUNTRY']  = $headers['X-Poedit-Country'];
-    list($environment['LAN_ID'], $environment['IC_UID']) = explode('-', strtoupper($locale));
+
+    if( strpos($locale, self::$localeSeparator) !== false ) {
+      list($environment['LAN_ID'], $environment['IC_UID']) = explode(self::$localeSeparator, strtoupper($locale));
+      $environments[$environment['LAN_ID']][$environment['IC_UID']] = $environment;
+    } else {
+      $environment['LAN_ID'] = strtoupper($locale);
+      $environment['IC_UID'] = '';
+      $environments[$locale]['__INTERNATIONAL__'] = $environment;
+    }
     
-    $environments[$environment['LAN_ID']][$environment['IC_UID']] = $environment;
+    
     file_put_contents($filePath, serialize($environments));
   }
   
   function removeTranslationEnvironment($locale)
   {
     $filePath = PATH_LANGUAGECONT . "translations.environments";
-    list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+    if( strpos($locale, self::$localeSeparator) !== false ) {
+      list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+    } else {
+      $LAN_ID = $locale;
+      $IC_UID = '__INTERNATIONAL__';
+    }
 
     if( file_exists($filePath) ) {
       $environments = unserialize(file_get_contents($filePath));
@@ -191,53 +205,16 @@ class Translation extends BaseTranslation {
       //the transaltions table file doesn't exist, then build it
       $translationsPath = PATH_CORE . "content" . PATH_SEP . 'translations' . PATH_SEP;
       $basePOFile = $translationsPath . 'english' . PATH_SEP . 'processmaker.en.po';
-      G::loadClass('i18n_po');
-      $POFile = new i18n_PO($basePOFile);
-      $POFile->readInit();
-      $POHeaders = $POFile->getHeaders();
-      $country  = self::getTranslationMetaByCountryName($POHeaders['X-Poedit-Country']);
-      $language = self::getTranslationMetaByLanguageName($POHeaders['X-Poedit-Language']);
-
-      if($country !== false && $language !== false){
-        $LOCALE = $language['LAN_ID'] . '-' . $country['IC_UID'];
-      } else {
-        $LOCALE = 'en-US';
-      }
-      $countItems = 0;
-      try{
-        while( $translation = $POFile->getTranslation() ) {
-          $countItems++;
-        }
-      } catch(Exception $e){
-        $countItems = '-';
-      }
-      self::addTranslationEnvironment($LOCALE, $POHeaders, $countItems);
+      
+      $params = self::getInfoFromPOFile($basePOFile);
+      self::addTranslationEnvironment($params['LOCALE'], $params['HEADERS'], $params['COUNT']);
       
       //getting more lanuguage translations
       $files = glob($translationsPath . "*.po");
       foreach( $files as $file ){
-        $POFile = new i18n_PO($file);
-        $POFile->readInit();
-        $POHeaders = $POFile->getHeaders();
-        $country  = self::getTranslationMetaByCountryName($POHeaders['X-Poedit-Country']);
-        $language = self::getTranslationMetaByLanguageName($POHeaders['X-Poedit-Language']);
-
-        if($country !== false && $language !== false){
-          $LOCALE = $language['LAN_ID'] . '-' . $country['IC_UID'];
-        } else {
-          continue;
-        }
-        $countItems = 0;
-        try{
-          while( $translation = $POFile->getTranslation() ) {
-            $countItems++;
-          }
-        } catch(Exception $e){
-          $countItems = '-';
-        }
-        self::addTranslationEnvironment($LOCALE, $POHeaders, $countItems);
+        $params = self::getInfoFromPOFile($file);
+        self::addTranslationEnvironment($params['LOCALE'], $params['HEADERS'], $params['COUNT']);
       }
-      
     }
     $envs = unserialize(file_get_contents($filePath));
 
@@ -248,7 +225,6 @@ class Translation extends BaseTranslation {
       }
     }
     
-
     return $environments;
 
     /*G::LoadSystem('dbMaintenance');
@@ -270,6 +246,45 @@ class Translation extends BaseTranslation {
      */
   }
 
+  function getInfoFromPOFile($file){
+    G::loadClass('i18n_po');
+    $POFile = new i18n_PO($file);
+    $POFile->readInit();
+    $POHeaders = $POFile->getHeaders();
+
+    if( $POHeaders['X-Poedit-Country'] != '.' ) {
+      $country  = self::getTranslationMetaByCountryName($POHeaders['X-Poedit-Country']);
+    } else {
+      $country = '.';
+    }
+    $language = self::getTranslationMetaByLanguageName($POHeaders['X-Poedit-Language']);
+
+    if( $language !== false ) {
+      if( $country !== false ) {
+        if( $country != '.') {
+          $LOCALE = $language['LAN_ID'] . '-' . $country['IC_UID'];
+        } else if( $country == '.' ) {
+          //this a trsnlation file with a language international, no country name was set
+          $LOCALE = $language['LAN_ID'];
+        } else
+          throw new Exception('PO File Error: "'.$file.'" has a invalid country definition!');
+      } else
+        throw new Exception('PO File Error: "'.$file.'" has a invalid country definition!');
+    } else
+      throw new Exception('PO File Error: "'.$file.'" has a invalid language definition!');
+
+    $countItems = 0;
+    try {
+      while( $rowTranslation = $POFile->getTranslation() ) {
+        $countItems++;
+      }
+    } catch(Exception $e) {
+      $countItems = '-';
+    }
+
+    return Array('LOCALE'=>$LOCALE, 'HEADERS'=>$POHeaders , 'COUNT'=>$countItems);
+  }
+
   function getTranslationEnvironment($locale){
     $filePath = PATH_LANGUAGECONT . "translations.environments";
     $environments = Array();
@@ -279,7 +294,12 @@ class Translation extends BaseTranslation {
     }
 
     $environments = unserialize(file_get_contents($filePath));
-    list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+    if( strpos($locale, self::$localeSeparator) !== false ) {
+      list($LAN_ID, $IC_UID) = explode(self::localeSeparator, strtoupper($locale));
+    } else {
+      $LAN_ID = $locale;
+      $IC_UID = '__INTERNATIONAL__';
+    }
 
     if( isset($environments[$LAN_ID][$IC_UID]) )
       return $environments[$LAN_ID][$IC_UID];
@@ -296,7 +316,13 @@ class Translation extends BaseTranslation {
     }
 
     $environments = unserialize(file_get_contents($filePath));
-    list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+    if( strpos($locale, self::$localeSeparator) !== false ) {
+      list($LAN_ID, $IC_UID) = explode(self::localeSeparator, strtoupper($locale));
+    } else {
+      $LAN_ID = $locale;
+      $IC_UID = '__INTERNATIONAL__';
+    }
+
     $environments[$LAN_ID][$IC_UID] = $data;
     file_put_contents($filePath, serialize($environments));
   }

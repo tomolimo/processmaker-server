@@ -193,7 +193,7 @@ class i18n_PO
       $lastPos = ftell($this->_fp);
       $line = fgets($this->_fp);
       $this->_fileComments .= $line;
-    } while( substr($line, 0, 1) == '#' );
+    } while( (substr($line, 0, 1) == '#' || trim($line) == '') && ! feof($this->_fp) );
     
     fseek($this->_fp, $lastPos);
   }
@@ -232,12 +232,12 @@ class i18n_PO
         continue;
       }
       //verify if has a valid mask header line
-      preg_match('/^"([a-z0-9\._-]+)\s*:\s*([a-z0-9\._-\s\W]+)\\\n"$/i', $this->_fileLine, $match);
+      preg_match('/^"([a-z0-9\._-]+)\s*:\s*([\W\w]+)\\\n"$/i', $this->_fileLine, $match);
 
       //for a valid header line the $match size should three
       if( sizeof($match) == 3 ) {
-        $key   = $match[1]; //getting the key of the header
-        $value = $match[2]; //getting the value of the header
+        $key   = trim($match[1]); //getting the key of the header
+        $value = trim($match[2]); //getting the value of the header
         $this->_meta[$key] = $value; //setting a new header
       } else {
         $this->flagEndHeaders = true; //otherwise set the ending to read the headers
@@ -246,10 +246,17 @@ class i18n_PO
     }//end looking for headeers
     
     //verifying the headers data
-    if( ! isset($this->_meta['X-Poedit-Language']) || ! isset($this->_meta['X-Poedit-Country']) ) {
+    if( ! isset($this->_meta['X-Poedit-Language']) ) {
       $this->flagError = true;
-    } else if ( trim($this->_meta['X-Poedit-Language'] == '') && trim($this->_meta['X-Poedit-Country'] == '') ) {
+    } else if ( $this->_meta['X-Poedit-Language'] == '' ) {
       $this->flagError = true;
+    }
+
+    //if the country is not present in metadata
+    if( ! isset($this->_meta['X-Poedit-Country']) ) {
+      $this->_meta['X-Poedit-Country'] = '.';
+    } else if( $this->_meta['X-Poedit-Country'] == '' ) {
+      $this->_meta['X-Poedit-Country'] = '.';
     }
     
     //thowing the exception if is necesary

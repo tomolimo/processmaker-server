@@ -61,7 +61,8 @@ Ext.onReady(function(){
         sortable : false,
         renderer: function (value, p, r){
           //return String.format("<span style='{1}'>{0}</span>", value, 'color:green;' );
-          return String.format("<img src='/images/flags/{0}.gif' />", value);
+          var e = (value == 'international') ? 'png': 'gif';
+          return String.format("<img src='/images/flags/{0}.{1}' />", value, e);
         }
       }, {
         dataIndex : 'LAN_ID',
@@ -95,7 +96,13 @@ Ext.onReady(function(){
         dataIndex : 'COUNTRY_NAME',
         header : TRANSLATIONS.ID_LAN_COUNTRY,
         width : 120,
-        sortable : false
+        sortable : false,
+        renderer: function (value, p, r){
+          if( r.data.LAN_FLAG == 'international' )
+            return String.format("<font color=green style='font-size:9px'>({0})</font>", value);
+          else
+            return value;
+        }
       }, {
         dataIndex : 'DATE',
         header : TRANSLATIONS.ID_LAN_UPDATE_DATE,
@@ -186,7 +193,6 @@ Ext.onReady(function(){
                     fieldLabel: TRANSLATIONS.ID_LAN_FILE,
                     name: 'form[LANGUAGE_FILENAME]',
                     buttonText: '',
-                    icon: '/images/delete-16x16.gif',
                     buttonCfg: {
                         iconCls: 'upload-icon'
                     }
@@ -354,10 +360,66 @@ Ext.onReady(function(){
         xtype: 'tbfill'
       },
       {
-        text: 'Delete',
+        text: TRANSLATIONS.ID_DELETE_LANGUAGE,
         iconCls: 'silk-add',
         icon: '/images/delete-16x16.gif',
-        handler: this.onAdd,
+        handler: function(){
+          iGrid = Ext.getCmp('infoGrid');
+          var rowSelected = iGrid.getSelectionModel().getSelected();
+          if( rowSelected ) {
+            langId      = rowSelected.data.LAN_ID;
+            langName    = rowSelected.data.LAN_NAME;
+            countryName = rowSelected.data.COUNTRY_NAME;
+            locale      = rowSelected.data.LOCALE;
+
+            confirmMsg = TRANSLATIONS.ID_DELETE_LANGUAGE_CONFIRM;
+            confirmMsg = confirmMsg.replace('{0}', locale);
+            Ext.Msg.show({
+              title:'',
+              msg: confirmMsg,
+              buttons: Ext.Msg.YESNO,
+              fn: function(btn){
+                if( btn == 'yes' ) {
+                  Ext.Ajax.request({
+                    url: 'language_Ajax',
+                    success: function(response){
+                      infoGrid.store.reload();
+
+                      Ext.Msg.show({
+                        title:'',
+                        msg: response.responseText,
+                        buttons: Ext.Msg.INFO,
+                        fn: function(){},
+                        animEl: 'elId',
+                        icon: Ext.MessageBox.INFO,
+                        buttons: Ext.MessageBox.OK
+                      });
+                    },
+                    failure: function(){},
+                    params: {
+                      'function': 'delete',
+                      'LOCALE': locale,
+                      'LAN_ID': langId
+                    }
+                  });
+                }
+              },
+              animEl: 'elId',
+              icon: Ext.MessageBox.QUESTION
+            });
+          } else {
+            Ext.Msg.show({
+              title:'',
+              msg: TRANSLATIONS.ID_DELETE_LANGUAGE_WARNING,
+              buttons: Ext.Msg.INFO,
+              fn: function(){},
+              animEl: 'elId',
+              icon: Ext.MessageBox.INFO,
+              buttons: Ext.MessageBox.OK
+            });
+          }
+          
+        },
         scope: this
       }
     ]

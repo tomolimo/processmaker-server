@@ -85,13 +85,17 @@ $translationsTable = Translation::getTranslationEnvironments();
 
 $availableLangArray = array ();
 $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
+
 foreach ( $translationsTable as $locale ) {
-  $aFields = array (
-    'LANG_ID'   => $locale['LOCALE'],
-    'LANG_NAME' => $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')'
-  );
+  $aFields['LANG_ID'] = $locale['LOCALE'];
+  if( $locale['COUNTRY'] != '.' )
+    $aFields['LANG_NAME'] = $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')';
+  else
+    $aFields['LANG_NAME'] = $locale['LANGUAGE'];
+
   $availableLangArray [] = $aFields;
 }
+
 
 $availableWorkspaceArray = array ();
 $availableWorkspaceArray [] = array ('ENV_ID' => 'char', 'ENV_NAME' => 'char' );

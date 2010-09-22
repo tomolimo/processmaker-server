@@ -275,4 +275,22 @@ class Content extends BaseContent {
     }
   }
 
+  function removeLanguageContent($lanId) {
+    try {
+      $c = new Criteria ( );
+      $c->add ( ContentPeer::CON_CATEGORY, 'APP_TITLE' );
+      $c->add ( ContentPeer::CON_LANG, $lanId );
+      $result = ContentPeer::doSelectRS ( $c );
+      $result->next ();
+      $row = $result->getRow ();
+      while ( is_array ( $row ) ) {
+        ContentPeer::doDelete ( array ($ConCategory, $ConParent, $ConId, $row [3] ) );
+        $result->next ();
+        $row = $result->getRow ();
+      }
+    } catch ( Exception $e ) {
+      throw ($e);
+    }
+
+  }
 } // Content
