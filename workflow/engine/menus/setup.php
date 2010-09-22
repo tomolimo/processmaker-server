@@ -25,8 +25,8 @@
   global $G_TMP_MENU;
   global $RBAC;
 
-  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../cases/casesListSetup', 'Cases List Setup', "",'', 'admToolsContent');
-  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../setup/appCacheViewConf', 'Application Cache Conf.', "",'', 'admToolsContent');
+  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'admToolsContent');
+  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'admToolsContent');
   
   if ($RBAC->userCanAccess('PM_SETUP') == 1) {
     $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'admToolsContent');
