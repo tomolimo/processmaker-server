@@ -15,6 +15,9 @@ Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
     }
 });
 
+//global variables
+var storeCases;
+
 Ext.onReady ( function() {
   var filterProcess = '';
 
@@ -100,7 +103,7 @@ Ext.onReady ( function() {
 
   // Typical Store collecting the Proxy, Reader and Writer together.
   // This is the store for Cases List
-  var storeCases = new Ext.data.Store({
+  storeCases = new Ext.data.Store({
     remoteSort: true,
     proxy: proxyCasesList,
     reader: readerCasesList,
@@ -319,5 +322,12 @@ Ext.onReady ( function() {
       m.slideIn('t').pause(1).ghost("t", {remove:true});              
 */      
     }
-
+  
+  
+  if( parent.PANEL_EAST_OPEN ){
+    parent.PANEL_EAST_OPEN = false;
+    var debugPanel = parent.Ext.getCmp('debugPanel');      
+    debugPanel.hide();
+    debugPanel.ownerCt.doLayout(); 
+  }
 });
