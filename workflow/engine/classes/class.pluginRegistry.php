@@ -76,6 +76,7 @@ class PMPluginRegistry {
   private $_aRedirectLogin = array();
   private $_aSteps = array();
   private $_aDashboardPages = array();
+  private $_aCSSStyleSheets = array();
 
   static private $instance = NULL;
 
@@ -361,6 +362,35 @@ class PMPluginRegistry {
    */
   function getDashboardPages() {
     return  $this->_aDashboardPages;
+  }
+  
+  /**
+   * Register a stylesheet in the singleton
+   *
+   * @param unknown_type $sNamespace
+   * @param unknown_type $sPage
+   */
+  function registerCss($sNamespace, $sCssFile ) {
+  $found = false;
+     foreach ( $this->_aCSSStyleSheets as $row=>$detail ) {
+      if ( $sCssFile == $detail->sCssFile && $sNamespace == $detail->sNamespace ){
+        $detail->sCssFile=$sCssFile;        
+      	$found = true;
+      }
+     }
+    if ( !$found ) {
+      $cssFile = new cssFile ($sNamespace, $sCssFile);
+      $this->_aCSSStyleSheets[] = $cssFile;
+    }
+  }
+  
+  /**
+   * return all dashboard pages
+   *
+   * @return array
+   */
+  function getRegisteredCss() {
+    return  $this->_aCSSStyleSheets;
   }
   
 

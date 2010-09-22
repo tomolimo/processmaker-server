@@ -300,6 +300,16 @@ class headPublisher {
     if (file_exists ( PATH_HTML . 'skins' . PATH_SEP . 'ext' . PATH_SEP . 'pmos-' . $this->extJsSkin . '.css' )) {
       $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
     }
+    //Load external/plugin css
+    $oPluginRegistry = & PMPluginRegistry::getSingleton ();
+    $registeredCss=$oPluginRegistry->getRegisteredCss();
+    foreach($registeredCss as $cssFile){
+      
+      $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n";
+    
+      
+    }
+    
     return $script;
   }
   

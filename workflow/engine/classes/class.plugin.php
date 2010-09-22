@@ -77,6 +77,21 @@ class menuDetail {
     $this->sIcon    = $sIcon;
   }
  }
+
+class cssFile {
+  var $sNamespace;
+  var $sCssFile;
+  /**
+  * This function is the constructor of the dashboardPage class
+  * @param string $sNamespace
+  * @param string $sPage  
+  * @return void
+  */
+  function __construct( $sNamespace, $sCssFile) {
+    $this->sNamespace = $sNamespace;
+    $this->sCssFile    = $sCssFile;        
+  }
+ }
  
 class triggerDetail {
   var $sNamespace;
@@ -283,6 +298,7 @@ class PMPlugin {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->registerDashboard ( $this->sNamespace);
   }
+  
 
   /**
   * With this function we can register the report
@@ -426,5 +442,14 @@ class PMPlugin {
   function registerDashboardPage( $sPage, $sName, $sIcon="") {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->registerDashboardPage ( $this->sNamespace, $sPage, $sName, $sIcon );
+  }
+  /**
+  * With this function we can register a Dashboard Page for Cases Dashboard
+  * @param string $sPage
+  * @return void
+  */
+  function registerCss( $sCssFile) {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $oPluginRegistry->registerCss ( $this->sNamespace, $sCssFile );
   }
 }
