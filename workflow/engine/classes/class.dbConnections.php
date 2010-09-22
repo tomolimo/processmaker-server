@@ -127,6 +127,48 @@ class dbConnections
     }
     
   }
+
+
+  /**
+   * getConnectionsProUid
+   *
+   * @param  string $pType
+   * @return Array $connections
+   */
+  public function getConnectionsProUid($pProUid)
+  {
+    $connections = Array(); 
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    
+    $c->addSelectColumn(DbSourcePeer::DBS_UID);
+    $c->addSelectColumn(DbSourcePeer::PRO_UID);    
+    $c->addSelectColumn(DbSourcePeer::DBS_TYPE);
+    $c->addSelectColumn(DbSourcePeer::DBS_SERVER);
+    $c->addSelectColumn(DbSourcePeer::DBS_DATABASE_NAME);
+
+    $result = DbSourcePeer::doSelectRS($c);
+    $result->next();
+    $row = $result->getRow();
+    while ($row = $result->getRow()) {
+      if(trim($pProUid) == trim($row[1])){
+        $connections[] = Array(
+          'DBS_UID'           => $row[0], 
+          'DBS_NAME'          => '[' . $row[3] . '] ' . $row[2] . ': ' . $row[4]          
+        );
+      }
+      $result->next();
+    }
+
+    if(count($connections) > 0){
+      return $connections;  
+    } else {
+      return Array();
+    }
+    
+  }
+
+
   
   /**
    * loadAdditionalConnections
