@@ -444,7 +444,10 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
     //setup plugins
     $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
     $avoidChangedWorkspaceValidation = false;
-
+    
+    //Load custom Classes and Model from Plugins. 
+    G::LoadAllPluginModelClasses();
+    
     //*********jump to php file in methods directory *************
     $collectionPlugin = '';
     if ( $oPluginRegistry->isRegisteredFolder( SYS_COLLECTION ) ) {
