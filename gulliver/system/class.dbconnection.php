@@ -86,7 +86,7 @@ class DBConnection
    * @return string
    *
    */
-  function DBConnection( $strServer = DB_HOST, $strUser = DB_USER, $strPwd = DB_PASS, $strDB = DB_NAME , $type = 'mysql', $strPort = 0,  $errorLevel = 2 )
+  function DBConnection( $strServer = DB_HOST, $strUser = DB_USER, $strPwd = DB_PASS, $strDB = DB_NAME , $type = DB_ADAPTER, $strPort = 0,  $errorLevel = 2 )
   {
     $this->errorLevel = $errorLevel;
     if ($type == null ) $type = 'mysql';
@@ -102,8 +102,10 @@ class DBConnection
     if ( $type == "odbc" )
       $dsn = "odbc://$strUser:$strPwd@$strServer/$strDB";
     if ( $type == "mssql" ) {
+      $strServer = substr($strServer, 0, strpos($strServer,':'));
       $prt = ( $strPort == 0 || $strPort == 1433  ? '' : ":$strPort" );
-      $dsn = "mssql://$strUser:$strPwd@$strServer$prt/$strDB";
+        $dsn = "mssql://$strUser:$strPwd@$strServer$prt/$strDB";
+      ///--) $dsn = "mssql://$strUser:$strPwd@$strServer/$strDB";
     }
     if ( $type == "oracle" ) {
       $dsn = "oci8://$strUser:$strPwd@$strServer/$strDB";
