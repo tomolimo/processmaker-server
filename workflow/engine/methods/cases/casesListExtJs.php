@@ -12,16 +12,16 @@
   // evaluates an action and the list that will be rendered
   $config = getAdditionalFields($action);
 
-  $columns      = json_encode($config['caseColumns']);
-  $readerFields = json_encode( $config['caseReaderFields']);
+  $columns      = $config['caseColumns'];
+  $readerFields = $config['caseReaderFields'];
     	
-  $oHeadPublisher->assignNumber( 'pageSize',     $config['rowsperpage'] ); //sending the page size
-  $oHeadPublisher->assignNumber( 'columns',      $columns ); //sending the columns to display in grid
-  $oHeadPublisher->assignNumber( 'readerFields', $readerFields ); //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'pageSize',     $config['rowsperpage'] ); //sending the page size
+  $oHeadPublisher->assign( 'columns',      $columns ); //sending the columns to display in grid
+  $oHeadPublisher->assign( 'readerFields', $readerFields ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'action',       $action ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'PMDateFormat', $config['dateformat'] ); //sending the fields to get from proxy
 
-  $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('cases/casesList', true );    //adding a javascript file .js
 
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
 

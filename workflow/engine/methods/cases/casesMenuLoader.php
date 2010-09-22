@@ -4,6 +4,7 @@
   G::LoadClass('case');
   G::LoadClass('configuration');
 
+  $userId = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : '00000000000000000000000000000000';
   switch($action) {
     case 'getAllCounters': 
       getAllCounters();  
@@ -108,6 +109,7 @@
   // get the process summary of specific case list type,
   function getProcess () {
   	global $G_TMP_MENU;
+  	global $userId;
     if ( !isset($_GET['item']) ) {
       die;
     }
@@ -115,12 +117,15 @@
     $oMenu = new Menu();
     $oMenu->load('cases');
     $type = $_GET['item'];
-    $oCases = new Cases();
+    $oCases = new AppCacheView();
       
     $aTypesID = Array('CASES_INBOX'=>'to_do', 'CASES_DRAFT'=>'draft', 'CASES_CANCELLED'=>'cancelled', 'CASES_SENT'=>'sent', 'CASES_PAUSED'=>'paused', 'CASES_COMPLETED'=>'completed','CASES_SELFSERVICE'=>'selfservice','CASES_TO_REVISE'=>'to_revise','CASES_TO_REASSIGN'=>'to_reassign');
 
-    $aCount = $oCases->getAllConditionCasesCount(Array($aTypesID[$type]), true);
+    $aCount = $oCases->getAllCounters(Array($aTypesID[$type]), $userId, true);
+//print_r ( $aCount);
     $response = Array();
+//disabling the summary...
+/*    
     $i=0;
     foreach($aCount[$aTypesID[$type]]['sumary'] as $PRO_UID=>$process){
       //{"text":"state","id":"src\/state","cls":"folder", loaded:true},
@@ -131,7 +136,7 @@
       $response[$i]->loaded = true;
       $i++;
     }
-
+*/
     //ordering
     /*for($i=0; $i<=count($response)-1; $i++){
       for($j=$i+1; $j<=count($response); $j++){
