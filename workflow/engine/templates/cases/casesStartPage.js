@@ -136,7 +136,7 @@ function getDashboardItems() {
 					}),
 					extraStyle : {
 						xAxis : {
-							labelRotation : -45,							
+							labelRotation : -45							
 						},
 					legend:{        
 				             display: 'right'  
@@ -384,13 +384,23 @@ MainPanel = function(){
 											// grid.getGridEl().unmask(true);
 											var response = Ext.util.JSON
 													.decode(responseObject.responseText);
+											if(response.openCase){
 											Ext.Msg
 													.show( {
 														title : 'Open Case',
-														msg : 'Case number <b>' + response.CASE_NUMBER + '</b>',
+														msg : 'Case number <b><a href="'+response.openCase.PAGE+'">' + response.CASE_NUMBER + '</a></b>',
 														icon : Ext.MessageBox.INFO
 													});
 											window.location = response.openCase.PAGE;
+											}else{
+												Ext.Msg
+												.show( {
+													title : 'Error creating a new Case',
+													msg : '<textarea cols="50" rows="10">'+response.message+'</textarea>',
+													icon : Ext.MessageBox.ERROR,
+													buttons: Ext.Msg.OK,
+												});
+											}
 											// Ext.Msg.alert('Status',
 											// responseObject.responseText);
 										},
@@ -403,6 +413,7 @@ MainPanel = function(){
 							}
 						},
 						click : function(n) {
+							//console.log(n);
 						  this.treePanel.showDetails(n);
 						  
 						  
@@ -464,14 +475,17 @@ MainPanel = function(){
 				},{
 					id: 'process-detail-panel',
 					region: 'east',
+					autoHeight: true,
 					split: true,
 					style: {
-           width: '50%',
+           width: '50%'
+           
            
         },
 					minWidth: 150,
 					//maxWidth: 250,
-					html:"jhl was here<br><br>Need to have a brief description here when nothing is selected...<br><br><b><i>Double click to start any Process/Case</b>"
+					html:""
+					
 				}],
     		       tbar : [ {
 						xtype : 'textfield',
@@ -567,14 +581,27 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 
 
 		this.detailsTemplate = new Ext.XTemplate(
-			'<div  class="details">',
+			'<div  class="details" style="background:url(/images/gear.png) repeat;">',
 				'<tpl for=".">',
-					'<!--<img src="{url}">--><div class="details-info">',
+					'<!--<img src="{url}">-->',
+					'<div class="details-info" style="background-color:#ffffff;/* for IE */ filter:alpha(opacity=90); /* CSS3 standard */ opacity:0.9;">',
+					
 					'<!-- <div style="width:90%;height:30%;padding:0px;overflow:auto;border:1px solid black" id="pm_target" ></div>-->',
+					'<h1><center><u>{taskName}</u></center></h1><br>',
 					'<b>Process Name:</b>',
-					'<span>{name}</span><br>',
+					'<span>{processName}</span>',
 					'<b>Description: </b>',
-					'<span>{sizeString}</span><br>',
+					'<span>{processDescription}</span>',
+					'<b>Category: </b>',
+					'<span>{processCategory}</span>',
+					'<b>Statistics: </b>',
+					'<span><b>Active Cases (Mine/Total):</b>{myInbox} / {totalInbox}</span>',
+					'<b>Calendar: </b>',
+					'<span>{calendarName} ({calendarDescription})</span>',
+					'<b>Working Days: </b>',
+					'<span>{calendarWorkDays}</span>',
+					'<b>Debug mode: </b>',
+					'<span>{processDebug}</span>',
 					'<hr><span><i>Double click to start any Process/Case</i></span>',
 					'<!-- <input type="button" value="Start Case" onclick="alert(\'JHL was here: This should start the following Process/Task{name}. \');alert(mainPanel);alert(mainPanel.startNewCase);"> -->',
 					
@@ -590,10 +617,32 @@ Ext.extend(MainPanel, Ext.TabPanel, {
       var detailEl = Ext.getCmp('process-detail-panel').body;
       if(selectedNode){
         this.initTemplates();
-         detailEl.hide();
-         data={name:selectedNode.attributes.text};
+         //detailEl.hide();
+        detailEl.sequenceFx();
+         detailEl.slideOut('l', {stopFx:true,duration:.9});
+         
+         otherAttributes=selectedNode.attributes.otherAttributes;
+         taskName=selectedNode.attributes.text;
+         processName=otherAttributes.PRO_TITLE;
+         calendarName=otherAttributes.CALENDAR_NAME;
+         calendarDescription=otherAttributes.CALENDAR_DESCRIPTION;
+         calendarWorkDays=otherAttributes.CALENDAR_WORK_DAYS;
+         processCategory=otherAttributes.PRO_CATEGORY_LABEL;
+         if(otherAttributes.PRO_DEBUG==0){
+        	 processDebug="False";
+         }else{
+        	 processDebug="True";
+         }
+         processDescription=otherAttributes.PRO_DESCRIPTION;
+         myInbox=otherAttributes.myInbox;
+         totalInbox=otherAttributes.totalInbox;
+         
+         //data={name:selectedNode.attributes.text};
+         data={taskName:taskName,processName:processName,calendarName:calendarName,calendarDescription:calendarDescription,calendarWorkDays:calendarWorkDays,processCategory:processCategory,processDebug:processDebug,processDescription:processDescription,myInbox:myInbox,totalInbox:totalInbox};
+         
+         
             this.detailsTemplate.overwrite(detailEl, data);
-            detailEl.slideIn('l', {stopFx:true,duration:.2});
+            detailEl.slideIn('t', {stopFx:true,duration:.9});
             detailEl.highlight('#c3daf9', {block:true});
             Pm=new parent.parent.processmap();            
             var params = "{\"uid\":\""+selectedNode.attributes.pro_uid+"\",\"mode\":true,\"ct\":false}";

@@ -20,6 +20,10 @@ $functionName ( $functionParams );
 
 function getProcessList() {
   G::LoadClass ( 'case' );
+  G::LoadClass ( 'process' );
+  G::LoadClass ( 'calendar' );
+  $calendar    = new Calendar ( );
+  $oProcess = new Process ( );
   $oCase = new Cases ( );
   $bCanStart = $oCase->canStartCase ( $_SESSION ['USER_LOGGED'] );
   if ($bCanStart) {
@@ -74,6 +78,9 @@ function getProcessList() {
         $tempTree ['optionType'] = "startProcess";
         $tempTree ['pro_uid'] = $processInfo ['pro_uid'];
         $tempTree ['tas_uid'] = $processInfo ['uid'];
+        $processInfo ['myInbox']=0;
+        $processInfo ['totalInbox']=0;
+        $tempTree ['otherAttributes'] = array_merge($processInfo,$oProcess->load ( $processInfo ['pro_uid'] ),$calendar->getCalendarFor ( $processInfo ['uid'], $processInfo ['uid'], $processInfo ['uid'] ));
         
         //$tempTree['cls']='file';
         $processListTree [] = $tempTree;
