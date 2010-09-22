@@ -6,7 +6,7 @@
   <LAN_NAME type="text" titlealign="left" colWidth="200">
     <en>Language</en>
   </LAN_NAME>
-  <LAN_SELECT type="text" titlealign="left" colWidth="10" enableHtml="1"/>
-  <LAN_EXPORT type="link" colWidth="50" value="@#LAN_EXPORT" link="languages_Export?LAN_ID=@#LAN_ID&amp;rand=@#RAND" onclick=""/>
-  <LAN_DELETE type="link" colWidth="50" value="@#LAN_DELETE" link="languages_Delete?LAN_ID=@#LAN_ID&amp;rand=@#RAND" onclick=""/>
+  <!--<LAN_SELECT type="text" titlealign="left" colWidth="10" enableHtml="1"/>-->
+  <LAN_EXPORT type="link" colWidth="25" value="@#LAN_EXPORT" link="languages_Export?LAN_ID=@#LAN_ID&amp;rand=@#RAND" onclick=""/>
+  <LAN_DELETE type="link" colWidth="25" value="@#LAN_DELETE" link="languages_Delete?LAN_ID=@#LAN_ID&amp;rand=@#RAND" onclick=""/>
 </dynaForm>  

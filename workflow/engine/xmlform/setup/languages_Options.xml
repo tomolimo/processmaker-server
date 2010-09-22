@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
 <MNU_IMPORT type="link" value="" link="languages_ImportForm" colAlign="left" colWidth="160">
-  <en>Import or Update</en>
+  <en>Import / Update</en>
 </MNU_IMPORT>
 
 <JS type="javascript"><![CDATA[
