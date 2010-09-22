@@ -232,3 +232,10 @@ function getRegisteredDashboards() {
   $dashBoardPages = $oPluginRegistry->getDashboardPages ();
   print_r ( json_encode ( $dashBoardPages ) );
 }
+function getDefaultDashboard(){
+	$defaultDashboard['defaultTab']="mainDashboard";
+	if(isset($_SESSION['__currentTabDashboard'])){
+		$defaultDashboard['defaultTab']=$_SESSION['__currentTabDashboard'];
+	}
+	print_r ( json_encode ( $defaultDashboard ) );
+}

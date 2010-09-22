@@ -1,4 +1,8 @@
 <?php
+unset($_SESSION['__currentTabDashboard']);
+if(isset($_GET['t'])){
+	$_SESSION['__currentTabDashboard']=$_GET['t'];
+}
 
   $oHeadPublisher =& headPublisher::getSingleton();
   //$oHeadPublisher->setExtSkin( 'xtheme-gray');
