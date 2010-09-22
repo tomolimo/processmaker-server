@@ -354,6 +354,7 @@ MainPanel = function(){
 					id : 'startCaseTreePanel',
 					rootVisible : false,
 					treePanel:this,
+					clearOnReLoad: false,
 					loader : new Ext.tree.TreeLoader( {
 						dataUrl : 'casesStartPage_Ajax.php',
 						baseParams : {
@@ -449,14 +450,79 @@ MainPanel = function(){
     		       tbar : [ {
 						xtype : 'textfield',
 						name : 'field1',
-						emptyText : 'enter search term',
-						enableKeyEvents : true,
+						emptyText : 'Find a Process',
+						enableKeyEvents : true,						
 						listeners : {
+    		    	   render: function(f){
+    		    	   Ext.getCmp("startCaseTreePanel").filter = new Ext.tree.TreeFilter(this, {
+                   		clearBlank: true,
+                   		autoClear: true
+                   	});
+					},
+					 keydown: function(t, e){
+						treeFiltered=Ext.getCmp("startCaseTreePanel");
+						console.log(treeFiltered);
+						console.log(t);
+							var text = t.getValue();
+							console.log(text);
+							if(!text){
+								console.info("Clearing filter");
+								treeFiltered.filter.clear();
+								return;
+							}
+							console.info("Expanding...");
+							treeFiltered.expandAll();
+							
+							var re = new RegExp('^' + Ext.escapeRe(text), 'i');
+							console.log(re);
+							console.log(treeFiltered.filter);
+							
+							treeFiltered.filter.filterBy(function(n){
+								console.info("filtering...");
+								console.log(n);
+								//return !n.attributes.isClass || re.test(n.text);
+							});
+							
+							/*
+							// hide empty packages that weren't filtered
+							this.hiddenPkgs = [];
+					                var me = this;
+							this.root.cascade(function(n){
+								if(!n.attributes.isClass && n.ui.ctNode.offsetHeight < 3){
+									n.ui.hide();
+									me.hiddenPkgs.push(n);
+								}
+							});
+						*/
+                        
+
+                    },
+
 							keyup : function(filterText) {
 								// console.log(filterText.getValue());
-					}
+					},
+					scope: this
+
+
+
+                    
 				}
-					},{
+					},
+					
+					' ', ' ',
+					{
+		                iconCls: 'icon-expand-all',
+						tooltip: 'Expand All',
+		                handler: function(){ Ext.getCmp("startCaseTreePanel").root.expand(true); },
+		                scope: this
+		            }, '-', {
+		                iconCls: 'icon-collapse-all',
+		                tooltip: 'Collapse All',
+		                handler: function(){ Ext.getCmp("startCaseTreePanel").root.collapse(true); },
+		                scope: this
+		            },
+		            ' ', ' ',
+					{
         
         xtype: 'tbbutton',
         cls: 'x-btn-icon',
@@ -540,27 +606,43 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 
 
 		this.detailsTemplate = new Ext.XTemplate(
-			'<div  class="details" style="background:url(/images/gear.png) repeat;">',
+			'<div  class="details" style="background:url(/images/onmouseSilver.jpg) repeat;">',
 				'<tpl for=".">',
 					'<!--<img src="{url}">-->',
 					'<div class="details-info" style="background-color:#ffffff;/* for IE */ filter:alpha(opacity=90); /* CSS3 standard */ opacity:0.9;">',
 					
 					'<!-- <div style="width:90%;height:30%;padding:0px;overflow:auto;border:1px solid black" id="pm_target" ></div>-->',
-					'<h1><center><u>{taskName}</u></center></h1><br>',
+					'<h1"><center><u>{taskName}</u></center></h1><br>',
 					'<b>Process Name:</b>',
 					'<span>{processName}</span>',
 					'<b>Description: </b>',
 					'<span>{processDescription}</span>',
+					'<table>',
+					'<tr>',
+					'<td>',
 					'<b>Category: </b>',
+					
 					'<span>{processCategory}</span>',
-					'<b>Statistics: </b>',
-					'<span><b>Active Cases (Mine/Total):</b>{myInbox} / {totalInbox}</span>',
+					
+					'</td>',
+					'<td>',
 					'<b>Calendar: </b>',
 					'<span>{calendarName} ({calendarDescription})</span>',
+					'</td>',
+					'<td>',
 					'<b>Working Days: </b>',
 					'<span>{calendarWorkDays}</span>',
+					'</td>',
+					'<td>',
 					'<b>Debug mode: </b>',
 					'<span>{processDebug}</span>',
+					'</tr>',
+					'</table>',
+					'<b>Statistics: </b>',
+					'<span><b>Active Cases (Mine/Total):</b>{myInbox} / {totalInbox}</span>',
+					
+					
+					
 					'<hr><span><i>Double click to start any Process/Case</i></span>',
 					'<!-- <input type="button" value="Start Case" onclick="alert(\'JHL was here: This should start the following Process/Task{name}. \');alert(mainPanel);alert(mainPanel.startNewCase);"> -->',
 					
@@ -569,7 +651,8 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 			'</div>'
 		);
 		this.detailsTemplate.compile();
-	},
+	} ,
+
     showDetails : function(selectedNode){
       
       // console.log(selectedNode);
