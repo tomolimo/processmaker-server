@@ -639,6 +639,14 @@ class G
     require_once( PATH_GULLIVER . 'class.' . $strClass . '.php' );
   }
 
+  function LoadSystemExist($strClass)
+  {
+    if (file_exists (PATH_GULLIVER . 'class.' . $strClass . '.php') ) 
+      return true;
+    else 
+      return false;
+  }
+
   /**
    * Render Page
    *
