@@ -95,4 +95,14 @@ class Language extends BaseLanguage {
     
     return $rows;
   }
+  
+  function findById($LAN_ID){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(LanguagePeer::LAN_NAME);
+    $oCriteria->add(LanguagePeer::LAN_ID, $LAN_ID);
+    $oDataset = LanguagePeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    return $oDataset->getRow();
+  }
 } // Language

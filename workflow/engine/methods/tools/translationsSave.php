@@ -25,6 +25,7 @@
 
   $form = $_POST['form'];
   require_once ( "classes/model/Translation.php" );
+  $form['trn_value'] = preg_replace("[\n|\r|\n\r]", ' ', $form['trn_value']);
   
   //$t = new Translation;
   $res = Translation::addTranslation(  $form['trn_category'],  $form['trn_id'], 'en' ,  $form['trn_value'] );
