@@ -953,7 +953,6 @@ class G
     unset($toparse);
 
     array_shift($URI_VARS);
-
     define("SYS_LANG", array_shift($URI_VARS));
     define("SYS_SKIN", array_shift($URI_VARS));
 
@@ -1838,29 +1837,38 @@ class G
    * @access public
    * @parameter string lang    
    * @return void
+   *
+   * @note Refactored By Erik A.O. <erik@colosa.com> in Sep 9th, 2010
    */
   function LoadTranslationObject($lang = SYS_LANG){
-    if( is_file(PATH_LANGUAGECONT . 'translation.en') ){
-      require( PATH_LANGUAGECONT . 'translation.en' );
-      $translationDefault = $translation;
-      if($lang!='en'){
-        if ( file_exists (PATH_LANGUAGECONT . 'translation.' . $lang) ){
-          require( PATH_LANGUAGECONT . 'translation.' . $lang );
-        }elseif((!defined("SHOW_UNTRANSLATED_AS_TAG"))||(SHOW_UNTRANSLATED_AS_TAG==0)){
-          // --Default English --
-          require( PATH_LANGUAGECONT . 'translation.' . 'en' );
-        }
-          $translationSYS_LANG=$translation;
-        }
-        
-        global $translation;
-        if($lang!='en'){
-          $translation = array_merge($translationDefault,$translationSYS_LANG);
-        }else{
-          $translation = $translationDefault;
-      }
+    $defaultTranslations = Array();
+    $foreignTranslations = Array();
+    
+    //if the default translations table doesn't exist we can't proceed
+    if( ! is_file(PATH_LANGUAGECONT . 'translation.en') )
+      return NULL;
+    
+    //load the translations table
+    require PATH_LANGUAGECONT . 'translation.en';
+    $defaultTranslations = $translation;
+    //self::dump(PATH_LANGUAGECONT . 'translation.' . $lang);
+    //if some foreign language was requested and its translation table exists
+    if( $lang != 'en' && file_exists(PATH_LANGUAGECONT . 'translation.' . $lang) ){
+      
+      //load the foreign translations table
+      
+      require PATH_LANGUAGECONT . 'translation.' . $lang;
+      $foreignTranslations = $translation;
+      //g::pr($foreignTranslations); die;
     }
+    
+    global $translation;
+    if( defined("SHOW_UNTRANSLATED_AS_TAG") && SHOW_UNTRANSLATED_AS_TAG != 0 ) 
+      $translation = $foreignTranslations;
+    else
+      $translation = array_merge($defaultTranslations, $foreignTranslations);
   }
+  
   /**
    * Function LoadTranslation
    * @author Aldo Mauricio Veliz Valenzuela. <mauricio@colosa.com>
