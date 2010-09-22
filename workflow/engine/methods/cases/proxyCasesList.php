@@ -29,45 +29,28 @@
 // get the action based list
   switch ( $action ) {
   	case 'draft' :
-         $Criteria = $oAppCache->getDraft();
+         $Criteria = $oAppCache->getDraftListCriteria($userUid);
          break;
   	case 'sent' :
-         $Criteria = $oAppCache->getParticipated();
+         $Criteria = $oAppCache->getParticipatedListCriteria($userUid);
          break;
   	case 'selfservice' :
-         $Criteria = $oAppCache->getUnassigned();
+         $Criteria = $oAppCache->getUnassignedListCriteria($userUid);
          break;
   	case 'paused' :
-         $Criteria = $oAppCache->getPaused();
+         $Criteria = $oAppCache->getPausedListCriteria($userUid);
          break;
   	case 'completed' :
-         $Criteria = $oAppCache->getCompleted();
+         $Criteria = $oAppCache->getCompletedListCriteria($userUid);
          break;
   	case 'cancelled' :
-         $Criteria = $oAppCache->getCancelled();
+         $Criteria = $oAppCache->getCancelledListCriteria($userUid);
          break;
     case 'todo' :
     default:
          $Criteria = $oAppCache->getToDoListCriteria($userUid);
     break;
   }
-  // VERY IMPORTANT
-  // Above Development debugging code needed to be removed previously to be deployed or commited
-  // TODO: remove this code if the list for both the new and original functions
-  //       get the exactly same results
-  G::LoadClass("case" );
-  $oCases = new Cases();
-
-//  $type='old'; // can uncomment this line to populate the list with the old cases methods
-  if ($type=='old'){
-    $action = $action=='todo' ? 'to_do' : $action;
-    $aCasesData = $oCases->getConditionCasesList($action,$sUIDUserLogged);
-    $Criteria = $aCasesData[0];
-    //g::pr($Criteria);
-  }
-  //
-  //  end test code
-  // VERY IMPORTANT
 
   //add the process filter
   if ( $process != '' ) {
@@ -116,9 +99,6 @@
   $rows = array();
   $index = $start;
   while($aRow = $oDataset->getRow()){
-    //$aRow['index'] = ++$index;
-//    g::pr($aRow);
-    $aRow['DEL_TASK_DUE_DATE'] = strip_tags($aRow['DEL_TASK_DUE_DATE']);
     $rows[] = $aRow;
       
     $oDataset->next();
@@ -129,10 +109,7 @@
   
   }
   catch ( Exception $e ) {
-    $G_PUBLISH = new Publisher;
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish', 'blank' );
+    print json_encode( $e->getMessage() ) ;
   }      
 
 

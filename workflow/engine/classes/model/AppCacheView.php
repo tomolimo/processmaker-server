@@ -29,6 +29,9 @@ class AppCacheView extends BaseAppCacheView {
   		case 'to_do' : 
   	    $Criteria = $this->getToDoCountCriteria( $userUid );
   	    break;
+  		case 'draft' : 
+  	    $Criteria = $this->getDraftCountCriteria( $userUid );
+  	    break;
   	  default :
   	    return $type;
     }
@@ -37,6 +40,8 @@ class AppCacheView extends BaseAppCacheView {
   
     /**
    * gets the todo cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
    * @return Criteria object $Criteria
    */
   function getToDo ( $userUid, $doCount ) {
@@ -57,12 +62,64 @@ class AppCacheView extends BaseAppCacheView {
     return $Criteria;
   }
   
+    /**
+   * gets the todo cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
   function getToDoCountCriteria ($userUid) {
   	return $this->getToDo($userUid, true);
   }
   
+   /**
+   * gets the todo cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
   function getToDoListCriteria ($userUid) {
   	return $this->getToDo($userUid, false);
+  }
+
+    /**
+   * gets the DRAFT cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getDraft ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('draft');
+    }
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    return $Criteria;
+  }
+  
+    /**
+   * gets the DRAFT cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getDraftCountCriteria ($userUid) {
+  	return $this->getDraft($userUid, true);
+  }
+  
+   /**
+   * gets the DRAFT cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getDraftListCriteria ($userUid) {
+  	return $this->getDraft($userUid, false);
   }
 
   /**
@@ -112,7 +169,9 @@ class AppCacheView extends BaseAppCacheView {
   
     $conf = new Configurations();
     $confCasesList = $conf->loadObject('casesList',$action,'','','');
-    if (count($confCasesList)>1&&isset($confCasesList['PMTable'])&&trim($confCasesList['PMTable'])!=''){
+    
+    //if there is PMTABLE for this case list:
+    if ( count($confCasesList)>1 && isset($confCasesList['PMTable']) && trim($confCasesList['PMTable'])!='') {
     // getting the table name
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
       $tableName = $oAdditionalTables->getAddTabName();
@@ -134,7 +193,12 @@ class AppCacheView extends BaseAppCacheView {
       $oCriteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
       return $oCriteria;
     } 
+    //else this list do not have a PM Table,
     else {
+      foreach($confCasesList['second']['data'] as $fieldData){
+        $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
+        $oCriteria->addSelectColumn (  $fieldName );
+      }
       //add the default and hidden DEL_INIT_DATE
       $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
       return $oCriteria;
