@@ -2117,6 +2117,7 @@ class Cases
     //return array ( 'where' => $cf, 'whereFilter' => $cf, 'group' => $g , 'groupFilter' => $gf );
   }
 
+  //DEPRECATED
   /*
   * Get the condition for Cases List
   *
@@ -2141,6 +2142,7 @@ class Cases
     $c->addAsColumn('DEL_TASK_DUE_DATE', " IF (" . AppDelegationPeer::DEL_TASK_DUE_DATE . " <= NOW(), CONCAT('<span style=\'color:red\';>', " . AppDelegationPeer::DEL_TASK_DUE_DATE . ", '</span>'), " . AppDelegationPeer::DEL_TASK_DUE_DATE . ") ");
 
     global $RBAC;
+//seems the PM_SUPERVISOR can delete a completed case    
     if ($sTypeList == "completed" && $RBAC->userCanAccess('PM_SUPERVISOR') == 1){
       $c->addAsColumn("DEL_LINK", "CONCAT('".G::LoadTranslation('ID_DELETE')."')");
     }
@@ -2201,6 +2203,7 @@ class Cases
 
     $c->add(TaskPeer::TAS_TYPE, 'SUBPROCESS', Criteria::NOT_EQUAL);
 
+//gral, to_revise, to_reassign dont have userid in the query
     if ($sTypeList != 'gral' && $sTypeList != 'to_revise' && $sTypeList != 'to_reassign' && $sTypeList != 'my_started' && $sTypeList != 'sent') {
       $c->add(UsersPeer::USR_UID, $sUIDUserLogged);
     }
@@ -2230,28 +2233,24 @@ class Cases
     }
 
     $filesList = array(
-        'all'         => 'cases/cases_ListAll',
+    //7 standard list
         'to_do'       => 'cases/cases_ListTodo',
         'draft'       => 'cases/cases_ListDraft',
         'paused'      => 'cases/cases_ListOnHold',
         'cancelled'   => 'cases/cases_ListCancelled',
         'completed'   => 'cases/cases_ListCompleted',
+        'sent'        => 'cases/cases_ListSent',
+        'selfservice' => 'cases/cases_ListSelfService',
+        
+     //5 admin list   
+        'all'         => 'cases/cases_ListAll',
         'to_revise'   => 'cases/cases_ListToRevise',
         'to_reassign' => 'cases/cases_ListAll_Reassign',
         'my_started'  => 'cases/cases_ListStarted',
-        'Alldelete'   => 'cases/cases_ListAllDelete',
-        'sent'        => 'cases/cases_ListSent',
-        'selfservice' => 'cases/cases_ListSelfService'
+        'Alldelete'   => 'cases/cases_ListAllDelete'
     );
     switch ($sTypeList) {
       case 'all':
-      /*
-          $c->addAsColumn('APP_TYPE', " IF (" . AppDelayPeer::APP_TYPE . " <> '', CONCAT(APPLICATION.APP_STATUS, ' (',APP_DELAY.APP_TYPE,')'), '-') ");
-          $c->addSelectColumn(AppDelayPeer::APP_DISABLE_ACTION_USER);
-          $appDelayConds = array();
-          $appDelayConds[] = array(ApplicationPeer::APP_UID,AppDelayPeer::APP_UID);
-          $appDelayConds[] = array(AppDelayPeer::APP_DISABLE_ACTION_USER, $del . '0' . $del);
-          $c->addJoinMC($appDelayConds, Criteria::LEFT_JOIN);*/
           $c->add(
               $c->getNewCriterion(
                   AppThreadPeer::APP_THREAD_STATUS, 'OPEN'

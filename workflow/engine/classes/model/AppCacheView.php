@@ -48,7 +48,7 @@ class AppCacheView extends BaseAppCacheView {
   	    $Criteria = $this->getCompletedCountCriteria( $userUid );
   	    break;
   		case 'cancelled' : 
-  	    $Criteria = $this->getUnassignedCountCriteria( $userUid );
+  	    $Criteria = $this->getCancelledCountCriteria( $userUid );
   	    break;
   	  default :
   	    return $type;
@@ -190,6 +190,14 @@ class AppCacheView extends BaseAppCacheView {
    * @return Criteria object $Criteria
    */
   function getUnassigned ( $userUid, $doCount ) {
+    //get the valid selfservice tasks for this user
+    $oCase = new Cases();
+    $tasks = $oCase->getSelfServiceTasks( $userUid ); 
+    $aTasks = array();
+    foreach ( $tasks as $key => $val ) {
+      if ( strlen(trim($val['uid'])) > 10 ) $aTasks[] = $val['uid'];
+    }
+    
     // adding configuration fields from the configuration options
     // and forming the criteria object
     if ( $doCount ) {
@@ -198,12 +206,15 @@ class AppCacheView extends BaseAppCacheView {
     else {
       $Criteria = $this->addPMFieldsToCriteria('draft');
     }
-    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
-    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "TODO" , CRITERIA::EQUAL );
 
     //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
-    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    //$Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    //$Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    
+    $Criteria->add(AppDelegationPeer::USR_UID, '');
+    $Criteria->add(AppDelegationPeer::TAS_UID, $aTasks , Criteria::IN );    
+    
     return $Criteria;
   }
   
@@ -288,12 +299,17 @@ class AppCacheView extends BaseAppCacheView {
     else {
       $Criteria = $this->addPMFieldsToCriteria('draft');
     }
-    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "COMPLETED" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
     //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
     $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+
+
+    //$c->add(AppDelegationPeer::DEL_PREVIOUS, '0', Criteria::NOT_EQUAL);
+    $Criteria->addGroupByColumn(ApplicationPeer::APP_UID);
+   
     return $Criteria;
   }
   
@@ -331,12 +347,10 @@ class AppCacheView extends BaseAppCacheView {
     else {
       $Criteria = $this->addPMFieldsToCriteria('draft');
     }
-    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "CANCELLED" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
-
-    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
-    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'CLOSED');
+    
     return $Criteria;
   }
   
