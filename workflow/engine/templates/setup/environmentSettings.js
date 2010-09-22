@@ -66,6 +66,7 @@ Ext.onReady(function() {
     allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
   })
 
+  
   fieldset = {
       xtype : 'fieldset',
       title : TRANSLATIONS.ID_PM_ENV_SETTINGS_USERFIELDSET_TITLE,
@@ -77,7 +78,6 @@ Ext.onReady(function() {
       defaultType : 'textfield',
       items : [cmbFormats]
   }
-  
   
   fsf.add(fieldset);
   cmbFormats.setValue(default_format);
