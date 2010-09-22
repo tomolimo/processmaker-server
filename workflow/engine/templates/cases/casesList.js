@@ -8,7 +8,8 @@ new Ext.KeyMap(document, {
             e.browserEvent.keyCode = 8;
         }
         e.stopEvent();
-        document.location = document.location;
+        //document.location = document.location;
+        storeCases.reload();
       }    
       else 
 Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
@@ -330,4 +331,6 @@ Ext.onReady ( function() {
     debugPanel.hide();
     debugPanel.ownerCt.doLayout(); 
   }
+  parent.updateCasesView();
+  
 });
