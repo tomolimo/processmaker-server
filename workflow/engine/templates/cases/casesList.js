@@ -416,12 +416,17 @@ Ext.onReady ( function() {
 */
     listeners: {
       rowdblclick: function(grid, n,e){
-      var appUid   = grid.store.data.items[n].data.APP_UID;
-    	var delIndex = grid.store.data.items[n].data.DEL_INDEX;
-    	var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
-    	Ext.Msg.alert ('open case' , caseTitle );
-      window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
-    }
+        var appUid   = grid.store.data.items[n].data.APP_UID;
+        var delIndex = grid.store.data.items[n].data.DEL_INDEX;
+        var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
+        Ext.Msg.alert ('open case' , caseTitle );
+        window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+      },
+      render: function(){
+        this.loadMask = new Ext.LoadMask(this.body, {
+          msg:TRANSLATIONS.LABEL_GRID_LOADING
+        });
+      }
   },
     
     tbar: tb,

@@ -108,7 +108,12 @@
   $oHeadPublisher->assign( 'statusValues',  $status ); //sending the columns to display in grid
   $oHeadPublisher->assign( 'processValues', $processes); //sending the columns to display in grid
   $oHeadPublisher->assign( 'userValues',    $users); //sending the columns to display in grid
-
+  
+  $TRANSLATIONS = new stdClass();
+  $TRANSLATIONS->LABEL_GRID_LOADING = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
+  
+  $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
+  
   $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
 
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
