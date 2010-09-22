@@ -7,12 +7,12 @@
 require_once ( "classes/model/AdditionalTables.php" );
 require_once ( "classes/model/Fields.php" );
 // passing the parameters
-$pmTableName   = (isset($_POST['tableName'])) ? $_POST['tableName'] : 'listTable';
+$pmTableName   = (isset($_POST['tableName'])) ? $_POST['tableName'] : 'contenders';
 $pmTableFields = (isset($_POST['tableFields'])) ? json_decode($_POST['tableFields']) : array();
 
 // default parameters
 //$pmTableName   = 'Sender';
-$pmTableFields = array(array('FLD_NAME'=>'APP_UID'),array('FLD_NAME'=>'_cedula'));
+$pmTableFields = array(array('FLD_NAME'=>'APP_UID'),array('FLD_NAME'=>'CON_NAME'),array('FLD_NAME'=>'CON_ADDR'),array('FLD_NAME'=>'_cedula'));
 
 // setting the data to assemble the table
 $aData = array();
@@ -59,5 +59,52 @@ foreach ($pmTableFields as $iRow => $aRow) {
 
 $oAdditionalTables->createTable(strtoupper($pmTableName), 'wf', $aFields);
 $oAdditionalTables->createPropelClasses(strtoupper($pmTableName), $pmTableName, $pmTableFields, $sAddTabUid);
+
+require_once ( "classes/model/Application.php" );
+require_once ( "classes/model/AdditionalTables.php" );
+require_once ( "classes/model/Fields.php" );
+
+
+$Criteria  = new Criteria('workflow');
+$Criteria->addSelectColumn (ApplicationPeer::APP_UID);
+$Criteria->addSelectColumn (ApplicationPeer::APP_DATA);
+
+//    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+$oDataset = ApplicationPeer::doSelectRS($Criteria);
+$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+$oDataset->next();
+$aProcesses = array();
+$i = 0;
+while ($aRow = $oDataset->getRow()) {
+	$appuid = $aRow['APP_UID'];
+	$data   = unserialize ( $aRow['APP_DATA'] );
+$cedula = '234'. rand (1000,999999);
+$nombre = 'nombre '. rand (1000,999999);
+$direccion = 'direccion '. rand (1000,999999);
+	if ( isset ( $data['_cedula'] ) ) {
+		$cedula = $data['_cedula'];
+		$nombre = isset($data['_nombre']) ? $data['_nombre'] : '';
+		$direccion = isset($data['_direccion']) ? $data['_direccion'] : '';
+	  print "$i $appuid $cedula <br>";
+	}
+//	  print_r ( $aRow);
+    $sql = "insert CONTENDERS VALUES ( '$appuid', '$nombre', '$direccion', '$cedula' )";
+
+    $con  = Propel::getConnection('workflow');
+    $stmt = $con->createStatement();
+    $rs   = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+
+    $i++;
+//    if ( $i == 100 ) die;
+/*	if ( strpos ( $aRow['APP_DATA'], 'cedula' ) !== false ) {
+	  print_r ( $aRow );
+	  print "<hr>";
+    $i++;
+    if ( $i == 10 ) die;
+	 }
+*/
+  $oDataset->next();
+}
+print "--$i--";
 
 ?>

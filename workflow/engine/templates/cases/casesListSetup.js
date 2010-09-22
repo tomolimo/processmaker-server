@@ -42,6 +42,27 @@ Ext.onReady(function(){
           success: function(response) {
             var dataResponse = Ext.util.JSON.decode(response.responseText);
             var rec = Ext.data.Record.create(pmFields);
+            //alert(firstGrid.store);
+            var index;
+            var record;
+            var count = firstGrid.store.getTotalCount();
+
+            // removing all the PM Table fields from the first grid
+            do{
+              index = firstGrid.store.find('fieldType','PM Table');
+              record = firstGrid.store.getAt(index);
+              if (index>=0)
+                firstGrid.store.remove(record);
+            }while (index>=0);
+
+            // removing all the PM Table fields from the second grid
+            do{
+              index = secondGrid.store.find('fieldType','PM Table');
+              record = secondGrid.store.getAt(index);
+              if (index>=0)
+                secondGrid.store.remove(record);
+            }while (index>=0);
+
             for(var i = 0; i <= dataResponse.data.length-1; i++){
               var d = new rec( dataResponse.data[i] );
               firstGrid.store.add(d);
@@ -69,7 +90,7 @@ Ext.onReady(function(){
     }),
     valueField    : 'id',
     displayField  : 'id',
-    triggerAction : 'all',
+    triggerAction : 'all'
   });
   
   // create the Dropdown for date formats
@@ -85,7 +106,7 @@ Ext.onReady(function(){
     }),
     valueField    : 'id',
     displayField  : 'id',
-    triggerAction : 'all',
+    triggerAction : 'all'
   });
   
   PmTableStore.setDefaultSort('ADD_TAB_NAME', 'asc');
@@ -148,7 +169,7 @@ Ext.onReady(function(){
   ];
 
   var labelTextField = new Ext.form.TextField ({
-    allowBlank: true,
+    allowBlank: true
   });
 
   var alignComboBox = new Ext.form.ComboBox ({
