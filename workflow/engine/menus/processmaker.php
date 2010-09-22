@@ -32,7 +32,7 @@ global $G_TMP_MENU;
 global $RBAC;
 
 if ($RBAC->userCanAccess('PM_DASHBOARD') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/dashboard', G::LoadTranslation('ID_DASHBOARD'));
+  //$G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/dashboard', G::LoadTranslation('ID_DASHBOARD'));
 }
 
 #CASES MODULE
