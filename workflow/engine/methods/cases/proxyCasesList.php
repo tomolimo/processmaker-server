@@ -32,7 +32,7 @@
          $Criteria = $oAppCache->getDraftListCriteria($userUid);
          break;
   	case 'sent' :
-         $Criteria = $oAppCache->getParticipatedListCriteria($userUid);
+         $Criteria = $oAppCache->getSentListCriteria($userUid);
          break;
   	case 'selfservice' :
          $Criteria = $oAppCache->getUnassignedListCriteria($userUid);
@@ -113,28 +113,6 @@
   }      
 
 
-  /**
-   * gets the draft cases list criteria
-   * @return Criteria object $Criteria
-   */
-  function getDraft() {
-  	global $sUIDUserLogged ;
-    $Criteria = new Criteria('workflow');
-    $Criteria->clearSelectColumns ( );
-
-    // adding configuration fields from the configuration options
-    // and forming the criteria object
-
-    $Criteria = addPMFieldsToCriteria('draft');
-        
-    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
-    $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, CRITERIA::ISNULL);
-    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-    $Criteria->add (AppCacheViewPeer::USR_UID, $sUIDUserLogged);
-    $Criteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
-    
-    return $Criteria;
-  }
   /**
    * gets the participated cases list criteria
    * @return Criteria object $Criteria

@@ -14,6 +14,9 @@ require_once 'classes/model/om/BaseAppCacheView.php';
  *
  * @package    classes.model
  */
+ 
+require_once 'classes/model/AppDelay.php';
+ 
 class AppCacheView extends BaseAppCacheView {
 
   function getAllCounters ( $aTypes, $userUid, $processSummary = false ) {
@@ -31,6 +34,21 @@ class AppCacheView extends BaseAppCacheView {
   	    break;
   		case 'draft' : 
   	    $Criteria = $this->getDraftCountCriteria( $userUid );
+  	    break;
+  		case 'sent' : 
+  	    $Criteria = $this->getSentCountCriteria( $userUid );
+  	    break;
+  		case 'selfservice' : 
+  	    $Criteria = $this->getUnassignedCountCriteria( $userUid );
+  	    break;
+  		case 'paused' : 
+  	    $Criteria = $this->getPausedCountCriteria( $userUid );
+  	    break;
+  		case 'completed' : 
+  	    $Criteria = $this->getCompletedCountCriteria( $userUid );
+  	    break;
+  		case 'cancelled' : 
+  	    $Criteria = $this->getUnassignedCountCriteria( $userUid );
   	    break;
   	  default :
   	    return $type;
@@ -120,6 +138,224 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getDraftListCriteria ($userUid) {
   	return $this->getDraft($userUid, false);
+  }
+
+    /**
+   * gets the SENT cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getSent ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('draft');
+    }
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    return $Criteria;
+  }
+  
+    /**
+   * gets the SENT cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSentCountCriteria ($userUid) {
+  	return $this->getSent($userUid, true);
+  }
+  
+   /**
+   * gets the SENT cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSentListCriteria ($userUid) {
+  	return $this->getSent($userUid, false);
+  }
+
+
+    /**
+   * gets the UNASSIGNED cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getUnassigned ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('draft');
+    }
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    return $Criteria;
+  }
+  
+    /**
+   * gets the UNASSIGNED cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getUnassignedCountCriteria ($userUid) {
+  	return $this->getUnassigned($userUid, true);
+  }
+  
+   /**
+   * gets the UNASSIGNED cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getUnassignedListCriteria ($userUid) {
+  	return $this->getUnassigned($userUid, false);
+  }
+
+    /**
+   * gets the PAUSED cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getPaused ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('paused');
+    }
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    //join with APP_DELAY table using APP_UID and DEL_INDEX    
+    $appDelayConds[] = array(AppCacheViewPeer::APP_UID, AppDelayPeer::APP_UID);
+    $appDelayConds[] = array(AppCacheViewPeer::DEL_INDEX, AppDelayPeer::APP_DEL_INDEX);
+    $Criteria->addJoinMC($appDelayConds, Criteria::LEFT_JOIN);
+    
+    $Criteria->add($Criteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL)->addOr($Criteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0)));
+
+    $Criteria->add(AppDelayPeer::APP_DELAY_UID, null, Criteria::ISNOTNULL);
+    $Criteria->add(AppDelayPeer::APP_TYPE, 'PAUSE');
+    return $Criteria;
+  }
+  
+    /**
+   * gets the PAUSED cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getPausedCountCriteria ($userUid) {
+  	return $this->getPaused($userUid, true);
+  }
+  
+   /**
+   * gets the PAUSED cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getPausedListCriteria ($userUid) {
+  	return $this->getPaused($userUid, false);
+  }
+
+
+    /**
+   * gets the COMPLETED cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getCompleted ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('draft');
+    }
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    return $Criteria;
+  }
+  
+    /**
+   * gets the COMPLETED cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getCompletedCountCriteria ($userUid) {
+  	return $this->getCompleted($userUid, true);
+  }
+  
+   /**
+   * gets the COMPLETED cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getCompletedListCriteria ($userUid) {
+  	return $this->getCompleted($userUid, false);
+  }
+
+
+    /**
+   * gets the CANCELLED cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getCancelled ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('draft');
+    }
+    $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    return $Criteria;
+  }
+  
+    /**
+   * gets the CANCELLED cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getCancelledCountCriteria ($userUid) {
+  	return $this->getCancelled($userUid, true);
+  }
+  
+   /**
+   * gets the CANCELLED cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getCancelledListCriteria ($userUid) {
+  	return $this->getCancelled($userUid, false);
   }
 
   /**

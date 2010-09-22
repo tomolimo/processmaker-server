@@ -445,14 +445,20 @@ function updateCasesView(){
 		          oldValue = oldValue.replace('<b>', '');
 		          oldValue = oldValue.replace('</b>', '');
 		          newValue = result[i].count;
+		          if( newValue != oldValue ) {
+                document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
+              }
 		          //alert(oldValue +'!='+ newValue);
-		          if( oldValue != newValue){
+		          if( oldValue != newValue && oldValue != 0 ){
 		            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
 		            NOTIFIER_FLAG = true;
-		          } else if(NOTIFIER_FLAG === false){
-		            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
-		          }
-		        } else continue;
+		          } 
+		          else 
+		          	if(NOTIFIER_FLAG === false){
+		              document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
+		            }
+		        } 
+		        else continue;
 	        }
 	        Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
 	      } catch (e){

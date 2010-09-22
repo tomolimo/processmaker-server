@@ -4130,6 +4130,25 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <index name="indexAppUid">
+      <index-column name="APP_UID"/>
+      <index-column name="APP_DEL_INDEX"/>
+      <index-column name="APP_DELAY_UID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APP_DELAY"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexAppDelay"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="APP_UID"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
     <index name="indexAppDelay">
       <index-column name="PRO_UID"/>
       <index-column name="APP_UID"/>

@@ -26,19 +26,19 @@ global $RBAC;
 global $G_TMP_MENU;
 //$G_TMP_MENU->AddIdRawOption('CASES_HOME',         'casesStartPage',             G::LoadTranslation('ID_CASES_START_PAGE'),   'pm.gif');
 $G_TMP_MENU->AddIdRawOption('CASES_HOME',           'casesStartPage',                           G::LoadTranslation('ID_CASES_START_PAGE'), '',                   '', 'blockHeader');
-$G_TMP_MENU->AddIdRawOption('CASES_START_CASE',       'casesStartPage?action=startCase',  G::LoadTranslation('ID_NEW_CASE'),              '' );
-$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',       'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
+$G_TMP_MENU->AddIdRawOption('CASES_START_CASE',     'casesStartPage?action=startCase',  G::LoadTranslation('ID_NEW_CASE'),              '' );
+$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',     'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
 
 
-$G_TMP_MENU->AddIdRawOption('FOLDERS',           '',                           G::LoadTranslation('ID_CASES_MENU_FOLDERS'), '',                   '', 'blockHeader');
-$G_TMP_MENU->AddIdRawOption('CASES_INBOX',       'casesListExtJs?action=todo',  G::LoadTranslation('ID_INBOX'),              'icon-cases-inbox.png' );
-$G_TMP_MENU->AddIdRawOption('CASES_DRAFT',       'casesListExtJs?action=draft', G::LoadTranslation('ID_DRAFT'),              'mail-mark-task.png'   );
-$G_TMP_MENU->AddIdRawOption('CASES_SENT',        'cases_List?l=sent',          G::LoadTranslation('ID_SENT'),               'icon-cases-outbox.png');
-$G_TMP_MENU->AddIdRawOption('CASES_SELFSERVICE', 'cases_List?l=selfservice',   G::LoadTranslation('ID_UNASSIGNED'),         'rotate_cw.png'        );
-$G_TMP_MENU->AddIdRawOption('CASES_PAUSED',      'cases_List?l=paused',        G::LoadTranslation('ID_PAUSED'),             'mail-queue.png'       );
-$G_TMP_MENU->AddIdRawOption('CASES_COMPLETED',   'cases_List?l=completed',     G::LoadTranslation('ID_COMPLETED'),          'file-archiver.png'    );
-$G_TMP_MENU->AddIdRawOption('CASES_CANCELLED',   'cases_List?l=cancelled',     G::LoadTranslation('ID_CANCELLED'),          'edit-clear-list.png'  );
-$G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     '../appFolder/appFolderList', G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
+$G_TMP_MENU->AddIdRawOption('FOLDERS',           '',                                 G::LoadTranslation('ID_CASES_MENU_FOLDERS'), '',                   '', 'blockHeader');
+$G_TMP_MENU->AddIdRawOption('CASES_INBOX',       'casesListExtJs?action=todo',       G::LoadTranslation('ID_INBOX'),              'icon-cases-inbox.png' );
+$G_TMP_MENU->AddIdRawOption('CASES_DRAFT',       'casesListExtJs?action=draft',      G::LoadTranslation('ID_DRAFT'),              'mail-mark-task.png'   );
+$G_TMP_MENU->AddIdRawOption('CASES_SENT',        'casesListExtJs?action=?l=sent',    G::LoadTranslation('ID_SENT'),               'icon-cases-outbox.png');
+$G_TMP_MENU->AddIdRawOption('CASES_SELFSERVICE', 'casesListExtJs?action=unassigned', G::LoadTranslation('ID_UNASSIGNED'),         'rotate_cw.png'        );
+$G_TMP_MENU->AddIdRawOption('CASES_PAUSED',      'casesListExtJs?action=paused',     G::LoadTranslation('ID_PAUSED'),             'mail-queue.png'       );
+$G_TMP_MENU->AddIdRawOption('CASES_COMPLETED',   'casesListExtJs?action==completed', G::LoadTranslation('ID_COMPLETED'),          'file-archiver.png'    );
+$G_TMP_MENU->AddIdRawOption('CASES_CANCELLED',   'casesListExtJs?action==cancelled', G::LoadTranslation('ID_CANCELLED'),          'edit-clear-list.png'  );
+$G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     '../appFolder/appFolderList',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
 
 
 if($RBAC->userCanAccess('PM_ALLCASES') == 1) {
