@@ -248,7 +248,7 @@ var installer=function()
 		$(tr).append(
 			new DOM('td',{innerHTML:"Workflow Data Directory: ",className:"inst_td0"},{width:"30%"}),
 			new DOM('td',{className:"inst_td1"},{width:"30%"}).append(
-				this.workflowData = new input({label:this.options.path_data,properties:{onkeyup:this.submit},style:{width:"100%"},maxlength:100})
+				this.workflowData = new input({label:this.options.path_data,properties:{onkeyup:this.submit},style:{width:"100%"},maxlength:200})
 			),
 			new DOM('td',{innerHTML:"Username (Default: admin):",className:"inst_td0"},{width:"20%"}),
 			new DOM('td',{className:"inst_td1"},{width:"20%"}).append(
@@ -261,7 +261,7 @@ var installer=function()
 		$(tr).append(
 			new DOM('td',{innerHTML:"Compiled Templates Directory: ",className:"inst_td0"},{width:"30%"}),
 			new DOM('td',{className:"inst_td1"},{width:"30%"}).append(
-				this.compiled = new input({label:this.options.path_compiled,properties:{onkeyup:this.submit},style:{width:"100%"},maxlength:100})
+				this.compiled = new input({label:this.options.path_compiled,properties:{onkeyup:this.submit},style:{width:"100%"},maxlength:200})
 			),
 			new DOM('td',{innerHTML:"Username (Default: admin):",className:"inst_td0"},{width:"20%"}),
 			new DOM('td',{className:"inst_td1"},{width:"20%"}).append(
