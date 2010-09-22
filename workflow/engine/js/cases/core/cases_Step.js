@@ -312,7 +312,7 @@ var cancelCase = function()
         args: 'action=cancelCase'
       });
       oRPC.callback = function(oRPC) {
-        window.location = 'cases_List';
+        window.location = 'casesListExtJs';
       }.extend(this);
       oRPC.make();
     }.extend(this)
@@ -328,7 +328,7 @@ var reactivateCase = function()
         args: 'action=reactivateCase'
       });
       oRPC.callback = function(oRPC) {
-        window.location = 'cases_List';
+        window.location = 'casesListExtJs';
       }.extend(this);
       oRPC.make();
     }.extend(this)
@@ -418,7 +418,7 @@ var deleteCase = function(sApplicationUID)
         args: 'action=deleteCase&sApplicationUID='+sApplicationUID
       });
       oRPC.callback = function(oRPC) {
-        window.location = 'cases_List';
+        window.location = 'casesListExtJs';
       }.extend(this);
       oRPC.make();
     }.extend(this)
@@ -435,7 +435,7 @@ var unpauseCase = function()
         args: 'action=unpauseCase'
       });
       oRPC.callback = function(oRPC) {
-        window.location = 'cases_List';
+        window.location = 'casesListExtJs';
       }.extend(this);
       oRPC.make();
     }.extend(this)
@@ -487,7 +487,7 @@ var reassignCase = function(USR_UID, THETYPE)
       });
 
       oRPC.callback = function(oRPC) {
-        window.location = 'cases_List';
+        window.location = 'casesListExtJs';
       }.extend(this);
       oRPC.make();
 };
