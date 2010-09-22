@@ -295,21 +295,30 @@ class headPublisher {
   }
   
   function getExtJsStylesheets(){
+    //$licfile = glob(PATH_TPL . '*/css/*/*');
+    
+    
     $script = "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
-    $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin . ".css' />\n";
+    $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin.".css' />\n";
+    
+    // <!-- DEPRECATED, this will be removed in a future - the three next lines
     if (file_exists ( PATH_HTML . 'skins' . PATH_SEP . 'ext' . PATH_SEP . 'pmos-' . $this->extJsSkin . '.css' )) {
       $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/pmos-" . $this->extJsSkin . ".css' />\n";
     }
-    //Load external/plugin css
+    //DEPRECATED, this will be removed in a future -->
+    
+    //new interactive css decorator
+    $script .= "  <link rel='stylesheet' type='text/css' href='/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/gulliver/decorator?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
+    
+    /**
+     * Load external/plugin css
+     * NOTE is necesary to move this to decorator server 
+     */
     $oPluginRegistry = & PMPluginRegistry::getSingleton ();
     $registeredCss=$oPluginRegistry->getRegisteredCss();
     foreach($registeredCss as $cssFile){
-      
-      $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n";
-    
-      
+      $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n"; 
     }
-    
     return $script;
   }
   
