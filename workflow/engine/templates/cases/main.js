@@ -152,6 +152,13 @@ Ext.onReady(function(){
     }),
 
     listeners: {
+    	'click': function(tp) {
+        Ext.Msg.alert('Navigation Tree Click', 'You clicked: "' + tp.attributes.url + '"');
+        if( tp.attributes.url ){
+          document.getElementById('casesSubFrame').src = tp.attributes.url;
+          }
+      } /*,
+
       'render': function(tp){
         tp.getSelectionModel().on('selectionchange', function(tree, node){
 
@@ -173,6 +180,7 @@ Ext.onReady(function(){
           }
         })
       }
+      */
     }
   }
   
