@@ -51,8 +51,6 @@ new Ext.KeyMap(document, {
       }
       e.stopEvent();
       updateCasesView();
-      //document.getElementById('casesSubFrame').src = document.getElementById('casesSubFrame').src;        
-      document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
     } else 
       Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
   }
@@ -416,24 +414,20 @@ Ext.onReady(function(){
 
 function updateCasesView(){
   try{
+    document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+  } catch(e){}
+  try{
     //treeMenuItems.root.reload();
     Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
     document.getElementById('ext-gen35').focus();
     
     itemsTypes = Array('CASES_INBOX', 'CASES_DRAFT', 'CASES_CANCELLED', 'CASES_SENT', 'CASES_PAUSED', 'CASES_COMPLETED','CASES_SELFSERVICE','CASES_TO_REVISE','CASES_TO_REASSIGN');
-    //for(i=0; i<itemsTypes.length; i++){
-      //document.getElementById('NOTIFIER_'+itemsTypes[i]).innerHTML = '<b>'+document.getElementById('NOTIFIER_'+itemsTypes[i]).innerHTML+'</b>';
-    //}
-
     if(currentSelectedTreeMenuItem){
       ReloadTreeMenuItemDetail({item:currentSelectedTreeMenuItem});
     }
     Ext.Ajax.request({
       url: 'casesMenuLoader?action=getAllCounters',
       success: function(response){
-      	
-      	document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
-      	
       	try{
 	        result = eval('('+response.responseText+')');
 	        for(i=0; i<result.length; i++){
