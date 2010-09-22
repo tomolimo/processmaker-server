@@ -19,7 +19,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 
 
 <PME_ONCLICK type="text" maxlength="100" size="50" defaultvalue="" group="2">
-  <en>Javascript to Execute On Click</en>
+  <en>JavaScript to Execute</en>
 </PME_ONCLICK>
 
 <BTN_CANCEL type="button" onclick="cancel();">
