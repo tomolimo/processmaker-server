@@ -12,7 +12,7 @@ new Ext.KeyMap(document, {
         storeCases.reload();
       }    
       else 
-    Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+    Ext.Msg.alert(TRANSLATIONS.LABEL_REFRESH, TRANSLATIONS.MESSAGE_REFRESH);
   }
 });
 
@@ -36,7 +36,7 @@ Ext.onReady ( function() {
     	  var myArrayHour = myArray[1].split(':');
     	else
     		var myArrayHour = new Array('0','0','0'); 
-    	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2],myArrayHour[0],myArrayHour[1],myArrayHour[2]);
+    	var myDate = new Date( myArrayDate[0], myArrayDate[1], myArrayDate[2], myArrayHour[0], myArrayHour[1], myArrayHour[2] );
     }
   }
   catch(e){};
@@ -139,7 +139,7 @@ Ext.onReady ( function() {
   // creating the button for filters
   var btnRead = new Ext.Button ({
     id: 'read',
-    text: 'read',
+    text: TRANSLATIONS.LABEL_OPT_READ,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -148,7 +148,7 @@ Ext.onReady ( function() {
  
   var btnUnread = new Ext.Button ({
     id: 'unread',
-    text: 'unread',
+    text: TRANSLATIONS.LABEL_OPT_UNREAD,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -157,7 +157,7 @@ Ext.onReady ( function() {
  
   var btnAll = new Ext.Button ({
     id: 'all',
-    text: 'all',
+    text: TRANSLATIONS.LABEL_OPT_ALL,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -166,7 +166,8 @@ Ext.onReady ( function() {
  
   var btnStarted = new Ext.Button ({
     id: 'started',
-    text: 'started by me',
+//    text: 'started by me',
+    text: TRANSLATIONS.LABEL_OPT_STARTED,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: true,
@@ -175,7 +176,8 @@ Ext.onReady ( function() {
  
   var btnCompleted = new Ext.Button ({
     id: 'completed',
-    text: 'Completed by me',
+//    text: 'Completed by me',
+    text: TRANSLATIONS.LABEL_OPT_COMPLETED,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: true,
@@ -194,6 +196,7 @@ Ext.onReady ( function() {
     forceSelection: true,
     triggerAction: 'all',
     //emptyText: 'Select a process...',
+    emptyText: TRANSLATIONS.LABEL_EMPTY_PROCESSES,
     selectOnFocus: true,
     //getListParent: function() {
     //  return this.el.up('.x-menu');
@@ -280,11 +283,13 @@ Ext.onReady ( function() {
   var textSearch = new Ext.form.TextField ({
     allowBlank: false,
     width: 90,
-    emptyText: 'enter search term'
+//    emptyText: 'enter search term'
+    emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH
   });
 
   var btnSearch = new Ext.Button ({
-    text: 'search',
+//    text: 'search',
+    text: TRANSLATIONS.LABEL_SEARCH,
     handler: function(){
       searchText = textSearch.getValue();
       storeCases.setBaseParam( 'search', searchText);
@@ -295,11 +300,13 @@ Ext.onReady ( function() {
   var textJump = new Ext.form.TextField ({
     allowBlank: false,
     width: 50,
-    emptyText: 'case Id'
+//    emptyText: 'case Id'
+    emptyText: TRANSLATIONS.LABEL_EMPTY_CASE
   });
 
   var btnJump = new Ext.Button ({
-    text: 'jump',
+//    text: 'jump',
+    text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
       jump = textJump.getValue();
       location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
@@ -419,7 +426,7 @@ Ext.onReady ( function() {
         var appUid   = grid.store.data.items[n].data.APP_UID;
         var delIndex = grid.store.data.items[n].data.DEL_INDEX;
         var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
-        Ext.Msg.alert ('open case' , caseTitle );
+        Ext.Msg.alert (TRANSLATIONS.LABEL_OPEN_CASE , caseTitle );
         window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
       },
       render: function(){
@@ -435,8 +442,10 @@ Ext.onReady ( function() {
       pageSize: pageSize,
       store: storeCases,
       displayInfo: true,
-      displayMsg: 'Displaying items {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
-      emptyMsg: "No items to display"
+//      displayMsg: 'Displaying items {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
+      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
+//      emptyMsg: "No items to display"
+      emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
     })
 
     });

@@ -29,7 +29,8 @@ Ext.onReady(function(){
   var pmTablesDropdown = new Ext.form.ComboBox ({
     width        : '180',
     xtype        : 'combo',
-    emptyText    : 'Select a PM Table...',
+//    emptyText    : 'Select a PM Table...',
+    emptyText    : TRANSLATIONS.LABEL_EMPTY_PMTABLE,
     store        : PmTableStore,
     displayField : 'ADD_TAB_NAME',
     valueField   : 'ADD_TAB_UID',
@@ -163,9 +164,10 @@ Ext.onReady(function(){
 
   // Column Model shortcut array
   var cols = [
-    {header: "#",          width: 25,  sortable: false, dataIndex: 'gridIndex', hidden: true},
-    {header: "Field Name", width: 160, sortable: false, dataIndex: 'name'},
-    {header: "Field Type", width: 70,  sortable: false, dataIndex: 'fieldType'}
+//    {header: "#",          width: 25,  sortable: false, dataIndex: 'gridIndex', hidden: true},
+    {header: TRANSLATIONS.LABEL_HEADER_NUMBER,     width: 25,  sortable: false, dataIndex: 'gridIndex', hidden: true},
+    {header: TRANSLATIONS.LABEL_HEADER_FIELD_NAME, width: 160, sortable: false, dataIndex: 'name'},
+    {header: TRANSLATIONS.LABEL_HEADER_FIELD_TYPE, width: 70,  sortable: false, dataIndex: 'fieldType'}
   ];
 
   var labelTextField = new Ext.form.TextField ({
@@ -204,12 +206,15 @@ Ext.onReady(function(){
             sortable: false // columns are not sortable by default           
         },
         columns: [
-          {header: "#",          width: 25,  dataIndex: 'gridIndex', hidden: true},
-          {header: "Field Name", width: 160, dataIndex: 'name'},
-          {header: "Field Type", width: 70,  dataIndex: 'fieldType'},
-          {header: "Label",      width: 160, dataIndex: 'label',  editor: labelTextField },
-          {header: "Width",      width: 40,  dataIndex: 'width',  editor: widthTextField },
-          {header: "Align",      width: 60,  dataIndex: 'align',  editor: alignComboBox},
+          {header: TRANSLATIONS.LABEL_HEADER_NUMBER,     width: 25,  dataIndex: 'gridIndex', hidden: true},
+          {header: TRANSLATIONS.LABEL_HEADER_FIELD_NAME, width: 160, dataIndex: 'name'},
+          {header: TRANSLATIONS.LABEL_HEADER_FIELD_TYPE, width: 70,  dataIndex: 'fieldType'},
+//          {header: "Label",      width: 160, dataIndex: 'label',  editor: labelTextField },
+          {header: TRANSLATIONS.LABEL_HEADER_LABEL,      width: 160, dataIndex: 'label',  editor: labelTextField },
+//          {header: "Width",      width: 40,  dataIndex: 'width',  editor: widthTextField },
+          {header: TRANSLATIONS.LABEL_HEADER_WIDTH,      width: 40,  dataIndex: 'width',  editor: widthTextField },
+//          {header: "Align",      width: 60,  dataIndex: 'align',  editor: alignComboBox},
+          {header: TRANSLATIONS.LABEL_HEADER_ALIGN,      width: 60,  dataIndex: 'align',  editor: alignComboBox},
         ]
     });
   
@@ -218,11 +223,13 @@ Ext.onReady(function(){
     enableDragDrop   : true,
     width            : 240,
     ddGroup          : 'secondGridDDGroup',
-    ddText           : '{0} selected field{1}',
+//    ddText           : '{0} selected field{1}',
+    ddText           : '{0} '+TRANSLATIONS.LABEL_SELECTED_FIELD+'{1}',
     store            : remotePmFieldsStore,
     columns          : cols,
     stripeRows       : true,
-    title            : 'Available Fields'
+//    title            : 'Available Fields'
+    title            : TRANSLATIONS.LABEL_AVAILABLE_FIELDS
   });
 
   var secondGridStore = new Ext.data.JsonStore({
@@ -243,7 +250,8 @@ Ext.onReady(function(){
       clicksToEdit: 1,
       cm          : colsSecond,
       stripeRows       : true,
-      title            : 'Case List Fields'
+//      title            : 'Case List Fields'
+      title            : TRANSLATIONS.LABEL_CASES_LIST_FIELDS
   });
 
  
@@ -295,7 +303,8 @@ Ext.onReady(function(){
         pmRowsPerPage.setValue(dataResponse.rowsperpage);
         pmDateFormat.setValue (dataResponse.dateformat );
 
-        Ext.Msg.alert( 'info', 'saved' );
+//        Ext.Msg.alert( 'info', 'saved' );
+        Ext.Msg.alert( TRANSLATIONS.LABEL_INFO, TRANSLATIONS.LABEL_SAVED );
       },
       failure: function(){},
       params: {xaction: 'applyChanges', action: currentAction, first: Ext.util.JSON.encode(fv), second: Ext.util.JSON.encode(sv), pmtable: pmTablesDropdown.getValue(), rowsperpage: pmRowsPerPage.getValue(), dateformat: pmDateFormat.getValue() }
@@ -324,49 +333,56 @@ Ext.onReady(function(){
   };
   
   var inboxPanel = new Ext.Panel({
-    title        : 'Inbox',
+//    title        : 'Inbox',
+    title        : TRANSLATIONS.LABEL_TITLE_INBOX,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('todo');
     }}  
   });
 
   var draftPanel = new Ext.Panel({
-    title        : 'Draft',
+//    title        : 'Draft',
+    title        : TRANSLATIONS.LABEL_TITLE_DRAFT,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('draft');
     }}  
   });
 
   var participatedPanel = new Ext.Panel({
-    title        : 'Participated',
+//    title        : 'Participated',
+    title        : TRANSLATIONS.LABEL_TITLE_PARTICIPATED,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('sent');
     }}  
   });
 
   var unassignedPanel = new Ext.Panel({
-    title        : 'Unassigned',
+//    title        : 'Unassigned',
+    title        : TRANSLATIONS.LABEL_TITLE_UNASSIGNED,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('unassigned');
     }}  
   });
 
   var pausedPanel = new Ext.Panel({
-    title        : 'Paused',
+//    title        : 'Paused',
+    title        : TRANSLATIONS.LABEL_TITLE_PAUSED,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('paused');
     }}  
   });
 
   var completedPanel = new Ext.Panel({
-    title        : 'Completed',
+//    title        : 'Completed',
+    title        : TRANSLATIONS.LABEL_TITLE_COMPLETED,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('completed');
     }}  
   });
 
   var cancelledPanel = new Ext.Panel({
-    title        : 'Cancelled',
+//    title        : 'Cancelled',
+    title        : TRANSLATIONS.LABEL_TITLE_CANCELLED,
     listeners: {'activate': function() {
     	sendGridFieldsRequest('cancelled');
     }}  
@@ -381,13 +397,16 @@ Ext.onReady(function(){
     layoutConfig : {align : 'stretch'},
     tbar         : new Ext.Toolbar({
       items: [
-        'PM Table', 
+//        'PM Table',
+        TRANSLATIONS.LABEL_PM_TABLE,
         pmTablesDropdown,
         ' ',
-        'Rows per page',
+//        'Rows per page',
+        TRANSLATIONS.LABEL_ROWS_PER_PAGE,
         pmRowsPerPage,
         ' ',
-        'Date format',
+//        'Date format',
+        TRANSLATIONS.LABEL_DATE_FORMAT,
         pmDateFormat
       ]
     }),
@@ -398,13 +417,15 @@ Ext.onReady(function(){
     bbar         : [
       '->',
       {
-        text    : 'Reset',
+//        text    : 'Reset',
+        text    : TRANSLATIONS.LABEL_RESET,
         handler: function(){
           resetGrids();
         }
       }, ' ',
       {
-        text    : 'Apply changes',
+//        text    : 'Apply changes',
+        text    : TRANSLATIONS.LABEL_APPLY_CHANGES,
         handler: function(){
           applyChanges();
         }

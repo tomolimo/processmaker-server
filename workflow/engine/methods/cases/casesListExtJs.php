@@ -71,6 +71,7 @@
   $users = array();
   $status[] = array( '', 'All status' );
   if ( $action != 'todo' && $action != 'draft' ) {
+    $cStatus = new Criteria('workflow');
     $cStatus->clearSelectColumns ( );
     $cStatus->setDistinct();
     $cStatus->addSelectColumn ( AppCacheViewPeer::APP_STATUS );
@@ -79,7 +80,7 @@
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     while($aRow = $oDataset->getRow()){
-      $status[] = array( $aRow['APP_STATUS'], strtolower( $aRow['APP_STATUS']) ); //here we can have a translation for the status ( the second param)
+      $status[] = array( $aRow['APP_STATUS'], G::LoadTranslation('ID_CASES_STATUS_'.$aRow['APP_STATUS'])  ); //here we can have a translation for the status ( the second param)
       $oDataset->next();
     }
   }
@@ -110,7 +111,21 @@
   $oHeadPublisher->assign( 'userValues',    $users); //sending the columns to display in grid
   
   $TRANSLATIONS = new stdClass();
-  $TRANSLATIONS->LABEL_GRID_LOADING = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
+  $TRANSLATIONS->LABEL_GRID_LOADING     = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
+  $TRANSLATIONS->LABEL_REFRESH          = G::LoadTranslation('ID_REFRESH_LABEL');
+  $TRANSLATIONS->MESSAGE_REFRESH        = G::LoadTranslation('ID_REFRESH_MESSAGE');
+  $TRANSLATIONS->LABEL_OPT_READ         = G::LoadTranslation('ID_OPT_READ');
+  $TRANSLATIONS->LABEL_OPT_UNREAD       = G::LoadTranslation('ID_OPT_UNREAD');
+  $TRANSLATIONS->LABEL_OPT_ALL          = G::LoadTranslation('ID_OPT_ALL');
+  $TRANSLATIONS->LABEL_OPT_STARTED      = G::LoadTranslation('ID_OPT_STARTED');
+  $TRANSLATIONS->LABEL_OPT_COMPLETED    = G::LoadTranslation('ID_OPT_COMPLETED');
+  $TRANSLATIONS->LABEL_EMPTY_PROCESSES  = G::LoadTranslation('ID_EMPTY_PROCESSES');
+  $TRANSLATIONS->LABEL_EMPTY_SEARCH     = G::LoadTranslation('ID_EMPTY_SEARCH');
+  $TRANSLATIONS->LABEL_EMPTY_CASE       = G::LoadTranslation('ID_EMPTY_CASE');
+  $TRANSLATIONS->LABEL_SEARCH           = G::LoadTranslation('ID_SEARCH');
+  $TRANSLATIONS->LABEL_OPT_JUMP         = G::LoadTranslation('ID_OPT_JUMP');
+  $TRANSLATIONS->LABEL_DISPLAY_ITEMS    = G::LoadTranslation('ID_DISPLAY_ITEMS');
+  $TRANSLATIONS->LABEL_DISPLAY_EMPTY    = G::LoadTranslation('ID_DISPLAY_EMPTY');
   
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   
@@ -320,4 +335,8 @@ function getAdditionalFields($action){
     }
     return $config;
   }
+}
+
+function defineTranslations(){
+
 }
