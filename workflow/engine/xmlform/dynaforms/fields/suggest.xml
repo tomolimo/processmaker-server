@@ -78,13 +78,9 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Autosuggest behaviour</en>
 </PME_SUBTITLE2>
 
-<PME_SQLCONNECTION type="dropdown" sqlconnection="" required="1">
-  SELECT DBS_UID, CONCAT('[',DBS_SERVER,'] ',DBS_TYPE,': ',DBS_DATABASE_NAME) AS CVALUE FROM DB_SOURCE WHERE PRO_UID = @@PME_PRO_UID
-  <en>Sql Connection
-  	<option name="workflow">Workflow</option>
-    <option name="rbac">RBAC</option>
-    <option name="rp">REPORT</option>
-  </en>
+<PME_SQLCONNECTION type="dropdown" sqlConnection="dbarray" required="1" >
+  SELECT * FROM DB_CONNECTIONS
+  <en>Sql Connection <option name="">(none)</option></en>
 </PME_SQLCONNECTION>
 
 <PME_XMLNODE_VALUE type="textarea" cols="40" rows="3" required="1">
