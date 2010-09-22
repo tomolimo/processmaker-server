@@ -438,4 +438,270 @@ class database extends database_base {
   }
   
   
+ /*=================================================================================================*/
+  /**
+   * concatString
+   * Generates a string equivalent to the chosen database.
+   *
+   * @author Hector Cortez <hector@gmail.com>
+   * @date 2010-08-04
+   *
+   * @return string $sConcat
+   */ 
+  function concatString()
+  {
+    $nums    = func_num_args();
+    $vars    = func_get_args();
+
+    $sConcat = " CONCAT(";
+    for($i = 0;$i < $nums; $i++) {
+      if(isset($vars[$i])) {
+        $sConcat .= $vars[$i];
+        if(($i+1) < $nums)
+          $sConcat .= ", ";
+      }
+    }
+    $sConcat .= ")";
+
+    return $sConcat;
+    
+  }
+
+  /* 
+   * query functions for class class.case.php
+   *
+   */
+  /**
+   * concatString
+   * Generates a string equivalent to the case when
+   *
+   * @author Hector Cortez <hector@gmail.com>
+   * @date 2010-08-04
+   *
+   * @return string $sCompare 
+   */ 
+  function getCaseWhen($compareValue, $trueResult, $falseResult) 
+  {
+    $sCompare = "IF(" . $compareValue . ", " . $trueResult . ", " . $falseResult . ") ";
+    return $sCompare;
+    
+  }
+
+  /**
+   * Generates a string equivalent to create table ObjectPermission
+   * 
+   * class.case.php
+   * function verifyTable()
+   *
+   * @return string $sql
+   */
+  function createTableObjectPermission()
+  {
+    $sql = "CREATE TABLE IF NOT EXISTS `OBJECT_PERMISSION` (
+                   `OP_UID` varchar(32) NOT NULL,
+                   `PRO_UID` varchar(32) NOT NULL,
+                   `TAS_UID` varchar(32) NOT NULL,
+                   `USR_UID` varchar(32) NOT NULL,
+                   `OP_USER_RELATION` int(1) NOT NULL default '1',
+                   `OP_TASK_SOURCE` varchar(32) NOT NULL,
+                   `OP_PARTICIPATE` int(1) NOT NULL default '1',
+                   `OP_OBJ_TYPE` varchar(15) NOT NULL default 'ANY',
+                   `OP_OBJ_UID` varchar(32) NOT NULL,
+                   `OP_ACTION` varchar(10) NOT NULL default 'VIEW',
+                   KEY `PRO_UID` (`PRO_UID`,`TAS_UID`,`USR_UID`,`OP_TASK_SOURCE`,`OP_OBJ_UID`)
+                   )ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+    return $sql;
+  } 
+  
+  /* 
+   * query functions for class class.report.php
+   *
+   */
+  /**
+   * Generates a string query
+   * 
+   * class.report.php
+   * function generatedReport4()
+   *
+   * @return string $sql
+   */
+  function getSelectReport4()
+  {
+      
+      $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
+      $sqlGroupBy  = " USER ";
+      
+      $sql = "SELECT " . $sqlConcat .  ", " .
+             "  COUNT(*) AS CANTCASES,
+                MIN(AD.DEL_DURATION) AS MIN,
+                MAX(AD.DEL_DURATION) AS MAX,
+                SUM(AD.DEL_DURATION) AS TOTALDUR,
+                AVG(AD.DEL_DURATION) AS PROMEDIO
+                FROM APPLICATION AS A
+                LEFT JOIN APP_DELEGATION AS AD ON(A.APP_UID = AD.APP_UID AND AD.DEL_INDEX=1)
+                LEFT JOIN USERS AS U ON(U.USR_UID = A.APP_INIT_USER)
+                WHERE A.APP_UID<>''
+                GROUP BY " . $sqlGroupBy;
+                
+    return $sql;
+    
+  }
+
+  /**
+   * Generates a string query
+   * 
+   * class.report.php
+   * function generatedReport4_filter()
+   *
+   * @return string $sql
+   */
+  function getSelectReport4Filter($var) 
+  {
+    $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
+    $sqlGroupBy  = " USER ";
+
+    $sql = " SELECT " . $sqlConcat .  ", " .
+           " COUNT(*) AS CANTCASES,
+             MIN(AD.DEL_DURATION) AS MIN,
+             MAX(AD.DEL_DURATION) AS MAX,
+             SUM(AD.DEL_DURATION) AS TOTALDUR,
+             AVG(AD.DEL_DURATION) AS PROMEDIO
+             FROM APPLICATION AS A
+             LEFT JOIN APP_DELEGATION AS AD ON(A.APP_UID = AD.APP_UID AND AD.DEL_INDEX=1)
+             LEFT JOIN USERS AS U ON(U.USR_UID = A.APP_INIT_USER)
+             ".$var."
+             GROUP BY " . $sqlGroupBy;
+
+    return $sql;
+    
+  }
+  
+  /**
+   * Generates a string query
+   * 
+   * class.report.php
+   * function generatedReport5()
+   *
+   * @return string $sql
+   */
+  function getSelectReport5()
+  {
+    $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
+    $sqlGroupBy  = " USER ";
+
+    $sql =  " SELECT " . $sqlConcat .  ", " .
+            " COUNT(*) AS CANTCASES,
+              MIN(AD.DEL_DURATION) AS MIN,
+              MAX(AD.DEL_DURATION) AS MAX,
+              SUM(AD.DEL_DURATION) AS TOTALDUR,
+              AVG(AD.DEL_DURATION) AS PROMEDIO
+              FROM APP_DELEGATION AS AD
+              LEFT JOIN PROCESS AS P ON (P.PRO_UID = AD.PRO_UID)
+              LEFT JOIN USERS AS U ON(U.USR_UID = AD.USR_UID)
+              WHERE AD.APP_UID<>'' AND AD.DEL_FINISH_DATE IS NULL
+              GROUP BY " . $sqlGroupBy;
+              
+    return $sql;
+    
+  }
+  
+  /**
+   * Generates a string query
+   * 
+   * class.report.php
+   * function generatedReport5_filter()
+   *
+   * @return string $sql
+   */
+  function getSelectReport5Filter($var) 
+  {
+
+    $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
+    $sqlGroupBy  = " USER ";
+
+    $sql = "SELECT " . $sqlConcat .  ", " .
+           "  COUNT(*) AS CANTCASES,
+              MIN(AD.DEL_DURATION) AS MIN,
+              MAX(AD.DEL_DURATION) AS MAX,
+              SUM(AD.DEL_DURATION) AS TOTALDUR,
+              AVG(AD.DEL_DURATION) AS PROMEDIO
+              FROM APP_DELEGATION AS AD
+              LEFT JOIN PROCESS AS P ON (P.PRO_UID = AD.PRO_UID)
+              LEFT JOIN USERS AS U ON(U.USR_UID = AD.USR_UID)
+              ".$var."
+              GROUP BY " . $sqlGroupBy;
+
+    return $sql;
+  }
+  
+  /* 
+   * query functions for class class.net.php
+   *
+   */
+  function getServerVersion($driver, $dbIP, $dbPort, $dbUser, $dbPasswd, $dbSourcename)
+  {
+    
+    if($link = @mysql_connect($dbIP, $dbUser, $dbPasswd)){
+        $v = @mysql_get_server_info();
+    } else {
+        throw new Exception(@mysql_error($link));
+    }
+    return (isset($v))?$v:'none';
+    
+  }
+  
+  
+    /* 
+   * query functions for class class.net.php, class.reportTables.php
+   *
+   */
+  function getDropTable($sTableName)
+  {
+    $sql = 'DROP TABLE IF EXISTS `' . $sTableName . '`';
+    return $sql;
+  }    
+  
+  
+  function getTableDescription($sTableName)
+  {
+    $sql = "DESC ".$sTableName;
+    return $sql;
+  }
+  
+  function getFieldNull()
+  {
+    $fieldName = "Null";
+    return $fieldName;
+  }
+
+  function getValidate($validate)
+  {
+    $oValidate = $validate;
+    return $oValidate;
+  }
+
+  /**
+   * Determines whether a table exists
+   * It is part of class.reportTables.php
+   */
+  function reportTableExist()
+  {
+    $bExists  = true;
+    $oConnection = mysql_connect(DB_HOST, DB_USER, DB_PASS);
+    mysql_select_db(DB_NAME);
+    $oDataset = mysql_query('SELECT COUNT(*) FROM REPORT_TABLE') || ($bExists = false);
+    
+    return $bExists;
+  }
+
+  /**
+   * It is part of class.pagedTable.php
+   *
+   */
+  function getLimitRenderTable($nCurrentPage, $nRowsPerPage)
+  {
+    $sql = ' LIMIT '.(($nCurrentPage-1)*$nRowsPerPage).', '.$nRowsPerPage;
+    return $sql;
+  }
+  
 }
