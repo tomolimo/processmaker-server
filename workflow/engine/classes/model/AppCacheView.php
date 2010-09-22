@@ -37,6 +37,7 @@ class AppCacheView extends BaseAppCacheView {
   	    break;
   		case 'sent' : 
   	    $Criteria = $this->getSentCountCriteria( $userUid );
+        return AppCacheViewPeer::doCount($Criteria, true);
   	    break;
   		case 'selfservice' : 
   	    $Criteria = $this->getUnassignedCountCriteria( $userUid );
@@ -170,7 +171,12 @@ class AppCacheView extends BaseAppCacheView {
    * @return Criteria object $Criteria
    */
   function getSentCountCriteria ($userUid) {
-  	return $this->getSent($userUid, true);
+    $Criteria  = new Criteria('workflow');
+
+    //$Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    return $Criteria;
   }
   
    /**
@@ -179,19 +185,14 @@ class AppCacheView extends BaseAppCacheView {
    * @return Criteria object $Criteria
    */
   function getSentListCriteria ($userUid) {
-      $Criteria  = new Criteria('workflow');
-  	
-$subSelect = "APP_CACHE_VIEW.APP_UID IN (
-    SELECT
-          distinct APP_CACHE_VIEW.APP_UID
-    FROM
-          APP_CACHE_VIEW
-    WHERE
-         APP_CACHE_VIEW.USR_UID = '$userUid'
-    )";
-$Criteria->add(AppCacheViewPeer::APP_UID, $subSelect, Criteria::CUSTOM);
-return $Criteria;  	
-  	return $this->getSent($userUid, false);
+    $Criteria = $this->addPMFieldsToCriteria('sent');
+    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
+    
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
+    //$Criteria->addGroupByColumn(AppCacheViewPeer::APP_);
+    return $Criteria;  	
   }
 
 

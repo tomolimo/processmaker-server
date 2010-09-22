@@ -306,6 +306,7 @@ Ext.onReady ( function() {
           btnUnread.toggle( false, true);
           break;
       }
+      storeCases.setBaseParam( 'filter', item.id );
       storeCases.load({params:{start:0, limit: pageSize, filter: item.id }});
       storeProcesses.load();
 /*

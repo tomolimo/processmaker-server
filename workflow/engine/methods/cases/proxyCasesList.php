@@ -9,8 +9,8 @@
   $filter   = isset($_POST['filter']) ? $_POST['filter'] : '';
   $search   = isset($_POST['search']) ? $_POST['search'] : '';
   $process  = isset($_POST['process']) ? $_POST['process'] : '';
-  $action   = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
-  $type   = isset($_GET['type']) ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
+  $action   = isset($_GET['action'])   ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
+  $type     = isset($_GET['type'])     ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
 
   try {  	
 
@@ -29,53 +29,65 @@
 // get the action based list
   switch ( $action ) {
   	case 'draft' :
-         $Criteria = $oAppCache->getDraftListCriteria($userUid);
+         $Criteria      = $oAppCache->getDraftListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getDraftCountCriteria($userUid);
          break;
   	case 'sent' :
-         $Criteria = $oAppCache->getSentListCriteria($userUid);
+         $Criteria      = $oAppCache->getSentListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getSentCountCriteria($userUid);
          break;
   	case 'selfservice' :
-         $Criteria = $oAppCache->getUnassignedListCriteria($userUid);
+         $Criteria      = $oAppCache->getUnassignedListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getUnassignedCountCriteria($userUid);
          break;
   	case 'paused' :
-         $Criteria = $oAppCache->getPausedListCriteria($userUid);
+         $Criteria      = $oAppCache->getPausedListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getPausedCountCriteria($userUid);
          break;
   	case 'completed' :
-         $Criteria = $oAppCache->getCompletedListCriteria($userUid);
+         $Criteria      = $oAppCache->getCompletedListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getCompletedCountCriteria($userUid);
          break;
   	case 'cancelled' :
-         $Criteria = $oAppCache->getCancelledListCriteria($userUid);
+         $Criteria      = $oAppCache->getCancelledListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getCancelledCountCriteria($userUid);
          break;
     case 'todo' :
     default:
-         $Criteria = $oAppCache->getToDoListCriteria($userUid);
+         $Criteria      = $oAppCache->getToDoListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getToDoCountCriteria($userUid);
     break;
   }
 
   //add the process filter
   if ( $process != '' ) {
-    $Criteria->add (AppCacheViewPeer::APP_PRO_TITLE, $process, Criteria::EQUAL );
+    $Criteria->add      (AppCacheViewPeer::APP_PRO_TITLE, $process, Criteria::EQUAL );
+    $CriteriaCount->add (AppCacheViewPeer::APP_PRO_TITLE, $process, Criteria::EQUAL );
   }
 
   //add the filter 
   if ( $filter != '' ) {
   	switch ( $filter ) {
   		case 'read' : 
-        $Criteria->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
+        $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
+        $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
         break;
   		case 'unread' : 
-        $Criteria->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
+        $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
+        $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
         break;
   	}
   }  
 
   //add the search filter
   if ( $search != '' ) {
-    $Criteria->add (AppCacheViewPeer::APP_TITLE, $search . '%', Criteria::LIKE );
+    $Criteria->add      (AppCacheViewPeer::APP_TITLE, $search . '%', Criteria::LIKE );
+    $CriteriaCount->add (AppCacheViewPeer::APP_TITLE, $search . '%', Criteria::LIKE );
   }  
 
   //here we count how many records exists for this criteria.
-  $totalCount = GulliverBasePeer::doCount( $Criteria );
+  //$totalCount = GulliverBasePeer::doCount( $Criteria );
+  $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, true );
       
   //add sortable options    
   if ( $sort != '' ) {
