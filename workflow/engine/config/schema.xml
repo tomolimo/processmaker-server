@@ -6987,7 +6987,7 @@
       <parameter name="Collation" value="utf8_general_ci"/>
       <parameter name="Checksum" value=""/>
       <parameter name="Create_options" value=""/>
-      <parameter name="Comment" value="Logs for Scheduled Cases Launched with Case Scheduler Feature"/>
+      <parameter name="Comment" value="Logs for Scheduled Cases"/>
     </vendor>
 
     <column name="LOG_CASE_UID" size="32" required="true" primaryKey="true" default="" >

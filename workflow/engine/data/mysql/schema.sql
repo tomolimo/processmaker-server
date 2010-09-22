@@ -1172,7 +1172,7 @@ CREATE TABLE `LOG_CASES_SCHEDULER`
 	`WS_CREATE_CASE_STATUS` TEXT  NOT NULL,
 	`WS_ROUTE_CASE_STATUS` TEXT  NOT NULL,
 	PRIMARY KEY (`LOG_CASE_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Logs for Scheduled Cases Launched with Case Scheduler Feature';
+)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Logs for Scheduled Cases';
 #-----------------------------------------------------------------------------
 #-- CASE_SCHEDULER
 #-----------------------------------------------------------------------------
