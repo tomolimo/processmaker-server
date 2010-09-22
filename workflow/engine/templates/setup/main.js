@@ -97,6 +97,9 @@ var tabMaintenance = new Ext.tree.TreePanel({
       width: 200,
       minSize: 175,
       maxSize: 400,
+      collapsible: true,
+      animCollapse: true,
+      
       margins: '0 0 0 5',
       activeTab: 0,
       items: [tabSettings, tabMaintenance, tabTools]
