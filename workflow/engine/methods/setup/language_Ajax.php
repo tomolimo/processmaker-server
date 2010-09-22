@@ -73,7 +73,7 @@ try {
         $oConf = new Configurations; 
         $oConf->loadConfig($x, 'LANGUAGE_META', $lang['LAN_ID']);
         $meta = $oConf->aConfig;
-        //print_r($meta);
+
         if( $lang['LAN_ID'] == 'en' )
           $langId = 'us';
         else 
@@ -81,7 +81,11 @@ try {
           
         $isoCountryRecord = $isoCountry->findById(strtoupper($langId));
         $countryName = isset($isoCountryRecord['IC_NAME'])? $isoCountryRecord['IC_NAME']: 'Unknow';
-        
+
+        $languagesList[$i]['LAN_FLAG']     = $lang['LAN_ID'];
+        $languagesList[$i]['DATE']         = '';
+        $languagesList[$i]['REV_DATE']     = '';
+        $languagesList[$i]['VERSION']      = '';
         $languagesList[$i]['COUNTRY_NAME'] = $countryName;
         $languagesList[$i]['OBS']          = ''; //($lang['LAN_ID'] == 'es')? 'Need Update': '';
         
@@ -89,10 +93,6 @@ try {
           $languagesList[$i]['DATE']         = $meta['import-date'];
           $languagesList[$i]['REV_DATE']     = $meta['headers']['PO-Revision-Date'];
           $languagesList[$i]['VERSION']      = $meta['headers']['Project-Id-Version'];
-        } else {
-          $languagesList[$i]['DATE']         = '';
-          $languagesList[$i]['REV_DATE']     = '';
-          $languagesList[$i]['VERSION']      = '';
         }
         
         $languagesList[$i]['DEFAULT'] = (isset($langEnv['LAN_ID']) && $langEnv['LAN_ID']==$lang['LAN_ID']) ? '1' : '0';

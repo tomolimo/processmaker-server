@@ -59,9 +59,10 @@ class Translation extends BaseTranslation {
    * @parameter $languageId   (es|en|...).
   */
 
-  function generateFileTranslation ( $languageId = ''  ) {
+  function generateFileTranslation ($languageId = '') {
     $translation = Array();
     $translationJS = Array();
+    
     if ($languageId === '')
       $languageId = defined('SYS_LANG') ? SYS_LANG : 'en';
 
@@ -71,7 +72,7 @@ class Translation extends BaseTranslation {
     $c->addAscendingOrderByColumn ( 'TRN_ID' );
     $tranlations = TranslationPeer::doSelect($c);
 
-    $cacheFile   = PATH_LANGUAGECONT."translation.".$languageId;
+    $cacheFile   = PATH_LANGUAGECONT . "translation." . $languageId;
     $cacheFileJS = PATH_CORE . 'js' . PATH_SEP . 'labels' . PATH_SEP . $languageId.".js";
 
     foreach ( $tranlations as $key => $row ) {
@@ -144,4 +145,52 @@ class Translation extends BaseTranslation {
     }
   }
 
+  function addTranslationEnvironment($locale)
+  {
+    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $environments = Array();
+    
+    if( file_exists($filePath) ) {
+      $environments = unserialize(file_get_contents($filePath));
+    }
+    
+    $environment['locale'] = $locale;
+    $environment['creation_date'] = date('Y-m-d H:i:s');
+    list($environment['LAN_ID'], $environment['IC_UID']) = explode('-', strtoupper($locale));
+    
+    $environments[$locale] = $environment;
+    file_put_contents($filePath, serialize($environments));
+  }
+  
+  function removeTranslationEnvironment($locale)
+  {
+    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    
+    if( file_exists($filePath) ) {
+      $environments = unserialize(file_get_contents($filePath));
+      unset($environments[$locale]);
+      file_put_contents($filePath, serialize($environments));
+    }
+  }
+
+  function getTranslationEnvironments(){
+    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $environments = Array();
+    
+    if( file_exists($filePath) ) {
+      $environments = unserialize(file_get_contents($filePath));
+    }
+
+    return $environments;
+  }
 } // Translation
+
+
+
+
+
+
+
+
+
+

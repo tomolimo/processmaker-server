@@ -40,8 +40,8 @@ Ext.onReady(function(){
 
     columns : [
       {
-        dataIndex : 'LAN_ID',
-        id : 'LAN_ID',
+        dataIndex : 'LAN_FLAG',
+        id : 'LAN_FLAG',
         header : '',
         width : 30,
         sortable : false,
@@ -49,6 +49,13 @@ Ext.onReady(function(){
           //return String.format("<span style='{1}'>{0}</span>", value, 'color:green;' );
           return String.format("<img src='/images/flags/{0}.gif' />", value);
         }
+      },
+      {
+        dataIndex : 'LAN_ID',
+        id : 'LAN_ID',
+        header : '',
+        width : 35,
+        sortable : false
       }, {
         dataIndex : 'LAN_NAME',
         header : TRANSLATIONS.ID_LAN_LANGUAGE,
@@ -106,6 +113,7 @@ Ext.onReady(function(){
       reader : new Ext.data.JsonReader( {
         root : 'data',
         fields : [
+          {name : 'LAN_FLAG'},
           {name : 'LAN_ID'},
           {name : 'LAN_NAME'},
           {name : 'COUNTRY_NAME'},
@@ -188,9 +196,9 @@ Ext.onReady(function(){
                           failure: function(o, resp){
                             w.close();
                             //alert('ERROR "'+resp.result.msg+'"');
-                            Ext.MessageBox.show({ title: '', msg: resp.result.msg, buttons:
+                            Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
                             Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
-                            Ext.MessageBox.ERROR });
+                            Ext.MessageBox.ERROR});
                             //setTimeout(function(){Ext.MessageBox.hide(); }, 2000);
                           }
                         });
@@ -220,6 +228,28 @@ Ext.onReady(function(){
           });
           w.show();
         }
+      },{
+        text: 'Export',
+        iconCls: 'silk-add',
+        icon: '/images/export.png',
+        handler: function(){
+          iGrid = Ext.getCmp('infoGrid');
+          var rowSelected = iGrid.getSelectionModel().getSelected();
+          if( rowSelected ) {
+            location.href = 'languages_Export?LAN_ID='+rowSelected.data.LAN_ID+'&rand='+Math.random()
+          } else {
+             Ext.Msg.show({
+              title:'',
+              msg: 'first select a language from the list please.',
+              buttons: Ext.Msg.INFO,
+              fn: function(){},
+              animEl: 'elId',
+              icon: Ext.MessageBox.INFO,
+              buttons: Ext.MessageBox.OK
+            });
+          }
+        },
+        scope: this
       }/*,
       {
         text: 'Set as predetermined',

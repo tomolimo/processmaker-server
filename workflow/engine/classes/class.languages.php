@@ -25,6 +25,7 @@
 
 require_once 'classes/model/Content.php';
 require_once 'classes/model/Language.php';
+require_once 'classes/model/IsoCountry.php';
 require_once 'classes/model/Translation.php';
 G::LoadClass('xmlDb');
 
@@ -243,17 +244,30 @@ class languages {
       $POFile->readInit();
       $POHeaders = $POFile->getHeaders();
       
-      //getting the PO Language definition
+      /*getting the PO Language definition*/
       $langName = $POHeaders['X-Poedit-Language'];
-      
+      //find the lang id
       $language = new Language();
       $langRecord = $language->findByLanName($langName);
       
-      if( ! isset($langRecord['LAN_ID']) )
-        throw new Exception('The .po file have a invalid language!');
+      if( ! isset($langRecord['LAN_ID']) ) //if the language doesn't exist abort
+        throw new Exception('The .po file has a invalid X-Poedit-Language definition!');
       
       $languageID = $langRecord['LAN_ID'];
-        
+
+      /*getting the PO Language definition*/
+      $countryName = $POHeaders['X-Poedit-Country'];
+      $isoCountry = new IsoCountry();
+      $countryRecord = $isoCountry->findByIcName($countryName);
+
+      if( ! isset($countryRecord['IC_UID']) ) //if the language doesn't exist abort
+        throw new Exception('The .po file has a invalid X-Poedit-Country definition!');
+
+      $countryID = $countryRecord['IC_UID'];
+
+      //define locale
+      $LOCALE = "$languageID-$countryID";
+      
       $oTranslation = new Translation();
       $countItems = 0;
       $countItemsSuccess = 0;
@@ -273,9 +287,9 @@ class languages {
           
           list($category, $id) = explode('/', $context);
           $result = $oTranslation->addTranslation(
-            $category, 
-            $id, 
-            $languageID,
+            $category,
+            $id,
+            $LOCALE,
             trim(str_replace(chr(10), '', $translation['msgstr']))
           );
           if( $result['codError'] == 0 )
@@ -293,13 +307,14 @@ class languages {
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
           
           if( sizeof($codes) == 2 ) { //is a normal node
-            $dynaform->addChilds($fieldName, Array($languageID=>$translation['msgstr']));
+            $dynaform->addChilds($fieldName, Array($LOCALE=>$translation['msgstr']));
           } else if( sizeof($codes) == 3 ) { //is a node child for a language node
             $name = trim($codes[2]);
             $childNode = Array(
               Array('name'=>'option', 'value'=>$translation['msgstr'], 'attributes'=>Array('name'=>$name))
             );
-            $dynaform->addChilds($fieldName, Array($languageID=>''), $childNode);
+
+            $dynaform->addChilds($fieldName, Array($LOCALE=>NULL), $childNode);
           }
           $countItemsSuccess++;
         }
@@ -308,8 +323,9 @@ class languages {
       
       $oLanguage = new Language();
       $oLanguage->update(array('LAN_ID' => $languageID, 'LAN_ENABLED' => '1'));
-      Translation::generateFileTranslation($languageID);
-      
+
+      Translation::generateFileTranslation($LOCALE);
+      Translation::addTranslationEnvironment($LOCALE);
       
       $this->log( "checking and updating CONTENT");
       $content = new Content();

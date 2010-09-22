@@ -47,4 +47,15 @@ class IsoCountry extends BaseIsoCountry {
     $oDataset->next();
     return $oDataset->getRow();
   }
+
+  function findByIcName($IC_NAME){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(IsoCountryPeer::IC_UID);
+    $oCriteria->addSelectColumn(IsoCountryPeer::IC_NAME);
+    $oCriteria->add(IsoCountryPeer::IC_NAME, $IC_NAME);
+    $oDataset = IsoCountryPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    return $oDataset->getRow();
+  }
 } // IsoCountry

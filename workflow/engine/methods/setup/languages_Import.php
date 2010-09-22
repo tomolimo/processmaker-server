@@ -46,9 +46,8 @@ if( $access != 1 ) {
 $result = new stdClass();
 
 try {
-  if(!is_writable(PATH_XMLFORM)){
+  if(!is_writable(PATH_XMLFORM))
     throw new Exception(G::LoadTranslation('IMPORT_LANGUAGE_ERR_NO_WRITABLE'));
-  }
   
   $sMaxExecutionTime = ini_get('max_execution_time');
   ini_set('max_execution_time', '0');
@@ -57,7 +56,6 @@ try {
   
   $languages     = new languages();
   $configuration = new Configurations;
-  
   $importResults = $languages->importLanguage($_FILES['form']['tmp_name']['LANGUAGE_FILENAME']);
 
   //G::SendTemporalMessage('IMPORT_LANGUAGE_SUCCESS', 'info', 'labels');
@@ -84,6 +82,7 @@ try {
   
 } catch (Exception $oError) {
   $result->msg = $oError->getMessage();
+  //print_r($oError->getTrace());
   $result->success = false;
   //G::SendTemporalMessage($oError->getMessage(), 'error', 'string');
   //G::header('location: languages_ImportForm');

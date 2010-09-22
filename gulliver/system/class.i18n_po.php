@@ -39,6 +39,7 @@ class i18n_PO
   private $_string = '';
   private $_meta;
   private $_fp;
+  private $_fileComments;
   
   protected $_editingHeader;
   protected $_fileLine;
@@ -87,7 +88,9 @@ class i18n_PO
     if ( ! is_resource($this->_fp) ) {
       throw new Exception('Could\'t open ' . $this->file . ' file');
     }
-    
+    //skipping comments
+    $this->skipCommets();
+    //deaing headers
     $this->readHeaders();
     
     $this->translatorComments = Array();
@@ -160,7 +163,8 @@ class i18n_PO
   
   function prepare($string, $reverse = false)
   {
-    $string = str_replace('\"', '"', $string);
+    //$string = str_replace('\"', '"', $string);
+    //$string = stripslashes($string);
   
     if ($reverse) {
       $smap = array('"', "\n", "\t", "\r");
@@ -183,6 +187,17 @@ class i18n_PO
   }
   
   /** read funtions **/
+  private function skipCommets(){
+    $this->_fileComments = '';
+    do {
+      $lastPos = ftell($this->_fp);
+      $line = fgets($this->_fp);
+      $this->_fileComments .= $line;
+    } while( substr($line, 0, 1) == '#' );
+    
+    fseek($this->_fp, $lastPos);
+  }
+
   private function readHeaders()
   {
     $this->flagEndHeaders = false;

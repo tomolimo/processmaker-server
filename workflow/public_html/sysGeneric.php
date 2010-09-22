@@ -522,12 +522,16 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
       header("Pragma: no-cache");
 
       if( defined('SYS_LANG') ){
-	    require_once 'classes/model/Language.php';
-	    $oLang = new Language();
-	    $aLang = $oLang->load(SYS_LANG);
-	    if( isset($aLang['LAN_DIRECTION']) ){
-	       define('SYS_LANG_DIRECTION', strtoupper($aLang['LAN_DIRECTION']));
-	    }
+        require_once 'classes/model/Language.php';
+        $oLang = new Language();
+        try{
+          $aLang = $oLang->load(SYS_LANG);
+          if( isset($aLang['LAN_DIRECTION']) ){
+             define('SYS_LANG_DIRECTION', strtoupper($aLang['LAN_DIRECTION']));
+          }
+        } catch(Exception $e){
+          define('SYS_LANG_DIRECTION', 'L');
+        }
       }
 
 

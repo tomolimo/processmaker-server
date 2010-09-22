@@ -107,7 +107,7 @@ while ($aRow1 = $oDataset->getRow()) {
     preg_match("/^[0-9a-zA-Z_-]+/", $aRow1['TRN_CATEGORY'], $sTestResult);
     
     if( $sTestResult[0] === $aRow1['TRN_CATEGORY']){ #the regular expr. evaluated ()$sTestResult) for $aRow1['TRN_CATEGORY'] must be the same
-        $msgid = $aRow1['TRN_VALUE'];
+        $msgid = trim($aRow1['TRN_VALUE']);
         
         if ( isset($aMsgids[$msgid]) ) 
           $msgid = '[' . $aRow1['TRN_CATEGORY'] . '/' . $aRow1['TRN_ID'] . '] ' . $msgid;
@@ -150,13 +150,15 @@ foreach ($aXMLForms as $sXmlForm) {
   foreach ($oForm->fields as $sNodeName => $oNode) {
     if (is_object($oNode)) {
       if (trim($oNode->label) != '') {
-          $aEnglishLabel[$oNode->name] = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $oNode->label))));
-          $aOptions[$sXmlForm . '?' . $oNode->name] = $aEnglishLabel[$oNode->name];
+          //$aEnglishLabel[$oNode->name] = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $oNode->label))));
+        $aEnglishLabel[$oNode->name] = stripslashes(trim(str_replace(chr(10), '', $oNode->label)));
+        $aOptions[$sXmlForm . '?' . $oNode->name] = $aEnglishLabel[$oNode->name];
       }
       if (isset($oNode->options)) {
         if (!empty($oNode->options)) {
           foreach ($oNode->options as $sKey => $sValue) {
-            $aEnglishLabel[$oNode->name . '-' . $sKey] = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $sValue))));
+            //$aEnglishLabel[$oNode->name . '-' . $sKey] = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $sValue))));
+            $aEnglishLabel[$oNode->name . '-' . $sKey] = stripslashes(ltrim(str_replace(chr(10), '', $sValue)));
             if (isset($aOptions[$sXmlForm . '?' . $oNode->name])) {
               if (!is_array($aOptions[$sXmlForm . '?' . $oNode->name])) {
                   $sAux = $aOptions[$sXmlForm . '?' . $oNode->name];
@@ -181,7 +183,8 @@ foreach ($aXMLForms as $sXmlForm) {
     if (is_object($oNode)) {
       if ( isset($aEnglishLabel[$oNode->name]) ) {
         $msgid = $aEnglishLabel[$oNode->name];
-        $oNode->label = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $oNode->label))));
+        //$oNode->label = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $oNode->label))));
+        $oNode->label = stripslashes(ltrim(str_replace(chr(10), '', $oNode->label)));
       } else 
         $msgid = '';
       

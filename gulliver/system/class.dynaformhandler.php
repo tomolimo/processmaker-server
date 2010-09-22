@@ -56,15 +56,24 @@ class dynaFormHandler
     if( !isset($file) ) 
       throw new Exception('[Class dynaFormHandler] ERROR:  xml file was not set!!');
     $this->xmlfile = $file;
+    $this->load();
+  }
+
+  function load(){
     $this->dom = new DOMDocument();
     $this->dom->preserveWhiteSpace = false;
     $this->dom->formatOutput = true;
-    if( is_file($file) ){
+    if( is_file($this->xmlfile) ) {
       $this->dom->load($this->xmlfile);
       $this->root = $this->dom->firstChild;
     } else {
       throw new Exception('[Class dynaFormHandler] ERROR:  the ('.$this->xmlfile.') file doesn\'t exits!!');
     }
+  }
+
+  function reload(){
+    $this->dom = NULL;
+    $this->load();
   }
 
   /**
@@ -473,22 +482,37 @@ class dynaFormHandler
         if( $nodeList->length == 0 ){ //the node doesn't exist
           //$newnode_child 
           $childNode = $element->appendChild($this->dom->createElement($child_name));
-          $childNode->appendChild($this->dom->createTextNode($child_text));  
+          $childNode->appendChild($this->dom->createCDATASection($child_text));
         } else { // the node already exists
-          $childNode = $nodeList->item(0);
-          //$element = $this->root->getElementsByTagName($replaced)->item(0);
-          //$xnode = $this->dom->createElement($name);
-          //$xnode->appendChild($this->dom->createTextNode($child_text));
-          //$this->root->replaceChild($xnode, $childNode);
+          //update its value
+          $childNode = $element->getElementsByTagName($child_name)->item(0);
+          
+          //
+          if($child_text !== NULL){
+            $xnode = $this->dom->createElement($childNode->nodeName);
+            $xnode->appendChild($this->dom->createCDATASection($child_text));
+                
+            /*if( $childNode->hasChildNodes() ) {
+              foreach ($childNode->childNodes as $domElement){
+                $domNode = $domElement->cloneNode(true);
+                if( $domNode->nodeType != 4 ) {
+                  $xnode->appendChild($domNode);
+                }
+              }
+            }*/
+            $element->replaceChild($xnode, $childNode); 
+            $childNode = $element->getElementsByTagName($child_name)->item(0);
+          }
         }
         
         if($childs_childs != null and is_array($childs_childs)){
           foreach($childs_childs as $cc) {
             $ccnode = $childNode->appendChild($this->dom->createElement($cc['name']));
-            $ccnode->appendChild($this->dom->createTextNode($cc['value']));
+            $ccnode->appendChild($this->dom->createCDATASection($cc['value']));
             foreach($cc['attributes'] as $cc_att_name => $cc_att_value) {
               $ccnode->setAttribute($cc_att_name, $cc_att_value);
             }
+            //$this->addOrUpdateChild($childNode, $cc['name'], $cc['value'], $cc['attributes']);
           }
         }
       }
@@ -497,6 +521,29 @@ class dynaFormHandler
       $newnode->appendChild($this->dom->createTextNode($text_node));
     }
     $this->save();
+  }
+
+
+  function addOrUpdateChild($xnode, $childName, $childValue, $childAttributes){
+    //$element = $this->root->getElementsByTagName($nodeName)->item(0);
+    //$childNode = $element->getElementsByTagName($childName)->item(0);
+    
+    $newNode = $this->dom->createElement($childName);
+    $newNode->appendChild($this->dom->createCDATASection($childValue));
+    
+    foreach($childAttributes as $attName => $attValue) {
+      $newNode->setAttribute($attName, $attValue);
+    }
+    
+    if( $xnode->hasChildNodes() ) {
+      foreach($xnode->childNodes as $cnode) {
+        if( $cnode->nodeName == $childName ) {
+          $xnode->replaceChild($newNode, $cnode);
+          break;
+        }
+      }
+    } else 
+      $xnode->appendChild($newNode);
   }
 }
 

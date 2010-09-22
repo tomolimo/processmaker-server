@@ -31,8 +31,13 @@ $langRecord = $language->findByLanName($langName);
 g::pr($langRecord);
 
 die;*/
-
+/*
+require_once "classes/model/Translation.php";
+$r = Translation::getTranslationEnvironments();
+g::pr($r);
+die;
 global $RBAC;
+*/
 $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
 if( $access != 1 ){
   switch ($access)
