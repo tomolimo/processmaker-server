@@ -7,12 +7,12 @@
 require_once ( "classes/model/AdditionalTables.php" );
 require_once ( "classes/model/Fields.php" );
 // passing the parameters
-$pmTableName   = (isset($_POST['tableName'])) ? $_POST['tableName'] : '';
+$pmTableName   = (isset($_POST['tableName'])) ? $_POST['tableName'] : 'listTable';
 $pmTableFields = (isset($_POST['tableFields'])) ? json_decode($_POST['tableFields']) : array();
 
 // default parameters
-$pmTableName   = 'Contenders';
-$pmTableFields = array(array('FLD_NAME'=>'APP_UID'),array('FLD_NAME'=>'CONT_NAME'),array('FLD_NAME'=>'CONT_DESC'),array('FLD_NAME'=>'_cedula'));
+//$pmTableName   = 'Sender';
+$pmTableFields = array(array('FLD_NAME'=>'APP_UID'),array('FLD_NAME'=>'_cedula'));
 
 // setting the data to assemble the table
 $aData = array();
@@ -24,8 +24,8 @@ $oAdditionalTables = new AdditionalTables();
 $sAddTabUid = $oAdditionalTables->create($aData, $pmTableFields);
 
 foreach ($pmTableFields as $iRow => $aRow) {
-  $pmTableFields[$iRow]['FLD_NAME'] = $aRow['FLD_NAME'];
-  $pmTableFields[$iRow]['FLD_DESCRIPTION'] = isset($aRow['FLD_DESCRIPTION']) ? $aRow['FLD_DESCRIPTION'] : '';
+  $pmTableFields[$iRow]['FLD_NAME'] = strtoupper($aRow['FLD_NAME']);
+  $pmTableFields[$iRow]['FLD_DESCRIPTION'] = isset($aRow['FLD_DESCRIPTION']) ? $aRow['FLD_DESCRIPTION'] : $aRow['FLD_NAME'];
   $pmTableFields[$iRow]['FLD_TYPE'] = isset($aRow['FLD_TYPE']) ? $aRow['FLD_TYPE'] : 'VARCHAR';
   $pmTableFields[$iRow]['FLD_SIZE'] = isset($aRow['FLD_SIZE']) ? $aRow['FLD_SIZE'] : '32';
   $pmTableFields[$iRow]['FLD_NULL'] = isset($aRow['FLD_NULL']) ? $aRow['FLD_NULL'] : 'off';
