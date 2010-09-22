@@ -27,12 +27,20 @@ Ext.onReady ( function() {
   }
 
   function convertDate ( value ) {
+    myDate = new Date( 1900,0,1,0,0,0);
+  try{
     if(!Ext.isDate( value )){
     	var myArray = value.split(' '); 
     	var myArrayDate = myArray[0].split('-'); 
-    	var myArrayHour = myArray[1].split(':'); 
+    	if ( myArray.length > 1 ) 
+    	  var myArrayHour = myArray[1].split(':');
+    	else
+    		var myArrayHour = new Array('0','0','0'); 
     	var myDate = new Date( myArrayDate[0],myArrayDate[1],myArrayDate[2],myArrayHour[0],myArrayHour[1],myArrayHour[2]);
     }
+  }
+  catch(e){};
+    
     return myDate;
   }   
   function showDate (value,p,r) {
@@ -178,12 +186,12 @@ Ext.onReady ( function() {
   var comboProcess = new Ext.form.ComboBox({
     width         : 180,
     boxMaxWidth   : 180,
-    //store: storeProcesses,
+    editable      : false,
     displayField  : 'APP_PRO_TITLE',
     valueField    : 'PRO_UID',
     //typeAhead     : true,
     mode          : 'local',
-    //forceSelection: true,
+    forceSelection: true,
     triggerAction: 'all',
     //emptyText: 'Select a process...',
     selectOnFocus: true,
@@ -211,11 +219,11 @@ Ext.onReady ( function() {
     editable      : false,
     mode          : 'local',    
     store         : new Ext.data.ArrayStore({
-      fields: ['id'],
+      fields: ['id', 'value'],
       data  : statusValues
     }),
     valueField    : 'id',
-    displayField  : 'id',
+    displayField  : 'value',
     triggerAction : 'all',
     
     //typeAhead: true,
@@ -236,6 +244,38 @@ Ext.onReady ( function() {
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
+
+  // ComboBox creation processValues
+  var comboUser = new Ext.form.ComboBox({
+    width         : 160,
+    boxMaxWidth   : 180,
+    editable      : false,
+    displayField  : 'USR_FULLNAME',
+    valueField    : 'USR_UID',
+    //typeAhead     : true,
+    mode          : 'local',
+    forceSelection: true,
+    triggerAction: 'all',
+    //emptyText: 'Select a process...',
+    selectOnFocus: true,
+    //getListParent: function() {
+    //  return this.el.up('.x-menu');
+    //},
+    store         : new Ext.data.ArrayStore({
+      fields: ['USR_UID','USR_FULLNAME'],
+      data  : userValues
+    }),
+    listeners:{
+      scope: this,
+      'select': function() {
+        filterUser = comboUser.value;
+        storeCases.setBaseParam( 'user', filterUser);
+        storeCases.setBaseParam( 'start', 0);
+        storeCases.setBaseParam( 'limit', pageSize);
+      }},
+    iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
+  });
+  
   
   var textSearch = new Ext.form.TextField ({
     allowBlank: false,
@@ -320,14 +360,42 @@ Ext.onReady ( function() {
       ' '
     ];
 
+  var toolbarSearch = [
+      'user',
+      comboUser,
+      'status', 
+      comboStatus,
+      '-',
+      'process', 
+      comboProcess,
+      '-', // begin using the right-justified button container 
+      textSearch,
+      btnSearch,
+      '-',
+    ];
+  if ( action == 'search' )
+  var firstToolbarSearch = new Ext.Toolbar({
+    renderTo: 'panel',
+    width: '100%',
+    height: 33,
+    items: [
+//      btnStarted,
+      '-',
+//      btnCompleted,
+      '-',
+//      btnAll
+    ]
+  });
+  
   switch (action) {
-    case 'draft': itemToolbar = toolbarDraft; break;
-    case 'sent' : itemToolbar = toolbarSent;  break;
-    default     : itemToolbar = toolbarTodo; break;
+    case 'draft'  : itemToolbar = toolbarDraft; break;
+    case 'sent'   : itemToolbar = toolbarSent;  break;
+    case 'search' : itemToolbar = toolbarSearch;  break;
+    default       : itemToolbar = toolbarTodo; break;
   }
     
   var tb = new Ext.Toolbar({
-    height: 35,
+    height: 33,
     items: itemToolbar
   });
 
@@ -367,7 +435,6 @@ Ext.onReady ( function() {
 
     });
 
-  
     // manually trigger the data store load
     storeCases.setBaseParam( 'action', action );
     storeCases.setBaseParam( 'start',  0 );
@@ -422,5 +489,7 @@ Ext.onReady ( function() {
   }
   //parent.updateCasesView();
   parent.updateCasesTree();
+  comboStatus.setValue('');
+  comboProcess.setValue('');
   
 });

@@ -22,53 +22,83 @@
 // get the action based list
   switch ( $action ) {
   	case 'draft' :
-         $Criteria      = $oAppCache->getDraftListCriteria($userUid);
+         $cProcess      = $oAppCache->getDraftListCriteria($userUid);
+         $cStatus       = $oAppCache->getDraftListCriteria($userUid);
          break;
   	case 'sent' :
-         $Criteria      = $oAppCache->getSentListCriteria($userUid);
+         $cProcess      = $oAppCache->getSentListCriteria($userUid);
+         $cStatus       = $oAppCache->getSentListCriteria($userUid);
+         break;
+  	case 'search' :
+         $cProcess      = $oAppCache->getSearchStatusCriteria(null);
+         $cStatus       = $oAppCache->getSearchStatusCriteria(null);
+         $cUsers        = $oAppCache->getSearchStatusCriteria(null);
          break;
   	case 'selfservice' :
-         $Criteria      = $oAppCache->getUnassignedListCriteria($userUid);
+         $cProcess      = $oAppCache->getUnassignedListCriteria($userUid);
+         $cStatus       = $oAppCache->getUnassignedListCriteria($userUid);
          break;
   	case 'paused' :
-         $Criteria      = $oAppCache->getPausedListCriteria($userUid);
+         $cProcess      = $oAppCache->getPausedListCriteria($userUid);
+         $cStatus       = $oAppCache->getPausedListCriteria($userUid);
          break;
     case 'todo' :
     default:
-         $Criteria      = $oAppCache->getToDoListCriteria($userUid);
+         $cProcess      = $oAppCache->getToDoListCriteria($userUid);
+         $cStatus       = $oAppCache->getToDoListCriteria($userUid);
     break;
   }
 
   //get the processes for this user in this action
-  $Criteria->clearSelectColumns ( );
-  $Criteria->setDistinct();
-  $Criteria->addSelectColumn ( AppCacheViewPeer::PRO_UID );
-  $Criteria->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
-  $Criteria->addAscendingOrderbyColumn ( AppCacheViewPeer::APP_PRO_TITLE );
-  $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
+  $processes = array();
+  $processes[] = array ( '', 'All processes' );
+  $cProcess->clearSelectColumns ( );
+  $cProcess->setDistinct();
+  $cProcess->addSelectColumn ( AppCacheViewPeer::PRO_UID );
+  $cProcess->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
+  //$cProcess->addAscendingOrderbyColumn ( AppCacheViewPeer::APP_PRO_TITLE );
+  $oDataset = AppCacheViewPeer::doSelectRS($cProcess);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
   $oDataset->next();
       
-  $processes = array();
   while($aRow = $oDataset->getRow()){
     $processes[] = array ( $aRow['PRO_UID'], $aRow['APP_PRO_TITLE'] );
     $oDataset->next();
   }
 
   //get the status for this user in this action
-  $Criteria->clearSelectColumns ( );
-  $Criteria->setDistinct();
-  $Criteria->addSelectColumn ( AppCacheViewPeer::APP_STATUS );
-  //$Criteria->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
-  $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
-  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-  $oDataset->next();
   $status = array();
-  while($aRow = $oDataset->getRow()){
-    $status[] = array( $aRow['APP_STATUS'] );
+  $users = array();
+  $status[] = array( '', 'All status' );
+  if ( $action != 'todo' && $action != 'draft' ) {
+    $cStatus->clearSelectColumns ( );
+    $cStatus->setDistinct();
+    $cStatus->addSelectColumn ( AppCacheViewPeer::APP_STATUS );
+    //$cStatus->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
+    $oDataset = AppCacheViewPeer::doSelectRS($cStatus);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
+    while($aRow = $oDataset->getRow()){
+      $status[] = array( $aRow['APP_STATUS'], strtolower( $aRow['APP_STATUS']) ); //here we can have a translation for the status ( the second param)
+      $oDataset->next();
+    }
   }
-  
+
+    //now users
+  if ( $action == 'search' ) {
+    $cUsers->clearSelectColumns ( );
+    $cUsers->setDistinct();
+    $cUsers->addSelectColumn ( AppCacheViewPeer::USR_UID );
+    $cUsers->addSelectColumn ( AppCacheViewPeer::APP_CURRENT_USER );
+    $oDataset = AppCacheViewPeer::doSelectRS($cUsers);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while($aRow = $oDataset->getRow()){
+      $users[] = array( $aRow['USR_UID'], $aRow['APP_CURRENT_USER'] );
+      $oDataset->next();
+    }
+
+  }  
    	
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns ); //sending the columns to display in grid
@@ -77,6 +107,7 @@
   $oHeadPublisher->assign( 'PMDateFormat',  $config['dateformat'] ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'statusValues',  $status ); //sending the columns to display in grid
   $oHeadPublisher->assign( 'processValues', $processes); //sending the columns to display in grid
+  $oHeadPublisher->assign( 'userValues',    $users); //sending the columns to display in grid
 
   $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
 
@@ -244,7 +275,7 @@ function getAdditionalFields($action){
 
   $conf = new Configurations();
   try {
-    $confCasesList = $conf->loadObject('casesList',$action,'','','');
+    $confCasesList = $conf->loadObject('casesList',$action=='search'?'sent':$action,'','','');
   } 
   catch (Exception $e){
     $confCasesList = array();
@@ -253,7 +284,9 @@ function getAdditionalFields($action){
   if ( count($confCasesList)>1 ) {
     foreach($confCasesList['second']['data'] as $fieldData){
       if ( $fieldData['fieldType']!='key' ) {
-        $caseColumns[]      = array( 'header' => G::loadTranslation('ID_CASESLIST_'.$fieldData['name']), 'dataIndex' => $fieldData['name'], 'width' => $fieldData['width'], 'align' => $fieldData['align'] );
+        $label = ($fieldData['fieldType']=='case field' ) ? G::loadTranslation('ID_CASESLIST_'.$fieldData['name']) : $fieldData['label'];
+        $label = $fieldData['label'];
+        $caseColumns[]      = array( 'header' => $label, 'dataIndex' => $fieldData['name'], 'width' => $fieldData['width'], 'align' => $fieldData['align'] );
         $caseReaderFields[] = array( 'name'   => $fieldData['name'] );
       }
     }
@@ -264,6 +297,7 @@ function getAdditionalFields($action){
     	case 'draft' :
         $config = getDraft();
       break;
+    	case 'search' :      
     	case 'participated' :
         $config = getParticipated();
       break;

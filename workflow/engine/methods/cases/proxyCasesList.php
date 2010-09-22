@@ -53,6 +53,10 @@
          $Criteria      = $oAppCache->getCancelledListCriteria($userUid);
          $CriteriaCount = $oAppCache->getCancelledCountCriteria($userUid);
          break;
+    case 'search' :
+         $Criteria      = $oAppCache->getSearchListCriteria();
+         $CriteriaCount = $oAppCache->getSearchCountCriteria();
+         break;         
     case 'todo' :
     default:
          $Criteria      = $oAppCache->getToDoListCriteria($userUid);
@@ -91,8 +95,13 @@
 
   //add the search filter
   if ( $search != '' ) {
-    $Criteria->add      (AppCacheViewPeer::APP_TITLE, $search . '%', Criteria::LIKE );
-    $CriteriaCount->add (AppCacheViewPeer::APP_TITLE, $search . '%', Criteria::LIKE );
+    $Criteria->add      (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
+    $CriteriaCount->add (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
+/*    
+    require_once( PATH_DATA_SITE . 'classes/Usuarios.php' );
+    $Criteria->add      ('USUARIOS.CEDULA', $search . '%', Criteria::LIKE );
+    $CriteriaCount->add ('USUARIOS.CEDULA', $search . '%', Criteria::LIKE );
+*/    
   }  
 
   //here we count how many records exists for this criteria.

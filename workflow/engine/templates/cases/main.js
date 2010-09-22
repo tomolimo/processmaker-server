@@ -1,5 +1,5 @@
 var PANEL_EAST_OPEN = false;
-var timerMinutes = 2*60*1000;  //every 2 minutes, this should be customized also,
+var timerMinutes = 3*60*1000;  //every 3 minutes, this should be customized also,
 
 var currentSelectedTreeMenuItem = null;
 var centerPanel;

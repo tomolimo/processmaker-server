@@ -16,6 +16,7 @@ require_once 'classes/model/om/BaseAppCacheView.php';
  */
  
 require_once 'classes/model/AppDelay.php';
+require_once 'classes/model/AdditionalTables.php';
  
 class AppCacheView extends BaseAppCacheView {
 
@@ -172,8 +173,8 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getSentCountCriteria ($userUid) {
     $Criteria  = new Criteria('workflow');
+    $Criteria = $this->addPMFieldsToCriteria('sent');
 
-    //$Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
     return $Criteria;
@@ -388,6 +389,75 @@ class AppCacheView extends BaseAppCacheView {
   function getCancelledListCriteria ($userUid) {
   	return $this->getCancelled($userUid, false);
   }
+
+    /**
+   * gets the ADVANCED SEARCH cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSearchCountCriteria () {
+    //$Criteria  = new Criteria('workflow'); this sent a outer and cross join :P :P
+    $Criteria = $this->addPMFieldsToCriteria('sent');
+    return $Criteria;
+  	//return $this->getSearchCriteria( true);
+  }
+  
+   /**
+   * gets the ADVANCED SEARCH cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSearchListCriteria () {
+    $Criteria = $this->addPMFieldsToCriteria('sent');
+    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
+    
+    //$Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
+    return $Criteria;
+  	//return $this->getSearchCriteria(false);
+  }
+  
+   /**
+   * gets the ADVANCED SEARCH cases list criteria for STATUS
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSearchStatusCriteria () {
+    $Criteria  = new Criteria('workflow');
+    return $Criteria;
+  }
+  
+  
+   /**
+   * gets the SENT cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+
+    /**
+   * gets the cases list criteria using the advanced search
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getSearchCriteria ( $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    if ( $doCount ) {
+      $Criteria  = new Criteria('workflow');
+    }
+    else {
+      $Criteria = $this->addPMFieldsToCriteria('sent');
+    }
+    //$Criteria->add (AppCacheViewPeer::APP_STATUS, "TO_DO" , CRITERIA::EQUAL );
+    $Criteria->add (AppCacheViewPeer::DEL_INDEX, 1);
+
+    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    //$Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    //$Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    return $Criteria;
+  }
+  
 
   /**
    * loads the configuration fields from the database based in an action parameter
