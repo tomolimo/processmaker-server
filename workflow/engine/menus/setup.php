@@ -25,25 +25,24 @@
   global $G_TMP_MENU;
   global $RBAC;
   
-  
-  $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'setting');
-  $G_TMP_MENU->AddIdRawOption('APPCACHEVIEW_SETUP', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'setting');
-  
   if ($RBAC->userCanAccess('PM_SETUP') == 1) {
     $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'tool');
   }
   if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
-    $G_TMP_MENU->AddIdRawOption('LANGUAGES', 'languages',   G::LoadTranslation('ID_LANGUAGES'), 'icon-language.png', '', 'setting');
+    $G_TMP_MENU->AddIdRawOption('UPGRADE',   'upgrade',     G::LoadTranslation('ID_UPGRADE'), 'icon-system-upgrade.png', '', 'maintenance');
     $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsList', 'Plugins', 'icon-plugins.png', '', 'setting');
-    $G_TMP_MENU->AddIdRawOption('UPGRADE',   'upgrade',     G::LoadTranslation('ID_UPGRADE'), 'icon-system-upgrade.png', '', 'setting');
+    $G_TMP_MENU->AddIdRawOption('LANGUAGES', 'languages',   G::LoadTranslation('ID_LANGUAGES'), 'icon-language.png', '', 'maintenance');
+    $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'setting');
+    $G_TMP_MENU->AddIdRawOption('APPCACHEVIEW_SETUP', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'maintenance');
   }
+  
   $G_TMP_MENU->AddIdRawOption('EMAILS',      'emails',      G::LoadTranslation('ID_EMAIL'), 'icon-email-settings.png', '', 'setting');
   $G_TMP_MENU->AddIdRawOption('WEBSERVICES', 'webServices', G::LoadTranslation('ID_WEB_SERVICES'), 'icon-webservices.png', '', 'tool');
   $G_TMP_MENU->AddIdRawOption('SKINS',       'skinsList', G::LoadTranslation('ID_SKINS'), 'icon-skins.png', '', 'setting');
   
   $G_TMP_MENU->AddIdRawOption('LOGO',        'uplogo', G::LoadTranslation('ID_LOGO'), 'icon-pmlogo.png', '', 'setting');
 
-  $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', '', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "msgBox('".G::LoadTranslation('ID_CLEAR_CACHE_CONFIRM1')."', 'confirm', function(){ location.href='clearCompiled';})", '' );
+  $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'maintenance' );
 
   $G_TMP_MENU->AddIdRawOption('CALENDAR',        'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'setting' );
   $G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_LOG_CASE_SCHEDULER'), "icon-logs-list.png",'', 'tool');

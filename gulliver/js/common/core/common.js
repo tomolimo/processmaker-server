@@ -1736,10 +1736,9 @@ function msgBox(msg, type, callbackAccept, callbackCancel){
 	//setting default type
 	type = typeof(type) != 'undefined'? type: 'info';
 	
-	//setting up the callback action 
+	//setting up the callback action
 	acceptEv = typeof(callbackAccept) != 'undefined'? callbackAccept: false;
-	calcelEv = typeof(callbackCancel) != 'undefined'? callbackCancel: false;
-	
+	cancelEv = typeof(callbackCancel) != 'undefined'? callbackCancel: false;
 	
 	switch(type){
 		case 'alert':
@@ -1765,27 +1764,27 @@ function msgBox(msg, type, callbackAccept, callbackCancel){
 			});
 			break;
 		case 'confirm':
-			if( calcelEv ){
+			if( cancelEv ){
 				new leimnud.module.app.confirm().make({
-			  		label: msg,
-			    	action: function(){
-						if( acceptEv ){
-			    			setTimeout(acceptEv, 1);
-			    		}
+			  	label: msg,
+			    action: function(){
+					  if( acceptEv ){
+			    	  setTimeout(acceptEv, 0);
+			    	}
 					}.extend(this),
 					cancel: function(){
-						setTimeout(calcelEv, 1);
-					}
-			  	});
+						setTimeout(cancelEv, 1);
+					}.extend(this)
+			  });
 			} else {
 				new leimnud.module.app.confirm().make({
-			  		label: msg,
-			    	action: function(){
-						if( acceptEv ){
-			    			setTimeout(acceptEv, 1);
-			    		}
-					}.extend(this)
-			  	});
+			  	label: msg,
+			   	action: function(){
+					  if( acceptEv ){
+			  	    setTimeout(acceptEv, 1);
+			   	  }
+				  }.extend(this)
+			  });
 			}
 			break;	
 	}

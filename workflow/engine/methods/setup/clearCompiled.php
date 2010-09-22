@@ -24,18 +24,21 @@
  */
 
 try{
-
-
   if( isset($_GET['result']) && $_GET['result'] == 'done') {
-    echo "<script>parent.location.href='setup'</script>";
+    $G_PUBLISH = new Publisher;
+    $G_PUBLISH->AddContent('view', 'setup/clearCompiledResult');
+    G::RenderPage('publish', 'blank');
   } else {
-    if( defined('PATH_C') ){
-      G::rm_dir(PATH_C);
-      G::SendTemporalMessage('All cache data was deleted', 'tmp-info', 'string');
-      G::header('location: clearCompiled?result=done');
+    if( isset($_GET['result']) && $_GET['result'] == 'confirm' ){
+      if( defined('PATH_C') ){
+        G::rm_dir(PATH_C);
+        G::SendTemporalMessage('ID_CLEAR_CACHE_MSG1', 'tmp-info', 'label');
+        G::header('location: clearCompiled?result=done');
+      }
+    } else {
+      echo '<script>parent.parent.msgBox("'.G::LoadTranslation('ID_CLEAR_CACHE_CONFIRM1').'", "confirm", function(){location.href = "clearCompiled?result=confirm"}, function(){history.back()});</script>';
     }
   }
 } catch(Exception $e){
   G::SendTemporalMessage($oError->getMessage(), 'error', 'string');
-  
 }

@@ -1413,10 +1413,6 @@ leimnud.Package.Public({
 				}.extend(this);
 				this.panel.events = {
 				    remove: function() { 
-						if(this.options.cancel)
-						{
-							this.options.cancel();
-						}
 					}.extend(this)
 				};
 			};

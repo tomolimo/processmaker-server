@@ -148,7 +148,7 @@ try {
 
 	//Events - End
 
-	$aNextStep['PAGE'] = 'cases_List';
+	$aNextStep['PAGE'] = 'casesListExtJs'; //'cases_List';
 	if( isset($_SESSION['PMDEBUGGER']) && $_SESSION['PMDEBUGGER'] ){
 		$_SESSION['TRIGGER_DEBUG']['BREAKPAGE'] = $aNextStep['PAGE'];
 		G::header('location: ' . 'cases_Step?' .'breakpoint=triggerdebug');

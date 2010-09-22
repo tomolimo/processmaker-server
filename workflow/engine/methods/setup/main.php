@@ -29,6 +29,12 @@
   $G_ID_MENU_SELECTED     = 'SETUP';
 
   $G_PUBLISH = new Publisher;
+  if( isset($_GET['i18']) )
+    $_SESSION['DEV_FLAG'] = $_SESSION['TOOLS_VIEWTYPE'] = isset($_GET['i18']);
+  else {
+    unset($_SESSION['DEV_FLAG']);
+    unset($_SESSION['TOOLS_VIEWTYPE']);
+  }
   $G_PUBLISH->AddContent('view', 'setup/main_Load');
   G::RenderPage('publish');
 

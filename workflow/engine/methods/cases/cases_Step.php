@@ -596,16 +596,6 @@
           $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=doc&random=' . rand();
 
           $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=pdf&random=' . rand();
-          $adoc= $aFields['APP_DOC_UID'];
-          $vdoc= $aFields['DOC_VERSION'];
-          $rdoc= rand();
-          $aFields['FILESRADIO'] = " 
-                                     <a href='cases_ShowOutputDocument?a=$adoc&amp;v=$vdoc&amp;ext=doc&amp;random=$rdoc'> <input type='radio' name='file' value='doc'> </a> download .doc <br>     
-                                     <a href='cases_ShowOutputDocument?a=$adoc&amp;v=$vdoc&amp;ext=pdf&amp;random=$rdoc'><input type='radio' name='file' value='pdf' > </a> download  .pdf <br>    
-                                     <a href='cases_ShowOutputDocument?a=$adoc&amp;v=$vdoc&amp;ext=both&amp;random=$rdoc'><input type='radio' name='file' value='both'></a> download .doc and .pdf 
-                                     
-                                     ";
-          
           
 
           if ( is_array ($listing) ){//If exist in Plugin Document List
@@ -845,7 +835,7 @@
   G::RenderPage('publish', $skin . '-submenu');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){
-    G::evalJScript('showdebug()');
+    G::evalJScript('showdebug();');
   }
 
 
