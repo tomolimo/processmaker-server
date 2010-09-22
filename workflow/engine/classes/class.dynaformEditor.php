@@ -777,6 +777,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
   function save($A,$DYN_UID) 
   {
     try {
+    	$answer = 0;
       $file = G::decrypt( $A , URL_KEY );
       $tmp  = self::_getTmpData();
       if (isset($tmp['useTmpCopy'])) {      /*Save Register*/
@@ -790,7 +791,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
         */
         if(!eregi('type="submit"',$copy) && !eregi('type="grid"',$copy) && !isset($_SESSION['submitAction']) ){
         	$_SESSION['submitAction']= 1;
-        	return 'noSub';
+        	$answer = 'noSub';
         }
         $copyHtml = false;
         if (file_exists(PATH_DYNAFORM  . $file . '.html')) {
@@ -809,7 +810,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       else {
         //throw new Exception("It should not come here unless you have disabled the temporary copy.");
       }
-      return 0;
+      return $answer;
     }
     catch(Exception $e) {
       return (array) $e;
