@@ -675,9 +675,11 @@ class Processes {
       $newGuid = $map[ $key ];
       $oData->dynaformFiles[$key] = $newGuid;
     }
-    foreach ( $oData->gridFiles as $key => $val ) {
-      $newGuid = $map[ $key ];
-      $oData->gridFiles[$key] = $newGuid;
+    if(isset($oData->gridFiles)){
+      foreach ( $oData->gridFiles as $key => $val ) {
+        $newGuid = $map[ $key ];
+        $oData->gridFiles[$key] = $newGuid;
+      }
     }
     foreach( $oData->fieldCondition as  $key => $val ){
         $newGuid = $map[ $val['FCD_DYN_UID'] ];
@@ -2145,11 +2147,10 @@ class Processes {
     $oData->fieldCondition    = $this->getFieldCondition($sProUid);
     $oData->event             = $this->getEventRow ($sProUid);
     $oData->caseScheduler     = $this->getCaseSchedulerRow ($sProUid);
-    
     //krumo ($oData);die;
     //$oJSON = new Services_JSON();
     //krumo ( $oJSON->encode($oData) );
-    //return $oJSON->encode($oData);
+    //return $oJSON->encode($oData); 
     return serialize($oData);
   }
 
@@ -2341,16 +2342,15 @@ class Processes {
   /* under here, I've not modified those lines */
 
     fclose ($fp);
-
+    
     //$bytesSaved = file_put_contents  ( $filename  , $oData  );
     $filenameLink = 'processes_DownloadFile?p=' . $proTitle . '&r=' . rand(100,1000);
-
-    $result['PRO_UID']         = $data->process['PRO_UID'];
-    $result['PRO_TITLE']       = $data->process['PRO_TITLE'];
-    $result['PRO_DESCRIPTION'] = $data->process['PRO_DESCRIPTION'];
-    $result['SIZE']            = $bytesSaved;
-    $result['FILENAME']        = $filenameOnly;
-    $result['FILENAME_LINK']   = $filenameLink;
+    $result['PRO_UID']          = $data->process['PRO_UID'];
+    $result['PRO_TITLE']        = $data->process['PRO_TITLE'];
+    $result['PRO_DESCRIPTION']  = $data->process['PRO_DESCRIPTION'];
+    $result['SIZE']             = $bytesSaved;
+    $result['FILENAME']         = $filenameOnly;
+    $result['FILENAME_LINK']    = $filenameLink;
     return $result;
   }
 
@@ -2360,6 +2360,7 @@ class Processes {
   * @return void
   */
   function getProcessData ( $pmFilename  ) {
+    $oProcess = new Process();
     if (! file_exists($pmFilename) )
       throw ( new Exception ( 'Unable to read uploaded file, please check permissions. '));
 
@@ -2403,9 +2404,9 @@ class Processes {
       $oData = null;
     }
     fclose ( $fp);
-
     return $oData;
   }
+  
   // import process related functions
 
   /**
@@ -3012,7 +3013,6 @@ class Processes {
     
     //and finally create the files, dynaforms (xml and html), emailTemplates and Public files
     $this->createFiles($oData, $pmFilename);
-    
  }
 
  /**
