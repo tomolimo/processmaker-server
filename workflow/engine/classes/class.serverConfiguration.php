@@ -434,6 +434,7 @@ class serverConf {
     curl_setopt ( $ch, CURLOPT_TIMEOUT, 20 );
 
     $response = curl_exec ( $ch );
+    
     if( ! $response )
       return;
     
@@ -451,7 +452,7 @@ class serverConf {
       $this->errors=array();
     } else {
       //Catch the error
-    	$this->errors[]=@curl_getinfo($curl_session);
+    	$this->errors[]=@curl_getinfo($ch);
       $this->nextBeatDate = strtotime ( "+1 day" ); //retry in 30 mins
     }
 
