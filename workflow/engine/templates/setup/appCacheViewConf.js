@@ -132,6 +132,7 @@ Ext.onReady(function() {
                * Ext.MessageBox.INFO }); setTimeout(function(){
                * Ext.MessageBox.hide(); }, 2000);
                */
+             store.reload();
               Ext.example.msg('', req.result.msg);
               try {
                 Ext.fly(newEl).slideOut('t', {
