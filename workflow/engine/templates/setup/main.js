@@ -65,7 +65,7 @@ var main = function(){
       }),
       {
         region: 'center', // a center region is ALWAYS required for border
-        contentEl: 'setup-frame',
+        contentEl: 'setup-frame'
       }
     ]
   });

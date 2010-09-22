@@ -195,19 +195,29 @@
    */
    function setDefaultFields() {
      $fields = array();
-     $fields[] = array( 'name' => 'APP_UID'    ,            'fieldType' => 'key',         'label' => G::loadTranslation('ID_CASESLIST_APP_UID'),                'width' => 80,  'align' => 'left');
-     $fields[] = array( 'name' => 'DEL_INDEX'  ,            'fieldType' => 'key' ,        'label' => G::loadTranslation('ID_CASESLIST_DEL_INDEX')  ,            'width' => 50,  'align' => 'left');
-     $fields[] = array( 'name' => 'APP_NUMBER' ,            'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_NUMBER') ,            'width' => 80,  'align' => 'left');
-     $fields[] = array( 'name' => 'APP_STATUS' ,            'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_STATUS') ,            'width' => 80,  'align' => 'left');
-     $fields[] = array( 'name' => 'APP_TITLE'  ,            'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TITLE')  ,            'width' => 140, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_PRO_TITLE'  ,        'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_PRO_TITLE') ,         'width' => 140, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_TAS_TITLE'  ,        'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TAS_TITLE') ,         'width' => 140, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DEL_PREVIOUS_USER') , 'width' => 120, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_CURRENT_USER'      , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_CURRENT_USER')  ,     'width' => 120, 'align' => 'left');
-     $fields[] = array( 'name' => 'DEL_TASK_DUE_DATE'     , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_TASK_DUE_DATE') ,     'width' => 100, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_UPDATE_DATE'       , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_UPDATE_DATE') ,       'width' => 100, 'align' => 'left');
-     $fields[] = array( 'name' => 'DEL_PRIORITY'          , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_PRIORITY')    ,       'width' => 80,  'align' => 'left');
-     $fields[] = array( 'name' => 'APP_FINISH_DATE'       , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_FINISH_DATE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_UID'    ,             'fieldType' => 'key',         'label' => G::loadTranslation('ID_CASESLIST_APP_UID'),                'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'DEL_INDEX'  ,             'fieldType' => 'key' ,        'label' => G::loadTranslation('ID_CASESLIST_DEL_INDEX')  ,            'width' => 50,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_NUMBER' ,             'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_NUMBER') ,            'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_STATUS' ,             'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_STATUS') ,            'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_TITLE'  ,             'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TITLE')  ,            'width' => 140, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_PRO_TITLE'  ,         'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_PRO_TITLE') ,         'width' => 140, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_TAS_TITLE'  ,         'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TAS_TITLE') ,         'width' => 140, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER'  , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DEL_PREVIOUS_USER') , 'width' => 120, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_CURRENT_USER'       , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_CURRENT_USER')  ,     'width' => 120, 'align' => 'left');
+     $fields[] = array( 'name' => 'DEL_TASK_DUE_DATE'      , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_TASK_DUE_DATE') ,     'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_UPDATE_DATE'        , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_UPDATE_DATE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'DEL_PRIORITY'           , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_PRIORITY')    ,       'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_FINISH_DATE'        , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_FINISH_DATE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_DELAY_UID'          , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DELAY_UID') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_THREAD_INDEX'       , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_THREAD_INDEX') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_DEL_INDEX'          , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DEL_INDEX') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_TYPE'               , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TYPE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_DELEGATION_USER'    , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DELEGATION_USER') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_ENABLE_ACTION_USER' , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_ENABLE_ACTION_USER') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_ENABLE_ACTION_DATE' , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_AAPP_ENABLE_ACTION_DATE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_DISABLE_ACTION_USER', 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DISABLE_ACTION_USER') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_DISABLE_ACTION_DATE', 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DISABLE_ACTION_DATE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_AUTOMATIC_DISABLED_DATE' , 'fieldType' => 'delay field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_AUTOMATIC_DISABLED_DATE') ,       'width' => 100, 'align' => 'left');
      return $fields;
 
    }
@@ -225,6 +235,17 @@
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
         $rows = removeItem( 'APP_CURRENT_USER',$rows);
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX',$rows);
+        $rows = removeItem( 'APP_DEL_INDEX',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         $rows = calculateGridIndex($rows);
 
         break;
@@ -236,6 +257,17 @@
         $rows = removeItem( 'APP_CURRENT_USER',$rows);
         $rows = removeItem( 'APP_DEL_PREVIOUS_USER',$rows);
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX',$rows);
+        $rows = removeItem( 'APP_DEL_INDEX',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         $rows = calculateGridIndex($rows);
         break;
 
@@ -244,6 +276,17 @@
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
         $rows = removeItem( 'DEL_TASK_DUE_DATE',$rows);
         $rows = removeItem( 'DEL_PRIORITY',$rows);
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX',$rows);
+        $rows = removeItem( 'APP_DEL_INDEX',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         $rows = calculateGridIndex($rows);
         break;
 
@@ -254,6 +297,17 @@
         $rows = removeItem( 'DEL_PRIORITY' , $rows );
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_CURRENT_USER' , $rows );
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX',$rows);
+        $rows = removeItem( 'APP_DEL_INDEX',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         $rows = calculateGridIndex( $rows );
         break;
 
@@ -264,6 +318,15 @@
         $rows = removeItem( 'DEL_PRIORITY' , $rows );
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_CURRENT_USER' , $rows );
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         $rows = calculateGridIndex( $rows );
         break;
       case 'completed' : //#, Case, task, process, completed by user, finish date
@@ -274,6 +337,17 @@
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_CURRENT_USER' , $rows );
         $rows = calculateGridIndex( $rows );
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX',$rows);
+        $rows = removeItem( 'APP_DEL_INDEX',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         break;
 
       case 'cancelled' : //#, Case, task, process, due date, Last Modify
@@ -283,6 +357,17 @@
         $rows = removeItem( 'DEL_PRIORITY' , $rows );
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_CURRENT_USER' , $rows );
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID',$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX',$rows);
+        $rows = removeItem( 'APP_DEL_INDEX',$rows);
+        $rows = removeItem( 'APP_TYPE',$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
         $rows = calculateGridIndex( $rows );
         break;
     }

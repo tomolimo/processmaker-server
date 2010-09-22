@@ -504,7 +504,17 @@ class AppCacheView extends BaseAppCacheView {
                   'APP_CREATE_DATE',
                   'APP_FINISH_DATE',
                   'APP_UPDATE_DATE',
-                  'APP_OVERDUE_PERCENTAGE'
+                  'APP_OVERDUE_PERCENTAGE',
+                  'APP_DELAY_UID',
+                  'APP_THREAD_INDEX',
+                  'APP_DEL_INDEX',
+                  'APP_TYPE',
+                  'APP_DELEGATION_USER',
+                  'APP_ENABLE_ACTION_USER',
+                  'APP_ENABLE_ACTION_DATE',
+                  'APP_DISABLE_ACTION_USER',
+                  'APP_DISABLE_ACTION_DATE',
+                  'APP_AUTOMATIC_DISABLED_DATE'
                 );
   
     $conf = new Configurations();
@@ -524,9 +534,20 @@ class AppCacheView extends BaseAppCacheView {
         if (!in_array($fieldData['name'],$defaultFields)){
           $fieldName = $tableName.'.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
-        } 
+        }
         else {
-          $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
+          switch ($fieldData['fieldType']){
+            case 'case field':
+              $configTable = 'APP_CACHE_VIEW';
+            break;
+            case 'delay field':
+              $configTable = 'APP_DELAY';
+            break;
+            default:
+              $configTable = 'APP_CACHE_VIEW';
+            break;
+          }
+          $fieldName = $configTable.'.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
         }
       }
@@ -541,13 +562,24 @@ class AppCacheView extends BaseAppCacheView {
     else {
       if (is_array($confCasesList)){
         foreach($confCasesList['second']['data'] as $fieldData){
-          $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
+           switch ($fieldData['fieldType']){
+            case 'case field':
+              $configTable = 'APP_CACHE_VIEW';
+            break;
+            case 'delay field':
+              $configTable = 'APP_DELAY';
+            break;
+            default:
+              $configTable = 'APP_CACHE_VIEW';
+            break;
+          }
+          $fieldName = $configTable.'.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
         }
       } else {
-        foreach($defaultFields as $field){
-          $oCriteria->addSelectColumn('APP_CACHE_VIEW.'.$field);
-        }
+        //foreach($defaultFields as $field){
+          $oCriteria->addSelectColumn('*');
+        //}
       }
       //add the default and hidden DEL_INIT_DATE
       $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
