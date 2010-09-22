@@ -25,7 +25,7 @@
  
  /**
  * i18n_PO 
- * This class build bigger PO files without size limit and this not use much memory that the allowed
+ * This class build biggers PO files without size limit and this not use much memory that the allowed
  * 
  * @package gulliver.system
  * @author Erik Amaru Ortiz <erik@colosa.com>
@@ -41,29 +41,38 @@ class i18n_PO
   private $_fp;
   
   protected $_editingHeader;
+  protected $_fileLine;
+  
+  protected $flagEndHeaders;
+  protected $flagError;
+  protected $flagInit;
+  protected $lineNumber;
+    
+  public $translatorComments;
+  public $extractedComments;
+  public $references;
+  public $flags;
+  public $previousUntranslatedStrings;
   
   function __construct($file)
   {
-    $this->_fp = fopen($file, 'w');
-    
-    if ( ! is_resource($this->_fp) ) {
-      return FALSE;
-    }
+    $this->file = $file;
   }
   
   function buildInit()
   {
+    $this->_fp = fopen($this->file, 'w');
+    
+    if ( ! is_resource($this->_fp) ) {
+      throw new Exception('Could\'t open ' . $this->file . ' file');
+    }
+    
     // lock PO file exclusively
     if ( ! flock($this->_fp, LOCK_EX) ) {
       fclose($this->_fp);
       return FALSE;
     }
     
-    $this->__init__();
-  }
-  
-  function __init__()
-  {
     $this->_meta = 'msgid ""';
     $this->_writeLine($this->_meta);
     $this->_meta = 'msgstr ""';
@@ -71,7 +80,23 @@ class i18n_PO
     
     $this->_editingHeader = TRUE;
   }
-  
+
+  function readInit(){
+    $this->_fp = fopen($this->file, 'r');
+    
+    if ( ! is_resource($this->_fp) ) {
+      throw new Exception('Could\'t open ' . $this->file . ' file');
+    }
+    
+    $this->readHeaders();
+    
+    $this->translatorComments = Array();
+    $this->extractedComments = Array();
+    $this->references = Array();
+    $this->flags = Array();
+    $this->previousUntranslatedStrings = Array();
+  }
+
   function addHeader($id, $value)
   {
     if( $this->_editingHeader ) {
@@ -157,6 +182,176 @@ class i18n_PO
     }
   }
   
+  /** read funtions **/
+  private function readHeaders()
+  {
+    $this->flagEndHeaders = false;
+    $this->flagError      = false;
+    $this->flagInit       = true;
+    $this->lineNumber     = 0;
+    
+    while( ! $this->flagError  && ! $this->flagEndHeaders ) {
+      
+      if( $this->flagInit ) { //in first instance
+        $this->flagInit   = false; //unset init flag
+
+        //read the first and second line of the file
+        $firstLine  = fgets($this->_fp);
+        $secondLine = fgets($this->_fp);
+
+        //verifying the file head
+        if( strpos($firstLine, 'msgid ""') === false || strpos($secondLine, 'msgstr ""') === false )
+          $this->flagError = true;
+
+        continue;
+      }
+      
+      //getting the new line
+      $this->_fileLine = trim(fgets($this->_fp));
+      //set line number
+      $this->lineNumber++;
+
+      //verifying that is not end of file and applying a restriction for to read just the twenty firsts lines
+      if( trim($this->_fileLine) == '' || ! $this->_fileLine || $this->lineNumber >= 20 ) {
+        $this->flagEndHeaders = true; // set ending to read the headers
+        continue;
+      }
+      //verify if has a valid mask header line
+      preg_match('/^"([a-z0-9\._-]+)\s*:\s*([a-z0-9\._-\s\W]+)\\\n"$/i', $this->_fileLine, $match);
+
+      //for a valid header line the $match size should three
+      if( sizeof($match) == 3 ) {
+        $key   = $match[1]; //getting the key of the header
+        $value = $match[2]; //getting the value of the header
+        $this->_meta[$key] = $value; //setting a new header
+      } else {
+        $this->flagEndHeaders = true; //otherwise set the ending to read the headers
+        break;
+      }
+    }//end looking for headeers
+    
+    //verifying the headers data
+    if( ! isset($this->_meta['X-Poedit-Language']) || ! isset($this->_meta['X-Poedit-Country']) ) {
+      $this->flagError = true;
+    } else if ( trim($this->_meta['X-Poedit-Language'] == '') && trim($this->_meta['X-Poedit-Country'] == '') ) {
+      $this->flagError = true;
+    }
+    
+    //thowing the exception if is necesary
+    if( $this->flagError ){
+      throw new Exception('This file is not a valid PO file.');
+    }
+  }
+
+  function getHeaders() {
+    return $this->_meta;
+  }
+
+  public function getTranslation(){
+
+    $flagReadingComments = true;
+    $this->translatorComments = Array();
+  	$this->extractedComments = Array();
+  	$this->references = Array();
+  	$this->flags = Array();
+    
+    //getting the new line
+    while( $flagReadingComments && ! $this->flagError ) {
+      
+      $this->_fileLine = trim(fgets($this->_fp));
+      //set line number
+      $this->lineNumber++;
+      
+      if( ! $this->_fileLine )
+        return false;
+        
+      $prefix = substr($this->_fileLine, 0, 2);
+      
+      switch($prefix) {
+        case '# ':
+          $lineItem = str_replace('# ', '', $this->_fileLine);
+          $this->translatorComments[] = $lineItem; 
+          break;
+        case '#.':
+          if( substr_count($this->_fileLine, '#. ') == 0 )
+            $this->flagError = true;
+          else {
+            $lineItem = str_replace('#. ', '', $this->_fileLine); 
+            $this->extractedComments[] = $lineItem;
+          }
+          break;
+        case '#:':
+          if( substr_count($this->_fileLine, '#: ') == 0 )
+            $this->flagError = true;
+          else {
+            $lineItem = str_replace('#: ', '', $this->_fileLine); 
+            $this->references[] = $lineItem;
+          }
+          break;
+        case '#,':
+          if( substr_count($this->_fileLine, '#, ') == 0 )
+            $this->flagError = true;
+          else {
+            $lineItem = str_replace('#, ', '', $this->_fileLine); 
+            $this->flags[] = $lineItem;
+          }
+          break;
+        case '#|':
+          if( substr_count($this->_fileLine, '#| ') == 0 )
+            $this->flagError = true;
+          else {
+            $lineItem = str_replace('#| ', '', $this->_fileLine); 
+            $this->previousUntranslatedStrings[] = $lineItem;
+          }
+          break;
+        default:
+          $flagReadingComments = false;
+      }
+    }
+    
+    if( ! $this->_fileLine )
+      return false;
+    
+    //Getting the msgid
+    preg_match('/\s*msgid\s*"(.*)"\s*/s', $this->_fileLine, $match);
+    
+    if( sizeof($match) != 2 )
+      throw new Exception('Invalid PO file format1');
+
+    $msgid = '';
+      
+    do {
+      //g::pr($match);
+      $msgid .= $match[1];
+      $this->_fileLine = trim(fgets($this->_fp));
+      preg_match('/^"(.*)"\s*/s', $this->_fileLine, $match);
+    } while ( sizeof($match) == 2 );
+    
+    //Getting the msgstr
+    preg_match('/\s*msgstr\s*"(.*)"\s*/s', $this->_fileLine, $match);
+    
+    if( sizeof($match) != 2 )
+      throw new Exception('Invalid PO file format2');
+
+    $msgstr = '';
+      
+    do {
+      //g::pr($match);
+      $msgstr .= $match[1] . "\n";
+      $this->_fileLine = trim(fgets($this->_fp));
+      preg_match('/^"(.*)"\s*/s', $this->_fileLine, $match);
+    } while ( sizeof($match) == 2 );
+    
+    
+    /*g::pr($this->translatorComments);
+    g::pr($this->references);
+    g::pr($match);
+    die;*/
+    
+    return Array('msgid'=>trim($msgid), 'msgstr'=>trim($msgstr));
+  }
+  
+  //garbage
   function __destruct() 
   {
     if ( $this->_fp )

@@ -73,6 +73,24 @@ var main = function(){
   //parent.document.getElementById('adminFrame').style.height = oClientWinSize.height-105;  
 }
 
+new Ext.KeyMap(document, {
+  key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+    	if (! e.ctrlKey) {
+        if (Ext.isIE) {
+            // IE6 doesn't allow cancellation of the F5 key, so trick it into
+            // thinking some other key was pressed (backspace in this case)
+            e.browserEvent.keyCode = 8;
+        }
+        e.stopEvent();
+        //document.location = document.location;
+        document.getElementById('setup-frame').src = document.getElementById('setup-frame').src;
+      }
+      else
+    Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+  }
+});
+
 Ext.onReady(main);
 
 

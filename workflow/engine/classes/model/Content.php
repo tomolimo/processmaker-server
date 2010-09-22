@@ -256,5 +256,23 @@ class Content extends BaseContent {
       throw($oError);
     }
   }
+  
+  function regenerateContent($langId)
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(ContentPeer::CON_CATEGORY);
+    $oCriteria->addSelectColumn(ContentPeer::CON_ID);
+    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $oCriteria->add(ContentPeer::CON_LANG, 'en');
+    $oCriteria->add(ContentPeer::CON_VALUE, '', Criteria::NOT_EQUAL );
+    $oDataset = ContentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $oContent = new Content();
+    while ($aRow = $oDataset->getRow()) {
+      $oContent->load($aRow['CON_CATEGORY'], '', $aRow['CON_ID'], $langId);
+      $oDataset->next();
+    }
+  }
 
 } // Content

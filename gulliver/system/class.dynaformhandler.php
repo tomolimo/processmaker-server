@@ -452,10 +452,66 @@ class dynaFormHandler
     }
     return $aFieldNames;
   }
+  
+  // 
+  function addChilds($name, $childs, $childs_childs=null)
+  {
+    //
+    $xpath = new DOMXPath($this->dom);
+    $nodeList = $xpath->query("/dynaForm/$name");
+    
+    if( $nodeList->length == 0 ) {
+      $element = $this->root->appendChild($this->dom->createElement($name));
+    } else
+      $element = $this->root->getElementsByTagName($name)->item(0);
+    
+    if( is_array($childs) ) {
+      foreach( $childs as $child_name => $child_text ) {
+        
+        $nodeList = $xpath->query("/dynaForm/$name/$child_name");
+        
+        if( $nodeList->length == 0 ){ //the node doesn't exist
+          //$newnode_child 
+          $childNode = $element->appendChild($this->dom->createElement($child_name));
+          $childNode->appendChild($this->dom->createTextNode($child_text));  
+        } else { // the node already exists
+          $childNode = $nodeList->item(0);
+          //$element = $this->root->getElementsByTagName($replaced)->item(0);
+          //$xnode = $this->dom->createElement($name);
+          //$xnode->appendChild($this->dom->createTextNode($child_text));
+          //$this->root->replaceChild($xnode, $childNode);
+        }
+        
+        if($childs_childs != null and is_array($childs_childs)){
+          foreach($childs_childs as $cc) {
+            $ccnode = $childNode->appendChild($this->dom->createElement($cc['name']));
+            $ccnode->appendChild($this->dom->createTextNode($cc['value']));
+            foreach($cc['attributes'] as $cc_att_name => $cc_att_value) {
+              $ccnode->setAttribute($cc_att_name, $cc_att_value);
+            }
+          }
+        }
+      }
+    } else {
+      $text_node = $childs;
+      $newnode->appendChild($this->dom->createTextNode($text_node));
+    }
+    $this->save();
+  }
 }
 
 //examples...........
-//$o = new dynaFormHandler('usersList.xml');
+//$o = new dynaFormHandler('xxx.xml');
+//attributes (String node-name, Array attributes(atribute-name =>attribute-value, ..., ...), Array childs(child-name=>child-content), Array Child-childs())
+/*$child_childs = Array(
+  Array('name'=>'option', 'value'=>'uno2', 'attributes'=>Array('name'=>1112)),
+  Array('name'=>'option', 'value'=>'dos', 'attributes'=>Array('name'=>222)),
+  Array('name'=>'option', 'value'=>'tres', 'attributes'=>Array('name'=>333)),
+);*/
+//$o->add('erik', Array('att1'=>1, 'att2'=>'dos'), Array('en'=>'hello'), $child_childs);
+//$o->addChilds('neyek', Array('en'=>'deutch'), $child_childs);
+//print_r($o->getFieldNames());
+
 /* for($i=1; $i<=5; $i++){
   $o->add('lastnamex'.$i, Array('type'=>'text', 'defaultvalue'=>'Ortiz'), Array('es'=>'Apellido'));
 }*/

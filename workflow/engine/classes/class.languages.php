@@ -53,7 +53,7 @@ class languages {
   * @param string $bXml
   * @return void 
   */
-  public function importLanguage($sLanguageFile, $bXml = true) 
+  public function importLanguage2($sLanguageFile, $bXml = true)
   {
     try {
       $this->log ( $sLanguageFile );
@@ -228,6 +228,101 @@ class languages {
         $oContent->load($aRow['CON_CATEGORY'], '', $aRow['CON_ID'], $sLanguageID);
         $oDataset->next();
       }
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
+
+  public function importLanguage($sLanguageFile, $updateXml = true)
+  {
+    try {
+      G::LoadSystem('i18n_po');
+      $POFile = new i18n_PO($sLanguageFile);
+      $POFile->readInit();
+      $POHeaders = $POFile->getHeaders();
+      
+      //getting the PO Language definition
+      $langName = $POHeaders['X-Poedit-Language'];
+      
+      $language = new Language();
+      $langRecord = $language->findByLanName($langName);
+      
+      if( ! isset($langRecord['LAN_ID']) )
+        throw new Exception('The .po file have a invalid language!');
+      
+      $languageID = $langRecord['LAN_ID'];
+        
+      $oTranslation = new Translation();
+      $countItems = 0;
+      $countItemsSuccess = 0;
+      
+      while( $translation = $POFile->getTranslation() ) {
+        $countItems++;
+        
+        if ( ! isset($POFile->translatorComments[0]) || ! isset($POFile->translatorComments[1]) || ! isset($POFile->references[0]) ) {
+          throw new Exception('The .po file has not valid directives for Processmaker!');
+        }
+        
+        $identifier = $POFile->translatorComments[0];
+        $context    = $POFile->translatorComments[1];
+        $reference  = $POFile->references[0];
+        
+        if( $identifier == 'TRANSLATION') {
+          
+          list($category, $id) = explode('/', $context);
+          $result = $oTranslation->addTranslation(
+            $category, 
+            $id, 
+            $languageID,
+            trim(str_replace(chr(10), '', $translation['msgstr']))
+          );
+          if( $result['codError'] == 0 )
+            $countItemsSuccess++;
+        } else if( $updateXml ){
+          $xmlForm = $context;
+          $codes   = explode(' - ', $reference);
+          $fieldName = trim($codes[1]);
+          
+          if( ! file_exists(PATH_XMLFORM . $xmlForm) ) {
+            continue;
+          }
+          
+          G::LoadSystem('dynaformhandler');
+          $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
+          
+          if( sizeof($codes) == 2 ) { //is a normal node
+            $dynaform->addChilds($fieldName, Array($languageID=>$translation['msgstr']));
+          } else if( sizeof($codes) == 3 ) { //is a node child for a language node
+            $name = trim($codes[2]);
+            $childNode = Array(
+              Array('name'=>'option', 'value'=>$translation['msgstr'], 'attributes'=>Array('name'=>$name))
+            );
+            $dynaform->addChilds($fieldName, Array($languageID=>''), $childNode);
+          }
+          $countItemsSuccess++;
+        }
+      }
+     
+      
+      $oLanguage = new Language();
+      $oLanguage->update(array('LAN_ID' => $languageID, 'LAN_ENABLED' => '1'));
+      Translation::generateFileTranslation($languageID);
+      
+      
+      $this->log( "checking and updating CONTENT");
+      $content = new Content();
+      $content->regenerateContent($languageID);
+      
+      //fill the results
+      $results = new stdClass();
+      $results->recordsCount        = $countItems;
+      $results->recordsCountSuccess = $countItemsSuccess;
+      $results->lang                = $languageID;
+      $results->headers             = $POHeaders;
+      
+      return $results;
     }
     catch (Exception $oError) {
       throw($oError);

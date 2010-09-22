@@ -44,6 +44,21 @@ if( $access != 1 ){
     break;  	
   }
 }  
+
+$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
+$oHeadPublisher->addExtJsScript('setup/languages', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('setup/languages'); //adding a html file  .html.
+
+$translations = Array(
+  'ID_PREDETERMINED' => 'Predetermined'
+);
+
+$oHeadPublisher->assign('TRANSLATIONS', $translations);
+
+G::RenderPage('publish', 'extJs');
+  
+die();
+
 $G_MAIN_MENU            = 'processmaker';
 $G_SUB_MENU             = 'setup';
 $G_ID_MENU_SELECTED     = 'SETUP';

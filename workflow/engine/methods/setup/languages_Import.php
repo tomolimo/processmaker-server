@@ -24,39 +24,68 @@
  */
 global $RBAC;
 $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
-if( $access != 1 ){
-  switch ($access)
-  {
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	default:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;  	
+if( $access != 1 ) {
+  switch( $access ) {
+    case -1:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+    break;
+    case -2:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+    break;
+    default:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+    break;
   }
-}  
+}
+$result = new stdClass();
+
 try {
   if(!is_writable(PATH_XMLFORM)){
     throw new Exception(G::LoadTranslation('IMPORT_LANGUAGE_ERR_NO_WRITABLE'));
   }
+  
   $sMaxExecutionTime = ini_get('max_execution_time');
   ini_set('max_execution_time', '0');
   G::LoadClass('languages');
-  $oLanguages = new languages();
-  $oLanguages->importLanguage($_FILES['form']['tmp_name']['LANGUAGE_FILENAME']);
+  G::LoadClass('configuration');
+  
+  $languages     = new languages();
+  $configuration = new Configurations;
+  
+  $importResults = $languages->importLanguage($_FILES['form']['tmp_name']['LANGUAGE_FILENAME']);
+
+  //G::SendTemporalMessage('IMPORT_LANGUAGE_SUCCESS', 'info', 'labels');
+  //G::header('location: languages');
+  
+  $result->msg = G::LoadTranslation('IMPORT_LANGUAGE_SUCCESS') . "\n";
+  $result->msg .= "PO File num. records: " . $importResults->recordsCount . "\n";
+  $result->msg .= "Records registered successfully : " . $importResults->recordsCountSuccess . "\n";
+  //$result->msg = htmlentities($result->msg);
+  $result->success = true;
+  
+  //saving metadata
+  
+  $configuration->aConfig  = Array(
+    'headers'     => $importResults->headers,
+    'language'    => $importResults->lang,
+    'import-date' => date('Y-m-d H:i:s'),
+    'user'        => '',
+    'version'     => '1.0'
+  );
+  $configuration->saveConfig('LANGUAGE_META', $importResults->lang);
+  
   ini_set('max_execution_time', $sMaxExecutionTime);
-  G::SendTemporalMessage('IMPORT_LANGUAGE_SUCCESS', 'info', 'labels');
-  G::header('location: languages');
+  
 } catch (Exception $oError) {
-  G::SendTemporalMessage($oError->getMessage(), 'error', 'string');
-  G::header('location: languages_ImportForm');
+  $result->msg = $oError->getMessage();
+  $result->success = false;
+  //G::SendTemporalMessage($oError->getMessage(), 'error', 'string');
+  //G::header('location: languages_ImportForm');
 }
+echo G::json_encode($result);

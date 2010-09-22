@@ -23,53 +23,86 @@
  *
  */
 try {
-
+  
   G::LoadInclude('ajax');
-  if (isset($_POST['form']))
-  {
-  	$_POST = $_POST['form'];
+  if(isset($_POST['form'])) {
+    $_POST = $_POST['form'];
   }
   $_POST['function'] = get_ajax_value('function');
-  switch ($_POST['function'])
-  {
-  	case 'languageSelect':
-  	  //print_r($_POST['lang']);  	die;  
-  	  require_once 'classes/model/Configuration.php';
-		  $oConfiguration = new Configuration();
-		  $sDelimiter     = DBAdapter::getStringDelimiter();
-		  $oCriteria      = new Criteria('workflow');
-		  $oCriteria->add(ConfigurationPeer::CFG_UID, 'Language');		  
-		  $oCriteria->add(ConfigurationPeer::OBJ_UID, '');
-		  //$oCriteria->add(ConfigurationPeer::CFG_VALUE, '');
-  		$oCriteria->add(ConfigurationPeer::PRO_UID, '');
-  		$oCriteria->add(ConfigurationPeer::USR_UID, '');
-  		$oCriteria->add(ConfigurationPeer::APP_UID, '');
+  switch($_POST['function']) {
+    case 'savePredetermined':
+      G::loadClass('configuration');
+      
+      if( ! isset($_POST['lang']) ) 
+        echo 'The lang id was not set!';
+        
+      $configuration = new Configurations;
+      $configuration->aConfig = Array('LAN_ID' => $_POST['lang']);
+      $configuration->saveConfig('LANGUAGE_ENVIRONMENT', '');
+      
+      //verifying if the config was stored correctly.
+      $oConf = new Configurations;
+      $oConf->loadConfig($x, 'LANGUAGE_ENVIRONMENT', '');
+      $meta = $oConf->aConfig;
+      
+      if( isset($meta['LAN_ID']) && $meta['LAN_ID'] == $_POST['lang'] ){
+        echo 'The Setting was saved successfully!';
+      } else {
+        echo 'Some error occured while the setting was being save, try later please.';
+      }
+      break;
+    
+    case 'languagesList':
+      require_once 'classes/model/Language.php';
+      require_once 'classes/model/IsoCountry.php';
+      G::loadClass('configuration');
+      
+      $isoCountry = new isoCountry();
+      $lang = new Language();
+      
+      
+      $languagesList = $lang->getActiveLanguages();
 
-		  if(ConfigurationPeer::doCount($oCriteria)==0)
-		   {
-		   		$aData['CFG_UID']   = 'Language';
-					$aData['OBJ_UID']   = ''; 
-					$aData['CFG_VALUE'] = $_POST['lang'];
-					$aData['PRO_UID']   = ''; 
-					$aData['USR_UID']   = ''; 
-					$aData['APP_UID']   = ''; 
-		
-		  		$oConfig = new Configuration();		  	  
-		  	  $oConfig->create($aData);  		
-		   }		 
-		  else
-		   {
-		   	  $oCriteria1 = new Criteria('workflow');
-		  		$oCriteria1->add(ConfigurationPeer::CFG_VALUE, $_POST['lang']);
-		  		$oCriteria2 = new Criteria('workflow');
-		  		$oCriteria2->add(ConfigurationPeer::CFG_UID, 'Language');
-		  		BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
-		   } 
-  	
-  	break;    	  	
-  }   
-}
-catch (Exception $oException) {
-	die($oException->getMessage());
+      $response = new stdClass();
+      //verifying if the config was stored correctly.
+      $langConf = new Configurations;
+      $langConf->loadConfig($x, 'LANGUAGE_ENVIRONMENT', '');
+      $langEnv = $langConf->aConfig;
+      //print_r($langEnv);
+      foreach( $languagesList as $i=>$lang ) {
+        $oConf = new Configurations; 
+        $oConf->loadConfig($x, 'LANGUAGE_META', $lang['LAN_ID']);
+        $meta = $oConf->aConfig;
+        //print_r($meta);
+        if( $lang['LAN_ID'] == 'en' )
+          $langId = 'us';
+        else 
+          $langId = $lang['LAN_ID'];
+          
+        $isoCountryRecord = $isoCountry->findById(strtoupper($langId));
+        $countryName = isset($isoCountryRecord['IC_NAME'])? $isoCountryRecord['IC_NAME']: 'Unknow';
+        
+        $languagesList[$i]['COUNTRY_NAME'] = $countryName;
+        $languagesList[$i]['OBS']          = ''; //($lang['LAN_ID'] == 'es')? 'Need Update': '';
+        
+        if( count($meta) > 0 ) {
+          $languagesList[$i]['DATE']         = $meta['import-date'];
+          $languagesList[$i]['REV_DATE']     = $meta['headers']['PO-Revision-Date'];
+          $languagesList[$i]['VERSION']      = $meta['headers']['Project-Id-Version'];
+        } else {
+          $languagesList[$i]['DATE']         = '';
+          $languagesList[$i]['REV_DATE']     = '';
+          $languagesList[$i]['VERSION']      = '';
+        }
+        
+        $languagesList[$i]['DEFAULT'] = (isset($langEnv['LAN_ID']) && $langEnv['LAN_ID']==$lang['LAN_ID']) ? '1' : '0';
+      }
+      $response->data = $languagesList;
+      
+      print(G::json_encode($response));
+    break;
+  }
+} catch ( Exception $oException ) {
+  die($oException->getMessage());
 }
 ?>
