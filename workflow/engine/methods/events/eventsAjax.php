@@ -3,8 +3,21 @@ $req = $_POST['request'];
 	
 switch($req){
 	case 'showUsers':
-		$sql = "SELECT USR_UID, USR_EMAIL, CONCAT(USR_FIRSTNAME, ' ' , USR_LASTNAME) AS USR_FULLNAME FROM USERS WHERE USR_STATUS = 'ACTIVE' AND USR_EMAIL <> ''";
-		
+	
+    /* 
+		  $sql = "SELECT USR_UID, USR_EMAIL, CONCAT(USR_FIRSTNAME, ' ' , USR_LASTNAME) AS USR_FULLNAME FROM USERS WHERE USR_STATUS = 'ACTIVE' AND USR_EMAIL <> ''";
+    */
+    $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+    if(G::LoadSystemExist($sDataBase)){
+      G::LoadSystem($sDataBase);
+      $oDataBase = new database();
+      $sConcat = $oDataBase->concatString("USR_FIRSTNAME", "' '" , "USR_LASTNAME") ;
+    }
+		$sql = " SELECT USR_UID, USR_EMAIL, " . 
+		       $sConcat .
+		       " AS USR_FULLNAME FROM USERS " .
+		       " WHERE USR_STATUS = 'ACTIVE' AND USR_EMAIL <> ''";
+		       
 		$oCriteria = new Criteria('workflow');
 		$del = DBAdapter::getStringDelimiter();
 
