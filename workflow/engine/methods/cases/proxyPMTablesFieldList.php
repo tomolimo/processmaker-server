@@ -42,21 +42,20 @@
    */
 
    function setDefaultFields() {
-
      $fields = array();
-     $fields[] = array( 'name' => 'APP_UID'    , 'fieldType' => 'key', 'label' => G::loadTranslation('ID_CASESLIST_APP_UID'), 'width' => 80, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_NUMBER' , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_NUMBER') , 'width' => 80, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_STATUS' , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_STATUS') , 'width' => 80, 'align' => 'left');
-     $fields[] = array( 'name' => 'DEL_INDEX'  , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_INDEX')  , 'width' => 50, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_TITLE'  , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TITLE')  , 'width' => 140, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_PRO_TITLE'  , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_PRO_TITLE') , 'width' => 140, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_TAS_TITLE'  , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TAS_TITLE') , 'width' => 140, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_UID'    ,            'fieldType' => 'key',         'label' => G::loadTranslation('ID_CASESLIST_APP_UID'),                'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'DEL_INDEX'  ,            'fieldType' => 'key' ,        'label' => G::loadTranslation('ID_CASESLIST_DEL_INDEX')  ,            'width' => 50,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_NUMBER' ,            'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_NUMBER') ,            'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_STATUS' ,            'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_STATUS') ,            'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_TITLE'  ,            'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TITLE')  ,            'width' => 140, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_PRO_TITLE'  ,        'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_PRO_TITLE') ,         'width' => 140, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_TAS_TITLE'  ,        'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TAS_TITLE') ,         'width' => 140, 'align' => 'left');
      $fields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_DEL_PREVIOUS_USER') , 'width' => 120, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_CURRENT_USER'      , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_CURRENT_USER')  , 'width' => 120, 'align' => 'left');
-     $fields[] = array( 'name' => 'DEL_TASK_DUE_DATE'     , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_TASK_DUE_DATE') , 'width' => 100, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_UPDATE_DATE' , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_UPDATE_DATE') , 'width' => 100, 'align' => 'left');
-     $fields[] = array( 'name' => 'DEL_PRIORITY'    , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_PRIORITY')    , 'width' => 80, 'align' => 'left');
-     $fields[] = array( 'name' => 'APP_FINISH_DATE' , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_FINISH_DATE') , 'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_CURRENT_USER'      , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_CURRENT_USER')  ,     'width' => 120, 'align' => 'left');
+     $fields[] = array( 'name' => 'DEL_TASK_DUE_DATE'     , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_TASK_DUE_DATE') ,     'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'APP_UPDATE_DATE'       , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_UPDATE_DATE') ,       'width' => 100, 'align' => 'left');
+     $fields[] = array( 'name' => 'DEL_PRIORITY'          , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_DEL_PRIORITY')    ,       'width' => 80,  'align' => 'left');
+     $fields[] = array( 'name' => 'APP_FINISH_DATE'       , 'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_FINISH_DATE') ,       'width' => 100, 'align' => 'left');
      return $fields;
 
    }
@@ -70,18 +69,6 @@
     $rows = array();
     switch ( $action ) {
       case 'todo' : // #, Case, task, process, sent by, due date, Last Modify, Priority
-/*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_DEL_PREVIOUS_USER', count($rows) );
-        $rows[] = defaultField ('DEL_TASK_DUE_DATE',     count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-        $rows[] = defaultField ('DEL_PRIORITY',          count($rows) );
-*/
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
@@ -89,18 +76,8 @@
         $rows = calculateGridIndex($rows);
 
         break;
+
       case 'draft' :    //#, Case, task, process, due date, Last Modify, Priority },
-      /*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('DEL_TASK_DUE_DATE',     count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-        $rows[] = defaultField ('DEL_PRIORITY',          count($rows) );
-        */
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
@@ -109,36 +86,16 @@
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
         $rows = calculateGridIndex($rows);
         break;
+
       case 'sent' : // #, Case, task, process, current user, sent by, Last Modify, Status
-        /*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_CURRENT_USER',      count($rows) );
-        $rows[] = defaultField ('APP_DEL_PREVIOUS_USER', count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-        $rows[] = defaultField ('APP_STATUS',            count($rows) );
-        */
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_FINISH_DATE',$rows);
         $rows = removeItem( 'DEL_TASK_DUE_DATE',$rows);
         $rows = removeItem( 'DEL_PRIORITY',$rows);
         $rows = calculateGridIndex($rows);
         break;
+
       case 'unassigned' :  //#, Case, task, process, completed by user, finish date
-        /*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_DEL_PREVIOUS_USER', count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-         */
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_FINISH_DATE' , $rows );
         $rows = removeItem( 'DEL_TASK_DUE_DATE' , $rows );
@@ -147,17 +104,8 @@
         $rows = removeItem( 'APP_CURRENT_USER' , $rows );
         $rows = calculateGridIndex( $rows );
         break;
+
       case 'paused' : //#, Case, task, process, sent by
-        /*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_DEL_PREVIOUS_USER', count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-         */
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_FINISH_DATE' , $rows );
         $rows = removeItem( 'DEL_TASK_DUE_DATE' , $rows );
@@ -167,16 +115,6 @@
         $rows = calculateGridIndex( $rows );
         break;
       case 'completed' : //#, Case, task, process, completed by user, finish date
-        /*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_CURRENT_USER',      count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-        */
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_FINISH_DATE' , $rows );
         $rows = removeItem( 'DEL_TASK_DUE_DATE' , $rows );
@@ -184,19 +122,9 @@
         $rows = removeItem( 'APP_STATUS' , $rows );
         $rows = removeItem( 'APP_CURRENT_USER' , $rows );
         $rows = calculateGridIndex( $rows );
-
         break;
+
       case 'cancelled' : //#, Case, task, process, due date, Last Modify
-        /*
-        $rows[] = defaultField ('APP_UID',               count($rows) );
-        $rows[] = defaultField ('DEL_INDEX',             count($rows) );
-        $rows[] = defaultField ('APP_NUMBER',            count($rows) );
-        $rows[] = defaultField ('APP_TITLE',             count($rows) );
-        $rows[] = defaultField ('APP_TAS_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_PRO_TITLE',         count($rows) );
-        $rows[] = defaultField ('APP_CURRENT_USER',      count($rows) );
-        $rows[] = defaultField ('APP_UPDATE_DATE',       count($rows) );
-        */
         $rows = setDefaultFields();
         $rows = removeItem( 'APP_FINISH_DATE' , $rows );
         $rows = removeItem( 'DEL_TASK_DUE_DATE' , $rows );
@@ -369,6 +297,8 @@
     print  json_encode( $result);
   }
   
+  
+  
   function xgetFieldsFromPMTable( $tabUid ) {
     $rows = array();
     $result = array();
@@ -425,6 +355,7 @@
     //$fields = calculateGridIndex( $fields );
     return ( $fields );
   }
+  
  /**
   *
   * @param Array $fields

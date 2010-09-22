@@ -1,5 +1,5 @@
 new Ext.KeyMap(document, {
-    key: Ext.EventObject.F5,
+  key: Ext.EventObject.F5,
     fn: function(keycode, e) {
     	if (! e.ctrlKey) {
         if (Ext.isIE) {
@@ -12,8 +12,8 @@ new Ext.KeyMap(document, {
         storeCases.reload();
       }    
       else 
-Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
-    }
+    Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+  }
 });
 
 //global variables
@@ -26,7 +26,7 @@ Ext.onReady ( function() {
     return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>Open</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
 
-  function converDate ( value ) {
+  function convertDate ( value ) {
     if(!Ext.isDate( value )){
     	var myArray = value.split(' '); 
     	var myArrayDate = myArray[0].split('-'); 
@@ -36,12 +36,12 @@ Ext.onReady ( function() {
     return myDate;
   }   
   function showDate (value,p,r) {
-    var myDate = converDate( value );
+    var myDate = convertDate( value );
     return String.format("{0}", myDate.dateFormat( PMDateFormat ));
   } 
   
   function dueDate(value, p, r){
-    var myDate = converDate( value );
+    var myDate = convertDate( value );
     var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;'; 
     return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
   }
@@ -156,6 +156,24 @@ Ext.onReady ( function() {
     pressed: true
   });
  
+  var btnStarted = new Ext.Button ({
+    id: 'started',
+    text: 'started by me',
+    enableToggle: true,
+    toggleHandler: onItemToggle,
+    allowDepress: true,
+    pressed: false
+  });
+ 
+  var btnCompleted = new Ext.Button ({
+    id: 'completed',
+    text: 'Completed by me',
+    enableToggle: true,
+    toggleHandler: onItemToggle,
+    allowDepress: true,
+    pressed: false
+  });
+ 
   // ComboBox creation
   var comboProcess = new Ext.form.ComboBox({
     width: 180,
@@ -181,8 +199,34 @@ Ext.onReady ( function() {
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
   
+  // ComboBox creation
+  var comboStatus = new Ext.form.ComboBox({
+    width: 80,
+    store: storeProcesses,
+    displayField: 'APP_STATUS',
+    typeAhead: true,
+    //mode: 'local',
+    maxHeight: 100,
+    forceSelection: true,
+    triggerAction: 'all',
+    emptyText: 'Select a status...',
+    selectOnFocus: true,
+    getListParent: function() {
+      return this.el.up('.x-menu');
+    },
+    listeners:{
+      scope: this,
+      'select': function() {
+        filterProcess = comboProcess.value;
+        storeCases.setBaseParam( 'process', filterProcess);
+        storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
+      }},
+    iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
+  });
+  
   var textSearch = new Ext.form.TextField ({
     allowBlank: false,
+    width: 90,
     emptyText: 'enter search term'
   });
 
@@ -197,6 +241,7 @@ Ext.onReady ( function() {
 
   var textJump = new Ext.form.TextField ({
     allowBlank: false,
+    width: 50,
     emptyText: 'case Id'
   });
 
@@ -240,9 +285,37 @@ Ext.onReady ( function() {
       ' '
     ];
 
+  var toolbarSent = [
+      btnStarted,
+      '-',
+      btnCompleted,
+      '-',
+      btnAll,
+      '-',
+      'status', 
+      comboStatus,
+      '-',
+      'process', 
+      comboProcess,
+      '->', // begin using the right-justified button container 
+      textSearch,
+      btnSearch,
+      '-',
+      textJump,
+      btnJump,
+      ' ',
+      ' '
+    ];
+
+  switch (action) {
+    case 'draft': itemToolbar = toolbarDraft; break;
+    case 'sent' : itemToolbar = toolbarSent;  break;
+    default     : itemToolbar = toolbarTodo; break;
+  }
+    
   var tb = new Ext.Toolbar({
     height: 35,
-    items: ( action == 'todo' ? toolbarTodo : toolbarDraft )
+    items: itemToolbar
   });
 
   // create the editor grid
@@ -305,23 +378,22 @@ Ext.onReady ( function() {
           btnRead.toggle( false, true);
           btnAll.toggle( false, true);
           break;
+        case 'started' : 
+          btnAll.toggle( false, true);
+          break;
+        case 'completed' : 
+          btnAll.toggle( false, true);
+          break;
         case 'all' : 
           btnRead.toggle( false, true);
           btnUnread.toggle( false, true);
+          btnStarted.toggle( false, true);
+          btnCompleted.toggle( false, true);
           break;
       }
       storeCases.setBaseParam( 'filter', item.id );
       storeCases.load({params:{start:0, limit: pageSize, filter: item.id }});
       storeProcesses.load();
-/*
-      title = item.text;
-
-      var msgCt = Ext.get('msg-div');
-      msgCt.alignTo(document, 't-t');
-      var s = String.format.apply(String, ['Button "{0}" was toggled to {1}.', item.text, pressed]);
-      var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
-      m.slideIn('t').pause(1).ghost("t", {remove:true});              
-*/      
     }
   
   
@@ -331,6 +403,7 @@ Ext.onReady ( function() {
     debugPanel.hide();
     debugPanel.ownerCt.doLayout(); 
   }
-  parent.updateCasesView();
+  //parent.updateCasesView();
+  parent.updateCasesTree();
   
 });

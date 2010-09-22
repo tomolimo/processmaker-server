@@ -47,8 +47,8 @@ $G_TMP_MENU->AddIdRawOption('CASES_DRAFT',       'casesListExtJs?action=draft', 
 $G_TMP_MENU->AddIdRawOption('CASES_SENT',        'casesListExtJs?action=sent',       G::LoadTranslation('ID_SENT'),               'icon-cases-outbox.png');
 $G_TMP_MENU->AddIdRawOption('CASES_SELFSERVICE', 'casesListExtJs?action=selfservice',G::LoadTranslation('ID_UNASSIGNED'),         'rotate_cw.png'        );
 $G_TMP_MENU->AddIdRawOption('CASES_PAUSED',      'casesListExtJs?action=paused',     G::LoadTranslation('ID_PAUSED'),             'mail-queue.png'       );
-$G_TMP_MENU->AddIdRawOption('CASES_COMPLETED',   'casesListExtJs?action=completed',  G::LoadTranslation('ID_COMPLETED'),          'file-archiver.png'    );
-$G_TMP_MENU->AddIdRawOption('CASES_CANCELLED',   'casesListExtJs?action=cancelled',  G::LoadTranslation('ID_CANCELLED'),          'edit-clear-list.png'  );
+//$G_TMP_MENU->AddIdRawOption('CASES_COMPLETED',   'casesListExtJs?action=completed',  G::LoadTranslation('ID_COMPLETED'),          'file-archiver.png'    );
+//$G_TMP_MENU->AddIdRawOption('CASES_CANCELLED',   'casesListExtJs?action=cancelled',  G::LoadTranslation('ID_CANCELLED'),          'edit-clear-list.png'  );
 $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     '../appFolder/appFolderList',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
 
 

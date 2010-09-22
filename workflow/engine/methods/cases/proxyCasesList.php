@@ -76,6 +76,10 @@
         $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
         $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
         break;
+  		case 'started' : 
+        $Criteria->add      (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
+        $CriteriaCount->add (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
+        break;
   	}
   }  
 
@@ -86,7 +90,6 @@
   }  
 
   //here we count how many records exists for this criteria.
-  //$totalCount = GulliverBasePeer::doCount( $Criteria );
   $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, true );
       
   //add sortable options    
@@ -121,7 +124,8 @@
   
   }
   catch ( Exception $e ) {
-    print json_encode( $e->getMessage() ) ;
+  	$msg = array ( 'error' => $e->getMessage() );
+    print json_encode( $msg ) ;
   }      
 
 

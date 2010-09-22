@@ -1,4 +1,5 @@
 var PANEL_EAST_OPEN = false;
+var timerMinutes = 2*60*1000;  //every 2 minutes, this should be customized also,
 
 var currentSelectedTreeMenuItem = null;
 var centerPanel;
@@ -50,7 +51,7 @@ new Ext.KeyMap(document, {
         e.browserEvent.keyCode = 8;
       }
       e.stopEvent();
-      updateCasesView();
+      updateCasesView;
     } else 
       Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
   }
@@ -147,7 +148,7 @@ Ext.onReady(function(){
         cls: 'x-btn-icon',
         icon: '/images/refresh.gif',
         /*text: 'Reload notifiers',*/
-        handler: updateCasesView
+        //handler: updateCasesTree
       }
     ],
     animate:true,
@@ -408,14 +409,21 @@ Ext.onReady(function(){
  
   setDefaultOption();
 
-  //the starting timer will be triggered after 2 seconds
-  setTimeout('Timer()', 2*1000);
+  //the starting timer will be triggered after timerMinutes 
+  setTimeout('Timer()', timerMinutes );
 });
 
-function updateCasesView(){
+function updateCasesView() {
   try{
-    document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
-  } catch(e){}
+  	if (document.getElementById('casesSubFrame').contentWindow.storeCases) {
+      document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+    }
+  } 
+  catch(e){};
+  updateCasesTree();
+}
+
+function updateCasesTree() {
   try{
     //treeMenuItems.root.reload();
     Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
@@ -458,7 +466,7 @@ function updateCasesView(){
 	      }
       },
       failure: function(){},
-      params: {}
+      params: {'updateCasesTree': true}
     });
   } catch(e){alert(' '+e)}
 }
@@ -466,7 +474,7 @@ function updateCasesView(){
 //the timer function will be called after 2 minutes;
 function Timer(){
   updateCasesView();
-  setTimeout('Timer()', 2*60*1000);
+  setTimeout('Timer()', timerMinutes);
 }
 
 Ext.data.DynamicJsonReader = function(config){
