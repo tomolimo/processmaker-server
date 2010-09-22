@@ -21,7 +21,14 @@ foreach($aTriggers as $aTrigger) {
       //$t_code = str_replace('"', '\'',$t_code);
       //$t_code = addslashes($t_code);
       //$t_code = Only1br($t_code);
-      $triggersList[$i]['code'] = $aTrigger['TRIGGERS_VALUES'][$index]['TRI_WEBBOT'];
+      
+      //highlighting the trigger code using the geshi third party library
+      G::LoadThirdParty('geshi', 'geshi');
+      $geshi = new GeSHi($aTrigger['TRIGGERS_VALUES'][$index]['TRI_WEBBOT'], 'php');
+      $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 2);
+      $geshi->set_line_style('background: #f0f0f0;');
+      
+      $triggersList[$i]['code'] = $geshi->parse_code(); //$aTrigger['TRIGGERS_VALUES'][$index]['TRI_WEBBOT'];
       $i++;
     }
   } else {

@@ -275,7 +275,7 @@ Ext.onReady(function(){
     reader: reader,
     sortInfo:{field: 'name', direction: "ASC"},
     groupField:'execution_time',
-    proxy: new Ext.data.HttpProxy({url: 'debug_triggers'})
+    proxy: new Ext.data.HttpProxy({url: 'debug_triggers?r='+Math.random()})
   });
 
   var debugTriggers = new xg.GridPanel({
@@ -318,6 +318,7 @@ Ext.onReady(function(){
       width: 500,
       height: 400,
       modal: false,
+      autoScroll: true,
       items: []
     });
     w.show();
