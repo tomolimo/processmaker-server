@@ -153,7 +153,7 @@ class AppCacheView extends BaseAppCacheView {
       $Criteria  = new Criteria('workflow');
     }
     else {
-      $Criteria = $this->addPMFieldsToCriteria('draft');
+      $Criteria = $this->addPMFieldsToCriteria('sent');
     }
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "DRAFT" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
@@ -179,6 +179,18 @@ class AppCacheView extends BaseAppCacheView {
    * @return Criteria object $Criteria
    */
   function getSentListCriteria ($userUid) {
+      $Criteria  = new Criteria('workflow');
+  	
+$subSelect = "APP_CACHE_VIEW.APP_UID IN (
+    SELECT
+          distinct APP_CACHE_VIEW.APP_UID
+    FROM
+          APP_CACHE_VIEW
+    WHERE
+         APP_CACHE_VIEW.USR_UID = '$userUid'
+    )";
+$Criteria->add(AppCacheViewPeer::APP_UID, $subSelect, Criteria::CUSTOM);
+return $Criteria;  	
   	return $this->getSent($userUid, false);
   }
 
@@ -204,7 +216,7 @@ class AppCacheView extends BaseAppCacheView {
       $Criteria  = new Criteria('workflow');
     }
     else {
-      $Criteria = $this->addPMFieldsToCriteria('draft');
+      $Criteria = $this->addPMFieldsToCriteria('unassigned');
     }
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "TODO" , CRITERIA::EQUAL );
 
@@ -297,7 +309,7 @@ class AppCacheView extends BaseAppCacheView {
       $Criteria  = new Criteria('workflow');
     }
     else {
-      $Criteria = $this->addPMFieldsToCriteria('draft');
+      $Criteria = $this->addPMFieldsToCriteria('completed');
     }
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "COMPLETED" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
@@ -345,7 +357,7 @@ class AppCacheView extends BaseAppCacheView {
       $Criteria  = new Criteria('workflow');
     }
     else {
-      $Criteria = $this->addPMFieldsToCriteria('draft');
+      $Criteria = $this->addPMFieldsToCriteria('cancelled');
     }
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "CANCELLED" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
