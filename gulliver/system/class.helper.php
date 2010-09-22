@@ -72,7 +72,8 @@ class Helper{
   }
   
   function minify(){
-    $this->content = G::removeComments($this->content);
+    G::LoadThirdParty('jsmin', 'jsmin');
+    $this->content = JSMin::minify($this->content);
   }
   
   function flush(){

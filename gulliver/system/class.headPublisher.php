@@ -308,7 +308,7 @@ class headPublisher {
     //DEPRECATED, this will be removed in a future -->
     
     //new interactive css decorator
-    $script .= "  <link rel='stylesheet' type='text/css' href='/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/gulliver/decorator?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
+    $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/decorator?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
     
     /**
      * Load external/plugin css

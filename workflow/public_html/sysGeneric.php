@@ -139,6 +139,7 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   $virtualURITable['/sys[a-zA-Z][a-zA-Z0-9]{0,}()/'] = 'sysNamed';
   $virtualURITable['/(sys*)']                        = FALSE;
   $virtualURITable['/errors/(*)']                    = PATH_GULLIVER_HOME . 'methods/errors/';
+  $virtualURITable['/gulliver/(*)']                  = PATH_GULLIVER_HOME . 'methods/';
   $virtualURITable['/controls/(*)']                  = PATH_GULLIVER_HOME . 'methods/controls/';
   $virtualURITable['/html2ps_pdf/(*)']               = PATH_THIRDPARTY . 'html2ps_pdf/';
   $virtualURITable['/Krumo/(*)']                     = PATH_THIRDPARTY . 'krumo/';
@@ -196,7 +197,7 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
 
       die;
     }
-
+    //die($realPath);
     switch ( $realPath  ) {
     case 'sysUnnamed' :
       require_once('sysUnnamed.php'); die;
@@ -217,6 +218,7 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
      break;
     default :
       $realPath = explode('?', $realPath);
+      $realPath[0] .= strpos($realPath[0], '.') === false ? '.php' : '';
       G::streamFile ( $realPath[0] );
       die;
     }

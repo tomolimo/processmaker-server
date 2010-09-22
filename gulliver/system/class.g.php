@@ -2935,7 +2935,6 @@ class G
 
   function removeComments($buffer)
   {
-    //return $buffer;
     /* remove comments */
     $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
     /* remove tabs, spaces, newlines, etc. */
