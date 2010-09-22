@@ -260,7 +260,8 @@ Ext.onReady(function(){
         //remove APP_UID and DEL_INDEX from second grid, this is only to avoid display in this grid
         if ( secondGrid.store.data.items[1].data['name'] == 'DEL_INDEX' ) secondGrid.store.removeAt(1); //del_index
         if ( secondGrid.store.data.items[0].data['name'] == 'APP_UID'   ) secondGrid.store.removeAt(0); //app_uid
-
+        // set also the selected table value in the comboBox element.
+        pmTablesDropdown.setValue(dataResponse.PMTable);
         pmRowsPerPage.setValue(dataResponse.rowsperpage);
         pmDateFormat.setValue (dataResponse.dateformat );
       },
