@@ -56,7 +56,7 @@ if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
 }*/
 
 if ($RBAC->userCanAccess('PM_SETUP') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/setup', G::LoadTranslation('ID_SETUP'));
+  $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/main', G::LoadTranslation('ID_SETUP'));
 }
 
 

@@ -3,18 +3,22 @@
   $request = isset($_POST['request'])? $_POST['request']: (isset($_GET['request'])? $_GET['request']: null);
   
   switch($request){
+  
     case 'info':
       $result = new stdClass();
       
-      G::LoadClass('serverConfiguration');
-      $oServerConf =& serverConf::getSingleton();
-      $appCacheViewEngine = $oServerConf->getProperty('APP_CACHE_VIEW_ENGINE');
+      G::loadClass('configuration');
+      $oConf = new Configurations; 
+      $oConf->loadConfig($x, 'APP_CACHE_VIEW_ENGINE','','','','');
+      $appCacheViewEngine = $oConf->aConfig;
       
-      if( isset($appCacheViewEngine['lang']) )
-        $lang = $appCacheViewEngine['lang'];
-      else
+      if( isset($appCacheViewEngine['LANG']) ){
+        $lang   = $appCacheViewEngine['LANG'];
+        $status = strtoupper($appCacheViewEngine['STATUS']);
+      } else {
         $lang = '-';
-      
+        $status = 'MISSING';
+      }
       $sql = "SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'wf_".SYS_SYS."'
@@ -35,19 +39,17 @@
           $count = $res['NUM'];
         else 
           $count = '-';
-          
-       // $o2->query('DROP TRIGGER IF EXISTS APP_DELEGATION_INSERT;');
-        //$o2->query('DROP TRIGGER IF EXISTS APP_DELEGATION_UPDATE;');
-        //$o2->query('DROP TRIGGER IF EXISTS APPLICATION_UPDATE;');
+
       } else {
         $tableExists  = 'NOT FOUND';
         $count = '-';
       }
-      
+      $result->status = 'ok';
       $result->info = Array(
+        Array('name'=>'Status', 'value'=>"[$status]"),
         Array('name'=>'Cache table', 'value'=>"[$tableExists]"),
         Array('name'=>'Records in Cache table', 'value'=>"[$count]"),
-        Array('name'=>'Cache Table Triggers', 'value'=>"[]"),
+       /* Array('name'=>'Cache Table Triggers', 'value'=>"[]"),*/
         Array('name'=>'Language', 'value'=>"[$lang]")
       );
       
@@ -66,7 +68,7 @@
       break;
     
     case 'build':
-            
+      
       $sqlToExe = Array();
       $schemasPath = PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP;
       $sqlToExe[] = $schemasPath . 'app_cache_view.sql';
@@ -75,16 +77,36 @@
       $sqlToExe[] = $schemasPath . 'triggerAppDelegationUpdate.sql';
       $sqlToExe[] = $schemasPath . 'triggerApplicationUpdate.sql';
       
-      G::LoadClass('serverConfiguration');
-      $oServerConf =& serverConf::getSingleton();
+      //G::LoadClass('serverConfiguration');
+      //$oServerConf =& serverConf::getSingleton();
+      
+      G::LoadClass('configuration');
+      $conf = new Configurations;
       
       $lang = $_POST['lang'];
-      
+      $dbUserType = $_GET['dbUserType'];
       try {
         
         $con = Propel::getConnection("workflow");
         G::LoadSystem('dbMaintenance');
-        $o2 = new DataBaseMaintenance('localhost', 'root', 'atopml2005');
+        
+        switch($dbUserType){
+          case '1': 
+            $o2 = new DataBaseMaintenance(DB_HOST, DB_USER, DB_PASS); 
+            break;
+          case '2': 
+          
+            $dbHash = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
+            $o2 = new DataBaseMaintenance($dbHash[0], $dbHash[1], $dbHash[2]);
+            break;
+          case '0': 
+            $o2 = new DataBaseMaintenance(DB_HOST, $_POST['user'], $_POST['password']); 
+            break;
+          default:
+            die('fatal error!!'); break;
+        }
+        
+        
         
         $o2->setDbName('wf_'.SYS_SYS);
         $o2->connect();
@@ -110,8 +132,6 @@
               $o2->query('DROP TRIGGER IF EXISTS APP_DELEGATION_INSERT;');
               $o2->query('DROP TRIGGER IF EXISTS APP_DELEGATION_UPDATE;');
               $o2->query('DROP TRIGGER IF EXISTS APPLICATION_UPDATE;');
-              
-              
             } else {
               $appCacheViewTableExists = false;
             }
@@ -123,20 +143,28 @@
         }
         
         $confParams = Array(
-          'lang'=>$lang,
-          'status'=> 'active'
+          'LANG'=>$lang,
+          'STATUS'=> 'active'
         );
-        $appCacheViewEngine = $oServerConf->setProperty('APP_CACHE_VIEW_ENGINE', $confParams);
-        echo '{success: true, msg:"Completed successlly"}';
+        
+        $conf->aConfig = $confParams;
+        $conf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
       
-      } catch (SQLException $sqle) {
+        $response = new StdClass();
+        $response->success = true;
+        $response->msg     = "Completed successfully";
+        
+        echo G::json_encode($response);
+        
+      } catch (Exception $e) {
         $confParams = Array(
           'lang'=>$lang,
           'status'=> 'failed'
         );
         $appCacheViewEngine = $oServerConf->setProperty('APP_CACHE_VIEW_ENGINE', $confParams);
         $con->rollback();
-        throw $sqle;
+        
+        echo '{success: false, msg:"'.$e->getMessage().'"}';
       }
      
       break;

@@ -882,6 +882,7 @@ var resendMessage = function(APP_UID, APP_MSG_UID)
 function showdebug(){
   try{
     if( !parent.PANEL_EAST_OPEN ){
+      parent.PANEL_EAST_OPEN = true;
       var w = parent.Ext.getCmp('debugPanel');
       
       /**show*/

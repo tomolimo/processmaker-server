@@ -40,19 +40,19 @@ Ext.onReady(function() {
       columns : [ {
           id : 'name',
           header : '',
-          width : 170,
+          width : 250,
           sortable : false,
           dataIndex : 'name'
         }, {
           header : '',
-          width : 90,
+          width : 95,
           sortable : false,
           dataIndex : 'value'
         }
       ],
       stripeRows : true,
       height : 140,
-      width : 270,
+      width : 350,
       title : 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
@@ -70,83 +70,123 @@ Ext.onReady(function() {
       labelWidth : 75, // label settings here cascade unless overridden
       url : '',
       frame : true,
-      title : 'Application Cache',
+      title : 'Build/Rebuild the Workflow Applications Cache',
       bodyStyle : 'padding:5px 5px 0',
       width : 350,
 
-      items : [ {
-        xtype : 'fieldset',
-        title : 'Cache configuration',
-        collapsible : false,
-        autoHeight : true,
-        defaults : {
-          width : 210
-        },
-        defaultType : 'textfield',
-        items : [ new Ext.form.ComboBox( {
-          fieldLabel : 'Language',
-          hiddenName : 'lang',
-          store : new Ext.data.Store( {
-            proxy : new Ext.data.HttpProxy( {
-              url : 'appCacheViewAjax',
-              method : 'POST'
-            }),
-            baseParams : {
-              request : 'getLangList'
-            },
-            reader : new Ext.data.JsonReader( {
-              root : 'rows',
-              fields : [ {
-                name : 'LAN_ID'
-              }, {
-                name : 'LAN_NAME'
-              } ]
-            })
-          }),
-          valueField : 'LAN_ID',
-          displayField : 'LAN_NAME',
-          triggerAction : 'all',
-          emptyText : 'Select',
-          selectOnFocus : true,
-          editable : false,
-          allowBlank : false,
-          allowBlankText : 'You should to select a language from the list.'
-        }) /*
-             * , { fieldLabel: 'Business', name: 'business' }
-             */
-        ]
-      } ],
-
-      buttons : [ {
-        text : 'Build Cache',
-        disabled : false,
-        handler : function() {
-          fsf.getForm().submit( {
-            url : 'appCacheViewAjax?request=build&r=' + Math.random(),
-            waitMsg : 'Building Cache for Application Data...',
-            timeout : 36000,
-            success : function(res, req) {
-              /*
-               * Ext.MessageBox.show({ title: '', msg: req.result.msg, buttons:
-               * Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
-               * Ext.MessageBox.INFO }); setTimeout(function(){
-               * Ext.MessageBox.hide(); }, 2000);
-               */
-             store.reload();
-              Ext.example.msg('', req.result.msg);
-              try {
-                Ext.fly(newEl).slideOut('t', {
-                  remove : true
-                });
-              } catch (e) {
+      items : [ ],
+      buttons : [ 
+        /*{ 
+          text: 'Test Grants in database' 
+        },*/ 
+        {
+          text : 'Build Cache',
+          disabled : false,
+          handler : function() {
+            fsf.getForm().submit( {
+              url : 'appCacheViewAjax?request=build&dbUserType='+dbUserType+'&r=' + Math.random(),
+              waitMsg : 'Building Cache for Application Data...',
+              timeout : 36000,
+              success : function(res, req) {
+                /*
+                * Ext.MessageBox.show({ title: '', msg: req.result.msg, buttons:
+                * Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
+                * Ext.MessageBox.INFO }); setTimeout(function(){
+                * Ext.MessageBox.hide(); }, 2000);
+                */
+                store.reload();
+                Ext.example.msg('', req.result.msg);
+                try {
+                  Ext.fly(newEl).slideOut('t', {
+                    remove : true
+                  });
+                } catch (e) {
+                }
               }
-            }
-          });
+            });
+          }
         }
-      } /*
-         * ,{ text: 'Cancel' }
-         */]
+      ]
     });
+    var fieldset;
+    
+    var cmbLanguages = new Ext.form.ComboBox({
+      fieldLabel : 'Language',
+      hiddenName : 'lang',
+      store : new Ext.data.Store( {
+        proxy : new Ext.data.HttpProxy( {
+          url : 'appCacheViewAjax',
+          method : 'POST'
+        }),
+        baseParams : {
+          request : 'getLangList'
+        },
+        reader : new Ext.data.JsonReader( {
+          root : 'rows',
+          fields : [ {
+            name : 'LAN_ID'
+          }, {
+            name : 'LAN_NAME'
+          } ]
+        })
+      }),
+      valueField : 'LAN_ID',
+      displayField : 'LAN_NAME',
+      triggerAction : 'all',
+      emptyText : 'Select',
+      selectOnFocus : true,
+      editable : false,
+      allowBlank : false,
+      allowBlankText : 'You should to select a language from the list.'
+    })
+    
+    
+    var txtUser = { 
+          xtype:'textfield',
+          fieldLabel: 'User',
+          disabled: false,
+          hidden: false,
+          name: 'user',
+          value: ''
+        };
+    
+    var txtPasswd = { 
+          inputType: 'password',
+                xtype:'textfield',
+          fieldLabel: 'Password',
+          disabled: false,
+          hidden: false,
+          name: 'password',
+          value: ''
+    }
+    
+    if(enoughGrants){
+      fieldset = {
+          xtype : 'fieldset',
+          title : 'Cache configuration',
+          collapsible : false,
+          autoHeight : true,
+          defaults : {
+            width : 210
+          },
+          defaultType : 'textfield',
+          items : [cmbLanguages]
+      }
+    } else {
+      fieldset = {
+          xtype : 'fieldset',
+          title : 'Cache configuration',
+          collapsible : false,
+          autoHeight : true,
+          defaults : {
+            width : 210
+          },
+          defaultType : 'textfield',
+          items : [cmbLanguages, txtUser, txtPasswd]
+      }
+    }
+    
+    fsf.add(fieldset);
 
     fsf.render(document.getElementById('main-panel'));
 
@@ -159,9 +199,9 @@ Ext.onReady(function() {
 var newEl;
 var Warning = function() {
   var tpl = new Ext.Template(
-      '<div id="fb" style="border: 1px solid #FF0000; background-color:#FFAAAA; display:none; padding:15px; color:#000000;">',
+      '<div id="fb" style="font-size:12px; border: 1px solid #FF0000; background-color:#FFAAAA; display:none; padding:12px; color:#000000;">',
       '<b>Warning: </b>We detect that the Application Cache Data is not present in this Workspace environment, you need build it <a href="#" id="help1">Online Help</a></div>');
-  newEl = tpl.insertFirst('main-panel');
+  newEl = tpl.insertFirst(document.body);
 
   /*
    * Ext.fly('hideWarning').on('click', function() {
@@ -196,8 +236,7 @@ Ext.example = function() {
         }, true);
       }
       msgCt.alignTo(document, 't-t');
-      var s = String.format.apply(String, Array.prototype.slice.call(arguments,
-          1));
+      var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
       var m = Ext.DomHelper.append(msgCt, {
         html : createBox(title, s)
       }, true);

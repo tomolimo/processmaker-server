@@ -46,7 +46,7 @@ foreach( $oMenu->Options as $i=>$option) {
     'onclick' => ($oMenu->JS[$i]!='')? $oMenu->JS[$i]: '',
     'label' => $oMenu->Labels[$i],
     'icon'  => ($oMenu->Icons[$i]!='')? $oMenu->Icons[$i]: 'icon-pmlogo.png',
-    'target'=> ($oMenu->Types[$i]=='admToolsContent')? 'admToolsContent': ''
+    'target'=> ($oMenu->JS[$i]!='')? '': 'admToolsContent'
   );
 }
 

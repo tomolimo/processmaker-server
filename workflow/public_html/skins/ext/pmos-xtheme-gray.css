@@ -281,3 +281,107 @@
 	 /*background-image:url('/skins/ext/images/gray/shapes/pallete/gateway.png') ;*/
 	 margin:2 2 2 2;
 }
+
+.pm-tree-node1 {
+	font: normal 11px Verdana,Arial,Helvetica,sans-serif !important;
+	
+	
+	border: 1px solid #CACACA;
+	height: 20px;
+	width: 99%;
+	color: #666;
+	vertical-align: middle;
+	text-decoration: none;
+  -moz-border-radius:6px;	/* Rounded edges in Firefox */
+}
+
+.ICON_CASES_LIST_SETUP{
+	background-image: url(/images/icon-pmcaseslist-conf.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+
+.ICON_APPCACHEVIEW_SETUP{
+  background-image: url(/images/icon-pmappcacheview-rebuild.png) !important;
+  width:15px !important;
+  height:15px !important;
+}
+
+.ICON_ADDITIONAL_TABLES{
+	background-image: url(/images/icon-pmtables.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_LANGUAGES{
+	background-image: url(/images/icon-languages.png) !important;
+	width:18px !important;
+	height:15px !important;
+}
+
+.ICON_PLUGINS{
+	background-image: url(/images/icon-pmplugins.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_UPGRADE{
+	background-image: url(/images/icon-pmupgrade.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_EMAILS{
+	background-image: url(/images/icon-pmmail-conf.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_WEBSERVICES{
+	background-image: url(/images/icon-pmwebservices.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_SKINS{
+	background-image: url(/images/icon-pmskins.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_LOGO{
+	background-image: url(/images/icon-pmlogo-15x15.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_CLEAR_CACHE{
+	background-image: url(/images/run-build-clean.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_CALENDAR{
+	background-image: url(/images/icon-pmcalendar.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_LOG_CASE_SCHEDULER{
+	background-image: url(/images/icon-pmlogs.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+.ICON_PROCESS_CATEGORY{
+	background-image: url(/images/icon-pmprocess-category.png) !important;
+	width:15px !important;
+	height:15px !important;
+}
+
+
+
+
+
+

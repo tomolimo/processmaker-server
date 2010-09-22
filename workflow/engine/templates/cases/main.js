@@ -43,21 +43,19 @@ var ReloadTreeMenuItemDetail;
 var NOTIFIER_FLAG = false;
 
 new Ext.KeyMap(document, {
-    key: Ext.EventObject.F5,
-    fn: function(keycode, e) {
-    	if (! e.ctrlKey) {
-        if (Ext.isIE) {
-            // IE6 doesn't allow cancellation of the F5 key, so trick it into
-            // thinking some other key was pressed (backspace in this case)
-            e.browserEvent.keyCode = 8;
-        }
-        e.stopEvent();
-        updateCasesView();
-        document.getElementById('casesSubFrame').src = document.getElementById('casesSubFrame').src;        
-      }    
-      else 
-Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
-    }
+  key: Ext.EventObject.F5,
+  fn: function(keycode, e) {
+    if (! e.ctrlKey) {
+      if (Ext.isIE) {
+        e.browserEvent.keyCode = 8;
+      }
+      e.stopEvent();
+      updateCasesView();
+      //document.getElementById('casesSubFrame').src = document.getElementById('casesSubFrame').src;        
+      document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+    } else 
+      Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+  }
 });
  
 Ext.onReady(function(){
@@ -141,22 +139,19 @@ Ext.onReady(function(){
     id: 'tree-panel',
     region: 'center',
     margins: '0 0 0 0',
-    tbar: [ /*bbar: [*/
-      /*{
-        text: 'Start Case',
-        xtype: 'tbbutton'
-      },*/
+    tbar: [
       {
         xtype: 'tbfill'
       },
       {
-      id:'refreshNotifiers',
-      xtype: 'tbbutton',
-      cls: 'x-btn-icon',
-      icon: '/images/refresh.gif',
-      /*text: 'Reload notifiers',*/
-      handler: updateCasesView
-    }],
+        id:'refreshNotifiers',
+        xtype: 'tbbutton',
+        cls: 'x-btn-icon',
+        icon: '/images/refresh.gif',
+        /*text: 'Reload notifiers',*/
+        handler: updateCasesView
+      }
+    ],
     animate:true,
     autoScroll: true,
     rootVisible: false,
@@ -436,6 +431,9 @@ function updateCasesView(){
     Ext.Ajax.request({
       url: 'casesMenuLoader?action=getAllCounters',
       success: function(response){
+      	
+      	document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+      	
       	try{
 	        result = eval('('+response.responseText+')');
 	        for(i=0; i<result.length; i++){

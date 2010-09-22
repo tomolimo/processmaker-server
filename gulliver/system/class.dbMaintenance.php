@@ -200,12 +200,15 @@ class DataBaseMaintenance
   public function query($sql) 
   {
     $this->result = @mysql_query($sql);
-    if(!$this->result) echo mysql_error($this->link);
-    $aRows = Array();
-    while( $aRow = @mysql_fetch_assoc($this->result) ) {
-      array_push($aRows, $aRow);
+    if($this->result){
+      $aRows = Array();
+      while( $aRow = @mysql_fetch_assoc($this->result) ) {
+        array_push($aRows, $aRow);
+      }
+      return $aRows;
+    } else {
+      return false;
     }
-    return $aRows;
   }
   
 /**
@@ -215,7 +218,7 @@ class DataBaseMaintenance
  */   
   public function error()
   {
-    return @mysql_error();
+    return @mysql_error($this->link);
   }
   
 /**
