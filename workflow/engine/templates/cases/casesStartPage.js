@@ -27,7 +27,8 @@ function getDashboardData() {
 		// grid.getGridEl().unmask(true);
 		// Ext.Msg.alert('Status', responseObject.responseText);
 		var responseData = Ext.decode(responseObject.responseText);		
-		// Load store from here		
+		
+		// Load store from here
         caseStatusByProcess.loadData(responseData);
         caseDelayed.loadData(responseData);
 	},
@@ -84,17 +85,18 @@ function getDashboardItems() {
 			 {
 				xtype : 'window',
 				title : 'Cases',
-				closable : true,
-				collapsible : true,
-				autoshow : true,
+				closable : false,
+				collapsible : false,
+				//autoshow : true,
 				expandOnShow : true,
 				hidden : false,
-				bodyBorder : false,
-				border : false,
-				hideBorders : true,
-				stateful : true,
+				bodyBorder : true,
+				border : true,
+				hideBorders : false,
+				stateful : false,
+				draggeable:false,
 
-				x: 480,
+				x: 50,
 				y : 50,
 				items : {
 					store : caseDelayed,
@@ -121,16 +123,20 @@ function getDashboardItems() {
 				}
 			},
 			
-			 {
+			 {				
 				xtype : 'window',
 				title : 'Status by Process',
 				closable : false,
 				collapsible : false,
-				autoshow : true,
+				//autoshow : true,
 				expandOnShow : true,
 				hidden : false,
+				bodyBorder : true,
+				border : true,
+				hideBorders : false,
+				stateful : true,
 				x:480,
-				y:330,
+				y:50,
 				items : {
 					xtype : 'columnchart',
 					store : caseStatusByProcess,
@@ -159,7 +165,7 @@ function getDashboardItems() {
 				         } 
 					}
 				}
-			}
+			 }
 
 	];
 	getDashboardData();
@@ -169,6 +175,7 @@ function getDefaultDashboard() {
 	defaultDashboard = "mainDashboard";
 	// Get Server Dashboard default
 	// defaultDashboard="pentaho";
+	defaultDashboard="startCase";
 	// Get User Dashbaord Default if allowed
 	return defaultDashboard;
 }
@@ -203,12 +210,13 @@ Ext.onReady(function() {
 items : [ 
          {
         	 title : 'Start Case',
-        		id : 'starCase',
+        		id : 'startCase',
         		iconCls : 'ICON_CASES_START_CASE',
         		xtype : 'container',
         		// layout:'border',
         		autoHeight : true,
         		enableDD : true,
+        		
         		items:[
         		       {
    					xtype : 'treepanel',
@@ -313,9 +321,9 @@ items : [
 	id : 'mainDashboard',
 	iconCls : 'ICON_CASES_START_PAGE',
 	xtype : 'container',
-	// layout:'border',
+	// layout:'hbox',
 	autoHeight : true,
-	enableDD : true,
+	enableDD : false,
 	items : getDashboardItems()
 } ]
 	});
@@ -323,6 +331,8 @@ items : [
 	getOtherDashboards(dashboardTabPanels);
 
 	// Set default Dashboard
+	dashboardName = "mainDashboard";
+	dashboardTabPanels.setActiveTab(dashboardName);
 		dashboardName = getDefaultDashboard();
 		if (!dashboardTabPanels.getItem(dashboardName))
 			dashboardName = "mainDashboard";
