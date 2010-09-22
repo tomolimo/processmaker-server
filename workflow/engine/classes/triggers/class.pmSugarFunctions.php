@@ -19,7 +19,7 @@
 /**
  * SugarCRM
  * @class pmSugar
- * @name Sugar CRM Functions
+ * @name Sugar CRM Triggers
  * @icon /images/triggers/icon_SugarCRM.gif
  * @className class.pmSugar.pmFunctions.php
  */
