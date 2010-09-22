@@ -43,24 +43,8 @@ if (! isset ( $_SESSION ['FAILED_LOGINS'] )) {
 }
 $sFailedLogins = $_SESSION ['FAILED_LOGINS'];
 
-//log by Everth
-
-
 require_once 'classes/model/LoginLog.php';
-require_once 'classes/model/Configuration.php';
-$oConfiguration = new Configuration ( );
-$oCriteria = new Criteria ( 'workflow' );
-$oCriteria->addSelectColumn ( ConfigurationPeer::CFG_VALUE );
-$oCriteria->add ( ConfigurationPeer::CFG_UID, 'Language' );
-$oCriteria->add ( ConfigurationPeer::OBJ_UID, '' );
-$oCriteria->add ( ConfigurationPeer::PRO_UID, '' );
-$oCriteria->add ( ConfigurationPeer::USR_UID, '' );
-$oCriteria->add ( ConfigurationPeer::APP_UID, '' );
-$oDataset1 = ConfigurationPeer::doSelectRS ( $oCriteria );
-$oDataset1->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-$oDataset1->next ();
-$aRow1 = $oDataset1->getRow ();
-$aFields ['USER_LANG'] = $aRow1 ['CFG_VALUE'];
+
 $aFields ['LOGIN_VERIFY_MSG'] = G::loadTranslation ( 'LOGIN_VERIFY_MSG' );
 
 $oCriteria = new Criteria ( 'workflow' );
