@@ -43,7 +43,18 @@ try {
           require_once 'classes/model/Users.php';
           $oCriteria = new Criteria('workflow');
           $oCriteria->addSelectColumn(UsersPeer::USR_UID);
-          $oCriteria->addAsColumn('USR_COMPLETENAME', "CONCAT(USR_LASTNAME, ' ', USR_FIRSTNAME, ' (', USR_USERNAME, ')')");
+          /*
+            $usr_completename_col = "CONCAT(USR_LASTNAME, ' ', USR_FIRSTNAME, ' (', USR_USERNAME, ')')";
+          */
+          $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+          if(G::LoadSystemExist($sDataBase)){
+            G::LoadSystem($sDataBase);
+            $oDataBase = new database();
+            $usr_completename_col = $oDataBase->concatString("USR_LASTNAME", "' '", "USR_FIRSTNAME", " '('", "USR_USERNAME", "')'");
+          }
+                   
+          $oCriteria->addAsColumn('USR_COMPLETENAME', $usr_completename_col);
+          
           $oCriteria->add(UsersPeer::USR_UID, $_POST['USR_UID'], Criteria::NOT_EQUAL);
           $oCriteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);
           $oDataset = UsersPeer::doSelectRS($oCriteria);
@@ -73,6 +84,12 @@ try {
           $oCriteria->add(AppDelegationPeer::USR_UID, $_POST['USR_UID']);
           $oCriteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
           $oCriteria->addGroupByColumn(AppDelegationPeer::PRO_UID);
+
+          /*
+           * Adding grouped by standardization.
+           */
+          $oCriteria->addGroupByColumn(ContentPeer::CON_VALUE); 
+          
           $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
           $oDataset->next();
