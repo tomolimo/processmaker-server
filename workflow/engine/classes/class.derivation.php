@@ -134,6 +134,7 @@ class Derivation
         else {
           //3. load the task information of normal NEXT_TASK
           $aDerivation['NEXT_TASK'] = $oTask->load( $aDerivation['ROU_NEXT_TASK'] );//print $aDerivation['ROU_NEXT_TASK']." **** ".$aDerivation['NEXT_TASK']['TAS_TYPE']."<hr>";
+          
           if ($aDerivation['NEXT_TASK']['TAS_TYPE'] === 'SUBPROCESS') {
             $oCriteria = new Criteria('workflow');
             $oCriteria->add(SubProcessPeer::PRO_PARENT, $aDerivation['PRO_UID']);
@@ -164,6 +165,71 @@ class Derivation
     }
     return $taskInfo;
   }
+
+
+   /**
+   * getRouteCondition
+   *
+   * @param  array    $aData
+   * @return $routeCondition
+   */
+  function getRouteCondition($aData)
+  {
+    //SELECT *
+    //FROM APP_DELEGATION AS A
+    //LEFT JOIN TASK AS T ON(T.TAS_UID = A.TAS_UID)
+    //LEFT JOIN ROUTE AS R ON(R.TAS_UID = A.TAS_UID)
+    //WHERE
+    //APP_UID = '$aData['APP_UID']'
+    //AND DEL_INDEX = '$aData['DEL_INDEX']'
+    $c = new Criteria ( 'workflow' );
+    $c->clearSelectColumns();
+    $c->addSelectColumn ( AppDelegationPeer::TAS_UID );
+    $c->addSelectColumn ( RoutePeer::ROU_CONDITION );
+    $c->addSelectColumn ( RoutePeer::ROU_NEXT_TASK );
+    $c->addSelectColumn ( RoutePeer::ROU_TYPE );
+    $c->addSelectColumn ( RoutePeer::ROU_OPTIONAL);
+    $c->addJoin ( AppDelegationPeer::TAS_UID, TaskPeer::TAS_UID,  Criteria::LEFT_JOIN );
+    $c->addJoin ( AppDelegationPeer::TAS_UID, RoutePeer::TAS_UID, Criteria::LEFT_JOIN );
+    $c->add ( AppDelegationPeer::APP_UID, $aData['APP_UID'] );
+    $c->add ( AppDelegationPeer::DEL_INDEX, $aData['DEL_INDEX'] );
+    $c->addAscendingOrderByColumn ( RoutePeer::ROU_CASE  );
+    $rs = AppDelegationPeer::doSelectRs ( $c );
+    $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $aDerivation = $rs->getRow();
+      while( is_array( $aDerivation) ) {
+         return $aDerivation;
+      }
+
+  }
+
+  function GetAppParentIndex($aData)
+  {
+    //('SELECT * FROM APP_THREAD WHERE APP_UID='".$aData['APP_UID']."' AND DEL_INDEX = '".$aData['DEL_INDEX']."'");
+    try {
+      $aThreads = array();
+      $c        = new Criteria();
+      $c->addSelectColumn(AppThreadPeer::APP_THREAD_PARENT);
+      $c->add(AppThreadPeer::APP_UID, $aData['APP_UID']);
+      $c->add(AppThreadPeer::DEL_INDEX, $aData['DEL_INDEX']);
+      $rs = AppThreadPeer::doSelectRs($c);
+      $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $rs->next();
+      $row = $rs->getRow();
+      while (is_array($row)) {
+          $aThreads = $row;
+          $rs->next();
+          $row = $rs->getRow();
+      }
+      return $aThreads;
+    }
+    catch (exception $e) {
+      throw ($e);
+    }
+  }
+
+
 
   /* get all users, from any task, if the task have Groups, the function expand the group
    *
@@ -245,6 +311,7 @@ class Derivation
         $auxFields['USR_CITY']       = $userFields['USR_CITY'];
         $auxFields['USR_LOCATION']   = $userFields['USR_LOCATION'];
         $auxFields['DEP_UID']        = $userFields['DEP_UID'];
+        $auxFields['USR_HIDDEN_FIELD'] = '';
         $aUsersData[] = $auxFields;
       }
     }
@@ -312,6 +379,8 @@ class Derivation
            }
            $userFields = $this->getUsersFullNameFromArray ($uidUser);
            break;
+      case 'STATIC_MI':
+      case 'CANCEL_MI':
       case 'MANUAL' :
            $users = $this->getAllUsersFromAnyTask ($sTasUid);
            $userFields = $this->getUsersFullNameFromArray ($users);
@@ -373,8 +442,8 @@ class Derivation
            $userFields['USR_LASTNAME']  = '';
            $userFields['USR_EMAIL']     = '';
            break;
-      
-      default :
+
+       default :
            throw ( new Exception('Invalid Task Assignment method for Next Task ') ) ;
     }
     return $userFields;
@@ -475,6 +544,13 @@ class Derivation
           continue;
         }
       }
+      //get TAS_ASSIGN_TYPE for current Delegation
+      $oTask = new Task();
+      $aTask = $oTask->load($currentDelegation['TAS_UID']);
+      $currentDelegation['TAS_ASSIGN_TYPE'] = $aTask['TAS_ASSIGN_TYPE'];
+      $currentDelegation['TAS_MI_COMPLETE_VARIABLE'] = $aTask['TAS_MI_COMPLETE_VARIABLE'];
+      $currentDelegation['TAS_MI_INSTANCE_VARIABLE'] = $aTask['TAS_MI_INSTANCE_VARIABLE'];
+      
       
       //get open threads
       $openThreads = $this->case->GetOpenThreads( $currentDelegation['APP_UID'] );
@@ -495,47 +571,122 @@ class Derivation
           break;
         default:
           // get all siblingThreads
-          if ( $currentDelegation['ROU_TYPE'] == 'SEC-JOIN' ) {
-            $siblingThreads = $this->case->getOpenSiblingThreads($nextDel['TAS_UID'], $currentDelegation['APP_UID'], $currentDelegation['DEL_INDEX'], $currentDelegation['TAS_UID']);
-            $canDerivate = count($siblingThreads) == 0;
-          }
-          else {
-            $canDerivate = true;
-          }
+           //if($currentDelegation['TAS_ASSIGN_TYPE'] == 'STATIC_MI')
+           switch ($currentDelegation['TAS_ASSIGN_TYPE']) {
+            case 'CANCEL_MI':
+            case 'STATIC_MI':
+                  $siblingThreads = $this->case->GetAllOpenDelegation($currentDelegation);
+                  $aData = $this->case->loadCase($currentDelegation['APP_UID']);
+
+                  if (isset($aData['APP_DATA'][str_replace('@@', '', $currentDelegation['TAS_MI_INSTANCE_VARIABLE'])]))
+                     $sMIinstanceVar = $aData['APP_DATA'][str_replace('@@', '', $currentDelegation['TAS_MI_INSTANCE_VARIABLE'])];
+                    else
+                     $sMIinstanceVar = $aData['APP_DATA']['TAS_MI_INSTANCE_VARIABLE'];
+
+                  if (isset($aData['APP_DATA'][str_replace('@@', '', $currentDelegation['TAS_MI_COMPLETE_VARIABLE'])]))
+                      $sMIcompleteVar = $aData['APP_DATA'][str_replace('@@', '', $currentDelegation['TAS_MI_COMPLETE_VARIABLE'])];
+                    else
+                     $sMIcompleteVar = $aData['APP_DATA']['TAS_MI_COMPLETE_VARIABLE'];
+                     $discriminateThread = $sMIinstanceVar - $sMIcompleteVar;
+                    // -1 because One App Delegation is closed by above Code
+                     if($discriminateThread == count($siblingThreads))
+                        $canDerivate =true;
+                     else
+                        $canDerivate =false;
+                  break;
+              default:
+                  if ( $currentDelegation['ROU_TYPE'] == 'SEC-JOIN') {
+                      $siblingThreads = $this->case->getOpenSiblingThreads($nextDel['TAS_UID'], $currentDelegation['APP_UID'], $currentDelegation['DEL_INDEX'], $currentDelegation['TAS_UID'],$currentDelegation['ROU_TYPE']);
+                      $canDerivate = count($siblingThreads) == 0;
+                  }
+                 else if($currentDelegation['ROU_TYPE'] == 'DISCRIMINATOR')
+                  {
+                    //First get the total threads of Next Task where route type='Discriminator'
+                    $siblingThreads = $this->case->getOpenSiblingThreads($nextDel['TAS_UID'], $currentDelegation['APP_UID'], $currentDelegation['DEL_INDEX'], $currentDelegation['TAS_UID'],$currentDelegation['ROU_TYPE']);
+                    $siblingThreadsCount = count($siblingThreads);
+                    $discriminateThread = $currentDelegation['ROU_CONDITION'];
+                    //$checkThread = count($totalThreads) - $cond;
+                    if($discriminateThread == $siblingThreadsCount)
+                        $canDerivate = true;
+                    else
+                        $canDerivate = false;
+                  }
+                  else {
+                    $canDerivate = true;
+                  }
+
+           }
+
+
+          
 
           if ( $canDerivate ) {
-            if ( $nextDel['TAS_ASSIGN_TYPE'] == 'BALANCED') {
-              $this->setTasLastAssigned ($nextDel['TAS_UID'], $nextDel['USR_UID']);
-            }
+              $iAppThreadIndex = $appFields['DEL_THREAD'];
+              $delType = 'NORMAL';
+            switch ( $nextDel['TAS_ASSIGN_TYPE'] ) {
+                  case 'CANCEL_MI':
+                  case 'STATIC_MI':
+                     // Create new delegation depending on the no of users in the group
+                      $iNewAppThreadIndex = $appFields['DEL_THREAD'];
+                      $this->case->closeAppThread ( $currentDelegation['APP_UID'], $iAppThreadIndex);
+                     foreach($nextDel['NEXT_TASK']['USER_ASSIGNED'] as $key=>$aValue){
+                          //Incrementing the Del_thread First so that new delegation has new del_thread
+                          $iNewAppThreadIndex += 1;
+                          //Creating new delegation according to users in group
+                          $iMIDelIndex = $this->case->newAppDelegation( $appFields['PRO_UID'],$currentDelegation['APP_UID'],$nextDel['TAS_UID'],
+                          (isset($aValue['USR_UID']) ? $aValue['USR_UID'] : ''),
+                          $currentDelegation['DEL_INDEX'],
+                          $nextDel['DEL_PRIORITY'],
+                          $delType,
+                          $iNewAppThreadIndex);
 
+                          $iNewThreadIndex = $this->case->newAppThread ( $currentDelegation['APP_UID'], $iMIDelIndex, $iAppThreadIndex );
+                          
+                          //Setting the del Index for Updating the AppThread delIndex
+                          if($key == 0)
+                              $iNewDelIndex = $iMIDelIndex -1;
+                     }
+                      break;
+                  case 'BALANCED' :
+                      $this->setTasLastAssigned ($nextDel['TAS_UID'], $nextDel['USR_UID']);
+                       //No Break, need no execute the default ones....
+                  default:
+                     // Create new delegation
+                      $iNewDelIndex = $this->case->newAppDelegation( $appFields['PRO_UID'],$currentDelegation['APP_UID'],$nextDel['TAS_UID'],
+                      (isset($nextDel['USR_UID']) ? $nextDel['USR_UID'] : ''),
+                      $currentDelegation['DEL_INDEX'],
+                      $nextDel['DEL_PRIORITY'],
+                      $delType,
+                      $iAppThreadIndex);
+                      break;
+
+
+              }
             $iAppThreadIndex = $appFields['DEL_THREAD'];
-            // the new delegation
-            $delType = 'NORMAL';
-            $iNewDelIndex = $this->case->newAppDelegation( $appFields['PRO_UID'],
-              $currentDelegation['APP_UID'],
-              $nextDel['TAS_UID'],
-              (isset($nextDel['USR_UID']) ? $nextDel['USR_UID'] : ''),
-              $currentDelegation['DEL_INDEX'],
-              $nextDel['DEL_PRIORITY'],
-              $delType,
-              $iAppThreadIndex
-            );
-
             switch ( $currentDelegation['ROU_TYPE'] ) {
               case 'PARALLEL' :
               case 'PARALLEL-BY-EVALUATION' :
                    $this->case->closeAppThread ( $currentDelegation['APP_UID'], $iAppThreadIndex);
                    $iNewThreadIndex = $this->case->newAppThread ( $currentDelegation['APP_UID'], $iNewDelIndex, $iAppThreadIndex );
                    $this->case->updateAppDelegation ( $currentDelegation['APP_UID'], $iNewDelIndex, $iNewThreadIndex  );
-//print " this->case->updateAppDelegation ( " . $currentDelegation['APP_UID'] .", " . $iNewDelIndex ." , " .  $iNewThreadIndex . " )<br>";
+                    //print " this->case->updateAppDelegation ( " . $currentDelegation['APP_UID'] .", " . $iNewDelIndex ." , " .  $iNewThreadIndex . " )<br>";
                    break;
+               case 'DISCRIMINATOR':
+                  if($currentDelegation['ROU_OPTIONAL'] == 'TRUE')
+                  {
+                      $this->case->discriminateCases($currentDelegation);
+                  } //No Break, executing Default Condition
               default :
+                 switch ($currentDelegation['TAS_ASSIGN_TYPE']) {
+                  case 'CANCEL_MI':
+                      $this->case->discriminateCases($currentDelegation);
+              } //No Break, executing updateAppThread
               $this->case->updateAppThread ( $currentDelegation['APP_UID'], $iAppThreadIndex, $iNewDelIndex );
             }//switch
             
             //if there are subprocess to create
             if (isset($aSP)) {
-              // Create the new case in the sub-process
+              //Create the new case in the sub-process
               // set the initial date to null the time its created
               $aNewCase   = $this->case->startCase($aSP['TAS_UID'], $aSP['USR_UID'],true);
               //Copy case variables to sub-process case
@@ -604,10 +755,13 @@ class Derivation
           else {  //when the task doesnt generate a new AppDelegation
             $iAppThreadIndex = $appFields['DEL_THREAD'];
             switch ( $currentDelegation['ROU_TYPE'] ) {
+              case 'DISCRIMINATOR':
               case 'SEC-JOIN' :
                    $this->case->closeAppThread ( $currentDelegation['APP_UID'], $iAppThreadIndex);
                    break;
               default :
+                  if($currentDelegation['TAS_ASSIGN_TYPE'] == 'STATIC_MI' || $currentDelegation['TAS_ASSIGN_TYPE'] == 'CANCEL_MI')
+                      $this->case->closeAppThread ( $currentDelegation['APP_UID'], $iAppThreadIndex);
             }//switch
           }
       }
@@ -804,6 +958,31 @@ class Derivation
 
 
     return $derivation;
+  }
+
+  function getGrpUser($aData)
+  {
+      G::LoadClass('groups');
+      G::LoadClass('tasks');
+      require_once 'classes/model/Content.php';
+      $oTasks = new Tasks();
+      $oGroups = new Groups();
+      $oContent = new Content();
+      $aGroup   = array();
+      $aUsers   = array();
+      $aGroup = $oTasks->getGroupsOfTask($aData['ROU_NEXT_TASK'],1);
+      $aGrpUid = $aGroup[0]['GRP_UID'];
+      $sGrpName = $oContent->load('GRP_TITLE', '',$aGrpUid, 'en');
+      $aGrp['GRP_NAME'] = $sGrpName;
+      $aGrp['GRP_UID'] = $aGrpUid;
+      $aUsers = $oGroups->getUsersOfGroup($aGroup[0]['GRP_UID']);
+      foreach($aUsers as $aKey=>$userid)
+         {
+            $aData[$aKey] = $userid;
+         }
+       return $aGrp;
+      //var_dump($aDerivation);
+      //die;
   }
 
 }
