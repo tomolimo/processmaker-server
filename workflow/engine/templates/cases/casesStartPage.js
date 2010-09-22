@@ -155,8 +155,8 @@ function getDefaultDashboard(dashboardTabPanels) {
 	Ext.getCmp("dashboardTabPanels").getEl().mask("Please wait, retrieving data...",  "ext-el-mask-msg x-mask-loading");
 	
 
-	//console.info("Get Default Dashboard");
-	//console.log(defaultDashboard);
+	// console.info("Get Default Dashboard");
+	// console.log(defaultDashboard);
 	// Get Server Dashboard default
 	// defaultDashboard="pentaho";
 	// defaultDashboard="startCase";
@@ -175,17 +175,18 @@ function getDefaultDashboard(dashboardTabPanels) {
 				// grid.getGridEl().unmask(true);
 				// Ext.Msg.alert('Status', responseObject.responseText);
 				var responseData = Ext.decode(responseObject.responseText);
-				//console.log(responseData);
-				//console.log(responseData.defaultTab);
+				// console.log(responseData);
+				// console.log(responseData.defaultTab);
 				if(responseData.defaultTab){
 					defaultDashboard=responseData.defaultTab;
 				}
-				//console.info("New default dashboard");
-				//console.log(defaultDashboard);
-				//console.log(dashboardTabPanels);
-				//console.log(dashboardTabPanels.getItem(defaultDashboard));
+				// console.info("New default dashboard");
+				// console.log(defaultDashboard);
+				// console.log(dashboardTabPanels);
+				// console.log(dashboardTabPanels.getItem(defaultDashboard));
 				if (dashboardTabPanels.getItem(defaultDashboard)){
-					//console.info("Setting the new default dashboard: "+defaultDashboard);
+					// console.info("Setting the new default dashboard:
+					// "+defaultDashboard);
 					dashboardTabPanels.setActiveTab(defaultDashboard);
 				}
 				Ext.getCmp("dashboardTabPanels").getEl().unmask();
@@ -206,7 +207,7 @@ function getDefaultDashboard(dashboardTabPanels) {
 
 
 Docs = {};
-//console.info("Doc Panel - Start");
+// console.info("Doc Panel - Start");
 
 
 DocPanel = Ext.extend(Ext.Panel, {
@@ -295,8 +296,8 @@ DocPanel = Ext.extend(Ext.Panel, {
     }
 });
 
-//console.info("Doc Panel - End");
-//console.info("Main Panel - Start");
+// console.info("Doc Panel - End");
+// console.info("Main Panel - Start");
 MainPanel = function(){
 	
 
@@ -304,7 +305,7 @@ MainPanel = function(){
     MainPanel.superclass.constructor.call(this, {
         id:'doc-body',
         region:'center',
-        //margins:'0 5 5 0',
+        // margins:'0 5 5 0',
         resizeTabs: true,
         minTabWidth: 135,
         tabWidth: 135,
@@ -317,38 +318,38 @@ MainPanel = function(){
             id:'startCase',
             title: 'Start Case',            
             iconCls:'ICON_CASES_START_CASE',
-            //autoScroll: true,
+            // autoScroll: true,
             layout:'border',
             items:[{
 					id: 'img-chooser-view',					
 					region: 'center',					
-					//autoScroll: true,
+					// autoScroll: true,
 					items: 
 					[
     		       {
 					xtype : 'treepanel',
 					id:'processTree',
 					style: {
-            //width: '50%',
+            // width: '50%',
             height: '100%',
-            //marginBottom: '10px',
+            // marginBottom: '10px',
             overflow:'auto'
         },
 
 					// autoWidth : true,
-					//autoHeight : true,
-					//useArrows : true,
-					//autoScroll : true,
+					// autoHeight : true,
+					// useArrows : true,
+					// autoScroll : true,
 					animate : true,
-					//enableDD : true,
-					//containerScroll : true,
-					//ddScroll:true,
-					//singleExpand:true,
+					// enableDD : true,
+					// containerScroll : true,
+					// ddScroll:true,
+					// singleExpand:true,
 					
 					// constrain : true,
 					border : false,
 					split : true,
-					//draggable : true,
+					// draggable : true,
 					itemId : 'startCaseTreePanel',
 					id : 'startCaseTreePanel',
 					rootVisible : false,
@@ -413,50 +414,8 @@ MainPanel = function(){
 							}
 						},
 						click : function(n) {
-							//console.log(n);
+							// console.log(n);
 						  this.treePanel.showDetails(n);
-						  
-						  
-						  return;						  
-							if (n.attributes.optionType == "startProcess") {
-								// Ext.Msg.alert('Start Case', 'Starting... "' +
-								// n.attributes.text + '"');
-								Ext.Msg
-										.show( {
-											title : 'Start Case',
-											msg : 'Starting new case<br><br> "' + n.attributes.text + '"',
-											icon : Ext.MessageBox.INFO
-										});
-								Ext.Ajax
-										.request( {
-											url : 'casesStartPage_Ajax.php',
-											params : {
-												action : 'startCase',
-												processId : n.attributes.pro_uid,
-												taskId : n.attributes.tas_uid
-											},
-											success : function(responseObject) {
-												// showHistoryDialog(responseObject.responseText);
-											// grid.getGridEl().unmask(true);
-											var response = Ext.util.JSON
-													.decode(responseObject.responseText);
-											Ext.Msg
-													.show( {
-														title : 'Open Case',
-														msg : 'Case number <b>' + response.CASE_NUMBER + '</b>',
-														icon : Ext.MessageBox.INFO
-													});
-											window.location = response.openCase.PAGE;
-											// Ext.Msg.alert('Status',
-											// responseObject.responseText);
-										},
-										failure : function() {
-											// grid.getGridEl().unmask(true);
-											Ext.Msg.alert('Error',
-													'Unable to start a case');
-										}
-										});
-							}
 						}
 					},
 					root : {
@@ -483,7 +442,7 @@ MainPanel = function(){
            
         },
 					minWidth: 150,
-					//maxWidth: 250,
+					// maxWidth: 250,
 					html:""
 					
 				}],
@@ -524,12 +483,12 @@ MainPanel = function(){
         ]
     });
 };
-//console.info("Main Panel - End");
+// console.info("Main Panel - End");
 Ext.extend(MainPanel, Ext.TabPanel, {
 
     initEvents : function(){
         MainPanel.superclass.initEvents.call(this);
-        //this.body.on('click', this.onClick, this);
+        // this.body.on('click', this.onClick, this);
     },
 
     onClick: function(e, target,elementselected){
@@ -613,11 +572,11 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 	},
     showDetails : function(selectedNode){
       
-      //console.log(selectedNode);
+      // console.log(selectedNode);
       var detailEl = Ext.getCmp('process-detail-panel').body;
       if(selectedNode){
         this.initTemplates();
-         //detailEl.hide();
+         // detailEl.hide();
         detailEl.sequenceFx();
          detailEl.slideOut('l', {stopFx:true,duration:.9});
          
@@ -637,7 +596,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
          myInbox=otherAttributes.myInbox;
          totalInbox=otherAttributes.totalInbox;
          
-         //data={name:selectedNode.attributes.text};
+         // data={name:selectedNode.attributes.text};
          data={taskName:taskName,processName:processName,calendarName:calendarName,calendarDescription:calendarDescription,calendarWorkDays:calendarWorkDays,processCategory:processCategory,processDebug:processDebug,processDescription:processDescription,myInbox:myInbox,totalInbox:totalInbox};
          
          
@@ -654,7 +613,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 												data : params
 											},
 											success : function(responseObject) {
-												//console.log(responseObject.responseText);
+												// console.log(responseObject.responseText);
 												var response = Ext.decode(responseObject.responseText);
 												var xPos = 0;
     var yPos = 0;
@@ -685,7 +644,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 			rw        : false,
 			hideMenu  : false
 		}
-		//console.log(Pm);
+		// console.log(Pm);
 		Pm.make();
 											
 										},
@@ -702,7 +661,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
       }
        
       return;
-	    //var selNode = this.getSelectedNodes();
+	    // var selNode = this.getSelectedNodes();
 	    
 		
 	},
@@ -710,9 +669,9 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 	  alert("asdasdasd");
 	},
     loadOtherDashboards:function(){
-    	//console.info("Getting other Dashboards");
+    	// console.info("Getting other Dashboards");
     	dashboardTabPanels=this;
-    	//console.log(dashboardTabPanels);
+    	// console.log(dashboardTabPanels);
     	conn.request( {
     		url : 'casesStartPage_Ajax.php',
     		method : 'POST',
@@ -752,14 +711,15 @@ Ext.extend(MainPanel, Ext.TabPanel, {
       // api.expandPath('/root/apidocs');
       // allow for link in
       var page = window.location.href.split('?')[1];
-      //console.info("page : "+page);
+      // console.info("page : "+page);
       if(page){
           var ps = Ext.urlDecode(page);
-          //console.log(ps.action);
+          // console.log(ps.action);
           if(ps.action){
           	defaultDashboard=ps.action;
           	if (this.getItem(defaultDashboard)){
-  				//console.info("Setting the new default dashboard: "+defaultDashboard);
+  				// console.info("Setting the new default dashboard:
+				// "+defaultDashboard);
   				this.setActiveTab(defaultDashboard);
   			}
           	
@@ -852,24 +812,16 @@ Ext.onReady(function(){
 	   
 
 	}
-	//Ext.getCmp("dashboardTabPanels").getEl().mask("Please wait, retrieving data...",  "ext-el-mask-msg x-mask-loading");
-	//Ext.getCmp("dashboardTabPanels").getEl().unmask();
+	// Ext.getCmp("dashboardTabPanels").getEl().mask("Please wait, retrieving
+	// data...", "ext-el-mask-msg x-mask-loading");
+	// Ext.getCmp("dashboardTabPanels").getEl().unmask();
 	/*
-    var t = Ext.get('exttheme');
-    if(!t){ // run locally?
-        return;
-    }
-    var theme = Cookies.get('exttheme') || 'aero';
-    if(theme){
-        t.dom.value = theme;
-        Ext.getBody().addClass('x-'+theme);
-    }
-    t.on('change', function(){
-        Cookies.set('exttheme', t.getValue());
-        setTimeout(function(){
-            window.location.reload();
-        }, 250);
-    });*/
+	 * var t = Ext.get('exttheme'); if(!t){ // run locally? return; } var theme =
+	 * Cookies.get('exttheme') || 'aero'; if(theme){ t.dom.value = theme;
+	 * Ext.getBody().addClass('x-'+theme); } t.on('change', function(){
+	 * Cookies.set('exttheme', t.getValue()); setTimeout(function(){
+	 * window.location.reload(); }, 250); });
+	 */
 
     Ext.QuickTips.init();
 
@@ -879,10 +831,10 @@ Ext.onReady(function(){
  * api.on('click', function(node, e){ if(node.isLeaf()){ e.stopEvent();
  * mainPanel.loadClass(node.attributes.href, node.id); } });
  */
-    //console.info("mai panel tabchnge -start");
+    // console.info("mai panel tabchnge -start");
     mainPanel.on('tabchange', function(tp, tab){
         // api.selectClass(tab.cclass);
-        //console.info("main tabchange");
+        // console.info("main tabchange");
         
         if (tab.getUpdater) {
 			var thisObj = tab.getUpdater();
@@ -893,8 +845,8 @@ Ext.onReady(function(){
         
         
     });
-    //console.info("mai panel tabchnge -end");
-    //console.info("viewport -start");
+    // console.info("mai panel tabchnge -end");
+    // console.info("viewport -start");
     var viewport = new Ext.Viewport({
         layout:'border',
         items:[ {
@@ -911,7 +863,7 @@ Ext.onReady(function(){
     
     mainPanel.loadOtherDashboards();
     
-    //console.info("viewport -end");
+    // console.info("viewport -end");
     
    
     viewport.doLayout();
