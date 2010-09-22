@@ -91,12 +91,47 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   $Fields['PME_A'] = $_GET['A'];
   $Fields['PME_PRO_UID'] = $proUid;
   $Fields['PME_XMLNODE_NAME_OLD'] = (isset($Fields['PME_XMLNODE_NAME']) ? $Fields['PME_XMLNODE_NAME'] : '');
+  
   $G_PUBLISH = new Publisher();
+
+  if ( !( isset($fields->Fields['XMLNODE_NAME']) && ($fields->Fields['XMLNODE_NAME']!=='') ) ) {
+      $type = strtolower( $_GET['TYPE'] );
+  } else {
+      $type = strtolower( $fields->Fields['TYPE'] );
+  }
+
+  if( $type == 'suggest' || 
+      $type == 'checkgroup' ||
+      $type == 'dropdown' ||
+      $type == 'radiogroup' ||
+      $type == 'text' ||
+      $type == 'listbox' ||
+      $type == 'currency' ||
+      $type == 'percentage' ||
+      $type == 'textarea' ||
+      $type == 'hidden' ) {
+
+    $aDefaultConnections = array();
+    $aDBConn             = array();
+    G::LoadClass ( 'dbConnections');
+    $oDBConn = new DbConnections (); 
+    $aDefaultConnections = array (
+        array('DBS_UID'  => '',         'DBS_NAME' => ''),
+        array('DBS_UID'  => 'workflow', 'DBS_NAME' => 'Workflow'),
+        array('DBS_UID'  => 'rbac',     'DBS_NAME' => 'RBAC'),
+        array('DBS_UID'  => 'rp',       'DBS_NAME' => 'REPORT')
+    );
+    $aDBConn = $oDBConn->getConnectionsProUid($proUid);
+    $aDbConnections = array_merge($aDefaultConnections, $aDBConn );
+    $_DBArray ['DB_CONNECTIONS'] = $aDbConnections;
+    $_SESSION['_DBArray'] = $_DBArray;
+  }
 
   if ( !( isset($fields->Fields['XMLNODE_NAME']) &&
       ($fields->Fields['XMLNODE_NAME']!=='') ) ) {
     $type = strtolower( $_GET['TYPE'] );
     $Fields['PME_TYPE'] = $type;
+    
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'dynaforms/fields/' . $type, '', $Fields , SYS_URI.'dynaforms/fields_Save', SYS_URI.'dynaforms/fields_Ajax');
   } else {
     $Fields['PME_LABEL'] = $form->fields[$fields->Fields['XMLNODE_NAME']]->label;
@@ -120,15 +155,16 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     if( $type == 'suggest' ) {
       //define the dbArray with the table fields
       //g::pr($Fields);
-      //$con = Propel::getConnection($Fields['PME_SQLCONNECTION']);
-      //$rs = $con->executeQuery("SHOW COLUMNS FROM USERS");
-		 // $result = Array();
-			//$i=0;
-			//while ($rs->next()) {
-			//  $result[$i++] = $rs->getRow();
-		//}
+      $con = Propel::getConnection($Fields['PME_SQLCONNECTION']);
+      $rs = $con->executeQuery("SHOW COLUMNS FROM USERS");
+		  $result = Array();
+			$i=0;
+			while ($rs->next()) {
+			  $result[$i++] = $rs->getRow();
+			}
       //g::pr($result);
     }
+
     
     if( isset($Fields['PME_HINT']) ) {
       $Fields['PME_HINT'] = str_replace("\'", "'", $Fields['PME_HINT']);
