@@ -46,7 +46,14 @@
   $i=0;
   foreach( $menuTypes as $menuType ){
     $tabItems[$i]->id    = $menuType;
-    $tabItems[$i]->title = str_replace('_', ' ', ucwords($menuType));
+    $LABEL_TRANSLATION = G::LoadTranslation("ID_".strtoupper($menuType));
+    
+    if( substr($LABEL_TRANSLATION,0,2) !== '**' ){
+      $title = $LABEL_TRANSLATION;
+    } else {
+      $title = str_replace('_', ' ', ucwords($menuType));
+    }
+    $tabItems[$i]->title = $title;
     $i++;
   }
 

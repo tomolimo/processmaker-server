@@ -401,6 +401,7 @@ Ext.onReady ( function() {
 
   // create the editor grid
   var grid = new Ext.grid.GridPanel({
+    region: 'center',
     store: storeCases,
     cm: cm,
     renderTo: 'cases-grid',
@@ -480,6 +481,13 @@ Ext.onReady ( function() {
       //storeProcesses.load();
     }
   
+  var viewport = new Ext.Viewport({
+    layout: 'border',
+    autoScroll: true,
+    items: [
+      grid
+    ]
+  });
   
   if( parent.PANEL_EAST_OPEN ){
     parent.PANEL_EAST_OPEN = false;

@@ -401,7 +401,7 @@ function toPause()
                 });
                 oRPC.callback = function(oRPC) {
                     //pausecasePanel.remove();
-                    window.location = 'cases_List';
+                    window.location = 'casesListExtJs';
                 }.extend(this);
                 oRPC.make();
             }.extend(this)

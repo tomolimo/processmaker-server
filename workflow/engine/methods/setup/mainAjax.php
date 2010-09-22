@@ -45,7 +45,7 @@ switch($request){
       }
     }
 
-    if( isset($_SESSION['DEV_FLAG']) && $_SESSION['DEV_FLAG'] && $_GET['menu'] == 'tool' ){
+    if( isset($_SESSION['DEV_FLAG']) && $_SESSION['DEV_FLAG'] && $_GET['menu'] == 'tools' ){
       $items[] = Array(
         'id'    => 'translations',
         'url'  => '../tools/translations',

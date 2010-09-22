@@ -344,7 +344,14 @@ Ext.onReady(function(){
       modal: true,
       autoScroll: true,
       maximizable: true,
-      items: []
+      items: [],
+      listeners:{
+        show:function() {
+          this.loadMask = new Ext.LoadMask(this.body, {
+            msg:'Loading. Please wait...'
+          });
+        }
+      }
     });
     w.show();
 
