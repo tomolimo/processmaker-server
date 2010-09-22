@@ -57,7 +57,7 @@ class AppCacheView extends BaseAppCacheView {
     return AppCacheViewPeer::doCount($Criteria);
   }
   
-    /**
+  /**
    * gets the todo cases list criteria
    * param $userUid the current userUid
    * param $doCount if true this will return the criteria for count cases only
@@ -80,8 +80,8 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
     return $Criteria;
   }
-  
-    /**
+
+  /**
    * gets the todo cases list criteria for count
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -90,7 +90,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getToDo($userUid, true);
   }
   
-   /**
+  /**
    * gets the todo cases list criteria for list
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -99,7 +99,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getToDo($userUid, false);
   }
 
-    /**
+  /**
    * gets the DRAFT cases list criteria
    * param $userUid the current userUid
    * param $doCount if true this will return the criteria for count cases only
@@ -431,11 +431,17 @@ class AppCacheView extends BaseAppCacheView {
                 );
   
     $conf = new Configurations();
-    $confCasesList = $conf->loadObject('casesList',$action,'','','');
-    
+    try {
+      $confCasesList = $conf->loadObject('casesList',$action,'','','');
+    }   catch (Exception $e){
+      $confCasesList = array();
+    }
     //if there is PMTABLE for this case list:
     if ( count($confCasesList)>1 && isset($confCasesList['PMTable']) && trim($confCasesList['PMTable'])!='') {
     // getting the table name
+      if (!class_exists('AdditionalTables')){
+        require_once ( "classes/model/AdditionalTables.php" );
+      }
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
       $tableName = $oAdditionalTables->getAddTabName();
   
