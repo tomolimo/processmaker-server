@@ -1,5 +1,5 @@
 var PANEL_EAST_OPEN = false;
-var timerMinutes = 3*60*1000;  //every 3 minutes, this should be customized also,
+var timerMinutes = 2*60*1000;  //every 2 minutes, this should be customized also,
 
 var currentSelectedTreeMenuItem = null;
 var centerPanel;
@@ -316,11 +316,16 @@ Ext.onReady(function(){
       title: 'Triggers',
       iconCls: 'icon-grid',
       tbar: [
-        {text: 'Open in a popup', handler: show1}
+        {text: 'Open in a popup', handler: triggerWindow}
       ],
       sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
       viewConfig: {
         forceFit: true
+      },
+      listeners: {
+        rowdblclick: function(grid, n,e){
+          triggerWindow();
+        }
       }
   });
   
@@ -329,15 +334,16 @@ Ext.onReady(function(){
     debugTriggersDetailTpl.overwrite(detailPanel.body, r.data);
   });
   
-  function show1() {
+  function triggerWindow() {
     var r = debugTriggers.getSelectionModel().getSelected();
     if(r){
     var w = new Ext.Window({
       title: r.data.name,
       width: 500,
       height: 400,
-      modal: false,
+      modal: true,
       autoScroll: true,
+      maximizable: true,
       items: []
     });
     w.show();
@@ -408,6 +414,10 @@ Ext.onReady(function(){
   //w.expand();       
  
   setDefaultOption();
+
+  var menuPanelDetail = Ext.getCmp('tree_menuItem_detail');
+  menuPanelDetail.hide(); 
+  menuPanelDetail.ownerCt.doLayout();
 
   //the starting timer will be triggered after timerMinutes 
   setTimeout('Timer()', timerMinutes );
