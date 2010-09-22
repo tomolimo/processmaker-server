@@ -466,7 +466,7 @@ protected $depo_title = '';
       G::LoadClass('ArrayPeer');
       global $_DBArray;
       $_DBArray['DepartmentUserList'] = $aUsers ;
-      $_SESSION['_DBArray'] = $_DBArray;
+       $_SESSION['_DBArray'] = $_DBArray;
       $oCriteriaT = new Criteria('dbarray');
       $oCriteriaT->setDBArrayTable('DepartmentUserList');
         
