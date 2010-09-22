@@ -1,0 +1,111 @@
+/**
+ * Cases Interface styles
+ */
+
+#details-panel .x-panel-body {
+    padding: 10px;
+    background: #eee;
+    color: #555;
+}
+#details-panel a:link, #details-panel a:visited {
+    color: #369;
+}
+#details-panel h2 {
+    color: #369;
+    font-size: 15px;
+}
+#details-panel p {
+    margin-bottom: 5px;
+}
+
+.ICON_FOLDERS {
+    background-image: url(/images/cases-folders.png) !important;
+}
+
+.ICON_CASES_FOLDERS {
+    background-image: url(/images/cases-inbox.png) !important;
+}
+
+.ICON_CASES_INBOX {
+    background-image: url(/images/cases-inbox.png) !important;
+}
+
+.ICON_CASES_DRAFT {
+    background-image: url(/images/cases-draft.png) !important;
+}
+
+.ICON_CASES_SENT {
+    background-image: url(/images/cases-outbox.png) !important;
+}
+
+.ICON_CASES_SELFSERVICE {
+    background-image: url(/images/cases-selfservice.png) !important;
+}
+
+.ICON_CASES_PAUSED {
+    background-image: url(/images/cases-paused.png) !important;
+}
+
+.ICON_CASES_COMPLETED {
+    background-image: url(/images/cases-completed1.png) !important;
+}
+
+.ICON_CASES_CANCELLED {
+    background-image: url(/images/cases-cancelled.png) !important;
+}
+
+.ICON_CASES_FOLDERS {
+    background-image: url(/images/cases-documents.png) !important;
+}
+
+.ICON_SEARCHS {
+    background-image: url(/images/cases-search.png) !important;
+}
+
+.ICON_ADMIN {
+    background-image: url(/images/cases-admin.png) !important;
+}
+
+.ICON_CASES_TO_REVISE {
+    background-image: url(/images/cases_torevise.png) !important;
+}
+
+.ICON_CASES_TO_REASSIGN {
+    background-image: url(/images/cases-reassing.png) !important;
+}
+
+.ICON_CASES_START_PAGE {
+    background-image: url(/images/pm.gif) !important;
+}
+.ICON_CASES_START_CASE {
+    background-image: url(/images/addc.png) !important;
+}
+.ICON_CASES_HOME {
+    background-image: url(/images/dialog-ok-apply.png) !important;
+}
+ 
+
+/**
+ * style for case list grid
+ */
+.x-grid3-col-openLink {
+    padding: 1px;
+    background: #eee;
+    text-align: center;
+}
+
+.x-grid3-col-openLink a {
+    color: black; 
+    border-color:#ff0;
+}
+
+.x-grid3-col-openLink a:hover {
+    background: #0ee;
+}
+
+
+
+
+ 
+
+
