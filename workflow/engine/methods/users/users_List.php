@@ -55,9 +55,7 @@ $sDelimiter = DBAdapter::getStringDelimiter();
 require_once 'classes/model/Users.php';
 $oCriteria = new Criteria('workflow');
 $oCriteria->addSelectColumn(UsersPeer::USR_UID);
-/*
-  $oCriteria->addAsColumn('USR_COMPLETENAME', "CONCAT(USR_LASTNAME, ' ', USR_FIRSTNAME)");
-*/
+
 $sDataBase = 'database_' . strtolower(DB_ADAPTER);
 if(G::LoadSystemExist($sDataBase)){
   G::LoadSystem($sDataBase);
