@@ -304,36 +304,55 @@ MainPanel = function(){
     MainPanel.superclass.constructor.call(this, {
         id:'doc-body',
         region:'center',
-        margins:'0 5 5 0',
+        //margins:'0 5 5 0',
         resizeTabs: true,
         minTabWidth: 135,
         tabWidth: 135,
         plugins: new Ext.ux.TabCloseMenu(),
         enableTabScroll: true,
         activeTab: 0,
+        
 
         items:[{
             id:'startCase',
             title: 'Start Case',            
             iconCls:'ICON_CASES_START_CASE',
-            autoScroll: true,
-            items:[
+            //autoScroll: true,
+            layout:'border',
+            items:[{
+					id: 'img-chooser-view',					
+					region: 'center',					
+					//autoScroll: true,
+					items: 
+					[
     		       {
 					xtype : 'treepanel',
+					id:'processTree',
+					style: {
+            //width: '50%',
+            height: '100%',
+            //marginBottom: '10px',
+            overflow:'auto'
+        },
+
 					// autoWidth : true,
-					autoHeight : true,
-					useArrows : true,
-					autoScroll : true,
+					//autoHeight : true,
+					//useArrows : true,
+					//autoScroll : true,
 					animate : true,
-					enableDD : true,
-					// containerScroll : true,
+					//enableDD : true,
+					//containerScroll : true,
+					//ddScroll:true,
+					//singleExpand:true,
+					
 					// constrain : true,
-					// border : false,
-					// split : true,
-					draggable : true,
+					border : false,
+					split : true,
+					//draggable : true,
 					itemId : 'startCaseTreePanel',
 					id : 'startCaseTreePanel',
 					rootVisible : false,
+					treePanel:this,
 					loader : new Ext.tree.TreeLoader( {
 						dataUrl : 'casesStartPage_Ajax.php',
 						baseParams : {
@@ -342,7 +361,50 @@ MainPanel = function(){
 					// custom http params
 							}),
 					listeners : {
+					  'dblclick':function(n) {
+						  if (n.attributes.optionType == "startProcess") {
+								// Ext.Msg.alert('Start Case', 'Starting... "' +
+								// n.attributes.text + '"');
+								Ext.Msg
+										.show( {
+											title : 'Start Case',
+											msg : 'Starting new case<br><br> "' + n.attributes.text + '"',
+											icon : Ext.MessageBox.INFO
+										});
+								Ext.Ajax
+										.request( {
+											url : 'casesStartPage_Ajax.php',
+											params : {
+												action : 'startCase',
+												processId : n.attributes.pro_uid,
+												taskId : n.attributes.tas_uid
+											},
+											success : function(responseObject) {
+												// showHistoryDialog(responseObject.responseText);
+											// grid.getGridEl().unmask(true);
+											var response = Ext.util.JSON
+													.decode(responseObject.responseText);
+											Ext.Msg
+													.show( {
+														title : 'Open Case',
+														msg : 'Case number <b>' + response.CASE_NUMBER + '</b>',
+														icon : Ext.MessageBox.INFO
+													});
+											window.location = response.openCase.PAGE;
+											// Ext.Msg.alert('Status',
+											// responseObject.responseText);
+										},
+										failure : function() {
+											// grid.getGridEl().unmask(true);
+											Ext.Msg.alert('Error',
+													'Unable to start a case');
+										}
+										});
+							}
+						},
 						click : function(n) {
+						  this.treePanel.showDetails(n);
+						  return;						  
 							if (n.attributes.optionType == "startProcess") {
 								// Ext.Msg.alert('Start Case', 'Starting... "' +
 								// n.attributes.text + '"');
@@ -395,7 +457,20 @@ MainPanel = function(){
 
 				}
 		        
-    		       ],
+    		       ]
+                 
+				},{
+					id: 'process-detail-panel',
+					region: 'east',
+					split: true,
+					style: {
+           width: '50%',
+           
+        },
+					minWidth: 150,
+					//maxWidth: 250,
+					html:"jhl was here<br><br>Need to have a brief description here when nothing is selected..."
+				}],
     		       tbar : [ {
 						xtype : 'textfield',
 						name : 'field1',
@@ -406,14 +481,17 @@ MainPanel = function(){
 								// console.log(filterText.getValue());
 					}
 				}
-					},'->', {
-						text : 'Refresh',
-
-						handler : function() {
-							tree = Ext.getCmp('startCaseTreePanel');
+					},{
+        
+        xtype: 'tbbutton',
+        cls: 'x-btn-icon',
+        icon: '/images/refresh.gif',
+        
+        handler: function(){
+          tree = Ext.getCmp('startCaseTreePanel');
 							tree.getLoader().load(tree.root);
-						}
-					} ]
+        }
+      } ]
 			
         },
         {
@@ -438,8 +516,8 @@ Ext.extend(MainPanel, Ext.TabPanel, {
         //this.body.on('click', this.onClick, this);
     },
 
-    onClick: function(e, target){
-    	return;
+    onClick: function(e, target,elementselected){
+      return;
         if(target = e.getTarget('a:not(.exi)', 3)){
             var cls = Ext.fly(target).getAttributeNS('ext', 'cls');
             e.stopEvent();
@@ -483,6 +561,45 @@ Ext.extend(MainPanel, Ext.TabPanel, {
             this.setActiveTab(p);
         }
     },
+    initTemplates : function(){
+
+
+		this.detailsTemplate = new Ext.XTemplate(
+			'<div  class=" x-panel ">',
+				'<tpl for=".">',
+					'<img src="{url}"><div class="x-panel-bwrap">',
+					'<b>Process Name:</b>',
+					'<span>{name}</span><br>',
+					'<b>Description:</b>',
+					'<span>{sizeString}</span><br>',
+					'<input type="button" value="Start Case" onclick="alert(\'JHL was here: This should start the following Process/Task{name}. \');">',
+					
+					
+				'</tpl>',
+			'</div>'
+		);
+		this.detailsTemplate.compile();
+	},
+    showDetails : function(selectedNode){
+      
+      //console.log(selectedNode);
+      var detailEl = Ext.getCmp('process-detail-panel').body;
+      if(selectedNode){
+        this.initTemplates();
+         detailEl.hide();
+         data={name:selectedNode.attributes.text};
+            this.detailsTemplate.overwrite(detailEl, data);
+            detailEl.slideIn('l', {stopFx:true,duration:.2});
+            detailEl.highlight('#c3daf9', {block:true});
+      }else{
+        detailEl.update('');
+      }
+       
+      return;
+	    //var selNode = this.getSelectedNodes();
+	    
+		
+	},
     loadOtherDashboards:function(){
     	//console.info("Getting other Dashboards");
     	dashboardTabPanels=this;
@@ -512,13 +629,35 @@ Ext.extend(MainPanel, Ext.TabPanel, {
     				}
     			}
     			// getDefaultDashboard(dashboardTabPanels);
+    			dashboardTabPanels.activateDefaultTab();
     		},
     		failure : function() {
     			// grid.getGridEl().unmask(true);
     			// getDefaultDashboard(dashboardTabPanels);
+    			dashboardTabPanels.activateDefaultTab();
     		Ext.Msg.alert('Status', 'Unable to get Dashboards');
     	}
     	});
+    },
+    activateDefaultTab:function(){
+      // api.expandPath('/root/apidocs');
+      // allow for link in
+      var page = window.location.href.split('?')[1];
+      //console.info("page : "+page);
+      if(page){
+          var ps = Ext.urlDecode(page);
+          //console.log(ps.action);
+          if(ps.action){
+          	defaultDashboard=ps.action;
+          	if (this.getItem(defaultDashboard)){
+  				//console.info("Setting the new default dashboard: "+defaultDashboard);
+  				this.setActiveTab(defaultDashboard);
+  			}
+          	
+          }
+          // var cls = ps['class'];
+          // mainPanel.loadClass('output/' + cls + '.html', cls, ps.member);
+      }
     }
 	
 
@@ -659,30 +798,12 @@ Ext.onReady(function(){
             // margins: '0 0 5 0'
         }, /* api, */ mainPanel ]
     });
-    //console.info("viewport -end");
-    // api.expandPath('/root/apidocs');
-
-    // allow for link in
-    var page = window.location.href.split('?')[1];
-    //console.info("page : "+page);
+    
     
     mainPanel.loadOtherDashboards();
     
+    //console.info("viewport -end");
     
-    if(page){
-        var ps = Ext.urlDecode(page);
-        //console.log(ps.action);
-        if(ps.action){
-        	defaultDashboard=ps.action;
-        	if (mainPanel.getItem(defaultDashboard)){
-				//console.info("Setting the new default dashboard: "+defaultDashboard);
-				mainPanel.setActiveTab(defaultDashboard);
-			}
-        	
-        }
-        // var cls = ps['class'];
-        // mainPanel.loadClass('output/' + cls + '.html', cls, ps.member);
-    }
    
     viewport.doLayout();
 	
