@@ -54,4 +54,4 @@
   //$G_TMP_MENU->AddIdRawOption('TRANSLATION', 'tools/translations', 'Translations');
   //$G_TMP_MENU->AddIdRawOption('UPDATE_ALL',  'tools/updateTranslation', 'Update');
 
-
+    $G_TMP_MENU->AddIdRawOption('ENVIRONMENT_SETTINGS', 'environmentSettings', G::LoadTranslation('ID_ENVIRONMENT_SETTINGS'), "",'', 'settings');
