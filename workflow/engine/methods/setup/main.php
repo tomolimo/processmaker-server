@@ -27,8 +27,8 @@
 
   $G_MAIN_MENU            = 'processmaker';
   $G_ID_MENU_SELECTED     = 'SETUP';
-
   $G_PUBLISH = new Publisher;
+
   if( isset($_GET['i18']) )
     $_SESSION['DEV_FLAG'] = $_SESSION['TOOLS_VIEWTYPE'] = isset($_GET['i18']);
   else {

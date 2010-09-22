@@ -27,9 +27,31 @@
   //$oHeadPublisher->setExtSkin( 'xtheme-blue');   
   //$oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
 //  $oHeadPublisher->usingExtJs('ux/Ext.ux.codepress');
-  
+
+  global $G_TMP_MENU;
+  $oMenu = new Menu();
+  $oMenu->load('setup');
+  $items = Array();
+
+  $menuTypes = array_unique($oMenu->Types);
+  foreach($menuTypes as $i=>$v){
+    if( $v == 'admToolsContent'){
+      unset($menuTypes[$i]);
+      break;
+    }
+  }
+  sort($menuTypes);
+
+  $tabItems = Array();
+  $i=0;
+  foreach( $menuTypes as $menuType ){
+    $tabItems[$i]->id    = $menuType;
+    $tabItems[$i]->title = str_replace('_', ' ', ucwords($menuType));
+    $i++;
+  }
+
   $oHeadPublisher->addExtJsScript('setup/main', false);    //adding a javascript file .js
   $oHeadPublisher->addContent('setup/main'); //adding a html file  .html.
+  $oHeadPublisher->assign('tabItems', $tabItems);
 
   G::RenderPage('publish', 'extJs');
-  

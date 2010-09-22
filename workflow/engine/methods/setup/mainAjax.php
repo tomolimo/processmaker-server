@@ -29,7 +29,7 @@ switch($request){
           'cls'    => 'pm-tree-node',
           'iconCls'=> 'ICON_'.$oMenu->Id[$i]
         );
-      } else if( ! in_array($oMenu->Types[$i], Array('tool', 'maintenance')) && $_GET['menu'] == 'setting' ){
+      } else if( in_array($oMenu->Types[$i], Array('', 'admToolsContent')) && $_GET['menu'] == 'settings' ){
         $items[] = Array(
           'id'    => $oMenu->Id[$i],
           'url'  => ($oMenu->Options[$i]!='')? $oMenu->Options[$i]: '#',
