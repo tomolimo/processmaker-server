@@ -81,7 +81,9 @@ if (defined ( "DB_HOST" )) {
   }
   
   try {
-    $sMySQLVersion = $dbNetView->getDbServerVersion ( 'mysql' );
+    
+    $sMySQLVersion = $dbNetView->getDbServerVersion ( DB_ADAPTER );      
+    
   }
   catch ( Exception $oException ) {
     $sMySQLVersion = '?????';
