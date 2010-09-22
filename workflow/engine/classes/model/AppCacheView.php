@@ -204,6 +204,10 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getUnassigned ( $userUid, $doCount ) {
     //get the valid selfservice tasks for this user
+    if (!class_exists('Cases')){
+      G::loadClass('case');
+    }
+
     $oCase = new Cases();
     $tasks = $oCase->getSelfServiceTasks( $userUid ); 
     $aTasks = array();
@@ -393,6 +397,9 @@ class AppCacheView extends BaseAppCacheView {
    */
   function addPMFieldsToCriteria($action) {
     $caseColumns = array();
+    if (!class_exists('AdditionalTables')){
+      require_once ( "classes/model/AdditionalTables.php" );
+    }
     $caseReaderFields = array();
     $oCriteria  = new Criteria('workflow');
     $oCriteria->clearSelectColumns ( );
@@ -439,9 +446,7 @@ class AppCacheView extends BaseAppCacheView {
     //if there is PMTABLE for this case list:
     if ( count($confCasesList)>1 && isset($confCasesList['PMTable']) && trim($confCasesList['PMTable'])!='') {
     // getting the table name
-      if (!class_exists('AdditionalTables')){
-        require_once ( "classes/model/AdditionalTables.php" );
-      }
+
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
       $tableName = $oAdditionalTables->getAddTabName();
   
@@ -464,9 +469,11 @@ class AppCacheView extends BaseAppCacheView {
     } 
     //else this list do not have a PM Table,
     else {
-      foreach($confCasesList['second']['data'] as $fieldData){
-        $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
-        $oCriteria->addSelectColumn (  $fieldName );
+      if (is_array($confCasesList)){
+        foreach($confCasesList['second']['data'] as $fieldData){
+          $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
+          $oCriteria->addSelectColumn (  $fieldName );
+        }
       }
       //add the default and hidden DEL_INIT_DATE
       $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
