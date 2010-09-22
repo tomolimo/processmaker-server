@@ -6459,7 +6459,7 @@
     </index>
     <index name="indexAppUser">
       <index-column name="USR_UID"/>
-      <index-column name="APP_STATUS"/>
+      <index-column name="PRO_UID"/>
       <vendor type="mysql">
         <parameter name="Table" value="APP_CACHE_VIEW"/>
         <parameter name="Non_unique" value="1"/>

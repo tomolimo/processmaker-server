@@ -174,21 +174,26 @@ Ext.onReady ( function() {
     pressed: false
   });
  
-  // ComboBox creation
+  // ComboBox creation processValues
   var comboProcess = new Ext.form.ComboBox({
-    width: 180,
-    store: storeProcesses,
-    displayField: 'APP_PRO_TITLE',
-    typeAhead: true,
-    //mode: 'local',
-    maxHeight: 200,
-    forceSelection: true,
+    width         : 180,
+    boxMaxWidth   : 180,
+    //store: storeProcesses,
+    displayField  : 'APP_PRO_TITLE',
+    valueField    : 'PRO_UID',
+    //typeAhead     : true,
+    mode          : 'local',
+    //forceSelection: true,
     triggerAction: 'all',
-    emptyText: 'Select a process...',
+    //emptyText: 'Select a process...',
     selectOnFocus: true,
-    getListParent: function() {
-      return this.el.up('.x-menu');
-    },
+    //getListParent: function() {
+    //  return this.el.up('.x-menu');
+    //},
+    store         : new Ext.data.ArrayStore({
+      fields: ['PRO_UID','APP_PRO_TITLE'],
+      data  : processValues
+    }),
     listeners:{
       scope: this,
       'select': function() {
@@ -201,25 +206,33 @@ Ext.onReady ( function() {
   
   // ComboBox creation
   var comboStatus = new Ext.form.ComboBox({
-    width: 80,
-    store: storeProcesses,
-    displayField: 'APP_STATUS',
-    typeAhead: true,
-    //mode: 'local',
-    maxHeight: 100,
-    forceSelection: true,
-    triggerAction: 'all',
-    emptyText: 'Select a status...',
-    selectOnFocus: true,
-    getListParent: function() {
-      return this.el.up('.x-menu');
-    },
+    width         : 90,
+    boxMaxWidth   : 90,
+    editable      : false,
+    mode          : 'local',    
+    store         : new Ext.data.ArrayStore({
+      fields: ['id'],
+      data  : statusValues
+    }),
+    valueField    : 'id',
+    displayField  : 'id',
+    triggerAction : 'all',
+    
+    //typeAhead: true,
+    //forceSelection: true,
+    //emptyText: 'Select a status...',
+    //selectOnFocus: true,
+    //getListParent: function() {
+    //  return this.el.up('.x-menu');
+    //},
     listeners:{
       scope: this,
       'select': function() {
-        filterProcess = comboProcess.value;
-        storeCases.setBaseParam( 'process', filterProcess);
-        storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
+        filterStatus = comboStatus.value;
+        storeCases.setBaseParam( 'status', filterStatus);
+        storeCases.setBaseParam( 'start', 0);
+        storeCases.setBaseParam( 'limit', pageSize);
+        storeCases.load();
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
@@ -357,8 +370,10 @@ Ext.onReady ( function() {
   
     // manually trigger the data store load
     storeCases.setBaseParam( 'action', action );
-    storeCases.load({params:{start:0, limit: pageSize }});
-    storeProcesses.load();
+    storeCases.setBaseParam( 'start',  0 );
+    storeCases.setBaseParam( 'limit',  pageSize );
+    storeCases.load();
+    //storeProcesses.load();
 
     function createBox(t, s){
         return ['<div class="msg">',
@@ -392,8 +407,10 @@ Ext.onReady ( function() {
           break;
       }
       storeCases.setBaseParam( 'filter', item.id );
-      storeCases.load({params:{start:0, limit: pageSize, filter: item.id }});
-      storeProcesses.load();
+      storeCases.setBaseParam( 'start',  0 );
+      storeCases.setBaseParam( 'limit',  pageSize );
+      storeCases.load();
+      //storeProcesses.load();
     }
   
   
