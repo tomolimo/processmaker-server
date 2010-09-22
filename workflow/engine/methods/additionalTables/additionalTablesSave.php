@@ -65,7 +65,10 @@ $aNoKeys = array();
 foreach ($_POST['form']['FIELDS'] as $aRow) {
   if ($aRow['FLD_KEY'] == 'on') {
     $aKeys[] = $aRow;
-    $aDynavars[] = array('FLD_UID'=>$aRow['FLD_UID'],'CASE_VARIABLE'=>$aRow['CASE_VARIABLE']);
+    if(isset($aRow['CASE_VARIABLE']))
+      $aDynavars[] = array('FLD_UID'=>$aRow['FLD_UID'],'CASE_VARIABLE'=>$aRow['CASE_VARIABLE']);
+    else 
+      $aDynavars[] = array('FLD_UID'=>$aRow['FLD_UID'],'CASE_VARIABLE'=>'');
   }
   else {
     $aNoKeys[] = $aRow;
@@ -101,7 +104,7 @@ if ($_POST['form']['ADD_TAB_UID'] == '') {
         G::header('Location: additionalTablesList');
         die;
     }
-    // Reserver Words
+    // Reserved Words
     $aReservedWords = array ('ALTER', 'CLOSE', 'COMMIT', 'CREATE', 'DECLARE',
                            'DELETE', 'DROP', 'FETCH', 'FUNCTION', 'GRANT', 
                            'INDEX', 'INSERT', 'OPEN', 'REVOKE', 'ROLLBACK', 
