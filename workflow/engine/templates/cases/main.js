@@ -61,7 +61,7 @@ Ext.onReady(function(){
 
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-  var resetGrid = function() {
+  var resetGrid = function() {  
     propStore.load();
   };
 
@@ -148,7 +148,10 @@ Ext.onReady(function(){
         cls: 'x-btn-icon',
         icon: '/images/refresh.gif',
         /*text: 'Reload notifiers',*/
-        //handler: updateCasesTree
+        handler: function(){
+          updateCasesTree();
+          updateCasesView();
+        }
       }
     ],
     animate:true,
@@ -437,7 +440,6 @@ function updateCasesView() {
     }
   } 
   catch(e){};
-  updateCasesTree();
 }
 
 function updateCasesTree() {
