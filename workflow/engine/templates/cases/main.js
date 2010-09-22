@@ -8,33 +8,16 @@ var menuTree;
 
 var winSize = parent.getClientWindowSize(); 
 
-var detailsMenuTreePanelHeight = winSize.height - 420;
+var detailsMenuTreePanelHeight  = winSize.height - 420;
 var detailsdebugVariablesHeight = winSize.height - 200;
 
-var debugVarTpl = new Ext.Template(
-  '<span style="font-size:11">',
-  '{value}',
-  '</span>'
-);
+var debugVarTpl = new Ext.Template('<span style="font-size:11">{value}</span>');
 debugVarTpl.compile();
 
 var detailsText = '<i></i>';
-var menuTreeDetailsTpl = new Ext.Template(
-  '<span style="font-size:10">',
-  '<h2 class="title">{title}</h2>',
-  'Related Processes</b>: {processes_count}<br/>',
-  '<span style="font-size:9">',
-  '{innerText}',
-  '</span>',
-  '</span>'
-);
-menuTreeDetailsTpl.compile();
 
-var debugTriggersDetailTpl = new Ext.Template(
-  '<pre style="font-size:10px"><code>{code}</code></pre>'
-);
+var debugTriggersDetailTpl = new Ext.Template('<pre style="font-size:10px"><code>{code}</code></pre>');
 debugTriggersDetailTpl.compile();
-  
   
 var propStore;
 var triggerStore;
@@ -172,7 +155,6 @@ Ext.onReady(function(){
           document.getElementById('casesSubFrame').src = tp.attributes.url;
           }
       } /*,
-
       'render': function(tp){
         tp.getSelectionModel().on('selectionchange', function(tree, node){
 
@@ -181,8 +163,6 @@ Ext.onReady(function(){
           }
           //var el = Ext.getCmp('details-panel').body;
           if(node.attributes.tagName == 'option' && node.attributes.cases_count ){
-            //Ext.getCmp('details-panel').setTitle(node.attributes.title);
-            //menuTreeDetailsTpl.overwrite(el, node.attributes);
             ReloadTreeMenuItemDetail({item:node.attributes.id});
             currentSelectedTreeMenuItem = node.attributes.id;
             Ext.getCmp('tree_menuItem_detail').setTitle(node.attributes.title.toUpperCase() + ' - Related processes: '+node.attributes.processes_count);
@@ -198,19 +178,6 @@ Ext.onReady(function(){
     }
   }
   
-  var treeMenuItemDetail2 = {
-    region: 'south',
-    title: '',
-    id: 'details-panel',
-    autoScroll: true,
-    collapsible: true,
-    split: true,
-    margins: '0 2 2 2',
-    cmargins: '2 2 2 2',
-    height: detailsMenuTreePanelHeight,
-    html: detailsText
-  }
-
   var treeMenuItemDetail = new Ext.tree.TreePanel({
       id: 'tree_menuItem_detail',
       region: 'south',
@@ -459,29 +426,25 @@ function updateCasesTree() {
 	        result = eval('('+response.responseText+')');
 	        for(i=0; i<result.length; i++){
 	        	if( document.getElementById('NOTIFIER_'+result[i].item ) ){
-	        	
 		          oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
 		          oldValue = oldValue.replace('<b>', '');
 		          oldValue = oldValue.replace('</b>', '');
 		          newValue = result[i].count;
-		          if( newValue != oldValue ) {
-                document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
-              }
-		          //alert(oldValue +'!='+ newValue);
+		          
 		          if( oldValue != newValue && oldValue != 0 ){
 		            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
 		            NOTIFIER_FLAG = true;
-		          } 
-		          else 
+		          } else { 
 		          	if(NOTIFIER_FLAG === false){
 		              document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
 		            }
+		          }
 		        } 
 		        else continue;
 	        }
 	        Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
 	      } catch (e){
-	      	//alert('NOTIFIER_'+result[i].item+" - "+e);
+	      	//alert(""+e);
 	      }
       },
       failure: function(){},
@@ -502,9 +465,11 @@ Ext.data.DynamicJsonReader = function(config){
 
 Ext.extend(Ext.data.DynamicJsonReader, Ext.data.JsonReader, {
   getRecordType : function(data) {
-  var i = 0, arr = [];
+    var i = 0, arr = [];
 
-  for (var name in data[0]) {arr[i++] = name;} // is there a built-in to do this?
+    for (var name in data[0]) {
+      arr[i++] = name;
+    } // is there a built-in to do this?
     this.recordType = Ext.data.Record.create(arr);
     return this.recordType;
   },
