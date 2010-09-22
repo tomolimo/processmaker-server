@@ -236,14 +236,19 @@
    * loads the PM Table field list from the database based in an action parameter
    * then assemble the List of fields with these data, for the configuration in cases list.
    * @param  String $action
-   * @return Criteria object $Criteria
+   * @return Array $config
    */
 function getAdditionalFields($action){
   $caseColumns = array();
   $caseReaderFields = array();
 
   $conf = new Configurations();
-  $confCasesList = $conf->loadObject('casesList',$action,'','','');
+  try {
+    $confCasesList = $conf->loadObject('casesList',$action,'','','');
+  } catch (Exception $e){
+    $confCasesList = array();
+  }
+  
   if ( count($confCasesList)>1 ){
     foreach($confCasesList['second']['data'] as $fieldData){
       if ( $fieldData['fieldType']!='key' ) {
