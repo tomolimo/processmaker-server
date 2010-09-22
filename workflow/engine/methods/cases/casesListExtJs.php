@@ -252,7 +252,7 @@ function getAdditionalFields($action){
   if ( count($confCasesList)>1 ){
     foreach($confCasesList['second']['data'] as $fieldData){
       if ( $fieldData['fieldType']!='key' ) {
-        $caseColumns[]      = array( 'header' => $fieldData['label'], 'dataIndex' => $fieldData['name'], 'width' => $fieldData['width'], 'align' => $fieldData['align'] );
+        $caseColumns[]      = array( 'header' => G::loadTranslation('ID_CASESLIST_'.$fieldData['name']), 'dataIndex' => $fieldData['name'], 'width' => $fieldData['width'], 'align' => $fieldData['align'] );
         $caseReaderFields[] = array( 'name'   => $fieldData['name'] );
       }
     }
