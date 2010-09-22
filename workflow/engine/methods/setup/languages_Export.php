@@ -41,28 +41,29 @@ if( ! isset($_GET['LOCALE']) )
 $sPOFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . MAIN_POFILE . '.' . $_GET['LOCALE'] . '.po';
 $poFile = new i18n_PO($sPOFile);
 $poFile->buildInit();
-
+$locale = $_GET['LOCALE'];
 $language = new Language();
 
+if( strpos($locale, Translation::$localeSeparator) !== false ) {
+  list($LAN_ID, $IC_UID) = explode(Translation::$localeSeparator, $_GET['LOCALE']);
+  $iCountry = new IsoCountry();
+  $iCountryRecord = $iCountry->findById($IC_UID);
 
+  if( ! isset($iCountryRecord['IC_UID']) )
+    throw new Exception("Country Target ID '{$_GET['LAN_ID']}' doesn't exist!");
 
-list($LAN_ID, $IC_UID) = explode('-', $_GET['LOCALE']);
+  $sCountry = $iCountryRecord['IC_NAME'];
+} else {
+  $LAN_ID = $locale;
+  $sCountry = $IC_UID = '';
+}
 
 $langRecord = $language->findById($LAN_ID);
 
 if( ! isset($langRecord['LAN_NAME']) )
-  throw new Exception("Language Target ID \"{$_GET['LAN_ID']}\" doesn't exist!");
+  throw new Exception("Language Target ID \"{$LAN_ID}\" doesn't exist!");
   
 $sLanguage = $langRecord['LAN_NAME'];
-
-
-$iCountry = new IsoCountry();
-$iCountryRecord = $iCountry->findById($IC_UID);
-
-if( ! isset($iCountryRecord['IC_UID']) )
-  throw new Exception("Country Target ID '{$_GET['LAN_ID']}' doesn't exist!");
-  
-$sCountry = $iCountryRecord['IC_NAME'];
 
 //setting headers
 $poFile->addHeader('Project-Id-Version'        , PO_SYSTEM_VERSION);
