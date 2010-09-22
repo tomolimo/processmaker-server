@@ -34,7 +34,29 @@ class MssqlPlatform extends DefaultPlatform {
 
 	/**
 	 * Initializes db specific domain mapping.
+	 * Change for standardization
 	 */
+	protected function initialize()
+	{
+		parent::initialize();
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::INTEGER, "INT"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::BOOLEAN, "INT"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::DOUBLE, "FLOAT"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, "NTEXT"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, "NTEXT"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::DATE, "CHAR(19)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::BU_DATE, "CHAR(19)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::TIME, "CHAR(19)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::TIMESTAMP, "CHAR(19)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::BU_TIMESTAMP, "CHAR(19)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::BINARY, "BINARY(7132)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::VARBINARY, "IMAGE"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, "IMAGE"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::BLOB, "IMAGE"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::VARCHAR, "NVARCHAR"));
+	}
+
+/*
 	protected function initialize()
 	{
 		parent::initialize();
@@ -53,6 +75,7 @@ class MssqlPlatform extends DefaultPlatform {
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, "IMAGE"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::BLOB, "IMAGE"));
 	}
+*/
 
 	/**
 	 * @see        Platform#getMaxColumnNameLength()
