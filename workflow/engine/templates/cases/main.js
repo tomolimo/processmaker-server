@@ -146,7 +146,7 @@ Ext.onReady(function(){
         id:'refreshNotifiers',
         xtype: 'tbbutton',
         cls: 'x-btn-icon',
-        icon: '/images/refresh.gif',
+        icon: '/images/refresh.gif'
         /*text: 'Reload notifiers',*/
         handler: function(){
           updateCasesTree();
