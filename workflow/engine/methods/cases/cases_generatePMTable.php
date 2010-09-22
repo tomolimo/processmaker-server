@@ -12,7 +12,7 @@ $pmTableFields = (isset($_POST['tableFields'])) ? json_decode($_POST['tableField
 
 // default parameters
 $pmTableName   = 'Contenders';
-$pmTableFields = array(array('FLD_NAME'=>'APP_UID'),array('FLD_NAME'=>'CONT_NAME'),array('FLD_NAME'=>'CONT_DESC'));
+$pmTableFields = array(array('FLD_NAME'=>'APP_UID'),array('FLD_NAME'=>'CONT_NAME'),array('FLD_NAME'=>'CONT_DESC'),array('FLD_NAME'=>'_cedula'));
 
 // setting the data to assemble the table
 $aData = array();
