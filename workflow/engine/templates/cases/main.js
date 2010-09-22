@@ -41,6 +41,24 @@ var triggerStore;
 var debugVariablesFilter;
 var ReloadTreeMenuItemDetail;
 var NOTIFIER_FLAG = false;
+
+new Ext.KeyMap(document, {
+    key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+    	if (! e.ctrlKey) {
+        if (Ext.isIE) {
+            // IE6 doesn't allow cancellation of the F5 key, so trick it into
+            // thinking some other key was pressed (backspace in this case)
+            e.browserEvent.keyCode = 8;
+        }
+        e.stopEvent();
+        updateCasesView();
+        document.getElementById('casesSubFrame').src = document.getElementById('casesSubFrame').src;        
+      }    
+      else 
+Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+    }
+});
  
 Ext.onReady(function(){
 
@@ -153,7 +171,6 @@ Ext.onReady(function(){
 
     listeners: {
     	'click': function(tp) {
-        Ext.Msg.alert('Navigation Tree Click', 'You clicked: "' + tp.attributes.url + '"');
         if( tp.attributes.url ){
           document.getElementById('casesSubFrame').src = tp.attributes.url;
           }
@@ -443,7 +460,7 @@ function updateCasesView(){
 	      }
       },
       failure: function(){},
-      params: {foo: 'bar'}
+      params: {}
     });
   } catch(e){alert(' '+e)}
 }
