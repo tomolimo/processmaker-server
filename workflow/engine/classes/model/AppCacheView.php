@@ -110,29 +110,35 @@ class AppCacheView extends BaseAppCacheView {
                   'APP_OVERDUE_PERCENTAGE'
                 );
   
-  $conf = new Configurations();
-  $confCasesList = $conf->loadObject('casesList',$action,'','','');
-  if (count($confCasesList)>1&&isset($confCasesList['PMTable'])&&trim($confCasesList['PMTable'])!=''){
-  // getting the table name
-    $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
-    $tableName = $oAdditionalTables->getAddTabName();
-
-    foreach($confCasesList['second']['data'] as $fieldData){
-      if (!in_array($fieldData['name'],$defaultFields)){
-        $fieldName = $tableName.'.'.$fieldData['name'];
-        $oCriteria->addSelectColumn (  $fieldName );
-      } 
-      else {
-        $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
-        $oCriteria->addSelectColumn (  $fieldName );
+    $conf = new Configurations();
+    $confCasesList = $conf->loadObject('casesList',$action,'','','');
+    if (count($confCasesList)>1&&isset($confCasesList['PMTable'])&&trim($confCasesList['PMTable'])!=''){
+    // getting the table name
+      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
+      $tableName = $oAdditionalTables->getAddTabName();
+  
+      foreach($confCasesList['second']['data'] as $fieldData){
+        if (!in_array($fieldData['name'],$defaultFields)){
+          $fieldName = $tableName.'.'.$fieldData['name'];
+          $oCriteria->addSelectColumn (  $fieldName );
+        } 
+        else {
+          $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
+          $oCriteria->addSelectColumn (  $fieldName );
+        }
       }
+  
+      //add the default and hidden DEL_INIT_DATE
+      $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
+      //Add the JOIN
+      $oCriteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
+      return $oCriteria;
+    } 
+    else {
+      //add the default and hidden DEL_INIT_DATE
+      $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
+      return $oCriteria;
     }
-    $oCriteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
-    return $oCriteria;
-  } 
-  else {
-    return $oCriteria;
-  }
   }
   
 } // AppCacheView

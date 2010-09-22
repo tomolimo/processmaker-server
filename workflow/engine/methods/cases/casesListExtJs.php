@@ -15,13 +15,13 @@
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
     	
-  $oHeadPublisher->assign( 'pageSize',     $config['rowsperpage'] ); //sending the page size
+  $oHeadPublisher->assign( 'pageSize',     intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',      $columns ); //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields', $readerFields ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'action',       $action ); //sending the fields to get from proxy
   $oHeadPublisher->assign( 'PMDateFormat', $config['dateformat'] ); //sending the fields to get from proxy
 
-  $oHeadPublisher->addExtJsScript('cases/casesList', true );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
 
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
 
@@ -31,7 +31,7 @@
   function getToDo() {
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',          'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
-    $caseColumns[] = array( 'header' =>'Case',       'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'Case',       'dataIndex' => 'APP_TITLE',         'width' => 150, 'renderer' => 'openLink' );
     $caseColumns[] = array( 'header' =>'Task',       'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',    'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Sent by',    'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );

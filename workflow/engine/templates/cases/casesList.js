@@ -1,3 +1,20 @@
+new Ext.KeyMap(document, {
+    key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+    	if (! e.ctrlKey) {
+        if (Ext.isIE) {
+            // IE6 doesn't allow cancellation of the F5 key, so trick it into
+            // thinking some other key was pressed (backspace in this case)
+            e.browserEvent.keyCode = 8;
+        }
+        e.stopEvent();
+        document.location = document.location;
+      }    
+      else 
+Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+    }
+});
+
 Ext.onReady ( function() {
   var filterProcess = '';
 
@@ -24,14 +41,28 @@ Ext.onReady ( function() {
     var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;'; 
     return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
   }
-   
-	columns.push ( { header: "", width: 50, dataIndex: 'DEL_PRIORITY', sortable: false, renderer: openLink, menuDisabled: true, id: 'openLink'});
 
+  function showField (value,p,r) {
+    if ( r.data['DEL_INIT_DATE'] )
+      return String.format("{0}", value );
+    else
+      return String.format("<b>{0}</b>", value );
+  } 
+  
   for(var i = 0, len = columns.length; i < len; i++){
     var c = columns[i];
-      if( c.dataIndex == 'DEL_TASK_DUE_DATE') c.renderer = dueDate;
-      if( c.dataIndex == 'APP_UPDATE_DATE') c.renderer = showDate;
+    c.renderer = showField;
+    if( c.dataIndex == 'DEL_TASK_DUE_DATE') c.renderer = dueDate;
+    if( c.dataIndex == 'APP_UPDATE_DATE') c.renderer = showDate;
   };
+
+  //adding the last column to open the cases_Open
+	columns.push ( { header: "", width: 50, dataIndex: 'DEL_PRIORITY', sortable: false, renderer: openLink, menuDisabled: true, id: 'openLink'});
+
+	//adding the hidden field DEL_INIT_DATE
+	readerFields.push ( { name: "DEL_INIT_DATE"});
+	readerFields.push ( { name: "APP_UID"});
+	readerFields.push ( { name: "DEL_INDEX"});
 
 	
   var cm = new Ext.grid.ColumnModel({
@@ -210,7 +241,6 @@ Ext.onReady ( function() {
     items: ( action == 'todo' ? toolbarTodo : toolbarDraft )
   });
 
-
   // create the editor grid
   var grid = new Ext.grid.GridPanel({
     store: storeCases,
@@ -225,13 +255,23 @@ Ext.onReady ( function() {
       forceFit:true
   },
 */
+    listeners: {
+      rowdblclick: function(grid, n,e){
+      var appUid   = grid.store.data.items[n].data.APP_UID;
+    	var delIndex = grid.store.data.items[n].data.DEL_INDEX;
+    	var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
+    	Ext.Msg.alert ('open case' , caseTitle );
+      window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+    }
+  },
+    
     tbar: tb,
     // paging bar on the bottom
     bbar: new Ext.PagingToolbar({
       pageSize: pageSize,
       store: storeCases,
       displayInfo: true,
-      displayMsg: 'Displaying items {0} - {1} of {2}',
+      displayMsg: 'Displaying items {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
       emptyMsg: "No items to display"
     })
 
