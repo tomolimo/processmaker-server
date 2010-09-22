@@ -232,7 +232,7 @@ class AppCacheView extends BaseAppCacheView {
     
     $Criteria->add(AppDelegationPeer::USR_UID, '');
     $Criteria->add(AppDelegationPeer::TAS_UID, $aTasks , Criteria::IN );    
-    
+
     return $Criteria;
   }
   
@@ -331,7 +331,7 @@ class AppCacheView extends BaseAppCacheView {
     return $Criteria;
   }
   
-    /**
+  /**
    * gets the COMPLETED cases list criteria for count
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -543,6 +543,10 @@ class AppCacheView extends BaseAppCacheView {
         foreach($confCasesList['second']['data'] as $fieldData){
           $fieldName = 'APP_CACHE_VIEW.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
+        }
+      } else {
+        foreach($defaultFields as $field){
+          $oCriteria->addSelectColumn('APP_CACHE_VIEW.'.$field);
         }
       }
       //add the default and hidden DEL_INIT_DATE
