@@ -51,7 +51,7 @@ new Ext.KeyMap(document, {
         e.browserEvent.keyCode = 8;
       }
       e.stopEvent();
-      updateCasesView;
+      updateCasesTree();
     } else 
       Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
   }
