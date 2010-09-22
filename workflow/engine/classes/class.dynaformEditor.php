@@ -784,7 +784,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
         $dynaform->update( $tmp['Properties'] );
         /*Save file*/
         $copy     = implode('',file(PATH_DYNAFORM  . $file . '.xml'));
-        /*
+         /*
 				* added by krlos carlos/a/colosa.com
         * in here we are validation if a xmlform has a submit action
         */
@@ -824,7 +824,6 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
   function close($A) 
   {
     try {
-    	
     	/*
       * we are unseting this variable. It's our control about to save the xmlfrom
       */

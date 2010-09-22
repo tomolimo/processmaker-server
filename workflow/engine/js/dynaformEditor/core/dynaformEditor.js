@@ -559,9 +559,6 @@ function getElementByPMClass(__class){
   }
 
   function fieldsAdd( type ){
-    var client_window = parent.getClientWindowSize(); 
-    h = client_window.height;
-    h1 = (h / 100) * 92;
-    popupWindow(G_STRINGS.ID_ADD + ' ' + type , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 600, h1);
+    popupWindow(G_STRINGS.ID_ADD + ' ' + type , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
   }
 
