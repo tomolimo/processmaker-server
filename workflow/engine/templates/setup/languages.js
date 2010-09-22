@@ -21,12 +21,16 @@ new Ext.KeyMap(document, {
 });
 
 Ext.onReady(function(){
-  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
+ 
+
+  //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   Ext.QuickTips.init();
 
   var infoGrid = new Ext.grid.GridPanel( {
     /*renderTo: 'list-panel',*/
-    /*region: 'center',*/
+    region: 'center',
+    layout: 'fit',
     id: 'infoGrid',
     stripeRows : true,
     autoHeight : true,
@@ -35,8 +39,18 @@ Ext.onReady(function(){
     stateful : true,
     stateId : 'grid',
     enableColumnHide: false,
-    enableColumnResize: false,
+    enableColumnResize: true,
     enableHdMenu: false,
+    collapsible: true,
+    animCollapse: false,
+
+
+    view: new Ext.grid.GroupingView({
+        forceFit:true,
+        //groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+        groupTextTpl: '{text}'
+    }),
+
 
     columns : [
       {
@@ -49,17 +63,23 @@ Ext.onReady(function(){
           //return String.format("<span style='{1}'>{0}</span>", value, 'color:green;' );
           return String.format("<img src='/images/flags/{0}.gif' />", value);
         }
-      },
-      {
+      }, {
         dataIndex : 'LAN_ID',
         id : 'LAN_ID',
         header : '',
         width : 35,
+        sortable : false,
+        hidden: true
+      }, {
+        dataIndex : 'LOCALE',
+        id : 'LOCALE',
+        header : 'Locale',
+        width : 60,
         sortable : false
       }, {
         dataIndex : 'LAN_NAME',
         header : TRANSLATIONS.ID_LAN_LANGUAGE,
-        width : 175,
+        width : 120,
         sortable : false,
         renderer: function (value, p, r){
           if( r.data.DEFAULT == '1' )
@@ -74,7 +94,7 @@ Ext.onReady(function(){
       }, {
         dataIndex : 'COUNTRY_NAME',
         header : TRANSLATIONS.ID_LAN_COUNTRY,
-        width : 175,
+        width : 120,
         sortable : false
       }, {
         dataIndex : 'DATE',
@@ -89,23 +109,23 @@ Ext.onReady(function(){
       }, {
         dataIndex : 'VERSION',
         header : TRANSLATIONS.ID_LAN_VERSION,
-        width : 50,
+        width : 150,
         sortable : false
       }, {
-        dataIndex : 'OBS',
-        header : '',
-        width : 100,
-        sortable : false
-      }, {
-        dataIndex : 'DEFAULT',
-        header : '',
-        width : 50,
+        dataIndex : 'TRANSLATOR',
+        header : 'Translator',
+        width : 150,
         sortable : false,
-        hidden: true
+        hidden: false
+      }, {
+        dataIndex : 'NUM_RECORDS',
+        header : '# Records',
+        width : 60,
+        sortable : false
       }
     ],
 
-    store: new Ext.data.Store( {
+    store: new Ext.data.GroupingStore( {
       proxy : new Ext.data.HttpProxy({
         url: 'language_Ajax'
       }),
@@ -115,15 +135,17 @@ Ext.onReady(function(){
         fields : [
           {name : 'LAN_FLAG'},
           {name : 'LAN_ID'},
+          {name : 'LOCALE'},
           {name : 'LAN_NAME'},
           {name : 'COUNTRY_NAME'},
           {name : 'DATE'},
           {name : 'REV_DATE'},
           {name : 'VERSION'},
-          {name : 'OBS'},
-          {name : 'DEFAULT'}
+          {name : 'TRANSLATOR'},
+          {name : 'NUM_RECORDS'}
         ]
-      })
+      }),
+      groupField:'LAN_NAME'
 
     }),
 
@@ -170,7 +192,7 @@ Ext.onReady(function(){
                     }
                 }],
                 buttons: [{
-                    text: 'Upload',
+                    text: TRANSLATIONS.ID_UPLOAD,
                     handler: function(){
                       uploader = Ext.getCmp('uploader');
 
@@ -204,14 +226,14 @@ Ext.onReady(function(){
                         });
                       }
                     }
-                },{
+                }/*,{
                     text: 'Reset',
                     handler: function(){
                       uploader = Ext.getCmp('uploader');
                       uploader.getForm().reset();
                     }
-                },{
-                    text: 'Cancel',
+                }*/,{
+                    text: TRANSLATIONS.ID_CANCEL,
                     handler: function(){
                       w.close();
                     }
@@ -229,14 +251,14 @@ Ext.onReady(function(){
           w.show();
         }
       },{
-        text: 'Export',
+        text: TRANSLATIONS.ID_EXPORT,
         iconCls: 'silk-add',
         icon: '/images/export.png',
         handler: function(){
           iGrid = Ext.getCmp('infoGrid');
           var rowSelected = iGrid.getSelectionModel().getSelected();
           if( rowSelected ) {
-            location.href = 'languages_Export?LAN_ID='+rowSelected.data.LAN_ID+'&rand='+Math.random()
+            location.href = 'languages_Export?LOCALE='+rowSelected.data.LOCALE+'&rand='+Math.random()
           } else {
              Ext.Msg.show({
               title:'',
@@ -250,7 +272,25 @@ Ext.onReady(function(){
           }
         },
         scope: this
-      }/*,
+      },/*{
+        text: 'Configuration',
+        iconCls: 'silk-add',
+        icon: '/images/options.png',
+        handler: function(){
+          var w = new Ext.Window({
+            title: '',
+            width: 500,
+            height: 420,
+            modal: true,
+            autoScroll: false,
+            maximizable: false,
+            resizable: false,
+            items: []
+          });
+          w.show();
+        },
+        scope: this
+      },
       {
         text: 'Set as predetermined',
         iconCls: 'silk-add',
@@ -259,11 +299,14 @@ Ext.onReady(function(){
           iGrid = Ext.getCmp('infoGrid');
           var rowSelected = iGrid.getSelectionModel().getSelected();
           if( rowSelected ) {
-            langId = rowSelected.data.LAN_ID;
-            langName = rowSelected.data.LAN_NAME;
+            langId      = rowSelected.data.LAN_ID;
+            langName    = rowSelected.data.LAN_NAME;
+            countryName = rowSelected.data.COUNTRY_NAME;
+            locale      = rowSelected.data.LOCALE;
+
             Ext.Msg.show({
               title:'Save Changes?',
-              msg: 'Do you want apply to the "'+langName+'" language such as the predetermined language for Processmkaer environment?',
+              msg: 'Do you want apply to the "'+langName + ' ('+capitalize(countryName)+') as default for '+langName+' language?',
               buttons: Ext.Msg.YESNO,
               fn: function(btn){
                 if( btn == 'yes' ) {
@@ -283,7 +326,11 @@ Ext.onReady(function(){
                       });
                     },
                     failure: function(){},
-                    params: {'function': 'savePredetermined', 'lang': langId}
+                    params: {
+                      'function': 'savePredetermined',
+                      'LOCALE': locale,
+                      'LAN_ID': langId
+                    }
                   });
                 }
               },
@@ -303,7 +350,7 @@ Ext.onReady(function(){
           }
         },
         scope: this
-      },{
+      },*/{
         xtype: 'tbfill'
       },
       {
@@ -312,16 +359,31 @@ Ext.onReady(function(){
         icon: '/images/delete-16x16.gif',
         handler: this.onAdd,
         scope: this
-      }*/
+      }
     ]
 
   });
 
   infoGrid.store.load({params: {"function":"languagesList"}});
+
+  //////////////////////store.load({params: {"function":"xml"}});
+
   //infoGrid.render('list-panel');
-  infoGrid.render(document.body);
+  //infoGrid.render(document.body);
   //fp.render('form-panel');
-    
+
+
+  var viewport = new Ext.Viewport({
+    layout: 'border',
+    autoScroll: true,
+    items: [
+      infoGrid
+    ]
+  });
 });
 
 
+capitalize = function(s){
+  s = s.toLowerCase();
+  return s.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
+};

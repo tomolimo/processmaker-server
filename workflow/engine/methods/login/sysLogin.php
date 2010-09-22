@@ -77,15 +77,19 @@ function getWorkspacesAvailable() {
 }
 $availableWorkspace = getWorkspacesAvailable ();
 
-$availableLang = getLangFiles ();
+require_once "classes/model/Translation.php";
 
-$langISONames ["en"] = "English";
-$langISONames ["es"] = "Spanish";
+$translationsTable = Translation::getTranslationEnvironments();
+//g::pr($translationsTable); die;
+//$availableLang = getLangFiles ();
 
 $availableLangArray = array ();
 $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
-foreach ( $availableLang as $langKey => $langFile ) {
-  $aFields = array ('LANG_ID' => $langKey, 'LANG_NAME' => isset ( $langISONames [$langKey] ) ? $langISONames [$langKey] : $langKey );
+foreach ( $translationsTable as $locale ) {
+  $aFields = array (
+    'LANG_ID'   => $locale['LOCALE'],
+    'LANG_NAME' => $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')'
+  );
   $availableLangArray [] = $aFields;
 }
 
@@ -117,6 +121,8 @@ else {
 }
 
 G::RenderPage ( "publish" );
+
+
 
 ?>
 <script type="text/javascript">

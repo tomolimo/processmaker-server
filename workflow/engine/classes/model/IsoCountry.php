@@ -38,10 +38,11 @@ require_once 'classes/model/om/BaseIsoCountry.php';
  * @package    classes.model
  */
 class IsoCountry extends BaseIsoCountry {
-  function findById($LAN_ID){
+  function findById($UID){
     $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(IsoCountryPeer::IC_UID);
     $oCriteria->addSelectColumn(IsoCountryPeer::IC_NAME);
-    $oCriteria->add(IsoCountryPeer::IC_UID, $LAN_ID);
+    $oCriteria->add(IsoCountryPeer::IC_UID, $UID);
     $oDataset = IsoCountryPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();

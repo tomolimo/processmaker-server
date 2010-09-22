@@ -34,28 +34,35 @@ G::LoadSystem('i18n_po');
 //$timer->start();
 
 //creating the .po file
-$sPOFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . MAIN_POFILE . '.' . $_GET['LAN_ID'] . '.po';
+
+if( ! isset($_GET['LOCALE']) )
+  throw new Exception('Language Target ID was not set!');
+  
+$sPOFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . MAIN_POFILE . '.' . $_GET['LOCALE'] . '.po';
 $poFile = new i18n_PO($sPOFile);
 $poFile->buildInit();
 
 $language = new Language();
 
-if( ! isset($_GET['LAN_ID']) )
-  throw new Exception('Language Target ID was not set!');
 
-$langRecord = $language->findById($_GET['LAN_ID']);
+
+list($LAN_ID, $IC_UID) = explode('-', $_GET['LOCALE']);
+
+$langRecord = $language->findById($LAN_ID);
 
 if( ! isset($langRecord['LAN_NAME']) )
-  throw new Exception('Language Target ID doesn\'t exist!');
+  throw new Exception("Language Target ID \"{$_GET['LAN_ID']}\" doesn't exist!");
   
 $sLanguage = $langRecord['LAN_NAME'];
-$sCountry = 'United States';
 
-if ($_GET['LAN_ID'] != 'en') {
-  $iCountry = new IsoCountry();
-  $iCountryRecord = $iCountry->findById(strtoupper($_GET['LAN_ID']));
-  $sCountry = isset($iCountryRecord['IC_NAME']) ?  $iCountryRecord['IC_NAME']: '';
-}
+
+$iCountry = new IsoCountry();
+$iCountryRecord = $iCountry->findById($IC_UID);
+
+if( ! isset($iCountryRecord['IC_UID']) )
+  throw new Exception("Country Target ID '{$_GET['LAN_ID']}' doesn't exist!");
+  
+$sCountry = $iCountryRecord['IC_NAME'];
 
 //setting headers
 $poFile->addHeader('Project-Id-Version'        , PO_SYSTEM_VERSION);
@@ -86,19 +93,19 @@ $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 $oDataset->next();
 
 while ($aRow1 = $oDataset->getRow()) {
-  if( $_GET['LAN_ID'] != 'en' ){
+  if( $LAN_ID != 'en' ){
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(TranslationPeer::TRN_VALUE);
     $oCriteria->add(TranslationPeer::TRN_CATEGORY, $aRow1['TRN_CATEGORY']);
     $oCriteria->add(TranslationPeer::TRN_ID, $aRow1['TRN_ID']);
-    $oCriteria->add(TranslationPeer::TRN_LANG, $_GET['LAN_ID']);
+    $oCriteria->add(TranslationPeer::TRN_LANG, $_GET['LOCALE']);
     $oDataset2 = TranslationPeer::doSelectRS($oCriteria);
     $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset2->next();
     $aRow2 = $oDataset2->getRow();
-  } else 
+  } else {
     $aRow2 = $aRow1;
-    
+  }
     $aRow1['TRN_CATEGORY'] = trim($aRow1['TRN_CATEGORY']);
 
     # Validation
@@ -176,7 +183,7 @@ foreach ($aXMLForms as $sXmlForm) {
   unset($oForm);
 
   //now go to the fields array
-  $oForm = new Form($sXmlForm, '', $_GET['LAN_ID']);
+  $oForm = new Form($sXmlForm, '', $_GET['LOCALE']);
   $i = 1;
   $iNumberOfFields = count($oForm->fields);
   foreach ($oForm->fields as $sNodeName => $oNode) {

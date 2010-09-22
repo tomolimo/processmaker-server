@@ -24,25 +24,17 @@
  */
 global $RBAC;
 $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
+
 if( $access != 1 ) {
   switch( $access ) {
-    case -1:
-      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-      G::header('location: ../login/login');
-      die;
-    break;
-    case -2:
-      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-      G::header('location: ../login/login');
-      die;
-    break;
-    default:
-      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-      G::header('location: ../login/login');
-      die;
-    break;
+    case -1: G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');   break;
+    case -2: G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels'); break;
+    default: G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');   break;
   }
+  G::header('location: ../login/login');
+  exit(0);
 }
+
 $result = new stdClass();
 
 try {
@@ -68,7 +60,6 @@ try {
   $result->success = true;
   
   //saving metadata
-  
   $configuration->aConfig  = Array(
     'headers'     => $importResults->headers,
     'language'    => $importResults->lang,
@@ -88,3 +79,7 @@ try {
   //G::header('location: languages_ImportForm');
 }
 echo G::json_encode($result);
+
+
+
+

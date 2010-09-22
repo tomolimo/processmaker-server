@@ -39,6 +39,8 @@ require_once 'classes/model/om/BaseTranslation.php';
  */
 class Translation extends BaseTranslation {
 
+  public $meta;
+
   function getAllCriteria(){
     
     //SELECT * from TRANSLATION WHERE TRN_LANG = 'en' order by TRN_CATEGORY, TRN_ID 
@@ -145,7 +147,7 @@ class Translation extends BaseTranslation {
     }
   }
 
-  function addTranslationEnvironment($locale)
+  function addTranslationEnvironment($locale, $headers, $numRecords)
   {
     $filePath = PATH_LANGUAGECONT . "translations.environments";
     $environments = Array();
@@ -154,34 +156,175 @@ class Translation extends BaseTranslation {
       $environments = unserialize(file_get_contents($filePath));
     }
     
-    $environment['locale'] = $locale;
-    $environment['creation_date'] = date('Y-m-d H:i:s');
+    $environment['LOCALE']  = $locale;
+    $environment['HEADERS'] = $headers;
+    $environment['DATE']    = date('Y-m-d H:i:s');
+    $environment['NUM_RECORDS'] = $numRecords;
+    $environment['LANGUAGE'] = $headers['X-Poedit-Language'];
+    $environment['COUNTRY']  = $headers['X-Poedit-Country'];
     list($environment['LAN_ID'], $environment['IC_UID']) = explode('-', strtoupper($locale));
     
-    $environments[$locale] = $environment;
+    $environments[$environment['LAN_ID']][$environment['IC_UID']] = $environment;
     file_put_contents($filePath, serialize($environments));
   }
   
   function removeTranslationEnvironment($locale)
   {
     $filePath = PATH_LANGUAGECONT . "translations.environments";
-    
+    list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+
     if( file_exists($filePath) ) {
       $environments = unserialize(file_get_contents($filePath));
-      unset($environments[$locale]);
+      if( ! isset($environments[$LAN_ID][$IC_UID]) )
+        return NULL;
+      
+      unset($environments[$LAN_ID][$IC_UID]);
       file_put_contents($filePath, serialize($environments));
     }
   }
 
   function getTranslationEnvironments(){
     $filePath = PATH_LANGUAGECONT . "translations.environments";
-    $environments = Array();
+    $envs = Array();
     
-    if( file_exists($filePath) ) {
-      $environments = unserialize(file_get_contents($filePath));
+    if( ! file_exists($filePath) ) {
+      //the transaltions table file doesn't exist, then build it
+      $translationsPath = PATH_CORE . "content" . PATH_SEP . 'translations' . PATH_SEP;
+      $basePOFile = $translationsPath . 'english' . PATH_SEP . 'processmaker.en.po';
+      G::loadClass('i18n_po');
+      $POFile = new i18n_PO($basePOFile);
+      $POFile->readInit();
+      $POHeaders = $POFile->getHeaders();
+      $country  = self::getTranslationMetaByCountryName($POHeaders['X-Poedit-Country']);
+      $language = self::getTranslationMetaByLanguageName($POHeaders['X-Poedit-Language']);
+
+      if($country !== false && $language !== false){
+        $LOCALE = $language['LAN_ID'] . '-' . $country['IC_UID'];
+      } else {
+        $LOCALE = 'en-US';
+      }
+      $countItems = 0;
+      try{
+        while( $translation = $POFile->getTranslation() ) {
+          $countItems++;
+        }
+      } catch(Exception $e){
+        $countItems = '-';
+      }
+      self::addTranslationEnvironment($LOCALE, $POHeaders, $countItems);
+      
+      //getting more lanuguage translations
+      $files = glob($translationsPath . "*.po");
+      foreach( $files as $file ){
+        $POFile = new i18n_PO($file);
+        $POFile->readInit();
+        $POHeaders = $POFile->getHeaders();
+        $country  = self::getTranslationMetaByCountryName($POHeaders['X-Poedit-Country']);
+        $language = self::getTranslationMetaByLanguageName($POHeaders['X-Poedit-Language']);
+
+        if($country !== false && $language !== false){
+          $LOCALE = $language['LAN_ID'] . '-' . $country['IC_UID'];
+        } else {
+          continue;
+        }
+        $countItems = 0;
+        try{
+          while( $translation = $POFile->getTranslation() ) {
+            $countItems++;
+          }
+        } catch(Exception $e){
+          $countItems = '-';
+        }
+        self::addTranslationEnvironment($LOCALE, $POHeaders, $countItems);
+      }
+      
     }
+    $envs = unserialize(file_get_contents($filePath));
+
+    $environments = Array();
+    foreach($envs as $LAN_ID => $rec1 ){
+      foreach($rec1 as $IC_UID => $rec2 ){
+        $environments[] = $rec2;
+      }
+    }
+    
 
     return $environments;
+
+    /*G::LoadSystem('dbMaintenance');
+      $o = new DataBaseMaintenance('localhost', 'root', 'atopml2005');
+      $o->connect('wf_os');
+      $r = $o->query('select * from ISO_COUNTRY');
+      foreach($r as $i=>$v){
+        $r[$i]['IC_NAME'] = utf8_encode($r[$i]['IC_NAME']);
+        unset($r[$i]['IC_SORT_ORDER']);
+      }
+      $r1 = $o->query('select * from LANGUAGE');
+      $r2 = Array();
+      foreach($r1 as $i=>$v){
+        $r2[$i]['LAN_NAME'] = utf8_encode($r1[$i]['LAN_NAME']);
+        $r2[$i]['LAN_ID'] = utf8_encode($r1[$i]['LAN_ID']);
+      }
+      $s = Array('ISO_COUNTRY'=>$r, 'LANGUAGE'=>$r2);
+      file_put_contents($translationsPath . 'pmos-translations.meta', serialize($s));
+     */
+  }
+
+  function getTranslationEnvironment($locale){
+    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $environments = Array();
+
+    if( ! file_exists($filePath) ) {
+      throw new Exception("The file $filePath doesn't exist");
+    }
+
+    $environments = unserialize(file_get_contents($filePath));
+    list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+
+    if( isset($environments[$LAN_ID][$IC_UID]) )
+      return $environments[$LAN_ID][$IC_UID];
+    else 
+      return false;
+  }
+  
+  function saveTranslationEnvironment($locale, $data){
+    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $environments = Array();
+
+    if( ! file_exists($filePath) ) {
+      throw new Exception("The file $filePath doesn't exist");
+    }
+
+    $environments = unserialize(file_get_contents($filePath));
+    list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
+    $environments[$LAN_ID][$IC_UID] = $data;
+    file_put_contents($filePath, serialize($environments));
+  }
+
+  function getTranslationMeta(){
+    $translationsPath = PATH_CORE . "content" . PATH_SEP . 'translations' . PATH_SEP;
+    $translationsTable = unserialize(file_get_contents($translationsPath . 'pmos-translations.meta'));
+    return $translationsTable;
+  }
+
+  function getTranslationMetaByCountryName($IC_NAME){
+    $translationsTable = self::getTranslationMeta();
+
+    foreach ($translationsTable['ISO_COUNTRY'] as $row) {
+      if( $row['IC_NAME'] == $IC_NAME )
+        return $row;
+    }
+    return false;
+  }
+
+  function getTranslationMetaByLanguageName($LAN_NAME){
+    $translationsTable = self::getTranslationMeta();
+
+    foreach ($translationsTable['LANGUAGE'] as $row) {
+      if( $row['LAN_NAME'] == $LAN_NAME )
+        return $row;
+    }
+    return false;
   }
 } // Translation
 

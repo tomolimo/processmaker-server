@@ -1851,15 +1851,11 @@ class G
     //load the translations table
     require PATH_LANGUAGECONT . 'translation.en';
     $defaultTranslations = $translation;
-    //self::dump(PATH_LANGUAGECONT . 'translation.' . $lang);
-    //if some foreign language was requested and its translation table exists
+    
+    //if some foreign language was requested and its translation file exists
     if( $lang != 'en' && file_exists(PATH_LANGUAGECONT . 'translation.' . $lang) ){
-      
-      //load the foreign translations table
-      
-      require PATH_LANGUAGECONT . 'translation.' . $lang;
+      require PATH_LANGUAGECONT . 'translation.' . $lang; //load the foreign translations table
       $foreignTranslations = $translation;
-      //g::pr($foreignTranslations); die;
     }
     
     global $translation;

@@ -88,6 +88,20 @@ if (strlen ( $msgType ) > 0) {
 }
 $_SESSION ['FAILED_LOGINS'] = $sFailedLogins;
 
+require_once "classes/model/Translation.php"; 
+$translationsTable = Translation::getTranslationEnvironments();
+$availableLangArray = array ();
+$availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
+foreach ( $translationsTable as $locale ) {
+  $aFields = array (
+    'LANG_ID'   => $locale['LOCALE'],
+    'LANG_NAME' => $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')'
+  );
+  $availableLangArray [] = $aFields;
+}
+global $_DBArray;
+$_DBArray ['langOptions'] = $availableLangArray;
+
 $G_PUBLISH = new Publisher ( );
 $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/login', '', $aFields, SYS_URI . 'login/authentication.php' );
 
