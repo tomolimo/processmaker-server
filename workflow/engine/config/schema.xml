@@ -580,7 +580,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_DOC_TAGS" type="LONGVARCHAR"  default="">
+    <column name="APP_DOC_TAGS" type="LONGVARCHAR" >
       <vendor type="mysql">
         <parameter name="Field" value="APP_DOC_TAGS"/>
         <parameter name="Type" value="text"/>
@@ -1471,7 +1471,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="INP_DOC_DESTINATION_PATH" type="LONGVARCHAR"  default="">
+    <column name="INP_DOC_DESTINATION_PATH" type="LONGVARCHAR">
       <vendor type="mysql">
         <parameter name="Field" value="INP_DOC_DESTINATION_PATH"/>
         <parameter name="Type" value="text"/>
@@ -1951,7 +1951,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="OUT_DOC_DESTINATION_PATH" type="LONGVARCHAR"  default="">
+    <column name="OUT_DOC_DESTINATION_PATH" type="LONGVARCHAR">
       <vendor type="mysql">
         <parameter name="Field" value="OUT_DOC_DESTINATION_PATH"/>
         <parameter name="Type" value="text"/>
@@ -2131,7 +2131,7 @@
       <vendor type="mysql">
         <parameter name="Field" value="PRO_CATEGORY"/>
         <parameter name="Type" value="varchar(48)"/>
-        <parameter name="Null" value="YES"/>
+        <parameter name="Null" value=""/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -2141,7 +2141,7 @@
       <vendor type="mysql">
         <parameter name="Field" value="PRO_SUB_CATEGORY"/>
         <parameter name="Type" value="varchar(48)"/>
-        <parameter name="Null" value="YES"/>
+        <parameter name="Null" value=""/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -5793,7 +5793,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="SHD_DETAILS" type="LONGVARCHAR" required="true" default="">
+    <column name="SHD_DETAILS" type="LONGVARCHAR" required="true">
       <vendor type="mysql">
         <parameter name="Field" value="SHD_DETAILS"/>
         <parameter name="Type" value="text"/>

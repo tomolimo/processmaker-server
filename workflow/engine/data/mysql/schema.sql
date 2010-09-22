@@ -681,6 +681,7 @@ CREATE TABLE `APP_DELAY`
 	`APP_DISABLE_ACTION_DATE` DATETIME,
 	`APP_AUTOMATIC_DISABLED_DATE` DATETIME,
 	PRIMARY KEY (`APP_DELAY_UID`),
+	KEY `indexAppUid`(`APP_UID`, `APP_DEL_INDEX`, `APP_DELAY_UID`),
 	KEY `indexAppDelay`(`PRO_UID`, `APP_UID`, `APP_THREAD_INDEX`, `APP_DEL_INDEX`, `APP_NEXT_TASK`, `APP_DELEGATION_USER`, `APP_DISABLE_ACTION_USER`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='APP_DELAY';
 #-----------------------------------------------------------------------------
@@ -1056,7 +1057,7 @@ CREATE TABLE `APP_CACHE_VIEW`
 	`APP_OVERDUE_PERCENTAGE` DOUBLE  NOT NULL,
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
 	KEY `indexAppNumber`(`APP_NUMBER`),
-	KEY `indexAppUser`(`USR_UID`, `APP_STATUS`)
+	KEY `indexAppUser`(`USR_UID`, `PRO_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
 #-----------------------------------------------------------------------------
 #-- DIM_TIME_DELEGATE
@@ -1171,7 +1172,7 @@ CREATE TABLE `LOG_CASES_SCHEDULER`
 	`WS_CREATE_CASE_STATUS` TEXT  NOT NULL,
 	`WS_ROUTE_CASE_STATUS` TEXT  NOT NULL,
 	PRIMARY KEY (`LOG_CASE_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Cases Launched with Case Scheduler';
+)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Logs for Scheduled Cases Launched with Case Scheduler Feature';
 #-----------------------------------------------------------------------------
 #-- CASE_SCHEDULER
 #-----------------------------------------------------------------------------
