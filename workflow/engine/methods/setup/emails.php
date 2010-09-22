@@ -65,7 +65,7 @@ if (ConfigurationPeer::doCount($oCriteria) == 0) {
 }
 else {
   $aFields = $oConfiguration->load('Emails', '', '', '', '');
-  if ($aFields['CFG_VALUE'] != '') {
+  if (trim($aFields['CFG_VALUE']) != '') {
     $aFields = unserialize($aFields['CFG_VALUE']);
   }
   else {
