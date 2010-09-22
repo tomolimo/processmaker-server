@@ -389,6 +389,8 @@ class serverConf {
    * @return void
    */
   function postHeartBeat() {
+    return false;
+    /*
     $this->index = intval ( $this->index ) + 1;
     $heartBeatUrl = 'http://heartbeat.processmaker.com/syspmLicenseSrv/en/green/services/beat';
 
@@ -430,19 +432,17 @@ class serverConf {
     curl_setopt ( $ch, CURLOPT_POSTFIELDS, $params );
     
     //To avoid timeouts
-    curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
-    curl_setopt ( $ch, CURLOPT_TIMEOUT, 20 );
+    curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, 5 );
+    curl_setopt ( $ch, CURLOPT_TIMEOUT, 10 );
 
     $response = curl_exec ( $ch );
     
     if( ! $response )
       return;
-    
-    
+
     $headers = curl_getinfo ( $ch );
     $header = substr ( $response, 0, $headers ['header_size'] );
     $content = substr ( $response, $headers ['header_size'] );
-    curl_close ( $ch );
 
     if ($headers ['http_code'] == 200) {
       $this->beatType = 'beat';
@@ -457,7 +457,8 @@ class serverConf {
     }
 
     $this->saveSingleton ();
-
+    curl_close ( $ch );
+    */
   }
   /**
    * Will reset all the logins' count
