@@ -9,8 +9,8 @@
   <en>Reassign By<option name="1">Case</option><option name="2">User</option></en>
 </REASSIGN_BY>
 
-<REASSIGN_USER type="dropdown" required="0" readonly="0" mode="edit"><![CDATA[
-SELECT USR_UID, CONCAT(USR_FIRSTNAME, ' ', USR_LASTNAME, ' (', USR_USERNAME, ')') AS USER_FULLNAME FROM USERS WHERE USR_STATUS <> 'CLOSED'
+<REASSIGN_USER type="dropdown" required="0" readonly="0" mode="edit" sqlconnection="dbarray"><![CDATA[
+SELECT * FROM aUserInfo
   ]]><en>
     <option name=""> - Select - </option>
   </en>

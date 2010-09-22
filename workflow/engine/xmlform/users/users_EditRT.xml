@@ -89,9 +89,8 @@ SELECT IL_UID, IL_NAME FROM ISO_LOCATION WHERE IC_UID = "@#USR_COUNTRY" AND IS_U
   <en>Department</en>
 </USR_DEPARTMENT >
 
-
-<USR_REPLACED_BY type="dropdown" defaultvalue="" required="0" group="1" dependentfields=""  readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0">
-SELECT USR_UID, CONCAT(USR_LASTNAME, " ", USR_FIRSTNAME) FROM USERS WHERE USR_STATUS = 1 AND USR_UID!= "@#USR_UID" ORDER BY USR_LASTNAME
+<USR_REPLACED_BY type="dropdown" defaultvalue="" required="0" group="1" dependentfields=""  readonly="0" sqlconnection="dbarray" noshowingrid="0" readonlyingrid="0">
+  SELECT * FROM aUserInfo
   <en>Replaced by<option name=""></option></en>
 </USR_REPLACED_BY>
 

@@ -105,6 +105,49 @@ try {
   //If the function returns a DEFAULT calendar it means that this object doesn't have assigned any calendar
   $aFields ['USR_CALENDAR'] = $calendarInfo ['CALENDAR_APPLIED']!='DEFAULT'? $calendarInfo ['CALENDAR_UID']:"";
 	$aFields['RANDOM']        = rand();
+	
+	/////////////////////////
+	//SELECT USR_UID, CONCAT(USR_LASTNAME, " ", USR_FIRSTNAME) FROM USERS WHERE USR_STATUS = 1 AND USR_UID!= "@#USR_UID" ORDER BY USR_LASTNAME
+	require_once 'classes/model/Users.php';
+	$oCriteria=new Criteria();
+  $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+  $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
+  $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+  $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+  $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+  $oCriteria->add(UsersPeer::USR_STATUS,'ACTIVE');
+  $oCriteria->add(UsersPeer::USR_UID,$_GET['USR_UID'], Criteria::NOT_EQUAL);
+  $oDataset=UsersPeer::doSelectRS($oCriteria);
+  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  ///////////////////////
+  G::loadClass('configuration');
+  $oConf = new Configurations;
+  $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+
+  $defaultOption = isset($oConf->aConfig['format'])? $oConf->aConfig['format']: '';
+  
+  $aUserInfo = array();
+  $aUserInfo[] = array('USR_UID' => 'char','USER_FULLNAME' => 'char');
+  while( $oDataset->next()){
+  $aRow1 = $oDataset->getRow();
+  
+  $infoUser = G::getFormatUserList($defaultOption,$aRow1);
+  $aUserInfo[]=array(
+          'USR_UID'       => $aRow1['USR_UID'],
+          'USER_FULLNAME' => $infoUser
+         );
+  }
+  //print_r($aUserInfo);
+  global $_DBArray;
+  $_DBArray['aUserInfo']  = $aUserInfo;
+  $_SESSION['_DBArray'] = $_DBArray;
+	/////////////////////////
+	
+	
+	
+	
+	
+	
   //always show this form  users_EditRT.xml.
 	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_EditRT.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);
   //if (isset($aFields['DEP_UID'])  && isset($aFields['USR_REPORTS_TO']) &&  $aFields['DEP_UID']!='' && $aFields['USR_REPORTS_TO']!='')

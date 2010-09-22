@@ -51,6 +51,38 @@ try {
 	$G_SUB_MENU             = 'cases';
 	$G_ID_MENU_SELECTED     = 'CASES';
 	$G_ID_SUB_MENU_SELECTED = 'CASES_TO_REASSIGN';
+	//////////////////
+	///SELECT USR_UID, CONCAT(USR_FIRSTNAME, ' ', USR_LASTNAME, ' (', USR_USERNAME, ')') AS USER_FULLNAME FROM USERS WHERE USR_STATUS <> 'CLOSED'//////
+	require_once 'classes/model/Users.php';
+	$oCriteria=new Criteria();
+  $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+  $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
+  $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+  $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+  $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+  $oCriteria->add(UsersPeer::USR_STATUS,'', Criteria::NOT_EQUAL);
+  $oDataset=UsersPeer::doSelectRS($oCriteria);
+  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  ///////////////////////
+  G::loadClass('configuration');
+  $oConf = new Configurations;
+  $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+
+  $defaultOption = isset($oConf->aConfig['format'])? $oConf->aConfig['format']: '';
+  $aUserInfo = array();
+  $aUserInfo[] = array('USR_UID' => 'char','USER_FULLNAME' => 'char');
+  while( $oDataset->next()){
+  $aRow1 = $oDataset->getRow();
+  $infoUser = G::getFormatUserList($defaultOption,$aRow1);
+  $aUserInfo[]=array(
+          'USR_UID'       => $aRow1['USR_UID'],
+          'USER_FULLNAME' => $infoUser
+         );
+  }
+  global $_DBArray;
+  $_DBArray['aUserInfo']  = $aUserInfo;
+  $_SESSION['_DBArray'] = $_DBArray;
+	//////////////////
 	$G_PUBLISH = new Publisher;
 	$G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_ReassignBy', '', $_GET);
 
