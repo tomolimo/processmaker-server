@@ -246,6 +246,8 @@ Ext.onReady(function(){
       ddGroup          : 'firstGridDDGroup',
       selModel         : new Ext.grid.RowSelectionModel({singleSelect:true}),
       store            : secondGridStore,
+      ddText           : '{0} '+TRANSLATIONS.LABEL_SELECTED_FIELD+'{1}',
+
       //columns          : colsSecond,
       clicksToEdit: 1,
       cm          : colsSecond,

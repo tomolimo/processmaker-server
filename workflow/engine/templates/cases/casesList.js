@@ -443,7 +443,7 @@ Ext.onReady ( function() {
       store: storeCases,
       displayInfo: true,
 //      displayMsg: 'Displaying items {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
-      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
+      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' {0} - {1} ' + TRANSLATIONS.LABEL_DISPLAY_OF + ' {2} ' + '&nbsp; &nbsp; ',
 //      emptyMsg: "No items to display"
       emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
     })

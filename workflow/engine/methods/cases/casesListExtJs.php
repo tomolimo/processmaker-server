@@ -125,6 +125,7 @@
   $TRANSLATIONS->LABEL_SEARCH           = G::LoadTranslation('ID_SEARCH');
   $TRANSLATIONS->LABEL_OPT_JUMP         = G::LoadTranslation('ID_OPT_JUMP');
   $TRANSLATIONS->LABEL_DISPLAY_ITEMS    = G::LoadTranslation('ID_DISPLAY_ITEMS');
+  $TRANSLATIONS->LABEL_DISPLAY_OF       = G::LoadTranslation('ID_DISPLAY_OF');
   $TRANSLATIONS->LABEL_DISPLAY_EMPTY    = G::LoadTranslation('ID_DISPLAY_EMPTY');
   
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
