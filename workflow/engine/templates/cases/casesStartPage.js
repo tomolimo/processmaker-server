@@ -404,6 +404,8 @@ MainPanel = function(){
 						},
 						click : function(n) {
 						  this.treePanel.showDetails(n);
+						  
+						  
 						  return;						  
 							if (n.attributes.optionType == "startProcess") {
 								// Ext.Msg.alert('Start Case', 'Starting... "' +
@@ -469,7 +471,7 @@ MainPanel = function(){
         },
 					minWidth: 150,
 					//maxWidth: 250,
-					html:"jhl was here<br><br>Need to have a brief description here when nothing is selected..."
+					html:"jhl was here<br><br>Need to have a brief description here when nothing is selected...<br><br><b><i>Double click to start any Process/Case</b>"
 				}],
     		       tbar : [ {
 						xtype : 'textfield',
@@ -565,14 +567,16 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 
 
 		this.detailsTemplate = new Ext.XTemplate(
-			'<div  class=" x-panel ">',
+			'<div  class="details">',
 				'<tpl for=".">',
-					'<img src="{url}"><div class="x-panel-bwrap">',
+					'<!--<img src="{url}">--><div class="details-info">',
+					'<!-- <div style="width:90%;height:30%;padding:0px;overflow:auto;border:1px solid black" id="pm_target" ></div>-->',
 					'<b>Process Name:</b>',
 					'<span>{name}</span><br>',
-					'<b>Description:</b>',
+					'<b>Description: </b>',
 					'<span>{sizeString}</span><br>',
-					'<input type="button" value="Start Case" onclick="alert(\'JHL was here: This should start the following Process/Task{name}. \');">',
+					'<hr><span><i>Double click to start any Process/Case</i></span>',
+					'<!-- <input type="button" value="Start Case" onclick="alert(\'JHL was here: This should start the following Process/Task{name}. \');alert(mainPanel);alert(mainPanel.startNewCase);"> -->',
 					
 					
 				'</tpl>',
@@ -591,6 +595,59 @@ Ext.extend(MainPanel, Ext.TabPanel, {
             this.detailsTemplate.overwrite(detailEl, data);
             detailEl.slideIn('l', {stopFx:true,duration:.2});
             detailEl.highlight('#c3daf9', {block:true});
+            Pm=new parent.parent.processmap();            
+            var params = "{\"uid\":\""+selectedNode.attributes.pro_uid+"\",\"mode\":true,\"ct\":false}";
+						  Ext.Ajax
+										.request( {
+											url : '../processes/processes_Ajax',
+											params : {
+												action : 'load',
+												data : params
+											},
+											success : function(responseObject) {
+												//console.log(responseObject.responseText);
+												var response = Ext.decode(responseObject.responseText);
+												var xPos = 0;
+    var yPos = 0;
+												for (var i in response){
+      if (i=='task'){
+        elements = response[i];
+        for (var j in elements){
+          if (elements[j].uid!=undefined){
+            if (elements[j].position.x > xPos){
+              xPos = elements[j].position.x;
+            }
+            if (elements[j].position.y > yPos){
+              yPos = elements[j].position.y;
+            }
+          }
+        }
+      }
+    }
+
+		Pm.options = {
+			target    : "pm_target",
+			dataServer: "../processes/processes_Ajax",
+			uid       : selectedNode.attributes.pro_uid,
+			lang      : "en",
+			theme     : "processmaker",
+			size      : {w:xPos+200,h:yPos+150},
+			images_dir: "/jscore/processmap/core/images/",
+			rw        : false,
+			hideMenu  : false
+		}
+		//console.log(Pm);
+		Pm.make();
+											
+										},
+										failure : function() {
+											// grid.getGridEl().unmask(true);
+											Ext.Msg.alert('Error',
+													'Error loading Processmap');
+										}
+										});
+            
+            
       }else{
         detailEl.update('');
       }
@@ -599,6 +656,9 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 	    //var selNode = this.getSelectedNodes();
 	    
 		
+	},
+	startNewCase:function(){
+	  alert("asdasdasd");
 	},
     loadOtherDashboards:function(){
     	//console.info("Getting other Dashboards");
