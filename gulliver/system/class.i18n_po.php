@@ -102,14 +102,17 @@ class i18n_PO
   
   function prepare($string, $reverse = false)
   {
+    $string = str_replace('\"', '"', $string);
+  
     if ($reverse) {
       $smap = array('"', "\n", "\t", "\r");
-      $rmap = array('\\"', '\\n"' . "\n" . '"', '\\t', '\\r');
+      $rmap = array('\"', '\\n"' . "\n" . '"', '\\t', '\\r');
       return (string) str_replace($smap, $rmap, $string);
     } else {
-      $smap = array('/"\s+"/', '/\\\\n/', '/\\\\r/', '/\\\\t/', '/\\\\"/');
-      $rmap = array('', "\n", "\r", "\t", '"');
-      return (string) preg_replace($smap, $rmap, $string);
+      $string = preg_replace('/"\s+"/', '', $string);
+      $smap = array('\\n', '\\r', '\\t', '\"');
+      $rmap = array("\n", "\r", "\t", '"');
+      return (string) str_replace($smap, $rmap, $string);
     }
   }
   
