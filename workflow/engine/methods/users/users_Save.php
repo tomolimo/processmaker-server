@@ -131,6 +131,14 @@ try {
         require_once 'classes/model/UsersProperties.php';
         $oUserProperty = new UsersProperties();
         $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($form['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array($form['USR_PASSWORD']))));
+        
+        $RBAC->loadUserRolePermission( 'PROCESSMAKER', $_SESSION['USER_LOGGED'] );
+         if( $RBAC->aUserInfo[ 'PROCESSMAKER' ]['ROLE']['ROL_CODE']=='PROCESSMAKER_ADMIN'){
+         	$aUserProperty['USR_LAST_UPDATE_DATE'] = date('Y-m-d H:i:s');
+          $aUserProperty['USR_LOGGED_NEXT_TIME'] = 1;
+          $oUserProperty->update($aUserProperty);
+         }
+        
         $aErrors       = $oUserProperty->validatePassword($form['USR_NEW_PASS'], $aUserProperty['USR_LAST_UPDATE_DATE'], 0);
         if (count($aErrors) > 0) {
           $sDescription = G::LoadTranslation('ID_POLICY_ALERT').':<br /><br />';
