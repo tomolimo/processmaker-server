@@ -246,7 +246,7 @@ function testConnectionMail()
   oRPC.make();
    } 
   else {
-    alert(G_STRINGS.ID_EMAIL_REQUIRED);
+    alert(G_STRINGS.ID_CHECK_REQUIRED);
   }
 };
 
