@@ -86,7 +86,10 @@ var send_test_mail;
 var mail_to;
 
 function verifyFields(oForm)
-{  verifyPassword = 0;
+{  
+   switch (getField('MESS_ENGINE').value) {
+      case 'PHPMAILER':   
+   verifyPassword = 0;
    oAuxS = $('form[MESS_SERVER]').value;
    if (oAuxS == ''){    
       new leimnud.module.app.alert().make({
@@ -134,6 +137,26 @@ function verifyFields(oForm)
          }
        }
      }
+   }
+   break;
+   case 'MAIL':
+   if ($('form[MESS_TEST_MAIL]').checked) {
+    oAuxE = $('form[MESS_TEST_MAIL_TO]').value;
+    if (oAuxE == ''){   
+      new leimnud.module.app.alert().make({
+      label:G_STRINGS.ID_EMAIL_REQUIRED
+     });
+     return false;
+    }
+    else{
+      testConnectionMail();
+    }     
+  } 
+  else {
+    testConnectionMail();
+  }
+   break;
+   
    }
 }
 function testConnection() {
@@ -189,6 +212,42 @@ function testConnection() {
     testSMTPHost(1);
   }.extend(this);
   oRPC.make();
+};
+
+
+
+function testConnectionMail() 
+{
+  resultset = true;
+  if ($('form[MESS_TEST_MAIL]').checked) {
+    send_test_mail = 'yes';
+  mail_to  = $('form[MESS_TEST_MAIL_TO]').value;
+  var uri = 'send_test_mail='+send_test_mail+'&mail_to='+mail_to;
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url : PROCESS_REQUEST_FILE,
+    args: 'request=mailTestMail_Show'+'&'+uri
+  });
+  oRPC.callback = function(rpc) {
+    oresp = rpc.xmlhttp.responseText.split(',');
+        result = oresp[0].trim();
+        msg = oresp[1].trim();
+        if( result == 'SUCCESSFUL' ) {
+          if(msg != '') {
+          }
+          alert(G_STRINGS.ID_MAIL_SUCESSFULLY);
+          $('form[SAVE_CHANGES]').disabled = false;
+        }
+        else {
+          if( result == 'FAILED' ) {
+            alert(G_STRINGS.ID_MAIL_FAILED);
+          } 
+        }
+  }.extend(this);
+  oRPC.make();
+   } 
+  else {
+    alert(G_STRINGS.ID_EMAIL_REQUIRED);
+  }
 };
 
 var resultset = true;
@@ -307,10 +366,9 @@ function initSet(){
     hideRowById('SAVE_CHANGES2');
     if(getField('MESS_ENGINE').value == 'MAIL'){
       hideRowById('MESS_RAUTH');
-      hideRowById('MESS_TEST_MAIL');
       hideRowById('MESS_TEST_MAIL_TO');
-      hideRowById('TEST');
-      showRowById('SAVE_CHANGES2');
+      showRowById('TEST');
+      showRowById('SAVE_CHANGES');
     }
   }
 }
@@ -345,8 +403,16 @@ leimnud.event.add(getField('MESS_ENABLED'), 'click', function() {
         hideRowById('MESS_PORT');
         hideRowById('MESS_ACCOUNT');
         hideRowById('MESS_PASSWORD');
-    hideRowById('TEST');    
-      $('form[SAVE_CHANGES]').disabled = false;
+        hideRowById('SAVE_CHANGES2');
+         showRowById('TEST');
+         showRowById('MESS_TEST_MAIL');
+    if ($('form[MESS_TEST_MAIL]').checked) {
+      showRowById('MESS_TEST_MAIL_TO');
+    } else {
+      hideRowById('MESS_TEST_MAIL_TO');
+      }
+      $('form[SAVE_CHANGES]').disabled = true;
+    
       break;
       case 'PHPMAILER':
         hideRowById('SAVE_CHANGES2');
@@ -404,12 +470,14 @@ leimnud.event.add(getField('MESS_ENGINE'), 'change', function() {
       hideRowById('MESS_PORT');
       hideRowById('MESS_ACCOUNT');
       hideRowById('MESS_PASSWORD');
-    hideRowById('TEST');
     hideRowById('MESS_RAUTH');
-    hideRowById('MESS_TEST_MAIL');
-    hideRowById('MESS_TEST_MAIL_TO');
-    $('form[SAVE_CHANGES]').disabled = false;
-    showRowById('SAVE_CHANGES2');
+   showRowById('MESS_TEST_MAIL');
+    if ($('form[MESS_TEST_MAIL]').checked) {
+      showRowById('MESS_TEST_MAIL_TO');
+    } else {
+      hideRowById('MESS_TEST_MAIL_TO');
+      }
+    $('form[SAVE_CHANGES]').disabled = true
     break;
     case 'PHPMAILER':
   hideRowById('SAVE_CHANGES2');
@@ -454,7 +522,6 @@ if (!getField('MESS_ENABLED').checked) {
   hideRowById('MESS_EXECUTE_EVERY');
   hideRowById('MESS_SEND_MAX');
   hideRowById('MESS_TRY_SEND_INMEDIATLY');
-  hideRowById('TEST');
 }
 
 switch (getField('MESS_ENGINE').value) {

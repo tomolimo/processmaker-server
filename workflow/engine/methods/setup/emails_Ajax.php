@@ -126,6 +126,27 @@ switch ($request) {
 		G::RenderPage('publish', 'raw');
 	break;
 
+case 'mailTestMail_Show':
+  define("SUCCESSFUL", 'SUCCESSFUL');
+  define("FAILED", 'FAILED');
+  $mail_to                = $_POST['mail_to'];
+  $send_test_mail         = $_POST['send_test_mail'];
+  $_POST['FROM_NAME']     = $mail_to;
+  $_POST['FROM_EMAIL']    = $mail_to;
+  $_POST['MESS_ENGINE']   = 'MAIL';
+  $_POST['MESS_SERVER']   = 'localhost';
+  $_POST['MESS_PORT']     = 25;
+  $_POST['MESS_ACCOUNT']  = $mail_to;
+  $_POST['MESS_PASSWORD'] = '';
+  $_POST['TO']            = $mail_to;
+  $_POST['SMTPAuth']      = true;
+  $resp = sendTestMail();
+  if($resp->status){
+    print(SUCCESSFUL.','.$resp->msg);
+  } else {
+    print(FAILED.','.$resp->msg);
+  }
+  break;
 	case 'testConnection':
 
 		G::LoadClass('net');
