@@ -1,47 +1,38 @@
 <?php
-/*** enable display_error On to caught even fatal errors ***/
-ini_set('display_errors','On');
-ini_set('error_reporting', E_ALL  );
-ini_set('short_open_tag', 'on');
-ini_set('asp_tags', 'on');
-ini_set('memory_limit', '80M');
-ini_set('register_globals', 'off');
-ini_set("default_charset", "UTF-8");
-ini_set("soap.wsdl_cache_enabled", "0");
+//sysGeneric, this file is used initialize main variables and redirect to each and all pages 
 
-$memAcum = 0;
-function logMemory ($text=''){
-  global $memAcum;
-  $dif = memory_get_usage() - $memAcum;
-  $memAcum = memory_get_usage();
-  $b =  debug_backtrace();
-  $aux = sprintf ( "[ usage:%8.1fK acum:%8.3fM] <b>$text</b> in line <b>%s</b> %s </br>",$dif/1024, memory_get_usage() / 1024 / 1024 , $b[0]["line"], $b[0]["file"]) ;
-  return $aux;
-}
-function strip_slashes(&$vVar) {
-  if (is_array($vVar)) {
-    foreach($vVar as $sKey => $vValue) {
-      if (is_array($vValue)) {
-        strip_slashes($vVar[$sKey]);
-      }
-      else {
-        $vVar[$sKey] = stripslashes($vVar[$sKey]);
+//*** ini setting, enable display_error On to caught even fatal errors 
+  ini_set('display_errors','On');
+  ini_set('error_reporting', E_ALL  );
+  ini_set('short_open_tag', 'on');
+  ini_set('asp_tags', 'on');
+  ini_set('memory_limit', '80M');
+  ini_set('register_globals', 'off');
+  ini_set("default_charset", "UTF-8");
+  ini_set("soap.wsdl_cache_enabled", "0");
+  
+//*** process the $_POST with magic_quotes enabled 
+  function strip_slashes(&$vVar) {
+    if (is_array($vVar)) {
+      foreach($vVar as $sKey => $vValue) {
+        if (is_array($vValue)) {
+          strip_slashes($vVar[$sKey]);
+        }
+        else {
+          $vVar[$sKey] = stripslashes($vVar[$sKey]);
+        }
       }
     }
+    else {
+      $vVar = stripslashes($vVar);
+    }
   }
-  else {
-    $vVar = stripslashes($vVar);
+  
+  if (ini_get('magic_quotes_gpc') == '1') {
+    strip_slashes($_POST);
   }
-}
 
-if (ini_get('magic_quotes_gpc') == '1') {
-  strip_slashes($_POST);
-}
-$path = Array();
-$sf = $_SERVER['SCRIPT_FILENAME'];
-//sysGeneric, this file is used to redirect to workspace, the url should by encrypted or not
-
-//***************** In the PATH_SEP we know if the the path separator symbol will be '\\' or '/' **************************
+//******** defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/' **************************
   if ( PHP_OS == 'WINNT' && !strpos ( $_SERVER['DOCUMENT_ROOT'], '/' ) )
    define('PATH_SEP','\\');
   else
@@ -49,8 +40,7 @@ $sf = $_SERVER['SCRIPT_FILENAME'];
 
 
 //***************** Defining the Home Directory *********************************
-$docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
-//  array_pop($docuroot);
+  $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   array_pop($docuroot);
   $pathhome = implode( PATH_SEP, $docuroot )  . PATH_SEP;
 
@@ -68,9 +58,8 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   define('PATH_TRUNK',    $pathTrunk  );
   define('PATH_OUTTRUNK', $pathOutTrunk );
 
-//***************** In this file we cant to get the PM paths , RBAC Paths and Gulliver Paths  ******************************
+//************* Including these files we get the PM paths and definitions (that should be just one file ***********
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php' );
-//***************** In this file we cant to get the PM definitions  ******************************
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php' );
 
 
@@ -78,19 +67,14 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   //to do: make different environments.  sys
   //G::setErrorHandler ( );
   //G::setFatalErrorHandler ( );
+  define ('ERROR_SHOW_SOURCE_CODE', true);  // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE 
+  //define ( 'ERROR_LOG_NOTICE_ERROR', true );  //enable ERROR_LOG_NOTICE_ERROR to log Notices messages in default apache log
 
-  /*** enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE ***/
-  define ('ERROR_SHOW_SOURCE_CODE', true);
-
-
- /*** enable ERROR_LOG_NOTICE_ERROR to log Notices messages in default apache log ***/
-  //  define ( 'ERROR_LOG_NOTICE_ERROR', true );
-
-
-
-//  ************* creat headPublisher singleton *****************
+//  ***** create headPublisher singleton *****************
   G::LoadSystem('headPublisher');
   $oHeadPublisher =& headPublisher::getSingleton();
+
+//  ***** defining the maborak js file, this file is the concat of many js files and here we are including all of them ****
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'maborak/core/maborak.js' );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'common/core/common.js' );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'common/core/effects.js' );
@@ -115,26 +99,23 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'widgets/suggest/bsn.AutoSuggest_2.1.3.js' );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'widgets/tooltip/pmtooltip.js' );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'thirdparty/krumo/krumo.js' );
-
-
-  $oHeadPublisher->addMaborakFile( PATH_CORE . 'js' . PATH_SEP . 'cases/core/cases.js' , true );
-  $oHeadPublisher->addMaborakFile( PATH_CORE . 'js' . PATH_SEP . 'cases/core/cases_Step.js', true );
-  $oHeadPublisher->addMaborakFile( PATH_CORE . 'js' . PATH_SEP . 'processmap/core/processmap.js', true );
-  $oHeadPublisher->addMaborakFile( PATH_THIRDPARTY . 'htmlarea/editor.js', true );
-
-  $oHeadPublisher->addMaborakFile( PATH_CORE . 'js' . PATH_SEP . 'appFolder/core/appFolderList.js', true );
-
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'widgets/calendar/pmcalendar.js' , true );
+  $oHeadPublisher->addMaborakFile( PATH_CORE          . 'js' . PATH_SEP . 'cases/core/cases.js' , true );
+  $oHeadPublisher->addMaborakFile( PATH_CORE          . 'js' . PATH_SEP . 'cases/core/cases_Step.js', true );
+  $oHeadPublisher->addMaborakFile( PATH_CORE          . 'js' . PATH_SEP . 'processmap/core/processmap.js', true );
+  $oHeadPublisher->addMaborakFile( PATH_CORE          . 'js' . PATH_SEP . 'appFolder/core/appFolderList.js', true );
+  $oHeadPublisher->addMaborakFile( PATH_THIRDPARTY    . 'htmlarea/editor.js', true );
 
 //************ defining Virtual URLs ****************/
   $virtualURITable = array();
   $virtualURITable['/plugin/(*)']                    = 'plugin';
-  $virtualURITable['/(sys*)/(*.js)']                 =  'jsMethod';
+  $virtualURITable['/(sys*)/(*.js)']                 = 'jsMethod';
   $virtualURITable['/js/(*)']                        = PATH_GULLIVER_HOME . 'js/';
   $virtualURITable['/jscore/(*)']                    = PATH_CORE . 'js/';
-  if ( defined('PATH_C') ) 
-    $virtualURITable['/extjs/(*)']                     = PATH_C . 'ExtJs/';
-  //$virtualURITable['/fckeditor/(*)']               = PATH_THIRDPARTY . 'fckeditor/';
+  if ( defined('PATH_C') ) {
+    $virtualURITable['/jsform/(*.js)']               = PATH_C . 'xmlform/';
+    $virtualURITable['/extjs/(*)']                   = PATH_C . 'ExtJs/';
+  }
   $virtualURITable['/htmlarea/(*)']                  = PATH_THIRDPARTY . 'htmlarea/';
   $virtualURITable['/sys[a-zA-Z][a-zA-Z0-9]{0,}()/'] = 'sysNamed';
   $virtualURITable['/(sys*)']                        = FALSE;
@@ -148,24 +129,19 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   $virtualURITable['/skins/']                        = 'errorFile';
   $virtualURITable['/files/']                        = 'errorFile';
 
-  if(defined('PATH_C'))
- {
-    $virtualURITable['/jsform/(*.js)']                 = PATH_C . 'xmlform/';
- }
-  /*To sysUnnamed*/
   $virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
   $virtualURITable['/(*)'] = PATH_HTML;
 
+//************** defining the serverConf singleton **************
   if(defined('PATH_DATA') && file_exists(PATH_DATA)){
     //Instance Server Configuration Singleton
     G::LoadClass('serverConfiguration');
     $oServerConf =& serverConf::getSingleton();
   }
 
-//************** verify if we need to redirect or stream the file **************
+//****** verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page *****
   if ( G::virtualURI($_SERVER['REQUEST_URI'], $virtualURITable , $realPath )) {
     // review if the file requested belongs to public_html plugin
-
     if ( substr ( $realPath, 0,6) == 'plugin' ) {
       /*
        * By JHL Jul 14, 08
@@ -178,7 +154,7 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
        * Did we use this variable $pathsQuery for something??
        */
       $forQuery=explode("?",$realPath);
-      if(isset($forQuery[1])){
+      if(isset($forQuery[1])) {
         $pathsQuery=$forQuery[1];
       }
 
@@ -194,44 +170,39 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
       if ( file_exists ( $pluginFilename ) ) {
           G::streamFile ( $pluginFilename );
       }
-
       die;
     }
     //die($realPath);
     switch ( $realPath  ) {
-    case 'sysUnnamed' :
-      require_once('sysUnnamed.php'); die;
-      break;
-    case 'sysNamed' :
-      header('location : ' . $_SERVER['REQUEST_URI'] . 'en/green/login/login' );
-      die;
-      break;
-    case 'jsMethod' :
-      G::parseURI ( getenv( "REQUEST_URI" ) );
-      $filename = PATH_METHODS . SYS_COLLECTION . '/' . SYS_TARGET . '.js';
-      G::streamFile ( $filename );
-      die;
-      break;
-    case 'errorFile':
-     header ("location: /errors/error404.php");
-     die;
-     break;
-    default :
-      $realPath = explode('?', $realPath);
-      $realPath[0] .= strpos($realPath[0], '.') === false ? '.php' : '';
-      G::streamFile ( $realPath[0] );
-      die;
-    }
+      case 'sysUnnamed' :
+        require_once('sysUnnamed.php'); die;
+        break;
+      case 'sysNamed' :
+        header('location : ' . $_SERVER['REQUEST_URI'] . 'en/green/login/login' );
+        die;
+        break;
+      case 'jsMethod' :
+        G::parseURI ( getenv( "REQUEST_URI" ) );
+        $filename = PATH_METHODS . SYS_COLLECTION . '/' . SYS_TARGET . '.js';
+        G::streamFile ( $filename );
+        die;
+        break;
+      case 'errorFile':
+        header ("location: /errors/error404.php");
+        die;
+        break;
+      default :
+        $realPath = explode('?', $realPath);
+        $realPath[0] .= strpos($realPath[0], '.') === false ? '.php' : '';
+        G::streamFile ( $realPath[0] );
+        die;
+      }
   }
 
-//************** verify if the URI is encrypted or not **************
+//************** the request correspond to valid php page, now parse the URI  **************
   G::parseURI ( getenv( "REQUEST_URI" ) );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . "widgets/jscalendar/lang/calendar-" . SYS_LANG . ".js");
   define( 'SYS_URI' , '/sys' .  SYS_TEMP . '/' . SYS_LANG . '/' . SYS_SKIN . '/' );
-
-  require_once ( PATH_THIRDPARTY . 'krumo' . PATH_SEP . 'class.krumo.php' );
-
-
 
 //***************** Call Gulliver Classes **************************
 
@@ -254,49 +225,37 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   G::LoadSystem('dvEditor');
   G::LoadSystem('table');
   G::LoadSystem('pagedTable');
-  //G::LoadSystem("fckEditor");
-  //G::LoadSystem("htmlArea");
+  require_once ( PATH_THIRDPARTY . 'krumo' . PATH_SEP . 'class.krumo.php' );
 
-  /***************** Installer  ******************************/
-  if(!defined('PATH_DATA') || !file_exists(PATH_DATA))
-  {
-    if((SYS_TARGET==='installServer'))
-    {
-       $phpFile = G::ExpandPath('methods') ."install/installServer.php";
+//************** Installer, redirect to install if we don't have a valid shared data folder ***************/
+  if ( !defined('PATH_DATA') || !file_exists(PATH_DATA)) {
+    if ( (SYS_TARGET==='installServer')) {
+      $phpFile = G::ExpandPath('methods') ."install/installServer.php";
       require_once($phpFile);
-       die();
+      die();
     }
-    else
-    {
-       $phpFile = G::ExpandPath('methods') ."install/install.php";
+    else {
+      $phpFile = G::ExpandPath('methods') ."install/install.php";
       require_once($phpFile);
-       die();
+      die();
     }
   }
 
-  /***************** Installer  ******************************/
-
-  //  ************* Load Language Translation *****************
+//  ************* Load Language Translation *****************
   G::LoadTranslationObject(defined('SYS_LANG')?SYS_LANG:"en");
 
-  //***************** database and workspace definition  ************************
-  //if SYS_TEMP exists, the URL has a workspace, now we need to verify if exists their db.php file
-  /*
-   * By krlos Feb 10, 2010
-   * look for a disabled site
-   * send value site
-   */
+//******** look for a disabled workspace ****
   if($oServerConf->isWSDisabled(SYS_TEMP)){
-  	$aMessage['MESSAGE'] = G::LoadTranslation('ID_DISB_WORKSPACE');
-    $G_PUBLISH          = new Publisher;
+    $aMessage['MESSAGE'] = G::LoadTranslation('ID_DISB_WORKSPACE');
+    $G_PUBLISH           = new Publisher;
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
     G::RenderPage( 'publish' );
     die;
   }
 
-
-  if ( defined('SYS_TEMP') && SYS_TEMP != '')
-  {
+//********** database and workspace definition  ************************
+  //if SYS_TEMP exists, the URL has a workspace, now we need to verify if exists their db.php file
+  if ( defined('SYS_TEMP') && SYS_TEMP != '')  {
     //this is the default, the workspace db.php file is in /shared/workflow/sites/SYS_SYS
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
       require_once( PATH_DB .  SYS_TEMP . '/db.php' );
@@ -310,22 +269,20 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
       G::RenderPage( 'publish' );
       die;
     }
-
   }
   else {  //when we are in global pages, outside any valid workspace
-
-
     if ((SYS_TARGET==='sysLoginVerify') || (SYS_TARGET==='sysLogin') || (SYS_TARGET==='newSite')) {
       $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . "/" . SYS_TARGET.'.php';
       require_once($phpFile);
       die();
     }
     else {
-    	if(SYS_TARGET=="dbInfo"){ //Show dbInfo when no SYS_SYS
-      		require_once( PATH_METHODS . "login/dbInfo.php" ) ;
-    	}else{
-    		require_once( PATH_METHODS . "login/sysLogin.php" ) ;
-    	}
+      if(SYS_TARGET=="dbInfo"){ //Show dbInfo when no SYS_SYS
+          require_once( PATH_METHODS . "login/dbInfo.php" ) ;
+      }
+      else{
+        require_once( PATH_METHODS . "login/sysLogin.php" ) ;
+      }
       die();
     }
   }
@@ -341,7 +298,8 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   define( 'PATH_IMAGES_ENVIRONMENT_USERS',  PATH_DATA_SITE . 'usersPhotographies'.PATH_SEP);
 
 
-  /*** defining and saving server info, //initialy for cron services ***/
+//**** defining and saving server info, this file has the values of the global array $_SERVER ****
+  //this file is useful for command line environment (no Browser), I mean for triggers, crons and other executed over command line
   define( 'SERVER_NAME',  $_SERVER ['SERVER_NAME']);
   define( 'SERVER_PORT',  $_SERVER ['SERVER_PORT']);
 
@@ -351,9 +309,9 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   $cput = serialize($_CSERVER);
   if( !is_file(PATH_DATA_SITE . PATH_SEP . '.server_info') ){
     file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
-  } else {
+  } 
+  else {
     $c = file_get_contents(PATH_DATA_SITE . PATH_SEP . '.server_info');
-
     if(md5($c) != md5($cput)){
       file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
     }
@@ -371,7 +329,6 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
 
 
 //***************** create $G_ENVIRONMENTS dependent of SYS_SYS **************************
-
   define ( 'G_ENVIRONMENT', G_DEV_ENV );
   $G_ENVIRONMENTS = array (
     G_PRO_ENV => array (
@@ -390,214 +347,195 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
       'cache' => 0,
       'debug' => 0,
     )
- );
+  );
 
-  // setup propel definitions and logging
-  //try {
-    require_once ( "propel/Propel.php" );
-    require_once ( "creole/Creole.php" );
+//******* setup propel definitions and logging ****
+  require_once ( "propel/Propel.php" );
+  require_once ( "creole/Creole.php" );
 
-    if ( $G_ENVIRONMENTS[ G_ENVIRONMENT ]['debug'] ) {
-      require_once ( "Log.php" );
+  if ( $G_ENVIRONMENTS[ G_ENVIRONMENT ]['debug'] ) {
+    require_once ( "Log.php" );
 
-      // register debug connection decorator driver
-      Creole::registerDriver('*', 'creole.contrib.DebugConnection');
+    // register debug connection decorator driver
+    Creole::registerDriver('*', 'creole.contrib.DebugConnection');
 
-      // itialize Propel with converted config file
-      Propel::init( PATH_CORE . "config/databases.php" );
+    // itialize Propel with converted config file
+    Propel::init( PATH_CORE . "config/databases.php" );
 
-      //log file for workflow database
-      $logFile = PATH_DATA . 'log' . PATH_SEP . 'workflow.log';
-      $logger = Log::singleton('file', $logFile, 'wf ' . SYS_SYS, null, PEAR_LOG_INFO);
-      Propel::setLogger($logger);
-      $con = Propel::getConnection('workflow');
-      if ($con instanceof DebugConnection) $con->setLogger($logger);
+    //log file for workflow database
+    $logFile = PATH_DATA . 'log' . PATH_SEP . 'workflow.log';
+    $logger = Log::singleton('file', $logFile, 'wf ' . SYS_SYS, null, PEAR_LOG_INFO);
+    Propel::setLogger($logger);
+    $con = Propel::getConnection('workflow');
+    if ($con instanceof DebugConnection) $con->setLogger($logger);
 
-      //log file for rbac database
-      $logFile = PATH_DATA . 'log' . PATH_SEP . 'rbac.log';
-      $logger = Log::singleton('file', $logFile, 'rbac ' . SYS_SYS, null, PEAR_LOG_INFO);
-      Propel::setLogger($logger);
-      $con = Propel::getConnection('rbac');
-      if ($con instanceof DebugConnection) $con->setLogger($logger);
+    //log file for rbac database
+    $logFile = PATH_DATA . 'log' . PATH_SEP . 'rbac.log';
+    $logger = Log::singleton('file', $logFile, 'rbac ' . SYS_SYS, null, PEAR_LOG_INFO);
+    Propel::setLogger($logger);
+    $con = Propel::getConnection('rbac');
+    if ($con instanceof DebugConnection) $con->setLogger($logger);
 
-      //log file for report database
-      $logFile = PATH_DATA . 'log' . PATH_SEP . 'report.log';
-      $logger = Log::singleton('file', $logFile, 'rp ' . SYS_SYS, null, PEAR_LOG_INFO);
-      Propel::setLogger($logger);
-      $con = Propel::getConnection('rp');
-      if ($con instanceof DebugConnection) $con->setLogger($logger);
-    }
-    else
-      Propel::init( PATH_CORE . "config/databases.php" );
-
-    Creole::registerDriver('dbarray', 'creole.contrib.DBArrayConnection');
-
-    //***************** Session Initializations **************************/
-      ini_alter( 'session.auto_start', '1' );
-      ini_alter( 'register_globals',   'Off' );
-      session_start();
-      ob_start();
-
-    //********* Log Page Handler *************
-    //  logPage ( $URL , SYS_CURRENT_PARMS);
-
-    //setup plugins
-    $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
-    $avoidChangedWorkspaceValidation = false;
-    
-    //Load custom Classes and Model from Plugins. 
-    G::LoadAllPluginModelClasses();
-    
-    //*********jump to php file in methods directory *************
-    $collectionPlugin = '';
-    if ( $oPluginRegistry->isRegisteredFolder( SYS_COLLECTION ) ) {
-      $phpFile = PATH_PLUGINS . SYS_COLLECTION . PATH_SEP . SYS_TARGET.'.php';
-      $targetPlugin = explode( '/', SYS_TARGET );
-      $collectionPlugin = $targetPlugin[0];
-      $avoidChangedWorkspaceValidation = true;
-    }
-    else
-      $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . SYS_TARGET.'.php';
-
-    if ( SYS_COLLECTION == 'services' ) {
-      $avoidChangedWorkspaceValidation = true;
-    	$targetPlugin = explode( '/', SYS_TARGET );
-    	if ( $targetPlugin[0] == 'webdav' ) {
-        $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . 'webdav.php';
-    	}
-    }
-
-    //the index.php file, this new feature will allow automatically redirects to valid php file inside the methods directory
-    if ( SYS_TARGET == '' ) {
-      $phpFile = str_replace ( '.php', 'index.php', $phpFile );
-      $phpFile = include ( $phpFile );
-    }
-    $bWE = false;
-    if ( substr(SYS_COLLECTION , 0,8) === 'gulliver' ) {
-      $phpFile = PATH_GULLIVER_HOME . 'methods/' . substr( SYS_COLLECTION , 8) . SYS_TARGET.'.php';
-    }
-    else {
-      //when the file is part of the public directory of any PROCESS
-      $avoidChangedWorkspaceValidation = true;
-      if (preg_match('/^[0-9][[:alnum:]]+$/', SYS_COLLECTION) == 1)
-      { //the pattern is /sysSYS/LANG/SKIN/PRO_UID/file
-      $auxPart = explode ( '/' ,  $_SERVER['REQUEST_URI']);
-      $aAux = explode('?', $auxPart[ count($auxPart)-1]);
-        //$extPart = explode ( '.' , $auxPart[ count($auxPart)-1] );
-        $extPart = explode ( '.' , $aAux[0] );
-        $queryPart = isset($aAux[1])?$aAux[1]:"";
-        $extension = $extPart[ count($extPart)-1 ];
-        $phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . urldecode ($auxPart[ count($auxPart)-1]);
-        $aAux = explode('?', $phpFile);
-        $phpFile = $aAux[0];
-        if ( $extension != 'php' ) {
-          G::streamFile ( $phpFile );
-          die;
-        }
-        $bWE = true;
-        //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
-      }
-      if ( ! file_exists( $phpFile ) ) {
-          $_SESSION['phpFileNotFound'] = $phpFile;
-          header ("location: /errors/error404.php");
-          die;
-      }
-    }
-
-    //redirect to login, if user changed the workspace in the URL
-    if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
-    	$_SESSION['WORKSPACE'] = SYS_SYS;
-    	header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/login/login' );
-    	die;
-    }
-
-//  ***************** enable rbac **************************
-
-    $RBAC =& RBAC::getSingleton();
-    $RBAC->sSystem = 'PROCESSMAKER';
-
-//  ***************** Headers **************************
-    if ( ! defined('EXECUTE_BY_CRON') ) {
-      header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
-      header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-      header("Cache-Control: no-store, no-cache, must-revalidate");
-      header("Cache-Control: post-check=0, pre-check=0", false);
-      header("Pragma: no-cache");
-
-      if( defined('SYS_LANG') ){
-        require_once 'classes/model/Language.php';
-        $oLang = new Language();
-        try{
-          $aLang = $oLang->load(SYS_LANG);
-          if( isset($aLang['LAN_DIRECTION']) ){
-             define('SYS_LANG_DIRECTION', strtoupper($aLang['LAN_DIRECTION']));
-          }
-        } catch(Exception $e){
-          define('SYS_LANG_DIRECTION', 'L');
-        }
-      }
-
-
-      //if(isset( $_SESSION['USER_LOGGED'] )) {
-      if((isset( $_SESSION['USER_LOGGED'] ))&&(!(isset($_GET['sid'])))) {
-        $RBAC->initRBAC();
-        $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
-      }
-      else {
-        //This sentence is used when you lost the Session
-        if ( SYS_TARGET != 'authentication' and  SYS_TARGET != 'login' and  SYS_TARGET != 'login_Ajax'
-        and  SYS_TARGET != 'dbInfo'         and  SYS_TARGET != 'sysLoginVerify' and SYS_TARGET != 'processes_Ajax'
-        and  SYS_TARGET != 'updateTranslation'
-        and  SYS_TARGET != 'autoinstallProcesses'
-        and  SYS_TARGET != 'autoinstallPlugins'
-        and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
-        and $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'cases_ShowDocument') {
-          $bRedirect = true;
-          if (isset($_GET['sid'])) {
-            G::LoadClass('sessions');
-            $oSessions = new Sessions();
-            if ($aSession = $oSessions->verifySession($_GET['sid'])) {
-              require_once 'classes/model/Users.php';
-              $oUser = new Users();
-              $aUser = $oUser->load($aSession['USR_UID']);
-              $_SESSION['USER_LOGGED']  = $aUser['USR_UID'];
-              $_SESSION['USR_USERNAME'] = $aUser['USR_USERNAME'];
-              $bRedirect = false;
-              $RBAC->initRBAC();
-              $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
-            }
-          }
-          if ($bRedirect) {
-            if (empty($_POST)) {
-              header('location: ' . SYS_URI . 'login/login?u=' . urlencode($_SERVER['REQUEST_URI']));
-            }
-            else {
-              header('location: ' . SYS_URI . 'login/login');
-            }
-            die();
-          }
-        }
-      }
-
-      require_once( $phpFile );
-      if ( defined('SKIP_HEADERS') ) {
-        header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
-        header('Cache-Control: public');
-        header('Pragma: ');
-      }
-      ob_end_flush();
-    }
-/*
+    //log file for report database
+    $logFile = PATH_DATA . 'log' . PATH_SEP . 'report.log';
+    $logger = Log::singleton('file', $logFile, 'rp ' . SYS_SYS, null, PEAR_LOG_INFO);
+    Propel::setLogger($logger);
+    $con = Propel::getConnection('rp');
+    if ($con instanceof DebugConnection) $con->setLogger($logger);
   }
-  catch ( Exception $e ) {
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH  = new Publisher;
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish' );
+  else
+    Propel::init( PATH_CORE . "config/databases.php" );
+
+  Creole::registerDriver('dbarray', 'creole.contrib.DBArrayConnection');
+
+//***************** Session Initializations **************************/
+  ini_set( 'session.auto_start', '1' );
+  ini_set( 'register_globals',   'Off' );
+  session_start();
+  ob_start();
+
+//********* Setup plugins *************
+  $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
+  $avoidChangedWorkspaceValidation = false;
+  
+  //Load custom Classes and Model from Plugins. 
+  G::LoadAllPluginModelClasses();
+  
+//*********jump to php file in methods directory *************
+  $collectionPlugin = '';
+  if ( $oPluginRegistry->isRegisteredFolder( SYS_COLLECTION ) ) {
+    $phpFile = PATH_PLUGINS . SYS_COLLECTION . PATH_SEP . SYS_TARGET.'.php';
+    $targetPlugin = explode( '/', SYS_TARGET );
+    $collectionPlugin = $targetPlugin[0];
+    $avoidChangedWorkspaceValidation = true;
+  }
+  else
+    $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . SYS_TARGET.'.php';
+
+  //services is a special folder, 
+  if ( SYS_COLLECTION == 'services' ) {
+    $avoidChangedWorkspaceValidation = true;
+    $targetPlugin = explode( '/', SYS_TARGET );
+    if ( $targetPlugin[0] == 'webdav' ) {
+      $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . 'webdav.php';
+    }
+  }
+
+  //the index.php file, this new feature will allow automatically redirects to valid php file inside any methods folder
+  if ( SYS_TARGET == '' ) {
+    $phpFile = str_replace ( '.php', 'index.php', $phpFile );
+    $phpFile = include ( $phpFile );
+  }
+  $bWE = false;
+  if ( substr(SYS_COLLECTION , 0,8) === 'gulliver' ) {
+    $phpFile = PATH_GULLIVER_HOME . 'methods/' . substr( SYS_COLLECTION , 8) . SYS_TARGET.'.php';
+  }
+  else {
+    //when the file is part of the public directory of any PROCESS, this a ProcessMaker feature
+    $avoidChangedWorkspaceValidation = true;
+    if (preg_match('/^[0-9][[:alnum:]]+$/', SYS_COLLECTION) == 1)
+    { //the pattern is /sysSYS/LANG/SKIN/PRO_UID/file
+    $auxPart = explode ( '/' ,  $_SERVER['REQUEST_URI']);
+    $aAux = explode('?', $auxPart[ count($auxPart)-1]);
+      //$extPart = explode ( '.' , $auxPart[ count($auxPart)-1] );
+      $extPart = explode ( '.' , $aAux[0] );
+      $queryPart = isset($aAux[1])?$aAux[1]:"";
+      $extension = $extPart[ count($extPart)-1 ];
+      $phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . urldecode ($auxPart[ count($auxPart)-1]);
+      $aAux = explode('?', $phpFile);
+      $phpFile = $aAux[0];
+      if ( $extension != 'php' ) {
+        G::streamFile ( $phpFile );
+        die;
+      }
+      $bWE = true;
+      //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
+    }
+    if ( ! file_exists( $phpFile ) ) {
+        $_SESSION['phpFileNotFound'] = $phpFile;
+        header ("location: /errors/error404.php");
+        die;
+    }
+  }
+
+  //redirect to login, if user changed the workspace in the URL
+  if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
+    $_SESSION['WORKSPACE'] = SYS_SYS;
+    header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/login/login' );
     die;
   }
-*/
 
-//$auxMem = sprintf ( "memory_limit:%s  usage:%4.2fM \$_SESSION: %4.2fKb=%d",
-//  ini_get("memory_limit"), memory_get_usage() / 1024 / 1024,strlen( serialize($_SESSION)) / 1024 , count($_SESSION) );
-//error_log($auxMem);
+//***************** enable rbac **************************
+  $RBAC =& RBAC::getSingleton();
+  $RBAC->sSystem = 'PROCESSMAKER';
+
+//****** define and send Headers for all pages *******************
+  if ( ! defined('EXECUTE_BY_CRON') ) {
+    header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+
+    if( defined('SYS_LANG') ){
+      require_once 'classes/model/Language.php';
+      $oLang = new Language();
+      try{
+        $aLang = $oLang->load(SYS_LANG);
+        if( isset($aLang['LAN_DIRECTION']) ){
+           define('SYS_LANG_DIRECTION', strtoupper($aLang['LAN_DIRECTION']));
+        }
+      } 
+      catch(Exception $e){
+        define('SYS_LANG_DIRECTION', 'L');
+      }
+    }
+
+    if((isset( $_SESSION['USER_LOGGED'] ))&&(!(isset($_GET['sid'])))) {
+      $RBAC->initRBAC();
+      $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
+    }
+    else {
+      //This sentence is used when you lost the Session
+      if ( SYS_TARGET != 'authentication' and  SYS_TARGET != 'login' and  SYS_TARGET != 'login_Ajax'
+      and  SYS_TARGET != 'dbInfo'         and  SYS_TARGET != 'sysLoginVerify' and SYS_TARGET != 'processes_Ajax'
+      and  SYS_TARGET != 'updateTranslation'
+      and  SYS_TARGET != 'autoinstallProcesses'
+      and  SYS_TARGET != 'autoinstallPlugins'
+      and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
+      and $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'cases_ShowDocument') {
+        $bRedirect = true;
+        if (isset($_GET['sid'])) {
+          G::LoadClass('sessions');
+          $oSessions = new Sessions();
+          if ($aSession = $oSessions->verifySession($_GET['sid'])) {
+            require_once 'classes/model/Users.php';
+            $oUser = new Users();
+            $aUser = $oUser->load($aSession['USR_UID']);
+            $_SESSION['USER_LOGGED']  = $aUser['USR_UID'];
+            $_SESSION['USR_USERNAME'] = $aUser['USR_USERNAME'];
+            $bRedirect = false;
+            $RBAC->initRBAC();
+            $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
+          }
+        }
+        if ($bRedirect) {
+          if (empty($_POST)) {
+            header('location: ' . SYS_URI . 'login/login?u=' . urlencode($_SERVER['REQUEST_URI']));
+          }
+          else {
+            header('location: ' . SYS_URI . 'login/login');
+          }
+          die();
+        }
+      }
+    }
+
+    require_once( $phpFile );
+    if ( defined('SKIP_HEADERS') ) {
+      header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
+      header('Cache-Control: public');
+      header('Pragma: ');
+    }
+    ob_end_flush();
+  }

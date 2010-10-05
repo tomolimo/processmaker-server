@@ -1849,12 +1849,12 @@ class G
       return NULL;
     
     //load the translations table
-    require PATH_LANGUAGECONT . 'translation.en';
+    require_once ( PATH_LANGUAGECONT . 'translation.en' );
     $defaultTranslations = $translation;
     
     //if some foreign language was requested and its translation file exists
     if( $lang != 'en' && file_exists(PATH_LANGUAGECONT . 'translation.' . $lang) ){
-      require PATH_LANGUAGECONT . 'translation.' . $lang; //load the foreign translations table
+      require_once ( PATH_LANGUAGECONT . 'translation.' . $lang ); //load the foreign translations table
       $foreignTranslations = $translation;
     }
     
