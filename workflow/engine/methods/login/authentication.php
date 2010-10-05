@@ -126,11 +126,10 @@ try {
   $_SESSION['USER_LOGGED']  = $uid;
   $_SESSION['USR_USERNAME'] = $usr;
   $aUser = $RBAC->userObj->load($_SESSION['USER_LOGGED']);
-  $RBAC->loadUserRolePermission('PROCESSMAKER', $_SESSION['USER_LOGGED']);
-  
-  $rol = $RBAC->rolesObj->load($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_UID']);
+  $RBAC->loadUserRolePermission($RBAC->sSystem, $_SESSION['USER_LOGGED']);
+  //$rol = $RBAC->rolesObj->load($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_UID']);
   $_SESSION['USR_FULLNAME'] = $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME']; 
-  $_SESSION['USR_ROLENAME'] = $rol['ROL_NAME']; 
+  //$_SESSION['USR_ROLENAME'] = $rol['ROL_NAME']; 
   
   unset($_SESSION['FAILED_LOGINS']);
 

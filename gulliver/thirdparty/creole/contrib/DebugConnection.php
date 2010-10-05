@@ -134,7 +134,7 @@ class DebugConnection implements Connection {
 	 */
 	public function applyLimit(&$sql, $offset, $limit)
 	{
-		$this->log("applyLimit(): $sql, offset: $offset, limit: $limit");
+		//$this->log("applyLimit(): $sql, offset: $offset, limit: $limit");
 		return $this->childConnection->applyLimit($sql, $offset, $limit);
 	}
 	
@@ -143,7 +143,7 @@ class DebugConnection implements Connection {
 	 */
 	public function close()
 	{
-		$this->log("close(): Closing connection.");
+		//$this->log("close(): Closing connection.");
 		return $this->childConnection->close();
 	}
 	
@@ -182,7 +182,7 @@ class DebugConnection implements Connection {
 	 **/
 	public function prepareCall($sql)
 	{
-		$this->log("prepareCall(): $sql");
+		//$this->log("prepareCall(): $sql");
 		return $this->childConnection->prepareCall($sql);
 	}
 	
@@ -242,7 +242,7 @@ class DebugConnection implements Connection {
 	 */
 	public function setAutoCommit($bit)
 	{
-		$this->log("Setting autocommit to: " . var_export($bit, true));
+		//$this->log("Setting autocommit to: " . var_export($bit, true));
 		return $this->childConnection->setAutoCommit($bit);
 	}
 	

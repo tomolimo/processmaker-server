@@ -290,8 +290,9 @@ class Log_file extends Log
         $message = $this->_extractMessage($message);
         
         /*********************** change here >> depth value *************/
+       $uri = $_SERVER['REQUEST_URI'];
        $backTrace = $this->_getBacktraceVars( 5 );
-       $trace = " [ $backTrace[3] ]";
+       $trace = " [ $uri -> $backTrace[3] ]";
         /* Build the string containing the complete log line. */
         $t = microtime(true);
         $micro = date('H:i:s.') . sprintf("%03d",($t - floor($t)) * 1000);
