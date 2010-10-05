@@ -69,7 +69,8 @@ Ext.onReady(function(){
     propStore.fields = propStore.recordType.prototype.fields;
     debugVariables.setSource(propStore.getAt(0).data);
   });
-  
+
+
   var debugVariables = new Ext.grid.PropertyGrid({
     id: 'debugVariables',
     title:'Variables',
@@ -95,6 +96,7 @@ Ext.onReady(function(){
     viewConfig: {
       forceFit: true
     }
+
   });
   
   //set debug variable details
@@ -102,6 +104,60 @@ Ext.onReady(function(){
     var detailPanel = Ext.getCmp('debug-details-panel');
     debugVarTpl.overwrite(detailPanel.body, r.data);
     detailPanel.setTitle(r.data.name);
+    //alert(r.data.name+' '+r.data.value);
+
+    //
+    if(r.data.value == '<object>' || r.data.value == '<array>' ){
+      Ext.Ajax.request({
+        url: 'debug_vars?r='+Math.random(),
+        success: function(response){
+          try{
+            result = eval('('+response.responseText+')');
+            
+//            alert(result.headers.length);
+  //          alert(result.rows.length);
+
+            var store1a = new Ext.data.ArrayStore({fields: result.headers});
+              // manually load local data
+              store1a.loadData(result.rows);
+
+              var myGridPanel = new Ext.grid.GridPanel({
+                store: store1a,
+                height: 200,
+                border : false,
+                columns: result.columns,
+                stripeRows : true,
+                layout: 'fit',
+                listeners: {
+                  rowdblclick: function(grid, n,e){
+
+                  },
+                  render: function(){
+                    this.loadMask = new Ext.LoadMask(this.body, {
+                      msg:'Loading...'
+                    });
+                  }
+                }
+              });
+
+              Ext.each(detailPanel.items.items, function(childPanel) {
+                  detailPanel.remove(childPanel, true);
+
+              });
+
+              detailPanel.add(myGridPanel);
+              detailPanel.doLayout();
+          } catch (e){
+            //alert(""+e);
+          }
+        },
+        failure: function(){},
+        params: {request: 'getRows', fieldname:r.data.name}
+      });
+
+     
+    }
+
   });
   
   centerPanel = {
