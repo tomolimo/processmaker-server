@@ -329,7 +329,6 @@
         <parameter name="Type" value="datetime"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
-        <!-- <parameter name="Default" value="0000-00-00 00:00:00"/> -->
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
@@ -439,6 +438,24 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <index name="indexDelFinishDate">
+      <index-column name="DEL_FINISH_DATE"/>
+      <index-column name="DEL_THREAD_STATUS"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APP_DELEGATION"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexDelFinishDate"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="DEL_FINISH_DATE"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
 
     <validator column="DEL_TYPE">
       <rule name="validValues" value="NORMAL|PARALLEL" message="Please select a valid status." />
@@ -4149,14 +4166,27 @@
         <parameter name="Comment" value=""/>
       </vendor>
     </index>
+    <index name="indexActionUser">
+      <index-column name="APP_DISABLE_ACTION_USER"/>
+      <index-column name="APP_ENABLE_ACTION_USER"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APP_DELAY"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexActionUser"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="APP_DISABLE_ACTION_USER"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
     <index name="indexAppDelay">
       <index-column name="PRO_UID"/>
       <index-column name="APP_UID"/>
-      <index-column name="APP_THREAD_INDEX"/>
-      <index-column name="APP_DEL_INDEX"/>
-      <index-column name="APP_NEXT_TASK"/>
-      <index-column name="APP_DELEGATION_USER"/>
-      <index-column name="APP_DISABLE_ACTION_USER"/>
       <vendor type="mysql">
         <parameter name="Table" value="APP_DELAY"/>
         <parameter name="Non_unique" value="1"/>
@@ -5341,17 +5371,17 @@
     <column name="LOG_IP" type="VARCHAR" size="15" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="LOG_IP"/>
-        <parameter name="Type" value="text"/>
+        <parameter name="Type" value="varchar(15)"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="LOG_SID" type="VARCHAR" size="100" required="true" default="">
+    <column name="LOG_SID" type="VARCHAR" size="40" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="LOG_SID"/>
-        <parameter name="Type" value="text"/>
+        <parameter name="Type" value="varchar(40)"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
@@ -5396,6 +5426,23 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <index name="indexLogSid">
+      <index-column name="LOG_SID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="LOGIN_LOG"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexLogSid"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="LOG_SID"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
   </table>
   <table name="USERS_PROPERTIES">
     <vendor type="mysql">

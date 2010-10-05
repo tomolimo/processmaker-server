@@ -62,7 +62,8 @@ CREATE TABLE `APP_DELEGATION`
 	`DEL_DELAYED` TINYINT default 0,
 	`DEL_DATA` TEXT  NOT NULL,
 	`APP_OVERDUE_PERCENTAGE` DOUBLE  NOT NULL,
-	PRIMARY KEY (`APP_UID`,`DEL_INDEX`)
+	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
+	KEY `indexDelFinishDate`(`DEL_FINISH_DATE`, `DEL_THREAD_STATUS`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
 #-----------------------------------------------------------------------------
 #-- APP_DOCUMENT
@@ -682,7 +683,8 @@ CREATE TABLE `APP_DELAY`
 	`APP_AUTOMATIC_DISABLED_DATE` DATETIME,
 	PRIMARY KEY (`APP_DELAY_UID`),
 	KEY `indexAppUid`(`APP_UID`, `APP_DEL_INDEX`, `APP_DELAY_UID`),
-	KEY `indexAppDelay`(`PRO_UID`, `APP_UID`, `APP_THREAD_INDEX`, `APP_DEL_INDEX`, `APP_NEXT_TASK`, `APP_DELEGATION_USER`, `APP_DISABLE_ACTION_USER`)
+	KEY `indexActionUser`(`APP_DISABLE_ACTION_USER`, `APP_ENABLE_ACTION_USER`),
+	KEY `indexAppDelay`(`PRO_UID`, `APP_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='APP_DELAY';
 #-----------------------------------------------------------------------------
 #-- PROCESS_USER
@@ -884,12 +886,13 @@ CREATE TABLE `LOGIN_LOG`
 	`LOG_UID` VARCHAR(32) default '' NOT NULL,
 	`LOG_STATUS` VARCHAR(100) default '' NOT NULL,
 	`LOG_IP` VARCHAR(15) default '' NOT NULL,
-	`LOG_SID` VARCHAR(100) default '' NOT NULL,
+	`LOG_SID` VARCHAR(40) default '' NOT NULL,
 	`LOG_INIT_DATE` DATETIME,
 	`LOG_END_DATE` DATETIME,
 	`LOG_CLIENT_HOSTNAME` VARCHAR(100) default '' NOT NULL,
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
-	PRIMARY KEY (`LOG_UID`)
+	PRIMARY KEY (`LOG_UID`),
+	KEY `indexLogSid`(`LOG_SID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
 #-- USERS_PROPERTIES
