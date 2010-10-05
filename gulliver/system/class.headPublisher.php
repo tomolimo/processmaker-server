@@ -270,6 +270,7 @@ class headPublisher {
     $head = '';
     $head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
+    $head .= "  <script type='text/javascript' src='/js/ext/ux/ux-all.js'></script>\n";
     
     if (isset ( $this->extJsLibrary ) && is_array ( $this->extJsLibrary )) {
       foreach ( $this->extJsLibrary as $file ) {
@@ -295,8 +296,6 @@ class headPublisher {
   }
   
   function getExtJsStylesheets(){
-    //$licfile = glob(PATH_TPL . '*/css/*/*');
-    
     
     $script = "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin.".css' />\n";
@@ -310,15 +309,14 @@ class headPublisher {
     //new interactive css decorator
     $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/decorator?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
     
-    /**
-     * Load external/plugin css
-     * NOTE is necesary to move this to decorator server 
-     */
+    // Load external/plugin css
+    // NOTE is necesary to move this to decorator server      
     $oPluginRegistry = & PMPluginRegistry::getSingleton ();
     $registeredCss=$oPluginRegistry->getRegisteredCss();
     foreach($registeredCss as $cssFile){
       $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n"; 
     }
+    
     return $script;
   }
   
