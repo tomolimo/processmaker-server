@@ -103,9 +103,12 @@ else {
   $Fields ['DATABASE_NAME'] = "Not defined";
   $Fields ['AVAILABLE_DB'] = "Not defined";
 }
-
+$eeT="";
+  if(class_exists('pmLicenseManager')){
+    $eeT=" - Enterprise Edition";
+  }
 $Fields ['PHP'] = phpversion ();
-$Fields ['FLUID'] = PM_VERSION;
+$Fields ['FLUID'] = PM_VERSION.$eeT;
 $Fields ['IP'] = lookup ( $ip );
 $Fields ['ENVIRONMENT'] = defined ( "SYS_SYS" ) ? SYS_SYS : "Not defined";
 $Fields ['SERVER_SOFTWARE'] = getenv ( 'SERVER_SOFTWARE' );
