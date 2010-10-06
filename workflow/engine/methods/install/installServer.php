@@ -271,6 +271,11 @@ else if($action==="install")
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/tools/updateTranslation");
 	print_r("Update language:  => ".((!$update)?$update:"OK")."\n");
 	
+	/* Heartbeat Enable/Disable */
+	if(!isset($dataClient->heartbeatEnabled)) $dataClient->heartbeatEnabled=true;
+	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/heartbeatStatus?status=".$dataClient->heartbeatEnabled);
+    print_r("Heartbeat Status:  => ".str_replace("<br>","\n",$update)."\n");
+	
 	/* Autoinstall Process */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/autoinstallProcesses");
 	print_r("Process AutoInstall:  => <br>".str_replace("<br>","\n",$update)."\n"); 

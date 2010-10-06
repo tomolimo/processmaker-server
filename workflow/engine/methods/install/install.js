@@ -278,6 +278,29 @@ var installer=function()
 			)
 		);
 		
+		var tr = this.table.insertRow(-1);
+		$(tr).append(
+			new DOM('td',{innerHTML:"<b>HeartBeat Configuration</b><br><i>Heartbeat is a anonymous statistics collector for ProcessMaker. It runs in the background and if you have internet enabled, it will periodically send anonymous information to ProcessMaker servers.<br />No sensitive or private information is collected.<br /><br /> The information collected will allow us to keep improving our software to offer everyone a better user experience</i>",className:"app_grid_title___gray title",colSpan:4})
+		);
+		this.heartBeatTitle=tr;
+		
+		var tr = this.table.insertRow(-1);
+		$(tr).append(
+				
+				this.heartBeat = 
+
+				new DOM('td',{innerHTML:"Enable HeartBeat",className:"inst_td0"},{width:"20%"}),
+				new DOM('td',{className:"inst_td0",colSpan:2},{textAlign:'left'}).append(
+					this.ao_hb_status = new input({
+						properties:{type:'checkbox',disabled:false,checked:true,className:''},style:{border:"1px solid #666"}
+					})
+				)
+			);
+		
+	
+		this.heartBeatRow=tr;
+		
+		
 		//alert(this.options.availableProcess);
 		//alert(this.options.availableProcess.length);
 		var tr = this.table.insertRow(-1);
@@ -328,7 +351,8 @@ var installer=function()
 				ao_db_rp	:this.ao_db_rp.value,
 				ao_db	:parseInt(this.select_ao_db.selected().value),
 				ao_pm	:parseInt(this.select_ao_pm.selected().value),
-				ao_db_drop	:this.ao_db_drop.checked
+				ao_db_drop	:this.ao_db_drop.checked,
+				heartbeatEnabled	:this.ao_hb_status.checked
 			};
 	};
 	this.check=function()

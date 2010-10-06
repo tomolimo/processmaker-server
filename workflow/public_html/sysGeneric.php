@@ -269,7 +269,9 @@
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
       require_once( PATH_DB .  SYS_TEMP . '/db.php' );
       define ( 'SYS_SYS' , SYS_TEMP );
+       if ((SYS_TARGET==='login')) {
       $oServerConf->setWsInfo(SYS_TEMP,$oServerConf->getWorkspaceInfo(SYS_TEMP));
+    }
     }
     else {
       $aMessage['MESSAGE'] = G::LoadTranslation ('ID_NOT_WORKSPACE');
@@ -501,6 +503,7 @@
       and  SYS_TARGET != 'updateTranslation'
       and  SYS_TARGET != 'autoinstallProcesses'
       and  SYS_TARGET != 'autoinstallPlugins'
+      and  SYS_TARGET != 'heartbeatStatus'        
       and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
       and $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'cases_ShowDocument') {
         $bRedirect = true;

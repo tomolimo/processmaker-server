@@ -31,6 +31,7 @@
  */
 class serverConf {
   private $_aProperties = array ();
+  private $_aHeartbeatConfig = array ();
   private $_aWSapces = array ();
   private $aWSinfo = array ();
   private $pluginsA = array ();
@@ -48,9 +49,10 @@ class serverConf {
   private $pmVersion;
   private $pmProduct = 'PMCE';
   private $nextBeatDate;
-  private $logins;
+  var $logins;
   private $lanDirection;
   private $lanLanguage;
+  
 
   private function __construct() {
     $this->filePath = PATH_DATA . 'srvConf.singleton';
@@ -64,16 +66,10 @@ class serverConf {
   function &getSingleton() {
     if (self::$instance == NULL) {
       self::$instance = new serverConf ( );
-      if (file_exists ( self::$instance->filePath )){
+      if ((file_exists ( self::$instance->filePath ))&&(filesize(self::$instance->filePath)>0)){
         self::$instance->unSerializeInstance ( file_get_contents ( self::$instance->filePath ) );
       }
     }
-    if (isset ( self::$instance->haveSetupData ) && ! self::$instance->checkIfHostNameHasChanged ()) {
-      self::$instance->getSetupData ();
-    }
-
-    if (self::$instance->beatType == 'starting' || strtotime ( "now" ) > self::$instance->nextBeatDate)
-      self::$instance->postHeartBeat ();
     return self::$instance;
   }
 
@@ -205,41 +201,6 @@ class serverConf {
     return $this->haveSetupData;
   }
 
-  /**
-   * This method will update all the initial values for this class related to the server
-   * @param
-   * @return void
-   */
-  function getSetupData() {
-    self::$instance->haveSetupData = true;
-
-    if (! defined ( 'PM_VERSION' )) {
-      if (file_exists ( PATH_METHODS . 'login/version-pmos.php' )) {
-        require_once (PATH_METHODS . 'login/version-pmos.php');
-      } else {
-        define ( 'PM_VERSION', 'Development Version' );
-      }
-    }
-
-    $this->ip = getenv ( 'SERVER_ADDR' );
-
-    $this->os = '';
-    if (file_exists ( '/etc/redhat-release' )) {
-      $fnewsize = filesize ( '/etc/redhat-release' );
-      $fp = fopen ( '/etc/redhat-release', 'r' );
-      $this->os = trim ( fread ( $fp, $fnewsize ) );
-      fclose ( $fp );
-    }
-    $this->os .= " (" . PHP_OS . ")";
-    $this->pmVersion = PM_VERSION;
-    $this->webserver = getenv ( 'SERVER_SOFTWARE' );
-    $this->host = getenv ( 'SERVER_NAME' );
-    $this->php = phpversion ();
-    $this->workspaces = $this->getWSList ();
-    $this->plugins = $this->getPluginsList ();
-    $this->nextBeatDate = strtotime ( "+1 min" );
-    $this->saveSingleton ();
-  }
 
   /**
    * Will return a list of all WS in this system and their related information.
@@ -388,96 +349,20 @@ class serverConf {
     return $sMySQLVersion;
   }
 
-  /**
-   * This will send a beat with the stats information
-   * @param
-   * @return void
-   */
-  function postHeartBeat() {
-    //return false;
-    
-    $this->index = intval ( $this->index ) + 1;
-    $heartBeatUrl = 'http://heartbeat.processmaker.com/syspmLicenseSrv/en/green/services/beat';
-
-    //Update sensitive data
-    $this->workspaces = $this->getWSList ();
-    $this->plugins = $this->getPluginsList ();
-
-    $params = array ();
-    $params ['ip'] = $this->ip;
-    $params ['index'] = $this->index;
-    $params ['beatType'] = $this->beatType;
-    $params ['date'] = date ( 'Y-m-d H:i:s' );
-    $params ['host'] = $this->host;
-    $params ['os'] = $this->os;
-    $params ['webserver'] = $this->webserver;
-    $params ['php'] = $this->php;
-    $params ['pmVersion'] = $this->pmVersion;
-    $params ['pmProduct'] = $this->pmProduct;
-    $params ['logins'] = $this->logins;
-    $params ['workspaces'] = serialize ( $this->workspaces );
-    $params ['plugins'] = serialize ( $this->plugins );
-    $params ['dbVersion'] = $this->getDBVersion();
-    $params ['errors'] = serialize( $this->errors );
-    if($licInfo=$this->getProperty('LICENSE_INFO')){
-      $params ['license'] = serialize ( $licInfo );
-    }
-
-    $ch = curl_init ();
-    curl_setopt ( $ch, CURLOPT_URL, $heartBeatUrl );
-    curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-    curl_setopt ( $ch, CURLOPT_HEADER, true );
-    curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, false );
-    curl_setopt ( $ch, CURLOPT_AUTOREFERER, true );
-    //To avoid SSL error
-    curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
-    curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-    
-    curl_setopt ( $ch, CURLOPT_POST, 1 );
-    curl_setopt ( $ch, CURLOPT_POSTFIELDS, $params );
-    
-    //To avoid timeouts
-    curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, 5 );
-    curl_setopt ( $ch, CURLOPT_TIMEOUT, 10 );
-
-    $response = curl_exec ( $ch );
-    $curl_session = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  /*  if( ! $response )
-      return;
-  */
-    $headers = curl_getinfo ( $ch );
-    $header = substr ( $response, 0, $headers ['header_size'] );
-    $content = substr ( $response, $headers ['header_size'] );
-
-    if ($headers ['http_code'] == 200) {
-      $this->beatType = 'beat';
-      $this->resetLogins ();
-      $this->nextBeatDate = strtotime ( "+7 day" ); //next beat in 7 days
-      //Reset Errors
-      $this->errors=array();
-    } 
-    else {
-      //Catch the error
-    	//$this->errors[]=@curl_getinfo($ch);
-    	$this->errors[]=$curl_session;
-      $this->nextBeatDate = strtotime ( "+1 day" ); //retry in 30 mins
-    }
-
-    $this->saveSingleton ();
-    curl_close ( $ch );
-    
-  }
-  /**
+    /**
    * Will reset all the logins' count
    * @param
    * @return void
    */
-  private function resetLogins() {
+  function resetLogins() {
     $this->logins = 0;
+    if(is_array($this->workspaces)){
     foreach ( $this->workspaces as $wsName => $wsinfo ) {
       $this->workspaces [$wsName] ['WSP_LOGINS'] = 0;
     }
   }
+  }
+  
 
   /**
    * Get the value of language direction property
@@ -510,6 +395,42 @@ class serverConf {
       }
     }
    return $this->lanDirection;
+  }
+/**
+   * With this is possible to save a property that will be saved in the properties
+   * array of this class.
+   * @param string $propertyName
+   * @param string $propertyValue
+   * @param string $workspace
+   */
+  function setHeartbeatProperty($propertyName, $propertyValue, $workspace) {
+    $this->_aHeartbeatConfig [$workspace][$propertyName] = $propertyValue;
+    $this->saveSingleton ();
+  }
+
+  /**
+   * To unset a defined property. If it doesn't exist then it does nothing.
+   * @param string $propertyName
+   * @param string $workspace
+   * @return void
+   */
+  function unsetHeartbeatProperty($propertyName,$workspace) {
+    if (isset ( $this->_aHeartbeatConfig [$workspace][$propertyName] ))
+      unset ( $this->_aHeartbeatConfig [$workspace][$propertyName] );
+    $this->saveSingleton ();
+  }
+  
+  /**
+   * Returns the value of a defined property. If it doesn't exist then returns null
+   * @param string $propertyName
+   * @return string/null
+   */
+  function getHeartbeatProperty($propertyName, $workspace) {
+    if (isset ( $this->_aHeartbeatConfig [$workspace][$propertyName] )) {
+      return $this->_aHeartbeatConfig [$workspace][$propertyName];
+    } else {
+      return null;
+    }
   }
 
 

@@ -49,6 +49,8 @@
   
   $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'settings');
   
+  $G_TMP_MENU->AddIdRawOption('PROCESS_HEARBEAT', 'processHeartBeatConfig', G::LoadTranslation('ID_HEARTBEAT_CONFIG'), "heartBeat.jpg",'', 'admToolsContent');
+  
   /*$G_TMP_MENU->AddIdRawOption('WORKSPACE',          'workspaceList', G::LoadTranslation('ID_WORKSPACES') );*/
   //$G_TMP_MENU->AddIdRawOption('SELFSERVICE',    'selfService', G::LoadTranslation('ID_SELF_SERVICE') );
   //$G_TMP_MENU->AddIdRawOption('TRANSLATION', 'tools/translations', 'Translations');

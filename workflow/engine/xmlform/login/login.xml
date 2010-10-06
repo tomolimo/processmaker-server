@@ -36,6 +36,7 @@ var dynaformOnload = function()
   oRPC.make();
   var response=oRPC.xmlhttp.responseText;
   //alert(response);
+  if(typeof(processHbInfo)!="undefined") processHbInfo();
   if(response==0)
    {
 		 panel =new leimnud.module.panel();

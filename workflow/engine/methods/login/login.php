@@ -106,5 +106,30 @@ $_DBArray ['langOptions'] = $availableLangArray;
 
 $G_PUBLISH = new Publisher ( );
 $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/login', '', $aFields, SYS_URI . 'login/authentication.php' );
+G::LoadClass ( 'serverConfiguration' );
+$oServerConf = & serverConf::getSingleton ();
+
+$sflag = $oServerConf->getHeartbeatProperty('HB_OPTION','HEART_BEAT_CONF');
+$sflag = (trim($sflag)!='')?$sflag:'1';
+
+$nextBeatDate = $oServerConf->getHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
+
+//echo (date('Y-m-d H:i:s', $nextBeatDate));
+//$oServerConf->unsetHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
+
+if(($sflag=="1")&&((strtotime ( "now" ) > $nextBeatDate)||(is_null($nextBeatDate)))){
+$oHeadPublisher =& headPublisher::getSingleton();
+$oHeadPublisher->addScriptCode('
+
+function processHbInfo(){
+ajax_server="../services/processHeartBeat_Ajax.php";
+parameters="action=processInformation";
+method="POST";
+callback="";
+asynchronous=true;
+ajax_post(ajax_server, parameters, method, callback, asynchronous );
+}
+');
+}
 
 G::RenderPage ( "publish" );
