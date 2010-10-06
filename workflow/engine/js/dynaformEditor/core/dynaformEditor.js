@@ -558,7 +558,10 @@ function getElementByPMClass(__class){
     dynaformEditor.refreshCurrentView();
   }
 
-  function fieldsAdd( type ){
-    popupWindow(G_STRINGS.ID_ADD + ' ' + type , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
+  function fieldsAdd( type,label ){	  
+	  if(!label){
+		  label=type; 
+	  }
+	  popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
   }
 
