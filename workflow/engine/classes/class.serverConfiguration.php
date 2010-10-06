@@ -49,6 +49,8 @@ class serverConf {
   private $pmProduct = 'PMCE';
   private $nextBeatDate;
   private $logins;
+  private $lanDirection;
+  private $lanLanguage;
 
   private function __construct() {
     $this->filePath = PATH_DATA . 'srvConf.singleton';
@@ -126,9 +128,10 @@ class serverConf {
    * @return void
    */
   function unsetProperty($propertyName) {
-    if (isset ( $this->_aProperties [$propertyName] ))
+    if (isset ( $this->_aProperties [$propertyName] )) {
       unset ( $this->_aProperties [$propertyName] );
-    $this->saveSingleton ();
+      $this->saveSingleton ();
+    }
   }
 
   /**
@@ -139,7 +142,8 @@ class serverConf {
   function getProperty($propertyName) {
     if (isset ( $this->_aProperties [$propertyName] )) {
       return $this->_aProperties [$propertyName];
-    } else {
+    } 
+    else {
       return null;
     }
   }
@@ -151,7 +155,7 @@ class serverConf {
    */
   function sucessfulLogin() {
     $this->logins ++;
-    $this->workspaces [SYS_SYS] ['WSP_LOGINS'] ++;
+    $this->workspaces[SYS_SYS]['WSP_LOGINS'] ++;
     $this->saveSingleton ();
   }
 
@@ -168,7 +172,8 @@ class serverConf {
 
     if (isset ( $this->_aWSapces [$wsName] )) { //Enable WS
       unset ( $this->_aWSapces [$wsName] );
-    } else {
+    } 
+    else {
       $this->_aWSapces [$wsName] = 'disabled';
     }
     $this->saveSingleton ();
@@ -184,7 +189,7 @@ class serverConf {
   }
 
   /**
-   * Check only if the server address or server namer has changed,
+   * Check only if the server address or server name has changed,
    * to send another beat in next minute.
    * @param
    * @return boolean
@@ -450,7 +455,8 @@ class serverConf {
       $this->nextBeatDate = strtotime ( "+7 day" ); //next beat in 7 days
       //Reset Errors
       $this->errors=array();
-    } else {
+    } 
+    else {
       //Catch the error
     	//$this->errors[]=@curl_getinfo($ch);
     	$this->errors[]=$curl_session;
@@ -472,5 +478,39 @@ class serverConf {
       $this->workspaces [$wsName] ['WSP_LOGINS'] = 0;
     }
   }
+
+  /**
+   * Get the value of language direction property
+   * @param void
+   * @return string
+   */
+  function getLanDirection() {
+  	if (!isset($this->lanDirection) ) {
+  		$this->lanDirection = 'L';
+  	}
+    if( defined('SYS_LANG') ) {
+    	//if we already have the landirection for this language, just return from serverConf
+    	if ( $this->lanLanguage == SYS_LANG ) 
+    	  return $this->lanDirection;
+    	
+    	//if not , we need to query Database, in order to get the direction
+    	$this->lanDirection = 'L';  //default value;
+    	$this->lanLanguage = SYS_LANG;
+      require_once 'classes/model/Language.php';
+      $oLang = new Language();
+      try{
+        $aLang = $oLang->load(SYS_LANG);
+        if( isset($aLang['LAN_DIRECTION']) ){
+           $this->lanDirection = strtoupper($aLang['LAN_DIRECTION']);
+        }
+        $this->saveSingleton();
+      } 
+      catch(Exception $e){
+        $this->lanDirection = 'L';
+      }
+    }
+   return $this->lanDirection;
+  }
+
 
 }

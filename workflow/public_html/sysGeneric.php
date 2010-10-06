@@ -32,6 +32,14 @@
     strip_slashes($_POST);
   }
 
+//******** function to calculate the time used to render this page  *****
+  function logTimeByPage() {
+  	global $startingTime;
+    $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
+    fwrite( $fpt, sprintf ( "%s.%03d %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
+    fclose( $fpt);
+  }
+
 //******** defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/' **************************
   if ( PHP_OS == 'WINNT' && !strpos ( $_SERVER['DOCUMENT_ROOT'], '/' ) )
    define('PATH_SEP','\\');
@@ -61,7 +69,7 @@
 //************* Including these files we get the PM paths and definitions (that should be just one file ***********
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php' );
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php' );
-
+  $startingTime = G::microtime_float();
 
 //******************* Error handler and log error *******************
   //to do: make different environments.  sys
@@ -132,13 +140,6 @@
   $virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
   $virtualURITable['/(*)'] = PATH_HTML;
 
-//************** defining the serverConf singleton **************
-  if(defined('PATH_DATA') && file_exists(PATH_DATA)){
-    //Instance Server Configuration Singleton
-    G::LoadClass('serverConfiguration');
-    $oServerConf =& serverConf::getSingleton();
-  }
-
 //****** verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page *****
   if ( G::virtualURI($_SERVER['REQUEST_URI'], $virtualURITable , $realPath )) {
     // review if the file requested belongs to public_html plugin
@@ -189,6 +190,7 @@
         break;
       case 'errorFile':
         header ("location: /errors/error404.php");
+        logTimeByPage();
         die;
         break;
       default :
@@ -203,6 +205,13 @@
   G::parseURI ( getenv( "REQUEST_URI" ) );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . "widgets/jscalendar/lang/calendar-" . SYS_LANG . ".js");
   define( 'SYS_URI' , '/sys' .  SYS_TEMP . '/' . SYS_LANG . '/' . SYS_SKIN . '/' );
+
+//************** defining the serverConf singleton **************
+  if(defined('PATH_DATA') && file_exists(PATH_DATA)){
+    //Instance Server Configuration Singleton
+    G::LoadClass('serverConfiguration');
+    $oServerConf =& serverConf::getSingleton();
+  }
 
 //***************** Call Gulliver Classes **************************
 
@@ -453,6 +462,7 @@
     }
     if ( ! file_exists( $phpFile ) ) {
         $_SESSION['phpFileNotFound'] = $phpFile;
+        print $phpFile;
         header ("location: /errors/error404.php");
         die;
     }
@@ -477,19 +487,8 @@
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
 
-    if( defined('SYS_LANG') ){
-      require_once 'classes/model/Language.php';
-      $oLang = new Language();
-      try{
-        $aLang = $oLang->load(SYS_LANG);
-        if( isset($aLang['LAN_DIRECTION']) ){
-           define('SYS_LANG_DIRECTION', strtoupper($aLang['LAN_DIRECTION']));
-        }
-      } 
-      catch(Exception $e){
-        define('SYS_LANG_DIRECTION', 'L');
-      }
-    }
+    //get the language direction from ServerConf
+    define('SYS_LANG_DIRECTION', $oServerConf->getLanDirection() );
 
     if((isset( $_SESSION['USER_LOGGED'] ))&&(!(isset($_GET['sid'])))) {
       $RBAC->initRBAC();
@@ -538,4 +537,5 @@
       header('Pragma: ');
     }
     ob_end_flush();
+    if ( $G_ENVIRONMENTS[ G_ENVIRONMENT ]['debug'] ) logTimeByPage(); //log this page
   }

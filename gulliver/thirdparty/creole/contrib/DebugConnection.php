@@ -152,10 +152,11 @@ class DebugConnection implements Connection {
 	 */
 	public function executeQuery($sql, $fetchmode = null)
 	{
-		$this->log("executeQuery(): $sql");
 		$this->lastExecutedQuery = $sql;
 		$this->numQueriesExecuted++;
-		return $this->childConnection->executeQuery($sql, $fetchmode);	
+		$res = $this->childConnection->executeQuery($sql, $fetchmode);	
+		$this->log("executeQuery(): $sql");
+		return $res;
 	}
 	
 	/**
