@@ -3657,7 +3657,33 @@ class XmlForm
   function parseFile($filename, $language, $forceParse)
   {
     $this->language = $language;
+    $filenameInitial=$filename;
     $filename = $this->home . $filename;
+    
+    //if the xmlform file doesn't exists, then try with the plugins folders
+      if ( !is_file ( $filename ) ) {
+        $aux = explode ( PATH_SEP, $filenameInitial );
+        //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment        
+        if(count($aux) > 2){//Subfolders
+          $filename=array_pop($aux);
+          $aux0=implode(PATH_SEP,$aux);
+          $aux=array();
+          $aux[0]=$aux0;
+          $aux[1]=$filename;
+        }
+        if ( count($aux) == 2 && defined ( 'G_PLUGIN_CLASS' ) ) {
+          $oPluginRegistry =& PMPluginRegistry::getSingleton();
+          if ( $response=$oPluginRegistry->isRegisteredFolder($aux[0]) ) {
+            if($response!==true){
+              $sPath = PATH_PLUGINS.$response.PATH_SEP;
+            }else{
+              $sPath = PATH_PLUGINS;
+            }
+            $filename=$sPath.$aux[0].PATH_SEP.$aux[1];
+          }
+        }
+      }
+    
     $this->fileName = $filename;
     $parsedFile = dirname ( $filename ) . PATH_SEP . basename ( $filename, 'xml' ) . $language;
     $parsedFile = (defined ( 'PATH_C' ) ? PATH_C : PATH_DATA) . 'xmlform/' . substr ( $parsedFile, strlen ( $this->home ) );

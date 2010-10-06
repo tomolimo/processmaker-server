@@ -13,6 +13,12 @@
 {else}
 {* elseif ($field->type==='link') || ($field->type==='menu') *}{$field->field}{/if}
 {/foreach}
+
+{php}
+//This will add registered HTML toolbar options from plugins
+$oPluginRegistry =& PMPluginRegistry::getSingleton();
+$oPluginRegistry->getToolbarOptions("NORMAL");
+{/php}
   </td>
 </tr>
 </table>

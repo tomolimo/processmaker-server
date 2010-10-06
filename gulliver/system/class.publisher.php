@@ -169,15 +169,26 @@ class Publisher
       }
 
       //if the xmlform file doesn't exists, then try with the plugins folders
-      if ( !is_file ( $sPath . $Part['File'] ) ) {
+      if ( !is_file ( $sPath . $Part['File'].'.xml' ) ) {
         $aux = explode ( PATH_SEP, $Part['File'] );
         //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment
+        if(count($aux) > 2){//Subfolders
+          $filename=array_pop($aux);
+          $aux0=implode(PATH_SEP,$aux);
+          $aux=array();
+          $aux[0]=$aux0;
+          $aux[1]=$filename;
+        }
         if ( count($aux) == 2 && defined ( 'G_PLUGIN_CLASS' ) ) {
           $oPluginRegistry =& PMPluginRegistry::getSingleton();
-          if ( $oPluginRegistry->isRegisteredFolder($aux[0]) ) {
+          if ( $response=$oPluginRegistry->isRegisteredFolder($aux[0]) ) {
+            if($response!==true){
+              $sPath = PATH_PLUGINS.$response.PATH_SEP;
+            }else{
             $sPath = PATH_PLUGINS;
           }
         }
+      }
       }
       if (!class_exists($Part['Template']) || $Part['Template']==='xmlform')
         $G_FORM = new Form ( $Part['File'] , $sPath , SYS_LANG, false );

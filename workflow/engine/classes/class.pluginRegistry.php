@@ -77,6 +77,7 @@ class PMPluginRegistry {
   private $_aSteps = array();
   private $_aDashboardPages = array();
   private $_aCSSStyleSheets = array();
+  private $_aToolbarFiles = array();
 
   static private $instance = NULL;
 
@@ -253,6 +254,18 @@ class PMPluginRegistry {
        if ( $detail->sNamespace == $sNamespace )
          unset ( $this->_aSteps[ $key ] );
     }
+   foreach ( $this->_aToolbarFiles as $key=>$detail ) {
+     if ( $detail->sNamespace == $sNamespace )
+       unset ( $this->_aToolbarFiles[ $key ] );
+   }
+   foreach ( $this->_aDashboardPages as $key=>$detail ) {
+     if ( $detail->sNamespace == $sNamespace )
+       unset ( $this->_aDashboardPages[ $key ] );
+   }
+   foreach ( $this->_aCSSStyleSheets as $key=>$detail ) {
+     if ( $detail->sNamespace == $sNamespace )
+       unset ( $this->_aCSSStyleSheets[ $key ] );
+   }
   }
 
   /**
@@ -487,7 +500,10 @@ class PMPluginRegistry {
    */
   function isRegisteredFolder( $sFolderName ) {
     foreach ( $this->_aFolders as $row => $folder ) {
-      if ( $sFolderName  == $folder->sFolderName && is_dir ( PATH_PLUGINS . $folder->sFolderName ) ) {
+      if ( $sFolderName  == $folder->sFolderName && (is_dir ( PATH_PLUGINS . $folder->sFolderName )||is_dir ( PATH_PLUGINS .$folder->sNamespace.PATH_SEP. $folder->sFolderName )) ) {
+      if(is_dir ( PATH_PLUGINS .$folder->sNamespace.PATH_SEP. $folder->sFolderName )){
+        return $folder->sNamespace;//If is a subfolder inside the plugin
+      }
         return true;
       }
     }
@@ -843,6 +859,36 @@ class PMPluginRegistry {
         if ( file_exists ($sSerializedFile) ){
           $pmLicenseManagerO->unSerializeInstance( file_get_contents  ( $sSerializedFile ) );
         }
+      }
+    }
+  }
+  /**
+   * Register a toolbar for dynaform editor in the singleton
+   *
+   * @param unknown_type $sNamespace
+   * @param unknown_type $sToolbarId
+   * @param unknown_type $sFilename
+   */
+  function registerToolbarFile($sNamespace, $sToolbarId, $sFilename ) {
+    $found = false;
+     foreach ( $this->_aToolbarFiles as $row=>$detail ) {
+      if ( $sToolbarId == $detail->sToolbarId && $sNamespace == $detail->sNamespace )
+        $found = true;
+     }
+    if ( !$found ) {
+      $toolbarDetail = new toolbarDetail ($sNamespace, $sToolbarId, $sFilename);
+      $this->_aToolbarFiles[] = $toolbarDetail;
+    }
+  }
+  /**
+   * return all toolbar files related to a sToolbarId
+   *
+   * @param unknown_type $sToolbarId (NORMAL, GRID)
+   */
+  function getToolbarOptions( $sToolbarId ) {
+    foreach ( $this->_aToolbarFiles as $row=>$detail ) {
+      if ( $sToolbarId == $detail->sToolbarId && file_exists ( $detail->sFilename ) ) {
+        include ( $detail->sFilename );
       }
     }
   }

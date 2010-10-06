@@ -58,7 +58,23 @@ class menuDetail {
     $this->sFilename  = $sFilename;
   }
  }
-
+class toolbarDetail {
+  var $sNamespace;
+  var $sToolbarId;
+  var $sFilename;
+  /**
+  * This function is the constructor of the menuDetail class
+  * @param string $sNamespace
+  * @param string $sMenuId
+  * @param string $sFilename
+  * @return void
+  */
+  function __construct( $sNamespace, $sToolbarId, $sFilename ) {
+    $this->sNamespace = $sNamespace;
+    $this->sToolbarId    = $sToolbarId;
+    $this->sFilename  = $sFilename;
+  }
+ }
  class dashboardPage {
   var $sNamespace;
   var $sPage;
@@ -451,5 +467,16 @@ class PMPlugin {
   function registerCss( $sCssFile) {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->registerCss ( $this->sNamespace, $sCssFile );
+  }
+  /**
+  * With this function we can register the toolbar file for dynaform editor
+  * @param string $menuId
+  * @param string $menuFilename
+  * @return void
+  */
+  function registerToolbarFile( $sToolbarId, $filename ) {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $sFilename   = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $filename;
+    $oPluginRegistry->registerToolbarFile ( $this->sNamespace, $sToolbarId, $sFilename);
   }
 }
