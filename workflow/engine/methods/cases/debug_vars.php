@@ -5,14 +5,6 @@ switch($request){
     
     $fieldname = $_POST['fieldname'];
 
-    $response->headers = Array(Array('name'=>'uno'), Array('name'=>'dos'));
-    $response->rows = Array(Array(1,2), Array(3,4), Array(5,6));
-    $response->columns = Array();
-    $response->columns[] = Array('header'=>'Uno', 'width'=>100, 'dataIndex'=>'uno');
-    $response->columns[] = Array('header'=>'Dos', 'width'=>100, 'dataIndex'=>'dos');
-     //{header: "ID", width: 100, sortable: true, dataIndex: 'uno'},
-
-
     G::LoadClass('case');
     $oApp= new Cases();
     $aFields = $oApp->loadCase($_SESSION['APPLICATION']);
@@ -23,17 +15,6 @@ switch($request){
     }
 
     $aVariables = array_merge($aFields['APP_DATA'], $aVariables);
-
-
-
-    $o = new stdClass();
-    $o->name = 'erik';
-    $o->nick = 'neyek';
-    $aVariables['neyek'] = $o;
-
-
-
-    
 
     $field = $aVariables[$fieldname];
     $response->headers = Array();
@@ -51,6 +32,7 @@ switch($request){
           }
           $sw = false;
         }
+
 
         $tmp = Array();
         foreach ($row as $key=>$value) {
@@ -97,15 +79,7 @@ switch($request){
     }
 
     ksort($aVariables);
-
-    //print_r($aVariables);
     $return_object->totalCount=1;
-
-
-    $o = new stdClass();
-    $o->name = 'erik';
-    $o->nick = 'neyek';
-    $aVariables['neyek'] = $o;
     
     foreach ($aVariables as $i=>$var) {
       if( is_object($var) ){
@@ -116,11 +90,8 @@ switch($request){
       }
     }
 
-    
-
     $return_object->data[0]=$aVariables;
 
     echo json_encode($return_object);
-    //echo '{"totalCount":1,"data":[{"param1":"173","param2":"923","param3":"value param3"}]}';
   break;
 }

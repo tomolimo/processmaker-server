@@ -25,6 +25,7 @@ var triggerStore;
 var debugVariablesFilter;
 var ReloadTreeMenuItemDetail;
 var NOTIFIER_FLAG = false;
+var result;
 
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
@@ -73,7 +74,7 @@ Ext.onReady(function(){
 
   var debugVariables = new Ext.grid.PropertyGrid({
     id: 'debugVariables',
-    title:'Variables',
+    title:TRANSLATIONS.ID_VARIABLES,
     autoHeight: false,
     height: 300,
     width: 400,
@@ -88,9 +89,9 @@ Ext.onReady(function(){
       }
     }, 
     tbar: [
-      {text: 'All', handler: resetGrid},
-      {text: 'Dynaform', handler: debugVariablesFilterDynaform},
-      {text: 'System', handler: debugVariablesFilterSystem}
+      {text: TRANSLATIONS.ID_ALL, handler: resetGrid},
+      {text: TRANSLATIONS.ID_DYNAFORM, handler: debugVariablesFilterDynaform},
+      {text: TRANSLATIONS.ID_SYSTEM, handler: debugVariablesFilterSystem}
     ],
     sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     viewConfig: {
@@ -108,19 +109,17 @@ Ext.onReady(function(){
 
     //
     if(r.data.value == '<object>' || r.data.value == '<array>' ){
+      deatachAction.setDisabled(false);
       Ext.Ajax.request({
         url: 'debug_vars?r='+Math.random(),
         success: function(response){
           try{
             result = eval('('+response.responseText+')');
             
-//            alert(result.headers.length);
-  //          alert(result.rows.length);
-
             var store1a = new Ext.data.ArrayStore({fields: result.headers});
               // manually load local data
               store1a.loadData(result.rows);
-
+              
               var myGridPanel = new Ext.grid.GridPanel({
                 store: store1a,
                 height: 200,
@@ -128,9 +127,10 @@ Ext.onReady(function(){
                 columns: result.columns,
                 stripeRows : true,
                 layout: 'fit',
+                viewConfig:{forceFit:true, scrollOffset:0},
                 listeners: {
                   rowdblclick: function(grid, n,e){
-
+                    
                   },
                   render: function(){
                     this.loadMask = new Ext.LoadMask(this.body, {
@@ -156,7 +156,8 @@ Ext.onReady(function(){
       });
 
      
-    }
+    } else
+      deatachAction.setDisabled(true);
 
   });
   
@@ -339,10 +340,10 @@ Ext.onReady(function(){
 
       width: 700,
       height: 450,
-      title: 'Triggers',
+      title: TRANSLATIONS.ID_TRIGGERS,
       iconCls: 'icon-grid',
       tbar: [
-        {text: 'Open in a popup', handler: triggerWindow}
+        {text: TRANSLATIONS.ID_OPEN_IN_POPUP, handler: triggerWindow}
       ],
       sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
       viewConfig: {
@@ -385,6 +386,53 @@ Ext.onReady(function(){
     }
   };
 
+
+  var deatachAction = new Ext.Action({
+    text: TRANSLATIONS.ID_DEATACH,
+    handler: function(){
+      var store1a = new Ext.data.ArrayStore({fields: result.headers});
+      store1a.loadData(result.rows);
+      
+      for(i=0; i<result.columns.length; i++){
+        result.columns[i].editor = new Ext.form.TextField({allowBlank: false, readOnly:true})
+      }
+      
+      var myGridPanel = new Ext.grid.EditorGridPanel({
+        region:'center',
+        store: store1a,
+        autoHeight: true,
+        autoWidth: true,
+        border : false,
+        columns: result.columns,
+        stripeRows : true,
+        layout: 'fit',
+        viewConfig:{forceFit:true, scrollOffset:0},
+        clicksToEdit: 1
+      });
+      
+      var w = new Ext.Window({
+        title: '',
+        width: 600,
+        height: 250,
+        layout:'fit',
+        autoScroll:true,
+        modal: true,
+        
+        maximizable: true,
+        items: [
+          
+              myGridPanel
+            
+        ]
+        });
+      w.show();
+
+    }
+  });
+
+  deatachAction.setDisabled(true);
+
+
   debugPanel = new Ext.Panel({
     id:'debugPanel',
     title: '',
@@ -414,6 +462,7 @@ Ext.onReady(function(){
       }),
       {
         region: 'center',
+        layout: 'fit',
         title: '',
         id: 'debug-details-panel',
         autoScroll: true,
@@ -422,7 +471,10 @@ Ext.onReady(function(){
         margins: '0 2 2 2',
         cmargins: '2 2 2 2',
         height: detailsMenuTreePanelHeight,
-        html: detailsText
+        html: detailsText,
+        tbar:[
+          deatachAction
+        ]
     }]  
   });
   

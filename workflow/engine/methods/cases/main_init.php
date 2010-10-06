@@ -23,13 +23,14 @@
  *
  */
 
-  $oHeadPublisher =& headPublisher::getSingleton();
-  //$oHeadPublisher->setExtSkin( 'xtheme-blue');   
+  $oHeadPublisher =& headPublisher::getSingleton(); 
   $oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
-//  $oHeadPublisher->usingExtJs('ux/Ext.ux.codepress');
-  
   $oHeadPublisher->addExtJsScript('cases/main', false );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/main'); //adding a html file  .html.
-
+  
+  $translations = G::getTranslations(Array(
+    'ID_DEATACH', 'ID_ALL', 'ID_DYNAFORM', 'ID_SYSTEM', 'ID_VARIABLES', 'ID_TRIGGERS', 'ID_OPEN_IN_POPUP'
+  ));
+  $oHeadPublisher->assign('TRANSLATIONS', $translations);
   G::RenderPage('publish', 'extJs');
   
