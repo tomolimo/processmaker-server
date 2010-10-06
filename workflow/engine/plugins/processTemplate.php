@@ -34,22 +34,30 @@
         $this->sDescription  = 'This plugin includes various templates for quick and easy Process Map creation. Users can customize Process Maps based on pre-defined templates of common process designs (including Parallel, Dual Start Task, and Selection).';
         $this->sPluginFolder = 'processTemplate';
         $this->sSetupPage    = null;
-        $this->iVersion = 0.78;
+        $this->iVersion      = 0.78;
+        $this->bPrivate      = true;
+        $this->aWorkspaces   = array ( '__' );
         return $res;
     }
 
     function setup()
     {
-      $this->registerTrigger( PM_NEW_PROCESS_LIST, 'getNewProcessTemplateList' );
-      $this->registerTrigger( PM_NEW_PROCESS_SAVE, 'saveNewProcess' );
-      $this->registerTrigger( PM_NEW_DYNAFORM_LIST, 'getNewDynaformTemplateList' );
-      $this->registerTrigger( PM_NEW_DYNAFORM_SAVE, 'saveNewDynaform' );
+      //$this->registerTrigger( PM_NEW_PROCESS_LIST, 'getNewProcessTemplateList' );
+      //$this->registerTrigger( PM_NEW_PROCESS_SAVE, 'saveNewProcess' );
+      //$this->registerTrigger( PM_NEW_DYNAFORM_LIST, 'getNewDynaformTemplateList' );
+      //$this->registerTrigger( PM_NEW_DYNAFORM_SAVE, 'saveNewDynaform' );
     }
     
     function install()
     {
       
-    }    
+    }
+    function enable(){
+      
+    }
+    function disable(){
+      
+    }
   }
 
  $oPluginRegistry =& PMPluginRegistry::getSingleton();
