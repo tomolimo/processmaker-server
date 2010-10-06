@@ -109,5 +109,8 @@
   float: left;
 }
  
-
-
+.ICON_HEARTBEAT{
+  background-image: url(/images/heartBeat.jpg) !important;
+  width:15px !important;
+  height:15px !important;
+}
