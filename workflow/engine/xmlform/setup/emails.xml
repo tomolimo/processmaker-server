@@ -230,7 +230,12 @@ function testConnectionMail()
   oRPC.callback = function(rpc) {
     oresp = rpc.xmlhttp.responseText.split(',');
         result = oresp[0].trim();
-        msg = oresp[1].trim();
+        if(typeof oresp[1] == "undefined"){
+          msg = '';
+          result = 'INVALID';
+        }else{
+          msg = oresp[1].trim();
+        }
         if( result == 'SUCCESSFUL' ) {
           if(msg != '') {
           }
@@ -240,6 +245,9 @@ function testConnectionMail()
         else {
           if( result == 'FAILED' ) {
             alert(G_STRINGS.ID_MAIL_FAILED);
+          } 
+          if( result == 'INVALID' ) {
+            alert(G_STRINGS.ID_INVALID_EMAIL);
           } 
         }
   }.extend(this);
@@ -361,6 +369,8 @@ function initSet(){
     hideRowById('MESS_RAUTH');
     hideRowById('MESS_TEST_MAIL');
     hideRowById('MESS_TEST_MAIL_TO');
+    hideRowById('TEST');
+    hideRowById('SAVE_CHANGES');
     $('form[SAVE_CHANGES]').disabled = false;
   } else {
     hideRowById('SAVE_CHANGES2');
@@ -522,6 +532,7 @@ if (!getField('MESS_ENABLED').checked) {
   hideRowById('MESS_EXECUTE_EVERY');
   hideRowById('MESS_SEND_MAX');
   hideRowById('MESS_TRY_SEND_INMEDIATLY');
+  //hideRowById('TEST');
 }
 
 switch (getField('MESS_ENGINE').value) {
