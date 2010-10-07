@@ -11,6 +11,9 @@
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
+  define ('DEBUG_SQL_LOG',  0 );
+  define ('DEBUG_TIME_LOG', 0 );
+  
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {
     if (is_array($vVar)) {
@@ -34,7 +37,7 @@
 
 //******** function to calculate the time used to render this page  *****
   function logTimeByPage() {
-  	global $startingTime;
+    global $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
     fwrite( $fpt, sprintf ( "%s.%03d %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
@@ -190,7 +193,7 @@
         break;
       case 'errorFile':
         header ("location: /errors/error404.php");
-        logTimeByPage();
+        if ( DEBUG_LOG ) logTimeByPage(); //log this page
         die;
         break;
       default :
@@ -269,9 +272,9 @@
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
       require_once( PATH_DB .  SYS_TEMP . '/db.php' );
       define ( 'SYS_SYS' , SYS_TEMP );
-       if ((SYS_TARGET==='login')) {
-      $oServerConf->setWsInfo(SYS_TEMP,$oServerConf->getWorkspaceInfo(SYS_TEMP));
-    }
+      if ((SYS_TARGET==='login')) {
+        $oServerConf->setWsInfo(SYS_TEMP,$oServerConf->getWorkspaceInfo(SYS_TEMP));
+      }
     }
     else {
       $aMessage['MESSAGE'] = G::LoadTranslation ('ID_NOT_WORKSPACE');
@@ -294,6 +297,7 @@
       else{
         require_once( PATH_METHODS . "login/sysLogin.php" ) ;
       }
+      if ( DEBUG_LOG ) logTimeByPage(); //log this page
       die();
     }
   }
@@ -307,26 +311,8 @@
   define( 'PATH_DYNAFORM',                  PATH_DATA_SITE . 'xmlForms/' );
   define( 'PATH_IMAGES_ENVIRONMENT_FILES',  PATH_DATA_SITE . 'usersFiles'.PATH_SEP);
   define( 'PATH_IMAGES_ENVIRONMENT_USERS',  PATH_DATA_SITE . 'usersPhotographies'.PATH_SEP);
-
-
-//**** defining and saving server info, this file has the values of the global array $_SERVER ****
-  //this file is useful for command line environment (no Browser), I mean for triggers, crons and other executed over command line
   define( 'SERVER_NAME',  $_SERVER ['SERVER_NAME']);
   define( 'SERVER_PORT',  $_SERVER ['SERVER_PORT']);
-
-  $_CSERVER = $_SERVER;
-  unset($_CSERVER['REQUEST_TIME']);
-  unset($_CSERVER['REMOTE_PORT']);
-  $cput = serialize($_CSERVER);
-  if( !is_file(PATH_DATA_SITE . PATH_SEP . '.server_info') ){
-    file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
-  } 
-  else {
-    $c = file_get_contents(PATH_DATA_SITE . PATH_SEP . '.server_info');
-    if(md5($c) != md5($cput)){
-      file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
-    }
-  }
 
 //***************** Plugins **************************
   G::LoadClass('plugin');
@@ -351,7 +337,7 @@
       'dbfile' => PATH_DB . SYS_SYS . PATH_SEP . 'db.php',
       'datasource' => 'workflow',
       'cache' => 0,
-      'debug' => 1,  //<--- change this value to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
+      'debug' => DEBUG_SQL_LOG,  //<--- change the value of this Constant to to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
     ) ,
     G_TEST_ENV => array (
       'dbfile' => PATH_DB . 'test' . PATH_SEP . 'db.php' ,
@@ -532,7 +518,6 @@
         }
       }
     }
-
     require_once( $phpFile );
     if ( defined('SKIP_HEADERS') ) {
       header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
@@ -540,5 +525,5 @@
       header('Pragma: ');
     }
     ob_end_flush();
-    if ( $G_ENVIRONMENTS[ G_ENVIRONMENT ]['debug'] ) logTimeByPage(); //log this page
+    if ( DEBUG_TIME_LOG ) logTimeByPage(); //log this page
   }

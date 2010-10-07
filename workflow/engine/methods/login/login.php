@@ -22,114 +22,119 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-if (! isset ( $_GET ['u'] )) {
-  $aFields ['URL'] = '';
-}
-else {
-  $aFields ['URL'] = urldecode ( $_GET ['u'] );
-}
-if (! isset ( $_SESSION ['G_MESSAGE'] )) {
-  $_SESSION ['G_MESSAGE'] = '';
-}
-if (! isset ( $_SESSION ['G_MESSAGE_TYPE'] )) {
-  $_SESSION ['G_MESSAGE_TYPE'] = '';
-}
-
-$msg = $_SESSION ['G_MESSAGE'];
-$msgType = $_SESSION ['G_MESSAGE_TYPE'];
-
-if (! isset ( $_SESSION ['FAILED_LOGINS'] )) {
-  $_SESSION ['FAILED_LOGINS'] = 0;
-}
-$sFailedLogins = $_SESSION ['FAILED_LOGINS'];
-
-require_once 'classes/model/LoginLog.php';
-
-$aFields ['LOGIN_VERIFY_MSG'] = G::loadTranslation ( 'LOGIN_VERIFY_MSG' );
-
-$oCriteria = new Criteria ( 'workflow' );
-$oCriteria->add ( LoginLogPeer::LOG_SID, session_id () );
-$oCriteria->add ( LoginLogPeer::USR_UID, isset ( $_SESSION ['USER_LOGGED'] ) ? $_SESSION ['USER_LOGGED'] : '-' );
-$oCriteria->add ( LoginLogPeer::LOG_STATUS, 'ACTIVE' );
-$oCriteria->add ( LoginLogPeer::LOG_END_DATE, NULL, Criteria::ISNULL );
-$oDataset = LoginLogPeer::doSelectRS ( $oCriteria );
-$oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-$oDataset->next ();
-$aRow = $oDataset->getRow ();
-if ($aRow) {
-  if ($aRow ['LOG_STATUS'] != 'CLOSED' && $aRow ['LOG_END_DATE'] == NULL) {
-    $weblog = new LoginLog ( );
-    $aLog ['LOG_UID'] = $aRow ['LOG_UID'];
-    $aLog ['LOG_STATUS'] = 'CLOSED';
-    $aLog ['LOG_IP'] = $aRow ['LOG_IP'];
-    $aLog ['LOG_SID'] = session_id ();
-    $aLog ['LOG_INIT_DATE'] = $aRow ['LOG_INIT_DATE'];
-    $aLog ['LOG_END_DATE'] = date ( 'Y-m-d H:i:s' );
-    $aLog ['LOG_CLIENT_HOSTNAME'] = $aRow ['LOG_CLIENT_HOSTNAME'];
-    $aLog ['USR_UID'] = $aRow ['USR_UID'];
-    $weblog->update ( $aLog );
+  if (! isset ( $_GET ['u'] )) {
+    $aFields ['URL'] = '';
   }
-}
-
-//end log
-
-
-session_destroy ();
-session_start ();
-session_regenerate_id ();
-
-//$G_MAIN_MENU     = 'wf.login';
-//$G_MENU_SELECTED = '';
-if (strlen ( $msg ) > 0) {
-  $_SESSION ['G_MESSAGE'] = $msg;
-}
-if (strlen ( $msgType ) > 0) {
-  $_SESSION ['G_MESSAGE_TYPE'] = $msgType;
-}
-$_SESSION ['FAILED_LOGINS'] = $sFailedLogins;
-
-require_once "classes/model/Translation.php"; 
-$translationsTable = Translation::getTranslationEnvironments();
-$availableLangArray = array ();
-$availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
-foreach ( $translationsTable as $locale ) {
-  $row['LANG_ID'] = $locale['LOCALE'];
-  if( $locale['COUNTRY'] != '.' )
-    $row['LANG_NAME'] = $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')';
-  else
-    $row['LANG_NAME'] = $locale['LANGUAGE'];
-
-  $availableLangArray [] = $row;
-}
-global $_DBArray;
-$_DBArray ['langOptions'] = $availableLangArray;
-
-$G_PUBLISH = new Publisher ( );
-$G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/login', '', $aFields, SYS_URI . 'login/authentication.php' );
-G::LoadClass ( 'serverConfiguration' );
-$oServerConf = & serverConf::getSingleton ();
-
-$sflag = $oServerConf->getHeartbeatProperty('HB_OPTION','HEART_BEAT_CONF');
-$sflag = (trim($sflag)!='')?$sflag:'1';
-
-$nextBeatDate = $oServerConf->getHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
-
-//echo (date('Y-m-d H:i:s', $nextBeatDate));
-//$oServerConf->unsetHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
-
-if(($sflag=="1")&&((strtotime ( "now" ) > $nextBeatDate)||(is_null($nextBeatDate)))){
-$oHeadPublisher =& headPublisher::getSingleton();
-$oHeadPublisher->addScriptCode('
-
-function processHbInfo(){
-ajax_server="../services/processHeartBeat_Ajax.php";
-parameters="action=processInformation";
-method="POST";
-callback="";
-asynchronous=true;
-ajax_post(ajax_server, parameters, method, callback, asynchronous );
-}
-');
-}
-
-G::RenderPage ( "publish" );
+  else {
+    $aFields ['URL'] = urldecode ( $_GET ['u'] );
+  }
+  if (! isset ( $_SESSION ['G_MESSAGE'] )) {
+    $_SESSION ['G_MESSAGE'] = '';
+  }
+  if (! isset ( $_SESSION ['G_MESSAGE_TYPE'] )) {
+    $_SESSION ['G_MESSAGE_TYPE'] = '';
+  }
+  
+  $msg = $_SESSION ['G_MESSAGE'];
+  $msgType = $_SESSION ['G_MESSAGE_TYPE'];
+  
+  if (! isset ( $_SESSION ['FAILED_LOGINS'] )) {
+    $_SESSION ['FAILED_LOGINS'] = 0;
+  }
+  $sFailedLogins = $_SESSION ['FAILED_LOGINS'];
+  
+  require_once 'classes/model/LoginLog.php';
+  
+  $aFields ['LOGIN_VERIFY_MSG'] = G::loadTranslation ( 'LOGIN_VERIFY_MSG' );
+  
+  $oCriteria = new Criteria ( 'workflow' );
+  $oCriteria->add ( LoginLogPeer::LOG_SID, session_id () );
+  $oCriteria->add ( LoginLogPeer::USR_UID, isset ( $_SESSION ['USER_LOGGED'] ) ? $_SESSION ['USER_LOGGED'] : '-' );
+  $oCriteria->add ( LoginLogPeer::LOG_STATUS, 'ACTIVE' );
+  $oCriteria->add ( LoginLogPeer::LOG_END_DATE, NULL, Criteria::ISNULL );
+  $oDataset = LoginLogPeer::doSelectRS ( $oCriteria );
+  $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+  $oDataset->next ();
+  $aRow = $oDataset->getRow ();
+  if ($aRow) {
+    if ($aRow ['LOG_STATUS'] != 'CLOSED' && $aRow ['LOG_END_DATE'] == NULL) {
+      $weblog = new LoginLog ( );
+      $aLog ['LOG_UID'] = $aRow ['LOG_UID'];
+      $aLog ['LOG_STATUS'] = 'CLOSED';
+      $aLog ['LOG_IP'] = $aRow ['LOG_IP'];
+      $aLog ['LOG_SID'] = session_id ();
+      $aLog ['LOG_INIT_DATE'] = $aRow ['LOG_INIT_DATE'];
+      $aLog ['LOG_END_DATE'] = date ( 'Y-m-d H:i:s' );
+      $aLog ['LOG_CLIENT_HOSTNAME'] = $aRow ['LOG_CLIENT_HOSTNAME'];
+      $aLog ['USR_UID'] = $aRow ['USR_UID'];
+      $weblog->update ( $aLog );
+    }
+  }
+  
+  //end log
+  
+  //start new session
+  session_destroy ();
+  session_start ();
+  session_regenerate_id ();
+  
+  if (strlen ( $msg ) > 0) {
+    $_SESSION ['G_MESSAGE'] = $msg;
+  }
+  if (strlen ( $msgType ) > 0) {
+    $_SESSION ['G_MESSAGE_TYPE'] = $msgType;
+  }
+  $_SESSION ['FAILED_LOGINS'] = $sFailedLogins;
+  
+  //translation
+  require_once "classes/model/Translation.php"; 
+  $translationsTable = Translation::getTranslationEnvironments();
+  $availableLangArray = array ();
+  $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
+  foreach ( $translationsTable as $locale ) {
+    $row['LANG_ID'] = $locale['LOCALE'];
+    if( $locale['COUNTRY'] != '.' )
+      $row['LANG_NAME'] = $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')';
+    else
+      $row['LANG_NAME'] = $locale['LANGUAGE'];
+  
+    $availableLangArray [] = $row;
+  }
+  global $_DBArray;
+  $_DBArray ['langOptions'] = $availableLangArray;
+  
+  $G_PUBLISH = new Publisher ( );
+  $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/login', '', $aFields, SYS_URI . 'login/authentication.php' );
+  G::LoadClass ( 'serverConfiguration' );
+  
+  //get the serverconf singleton, and check if we can send the heartbeat
+  $oServerConf = & serverConf::getSingleton ();
+  
+  $sflag = $oServerConf->getHeartbeatProperty('HB_OPTION','HEART_BEAT_CONF');
+  $sflag = (trim($sflag)!='')?$sflag:'1';
+  
+  //get date of next beat
+  $nextBeatDate = $oServerConf->getHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
+  $sflag = 1;
+  //if flag to send heartbeat is enabled, and it is time to send heartbeat, sent it using asynchronous beat.
+  if( ($sflag=="1") && ((strtotime ( "now" ) > $nextBeatDate) || is_null($nextBeatDate) ) ){
+    $oHeadPublisher =& headPublisher::getSingleton();
+    //To do: we need to change to ExtJs
+    $oHeadPublisher->addScriptCode( 'var flagHeartBeat = 1; ');
+  }
+  
+  //check if we show the panel with the getting started info
+  require_once 'classes/model/Configuration.php';
+  $oConfiguration = new Configuration ( );
+  $oCriteria = new Criteria ( 'workflow' );
+  $oCriteria->add ( ConfigurationPeer::CFG_UID, 'getStarted' );
+  $oCriteria->add ( ConfigurationPeer::OBJ_UID, '' );
+  $oCriteria->add ( ConfigurationPeer::CFG_VALUE, '1' );
+  $oCriteria->add ( ConfigurationPeer::PRO_UID, '' );
+  $oCriteria->add ( ConfigurationPeer::USR_UID, '' );
+  $oCriteria->add ( ConfigurationPeer::APP_UID, '' );
+  $flagGettingStarted =  ConfigurationPeer::doCount ( $oCriteria );  
+  if( $flagGettingStarted == 0 ) {
+    $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
+  }
+  G::RenderPage ( "publish" );

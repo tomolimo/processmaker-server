@@ -149,7 +149,7 @@ $oServerConf = & serverConf::getSingleton ();
     //To avoid timeouts
     curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
     curl_setopt ( $ch, CURLOPT_TIMEOUT, 20 );
-
+    
     $response = curl_exec ( $ch );
     $curl_session = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $headers = curl_getinfo ( $ch );

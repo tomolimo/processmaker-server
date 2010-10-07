@@ -177,6 +177,23 @@ try {
   $aLog['USR_UID']            = $_SESSION['USER_LOGGED'];
   $weblog->create($aLog);
   /**end log**/
+  
+  //**** defining and saving server info, this file has the values of the global array $_SERVER ****
+  //this file is useful for command line environment (no Browser), I mean for triggers, crons and other executed over command line
+
+  $_CSERVER = $_SERVER;
+  unset($_CSERVER['REQUEST_TIME']);
+  unset($_CSERVER['REMOTE_PORT']);
+  $cput = serialize($_CSERVER);
+  if( !is_file(PATH_DATA_SITE . PATH_SEP . '.server_info') ){
+    file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
+  } 
+  else {
+    $c = file_get_contents(PATH_DATA_SITE . PATH_SEP . '.server_info');
+    if(md5($c) != md5($cput)){
+      file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
+    }
+  }
 
   /* Check password using policy - Start */
   require_once 'classes/model/UsersProperties.php';

@@ -30,22 +30,6 @@ try {
   }
   $_POST ['function'] = get_ajax_value ( 'function' );
   switch ($_POST ['function']) {
-    case 'getStarted' :
-      require_once 'classes/model/Configuration.php';
-      $oConfiguration = new Configuration ( );
-      $sDelimiter = DBAdapter::getStringDelimiter ();
-      $oCriteria = new Criteria ( 'workflow' );
-      $oCriteria->add ( ConfigurationPeer::CFG_UID, 'getStarted' );
-      $oCriteria->add ( ConfigurationPeer::OBJ_UID, '' );
-      $oCriteria->add ( ConfigurationPeer::CFG_VALUE, '1' );
-      $oCriteria->add ( ConfigurationPeer::PRO_UID, '' );
-      $oCriteria->add ( ConfigurationPeer::USR_UID, '' );
-      $oCriteria->add ( ConfigurationPeer::APP_UID, '' );
-      
-      echo ConfigurationPeer::doCount ( $oCriteria );
-      
-      break;
-    
     case 'getStarted_save' :
       require_once 'classes/model/Configuration.php';
       $aData ['CFG_UID'] = 'getStarted';
@@ -64,4 +48,3 @@ try {
 catch ( Exception $oException ) {
   die ( $oException->getMessage () );
 }
-?>
