@@ -11,9 +11,9 @@
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG',  0 );
-  define ('DEBUG_TIME_LOG', 0 );
-  
+  define ('DEBUG_SQL_LOG',  1 );
+  define ('DEBUG_TIME_LOG', 1 );
+
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {
     if (is_array($vVar)) {
@@ -49,7 +49,6 @@
   else
    define('PATH_SEP', '/');
 
-
 //***************** Defining the Home Directory *********************************
   $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
   array_pop($docuroot);
@@ -69,9 +68,9 @@
   define('PATH_TRUNK',    $pathTrunk  );
   define('PATH_OUTTRUNK', $pathOutTrunk );
 
+
 //************* Including these files we get the PM paths and definitions (that should be just one file ***********
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php' );
-  require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php' );
   $startingTime = G::microtime_float();
 
 //******************* Error handler and log error *******************
@@ -215,7 +214,6 @@
     G::LoadClass('serverConfiguration');
     $oServerConf =& serverConf::getSingleton();
   }
-
 //***************** Call Gulliver Classes **************************
 
   G::LoadThirdParty('pear/json','class.json');
@@ -272,9 +270,6 @@
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
       require_once( PATH_DB .  SYS_TEMP . '/db.php' );
       define ( 'SYS_SYS' , SYS_TEMP );
-      if ((SYS_TARGET==='login')) {
-        $oServerConf->setWsInfo(SYS_TEMP,$oServerConf->getWorkspaceInfo(SYS_TEMP));
-      }
     }
     else {
       $aMessage['MESSAGE'] = G::LoadTranslation ('ID_NOT_WORKSPACE');

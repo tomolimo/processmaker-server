@@ -201,6 +201,24 @@
         <parameter name="Comment" value=""/>
       </vendor>
     </index>
+    <index name="indexAppStatus">
+      <index-column name="APP_STATUS"/>
+      <index-column name="APP_UID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APPLICATION"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexAppStatus"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="APP_STATUS"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
   </table>
   <table name="APP_DELEGATION">
     <vendor type="mysql">
@@ -6506,7 +6524,8 @@
     </index>
     <index name="indexAppUser">
       <index-column name="USR_UID"/>
-      <index-column name="PRO_UID"/>
+      <index-column name="APP_STATUS"/>
+      <index-column name="DEL_FINISH_DATE"/>
       <vendor type="mysql">
         <parameter name="Table" value="APP_CACHE_VIEW"/>
         <parameter name="Non_unique" value="1"/>

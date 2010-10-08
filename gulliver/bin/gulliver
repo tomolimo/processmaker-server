@@ -34,8 +34,6 @@
     print "Unable to find config/gulliver.php file\n"; exit(255);
   }
   
-  require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php' );
-
   ini_set('display_errors','off');
   ini_set('error_reporting', E_ERROR);
   

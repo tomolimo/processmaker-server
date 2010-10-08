@@ -178,8 +178,11 @@ try {
   $weblog->create($aLog);
   /**end log**/
   
-  //**** defining and saving server info, this file has the values of the global array $_SERVER ****
-  //this file is useful for command line environment (no Browser), I mean for triggers, crons and other executed over command line
+//************** background processes, here we are putting some back office routines **********
+  $oServerConf->setWsInfo(SYS_SYS,$oServerConf->getWorkspaceInfo(SYS_SYS) );
+ 
+//**** defining and saving server info, this file has the values of the global array $_SERVER ****
+//this file is useful for command line environment (no Browser), I mean for triggers, crons and other executed over command line
 
   $_CSERVER = $_SERVER;
   unset($_CSERVER['REQUEST_TIME']);

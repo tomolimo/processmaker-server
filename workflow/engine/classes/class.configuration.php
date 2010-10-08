@@ -194,6 +194,7 @@ class Configurations // extends Configuration
 
   /**
    * loadObject
+   * this function is deprecated, we dont know why return an object, use the function getConfiguration below
    *
    * @param  string    $cfg  
    * @param  object    $obj
@@ -210,6 +211,7 @@ class Configurations // extends Configuration
       $this->Fields = $this->Configuration->load( $cfg, $obj, $pro, $usr, $app );
     else
       return $objectContainer[0]; 
+      
     if (isset($this->Fields['CFG_VALUE']))
       $objectContainer = unserialize($this->Fields['CFG_VALUE']);
     if (!is_array($objectContainer)||sizeof($objectContainer)!=1) 
@@ -218,6 +220,35 @@ class Configurations // extends Configuration
       return $objectContainer[0];
   }
   
+  /**
+   * getConfiguration
+   *
+   * @param  string    $cfg  
+   * @param  object    $obj
+   * @param  string    $pro
+   * @param  string    $usr
+   * @param  string    $app
+   * @return void
+   */   
+  function getConfiguration($cfg, $obj, $pro = '', $usr = '', $app = '')
+  {
+    try {
+      $oCfg = ConfigurationPeer::retrieveByPK( $cfg, $obj, $pro, $usr, $app );
+      if (!is_null($oCfg)) {
+        $row  = $oCfg->toArray(BasePeer::TYPE_FIELDNAME);
+        $result = unserialize($row['CFG_VALUE']);
+        if ( is_array($result) && sizeof($result)==1 )
+          return $result[0]; 
+      }
+      else {
+        return null;
+      }
+    }
+    catch (Exception $oError) {
+      return null;
+    }
+  }
+    
   /**
    * setConfig
    *

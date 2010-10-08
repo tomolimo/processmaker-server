@@ -10,35 +10,44 @@
   $oHeadPublisher   =& headPublisher::getSingleton();
   // oHeadPublisher->setExtSkin( 'xtheme-blue');
 
+  //get the configuration for this action
+  $conf = new Configurations();
+  try {
+    $confCasesList = $conf->getConfiguration('casesList',$action=='search'?'sent':$action );
+  } 
+  catch (Exception $e){
+    $confCasesList = array();
+  }
+
   // evaluates an action and the list that will be rendered
   $config = getAdditionalFields($action);
-
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
   
-  
-	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
+  $userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
   $oAppCache = new AppCacheView();
+  $oAppCache->confCasesList = $confCasesList;
+  
 // get the action based list
   switch ( $action ) {
-  	case 'draft' :
+    case 'draft' :
          $cProcess      = $oAppCache->getDraftListCriteria($userUid);
          $cStatus       = $oAppCache->getDraftListCriteria($userUid);
          break;
-  	case 'sent' :
+    case 'sent' :
          $cProcess      = $oAppCache->getSentListCriteria($userUid);
          $cStatus       = $oAppCache->getSentListCriteria($userUid);
          break;
-  	case 'search' :
+    case 'search' :
          $cProcess      = $oAppCache->getSearchStatusCriteria(null);
          $cStatus       = $oAppCache->getSearchStatusCriteria(null);
          $cUsers        = $oAppCache->getSearchStatusCriteria(null);
          break;
-  	case 'selfservice' :
+    case 'selfservice' :
          $cProcess      = $oAppCache->getUnassignedListCriteria($userUid);
          $cStatus       = $oAppCache->getUnassignedListCriteria($userUid);
          break;
-  	case 'paused' :
+    case 'paused' :
          $cProcess      = $oAppCache->getPausedListCriteria($userUid);
          $cStatus       = $oAppCache->getPausedListCriteria($userUid);
          break;
@@ -100,7 +109,7 @@
     }
 
   }  
-   	
+    
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns ); //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields',  $readerFields ); //sending the fields to get from proxy
@@ -291,17 +300,10 @@
    * @return Array $config
    */
 function getAdditionalFields($action){
+global $confCasesList;
   $caseColumns = array();
   $caseReaderFields = array();
 
-  $conf = new Configurations();
-  try {
-    $confCasesList = $conf->loadObject('casesList',$action=='search'?'sent':$action,'','','');
-  } 
-  catch (Exception $e){
-    $confCasesList = array();
-  }
-  
   if ( count($confCasesList)>1 ) {
     foreach($confCasesList['second']['data'] as $fieldData){
       if ( $fieldData['fieldType']!='key' ) {
@@ -315,22 +317,22 @@ function getAdditionalFields($action){
   } 
   else {
     switch ( $action ) {
-    	case 'draft' :
+      case 'draft' :
         $config = getDraft();
       break;
-    	case 'search' :      
-    	case 'participated' :
+      case 'search' :      
+      case 'participated' :
         $config = getParticipated();
       break;
-    	case 'unassigned' :
+      case 'unassigned' :
         $config = getUnassigned();
       break;
-    	case 'paused' :
+      case 'paused' :
         $config = getPaused();
       break;
       case 'todo' :
-    	default : 
-    	  $action = 'todo';
+      default : 
+        $action = 'todo';
         $config = getToDo();
       break;
     }

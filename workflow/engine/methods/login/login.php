@@ -47,6 +47,7 @@
   
   $aFields ['LOGIN_VERIFY_MSG'] = G::loadTranslation ( 'LOGIN_VERIFY_MSG' );
   
+//close the session, if the current session_id was used in PM.
   $oCriteria = new Criteria ( 'workflow' );
   $oCriteria->add ( LoginLogPeer::LOG_SID, session_id () );
   $oCriteria->add ( LoginLogPeer::USR_UID, isset ( $_SESSION ['USER_LOGGED'] ) ? $_SESSION ['USER_LOGGED'] : '-' );

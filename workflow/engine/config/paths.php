@@ -23,15 +23,11 @@
  * 
  */
 
-//****** Basic defines **** //
-//  define('PATH_HOME',     $pathhome . PATH_SEP );
-//  define('PATH_TRUNK',    $pathTrunk . PATH_SEP );
-// define('PATH_OUTTRUNK', $pathOutTrunk . PATH_SEP );
-
 //***************** System Directories & Paths **************************
 
-  //***************** RBAC Paths **************************
+//***************** RBAC Paths **************************
   define( 'PATH_RBAC_HOME',     PATH_TRUNK . 'rbac' . PATH_SEP );
+
 //***************** GULLIVER Paths **************************
   define( 'PATH_GULLIVER_HOME', PATH_TRUNK . 'gulliver'  . PATH_SEP );
   define( 'PATH_GULLIVER',      PATH_GULLIVER_HOME . 'system' . PATH_SEP );   //gulliver system classes
@@ -63,22 +59,23 @@
   define( 'PATH_RBAC_MYSQL_DATA',  PATH_RBAC_CORE . 'data' . PATH_SEP.'mysql'.PATH_SEP);
   
   define( 'FILE_PATHS_INSTALLED', PATH_CORE . 'config' . PATH_SEP . 'paths_installed.php' );
+  
 //************ include Gulliver Class **************
- require_once( PATH_GULLIVER . PATH_SEP . 'class.g.php');
+  require_once( PATH_GULLIVER . PATH_SEP . 'class.g.php');
+  
 //************ the Smarty Directories **************
  
-  if(file_exists(FILE_PATHS_INSTALLED))
-  {
-  	require_once ( FILE_PATHS_INSTALLED );
-  // TODO: This path defines where to save temporal data, similar to $_SESSION.
-  define( 'PATH_TEMPORAL', PATH_C . 'dynEditor/');
+  if(file_exists(FILE_PATHS_INSTALLED)) {
+    require_once ( FILE_PATHS_INSTALLED );
+    // TODO: This path defines where to save temporal data, similar to $_SESSION.
+    define( 'PATH_TEMPORAL', PATH_C . 'dynEditor/');
 
-	define( 'PATH_DB', PATH_DATA . 'sites' . PATH_SEP );
-	define( 'PATH_SMARTY_C',       PATH_C . 'smarty' . PATH_SEP . 'c' );
-	define( 'PATH_SMARTY_CACHE',   PATH_C . 'smarty' . PATH_SEP . 'cache' );
-	if (!is_dir(PATH_SMARTY_C)) G::mk_dir(PATH_SMARTY_C);
-	if (!is_dir(PATH_SMARTY_CACHE)) G::mk_dir(PATH_SMARTY_CACHE);
-}
+    define( 'PATH_DB', PATH_DATA . 'sites' . PATH_SEP );
+    define( 'PATH_SMARTY_C',       PATH_C . 'smarty' . PATH_SEP . 'c' );
+    define( 'PATH_SMARTY_CACHE',   PATH_C . 'smarty' . PATH_SEP . 'cache' );
+    if (!is_dir(PATH_SMARTY_C)) G::mk_dir(PATH_SMARTY_C);
+    if (!is_dir(PATH_SMARTY_CACHE)) G::mk_dir(PATH_SMARTY_CACHE);
+  }
 //***************** set include path  ***********************
   set_include_path(
     PATH_CORE . PATH_SEPARATOR .
@@ -87,3 +84,51 @@
     PATH_RBAC_CORE . PATH_SEPARATOR .
     get_include_path()
   );
+
+//******************* some global definitions, before it was the defines.php file ********
+
+//***************** URL KEY *********************************************
+  define("URL_KEY", 'c0l0s40pt1mu59r1m3' );
+
+//************ Other definitions  **************
+  //web service timeout
+  define( 'TIMEOUT_RESPONSE', 100 );
+  //to login like workflow system
+  define( 'APPLICATION_CODE', 'ProcessMaker' );
+
+  define ( 'MAIN_POFILE', 'processmaker');
+  define ( 'PO_SYSTEM_VERSION',  'PM 4.0.1');
+
+///************TimeZone Set***************//
+  if(!defined('TIME_ZONE')) {
+    define('TIME_ZONE', 'America/La_Paz');
+  }
+  if (function_exists('date_default_timezone_set')) {
+    date_default_timezone_set(TIME_ZONE);
+  }
+
+  $G_CONTENT = NULL;
+  $G_MESSAGE = "";
+  $G_MESSAGE_TYPE = "info";
+  $G_MENU_SELECTED = -1;
+  $G_MAIN_MENU = "default";
+
+  //remove this, when migrate to Propel
+//  define ( 'PEAR_DATABASE', 'mysql');
+//  define ( 'ENABLE_ENCRYPT', 'no' );
+//  define('DB_ERROR_BACKTRACE', TRUE);
+
+//************ Environment definitions  **************
+  define ( 'G_PRO_ENV',  'PRODUCTION' );
+  define ( 'G_DEV_ENV',  'DEVELOPMENT' );
+  define ( 'G_TEST_ENV', 'TEST' );
+
+//********* Number of files per folder at PATH_UPLOAD (cases documents) *****
+ define( 'APPLICATION_DOCUMENTS_PER_FOLDER', 1000 );
+
+//********* Server of ProcessMaker Library *****
+  define ( 'PML_SERVER' ,  'http://library.processmaker.com' );
+  define ( 'PML_WSDL_URL' ,    PML_SERVER . '/syspmLibrary/en/green/services/wsdl');
+  define ( 'PML_UPLOAD_URL',   PML_SERVER . '/syspmLibrary/en/green/services/uploadProcess');
+  define ( 'PML_DOWNLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/download');
+

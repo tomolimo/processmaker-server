@@ -29,7 +29,8 @@ CREATE TABLE `APPLICATION`
 	`APP_DATA` TEXT  NOT NULL,
 	`APP_PIN` VARCHAR(32) default '',
 	PRIMARY KEY (`APP_UID`),
-	KEY `indexApp`(`PRO_UID`, `APP_UID`)
+	KEY `indexApp`(`PRO_UID`, `APP_UID`),
+	KEY `indexAppStatus`(`APP_STATUS`, `APP_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='The application';
 #-----------------------------------------------------------------------------
 #-- APP_DELEGATION
@@ -1060,7 +1061,7 @@ CREATE TABLE `APP_CACHE_VIEW`
 	`APP_OVERDUE_PERCENTAGE` DOUBLE  NOT NULL,
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
 	KEY `indexAppNumber`(`APP_NUMBER`),
-	KEY `indexAppUser`(`USR_UID`, `PRO_UID`)
+	KEY `indexAppUser`(`USR_UID`, `APP_STATUS`, `DEL_FINISH_DATE`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
 #-----------------------------------------------------------------------------
 #-- DIM_TIME_DELEGATE

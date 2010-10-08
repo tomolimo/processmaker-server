@@ -249,61 +249,22 @@ class serverConf {
    */
   function getWorkspaceInfo($wsName) {
     $aResult = Array ('num_processes' => '0', 'num_cases' => '0' );
-    if (file_exists ( PATH_DB . $wsName . PATH_SEP . 'db.php' )) {
+    $result = array();
+    require_once 'classes/model/Process.php';
+    require_once 'classes/model/Application.php';
+    require_once 'classes/model/Users.php';
 
-      $sContent = file_get_contents ( PATH_DB . $wsName . PATH_SEP . 'db.php' );
+    $Criteria  = new Criteria('workflow');
+    $Criteria->add (ProcessPeer::PRO_STATUS, 'ACTIVE' , CRITERIA::EQUAL );
+    $aResult['num_processes'] = ProcessPeer::doCount($Criteria);
 
-      $sContent = str_replace ( '<?php', '', $sContent );
-      $sContent = str_replace ( '<?', '', $sContent );
-      $sContent = str_replace ( '?>', '', $sContent );
-      $sContent = str_replace ( 'define', '', $sContent );
-      $sContent = str_replace ( "('", "$", $sContent );
-      $sContent = str_replace ( "',", '=', $sContent );
-      $sContent = str_replace ( ");", ';', $sContent );
+    $Criteria  = new Criteria('workflow');
+    $Criteria->add (ApplicationPeer::APP_STATUS, 'COMPLETED' , CRITERIA::NOT_EQUAL );
+    $aResult['num_cases'] = ApplicationPeer::doCount($Criteria);
 
-      @eval ( $sContent );
-
-      if (! (isset ( $DB_ADAPTER ) && isset ( $DB_USER ) && isset ( $DB_PASS ) && isset ( $DB_HOST ) && isset ( $DB_NAME ))) {
-        return false;
-      }
-
-      $dsn = $DB_ADAPTER . '://' . $DB_USER . ':' . $DB_PASS . '@' . $DB_HOST . '/' . $DB_NAME;
-      $dsnRbac = $DB_ADAPTER . '://' . $DB_RBAC_USER . ':' . $DB_RBAC_PASS . '@' . $DB_RBAC_HOST . '/' . $DB_RBAC_NAME;
-      $dsnRp = $DB_ADAPTER . '://' . $DB_REPORT_USER . ':' . $DB_REPORT_PASS . '@' . $DB_REPORT_HOST . '/' . $DB_REPORT_NAME;
-
-      $link = @mysql_connect ( $DB_HOST, $DB_USER, $DB_PASS );
-
-      if ($link) {
-        @mysql_select_db ( $DB_NAME );
-        $result = @mysql_query ( "SELECT COUNT(*) AS NUM FROM PROCESS WHERE PRO_STATUS='ACTIVE'", $link );
-        if ($result) {
-          $a = @mysql_fetch_array ( $result );
-
-          if (isset ( $a ['NUM'] )) {
-            $aResult ['num_processes'] = $a ['NUM'];
-          }
-        }
-        $result = @mysql_query ( "SELECT COUNT(APP_UID) AS NUM FROM APPLICATION WHERE APP_STATUS<>'COMPLETED'", $link );
-        if ($result) {
-          $a = @mysql_fetch_array ( $result );
-
-          if (isset ( $a ['NUM'] )) {
-            $aResult ['num_cases'] = $a ['NUM'];
-          }
-        }
-
-        $result = @mysql_query ( "SELECT COUNT(USR_UID) AS NUM FROM USERS WHERE USR_STATUS NOT IN('DELETED','DISABLED')", $link );
-        $aResult ['num_users'] = 'undefined';
-        if ($result) {
-          $a = @mysql_fetch_array ( $result );
-
-          if (isset ( $a ['NUM'] )) {
-            $aResult ['num_users'] = $a ['NUM'];
-          }
-        }
-        mysql_close ( $link );
-      }
-    }
+    $Criteria  = new Criteria('workflow');
+    $Criteria->add (UsersPeer::USR_STATUS, array('DELETED','DISABLED') , CRITERIA::NOT_IN  );
+    $aResult['num_users'] = UsersPeer::doCount($Criteria);
     return $aResult;
   }
 

@@ -19,6 +19,7 @@ require_once 'classes/model/AppDelay.php';
 require_once 'classes/model/AdditionalTables.php';
  
 class AppCacheView extends BaseAppCacheView {
+	var $confCasesList;
 
   function getAllCounters ( $aTypes, $userUid, $processSummary = false ) {
     $aResult = Array();
@@ -517,20 +518,14 @@ class AppCacheView extends BaseAppCacheView {
                   'APP_AUTOMATIC_DISABLED_DATE'
                 );
   
-    $conf = new Configurations();
-    try {
-      $confCasesList = $conf->loadObject('casesList',$action,'','','');
-    }   catch (Exception $e){
-      $confCasesList = array();
-    }
     //if there is PMTABLE for this case list:
-    if ( count($confCasesList)>1 && isset($confCasesList['PMTable']) && trim($confCasesList['PMTable'])!='') {
+    if ( count($this->confCasesList)>1 && isset($this->confCasesList['PMTable']) && trim($this->confCasesList['PMTable'])!='') {
     // getting the table name
 
-      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
+      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($this->confCasesList['PMTable']);
       $tableName = $oAdditionalTables->getAddTabName();
   
-      foreach($confCasesList['second']['data'] as $fieldData){
+      foreach($this->confCasesList['second']['data'] as $fieldData){
         if (!in_array($fieldData['name'],$defaultFields)){
           $fieldName = $tableName.'.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
@@ -560,8 +555,8 @@ class AppCacheView extends BaseAppCacheView {
     } 
     //else this list do not have a PM Table,
     else {
-      if (is_array($confCasesList)){
-        foreach($confCasesList['second']['data'] as $fieldData){
+      if (is_array($this->confCasesList)){
+        foreach($this->confCasesList['second']['data'] as $fieldData){
            switch ($fieldData['fieldType']){
             case 'case field':
               $configTable = 'APP_CACHE_VIEW';

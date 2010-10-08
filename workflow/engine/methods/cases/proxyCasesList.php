@@ -65,7 +65,7 @@
   }
 
   $conf = new Configurations();
-  $confCasesList = $conf->loadObject('casesList',$action,'','','');
+  $confCasesList = $conf->getConfiguration('casesList',$action=='search'?'sent':$action );
   if ( !is_array($confCasesList) ) {
     	$rows = getDefaultFields( $action );
     	$result = genericJsonResponse( '', array(), $rows , 20, '' );
