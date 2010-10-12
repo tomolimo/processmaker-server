@@ -1650,7 +1650,7 @@ function backupAddTarFolder($tar, $pathBase, $pluginHome) {
     while( false !== ($file = readdir($handle)) ) {
       if( is_file($pathBase . $file) ) {
         $empty = false;
-        $tar->addModify($pathBase . $file, '', $pluginHome);
+        $tar->addModify(array($pathBase . $file), '', $pluginHome);
       }
       if( is_dir($pathBase . $file) && $file != '..' && $file != '.' ) {
         //print "dir $pathBase$file \n";
@@ -1661,7 +1661,7 @@ function backupAddTarFolder($tar, $pathBase, $pluginHome) {
     closedir($handle);
   }
   if( $empty /*&& $pathBase . $file != $pluginHome */) {
-    $tar->addModify($pathBase . $file, '', $pluginHome);
+    $tar->addModify(array($pathBase . $file), '', $pluginHome);
   }
 
 }
@@ -2269,15 +2269,6 @@ function printInfoSites($aSitebck, $aSiterestared) {
 global $aFiles;
 
 function checkFileStandardCode ( $file ) {
-/*
-$str = file_get_contents('file.utf8.csv');
-$bom = pack("CCC", 0xef, 0xbb, 0xbf);
-if (0 == strncmp($str, $bom, 3)) {
-	echo "BOM detected - file is UTF-8\n";
-	$str = substr($str, 3);
-}
-*/
-
   global $aFiles;
   
 	if (  strpos ($file, 'workflow/engine/classes/model/om/') !== false ) {
