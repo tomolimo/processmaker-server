@@ -473,7 +473,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       }
       /*
        * It adds the new fields automatically at the bottom of the form.
-       * TODO: ¿TOP OR BOTTOM?
+       * TODO: ï¿½TOP OR BOTTOM?
        * Improving detection algorithm of new fields.
        * Current: Do not check the fields that have already been reviewed (saving)
        * Already checked the temporary file dynaforms editor.
@@ -590,9 +590,9 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    * @return string
    */
   function set_xmlcode($A,$xmlcode) 
-  { 
+  {
     $file    = G::decrypt( $A , URL_KEY );
-    $xmlcode = trim($xmlcode);
+    $xmlcode = str_replace('&nbsp;', ' ', trim($xmlcode));
     $fp      = fopen(PATH_DYNAFORM  . $file . '.xml', 'w');
     fwrite($fp, $xmlcode );
     fclose($fp);
