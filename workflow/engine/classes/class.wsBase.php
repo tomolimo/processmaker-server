@@ -545,10 +545,15 @@ class wsBase
   */
   public function taskList( $userId ) {
     try {
+      g::loadClass('groups');
+      $oGroup = new Groups();
+      $aGroups = $oGroup->getActiveGroupsForAnUser($userId);
+
       $result  = array();
       $oCriteria = new Criteria('workflow');
       $del = DBAdapter::getStringDelimiter();
       $oCriteria->addSelectColumn(TaskPeer::TAS_UID);
+      $oCriteria->setDistinct();
       $oCriteria->addAsColumn('TAS_TITLE', 'C1.CON_VALUE' );
       $oCriteria->addAlias("C1",  'CONTENT');
       $tasTitleConds = array();
@@ -557,9 +562,10 @@ class wsBase
       $tasTitleConds[] = array( 'C1.CON_LANG' ,    $del . SYS_LANG . $del );
       $oCriteria->addJoinMC($tasTitleConds ,    Criteria::LEFT_JOIN);
 
-      $oCriteria->addJoin(TaskPeer::TAS_UID, TaskUserPeer::TAS_UID, Criteria::LEFT_JOIN);
+      $oCriteria->addJoin ( TaskPeer::TAS_UID, TaskUserPeer::TAS_UID, Criteria::LEFT_JOIN );
+      $oCriteria->addOr   ( TaskUserPeer::USR_UID, $userId );
+      $oCriteria->addOr   ( TaskUserPeer::USR_UID, $aGroups, Criteria::IN );
 
-      $oCriteria->add(TaskUserPeer::USR_UID, $userId );
       $oDataset = TaskPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
