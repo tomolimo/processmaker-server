@@ -363,8 +363,11 @@ function G_Text( form, element, name )
                 doubleChange=false;
                 return false;
             }
-            var sel = me.getCursorP(me.element);
-            //var sel = me.getSelectionRange();
+            if(navigator.appName=='Microsoft Internet Explorer')
+             var sel = me.getSelectionRange();
+            else
+             var sel = me.getCursorP(me.element);
+            
             var myValue = String.fromCharCode(keyCode);
             var startPos=sel.selectionStart;
             var endPos=sel.selectionEnd;
@@ -526,7 +529,7 @@ function replaceAll( text, busca, reemplaza ){
         if (event.keyCode===8) {
             if(navigator.appName=='Microsoft Internet Explorer'){
                 //var sel=me.getSelectionRange();
-                var sel = me.getCursorP(me.element);
+                var sel = me.getSelectionRange();
                 var startPos = sel.selectionStart;
                 var endPos   = sel.selectionEnd;
                 var myField = me.element;
@@ -540,7 +543,8 @@ function replaceAll( text, busca, reemplaza ){
                     me.setSelectionRange(startPos-1, startPos-1);
                 }
             }else{
-                var sel=me.getSelectionRange();
+                //var sel=me.getSelectionRange();
+                var sel = me.getCursorP(me.element);
                 var startPos = sel.selectionStart;
                 var endPos   = sel.selectionEnd;
                 var myField = me.element;
