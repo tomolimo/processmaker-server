@@ -49,18 +49,30 @@
     $oProcess = new Processes();
     $oProcess->ws_open_public ();
     $processData = $oProcess->ws_processGetData ( $ObjUid  );
-    $Fields['pro_title']    = $processData->title;
-    $Fields['installSteps'] = nl2br($processData->installSteps);
-    $Fields['category']     = (isset($processData->category) ? $processData->category : '');
-    $Fields['version']      = $processData->version;
-    $G_MAIN_MENU            = 'processmaker';
-    $G_ID_MENU_SELECTED     = 'PROCESSES';
-    $G_PUBLISH = new Publisher;
-    $Fields['PRO_UID'] = $sProUid;
-    $processmapLink = "processes_Map?PRO_UID=$sProUid";
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ImportSucessful', '', $Fields, $processmapLink );
-    G::RenderPage('publish');
-    die;
+    
+    if( is_object($processData->title) && isset($processData->title) )
+    	$processData = $oProcess->ws_processGetData ( $ObjUid  );
+    	
+    if( is_object($processData->title) && isset($processData->title)){
+      $Fields['pro_title']    = $processData->title;
+      $Fields['installSteps'] = nl2br($processData->installSteps);
+      $Fields['category']     = (isset($processData->category) ? $processData->category : '');
+      $Fields['version']      = $processData->version;
+      $G_MAIN_MENU            = 'processmaker';
+      $G_ID_MENU_SELECTED     = 'PROCESSES';
+      $G_PUBLISH = new Publisher;
+      $Fields['PRO_UID'] = $sProUid;
+      $processmapLink = "processes_Map?PRO_UID=$sProUid";
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ImportSucessful', '', $Fields, $processmapLink );
+      G::RenderPage('publish');
+      die;
+    }else{
+      $aMessage['MESSAGE'] = G::LoadTranslation ('ID_BREAK_DW_PROCESS');//"The process was donwloaded but the server had some problems";
+      $G_PUBLISH          = new Publisher;
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
+      G::RenderPage( 'publish' );
+      die;	
+    }
   }
   catch ( Exception $e ) {
     $G_PUBLISH = new Publisher;
