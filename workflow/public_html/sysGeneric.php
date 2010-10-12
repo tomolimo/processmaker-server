@@ -11,8 +11,8 @@
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG',  1 );
-  define ('DEBUG_TIME_LOG', 1 );
+  define ('DEBUG_SQL_LOG',  0 );
+  define ('DEBUG_TIME_LOG', 0 );
 
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {
@@ -192,7 +192,7 @@
         break;
       case 'errorFile':
         header ("location: /errors/error404.php");
-        if ( DEBUG_LOG ) logTimeByPage(); //log this page
+        if ( DEBUG_TIME_LOG ) logTimeByPage(); //log this page
         die;
         break;
       default :
@@ -292,7 +292,7 @@
       else{
         require_once( PATH_METHODS . "login/sysLogin.php" ) ;
       }
-      if ( DEBUG_LOG ) logTimeByPage(); //log this page
+      if ( DEBUG_TIME_LOG ) logTimeByPage(); //log this page
       die();
     }
   }

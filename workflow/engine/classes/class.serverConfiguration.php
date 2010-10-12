@@ -104,6 +104,7 @@ class serverConf {
    */
 
   function saveSingleton() {
+    $this->filePath = PATH_DATA . 'srvConf.singleton';
     $size = file_put_contents ( $this->filePath, $this->serializeInstance () );
   }
 
