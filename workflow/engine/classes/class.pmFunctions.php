@@ -255,12 +255,16 @@ function pauseCase($sApplicationUID = '', $iDelegation = 0, $sUserUID = '', $sUn
  */
 function executeQuery($SqlStatement, $DBConnectionUID = 'workflow') {
   try {
-    $SqlStatement = trim($SqlStatement);
+    $statement = trim($SqlStatement);
+    $statement = str_replace('(', '', $statement);
     $con = Propel::getConnection($DBConnectionUID);
     $con->begin();
+
+    $result = false;
+
     switch(true) {
-      case preg_match("/^SELECT\s/i", $SqlStatement):
-      case preg_match("/^EXECUTE\s/i", $SqlStatement):
+      case preg_match("/^SELECT\s/i", $statement):
+      case preg_match("/^EXECUTE\s/i", $statement):
         $rs = $con->executeQuery($SqlStatement);
         $con->commit();
 
@@ -270,18 +274,18 @@ function executeQuery($SqlStatement, $DBConnectionUID = 'workflow') {
           $result[$i++] = $rs->getRow();
         }
         break;
-      case preg_match("/^INSERT\s/i", $SqlStatement):
+      case preg_match("/^INSERT\s/i", $statement):
         $rs = $con->executeUpdate($SqlStatement);
         $con->commit();
         //$result = $lastId->getId();
         $result = 1;
         break;
-      case preg_match("/^UPDATE\s/i", $SqlStatement):
+      case preg_match("/^UPDATE\s/i", $statement):
         $rs = $con->executeUpdate($SqlStatement);
         $con->commit();
         $result =  $con->getUpdateCount();
         break;
-      case preg_match("/^DELETE\s/i", $SqlStatement):
+      case preg_match("/^DELETE\s/i", $statement):
         $rs = $con->executeUpdate($SqlStatement);
         $con->commit();
         $result =  $con->getUpdateCount();
