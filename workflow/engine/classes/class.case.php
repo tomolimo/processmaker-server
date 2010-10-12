@@ -1622,10 +1622,15 @@ class Cases
   */
   function startCase($sTasUid, $sUsrUid, $isSubprocess=false)
   {
-    if ($sTasUid != '' && $sUsrUid != '') {
+    if ($sTasUid != '') {
       try {
         $this->Task = new Task;
         $this->Task->Load($sTasUid);
+        
+        //To allow Self Service as the first task
+        if(($Fields['TAS_ASSIGN_TYPE']!='SELF_SERVICE')&&($sUsrUid == '')){
+            throw (new Exception('You tried to start a new case without send the USER UID!'));
+        }
 
         //Process
         $sProUid       = $this->Task->getProUid();
@@ -1638,10 +1643,9 @@ class Cases
 
         //appDelegation
         $AppDelegation   = new AppDelegation;
-        $iAppThreadIndex = 1; //start thread
+        $iAppThreadIndex = 1; // Start Thread
         $iAppDelPrio     = 3; // Priority
         $iDelIndex       = $AppDelegation->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex, $iAppDelPrio, $isSubprocess);
-
 
         //appThread
         $AppThread       = new AppThread;

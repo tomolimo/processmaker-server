@@ -58,9 +58,9 @@
 
   $Fields['STATUS'] .= ' ( '.  G::LoadTranslation('ID_UNASSIGNED') . ' )';
   
-  //now getting information about the PREVIOUS task
+  //now getting information about the PREVIOUS task. If is the first task then no preious, use 1
   $oAppDel = new AppDelegation();
-  $oAppDel->Load($Fields['APP_UID'], $Fields['DEL_PREVIOUS'] );
+  $oAppDel->Load($Fields['APP_UID'], ($Fields['DEL_PREVIOUS']==0 ? $Fields['DEL_PREVIOUS'] = 1 : $Fields['DEL_PREVIOUS']) );
 
   $aAppDel = $oAppDel->toArray(BasePeer::TYPE_FIELDNAME);
   try {
