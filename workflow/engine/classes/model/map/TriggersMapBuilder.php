@@ -72,7 +72,7 @@ class TriggersMapBuilder {
 
 		$tMap->addColumn('TRI_WEBBOT', 'TriWebbot', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
-		$tMap->addColumn('TRI_PARAM', 'TriParam', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('TRI_PARAM', 'TriParam', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
 		$tMap->addValidator('TRI_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'WEBBOT|SCRIPT', 'Please select a valid type.');
 

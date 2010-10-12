@@ -201,24 +201,6 @@
         <parameter name="Comment" value=""/>
       </vendor>
     </index>
-    <index name="indexAppStatus">
-      <index-column name="APP_STATUS"/>
-      <index-column name="APP_UID"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="APPLICATION"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexAppStatus"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="APP_STATUS"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
   </table>
   <table name="APP_DELEGATION">
     <vendor type="mysql">
@@ -347,6 +329,7 @@
         <parameter name="Type" value="datetime"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
+        <!-- <parameter name="Default" value="0000-00-00 00:00:00"/> -->
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
@@ -456,24 +439,6 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <index name="indexDelFinishDate">
-      <index-column name="DEL_FINISH_DATE"/>
-      <index-column name="DEL_THREAD_STATUS"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="APP_DELEGATION"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexDelFinishDate"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="DEL_FINISH_DATE"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
 
     <validator column="DEL_TYPE">
       <rule name="validValues" value="NORMAL|PARALLEL" message="Please select a valid status." />
@@ -555,7 +520,7 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column>    
+    </column>
     <column name="USR_UID" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="USR_UID"/>
@@ -615,7 +580,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_DOC_TAGS" type="LONGVARCHAR" >
+    <column name="APP_DOC_TAGS" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="APP_DOC_TAGS"/>
         <parameter name="Type" value="text"/>
@@ -648,7 +613,7 @@
     <validator column="APP_DOC_UID">
       <rule name="maxLength" value="32" message="Application Document UID can be no larger than ${value} in size" />
       <rule name="required" message="Application Document UID is required." />
-    </validator>    
+    </validator>
     <validator column="APP_UID">
       <rule name="maxLength" value="32" message="Application UID can be no larger than ${value} in size" />
       <rule name="required" message="Application UID is required." />
@@ -798,7 +763,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_MSG_CC" type="LONGVARCHAR">
+    <column name="APP_MSG_CC" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="APP_MSG_CC"/>
         <parameter name="Type" value="text"/>
@@ -808,7 +773,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_MSG_BCC" type="LONGVARCHAR">
+    <column name="APP_MSG_BCC" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="APP_MSG_BCC"/>
         <parameter name="Type" value="text"/>
@@ -818,7 +783,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_MSG_TEMPLATE" type="LONGVARCHAR">
+    <column name="APP_MSG_TEMPLATE" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="APP_MSG_TEMPLATE"/>
         <parameter name="Type" value="text"/>
@@ -838,7 +803,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_MSG_ATTACH" type="LONGVARCHAR">
+    <column name="APP_MSG_ATTACH" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="APP_MSG_ATTACH"/>
         <parameter name="Type" value="text"/>
@@ -1506,7 +1471,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="INP_DOC_DESTINATION_PATH" type="LONGVARCHAR">
+    <column name="INP_DOC_DESTINATION_PATH" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="INP_DOC_DESTINATION_PATH"/>
         <parameter name="Type" value="text"/>
@@ -1516,7 +1481,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="INP_DOC_TAGS" type="LONGVARCHAR">
+    <column name="INP_DOC_TAGS" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="INP_DOC_TAGS"/>
         <parameter name="Type" value="text"/>
@@ -1915,7 +1880,7 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column>    
+    </column>
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="PRO_UID"/>
@@ -1966,11 +1931,11 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="OUT_DOC_FIELD_MAPPING" type="LONGVARCHAR" required="true">
+    <column name="OUT_DOC_FIELD_MAPPING" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="OUT_DOC_FIELD_MAPPING"/>
         <parameter name="Type" value="text"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -1986,7 +1951,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="OUT_DOC_DESTINATION_PATH" type="LONGVARCHAR">
+    <column name="OUT_DOC_DESTINATION_PATH" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="OUT_DOC_DESTINATION_PATH"/>
         <parameter name="Type" value="text"/>
@@ -1996,7 +1961,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="OUT_DOC_TAGS" type="LONGVARCHAR">
+    <column name="OUT_DOC_TAGS" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="OUT_DOC_TAGS"/>
         <parameter name="Type" value="text"/>
@@ -2166,7 +2131,7 @@
       <vendor type="mysql">
         <parameter name="Field" value="PRO_CATEGORY"/>
         <parameter name="Type" value="varchar(48)"/>
-        <parameter name="Null" value=""/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -2176,7 +2141,7 @@
       <vendor type="mysql">
         <parameter name="Field" value="PRO_SUB_CATEGORY"/>
         <parameter name="Type" value="varchar(48)"/>
-        <parameter name="Null" value=""/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -3634,11 +3599,11 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="TRI_PARAM" type="LONGVARCHAR" required="true">
+    <column name="TRI_PARAM" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="TRI_PARAM"/>
         <parameter name="Type" value="text"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -3900,7 +3865,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="USR_REPORTS_TO" type="VARCHAR" size="32" default="">
       <vendor type="mysql">
         <parameter name="Field" value="USR_REPORTS_TO"/>
@@ -3911,7 +3876,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="USR_REPLACED_BY" type="VARCHAR" size="32" default="">
       <vendor type="mysql">
         <parameter name="Field" value="USR_REPLACED_BY"/>
@@ -4165,46 +4130,14 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <index name="indexAppUid">
-      <index-column name="APP_UID"/>
-      <index-column name="APP_DEL_INDEX"/>
-      <index-column name="APP_DELAY_UID"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="APP_DELAY"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexAppDelay"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="APP_UID"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
-    <index name="indexActionUser">
-      <index-column name="APP_DISABLE_ACTION_USER"/>
-      <index-column name="APP_ENABLE_ACTION_USER"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="APP_DELAY"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexActionUser"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="APP_DISABLE_ACTION_USER"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
     <index name="indexAppDelay">
       <index-column name="PRO_UID"/>
       <index-column name="APP_UID"/>
+      <index-column name="APP_THREAD_INDEX"/>
+      <index-column name="APP_DEL_INDEX"/>
+      <index-column name="APP_NEXT_TASK"/>
+      <index-column name="APP_DELEGATION_USER"/>
+      <index-column name="APP_DISABLE_ACTION_USER"/>
       <vendor type="mysql">
         <parameter name="Table" value="APP_DELAY"/>
         <parameter name="Non_unique" value="1"/>
@@ -5389,17 +5322,17 @@
     <column name="LOG_IP" type="VARCHAR" size="15" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="LOG_IP"/>
-        <parameter name="Type" value="varchar(15)"/>
+        <parameter name="Type" value="text"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="LOG_SID" type="VARCHAR" size="40" required="true" default="">
+    <column name="LOG_SID" type="VARCHAR" size="100" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="LOG_SID"/>
-        <parameter name="Type" value="varchar(40)"/>
+        <parameter name="Type" value="text"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
@@ -5444,23 +5377,6 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <index name="indexLogSid">
-      <index-column name="LOG_SID"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="LOGIN_LOG"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexLogSid"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="LOG_SID"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
   </table>
   <table name="USERS_PROPERTIES">
     <vendor type="mysql">
@@ -5512,11 +5428,11 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="USR_PASSWORD_HISTORY" type="LONGVARCHAR">
+    <column name="USR_PASSWORD_HISTORY" type="LONGVARCHAR" required="false">
       <vendor type="mysql">
         <parameter name="Field" value="USR_PASSWORD_HISTORY"/>
         <parameter name="Type" value="text"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -6062,7 +5978,7 @@
       <vendor type="mysql">
         <parameter name="Field" value="EVN_CONDITIONS"/>
         <parameter name="Type" value="text"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -6072,7 +5988,7 @@
       <vendor type="mysql">
         <parameter name="Field" value="EVN_ACTION_PARAMETERS"/>
         <parameter name="Type" value="text"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -6106,7 +6022,7 @@
       </vendor>
     </index>
   </table>
-  
+
   <table name="APP_EVENT">
     <vendor type="mysql">
       <parameter name="Name" value="APP_EVENT"/>
@@ -6197,8 +6113,8 @@
       </vendor>
     </column>
   </table>
-  
-  
+
+
   <table name="APP_CACHE_VIEW">
     <vendor type="mysql">
       <parameter name="Name" value="APP_CACHE_VIEW"/>
@@ -6512,29 +6428,28 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <index name="indexAppNumber">
       <index-column name="APP_NUMBER"/>
       <vendor type="mysql">
         <parameter name="Table" value="APP_CACHE_VIEW"/>
         <parameter name="Non_unique" value="1"/>
         <parameter name="Key_name" value="indexAppNumber"/>
-        <parameter name="Seq_in_index" value="1"/>        
+        <parameter name="Seq_in_index" value="1"/>
       </vendor>
     </index>
     <index name="indexAppUser">
       <index-column name="USR_UID"/>
       <index-column name="APP_STATUS"/>
-      <index-column name="DEL_FINISH_DATE"/>
       <vendor type="mysql">
         <parameter name="Table" value="APP_CACHE_VIEW"/>
         <parameter name="Non_unique" value="1"/>
         <parameter name="Key_name" value="indexAppUser"/>
-        <parameter name="Seq_in_index" value="1"/>        
+        <parameter name="Seq_in_index" value="1"/>
       </vendor>
     </index>
   </table>
-  
+
   <table name="DIM_TIME_DELEGATE">
     <vendor type="mysql">
       <parameter name="Name" value="DIM_TIME_DELEGATE"/>
@@ -6739,7 +6654,7 @@
       </vendor>
     </column>
   </table>
-  
+
   <table name="APP_HISTORY">
     <vendor type="mysql">
       <parameter name="Name" value="APP_HISTORY"/>
@@ -6791,7 +6706,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="TAS_UID" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="TAS_UID"/>
@@ -6850,7 +6765,7 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column>    
+    </column>
     <index name="indexAppHistory">
       <index-column name="APP_UID"/>
       <index-column name="TAS_UID"/>
@@ -6893,7 +6808,7 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column> 
+    </column>
     <column name="FOLDER_PARENT_UID" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="FOLDER_PARENT_UID"/>
@@ -6903,7 +6818,7 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column> 
+    </column>
     <column name="FOLDER_NAME" type="LONGVARCHAR" required="true">
       <vendor type="mysql">
         <parameter name="Field" value="FOLDER_NAME"/>
@@ -6932,7 +6847,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
   </table>
 
   <table name="FIELD_CONDITION">
@@ -6976,7 +6891,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="FCD_FIELDS" type="LONGVARCHAR" required="true" >
+    <column name="FCD_FIELDS" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="FCD_FIELDS"/>
         <parameter name="Type" value="mediumtext"/>
@@ -6985,7 +6900,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="FCD_CONDITION" type="LONGVARCHAR" required="true" >
+    <column name="FCD_CONDITION" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="FCD_CONDITION"/>
         <parameter name="Type" value="mediumtext"/>
@@ -6994,7 +6909,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="FCD_EVENTS" type="LONGVARCHAR" required="true" >
+    <column name="FCD_EVENTS" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="FCD_EVENTS"/>
         <parameter name="Type" value="mediumtext"/>
@@ -7003,7 +6918,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="FCD_EVENT_OWNERS" type="LONGVARCHAR" required="true" >
+    <column name="FCD_EVENT_OWNERS" type="LONGVARCHAR" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="FCD_EVENT_OWNERS"/>
         <parameter name="Type" value="mediumtext"/>
@@ -7053,7 +6968,7 @@
       <parameter name="Collation" value="utf8_general_ci"/>
       <parameter name="Checksum" value=""/>
       <parameter name="Create_options" value=""/>
-      <parameter name="Comment" value="Logs for Scheduled Cases"/>
+      <parameter name="Comment" value="Cases Launched with Case Scheduler"/>
     </vendor>
 
     <column name="LOG_CASE_UID" size="32" required="true" primaryKey="true" default="" >
@@ -7155,7 +7070,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
   </table>
 
 
@@ -7225,22 +7140,22 @@
         <parameter name="Field" value="SCH_NAME"/>
         <parameter name="Type" value="varchar(100)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-<!--    
+<!--
     <column name="SCH_PROGRAM" type="VARCHAR" size="100" required="true">
       <vendor type="mysql">
         <parameter name="Field" value="SCH_PROGRAM"/>
         <parameter name="Type" value="varchar(100)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column> 
+    </column>
 //-->
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
@@ -7280,13 +7195,13 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="SCH_STATE" type="VARCHAR" size="15" required="true" default="ACTIVE" >
       <vendor type="mysql">
         <parameter name="Field" value="SCH_STATE"/>
         <parameter name="Type" value="varchar(15)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value="ACTIVE"/>
         <parameter name="Extra" value=""/>
       </vendor>
@@ -7296,7 +7211,7 @@
         <parameter name="Field" value="SCH_LAST_STATE"/>
         <parameter name="Type" value="varchar(60)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
@@ -7306,7 +7221,7 @@
         <parameter name="Field" value="USR_UID"/>
         <parameter name="Type" value="varchar(32)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
@@ -7403,7 +7318,7 @@
         <parameter name="Field" value="SCH_REPEAT_EVERY"/>
         <parameter name="Type" value="varchar(15)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
@@ -7413,7 +7328,7 @@
         <parameter name="Field" value="SCH_REPEAT_UNTIL"/>
         <parameter name="Type" value="varchar(15)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/> 
+        <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
@@ -7430,7 +7345,7 @@
     </column>
 
   </table>
-  
+
   <table name="CALENDAR_DEFINITION">
     <vendor type="mysql">
       <parameter name="Name" value="CALENDAR_DEFINITION"/>
@@ -7472,7 +7387,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="CALENDAR_CREATE_DATE" type="TIMESTAMP" required="true">
       <vendor type="mysql">
         <parameter name="Field" value="CALENDAR_CREATE_DATE"/>
@@ -7501,7 +7416,7 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column>    
+    </column>
     <column name="CALENDAR_DESCRIPTION" type="LONGVARCHAR" required="true">
       <vendor type="mysql">
         <parameter name="Field" value="CALENDAR_DESCRIPTION"/>
@@ -7522,7 +7437,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
 	<validator column="CALENDAR_STATUS">
       <rule name="validValues" value="ACTIVE|INACTIVE|DELETED" message="Please select a valid Calendar Status." />
     </validator>
@@ -7588,11 +7503,11 @@
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column>    
+    </column>
 	<validator column="CALENDAR_BUSINESS_DAY">
       <rule name="validValues" value="0|1|2|3|4|5|6|7" message="Please select a valid Day." />
-    </validator>    
-  </table>  
+    </validator>
+  </table>
 <table name="CALENDAR_HOLIDAYS">
     <vendor type="mysql">
       <parameter name="Name" value="CALENDAR_HOLIDAYS"/>
@@ -7642,7 +7557,7 @@
         <parameter name="Key" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
-    </column>    
+    </column>
     <column name="CALENDAR_HOLIDAY_END" type="TIMESTAMP" required="true" >
       <vendor type="mysql">
         <parameter name="Field" value="CALENDAR_HOLIDAY_END"/>
@@ -7694,7 +7609,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="OBJECT_TYPE" type="VARCHAR" size="100" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="OBJECT_TYPE"/>
@@ -7705,7 +7620,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
   </table>
   <table name="PROCESS_CATEGORY">
     <vendor type="mysql">
@@ -7748,7 +7663,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
     <column name="CATEGORY_NAME" type="VARCHAR" size="100" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="CATEGORY_NAME"/>
@@ -7769,6 +7684,6 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    
+
   </table>
 </database>

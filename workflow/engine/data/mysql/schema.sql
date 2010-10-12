@@ -29,8 +29,7 @@ CREATE TABLE `APPLICATION`
 	`APP_DATA` TEXT  NOT NULL,
 	`APP_PIN` VARCHAR(32) default '',
 	PRIMARY KEY (`APP_UID`),
-	KEY `indexApp`(`PRO_UID`, `APP_UID`),
-	KEY `indexAppStatus`(`APP_STATUS`, `APP_UID`)
+	KEY `indexApp`(`PRO_UID`, `APP_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='The application';
 #-----------------------------------------------------------------------------
 #-- APP_DELEGATION
@@ -63,8 +62,7 @@ CREATE TABLE `APP_DELEGATION`
 	`DEL_DELAYED` TINYINT default 0,
 	`DEL_DATA` TEXT  NOT NULL,
 	`APP_OVERDUE_PERCENTAGE` DOUBLE  NOT NULL,
-	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
-	KEY `indexDelFinishDate`(`DEL_FINISH_DATE`, `DEL_THREAD_STATUS`)
+	PRIMARY KEY (`APP_UID`,`DEL_INDEX`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
 #-----------------------------------------------------------------------------
 #-- APP_DOCUMENT
@@ -352,7 +350,7 @@ CREATE TABLE `OUTPUT_DOCUMENT`
 	`OUT_DOC_GENERATE` VARCHAR(10) default 'BOTH' NOT NULL,
 	`OUT_DOC_TYPE` VARCHAR(32) default 'HTML' NOT NULL,
 	`OUT_DOC_CURRENT_REVISION` INTEGER default 0,
-	`OUT_DOC_FIELD_MAPPING` TEXT  NOT NULL,
+	`OUT_DOC_FIELD_MAPPING` TEXT,
 	`OUT_DOC_VERSIONING` TINYINT default 0 NOT NULL,
 	`OUT_DOC_DESTINATION_PATH` TEXT,
 	`OUT_DOC_TAGS` TEXT,
@@ -604,7 +602,7 @@ CREATE TABLE `TRIGGERS`
 	`PRO_UID` VARCHAR(32) default '' NOT NULL,
 	`TRI_TYPE` VARCHAR(20) default 'SCRIPT' NOT NULL,
 	`TRI_WEBBOT` TEXT  NOT NULL,
-	`TRI_PARAM` TEXT  NOT NULL,
+	`TRI_PARAM` TEXT,
 	PRIMARY KEY (`TRI_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
@@ -683,9 +681,7 @@ CREATE TABLE `APP_DELAY`
 	`APP_DISABLE_ACTION_DATE` DATETIME,
 	`APP_AUTOMATIC_DISABLED_DATE` DATETIME,
 	PRIMARY KEY (`APP_DELAY_UID`),
-	KEY `indexAppUid`(`APP_UID`, `APP_DEL_INDEX`, `APP_DELAY_UID`),
-	KEY `indexActionUser`(`APP_DISABLE_ACTION_USER`, `APP_ENABLE_ACTION_USER`),
-	KEY `indexAppDelay`(`PRO_UID`, `APP_UID`)
+	KEY `indexAppDelay`(`PRO_UID`, `APP_UID`, `APP_THREAD_INDEX`, `APP_DEL_INDEX`, `APP_NEXT_TASK`, `APP_DELEGATION_USER`, `APP_DISABLE_ACTION_USER`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='APP_DELAY';
 #-----------------------------------------------------------------------------
 #-- PROCESS_USER
@@ -887,13 +883,12 @@ CREATE TABLE `LOGIN_LOG`
 	`LOG_UID` VARCHAR(32) default '' NOT NULL,
 	`LOG_STATUS` VARCHAR(100) default '' NOT NULL,
 	`LOG_IP` VARCHAR(15) default '' NOT NULL,
-	`LOG_SID` VARCHAR(40) default '' NOT NULL,
+	`LOG_SID` VARCHAR(100) default '' NOT NULL,
 	`LOG_INIT_DATE` DATETIME,
 	`LOG_END_DATE` DATETIME,
 	`LOG_CLIENT_HOSTNAME` VARCHAR(100) default '' NOT NULL,
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
-	PRIMARY KEY (`LOG_UID`),
-	KEY `indexLogSid`(`LOG_SID`)
+	PRIMARY KEY (`LOG_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
 #-- USERS_PROPERTIES
@@ -1061,7 +1056,7 @@ CREATE TABLE `APP_CACHE_VIEW`
 	`APP_OVERDUE_PERCENTAGE` DOUBLE  NOT NULL,
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
 	KEY `indexAppNumber`(`APP_NUMBER`),
-	KEY `indexAppUser`(`USR_UID`, `APP_STATUS`, `DEL_FINISH_DATE`)
+	KEY `indexAppUser`(`USR_UID`, `APP_STATUS`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
 #-----------------------------------------------------------------------------
 #-- DIM_TIME_DELEGATE
@@ -1148,10 +1143,10 @@ CREATE TABLE `FIELD_CONDITION`
 (
 	`FCD_UID` VARCHAR(32) default '' NOT NULL,
 	`FCD_FUNCTION` VARCHAR(50)  NOT NULL,
-	`FCD_FIELDS` TEXT  NOT NULL,
-	`FCD_CONDITION` TEXT  NOT NULL,
-	`FCD_EVENTS` TEXT  NOT NULL,
-	`FCD_EVENT_OWNERS` TEXT  NOT NULL,
+	`FCD_FIELDS` TEXT,
+	`FCD_CONDITION` TEXT,
+	`FCD_EVENTS` TEXT,
+	`FCD_EVENT_OWNERS` TEXT,
 	`FCD_STATUS` VARCHAR(10),
 	`FCD_DYN_UID` VARCHAR(32)  NOT NULL,
 	PRIMARY KEY (`FCD_UID`)
@@ -1176,7 +1171,7 @@ CREATE TABLE `LOG_CASES_SCHEDULER`
 	`WS_CREATE_CASE_STATUS` TEXT  NOT NULL,
 	`WS_ROUTE_CASE_STATUS` TEXT  NOT NULL,
 	PRIMARY KEY (`LOG_CASE_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Logs for Scheduled Cases';
+)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Cases Launched with Case Scheduler';
 #-----------------------------------------------------------------------------
 #-- CASE_SCHEDULER
 #-----------------------------------------------------------------------------

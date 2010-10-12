@@ -68,13 +68,13 @@ class FieldConditionMapBuilder {
 
 		$tMap->addColumn('FCD_FUNCTION', 'FcdFunction', 'string', CreoleTypes::VARCHAR, true, 50);
 
-		$tMap->addColumn('FCD_FIELDS', 'FcdFields', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('FCD_FIELDS', 'FcdFields', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-		$tMap->addColumn('FCD_CONDITION', 'FcdCondition', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('FCD_CONDITION', 'FcdCondition', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-		$tMap->addColumn('FCD_EVENTS', 'FcdEvents', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('FCD_EVENTS', 'FcdEvents', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-		$tMap->addColumn('FCD_EVENT_OWNERS', 'FcdEventOwners', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('FCD_EVENT_OWNERS', 'FcdEventOwners', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
 		$tMap->addColumn('FCD_STATUS', 'FcdStatus', 'string', CreoleTypes::VARCHAR, false, 10);
 

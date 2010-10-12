@@ -76,7 +76,7 @@ class OutputDocumentMapBuilder {
 
 		$tMap->addColumn('OUT_DOC_CURRENT_REVISION', 'OutDocCurrentRevision', 'int', CreoleTypes::INTEGER, false, null);
 
-		$tMap->addColumn('OUT_DOC_FIELD_MAPPING', 'OutDocFieldMapping', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('OUT_DOC_FIELD_MAPPING', 'OutDocFieldMapping', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
 		$tMap->addColumn('OUT_DOC_VERSIONING', 'OutDocVersioning', 'int', CreoleTypes::TINYINT, true, null);
 
