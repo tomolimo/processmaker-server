@@ -35,6 +35,7 @@ G::LoadThirdParty('pear/json','class.json');
 $oJSON = new Services_JSON();
 
 foreach($_POST['aUsers'] as $sUser) {
+  $matches                   = array();
   $aUser                     = (array)$oJSON->decode(stripslashes($sUser));
   $aData['USR_USERNAME']     = str_replace("*","'",$aUser['sUsername']);
 	$aData['USR_PASSWORD']     = md5(str_replace("*","'",$aUser['sUsername']));
@@ -51,7 +52,14 @@ foreach($_POST['aUsers'] as $sUser) {
 	$aData['USR_STATUS']       = 1;
 	$aData['USR_AUTH_TYPE']    = strtolower($aFields['AUTH_SOURCE_PROVIDER']);
 	$aData['UID_AUTH_SOURCE']  = $aFields['AUTH_SOURCE_UID'];
-	$aData['USR_AUTH_USER_DN'] = $aUser['sDN'];
+  // validating with regexp if there are some missing * inside the DN string
+  // if it's so the is changed to the ' character
+  preg_match('/[a-zA-Z]\*[a-zA-Z]/',$aUser['sDN'],$matches);
+  foreach ($matches as $key => $match){
+    $newMatch = str_replace('*', '\'', $match);
+    $aUser['sDN'] = str_replace($match,$newMatch,$aUser['sDN']);
+  }
+ 	$aData['USR_AUTH_USER_DN'] = $aUser['sDN'];
 	$sUserUID                  = $RBAC->createUser($aData, 'PROCESSMAKER_OPERATOR');
 	$aData['USR_STATUS']       = 'ACTIVE';
 	$aData['USR_UID']          = $sUserUID;
