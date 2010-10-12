@@ -30,7 +30,7 @@
     $Fields['OBJ_UID']       = $ObjUid ;
     $sProUid = $oData->process['PRO_UID'];
     $oData->process['PRO_UID_OLD']=$sProUid;
-
+//print $sProUid;die;
     //if the process exists, we need to ask what kind of re-import the user wants,
     if ( $oProcess->processExists ( $sProUid ) ) {
       $G_MAIN_MENU            = 'processmaker';
@@ -50,10 +50,6 @@
     $oProcess->ws_open_public ();
     $processData = $oProcess->ws_processGetData ( $ObjUid  );
     
-    if( is_object($processData->title) && isset($processData->title) )
-    	$processData = $oProcess->ws_processGetData ( $ObjUid  );
-    	
-    if( is_object($processData->title) && isset($processData->title)){
       $Fields['pro_title']    = $processData->title;
       $Fields['installSteps'] = nl2br($processData->installSteps);
       $Fields['category']     = (isset($processData->category) ? $processData->category : '');
@@ -66,13 +62,7 @@
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ImportSucessful', '', $Fields, $processmapLink );
       G::RenderPage('publish');
       die;
-    }else{
-      $aMessage['MESSAGE'] = G::LoadTranslation ('ID_BREAK_DW_PROCESS');//"The process was donwloaded but the server had some problems";
-      $G_PUBLISH          = new Publisher;
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-      G::RenderPage( 'publish' );
-      die;	
-    }
+    
   }
   catch ( Exception $e ) {
     $G_PUBLISH = new Publisher;
