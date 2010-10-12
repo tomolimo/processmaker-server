@@ -73,6 +73,7 @@ class LDAP
    */
   function VerifyLogin( $strUser, $strPass) {
     //get the AuthSource properties
+    if ( strlen($strPass) == 0) return -2;
     $RBAC = RBAC::getSingleton();
     $aAuthSource = $RBAC->authSourcesObj->load($this->sAuthSource );
 

@@ -270,6 +270,7 @@ class RBAC
   */
   function VerifyLogin( $strUser, $strPass)
   {
+    if ( strlen($strPass) == 0) return -2;
     //check if the user exists in the table RB_WORKFLOW.USERS
     $this->initRBAC();
     //if the user exists, the VerifyUser function will return the user properties
