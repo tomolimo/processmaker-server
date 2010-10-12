@@ -335,6 +335,30 @@ var G_Grid = function(oForm, sGridName) {
 								if(oCell1.innerHTML.indexOf('<div id=')!=-1)
 								 oCell1.innerHTML = oCell2.innerHTML;
 							}
+
+              aObjects = oCell1.getElementsByTagName('div');
+
+              if (aObjects.length > 0) {
+
+                if (aObjects[0]) {
+                  aObjects[0].id = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                  aObjects[0].name = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                  if (aObjects[0].onclick) {
+                    sAux = new String(aObjects[0].onclick);
+                    eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
+                  }
+                }
+                aObjects = oCell1.getElementsByTagName('a');
+                if (aObjects) {
+                  if (aObjects[0]) {
+                    if (aObjects[0].onclick) {
+                      sAux = new String(aObjects[0].onclick);
+                      eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
+                    }
+                  }
+                }
+              }
+              
 							break;
 						case '<selec':
 							aObjects1 = oCell1.getElementsByTagName('select');
@@ -657,14 +681,15 @@ function deleteRowOnDybaform(grid, sRow) {
 		args : 'request=deleteGridRowOnDynaform&gridname=' + grid.sGridName + '&rowpos=' + sRow
 	});
 	oRPC.callback = function(rpc) {
-		oPanel.loader.hide();
+    if(oPanel)
+      oPanel.loader.hide();
 		scs = rpc.xmlhttp.responseText.extractScript();
 		scs.evalScript();
 
 		/**
 		 * We verify if the debug panel is open, if it is-> update its content
 		 */
-		if (oDebuggerPanel != null) {
+		if ( typeof(oDebuggerPanel) != 'undefined' &&  oDebuggerPanel != null) {
 			oDebuggerPanel.clearContent();
 			oDebuggerPanel.loader.show();
 			var oRPC = new leimnud.module.rpc.xmlhttp( {
