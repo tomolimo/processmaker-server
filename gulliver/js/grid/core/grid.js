@@ -169,6 +169,14 @@ var G_Grid = function(oForm, sGridName) {
 							} else {
                 aObjects[0].checked = false;
 							}
+							if (aObjects[0].detachEvent) {
+							  try {
+							    aObjects[0].detachEvent('onkeypress', this.getElementByName(1, aObjects[0].id.split('][')[2].replace(']', '')).validateKey);
+							  }
+							  catch (e) {
+							    //Nothing
+							  }
+						  }
               // clearing the html inside the div tag so the values dont be copied
               if (aDatePicker[0]!=undefined){
                   aDatePicker[0].innerHTML='';

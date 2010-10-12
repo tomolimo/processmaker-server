@@ -412,7 +412,7 @@ function replaceAll( text, busca, reemplaza ){
 }
 
     this.putFormatNumber =function (evt) { 
-    if((typeof(evt==="undefined") || evt===0) && me.mask!='' ){ 
+    if((typeof(evt)==="undefined" || evt===0) && me.mask!='' ){ 
       var numberSet=me.element.value.split('.');
       if(numberSet.length >=2)return;
       
@@ -420,6 +420,7 @@ function replaceAll( text, busca, reemplaza ){
       maskL = (maskD.length >1)?maskD[1]:maskD[0];  
       maskWithoutC =replaceAll(maskL,",",""); 
       //maskWithoutC =replaceAll(maskWithoutC,".","");
+      maskWithoutC  =replaceAll(maskWithoutC,"#","");
       maskWithoutC  =replaceAll(maskWithoutC,"%","");
       maskWithoutC  =replaceAll(maskWithoutC," ","");
       maskWithoutPto=replaceAll(maskWithoutC,".","");
