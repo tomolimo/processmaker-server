@@ -50,8 +50,7 @@ try {
   $type = isset ( $aFields['OUT_DOC_TYPE']) ? $aFields['OUT_DOC_TYPE'] : 'HTML';
   
   $aFields['OUT_DOC_TAGS'] = isset ( $aFields['OUT_DOC_TAGS']) ? $aFields['OUT_DOC_TAGS'] : 'OUTPUT';
-  
-  
+  $aFields['OUT_DOC_VERSIONING'] = strval($aFields['OUT_DOC_VERSIONING']);
   
   G::LoadClass('xmlfield_InputPM');
   $G_PUBLISH = new Publisher();
