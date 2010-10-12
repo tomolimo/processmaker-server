@@ -168,7 +168,12 @@ class Triggers extends BaseTriggers {
           $this->setTriDescription("");
         else
           $this->setTriDescription( $aData['TRI_DESCRIPTION'] );
-        
+          
+        if ( !isset ( $aData['TRI_PARAM'] ) ) 
+          $this->setTriParam("");
+        else
+          $this->setTriParam( $aData['TRI_PARAM'] );
+          
         $result=$this->save();
         $con->commit();
         return $result;
