@@ -568,12 +568,15 @@ class G
           if(is_dir($dirName.'/'.$file)) {
             G::rm_dir($dirName.'/'.$file);
           } else {
-            @unlink($dirName.'/'.$file) or die('File '.$dirName.'/'.$file.' couldn\'t be deleted!');
+            if( ! unlink($dirName.'/'.$file) )
+              throw new Exception('File '.$dirName.$file.' couldn\'t be deleted!');
           }
         }
       }
       closedir($dir);
-      @rmdir($dirName) or die('Folder '.$dirName.'/'.$file.' couldn\'t be deleted!');
+      if( ! rmdir($dirName) )
+        throw new Exception('Folder '.$dirName.$file.' couldn\'t be deleted!');
+      
     } else {
       echo 'Folder "<b>'.$dirName.'</b>" doesn\'t exist.';
     }
