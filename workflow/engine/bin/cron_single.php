@@ -164,7 +164,7 @@ if (!defined('SYS_SYS')) {
         processWorkspace();
       }catch(Exception $e){
         echo  $e->getMessage();
-        eprintln("Probelm in workspace: " . $sObject.' it was ommited.', 'red');
+        eprintln("Probelm in workspace: " . $sObject.' it was omitted.', 'red');
       }
       eprintln();
     }
