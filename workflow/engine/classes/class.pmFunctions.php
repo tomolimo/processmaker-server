@@ -255,7 +255,7 @@ function pauseCase($sApplicationUID = '', $iDelegation = 0, $sUserUID = '', $sUn
  */
 function executeQuery($SqlStatement, $DBConnectionUID = 'workflow') {
   try {
-
+    $SqlStatement = trim($SqlStatement);
     $con = Propel::getConnection($DBConnectionUID);
     $con->begin();
     switch(true) {
