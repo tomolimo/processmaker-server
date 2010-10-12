@@ -179,7 +179,7 @@ abstract class BaseAppDelegation extends BaseObject  implements Persistent {
 	 * The value for the app_overdue_percentage field.
 	 * @var        double
 	 */
-	protected $app_overdue_percentage;
+	protected $app_overdue_percentage = 0;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -978,7 +978,7 @@ abstract class BaseAppDelegation extends BaseObject  implements Persistent {
 	public function setAppOverduePercentage($v)
 	{
 
-		if ($this->app_overdue_percentage !== $v) {
+		if ($this->app_overdue_percentage !== $v || $v === 0) {
 			$this->app_overdue_percentage = $v;
 			$this->modifiedColumns[] = AppDelegationPeer::APP_OVERDUE_PERCENTAGE;
 		}

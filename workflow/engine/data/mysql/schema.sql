@@ -61,7 +61,7 @@ CREATE TABLE `APP_DELEGATION`
 	`DEL_FINISHED` TINYINT default 0,
 	`DEL_DELAYED` TINYINT default 0,
 	`DEL_DATA` TEXT  NOT NULL,
-	`APP_OVERDUE_PERCENTAGE` DOUBLE  NOT NULL,
+	`APP_OVERDUE_PERCENTAGE` DOUBLE default 0 NOT NULL,
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
 #-----------------------------------------------------------------------------

@@ -430,12 +430,13 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="APP_OVERDUE_PERCENTAGE" type="DOUBLE" required="true">
+    <column name="APP_OVERDUE_PERCENTAGE" type="DOUBLE" required="true" default="0">
       <vendor type="mysql">
         <parameter name="Field" value="APP_OVERDUE_PERCENTAGE"/>
         <parameter name="Type" value="double"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
