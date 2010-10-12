@@ -1625,7 +1625,7 @@ class Cases
     if ($sTasUid != '') {
       try {
         $this->Task = new Task;
-        $this->Task->Load($sTasUid);
+        $Fields = $this->Task->Load($sTasUid);
         
         //To allow Self Service as the first task
         if(($Fields['TAS_ASSIGN_TYPE']!='SELF_SERVICE')&&($sUsrUid == '')){
