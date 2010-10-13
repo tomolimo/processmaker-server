@@ -363,7 +363,7 @@ MainPanel = function(){
 					// custom http params
 							}),
 					listeners : {
-					  'dblclick':function(n) {
+					  dblclick:function(n) {
 						  if (n.attributes.optionType == "startProcess") {
 								// Ext.Msg.alert('Start Case', 'Starting... "' +
 								// n.attributes.text + '"');
@@ -400,7 +400,7 @@ MainPanel = function(){
 													title : 'Error creating a new Case',
 													msg : '<textarea cols="50" rows="10">'+response.message+'</textarea>',
 													icon : Ext.MessageBox.ERROR,
-													buttons: Ext.Msg.OK,
+													buttons: Ext.Msg.OK
 												});
 											}
 											// Ext.Msg.alert('Status',
@@ -425,7 +425,7 @@ MainPanel = function(){
 						// allowDrop:false,
 						id : 'root',
 						expanded : true
-					},
+					}
 					
 
 				}
@@ -592,7 +592,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
             if(member){
                 autoLoad.callback = function(){
                     Ext.getCmp(id).scrollToMember(member);
-                }
+                };
             }
             var p = this.add(new DocPanel({
                 id: id,
@@ -606,7 +606,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 
 
 		this.detailsTemplate = new Ext.XTemplate(
-			'<div  class="details" style="background:url(/images/onmouseSilver.jpg) repeat;">',
+			'<div  class="details" style="background-color:silver">',
 				'<tpl for=".">',
 					'<!--<img src="{url}">-->',
 					'<div class="details-info" style="background-color:#ffffff;/* for IE */ filter:alpha(opacity=90); /* CSS3 standard */ opacity:0.9;">',
