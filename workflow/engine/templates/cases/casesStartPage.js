@@ -606,12 +606,12 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 
 
 		this.detailsTemplate = new Ext.XTemplate(
-			'<div  class="details" style="background-color:silver">',
+			'<div  class="details" style="background-color:Gainsboro">',
 				'<tpl for=".">',
 					'<!--<img src="{url}">-->',
 					'<div class="details-info" style="background-color:#ffffff;/* for IE */ filter:alpha(opacity=90); /* CSS3 standard */ opacity:0.9;">',
 					
-					'<!-- <div style="width:90%;height:30%;padding:0px;overflow:auto;border:1px solid black" id="pm_target" ></div>-->',
+					'<!-- <div style="width:90%;height:30%;padding:0px;overflow:auto;border:5px dashed black;margin:10px" id="pm_target" ></div>-->',
 					'<h1"><center><u>{taskName}</u></center></h1><br>',
 					'<b>Process Name:</b>',
 					'<span>{processName}</span>',
