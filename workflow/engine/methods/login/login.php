@@ -123,6 +123,8 @@
     //To do: we need to change to ExtJs
     $oHeadPublisher->addScriptCode( 'var flagHeartBeat = 1; ');
   }
+  else
+    $oHeadPublisher->addScriptCode( 'var flagHeartBeat = 0; ');
   
   //check if we show the panel with the getting started info
   require_once 'classes/model/Configuration.php';
@@ -138,4 +140,7 @@
   if( $flagGettingStarted == 0 ) {
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
   }
+  else
+    $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
+
   G::RenderPage ( "publish" );
