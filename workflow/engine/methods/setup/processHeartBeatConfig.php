@@ -30,8 +30,7 @@ if( $access != 1 ){
 	$oServerConf =& serverConf::getSingleton();
 	/*you can use SYS_TEMP or SYS_SYS ON HEAR_BEAT_CONF to save for each workspace*/
 	$sflag = $oServerConf->getHeartbeatProperty('HB_OPTION','HEART_BEAT_CONF');
-	
-    if($sflag){
+    if(($sflag)||(is_null($sflag))){
       $aRow['HB_OPTION']='1';
     }else{
       $aRow['HB_OPTION']='0';
