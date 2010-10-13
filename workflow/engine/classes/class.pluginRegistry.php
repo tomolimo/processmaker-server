@@ -500,11 +500,10 @@ class PMPluginRegistry {
    */
   function isRegisteredFolder( $sFolderName ) {
     foreach ( $this->_aFolders as $row => $folder ) {
-      if ( $sFolderName  == $folder->sFolderName && (is_dir ( PATH_PLUGINS . $folder->sFolderName )||is_dir ( PATH_PLUGINS .$folder->sNamespace.PATH_SEP. $folder->sFolderName )) ) {
-      if(is_dir ( PATH_PLUGINS .$folder->sNamespace.PATH_SEP. $folder->sFolderName )){
-        return $folder->sNamespace;//If is a subfolder inside the plugin
-      }
+      if ( $sFolderName  == $folder->sFolderName && is_dir ( PATH_PLUGINS . $folder->sFolderName )){
         return true;
+      }elseif( $sFolderName  == $folder->sFolderName && is_dir ( PATH_PLUGINS .$folder->sNamespace.PATH_SEP. $folder->sFolderName )){
+        return $folder->sNamespace;
       }
     }
     return false;
