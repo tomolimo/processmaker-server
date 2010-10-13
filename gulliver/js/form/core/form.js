@@ -320,6 +320,10 @@ function G_Text( form, element, name )
         }
     }
 
+function IsUnsignedInteger(YourNumber){
+ var Template = /^d+$/ //Formato de numero entero sin signo
+ return (Template.test(YourNumber)) ? 1 : 0 //Compara "YourNumber" con el formato "Template" y si coincidevuelve verdadero si no devuelve falso
+}
     this.validateKey=function(event) {
         if(me.element.readOnly)  return true;
         me.prev = me.element.value;
@@ -332,7 +336,7 @@ function G_Text( form, element, name )
             if (event.ctrlKey) return true;
             if (event.altKey) return true;
             if (event.shiftKey) return true;
-        }
+        } //alert(keyCode +" \n"+event.ctrlKey);
         if ((keyCode===0) ) if (event.keyCode===46) return true; else return true;
         if ( (keyCode===8)) return true;
         if (me.mask ==='') {
@@ -350,12 +354,20 @@ function G_Text( form, element, name )
                 return k.result();
             }
             else {
+            	  if(me.validate=="Int"){
+            	        if ((keyCode > 47) && (keyCode < 58) || ( keyCode == 118 && event.ctrlKey)|| (keyCode == 120 && event.ctrlKey)) {
+                        return true;
+                      }else{
+                      return false;
+                      }
+            	  } else {
                 var k=new leimnud.module.validator({
                     valid :[me.validate],
                     key   :event,
                     lang  :(typeof(me.language)!=='undefined')?me.language:"en"
                 });
                 return k.result();
+                }
             }
         } else {
             //return true;
