@@ -141,6 +141,6 @@
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
   }
   else
-    $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
+    $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 0; ');
 
   G::RenderPage ( "publish" );
