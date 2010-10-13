@@ -562,21 +562,19 @@ class G
       return;
     }
     if(file_exists($dirName)) {
-      $dir = @opendir($dirName);
-      while((false !== ($file = readdir($dir)))) {
+      $dir = dir($dirName);
+      while($file = $dir->read()) {
         if($file != '.' && $file != '..') {
           if(is_dir($dirName.'/'.$file)) {
             G::rm_dir($dirName.'/'.$file);
           } else {
-            if( ! unlink($dirName.'/'.$file) )
-              throw new Exception('File '.$dirName.$file.' couldn\'t be deleted!');
+            @unlink($dirName.'/'.$file) or die('File '.$dirName.'/'.$file.' couldn\'t be deleted!');
           }
         }
       }
-      closedir($dir);
-      if( ! rmdir($dirName) )
-        throw new Exception('Folder '.$dirName.$file.' couldn\'t be deleted!');
-      
+      $folder = opendir($dirName. PATH_SEP .$file);
+      closedir($folder);
+      @rmdir($dirName.'/'.$file) or die('Folder '.$dirName.'/'.$file.' couldn\'t be deleted!');
     } else {
       echo 'Folder "<b>'.$dirName.'</b>" doesn\'t exist.';
     }
@@ -639,6 +637,14 @@ class G
   function LoadSystem( $strClass )
   {
     require_once( PATH_GULLIVER . 'class.' . $strClass . '.php' );
+  }
+
+  function LoadSystemExist($strClass)
+  {
+    if (file_exists (PATH_GULLIVER . 'class.' . $strClass . '.php') ) 
+      return true;
+    else 
+      return false;
   }
 
   /**
@@ -947,7 +953,6 @@ class G
     unset($toparse);
 
     array_shift($URI_VARS);
-
     define("SYS_LANG", array_shift($URI_VARS));
     define("SYS_SKIN", array_shift($URI_VARS));
 
@@ -1159,7 +1164,8 @@ class G
 
     //if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
     $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
-    if ( ereg("msie", $userAgent)) {
+    if ( preg_match("/msie/i", $userAgent)) {
+    //if ( ereg("msie", $userAgent)) {
       header('Pragma: cache');
 
       $mtime = filemtime($filename);
@@ -1831,29 +1837,34 @@ class G
    * @access public
    * @parameter string lang    
    * @return void
+   *
+   * @note Refactored By Erik A.O. <erik@colosa.com> in Sep 9th, 2010
    */
   function LoadTranslationObject($lang = SYS_LANG){
-    if( is_file(PATH_LANGUAGECONT . 'translation.en') ){
-      require( PATH_LANGUAGECONT . 'translation.en' );
-      $translationDefault = $translation;
-      if($lang!='en'){
-        if ( file_exists (PATH_LANGUAGECONT . 'translation.' . $lang) ){
-          require( PATH_LANGUAGECONT . 'translation.' . $lang );
-        }elseif((!defined("SHOW_UNTRANSLATED_AS_TAG"))||(SHOW_UNTRANSLATED_AS_TAG==0)){
-          // --Default English --
-          require( PATH_LANGUAGECONT . 'translation.' . 'en' );
-        }
-          $translationSYS_LANG=$translation;
-        }
-        
-        global $translation;
-        if($lang!='en'){
-          $translation = array_merge($translationDefault,$translationSYS_LANG);
-        }else{
-          $translation = $translationDefault;
-      }
+    $defaultTranslations = Array();
+    $foreignTranslations = Array();
+    
+    //if the default translations table doesn't exist we can't proceed
+    if( ! is_file(PATH_LANGUAGECONT . 'translation.en') )
+      return NULL;
+    
+    //load the translations table
+    require_once ( PATH_LANGUAGECONT . 'translation.en' );
+    $defaultTranslations = $translation;
+    
+    //if some foreign language was requested and its translation file exists
+    if( $lang != 'en' && file_exists(PATH_LANGUAGECONT . 'translation.' . $lang) ){
+      require_once ( PATH_LANGUAGECONT . 'translation.' . $lang ); //load the foreign translations table
+      $foreignTranslations = $translation;
     }
+    
+    global $translation;
+    if( defined("SHOW_UNTRANSLATED_AS_TAG") && SHOW_UNTRANSLATED_AS_TAG != 0 ) 
+      $translation = $foreignTranslations;
+    else
+      $translation = array_merge($defaultTranslations, $foreignTranslations);
   }
+  
   /**
    * Function LoadTranslation
    * @author Aldo Mauricio Veliz Valenzuela. <mauricio@colosa.com>
@@ -1866,7 +1877,8 @@ class G
   {
     global $translation;      
     if ( isset ( $translation[$msgID] ) ){
-      return eregi_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
+      //return eregi_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
+      return preg_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
     }else{
       if(defined("UNTRANSLATED_MARK")){
         $untranslatedMark = strip_tags(UNTRANSLATED_MARK);
@@ -1878,6 +1890,26 @@ class G
 
   }
 
+
+  /**
+   * Function getTranslations
+   * @author Erik Amaru O. <erik@colosa.com>
+   * @access public
+   * @parameter array msgIDs
+   * @parameter string file
+   * @return string
+   */
+  function getTranslations($msgIDs , $lang = SYS_LANG)
+  {
+    if ( ! is_array($msgIDs) ) return null;
+
+    $translations = Array();
+    foreach( $msgIDs as $mID ) {
+      $translations[$mID] = self::LoadTranslation($mID , $lang);
+    }
+    
+    return $translations;
+  }
   /**
    * Load an array File Content
    *
@@ -2528,10 +2560,8 @@ class G
         // note by gustavo cruz gustavo[at]colosa[dot]com
         // minor adjustments to validate if an open node have a value attribute.
         // for example a dropdown has many childs, but also can have a value attribute.
-        if (isset($r['value'])){
-          if (trim($r['value'])!=''){
-            $cv['__VALUE__'] = $r['value'];
-          }
+        if (trim($r['value'])!=''){
+          $cv['__VALUE__'] = $r['value'];
         }
         // end added code
         $cv['__CONTENT__']       = array();
@@ -2885,6 +2915,111 @@ class G
     }
     return false;
   }
+  
+  /**
+   * Get the type of a variable
+   * Returns the type of the PHP variable var. 
+   *
+   * @author Erik A. Ortiz. <erik@colosa.com>
+   * @return (string) type of variable
+   */ 
+  public function gettype($var) {
+      switch ($var) {
+        case is_null($var):
+          $type='NULL';
+          break;
+           
+        case is_bool($var):
+          $type='boolean';
+          break;
+
+        case is_float($var):
+          $type='double';
+          break;
+
+        case is_int($var):
+          $type='integer';
+          break;
+
+        case is_string($var):
+          $type='string';
+          break;
+
+        case is_array($var):
+          $type='array';
+          break;
+
+        case is_object($var):
+          $type='object';
+          break;
+
+        case is_resource($var):
+          $type='resource';
+          break;
+
+        default:
+          $type='unknown type';
+          break;
+      }
+
+      return $type;
+    }
+
+  function removeComments($buffer)
+  {
+    /* remove comments */
+    $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
+    /* remove tabs, spaces, newlines, etc. */
+    $buffer = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $buffer);
+    return $buffer;
+  }
+
+  function getMemoryUsage(){
+    $size = memory_get_usage(true);
+    $unit=array('B','Kb','Mb','Gb','Tb','Pb');
+    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+  }
+
+  function getFormatUserList($format, $aUserInfo){
+  	
+   	switch($format){
+     case '@firstName @lastName':
+     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $format);   
+     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);   
+     break;
+     case '@firstName @lastName (@userName)':
+     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $format);   
+     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);   
+     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);   
+     break;
+     case '@userName':
+     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $format);   
+     break;
+     case '@userName (@firstName @lastName)':
+     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $format);   
+     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
+     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);   
+     break;
+     case '@lastName @firstName':
+     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);   
+     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
+     break;
+     case '@lastName, @firstName':	
+     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);   
+     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
+     break;
+     case '@lastName, @firstName (@userName)':
+     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);   
+     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
+     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);   
+     break;
+     default :
+     break;
+     }
+  	return $infoUser;
+  }
+
+
 
 };
 
