@@ -18,9 +18,10 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_LABEL>
 
 <PME_RELATIVEDATE type="dropdown" required="0" mode="edit" defaultvalue="0">  
-  <en>Interval date type
-    <option name="">Start and End dates (static)</option>
-    <option name="1">Relative dates (dinamic)</option></en>
+  <en>Type of date range
+    <option name="1">Relative Dates</option>
+    <option name="">Static Dates</option>
+   </en>
 </PME_RELATIVEDATE>
 
 <PME_SUBTITLE3 type="title" enableHTML="1">
@@ -40,7 +41,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_SUBTITLE3a>
 
 <PMED_AFTERBEFORE_DESC type="subtitle" defaultvalue="1m" enableHtml="1">
-  <en><![CDATA[<b>Sufixes:</b> d=day m=month y=year;<br/>  	Use negative numbers for past dates and positive numbers for future dates<br />  	<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>.]]></en>
+  <en><![CDATA[<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  	<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>.]]></en>
 </PMED_AFTERBEFORE_DESC>
 
 <PME_BEFOREDATE type="text" defaultvalue="0m">
@@ -53,7 +54,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 
 
 <PME_SUBTITLE3x type="subtitle" enableHTML="1">
-  <en><![CDATA[<b>Mask Sufixes: </b>Y=Year, y=year (the two last digits at year), m=Month, d=Day]]></en>
+  <en><![CDATA[<b>Mask Codes: </b>Y=Year, y=year (the two last digits at year), m=Month, d=Day]]></en>
 </PME_SUBTITLE3x>
 <PME_MASK type="text" maxlength="50" size="30" defaultvalue="Y-m-d">
   <en>Mask</en>
