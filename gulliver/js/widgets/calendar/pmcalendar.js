@@ -197,7 +197,7 @@ var NeyekCalendar = function(t, editable){
 
 function getDateFromCalendar(inputArray, targetId, mask, editable){
 	
-	sClear = '<a onclick="clearCalendar(\''+targetId+'\');return false;" onmouseover="lockCalendar()" onmouseout="enableCalendar()" title="Reset date field" href="#"><img src="/images/delete-icon.png" border=0 width=12 height=12/></a>';
+	sClear = '<a onclick="clearCalendar(\''+targetId+'\');return false;" onmouseover="lockCalendar()" onmouseout="enableCalendar()" title=\''+G_STRINGS.ID_RSTDATAFIELD+'\' href="#"><img src="/images/delete-icon.png" border=0 width=12 height=12/></a>';
 	
 	result = mask;
 	result = result.replace("Y", inputArray.year);
