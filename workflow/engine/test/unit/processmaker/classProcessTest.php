@@ -167,8 +167,8 @@
   //#28
     $t->isa_ok( $e,      'Exception',   'update() returns error when PRO_UID is not defined' );
   //#29
-  //  $t->is ( $e->getMessage(),   "This row doesn't exists!",   "update() This row doesn't exists!" );
-     $t->todo ( " $e->getMessage() This row doesn't exists!  <>  The row '' in table Process doesn't exists! "  . " line 171");
+  //  $t->is ( $e->getMessage(),   "This row doesn't exist!",   "update() This row doesn't exist!" );
+     $t->todo ( " $e->getMessage() This row doesn't exist!  <>  The row '' in table Process doesn't exist! "  . " line 171");
   }
 
 
@@ -209,8 +209,8 @@
   //#30
     $t->isa_ok( $e,      'Exception',   'remove() returns error when UID is not defined' );
   //#31
-  //$t->is ( $e->getMessage(),   "This row doesn't exists!",   "remove() This row doesn't exists!" );
-    $t->todo ( $e->getMessage() . "  <> The row ''in table Process doesn't exists! " . "     line 213" );
+  //$t->is ( $e->getMessage(),   "This row doesn't exist!",   "remove() This row doesn't exist!" );
+    $t->todo ( $e->getMessage() . "  <> The row ''in table Process doesn't exist! " . "     line 213" );
   }
 
   //remove with $fields

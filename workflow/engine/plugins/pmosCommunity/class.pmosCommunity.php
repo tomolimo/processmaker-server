@@ -11,10 +11,10 @@
     function readConfig () {
     	$fileConf = PATH_PLUGINS . 'pmosCommunity' . PATH_SEP . 'config' . PATH_SEP . 'setup.conf';
     	if ( !file_exists( dirname($fileConf) ) )
-    	  throw ( new Exception ("The directory " . dirname($fileConf) . " doesn't exists." ) );
+    	  throw ( new Exception ("The directory " . dirname($fileConf) . " doesn't exist." ) );
 
     	if ( file_exists ( $fileConf ) && !is_writable( $fileConf ) )
-    	  throw ( new Exception ("The file $fileConf doesn't exists or this file is not writable." ) );
+    	  throw ( new Exception ("The file $fileConf doesn't exist or this file is not writable." ) );
 
     	$content = file_get_contents ( $fileConf);
     	$fields = unserialize ($content);
@@ -24,10 +24,10 @@
     function getFieldsForPageSetup () {
     	$fileConf = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . 'config' . PATH_SEP . 'setup.conf';
     	if ( !file_exists( dirname($fileConf) ) )
-    	  throw ( new Exception ("The directory " . dirname($fileConf) . " doesn't exists." ) );
+    	  throw ( new Exception ("The directory " . dirname($fileConf) . " doesn't exist." ) );
 
     	if ( file_exists ( $fileConf ) && !is_writable( $fileConf ) )
-    	  throw ( new Exception ("The file $fileConf doesn't exists or this file is not writable." ) );
+    	  throw ( new Exception ("The file $fileConf doesn't exist or this file is not writable." ) );
 
     	if ( file_exists ( $fileConf ) ) {
     	  $content = file_get_contents ( $fileConf);
@@ -42,10 +42,10 @@
     	$content = serialize ($oData['form']);
     	$fileConf = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . 'config' . PATH_SEP . 'setup.conf';
     	if ( !is_writable( dirname($fileConf) ) )
-    	  throw ( new Exception ("The directory " . dirname($fileConf) . " doesn't exists or this directory is not writable." ) );
+    	  throw ( new Exception ("The directory " . dirname($fileConf) . " doesn't exist or this directory is not writable." ) );
 
     	if ( file_exists ( $fileConf ) && !is_writable( $fileConf ) )
-    	  throw ( new Exception ("The file $fileConf doesn't exists or this file is not writable." ) );
+    	  throw ( new Exception ("The file $fileConf doesn't exist or this file is not writable." ) );
 
     	file_put_contents ( $fileConf, $content);
     	return true;

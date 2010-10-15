@@ -510,7 +510,7 @@ function run_pack_plugin($task, $args) {
   $pluginClassFilename = PATH_PLUGINS . $pluginName . PATH_SEP . 'class.' . $pluginName . '.php';
   $pluginFilename = PATH_PLUGINS . $pluginName . '.php';
   if( ! is_file($pluginClassFilename) ) {
-    printf("The plugin %s does not exists in this file %s \n", pakeColor::colorize($pluginName, 'ERROR'), pakeColor::colorize($pluginClassFilename, 'INFO'));
+    printf("The plugin %s does not exist in this file %s \n", pakeColor::colorize($pluginName, 'ERROR'), pakeColor::colorize($pluginClassFilename, 'INFO'));
     die();
   }
   G::LoadClass('plugin');
@@ -1047,7 +1047,7 @@ function run_new_project($task, $args) {
   $dbnpass = substr(G::GenerateUniqueId(), 0, 8);
   if( 1 || ! file_exists($dbFile) ) {
     if( ! defined('HASH_INSTALLATION') ) {
-      printf("%s\n", pakeColor::colorize('HASH INSTALLATION is invalid or not exists. Please check the paths_installed.php file', 'ERROR'));
+      printf("%s\n", pakeColor::colorize('HASH INSTALLATION is invalid or does not exist. Please check the paths_installed.php file', 'ERROR'));
       exit(0);
     }
     $dbOpt = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
@@ -1849,7 +1849,7 @@ function run_workspace_backup($task, $args) {
     
     $dbFile = PATH_DB . $workspace . PATH_SEP . 'db.php';
     if( ! file_exists($dbFile) ) {
-      throw (new Exception("Invalid workspace, the db file does not exists, $dbFile"));
+      throw (new Exception("Invalid workspace, the db file does not exist, $dbFile"));
     }
     
     $dbOpt = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
@@ -2175,7 +2175,7 @@ function get_DirDB($workspace) {
   
   $dbFile = PATH_DB . $workspace . PATH_SEP . 'db.php';
   if( ! file_exists($dbFile) ) {
-    throw (new Exception("the db file does not exists, $dbFile"));
+    throw (new Exception("the db file does not exist, $dbFile"));
   }
   
   require_once ($dbFile);

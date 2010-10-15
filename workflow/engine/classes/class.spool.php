@@ -209,7 +209,7 @@ class spoolRun {
       //to validate complex email address i.e. Erik A. O <erik@colosa.com>
       preg_match('/([\"\w@\.-_\s]*\s*)?(<(\w+[\.-]?\w+]*@\w+([\.-]?\w+)*\.\w{2,3})+>)/', $this->fileData['from'], $matches);
       if( isset($matches[1]) && $matches[1] != '' ) {
-        //drop the " characteres if exists
+        //drop the " characters if they exist
         $this->fileData['from_name'] = trim(str_replace('"', '', $matches[1]));
       } else { //if the from name was not set
         $this->fileData['from_name'] = 'Processmaker';

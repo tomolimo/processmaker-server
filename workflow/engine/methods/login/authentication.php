@@ -41,7 +41,7 @@ try {
   $uid = $RBAC->VerifyLogin($usr , $pwd);
   $sPwd = 'currentPwd';
   switch ($uid) {
-    //The user not exists
+    //The user does not exist
     case -1:
       G::SendTemporalMessage ('ID_USER_NOT_REGISTERED', "warning");
       break;
@@ -77,7 +77,7 @@ try {
   }
   $$sPwd= $pwd;
   
-  //to avoid empty string in user field.  This will avoid a weird message "this row doesnt exists"
+  //to avoid empty string in user field.  This will avoid a weird message "this row doesn't exist"
   if ( !isset($uid) ) {
     $uid = -1;
     G::SendTemporalMessage ('ID_USER_NOT_REGISTERED', "warning");

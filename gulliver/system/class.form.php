@@ -130,7 +130,7 @@ class Form extends XmlForm
   function printTemplate( $template, &$scriptContent )
   {
     if (!file_exists($template)){
-      throw(new Exception('Template "'.basename($template).'" doesn`t exists.'));
+      throw(new Exception('Template "'.basename($template).'" doesn`t exist.'));
     }
     $o = new xmlformTemplate($this, $template);
     if (is_array(reset($this->values))) 

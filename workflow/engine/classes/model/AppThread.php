@@ -110,7 +110,7 @@ class AppThread extends BaseAppThread {
       }
       else {
         $con->rollback(); 
-        throw(new Exception( "This AppThread row doesn't exists!" ));
+        throw(new Exception( "This AppThread row doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

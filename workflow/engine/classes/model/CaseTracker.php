@@ -25,7 +25,7 @@ class CaseTracker extends BaseCaseTracker {
         return $aFields;
       }
       else {
-        throw(new Exception("The row '$sProcessUID' in table CASE_TRACKER doesn't exists!"));
+        throw(new Exception("The row '$sProcessUID' in table CASE_TRACKER doesn't exist!"));
       }
     }
     catch (Exception $oError) {
@@ -85,7 +85,7 @@ class CaseTracker extends BaseCaseTracker {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

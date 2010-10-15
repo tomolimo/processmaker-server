@@ -136,7 +136,7 @@
     $t->isa_ok( $e,      'Exception',   'update() returns error when APP_UID is not defined' );
   //#24 
   
-  $t->is ( $e->getMessage(),   "The row '' in table APPLICATION doesn't exists!",   "update() This row doesn't exists!" );
+  $t->is ( $e->getMessage(),   "The row '' in table APPLICATION doesn't exist!",   "update() This row doesn't exist!" );
 
   }
 
@@ -176,7 +176,7 @@
   //#30
     $t->isa_ok( $e,      'Exception',   'remove() returns error when APP_UID is not defined' );
   //#31
-    $t->is ( $e->getMessage(),   "The row '' in table Application doesn't exists!",   "remove() This row doesn't exists!" );
+    $t->is ( $e->getMessage(),   "The row '' in table Application doesn't exist!",   "remove() This row doesn't exist!" );
   }
 /*
   //remove with $fields

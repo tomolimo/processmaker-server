@@ -51,7 +51,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   else
   {
     //TODO
-    print("$PRO_UID doesnt exists, continue? yes");
+    print("$PRO_UID doesn't exist, continue? yes");
   }
 
 

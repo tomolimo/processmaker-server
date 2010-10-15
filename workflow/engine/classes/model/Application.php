@@ -190,7 +190,7 @@ class Application extends BaseApplication {
         return $aFields;
       }
       else {
-        throw( new Exception( "The Application row '$AppUid' doesn't exists!" ));
+        throw( new Exception( "The Application row '$AppUid' doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -304,7 +304,7 @@ class Application extends BaseApplication {
       }
       else {
         $con->rollback();
-        throw(new Exception( "The row '" . $aData['APP_UID'] . "' in table APPLICATION doesn't exists!" ));
+        throw(new Exception( "The row '" . $aData['APP_UID'] . "' in table APPLICATION doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -332,7 +332,7 @@ class Application extends BaseApplication {
         return $oApp->delete();
       }
       else {
-        throw(new Exception( "The row '$appUid' in table Application doesn't exists!" ));
+        throw(new Exception( "The row '$appUid' in table Application doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

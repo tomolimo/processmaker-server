@@ -150,7 +150,7 @@ class Groupwf extends BaseGroupwf {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '$ProUid' in table Group doesn't exists!" ));
+        throw(new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -189,7 +189,7 @@ class Groupwf extends BaseGroupwf {
       }
       else {
         $con->rollback(); 
-        throw(new Exception( "The row '" . $aData['GRP_UID'] . "' in table Group doesn't exists!" ));
+        throw(new Exception( "The row '" . $aData['GRP_UID'] . "' in table Group doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -216,7 +216,7 @@ class Groupwf extends BaseGroupwf {
         return $oPro->delete();
       }
       else {
-        throw(new Exception( "The row '$ProUid' in table Group doesn't exists!" ));
+        throw(new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

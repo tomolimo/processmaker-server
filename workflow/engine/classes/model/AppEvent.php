@@ -24,7 +24,7 @@ class AppEvent extends BaseAppEvent {
         return $aFields;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -80,7 +80,7 @@ class AppEvent extends BaseAppEvent {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -100,7 +100,7 @@ class AppEvent extends BaseAppEvent {
         return $iResult;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -255,8 +255,8 @@ class AppEvent extends BaseAppEvent {
 
         $oTrigger = TriggersPeer::retrieveByPk($aRow['TRI_UID']);
         if( !is_object($oTrigger) ){
-          //the trigger record doesn't exists..
-          if($debug) println(" (!) The trigger {$aRow['TRI_UID']} {$oTrigger->getTriTitle()} doesn't exists.......SKIPPED and will be CLOSED");
+          //the trigger record doesn't exist..
+          if($debug) println(" (!) The trigger {$aRow['TRI_UID']} {$oTrigger->getTriTitle()} doesn't exist.......SKIPPED and will be CLOSED");
           $oAppEvent->setAppEvnStatus('CLOSE');
           $oAppEvent->save();
           continue;

@@ -88,7 +88,7 @@
     //verify if plugin exists, 
     $pluginClassFilename = PATH_PLUGINS . $pluginName . PATH_SEP . 'class.' . $pluginName . '.php';
     if ( !is_file ( $pluginClassFilename ) ) { 
-      printf("The plugin %s does not exists in this file %s \n", pakeColor::colorize( $pluginName, 'ERROR'), pakeColor::colorize( $pluginClassFilename, 'INFO') );
+      printf("The plugin %s does not exist in this file %s \n", pakeColor::colorize( $pluginName, 'ERROR'), pakeColor::colorize( $pluginClassFilename, 'INFO') );
       die ;
     }
   */

@@ -94,7 +94,7 @@ class DbSource extends BaseDbSource
                 $this->setNew(false);
                 return $aFields;
             } else {
-        throw(new Exception( "The row '$Uid' in table DbSource doesn't exists!" ));
+        throw(new Exception( "The row '$Uid' in table DbSource doesn't exist!" ));
             }
         }
         catch (exception $oError) {

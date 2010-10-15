@@ -26,7 +26,7 @@ class CaseTrackerObject extends BaseCaseTrackerObject {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$Uid' in table CaseTrackerObject doesn't exists!" ));
+        throw( new Exception( "The row '$Uid' in table CaseTrackerObject doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -87,7 +87,7 @@ class CaseTrackerObject extends BaseCaseTrackerObject {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -108,7 +108,7 @@ class CaseTrackerObject extends BaseCaseTrackerObject {
         return $iResult;
       }
       else {
-        throw( new Exception( "The row '" . $sCTOUID . "' in table CaseTrackerObject doesn't exists!" ));
+        throw( new Exception( "The row '" . $sCTOUID . "' in table CaseTrackerObject doesn't exist!" ));
       }
     }
     catch (Exception $oError) {var_dump($oError);die;

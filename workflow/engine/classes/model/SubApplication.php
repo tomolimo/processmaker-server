@@ -26,7 +26,7 @@ class SubApplication extends BaseSubApplication {
         return $aFields;
       }
       else {
-        throw new Exception("The row '$sAppUID, $sAppParent, $iIndexParent, $iThreadParent' in table SubApplication doesn't exists!");
+        throw new Exception("The row '$sAppUID, $sAppParent, $iIndexParent, $iThreadParent' in table SubApplication doesn't exist!");
       }
     }
     catch (Exception $oError) {
@@ -82,7 +82,7 @@ class SubApplication extends BaseSubApplication {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

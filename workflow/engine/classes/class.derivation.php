@@ -401,7 +401,7 @@ class Derivation
              }
            }
            else
-             throw ( new Exception("Task doesn't have a valid user in variable $variable or this variable doesn't exists.") ) ;
+             throw ( new Exception("Task doesn't have a valid user in variable $variable or this variable doesn't exist.") ) ;
            break;
       
       case 'REPORT_TO' :

@@ -420,7 +420,7 @@ public function kgetassigType($pro_uid, $tas){
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '" . $TasUid . "' in table TASK doesn't exists!" ));
+        throw( new Exception( "The row '" . $TasUid . "' in table TASK doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -481,7 +481,7 @@ public function kgetassigType($pro_uid, $tas){
         return $iResult;
       }
       else {
-        throw( new Exception( "The row '" . $TasUid . "' in table TASK doesn't exists!" ));
+        throw( new Exception( "The row '" . $TasUid . "' in table TASK doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

@@ -28,7 +28,7 @@ class ObjectPermission extends BaseObjectPermission {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exists!" ));
+        throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -78,7 +78,7 @@ class ObjectPermission extends BaseObjectPermission {
         return $iResult;
       }
       else {
-        throw( new Exception( "The row '" . $Uid . "' in table CaseTrackerObject doesn't exists!" ));
+        throw( new Exception( "The row '" . $Uid . "' in table CaseTrackerObject doesn't exist!" ));
       }
     }
     catch (exception $e) {

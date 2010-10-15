@@ -81,7 +81,7 @@
   }
   $t->is( strlen( $roleOperator ) >= 30 , true,  'role PROCESSMAKER_OPERATOR exists');
   if ( $roleOperator == '' )
-    throw ( new Exception ( "rol PROCESSMAKER_OPERATOR does not exists" ) );
+    throw ( new Exception ( "rol PROCESSMAKER_OPERATOR does not exist" ) );
   
   //checking user list 
   $users     = ws_userList();
@@ -230,7 +230,7 @@
     $fName = PATH_CORE. 'test'.PATH_SEP.'fixtures'.PATH_SEP. $fileName;
     $array = array();
     if ( !file_exists($fName) ) 
-      throw (new Exception ( "file $fName doesn't exists." ) );
+      throw (new Exception ( "file $fName doesn't exist." ) );
         
     $fp = fopen ( $fName, 'r' );
     $i = 0;
@@ -245,7 +245,7 @@
     $fName = PATH_CORE. 'test'.PATH_SEP.'fixtures'.PATH_SEP. $fileName;
     $array = array();
     if ( !file_exists($fName) ) 
-      throw (new Exception ( "file $fName doesn't exists." ) );
+      throw (new Exception ( "file $fName doesn't exist." ) );
         
     $fp = fopen ( $fName, 'r' );
     $i = 0;

@@ -81,7 +81,7 @@ class Configuration extends BaseConfiguration {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '$CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid' in table Configuration doesn't exists!" ));
+        throw(new Exception( "The row '$CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid' in table Configuration doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

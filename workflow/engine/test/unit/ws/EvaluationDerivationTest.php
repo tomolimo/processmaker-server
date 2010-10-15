@@ -156,7 +156,7 @@
      $result = ws_derivateCase ($caseId, 1 );
      $t->isa_ok( $result, 'stdClass',  'executed ws_derivateCase');
      $t->is( $result->status_code == 100 , true,  'ws_derivateCase status_code = 100');
-     $msg1 = "Task doesn't have a valid user in variable SYS_NEXT_USER_TO_BE_ASSIGNED or this variable doesn't exists.";
+     $msg1 = "Task doesn't have a valid user in variable SYS_NEXT_USER_TO_BE_ASSIGNED or this variable doesn't exist.";
      $t->is( $result->message , $msg1, $msg1 );
 
      $amount = rand( 1, 200 );

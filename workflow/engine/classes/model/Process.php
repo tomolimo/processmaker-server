@@ -309,7 +309,7 @@ class Process extends BaseProcess {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$ProUid' in table Process doesn't exists!" ));
+        throw( new Exception( "The row '$ProUid' in table Process doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -351,7 +351,7 @@ class Process extends BaseProcess {
       }
       else {
         $con->rollback();
-        throw( new Exception( "The row '" . $aData['PRO_UID'] ."' in table Process doesn't exists!" ));
+        throw( new Exception( "The row '" . $aData['PRO_UID'] ."' in table Process doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -436,7 +436,7 @@ class Process extends BaseProcess {
         return $oPro->delete();
       }
       else {
-        throw( new Exception( "The row '$ProUid' in table Process doesn't exists!" ));
+        throw( new Exception( "The row '$ProUid' in table Process doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

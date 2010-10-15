@@ -32,7 +32,7 @@ $form  = $oUser->load($uid);
 if (!isset($form['USR_RESUME']) || $form['USR_RESUME']==='') die(G::LoadTranslation('ID_WITHOUT_RESUME'));
 	$direction = PATH_IMAGES_ENVIRONMENT_FILES.$uid."/".$form['USR_RESUME'];
 if (!file_exists($direction)) {
-	die('The file "' . $direction . '" not exists in the server!');
+	die('The file "' . $direction . '"does  not exist in the server!');
 }
 //	echo $direction ;
 	header('Pragma: ');

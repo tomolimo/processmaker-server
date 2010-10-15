@@ -49,7 +49,7 @@ class CaseScheduler extends BaseCaseScheduler {
         $this->setNew ( false );
         return $aFields;
       } else {
-        throw (new Exception ( "The row '" . $SchUid . "' in table CASE_SCHEDULER doesn't exists!" ));
+        throw (new Exception ( "The row '" . $SchUid . "' in table CASE_SCHEDULER doesn't exist!" ));
       }
     } catch ( Exception $oError ) {
       throw ($oError);
@@ -105,7 +105,7 @@ class CaseScheduler extends BaseCaseScheduler {
         return $iResult;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
       /*  
       $con->begin();

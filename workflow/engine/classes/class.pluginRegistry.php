@@ -808,7 +808,7 @@ class PMPluginRegistry {
   //$sClassName = str_replace ( 'plugin', 'class', $className );
       $obj = new $sClassName( );
       if ( !in_array ( $methodName, get_class_methods ($obj) ) ) {
-        throw ( new Exception ( "The method '$methodName' doesn't exists in class '$sClassName' ") );
+        throw ( new Exception ( "The method '$methodName' doesn't exist in class '$sClassName' ") );
       }
       $obj->sNamespace    = $details->sNamespace;
       $obj->sClassName    = $details->sClassName;
@@ -844,7 +844,7 @@ class PMPluginRegistry {
   */
   function updateFieldsForPageSetup( $sNamespace, $oData ) {
     if ( !isset ($this->_aPluginDetails[$sNamespace] ) ) {
-      throw ( new Exception ( "The namespace '$sNamespace' doesn't exists in plugins folder." ) );
+      throw ( new Exception ( "The namespace '$sNamespace' doesn't exist in plugins folder." ) );
     };
     return $this->executeMethod ( $sNamespace, 'updateFieldsForPageSetup', $oData);
   }

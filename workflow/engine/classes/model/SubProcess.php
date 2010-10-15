@@ -28,7 +28,7 @@ class SubProcess extends BaseSubProcess {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$SP_UID' in table SubProcess doesn't exists!" ));
+        throw( new Exception( "The row '$SP_UID' in table SubProcess doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

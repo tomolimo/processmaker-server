@@ -16616,8 +16616,8 @@ msgstr "<div align=\"center\">Importing Groups</div>"
 # processes/processes_ValidatingGroups.xml?TITLE1
 # processes/processes_ValidatingGroups.xml
 #: subtitle - TITLE1
-msgid "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue:"
-msgstr "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue:"
+msgid "Some of the groups that are you trying to import, already exist. Please select one of the following options to continue:"
+msgstr "Some of the groups that are you trying to import, already exist. Please select one of the following options to continue:"
 
 # processes/processes_ValidatingGroups.xml?GROUP_IMPORT_OPTION
 # processes/processes_ValidatingGroups.xml

@@ -440,7 +440,7 @@
 
   //Get case info for invalid case
   $res = ws_getCaseInfo ('123456', $delIndex);
-  $t->is( $res->status_code , 100 ,  "ws_getCaseInfo status_code = 100 Case doesn't exists.");
+  $t->is( $res->status_code , 100 ,  "ws_getCaseInfo status_code = 100 Case doesn't exist.");
   $t->diag('ws_getCaseInfo for invalid case is : '. $res->message );
 
   //routing a case from John to Mary

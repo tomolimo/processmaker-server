@@ -172,7 +172,7 @@ protected $depo_title = '';
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '$DepUid' in table Department doesn't exists!" ));
+        throw(new Exception( "The row '$DepUid' in table Department doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -217,7 +217,7 @@ protected $depo_title = '';
       }
       else {
         $con->rollback(); 
-        throw(new Exception( "The row '" . $aData['DEP_UID'] . "' in table Department doesn't exists!" ));
+        throw(new Exception( "The row '" . $aData['DEP_UID'] . "' in table Department doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -271,7 +271,7 @@ protected $depo_title = '';
         return $oPro->delete();
       }
       else {
-        throw(new Exception( "The row '$ProUid' in table Group doesn't exists!" ));
+        throw(new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

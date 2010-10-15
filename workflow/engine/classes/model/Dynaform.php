@@ -326,7 +326,7 @@ class Dynaform extends BaseDynaform {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '$ProUid' in table Dynaform doesn't exists!" ));
+        throw(new Exception( "The row '$ProUid' in table Dynaform doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -365,7 +365,7 @@ class Dynaform extends BaseDynaform {
       }
       else {
         $con->rollback();
-        throw(new Exception( "The row '" . $aData['DYN_UID'] . "' in table Dynaform doesn't exists!" ));
+        throw(new Exception( "The row '" . $aData['DYN_UID'] . "' in table Dynaform doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -405,7 +405,7 @@ class Dynaform extends BaseDynaform {
         return $iResult;
       }
       else {
-        throw(new Exception( "The row '$ProUid' in table Dynaform doesn't exists!" ));
+        throw(new Exception( "The row '$ProUid' in table Dynaform doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

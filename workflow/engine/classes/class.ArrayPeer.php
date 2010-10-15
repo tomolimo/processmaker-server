@@ -508,7 +508,7 @@ abstract class ArrayBasePeer {
     }
     $tableName = $criteria->getDBArrayTable();
     if ( !isset ( $_DBArray[$tableName] ) ) {
-      throw new Exception ( "Error: the table '$tableName' doesn't exists in DBArray " );
+      throw new Exception ( "Error: the table '$tableName' doesn't exist in DBArray " );
     }
 
     $arrayTable = $_DBArray[$tableName];

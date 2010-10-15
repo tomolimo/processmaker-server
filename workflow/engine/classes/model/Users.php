@@ -75,7 +75,7 @@ class Users extends BaseUsers {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exists!" ));
+        throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -97,7 +97,7 @@ class Users extends BaseUsers {
       }
       else {
 //        return $result;
-        throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exists!" ));
+        throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

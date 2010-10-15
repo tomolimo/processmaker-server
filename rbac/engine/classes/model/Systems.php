@@ -56,7 +56,7 @@ class Systems extends BaseSystems {
         return $aFields;
       }
       else {
-        throw( new Exception( "This Systems row doesn't exists!" ));
+        throw( new Exception( "This Systems row doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -76,7 +76,7 @@ class Systems extends BaseSystems {
         return $aFields;
       }
       else {
-        throw( new Exception( "This Systems row doesn't exists!" ));
+        throw( new Exception( "This Systems row doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

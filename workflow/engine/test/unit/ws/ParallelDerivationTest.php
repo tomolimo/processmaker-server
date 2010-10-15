@@ -142,7 +142,7 @@
      $result = ws_derivateCase ($caseId, 1 );
      $t->isa_ok( $result, 'stdClass',  'executed ws_derivateCase');
      $t->is( $result->status_code == 100 , true,  'ws_derivateCase status_code = 100');
-     $msg1 = "Task doesn't have a valid user in variable leftUser or this variable doesn't exists.";
+     $msg1 = "Task doesn't have a valid user in variable leftUser or this variable doesn't exist.";
      $t->is( $result->message , $msg1, $msg1 );
 
      $user1 = rand(0, count($users)-1 ); 

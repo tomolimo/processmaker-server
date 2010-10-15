@@ -251,7 +251,7 @@ class System {
          if( is_writable($parentDir) ) {
            mkdir($dirName, 0777);
          } else {
-           throw (new Exception("$dirName not exists and parent folder $parentDir is not writable"));
+           throw (new Exception("$dirName does not exist and parent folder $parentDir is not writable"));
          }
        }
      }

@@ -61,7 +61,7 @@ class Roles extends BaseRoles {
                 
                 return $aFields;
             } else {
-                throw (new Exception("The '$Uid' row doesn't exists!"));
+                throw (new Exception("The '$Uid' row doesn't exist!"));
             }
         } catch( exception $oError ) {
             throw ($oError);
@@ -79,7 +79,7 @@ class Roles extends BaseRoles {
             if (is_array($aRow)) {
                 return $aRow;
             } else {
-                throw (new Exception("The role '$sRolCode' doesn\'t exists!"));
+                throw (new Exception("The role '$sRolCode' doesn\'t exist!"));
             }
         } catch( exception $oError ) {
             throw ($oError);

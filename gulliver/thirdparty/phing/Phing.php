@@ -231,7 +231,7 @@ class Phing {
                         $this->setDefinedProperty('pear.log.name', $logFile->getAbsolutePath());
                     }
                 } catch (IOException $ioe) {
-                    print("Cannot write on the specified log file. Make sure the path exists and you have write permissions.\n");
+                    print("Cannot write to the specified log file. Make sure the path exists and you have write permissions.\n");
                     throw $ioe;
                 }
             } elseif ($arg == "-buildfile" || $arg == "-file" || $arg == "-f") {

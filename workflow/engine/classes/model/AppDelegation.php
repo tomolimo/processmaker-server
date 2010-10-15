@@ -142,7 +142,7 @@ class AppDelegation extends BaseAppDelegation {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$AppUid, $sDelIndex' in table AppDelegation doesn't exists!" ));
+        throw( new Exception( "The row '$AppUid, $sDelIndex' in table AppDelegation doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -179,7 +179,7 @@ class AppDelegation extends BaseAppDelegation {
       }
       else {
         $con->rollback();
-        throw(new Exception( "This AppDelegation row doesn't exists!" ));
+        throw(new Exception( "This AppDelegation row doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

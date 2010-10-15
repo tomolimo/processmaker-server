@@ -111,7 +111,7 @@ class Step extends BaseStep {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$StepUid' in table StepUid doesn't exists!" ));
+        throw( new Exception( "The row '$StepUid' in table StepUid doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

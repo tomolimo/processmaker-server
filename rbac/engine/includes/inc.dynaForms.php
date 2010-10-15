@@ -139,7 +139,7 @@ function parseFile ($filename) {
  
   if (strlen($filename) <= 0) die ("invalid filename");
 
-  if ( ! file_exists ( $filename) ) die ("This file $filename not exists");
+  if ( ! file_exists ( $filename) ) die ("This file $filename does not exist");
   if ( ! is_file ( $filename) )     die ("$filename is not a file");
 
   $size = filesize ($filename);

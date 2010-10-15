@@ -70,7 +70,7 @@ class Stage extends BaseStage {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$StgUid' in table Stage doesn't exists!" ));
+        throw( new Exception( "The row '$StgUid' in table Stage doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

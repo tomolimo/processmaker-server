@@ -53,7 +53,7 @@ class LoginLog extends BaseLoginLog {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '" . $LogUid . "' in table LOGIN_LOG doesn't exists!" ));
+        throw(new Exception( "The row '" . $LogUid . "' in table LOGIN_LOG doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

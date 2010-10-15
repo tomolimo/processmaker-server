@@ -93,7 +93,7 @@ class StepTrigger extends BaseStepTrigger {
         return $aFields;
       }
       else {
-        throw(new Exception( "The row '$StepUid, $TasUid, $TriUid, $StType' in table StepTrigger doesn't exists!" ));
+        throw(new Exception( "The row '$StepUid, $TasUid, $TriUid, $StType' in table StepTrigger doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -139,7 +139,7 @@ class StepTrigger extends BaseStepTrigger {
         return $iResult;
       }
       else {
-        throw(new Exception( "The row '$StepUid, $TasUid, $TriUid, $StType' in table StepTrigger doesn't exists!" ));
+        throw(new Exception( "The row '$StepUid, $TasUid, $TriUid, $StType' in table StepTrigger doesn't exist!" ));
       }
     }
     catch (Exception $oError) {

@@ -60,7 +60,7 @@
   $oPluginRegistry =& PMPluginRegistry::getSingleton();
 
   $pluginFile = $sClassName . '.php';
-  if ( !file_exists ( PATH_PLUGINS . $sClassName . '.php' ) ) throw ( new Exception( "File '$pluginFile' doesn't exists ") );
+  if ( !file_exists ( PATH_PLUGINS . $sClassName . '.php' ) ) throw ( new Exception( "File '$pluginFile' doesn't exist ") );
 
   require_once ( PATH_PLUGINS . $pluginFile );
   $details = $oPluginRegistry->getPluginDetails( $pluginFile );
