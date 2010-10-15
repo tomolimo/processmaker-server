@@ -23,26 +23,22 @@
  *
  */
 
-/**
- * @author Erik A. O. <erik@colosa.com>
- * @date Oct 1th, 2010
- */
-
 try{
   if( isset($_GET['result']) && $_GET['result'] == 'done') {
-    echo "<script>parent.location.href='setup'</script>";
+    $G_PUBLISH = new Publisher;
+    $G_PUBLISH->AddContent('view', 'setup/clearCompiledResult');
+    G::RenderPage('publish', 'blank');
   } else {
-    if( defined('PATH_C') ){
-      G::rm_dir(PATH_C);
-      G::SendTemporalMessage(G::LoadTranslation('ID_CACHE_DELETED_SUCCESS'), 'tmp-info', 'string');
-      G::header('location: clearCompiled?result=done');
+    if( isset($_GET['result']) && $_GET['result'] == 'confirm' ){
+      if( defined('PATH_C') ){
+        G::rm_dir(PATH_C);
+        G::SendTemporalMessage('ID_CLEAR_CACHE_MSG1', 'tmp-info', 'label');
+        G::header('location: clearCompiled?result=done');
+      }
+    } else {
+      echo '<script>parent.parent.msgBox("'.G::LoadTranslation('ID_CLEAR_CACHE_CONFIRM1').'", "confirm", function(){location.href = "clearCompiled?result=confirm"}, function(){history.back()});</script>';
     }
   }
 } catch(Exception $e){
-  $errorMsg = $e->getMessage();
-  if( strpos($errorMsg, "couldn't be deleted") !== false ){
-    $errorMsg = G::LoadTranslation('ID_CACHE_DIR_ISNOT_WRITABLE') . ' ('.PATH_C.')';
-  }
-  G::SendTemporalMessage($errorMsg, 'error', 'string', null, '100%');
-  G::header('location: clearCompiled?result=done');
+  G::SendTemporalMessage($oError->getMessage(), 'error', 'string');
 }
