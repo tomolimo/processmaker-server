@@ -982,7 +982,7 @@ function WSGetSession() {
   if(isset($_SESSION['WS_SESSION_ID'])) {
     return $_SESSION['WS_SESSION_ID'];
   } else {
-    throw new Exception("SW session is not opem!");
+    throw new Exception("SW session is not open!");
   }
 }
 

@@ -265,7 +265,7 @@ switch($RPT_UID)
       closedir($handle);
     }
     if ( !$foundReport )
-      throw ( new Exception ( "Call to an inexistent member function " . $RPT_UID . "() ") );
+      throw ( new Exception ( "Call to an nonexistent member function " . $RPT_UID . "() ") );
 }
 
 }

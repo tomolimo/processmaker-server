@@ -562,7 +562,7 @@ class processMap
          * exists in the Database, however there is a strange behavior within the
          * propel engine, when the first record is erased somehow the "_deleted"
          * attribute of the next row is set to true, so when propel tries to erase
-         * it, obviusly it can't and trows an error. With the "Exist" function
+         * it, obviously it can't and trows an error. With the "Exist" function
          * we ensure that if there is the record in the database, the _delete attribute must be false.
          *
          * note added by gustavo cruz gustavo-at-colosa-dot-com 28-01-2010

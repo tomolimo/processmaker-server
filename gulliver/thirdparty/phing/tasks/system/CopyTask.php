@@ -256,11 +256,11 @@ class CopyTask extends Task {
         }
 
         if ($this->destFile !== null && $this->destDir !== null) {
-            throw new BuildException("Only one of destfile and destdir may be set.");
+            throw new BuildException("Only one destfile and destdir may be set.");
         }
 
         if ($this->destFile === null && $this->destDir === null) {
-            throw new BuildException("One of destfile or destdir must be set.");
+            throw new BuildException("One destfile or destdir must be set.");
         }
 
         if ($this->file !== null && $this->file->exists() && $this->file->isDirectory()) {
@@ -268,7 +268,7 @@ class CopyTask extends Task {
         }
 
         if ($this->destFile !== null && count($this->filesets) > 0) {
-            throw new BuildException("Cannot concatenate multple files into a single file.");
+            throw new BuildException("Cannot concatenate multiple files into a single file.");
         }
 
         if ($this->destFile !== null) {

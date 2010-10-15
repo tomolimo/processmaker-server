@@ -155,7 +155,7 @@ class DataBaseMaintenance
     
     $this->link = mysql_connect($this->host, $this->user, $this->passwd);
     if( ! $this->link ) {
-      throw new Exception("Could't connect to host {$this->host} with user {$this->user}");
+      throw new Exception("Couldn't connect to host {$this->host} with user {$this->user}");
     }
     
     if( $this->dbName != null ) {
@@ -186,7 +186,7 @@ class DataBaseMaintenance
   {
     $this->setDbName($dbname);
     If( ! @mysql_select_db($this->dbName, $this->link) ) {
-      throw new Exception("Could't select database $dbname");
+      throw new Exception("Couldn't select database $dbname");
     }
   }
   

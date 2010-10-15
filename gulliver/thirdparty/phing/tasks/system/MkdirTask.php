@@ -44,7 +44,7 @@ class MkdirTask extends Task {
             throw new BuildException("dir attribute is required", $this->location);
         }
         if ($this->dir->isFile()) {
-            throw new BuildException("Unable to create directory as a file already exists with that name: " . $this->dir->getAbsolutePath());
+            throw new BuildException("Unable to create directory since a file already exists with that name: " . $this->dir->getAbsolutePath());
         }
         if (!$this->dir->exists()) {
             $result = $this->dir->mkdirs();

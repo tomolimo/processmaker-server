@@ -61,7 +61,7 @@ if( $access != 1 ){
     G::uploadFile($tempName, $path, $filename );
   }
   if ( ! $_FILES['form']['type']['PLUGIN_FILENAME'] == 'application/octet-stream')
-    throw ( new Exception ( "the uploaded files is invalid, expected 'application/octect-stream mime type file (".  $_FILES['form']['type']['PLUGIN_FILENAME'] . ")" ));
+    throw ( new Exception ( "the uploaded files are invalid, expected 'application/octect-stream mime type file (".  $_FILES['form']['type']['PLUGIN_FILENAME'] . ")" ));
 
 
   G::LoadThirdParty( 'pear/Archive','Tar');

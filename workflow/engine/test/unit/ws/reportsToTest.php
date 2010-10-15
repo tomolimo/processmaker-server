@@ -81,7 +81,7 @@
   }
   $t->is( strlen( $roleOperator ) >= 30 , true,  'role PROCESSMAKER_OPERATOR exists');
   if ( $roleOperator == '' )
-    throw ( new Exception ( "rol PROCESSMAKER_OPERATOR does not exist" ) );
+    throw ( new Exception ( "role PROCESSMAKER_OPERATOR does not exist" ) );
   
   //checking user list 
   $users     = ws_userList();

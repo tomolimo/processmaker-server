@@ -129,7 +129,7 @@ class ProjectConfigurator {
         foreach ($attrs as $key => $value) {
             if ($key == 'id') {
                 continue;
-                // throw new BuildException("Id must be set Extermnally");
+                // throw new BuildException("I'd must be set Externally");
             }            
             $value = self::replaceProperties($project, $value, $project->getProperties());
             try { // try to set the attribute
