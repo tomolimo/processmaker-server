@@ -71,12 +71,14 @@ class Helper{
       ob_start();
   }
   
-  function minify(){
-    G::LoadThirdParty('jsmin', 'jsmin');
-    $this->content = JSMin::minify($this->content);
-  }
-  
-  function flush(){
+  function minify() {
+		if ($this->contentType != 'text/css') {
+			G::LoadThirdParty('jsmin', 'jsmin');
+			$this->content = JSMin::minify($this->content);
+		}
+	}
+
+	function flush(){
     if( $this->minified )
       $this->minify();
     print($this->content);

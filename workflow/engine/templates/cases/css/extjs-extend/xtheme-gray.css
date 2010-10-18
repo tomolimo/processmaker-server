@@ -108,4 +108,20 @@
 
  
 
+/*
+* Cambios CSS
+* Rene Silva
+*/
+.x-grid3-row-table{
+	padding:4px 0;
+}
+.x-grid3-hd-inner{
+	font-size:12px;
+	font-weight: bold;
+	color:#333;
+	text-shadow:#fff 0px 1px 1px;
+}
+.x-grid3-col-openLink a{
+
+}
 
