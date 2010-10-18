@@ -33,7 +33,7 @@
 /**
  * PMScript - PMScript class
  * @package ProcessMaker
- * @author Julio Cesar Laura Avendaño <juliocesar@colosa.com>
+ * @author Julio Cesar Laura Avendaï¿½o <juliocesar@colosa.com>
  * @last modify 2008.08.13 by Erik Amaru Ortiz <erik@colosa.com>
  * @last modify comment was added and adapted the catch errors
  * @copyright 2007 COLOSA
@@ -338,10 +338,13 @@ class PMScript
     $sScript = '';
     $iAux    = 0;
     $bEqual  = false;
+    $variableIsDefined = true;
     $iOcurrences = preg_match_all('/\@(?:([\@\%\#\?\$\=])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/', $this->sScript, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
     if ($iOcurrences){
       for($i = 0; $i < $iOcurrences; $i++){
+        // if the variables for that condition has not been previously defined then $variableIsDefined is set to false
         if (!isset($this->aFields[$aMatch[2][$i][0]])){
+          $variableIsDefined = false;
           $this->aFields[$aMatch[2][$i][0]] = '';
         }
         $sAux = substr($this->sScript, $iAux, $aMatch[0][$i][1] - $iAux);
@@ -472,11 +475,13 @@ class PMScript
     }
     $sScript .= substr($this->sScript, $iAux);
     $sScript  = '$bResult = ' . $sScript . ';';
-    if ($this->validSyntax($sScript)){
+    // checks if the syntax is valid or if the variables in that condition has been previously defined
+    if ($this->validSyntax($sScript)&&$variableIsDefined){
       $this->bError = false;
       eval($sScript);
     }
     else{
+      echo "<script> alert('".G::loadTranslation('MSG_CONDITION_NOT_DEFINED')."'); </script>";
       $this->bError = true;
     }
     return $bResult;
@@ -492,7 +497,7 @@ class PMScript
  */
 function pmToString($vValue)
 {
-  return (string)$vValue;
+    return (string)$vValue;
 }
 
 /**
@@ -541,7 +546,7 @@ function pmSqlEscape($vValue)
 
 /***************************************************************************
 * Error handler
-* @author: Julio Cesar Laura Avendaño <juliocesar@colosa.com>
+* @author: Julio Cesar Laura Avendaï¿½o <juliocesar@colosa.com>
 * @date: 2009-10-01
 ***************************************************************************/
 /*
