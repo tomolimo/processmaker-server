@@ -59,6 +59,7 @@ try {
   $array['APP_TITLE']       = $Fields['TITLE'];
   $array['USR_USERNAME']    = $Fields['APP_DATA']['USR_USERNAME'];
   $array['USER_ENV']        = $Fields['APP_DATA']['SYS_SYS'];
+  $array['DATEPRINT']        = date('Y-m-d H:m:s');
   }
   $array['APP_PROCESS']     = $sProcess;
   
@@ -67,7 +68,7 @@ try {
   else 
     $array['TITLE']         = '';
   $array['PROCESS']         = G::LoadTranslation('ID_PROCESS');
-  
+   $array['DATELABEL']        = G::LoadTranslation('DATE_L'); 
   
   
   $G_PUBLISH->AddContent('smarty', 'cases/cases_PrintViewTitle', '', '', $array);
