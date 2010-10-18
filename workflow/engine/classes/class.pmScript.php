@@ -344,7 +344,7 @@ class PMScript
       for($i = 0; $i < $iOcurrences; $i++){
         // if the variables for that condition has not been previously defined then $variableIsDefined is set to false
         if (!isset($this->aFields[$aMatch[2][$i][0]])){
-          $variableIsDefined = false;
+//          $variableIsDefined = false;
           $this->aFields[$aMatch[2][$i][0]] = '';
         }
         $sAux = substr($this->sScript, $iAux, $aMatch[0][$i][1] - $iAux);
@@ -481,7 +481,8 @@ class PMScript
       eval($sScript);
     }
     else{
-      echo "<script> alert('".G::loadTranslation('MSG_CONDITION_NOT_DEFINED')."'); </script>";
+//      echo "<script> alert('".G::loadTranslation('MSG_CONDITION_NOT_DEFINED')."'); </script>";
+   	  G::SendTemporalMessage('MSG_CONDITION_NOT_DEFINED', 'error', 'labels');
       $this->bError = true;
     }
     return $bResult;
