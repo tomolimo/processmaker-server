@@ -111,17 +111,52 @@
 /*
 * Cambios CSS
 * Rene Silva
+* 18102010
 */
-.x-grid3-row-table{
-	padding:4px 0;
+.x-grid3-cell-inner{
+/*	font-size:12px;*/
 }
+.x-grid3-row-table{
+	padding:6px 0;
+}
+.x-grid3-row:nth-child(odd) { background-color:#FFF; }
+.x-grid3-row:nth-child(even) { background-color:#EFF3FF; }
 .x-grid3-hd-inner{
-	font-size:12px;
+	font-size:13px;
 	font-weight: bold;
 	color:#333;
 	text-shadow:#fff 0px 1px 1px;
 }
-.x-grid3-col-openLink a{
-
+.x-grid3-col-openLink{
+	background:none;
+	height: 22px;
 }
-
+.x-grid3-col-openLink a{
+	-moz-border-radius:10px;
+	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
+	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5);
+	background:#EEE;
+	border-radius:10px;
+	color:#333;
+	font-size:10px;
+	font-weight:700;
+	margin:0px;
+	padding:4px 6px;
+	text-decoration:none;
+	line-height: 18px;
+	text-shadow:0 1px 0px rgba(255,255,255,1);
+}
+.x-grid3-col-openLink a:hover{
+	background:#666;
+	color:#fff;
+	text-shadow:0 1px 0px rgba(0,0,0,1);
+}
+.x-grid3-col-openLink a:after{
+	content:'';
+}
+.x-toolbar-cell{
+	text-transform: capitalize;
+}
+.x-grid3-row-over{
+	background-color: #eFeFeF !important;
+}
