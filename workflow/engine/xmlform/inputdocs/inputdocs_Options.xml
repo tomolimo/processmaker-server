@@ -23,11 +23,15 @@ var currentPagedTable = @#PAGED_TABLE_ID;
     @#PAGED_TABLE_ID.refresh();
   }
   function inputdocsDelete( uid ) {
+  
+	  result = ajax_function('@G::encryptlink(@#inputdocsDelete)','getRelationInfDoc','INP_DOC_UID='+uid,'POST');
+	  labelToshow = (result)?'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_IDOCUMENT)':'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DOCUMENT)';
+  
     new leimnud.module.app.confirm().make({
-    	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DOCUMENT)',
+    	label:labelToshow,
     	action:function()
     	{
-        ajax_function('@G::encryptlink(@#inputdocsDelete)','','INP_DOC_UID='+uid,'POST');
+        ajax_function('@G::encryptlink(@#inputdocsDelete)','deleteInputDocument','INP_DOC_UID='+uid,'POST');
         @#PAGED_TABLE_ID.refresh();
       }.extend(this)
     });

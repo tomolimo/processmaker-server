@@ -208,4 +208,19 @@ class StepSupervisor extends BaseStepSupervisor {
       throw($e);
     }
   }
+
+function loadInfo($sObjUID){
+  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(StepSupervisorPeer::STEP_UID_OBJ,  $sObjUID);
+    $oDataset = StepSupervisorPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    return($aRow);
+      
+  
+  }
+
+
 } // StepSupervisor

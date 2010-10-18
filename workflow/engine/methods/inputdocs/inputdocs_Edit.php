@@ -46,7 +46,7 @@ try {
   	$aFields['PRO_UID'] = $_GET['PRO_UID'];
   }
   $aFields['INP_DOC_TAGS'] = isset ( $aFields['INP_DOC_TAGS']) ? $aFields['INP_DOC_TAGS'] : 'INPUT';
-  $aFields['INP_DOC_VERSIONING'] = strval($aFields['INP_DOC_VERSIONING']);
+  $aFields['INP_DOC_VERSIONING'] = strval(isset($aFields['INP_DOC_VERSIONING'])?$aFields['INP_DOC_VERSIONING']:'');
   G::LoadClass('xmlfield_InputPM');
   $G_PUBLISH = new Publisher();
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'inputdocs/inputdocs_Edit', '', $aFields , '../inputdocs/inputdocs_Save');

@@ -120,4 +120,16 @@ class ObjectPermission extends BaseObjectPermission {
       throw($e);
     }
   }
+  
+  function loadInfo($sObjUID){
+  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(ObjectPermissionPeer::OP_OBJ_UID,  $sObjUID);
+    $oDataset = ObjectPermissionPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    return($aRow);
+  }
+  
 } // ObjectPermission

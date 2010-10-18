@@ -101,11 +101,15 @@
   }
   
   function dynaformDelete ( uid ){
+  
+	  result = ajax_function('@G::encryptlink(@#dynaformsDelete)','getRelationInfDynaform','DYN_UID='+uid,'POST');
+	  labelToshow = (result)?'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_IDOCUMENT)':'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DYNAFORM)';
+  
     new leimnud.module.app.confirm().make({
-    	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DYNAFORM)',
+    	label:labelToshow,
     	action:function()
     	{
-        ajax_function('@G::encryptlink(@#dynaformsDelete)','','DYN_UID='+uid,'POST');
+        ajax_function('@G::encryptlink(@#dynaformsDelete)','deleteDynaform','DYN_UID='+uid,'POST');
         @#PAGED_TABLE_ID.refresh();
       }.extend(this)
     });

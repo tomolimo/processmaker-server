@@ -37,26 +37,53 @@ try {
   	break;
   }
   
+  require_once 'classes/model/StepSupervisor.php';
+  require_once 'classes/model/ObjectPermission.php';
   require_once 'classes/model/InputDocument.php';
   require_once 'classes/model/Step.php';
   require_once 'classes/model/ObjectPermission.php';
   G::LoadClass( 'processMap' );
   
-  $oInputDocument = new InputDocument();
-  $fields = $oInputDocument->load($_POST['INP_DOC_UID']);
+  $sfunction =$_POST['function'];
   
-  $oInputDocument->remove($_POST['INP_DOC_UID']);
-
-  $oStep = new Step();
-  $oStep->removeStep('INPUT_DOCUMENT', $_POST['INP_DOC_UID']);
-
-  $oOP = new ObjectPermission();
-  $oOP->removeByObject('INPUT', $_POST['INP_DOC_UID']);
-
-  //refresh dbarray with the last change in inputDocument
-  $oMap = new processMap();
-  $oCriteria = $oMap->getInputDocumentsCriteria($fields['PRO_UID']);
-  
+  switch($sfunction){
+  	case 'getRelationInfDoc': 
+  	$oStepSupervisor = new StepSupervisor();
+    $fields2=$oStepSupervisor->loadInfo($_POST['INP_DOC_UID']);
+    $result=false;
+    if(is_array($fields2)){
+    	$result=true;
+    }
+    
+    return print $result;
+  	break;
+  	case 'deleteInputDocument':
+    
+    $oStepSupervisor = new StepSupervisor();
+    $fields2=$oStepSupervisor->loadInfo($_POST['INP_DOC_UID']);
+    $oStepSupervisor->remove($fields2['STEP_UID']);
+    
+    $oPermission = new ObjectPermission();
+    $fields3=$oPermission->loadInfo($_POST['INP_DOC_UID']);
+    if(is_array($fields3)) 
+     $oPermission->remove($fields3['OP_UID']);
+    
+    $oInputDocument = new InputDocument();
+    $fields = $oInputDocument->load($_POST['INP_DOC_UID']);
+    
+    $oInputDocument->remove($_POST['INP_DOC_UID']);
+    
+    $oStep = new Step();
+    $oStep->removeStep('INPUT_DOCUMENT', $_POST['INP_DOC_UID']);
+    
+    $oOP = new ObjectPermission();
+    $oOP->removeByObject('INPUT', $_POST['INP_DOC_UID']);
+    
+    //refresh dbarray with the last change in inputDocument
+    $oMap = new processMap();
+    $oCriteria = $oMap->getInputDocumentsCriteria($fields['PRO_UID']);
+    break;
+  }
 }
 catch (Exception $oException) {
 	die($oException->getMessage());

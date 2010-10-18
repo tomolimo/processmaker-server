@@ -34,25 +34,40 @@ require_once 'classes/model/CaseTrackerObject.php';
 In here we are deleting all datas about this Dynaform into DB
 */
 
+$sfunction =$_POST['function'];
+  
+  switch($sfunction){
 
-$dynaform = new dynaform();
-
-if (!isset($_POST['DYN_UID'])) return;
-//in table dynaform
-$dynaform->remove( $_POST['DYN_UID'] );
-
-//in table Step
-$oStep = new Step();
-$oStep->removeStep('DYNAFORM', $_POST['DYN_UID']);
-
-//in table ObjectPermission
-$oOP = new ObjectPermission();
-$oOP->removeByObject('DYNAFORM', $_POST['DYN_UID']);
-
-//in table Step_supervisor
-$oSS = new StepSupervisor();
-$oSS->removeByObject('DYNAFORM', $_POST['DYN_UID']);
-
-//in table case_tracker_object
-$oCTO = new CaseTrackerObject();                        
-$oCTO->removeByObject('DYNAFORM', $_POST['DYN_UID']);
+   case 'getRelationInfDynaform':
+   $oStepSupervisor = new StepSupervisor();
+    $fields2=$oStepSupervisor->loadInfo($_POST['DYN_UID']);
+    $result=false;
+    if(is_array($fields2)){
+    	$result=true;
+    }
+    return print $result;
+   break;
+   case 'deleteDynaform':
+   $dynaform = new dynaform();
+   
+   if (!isset($_POST['DYN_UID'])) return;
+   //in table dynaform
+   $dynaform->remove( $_POST['DYN_UID'] );
+   
+   //in table Step
+   $oStep = new Step();
+   $oStep->removeStep('DYNAFORM', $_POST['DYN_UID']);
+   
+   //in table ObjectPermission
+   $oOP = new ObjectPermission();
+   $oOP->removeByObject('DYNAFORM', $_POST['DYN_UID']);
+   
+   //in table Step_supervisor
+   $oSS = new StepSupervisor();
+   $oSS->removeByObject('DYNAFORM', $_POST['DYN_UID']);
+   
+   //in table case_tracker_object
+   $oCTO = new CaseTrackerObject();                        
+   $oCTO->removeByObject('DYNAFORM', $_POST['DYN_UID']);
+  break;
+ }
