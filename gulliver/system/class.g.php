@@ -3014,6 +3014,7 @@ class G
      $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);   
      break;
      default :
+     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], '@userName');   
      break;
      }
   	return $infoUser;
