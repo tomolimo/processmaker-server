@@ -2020,11 +2020,11 @@ function run_workspace_restore($task, $options) {
         if( ! is_file($fileExSite) )
           throw (new Exception("the workspace exist you need more options "));
         else
-          $options[1] = $sTarWsName;
+          $options[1] = $sTarWsName; 
       } else {
         $fileExSite1 = PATH_DATA . 'sites' . PATH_SEP . $options[1];
         if( file_exists($fileExSite1) )
-          throw (new Exception("the workspace exist you need the overwrite option "));
+          throw (new Exception("Workspace already exists. Use the \"overwrite\" option to replace it."));
       }
     } else {
       if( strcmp($options[2], "overwrite") != 0 ) {
