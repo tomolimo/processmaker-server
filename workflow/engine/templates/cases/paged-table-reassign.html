@@ -21,7 +21,7 @@
 		<!-- START BLOCK : headers -->
 		<td class="pagedTableHeader"><img style="{displaySeparator}" src="/js/maborak/core/images/separatorTable.gif" /></td>
 		<td width="{width}" style="{align}" class="pagedTableHeader" >
-			<a href="{href}" onclick="{onclick}">{header}</a>
+			<a href="{href}" onclick="{onclick}{onsort}">{header}</a>
 		</td>
   	<!-- END BLOCK : headers -->
     </tr>
@@ -76,8 +76,15 @@
 	   		</table>
    		</td>
     </tr>
-  	<!-- END BLOCK : bottomFooter -->
-    <!-- END BLOCK : contentBlock -->
+    <tr >
+    	<th colspan='6'>
+			<input type="button" value="Reassign" onclick="reassignCases(this.form);" class="module_app_button___gray" />
+			&nbsp; 
+			<input type="button" value="Cancel" onclick="cancel();" class="module_app_button___gray" /> 
+			</th>  </tr>
+ 	<!-- END BLOCK : bottomFooter -->
+ 	<!-- END BLOCK : contentBlock -->
+
 <!-- START BLOCK : closeBlock -->
     </table>
 
@@ -89,9 +96,7 @@
 </td></tr></table>
 <!-- END BLOCK : closeBlock -->
 <input type="hidden" name="USR_UID" id="USR_UID" value="{USR_UID}"  />
-<input type="button" value="Reassign" onclick="reassignCases(this.form);" class="module_app_button___gray" />
-&nbsp; 
-<input type="button" value="Cancel" onclick="cancel();" class="module_app_button___gray" /> 
+
 
 </form>
 <!-- START IGNORE -->

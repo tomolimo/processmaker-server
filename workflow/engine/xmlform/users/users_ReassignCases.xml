@@ -8,7 +8,7 @@
 </PROCESS>
 
 <CANTITY type="text" colWidth="50" titleAlign="left" align="left">
-  <en>Number of cases</en>
+  <en>No. of cases</en>
 </CANTITY>
 
 <USERS type="text" colWidth="200" titleAlign="left" align="left" enableHtml="1">
