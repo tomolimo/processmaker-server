@@ -375,7 +375,7 @@ this.todayString='Hoje';
 this.timeString='';
 break;
 case "fr":  
-this.monthArray=['Janvier','F?vrier','Mars','Avril','Mai','Juin','Juillet','Ao?t','Septembre','Octobre','Novembre','D?cembre'];
+this.monthArray=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 this.monthArrayShort=['Jan','Fev','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Dec'];
 this.dayArray=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 this.weekString='Sem';
