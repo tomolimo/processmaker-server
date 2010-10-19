@@ -36,7 +36,8 @@ new Ext.KeyMap(document, {
       }
       e.stopEvent();
       updateCasesTree();
-    } else 
+    } 
+    else 
       Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
   }
 });
@@ -133,9 +134,7 @@ Ext.onReady(function(){
                     
                   },
                   render: function(){
-                    this.loadMask = new Ext.LoadMask(this.body, {
-                      msg:'Loading...'
-                    });
+                    this.loadMask = new Ext.LoadMask(this.body, { msg:'Loading...' });
                   }
                 }
               });
@@ -281,7 +280,6 @@ Ext.onReady(function(){
     id:'menuTreePanel',
     title: '',
     region: 'west',
-    /*renderTo: 'tree',*/
     layout: 'border',
     width: 200,
     height: 500,
@@ -374,9 +372,7 @@ Ext.onReady(function(){
       items: [],
       listeners:{
         show:function() {
-          this.loadMask = new Ext.LoadMask(this.body, {
-            msg:'Loading. Please wait...'
-          });
+          this.loadMask = new Ext.LoadMask(this.body, { msg:'Loading. Please wait...' });
         }
       }
     });

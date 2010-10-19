@@ -12,7 +12,7 @@ new Ext.KeyMap(document, {
         storeCases.reload();
       }    
       else 
-    Ext.Msg.alert(TRANSLATIONS.LABEL_REFRESH, TRANSLATIONS.MESSAGE_REFRESH);
+        Ext.Msg.alert(TRANSLATIONS.LABEL_REFRESH, TRANSLATIONS.MESSAGE_REFRESH);
   }
 });
 
@@ -426,13 +426,17 @@ Ext.onReady ( function() {
         var appUid   = grid.store.data.items[n].data.APP_UID;
         var delIndex = grid.store.data.items[n].data.DEL_INDEX;
         var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
-        Ext.Msg.alert (TRANSLATIONS.LABEL_OPEN_CASE , caseTitle );
+        //Ext.Msg.alert (TRANSLATIONS.LABEL_OPEN_CASE , caseTitle );
+        Ext.Msg.show({ 
+                msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
+                width:300,
+                wait:true,
+                waitConfig: {interval:200},
+              });
         window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
       },
       render: function(){
-        this.loadMask = new Ext.LoadMask(this.body, {
-          msg:TRANSLATIONS.LABEL_GRID_LOADING
-        });
+        //this.loadMask = new Ext.LoadMask(this.body, {msg:TRANSLATIONS.LABEL_GRID_LOADING});
       }
   },
     
@@ -442,8 +446,8 @@ Ext.onReady ( function() {
       pageSize: pageSize,
       store: storeCases,
       displayInfo: true,
-//      displayMsg: 'Displaying items {0} - {1} of {2} ' + '&nbsp; &nbsp; ',
-      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' {0} - {1} ' + TRANSLATIONS.LABEL_DISPLAY_OF + ' {2} ' + '&nbsp; &nbsp; ',
+//      displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ',
+      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' &nbsp; ',
 //      emptyMsg: "No items to display"
       emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
     })
@@ -457,6 +461,7 @@ Ext.onReady ( function() {
     storeCases.load();
     //storeProcesses.load();
 
+/*
     function createBox(t, s){
         return ['<div class="msg">',
                 '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
@@ -464,7 +469,7 @@ Ext.onReady ( function() {
                 '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
                 '</div>'].join('');
     }
-
+*/
     function onItemToggle(item, pressed){
       switch ( item.id ) {
         case 'read' : 

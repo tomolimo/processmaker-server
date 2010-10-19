@@ -11,8 +11,8 @@
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG',  0 );
-  define ('DEBUG_TIME_LOG', 0 );
+  define ('DEBUG_SQL_LOG',  1 );
+  define ('DEBUG_TIME_LOG', 1 );
 
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {

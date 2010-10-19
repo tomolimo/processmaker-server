@@ -13,14 +13,15 @@
   //get the configuration for this action
   $conf = new Configurations();
   try {
-    $confCasesList = $conf->getConfiguration('casesList',$action=='search'?'sent':$action );
+  	// the setup for search is the same as the Sent (participated)
+    $confCasesList = $conf->getConfiguration('casesList', $action=='search' ? 'sent': $action );
   } 
   catch (Exception $e){
     $confCasesList = array();
   }
 
   // evaluates an action and the list that will be rendered
-  $config = getAdditionalFields($action);
+  $config       = getAdditionalFields($action);
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
   
@@ -28,18 +29,18 @@
   $oAppCache = new AppCacheView();
   $oAppCache->confCasesList = $confCasesList;
   
-// get the action based list
+// get the list based in the action provided
   switch ( $action ) {
     case 'draft' :
-         $cProcess      = $oAppCache->getDraftListCriteria($userUid);
-         $cStatus       = $oAppCache->getDraftListCriteria($userUid);
+         $cProcess      = $oAppCache->getDraftListCriteria($userUid); //fast enough
+         $cStatus       = $oAppCache->getDraftListCriteria($userUid); //fast enough
          break;
     case 'sent' :
-         $cProcess      = $oAppCache->getSentListCriteria($userUid);
+         $cProcess      = $oAppCache->getSentListCriteria($userUid); 
          $cStatus       = $oAppCache->getSentListCriteria($userUid);
          break;
     case 'search' :
-         $cProcess      = $oAppCache->getSearchStatusCriteria(null);
+         $cProcess      = $oAppCache->getSearchStatusCriteria(null); 
          $cStatus       = $oAppCache->getSearchStatusCriteria(null);
          $cUsers        = $oAppCache->getSearchStatusCriteria(null);
          break;
@@ -53,11 +54,10 @@
          break;
     case 'todo' :
     default:
-         $cProcess      = $oAppCache->getToDoListCriteria($userUid);
-         $cStatus       = $oAppCache->getToDoListCriteria($userUid);
+         $cProcess      = $oAppCache->getToDoListCriteria($userUid); //fast enough
+         $cStatus       = $oAppCache->getToDoListCriteria($userUid); //fast enough
     break;
   }
-
   //get the processes for this user in this action
   $processes = array();
   $processes[] = array ( '', 'All processes' );
@@ -65,7 +65,6 @@
   $cProcess->setDistinct();
   $cProcess->addSelectColumn ( AppCacheViewPeer::PRO_UID );
   $cProcess->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
-  //$cProcess->addAscendingOrderbyColumn ( AppCacheViewPeer::APP_PRO_TITLE );
   $oDataset = AppCacheViewPeer::doSelectRS($cProcess);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
   $oDataset->next();
@@ -75,7 +74,8 @@
     $oDataset->next();
   }
 
-  //get the status for this user in this action
+
+  //get the status for this user in this action only for participated, unassigned, paused
   $status = array();
   $users = array();
   $status[] = array( '', 'All status' );
@@ -84,7 +84,6 @@
     $cStatus->clearSelectColumns ( );
     $cStatus->setDistinct();
     $cStatus->addSelectColumn ( AppCacheViewPeer::APP_STATUS );
-    //$cStatus->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
     $oDataset = AppCacheViewPeer::doSelectRS($cStatus);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
@@ -94,7 +93,7 @@
     }
   }
 
-    //now users
+  //now get users, just for the Search action
   if ( $action == 'search' ) {
     $cUsers->clearSelectColumns ( );
     $cUsers->setDistinct();
@@ -107,17 +106,16 @@
       $users[] = array( $aRow['USR_UID'], $aRow['APP_CURRENT_USER'] );
       $oDataset->next();
     }
-
   }  
     
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
-  $oHeadPublisher->assign( 'columns',       $columns ); //sending the columns to display in grid
-  $oHeadPublisher->assign( 'readerFields',  $readerFields ); //sending the fields to get from proxy
-  $oHeadPublisher->assign( 'action',        $action ); //sending the fields to get from proxy
-  $oHeadPublisher->assign( 'PMDateFormat',  $config['dateformat'] ); //sending the fields to get from proxy
-  $oHeadPublisher->assign( 'statusValues',  $status ); //sending the columns to display in grid
-  $oHeadPublisher->assign( 'processValues', $processes); //sending the columns to display in grid
-  $oHeadPublisher->assign( 'userValues',    $users); //sending the columns to display in grid
+  $oHeadPublisher->assign( 'columns',       $columns );                       //sending the columns to display in grid
+  $oHeadPublisher->assign( 'readerFields',  $readerFields );                  //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'action',        $action );                        //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'PMDateFormat',  $config['dateformat'] );          //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'statusValues',  $status );                        //sending the columns to display in grid
+  $oHeadPublisher->assign( 'processValues', $processes);                      //sending the columns to display in grid
+  $oHeadPublisher->assign( 'userValues',    $users);                          //sending the columns to display in grid
   
   $TRANSLATIONS = new stdClass();
   $TRANSLATIONS->LABEL_GRID_LOADING     = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
@@ -134,8 +132,8 @@
   $TRANSLATIONS->LABEL_SEARCH           = G::LoadTranslation('ID_SEARCH');
   $TRANSLATIONS->LABEL_OPT_JUMP         = G::LoadTranslation('ID_OPT_JUMP');
   $TRANSLATIONS->LABEL_DISPLAY_ITEMS    = G::LoadTranslation('ID_DISPLAY_ITEMS');
-  $TRANSLATIONS->LABEL_DISPLAY_OF       = G::LoadTranslation('ID_DISPLAY_OF');
   $TRANSLATIONS->LABEL_DISPLAY_EMPTY    = G::LoadTranslation('ID_DISPLAY_EMPTY');
+  $TRANSLATIONS->LABEL_OPEN_CASE        = G::LoadTranslation('ID_OPEN_CASE');
   
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   
@@ -145,19 +143,17 @@
 
   G::RenderPage('publish', 'extJs');
  
-  // needing to improve the assembling of the configuration
-  
-  //maybe this getXX should be using the default fields in casesListSetup
+  //these getXX function gets the default fields in casesListSetup
   function getToDo() {
     $caseColumns = array ();
-    $caseColumns[] = array( 'header' =>'#',          'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
-    $caseColumns[] = array( 'header' =>'Case',       'dataIndex' => 'APP_TITLE',         'width' => 150 );
-    $caseColumns[] = array( 'header' =>'Task',       'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' =>'Process',    'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' =>'Sent by',    'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
-    $caseColumns[] = array( 'header' =>'Due Date',   'dataIndex' => 'DEL_TASK_DUE_DATE', 'width' => 110);
-    $caseColumns[] = array( 'header' =>'Last Modify', 'dataIndex' => 'APP_UPDATE_DATE',  'width' => 110 );
-    $caseColumns[] = array( 'header' =>'Priority',   'dataIndex' => 'DEL_PRIORITY',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'#',           'dataIndex' => 'APP_NUMBER',          'width' => 45, 'align' => 'center');
+    $caseColumns[] = array( 'header' =>'Case',        'dataIndex' => 'APP_TITLE',           'width' => 150 );
+    $caseColumns[] = array( 'header' =>'Task',        'dataIndex' => 'APP_TAS_TITLE',       'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Process',     'dataIndex' => 'APP_PRO_TITLE',       'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Sent by',     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
+    $caseColumns[] = array( 'header' =>'Due Date',    'dataIndex' => 'DEL_TASK_DUE_DATE',   'width' => 110);
+    $caseColumns[] = array( 'header' =>'Last Modify', 'dataIndex' => 'APP_UPDATE_DATE',     'width' => 110 );
+    $caseColumns[] = array( 'header' =>'Priority',    'dataIndex' => 'DEL_PRIORITY',        'width' => 50 );
     
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
@@ -300,7 +296,7 @@
    * @return Array $config
    */
 function getAdditionalFields($action){
-global $confCasesList;
+  global $confCasesList;
   $caseColumns = array();
   $caseReaderFields = array();
 
@@ -315,21 +311,21 @@ global $confCasesList;
     }
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => $confCasesList['rowsperpage'], 'dateformat' => $confCasesList['dateformat'] );
   } 
-  else {
+  else {  //seems this is only in case this user dont have the configuration for this action.
     switch ( $action ) {
       case 'draft' :
         $config = getDraft();
-      break;
+        break;
       case 'search' :      
       case 'participated' :
         $config = getParticipated();
-      break;
+        break;
       case 'unassigned' :
         $config = getUnassigned();
-      break;
+        break;
       case 'paused' :
         $config = getPaused();
-      break;
+        break;
       case 'todo' :
       default : 
         $action = 'todo';
@@ -340,6 +336,3 @@ global $confCasesList;
   }
 }
 
-function defineTranslations(){
-
-}
