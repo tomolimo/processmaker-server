@@ -330,7 +330,7 @@ this.todayString='T&auml;n&auml;&auml;n';
 this.timeString='Kello';
 break;
 case "ge":
-this.monthArray=['Januar','Februar','M?rz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+this.monthArray=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 this.monthArrayShort=['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 this.dayArray=['Mon','Die','Mit','Don','Fre','Sam','Son'];
 this.weekString='Woche';
