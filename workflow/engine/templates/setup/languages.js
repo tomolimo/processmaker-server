@@ -41,7 +41,7 @@ Ext.onReady(function(){
     enableColumnHide: false,
     enableColumnResize: true,
     enableHdMenu: false,
-    collapsible: true,
+    collapsible: false,
     animCollapse: false,
 
 
@@ -82,6 +82,7 @@ Ext.onReady(function(){
         header : TRANSLATIONS.ID_LAN_LANGUAGE,
         width : 120,
         sortable : false,
+        hidden: true,
         renderer: function (value, p, r){
           if( r.data.DEFAULT == '1' )
             return String.format(
@@ -116,7 +117,7 @@ Ext.onReady(function(){
       }, {
         dataIndex : 'VERSION',
         header : TRANSLATIONS.ID_LAN_VERSION,
-        width : 150,
+        width : 40,
         sortable : false
       }, {
         dataIndex : 'TRANSLATOR',

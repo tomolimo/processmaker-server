@@ -65,15 +65,58 @@ try {
           $countryName = G::LoadTranslation('ID_INTERNATIONAL');
         }
         
+        G::LoadClass ( 'configuration' );
+        
+        $conf = new Configurations();
+        $confCasesList = $conf->getConfiguration('casesList','todo');
+        //echo date($confCasesList['dateformat'], '2010-01-01');
+        
+        if( isset($confCasesList['dateformat']) ){
+          $datetime = explode(' ', $translationRow['DATE']);
+          
+          $date = explode('-', $datetime[0]);
+          if( count($datetime) == 2 )
+            $time = explode(':', $datetime[1]);
+          
+          if( count($date) == 3 ){
+            if( count($time) >= 2 ){
+              $DATE = date($confCasesList['dateformat'], mktime($time[0], $time[1], 0, $date[1], $date[2], $date[0]));
+            } else {
+              $DATE = date($confCasesList['dateformat'], mktime(0, 0, 0, $date[1], $date[2], $date[0]));  
+            }
+          } else {
+            $DATE = $translationRow['DATE'];
+          }
+          
+          $datetime = explode(' ', $translationRow['HEADERS']['PO-Revision-Date']);
+          
+          $date = explode('-', $datetime[0]);
+          if( count($datetime) == 2 )
+              $time = explode(':', $datetime[1]);
+          
+          if( count($date) == 3 ){
+            if( count($time) >= 2 ){
+              $REV_DATE = date($confCasesList['dateformat'], mktime($time[0], substr($time[1],0,2), 0, $date[1], $date[2], $date[0]));
+            } else {
+              $REV_DATE = date($confCasesList['dateformat'], mktime(0, 0, 0, $date[1], $date[2], $date[0]));  
+            }
+          } else {
+            $REV_DATE = $translationRow['HEADERS']['PO-Revision-Date'];
+          }
+        } else {
+          $DATE = $translationRow['DATE'];
+          $REV_DATE = $translationRow['HEADERS']['PO-Revision-Date'];
+        }
+        
         $languagesList[$i]['LAN_ID']       = $translationRow['LAN_ID'];
         $languagesList[$i]['LOCALE']       = $translationRow['LOCALE'];
         $languagesList[$i]['LAN_FLAG']     = $flag;
         $languagesList[$i]['NUM_RECORDS']  = $translationRow['NUM_RECORDS'];
-        $languagesList[$i]['DATE']         = $translationRow['DATE'];
+        $languagesList[$i]['DATE']         = $DATE;
         $languagesList[$i]['LAN_NAME']     = $translationRow['HEADERS']['X-Poedit-Language'];
         $languagesList[$i]['COUNTRY_NAME'] = $countryName;
         $languagesList[$i]['TRANSLATOR']   = htmlentities($translationRow['HEADERS']['Last-Translator']);
-        $languagesList[$i]['REV_DATE']     = $translationRow['HEADERS']['PO-Revision-Date'];
+        $languagesList[$i]['REV_DATE']     = $REV_DATE;
         $languagesList[$i]['VERSION']      = $translationRow['HEADERS']['Project-Id-Version'];
         
         $i++;
