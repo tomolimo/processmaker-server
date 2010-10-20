@@ -476,12 +476,12 @@ Ext.onReady ( function() {
     frame: false,
     autoHeight:true,
     minHeight:400,
-    //layout: 'fit',
-/*
+    layout: 'fit',
+
     viewConfig: {
       forceFit:true
-  },
-*/
+    },
+
     listeners: {
       rowdblclick: function(grid, n,e){
         var appUid   = grid.store.data.items[n].data.APP_UID;
@@ -498,6 +498,7 @@ Ext.onReady ( function() {
       },
       render: function(){
         //this.loadMask = new Ext.LoadMask(this.body, {msg:TRANSLATIONS.LABEL_GRID_LOADING});
+        //this.ownerCt.doLayout();
       }
   },
     
@@ -562,11 +563,9 @@ Ext.onReady ( function() {
     }
   
   var viewport = new Ext.Viewport({
-    layout: 'border',
+    layout: 'fit',
     autoScroll: true,
-    items: [
-      grid
-    ]
+    items: [grid]
   });
   
   if( parent.PANEL_EAST_OPEN ){
