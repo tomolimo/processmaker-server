@@ -22,38 +22,33 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-  global $G_TMP_MENU;
-  global $RBAC;
+global $G_TMP_MENU;
+global $RBAC;
   
-  if ($RBAC->userCanAccess('PM_SETUP') == 1) {
-    $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'tools');
-  }
-  if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
-    $G_TMP_MENU->AddIdRawOption('UPGRADE',   'upgrade',     G::LoadTranslation('ID_UPGRADE'), 'icon-system-upgrade.png', '', 'settings');
-    $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsList', 'Plugins', 'icon-plugins.png', '', 'settings');
-    $G_TMP_MENU->AddIdRawOption('LANGUAGES', 'languages',   G::LoadTranslation('ID_LANGUAGES'), 'icon-language.png', '', 'settings');
-    $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'settings');
-    $G_TMP_MENU->AddIdRawOption('APPCACHEVIEW_SETUP', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'settings');
-  }
-  
-  $G_TMP_MENU->AddIdRawOption('EMAILS',      'emails',      G::LoadTranslation('ID_EMAIL'), 'icon-email-settings.png', '', 'settings');
-  $G_TMP_MENU->AddIdRawOption('WEBSERVICES', 'webServices', G::LoadTranslation('ID_WEB_SERVICES'), 'icon-webservices.png', '', 'tools');
-  $G_TMP_MENU->AddIdRawOption('SKINS',       'skinsList', G::LoadTranslation('ID_SKINS'), 'icon-skins.png', '', 'settings');
-  
-  $G_TMP_MENU->AddIdRawOption('LOGO',        'uplogo', G::LoadTranslation('ID_LOGO'), 'icon-pmlogo.png', '', 'settings');
+//settings options
+$G_TMP_MENU->AddIdRawOption('LOGO', 'uplogo', G::LoadTranslation('ID_LOGO'), 'icon-pmlogo.png', '', 'settings');
+$G_TMP_MENU->AddIdRawOption('EMAILS','emails', G::LoadTranslation('ID_EMAIL'), 'icon-email-settings.png', '', 'settings');
+$G_TMP_MENU->AddIdRawOption('CALENDAR', 'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'settings' );
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)  
+  $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'settings');
+$G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'settings');  
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+  $G_TMP_MENU->AddIdRawOption('LANGUAGES', 'languages',   G::LoadTranslation('ID_LANGUAGES'), 'icon-language.png', '', 'settings');  
+$G_TMP_MENU->AddIdRawOption('SKINS', 'skinsList', G::LoadTranslation('ID_SKINS'), 'icon-skins.png', '', 'settings');
+$G_TMP_MENU->AddIdRawOption('HEARTBEAT', 'processHeartBeatConfig', G::LoadTranslation('ID_HEARTBEAT_CONFIG'), "heartBeat.jpg",'', 'settings');
+$G_TMP_MENU->AddIdRawOption('ENVIRONMENT_SETTINGS', 'environmentSettings', G::LoadTranslation('ID_ENVIRONMENT_SETTINGS'), "",'', 'settings');
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+  $G_TMP_MENU->AddIdRawOption('APPCACHEVIEW_SETUP', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'settings');
+$G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'settings' );
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+  $G_TMP_MENU->AddIdRawOption('UPGRADE', 'upgrade',     G::LoadTranslation('ID_UPGRADE'), 'icon-system-upgrade.png', '', 'settings');
 
-  $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'settings' );
+//settings options
+if ($RBAC->userCanAccess('PM_SETUP') == 1)
+  $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'tools');
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+  $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsList', 'Plugins', 'icon-plugins.png', '', 'tools');
+$G_TMP_MENU->AddIdRawOption('WEBSERVICES', 'webServices', G::LoadTranslation('ID_WEB_SERVICES'), 'icon-webservices.png', '', 'tools');
+$G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_LOG_CASE_SCHEDULER'), "icon-logs-list.png",'', 'tools');
 
-  $G_TMP_MENU->AddIdRawOption('CALENDAR',        'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'settings' );
-  $G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_LOG_CASE_SCHEDULER'), "icon-logs-list.png",'', 'tools');
-  
-  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'settings');
-  
-  $G_TMP_MENU->AddIdRawOption('HEARTBEAT', 'processHeartBeatConfig', G::LoadTranslation('ID_HEARTBEAT_CONFIG'), "heartBeat.jpg",'', 'settings');
-  
-  /*$G_TMP_MENU->AddIdRawOption('WORKSPACE',          'workspaceList', G::LoadTranslation('ID_WORKSPACES') );*/
-  //$G_TMP_MENU->AddIdRawOption('SELFSERVICE',    'selfService', G::LoadTranslation('ID_SELF_SERVICE') );
-  //$G_TMP_MENU->AddIdRawOption('TRANSLATION', 'tools/translations', 'Translations');
-  //$G_TMP_MENU->AddIdRawOption('UPDATE_ALL',  'tools/updateTranslation', 'Update');
 
-    $G_TMP_MENU->AddIdRawOption('ENVIRONMENT_SETTINGS', 'environmentSettings', G::LoadTranslation('ID_ENVIRONMENT_SETTINGS'), "",'', 'settings');
