@@ -1036,6 +1036,8 @@
     </validator>
     <index name="indexUid">
       <index-column name="CON_ID"/>
+      <index-column name="CON_CATEGORY"/>
+      <index-column name="CON_LANG"/>
       <vendor type="mysql">
         <parameter name="Table" value="CONTENT"/>
         <parameter name="Non_unique" value="1"/>

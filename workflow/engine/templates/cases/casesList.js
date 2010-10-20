@@ -19,11 +19,67 @@ new Ext.KeyMap(document, {
 //global variables
 var storeCases;
 
+function callbackDeleteCase (btn, text) {
+	if ( btn == 'yes' ) {
+    Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+    Ext.Ajax.request({
+      url: 'cases_Delete',
+      success: function(response) {
+      	parent.updateCasesView();
+        Ext.MessageBox.hide();
+        parent.updateCasesTree();
+      },
+      params: {APP_UID:caseIdToDelete}
+    });
+  }
+}
+
+function deleteCaseFunction (appid) {
+	caseIdToDelete = appid;
+  Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES , callbackDeleteCase );
+}
+
+function callbackUnpauseCase (btn, text) {
+	if ( btn == 'yes' ) {
+    Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+    Ext.Ajax.request({
+      url: 'cases_Ajax',
+      success: function(response) {
+      	parent.updateCasesView();
+        Ext.MessageBox.hide();
+        parent.updateCasesTree();
+      },
+      params: {action:'unpauseCase', sApplicationUID: caseIdToUnpause, iIndex: caseIndexToUnpause}
+    });
+  }
+}
+
+function unpauseCaseFunction (appid, delindex) {
+	caseIdToUnpause    = appid;
+	caseIndexToUnpause = delindex;
+  Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_CONFIRM_UNPAUSE_CASE , callbackUnpauseCase );
+}
+
 Ext.onReady ( function() {
   var filterProcess = '';
-
+  var caseIdToDelete = '';
+  var caseIdToUnpause = '';
+  var caseIndexToUnpause = '';
+ 
   function openLink(value, p, r){
-    return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>Open</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+    return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+  }
+
+  function deleteLink(value, p, r){
+    return String.format("<a href='#' onclick='deleteCaseFunction(\"{0}\")'>" + TRANSLATIONS.ID_DELETE + "</a>", r.data['APP_UID'] );
+  }
+
+  function viewLink(value, p, r){
+    return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+  }
+
+  function unpauseLink(value, p, r){
+    return String.format("<a href='#' onclick='unpauseCaseFunction(\"{0}\",\"{1}\")'>" + TRANSLATIONS.ID_UNPAUSE + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'] );
   }
 
   function convertDate ( value ) {
@@ -65,11 +121,15 @@ Ext.onReady ( function() {
     var c = columns[i];
     c.renderer = showField;
     if( c.dataIndex == 'DEL_TASK_DUE_DATE') c.renderer = dueDate;
-    if( c.dataIndex == 'APP_UPDATE_DATE') c.renderer = showDate;
+    if( c.dataIndex == 'APP_UPDATE_DATE')   c.renderer = showDate;
+    if( c.id == 'deleteLink')               c.renderer = deleteLink;
+    if( c.id == 'viewLink')                 c.renderer = viewLink;
+    if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
   };
 
   //adding the last column to open the cases_Open
-	columns.push ( { header: "", width: 50, dataIndex: 'DEL_PRIORITY', sortable: false, renderer: openLink, menuDisabled: true, id: 'openLink'});
+	//columns.push ( { header: "aaaaa", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'openLink'});
+//	columns.push ( { header: "xxxxxx", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'deleteLink'});
 
 	//adding the hidden field DEL_INIT_DATE
 	readerFields.push ( { name: "DEL_INIT_DATE"});
@@ -301,7 +361,7 @@ Ext.onReady ( function() {
     allowBlank: false,
     width: 50,
 //    emptyText: 'case Id'
-    emptyText: TRANSLATIONS.LABEL_EMPTY_CASE
+    emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID
   });
 
   var btnJump = new Ext.Button ({
@@ -314,14 +374,14 @@ Ext.onReady ( function() {
   });
   
   var toolbarTodo = [
+      'process', 
+      comboProcess,
+      '-',
       btnRead,
       '-',
       btnUnread,
       '-',
       btnAll,
-      '-',
-      'process', 
-      comboProcess,
       '->', // begin using the right-justified button container 
       textSearch,
       btnSearch,
@@ -346,17 +406,17 @@ Ext.onReady ( function() {
     ];
 
   var toolbarSent = [
+      'process', 
+      comboProcess,
+      '-',
+      'status', 
+      comboStatus,
+      '-',
       btnStarted,
       '-',
       btnCompleted,
       '-',
       btnAll,
-      '-',
-      'status', 
-      comboStatus,
-      '-',
-      'process', 
-      comboProcess,
       '->', // begin using the right-justified button container 
       textSearch,
       btnSearch,
@@ -368,14 +428,15 @@ Ext.onReady ( function() {
     ];
 
   var toolbarSearch = [
-      'user',
-      comboUser,
+      'process', 
+      comboProcess,
+      '-',
       'status', 
       comboStatus,
       '-',
-      'process', 
-      comboProcess,
-      '-', // begin using the right-justified button container 
+      'user',
+      comboUser,
+      '->', // begin using the right-justified button container 
       textSearch,
       btnSearch,
       '-',
@@ -415,7 +476,7 @@ Ext.onReady ( function() {
     frame: false,
     autoHeight:true,
     minHeight:400,
-    layout: 'fit',
+    //layout: 'fit',
 /*
     viewConfig: {
       forceFit:true

@@ -45,8 +45,8 @@ G::LoadClass('case');
 
 /* Process the info */
 $oCase = new Cases();
+print $_POST['APP_UID'];
 if ( !isset($_POST['APP_UID']) ) return;
-$oCase->removeCase( $_POST['APP_UID'] );
-
+  $oCase->removeCase( $_POST['APP_UID'] );
+print "ok";
 /* Redirect */
-?>

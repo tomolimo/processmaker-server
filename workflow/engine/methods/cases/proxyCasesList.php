@@ -113,7 +113,19 @@
   }  
 
   //here we count how many records exists for this criteria.
-  $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, true );
+  //BUT there are some special cases, and if we dont optimize them the server will crash.
+  $doCountAlreadyExecuted = false;
+  //case 1. when the SEARCH action is selected and none filter, search criteria is defined, 
+  //we need to count using the table APPLICATION, because APP_CACHE_VIEW takes 3 seconds
+  
+  if ( $action == 'search' && $filter == '' && $search == '' && $process == '' && $status == '' ) {
+  	$totalCount = $oAppCache->getSearchAllCount();
+    $doCountAlreadyExecuted = true;
+  }
+  
+  if ( $doCountAlreadyExecuted == false ) {
+    $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, true );
+  }
       
   //add sortable options    
   if ( $sort != '' ) {

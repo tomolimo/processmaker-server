@@ -6,6 +6,8 @@
   G::LoadClass ( 'configuration' );
   require_once ( "classes/model/Fields.php" );
   require_once ( "classes/model/AppCacheView.php" );
+  require_once ( "classes/model/Process.php" );
+  require_once ( "classes/model/Users.php" );
 
   $oHeadPublisher   =& headPublisher::getSingleton();
   // oHeadPublisher->setExtSkin( 'xtheme-blue');
@@ -25,89 +27,31 @@
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
   
+  if ( $action == 'draft' /* &&  $action == 'cancelled' */) {
+    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'deleteLink' ) );
+  }
+  if ( $action == 'selfservice' ) {
+    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'viewLink' ) );
+  }
+
+  if ( $action == 'paused' ) {
+    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'unpauseLink' ) );
+  }
+
+//  if ( $action == 'cancelled' ) {
+//    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'reactivateLink' ) );
+//  }
+
   $userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
   $oAppCache = new AppCacheView();
   $oAppCache->confCasesList = $confCasesList;
   
-// get the list based in the action provided
-  switch ( $action ) {
-    case 'draft' :
-         $cProcess      = $oAppCache->getDraftListCriteria($userUid); //fast enough
-         $cStatus       = $oAppCache->getDraftListCriteria($userUid); //fast enough
-         break;
-    case 'sent' :
-         $cProcess      = $oAppCache->getSentListCriteria($userUid); 
-         $cStatus       = $oAppCache->getSentListCriteria($userUid);
-         break;
-    case 'search' :
-         $cProcess      = $oAppCache->getSearchStatusCriteria(null); 
-         $cStatus       = $oAppCache->getSearchStatusCriteria(null);
-         $cUsers        = $oAppCache->getSearchStatusCriteria(null);
-         break;
-    case 'selfservice' :
-         $cProcess      = $oAppCache->getUnassignedListCriteria($userUid);
-         $cStatus       = $oAppCache->getUnassignedListCriteria($userUid);
-         break;
-    case 'paused' :
-         $cProcess      = $oAppCache->getPausedListCriteria($userUid);
-         $cStatus       = $oAppCache->getPausedListCriteria($userUid);
-         break;
-    case 'todo' :
-    default:
-         $cProcess      = $oAppCache->getToDoListCriteria($userUid); //fast enough
-         $cStatus       = $oAppCache->getToDoListCriteria($userUid); //fast enough
-    break;
-  }
-  //get the processes for this user in this action
-  $processes = array();
-  $processes[] = array ( '', 'All processes' );
-  $cProcess->clearSelectColumns ( );
-  $cProcess->setDistinct();
-  $cProcess->addSelectColumn ( AppCacheViewPeer::PRO_UID );
-  $cProcess->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
-  $oDataset = AppCacheViewPeer::doSelectRS($cProcess);
-  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-  $oDataset->next();
-      
-  while($aRow = $oDataset->getRow()){
-    $processes[] = array ( $aRow['PRO_UID'], $aRow['APP_PRO_TITLE'] );
-    $oDataset->next();
-  }
-
-
-  //get the status for this user in this action only for participated, unassigned, paused
-  $status = array();
-  $users = array();
-  $status[] = array( '', 'All status' );
-  if ( $action != 'todo' && $action != 'draft' ) {
-    $cStatus = new Criteria('workflow');
-    $cStatus->clearSelectColumns ( );
-    $cStatus->setDistinct();
-    $cStatus->addSelectColumn ( AppCacheViewPeer::APP_STATUS );
-    $oDataset = AppCacheViewPeer::doSelectRS($cStatus);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    while($aRow = $oDataset->getRow()){
-      $status[] = array( $aRow['APP_STATUS'], G::LoadTranslation('ID_CASES_STATUS_'.$aRow['APP_STATUS'])  ); //here we can have a translation for the status ( the second param)
-      $oDataset->next();
-    }
-  }
-
-  //now get users, just for the Search action
-  if ( $action == 'search' ) {
-    $cUsers->clearSelectColumns ( );
-    $cUsers->setDistinct();
-    $cUsers->addSelectColumn ( AppCacheViewPeer::USR_UID );
-    $cUsers->addSelectColumn ( AppCacheViewPeer::APP_CURRENT_USER );
-    $oDataset = AppCacheViewPeer::doSelectRS($cUsers);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    while($aRow = $oDataset->getRow()){
-      $users[] = array( $aRow['USR_UID'], $aRow['APP_CURRENT_USER'] );
-      $oDataset->next();
-    }
-  }  
-    
+  //get values for the comboBoxes
+  $processes = getProcessArray($action, $userUid );
+  $status    = getStatusArray($action, $userUid );
+  $users     = getUserArray($action, $userUid );
+  
+ 
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns );                       //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields',  $readerFields );                  //sending the fields to get from proxy
@@ -118,31 +62,188 @@
   $oHeadPublisher->assign( 'userValues',    $users);                          //sending the columns to display in grid
   
   $TRANSLATIONS = new stdClass();
-  $TRANSLATIONS->LABEL_GRID_LOADING     = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
-  $TRANSLATIONS->LABEL_REFRESH          = G::LoadTranslation('ID_REFRESH_LABEL');
-  $TRANSLATIONS->MESSAGE_REFRESH        = G::LoadTranslation('ID_REFRESH_MESSAGE');
-  $TRANSLATIONS->LABEL_OPT_READ         = G::LoadTranslation('ID_OPT_READ');
-  $TRANSLATIONS->LABEL_OPT_UNREAD       = G::LoadTranslation('ID_OPT_UNREAD');
-  $TRANSLATIONS->LABEL_OPT_ALL          = G::LoadTranslation('ID_OPT_ALL');
-  $TRANSLATIONS->LABEL_OPT_STARTED      = G::LoadTranslation('ID_OPT_STARTED');
-  $TRANSLATIONS->LABEL_OPT_COMPLETED    = G::LoadTranslation('ID_OPT_COMPLETED');
-  $TRANSLATIONS->LABEL_EMPTY_PROCESSES  = G::LoadTranslation('ID_EMPTY_PROCESSES');
-  $TRANSLATIONS->LABEL_EMPTY_SEARCH     = G::LoadTranslation('ID_EMPTY_SEARCH');
-  $TRANSLATIONS->LABEL_EMPTY_CASE       = G::LoadTranslation('ID_EMPTY_CASE');
-  $TRANSLATIONS->LABEL_SEARCH           = G::LoadTranslation('ID_SEARCH');
-  $TRANSLATIONS->LABEL_OPT_JUMP         = G::LoadTranslation('ID_OPT_JUMP');
-  $TRANSLATIONS->LABEL_DISPLAY_ITEMS    = G::LoadTranslation('ID_DISPLAY_ITEMS');
-  $TRANSLATIONS->LABEL_DISPLAY_EMPTY    = G::LoadTranslation('ID_DISPLAY_EMPTY');
-  $TRANSLATIONS->LABEL_OPEN_CASE        = G::LoadTranslation('ID_OPEN_CASE');
+  $TRANSLATIONS->LABEL_GRID_LOADING          = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
+  $TRANSLATIONS->LABEL_REFRESH               = G::LoadTranslation('ID_REFRESH_LABEL');
+  $TRANSLATIONS->MESSAGE_REFRESH             = G::LoadTranslation('ID_REFRESH_MESSAGE');
+  $TRANSLATIONS->LABEL_OPT_READ              = G::LoadTranslation('ID_OPT_READ');
+  $TRANSLATIONS->LABEL_OPT_UNREAD            = G::LoadTranslation('ID_OPT_UNREAD');
+  $TRANSLATIONS->LABEL_OPT_ALL               = G::LoadTranslation('ID_OPT_ALL');
+  $TRANSLATIONS->LABEL_OPT_STARTED           = G::LoadTranslation('ID_OPT_STARTED');
+  $TRANSLATIONS->LABEL_OPT_COMPLETED         = G::LoadTranslation('ID_OPT_COMPLETED');
+  $TRANSLATIONS->LABEL_EMPTY_PROCESSES       = G::LoadTranslation('ID_EMPTY_PROCESSES');
+  $TRANSLATIONS->LABEL_EMPTY_SEARCH          = G::LoadTranslation('ID_EMPTY_SEARCH');
+  $TRANSLATIONS->LABEL_EMPTY_CASE            = G::LoadTranslation('ID_EMPTY_CASE');
+  $TRANSLATIONS->LABEL_SEARCH                = G::LoadTranslation('ID_SEARCH');
+  $TRANSLATIONS->LABEL_OPT_JUMP              = G::LoadTranslation('ID_OPT_JUMP');
+  $TRANSLATIONS->LABEL_DISPLAY_ITEMS         = G::LoadTranslation('ID_DISPLAY_ITEMS');
+  $TRANSLATIONS->LABEL_DISPLAY_EMPTY         = G::LoadTranslation('ID_DISPLAY_EMPTY');
+  $TRANSLATIONS->LABEL_OPEN_CASE             = G::LoadTranslation('ID_OPEN_CASE');
+  $TRANSLATIONS->ID_CASESLIST_APP_UID        = G::LoadTranslation('ID_CASESLIST_APP_UID');
+  $TRANSLATIONS->ID_CONFIRM                  = G::LoadTranslation('ID_CONFIRM');
+  $TRANSLATIONS->ID_MSG_CONFIRM_DELETE_CASES = G::LoadTranslation('ID_MSG_CONFIRM_DELETE_CASES');
+  $TRANSLATIONS->ID_DELETE                   = G::LoadTranslation('ID_DELETE');
+  $TRANSLATIONS->ID_VIEW                     = G::LoadTranslation('ID_VIEW');
+  $TRANSLATIONS->ID_UNPAUSE                  = G::LoadTranslation('ID_UNPAUSE'); 		 			
+  $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
+  $TRANSLATIONS->ID_CONFIRM_UNPAUSE_CASE     = G::LoadTranslation('ID_CONFIRM_UNPAUSE_CASE'); 		 			
   
+ 				         
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   
-  $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('cases/casesList', true );    //adding a javascript file .js
 
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
 
   G::RenderPage('publish', 'extJs');
  
+  //functions to fill the comboboxes in the case list page 
+  function getProcessArray ( $action, $userUid ) {
+  	global $oAppCache;
+    $processes = Array();
+    $processes[] = array ( '', G::LoadTranslation('ID_ALL_PROCESS') );
+  
+//get the list based in the action provided
+    switch ( $action ) {
+      case 'draft' :
+           $cProcess      = $oAppCache->getDraftListCriteria($userUid); //fast enough
+           break;
+      case 'sent' :
+           $cProcess      = $oAppCache->getSentListProcessCriteria ($userUid); // fast enough
+           break;
+      case 'search' :
+           $cProcess      = new Criteria('workflow');
+           $cProcess->clearSelectColumns ( );
+           $cProcess->addSelectColumn ( ProcessPeer::PRO_UID );
+           $cProcess->addSelectColumn ( ContentPeer::CON_VALUE );
+           $del = DBAdapter::getStringDelimiter();
+           $conds = array();
+           $conds[] = array(ProcessPeer::PRO_UID,      ContentPeer::CON_ID );
+           $conds[] = array(ContentPeer::CON_CATEGORY, $del . 'PRO_TITLE' . $del);
+           $conds[] = array(ContentPeer::CON_LANG,     $del . SYS_LANG . $del);
+           $cProcess->addJoinMC($conds, Criteria::LEFT_JOIN);           
+           $cProcess->add(ProcessPeer::PRO_STATUS, 'ACTIVE');
+           $oDataset = ProcessPeer::doSelectRS($cProcess);
+           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+           $oDataset->next();
+               
+           while($aRow = $oDataset->getRow()){
+             $processes[] = array ( $aRow['PRO_UID'], $aRow['CON_VALUE'] );
+             $oDataset->next();
+           }
+           
+           return $processes;  
+           break;
+      case 'selfservice' :
+           $cProcess      = $oAppCache->getUnassignedListCriteria($userUid);
+           break;
+      case 'paused' :
+           $cProcess      = $oAppCache->getPausedListCriteria($userUid);
+           break;
+      case 'todo' :
+      default:
+           $cProcess      = $oAppCache->getToDoListCriteria($userUid); //fast enough
+      break;
+    }
+  
+    //get the processes for this user in this action
+    $cProcess->clearSelectColumns ( );
+    $cProcess->setDistinct();
+    $cProcess->addSelectColumn ( AppCacheViewPeer::PRO_UID );
+    $cProcess->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
+    $oDataset = AppCacheViewPeer::doSelectRS($cProcess);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+        
+    while($aRow = $oDataset->getRow()){
+      $processes[] = array ( $aRow['PRO_UID'], $aRow['APP_PRO_TITLE'] );
+      $oDataset->next();
+    }
+    
+    return $processes;  
+  }
+
+  function getUserArray ( $action, $userUid ) {
+  	global $oAppCache;
+    $status = array();
+    $users[] = array( '', G::LoadTranslation('ID_ALL_USERS') );
+    //now get users, just for the Search action
+    switch ( $action ) {
+      case 'search' :
+           $cUsers = new Criteria('workflow');
+           $cUsers->clearSelectColumns ( );
+           $cUsers->addSelectColumn ( UsersPeer::USR_UID );
+           $cUsers->addSelectColumn ( UsersPeer::USR_FIRSTNAME );
+           $cUsers->addSelectColumn ( UsersPeer::USR_LASTNAME );
+           $oDataset = UsersPeer::doSelectRS($cUsers);
+           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+           $oDataset->next();
+           while($aRow = $oDataset->getRow()){
+             $users[] = array( $aRow['USR_UID'], $aRow['USR_LASTNAME'] . ' ' . $aRow['USR_FIRSTNAME'] );
+             $oDataset->next();
+           }
+           break;
+      default:
+           return $users;
+      break;
+    }
+    return $users;
+  }
+
+  function getStatusArray ( $action, $userUid ) {
+  	global $oAppCache;
+    $status = array();
+    $status[] = array( '',  G::LoadTranslation('ID_ALL_STATUS') );
+//get the list based in the action provided
+    switch ( $action ) {
+      case 'sent' :
+           $cStatus       = $oAppCache->getSentListProcessCriteria ($userUid); // a little slow
+           break;
+      case 'search' :
+           $cStatus = new Criteria('workflow');
+           $cStatus->clearSelectColumns ( );
+           $cStatus->setDistinct();
+           $cStatus->addSelectColumn ( ApplicationPeer::APP_STATUS );
+           $oDataset = ApplicationPeer::doSelectRS($cStatus);
+           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+           $oDataset->next();
+           while($aRow = $oDataset->getRow()){
+             $status[] = array( $aRow['APP_STATUS'], G::LoadTranslation('ID_CASES_STATUS_'.$aRow['APP_STATUS'])  ); //here we can have a translation for the status ( the second param)
+             $oDataset->next();
+           }
+           return $status;
+           break;
+           
+      case 'selfservice' :
+           $cStatus       = $oAppCache->getUnassignedListCriteria($userUid);
+           break;
+      case 'paused' :
+           $cStatus       = $oAppCache->getPausedListCriteria($userUid);
+           break;
+
+      case 'todo' :
+      case 'draft' :
+      default:
+           return $status;
+      break;
+    }
+
+    //get the status for this user in this action only for participated, unassigned, paused
+    if ( $action != 'todo' && $action != 'draft' ) {
+      //$cStatus = new Criteria('workflow');
+      $cStatus->clearSelectColumns ( );
+      $cStatus->setDistinct();
+      $cStatus->addSelectColumn ( AppCacheViewPeer::APP_STATUS );
+      $oDataset = AppCacheViewPeer::doSelectRS($cStatus);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while($aRow = $oDataset->getRow()){
+        $status[] = array( $aRow['APP_STATUS'], G::LoadTranslation('ID_CASES_STATUS_'.$aRow['APP_STATUS'])  ); //here we can have a translation for the status ( the second param)
+        $oDataset->next();
+      }
+    }
+    return $status;
+  }
+  
   //these getXX function gets the default fields in casesListSetup
   function getToDo() {
     $caseColumns = array ();

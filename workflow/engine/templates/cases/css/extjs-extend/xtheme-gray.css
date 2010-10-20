@@ -129,7 +129,7 @@
 }
 .x-grid3-col-openLink{
 	background:none;
-	height: 22px;
+	//height: 22px;
 }
 .x-grid3-col-openLink a{
 	-moz-border-radius:10px;
@@ -154,9 +154,9 @@
 .x-grid3-col-openLink a:after{
 	content:'';
 }
-.x-toolbar-cell{
+/*.x-toolbar-cell{
 	text-transform: capitalize;
-}
+}*/
 .x-grid3-row-over{
 	background: #E0EAEF !important;
 }

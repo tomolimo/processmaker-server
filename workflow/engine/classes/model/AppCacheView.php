@@ -15,6 +15,7 @@ require_once 'classes/model/om/BaseAppCacheView.php';
  * @package    classes.model
  */
  
+require_once 'classes/model/Application.php';
 require_once 'classes/model/AppDelay.php';
 require_once 'classes/model/AdditionalTables.php';
  
@@ -196,6 +197,13 @@ class AppCacheView extends BaseAppCacheView {
     //$Criteria->addGroupByColumn(AppCacheViewPeer::APP_);
     return $Criteria;  	
   }
+
+  function getSentListProcessCriteria ($userUid) {
+    $Criteria = $this->addPMFieldsToCriteria('sent');
+    $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+    return $Criteria;  	
+  }
+
 
 
     /**
@@ -403,6 +411,14 @@ class AppCacheView extends BaseAppCacheView {
   	//return $this->getSearchCriteria( true);
   }
   
+  function getSearchAllCount ( ) {
+    $CriteriaCount  = new Criteria('workflow');
+    //$CriteriaCount->add (ApplicationPeer::USR_UID, '', CRITERIA::NOT_EQUAL );
+    $totalCount = ApplicationPeer::doCount( $CriteriaCount);
+    
+    return $totalCount;
+  }
+
    /**
    * gets the ADVANCED SEARCH cases list criteria for list
    * param $userUid the current userUid
