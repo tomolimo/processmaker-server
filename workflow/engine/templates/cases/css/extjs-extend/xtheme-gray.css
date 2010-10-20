@@ -121,17 +121,21 @@
 }
 .x-grid3-row:nth-child(odd) { background-color:#FFF; }
 .x-grid3-row:nth-child(even) { background-color:#F6F6F6; }
+.x-grid3-row-over{
+	background: #E0EAEF !important;
+	/*cursor: pointer;*/
+}
 .x-grid3-hd-inner{
 	font-size:11px;
 	font-weight: bold;
 	color:#333;
 	text-shadow:#fff 0px 1px 1px;
 }
-.x-grid3-col-openLink{
+.x-grid3-col-openLink,.x-grid3-col-deleteLink{
 	background:none;
-	//height: 22px;
+	height: 18px;
 }
-.x-grid3-col-openLink a{
+.x-grid3-col-openLink a,.x-grid3-col-deleteLink a{
 	-moz-border-radius:10px;
 	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
 	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5);
@@ -141,12 +145,12 @@
 	font-size:10px;
 	font-weight:700;
 	margin:0px;
-	padding:4px 6px;
+	padding:3px 5px;
 	text-decoration:none;
 	line-height: 18px;
 	text-shadow:0 1px 0px rgba(255,255,255,1);
 }
-.x-grid3-col-openLink a:hover{
+.x-grid3-col-openLink a:hover,.x-grid3-col-deleteLink a:hover{
 	background:#666;
 	color:#fff;
 	text-shadow:0 1px 0px rgba(0,0,0,1);
@@ -154,13 +158,43 @@
 .x-grid3-col-openLink a:after{
 	content:'';
 }
-/*.x-toolbar-cell{
+
+/*
+Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
+*/
+.x-panel-tbar .x-toolbar-cell{
 	text-transform: capitalize;
-}*/
-.x-grid3-row-over{
-	background: #E0EAEF !important;
 }
 
+/*
+TREE
+*/
 #ext-gen38.x-tree-root-ct .x-tree-node-el{
-	backgound:none;
+	/*background:none;*/
+}
+
+#ext-gen38.x-tree-root-ct .x-tree-node-ct b{
+	background:#FFFADF;
+}
+
+
+#refreshNotifiers.x-btn{
+}
+#ext-gen35.x-panel-tbar-noheader{
+	position:absolute;
+	top:1px;
+	right:1px;
+	height:27px;
+	z-index:1000 !important;
+	width:28px !important;
+	border-bottom:1px #ccc solid;
+}
+#ext-gen35.x-panel-tbar-noheader .x-toolbar-layout-ct{
+	width:28px !important;
+}
+#ext-gen35.x-panel-tbar-noheader .x-toolbar-left{
+	display:none;
+}
+#ext-gen35.x-panel-tbar-noheader .x-toolbar-right{
+	text-align: left !important;
 }
