@@ -315,7 +315,8 @@ class processMap
         $oPM->statusIcons=array();
         $oCriteria = new Criteria ( 'workflow' );
         $oCriteria->addSelectColumn ( SwimlanesElementsPeer::SWI_UID );
-        $oCriteria->addSelectColumn ( ContentPeer::CON_VALUE );
+//        $oCriteria->addSelectColumn ( ContentPeer::CON_VALUE );
+		$oCriteria->addAsColumn ( "CON_VALUE", "CASE WHEN CONTENT.CON_VALUE IS NULL THEN (SELECT DISTINCT MAX(A.CON_VALUE) FROM CONTENT A WHERE SWIMLANES_ELEMENTS.SWI_UID=A.CON_ID  ) ELSE CONTENT.CON_VALUE  END " );
         $oCriteria->addSelectColumn ( SwimlanesElementsPeer::SWI_TYPE );
         $oCriteria->addSelectColumn ( SwimlanesElementsPeer::SWI_X );
         $oCriteria->addSelectColumn ( SwimlanesElementsPeer::SWI_Y );
@@ -341,6 +342,7 @@ class processMap
               $oText              = null;
               $oText->uid         = $aRow ['SWI_UID'];
               $oText->label       = strip_tags ( ($aRow ['CON_VALUE'] != '' ? str_replace ( chr ( 92 ), '&#92;', str_replace ( '<', '&lt;', $aRow ['CON_VALUE'] ) ) : '-') );
+              // $oText->label       = '->' . $aRow ['CON_VALUE'] . '<-' ;
               $oText->position->x = $aRow ['SWI_X'];
               $oText->position->y = $aRow ['SWI_Y'];
               $oPM->text [] = $oText;
@@ -2155,7 +2157,8 @@ class processMap
     $oCriteria  = new Criteria ( 'workflow' );
     $oCriteria->addSelectColumn ( ReportTablePeer::REP_TAB_UID );
     $oCriteria->addSelectColumn ( ReportTablePeer::PRO_UID );
-    $oCriteria->addAsColumn ( 'REP_TAB_TITLE', 'C.CON_VALUE' );
+    // $oCriteria->addAsColumn ( 'REP_TAB_TITLE', 'C.CON_VALUE' );
+    $oCriteria->addAsColumn ( 'REP_TAB_TITLE', "CASE WHEN C.CON_VALUE IS NULL THEN (SELECT DISTINCT MAX(A.CON_VALUE) FROM CONTENT A WHERE A.CON_ID = REPORT_TABLE.REP_TAB_UID ) ELSE C.CON_VALUE  END "); 
     $oCriteria->addAlias ( 'C', 'CONTENT' );
     $aConditions    = array ();
     $aConditions [] = array (ReportTablePeer::REP_TAB_UID, 'C.CON_ID' );
