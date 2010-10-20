@@ -26,7 +26,7 @@
 
 	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
   $oAppCache = new AppCacheView();
-  
+
 // get the action based list
   switch ( $action ) {
   	case 'draft' :
@@ -139,6 +139,27 @@
   $Criteria->setLimit( $limit );
   $Criteria->setOffset( $start );
 
+  // getting the casesList configuration record
+  // getting the additional table name based in the id saved in the configuration
+  // record
+  if (isset($confCasesList['PMTable'])&&!empty($confCasesList['PMTable'])) {
+    $oAdditionalTables = new AdditionalTables();
+    $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
+    $tableName         = $oAdditionalTables->getAddTabName();
+    // getting the default fields list
+    $defaultFields     = $oAppCache->getDefaultFields();
+
+    // so if the fields are not in the default list those are pm fields
+      foreach($confCasesList['second']['data'] as $fieldData){
+        // assembling the query based in the configuration array
+        if (!in_array($fieldData['name'],$defaultFields)){
+          $fieldName = $tableName.'.'.$fieldData['name'];
+          $Criteria->addSelectColumn (  $fieldName );
+        }
+      }
+    // adding the join instruction to the pmTable
+    $Criteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
+  }
   //execute the query      
   $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
