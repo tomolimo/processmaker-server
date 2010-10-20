@@ -917,9 +917,9 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
         else
           $result [] = '<input class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>';
       } elseif ($this->mode === 'view') {
-          $result [] = '<input class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities ( $v, ENT_COMPAT, 'utf-8' );
+           $result [] = '<input class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities ( $v, ENT_COMPAT, 'utf-8' );
       } else {
-        $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
+         $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
       }
       $r ++;
     }
@@ -1317,7 +1317,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
         return $html;
       }
     } elseif ($this->mode === 'view') {
-      return '<textarea id="form[' . $this->name . ']" name="form[' . $this->name . ']" wrap="hard" cols="' . $this->cols . '" rows="' . $this->rows . '" readOnly style="border:0px;backgroud-color:inherit;' . $this->style . '" wrap="' . htmlentities ( $this->wrap, ENT_QUOTES, 'UTF-8' ) . '"  class="FormTextArea" >' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '</textarea>';
+        return '<textarea id="form[' . $this->name . ']" name="form[' . $this->name . ']" wrap="hard" cols="' . $this->cols . '" rows="' . $this->rows . '" readOnly style="border:0px;backgroud-color:inherit;' . $this->style . '" wrap="' . htmlentities ( $this->wrap, ENT_QUOTES, 'UTF-8' ) . '"  class="FormTextArea" >' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '</textarea>';
     } else {
       return '<textarea id="form[' . $this->name . ']" name="form[' . $this->name . ']" wrap="hard" cols="' . $this->cols . '" rows="' . $this->rows . '" style="' . $this->style . '" wrap="' . htmlentities ( $this->wrap, ENT_QUOTES, 'UTF-8' ) . '"  class="module_app_input___gray" >' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '</textarea>';
     }
@@ -1346,17 +1346,20 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
     $r = 1;
     foreach ( $values as $v ) {
       if ($this->mode === 'edit') {
+
         if ($this->readOnly)
-          $result [] = '<textarea class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"  wrap="hard" rows="' . $this->rows . '"cols="'.$this->cols.'" required="' . $isRequired . '" readOnly="readOnly">'.$this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'</textarea>';
+            $result [] = '<textarea class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"  wrap="hard" rows="' . $this->rows . '"cols="'.$this->cols.'" required="' . $isRequired . '" readOnly="readOnly">'.$this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'</textarea>';
         else
           $result [] = '<textarea class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"  wrap="hard" rows="' . $this->rows . '"cols="'.$this->cols.'" required="' . $isRequired . '">'.$this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'</textarea>';
       } elseif ($this->mode === 'view') {
+
         if (stristr ( $_SERVER ['HTTP_USER_AGENT'], 'iPhone' )) {
           //$result[] = '<div style="overflow:hidden;height:25px;padding:0px;margin:0px;">'.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'</div>';
-          $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
+       
+            $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
         } else {
-          //$result[] = '<div style="overflow:hidden;width:inherit;height:2em;padding:0px;margin:0px;">'.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'</div>';
-          $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
+                   $varaux = '<textarea class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"  wrap="hard" rows="' . $this->rows . '"cols="'.$this->cols.'" required="' . $isRequired . '">'.$this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'</textarea>';
+                   $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'<div style="display:none;">'.$varaux.'</div>';
         }
 
       } else {
