@@ -43,7 +43,7 @@ $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('
 if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
   $G_TMP_MENU->AddIdRawOption('UPGRADE', 'upgrade',     G::LoadTranslation('ID_UPGRADE'), 'icon-system-upgrade.png', '', 'settings');
 
-//settings options
+//tools options
 if ($RBAC->userCanAccess('PM_SETUP') == 1)
   $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'tools');
 if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
