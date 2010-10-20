@@ -23,7 +23,7 @@
  *
  */
 
-  if (($RBAC_Response = $RBAC->userCanAccess("PM_CASES"))!=1) return $RBAC_Response;
+  if (($RBAC_Response = $RBAC->userCanAccess("PM_SETUP"))!=1) return $RBAC_Response;
 
   $G_MAIN_MENU            = 'processmaker';
   $G_ID_MENU_SELECTED     = 'SETUP';

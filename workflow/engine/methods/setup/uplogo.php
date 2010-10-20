@@ -25,23 +25,11 @@
  
 global $RBAC;
 G::LoadClass('replacementLogo');
-switch ($RBAC->userCanAccess('PM_SETUP_ADVANCE'))
-{
-	case -2:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	case -1:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	case -3:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
+
+if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){	
+  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+  //G::header('location: ../login/login');
+  die;
 }
 
   //calculating the max upload file size;

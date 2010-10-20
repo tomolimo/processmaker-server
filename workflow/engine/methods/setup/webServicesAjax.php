@@ -25,9 +25,12 @@
 ini_set ( "soap.wsdl_cache_enabled", "0" ); // enabling WSDL cache
 
 G::LoadClass ( 'ArrayPeer' );
+if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_FACTORY') != 1){	
+  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+  //G::header('location: ../login/login');
+  die;
+}
 
-if (($RBAC_Response = $RBAC->userCanAccess ( "PM_FACTORY" )) != 1)
-   return $RBAC_Response;
 G::LoadInclude ( 'ajax' );
 //G::pr($_SESSION);
 $_POST['action'] = get_ajax_value ( 'action' );

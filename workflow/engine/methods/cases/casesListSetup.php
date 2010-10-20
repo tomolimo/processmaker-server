@@ -1,5 +1,12 @@
 <?php
 
+global $RBAC;
+if($RBAC->userCanAccess('PM_SETUP') != 1 || $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){	
+  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+  //G::header('location: ../login/login');
+  die;
+}
+
   $oHeadPublisher =& headPublisher::getSingleton();
     	
   $oHeadPublisher->assignNumber( 'pageSize',     20 ); //sending the page size

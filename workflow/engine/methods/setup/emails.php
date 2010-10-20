@@ -24,24 +24,10 @@
  */
 
 global $RBAC;
-switch ($RBAC->userCanAccess('PM_FACTORY'))
-{
-	case -2:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	case -1:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	case -3:
-	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	  G::header('location: ../login/login');
-	  die;
-	break;
-	
+if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_FACTORY') != 1){	
+  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+  //G::header('location: ../login/login');
+  die;
 }
 
 $G_MAIN_MENU            = 'processmaker';
