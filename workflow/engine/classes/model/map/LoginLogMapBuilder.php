@@ -70,7 +70,7 @@ class LoginLogMapBuilder {
 
 		$tMap->addColumn('LOG_IP', 'LogIp', 'string', CreoleTypes::VARCHAR, true, 15);
 
-		$tMap->addColumn('LOG_SID', 'LogSid', 'string', CreoleTypes::VARCHAR, true, 40);
+		$tMap->addColumn('LOG_SID', 'LogSid', 'string', CreoleTypes::VARCHAR, true, 100);
 
 		$tMap->addColumn('LOG_INIT_DATE', 'LogInitDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 

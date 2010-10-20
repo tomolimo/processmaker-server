@@ -162,7 +162,7 @@ CREATE TABLE `CONTENT`
 	`CON_LANG` VARCHAR(10) default '' NOT NULL,
 	`CON_VALUE` TEXT  NOT NULL,
 	PRIMARY KEY (`CON_CATEGORY`,`CON_PARENT`,`CON_ID`,`CON_LANG`),
-	KEY `indexUid`(`CON_ID`)
+	KEY `indexUid`(`CON_ID`, `CON_CATEGORY`, `CON_LANG`)
 )Type=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
 #-- DEPARTMENT
