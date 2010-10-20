@@ -152,7 +152,12 @@ class serverConf {
    */
   function sucessfulLogin() {
     $this->logins ++;
-    $this->workspaces[SYS_SYS]['WSP_LOGINS'] ++;
+    if ( isset ($this->workspaces[SYS_SYS]) && isset ($this->workspaces[SYS_SYS]['WSP_LOGINS']) )
+      $this->workspaces[SYS_SYS]['WSP_LOGINS'] ++;
+
+    if ( isset ($this->workspaces[SYS_SYS]) && !isset ($this->workspaces[SYS_SYS]['WSP_LOGINS']) )
+      $this->workspaces[SYS_SYS]['WSP_LOGINS'] = 1;
+    
     $this->saveSingleton ();
   }
 

@@ -54,6 +54,9 @@ class AppCacheView extends BaseAppCacheView {
   		case 'cancelled' : 
   	    $Criteria = $this->getCancelledCountCriteria( $userUid );
   	    break;
+  		case 'to_revise' : 
+  	    $Criteria = $this->getToReviseCountCriteria( $userUid );
+  	    break;
   	  default :
   	    return $type;
     }
@@ -308,6 +311,60 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getPausedListCriteria ($userUid) {
   	return $this->getPaused($userUid, false);
+  }
+
+    /**
+   * gets the TO_REVISE cases list criteria
+   * param $userUid the current userUid
+   * param $doCount if true this will return the criteria for count cases only
+   * @return Criteria object $Criteria
+   */
+  function getToRevise ( $userUid, $doCount ) {
+    // adding configuration fields from the configuration options
+    // and forming the criteria object
+    $oCriteria  = new Criteria('workflow');
+    $oCriteria->add(ProcessUserPeer::USR_UID, $userUid );
+    $oCriteria->add(ProcessUserPeer::PU_TYPE, 'SUPERVISOR');
+    $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aProcesses = array();
+    while ($aRow = $oDataset->getRow()) {
+        $aProcesses[] = $aRow['PRO_UID'];
+        $oDataset->next();
+    }
+
+    if ( $doCount ) {
+      $c  = new Criteria('workflow');
+    }
+    else {
+      $c = $this->addPMFieldsToCriteria('todo');
+    }
+    $c->add(AppCacheViewPeer::PRO_UID,           $aProcesses, Criteria::IN);
+    $c->add(AppCacheViewPeer::APP_STATUS,        'TO_DO');
+    $c->add(AppCacheViewPeer::DEL_FINISH_DATE,   null,  Criteria::ISNULL);
+    $c->add(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $c->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+
+    return $c;
+  }
+  
+    /**
+   * gets the ToRevise cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getToReviseCountCriteria ($userUid) {
+  	return $this->getToRevise($userUid, true);
+  }
+  
+   /**
+   * gets the PAUSED cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getToReviseListCriteria ($userUid) {
+  	return $this->getToRevise($userUid, false);
   }
 
 

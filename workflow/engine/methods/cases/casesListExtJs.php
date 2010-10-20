@@ -111,6 +111,14 @@
            $cProcess      = $oAppCache->getSentListProcessCriteria ($userUid); // fast enough
            break;
       case 'search' :
+           //in search action, the query to obtain all process is too slow, so we need to query directly to 
+           //process and content tables, and for that reason we need the current language in AppCacheView.
+           G::loadClass('configuration');
+           $oConf = new Configurations; 
+           $oConf->loadConfig($x, 'APP_CACHE_VIEW_ENGINE','','','','');
+           $appCacheViewEngine = $oConf->aConfig;
+           $lang   = isset($appCacheViewEngine['LANG']) ? $appCacheViewEngine['LANG'] : 'en';
+           
            $cProcess      = new Criteria('workflow');
            $cProcess->clearSelectColumns ( );
            $cProcess->addSelectColumn ( ProcessPeer::PRO_UID );
@@ -119,7 +127,7 @@
            $conds = array();
            $conds[] = array(ProcessPeer::PRO_UID,      ContentPeer::CON_ID );
            $conds[] = array(ContentPeer::CON_CATEGORY, $del . 'PRO_TITLE' . $del);
-           $conds[] = array(ContentPeer::CON_LANG,     $del . SYS_LANG . $del);
+           $conds[] = array(ContentPeer::CON_LANG,     $del . $lang . $del);
            $cProcess->addJoinMC($conds, Criteria::LEFT_JOIN);           
            $cProcess->add(ProcessPeer::PRO_STATUS, 'ACTIVE');
            $oDataset = ProcessPeer::doSelectRS($cProcess);

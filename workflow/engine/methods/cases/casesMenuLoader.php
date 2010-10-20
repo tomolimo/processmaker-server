@@ -16,7 +16,7 @@
       getLoadTreeMenuData();
       break;
   }
-  die;
+  
   
   function getLoadTreeMenuData () {
     header ("content-type: text/xml");
@@ -119,6 +119,16 @@
     $type = $_GET['item'];
     $oCases = new AppCacheView();
       
+    $aTypesID = array();
+    $aTypesID['CASES_INBOX']       = 'to_do';
+    $aTypesID['CASES_DRAFT']       = 'draft'; 
+    $aTypesID['CASES_CANCELLED']   = 'cancelled';
+    $aTypesID['CASES_SENT']        = 'sent';
+    $aTypesID['CASES_PAUSED']      = 'paused';
+    $aTypesID['CASES_COMPLETED']   = 'completed';
+    $aTypesID['CASES_SELFSERVICE'] = 'selfservice';
+    $aTypesID['CASES_TO_REVISE']   = 'to_revise';
+    //$aTypesID['CASES_TO_REASSIGN'] = 'to_reassign';
     $aTypesID = Array('CASES_INBOX'=>'to_do', 'CASES_DRAFT'=>'draft', 'CASES_CANCELLED'=>'cancelled', 'CASES_SENT'=>'sent', 'CASES_PAUSED'=>'paused', 'CASES_COMPLETED'=>'completed','CASES_SELFSERVICE'=>'selfservice','CASES_TO_REVISE'=>'to_revise','CASES_TO_REASSIGN'=>'to_reassign');
 
     $aCount = $oCases->getAllCounters(Array($aTypesID[$type]), $userId, true);
@@ -156,8 +166,17 @@
   	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
     $oAppCache = new AppCacheView();
     //$aTypes = Array('to_do', 'draft', 'cancelled', 'sent', 'paused', 'completed','selfservice','to_revise','to_reassign');
-    $aTypes = Array('to_do'=>'CASES_INBOX', 'draft'=>'CASES_DRAFT', 'cancelled'=>'CASES_CANCELLED', 'sent'=>'CASES_SENT', 'paused'=>'CASES_PAUSED', 'completed'=>'CASES_COMPLETED','selfservice'=>'CASES_SELFSERVICE','to_revise'=>'CASES_TO_REVISE','to_reassign'=>'CASES_TO_REASSIGN');
-
+    $aTypes = Array();
+    $aTypes['to_do']       = 'CASES_INBOX';
+    $aTypes['draft']       = 'CASES_DRAFT';
+    $aTypes['cancelled']   = 'CASES_CANCELLED'; 
+    $aTypes['sent']        = 'CASES_SENT'; 
+    $aTypes['paused']      = 'CASES_PAUSED'; 
+    $aTypes['completed']   = 'CASES_COMPLETED';
+    $aTypes['selfservice'] = 'CASES_SELFSERVICE';
+    $aTypes['to_revise']   = 'CASES_TO_REVISE';
+    $aTypes['to_reassign'] = 'CASES_TO_REASSIGN';
+    
     $aCount = $oAppCache->getAllCounters( array_keys($aTypes), $userUid );
 
     $response = Array();

@@ -138,7 +138,7 @@ try {
   $oServerConf =& serverConf::getSingleton();
   $oServerConf->sucessfulLogin();
 
-  // Asign the uid of user to userloggedobj
+  // Assign the uid of user to userloggedobj
   $RBAC->loadUserRolePermission($RBAC->sSystem, $uid);
   $res = $RBAC->userCanAccess('PM_LOGIN');
   if ($res != 1 ) {
@@ -164,7 +164,7 @@ try {
     }
   }
 
-  /**log by Everth**/
+  /**log in table Login**/
   require_once 'classes/model/LoginLog.php';
   $weblog=new LoginLog();
   $aLog['LOG_UID']            = G::generateUniqueID();

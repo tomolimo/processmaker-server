@@ -189,44 +189,40 @@ class UsersProperties extends BaseUsersProperties {
   public function redirectTo($sUserUID, $sLanguage = 'en') {
     global $RBAC;
     //get the plugins, and check if there is redirectLogins
-    //if yes, then redirect according his Role
+    //if yes, then redirect goes according his Role
     if ( class_exists('redirectDetail')) {
-      //falta validar...
+      //to do: complete the validation
       if(isset($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE']))
         $userRole = $RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE'];
+        
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
       $aRedirectLogin = $oPluginRegistry->getRedirectLogins();
-      if (isset($aRedirectLogin)) {
-        if (is_array($aRedirectLogin)) {
-          foreach ($aRedirectLogin as $key=>$detail) {
-            if (isset($detail->sPathMethod)) {
-              if ($detail->sRoleCode == $userRole) {
-                return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . $detail->sPathMethod;
-              }
-            }
+      if (isset($aRedirectLogin) && is_array($aRedirectLogin) ) {
+        foreach ($aRedirectLogin as $key=>$detail) {
+          if (isset($detail->sPathMethod) && $detail->sRoleCode == $userRole ) {
+              return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . $detail->sPathMethod;
           }
         }
       }
     }
     //end plugin
 
-    #New feature by Neyek <aortiz.erik@gmail.com, erik@colosa.com>
+    #New feature by Erik erik@colosa.com>
     #get user preferences for default redirect
     #verifying if it has any preferences on the configurations table
     G::loadClass('configuration');
     $oConf = new Configurations;
     $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
-
     if( sizeof($oConf->aConfig) > 0) { #this user has a configuration record
+    	
+    	//these is for backward compatibility, because now, we dont have user and dashboard menu.
+    	if ( $oConf->aConfig['DEFAULT_MENU'] == 'PM_USERS')     $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
+    	if ( $oConf->aConfig['DEFAULT_MENU'] == 'PM_DASHBOARD') $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
+    	
       switch($oConf->aConfig['DEFAULT_MENU']) {
-        case 'PM_USERS':
-          if ($RBAC->userCanAccess('PM_USERS') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/users_List';
-          }
-          break;
-        case 'PM_CASES':
-          if ($RBAC->userCanAccess('PM_CASES') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'cases/main';
+        case 'PM_SETUP':
+          if ($RBAC->userCanAccess('PM_SETUP') == 1) {
+            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
           }
           break;
         case 'PM_FACTORY':
@@ -234,14 +230,19 @@ class UsersProperties extends BaseUsersProperties {
             return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/processes_List';
           }
           break;
+        case 'PM_CASES':
+          if ($RBAC->userCanAccess('PM_CASES') == 1) {
+            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'cases/main';
+          }
+          break;
+        case 'PM_USERS':
+          if ($RBAC->userCanAccess('PM_USERS') == 1) {
+            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/users_List';
+          }
+          break;
         case 'PM_DASHBOARD':
           if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
             return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'dashboard/dashboard';
-          }
-          break;
-        case 'PM_SETUP':
-          if ($RBAC->userCanAccess('PM_SETUP') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/emails';
           }
           break;
       }
@@ -250,20 +251,20 @@ class UsersProperties extends BaseUsersProperties {
     if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/processes_List';
     }
+    if ($RBAC->userCanAccess('PM_SETUP') == 1) {
+      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
+    }
     if ($RBAC->userCanAccess('PM_CASES') == 1) {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'cases/main';
-    }
-    if ($RBAC->userCanAccess('PM_REPORTS') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'reports/reportsList';
     }
     if ($RBAC->userCanAccess('PM_USERS') == 1) {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/users_List';
     }
-    if ($RBAC->userCanAccess('PM_SETUP') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/emails';
-    }
     if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'dashboard/dashboard';
+    }
+    if ($RBAC->userCanAccess('PM_REPORTS') == 1) {
+      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'reports/reportsList';
     }
     return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/myInfo';
   }
