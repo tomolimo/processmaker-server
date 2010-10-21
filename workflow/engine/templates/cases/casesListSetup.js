@@ -8,7 +8,7 @@ Ext.onReady(function(){
     {name: 'gridIndex', mapping : 'gridIndex'},
     {name: 'fieldType', mapping : 'fieldType'},
     {name: 'label', mapping : 'label'},
-    {name: 'width', mapping : 'width'},
+    //{name: 'width', mapping : 'width'},
     {name: 'align', mapping : 'align'}
   ];
 
@@ -158,7 +158,7 @@ Ext.onReady(function(){
     {name: 'gridIndex', mapping : 'gridIndex'},
     {name: 'fieldType', mapping : 'fieldType'},
     {name: 'label', mapping : 'label'},
-    {name: 'width', mapping : 'width'},
+    //{name: 'width', mapping : 'width'},
     {name: 'align', mapping : 'align'}
   ];
 
@@ -212,7 +212,7 @@ Ext.onReady(function(){
 //          {header: "Label",      width: 160, dataIndex: 'label',  editor: labelTextField },
           {header: TRANSLATIONS.LABEL_HEADER_LABEL,      width: 160, dataIndex: 'label',  editor: labelTextField },
 //          {header: "Width",      width: 40,  dataIndex: 'width',  editor: widthTextField },
-          {header: TRANSLATIONS.LABEL_HEADER_WIDTH,      width: 40,  dataIndex: 'width',  editor: widthTextField },
+//          {header: TRANSLATIONS.LABEL_HEADER_WIDTH,      width: 40,  dataIndex: 'width',  editor: widthTextField },
 //          {header: "Align",      width: 60,  dataIndex: 'align',  editor: alignComboBox},
           {header: TRANSLATIONS.LABEL_HEADER_ALIGN,      width: 60,  dataIndex: 'align',  editor: alignComboBox},
         ]
