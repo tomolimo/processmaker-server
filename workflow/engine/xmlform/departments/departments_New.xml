@@ -25,8 +25,8 @@
 </button> 
 <JS type="javascript" replacetags="1">
 var sGroupname;
-sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
-     
+//sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
+
 var verifyDptoname = function()
 {
   document.forms[0].elements['form[DEP_TITLE]'].disabled = true;
