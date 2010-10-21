@@ -1357,9 +1357,10 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
           //$result[] = '<div style="overflow:hidden;height:25px;padding:0px;margin:0px;">'.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'</div>';
        
             $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
-        } else {
+        } else { //start add Alvaro
                    $varaux = '<textarea class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"  wrap="hard" rows="' . $this->rows . '"cols="'.$this->cols.'" required="' . $isRequired . '">'.$this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'</textarea>';
                    $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'<div style="display:none;">'.$varaux.'</div>';
+                   //end add Alvaro
         }
 
       } else {
@@ -2404,13 +2405,13 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
       } elseif ($this->mode === 'view') {
         $html = $this->htmlentities ( isset ( $this->options [$value] ) ? $this->options [$value] : '', ENT_COMPAT, 'utf-8' );
         $html .= '<select '.$readOnlyField.' required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" style="display:none" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
-      }
+      } 
       foreach ( $this->option as $optionName => $option ) {
         // if change the type with the settype function then compare "0" == "" so both can be diferentiated
         settype($optionName,'string');
         $html .= '<option value="' . $optionName . '" ' . ($optionName === $value ? 'selected="selected"' : ''). '>' . $option . '</option>';
       }
-      foreach ( $this->sqlOption as $optionName => $option ) {
+      foreach ( $this->sqlOption as $optionName => $option ) {  
         // if change the type with the settype function then compare "0" == "" so both can be diferentiated
         settype($optionName,'string');
         $html .= '<option value="' . $optionName . '" ' . ($optionName === $value ? 'selected="selected"' : '') . '>' . $option . '</option>';
@@ -2433,6 +2434,26 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
                   <image src="/images/help4.gif" width="15" height="15" border="0"/>
                 </a>';
         }
+//add by alvaro
+         if($this->readonly){
+           $readOnlyField = "";
+           $html1 = '<select '.$readOnlyField.' required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
+           foreach ( $this->option as $optionName => $option ) {
+             // if change the type with the settype function then compare "0" == "" so both can be diferentiated
+             settype($optionName,'string');
+             $html1 .= '<option value="' . $optionName . '" ' . ($optionName === $value ? 'selected="selected"' : ''). '>' . $option . '</option>';
+           }
+           foreach ( $this->sqlOption as $optionName => $option ) {
+             // if change the type with the settype function then compare "0" == "" so both can be diferentiated
+             settype($optionName,'string');
+             $html1 .= '<option value="' . $optionName . '" ' . ($optionName === $value ? 'selected="selected"' : '') . '>' . $option . '</option>';
+           }
+           $html1 .= '</select>';
+           $html.='<div style="display:none">'.$html1.'</div>';
+        }
+//end add
+
+
     return $html;
   }
 }
