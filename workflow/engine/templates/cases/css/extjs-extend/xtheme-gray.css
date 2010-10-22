@@ -1,3 +1,4 @@
+@import url("/images/icons_silk/sprite.css");
 /**
  * Cases Interface styles
  */
@@ -18,32 +19,57 @@
     margin-bottom: 5px;
 }
 
+.x-tree-node-icon{
+	width:18px !important;
+	background-image:url( /images/icons_silk/sprites.png);
+	height:18px;
+}
+
+
 .ICON_FOLDERS {
-    background-image: url(/images/cases-folders.png) !important;
+   /* background-image: url(/images/cases-folders.png) !important;*/
+	/*.ss_folder_explore*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -7777px !important;
 }
 
 .ICON_CASES_FOLDERS {
-    background-image: url(/images/cases-inbox.png) !important;
+    background-image: url(/images/icons_silk/cases-inbox.png) !important;
 }
 
 .ICON_CASES_INBOX {
-    background-image: url(/images/cases-inbox.png) !important;
+    /*background-image: url(/images/cases-inbox.png) !important;*/
+	 /*ss_folder_page*/
+	 background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -7957px !important;
 }
 
 .ICON_CASES_DRAFT {
-    background-image: url(/images/cases-draft.png) !important;
+    /*background-image: url(/images/cases-draft.png) !important;*/
+	 /*ss_pencil*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -12439px !important;
 }
 
 .ICON_CASES_SENT {
-    background-image: url(/images/cases-outbox.png) !important;
+   /* background-image: url(/images/cases-outbox.png) !important;*/
+	/*.ss_page_white_go*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -11773px !important;
 }
 
 .ICON_CASES_SELFSERVICE {
-    background-image: url(/images/cases-selfservice.png) !important;
+    /*background-image: url(/images/cases-selfservice.png) !important;*/
+	 /* ss_arrow_rotate_anticlockwise */
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -955px !important;
 }
 
 .ICON_CASES_PAUSED {
-    background-image: url(/images/cases-paused.png) !important;
+    /*background-image: url(/images/cases-paused.png) !important;*/
+	 /*ss_clock*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -4033px !important;
 }
 
 .ICON_CASES_COMPLETED {
@@ -55,15 +81,30 @@
 }
 
 .ICON_CASES_FOLDERS {
-    background-image: url(/images/cases-documents.png) !important;
+   /*background-image: url(/images/cases-documents.png) !important;*/
+	/*ss_report */
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -13213px !important;
 }
 
 .ICON_SEARCHS {
     background-image: url(/images/cases-search.png) !important;
+	 /*ss_find*/
+	 /*background-image:url('/images/sprites.png') !important;
+	height:18px !important;
+	background-position:0 -7453px !important;*/
+}
+.ICON_CASES_SEARCH {
+	 /*ss_page_find*/
+	 background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -11089px !important;
 }
 
 .ICON_ADMIN {
-    background-image: url(/images/cases-admin.png) !important;
+    /*background-image: url(/images/cases-admin.png) !important;*/
+	 /*ss_user_suit*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -17371px !important;
 }
 
 .ICON_CASES_TO_REVISE {
@@ -78,10 +119,16 @@
     background-image: url(/images/pm.gif) !important;
 }
 .ICON_CASES_START_CASE {
-    background-image: url(/images/addc.png) !important;
+	/*ss_add*/
+    /*background-image: url(/images/addc.png) !important;*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -19px !important;
 }
 .ICON_CASES_HOME {
-    background-image: url(/images/dialog-ok-apply.png) !important;
+	/*ss_house*/
+   /*background-image: url(/images/dialog-ok-apply.png) !important;*/
+	background-image:url(/images/icons_silk/sprites.png) !important;
+	background-position:0 -8497px !important;
 }
  
 
@@ -106,13 +153,7 @@
 
 
 
- 
-
-/*
-* Cambios CSS
-* Rene Silva
-* 18102010
-*/
+/*Tables*/
 .x-grid3-cell-inner{
 /*	font-size:12px;*/
 }
@@ -135,26 +176,6 @@
 	background:none;
 	height: 18px;
 }
-.x-grid3-col-openLink a,.x-grid3-col-deleteLink a{
-	-moz-border-radius:10px;
-	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
-	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5);
-	background:#EEE;
-	border-radius:10px;
-	color:#333;
-	font-size:10px;
-	font-weight:700;
-	margin:0px;
-	padding:3px 5px;
-	text-decoration:none;
-	line-height: 18px;
-	text-shadow:0 1px 0px rgba(255,255,255,1);
-}
-.x-grid3-col-openLink a:hover,.x-grid3-col-deleteLink a:hover{
-	background:#666;
-	color:#fff;
-	text-shadow:0 1px 0px rgba(0,0,0,1);
-}
 .x-grid3-col-openLink a:after{
 	content:'';
 }
@@ -166,18 +187,56 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 	text-transform: capitalize;
 }
 
-/*
-TREE
-*/
-#ext-gen38.x-tree-root-ct .x-tree-node-el{
-	/*background:none;*/
+/*TREE*/
+#ext-gen38.x-tree-root-ct .x-tree-node{
 }
 
+#ext-gen38.x-tree-root-ct .x-tree-node-el{
+	background:#eee;
+	padding-top:4px;
+	padding-bottom:4px;
+	cursor: auto;
+	border-bottom:1px solid #ddd;
+	border-top:1px solid #ddd;
+}
+#ext-gen38.x-tree-root-ct .x-tree-node .x-tree-node-ct{
+	padding:3px 0 3px 16px;
+}
+#ext-gen38.x-tree-root-ct .x-tree-node-leaf{
+	background:#fff;
+	padding-top:0;
+	padding-bottom:0;
+	cursor: pointer;
+	border-bottom:none;
+	border-top:none;
+}
+#ext-gen38.x-tree-root-ct .x-tree-node .x-tree-node{
+	padding-bottom:0;
+}
+#ext-gen38.x-tree-root-ct .x-tree-node-over{
+	background:#eee;
+}
+
+/*Eliminamos los restos del tree*/
+#ext-gen38.x-tree-root-ct .x-tree-elbow,#ext-gen38.x-tree-root-ct .x-tree-elbow-line,#ext-gen38.x-tree-root-ct .x-tree-elbow-end,
+#ext-gen38.x-tree-root-ct .x-tree-node-indent img{
+	background:none;
+	width:0px;
+}
+/*Cambiamos el menos y más*/
+#ext-gen38.x-tree-root-ct .x-tree-elbow-minus,#ext-gen38.x-tree-root-ct .x-tree-elbow-end-minus{
+	background-image:url(/images/icons_silk/sprites.png) !important;
+	background-position:0 -2395px !important;
+}
+#ext-gen38.x-tree-root-ct .x-tree-elbow-plus,#ext-gen38.x-tree-root-ct .x-tree-elbow-end-plus{
+	background-image:url(/images/icons_silk/sprites.png) !important;
+	background-position:0 -2359px !important;
+}
+
+/*REFRESHER*/
 #ext-gen38.x-tree-root-ct .x-tree-node-ct b{
 	background:#FFFADF;
 }
-
-
 #refreshNotifiers.x-btn{
 }
 #ext-gen35.x-panel-tbar-noheader{
@@ -197,4 +256,9 @@ TREE
 }
 #ext-gen35.x-panel-tbar-noheader .x-toolbar-right{
 	text-align: left !important;
+}
+
+/*StartCase*/
+.x-tab-strip-text.ICON_CASES_START_CASE{
+	background-position:0px -17px !important;
 }
