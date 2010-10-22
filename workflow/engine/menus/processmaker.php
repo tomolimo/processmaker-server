@@ -47,7 +47,7 @@ if ($RBAC->userCanAccess('PM_USERS') == 1) {
 
 #PROCESSES MODULE
 if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/processes_List', G::LoadTranslation('ID_APPLICATIONS'));
+  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_APPLICATIONS'));
 }
 
 

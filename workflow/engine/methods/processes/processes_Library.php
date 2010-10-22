@@ -128,7 +128,7 @@ try {
     oRPC.make();
   };
   ");
-  G::RenderPage('publish');
+  G::RenderPage('publish', 'blank');
   }
   catch ( Exception $e ) {
     $G_PUBLISH = new Publisher;

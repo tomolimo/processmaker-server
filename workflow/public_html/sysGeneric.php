@@ -332,7 +332,7 @@
       'dbfile' => PATH_DB . SYS_SYS . PATH_SEP . 'db.php',
       'datasource' => 'workflow',
       'cache' => 0,
-      'debug' => DEBUG_SQL_LOG,  //<--- change the value of this Constant to to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
+      'debug' => 1,  //<--- change the value of this Constant to to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
     ) ,
     G_TEST_ENV => array (
       'dbfile' => PATH_DB . 'test' . PATH_SEP . 'db.php' ,

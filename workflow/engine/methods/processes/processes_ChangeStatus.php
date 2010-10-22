@@ -40,5 +40,5 @@ switch ($RBAC->userCanAccess('PM_FACTORY'))
   G::LoadClass('processes');
   $oProcess = new Processes();
   $oProcess->changeStatus ( $_GET['PRO_UID'] );
-  G::header('location: ' . $_SERVER['HTTP_REFERER']);
+  //G::header('location: ' . $_SERVER['HTTP_REFERER']);
   

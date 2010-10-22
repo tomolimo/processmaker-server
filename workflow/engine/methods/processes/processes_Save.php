@@ -85,5 +85,5 @@ if ( isset($_GET['PRO_UID'])) {
 
   if ($_POST['form']['THETYPE'] == '')
   {
-    G::header('location: processes_List');
+    G::header('location: main');
   }

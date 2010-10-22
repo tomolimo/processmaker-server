@@ -87,6 +87,6 @@ $oHeadPublisher->addScriptCode( '
 	});' );
 
 if( ! isset($_GET['raw']) )
-    G::RenderPage('publish');
+    G::RenderPage('publish', 'green-submenu');
 else
     G::RenderPage('publish', 'raw');

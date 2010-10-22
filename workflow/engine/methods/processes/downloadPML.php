@@ -37,7 +37,7 @@
       $G_ID_MENU_SELECTED     = 'PROCESSES';
       $G_PUBLISH = new Publisher;
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ImportExisting', '', $Fields, 'downloadPML_ImportExisting'  );
-      G::RenderPage('publish');
+      G::RenderPage('publish', 'blank');
       die;
     }
 
@@ -60,7 +60,7 @@
       $Fields['PRO_UID'] = $sProUid;
       $processmapLink = "processes_Map?PRO_UID=$sProUid";
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ImportSucessful', '', $Fields, $processmapLink );
-      G::RenderPage('publish');
+      G::RenderPage('publish', 'blank');
       die;
     
   }

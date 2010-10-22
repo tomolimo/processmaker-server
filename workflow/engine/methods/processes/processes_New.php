@@ -60,4 +60,4 @@ if( $access != 1 ){
   else {
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_NewSimple', '', $aFields, 'processes_Save');
   }
-  G::RenderPage( 'publish' );
+  G::RenderPage( 'publish', 'blank');

@@ -39,27 +39,30 @@ switch ($RBAC->userCanAccess('PM_FACTORY'))
 	break;
 }
 */
-  $PRO_UID=$_GET['PRO_UID'];
-
+  $PRO_UID = $_GET['PRO_UID'];
+  require_once 'classes/model/Process.php';
   G::LoadClass('case');
   $oProcessMap = new Cases();
-
+  
+  $process = new Process();
+  $processData = $process->load($PRO_UID);
+  
   $c = $oProcessMap->getCriteriaProcessCases('TO_DO', $PRO_UID);
-  $array["TO_DO"] = ApplicationPeer::doCount($c);
+  $processData["TO_DO"] = ApplicationPeer::doCount($c);
 
   $c = $oProcessMap->getCriteriaProcessCases('COMPLETED', $PRO_UID);
-  $array["COMPLETED"] = ApplicationPeer::doCount($c);
+  $processData["COMPLETED"] = ApplicationPeer::doCount($c);
 
   $c = $oProcessMap->getCriteriaProcessCases('DRAFT', $PRO_UID);
-  $array["DRAFT"] = ApplicationPeer::doCount($c);
+  $processData["DRAFT"] = ApplicationPeer::doCount($c);
 
   $c = $oProcessMap->getCriteriaProcessCases('CANCELLED', $PRO_UID);
-  $array["CANCELLED"] = ApplicationPeer::doCount($c);
+  $processData["CANCELLED"] = ApplicationPeer::doCount($c);
 
-  $array["PRO_UID"]=$PRO_UID;
+  $processData["PRO_UID"] = $PRO_UID;
 
   $G_PUBLISH = new Publisher;
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_DeleteCases', '', $array, 'processes_Delete.php');
+  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_DeleteCases', '', $processData, 'processes_Delete.php');
   G::RenderPage('publish', 'raw');
 
 ?>

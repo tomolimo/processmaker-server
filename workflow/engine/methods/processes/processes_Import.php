@@ -54,12 +54,12 @@ G::LoadClass('processes');
   $G_ID_MENU_SELECTED     = 'PROCESSES';
   $G_PUBLISH = new Publisher;
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_Import', '', NULL, 'processes_ImportFile' );
-  G::RenderPage( "publish" );
+  G::RenderPage( "publish", "blank");
 
 }
 catch ( Exception $e ){
   $G_PUBLISH = new Publisher;
 	$aMessage['MESSAGE'] = $e->getMessage();
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-  G::RenderPage('publish');
+  G::RenderPage('publish', "blank");
 }

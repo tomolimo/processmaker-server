@@ -3020,6 +3020,17 @@ class G
   	return $infoUser;
   }
 
+  function in_array_column($text, $column, $array)
+  {
+      if (!empty($array) && is_array($array))
+      {
+          for ($i=0; $i < count($array); $i++)
+          {
+              if ($array[$i][$column]==$text || strcmp($array[$i][$column],$text)==0) return true;
+          }
+      }
+      return false;
+  }
 
 
 };
