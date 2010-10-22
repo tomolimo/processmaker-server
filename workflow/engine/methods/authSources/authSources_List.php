@@ -37,4 +37,4 @@ $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
 $G_PUBLISH = new Publisher;
 $G_PUBLISH->AddContent('propeltable', 'paged-table', 'authSources/authSources_List', $RBAC->getAllAuthSources(), '', '');
-G::RenderPage('publish');
+G::RenderPage('publish','blank');

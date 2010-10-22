@@ -155,7 +155,7 @@ try {
   //else
   //	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_Edit.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);
   
-  G::RenderPage('publish');
+  G::RenderPage('publish','blank');
 }
 catch (Exception $oException) {
 	die($oException->getMessage());

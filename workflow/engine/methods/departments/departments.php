@@ -58,7 +58,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_USERS"))!=1) return $RBAC_Response;
   $G_PUBLISH->AddContent('view',   'departments/departments_Tree' );
   $G_PUBLISH->AddContent('smarty', 'departments/departments_userList', '', '', array());
   
-  G::RenderPage( "publish-treeview" );
+  G::RenderPage( "publish-treeview",'blank' );
 
   $departments_New        = G::encryptlink('departments_New');
   $departments_Edit       = G::encryptlink('departments_Edit');

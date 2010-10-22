@@ -112,7 +112,7 @@ try {
   
   $G_PUBLISH             = new Publisher;
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_New.xml', '', $aFields, 'users_Save');
-  G::RenderPage('publish');
+  G::RenderPage('publish','blank');
 }
 catch (Exception $oException) {
 	die($oException->getMessage());

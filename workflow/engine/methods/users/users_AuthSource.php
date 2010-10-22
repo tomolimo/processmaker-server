@@ -36,4 +36,4 @@ $G_ID_MENU_SELECTED     = 'USERS';
 
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_AuthSource', '', $RBAC->load($_GET['USR_UID']), '../users/users_AuthSourceSave');
-G::RenderPage('publish');
+G::RenderPage('publish','blank');

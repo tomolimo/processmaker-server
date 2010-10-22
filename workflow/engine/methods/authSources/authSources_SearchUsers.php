@@ -36,4 +36,4 @@ $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/authSources_SearchUsers', '', array('AUTH_SOURCE_UID' => $_GET['sUID']), '../authSources/authSources_ImportUsers');
-G::RenderPage('publish');
+G::RenderPage('publish','blank');

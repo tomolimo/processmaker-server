@@ -64,7 +64,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_USERS"))!=1) return $RBAC_Response;
   $G_PUBLISH->AddContent('view', 'groups/groups_Tree' );
   $G_PUBLISH->AddContent('smarty', 'groups/groups_usersList', '', '', array());
 
-  G::RenderPage( "publish-treeview" );
+  G::RenderPage( "publish-treeview",'blank' );
 
   $groups_Edit = G::encryptlink('groups_Edit');
   $groups_Delete = G::encryptlink('groups_Delete');

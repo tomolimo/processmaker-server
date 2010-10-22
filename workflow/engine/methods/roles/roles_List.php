@@ -70,7 +70,7 @@
 	$G_PUBLISH = new Publisher;
 	$G_PUBLISH->AddContent('propeltable', 'paged-table', 'roles/roles_List', $oCriteria);
 	
-	G::RenderPage('publish');
+	G::RenderPage('publish','blank');
 ?>
 
 

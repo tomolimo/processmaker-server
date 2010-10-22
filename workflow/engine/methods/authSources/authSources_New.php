@@ -48,4 +48,4 @@ else {
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
   }
 }
-G::RenderPage('publish');
+G::RenderPage('publish','blank');

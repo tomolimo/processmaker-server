@@ -50,4 +50,4 @@ $_SESSION['_DBArray'] = $_DBArray;
 
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/authSources_SelectType', '', '', '../authSources/authSources_New');
-G::RenderPage('publish');
+G::RenderPage('publish','blank');
