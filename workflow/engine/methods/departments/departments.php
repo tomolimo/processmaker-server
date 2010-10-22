@@ -222,7 +222,8 @@ function resetChecks(){
   }
   
   function savedeptomain( form ) {//alert(form.action);return;
-    ajax_post( form.action, form, 'POST' );
+  	var formAction ='departments_Save';
+    ajax_post( formAction, form, 'POST' );
     selectDpto(getField('DEP_UID').value);
     refreshTree();
   }

@@ -35,7 +35,7 @@ switch ($_POST['action'])
 	  $oDept  = new Department();
 	  $aFields = $oDept->load($_POST['sDptoUID']);
   	$G_PUBLISH = new Publisher();
-  	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'departments/departments_Edit', '', $aFields , 'departments_Save');
+  	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'departments/departments_Edit', '', $aFields , '');
 
     $criteria = $oDept->getUsersFromDepartment( $_POST['sDptoUID'], $aFields ['DEP_MANAGER'] );
     
