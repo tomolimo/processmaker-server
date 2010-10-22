@@ -215,7 +215,8 @@ function resetChecks(){
   
   
   function savedepto( form ) {
-    ajax_post( form.action, form, 'POST' );
+    var actionform='departments_Save';
+    ajax_post( actionform, form, 'POST' );
     currentPopupWindow.remove();
     refreshTree();
   }

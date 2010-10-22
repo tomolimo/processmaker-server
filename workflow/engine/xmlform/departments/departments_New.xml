@@ -20,15 +20,16 @@
   <en>Cancel</en>
 </BTN_CANCEL>
 
-<button type="button" onclick="validateLocalFields(this.form);" showInTable="0">
+<button type="button" onclick="return validateLocalFields(this.form);" showInTable="0">
   <en>Save</en>
 </button> 
 <JS type="javascript" replacetags="1">
+getField('DEP_TITLE').value ='';
 var sGroupname;
 //sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
 
 var verifyDptoname = function()
-{
+{ 
   document.forms[0].elements['form[DEP_TITLE]'].disabled = true;
   document.forms[0].elements['form[button]'].disabled = true;    
   var oRPC = new leimnud.module.rpc.xmlhttp({
@@ -38,8 +39,9 @@ var verifyDptoname = function()
     args   :'action=verifyDptoname&amp;sOriginalGroupname=' + sGroupname + '&amp;sGroupname=' + encodeURIComponent(this.value)});
   oRPC.make();
   var sResponse = oRPC.xmlhttp.responseText; 
+  
   document.forms[0].elements['form[DEP_TITLE]'].disabled = false;
-  if (sResponse == 1)
+  if (sResponse == '1')
   {
     new leimnud.module.app.alert().make({
 	    label: G_STRINGS.ID_MSJ_DEPTO
@@ -47,7 +49,7 @@ var verifyDptoname = function()
     document.forms[0].elements['form[DEP_TITLE]'].focus();
   }
   else
-  {
+  { 
     document.forms[0].elements['form[button]'].disabled = false;
   }
 };

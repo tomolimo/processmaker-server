@@ -541,6 +541,18 @@ protected $depo_title = '';
         throw ($oError);
       }
     }
-
+		function loadByGroupname ( $Groupname ) {       
+		    $c = new Criteria('workflow');    
+		    $del = DBAdapter::getStringDelimiter();
+		
+		    $c->clearSelectColumns();
+		    $c->addSelectColumn( ContentPeer::CON_CATEGORY );
+		    $c->addSelectColumn( ContentPeer::CON_VALUE );
+		                    
+		    $c->add(ContentPeer::CON_CATEGORY,  'DEPO_TITLE');
+		    $c->add(ContentPeer::CON_VALUE,  $Groupname);
+		    $c->add(ContentPeer::CON_LANG,  SYS_LANG );          
+		    return $c;   
+		  }
 
 } // Department

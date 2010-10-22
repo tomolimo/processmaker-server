@@ -59,7 +59,7 @@ if( $access != 1 ){
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'departments/departments_SubNew', '', $Fields , 'departments_Save');
   }
   else {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'departments/departments_New', '', null, 'departments_Save');
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'departments/departments_New', '', null, '');
   }
 
   G::RenderPage( "publish" , "raw" );
