@@ -328,9 +328,9 @@ var G_Grid = function(oForm, sGridName) {
 							aObjects1 = oCell1.getElementsByTagName('input');
 							aObjects2 = oCell2.getElementsByTagName('input');
 							if (aObjects1 && aObjects2) {
-							  /*if(aObjects1[0].type=='checkbox'){
+							  if(aObjects1[0].type=='checkbox'){
 							   aObjects1[0].checked = aObjects2[0].checked;
-							  }*/
+							  }
 								aObjects1[0].value = aObjects2[0].value;
 								/*if(oCell1.innerHTML.indexOf('<div id=')!=-1)
 								 oCell1.innerHTML = oCell2.innerHTML;*/
