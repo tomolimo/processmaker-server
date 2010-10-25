@@ -36,9 +36,13 @@ switch ($RBAC->userCanAccess('PM_FACTORY'))
 	  die;
 	break;
 }
-  
+  $ids = explode(',', $_GET['UIDS']);
+
   G::LoadClass('processes');
   $oProcess = new Processes();
-  $oProcess->changeStatus ( $_GET['PRO_UID'] );
+  if( count($ids) > 0 ){
+    foreach($ids as $id)
+      $oProcess->changeStatus ($id);
+  }
   //G::header('location: ' . $_SERVER['HTTP_REFERER']);
   
