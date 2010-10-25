@@ -473,9 +473,9 @@ Ext.onReady ( function() {
     store: storeCases,
     cm: cm,
     renderTo: 'cases-grid',
-    frame: false,
-    autoHeight:true,
-    minHeight:400,
+    //frame: false,
+    //autoHeight:true,
+    //minHeight:400,
     layout: 'fit',
 
     viewConfig: {
@@ -492,7 +492,7 @@ Ext.onReady ( function() {
                 msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
                 width:300,
                 wait:true,
-                waitConfig: {interval:200},
+                waitConfig: {interval:200}
               });
         window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
       },
