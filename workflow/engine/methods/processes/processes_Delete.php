@@ -48,5 +48,5 @@ G::LoadClass('processMap');
 $oProcessMap = new ProcessMap();
 //$oProcessMap->deleteProcess($_POST['form']['PRO_UID']);
 $oProcessMap->deleteProcess($_GET['PRO_UID']);
-G::header('location: ' . $_SERVER['HTTP_REFERER']);
+G::header('location: main');
 ?>
