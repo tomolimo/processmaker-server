@@ -29,12 +29,12 @@
   $randTable = "RAND_" . md5(rand());
   
   $dbMaintenance = new DataBaseMaintenance(DB_HOST, DB_USER, DB_PASS);
-  $dbMaintenance->setDbName('wf_'.SYS_SYS);
+  $dbMaintenance->setDbName(DB_NAME);
   $dbMaintenance->connect();
   
   $dbUserType = 0;
   
-  if( $dbMaintenance->query("CREATE TRIGGER $randTable AFTER UPDATE ON wf_".SYS_SYS." FOR EACH ROW BEGIN INSERT INTO APPLICATION(APP_UID VALUES ('111' ); END;") !== false ){
+  if( $dbMaintenance->query("CREATE TRIGGER $randTable AFTER UPDATE ON ".DB_NAME." FOR EACH ROW BEGIN INSERT INTO APPLICATION(APP_UID VALUES ('111' ); END;") !== false ){
     $dbMaintenance->query("DROP TRIGGER $randTable;");
     $enoughGrants = true;
     $dbUserType = 1;
@@ -42,7 +42,7 @@
     $dbHash = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
     
     $dbMaintenance = new DataBaseMaintenance($dbHash[0], $dbHash[1], $dbHash[2]);
-    $dbMaintenance->setDbName('wf_'.SYS_SYS);
+    $dbMaintenance->setDbName(DB_NAME);
     $dbMaintenance->connect();
     if( $dbMaintenance->query("CREATE TABLE $randTable (ID VARCHAR(32));") !== false ){
       $dbMaintenance->query("DROP TABLE $randTable;");
