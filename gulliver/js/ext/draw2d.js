@@ -1486,6 +1486,9 @@ if(this.graphics!=null){
 this.paint();
 }
 };
+VectorFigure.prototype.setTaskCount=function(_40c0){
+
+}
 VectorFigure.prototype.setBackgroundColor=function(color){
 this.bgColor=color;
 if(this.graphics!=null){
@@ -1874,7 +1877,8 @@ if(_41ce==null){
 _41ce=new Figure();
 }
 if(this.uiRepresentationAdded){
-this.html.removeChild(this.currentUIRepresentation.getHTMLElement());
+    //Commented for IE* errors while changing the shape from context menu
+ //this.html.removeChild(this.currentUIRepresentation.getHTMLElement());
 }
 this.html.appendChild(_41ce.getHTMLElement());
 _41ce.paint();
@@ -3270,11 +3274,12 @@ ArrowConnectionDecorator.prototype.type="ArrowConnectionDecorator";
 ArrowConnectionDecorator.prototype.paint=function(g){
 if(this.backgroundColor!=null){
 g.setColor(this.backgroundColor);
-g.fillPolygon([3,20,20,3],[0,5,-5,0]);
+g.fillPolygon([1,10,10,1],[0,5,-5,0]);
 }
 g.setColor(this.color);
 g.setStroke(1);
-g.drawPolygon([3,20,20,3],[0,5,-5,0]);
+g.drawPolygon([1,10,10,1],[0,5,-5,0]);
+g.fillPolygon([1,10,10,1],[0,5,-5,0]);
 };
 CompartmentFigure=function(){
 Node.call(this);
@@ -4653,8 +4658,8 @@ var item=Figure.prototype.createHTMLElement.call(this);
 item.style.margin="0px";
 item.style.padding="0px";
 item.style.border="1px solid black";
-item.style.backgroundImage="url(window_bg.png)";
-item.style.zIndex=Window.ZOrderBaseIndex;
+item.style.backgroundImage="url(/skins/ext/images/gray/shapes/window_bg.png)";
+//item.style.zIndex=Window.ZOrderBaseIndex;
 item.style.cursor=null;
 if(this.hasTitleBar()){
 this.titlebar=document.createElement("div");
@@ -4670,7 +4675,7 @@ this.titlebar.style.backgroundColor="blue";
 this.titlebar.style.borderBottom="2px solid gray";
 this.titlebar.style.whiteSpace="nowrap";
 this.titlebar.style.textAlign="center";
-this.titlebar.style.backgroundImage="url(window_toolbar.png)";
+this.titlebar.style.backgroundImage="url(/skins/ext/images/gray/shapes/window_toolbar.png)";
 this.textNode=document.createTextNode(this.title);
 this.titlebar.appendChild(this.textNode);
 item.appendChild(this.titlebar);
@@ -5189,7 +5194,7 @@ this.buttonbar.style.height="30px";
 this.buttonbar.style.margin="0px";
 this.buttonbar.style.padding="0px";
 this.buttonbar.style.font="normal 10px verdana";
-this.buttonbar.style.backgroundColor="#c0c0c0";
+this.buttonbar.style.backgroundColor="#C0C0C0";
 this.buttonbar.style.borderBottom="2px solid gray";
 this.buttonbar.style.whiteSpace="nowrap";
 this.buttonbar.style.textAlign="center";
