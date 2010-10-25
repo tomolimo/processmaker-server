@@ -49,6 +49,7 @@
 <DEFAULT_CALENDAR_JS type="javascript">
 <![CDATA[
 
+
 if((getField("CALENDAR_UID").value=="00000000000000000000000000000001")||(getField("CALENDAR_UID").value=="00000000000000000000000000000002")){
 	getField("CALENDAR_STATUS").disabled=true;
 	getField("CALENDAR_NAME").disabled=true;	
@@ -111,7 +112,7 @@ function validateForm(form){
 	var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
 	//alert(rowsHoliday);return false;
 	var j=0;
-	for(var j =1 j<= rowsHoliday;j++){
+	for(var j =1; j<= rowsHoliday;j++){
 		msgHolidays = getGridField("HOLIDAY", j, "CALENDAR_HOLIDAY_START");
 		if(msgHolidays.value==''){
 		flag=false;
@@ -161,6 +162,7 @@ function isValidTime(value) {
 }
 
 function cancel(){
+ 
     window.location = 'calendarList';
 }
 
