@@ -478,13 +478,13 @@ class Process extends BaseProcess {
 
     if( isset($category) )
       $oCriteria->add(ProcessPeer::PRO_CATEGORY, $category, Criteria::EQUAL);
-    if( isset($processName) )
-      $oCriteria->add(ProcessPeer::PRO_TITLE, "$processName%", Criteria::LIKE);
-    if($start != '')
+
+    /*if($start != '')
       $oCriteria->setOffset($start);
     if($limit != '')
       $oCriteria->setLimit($limit);
-
+    */
+    
     $this->tmpCriteria = $oCriteria;
     $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
@@ -494,8 +494,16 @@ class Process extends BaseProcess {
     $casesCnt = $this->getCasesCountInAllProcesses();
 
     $oProcess = new Process ();
-    while ( $aRow = $oDataset->getRow () ) {
-      $aProcess = $oProcess->load ( $aRow ['PRO_UID'] );
+    while( $oDataset->next() ) {
+      $aRow = $oDataset->getRow();
+      $aProcess = $oProcess->load( $aRow ['PRO_UID'] );
+
+      if( isset($processName) && $processName != ''){
+        preg_match("/$processName/i", $aProcess['PRO_TITLE'], $res);
+        if( sizeof($res) == 0)
+          continue;
+      }
+
       //print_r($aProcess);
       $casesCountTotal = 0;
       if( isset($casesCnt[$aProcess['PRO_UID']]) ) {
@@ -504,9 +512,9 @@ class Process extends BaseProcess {
         }
       }
       
-      if( ! G::in_array_column($aProcess['PRO_CATEGORY'], 'CAT_ID', $categories) ){
+      /*if( ! G::in_array_column($aProcess['PRO_CATEGORY'], 'CAT_ID', $categories) ){
         $categories[] = Array('CAT_ID'=>$aProcess['PRO_CATEGORY'], 'CAT_NAME'=>$aProcess['PRO_CATEGORY_LABEL']);
-      }
+      }*/
       
       $aProcess['PRO_DEBUG_LABEL'] = ($aProcess['PRO_DEBUG']=="1")? 'On': 'Off';
       $aProcess['PRO_STATUS_LABEL'] = $aProcess ['PRO_STATUS'] == 'ACTIVE' ? G::LoadTranslation ( 'ID_ACTIVE' ) : G::LoadTranslation ( 'ID_INACTIVE' );
@@ -537,7 +545,7 @@ class Process extends BaseProcess {
         'CASES_COUNT_CANCELLED'=>(isset($casesCnt[$aProcess['PRO_UID']]['CANCELLED'])? $casesCnt[$aProcess['PRO_UID']]['CANCELLED']: 0),
         'CASES_COUNT'=>$casesCountTotal
       );*/
-      $oDataset->next ();
+      
     }
     return Array('data'=>$aProcesses, 'categories'=>$categories);
   }

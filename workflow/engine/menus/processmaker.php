@@ -40,11 +40,6 @@ if ($RBAC->userCanAccess('PM_CASES') == 1) {
   $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_CASES'));
 }
 
-#USERS MODULE
-if ($RBAC->userCanAccess('PM_USERS') == 1) {
-  $G_TMP_MENU->AddIdRawOption('USERS', 'users/users_List', G::LoadTranslation('ID_USERS'));
-}
-
 #PROCESSES MODULE
 if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
   $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_APPLICATIONS'));

@@ -15,5 +15,27 @@ require_once 'classes/model/om/BaseProcessCategory.php';
  * @package    classes.model
  */
 class ProcessCategory extends BaseProcessCategory {
+  function getAll($type='criteria'){
+    $c = new Criteria('workflow');
+    $c->addSelectColumn(ProcessCategoryPeer::CATEGORY_UID);
+    $c->addSelectColumn(ProcessCategoryPeer::CATEGORY_NAME);
+    $dataset = ProcessCategoryPeer::doSelectRS($c);
+    $dataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
 
+    $dataset->next ();
+
+    if( $type == 'array' ){
+      $result = Array();
+      while ( $dataset->next() ) {
+        $result[] = $dataset->getRow(); 
+      }
+      return $result;
+    } else {
+      return $c;
+    }
+  }
 } // ProcessCategory
+
+
+
+
