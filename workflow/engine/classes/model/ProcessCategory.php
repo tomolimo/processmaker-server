@@ -21,9 +21,7 @@ class ProcessCategory extends BaseProcessCategory {
     $c->addSelectColumn(ProcessCategoryPeer::CATEGORY_NAME);
     $dataset = ProcessCategoryPeer::doSelectRS($c);
     $dataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-
-    $dataset->next ();
-
+    
     if( $type == 'array' ){
       $result = Array();
       while ( $dataset->next() ) {

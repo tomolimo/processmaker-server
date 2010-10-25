@@ -516,8 +516,8 @@ class Process extends BaseProcess {
         $categories[] = Array('CAT_ID'=>$aProcess['PRO_CATEGORY'], 'CAT_NAME'=>$aProcess['PRO_CATEGORY_LABEL']);
       }*/
       
-      $aProcess['PRO_DEBUG_LABEL'] = ($aProcess['PRO_DEBUG']=="1")? 'On': 'Off';
-      $aProcess['PRO_STATUS_LABEL'] = $aProcess ['PRO_STATUS'] == 'ACTIVE' ? G::LoadTranslation ( 'ID_ACTIVE' ) : G::LoadTranslation ( 'ID_INACTIVE' );
+      $aProcess['PRO_DEBUG_LABEL'] = ($aProcess['PRO_DEBUG']=="1")? G::LoadTranslation('ID_ON'): G::LoadTranslation('ID_OFF');
+      $aProcess['PRO_STATUS_LABEL'] = $aProcess ['PRO_STATUS'] == 'ACTIVE'? G::LoadTranslation ('ID_ACTIVE'): G::LoadTranslation('ID_INACTIVE');
       $userData = $user->load($aProcess['PRO_CREATE_USER']);
       //print_r($userData); die;
       $aProcess['PRO_CREATE_USER_LABEL'] = $userData['USR_FIRSTNAME'] . ' ' . $userData['USR_LASTNAME'];
@@ -528,23 +528,6 @@ class Process extends BaseProcess {
       $aProcess['CASES_COUNT_CANCELLED']=(isset($casesCnt[$aProcess['PRO_UID']]['CANCELLED'])? $casesCnt[$aProcess['PRO_UID']]['CANCELLED']: 0);
       $aProcess['CASES_COUNT']=$casesCountTotal;
       $aProcesses[] = $aProcess;
-
-      /*array (
-        'PRO_UID' => $aProcess ['PRO_UID'],
-        'PRO_TITLE' => $aProcess ['PRO_TITLE'],
-        'PRO_DESCRIPTION' => $aProcess ['PRO_DESCRIPTION'],
-        'PRO_CREATE_DATE' => $aProcess ['PRO_CREATE_DATE'],
-        'PRO_DEBUG_LABEL' => (($aProcess['PRO_DEBUG']=="1")?'On': 'Off'),
-        'PRO_CREATE_USER_LABEL' => $aProcess ['PRO_CREATE_USER'],
-        'PRO_STATUS' => ($aProcess ['PRO_STATUS'] == 'ACTIVE' ? G::LoadTranslation ( 'ID_ACTIVE' ) : G::LoadTranslation ( 'ID_INACTIVE' )),
-        'PRO_CATEGORY' => $aProcess ['PRO_CATEGORY'],
-        'PRO_CATEGORY_LABEL' => $aProcess ['PRO_CATEGORY_LABEL'],
-        'CASES_COUNT_TO_DO'=>(isset($casesCnt[$aProcess['PRO_UID']]['TO_DO'])? $casesCnt[$aProcess['PRO_UID']]['TO_DO']: 0),
-        'CASES_COUNT_COMPLETED'=>(isset($casesCnt[$aProcess['PRO_UID']]['COMPLETED'])? $casesCnt[$aProcess['PRO_UID']]['COMPLETED']: 0),
-        'CASES_COUNT_DRAFT'=>(isset($casesCnt[$aProcess['PRO_UID']]['DRAFT'])? $casesCnt[$aProcess['PRO_UID']]['DRAFT']: 0),
-        'CASES_COUNT_CANCELLED'=>(isset($casesCnt[$aProcess['PRO_UID']]['CANCELLED'])? $casesCnt[$aProcess['PRO_UID']]['CANCELLED']: 0),
-        'CASES_COUNT'=>$casesCountTotal
-      );*/
       
     }
     return Array('data'=>$aProcesses, 'categories'=>$categories);

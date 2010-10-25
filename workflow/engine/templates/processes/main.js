@@ -59,7 +59,7 @@ Ext.onReady(function(){
   
   var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        '<p><b>Process Description:</b> {PRO_DESCRIPTION}</p><br>'
+        '<p><b>'+TRANSLATIONS.ID_PRO_DESCRIPTION+':</b> {PRO_DESCRIPTION}</p><br>'
     )
   });
 
@@ -86,7 +86,7 @@ Ext.onReady(function(){
       valueField : 'CATEGORY_UID',
       displayField : 'CATEGORY_NAME',
       triggerAction : 'all',
-      emptyText : 'Select',
+      emptyText : TRANSLATIONS.ID_SELECT,
       selectOnFocus : true,
       editable : true,
       width: 180,
@@ -132,24 +132,24 @@ Ext.onReady(function(){
       defaults: {
           width: 200,
           sortable: true
-      },
+      },    
       columns: [
           expander,
           {id:'PRO_UID', dataIndex: 'PRO_UID', hidden:true},
-          {header: "Description", dataIndex: 'PRO_DESCRIPTION',hidden:true},
-          {header: "Process Title", dataIndex: 'PRO_TITLE', width: 300},
-          {header: "Categoty", dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
-          {header: "Status", dataIndex: 'PRO_STATUS', width: 50, hidden:true},
-          {header: "Status", dataIndex: 'PRO_STATUS_LABEL', width: 50},
-          {header: "User owner", dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
-          {header: "Create date", dataIndex: 'PRO_CREATE_DATE', width: 90},
-          {header: "Debug", dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'},
+          {header: TRANSLATIONS.ID_PRO_DESCRIPTION, dataIndex: 'PRO_DESCRIPTION',hidden:true},
+          {header: TRANSLATIONS.ID_PRO_TITLE, dataIndex: 'PRO_TITLE', width: 300},
+          {header: TRANSLATIONS.ID_CATEGORY, dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
+          {header: "", dataIndex: 'PRO_STATUS', width: 50, hidden:true},
+          {header: TRANSLATIONS.ID_STATUS, dataIndex: 'PRO_STATUS_LABEL', width: 50},
+          {header: TRANSLATIONS.ID_PRO_USER, dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
+          {header: TRANSLATIONS.ID_PRO_CREATE_DATE, dataIndex: 'PRO_CREATE_DATE', width: 90},
+          {header: TRANSLATIONS.ID_PRO_DEBUG, dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'},
           
-          {header: "Inbox", dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
-          {header: "Draft", dataIndex: 'CASES_COUNT_DRAFT', width: 50, align:'right'},
-          {header: "Completed", dataIndex: 'CASES_COUNT_COMPLETED', width: 70, align:'right'},
-          {header: "Cancelled", dataIndex: 'CASES_COUNT_CANCELLED', width: 70, align:'right'},
-          {header: "Total Cases", dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'}
+          {header: TRANSLATIONS.ID_INBOX, dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
+          {header: TRANSLATIONS.ID_DRAFT, dataIndex: 'CASES_COUNT_DRAFT', width: 50, align:'right'},
+          {header: TRANSLATIONS.ID_COMPLETED, dataIndex: 'CASES_COUNT_COMPLETED', width: 70, align:'right'},
+          {header: TRANSLATIONS.ID_CANCELLED, dataIndex: 'CASES_COUNT_CANCELLED', width: 70, align:'right'},
+          {header: TRANSLATIONS.ID_TOTAL_CASES, dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'}
       ]
     }),
 
@@ -157,31 +157,31 @@ Ext.onReady(function(){
 
     tbar:[
       {
-        text:'New',
+        text:TRANSLATIONS.ID_NEW,
         iconCls: 'silk-add',
         icon: '/images/addc.png',
         handler: newProcess
       },{
-        text:'Edit',
+        text:TRANSLATIONS.ID_EDIT,
         iconCls: 'silk-add',
         icon: '/images/edit.gif',
         handler: editProcess
       },{
-        text:'Status',
+        text:TRANSLATIONS.ID_STATUS,
         id:'activator',
         icon: '',
         iconCls: 'silk-add',
         handler: activeDeactive,
         disabled:true
       },{
-        text:'Delete',
+        text:TRANSLATIONS.ID_DELETE,
         iconCls: 'silk-add',
         icon: '/images/delete-16x16.gif',
         handler:deleteProcess
       },{
         xtype: 'tbseparator'
       },{
-        text:'Import',
+        text:TRANSLATIONS.ID_IMPORT,
         iconCls: 'silk-add',
         icon: '/images/import.gif',
         handler:importProcess
@@ -190,7 +190,7 @@ Ext.onReady(function(){
         iconCls: 'silk-add',
         icon: '/images/export.png',
       },*/{
-        text:'Browse Library',
+        text:TRANSLATIONS.ID_BROWSE_LIBRARY,
         iconCls: 'silk-add',
         icon: '/images/icon-pmwebservices.png',
         handler: browseLibrary
@@ -200,14 +200,14 @@ Ext.onReady(function(){
       },{
         xtype: 'tbseparator'
       },
-      'Category',
+      TRANSLATIONS.ID_CATEGORY,
       comboCategory,{
         xtype: 'tbseparator'
       },new Ext.form.TextField ({
         id: 'searchTxt',
         allowBlank: true,
         width: 150,
-        emptyText: 'enter search term',
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
@@ -216,7 +216,7 @@ Ext.onReady(function(){
           }
         }
       }),{
-        text:'Search',
+        text:TRANSLATIONS.ID_SEARCH,
         handler: doSearch
       },
       {
@@ -257,10 +257,10 @@ Ext.onReady(function(){
         activator.setDisabled(false);
         if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
           activator.setIcon('/images/deactivate.png');
-          activator.setText('Deactivate');
+          activator.setText(TRANSLATIONS.ID_DEACTIVATE);
         } else {
           activator.setIcon('/images/activate.png');
-          activator.setText('Activate');
+          activator.setText(TRANSLATIONS.ID_ACTIVATE);
         }
          
         });
@@ -310,7 +310,7 @@ editProcess = function(){
   } else {
      Ext.Msg.show({
       title:'',
-      msg: 'Select a process from the list please',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -327,7 +327,7 @@ deleteProcess = function(){
   } else {
      Ext.Msg.show({
       title:'',
-      msg: 'Select a process from the list please',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -346,11 +346,19 @@ browseLibrary = function(){
 }
 
 function activeDeactive(){
-  var rowSelected = processesGrid.getSelectionModel().getSelected();
-  if( rowSelected ) {
+  //var rowSelected = processesGrid.getSelectionModel().getSelected();
+  var rows = processesGrid.getSelectionModel().getSelections();
+  
+  if( rows.length > 0 ) {
+    var ids = '';
+    for(i=0; i<rows.length; i++) {
+      if(i != 0 ) ids += ',';
+      ids += rows[i].get('PRO_UID');
+    }
+
     Ext.Ajax.request({
       url : 'processes_ChangeStatus' ,
-      params : { PRO_UID : rowSelected.data.PRO_UID },
+      params : { UIDS : ids },
       method: 'GET',
       success: function ( result, request ) {
         //Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
@@ -369,7 +377,7 @@ function activeDeactive(){
   } else {
      Ext.Msg.show({
       title:'',
-      msg: 'Select a process from the list please',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',

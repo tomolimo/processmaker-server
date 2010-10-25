@@ -28,10 +28,13 @@
   $oHeadPublisher->addExtJsScript('processes/main', true );    //adding a javascript file .js
   $oHeadPublisher->addContent('processes/main'); //adding a html file  .html.
   
-  /*$translations = G::getTranslations(Array(
-    'ID_DEATACH', 'ID_ALL', 'ID_DYNAFORM', 'ID_SYSTEM', 'ID_VARIABLES', 'ID_TRIGGERS', 'ID_OPEN_IN_POPUP'
-  ));*/
-  //$oHeadPublisher->assign('TRANSLATIONS', $translations);
+  $translations = G::getTranslations(Array(
+    'ID_NEW', 'ID_EDIT', 'ID_STATUS', 'ID_DELETE', 'ID_IMPORT', 'ID_BROWSE_LIBRARY', 'ID_CATEGORY', 'ID_SELECT',
+    'ID_PRO_DESCRIPTION', 'ID_PRO_TITLE', 'ID_CATEGORY', 'ID_STATUS', 'ID_PRO_USER', 'ID_PRO_CREATE_DATE', 'ID_PRO_DEBUG', 'ID_INBOX', 'ID_DRAFT',
+    'ID_COMPLETED', 'ID_CANCELLED', 'ID_TOTAL_CASES', 'ID_ENTER_SEARCH_TERM', 'ID_ACTIVATE', 'ID_DEACTIVATE',
+    'ID_SELECT', 'ID_SEARCH', 'ID_NO_SELECTION_WARNING'
+  ));
+  $oHeadPublisher->assign('TRANSLATIONS', $translations);
   G::RenderPage('publish', 'extJs');
   
   
