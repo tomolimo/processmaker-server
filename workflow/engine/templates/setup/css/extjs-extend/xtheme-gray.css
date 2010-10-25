@@ -114,3 +114,33 @@
   width:15px !important;
   height:15px !important;
 }
+
+/*icons add alvaro*/
+.ICON_USERS{
+  background-image: url(/images/icon-users.png) !important;
+  width:15px !important;
+  height:15px !important;
+}
+
+.ICON_ROLES{
+  background-image: url(/images/icon-roles.png) !important;
+  width:15px !important;
+  height:15px !important;
+}
+
+.ICON_GROUPS{
+  background-image: url(/images/icon-groups.png) !important;
+  width:15px !important;
+  height:15px !important;
+}
+
+.ICON_DEPARTAMENTS{
+  background-image: url(/images/icon-departments.png) !important;
+  width:15px !important;
+  height:15px !important;
+}
+.ICON_AUTHSOURCES{
+  background-image: url(/images/icon-authSources.png) !important;
+  width:15px !important;
+  height:15px !important;
+}
