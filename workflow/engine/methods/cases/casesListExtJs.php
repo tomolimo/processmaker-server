@@ -1,6 +1,9 @@
 <?php
   //get the action from GET or POST, default is todo
   $action   = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
+  //fix a previous inconsistency
+  if ( $action == 'selfservice' ) $action = 'unassigned';
+
 
   G::LoadClass ( "BasePeer" );
   G::LoadClass ( 'configuration' );

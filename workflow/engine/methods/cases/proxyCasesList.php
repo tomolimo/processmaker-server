@@ -26,7 +26,6 @@
 
 	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
   $oAppCache = new AppCacheView();
-
 // get the action based list
   switch ( $action ) {
   	case 'draft' :
@@ -105,11 +104,6 @@
   if ( $search != '' ) {
     $Criteria->add      (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
     $CriteriaCount->add (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
-/*    
-    require_once( PATH_DATA_SITE . 'classes/Usuarios.php' );
-    $Criteria->add      ('USUARIOS.CEDULA', $search . '%', Criteria::LIKE );
-    $CriteriaCount->add ('USUARIOS.CEDULA', $search . '%', Criteria::LIKE );
-*/    
   }  
 
   //here we count how many records exists for this criteria.
@@ -185,41 +179,6 @@
   }      
 
 
-  /**
-   * gets the unassigned cases list criteria
-   * @return Criteria object $Criteria
-   */
-  function getUnassigned() {
-
-    global $sUIDUserLogged;
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->clearSelectColumns ( );
-
-    $oCriteria = addPMFieldsToCriteria('selfservice');
-
-    // self service filter
-    if (!class_exists('Cases')){
-      G::LoadClass("case" );
-    }
-
-    $oCase = new Cases();
-    $tasks = $oCase->getSelfServiceTasks( $_SESSION['USER_LOGGED'] );
-    $aTasks = array();
-    foreach ( $tasks as $key => $val ) {
-      if ( strlen(trim($val['uid'])) > 10 ) $aTasks[] = $val['uid'];
-    }
-
-    $oCriteria->add(AppCacheViewPeer::USR_UID, '');
-    $oCriteria->add(AppCacheViewPeer::TAS_UID, $aTasks , Criteria::IN );
-
-    // end selfservice filter
-
-    // adding configuration fields from the configuration options
-    // and forming the criteria object
-
-
-    return $oCriteria;
-  }
   
  //TODO: Encapsulates these and another default generation functions inside a class
   /**

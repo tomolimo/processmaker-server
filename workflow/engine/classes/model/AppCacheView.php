@@ -207,7 +207,66 @@ class AppCacheView extends BaseAppCacheView {
     return $Criteria;  	
   }
 
+  /*
+  * get user's SelfService tasks
+  * @param string $sUIDUser
+  * @return $rows
+  */
+  function getSelfServiceTasks($userUid = '')
+  {
+    $rows[] = array();
+    $tasks  = array();
 
+    //check starting task assigned directly to this user
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn(TaskPeer::TAS_UID);
+    $c->addSelectColumn(TaskPeer::PRO_UID);
+    $c->addJoin(TaskPeer::PRO_UID, ProcessPeer::PRO_UID, Criteria::LEFT_JOIN);
+    $c->addJoin(TaskPeer::TAS_UID, TaskUserPeer::TAS_UID, Criteria::LEFT_JOIN);
+    $c->add(ProcessPeer::PRO_STATUS, 'ACTIVE');
+    $c->add(TaskPeer::TAS_ASSIGN_TYPE, 'SELF_SERVICE');
+    $c->add(TaskUserPeer::USR_UID, $userUid);
+
+    $rs = TaskPeer::doSelectRS($c);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+
+    while (is_array($row)) {
+        $tasks[] = $row['TAS_UID'];
+        $rs->next();
+        $row = $rs->getRow();
+    }
+
+    //check groups assigned to SelfService task
+    G::LoadClass('groups');
+    $group = new Groups();
+    $aGroups = $group->getActiveGroupsForAnUser($userUid);
+
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn(TaskPeer::TAS_UID);
+    $c->addSelectColumn(TaskPeer::PRO_UID);
+    $c->addJoin(TaskPeer::PRO_UID, ProcessPeer::PRO_UID, Criteria::LEFT_JOIN);
+    $c->addJoin(TaskPeer::TAS_UID, TaskUserPeer::TAS_UID, Criteria::LEFT_JOIN);
+    $c->add(ProcessPeer::PRO_STATUS, 'ACTIVE');
+    $c->add(TaskPeer::TAS_ASSIGN_TYPE, 'SELF_SERVICE');
+    $c->add(TaskUserPeer::USR_UID, $aGroups, Criteria::IN);
+
+    $rs = TaskPeer::doSelectRS($c);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+
+    while (is_array($row)) {
+        $tasks[] = $row['TAS_UID'];
+        $rs->next();
+        $row = $rs->getRow();
+    }
+
+    return $tasks;
+  }
 
     /**
    * gets the UNASSIGNED cases list criteria
@@ -222,12 +281,7 @@ class AppCacheView extends BaseAppCacheView {
     }
 
     $oCase = new Cases();
-    $tasks = $oCase->getSelfServiceTasks( $userUid ); 
-    $aTasks = array();
-    foreach ( $tasks as $key => $val ) {
-      if ( strlen(trim($val['uid'])) > 10 ) $aTasks[] = $val['uid'];
-    }
-    
+    $tasks = $this->getSelfServiceTasks( $userUid ); 
     // adding configuration fields from the configuration options
     // and forming the criteria object
     if ( $doCount ) {
@@ -236,14 +290,14 @@ class AppCacheView extends BaseAppCacheView {
     else {
       $Criteria = $this->addPMFieldsToCriteria('unassigned');
     }
-    $Criteria->add (AppCacheViewPeer::APP_STATUS, "TODO" , CRITERIA::EQUAL );
+  //  $Criteria->add (AppCacheViewPeer::APP_STATUS, "TO_DO"   );
 
-    //$Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-    //$Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
-    //$Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+    $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+//    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+//    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
     
-    $Criteria->add(AppDelegationPeer::USR_UID, '');
-    $Criteria->add(AppDelegationPeer::TAS_UID, $aTasks , Criteria::IN );    
+    $Criteria->add(AppCacheViewPeer::USR_UID, '');
+    $Criteria->add(AppCacheViewPeer::TAS_UID, $tasks , Criteria::IN );    
 
     return $Criteria;
   }

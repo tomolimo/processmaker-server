@@ -185,6 +185,7 @@
     </validator>
     <index name="indexApp">
       <index-column name="PRO_UID"/>
+      <index-column name="APP_STATUS"/>
       <index-column name="APP_UID"/>
       <vendor type="mysql">
         <parameter name="Table" value="APPLICATION"/>

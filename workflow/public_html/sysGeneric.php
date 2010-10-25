@@ -11,8 +11,8 @@
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG',  0 );
-  define ('DEBUG_TIME_LOG', 0 );
+  define ('DEBUG_SQL_LOG', 1 );
+  define ('DEBUG_TIME_LOG', 1 );
 
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {
@@ -37,9 +37,10 @@
 
 //******** function to calculate the time used to render this page  *****
   function logTimeByPage() {
-    global $startingTime;
+  	$serverAddr = $_SERVER['SERVER_ADDR'];
+  	global $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
-    fwrite( $fpt, sprintf ( "%s.%03d %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
+    fwrite( $fpt, sprintf ( "%s.%03d %s %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), substr($serverAddr,-4), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
   }
 
