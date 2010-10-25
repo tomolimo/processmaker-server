@@ -4,6 +4,7 @@
  */
 var processesGrid;
 var store;
+var comboCategory;
 
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
@@ -62,7 +63,7 @@ Ext.onReady(function(){
     )
   });
 
-  var comboCategory = new Ext.form.ComboBox({
+  comboCategory = new Ext.form.ComboBox({
       fieldLabel : 'Categoty',
       hiddenName : 'category',
       store : new Ext.data.Store( {
@@ -206,15 +207,17 @@ Ext.onReady(function(){
         id: 'searchTxt',
         allowBlank: true,
         width: 150,
-        emptyText: 'enter search term'
-        //emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH
+        emptyText: 'enter search term',
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+              doSearch();
+            }
+          }
+        }
       }),{
         text:'Search',
-        handler: function(){
-          filter = Ext.getCmp('searchTxt').getValue();
-          store.setBaseParam('processName', filter);
-          store.load({params:{processName: filter, start : 0 , limit : 25 }});
-        }
+        handler: doSearch
       },
       {
         text:'X',
@@ -223,6 +226,7 @@ Ext.onReady(function(){
           store.setBaseParam( 'processName', '');
           store.load({params:{start : 0 , limit : '' }});
           Ext.getCmp('searchTxt').setValue('');
+          comboCategory.setValue('');
           //store.reload();
         }
       }
@@ -288,6 +292,15 @@ Ext.onReady(function(){
 
 function newProcess(){
   window.location = 'processes_New';
+}
+
+function doSearch(){
+  if(comboCategory.getValue() == '')
+    store.setBaseParam( 'category', '<reset>');
+  filter = Ext.getCmp('searchTxt').getValue();
+  
+  store.setBaseParam('processName', filter);
+  store.load({params:{processName: filter, start : 0 , limit : 25 }});
 }
 
 editProcess = function(){
