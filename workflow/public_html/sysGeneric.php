@@ -40,7 +40,7 @@
   	$serverAddr = $_SERVER['SERVER_ADDR'];
   	global $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
-    fwrite( $fpt, sprintf ( "%s.%03d %s %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), substr($serverAddr,-4), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
+    fwrite( $fpt, sprintf ( "%s.%03d %16s %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), substr($serverAddr,-4), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
   }
 
