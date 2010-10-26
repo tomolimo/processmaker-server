@@ -21,7 +21,7 @@
       }
       $sql = "SELECT table_name
       FROM information_schema.tables
-      WHERE table_schema = 'wf_".SYS_SYS."'
+      WHERE table_schema = '".DB_NAME."'
       AND table_name = 'APP_CACHE_VIEW'";
       
       $con = Propel::getConnection("workflow");
@@ -108,14 +108,14 @@
         
         
         
-        $o2->setDbName('wf_'.SYS_SYS);
+        $o2->setDbName(DB_NAME);
         $o2->connect();
         foreach ($sqlToExe as $i=>$sqlFile) {
           
           if($i == 0){
             $s = "SELECT table_name
             FROM information_schema.tables
-            WHERE table_schema = 'wf_".SYS_SYS."'
+            WHERE table_schema = '".DB_NAME."'
             AND table_name = 'APP_CACHE_VIEW'";
             
             $con = Propel::getConnection("workflow");
