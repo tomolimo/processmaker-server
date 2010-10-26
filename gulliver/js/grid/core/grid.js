@@ -625,13 +625,17 @@ var G_Grid = function(oForm, sGridName) {
            maskformula =this.aFields[i].oProperties.mask;
          }
       }
-      maskDecimal=maskformula.split(";");
-      if(maskDecimal.length > 1) {
-      	maskDecimal=maskDecimal[1].split(".");
-      } else {
-      	maskDecimal=maskformula.split(".");
+      if(maskformula!=''){
+	      maskDecimal=maskformula.split(";");
+	      if(maskDecimal.length > 1) {
+	      	maskDecimal=maskDecimal[1].split(".");
+	      } else {
+	      	maskDecimal=maskformula.split(".");
+	      }
+	      maskToPut=maskDecimal[1].length;      
+      }else{
+       maskToPut=0;      	
       }
-      maskToPut=maskDecimal[1].length;      
 			eval("document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + "]').value = (" + sAux + ').toFixed('+maskToPut+');');
 			//eval("document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + "]').value = (" + sAux + ').toFixed(2);');
 			if (this.aFunctions.length > 0) {
