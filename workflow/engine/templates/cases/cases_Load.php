@@ -1,4 +1,16 @@
 <html>
+<style>
+.Footer{
+  font    :normal 8pt sans-serif,Tahoma,MiscFixed !important; 
+  color   :#000 !important;
+  height    :0px !important;
+  text-align  :center !important;
+}
+.Footer .content{
+  color   :black !important;
+  padding   :0px !important;
+}
+</style>
 <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
 <iframe name="casesFrame" id="casesFrame" src ="../cases/main_init" width="99%" height="200" frameborder="0">
   <p>Your browser does not support iframes.</p>

@@ -210,9 +210,9 @@ Ext.onReady(function(){
         if( tp.attributes.url ){
           document.getElementById('casesSubFrame').src = tp.attributes.url;
           }
-      } /*,
+      } ,
       'render': function(tp){
-        tp.getSelectionModel().on('selectionchange', function(tree, node){
+        /*tp.getSelectionModel().on('selectionchange', function(tree, node){
 
           if( node.attributes.url ){
             document.getElementById('casesSubFrame').src = node.attributes.url;
@@ -228,9 +228,10 @@ Ext.onReady(function(){
             currentSelectedTreeMenuItem = null;
             ReloadTreeMenuItemDetail({item:''});
           }
-        })
+        })*/
+        setDefaultOption();
       }
-      */
+      
     }
   }
   
@@ -492,9 +493,7 @@ Ext.onReady(function(){
   /**show*/
   //w.show();
   //w.ownerCt.doLayout();
-  //w.expand();       
- 
-  setDefaultOption();
+  //w.expand();
 
   var menuPanelDetail = Ext.getCmp('tree_menuItem_detail');
   menuPanelDetail.hide(); 
