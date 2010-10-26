@@ -296,7 +296,7 @@ class NET
                               $this->errno = 0;
                               @mysql_free_result($result);
                           } else {
-              $this->error = "the user $this->db_user don't has privileges to run queries!";
+              $this->error = "the user $this->db_user doesn't have privileges to run queries!";
                               $this->errstr = "NET::MYSQL->Test query failed";
                               $this->errno = 10100;
                           }
