@@ -24,6 +24,15 @@
   <en>Save</en>
 </button> 
 <JS type="javascript" replacetags="1">
+	document.onkeypress=function(e){
+var esIE=(document.all);
+var esNS=(document.layers);
+tecla=(esIE) ? event.keyCode : e.which;
+if(tecla==13){
+	return false;
+  }
+}
+
 getField('DEP_TITLE').value ='';
 var sGroupname;
 //sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
