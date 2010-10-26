@@ -56,6 +56,10 @@
          $Criteria      = $oAppCache->getSearchListCriteria();
          $CriteriaCount = $oAppCache->getSearchCountCriteria();
          break;         
+    case 'to_revise' :
+         $Criteria      = $oAppCache->getToReviseListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getToReviseCountCriteria($userUid);
+         break;
     case 'todo' :
     default:
          $Criteria      = $oAppCache->getToDoListCriteria($userUid);
@@ -357,6 +361,26 @@
         $rows = removeItem( 'APP_DELEGATION_USER',$rows);
         $rows = removeItem( 'APP_ENABLE_ACTION_USER',$rows);
         $rows = removeItem( 'APP_ENABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
+        $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
+        $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);
+        $rows = calculateGridIndex( $rows );
+        break;
+
+      case 'to_revise' : //#, Case, task, process, due date, Last Modify
+        $rows = setDefaultFields();
+        $rows = removeItem( 'APP_FINISH_DATE'   , $rows );
+        $rows = removeItem( 'DEL_TASK_DUE_DATE' , $rows );
+        $rows = removeItem( 'DEL_INDEX'    ,$rows);
+        // APP_DELAY fields
+        $rows = removeItem( 'APP_DELAY_UID'    ,$rows);
+        $rows = removeItem( 'APP_THREAD_INDEX' ,$rows);
+        $rows = removeItem( 'APP_DEL_INDEX'    ,$rows);
+        $rows = removeItem( 'APP_UPDATE_DATE'  ,$rows);
+        $rows = removeItem( 'APP_TYPE'         ,$rows);
+        $rows = removeItem( 'APP_DELEGATION_USER'    ,$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_USER' ,$rows);
+        $rows = removeItem( 'APP_ENABLE_ACTION_DATE' ,$rows);
         $rows = removeItem( 'APP_DISABLE_ACTION_USER',$rows);
         $rows = removeItem( 'APP_DISABLE_ACTION_DATE',$rows);
         $rows = removeItem( 'APP_AUTOMATIC_DISABLED_DATE',$rows);

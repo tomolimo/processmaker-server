@@ -26,10 +26,10 @@
   }
 
   // evaluates an action and the list that will be rendered
-  $config       = getAdditionalFields($action);
+  $config       = getAdditionalFields($action, $confCasesList);
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
-  
+
   if ( $action == 'draft' /* &&  $action == 'cancelled' */) {
     array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'deleteLink' ) );
   }
@@ -150,6 +150,10 @@
       case 'paused' :
            $cProcess      = $oAppCache->getPausedListCriteria($userUid);
            break;
+      case 'to_revise' :
+           $cProcess      = $oAppCache->getToReviseListCriteria($userUid);
+//           $cProcess      = $oAppCache->getPausedListCriteria($userUid);
+           break;
       case 'todo' :
       default:
            $cProcess      = $oAppCache->getToDoListCriteria($userUid); //fast enough
@@ -230,15 +234,20 @@
       case 'paused' :
            $cStatus       = $oAppCache->getPausedListCriteria($userUid);
            break;
-
+      case 'to_revise' :
+           $cStatus       = $oAppCache->getToReviseListCriteria($userUid);
+//           $cStatus       = $oAppCache->getPausedListCriteria($userUid);
+           break;
       case 'todo' :
       case 'draft' :
+//      case 'to_revise' :
       default:
            return $status;
       break;
     }
 
     //get the status for this user in this action only for participated, unassigned, paused
+//    if ( $action != 'todo' && $action != 'draft' && $action != 'to_revise') {
     if ( $action != 'todo' && $action != 'draft' ) {
       //$cStatus = new Criteria('workflow');
       $cStatus->clearSelectColumns ( );
@@ -400,6 +409,35 @@
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
+  function getToRevise() {
+    $caseColumns = array ();
+    $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
+    $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER',  'width' => 90 );
+    $caseColumns[] = array( 'header' =>'Sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
+    $caseColumns[] = array( 'header' =>'Last Modify',  'dataIndex' => 'APP_UPDATE_DATE',   'width' => 110 );
+    $caseColumns[] = array( 'header' =>'Priority',     'dataIndex' => 'DEL_PRIORITY',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
+
+    $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
+    $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
+    $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
+    $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
+    $caseReaderFields[] = array( 'name' => 'DEL_TASK_DUE_DATE' );
+    $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
+    $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
+    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
+  }
 
   /**
    * loads the PM Table field list from the database based in an action parameter
@@ -407,12 +445,11 @@
    * @param  String $action
    * @return Array $config
    */
-function getAdditionalFields($action){
-  global $confCasesList;
+function getAdditionalFields($action, $confCasesList){
   $caseColumns = array();
   $caseReaderFields = array();
 
-  if ( count($confCasesList)>1 ) {
+  if ( !empty($confCasesList) && !empty($confCasesList['second']['data'])) {
     foreach($confCasesList['second']['data'] as $fieldData){
       if ( $fieldData['fieldType']!='key' ) {
 //        $label = ($fieldData['fieldType']=='case field' ) ? G::loadTranslation('ID_CASESLIST_'.$fieldData['name']) : $fieldData['label'];
@@ -437,6 +474,9 @@ function getAdditionalFields($action){
         break;
       case 'paused' :
         $config = getPaused();
+        break;
+      case 'to_revise' :
+        $config = getToRevise();
         break;
       case 'todo' :
       default : 

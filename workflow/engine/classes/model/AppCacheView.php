@@ -358,7 +358,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getPaused($userUid, true);
   }
   
-   /**
+  /**
    * gets the PAUSED cases list criteria for list
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -367,7 +367,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getPaused($userUid, false);
   }
 
-    /**
+  /**
    * gets the TO_REVISE cases list criteria
    * param $userUid the current userUid
    * param $doCount if true this will return the criteria for count cases only
@@ -399,7 +399,7 @@ class AppCacheView extends BaseAppCacheView {
     $c->add(AppCacheViewPeer::DEL_FINISH_DATE,   null,  Criteria::ISNULL);
     $c->add(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
     $c->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-
+   
     return $c;
   }
   
@@ -422,7 +422,7 @@ class AppCacheView extends BaseAppCacheView {
   }
 
 
-    /**
+  /**
    * gets the COMPLETED cases list criteria
    * param $userUid the current userUid
    * param $doCount if true this will return the criteria for count cases only
@@ -602,48 +602,7 @@ class AppCacheView extends BaseAppCacheView {
     $oCriteria  = new Criteria('workflow');
     $oCriteria->clearSelectColumns ( );
     // default configuration fields array
-    $defaultFields = array (
-                  'APP_UID',
-                  'DEL_INDEX',
-                  'APP_NUMBER',
-                  'APP_STATUS',
-                  'USR_UID',
-                  'PREVIOUS_USR_UID',
-                  'TAS_UID',
-                  'PRO_UID',
-                  'DEL_DELEGATE_DATE',
-                  'DEL_INIT_DATE',
-                  'DEL_TASK_DUE_DATE',
-                  'DEL_FINISH_DATE',
-                  'DEL_THREAD_STATUS',
-                  'APP_THREAD_STATUS',
-                  'APP_TITLE',
-                  'APP_PRO_TITLE',
-                  'APP_TAS_TITLE',
-                  'APP_CURRENT_USER',
-                  'APP_DEL_PREVIOUS_USER',
-                  'DEL_PRIORITY',
-                  'DEL_DURATION',
-                  'DEL_QUEUE_DURATION',
-                  'DEL_DELAY_DURATION',
-                  'DEL_STARTED',
-                  'DEL_FINISHED',
-                  'DEL_DELAYED',
-                  'APP_CREATE_DATE',
-                  'APP_FINISH_DATE',
-                  'APP_UPDATE_DATE',
-                  'APP_OVERDUE_PERCENTAGE',
-                  'APP_DELAY_UID',
-                  'APP_THREAD_INDEX',
-                  'APP_DEL_INDEX',
-                  'APP_TYPE',
-                  'APP_DELEGATION_USER',
-                  'APP_ENABLE_ACTION_USER',
-                  'APP_ENABLE_ACTION_DATE',
-                  'APP_DISABLE_ACTION_USER',
-                  'APP_DISABLE_ACTION_DATE',
-                  'APP_AUTOMATIC_DISABLED_DATE'
-                );
+    $defaultFields = $this->getDefaultFields();
   
     //if there is PMTABLE for this case list:
     if ( count($this->confCasesList)>1 && isset($this->confCasesList['PMTable']) && trim($this->confCasesList['PMTable'])!='') {

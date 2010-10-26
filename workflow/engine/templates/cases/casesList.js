@@ -421,6 +421,19 @@ Ext.onReady ( function() {
       ' '
     ];
 
+  var toolbarToRevise = [
+      'process',
+      comboProcess,
+      '->', // begin using the right-justified button container
+      textSearch,
+      btnSearch,
+      '-',
+      textJump,
+      btnJump,
+      ' ',
+      ' '
+    ];
+
   var toolbarSent = [
       'process', 
       comboProcess,
@@ -474,6 +487,7 @@ Ext.onReady ( function() {
   switch (action) {
     case 'draft'  : itemToolbar = toolbarDraft; break;
     case 'sent'   : itemToolbar = toolbarSent;  break;
+    case 'to_revise'   : itemToolbar = toolbarToRevise;  break;
     case 'search' : itemToolbar = toolbarSearch;  break;
     default       : itemToolbar = toolbarTodo; break;
   }

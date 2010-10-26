@@ -59,7 +59,8 @@
   
   $G_TMP_MENU->AddIdRawOption('ADMIN',             '',                                 G::LoadTranslation('ID_CASES_MENU_ADMIN'),   '',                    '', 'blockHeader');
   if ( $RBAC->userCanAccess('PM_SUPERVISOR') == 1 ) {
-    $G_TMP_MENU->AddIdRawOption('CASES_TO_REVISE', 'cases_List?l=to_revise',           G::LoadTranslation('ID_TO_REVISE'),          'document-review.png'  );
+//    $G_TMP_MENU->AddIdRawOption('CASES_TO_REVISE_NORMAL', 'cases_List?l=to_revise',           G::LoadTranslation('ID_TO_REVISE'),          'document-review.png'  );
+    $G_TMP_MENU->AddIdRawOption('CASES_TO_REVISE', 'casesListExtJs?action=to_revise',           G::LoadTranslation('ID_TO_REVISE'),          'document-review.png'  );
   //$G_TMP_MENU->AddIdRawOption('CASES_SCHEDULER', 'cases_Scheduler_List',             G::LoadTranslation('ID_SCHEDULER_LIST'  ));
   //$G_TMP_MENU->AddIdRawOption('CASES_SCHEDULER_LOG', 'cases_Scheduler_Log',          G::LoadTranslation('ID_SCHEDULER_LOG'  ));
   }
