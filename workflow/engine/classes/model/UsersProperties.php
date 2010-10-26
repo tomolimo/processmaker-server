@@ -227,7 +227,7 @@ class UsersProperties extends BaseUsersProperties {
           break;
         case 'PM_FACTORY':
           if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/processes_List';
+            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/main';
           }
           break;
         case 'PM_CASES':
@@ -249,7 +249,7 @@ class UsersProperties extends BaseUsersProperties {
     }
 
     if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/processes_List';
+      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/main';
     }
     if ($RBAC->userCanAccess('PM_SETUP') == 1) {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
