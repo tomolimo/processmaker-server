@@ -139,22 +139,21 @@ Ext.onReady(function(){
           sortable: true
       },    
       columns: [
-          expander,
-          {id:'PRO_UID', dataIndex: 'PRO_UID', hidden:true},
-          {header: TRANSLATIONS.ID_PRO_DESCRIPTION, dataIndex: 'PRO_DESCRIPTION',hidden:true},
-          {header: TRANSLATIONS.ID_PRO_TITLE, dataIndex: 'PRO_TITLE', width: 300},
-          {header: TRANSLATIONS.ID_CATEGORY, dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
-          {header: "", dataIndex: 'PRO_STATUS', width: 50, hidden:true},
-          {header: TRANSLATIONS.ID_STATUS, dataIndex: 'PRO_STATUS_LABEL', width: 50},
-          {header: TRANSLATIONS.ID_PRO_USER, dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
-          {header: TRANSLATIONS.ID_PRO_CREATE_DATE, dataIndex: 'PRO_CREATE_DATE', width: 90},
-          {header: TRANSLATIONS.ID_PRO_DEBUG, dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'},
-          
-          {header: TRANSLATIONS.ID_INBOX, dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
-          {header: TRANSLATIONS.ID_DRAFT, dataIndex: 'CASES_COUNT_DRAFT', width: 50, align:'right'},
-          {header: TRANSLATIONS.ID_COMPLETED, dataIndex: 'CASES_COUNT_COMPLETED', width: 70, align:'right'},
-          {header: TRANSLATIONS.ID_CANCELLED, dataIndex: 'CASES_COUNT_CANCELLED', width: 70, align:'right'},
-          {header: TRANSLATIONS.ID_TOTAL_CASES, dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'}
+        expander,
+        {id:'PRO_UID', dataIndex: 'PRO_UID', hidden:true, hideable:false},
+        {header: "", dataIndex: 'PRO_STATUS', width: 50, hidden:true, hideable:false},
+        {header: TRANSLATIONS.ID_PRO_DESCRIPTION, dataIndex: 'PRO_DESCRIPTION',hidden:true, hideable:false},
+        {header: TRANSLATIONS.ID_PRO_TITLE, dataIndex: 'PRO_TITLE', width: 300},
+        {header: TRANSLATIONS.ID_CATEGORY, dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
+        {header: TRANSLATIONS.ID_STATUS, dataIndex: 'PRO_STATUS_LABEL', width: 50},
+        {header: TRANSLATIONS.ID_PRO_USER, dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
+        {header: TRANSLATIONS.ID_PRO_CREATE_DATE, dataIndex: 'PRO_CREATE_DATE', width: 90},
+        {header: TRANSLATIONS.ID_PRO_DEBUG, dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'},
+        {header: TRANSLATIONS.ID_INBOX, dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
+        {header: TRANSLATIONS.ID_DRAFT, dataIndex: 'CASES_COUNT_DRAFT', width: 50, align:'right'},
+        {header: TRANSLATIONS.ID_COMPLETED, dataIndex: 'CASES_COUNT_COMPLETED', width: 70, align:'right'},
+        {header: TRANSLATIONS.ID_CANCELLED, dataIndex: 'CASES_COUNT_CANCELLED', width: 70, align:'right'},
+        {header: TRANSLATIONS.ID_TOTAL_CASES, dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'}
       ]
     }),
 
