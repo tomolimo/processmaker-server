@@ -1,8 +1,9 @@
-.button_pm{
+.module_app_button___gray,.button_pm{
 	-moz-border-radius:10px;
 	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
 	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5);
 	background-color:#EEE;
+	background-image: none;
 	border-radius:10px;
 	color:#333;
 	font-size:10px;
@@ -16,10 +17,20 @@
 	font-family: Arial,serif;
 	cursor:pointer;
 }
-.button_pm:hover{
+.module_app_button___gray:hover,.button_pm:hover{
 	background-color:#666;
 	color:#fff;
 	text-shadow:0 1px 0px rgba(0,0,0,1);
+	border:none;
+}
+.module_app_button___gray:focus,.button_pm:focus{
+	-moz-outline-style:none;
+	outline:none;
+}
+input::-moz-focus-inner { border: 0; }
+/*Problem with the shadow*/
+.pagedTableDefault center .module_app_button___gray{
+	margin-bottom:5px;
 }
 .ss_sprite{
 	background-image:url( /images/icons_silk/sprites.png);

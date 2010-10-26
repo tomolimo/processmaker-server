@@ -158,13 +158,13 @@
 /*	font-size:12px;*/
 }
 .x-grid3-row-table{
-	padding:3px 0;
+	padding:0px 0;
 }
 .x-grid3-row:nth-child(odd) { background-color:#FFF; }
 .x-grid3-row:nth-child(even) { background-color:#F6F6F6; }
 .x-grid3-row-over{
 	background: #E0EAEF !important;
-	/*cursor: pointer;*/
+	cursor: pointer;
 }
 .x-grid3-hd-inner{
 	font-size:11px;
@@ -213,7 +213,9 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 #ext-gen38.x-tree-root-ct .x-tree-node .x-tree-node{
 	padding-bottom:0;
 }
-#ext-gen38.x-tree-root-ct .x-tree-node-over{
+#ext-gen38.x-tree-root-ct .x-tree-node-over,
+#ext-gen38.x-tree-root-ct .x-tree-selected
+{
 	background:#eee;
 }
 
@@ -235,7 +237,7 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 
 /*REFRESHER*/
 #ext-gen38.x-tree-root-ct .x-tree-node-ct b{
-	background:#FFFADF;
+	/*background:#FFFADF;*/
 }
 #refreshNotifiers.x-btn{
 }
@@ -261,4 +263,10 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 /*StartCase*/
 .x-tab-strip-text.ICON_CASES_START_CASE{
 	background-position:0px -17px !important;
+}
+
+
+.row_updated{
+	/*background:#FFFDEF;*/
+	font-weight: bold;
 }

@@ -114,7 +114,7 @@ Ext.onReady ( function() {
     if ( r.data['DEL_INIT_DATE'] )
       return String.format("{0}", value );
     else
-      return String.format("<b>{0}</b>", value );
+      return String.format("<span class='row_updated'>{0}</span>", value );
   } 
   
   for(var i = 0, len = columns.length; i < len; i++){
@@ -125,8 +125,21 @@ Ext.onReady ( function() {
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
+	 //Status images
+    if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   };
 
+  function showStatusImage(value,p,r){
+	  if ( value == 'COMPLETED' )
+      return String.format("<div class='ss_sprite ss_tick' style='display:block;padding-left:0' title='{0}'> </div>", value );
+    else if ( value == 'DRAFT' )
+      return String.format("<div class='ss_sprite ss_pencil' style='display:block;padding-left:0' title='{0}'> </div>", value );
+    else if ( value == 'TO_DO' )
+      return String.format("<div class='ss_sprite ss_page_white_edit' style='display:block;padding-left:0' title='{0}'> </div>", value );
+    else if ( value == 'CANCELLED' )
+      return String.format("<div class='ss_sprite ss_cancel' style='display:block;padding-left:0' title='{0}'> </div>", value );
+		else return String.format("{0}", value );
+  }
   //adding the last column to open the cases_Open
 	//columns.push ( { header: "aaaaa", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'openLink'});
 //	columns.push ( { header: "xxxxxx", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'deleteLink'});
@@ -179,6 +192,9 @@ Ext.onReady ( function() {
     writer: writerCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
     autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
+
+  //Layout Resizing
+  storeCases.on('load',function(){var viewport = Ext.getCmp("viewportcases");viewport.doLayout();})
 
   // create the Data Store for processes
   var storeProcesses = new Ext.data.JsonStore({
@@ -565,6 +581,7 @@ Ext.onReady ( function() {
   var viewport = new Ext.Viewport({
     layout: 'fit',
     autoScroll: true,
+	 id:'viewportcases',
     items: [grid]
   });
   
