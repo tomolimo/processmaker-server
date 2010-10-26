@@ -489,8 +489,6 @@ class Process extends BaseProcess {
     $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
 
-    $oDataset->next ();
-
     $casesCnt = $this->getCasesCountInAllProcesses();
 
     $oProcess = new Process ();
@@ -499,8 +497,8 @@ class Process extends BaseProcess {
       $aProcess = $oProcess->load( $aRow ['PRO_UID'] );
 
       if( isset($processName) && $processName != ''){
-        preg_match("/$processName/i", $aProcess['PRO_TITLE'], $res);
-        if( sizeof($res) == 0)
+        //preg_match("/$processName/i", $aProcess['PRO_TITLE'], $res);
+        if( stripos($aProcess['PRO_TITLE'], $processName) === false)
           continue;
       }
 

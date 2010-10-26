@@ -237,7 +237,7 @@ class UsersProperties extends BaseUsersProperties {
           break;
         case 'PM_USERS':
           if ($RBAC->userCanAccess('PM_USERS') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/users_List';
+            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
           }
           break;
         case 'PM_DASHBOARD':
@@ -258,7 +258,7 @@ class UsersProperties extends BaseUsersProperties {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'cases/main';
     }
     if ($RBAC->userCanAccess('PM_USERS') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/users_List';
+      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
     }
     if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
       return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'dashboard/dashboard';

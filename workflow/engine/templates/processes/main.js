@@ -99,6 +99,11 @@ Ext.onReady(function(){
       'select': function() {
         filter = comboCategory.value;
         store.setBaseParam( 'category', filter);
+        var searchTxt = Ext.util.Format.trim(Ext.getCmp('searchTxt').getValue());
+        
+        if( searchTxt == '' ){
+          store.setBaseParam( 'processName', '');
+        }
         store.load({params:{category: filter, start : 0 , limit : 25 }});
       }}
     })
