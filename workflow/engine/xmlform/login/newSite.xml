@@ -39,8 +39,7 @@
   <en>Test</en>
 </NW_SUB>
 <JS type="JavaScript"><![CDATA[
-	
-	var data={
+		var data={
 		name:new input(getField('NW_TITLE')).setStyle({fontWeight:'bold'}),
 		submit:new button(getField('NW_SUB')),
 		ao_db_wf:new input(getField('AO_DB_WF')),
@@ -125,15 +124,18 @@
 			var confirm = new leimnud.module.app.confirm().make({
 		  		label: G_STRINGS.NEW_SITE_SUCCESS +" "+ data.name.value +"<br/>"+ G_STRINGS.NEW_SITE_SUCCESS_CONFIRM+"<br/>"+ G_STRINGS.NEW_SITE_SUCCESS_CONFIRMNOTE,
 		    	action: function(){
-		    	    if (typeof(window.parent.admToolsContent) != 'undefined'){
+		    	 
+		    	parent.parent.window.location="/sys"+data.name.value+"/en/green/login/login";
+		    
+		 /*  	   if (typeof(window.parent.admToolsContent) != 'undefined'){
 		    	  
-					    parent.window.location="/sys"+data.name.value+"/en/green/login/login";
-					} else {
-						
+					 parent.parent.window.location="/sys"+data.name.value+"/en/green/login/login";
+					} else {						
 					    setTimeout('redirectLogin()', 1000);
-					}
+					}*/
 				}.extend(this),
 				cancel: function(){
+					
 					//window.location="../install/newSite?type=blank";
 				},
 				width:380,
@@ -162,4 +164,4 @@
 		location.href="/sys"+data.name.value+"/en/green/login/login";
 	}
 ]]></JS>
-</dynaForm>  
+</dynaForm>    
