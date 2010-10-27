@@ -40,19 +40,19 @@ Ext.onReady(function() {
       columns : [ {
           id : 'name',
           header : '',
-          width : 250,
+          width : 190,
           sortable : false,
           dataIndex : 'name'
         }, {
           header : '',
-          width : 95,
+          width : 90,
           sortable : false,
           dataIndex : 'value'
         }
       ],
       stripeRows : true,
-      height : 140,
-      width : 350,
+      autoHeight : true,
+      width : 280,
       title : 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
@@ -72,7 +72,7 @@ Ext.onReady(function() {
       frame : true,
       title : 'Build/Rebuild the Workflow Applications Cache',
       bodyStyle : 'padding:5px 5px 0',
-      width : 350,
+      width : 300,
 
       items : [ ],
       buttons : [ 
@@ -167,19 +167,20 @@ Ext.onReady(function() {
           collapsible : false,
           autoHeight : true,
           defaults : {
-            width : 210
+            width : 170
           },
           defaultType : 'textfield',
           items : [cmbLanguages]
       }
-    } else {
+    } 
+    else {
       fieldset = {
           xtype : 'fieldset',
           title : 'Cache configuration',
           collapsible : false,
           autoHeight : true,
           defaults : {
-            width : 210
+            width : 170
           },
           defaultType : 'textfield',
           items : [cmbLanguages, txtUser, txtPasswd]
