@@ -34,6 +34,9 @@ $G_PUBLISH = new Publisher;
 $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/processes/main.js');
 $G_PUBLISH->AddContent('view', 'processes/mainLoad');
-G::RenderPage('publish');
-
+//G::RenderPage('publish');
+if( isset($_GET['type']) )
+	  G::RenderPage( "publishBlank", "blank");
+	else
+	  G::RenderPage( "publish" );
   

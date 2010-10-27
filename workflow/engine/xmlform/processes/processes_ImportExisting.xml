@@ -34,7 +34,9 @@
 
 <JS type="javascript" replacetags="1"><![CDATA[
 function cancel(){
-    window.location = 'processes_List';
+ //history.back();
+ window.location = 'main?type=blank';
+//    window.location = 'processes_List?type=blank';
 }
 
 ]]></JS>
