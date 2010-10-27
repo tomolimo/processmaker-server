@@ -42,7 +42,7 @@ try {//ini_set('display_errors','1');
   $sfunction =$_GET['function'];
   switch($sfunction){
    	case 'replacementLogo':
-   	  $snameLogo=$_GET['NAMELOGO'];
+   	  $snameLogo=urldecode($_GET['NAMELOGO']);
    	  G::loadClass('configuration');
    	  $oConf = new Configurations;
    	  $aConf = Array(

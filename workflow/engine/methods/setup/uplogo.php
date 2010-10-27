@@ -23,14 +23,13 @@
  *
  */
  
-global $RBAC;
-G::LoadClass('replacementLogo');
-
-if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){	
-  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  //G::header('location: ../login/login');
-  die;
-}
+  global $RBAC;
+  G::LoadClass('replacementLogo');
+  
+  if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){ 
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+    die;
+  }
 
   //calculating the max upload file size;
   $POST_MAX_SIZE   = ini_get('post_max_size');
@@ -46,75 +45,71 @@ if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVAN
   if ( $postMaxSize < $uploadMaxSize ) $uploadMaxSize = $postMaxSize;
   $Fields['MAX_FILE_SIZE'] = $uploadMaxSize .  " (" . $UPLOAD_MAX_SIZE . ") ";
 
-$G_MAIN_MENU            = 'processmaker';
-$G_SUB_MENU             = 'setup';
-$G_ID_MENU_SELECTED     = 'SETUP';
-$G_ID_SUB_MENU_SELECTED = 'LOGO';
-
-$G_PUBLISH = new Publisher;
-$oHeadPublisher =& headPublisher::getSingleton();
-$G_PUBLISH->AddContent('xmlform', 'xmlform', 'setup/uplogo', '', $Fields );
-
-$G_PUBLISH->AddContent('view', 'setup/uplogo' );
-G::RenderPage( "publishBlank", "blank");
+  $G_MAIN_MENU            = 'processmaker';
+  $G_SUB_MENU             = 'setup';
+  $G_ID_MENU_SELECTED     = 'SETUP';
+  $G_ID_SUB_MENU_SELECTED = 'LOGO';
+  
+  $G_PUBLISH = new Publisher;
+  $oHeadPublisher =& headPublisher::getSingleton();
+  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'setup/uplogo', '', $Fields );
+  
+  $G_PUBLISH->AddContent('view', 'setup/uplogo' );
+  G::RenderPage( "publishBlank", "blank");
 
 ?>
-
-
 <script>
-/*
- * By krlos April 07, 2010
- * we're going to change to the logo choosed
- * parameter logo name
- */ 	
-var changeLogo= function (nameLogo){
+  /*
+   * By krlos April 07, 2010
+   * we're going to change to the logo choosed
+   * parameter logo name
+   */   
+  var changeLogo= function (nameLogo){
     new leimnud.module.app.confirm().make({
-        label:G_STRINGS.ID_APPLY_LOGO,
-        action:function(){
-        ajax_function('replacementLogo','replacementLogo','NAMELOGO='+nameLogo,'GET') ;
-        //parent.window.location.href = 'setup';
-        history.go(0);
-        jumbshowlogo();
+      label:G_STRINGS.ID_APPLY_LOGO,
+      action:function(){
+      ajax_function('replacementLogo','replacementLogo','NAMELOGO='+encodeURIComponent(nameLogo),'GET') ;
+      parent.window.location.href = 'setup';
+      history.go(0);
+      jumbshowlogo();
     }});
-	
-}
-/*
- * By krlos April 07, 2010
- * to delete logo choosed
- * parameter logo name
- */ 
-function deleteLogo(nameLogo) {
+  
+  }
+  
+  /*
+   * By krlos April 07, 2010
+   * to delete logo choosed
+   * parameter logo name
+   */ 
+  function deleteLogo(nameLogo) {
     new leimnud.module.app.confirm().make({
-        label:G_STRINGS.ID_REMOVE_LOGO,
-        action:function(){
+      label:G_STRINGS.ID_REMOVE_LOGO,
+      action:function(){
         ajax_function('logo_Delete','','NAMELOGO='+nameLogo,'GET') ;
-        //parent.window.location.href = 'setup';
-        //document.getElementById("admToolsContent").contentWindow.location.href = 'uplogo';
         history.go(0);
         jumbshowlogo();
-    }});
-
+      }
+    });
     return false;
-}
+  }
 
-/*
- * By krlos April 07, 2010
- * to put processmaker logo
- * parameters file db and user id
- */
-var restoreLogo = function (optfiledb, usrUid){ //alert(optfiledb +'\n'+usrUid);return false;
-	ajax_function('replacementLogo','restoreLogo','OPTFILEDB='+optfiledb+'&USRUID='+usrUid,'GET') ;
-	parent.window.location.href = 'setup';
-}
-
-/*
- * By krlos April 07, 2010
- * we're going to go to the logo option
- * parameter
- */ 
-var jumbshowlogo = function(){
-	parent.admToolsContent.location='uplogo';
-	}
-
-
+  /*
+   * By krlos April 07, 2010
+   * to put processmaker logo
+   * parameters file db and user id
+   */
+  var restoreLogo = function (optfiledb, usrUid){ 
+    ajax_function('replacementLogo','restoreLogo','OPTFILEDB='+optfiledb+'&USRUID='+usrUid,'GET') ;
+    parent.window.location.href = 'setup';
+  }
+  
+  /*
+   * By krlos April 07, 2010
+   * we're going to go to the logo option
+   * parameter
+   */ 
+  var jumbshowlogo = function() {
+    parent.admToolsContent.location='uplogo';
+  } 
+  
 </script>

@@ -1,9 +1,10 @@
 <?php
+  require_once('classes/model/AppCacheView.php');
 
   $request = isset($_POST['request'])? $_POST['request']: (isset($_GET['request'])? $_GET['request']: null);
   
   switch($request){
-  
+    //check if the APP_CACHE VIEW table and their triggers are installed
     case 'info':
       $result = new stdClass();
       
@@ -15,42 +16,42 @@
       if( isset($appCacheViewEngine['LANG']) ){
         $lang   = $appCacheViewEngine['LANG'];
         $status = strtoupper($appCacheViewEngine['STATUS']);
-      } else {
+      } 
+      else {
         $lang = '-';
         $status = 'MISSING';
       }
-      $sql = "SELECT table_name
-      FROM information_schema.tables
-      WHERE table_schema = '".DB_NAME."'
-      AND table_name = 'APP_CACHE_VIEW'";
-      
-      $con = Propel::getConnection("workflow");
-      $rs = $con->executeQuery($sql);
-      $rs->next();
-      $res = $rs->getRow();
-      if( isset($res['table_name']) ){
-        $tableExists  = 'PASSED';
-        $sql = "SELECT COUNT(APP_UID) AS NUM FROM APP_CACHE_VIEW";
-        $rs = $con->executeQuery($sql);
-        $rs->next();
-        $res = $rs->getRow();
-        //print_r($res);
-        if( isset($res['NUM']) )
-          $count = $res['NUM'];
-        else 
-          $count = '-';
 
-      } else {
+      $con = Propel::getConnection("workflow");
+      $stmt = $con->createStatement();      
+      $sql="SHOW TABLES"; 
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+      $rs1->next();
+      $found = false;     
+      while ( is_array($row = $rs1->getRow() ) && !$found ) {
+        if ( strtolower($row[0]) == 'app_cache_view' ) {
+          $found = true;
+        }
+        $rs1->next();
+      }      
+      
+      if ( $found ) {
+        $tableExists  = 'FOUND';
+        $oCriteria = new Criteria('workflow');  
+        $count = AppCacheViewPeer::doCount($oCriteria);        
+      } 
+      else {
         $tableExists  = 'NOT FOUND';
         $count = '-';
       }
+
       $result->status = 'ok';
       $result->info = Array(
-        Array('name'=>'Status', 'value'=>"[$status]"),
-        Array('name'=>'Cache table', 'value'=>"[$tableExists]"),
-        Array('name'=>'Records in Cache table', 'value'=>"[$count]"),
-       /* Array('name'=>'Cache Table Triggers', 'value'=>"[]"),*/
-        Array('name'=>'Language', 'value'=>"[$lang]")
+        Array('name'=>'Cache Table', 'value'=>"[$tableExists]"),
+        Array('name'=>'Records in Cache Table', 'value'=>"[$count]"),
+        Array('name'=>'Cache Table Triggers', 'value'=>"[]"),
+        Array('name'=>'Language', 'value'=>"[$lang]"),
+        Array('name'=>'Status', 'value'=>"[$status]")
       );
       
       echo G::json_encode($result);
@@ -156,7 +157,8 @@
         
         echo G::json_encode($response);
         
-      } catch (Exception $e) {
+      } 
+      catch (Exception $e) {
         $confParams = Array(
           'lang'=>$lang,
           'status'=> 'failed'
