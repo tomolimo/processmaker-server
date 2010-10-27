@@ -45,14 +45,14 @@ Ext.onReady(function() {
           dataIndex : 'name'
         }, {
           header : '',
-          width : 90,
+          width : 140,
           sortable : false,
           dataIndex : 'value'
         }
       ],
       stripeRows : true,
       autoHeight : true,
-      width : 280,
+      width : 330,
       title : 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
@@ -160,7 +160,7 @@ Ext.onReady(function() {
           value: ''
     }
     
-    if(enoughGrants){
+    if( true /*enoughGrants */){
       fieldset = {
           xtype : 'fieldset',
           title : 'Cache configuration',

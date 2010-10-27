@@ -7,45 +7,86 @@
     //check if the APP_CACHE VIEW table and their triggers are installed
     case 'info':
       $result = new stdClass();
+      $result->info = Array();
       
+      //check the language, if no info in config about language, the default is 'en'
       G::loadClass('configuration');
       $oConf = new Configurations; 
       $oConf->loadConfig($x, 'APP_CACHE_VIEW_ENGINE','','','','');
       $appCacheViewEngine = $oConf->aConfig;
       
-      if( isset($appCacheViewEngine['LANG']) ){
+      if( isset($appCacheViewEngine['LANG']) ) {
         $lang   = $appCacheViewEngine['LANG'];
         $status = strtoupper($appCacheViewEngine['STATUS']);
       } 
       else {
-        $lang = '-';
-        $status = 'MISSING';
+        $confParams = Array(
+          'LANG' => 'en',
+          'STATUS'=> ''
+        );
+        $oConf->aConfig = $confParams;
+        $oConf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');      	
+        $lang = 'en';
+        $status = '';
       }
 
-      $con = Propel::getConnection("workflow");
-      $stmt = $con->createStatement();      
-      $sql="SHOW TABLES"; 
-      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
-      $rs1->next();
-      $found = false;     
-      while ( is_array($row = $rs1->getRow() ) && !$found ) {
-        if ( strtolower($row[0]) == 'app_cache_view' ) {
-          $found = true;
-        }
-        $rs1->next();
-      }      
+      //get user Root from hash 
+      PROPEL::Init ( PATH_METHODS.'dbConnections/rootDbConnections.php' ); 
+      $con = Propel::getConnection("root");
+
+      //setup the appcacheview object, and the path for the sql files
+      $appCache = new AppCacheView();
+      $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP );
       
-      if ( $found ) {
-        $tableExists  = 'FOUND';
-        $oCriteria = new Criteria('workflow');  
-        $count = AppCacheViewPeer::doCount($oCriteria);        
-      } 
-      else {
-        $tableExists  = 'NOT FOUND';
-        $count = '-';
+      $res = $appCache->getMySQLVersion();
+      $result->info[] = array ('name' => 'MySQL Version',   'value'=> $res );
+      
+      $res = $appCache->checkGrantsForUser( false );
+      $currentUser        = $res['user'];
+      $currentUserIsSuper = $res['super'];
+      $result->info[] = array ('name' => 'Current User',    'value'=> $currentUser );
+      $result->info[] = array ('name' => 'SUPER privilege', 'value'=> $currentUserIsSuper );
+      
+      //if user does not have the SUPER privilege we need to use the root user and grant the SUPER priv. to normal user.
+      if ( ! $currentUserIsSuper ) {
+        $res = $appCache->checkGrantsForUser( true );
+        $result->info[] = array ('name' => 'Root User',       'value'=> $res['user'] );
+        $result->info[] = array ('name' => 'Has SUPER privilege', 'value'=> $res['super'] );
+
+        $res = $appCache->setSuperForUser( $currentUser );
+        $result->info[] = array ('name' => 'setting SUPER privilege',       'value'=> $res);
+        $currentUserIsSuper = true;
       }
 
-      $result->status = 'ok';
+      //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.      
+      $res = $appCache->checkAppCacheView();
+      $result->info[] = array ('name' => 'Table APP_CACHE_VIEW',           'value'=> $res['found']);
+      if ( $res['recreated'] ) 
+        $result->info[] = array ('name' => 'Table APP_CACHE_VIEW recreated', 'value'=> $res['recreated']);
+        
+      $result->info[] = array ('name' => 'Rows in APP_CACHE_VIEW',       'value'=> $res['count']);
+      
+      //now check if we have the triggers installed
+      //APP_DELEGATION INSERT 
+      $res = $appCache->triggerAppDelegationInsert();
+      $result->info[] = array ('name' => 'Trigger APP_DELEGATION INSERT',           'value'=> $res);
+
+      //APP_DELEGATION Update 
+      $res = $appCache->triggerAppDelegationUpdate();
+      $result->info[] = array ('name' => 'Trigger APP_DELEGATION UPDATE',           'value'=> $res);
+
+      //APPLICATION UPDATE 
+      $res = $appCache->triggerApplicationUpdate();
+      $result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
+
+      //build?
+      $res = $appCache->fillAppCacheView();
+      $result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
+
+      //show language
+      $result->info[] = array ('name' => 'Language',         'value'=> $lang );
+
+/*
       $result->info = Array(
         Array('name'=>'Cache Table', 'value'=>"[$tableExists]"),
         Array('name'=>'Records in Cache Table', 'value'=>"[$count]"),
@@ -53,7 +94,7 @@
         Array('name'=>'Language', 'value'=>"[$lang]"),
         Array('name'=>'Status', 'value'=>"[$status]")
       );
-      
+*/      
       echo G::json_encode($result);
       break;
     
@@ -69,7 +110,6 @@
       break;
     
     case 'build':
-      
       $sqlToExe = Array();
       $schemasPath = PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP;
       $sqlToExe[] = $schemasPath . 'app_cache_view.sql';

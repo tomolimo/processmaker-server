@@ -21,7 +21,8 @@ require_once 'classes/model/AdditionalTables.php';
  
 class AppCacheView extends BaseAppCacheView {
 	var $confCasesList;
-
+	var $pathToAppCacheFiles;
+	
   function getAllCounters ( $aTypes, $userUid, $processSummary = false ) {
     $aResult = Array();
     foreach($aTypes as $type){
@@ -712,4 +713,236 @@ class AppCacheView extends BaseAppCacheView {
                   'APP_AUTOMATIC_DISABLED_DATE'
                 );
   }
+  
+  
+  function setPathToAppCacheFiles ( $path ) {
+  	$this->pathToAppCacheFiles = $path; 
+  }
+  
+  function getMySQLVersion() {
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+    $sql = "select version()  ";
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+    $rs1->next();
+    $row = $rs1->getRow();
+    return $row[0];
+
+  }  
+
+  function checkGrantsForUser( $root = false ) {
+  	if ( $root ) 
+      $con = Propel::getConnection("root");
+    else
+      $con = Propel::getConnection("workflow");
+      
+    $stmt = $con->createStatement();
+    $sql = "select CURRENT_USER(), USER() ";
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+    $rs1->next();
+    $row = $rs1->getRow();
+    $mysqlUser    = str_replace('@', "'@'", $row[0] );
+    
+    $super = false;
+    $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' "; 
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+    $rs1->next();
+    $row = $rs1->getRow();
+    if ( is_array($row = $rs1->getRow() ) ) {
+    	$super = true;
+  	}
+    
+    return array( 'user' => $mysqlUser, 'super' => $super );
+  }
+    
+  function setSuperForUser( $mysqlUser ) {
+    $con = Propel::getConnection("root");
+    $stmt = $con->createStatement();
+    $sql = "GRANT SUPER on *.* to '$mysqlUser' ";
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+
+    return true;
+  }
+  
+  /**
+   * search for table APP_CACHE_VIEW  
+   * @return void
+   *
+   */
+  function checkAppCacheView () {
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+    
+    //check if table APP_CACHE_VIEW exists
+    $sql="SHOW TABLES"; 
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+    $rs1->next();
+    $found = false;     
+    while ( is_array($row = $rs1->getRow() ) && !$found ) {
+      if ( strtolower($row[0]) == 'app_cache_view' ) {
+        $found = true;
+      }
+      $rs1->next();
+    }
+    
+    $needCreateTable = $found == false;
+    
+    //if exists the APP_CACHE_VIEW Table, we need to check if it has the correct number of fields, if not recreate the table
+    $tableRecreated = false;
+    if ( $found ) {
+      $sql="SHOW FIELDS FROM  APP_CACHE_VIEW";  
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+      $rs1->next();
+      $fields = array();     
+      while ( is_array($row = $rs1->getRow() ) ) {
+        $fields[] = $row[0];
+        $rs1->next();
+      }
+      if ( count($fields) != 30 ) {
+      	$needCreateTable = true;
+      }
+    }  
+    
+    if ( $needCreateTable ) {
+      $stmt->executeQuery( "DROP TABLE IF EXISTS `APP_CACHE_VIEW`; ");
+  
+      $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view.sql';
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file app_cache_view.sql doesn't exists ") );
+      $sql = file_get_contents ( $filenameSql );
+      $stmt->executeQuery($sql);
+      $tableRecreated = true;
+      $found = true;
+    }
+    
+    //now count how many records there are ..
+    $count = '-';
+    if ( $found ) {
+      $oCriteria = new Criteria('workflow');  
+      $count = AppCacheViewPeer::doCount($oCriteria);        
+    }
+    return array( 'found' => $found, 'recreated' => $tableRecreated, 'count' => $count );
+
+  }
+
+  /**
+   * populate (fill) the table APP_CACHE_VIEW
+   * @return void
+   */
+  function fillAppCacheView () {
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+    
+    $sql="select count(*) as CANT from APP_CACHE_VIEW ";  
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+    $rs1->next();
+    $row1 = $rs1->getRow();
+    $cant = $row1['CANT'];
+    //print " $cant rows in app_delegation<br>"; 
+    if ( $cant == 0 ) {
+      $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view_insert.sql';
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file app_cache_view_insert.sql doesn't exists ") );
+
+      $sql = explode ( ';', file_get_contents ( $filenameSql ) );
+      foreach ( $sql as $key => $val ) 
+        $stmt->executeQuery($val);
+    }
+    return 'done';
+  }
+
+
+  /**
+   * Insert an app delegatiojn trigger
+   * @return void
+   */
+  function triggerAppDelegationInsert() {
+    $con = Propel::getConnection("root");
+    $stmt = $con->createStatement();
+
+    $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    $found = false;
+    while ( is_array ( $row ) ) {
+      if ( strtolower($row['Trigger'] == 'APP_DELEGATION_INSERT') && strtoupper($row['Table']) == 'APP_DELEGATION' ) {
+        $found = true;
+      }
+      $rs->next();
+      $row = $rs->getRow();
+    }
+    if ( ! $found ) {
+      $filenameSql = $this->pathToAppCacheFiles . 'triggerAppDelegationInsert.sql';
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file triggerAppDelegationInsert.sql doesn't exists ") );
+      $sql = file_get_contents ( $filenameSql );
+      $stmt->executeQuery($sql);
+      return 'created';
+    }
+    return 'exists';
+  }
+  
+
+  /**
+   * update the App Delegation triggers
+   * @return void
+   */
+  function triggerAppDelegationUpdate() {
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+
+    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    $found = false;
+    while ( is_array ( $row ) ) {
+      if ( strtolower($row['Trigger'] == 'APP_DELEGATION_UPDATE') && strtoupper($row['Table']) == 'APP_DELEGATION' ) {
+        $found = true;
+      }
+      $rs->next();
+      $row = $rs->getRow();
+    }
+
+    if ( ! $found ) {
+      $filenameSql = $this->pathToAppCacheFiles . '/triggerAppDelegationUpdate.sql';
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+      $sql = file_get_contents ( $filenameSql );
+      $stmt->executeQuery($sql);
+      return 'created';
+    }
+    return 'exists';
+  }
+
+  /**
+   * update the Application triggers
+   * @return void
+   */
+  function triggerApplicationUpdate() {
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+
+    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    $found = false;
+    while ( is_array ( $row ) ) {
+      if ( strtolower($row['Trigger'] == 'APPLICATION_UPDATE') && strtoupper($row['Table']) == 'APPLICATION' ) {
+        $found = true;
+      }
+      $rs->next();
+      $row = $rs->getRow();
+    }
+
+    if ( ! $found ) {
+      $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate.sql';
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+      $sql = file_get_contents ( $filenameSql );
+      $stmt->executeQuery($sql);
+      return 'created';
+    }
+    return 'exists';
+  }
+  
 } // AppCacheView
