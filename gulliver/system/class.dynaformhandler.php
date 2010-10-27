@@ -221,6 +221,10 @@ class dynaFormHandler
   */
   function save($fname=null)
   {
+    if( ! is_writable($this->xmlfile) ) {
+      throw new Exception("The file {$this->xmlfile} is not writeable!");
+    }
+
     if( !isset($fname) ){
       $this->dom->save($this->xmlfile);
     } else {

@@ -204,6 +204,7 @@ class i18n_PO
     $this->flagError      = false;
     $this->flagInit       = true;
     $this->lineNumber     = 0;
+    $errMsg = '';
     
     while( ! $this->flagError  && ! $this->flagEndHeaders ) {
       
@@ -215,9 +216,10 @@ class i18n_PO
         $secondLine = fgets($this->_fp);
 
         //verifying the file head
-        if( strpos($firstLine, 'msgid ""') === false || strpos($secondLine, 'msgstr ""') === false )
+        if( strpos($firstLine, 'msgid ""') === false || strpos($secondLine, 'msgstr ""') === false ){
           $this->flagError = true;
-
+          $errMsg = 'Misplace for firts msgid "" and msgstr "" in the header';
+        }
         continue;
       }
       
@@ -248,8 +250,10 @@ class i18n_PO
     //verifying the headers data
     if( ! isset($this->_meta['X-Poedit-Language']) ) {
       $this->flagError = true;
+      $errMsg = "X-Poedit-Language meta doesn't exist";
     } else if ( $this->_meta['X-Poedit-Language'] == '' ) {
       $this->flagError = true;
+      $errMsg = "X-Poedit-Language meta is empty";
     }
 
     //if the country is not present in metadata
@@ -261,7 +265,7 @@ class i18n_PO
     
     //thowing the exception if is necesary
     if( $this->flagError ){
-      throw new Exception('This file is not a valid PO file.');
+      throw new Exception("This file is not a valid PO file. ($errMsg)");
     }
   }
 
