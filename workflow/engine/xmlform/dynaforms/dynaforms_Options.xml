@@ -75,14 +75,23 @@
   }
 
   function dynaformSave ( form, bOpen ) {
-    if (!bOpen) {
-      ajax_post( form.action, form, 'POST' );
-      lastPopupWindow.remove();
-      @#PAGED_TABLE_ID.refresh();
-    }
-    else {
-      ajax_post( form.action, form, 'POST', openDynaform );
-    }
+   var nameDynaForm = getField('DYN_TITLE').value;
+   var proUid = getField('PRO_UID').value;
+   reqName=ajax_function(form.action,'lookforNameDynaform','NAMEDYNAFORM='+encodeURIComponent(nameDynaForm)+'&proUid='+encodeURIComponent(proUid),'POST') ;
+
+   if(!reqName){
+   		alert(G_STRINGS.ID_EXIST_DYNAFORM);return false;
+   }else{
+	   if (!bOpen) {
+	      ajax_post( form.action, form, 'POST' );
+	      lastPopupWindow.remove();
+	      @#PAGED_TABLE_ID.refresh();
+	    }
+	    else {
+	      ajax_post( form.action, form, 'POST', openDynaform );
+	    }
+   }
+  
   }
 
   function dynaformSavePMBasedForm ( form, bOpen ) {

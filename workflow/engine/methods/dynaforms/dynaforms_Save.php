@@ -26,24 +26,64 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   //G::genericForceLogin( 'WF_MYINFO' , 'login/noViewPage', $urlLogin = 'login/login' );
 
   require_once('classes/model/Dynaform.php');
+  require_once('classes/model/Content.php');
+  
+  
+  $sfunction =$_POST['function'];
+  switch($sfunction){
+  case 'lookforNameDynaform':
+  
+  $snameDyanform=urldecode($_POST['NAMEDYNAFORM']);
+  $sPRO_UID=urldecode($_POST['proUid']);
+	  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID  );
+    $oCriteria->add(DynaformPeer::PRO_UID, $sPRO_UID);
+    $oDataset = DynaformPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $flag=true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+          
+      $oCriteria1 = new Criteria('workflow');
+	    $oCriteria1->addSelectColumn('COUNT(*) AS DYNAFORMS');
+	    $oCriteria1->add(ContentPeer::CON_CATEGORY, 'DYN_TITLE');
+	    $oCriteria1->add(ContentPeer::CON_ID,    $aRow['DYN_UID']);  
+	    $oCriteria1->add(ContentPeer::CON_VALUE,    $snameDyanform);
+	    $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);     
+	    $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+	    $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+	    $oDataset1->next();
+	    $aRow1 = $oDataset1->getRow();
 
-  $dynaform = new dynaform();
-
-  if ($_POST['form']['DYN_UID']==='') unset($_POST['form']['DYN_UID']);
-
-  if (isset($_POST['form']['DYN_UID']))
-  {
-    $dynaform->Save( $_POST['form'] );
-  }
-  else
-  {
-    if (!isset($_POST['form']['ADD_TABLE'])||$_POST['form']['ADD_TABLE']==""){
-        $aFields=$dynaform->create( $_POST['form'] );
-    } else {
-        $aFields=$dynaform->createFromPMTable( $_POST['form'], $_POST['form']['ADD_TABLE']);
+	    if($aRow1['DYNAFORMS'])$flag=false;
+     
+      
     }
-    $_POST['form']['DYN_UID']=$dynaform->getDynUid();
-    $dynaform->update( $_POST['form'] );
-  }
-  echo $dynaform->getDynUid();
+    print $flag;
+  
+  break;
+  default:
+		
+		  $dynaform = new dynaform();
+		
+		  if ($_POST['form']['DYN_UID']==='') unset($_POST['form']['DYN_UID']);
+		
+		  if (isset($_POST['form']['DYN_UID']))
+		  {
+		    $dynaform->Save( $_POST['form'] );
+		  }
+		  else
+		  {
+		    if (!isset($_POST['form']['ADD_TABLE'])||$_POST['form']['ADD_TABLE']==""){
+		        $aFields=$dynaform->create( $_POST['form'] );
+		    } else {
+		        $aFields=$dynaform->createFromPMTable( $_POST['form'], $_POST['form']['ADD_TABLE']);
+		    }
+		    $_POST['form']['DYN_UID']=$dynaform->getDynUid();
+		    $dynaform->update( $_POST['form'] );
+		  }
+		  echo $dynaform->getDynUid();
+	 break;
+	}
 ?>
