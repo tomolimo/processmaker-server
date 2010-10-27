@@ -27,21 +27,21 @@ $access = $RBAC->userCanAccess('PM_SETUP');
 if( $access != 1 ){
   switch ($access)
   {
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	default:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;  	
+    case -1:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+    break;
+    case -2:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+    break;
+    default:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+    break;    
   }
 }  
   // lets display the items
@@ -55,12 +55,14 @@ if( $access != 1 ){
       $filename = substr ( $file,0, strrpos($file, '.'));
 
       // list of no complete skins
-      $aFilterSkinsList = Array('blank', 'green', 'raw', 'tracker', 'iphone', 'green-submenu');
+      $aFilterSkinsList = Array('blank', 'green', 'raw', 'tracker', 'iphone', 'green-submenu', 'extJsInitLoad', 'extJs' );
       
-      if ( !in_array($filename, $aFilterSkinsList) && $filename != 'blank' && substr($file,0,1) != '.' ) {
-        if ( !isset($aFiles[ $filename ]) ) $aFiles[$filename] = 0;
-        if ( strpos($file, '.php', 1) ) $aFiles[ $filename ] += 1;
-        if ( strpos($file, '.html',1) ) $aFiles[ $filename ] += 2;
+      if ( !is_dir(PATH_SKINS. $file) ) {
+        if ( !in_array($filename, $aFilterSkinsList) /*&& /*/ && !strpos($file, '.tar', 1) ) {
+          if ( !isset($aFiles[ $filename ]) ) $aFiles[$filename] = 0;
+          if ( strpos($file, '.php', 1) ) $aFiles[ $filename ] += 1;
+          if ( strpos($file, '.html',1) ) $aFiles[ $filename ] += 2;
+        }
       }
     }
 
@@ -78,7 +80,7 @@ if( $access != 1 ){
         $prop = unserialize ( $serial );
         error_reporting( $previousErrorRep );
         if ( !is_object( $prop ) ) {
-          unlink ( PATH_SKINS . $key . '.cnf');
+          @unlink ( PATH_SKINS . $key . '.cnf');
         }
         if ( isset ( $prop) && isset($prop->description) ) $description = $prop->description;
         if ( isset ( $prop) && isset($prop->version    ) ) $version     = $prop->version;

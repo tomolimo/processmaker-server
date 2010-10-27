@@ -187,4 +187,5 @@ switch ($RBAC->userCanAccess('PM_SETUP'))
   $bDownload = true;
   G::streamFile ( $fileTar, $bDownload, basename($fileTar) );
   
-  
+  @G::rm_dir ($pathHome);
+  @unlink ($fileTar);

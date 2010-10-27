@@ -25,7 +25,7 @@
  
 
   function xcopy ( $pathSource, $pathTarget ) {
-  	G::mk_dir ($pathTarget);
+    G::mk_dir ($pathTarget);
     if ($handle = opendir( $pathSource )) {
       while ( false !== ($file = readdir($handle))) {
         if ( substr($file,0,1) != '.' && !is_dir ($file)  ) {
@@ -60,7 +60,7 @@ switch ($RBAC->userCanAccess('PM_SETUP'))
     include('version-pmos.php');
   }
   else {
-    define('PM_VERSION', '1.2.2740');
+    define('PM_VERSION', '1.8.320');
   } 
 
   $id   = strip_tags ( str_replace ( ' ', '_', trim ($_POST['form']['NAME']) ) );
@@ -89,12 +89,14 @@ switch ($RBAC->userCanAccess('PM_SETUP'))
   $pathImages = PATH_HTML . 'skins' . PATH_SEP . $id . PATH_SEP . 'images' . PATH_SEP;
   G::mk_dir ( $pathImages );
   
-	xcopy ( 
-  	        PATH_HTML . 'skins' . PATH_SEP . 'green' . PATH_SEP ,
-  	        PATH_HTML . 'skins' . PATH_SEP . $id . PATH_SEP );
+  xcopy ( 
+    PATH_HTML . 'skins' . PATH_SEP . 'green' . PATH_SEP ,
+    PATH_HTML . 'skins' . PATH_SEP . $id . PATH_SEP 
+  );
 
   xcopy ( 
-  	        PATH_HTML . 'skins' . PATH_SEP . 'green' . PATH_SEP . 'images'. PATH_SEP,
-  	        PATH_HTML . 'skins' . PATH_SEP . $id . PATH_SEP . 'images'. PATH_SEP );
+    PATH_HTML . 'skins' . PATH_SEP . 'green' . PATH_SEP . 'images'. PATH_SEP,
+    PATH_HTML . 'skins' . PATH_SEP . $id . PATH_SEP . 'images'. PATH_SEP 
+  );
 
   G::Header ( 'Location: ../../' . $id . '/setup/skinsList' ); 
