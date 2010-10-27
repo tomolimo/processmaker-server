@@ -64,11 +64,15 @@ function saveNewRole()
 				  	});
 					oRPC.make();
 					$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;	
+				history.go(0);
+        rredir();
 				}.extend(this);
 				oRPC.make();
 				currentPopupWindow.remove();
+        
 		  	}
-		  	else{
+		  	
+		  	if(!eval(ajax.responseText.trim())){
 			 	new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG2});
 				return false;
 		  	}
@@ -77,7 +81,9 @@ function saveNewRole()
 	ajax.send(uri);
 
 }
-
+var rredir=function(){
+  parent.users.location='roles_List';
+}
 
 function editRole(ROL_UID)
 {  	
@@ -94,7 +100,7 @@ function editRole(ROL_UID)
 
 function updateRole(ROL_UID) {
   
-  	code = $('form[ROL_CODE]').value;
+  code = $('form[ROL_CODE]').value;
 	name = $('form[ROL_NAME]').value;
 	if(code == '') {
 		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG1});
@@ -127,11 +133,13 @@ function updateRole(ROL_UID) {
 		oRPC.make();
 		$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;
 		currentPopupWindow.remove();
+		history.go(0);
+    rredir();
 	}.extend(this);
 	oRPC.make();
 };
 
-function deleteRole(ROL_UID) {		
+function deleteRole(ROL_UID) {
 	 		var uri = 'request=canDeleteRole&ROL_UID='+ROL_UID;
 			var ajax = AJAX();
 			ajax.open("POST", PROCESS_REQUEST_FILE, true);
@@ -159,6 +167,8 @@ function deleteRole(ROL_UID) {
 							  	});
 								oRPC.make();
 								$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;
+							history.go(0);
+							rredir();
 							}.extend(this);
 							oRPC.make();
 							
