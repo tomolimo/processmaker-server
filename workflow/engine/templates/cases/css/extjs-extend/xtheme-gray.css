@@ -172,16 +172,19 @@
 	content:'';
 }
 
-.x-grid3-row{
+.x-grid3-row-selected{
+	background-color:#F6E095 !important;
+}
+/*Checkboxes*/
+.grid_with_checkbox .x-grid3-row{
 	background-image:url(/images/icons_silk/unchecked.png) !important;
 	background-repeat: no-repeat !important;
 	padding-left:18px !important;
 }
 
-.x-grid3-row.x-grid3-row-selected{
+.grid_with_checkbox .x-grid3-row.x-grid3-row-selected{
 	/*background:#F6E095 !important;*//*#FFE195*/
 	/*#F6E095*/
-	background-color:#F6E095 !important;
 	background-image:url(/images/icons_silk/checked.png) !important;
 	background-repeat: no-repeat !important;
 	padding-left:18px !important;
@@ -305,9 +308,6 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 	background-image:url(/images/icons_silk/sprites.png) !important;
 	background-position:0 -2683px !important;
 }
-#startCaseTreePanel .x-tree-elbow-end-minus,#startCaseTreePanel .x-tree-elbow-end-plus{
+#startCaseTreePanel .x-tree-elbow-end-minus,#startCaseTreePanel .x-tree-elbow-end-plus,#startCaseTreePanel .x-tree-node-indent{
 	display:none;
 }
-
-
-
