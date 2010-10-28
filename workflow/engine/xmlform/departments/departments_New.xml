@@ -24,6 +24,7 @@
   <en>Save</en>
 </button> 
 <JS type="javascript" replacetags="1">
+<![CDATA[
 	document.onkeypress=function(e){
 var esIE=(document.all);
 var esNS=(document.layers);
@@ -33,22 +34,23 @@ if(tecla==13){
   }
 }
 
-getField('DEP_TITLE').value ='';
+//getField('DEP_TITLE').value ='';
 var sGroupname;
-//sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
-
+sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
 var verifyDptoname = function()
 { 
   document.forms[0].elements['form[DEP_TITLE]'].disabled = true;
   document.forms[0].elements['form[button]'].disabled = true;    
+  
+  var newvar =(typeof(this.value)=="undefined" )?getField('DEP_TITLE').value:this.value;
+  
   var oRPC = new leimnud.module.rpc.xmlhttp({
     url    :'departments_Ajax',
     async  : false,
     method :'POST',
-    args   :'action=verifyDptoname&amp;sOriginalGroupname=' + sGroupname + '&amp;sGroupname=' + encodeURIComponent(this.value)});
+    args   :'action=verifyDptoname&sOriginalGroupname=' + sGroupname + '&sGroupname=' + encodeURIComponent(newvar)});
   oRPC.make();
   var sResponse = oRPC.xmlhttp.responseText; 
-  
   document.forms[0].elements['form[DEP_TITLE]'].disabled = false;
   if (sResponse == '1')
   {
@@ -59,7 +61,7 @@ var verifyDptoname = function()
   }
   else
   { 
-    document.forms[0].elements['form[button]'].disabled = false;
+  	getField('button').disabled= false;
   }
 };
   
@@ -86,7 +88,7 @@ var validateLocalFields = function(oForm){
 function cancel(){
     currentPopupWindow.remove();
 }
-
+]]>
 </JS>
 
 </dynaForm>  
