@@ -36,7 +36,45 @@ try {
   	  die;
   	break;
   }
+  
+  
+  $sfunction =$_POST['function']; 
+  
+  switch($sfunction){
+  case 'lookForNameOutput':
+	require_once('classes/model/Content.php');
+  require_once ( "classes/model/OutputDocument.php" );
+  
+  $snameInput=urldecode($_POST['NAMEOUTPUT']);
+  $sPRO_UID=urldecode($_POST['proUid']);
+	  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn ( OutputDocumentPeer::OUT_DOC_UID    );
+    $oCriteria->add(OutputDocumentPeer::PRO_UID, $sPRO_UID);
+    $oDataset = OutputDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $flag=true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+          
+      $oCriteria1 = new Criteria('workflow');
+	    $oCriteria1->addSelectColumn('COUNT(*) AS OUTPUTS');
+	    $oCriteria1->add(ContentPeer::CON_CATEGORY, 'OUT_DOC_TITLE');
+	    $oCriteria1->add(ContentPeer::CON_ID,    $aRow['OUT_DOC_UID']);  
+	    $oCriteria1->add(ContentPeer::CON_VALUE,    $snameInput);
+	    $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);     
+	    $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+	    $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+	    $oDataset1->next();
+	    $aRow1 = $oDataset1->getRow();
 
+	    if($aRow1['OUTPUTS'])$flag=false;
+	  }
+    print $flag;	  
+	  break;
+	  
+  default:
+  
   require_once 'classes/model/OutputDocument.php';
   G::LoadClass( 'processMap' );
   
@@ -63,7 +101,8 @@ try {
   //refresh dbarray with the last change in outputDocument
   $oMap = new processMap();
   $oCriteria = $oMap->getOutputDocumentsCriteria($_POST['form']['PRO_UID']);
-    
+  break;
+ }
 }
 catch (Exception $oException) {
 	die($oException->getMessage());

@@ -112,11 +112,17 @@ var verifyTitle = function(oForm)
 		oAux1.focus();
 		bContinue = false;
 		return false;
-	}
-     else{
-		outputdocsPropertiesSave(oForm);
-
-     }
+	} else {
+	  var nameOutPut = getField('OUT_DOC_TITLE').value;
+	  var proUid = getField('PRO_UID').value;
+	  
+	  reqName=ajax_function(oForm.action,'lookForNameOutput','NAMEOUTPUT='+encodeURIComponent(nameOutPut)+'&proUid='+encodeURIComponent(proUid),'POST') ;
+	  if(reqName){
+		 outputdocsPropertiesSave(oForm);
+    } else {
+	   alert(G_STRINGS.ID_EXIST_OUTPUTDOCUMENT);return false;
+	  }
+  }
 
 }
 
