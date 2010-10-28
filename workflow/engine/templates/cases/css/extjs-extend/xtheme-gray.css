@@ -148,9 +148,7 @@
 
 
 /*Tables*/
-.x-grid3-cell-inner{
-/*	font-size:12px;*/
-}
+.x-grid3-cell-inner{}
 .x-grid3-row-table{
 	padding:0px 0;
 }
@@ -173,11 +171,23 @@
 .x-grid3-col-openLink a:after{
 	content:'';
 }
-.x-grid3-row-selected{
-	/*background:#F6E095 !important;*//*#FFE195*/
-	background:#F6E095 !important;
+
+.x-grid3-row{
+	background-image:url(/images/icons_silk/unchecked.png) !important;
+	background-repeat: no-repeat !important;
+	padding-left:18px !important;
 }
-/*#F6E095*/
+
+.x-grid3-row.x-grid3-row-selected{
+	/*background:#F6E095 !important;*//*#FFE195*/
+	/*#F6E095*/
+	background-color:#F6E095 !important;
+	background-image:url(/images/icons_silk/checked.png) !important;
+	background-repeat: no-repeat !important;
+	padding-left:18px !important;
+}
+
+
 /*
 Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 */
@@ -295,3 +305,9 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 	background-image:url(/images/icons_silk/sprites.png) !important;
 	background-position:0 -2683px !important;
 }
+#startCaseTreePanel .x-tree-elbow-end-minus,#startCaseTreePanel .x-tree-elbow-end-plus{
+	display:none;
+}
+
+
+
