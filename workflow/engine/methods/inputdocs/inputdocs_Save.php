@@ -37,22 +37,61 @@ try {
   	break;
   }
 
-  require_once 'classes/model/InputDocument.php';
-  G::LoadClass( 'processMap' );
   
-  $oInputDocument = new InputDocument();
-  if ($_POST['form']['INP_DOC_UID'] == '') {
-    unset($_POST['form']['INP_DOC_UID']);
-  	$oInputDocument->create($_POST['form']);
-  }
-  else {
-  	$oInputDocument->update($_POST['form']);
-  }
+  $sfunction =$_POST['function']; 
   
-  //refresh dbarray with the last change in inputDocument
-  $oMap = new processMap();
-  $oCriteria = $oMap->getInputDocumentsCriteria($_POST['form']['PRO_UID']);
+  switch($sfunction){
+  case 'lookForNameInput':
+	require_once('classes/model/Content.php');
+  require_once ( "classes/model/InputDocument.php" );
   
+  $snameInput=urldecode($_POST['NAMEINPUT']);
+  $sPRO_UID=urldecode($_POST['proUid']);
+	  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn ( InputDocumentPeer::INP_DOC_UID   );
+    $oCriteria->add(InputDocumentPeer::PRO_UID, $sPRO_UID);
+    $oDataset = InputDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $flag=true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+          
+      $oCriteria1 = new Criteria('workflow');
+	    $oCriteria1->addSelectColumn('COUNT(*) AS INPUTS');
+	    $oCriteria1->add(ContentPeer::CON_CATEGORY, 'INP_DOC_TITLE');
+	    $oCriteria1->add(ContentPeer::CON_ID,    $aRow['INP_DOC_UID']);  
+	    $oCriteria1->add(ContentPeer::CON_VALUE,    $snameInput);
+	    $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);     
+	    $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+	    $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+	    $oDataset1->next();
+	    $aRow1 = $oDataset1->getRow();
+
+	    if($aRow1['INPUTS'])$flag=false;
+	  }
+    print $flag;	  
+	  break;
+	  
+  default:
+  
+	  require_once 'classes/model/InputDocument.php';
+	  G::LoadClass( 'processMap' );
+	  
+	  $oInputDocument = new InputDocument();
+	  if ($_POST['form']['INP_DOC_UID'] == '') {
+	    unset($_POST['form']['INP_DOC_UID']);
+	  	$oInputDocument->create($_POST['form']);
+	  }
+	  else {
+	  	$oInputDocument->update($_POST['form']);
+	  }
+	  
+	  //refresh dbarray with the last change in inputDocument
+	  $oMap = new processMap();
+	  $oCriteria = $oMap->getInputDocumentsCriteria($_POST['form']['PRO_UID']);
+  break;
+ }
 }
 catch (Exception $oException) {
 	die($oException->getMessage());
