@@ -231,8 +231,9 @@ Ext.onReady(function(){
         })*/
         
       },
-      'afterrender': function(){
-        setDefaultOption();
+      'afterrender': {
+        fn: setDefaultOption,
+        scope: this
       }
       
     }
