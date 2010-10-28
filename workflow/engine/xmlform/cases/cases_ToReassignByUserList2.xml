@@ -25,7 +25,7 @@
 
 
 <USERS type="dropdownpt" colWidth="50">
-  <en>Reassign to</en>
+  <en>Reassign to </en><option name=" ">NONE</option>
 </USERS>
 
 <PAGED_TABLE_ID type="private" showInTable="0"/>
