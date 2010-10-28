@@ -4,7 +4,45 @@
 #pm_main_table{
 	padding:0 10px;
 }*/
-
+/*
+.FormTitle,.FormSubTitle{
+	background:#E0E7EF !important;
+}
+.mainMenuBG{
+	background-image:-webkit-gradient(    linear,    left bottom,    left top,    color-stop(0.2, rgb(96,145,171)),    color-stop(0.91, rgb(15,76,122))) !important;
+	background-image:-moz-linear-gradient(    center bottom,    rgb(96,145,171) 20%,    rgb(15,76,122) 91%) !important;
+	
+}
+*/
+ul#pm_menu{
+	list-style: none;
+	margin:0;
+	padding:0 0 0 13px;
+}
+ul#pm_menu li{
+	float:left;
+	margin:3px 2px 0 0;
+	padding:0;
+	-moz-border-radius:3px 3px 0 0;
+	border-radius:3px 3px 0 0;
+}
+ul#pm_menu a{
+	font-weight: bold;
+	color:#fff;
+	font-size:11px;
+	text-decoration: none;
+	display:block;
+	padding:4px 30px;
+	text-transform: uppercase;
+}
+ul#pm_menu li.SelectedMenu,ul#pm_menu li:hover{
+	background-color: #eee;
+	background-image: -webkit-gradient ( linear, left bottom, left top, color-stop(0.39, rgb(245,245,245)), color-stop(0.83, rgb(227,227,227))	);
+	background-image:  -moz-linear-gradient( center bottom, rgb(245,245,245) 39%, rgb(227,227,227) 83%	);
+}
+ul#pm_menu li.SelectedMenu a,ul#pm_menu li:hover a{
+	color:#333;
+}
 
 
 .button_pm{/*.module_app_button___gray,*/
@@ -32,7 +70,7 @@
 	text-shadow:0 1px 0px rgba(0,0,0,1);
 	border:none;
 }
-.button_pm:focus{
+.button_pm:focus,ul#pm_menu a:focus{
 	-moz-outline-style:none;
 	outline:none;
 }

@@ -25,16 +25,18 @@
 }
 
 .ICON_ADDITIONAL_TABLES{
-	/*ss_database*/
+	/*ss_database_table*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
-	background-position:0 -5581px !important;
+	background-position:0 -5815px !important;
 }
 
 .ICON_LANGUAGES{
 	/*ss_text_dropcaps*/
-	background-image:url( /images/icons_silk/sprites.png) !important;
-	background-position:0 -16255px !important;
+	background-image: url(/images/icon-languages.png) !important;
+	width:18px !important;
+	height:15px !important;
 }
+
 
 .ICON_PLUGINS{
 	/*ss_plugin*/
@@ -55,9 +57,9 @@
 }
 
 .ICON_WEBSERVICES{
-	/*ss_world*/
+	/*ss_server_connect*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
-	background-position:0 -17713px !important;
+	background-position:0 -14095px !important;
 }
 
 .ICON_SKINS{
@@ -123,9 +125,9 @@
 }
 
 .ICON_ROLES{
-	/*ss_pencil*/
+	/*ss_application_key*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
-	background-position:0 -12439px !important;
+	background-position:0 -325px !important;
 }
 
 .ICON_GROUPS{

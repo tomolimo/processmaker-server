@@ -308,6 +308,11 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 	background-image:url(/images/icons_silk/sprites.png) !important;
 	background-position:0 -2683px !important;
 }
-#startCaseTreePanel .x-tree-elbow-end-minus,#startCaseTreePanel .x-tree-elbow-end-plus,#startCaseTreePanel .x-tree-node-indent{
+#startCaseTreePanel .x-tree-elbow-end-minus,
+#startCaseTreePanel .x-tree-elbow-end-plus,
+#startCaseTreePanel .x-tree-elbow-minus,
+#startCaseTreePanel .x-tree-elbow-plus,
+#startCaseTreePanel .x-tree-elbow-line,
+#startCaseTreePanel .x-tree-node-indent{
 	display:none;
 }
