@@ -1,15 +1,24 @@
-.module_app_button___gray,.button_pm{
-	-moz-border-radius:10px;
+/*body{
+	background:#fff;
+}
+#pm_main_table{
+	padding:0 10px;
+}*/
+
+
+
+.button_pm{/*.module_app_button___gray,*/
+	-moz-border-radius:7px;
 	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
 	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5);
 	background-color:#EEE;
 	background-image: none;
-	border-radius:10px;
+	border-radius:7px;
 	color:#333;
 	font-size:10px;
 	font-weight:700;
 	margin:0px;
-	padding:3px 5px;
+	padding:2px 5px;
 	text-decoration:none;
 	line-height: 18px;
 	text-shadow:0 1px 0px rgba(255,255,255,1);
@@ -17,21 +26,25 @@
 	font-family: Arial,serif;
 	cursor:pointer;
 }
-.module_app_button___gray:hover,.button_pm:hover{
-	background-color:#666;
+.button_pm:hover{
+	background-color:#999;
 	color:#fff;
 	text-shadow:0 1px 0px rgba(0,0,0,1);
 	border:none;
 }
-.module_app_button___gray:focus,.button_pm:focus{
+.button_pm:focus{
 	-moz-outline-style:none;
 	outline:none;
 }
 input::-moz-focus-inner { border: 0; }
 /*Problem with the shadow*/
-.pagedTableDefault center .module_app_button___gray{
-	margin-bottom:5px;
+.module_app_button___gray{
+	margin:5px 0;
 }
+.x-btn.x-btn-noicon{
+	
+}
+
 .ss_sprite{
 	background-image:url( /images/icons_silk/sprites.png);
 	background-repeat:no-repeat;
@@ -169,31 +182,31 @@ input::-moz-focus-inner { border: 0; }
 .ss_building_go{background-position:4px -2269px}
 .ss_building_key{background-position:4px -2287px}
 .ss_building_link{background-position:4px -2305px}
-.ss_bullet_add{background-position:4px -2323px}
-.ss_bullet_arrow_bottom{background-position:4px -2341px}
-.ss_bullet_arrow_down{background-position:4px -2359px}
-.ss_bullet_arrow_top{background-position:4px -2377px}
-.ss_bullet_arrow_up{background-position:4px -2395px}
-.ss_bullet_black{background-position:4px -2413px}
-.ss_bullet_blue{background-position:4px -2431px}
-.ss_bullet_delete{background-position:4px -2449px}
-.ss_bullet_disk{background-position:4px -2467px}
-.ss_bullet_error{background-position:4px -2485px}
-.ss_bullet_feed{background-position:4px -2503px}
-.ss_bullet_go{background-position:4px -2521px}
-.ss_bullet_green{background-position:4px -2539px}
-.ss_bullet_key{background-position:4px -2557px}
-.ss_bullet_orange{background-position:4px -2575px}
-.ss_bullet_picture{background-position:4px -2593px}
-.ss_bullet_pink{background-position:4px -2611px}
-.ss_bullet_purple{background-position:4px -2629px}
-.ss_bullet_red{background-position:4px -2647px}
-.ss_bullet_star{background-position:4px -2665px}
-.ss_bullet_toggle_minus{background-position:4px -2683px}
-.ss_bullet_toggle_plus{background-position:4px -2701px}
-.ss_bullet_white{background-position:4px -2719px}
-.ss_bullet_wrench{background-position:4px -2737px}
-.ss_bullet_yellow{background-position:4px -2755px}
+.ss_bullet_add{background-position:4px -2323px;padding-left:22px}
+.ss_bullet_arrow_bottom{background-position:4px -2341px;padding-left:22px}
+.ss_bullet_arrow_down{background-position:4px -2359px;padding-left:22px}
+.ss_bullet_arrow_top{background-position:4px -2377px;padding-left:22px}
+.ss_bullet_arrow_up{background-position:4px -2395px;padding-left:22px}
+.ss_bullet_black{background-position:4px -2413px;padding-left:22px}
+.ss_bullet_blue{background-position:4px -2431px;padding-left:22px}
+.ss_bullet_delete{background-position:4px -2449px;padding-left:22px}
+.ss_bullet_disk{background-position:4px -2467px;padding-left:22px}
+.ss_bullet_error{background-position:4px -2485px;padding-left:22px}
+.ss_bullet_feed{background-position:4px -2503px;padding-left:22px}
+.ss_bullet_go{background-position:4px -2521px;padding-left:22px}
+.ss_bullet_green{background-position:4px -2539px;padding-left:22px}
+.ss_bullet_key{background-position:4px -2557px;padding-left:22px}
+.ss_bullet_orange{background-position:4px -2575px;padding-left:22px}
+.ss_bullet_picture{background-position:4px -2593px;padding-left:22px}
+.ss_bullet_pink{background-position:4px -2611px;padding-left:22px}
+.ss_bullet_purple{background-position:4px -2629px;padding-left:22px}
+.ss_bullet_red{background-position:4px -2647px;padding-left:22px}
+.ss_bullet_star{background-position:4px -2665px;padding-left:22px}
+.ss_bullet_toggle_minus{background-position:4px -2683px;padding-left:22px}
+.ss_bullet_toggle_plus{background-position:4px -2701px;padding-left:22px}
+.ss_bullet_white{background-position:4px -2719px;padding-left:22px}
+.ss_bullet_wrench{background-position:4px -2737px;padding-left:22px}
+.ss_bullet_yellow{background-position:4px -2755px;padding-left:22px}
 .ss_cake{background-position:4px -2773px}
 .ss_calculator{background-position:4px -2791px}
 .ss_calculator_add{background-position:4px -2809px}

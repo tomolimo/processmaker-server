@@ -71,7 +71,7 @@ Ext.onReady ( function() {
   }
 
   function deleteLink(value, p, r){
-    return String.format("<a class='button_pm ss_sprite ss_delete' href='#' onclick='deleteCaseFunction(\"{0}\")'>" + TRANSLATIONS.ID_DELETE + "</a>", r.data['APP_UID'] );
+    return String.format("<a class='button_pm ss_sprite ss_bullet_red' href='#' onclick='deleteCaseFunction(\"{0}\")'>" + TRANSLATIONS.ID_DELETE + "</a>", r.data['APP_UID'] );
   }
 
   function viewLink(value, p, r){
@@ -126,9 +126,9 @@ Ext.onReady ( function() {
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
 	 //Status images
-    if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
-  };
-
+    //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
+  }
+	/*
   function showStatusImage(value,p,r){
 	  if ( value == 'COMPLETED' )
       return String.format("<div class='ss_sprite ss_tick' style='display:block;padding-left:0' title='{0}'> </div>", value );
@@ -140,6 +140,7 @@ Ext.onReady ( function() {
       return String.format("<div class='ss_sprite ss_cancel' style='display:block;padding-left:0' title='{0}'> </div>", value );
 		else return String.format("{0}", value );
   }
+  */
   //adding the last column to open the cases_Open
 	//columns.push ( { header: "aaaaa", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'openLink'});
 //	columns.push ( { header: "xxxxxx", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'deleteLink'});

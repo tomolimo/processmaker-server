@@ -27,47 +27,41 @@
 
 
 .ICON_FOLDERS {
-   /* background-image: url(/images/cases-folders.png) !important;*/
 	/*.ss_folder_explore*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -7777px !important;
 }
 
 .ICON_CASES_FOLDERS {
-    background-image: url(/images/icons_silk/cases-inbox.png) !important;
+	/*background-image: url(/images/icons_silk/cases-inbox.png) !important;*/
 }
 
 .ICON_CASES_INBOX {
-    /*background-image: url(/images/cases-inbox.png) !important;*/
-	 /*ss_folder_page*/
-	 background-image:url( /images/icons_silk/sprites.png) !important;
+	/*ss_folder_page*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -7957px !important;
 }
 
 .ICON_CASES_DRAFT {
-    /*background-image: url(/images/cases-draft.png) !important;*/
-	 /*ss_pencil*/
+	/*ss_pencil*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -12439px !important;
 }
 
 .ICON_CASES_SENT {
-   /* background-image: url(/images/cases-outbox.png) !important;*/
-	/*.ss_page_white_go*/
+	/*ss_page_white_go*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -11773px !important;
 }
 
 .ICON_CASES_SELFSERVICE {
-    /*background-image: url(/images/cases-selfservice.png) !important;*/
-	 /* ss_arrow_rotate_anticlockwise */
+	/*ss_arrow_rotate_anticlockwise */
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -955px !important;
 }
 
 .ICON_CASES_PAUSED {
-    /*background-image: url(/images/cases-paused.png) !important;*/
-	 /*ss_clock*/
+	/*ss_clock*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -4033px !important;
 }
@@ -81,7 +75,6 @@
 }
 
 .ICON_CASES_FOLDERS {
-   /*background-image: url(/images/cases-documents.png) !important;*/
 	/*ss_report */
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -13213px !important;
@@ -90,43 +83,44 @@
 .ICON_SEARCHS {
     background-image: url(/images/cases-search.png) !important;
 	 /*ss_find*/
-	 /*background-image:url('/images/sprites.png') !important;
-	height:18px !important;
-	background-position:0 -7453px !important;*/
+	/*background-position:0 -7453px !important;*/
 }
 .ICON_CASES_SEARCH {
-	 /*ss_page_find*/
-	 background-image:url( /images/icons_silk/sprites.png) !important;
+	/*ss_page_find*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -11089px !important;
 }
 
 .ICON_ADMIN {
-    /*background-image: url(/images/cases-admin.png) !important;*/
 	 /*ss_user_suit*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -17371px !important;
 }
 
 .ICON_CASES_TO_REVISE {
-    background-image: url(/images/cases_torevise.png) !important;
+	/*ss_page_white_magnify*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -11881px !important;
 }
 
 .ICON_CASES_TO_REASSIGN {
-    background-image: url(/images/cases-reassing.png) !important;
+	/*ss_arrow_rotate_clockwise*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -973px !important;
 }
 
 .ICON_CASES_START_PAGE {
-    background-image: url(/images/pm.gif) !important;
+	/*ss_chart_pie*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -3925px !important;
 }
 .ICON_CASES_START_CASE {
 	/*ss_add*/
-    /*background-image: url(/images/addc.png) !important;*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -19px !important;
 }
 .ICON_CASES_HOME {
 	/*ss_house*/
-   /*background-image: url(/images/dialog-ok-apply.png) !important;*/
 	background-image:url(/images/icons_silk/sprites.png) !important;
 	background-position:0 -8497px !important;
 }
@@ -179,7 +173,11 @@
 .x-grid3-col-openLink a:after{
 	content:'';
 }
-
+.x-grid3-row-selected{
+	/*background:#F6E095 !important;*//*#FFE195*/
+	background:#F6E095 !important;
+}
+/*#F6E095*/
 /*
 Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 */
@@ -264,9 +262,36 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 .x-tab-strip-text.ICON_CASES_START_CASE{
 	background-position:0px -17px !important;
 }
+/*Dashboard*/
+.x-tab-strip-text.ICON_CASES_START_PAGE{
+	background-position:0px -3923px !important;
+}
 
 
 .row_updated{
 	/*background:#FFFDEF;*/
 	font-weight: bold;
+}
+
+/*STARTCASE RIGHT PANEL*/
+
+#process-detail-panel .details{
+
+}
+#process-detail-panel .details .details-info{
+	padding:10px;
+}
+#process-detail-panel .details .details-info table td{
+	padding:5px;
+}
+
+.icon-expand-all{
+	/*ss_bullet_toggle_plus*/
+	background-image:url(/images/icons_silk/sprites.png) !important;
+	background-position:0 -2701px !important;
+}
+.icon-collapse-all{
+	/*ss_bullet_toggle_minus*/
+	background-image:url(/images/icons_silk/sprites.png) !important;
+	background-position:0 -2683px !important;
 }
