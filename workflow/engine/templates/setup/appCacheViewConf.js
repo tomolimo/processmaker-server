@@ -3,45 +3,38 @@ Ext.onReady(function() {
   Ext.QuickTips.init();
 
   // turn on validation errors beside the field globally
-    Ext.form.Field.prototype.msgTarget = 'side';
+  Ext.form.Field.prototype.msgTarget = 'side';
 
-    var bd = Ext.getBody();
+  var bd = Ext.getBody();
 
-    // bd.createChild({tag: 'h2', html: 'Form 2 - Adding fieldsets'});
+  // bd.createChild({tag: 'h2', html: 'Form 2 - Adding fieldsets'});
 
- // proxy
-    proxy = new Ext.data.HttpProxy( {
-      url : 'appCacheViewAjax?request=info'
-    });
+  // proxy
+  proxy = new Ext.data.HttpProxy( {
+    url : 'appCacheViewAjax?request=info'
+  });
 
-    // reader
-    var reader = new Ext.data.JsonReader( {
-      root : 'info',
-      fields : [ {
-        name : 'name'
-      }, {
-        name : 'value'
-      } ]
-    })
+  // reader
+  var reader = new Ext.data.JsonReader( {
+    root : 'info',
+    fields : [ {name : 'name'}, {name : 'value'} ]
+  })
 
-    // Store
-    var store = new Ext.data.Store( {
-      proxy : proxy,
-      reader : reader
-    });
-    store.load();
+  // Store
+  var store = new Ext.data.Store( {
+    proxy : proxy,
+    reader : reader
+  });
+  store.load();
 
-    // manually load local data
-    //store.loadData(myData);
-
-    // create the Grid
-    var infoGrid = new Ext.grid.GridPanel( {
-      store : store,
-      columns : [ {
-          id : 'name',
-          header : '',
-          width : 190,
-          sortable : false,
+  // create the Grid
+  var infoGrid = new Ext.grid.GridPanel( {
+    store : store,
+    columns : [ {
+      id : 'name',
+      header : '',
+      width : 190,
+      sortable : false,
           dataIndex : 'name'
         }, {
           header : '',

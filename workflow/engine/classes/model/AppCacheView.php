@@ -829,7 +829,7 @@ class AppCacheView extends BaseAppCacheView {
    * populate (fill) the table APP_CACHE_VIEW
    * @return void
    */
-  function fillAppCacheView () {
+  function fillAppCacheView ( $lang ) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
     
@@ -840,12 +840,16 @@ class AppCacheView extends BaseAppCacheView {
     $cant = $row1['CANT'];
     //print " $cant rows in app_delegation<br>"; 
     if ( $cant == 0 ) {
+      $sql ="truncate table APP_CACHE_VIEW ";  
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+
       $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view_insert.sql';
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file app_cache_view_insert.sql doesn't exists ") );
 
       $sql = explode ( ';', file_get_contents ( $filenameSql ) );
       foreach ( $sql as $key => $val ) 
+        $val = str_replace('{lang}', $lang, $val);      
         $stmt->executeQuery($val);
     }
     return 'done';
@@ -856,7 +860,7 @@ class AppCacheView extends BaseAppCacheView {
    * Insert an app delegatiojn trigger
    * @return void
    */
-  function triggerAppDelegationInsert() {
+  function triggerAppDelegationInsert( $lang ) {
     $con = Propel::getConnection("root");
     $stmt = $con->createStatement();
 
@@ -876,6 +880,7 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationInsert.sql doesn't exists ") );
       $sql = file_get_contents ( $filenameSql );
+      $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
       return 'created';
     }
@@ -887,7 +892,7 @@ class AppCacheView extends BaseAppCacheView {
    * update the App Delegation triggers
    * @return void
    */
-  function triggerAppDelegationUpdate() {
+  function triggerAppDelegationUpdate( $lang ) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
@@ -908,6 +913,7 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
       $sql = file_get_contents ( $filenameSql );
+      $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
       return 'created';
     }
@@ -918,7 +924,7 @@ class AppCacheView extends BaseAppCacheView {
    * update the Application triggers
    * @return void
    */
-  function triggerApplicationUpdate() {
+  function triggerApplicationUpdate( $lang ) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
@@ -939,6 +945,7 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
       $sql = file_get_contents ( $filenameSql );
+      $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
       return 'created';
     }

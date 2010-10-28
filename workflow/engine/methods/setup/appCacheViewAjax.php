@@ -68,33 +68,24 @@
       
       //now check if we have the triggers installed
       //APP_DELEGATION INSERT 
-      $res = $appCache->triggerAppDelegationInsert();
+      $res = $appCache->triggerAppDelegationInsert($lang);
       $result->info[] = array ('name' => 'Trigger APP_DELEGATION INSERT',           'value'=> $res);
 
       //APP_DELEGATION Update 
-      $res = $appCache->triggerAppDelegationUpdate();
+      $res = $appCache->triggerAppDelegationUpdate($lang);
       $result->info[] = array ('name' => 'Trigger APP_DELEGATION UPDATE',           'value'=> $res);
 
       //APPLICATION UPDATE 
-      $res = $appCache->triggerApplicationUpdate();
+      $res = $appCache->triggerApplicationUpdate($lang);
       $result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
 
       //build?
-      $res = $appCache->fillAppCacheView();
+      $res = $appCache->fillAppCacheView($lang);
       $result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
 
       //show language
       $result->info[] = array ('name' => 'Language',         'value'=> $lang );
 
-/*
-      $result->info = Array(
-        Array('name'=>'Cache Table', 'value'=>"[$tableExists]"),
-        Array('name'=>'Records in Cache Table', 'value'=>"[$count]"),
-        Array('name'=>'Cache Table Triggers', 'value'=>"[]"),
-        Array('name'=>'Language', 'value'=>"[$lang]"),
-        Array('name'=>'Status', 'value'=>"[$status]")
-      );
-*/      
       echo G::json_encode($result);
       break;
     
