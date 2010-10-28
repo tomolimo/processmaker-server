@@ -19,7 +19,7 @@
   $conf = new Configurations();
   try {
   	// the setup for search is the same as the Sent (participated)
-    $confCasesList = $conf->getConfiguration('casesList', $action=='search' ? 'sent': $action );
+    $confCasesList = $conf->getConfiguration('casesList', $action=='search' ? 'search': $action );
   } 
   catch (Exception $e){
     $confCasesList = array();
@@ -369,17 +369,17 @@
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
-  
+
   function getParticipated() {
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' =>'sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
-    $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER', 'width' => 90 );
-    $caseColumns[] = array( 'header' =>'Last Modify',  'dataIndex' => 'APP_UPDATE_DATE',  'width' => 110 );
-    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER', 'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Last Modify',  'dataIndex' => 'APP_UPDATE_DATE',  'width' => 80 );
+    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',       'width' => 50 );
     
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
@@ -393,6 +393,38 @@
     $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
     $caseReaderFields[] = array( 'name' => 'DEL_TASK_DUE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
+    $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
+    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
+   }
+
+   function getSearch() {
+    $caseColumns = array ();
+    $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
+    $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 100 );
+    $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER', 'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Last Modify',     'dataIndex' => 'APP_UPDATE_DATE',  'width' => 80 );
+    $caseColumns[] = array( 'header' =>'Delegation Date', 'dataIndex' => 'DEL_DELEGATE_DATE','width' => 80 );
+    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',      'width' => 50 );
+
+    $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
+    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
+    $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
+    $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
+    $caseReaderFields[] = array( 'name' => 'DEL_TASK_DUE_DATE' );
+    $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
+    $caseReaderFields[] = array( 'name' => 'DEL_DELEGATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
@@ -536,7 +568,9 @@ function getAdditionalFields($action, $confCasesList){
       case 'draft' :
         $config = getDraft();
         break;
-      case 'search' :      
+      case 'search' :
+        $config = getSearch();
+        break;
       case 'participated' :
         $config = getParticipated();
         break;
