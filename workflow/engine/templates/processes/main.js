@@ -226,11 +226,11 @@ Ext.onReady(function(){
       {
         text:'X',
         handler: function(){
-          store.setBaseParam( 'category', '<reset>');
+          //store.setBaseParam( 'category', '<reset>');
           store.setBaseParam( 'processName', '');
           store.load({params:{start : 0 , limit : '' }});
           Ext.getCmp('searchTxt').setValue('');
-          comboCategory.setValue('');
+          //comboCategory.setValue('');
           //store.reload();
         }
       }
