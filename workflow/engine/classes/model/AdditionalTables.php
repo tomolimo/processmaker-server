@@ -1,3 +1,4 @@
+
 <?php
 
 require_once 'classes/model/om/BaseAdditionalTables.php';
@@ -876,7 +877,13 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       $aData = $this->load($sUID, true);
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
       $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
-      require_once $sPath . $sClassName . '.php';
+
+      if (file_exists ($sPath . $sClassName . '.php') ) { 
+        require_once $sPath . $sClassName . '.php';      
+      } else {
+      	return null;
+      } 
+      
       $sClassPeerName = $sClassName . 'Peer';
       $oCriteria = new Criteria('workflow');
       //eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
@@ -904,6 +911,24 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       throw($oError);
     }
   }
+
+  function checkClassNotExist($sUID) {
+    try {
+      $aData = $this->load($sUID, true);
+      $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+      $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
+
+      if (file_exists ($sPath . $sClassName . '.php') ) { 
+        return $sClassName;      
+      } else {
+      	return '';
+      }
+       
+    } catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
 
   function createXmlEdit($sUID, $bEnableKeys) {
     try {

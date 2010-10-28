@@ -66,6 +66,7 @@ function resetChecks(){
 }
 
 function doExport(){
+
 	if( checks_selected_ids.length == 0 ){
 		new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_SELECT_TABLE)'});
 		return 0;
@@ -81,6 +82,13 @@ function doExport(){
 		}
 	}
 		
+  var answer;
+  answer = ajax_function(@G::encryptlink('additionalTablesAjax'), 'existClass', 'tables='+checks_selected_ids+'&schema='+checks_selected_schema+"&data="+checks_selected_data, 'POST');
+  if(answer.length > 1){
+		new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_CLASS_TABLE_DOESNT_EXIST)' + answer });
+		return 0;
+  } 
+  
 		
 	exportPanel.loader.show();
     var oRPC = new leimnud.module.rpc.xmlhttp({
@@ -94,7 +102,7 @@ function doExport(){
 	  	var scs=rpc.xmlhttp.responseText.extractScript();
 	  	exportPanel.addContent(rpc.xmlhttp.responseText);
 	  	scs.evalScript();
- 	}.extend(this);
+ 	  }.extend(this);
     resetChecks();
     oRPC.make();
 }
