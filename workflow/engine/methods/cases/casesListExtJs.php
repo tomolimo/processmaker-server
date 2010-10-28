@@ -70,7 +70,7 @@
   $oHeadPublisher->assign( 'userValues',    $users);                          //sending the columns to display in grid
   $oHeadPublisher->assign( 'allUsersValues',$allUsers);                       //sending the columns to display in grid
   
-  $TRANSLATIONS = new stdClass();
+  
   $TRANSLATIONS->LABEL_GRID_LOADING          = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
   $TRANSLATIONS->LABEL_REFRESH               = G::LoadTranslation('ID_REFRESH_LABEL');
   $TRANSLATIONS->MESSAGE_REFRESH             = G::LoadTranslation('ID_REFRESH_MESSAGE');
@@ -88,6 +88,7 @@
   $TRANSLATIONS->LABEL_DISPLAY_ITEMS         = G::LoadTranslation('ID_DISPLAY_ITEMS');
   $TRANSLATIONS->LABEL_DISPLAY_EMPTY         = G::LoadTranslation('ID_DISPLAY_EMPTY');
   $TRANSLATIONS->LABEL_OPEN_CASE             = G::LoadTranslation('ID_OPEN_CASE');
+  
   $TRANSLATIONS->ID_CASESLIST_APP_UID        = G::LoadTranslation('ID_CASESLIST_APP_UID');
   $TRANSLATIONS->ID_CONFIRM                  = G::LoadTranslation('ID_CONFIRM');
   $TRANSLATIONS->ID_MSG_CONFIRM_DELETE_CASES = G::LoadTranslation('ID_MSG_CONFIRM_DELETE_CASES');
@@ -98,6 +99,9 @@
   $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
   $TRANSLATIONS->ID_CONFIRM_UNPAUSE_CASE     = G::LoadTranslation('ID_CONFIRM_UNPAUSE_CASE'); 		 			
   
+  $TRANSLATIONS->ID_PROCESS  = G::LoadTranslation('ID_PROCESS');
+  $TRANSLATIONS->ID_STATUS     = G::LoadTranslation('ID_STATUS');
+  $TRANSLATIONS->ID_USER      = G::LoadTranslation('ID_USER');
  				         
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   

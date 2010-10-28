@@ -271,19 +271,19 @@ Ext.onReady ( function() {
   var comboProcess = new Ext.form.ComboBox({
     width         : 180,
     boxMaxWidth   : 180,
-    editable      : false,
+    editable      : true,
     displayField  : 'APP_PRO_TITLE',
     valueField    : 'PRO_UID',
-    //typeAhead     : true,
-    mode          : 'local',
-    forceSelection: true,
-    triggerAction: 'all',
-    //emptyText: 'Select a process...',
+    forceSelection: false,
     emptyText: TRANSLATIONS.LABEL_EMPTY_PROCESSES,
     selectOnFocus: true,
-    //getListParent: function() {
-    //  return this.el.up('.x-menu');
-    //},
+
+
+    typeAhead: true,
+    mode: 'local',
+    autocomplete: true,
+    triggerAction: 'all',
+
     store         : new Ext.data.ArrayStore({
       fields: ['PRO_UID','APP_PRO_TITLE'],
       data  : processValues
@@ -439,18 +439,19 @@ Ext.onReady ( function() {
   var comboUser = new Ext.form.ComboBox({
     width         : 160,
     boxMaxWidth   : 180,
-    editable      : false,
+    editable      : true,
     displayField  : 'USR_FULLNAME',
     valueField    : 'USR_UID',
-    //typeAhead     : true,
     mode          : 'local',
-    forceSelection: true,
-    triggerAction: 'all',
-    //emptyText: 'Select a process...',
+    forceSelection: false,
+    emptyText: 'Select',
     selectOnFocus: true,
-    //getListParent: function() {
-    //  return this.el.up('.x-menu');
-    //},
+
+    typeAhead: true,
+    mode: 'local',
+    autocomplete: true,
+    triggerAction: 'all',
+    
     store         : new Ext.data.ArrayStore({
       fields: ['USR_UID','USR_FULLNAME'],
       data  : userValues
@@ -462,46 +463,83 @@ Ext.onReady ( function() {
         storeCases.setBaseParam( 'user', filterUser);
         storeCases.setBaseParam( 'start', 0);
         storeCases.setBaseParam( 'limit', pageSize);
+        storeCases.load();
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
   
   
   var textSearch = new Ext.form.TextField ({
-    allowBlank: false,
-    width: 90,
-//    emptyText: 'enter search term'
-    emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH
-  });
-
-  var btnSearch = new Ext.Button ({
-//    text: 'search',
-    text: TRANSLATIONS.LABEL_SEARCH,
-    handler: function(){
-      searchText = textSearch.getValue();
-      storeCases.setBaseParam( 'search', searchText);
-      storeCases.load({params:{ start : 0 , limit : pageSize }});
+    allowBlank: true,
+    width: 150,
+    emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH,
+    listeners: {
+      specialkey: function(f,e){
+        if (e.getKey() == e.ENTER) {
+          doSearch();
+        }
+      }
     }
   });
 
+  var btnSearch = new Ext.Button ({
+    text: TRANSLATIONS.LABEL_SEARCH,
+    handler: doSearch
+  });
+
+  var doSearch = function(){
+    searchText = textSearch.getValue();
+    storeCases.setBaseParam( 'search', searchText);
+    storeCases.load({params:{ start : 0 , limit : pageSize }});
+  }
+  
+  var resetSearchButton = {
+    text:'X',
+    handler: function(){
+      textSearch.setValue('');
+      doSearch();
+    }
+  }
+  
   var textJump = new Ext.form.TextField ({
     allowBlank: false,
     width: 50,
-//    emptyText: 'case Id'
-    emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID
+    emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID,
+    listeners: {
+      specialkey: function(f,e){
+        if (e.getKey() == e.ENTER) {
+          jump = textJump.getValue();
+          location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
+        }
+      }
+    }
   });
 
   var btnJump = new Ext.Button ({
-//    text: 'jump',
     text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
       jump = textJump.getValue();
       location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
     }
   });
-  
+
+
+  var dateFrom = new Ext.form.DateField({
+    id:'dateFrom',
+    format: 'Y-m-d',
+    width: 120,
+    value: ''
+  });
+
+  var dateTo = new Ext.form.DateField({
+    id:'dateTo',
+    format: 'Y-m-d',
+    width: 120,
+    value: ''
+  });
+
   var toolbarTodo = [
-      'process', 
+      TRANSLATIONS.ID_PROCESS, 
       comboProcess,
       '-',
       btnRead,
@@ -511,6 +549,7 @@ Ext.onReady ( function() {
       btnAll,
       '->', // begin using the right-justified button container 
       textSearch,
+      resetSearchButton,
       btnSearch,
       '-',
       textJump,
@@ -520,10 +559,11 @@ Ext.onReady ( function() {
     ];
 
   var toolbarDraft = [
-      'process', 
+      TRANSLATIONS.ID_PROCESS, 
       comboProcess,
       '->', // begin using the right-justified button container 
       textSearch,
+      resetSearchButton,
       btnSearch,
       '-',
       textJump,
@@ -533,10 +573,11 @@ Ext.onReady ( function() {
     ];
 
   var toolbarToRevise = [
-      'process',
+      TRANSLATIONS.ID_PROCESS,
       comboProcess,
       '->', // begin using the right-justified button container
       textSearch,
+      resetSearchButton,
       btnSearch,
       '-',
       textJump,
@@ -559,10 +600,10 @@ Ext.onReady ( function() {
     ];
 
   var toolbarSent = [
-      'process', 
+      TRANSLATIONS.ID_PROCESS, 
       comboProcess,
       '-',
-      'status', 
+      TRANSLATIONS.ID_STATUS, 
       comboStatus,
       '-',
       btnStarted,
@@ -572,6 +613,7 @@ Ext.onReady ( function() {
       btnAll,
       '->', // begin using the right-justified button container 
       textSearch,
+      resetSearchButton,
       btnSearch,
       '-',
       textJump,
@@ -580,31 +622,52 @@ Ext.onReady ( function() {
       ' '
     ];
 
+
+
   var toolbarSearch = [
-      'process', 
+      ' ',
+      'From date',
+      dateFrom,
+      ' ',
+      'To',
+      dateTo,
+      new Ext.Button ({
+        text: 'Filter',
+        handler: function(){
+          if(dateFrom.getValue() != '')
+            storeCases.setBaseParam('dateFrom', dateFrom.getValue());
+          if(dateTo.getValue() != '')
+            storeCases.setBaseParam('dateTo', dateTo.getValue());
+
+          storeCases.load({params:{ start : 0 , limit : pageSize }});
+        }
+      })
+    ];
+  
+  
+  
+  var firstToolbarSearch = new Ext.Toolbar({
+    /*renderTo: 'panel',*/
+    
+    region: 'north',
+    width: '100%',
+    autoHeight: true,
+    //height: 10,
+    // 'd mmm yyyy' is not valid, but I assume this is close?
+    items: [
+      ' ',
+      TRANSLATIONS.ID_PROCESS,
       comboProcess,
       '-',
-      'status', 
+      TRANSLATIONS.ID_STATUS,
       comboStatus,
       '-',
-      'user',
+      TRANSLATIONS.ID_USER,
       comboUser,
-      '->', // begin using the right-justified button container 
+      '->',
       textSearch,
-      btnSearch,
-      '-',
-    ];
-  if ( action == 'search' )
-  var firstToolbarSearch = new Ext.Toolbar({
-    renderTo: 'panel',
-    width: '100%',
-    height: 33,
-    items: [
-//      btnStarted,
-      '-',
-//      btnCompleted,
-      '-',
-//      btnAll
+      resetSearchButton,
+      btnSearch
     ]
   });
   
@@ -627,7 +690,8 @@ Ext.onReady ( function() {
     region: 'center',
     store: storeCases,
     cm: cm,
-    renderTo: 'cases-grid',
+    /*renderTo: 'cases-grid',*/
+    autoHeight: true,
     //frame: false,
     //autoHeight:true,
     //minHeight:400,
@@ -716,14 +780,26 @@ Ext.onReady ( function() {
       storeCases.load();
       //storeProcesses.load();
     }
-  
-  var viewport = new Ext.Viewport({
-    layout: 'fit',
+
+
+  $configViewport = {
+    layout: 'border',
     autoScroll: true,
-	 id:'viewportcases',
+	  id:'viewportcases',
     items: [grid]
-  });
+  }
+
+  if ( action == 'search' )
+    $configViewport.items.push(firstToolbarSearch);
+
+  var viewport = new Ext.Viewport($configViewport);
   
+  
+    
+
+  
+  
+
   if( parent.PANEL_EAST_OPEN ){
     parent.PANEL_EAST_OPEN = false;
     var debugPanel = parent.Ext.getCmp('debugPanel');      

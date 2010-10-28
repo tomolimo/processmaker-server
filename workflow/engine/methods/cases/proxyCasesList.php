@@ -13,8 +13,9 @@
   $status   = isset($_POST['status'])  ? strtoupper($_POST['status']) : '';
   $action   = isset($_GET['action'])   ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
   $type     = isset($_GET['type'])     ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
-
-  try {  	
+  $user     = isset($_POST['user'])    ? $_POST['user'] : '';
+  
+  try {
 
   G::LoadClass("BasePeer" );
   require_once ( "classes/model/AppCacheView.php" );
@@ -96,7 +97,22 @@
     $Criteria->add      (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
     $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
   }
+  
+  if ( $user != '' ) {
+    $Criteria->add      (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+    $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+  }
+/*
+  if ( $dateFrom != '' ) {
+    $Criteria->add      (AppCacheViewPeer::APP, $user, Criteria::EQUAL );
+    $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+  }
 
+  if ( $dateTo != '' ) {
+    $Criteria->add      (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+    $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+  }
+*/
   //add the filter 
   if ( $filter != '' ) {
   	switch ( $filter ) {
