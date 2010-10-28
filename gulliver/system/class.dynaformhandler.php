@@ -64,8 +64,10 @@ class dynaFormHandler
     $this->dom->preserveWhiteSpace = false;
     $this->dom->formatOutput = true;
     if( is_file($this->xmlfile) ) {
-      $this->dom->load($this->xmlfile);
-      $this->root = $this->dom->firstChild;
+      if ( @$this->dom->load($this->xmlfile) === true ) {
+        $this->root = $this->dom->firstChild;
+      } else
+        throw new Exception('Error: '.$this->xmlfile.' is a invalid xml file!');
     } else {
       throw new Exception('[Class dynaFormHandler] ERROR:  the ('.$this->xmlfile.') file doesn\'t exits!!');
     }
