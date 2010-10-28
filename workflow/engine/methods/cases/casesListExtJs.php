@@ -41,6 +41,10 @@
     array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'unpauseLink' ) );
   }
 
+  if ( $action == 'to_reassign' ) {
+    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'reassignLink' ) );
+  }
+
 //  if ( $action == 'cancelled' ) {
 //    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'reactivateLink' ) );
 //  }
@@ -53,6 +57,7 @@
   $processes = getProcessArray($action, $userUid );
   $status    = getStatusArray($action, $userUid );
   $users     = getUserArray($action, $userUid );
+  $allUsers  = getAllUsersArray($action);
   
  
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
@@ -63,6 +68,7 @@
   $oHeadPublisher->assign( 'statusValues',  $status );                        //sending the columns to display in grid
   $oHeadPublisher->assign( 'processValues', $processes);                      //sending the columns to display in grid
   $oHeadPublisher->assign( 'userValues',    $users);                          //sending the columns to display in grid
+  $oHeadPublisher->assign( 'allUsersValues',$allUsers);                       //sending the columns to display in grid
   
   $TRANSLATIONS = new stdClass();
   $TRANSLATIONS->LABEL_GRID_LOADING          = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
@@ -74,6 +80,7 @@
   $TRANSLATIONS->LABEL_OPT_STARTED           = G::LoadTranslation('ID_OPT_STARTED');
   $TRANSLATIONS->LABEL_OPT_COMPLETED         = G::LoadTranslation('ID_OPT_COMPLETED');
   $TRANSLATIONS->LABEL_EMPTY_PROCESSES       = G::LoadTranslation('ID_EMPTY_PROCESSES');
+  $TRANSLATIONS->LABEL_EMPTY_USERS           = G::LoadTranslation('ID_EMPTY_USERS');
   $TRANSLATIONS->LABEL_EMPTY_SEARCH          = G::LoadTranslation('ID_EMPTY_SEARCH');
   $TRANSLATIONS->LABEL_EMPTY_CASE            = G::LoadTranslation('ID_EMPTY_CASE');
   $TRANSLATIONS->LABEL_SEARCH                = G::LoadTranslation('ID_SEARCH');
@@ -85,6 +92,7 @@
   $TRANSLATIONS->ID_CONFIRM                  = G::LoadTranslation('ID_CONFIRM');
   $TRANSLATIONS->ID_MSG_CONFIRM_DELETE_CASES = G::LoadTranslation('ID_MSG_CONFIRM_DELETE_CASES');
   $TRANSLATIONS->ID_DELETE                   = G::LoadTranslation('ID_DELETE');
+  $TRANSLATIONS->ID_REASSIGN                 = G::LoadTranslation('ID_REASSIGN');
   $TRANSLATIONS->ID_VIEW                     = G::LoadTranslation('ID_VIEW');
   $TRANSLATIONS->ID_UNPAUSE                  = G::LoadTranslation('ID_UNPAUSE'); 		 			
   $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
@@ -152,7 +160,15 @@
            break;
       case 'to_revise' :
            $cProcess      = $oAppCache->getToReviseListCriteria($userUid);
-//           $cProcess      = $oAppCache->getPausedListCriteria($userUid);
+           break;
+      case 'to_reassign' :
+//           $cProcess      = $oAppCache->getToReassignListCriteria();
+             return $processes;
+           
+//           $params = array();
+//           $sqlString = BasePeer::createSelectSql($cProcess, $params);
+//           var_dump ($sqlString);
+
            break;
       case 'todo' :
       default:
@@ -204,6 +220,29 @@
     return $users;
   }
 
+  function getAllUsersArray ( $action ) {
+    global $oAppCache;
+    $status = array();
+    $users[] = array( '', G::LoadTranslation('ID_ALL_USERS') );
+    if ($action=='to_reassign') {
+      //now get users, just for the Search action
+      $cUsers = new Criteria('workflow');
+      $cUsers->clearSelectColumns ( );
+      $cUsers->addSelectColumn ( AppCacheViewPeer::USR_UID );
+      $cUsers->setDistinct();
+      $cUsers->addSelectColumn ( AppCacheViewPeer::APP_CURRENT_USER );
+      $cUsers->addAscendingOrderByColumn ( AppCacheViewPeer::APP_CURRENT_USER );
+      $oDataset = AppCacheViewPeer::doSelectRS($cUsers);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while($aRow = $oDataset->getRow()){
+        $users[] = array( $aRow['USR_UID'], $aRow['APP_CURRENT_USER'] );
+        $oDataset->next();
+      }
+    }
+    return $users;
+  }
+
   function getStatusArray ( $action, $userUid ) {
   	global $oAppCache;
     $status = array();
@@ -237,6 +276,9 @@
       case 'to_revise' :
            $cStatus       = $oAppCache->getToReviseListCriteria($userUid);
 //           $cStatus       = $oAppCache->getPausedListCriteria($userUid);
+           break;
+      case 'to_reassign' :
+           $cStatus       = $oAppCache->getToReassignListCriteria();
            break;
       case 'todo' :
       case 'draft' :
@@ -439,6 +481,31 @@
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
+  function getToReassign() {
+    $caseColumns = array ();
+    $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
+    $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER',  'width' => 90 );
+    $caseColumns[] = array( 'header' =>'Sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
+    $caseColumns[] = array( 'header' =>'Last Modify',  'dataIndex' => 'APP_UPDATE_DATE',   'width' => 110 );
+    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
+
+    $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
+    $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
+    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
+    $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
+    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
+  }
+
   /**
    * loads the PM Table field list from the database based in an action parameter
    * then assemble the List of fields with these data, for the configuration in cases list.
@@ -477,6 +544,9 @@ function getAdditionalFields($action, $confCasesList){
         break;
       case 'to_revise' :
         $config = getToRevise();
+        break;
+      case 'to_reassign' :
+        $config = getToReassign();
         break;
       case 'todo' :
       default : 

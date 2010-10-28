@@ -16,6 +16,7 @@ require_once 'classes/model/om/BaseAppCacheView.php';
  */
  
 require_once 'classes/model/Application.php';
+require_once 'classes/model/AppDelegation.php';
 require_once 'classes/model/AppDelay.php';
 require_once 'classes/model/AdditionalTables.php';
  
@@ -447,7 +448,7 @@ class AppCacheView extends BaseAppCacheView {
 
 
     //$c->add(AppDelegationPeer::DEL_PREVIOUS, '0', Criteria::NOT_EQUAL);
-    $Criteria->addGroupByColumn(ApplicationPeer::APP_UID);
+    $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
    
     return $Criteria;
   }
@@ -526,7 +527,7 @@ class AppCacheView extends BaseAppCacheView {
   function getSearchAllCount ( ) {
     $CriteriaCount  = new Criteria('workflow');
     //$CriteriaCount->add (ApplicationPeer::USR_UID, '', CRITERIA::NOT_EQUAL );
-    $totalCount = ApplicationPeer::doCount( $CriteriaCount);
+    $totalCount = AppCacheViewPeer::doCount( $CriteriaCount);
     
     return $totalCount;
   }
@@ -668,6 +669,77 @@ class AppCacheView extends BaseAppCacheView {
       return $oCriteria;
     }
   }
+
+  public function getAll($doCount='false'){
+    if ( $doCount ) {
+      $oCriteria  = new Criteria('workflow');
+    }
+    else {
+      $oCriteria = $this->addPMFieldsToCriteria('completed');
+    }
+    $oCriteria->add(
+      $oCriteria->getNewCriterion(
+        AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN'
+        )->addOr(
+        $oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'COMPLETED'
+          )->addAnd(
+            $oCriteria->getNewCriterion(
+              AppCacheViewPeer::DEL_PREVIOUS,0
+            )
+          )
+      )
+    );
+//    $oCriteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
+    return $oCriteria;
+  }
+
+  /**
+   * gets the ALL cases list criteria for count
+   * @return Criteria object $Criteria
+   */
+  function getAllCountCriteria () {
+  	return $this->getAll( true );
+  }
+
+  /**
+   * gets the ALL cases list criteria for list
+   * @return Criteria object $Criteria
+   */
+  function getAllListCriteria () {
+  	return $this->getAll( false );
+  }
+
+  public function getToReassign( $doCount ){
+    if ( $doCount ) {
+      $oCriteria  = new Criteria('workflow');
+    }
+    else {
+      $oCriteria = $this->addPMFieldsToCriteria('to_do');
+    }
+    $oCriteria->add($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'TO_DO')->addOr($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'DRAFT')));
+    $oCriteria->add(AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    $oCriteria->add(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
+    $oCriteria->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
+//    $oCriteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
+    return $oCriteria;
+  }
+
+  /**
+   * gets the ALL cases list criteria for count
+   * @return Criteria object $Criteria
+   */
+  function getToReassignCountCriteria () {
+  	return $this->getToReassign( true );
+  }
+
+  /**
+   * gets the ALL cases list criteria for list
+   * @return Criteria object $Criteria
+   */
+  function getToReassignListCriteria () {
+  	return $this->getToReassign( false );
+  }
+
 
   public function getDefaultFields (){
     return array (

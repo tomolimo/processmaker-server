@@ -62,6 +62,7 @@ function unpauseCaseFunction (appid, delindex) {
 
 Ext.onReady ( function() {
   var filterProcess = '';
+  var filterUser    = '';
   var caseIdToDelete = '';
   var caseIdToUnpause = '';
   var caseIndexToUnpause = '';
@@ -76,6 +77,10 @@ Ext.onReady ( function() {
 
   function viewLink(value, p, r){
     return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+  }
+
+  function reassignLink(value, p, r){
+    return String.format("<a href='../cases/cases_Reassign?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_REASSIGN + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
 
   function unpauseLink(value, p, r){
@@ -125,6 +130,7 @@ Ext.onReady ( function() {
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
+    if( c.id == 'reassignLink')             c.renderer = reassignLink;
 	 //Status images
     //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   }
@@ -291,7 +297,111 @@ Ext.onReady ( function() {
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
-  
+
+  var comboAllUsers = new Ext.form.ComboBox({
+    width         : 180,
+    boxMaxWidth   : 180,
+    editable      : false,
+    displayField  : 'USR_FULLNAME',
+    valueField    : 'USR_UID',
+    //typeAhead     : true,
+    mode          : 'local',
+    forceSelection: true,
+    triggerAction: 'all',
+    //emptyText: 'Select a process...',
+    emptyText: TRANSLATIONS.LABEL_EMPTY_USERS,
+    selectOnFocus: true,
+    //getListParent: function() {
+    //  return this.el.up('.x-menu');
+    //},
+    store         : new Ext.data.ArrayStore({
+      fields: ['USR_UID','USR_FULLNAME'],
+      data  : allUsersValues
+    }),
+    listeners:{
+      scope: this,
+      'select': function() {
+        filterUser = comboAllUsers.value;
+        if (filterUser=''){
+          btnSelectAll.hide();
+          btnUnSelectAll.hide();
+          btnReassign.hide();
+        } else  {
+          btnSelectAll.show();
+          btnUnSelectAll.show();
+          btnReassign.show();
+        }
+        storeCases.setBaseParam( 'user', filterUser);
+        storeCases.load({params:{user: filterUser, start : 0 , limit : pageSize }});
+      }},
+    iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
+  });
+
+  var btnSelectAll = new Ext.Button ({
+    text: 'Check All',
+//    text: TRANSLATIONS.LABEL_SELECT_ALL,
+    handler: function(){
+      grid.getSelectionModel().selectAll();
+    }
+  });
+
+  var btnUnSelectAll = new Ext.Button ({
+    text: 'Un-Check All',
+//    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
+    handler: function(){
+      grid.getSelectionModel().clearSelections();
+    }
+  });
+
+  var btnReassign = new Ext.Button ({
+    text: 'Reassign',
+//    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
+    handler: function(){
+      grid.getSelectionModel().getSelections();
+      reassignPopup.show();
+    }
+  });
+
+  var nav = new Ext.FormPanel({
+					labelWidth:100,
+					frame:true,
+					width:300,
+					collapsible:true,
+					defaultType:'textfield',
+					items:[{
+						fieldLabel:'Reassign To',
+						name:'txt_stock_in',
+						allowBlank:true
+					}]
+				});
+
+  var reassignPopup = new Ext.Window({
+					el:'reassign-panel',
+					modal:true,
+					layout:'fit',
+					width:300,
+					height:300,
+					closable:false,
+					resizable:false,
+					plain:true,
+					items:[nav],
+					buttons:[{
+						text:'submit',
+						handler:function(){
+							Ext.Msg.alert('OK','save ?');
+							Ext.Msg.prompt('Name','please enter your name: ',function(btn,text){
+								if(btn=='ok') {
+									alert('ok');
+								}
+							});
+						}
+					}, {
+						text:'close',
+						handler:function() {
+							reassignPopup.hide();
+						}
+					}]
+				});
   // ComboBox creation
   var comboStatus = new Ext.form.ComboBox({
     width         : 90,
@@ -435,6 +545,19 @@ Ext.onReady ( function() {
       ' '
     ];
 
+  var toolbarToReassign = [
+      'user',
+      comboAllUsers,
+      '-',
+      btnSelectAll,
+      '-',
+      btnUnSelectAll,
+      '-',
+      btnReassign,
+      ' ',
+      ' '
+    ];
+
   var toolbarSent = [
       'process', 
       comboProcess,
@@ -486,11 +609,12 @@ Ext.onReady ( function() {
   });
   
   switch (action) {
-    case 'draft'  : itemToolbar = toolbarDraft; break;
-    case 'sent'   : itemToolbar = toolbarSent;  break;
-    case 'to_revise'   : itemToolbar = toolbarToRevise;  break;
-    case 'search' : itemToolbar = toolbarSearch;  break;
-    default       : itemToolbar = toolbarTodo; break;
+    case 'draft'      : itemToolbar = toolbarDraft; break;
+    case 'sent'       : itemToolbar = toolbarSent;  break;
+    case 'to_revise'  : itemToolbar = toolbarToRevise;  break;
+    case 'to_reassign': itemToolbar = toolbarToReassign;  break;
+    case 'search'     : itemToolbar = toolbarSearch;  break;
+    default           : itemToolbar = toolbarTodo; break;
   }
     
   var tb = new Ext.Toolbar({
