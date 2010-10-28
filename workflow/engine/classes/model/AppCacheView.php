@@ -376,6 +376,7 @@ class AppCacheView extends BaseAppCacheView {
    * @return Criteria object $Criteria
    */
   function getToRevise ( $userUid, $doCount ) {
+  	require_once 'classes/model/ProcessUser.php';
     // adding configuration fields from the configuration options
     // and forming the criteria object
     $oCriteria  = new Criteria('workflow');
