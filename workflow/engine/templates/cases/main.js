@@ -229,6 +229,9 @@ Ext.onReady(function(){
             ReloadTreeMenuItemDetail({item:''});
           }
         })*/
+        
+      },
+      'afterrender': function(){
         setDefaultOption();
       }
       
