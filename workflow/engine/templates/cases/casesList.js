@@ -471,6 +471,7 @@ Ext.onReady ( function() {
   
   var textSearch = new Ext.form.TextField ({
     allowBlank: true,
+	 ctCls:'pm_search_text_field',
     width: 150,
     emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH,
     listeners: {
@@ -495,6 +496,7 @@ Ext.onReady ( function() {
   
   var resetSearchButton = {
     text:'X',
+	 ctCls:'pm_search_x_button',
     handler: function(){
       textSearch.setValue('');
       doSearch();

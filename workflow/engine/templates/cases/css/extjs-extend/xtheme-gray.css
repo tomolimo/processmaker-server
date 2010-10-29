@@ -176,6 +176,9 @@
 	background-color:#F6E095 !important;
 }
 /*Checkboxes*/
+.grid_with_checkbox .x-grid3-header-offset{
+	padding-left:18px !important;
+}
 .grid_with_checkbox .x-grid3-row{
 	background-image:url(/images/icons_silk/unchecked.png) !important;
 	background-repeat: no-repeat !important;
@@ -315,4 +318,31 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 #startCaseTreePanel .x-tree-elbow-line,
 #startCaseTreePanel .x-tree-node-indent{
 	display:none;
+}
+
+
+/*Search Button*/
+.pm_search_x_button{
+	margin-left:-21px;
+	display:block;
+	width:18px;
+	height:18px;
+	z-index:1000 !important;
+}
+.pm_search_x_button .x-btn-over .x-btn-mc,.pm_search_x_button .x-btn-over .x-btn-ml,.pm_search_x_button .x-btn-over .x-btn-mr,
+.pm_search_x_button .x-btn-over .x-btn-tc,.pm_search_x_button .x-btn-over .x-btn-tl,.pm_search_x_button .x-btn-over .x-btn-tr,
+.pm_search_x_button .x-btn-over .x-btn-bc,.pm_search_x_button .x-btn-over .x-btn-bl,.pm_search_x_button .x-btn-over .x-btn-br
+{
+	background:transparent;
+}
+.pm_search_x_button button{
+	background-image:url(/images/icons_silk/sprites.png) !important;
+	background-position:0 -5275px !important;
+	text-indent: -10000px;
+	z-index:1000 !important;
+	width:18px;
+	height:18px;
+}
+.pm_search_text_field{
+	/*padding-right:16px;*/
 }
