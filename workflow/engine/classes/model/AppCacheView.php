@@ -906,26 +906,26 @@ class AppCacheView extends BaseAppCacheView {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
     
-    $sql="select count(*) as CANT from APP_CACHE_VIEW ";  
+    $sql ="truncate table APP_CACHE_VIEW ";  
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+
+    $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view_insert.sql';
+    if ( !file_exists ( $filenameSql ) )
+      throw ( new Exception ( "file app_cache_view_insert.sql doesn't exists ") );
+
+    $sql = explode ( ';', file_get_contents ( $filenameSql ) );
+    foreach ( $sql as $key => $val ) {
+      $val = str_replace('{lang}', $lang, $val);      
+      $stmt->executeQuery($val);
+    }
+    
+    $sql = "select count(*) as CANT from APP_CACHE_VIEW ";  
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
     $rs1->next();
     $row1 = $rs1->getRow();
     $cant = $row1['CANT'];
-    //print " $cant rows in app_delegation<br>"; 
-    if ( $cant == 0 ) {
-      $sql ="truncate table APP_CACHE_VIEW ";  
-      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
-
-      $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view_insert.sql';
-      if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file app_cache_view_insert.sql doesn't exists ") );
-
-      $sql = explode ( ';', file_get_contents ( $filenameSql ) );
-      foreach ( $sql as $key => $val ) 
-        $val = str_replace('{lang}', $lang, $val);      
-        $stmt->executeQuery($val);
-    }
-    return 'done';
+    
+    return "done $cant rows in table APP_CACHE_VIEW";
   }
 
 
@@ -1017,6 +1017,38 @@ class AppCacheView extends BaseAppCacheView {
       $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate.sql';
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+      $sql = file_get_contents ( $filenameSql );
+      $sql = str_replace('{lang}', $lang, $sql);      
+      $stmt->executeQuery($sql);
+      return 'created';
+    }
+    return 'exists';
+  }
+  
+  /**
+   * update the Application triggers
+   * @return void
+   */
+  function triggerApplicationDelete( $lang ) {
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+
+    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    $found = false;
+    while ( is_array ( $row ) ) {
+      if ( strtolower($row['Trigger'] == 'APPLICATION_DELETE') && strtoupper($row['Table']) == 'APPLICATION' ) {
+        $found = true;
+      }
+      $rs->next();
+      $row = $rs->getRow();
+    }
+
+    if ( ! $found ) {
+      $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationDelete.sql';
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file triggerAppDelegationDelete.sql doesn't exists ") );
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);

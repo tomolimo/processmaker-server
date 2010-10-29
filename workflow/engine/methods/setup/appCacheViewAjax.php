@@ -79,9 +79,9 @@
       $res = $appCache->triggerApplicationUpdate($lang);
       $result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
 
-      //build?
-      $res = $appCache->fillAppCacheView($lang);
-      $result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
+      //APPLICATION DELETE
+      $res = $appCache->triggerApplicationDelete($lang);
+      $result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
 
       //show language
       $result->info[] = array ('name' => 'Language',         'value'=> $lang );
@@ -102,83 +102,24 @@
     
     case 'build':
       $sqlToExe = Array();
-      $schemasPath = PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP;
-      $sqlToExe[] = $schemasPath . 'app_cache_view.sql';
-      $sqlToExe[] = $schemasPath . 'app_cache_view_insert.sql';
-      $sqlToExe[] = $schemasPath . 'triggerAppDelegationInsert.sql';
-      $sqlToExe[] = $schemasPath . 'triggerAppDelegationUpdate.sql';
-      $sqlToExe[] = $schemasPath . 'triggerApplicationUpdate.sql';
-      
-      //G::LoadClass('serverConfiguration');
-      //$oServerConf =& serverConf::getSingleton();
-      
       G::LoadClass('configuration');
       $conf = new Configurations;
       
       $lang = $_POST['lang'];
-      $dbUserType = $_GET['dbUserType'];
-      try {
+
+      try {        
+        //build using the method in AppCacheView Class
+        //setup the appcacheview object, and the path for the sql files
+        $appCache = new AppCacheView();
+        $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP );
+        $res = $appCache->fillAppCacheView($lang);
+        $result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
         
-        $con = Propel::getConnection("workflow");
-        G::LoadSystem('dbMaintenance');
-        
-        switch($dbUserType){
-          case '1': 
-            $o2 = new DataBaseMaintenance(DB_HOST, DB_USER, DB_PASS); 
-            break;
-          case '2': 
-          
-            $dbHash = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
-            $o2 = new DataBaseMaintenance($dbHash[0], $dbHash[1], $dbHash[2]);
-            break;
-          case '0': 
-            $o2 = new DataBaseMaintenance(DB_HOST, $_POST['user'], $_POST['password']); 
-            break;
-          default:
-            die('fatal error!!'); break;
-        }
-        
-        
-        
-        $o2->setDbName(DB_NAME);
-        $o2->connect();
-        foreach ($sqlToExe as $i=>$sqlFile) {
-          
-          if($i == 0){
-            $s = "SELECT table_name
-            FROM information_schema.tables
-            WHERE table_schema = '".DB_NAME."'
-            AND table_name = 'APP_CACHE_VIEW'";
-            
-            $con = Propel::getConnection("workflow");
-            $con->begin();
-            
-            $rs = $con->executeQuery($s);
-            $con->commit();
-            $rs->next();
-            $res = $rs->getRow();
-            //print_r($res);
-            if( isset($res['table_name']) ){
-              $appCacheViewTableExists = true;
-              $o2->query('DROP TABLE IF EXISTS APP_CACHE_VIEW;');
-              $o2->query('DROP TRIGGER IF EXISTS APP_DELEGATION_INSERT;');
-              $o2->query('DROP TRIGGER IF EXISTS APP_DELEGATION_UPDATE;');
-              $o2->query('DROP TRIGGER IF EXISTS APPLICATION_UPDATE;');
-            } else {
-              $appCacheViewTableExists = false;
-            }
-          }
-          $sqlString = file_get_contents($sqlFile);
-          $sqlString = str_replace('{lang}', $lang, $sqlString);
-          
-          $o2->restoreFromSql($sqlString, 'string');
-        }
-        
+        //set status in config table
         $confParams = Array(
-          'LANG'=>$lang,
+          'LANG' => $lang,
           'STATUS'=> 'active'
-        );
-        
+        );        
         $conf->aConfig = $confParams;
         $conf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
       

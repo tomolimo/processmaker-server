@@ -9,21 +9,18 @@ Ext.onReady(function() {
 
   // bd.createChild({tag: 'h2', html: 'Form 2 - Adding fieldsets'});
 
-  // proxy
-  proxy = new Ext.data.HttpProxy( {
-    url : 'appCacheViewAjax?request=info'
-  });
-
-  // reader
-  var reader = new Ext.data.JsonReader( {
-    root : 'info',
-    fields : [ {name : 'name'}, {name : 'value'} ]
-  })
 
   // Store
   var store = new Ext.data.Store( {
-    proxy : proxy,
-    reader : reader
+    proxy: new Ext.data.HttpProxy({
+      url: 'appCacheViewAjax',
+      method: 'POST'
+    }),    
+    baseParams : { request : 'info'},
+    reader : new Ext.data.JsonReader( {
+      root : 'info',
+      fields : [ {name : 'name'}, {name : 'value'} ]
+    }),
   });
   store.load();
 
@@ -38,14 +35,14 @@ Ext.onReady(function() {
           dataIndex : 'name'
         }, {
           header : '',
-          width : 140,
+          width : 160,
           sortable : false,
           dataIndex : 'value'
         }
       ],
       stripeRows : true,
       autoHeight : true,
-      width : 330,
+      width : 350,
       title : 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
@@ -63,44 +60,12 @@ Ext.onReady(function() {
       labelWidth : 75, // label settings here cascade unless overridden
       url : '',
       frame : true,
-      title : 'Build/Rebuild the Workflow Applications Cache',
+      title : ' ',
       bodyStyle : 'padding:5px 5px 0',
-      width : 300,
-
+      width : 350,
       items : [ ],
-      buttons : [ 
-        /*{ 
-          text: 'Test Grants in database' 
-        },*/ 
-        {
-          text : 'Build Cache',
-          disabled : false,
-          handler : function() {
-            fsf.getForm().submit( {
-              url : 'appCacheViewAjax?request=build&dbUserType='+dbUserType+'&r=' + Math.random(),
-              waitMsg : 'Building Cache for Application Data...',
-              timeout : 36000,
-              success : function(res, req) {
-                /*
-                * Ext.MessageBox.show({ title: '', msg: req.result.msg, buttons:
-                * Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
-                * Ext.MessageBox.INFO }); setTimeout(function(){
-                * Ext.MessageBox.hide(); }, 2000);
-                */
-                store.reload();
-                Ext.example.msg('', req.result.msg);
-                try {
-                  Ext.fly(newEl).slideOut('t', {
-                    remove : true
-                  });
-                } catch (e) {
-                }
-              }
-            });
-          }
-        }
-      ]
     });
+    
     var fieldset;
     
     var cmbLanguages = new Ext.form.ComboBox({
@@ -111,80 +76,110 @@ Ext.onReady(function() {
           url : 'appCacheViewAjax',
           method : 'POST'
         }),
-        baseParams : {
-          request : 'getLangList'
-        },
+        baseParams : {request : 'getLangList'},
         reader : new Ext.data.JsonReader( {
           root : 'rows',
-          fields : [ {
-            name : 'LAN_ID'
-          }, {
-            name : 'LAN_NAME'
-          } ]
+          fields : [ {name : 'LAN_ID'}, {name : 'LAN_NAME'} ]
         })
       }),
-      valueField : 'LAN_ID',
-      displayField : 'LAN_NAME',
-      triggerAction : 'all',
-      emptyText : 'Select',
-      selectOnFocus : true,
-      editable : false,
-      allowBlank : false,
-      allowBlankText : 'You should to select a language from the list.'
+      valueField     : 'LAN_ID',
+      displayField   : 'LAN_NAME',
+      //triggerAction  : 'all',
+      emptyText      : 'Select',
+      selectOnFocus  : true,
+      editable       : false,
+      allowBlank     : false,
+      //allowBlankText : 'You should to select a language from the list.'
     })
     
-    
     var txtUser = { 
-          xtype:'textfield',
-          fieldLabel: 'User',
-          disabled: false,
-          hidden: false,
-          name: 'user',
-          value: ''
-        };
+      xtype:'textfield',
+      fieldLabel: 'User',
+      disabled: false,
+      name: 'user',
+      value: ''
+    };
     
     var txtPasswd = { 
-          inputType: 'password',
-                xtype:'textfield',
-          fieldLabel: 'Password',
-          disabled: false,
-          hidden: false,
-          name: 'password',
-          value: ''
+      inputType: 'password',
+      xtype:'textfield',
+      fieldLabel: 'Password',
+      disabled: false,
+      hidden: false,
+      value: ''
     }
     
-    if( true /*enoughGrants */){
-      fieldset = {
-          xtype : 'fieldset',
-          title : 'Cache configuration',
-          collapsible : false,
-          autoHeight : true,
-          defaults : {
-            width : 170
-          },
-          defaultType : 'textfield',
-          items : [cmbLanguages]
-      }
+    fieldset = {
+      xtype : 'fieldset',
+      title : 'Rebuild Workflow Application Cache',
+      collapsible : false,
+      autoHeight  : true,
+      defaults    : { width : 170 },
+      defaultType : 'textfield',
+      items   : [cmbLanguages],
+      buttons : [{
+        text : 'Build Cache',
+        handler : function() {
+          Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
+          Ext.Ajax.request({
+            url: 'appCacheViewAjax',
+            success: function(response) {
+              store.reload();
+              Ext.MessageBox.hide();              
+              Ext.Msg.alert ( '', response.responseText );
+            },
+            failure : function(response) {
+              Ext.Msg.hide();              
+              Ext.Msg.alert ( 'Error', response.responseText );
+            },
+            params: {request: 'build', lang: 'en' },
+            waitMsg : 'Building Workflow Application Cache...',
+            timeout : 1000*60*30 //30 mins
+          });
+        }
+      }]      
     } 
-    else {
-      fieldset = {
-          xtype : 'fieldset',
-          title : 'Cache configuration',
-          collapsible : false,
-          autoHeight : true,
-          defaults : {
-            width : 170
-          },
-          defaultType : 'textfield',
-          items : [cmbLanguages, txtUser, txtPasswd]
-      }
-    }
     
+    
+    fieldsetRoot = {
+      xtype : 'fieldset',
+      title : 'Setup MySql Root Password',
+      collapsible : false,
+      autoHeight  : true,
+      defaults    : { width : 170 },
+      defaultType : 'textfield',
+      items   : [txtUser, txtPasswd ],
+      buttons : [{
+        text : 'Setup Password',
+        handler : function() {
+          Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
+          Ext.Ajax.request({
+            url: 'appCacheViewAjaxx',
+            success: function(response) {
+              store.reload();
+              Ext.MessageBox.hide();              
+              Ext.Msg.alert ( '', response.responseText );
+            },
+            failure : function(response) {
+              Ext.Msg.hide();              
+              Ext.Msg.alert ( 'Error', response.responseText );
+            },
+            params: {request: 'build', lang: 'en' },
+            waitMsg : 'Building Workflow Application Cache...',
+            //timeout : 1000 //30 mins
+            timeout : 1000*60*30 //30 mins
+          });
+        }
+      }]      
+    } 
     fsf.add(fieldset);
-
+    fsf.add(fieldsetRoot);
     fsf.render(document.getElementById('main-panel'));
 
-    
+    //set the current language
+    cmbLanguages.store.on('load',function(){ cmbLanguages.setValue ( currentLang ) });
+    cmbLanguages.store.load();
+
     if (!appCacheViewEnabled) {
       Warning();
     }
