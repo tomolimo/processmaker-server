@@ -11,24 +11,29 @@
 <inputdocsDelete type="private" defaultValue="../inputdocs/inputdocs_Delete"/>
 <js type="javascript" replaceTags="1"><![CDATA[
 var currentPagedTable = @#PAGED_TABLE_ID;
-  function inputdocsAdd(){
+  function inputdocsAdd(){//alert('@G::encryptlink(@#inputdocsEdit)?PRO_UID=@%PRO_UID');
 		popupWindow('@G::LoadTranslation(ID_NEW_INPUTDOCS)', '@G::encryptlink(@#inputdocsEdit)?PRO_UID=@%PRO_UID' , 500, 410);
   }
-  function inputdocsEdit( uid ) {
+  function inputdocsEdit( uid ) {// alert('@G::encryptlink(@#inputdocsEdit)?INP_DOC_UID='+ uid);
 		popupWindow('@G::LoadTranslation(ID_EDIT_INPUTDOCS)', '@G::encryptlink(@#inputdocsEdit)?INP_DOC_UID='+ uid , 500, 410);
   }
   function inputdocsSave( form ) { 
   var nameInput = getField('INP_DOC_TITLE').value;
   var proUid = getField('PRO_UID').value;
-  reqName=ajax_function(form.action,'lookForNameInput','NAMEINPUT='+encodeURIComponent(nameInput)+'&proUid='+encodeURIComponent(proUid),'POST') ;
-  if(reqName){
-    ajax_post( form.action, form, 'POST' );
-    currentPopupWindow.remove();
-    @#PAGED_TABLE_ID.refresh();
-   }else{
-   alert(G_STRINGS.ID_EXIST_INPUTDOCUMENT);return false;
-   }
-    
+  if(getField('INP_DOC_UID').value==''){
+	  reqName=ajax_function(form.action,'lookForNameInput','NAMEINPUT='+encodeURIComponent(nameInput)+'&proUid='+encodeURIComponent(proUid),'POST') ;
+	  if(reqName){
+	    ajax_post( form.action, form, 'POST' );
+	    currentPopupWindow.remove();
+	    @#PAGED_TABLE_ID.refresh();
+	   }else{
+	   alert(G_STRINGS.ID_EXIST_INPUTDOCUMENT);return false;
+	   }
+    }else{
+      ajax_post( form.action, form, 'POST' );
+	    currentPopupWindow.remove();
+	    @#PAGED_TABLE_ID.refresh();
+    }
   }
   function inputdocsDelete( uid ) {
   
