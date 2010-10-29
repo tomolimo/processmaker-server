@@ -18,12 +18,8 @@
 </CATEGORY_ICON>
 
 
-<LINK type="link" colWidth="60" titleAlign="left" align="left" link='processCategoryEdit?id=@!CATEGORY_UID' >
-  <en>Edit</en>
-</LINK >
-
-<LINK2 type="link" colWidth="60" titleAlign="left" align="left" link='processCategoryDelete?id=@!CATEGORY_UID' >
-  <en>Delete</en>
-</LINK2 >
-
+<LINK type="link" colWidth="60" titleAlign="left" align="left" link='processCategoryEdit?id=@!CATEGORY_UID' value="@G::LoadTranslation(ID_EDIT)" />
+  
+<LINK2 type="link" colWidth="60" titleAlign="left" align="left" link='processCategoryDelete?id=@!CATEGORY_UID' value="@G::LoadTranslation(ID_DELETE)"/>
+  
 </dynaForm>
