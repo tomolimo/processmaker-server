@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm type="pagetable" menu="roles/roles_Options">
+<dynaForm type="pagetable" menu="roles/roles_Options" searchBy="ROL_NAME">
 
 <ROL_CODE type="text" titlealign="left" align="left" colWidth="200">
   <en>Code</en>
