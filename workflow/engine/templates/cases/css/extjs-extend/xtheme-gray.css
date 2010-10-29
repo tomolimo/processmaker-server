@@ -330,6 +330,7 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 	margin-top:1px;
 	margin-right:3px;
 }
+.ext-ie .pm_search_x_button {margin-top:0px !important}
 .pm_search_x_button .x-btn-over .x-btn-mc
 {
 	background:transparent;
@@ -346,11 +347,15 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 	width:16px !important;
 	height:20px !important;
 	display:block;
+	margin:0;
+	padding:0;
 }
 .pm_search_text_field input{
 	border-right:none !important;
 }
-.pm_search_text_field input:focus{
+.ext-ie8 .pm_search_text_field input {margin-top:1px !important}
+
+.pm_search_text_field input:focus,.pm_search_text_field .x-form-focus{
 	border:1px solid #c1c1c1 !important;
 	border-right:none !important;
 }
