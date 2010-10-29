@@ -226,12 +226,12 @@
   }
   $result['data'] = $rows;
 //print the result in json format
-  print json_encode( $result ) ;
+  print G::json_encode( $result ) ;
   
   }
   catch ( Exception $e ) {
   	$msg = array ( 'error' => $e->getMessage() );
-    print json_encode( $msg ) ;
+    print G::json_encode( $msg ) ;
   }      
 
 
