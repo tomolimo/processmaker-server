@@ -32,6 +32,24 @@ class ProcessCategory extends BaseProcessCategory {
       return $c;
     }
   }
+  
+  function loadByCategoryName($sCategoryName)
+  {
+    $c = new Criteria('workflow');
+    $del = DBAdapter::getStringDelimiter();
+
+    $c->clearSelectColumns();
+    $c->addSelectColumn( ProcessCategoryPeer::CATEGORY_UID );
+    $c->addSelectColumn( ProcessCategoryPeer::CATEGORY_NAME);
+
+    $c->add(ProcessCategoryPeer::CATEGORY_NAME, $sCategoryName);
+    $dataset = ProcessCategoryPeer::doSelectRS($c);
+    $dataset->next();
+    $aRow = $dataset->getRow();
+    return $aRow;
+  }
+
+  
 } // ProcessCategory
 
 
