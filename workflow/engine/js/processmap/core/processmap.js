@@ -2230,7 +2230,7 @@ processmap.prototype={
 		{
 			var h = this.parent.dom.element("pm_header");
 			var m = this.parent.dom.element("pm_menu");
-			var s = this.parent.dom.element("pm_submenu");
+			var s = this.parent.dom.element("pm_submenu"); 
 			var sep = this.parent.dom.element("pm_separator");
 			sep.className = "pm_separatorOff___"+this.options.theme;
 			this.menuRolled=false;

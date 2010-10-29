@@ -8,7 +8,8 @@
   h = getStyle(document.getElementById('pm_menu'),'top');
   h = h.replace("px", "");
   h = parseInt(h) + 18;
-  document.getElementById('pm_submenu').style.display = 'none';
+  if ( document.getElementById('pm_submenu') ) 
+    document.getElementById('pm_submenu').style.display = 'none';
   document.documentElement.style.overflowY = 'hidden';
   function autoResizeScreen() {
     oCasesFrame    = document.getElementById('adminFrame');
