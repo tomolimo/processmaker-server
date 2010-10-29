@@ -526,10 +526,8 @@ class AppCacheView extends BaseAppCacheView {
   }
   
   function getSearchAllCount ( ) {
-    $CriteriaCount  = new Criteria('workflow');
-    //$CriteriaCount->add (ApplicationPeer::USR_UID, '', CRITERIA::NOT_EQUAL );
-    $totalCount = AppCacheViewPeer::doCount( $CriteriaCount);
-    
+    $CriteriaCount = new Criteria('workflow');
+    $totalCount = ApplicationPeer::doCount( $CriteriaCount);
     return $totalCount;
   }
 

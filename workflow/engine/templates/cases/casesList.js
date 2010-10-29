@@ -97,7 +97,7 @@ Ext.onReady ( function() {
     	  var myArrayHour = myArray[1].split(':');
     	else
     		var myArrayHour = new Array('0','0','0'); 
-    	var myDate = new Date( myArrayDate[0], myArrayDate[1], myArrayDate[2], myArrayHour[0], myArrayHour[1], myArrayHour[2] );
+    	var myDate = new Date( myArrayDate[0], myArrayDate[1]-1, myArrayDate[2], myArrayHour[0], myArrayHour[1], myArrayHour[2] );
     }
   }
   catch(e){};
@@ -121,7 +121,8 @@ Ext.onReady ( function() {
     else
       return String.format("<span class='row_updated'>{0}</span>", value );
   } 
-  
+
+  //alert(Ext.encode(columns));
   for(var i = 0, len = columns.length; i < len; i++){
     var c = columns[i];
     c.renderer = showField;
@@ -134,6 +135,7 @@ Ext.onReady ( function() {
 	 //Status images
     //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   }
+  
 	/*
   function showStatusImage(value,p,r){
 	  if ( value == 'COMPLETED' )
@@ -292,7 +294,11 @@ Ext.onReady ( function() {
       scope: this,
       'select': function() {
         filterProcess = comboProcess.value;
-        storeCases.setBaseParam( 'process', filterProcess);
+        if ( action == 'search' ){
+          storeCases.setBaseParam('dateFrom', dateFrom.getValue());
+          storeCases.setBaseParam('dateTo', dateTo.getValue());
+        }
+        storeCases.setBaseParam('process', filterProcess);
         storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
@@ -376,32 +382,32 @@ Ext.onReady ( function() {
 				});
 
   var reassignPopup = new Ext.Window({
-					el:'reassign-panel',
-					modal:true,
-					layout:'fit',
-					width:300,
-					height:300,
-					closable:false,
-					resizable:false,
-					plain:true,
-					items:[nav],
-					buttons:[{
-						text:'submit',
-						handler:function(){
-							Ext.Msg.alert('OK','save ?');
-							Ext.Msg.prompt('Name','please enter your name: ',function(btn,text){
-								if(btn=='ok') {
-									alert('ok');
-								}
-							});
-						}
-					}, {
-						text:'close',
-						handler:function() {
-							reassignPopup.hide();
-						}
-					}]
-				});
+    el:'reassign-panel',
+    modal:true,
+    layout:'fit',
+    width:300,
+    height:300,
+    closable:false,
+    resizable:false,
+    plain:true,
+    items:[nav],
+    buttons:[{
+      text:'submit',
+      handler:function(){
+        Ext.Msg.alert('OK','save ?');
+        Ext.Msg.prompt('Name','please enter your name: ',function(btn,text){
+          if(btn=='ok') {
+            alert('ok');
+          }
+        });
+      }
+    }, {
+      text:'close',
+      handler:function() {
+        reassignPopup.hide();
+      }
+    }]
+  });
   // ComboBox creation
   var comboStatus = new Ext.form.ComboBox({
     width         : 90,
@@ -471,7 +477,7 @@ Ext.onReady ( function() {
   
   var textSearch = new Ext.form.TextField ({
     allowBlank: true,
-	 ctCls:'pm_search_text_field',
+    ctCls:'pm_search_text_field',
     width: 150,
     emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH,
     listeners: {
@@ -496,7 +502,7 @@ Ext.onReady ( function() {
   
   var resetSearchButton = {
     text:'X',
-	 ctCls:'pm_search_x_button',
+	  ctCls:'pm_search_x_button',
     handler: function(){
       textSearch.setValue('');
       doSearch();
@@ -541,121 +547,111 @@ Ext.onReady ( function() {
   });
 
   var toolbarTodo = [
-      TRANSLATIONS.ID_PROCESS, 
-      comboProcess,
-      '-',
-      btnRead,
-      '-',
-      btnUnread,
-      '-',
-      btnAll,
-      '->', // begin using the right-justified button container 
-      textSearch,
-      resetSearchButton,
-      btnSearch,
-      '-',
-      textJump,
-      btnJump,
-      ' ',
-      ' '
-    ];
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '-',
+    btnRead,
+    '-',
+    btnUnread,
+    '-',
+    btnAll,
+    '->', // begin using the right-justified button container
+    textSearch,
+    resetSearchButton,
+    btnSearch,
+    '-',
+    textJump,
+    btnJump,
+    ' ',
+    ' '
+  ];
 
   var toolbarDraft = [
-      TRANSLATIONS.ID_PROCESS, 
-      comboProcess,
-      '->', // begin using the right-justified button container 
-      textSearch,
-      resetSearchButton,
-      btnSearch,
-      '-',
-      textJump,
-      btnJump,
-      ' ',
-      ' '
-    ];
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '->', // begin using the right-justified button container
+    textSearch,
+    resetSearchButton,
+    btnSearch,
+    '-',
+    textJump,
+    btnJump,
+    ' ',
+    ' '
+  ];
 
   var toolbarToRevise = [
-      TRANSLATIONS.ID_PROCESS,
-      comboProcess,
-      '->', // begin using the right-justified button container
-      textSearch,
-      resetSearchButton,
-      btnSearch,
-      '-',
-      textJump,
-      btnJump,
-      ' ',
-      ' '
-    ];
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '->', // begin using the right-justified button container
+    textSearch,
+    resetSearchButton,
+    btnSearch,
+    '-',
+    textJump,
+    btnJump,
+    ' ',
+    ' '
+  ];
 
   var toolbarToReassign = [
-      'user',
-      comboAllUsers,
-      '-',
-      btnSelectAll,
-      '-',
-      btnUnSelectAll,
-      '-',
-      btnReassign,
-      ' ',
-      ' '
-    ];
+    'user',
+    comboAllUsers,
+    '-',
+    btnSelectAll,
+    '-',
+    btnUnSelectAll,
+    '-',
+    btnReassign,
+    ' ',
+    ' '
+  ];
 
   var toolbarSent = [
-      TRANSLATIONS.ID_PROCESS, 
-      comboProcess,
-      '-',
-      TRANSLATIONS.ID_STATUS, 
-      comboStatus,
-      '-',
-      btnStarted,
-      '-',
-      btnCompleted,
-      '-',
-      btnAll,
-      '->', // begin using the right-justified button container 
-      textSearch,
-      resetSearchButton,
-      btnSearch,
-      '-',
-      textJump,
-      btnJump,
-      ' ',
-      ' '
-    ];
-
-
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '-',
+    TRANSLATIONS.ID_STATUS,
+    comboStatus,
+    '-',
+    btnStarted,
+    '-',
+    btnCompleted,
+    '-',
+    btnAll,
+    '->', // begin using the right-justified button container
+    textSearch,
+    resetSearchButton,
+    btnSearch,
+    '-',
+    textJump,
+    btnJump,
+    ' ',
+    ' '
+  ];
 
   var toolbarSearch = [
       ' ',
-      'From date',
+      TRANSLATIONS.ID_DELEGATE_DATE_FROM,
       dateFrom,
       ' ',
-      'To',
+      TRANSLATIONS.ID_DELEGATE_DATE_TO,
       dateTo,
       new Ext.Button ({
-        text: 'Filter',
+        text: TRANSLATIONS.ID_FILTER_BY_DELEGATED_DATE,
         handler: function(){
-          if(dateFrom.getValue() != '')
-            storeCases.setBaseParam('dateFrom', dateFrom.getValue());
-          if(dateTo.getValue() != '')
-            storeCases.setBaseParam('dateTo', dateTo.getValue());
-
+          storeCases.setBaseParam('dateFrom', dateFrom.getValue());
+          storeCases.setBaseParam('dateTo', dateTo.getValue());
           storeCases.load({params:{ start : 0 , limit : pageSize }});
         }
-      })
+      }),
+      '-'
     ];
   
-  
-  
   var firstToolbarSearch = new Ext.Toolbar({
-    /*renderTo: 'panel',*/
-    
     region: 'north',
     width: '100%',
     autoHeight: true,
-    //height: 10,
-    // 'd mmm yyyy' is not valid, but I assume this is close?
     items: [
       ' ',
       TRANSLATIONS.ID_PROCESS,
@@ -692,36 +688,29 @@ Ext.onReady ( function() {
     region: 'center',
     store: storeCases,
     cm: cm,
-    /*renderTo: 'cases-grid',*/
     autoHeight: true,
-    //frame: false,
-    //autoHeight:true,
-    //minHeight:400,
     layout: 'fit',
-
     viewConfig: {
       forceFit:true
     },
-
     listeners: {
       rowdblclick: function(grid, n,e){
         var appUid   = grid.store.data.items[n].data.APP_UID;
         var delIndex = grid.store.data.items[n].data.DEL_INDEX;
         var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
-        //Ext.Msg.alert (TRANSLATIONS.LABEL_OPEN_CASE , caseTitle );
         Ext.Msg.show({ 
-                msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
-                width:300,
-                wait:true,
-                waitConfig: {interval:200}
-              });
+          msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
+          width:300,
+          wait:true,
+          waitConfig: {interval:200}
+        });
         window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
       },
       render: function(){
         //this.loadMask = new Ext.LoadMask(this.body, {msg:TRANSLATIONS.LABEL_GRID_LOADING});
         //this.ownerCt.doLayout();
       }
-  },
+    },
     
     tbar: tb,
     // paging bar on the bottom
@@ -729,13 +718,11 @@ Ext.onReady ( function() {
       pageSize: pageSize,
       store: storeCases,
       displayInfo: true,
-//      displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ',
+      //displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ' ,
       displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' &nbsp; ',
-//      emptyMsg: "No items to display"
       emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
     })
-
-    });
+  });
 
     // manually trigger the data store load
     storeCases.setBaseParam( 'action', action );
@@ -744,15 +731,6 @@ Ext.onReady ( function() {
     storeCases.load();
     //storeProcesses.load();
 
-/*
-    function createBox(t, s){
-        return ['<div class="msg">',
-                '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
-                '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
-                '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
-                '</div>'].join('');
-    }
-*/
     function onItemToggle(item, pressed){
       switch ( item.id ) {
         case 'read' : 
@@ -795,12 +773,6 @@ Ext.onReady ( function() {
     $configViewport.items.push(firstToolbarSearch);
 
   var viewport = new Ext.Viewport($configViewport);
-  
-  
-    
-
-  
-  
 
   if( parent.PANEL_EAST_OPEN ){
     parent.PANEL_EAST_OPEN = false;

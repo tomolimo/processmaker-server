@@ -99,10 +99,20 @@
   $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
   $TRANSLATIONS->ID_CONFIRM_UNPAUSE_CASE     = G::LoadTranslation('ID_CONFIRM_UNPAUSE_CASE'); 		 			
   
-  $TRANSLATIONS->ID_PROCESS  = G::LoadTranslation('ID_PROCESS');
-  $TRANSLATIONS->ID_STATUS     = G::LoadTranslation('ID_STATUS');
-  $TRANSLATIONS->ID_USER      = G::LoadTranslation('ID_USER');
- 				         
+  $TRANSLATIONS->ID_PROCESS                  = G::LoadTranslation('ID_PROCESS');
+  $TRANSLATIONS->ID_STATUS                   = G::LoadTranslation('ID_STATUS');
+  $TRANSLATIONS->ID_USER                     = G::LoadTranslation('ID_USER');
+  $TRANSLATIONS->ID_DELEGATE_DATE_FROM       = G::LoadTranslation('ID_DELEGATE_DATE_FROM');
+  $TRANSLATIONS->ID_DELEGATE_DATE_TO         = G::LoadTranslation('ID_DELEGATE_DATE_TO');
+  $TRANSLATIONS->ID_FILTER_BY_DELEGATED_DATE = G::LoadTranslation('ID_FILTER_BY_DELEGATED_DATE');
+
+  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_TO_DO');
+  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_DRAFT');
+  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_COMPLETED');
+  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_CANCELLED');
+  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_PAUSED');
+
+
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   
   $oHeadPublisher->addExtJsScript('cases/casesList', true );    //adding a javascript file .js

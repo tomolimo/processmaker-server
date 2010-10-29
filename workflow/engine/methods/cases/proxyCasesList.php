@@ -14,7 +14,9 @@
   $action   = isset($_GET['action'])   ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
   $type     = isset($_GET['type'])     ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
   $user     = isset($_POST['user'])    ? $_POST['user'] : '';
-  
+  $dateFrom = isset($_POST['dateFrom'])? substr($_POST['dateFrom'],0,10) : '';
+  $dateTo   = isset($_POST['dateTo']) ? substr($_POST['dateTo'],0,10) : '';
+
   try {
 
   G::LoadClass("BasePeer" );
@@ -97,22 +99,37 @@
     $Criteria->add      (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
     $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
   }
-  
-  if ( $user != '' ) {
-    $Criteria->add      (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
-    $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
-  }
-/*
+
+
   if ( $dateFrom != '' ) {
-    $Criteria->add      (AppCacheViewPeer::APP, $user, Criteria::EQUAL );
-    $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+    if( $dateTo != '' ){
+      $Criteria->add(
+        $Criteria->getNewCriterion(
+          AppCacheViewPeer::DEL_DELEGATE_DATE,
+          $dateFrom, Criteria::GREATER_EQUAL
+        )->addAnd($Criteria->getNewCriterion(
+          AppCacheViewPeer::DEL_DELEGATE_DATE,
+          $dateTo, Criteria::LESS_EQUAL
+        ))
+      );
+      $CriteriaCount->add(
+        $CriteriaCount->getNewCriterion(
+          AppCacheViewPeer::DEL_DELEGATE_DATE,
+          $dateFrom, Criteria::GREATER_EQUAL
+        )->addAnd($Criteria->getNewCriterion(
+          AppCacheViewPeer::DEL_DELEGATE_DATE,
+          $dateTo, Criteria::LESS_EQUAL
+        ))
+      );
+    } else {
+      $Criteria->add      (AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL );
+      $CriteriaCount->add (AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL );
+    }
+  } else if ( $dateTo != '' ) {
+    $Criteria->add      (AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
+    $CriteriaCount->add (AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
   }
 
-  if ( $dateTo != '' ) {
-    $Criteria->add      (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
-    $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
-  }
-*/
   //add the filter 
   if ( $filter != '' ) {
   	switch ( $filter ) {
@@ -143,7 +160,7 @@
   //case 1. when the SEARCH action is selected and none filter, search criteria is defined, 
   //we need to count using the table APPLICATION, because APP_CACHE_VIEW takes 3 seconds
   
-  if ( $action == 'search' && $filter == '' && $search == '' && $process == '' && $status == '' ) {
+  if ( $action == 'search' && $filter == '' && $search == '' && $process == '' && $status == '' && $dateFrom == '' && $dateTo == '') {
   	$totalCount = $oAppCache->getSearchAllCount();
     $doCountAlreadyExecuted = true;
   }
