@@ -25,10 +25,15 @@
     $confCasesList = array();
   }
 
+  // reassign header configuration
+  $confReassignList = getReassignList();
+
   // evaluates an action and the list that will be rendered
   $config       = getAdditionalFields($action, $confCasesList);
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
+  $reassignColumns      = $confReassignList['caseColumns'];
+  $reassignReaderFields = $confReassignList['caseReaderFields'];
 
   if ( $action == 'draft' /* &&  $action == 'cancelled' */) {
     array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'deleteLink' ) );
@@ -63,6 +68,8 @@
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns );                       //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields',  $readerFields );                  //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'reassignColumns',       $reassignColumns );       //sending the columns to display in grid
+  $oHeadPublisher->assign( 'reassignReaderFields',  $reassignReaderFields );  //sending the fields to get from proxy
   $oHeadPublisher->assign( 'action',        $action );                        //sending the fields to get from proxy
   $oHeadPublisher->assign( 'PMDateFormat',  $config['dateformat'] );          //sending the fields to get from proxy
   $oHeadPublisher->assign( 'statusValues',  $status );                        //sending the columns to display in grid
@@ -552,6 +559,38 @@
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
+  /**
+   * get the list configuration headers of the cases checked for reassign, for the
+   * reassign cases list.
+   */
+  function getReassignList() {
+    $caseColumns = array ();
+    $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 100 );
+    $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
+    $caseColumns[] = array( 'header' =>'Reassign To',  'dataIndex' => 'APP_STATUS',        'width' => 120, );
+
+    $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+//    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+//    $caseReaderFields[] = array( 'name' => 'USERS' );
+
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
+  }
+
+//  Ext.namespace("Ext.ux");
+//  Ext.ux.comboBoxRenderer = function(combo) {
+//    return function(value) {
+//      var idx = combo.store.find(combo.valueField, value);
+//      var rec = combo.store.getAt(idx);
+//      return rec.get(combo.displayField);
+//    }
+//  }
   /**
    * loads the PM Table field list from the database based in an action parameter
    * then assemble the List of fields with these data, for the configuration in cases list.

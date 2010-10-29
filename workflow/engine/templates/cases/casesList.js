@@ -10,14 +10,16 @@ new Ext.KeyMap(document, {
         e.stopEvent();
         //document.location = document.location;
         storeCases.reload();
-      }    
-      else 
+      }
+      else
         Ext.Msg.alert(TRANSLATIONS.LABEL_REFRESH, TRANSLATIONS.MESSAGE_REFRESH);
   }
 });
 
 //global variables
 var storeCases;
+var storeReassignCases;
+
 
 function callbackDeleteCase (btn, text) {
 	if ( btn == 'yes' ) {
@@ -61,12 +63,13 @@ function unpauseCaseFunction (appid, delindex) {
 }
 
 Ext.onReady ( function() {
+
   var filterProcess = '';
   var filterUser    = '';
   var caseIdToDelete = '';
   var caseIdToUnpause = '';
   var caseIndexToUnpause = '';
- 
+
   function openLink(value, p, r){
     return String.format("<a class='button_pm' href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
@@ -91,27 +94,27 @@ Ext.onReady ( function() {
     myDate = new Date( 1900,0,1,0,0,0);
   try{
     if(!Ext.isDate( value )){
-    	var myArray = value.split(' '); 
-    	var myArrayDate = myArray[0].split('-'); 
-    	if ( myArray.length > 1 ) 
+    	var myArray = value.split(' ');
+    	var myArrayDate = myArray[0].split('-');
+    	if ( myArray.length > 1 )
     	  var myArrayHour = myArray[1].split(':');
     	else
-    		var myArrayHour = new Array('0','0','0'); 
+    		var myArrayHour = new Array('0','0','0');
     	var myDate = new Date( myArrayDate[0], myArrayDate[1]-1, myArrayDate[2], myArrayHour[0], myArrayHour[1], myArrayHour[2] );
     }
   }
   catch(e){};
-    
+
     return myDate;
-  }   
+  }
   function showDate (value,p,r) {
     var myDate = convertDate( value );
     return String.format("{0}", myDate.dateFormat( PMDateFormat ));
-  } 
-  
+  }
+
   function dueDate(value, p, r){
     var myDate = convertDate( value );
-    var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;'; 
+    var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;';
     return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
   }
 
@@ -154,17 +157,45 @@ Ext.onReady ( function() {
 //	columns.push ( { header: "xxxxxx", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'deleteLink'});
 
 	//adding the hidden field DEL_INIT_DATE
-	readerFields.push ( { name: "DEL_INIT_DATE"});
-	readerFields.push ( { name: "APP_UID"});
-	readerFields.push ( { name: "DEL_INDEX"});
+	readerFields.push ( {name: "DEL_INIT_DATE"});
+	readerFields.push ( {name: "APP_UID"});
+	readerFields.push ( {name: "DEL_INDEX"});
 
-	
+
   var cm = new Ext.grid.ColumnModel({
     defaults: {
-      sortable: true // columns are sortable by default           
+      sortable: true // columns are sortable by default
     },
       columns: columns
     });
+
+  var reassignCm = new Ext.grid.ColumnModel({
+    defaults: {
+      sortable: true // columns are sortable by default
+    },
+      columns: reassignColumns
+    });
+
+  var newPopUp = new Ext.Window({
+              id       : Ext.id(),
+              el       : 'reassign-panel',
+              title    : 'Static Panel',
+              width    : 600,
+              height   : 400,
+              frame    : true,
+              closable: false
+            //  html     : responseObject.responseText
+            });
+
+ var btnCloseReassign = new Ext.Button ({
+    text: 'Close',
+    //    text: TRANSLATIONS.LABEL_SELECT_ALL,
+        handler: function(){
+          newPopUp.hide();
+     }
+ });
+
+
 
   // Create HttpProxy instance, all CRUD requests will be directed to single proxy url.
   var proxyCasesList = new Ext.data.HttpProxy({
@@ -180,14 +211,37 @@ Ext.onReady ( function() {
     successProperty: 'success',
     idProperty: 'index',
     root: 'data',
-    messageProperty: 'message'  
-    }, 
+    messageProperty: 'message'
+    },
     readerFields
+  );
+
+  var proxyReassignCasesList = new Ext.data.HttpProxy({
+    api: {
+      read :   'proxyReassignCasesList'
+    }
+  });
+
+  var readerReassignCasesList = new Ext.data.JsonReader({
+    totalProperty: 'totalCount',
+    successProperty: 'success',
+    idProperty: 'index',
+    root: 'data',
+    messageProperty: 'message'
+    },
+    reassignReaderFields
   );
 
   // The new DataWriter component.
   //currently we are not using this in casesList, but it is here just for complete definition
   var writerCasesList = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true
+  });
+
+  // The new DataWriter component.
+  //currently we are not using this in casesList, but it is here just for complete definition
+  var writerReassignCasesList = new Ext.data.JsonWriter({
     encode: true,
     writeAllFields: true
   });
@@ -199,6 +253,14 @@ Ext.onReady ( function() {
     proxy: proxyCasesList,
     reader: readerCasesList,
     writer: writerCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+  });
+
+  storeReassignCases = new Ext.data.Store({
+    remoteSort: true,
+    proxy : proxyReassignCasesList,
+    reader: readerReassignCasesList,
+    writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
     autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
 
@@ -220,6 +282,21 @@ Ext.onReady ( function() {
   });
   storeProcesses.setDefaultSort('APP_PRO_TITLE', 'asc');
 
+  //var reassignUsersCombo = new Ext.grid.;
+  /*
+  var storeToReassignUsers = new Ext.data.JsonStore({
+    root: 'data',
+    totalProperty: 'totalCount',
+    idProperty: 'index',
+    remoteSort: true,
+    fields: [
+      'USR_UID', 'USR_USERNAME'
+    ],
+    data: usersObject
+  });
+  storeProcesses.setDefaultSort('APP_PRO_TITLE', 'asc');
+  */
+
 
   // creating the button for filters
   var btnRead = new Ext.Button ({
@@ -230,7 +307,7 @@ Ext.onReady ( function() {
     allowDepress: false,
     pressed: false
   });
- 
+
   var btnUnread = new Ext.Button ({
     id: 'unread',
     text: TRANSLATIONS.LABEL_OPT_UNREAD,
@@ -239,7 +316,7 @@ Ext.onReady ( function() {
     allowDepress: false,
     pressed: false
   });
- 
+
   var btnAll = new Ext.Button ({
     id: 'all',
     text: TRANSLATIONS.LABEL_OPT_ALL,
@@ -248,7 +325,7 @@ Ext.onReady ( function() {
     allowDepress: false,
     pressed: true
   });
- 
+
   var btnStarted = new Ext.Button ({
     id: 'started',
 //    text: 'started by me',
@@ -258,7 +335,7 @@ Ext.onReady ( function() {
     allowDepress: true,
     pressed: false
   });
- 
+
   var btnCompleted = new Ext.Button ({
     id: 'completed',
 //    text: 'Completed by me',
@@ -268,7 +345,7 @@ Ext.onReady ( function() {
     allowDepress: true,
     pressed: false
   });
- 
+
   // ComboBox creation processValues
   var comboProcess = new Ext.form.ComboBox({
     width         : 180,
@@ -299,7 +376,7 @@ Ext.onReady ( function() {
           storeCases.setBaseParam('dateTo', dateTo.getValue());
         }
         storeCases.setBaseParam('process', filterProcess);
-        storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize }});
+        storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize}});
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
@@ -327,8 +404,9 @@ Ext.onReady ( function() {
     listeners:{
       scope: this,
       'select': function() {
-        filterUser = comboAllUsers.value;
-        if (filterUser=''){
+        filterProcess = comboAllUsers.value;
+
+        if (filterProcess==''){
           btnSelectAll.hide();
           btnUnSelectAll.hide();
           btnReassign.hide();
@@ -337,8 +415,8 @@ Ext.onReady ( function() {
           btnUnSelectAll.show();
           btnReassign.show();
         }
-        storeCases.setBaseParam( 'user', filterUser);
-        storeCases.load({params:{user: filterUser, start : 0 , limit : pageSize }});
+        storeCases.setBaseParam( 'user', filterProcess);
+        storeCases.load({params:{user: filterProcess, start : 0 , limit : pageSize}});
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
@@ -364,10 +442,33 @@ Ext.onReady ( function() {
 //    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
       grid.getSelectionModel().getSelections();
-      reassignPopup.show();
+        reassign();
+//      reassignPopup.show();
+//      conn.request({
+//        url: 'cases_Ajax',
+//        url: 'proxyReassignCases',
+//        method: 'POST',
+//        params: {"APP_UIDS": 'metaID', 'FROM_USR_ID': 'field', 'action': 'reassignByUserList'},
+//        success: function(responseObject) {
+//          reassignPopup.html = responseObject.responseText;
+//
+//            var newPopUp = new Ext.Window({
+//              title    : 'Static Panel',
+//              width    : 600,
+//              height   : 400,
+//              frame    : true,
+//              html     : responseObject.responseText
+//            });
+//            newPopUp.show();
+//        },
+//        failure: function() {
+//            Ext.Msg.alert('Status', 'Unable to show history at this time. Please try again later.');
+//        }
+//      });
     }
   });
 
+//  var conn = new Ext.data.Connection();
   var nav = new Ext.FormPanel({
 					labelWidth:100,
 					frame:true,
@@ -413,7 +514,7 @@ Ext.onReady ( function() {
     width         : 90,
     boxMaxWidth   : 90,
     editable      : false,
-    mode          : 'local',    
+    mode          : 'local',
     store         : new Ext.data.ArrayStore({
       fields: ['id', 'value'],
       data  : statusValues
@@ -421,7 +522,7 @@ Ext.onReady ( function() {
     valueField    : 'id',
     displayField  : 'value',
     triggerAction : 'all',
-    
+
     //typeAhead: true,
     //forceSelection: true,
     //emptyText: 'Select a status...',
@@ -457,7 +558,7 @@ Ext.onReady ( function() {
     mode: 'local',
     autocomplete: true,
     triggerAction: 'all',
-    
+
     store         : new Ext.data.ArrayStore({
       fields: ['USR_UID','USR_FULLNAME'],
       data  : userValues
@@ -473,8 +574,8 @@ Ext.onReady ( function() {
       }},
     iconCls: 'no-icon'  //use iconCls if placing within menu to shift to right side of menu
   });
-  
-  
+
+
   var textSearch = new Ext.form.TextField ({
     allowBlank: true,
     ctCls:'pm_search_text_field',
@@ -499,7 +600,7 @@ Ext.onReady ( function() {
     storeCases.setBaseParam( 'search', searchText);
     storeCases.load({params:{ start : 0 , limit : pageSize }});
   }
-  
+
   var resetSearchButton = {
     text:'X',
 	  ctCls:'pm_search_x_button',
@@ -508,7 +609,7 @@ Ext.onReady ( function() {
       doSearch();
     }
   }
-  
+
   var textJump = new Ext.form.TextField ({
     allowBlank: false,
     width: 50,
@@ -517,7 +618,7 @@ Ext.onReady ( function() {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
           jump = textJump.getValue();
-          location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
+          location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner';
         }
       }
     }
@@ -527,7 +628,7 @@ Ext.onReady ( function() {
     text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
       jump = textJump.getValue();
-      location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner'; 
+      location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner';
     }
   });
 
@@ -668,7 +769,7 @@ Ext.onReady ( function() {
       btnSearch
     ]
   });
-  
+
   switch (action) {
     case 'draft'      : itemToolbar = toolbarDraft; break;
     case 'sent'       : itemToolbar = toolbarSent;  break;
@@ -677,7 +778,7 @@ Ext.onReady ( function() {
     case 'search'     : itemToolbar = toolbarSearch;  break;
     default           : itemToolbar = toolbarTodo; break;
   }
-    
+
   var tb = new Ext.Toolbar({
     height: 33,
     items: itemToolbar
@@ -698,7 +799,7 @@ Ext.onReady ( function() {
         var appUid   = grid.store.data.items[n].data.APP_UID;
         var delIndex = grid.store.data.items[n].data.DEL_INDEX;
         var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
-        Ext.Msg.show({ 
+        Ext.Msg.show({
           msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
           width:300,
           wait:true,
@@ -711,7 +812,7 @@ Ext.onReady ( function() {
         //this.ownerCt.doLayout();
       }
     },
-    
+
     tbar: tb,
     // paging bar on the bottom
     bbar: new Ext.PagingToolbar({
@@ -724,30 +825,84 @@ Ext.onReady ( function() {
     })
   });
 
+   // create the editor grid
+  var reassignGrid = new Ext.grid.EditorGridPanel({
+    id : Ext.id(),
+    region: 'center',
+    store: storeReassignCases,
+    cm: reassignCm,
+    /* renderTo: 'cases-grid', */
+    autoHeight: true,
+    //frame: false,
+    //autoHeight:true,
+    //minHeight:400,
+//    layout: 'fit',
+    viewConfig: {
+      forceFit:true
+    },
+/*
+    listeners: {
+      rowdblclick: function(grid, n,e){
+        var appUid   = grid.store.data.items[n].data.APP_UID;
+        var delIndex = grid.store.data.items[n].data.DEL_INDEX;
+        var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
+        //Ext.Msg.alert (TRANSLATIONS.LABEL_OPEN_CASE , caseTitle );
+        Ext.Msg.show({
+                msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
+                width:300,
+                wait:true,
+                waitConfig: {interval:200}
+              });
+        window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+      },
+      render: function(){
+        //this.loadMask = new Ext.LoadMask(this.body, {msg:TRANSLATIONS.LABEL_GRID_LOADING});
+        //this.ownerCt.doLayout();
+      }
+  },
+  */
+    //tbar: tb,
+    // paging bar on the bottom
+    bbar: new Ext.PagingToolbar({
+      pageSize: pageSize,
+      store: storeReassignCases,
+      displayInfo: true,
+//      displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ',
+      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' &nbsp; ',
+//      emptyMsg: "No items to display"
+      emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
+    })
+
+    });
+
+
     // manually trigger the data store load
     storeCases.setBaseParam( 'action', action );
     storeCases.setBaseParam( 'start',  0 );
     storeCases.setBaseParam( 'limit',  pageSize );
     storeCases.load();
+    newPopUp.add(reassignGrid);
+    newPopUp.addButton(btnCloseReassign);
+
     //storeProcesses.load();
 
     function onItemToggle(item, pressed){
       switch ( item.id ) {
-        case 'read' : 
+        case 'read' :
           btnUnread.toggle( false, true);
           btnAll.toggle( false, true);
           break;
-        case 'unread' : 
+        case 'unread' :
           btnRead.toggle( false, true);
           btnAll.toggle( false, true);
           break;
-        case 'started' : 
+        case 'started' :
           btnAll.toggle( false, true);
           break;
-        case 'completed' : 
+        case 'completed' :
           btnAll.toggle( false, true);
           break;
-        case 'all' : 
+        case 'all' :
           btnRead.toggle( false, true);
           btnUnread.toggle( false, true);
           btnStarted.toggle( false, true);
@@ -774,15 +929,85 @@ Ext.onReady ( function() {
 
   var viewport = new Ext.Viewport($configViewport);
 
+
+
+
+
+
   if( parent.PANEL_EAST_OPEN ){
     parent.PANEL_EAST_OPEN = false;
-    var debugPanel = parent.Ext.getCmp('debugPanel');      
+    var debugPanel = parent.Ext.getCmp('debugPanel');
     debugPanel.hide();
-    debugPanel.ownerCt.doLayout(); 
+    debugPanel.ownerCt.doLayout();
   }
   //parent.updateCasesView();
   parent.updateCasesTree();
   comboStatus.setValue('');
   comboProcess.setValue('');
-  
+  // hidding the buttons for the reassign
+//  if (action=='to_reassign'){
+//    btnSelectAll.hide();
+//    btnUnSelectAll.hide();
+//    btnReassign.hide();
+//  }
+
+
+function reassign(){
+  //var rowSelected = processesGrid.getSelectionModel().getSelected();
+  var rows = grid.getSelectionModel().getSelections();
+//  alert(reassignGrid.getId());
+  if( rows.length > 0 ) {
+    var ids = '';
+    for(i=0; i<rows.length; i++) {
+      if(i != 0 ) ids += ',';
+      ids += rows[i].get('APP_UID');
+    }
+    storeReassignCases.setBaseParam( 'APP_UIDS', ids);
+    storeReassignCases.setBaseParam( 'user', comboAllUsers.value);
+    storeReassignCases.load({params:{ start : 0 , limit : pageSize}});
+    newPopUp.show();
+//    storeReassignCases.baseParams = {APP_UIDS : ids, user : comboAllUsers.value};
+//    storeReassignCases.reload();
+   /* Ext.Ajax.request({
+      url : 'proxyReassignCasesList' ,
+      params : {APP_UIDS : ids, user : comboAllUsers.value},
+      method: 'POST',
+      success: function ( responseObject ) {
+//        Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
+        //storeCases.reload();
+            var newPopUp = new Ext.Window({
+              title    : 'Static Panel',
+              width    : 600,
+              height   : 400,
+              frame    : true
+            //  html     : responseObject.responseText
+            });
+            newPopUp.add(reassignGrid);
+            newPopUp.show();
+//        var activator = Ext.storeCasesgetCmp('activator');
+//        var activator = Ext.storeCasesgetCmp('activator');
+//        activator.setDisabled(true);
+//        activator.setText('Status');
+//        activator.setIcon('');
+      },
+      failure: function ( ) {
+        Ext.MessageBox.alert('Failed', result.responseText);
+      }
+    });*/
+
+    //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
+  } else {
+     Ext.Msg.show({
+      title:'',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      buttons: Ext.Msg.INFO,
+      fn: function(){},
+      animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
+    });
+  }
+}
+
+
 });
