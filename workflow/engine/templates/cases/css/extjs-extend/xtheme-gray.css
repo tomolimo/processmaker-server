@@ -323,26 +323,34 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 
 /*Search Button*/
 .pm_search_x_button{
-	margin-left:-21px;
+	/*margin-left:-21px;*/
 	display:block;
-	width:18px;
-	height:18px;
-	z-index:1000 !important;
+	width:16px;
+	height:20px;
+	margin-top:1px;
+	margin-right:3px;
 }
-.pm_search_x_button .x-btn-over .x-btn-mc,.pm_search_x_button .x-btn-over .x-btn-ml,.pm_search_x_button .x-btn-over .x-btn-mr,
-.pm_search_x_button .x-btn-over .x-btn-tc,.pm_search_x_button .x-btn-over .x-btn-tl,.pm_search_x_button .x-btn-over .x-btn-tr,
-.pm_search_x_button .x-btn-over .x-btn-bc,.pm_search_x_button .x-btn-over .x-btn-bl,.pm_search_x_button .x-btn-over .x-btn-br
+.pm_search_x_button .x-btn-over .x-btn-mc
 {
 	background:transparent;
 }
-.pm_search_x_button button{
-	background-image:url(/images/icons_silk/sprites.png) !important;
-	background-position:0 -5275px !important;
-	text-indent: -10000px;
-	z-index:1000 !important;
-	width:18px;
-	height:18px;
+.pm_search_x_button .x-btn-ml,.pm_search_x_button .x-btn-mr,
+.pm_search_x_button .x-btn-tc,.pm_search_x_button .x-btn-tl,.pm_search_x_button .x-btn-tr,
+.pm_search_x_button .x-btn-bc,.pm_search_x_button .x-btn-bl,.pm_search_x_button .x-btn-br
+{
+	display:none !important;
 }
-.pm_search_text_field{
-	/*padding-right:16px;*/
+.pm_search_x_button button{
+	background:url(/images/icons_silk/search_x_button.png) no-repeat;
+	text-indent: -10000px;
+	width:16px !important;
+	height:20px !important;
+	display:block;
+}
+.pm_search_text_field input{
+	border-right:none !important;
+}
+.pm_search_text_field input:focus{
+	border:1px solid #c1c1c1 !important;
+	border-right:none !important;
 }
