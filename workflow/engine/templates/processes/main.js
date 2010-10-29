@@ -209,6 +209,7 @@ Ext.onReady(function(){
         xtype: 'tbseparator'
       },new Ext.form.TextField ({
         id: 'searchTxt',
+        ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 150,
         emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
@@ -220,11 +221,8 @@ Ext.onReady(function(){
           }
         }
       }),{
-        text:TRANSLATIONS.ID_SEARCH,
-        handler: doSearch
-      },
-      {
         text:'X',
+        ctCls:'pm_search_x_button',
         handler: function(){
           //store.setBaseParam( 'category', '<reset>');
           store.setBaseParam( 'processName', '');
@@ -233,6 +231,9 @@ Ext.onReady(function(){
           //comboCategory.setValue('');
           //store.reload();
         }
+      },{
+        text:TRANSLATIONS.ID_SEARCH,
+        handler: doSearch
       }
     ],
  // paging bar on the bottom
