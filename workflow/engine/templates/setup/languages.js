@@ -22,19 +22,17 @@ new Ext.KeyMap(document, {
 
 Ext.onReady(function(){
 
- 
-
   //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   Ext.QuickTips.init();
 
   var infoGrid = new Ext.grid.GridPanel( {
-    /*renderTo: 'list-panel',*/
+    renderTo: 'list-panel',
     region: 'center',
     layout: 'fit',
     id: 'infoGrid',
     stripeRows : true,
     autoHeight : true,
-    width : 800,
+    autoWidth : true,
     title : '',
     stateful : true,
     stateId : 'grid',
@@ -43,7 +41,6 @@ Ext.onReady(function(){
     enableHdMenu: false,
     collapsible: false,
     animCollapse: false,
-
 
     view: new Ext.grid.GroupingView({
         forceFit:true,
@@ -112,7 +109,7 @@ Ext.onReady(function(){
       }, {
         dataIndex : 'REV_DATE',
         header : TRANSLATIONS.ID_LAN_REV_DATE,
-        width : 140,
+        width : 110,
         sortable : false
       }, {
         dataIndex : 'VERSION',
@@ -435,14 +432,15 @@ Ext.onReady(function(){
   //infoGrid.render(document.body);
   //fp.render('form-panel');
 
-
+/*
   var viewport = new Ext.Viewport({
-    layout: 'border',
+    layout: 'fit',
     autoScroll: true,
     items: [
       infoGrid
     ]
   });
+  */
 });
 
 
