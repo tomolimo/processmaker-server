@@ -802,37 +802,47 @@ class AppCacheView extends BaseAppCacheView {
   }  
 
   function checkGrantsForUser( $root = false ) {
-  	if ( $root ) 
-      $con = Propel::getConnection("root");
-    else
-      $con = Propel::getConnection("workflow");
+    try {      
+    	if ( $root ) 
+        $con = Propel::getConnection("root");
+      else
+        $con = Propel::getConnection("workflow");
+
+      $stmt = $con->createStatement();
+      $sql = "select CURRENT_USER(), USER() ";
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+      $rs1->next();
+      $row = $rs1->getRow();
+      $mysqlUser    = str_replace('@', "'@'", $row[0] );
       
-    $stmt = $con->createStatement();
-    $sql = "select CURRENT_USER(), USER() ";
-    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
-    $rs1->next();
-    $row = $rs1->getRow();
-    $mysqlUser    = str_replace('@', "'@'", $row[0] );
-    
-    $super = false;
-    $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' "; 
-    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
-    $rs1->next();
-    $row = $rs1->getRow();
-    if ( is_array($row = $rs1->getRow() ) ) {
-    	$super = true;
-  	}
-    
-    return array( 'user' => $mysqlUser, 'super' => $super );
+      $super = false;
+      $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' "; 
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+      $rs1->next();
+      $row = $rs1->getRow();
+      if ( is_array($row = $rs1->getRow() ) ) {
+      	$super = true;
+    	}
+      
+      return array( 'user' => $mysqlUser, 'super' => $super );
+    }
+    catch ( Exception $e ) {
+      return array( 'error' => true, 'msg' => $e->getMessage() );
+    }
   }
     
   function setSuperForUser( $mysqlUser ) {
-    $con = Propel::getConnection("root");
-    $stmt = $con->createStatement();
-    $sql = "GRANT SUPER on *.* to '$mysqlUser' ";
-    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+    try {      
+      $con = Propel::getConnection("root");
+      $stmt = $con->createStatement();
+      $sql = "GRANT SUPER on *.* to '$mysqlUser' ";
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+      return array();
+    }
+    catch ( Exception $e ) {
+      return array( 'error' => true, 'msg' => $e->getMessage() );
+    }
 
-    return true;
   }
   
   /**
@@ -931,8 +941,8 @@ class AppCacheView extends BaseAppCacheView {
    * Insert an app delegatiojn trigger
    * @return void
    */
-  function triggerAppDelegationInsert( $lang ) {
-    $con = Propel::getConnection("root");
+  function triggerAppDelegationInsert( $lang, $recreate = false ) {
+    $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
     $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
@@ -945,6 +955,10 @@ class AppCacheView extends BaseAppCacheView {
       }
       $rs->next();
       $row = $rs->getRow();
+    }
+    if ( $recreate ) {
+      $rs = $stmt->executeQuery('DROP TRIGGER IF EXISTS APP_DELEGATION_INSERT' );
+      $found = false;
     }
     if ( ! $found ) {
       $filenameSql = $this->pathToAppCacheFiles . 'triggerAppDelegationInsert.sql';
@@ -963,7 +977,7 @@ class AppCacheView extends BaseAppCacheView {
    * update the App Delegation triggers
    * @return void
    */
-  function triggerAppDelegationUpdate( $lang ) {
+  function triggerAppDelegationUpdate( $lang, $recreate = false ) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
@@ -977,6 +991,11 @@ class AppCacheView extends BaseAppCacheView {
       }
       $rs->next();
       $row = $rs->getRow();
+    }
+
+    if ( $recreate ) {
+      $rs = $stmt->executeQuery('DROP TRIGGER IF EXISTS APP_DELEGATION_UPDATE' );
+      $found = false;
     }
 
     if ( ! $found ) {
@@ -995,7 +1014,7 @@ class AppCacheView extends BaseAppCacheView {
    * update the Application triggers
    * @return void
    */
-  function triggerApplicationUpdate( $lang ) {
+  function triggerApplicationUpdate( $lang, $recreate = false ) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
@@ -1009,6 +1028,10 @@ class AppCacheView extends BaseAppCacheView {
       }
       $rs->next();
       $row = $rs->getRow();
+    }
+    if ( $recreate ) {
+      $rs = $stmt->executeQuery('DROP TRIGGER IF EXISTS APPLICATION_UPDATE' );
+      $found = false;
     }
 
     if ( ! $found ) {
@@ -1027,7 +1050,7 @@ class AppCacheView extends BaseAppCacheView {
    * update the Application triggers
    * @return void
    */
-  function triggerApplicationDelete( $lang ) {
+  function triggerApplicationDelete( $lang , $recreate = false) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
@@ -1041,6 +1064,11 @@ class AppCacheView extends BaseAppCacheView {
       }
       $rs->next();
       $row = $rs->getRow();
+    }
+
+    if ( $recreate ) {
+      $rs = $stmt->executeQuery('DROP TRIGGER IF EXISTS APPLICATION_DELETE' );
+      $found = false;
     }
 
     if ( ! $found ) {

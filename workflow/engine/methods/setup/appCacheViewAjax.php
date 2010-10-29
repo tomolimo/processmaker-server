@@ -31,8 +31,8 @@
       }
 
       //get user Root from hash 
-      PROPEL::Init ( PATH_METHODS.'dbConnections/rootDbConnections.php' ); 
-      $con = Propel::getConnection("root");
+      $result->info = array ();
+      $result->error = false;
 
       //setup the appcacheview object, and the path for the sql files
       $appCache = new AppCacheView();
@@ -45,17 +45,39 @@
       $currentUser        = $res['user'];
       $currentUserIsSuper = $res['super'];
       $result->info[] = array ('name' => 'Current User',    'value'=> $currentUser );
-      $result->info[] = array ('name' => 'SUPER privilege', 'value'=> $currentUserIsSuper );
+      $result->info[] = array ('name' => 'Current User has SUPER privilege', 'value'=> $currentUserIsSuper );
+      
+      try {
+        PROPEL::Init ( PATH_METHODS.'dbConnections/rootDbConnections.php' ); 
+        $con = Propel::getConnection("root");
+      }
+      catch ( Exception $e ) {
+        $result->info[] = array ('name' => 'Checking MySql Root user',    'value'=> 'failed' );
+        $result->error = true;
+        $result->errorMsg = $e->getMessage();
+      }
       
       //if user does not have the SUPER privilege we need to use the root user and grant the SUPER priv. to normal user.
-      if ( ! $currentUserIsSuper ) {
+      if ( ! $currentUserIsSuper && !$result->error ) {
         $res = $appCache->checkGrantsForUser( true );
-        $result->info[] = array ('name' => 'Root User',       'value'=> $res['user'] );
-        $result->info[] = array ('name' => 'Has SUPER privilege', 'value'=> $res['super'] );
+        if ( !isset( $res['error'] ) ) {
+          $result->info[] = array ('name' => 'Root User',       'value'=> $res['user'] );
+          $result->info[] = array ('name' => 'Root User has SUPER privilege', 'value'=> $res['super'] );
+        }
+        else {
+          $result->info[] = array ('name' => 'Error', 'value'=> $res['msg'] );
+        }
 
         $res = $appCache->setSuperForUser( $currentUser );
-        $result->info[] = array ('name' => 'setting SUPER privilege',       'value'=> $res);
+        if ( !isset( $res['error'] ) ) {
+          $result->info[] = array ('name' => 'Setting SUPER privilege',       'value'=> 'Successfully' );
+        }
+        else {
+          $result->error = true;
+          $result->errorMsg = $res['msg'];
+        }
         $currentUserIsSuper = true;
+        
       }
 
       //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.      
@@ -68,19 +90,19 @@
       
       //now check if we have the triggers installed
       //APP_DELEGATION INSERT 
-      $res = $appCache->triggerAppDelegationInsert($lang);
+      $res = $appCache->triggerAppDelegationInsert($lang, false);
       $result->info[] = array ('name' => 'Trigger APP_DELEGATION INSERT',           'value'=> $res);
 
       //APP_DELEGATION Update 
-      $res = $appCache->triggerAppDelegationUpdate($lang);
+      $res = $appCache->triggerAppDelegationUpdate($lang, false);
       $result->info[] = array ('name' => 'Trigger APP_DELEGATION UPDATE',           'value'=> $res);
 
       //APPLICATION UPDATE 
-      $res = $appCache->triggerApplicationUpdate($lang);
+      $res = $appCache->triggerApplicationUpdate($lang, false);
       $result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
 
       //APPLICATION DELETE
-      $res = $appCache->triggerApplicationDelete($lang);
+      $res = $appCache->triggerApplicationDelete($lang, false);
       $result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
 
       //show language
@@ -108,12 +130,30 @@
       $lang = $_POST['lang'];
 
       try {        
-        //build using the method in AppCacheView Class
         //setup the appcacheview object, and the path for the sql files
         $appCache = new AppCacheView();
         $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP );
+
+        //APP_DELEGATION INSERT 
+        $res = $appCache->triggerAppDelegationInsert($lang, false);
+        //$result->info[] = array ('name' => 'Trigger APP_DELEGATION INSERT',           'value'=> $res);
+  
+        //APP_DELEGATION Update 
+        $res = $appCache->triggerAppDelegationUpdate($lang, false);
+        //$result->info[] = array ('name' => 'Trigger APP_DELEGATION UPDATE',           'value'=> $res);
+  
+        //APPLICATION UPDATE 
+        $res = $appCache->triggerApplicationUpdate($lang, false);
+        //$result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
+  
+        //APPLICATION DELETE
+        $res = $appCache->triggerApplicationDelete($lang, false);
+        //$result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
+
+
+        //build using the method in AppCacheView Class
         $res = $appCache->fillAppCacheView($lang);
-        $result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
+        //$result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
         
         //set status in config table
         $confParams = Array(
@@ -124,10 +164,10 @@
         $conf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
       
         $response = new StdClass();
-        $response->success = true;
-        $response->msg     = "Completed successfully";
+        $result->success = true;
+        $result->msg     = "Completed successfully";
         
-        echo G::json_encode($response);
+        echo G::json_encode($result);
         
       } 
       catch (Exception $e) {

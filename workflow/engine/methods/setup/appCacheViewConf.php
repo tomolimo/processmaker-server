@@ -23,7 +23,7 @@
   }
   $lang = isset($oConf->aConfig['LANG']) ? $oConf->aConfig['LANG'] : 'en';
   
-  $oHeadPublisher->assign('appCacheViewEnabled', $appCacheViewEnabled);
+  //$oHeadPublisher->assign('appCacheViewEnabled', $appCacheViewEnabled);
   $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   $oHeadPublisher->assign( 'currentLang',    $lang);  //current language  

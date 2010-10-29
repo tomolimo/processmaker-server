@@ -22,27 +22,27 @@ Ext.onReady(function() {
       fields : [ {name : 'name'}, {name : 'value'} ]
     }),
   });
-  store.load();
 
   // create the Grid
   var infoGrid = new Ext.grid.GridPanel( {
     store : store,
-    columns : [ {
-      id : 'name',
-      header : '',
-      width : 190,
-      sortable : false,
-          dataIndex : 'name'
-        }, {
-          header : '',
-          width : 160,
-          sortable : false,
-          dataIndex : 'value'
-        }
+    columns : [{
+        id : 'name',
+        header : '',
+        width : 210,
+        sortable : false,
+        dataIndex : 'name'
+      }, 
+      {
+        header : '',
+        width : 190,
+        sortable : false,
+        dataIndex : 'value'
+      }
       ],
       stripeRows : true,
       autoHeight : true,
-      width : 350,
+      width : 400,
       title : 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
@@ -57,12 +57,12 @@ Ext.onReady(function() {
 
     
     var fsf = new Ext.FormPanel( {
-      labelWidth : 75, // label settings here cascade unless overridden
+      labelWidth : 105, // label settings here cascade unless overridden
       url : '',
       frame : true,
       title : ' ',
       bodyStyle : 'padding:5px 5px 0',
-      width : 350,
+      width : 400,
       items : [ ],
     });
     
@@ -125,8 +125,10 @@ Ext.onReady(function() {
             url: 'appCacheViewAjax',
             success: function(response) {
               store.reload();
-              Ext.MessageBox.hide();              
-              Ext.Msg.alert ( '', response.responseText );
+              Ext.MessageBox.hide();  
+              res = Ext.decode ( response.responseText );            
+              Ext.Msg.alert ( '', res.msg );
+                
             },
             failure : function(response) {
               Ext.Msg.hide();              
@@ -165,7 +167,6 @@ Ext.onReady(function() {
               Ext.Msg.alert ( 'Error', response.responseText );
             },
             params: {request: 'build', lang: 'en' },
-            waitMsg : 'Building Workflow Application Cache...',
             //timeout : 1000 //30 mins
             timeout : 1000*60*30 //30 mins
           });
@@ -180,67 +181,28 @@ Ext.onReady(function() {
     cmbLanguages.store.on('load',function(){ cmbLanguages.setValue ( currentLang ) });
     cmbLanguages.store.load();
 
-    if (!appCacheViewEnabled) {
-      Warning();
-    }
-  });
+    //store.load(); instead call standard proxy we are calling ajax request, because we need to catch any error 
+    Ext.Ajax.request({
+      url: 'appCacheViewAjax',
+      success: function(response) {
+        myData = Ext.decode ( response.responseText );
+        store.loadData(myData);  
+        if ( myData.error ) {
+          Warning( 'error', myData.errorMsg );
+      	}
+      },
+      failure : function(response) {
+        Ext.Msg.alert ( 'Error', response.responseText );
+      },
+      params: {request: 'info' },
+    });
+  
+  });  //ExtReady
 
-var newEl;
-var Warning = function() {
-  var tpl = new Ext.Template(
-      '<div id="fb" style="font-size:12px; border: 1px solid #FF0000; background-color:#FFAAAA; display:none; padding:12px; color:#000000;">',
-      '<b>Warning: </b>We detect that the Application Cache Data is not present in this Workspace environment, you need build it <a href="#" id="help1">Online Help</a></div>');
-  newEl = tpl.insertFirst(document.body);
+var Warning = function( msgTitle, msgError ) {
+  tplEl = Ext.get ('errorMsg');
 
-  /*
-   * Ext.fly('hideWarning').on('click', function() {
-   * Ext.fly(newEl).slideOut('t',{remove:true}); cp.set('hideFBWarning', true);
-   * });
-   */
-  Ext.fly(newEl).slideIn();
+  tplText = '<div style="font-size:12px; border: 1px solid #FF0000; background-color:#FFAAAA; display:block; padding:10px; color:#404000;"><b>' + msgTitle + ': </b>' + msgError + '</div>';
+  tplEl.update ( tplText );
+
 }
-
-// /
-
-Ext.example = function() {
-  var msgCt;
-
-  function createBox(t, s) {
-    return [
-        '<div class="msg">',
-        '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
-        '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>',
-        t,
-        '</h3>',
-        s,
-        '</div></div></div>',
-        '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
-        '</div>' ].join('');
-  }
-  return {
-    msg : function(title, format) {
-      if (!msgCt) {
-        msgCt = Ext.DomHelper.insertFirst(document.body, {
-          id : 'msg-div'
-        }, true);
-      }
-      msgCt.alignTo(document, 't-t');
-      var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
-      var m = Ext.DomHelper.append(msgCt, {
-        html : createBox(title, s)
-      }, true);
-      m.slideIn('t').pause(1).ghost("t", {
-        remove : true
-      });
-    },
-
-    init : function() {
-      var lb = Ext.get('lib-bar');
-      if (lb) {
-        lb.show();
-      }
-    }
-  };
-}();
-
-Ext.onReady(Ext.example.init, Ext.example);
