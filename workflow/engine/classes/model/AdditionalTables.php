@@ -1,4 +1,3 @@
-
 <?php
 
 require_once 'classes/model/om/BaseAdditionalTables.php';

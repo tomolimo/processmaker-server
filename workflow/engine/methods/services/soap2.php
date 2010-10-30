@@ -26,7 +26,6 @@
   require_once ( "classes/model/Users.php" );
   require_once ( "classes/model/Session.php" );
   require_once ( "classes/model/Content.php" );
-  
   G::LoadClass('wsResponse');
   G::LoadClass('wsBase');
 
