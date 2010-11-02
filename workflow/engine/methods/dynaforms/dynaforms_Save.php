@@ -28,13 +28,9 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   require_once('classes/model/Dynaform.php');
   require_once('classes/model/Content.php');
   
-  
-  $sfunction =$_POST['function'];
-  switch($sfunction){
-  case 'lookforNameDynaform':
-  
-  $snameDyanform=urldecode($_POST['NAMEDYNAFORM']);
-  $sPRO_UID=urldecode($_POST['proUid']);
+  if(isset($_POST['function']) && $_POST['function']=='lookforNameDynaform'){
+	  $snameDyanform=urldecode($_POST['NAMEDYNAFORM']);
+	  $sPRO_UID=urldecode($_POST['proUid']);
 	  
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID  );
@@ -62,9 +58,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     }
     print $flag;
   
-  break;
-  default:
-		
+   } else {	
 		  $dynaform = new dynaform();
 		
 		  if ($_POST['form']['DYN_UID']==='') unset($_POST['form']['DYN_UID']);
@@ -84,6 +78,5 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
 		    $dynaform->update( $_POST['form'] );
 		  }
 		  echo $dynaform->getDynUid();
-	 break;
 	}
 ?>
