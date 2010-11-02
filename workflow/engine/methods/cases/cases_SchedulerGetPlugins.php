@@ -1,15 +1,15 @@
 <?php
 
 if (! isset ( $_REQUEST ['action'] )) {
-  $ruturn ['success'] = 'failure';
-  $ruturn ['message'] = 'You may request an action';
-  print json_encode ( $ruturn );
+  $return ['success'] = 'failure';
+  $return ['message'] = 'You may request an action';
+  print json_encode ( $return );
   die ();
 }
 if (! function_exists ( $_REQUEST ['action'] )) {
-  $ruturn ['success'] = 'failure';
-  $ruturn ['message'] = 'The requested action doesn\'t exists';
-  print json_encode ( $ruturn );
+  $return ['success'] = 'failure';
+  $return ['message'] = 'The requested action doesn\'t exists';
+  print json_encode ( $return );
   die ();
 }
 
@@ -39,38 +39,19 @@ function pluginCaseSchedulerForm(){
   if(!isset($_REQUEST ['selectedOption'])) die;
   $G_PUBLISH = new Publisher;
   $params=explode("--",$_REQUEST ['selectedOption']);
-  G::pr($params);
   $oPluginRegistry =& PMPluginRegistry::getSingleton();
    $activePluginsForCaseScheduler=$oPluginRegistry->getCaseSchedulerPlugins();
 
    foreach($activePluginsForCaseScheduler as $key => $caseSchedulerPluginDetail){
     if(($caseSchedulerPluginDetail->sNamespace==$params[0])&&($caseSchedulerPluginDetail->sActionId==$params[1])){
-      //Render the form
-      G::pr($caseSchedulerPluginDetail);
-      $caseSchedulerForm=$caseSchedulerPluginDetail->sActionForm;
-    }    
-    
-  }
-  if($caseSchedulerForm!=""){
-        try {
-    //the setup page is a special page
-    if ( substr($caseSchedulerForm,-4) == '.php' && file_exists ( PATH_PLUGINS . $caseSchedulerForm ) ) {
-        require_once ( PATH_PLUGINS . $caseSchedulerForm  );
-        die;
+      $caseSchedulerSelected=$caseSchedulerPluginDetail;
+     
     }
-        
-    //the setup page is a xmlform and using the default showform and saveform function to serialize data
-    if ( !file_exists ( PATH_PLUGINS.$caseSchedulerForm.'.xml' ) ) throw ( new Exception ('Error') );
-  
-  
-    $Fields = array();
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', $xmlform, '',$Fields ,'pluginsSetupSave?id='.$pluginFile );  
   }
-  catch ( Exception $e ){
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-  }
-  G::RenderPage('publishBlank', 'blank');
+  if((isset($caseSchedulerSelected))&&(is_object($caseSchedulerSelected))){
+    //Render the form
+      $oData=array();
+      $oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionForm, $oData );   
   }
   
 }
