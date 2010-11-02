@@ -16,9 +16,22 @@ if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVAN
 	$sflag = $oServerConf->getHeartbeatProperty('HB_OPTION','HEART_BEAT_CONF');
     if(($sflag)||(is_null($sflag))){
       $aRow['HB_OPTION']='1';
+      
+      $nextBeatDate = $oServerConf->getHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
+      $nextBeatMessage=" ".G::LoadTranslation("ID_NEXT_BEAT");
+      
+      if(is_null($nextBeatDate)){
+        $nextBeatMessage.=" ".G::LoadTranslation("ID_NEXT_BEAT_LOGIN");
+      }else{
+        $nextBeatMessage.=" ".date("Y-m-d H:i:s",$nextBeatDate);
+      }
+      $aRow['HB_MESSAGE']=$nextBeatMessage;
     }else{
       $aRow['HB_OPTION']='0';
+      $aRow['HB_MESSAGE']="";
     }
+    
+    
     if($oServerConf->getHeartbeatProperty('HB_BEAT_TYPE','HEART_BEAT_CONF')=="endbeat"){
       $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptCode('

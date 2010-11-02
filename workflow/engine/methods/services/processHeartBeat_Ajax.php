@@ -100,7 +100,7 @@ $oServerConf = & serverConf::getSingleton ();
     $oServerConf->setHeartbeatProperty('HB_BEAT_INDEX',intval($oServerConf->getHeartbeatProperty('HB_BEAT_INDEX','HEART_BEAT_CONF'))+1,'HEART_BEAT_CONF');
     
     $params ['index'] = $oServerConf->getHeartbeatProperty('HB_BEAT_INDEX','HEART_BEAT_CONF');//$this->index;
-    $params ['beatType'] = is_null($oServerConf->getHeartbeatProperty('HB_BEAT_TYPE','HEART_BEAT_CONF'))?"Starting":$oServerConf->getHeartbeatProperty('HB_BEAT_TYPE','HEART_BEAT_CONF');//1;//$this->beatType;
+    $params ['beatType'] = is_null($oServerConf->getHeartbeatProperty('HB_BEAT_TYPE','HEART_BEAT_CONF'))?"starting":$oServerConf->getHeartbeatProperty('HB_BEAT_TYPE','HEART_BEAT_CONF');//1;//$this->beatType;
     $params ['date'] = date ( 'Y-m-d H:i:s' );
     $params ['host'] = getenv ( 'SERVER_NAME' );
     $params ['os'] = $os;
