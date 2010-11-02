@@ -736,7 +736,7 @@ Ext.onReady ( function() {
       TRANSLATIONS.ID_DELEGATE_DATE_FROM,
       dateFrom,
       ' ',
-      TRANSLATIONS.ID_DELEGATE_DATE_TO,
+      TRANSLATIONS.ID_TO,
       dateTo,
       new Ext.Button ({
         text: TRANSLATIONS.ID_FILTER_BY_DELEGATED_DATE,

@@ -150,9 +150,29 @@
 
   //add the search filter
   if ( $search != '' ) {
-    $Criteria->add      (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
-    $CriteriaCount->add (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
-  }  
+    //$Criteria->add      (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
+    //$CriteriaCount->add (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
+    
+    $Criteria->add(
+      $Criteria->getNewCriterion(
+        AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
+      )->addOr($Criteria->getNewCriterion(
+        AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
+      )->addOr($Criteria->getNewCriterion(
+        AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+      ))
+    ));
+
+    $CriteriaCount->add(
+      $CriteriaCount->getNewCriterion(
+        AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
+      )->addOr($CriteriaCount->getNewCriterion(
+        AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
+      )->addOr($CriteriaCount->getNewCriterion(
+        AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+      ))
+    ));
+  }
 
   //here we count how many records exists for this criteria.
   //BUT there are some special cases, and if we dont optimize them the server will crash.
