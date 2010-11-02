@@ -270,6 +270,31 @@ class loginInfo {
   }
 }
 
+class caseSchedulerPlugin {
+  var $sNamespace;
+  var $sActionId;
+  var $sActionForm;
+  var $sActionSave;
+  var $sActionExecute;
+
+  /**
+  * This function is the constructor of the caseSchedulerPlugin class
+  * @param string $sNamespace
+  * @param string $sActionId
+  * @param string $sActionForm
+  * @param string $sActionSave
+  * @param string $sActionExecute
+  * @return void
+  */
+  function __construct( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute ) {
+    $this->sNamespace     = $sNamespace;
+    $this->sActionId        = $sActionId;
+    $this->sActionForm      = $sActionForm;
+    $this->sActionSave     = $sActionSave;
+    $this->sActionExecute = $sActionExecute;
+   }
+}
+
 class PMPlugin {
   var $sNamespace;
   var $sClassName;
@@ -478,5 +503,14 @@ class PMPlugin {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $sFilename   = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $filename;
     $oPluginRegistry->registerToolbarFile ( $this->sNamespace, $sToolbarId, $sFilename);
+  }
+  /**
+  * With this function we can register a Case Scheduler Plugin/Addon
+  * @param
+  * @return void
+  */
+  function registerCaseSchedulerPlugin($sActionId, $sActionForm, $sActionSave, $sActionExecute) {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute );
   }
 }

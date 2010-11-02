@@ -163,7 +163,7 @@ function getDefaultDashboard(dashboardTabPanels) {
 	
 	var parameters = {       
 		       action : 'getDefaultDashboard'
-		    }
+		    };
 			conn.request( {
 				url : 'casesStartPage_Ajax.php',
 				method : 'POST',
@@ -726,7 +726,7 @@ Ext.extend(MainPanel, Ext.TabPanel, {
 			images_dir: "/jscore/processmap/core/images/",
 			rw        : false,
 			hideMenu  : false
-		}
+		};
 		// console.log(Pm);
 		Pm.make();
 											
@@ -870,7 +870,7 @@ Ext.onReady(function(){
 
 	    var parameters = {       
 	       action : 'getSimpleDashboardData'
-	    }
+	    };
 		conn.request( {
 			url : 'casesStartPage_Ajax.php',
 			method : 'POST',

@@ -78,6 +78,7 @@ class PMPluginRegistry {
   private $_aDashboardPages = array();
   private $_aCSSStyleSheets = array();
   private $_aToolbarFiles = array();
+  private $_aCaseSchedulerPlugin = array();
 
   static private $instance = NULL;
 
@@ -266,6 +267,10 @@ class PMPluginRegistry {
      if ( $detail->sNamespace == $sNamespace )
        unset ( $this->_aCSSStyleSheets[ $key ] );
    }
+   foreach ( $this->_aCaseSchedulerPlugin as $key=>$detail ) {
+       if ( $detail->sNamespace == $sNamespace )
+         unset ( $this->_aCaseSchedulerPlugin[ $key ] );
+    }
   }
 
   /**
@@ -890,5 +895,27 @@ class PMPluginRegistry {
         include ( $detail->sFilename );
       }
     }
+  }
+  /**
+   * Register a Case Scheduler Plugin
+   *
+   */
+  function registerCaseSchedulerPlugin($sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute) {
+    $found = false;
+    foreach ( $this->_aCaseSchedulerPlugin as $row=>$detail )
+      if ( $sActionId == $detail->sActionId && $sNamespace == $detail->sNamespace )
+        $found = true;
+
+    if ( !$found ) {
+      $this->_aCaseSchedulerPlugin[] = new caseSchedulerPlugin ( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute);
+    }
+  }
+/**
+   * This function returns all Case Scheduler Plugins registered
+   *
+   * @return string
+   */
+  function getCaseSchedulerPlugins( ) {
+    return $this->_aCaseSchedulerPlugin;
   }
 }

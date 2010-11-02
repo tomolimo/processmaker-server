@@ -215,6 +215,10 @@
 <en> </en>
 </SUB_SAVE>
 //-->
+<SELECT_PLUGIN type="subtitle" enablehtml="1">
+<en>Start a case based on following registered Plugin.</en>
+</SELECT_PLUGIN>
+
 <SAVE type="submit"  onClick="if(validateSchedulerFields()) {return true;} else {return false;}">
 <en>Save</en>
 </SAVE>
@@ -233,6 +237,7 @@ function hideProperties(){
         document.getElementById('form[EDIT_USER]').style.display='none';
         document.getElementById('form[PERFORM_TASK]').style.display='none';
         document.getElementById('form[SELECT_TIME_DAY]').style.display='none';
+        document.getElementById('form[SELECT_PLUGIN]').style.display='none';
         // end of enabling
 }
 
@@ -244,10 +249,13 @@ function showProperties(){
     document.getElementById('form[EDIT_USER]').style.display='';
     document.getElementById('form[PERFORM_TASK]').style.display='';
     document.getElementById('form[SELECT_TIME_DAY]').style.display='';
+    
+    
 
 }
 
 function hideAll() {
+contractSubtitle('SELECT_PLUGIN');
   contractSubtitle('SELECT_TIME_DAY');
 	contractSubtitle('SELECT_DATE');
 	contractSubtitle('SELECT_1');
@@ -264,11 +272,52 @@ function hideAll() {
 	
 }
 
+function showPluginSelection(opt) {
+document.getElementById("pluginsListContent").innerHTML ="";
+if(opt!=""){
+var oRPCProcess = new leimnud.module.rpc.xmlhttp({
+            url   : '../cases/cases_SchedulerGetPlugins',
+            async : true,
+            method: 'POST',
+            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt
+       });
+       oRPCProcess.callback = function(rpc){
+       //alert(rpc.xmlhttp.responseText);
+       if(rpc.xmlhttp.responseText!=""){
+        
+        document.getElementById("pluginsListContent").innerHTML = rpc.xmlhttp.responseText;
+       }
+                
+       }.extend(this);
+
+       oRPCProcess.make();
+}
+}
 function showSelection(opt) {
 
 	if (opt!=0) {
     expandSubtitle('SELECT_TIME_DAY');
     getField('SAVE').disabled=false;
+    
+    var oRPCProcess = new leimnud.module.rpc.xmlhttp({
+            url   : '../cases/cases_SchedulerGetPlugins',
+            async : true,
+            method: 'POST',
+            args  : "action=pluginsList"
+       });
+
+       oRPCProcess.callback = function(rpc){
+       //alert(rpc.xmlhttp.responseText);
+       if(rpc.xmlhttp.responseText!=""){
+        document.getElementById('form[SELECT_PLUGIN]').style.display='';
+        expandSubtitle('SELECT_PLUGIN');
+        document.getElementById("pluginsListDropdown").innerHTML = rpc.xmlhttp.responseText;
+       }
+                
+       }.extend(this);
+
+       oRPCProcess.make();
+    
 	} else {
     contractSubtitle('SELECT_TIME_DAY');
     getField('SAVE').disabled=true;
