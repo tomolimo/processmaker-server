@@ -338,8 +338,11 @@ class headPublisher {
       foreach ( $this->extVariable as $key => $val ) {
         $name = $val ['name'];
         $value = $val ['value'];
-        
-        $script .= "  var $name = ".G::json_encode($value).";\n";          
+        $variablesValues = G::json_encode($value);
+        $variablesValues = $this->stripCodeQuotes($variablesValues);
+//        var_dump($variablesValues);
+//        echo "<br>";
+        $script .= "  var $name = ".$variablesValues.";\n";
         /*
         if ($val ['type'] == 'number')
           $script .= "  var $name = $value;\n";
@@ -393,7 +396,7 @@ class headPublisher {
    * @access public
    * @return string
    */
-  function addExtJsScript($filename, $debug = false) {
+  function addExtJsScript($filename, $debug = false, $isExternal=false) {
     
     $sPath = PATH_TPL;
     //if the template  file doesn't exists, then try with the plugins folders
@@ -409,9 +412,12 @@ class headPublisher {
         }
       }
     }
-    
-    $jsFilename = $sPath . $filename . '.js';
-    
+
+    if (!$isExternal)
+      $jsFilename = $sPath . $filename . '.js';
+    else
+      $jsFilename = $filename . '.js';
+
     if (! file_exists ( $jsFilename )) {
       return;
     }
@@ -511,4 +517,24 @@ class headPublisher {
     return $body;
   }
 
+  function stripCodeQuotes($sJson){
+    $fields = array( "editor", "renderer" );
+    foreach ($fields as $field) {
+      $pattern = '/"('.$field.')":"[a-zA-Z.()]*"/';
+//      echo $pattern."<br>";
+      preg_match ($pattern,$sJson,$matches);
+//      var_dump ($matches);
+//      echo "<br>";
+      if (!empty($matches)){
+        $rendererMatch = $matches[0];
+        $replaceBy = explode(":", $matches[0]);
+        $replaceBy[1] = str_replace('"','',$replaceBy[1]);
+        $tmpString = implode(":",$replaceBy);
+        $sJson = str_replace($rendererMatch, $tmpString, $sJson);
+//        var_dump ($sJson);
+//        echo "<br>";
+      }
+    }
+    return $sJson;
+  }
 }

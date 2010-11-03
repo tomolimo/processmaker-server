@@ -64,7 +64,7 @@
   $users     = getUserArray($action, $userUid );
   $allUsers  = getAllUsersArray($action);
   
- 
+  $oHeadPublisher->addExtJsScript('cases/reassignList', true );
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns );                       //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields',  $readerFields );                  //sending the fields to get from proxy
@@ -569,7 +569,7 @@
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
-    $caseColumns[] = array( 'header' =>'Reassign To',  'dataIndex' => 'APP_STATUS',        'width' => 120, );
+    $caseColumns[] = array( 'header' =>'Reassign To',  'dataIndex' => 'USERS',             'width' => 120 , 'editor'=>"combo", 'renderer'=>"Ext.util.Format.comboRenderer(combo)");
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
@@ -578,7 +578,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
 //    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
-//    $caseReaderFields[] = array( 'name' => 'USERS' );
+    $caseReaderFields[] = array( 'name' => 'USERS' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }

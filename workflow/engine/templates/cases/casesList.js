@@ -824,8 +824,11 @@ Ext.onReady ( function() {
       emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
     })
   });
+  
+  // create reusable renderer
 
-   // create the editor grid
+
+  // create the editor grid
   var reassignGrid = new Ext.grid.EditorGridPanel({
     id : Ext.id(),
     region: 'center',
