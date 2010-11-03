@@ -242,6 +242,10 @@
   $rows = array();
   $index = $start;
   while($aRow = $oDataset->getRow()){
+    if( isset($aRow['APP_STATUS']) ){
+      $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
+    }
+    
     $rows[] = $aRow;
     $oDataset->next();
   }
