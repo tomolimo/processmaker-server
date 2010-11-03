@@ -29,35 +29,35 @@
 pake_desc('gulliver version');
 pake_task('version', 'project_exists');
 
-pake_desc('create poedit file for system labels');
+pake_desc("create poedit file for system labels\n   args: [<lang-id> [<country-id> [verbose]]] ");
 pake_task('create-poedit-file', 'project_exists');
 
-pake_desc('generate a unit test php file for an existing class');
+pake_desc("generate a unit test file for an existing class\n   args: <class-filename>");
 pake_task('generate-unit-test-class', 'project_exists');
 
 //pake_desc('generate basic CRUD files for an existing class');
 //pake_task('generate-crud',  'project_exists');
 
 
-pake_desc('build new project');
+pake_desc("build new project \n   args: <name>");
 pake_task('new-project', 'project_exists');
 
-pake_desc('build new plugin');
+pake_desc("build new plugin \n   args: <name>");
 pake_task('new-plugin', 'project_exists');
 
-pake_desc('pack plugin in .tar file');
+pake_desc("pack plugin in .tar file \n   args: <plugin>");
 pake_task('pack-plugin', 'project_exists');
 
-pake_desc('generate basic CRUD files for an existing class inside a project');
+pake_desc("generate basic CRUD files for an existing class\n   args: <class-name> <table-name> <plugin-name>");
 pake_task('propel-build-crud', 'project_exists');
 
-pake_desc('backup a workspace');
+pake_desc("backup a workspace\n   args: <workspace> [compress]");
 pake_task('workspace-backup', 'project_exists');
 
-pake_desc('restore a previously backed-up workspace');
+pake_desc("restore a previously backed-up workspace\n   args: <filename> <workspace> [overwrite]");
 pake_task('workspace-restore', 'project_exists');
 
-pake_desc('check standard code for folder');
+pake_desc("check standard code\n   args: <directory>");
 pake_task('check-standard-code', 'project_exists' );
 
 function run_version($task, $args) {
@@ -1022,9 +1022,9 @@ function run_new_project($task, $args) {
   global $projectName;
   //the class filename in the first argument
   $projectName = $args[0];
-  
+
   if( trim($projectName) == '' ) {
-    printf("invalid Project Name\n", pakeColor::colorize($class, 'ERROR'));
+    printf("Error: %s\n", pakeColor::colorize("you must specify a valid name for the project", 'ERROR'));
     exit(0);
   }
   $createProject = strtolower(prompt("Do you want to create the project '$projectName' ? [Y/n]"));
@@ -1833,8 +1833,8 @@ function run_workspace_backup($task, $args) {
     }
     
     $workspace = $args[0];
-    G::mk_dir(PATH_OUTTRUNK . 'backups');
-    $fileTar = PATH_OUTTRUNK . 'backups' . PATH_SEP . $workspace . '.tar';
+    G::mk_dir(PATH_TRUNK . 'backups');
+    $fileTar = PATH_TRUNK . 'backups' . PATH_SEP . $workspace . '.tar';
     
     $compress = false;
     if( isset($args[1]) ) {
@@ -2004,7 +2004,7 @@ function run_workspace_restore($task, $options) {
 
     $fileToUnzip = $options[0];
     if( ! is_file($fileToUnzip) ) {
-      $fileToUnzip = PATH_OUTTRUNK . 'backups' . '/' . $options[0];
+      $fileToUnzip = PATH_TRUNK . 'backups' . '/' . $options[0];
       if( ! is_file($fileToUnzip) ) {
         throw (new Exception("the backup file $fileToUnzip does not exist"));
       }
