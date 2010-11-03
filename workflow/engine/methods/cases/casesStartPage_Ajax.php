@@ -123,11 +123,6 @@ function startCase() {
   if (isset ( $_SESSION ['INDEX'] ))          unset ( $_SESSION ['INDEX'] );
   if (isset ( $_SESSION ['STEP_POSITION'] ))  unset ( $_SESSION ['STEP_POSITION'] );
 
-
-
-
-
-    
   /* Process */
   try {
     $oCase = new Cases ( );
@@ -139,13 +134,12 @@ function startCase() {
     $_SESSION ['STEP_POSITION'] = 0;
     
     $_SESSION ['CASES_REFRESH'] = true;
-    
-    /*
+        
     $oCase = new Cases ( );
     $aNextStep = $oCase->getNextStep ( $_SESSION ['PROCESS'], $_SESSION ['APPLICATION'], $_SESSION ['INDEX'], $_SESSION ['STEP_POSITION'] );
     $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
     $aData ['openCase'] = $aNextStep;
-    */
+    
     $aData ['status'] = 'success';
     print (json_encode ( $aData )) ;
   } 
