@@ -1,5 +1,6 @@
 <?php
 //sysGeneric, this file is used initialize main variables and redirect to each and all pages 
+$startingTime =  array_sum(explode(' ',microtime()));
 
 //*** ini setting, enable display_error On to caught even fatal errors 
   ini_set('display_errors','On');
@@ -11,8 +12,8 @@
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG', 1 );
-  define ('DEBUG_TIME_LOG', 1 );
+  define ('DEBUG_SQL_LOG', 0 ); 
+  define ('DEBUG_TIME_LOG', 0 );
 
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {
@@ -39,8 +40,10 @@
   function logTimeByPage() {
   	$serverAddr = $_SERVER['SERVER_ADDR'];
   	global $startingTime;
+  	$endTime =  array_sum(explode(' ',microtime()));
+  	$time = $endTime - $startingTime;  	
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
-    fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('H:i:s'), ($startingTime - floor($startingTime)) * 1000, getenv('REMOTE_ADDR'), substr($serverAddr,-4), G::microtime_float() - $startingTime, $_SERVER['REQUEST_URI'] ));
+    fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
   }
 
@@ -72,8 +75,6 @@
 
 //************* Including these files we get the PM paths and definitions (that should be just one file ***********
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php' );
-  $startingTime = G::microtime_float();
-
 //******************* Error handler and log error *******************
   //to do: make different environments.  sys
   //G::setErrorHandler ( );
@@ -176,7 +177,6 @@
       }
       die;
     }
-    //die($realPath);
     switch ( $realPath  ) {
       case 'sysUnnamed' :
         require_once('sysUnnamed.php'); die;
@@ -235,8 +235,7 @@
   G::LoadSystem("xmlMenu");
   G::LoadSystem('dvEditor');
   G::LoadSystem('table');
-  G::LoadSystem('pagedTable');
-  require_once ( PATH_THIRDPARTY . 'krumo' . PATH_SEP . 'class.krumo.php' );
+  //G::LoadSystem('pagedTable');
 
 //************** Installer, redirect to install if we don't have a valid shared data folder ***************/
   if ( !defined('PATH_DATA') || !file_exists(PATH_DATA)) {
@@ -333,7 +332,7 @@
       'dbfile' => PATH_DB . SYS_SYS . PATH_SEP . 'db.php',
       'datasource' => 'workflow',
       'cache' => 0,
-      'debug' => 1,  //<--- change the value of this Constant to to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
+      'debug' => DEBUG_SQL_LOG,  //<--- change the value of this Constant to to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
     ) ,
     G_TEST_ENV => array (
       'dbfile' => PATH_DB . 'test' . PATH_SEP . 'db.php' ,
@@ -460,7 +459,7 @@
   }
 
 //***************** enable rbac **************************
-  $RBAC =& RBAC::getSingleton();
+  $RBAC =& RBAC::getSingleton( PATH_DATA, session_id() );
   $RBAC->sSystem = 'PROCESSMAKER';
 
 //****** define and send Headers for all pages *******************
@@ -473,10 +472,10 @@
 
     //get the language direction from ServerConf
     define('SYS_LANG_DIRECTION', $oServerConf->getLanDirection() );
-
+    
     if((isset( $_SESSION['USER_LOGGED'] ))&&(!(isset($_GET['sid'])))) {
       $RBAC->initRBAC();
-      $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
+      $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] , PATH_DATA, session_id());
     }
     else {
       //This sentence is used when you lost the Session

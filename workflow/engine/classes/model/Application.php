@@ -208,20 +208,10 @@ class Application extends BaseApplication {
    */
 
   function create ($sProUid, $sUsrUid ) {
-    $con = Propel::getConnection( ApplicationPeer::DATABASE_NAME );
+    $con = Propel::getConnection( 'workflow' );
     try {
-      $c = new Criteria();
-      $c->clearSelectColumns();
-      $c->addSelectColumn( 'MAX(' . ApplicationPeer::APP_NUMBER . ')' );
-      //the appnumber is based in all process active, not only in the specified process guid
-      //$c->add( ApplicationPeer::PRO_UID, $sProUid );
-      $result = ApplicationPeer::doSelectRS( $c );
-      $result->next();
-      $row = $result->getRow();
-      $maxNumber = $row[0] + 1;
+    	//fill the default values for new application row
       $this->setAppUid ( G::generateUniqueID() );
-
-      $this->setAppNumber    ( $maxNumber );
       $this->setAppParent    ( '' );
       $this->setAppStatus    ( 'DRAFT' );
       $this->setProUid       ( $sProUid );
@@ -230,18 +220,30 @@ class Application extends BaseApplication {
       $this->setAppParallel  ( 'N' );
       $this->setAppInitUser  ( $sUsrUid );
       $this->setAppCurUser   ( $sUsrUid );
-      $this->setAppCreateDate('now' );
-      $res = $this->setAppInitDate  ('now' );
-      //to do: what is the empty date for propel???/
-      $this->setAppFinishDate( '19020101' );
+      $this->setAppCreateDate( 'now' );
+      $this->setAppInitDate  ( 'now' );
+      $this->setAppFinishDate( '19020101' );  //to do: what is the empty date for propel???/
       $this->setAppUpdateDate( 'now' );
 
-      $pin = G::generateCode(4, 'ALPHANUMERIC');
+      $pin = G::generateCode( 4, 'ALPHANUMERIC');
       $this->setAppData      ( serialize ( array('PIN'=>$pin) ) );
       $this->setAppPin       ( md5($pin) );
+      
+      $c = new Criteria();
+      $c->clearSelectColumns();
+      $c->addSelectColumn( 'MAX(' . ApplicationPeer::APP_NUMBER . ')' );  //the appnumber is based in all processes active, not only in the specified process guid
+
+      $result = ApplicationPeer::doSelectRS( $c );
+      $result->next();
+      $row = $result->getRow();
+
+      $maxNumber = $row[0] + 1;
+      $this->setAppNumber    ( $maxNumber );
+
       if ( $this->validate() ) {
         $con->begin();
         $res = $this->save();
+        $con->commit();
 
         //to do: ID_CASE in translation       $this->setAppTitle ( G::LoadTranslation ( 'ID_CASE') . $maxNumber );
         $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
@@ -249,18 +251,15 @@ class Application extends BaseApplication {
         Content::insertContent( 'APP_DESCRIPTION', '', $this->getAppUid(), $lang,  '' );
         Content::insertContent( 'APP_PROC_CODE',   '', $this->getAppUid(), $lang,  '' );
 
-        //$this->setAppTitle (  '#' . $maxNumber );
-        //$this->setAppDescription ( '' );
-        //$this->setAppProcCode ( '' );
         $con->commit();
         return $this->getAppUid();
       }
-      else {
+      else { 
        $msg = '';
        foreach($this->getValidationFailures() as $objValidationFailure)
          $msg .= $objValidationFailure->getMessage() . "<br/>";
 
-       throw ( new PropelException ( 'The row cannot be created!', new PropelException ( $msg ) ) );
+       throw ( new PropelException ( 'The APPLICATION row cannot be created!', new PropelException ( $msg ) ) );
       }
 
     }

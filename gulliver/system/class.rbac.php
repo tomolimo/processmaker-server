@@ -154,7 +154,17 @@ class RBAC
   * @param  string $sUser      the user
   * @return $this->aUserInfo[ $sSystem ]
   */
-  function loadUserRolePermission( $sSystem, $sUser) {
+  function loadUserRolePermission( $sSystem, $sUser, $pathData = null, $sid =null ) {
+    //if we provide a path data and session we will cache the session Info for this user
+    if ( $pathData != null && $sid != null ) {
+      $pathData = $pathData . 'session' . PATH_SEP;
+      $filePath = $pathData . $sid . '.rbac';      
+      if ( file_exists ( $filePath ) && filesize($filePath) > 0 ) {
+        $this->aUserInfo = unserialize( file_get_contents ( $filePath ) );
+        return;
+      }
+    }
+    
     $this->sSystem = $sSystem;
     $fieldsSystem = $this->systemObj->loadByCode($sSystem);
     $fieldsRoles = $this->usersRolesObj->getRolesBySystem ($fieldsSystem['SYS_UID'], $sUser );
@@ -164,6 +174,10 @@ class RBAC
     $this->aUserInfo[ $sSystem ]['ROLE'] = $fieldsRoles;
     $this->aUserInfo[ $sSystem ]['PERMISSIONS'] = $fieldsPermissions;
 
+    if ( $pathData != null && $sid != null ) {
+      G::mk_dir ( $pathData );
+      file_put_contents( $filePath, serialize ( $this->aUserInfo ) );
+    }
   }
   
   /**

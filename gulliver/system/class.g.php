@@ -1529,7 +1529,8 @@ class G
   {
     switch($DBEngine){
       case 'mysql':
-        return mysql_real_escape_string(stripslashes($sqlString));
+        $con = Propel::getConnection('workflow') ;
+        return mysql_real_escape_string(stripslashes($sqlString), $con->getResource() );
       case 'myxml':
         $sqlString = str_replace('"', '""', $sqlString);
         return str_replace("'", "''", $sqlString);

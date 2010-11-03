@@ -1,15 +1,15 @@
 <?php
 
 if (! isset ( $_REQUEST ['action'] )) {
-  $ruturn ['success'] = 'failure';
-  $ruturn ['message'] = 'You may request an action';
-  print json_encode ( $ruturn );
+  $res ['success'] = 'failure';
+  $res ['message'] = 'You may request an action';
+  print json_encode ( $res);
   die ();
 }
 if (! function_exists ( $_REQUEST ['action'] )) {
-  $ruturn ['success'] = 'failure';
-  $ruturn ['message'] = 'The requested action doesn\'t exists';
-  print json_encode ( $ruturn );
+  $res ['success'] = 'failure';
+  $res ['message'] = 'The requested action doesn\'t exists';
+  print json_encode ( $res );
   die ();
 }
 
@@ -95,6 +95,7 @@ function getProcessList() {
   print json_encode ( $processList );
   die ();
 }
+
 function ellipsis($text, $numb) {
   $text = html_entity_decode ( $text, ENT_QUOTES );
   if (strlen ( $text ) > $numb) {
@@ -110,47 +111,45 @@ function ellipsis($text, $numb) {
   
   return $text;
 }
+
 function startCase() {
-  /* Includes */
   G::LoadClass ( 'case' );
   
   /* GET , POST & $_SESSION Vars */
-  
   /* unset any variable, because we are starting a new case */
-  if (isset ( $_SESSION ['APPLICATION'] ))
-    unset ( $_SESSION ['APPLICATION'] );
-  if (isset ( $_SESSION ['PROCESS'] ))
-    unset ( $_SESSION ['PROCESS'] );
-  if (isset ( $_SESSION ['TASK'] ))
-    unset ( $_SESSION ['TASK'] );
-  if (isset ( $_SESSION ['INDEX'] ))
-    unset ( $_SESSION ['INDEX'] );
-  if (isset ( $_SESSION ['STEP_POSITION'] ))
-    unset ( $_SESSION ['STEP_POSITION'] );
+  if (isset ( $_SESSION ['APPLICATION'] ))    unset ( $_SESSION ['APPLICATION'] );
+  if (isset ( $_SESSION ['PROCESS'] ))        unset ( $_SESSION ['PROCESS'] );
+  if (isset ( $_SESSION ['TASK'] ))           unset ( $_SESSION ['TASK'] );
+  if (isset ( $_SESSION ['INDEX'] ))          unset ( $_SESSION ['INDEX'] );
+  if (isset ( $_SESSION ['STEP_POSITION'] ))  unset ( $_SESSION ['STEP_POSITION'] );
+
+
+
+
+
     
   /* Process */
   try {
     $oCase = new Cases ( );
     $aData = $oCase->startCase ( $_REQUEST ['taskId'], $_SESSION ['USER_LOGGED'] );
     $_SESSION ['APPLICATION'] = $aData ['APPLICATION'];
-    $_SESSION ['INDEX'] = $aData ['INDEX'];
+    $_SESSION ['INDEX']   = $aData ['INDEX'];
     $_SESSION ['PROCESS'] = $aData ['PROCESS'];
     $_SESSION ['TASK'] = $_REQUEST ['taskId'];
     $_SESSION ['STEP_POSITION'] = 0;
     
     $_SESSION ['CASES_REFRESH'] = true;
     
+    /*
     $oCase = new Cases ( );
     $aNextStep = $oCase->getNextStep ( $_SESSION ['PROCESS'], $_SESSION ['APPLICATION'], $_SESSION ['INDEX'], $_SESSION ['STEP_POSITION'] );
     $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
-    $aData ['status'] = 'success';
     $aData ['openCase'] = $aNextStep;
+    */
+    $aData ['status'] = 'success';
     print (json_encode ( $aData )) ;
-    //G::header('location: ' . $aNextStep['PAGE']);
-  } catch ( Exception $e ) {
-    $_SESSION ['G_MESSAGE'] = $e->getMessage ();
-    $_SESSION ['G_MESSAGE_TYPE'] = 'error';
-    //G::header('location: cases_New' );
+  } 
+  catch ( Exception $e ) {
     $aData ['status'] = 'failure';
     $aData ['message'] = $e->getMessage ();
     print_r ( json_encode ( $aData ) );
@@ -234,11 +233,13 @@ function getSimpleDashboardData() {
   
   print_r ( json_encode ( $rowsResponse ) );
 }
+
 function getRegisteredDashboards() {
   $oPluginRegistry = & PMPluginRegistry::getSingleton ();
   $dashBoardPages = $oPluginRegistry->getDashboardPages ();
   print_r ( json_encode ( $dashBoardPages ) );
 }
+
 function getDefaultDashboard(){
 	$defaultDashboard['defaultTab']="mainDashboard";
 	if(isset($_SESSION['__currentTabDashboard'])){

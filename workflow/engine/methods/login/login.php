@@ -47,33 +47,34 @@
   
   $aFields ['LOGIN_VERIFY_MSG'] = G::loadTranslation ( 'LOGIN_VERIFY_MSG' );
   
-//close the session, if the current session_id was used in PM.
-  $oCriteria = new Criteria ( 'workflow' );
-  $oCriteria->add ( LoginLogPeer::LOG_SID, session_id () );
-  $oCriteria->add ( LoginLogPeer::USR_UID, isset ( $_SESSION ['USER_LOGGED'] ) ? $_SESSION ['USER_LOGGED'] : '-' );
-  $oCriteria->add ( LoginLogPeer::LOG_STATUS, 'ACTIVE' );
-  $oCriteria->add ( LoginLogPeer::LOG_END_DATE, NULL, Criteria::ISNULL );
-  $oDataset = LoginLogPeer::doSelectRS ( $oCriteria );
-  $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-  $oDataset->next ();
-  $aRow = $oDataset->getRow ();
-  if ($aRow) {
-    if ($aRow ['LOG_STATUS'] != 'CLOSED' && $aRow ['LOG_END_DATE'] == NULL) {
-      $weblog = new LoginLog ( );
-      $aLog ['LOG_UID'] = $aRow ['LOG_UID'];
-      $aLog ['LOG_STATUS'] = 'CLOSED';
-      $aLog ['LOG_IP'] = $aRow ['LOG_IP'];
-      $aLog ['LOG_SID'] = session_id ();
-      $aLog ['LOG_INIT_DATE'] = $aRow ['LOG_INIT_DATE'];
-      $aLog ['LOG_END_DATE'] = date ( 'Y-m-d H:i:s' );
-      $aLog ['LOG_CLIENT_HOSTNAME'] = $aRow ['LOG_CLIENT_HOSTNAME'];
-      $aLog ['USR_UID'] = $aRow ['USR_UID'];
-      $weblog->update ( $aLog );
+  if ( isset ($_SESSION ['USER_LOGGED']) ) {
+  //close the session, if the current session_id was used in PM.
+    $oCriteria = new Criteria ( 'workflow' );
+    $oCriteria->add ( LoginLogPeer::LOG_SID, session_id () );
+    $oCriteria->add ( LoginLogPeer::USR_UID, isset ( $_SESSION ['USER_LOGGED'] ) ? $_SESSION ['USER_LOGGED'] : '-' );
+    $oCriteria->add ( LoginLogPeer::LOG_STATUS, 'ACTIVE' );
+    $oCriteria->add ( LoginLogPeer::LOG_END_DATE, NULL, Criteria::ISNULL );
+    $oDataset = LoginLogPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aRow = $oDataset->getRow ();
+    if ($aRow) {
+      if ($aRow ['LOG_STATUS'] != 'CLOSED' && $aRow ['LOG_END_DATE'] == NULL) {
+        $weblog = new LoginLog ( );
+        $aLog ['LOG_UID'] = $aRow ['LOG_UID'];
+        $aLog ['LOG_STATUS'] = 'CLOSED';
+        $aLog ['LOG_IP'] = $aRow ['LOG_IP'];
+        $aLog ['LOG_SID'] = session_id ();
+        $aLog ['LOG_INIT_DATE'] = $aRow ['LOG_INIT_DATE'];
+        $aLog ['LOG_END_DATE'] = date ( 'Y-m-d H:i:s' );
+        $aLog ['LOG_CLIENT_HOSTNAME'] = $aRow ['LOG_CLIENT_HOSTNAME'];
+        $aLog ['USR_UID'] = $aRow ['USR_UID'];
+        $weblog->update ( $aLog );
+      }
     }
   }
-  
   //end log
-  
+
   //start new session
   session_destroy ();
   session_start ();
@@ -127,6 +128,7 @@
     $oHeadPublisher->addScriptCode( 'var flagHeartBeat = 0; ');
   
   //check if we show the panel with the getting started info
+
   require_once 'classes/model/Configuration.php';
   $oConfiguration = new Configuration ( );
   $oCriteria = new Criteria ( 'workflow' );

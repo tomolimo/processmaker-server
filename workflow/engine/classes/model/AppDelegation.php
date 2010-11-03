@@ -75,7 +75,7 @@ class AppDelegation extends BaseAppDelegation {
     $c = new Criteria ();
     $c->clearSelectColumns();
     $c->addSelectColumn ( 'MAX(' . AppDelegationPeer::DEL_INDEX . ') ' );
-    $c->addSelectColumn ( AppDelegationPeer::DEL_STARTED );
+    //$c->addSelectColumn ( AppDelegationPeer::DEL_STARTED ); //not needed
     $c->add ( AppDelegationPeer::APP_UID, $sAppUid );
     $rs = AppDelegationPeer::doSelectRS ( $c );
     $rs->next();
@@ -97,7 +97,7 @@ class AppDelegation extends BaseAppDelegation {
     //The function return an array now.  By JHL
     $delTaskDueDate=$this->calculateDueDate();
     $this->setDelTaskDueDate  ( $delTaskDueDate['DUE_DATE'] ); // Due date formatted
-    $this->setDelData  ( $delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
+    $this->setDelData  ( '' ); //$delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
 
     // this condition assures that an internal delegation like a subprocess dont have an initial date setted
     if ( $delIndex == 1 &&  !$isSubprocess )  //the first delegation, init date this should be now for draft applications, in other cases, should be null.
