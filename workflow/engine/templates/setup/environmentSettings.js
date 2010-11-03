@@ -34,17 +34,17 @@ Ext.onReady(function() {
     ]
   });
   var fieldset;
-  
-  var cmbFormats = new Ext.form.ComboBox({
+
+  var cmbUsernameFormats = new Ext.form.ComboBox({
     fieldLabel : TRANSLATIONS.IS_USER_NAME_DISPLAY_FORMAT,
-    hiddenName : 'format',
+    hiddenName : 'userFormat',
     store : new Ext.data.Store( {
       proxy : new Ext.data.HttpProxy( {
         url : 'environmentSettingsAjax',
         method : 'POST'
       }),
       baseParams : {
-        request : 'getList'
+        request : 'getUserMaskList'
       },
       reader : new Ext.data.JsonReader( {
         root : 'rows',
@@ -55,7 +55,7 @@ Ext.onReady(function() {
         } ]
       })
     }),
-    
+
     valueField : 'id',
     displayField : 'name',
     triggerAction : 'all',
@@ -64,7 +64,38 @@ Ext.onReady(function() {
     editable : false,
     allowBlank : false,
     allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
-  })
+  });
+
+  var cmbDateFormats = new Ext.form.ComboBox({
+    fieldLabel : TRANSLATIONS.ID_GLOBAL_DATE_MASK,
+    hiddenName : 'dateFormat',
+    store : new Ext.data.Store( {
+      proxy : new Ext.data.HttpProxy( {
+        url : 'environmentSettingsAjax',
+        method : 'POST'
+      }),
+      baseParams : {
+        request : 'getDateMaskList'
+      },
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'id'
+        }, {
+          name : 'name'
+        } ]
+      })
+    }),
+
+    valueField : 'id',
+    displayField : 'name',
+    triggerAction : 'all',
+    emptyText : 'Select',
+    selectOnFocus : true,
+    editable : false,
+    allowBlank : false,
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+  });
 
   
   fieldset = {
@@ -76,11 +107,24 @@ Ext.onReady(function() {
         width : 250
       },
       defaultType : 'textfield',
-      items : [cmbFormats]
+      items : [cmbUsernameFormats]
+  }
+  fieldset2 = {
+      xtype : 'fieldset',
+      title : TRANSLATIONS.ID_PM_ENV_SETTINGS_REGIONFIELDSET_TITLE,
+      collapsible : false,
+      autoHeight : true,
+      defaults : {
+        width : 250
+      },
+      defaultType : 'textfield',
+      items : [cmbDateFormats]
   }
   
   fsf.add(fieldset);
-  cmbFormats.setValue(default_format);
+  fsf.add(fieldset2);
+  cmbUsernameFormats.setValue(default_format);
+  cmbDateFormats.setValue(default_date_format);
 
   fsf.render(document.body);
 });
