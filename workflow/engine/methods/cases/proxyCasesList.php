@@ -41,6 +41,7 @@
          $CriteriaCount = $oAppCache->getSentCountCriteria($userUid);
          break;
   	case 'selfservice' :
+        case 'unassigned':
          $Criteria      = $oAppCache->getUnassignedListCriteria($userUid);
          $CriteriaCount = $oAppCache->getUnassignedCountCriteria($userUid);
          break;
@@ -188,7 +189,7 @@
   if ( $doCountAlreadyExecuted == false ) {
     // in the case of reassign the distinct attribute shows a diferent count result comparing to the
     // original list
-    if ($action == 'to_reassign'){
+    if ($action == 'to_reassign' || $action == 'todo'){
       $distinct = false;
     } else{
       $distinct = true;
