@@ -9,7 +9,7 @@
 
 <en>Calendar Definition</en>
 </DEFINITION_TITLE>
-<CALENDAR_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="15" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
+<CALENDAR_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="15" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0" onclick="setFocusByIdField;">
 <en>Name</en>
 </CALENDAR_NAME>
 <CALENDAR_DESCRIPTION type="textarea" required="0" readonly="0" rows="2" cols="32" mode="edit">
@@ -43,12 +43,460 @@
 <SUBMIT type="submit" onclick="return validateForm(this.form);">
 <en>Save</en>
 </SUBMIT>
+<SUBMIT2 type="button" onclick="submit(this);">
+<en>Save</en>
+</SUBMIT2>
 <BTN_CANCEL type="button" onclick="cancel();">
   <en>Cancel</en>
 </BTN_CANCEL>
+<HOLIDAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="1">
+<en>Active</en>
+</HOLIDAY_STATUS>
 <DEFAULT_CALENDAR_JS type="javascript">
 <![CDATA[
+function submit(){
+form.submit();
+}
+function hiddenholidays()
+{getField('HOLIDAY_STATUS').checked=false;
+document.getElementById('gridholi').style.display="none";
+ document.getElementById('down').style.display="none";
+ document.getElementById('up').style.display="";
+ document.getElementById('hiddenb').style.display="none";
+ document.getElementById('showb').style.display="";
+}
+function showholidays()
+{getField('HOLIDAY_STATUS').checked=true;
+document.getElementById('gridholi').style.display="";
+ document.getElementById('down').style.display="";
+ document.getElementById('up').style.display="none";
+ document.getElementById('hiddenb').style.display="";
+ document.getElementById('showb').style.display="none";
+}
 
+
+ while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+      getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+   }
+    Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+function AddItem(Text,Value)
+{
+    var opt = document.createElement("option");
+    getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.add(opt);
+    opt.text = Text;
+    opt.value = Value;
+}
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][0"), 'click', function() {
+   while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+      getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+   }
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){ 
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+         while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+         getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length-1] = null;
+         }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   } 
+
+});
+
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][1"), 'click', function() {
+   while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+      getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+   }
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+         while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+         getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+         }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+
+});
+
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][2"), 'click', function() {
+   while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+      getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+   }
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+         while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+         getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+         }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+
+});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][3"), 'click', function() {
+   while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+      getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+   }
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+         while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+         getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+         }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+
+});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][4"), 'click', function() {
+    while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+    getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+   }
+
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+        while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+        getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+        }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+
+});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][5"), 'click', function() {
+    while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+        getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+        }
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+         while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+        getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+        }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+
+});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][6"), 'click', function() {
+    while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+        getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+        }
+   Text='- ALL -';
+   Value=7;
+   AddItem(Text,Value);
+
+   if(getField("CALENDAR_WORK_DAYS][0").checked){
+     Text='SUN';
+     Value=0;
+     AddItem(Text,Value);
+   }else{
+         while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0){
+        getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+        }
+         Text='- ALL -';
+         Value=7;
+         AddItem(Text,Value);
+        }
+
+   if(getField("CALENDAR_WORK_DAYS][1").checked){
+     Text='MON';
+     Value=1;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+
+});
 
 if((getField("CALENDAR_UID").value=="00000000000000000000000000000001")||(getField("CALENDAR_UID").value=="00000000000000000000000000000002")){
 	getField("CALENDAR_STATUS").disabled=true;
@@ -90,8 +538,8 @@ function timeValidatorWrap(iRow){
 	
 	
 }
-function validateForm(form){
-	rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
+function validateForm(form){  
+ 	rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
 	msg="";
 	
 	for(i=1;i<=rowsCount;i++){		

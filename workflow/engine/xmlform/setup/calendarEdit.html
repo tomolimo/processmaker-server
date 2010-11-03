@@ -36,6 +36,7 @@
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.CALENDAR_WORK_DAYS} </td>  //-->
               <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.CALENDAR_WORK_DAYS}</td> 
               </tr>
+              
                                                <tr>
               <td class="FormTitle" colspan="2" align="">{$form.BUSINESS_DAY_TITLE}</td>
              </tr>
@@ -43,13 +44,14 @@
               <td colspan="2">{$form.BUSINESS_DAY}</td>
              </tr>
                                                <tr>
-              <td class="FormTitle" colspan="2" align="">{$form.HOLIDAY_LABEL}</td>
-             </tr>
-                                               <tr>
+
+                                                   <td class="FormTitle" colspan="2" align="rigth">{$form.HOLIDAY_STATUS} {$form.HOLIDAY_LABEL}  <a href="#" onclick="hiddenholidays(); return false;"><span id="down" align="rigth" style="display:none;"> <img src="/images/closereg.gif" /></span></a> <a href="#" onclick="showholidays(); return false;"><span id="up"><img src="/images/Openreg.gif" ></span></a></td>
+                                               </tr>
+                                               <tr id="gridholi" style="display:none;">
               <td colspan="2">{$form.HOLIDAY}</td>
              </tr>
                                                <tr>
-              <td class="FormButton" colspan="2" align="">{$form.SUBMIT} &nbsp; {$form.BTN_CANCEL}</td>
+              <td class="FormButton" colspan="2" align=""><span id="hiddenb" style="display:none;">{$form.SUBMIT}</span> <span id="showb">{$form.SUBMIT2}</span> &nbsp; {$form.BTN_CANCEL}</td>
              </tr>
                                                                    </tbody></table>
         </td>
