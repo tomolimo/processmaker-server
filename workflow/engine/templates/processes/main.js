@@ -50,8 +50,8 @@ Ext.onReady(function(){
         {name : 'CASES_COUNT_COMPLETED', type:'float'},
         {name : 'CASES_COUNT_CANCELLED', type:'float'}
       ]
-    }),
-    sortInfo:{field: 'PRO_TITLE', direction: "ASC"}
+    })//,
+    //sortInfo:{field: 'PRO_TITLE', direction: "ASC"}
     //groupField:'PRO_CATEGORY_LABEL'
 
   });

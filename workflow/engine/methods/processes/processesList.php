@@ -41,9 +41,9 @@ if( isset($_POST['category']) && $_POST['category'] !== '<reset>' ){
   else
     $proData = $oProcess->getAllProcesses($start, $limit);
 }
-$r->data = $proData['data'];
-$_SESSION['_processCategories'] = $proData['categories'];
-$r->totalCount = $oProcess->getAllProcessesCount();
+$r->data = $proData;
+
+$r->totalCount = 0; //$oProcess->getAllProcessesCount();
 
 //print_R($r)
 echo G::json_encode($r);

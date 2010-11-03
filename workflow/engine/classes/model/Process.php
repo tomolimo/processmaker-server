@@ -317,6 +317,13 @@ class Process extends BaseProcess {
     }
   }
 
+
+  function getAll($getAllLang=false) {
+    $c = new Criteria('workflow');
+    
+    
+  }
+
   /**
    * Update the Prolication row
    * @param     array $aData
@@ -467,14 +474,24 @@ class Process extends BaseProcess {
 
   function getAllProcesses($start, $limit, $category=NULL, $processName=NULL)
   {
-    require_once ( PATH_RBAC . "model/RbacUsers.php" );
+    require_once PATH_RBAC . "model/RbacUsers.php";
+    require_once "classes/model/ProcessCategory.php";
+    require_once "classes/model/Users.php";
+
     $user = new RbacUsers;
     $aProcesses = Array();
     $categories = Array();
     $oCriteria  = new Criteria('workflow');
     
-    $oCriteria->addSelectColumn(ProcessPeer::PRO_UID);
+    //$oCriteria->addSelectColumn(ProcessPeer::PRO_UID);
+    $oCriteria->addSelectColumn(ProcessPeer::TABLE_NAME . '.*');
+    $oCriteria->addSelectColumn(UsersPeer::TABLE_NAME . '.*');
+    $oCriteria->addSelectColumn(ProcessCategoryPeer::TABLE_NAME . '.*');
+    
     $oCriteria->add(ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL);
+    $oCriteria->addJoin(ProcessPeer::PRO_CREATE_USER, UsersPeer::USR_UID);
+    $oCriteria->addJoin(ProcessPeer::PRO_CATEGORY, ProcessCategoryPeer::CATEGORY_UID, Criteria::LEFT_JOIN);
+    $oCriteria->addDescendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
 
     if( isset($category) )
       $oCriteria->add(ProcessPeer::PRO_CATEGORY, $category, Criteria::EQUAL);
@@ -488,47 +505,82 @@ class Process extends BaseProcess {
     $this->tmpCriteria = $oCriteria;
     $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-
     $casesCnt = $this->getCasesCountInAllProcesses();
-
-    $oProcess = new Process ();
+    $processes = Array();
+    
     while( $oDataset->next() ) {
-      $aRow = $oDataset->getRow();
-      $aProcess = $oProcess->load( $aRow ['PRO_UID'] );
+      $processes[] = $oDataset->getRow();
+      $uids[] = $processes[sizeof($processes)-1]['PRO_UID'];
+    }
 
-      if( isset($processName) && $processName != ''){
-        //preg_match("/$processName/i", $aProcess['PRO_TITLE'], $res);
-        if( stripos($aProcess['PRO_TITLE'], $processName) === false)
-          continue;
+    $c = new Criteria('workflow');
+    //$c->add ( ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL );
+    $c->add ( ContentPeer::CON_LANG, defined('SYS_LANG')?SYS_LANG:'en', Criteria::EQUAL );
+    $c->add ( ContentPeer::CON_ID, $uids, Criteria::IN );
+    
+    $dt = ContentPeer::doSelectRS ($c);
+    $dt->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    $processesDetails = Array();
+    while( $dt->next() ) {
+      $row = $dt->getRow();
+      $processesDetails[$row['CON_ID']][$row['CON_CATEGORY']] = $row['CON_VALUE'];
+    }
+
+    foreach( $processes as $process ) {
+
+      $proTitle = isset($processesDetails[$process['PRO_UID']]) && isset($processesDetails[$process['PRO_UID']]['PRO_TITLE']) ? $processesDetails[$process['PRO_UID']]['PRO_TITLE']: '';
+      $proDescription = isset($processesDetails[$process['PRO_UID']]) && isset($processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION']) ? $processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION']: '';
+      
+      if( isset($processName) && $processName != '' && stripos($proTitle, $processName) === false){
+        continue;
       }
 
-      //print_r($aProcess);
       $casesCountTotal = 0;
-      if( isset($casesCnt[$aProcess['PRO_UID']]) ) {
-        foreach($casesCnt[$aProcess['PRO_UID']] as $item) {
+      if( isset($casesCnt[$process['PRO_UID']]) ) {
+        foreach($casesCnt[$process['PRO_UID']] as $item) {
           $casesCountTotal += $item;
         }
       }
-      
-      /*if( ! G::in_array_column($aProcess['PRO_CATEGORY'], 'CAT_ID', $categories) ){
-        $categories[] = Array('CAT_ID'=>$aProcess['PRO_CATEGORY'], 'CAT_NAME'=>$aProcess['PRO_CATEGORY_LABEL']);
-      }*/
-      
-      $aProcess['PRO_DEBUG_LABEL'] = ($aProcess['PRO_DEBUG']=="1")? G::LoadTranslation('ID_ON'): G::LoadTranslation('ID_OFF');
-      $aProcess['PRO_STATUS_LABEL'] = $aProcess ['PRO_STATUS'] == 'ACTIVE'? G::LoadTranslation ('ID_ACTIVE'): G::LoadTranslation('ID_INACTIVE');
-      $userData = $user->load($aProcess['PRO_CREATE_USER']);
-      //print_r($userData); die;
-      $aProcess['PRO_CREATE_USER_LABEL'] = $userData['USR_FIRSTNAME'] . ' ' . $userData['USR_LASTNAME'];
-      
-      $aProcess['CASES_COUNT_TO_DO']=(isset($casesCnt[$aProcess['PRO_UID']]['TO_DO'])? $casesCnt[$aProcess['PRO_UID']]['TO_DO']: 0);
-      $aProcess['CASES_COUNT_COMPLETED']=(isset($casesCnt[$aProcess['PRO_UID']]['COMPLETED'])? $casesCnt[$aProcess['PRO_UID']]['COMPLETED']: 0);
-      $aProcess['CASES_COUNT_DRAFT']=(isset($casesCnt[$aProcess['PRO_UID']]['DRAFT'])? $casesCnt[$aProcess['PRO_UID']]['DRAFT']: 0);
-      $aProcess['CASES_COUNT_CANCELLED']=(isset($casesCnt[$aProcess['PRO_UID']]['CANCELLED'])? $casesCnt[$aProcess['PRO_UID']]['CANCELLED']: 0);
-      $aProcess['CASES_COUNT']=$casesCountTotal;
-      $aProcesses[] = $aProcess;
+
+      G::loadClass('configuration');
+      $oConf = new Configurations;
+      $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+      $userOwner = isset($oConf->aConfig['format'])? $oConf->aConfig['format']: '';
+      $creationDateMask = isset($oConf->aConfig['dateFormat'])? $oConf->aConfig['dateFormat']: '';
+
+      if( $userOwner != '' ){
+        $userOwner = str_replace('@userName', $process['USR_USERNAME'], $userOwner);
+        $userOwner = str_replace('@firstName', $process['USR_FIRSTNAME'], $userOwner);
+        $userOwner = str_replace('@lastName', $process['USR_LASTNAME'], $userOwner);
+      } else {
+        $userOwner = $process['USR_FIRSTNAME'].' '.$process['USR_LASTNAME'];
+      }
+
+      if( $creationDateMask != '' ){
+        list($date, $time) = explode(' ', $process['PRO_CREATE_DATE']);
+        list($y, $m, $d) = explode('-', $date);
+        list($h, $i, $s) = explode(':', $time);
+
+        $process['PRO_CREATE_DATE'] = date($creationDateMask, mktime($h, $i, $s, $m, $d, $y));
+      } 
+
+
+      $process['PRO_CATEGORY_LABEL'] = $process['PRO_CATEGORY'] != ''? $process['CATEGORY_NAME']: G::LoadTranslation('ID_PROCESS_NO_CATEGORY');
+      $process['PRO_TITLE'] = $proTitle;
+      $process['PRO_DESCRIPTION'] = $proDescription;
+      $process['PRO_DEBUG_LABEL'] = ($process['PRO_DEBUG']=="1")? G::LoadTranslation('ID_ON'): G::LoadTranslation('ID_OFF');
+      $process['PRO_STATUS_LABEL'] = $process ['PRO_STATUS'] == 'ACTIVE'? G::LoadTranslation ('ID_ACTIVE'): G::LoadTranslation('ID_INACTIVE');
+      $process['PRO_CREATE_USER_LABEL'] = $userOwner;
+      $process['CASES_COUNT_TO_DO'] = (isset($casesCnt[$process['PRO_UID']]['TO_DO'])? $casesCnt[$process['PRO_UID']]['TO_DO']: 0);
+      $process['CASES_COUNT_COMPLETED'] = (isset($casesCnt[$process['PRO_UID']]['COMPLETED'])? $casesCnt[$process['PRO_UID']]['COMPLETED']: 0);
+      $process['CASES_COUNT_DRAFT'] = (isset($casesCnt[$process['PRO_UID']]['DRAFT'])? $casesCnt[$process['PRO_UID']]['DRAFT']: 0);
+      $process['CASES_COUNT_CANCELLED'] = (isset($casesCnt[$process['PRO_UID']]['CANCELLED'])? $casesCnt[$process['PRO_UID']]['CANCELLED']: 0);
+      $process['CASES_COUNT'] = $casesCountTotal;
+      $aProcesses[] = $process;
       
     }
-    return Array('data'=>$aProcesses, 'categories'=>$categories);
+    return $aProcesses;
   }
 
   function getCasesCountInAllProcesses(){
