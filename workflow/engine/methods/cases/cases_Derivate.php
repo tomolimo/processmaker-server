@@ -88,7 +88,6 @@ try {
 	$oCase->updateCase ( $_SESSION['APPLICATION'], $appFields); //Save data 
 
 	//derivate case
-	 //////////////////////////////////////////////////////// 
 	$oDerivation = new Derivation();
 	$aCurrentDerivation = array(
 	    'APP_UID'    => $_SESSION['APPLICATION'],
@@ -99,8 +98,6 @@ try {
 	);
 
 	$oDerivation->derivate( $aCurrentDerivation, $_POST['form']['TASKS'] );
-	/*
-	///////////////////////////////////////////////////////// */
 	
 	$appFields = $oCase->loadCase( $_SESSION['APPLICATION'] ); //refresh appFields, because in derivations should change some values
 	$triggers = $oCase->loadTriggers( $_SESSION['TASK'], 'ASSIGN_TASK', -2, 'AFTER'); //load the triggers after derivation
@@ -148,25 +145,18 @@ try {
 
 	//Events - End
 
-	$aNextStep['PAGE'] = 'casesListExtJs'; //'cases_List';
+	$aNextStep['PAGE'] = 'casesListExtJs';
 	if( isset($_SESSION['PMDEBUGGER']) && $_SESSION['PMDEBUGGER'] ){
 		$_SESSION['TRIGGER_DEBUG']['BREAKPAGE'] = $aNextStep['PAGE'];
 		G::header('location: ' . 'cases_Step?' .'breakpoint=triggerdebug');
-	}
-	else {
-		G::header('location: cases_List');
+	} else {
+		G::header('location: casesListExtJs');
 	}
 }
 catch ( Exception $e ){
-	/* Render Error Page */
-	//$G_MAIN_MENU        = 'processmaker';
-	//$G_SUB_MENU         = 'cases';
-	//$G_ID_MENU_SELECTED = 'CASES';
-
 	$aMessage = array();
 	$aMessage['MESSAGE'] = $e->getMessage();
 	$G_PUBLISH = new Publisher;
 	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
   G::RenderPage( 'publish', 'blank');
-//	G::RenderPage( 'publish');
 }
