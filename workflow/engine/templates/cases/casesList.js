@@ -179,7 +179,7 @@ Ext.onReady ( function() {
   var newPopUp = new Ext.Window({
               id       : Ext.id(),
               el       : 'reassign-panel',
-              title    : 'Static Panel',
+              title    : 'Reassign All Cases by Task',
               width    : 600,
               height   : 400,
               frame    : true,
@@ -190,9 +190,9 @@ Ext.onReady ( function() {
  var btnCloseReassign = new Ext.Button ({
     text: 'Close',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
-        handler: function(){
-          newPopUp.hide();
-     }
+    handler: function(){
+      newPopUp.hide();
+    }
  });
 
 
@@ -216,6 +216,13 @@ Ext.onReady ( function() {
     readerFields
   );
 
+  // The new DataWriter component.
+  //currently we are not using this in casesList, but it is here just for complete definition
+  var writerCasesList = new Ext.data.JsonWriter({
+    encode: true,
+    writeAllFields: true
+  });
+
   var proxyReassignCasesList = new Ext.data.HttpProxy({
     api: {
       read :   'proxyReassignCasesList'
@@ -234,17 +241,12 @@ Ext.onReady ( function() {
 
   // The new DataWriter component.
   //currently we are not using this in casesList, but it is here just for complete definition
-  var writerCasesList = new Ext.data.JsonWriter({
-    encode: true,
-    writeAllFields: true
-  });
-
-  // The new DataWriter component.
-  //currently we are not using this in casesList, but it is here just for complete definition
   var writerReassignCasesList = new Ext.data.JsonWriter({
     encode: true,
     writeAllFields: true
   });
+  
+
 
   // Typical Store collecting the Proxy, Reader and Writer together.
   // This is the store for Cases List
@@ -364,8 +366,8 @@ Ext.onReady ( function() {
     triggerAction: 'all',
 
     store         : new Ext.data.ArrayStore({
-      fields: ['PRO_UID','APP_PRO_TITLE'],
-      data  : processValues
+      fields : ['PRO_UID','APP_PRO_TITLE'],
+      data   : processValues
     }),
     listeners:{
       scope: this,
@@ -441,7 +443,10 @@ Ext.onReady ( function() {
     text: 'Reassign',
 //    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
-      grid.getSelectionModel().getSelections();
+      //grid.getSelectionModel().getSelections();
+        reassignGrid.getColumnModel().setHidden(0, true);
+        reassignGrid.getColumnModel().setHidden(1, true);
+        reassignGrid.getColumnModel().setHidden(2, true);
         reassign();
 //      reassignPopup.show();
 //      conn.request({
@@ -698,6 +703,9 @@ Ext.onReady ( function() {
   var toolbarToReassign = [
     'user',
     comboAllUsers,
+    '-',
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
     '-',
     btnSelectAll,
     '-',
@@ -957,49 +965,24 @@ Ext.onReady ( function() {
 
 function reassign(){
   //var rowSelected = processesGrid.getSelectionModel().getSelected();
-  var rows = grid.getSelectionModel().getSelections();
+  //var rows = grid.getSelectionModel().getSelections();
 //  alert(reassignGrid.getId());
-  if( rows.length > 0 ) {
-    var ids = '';
-    for(i=0; i<rows.length; i++) {
-      if(i != 0 ) ids += ',';
-      ids += rows[i].get('APP_UID');
-    }
-    storeReassignCases.setBaseParam( 'APP_UIDS', ids);
+  //if( rows.length > 0 ) {
+  //  var ids = '';
+  //  for(i=0; i<rows.length; i++) {
+  //    if(i != 0 ) ids += ',';
+  //    ids += rows[i].get('APP_UID');
+  //  }
+    //storeReassignCases.setBaseParam( 'APP_UIDS', ids);
     storeReassignCases.setBaseParam( 'user', comboAllUsers.value);
+    storeReassignCases.setBaseParam( 'process', comboProcess.value);
     storeReassignCases.load({params:{ start : 0 , limit : pageSize}});
     newPopUp.show();
 //    storeReassignCases.baseParams = {APP_UIDS : ids, user : comboAllUsers.value};
 //    storeReassignCases.reload();
-   /* Ext.Ajax.request({
-      url : 'proxyReassignCasesList' ,
-      params : {APP_UIDS : ids, user : comboAllUsers.value},
-      method: 'POST',
-      success: function ( responseObject ) {
-//        Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
-        //storeCases.reload();
-            var newPopUp = new Ext.Window({
-              title    : 'Static Panel',
-              width    : 600,
-              height   : 400,
-              frame    : true
-            //  html     : responseObject.responseText
-            });
-            newPopUp.add(reassignGrid);
-            newPopUp.show();
-//        var activator = Ext.storeCasesgetCmp('activator');
-//        var activator = Ext.storeCasesgetCmp('activator');
-//        activator.setDisabled(true);
-//        activator.setText('Status');
-//        activator.setIcon('');
-      },
-      failure: function ( ) {
-        Ext.MessageBox.alert('Failed', result.responseText);
-      }
-    });*/
 
     //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
-  } else {
+  /*} else {
      Ext.Msg.show({
       title:'',
       msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
@@ -1009,8 +992,15 @@ function reassign(){
       icon: Ext.MessageBox.INFO,
       buttons: Ext.MessageBox.OK
     });
-  }
+  }*/
 }
 
+function getSelectionData () {
+  //var rows = reassignGrid.getSelectionModel().getSelections();
+  //var gridData[0]  = rows[0].get( 'APP_UID' );
+  //gridData[1]      = rows[0].get( 'TAS_UID' );
+  //alert (gridData[0]+gridData[1]);
+  alert('none');
+}
 
 });

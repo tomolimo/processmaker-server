@@ -183,8 +183,8 @@
            $cProcess      = $oAppCache->getToReviseListCriteria($userUid);
            break;
       case 'to_reassign' :
-//           $cProcess      = $oAppCache->getToReassignListCriteria();
-             return $processes;
+           $cProcess      = $oAppCache->getToReassignListCriteria();
+//             return $processes;
            
 //           $params = array();
 //           $sqlString = BasePeer::createSelectSql($cProcess, $params);
@@ -566,19 +566,32 @@
   function getReassignList() {
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 100 );
+    $caseColumns[] = array( 'header' =>'CaseId',       'dataIndex' => 'APP_UID'  ,         'width' => 200 );
+    $caseColumns[] = array( 'header' =>'User',         'dataIndex' => 'USR_UID'  ,         'width' => 200 );
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
+//    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
     $caseColumns[] = array( 'header' =>'Reassign To',  'dataIndex' => 'USERS',             'width' => 120 , 'editor'=>"combo", 'renderer'=>"Ext.util.Format.comboRenderer(combo)");
 
     $caseReaderFields = array();
-    $caseReaderFields[] = array( 'name' => 'APP_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
+    $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
-    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
 //    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
-    $caseReaderFields[] = array( 'name' => 'USERS' );
+//    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+//    $caseReaderFields[] = array( 'name' => 'USERS' );
+
+    return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
+  }
+
+  function getReassignUsersList() {
+    $caseColumns = array ();
+
+    $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'userUid' );
+    $caseReaderFields[] = array( 'name' => 'userFullname' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
