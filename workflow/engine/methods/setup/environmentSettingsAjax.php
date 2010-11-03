@@ -80,6 +80,10 @@
         'name'=>'D M j G:i:s T Y'
       );
       $formats[] = Array(
+        'id'=>'D d M, Y',
+        'name'=>'D d M, Y'
+      );
+      $formats[] = Array(
         'id'=>'D M, Y',
         'name'=>'D M, Y'
       );
