@@ -255,7 +255,8 @@ Ext.onReady ( function() {
     proxy: proxyCasesList,
     reader: readerCasesList,
     writer: writerCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
-    autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+    autoSave: true, // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+    sortInfo:{field: 'APP_CACHE_VIEW.APP_NUMBER', direction: "DESC"}
   });
 
   storeReassignCases = new Ext.data.Store({
