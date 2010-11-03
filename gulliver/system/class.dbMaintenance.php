@@ -475,6 +475,12 @@ class DataBaseMaintenance
       $bytesSaved += fwrite($fp, $data);
     }
     
+    echo "UNLOCK TABLES .....................";
+    if( @mysql_query("UNLOCK TABLES;") )
+      echo "[OK]\n";
+    else
+      echo "[FAILED]\n";
+
     fclose($fp);
     fclose($fpmd);
     return $bytesSaved;
