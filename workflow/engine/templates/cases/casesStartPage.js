@@ -269,8 +269,6 @@ DocPanel = Ext.extend(Ext.Panel, {
     }
 });
 
-// console.info("Doc Panel - End");
-// console.info("Main Panel - Start");
 MainPanel = function(){
   MainPanel.superclass.constructor.call(this, {
     id     : 'doc-body',
@@ -576,98 +574,97 @@ Ext.extend(MainPanel, Ext.TabPanel, {
       var detailEl = Ext.getCmp('process-detail-panel').body;
       if(selectedNode){
         this.initTemplates();
-         // detailEl.hide();
-        detailEl.sequenceFx();
-         detailEl.slideOut('l', {stopFx:true,duration:.9});
+        // detailEl.hide();
+        //detailEl.sequenceFx();
+        // detailEl.slideOut('l', {stopFx:true,duration:.9});
          
-         otherAttributes=selectedNode.attributes.otherAttributes;
-         taskName=selectedNode.attributes.text;
-         processName=otherAttributes.PRO_TITLE;
-         calendarName=otherAttributes.CALENDAR_NAME;
-         calendarDescription=otherAttributes.CALENDAR_DESCRIPTION;
-         calendarWorkDays=otherAttributes.CALENDAR_WORK_DAYS;
-         processCategory=otherAttributes.PRO_CATEGORY_LABEL;
-         if(otherAttributes.PRO_DEBUG==0){
-           processDebug="False";
-         }else{
-           processDebug="True";
-         }
-         processDescription=otherAttributes.PRO_DESCRIPTION;
-         myInbox=otherAttributes.myInbox;
-         totalInbox=otherAttributes.totalInbox;
-         
-         // data={name:selectedNode.attributes.text};
-         data={taskName:taskName,processName:processName,calendarName:calendarName,calendarDescription:calendarDescription,calendarWorkDays:calendarWorkDays,processCategory:processCategory,processDebug:processDebug,processDescription:processDescription,myInbox:myInbox,totalInbox:totalInbox};
-         
-         
-            this.detailsTemplate.overwrite(detailEl, data);
-            detailEl.slideIn('t', {stopFx:true,duration:.9});
-            detailEl.highlight('#c3daf9', {block:true});
-            Pm=new parent.parent.processmap();            
-            var params = "{\"uid\":\""+selectedNode.attributes.pro_uid+"\",\"mode\":true,\"ct\":false}";
-              Ext.Ajax
-                    .request( {
-                      url : '../processes/processes_Ajax',
-                      params : {
-                        action : 'load',
-                        data : params
-                      },
-                      success : function(responseObject) {
-                        // console.log(responseObject.responseText);
-                        var response = Ext.decode(responseObject.responseText);
-                        var xPos = 0;
-    var yPos = 0;
-                        for (var i in response){
-      if (i=='task'){
-        elements = response[i];
-        for (var j in elements){
-          if (elements[j].uid!=undefined){
-            if (elements[j].position.x > xPos){
-              xPos = elements[j].position.x;
-            }
-            if (elements[j].position.y > yPos){
-              yPos = elements[j].position.y;
-            }
-          }
+        otherAttributes=selectedNode.attributes.otherAttributes;
+        taskName       =selectedNode.attributes.text;
+        processName    =otherAttributes.PRO_TITLE;
+        calendarName   =otherAttributes.CALENDAR_NAME;
+        calendarDescription=otherAttributes.CALENDAR_DESCRIPTION;
+        calendarWorkDays=otherAttributes.CALENDAR_WORK_DAYS;
+        processCategory=otherAttributes.PRO_CATEGORY_LABEL;
+        if(otherAttributes.PRO_DEBUG==0){
+          processDebug="False";
         }
-      }
-    }
-
-    Pm.options = {
-      target    : "pm_target",
-      dataServer: "../processes/processes_Ajax",
-      uid       : selectedNode.attributes.pro_uid,
-      lang      : "en",
-      theme     : "processmaker",
-      size      : {w:xPos+200,h:yPos+150},
-      images_dir: "/jscore/processmap/core/images/",
-      rw        : false,
-      hideMenu  : false
-    };
-    // console.log(Pm);
-    Pm.make();
-                      
-                    },
-                    failure : function() {
-                      // grid.getGridEl().unmask(true);
-                      Ext.Msg.alert('Error',
-                          'Error loading Processmap');
+        else{
+           processDebug="True";
+        }
+        processDescription=otherAttributes.PRO_DESCRIPTION;
+        myInbox=otherAttributes.myInbox;
+        totalInbox=otherAttributes.totalInbox;
+         
+        // data={name:selectedNode.attributes.text};
+        data={taskName:taskName,processName:processName,calendarName:calendarName,calendarDescription:calendarDescription,calendarWorkDays:calendarWorkDays,processCategory:processCategory,processDebug:processDebug,processDescription:processDescription,myInbox:myInbox,totalInbox:totalInbox};
+        this.detailsTemplate.overwrite(detailEl, data);
+        //detailEl.slideIn('t', {stopFx:true,duration:.0});
+        detailEl.highlight('#c3daf9', {block:true});
+        Pm=new parent.parent.processmap();            
+        var params = "{\"uid\":\""+selectedNode.attributes.pro_uid+"\",\"mode\":true,\"ct\":false}";
+          Ext.Ajax.request( {
+            url : '../processes/processes_Ajax',
+            params : {
+              action : 'load',
+              data : params
+            },
+            success : function(responseObject) {
+              var response = Ext.decode(responseObject.responseText);
+              var xPos = 0;
+              var yPos = 0;
+              for (var i in response){
+                if (i=='task'){
+                  elements = response[i];
+                  for (var j in elements){
+                    if (elements[j].uid!=undefined){
+                      if (elements[j].position.x > xPos){
+                        xPos = elements[j].position.x;
+                      }
+                      if (elements[j].position.y > yPos){
+                        yPos = elements[j].position.y;
+                      }
                     }
-                    });
-            
-            
-      }else{
-        detailEl.update('');
-      }
+                  }
+                }
+              }
+
+              Pm.options = {
+                target    : "pm_target",
+                dataServer: "../processes/processes_Ajax",
+                uid       : selectedNode.attributes.pro_uid,
+                lang      : "en",
+                theme     : "processmaker",
+                size      : {w:xPos+200,h:yPos+150},
+                images_dir: "/jscore/processmap/core/images/",
+                rw        : false,
+                hideMenu  : false
+              };
+
+              Pm.make();
+                                
+                              },
+                              failure : function() {
+                                // grid.getGridEl().unmask(true);
+                                Ext.Msg.alert('Error',
+                                    'Error loading Processmap');
+                              }
+                              });
+                      
+                      
+                }else{
+                  detailEl.update('');
+                }
        
       return;
       // var selNode = this.getSelectedNodes();
       
     
   },
+/*
   startNewCase:function(){
     alert("asdasdasd");
   },
+*/
     loadOtherDashboards:function(){
       // console.info("Getting other Dashboards");
       dashboardTabPanels=this;

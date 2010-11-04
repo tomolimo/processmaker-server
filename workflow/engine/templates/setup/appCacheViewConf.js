@@ -20,7 +20,7 @@ Ext.onReady(function() {
     reader : new Ext.data.JsonReader( {
       root : 'info',
       fields : [ {name : 'name'}, {name : 'value'} ]
-    }),
+    })
   });
 
   // create the Grid
@@ -63,7 +63,7 @@ Ext.onReady(function() {
       title : ' ',
       bodyStyle : 'padding:5px 5px 0',
       width : 400,
-      items : [ ],
+      items : [ ]
     });
     
     var fieldset;
@@ -88,8 +88,7 @@ Ext.onReady(function() {
       emptyText      : 'Select',
       selectOnFocus  : true,
       editable       : false,
-      allowBlank     : false,
-      //allowBlankText : 'You should to select a language from the list.'
+      allowBlank     : false
     })
     
     var txtUser = { 
@@ -174,7 +173,7 @@ Ext.onReady(function() {
       }]      
     } 
     fsf.add(fieldset);
-    fsf.add(fieldsetRoot);
+    //fsf.add(fieldsetRoot);
     fsf.render(document.getElementById('main-panel'));
 
     //set the current language
@@ -194,7 +193,7 @@ Ext.onReady(function() {
       failure : function(response) {
         Ext.Msg.alert ( 'Error', response.responseText );
       },
-      params: {request: 'info' },
+      params: {request: 'info' }
     });
   
   });  //ExtReady
