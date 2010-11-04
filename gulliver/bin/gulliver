@@ -40,9 +40,10 @@
   
   // Get the platform name (should be 'linux', 'windows', etc)
   $svrOS = strtolower(reset(explode(' ',php_uname('s'))));
+  $defines = $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php';
 
-  if ($svrOS === "windows")
-    require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php' );
+  if ($svrOS === "windows" && file_exists($defines))
+    require_once ( $defines );
 
   ini_set('display_errors','off');
   ini_set('error_reporting', E_ERROR);
