@@ -124,6 +124,23 @@
   background-image:url(/images/icons_silk/sprites.gif.png) !important;
   background-position:0 -8497px !important;
 }
+
+.ICON_CASES_DELETE {
+  background-image:url(/images/delete-16x16.gif) !important;
+}
+
+.ICON_CASES_CANCEL {
+  background-image:url(/images/deactivate.png) !important;
+}
+
+.ICON_CASES_UNPAUSE {
+  background-image:url(/images/activate.png) !important;
+}
+
+.ICON_CASES_OPEN {
+  background-image:url(/images/edit.gif) !important;
+}
+
  
 
 /**

@@ -282,10 +282,30 @@ switch($_POST['action']) {
 		break;
 
 	case 'cancelCase':
-		$sApplicationUID = (isset($_POST['sApplicationUID'])) ? $_POST['sApplicationUID'] : $_SESSION['APPLICATION'];
-		$iIndex = (isset($_POST['sApplicationUID'])) ? $_POST['iIndex'] : $_SESSION['INDEX'];
 		$oCase = new Cases();
-		$oCase->cancelCase($sApplicationUID, $iIndex, $_SESSION['USER_LOGGED']);
+    $multiple = false;
+
+    if( isset($_POST['APP_UID']) && isset($_POST['DEL_INDEX']) ) {
+			$APP_UID   = $_POST['APP_UID'];
+      $DEL_INDEX = $_POST['DEL_INDEX'];
+
+      $appUids    = explode(',', $APP_UID);
+      $delIndexes = explode(',', $DEL_INDEX);
+      if( count($appUids) > 1 && count($delIndexes) > 1 )
+        $multiple = true;
+		} else if( isset($_POST['sApplicationUID']) && isset($_POST['iIndex']) ){
+      $APP_UID   = $_POST['sApplicationUID'];
+      $DEL_INDEX = $_POST['iIndex'];
+    } else {
+			$APP_UID   = $_SESSION['APPLICATION'];
+      $DEL_INDEX = $_SESSION['INDEX'];
+		}
+
+    if( $multiple ) {
+      foreach($appUids as $i=>$appUid)
+        $oCase->cancelCase($appUid, $delIndexes[$i], $_SESSION['USER_LOGGED']);
+    } else
+      $oCase->cancelCase($APP_UID, $DEL_INDEX, $_SESSION['USER_LOGGED']);
 		break;
 
 	case 'reactivateCase':
@@ -304,16 +324,25 @@ switch($_POST['action']) {
 		$G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_UnpauseDateInput', '', $aFields);
 		G::RenderPage('publish', 'raw');
 		break;
+
 	case 'pauseCase':
 		$unpausedate = $_POST['unpausedate'];
-		$oCase = new Cases();
-		if(isset($_POST['sApplicationUID'])) {
-			$oCase->pauseCase($_POST['sApplicationUID'], $_POST['iIndex'], $_SESSION['USER_LOGGED'], $unpausedate);
-		} else {
-			$oCase->pauseCase($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], $unpausedate);
+  	$oCase = new Cases();
+		if( isset($_POST['APP_UID']) && isset($_POST['DEL_INDEX']) ) {
+			$APP_UID   = $_POST['APP_UID'];
+      $DEL_INDEX = $_POST['DEL_INDEX'];
+		} else if( isset($_POST['sApplicationUID']) && isset($_POST['iIndex']) ){
+      $APP_UID   = $_POST['sApplicationUID'];
+      $DEL_INDEX = $_POST['iIndex'];
+    } else {
+			$APP_UID   = $_SESSION['APPLICATION'];
+      $DEL_INDEX = $_SESSION['INDEX'];
 		}
+    
+    $oCase->pauseCase($APP_UID, $DEL_INDEX, $_SESSION['USER_LOGGED'], $unpauseDate);
 		break;
-	case 'unpauseCase':
+
+  case 'unpauseCase':
 		$sApplicationUID = (isset($_POST['sApplicationUID'])) ? $_POST['sApplicationUID'] : $_SESSION['APPLICATION'];
 		$iIndex = (isset($_POST['sApplicationUID'])) ? $_POST['iIndex'] : $_SESSION['INDEX'];
 		$oCase = new Cases();

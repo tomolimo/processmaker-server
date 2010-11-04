@@ -90,7 +90,7 @@ function deleteCase() {
       rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want delete all seleted cases?',
       function(btn, text){
         if ( btn == 'yes' ) {
-          Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+          Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
           Ext.Ajax.request({
             url: 'cases_Delete',
             success: function(response) {
@@ -99,6 +99,76 @@ function deleteCase() {
               parent.updateCasesTree();
             },
             params: {APP_UIDS:APP_UIDS}
+          });
+        }
+      }
+    );
+  } else {
+    Ext.Msg.show({
+      title:'',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      buttons: Ext.Msg.INFO,
+      fn: function(){},
+      animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
+    });
+  }
+}
+
+function pauseCase(date){
+  rowModel = grid.getSelectionModel().getSelected();
+  unpauseDate = date.format('Y-m-d');
+ 
+  Ext.Msg.confirm(
+    'Confirm',
+    'Do you want to pause the case to date '+date.format('M j, Y'),
+    function(btn, text){
+      if ( btn == 'yes' ) {
+        Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
+        Ext.Ajax.request({
+          url: 'cases_Ajax',
+          success: function(response) {
+            parent.updateCasesView();
+            parent.updateCasesTree();
+            Ext.MessageBox.hide();
+          },
+          params: {action:'pauseCase', unpausedate:unpauseDate, APP_UID:rowModel.data.APP_UID, DEL_INDEX: rowModel.data.DEL_INDEX}
+        });
+        
+      }
+    }
+  );
+}
+
+
+function cancelCase(){
+  var rows = grid.getSelectionModel().getSelections();
+  if( rows.length > 0 ) {
+    app_uid = Array();
+    del_index = Array();
+
+    for(i=0; i<rows.length; i++){
+      app_uid[i]   = rows[i].get('APP_UID');
+      del_index[i] = rows[i].get('DEL_INDEX');
+    }
+    APP_UIDS    = app_uid.join(',');
+    DEL_INDEXES = del_index.join(',');
+
+    Ext.Msg.confirm(
+      TRANSLATIONS.ID_CONFIRM,
+      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want delete all seleted cases?',
+      function(btn, text){
+        if ( btn == 'yes' ) {
+          Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
+          Ext.Ajax.request({
+            url: 'cases_Ajax',
+            success: function(response) {
+              parent.updateCasesView();
+              Ext.MessageBox.hide();
+              parent.updateCasesTree();
+            },
+            params: {action:'cancelCase', APP_UID:APP_UIDS, DEL_INDEX:DEL_INDEXES}
           });
         }
       }
@@ -131,10 +201,25 @@ function callbackUnpauseCase (btn, text) {
   }
 }
 
-function unpauseCaseFunction (appid, delindex) {
-	caseIdToUnpause    = appid;
-	caseIndexToUnpause = delindex;
-  Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_CONFIRM_UNPAUSE_CASE , callbackUnpauseCase );
+function unpauseCase() {
+  rowModel = grid.getSelectionModel().getSelected();
+	caseIdToUnpause    = rowModel.data.APP_UID;
+	caseIndexToUnpause = rowModel.data.DEL_INDEX;
+  
+  Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_CONFIRM_UNPAUSE_CASE , function (btn, text) {
+    if ( btn == 'yes' ) {
+      Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+      Ext.Ajax.request({
+        url: 'cases_Ajax',
+        success: function(response) {
+          parent.updateCasesView();
+          Ext.MessageBox.hide();
+          parent.updateCasesTree();
+        },
+        params: {action:'unpauseCase', sApplicationUID: caseIdToUnpause, iIndex: caseIndexToUnpause}
+      });
+    }
+  });
 }
 
 Ext.onReady ( function() {
@@ -144,17 +229,6 @@ Ext.onReady ( function() {
   var caseIdToDelete = '';
   var caseIdToUnpause = '';
   var caseIndexToUnpause = '';
-
-
-  contextMenu = new Ext.menu.Menu({
-    items: [{
-      text: 'Edit',
-      iconCls: 'edit',
-      hadler: function(){
-        //alert('s');
-      }
-    }]
-  })
 
 
   function openLink(value, p, r){
@@ -736,35 +810,105 @@ Ext.onReady ( function() {
     e.stopEvent();
     var coords = e.getXY();
     messageContextMenu.showAt([coords[0], coords[1]]);
+    enableDisableMenuOption();
+  }
+
+  function enableDisableMenuOption(){
     var rows = grid.getSelectionModel().getSelections();
-    //alert(rows.length);
-    if( rows.length > 0 ) {
-
+    switch(action){
+      case 'todo':
+        if( rows.length == 0 ) {
+          optionMenuOpen.setDisabled(true);
+          optionMenuPause.setDisabled(true);
+          optionMenuReassign.setDisabled(true);
+          optionMenuCancel.setDisabled(true);
+        } else if( rows.length == 1 ) {
+          optionMenuOpen.setDisabled(false);
+          optionMenuPause.setDisabled(false);
+          optionMenuReassign.setDisabled(false);
+          optionMenuCancel.setDisabled(false);
+        } else {
+          optionMenuOpen.setDisabled(true);
+          optionMenuPause.setDisabled(true);
+          optionMenuReassign.setDisabled(true);
+          optionMenuCancel.setDisabled(false);
+        }
+        break;
+      case 'draft':
+        if( rows.length == 0 ) {
+          optionMenuOpen.setDisabled(true);
+          optionMenuPause.setDisabled(true);
+          optionMenuReassign.setDisabled(true);
+          optionMenuDelete.setDisabled(true);
+        } else if( rows.length == 1 ) {
+          optionMenuOpen.setDisabled(false);
+          optionMenuPause.setDisabled(false);
+          optionMenuReassign.setDisabled(false);
+          optionMenuDelete.setDisabled(false);
+        } else {
+          optionMenuOpen.setDisabled(true);
+          optionMenuPause.setDisabled(true);
+          optionMenuReassign.setDisabled(true);
+          optionMenuDelete.setDisabled(false);
+        }
+        break;
     }
-
   }
 
   var menuItems;
+  //alert(action);
+  optionMenuOpen = new Ext.Action({
+    text: 'Open Case',
+    iconCls: 'ICON_CASES_OPEN',
+    handler: openCase
+  });
+
+  optionMenuUnpause = new Ext.Action({
+    text: 'Unpause Case',
+    iconCls: 'ICON_CASES_UNPAUSE',
+    handler: unpauseCase
+  });
+
+  optionMenuPause = new Ext.Action({
+    text: 'Pause',
+    iconCls: 'ICON_CASES_PAUSED',
+    menu: new Ext.menu.DateMenu({
+      //vtype: 'daterange',
+      startDate: '2010-11-04',
+      handler: function(dp, date){
+        pauseCase(date);
+      }
+    })
+
+  });
+  optionMenuReassign = new Ext.Action({
+    text: 'Reassign',
+    iconCls: 'ICON_CASES_TO_REASSIGN',
+    handler: function(){}
+  });
+  optionMenuDelete = new Ext.Action({
+    text: 'Delete',
+    iconCls: 'ICON_CASES_DELETE',
+    handler: deleteCase
+  });
+  optionMenuCancel = new Ext.Action({
+    text: 'Cancel',
+    iconCls: 'ICON_CASES_CANCEL',
+    handler: cancelCase
+  });
+
+
   switch(action){
-    case 'draft':
-      menuItems = [{
-          text: 'Open Case',
-          iconCls: 'vcard',
-          handler: onMessageContextItemClick.createDelegate(this, ['open'])
-        }, {
-          text: 'Pause',
-          iconCls: 'album',
-          handler: onMessageContextItemClick.createDelegate(this, ['pause'])
-        }, {
-          text: 'Reassign',
-          iconCls: 'album',
-          handler: onMessageContextItemClick.createDelegate(this, ['reassign'])
-        }, {
-          text: 'Delete',
-          iconCls: 'album',
-          handler: onMessageContextItemClick.createDelegate(this, ['delete'])
-        }
-      ];
+    case 'todo':
+      menuItems = [optionMenuOpen, optionMenuPause, optionMenuReassign, optionMenuCancel];
+      break;
+
+      case 'draft':
+      menuItems = [optionMenuOpen, optionMenuPause, optionMenuReassign, optionMenuDelete];
+      break;
+
+    case 'paused':
+      menuItems = [optionMenuUnpause];
       break;
 
     default:
@@ -776,18 +920,6 @@ Ext.onReady ( function() {
     items: menuItems
   });
 
-  function onMessageContextItemClick(option) {
-
-    switch(option){
-      case 'open':
-        openCase();
-        break;
-
-      case 'delete':
-        deleteCase();
-      break;
-    }
-  }
   //
 
   var dateFrom = new Ext.form.DateField({
@@ -805,8 +937,13 @@ Ext.onReady ( function() {
   });
 
   var toolbarTodo = [
-    TRANSLATIONS.ID_PROCESS,
-    comboProcess,
+    {
+      xtype: 'tbsplit',
+      text: 'Actions',
+      menu: menuItems,
+      listeners: { menushow: enableDisableMenuOption }
+    },
+    
     '-',
     btnRead,
     '-',
@@ -814,6 +951,29 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '-',
+    textSearch,
+    resetSearchButton,
+    btnSearch,
+    '-',
+    textJump,
+    btnJump,
+    ' ',
+    ' '
+  ];
+  
+  var toolbarUnassigned = [
+    btnRead,
+    '-',
+    btnUnread,
+    '-',
+    btnAll,
+    '->', // begin using the right-justified button container
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '-',
     textSearch,
     resetSearchButton,
     btnSearch,
@@ -824,11 +984,14 @@ Ext.onReady ( function() {
     ' '
   ];
 
+
+
   var toolbarDraft = [
     {
       xtype: 'tbsplit',
       text: 'Actions',
-      menu: menuItems
+      menu: menuItems,
+      listeners: { menushow: enableDisableMenuOption }
     },
     '->',
     TRANSLATIONS.ID_PROCESS,
@@ -875,18 +1038,18 @@ Ext.onReady ( function() {
   ];
 
   var toolbarSent = [
-    TRANSLATIONS.ID_PROCESS,
-    comboProcess,
-    '-',
-    TRANSLATIONS.ID_STATUS,
-    comboStatus,
-    '-',
     btnStarted,
     '-',
     btnCompleted,
     '-',
     btnAll,
     '->', // begin using the right-justified button container
+     TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '-',
+    TRANSLATIONS.ID_STATUS,
+    comboStatus,
+    '-',
     textSearch,
     resetSearchButton,
     btnSearch,
@@ -935,13 +1098,14 @@ Ext.onReady ( function() {
       btnSearch
     ]
   });
-
+  //alert(action);
   switch (action) {
     case 'draft'      : itemToolbar = toolbarDraft; break;
     case 'sent'       : itemToolbar = toolbarSent;  break;
     case 'to_revise'  : itemToolbar = toolbarToRevise;  break;
     case 'to_reassign': itemToolbar = toolbarToReassign; break;
     case 'search'     : itemToolbar = toolbarSearch;  break;
+    case 'unassigned' : itemToolbar = toolbarUnassigned;  break;
     default           : itemToolbar = toolbarTodo; break;
   }
 
@@ -1167,5 +1331,35 @@ function inArray(arr, obj) {
 }
 
 
+// Add the additional 'advanced' VTypes -- [Begin]
+Ext.apply(Ext.form.VTypes, {
+	daterange : function(val, field) {
+		var date = field.parseDate(val);
+
+		if(!date){
+			return;
+		}
+		if (field.startDateField && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
+			var start = Ext.getCmp(field.startDateField);
+			start.setMaxValue(date);
+			start.validate();
+			this.dateRangeMax = date;
+		}
+		else if (field.endDateField && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
+			var end = Ext.getCmp(field.endDateField);
+			end.setMinValue(date);
+			end.validate();
+			this.dateRangeMin = date;
+		}
+		/*
+		 * Always return true since we're only using this vtype to set the
+		 * min/max allowed values (these are tested for after the vtype test)
+		 */
+		return true;
+	}
+});
+// Add the additional 'advanced' VTypes -- [End]
+
 
 });
+

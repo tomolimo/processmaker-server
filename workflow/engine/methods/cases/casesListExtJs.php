@@ -61,7 +61,7 @@
   }
 
   if ( $action == 'paused' ) {
-    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'unpauseLink' ) );
+    //array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'unpauseLink' ) );
   }
 /*
   if ( $action == 'to_reassign' ) {
