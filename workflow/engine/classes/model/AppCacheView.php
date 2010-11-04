@@ -604,7 +604,6 @@ class AppCacheView extends BaseAppCacheView {
     $oCriteria->clearSelectColumns ( );
     // default configuration fields array
     $defaultFields = $this->getDefaultFields();
-  
     //if there is PMTABLE for this case list:
     if ( count($this->confCasesList)>1 && isset($this->confCasesList['PMTable']) && trim($this->confCasesList['PMTable'])!='') {
     // getting the table name
@@ -613,7 +612,7 @@ class AppCacheView extends BaseAppCacheView {
       $tableName = $oAdditionalTables->getAddTabName();
   
       foreach($this->confCasesList['second']['data'] as $fieldData){
-        if (!in_array($fieldData['name'],$defaultFields)){
+        if ( !in_array($fieldData['name'],$defaultFields) ){
           $fieldName = $tableName.'.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
         }
@@ -629,7 +628,7 @@ class AppCacheView extends BaseAppCacheView {
               $configTable = 'APP_CACHE_VIEW';
             break;
           }
-          $fieldName = $configTable.'.'.$fieldData['name'];
+          $fieldName = $configTable . '.' . $fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
         }
       }
@@ -658,7 +657,8 @@ class AppCacheView extends BaseAppCacheView {
           $fieldName = $configTable.'.'.$fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
         }
-      } else {
+      } 
+      else {
         //foreach($defaultFields as $field){
           $oCriteria->addSelectColumn('*');
         //}

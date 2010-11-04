@@ -20,16 +20,21 @@
   try {
 
   G::LoadClass("BasePeer" );
+  G::LoadClass ( 'configuration' );
   require_once ( "classes/model/AppCacheView.php" );
   require_once ( "classes/model/AppDelegation.php" );
   require_once ( "classes/model/AdditionalTables.php" );
   require_once ( "classes/model/AppDelay.php" );
-  G::LoadClass ( "BasePeer" );
-  G::LoadClass ( 'configuration' );
   require_once ( "classes/model/Fields.php" );
 
 	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
   $oAppCache = new AppCacheView();
+  
+  //get data configuration
+  $conf = new Configurations();
+  $confCasesList = $conf->getConfiguration('casesList',$action=='search'?'sent':$action );
+  $oAppCache->confCasesList = $confCasesList;
+
 // get the action based list
   switch ( $action ) {
   	case 'draft' :
@@ -76,8 +81,6 @@
     break;
   }
 
-  $conf = new Configurations();
-  $confCasesList = $conf->getConfiguration('casesList',$action=='search'?'sent':$action );
   if ( !is_array($confCasesList) ) {
     	$rows = getDefaultFields( $action );
     	$result = genericJsonResponse( '', array(), $rows , 20, '' );
@@ -100,7 +103,6 @@
     $Criteria->add      (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
     $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
   }
-
 
   if ( $dateFrom != '' ) {
     if( $dateTo != '' ){
@@ -211,27 +213,6 @@
   $Criteria->setLimit( $limit );
   $Criteria->setOffset( $start );
 
-  // getting the casesList configuration record
-  // getting the additional table name based in the id saved in the configuration
-  // record
-  if (isset($confCasesList['PMTable'])&&!empty($confCasesList['PMTable'])) {
-    $oAdditionalTables = new AdditionalTables();
-    $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($confCasesList['PMTable']);
-    $tableName         = $oAdditionalTables->getAddTabName();
-    // getting the default fields list
-    $defaultFields     = $oAppCache->getDefaultFields();
-
-    // so if the fields are not in the default list those are pm fields
-      foreach($confCasesList['second']['data'] as $fieldData){
-        // assembling the query based in the configuration array
-        if (!in_array($fieldData['name'],$defaultFields)){
-          $fieldName = $tableName.'.'.$fieldData['name'];
-          $Criteria->addSelectColumn (  $fieldName );
-        }
-      }
-    // adding the join instruction to the pmTable
-    $Criteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
-  }
   //execute the query      
   $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -245,7 +226,6 @@
     if( isset($aRow['APP_STATUS']) ){
       $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
     }
-    
     $rows[] = $aRow;
     $oDataset->next();
   }
