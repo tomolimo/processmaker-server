@@ -73,6 +73,38 @@ ul#pm_menu li.SelectedMenu a,ul#pm_menu li:hover a{
 }
 
 
+ul#pm_submenu{
+  list-style: none;
+  margin:0;
+  padding:0 0 0 2px;
+}
+ul#pm_submenu li{
+  float:left;
+  margin:1px 1px 0 0;
+  padding:0;
+  -moz-border-radius:3px 3px 0 0;
+  border-radius:3px 3px 0 0;
+}
+ul#pm_submenu a{
+  font-weight: bold;
+  color:#fff;
+  font-align:absolutemiddle;
+  font-size:9px;
+  text-decoration: none;
+  display:block;
+  padding:2px 8px;
+  text-transform: uppercase;
+}
+ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
+  background-color: #eee;
+  background-image: -webkit-gradient ( linear, left bottom, left top, color-stop(0.39, rgb(245,245,245)), color-stop(0.83, rgb(227,227,227))  );
+  background-image:  -moz-linear-gradient( center bottom, rgb(245,245,245) 39%, rgb(227,227,227) 83%  );
+}
+ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
+  color:#333;
+}
+
+
 .button_pm{/*.module_app_button___gray,*/
   -moz-border-radius:7px;
   -moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
