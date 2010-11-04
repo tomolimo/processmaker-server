@@ -326,8 +326,11 @@
           G::mk_dir ( $pathOutput );
           switch ( $aOD['OUT_DOC_TYPE'] ) {
             case 'HTML' : 
+                $aProperties = array();                //maui
+                $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
+                $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
                 $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
-                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
+                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
                 break;
             case 'JRXML' :
                 //creating the xml with the application data;

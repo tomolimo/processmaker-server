@@ -33,6 +33,43 @@
   <en>Enable Versioning<option name="">NO</option><option name="1">YES</option></en>
 </OUT_DOC_VERSIONING>
 
+<OUT_DOC_MEDIA type="dropdown">
+  <en>Media
+    <option name="Letter">Letter</option>
+    <option name="Legal">Legal</option>
+    <option name="Executive">Executive</option>
+    <option name="B5">B5</option>
+    <option name="Folio">Folio</option>
+    <option name="A0Oversize">A0Oversize</option>
+    <option name="A0">A0</option>
+    <option name="A1">A1</option>
+    <option name="A2">A2</option>
+    <option name="A3">A3</option>
+    <option name="A4">A4</option>
+    <option name="A5">A5</option>
+    <option name="A6">A6</option>
+    <option name="A7">A7</option>
+    <option name="A8">A8</option>
+    <option name="A9">A9</option>
+    <option name="A10">A10</option>
+    <option name="Screenshot640">Screenshot640</option>
+    <option name="Screenshot800">Screenshot800</option>
+    <option name="Screenshot1024">Screenshot1024</option> 
+  </en>
+</OUT_DOC_MEDIA>
+
+<OUT_DOC_LEFT_MARGIN type="text" style="width:15%" validate="Int">
+  <en>Left Margin</en>  
+</OUT_DOC_LEFT_MARGIN>
+<OUT_DOC_RIGHT_MARGIN type="text" style="width:15%" validate="Int">
+  <en>Right Margin</en> 
+</OUT_DOC_RIGHT_MARGIN>
+<OUT_DOC_TOP_MARGIN type="text" style="width:15%" validate="Int">
+  <en>Top Margin</en> 
+</OUT_DOC_TOP_MARGIN>
+<OUT_DOC_BOTTOM_MARGIN type="text" style="width:15%" validate="Int">
+  <en>Bottom Margin</en>
+</OUT_DOC_BOTTOM_MARGIN>
 <OUT_DOC_DESTINATION_PATH type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Path">
   <en>Destination Path</en>
 </OUT_DOC_DESTINATION_PATH>
@@ -52,8 +89,8 @@
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
-	_oVarsPanel_ = new leimnud.module.panel();
-	_oVarsPanel_.options = {
+  _oVarsPanel_ = new leimnud.module.panel();
+  _oVarsPanel_.options = {
     limit    : true,
     size     : {w:400,h:410},
     position : {x:0,y:0,center:true},
@@ -85,48 +122,38 @@ var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol)
 };
 
 var insertFormVar = function(sFieldName, sValue) {
-	oAux = document.getElementById(sFieldName);
-	if (oAux.setSelectionRange) {
-		var rangeStart = oAux.selectionStart;
+  oAux = document.getElementById(sFieldName);
+  if (oAux.setSelectionRange) {
+    var rangeStart = oAux.selectionStart;
     var rangeEnd   = oAux.selectionEnd;
     var tempStr1   = oAux.value.substring(0,rangeStart);
     var tempStr2   = oAux.value.substring(rangeEnd);
     oAux.value     = tempStr1 + sValue + tempStr2;
-	}
-	else {
-	  if (document.selection) {
-	    oAux.focus();
+  }
+  else {
+    if (document.selection) {
+      oAux.focus();
       document.selection.createRange().text = sValue;
-	  }
-	}
-	_oVarsPanel_.remove();
+    }
+  }
+  _oVarsPanel_.remove();
 };
 
 var verifyTitle = function(oForm)
 { oAux1 = oForm.elements['form[OUT_DOC_TITLE]'];
-	if (oAux1.value == '')
-	{
-		new leimnud.module.app.alert().make({
-	    label:G_STRINGS.DBCONNECTIONS_ALERT
-  	});
-		oAux1.focus();
-		bContinue = false;
-		return false;
-	} else {
-	  var nameOutPut = getField('OUT_DOC_TITLE').value;
-	  var proUid = getField('PRO_UID').value;
-	  var OutPutID = getField('OUT_DOC_UID').value;
-	  if(OutPutID==''){
-		  reqName=ajax_function(oForm.action,'lookForNameOutput','NAMEOUTPUT='+encodeURIComponent(nameOutPut)+'&proUid='+encodeURIComponent(proUid),'POST') ;
-		  if(reqName){
-			 outputdocsPropertiesSave(oForm);
-	    } else {
-		   alert(G_STRINGS.ID_EXIST_OUTPUTDOCUMENT);return false;
-		  }
-	  }else{
-	    outputdocsPropertiesSave(oForm);
-	  }
+  if (oAux1.value == '')
+  {
+    new leimnud.module.app.alert().make({
+      label:G_STRINGS.DBCONNECTIONS_ALERT
+    });
+    oAux1.focus();
+    bContinue = false;
+    return false;
   }
+     else{
+    outputdocsPropertiesSave(oForm);
+
+     }
 
 }
 
@@ -136,5 +163,4 @@ function cancel(){
 }
 
 ]]></JS>
-
 </dynaForm>  

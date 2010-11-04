@@ -51,7 +51,7 @@ try {
   
   $aFields['OUT_DOC_TAGS'] = isset ( $aFields['OUT_DOC_TAGS']) ? $aFields['OUT_DOC_TAGS'] : 'OUTPUT';
   $aFields['OUT_DOC_VERSIONING'] = strval($aFields['OUT_DOC_VERSIONING']);
-  
+  $aFields['OUT_DOC_LANDSCAPE'] = strval($aFields['OUT_DOC_LANDSCAPE']);
   G::LoadClass('xmlfield_InputPM');
   $G_PUBLISH = new Publisher();
   switch ( $type ) {

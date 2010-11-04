@@ -22,7 +22,7 @@ var currentPagedTable = @#PAGED_TABLE_ID;
 		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Edit)?OUT_DOC_UID='+ uid , wi, he);
   }
   function outputdocsProperties( uid ) {
-		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Properties)?OUT_DOC_UID='+ uid , 600, 410);
+		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Properties)?OUT_DOC_UID='+ uid , 600, 530);
   }
   
   function outputdocsPropertiesSave( form ) {
