@@ -87,7 +87,7 @@ img {
 {
 	-moz-border-radius:6px;	/* Rounded edges in Firefox */
 	background-image: url(/skins/green/images/message.png);
-	color	:#ffffff;
+	color	:#000000;
 	border-style:solid;
 	border-width:1px;
 	border-color:#ffffff;
