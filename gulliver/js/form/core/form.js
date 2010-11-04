@@ -375,7 +375,7 @@ function IsUnsignedInteger(YourNumber){
                 doubleChange=false;
                 return false;
             }
-            if(navigator.appName=='Microsoft Internet Explorer')
+            if(navigator.appName!='Microsoft Internet Explorer')
              var sel = me.getSelectionRange();
             else
              var sel = me.getCursorP(me.element);
@@ -432,8 +432,8 @@ function replaceAll( text, busca, reemplaza ){
       maskL = (maskD.length >1)?maskD[1]:maskD[0];  
       maskWithoutC =replaceAll(maskL,",",""); 
       //maskWithoutC =replaceAll(maskWithoutC,".","");
-      maskWithoutC  =replaceAll(maskWithoutC,"#","");
-      maskWithoutC  =replaceAll(maskWithoutC,"%","");
+      //maskWithoutC  =replaceAll(maskWithoutC,"#","");
+      maskWithoutC  =replaceAll(maskWithoutC,"%","");	
       maskWithoutC  =replaceAll(maskWithoutC," ","");
       maskWithoutPto=replaceAll(maskWithoutC,".","");
       
@@ -542,7 +542,7 @@ function replaceAll( text, busca, reemplaza ){
         if (event.keyCode===8) {
             if(navigator.appName=='Microsoft Internet Explorer'){
                 //var sel=me.getSelectionRange();
-                var sel = me.getSelectionRange();
+                var sel = me.getCursorP(me.element);
                 var startPos = sel.selectionStart;
                 var endPos   = sel.selectionEnd;
                 var myField = me.element;
@@ -556,8 +556,8 @@ function replaceAll( text, busca, reemplaza ){
                     me.setSelectionRange(startPos-1, startPos-1);
                 }
             }else{
-                //var sel=me.getSelectionRange();
-                var sel = me.getCursorP(me.element);
+                var sel=me.getSelectionRange();
+                //var sel = me.getCursorP(me.element);
                 var startPos = sel.selectionStart;
                 var endPos   = sel.selectionEnd;
                 var myField = me.element;
