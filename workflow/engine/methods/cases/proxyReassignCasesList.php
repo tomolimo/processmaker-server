@@ -12,7 +12,7 @@
   $action   = isset($_GET['action'])    ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
   $type     = isset($_GET['type'])      ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
   $user     = isset($_POST['user'])     ? $_POST['user'] : '';
-  //$APP_UIDS          = explode(',', $_POST['APP_UIDS']);
+  $APP_UIDS          = explode(',', $_POST['APP_UIDS']);
 	$sReassignFromUser = isset($_POST['user'])    ? $_POST['user']    : '';
 	$sProcessUid       = isset($_POST['process']) ? $_POST['process'] : '';
 
@@ -27,23 +27,23 @@
         $oUser   = new Users  ();
         $oCases  = new Cases  ();
 
-        $oAppCache = new AppCacheView();
-        $oCriteria = $oAppCache->getToReassignListCriteria();
-//        $oCriteria->( AppCacheViewPeer::APP_TAS_TITLE );
-        $oCriteria->add(AppCacheViewPeer::PRO_UID, $sProcessUid);
-        $oCriteria->add(AppCacheViewPeer::USR_UID, $sReassignFromUser);
-        $oCriteria->addGroupByColumn(AppCacheViewPeer::APP_TAS_TITLE);
-//        $oCriteria->setDistinct();
-
-        $oDataset = AppCacheViewPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
-        $APP_UIDS = array();
-
-        while($aRow = $oDataset->getRow()){
-          $APP_UIDS[] = $aRow['APP_UID'];
-          $oDataset->next();
-        }
+//        $oAppCache = new AppCacheView();
+//        $oCriteria = $oAppCache->getToReassignListCriteria();
+////        $oCriteria->( AppCacheViewPeer::APP_TAS_TITLE );
+//        $oCriteria->add(AppCacheViewPeer::PRO_UID, $sProcessUid);
+//        $oCriteria->add(AppCacheViewPeer::USR_UID, $sReassignFromUser);
+//        $oCriteria->addGroupByColumn(AppCacheViewPeer::APP_TAS_TITLE);
+////        $oCriteria->setDistinct();
+//
+//        $oDataset = AppCacheViewPeer::doSelectRS($oCriteria);
+//        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+//        $oDataset->next();
+//        $APP_UIDS = array();
+//
+//        while($aRow = $oDataset->getRow()){
+//          $APP_UIDS[] = $aRow['APP_UID'];
+//          $oDataset->next();
+//        }
         $aCasesList = Array();
 
         foreach ( $APP_UIDS as $APP_UID ) {

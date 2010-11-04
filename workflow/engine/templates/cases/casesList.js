@@ -1119,34 +1119,48 @@ Ext.onReady ( function() {
 
 function reassign(){
   //var rowSelected = processesGrid.getSelectionModel().getSelected();
-  //var rows = grid.getSelectionModel().getSelections();
+  var rows = grid.getSelectionModel().getSelections();
+  var tasks = [];
 //  alert(reassignGrid.getId());
-  //if( rows.length > 0 ) {
-  //  var ids = '';
-  //  for(i=0; i<rows.length; i++) {
-  //    if(i != 0 ) ids += ',';
-  //    ids += rows[i].get('APP_UID');
-  //  }
-    //storeReassignCases.setBaseParam( 'APP_UIDS', ids);
-    storeReassignCases.setBaseParam( 'user', comboAllUsers.value);
-    storeReassignCases.setBaseParam( 'process', comboProcess.value);
+  if( rows.length > 0 ) {
+    var ids = '';
+    for(i=0; i<rows.length; i++) {
+      // filtering duplicate tasks  
+       var currentTask = rows[i].get('APP_TAS_TITLE');
+       
+       if (!inArray(tasks , currentTask)) {
+         if( i != 0 ) ids += ',';
+         ids += rows[i].get('APP_UID');
+         tasks[tasks.length] = currentTask;
+       }
+    }
+    storeReassignCases.setBaseParam( 'APP_UIDS', ids);
+    storeReassignCases.setBaseParam( 'user', comboAllUsers.value   );
+    storeReassignCases.setBaseParam( 'process', comboProcess.value );
     storeReassignCases.load({params:{ start : 0 , limit : pageSize}});
     newPopUp.show();
 //    storeReassignCases.baseParams = {APP_UIDS : ids, user : comboAllUsers.value};
 //    storeReassignCases.reload();
 
     //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
-  /*} else {
+  } else {
      Ext.Msg.show({
-      title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
-      buttons: Ext.Msg.INFO,
-      fn: function(){},
-      animEl: 'elId',
-      icon: Ext.MessageBox.INFO,
-      buttons: Ext.MessageBox.OK
+       title:'',
+       msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+       buttons: Ext.Msg.INFO,
+       fn: function(){},
+       animEl: 'elId',
+       icon: Ext.MessageBox.INFO,
+       buttons: Ext.MessageBox.OK
     });
-  }*/
+  }
+}
+
+function inArray(arr, obj) {
+  for(var i=0; i<arr.length; i++) {
+    if (arr[i] == obj) return true;
+  }
+  return false;
 }
 
 

@@ -61,13 +61,13 @@
     lazyRender    : true,
     //store         : new Ext.data.Store(),
     store         : storeUsersToReassign,
-    listeners:{
+    /*listeners:{
       'select': function() {
         //storeUsersToReassign.load();
         //alert("extras");
         //getSelectionData();
       }
-    },
+    },*/
     valueField    : 'userId',
     displayField  : 'userFullname'
   });
