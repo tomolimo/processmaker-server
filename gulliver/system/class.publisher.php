@@ -314,7 +314,7 @@ class Publisher
       $G_FORM->setValues ($Part['Data']);
       if (isset($_SESSION)) $_SESSION[$G_FORM->id]=$G_FORM->values;
 
-
+      G::LoadSystem('pagedTable');
       $oTable                           = new pagedTable();
       $oTable->template                 = 'templates/'.$Part['Template'] . '.html';
       $G_FORM->xmlform                  = '';
