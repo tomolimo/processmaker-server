@@ -45,11 +45,11 @@
   if ( $action == 'paused' ) {
     array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'unpauseLink' ) );
   }
-
+/*
   if ( $action == 'to_reassign' ) {
     array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'reassignLink' ) );
   }
-
+*/
 //  if ( $action == 'cancelled' ) {
 //    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'reactivateLink' ) );
 //  }
@@ -63,13 +63,13 @@
   $status    = getStatusArray($action, $userUid );
   $users     = getUserArray($action, $userUid );
   $allUsers  = getAllUsersArray($action);
-  
+
+  $oHeadPublisher->assign( 'reassignReaderFields',  $reassignReaderFields );  //sending the fields to get from proxy
   $oHeadPublisher->addExtJsScript('cases/reassignList', true );
   $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns );                       //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields',  $readerFields );                  //sending the fields to get from proxy
   $oHeadPublisher->assign( 'reassignColumns',       $reassignColumns );       //sending the columns to display in grid
-  $oHeadPublisher->assign( 'reassignReaderFields',  $reassignReaderFields );  //sending the fields to get from proxy
   $oHeadPublisher->assign( 'action',        $action );                        //sending the fields to get from proxy
   $oHeadPublisher->assign( 'PMDateFormat',  $config['dateformat'] );          //sending the fields to get from proxy
   $oHeadPublisher->assign( 'statusValues',  $status );                        //sending the columns to display in grid
@@ -184,6 +184,7 @@
            break;
       case 'to_reassign' :
            $cProcess      = $oAppCache->getToReassignListCriteria();
+           $cProcess->addDescendingOrderByColumn(AppCacheViewPeer::APP_PRO_TITLE);
 //             return $processes;
            
 //           $params = array();

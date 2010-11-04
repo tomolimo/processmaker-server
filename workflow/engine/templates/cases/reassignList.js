@@ -22,6 +22,7 @@
     }
   );
 
+
   // The new DataWriter component.
   //currently we are not using this in casesList, but it is here just for complete definition
   var writerUsersToReassignList = new Ext.data.JsonWriter({
@@ -30,7 +31,7 @@
   });
 
   
-  storeUsersToReassign = new Ext.data.Store({
+  var storeUsersToReassign = new Ext.data.Store({
     remoteSort: true,
     proxy : proxyUsersToReassignList,
     reader: readerUsersToReassignList,
@@ -40,10 +41,15 @@
   
   Ext.util.Format.comboRenderer = function(combo){
     return function(value){
-      var record = combo.findRecord(combo.valueField, value);
-      storeUsersToReassign.load();
-      //getSelectionData();
-      //var record = array();
+      var record   = combo.findRecord(combo.valueField, value);
+      //getting the parent gridpanel.
+      var gp = combo.findParentBy (
+        function (ct, cmt) {return (ct instanceof Ext.grid.GridPanel) ? true : false;}
+      );
+
+      //storeUsersToReassign.load();
+      //alert(gp);
+      // var record = array();
       return record ? record.get(combo.displayField) : combo.valueNotFoundText;
     }
   }
@@ -54,11 +60,12 @@
     triggerAction : 'all',
     lazyRender    : true,
     //store         : new Ext.data.Store(),
-    store         : storeUsersToReassign,
+    store         : storeUsersToReassign
     listeners:{
-      scope: this,
       'select': function() {
-        storeUsersToReassign.load();
+        //storeUsersToReassign.load();
+        //alert("extras");
+        //getSelectionData();
       }
     },
     valueField    : 'userId',

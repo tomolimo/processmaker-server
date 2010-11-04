@@ -134,7 +134,7 @@ Ext.onReady ( function() {
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
-    if( c.id == 'reassignLink')             c.renderer = reassignLink;
+    //if( c.id == 'reassignLink')             c.renderer = reassignLink;
 	 //Status images
     //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   }
@@ -996,12 +996,6 @@ function reassign(){
   }*/
 }
 
-function getSelectionData () {
-  //var rows = reassignGrid.getSelectionModel().getSelections();
-  //var gridData[0]  = rows[0].get( 'APP_UID' );
-  //gridData[1]      = rows[0].get( 'TAS_UID' );
-  //alert (gridData[0]+gridData[1]);
-  alert('none');
-}
+
 
 });

@@ -63,4 +63,4 @@
 //            $oTmp->items = $aUsersInvolved;
         $result = array();
         $result['data'] = $aUsersInvolved;
-        print json_encode( $aUsersInvolved ) ;
+        print json_encode( $result ) ;
