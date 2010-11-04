@@ -251,6 +251,7 @@
      $fields['APP_UID']                 = array( 'name' => 'APP_UID'    ,             'fieldType' => 'key',         'label' => G::loadTranslation('ID_CASESLIST_APP_UID'),                'width' => 80,  'align' => 'left');
      $fields['DEL_INDEX']               = array( 'name' => 'DEL_INDEX'  ,             'fieldType' => 'key' ,        'label' => G::loadTranslation('ID_CASESLIST_DEL_INDEX')  ,            'width' => 50,  'align' => 'left');
      $fields['TAS_UID']                 = array( 'name' => 'TAS_UID'  ,               'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_TAS_UID')    ,            'width' => 80,  'align' => 'left');
+     $fields['USR_UID']                 = array( 'name' => 'USR_UID'  ,               'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_USR_UID')    ,            'width' => 80,  'align' => 'left');
      $fields['APP_NUMBER']              = array( 'name' => 'APP_NUMBER' ,             'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_NUMBER') ,            'width' => 80,  'align' => 'left');
      $fields['APP_TITLE']               = array( 'name' => 'APP_TITLE'  ,             'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TITLE')  ,            'width' => 140, 'align' => 'left');
      $fields['APP_PRO_TITLE']           = array( 'name' => 'APP_PRO_TITLE'  ,         'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_PRO_TITLE') ,         'width' => 140, 'align' => 'left');
@@ -407,6 +408,7 @@
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
+        $rows[] = $fields['USR_UID'];
 
         break;
     }

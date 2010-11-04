@@ -242,11 +242,10 @@
     $users[] = array( '', G::LoadTranslation('ID_ALL_USERS') );
     if ($action=='to_reassign') {
       //now get users, just for the Search action
-      $cUsers = new Criteria('workflow');
-      $cUsers->clearSelectColumns ( );
-      $cUsers->addSelectColumn ( AppCacheViewPeer::USR_UID );
-      $cUsers->setDistinct();
-      $cUsers->addSelectColumn ( AppCacheViewPeer::APP_CURRENT_USER );
+      $cUsers = $oAppCache->getToReassignListCriteria();
+      $cUsers->addSelectColumn(AppCacheViewPeer::USR_UID);
+      $cUsers->addGroupByColumn(AppCacheViewPeer::USR_UID);
+
       $cUsers->addAscendingOrderByColumn ( AppCacheViewPeer::APP_CURRENT_USER );
       $oDataset = AppCacheViewPeer::doSelectRS($cUsers);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);

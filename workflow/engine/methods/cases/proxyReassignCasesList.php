@@ -28,7 +28,7 @@
   foreach ($sentUids as $sentUid){
     $aItem = explode('|',$sentUid);
     if (!in_array($aItem[1],$allTasUids)){
-      $nonDuplicateAppUids[] = $aItem[0];
+      $nonDuplicateAppUids[] = array ( 'APP_UID' => $aItem[0] , 'TAS_UID' => $aItem[1], 'DEL_INDEX' => $aItem[2]);
       $allTasUids[] = $aItem[1];
     }
   }
@@ -66,8 +66,10 @@
 //        }
         $aCasesList = Array();
 
-        foreach ( $nonDuplicateAppUids as $APP_UID ) {
-        	  $aCase  = $oCases->loadCaseInCurrentDelegation($APP_UID);
+        foreach ( $nonDuplicateAppUids as $aRecord ) {
+            $APP_UID  = $aRecord['APP_UID'];
+            $delIndex = $aRecord['DEL_INDEX'];
+        	  $aCase  = $oCases->loadCaseByDelegation($APP_UID,$delIndex);
 
             $aUsersInvolved = Array();
             $aCaseGroups = $oTasks->getGroupsOfTask($aCase['TAS_UID'], 1);
