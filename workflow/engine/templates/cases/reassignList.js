@@ -43,9 +43,9 @@
     return function(value){
       var record   = combo.findRecord(combo.valueField, value);
       //getting the parent gridpanel.
-      var gp = combo.findParentBy (
+      /*var gp = combo.findParentBy (
         function (ct, cmt) {return (ct instanceof Ext.grid.GridPanel) ? true : false;}
-      );
+      );*/
 
       //storeUsersToReassign.load();
       //alert(gp);

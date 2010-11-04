@@ -184,13 +184,7 @@
            break;
       case 'to_reassign' :
            $cProcess      = $oAppCache->getToReassignListCriteria();
-           $cProcess->addDescendingOrderByColumn(AppCacheViewPeer::APP_PRO_TITLE);
-//             return $processes;
-           
-//           $params = array();
-//           $sqlString = BasePeer::createSelectSql($cProcess, $params);
-//           var_dump ($sqlString);
-
+           $cProcess->addAscendingOrderByColumn(AppCacheViewPeer::APP_PRO_TITLE);
            break;
       case 'todo' :
       default:
@@ -537,6 +531,8 @@
 
   function getToReassign() {
     $caseColumns = array ();
+    $caseColumns[] = array( 'header' =>'TaskUid',      'dataIndex' => 'TAS_UID' ,          'width' => 150 );
+    $caseColumns[] = array( 'header' =>'DelIndex',     'dataIndex' => 'DEL_INDEX' ,        'width' => 150 );
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
@@ -547,6 +543,8 @@
     $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
 
     $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'TAS_UID' );
+    $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );

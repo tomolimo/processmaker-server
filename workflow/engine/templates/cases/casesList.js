@@ -274,15 +274,21 @@ Ext.onReady ( function() {
             //  html     : responseObject.responseText
             });
 
- var btnCloseReassign = new Ext.Button ({
+  var btnCloseReassign = new Ext.Button ({
     text: 'Close',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       newPopUp.hide();
     }
- });
+  });
 
-
+  var btnExecReassign = new Ext.Button ({
+    text: 'Reassign',
+    //    text: TRANSLATIONS.LABEL_SELECT_ALL,
+    handler: function(){
+      newPopUp.hide();
+    }
+  });
 
   // Create HttpProxy instance, all CRUD requests will be directed to single proxy url.
   var proxyCasesList = new Ext.data.HttpProxy({
@@ -934,7 +940,7 @@ Ext.onReady ( function() {
     case 'draft'      : itemToolbar = toolbarDraft; break;
     case 'sent'       : itemToolbar = toolbarSent;  break;
     case 'to_revise'  : itemToolbar = toolbarToRevise;  break;
-    case 'to_reassign': itemToolbar = toolbarToReassign;  break;
+    case 'to_reassign': itemToolbar = toolbarToReassign; break;
     case 'search'     : itemToolbar = toolbarSearch;  break;
     default           : itemToolbar = toolbarTodo; break;
   }
@@ -986,6 +992,10 @@ Ext.onReady ( function() {
 
   grid.addListener('rowcontextmenu', onMessageContextMenu,this);
   
+  if (action=='to_reassign'){
+    grid.getColumnModel().setHidden(0, true);
+    grid.getColumnModel().setHidden(1, true);
+  }
   
   // create reusable renderer
 
@@ -1040,13 +1050,15 @@ Ext.onReady ( function() {
 
     });
 
-
+    
+    
     // manually trigger the data store load
     storeCases.setBaseParam( 'action', action );
     storeCases.setBaseParam( 'start',  0 );
     storeCases.setBaseParam( 'limit',  pageSize );
     storeCases.load();
     newPopUp.add(reassignGrid);
+    newPopUp.addButton(btnExecReassign);
     newPopUp.addButton(btnCloseReassign);
 
     //storeProcesses.load();
@@ -1118,31 +1130,22 @@ Ext.onReady ( function() {
 
 
 function reassign(){
-  //var rowSelected = processesGrid.getSelectionModel().getSelected();
   var rows = grid.getSelectionModel().getSelections();
   var tasks = [];
-//  alert(reassignGrid.getId());
   if( rows.length > 0 ) {
     var ids = '';
     for(i=0; i<rows.length; i++) {
       // filtering duplicate tasks  
-       var currentTask = rows[i].get('APP_TAS_TITLE');
        
-       if (!inArray(tasks , currentTask)) {
          if( i != 0 ) ids += ',';
-         ids += rows[i].get('APP_UID');
-         tasks[tasks.length] = currentTask;
-       }
+         ids += rows[i].get('APP_UID') + "|" + rows[i].get('TAS_UID')+ "|" + rows[i].get('DEL_INDEX');
     }
     storeReassignCases.setBaseParam( 'APP_UIDS', ids);
-    storeReassignCases.setBaseParam( 'user', comboAllUsers.value   );
-    storeReassignCases.setBaseParam( 'process', comboProcess.value );
-    storeReassignCases.load({params:{ start : 0 , limit : pageSize}});
+    //storeReassignCases.setBaseParam( 'user', comboAllUsers.value   );
+    //storeReassignCases.setBaseParam( 'process', comboProcess.value );
+    storeReassignCases.load();
     newPopUp.show();
-//    storeReassignCases.baseParams = {APP_UIDS : ids, user : comboAllUsers.value};
-//    storeReassignCases.reload();
 
-    //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
   } else {
      Ext.Msg.show({
        title:'',

@@ -715,7 +715,7 @@ class AppCacheView extends BaseAppCacheView {
     else {
       $oCriteria = $this->addPMFieldsToCriteria('to_do');
     }
-    $oCriteria->add($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'TO_DO')->addOr($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'DRAFT')));
+    $oCriteria->add(AppCacheViewPeer::APP_STATUS, 'TO_DO');
     $oCriteria->add(AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
     $oCriteria->add(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
     $oCriteria->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');

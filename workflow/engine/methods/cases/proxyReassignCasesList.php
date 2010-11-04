@@ -12,7 +12,27 @@
   $action   = isset($_GET['action'])    ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
   $type     = isset($_GET['type'])      ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
   $user     = isset($_POST['user'])     ? $_POST['user'] : '';
-  $APP_UIDS          = explode(',', $_POST['APP_UIDS']);
+  
+  $sentUids          = explode( ',', $_POST['APP_UIDS'] );
+
+  $allUidsRecords = array();
+  $allTasUids = array();
+  $nonDuplicateAppUids = array();
+  // getting all App Uids and task Uids
+  foreach ($sentUids as $sentUid){
+    $aItem = explode('|',$sentUid);
+    $allUidsRecords[] = array ( 'APP_UID' => $aItem[0] , 'TAS_UID' => $aItem[1], 'DEL_INDEX' => $aItem[2]);
+//    $allUidsRecords[] = array ( 'APP_UID' => $aItem[0] , 'TAS_UID' => $aItem[1] );
+  }
+  // filtering the cases with duplicated TasUids
+  foreach ($sentUids as $sentUid){
+    $aItem = explode('|',$sentUid);
+    if (!in_array($aItem[1],$allTasUids)){
+      $nonDuplicateAppUids[] = $aItem[0];
+      $allTasUids[] = $aItem[1];
+    }
+  }
+
 	$sReassignFromUser = isset($_POST['user'])    ? $_POST['user']    : '';
 	$sProcessUid       = isset($_POST['process']) ? $_POST['process'] : '';
 
@@ -46,7 +66,7 @@
 //        }
         $aCasesList = Array();
 
-        foreach ( $APP_UIDS as $APP_UID ) {
+        foreach ( $nonDuplicateAppUids as $APP_UID ) {
         	  $aCase  = $oCases->loadCaseInCurrentDelegation($APP_UID);
 
             $aUsersInvolved = Array();

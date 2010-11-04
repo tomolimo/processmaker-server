@@ -2371,7 +2371,7 @@ class Cases
           $c->add(AppThreadPeer::APP_THREAD_STATUS, 'OPEN');
           $c->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
           $c->addDescendingOrderByColumn(ApplicationPeer::APP_NUMBER);
-          
+
           break;
         case 'selfservice':  
           //get the valid selfservice tasks for this user
@@ -2444,7 +2444,9 @@ class Cases
           $c->add(AppThreadPeer::APP_THREAD_STATUS, 'OPEN');
           $c->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
           $c->addDescendingOrderByColumn(ApplicationPeer::APP_NUMBER);
-          
+//          $params = array();
+//          $sqlString = BasePeer::createSelectSql($c, $params);
+//          var_dump ($sqlString);
           break;
 
       case 'sent':
@@ -2563,7 +2565,7 @@ class Cases
     $c->addSelectColumn(ApplicationPeer::APP_UPDATE_DATE);
     $c->addSelectColumn(AppDelegationPeer::DEL_PRIORITY);
     //$c->addSelectColumn(AppDelegationPeer::DEL_TASK_DUE_DATE);
-    $c->addAsColumn('DEL_TASK_DUE_DATE', " IF (" . AppDelegationPeer::DEL_TASK_DUE_DATE . " <= NOW(), CONCAT('<span style=\'color:red\';>', " . AppDelegationPeer::DEL_TASK_DUE_DATE . ", '</span>'), " . AppDelegationPeer::DEL_TASK_DUE_DATE . ") ");
+    $c->addAsColumn('DEL_TASK_DUE_DATE', " IF (" . AppDelegationPeer::DEL_TASK_DUE_DATE . " <= NOW(),  " . AppDelegationPeer::DEL_TASK_DUE_DATE . " , " . AppDelegationPeer::DEL_TASK_DUE_DATE . ") ");
 
     $c->addSelectColumn(AppDelegationPeer::DEL_INDEX);
     $c->addSelectColumn(AppDelegationPeer::TAS_UID);
