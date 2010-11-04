@@ -19,21 +19,39 @@
   $conf = new Configurations();
   try {
   	// the setup for search is the same as the Sent (participated)
-    $confCasesList = $conf->getConfiguration('casesList', $action=='search' ? 'search': $action );
+    $confCasesList        = $conf->getConfiguration('casesList', $action=='search' ? 'search': $action );
+    $generalConfCasesList = $conf->getConfiguration('ENVIRONMENT_SETTINGS', '' );
   } 
   catch (Exception $e){
     $confCasesList = array();
+    $generalConfCasesList = array();
   }
 
   // reassign header configuration
   $confReassignList = getReassignList();
 
-  // evaluates an action and the list that will be rendered
+  // evaluates an action and the configuration for the list that will be rendered
   $config       = getAdditionalFields($action, $confCasesList);
   $columns      = $config['caseColumns'];
   $readerFields = $config['caseReaderFields'];
   $reassignColumns      = $confReassignList['caseColumns'];
   $reassignReaderFields = $confReassignList['caseReaderFields'];
+
+  // if the general settings has been set the pagesize values are extracted from that record
+  if (isset($generalConfCasesList['casesListRowNumber'])&&!empty($generalConfCasesList['casesListRowNumber'])){
+    $pageSize = $generalConfCasesList['casesListRowNumber'];
+  } else {
+    $pageSize = intval($config['rowsperpage']);
+  }
+
+  // if the general settings has been set the dateFormat values are extracted from that record
+  if (isset($generalConfCasesList['casesListDateFormat'])&&!empty($generalConfCasesList['casesListDateFormat'])){
+    $dateFormat = $generalConfCasesList['casesListDateFormat'];
+  } else {
+    $dateFormat = $config['dateformat'];
+  }
+
+
 
   if ( $action == 'draft' /* &&  $action == 'cancelled' */) {
     //array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'deleteLink' ) );
@@ -66,12 +84,12 @@
 
   $oHeadPublisher->assign( 'reassignReaderFields',  $reassignReaderFields );  //sending the fields to get from proxy
   $oHeadPublisher->addExtJsScript('cases/reassignList', true );
-  $oHeadPublisher->assign( 'pageSize',      intval($config['rowsperpage']) ); //sending the page size
+  $oHeadPublisher->assign( 'pageSize',      $pageSize ); //sending the page size
   $oHeadPublisher->assign( 'columns',       $columns );                       //sending the columns to display in grid
   $oHeadPublisher->assign( 'readerFields',  $readerFields );                  //sending the fields to get from proxy
   $oHeadPublisher->assign( 'reassignColumns',       $reassignColumns );       //sending the columns to display in grid
   $oHeadPublisher->assign( 'action',        $action );                        //sending the fields to get from proxy
-  $oHeadPublisher->assign( 'PMDateFormat',  $config['dateformat'] );          //sending the fields to get from proxy
+  $oHeadPublisher->assign( 'PMDateFormat',  $dateFormat );          //sending the fields to get from proxy
   $oHeadPublisher->assign( 'statusValues',  $status );                        //sending the columns to display in grid
   $oHeadPublisher->assign( 'processValues', $processes);                      //sending the columns to display in grid
   $oHeadPublisher->assign( 'userValues',    $users);                          //sending the columns to display in grid

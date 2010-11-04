@@ -34,6 +34,7 @@ Ext.onReady(function() {
     ]
   });
   var fieldset;
+  var fieldsetCasesList;
 
   var cmbUsernameFormats = new Ext.form.ComboBox({
     fieldLabel : TRANSLATIONS.IS_USER_NAME_DISPLAY_FORMAT,
@@ -97,6 +98,70 @@ Ext.onReady(function() {
     allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
   });
 
+  var cmbCasesDateFormats = new Ext.form.ComboBox({
+    fieldLabel : TRANSLATIONS.ID_CASES_DATE_MASK,
+    hiddenName : 'casesListDateFormat',
+
+    store : new Ext.data.Store( {
+      proxy : new Ext.data.HttpProxy( {
+        url : 'environmentSettingsAjax',
+        method : 'POST'
+      }),
+      baseParams : {
+        request : 'getCasesListDateFormat'
+      },
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'id'
+        }, {
+          name : 'name'
+        } ]
+      })
+    }),
+
+    valueField : 'id',
+    displayField : 'name',
+    triggerAction : 'all',
+    emptyText : 'Select',
+    selectOnFocus : true,
+    editable : false,
+    allowBlank : false,
+
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+  });
+
+  var cmbCasesRowsPerPage = new Ext.form.ComboBox({
+    fieldLabel : TRANSLATIONS.ID_CASES_ROW_NUMBER,
+    hiddenName : 'casesListRowNumber',
+        store : new Ext.data.Store( {
+      proxy : new Ext.data.HttpProxy( {
+        url : 'environmentSettingsAjax',
+        method : 'POST'
+      }),
+      baseParams : {
+        request : 'getCasesListRowNumber'
+      },
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'id'
+        }, {
+          name : 'name'
+        } ]
+      })
+    }),
+
+    valueField : 'id',
+    displayField : 'name',
+    triggerAction : 'all',
+    emptyText : 'Select',
+    selectOnFocus : true,
+    editable : false,
+    allowBlank : false,
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+  });
+
   
   fieldset = {
       xtype : 'fieldset',
@@ -120,11 +185,26 @@ Ext.onReady(function() {
       defaultType : 'textfield',
       items : [cmbDateFormats]
   }
+
+  fieldsetCasesList = {
+      xtype : 'fieldset',
+      title : TRANSLATIONS.ID_PM_ENV_SETTINGS_CASESLIST_TITLE,
+      collapsible : false,
+      autoHeight : true,
+      defaults : {
+        width : 250
+      },
+      defaultType : 'textfield',
+      items : [cmbCasesDateFormats,cmbCasesRowsPerPage]
+  }
   
   fsf.add(fieldset);
   fsf.add(fieldset2);
+  fsf.add(fieldsetCasesList);
   cmbUsernameFormats.setValue(default_format);
   cmbDateFormats.setValue(default_date_format);
+  cmbCasesDateFormats.setValue(default_caseslist_date_format);
+  cmbCasesRowsPerPage.setValue(default_caseslist_row_number);
 
   fsf.render(document.body);
 });
