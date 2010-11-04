@@ -39,7 +39,7 @@
 
   // if the general settings has been set the pagesize values are extracted from that record
   if (isset($generalConfCasesList['casesListRowNumber'])&&!empty($generalConfCasesList['casesListRowNumber'])){
-    $pageSize = $generalConfCasesList['casesListRowNumber'];
+    $pageSize = intval($generalConfCasesList['casesListRowNumber']);
   } else {
     $pageSize = intval($config['rowsperpage']);
   }
