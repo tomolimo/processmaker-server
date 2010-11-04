@@ -60,7 +60,7 @@
     triggerAction : 'all',
     lazyRender    : true,
     //store         : new Ext.data.Store(),
-    store         : storeUsersToReassign
+    store         : storeUsersToReassign,
     listeners:{
       'select': function() {
         //storeUsersToReassign.load();
