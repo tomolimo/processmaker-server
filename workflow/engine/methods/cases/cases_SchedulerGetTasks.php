@@ -11,7 +11,7 @@ $oCase = new Cases();
 $startTasks = $oCase->getStartCases( $oUserId );
 
 foreach($startTasks as $task){
-   if($task['pro_uid'] == $oProcessId){
+   if((isset($task['pro_uid']))&&($task['pro_uid'] == $oProcessId)){
        $taskValue = explode('(',$task['value']);
        $tasksLastIndex = count($taskValue)-1;
        $taskValue = explode(')',$taskValue[$tasksLastIndex]);
@@ -19,7 +19,7 @@ foreach($startTasks as $task){
        echo "<option value=\"".$task['uid']."\">".$taskValue[0]."</option>";
    }
 }
-print_r($startTasks);
+//print_r($startTasks);
 //  echo "<option value=\"".$value."\">".$label."</option>";
 ?>
 </select>
