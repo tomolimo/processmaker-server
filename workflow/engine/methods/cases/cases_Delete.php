@@ -40,13 +40,21 @@ switch ($RBAC->userCanAccess('PM_CASES'))
 /* Includes */
 G::LoadClass('case');
 
-/* GET , POST & $_SESSION Vars */
-
-
 /* Process the info */
-$oCase = new Cases();
-print $_POST['APP_UID'];
-if ( !isset($_POST['APP_UID']) ) return;
-  $oCase->removeCase( $_POST['APP_UID'] );
-print "ok";
-/* Redirect */
+try{
+  $oCase = new Cases();
+  if( isset($_POST['APP_UIDS']) ){
+    $ids = explode(',', $_POST['APP_UIDS']);
+    foreach($ids as $id)
+      $oCase->removeCase($id);
+
+    if( count($_POST['APP_UIDS']) > 1)
+      echo 'The Case was deleted successfully';
+    else
+      echo 'All Cases were deleted successfully';
+  }
+} catch(Exception $e){
+  echo $e->getMessage();
+}
+
+

@@ -16,29 +16,104 @@ new Ext.KeyMap(document, {
   }
 });
 
-//global variables
+/*** global variables **/
 var storeCases;
 var storeReassignCases;
+var grid;
+/** */
 
+function openCase(){
+    var rowModel = grid.getSelectionModel().getSelected();
+    if(rowModel){
+      var appUid   = rowModel.data.APP_UID;
+      var delIndex = rowModel.data.DEL_INDEX;
+      var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
 
-function callbackDeleteCase (btn, text) {
-	if ( btn == 'yes' ) {
-    Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
-    Ext.Ajax.request({
-      url: 'cases_Delete',
-      success: function(response) {
-      	parent.updateCasesView();
-        Ext.MessageBox.hide();
-        parent.updateCasesTree();
+      Ext.Msg.show({
+        msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
+        width:300,
+        wait:true,
+        waitConfig: {interval:200}
+      });
+      window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+    } else {
+      Ext.Msg.show({
+        title:'',
+        msg: "Select someone item to process the action",
+        buttons: Ext.Msg.INFO,
+        fn: function(){},
+        animEl: 'elId',
+        icon: Ext.MessageBox.INFO,
+        buttons: Ext.MessageBox.OK
+      });
+    }
+  }
+
+  /*function deleteCase(){
+    Ext.Msg.show({
+      title:TRANSLATIONS.ID_CONFIRM,
+      msg: TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES,
+      buttons: Ext.Msg.YESNO,
+      fn: function(btn){
+        if( btn == 'yes' ) {
+          var rowModel = grid.getSelectionModel().getSelected();
+
+          Ext.Ajax.request({
+            url: 'cases_Ajax',
+            success: function(response){
+              grid.store.reload();
+            },
+            failure: function(){},
+            params: {
+              'action': 'deleteCase',
+              'sApplicationUID': rowModel.data.APP_UID
+            }
+          });
+        }
       },
-      params: {APP_UID:caseIdToDelete}
+      animEl: 'elId',
+      icon: Ext.MessageBox.QUESTION
+    });
+  }*/
+
+function deleteCase() {
+  var rows = grid.getSelectionModel().getSelections();
+  if( rows.length > 0 ) {
+    ids = Array();
+    for(i=0; i<rows.length; i++)
+      ids[i] = rows[i].get('APP_UID');
+
+    APP_UIDS = ids.join(',');
+
+    Ext.Msg.confirm(
+      TRANSLATIONS.ID_CONFIRM,
+      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want delete all seleted cases?',
+      function(btn, text){
+        if ( btn == 'yes' ) {
+          Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+          Ext.Ajax.request({
+            url: 'cases_Delete',
+            success: function(response) {
+              parent.updateCasesView();
+              Ext.MessageBox.hide();
+              parent.updateCasesTree();
+            },
+            params: {APP_UIDS:APP_UIDS}
+          });
+        }
+      }
+    );
+  } else {
+    Ext.Msg.show({
+      title:'',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      buttons: Ext.Msg.INFO,
+      fn: function(){},
+      animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
     });
   }
-}
-
-function deleteCaseFunction (appid) {
-	caseIdToDelete = appid;
-  Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES , callbackDeleteCase );
 }
 
 function callbackUnpauseCase (btn, text) {
@@ -70,12 +145,24 @@ Ext.onReady ( function() {
   var caseIdToUnpause = '';
   var caseIndexToUnpause = '';
 
+
+  contextMenu = new Ext.menu.Menu({
+    items: [{
+      text: 'Edit',
+      iconCls: 'edit',
+      hadler: function(){
+        //alert('s');
+      }
+    }]
+  })
+
+
   function openLink(value, p, r){
     return String.format("<a class='button_pm' href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
 
   function deleteLink(value, p, r){
-    return String.format("<a class='button_pm ss_sprite ss_bullet_red' href='#' onclick='deleteCaseFunction(\"{0}\")'>" + TRANSLATIONS.ID_DELETE + "</a>", r.data['APP_UID'] );
+    return String.format("<a class='button_pm ss_sprite ss_bullet_red' href='#' onclick='deleteCase(\"{0}\")'>" + TRANSLATIONS.ID_DELETE + "</a>", r.data['APP_UID'] );
   }
 
   function viewLink(value, p, r){
@@ -638,6 +725,64 @@ Ext.onReady ( function() {
     }
   });
 
+  /*** menu and toolbars **/
+  function onMessageContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    messageContextMenu.showAt([coords[0], coords[1]]);
+    var rows = grid.getSelectionModel().getSelections();
+    //alert(rows.length);
+    if( rows.length > 0 ) {
+
+    }
+
+  }
+
+  var menuItems;
+  switch(action){
+    case 'draft':
+      menuItems = [{
+          text: 'Open Case',
+          iconCls: 'vcard',
+          handler: onMessageContextItemClick.createDelegate(this, ['open'])
+        }, {
+          text: 'Pause',
+          iconCls: 'album',
+          handler: onMessageContextItemClick.createDelegate(this, ['pause'])
+        }, {
+          text: 'Reassign',
+          iconCls: 'album',
+          handler: onMessageContextItemClick.createDelegate(this, ['reassign'])
+        }, {
+          text: 'Delete',
+          iconCls: 'album',
+          handler: onMessageContextItemClick.createDelegate(this, ['delete'])
+        }
+      ];
+      break;
+
+    default:
+      menuItems = []
+  }
+
+  var messageContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: menuItems
+  });
+
+  function onMessageContextItemClick(option) {
+
+    switch(option){
+      case 'open':
+        openCase();
+        break;
+
+      case 'delete':
+        deleteCase();
+      break;
+    }
+  }
+  //
 
   var dateFrom = new Ext.form.DateField({
     id:'dateFrom',
@@ -674,9 +819,15 @@ Ext.onReady ( function() {
   ];
 
   var toolbarDraft = [
+    {
+      xtype: 'tbsplit',
+      text: 'Actions',
+      menu: menuItems
+    },
+    '->',
     TRANSLATIONS.ID_PROCESS,
     comboProcess,
-    '->', // begin using the right-justified button container
+    '-',
     textSearch,
     resetSearchButton,
     btnSearch,
@@ -794,8 +945,9 @@ Ext.onReady ( function() {
   });
 
   // create the editor grid
-  var grid = new Ext.grid.GridPanel({
+  grid = new Ext.grid.GridPanel({
     region: 'center',
+    id: 'casesGrid',
     store: storeCases,
     cm: cm,
     autoHeight: true,
@@ -804,18 +956,7 @@ Ext.onReady ( function() {
       forceFit:true
     },
     listeners: {
-      rowdblclick: function(grid, n,e){
-        var appUid   = grid.store.data.items[n].data.APP_UID;
-        var delIndex = grid.store.data.items[n].data.DEL_INDEX;
-        var caseTitle = (grid.store.data.items[n].data.APP_TITLE) ? grid.store.data.items[n].data.APP_TITLE : grid.store.data.items[n].data.APP_UID;
-        Ext.Msg.show({
-          msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
-          width:300,
-          wait:true,
-          waitConfig: {interval:200}
-        });
-        window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
-      },
+      rowdblclick: openCase,
       render: function(){
         //this.loadMask = new Ext.LoadMask(this.body, {msg:TRANSLATIONS.LABEL_GRID_LOADING});
         //this.ownerCt.doLayout();
@@ -833,6 +974,18 @@ Ext.onReady ( function() {
       emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
     })
   });
+
+
+  grid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+      var sm = grid.getSelectionModel();
+      sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+  grid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  grid.addListener('rowcontextmenu', onMessageContextMenu,this);
+  
   
   // create reusable renderer
 
@@ -935,10 +1088,10 @@ Ext.onReady ( function() {
 	  id:'viewportcases',
     items: [grid]
   }
-
+  
   if ( action == 'search' )
     $configViewport.items.push(firstToolbarSearch);
-
+ 
   var viewport = new Ext.Viewport($configViewport);
 
 

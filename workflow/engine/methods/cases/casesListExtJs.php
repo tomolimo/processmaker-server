@@ -36,7 +36,7 @@
   $reassignReaderFields = $confReassignList['caseReaderFields'];
 
   if ( $action == 'draft' /* &&  $action == 'cancelled' */) {
-    array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'deleteLink' ) );
+    //array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'deleteLink' ) );
   }
   if ( $action == 'selfservice' ) {
     array_unshift ( $columns, array( 'header'=> '', 'width'=> 50, 'sortable'=> false, 'id'=> 'viewLink' ) );
