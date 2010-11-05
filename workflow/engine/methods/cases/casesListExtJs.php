@@ -96,47 +96,37 @@
   $oHeadPublisher->assign( 'allUsersValues',$allUsers);                       //sending the columns to display in grid
   
   
-  $TRANSLATIONS->LABEL_GRID_LOADING          = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
-  $TRANSLATIONS->LABEL_REFRESH               = G::LoadTranslation('ID_REFRESH_LABEL');
-  $TRANSLATIONS->MESSAGE_REFRESH             = G::LoadTranslation('ID_REFRESH_MESSAGE');
-  $TRANSLATIONS->LABEL_OPT_READ              = G::LoadTranslation('ID_OPT_READ');
-  $TRANSLATIONS->LABEL_OPT_UNREAD            = G::LoadTranslation('ID_OPT_UNREAD');
-  $TRANSLATIONS->LABEL_OPT_ALL               = G::LoadTranslation('ID_OPT_ALL');
-  $TRANSLATIONS->LABEL_OPT_STARTED           = G::LoadTranslation('ID_OPT_STARTED');
-  $TRANSLATIONS->LABEL_OPT_COMPLETED         = G::LoadTranslation('ID_OPT_COMPLETED');
-  $TRANSLATIONS->LABEL_EMPTY_PROCESSES       = G::LoadTranslation('ID_EMPTY_PROCESSES');
-  $TRANSLATIONS->LABEL_EMPTY_USERS           = G::LoadTranslation('ID_EMPTY_USERS');
-  $TRANSLATIONS->LABEL_EMPTY_SEARCH          = G::LoadTranslation('ID_EMPTY_SEARCH');
-  $TRANSLATIONS->LABEL_EMPTY_CASE            = G::LoadTranslation('ID_EMPTY_CASE');
-  $TRANSLATIONS->LABEL_SEARCH                = G::LoadTranslation('ID_SEARCH');
-  $TRANSLATIONS->LABEL_OPT_JUMP              = G::LoadTranslation('ID_OPT_JUMP');
-  $TRANSLATIONS->LABEL_DISPLAY_ITEMS         = G::LoadTranslation('ID_DISPLAY_ITEMS');
-  $TRANSLATIONS->LABEL_DISPLAY_EMPTY         = G::LoadTranslation('ID_DISPLAY_EMPTY');
-  $TRANSLATIONS->LABEL_OPEN_CASE             = G::LoadTranslation('ID_OPEN_CASE');
+  $TRANSLATIONS['LABEL_GRID_LOADING']          = G::LoadTranslation('ID_CASES_LIST_GRID_LOADING');
+  $TRANSLATIONS['LABEL_REFRESH']               = G::LoadTranslation('ID_REFRESH_LABEL');
+  $TRANSLATIONS['MESSAGE_REFRESH']             = G::LoadTranslation('ID_REFRESH_MESSAGE');
+  $TRANSLATIONS['LABEL_OPT_READ']              = G::LoadTranslation('ID_OPT_READ');
+  $TRANSLATIONS['LABEL_OPT_UNREAD']            = G::LoadTranslation('ID_OPT_UNREAD');
+  $TRANSLATIONS['LABEL_OPT_ALL']               = G::LoadTranslation('ID_OPT_ALL');
+  $TRANSLATIONS['LABEL_OPT_STARTED']           = G::LoadTranslation('ID_OPT_STARTED');
+  $TRANSLATIONS['LABEL_OPT_COMPLETED']         = G::LoadTranslation('ID_OPT_COMPLETED');
+  $TRANSLATIONS['LABEL_EMPTY_PROCESSES']       = G::LoadTranslation('ID_EMPTY_PROCESSES');
+  $TRANSLATIONS['LABEL_EMPTY_USERS']           = G::LoadTranslation('ID_EMPTY_USERS');
+  $TRANSLATIONS['LABEL_EMPTY_SEARCH']          = G::LoadTranslation('ID_EMPTY_SEARCH');
+  $TRANSLATIONS['LABEL_EMPTY_CASE']            = G::LoadTranslation('ID_EMPTY_CASE');
+  $TRANSLATIONS['LABEL_SEARCH']                = G::LoadTranslation('ID_SEARCH');
+  $TRANSLATIONS['LABEL_OPT_JUMP']              = G::LoadTranslation('ID_OPT_JUMP');
+  $TRANSLATIONS['LABEL_DISPLAY_ITEMS']         = G::LoadTranslation('ID_DISPLAY_ITEMS');
+  $TRANSLATIONS['LABEL_DISPLAY_EMPTY']         = G::LoadTranslation('ID_DISPLAY_EMPTY');
+  $TRANSLATIONS['LABEL_OPEN_CASE']             = G::LoadTranslation('ID_OPEN_CASE');
   
-  $TRANSLATIONS->ID_CASESLIST_APP_UID        = G::LoadTranslation('ID_CASESLIST_APP_UID');
-  $TRANSLATIONS->ID_CONFIRM                  = G::LoadTranslation('ID_CONFIRM');
-  $TRANSLATIONS->ID_MSG_CONFIRM_DELETE_CASES = G::LoadTranslation('ID_MSG_CONFIRM_DELETE_CASES');
-  $TRANSLATIONS->ID_DELETE                   = G::LoadTranslation('ID_DELETE');
-  $TRANSLATIONS->ID_REASSIGN                 = G::LoadTranslation('ID_REASSIGN');
-  $TRANSLATIONS->ID_VIEW                     = G::LoadTranslation('ID_VIEW');
-  $TRANSLATIONS->ID_UNPAUSE                  = G::LoadTranslation('ID_UNPAUSE'); 		 			
-  $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
-  $TRANSLATIONS->ID_CONFIRM_UNPAUSE_CASE     = G::LoadTranslation('ID_CONFIRM_UNPAUSE_CASE'); 		 			
-  
-  $TRANSLATIONS->ID_PROCESS                  = G::LoadTranslation('ID_PROCESS');
-  $TRANSLATIONS->ID_STATUS                   = G::LoadTranslation('ID_STATUS');
-  $TRANSLATIONS->ID_USER                     = G::LoadTranslation('ID_USER');
-  $TRANSLATIONS->ID_DELEGATE_DATE_FROM       = G::LoadTranslation('ID_DELEGATE_DATE_FROM');
-  $TRANSLATIONS->ID_TO                       = G::LoadTranslation('ID_TO');
-  $TRANSLATIONS->ID_FILTER_BY_DELEGATED_DATE = G::LoadTranslation('ID_FILTER_BY_DELEGATED_DATE');
+ 
+  $TRANSLATIONS2 = G::getTranslations(Array(
+    'ID_CASESLIST_APP_UID', 'ID_CONFIRM', 'ID_MSG_CONFIRM_DELETE_CASES', 'ID_DELETE', 'ID_REASSIGN', 
+    'ID_VIEW', 'ID_UNPAUSE', 'ID_PROCESSING', 'ID_CONFIRM_UNPAUSE_CASE',
+    'ID_PROCESS', 'ID_STATUS', 'ID_USER', 'ID_DELEGATE_DATE_FROM', 'ID_TO', 'ID_FILTER_BY_DELEGATED_DATE',
+    'ID_TO_DO', 'ID_DRAFT', 'ID_COMPLETED', 'ID_CANCELLED', 'ID_PAUSED',
+    'ID_PRO_DESCRIPTION', 'ID_PRO_TITLE', 'ID_CATEGORY', 'ID_STATUS', 'ID_PRO_USER', 'ID_PRO_CREATE_DATE', 'ID_PRO_DEBUG', 'ID_INBOX', 'ID_DRAFT',
+    'ID_COMPLETED', 'ID_CANCELLED', 'ID_TOTAL_CASES', 'ID_ENTER_SEARCH_TERM', 'ID_ACTIVATE', 'ID_DEACTIVATE',
+    'ID_SELECT', 'ID_SEARCH', 'ID_NO_SELECTION_WARNING', 'ID_SELECT_ONE_AT_LEAST', 'ID_MSG_CONFIRM_DELETE_CASES2',
+    'ID_PAUSE_CASE_TO_DATE', ''
+  ));
 
-  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_TO_DO');
-  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_DRAFT');
-  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_COMPLETED');
-  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_CANCELLED');
-  $TRANSLATIONS->ID_DELEGATE_DATE_TO = G::LoadTranslation('ID_PAUSED');
-
+  $TRANSLATIONS = array_merge($TRANSLATIONS, $TRANSLATIONS2);
 
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   

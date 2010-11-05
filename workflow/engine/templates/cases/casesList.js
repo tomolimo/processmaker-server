@@ -47,7 +47,7 @@ function openCase(){
     } else {
       Ext.Msg.show({
         title:'',
-        msg: "Select someone item to process the action",
+        msg: TRANSLATIONS.ID_SELECT_ONE_AT_LEAST,
         buttons: Ext.Msg.INFO,
         fn: function(){},
         animEl: 'elId',
@@ -95,7 +95,7 @@ function deleteCase() {
 
     Ext.Msg.confirm(
       TRANSLATIONS.ID_CONFIRM,
-      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want delete all seleted cases?',
+      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES,
       function(btn, text){
         if ( btn == 'yes' ) {
           Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
@@ -129,8 +129,8 @@ function pauseCase(date){
   unpauseDate = date.format('Y-m-d');
  
   Ext.Msg.confirm(
-    'Confirm',
-    'Do you want to pause the case to date '+date.format('M j, Y'),
+    TRANSLATIONS.ID_CONFIRM,
+    TRANSLATIONS.ID_PAUSE_CASE_TO_DATE +' '+date.format('M j, Y'),
     function(btn, text){
       if ( btn == 'yes' ) {
         Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
