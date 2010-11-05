@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="cases_AttachInputDocument3" type="xmlform" width="400px" labelWidth="100px" enableTemplate="1">
+<dynaForm name="cases_AttachInputDocument3" type="xmlform" width="400px" labelWidth="200px" enableTemplate="1">
 
 <TITLE1 type="title">
   <en>Import PMTables</en>
 </TITLE1>
+
+<MAX_FILE_SIZE type="edit" mode="view">
+  <en>Max upload file size in bytes</en>
+</MAX_FILE_SIZE>
 
 <FILENAME type="file">
   <en>File</en>
