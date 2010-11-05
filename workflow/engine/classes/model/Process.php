@@ -527,6 +527,10 @@ class Process extends BaseProcess {
       $processesDetails[$row['CON_ID']][$row['CON_CATEGORY']] = $row['CON_VALUE'];
     }
 
+    G::loadClass('configuration');
+    $oConf = new Configurations;
+    $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+
     foreach( $processes as $process ) {
 
       $proTitle = isset($processesDetails[$process['PRO_UID']]) && isset($processesDetails[$process['PRO_UID']]['PRO_TITLE']) ? $processesDetails[$process['PRO_UID']]['PRO_TITLE']: '';
@@ -543,9 +547,6 @@ class Process extends BaseProcess {
         }
       }
 
-      G::loadClass('configuration');
-      $oConf = new Configurations;
-      $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
       $userOwner = isset($oConf->aConfig['format'])? $oConf->aConfig['format']: '';
       $creationDateMask = isset($oConf->aConfig['dateFormat'])? $oConf->aConfig['dateFormat']: '';
 
