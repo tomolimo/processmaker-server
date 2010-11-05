@@ -25,22 +25,57 @@
  
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
 require_once('classes/model/Triggers.php');
-$oTrigger = new Triggers();
+require_once('classes/model/Content.php');
+  
+  if(isset($_POST['function']) && $_POST['function']=='lookforNameTrigger'){
+	  $snameTrigger=urldecode($_POST['NAMETRIGGER']);
+	  $sPRO_UID=urldecode($_POST['proUid']);
+	  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn ( TriggersPeer::TRI_UID  );
+    $oCriteria->add(TriggersPeer::PRO_UID, $sPRO_UID);
+    $oDataset = TriggersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $flag=true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+          
+      $oCriteria1 = new Criteria('workflow');
+	    $oCriteria1->addSelectColumn('COUNT(*) AS TRIGGERS');
+	    $oCriteria1->add(ContentPeer::CON_CATEGORY, 'TRI_TITLE');
+	    $oCriteria1->add(ContentPeer::CON_ID,    $aRow['TRI_UID']);  
+	    $oCriteria1->add(ContentPeer::CON_VALUE,    $snameTrigger);
+	    $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);     
+	    $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+	    $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+	    $oDataset1->next();
+	    $aRow1 = $oDataset1->getRow();
 
-G::LoadClass('processMap');
-$oProcessMap = new processMap(new DBConnection);
+	    if($aRow1['TRIGGERS'])$flag=false;
+     
+      
+    }
+    print $flag;
+	  //print'krlos';return ;
+	} else {
 
-if ($_POST['form']['TRI_UID'] != '')
-{
-	$oTrigger->load($_POST['form']['TRI_UID']);
-}
-else
-{
-	$oTrigger->create($_POST['form']);
-	$_POST['form']['TRI_UID']=$oTrigger->getTriUid();
-}
-
-$oTrigger->update($_POST['form']);
-
-$oProcessMap->triggersList($_POST['form']['PRO_UID']);
+   $oTrigger = new Triggers();
+   
+   G::LoadClass('processMap');
+   $oProcessMap = new processMap(new DBConnection);
+   
+   if ($_POST['form']['TRI_UID'] != '')
+   {
+   	$oTrigger->load($_POST['form']['TRI_UID']);
+   }
+   else
+   {
+   	$oTrigger->create($_POST['form']);
+   	$_POST['form']['TRI_UID']=$oTrigger->getTriUid();
+   }
+   //print_r($_POST['form']);die;
+   $oTrigger->update($_POST['form']);
+   
+   $oProcessMap->triggersList($_POST['form']['PRO_UID']);
+  }
 ?>

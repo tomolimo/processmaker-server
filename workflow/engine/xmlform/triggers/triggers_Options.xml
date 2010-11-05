@@ -71,9 +71,26 @@
 
   function triggerSave(form)
   {
-   ajax_post(form.action, form, 'POST');
-    currentPopupWindow.remove();
-    @#PAGED_TABLE_ID.refresh();
+
+   var triUid = getField('TRI_UID').value;
+   if(triUid==''){
+   var triTitle =getField('TRI_TITLE').value;
+   if(triTitle==''){
+     alert(G_STRINGS.ID_REQUIRED_NAME_TRIGGERS);return false;
+   }
+   reqName=ajax_function(form.action,'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+encodeURIComponent(getField('PRO_UID').value),'POST') ;
+   if(!reqName){
+   	  alert(G_STRINGS.ID_EXIST_TRIGGERS);return false;
+   }else{
+	    ajax_post(form.action, form, 'POST');
+	    currentPopupWindow.remove();
+	    @#PAGED_TABLE_ID.refresh();
+   }
+   }else{
+	     ajax_post(form.action, form, 'POST');
+		   currentPopupWindow.remove();
+		   @#PAGED_TABLE_ID.refresh();
+   }
   }
 
   function triggerDelete(sUID) {
