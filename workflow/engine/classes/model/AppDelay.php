@@ -88,4 +88,31 @@ class AppDelay extends BaseAppDelay {
       throw($oError);
     }
   }
+
+  function isPaused($appUid, $delIndex){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(AppDelayPeer::APP_UID, $appUid);
+    $oCriteria->add(AppDelayPeer::APP_DEL_INDEX, $delIndex);
+    $oCriteria->add(AppDelayPeer::APP_TYPE, 'PAUSE');
+    $oCriteria->add(AppDelayPeer::APP_DISABLE_ACTION_USER, null);
+    $oCriteria->add(
+      $oCriteria->getNewCriterion(
+        AppDelayPeer::APP_DISABLE_ACTION_USER,
+        null,
+        Criteria::ISNULL
+      )->addOr(
+        $oCriteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0)
+      )
+    );
+    $oDataset = AppDelayPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( $aRow )
+      return true;
+    else
+      return false;
+    
+  }
 } // AppDelay

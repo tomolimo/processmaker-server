@@ -384,6 +384,7 @@
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['APP_NUMBER'];
+        $rows[] = $fields['DEL_INDEX'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
         $rows[] = $fields['APP_TAS_TITLE'];
