@@ -34,6 +34,16 @@ SELECT CATEGORY_UID, CATEGORY_NAME FROM PROCESS_CATEGORY
 
 <JS type="javascript" replacetags="1">
 
+document.onkeypress=function(e){
+var esIE=(document.all);
+var esNS=(document.layers);
+tecla=(esIE) ? event.keyCode : e.which;
+if(tecla==13){
+	return false;
+  }
+}
+
+
 var verifyProcessInformation = function(oForm){ 
   var nameProcess = getField('PRO_TITLE').value;
   reqName=ajax_function('processes_Save','lookForNameProcess','NAMEPROCESS='+encodeURIComponent(nameProcess),'POST') ;
