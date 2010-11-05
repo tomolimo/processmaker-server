@@ -35,7 +35,15 @@ function openCase(){
         wait:true,
         waitConfig: {interval:200}
       });
-      window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+      
+      switch(action){
+        case 'to_revise':
+          window.location = '../cases/cases_OpenToRevise?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+        break;
+        default:
+          window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+      }
+      
     } else {
       Ext.Msg.show({
         title:'',
@@ -157,7 +165,7 @@ function cancelCase(){
 
     Ext.Msg.confirm(
       TRANSLATIONS.ID_CONFIRM,
-      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want delete all seleted cases?',
+      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want cancel all seleted cases?',
       function(btn, text){
         if ( btn == 'yes' ) {
           Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
@@ -874,13 +882,14 @@ Ext.onReady ( function() {
     iconCls: 'ICON_CASES_PAUSED',
     menu: new Ext.menu.DateMenu({
       //vtype: 'daterange',
-      startDate: '2010-11-04',
       handler: function(dp, date){
         pauseCase(date);
       }
     })
 
   });
+
+  //optionMenuPause.setMinValue('2010-11-04');
   optionMenuReassign = new Ext.Action({
     text: 'Reassign',
     iconCls: 'ICON_CASES_TO_REASSIGN',
@@ -1269,11 +1278,6 @@ Ext.onReady ( function() {
     $configViewport.items.push(firstToolbarSearch);
  
   var viewport = new Ext.Viewport($configViewport);
-
-
-
-
-
 
   if( parent.PANEL_EAST_OPEN ){
     parent.PANEL_EAST_OPEN = false;
