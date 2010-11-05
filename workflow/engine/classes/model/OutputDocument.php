@@ -442,99 +442,116 @@ class OutputDocument extends BaseOutputDocument {
       $oFile = fopen($sPath .  $sFilename . '.doc', 'wb');
       $size = array();
       $size["Letter"]         = "216mm  279mm"; 
-			$size["Legal"]          = "216mm  357mm"; 
-			$size["Executive"]      = "184mm  267mm"; 
-			$size["B5"]             = "182mm  257mm"; 
-			$size["Folio"]          = "216mm  330mm"; 
-			$size["A0Oversize"]     = "882mm  1247mm";
-			$size["A0"]             = "841mm  1189mm";
-			$size["A1"]             = "594mm  841mm"; 
-			$size["A2"]             = "420mm  594mm"; 
-			$size["A3"]             = "297mm  420mm"; 
-			$size["A4"]             = "210mm  297mm"; 
-			$size["A5"]             = "148mm  210mm"; 
-			$size["A6"]             = "105mm  148mm"; 
-			$size["A7"]             = "74mm   105mm"; 
-			$size["A8"]             = "52mm   74mm";  
-			$size["A9"]             = "37mm   52mm";  
-			$size["A10"]            = "26mm   37mm";  
-			$size["Screenshot640"]  = "640mm  480mm"; 
-			$size["Screenshot800"]  = "800mm  600mm"; 
-			$size["Screenshot1024"] = "1024mm 768mm"; 
-			
+      $size["Legal"]          = "216mm  357mm"; 
+      $size["Executive"]      = "184mm  267mm"; 
+      $size["B5"]             = "182mm  257mm"; 
+      $size["Folio"]          = "216mm  330mm"; 
+      $size["A0Oversize"]     = "882mm  1247mm";
+      $size["A0"]             = "841mm  1189mm";
+      $size["A1"]             = "594mm  841mm"; 
+      $size["A2"]             = "420mm  594mm"; 
+      $size["A3"]             = "297mm  420mm"; 
+      $size["A4"]             = "210mm  297mm"; 
+      $size["A5"]             = "148mm  210mm"; 
+      $size["A6"]             = "105mm  148mm"; 
+      $size["A7"]             = "74mm   105mm"; 
+      $size["A8"]             = "52mm   74mm";  
+      $size["A9"]             = "37mm   52mm";  
+      $size["A10"]            = "26mm   37mm";  
+      $size["Screenshot640"]  = "640mm  480mm"; 
+      $size["Screenshot800"]  = "800mm  600mm"; 
+      $size["Screenshot1024"] = "1024mm 768mm"; 
+      
       $sizeLandscape["Letter"]         = "279mm  216mm";      
-			$sizeLandscape["Legal"]          = "357mm  216mm";      
-			$sizeLandscape["Executive"]      = "267mm  184mm";      
-			$sizeLandscape["B5"]             = "257mm  182mm";      
-			$sizeLandscape["Folio"]          = "330mm  216mm";      
-			$sizeLandscape["A0Oversize"]     = "1247mm 882mm";      
-			$sizeLandscape["A0"]             = "1189mm 841mm";      
-			$sizeLandscape["A1"]             = "841mm  594mm";      
-			$sizeLandscape["A2"]             = "594mm  420mm";      
-			$sizeLandscape["A3"]             = "420mm  297mm";      
-			$sizeLandscape["A4"]             = "297mm  210mm";      
-			$sizeLandscape["A5"]             = "210mm  148mm";      
-			$sizeLandscape["A6"]             = "148mm  105mm";      
-			$sizeLandscape["A7"]             = "105mm  74mm";       
-			$sizeLandscape["A8"]             = "74mm   52mm";       
-			$sizeLandscape["A9"]             = "52mm   37mm";       
-			$sizeLandscape["A10"]            = "37mm   26mm";       
-			$sizeLandscape["Screenshot640"]  = "480mm  640mm";      
-			$sizeLandscape["Screenshot800"]  = "600mm  800mm";      
-			$sizeLandscape["Screenshot1024"] = "768mm  1024mm";  	
-			
-      $media = $size[$aProperties['media']];
-      if($sLandscape) $media = $sizeLandscape[$aProperties['media']];
-      $marginLeft = $aProperties['margins']['left']; 
-      $marginRight = $aProperties['margins']['right']; 
-      $marginTop = $aProperties['margins']['top']; 
-      $marginBottom = $aProperties['margins']['bottom']; 
-
-			fwrite($oFile, '<html xmlns:v="urn:schemas-microsoft-com:vml"
-			xmlns:o="urn:schemas-microsoft-com:office:office"
-			xmlns:w="urn:schemas-microsoft-com:office:word"
-			xmlns="http://www.w3.org/TR/REC-html40">
-			<head>
-			<meta http-equiv=Content-Type content="text/html; charset=utf-8">
-			<meta name=ProgId content=Word.Document>
-			<meta name=Generator content="Microsoft Word 9">
-			<meta name=Originator content="Microsoft Word 9">
-			<!--[if !mso]>
-			<style>
-			v\:* {behavior:url(#default#VML);}
-			o\:* {behavior:url(#default#VML);}
-			w\:* {behavior:url(#default#VML);}
-			.shape {behavior:url(#default#VML);}
-			</style>
-			<![endif]-->
-			<!--[if gte mso 9]><xml>
-			 <w:WordDocument>
-			  <w:View>Print</w:View>
-			  <w:DoNotHyphenateCaps/>
-			  <w:PunctuationKerning/>
-			  <w:DrawingGridHorizontalSpacing>9.35 pt</w:DrawingGridHorizontalSpacing>
-			  <w:DrawingGridVerticalSpacing>9.35 pt</w:DrawingGridVerticalSpacing>
-			 </w:WordDocument>
-			</xml><![endif]-->
-			
-			<style>
-			<!--
-			@page WordSection1
-				{size:'.$media.';
-				margin-left:'.$marginLeft.'mm; 
-				margin-right:'.$marginRight.'mm;
-				margin-bottom:'.$marginBottom.'mm; 
-				margin-top:'.$marginTop.'mm;
-				mso-header-margin:35.4pt;
-				mso-footer-margin:35.4pt;
-				mso-paper-source:0;}
-			div.WordSection1
-				{page:WordSection1;}
-			-->
-			</style>
-			</head>
-			<body> 
-			<div class=WordSection1>');
+      $sizeLandscape["Legal"]          = "357mm  216mm";      
+      $sizeLandscape["Executive"]      = "267mm  184mm";      
+      $sizeLandscape["B5"]             = "257mm  182mm";      
+      $sizeLandscape["Folio"]          = "330mm  216mm";      
+      $sizeLandscape["A0Oversize"]     = "1247mm 882mm";      
+      $sizeLandscape["A0"]             = "1189mm 841mm";      
+      $sizeLandscape["A1"]             = "841mm  594mm";      
+      $sizeLandscape["A2"]             = "594mm  420mm";      
+      $sizeLandscape["A3"]             = "420mm  297mm";      
+      $sizeLandscape["A4"]             = "297mm  210mm";      
+      $sizeLandscape["A5"]             = "210mm  148mm";      
+      $sizeLandscape["A6"]             = "148mm  105mm";      
+      $sizeLandscape["A7"]             = "105mm  74mm";       
+      $sizeLandscape["A8"]             = "74mm   52mm";       
+      $sizeLandscape["A9"]             = "52mm   37mm";       
+      $sizeLandscape["A10"]            = "37mm   26mm";       
+      $sizeLandscape["Screenshot640"]  = "480mm  640mm";      
+      $sizeLandscape["Screenshot800"]  = "600mm  800mm";      
+      $sizeLandscape["Screenshot1024"] = "768mm  1024mm";  	
+      
+      if(!isset($aProperties['media']))
+      	$aProperties['media'] = 'Letter';
+      	
+      if($sLandscape) 
+        $media = $sizeLandscape[$aProperties['media']];
+      else 
+        $media = $size[$aProperties['media']];
+        
+      $marginLeft = '15'; 
+      if(isset($aProperties['margins']['left']))
+        $marginLeft = $aProperties['margins']['left']; 
+      	
+      $marginRight = '15'; 	
+      if(isset($aProperties['margins']['right']))	
+        $marginRight = $aProperties['margins']['right'];
+      	 
+      $marginTop = '15'; 
+      if(isset($aProperties['margins']['top']))	
+        $marginTop = $aProperties['margins']['top']; 
+      
+      $marginBottom = '15'; 
+      if(isset($aProperties['margins']['bottom']))		
+        $marginBottom = $aProperties['margins']['bottom']; 
+      
+      fwrite($oFile, '<html xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+      <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+      <meta name=ProgId content=Word.Document>
+      <meta name=Generator content="Microsoft Word 9">
+      <meta name=Originator content="Microsoft Word 9">
+      <!--[if !mso]>
+      <style>
+      v\:* {behavior:url(#default#VML);}
+      o\:* {behavior:url(#default#VML);}
+      w\:* {behavior:url(#default#VML);}
+      .shape {behavior:url(#default#VML);}
+      </style>
+      <![endif]-->
+      <!--[if gte mso 9]><xml>
+       <w:WordDocument>
+        <w:View>Print</w:View>
+        <w:DoNotHyphenateCaps/>
+        <w:PunctuationKerning/>
+        <w:DrawingGridHorizontalSpacing>9.35 pt</w:DrawingGridHorizontalSpacing>
+        <w:DrawingGridVerticalSpacing>9.35 pt</w:DrawingGridVerticalSpacing>
+       </w:WordDocument>
+      </xml><![endif]-->
+      
+      <style>
+      <!--
+      @page WordSection1
+      	{size:'.$media.';
+      	margin-left:'.$marginLeft.'mm; 
+      	margin-right:'.$marginRight.'mm;
+      	margin-bottom:'.$marginBottom.'mm; 
+      	margin-top:'.$marginTop.'mm;
+      	mso-header-margin:35.4pt;
+      	mso-footer-margin:35.4pt;
+      	mso-paper-source:0;}
+      div.WordSection1
+      	{page:WordSection1;}
+      -->
+      </style>
+      </head>
+      <body> 
+      <div class=WordSection1>');
       fwrite($oFile, $sContent);
       fwrite($oFile, "\n</div></body></html>\n\n");
       fclose($oFile);

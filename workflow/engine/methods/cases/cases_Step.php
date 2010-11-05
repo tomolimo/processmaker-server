@@ -327,6 +327,18 @@
           switch ( $aOD['OUT_DOC_TYPE'] ) {
             case 'HTML' : 
                 $aProperties = array();                //maui
+                
+                if(!isset($aOD['OUT_DOC_MEDIA']))
+                	$aOD['OUT_DOC_MEDIA'] = 'Letter';
+                if(!isset($aOD['OUT_DOC_LEFT_MARGIN']))
+                	$aOD['OUT_DOC_LEFT_MARGIN'] = '15';
+                if(!isset($aOD['OUT_DOC_RIGHT_MARGIN']))
+                	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
+                if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
+                	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
+                if(!isset($aOD['OUT_DOC_MEDIA']))
+                	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
+                	
                 $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
                 $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
                 $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
