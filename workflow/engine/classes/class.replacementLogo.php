@@ -90,7 +90,7 @@ class replacementLogo {
     $oDataset->next ();
     $aRow = $oDataset->getRow ();
     if (isset ( $aRow [0] ))
-      $ainfoLogo = unserialize ( $aRow [0] );
+      $ainfoLogo = @unserialize ( $aRow [0] );
     else
       $ainfoLogo = NULL;
     
@@ -99,5 +99,3 @@ class replacementLogo {
 
 } // end class
 
-
-?>    

@@ -130,7 +130,7 @@
 
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   
-  $oHeadPublisher->addExtJsScript('cases/casesList', true );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
 
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
 

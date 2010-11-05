@@ -251,10 +251,6 @@ Ext.onReady ( function() {
     return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
 
-  function reassignLink(value, p, r){
-    return String.format("<a href='../cases/cases_Reassign?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_REASSIGN + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
-  }
-
   function unpauseLink(value, p, r){
     return String.format("<a href='#' onclick='unpauseCaseFunction(\"{0}\",\"{1}\")'>" + TRANSLATIONS.ID_UNPAUSE + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'] );
   }
@@ -303,7 +299,6 @@ Ext.onReady ( function() {
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
-    //if( c.id == 'reassignLink')             c.renderer = reassignLink;
 	 //Status images
     //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   }
@@ -343,7 +338,7 @@ Ext.onReady ( function() {
       sortable: true // columns are sortable by default
     },
       columns: reassignColumns
-    });
+  });
 
   var newPopUp = new Ext.Window({
               id       : Ext.id(),
@@ -353,7 +348,6 @@ Ext.onReady ( function() {
               height   : 400,
               frame    : true,
               closable: false
-            //  html     : responseObject.responseText
             });
 
   var btnCloseReassign = new Ext.Button ({
@@ -435,11 +429,11 @@ Ext.onReady ( function() {
   });
 
   storeReassignCases = new Ext.data.Store({
-    remoteSort: true,
+    remoteSort: false,
     proxy : proxyReassignCasesList,
     reader: readerReassignCasesList,
-    writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
-    autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+    //writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
+    //autoSave: false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
 
   //Layout Resizing
@@ -588,7 +582,8 @@ Ext.onReady ( function() {
           btnSelectAll.hide();
           btnUnSelectAll.hide();
           btnReassign.hide();
-        } else  {
+        } 
+        else  {
           btnSelectAll.show();
           btnUnSelectAll.show();
           btnReassign.show();
@@ -620,9 +615,9 @@ Ext.onReady ( function() {
 //    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
       //grid.getSelectionModel().getSelections();
-        reassignGrid.getColumnModel().setHidden(0, true);
-        reassignGrid.getColumnModel().setHidden(1, true);
-        reassignGrid.getColumnModel().setHidden(2, true);
+        //reassignGrid.getColumnModel().setHidden(0, true);
+        //reassignGrid.getColumnModel().setHidden(1, true);
+        //reassignGrid.getColumnModel().setHidden(2, true);
         reassign();
 //      reassignPopup.show();
 //      conn.request({
@@ -1179,12 +1174,7 @@ Ext.onReady ( function() {
     region: 'center',
     store: storeReassignCases,
     cm: reassignCm,
-    /* renderTo: 'cases-grid', */
     autoHeight: true,
-    //frame: false,
-    //autoHeight:true,
-    //minHeight:400,
-//    layout: 'fit',
     viewConfig: {
       forceFit:true
     },
@@ -1210,16 +1200,6 @@ Ext.onReady ( function() {
   },
   */
     //tbar: tb,
-    // paging bar on the bottom
-    bbar: new Ext.PagingToolbar({
-      pageSize: pageSize,
-      store: storeReassignCases,
-      displayInfo: true,
-//      displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ',
-      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' &nbsp; ',
-//      emptyMsg: "No items to display"
-      emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
-    })
 
     });
 
@@ -1309,12 +1289,18 @@ function reassign(){
          ids += rows[i].get('APP_UID') + "|" + rows[i].get('TAS_UID')+ "|" + rows[i].get('DEL_INDEX');
     }
     storeReassignCases.setBaseParam( 'APP_UIDS', ids);
-    //storeReassignCases.setBaseParam( 'user', comboAllUsers.value   );
-    //storeReassignCases.setBaseParam( 'process', comboProcess.value );
     storeReassignCases.load();
     newPopUp.show();
-
-  } else {
+    
+    grid = reassignGrid.store.data;
+    Ext.Msg.alert ( grid );    
+/*
+    for( var i =0; i < grid.length; i++) {
+      grid[i].data.APP_UID = grid[i].data.USERS[0];
+    }  
+    */
+  } 
+  else {
      Ext.Msg.show({
        title:'',
        msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,

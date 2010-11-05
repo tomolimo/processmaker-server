@@ -32,7 +32,7 @@
 
   
   var storeUsersToReassign = new Ext.data.Store({
-    remoteSort: true,
+    remoteSort: false,
     proxy : proxyUsersToReassignList,
     reader: readerUsersToReassignList,
     writer: writerUsersToReassignList,  // <-- plug a DataWriter into the store just as you would a Reader
@@ -56,11 +56,11 @@
 
   // create the combo instance
   var combo = new Ext.form.ComboBox({
-    typeAhead     : true,
+    //typeAhead     : true,
     triggerAction : 'all',
-    lazyRender    : true,
-    //store         : new Ext.data.Store(),
-    store         : storeUsersToReassign,
+    //lazyRender    : true,
+    store         : new Ext.data.Store(),
+    //store         : storeUsersToReassign,
     /*listeners:{
       'select': function() {
         //storeUsersToReassign.load();
