@@ -74,6 +74,17 @@
          $Criteria      = $oAppCache->getToReassignListCriteria();
          $CriteriaCount = $oAppCache->getToReassignCountCriteria();
          break;
+    case 'all' :
+         $Criteria      = $oAppCache->getAllCasesListCriteria($userUid);
+         $CriteriaCount = $oAppCache->getAllCasesCountCriteria($userUid);
+         break;
+    case 'gral' :
+         $Criteria      = $oAppCache->getGeneralListCriteria();
+         $CriteriaCount = $oAppCache->getGeneralCountCriteria();
+//         $params = array();
+//         $sSql = BasePeer::createSelectSql($Criteria, $params);
+//         var_dump($sSql);
+         break;
     case 'todo' :
     default:
          $Criteria      = $oAppCache->getToDoListCriteria($userUid);
@@ -153,28 +164,65 @@
 
   //add the search filter
   if ( $search != '' ) {
-    //$Criteria->add      (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
-    //$CriteriaCount->add (AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE );
-    
-    $Criteria->add(
-      $Criteria->getNewCriterion(
-        AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
-      )->addOr($Criteria->getNewCriterion(
-        AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
-      )->addOr($Criteria->getNewCriterion(
-        AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
-      ))
-    ));
 
-    $CriteriaCount->add(
-      $CriteriaCount->getNewCriterion(
-        AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
-      )->addOr($CriteriaCount->getNewCriterion(
-        AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
-      )->addOr($CriteriaCount->getNewCriterion(
-        AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
-      ))
-    ));
+    $defaultFields = $oAppCache->getDefaultFields();
+    $oTmpCriteria = '';
+    // if there is PMTABLE for this case list:
+    if ( !empty($oAppCache->confCasesList) && isset($oAppCache->confCasesList['PMTable']) && trim($oAppCache->confCasesList['PMTable'])!='' ) {
+    // getting the table name
+      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
+      $tableName = $oAdditionalTables->getAddTabName();
+      $oNewCriteria = new Criteria( 'workflow' );
+      $counter = 0;
+      foreach($oAppCache->confCasesList['second']['data'] as $fieldData){
+        if ( !in_array($fieldData['name'],$defaultFields) ){
+          $fieldName = $tableName.'.'.$fieldData['name'];
+          if ( $counter == 0 ) {
+            $oTmpCriteria = $oNewCriteria->getNewCriterion ( $fieldName, '%' . $search . '%', Criteria::LIKE );
+          } else {
+            $oTmpCriteria = $oNewCriteria->getNewCriterion ( $fieldName, '%' . $search . '%', Criteria::LIKE )->addOr($oTmpCriteria);
+          }
+          $counter++;
+        }
+      }
+      //add the default and hidden DEL_INIT_DATE
+    }
+
+    if ($oTmpCriteria!='') {
+      $Criteria->add(
+        $Criteria->getNewCriterion(
+          AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
+        )->addOr($Criteria->getNewCriterion(
+          AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
+        )->addOr($Criteria->getNewCriterion(
+          AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+        )->addOr($oTmpCriteria))
+      ));
+    } else {
+      $Criteria->add(
+        $Criteria->getNewCriterion(
+          AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
+        )->addOr($Criteria->getNewCriterion(
+          AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
+        )->addOr($Criteria->getNewCriterion(
+          AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+        ))
+      ));
+    }
+
+    if ($oTmpCriteria!='') {
+      $CriteriaCount = $Criteria;
+    } else {
+      $CriteriaCount->add(
+        $CriteriaCount->getNewCriterion(
+          AppCacheViewPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE
+        )->addOr($CriteriaCount->getNewCriterion(
+          AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
+        )->addOr($CriteriaCount->getNewCriterion(
+          AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+        ))
+      ));
+    }
   }
 
   //here we count how many records exists for this criteria.
@@ -182,12 +230,12 @@
   $doCountAlreadyExecuted = false;
   //case 1. when the SEARCH action is selected and none filter, search criteria is defined, 
   //we need to count using the table APPLICATION, because APP_CACHE_VIEW takes 3 seconds
-  
+
   if ( $action == 'search' && $filter == '' && $search == '' && $process == '' && $status == '' && $dateFrom == '' && $dateTo == '') {
   	$totalCount = $oAppCache->getSearchAllCount();
     $doCountAlreadyExecuted = true;
   }
-  
+
   if ( $doCountAlreadyExecuted == false ) {
     // in the case of reassign the distinct attribute shows a diferent count result comparing to the
     // original list
@@ -196,11 +244,29 @@
     } else{
       $distinct = true;
     }
-
+    // needs a litle bit of analysis to understant whats going on
+    // first check if there is a PMTable defined within the list
+    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
+        // then
+        $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
+        $tableName = $oAdditionalTables->getAddTabName();
+        $tableName = strtolower($tableName);
+        $tableNameArray = explode('_',$tableName);
+        foreach ($tableNameArray as $item){
+          $newTableName[] = ucfirst($item);
+        }
+        $tableNamePeer = implode('',$newTableName)."Peer";
+        // 
+        eval ("\$totalCount=".$tableNamePeer."::doCount( \$CriteriaCount, \$distinct );");
+     } else {
+        $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
+     }
     $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
-
+//    $params = array();
+//    $sSql   = BasePeer::createSelectSql($CriteriaCount, $params);
+//    var_dump($sSql);
   }
-      
+
   //add sortable options    
   if ( $sort != '' ) {
     if ( $dir == 'DESC' )
@@ -213,7 +279,11 @@
   $Criteria->setLimit( $limit );
   $Criteria->setOffset( $start );
 
-  //execute the query      
+  $params = array();
+  $sSql   = BasePeer::createSelectSql($Criteria, $params);
+//  var_dump($sSql);
+  
+  //execute the query
   $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
   $oDataset->next();
@@ -410,7 +480,32 @@
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
         $rows[] = $fields['USR_UID'];
+        break;
 
+      case 'all' : //#, Case, task, process, due date, Last Modify
+        $fields = setDefaultFields();
+        $rows[] = $fields['APP_UID'];
+        $rows[] = $fields['APP_NUMBER'];
+        $rows[] = $fields['APP_TITLE'];
+        $rows[] = $fields['APP_PRO_TITLE'];
+        $rows[] = $fields['APP_TAS_TITLE'];
+        $rows[] = $fields['APP_CURRENT_USER'];
+        $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
+        $rows[] = $fields['APP_UPDATE_DATE'];
+        $rows[] = $fields['APP_STATUS'];
+        break;
+
+      case 'gral' : //#, Case, task, process, due date, Last Modify
+        $fields = setDefaultFields();
+        $rows[] = $fields['APP_UID'];
+        $rows[] = $fields['APP_NUMBER'];
+        $rows[] = $fields['APP_TITLE'];
+        $rows[] = $fields['APP_PRO_TITLE'];
+        $rows[] = $fields['APP_TAS_TITLE'];
+        $rows[] = $fields['APP_CURRENT_USER'];
+        $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
+        $rows[] = $fields['APP_UPDATE_DATE'];
+        $rows[] = $fields['APP_STATUS'];
         break;
     }
     return $rows;

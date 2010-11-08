@@ -74,7 +74,7 @@ class AppCacheView extends BaseAppCacheView {
   function getToDo ( $userUid, $doCount ) {
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -116,7 +116,7 @@ class AppCacheView extends BaseAppCacheView {
   function getDraft ( $userUid, $doCount ) {
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -158,7 +158,7 @@ class AppCacheView extends BaseAppCacheView {
   function getSent ( $userUid, $doCount ) {
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -286,7 +286,7 @@ class AppCacheView extends BaseAppCacheView {
     $tasks = $this->getSelfServiceTasks( $userUid ); 
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -331,7 +331,7 @@ class AppCacheView extends BaseAppCacheView {
   function getPaused ( $userUid, $doCount ) {
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -391,7 +391,7 @@ class AppCacheView extends BaseAppCacheView {
         $oDataset->next();
     }
 
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $c  = new Criteria('workflow');
     }
     else {
@@ -434,7 +434,7 @@ class AppCacheView extends BaseAppCacheView {
   function getCompleted ( $userUid, $doCount ) {
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -463,7 +463,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getCompleted($userUid, true);
   }
   
-   /**
+  /**
    * gets the COMPLETED cases list criteria for list
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -473,7 +473,7 @@ class AppCacheView extends BaseAppCacheView {
   }
 
 
-    /**
+  /**
    * gets the CANCELLED cases list criteria
    * param $userUid the current userUid
    * param $doCount if true this will return the criteria for count cases only
@@ -482,7 +482,7 @@ class AppCacheView extends BaseAppCacheView {
   function getCancelled ( $userUid, $doCount ) {
     // adding configuration fields from the configuration options
     // and forming the criteria object
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $Criteria  = new Criteria('workflow');
     }
     else {
@@ -495,7 +495,7 @@ class AppCacheView extends BaseAppCacheView {
     return $Criteria;
   }
   
-    /**
+  /**
    * gets the CANCELLED cases list criteria for count
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -504,7 +504,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getCancelled($userUid, true);
   }
   
-   /**
+  /**
    * gets the CANCELLED cases list criteria for list
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -513,7 +513,7 @@ class AppCacheView extends BaseAppCacheView {
   	return $this->getCancelled($userUid, false);
   }
 
-    /**
+  /**
    * gets the ADVANCED SEARCH cases list criteria for count
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -531,7 +531,7 @@ class AppCacheView extends BaseAppCacheView {
     return $totalCount;
   }
 
-   /**
+  /**
    * gets the ADVANCED SEARCH cases list criteria for list
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -547,7 +547,7 @@ class AppCacheView extends BaseAppCacheView {
   	//return $this->getSearchCriteria(false);
   }
   
-   /**
+  /**
    * gets the ADVANCED SEARCH cases list criteria for STATUS
    * param $userUid the current userUid
    * @return Criteria object $Criteria
@@ -558,13 +558,13 @@ class AppCacheView extends BaseAppCacheView {
   }
   
   
-   /**
+  /**
    * gets the SENT cases list criteria for list
    * param $userUid the current userUid
    * @return Criteria object $Criteria
    */
 
-    /**
+  /**
    * gets the cases list criteria using the advanced search
    * param $doCount if true this will return the criteria for count cases only
    * @return Criteria object $Criteria
@@ -635,6 +635,7 @@ class AppCacheView extends BaseAppCacheView {
   
       //add the default and hidden DEL_INIT_DATE
       $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
+//      $oCriteria->addAlias("PM_TABLE", $tableName);
       //Add the JOIN
       $oCriteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
       return $oCriteria;
@@ -669,25 +670,20 @@ class AppCacheView extends BaseAppCacheView {
     }
   }
 
-  public function getAll($doCount='false'){
-    if ( $doCount ) {
+  public function getGeneralCases($doCount='false'){
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $oCriteria  = new Criteria('workflow');
     }
     else {
       $oCriteria = $this->addPMFieldsToCriteria('completed');
     }
-    $oCriteria->add(
-      $oCriteria->getNewCriterion(
-        AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN'
-        )->addOr(
-        $oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'COMPLETED'
-          )->addAnd(
-            $oCriteria->getNewCriterion(
-              AppCacheViewPeer::DEL_PREVIOUS,0
-            )
-          )
-      )
-    );
+    $oCriteria->addJoin( AppCacheViewPeer::APP_UID, AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN );
+    $oCriteria->add( $oCriteria->getNewCriterion(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN')->addOr($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'COMPLETED')->addAnd($oCriteria->getNewCriterion(AppDelegationPeer::DEL_PREVIOUS, 0))));
+//    $oCriteria->add( AppDelegationPeer::DEL_PREVIOUS, 0 );
+//    $params = array();
+//    $sSql = BasePeer::createSelectSql($oCriteria, $params);
+//    var_dump($sSql);
+
 //    $oCriteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
     return $oCriteria;
   }
@@ -696,20 +692,40 @@ class AppCacheView extends BaseAppCacheView {
    * gets the ALL cases list criteria for count
    * @return Criteria object $Criteria
    */
-  function getAllCountCriteria () {
-  	return $this->getAll( true );
+  function getAllCasesCountCriteria ( $userUid ) {
+    $oCriteria = $this->getGeneralCases( true );
+    $oCriteria->add( AppCacheViewPeer::USR_UID, $userUid );
+    return $oCriteria;
   }
 
   /**
    * gets the ALL cases list criteria for list
    * @return Criteria object $Criteria
    */
-  function getAllListCriteria () {
-  	return $this->getAll( false );
+  function getAllCasesListCriteria ( $userUid ) {
+    $oCriteria = $this->getGeneralCases( false );
+    $oCriteria->add( AppCacheViewPeer::USR_UID, $userUid );
+    return $oCriteria;
+  }
+
+  /**
+   * gets the ALL cases list criteria for count
+   * @return Criteria object $Criteria
+   */
+  function getGeneralCountCriteria () {
+    return $this->getGeneralCases( true );
+  }
+
+  /**
+   * gets the ALL cases list criteria for list
+   * @return Criteria object $Criteria
+   */
+  function getGeneralListCriteria () {
+  	return $this->getGeneralCases( false );
   }
 
   public function getToReassign( $doCount ){
-    if ( $doCount ) {
+    if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $oCriteria  = new Criteria('workflow');
     }
     else {
