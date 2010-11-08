@@ -255,10 +255,13 @@
         foreach ($tableNameArray as $item){
           $newTableName[] = ucfirst($item);
         }
-        $tableNamePeer = implode('',$newTableName)."Peer";
+        $tableName = implode('',$newTableName);
         //
         if (class_exists($tableNamePeer)){
-          eval ("\$totalCount=".$tableNamePeer."::doCount( \$CriteriaCount, \$distinct );");
+          eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
+        } else {
+          require_once(PATH_DB.$workspace.PATH_SEP."classes".PATH_SEP.$tableName.".php");
+          eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
         }
      } else {
         $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
