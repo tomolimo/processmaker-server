@@ -33,32 +33,16 @@
 
 <JS type="javascript" replaceTags="1">
 <![CDATA[
-/*
+
 	document.onkeypress=function(e){
 	var esIE=(document.all);
 	var esNS=(document.layers);
 	tecla=(esIE) ? event.keyCode : e.which;
 	if(tecla==13){
-	
-alert(	getField('TRI_UID').value);
 		return false;
 	  }
 	}
-*/
- /*function donothing(){
- alert(3333);return false;
- }
-eimnud.event.add(getField('TRI_TITLE'),'keypress',donothing);  */
 
-var dynaformOnload = function()
-{ 
-
-};
-
-leimnud.event.add(getField('TRI_TITLE'), 'change', function() {
-  alert(3333);
-   
-});
   function triggerEditWizardSource (sUID){
     popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' , 770, 510);
   }
