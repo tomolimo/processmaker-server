@@ -257,7 +257,7 @@
         }
         $tableName = implode('',$newTableName);
         //
-        if (class_exists($tableNamePeer)){
+        if (class_exists($tableName)){
           eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
         } else {
           require_once(PATH_DB.$workspace.PATH_SEP."classes".PATH_SEP.$tableName.".php");
