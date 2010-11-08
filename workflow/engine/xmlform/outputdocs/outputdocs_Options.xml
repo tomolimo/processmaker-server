@@ -32,12 +32,15 @@ var currentPagedTable = @#PAGED_TABLE_ID;
      }
     else  
      { 
-        ajax_post( form.action, form, 'POST', function(){
+        /*ajax_post( form.action, form, 'POST', function(){
        		  currentPopupWindow.remove();
        		  @#PAGED_TABLE_ID.refresh();
      			},
      			true 
-     	  );
+     	  );*/
+     	  ajax_post( form.action, form, 'POST' );
+    		currentPopupWindow.remove();
+    		@#PAGED_TABLE_ID.refresh();
        
      }  
   }
