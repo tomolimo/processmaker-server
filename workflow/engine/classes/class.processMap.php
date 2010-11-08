@@ -707,7 +707,10 @@ class processMap {
             break;
           case 'OUTPUT_DOCUMENT' :
             $oOutputDocument = new OutputDocument ( );
-            $aFields = $oOutputDocument->load($aRow ['STEP_UID_OBJ']);
+            $aFields = $oOutputDocument->getByUid($aRow ['STEP_UID_OBJ']);
+
+            if( $aFields === false )
+              continue;
             $sTitle = $aFields ['OUT_DOC_TITLE'];
             break;
           case 'EXTERNAL' :
