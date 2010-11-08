@@ -38,10 +38,10 @@ try {
   }
   
   
-  $sfunction =$_POST['function']; 
+  //$sfunction =$_POST['function']; 
   
-  switch($sfunction){
-  case 'lookForNameOutput':
+  if(isset($_POST['function']) && $_POST['function']=='lookForNameOutput'){
+  
 	require_once('classes/model/Content.php');
   require_once ( "classes/model/OutputDocument.php" );
   
@@ -71,9 +71,9 @@ try {
 	    if($aRow1['OUTPUTS'])$flag=false;
 	  }
     print $flag;	  
-	  break;
 	  
-  default:
+	} else {
+  //default:
   
   require_once 'classes/model/OutputDocument.php';
   G::LoadClass( 'processMap' );
@@ -101,7 +101,7 @@ try {
   //refresh dbarray with the last change in outputDocument
   $oMap = new processMap();
   $oCriteria = $oMap->getOutputDocumentsCriteria($_POST['form']['PRO_UID']);
-  break;
+  
  }
 }
 catch (Exception $oException) {
