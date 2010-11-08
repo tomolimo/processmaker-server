@@ -70,7 +70,27 @@ class OutputDocument extends BaseOutputDocument {
       G::mk_dir ( $javaInput );
       G::mk_dir ( $javaOutput );  
   }
-  
+
+  public function getByUid($sOutDocUid)
+  {
+    try {
+      $oOutputDocument = OutputDocumentPeer::retrieveByPK( $sOutDocUid );
+      if( is_null($oOutputDocument) )
+        return false;
+
+      $aFields = $oOutputDocument->toArray(BasePeer::TYPE_FIELDNAME);
+      $aFields['OUT_DOC_TITLE']       = $oOutputDocument->getOutDocTitle();
+      $aFields['OUT_DOC_DESCRIPTION'] = $oOutputDocument->getOutDocDescription();
+      $aFields['OUT_DOC_FILENAME']    = $oOutputDocument->getOutDocFilename();
+      $aFields['OUT_DOC_TEMPLATE']    = $oOutputDocument->getOutDocTemplate();
+      $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+      return $aFields;
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
   /*
   * Load the application document registry
   * @param string $sAppDocUid
