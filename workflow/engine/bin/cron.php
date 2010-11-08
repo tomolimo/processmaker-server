@@ -20,10 +20,8 @@ $pathOutTrunk = implode( PATH_SEP, $docuroot) . PATH_SEP ;
 define('PATH_HOME',     $pathhome);
 define('PATH_TRUNK',    $pathTrunk);
 define('PATH_OUTTRUNK', $pathOutTrunk);
-//***************** In this file we cant to get the PM paths , RBAC Paths and Gulliver Paths  ************************
+
 require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-//***************** In this file we cant to get the PM definitions  **************************************************
-require_once (PATH_HOME . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php');
 
 //default values  
 $bCronIsRunning = false;

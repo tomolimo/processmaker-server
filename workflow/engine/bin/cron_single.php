@@ -25,14 +25,7 @@ if (!defined('PATH_HOME')) {
   define('PATH_TRUNK',    $pathTrunk);
   define('PATH_OUTTRUNK', $pathOutTrunk);
 
-  //***************** In this file we cant to get the PM paths , RBAC Paths and Gulliver Paths  ************************
   require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-  //***************** In this file we cant to get the PM definitions  **************************************************
-  require_once (PATH_HOME . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php');
-  //require_once (PATH_THIRDPARTY . 'krumo' . PATH_SEP . 'class.krumo.php');
-  //***************** Call Gulliver Classes **************************
-  //G::LoadThirdParty('pear/json','class.json');
-  //G::LoadThirdParty('smarty/libs','Smarty.class');
 
   G::LoadThirdParty('pear/json','class.json');
   G::LoadThirdParty('smarty/libs','Smarty.class');
@@ -56,8 +49,6 @@ if (!defined('PATH_HOME')) {
   require_once ( "propel/Propel.php" );
   require_once ( "creole/Creole.php" );
 }
-
-//******* main program ********************************************************************************************************
 
 require_once 'classes/model/AppDelegation.php';
 require_once 'classes/model/Event.php';
