@@ -256,15 +256,15 @@
           $newTableName[] = ucfirst($item);
         }
         $tableNamePeer = implode('',$newTableName)."Peer";
-        // 
-        eval ("\$totalCount=".$tableNamePeer."::doCount( \$CriteriaCount, \$distinct );");
+        //
+        if (class_exists($tableNamePeer)){
+          eval ("\$totalCount=".$tableNamePeer."::doCount( \$CriteriaCount, \$distinct );");
+        }
      } else {
         $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
      }
     $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
-//    $params = array();
-//    $sSql   = BasePeer::createSelectSql($CriteriaCount, $params);
-//    var_dump($sSql);
+
   }
 
   //add sortable options    
