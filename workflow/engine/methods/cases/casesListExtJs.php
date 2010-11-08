@@ -123,15 +123,30 @@
     'ID_PRO_DESCRIPTION', 'ID_PRO_TITLE', 'ID_CATEGORY', 'ID_STATUS', 'ID_PRO_USER', 'ID_PRO_CREATE_DATE', 'ID_PRO_DEBUG', 'ID_INBOX', 'ID_DRAFT',
     'ID_COMPLETED', 'ID_CANCELLED', 'ID_TOTAL_CASES', 'ID_ENTER_SEARCH_TERM', 'ID_ACTIVATE', 'ID_DEACTIVATE',
     'ID_SELECT', 'ID_SEARCH', 'ID_NO_SELECTION_WARNING', 'ID_SELECT_ONE_AT_LEAST', 'ID_MSG_CONFIRM_DELETE_CASES2',
-    'ID_PAUSE_CASE_TO_DATE', ''
+    'ID_PAUSE_CASE_TO_DATE', 'ID_DELETING_ELEMENTS', 'ID_MSG_CONFIRM_CANCEL_CASE', 'ID_MSG_CONFIRM_CANCEL_CASES',
+    'ID_OPEN_CASE', 'ID_PAUSE_CASE', 'ID_REASSIGN', 'ID_DELETE', 'ID_CANCEL', ''
   ));
+
+
+  //menu permissions  
+  /*$c = new Criteria('workflow');
+  $c->clearSelectColumns();
+  $c->addSelectColumn( AppThreadPeer::APP_THREAD_PARENT );
+  $c->add(AppThreadPeer::APP_UID, $APP_UID );
+  $c->add(AppThreadPeer::APP_THREAD_STATUS , 'OPEN' );
+  $cnt = AppThreadPeer::doCount($c);*/
+  $cnt = '';
+  $menuPerms = '';
+  $menuPerms = $menuPerms . ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1) ? 'R': ''; //can reassign case
+  $menuPerms = $menuPerms . ($cnt == 1) ? 'C': ''; //can cancel case
+
 
   $TRANSLATIONS = array_merge($TRANSLATIONS, $TRANSLATIONS2);
 
   $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
-  
-  $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
+  $oHeadPublisher->assign( '___p34315105',   $menuPerms); // user menu permissions
 
+  $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
 
   G::RenderPage('publish', 'extJs');

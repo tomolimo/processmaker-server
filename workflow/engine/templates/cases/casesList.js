@@ -95,10 +95,10 @@ function deleteCase() {
 
     Ext.Msg.confirm(
       TRANSLATIONS.ID_CONFIRM,
-      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES,
+      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASE: TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES,
       function(btn, text){
         if ( btn == 'yes' ) {
-          Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
+          Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
           Ext.Ajax.request({
             url: 'cases_Delete',
             success: function(response) {
@@ -133,7 +133,7 @@ function pauseCase(date){
     TRANSLATIONS.ID_PAUSE_CASE_TO_DATE +' '+date.format('M j, Y'),
     function(btn, text){
       if ( btn == 'yes' ) {
-        Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
+        Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
         Ext.Ajax.request({
           url: 'cases_Ajax',
           success: function(response) {
@@ -165,10 +165,10 @@ function cancelCase(){
 
     Ext.Msg.confirm(
       TRANSLATIONS.ID_CONFIRM,
-      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES: 'Do you want cancel all seleted cases?',
+      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_CANCEL_CASE: TRANSLATIONS.ID_MSG_CONFIRM_CANCEL_CASES,
       function(btn, text){
         if ( btn == 'yes' ) {
-          Ext.MessageBox.show({ msg: 'Deleting elements, please wait...', wait:true,waitConfig: {interval:200} });
+          Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
           Ext.Ajax.request({
             url: 'cases_Ajax',
             success: function(response) {
@@ -771,7 +771,7 @@ Ext.onReady ( function() {
     handler: doSearch
   });
 
-  var doSearch = function(){
+  function doSearch(){
     searchText = textSearch.getValue();
     storeCases.setBaseParam( 'search', searchText);
     storeCases.load({params:{ start : 0 , limit : pageSize }});
@@ -808,7 +808,8 @@ Ext.onReady ( function() {
     }
   });
 
-  /*** menu and toolbars **/
+  /*** menu and toolbars **/  
+
   function onMessageContextMenu(grid, rowIndex, e) {
     e.stopEvent();
     var coords = e.getXY();
@@ -861,19 +862,19 @@ Ext.onReady ( function() {
   var menuItems;
   //alert(action);
   optionMenuOpen = new Ext.Action({
-    text: 'Open Case',
+    text: TRANSLATIONS.ID_OPEN_CASE,
     iconCls: 'ICON_CASES_OPEN',
     handler: openCase
   });
 
   optionMenuUnpause = new Ext.Action({
-    text: 'Unpause Case',
+    text: TRANSLATIONS.ID_UNPAUSE_CASE,
     iconCls: 'ICON_CASES_UNPAUSE',
     handler: unpauseCase
   });
 
   optionMenuPause = new Ext.Action({
-    text: 'Pause',
+    text: TRANSLATIONS.ID_PAUSE_CASE,
     iconCls: 'ICON_CASES_PAUSED',
     menu: new Ext.menu.DateMenu({
       //vtype: 'daterange',
@@ -886,17 +887,17 @@ Ext.onReady ( function() {
 
   //optionMenuPause.setMinValue('2010-11-04');
   optionMenuReassign = new Ext.Action({
-    text: 'Reassign',
+    text: TRANSLATIONS.ID_REASSIGN,
     iconCls: 'ICON_CASES_TO_REASSIGN',
     handler: function(){}
   });
   optionMenuDelete = new Ext.Action({
-    text: 'Delete',
+    text: TRANSLATIONS.ID_DELETE,
     iconCls: 'ICON_CASES_DELETE',
     handler: deleteCase
   });
   optionMenuCancel = new Ext.Action({
-    text: 'Cancel',
+    text: TRANSLATIONS.ID_CANCEL,
     iconCls: 'ICON_CASES_CANCEL',
     handler: cancelCase
   });
@@ -904,11 +905,21 @@ Ext.onReady ( function() {
 
   switch(action){
     case 'todo':
-      menuItems = [optionMenuOpen, optionMenuPause, optionMenuReassign, optionMenuCancel];
+      menuItems = [optionMenuOpen, optionMenuPause];
+
+      if( ___p34315105.search('R') > 0 )
+        menuItems.push(optionMenuReassign);
+      if( ___p34315105.search('C') > 0 )
+        menuItems.push(optionMenuCancel);
+
       break;
 
       case 'draft':
-      menuItems = [optionMenuOpen, optionMenuPause, optionMenuReassign, optionMenuDelete];
+      menuItems = [optionMenuOpen, optionMenuPause];
+      if( ___p34315105.search('R') > 0 )
+        menuItems.push(optionMenuReassign);
+      menuItems.push(optionMenuDelete);
+
       break;
 
     case 'paused':
