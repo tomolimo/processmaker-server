@@ -50,6 +50,41 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 
 
 	/**
+	 * The value for the out_doc_media field.
+	 * @var        string
+	 */
+	protected $out_doc_media = 'Letter';
+
+
+	/**
+	 * The value for the out_doc_left_margin field.
+	 * @var        int
+	 */
+	protected $out_doc_left_margin = 30;
+
+
+	/**
+	 * The value for the out_doc_right_margin field.
+	 * @var        int
+	 */
+	protected $out_doc_right_margin = 15;
+
+
+	/**
+	 * The value for the out_doc_top_margin field.
+	 * @var        int
+	 */
+	protected $out_doc_top_margin = 15;
+
+
+	/**
+	 * The value for the out_doc_bottom_margin field.
+	 * @var        int
+	 */
+	protected $out_doc_bottom_margin = 15;
+
+
+	/**
 	 * The value for the out_doc_generate field.
 	 * @var        string
 	 */
@@ -142,6 +177,61 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 	{
 
 		return $this->out_doc_landscape;
+	}
+
+	/**
+	 * Get the [out_doc_media] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getOutDocMedia()
+	{
+
+		return $this->out_doc_media;
+	}
+
+	/**
+	 * Get the [out_doc_left_margin] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getOutDocLeftMargin()
+	{
+
+		return $this->out_doc_left_margin;
+	}
+
+	/**
+	 * Get the [out_doc_right_margin] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getOutDocRightMargin()
+	{
+
+		return $this->out_doc_right_margin;
+	}
+
+	/**
+	 * Get the [out_doc_top_margin] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getOutDocTopMargin()
+	{
+
+		return $this->out_doc_top_margin;
+	}
+
+	/**
+	 * Get the [out_doc_bottom_margin] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getOutDocBottomMargin()
+	{
+
+		return $this->out_doc_bottom_margin;
 	}
 
 	/**
@@ -286,6 +376,116 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		}
 
 	} // setOutDocLandscape()
+
+	/**
+	 * Set the value of [out_doc_media] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setOutDocMedia($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->out_doc_media !== $v || $v === 'Letter') {
+			$this->out_doc_media = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_MEDIA;
+		}
+
+	} // setOutDocMedia()
+
+	/**
+	 * Set the value of [out_doc_left_margin] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setOutDocLeftMargin($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->out_doc_left_margin !== $v || $v === 30) {
+			$this->out_doc_left_margin = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_LEFT_MARGIN;
+		}
+
+	} // setOutDocLeftMargin()
+
+	/**
+	 * Set the value of [out_doc_right_margin] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setOutDocRightMargin($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->out_doc_right_margin !== $v || $v === 15) {
+			$this->out_doc_right_margin = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_RIGHT_MARGIN;
+		}
+
+	} // setOutDocRightMargin()
+
+	/**
+	 * Set the value of [out_doc_top_margin] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setOutDocTopMargin($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->out_doc_top_margin !== $v || $v === 15) {
+			$this->out_doc_top_margin = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_TOP_MARGIN;
+		}
+
+	} // setOutDocTopMargin()
+
+	/**
+	 * Set the value of [out_doc_bottom_margin] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setOutDocBottomMargin($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->out_doc_bottom_margin !== $v || $v === 15) {
+			$this->out_doc_bottom_margin = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_BOTTOM_MARGIN;
+		}
+
+	} // setOutDocBottomMargin()
 
 	/**
 	 * Set the value of [out_doc_generate] column.
@@ -464,26 +664,36 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 
 			$this->out_doc_landscape = $rs->getInt($startcol + 2);
 
-			$this->out_doc_generate = $rs->getString($startcol + 3);
+			$this->out_doc_media = $rs->getString($startcol + 3);
 
-			$this->out_doc_type = $rs->getString($startcol + 4);
+			$this->out_doc_left_margin = $rs->getInt($startcol + 4);
 
-			$this->out_doc_current_revision = $rs->getInt($startcol + 5);
+			$this->out_doc_right_margin = $rs->getInt($startcol + 5);
 
-			$this->out_doc_field_mapping = $rs->getString($startcol + 6);
+			$this->out_doc_top_margin = $rs->getInt($startcol + 6);
 
-			$this->out_doc_versioning = $rs->getInt($startcol + 7);
+			$this->out_doc_bottom_margin = $rs->getInt($startcol + 7);
 
-			$this->out_doc_destination_path = $rs->getString($startcol + 8);
+			$this->out_doc_generate = $rs->getString($startcol + 8);
 
-			$this->out_doc_tags = $rs->getString($startcol + 9);
+			$this->out_doc_type = $rs->getString($startcol + 9);
+
+			$this->out_doc_current_revision = $rs->getInt($startcol + 10);
+
+			$this->out_doc_field_mapping = $rs->getString($startcol + 11);
+
+			$this->out_doc_versioning = $rs->getInt($startcol + 12);
+
+			$this->out_doc_destination_path = $rs->getString($startcol + 13);
+
+			$this->out_doc_tags = $rs->getString($startcol + 14);
 
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 10; // 10 = OutputDocumentPeer::NUM_COLUMNS - OutputDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 15; // 15 = OutputDocumentPeer::NUM_COLUMNS - OutputDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating OutputDocument object", $e);
@@ -696,24 +906,39 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 				return $this->getOutDocLandscape();
 				break;
 			case 3:
-				return $this->getOutDocGenerate();
+				return $this->getOutDocMedia();
 				break;
 			case 4:
-				return $this->getOutDocType();
+				return $this->getOutDocLeftMargin();
 				break;
 			case 5:
-				return $this->getOutDocCurrentRevision();
+				return $this->getOutDocRightMargin();
 				break;
 			case 6:
-				return $this->getOutDocFieldMapping();
+				return $this->getOutDocTopMargin();
 				break;
 			case 7:
-				return $this->getOutDocVersioning();
+				return $this->getOutDocBottomMargin();
 				break;
 			case 8:
-				return $this->getOutDocDestinationPath();
+				return $this->getOutDocGenerate();
 				break;
 			case 9:
+				return $this->getOutDocType();
+				break;
+			case 10:
+				return $this->getOutDocCurrentRevision();
+				break;
+			case 11:
+				return $this->getOutDocFieldMapping();
+				break;
+			case 12:
+				return $this->getOutDocVersioning();
+				break;
+			case 13:
+				return $this->getOutDocDestinationPath();
+				break;
+			case 14:
 				return $this->getOutDocTags();
 				break;
 			default:
@@ -739,13 +964,18 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 			$keys[0] => $this->getOutDocUid(),
 			$keys[1] => $this->getProUid(),
 			$keys[2] => $this->getOutDocLandscape(),
-			$keys[3] => $this->getOutDocGenerate(),
-			$keys[4] => $this->getOutDocType(),
-			$keys[5] => $this->getOutDocCurrentRevision(),
-			$keys[6] => $this->getOutDocFieldMapping(),
-			$keys[7] => $this->getOutDocVersioning(),
-			$keys[8] => $this->getOutDocDestinationPath(),
-			$keys[9] => $this->getOutDocTags(),
+			$keys[3] => $this->getOutDocMedia(),
+			$keys[4] => $this->getOutDocLeftMargin(),
+			$keys[5] => $this->getOutDocRightMargin(),
+			$keys[6] => $this->getOutDocTopMargin(),
+			$keys[7] => $this->getOutDocBottomMargin(),
+			$keys[8] => $this->getOutDocGenerate(),
+			$keys[9] => $this->getOutDocType(),
+			$keys[10] => $this->getOutDocCurrentRevision(),
+			$keys[11] => $this->getOutDocFieldMapping(),
+			$keys[12] => $this->getOutDocVersioning(),
+			$keys[13] => $this->getOutDocDestinationPath(),
+			$keys[14] => $this->getOutDocTags(),
 		);
 		return $result;
 	}
@@ -787,24 +1017,39 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 				$this->setOutDocLandscape($value);
 				break;
 			case 3:
-				$this->setOutDocGenerate($value);
+				$this->setOutDocMedia($value);
 				break;
 			case 4:
-				$this->setOutDocType($value);
+				$this->setOutDocLeftMargin($value);
 				break;
 			case 5:
-				$this->setOutDocCurrentRevision($value);
+				$this->setOutDocRightMargin($value);
 				break;
 			case 6:
-				$this->setOutDocFieldMapping($value);
+				$this->setOutDocTopMargin($value);
 				break;
 			case 7:
-				$this->setOutDocVersioning($value);
+				$this->setOutDocBottomMargin($value);
 				break;
 			case 8:
-				$this->setOutDocDestinationPath($value);
+				$this->setOutDocGenerate($value);
 				break;
 			case 9:
+				$this->setOutDocType($value);
+				break;
+			case 10:
+				$this->setOutDocCurrentRevision($value);
+				break;
+			case 11:
+				$this->setOutDocFieldMapping($value);
+				break;
+			case 12:
+				$this->setOutDocVersioning($value);
+				break;
+			case 13:
+				$this->setOutDocDestinationPath($value);
+				break;
+			case 14:
 				$this->setOutDocTags($value);
 				break;
 		} // switch()
@@ -833,13 +1078,18 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[0], $arr)) $this->setOutDocUid($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setProUid($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setOutDocLandscape($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setOutDocGenerate($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setOutDocType($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setOutDocCurrentRevision($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setOutDocFieldMapping($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setOutDocVersioning($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setOutDocDestinationPath($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setOutDocTags($arr[$keys[9]]);
+		if (array_key_exists($keys[3], $arr)) $this->setOutDocMedia($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setOutDocLeftMargin($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setOutDocRightMargin($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setOutDocTopMargin($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setOutDocBottomMargin($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setOutDocGenerate($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setOutDocType($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setOutDocCurrentRevision($arr[$keys[10]]);
+		if (array_key_exists($keys[11], $arr)) $this->setOutDocFieldMapping($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setOutDocVersioning($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setOutDocDestinationPath($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setOutDocTags($arr[$keys[14]]);
 	}
 
 	/**
@@ -854,6 +1104,11 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_UID)) $criteria->add(OutputDocumentPeer::OUT_DOC_UID, $this->out_doc_uid);
 		if ($this->isColumnModified(OutputDocumentPeer::PRO_UID)) $criteria->add(OutputDocumentPeer::PRO_UID, $this->pro_uid);
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_LANDSCAPE)) $criteria->add(OutputDocumentPeer::OUT_DOC_LANDSCAPE, $this->out_doc_landscape);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_MEDIA)) $criteria->add(OutputDocumentPeer::OUT_DOC_MEDIA, $this->out_doc_media);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_LEFT_MARGIN)) $criteria->add(OutputDocumentPeer::OUT_DOC_LEFT_MARGIN, $this->out_doc_left_margin);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_RIGHT_MARGIN)) $criteria->add(OutputDocumentPeer::OUT_DOC_RIGHT_MARGIN, $this->out_doc_right_margin);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_TOP_MARGIN)) $criteria->add(OutputDocumentPeer::OUT_DOC_TOP_MARGIN, $this->out_doc_top_margin);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_BOTTOM_MARGIN)) $criteria->add(OutputDocumentPeer::OUT_DOC_BOTTOM_MARGIN, $this->out_doc_bottom_margin);
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_GENERATE)) $criteria->add(OutputDocumentPeer::OUT_DOC_GENERATE, $this->out_doc_generate);
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_TYPE)) $criteria->add(OutputDocumentPeer::OUT_DOC_TYPE, $this->out_doc_type);
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_CURRENT_REVISION)) $criteria->add(OutputDocumentPeer::OUT_DOC_CURRENT_REVISION, $this->out_doc_current_revision);
@@ -918,6 +1173,16 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		$copyObj->setProUid($this->pro_uid);
 
 		$copyObj->setOutDocLandscape($this->out_doc_landscape);
+
+		$copyObj->setOutDocMedia($this->out_doc_media);
+
+		$copyObj->setOutDocLeftMargin($this->out_doc_left_margin);
+
+		$copyObj->setOutDocRightMargin($this->out_doc_right_margin);
+
+		$copyObj->setOutDocTopMargin($this->out_doc_top_margin);
+
+		$copyObj->setOutDocBottomMargin($this->out_doc_bottom_margin);
 
 		$copyObj->setOutDocGenerate($this->out_doc_generate);
 

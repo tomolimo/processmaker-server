@@ -24,7 +24,7 @@ abstract class BaseOutputDocumentPeer {
 	const CLASS_DEFAULT = 'classes.model.OutputDocument';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 10;
+	const NUM_COLUMNS = 15;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -38,6 +38,21 @@ abstract class BaseOutputDocumentPeer {
 
 	/** the column name for the OUT_DOC_LANDSCAPE field */
 	const OUT_DOC_LANDSCAPE = 'OUTPUT_DOCUMENT.OUT_DOC_LANDSCAPE';
+
+	/** the column name for the OUT_DOC_MEDIA field */
+	const OUT_DOC_MEDIA = 'OUTPUT_DOCUMENT.OUT_DOC_MEDIA';
+
+	/** the column name for the OUT_DOC_LEFT_MARGIN field */
+	const OUT_DOC_LEFT_MARGIN = 'OUTPUT_DOCUMENT.OUT_DOC_LEFT_MARGIN';
+
+	/** the column name for the OUT_DOC_RIGHT_MARGIN field */
+	const OUT_DOC_RIGHT_MARGIN = 'OUTPUT_DOCUMENT.OUT_DOC_RIGHT_MARGIN';
+
+	/** the column name for the OUT_DOC_TOP_MARGIN field */
+	const OUT_DOC_TOP_MARGIN = 'OUTPUT_DOCUMENT.OUT_DOC_TOP_MARGIN';
+
+	/** the column name for the OUT_DOC_BOTTOM_MARGIN field */
+	const OUT_DOC_BOTTOM_MARGIN = 'OUTPUT_DOCUMENT.OUT_DOC_BOTTOM_MARGIN';
 
 	/** the column name for the OUT_DOC_GENERATE field */
 	const OUT_DOC_GENERATE = 'OUTPUT_DOCUMENT.OUT_DOC_GENERATE';
@@ -71,10 +86,10 @@ abstract class BaseOutputDocumentPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('OutDocUid', 'ProUid', 'OutDocLandscape', 'OutDocGenerate', 'OutDocType', 'OutDocCurrentRevision', 'OutDocFieldMapping', 'OutDocVersioning', 'OutDocDestinationPath', 'OutDocTags', ),
-		BasePeer::TYPE_COLNAME => array (OutputDocumentPeer::OUT_DOC_UID, OutputDocumentPeer::PRO_UID, OutputDocumentPeer::OUT_DOC_LANDSCAPE, OutputDocumentPeer::OUT_DOC_GENERATE, OutputDocumentPeer::OUT_DOC_TYPE, OutputDocumentPeer::OUT_DOC_CURRENT_REVISION, OutputDocumentPeer::OUT_DOC_FIELD_MAPPING, OutputDocumentPeer::OUT_DOC_VERSIONING, OutputDocumentPeer::OUT_DOC_DESTINATION_PATH, OutputDocumentPeer::OUT_DOC_TAGS, ),
-		BasePeer::TYPE_FIELDNAME => array ('OUT_DOC_UID', 'PRO_UID', 'OUT_DOC_LANDSCAPE', 'OUT_DOC_GENERATE', 'OUT_DOC_TYPE', 'OUT_DOC_CURRENT_REVISION', 'OUT_DOC_FIELD_MAPPING', 'OUT_DOC_VERSIONING', 'OUT_DOC_DESTINATION_PATH', 'OUT_DOC_TAGS', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+		BasePeer::TYPE_PHPNAME => array ('OutDocUid', 'ProUid', 'OutDocLandscape', 'OutDocMedia', 'OutDocLeftMargin', 'OutDocRightMargin', 'OutDocTopMargin', 'OutDocBottomMargin', 'OutDocGenerate', 'OutDocType', 'OutDocCurrentRevision', 'OutDocFieldMapping', 'OutDocVersioning', 'OutDocDestinationPath', 'OutDocTags', ),
+		BasePeer::TYPE_COLNAME => array (OutputDocumentPeer::OUT_DOC_UID, OutputDocumentPeer::PRO_UID, OutputDocumentPeer::OUT_DOC_LANDSCAPE, OutputDocumentPeer::OUT_DOC_MEDIA, OutputDocumentPeer::OUT_DOC_LEFT_MARGIN, OutputDocumentPeer::OUT_DOC_RIGHT_MARGIN, OutputDocumentPeer::OUT_DOC_TOP_MARGIN, OutputDocumentPeer::OUT_DOC_BOTTOM_MARGIN, OutputDocumentPeer::OUT_DOC_GENERATE, OutputDocumentPeer::OUT_DOC_TYPE, OutputDocumentPeer::OUT_DOC_CURRENT_REVISION, OutputDocumentPeer::OUT_DOC_FIELD_MAPPING, OutputDocumentPeer::OUT_DOC_VERSIONING, OutputDocumentPeer::OUT_DOC_DESTINATION_PATH, OutputDocumentPeer::OUT_DOC_TAGS, ),
+		BasePeer::TYPE_FIELDNAME => array ('OUT_DOC_UID', 'PRO_UID', 'OUT_DOC_LANDSCAPE', 'OUT_DOC_MEDIA', 'OUT_DOC_LEFT_MARGIN', 'OUT_DOC_RIGHT_MARGIN', 'OUT_DOC_TOP_MARGIN', 'OUT_DOC_BOTTOM_MARGIN', 'OUT_DOC_GENERATE', 'OUT_DOC_TYPE', 'OUT_DOC_CURRENT_REVISION', 'OUT_DOC_FIELD_MAPPING', 'OUT_DOC_VERSIONING', 'OUT_DOC_DESTINATION_PATH', 'OUT_DOC_TAGS', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
 	/**
@@ -84,10 +99,10 @@ abstract class BaseOutputDocumentPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('OutDocUid' => 0, 'ProUid' => 1, 'OutDocLandscape' => 2, 'OutDocGenerate' => 3, 'OutDocType' => 4, 'OutDocCurrentRevision' => 5, 'OutDocFieldMapping' => 6, 'OutDocVersioning' => 7, 'OutDocDestinationPath' => 8, 'OutDocTags' => 9, ),
-		BasePeer::TYPE_COLNAME => array (OutputDocumentPeer::OUT_DOC_UID => 0, OutputDocumentPeer::PRO_UID => 1, OutputDocumentPeer::OUT_DOC_LANDSCAPE => 2, OutputDocumentPeer::OUT_DOC_GENERATE => 3, OutputDocumentPeer::OUT_DOC_TYPE => 4, OutputDocumentPeer::OUT_DOC_CURRENT_REVISION => 5, OutputDocumentPeer::OUT_DOC_FIELD_MAPPING => 6, OutputDocumentPeer::OUT_DOC_VERSIONING => 7, OutputDocumentPeer::OUT_DOC_DESTINATION_PATH => 8, OutputDocumentPeer::OUT_DOC_TAGS => 9, ),
-		BasePeer::TYPE_FIELDNAME => array ('OUT_DOC_UID' => 0, 'PRO_UID' => 1, 'OUT_DOC_LANDSCAPE' => 2, 'OUT_DOC_GENERATE' => 3, 'OUT_DOC_TYPE' => 4, 'OUT_DOC_CURRENT_REVISION' => 5, 'OUT_DOC_FIELD_MAPPING' => 6, 'OUT_DOC_VERSIONING' => 7, 'OUT_DOC_DESTINATION_PATH' => 8, 'OUT_DOC_TAGS' => 9, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+		BasePeer::TYPE_PHPNAME => array ('OutDocUid' => 0, 'ProUid' => 1, 'OutDocLandscape' => 2, 'OutDocMedia' => 3, 'OutDocLeftMargin' => 4, 'OutDocRightMargin' => 5, 'OutDocTopMargin' => 6, 'OutDocBottomMargin' => 7, 'OutDocGenerate' => 8, 'OutDocType' => 9, 'OutDocCurrentRevision' => 10, 'OutDocFieldMapping' => 11, 'OutDocVersioning' => 12, 'OutDocDestinationPath' => 13, 'OutDocTags' => 14, ),
+		BasePeer::TYPE_COLNAME => array (OutputDocumentPeer::OUT_DOC_UID => 0, OutputDocumentPeer::PRO_UID => 1, OutputDocumentPeer::OUT_DOC_LANDSCAPE => 2, OutputDocumentPeer::OUT_DOC_MEDIA => 3, OutputDocumentPeer::OUT_DOC_LEFT_MARGIN => 4, OutputDocumentPeer::OUT_DOC_RIGHT_MARGIN => 5, OutputDocumentPeer::OUT_DOC_TOP_MARGIN => 6, OutputDocumentPeer::OUT_DOC_BOTTOM_MARGIN => 7, OutputDocumentPeer::OUT_DOC_GENERATE => 8, OutputDocumentPeer::OUT_DOC_TYPE => 9, OutputDocumentPeer::OUT_DOC_CURRENT_REVISION => 10, OutputDocumentPeer::OUT_DOC_FIELD_MAPPING => 11, OutputDocumentPeer::OUT_DOC_VERSIONING => 12, OutputDocumentPeer::OUT_DOC_DESTINATION_PATH => 13, OutputDocumentPeer::OUT_DOC_TAGS => 14, ),
+		BasePeer::TYPE_FIELDNAME => array ('OUT_DOC_UID' => 0, 'PRO_UID' => 1, 'OUT_DOC_LANDSCAPE' => 2, 'OUT_DOC_MEDIA' => 3, 'OUT_DOC_LEFT_MARGIN' => 4, 'OUT_DOC_RIGHT_MARGIN' => 5, 'OUT_DOC_TOP_MARGIN' => 6, 'OUT_DOC_BOTTOM_MARGIN' => 7, 'OUT_DOC_GENERATE' => 8, 'OUT_DOC_TYPE' => 9, 'OUT_DOC_CURRENT_REVISION' => 10, 'OUT_DOC_FIELD_MAPPING' => 11, 'OUT_DOC_VERSIONING' => 12, 'OUT_DOC_DESTINATION_PATH' => 13, 'OUT_DOC_TAGS' => 14, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
 	/**
@@ -193,6 +208,16 @@ abstract class BaseOutputDocumentPeer {
 		$criteria->addSelectColumn(OutputDocumentPeer::PRO_UID);
 
 		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_LANDSCAPE);
+
+		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_MEDIA);
+
+		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_LEFT_MARGIN);
+
+		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_RIGHT_MARGIN);
+
+		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_TOP_MARGIN);
+
+		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_BOTTOM_MARGIN);
 
 		$criteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_GENERATE);
 

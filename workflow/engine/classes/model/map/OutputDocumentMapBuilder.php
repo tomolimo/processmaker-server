@@ -70,6 +70,16 @@ class OutputDocumentMapBuilder {
 
 		$tMap->addColumn('OUT_DOC_LANDSCAPE', 'OutDocLandscape', 'int', CreoleTypes::TINYINT, true, null);
 
+		$tMap->addColumn('OUT_DOC_MEDIA', 'OutDocMedia', 'string', CreoleTypes::VARCHAR, true, 10);
+
+		$tMap->addColumn('OUT_DOC_LEFT_MARGIN', 'OutDocLeftMargin', 'int', CreoleTypes::INTEGER, false, null);
+
+		$tMap->addColumn('OUT_DOC_RIGHT_MARGIN', 'OutDocRightMargin', 'int', CreoleTypes::INTEGER, false, null);
+
+		$tMap->addColumn('OUT_DOC_TOP_MARGIN', 'OutDocTopMargin', 'int', CreoleTypes::INTEGER, false, null);
+
+		$tMap->addColumn('OUT_DOC_BOTTOM_MARGIN', 'OutDocBottomMargin', 'int', CreoleTypes::INTEGER, false, null);
+
 		$tMap->addColumn('OUT_DOC_GENERATE', 'OutDocGenerate', 'string', CreoleTypes::VARCHAR, true, 10);
 
 		$tMap->addColumn('OUT_DOC_TYPE', 'OutDocType', 'string', CreoleTypes::VARCHAR, true, 32);

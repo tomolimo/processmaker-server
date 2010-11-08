@@ -401,6 +401,24 @@ class CaseScheduler extends BaseCaseScheduler {
               'WS_ROUTE_CASE_STATUS' => '' 
           );
           
+          //If there is a trigger that is registered to do this then transfer control
+          $oPluginRegistry =& PMPluginRegistry::getSingleton();
+          $activePluginsForCaseScheduler=$oPluginRegistry->getCaseSchedulerPlugins();
+          if(isset($caseSchedulerPluginDetail[0])){
+            $caseSchedulerSelected=$caseSchedulerPluginDetail[0];
+          }
+          if((isset($caseSchedulerSelected))&&(is_object($caseSchedulerSelected))){
+            eprint(" - Transfering control to a Plugin: ".$caseSchedulerSelected->sNamespace.".............");
+            $oData['OBJ_SOAP'] =$client;
+      $paramsLogResultFromPlugin=$oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionExecute, $oData );
+      
+      $paramsLog['WS_CREATE_CASE_STATUS']=$paramsLogResultFromPlugin['paramsLogCreate'];
+      $paramsLog['WS_ROUTE_CASE_STATUS']=$paramsLogResultFromPlugin['paramsLogRoute'];
+      
+      $paramsLogResult=$paramsLogResultFromPlugin['paramsLogResult'];
+$paramsRouteLogResult=$paramsLogResultFromPlugin['paramsRouteLogResult'];
+          }else{
+          
           eprint(" - Creating the new case.............");
           $result = $client->__SoapCall ( 'NewCase', array (
               $params 
@@ -437,6 +455,7 @@ class CaseScheduler extends BaseCaseScheduler {
             $paramsLog ['WS_CREATE_CASE_STATUS'] = strip_tags ( $result->message );
             $paramsLogResult = 'FAILED';
           
+          }
           }
         } else {
           eprintln($result->message, 'red');

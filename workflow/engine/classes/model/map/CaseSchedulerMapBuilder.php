@@ -112,6 +112,8 @@ class CaseSchedulerMapBuilder {
 
 		$tMap->addColumn('SCH_REPEAT_STOP_IF_RUNNING', 'SchRepeatStopIfRunning', 'int', CreoleTypes::TINYINT, false, null);
 
+		$tMap->addColumn('CASE_SH_PLUGIN_UID', 'CaseShPluginUid', 'string', CreoleTypes::VARCHAR, false, 100);
+
 	} // doBuild()
 
 } // CaseSchedulerMapBuilder

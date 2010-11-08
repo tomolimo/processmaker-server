@@ -195,6 +195,13 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	 */
 	protected $sch_repeat_stop_if_running = 0;
 
+
+	/**
+	 * The value for the case_sh_plugin_uid field.
+	 * @var        string
+	 */
+	protected $case_sh_plugin_uid;
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -571,6 +578,17 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	{
 
 		return $this->sch_repeat_stop_if_running;
+	}
+
+	/**
+	 * Get the [case_sh_plugin_uid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getCaseShPluginUid()
+	{
+
+		return $this->case_sh_plugin_uid;
 	}
 
 	/**
@@ -1112,6 +1130,28 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	} // setSchRepeatStopIfRunning()
 
 	/**
+	 * Set the value of [case_sh_plugin_uid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setCaseShPluginUid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->case_sh_plugin_uid !== $v) {
+			$this->case_sh_plugin_uid = $v;
+			$this->modifiedColumns[] = CaseSchedulerPeer::CASE_SH_PLUGIN_UID;
+		}
+
+	} // setCaseShPluginUid()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1176,12 +1216,14 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 
 			$this->sch_repeat_stop_if_running = $rs->getInt($startcol + 23);
 
+			$this->case_sh_plugin_uid = $rs->getString($startcol + 24);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 24; // 24 = CaseSchedulerPeer::NUM_COLUMNS - CaseSchedulerPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 25; // 25 = CaseSchedulerPeer::NUM_COLUMNS - CaseSchedulerPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating CaseScheduler object", $e);
@@ -1456,6 +1498,9 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			case 23:
 				return $this->getSchRepeatStopIfRunning();
 				break;
+			case 24:
+				return $this->getCaseShPluginUid();
+				break;
 			default:
 				return null;
 				break;
@@ -1500,6 +1545,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$keys[21] => $this->getSchRepeatEvery(),
 			$keys[22] => $this->getSchRepeatUntil(),
 			$keys[23] => $this->getSchRepeatStopIfRunning(),
+			$keys[24] => $this->getCaseShPluginUid(),
 		);
 		return $result;
 	}
@@ -1603,6 +1649,9 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			case 23:
 				$this->setSchRepeatStopIfRunning($value);
 				break;
+			case 24:
+				$this->setCaseShPluginUid($value);
+				break;
 		} // switch()
 	}
 
@@ -1650,6 +1699,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[21], $arr)) $this->setSchRepeatEvery($arr[$keys[21]]);
 		if (array_key_exists($keys[22], $arr)) $this->setSchRepeatUntil($arr[$keys[22]]);
 		if (array_key_exists($keys[23], $arr)) $this->setSchRepeatStopIfRunning($arr[$keys[23]]);
+		if (array_key_exists($keys[24], $arr)) $this->setCaseShPluginUid($arr[$keys[24]]);
 	}
 
 	/**
@@ -1685,6 +1735,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CaseSchedulerPeer::SCH_REPEAT_EVERY)) $criteria->add(CaseSchedulerPeer::SCH_REPEAT_EVERY, $this->sch_repeat_every);
 		if ($this->isColumnModified(CaseSchedulerPeer::SCH_REPEAT_UNTIL)) $criteria->add(CaseSchedulerPeer::SCH_REPEAT_UNTIL, $this->sch_repeat_until);
 		if ($this->isColumnModified(CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING)) $criteria->add(CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING, $this->sch_repeat_stop_if_running);
+		if ($this->isColumnModified(CaseSchedulerPeer::CASE_SH_PLUGIN_UID)) $criteria->add(CaseSchedulerPeer::CASE_SH_PLUGIN_UID, $this->case_sh_plugin_uid);
 
 		return $criteria;
 	}
@@ -1784,6 +1835,8 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 		$copyObj->setSchRepeatUntil($this->sch_repeat_until);
 
 		$copyObj->setSchRepeatStopIfRunning($this->sch_repeat_stop_if_running);
+
+		$copyObj->setCaseShPluginUid($this->case_sh_plugin_uid);
 
 
 		$copyObj->setNew(true);

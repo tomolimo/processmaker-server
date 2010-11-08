@@ -7397,6 +7397,16 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="CASE_SH_PLUGIN_UID" type="VARCHAR" size="100" required="false">
+      <vendor type="mysql">
+        <parameter name="Field" value="CASE_SH_PLUGIN_UID"/>
+        <parameter name="Type" value="varchar(100)"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
 
   </table>
 

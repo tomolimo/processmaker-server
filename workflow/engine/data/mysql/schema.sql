@@ -1210,6 +1210,7 @@ CREATE TABLE `CASE_SCHEDULER`
 	`SCH_REPEAT_EVERY` VARCHAR(15)  NOT NULL,
 	`SCH_REPEAT_UNTIL` VARCHAR(15)  NOT NULL,
 	`SCH_REPEAT_STOP_IF_RUNNING` TINYINT default 0,
+	`CASE_SH_PLUGIN_UID` VARCHAR(100),
 	PRIMARY KEY (`SCH_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Conditions store to show or hide dynaform fields..';
 #-----------------------------------------------------------------------------
