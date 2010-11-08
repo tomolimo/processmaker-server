@@ -38,14 +38,14 @@
               </tr>
               
                                                <tr>
-              <td class="FormTitle" colspan="2" align="">{$form.BUSINESS_DAY_TITLE}</td>
+              <td class="FormTitle" colspan="2" align="">{$form.BUSINESS_DAY_STATUS} {$form.BUSINESS_DAY_TITLE}</td>
              </tr>
-                                               <tr>
+                                               <tr id="gridbusiness">
               <td colspan="2">{$form.BUSINESS_DAY}</td>
              </tr>
                                                <tr>
 
-                                                   <td class="FormTitle" colspan="2" align="rigth">{$form.HOLIDAY_STATUS} {$form.HOLIDAY_LABEL}  <a href="#" onclick="hiddenholidays(); return false;"><span id="down" align="rigth" style="display:none;"> <img src="/images/closereg.gif" /></span></a> <a href="#" onclick="showholidays(); return false;"><span id="up"><img src="/images/Openreg.gif" ></span></a></td>
+                                                   <td class="FormTitle" colspan="2" align="rigth">{$form.HOLIDAY_STATUS} {$form.HOLIDAY_LABEL}  <a href="#" onclick="hiddenholidays(); return false;"><span id="down" align="rigth" style="display:none;"> <img src="/images/closereg.gif" /></span></a> <a href="#" onclick="showholidays(); return false;"><span id="up" style="display:none;"><img src="/images/Openreg.gif" ></span></a></td>
                                                </tr>
                                                <tr id="gridholi" style="display:none;">
               <td colspan="2">{$form.HOLIDAY}</td>
