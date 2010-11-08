@@ -468,6 +468,6 @@ try {
   	die($sOutput);
 }
 catch (Exception $oException) {
-	die($oException->getMessage());
+	die($oException->getMessage() . "\n" . $oException->getTraceAsString());
 }
 ?>
