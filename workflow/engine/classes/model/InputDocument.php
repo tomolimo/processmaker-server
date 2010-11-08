@@ -77,6 +77,24 @@ class InputDocument extends BaseInputDocument {
     }
   }
 
+  public function getByUid($sInpDocUid)
+  {
+    try {
+      $oInputDocument = InputDocumentPeer::retrieveByPK($sInpDocUid);
+      if( is_null($oInputDocument))
+        return false;
+      
+      $aFields = $oInputDocument->toArray(BasePeer::TYPE_FIELDNAME);
+      $aFields['INP_DOC_TITLE']       = $oInputDocument->getInpDocTitle();
+      $aFields['INP_DOC_DESCRIPTION'] = $oInputDocument->getInpDocDescription();
+      $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+      return $aFields;
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
   /**
    * Create the application document registry
    * @param array $aData

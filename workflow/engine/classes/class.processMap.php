@@ -702,7 +702,9 @@ class processMap {
             break;
           case 'INPUT_DOCUMENT' :
             $oInputDocument = new InputDocument ( );
-            $aFields = $oInputDocument->load($aRow ['STEP_UID_OBJ']);
+            $aFields = $oInputDocument->getByUid($aRow ['STEP_UID_OBJ']);
+            if( $aFields === false )
+              continue;
             $sTitle = $aFields ['INP_DOC_TITLE'];
             break;
           case 'OUTPUT_DOCUMENT' :
