@@ -171,7 +171,7 @@ Ext.onReady(function(){
   /**
    * Menu Panel
    */
-  var treeMenuItems = {
+  var treeMenuItems = new Ext.tree.TreePanel({
     xtype: 'treepanel',
     height: 350,
     id: 'tree-panel',
@@ -230,15 +230,23 @@ Ext.onReady(function(){
           }
         })*/
         
-      },
+      }/*,
       'afterrender': {
-        fn: setDefaultOption,
+        fn: setNode,
         scope: this
-      }
+      }*/
       
     }
-  }
-  
+  });
+
+  var loader = treeMenuItems.getLoader();
+  loader.on("load", function(){
+    node = Ext.getCmp('tree-panel').getNodeById("CASES_INBOX");
+    node.select();
+  });
+
+
+
   var treeMenuItemDetail = new Ext.tree.TreePanel({
       id: 'tree_menuItem_detail',
       region: 'south',
@@ -645,6 +653,6 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
 });
 
 function setDefaultOption(){
-  document.getElementById('casesSubFrame').src = "casesListExtJs";
+  //document.getElementById('casesSubFrame').src = "casesListExtJs";
 }
 

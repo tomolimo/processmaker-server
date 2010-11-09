@@ -12,7 +12,7 @@
 }
 </style>
 <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
-<iframe name="casesFrame" id="casesFrame" src ="../cases/main_init" width="99%" height="200" frameborder="0">
+<iframe name="casesFrame" id="casesFrame" src ="../cases/main_init" width="99%" height="768" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>
 </body>
