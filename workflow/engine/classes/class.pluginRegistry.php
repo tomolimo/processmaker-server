@@ -900,14 +900,14 @@ class PMPluginRegistry {
    * Register a Case Scheduler Plugin
    *
    */
-  function registerCaseSchedulerPlugin($sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute) {
+  function registerCaseSchedulerPlugin($sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields) {
     $found = false;
     foreach ( $this->_aCaseSchedulerPlugin as $row=>$detail )
       if ( $sActionId == $detail->sActionId && $sNamespace == $detail->sNamespace )
         $found = true;
 
     if ( !$found ) {
-      $this->_aCaseSchedulerPlugin[] = new caseSchedulerPlugin ( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute);
+      $this->_aCaseSchedulerPlugin[] = new caseSchedulerPlugin ( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields);
     }
   }
 /**
