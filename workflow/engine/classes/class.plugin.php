@@ -276,6 +276,7 @@ class caseSchedulerPlugin {
   var $sActionForm;
   var $sActionSave;
   var $sActionExecute;
+  var $sActionGetFields;
 
   /**
   * This function is the constructor of the caseSchedulerPlugin class
@@ -284,14 +285,16 @@ class caseSchedulerPlugin {
   * @param string $sActionForm
   * @param string $sActionSave
   * @param string $sActionExecute
+  * $param string $sActionGetFields
   * @return void
   */
-  function __construct( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute ) {
+  function __construct( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields ) {
     $this->sNamespace     = $sNamespace;
     $this->sActionId        = $sActionId;
     $this->sActionForm      = $sActionForm;
     $this->sActionSave     = $sActionSave;
     $this->sActionExecute = $sActionExecute;
+    $this->sActionGetFields = $sActionGetFields;
    }
 }
 
@@ -509,8 +512,8 @@ class PMPlugin {
   * @param
   * @return void
   */
-  function registerCaseSchedulerPlugin($sActionId, $sActionForm, $sActionSave, $sActionExecute) {
+  function registerCaseSchedulerPlugin($sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields) {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute );
+    $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields );
   }
 }

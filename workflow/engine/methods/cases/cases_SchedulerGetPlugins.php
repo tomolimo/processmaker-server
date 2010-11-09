@@ -19,6 +19,10 @@ $functionParams = isset($_REQUEST ['params'] ) ? $_REQUEST ['params'] : array ()
 
 $functionName ( $functionParams );
 
+function searchSavedJob($schUid){
+  
+}
+
 function pluginsList(){
 $oPluginRegistry =& PMPluginRegistry::getSingleton();
 $activePluginsForCaseScheduler=$oPluginRegistry->getCaseSchedulerPlugins();

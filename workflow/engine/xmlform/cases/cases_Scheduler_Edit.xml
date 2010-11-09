@@ -237,6 +237,9 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 <en>If the task is still running, stop it at this time</en>
 </SCH_REPEAT_STOP_IF_RUNNING>
 //-->
+<SELECT_PLUGIN type="subtitle" enablehtml="1">
+<en>Start a case based on following registered Plugin.</en>
+</SELECT_PLUGIN>
 
 <UPDATE type="submit" onClick="if(validateSchedulerFields()) {return true;} else {return false;}">
 <en>Update</en>
@@ -283,6 +286,8 @@ function hideProperties(){
         document.getElementById('form[EDIT_USER]').style.display='none';
         document.getElementById('form[PERFORM_TASK]').style.display='none';
         document.getElementById('form[SELECT_TIME_DAY]').style.display='none';
+        document.getElementById('form[SELECT_PLUGIN]').style.display='none';
+        document.getElementById('form[SELECT_PLUGIN]').style.display='none';
         // end of enabling
 }
 
@@ -334,6 +339,7 @@ function disableAdvanced(){
 }
 
 function hideAll() {
+    contractSubtitle('SELECT_PLUGIN');
 	contractSubtitle('SELECT_TIME_DAY');
 	contractSubtitle('SELECT_DATE');
 	contractSubtitle('SELECT_1');
@@ -342,11 +348,52 @@ function hideAll() {
 	//contractSubtitle('ADVANCED_4');
 
 }
+function showPluginSelection(opt) {
+document.getElementById("pluginsListContent").innerHTML ="";
+if(opt!=""){
+var oRPCProcess = new leimnud.module.rpc.xmlhttp({
+            url   : '../cases/cases_SchedulerGetPlugins',
+            async : true,
+            method: 'POST',
+            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt
+       });
+       oRPCProcess.callback = function(rpc){
+       //alert(rpc.xmlhttp.responseText);
+       if(rpc.xmlhttp.responseText!=""){
+        
+        document.getElementById("pluginsListContent").innerHTML = rpc.xmlhttp.responseText;
+       }
+                
+       }.extend(this);
 
+       oRPCProcess.make();
+}
+}
 function showSelection(opt) {
 	if (opt!=0) {
 		expandSubtitle('SELECT_TIME_DAY');
-		getField('UPDATE').disabled=false;	
+		getField('UPDATE').disabled=false;
+		
+		var oRPCProcess = new leimnud.module.rpc.xmlhttp({
+            url   : '../cases/cases_SchedulerGetPlugins',
+            async : true,
+            method: 'POST',
+            args  : "action=pluginsList&sch_uid="+getField('SCH_UID').value
+       });
+
+       oRPCProcess.callback = function(rpc){
+       //alert(rpc.xmlhttp.responseText);
+       if(rpc.xmlhttp.responseText!=""){
+        document.getElementById('form[SELECT_PLUGIN]').style.display='';
+        expandSubtitle('SELECT_PLUGIN');
+        document.getElementById("pluginsListDropdown").innerHTML = rpc.xmlhttp.responseText;
+       }
+                
+       }.extend(this);
+
+       oRPCProcess.make();
+		
+			
 	} else {
 		contractSubtitle('SELECT_TIME_DAY');
 		getField('UPDATE').disabled=true;	
