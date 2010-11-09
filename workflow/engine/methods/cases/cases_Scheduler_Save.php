@@ -202,6 +202,10 @@ try {
 
 
   }
+  
+  if((isset($_POST['form']['CASE_SH_PLUGIN_UID']))&&($_POST['form']['CASE_SH_PLUGIN_UID']!="")){
+    $aData['CASE_SH_PLUGIN_UID'] = $_POST['form']['CASE_SH_PLUGIN_UID'];
+  }
  	//$aData['SCH_END_DATE'] = "2020-12-30";
   $oCaseScheduler->create($aData);
   if((isset($_POST['form']['CASE_SH_PLUGIN_UID']))&&($_POST['form']['CASE_SH_PLUGIN_UID']!="")){

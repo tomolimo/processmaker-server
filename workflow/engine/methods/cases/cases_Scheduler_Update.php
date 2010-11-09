@@ -244,6 +244,24 @@ try {
 //	 	var_dump ($aData['SCH_TIME_NEXT_RUN']);
 //                die;
 	$oCaseScheduler ->Update($aData);
+	if((isset($_POST['form']['CASE_SH_PLUGIN_UID']))&&($_POST['form']['CASE_SH_PLUGIN_UID']!="")){
+    $params=explode("--",$_REQUEST ['form']['CASE_SH_PLUGIN_UID']);
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $activePluginsForCaseScheduler=$oPluginRegistry->getCaseSchedulerPlugins();
+
+    foreach($activePluginsForCaseScheduler as $key => $caseSchedulerPluginDetail){
+      if(($caseSchedulerPluginDetail->sNamespace==$params[0])&&($caseSchedulerPluginDetail->sActionId==$params[1])){
+        $caseSchedulerSelected=$caseSchedulerPluginDetail;
+         
+      }
+    }
+    if((isset($caseSchedulerSelected))&&(is_object($caseSchedulerSelected))){
+      //Save the form
+      $oData=$_POST['pluginFields'];
+      $oData['SCH_UID'] =$aData['SCH_UID'];
+      $oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionSave, $oData );
+    }
+  }
 
 	G::header('location: cases_Scheduler_List');
   

@@ -241,6 +241,10 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 <en>Start a case based on following registered Plugin.</en>
 </SELECT_PLUGIN>
 
+<CASE_SH_PLUGIN_UID type="hidden" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
+
+</CASE_SH_PLUGIN_UID>
+
 <UPDATE type="submit" onClick="if(validateSchedulerFields()) {return true;} else {return false;}">
 <en>Update</en>
 </UPDATE>
@@ -355,7 +359,7 @@ var oRPCProcess = new leimnud.module.rpc.xmlhttp({
             url   : '../cases/cases_SchedulerGetPlugins',
             async : true,
             method: 'POST',
-            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt
+            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt+"&sch_uid="+getField('SCH_UID').value
        });
        oRPCProcess.callback = function(rpc){
        //alert(rpc.xmlhttp.responseText);
@@ -373,12 +377,12 @@ function showSelection(opt) {
 	if (opt!=0) {
 		expandSubtitle('SELECT_TIME_DAY');
 		getField('UPDATE').disabled=false;
-		
+		plgUid=getField('CASE_SH_PLUGIN_UID').value;
 		var oRPCProcess = new leimnud.module.rpc.xmlhttp({
             url   : '../cases/cases_SchedulerGetPlugins',
             async : true,
             method: 'POST',
-            args  : "action=pluginsList&sch_uid="+getField('SCH_UID').value
+            args  : "action=pluginsList&sch_uid="+getField('SCH_UID').value+"&plg_uid="+getField('CASE_SH_PLUGIN_UID').value
        });
 
        oRPCProcess.callback = function(rpc){
@@ -387,6 +391,7 @@ function showSelection(opt) {
         document.getElementById('form[SELECT_PLUGIN]').style.display='';
         expandSubtitle('SELECT_PLUGIN');
         document.getElementById("pluginsListDropdown").innerHTML = rpc.xmlhttp.responseText;
+        showPluginSelection(plgUid);
        }
                 
        }.extend(this);

@@ -26,14 +26,18 @@ function searchSavedJob($schUid){
 function pluginsList(){
 $oPluginRegistry =& PMPluginRegistry::getSingleton();
 $activePluginsForCaseScheduler=$oPluginRegistry->getCaseSchedulerPlugins();
+$selectedPlugin="";
+if((isset($_REQUEST['plg_uid']))&&($_REQUEST['plg_uid']!="")) $selectedPlugin=$_REQUEST['plg_uid'];
 if(!empty($activePluginsForCaseScheduler)){
   echo '<select style="width: 300px;" name="form[CASE_SH_PLUGIN_UID]" id="form[CASE_SH_PLUGIN_UID]" class="module_app_input___gray" required="1" onChange="showPluginSelection(this.options[this.selectedIndex].value)">';
   echo "<option value=\"\">- Select -</option>";
   foreach($activePluginsForCaseScheduler as $key => $caseSchedulerPluginDetail){
     $sActionId=$caseSchedulerPluginDetail->sActionId;
     $sNamespace=$caseSchedulerPluginDetail->sNamespace;
-    
-    echo "<option value=\"".$sNamespace."--".$sActionId."\">".$sActionId."</option>";
+    $optionId=$sNamespace."--".$sActionId;
+    $selectedOption="";    
+    if($selectedPlugin==$optionId) $selectedOption="selected";
+    echo "<option value=\"$optionId\" $selectedOption>".$sActionId."</option>";
   }
   echo '</select>';
     //G::pr($activePlugnsForCaseScheduler);
@@ -54,7 +58,13 @@ function pluginCaseSchedulerForm(){
   }
   if((isset($caseSchedulerSelected))&&(is_object($caseSchedulerSelected))){
     //Render the form
-      $oData=array();
+      if((isset($_REQUEST['sch_uid']))&&($_REQUEST['sch_uid']!="")){
+        //$oData=$oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionGetFields, array("SCH_UID"=>$_REQUEST['sch_uid']) );
+        $oData=array("SCH_UID"=>$_REQUEST['sch_uid']);
+      }else{
+        $oData=array();
+      }
+      
       $oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionForm, $oData );   
   }
   

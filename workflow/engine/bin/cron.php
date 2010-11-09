@@ -53,7 +53,7 @@ for($i=1; $i<count($argv); $i++){
 
 //if $sDate is not set, so take the system time
 if($sDate!=''){
-  eprintln("[Aplying date filter: $sDate]");
+  eprintln("[Aplpying date filter: $sDate]");
 } else {
   $sDate = date('Y-m-d H:i:s');
 }
