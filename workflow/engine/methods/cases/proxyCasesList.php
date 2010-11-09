@@ -195,7 +195,7 @@
         )->addOr($Criteria->getNewCriterion(
           AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
         )->addOr($Criteria->getNewCriterion(
-          AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+          AppCacheViewPeer::APP_NUMBER, $search, Criteria::LIKE
         )->addOr($oTmpCriteria))
       ));
     } else {
@@ -205,7 +205,7 @@
         )->addOr($Criteria->getNewCriterion(
           AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
         )->addOr($Criteria->getNewCriterion(
-          AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+          AppCacheViewPeer::APP_NUMBER, $search, Criteria::LIKE
         ))
       ));
     }
@@ -219,7 +219,7 @@
         )->addOr($CriteriaCount->getNewCriterion(
           AppCacheViewPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE
         )->addOr($CriteriaCount->getNewCriterion(
-          AppCacheViewPeer::APP_NUMBER, '%' . $search . '%', Criteria::LIKE
+          AppCacheViewPeer::APP_NUMBER, $search, Criteria::LIKE
         ))
       ));
     }
