@@ -200,7 +200,17 @@ class Step extends BaseStep {
     }
   }
   function remove($sStepUID)
-  {
+  { 
+  	 require_once('classes/model/StepTrigger.php');
+  	 $oStepTriggers = new StepTrigger();
+  	 $oCriteria = new Criteria('workflow');
+		 $oCriteria->add(StepTriggerPeer::STEP_UID ,  $sStepUID);
+		 $oDataset = StepTriggerPeer::doSelectRS($oCriteria);
+		 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+		 while($oDataset->next()){
+     $aRow = $oDataset->getRow();
+     $oStepTriggers->remove($aRow['STEP_UID'], $aRow['TAS_UID'], $aRow['TRI_UID'], $aRow['ST_TYPE']);
+     }
     /*$con = Propel::getConnection(StepPeer::DATABASE_NAME);
     try
     {
@@ -368,6 +378,25 @@ class Step extends BaseStep {
     catch (Exception $oError) {
       throw($oError);
     }
+  }
+  
+  /**
+   * verify if a dynaform is assigned some steps
+   *
+   * @param      string $sproUid   the uid of the process
+   * @param      string $sObjUID   the uid of the dynaform
+   */
+  function loadInfoAssigDynaform($sproUid,$sObjUID){
+  
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(StepPeer::PRO_UID,  $sproUid);
+    $oCriteria->add(StepPeer::STEP_UID_OBJ,  $sObjUID);
+    $oCriteria->add(StepPeer::STEP_TYPE_OBJ,  'DYNAFORM');
+    $oDataset = StepPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    return($aRow);
   }
 
 } // Step

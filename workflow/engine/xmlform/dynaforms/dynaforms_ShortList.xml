@@ -2,6 +2,7 @@
 <dynaForm menu="dynaforms/dynaforms_Options" width="100%" rowsPerPage="12">
 
 <DYN_UID type="hidden" showInTable="0"/>
+<PRO_UID type="hidden" showInTable="1"/>
 
 <DYN_TITLE type="text" colWidth="300" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
   <en>Title</en>
@@ -13,7 +14,7 @@
 
 <EDIT type="link" colWidth="40" colAlign="left" titleAlign="left" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="dynaformEdit(@QDYN_UID);return false;"/>
 
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="dynaformDelete(@QDYN_UID);return false;"><en></en></DELETE>
+<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="dynaformDelete(@QDYN_UID,@QPRO_UID);return false;"><en></en></DELETE>
 
 <GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox(&#039;UID: &#039;+@QDYN_UID, &#039;info&#039;);return false;"/>
 

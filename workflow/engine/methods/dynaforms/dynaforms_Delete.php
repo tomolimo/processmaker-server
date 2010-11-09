@@ -47,6 +47,17 @@ $sfunction =$_POST['function'];
     }
     return print $result;
    break;
+   
+   case 'getDynaformAssign':
+   $oStep = new Step();
+    $aDependent=$oStep->loadInfoAssigDynaform($_POST['PRO_UID'],$_POST['DYN_UID']);
+    $result=false;
+    if(is_array($aDependent)){
+    	$result=true;
+    }
+    return print $result;
+   break;
+   
    case 'deleteDynaform':
    $dynaform = new dynaform();
    
