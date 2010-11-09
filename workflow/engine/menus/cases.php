@@ -51,7 +51,7 @@
   $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     '../appFolder/appFolderList',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
   
   if ( $RBAC->userCanAccess('PM_ALLCASES') == 1 ) {
-    //$G_TMP_MENU->AddIdRawOption('CASES_GRAL', 'cases_List?l=gral', G::LoadTranslation('ID_GENERAL'));
+    $G_TMP_MENU->AddIdRawOption('CASES_GRAL', 'casesListExtJs?action=gral', G::LoadTranslation('ID_GENERAL'));
   }
   
   $G_TMP_MENU->AddIdRawOption('SEARCHS',           '',                                 G::LoadTranslation('ID_CASES_MENU_SEARCH'),  '',                    '', 'blockHeader');
@@ -69,3 +69,5 @@
     //$G_TMP_MENU->AddIdRawOption('CASES_TO_REASSIGN_NORMAL', 'cases_List?l=to_reassign',   G::LoadTranslation('ID_TO_REASSIGN'),         'reassing.png'   );
     $G_TMP_MENU->AddIdRawOption('CASES_TO_REASSIGN', 'casesListExtJs?action=to_reassign', G::LoadTranslation('ID_TO_REASSIGN'),         'reassing.png'   );
   }
+
+

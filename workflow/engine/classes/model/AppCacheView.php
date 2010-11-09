@@ -18,6 +18,7 @@ require_once 'classes/model/om/BaseAppCacheView.php';
 require_once 'classes/model/Application.php';
 require_once 'classes/model/AppDelegation.php';
 require_once 'classes/model/AppDelay.php';
+require_once 'classes/model/Task.php';
 require_once 'classes/model/AdditionalTables.php';
  
 class AppCacheView extends BaseAppCacheView {
@@ -669,22 +670,25 @@ class AppCacheView extends BaseAppCacheView {
       return $oCriteria;
     }
   }
-
+  
+  /**
+   * gets the Criteria object for the general cases list.
+   * @param Boolean $doCount
+   * @return Criteria
+   */
   public function getGeneralCases($doCount='false'){
     if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
       $oCriteria  = new Criteria('workflow');
-    }
-    else {
+    } else {
       $oCriteria = $this->addPMFieldsToCriteria('completed');
     }
+    $oCriteria->addAsColumn( 'DEL_INDEX', 'MIN(' . AppCacheViewPeer::DEL_INDEX . ')' );
     $oCriteria->addJoin( AppCacheViewPeer::APP_UID, AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN );
-    $oCriteria->add( $oCriteria->getNewCriterion(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN')->addOr($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'COMPLETED')->addAnd($oCriteria->getNewCriterion(AppDelegationPeer::DEL_PREVIOUS, 0))));
-//    $oCriteria->add( AppDelegationPeer::DEL_PREVIOUS, 0 );
-//    $params = array();
-//    $sSql = BasePeer::createSelectSql($oCriteria, $params);
-//    var_dump($sSql);
-
-//    $oCriteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
+    $oCriteria->add ( $oCriteria->getNewCriterion(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN')->addOr($oCriteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, 'COMPLETED')->addAnd($oCriteria->getNewCriterion(AppDelegationPeer::DEL_PREVIOUS, 0))));
+    if (!$doCount){
+      $oCriteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
+    }
+//  $oCriteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
     return $oCriteria;
   }
 

@@ -431,7 +431,7 @@ Ext.onReady ( function() {
   storeReassignCases = new Ext.data.Store({
     remoteSort: false,
     proxy : proxyReassignCasesList,
-    reader: readerReassignCasesList,
+    reader: readerReassignCasesList
     //writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
     //autoSave: false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
@@ -978,6 +978,26 @@ Ext.onReady ( function() {
     ' ',
     ' '
   ];
+
+  var toolbarGeneral = [
+    btnRead,
+    '-',
+    btnUnread,
+    '-',
+    btnAll,
+    '->', // begin using the right-justified button container
+    TRANSLATIONS.ID_PROCESS,
+    comboProcess,
+    '-',
+    textSearch,
+    resetSearchButton,
+    btnSearch,
+    '-',
+    textJump,
+    btnJump,
+    ' ',
+    ' '
+  ];
   
   var toolbarUnassigned = [
     btnRead,
@@ -1119,8 +1139,9 @@ Ext.onReady ( function() {
     case 'sent'       : itemToolbar = toolbarSent;  break;
     case 'to_revise'  : itemToolbar = toolbarToRevise;  break;
     case 'to_reassign': itemToolbar = toolbarToReassign; break;
-    case 'search'     : itemToolbar = toolbarSearch;  break;
-    case 'unassigned' : itemToolbar = toolbarUnassigned;  break;
+    case 'search'     : itemToolbar = toolbarSearch;     break;
+    case 'unassigned' : itemToolbar = toolbarUnassigned; break;
+    case 'gral'       : itemToolbar = toolbarGeneral;    break;
     default           : itemToolbar = toolbarTodo; break;
   }
 
@@ -1188,7 +1209,7 @@ Ext.onReady ( function() {
     autoHeight: true,
     viewConfig: {
       forceFit:true
-    },
+    }
 /*
     listeners: {
       rowdblclick: function(grid, n,e){

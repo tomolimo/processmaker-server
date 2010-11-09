@@ -247,25 +247,25 @@
     // needs a litle bit of analysis to understant whats going on
     // first check if there is a PMTable defined within the list
     if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
-        // then
-        $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
-        $tableName = $oAdditionalTables->getAddTabName();
-        $tableName = strtolower($tableName);
-        $tableNameArray = explode('_',$tableName);
-        foreach ($tableNameArray as $item){
-          $newTableName[] = ucfirst($item);
-        }
-        $tableName = implode('',$newTableName);
+      // then
+      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
+      $tableName = $oAdditionalTables->getAddTabName();
+      $tableName = strtolower($tableName);
+      $tableNameArray = explode('_',$tableName);
+      foreach ($tableNameArray as $item){
+        $newTableName[] = ucfirst($item);
+      }
+      $tableName = implode('',$newTableName);
         //
-        if (class_exists($tableName)){
-          eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
-        } else {
-          require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
-          eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
-        }
-     } else {
-        $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
-     }
+      if (class_exists($tableName)){
+        eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
+      } else {
+        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
+        eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
+      }
+    } else {
+      $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
+    }
     $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
 
   }
@@ -501,6 +501,7 @@
       case 'gral' : //#, Case, task, process, due date, Last Modify
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
+        $rows[] = $fields['DEL_INDEX'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
