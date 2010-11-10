@@ -154,23 +154,20 @@ class Installer
     $test = $this->create_site_test();
     if($test['created']===true)
     {
-      $local = Array('localhost','127.0.0.1');
-
-      //      $this->wf_site_name = $wf = "wf_".$this->options['name'];
-      //
+      /* Check if the hostname is local (localhost or 127.0.0.1) */
+      $islocal = (strcmp(substr($this->options['database']['hostname'], 0, strlen('localhost')),'localhost')===0) ||
+	         (strcmp(substr($this->options['database']['hostname'], 0, strlen('127.0.0.1')),'127.0.0.1')===0);
 
       $this->wf_site_name = $wf = $this->options['advanced']['ao_db_wf'];
-
-//      $this->rbac_site_name = $rb = "rbac_".$this->options['name'];
 
       $this->rbac_site_name   = $rb = $this->options['advanced']['ao_db_rb'];
       $this->report_site_name = $rp = $this->options['advanced']['ao_db_rp'];
 
       $schema = "schema.sql";
-      $values = "insert.sql";   //noe existe
+      $values = "insert.sql";
 
       if($this->options['advanced']['ao_db_drop']===true) {
-        /* Create databases & users  */
+        /* Drop databases  */
         $q  = "DROP DATABASE IF EXISTS ".$wf;
         $ac = @mysql_query($q,$this->connection_database);
         $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
@@ -200,9 +197,8 @@ class Installer
 
       /* report DB end */
 
-      //$priv_wf = "GRANT ALL PRIVILEGES ON `".$wf.".* TO ".$wf."@`".$this->options['database']['hostname']."` IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
       if($this->cc_status==1) {
-        if(in_array($this->options['database']['hostname'],$local)) {
+        if($islocal) {
           $priv_wf = "GRANT ALL PRIVILEGES ON `".$wf."`.* TO ".$wf."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
         }
         else {
@@ -212,7 +208,7 @@ class Installer
         $this->log($priv_wf.": => ".((!$ac)?mysql_error():"OK")."\n");
 
 
-        if(in_array($this->options['database']['hostname'],$local)) {
+        if($islocal) {
           $priv_rb = "GRANT ALL PRIVILEGES ON `".$rb."`.* TO ".$rb."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
         }
         else {
@@ -223,13 +219,11 @@ class Installer
 
         /* report DB begin */
 
-        if(in_array($this->options['database']['hostname'],$local)) {
+        if($islocal) {
           $priv_rp = "GRANT ALL PRIVILEGES ON `".$rp."`.* TO ".$rp."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-          //$priv_rp = "GRANT ALL PRIVILEGES ON `".$rp."`.* TO ".$wf."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
         }
         else {
           $priv_rp = "GRANT ALL PRIVILEGES ON `".$rp."`.* TO ".$rp."@'%' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-          //$priv_rp = "GRANT ALL PRIVILEGES ON `".$rp."`.* TO ".$wf."@'%' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
         }
         $ac = @mysql_query($priv_rp,$this->connection_database);
         $this->log($priv_rp.": => ".((!$ac)?mysql_error():"OK")."\n");
@@ -239,15 +233,13 @@ class Installer
 
       /* Dump schema workflow && data  */
 
-      $this->log("Dump schema workflow/rbac && data\n====================================\n");
+      $this->log("Importing database schema\n");
       $myPortA = explode(":",$this->options['database']['hostname']);
       if(count($myPortA)<2) {
         $myPortA[1]="3306";
       }
       $myPort = $myPortA[1];
       $this->options['database']['hostname'] = $myPortA[0];
-
-      $this->log("Mysql port: ".$myPort."\n");
 
       mysql_select_db($wf,$this->connection_database);
       $pws = PATH_WORKFLOW_MYSQL_DATA.$schema;
@@ -331,51 +323,28 @@ class Installer
     $report = array(
       'SQL_FILE' => $file,
       'errors'   => array(),
-      'querys'   => 0
+      'queries'   => 0
     );
-    /** Deprecated
-     * new routines written for this process....
-     * evaluating its performance..... So, that why this deprecated code was not deleted yet..
-     * the problem with this code is the \n dependence,.. in insert.sql always not ending with \n
-     * <erik@colosa.com>
-     * ........................................................... 
-    $content = @fread(@fopen($file,"rt"),@filesize($file));
-    if(!$content)
-    {
-      $report['errors']="Error reading SQL";
-      return $report;
-    }
-    $ret = array();
-    for ($i=0 ; $i < strlen($content)-1; $i++)
-    {
-      if ( $content[$i] == ";" )
-      {
-              if ( $content[$i+1] == "\n" )
-              {
-          $ret[] = substr($content, 0, $i);
-          $content = substr($content, $i + 1);
-          $i = 0;
-              }
-          }
-      }
-      */
     
-    #<--
     if( !is_file($file) ) {
       $report['errors']="Error reading SQL";
       return $report;
     }
     $content = file_get_contents($file);
     $ret     = explode(';', $content);
-    #-->
-    
-    $report['querys'] = count($ret);
+
+    /* Count successful queries only */
+    $report['queries'] = 0;
     @mysql_query("SET NAMES 'utf8';");
-    
-    foreach($ret as $qr) {
-      $re = @mysql_query($qr, $connection);
-      if(!$re) {
-        $report['errors'][] = "Query error: ".mysql_error();
+
+    foreach($ret as $i => $qr) {
+      /* Make sure we have a query to execute, then execute it */
+      if (trim($qr) != "") {
+          if(!@mysql_query($qr, $connection)) {
+              $report['errors'][] = "Error in query ".$i.": ".mysql_error();
+          } else {
+              $report['queries'] += 1;
+          }
       }
     }
     return $report;

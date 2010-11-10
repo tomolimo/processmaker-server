@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-print " ";
+
 $isWindows = PHP_OS == 'WINNT' ? true : false;
 
 $oJSON   = new Services_JSON();
@@ -40,10 +40,11 @@ function find_SQL_Version($my = 'mysql',$infExe)
 }
 if($action==="check")
 {
+	/* TODO: Check if this space is required */
+	print " ";
 	G::LoadClass('Installer');
 	$inst = new Installer();
 	$siteName="workflow";
-//	print_r($dataClient);
 	$p1 = (isset($dataClient->ao_admin_pass1))?$dataClient->ao_admin_pass1:'admin';
 	$p2 = (isset($dataClient->ao_admin_pass2))?$dataClient->ao_admin_pass2:'admin';
 	$s = $inst->create_site(Array(
@@ -56,7 +57,7 @@ if($action==="check")
 			'ao_db_drop'=>(isset($dataClient->ao_db_drop) && $dataClient->ao_db_drop===true)?true:false,
 			'ao_db_wf'=>(isset($dataClient->ao_db_wf))?$dataClient->ao_db_wf:'wf_'.$siteName,
 			'ao_db_rb'=>(isset($dataClient->ao_db_rb))?$dataClient->ao_db_rb:'rb_'.$siteName,
-			'ao_db_rp'=>(isset($dataClient->ao_db_rp))?$dataClient->ao_db_rp:'rp'.$siteName
+			'ao_db_rp'=>(isset($dataClient->ao_db_rp))?$dataClient->ao_db_rp:'rp_'.$siteName
 		),
 		'database'=>Array(
 			'hostname'=>$dataClient->mysqlH,
@@ -64,8 +65,6 @@ if($action==="check")
 			'password'=>$dataClient->mysqlP
 		)
 	));
-	//print_r($inst);
-	//print_r($s);
 	$data=null;
 	$data->phpVersion	=(version_compare(PHP_VERSION,"5.1.0",">=") && version_compare(PHP_VERSION,"5.3.0","<") )?true:false;
 	if(trim($dataClient->mysqlH)=='' || trim($dataClient->mysqlU)=='')
@@ -108,13 +107,10 @@ if($action==="check")
 }
 else if($action==="install")
 {
-	print_r("POST:\n");
-	print_r($_POST);
-	print_r("\n------------------------------------------------\n");
 	/*
-	 * InstalaciC3n son SIMPLE POST
+	 * Installation with SIMPLE POST
 	 *
-	 * Datos necesarios por POST:
+	 * Data necessary for the POST:
 	 *
 	 *
 	 * 	action=install
@@ -123,36 +119,37 @@ else if($action==="install")
 	 * 		"mysqlU":"mysqlUsername",
 	 * 		"mysqlP":"mysqlPassword",
 	 * 		"path_data":"/path/to/workflow_data/",
-	 * 		"path_compiled":"/path/to/compiled/"}
+	 * 		"path_compiled":"/path/to/compiled/",
+         *              "heartbeatEnabled":"1"}
 	 *
 	 *--------------------------------------------------------------------------------------------------------------
 	 *
-	 * Pasos para instalar.
-	 * 1) Se necesita los datos:
+	 * Steps to install.
+	 * 1) This data is required:
 	 * 	$HOSTNAME
 	 * 	$USERNAME
 	 * 	$PASSWORD
 	 * 	$PATH_TO_WORKFLOW_DATA
 	 * 	$PATH_TO_COMPILED DATA
-	 * 2) crear $PATH_TO_WORKFLOW_DATA
-	 * 3) crear $PATH_TO_COMPILED_DATA
-	 * 4) Crear el sitio workflow
+	 * 2) create $PATH_TO_WORKFLOW_DATA
+	 * 3) create $PATH_TO_COMPILED_DATA
+	 * 4) Create the site workflow
 	 *
-	 * 	4.1 Crear el usuario (mysql) wf_workflow , password: sample
-	 *		4.1.1 Crear base de datos wf_workflow con el actual usuario
-	 *		4.1.2 Darle todos los privilegios sobre la base de datos wf_workflow al usuario wf_workflow
-	 *		4.1.3 Dump del archivo processmaker/workflow/engine/data/mysql/schema.sql
-	 *		4.1.4 Dump del archivo processmaker/workflow/engine/data/mysql/insert.sql
+	 * 	4.1 Create user (mysql) wf_workflow , password: sample
+	 *		4.1.1 Create database wf_workflow with user wf_workflow
+	 *		4.1.2 Give all priviledges to database wf_workflow for user wf_workflow
+	 *		4.1.3 Dump file processmaker/workflow/engine/data/mysql/schema.sql
+	 *		4.1.4 Dump file processmaker/workflow/engine/data/mysql/insert.sql
 	 *
-	 * 	4.2 Crear el usuario (mysql) wf_rbac, password: sample
-	 *		4.2.1 Crear base de datos wf_rbac con el actual usuario
-	 *		4.2.2 Darle todos los privilegios sobre la base de datos wf_rbac al usuario wf_rbac
-	 *		4.2.3 Dump del archivo processmaker/rbac/engine/data/mysql/schema.sql
-	 *		4.2.4 Dump del archivo processmaker/rbac/engine/data/mysql/insert.sql
+	 * 	4.2 Create user (mysql) wf_rbac, password: sample
+	 *		4.2.1 Create database wf_rbac with user wf_rbac
+	 *		4.2.2 Give all priviledges to databse wf_rbac for user wf_rbac
+	 *		4.2.3 Dump file processmaker/rbac/engine/data/mysql/schema.sql
+	 *		4.2.4 Dump file processmaker/rbac/engine/data/mysql/insert.sql
 	 *
-	 *	4.3 Crear archivo de configuraciC3n y directorios para el sitio workflow
+	 *	4.3 Create configuratoin file and directories to site workflow
 	 *
-	 *		4.3.1 Crer los directorios:
+	 *		4.3.1 Create directories:
 	 *			
 	 *			$PATH_TO_WORKFLOW_DATA./sites/workflow/
 	 *			$PATH_TO_WORKFLOW_DATA./sites/workflow/cutomFunctions/
@@ -160,11 +157,11 @@ else if($action==="install")
 	 *			$PATH_TO_WORKFLOW_DATA./sites/workflow/xmlforms/
 	 *			$PATH_TO_WORKFLOW_DATA./sites/workflow/processesImages/
 	 *			$PATH_TO_WORKFLOW_DATA./sites/workflow/files/
-	 *		4.3.2 Crear el archivo.
+	 *		4.3.2 Create file.
 	 *
 	 *			$PATH_TO_WORKFLOW_DATA./sites/workflow/db.php
 	 *
-	 *			con el contenido reemplazando $HOSTNAME por el valor definido.
+	 *			with these contents replacing $HOSTNAME.
 	 *
 				<?php
 				// Processmaker configuration
@@ -179,27 +176,27 @@ else if($action==="install")
 				define ('DB_RBAC_PASS', 'sample' );
 			?>
 			
-	*	4.4 Crear el archivo workflow/engine/config/paths_installed.php con el contenido.
+	*	4.4 Create file workflow/engine/config/paths_installed.php with these contents.
 	*
 	*		<?php
 			define( 'PATH_DATA', '$PATH_TO_WORKFLOW_DATA' );
 			define( 'PATH_C', '$PATH_TO_COMPILED_DATA' );
 			?>
 
-			Reemplazando:
+			Restarting:
 	* 	$PATH_TO_WORKFLOW_DATA
 	* 	$PATH_TO_COMPILED DATA
 	*
-	*	4.2 Actualizar archivos de idiomas abriendo la pC!gina (background)
+	*	4.2 Update translation from this url (background)
 	*
 	*		http://ProcessmakerHostname/sysworkflow/en/green/tools/updateTranslation
 	*
  	*
  	*
  	*
- 	*5) Auto instalar Procesos o Plugins 
- 	*5.1 Intalar procesos
- 	*5.2 Intalar plugins
+ 	*5) Auto install processes and plugins
+ 	*5.1 Install processes
+ 	*5.2 Install plugins
 	* */
 	
 	$sp		= "/";
@@ -217,18 +214,8 @@ else if($action==="install")
 	$schema		="schema.sql";
 
 	G::LoadClass('Installer');
-	/*$inst = new Installer();
-	$s = $inst->create_site(Array(
-		'name'	  =>'workflow',
-		'path_data'=>$dataClient->path_data,
-		'path_compiled'=>$dataClient->path_compiled,
-		'database'=>Array(
-			'hostname'=>$dataClient->mysqlH,
-			'username'=>$dataClient->mysqlU,
-			'password'=>$dataClient->mysqlP
-		)
-	),true);*/
 
+	/* Create default workspace called workflow */
 	$inst = new Installer();
 	$siteName="workflow";
 	$p1 = (isset($dataClient->ao_admin_pass1))?$dataClient->ao_admin_pass1:'admin';
@@ -243,7 +230,7 @@ else if($action==="install")
 			'ao_db_drop'=>(isset($dataClient->ao_db_drop) && $dataClient->ao_db_drop===true)?true:false,
 			'ao_db_wf'=>(isset($dataClient->ao_db_wf))?$dataClient->ao_db_wf:'wf_'.$siteName,
 			'ao_db_rb'=>(isset($dataClient->ao_db_rb))?$dataClient->ao_db_rb:'rb_'.$siteName,
-			'ao_db_rp'=>(isset($dataClient->ao_db_rp))?$dataClient->ao_db_rp:'rp'.$siteName
+			'ao_db_rp'=>(isset($dataClient->ao_db_rp))?$dataClient->ao_db_rp:'rp_'.$siteName
 		),
 		'database'=>Array(
 			'hostname'=>$dataClient->mysqlH,
@@ -252,9 +239,23 @@ else if($action==="install")
 		)
 	),true);
 
-	//print_r($s);
+	/* Status is used in the Windows installer, do not change this */
+	print_r("Status: ".($s['created'] ? 'SUCCESS':'FAILED')."\n\n");
+	print_r("Installation arguments:\n");
+	print_r($dataClient);
+	print_r("\n");
+	if (!$s['created']) {
+		/* On a failed install, $inst->report is blank because the
+		 * installation didnt occured at all. So we use the test report
+		 * instead.
+		 */
+		print_r("Installation report:\n");
+		print_r($s['result']);
+		die();
+	}
+
+	print_r("Installation report:\n");
 	print_r($inst->report);
-	//die();
 	
 	$sh=md5(filemtime(PATH_GULLIVER."/class.g.php"));
 	$h=G::encrypt($dataClient->mysqlH.$sh.$dataClient->mysqlU.$sh.$dataClient->mysqlP.$sh.$inst->cc_status,$sh);
@@ -267,21 +268,26 @@ else if($action==="install")
 	$fp = fopen(FILE_PATHS_INSTALLED, "w");
 	fputs( $fp, $db_text, strlen($db_text));
 	fclose( $fp );
+
 	/* Update languages */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/tools/updateTranslation");
-	print_r("Update language:  => ".((!$update)?$update:"OK")."\n");
+	print_r("Update language      => ".((!$update)?$update:"OK")."\n");
 	
 	/* Heartbeat Enable/Disable */
 	if(!isset($dataClient->heartbeatEnabled)) $dataClient->heartbeatEnabled=true;
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/heartbeatStatus?status=".$dataClient->heartbeatEnabled);
-    print_r("Heartbeat Status:  => ".str_replace("<br>","\n",$update)."\n");
+	print_r("Heartbeat Status     => ".str_replace("<br>","\n",$update)."\n");
 	
 	/* Autoinstall Process */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/autoinstallProcesses");
-	print_r("Process AutoInstall:  => <br>".str_replace("<br>","\n",$update)."\n"); 
+	if (trim(str_replace("<br>","",$update)) == "")
+		$update = "Nothing to do.";
+	print_r("Process AutoInstall  => ".str_replace("<br>","\n",$update)."\n");
 	
 	/* Autoinstall Plugins */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/autoinstallPlugins");
-	print_r("Plugin AutoInstall:  => <br>".str_replace("<br>","\n",$update)."\n"); 
+	if (trim(str_replace("<br>","",$update)) == "")
+		$update = "Nothing to do.";
+	print_r("Plugin AutoInstall   => ".str_replace("<br>","\n",$update)."\n");
 }
 ?>
