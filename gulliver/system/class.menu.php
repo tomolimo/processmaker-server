@@ -47,6 +47,7 @@ class Menu
   var $Enabled = NULL;
   var $optionOn = -1;
   var $id_optionOn = "";
+  var $ElementClass = NULL;
 
   /**
   * Set menu style
@@ -106,6 +107,7 @@ class Menu
       $this->Enabled[$c] = $G_TMP_MENU->Enabled[$i];
       $this->Id     [$c] = $G_TMP_MENU->Id[$i];
       $this->Classes[$c] = $G_TMP_MENU->Classes[$i];
+      $this->ElementClass[$c] = $G_TMP_MENU->ElementClass[$i];
       $c ++;
     } else {
       if ($i == $this->optionOn) $this->optionOn = -1;
@@ -209,9 +211,10 @@ class Menu
   * @param string $strLabel label to show
   * @param string $strURL link
   * @param string $strType type, defualt value ='relative'
+  * @param string $elementClass default value =''
   * @return void
   */
-  function AddIdRawOption( $strId, $strURL = "", $label = "", $icon = "",$js = "",  $strType = "relative" )
+  function AddIdRawOption( $strId, $strURL = "", $label = "", $icon = "",$js = "",  $strType = "relative",$elementClass = '' )
   {
     $pos = $this->OptionCount();
     $this->Options[$pos] = $strURL;
@@ -220,6 +223,7 @@ class Menu
     $this->JS[$pos]      = $js;
     $this->Types[$pos]   = $strType;
     $this->Enabled[$pos] = 1;
+	 $this->ElementClass[$pos] = $elementClass;
     if (is_array ($strId)) {
       $this->Id[$pos]      = $strId[0];
       $this->Classes[$pos] = $strId[1];
@@ -358,9 +362,15 @@ class Menu
           $target = "#";
         }
         $idName=$this->Id[$ncount];
+
+		  $elementclass = '';
+		  if($this->ElementClass[$ncount] != ''){
+			  $elementclass = 'class="'.$this->ElementClass[$ncount].'"';
+		  }
+
         $menus[] = array ( 'id' => $ncount, 'target' => $target, 'label' => $label, 'onMenu' => $onMenu, 'classname' => $classname,
                            'imageLeft' => $imageLeft, 'onclick' => $onclick,
-                           'icon' => $icon, 'aux' => $aux,'idName' => $idName);
+                           'icon' => $icon, 'aux' => $aux,'idName' => $idName,'elementclass'=>$elementclass);
       }
     }
     return $menus;

@@ -22,21 +22,31 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
+/*
+ * RS.
+ *
+ * Adicioné un nuevo parámetro en la clase AddIdRawOption en class.menu.php que me ayude
+ * a colocar una clase al elemento que se encuentra dentro de la lista (generada por el
+ * submenu).
+ *
+ * En este caso seguiremos con el uso del sprite. ss_sprite ss_nombre_archivo
+ */
 global $G_TMP_MENU;
 $G_TMP_MENU_ALIGN = "left";
 
-$G_TMP_MENU->AddIdRawOption('DYNAFORMS',    '', G::LoadTranslation('ID_DYNAFORMS'),"/images/dynaforms.gif",'Pm.data.render.buildingBlocks.injector(\'dynaforms\'); return false;');
-$G_TMP_MENU->AddIdRawOption('INPUTDOCS',    '', G::LoadTranslation('ID_REQUEST_DOCUMENTS'),"/images/inputdocument.gif",'Pm.data.render.buildingBlocks.injector(\'inputs\'); return false;');
-$G_TMP_MENU->AddIdRawOption('OUTPUTDOCS',   '', G::LoadTranslation('ID_OUTPUT_DOCUMENTS'),"/images/outputdocument.gif",'Pm.data.render.buildingBlocks.injector(\'outputs\'); return false;');
-$G_TMP_MENU->AddIdRawOption('TRIGGERS',     '', G::LoadTranslation('ID_TRIGGERS'),"/images/trigger.gif",'Pm.data.render.buildingBlocks.injector(\'triggers\'); return false;');
+$G_TMP_MENU->AddIdRawOption('DYNAFORMS',    '', G::LoadTranslation('ID_DYNAFORMS'),"",'Pm.data.render.buildingBlocks.injector(\'dynaforms\'); return false;','','ss_sprite ss_application_form');
+$G_TMP_MENU->AddIdRawOption('INPUTDOCS',    '', G::LoadTranslation('ID_REQUEST_DOCUMENTS'),"",'Pm.data.render.buildingBlocks.injector(\'inputs\'); return false;','','ss_sprite ss_page_white_get');
+$G_TMP_MENU->AddIdRawOption('OUTPUTDOCS',   '', G::LoadTranslation('ID_OUTPUT_DOCUMENTS'),"",'Pm.data.render.buildingBlocks.injector(\'outputs\'); return false;','','ss_sprite ss_page_white_put');
+$G_TMP_MENU->AddIdRawOption('TRIGGERS',     '', G::LoadTranslation('ID_TRIGGERS'),"",'Pm.data.render.buildingBlocks.injector(\'triggers\'); return false;','','ss_sprite ss_cog');
 
 //$G_TMP_MENU->AddIdRawOption('MESSAGES',     '', G::LoadTranslation('ID_MESSAGES'),"/images/mail.gif",'Pm.data.render.buildingBlocks.injector(\'messages\'); return false;');
 G::LoadClass('reportTables');
 if (ReportTables::tableExist()) {
-  $G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '', G::LoadTranslation('ID_REPORT_TABLES'),"/images/report_tables.gif",'Pm.data.render.buildingBlocks.injector(\'reportTables\'); return false;');
+  $G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '', G::LoadTranslation('ID_REPORT_TABLES'),"",'Pm.data.render.buildingBlocks.injector(\'reportTables\'); return false;','','ss_sprite ss_table');
 }
-$G_TMP_MENU->AddIdRawOption('DB_CONNECTIONS', '', G::LoadTranslation('ID_DB_CONNECTIONS'),"/images/iconoenlace.png",'showDbConnectionsList(Pm.options.uid); return false;');
-$G_TMP_MENU->AddIdRawOption('CASE_SCHEDULER', '', G::LoadTranslation('ID_CASE_SCHEDULER'), "/images/scheduler.png", 'showCaseSchedulerList(Pm.options.uid); return false;');
+$G_TMP_MENU->AddIdRawOption('DB_CONNECTIONS', '', G::LoadTranslation('ID_DB_CONNECTIONS'),"",'showDbConnectionsList(Pm.options.uid); return false;','','ss_sprite ss_database_connect');
+$G_TMP_MENU->AddIdRawOption('CASE_SCHEDULER', '', G::LoadTranslation('ID_CASE_SCHEDULER'), "", 'showCaseSchedulerList(Pm.options.uid); return false;','','ss_sprite ss_calendar_view_day');
 
 
 ?>

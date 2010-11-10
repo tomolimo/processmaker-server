@@ -8,20 +8,22 @@
   background:#8E9EAF !important;
 }
 .mainMenuBG{
-  background-image: none !important;
+  background-image: url("/skins/ext/images/gray/toolbar/bg.gif") !important;
+}
+#pm_main_table .mainMenuBG{
   background-color:#347898;
   background-image: -webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0, rgb(74,149,184)),
-    color-stop(0.97, rgb(46,112,143))
-) !important;
-  background-image: -moz-linear-gradient(
-    center bottom,
-    rgb(74,149,184) 0%,
-    rgb(46,112,143) 97%
-) !important;
+		 linear,
+		 left bottom,
+		 left top,
+		 color-stop(0, rgb(74,149,184)),
+		 color-stop(0.97, rgb(46,112,143))
+	) !important;
+	  background-image: -moz-linear-gradient(
+		 center bottom,
+		 rgb(74,149,184) 0%,
+		 rgb(46,112,143) 97%
+	) !important;
 }
 
 .panel_containerWindow___processmaker{
@@ -84,62 +86,95 @@ ul#pm_submenu li{
   padding:0;
   -moz-border-radius:3px 3px 0 0;
   border-radius:3px 3px 0 0;
+  padding:3px;
 }
 ul#pm_submenu a{
   font-weight: bold;
-  color:#fff;
-  font-align:absolutemiddle;
+  color:#333;
   font-size:9px;
   text-decoration: none;
   display:block;
-  padding:2px 8px;
+  padding-top:0px;
   text-transform: uppercase;
+  line-height:18px;
 }
 ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
-  background-color: #eee;
-  background-image: -webkit-gradient ( linear, left bottom, left top, color-stop(0.39, rgb(245,245,245)), color-stop(0.83, rgb(227,227,227))  );
-  background-image:  -moz-linear-gradient( center bottom, rgb(245,245,245) 39%, rgb(227,227,227) 83%  );
+  background-color: #CCC;
 }
 ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
   color:#333;
 }
 
 
-.button_pm{/*.module_app_button___gray,*/
-  -moz-border-radius:7px;
+.module_app_button___gray,.button_pm{/*.module_app_button___gray,*/
+  -moz-border-radius:3px;
+  border-radius:3px;
   -moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
-  -webkit-box-shadow:0 1px 2px rgba(0,0,0,0.5);
+  -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.5);
   background-color:#EEE;
   background-image: none;
-  border-radius:7px;
   color:#333;
   font-size:10px;
   font-weight:700;
   margin:0px;
-  padding:2px 5px;
+  padding:3px 8px;
   text-decoration:none;
   line-height: 18px;
   text-shadow:0 1px 0px rgba(255,255,255,1);
   border:none;
   font-family: Arial,serif;
+  text-transform: uppercase;
   cursor:pointer;
+  border:1px solid #EEE;
+  background-image:-webkit-gradient(
+		 linear,
+		 left bottom,
+		 left top,
+		 color-stop(0, rgb(208,208,208)),
+    color-stop(0.5, rgb(239,239,239))
+	);background-image:
+	-moz-linear-gradient(
+		 center bottom,
+		rgb(208,208,208) 0%,
+    rgb(239,239,239) 50%
+	);
 }
-.button_pm:hover{
-  background-color:#999;
-  color:#fff;
-  text-shadow:0 1px 0px rgba(0,0,0,1);
-  border:none;
+.module_app_button___gray:hover,.button_pm:hover{
+  background-color:#AAA;
+  border:1px solid #888;
+  background-position: 0 0;
+  background-image:-webkit-gradient(
+		 linear,
+		 left bottom,
+		 left top,
+    color-stop(0, rgb(239,239,239)),
+		 color-stop(0.5, rgb(208,208,208))
+	);background-image:
+	-moz-linear-gradient(
+		 center bottom,
+    rgb(239,239,239) 0%,
+		rgb(208,208,208) 50%
+	);
 }
-.button_pm:focus,ul#pm_menu a:focus{
+.module_app_button___gray:focus,.button_pm:focus{
+  border:1px solid #45626F;
+}
+ul#pm_menu a:focus{
   -moz-outline-style:none;
   outline:none;
 }
+.module_app_button___gray{
+  margin:5px 0;
+}
+
+
+
 input::-moz-focus-inner { border: 0; }
 /*
 Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 */
 .ss_sprite{
-  background-image:url( /images/icons_silk/sprites.gif.png);
+  background-image:url( /images/icons_silk/sprites.png);
   background-repeat:no-repeat;
   display:inline;
   height:18px;
