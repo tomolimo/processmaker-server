@@ -12,6 +12,7 @@
 }
 #pm_main_table .mainMenuBG{
   background-color:#347898;
+  background-image:none !important;
   background-image: -webkit-gradient(
 		 linear,
 		 left bottom,
@@ -83,7 +84,6 @@ ul#pm_submenu{
 ul#pm_submenu li{
   float:left;
   margin:1px 1px 0 0;
-  padding:0;
   -moz-border-radius:3px 3px 0 0;
   border-radius:3px 3px 0 0;
   padding:3px;
@@ -97,6 +97,7 @@ ul#pm_submenu a{
   padding-top:0px;
   text-transform: uppercase;
   line-height:18px;
+  height: auto; /*IE se pone loco con el height 18px del ss_sprite*/
 }
 ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
   background-color: #CCC;
@@ -106,7 +107,7 @@ ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
 }
 
 
-.module_app_button___gray,.button_pm{/*.module_app_button___gray,*/
+.button_pm{/*.module_app_button___gray,*/
   -moz-border-radius:3px;
   border-radius:3px;
   -moz-box-shadow:0 1px 2px rgba(0,0,0,0.5);
@@ -139,7 +140,7 @@ ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
     rgb(239,239,239) 50%
 	);
 }
-.module_app_button___gray:hover,.button_pm:hover{
+.button_pm:hover{/*.module_app_button___gray:hover*/
   background-color:#AAA;
   border:1px solid #888;
   background-position: 0 0;
@@ -156,16 +157,16 @@ ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
 		rgb(208,208,208) 50%
 	);
 }
-.module_app_button___gray:focus,.button_pm:focus{
+.button_pm:focus{/*.module_app_button___gray:focus,*/
   border:1px solid #45626F;
 }
 ul#pm_menu a:focus{
   -moz-outline-style:none;
   outline:none;
 }
-.module_app_button___gray{
+/*.module_app_button___gray{
   margin:5px 0;
-}
+}*/
 
 
 
