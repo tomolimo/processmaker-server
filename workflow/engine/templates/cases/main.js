@@ -27,6 +27,8 @@ var ReloadTreeMenuItemDetail;
 var NOTIFIER_FLAG = false;
 var result;
 
+var _action;
+
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
   fn: function(keycode, e) {
@@ -241,8 +243,8 @@ Ext.onReady(function(){
 
   var loader = treeMenuItems.getLoader();
   loader.on("load", function(){
-    node = Ext.getCmp('tree-panel').getNodeById("CASES_INBOX");
-    node.select();
+    //node = Ext.getCmp('tree-panel').getNodeById("CASES_INBOX");
+    //node.select();
   });
 
 

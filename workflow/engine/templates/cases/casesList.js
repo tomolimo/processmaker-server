@@ -1297,6 +1297,31 @@ Ext.onReady ( function() {
     debugPanel.hide();
     debugPanel.ownerCt.doLayout();
   }
+
+  _nodeId = '';
+  switch(action){
+    case 'draft': 
+      _nodeId = "CASES_DRAFT";
+      break;
+    case 'sent':
+      _nodeId = "CASES_SENT";
+      break;
+    case 'unassigned':
+      _nodeId = "CASES_SELFSERVICE";
+      break;
+    case 'paused':
+      _nodeId = "CASES_PAUSED";
+      break;
+    case 'todo':
+      _nodeId = "CASES_INBOX";
+      break;
+  }
+
+  if( _nodeId != '' ){
+    node = parent.Ext.getCmp('tree-panel').getNodeById(_nodeId);
+    node.select();
+  }
+
   //parent.updateCasesView();
   parent.updateCasesTree();
   comboStatus.setValue('');
