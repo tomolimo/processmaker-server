@@ -33,7 +33,7 @@
 
 <JS type="javascript" replaceTags="1">
 <![CDATA[
-
+/*
 	document.onkeypress=function(e){
 	var esIE=(document.all);
 	var esNS=(document.layers);
@@ -42,7 +42,7 @@
 		return false;
 	  }
 	}
-
+*/
   function triggerEditWizardSource (sUID){
     popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' , 770, 510);
   }
