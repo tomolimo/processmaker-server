@@ -20,6 +20,7 @@ new Ext.KeyMap(document, {
 var storeCases;
 var storeReassignCases;
 var grid;
+
 /** */
 
 function openCase(){
@@ -237,7 +238,7 @@ Ext.onReady ( function() {
   var caseIdToDelete = '';
   var caseIdToUnpause = '';
   var caseIndexToUnpause = '';
-
+  parent._action = action;
 
   function openLink(value, p, r){
     return String.format("<a class='button_pm' href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
@@ -1318,8 +1319,11 @@ Ext.onReady ( function() {
   }
 
   if( _nodeId != '' ){
-    node = parent.Ext.getCmp('tree-panel').getNodeById(_nodeId);
-    node.select();
+    treePanel1 = parent.Ext.getCmp('tree-panel')
+    if(treePanel1)
+      node = treePanel1.getNodeById(_nodeId);
+    if(node)
+      node.select();
   }
 
   //parent.updateCasesView();

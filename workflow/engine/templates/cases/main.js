@@ -27,7 +27,7 @@ var ReloadTreeMenuItemDetail;
 var NOTIFIER_FLAG = false;
 var result;
 
-var _action;
+var _action = '';
 
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
@@ -243,8 +243,34 @@ Ext.onReady(function(){
 
   var loader = treeMenuItems.getLoader();
   loader.on("load", function(){
-    //node = Ext.getCmp('tree-panel').getNodeById("CASES_INBOX");
-    //node.select();
+    _nodeId='';
+     if(_action != '')
+     switch(_action){
+        case 'draft':
+          _nodeId = "CASES_DRAFT";
+          break;
+        case 'sent':
+          _nodeId = "CASES_SENT";
+          break;
+        case 'unassigned':
+          _nodeId = "CASES_SELFSERVICE";
+          break;
+        case 'paused':
+          _nodeId = "CASES_PAUSED";
+          break;
+        case 'todo':
+          _nodeId = "CASES_INBOX";
+          break;
+      }
+
+      if( _nodeId != '' ){
+        treePanel1 = Ext.getCmp('tree-panel')
+        if(treePanel1)
+          node = treePanel1.getNodeById(_nodeId);
+        if(node)
+          node.select();
+        
+      }
   });
 
 
