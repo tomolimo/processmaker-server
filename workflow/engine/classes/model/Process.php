@@ -507,7 +507,7 @@ class Process extends BaseProcess {
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $casesCnt = $this->getCasesCountInAllProcesses();
     $processes = Array();
-    
+    $uids=array();
     while( $oDataset->next() ) {
       $processes[] = $oDataset->getRow();
       $uids[] = $processes[sizeof($processes)-1]['PRO_UID'];
