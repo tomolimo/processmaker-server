@@ -1157,7 +1157,7 @@ Ext.onReady ( function() {
     id: 'casesGrid',
     store: storeCases,
     cm: cm,
-    autoHeight: true,
+    //autoHeight: true,
     layout: 'fit',
     viewConfig: {
       forceFit:true
