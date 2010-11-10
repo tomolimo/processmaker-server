@@ -214,7 +214,7 @@ Ext.onReady(function(){
           }
       } ,
       'render': function(tp){
-        /*tp.getSelectionModel().on('selectionchange', function(tree, node){
+    	  /*tp.getSelectionModel().on('selectionchange', function(tree, node){
 
           if( node.attributes.url ){
             document.getElementById('casesSubFrame').src = node.attributes.url;
@@ -659,12 +659,44 @@ Ext.extend(Ext.data.DynamicJsonReader, Ext.data.JsonReader, {
 
 Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
   processAttributes : function(attr){
-    if(attr.blockTitle){
+    
+    if(attr.blockNestedTree){
+      //console.log(attr);
+      attr.text = attr.blockTitle;
+      attr.iconCls = 'ICON_' + attr.id;
+      attr.loaded = false;
+      attr.expanded = false;
+      attr.xtype = 'treepanel';
+      attr.rootVisible = true,
+      attr.singleClickExpand=true,
+      attr.animate = true,
+      attr.nodeType = 'async',
+      attr.clearOnReLoad= false,
+
+      attr.loader = new Ext.tree.TreeLoader( {
+						dataUrl : attr.blockNestedTree,
+						baseParams : {
+							action : 'expandNode',
+							folderID: attr.folderId
+						}});
+		 attr.style= {
+            // width: '50%',
+            height: '50px',
+            // marginBottom: '10px',
+            overflow:'auto'
+        };
+                 
+				      
+    }else if(attr.blockTitle){
       attr.text = attr.blockTitle;
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;
-      attr.expanded = true;
-    } else if(attr.title){ 
+      if((attr.url)&&(attr.url!="")){
+      	attr.expanded = false;
+      }else{
+    	  attr.expanded = true;
+      }
+    }else if(attr.title){ 
       attr.text = attr.title;
       if( attr.cases_count )
         attr.text += ' (<label id="NOTIFIER_'+attr.id+'">' + attr.cases_count + '</label>)';

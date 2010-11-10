@@ -11,6 +11,53 @@ $oPMFolder = new AppFolder ( );
 $rootFolder = "/";
 switch ($_POST ['action']) {
 	
+	case 'expandNode':
+	  $folderList = $oPMFolder->getFolderList ( $_POST ['node'] != 'CASES_FOLDERS' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
+	  $folderContent = $oPMFolder->getFolderContent ( $_POST ['node'] != 'CASES_FOLDERS' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
+	  //G::pr($folderContent);
+	  $processListTree=array();
+	  foreach ( $folderList as $key => $obj ) {
+		  $tempTree ['text'] = $obj['FOLDER_NAME'];
+        $tempTree ['id'] = $obj['FOLDER_UID'];
+        $tempTree ['folderID'] = $obj['FOLDER_UID'];
+        $tempTree ['cls'] = 'folder';
+        $tempTree ['draggable'] = true;
+        //$tempTree ['leaf'] = true;
+        //$tempTree ['optionType'] = "category";
+        //$tempTree['allowDrop']=false;
+        $tempTree ['singleClickExpand'] = true;
+        /*
+        if ($key != "No Category") {
+          $tempTree ['expanded'] = true;
+        } else {
+          //$tempTree ['expanded'] = false;
+          $tempTree ['expanded'] = true;
+        }
+        */
+        $processListTree [] = $tempTree;
+    }
+    foreach ( $folderContent as $key => $obj ) {
+		  $tempTree ['text'] = $obj['APP_DOC_FILENAME'];
+        $tempTree ['id'] = $obj['APP_DOC_UID'];
+        
+        $tempTree ['cls'] = 'file';
+        //$tempTree ['draggable'] = true;
+        $tempTree ['leaf'] = true;
+        //$tempTree ['optionType'] = "category";
+        //$tempTree['allowDrop']=false;
+        //$tempTree ['singleClickExpand'] = true;
+        /*
+        if ($key != "No Category") {
+          $tempTree ['expanded'] = true;
+        } else {
+          //$tempTree ['expanded'] = false;
+          $tempTree ['expanded'] = true;
+        }
+        */
+        $processListTree [] = $tempTree;
+    }
+    print json_encode ( $processListTree );    
+	break;
 	case 'openPMFolder' :
 		$WIDTH_PANEL = 350;
 		G::LoadClass ( 'tree' );

@@ -316,7 +316,7 @@
 	        //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
 	        $oPluginRegistry =& PMPluginRegistry::getSingleton();
 	        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator        	
-	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );        	        	
+	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED'],'DOC_UID'=>$_GET['UID'],'PRO_UID'=>$_SESSION['PROCESS']) );        	        	
 	        }         
 					//END: If there is a Break Step registered from Plugin
         

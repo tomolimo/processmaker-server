@@ -66,8 +66,17 @@
       if( $oMenu->Types[$i] == 'blockHeader' ) {
         $CurrentBlockID = $oMenu->Id[$i];
         $menuCases[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
-      }
-      else {
+        if($oMenu->Options[$i]!=""){
+            $menuCases[$CurrentBlockID]['link']  = $oMenu->Options[$i];
+        }
+      }elseif( $oMenu->Types[$i] == 'blockNestedTree' ){
+        $CurrentBlockID = $oMenu->Id[$i];
+        $menuCases[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
+        $menuCases[$CurrentBlockID]['blockType'] = $oMenu->Types[$i];
+        $menuCases[$CurrentBlockID]['loaderurl'] = $oMenu->Options[$i];
+        
+        
+      }else {
         $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = Array (
           'label' => $oMenu->Labels[$i],
           'link'  => $oMenu->Options[$i],
@@ -79,13 +88,16 @@
         }
       }
     }
-
     //now build the menu in xml format
     $xml = '<menu_cases>';
     $i = 0;
     foreach( $menuCases as $menu => $aMenuBlock ) {
       if( isset($aMenuBlock['blockItems']) && sizeof($aMenuBlock['blockItems']) > 0 ) {
-        $xml .= '<menu_block blockTitle="'.$aMenuBlock['blockTitle'].'" id="'.$menu.'">';
+        $urlProperty="";
+        if((isset($aMenuBlock['link']))&&($aMenuBlock['link']!="")){
+          $urlProperty="url='".$aMenuBlock['link']."'";
+        }
+        $xml .= '<menu_block blockTitle="'.$aMenuBlock['blockTitle'].'" id="'.$menu.'" '.$urlProperty.'>';
         foreach( $aMenuBlock['blockItems'] as $id => $aMenu ) {
           $i++;
           if( isset($aMenu['cases_count']) && $aMenu['cases_count'] !== '') {
@@ -97,6 +109,9 @@
           $xml .= '<option title="'.$aMenu['label'].'" id="'.$id.'" '.$nofifier.' url="'.$aMenu['link'].'">';
           $xml .= '</option>';
         }
+        $xml .= '</menu_block>';
+      }elseif( isset($aMenuBlock['blockType']) && $aMenuBlock['blockType']=="blockNestedTree" ) {
+        $xml .= '<menu_block blockTitle="'.$aMenuBlock['blockTitle'].'" blockNestedTree = "'.$aMenuBlock['loaderurl'].'" id="'.$menu.'" folderId="0">';
         $xml .= '</menu_block>';
       }
     }

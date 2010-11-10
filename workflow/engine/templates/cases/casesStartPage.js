@@ -447,6 +447,16 @@ MainPanel = function(){
         ]  
       },
       {
+    	  id:'documents',
+          title: 'Documents',            
+          iconCls:'ICON_FOLDERS',
+          layout:'border',
+          autoLoad : {
+              url : '../appFolder/appFolderList',
+              scripts : true
+            }
+      },
+      {
         title : 'Dashboard',
         id : 'mainDashboard',
         iconCls : 'ICON_CASES_START_PAGE',
