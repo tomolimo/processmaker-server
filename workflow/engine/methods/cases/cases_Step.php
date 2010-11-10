@@ -336,7 +336,7 @@
                 	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
                 if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
                 	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_MEDIA']))
+                if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
                 	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
                 	
                 $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
