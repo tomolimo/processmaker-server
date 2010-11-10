@@ -362,7 +362,6 @@ TD.SelectedMenu{
 }
 A.SelectedMenu {
 	vertical-align: middle;
-	font-family: Tahoma;
 	font-size: 11px;
 	font-weight: bold;
 	color: #000;
@@ -374,7 +373,6 @@ A.SelectedMenu {
 
 .SelectedMenu:hover {
 	vertical-align: middle;
-	font-family: Tahoma;
 	font-size: 11px;
 	font-weight: bold;
 	color: #005791;
