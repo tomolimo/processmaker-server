@@ -53,7 +53,7 @@
       //Get the Custom Folder ID (create if necessary)         
       $oFolder=new AppFolder();
       if($_GET['UID']!=-1){
-      	krumo("jhl");
+      	//krumo("jhl");
         $folderId=$oFolder->createFromPath($aID['INP_DOC_DESTINATION_PATH'],$appId);
          //Tags
         $fileTags=$oFolder->parseTags($aID['INP_DOC_TAGS'],$appId);
