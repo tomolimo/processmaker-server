@@ -31,8 +31,6 @@
     $appId=$_GET['appId'];
     $docType=isset($_GET['docType'])?$_GET['docType']:"";
    
-	krumo($_POST);
-	krumo($_GET);
     //save info
     
     require_once ( "classes/model/AppDocument.php" );
