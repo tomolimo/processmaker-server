@@ -2965,7 +2965,7 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
  * @Last Modification 2008-07-29
  * @Modification 2008-07-29 Comment Working for after and before date attributes
  */
-class XmlForm_Field_Date3 extends XmlForm_Field_SimpleText 
+class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText 
 {
   public $required        = false;
   public $readOnly        = false;
@@ -3167,11 +3167,16 @@ class XmlForm_Field_Date3 extends XmlForm_Field_SimpleText
 
     #the validations field was moved to javascript routines ;)
     if ($this->mode == 'edit') {
-      $html = "<input size=9  class='module_app_input___gray' readonly=true type='text' id='" . $pID . "' name='" . $pID . "' value='" . $value . "'>";
+     /* $html = "<input size=9  class='module_app_input___gray' readonly=true type='text' id='" . $pID . "' name='" . $pID . "' value='" . $value . "'>";
       $html .= "<a title='Show calendar' href='#' onclick=\"return showCalendar('$pID', '$mask', '24', true, '$startDate', '$endDate');\" >
               <img src='/controls/Calendar-32x32.png' border='0' width='12' height='14'>
             </a>
             <a title='Reset date field' href='#' onclick=\"document.getElementById('$pID').value=''; return false;\"><img src='/controls/TrashIcon.jpg' border='0' width='12' height='15'></a>";
+      */
+      $html = '<input id="'.$pID.'" class="module_app_input___gray" size="14"/>
+      <a onclick="removeValue(\''.$pID.'\'); return false;" value="clear" style="left:-50px"/>X</a>
+      <a id="'.$pID.'[btn]" value="."><img src="/images/pmdateicon.png" border="0" width="12" height="12"/></a>
+      <script type="text/javascript">new Calendar({ inputField: "'.$pID.'", dateFormat: "'.$mask.'", trigger: "'.$pID.'[btn]", bottomBar: true, onSelect: function() { this.hide(); }});</script>';
     } else {
       $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
     }

@@ -1839,3 +1839,10 @@ function popUp(URL, width, height, left, top, resizable) {
 function XHRequest(){
 	return new leimnud.module.rpc.xmlhttp;
 }
+
+function removeValue(id){
+  if( document.getElementById('form['+id+']') )
+    document.getElementById('form['+id+']').value = '';
+  else if( document.getElementById(id) )
+    document.getElementById(id).value = '';
+}

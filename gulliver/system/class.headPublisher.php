@@ -184,7 +184,7 @@ class headPublisher {
     }
     if ($this->disableHeaderScripts)
       return '';
-    $this->addScriptFile ( "/js/widgets/jscalendar/lang/calendar-" . SYS_LANG . ".js" );
+    $this->addScriptFile ( "/js/widgets/js-calendar/lang/" . SYS_LANG . ".js" );
     /*$this->addScriptFile("/js/widgets/calendar/pmcalendar.js");
   /*$this->addScriptFile("/js/widgets/calendar/dhtmlSuite-common.js");
   $this->addScriptFile("/js/widgets/calendar/dhtmlSuite-calendar.js");
