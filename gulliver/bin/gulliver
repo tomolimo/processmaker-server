@@ -28,7 +28,12 @@
   define('PATH_OUTTRUNK', $pathOutTrunk . PATH_SEP );
   
 //***************** include the main config file  ******************************
-  $gulliverConfig =  PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';  
+  $gulliverInstalled =  PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php';
+  if (file_exists( $gulliverInstalled ))   {
+    require_once ( $gulliverInstalled );
+  }
+
+  $gulliverConfig =  PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
 
   // project exists?
   if (file_exists( $gulliverConfig ))   {

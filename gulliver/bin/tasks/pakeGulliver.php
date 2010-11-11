@@ -51,10 +51,10 @@ pake_task('pack-plugin', 'project_exists');
 pake_desc("generate basic CRUD files for an existing class\n   args: <class-name> <table-name> <plugin-name>");
 pake_task('propel-build-crud', 'project_exists');
 
-pake_desc("backup a workspace\n   args: <workspace> [compress]");
+pake_desc("backup a workspace\n   args: [-c|--compress] <workspace> [<backup-name>|<backup-filename>]");
 pake_task('workspace-backup', 'project_exists');
 
-pake_desc("restore a previously backed-up workspace\n   args: <filename> <workspace> [overwrite]");
+pake_desc("restore a previously backed-up workspace\n   args: [-o|--overwrite] <filename> <workspace>");
 pake_task('workspace-restore', 'project_exists');
 
 pake_desc("check standard code\n   args: <directory>");
@@ -91,8 +91,8 @@ function prompt_win($text) {
 
 function prompt($text) {
   
-  if( ! PHP_OS == "WINNT" ) {
-    printf("$text %s ", pakeColor::colorize(':', 'INFO'));
+  if( ! (PHP_OS == "WINNT") ) {
+    printf("$text%s ", pakeColor::colorize(':', 'INFO'));
     # 4092 max on win32 fopen
     
 
@@ -1716,8 +1716,8 @@ function get_infoOnPM($workspace) {
       $sMySQLVersion = '?????';
     }
   }
-  $workspacename = (strpos($_SERVER['argv'][2], ".tar")) ? $workspace : $_SERVER['argv'][2];
-  $Fields['WORKSPACE_NAME'] = $workspacename;
+
+  $Fields['WORKSPACE_NAME'] = $workspace;
   $Fields['SYSTEM'] = $redhat;
   
   if( defined("DB_HOST") ) {
@@ -1826,25 +1826,76 @@ function run_workspace_backup($task, $args) {
     
     // the environment for poedit always is Development
     define('G_ENVIRONMENT', G_DEV_ENV);
-    
-    //the class filename in the first argument
-    if( ! isset($args[0]) ) {
-      throw (new Exception('you must specify a valid workspace '));
+
+    /* Look for -c and --compress in arguments */
+    $compress = array_search('-c', $args);
+    if ($compress === false)
+      $compress = array_search('--compress', $args);
+    if ($compress !== false) {
+      unset($args[$compress]);
+      /* We need to reorder the args if we removed the compress switch */
+      $args = array_values($args);
+      $compress = true;
     }
-    
+
+    /* Look for -c and --compress in arguments */
+    $overwrite = array_search('-o', $args);
+    if ($overwrite === false)
+      $overwrite = array_search('--overwrite', $args);
+    if ($overwrite !== false) {
+      unset($args[$overwrite]);
+      /* We need to reorder the args if we removed the compress switch */
+      $args = array_values($args);
+      $overwrite = true;
+    }
+
+    if (array_search('compress', $args)) {
+      echo pakeColor::colorize("Compress is no longer an option, check if this is what you want\n", 'ERROR');
+    }
+
+    if (count($args) > 2 || count($args) == 0)
+      throw (new Exception('wrong arguments specified'));
+
     $workspace = $args[0];
-    G::mk_dir(PATH_TRUNK . 'backups');
-    $fileTar = PATH_TRUNK . 'backups' . PATH_SEP . $workspace . '.tar';
-    
-    $compress = false;
-    if( isset($args[1]) ) {
-      if( strtolower($args[1]) == 'compress' ) {
-        $compress = true;
-        $fileTar .= '.gz';
-        printf("using compresion in file %s \n", pakeColor::colorize($fileTar, 'INFO'));
+
+    if (isset($args[1])) {
+      $fileTar = $args[1];
+      /* Check if the second argument is an absolute filename. If it is, use
+       * it as the backup filename. Otherwise, use it as a filename relative
+       * to the backups directory. This makes migration from previous versions
+       * easier, which always expects a relative filename, while still accepting
+       * absolute filenames.
+       */
+      if (dirname($fileTar) == '.') {
+        printf("Using %s as root. Use an absolute filename to change it.\n", pakeColor::colorize(PATH_TRUNK . 'backups', 'INFO'));
+        G::mk_dir(PATH_DATA . 'backups');
+        $fileTar = PATH_DATA . 'backups' . PATH_SEP . $fileTar . '.tar';
+        if ($compress)
+          $fileTar .= '.gz';
       }
+    } else {
+      G::mk_dir(PATH_DATA . 'backups');
+      $fileTar = PATH_DATA . 'backups' . PATH_SEP . $workspace . '.tar';
+      if ($compress)
+        $fileTar .= '.gz';
     }
-    
+
+    if (!$overwrite && file_exists($fileTar)) {
+      $overwrite = strtolower(prompt('Backup file already exists, do you want to override? [Y/n]'));
+      if( array_search(trim($override), array("y", "")) === false )
+        die();
+      $overwrite = true;
+    }
+
+    /* Remove the backup file before backing up. Previous versions didn't do
+     * this, so backup files would increase indefinetely, as new data was
+     * appended to the tar file instead of replaced.
+     */
+    if (file_exists($fileTar))
+      unlink($fileTar);
+
+    printf("Backing up workspace %s to %s\n", pakeColor::colorize($workspace, 'INFO'), pakeColor::colorize($fileTar, 'INFO'));
+
     $aSerializeData = get_infoOnPM($workspace);
     
     $dbFile = PATH_DB . $workspace . PATH_SEP . 'db.php';
@@ -1858,7 +1909,7 @@ function run_workspace_backup($task, $args) {
     try{
       $oDbMaintainer->connect("mysql");
     } catch(Exception $e){
-      echo "Sorry but you Admistrative account, with you Processmaker installation has changed!\n";
+      echo "Problems contacting the database with the administrator user\n";
       echo "The response was: {$e->getMessage()}\n";
     }
     
@@ -1892,7 +1943,7 @@ function run_workspace_backup($task, $args) {
     $row = $rs->getRow();
     $mysqlVersion = $row[0];
     $aSerializeData['DATABASE'] = $mysqlVersion;
-    $fileMetadata = PATH_OUTTRUNK . 'backups' . PATH_SEP . $workspace . '.txt';
+    $fileMetadata = PATH_TRUNK . 'backups' . PATH_SEP . 'metadata.txt';
     $sMetadata = file_put_contents($fileMetadata, serialize($aSerializeData));
     
     G::LoadThirdParty('pear/Archive', 'Tar');
@@ -1943,8 +1994,6 @@ function run_workspace_backup($task, $args) {
     printf("%20s %s \n", 'Files in Backup', pakeColor::colorize(count($aFiles), 'INFO'));
     printf("%20s %s \n", 'Total Filesize', pakeColor::colorize(sprintf("%5.2f MB", $total / 1024 / 1024), 'INFO'));
     printf("%20s %s \n", 'Backup Filesize', pakeColor::colorize(sprintf("%5.2f MB", filesize($fileTar) / 1024 / 1024), 'INFO'));
-    
-    print $dataDir . "\n";
   
   } catch( Exception $e ) {
     printf("Error: %s\n", pakeColor::colorize($e->getMessage(), 'ERROR'));
@@ -1985,7 +2034,7 @@ function getDataBaseConfiguration($dsn) {
   return $result;
 }
 
-function run_workspace_restore($task, $options) {
+function run_workspace_restore($task, $args) {
   try {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', E_ERROR);
@@ -1993,49 +2042,48 @@ function run_workspace_restore($task, $options) {
     // the environment for poedit always is Development
     define('G_ENVIRONMENT', G_DEV_ENV);
     
-    //the class filename in the first argument
-    
+    $overwrite = array_search('-o', $args);
+    if ($overwrite === false)
+      $overwrite = array_search('--overwrite', $args);
+    if ($overwrite !== false) {
+      unset($args[$overwrite]);
+      $args = array_values($args);
+      $overwrite = true;
+    }
 
-    if( ! isset($options[0]) ) {
-      throw (new Exception('you must specify a valid workspace '));
+    if (count($args) < 1 || count($args) > 2) {
+      throw (new Exception('Wrong number of arguments specified'));
     }
-    //validate if this file exists
-    
 
-    $fileToUnzip = $options[0];
-    if( ! is_file($fileToUnzip) ) {
-      $fileToUnzip = PATH_TRUNK . 'backups' . '/' . $options[0];
-      if( ! is_file($fileToUnzip) ) {
-        throw (new Exception("the backup file $fileToUnzip does not exist"));
-      }
+    /* Search for the backup file in several directories, choosing the first one
+     * that is found.
+     * 1) An absolute filename used as is.
+     * 2) A filename relative to the backups directory (eg. workflow.tar)
+     * 3) A workspace name (such as workflow) uncompressed backup
+     * 4) A workspace name compressed backup
+     * 5) A filename in the old backups directory (for legacy compatibiility)
+     */
+    $backupFiles = array(
+        $args[0],
+        PATH_DATA . 'backups' . PATH_SEP . $args[0],
+        PATH_DATA . 'backups' . PATH_SEP . $args[0] . ".tar",
+        PATH_DATA . 'backups' . PATH_SEP . $args[0] . ".tar.gz",
+        PATH_OUTTRUNK . 'backups' . PATH_SEP . $args[0]
+    );
+
+    foreach ($backupFiles as $backupFile) {
+      if (file_exists($backupFile))
+        break;
     }
+    if (!file_exists($backupFile))
+      throw(new Exception("Backup file not found."));
+
+    $targetWorkspaceName = isset($args[1]) ? $args[1] : NULL;
+
+    printf("Using file %s \n", pakeColor::colorize($backupFile, 'INFO'));
     
-    $namews = explode(".", basename($fileToUnzip));
-    
-    $sTarWsName = $namews[0];
-    
-    if( ! isset($options[2]) ) {
-      if( ! isset($options[1]) ) {
-        $fileExSite = PATH_DATA . 'sites' . PATH_SEP . $sTarWsName;
-        if( ! is_file($fileExSite) )
-          throw (new Exception("the workspace exist you need more options "));
-        else
-          $options[1] = $sTarWsName; 
-      } else {
-        $fileExSite1 = PATH_DATA . 'sites' . PATH_SEP . $options[1];
-        if( file_exists($fileExSite1) )
-          throw (new Exception("Workspace already exists. Use the \"overwrite\" option to replace it."));
-      }
-    } else {
-      if( strcmp($options[2], "overwrite") != 0 ) {
-        throw (new Exception("this options doesn't exist, it is overwrite"));
-      }
-    }
-    
-    printf("using this file %s \n", pakeColor::colorize($fileToUnzip, 'INFO'));
-    
-    if( restoreWspacemv($fileToUnzip, $sTarWsName, $options[1], $options[2]) ) {
-      printf("Successfully unzipped file  %s \n", pakeColor::colorize($options[0], 'INFO'));
+    if( restoreWspacemv($backupFile, $targetWorkspaceName, $overwrite) ) {
+      printf("Successfully restored from file %s \n", pakeColor::colorize($backupFile, 'INFO'));
     } else {
       throw (new Exception('There was an error in file descompression. '));
     }
@@ -2054,40 +2102,73 @@ function updateDBfile($dirfile, $sTarWsName, $sNewWsName) {
     file_put_contents($dbfile, $sNewDbFile);
   }
 }
-function restoreWspacemv($fileTar, $sTarWsName, $sNewWsName, $oOwrite) {
+function restoreWspacemv($fileTar, $sNewWsName, $oOwrite) {
+
+  $tempDirectory = tempnam(__FILE__, '');
+  if (file_exists($tempDirectory)) {
+    unlink($tempDirectory);
+  }
   
-  
-  $pathTemporalWorkspace = PATH_DATA . 'upgrade' . PATH_SEP . 'workspace' . PATH_SEP;
-  
-  G::rm_dir($pathTemporalWorkspace);
-  G::mk_dir($pathTemporalWorkspace);
+  if (file_exists($tempDirectory))
+    G::rm_dir($tempDirectory);
+  G::mk_dir($tempDirectory);
   
   G::LoadThirdParty('pear/Archive', 'Tar');
   $tar = new Archive_Tar($fileTar);
-  $res = $tar->extract($pathTemporalWorkspace);
+  $res = $tar->extract($tempDirectory);
   
-  //getting metadata info
-  $aMetadata = unserialize(file_get_contents($pathTemporalWorkspace . PATH_SEP . $sTarWsName . '.txt'));
-  //print_r($aMetadata); die;
-  
-  //obtain the current mysqldata dir
-  $pathMySqlData = $aMetadata['datadir'];
-  $pathMySqlData = '/var/lib/mysql/';
+  $metadataFilename = $tempDirectory . PATH_SEP . 'metadata.txt';
+  if (!file_exists($metadataFilename)) {
+    /* Look for legacy backups, where metadata was stored as a file with the
+     * workspace name, such as workflow.txt
+     * This means the backup filename must be the same as the metadata file.
+     */
+    $info = pathinfo($fileTar);
+    /* Check if it's a compressed backup, in which case we need to remove
+     * both the gz and the tar extensions.
+     */
+    if ($info['extension'] == "gz")
+      $info = pathinfo(basename($fileTar, '.' . $info['extension']));
+    $wsNameFromTar = basename($fileTar, '.' . $info['extension']);
+    $metadataFilename = $tempDirectory . PATH_SEP . $wsNameFromTar;
+    if (!file_exists($metadataFilename)) {
+      throw (new Exception("Metadata file was not found in backup"));
+    }
+  }
+  $aMetadata = unserialize(file_get_contents($metadataFilename));
+
+  $sTarWsName = $aMetadata['WORKSPACE_NAME'];
+  if (!isset($sNewWsName)) {
+    $sNewWsName = $sTarWsName;
+  } else {
+    echo "Restoring from workspace: " . pakeColor::colorize($sTarWsName, 'INFO') . "\n";
+  }
+  echo "Restoring to workspace:   ".pakeColor::colorize($sNewWsName, 'INFO')."\n";
   
   //moving the site files
-  $pathTarWsSite = $pathTemporalWorkspace . PATH_SEP . $sTarWsName;
+  $pathTarWsSite = $tempDirectory . PATH_SEP . $sTarWsName;
   $pathNewWsSite = PATH_DATA . 'sites' . PATH_SEP . $sNewWsName;
-  printf("moving files to %s \n", pakeColor::colorize($pathNewWsSite, 'INFO'));
-  
-  if( isset($oOwrite) ) {
-    G::rm_dir($pathNewWsSite);
+
+  if (!$oOwrite && file_exists($pathNewWsSite)) {
+    $oOwrite = strtolower(prompt('Workspace already exists, do you want to override? [Y/n]'));
+    if( array_search(trim($oOwrite), array("y", "")) === false )
+      die();
+    $oOwrite = true;
   }
+
+  printf("Moving files to %s \n", pakeColor::colorize($pathNewWsSite, 'INFO'));
+  
+  /* We already know we will be overwriting the new workspace if we reach this
+   * point, so remove the workspace directory if it exists.
+   */
+  if (file_exists($pathNewWsSite))
+    G::rm_dir($pathNewWsSite);
+  
   if( ! rename($pathTarWsSite, $pathNewWsSite) ) {
     throw (new Exception("There was an error moving from $pathTarWsSite to $pathNewWsSite"));
   }
   //we are changing user datas on this new DB
   updateDBfile($pathNewWsSite, $sTarWsName, $sNewWsName);
-  //print "($pathTarWsSite \n $pathNewWsSite)\n";die;
   
   //new db restore rotines, by Erik <erik@colosa.com> on May 17th, 2010
   $dbOpt = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
@@ -2105,14 +2186,14 @@ function restoreWspacemv($fileTar, $sTarWsName, $sNewWsName, $oOwrite) {
   }
   $oDbMaintainer->query("GRANT ALL PRIVILEGES ON `$dbName`.* TO $dbName@'localhost' IDENTIFIED BY '{$aMetadata['DB_PASS']}' WITH GRANT OPTION");
   
-  if( isset($oOwrite) ) {
-    $oDbMaintainer->createDb($dbName, true);  
+  if( $oOwrite ) {
+    $oDbMaintainer->createDb($dbName, true);
   } else {
     $oDbMaintainer->createDb($dbName);
   }
   
   $oDbMaintainer->connect($dbName);
-  $oDbMaintainer->setTempDir($pathTemporalWorkspace . $aMetadata['DB_NAME'] . PATH_SEP);
+  $oDbMaintainer->setTempDir($tempDirectory.PATH_SEP.$aMetadata['DB_NAME'] . PATH_SEP);
   $oDbMaintainer->restoreFromSql($oDbMaintainer->getTempDir() . $aMetadata['DB_NAME'] . '.sql');
   $oDbMaintainer->restoreAllData('sql');
   
@@ -2126,20 +2207,20 @@ function restoreWspacemv($fileTar, $sTarWsName, $sNewWsName, $oOwrite) {
   }
   $oDbMaintainer->query("GRANT ALL PRIVILEGES ON `$dbName`.* TO $dbName@'localhost' IDENTIFIED BY '{$aMetadata['DB_RBAC_PASS']}' WITH GRANT OPTION");
   
-  if( isset($oOwrite) ) {
+  if( $oOwrite ) {
     $oDbMaintainer->createDb($dbName, true);  
   } else {
     $oDbMaintainer->createDb($dbName);
   }
   
-  if( isset($oOwrite) ) {
+  if( $oOwrite ) {
     $oDbMaintainer->createDb($dbName, true);  
   } else {
     $oDbMaintainer->createDb($dbName);
   }
   
   $oDbMaintainer->connect($dbName);
-  $oDbMaintainer->setTempDir($pathTemporalWorkspace . $aMetadata['DB_RBAC_NAME'] . PATH_SEP);
+  $oDbMaintainer->setTempDir($tempDirectory .PATH_SEP. $aMetadata['DB_RBAC_NAME'] . PATH_SEP);
   $oDbMaintainer->restoreFromSql($oDbMaintainer->getTempDir() . $aMetadata['DB_RBAC_NAME'] . '.sql');
   $oDbMaintainer->restoreAllData('sql');
   
@@ -2153,20 +2234,20 @@ function restoreWspacemv($fileTar, $sTarWsName, $sNewWsName, $oOwrite) {
   }
   $oDbMaintainer->query("GRANT ALL PRIVILEGES ON `$dbName`.* TO $dbName@'localhost' IDENTIFIED BY '{$aMetadata['DB_REPORT_PASS']}' WITH GRANT OPTION");
   
-  if( isset($oOwrite) ) {
+  if( $oOwrite ) {
     $oDbMaintainer->createDb($dbName, true);  
   } else {
     $oDbMaintainer->createDb($dbName);
   }
   
   $oDbMaintainer->connect($dbName);
-  $oDbMaintainer->setTempDir($pathTemporalWorkspace . $aMetadata['DB_REPORT_NAME'] . PATH_SEP);
+  $oDbMaintainer->setTempDir($tempDirectory .PATH_SEP. $aMetadata['DB_REPORT_NAME'] . PATH_SEP);
   $oDbMaintainer->restoreFromSql($oDbMaintainer->getTempDir() . $aMetadata['DB_REPORT_NAME'] . '.sql');
   $oDbMaintainer->restoreAllData('sql');
 
+  echo "\n";
   $aInfoNewSite = get_infoOnPM($sNewWsName);
   printInfoSites($aMetadata, $aInfoNewSite);
-  
 
   return true;
 }

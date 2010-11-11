@@ -308,12 +308,12 @@ class DataBaseMaintenance
     foreach( $aTables as $table ) {
       $fsize = $this->dumpSqlInserts($table);
       $file  = basename($this->outfile);
-      echo "Dump of table: $table  in file $file | $fsize Bytes Saved\n";
+      
     }
     
-    echo "UNLOCK TABLES .....................";
+    printf("%-70s", "UNLOCK TABLES");
     if( @mysql_query("UNLOCK TABLES;") )
-      echo "[OK]\n";
+      echo "    [OK]\n";
     else
       echo "[FAILED]\n";
     return true;
@@ -335,8 +335,10 @@ class DataBaseMaintenance
       if( isset($type) && $type == 'sql' ) {
         $this->infile = $this->tmpDir . $table . ".sql";
         if( is_file($this->infile) ) {
-          $this->restoreFromSql($this->infile, true);
-          printf("%20s %s %s\n", 'Restoring data from Sql file ', $this->infile, " in table $table");
+	  $queries = $this->restoreFromSql($this->infile, true);
+	  if (!isset($queries))
+	      $queries = "unknown";
+	  printf("%-59s%20s", "Restored table $table", "$queries queries\n");
         }
       } else {
         $this->infile = $this->tmpDir . $table . ".dump";
@@ -430,11 +432,11 @@ class DataBaseMaintenance
     }
     $fp = fopen($this->outfile, "wb");
     $fpmd = fopen($metadatafile, "wb");
-    echo "LOCK TABLES $table READ.....................";
+    printf("%-70s", "LOCK TABLES $table READ");
     if( @mysql_query("LOCK TABLES $table READ; ") )
-      echo "[OK]\n";
+      echo "    [OK]\n";
     else
-      echo "[FAILED] - ".mysql_error()."\n";
+      echo "[FAILED]\n".mysql_error()."\n";
     $result = @mysql_query("SELECT * FROM `$table`");
     
     //echo "FLUSH TABLES WITH READ LOCK ................";
@@ -474,12 +476,14 @@ class DataBaseMaintenance
       fwrite($fpmd, "$fsData\n");
       $bytesSaved += fwrite($fp, $data);
     }
+
+    printf("%-59s%20s", "Dump of table $table", "$bytesSaved Bytes Saved\n");
     
-    echo "UNLOCK TABLES .....................";
+    printf("%-70s", "UNLOCK TABLES");
     if( @mysql_query("UNLOCK TABLES;") )
-      echo "[OK]\n";
+      echo "    [OK]\n";
     else
-      echo "[FAILED]\n";
+      echo "[FAILED]\n".mysql_error()."\n";
 
     fclose($fp);
     fclose($fpmd);
@@ -538,15 +542,18 @@ class DataBaseMaintenance
     }
     
     $metaFile = str_replace('.sql', '.meta', $sqlfile);
+
+    $queries = 0;
     
     if( is_file($metaFile) ) {
-      echo "Using $metaFile metadata file.\n";
+      echo "Using $metaFile as metadata.\n";
       $fp   = fopen($sqlfile, 'rb');
       $fpmd = fopen($metaFile, 'r');
       while( $offset = fgets($fpmd, 1024) ) {
         $buffer = intval($offset); //reading the size of $oData
         $query  = fread($fp, $buffer); //reading string $oData
-        
+        $queries += 1;
+
         if( ! @mysql_query($query) ) {
           echo mysql_error() . "\n";
           echo "==>" . $query . "<==\n";
@@ -554,6 +561,7 @@ class DataBaseMaintenance
       }
     
     } else {
+	$queries = NULL;
       try{
         $mysqli = new mysqli($this->host, $this->user, $this->passwd, $this->dbName);
         /* check connection */
@@ -596,6 +604,7 @@ class DataBaseMaintenance
         echo $e->getMessage();
       }
     }
+    return $queries;
   }
   
 /**
