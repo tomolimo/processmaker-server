@@ -52,12 +52,18 @@
   $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS1',     '../appFolder/appFolderList',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
   
   if ( $RBAC->userCanAccess('PM_ALLCASES') == 1 ) {
-    $G_TMP_MENU->AddIdRawOption('CASES_GRAL', 'casesListExtJs?action=gral', G::LoadTranslation('ID_GENERAL'));
+//    $G_TMP_MENU->AddIdRawOption('CASES_GRAL', 'casesListExtJs?action=gral', G::LoadTranslation('ID_GENERAL'));
   }
   
-  $G_TMP_MENU->AddIdRawOption('SEARCHS',           '',                                 G::LoadTranslation('ID_CASES_MENU_SEARCH'),  '',                    '', 'blockHeader');
-  $G_TMP_MENU->AddIdRawOption('CASES_SEARCH',      'casesListExtJs?action=search',     G::LoadTranslation('ID_ADVANCEDSEARCH'),     'system-search.png'     );
-  
+  $G_TMP_MENU->AddIdRawOption('SEARCHS',           '',                                         G::LoadTranslation('ID_CASES_MENU_SEARCH'),  '',                    '', 'blockHeader');
+
+  if ( $RBAC->userCanAccess('PM_ALLCASES') == 1 ) {
+    $G_TMP_MENU->AddIdRawOption('CASES_SEARCH',        'casesListExtJs?action=search',         G::LoadTranslation('ID_ADVANCEDSEARCH'),     'system-search.png'     );
+    $G_TMP_MENU->AddIdRawOption('CASES_SIMPLE_SEARCH', 'casesListExtJs?action=simple_search',  G::LoadTranslation('ID_SIMPLESEARCH'),     'system-search.png'     );
+  } else {
+    $G_TMP_MENU->AddIdRawOption('CASES_SIMPLE_SEARCH', 'casesListExtJs?action=simple_search',  G::LoadTranslation('ID_SIMPLESEARCH'),     'system-search.png'     );
+  }
+
   $G_TMP_MENU->AddIdRawOption('ADMIN',             '',                                 G::LoadTranslation('ID_CASES_MENU_ADMIN'),   '',                    '', 'blockHeader');
   if ( $RBAC->userCanAccess('PM_SUPERVISOR') == 1 ) {
     //$G_TMP_MENU->AddIdRawOption('CASES_TO_REVISE_NORMAL', 'cases_List?l=to_revise',           G::LoadTranslation('ID_TO_REVISE'),          'document-review.png'  );

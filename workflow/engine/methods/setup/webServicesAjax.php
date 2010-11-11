@@ -455,10 +455,35 @@ switch ($_POST ['action']) {
 				break;
 			
 			case "SendMessage" :
+        require_once('classes/model/Application.php');
 				$sessionId = $frm ["SESSION_ID"];
-				$caseId = $frm ["CASE_ID"];
+				$from    = $frm ["FROM"];
+        $to      = $frm ["TO_EMAIL"];
+        $cc      = isset($frm ["CC_MAIL"]) ?$frm ["CC_MAIL"]  :'';
+        $bcc     = isset($frm ["BCC_MAIL"])?$frm ["BCC_MAIL"] :'';
+				$caseId  = $frm ["CASE_ID"];
+				$subject = $frm ["SUBJECT"];
 				$message = $frm ["MESSAGE"];
-				$params = array ('sessionId' => $sessionId, 'caseId' => $caseId, 'message' => $message );
+        // getting the proUid variable
+        $oCases = new Application();
+        $oCases->load($caseId);
+        $proUid     = $oCases->getProUid();
+        $caseNumber = $oCases->getAppNumber();
+
+        // generating the path for the template msj
+        $templateFile = PATH_DB.SYS_SYS.PATH_SEP.'mailTemplates'.PATH_SEP.$proUid.PATH_SEP.'tempTemplate.hml';
+          // generating the file adding the msj variable
+        $messageBody = "message for case: ".$caseNumber. "<br>" . $message;
+        file_put_contents($templateFile, $messageBody);
+
+				$params = array ( 'sessionId' => $sessionId,
+                          'caseId' => $caseId,
+                          'from' => $from,
+                          'to' => $to,
+                          'cc' => $cc, 
+                          'bcc' => $bcc,
+                          'subject' => $subject,
+                          'template' => 'tempTemplate.hml' );
 				$result = $client->__SoapCall ( 'sendMessage', array ($params ) );
 				$G_PUBLISH = new Publisher ( );
 				$fields ['status_code'] = $result->status_code;
