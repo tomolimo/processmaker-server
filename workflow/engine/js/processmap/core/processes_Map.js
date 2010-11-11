@@ -94,6 +94,10 @@ var saveTaskData = function(oForm, iForm, iType)
   iLastTab = iForm;
   saveDataTaskTemporal(iForm);
   oTaskData.TAS_UID = getField('TAS_UID').value;
+  if(oTaskData.TAS_TITLE==''){
+	  alert(G_STRINGS.ID_REQ_TITLE );
+	  return false;
+	}
   if(oTaskData.TAS_DEF_MESSAGE)
    oTaskData.TAS_DEF_MESSAGE=oTaskData.TAS_DEF_MESSAGE.replace(re,"@amp@");
   var sParameters = 'function=saveTaskData';
@@ -113,6 +117,7 @@ var saveTaskData = function(oForm, iForm, iType)
     oTaskData.TAS_START = (oTaskData.TAS_START == 'TRUE' ? true : false);
     Pm.data.render.setTaskINI({task: oTaskData.TAS_UID, value: oTaskData.TAS_START});
   }
+  
   Pm.tmp.propertiesPanel.remove();
 };
 
