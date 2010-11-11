@@ -320,8 +320,10 @@ class spoolRun {
           $oPHPMailer->Body = utf8_decode($this->fileData['body']);
           
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
+            $evalMail = strpos($sEmail, '<');
+            
             if( strpos($sEmail, '<') !== false ) {
-              preg_match('/([\"\w@\.-_\s]*\s*)?(<(\w+[\.-]?\w+]*@\w+([\.-]?\w+)*\.\w{2,3})+>)/', $sEmail, $matches);
+              preg_match('/([\"\w@\.-_\s]*\s*)?(<((\w+[\.-])*?\w+]*@\w+([\.-]?\w+)*\.\w{2,3})+>)/', $sEmail, $matches);
               $sTo = trim($matches[3]);
               $sToName = trim($matches[1]);
               $oPHPMailer->AddAddress($sTo, $sToName);
