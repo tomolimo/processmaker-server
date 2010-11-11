@@ -20,13 +20,206 @@ new Ext.KeyMap(document, {
   }
 });
 
-Ext.onReady(function(){
+var removeOption;
+var installOption;
+var exportOption;
 
+
+Ext.onReady(function(){
+  
   //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   Ext.QuickTips.init();
 
+  installOption = new Ext.Action({
+    text: TRANSLATIONS.ID_LANG_INSTALL_UPDATE,
+    iconCls: 'silk-add',
+    icon: '/images/import.gif',
+    handler: function(){
+      var w = new Ext.Window({
+        title: '',
+        width: 420,
+        height: 140,
+        modal: true,
+        autoScroll: false,
+        maximizable: false,
+        resizable: false,
+        items: [
+          new Ext.FormPanel({
+            /*renderTo: 'form-panel',*/
+            id:'uploader',
+            fileUpload: true,
+            width: 400,
+            frame: true,
+            title: TRANSLATIONS.ID_LAN_UPLOAD_TITLE,
+            autoHeight: false,
+            bodyStyle: 'padding: 10px 10px 0 10px;',
+            labelWidth: 50,
+            defaults: {
+                anchor: '90%',
+                allowBlank: false,
+                msgTarget: 'side'
+            },
+            items: [{
+                xtype: 'fileuploadfield',
+                id: 'form-file',
+                emptyText: TRANSLATIONS.ID_LAN_FILE_WATER_LABEL,
+                fieldLabel: TRANSLATIONS.ID_LAN_FILE,
+                name: 'form[LANGUAGE_FILENAME]',
+                buttonText: '',
+                buttonCfg: {
+                    iconCls: 'upload-icon'
+                }
+            }],
+            buttons: [{
+                text: TRANSLATIONS.ID_UPLOAD,
+                handler: function(){
+                  uploader = Ext.getCmp('uploader');
+
+                  if(uploader.getForm().isValid()){
+                    uploader.getForm().submit({
+                      url: 'languages_Import',
+                      waitMsg: 'Uploading the translation file...',
+                      success: function(o, resp){
+                        w.close();
+                        infoGrid.store.reload();
+
+                        Ext.MessageBox.show({
+                          title: '',
+                          width: 500,
+                          height: 500,
+                          msg: "<pre style='font-size:10px'>"+resp.result.msg+"</pre>",
+                          buttons: Ext.MessageBox.OK,
+                          animEl: 'mb9',
+                          fn: function(){},
+                          icon: Ext.MessageBox.INFO
+                        });
+                      },
+                      failure: function(o, resp){
+                        w.close();
+                        //alert('ERROR "'+resp.result.msg+'"');
+                        Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
+                        Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
+                        Ext.MessageBox.ERROR});
+                        //setTimeout(function(){Ext.MessageBox.hide(); }, 2000);
+                      }
+                    });
+                  }
+                }
+            }/*,{
+                text: 'Reset',
+                handler: function(){
+                  uploader = Ext.getCmp('uploader');
+                  uploader.getForm().reset();
+                }
+            }*/,{
+                text: TRANSLATIONS.ID_CANCEL,
+                handler: function(){
+                  w.close();
+                }
+            }]
+          })
+        ]/*,
+        listeners:{
+          show:function() {
+            this.loadMask = new Ext.LoadMask(this.body, {
+              msg:'Loading. Please wait...'
+            });
+          }
+        }*/
+      });
+      w.show();
+    }
+  });
+
+  exportOption = new Ext.Action({
+  text: TRANSLATIONS.ID_EXPORT,
+  iconCls: 'silk-add',
+  icon: '/images/export.png',
+  handler: function(){
+    iGrid = Ext.getCmp('infoGrid');
+    var rowSelected = iGrid.getSelectionModel().getSelected();
+    if( rowSelected ) {
+      location.href = 'languages_Export?LOCALE='+rowSelected.data.LOCALE+'&rand='+Math.random()
+    } else {
+       Ext.Msg.show({
+        title:'',
+        msg: 'first select a language from the list please.',
+        buttons: Ext.Msg.INFO,
+        fn: function(){},
+        animEl: 'elId',
+        icon: Ext.MessageBox.INFO,
+        buttons: Ext.MessageBox.OK
+      });
+    }
+  }
+  });
+
+
+  removeOption = new Ext.Action({
+    text: TRANSLATIONS.ID_DELETE_LANGUAGE,
+    iconCls: 'silk-add',
+    icon: '/images/delete-16x16.gif',
+    handler: function(){
+      iGrid = Ext.getCmp('infoGrid');
+      var rowSelected = iGrid.getSelectionModel().getSelected();
+      if( rowSelected ) {
+        langId      = rowSelected.data.LAN_ID;
+        langName    = rowSelected.data.LAN_NAME;
+        countryName = rowSelected.data.COUNTRY_NAME;
+        locale      = rowSelected.data.LOCALE;
+
+        confirmMsg = TRANSLATIONS.ID_DELETE_LANGUAGE_CONFIRM;
+        confirmMsg = confirmMsg.replace('{0}', locale);
+        Ext.Msg.show({
+          title:'',
+          msg: confirmMsg,
+          buttons: Ext.Msg.YESNO,
+          fn: function(btn){
+            if( btn == 'yes' ) {
+              Ext.Ajax.request({
+                url: 'language_Ajax',
+                success: function(response){
+                  infoGrid.store.reload();
+
+                  Ext.Msg.show({
+                    title:'',
+                    msg: response.responseText,
+                    buttons: Ext.Msg.INFO,
+                    fn: function(){},
+                    animEl: 'elId',
+                    icon: Ext.MessageBox.INFO,
+                    buttons: Ext.MessageBox.OK
+                  });
+                },
+                failure: function(){},
+                params: {
+                  'function': 'delete',
+                  'LOCALE': locale,
+                  'LAN_ID': langId
+                }
+              });
+            }
+          },
+          animEl: 'elId',
+          icon: Ext.MessageBox.QUESTION
+        });
+      } else {
+        Ext.Msg.show({
+          title:'',
+          msg: TRANSLATIONS.ID_DELETE_LANGUAGE_WARNING,
+          buttons: Ext.Msg.INFO,
+          fn: function(){},
+          animEl: 'elId',
+          icon: Ext.MessageBox.INFO,
+          buttons: Ext.MessageBox.OK
+        });
+      }
+      
+    }
+  });
+  
   var infoGrid = new Ext.grid.GridPanel( {
-    renderTo: 'list-panel',
+    /*renderTo: 'list-panel',*/
     region: 'center',
     layout: 'fit',
     id: 'infoGrid',
@@ -154,273 +347,11 @@ Ext.onReady(function(){
 
     }),
 
-    tbar:[
-      {
-        text: TRANSLATIONS.ID_LANG_INSTALL_UPDATE,
-        iconCls: 'silk-add',
-        icon: '/images/import.gif',
-        handler: function(){
-          var w = new Ext.Window({
-            title: '',
-            width: 420,
-            height: 140,
-            modal: true,
-            autoScroll: false,
-            maximizable: false,
-            resizable: false,
-            items: [
-              new Ext.FormPanel({
-                /*renderTo: 'form-panel',*/
-                id:'uploader',
-                fileUpload: true,
-                width: 400,
-                frame: true,
-                title: TRANSLATIONS.ID_LAN_UPLOAD_TITLE,
-                autoHeight: false,
-                bodyStyle: 'padding: 10px 10px 0 10px;',
-                labelWidth: 50,
-                defaults: {
-                    anchor: '90%',
-                    allowBlank: false,
-                    msgTarget: 'side'
-                },
-                items: [{
-                    xtype: 'fileuploadfield',
-                    id: 'form-file',
-                    emptyText: TRANSLATIONS.ID_LAN_FILE_WATER_LABEL,
-                    fieldLabel: TRANSLATIONS.ID_LAN_FILE,
-                    name: 'form[LANGUAGE_FILENAME]',
-                    buttonText: '',
-                    buttonCfg: {
-                        iconCls: 'upload-icon'
-                    }
-                }],
-                buttons: [{
-                    text: TRANSLATIONS.ID_UPLOAD,
-                    handler: function(){
-                      uploader = Ext.getCmp('uploader');
-
-                      if(uploader.getForm().isValid()){
-                        uploader.getForm().submit({
-                          url: 'languages_Import',
-                          waitMsg: 'Uploading the translation file...',
-                          success: function(o, resp){
-                            w.close();
-                            infoGrid.store.reload();
-
-                            Ext.MessageBox.show({
-                              title: '',
-                              width: 500,
-                              height: 500,
-                              msg: "<pre style='font-size:10px'>"+resp.result.msg+"</pre>",
-                              buttons: Ext.MessageBox.OK,
-                              animEl: 'mb9',
-                              fn: function(){},
-                              icon: Ext.MessageBox.INFO
-                            });
-                          },
-                          failure: function(o, resp){
-                            w.close();
-                            //alert('ERROR "'+resp.result.msg+'"');
-                            Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
-                            Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
-                            Ext.MessageBox.ERROR});
-                            //setTimeout(function(){Ext.MessageBox.hide(); }, 2000);
-                          }
-                        });
-                      }
-                    }
-                }/*,{
-                    text: 'Reset',
-                    handler: function(){
-                      uploader = Ext.getCmp('uploader');
-                      uploader.getForm().reset();
-                    }
-                }*/,{
-                    text: TRANSLATIONS.ID_CANCEL,
-                    handler: function(){
-                      w.close();
-                    }
-                }]
-              })
-            ]/*,
-            listeners:{
-              show:function() {
-                this.loadMask = new Ext.LoadMask(this.body, {
-                  msg:'Loading. Please wait...'
-                });
-              }
-            }*/
-          });
-          w.show();
-        }
-      },{
-        text: TRANSLATIONS.ID_EXPORT,
-        iconCls: 'silk-add',
-        icon: '/images/export.png',
-        handler: function(){
-          iGrid = Ext.getCmp('infoGrid');
-          var rowSelected = iGrid.getSelectionModel().getSelected();
-          if( rowSelected ) {
-            location.href = 'languages_Export?LOCALE='+rowSelected.data.LOCALE+'&rand='+Math.random()
-          } else {
-             Ext.Msg.show({
-              title:'',
-              msg: 'first select a language from the list please.',
-              buttons: Ext.Msg.INFO,
-              fn: function(){},
-              animEl: 'elId',
-              icon: Ext.MessageBox.INFO,
-              buttons: Ext.MessageBox.OK
-            });
-          }
-        },
-        scope: this
-      },/*{
-        text: 'Configuration',
-        iconCls: 'silk-add',
-        icon: '/images/options.png',
-        handler: function(){
-          var w = new Ext.Window({
-            title: '',
-            width: 500,
-            height: 420,
-            modal: true,
-            autoScroll: false,
-            maximizable: false,
-            resizable: false,
-            items: []
-          });
-          w.show();
-        },
-        scope: this
-      },
-      {
-        text: 'Set as predetermined',
-        iconCls: 'silk-add',
-        icon: '/images/language-selected.png',
-        handler: function(){
-          iGrid = Ext.getCmp('infoGrid');
-          var rowSelected = iGrid.getSelectionModel().getSelected();
-          if( rowSelected ) {
-            langId      = rowSelected.data.LAN_ID;
-            langName    = rowSelected.data.LAN_NAME;
-            countryName = rowSelected.data.COUNTRY_NAME;
-            locale      = rowSelected.data.LOCALE;
-
-            Ext.Msg.show({
-              title:'Save Changes?',
-              msg: 'Do you want apply to the "'+langName + ' ('+capitalize(countryName)+') as default for '+langName+' language?',
-              buttons: Ext.Msg.YESNO,
-              fn: function(btn){
-                if( btn == 'yes' ) {
-                  Ext.Ajax.request({
-                    url: 'language_Ajax',
-                    success: function(response){
-                      infoGrid.store.reload();
-
-                      Ext.Msg.show({
-                        title:'',
-                        msg: response.responseText,
-                        buttons: Ext.Msg.INFO,
-                        fn: function(){},
-                        animEl: 'elId',
-                        icon: Ext.MessageBox.INFO,
-                        buttons: Ext.MessageBox.OK
-                      });
-                    },
-                    failure: function(){},
-                    params: {
-                      'function': 'savePredetermined',
-                      'LOCALE': locale,
-                      'LAN_ID': langId
-                    }
-                  });
-                }
-              },
-              animEl: 'elId',
-              icon: Ext.MessageBox.QUESTION
-            });
-          } else {
-            Ext.Msg.show({
-              title:'',
-              msg: 'first select a language from the list please.',
-              buttons: Ext.Msg.INFO,
-              fn: function(){},
-              animEl: 'elId',
-              icon: Ext.MessageBox.INFO,
-              buttons: Ext.MessageBox.OK
-            });
-          }
-        },
-        scope: this
-      },*/{
-        xtype: 'tbfill'
-      },
-      {
-        text: TRANSLATIONS.ID_DELETE_LANGUAGE,
-        iconCls: 'silk-add',
-        icon: '/images/delete-16x16.gif',
-        handler: function(){
-          iGrid = Ext.getCmp('infoGrid');
-          var rowSelected = iGrid.getSelectionModel().getSelected();
-          if( rowSelected ) {
-            langId      = rowSelected.data.LAN_ID;
-            langName    = rowSelected.data.LAN_NAME;
-            countryName = rowSelected.data.COUNTRY_NAME;
-            locale      = rowSelected.data.LOCALE;
-
-            confirmMsg = TRANSLATIONS.ID_DELETE_LANGUAGE_CONFIRM;
-            confirmMsg = confirmMsg.replace('{0}', locale);
-            Ext.Msg.show({
-              title:'',
-              msg: confirmMsg,
-              buttons: Ext.Msg.YESNO,
-              fn: function(btn){
-                if( btn == 'yes' ) {
-                  Ext.Ajax.request({
-                    url: 'language_Ajax',
-                    success: function(response){
-                      infoGrid.store.reload();
-
-                      Ext.Msg.show({
-                        title:'',
-                        msg: response.responseText,
-                        buttons: Ext.Msg.INFO,
-                        fn: function(){},
-                        animEl: 'elId',
-                        icon: Ext.MessageBox.INFO,
-                        buttons: Ext.MessageBox.OK
-                      });
-                    },
-                    failure: function(){},
-                    params: {
-                      'function': 'delete',
-                      'LOCALE': locale,
-                      'LAN_ID': langId
-                    }
-                  });
-                }
-              },
-              animEl: 'elId',
-              icon: Ext.MessageBox.QUESTION
-            });
-          } else {
-            Ext.Msg.show({
-              title:'',
-              msg: TRANSLATIONS.ID_DELETE_LANGUAGE_WARNING,
-              buttons: Ext.Msg.INFO,
-              fn: function(){},
-              animEl: 'elId',
-              icon: Ext.MessageBox.INFO,
-              buttons: Ext.MessageBox.OK
-            });
-          }
-          
-        },
-        scope: this
-      }
-    ]
+    tbar:[{
+      xtype: 'tbsplit',
+      text: 'Actions',
+      menu: [removeOption]
+    }, '-', installOption, exportOption]
 
   });
 
@@ -432,7 +363,7 @@ Ext.onReady(function(){
   //infoGrid.render(document.body);
   //fp.render('form-panel');
 
-/*
+
   var viewport = new Ext.Viewport({
     layout: 'fit',
     autoScroll: true,
@@ -440,7 +371,7 @@ Ext.onReady(function(){
       infoGrid
     ]
   });
-  */
+
 });
 
 
