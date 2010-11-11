@@ -25,28 +25,38 @@
 global $RBAC;
 $access = $RBAC->userCanAccess('PM_FACTORY');
 if( $access != 1 ){
-  switch ($access)
-  {
+  switch ($access){
   	case -1:
   	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
   	  G::header('location: ../login/login');
   	  die;
-  	break;
+  	  break;
   	case -2:
+    default:
   	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
   	  G::header('location: ../login/login');
   	  die;
-  	break;
-  	default:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;  	
+  	  break;
   }
 }  
 G::LoadClass('processMap');
 $oProcessMap = new ProcessMap();
-//$oProcessMap->deleteProcess($_POST['form']['PRO_UID']);
-$oProcessMap->deleteProcess($_GET['PRO_UID']);
-G::header('location: main');
-?>
+
+$UIDS = explode(',', $_POST['PRO_UIDS']);
+
+try{
+  
+  foreach($UIDS as $UID){
+    $oProcessMap->deleteProcess($UID);
+  }
+  $resp->status = 0;
+  $resp->msg = 'All process was deleted successfully';
+  echo G::json_encode($resp);
+} catch(Exception $e){
+  $resp->status = 1;
+  $resp->msg = $e->getMessage();
+  echo G::json_encode($resp);
+}
+
+
+  

@@ -146,7 +146,10 @@ Ext.onReady(function(){
         {header: TRANSLATIONS.ID_PRO_DESCRIPTION, dataIndex: 'PRO_DESCRIPTION',hidden:true, hideable:false},
         {header: TRANSLATIONS.ID_PRO_TITLE, dataIndex: 'PRO_TITLE', width: 300},
         {header: TRANSLATIONS.ID_CATEGORY, dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
-        {header: TRANSLATIONS.ID_STATUS, dataIndex: 'PRO_STATUS_LABEL', width: 50},
+        {header: TRANSLATIONS.ID_STATUS, dataIndex: 'PRO_STATUS_LABEL', width: 50, renderer:function(v,p,r){
+          color = r.get('PRO_STATUS') == 'ACTIVE'? 'green': 'red';
+          return String.format("<font color='{0}'>{1}</font>", color, v);
+        }},
         {header: TRANSLATIONS.ID_PRO_USER, dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
         {header: TRANSLATIONS.ID_PRO_CREATE_DATE, dataIndex: 'PRO_CREATE_DATE', width: 90}, 
         {header: TRANSLATIONS.ID_INBOX, dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
@@ -166,7 +169,9 @@ Ext.onReady(function(){
         iconCls: 'silk-add',
         icon: '/images/addc.png',
         handler: newProcess
-      },{
+      },
+    	'-'  
+      ,{
         text:TRANSLATIONS.ID_EDIT,
         iconCls: 'silk-add',
         icon: '/images/edit.gif',
@@ -327,11 +332,83 @@ editProcess = function(){
 }
 
 deleteProcess = function(){
-  var rowSelected = processesGrid.getSelectionModel().getSelected();
-  if( rowSelected ) {
-    parent.dropProcess(rowSelected.data.PRO_UID);
+  //var rowSelected = processesGrid.getSelectionModel().getSelected();
+  var rows = processesGrid.getSelectionModel().getSelections();
+  if( rows.length > 0 ) {
+    //parent.dropProcess(rowSelected.data.PRO_UID);
+    
+    isValid = true;
+    errLog = Array();
+    //verify if the selected rows have not any started or delegated cases
+    for(i=0; i<rows.length; i++){
+      //alert(rows[i].get('CASES_COUNT'));
+      if( rows[i].get('CASES_COUNT') != 0 ){
+        errLog.push(i);
+        isValid = false;
+      }
+    }
+    
+    if( isValid ){
+      ids = Array();
+      for(i=0; i<rows.length; i++)
+        ids[i] = rows[i].get('PRO_UID');
+
+      PRO_UIDS = ids.join(',');
+
+      Ext.Msg.confirm(
+        TRANSLATIONS.ID_CONFIRM,
+        rows.length == 1? TRANSLATIONS.ID_PROCESS_DELETE_LABEL: TRANSLATIONS.ID_PROCESS_DELETE_ALL_LABEL,
+        function(btn, text){
+          if ( btn == 'yes' ){
+            Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
+            Ext.Ajax.request({
+              url: 'processes_Delete',
+              success: function(response) {
+                Ext.MessageBox.hide();
+                processesGrid.store.reload();
+                result = Ext.util.JSON.decode(response.responseText);
+                
+                if(result){
+                  if(result.status != 0){
+                    Ext.MessageBox.show({
+                      title: 'Error',
+                      msg: result.msg,
+                      buttons: Ext.MessageBox.OK,
+                      icon: Ext.MessageBox.ERROR
+                    });
+                  }
+                } else
+                  Ext.MessageBox.show({
+                    title: 'Error',
+                    msg: response.responseText,
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.ERROR
+                  });
+              },
+              params: {PRO_UIDS:PRO_UIDS}
+            });
+          }
+        }
+      );
+    } else {
+      errMsg = '';
+      for(i=0; i<errLog.length; i++){
+        //errMsg += 'You can\'t delete the process "'+rows[errLog[i]].get('PRO_TITLE')+'" because has '+rows[errLog[i]].get('CASES_COUNT')+' cases.<br/>';
+        e = TRANSLATIONS.ID_PROCESS_CANT_DELETE;
+        e = e.replace('{0}', rows[errLog[i]].get('PRO_TITLE'));
+        e = e.replace('{1}', rows[errLog[i]].get('CASES_COUNT'));
+        errMsg += e + '<br/>';
+      }
+      Ext.MessageBox.show({
+        title: 'Error',
+        msg: errMsg,
+        buttons: Ext.MessageBox.OK,
+        icon: Ext.MessageBox.ERROR
+      });
+    }
+    
   } else {
-     Ext.Msg.show({
+    Ext.Msg.show({
       title:'',
       msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
       buttons: Ext.Msg.INFO,
