@@ -1881,8 +1881,8 @@ function run_workspace_backup($task, $args) {
     }
 
     if (!$overwrite && file_exists($fileTar)) {
-      $overwrite = strtolower(prompt('Backup file already exists, do you want to override? [Y/n]'));
-      if( array_search(trim($override), array("y", "")) === false )
+      $overwrite = strtolower(prompt('Backup file already exists, do you want to overwrite? [Y/n]'));
+      if( array_search(trim($overwrite), array("y", "")) === false )
         die();
       $overwrite = true;
     }
@@ -2150,7 +2150,7 @@ function restoreWspacemv($fileTar, $sNewWsName, $oOwrite) {
   $pathNewWsSite = PATH_DATA . 'sites' . PATH_SEP . $sNewWsName;
 
   if (!$oOwrite && file_exists($pathNewWsSite)) {
-    $oOwrite = strtolower(prompt('Workspace already exists, do you want to override? [Y/n]'));
+    $oOwrite = strtolower(prompt('Workspace already exists, do you want to overwrite? [Y/n]'));
     if( array_search(trim($oOwrite), array("y", "")) === false )
       die();
     $oOwrite = true;
