@@ -93,6 +93,7 @@ try {
 
   $sAppUid   = $_GET['APP_UID'];
   $iDelIndex = $_GET['DEL_INDEX'];
+  $_action   = isset($_GET['action'])? $_GET['action']: '';
 
   //loading application data
   $aFields = $oCase->loadCase($sAppUid, $iDelIndex);
@@ -137,7 +138,7 @@ try {
       }
 
       //if the current users is in the AppDelegation row, then open the case
-      if( ($aDelegation['USR_UID'] == $_SESSION['USER_LOGGED']) && $_SESSION['CASES_MENU_OPTION'] != 'sent' ) {
+      if( ($aDelegation['USR_UID'] == $_SESSION['USER_LOGGED']) && $_action != 'participated' ) {
         $_SESSION['APPLICATION'] = $sAppUid;
         $_SESSION['INDEX']       = $iDelIndex;
 

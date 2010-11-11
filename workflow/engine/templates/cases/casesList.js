@@ -40,6 +40,11 @@ function openCase(){
       switch(action){
         case 'to_revise':
           window.location = '../cases/cases_OpenToRevise?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+          break;
+        case 'participated':
+        case 'sent':
+          window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex + '&action=participated&content=inner';
+          break;
         break;
         default:
           window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
