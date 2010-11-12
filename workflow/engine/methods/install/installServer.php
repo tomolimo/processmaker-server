@@ -79,9 +79,11 @@ if($action==="check")
 	$data->path_compiled	=$s['result']['path_compiled'];
 	$data->checkMemory	=(((int)ini_get("memory_limit"))>=40)?true:false;
 	#$data->checkmqgpc	=(get_magic_quotes_gpc())?false:true;
-	$data->checkPI		=((int)$inst->file_permisions(PATH_CORE."config/paths_installed.php",666)==666 || (!file_exists(PATH_CORE."config/paths_installed.php") && (int)$inst->file_permisions(PATH_CORE."config/",777)==777))?true:false;
-	$data->checkDL		=((int)$inst->file_permisions(PATH_CORE."content/languages/",777)==777)?true:false;
-	$data->checkDLJ		=((int)$inst->file_permisions(PATH_CORE."js/labels/",777)==777)?true:false;
+	$data->checkPI		=$inst->is_dir_writable(PATH_CORE."config/");
+	$data->checkDL		=$inst->is_dir_writable(PATH_CORE."content/languages/");
+	$data->checkDLJ		=$inst->is_dir_writable(PATH_CORE."js/labels/");
+  $data->checkPL		=$inst->is_dir_writable(PATH_CORE."plugins/");
+  $data->checkXF		=$inst->is_dir_writable(PATH_CORE."xmlform/");
 	$data->ao_db_wf		=$s['result']['database']['ao']['ao_db_wf'];
 	$data->ao_db_rb		=$s['result']['database']['ao']['ao_db_rb'];
 	$data->ao_db_rp		=$s['result']['database']['ao']['ao_db_rp'];

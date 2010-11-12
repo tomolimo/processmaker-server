@@ -90,20 +90,32 @@ var installer=function()
 
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"Directory "+this.options.path_trunk+"config/<br> permissions: <b>0777</b> <br />OR<br />File <i>"+this.options.path_trunk+"config/paths_installed.php</i><br> permissions: <b>0666</b>",className:"inst_td0",colSpan:2}),
+			new DOM('td',{innerHTML:"Directory "+this.options.path_trunk+"config/<br> permissions: <b>writable</b>",className:"inst_td0",colSpan:2}),
 			this.checkPI = new DOM('td',{innerHTML:'Loading...',className:"inst_td1",colSpan:2})
 		);
 
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"Directory "+this.options.path_trunk+"content/languages/<br> permissions: <b>0777</b>",className:"inst_td0",colSpan:2}),
+			new DOM('td',{innerHTML:"Directory "+this.options.path_trunk+"content/languages/<br> permissions: <b>writable</b>",className:"inst_td0",colSpan:2}),
 			this.checkDL = new DOM('td',{innerHTML:'Loading...',className:"inst_td1",colSpan:2})
 		);
 
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"File "+this.options.path_trunk+"js/labels/<br> permissions: <b>0777</b>",className:"inst_td0",colSpan:2}),
+			new DOM('td',{innerHTML:"File "+this.options.path_trunk+"js/labels/<br> permissions: <b>writable</b>",className:"inst_td0",colSpan:2}),
 			this.checkDLJ = new DOM('td',{innerHTML:'Loading...',className:"inst_td1",colSpan:2})
+		);
+
+		var tr = this.table.insertRow(-1);
+		$(tr).append(
+			new DOM('td',{innerHTML:"File "+this.options.path_trunk+"plugins/<br> permissions: <b>writable</b>",className:"inst_td0",colSpan:2}),
+			this.checkPL = new DOM('td',{innerHTML:'Loading...',className:"inst_td1",colSpan:2})
+		);
+
+		var tr = this.table.insertRow(-1);
+		$(tr).append(
+			new DOM('td',{innerHTML:"File "+this.options.path_trunk+"xmlform/<br> permissions: <b>writable</b>",className:"inst_td0",colSpan:2}),
+			this.checkXF = new DOM('td',{innerHTML:'Loading...',className:"inst_td1",colSpan:2})
 		);
 
 		/* Database  */
@@ -400,6 +412,12 @@ var installer=function()
 			this.checkDLJ.className = (!this.cstatus.checkDLJ)?"inst_td1 tdFailed":"inst_td1 tdOk";
 			this.checkDLJ.innerHTML = (!this.cstatus.checkDLJ)?"FAILED":"PASSED";
 
+			this.checkPL.className = (!this.cstatus.checkPL)?"inst_td1 tdFailed":"inst_td1 tdOk";
+			this.checkPL.innerHTML = (!this.cstatus.checkPL)?"FAILED":"PASSED";
+
+			this.checkXF.className = (!this.cstatus.checkXF)?"inst_td1 tdFailed":"inst_td1 tdOk";
+			this.checkXF.innerHTML = (!this.cstatus.checkXF)?"FAILED":"PASSED";
+
 			this.databaseHostname[(!this.cstatus.mysqlConnection)?"failed":"passed"]();
 			this.databaseUsername[(!this.cstatus.mysqlConnection)?"failed":"passed"]();
 			this.databasePassword[(!this.cstatus.mysqlConnection)?"failed":"passed"]();
@@ -422,7 +440,7 @@ var installer=function()
 			this.ao_admin_pass1[(!this.cstatus.ao_admin_pass && this.select_ao_pm.selected().value==2)?"failed":"passed"]();
 			this.ao_admin_pass2[(!this.cstatus.ao_admin_pass && this.select_ao_pm.selected().value==2)?"failed":"passed"]();
 
-			if(this.cstatus.ao_db_wf['status'] && this.cstatus.ao_db_rb['status'] && this.cstatus.ao_db_rp['status'] && this.cstatus.ao_admin && this.cstatus.ao_admin_pass && this.cstatus.checkMemory && this.cstatus.checkPI && this.cstatus.checkDL && this.cstatus.checkDLJ && this.cstatus.phpVersion && this.cstatus.mysqlVersion && this.cstatus.mysqlConnection && this.cstatus.grantPriv && this.cstatus.path_data && this.cstatus.path_compiled)
+			if(this.cstatus.ao_db_wf['status'] && this.cstatus.ao_db_rb['status'] && this.cstatus.ao_db_rp['status'] && this.cstatus.ao_admin && this.cstatus.ao_admin_pass && this.cstatus.checkMemory && this.cstatus.checkPI && this.cstatus.checkDL && this.cstatus.checkDLJ && this.cstatus.checkPL && this.cstatus.checkXF && this.cstatus.phpVersion && this.cstatus.mysqlVersion && this.cstatus.mysqlConnection && this.cstatus.grantPriv && this.cstatus.path_data && this.cstatus.path_compiled)
 			{
 				this.options.button0.disabled=true;
 				this.options.button1.disabled=false;

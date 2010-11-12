@@ -406,7 +406,7 @@ class Installer
     }
     else {
       $dir = $this->find_root_path($dir);
-        return (is_writable($dir) && ($this->file_permisions($dir)==777 || $this->file_permisions($dir)==755));
+        return (is_writable($dir) && is_readable($dir));
     }
   }
 
