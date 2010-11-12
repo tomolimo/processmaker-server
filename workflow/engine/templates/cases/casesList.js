@@ -46,6 +46,7 @@ function openCase(){
         case 'sent':
         case 'todo':
         case 'paused':
+        case 'unassigned':
           requestFile = '../cases/cases_Open';
           break;
       }
