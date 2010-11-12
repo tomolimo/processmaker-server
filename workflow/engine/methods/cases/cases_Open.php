@@ -47,27 +47,6 @@ $oCase = new Cases();
 //cleaning the case session data
 Cases::clearCaseSessionData();
 
-/**
- * this rutine validate the content=inner, if this parameter is not passed as parameter
- * it assume that is a request from a direct link like "...sysos/en/green/cases/cases_Open?APP_UID=8657855064c913c5ecdef30003851716&DEL_INDEX=2"
- * and this will be redirected, this cause that the application form will be loaded on side main frame therefor the form
- * will be loaded with the main menu and the left menu of cases
- */
-
-if( ! isset($_GET['content']) || $_GET['content'] != "inner" ) {
-  $tmp = explode(PATH_SEP, $_SERVER['REDIRECT_URL']);
-  if( count($tmp) > 1 ) {
-    $_SESSION['cases_url'] = $tmp[count($tmp) - 1] . '?' . $_SERVER['QUERY_STRING'];
-    $G_PUBLISH = new Publisher();
-    $oHeadPublisher = & headPublisher::getSingleton();
-    $oHeadPublisher->addScriptCode("parent.window.location.href ='main'");
-    G::RenderPage('publish', 'raw');
-    die();
-  }
-}
-
-
-
 try {
   //Loading data for a Jump request
   if( ! isset($_GET['APP_UID']) && isset($_GET['APP_NUMBER']) ) {
@@ -97,7 +76,6 @@ try {
 
   //loading application data
   $aFields = $oCase->loadCase($sAppUid, $iDelIndex);
-
 
   switch($aFields['APP_STATUS']){
     case 'DRAFT':
@@ -138,7 +116,7 @@ try {
       }
 
       //if the current users is in the AppDelegation row, then open the case
-      if( ($aDelegation['USR_UID'] == $_SESSION['USER_LOGGED']) && $_action != 'participated' ) {
+      if( ($aDelegation['USR_UID'] == $_SESSION['USER_LOGGED']) && $_action != 'sent' ) {
         $_SESSION['APPLICATION'] = $sAppUid;
         $_SESSION['INDEX']       = $iDelIndex;
 

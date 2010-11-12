@@ -20,10 +20,12 @@ new Ext.KeyMap(document, {
 var storeCases;
 var storeReassignCases;
 var grid;
+var textJump;
 
 /** */
 
 function openCase(){
+  
     var rowModel = grid.getSelectionModel().getSelected();
     if(rowModel){
       var appUid   = rowModel.data.APP_UID;
@@ -36,59 +38,35 @@ function openCase(){
         wait:true,
         waitConfig: {interval:200}
       });
-      
+
+      alert(action);
+
       switch(action){
         case 'to_revise':
-          window.location = '../cases/cases_OpenToRevise?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
+          requestFile = '../cases/cases_OpenToRevise';
           break;
-        case 'participated':
         case 'sent':
-          window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex + '&action=participated&content=inner';
+        case 'todo':
+        case 'paused':
+          requestFile = '../cases/cases_Open';
           break;
-        break;
-        default:
-          window.location = '../cases/cases_Open?APP_UID=' + appUid + '&DEL_INDEX='+delIndex+'&content=inner';
       }
-      
-    } else {
-      Ext.Msg.show({
-        title:'',
-        msg: TRANSLATIONS.ID_SELECT_ONE_AT_LEAST,
-        buttons: Ext.Msg.INFO,
-        fn: function(){},
-        animEl: 'elId',
-        icon: Ext.MessageBox.INFO,
-        buttons: Ext.MessageBox.OK
-      });
-    }
-  }
+      params  = 'APP_UID=' + appUid;
+      params += '&DEL_INDEX=' + delIndex;
+      params += '&action=' + action;
 
-  /*function deleteCase(){
-    Ext.Msg.show({
-      title:TRANSLATIONS.ID_CONFIRM,
-      msg: TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES,
-      buttons: Ext.Msg.YESNO,
-      fn: function(btn){
-        if( btn == 'yes' ) {
-          var rowModel = grid.getSelectionModel().getSelected();
+      redirect(requestFile + '?' + params);
 
-          Ext.Ajax.request({
-            url: 'cases_Ajax',
-            success: function(response){
-              grid.store.reload();
-            },
-            failure: function(){},
-            params: {
-              'action': 'deleteCase',
-              'sApplicationUID': rowModel.data.APP_UID
-            }
-          });
-        }
-      },
-      animEl: 'elId',
-      icon: Ext.MessageBox.QUESTION
-    });
-  }*/
+    } else
+      msgBox('Information', TRANSLATIONS.ID_SELECT_ONE_AT_LEAST);
+}
+
+function jumpToCase(appNumber){
+  params  = 'APP_NUMBER=' + appNumber;
+  params += '&action=jump';
+  requestFile = '../cases/cases_Open';
+  redirect(requestFile + '?' + params);
+}
 
 function deleteCase() {
   var rows = grid.getSelectionModel().getSelections();
@@ -234,6 +212,10 @@ function unpauseCase() {
       });
     }
   });
+}
+
+function redirect(href){
+  window.location.href = href;
 }
 
 Ext.onReady ( function() {
@@ -792,15 +774,18 @@ Ext.onReady ( function() {
     }
   }
 
-  var textJump = new Ext.form.TextField ({
+  textJump = new Ext.form.TextField ({
     allowBlank: false,
     width: 50,
     emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID,
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
-          jump = textJump.getValue();
-          location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner';
+          caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
+          if( caseNumber )
+            jumpToCase(caseNumber);
+          else
+            msgBox('Input Error', 'You have set a invalid Application number', 'error');
         }
       }
     }
@@ -809,8 +794,11 @@ Ext.onReady ( function() {
   var btnJump = new Ext.Button ({
     text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
-      jump = textJump.getValue();
-      location.href = '../cases/cases_Open?APP_NUMBER=' + jump +'&content=inner';
+      caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
+      if( caseNumber != 'NaN' )
+        jumpToCase(caseNumber);
+      else
+        msgBox('Input Error', 'You have set a invalid Application number', 'error');
     }
   });
 
@@ -1419,3 +1407,26 @@ Ext.apply(Ext.form.VTypes, {
 
 });
 
+function msgBox(title, msg, type){
+  if( typeof('type') == 'undefined' )
+    type = 'info';
+
+  switch(type){
+    case 'error': 
+      icon = Ext.MessageBox.ERROR;
+      break;
+    case 'info':
+    default:
+      icon = Ext.MessageBox.INFO;
+      break;
+  }
+
+  Ext.Msg.show({
+    title: title,
+    msg: msg,
+    fn: function(){},
+    animEl: 'elId',
+    icon: icon,
+    buttons: Ext.MessageBox.OK
+  });
+}
