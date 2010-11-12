@@ -39,8 +39,6 @@ function openCase(){
         waitConfig: {interval:200}
       });
 
-      alert(action);
-
       switch(action){
         case 'to_revise':
           requestFile = '../cases/cases_OpenToRevise';
