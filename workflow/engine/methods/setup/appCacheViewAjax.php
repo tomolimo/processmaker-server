@@ -135,19 +135,19 @@
         $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP );
 
         //APP_DELEGATION INSERT 
-        $res = $appCache->triggerAppDelegationInsert($lang, false);
+        $res = $appCache->triggerAppDelegationInsert($lang, true);
         //$result->info[] = array ('name' => 'Trigger APP_DELEGATION INSERT',           'value'=> $res);
   
         //APP_DELEGATION Update 
-        $res = $appCache->triggerAppDelegationUpdate($lang, false);
+        $res = $appCache->triggerAppDelegationUpdate($lang, true);
         //$result->info[] = array ('name' => 'Trigger APP_DELEGATION UPDATE',           'value'=> $res);
   
         //APPLICATION UPDATE 
-        $res = $appCache->triggerApplicationUpdate($lang, false);
+        $res = $appCache->triggerApplicationUpdate($lang, true);
         //$result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
   
         //APPLICATION DELETE
-        $res = $appCache->triggerApplicationDelete($lang, false);
+        $res = $appCache->triggerApplicationDelete($lang, true);
         //$result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
 
 
