@@ -159,6 +159,10 @@
         $Criteria->add      (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
         $CriteriaCount->add (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
         break;
+      case 'completed' : 
+        $Criteria->add      (AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
+        $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
+        break;
   	}
   }  
 
