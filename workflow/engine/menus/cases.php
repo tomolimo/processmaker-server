@@ -59,10 +59,7 @@
 
   if ( $RBAC->userCanAccess('PM_ALLCASES') == 1 ) {
     $G_TMP_MENU->AddIdRawOption('CASES_SEARCH',        'casesListExtJs?action=search',         G::LoadTranslation('ID_ADVANCEDSEARCH'),     'system-search.png'     );
-    $G_TMP_MENU->AddIdRawOption('CASES_SIMPLE_SEARCH', 'casesListExtJs?action=simple_search',  G::LoadTranslation('ID_SIMPLESEARCH'),     'system-search.png'     );
-  } else {
-    $G_TMP_MENU->AddIdRawOption('CASES_SIMPLE_SEARCH', 'casesListExtJs?action=simple_search',  G::LoadTranslation('ID_SIMPLESEARCH'),     'system-search.png'     );
-  }
+  } 
 
   $G_TMP_MENU->AddIdRawOption('ADMIN',             '',                                 G::LoadTranslation('ID_CASES_MENU_ADMIN'),   '',                    '', 'blockHeader');
   if ( $RBAC->userCanAccess('PM_SUPERVISOR') == 1 ) {
