@@ -447,15 +447,162 @@ MainPanel = function(){
         ]  
       },
       {
-    	  id:'documents',
+          id:'documents',
           title: 'Documents',            
           iconCls:'ICON_FOLDERS',
           layout:'border',
-          autoLoad : {
-              url : '../appFolder/appFolderList',
-              scripts : true
+          items:[{
+            id: 'documentsView',         
+            region: 'center',         
+            // autoScroll: true,
+            items: [
+              {
+                xtype : 'treepanel',
+                id    : 'documentsTree',
+                style : {
+                  // width: '50%',
+                  height : '100%',
+                  overflow:'auto'
+                },
+                useArrows : true,
+                border    : false,
+                split     : true,
+                itemId    : 'documentsTreePanel',
+                id        : 'documentsTreePanel',
+                rootVisible   : true,
+                treePanel     : this,
+                clearOnReLoad : false,
+                loader : new Ext.tree.TreeLoader( {
+                  dataUrl : '../appFolder/appFolderAjax.php',
+                  baseParams : {
+                    action : 'expandNode'
+                  }
+                }),
+                listeners : {
+                  dblclick:function(n) {
+                    if (n.attributes.optionType == "startProcess") {
+                      Ext.Msg.show( {
+                            title : 'Start Case',
+                            msg : 'Starting new case<br><br><b>' + n.attributes.text + '</b>',
+                            icon : Ext.MessageBox.INFO
+                          });
+                      Ext.Ajax.request( {
+                        url : 'casesStartPage_Ajax.php',
+                        params : {
+                          action : 'startCase',
+                          processId : n.attributes.pro_uid,
+                          taskId : n.attributes.tas_uid
+                        },
+                        success : function( response ) {
+                          var res = Ext.util.JSON.decode(response.responseText);
+                          if(res.openCase){
+                            //Ext.Msg.show({
+                            //  title : 'Open Case',
+                            //  msg : 'Case number <b>' + res.CASE_NUMBER + '</a></b>',
+                            //  icon : Ext.MessageBox.INFO
+                            //});
+                            window.location = res.openCase.PAGE;
+                          }
+                          else {
+                            Ext.Msg.show( {
+                              title : 'Error creating a new Case',
+                              msg : '<textarea cols="50" rows="10">'+ res.message +'</textarea>',
+                              icon : Ext.MessageBox.ERROR,
+                              buttons: Ext.Msg.OK
+                            });
+                          }
+                        },
+                        failure : function() {
+                          // grid.getGridEl().unmask(true);
+                          Ext.Msg.alert('Error','Unable to start a case');
+                        }
+                      });
+                    }
+                  },
+                  click : function(n) {
+                    this.treePanel.showDetails(n);
+                  }
+                },
+                root : {
+                  nodeType : 'async',
+                  draggable : false,
+                  id : 'root',
+                  expanded : true
+                }
+              }
+            ] //items
+          }
+          ],
+             
+          tbar : [ {
+            xtype  : 'textfield',
+            name   : 'field1',
+            emptyText : 'Filter',
+            enableKeyEvents : true,           
+            listeners : {
+              render: function(f){
+                Ext.getCmp("startCaseTreePanel").filter = new Ext.tree.TreeFilter(this, {
+                  clearBlank: true,
+                  autoClear: true
+                });
+              },
+              keydown: function(t, e){
+                treeFiltered = Ext.getCmp("startCaseTreePanel");
+                var text = t.getValue();
+                if(!text){
+                  treeFiltered.filter.clear();
+                  return;
+                }
+                treeFiltered.expandAll();
+                 
+                var re = new RegExp('^' + Ext.escapeRe(text), 'i');
+                treeFiltered.filter.filterBy(function(n) {
+                   //return !n.attributes.isClass || re.test(n.text);
+                 });          
+                 /*
+                 // hide empty packages that weren't filtered
+                 this.hiddenPkgs = [];
+                             var me = this;
+                 this.root.cascade(function(n){
+                   if(!n.attributes.isClass && n.ui.ctNode.offsetHeight < 3){
+                     n.ui.hide();
+                     me.hiddenPkgs.push(n);
+                   }
+                 });
+                 */                  
+              },
+              scope: this                
             }
-      },
+          },
+          ' ', 
+          ' ',
+          {
+            iconCls: 'icon-expand-all',
+            tooltip: 'Expand All',
+            handler: function(){ Ext.getCmp("startCaseTreePanel").root.expand(true); },
+              scope: this
+            }, 
+            '-', 
+            {
+              iconCls: 'icon-collapse-all',
+              tooltip: 'Collapse All',
+              handler: function(){ Ext.getCmp("startCaseTreePanel").root.collapse(true); },
+              scope: this
+            },
+            ' ', 
+            ' ',
+            {
+              xtype: 'tbbutton',
+              cls: 'x-btn-icon',
+              icon: '/images/refresh.gif',
+      
+              handler: function(){
+                tree = Ext.getCmp('startCaseTreePanel');
+                tree.getLoader().load(tree.root);
+              }
+            } 
+          ]  
+        },
       {
         title : 'Dashboard',
         id : 'mainDashboard',

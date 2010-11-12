@@ -12,8 +12,8 @@ $rootFolder = "/";
 switch ($_POST ['action']) {
 	
 	case 'expandNode':
-	  $folderList = $oPMFolder->getFolderList ( $_POST ['node'] != 'CASES_FOLDERS' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
-	  $folderContent = $oPMFolder->getFolderContent ( $_POST ['node'] != 'CASES_FOLDERS' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
+	  $folderList = $oPMFolder->getFolderList ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
+	  $folderContent = $oPMFolder->getFolderContent ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
 	  //G::pr($folderContent);
 	  $processListTree=array();
 	  foreach ( $folderList as $key => $obj ) {
