@@ -456,6 +456,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
 //redirect to login, if user changed the workspace in the URL
   if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
+    G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', "error");
     header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/login/login' );
     die;
   }
