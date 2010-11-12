@@ -205,6 +205,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   }
 
 //************** the request correspond to valid php page, now parse the URI  **************
+  
   G::parseURI ( getenv( "REQUEST_URI" ) );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . "widgets/jscalendar/lang/calendar-" . SYS_LANG . ".js");
   define( 'SYS_URI' , '/sys' .  SYS_TEMP . '/' . SYS_LANG . '/' . SYS_SKIN . '/' );
@@ -424,7 +425,6 @@ $startingTime =  array_sum(explode(' ',microtime()));
   }
   else {
     //when the file is part of the public directory of any PROCESS, this a ProcessMaker feature
-    $avoidChangedWorkspaceValidation = true;
     if (preg_match('/^[0-9][[:alnum:]]+$/', SYS_COLLECTION) == 1)
     { //the pattern is /sysSYS/LANG/SKIN/PRO_UID/file
     $auxPart = explode ( '/' ,  $_SERVER['REQUEST_URI']);
@@ -440,6 +440,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         G::streamFile ( $phpFile );
         die;
       }
+      //$avoidChangedWorkspaceValidation=true;
       $bWE = true;
       //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
     }
@@ -450,8 +451,9 @@ $startingTime =  array_sum(explode(' ',microtime()));
         die;
     }
   }
-
-  //redirect to login, if user changed the workspace in the URL
+//G::pr($_SESSION);
+//G::dump($avoidChangedWorkspaceValidation);die;  
+//redirect to login, if user changed the workspace in the URL
   if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
     header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/login/login' );
@@ -486,7 +488,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       and  SYS_TARGET != 'autoinstallPlugins'
       and  SYS_TARGET != 'heartbeatStatus'        
       and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
-      and $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'cases_ShowDocument') {
+      and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'cases_ShowDocument') {
         $bRedirect = true;
         if (isset($_GET['sid'])) {
           G::LoadClass('sessions');
