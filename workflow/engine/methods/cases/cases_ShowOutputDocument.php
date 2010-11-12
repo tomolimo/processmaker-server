@@ -31,7 +31,7 @@
   require_once ( "classes/model/AppDocumentPeer.php" );
 
   $oAppDocument = new AppDocument();
-  $oAppDocument->Fields = $oAppDocument->load($_GET['a'],isset($_GET['v']) ? $_GET['v'] : NULL ); 
+  $oAppDocument->Fields = $oAppDocument->load($_GET['a'],(isset($_GET['v']) )? $_GET['v'] : NULL ); 
 
   $sAppDocUid = $oAppDocument->getAppDocUid();
   $info = pathinfo( $oAppDocument->getAppDocFilename() );
@@ -46,8 +46,8 @@
   		$ext = $info['extension'];
   	}
   }
-
-  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename'] . '.' . $ext ;
+  $ver= (isset($_GET['v']) && $_GET['v']!='') ? '_'.$_GET['v'] : '';
+  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename'] .$ver. '.' . $ext ;
   G::streamFile ( $realPath, true );
 
 ?>

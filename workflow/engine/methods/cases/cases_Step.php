@@ -301,6 +301,7 @@
       require_once 'classes/model/OutputDocument.php';
       $oOutputDocument = new OutputDocument();
       $aOD = $oOutputDocument->load( $_GET['UID'] );
+
       if (!$aPreviousStep) {
         $aOD['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
       }
@@ -339,10 +340,19 @@
                 if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
                 	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
                 	
+                if(isset($aOD['OUT_DOC_VERSIONING']) && $aOD['OUT_DOC_VERSIONING']!=0){
+                 $oAppDocument= new AppDocument();          
+                 $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
+                 $lastDocVersion = $lastDocVersion +1;
+                 $lastDocVersion = '_'.$lastDocVersion;
+                }else {
+                	$lastDocVersion='';
+                }
+
                 $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
                 $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
                 $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
-                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
+                   $sFilename.$lastDocVersion, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
                 break;
             case 'JRXML' :
                 //creating the xml with the application data;
@@ -589,7 +599,6 @@
           $oAppDocument = new AppDocument();
           $lastVersion=$oAppDocument->getLastAppDocVersion($_GET['DOC'],$_SESSION['APPLICATION']);
           $aFields = $oAppDocument->load($_GET['DOC'],$lastVersion);
-          
           $listing=false;
 			    $oPluginRegistry = & PMPluginRegistry::getSingleton();
 			    if($oPluginRegistry->existsTrigger(PM_CASE_DOCUMENT_LIST)) {
@@ -603,14 +612,20 @@
           require_once 'classes/model/OutputDocument.php';
           $oOutputDocument = new OutputDocument();
           $aGields = $oOutputDocument->load($aFields['DOC_UID']);
-
+          
+          if(isset($aGields['OUT_DOC_VERSIONING']) && $aGields['OUT_DOC_VERSIONING']!=0){
+         	  $oAppDocument= new AppDocument();          
+            $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
+          }else {
+           	$lastDocVersion='';
+          }
           $aFields['VIEW1'] = G::LoadTranslation('ID_OPEN');
           
           $aFields['VIEW2'] = G::LoadTranslation('ID_OPEN');
 
-          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=doc&random=' . rand();
+          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=doc&random=' . rand();
 
-          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=pdf&random=' . rand();
+          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=pdf&random=' . rand();
           
 
           if ( is_array ($listing) ){//If exist in Plugin Document List
