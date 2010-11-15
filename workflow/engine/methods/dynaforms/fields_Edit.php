@@ -152,10 +152,10 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
       }
     }
 
-    if( $type == 'suggest' ) {
+    if( $type == 'suggest' && isset($Fields['PME_SQLCONNECTION']) && $Fields['PME_SQLCONNECTION']!='') {
       //define the dbArray with the table fields
       //g::pr($Fields);
-      $con = Propel::getConnection($Fields['PME_SQLCONNECTION']);
+      $con = Propel::getConnection($Fields['PME_SQLCONNECTION']); 
       $rs = $con->executeQuery("SHOW COLUMNS FROM USERS");
 		  $result = Array();
 			$i=0;
