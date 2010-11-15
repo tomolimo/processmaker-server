@@ -113,11 +113,17 @@
     
     case 'getLangList': 
 
-      require_once 'classes/model/Language.php';
+      require_once 'classes/model/Translation.php';
       $result = new stdClass();
       $result->rows = Array();
-      $lang = new Language();
-      $result->rows = $lang->getActiveLanguages();
+      
+      
+      $langs = Translation::getTranslationEnvironments();
+      foreach($langs as $lang){
+        $result->rows[] = Array('LAN_ID'=>$lang['LOCALE'], 'LAN_NAME'=>$lang['LANGUAGE']);
+      }
+      //print_r($langs);
+      //$result->rows = $lang->getActiveLanguages();
      
       print(G::json_encode($result));
       break;

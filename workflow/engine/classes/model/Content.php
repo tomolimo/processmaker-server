@@ -278,18 +278,22 @@ class Content extends BaseContent {
   function removeLanguageContent($lanId) {
     try {
       $c = new Criteria ( );
+      $c->addSelectColumn(ContentPeer::CON_CATEGORY);
+      $c->addSelectColumn(ContentPeer::CON_PARENT);
+      $c->addSelectColumn(ContentPeer::CON_ID);
+      $c->addSelectColumn(ContentPeer::CON_LANG);
+
       $c->add ( ContentPeer::CON_LANG, $lanId );
       $result = ContentPeer::doSelectRS ( $c );
       $result->next ();
       $row = $result->getRow ();
       while ( is_array ( $row ) ) {
-        ContentPeer::doDelete ( array ($ConCategory, $ConParent, $ConId, $row [3] ) );
+        ContentPeer::doDelete ( array ($row['CON_CATEGORY'], $row['CON_PARENT'], $row['CON_ID'], $lanId ) );
         $result->next ();
         $row = $result->getRow ();
       }
     } catch ( Exception $e ) {
       throw ($e);
     }
-
   }
 } // Content
