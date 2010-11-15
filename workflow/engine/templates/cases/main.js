@@ -563,7 +563,7 @@ function updateCasesTree() {
       ReloadTreeMenuItemDetail({item:currentSelectedTreeMenuItem});
     }
     Ext.Ajax.request({
-      url: 'casesMenuLoader?action=getAllCounters',
+      url: 'casesMenuLoader?action=getAllCounters&r='+Math.random(),
       success: function(response){
       	try{
 	        result = eval('('+response.responseText+')');
@@ -572,15 +572,16 @@ function updateCasesTree() {
 		          oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
 		          oldValue = oldValue.replace('<b>', '');
 		          oldValue = oldValue.replace('</b>', '');
-		          newValue = result[i].count;
 		          
+		          newValue = result[i].count;
+
 		          if( oldValue != newValue && oldValue != 0 ){
 		            document.getElementById('NOTIFIER_'+result[i].item).innerHTML = '<b>' + result[i].count + '</b>';
-		            NOTIFIER_FLAG = true;
+		            //NOTIFIER_FLAG = true;
 		          } else { 
-		          	if(NOTIFIER_FLAG === false){
+		          	//if(NOTIFIER_FLAG === false){
 		              document.getElementById('NOTIFIER_'+result[i].item).innerHTML = result[i].count;
-		            }
+		            //}
 		          }
 		        } 
 		        else continue;

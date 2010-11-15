@@ -38,22 +38,28 @@ function openCase(){
         wait:true,
         waitConfig: {interval:200}
       });
-
+      params = '';      
       switch(action){
         case 'to_revise':
+          params += 'APP_UID=' + appUid;
+          params += '&DEL_INDEX=' + delIndex;
           requestFile = '../cases/cases_OpenToRevise';
           break;
-        case 'sent':
+        case 'sent': // = participated
+          params += 'APP_UID=' + appUid;
+          params += '&DEL_INDEX=' + delIndex;
+          requestFile = '../cases/cases_Open';        
+        break;
         case 'todo':
         case 'paused':
         case 'unassigned':
+          params += 'APP_UID=' + appUid;
+          params += '&DEL_INDEX=' + delIndex;
           requestFile = '../cases/cases_Open';
           break;
       }
-      params  = 'APP_UID=' + appUid;
-      params += '&DEL_INDEX=' + delIndex;
+      
       params += '&action=' + action;
-
       redirect(requestFile + '?' + params);
 
     } else
