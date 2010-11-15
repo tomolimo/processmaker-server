@@ -3059,6 +3059,9 @@ function eprint($s = "", $c = null){
         case 'red':
           printf("\033[0;35;31m$s\033[0m");
           return;
+        case 'blue':
+          printf("\033[0;35;34m$s\033[0m");
+          return;
         default: print "$s";
       }
     } else 
@@ -3099,6 +3102,9 @@ function eprintln($s="", $c=null){
           return;
         case 'red':
           printf("\033[0;35;31m$s\033[0m\n");
+          return;
+        case 'blue':
+          printf("\033[0;35;34m$s\033[0m\n");
           return;
       }
     }
