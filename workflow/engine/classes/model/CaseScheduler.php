@@ -434,7 +434,7 @@ class CaseScheduler extends BaseCaseScheduler {
 
 
               if((isset($caseSchedulerSelected))&&(is_object($caseSchedulerSelected))){
-                eprint(" - Transfering control to a Plugin: ".$caseSchedulerSelected->sNamespace."/".$caseSchedulerSelected->sActionId,'green');
+                eprintln(" - Transfering control to a Plugin: ".$caseSchedulerSelected->sNamespace."/".$caseSchedulerSelected->sActionId,'green');
 
                 $oData['OBJ_SOAP'] = $client;
                 $oData['SCH_UID'] = $aRow['SCH_UID'];
