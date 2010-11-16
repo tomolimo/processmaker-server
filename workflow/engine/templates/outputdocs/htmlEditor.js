@@ -116,7 +116,14 @@ Ext.onReady(function(){
             Ext.Ajax.request({
               url: 'outputdocs_Save',
               success: function(response){
-                alert('s');
+                Ext.Msg.show({
+                  title: '',
+                  msg: 'Saved Successfully',
+                  fn: function(){},
+                  animEl: 'elId',
+                  icon: Ext.MessageBox.INFO,
+                  buttons: Ext.MessageBox.OK
+                });
               },
               failure: function(){},
               params: {
