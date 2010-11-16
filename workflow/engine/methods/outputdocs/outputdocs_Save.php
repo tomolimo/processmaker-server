@@ -73,36 +73,37 @@ try {
     print $flag;	  
 	  
 	} else {
-  //default:
-  
-  require_once 'classes/model/OutputDocument.php';
-  G::LoadClass( 'processMap' );
-  
-  $oOutputDocument = new OutputDocument();
+    //default:
+    
+    require_once 'classes/model/OutputDocument.php';
+    G::LoadClass( 'processMap' );
+    
+    $oOutputDocument = new OutputDocument();
 
-  if ($_POST['form']['OUT_DOC_UID'] == '') {
-  	if ((isset($_POST['form']['OUT_DOC_TYPE']))&&( $_POST['form']['OUT_DOC_TYPE'] == 'JRXML' )) {
-    	$dynaformUid = $_POST['form']['DYN_UID'];
+    if ($_POST['form']['OUT_DOC_UID'] == '') {
+      if ((isset($_POST['form']['OUT_DOC_TYPE']))&&( $_POST['form']['OUT_DOC_TYPE'] == 'JRXML' )) {
+        $dynaformUid = $_POST['form']['DYN_UID'];
 
-    	$outDocUid = $oOutputDocument->create($_POST['form']);
-    	G::LoadClass ('javaBridgePM');
-    	$jbpm = new JavaBridgePM ();
-    	print $jbpm->generateJrxmlFromDynaform ( $outDocUid, $dynaformUid, 'classic' );
+        $outDocUid = $oOutputDocument->create($_POST['form']);
+        G::LoadClass ('javaBridgePM');
+        $jbpm = new JavaBridgePM ();
+        print $jbpm->generateJrxmlFromDynaform ( $outDocUid, $dynaformUid, 'classic' );
 
-  	}
-  	else {
-    	$outDocUid = $oOutputDocument->create($_POST['form']);
+      }
+      else {
+        $outDocUid = $oOutputDocument->create($_POST['form']);
+      }
+    }
+    else {
+      $oOutputDocument->update($_POST['form']);
+    }
+    
+    if( isset($_POST['form']['PRO_UID']) ){
+      //refresh dbarray with the last change in outputDocument
+      $oMap = new processMap();
+      $oCriteria = $oMap->getOutputDocumentsCriteria($_POST['form']['PRO_UID']);
     }
   }
-  else {
-  	$oOutputDocument->update($_POST['form']);
-  }
-  
-  //refresh dbarray with the last change in outputDocument
-  $oMap = new processMap();
-  $oCriteria = $oMap->getOutputDocumentsCriteria($_POST['form']['PRO_UID']);
-  
- }
 }
 catch (Exception $oException) {
 	die($oException->getMessage());

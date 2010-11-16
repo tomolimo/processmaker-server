@@ -64,25 +64,36 @@ try {
 
   switch ( $type ) {
   	case 'HTML' :
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'outputdocs/outputdocs_Edit', '', $aFields , '../outputdocs/outputdocs_Save');
-  	     break;
-  	case 'JRXML' :
-  	case 'ACROFORM' :
-         $type = $aFields['OUT_DOC_TYPE'];
-         if ( $type == 'JRXML') $extension = 'jrxml';
-         if ( $type == 'ACROFORM') $extension = 'pdf';
+      //$G_PUBLISH->AddContent('xmlform', 'xmlform', 'outputdocs/outputdocs_Edit', '', $aFields , '../outputdocs/outputdocs_Save');
+      $oHeadPublisher =& headPublisher::getSingleton(); 
+      $oHeadPublisher->assign('OUT_DOC_UID', $_GET['OUT_DOC_UID']);
+      $translations = G::getTranslations(Array(
+        'ID_FILE', 'ID_OUT_PUT_DOC_UPLOAD_TITLE', 'ID_UPLOADING_FILE', 'ID_UPLOAD', 'ID_CANCEL', 
+        'ID_SAVE', 'ID_LOAD_FROM_FILE', 'ID_SELECT_TEMPLATE_FILE'
+      ));
+      $oHeadPublisher->assign('TRANSLATIONS', $translations);
+      $oHeadPublisher->addExtJsScript('outputdocs/htmlEditor', false );    //adding a javascript file .js
+      G::RenderPage('publish', 'extJs');
+      die;
+    break;
+    
+    case 'JRXML' :
+    case 'ACROFORM' :
+      $type = $aFields['OUT_DOC_TYPE'];
+      if ( $type == 'JRXML') $extension = 'jrxml';
+      if ( $type == 'ACROFORM') $extension = 'pdf';
 
-         $downFileName = ereg_replace('[^A-Za-z0-9_]', '_', $aFields['OUT_DOC_TITLE'] ) . '.' . $extension;
-         $filename = PATH_DYNAFORM . $aFields['PRO_UID'] . PATH_SEP . $aFields['OUT_DOC_UID'] . '.' . $extension ;
-         if ( file_exists ( $filename) )
-           $aFields['FILENAME'] = $downFileName;
-         else
-           $aFields['FILENAME'] = '';
+      $downFileName = ereg_replace('[^A-Za-z0-9_]', '_', $aFields['OUT_DOC_TITLE'] ) . '.' . $extension;
+      $filename = PATH_DYNAFORM . $aFields['PRO_UID'] . PATH_SEP . $aFields['OUT_DOC_UID'] . '.' . $extension ;
+      if ( file_exists ( $filename) )
+        $aFields['FILENAME'] = $downFileName;
+      else
+        $aFields['FILENAME'] = '';
 
-         $aFields['FILELINK'] = '../outputdocs/downloadFile?' . $aFields['OUT_DOC_UID'];
-         $G_PUBLISH->AddContent('xmlform', 'xmlform', 'outputdocs/outputdocsUploadFile', '', $aFields , '../outputdocs/uploadFile');
-         $G_PUBLISH->AddContent('view', 'outputdocs/editJrxml' );
-  	     break;
+      $aFields['FILELINK'] = '../outputdocs/downloadFile?' . $aFields['OUT_DOC_UID'];
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'outputdocs/outputdocsUploadFile', '', $aFields , '../outputdocs/uploadFile');
+      $G_PUBLISH->AddContent('view', 'outputdocs/editJrxml' );
+    break;
   }
   G::RenderPage('publish', 'raw');
 
