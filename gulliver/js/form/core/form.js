@@ -354,20 +354,29 @@ function IsUnsignedInteger(YourNumber){
                 return k.result();
             }
             else {
-            	  if(me.validate=="Int"){
-            	        if ((keyCode > 47) && (keyCode < 58) || ( keyCode == 118 && event.ctrlKey)|| (keyCode == 120 && event.ctrlKey)) {
+            	  switch(me.validate){
+            	  	case "Int":
+            	  	    if ((keyCode > 47) && (keyCode < 58) || ( keyCode == 118 && event.ctrlKey)|| (keyCode == 120 && event.ctrlKey)) {
                         return true;
                       }else{
                       return false;
                       }
-            	  } else {
-                var k=new leimnud.module.validator({
-                    valid :[me.validate],
-                    key   :event,
-                    lang  :(typeof(me.language)!=='undefined')?me.language:"en"
-                });
-                return k.result();
-                }
+                   break;
+                  case "Alpha": 
+								    if (keyCode==8) return true;
+								    patron =/[A-Za-z\s]/; 
+								    te = String.fromCharCode(keyCode);
+								    return patron.test(te);
+                  break;
+                  default:
+	                   var k=new leimnud.module.validator({
+	                    valid :[me.validate],
+	                    key   :event,
+	                    lang  :(typeof(me.language)!=='undefined')?me.language:"en"
+	                   });
+	                   return k.result();
+	                  break;
+            	  }
             }
         } else {
             //return true;
