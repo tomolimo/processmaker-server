@@ -40,7 +40,7 @@
       break;
     }
   }
-  sort($menuTypes);
+  //sort($menuTypes);
 
   $tabItems = Array();
   $i=0;
