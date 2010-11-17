@@ -329,5 +329,95 @@ class Configurations // extends Configuration
       }
     }
   }
+  
+  function getDateFormats(){
+    $formats[] = Array(
+      'id'=>'Y-m-d H:i:s', //the id , don't translate
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_1') //label displayed, can be translated
+    );
+    $formats[] = Array(
+      'id'=>'d/m/Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_2')
+    );
+    $formats[] = Array(
+      'id'=>'m/d/Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_3')
+    );
+    $formats[] = Array(
+      'id'=>'Y/d/m',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_4')
+    );
+    $formats[] = Array(
+      'id'=>'Y/m/d',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_5')
+    );
+    $formats[] = Array(
+      'id'=>'F j, Y, g:i a',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_6')
+    );
+    $formats[] = Array(
+      'id'=>'m.d.y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_7')
+    );
+    $formats[] = Array(
+      'id'=>'j, n, Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_8')
+    );
+    $formats[] = Array(
+      'id'=>'D M j G:i:s T Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_9')
+    );
+    $formats[] = Array(
+      'id'=>'D d M, Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_10')
+    );
+    $formats[] = Array(
+      'id'=>'D M, Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_11')
+    );
+    $formats[] = Array(
+      'id'=>'d M, Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_12')
+    );
+    $formats[] = Array(
+      'id'=>'d m, Y',
+      'name'=>G::loadTranslation('ID_DATE_FORMAT_13')
+    );
+    
+    return $formats;
+  }
+
+  function getUserNameFormats(){
+    $formats[] = Array(
+      'id'=>'@firstName @lastName', //the id , don't translate
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_1') //label displayed, can be translated
+    );
+    $formats[] = Array(
+      'id'=>'@firstName @lastName (@userName)',
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_2')
+    );
+    $formats[] = Array(
+      'id'=>'@userName',
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_3')
+    );
+    $formats[] = Array(
+      'id'=>'@userName (@firstName @lastName)',
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_4')
+    );
+    $formats[] = Array(
+      'id'=>'@lastName @firstName',
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_5')
+    );
+    $formats[] = Array(
+      'id'=>'@lastName, @firstName',
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_6')
+    );
+    $formats[] = Array(
+      'id'=>'@lastName, @firstName (@userName)',
+      'name'=>G::loadTranslation('ID_USERNAME_FORMAT_7')
+    );
+
+    return $formats;
+  }
 }
 ?>

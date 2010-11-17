@@ -54,7 +54,14 @@ Ext.onReady(function() {
         }, {
           name : 'name'
         } ]
-      })
+      }),
+      listeners:{
+        load: function(){
+          i = cmbUsernameFormats.store.findExact('id', default_format, 0);
+          cmbUsernameFormats.setValue(cmbUsernameFormats.store.getAt(i).data.id);
+          cmbUsernameFormats.setRawValue(cmbUsernameFormats.store.getAt(i).data.name);
+        }
+      }
     }),
 
     valueField : 'id',
@@ -64,11 +71,17 @@ Ext.onReady(function() {
     selectOnFocus : true,
     editable : false,
     allowBlank : false,
-    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1,
+    mode:'local',
+    listeners:{
+      afterrender:function(){
+        cmbUsernameFormats.store.load();
+      }
+    }
   });
 
   var cmbDateFormats = new Ext.form.ComboBox({
-    fieldLabel : TRANSLATIONS.ID_GLOBAL_DATE_MASK,
+    fieldLabel : TRANSLATIONS.ID_GLOBAL_DATE_FORMAT,
     hiddenName : 'dateFormat',
     store : new Ext.data.Store( {
       proxy : new Ext.data.HttpProxy( {
@@ -76,7 +89,7 @@ Ext.onReady(function() {
         method : 'POST'
       }),
       baseParams : {
-        request : 'getDateMaskList'
+        request : 'getDateFormats'
       },
       reader : new Ext.data.JsonReader( {
         root : 'rows',
@@ -85,9 +98,16 @@ Ext.onReady(function() {
         }, {
           name : 'name'
         } ]
-      })
+      }),
+      listeners:{
+        load: function(){
+          i = cmbDateFormats.store.findExact('id', default_date_format, 0);
+          cmbDateFormats.setValue(cmbDateFormats.store.getAt(i).data.id);
+          cmbDateFormats.setRawValue(cmbDateFormats.store.getAt(i).data.name);
+        }
+      }
     }),
-
+    mode: 'remote',
     valueField : 'id',
     displayField : 'name',
     triggerAction : 'all',
@@ -95,7 +115,13 @@ Ext.onReady(function() {
     selectOnFocus : true,
     editable : false,
     allowBlank : false,
-    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1,
+    mode:'local',
+    listeners:{
+      afterrender:function(){
+        cmbDateFormats.store.load();
+      }  
+    }
   });
 
   var cmbCasesDateFormats = new Ext.form.ComboBox({
@@ -117,7 +143,14 @@ Ext.onReady(function() {
         }, {
           name : 'name'
         } ]
-      })
+      }),
+      listeners:{
+        load: function(){
+          i = cmbCasesDateFormats.store.findExact('id', default_caseslist_date_format, 0);
+          cmbCasesDateFormats.setValue(cmbCasesDateFormats.store.getAt(i).data.id);
+          cmbCasesDateFormats.setRawValue(cmbCasesDateFormats.store.getAt(i).data.name);
+        }
+      }
     }),
 
     valueField : 'id',
@@ -128,13 +161,19 @@ Ext.onReady(function() {
     editable : false,
     allowBlank : false,
 
-    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1,
+    mode:'local',
+    listeners:{
+      afterrender:function(){
+        cmbCasesDateFormats.store.load();
+      }
+    }
   });
 
   var cmbCasesRowsPerPage = new Ext.form.ComboBox({
     fieldLabel : TRANSLATIONS.ID_CASES_ROW_NUMBER,
     hiddenName : 'casesListRowNumber',
-        store : new Ext.data.Store( {
+    store : new Ext.data.Store( {
       proxy : new Ext.data.HttpProxy( {
         url : 'environmentSettingsAjax',
         method : 'POST'
@@ -149,7 +188,16 @@ Ext.onReady(function() {
         }, {
           name : 'name'
         } ]
-      })
+      }),
+      listeners:{
+        load: function(){
+          i = cmbCasesRowsPerPage.store.findExact('id', default_caseslist_row_number, 0);
+          if( i != -1 ){
+            cmbCasesRowsPerPage.setValue(cmbCasesRowsPerPage.store.getAt(i).data.id);
+            cmbCasesRowsPerPage.setRawValue(cmbCasesRowsPerPage.store.getAt(i).data.name);
+          }
+        }
+      }
     }),
 
     valueField : 'id',
@@ -157,9 +205,16 @@ Ext.onReady(function() {
     triggerAction : 'all',
     emptyText : 'Select',
     selectOnFocus : true,
-    editable : false,
+    editable : true,
     allowBlank : false,
-    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1
+    allowBlankText : TRANSLATIONS.ID_ENVIRONMENT_SETTINGS_MSG_1,
+    mode:'local',
+    vtype: 'numeric',
+    listeners:{
+      afterrender:function(){
+        cmbCasesRowsPerPage.store.load();
+      }
+    }
   });
 
   
@@ -202,7 +257,7 @@ Ext.onReady(function() {
   fsf.add(fieldset2);
   fsf.add(fieldsetCasesList);
   cmbUsernameFormats.setValue(default_format);
-  cmbDateFormats.setValue(default_date_format);
+  cmbDateFormats.selectByValue(default_date_format);
   cmbCasesDateFormats.setValue(default_caseslist_date_format);
   cmbCasesRowsPerPage.setValue(default_caseslist_row_number);
 
@@ -211,3 +266,45 @@ Ext.onReady(function() {
 
 
 
+Ext.apply(Ext.form.VTypes, {
+	   // Password Check
+	   passwordText: 'The passwords entered do not match.',
+	   password: function(value, field) {
+	      var valid = false;
+	      if (field.matches) {
+	         var otherField = Ext.getCmp(field.matches);
+	         if (value == otherField.getValue()) {
+	            otherField.clearInvalid();
+	            valid = true;
+	         }
+	      }
+	      return valid;
+	   },
+    // Phone Number check
+	   phoneText: "Not a valid phone number.  Must be in the following format: 123-4567 or 123-456-7890.",
+	   phoneMask: /[d-]/,
+	   phoneRe: /^(d{3}[-]?){1,2}(d{4})$/,
+	   phone: function(v) {
+	      return this.phoneRe.test(v);
+	   },
+	   // Email address check
+	   emailText: "Not a valid email address. Must be in the following format: yourname@company.domain",
+	    emailRe: /^(\s*[a-zA-Z0-9\._%-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,4})\s*$/,
+	    email: function(v) {
+	        return this.emailRe.test(v);
+	    },
+	   // Numeric check
+	   numericText: "Only numbers are allowed.",
+	   numericMask: /[0-9]/,
+	   numericRe: /[0-9]/,
+	   numeric: function(v) {
+	      return this.numericRe.test(v);
+	   },
+	   // Decimal Number check
+	   decNumText: "Only decimal numbers are allowed.",
+	   decNumMask: /(d|.)/,
+	   decNumRe: /d+.d+|d+/,
+	   decNum: function(v) {
+	      return this.decNumRe.test(v);
+	   }
+	});
