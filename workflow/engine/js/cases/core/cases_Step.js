@@ -960,6 +960,47 @@ var uploadInputDocument = function(docID,appDocId,docVersion,actionType){
   oRPC.make();
 };
 
+var uploadToReviseInputDocument = function(docID,appDocId,docVersion,actionType){
+    if(actionType){
+        if(actionType=="R"){
+            windowTitle=G_STRINGS.ID_UPLOAD_REPLACE_INPUT;
+        }
+        if(actionType=="NV"){
+            windowTitle=G_STRINGS.ID_UPLOAD_NEW_INPUT_VERSION;
+        }
+    }else{
+        windowTitle=G_STRINGS.ID_UPLOAD_NEW_INPUT;
+        docVersion=1;
+        actionType="";
+    }
+  oPanel = new leimnud.module.panel();
+  oPanel.options = {
+    size  :{w:550,h:300},
+    position:{x:0,y:0,center:true},
+    title :windowTitle,
+    theme :"processmaker",
+    statusBar:false,
+    control :{resize:true,roll:false},
+    fx  :{modal:true,opacity:true,blinkToFront:true,fadeIn:false}
+  };
+  oPanel.events = {
+    remove: function() {delete(oPanel);}.extend(this)
+  };
+  oPanel.make();
+  oPanel.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url : 'cases_Ajax',
+    args: "action=uploadToReviseInputDocument&docID="+docID+"&appDocId="+appDocId+"&docVersion="+docVersion+"&actionType="+actionType
+  });
+  oRPC.callback = function(rpc){
+    oPanel.loader.hide();
+    var scs=rpc.xmlhttp.responseText.extractScript();
+    oPanel.addContent(rpc.xmlhttp.responseText);
+    scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
 var inputDocumentVersionHistory = function(docID,appDocId){
   oPanel = new leimnud.module.panel();
   oPanel.options = {

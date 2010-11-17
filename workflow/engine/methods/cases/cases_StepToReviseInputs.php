@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-
+//die("second");
 /* Permissions */
 switch ($RBAC->userCanAccess('PM_SUPERVISOR')) {
     case - 2:
@@ -92,6 +92,8 @@ if (!isset($_GET['INP_DOC_UID'])) {
   G::LoadClass('case');
   $oCase         = new Cases();
   $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_InputdocsListToRevise', $oCase->getInputDocumentsCriteriaToRevise($_SESSION['APPLICATION']), '');
+//  $G_PUBLISH->AddContent('propeltable', 'cases/paged-table-inputDocuments', 'cases/cases_InputdocsList', $oCase->getInputDocumentsCriteria($_SESSION['APPLICATION']));//$aFields
+
 }
 else {
   $oInputDocument = new InputDocument();
@@ -129,7 +131,9 @@ else {
   }
   $Fields['MESSAGE1'] = G::LoadTranslation('ID_PLEASE_ENTER_COMMENTS');
   $Fields['MESSAGE2'] = G::LoadTranslation('ID_PLEASE_SELECT_FILE');
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', $sXmlForm, '', $Fields, 'cases_SupervisorSaveDocument?UID=' . $_GET['INP_DOC_UID'] . '&APP_UID=' . $_GET['APP_UID'] . '&position=' . $_GET['position']);
+//  $G_PUBLISH->AddContent('xmlform', 'xmlform', $sXmlForm, '', $Fields, 'cases_SupervisorSaveDocument?UID=' . $_GET['INP_DOC_UID'] . '&APP_UID=' . $_GET['APP_UID'] . '&position=' . $_GET['position']);
+  $G_PUBLISH->AddContent('propeltable', 'cases/paged-table-inputDocuments', 'cases/cases_ToReviseInputdocsList', $oCase->getInputDocumentsCriteria($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_GET['INP_DOC_UID']), array_merge(array('DOC_UID'=>$_GET['INP_DOC_UID']),$Fields));//$aFields
+//  $G_PUBLISH->AddContent('propeltable', 'cases/paged-table-inputDocuments', 'cases/cases_InputdocsList', $oCase->getInputDocumentsCriteria($_SESSION['APPLICATION']));//$aFields
 }
 
 G::RenderPage('publish', 'blank');

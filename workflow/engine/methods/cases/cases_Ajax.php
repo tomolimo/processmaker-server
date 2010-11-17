@@ -398,8 +398,10 @@ switch($_POST['action']) {
 		$_GET['APP_UID'] = $_POST['APP_UID'];
 		$_GET['DEL_INDEX'] = $_POST['DEL_INDEX'];
 		$G_PUBLISH = new Publisher();
-		$G_PUBLISH->AddContent('view', 'cases/cases_toRevise');
-		$G_PUBLISH->AddContent('smarty', 'cases/cases_toReviseIn', '', '', array());
+
+    echo "<iframe scrolling='no' style='border:none;height=300px;width:240px;'  src='casesToRevisePanelExtJs?APP_UID={$_GET['APP_UID']}&DEL_INDEX={$_GET['DEL_INDEX']}'></iframe>";
+//		$G_PUBLISH->AddContent( 'smarty', 'cases/cases_toRevise' );
+//		$G_PUBLISH->AddContent('smarty', 'cases/cases_toReviseIn', '', '', array());
 		G::RenderPage('publish', 'raw');
 		break;
 	case 'showUploadedDocuments':
@@ -790,6 +792,17 @@ switch($_POST['action']) {
 	    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_AttachInputDocumentGeneral', '', $Fields, 'cases_SaveDocument?UID=' . $_POST['docID']);
 	    G::RenderPage('publish', 'raw');
 	    
+	break;
+	case "uploadToReviseInputDocument":
+	    //krumo($_POST);
+	    $G_PUBLISH = new Publisher;
+	    $Fields['DOC_UID']=$_POST['docID'];
+	    $Fields['APP_DOC_UID']=$_POST['appDocId'];
+	    $Fields['actionType']=$_POST['actionType'];
+	    $Fields['docVersion']=$_POST['docVersion'];
+	    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_AttachInputDocumentGeneral', '', $Fields, 'cases_SupervisorSaveDocument?UID=' . $_POST['docID'] . '&APP_UID=' . $_POST['appDocId']);
+	    G::RenderPage('publish', 'raw');
+
 	break;
 	case "inputDocumentVersionHistory":
 	    //krumo($_POST);	    

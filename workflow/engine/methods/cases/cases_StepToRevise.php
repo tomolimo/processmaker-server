@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-
+//  die("first");
 	/* Permissions */
 	switch ($RBAC->userCanAccess('PM_SUPERVISOR')) {
 	    case - 2:
@@ -75,10 +75,11 @@ $oHeadPublisher->addScriptCode('
 	  leimnud.exec(leimnud.fix.memoryLeak);
 	  leimnud.event.add(window,"load",function(){
 		  '.(isset($_SESSION['showCasesWindow'])?'try{'.$_SESSION['showCasesWindow'].'}catch(e){}':'').'
-	});
+    });
 	  ');
 	  $G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
-
+    //die();
+  if(!isset($_GET['type'])) $_GET['type'] = 'DYNAFORM';
 	if(!isset($_GET['position'])) $_GET['position'] = 1;
 
 	$_SESSION['STEP_POSITION'] = (int)$_GET['position'];

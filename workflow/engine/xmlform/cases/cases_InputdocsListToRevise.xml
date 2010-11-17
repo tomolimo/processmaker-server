@@ -11,15 +11,15 @@
 
 <TITLE type="text" colWidth="150" titleAlign="left" align="left">
   <en>Type</en>
-<es>Tipo</es><pt>Tipo</pt></TITLE>
+<es>Tipo</es></TITLE>
 
 <TYPE type="text" colWidth="100" titleAlign="left" align="left">
   <en>Type</en>
-<es>Tipo</es><pt>Tipo</pt></TYPE>
+<es>Tipo</es></TYPE>
 
 <CREATE_DATE type="text" colWidth="110" titleAlign="left" align="left">
   <en>Create Date</en>
-<es>Crear Fecha</es><pt><![CDATA[Data de Criação]]></pt></CREATE_DATE>
+<es>Crear Fecha</es></CREATE_DATE>
 
 <VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="cases_ToReviseInputDocView?UID=@#DOC_UID&amp;DOC=@#APP_DOC_UID" onclick=""><en></en></VIEW>
 </dynaForm>   
