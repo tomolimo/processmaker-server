@@ -119,7 +119,11 @@ $oServerConf->setProperty("extSkin",$extSkin);
     if (class_exists('PMPluginRegistry')) {
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
       if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect,SYS_SYS)) ){
-        $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/files/logos/'.$sFotoSelect);
+      	$ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
+        $dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
+      	$dir=$dir.PATH_SEP.$sFotoSelect;
+        $sCompanyLogo = $oPluginRegistry->getCompanyLogo($dir);
+        $sCompanyLogo= "showLogoFile.php?imagen=".$sCompanyLogo;
       }
       else {
          $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');

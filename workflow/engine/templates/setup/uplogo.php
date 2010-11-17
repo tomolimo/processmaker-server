@@ -37,8 +37,8 @@ try {
   $aFotoSelect = $upload->getNameLogo($_SESSION['USER_LOGGED']);
   $sFotoSelect = trim($aFotoSelect['DEFAULT_LOGO_NAME']);
   $check ='';
-  //$dir=PATH_DATA . 'logos';
-  $dir = PATH_HOME . "public_html/files/logos";
+  $ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
+  $dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
   G::mk_dir ( $dir );
   $i=0;
   
@@ -52,9 +52,9 @@ try {
           $sfileExtention = strtoupper($extention[count($extention)-1]);
 //          if( $sfileExtention == 'JPG' || $sfileExtention == 'PNG' || $sfileExtention == 'GIF' ) {
           if( in_array($sfileExtention, array('JPG','JPEG','PNG','GIF') ) ) {
+          	
             $check   = (!strcmp($file,$sFotoSelect))?'/images/toadd.png':'/images/delete.png';
             $onclick = (strcmp($file,$sFotoSelect))? "onclick ='deleteLogo(\" $file \");return false;'":'';
-            
             /** if we have at least one image we show the restore image  */
             if($i==0){
             	$template->newBlock( 'logo_Detail');
@@ -75,6 +75,7 @@ try {
             $template->assign ('TR1'             , ($i%3==0)?'<tr>':''                                       );
             $template->assign ('TR2'             , ($i%3==2)?'</tr>':''                                      );
             $template->assign ('LOG0_IMAGE'      , "/files/logos/".$file                                     );
+            $template->assign ('LOG0_IMAGE'      , "showLogoFile.php?imagen=".$dir.'/'.$file                 );
             $template->assign ('LOG0_NAME'       , $file                                                     );
             $template->assign ('LOG0_DESCRIPTION', $extention[count($extention)-1]                           );
             $template->assign ('LOGO_CHARACT'    , $aImageProp[3]                                            );

@@ -1,6 +1,6 @@
-<?php 
-/** 
- * logo_Delete.php
+<?php
+/**
+ * showLogoFile.php
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -22,30 +22,28 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-try {
+ 
   global $RBAC;
-  switch ($RBAC->userCanAccess('PM_FACTORY'))
-  {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
+  G::LoadClass('replacementLogo');
+  
+  if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){ 
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+    die;
   }
 
-  $snameLogo =trim($_GET['NAMELOGO']);
-  $ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
-  $dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
-  $sfileDir=$dir.PATH_SEP.$snameLogo;
-  unlink($sfileDir);
-  //header('location: uplogo.php');
-  
-} catch (Exception $oException) {
-	die($oException->getMessage());
-}
+$imagen = $_GET['imagen'];
+	if (is_file($imagen))
+	{
+	  $ext = substr($imagen, strrpos($imagen, '.') + 1); // extension
+	
+	  header('content-type: image/'.$ext);
+	  readfile($imagen);
+	  exit;
+	}
+
+die;
+
 ?>
+<script>
+ 
+</script>
