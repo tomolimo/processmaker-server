@@ -159,11 +159,14 @@ var G_Grid = function(oForm, sGridName) {
 					switch (enodename) {
 					case 'input':
 						aObjects    = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
-            // if its a date picker field the there must be  a div tag inside
-            aDatePicker = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('div');
+
 						if (aObjects) {
+
 							aObjects[0].name = aObjects[0].name.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 							aObjects[0].id = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+							
+              //alert(aObjects[0].id+'-'+aObjects[0].name);
+
 							if (aObjects[0].type != 'checkbox') {
                 aObjects[0].value = '';
 							} else {
@@ -177,16 +180,32 @@ var G_Grid = function(oForm, sGridName) {
 							    //Nothing
 							  }
 						  }
-              // clearing the html inside the div tag so the values dont be copied
-              if (aDatePicker[0]!=undefined){
-                  aDatePicker[0].innerHTML='';
+              
+              
+              
+              //verifying if it is a datepickey
+              // if its a date picker field the there must be  a div tag inside
+              tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
+              script = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+              
+              if( tags.length == 3 ){ //then it is a datepicker
+                if (tags[0].onclick) {
+                  evOnclick = new String(tags[0].onclick);
+                  eval('tags[0].onclick = ' + evOnclick.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
+                  //alert(tags[0].onclick);
+								}
+                tags[1].id = tags[1].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                
+                script[0].innerHTML = script[0].innerHTML.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                eval(script[0].innerHTML);
               }
-							if (aObjects[1]) {
+              
+							/*if (aObjects[1]) {
 								if (aObjects[1].onclick) {
 									sAux = new String(aObjects[1].onclick);
 									eval('aObjects[1].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
 								}
-							}
+							}*/
 						}
 						aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('span');
 						if (aObjects) {
@@ -668,6 +687,187 @@ var G_Grid = function(oForm, sGridName) {
 			});
 		}
 	};
+	
+	/*add*/
+	 this.deleteGridRownomsg = function(sRow) {
+		var i, iRow, iRowAux, oAux, ooAux;
+
+
+			//action : function() {
+      //this.aElements = [];
+				sRow = sRow.replace('[', '');
+				sRow = sRow.replace(']', '');
+				iRow = Number(sRow);
+
+				/*
+				 * delete the respective session row grid variables from
+				 * Dynaform - by Nyeke <erik@colosa.com
+				 */
+
+				deleteRowOnDybaform(this, iRow);
+
+				iRowAux = iRow + 1;
+				while (iRowAux <= (this.oGrid.rows.length - 2)) {
+					for (i = 1; i < this.oGrid.rows[iRowAux - 1].cells.length; i++) {
+						var oCell1 = this.oGrid.rows[iRowAux - 1].cells[i];
+						var oCell2 = this.oGrid.rows[iRowAux].cells[i];
+						switch (oCell1.innerHTML.replace(/^\s+|\s+$/g, '').substr(0, 6).toLowerCase()) {
+						case '<input':
+							aObjects1 = oCell1.getElementsByTagName('input');
+							aObjects2 = oCell2.getElementsByTagName('input');
+							if (aObjects1 && aObjects2) {
+							  if(aObjects1[0].type=='checkbox'){
+							   aObjects1[0].checked = aObjects2[0].checked;
+							  }
+								aObjects1[0].value = aObjects2[0].value;
+							//	if(oCell1.innerHTML.indexOf('<div id=')!=-1)
+							//	oCell1.innerHTML = oCell2.innerHTML;
+							}
+
+              aObjects = oCell1.getElementsByTagName('div');
+
+              if (aObjects.length > 0) {
+
+                if (aObjects[0]) {
+                  aObjects[0].id = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                  aObjects[0].name = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                  if (aObjects[0].onclick) {
+                    sAux = new String(aObjects[0].onclick);
+                    eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
+                  }
+                }
+                aObjects = oCell1.getElementsByTagName('a');
+                if (aObjects) {
+                  if (aObjects[0]) {
+                    if (aObjects[0].onclick) {
+                      sAux = new String(aObjects[0].onclick);
+                      eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
+                    }
+                  }
+                }
+              }
+ //oCell1.innerHTML= aux.innerHTM;
+							break;
+						case '<selec':
+							aObjects1 = oCell1.getElementsByTagName('select');
+							aObjects2 = oCell2.getElementsByTagName('select');
+							if (aObjects1 && aObjects2) {
+								var vValue = aObjects2[0].value;
+								/*
+								 * for (var j = (aObjects1[0].options.length-1);
+								 * j >= 0; j--) { aObjects1[0].options[j] =
+								 * null; }
+								 */
+								aObjects1[0].options.length = 0;
+								for ( var j = 0; j < aObjects2[0].options.length; j++) {
+									var optn = $dce("OPTION");
+									optn.text = aObjects2[0].options[j].text;
+									optn.value = aObjects2[0].options[j].value;
+									aObjects1[0].options[j] = optn;
+								}
+								aObjects1[0].value = vValue;
+							}
+							break;
+						case '<texta':
+							aObjects1 = oCell1.getElementsByTagName('textarea');
+							aObjects2 = oCell2.getElementsByTagName('textarea');
+							if (aObjects1 && aObjects2) {
+								aObjects1[0].value = aObjects2[0].value;
+							}
+							break;
+						default:
+							if (( oCell2.innerHTML.indexOf('changeValues')==111 || oCell2.innerHTML.indexOf('changeValues')==115 ) ) {
+								alert('erik2');
+						    break;
+							}
+							if (oCell2.innerHTML.toLowerCase().indexOf('deletegridrow') == -1) {
+								oCell1.innerHTML = oCell2.innerHTML;
+								alert('erik');
+							}
+							break;
+						}
+					}
+					iRowAux++;
+				}
+				this.oGrid.deleteRow(this.oGrid.rows.length - 2);
+				if (this.sAJAXPage != '') {
+				}
+		    /* this slice of code was comented because it could be the problem to do that sum function is working wrong
+				if (this.aFields.length > 0) {
+					this.unsetFields();
+				}*/
+        //this slice of code was added to fill the grid after to delete some row
+			  this.aElements = [];
+			  for (var k=1;k<= this.oGrid.rows.length-2;k++){
+			   	for (var i = 0; i < this.aFields.length; i++) {
+			      var j = k;
+			      switch (this.aFields[i].sType) {
+			        case 'text':
+			        	this.aElements.push(new G_Text(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName));
+			        	this.aElements[this.aElements.length - 1].validate = this.aFields[i].oProperties.validate;
+			        break;
+			        case 'currency':
+					      this.aElements.push(new G_Currency(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['+ this.aFields[i].sFieldName));
+				      break;
+			        case 'percentage':
+			          this.aElements.push(new G_Percentage(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j+ '][' + this.aFields[i].sFieldName));
+			        break;
+  			      case 'dropdown':
+				       	this.aElements.push(new G_DropDown(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['+ this.aFields[i].sFieldName));
+				      break;
+			      }
+			      j++;
+			   }
+			  }
+
+				if (this.aFunctions.length > 0) {
+
+					for (i = 0; i < this.aFunctions.length; i++) {
+						oAux = document.getElementById('form[' + this.sGridName + '][1][' + this.aFunctions[i].sFieldName + ']');
+						if (oAux) {
+							switch (this.aFunctions[i].sFunction) {
+							case 'sum':
+							this.sum(false, oAux);
+							/*
+							aaAux=oAux.name.split('][');
+							sNamef=aaAux[2].replace(']', '');
+							var sumaSol = 0;
+							this.aElements.length;
+							var j=1;k=0;
+							for ( var i = 0; i < this.aElements.length; i++) {
+								nnName= this.aElements[i].name.split('][');
+								if (nnName[2] == sNamef && j <= (this.oGrid.rows.length-2)){
+								  ooAux=this.getElementByName(j, nnName[2]);
+
+								  if(ooAux!=null){
+
+								  sumaSol += parseFloat(G.cleanMask(ooAux.value() || 0, ooAux.mask).result.replace(/,/g, ''))
+								  }
+								  j++;
+							   }
+			        }
+			        sumaSol = sumaSol.toFixed(2);
+			        oAux = document.getElementById('form[SYS_GRID_AGGREGATE_' + oGrid.sGridName + '_' + sNamef + ']');
+		          oAux.value = sumaSol;
+		          oAux = document.getElementById('form[SYS_GRID_AGGREGATE_' + oGrid.sGridName + '__' + sNamef + ']');
+		          oAux.innerHTML = sumaSol;//return;
+		          */
+							break;
+							case 'avg':
+								this.avg(false, oAux);
+							break;
+							}
+						}
+					}
+				}
+				if (this.ondeleterow) {
+					this.ondeleterow();
+				}
+
+			//}.extend(this)
+
+	};
+	/*add end*/
 };
 
 /**

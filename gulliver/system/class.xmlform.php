@@ -2965,7 +2965,7 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
  * @Last Modification 2008-07-29
  * @Modification 2008-07-29 Comment Working for after and before date attributes
  */
-class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText 
+class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 {
   public $required        = false;
   public $readOnly        = false;
@@ -2985,7 +2985,7 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
 
   public $mask            = '%Y-%m-%d';
   public $dependentFields = '';
-
+  var $hint;
   /**
    * Verify the format of a date
    * @param <Date> $date
@@ -3100,10 +3100,10 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
   {
     $startDate  = G::replaceDataField ( $this->startDate, $owner->values );
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
-
+    //$this->
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
     $afterDate  = G::replaceDataField ( $this->afterDate, $owner->values );
-
+//print('start='.$this->startDate.'    end='.$this->endDate);
     if ($startDate != '') {
       if (! $this->verifyDateFormat ( $startDate ))
         $startDate = '';
@@ -3172,18 +3172,42 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
               <img src='/controls/Calendar-32x32.png' border='0' width='12' height='14'>
             </a>
             <a title='Reset date field' href='#' onclick=\"document.getElementById('$pID').value=''; return false;\"><img src='/controls/TrashIcon.jpg' border='0' width='12' height='15'></a>";
-      */
-      $html = '<input id="'.$pID.'" class="module_app_input___gray" size="14"/>
-      <a onclick="removeValue(\''.$pID.'\'); return false;" value="clear" style="left:-50px"/>X</a>
+      *///
+      if($startDate=='1969-12-31'){
+         $startDate='';
+         $endDate='';
+        }
+        
+        //1969-12-31
+      $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="14" value="'.$value.'"/>
+      <a onclick="removeValue(\''.$pID.'\'); return false;"  style="left:-50px"/>X</a>
       <a id="'.$pID.'[btn]" value="."><img src="/images/pmdateicon.png" border="0" width="12" height="12"/></a>
-      <script type="text/javascript">new Calendar({ inputField: "'.$pID.'", dateFormat: "'.$mask.'", trigger: "'.$pID.'[btn]", bottomBar: true, onSelect: function() { this.hide(); }});</script>';
+      <script type="text/javascript">
+      new Calendar({
+        inputField: "'.$pID.'",
+        dateFormat: "'.$mask.'",
+        trigger: "'.$pID.'[btn]",
+        bottomBar: true,
+        min:"'.$startDate.'",
+        max:"'.$endDate.'",
+        onSelect: function() { this.hide(); }});
+       </script>';
     } else {
       $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
     }
+     if($this->hint){
+           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
+                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
+                </a>';
+    }//print '<input type="text" id="'.$pID.'" name="'.$pID.'" value="'.$value.'" onchange="'.$this->onchange.'"/>';
+       //print_r($html);die;
     return $html;
   }
 }
-
+/*
+ min:"'.$startDate.'",
+ max:"'.$endDate.'",
+ */
 
 
 /**
@@ -3191,7 +3215,7 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
  * @Author      Erik amaru Ortiz <aortiz@gmail.com, erik@colosa.com>
  * @creation date   Oct 5th, 2009
  */
-class XmlForm_Field_Date extends XmlForm_Field_SimpleText 
+class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
 {
   public $required        = false;
   public $readOnly        = false;
@@ -3507,6 +3531,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                   <image src="/images/help4.gif" width="15" height="15" border="0"/>
                 </a>';
     }//print '<input type="text" id="'.$pID.'" name="'.$pID.'" value="'.$value.'" onchange="'.$this->onchange.'"/>';
+
     return $html;
   }
 
