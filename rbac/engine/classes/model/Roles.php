@@ -162,7 +162,7 @@ class Roles extends BaseRoles {
             }
             
             $rol_name = $aData['ROL_NAME'];
-            unset($fields['ROL_NAME']);
+            unset($aData['ROL_NAME']);
             
             $obj = new Roles();
             $obj->fromArray($aData, BasePeer::TYPE_FIELDNAME);
