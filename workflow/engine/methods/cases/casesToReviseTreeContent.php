@@ -77,7 +77,7 @@ switch ($requestedNode){
       $DYN_UID = $dynaformF['DYN_UID'];
       $PRO_UID = $step['PRO_UID'];
       $href = "cases_StepToRevise?type=DYNAFORM&ex=$i&PRO_UID=$PRO_UID&DYN_UID=$DYN_UID&APP_UID=$APP_UID&position=".$step['STEP_POSITION']."&DEL_INDEX=$DEL_INDEX";
-      $treeNodes->add($DYN_UID,$TITLE,"datasource",true,false,$href,"");
+      $treeNodes->add($DYN_UID,$TITLE,"datasource",true,false,$href,"_parent");
       $i++;
     }
   break;
@@ -97,7 +97,7 @@ switch ($requestedNode){
       $INP_DOC_UID = $IDF['INP_DOC_UID'];
       $PRO_UID = $step['PRO_UID'];
       $href = "cases_StepToReviseInputs?type=INPUT_DOCUMENT&ex=$i&PRO_UID=$PRO_UID&INP_DOC_UID=$INP_DOC_UID&APP_UID=$APP_UID&position=".$step['STEP_POSITION']."&DEL_INDEX=$DEL_INDEX";
-      $treeNodes->add($INP_DOC_UID,$TITLE,"datasource",true,false,$href,"");
+      $treeNodes->add($INP_DOC_UID,$TITLE,"datasource",true,false,$href,"_parent");
       $i++;
     }
   break;
