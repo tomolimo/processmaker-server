@@ -495,7 +495,6 @@ Ext.onReady ( function() {
 
   var btnStarted = new Ext.Button ({
     id: 'started',
-//    text: 'started by me',
     text: TRANSLATIONS.LABEL_OPT_STARTED,
     enableToggle: true,
     toggleHandler: onItemToggle,
@@ -505,7 +504,6 @@ Ext.onReady ( function() {
 
   var btnCompleted = new Ext.Button ({
     id: 'completed',
-//    text: 'Completed by me',
     text: TRANSLATIONS.LABEL_OPT_COMPLETED,
     enableToggle: true,
     toggleHandler: onItemToggle,
@@ -781,8 +779,9 @@ Ext.onReady ( function() {
     }
   }
 
-  textJump = new Ext.form.TextField ({
-    allowBlank: false,
+  textJump = {
+    xtype: 'numberfield',
+    allowBlank: true,
     width: 50,
     emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID,
     listeners: {
@@ -792,20 +791,21 @@ Ext.onReady ( function() {
           if( caseNumber )
             jumpToCase(caseNumber);
           else
-            msgBox('Input Error', 'You have set a invalid Application number', 'error');
+            msgBox('Input Error', 'You have set a invalid Application Number', 'error');
         }
       }
     }
-  });
+  };
 
   var btnJump = new Ext.Button ({
     text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
       caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
-      if( caseNumber != 'NaN' )
-        jumpToCase(caseNumber);
-      else
-        msgBox('Input Error', 'You have set a invalid Application number', 'error');
+       caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
+          if( caseNumber )
+            jumpToCase(caseNumber);
+          else
+            msgBox('Input Error', 'You have set a invalid Application Number', 'error');
     }
   });
 
@@ -1250,6 +1250,7 @@ Ext.onReady ( function() {
     //storeProcesses.load();
 
     function onItemToggle(item, pressed){
+
       switch ( item.id ) {
         case 'read' :
           btnUnread.toggle( false, true);
@@ -1261,9 +1262,11 @@ Ext.onReady ( function() {
           break;
         case 'started' :
           btnAll.toggle( false, true);
+          btnCompleted.toggle( false, true);
           break;
         case 'completed' :
           btnAll.toggle( false, true);
+          btnStarted.toggle( false, true);
           break;
         case 'all' :
           btnRead.toggle( false, true);
@@ -1272,7 +1275,11 @@ Ext.onReady ( function() {
           btnCompleted.toggle( false, true);
           break;
       }
-      storeCases.setBaseParam( 'filter', item.id );
+      if(pressed){
+        storeCases.setBaseParam( 'filter', item.id );
+      } else {
+        storeCases.setBaseParam( 'filter', '' );
+      }
       storeCases.setBaseParam( 'start',  0 );
       storeCases.setBaseParam( 'limit',  pageSize );
       storeCases.load();
