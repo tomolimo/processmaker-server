@@ -3179,13 +3179,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
         
         //1969-12-31
-      $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="14" value="'.$value.'"/>
-      <a onclick="removeValue(\''.$pID.'\'); return false;"  style="left:-50px"/>X</a>
-      <a id="'.$pID.'[btn]" value="."><img src="/images/pmdateicon.png" border="0" width="12" height="12"/></a>
+      $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="14" value="'.$value.'"/>      
+      <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
+      <a id="'.$pID.'[btn]" value="."><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>
       <script type="text/javascript">
       new Calendar({
         inputField: "'.$pID.'",
-        dateFormat: "'.$mask.'",
+        dateFormat: "'.$mask.'", 
         trigger: "'.$pID.'[btn]",
         bottomBar: true,
         min:"'.$startDate.'",
@@ -3197,7 +3197,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     }
      if($this->hint){
            $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
-                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
+                  <image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>
                 </a>';
     }//print '<input type="text" id="'.$pID.'" name="'.$pID.'" value="'.$value.'" onchange="'.$this->onchange.'"/>';
        //print_r($html);die;
