@@ -23,15 +23,14 @@
  *
  */
  
-  global $RBAC;
-  G::LoadClass('replacementLogo');
-  
   if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){ 
     G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
     die;
   }
 
-$imagen = $_GET['imagen'];
+	$ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
+	$dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
+	$imagen = $dir .PATH_SEP.G::decrypt($_GET['id'],'imagen');
 	if (is_file($imagen))
 	{
 	  $ext = substr($imagen, strrpos($imagen, '.') + 1); // extension

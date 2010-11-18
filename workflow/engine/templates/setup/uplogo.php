@@ -74,8 +74,7 @@ try {
             $template->newBlock( 'logo_Detail');
             $template->assign ('TR1'             , ($i%3==0)?'<tr>':''                                       );
             $template->assign ('TR2'             , ($i%3==2)?'</tr>':''                                      );
-            $template->assign ('LOG0_IMAGE'      , "/files/logos/".$file                                     );
-            $template->assign ('LOG0_IMAGE'      , "showLogoFile.php?imagen=".$dir.'/'.$file                 );
+            $template->assign ('LOG0_IMAGE'      , "showLogoFile.php?id=".G::encrypt($file,'imagen')         );
             $template->assign ('LOG0_NAME'       , $file                                                     );
             $template->assign ('LOG0_DESCRIPTION', $extention[count($extention)-1]                           );
             $template->assign ('LOGO_CHARACT'    , $aImageProp[3]                                            );
