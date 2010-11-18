@@ -120,7 +120,7 @@ $oServerConf->setProperty("extSkin",$extSkin);
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
       if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect,SYS_SYS)) ){
         $sCompanyLogo = $oPluginRegistry->getCompanyLogo($sFotoSelect);
-        $sCompanyLogo= "showLogoFile.php?id=".G::encrypt($sCompanyLogo,"imagen");
+        $sCompanyLogo= "../setup/showLogoFile.php?id=".G::encrypt($sCompanyLogo,"imagen");
       }
       else {
          $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
