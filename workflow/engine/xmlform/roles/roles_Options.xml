@@ -64,12 +64,10 @@ function saveNewRole()
 				  	});
 					oRPC.make();
 					$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;	
-				history.go(0);
-        rredir();
+				window.location = 'roles_List';
 				}.extend(this);
 				oRPC.make();
 				currentPopupWindow.remove();
-        
 		  	}
 		  	
 		  	if(!eval(ajax.responseText.trim())){
@@ -80,9 +78,6 @@ function saveNewRole()
 	}
 	ajax.send(uri);
 
-}
-var rredir=function(){
-  parent.users.location='roles_List';
 }
 
 function editRole(ROL_UID)
@@ -133,8 +128,7 @@ function updateRole(ROL_UID) {
 		oRPC.make();
 		$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;
 		currentPopupWindow.remove();
-		history.go(0);
-    rredir();
+		window.location = 'roles_List';
 	}.extend(this);
 	oRPC.make();
 };
@@ -167,8 +161,7 @@ function deleteRole(ROL_UID) {
 							  	});
 								oRPC.make();
 								$('publisherContent[0]').innerHTML = oRPC.xmlhttp.responseText;
-							history.go(0);
-							rredir();
+							  window.location = 'roles_List';
 							}.extend(this);
 							oRPC.make();
 							
