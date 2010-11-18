@@ -438,6 +438,8 @@ class CaseScheduler extends BaseCaseScheduler {
 
                 $oData['OBJ_SOAP'] = $client;
                 $oData['SCH_UID'] = $aRow['SCH_UID'];
+                $oData['params'] = $params;
+                $oData['sessionId'] = $sessionId;
                 $paramsLogResultFromPlugin=$oPluginRegistry->executeMethod( $caseSchedulerSelected->sNamespace, $caseSchedulerSelected->sActionExecute, $oData );
 eprint("TESTING       ".$paramsLogResultFromPlugin['paramsLogResult'],"red");
                 die;
