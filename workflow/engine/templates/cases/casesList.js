@@ -51,8 +51,10 @@ function openCase(){
           requestFile = '../cases/cases_Open';        
         break;
         case 'todo':
+        case 'draft':
         case 'paused':
         case 'unassigned':
+        default:
           params += 'APP_UID=' + appUid;
           params += '&DEL_INDEX=' + delIndex;
           requestFile = '../cases/cases_Open';
