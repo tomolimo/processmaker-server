@@ -104,7 +104,11 @@ function updateRole(ROL_UID) {
 		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG3});
 		return false;
 	}
-	
+	if(ajax_function('roles_Ajax','verifyNewRole','request=updateDataRole&code='+code,'GET') =='false'){
+		new leimnud.module.app.alert().make({label: G_STRINGS.ID_ROLES_MSG2});
+		return false;
+		}
+
   	try{
 	parent = $('form[ROL_PARENT]').value;
 	}catch(e){}

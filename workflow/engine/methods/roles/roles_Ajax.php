@@ -23,7 +23,6 @@
  *
  */
 
- 
 $REQUEST = (isset($_GET['request']))?$_GET['request']:$_POST['request'];
  
 switch ($REQUEST) {
@@ -113,7 +112,12 @@ switch ($REQUEST) {
 		$response = ($RBAC->verifyNewRole($_POST['code']))?'true':'false';
 		print($response);
         break;
-
+    
+    case 'updateDataRole':
+		$response = ($RBAC->verifyNewRole($_GET['code']))?'true':'false';
+		print($response);
+        break;
+        
     case 'usersIntoRole':
 
 		$_GET['ROL_UID'] = (isset($_GET['ROL_UID']))?$_GET['ROL_UID']:$_POST['ROL_UID'];
