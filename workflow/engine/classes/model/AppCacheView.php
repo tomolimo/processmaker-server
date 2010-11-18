@@ -195,7 +195,8 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getSentListCriteria ($userUid) {
     $Criteria = $this->addPMFieldsToCriteria('sent');
-    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
+    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppDelegationPeer::DEL_INDEX . ')' );
+    $Criteria->addJoin ( AppCacheViewPeer::APP_UID , AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
     
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
@@ -547,7 +548,36 @@ class AppCacheView extends BaseAppCacheView {
     return $Criteria;
   	//return $this->getSearchCriteria(false);
   }
-  
+
+  /**
+   * gets the ADVANCED SEARCH cases list criteria for count
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSimpleSearchCountCriteria () {
+    //$Criteria  = new Criteria('workflow'); this sent a outer and cross join :P :P
+    $Criteria = $this->addPMFieldsToCriteria('sent');
+    $Criteria->add(AppCacheViewPeer::USR_UID, $_SESSION['USER_LOGGED']);
+    return $Criteria;
+  	//return $this->getSearchCriteria( true);
+  }
+
+  /**
+   * gets the ADVANCED SEARCH cases list criteria for list
+   * param $userUid the current userUid
+   * @return Criteria object $Criteria
+   */
+  function getSimpleSearchListCriteria () {
+    $Criteria = $this->addPMFieldsToCriteria('sent');
+    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
+    $Criteria->add(AppCacheViewPeer::USR_UID, $_SESSION['USER_LOGGED']);
+    //$Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
+
+    $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
+    return $Criteria;
+  	//return $this->getSearchCriteria(false);
+  }
+
   /**
    * gets the ADVANCED SEARCH cases list criteria for STATUS
    * param $userUid the current userUid
@@ -605,8 +635,8 @@ class AppCacheView extends BaseAppCacheView {
     $oCriteria->clearSelectColumns ( );
     // default configuration fields array
     $defaultFields = $this->getDefaultFields();
-    //if there is PMTABLE for this case list:
-    if ( count($this->confCasesList)>1 && isset($this->confCasesList['PMTable']) && trim($this->confCasesList['PMTable'])!='') {
+    // if there is PMTABLE for this case list:
+    if ( !empty($this->confCasesList) && isset($this->confCasesList['PMTable']) && trim($this->confCasesList['PMTable'])!='') {
     // getting the table name
 
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($this->confCasesList['PMTable']);
@@ -629,7 +659,17 @@ class AppCacheView extends BaseAppCacheView {
               $configTable = 'APP_CACHE_VIEW';
             break;
           }
-          $fieldName = $configTable . '.' . $fieldData['name'];
+          //filterign for some especial cases
+          switch($action) {
+            case 'sent':
+              if ($fieldData['name']!='DEL_INDEX'){
+                $fieldName = $configTable . '.' . $fieldData['name'];
+              }
+            break;
+            default:
+              $fieldName = $configTable . '.' . $fieldData['name'];
+            break;
+          }
           $oCriteria->addSelectColumn (  $fieldName );
         }
       }
@@ -643,7 +683,7 @@ class AppCacheView extends BaseAppCacheView {
     } 
     //else this list do not have a PM Table,
     else {
-      if (is_array($this->confCasesList)){
+      if (is_array($this->confCasesList) && !empty($this->confCasesList['second']['data'])){
         foreach($this->confCasesList['second']['data'] as $fieldData){
            switch ($fieldData['fieldType']){
             case 'case field':
@@ -657,12 +697,22 @@ class AppCacheView extends BaseAppCacheView {
             break;
           }
           $fieldName = $configTable.'.'.$fieldData['name'];
+          switch($action) {
+            case 'sent':
+              if ($fieldData['name']!='DEL_INDEX'){
+                $fieldName = $configTable . '.' . $fieldData['name'];
+              }
+            break;
+            default:
+              $fieldName = $configTable . '.' . $fieldData['name'];
+            break;
+          }
           $oCriteria->addSelectColumn (  $fieldName );
         }
       } 
       else {
         //foreach($defaultFields as $field){
-          $oCriteria->addSelectColumn('*');
+        $oCriteria->addSelectColumn('*');
         //}
       }
       //add the default and hidden DEL_INIT_DATE

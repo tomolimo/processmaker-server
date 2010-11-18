@@ -19,7 +19,7 @@
   $conf = new Configurations();
   try {
   	// the setup for search is the same as the Sent (participated)
-    $confCasesList        = $conf->getConfiguration('casesList', $action=='search' ? 'search': $action );
+    $confCasesList        = $conf->getConfiguration('casesList', ($action=='search'||$action=='simple_search') ? 'search': $action );
     $generalConfCasesList = $conf->getConfiguration('ENVIRONMENT_SETTINGS', '' );
   } 
   catch (Exception $e){
@@ -165,6 +165,7 @@
       case 'sent' :
            $cProcess      = $oAppCache->getSentListProcessCriteria ($userUid); // fast enough
            break;
+      case 'simple_search':
       case 'search' :
            //in search action, the query to obtain all process is too slow, so we need to query directly to 
            //process and content tables, and for that reason we need the current language in AppCacheView.
@@ -242,6 +243,7 @@
     $users[] = array( '', G::LoadTranslation('ID_ALL_USERS') );
     //now get users, just for the Search action
     switch ( $action ) {
+      case 'search_simple':
       case 'search' :
            $cUsers = new Criteria('workflow');
            $cUsers->clearSelectColumns ( );
@@ -294,6 +296,7 @@
       case 'sent' :
            $cStatus       = $oAppCache->getSentListProcessCriteria ($userUid); // a little slow
            break;
+      case 'simple_search':
       case 'search' :
            $cStatus = new Criteria('workflow');
            $cStatus->clearSelectColumns ( );
@@ -533,7 +536,7 @@
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER',  'width' => 90 );
-    $caseColumns[] = array( 'header' =>'Sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
+//    $caseColumns[] = array( 'header' =>'Sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
     $caseColumns[] = array( 'header' =>'Last Modify',  'dataIndex' => 'APP_UPDATE_DATE',   'width' => 110 );
     $caseColumns[] = array( 'header' =>'Priority',     'dataIndex' => 'DEL_PRIORITY',      'width' => 50 );
     $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
@@ -545,7 +548,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
-    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
+//    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
     $caseReaderFields[] = array( 'name' => 'DEL_TASK_DUE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
@@ -681,6 +684,7 @@ function getAdditionalFields($action, $confCasesList){
       case 'draft' :
         $config = getDraft();
         break;
+      case 'simple_search':
       case 'search' :
         $config = getSearch();
         break;

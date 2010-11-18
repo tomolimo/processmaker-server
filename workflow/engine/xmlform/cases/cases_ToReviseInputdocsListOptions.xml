@@ -4,7 +4,7 @@
 <PRO_UID type="private"/>
 <APP_DOC_UID type="private"/>
 <DOC_UID type="private"/>
-<upload_New type="private" defaultValue="javascript:uploadToReviseInputDocument('@#DOC_UID','@#APPLICATION'); alert('@#APPLICATION');"/>
+<upload_New type="private" defaultValue="javascript:uploadToReviseInputDocument('@#DOC_UID','@#APPLICATION');"/>
 <PAGED_TABLE_ID type="private"/>
 
 <!-- Default Search option -->
