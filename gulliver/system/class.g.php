@@ -2561,7 +2561,7 @@ class G
         // note by gustavo cruz gustavo[at]colosa[dot]com
         // minor adjustments to validate if an open node have a value attribute.
         // for example a dropdown has many childs, but also can have a value attribute.
-        if (trim($r['value'])!=''){
+        if (isset($r['value']) && trim($r['value'])!=''){
           $cv['__VALUE__'] = $r['value'];
         }
         // end added code
