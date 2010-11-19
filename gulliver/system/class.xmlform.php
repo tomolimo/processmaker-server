@@ -3201,17 +3201,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         
       $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="14" value="'.$value.'"/>      
       <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
-      <a id="'.$pID.'[btn]" value="."><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>
-      <script type="text/javascript">
-      new Calendar({
-        inputField: "'.$pID.'",
-        dateFormat: "'.$mask.'", 
-        trigger: "'.$pID.'[btn]",
-        bottomBar: true,
-        min:"'.$startDate.'",
-        max:"'.$endDate.'",
-        onSelect: function() { this.hide(); }});
-       </script>';
+      <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';
+      
     } else {
       $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
     }

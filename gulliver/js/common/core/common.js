@@ -1533,19 +1533,19 @@ function setNestedProperty(obj, propertyName, propertyValue){
  * @Return (objeect) {browser:sBrowser, version:sVersion}
  */
 function getBrowserClient(){
-
-    var aBrowFull = new Array("opera", "msie", "firefox", "opera", "safari");
-    var sInfo = navigator.userAgent.toLowerCase();
-    sBrowser = "";
-    for (var i = 0; i < aBrowFull.length; i++){
-		if ((sBrowser == "") && (sInfo.indexOf(aBrowFull[i]) != -1)){
-			sBrowser = aBrowFull[i];
-			sVersion = String(parseFloat(sInfo.substr(sInfo.indexOf(aBrowFull[i]) + aBrowFull[i].length + 1)));
-			return {browser:sBrowser, version:sVersion}
-		}
+  var aBrowFull = new Array("opera", "msie", "firefox", "opera", "safari");
+  var sInfo = navigator.userAgent.toLowerCase();
+  sBrowser = "";
+  for (var i = 0; i < aBrowFull.length; i++){
+    if ((sBrowser == "") && (sInfo.indexOf(aBrowFull[i]) != -1)){
+      sBrowser = aBrowFull[i];
+      sVersion = String(parseFloat(sInfo.substr(sInfo.indexOf(aBrowFull[i]) + aBrowFull[i].length + 1)));
+      return {name:sBrowser, browser:sBrowser, version:sVersion}
     }
-    return false;
-}
+  }
+  return false;
+};
+var _BROWSER = getBrowserClient();
 
 /**
  * Create and send cookie
@@ -1845,4 +1845,42 @@ function removeValue(id){
     document.getElementById('form['+id+']').value = '';
   else if( document.getElementById(id) )
     document.getElementById(id).value = '';
+}
+
+function datePicker4(obj, id, mask, startDate, endDate, showTIme){  
+
+  new Calendar({
+    inputField: id,
+    dateFormat: mask,
+    trigger: id+"[btn]",
+    bottomBar: true,
+    min:startDate,
+    max:endDate,
+    animation: _BROWSER.name =='msie'? false: true,
+    showTime: true,
+    onSelect: function() { this.hide(); }}
+  );
+
+  if( _BROWSER.name != 'msie' )
+    obj.onmouseover = undefined;
+
+}
+
+function elementAttributesNS(e, ns) {
+  if (!this.__namespaceRegexps)
+    this.__namespaceRegexps = {};
+  var regexp = this.__namespaceRegexps[ns];
+  if (!regexp) {
+    this.__namespaceRegexps[ns] = regexp =
+    ns ? eval("/^" + ns + ":(.+)/") : /^([^:]*)$/;
+  }
+  var result = {};
+  var atts = e.attributes;
+  var l = atts.length;
+  for (var i = 0; i < l; i++) {
+    var m = atts[i].name.match(regexp);
+    if (m)
+      result[m[1]] = atts[i].value;
+  }
+  return result;
 }
