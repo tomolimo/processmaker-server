@@ -179,7 +179,7 @@ var G_Grid = function(oForm, sGridName) {
 							  catch (e) {
 							    //Nothing
 							  }
-						  }
+						  } 
               
               
               
