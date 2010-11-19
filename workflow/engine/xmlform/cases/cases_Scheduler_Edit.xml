@@ -352,14 +352,14 @@ function hideAll() {
 	//contractSubtitle('ADVANCED_4');
 
 }
-function showPluginSelection(opt) {
+function showPluginSelection(opt,pro_uid) {
 document.getElementById("pluginsListContent").innerHTML ="";
 if(opt!=""){
 var oRPCProcess = new leimnud.module.rpc.xmlhttp({
             url   : '../cases/cases_SchedulerGetPlugins',
             async : true,
             method: 'POST',
-            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt+"&sch_uid="+getField('SCH_UID').value
+            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt+"&sch_uid="+getField('SCH_UID').value+"&pro_uid="+pro_uid
        });
        oRPCProcess.callback = function(rpc){
        //alert(rpc.xmlhttp.responseText);
@@ -391,7 +391,7 @@ function showSelection(opt) {
         document.getElementById('form[SELECT_PLUGIN]').style.display='';
         expandSubtitle('SELECT_PLUGIN');
         document.getElementById("pluginsListDropdown").innerHTML = rpc.xmlhttp.responseText;
-        showPluginSelection(plgUid);
+        showPluginSelection(plgUid,getField('PRO_UID').value);
        }
                 
        }.extend(this);

@@ -440,11 +440,10 @@ class CaseScheduler extends BaseCaseScheduler {
                 $oData['SCH_UID'] = $aRow['SCH_UID'];
                 $oData['params'] = $params;
                 $oData['sessionId'] = $sessionId;
+                $oData['userId'] = $user;
                 $paramsLogResultFromPlugin=$oPluginRegistry->executeMethod( $caseSchedulerSelected->sNamespace, $caseSchedulerSelected->sActionExecute, $oData );
-eprint("TESTING       ".$paramsLogResultFromPlugin['paramsLogResult'],"red");
-                die;
-                $paramsLog['WS_CREATE_CASE_STATUS']=$paramsLogResultFromPlugin['paramsLogCreate'];
-                $paramsLog['WS_ROUTE_CASE_STATUS']=$paramsLogResultFromPlugin['paramsLogRoute'];
+                $paramsLog['WS_CREATE_CASE_STATUS']=$paramsLogResultFromPlugin['WS_CREATE_CASE_STATUS'];
+                $paramsLog['WS_ROUTE_CASE_STATUS']=$paramsLogResultFromPlugin['WS_ROUTE_CASE_STATUS'];
 
                 $paramsLogResult=$paramsLogResultFromPlugin['paramsLogResult'];
                 $paramsRouteLogResult=$paramsLogResultFromPlugin['paramsRouteLogResult'];

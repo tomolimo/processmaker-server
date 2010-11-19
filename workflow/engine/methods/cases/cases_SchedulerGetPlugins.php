@@ -29,7 +29,7 @@ $activePluginsForCaseScheduler=$oPluginRegistry->getCaseSchedulerPlugins();
 $selectedPlugin="";
 if((isset($_REQUEST['plg_uid']))&&($_REQUEST['plg_uid']!="")) $selectedPlugin=$_REQUEST['plg_uid'];
 if(!empty($activePluginsForCaseScheduler)){
-  echo '<select style="width: 300px;" name="form[CASE_SH_PLUGIN_UID]" id="form[CASE_SH_PLUGIN_UID]" class="module_app_input___gray" required="1" onChange="showPluginSelection(this.options[this.selectedIndex].value)">';
+  echo '<select style="width: 300px;" name="form[CASE_SH_PLUGIN_UID]" id="form[CASE_SH_PLUGIN_UID]" class="module_app_input___gray" required="1" onChange="showPluginSelection(this.options[this.selectedIndex].value,getField(\'PRO_UID\').value)">';
   echo "<option value=\"\">- Select -</option>";
   foreach($activePluginsForCaseScheduler as $key => $caseSchedulerPluginDetail){
     $sActionId=$caseSchedulerPluginDetail->sActionId;
@@ -52,17 +52,16 @@ function pluginCaseSchedulerForm(){
 
    foreach($activePluginsForCaseScheduler as $key => $caseSchedulerPluginDetail){
     if(($caseSchedulerPluginDetail->sNamespace==$params[0])&&($caseSchedulerPluginDetail->sActionId==$params[1])){
-      $caseSchedulerSelected=$caseSchedulerPluginDetail;
-     
+      $caseSchedulerSelected=$caseSchedulerPluginDetail;     
     }
   }
   if((isset($caseSchedulerSelected))&&(is_object($caseSchedulerSelected))){
     //Render the form
       if((isset($_REQUEST['sch_uid']))&&($_REQUEST['sch_uid']!="")){
         //$oData=$oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionGetFields, array("SCH_UID"=>$_REQUEST['sch_uid']) );
-        $oData=array("SCH_UID"=>$_REQUEST['sch_uid']);
+        $oData=array("SCH_UID"=>$_REQUEST['sch_uid'],"PRO_UID"=>$_REQUEST['pro_uid']);
       }else{
-        $oData=array();
+        $oData=array("PRO_UID"=>$_REQUEST['pro_uid']);
       }
       
       $oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionForm, $oData );   

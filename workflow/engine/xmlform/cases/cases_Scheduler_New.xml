@@ -272,14 +272,14 @@ contractSubtitle('SELECT_PLUGIN');
 	
 }
 
-function showPluginSelection(opt) {
+function showPluginSelection(opt,pro_uid) {
 document.getElementById("pluginsListContent").innerHTML ="";
 if(opt!=""){
 var oRPCProcess = new leimnud.module.rpc.xmlhttp({
             url   : '../cases/cases_SchedulerGetPlugins',
             async : true,
             method: 'POST',
-            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt
+            args  : "action=pluginCaseSchedulerForm&selectedOption="+opt+"&pro_uid="+pro_uid            
        });
        oRPCProcess.callback = function(rpc){
        //alert(rpc.xmlhttp.responseText);
