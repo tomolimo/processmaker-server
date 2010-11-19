@@ -1,3 +1,10 @@
+clickListener = function (node,event){
+    if (node.attributes.href){
+      parent.location.href = node.attributes.href;
+//      Ext.get('casesSubFrame').src=node.attributes.href;
+    }
+};
+
 Ext.onReady(function() {
 
 var tree = new Ext.tree.TreePanel({
@@ -18,14 +25,18 @@ var tree = new Ext.tree.TreePanel({
     },
     listeners: {
         render: function() {
-            this.getRootNode().expand();
+//            this.getRootNode().expand();
+            this.expandAll();
 //            this.getNodeById('node-dynaforms').expand();
 //            this.getNodeById('node-input-documents').expand();
+        },
+        click: {
+          fn:clickListener
         }
     }
 })
     tree.render();
-    tree.expandAll();
+//    tree.expandAll();
 //    tree.getNodeById('node-dynaforms').expand();
 //    tree.getNodeById('node-input-documents').expand();
 });
