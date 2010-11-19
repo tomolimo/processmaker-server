@@ -3100,14 +3100,14 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
   {
     $startDate  = G::replaceDataField ( $this->startDate, $owner->values );
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
-    //$this->
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
     $afterDate  = G::replaceDataField ( $this->afterDate, $owner->values );
-//print('start='.$this->startDate.'    end='.$this->endDate);
+
     if ($startDate != '') {
       if (! $this->verifyDateFormat ( $startDate ))
         $startDate = '';
     }
+    
     if (isset ( $beforeDate ) && $beforeDate != '') {
       if ($this->isvalidBeforeFormat ( $beforeDate ))
         $startDate = $this->calculateBeforeFormat ( $beforeDate, 1 );
@@ -3134,18 +3134,50 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     if (isset ( $this->maxlength ) && is_numeric ( $this->maxlength ) && $this->maxlength >= 1900 && $this->maxlength <= 2100) {
       $endDate = $this->maxlength . '-01-01';
     }
+    
     if ($endDate == '') {
-      //$this->endDate = mktime ( 0,0,0,date('m'),date('d'),date('y') );  // the default is the current date + 2 years
-      $endDate = date ( 'Y-m-d', mktime ( 0, 0, 0, date ( 'm' ), date ( 'd' ), date ( 'Y' ) + 2 ) ); // the default is the current date + 2 years
+      // the default is the current date + 2 years
+      $endDate = date ( 'Y-m-d', mktime ( 0, 0, 0, date ( 'm' ), date ( 'd' ), date ( 'Y' ) + 2 ) ); 
     }
 
+    //validating the mask, if it is not set, 
     if( isset($this->mask) && $this->mask != '' ){
       $mask = $this->mask;
     } else {
-      $mask = '%Y-%m-%d';
+      $mask = '%Y-%m-%d'; //set default
     }
-    //echo '---->'.$value;
-  $tmp = str_replace("%", "", $mask);
+
+    /**
+     * - init - Backward compatibility
+     *
+     * By Erik A. O. <erik@colosa.com>
+     */
+    if($mask == 'yyyy-mm-dd')
+      $mask = '%Y-%m-%d';
+    
+    if( strpos($mask, '%') === false ) {
+      if( strpos($mask, '-') !== false ) { // case '-' saparator
+        $maskparts = explode('-', $mask);
+        $mask = '';
+        foreach($maskparts as $part) {
+          if($mask != '')
+            $mask .= '-';
+          $mask .= '%'.$part;
+        }
+      }
+      
+      if( strpos($mask, '/') !== false ) { // case '/' saparator
+        $maskparts = explode('/', $mask);
+        $mask = '';
+        foreach($maskparts as $part) {
+          if($mask != '')
+            $mask .= '/';
+          $mask .= '%'.$part;
+        }
+      }
+    }
+    /** - end - Backward compatibility **/
+  
     if ( trim ($value) == '' or $value == NULL ) {
       $value = ''; //date ($tmp);
     } else {
@@ -3160,25 +3192,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       }
     }
 
-    /*for old mask definitions...*/
-    if($mask == 'yyyy-mm-dd'){
-      $mask = '%Y-%m-%d';
-    }
-
     #the validations field was moved to javascript routines ;)
     if ($this->mode == 'edit') {
-     /* $html = "<input size=9  class='module_app_input___gray' readonly=true type='text' id='" . $pID . "' name='" . $pID . "' value='" . $value . "'>";
-      $html .= "<a title='Show calendar' href='#' onclick=\"return showCalendar('$pID', '$mask', '24', true, '$startDate', '$endDate');\" >
-              <img src='/controls/Calendar-32x32.png' border='0' width='12' height='14'>
-            </a>
-            <a title='Reset date field' href='#' onclick=\"document.getElementById('$pID').value=''; return false;\"><img src='/controls/TrashIcon.jpg' border='0' width='12' height='15'></a>";
-      *///
-      if($startDate=='1969-12-31'){
-         $startDate='';
-         $endDate='';
-        }
+      if( $startDate=='1969-12-31' ) {
+        $startDate='';
+        $endDate='';
+      }
         
-        //1969-12-31
       $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="14" value="'.$value.'"/>      
       <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
       <a id="'.$pID.'[btn]" value="."><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>
@@ -3195,19 +3215,16 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     } else {
       $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
     }
-     if($this->hint){
-           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
-                  <image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>
-                </a>';
-    }//print '<input type="text" id="'.$pID.'" name="'.$pID.'" value="'.$value.'" onchange="'.$this->onchange.'"/>';
-       //print_r($html);die;
+    
+    if($this->hint){
+      $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
+             . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>'
+             . '</a>';
+    }
+     
     return $html;
   }
 }
-/*
- min:"'.$startDate.'",
- max:"'.$endDate.'",
- */
 
 
 /**
