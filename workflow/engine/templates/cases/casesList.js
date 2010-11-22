@@ -1299,6 +1299,7 @@ Ext.onReady ( function() {
  
   var viewport = new Ext.Viewport($configViewport);
 
+  //routine to hide the debug panel if it is open
   if( parent.PANEL_EAST_OPEN ){
     parent.PANEL_EAST_OPEN = false;
     var debugPanel = parent.Ext.getCmp('debugPanel');
