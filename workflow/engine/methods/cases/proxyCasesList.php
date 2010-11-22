@@ -488,7 +488,7 @@
         $rows[] = $fields['APP_PRO_TITLE'];
         $rows[] = $fields['APP_TAS_TITLE'];
         $rows[] = $fields['APP_CURRENT_USER'];
-        $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
+//        $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
 //        $rows[] = $fields['USR_UID'];
