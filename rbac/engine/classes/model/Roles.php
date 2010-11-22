@@ -348,6 +348,7 @@ class Roles extends BaseRoles {
     
     function assignUserToRole($aData) {
         /*find the system uid for this role */
+        require_once 'classes/model/Users.php';
         $c = new Criteria();
         $c->add(RolesPeer::ROL_UID, $aData['ROL_UID']);
         $result = RolesPeer::doSelectRS($c);
@@ -355,6 +356,13 @@ class Roles extends BaseRoles {
         $result->next();
         $row = $result->getRow();
         $sSystemId = $row['ROL_SYSTEM'];
+        
+        //updating the role into users table
+        $oCriteria1 = new Criteria('workflow');
+        $oCriteria1->add(UsersPeer::USR_UID , $aData['USR_UID'], Criteria::EQUAL);
+        $oCriteria2 = new Criteria('workflow');
+        $oCriteria2->add(UsersPeer::USR_ROLE , $row['ROL_CODE']);
+        BasePeer::doUpdate($oCriteria1, $oCriteria2, Propel::getConnection('workflow'));
         
         //delete roles for the same System      
         $c = new Criteria();
@@ -382,6 +390,7 @@ class Roles extends BaseRoles {
         $oUsersRoles->setUsrUid($aData['USR_UID']);
         $oUsersRoles->setRolUid($aData['ROL_UID']);
         $oUsersRoles->save();
+        
     }
     
     function deleteUserRole($ROL_UID, $USR_UID) {
