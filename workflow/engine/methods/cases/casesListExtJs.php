@@ -619,13 +619,15 @@
    */
   function getReassignList() {
     $caseColumns = array ();
-    $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 100 );
-    $caseColumns[] = array( 'header' =>'CaseId',       'dataIndex' => 'APP_UID'  ,         'width' => 200 );
-    $caseColumns[] = array( 'header' =>'User',         'dataIndex' => 'USR_UID'  ,         'width' => 200 );
-    $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
-//    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',        'width' => 50 );
-    $caseColumns[] = array( 'header' =>'Reassign To',  'dataIndex' => 'USERS',             'width' => 120 , 'editor'=>"combo", 'renderer'=>"Ext.util.Format.comboRenderer(combo)");
+    $caseColumns[] = array( 'header' =>'Case',          'dataIndex' => 'APP_TITLE',         'width' => 100 , 'hidden'=> true);
+    $caseColumns[] = array( 'header' =>'CaseId',        'dataIndex' => 'APP_UID'  ,         'width' => 200 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'User',          'dataIndex' => 'USR_UID'  ,         'width' => 200 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'Task',          'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Process',       'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
+//    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',    'width' => 50 );
+    $caseColumns[] = array( 'header' =>'Reassigned Uid', 'dataIndex' => 'APP_REASSIGN_USER_UID', 'width' => 120, 'hidden'=> true );
+    $caseColumns[] = array( 'header' =>'Reassigned Uid', 'dataIndex' => 'TAS_UID', 'width' => 120, 'hidden'=> true );
+    $caseColumns[] = array( 'header' =>'Reassigned To' , 'dataIndex' => 'APP_REASSIGN_USER', 'width' => 120 );
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
@@ -633,7 +635,9 @@
     $caseReaderFields[] = array( 'name' => 'USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_PRO_TITLE' );
-//    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'APP_REASSIGN_USER_UID' );
+    $caseReaderFields[] = array( 'name' => 'TAS_UID' );
+    $caseReaderFields[] = array( 'name' => 'APP_REASSIGN_USER' );
 //    $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
 //    $caseReaderFields[] = array( 'name' => 'USERS' );
 

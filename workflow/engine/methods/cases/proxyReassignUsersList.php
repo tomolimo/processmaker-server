@@ -16,7 +16,6 @@
 //  $APP_UIDS          = explode(',', $_POST['APP_UID']);
   
   $appUid = isset($_POST['application']) ? $_POST['application'] : '';
-  $appUid = '9689438684c21413cab0d67065408760';
 //  $processUid = isset($_POST['process'])     ? $_POST['process'] : '';
 //  $TaskUid    = isset($_POST['task'])        ? $_POST['task'] : '';
 	$sReassignFromUser = isset($_POST['user']) ? $_POST['user'] : '';

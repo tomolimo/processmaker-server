@@ -32,7 +32,8 @@
   
   //get data configuration
   $conf = new Configurations();
-  $confCasesList = $conf->getConfiguration('casesList',$action=='search'?'sent':$action );
+  $confCasesList = $conf->getConfiguration('casesList',($action=='search'||$action=='simple_search')?'sent':$action );
+//  var_dump($confCasesList);
   $oAppCache->confCasesList = $confCasesList;
 
 // get the action based list
@@ -44,6 +45,7 @@
   	case 'sent' :
          $Criteria      = $oAppCache->getSentListCriteria($userUid);
          $CriteriaCount = $oAppCache->getSentCountCriteria($userUid);
+//         var_dump($Criteria);
          break;
   	case 'selfservice' :
         case 'unassigned':
@@ -66,6 +68,10 @@
          $Criteria      = $oAppCache->getSearchListCriteria();
          $CriteriaCount = $oAppCache->getSearchCountCriteria();
          break;         
+    case 'simple_search' :
+         $Criteria      = $oAppCache->getSimpleSearchListCriteria();
+         $CriteriaCount = $oAppCache->getSimpleSearchCountCriteria();
+         break;
     case 'to_revise' :
          $Criteria      = $oAppCache->getToReviseListCriteria($userUid);
          $CriteriaCount = $oAppCache->getToReviseCountCriteria($userUid);
@@ -261,12 +267,11 @@
       }
       $tableName = implode('',$newTableName);
         //
-      if (class_exists($tableName)){
-        eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
-      } else {
+      if (!class_exists($tableName)){
         require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
-        eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
       }
+      eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
+      
     } else {
       $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
     }
@@ -486,7 +491,7 @@
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
-        $rows[] = $fields['USR_UID'];
+//        $rows[] = $fields['USR_UID'];
         break;
 
       case 'all' : //#, Case, task, process, due date, Last Modify

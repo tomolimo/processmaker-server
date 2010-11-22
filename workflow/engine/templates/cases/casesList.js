@@ -25,7 +25,7 @@ var textJump;
 /** */
 
 function openCase(){
-  
+
     var rowModel = grid.getSelectionModel().getSelected();
     if(rowModel){
       var appUid   = rowModel.data.APP_UID;
@@ -38,7 +38,7 @@ function openCase(){
         wait:true,
         waitConfig: {interval:200}
       });
-      params = '';      
+      params = '';
       switch(action){
         case 'to_revise':
           params += 'APP_UID=' + appUid;
@@ -48,7 +48,7 @@ function openCase(){
         case 'sent': // = participated
           params += 'APP_UID=' + appUid;
           params += '&DEL_INDEX=' + delIndex;
-          requestFile = '../cases/cases_Open';        
+          requestFile = '../cases/cases_Open';
         break;
         case 'todo':
         case 'draft':
@@ -60,7 +60,7 @@ function openCase(){
           requestFile = '../cases/cases_Open';
           break;
       }
-      
+
       params += '&action=' + action;
       redirect(requestFile + '?' + params);
 
@@ -118,7 +118,7 @@ function deleteCase() {
 function pauseCase(date){
   rowModel = grid.getSelectionModel().getSelected();
   unpauseDate = date.format('Y-m-d');
- 
+
   Ext.Msg.confirm(
     TRANSLATIONS.ID_CONFIRM,
     TRANSLATIONS.ID_PAUSE_CASE_TO_DATE +' '+date.format('M j, Y'),
@@ -134,7 +134,7 @@ function pauseCase(date){
           },
           params: {action:'pauseCase', unpausedate:unpauseDate, APP_UID:rowModel.data.APP_UID, DEL_INDEX: rowModel.data.DEL_INDEX}
         });
-        
+
       }
     }
   );
@@ -204,7 +204,7 @@ function unpauseCase() {
   rowModel = grid.getSelectionModel().getSelected();
 	caseIdToUnpause    = rowModel.data.APP_UID;
 	caseIndexToUnpause = rowModel.data.DEL_INDEX;
-  
+
   Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_CONFIRM_UNPAUSE_CASE , function (btn, text) {
     if ( btn == 'yes' ) {
       Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
@@ -283,7 +283,7 @@ Ext.onReady ( function() {
       return String.format("{0}", value );
     else
       return String.format("<span class='row_updated'>{0}</span>", value );
-  } 
+  }
 
   //alert(Ext.encode(columns));
   for(var i = 0, len = columns.length; i < len; i++){
@@ -297,7 +297,7 @@ Ext.onReady ( function() {
 	 //Status images
     //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   }
-  
+
 	/*
   function showStatusImage(value,p,r){
 	  if ( value == 'COMPLETED' )
@@ -339,8 +339,8 @@ Ext.onReady ( function() {
               id       : Ext.id(),
               el       : 'reassign-panel',
               title    : 'Reassign All Cases by Task',
-              width    : 600,
-              height   : 400,
+              width    : 650,
+              height   : 350,
               frame    : true,
               closable: false
             });
@@ -357,7 +357,19 @@ Ext.onReady ( function() {
     text: 'Reassign',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
+      var result = storeReassignCases.save();
       newPopUp.hide();
+      if (result==1){
+        storeCases.reload();
+        //var messagePopUp = 'The selected task cases has been reassigned.';
+        //Ext.MessageBox.alert('Status', messagePopUp, storeCases.reload());
+      } else {
+        //var messagePopUp = 'The selected task cases can\'t be reassigned.';
+        //Ext.MessageBox.alert('Status', messagePopUp, storeCases.reload());
+        storeCases.reload();
+      }
+      //storeReassignCases.reload();
+
     }
   });
 
@@ -389,7 +401,10 @@ Ext.onReady ( function() {
 
   var proxyReassignCasesList = new Ext.data.HttpProxy({
     api: {
-      read :   'proxyReassignCasesList'
+      read    : 'proxyReassignCasesList',
+      create  : 'proxySaveReassignCasesList',
+      update  : 'proxySaveReassignCasesList',
+      delete  : 'proxyDeleteReassignCasesList'
     }
   });
 
@@ -409,7 +424,7 @@ Ext.onReady ( function() {
     encode: true,
     writeAllFields: true
   });
-  
+
 
 
   // Typical Store collecting the Proxy, Reader and Writer together.
@@ -426,9 +441,9 @@ Ext.onReady ( function() {
   storeReassignCases = new Ext.data.Store({
     remoteSort: false,
     proxy : proxyReassignCasesList,
-    reader: readerReassignCasesList
-    //writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
-    //autoSave: false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+    reader: readerReassignCasesList,
+    writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave: false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
 
   //Layout Resizing
@@ -495,6 +510,7 @@ Ext.onReady ( function() {
 
   var btnStarted = new Ext.Button ({
     id: 'started',
+//    text: 'started by me',
     text: TRANSLATIONS.LABEL_OPT_STARTED,
     enableToggle: true,
     toggleHandler: onItemToggle,
@@ -504,6 +520,7 @@ Ext.onReady ( function() {
 
   var btnCompleted = new Ext.Button ({
     id: 'completed',
+//    text: 'Completed by me',
     text: TRANSLATIONS.LABEL_OPT_COMPLETED,
     enableToggle: true,
     toggleHandler: onItemToggle,
@@ -575,7 +592,7 @@ Ext.onReady ( function() {
           btnSelectAll.hide();
           btnUnSelectAll.hide();
           btnReassign.hide();
-        } 
+        }
         else  {
           btnSelectAll.show();
           btnUnSelectAll.show();
@@ -803,13 +820,13 @@ Ext.onReady ( function() {
       caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
        caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
           if( caseNumber )
-            jumpToCase(caseNumber);
-          else
+        jumpToCase(caseNumber);
+      else
             msgBox('Input Error', 'You have set a invalid Application Number', 'error');
     }
   });
 
-  /*** menu and toolbars **/  
+  /*** menu and toolbars **/
 
   function onMessageContextMenu(grid, rowIndex, e) {
     e.stopEvent();
@@ -959,7 +976,7 @@ Ext.onReady ( function() {
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
-    
+
     '-',
     btnRead,
     '-',
@@ -999,7 +1016,7 @@ Ext.onReady ( function() {
     ' ',
     ' '
   ];
-  
+
   var toolbarUnassigned = [
     btnRead,
     '-',
@@ -1113,7 +1130,7 @@ Ext.onReady ( function() {
       }),
       '-'
     ];
-  
+
   var firstToolbarSearch = new Ext.Toolbar({
     region: 'north',
     width: '100%',
@@ -1192,12 +1209,12 @@ Ext.onReady ( function() {
   }, this);
 
   grid.addListener('rowcontextmenu', onMessageContextMenu,this);
-  
+
   if (action=='to_reassign'){
     grid.getColumnModel().setHidden(0, true);
     grid.getColumnModel().setHidden(1, true);
   }
-  
+
   // create reusable renderer
 
 
@@ -1236,21 +1253,87 @@ Ext.onReady ( function() {
 
     });
 
-    
-    
+
+var gridForm = new Ext.FormPanel({
+        id: 'reassign-form',
+        frame: true,
+        labelAlign: 'left',
+        //title: 'Company data',
+        bodyStyle:'padding:5px',
+        width: 650,
+        layout: 'column',    // Specifies that the items will now be arranged in columns
+        items: [{
+            id : 'tasksGrid',
+            columnWidth: 0.60,
+            layout: 'fit',
+            items: {
+                id: 'TasksToReassign',
+                xtype: 'grid',
+                ds: storeReassignCases,
+                cm: reassignCm,
+                sm: new Ext.grid.RowSelectionModel({
+                    singleSelect: true
+                    /*listeners: {
+                        rowselect: function(sm, row, rec) {
+                            Ext.getCmp("reassign-form").getForm().loadRecord(rec);
+                        }
+                    }*/
+                }),
+                //autoExpandColumn: 'company',
+                height: 350,
+                title  : 'Cases to reassign - Task List',
+                border : true,
+                listeners: {
+                    click: function() {
+                        rows = this.getSelectionModel().getSelections();
+                        var application = '';
+                        if( rows.length > 0 ) {
+                            var ids = '';
+                            for(i=0; i<rows.length; i++) {
+                              // filtering duplicate tasks
+                             application = rows[i].get('APP_UID');
+                            }
+                        }
+                        comboUsersToReassign.clearValue();
+                        storeUsersToReassign.setBaseParam('application',application);
+                        storeUsersToReassign.load();
+                        //alert(record.USERS);
+                    } // Allow rows to be rendered.
+                }
+            }
+        },{
+            columnWidth: 0.4,
+            xtype: 'fieldset',
+            labelWidth: 70,
+            title:'User List',
+            defaults: {width: 120, border:false},    // Default config options for child items
+            defaultType: 'textfield',
+            autoHeight: true,
+            bodyStyle: Ext.isIE ? 'padding:0 0 5px 15px;' : 'padding:10px 15px;',
+            border: false,
+            style: {
+                "margin-left": "10px", // when you add custom margin in IE 6...
+                "margin-right": Ext.isIE6 ? (Ext.isStrict ? "-10px" : "-13px") : "0"  // you have to adjust for it somewhere else
+            },
+            items: comboUsersToReassign
+        }]
+        //renderTo: bd
+    });
+
+
     // manually trigger the data store load
     storeCases.setBaseParam( 'action', action );
     storeCases.setBaseParam( 'start',  0 );
     storeCases.setBaseParam( 'limit',  pageSize );
     storeCases.load();
-    newPopUp.add(reassignGrid);
+    //newPopUp.add(reassignGrid);
+    newPopUp.add(gridForm);
     newPopUp.addButton(btnExecReassign);
     newPopUp.addButton(btnCloseReassign);
 
     //storeProcesses.load();
 
     function onItemToggle(item, pressed){
-
       switch ( item.id ) {
         case 'read' :
           btnUnread.toggle( false, true);
@@ -1276,7 +1359,7 @@ Ext.onReady ( function() {
           break;
       }
       if(pressed){
-        storeCases.setBaseParam( 'filter', item.id );
+      storeCases.setBaseParam( 'filter', item.id );
       } else {
         storeCases.setBaseParam( 'filter', '' );
       }
@@ -1293,10 +1376,10 @@ Ext.onReady ( function() {
 	  id:'viewportcases',
     items: [grid]
   }
-  
+
   if ( action == 'search' )
     $configViewport.items.push(firstToolbarSearch);
- 
+
   var viewport = new Ext.Viewport($configViewport);
 
   //routine to hide the debug panel if it is open
@@ -1309,7 +1392,7 @@ Ext.onReady ( function() {
 
   _nodeId = '';
   switch(action){
-    case 'draft': 
+    case 'draft':
       _nodeId = "CASES_DRAFT";
       break;
     case 'sent':
@@ -1352,23 +1435,23 @@ function reassign(){
   if( rows.length > 0 ) {
     var ids = '';
     for(i=0; i<rows.length; i++) {
-      // filtering duplicate tasks  
-       
+      // filtering duplicate tasks
+
          if( i != 0 ) ids += ',';
          ids += rows[i].get('APP_UID') + "|" + rows[i].get('TAS_UID')+ "|" + rows[i].get('DEL_INDEX');
     }
     storeReassignCases.setBaseParam( 'APP_UIDS', ids);
     storeReassignCases.load();
     newPopUp.show();
-    
-    grid = reassignGrid.store.data;
-    Ext.Msg.alert ( grid );    
+
+    //grid = reassignGrid.store.data;
+    //Ext.Msg.alert ( grid );
 /*
     for( var i =0; i < grid.length; i++) {
       grid[i].data.APP_UID = grid[i].data.USERS[0];
-    }  
+    }
     */
-  } 
+  }
   else {
      Ext.Msg.show({
        title:'',
@@ -1427,7 +1510,7 @@ function msgBox(title, msg, type){
     type = 'info';
 
   switch(type){
-    case 'error': 
+    case 'error':
       icon = Ext.MessageBox.ERROR;
       break;
     case 'info':

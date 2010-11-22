@@ -258,7 +258,7 @@ _b.AutoSuggest.prototype.setSuggestions = function (req, input)
         this.aSug.push(  { 'id':jsondata.results[i].id, 'value':jsondata.results[i].value, 'info':jsondata.results[i].info }  );
       }
     } else {
-      alert('\t\t\t --= AUTO SUGGEST PM FIELD ERROR =-- \nYou have a SQL definition error, the database engine response was:\n\n'+jsondata.message);
+      //alert('\t\t\t --= AUTO SUGGEST PM FIELD ERROR =-- \nYou have a SQL definition error, the database engine response was:\n\n'+jsondata.message);
       return false;
     }
 	}

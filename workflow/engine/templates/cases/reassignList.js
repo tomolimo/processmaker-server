@@ -1,4 +1,3 @@
-﻿
 
   var proxyUsersToReassignList = new Ext.data.HttpProxy({
     api: {
@@ -55,19 +54,21 @@
   }
 
   // create the combo instance
-  var combo = new Ext.form.ComboBox({
+  var comboUsersToReassign = new Ext.form.ComboBox({
     //typeAhead     : true,
+    fieldLabel    : 'Reassign to',
     triggerAction : 'all',
     //lazyRender    : true,
-    store         : new Ext.data.Store(),
-    //store         : storeUsersToReassign,
-    /*listeners:{
-      'select': function() {
-        //storeUsersToReassign.load();
-        //alert("extras");
-        //getSelectionData();
+//    store         : new Ext.data.Store(),
+    store         : storeUsersToReassign,
+    listeners:{
+      'select': function(comp, record, index) {
+        var row = Ext.getCmp('TasksToReassign').getSelectionModel().getSelected();
+        row.set('APP_REASSIGN_USER_UID', record.get('userUid'));
+        row.set('APP_REASSIGN_USER', record.get('userFullname'));
+        this.setValue(record.get('userFullname'));
       }
-    },*/
+    },
     valueField    : 'userId',
     displayField  : 'userFullname'
   });
