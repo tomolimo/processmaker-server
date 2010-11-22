@@ -354,25 +354,34 @@ Ext.onReady ( function() {
   });
 
   var btnExecReassign = new Ext.Button ({
-    text: 'Reassign',
+    text: 'Reassign All',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
+      storeReassignCases.setBaseParam('selected', false);
       var result = storeReassignCases.save();
       newPopUp.hide();
-      if (result==1){
-        storeCases.reload();
-        //var messagePopUp = 'The selected task cases has been reassigned.';
-        //Ext.MessageBox.alert('Status', messagePopUp, storeCases.reload());
-      } else {
-        //var messagePopUp = 'The selected task cases can\'t be reassigned.';
-        //Ext.MessageBox.alert('Status', messagePopUp, storeCases.reload());
-        storeCases.reload();
-      }
+      storeCases.reload();
+      
+      
       //storeReassignCases.reload();
 
     }
   });
+  
+  var btnExecReassignSelected = new Ext.Button ({
+    text: 'Reassign Checked',
+    //    text: TRANSLATIONS.LABEL_SELECT_ALL,
+    handler: function(){
+      storeReassignCases.setBaseParam('selected', true);
+      var result = storeReassignCases.save();
+      //storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize}});
+      newPopUp.hide();
+      storeCases.reload();
+      //storeReassignCases.reload();
 
+    }
+  });
+  
   // Create HttpProxy instance, all CRUD requests will be directed to single proxy url.
   var proxyCasesList = new Ext.data.HttpProxy({
     api: {
@@ -1328,7 +1337,8 @@ var gridForm = new Ext.FormPanel({
     storeCases.load();
     //newPopUp.add(reassignGrid);
     newPopUp.add(gridForm);
-    newPopUp.addButton(btnExecReassign);
+    newPopUp.addButton(btnExecReassignSelected);
+    newPopUp.addButton(btnExecReassign);   
     newPopUp.addButton(btnCloseReassign);
 
     //storeProcesses.load();

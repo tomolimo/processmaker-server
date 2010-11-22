@@ -23,7 +23,15 @@
  *
  */
  $aData = json_decode($_POST['data']);
+ $appSelectedUids = array ();
+ $items = explode(",",$_POST['APP_UIDS']);
+ foreach ($items as $item) {
+   $dataUids = explode("|",$item);
+   $appSelectedUids[] = $dataUids[0];
+ }
+
 // var_dump($aData);
+//var_dump($appSelectedUids);
       $casesReassignedCount = 0;
       $serverResponse = array();
       G::LoadClass ('case');
@@ -32,7 +40,12 @@
       require_once ('classes/model/AppCacheView.php');
       $oAppCacheView      = new AppCacheView();
       $oCasesReassignList = $oAppCacheView->getToReassignListCriteria();
-      
+      if (isset($_POST['selected'])&&$_POST['selected']=='true'){
+        $oCasesReassignList->add(AppCacheViewPeer::APP_UID,$appSelectedUids,Criteria::IN);
+      }
+//      $params = array ();
+//      $sql = BasePeer::createSelectSql($oCasesReassignList, $params);
+//      var_dump($sql);
       if (is_array($aData)){
         foreach ($aData as $data){
           $oTmpReassignCriteria = $oCasesReassignList;
