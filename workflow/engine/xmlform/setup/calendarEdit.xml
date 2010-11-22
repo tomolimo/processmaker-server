@@ -43,7 +43,7 @@
 <SUBMIT type="submit" onclick="getField('CALENDAR_WORK_DAYS][0').disabled=false;getField('CALENDAR_WORK_DAYS][1').disabled=false;getField('CALENDAR_WORK_DAYS][2').disabled=false;getField('CALENDAR_WORK_DAYS][3').disabled=false;getField('CALENDAR_WORK_DAYS][4').disabled=false;getField('CALENDAR_WORK_DAYS][5').disabled=false;getField('CALENDAR_WORK_DAYS][6').disabled=false; return validateForm(this.form);">
 <en>Save</en>
 </SUBMIT>
-<SUBMIT2 type="button" onclick="getField('CALENDAR_WORK_DAYS][0').disabled=false;getField('CALENDAR_WORK_DAYS][1').disabled=false;getField('CALENDAR_WORK_DAYS][2').disabled=false;getField('CALENDAR_WORK_DAYS][3').disabled=false;getField('CALENDAR_WORK_DAYS][4').disabled=false;getField('CALENDAR_WORK_DAYS][5').disabled=false;getField('CALENDAR_WORK_DAYS][6').disabled=false;submit(this);">
+<SUBMIT2 type="button" onclick="getField('CALENDAR_WORK_DAYS][0').disabled=false;getField('CALENDAR_WORK_DAYS][1').disabled=false;getField('CALENDAR_WORK_DAYS][2').disabled=false;getField('CALENDAR_WORK_DAYS][3').disabled=false;getField('CALENDAR_WORK_DAYS][4').disabled=false;getField('CALENDAR_WORK_DAYS][5').disabled=false;getField('CALENDAR_WORK_DAYS][6').disabled=false;if(getField('CALENDAR_NAME').value!=''){submit(this);}else{alert('- Invalid Name');}">
 <en>Save</en>
 </SUBMIT2>
 <BTN_CANCEL type="button" onclick="cancel();">
@@ -285,6 +285,11 @@ function validateForm(form){
 			msg+="- "+msgEnd+"\n";
 		}
 		
+	}
+	getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.replace(/^\s+/, "");
+
+	if(getField('CALENDAR_NAME').value==""){ 
+	msg+="- Invalid Name \n";
 	}
 	var flag=true;
 	var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
