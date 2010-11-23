@@ -339,7 +339,7 @@ Ext.onReady ( function() {
               id       : Ext.id(),
               el       : 'reassign-panel',
               title    : 'Reassign All Cases by Task',
-              width    : 650,
+              width    : 750,
               height   : 350,
               frame    : true,
               closable: false
@@ -473,22 +473,6 @@ Ext.onReady ( function() {
   });
   storeProcesses.setDefaultSort('APP_PRO_TITLE', 'asc');
 
-  //var reassignUsersCombo = new Ext.grid.;
-  /*
-  var storeToReassignUsers = new Ext.data.JsonStore({
-    root: 'data',
-    totalProperty: 'totalCount',
-    idProperty: 'index',
-    remoteSort: true,
-    fields: [
-      'USR_UID', 'USR_USERNAME'
-    ],
-    data: usersObject
-  });
-  storeProcesses.setDefaultSort('APP_PRO_TITLE', 'asc');
-  */
-
-
   // creating the button for filters
   var btnRead = new Ext.Button ({
     id: 'read',
@@ -582,7 +566,7 @@ Ext.onReady ( function() {
     mode          : 'local',
     forceSelection: true,
     triggerAction: 'all',
-    //emptyText: 'Select a process...',
+    
     emptyText: TRANSLATIONS.LABEL_EMPTY_USERS,
     selectOnFocus: true,
     //getListParent: function() {
@@ -633,33 +617,7 @@ Ext.onReady ( function() {
     text: 'Reassign',
 //    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
-      //grid.getSelectionModel().getSelections();
-        //reassignGrid.getColumnModel().setHidden(0, true);
-        //reassignGrid.getColumnModel().setHidden(1, true);
-        //reassignGrid.getColumnModel().setHidden(2, true);
         reassign();
-//      reassignPopup.show();
-//      conn.request({
-//        url: 'cases_Ajax',
-//        url: 'proxyReassignCases',
-//        method: 'POST',
-//        params: {"APP_UIDS": 'metaID', 'FROM_USR_ID': 'field', 'action': 'reassignByUserList'},
-//        success: function(responseObject) {
-//          reassignPopup.html = responseObject.responseText;
-//
-//            var newPopUp = new Ext.Window({
-//              title    : 'Static Panel',
-//              width    : 600,
-//              height   : 400,
-//              frame    : true,
-//              html     : responseObject.responseText
-//            });
-//            newPopUp.show();
-//        },
-//        failure: function() {
-//            Ext.Msg.alert('Status', 'Unable to show history at this time. Please try again later.');
-//        }
-//      });
     }
   });
 
@@ -1269,7 +1227,7 @@ var gridForm = new Ext.FormPanel({
         labelAlign: 'left',
         //title: 'Company data',
         bodyStyle:'padding:5px',
-        width: 650,
+        width: 750,
         layout: 'column',    // Specifies that the items will now be arranged in columns
         items: [{
             id : 'tasksGrid',

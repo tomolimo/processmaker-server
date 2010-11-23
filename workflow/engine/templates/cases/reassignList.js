@@ -58,6 +58,7 @@
     //typeAhead     : true,
     fieldLabel    : 'Reassign to',
     triggerAction : 'all',
+    width         : '150',
     //lazyRender    : true,
 //    store         : new Ext.data.Store(),
     store         : storeUsersToReassign,

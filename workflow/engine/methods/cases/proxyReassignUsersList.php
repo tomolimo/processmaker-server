@@ -38,14 +38,19 @@
             $aUsersInvolved = Array();
             $aCaseGroups = $oTasks->getGroupsOfTask($aCase['TAS_UID'], 1);
 
+            G::loadClass('configuration');
+            $oConfig = new Configuration();
+            $aConfig = $oConfig->load('ENVIRONMENT_SETTINGS');
+            $aConfig = unserialize($aConfig['CFG_VALUE']);
+//            var_dump($aConfig);
             foreach ( $aCaseGroups as $aCaseGroup ) {
                 $aCaseUsers = $oGroups->getUsersOfGroup($aCaseGroup['GRP_UID']);
                 foreach ( $aCaseUsers as $aCaseUser ) {
                     if ( $aCaseUser['USR_UID'] != $sReassignFromUser ) {
                         $aCaseUserRecord = $oUser->load($aCaseUser['USR_UID']);
-                        $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
-//                        $aUsersInvolved[$aCaseUser['USR_UID']] = $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']; // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
+                        $sCaseUser = G::getFormatUserList ($aConfig['format'],$aCaseUserRecord);
 //                        $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
+                        $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $sCaseUser); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                     }
                 }
             }
@@ -54,10 +59,9 @@
             foreach ( $aCaseUsers as $aCaseUser ) {
                 if ( $aCaseUser['USR_UID'] != $sReassignFromUser ) {
                     $aCaseUserRecord = $oUser->load($aCaseUser['USR_UID']);
-//                    $aUsersInvolved[$aCaseUser['USR_UID']] = $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']; // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
-                    $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
-//                    $aUsersInvolved[$aCaseUser['USR_UID']] = $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']; // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
-//                    $aUsersInvolved[$aCaseUser['USR_UID']] = $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']; // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
+                    $sCaseUser = G::getFormatUserList ($aConfig['format'],$aCaseUserRecord);
+//                    $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
+                    $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $sCaseUser); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                 }
             }
 //            $oTmp = new stdClass();

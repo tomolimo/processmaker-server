@@ -627,7 +627,7 @@
 //    $caseColumns[] = array( 'header' =>'Status',       'dataIndex' => 'APP_STATUS',    'width' => 50 );
     $caseColumns[] = array( 'header' =>'Reassigned Uid', 'dataIndex' => 'APP_REASSIGN_USER_UID', 'width' => 120, 'hidden'=> true );
     $caseColumns[] = array( 'header' =>'Reassigned Uid', 'dataIndex' => 'TAS_UID', 'width' => 120, 'hidden'=> true );
-    $caseColumns[] = array( 'header' =>'Reassigned To' , 'dataIndex' => 'APP_REASSIGN_USER', 'width' => 120 );
+    $caseColumns[] = array( 'header' =>'Reassigned To' , 'dataIndex' => 'APP_REASSIGN_USER', 'width' => 170 );
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
