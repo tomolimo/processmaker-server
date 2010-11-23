@@ -23,13 +23,12 @@
  *
  */
 
-  if (($RBAC_Response = $RBAC->userCanAccess("PM_CASES"))!=1) return $RBAC_Response;
+$RBAC->requirePermissions('PM_CASES');
 
-  $G_MAIN_MENU            = 'processmaker';
-  $G_ID_MENU_SELECTED     = 'CASES';
+$G_MAIN_MENU            = 'processmaker';
+$G_ID_MENU_SELECTED     = 'CASES';
 
-  $G_PUBLISH = new Publisher;
-  $G_PUBLISH->AddContent('view', 'cases/cases_Load');
-  G::RenderPage('publish');
+$G_PUBLISH = new Publisher;
+$G_PUBLISH->AddContent('view', 'cases/cases_Load');
+G::RenderPage('publish');
 
-  

@@ -23,10 +23,9 @@
  *
  */
 
+  $RBAC->requirePermissions('PM_SETUP');
+
   $oHeadPublisher =& headPublisher::getSingleton();
-  //$oHeadPublisher->setExtSkin( 'xtheme-blue');   
-  //$oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
-//  $oHeadPublisher->usingExtJs('ux/Ext.ux.codepress');
 
   global $G_TMP_MENU;
   $oMenu = new Menu();

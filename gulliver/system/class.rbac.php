@@ -899,4 +899,42 @@ class RBAC
     }
     return array();
   }
+
+
+  function requirePermissions($permissions){
+    $numPerms = func_num_args();
+    $permissions = func_get_args();
+    
+    if ( $numPerms == 1 ){
+      $access = $this->userCanAccess($permissions[0]);
+    } else if ( $numPerms > 0 ){
+      foreach ($permissions as $perm) {
+        $access = $this->userCanAccess($perm);
+        if( $access != 1 ) {
+          $access = -1;
+          break;
+        }
+      }
+    } else {
+      throw new Exception('function requirePermissions() ->ERROR: Parameters missing!');
+    }
+
+   
+    if( $access == 1 )
+      return true;
+    else {
+      switch ($access) {
+        case -2:
+          G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+          G::header('location: ../login/login');
+        break;
+        case -1:
+        default:
+          G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+          G::header('location: ../login/login');
+        break;
+      }
+      exit(0);
+    }
+  }
 }
