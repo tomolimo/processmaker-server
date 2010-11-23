@@ -62,3 +62,11 @@
   $oHeadPublisher->assign('tabItems', $tabItems);
 
   G::RenderPage('publish', 'extJs');
+  // this patch enables the load of the plugin list panel inside de main admin panel iframe
+  if (isset($_GET['action'])&&$_GET['action']=='pluginsList'){
+    print "
+    <script>
+    document.getElementById('setup-frame').src = 'pluginsList';
+    </script>
+    ";
+  }

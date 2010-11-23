@@ -153,9 +153,10 @@ if( $access != 1 ){
   $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
 
   //G::header ( 'Location: pluginsList');
+  // this additional parameter pluginsList enables the load of the plugin list panel inside de main admin panel iframe
   print "
   <script>
-  parent.window.location.href = 'setup?module=pluginsList';
+  parent.window.location.href = 'main_init?action=pluginsList';
   </script>
   ";
 
