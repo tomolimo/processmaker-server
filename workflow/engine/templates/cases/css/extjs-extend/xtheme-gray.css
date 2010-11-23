@@ -32,6 +32,14 @@
   background-position:0 -7777px !important;
 }
 
+.x-tab-strip-text.ICON_FOLDERS{
+  /*.ss_folder_explore*/
+  background-position:0 -7776px !important;
+}
+.x-tab-strip-inner .x-tab-strip-text.ICON_FOLDERS{
+  background-position:0 -7775px !important;
+}
+
 .ICON_CASES_FOLDERS {
   /*background-image: url(/images/icons_silk/cases-inbox.png) !important;*/
 }
