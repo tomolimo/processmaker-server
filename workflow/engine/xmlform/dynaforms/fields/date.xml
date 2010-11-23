@@ -119,7 +119,7 @@ function masks(){
   popupWindow('Masks List' , '../dynaforms/datemask' , 400 , 370 );
 }
 hideRowById('PME_READONLY');
-hideRowById('PME_EDITABLE');
+showRowById('PME_EDITABLE');
 hideRowById('PME_SHOWTIME');
 
 reltype = getField('PME_RELATIVEDATE').value;

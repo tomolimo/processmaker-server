@@ -2985,6 +2985,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
   public $mask            = '%Y-%m-%d';
   public $dependentFields = '';
+  public $editable;  
   var $hint;
   /**
    * Verify the format of a date
@@ -3198,21 +3199,29 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         $startDate='';
         $endDate='';
       }
+       $maskleng=strlen($mask);
+       $hour   = '%H';$min   = '%M';$sec   = '%S';
+       $sizehour = strpos($mask, $hour);
+       $sizemin = strpos($mask, $hour);
+       $sizesec = strpos($mask, $hour);
+    if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
+      $sizeend=$maskleng+2;
+      }else{
+         $sizeend=$maskleng+2;
+         } 
+		if ( $this->editable != "0") {
+       	$html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"/>
+        	<a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
+        	<a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';		
+		}else{
+         $html = '<input id="'.$pID.'" name="'.$pID.'" class="" size="'.$sizeend.'" value="'.$value.'" readonly/>
+         <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
+         <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';			
+			}
 
-        $hour   = '%H';$min   = '%M';$sec   = '%S';
-        $sizehour = strpos($mask, $hour);
-        $sizemin = strpos($mask, $hour);
-        $sizesec = strpos($mask, $hour);
-if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
-  $sizeend="18";
-  }else{$sizeend="14";}
-      $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"/>
-      <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
-      <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';
-      
-    } else {
-      $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
-    }
+         }else {
+          $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
+        }
     
     if($this->hint){
       $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
