@@ -413,7 +413,7 @@ Ext.onReady ( function() {
       read    : 'proxyReassignCasesList',
       create  : 'proxySaveReassignCasesList',
       update  : 'proxySaveReassignCasesList',
-      delete  : 'proxyDeleteReassignCasesList'
+      destroy : 'proxyReassignCasesList'
     }
   });
 
