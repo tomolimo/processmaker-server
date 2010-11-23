@@ -49,10 +49,10 @@
   $G_TMP_MENU->AddIdRawOption('CASES_SELFSERVICE', 'casesListExtJs?action=selfservice',G::LoadTranslation('ID_UNASSIGNED'),         'rotate_cw.png'        );
   $G_TMP_MENU->AddIdRawOption('CASES_PAUSED',      'casesListExtJs?action=paused',     G::LoadTranslation('ID_PAUSED'),             'mail-queue.png'       );
   //$G_TMP_MENU->AddIdRawOption('CASES_CANCELLED',   'casesListExtJs?action=cancelled',  G::LoadTranslation('ID_CANCELLED'),          'edit-clear-list.png'  );
-  $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS1',     '../appFolder/appFolderList',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
+  //$G_TMP_MENU->AddIdRawOption('CASES_FOLDERS1',     '../appFolder/appFolderList',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
   
   if ( $RBAC->userCanAccess('PM_ALLCASES') == 1 ) {
-//    $G_TMP_MENU->AddIdRawOption('CASES_GRAL', 'casesListExtJs?action=gral', G::LoadTranslation('ID_GENERAL'));
+    //$G_TMP_MENU->AddIdRawOption('CASES_GRAL', 'casesListExtJs?action=gral', G::LoadTranslation('ID_GENERAL'));
   }
   
   $G_TMP_MENU->AddIdRawOption('SEARCHS',           '',                                         G::LoadTranslation('ID_CASES_MENU_SEARCH'),  '',                    '', 'blockHeader');
