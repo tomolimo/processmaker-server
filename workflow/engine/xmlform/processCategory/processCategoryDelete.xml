@@ -9,10 +9,13 @@
 <LABEL_CATEGORY_UID type="caption" colWidth='32'  >
   <en>Category Uid</en>
 </LABEL_CATEGORY_UID>
-
+<LABEL_CATEGORY_NAME type="caption" colWidth='32'  >
+  <en>Category Name</en>
+</LABEL_CATEGORY_NAME>
 <CATEGORY_UID type="hidden" colWidth='32'  >
 </CATEGORY_UID>
-
+<CATEGORY_NAME type="hidden" colWidth='32'  >
+</CATEGORY_NAME>
 
 <BTN_SUBMIT type="submit" >
   <en>delete</en>
