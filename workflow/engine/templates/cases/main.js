@@ -211,7 +211,7 @@ Ext.onReady(function(){
     	'click': function(tp) {
         if( tp.attributes.url ){
           document.getElementById('casesSubFrame').src = tp.attributes.url;
-          }
+        }
       } ,
       'render': function(tp){
     	  /*tp.getSelectionModel().on('selectionchange', function(tree, node){
@@ -243,26 +243,8 @@ Ext.onReady(function(){
 
   var loader = treeMenuItems.getLoader();
   loader.on("load", function(){
-    _nodeId='';
-     if(_action != '')
-     switch(_action){
-        case 'draft':
-          _nodeId = "CASES_DRAFT";
-          break;
-        case 'sent':
-          _nodeId = "CASES_SENT";
-          break;
-        case 'unassigned':
-          _nodeId = "CASES_SELFSERVICE";
-          break;
-        case 'paused':
-          _nodeId = "CASES_PAUSED";
-          break;
-        case 'todo':
-          _nodeId = "CASES_INBOX";
-          break;
-      }
-
+    document.getElementById('casesSubFrame').src = defaultOption;
+    
       if( _nodeId != '' ){
         treePanel1 = Ext.getCmp('tree-panel')
         if(treePanel1)

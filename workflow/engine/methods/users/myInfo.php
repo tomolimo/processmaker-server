@@ -100,8 +100,8 @@ try {
   
   if( sizeof($oConf->Fields) > 0){ #this user has a configuration record
     $aFields['PREF_DEFAULT_LANG'] = $oConf->aConfig['DEFAULT_LANG'];
-    $aFields['PREF_DEFAULT_MENUSELECTED'] = $oConf->aConfig['DEFAULT_MENU'];
-    $aFields['PREF_DEFAULT_CASES_MENUSELECTED'] = $oConf->aConfig['DEFAULT_CASES_MENU'];
+    $aFields['PREF_DEFAULT_MENUSELECTED'] = isset($oConf->aConfig['DEFAULT_MENU']) ? $oConf->aConfig['DEFAULT_MENU']: '';
+    $aFields['PREF_DEFAULT_CASES_MENUSELECTED'] = isset($oConf->aConfig['DEFAULT_CASES_MENU']) ? $oConf->aConfig['DEFAULT_CASES_MENU']: '';
   } else {
     switch($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE']){
       case 'PROCESSMAKER_ADMIN':

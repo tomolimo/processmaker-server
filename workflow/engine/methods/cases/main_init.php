@@ -28,6 +28,33 @@
   $oHeadPublisher->addExtJsScript('cases/main', false );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/main'); //adding a html file  .html.
   
+  G::loadClass('configuration');
+  $oConf = new Configurations; 
+  $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
+  
+  if( sizeof($oConf->Fields) > 0 && isset($oConf->aConfig['DEFAULT_CASES_MENU']) ){ #this user has a configuration record  
+    $confDefaultOption = $oConf->aConfig['DEFAULT_CASES_MENU'];
+    global $G_TMP_MENU;
+    $oMenu = new Menu();
+    $oMenu->load('cases');
+    $defaultOption = '';
+    //g::pr($oMenu); die; 
+    foreach($oMenu->Id as $i=>$id){
+      if( $id == $confDefaultOption ){
+         $defaultOption = $oMenu->Options[$i];
+         break;
+      }
+    }
+    $defaultOption = $defaultOption != '' ? $defaultOption : 'casesListExtJs';
+  
+  } else {
+    $defaultOption = 'casesListExtJs';
+  }
+  
+    
+  $oHeadPublisher->assign( 'defaultOption', $defaultOption); // user menu permissions
+  $oHeadPublisher->assign( '_nodeId', $confDefaultOption); // user menu permissions
+  
   $translations = G::getTranslations(Array(
     'ID_DEATACH', 'ID_ALL', 'ID_DYNAFORM', 'ID_SYSTEM', 'ID_VARIABLES', 'ID_TRIGGERS', 'ID_OPEN_IN_POPUP'
   ));
