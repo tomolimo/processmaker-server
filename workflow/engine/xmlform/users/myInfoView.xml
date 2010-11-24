@@ -113,15 +113,20 @@
     <en>Preferences</en>
   </TITLEPREF>
 
-  <PREF_DEFAULT_LANG type="dropdown"><![CDATA[
+  <!--<PREF_DEFAULT_LANG type="dropdown"><![CDATA[
     SELECT LAN_ID, LAN_NAME FROM LANGUAGE WHERE LAN_ENABLED = '1' ORDER BY LAN_WEIGHT DESC
     ]]><en>Default languaje</en>
-  </PREF_DEFAULT_LANG>
+  </PREF_DEFAULT_LANG>-->
 
   <PREF_DEFAULT_MENUSELECTED type="dropdown" sqlconnection="dbarray">
     SELECT * FROM menutab
-    <en>Default menu option</en>
+    <en>Default Main Menu Option</en>
   </PREF_DEFAULT_MENUSELECTED>
+  
+  <PREF_DEFAULT_CASES_MENUSELECTED type="dropdown" sqlconnection="dbarray">
+    SELECT * FROM CASES_MENU
+    <en>Default Cases Menu Option</en>
+  </PREF_DEFAULT_CASES_MENUSELECTED>
 
   <SUBMIT3 type="button" onclick="verifyUserInformation(this.form);" group="1">
     <en>Save</en>

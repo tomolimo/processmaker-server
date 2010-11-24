@@ -94,6 +94,7 @@ try {
   if( sizeof($oConf->Fields) > 0){ #this user has a configuration record
     $aFields['PREF_DEFAULT_LANG'] = $oConf->aConfig['DEFAULT_LANG'];
     $aFields['PREF_DEFAULT_MENUSELECTED'] = $oConf->aConfig['DEFAULT_MENU'];
+    $aFields['PREF_DEFAULT_CASES_MENUSELECTED'] = $oConf->aConfig['DEFAULT_CASES_MENU'];
   } else {
     switch($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE']){
       case 'PROCESSMAKER_ADMIN':
@@ -126,13 +127,32 @@ try {
       break;
     }
   }
+  
+  global $G_TMP_MENU;
+  $oMenu = new Menu();
+  $oMenu->load('cases');
+  
+  $rowsCasesMenu[] = Array('id'=>'char', 'name'=>'char');
+  
+  foreach($oMenu->Id as $i=>$item){
+    if( $oMenu->Types[$i] != 'blockHeader' ){
+      $rowsCasesMenu[] = Array('id'=>$item, 'name'=>$oMenu->Labels[$i]);
+    }
+  }
+  
   //G::pr($rows); die;
   global $_DBArray;
   $_DBArray['menutab']   = $rows;
   $_SESSION['_DBArray'] = $_DBArray;
+  $_DBArray['CASES_MENU']   = $rowsCasesMenu;
+  $_SESSION['_DBArray'] = $_DBArray;
+  
   G::LoadClass('ArrayPeer');
   $oCriteria = new Criteria('dbarray');
   $oCriteria->setDBArrayTable('menutab');
+  
+  $oCriteria2 = new Criteria('dbarray');
+  $oCriteria2->setDBArrayTable('CASES_MENU');
  
   if ($RBAC->userCanAccess('PM_EDITPERSONALINFO') == 1) { //he has permitions for edit his profile
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/myInfo.xml', '', $aFields, 'myInfo_Save');

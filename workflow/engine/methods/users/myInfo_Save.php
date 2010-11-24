@@ -143,13 +143,15 @@ try {ini_set('display_errors','1');
 	/* Saving preferences */
 	$def_lang = $_POST['form']['PREF_DEFAULT_LANG'];
 	$def_menu = $_POST['form']['PREF_DEFAULT_MENUSELECTED'];
+	$def_cases_menu = $_POST['form']['PREF_DEFAULT_CASES_MENUSELECTED'];
 	
 	G::loadClass('configuration');
 	
 	$oConf = new Configurations;
 	$aConf = Array(
 		'DEFAULT_LANG'=>$def_lang,
-		'DEFAULT_MENU'=>$def_menu
+		'DEFAULT_MENU'=>$def_menu,
+		'DEFAULT_CASES_MENU'=>$def_cases_menu
 	);
 	
 	/*UPDATING SESSION VARIABLES*/
