@@ -329,12 +329,12 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 .icon-expand-all{
   /*ss_bullet_toggle_plus*/
   background-image:url(/images/icons_silk/sprites.gif.png) !important;
-  background-position:0 -2701px !important;
+  background-position:0 -2359px !important;
 }
 .icon-collapse-all{
   /*ss_bullet_toggle_minus*/
   background-image:url(/images/icons_silk/sprites.gif.png) !important;
-  background-position:0 -2683px !important;
+  background-position:0 -2395px !important;
 }
 #startCaseTreePanel .x-tree-elbow-end-minus,
 #startCaseTreePanel .x-tree-elbow-end-plus,
