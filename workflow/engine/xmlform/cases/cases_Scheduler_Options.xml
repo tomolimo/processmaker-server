@@ -22,21 +22,25 @@
 
 <JS type="javascript"><![CDATA[
 
-	
+function $_GET(q,s) {
+    s = (s) ? s : self.location.search;
+    var re = new RegExp('&'+q+'=([^&]*)','i');
+    return (s=s.replace(/^\?/,'&').match(re)) ? s=s[1] : s='';
+}
 function 	newScheduler() {
-	window.location = 'cases_Scheduler_New'; return false;	
+	window.location = 'cases_Scheduler_New?PRO_UID='+$_GET('PRO_UID'); return false;
 }
 
-function casesSchedulerDelete(schUID) {
+function casesSchedulerDelete(schUID,proUid) {
    ajax_function('cases_Scheduler_Delete','','SCH_UID='+encodeURIComponent(schUID),'GET') ;
   // @#PAGED_TABLE_ID.refresh();
-  window.location = 'cases_Scheduler_List';
+  window.location = 'cases_Scheduler_List?PRO_UID='+proUid;
   
 }
 
-function editCaseScheduler(SCH_UID)
+function editCaseScheduler(SCH_UID,PRO_UID)
 {  	
-	window.location = 'cases_Scheduler_Edit?SCH_UID='+SCH_UID; 
+	window.location = 'cases_Scheduler_Edit?SCH_UID='+SCH_UID+'&PRO_UID='+PRO_UID;
 	return false;	
 }
 

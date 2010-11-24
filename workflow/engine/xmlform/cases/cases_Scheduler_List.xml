@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="cases/cases_Scheduler_Options" searchBy="SCH_NAME  ">
 <SCH_UID type="private" showInTable="0"/>
+<PRO_UID type="private" showInTable="0"/>
 <SCH_NAME type="text" titlealign="left" align="left" colWidth="200">
   <en>Name</en>
 </SCH_NAME>
@@ -24,11 +25,11 @@
   <en/>
 </SCH_STATUS_LNK>
 
-<ROL_VIEW type="link" colWidth="30" value="@G::LoadTranslation(ID_EDIT)" link="javascript:editCaseScheduler(&#039;@#SCH_UID&#039;)">
+<ROL_VIEW type="link" colWidth="30" value="@G::LoadTranslation(ID_EDIT)" link="javascript:editCaseScheduler(&#039;@#SCH_UID&#039;,&#039;@#PRO_UID&#039;)">
   <en/>
 </ROL_VIEW>
 
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="new leimnud.module.app.confirm().make({label:&#039;@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_CASES)&#039;,action:function(){ casesSchedulerDelete(@@SCH_UID); }});return false;">
+<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="new leimnud.module.app.confirm().make({label:&#039;@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_CASES)&#039;,action:function(){ casesSchedulerDelete(@@SCH_UID,@@PRO_UID); }});return false;">
   <en/>
 </DELETE>
 

@@ -227,7 +227,7 @@ try {
     }
   }
 
-  G::header('location: cases_Scheduler_List');
+  G::header('location: cases_Scheduler_List?PRO_UID='.$_POST['form']['PRO_UID']);
 
 
 }

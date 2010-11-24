@@ -69,7 +69,7 @@ $G_ID_SUB_MENU_SELECTED = 'CASES_SCHEDULER';
 
     G::LoadClass('case');
   $aFields['PHP_START_DATE'] = date('Y-m-d');
-  $aFields['PRO_UID'] = $_SESSION['PROCESS'];
+  $aFields['PRO_UID'] = isset($_GET['PRO_UID'])?$_GET['PRO_UID']:$_SESSION['PROCESS'];
   $aFields['PHP_CURRENT_DATE'] = $aFields['PHP_START_DATE'];
   $aFields['PHP_END_DATE'] = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 5));
 

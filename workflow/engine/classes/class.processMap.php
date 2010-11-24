@@ -1979,7 +1979,7 @@ class processMap {
         G::RenderPage('publish');
         //return true; */
       $schedulerPath = SYS_URI . "cases/cases_Scheduler_List";
-      $html = "<iframe  WIDTH=820 HEIGHT=530 FRAMEBORDER=0 src='" . $schedulerPath . "'></iframe>";
+      $html = "<iframe  WIDTH=820 HEIGHT=530 FRAMEBORDER=0 src='" . $schedulerPath .'?PRO_UID=' .$sProcessUID. "'></iframe>";
       echo $html;
     } catch (Exception $oError) {
       throw ($oError);

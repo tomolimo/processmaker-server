@@ -227,6 +227,16 @@
 hideAll();
 hideProperties();
 
+function $_GET(q,s) {
+    s = (s) ? s : self.location.search;
+    var re = new RegExp('&'+q+'=([^&]*)','i');
+    return (s=s.replace(/^\?/,'&').match(re)) ? s=s[1] : s='';
+}
+
+function backToList(){
+  //alert($_GET('PRO_UID'));
+  self.location = 'cases_Scheduler_List?PRO_UID='+$_GET('PRO_UID');
+}
 function hideProperties(){
         // hiddeRow('EDIT_USER');
         // whenever a user is logged then the following section must be enabled
@@ -488,7 +498,7 @@ function case_userSchedulerValidate(username, password) {
        	    url   : '../cases/cases_SchedulerGetProcesses',
             async : true,
             method: 'POST',
-            args  : "USR_UID="+user_uid
+            args  : "USR_UID="+user_uid+"&PRO_UID="+$_GET('PRO_UID')
        });
 
        oRPCProcess.callback = function(rpc){

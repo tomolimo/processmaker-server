@@ -57,13 +57,10 @@ try {
 	$oCaseScheduler = new CaseScheduler();
 	$aFields = $oCaseScheduler->load($_GET['SCH_UID']);
  	
-	//$_DBArray['NewProcess'] = $oCaseScheduler->getProcessDescription();
-	//$_DBArray['NewTask'] = $oCaseScheduler->getTaskDescription();
-
-	// var_dump($oCaseScheduler->getAllProcess()); die;
-  
+ 
 	$aFields['UID_SCHEDULER'] ="scheduler" ;
-  
+
+  // load according the scheduler option selected daily/weekly/monthly/one time
 	$nOpt = $aFields['SCH_OPTION'];
 	switch($nOpt){
 		case 1 :  $aStartDay =  explode('|', $aFields['SCH_DAYS_PERFORM_TASK']);
@@ -125,9 +122,8 @@ try {
         } else {
             $aFields['SCH_ADVANCED'] = 'false';
         }
-//        var_dump($aFields['SCH_ADVANCED']);
-//        die();
-        $aFields['PRO_UID_TMP'] = $_SESSION['PROCESS'];
+
+        $aFields['PRO_UID_TMP'] = isset($_GET['PRO_UID'])?$_GET['PRO_UID']:$_SESSION['PROCESS'];
         $aFields['PHP_START_DATE'] = date('Y-m-d');
         $aFields['PHP_END_DATE']   = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 5));
 

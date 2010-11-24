@@ -45,13 +45,12 @@ $G_SUB_MENU             = 'cases';
 
 $G_ID_MENU_SELECTED     = 'CASES';
 $G_ID_SUB_MENU_SELECTED = 'CASES_SCHEDULER'; 
-
 require_once 'classes/model/CaseScheduler.php';
-
+$process = isset($_GET['PRO_UID'])?$_GET['PRO_UID']:$_SESSION['PROCESS'];
 $sDelimiter = DBAdapter::getStringDelimiter();
 
  $oCaseScheduler = new CaseScheduler();
- $aRows = $oCaseScheduler->getAllByProcess($_SESSION['PROCESS']);
+ $aRows = $oCaseScheduler->getAllByProcess($process);
  
  //$oCaseScheduler->caseSchedulerCron();
  // g::pr($aRows); die;

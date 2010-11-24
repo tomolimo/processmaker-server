@@ -2,7 +2,7 @@
 <?php
 //$oUserId = '2963666854afbb1cea372c4011254883';
 $oUserId = $_POST['USR_UID'];
-
+$process = isset($_POST['PRO_UID'])?$_POST['PRO_UID']:$_SESSION['PROCESS'];
 //echo '<select style="width: 300px;" readOnly name="form[PRO_UID]" id="form[PRO_UID]" class="module_app_input___gray" required="1" onChange="loadTasksDropdown(this.value,\''.$oUserId.'\');">';
 
 require_once ("classes/model/TaskPeer.php");
@@ -21,7 +21,7 @@ G::LoadClass ( 'Content' );
   $oCriteria->add(TaskPeer::TAS_START, 'true');
   $oCriteria->add(ContentPeer::CON_CATEGORY, 'PRO_TITLE');
   $oCriteria->add(ContentPeer::CON_LANG, SYS_LANG);
-  $oCriteria->addAnd(ProcessPeer::PRO_UID, $_SESSION['PROCESS']);
+  $oCriteria->addAnd(ProcessPeer::PRO_UID, $process);
 
   $resultSet = TaskUserPeer::doSelectRS($oCriteria);
   while ($resultSet->next()){
