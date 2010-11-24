@@ -85,7 +85,7 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 <en>Select the time and day you want this task to start.</en>
 </SELECT_TIME_DAY>
 
-<SCH_START_TIME type="text" maxlength="5" validate="Any" required="1" readonly="0" size="5"  mode="edit" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">
+<SCH_START_TIME type="text" maxlength="5" validate="Any" mask="##:##" required="1" readonly="0" size="5"  mode="edit" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">
 <en>Execution time</en>
 </SCH_START_TIME>
 
