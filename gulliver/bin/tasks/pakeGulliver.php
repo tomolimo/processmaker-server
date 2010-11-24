@@ -2258,7 +2258,7 @@ function workspaceRestore($backupFilename, $targetWorkspace, $overwrite) {
     if ($info['extension'] == "gz")
       $info = pathinfo(basename($backupFilename, '.' . $info['extension']));
     $wsNameFromTar = basename($backupFilename, '.' . $info['extension']);
-    $metadataFilename = $tempDirectory . PATH_SEP . $wsNameFromTar;
+    $metadataFilename = $tempDirectory . PATH_SEP . $wsNameFromTar . '.txt';
     if (!file_exists($metadataFilename)) {
       throw (new Exception("Metadata file was not found in backup"));
     }
