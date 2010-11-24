@@ -24,19 +24,8 @@
  */
 try {
   global $RBAC;
-  switch ($RBAC->userCanAccess('PM_FACTORY'))
-  {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  }
+  $RBAC->requirePermissions('PM_USERS'); 
+  
   // deprecated the class XmlForm_Field_Image is currently part of the class.xmlform.php package
   // the use of the external xmlfield_Image is highly discouraged
   if (!class_exists('XmlForm_Field_Image')){
@@ -58,8 +47,6 @@ try {
   $aFields['START_DATE']    = date('Y-m-d');
   $aFields['END_DATE']      = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 5));
   
-//  $G_MAIN_MENU              = 'processmaker';
-//  $G_ID_MENU_SELECTED       = 'USERS';
   $G_MAIN_MENU            = 'processmaker';
   $G_SUB_MENU             = 'users';
   $G_ID_MENU_SELECTED     = 'USERS';
@@ -141,12 +128,6 @@ try {
   global $_DBArray;
   $_DBArray['aUserInfo']  = $aUserInfo;
   $_SESSION['_DBArray'] = $_DBArray;
-	/////////////////////////
-	
-	
-	
-	
-	
 	
   //always show this form  users_EditRT.xml.
 	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_EditRT.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);

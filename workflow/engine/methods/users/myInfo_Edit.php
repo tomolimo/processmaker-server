@@ -24,19 +24,7 @@
  */
 try {
 	global $RBAC;
-	switch ($RBAC->userCanAccess('PM_LOGIN')){		
-		case -2:
-			G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-			G::header('location: ../login/login');
-			die;
-			break;
-
-    case $RBAC->userCanAccess('PM_LOGIN') < 0:
-			G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-			G::header('location: ../login/login');
-			die;
-			break;
-	}
+	$RBAC->requirePermissions('PM_USERS'); 
 
   // deprecated the class XmlForm_Field_Image is currently part of the class.xmlform.php package
   // the use of the external xmlfield_Image is highly discouraged

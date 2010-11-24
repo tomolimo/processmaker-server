@@ -24,25 +24,7 @@
  */
 try {
   global $RBAC;
-  switch ($RBAC->userCanAccess('PM_FACTORY'))
-  {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-    case -3:
-      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-      G::header('location: ../login/login');
-      die;
-    break;
-  	
-  }
+  $RBAC->requirePermissions('PM_USERS');
   
   $aFields['MESSAGE0']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_USER_REGISTERED')) . '!';
   $aFields['MESSAGE1']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_MSG_ERROR_USR_USERNAME'));
