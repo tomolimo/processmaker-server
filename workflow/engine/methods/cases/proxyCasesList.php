@@ -84,12 +84,10 @@
          $Criteria      = $oAppCache->getAllCasesListCriteria($userUid);
          $CriteriaCount = $oAppCache->getAllCasesCountCriteria($userUid);
          break;
+    // general criteria probably will be deprecated
     case 'gral' :
          $Criteria      = $oAppCache->getGeneralListCriteria();
          $CriteriaCount = $oAppCache->getGeneralCountCriteria();
-//         $params = array();
-//         $sSql = BasePeer::createSelectSql($Criteria, $params);
-//         var_dump($sSql);
          break;
     case 'todo' :
     default:
@@ -198,6 +196,7 @@
       //add the default and hidden DEL_INIT_DATE
     }
 
+    // the criteria adds new fields if there are defined PM Table Fields in the cases list
     if ($oTmpCriteria!='') {
       $Criteria->add(
         $Criteria->getNewCriterion(
@@ -220,6 +219,7 @@
       ));
     }
 
+    // the count query needs to be the normal criteria query if there are defined PM Table Fields in the cases list
     if ($oTmpCriteria!='') {
       $CriteriaCount = $Criteria;
     } else {
@@ -255,26 +255,27 @@
       $distinct = true;
     }
     // needs a litle bit of analysis to understant whats going on
-    // first check if there is a PMTable defined within the list
-    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
-      // then
-      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
-      $tableName = $oAdditionalTables->getAddTabName();
-      $tableName = strtolower($tableName);
-      $tableNameArray = explode('_',$tableName);
-      foreach ($tableNameArray as $item){
-        $newTableName[] = ucfirst($item);
-      }
-      $tableName = implode('',$newTableName);
-        //
-      if (!class_exists($tableName)){
-        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
-      }
-      eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
-      
-    } else {
-      $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
-    }
+    // first check if there is a PMTable defined within the list maybe this code will be deprecated
+    // the issue that brokes the normal criteria query seems to be fixed
+//    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
+//      // then
+//      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
+//      $tableName = $oAdditionalTables->getAddTabName();
+//      $tableName = strtolower($tableName);
+//      $tableNameArray = explode('_',$tableName);
+//      foreach ($tableNameArray as $item){
+//        $newTableName[] = ucfirst($item);
+//      }
+//      $tableName = implode('',$newTableName);
+////
+//      if (!class_exists($tableName)){
+//        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
+//      }
+//      eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
+//
+//    } else {
+//      $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
+//    }
     $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
 
   }
