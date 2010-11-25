@@ -50,11 +50,14 @@ class spoolRun {
   private $config;
   private $fileData;
   private $spool_id;
-  public $status;
-  public $error;
+  public  $status;
+  public  $error;
   
   private $ExceptionCode = Array (); //Array to define the Expetion codes
   private $aWarnings = Array (); //Array to store the warning that were throws by the class
+
+  private $longMailEreg;
+  private $mailEreg;
   
 
   /**
@@ -62,16 +65,19 @@ class spoolRun {
    * @param none
    * @return none
    */
-  function spoolRun() {
+  function __construct() {
     $this->config = array ();
     $this->fileData = array ();
     $this->spool_id = '';
     $this->status = 'pending';
     $this->error = '';
     
-    $this->ExceptionCode['FATAL'] = 1;
+    $this->ExceptionCode['FATAL']   = 1;
     $this->ExceptionCode['WARNING'] = 2;
-    $this->ExceptionCode['NOTICE'] = 3;
+    $this->ExceptionCode['NOTICE']  = 3;
+
+    $this->longMailEreg = '/([\"\w\W\s]*\s*)?(<([\w\-\.]+@[\.-\w]+\.\w{2,3})+>)/';
+    $this->mailEreg     = '/^([\w\-_\.]+@[\.-\w]+\.\w{2,3}+)$/';
   }
   
   /**
@@ -207,7 +213,7 @@ class spoolRun {
   private function handleFrom() {
     if( strpos($this->fileData['from'], '<') !== false ) {      
       //to validate complex email address i.e. Erik A. O <erik@colosa.com>
-      preg_match('/([\"\w@\.-_\s]*\s*)?(<(\w+[\.-]?\w+]*@\w+([\.-]?\w+)*\.\w{2,3})+>)/', $this->fileData['from'], $matches);
+      preg_match($this->longMailEreg, $this->fileData['from'], $matches);
       if( isset($matches[1]) && $matches[1] != '' ) {
         //drop the " characters if they exist
         $this->fileData['from_name'] = trim(str_replace('"', '', $matches[1]));
@@ -222,7 +228,7 @@ class spoolRun {
       $this->fileData['from_email'] = trim($matches[3]);
     } else {
       //to validate simple email address i.e. erik@colosa.com
-      preg_match('/\w+[\.-]?\w+]*@\w+([\.-]?\w+)*\.\w{2,3}+/', $this->fileData['from'], $matches);
+      preg_match($this->mailEreg, $this->fileData['from'], $matches);
       
       if( ! isset($matches[0]) ) {
         throw new Exception('Invalid email address in FROM parameter (' . $this->fileData['from'] . ')', $this->ExceptionCode['WARNING']);
@@ -287,7 +293,7 @@ class spoolRun {
           
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
             if( strpos($sEmail, '<') !== false ) {
-              preg_match('/([\"\w@\.-_\s]*\s*)?(<(\w+[\.-]?\w+]*@\w+([\.-]?\w+)*\.\w{2,3})+>)/', $sEmail, $matches);
+              preg_match($this->longMailEreg, $sEmail, $matches);
               $sTo = trim($matches[3]);
               $sToName = trim($matches[1]);
               $oPHPMailer->AddAddress($sTo, $sToName);
@@ -323,7 +329,7 @@ class spoolRun {
             $evalMail = strpos($sEmail, '<');
             
             if( strpos($sEmail, '<') !== false ) {
-              preg_match('/([\"\w@\.-_\s]*\s*)?(<((\w+[\.-])*?\w+]*@\w+([\.-]?\w+)*\.\w{2,3})+>)/', $sEmail, $matches);
+              preg_match($this->longMailEreg, $sEmail, $matches);
               $sTo = trim($matches[3]);
               $sToName = trim($matches[1]);
               $oPHPMailer->AddAddress($sTo, $sToName);
