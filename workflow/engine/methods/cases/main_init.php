@@ -49,6 +49,7 @@
   
   } else {
     $defaultOption = 'casesListExtJs';
+    $confDefaultOption = 'CASES_INBOX';
   }
   
     
