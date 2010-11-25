@@ -31,7 +31,7 @@
   G::loadClass('configuration');
   $oConf = new Configurations; 
   $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
-  
+  $confDefaultOption='';
   if( sizeof($oConf->Fields) > 0 && isset($oConf->aConfig['DEFAULT_CASES_MENU']) ){ #this user has a configuration record  
     $confDefaultOption = $oConf->aConfig['DEFAULT_CASES_MENU'];
     global $G_TMP_MENU;
