@@ -3178,7 +3178,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       }
     }
     /** - end - Backward compatibility **/
-  
+    $tmp = str_replace("%", "", $mask);
     if ( trim ($value) == '' or $value == NULL ) {
       $value = ''; //date ($tmp);
     } else {
