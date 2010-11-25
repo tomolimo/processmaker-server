@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="ProcessCategory" width="600" mode="edit" enableTemplate="1" border="0">
+<dynaForm name="ProcessCategory" width="400" mode="edit" enableTemplate="1" border="0">
 
 <title1 type="title" >
   <en>Delete Process Category</en>
 </title1>
 
 
-<LABEL_CATEGORY_UID type="caption" colWidth='32'  >
-  <en>Category Uid</en>
-</LABEL_CATEGORY_UID>
+
 <LABEL_CATEGORY_NAME type="caption" colWidth='32'  >
   <en>Category Name</en>
 </LABEL_CATEGORY_NAME>
-<CATEGORY_UID type="hidden" colWidth='32'  >
-</CATEGORY_UID>
+
 <CATEGORY_NAME type="hidden" colWidth='32'  >
 </CATEGORY_NAME>
 
