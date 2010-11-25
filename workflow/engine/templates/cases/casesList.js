@@ -1053,6 +1053,10 @@ Ext.onReady ( function() {
     btnUnSelectAll,
     '-',
     btnReassign,
+    '->',
+    textSearch,
+    resetSearchButton,
+    btnSearch,
     ' ',
     ' '
   ];
