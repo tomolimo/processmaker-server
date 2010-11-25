@@ -33,9 +33,9 @@ function run_drafts_clean($task, $args)
   if ($allDrafts)
     echo "Removing all drafts\n";
   else
-    echo "Removing drafts from " . $days . " days ago\n";
+    echo "Removing drafts older than " . $days . " days\n";
 
-  if (!$allDrafts && !is_numeric($days)) {
+  if (!$allDrafts && (!is_numeric($days) || intval($days) <= 0)) {
     throw new Exception("Days value is not valid: " . $days);
   }
 
@@ -53,7 +53,7 @@ function run_drafts_clean($task, $args)
   $stmt = $con->createStatement();
 
   if (!$allDrafts)
-    $dateSql = "AND DATE_SUB(CURDATE(),INTERVAL " . $days . " DAY) <= APP_CREATE_DATE";
+    $dateSql = "AND DATE_SUB(CURDATE(),INTERVAL " . $days . " DAY) >= APP_CREATE_DATE";
   else
     $dateSql = "";
   /* Search for all the draft cases */
