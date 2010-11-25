@@ -250,7 +250,7 @@ background-position: bottom;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
 .pagedTableDefault .pagedTable .RowLink a:empty,.module_app_button___gray:empty,.button_pm:empty{
-	display:none;
+	/*display:none;*/
 	margin:0;
 }
 ul#pm_menu a:focus,button.x-btn-text:focus,.x-combo-selected{
