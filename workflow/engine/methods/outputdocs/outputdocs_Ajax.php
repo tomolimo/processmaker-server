@@ -15,7 +15,11 @@ switch($action){
   break;
   
   case 'getTemplateFile':
-    echo $content = file_get_contents($_SESSION['outpudocs_tmpFile']);
+    $aExtensions = array ("html", "htm", "txt", "xml");
+    $sFileName = strtolower($_SESSION['outpudocs_tmpFile']);
+    $sExtension = substr($sFileName, strpos($sFileName,'.') + 1, strlen($sFileName));
+    if(in_array($sExtension, $aExtensions))
+      echo $content = file_get_contents($_SESSION['outpudocs_tmpFile']);
   break;
   
   case 'loadTemplateContent':
