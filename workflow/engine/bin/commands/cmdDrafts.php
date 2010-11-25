@@ -32,6 +32,8 @@ function run_drafts_clean($task, $args)
 
   if ($allDrafts)
     echo "Removing all drafts\n";
+  else
+    echo "Removing drafts from " . $days . " days ago\n";
 
   if (!$allDrafts && !is_numeric($days)) {
     throw new Exception("Days value is not valid: " . $days);
