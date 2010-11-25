@@ -226,7 +226,7 @@ function redirect(href){
 }
 
 Ext.onReady ( function() {
-
+  var ids = '';
   var filterProcess = '';
   var filterUser    = '';
   var caseIdToDelete = '';
@@ -357,14 +357,31 @@ Ext.onReady ( function() {
     text: 'Reassign All',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
+      
+      var rs = storeReassignCases.getModifiedRecords();
+      var sv = [];
+      for(var i = 0; i <= rs.length-1; i++){
+        //sv[i]= rs[i].data['name'];
+        sv[i]= rs[i].data;
+      }
+      var gridData = storeReassignCases.getModifiedRecords();
+      
+      Ext.Ajax.request({
+        url: 'proxySaveReassignCasesList',
+        success: function(response) {
+          newPopUp.hide();
+          storeCases.reload();
+        },
+        params: { APP_UIDS:ids, data:Ext.util.JSON.encode(sv), selected:false }
+      });
+      
+      /*
       storeReassignCases.setBaseParam('selected', false);
       var result = storeReassignCases.save();
       newPopUp.hide();
       storeCases.reload();
-      
-      
+      */
       //storeReassignCases.reload();
-
     }
   });
   
@@ -372,13 +389,31 @@ Ext.onReady ( function() {
     text: 'Reassign Checked',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
-      storeReassignCases.setBaseParam('selected', true);
+      
+      var rs = storeReassignCases.getModifiedRecords();
+      var sv = [];
+      for(var i = 0; i <= rs.length-1; i++){
+        //sv[i]= rs[i].data['name'];
+        sv[i]= rs[i].data;
+      }
+      var gridData = storeReassignCases.getModifiedRecords();
+      
+      Ext.Ajax.request({
+        url: 'proxySaveReassignCasesList',
+        success: function(response) {
+          newPopUp.hide();
+          storeCases.reload();
+        },
+        params: { APP_UIDS:ids, data:Ext.util.JSON.encode(sv), selected:true }
+      });
+      
+      /*storeReassignCases.setBaseParam('selected', true);
       var result = storeReassignCases.save();
       //storeCases.load({params:{process: filterProcess, start : 0 , limit : pageSize}});
       newPopUp.hide();
       storeCases.reload();
       //storeReassignCases.reload();
-
+      */
     }
   });
   
@@ -411,9 +446,9 @@ Ext.onReady ( function() {
   var proxyReassignCasesList = new Ext.data.HttpProxy({
     api: {
       read    : 'proxyReassignCasesList',
-      create  : 'proxySaveReassignCasesList',
-      update  : 'proxySaveReassignCasesList',
-      destroy : 'proxyReassignCasesList'
+      //create  : 'proxySaveReassignCasesList',
+      //update  : 'proxySaveReassignCasesList',
+      //destroy : 'proxyReassignCasesList'
     }
   });
 
@@ -450,9 +485,9 @@ Ext.onReady ( function() {
   storeReassignCases = new Ext.data.Store({
     remoteSort: false,
     proxy : proxyReassignCasesList,
-    reader: readerReassignCasesList,
-    writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
-    autoSave: false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+    reader: readerReassignCasesList
+    //writer: writerReassignCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
+    //autoSave: false // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
 
   //Layout Resizing
@@ -1405,7 +1440,7 @@ function reassign(){
   var rows = grid.getSelectionModel().getSelections();
   var tasks = [];
   if( rows.length > 0 ) {
-    var ids = '';
+    ids = '';
     for(i=0; i<rows.length; i++) {
       // filtering duplicate tasks
 
