@@ -15,6 +15,10 @@ function run_drafts_clean($task, $args)
   if (count($args) < 1)
     throw new Exception ("Please specify a workspace name");
   $workspace = $args[0];
+  
+  if (!file_exists(PATH_DB . $workspace . '/db.php')) {
+    throw new Exception('Could not find workspace ' . $workspace);
+  }
 
   $allDrafts = false;
   if (count($args) < 2) {
@@ -30,21 +34,17 @@ function run_drafts_clean($task, $args)
     }
   }
 
+  if (!$allDrafts && (!is_numeric($days) || intval($days) <= 0)) {
+    throw new Exception("Days value is not valid: " . $days);
+  }
+
   if ($allDrafts)
     echo "Removing all drafts\n";
   else
     echo "Removing drafts older than " . $days . " days\n";
 
-  if (!$allDrafts && (!is_numeric($days) || intval($days) <= 0)) {
-    throw new Exception("Days value is not valid: " . $days);
-  }
-
-  if (!file_exists(PATH_DB . $workspace . '/db.php')) {
-    throw new Exception('Could not find workspace ' . $workspace);
-  }
   /* Load the configuration from the workspace */
   require_once( PATH_DB . $workspace . '/db.php' );
-
   require_once( PATH_THIRDPARTY . 'propel/Propel.php');
 
   PROPEL::Init ( PATH_METHODS.'dbConnections/rootDbConnections.php' );
