@@ -18,7 +18,7 @@ function run_drafts_clean($task, $args)
 
   $allDrafts = false;
   if (count($args) < 2) {
-    echo "Type how much days of drafts to delete (ENTER for all): ";
+    echo "Cases older them this much days will be deleted (ENTER for all): ";
     $days = rtrim( fgets( STDIN ), "\n" );
     if ($days == "") {
       $allDrafts = true;
