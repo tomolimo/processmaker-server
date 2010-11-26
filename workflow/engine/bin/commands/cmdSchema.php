@@ -272,8 +272,12 @@ function repairSchema($workspace, $checkOnly = false) {
               count($changes['tablesToAlter']) > 0 ||
               count($changes['tablesWithNewIndex']) > 0 ||
               count($changes['tablesToAlterIndex']) > 0);
-  if ($checkOnly || (!$changed))
-    return $changed;
+  if ($checkOnly || (!$changed)) {
+    if ($changed)
+      return $changes;
+    else
+      return $changed;
+  }
 
   $dbInfo = getDBInfo($workspace);
   $DB_ADAPTER = $dbInfo["DB_ADAPTER"];
@@ -346,7 +350,7 @@ function run_schema_fix($task, $args) {
   }
   foreach ($workspaces as $workspace) {
     print_r("Fixing ".$workspace."\n");
-    if (repairSchema($workspace)) {
+    if (repairSchema($workspace) != false) {
       echo "> Fixed schema\n";
     } else {
       echo "> No need to fix\n";
@@ -362,8 +366,13 @@ function run_schema_check($task, $args) {
   }
   foreach ($workspaces as $workspace) {
     print_r("Checking ".$workspace."\n");
-    if (repairSchema($workspace, true)) {
+    $changes = repairSchema($workspace, true);
+    if ($changes != false) {
       echo "> Schema has changed, run fix to repair\n";
+      echo "  Tables to add:    " . count($changes['tablesToAdd'])."\n";
+      echo "  Tables to alter:  " . count($changes['tablesToAlter'])."\n";
+      echo "  Indexes to add:   " . count($changes['tablesWithNewIndex'])."\n";
+      echo "  Indexes to alter: " . count($changes['tablesToAlterIndex'])."\n";
     } else {
       echo "> Schema is OK\n";
     }
