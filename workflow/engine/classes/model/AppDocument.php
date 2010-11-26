@@ -72,9 +72,12 @@ class AppDocument extends BaseAppDocument {
       if (!is_null($oAppDocument))
       {
         $aFields = $oAppDocument->toArray(BasePeer::TYPE_FIELDNAME);
-        $aFields['APP_DOC_TITLE']    = $oAppDocument->getAppDocTitle();
-        $aFields['APP_DOC_COMMENT']  = $oAppDocument->getAppDocComment();
-        $aFields['APP_DOC_FILENAME'] = $oAppDocument->getAppDocFilename();
+        //optimized for speed
+        $aContentFields   = $oAppDocument->getContentFields();
+        $aFields['APP_DOC_TITLE']    = $aContentFields['APP_DOC_TITLE'];
+        $aFields['APP_DOC_COMMENT']  = $aContentFields['APP_DOC_COMMENT'];
+        $aFields['APP_DOC_FILENAME'] = $aContentFields['APP_DOC_FILENAME'];
+
         $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
         return $aFields;
       }
@@ -459,5 +462,113 @@ class AppDocument extends BaseAppDocument {
       }
     }
   }
+
+  public function isEmptyInContent ( $content, $field, $lang )  {
+    if ( isset ( $content[$field][ $lang ] ) ) {
+    	if ( trim( $content[$field][ $lang ] ) != '' ) 
+    	  return false;
+    };
+    return true;
+  } 
+
+  public function updateInsertContent ( $content, $field, $value )  {
+    if ( isset ( $content[$field][ 'en' ] ) ) {
+    	//update 
+      $con = ContentPeer::retrieveByPK ( $field, $this->getDocVersion(), $this->getAppDocUid(), 'en' );
+      $con->setConValue ( $value );
+      if ($con->validate ()) {
+        $res = $con->save ();      
+      }	
+    }
+    else {//insert
+      $con = new Content ( );
+      $con->setConCategory ( $field );    	
+      $con->setConParent ($this->getDocVersion() );
+      $con->setConId ( $this->getAppDocUid() );
+      $con->setConLang ( 'en' );
+      $con->setConValue ( $value );
+      if ($con->validate ()) {
+        $res = $con->save ();      
+      }	
+    }
+  } 
+
+  public function normalizeContent( $content, $field , $lang ) {
+    $value = '';
+    //if the lang row is not empty, update in 'en' row and continue
+    if ( !$this->isEmptyInContent ( $content, $field , $lang ) ) {
+    	//update/insert only if this lang is != 'en', with this always we will have an en row with last value
+    	$value = $content [ $field  ][ $lang ];
+      if ( $lang != 'en' ) {
+      	$this->updateInsertContent ( $content, $field , $value );
+      }    
+    }
+    else {
+      //if the lang row is empty, and 'en' row is not empty return 'en' value
+      if ( !$this->isEmptyInContent ( $content, $field , 'en' ) ) {
+      	$value = $content [ $field ][ 'en' ];
+      }
+
+      //if the lang row is empty, and 'en' row is empty get value for 'other' row and update in 'en' row and continue
+      if ( $this->isEmptyInContent ( $content, $field , 'en' ) ) {
+      	if ( isset($content[$field]) && is_array ($content[$field] ) ) {
+      	  foreach ( $content [ $field  ] as $lan => $val ) {
+      	  	if ( trim ( $val ) != '' ) { 
+      	  		$value = $val;
+      	  		if ( $lan != 'en' ) {
+                $this->updateInsertContent ( $content, $field , $value );      			
+                continue;
+              }
+      	    }	
+          }
+        }
+        else {
+        	$this->updateInsertContent ( $content, $field , '' );
+        }
+      }
+    }
+    return $value;
+  }      
+
+  /**
+   * Get the [app_description] , [app_title] column values.
+   * @return     array of string
+   */
+  public function getContentFields()
+  {
+    if ( $this->getAppDocUid() == '' ) {
+      throw ( new Exception( "Error in getContentFields, the APP_DOC_UID can't be blank") );
+    }
+    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn( ContentPeer::CON_CATEGORY );    
+    $c->addSelectColumn( ContentPeer::CON_PARENT );    
+    $c->addSelectColumn( ContentPeer::CON_LANG );    
+    $c->addSelectColumn( ContentPeer::CON_VALUE );
+    $c->add( ContentPeer::CON_ID,  $this->getAppDocUid() );
+    $c->add( ContentPeer::CON_PARENT,  $this->getDocVersion() );    
+    $c->addAscendingOrderByColumn('CON_CATEGORY');
+    $c->addAscendingOrderByColumn('CON_LANG');
+    $rs = ContentPeer::doSelectRS( $c );
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $content = array();
+    while ($row = $rs->getRow()) {
+    	$conCategory = $row['CON_CATEGORY'];
+    	$conLang     = $row['CON_LANG'];
+      if ( !isset( $content[$conCategory] ) ) $content[$conCategory] = array();
+      if ( !isset( $content[$conCategory][$conLang] ) ) $content[$conCategory][$conLang] = array();
+      $content[$conCategory][$conLang] = $row['CON_VALUE'];
+      $rs->next();
+      $row = $rs->getRow();
+    }
+    
+    $res['APP_DOC_TITLE']    = $this->normalizeContent( $content, 'APP_DOC_TITLE',    $lang );
+    $res['APP_DOC_COMMENT']  = $this->normalizeContent( $content, 'APP_DOC_COMMENT',  $lang );
+    $res['APP_DOC_FILENAME'] = $this->normalizeContent( $content, 'APP_DOC_FILENAME', $lang );
+    return $res;
+  }
+
 
 } // AppDocument

@@ -4802,7 +4802,8 @@ class Cases {
           G::SendMessageText(G::LoadTranslation('ID_CASE_IS_CURRENTLY_WITH_ANOTHER_USER') . ': ' . $aData['USR_FIRSTNAME'] . ' ' . $aData['USR_LASTNAME'] . ' (' . $aData['USR_USERNAME'] . ')', 'error');
           G::header('Location: ' . $sURL);
           die;
-        } else {
+        } 
+        else {
           $oCriteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
           if (!(boolean) AppDelegationPeer::doCount($oCriteria)) {
             G::SendMessageText(G::LoadTranslation('ID_CASE_ALREADY_DERIVATED'), 'error');
