@@ -389,7 +389,7 @@ Ext.onReady ( function() {
     text: 'Reassign',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
-      
+      newPopUp.hide();
       var rs = storeReassignCases.getModifiedRecords();
       var sv = [];
       for(var i = 0; i <= rs.length-1; i++){
@@ -397,12 +397,31 @@ Ext.onReady ( function() {
         sv[i]= rs[i].data;
       }
       var gridData = storeReassignCases.getModifiedRecords();
-      
+      Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
       Ext.Ajax.request({
         url: 'proxySaveReassignCasesList',
         success: function(response) {
-          newPopUp.hide();
+          Ext.MessageBox.hide();
           storeCases.reload();
+          var ajaxServerResponse = Ext.util.JSON.decode(response.responseText);
+          var count;
+          var message = '';
+          
+          for (count in ajaxServerResponse) {
+            if ( ajaxServerResponse[count]['TAS_TITLE'] != undefined ){
+              message = message + "Task: " + ajaxServerResponse[count]['TAS_TITLE'] + " - Reassigned Cases: " + ajaxServerResponse[count]['REASSIGNED_CASES'] + "<br>" ;
+            };
+          }
+          
+          if (ajaxServerResponse['TOTAL']!=undefined&&ajaxServerResponse['TOTAL']!=-1){
+            message = message + "Total Cases Reassigned: " + ajaxServerResponse['TOTAL'];
+          } else {
+            message = "";
+          };
+          
+          if (message!=""){
+            Ext.MessageBox.alert( 'Status Reassignment', message, '' );
+          }
         },
         params: { APP_UIDS:ids, data:Ext.util.JSON.encode(sv), selected:true }
       });
@@ -1217,7 +1236,7 @@ Ext.onReady ( function() {
   grid.addListener('rowcontextmenu', onMessageContextMenu,this);
 
   if (action=='to_reassign'){
-    grid.getColumnModel().setHidden(0, true);
+    //grid.getColumnModel().setHidden(0, true);
     grid.getColumnModel().setHidden(1, true);
   }
 
@@ -1437,7 +1456,8 @@ var gridForm = new Ext.FormPanel({
 
 
 function reassign(){
-  var rows = grid.getSelectionModel().getSelections();
+  var rows  = grid.getSelectionModel().getSelections();
+  storeReassignCases.rejectChanges();
   var tasks = [];
   if( rows.length > 0 ) {
     ids = '';

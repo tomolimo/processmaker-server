@@ -43,6 +43,12 @@
       if (isset($_POST['selected'])&&$_POST['selected']=='true'){
         $oCasesReassignList->add(AppCacheViewPeer::APP_UID,$appSelectedUids,Criteria::IN);
       }
+      // if there are no records to save return -1
+      if (empty($aData)){
+        $serverResponse['TOTAL']=-1;
+        echo json_encode($serverResponse);
+        die();
+      }
 //      $params = array ();
 //      $sql = BasePeer::createSelectSql($oCasesReassignList, $params);
 //      var_dump($sql);

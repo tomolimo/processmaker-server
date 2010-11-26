@@ -619,6 +619,7 @@
    */
   function getReassignList() {
     $caseColumns = array ();
+    $caseColumns[] = array( 'header' =>'#',             'dataIndex' => 'APP_NUMBER',        'width' => 40 );
     $caseColumns[] = array( 'header' =>'Case',          'dataIndex' => 'APP_TITLE',         'width' => 100 , 'hidden'=> true);
     $caseColumns[] = array( 'header' =>'CaseId',        'dataIndex' => 'APP_UID'  ,         'width' => 200 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'User',          'dataIndex' => 'USR_UID'  ,         'width' => 200 , 'hidden'=> true, 'hideable'=> false);
@@ -630,6 +631,7 @@
     $caseColumns[] = array( 'header' =>'Reassign To' , 'dataIndex' => 'APP_REASSIGN_USER', 'width' => 170 );
 
     $caseReaderFields = array();
+    $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
     $caseReaderFields[] = array( 'name' => 'USR_UID' );
