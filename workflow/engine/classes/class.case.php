@@ -580,11 +580,12 @@ class Cases {
     $oApplication = new Application;
     try {
       $fields = $oApplication->load($sAppUid);
-    } catch (Exception $e) {
+    } 
+    catch (Exception $e) {
       return $res;
     }
 
-    $res['APP_TITLE'] = $fields['APP_TITLE']; // $oApplication->$getAppLabel();
+    $res['APP_TITLE']       = $fields['APP_TITLE']; // $oApplication->$getAppLabel();
     $res['APP_DESCRIPTION'] = $fields['APP_DESCRIPTION'];
 
     $lang = defined('SYS_LANG') ? SYS_LANG : 'en';
@@ -630,6 +631,73 @@ class Cases {
         $rs->next();
         $row = $rs->getRow();
       }
+    }
+
+    return $res;
+  }
+
+  /*
+   * optimized for speed. This function loads the title and description label in a case
+   *    If there is a label then it is loaded
+   *    Get Open APP_DELEGATIONS in the case
+   *    To look for APP_DELEGATIONS wich TASK in it, It has a label defined(CASE_TITLE)
+   *    We need to read the last APP_DELEGATION->TASK
+   * @param string $sAppUid
+   * @param array $aAppData
+   * @return $res
+   */
+
+  function newRefreshCaseTitleAndDescription($sAppUid, $fields, $aAppData) {
+    $res['APP_TITLE']       = $fields['APP_TITLE']; 
+    $res['APP_DESCRIPTION'] = $fields['APP_DESCRIPTION'];
+
+    $lang = defined('SYS_LANG') ? SYS_LANG : 'en';
+    $bUpdatedDefTitle = false;
+    $bUpdatedDefDescription = false;
+    $cri = new Criteria;
+    $cri->clearSelectColumns();
+    $cri->addSelectColumn(AppDelegationPeer::TAS_UID );
+    $cri->add(AppDelegationPeer::APP_UID, $sAppUid);
+    $cri->add(AppDelegationPeer::DEL_THREAD_STATUS, "OPEN");
+    $rsCri = AppDelegationPeer::doSelectRS($cri);
+    $rsCri->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rsCri->next();
+    $rowCri = $rsCri->getRow();
+    while (is_array($rowCri)) {
+      //load only the tas_def fields, because these three or two values are needed
+      //SELECT CONTENT.CON_CATEGORY, CONTENT.CON_VALUE FROM CONTENT WHERE CONTENT.CON_ID='63515150649b03231c3b020026243292' AND CONTENT.CON_LANG='es'
+      $c = new Criteria();
+      $c->clearSelectColumns();
+      $c->addSelectColumn(ContentPeer::CON_CATEGORY);
+      $c->addSelectColumn(ContentPeer::CON_VALUE);
+      $c->add(ContentPeer::CON_ID, $rowCri['TAS_UID'] );
+      $c->add(ContentPeer::CON_LANG, $lang);
+      $rs = TaskPeer::doSelectRS($c);
+      $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $rs->next();
+      $row = $rs->getRow();
+      while (is_array($row)) {
+        switch ($row['CON_CATEGORY']) {
+          case 'TAS_DEF_TITLE' :
+            $tasDefTitle = $row['CON_VALUE'];
+            if ($tasDefTitle != '' && !$bUpdatedDefTitle) {
+              $res['APP_TITLE'] = G::replaceDataField($tasDefTitle, $aAppData);
+              $bUpdatedDefTitle = true;
+            }
+            break;
+          case 'TAS_DEF_DESCRIPTION' : $tasDefDescription = $row['CON_VALUE'];
+            $tasDefDescription = $row['CON_VALUE'];
+            if ($tasDefDescription != '' && !$bUpdatedDefDescription) {
+              $res['APP_DESCRIPTION'] = G::replaceDataField($tasDefDescription, $aAppData);
+              $bUpdatedDefDescription = true;
+            }
+            break;
+        }
+        $rs->next();
+        $row = $rs->getRow();
+      }
+      $rsCri->next();
+      $rowCri = $rsCri->getRow();
     }
 
     return $res;
@@ -722,17 +790,19 @@ class Cases {
   function updateCase($sAppUid, $Fields = array()) {
     try {
       $aApplicationFields = $Fields['APP_DATA'];
-      $oApp = new Application;
       $Fields['APP_UID'] = $sAppUid;
       $Fields['APP_UPDATE_DATE'] = 'now';
       $Fields['APP_DATA'] = serialize($Fields['APP_DATA']);
-      $aux = self::refreshCaseTitleAndDescription($sAppUid, $aApplicationFields);
-      $Fields['APP_TITLE'] = $aux['APP_TITLE'];       //self::refreshCaseTitle($sAppUid, $aApplicationFields);
-      $Fields['APP_DESCRIPTION'] = $aux['APP_DESCRIPTION']; //self::refreshCaseDescription($sAppUid, $aApplicationFields);
-      //$Fields['APP_PROC_CODE'] = self::refreshCaseStatusCode($sAppUid, $aApplicationFields);
+      
+      $oApp = new Application;
+      $appFields = $oApp->load($sAppUid);
+      $newValues = $this->newRefreshCaseTitleAndDescription($sAppUid, $appFields, $aApplicationFields);
+      $Fields['APP_TITLE']       = $newValues['APP_TITLE'];       
+      $Fields['APP_DESCRIPTION'] = $newValues['APP_DESCRIPTION']; 
+      
       //Start: Save History --By JHL
       if (isset($Fields['CURRENT_DYNAFORM'])) {//only when that variable is set.. from Save
-        $FieldsBefore = $this->loadCase($_SESSION['APPLICATION']);
+        $FieldsBefore = $this->loadCase( $sAppUid );
         $FieldsDifference = $this->arrayRecursiveDiff($FieldsBefore['APP_DATA'], $aApplicationFields);
         $fieldsOnBoth = array_intersect_assoc($FieldsBefore['APP_DATA'], $aApplicationFields);
         //Add fields that weren't in previous version
@@ -754,10 +824,10 @@ class Cases {
 
       $DEL_INDEX = isset($Fields['DEL_INDEX']) ? $Fields['DEL_INDEX'] : '';
       $TAS_UID = isset($Fields['TAS_UID']) ? $Fields['TAS_UID'] : '';
-      $aFields = $oApp->load($sAppUid);
+      
       G::LoadClass('reportTables');
       $oReportTables = new ReportTables();
-      $oReportTables->updateTables($aFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
+      $oReportTables->updateTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
 
       if ($DEL_INDEX != '' && $TAS_UID != '') {
         $oTask = new Task;
@@ -1760,7 +1830,9 @@ class Cases {
     G::LoadClass('pmScript');
     $oPMScript = new PMScript();
     $oApplication = new Application();
-    $aFields = $oApplication->load($sAppUid);
+    //$aFields = $oApplication->load($sAppUid);
+    $oApplication = ApplicationPeer::retrieveByPk($sAppUid);
+    $aFields = $oApplication->toArray(BasePeer::TYPE_FIELDNAME);
     if (!is_array($aFields['APP_DATA'])) {
       $aFields['APP_DATA'] = G::array_merges(G::getSystemConstants(), unserialize($aFields['APP_DATA']));
     }

@@ -95,12 +95,15 @@
   $APP_NUMBER = $Fields['APP_NUMBER'];
   $APP_TITLE = $Fields['TITLE'];
 
-  $oProcess = new Process();
-  $oProcessFieds = $oProcess->Load($_SESSION['PROCESS']);
+  //optimize for speed, we are reading process info once
+  //$oProcess = new Process();
+  //$oProcessFields = $oProcess->Load($_SESSION['PROCESS']);
+  $oProcess = ProcessPeer::retrieveByPk( $_SESSION['PROCESS'] );
+  $oProcessFields = $oProcess->toArray(BasePeer::TYPE_FIELDNAME);
 
   #trigger debug routines...
 
-  if( isset($oProcessFieds['PRO_DEBUG']) && $oProcessFieds['PRO_DEBUG'] ) { #here we must verify if is a debugg session
+  if( isset($oProcessFields['PRO_DEBUG']) && $oProcessFields['PRO_DEBUG'] ) { #here we must verify if is a debugg session
     $_SESSION['TRIGGER_DEBUG']['ISSET'] = 1;
     $_SESSION['PMDEBUGGER']= true;
   }
@@ -201,7 +204,7 @@
       /** Added By erik  16-05-08
       * Description: this was added for the additional database connections */
       G::LoadClass ('dbConnections');
-      $oDbConnections = new dbConnections($_SESSION['PROCESS']);
+      $oDbConnections = new dbConnections(NULL);
       $oDbConnections->loadAdditionalConnections();
       $_SESSION['CURRENT_DYN_UID'] = $_GET['UID'];
 
@@ -659,9 +662,10 @@
 
     case 'ASSIGN_TASK':
       $oDerivation = new Derivation();
-      $oProcess    = new Process();
+      //$oProcess    = new Process();  //optimized for speed, we already load process row
       $aData       = $oCase->loadCase($_SESSION['APPLICATION']);
-      $aFields['PROCESS']              = $oProcess->load($_SESSION['PROCESS']);
+      //$aFields['PROCESS']              = $oProcess->load($_SESSION['PROCESS']);
+      $aFields['PROCESS']              = $oProcessFields;
       $aFields['PREVIOUS_PAGE']        = $aPreviousStep['PAGE'];
       $aFields['PREVIOUS_PAGE_LABEL']  = G::LoadTranslation('ID_PREVIOUS_STEP');
       $aFields['ASSIGN_TASK']          = G::LoadTranslation('ID_ASSIGN_TASK');
@@ -799,7 +803,7 @@
       /** Added By erik date: 16-05-08
       * Description: this was added for the additional database connections */
       G::LoadClass ('dbConnections');
-      $oDbConnections = new dbConnections($_SESSION['PROCESS']);
+      $oDbConnections = new dbConnections(NULL);
       $oDbConnections->loadAdditionalConnections();
       $stepFilename = "$sNamespace/$sStepName";
       $G_PUBLISH->AddContent('content', $stepFilename );
