@@ -136,7 +136,11 @@ Ext.onReady(function(){
         },{
           text: 'Cancel',
           handler: function(){
-            parent.outputdocsEditor.remove();
+            var sInfo = navigator.userAgent.toLowerCase();
+            if ( sInfo.indexOf('msie') != -1 )
+              self.close();
+            else
+              parent.outputdocsEditor.remove();
           }
         }]
     });

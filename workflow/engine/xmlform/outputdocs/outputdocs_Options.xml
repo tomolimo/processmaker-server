@@ -19,10 +19,23 @@ var outputdocsEditor;
 		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_New)?PRO_UID=@%PRO_UID' , 600, 410);
   }
   
+  function PopupCenter(pageURL, title,w,h) {
+    clientWinSize = getClientWindowSize();
+    
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2);//-(h/2);
+    var targetWin = window.open (pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+  } 
+
   function outputdocsEdit( uid, typ ) {
+    
+    if( _BROWSER.name == 'msie' ) {
+      PopupCenter('../outputdocs/outputdocs_Edit?OUT_DOC_UID=' + uid, 's', 800, 410);
+      return false;
+    }
+    
     wi=770; he=510;
     if ( typ == 'JRXML' ||  typ == 'ACROFORM' ) { wi=500; he=310; }
-		//popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Edit)?OUT_DOC_UID='+ uid , wi, he);
 		
 		outputdocsEditor = new leimnud.module.panel();
 	  outputdocsEditor.options={
@@ -30,8 +43,8 @@ var outputdocsEditor;
 		  size	   : {w:800,h:450},
 		  position : {x:0,y:0,center:true},
 		  title	   : '',
-		  control	 : {close:true,resize:false},fx:{modal:true},
-		  fx	     : {shadow:true,modal:true}
+		  control	 : {close:true,resize:false},fx: {modal:false},
+		  fx	     : {shadow:false,modal:false}
 	  };
 	  outputdocsEditor.make();
 	  oIFrame = window.document.createElement('iframe');
@@ -40,9 +53,7 @@ var outputdocsEditor;
 	  oIFrame.style.height = '100%';
 	  oIFrame.src          = '../outputdocs/outputdocs_Edit?OUT_DOC_UID=' + uid;
 	  outputdocsEditor.addContent(oIFrame);
-	
   }
-  
   
   function outputdocsProperties( uid ) {
 		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_Properties)?OUT_DOC_UID='+ uid , 600, 530);

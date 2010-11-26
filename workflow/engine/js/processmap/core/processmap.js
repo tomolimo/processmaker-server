@@ -1,6 +1,8 @@
 var PROCESSMAP_STEP_EDIT = false;
 var PROCESSMAP_USER_EDIT = false;
 
+var processmapOutputsPanel;
+
 var processmap=function(){
 	this.data={
 		load:function()
@@ -41,7 +43,7 @@ var processmap=function(){
 							statusBar:false,
 							//titleBar:false,
 							control	:{drag:false,resize:false,close:true, drag:true},
-							fx	:{opacity:true,rolled:false,modal:true, drag:true}
+							fx	:{opacity:false,rolled:false,modal:true, drag:true}
 						};
 						this.panels.buildingBlocks.make();
 						this.panels.buildingBlocks.events={
@@ -73,6 +75,8 @@ var processmap=function(){
 									this.buildLoading=false;
 								}.extend(this);
 								r.make();
+                
+                processmapOutputsPanel = panel;
 							}.extend(this),
 							inputs:function()
 							{
