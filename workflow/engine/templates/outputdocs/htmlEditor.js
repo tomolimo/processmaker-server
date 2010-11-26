@@ -22,6 +22,7 @@ Ext.onReady(function(){
         autoScroll: false,
         maximizable: false,
         resizable: false,
+        
         items: [
           new Ext.FormPanel({
             /*renderTo: 'form-panel',*/
@@ -52,7 +53,7 @@ Ext.onReady(function(){
             buttons: [{
                 text: _('ID_UPLOAD'),
                 handler: function(){
-                  uploader = Ext.getCmp('uploader');
+                  var uploader = Ext.getCmp('uploader');
                   if(uploader.getForm().isValid()){
                     uploader.getForm().submit({
                       url: 'outputdocs_Ajax?action=setTemplateFile',
@@ -65,7 +66,7 @@ Ext.onReady(function(){
                           success: function(response){
                             Ext.getCmp('OUT_DOC_TEMPLATE').setValue(response.responseText);
                             if(Ext.getCmp('OUT_DOC_TEMPLATE').getValue(response.responseText)=='')
-                              Ext.Msg.alert(_('ID_INVALID_FILE'));
+                              Ext.Msg.alert(_('ID_ALERT_MESSAGE'), _('ID_INVALID_FILE'));
                           },
                           failure: function(){},
                           params: {request: 'getRows'}

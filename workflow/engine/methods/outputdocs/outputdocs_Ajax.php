@@ -15,10 +15,15 @@ switch($action){
   break;
   
   case 'getTemplateFile':
-    $aExtensions = array ("html", "htm", "txt", "xml");
+    $aExtensions = array ( "exe", "com", "dll", "ocx", "fon", "ttf", "doc", "xls", "mdb", "rtf",
+                          "jpeg", "jpg", "jif", "jfif", "gif", "tif", "tiff", "png", "bmp", "pdf",
+                          "aac", "mp3", "mp3pro", "vorbis", "realaudio", "vqf", "wma",
+                          "aiff", "flac", "wav", "midi", "mka", "ogg", "jpeg", "ilbm", 
+                          "tar", "zip", "rar", "arj", "gzip", "bzip2", "afio", "kgb",
+                          "asf", "avi", "mov", "iff", "ogg", "ogm", "mkv", "3gp" );
     $sFileName = strtolower($_SESSION['outpudocs_tmpFile']);
     $sExtension = substr($sFileName, strpos($sFileName,'.') + 1, strlen($sFileName));
-    if(in_array($sExtension, $aExtensions))
+    if(! in_array($sExtension, $aExtensions))
       echo $content = file_get_contents($_SESSION['outpudocs_tmpFile']);
   break;
   

@@ -69,7 +69,7 @@ try {
       $oHeadPublisher->assign('OUT_DOC_UID', $_GET['OUT_DOC_UID']);
       $translations = G::getTranslations(Array(
         'ID_FILE', 'ID_OUT_PUT_DOC_UPLOAD_TITLE', 'ID_UPLOADING_FILE', 'ID_UPLOAD', 'ID_CANCEL', 
-        'ID_SAVE', 'ID_LOAD_FROM_FILE', 'ID_SELECT_TEMPLATE_FILE'
+        'ID_SAVE', 'ID_LOAD_FROM_FILE', 'ID_SELECT_TEMPLATE_FILE', 'ID_ALERT_MESSAGE', 'ID_INVALID_FILE'
       ));
       $oHeadPublisher->assign('TRANSLATIONS', $translations);
       $oHeadPublisher->addExtJsScript('outputdocs/htmlEditor', false );    //adding a javascript file .js
