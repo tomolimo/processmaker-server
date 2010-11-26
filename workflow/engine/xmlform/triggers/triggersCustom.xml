@@ -29,7 +29,7 @@
 
 
 <JS type="JavaScript"><![CDATA[
-
+getField('TRI_TITLE').form.onsubmit = function() {return false;};
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
 	_oVarsPanel_ = new leimnud.module.panel();
