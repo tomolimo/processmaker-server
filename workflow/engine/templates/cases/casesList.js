@@ -445,7 +445,7 @@ Ext.onReady ( function() {
 
   var proxyReassignCasesList = new Ext.data.HttpProxy({
     api: {
-      read    : 'proxyReassignCasesList',
+      read    : 'proxyReassignCasesList'
       //create  : 'proxySaveReassignCasesList',
       //update  : 'proxySaveReassignCasesList',
       //destroy : 'proxyReassignCasesList'
