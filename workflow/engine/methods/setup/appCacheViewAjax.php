@@ -182,7 +182,6 @@
           'status'=> 'failed'
         );
         $appCacheViewEngine = $oServerConf->setProperty('APP_CACHE_VIEW_ENGINE', $confParams);
-        $con->rollback();
         
         echo '{success: false, msg:"'.$e->getMessage().'"}';
       }

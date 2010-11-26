@@ -949,7 +949,7 @@ class AppCacheView extends BaseAppCacheView {
         $fields[] = $row[0];
         $rs1->next();
       }
-      if ( count($fields) != 30 ) {
+      if ( count($fields) != 31 ) {
       	$needCreateTable = true;
       }
     }  

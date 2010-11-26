@@ -101,6 +101,114 @@ class Application extends BaseApplication {
     return $this->app_description;
   }
 
+  public function isEmptyInContent ( $content, $field, $lang )  {
+    if ( isset ( $content[$field][ $lang ] ) ) {
+    	if ( trim( $content[$field][ $lang ] ) != '' ) 
+    	  return false;
+    };
+    return true;
+  } 
+
+  public function updateInsertContent ( $content, $field, $value )  {
+    if ( isset ( $content[$field][ 'en' ] ) ) {
+    	//update 
+      $con = ContentPeer::retrieveByPK ( $field, '', $this->getAppUid(), 'en' );
+      $con->setConValue ( $value );
+      if ($con->validate ()) {
+        $res = $con->save ();      
+      }	
+    }
+    else {//insert
+      $con = new Content ( );
+      $con->setConCategory ( $field );
+      $con->setConParent ( '' );
+      $con->setConId ( $this->getAppUid());
+      $con->setConLang ( 'en' );
+      $con->setConValue ( $value );
+      if ($con->validate ()) {
+        $res = $con->save ();      
+      }	
+    }
+  } 
+
+  public function normalizeContent( $content, $field , $lang ) {
+    $value = '';
+    //if the lang row is not empty, update in 'en' row and continue
+    if ( !$this->isEmptyInContent ( $content, $field , $lang ) ) {
+    	//update/insert only if this lang is != 'en', with this always we will have an en row with last value
+    	$value = $content [ $field  ][ $lang ];
+      if ( $lang != 'en' ) {
+      	$this->updateInsertContent ( $content, $field , $value );
+      }    
+    }
+    else {
+      //if the lang row is empty, and 'en' row is not empty return 'en' value
+      if ( !$this->isEmptyInContent ( $content, $field , 'en' ) ) {
+      	$value = $content [ $field ][ 'en' ];
+      }
+
+      //if the lang row is empty, and 'en' row is empty get value for 'other' row and update in 'en' row and continue
+      if ( $this->isEmptyInContent ( $content, $field , 'en' ) ) {
+      	if ( isset($content[$field]) && is_array ($content[$field] ) ) {
+      	  foreach ( $content [ $field  ] as $lan => $val ) {
+      	  	if ( trim ( $val ) != '' ) { 
+      	  		$value = $val;
+      	  		if ( $lan != 'en' ) {
+                $this->updateInsertContent ( $content, $field , $value );      			
+                continue;
+              }
+      	    }	
+          }
+        }
+        else {
+        	$this->updateInsertContent ( $content, $field , '' );
+        }
+      }
+    }
+    return $value;
+  }      
+
+  /**
+   * Get the [app_description] , [app_title] column values.
+   * @return     array of string
+   */
+  public function getContentFields()
+  {
+    if ( $this->getAppUid() == '' ) {
+      throw ( new Exception( "Error in getContentFields, the APP_UID can't be blank") );
+    }
+    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn( ContentPeer::CON_CATEGORY );    
+    $c->addSelectColumn( ContentPeer::CON_LANG );    
+    $c->addSelectColumn( ContentPeer::CON_VALUE );
+    $c->add( ContentPeer::CON_ID,  $this->getAppUid() );
+    //$c->add( ContentPeer::CON_LANG, $lang );
+    $c->addAscendingOrderByColumn('CON_CATEGORY');
+    $c->addAscendingOrderByColumn('CON_LANG');
+    $rs = ContentPeer::doSelectRS( $c );
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $content = array();
+    while ($row = $rs->getRow()) {
+    	$conCategory = $row['CON_CATEGORY'];
+    	$conLang     = $row['CON_LANG'];
+      if ( !isset( $content[$conCategory] ) ) $content[$conCategory] = array();
+      if ( !isset( $content[$conCategory][$conLang] ) ) $content[$conCategory][$conLang] = array();
+      $content[$conCategory][$conLang] = $row['CON_VALUE'];
+      $rs->next();
+      $row = $rs->getRow();
+    }
+    
+    $appTitle       = $this->normalizeContent( $content, 'APP_TITLE', $lang );
+    $appDescription = $this->normalizeContent( $content, 'APP_DESCRIPTION', $lang );
+
+    $res['APP_TITLE']        = $appTitle;
+    $res['APP_DESCRIPTION']  = $appDescription;
+    return $res;
+  }
+
   /**
    * Set the [app_description] column value.
    *
@@ -179,10 +287,14 @@ class Application extends BaseApplication {
       if ( get_class ($oApplication) == 'Application' ) {
         $aFields = $oApplication->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
-        $aFields['APP_TITLE']    = $oApplication->getAppTitle();
-        $aFields['APP_DESCRIPTION']    = $oApplication->getAppDescription();
+        
+        //this is the new function to optimize content queries
+        $aContentFields   = $oApplication->getContentFields();
 
-        $this->app_title = $aFields['APP_TITLE'];
+        $aFields['APP_TITLE']        = $aContentFields['APP_TITLE'];
+        $aFields['APP_DESCRIPTION']  = $aContentFields['APP_DESCRIPTION'];
+
+        $this->app_title       = $aFields['APP_TITLE'];
         $this->app_description = $aFields['APP_DESCRIPTION'];
 
         //$aFields['APP_PROC_CODE']    = $oApplication->getAppProcCode();
@@ -210,7 +322,7 @@ class Application extends BaseApplication {
   function create ($sProUid, $sUsrUid ) {
     $con = Propel::getConnection( 'workflow' );
     try {
-    	//fill the default values for new application row
+      //fill the default values for new application row
       $this->setAppUid ( G::generateUniqueID() );
       $this->setAppParent    ( '' );
       $this->setAppStatus    ( 'DRAFT' );
