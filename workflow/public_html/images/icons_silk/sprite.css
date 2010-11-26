@@ -50,9 +50,13 @@ form.formDefault .FormTitle,form.formDefault .FormSubTitle{
 /*Tabs con ícono en EXT*/
 .x-tab-strip span.x-tab-strip-text{
 	padding:4px 0;
-	height:12px;
 	font-weight: normal;
 }
+.ext-gecko .x-tab-strip span.x-tab-strip-text,
+.ext-webkit .x-tab-strip span.x-tab-strip-text{
+	height:12px;
+}
+
 
 /*Tablas (archivos adjuntos)*/
 .pagedTableDefault .pagedTable .pagedTableHeader{
@@ -249,8 +253,8 @@ background-position: bottom;
   border:1px solid #45626F;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
-.pagedTableDefault .pagedTable .RowLink a:empty,.module_app_button___gray:empty,.button_pm:empty{
-	/*display:none;*/
+.pagedTableDefault .pagedTable .RowLink a:empty{
+	display:none;
 	margin:0;
 }
 ul#pm_menu a:focus,button.x-btn-text:focus,.x-combo-selected{
