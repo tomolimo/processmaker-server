@@ -386,7 +386,7 @@ Ext.onReady ( function() {
   });
   
   var btnExecReassignSelected = new Ext.Button ({
-    text: 'Reassign Checked',
+    text: 'Reassign',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       
@@ -1335,7 +1335,7 @@ var gridForm = new Ext.FormPanel({
     //newPopUp.add(reassignGrid);
     newPopUp.add(gridForm);
     newPopUp.addButton(btnExecReassignSelected);
-    newPopUp.addButton(btnExecReassign);   
+    //newPopUp.addButton(btnExecReassign);   
     newPopUp.addButton(btnCloseReassign);
 
     //storeProcesses.load();
