@@ -271,9 +271,9 @@ var installer=function()
 
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"Compiled Templates Directory: ",className:"inst_td0"},{width:"30%"}),
+			new DOM('td',{innerHTML:"",className:"inst_td0"},{width:"30%"}),
 			new DOM('td',{className:"inst_td1"},{width:"30%"}).append(
-				this.compiled = new input({label:this.options.path_compiled,properties:{onkeyup:this.submit},style:{width:"100%"},maxlength:200})
+				this.compiled = new input({label:this.options.path_compiled,properties:{onkeyup:this.submit},style:{width:"100%", display:'none'},maxlength:200})
 			),
 			new DOM('td',{innerHTML:"Username (Default: admin):",className:"inst_td0"},{width:"20%"}),
 			new DOM('td',{className:"inst_td1"},{width:"20%"}).append(

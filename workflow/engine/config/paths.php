@@ -66,7 +66,14 @@
 //************ the Smarty Directories **************
  
   if(file_exists(FILE_PATHS_INSTALLED)) {
+    //parsing for old definitions in the compiled path constant
+    $tmp = file_get_contents(FILE_PATHS_INSTALLED);
+    if( strpos($tmp, 'PATH_OUTTRUNK') !== false ){
+      @file_put_contents(FILE_PATHS_INSTALLED, str_replace('PATH_OUTTRUNK', 'PATH_DATA', $tmp));
+    }
+    
     require_once ( FILE_PATHS_INSTALLED );
+
     // TODO: This path defines where to save temporal data, similar to $_SESSION.
     define( 'PATH_TEMPORAL', PATH_C . 'dynEditor/');
 

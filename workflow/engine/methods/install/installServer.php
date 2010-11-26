@@ -203,10 +203,10 @@ else if($action==="install")
 	
 	$sp		= "/";
 	$dir_data	= $dataClient->path_data;
-	$dir_compiled	= $dataClient->path_compiled;
+	//$dir_compiled	= $dataClient->path_compiled;
 
 	$dir_data	= (substr($dir_data,-1)==$sp)?$dir_data:$dir_data."/";
-	$dir_compiled	= (substr($dir_compiled,-1)==$sp)?$dir_compiled:$dir_compiled."/";
+	$dir_compiled	= $dir_data . "compiled/"; //(substr($dir_compiled,-1)==$sp)?$dir_compiled:$dir_compiled."/";
 	global $isWindows;
 
 	@mkdir($dir_data."sites",0777,true);
