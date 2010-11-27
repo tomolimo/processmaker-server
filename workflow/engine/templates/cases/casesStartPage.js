@@ -21,7 +21,7 @@ function getDashboardData() {
 
 	var parameters = {
 		action : 'getSimpleDashboardData'
-	}
+	};
 	conn.request({
 		url : 'casesStartPage_Ajax.php',
 		method : 'POST',
@@ -491,7 +491,7 @@ var startCaseTab = {
         }
       }
    ]
-}
+};
 
 var documentsTab = {
   id : 'documents',
@@ -676,7 +676,7 @@ var documentsTab = {
         }
       }
    ]
-}
+};
 
 var dashboardTab = {
   title : 'Dashboard',
@@ -686,7 +686,7 @@ var dashboardTab = {
   autoHeight : true,
   enableDD : false,
   items : getDashboardItems()
-}
+};
 
 var MainPanel = function() {
 	MainPanel.superclass.constructor.call(this, {
@@ -698,7 +698,7 @@ var MainPanel = function() {
     plugins : new Ext.ux.TabCloseMenu(),
     enableTabScroll : true,
     activeTab : 0,
-    items : [startCaseTab, documentsTab, dashboardTab]
+    items : [startCaseTab/*, documentsTab, dashboardTab*/]
   });
 };
 

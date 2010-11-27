@@ -27,8 +27,8 @@
 
   $G_TMP_MENU->AddIdRawOption('CASES_HOME',           'casesStartPage',                           G::LoadTranslation('ID_CASES_START_PAGE'), '',                   '', 'blockHeader');
   $G_TMP_MENU->AddIdRawOption('CASES_START_CASE',     'casesStartPage?action=startCase',  G::LoadTranslation('ID_NEW_CASE'),              '' );
-  $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     'casesStartPage?action=documents',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
-  $G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',     'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
+  //$G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     'casesStartPage?action=documents',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
+  //$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',     'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
 
   //Load Other registered Dashboards (From plugins)
   $oPluginRegistry = & PMPluginRegistry::getSingleton ();
