@@ -40,19 +40,25 @@
 
             G::loadClass('configuration');
             $oConfig = new Configuration();
-            $aConfig = $oConfig->load('ENVIRONMENT_SETTINGS');
-            $aConfig = unserialize($aConfig['CFG_VALUE']);
+            try {
+              $aConfig = $oConfig->load('ENVIRONMENT_SETTINGS');
+              $aConfig = unserialize($aConfig['CFG_VALUE']);
+            } catch (Exception $e){
+              // if there is no configuration record then.
+              $aConfig['format'] = '@userName';
+            }
+            
 //            var_dump($aConfig);
             foreach ( $aCaseGroups as $aCaseGroup ) {
-                $aCaseUsers = $oGroups->getUsersOfGroup($aCaseGroup['GRP_UID']);
-                foreach ( $aCaseUsers as $aCaseUser ) {
-                    if ( $aCaseUser['USR_UID'] != $sReassignFromUser ) {
-                        $aCaseUserRecord = $oUser->load($aCaseUser['USR_UID']);
-                        $sCaseUser = G::getFormatUserList ($aConfig['format'],$aCaseUserRecord);
+              $aCaseUsers = $oGroups->getUsersOfGroup($aCaseGroup['GRP_UID']);
+              foreach ( $aCaseUsers as $aCaseUser ) {
+                if ( $aCaseUser['USR_UID'] != $sReassignFromUser ) {
+                  $aCaseUserRecord = $oUser->load($aCaseUser['USR_UID']);
+                  $sCaseUser = G::getFormatUserList ($aConfig['format'],$aCaseUserRecord);
 //                        $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
-                        $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $sCaseUser); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
-                    }
+                  $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $sCaseUser); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                 }
+              }
             }
 
             $aCaseUsers = $oTasks->getUsersOfTask($aCase['TAS_UID'], 1);
