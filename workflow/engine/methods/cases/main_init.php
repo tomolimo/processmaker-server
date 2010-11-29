@@ -24,7 +24,7 @@
  */
 
   $oHeadPublisher =& headPublisher::getSingleton(); 
-  $oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
+  //$oHeadPublisher->usingExtJs('ux/XmlTreeLoader');
   $oHeadPublisher->addExtJsScript('cases/main', false );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/main'); //adding a html file  .html.
   
@@ -52,7 +52,6 @@
     $confDefaultOption = 'CASES_INBOX';
   }
   
-    
   $oHeadPublisher->assign( 'defaultOption', $defaultOption); // user menu permissions
   $oHeadPublisher->assign( '_nodeId', $confDefaultOption); // user menu permissions
   
