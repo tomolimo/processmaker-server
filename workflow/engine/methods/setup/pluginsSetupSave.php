@@ -22,23 +22,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-/*  switch ($RBAC->userCanAccess('PM_CASES'))
-  {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  }
-*/
-  
-// lets display the items
-  $pluginFile   = $_GET['id'];
+
+  $pluginFile = $_GET['id'];
 	G::LoadClass('plugin');
 
   $oPluginRegistry =& PMPluginRegistry::getSingleton();
@@ -46,9 +31,10 @@
   $details = $oPluginRegistry->getPluginDetails( $pluginFile );
   try {
   	$Fields = $oPluginRegistry->updateFieldsForPageSetup( $details->sNamespace, $_POST );
-    G::Header('location: pluginsList');
-  }
-  catch ( Exception $e ){
+  	$str = "$Fields fields saved successfully!";
+  	G::SendTemporalMessage($str, 'info', 'string', 3, 100);
+    G::Header("location: pluginsSetup?id=$pluginFile");
+  } catch ( Exception $e ){
     $G_MAIN_MENU            = 'processmaker';
     $G_ID_MENU_SELECTED     = 'SETUP';
     $G_SUB_MENU             = 'setup';

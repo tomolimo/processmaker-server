@@ -9,6 +9,7 @@ var main = function(){
   items = Array();
   
   for(i=0; i<tabItems.length; i++){
+    
     items[i] = new Ext.tree.TreePanel({
       title: tabItems[i].title,
       id: tabItems[i].id,

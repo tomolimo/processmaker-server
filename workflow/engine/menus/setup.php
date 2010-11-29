@@ -51,7 +51,7 @@ $G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log'
 
 //tools options
 if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
-  $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsList', 'Plugins Manager', 'icon-plugins.png', '', 'plugins');
+  $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsMain', 'Plugins Manager', 'icon-plugins.png', '', 'plugins');
 
 //users options
 $G_TMP_MENU->AddIdRawOption('USERS', '../users/users_List', G::LoadTranslation('ID_USERS_LIST'), 'icon-webservices.png', '', 'users');

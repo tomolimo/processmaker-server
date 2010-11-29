@@ -26,8 +26,10 @@
 $RBAC->requirePermissions('PM_SETUP_ADVANCE');
 
 // lets display the items
-$items[] = array ( 'id' => 'char', 'title' => 'char', 'type' => 'char', 'creator' => 'char' ,
-                   'modifiedBy' => 'char', 'filename' => 'char', 'size' => 'char', 'mime' => 'char');
+//$items = array ( 'id' => 'char', 'title' => 'char', 'type' => 'char', 'creator' => 'char' , 'modifiedBy' => 'char', 'filename' => 'char', 'size' => 'char', 'mime' => 'char');
+
+
+$items = Array();
 //***************** Plugins **************************
 	G::LoadClass('plugin');
   //here we are loading all plugins registered
@@ -49,16 +51,20 @@ $items[] = array ( 'id' => 'char', 'title' => 'char', 'type' => 'char', 'creator
     	 if ( strpos($file, '.php',1) && is_file(PATH_PLUGINS . $file) ) {
          include_once ( PATH_PLUGINS . $file );
          $pluginDetail = $oPluginRegistry->getPluginDetails ( $file );
-         //krumo ($pluginDetail ); die;
+         //print_R ($pluginDetail );
+         //die;
          //$status = $pluginDetail->enabled ? 'Enabled' : 'Disabled';
          if($pluginDetail==NULL) continue; //When for some reason we gen NULL plugin
-         $status = $pluginDetail->enabled ? G::LoadTranslation('ID_ENABLED') : G::LoadTranslation('ID_DISABLED');
+         $status_label = $pluginDetail->enabled ? G::LoadTranslation('ID_ENABLED') : G::LoadTranslation('ID_DISABLED');
+         $status = $pluginDetail->enabled ? 1: 0;
          if ( isset ($pluginDetail->aWorkspaces ) ) {
            if ( ! in_array ( SYS_SYS, $pluginDetail->aWorkspaces) )
              continue;
          }
          $linkEditValue = $pluginDetail->sSetupPage != '' && $pluginDetail->enabled ?  G::LoadTranslation('ID_SETUP') : ' ';
-
+         //g::pr($pluginDetail->sSetupPage);
+         $setup = $pluginDetail->sSetupPage != '' && $pluginDetail->enabled ?  '1' : '0';
+         
          $link = 'pluginsChange?id=' . $file . '&status=' . $pluginDetail->enabled;
          $linkEdit = 'pluginsSetup?id=' . $file ;
          $pluginName = $pluginDetail->sFriendlyName;
@@ -69,18 +75,17 @@ $items[] = array ( 'id' => 'char', 'title' => 'char', 'type' => 'char', 'creator
          if ( isset ($pluginDetail) ){
          if(!$pluginDetail->bPrivate){
            $items[] = array (
-             'id'   => count( $items ),
-             //'title'=>$pluginDetail->sFriendlyName,
+             'id'   => (count($items) + 1),
+             'namespace'=>$pluginDetail->sNamespace,
              'title'=>$pluginDetail->sFriendlyName . "\n(" . $pluginDetail->sNamespace . '.php)',
              'className' => $pluginDetail->sNamespace,
              'description' => $pluginDetail->sDescription,
              'version' => $pluginDetail->iVersion,
              'setupPage' => $pluginDetail->sSetupPage,
-             'enabled'=> $status,
-             'url' => $link,
-             'urlEdit' => $linkEdit,
-             'urlRemove' => $linkRemove,
-             'linkEditValue' => $linkEditValue,
+             'status_label'=> $status_label,
+             'status'=> $status,
+             'setup'=>$setup,
+             
              'sFile' => $file,
              'sStatusFile' => $pluginDetail->enabled
              );
@@ -92,10 +97,12 @@ $items[] = array ( 'id' => 'char', 'title' => 'char', 'type' => 'char', 'creator
     closedir($handle);
   }
 
-$folders['items'] = $items;
-
-$_DBArray['plugins'] = $items;
-$_SESSION['_DBArray'] = $_DBArray;
+  $folders['items'] = $items;
+  //g::pr($items);
+  echo G::json_encode($items);
+  die;
+  $_DBArray['plugins'] = $items;
+  $_SESSION['_DBArray'] = $_DBArray;
 
     G::LoadClass( 'ArrayPeer');
     $c = new Criteria ('dbarray');
@@ -116,17 +123,3 @@ $_SESSION['_DBArray'] = $_DBArray;
   G::RenderPage('publishBlank', 'blank');
 
 ?>
-
-<script language="javascript">
-	function goonext(sFile, sStatus){
-		ajax_function('pluginsChange','','id='+sFile+'&status='+sStatus,'GET') ;
-		refreshPagk();
-	}
-
-function refreshPagk(){
-history.go(0);
-document.getElementById("admToolsContent").contentWindow.location.href ='pluginsList';
-}
-
-
-</script>

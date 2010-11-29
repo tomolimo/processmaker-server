@@ -22,22 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-/*  switch ($RBAC->userCanAccess('PM_CASES'))
-  {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  }
-*/
-  
-// lets display the items
+
   $pluginFile   = $_GET['id'];
 
 	G::LoadClass('plugin');

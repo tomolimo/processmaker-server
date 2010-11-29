@@ -24,29 +24,9 @@
  */
 
 global $RBAC;
-$access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
-if( $access != 1 ){
-  switch ($access)
-  {
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	default:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;  	
-  }
-}  
+$RBAC->requirePermissions('PM_SETUP_ADVANCE');
 
- try {
+try {
   //load the variables
   G::LoadClass('plugin');
   if ( ! isset($_FILES['form']['error']['PLUGIN_FILENAME'] ) || $_FILES['form']['error']['PLUGIN_FILENAME'] == 1 ) {
@@ -152,14 +132,8 @@ if( $access != 1 ){
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
   $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
 
-  //G::header ( 'Location: pluginsList');
-  // this additional parameter pluginsList enables the load of the plugin list panel inside de main admin panel iframe
-  print "
-  <script>
-  parent.window.location.href = 'main_init?action=pluginsList';
-  </script>
-  ";
-
+  G::header ( 'Location: pluginsMain');
+  die;
 }
 catch ( Exception $e ){
   $G_PUBLISH = new Publisher;

@@ -22,20 +22,6 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-/*  switch ($RBAC->userCanAccess('PM_CASES'))
-  {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  }
-*/
 
 // lets display the items
   $pluginFile   = $_GET['id'];
@@ -49,30 +35,28 @@
 
   if ($handle = opendir( PATH_PLUGINS  )) {
     while ( false !== ($file = readdir($handle))) {
-    	 if ( strpos($file, '.php',1) ) {
-
-         if ( $file == $pluginFile && $pluginStatus == '1' ) {
-           //print "change to disable";
-           $details = $oPluginRegistry->getPluginDetails( $pluginFile );
-           $oPluginRegistry->disablePlugin( $details->sNamespace );
-           $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
-           //print "size saved : $size  <br>";
-         }
-
-         if ( $file == $pluginFile && $pluginStatus == '' ) {
-           //print "change to ENABLED";
-           require_once ( PATH_PLUGINS . $pluginFile );
-           $details = $oPluginRegistry->getPluginDetails( $pluginFile );
-           $oPluginRegistry->enablePlugin( $details->sNamespace);
-           $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
-           $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
-           //print "size saved : $size  <br>";
-         }
-       }
+    	if ( strpos($file, '.php', 1 ) && $file == $pluginFile) {
+        
+        if ( $pluginStatus == '1' ) {
+          //print "change to disable";
+          $details = $oPluginRegistry->getPluginDetails( $pluginFile );
+          $oPluginRegistry->disablePlugin( $details->sNamespace );
+          $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+          print "size saved : $size  <br>";
+        } else {
+          //print "change to ENABLED";
+          require_once ( PATH_PLUGINS . $pluginFile );
+          $details = $oPluginRegistry->getPluginDetails( $pluginFile );
+          $oPluginRegistry->enablePlugin( $details->sNamespace);
+          $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
+          $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+          print "size saved : $size  <br>";
+        }
+      }
     }
     closedir($handle);
   }
 
   //$oPluginRegistry->showArrays();
-  G::Header('location: pluginsList');
+  //G::Header('location: pluginsList');
 
