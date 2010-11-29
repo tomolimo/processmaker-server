@@ -1035,11 +1035,12 @@ class G
       }
     }
     else {
-      G::SendMessageText("'$downloadFileName' ".G::LoadTranslation('ID_ERROR_STREAMING_FILE'), "ERROR");
-      $backUrlObj=explode("sys".SYS_SYS,$_SERVER['HTTP_REFERER']);
-      G::header("location: "."/sys".SYS_SYS.$backUrlObj[1]);
-
-      //throw new Exception ( "file '$file' doesn't exists. " );
+      if( strpos($file, 'gulliver') !== false ){
+        list($path, $filename) = explode('gulliver', $file);
+      }
+      
+      $_SESSION['phpFileNotFound'] = $file;
+      G::header("location: /errors/error404.php?p=$filename");
     }
 
     switch ( strtolower($typefile ) ) {

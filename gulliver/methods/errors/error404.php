@@ -23,10 +23,14 @@
  * 
  */
   session_start();
-  if ( isset ( $_SESSION['phpFileNotFound'] ) )
-    $uri =      $_SESSION['phpFileNotFound'];
+  if( ! isset($_GET['p']) )
+    if ( isset ( $_SESSION['phpFileNotFound'] ) )
+      $uri = $_SESSION['phpFileNotFound'];
+    else
+      $uri = 'undefined';
   else
-    $uri = 'undefined';
+    $uri = $_GET['p'];
+  
   $referer =  isset ( $_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
   
  $ERROR_TEXT = "404 Not Found ";
