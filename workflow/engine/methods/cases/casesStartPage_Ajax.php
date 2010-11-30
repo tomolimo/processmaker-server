@@ -3,13 +3,13 @@
 if (! isset ( $_REQUEST ['action'] )) {
   $res ['success'] = 'failure';
   $res ['message'] = 'You may request an action';
-  print json_encode ( $res);
+  print G::json_encode ( $res);
   die ();
 }
 if (! function_exists ( $_REQUEST ['action'] )) {
   $res ['success'] = 'failure';
   $res ['message'] = 'The requested action doesn\'t exists';
-  print json_encode ( $res );
+  print G::json_encode ( $res );
   die ();
 }
 
@@ -92,7 +92,7 @@ function getProcessList() {
     $processList ['success'] = 'failure';
     $processList ['message'] = 'User can\'t start process';
   }
-  print json_encode ( $processList );
+  print G::json_encode ( $processList );
   die ();
 }
 
@@ -141,12 +141,12 @@ function startCase() {
     $aData ['openCase'] = $aNextStep;
     
     $aData ['status'] = 'success';
-    print (json_encode ( $aData )) ;
+    print (G::json_encode ( $aData )) ;
   } 
   catch ( Exception $e ) {
     $aData ['status'] = 'failure';
     $aData ['message'] = $e->getMessage ();
-    print_r ( json_encode ( $aData ) );
+    print_r ( G::json_encode ( $aData ) );
   }
 }
 
@@ -225,13 +225,13 @@ function getSimpleDashboardData() {
   $rowsResponse['caseDelayed'][]=array('delayed'=>'On Time','total'=>100);
   $rowsResponse['caseDelayed'][]=array('delayed'=>'Delayed','total'=>50);
   
-  print_r ( json_encode ( $rowsResponse ) );
+  print_r ( G::json_encode ( $rowsResponse ) );
 }
 
 function getRegisteredDashboards() {
   $oPluginRegistry = & PMPluginRegistry::getSingleton ();
   $dashBoardPages = $oPluginRegistry->getDashboardPages ();
-  print_r ( json_encode ( $dashBoardPages ) );
+  print_r ( G::json_encode ( $dashBoardPages ) );
 }
 
 function getDefaultDashboard(){
@@ -239,5 +239,5 @@ function getDefaultDashboard(){
 	if(isset($_SESSION['__currentTabDashboard'])){
 		$defaultDashboard['defaultTab']=$_SESSION['__currentTabDashboard'];
 	}
-	print_r ( json_encode ( $defaultDashboard ) );
+	print_r ( G::json_encode ( $defaultDashboard ) );
 }
