@@ -1857,7 +1857,7 @@ function datePicker4(obj, id, mask, startDate, endDate, showTIme){
     min:startDate,
     max:endDate,
     animation: _BROWSER.name =='msie'? false: true,
-    showTime: true,
+    showTime: showTIme,
     opacity: 1,
     onSelect: function() { this.hide(); }}
   );
