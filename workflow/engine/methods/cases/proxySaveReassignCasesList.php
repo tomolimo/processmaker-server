@@ -46,7 +46,7 @@
       // if there are no records to save return -1
       if (empty($aData)){
         $serverResponse['TOTAL']=-1;
-        echo json_encode($serverResponse);
+        echo G::json_encode($serverResponse);
         die();
       }
 //      $params = array ();
@@ -97,7 +97,7 @@
       }
 
       $serverResponse['TOTAL'] = $casesReassignedCount;
-      echo json_encode($serverResponse);
+      echo G::json_encode($serverResponse);
 //      $oTask  = new Task();
 //      $oCases = new Cases();
 //      $aCases = Array();

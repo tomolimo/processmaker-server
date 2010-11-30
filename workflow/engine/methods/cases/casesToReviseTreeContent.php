@@ -22,7 +22,7 @@ class TreeNode {
     }
 
     function toJson() {
-      return json_encode($this);
+      return G::json_encode($this);
     }
 }
 
@@ -33,7 +33,7 @@ class ExtJsTreeNode extends TreeNode {
     }
 
     function toJson() {
-        return json_encode($this);
+        return G::json_encode($this);
     }
 }
 

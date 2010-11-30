@@ -92,6 +92,6 @@ switch($request){
 
     $return_object->data[0]=$aVariables;
 
-    echo json_encode($return_object);
+    echo G::json_encode($return_object);
   break;
 }

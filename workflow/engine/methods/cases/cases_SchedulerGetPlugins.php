@@ -3,13 +3,13 @@
 if (! isset ( $_REQUEST ['action'] )) {
   $return ['success'] = 'failure';
   $return ['message'] = 'You may request an action';
-  print json_encode ( $return );
+  print G::json_encode ( $return );
   die ();
 }
 if (! function_exists ( $_REQUEST ['action'] )) {
   $return ['success'] = 'failure';
   $return ['message'] = 'The requested action doesn\'t exists';
-  print json_encode ( $return );
+  print G::json_encode ( $return );
   die ();
 }
 

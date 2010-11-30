@@ -56,7 +56,7 @@ class WebResource
         else $paramsRef[]='$parameters['.$key.']';
       }
       $res=eval('return ($this->'.$post['function'].'('.implode(',',$paramsRef).'));');
-      $res=json_encode($res);
+      $res=G::json_encode($res);
       print($res);
     }
     else {

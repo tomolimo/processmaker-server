@@ -140,4 +140,4 @@
         $index  = $start;
         $result['data'] = $rows;
       //print the result in json format
-        print json_encode( $result ) ;
+        print G::json_encode( $result ) ;

@@ -74,4 +74,4 @@
 //            $oTmp->items = $aUsersInvolved;
         $result = array();
         $result['data'] = $aUsersInvolved;
-        print json_encode( $result ) ;
+        print G::json_encode( $result ) ;

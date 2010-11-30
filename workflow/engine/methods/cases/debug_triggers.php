@@ -69,4 +69,4 @@ foreach($DEBUG_ERRORS as $error){
 $triggersRet->total = count($triggersList);
 $triggersRet->data  = $triggersList;
 
-echo json_encode($triggersRet);
+echo G::json_encode($triggersRet);

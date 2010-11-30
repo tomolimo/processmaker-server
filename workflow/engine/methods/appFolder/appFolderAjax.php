@@ -56,7 +56,7 @@ switch ($_POST ['action']) {
         */
         $processListTree [] = $tempTree;
     }
-    print json_encode ( $processListTree );    
+    print G::json_encode ( $processListTree );
 	break;
 	case 'openPMFolder' :
 		$WIDTH_PANEL = 350;
