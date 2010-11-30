@@ -168,7 +168,13 @@
         );        
         $conf->aConfig = $confParams;
         $conf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
-      
+
+        // removing casesList configuration records. TODO: removing these lines that resets all the configurations records
+        $oCriteria = new Criteria();
+        $oCriteria->add(ConfigurationPeer::CFG_UID,'casesList');
+        ConfigurationPeer::doDelete($oCriteria);
+        // end of reset 
+
         $response = new StdClass();
         $result->success = true;
         $result->msg     = "Completed successfully";
@@ -185,7 +191,37 @@
         
         echo '{success: false, msg:"'.$e->getMessage().'"}';
       }
-     
+//      break;
+//    case 'recreate-root':
+//      $sh=md5(filemtime(PATH_GULLIVER."/class.g.php"));
+//      $h=G::encrypt($_POST['host'].$sh.$_POST['user'].$sh.$_POST['password'].$sh.(1),$sh);
+//      $insertStatements = "define ( 'HASH_INSTALLATION','{$h}' );  \ndefine ( 'SYSTEM_HASH', '{$sh}' ); \n";
+//        //$handle = fopen();
+//
+//      $lines   = array();
+//      $content = '';
+//      $filename = PATH_HOME.'engine'.PATH_SEP.'config'.PATH_SEP.'paths_installed.php';
+//      $lines = file($filename);
+//      foreach ($lines as $line_num => $line) {
+//        if ($line_num<5){
+//          $content = $content. $line;
+//        }
+//      }
+//      for ($j=0;$j<=4;$j++){
+//        $content = $content.$lines[$j]."\n";
+//      }
+//      $content = $content.$insertStatements."\n";
+//      if (file_put_contents($filename, $content)!=false){
+//        echo G::loadTranslation('ID_MESSAGE_ROOT_CHANGE_SUCESS');
+//      } else {
+//        echo G::loadTranslation('ID_MESSAGE_ROOT_CHANGE_FAILURE');
+//      }
+
+//      fclose($fp);
+//      echo PATH_HOME.'methods'.PATH_SEP.'install'.PATH_SEP.'r.php';
+//      echo PATH_HOME.'methods'.PATH_SEP.'install'.PATH_SEP.'r.php';
+//      var_dump($lines);
+//      echo '<br>'.$insertStatements;
       break;
   }
 
