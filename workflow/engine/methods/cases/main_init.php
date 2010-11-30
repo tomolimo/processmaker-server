@@ -53,7 +53,7 @@
   }
   
   $oHeadPublisher->assign( 'defaultOption', $defaultOption); // user menu permissions
-  $oHeadPublisher->assign( '_nodeId', $confDefaultOption); // user menu permissions
+  $oHeadPublisher->assign( '_nodeId', isset($confDefaultOption)?$confDefaultOption:'PM_USERS'); // user menu permissions
   
   $translations = G::getTranslations(Array(
     'ID_DEATACH', 'ID_ALL', 'ID_DYNAFORM', 'ID_SYSTEM', 'ID_VARIABLES', 'ID_TRIGGERS', 'ID_OPEN_IN_POPUP'

@@ -1152,5 +1152,37 @@ class AppCacheView extends BaseAppCacheView {
     }
     return 'exists';
   }
+
+  function getFormatedUser($sFormat, $aCaseUser, $userIndex){
+    require_once('classes/model/Users.php');
+    $oUser = new Users();
+    try {
+      $aCaseUserRecord = $oUser->load($aCaseUser[$userIndex]);
+      $sCaseUser = G::getFormatUserList ($sFormat,$aCaseUserRecord);
+       // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';]
+    } catch (Exception $e){
+      $sCaseUser = '';
+    }
+    return($sCaseUser);
+  }
+
+  function replaceRowUserData($rowData){
+    try {
+      G::loadClass('configuration');
+      $oConfig = new Configuration();
+      $aConfig = $oConfig->load('ENVIRONMENT_SETTINGS');
+      $aConfig = unserialize($aConfig['CFG_VALUE']);
+    } catch (Exception $e){
+      // if there is no configuration record then.
+      $aConfig['format'] = '@userName';
+    }
+    if (isset($rowData['USR_UID'])&&isset($rowData['APP_CURRENT_USER'])){
+      $rowData['APP_CURRENT_USER'] = $this->getFormatedUser($aConfig['format'],$rowData,'USR_UID');
+    }
+    if (isset($rowData['PREVIOUS_USR_UID'])&&isset($rowData['APP_DEL_PREVIOUS_USER'])){
+      $rowData['APP_DEL_PREVIOUS_USER'] = $this->getFormatedUser($aConfig['format'],$rowData,'PREVIOUS_USR_UID');
+    }
+    return ($rowData);
+  }
   
 } // AppCacheView

@@ -306,6 +306,7 @@
   $rows = array();
   $index = $start;
   while($aRow = $oDataset->getRow()){
+    $aRow = $oAppCache->replaceRowUserData($aRow);
     if( isset($aRow['APP_STATUS']) ){
       $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
     }
@@ -335,7 +336,8 @@
      $fields['APP_UID']                 = array( 'name' => 'APP_UID'    ,             'fieldType' => 'key',         'label' => G::loadTranslation('ID_CASESLIST_APP_UID'),                'width' => 80,  'align' => 'left');
      $fields['DEL_INDEX']               = array( 'name' => 'DEL_INDEX'  ,             'fieldType' => 'key' ,        'label' => G::loadTranslation('ID_CASESLIST_DEL_INDEX')  ,            'width' => 50,  'align' => 'left');
      $fields['TAS_UID']                 = array( 'name' => 'TAS_UID'  ,               'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_TAS_UID')    ,            'width' => 80,  'align' => 'left');
-     $fields['USR_UID']                 = array( 'name' => 'USR_UID'  ,               'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_USR_UID')    ,            'width' => 80,  'align' => 'left');
+     $fields['USR_UID']                 = array( 'name' => 'USR_UID'  ,               'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_USR_UID')    ,            'width' => 80,  'align' => 'left', 'hidden' => true);
+     $fields['PREVIOUS_USR_UID']        = array( 'name' => 'PREVIOUS_USR_UID'  ,      'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_PREVIOUS_USR_UID')   ,    'width' => 80,  'align' => 'left', 'hidden' => true);
      $fields['APP_TITLE']               = array( 'name' => 'APP_TITLE'  ,             'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TITLE')  ,            'width' => 140, 'align' => 'left');
      $fields['APP_PRO_TITLE']           = array( 'name' => 'APP_PRO_TITLE'  ,         'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_PRO_TITLE') ,         'width' => 140, 'align' => 'left');
      $fields['APP_TAS_TITLE']           = array( 'name' => 'APP_TAS_TITLE'  ,         'fieldType' => 'case field' , 'label' => G::loadTranslation('ID_CASESLIST_APP_TAS_TITLE') ,         'width' => 140, 'align' => 'left');
@@ -380,7 +382,8 @@
         $rows[] = $fields['DEL_TASK_DUE_DATE'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['DEL_PRIORITY'];
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'draft' :    //#, Case, task, process, due date, Last Modify, Priority },
@@ -394,7 +397,8 @@
         $rows[] = $fields['DEL_TASK_DUE_DATE'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['DEL_PRIORITY'];
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'sent' : // #, Case, task, process, current user, sent by, Last Modify, Status
         $fields = setDefaultFields();
@@ -408,7 +412,8 @@
         $rows[] = $fields['APP_CURRENT_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'unassigned' :  //#, Case, task, process, completed by user, finish date
         $fields = setDefaultFields();
@@ -420,7 +425,8 @@
         $rows[] = $fields['APP_TAS_TITLE'];
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'paused' : //#, Case, task, process, sent by
         $fields = setDefaultFields();
@@ -434,7 +440,8 @@
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_THREAD_INDEX'];
         $rows[] = $fields['APP_DEL_INDEX'];
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'completed' : //#, Case, task, process, completed by user, finish date
         $fields = setDefaultFields();
@@ -446,7 +453,8 @@
         $rows[] = $fields['APP_TAS_TITLE'];
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'cancelled' : //#, Case, task, process, due date, Last Modify
@@ -459,8 +467,8 @@
         $rows[] = $fields['APP_TAS_TITLE'];
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
-
-        
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'to_revise' : //#, Case, task, process, due date, Last Modify
@@ -475,8 +483,8 @@
         $rows[] = $fields['APP_CURRENT_USER'];
         $rows[] = $fields['DEL_PRIORITY'];
         $rows[] = $fields['APP_STATUS'];
-
-
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'to_reassign' : //#, Case, task, process, due date, Last Modify
@@ -493,6 +501,9 @@
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
 //        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
+
         break;
 
       case 'all' : //#, Case, task, process, due date, Last Modify
@@ -506,6 +517,8 @@
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'gral' : //#, Case, task, process, due date, Last Modify
@@ -520,6 +533,8 @@
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
     }
     return $rows;

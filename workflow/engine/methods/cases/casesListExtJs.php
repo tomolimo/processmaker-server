@@ -21,7 +21,7 @@
   	// the setup for search is the same as the Sent (participated)
     $confCasesList        = $conf->getConfiguration('casesList', ($action=='search'||$action=='simple_search') ? 'search': $action );
     $generalConfCasesList = $conf->getConfiguration('ENVIRONMENT_SETTINGS', '' );
-  } 
+  }
   catch (Exception $e){
     $confCasesList = array();
     $generalConfCasesList = array();
@@ -357,6 +357,8 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',           'dataIndex' => 'APP_NUMBER',          'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',        'dataIndex' => 'APP_TITLE',           'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',        'dataIndex' => 'APP_TAS_TITLE',       'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',     'dataIndex' => 'APP_PRO_TITLE',       'width' => 120 );
     $caseColumns[] = array( 'header' =>'Sent by',     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
@@ -379,6 +381,8 @@
 
     $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y' );  
   }
@@ -387,6 +391,8 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',           'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',        'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',        'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',     'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Due Date',    'dataIndex' => 'DEL_TASK_DUE_DATE', 'width' => 110);
@@ -408,6 +414,8 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -416,6 +424,8 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
@@ -438,6 +448,8 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
    }
@@ -446,6 +458,8 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 100 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'sent By',      'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
@@ -470,6 +484,8 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
    }
@@ -478,10 +494,12 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',           'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',        'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',        'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',     'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Completed By User', 'dataIndex' => 'APP_CURRENT_USER',   'width' => 110 );
-    $caseColumns[] = array( 'header' =>'Finish Date',    'dataIndex' => 'APP_FINISH_DATE',      'width' => 50 );
+    $caseColumns[] = array( 'header' =>'Finish Date', 'dataIndex' => 'APP_FINISH_DATE',      'width' => 50 );
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
@@ -498,6 +516,8 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -506,9 +526,13 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',           'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',        'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',        'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',     'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Sent By',     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
@@ -525,6 +549,8 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -533,6 +559,8 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER',  'width' => 90 );
@@ -555,14 +583,18 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
 
   function getToReassign() {
     $caseColumns = array ();
-    $caseColumns[] = array( 'header' =>'TaskUid',      'dataIndex' => 'TAS_UID' ,          'width' => 150 );
+    $caseColumns[] = array( 'header' =>'TaskUid',      'dataIndex' => 'TAS_UID' ,          'width' => 150 ,'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'DelIndex',     'dataIndex' => 'DEL_INDEX' ,        'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
@@ -584,6 +616,8 @@
 //    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -592,6 +626,8 @@
     $caseColumns = array ();
     $caseColumns[] = array( 'header' =>'#',            'dataIndex' => 'APP_NUMBER',        'width' => 45, 'align' => 'center');
     $caseColumns[] = array( 'header' =>'Case',         'dataIndex' => 'APP_TITLE',         'width' => 150 );
+    $caseColumns[] = array( 'header' =>'UserUid',      'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
+    $caseColumns[] = array( 'header' =>'PreUsrUid',    'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' =>'Task',         'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Process',      'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' =>'Current User', 'dataIndex' => 'APP_CURRENT_USER',  'width' => 90 );
@@ -609,6 +645,8 @@
     $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }

@@ -1234,7 +1234,12 @@ Ext.onReady ( function() {
   }, this);
 
   grid.addListener('rowcontextmenu', onMessageContextMenu,this);
-
+  // patch in order to hidde the USR_UIR and PREVIOUS_USR_UID columns 
+  var userIndex     = grid.getColumnModel().findColumnIndex('USR_UID');
+  grid.getColumnModel().setHidden(userIndex, true);
+  var prevUserIndex = grid.getColumnModel().findColumnIndex('PREVIOUS_USR_UID');
+  grid.getColumnModel().setHidden(prevUserIndex, true);
+  
   if (action=='to_reassign'){
     //grid.getColumnModel().setHidden(0, true);
     grid.getColumnModel().setHidden(1, true);
