@@ -64,12 +64,12 @@
    * we're going to change to the logo choosed
    * parameter logo name
    */   
-  var changeLogo= function (nameLogo){
+  var changeLogo= function (nameLogo){ 
     new leimnud.module.app.confirm().make({
       label:G_STRINGS.ID_APPLY_LOGO,
       action:function(){
       ajax_function('replacementLogo','replacementLogo','NAMELOGO='+encodeURIComponent(nameLogo),'GET') ;
-      parent.window.location.href = 'setup';
+      parent.window.location.href = 'main_init';
       history.go(0);
       jumbshowlogo();
     }});
@@ -100,7 +100,8 @@
    */
   var restoreLogo = function (optfiledb, usrUid){ 
     ajax_function('replacementLogo','restoreLogo','OPTFILEDB='+optfiledb+'&USRUID='+usrUid,'GET') ;
-    parent.window.location.href = 'setup';
+    //parent.window.location.href = 'setup';
+    parent.window.location.href = 'main_init';
   }
   
   /*
@@ -109,7 +110,8 @@
    * parameter
    */ 
   var jumbshowlogo = function() {
-    parent.admToolsContent.location='uplogo';
+    //parent.admToolsContent.location='uplogo';   
+    parent.document.getElementById('setup-frame').location='uplogo';
   } 
   
 </script>
