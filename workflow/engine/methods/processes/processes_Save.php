@@ -23,93 +23,68 @@
  * 
  */
  
-global $RBAC;
-$access = $RBAC->userCanAccess('PM_FACTORY');
-if( $access != 1 ){
-  switch ($access)
-  {
-  	case -1:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;
-  	default:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	  die;
-  	break;  	
-  }
-}  
+/*
+ * This is a ajax response file
+ * 
+ */
 
+G::LoadThirdParty('pear/json','class.json');
 
-  G::LoadThirdParty('pear/json','class.json');
+$function = isset($_POST['function']) ? $_POST['function']: '';
 
-
-  $sfunction =$_POST['function'];
-  switch($sfunction){
+switch($function){
   case 'lookForNameProcess':
-  require_once 'classes/model/Content.php';
-  
-  $snameProcess=urldecode($_POST['NAMEPROCESS']);
-   
-  $oCriteria = new Criteria('workflow');
-  $oCriteria->addSelectColumn('COUNT(*) AS PROCESS');
-  $oCriteria->add(ContentPeer::CON_CATEGORY, 'PRO_TITLE');
-  $oCriteria->add(ContentPeer::CON_LANG,     SYS_LANG);
-  $oCriteria->add(ContentPeer::CON_VALUE,    $snameProcess);
-  $oDataset = ContentPeer::doSelectRS($oCriteria);
-  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-  $oDataset->next();
-  $aRow = $oDataset->getRow();
-  print ($aRow['PROCESS']?true:false);
-  
+    require_once 'classes/model/Content.php';
+    $snameProcess=urldecode($_POST['NAMEPROCESS']);
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn('COUNT(*) AS PROCESS');
+    $oCriteria->add(ContentPeer::CON_CATEGORY, 'PRO_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,     SYS_LANG);
+    $oCriteria->add(ContentPeer::CON_VALUE,    $snameProcess);
+    $oDataset = ContentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    print ($aRow['PROCESS']?true:false);
   break;
   
   default:
-
-			if ( isset($_GET['PRO_UID'])) {
-			 $_POST['form']['PRO_UID'] = $_GET['PRO_UID'];
-			}
-		
-		  G::LoadClass('processMap');
-		  $oProcessMap = new ProcessMap();
-		  if( !isset($_POST['form']['PRO_UID']) ) {
-		  	$_POST['form']['USR_UID'] = $_SESSION['USER_LOGGED'];
-			  $oJSON  = new Services_JSON();
-			  require_once 'classes/model/Task.php';
-		
-		    $sProUid = $oProcessMap->createProcess($_POST['form']);
-		    
-		    //call plugins
-		    $oData['PRO_UID']      = $sProUid;
-		    $oData['PRO_TEMPLATE'] = (isset($_POST['form']['PRO_TEMPLATE']) && $_POST['form']['PRO_TEMPLATE']!='')?$_POST['form']['PRO_TEMPLATE']:'';
-		    $oData['PROCESSMAP']   = $oProcessMap;
-		
-		    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-		    $oPluginRegistry->executeTriggers ( PM_NEW_PROCESS_SAVE , $oData );
-		    
-		    G::header('location: processes_Map?PRO_UID='. $sProUid );
-		    
-		    die;
-		  }
-		  else {
-			  $oProcessMap->updateProcess($_POST['form']);
-			  $sProUid = $_POST['form']['PRO_UID'];
-		  }
-		  //Save Calendar ID for this process
-		  G::LoadClass("calendar");
-		  $calendarObj=new Calendar();
-		  $calendarObj->assignCalendarTo($sProUid,$_POST['form']['PRO_CALENDAR'],'PROCESS');
-		
-		  if ($_POST['form']['THETYPE'] == '')
-		  {
-		    G::header('location: main');
-		  }
+    if ( isset($_GET['PRO_UID'])) {
+      $_POST['form']['PRO_UID'] = $_GET['PRO_UID'];
+    }
+  
+    G::LoadClass('processMap');
+    $oProcessMap = new ProcessMap();
+    if( !isset($_POST['form']['PRO_UID']) ) {
+      $_POST['form']['USR_UID'] = $_SESSION['USER_LOGGED'];
+      $oJSON  = new Services_JSON();
+      require_once 'classes/model/Task.php';
+  
+      $sProUid = $oProcessMap->createProcess($_POST['form']);
+      
+      //call plugins
+      $oData['PRO_UID']      = $sProUid;
+      $oData['PRO_TEMPLATE'] = (isset($_POST['form']['PRO_TEMPLATE']) && $_POST['form']['PRO_TEMPLATE']!='')?$_POST['form']['PRO_TEMPLATE']:'';
+      $oData['PROCESSMAP']   = $oProcessMap;
+  
+      $oPluginRegistry =& PMPluginRegistry::getSingleton();
+      $oPluginRegistry->executeTriggers ( PM_NEW_PROCESS_SAVE , $oData );
+      
+      G::header('location: processes_Map?PRO_UID='. $sProUid );
+      die;
+    } else {
+      $oProcessMap->updateProcess($_POST['form']);
+      $sProUid = $_POST['form']['PRO_UID'];
+    }
+    
+    //Save Calendar ID for this process
+    G::LoadClass("calendar");
+    $calendarObj=new Calendar();
+    $calendarObj->assignCalendarTo($sProUid,$_POST['form']['PRO_CALENDAR'],'PROCESS');
+  
+    if ($_POST['form']['THETYPE'] == ''){
+      G::header('location: main');
+    }
   break;
 
-  }
+}
