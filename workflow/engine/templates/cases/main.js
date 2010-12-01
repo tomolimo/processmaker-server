@@ -674,11 +674,11 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
       attr.text = attr.blockTitle;
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;
-      if((attr.url)&&(attr.url!="")){
-      	attr.expanded = false;
-      }else{
+      //if((attr.url)&&(attr.url!="")){
+      //	attr.expanded = false;
+      //}else{
     	  attr.expanded = true;
-      }
+      //}
     }else if(attr.title){ 
       attr.text = attr.title;
       if( attr.cases_count )
