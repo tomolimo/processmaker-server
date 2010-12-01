@@ -1217,7 +1217,6 @@ Ext.onReady ( function() {
   
   // patch in order to hide the USR_UIR and PREVIOUS_USR_UID columns 
   var userIndex     = grid.getColumnModel().findColumnIndex('USR_UID');
-  console.log (userIndex);
   if ( userIndex >= 0 ) grid.getColumnModel().setHidden(userIndex, true);
   var prevUserIndex = grid.getColumnModel().findColumnIndex('PREVIOUS_USR_UID');
   if ( prevUserIndex >= 0 ) grid.getColumnModel().setHidden(prevUserIndex, true);
