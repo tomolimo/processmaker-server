@@ -386,18 +386,99 @@ var startCaseTab = {
       {
         id : 'img-chooser-view',
         region : 'center',
+        style : {
+            width : '50%'
+          	
+          },
         // autoScroll: true,
         items : [ newCaseTree ]
       }, {
+    	  xtype:'form',
         id : 'process-detail-panel',
         region : 'east',
-        autoHeight : true,
+        //autoHeight : true,
         split : true,
         style : {
-          width : '50%'
-        },
-        minWidth : 150,
-        html : ""
+            width : '50%'
+          	
+          },
+        
+//        minWidth : 150,
+        frame: true,
+        labelAlign: 'right',
+        labelWidth: 85,
+  //      width:340,
+        waitMsgTarget: true,
+        title:'Process Information',
+        layout:'form',
+        defaults: {width: 350},
+        defaultType: 'textfield',
+
+
+        items: [{
+            fieldLabel: 'Process',
+            name: 'processName',
+            allowBlank:false,
+            value: '',
+            disabled: true,
+            //readonly:true,
+            id:"processName"
+        },{
+            fieldLabel: 'Task',
+            name: 'taskName',
+            allowBlank:false,
+            value: '',
+            disabled: true,
+            id:"taskName"
+        },{
+        	xtype:'textarea',
+            fieldLabel: 'Description',
+            name: 'processDescription',
+            value: '',
+            disabled: true,
+            id:"processDescription"
+        },{
+            fieldLabel: 'Category',
+            name: 'processCategory',
+            value: '',
+            disabled: true,
+            id:"processCategory"
+        }, {
+            fieldLabel: 'Calendar',
+            name: 'calendarName',            
+            disabled: true,
+            id:"calendarName"
+      },{
+      	xtype:'textarea',
+        fieldLabel: 'Calendar Description',
+        name: 'calendarDescription',
+        value: '',
+        disabled: true,
+        id:"calendarDescription"
+    },{
+    	xtype:'checkboxgroup',
+          fieldLabel: 'Working days',
+          name: 'calendarWorkDays',
+          disabled: true,
+          id:"calendarWorkDays",
+        	  columns: 7,
+        	    items: [
+        	        {boxLabel: 'Sun', name: '0'},
+        	        {boxLabel: 'Mon', name: '1'},
+        	        {boxLabel: 'Tue', name: '2'},
+        	        {boxLabel: 'Wen', name: '3'},
+        	        {boxLabel: 'Thu', name: '4'},
+        	        {boxLabel: 'Fri', name: '5'},
+        	        {boxLabel: 'Sat', name: '6'}
+        	    ]
+
+     }, {
+    	xtype:'checkbox',
+        fieldLabel: 'Debug Mode',
+        name: 'debugMode',        
+        disabled: true,
+        id:"debugMode"
+  }]
       }
   ],
 
@@ -711,6 +792,7 @@ Ext.extend(
     initEvents : function() {
       MainPanel.superclass.initEvents.call(this);
       // this.body.on('click', this.onClick, this);
+      
     },
 
     onClick : function(e, target, elementselected) {
@@ -814,46 +896,43 @@ Ext.extend(
       // console.log(selectedNode);
       var detailEl = Ext.getCmp('process-detail-panel').body;
       if (selectedNode) {
-        this.initTemplates();
-        // detailEl.hide();
+    	
+        //this.initTemplates();
+         //detailEl.hide();
         // detailEl.sequenceFx();
         // detailEl.slideOut('l',
         // {stopFx:true,duration:.9});
+    	  
+    	    
 
         otherAttributes = selectedNode.attributes.otherAttributes;
-        taskName = selectedNode.attributes.text;
-        processName = otherAttributes.PRO_TITLE;
-        calendarName = otherAttributes.CALENDAR_NAME;
-        calendarDescription = otherAttributes.CALENDAR_DESCRIPTION;
-        calendarWorkDays = otherAttributes.CALENDAR_WORK_DAYS;
-        processCategory = otherAttributes.PRO_CATEGORY_LABEL;
-        if (otherAttributes.PRO_DEBUG == 0) {
-          processDebug = "False";
-        } else {
-          processDebug = "True";
-        }
-        processDescription = otherAttributes.PRO_DESCRIPTION;
-        myInbox = otherAttributes.myInbox;
-        totalInbox = otherAttributes.totalInbox;
+        
+        
+        
+        Ext.getCmp('process-detail-panel').getForm().setValues({
+        	processName : otherAttributes.PRO_TITLE,
+        	taskName : selectedNode.attributes.text,
+        	calendarName : otherAttributes.CALENDAR_NAME,
+        	calendarDescription : otherAttributes.CALENDAR_DESCRIPTION,
+        	processCalendar:otherAttributes.CALENDAR_NAME+" "+otherAttributes.CALENDAR_DESCRIPTION,
+        	calendarWorkDays : (otherAttributes.CALENDAR_WORK_DAYS).split("|"),
+        	processCategory : otherAttributes.PRO_CATEGORY_LABEL,
+        	processDebug : otherAttributes.PRO_DEBUG,
+        	processDescription : otherAttributes.PRO_DESCRIPTION,
+        	myInbox : otherAttributes.myInbox,
+            totalInbox : otherAttributes.totalInbox
 
-        // data={name:selectedNode.attributes.text};
-        data = {
-          taskName : taskName,
-          processName : processName,
-          calendarName : calendarName,
-          calendarDescription : calendarDescription,
-          calendarWorkDays : calendarWorkDays,
-          processCategory : processCategory,
-          processDebug : processDebug,
-          processDescription : processDescription,
-          myInbox : myInbox,
-          totalInbox : totalInbox
-        };
-        this.detailsTemplate.overwrite(detailEl, data);
-        // detailEl.slideIn('t', {stopFx:true,duration:.0});
-        detailEl.highlight('#c3daf9', {
-          block : true
         });
+
+        
+        
+        
+        
+        //this.detailsTemplate.overwrite(detailEl, data);
+        //detailEl.slideIn('t', {stopFx:true,duration:.0});
+        //detailEl.highlight('#000', {
+        //  block : true
+        //});
       } else {
         detailEl.update('');
       }
