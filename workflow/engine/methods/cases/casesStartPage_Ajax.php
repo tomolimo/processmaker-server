@@ -68,7 +68,7 @@ function getProcessList() {
         //print_r($processInfo);
         $tempTreeChild ['text'] = ellipsis ( $keyChild, 50 );
         //$tempTree['text']=$key;
-        $tempTreeChild ['id'] = $key;
+        $tempTreeChild ['id'] = $keyChild;
         $tempTreeChild ['draggable'] = true;
         $tempTreeChild ['leaf'] = true;
         $tempTreeChild ['icon'] = '/images/icon.trigger.png';
@@ -79,12 +79,15 @@ function getProcessList() {
         $processInfoChild ['myInbox']=0;
         $processInfoChild ['totalInbox']=0;
         $tempTreeChild ['otherAttributes'] = array_merge($processInfoChild,$oProcess->load ( $processInfoChild ['pro_uid'] ),$calendar->getCalendarFor ( $processInfoChild ['uid'], $processInfoChild ['uid'], $processInfoChild ['uid'] ));
+        $tempTreeChild ['qtip']=$tempTreeChild ['otherAttributes']['PRO_DESCRIPTION']; 
         
         //$tempTree['cls']='file';
+        
         $tempTreeChildren [] = $tempTreeChild;
       }
         
         $tempTree['children']=$tempTreeChildren;
+        
         $processListTree [] = $tempTree;
       }
     } else {
@@ -103,7 +106,7 @@ function getProcessList() {
         $processInfo ['myInbox']=0;
         $processInfo ['totalInbox']=0;
         $tempTree ['otherAttributes'] = array_merge($processInfo,$oProcess->load ( $processInfo ['pro_uid'] ),$calendar->getCalendarFor ( $processInfo ['uid'], $processInfo ['uid'], $processInfo ['uid'] ));
-        
+        $tempTree ['qtip']=$tempTree ['otherAttributes']['PRO_DESCRIPTION']; 
         //$tempTree['cls']='file';
         $processListTree [] = $tempTree;
       }
