@@ -320,6 +320,7 @@ var newCaseTree = {
   treePanel : this,
   clearOnReLoad : false,
   loader : new Ext.tree.TreeLoader({
+	  preloadChildren : true,
     dataUrl : 'casesStartPage_Ajax.php',
     baseParams : {
       action : 'getProcessList'
@@ -677,7 +678,7 @@ var documentsTab = {
       }
    ]
 };
-
+/*
 var dashboardTab = {
   title : 'Dashboard',
   id : 'mainDashboard',
@@ -687,7 +688,7 @@ var dashboardTab = {
   enableDD : false,
   items : getDashboardItems()
 };
-
+*/
 var MainPanel = function() {
 	MainPanel.superclass.constructor.call(this, {
     id : 'doc-body',
