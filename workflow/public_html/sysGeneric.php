@@ -413,6 +413,9 @@ $startingTime =  array_sum(explode(' ',microtime()));
       $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . 'webdav.php';
     }
   }
+  if(SYS_COLLECTION=='login' && SYS_TARGET=='login'){
+    $avoidChangedWorkspaceValidation = true;
+  }
 
   //the index.php file, this new feature will allow automatically redirects to valid php file inside any methods folder
   if ( SYS_TARGET == '' ) {
