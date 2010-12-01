@@ -63,6 +63,28 @@ function getProcessList() {
           //$tempTree ['expanded'] = false;
           $tempTree ['expanded'] = true;
         }
+        $tempTreeChildren=array();
+      foreach ( $processList [$key] as $keyChild => $processInfoChild ) {
+        //print_r($processInfo);
+        $tempTreeChild ['text'] = ellipsis ( $keyChild, 50 );
+        //$tempTree['text']=$key;
+        $tempTreeChild ['id'] = $key;
+        $tempTreeChild ['draggable'] = true;
+        $tempTreeChild ['leaf'] = true;
+        $tempTreeChild ['icon'] = '/images/icon.trigger.png';
+        $tempTreeChild ['allowChildren'] = false;
+        $tempTreeChild ['optionType'] = "startProcess";
+        $tempTreeChild ['pro_uid'] = $processInfoChild ['pro_uid'];
+        $tempTreeChild ['tas_uid'] = $processInfoChild ['uid'];
+        $processInfoChild ['myInbox']=0;
+        $processInfoChild ['totalInbox']=0;
+        $tempTreeChild ['otherAttributes'] = array_merge($processInfoChild,$oProcess->load ( $processInfoChild ['pro_uid'] ),$calendar->getCalendarFor ( $processInfoChild ['uid'], $processInfoChild ['uid'], $processInfoChild ['uid'] ));
+        
+        //$tempTree['cls']='file';
+        $tempTreeChildren [] = $tempTreeChild;
+      }
+        
+        $tempTree['children']=$tempTreeChildren;
         $processListTree [] = $tempTree;
       }
     } else {
