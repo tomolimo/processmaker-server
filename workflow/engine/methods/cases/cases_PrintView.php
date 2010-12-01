@@ -70,7 +70,7 @@ try {
   $array['PROCESS']         = G::LoadTranslation('ID_PROCESS');
    $array['DATELABEL']        = G::LoadTranslation('DATE_L'); 
   
-  
+  $aDyn['DYN_UID']=(isset($_SESSION['DYN_UID_PRINT']) && $_SESSION['DYN_UID_PRINT']!='')?$_SESSION['DYN_UID_PRINT']:$aDyn['DYN_UID'];
   $G_PUBLISH->AddContent('smarty', 'cases/cases_PrintViewTitle', '', '', $array);
 	 
 	$G_PUBLISH->AddContent('dynaform', 'xmlform', $aDyn['PRO_UID']. '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '',  '');
