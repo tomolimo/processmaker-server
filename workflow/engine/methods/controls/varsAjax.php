@@ -71,6 +71,10 @@ if (! isset($_POST['sNoShowLeyend'])) {
   $sHTML .= '<tr><td align="center" class="module_app_input___gray" colspan="2">&nbsp;</td></tr>';
   //$sHTML .= '<tr><td align="center" class="module_app_input___gray" colspan="2">' . G::LoadTranslation('ID_DOCLICK') . '</td></tr>';
   $sHTML .= '</table>';
+} else {
+  // please don't remove this definition if there isn't some sort of html tags before the css styles aren't loaded in IE
+  $sHTML = '<table width="100%">';
+  $sHTML .= '</table>';
 }
 $sStyle = " <style type=\"text/css\">
 
