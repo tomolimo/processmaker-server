@@ -25,7 +25,7 @@
 
 $oHeadPublisher =& headPublisher::getSingleton(); 
   
-  $oHeadPublisher->addExtJsScript('setup/pluginsMain', true );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('setup/pluginsMain', false );    //adding a javascript file .js
   //$oHeadPublisher->addContent('setup/main'); //adding a html file  .html.
   
   $translations = G::getTranslations(Array(

@@ -15,7 +15,7 @@
   $defaultCasesListRowOption  = isset($oConf->aConfig['casesListRowNumber']) ? $oConf->aConfig['casesListRowNumber'] : '';
   
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->addExtJsScript('setup/environmentSettings', true);
+  $oHeadPublisher->addExtJsScript('setup/environmentSettings', false );
 
   $oHeadPublisher->assign('default_format', $defaultOption);
   $oHeadPublisher->assign('default_date_format', $defaultDateOption);

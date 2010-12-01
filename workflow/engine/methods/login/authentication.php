@@ -247,7 +247,7 @@ try {
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->extJsInit = true;
   
-  $oHeadPublisher->addExtJsScript('login/init', true);    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('login/init', false);    //adding a javascript file .js
   $oHeadPublisher->assign('uriReq', $sLocation);
   G::RenderPage('publish', 'extJs');
   //G::header('Location: ' . $sLocation);

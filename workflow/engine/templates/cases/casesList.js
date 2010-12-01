@@ -285,7 +285,6 @@ Ext.onReady ( function() {
       return String.format("<span class='row_updated'>{0}</span>", value );
   }
 
-  //alert(Ext.encode(columns));
   for(var i = 0, len = columns.length; i < len; i++){
     var c = columns[i];
     c.renderer = showField;
@@ -294,26 +293,7 @@ Ext.onReady ( function() {
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
-	 //Status images
-    //if( c.dataIndex == 'APP_STATUS')			c.renderer = showStatusImage;
   }
-
-	/*
-  function showStatusImage(value,p,r){
-	  if ( value == 'COMPLETED' )
-      return String.format("<div class='ss_sprite ss_tick' style='display:block;padding-left:0' title='{0}'> </div>", value );
-    else if ( value == 'DRAFT' )
-      return String.format("<div class='ss_sprite ss_pencil' style='display:block;padding-left:0' title='{0}'> </div>", value );
-    else if ( value == 'TO_DO' )
-      return String.format("<div class='ss_sprite ss_page_white_edit' style='display:block;padding-left:0' title='{0}'> </div>", value );
-    else if ( value == 'CANCELLED' )
-      return String.format("<div class='ss_sprite ss_cancel' style='display:block;padding-left:0' title='{0}'> </div>", value );
-		else return String.format("{0}", value );
-  }
-  */
-  //adding the last column to open the cases_Open
-	//columns.push ( { header: "aaaaa", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'openLink'});
-//	columns.push ( { header: "xxxxxx", width: 50, sortable: false, renderer: openLink, menuDisabled: false, id: 'deleteLink'});
 
 	//adding the hidden field DEL_INIT_DATE
 	readerFields.push ( {name: "DEL_INIT_DATE"});
@@ -1234,11 +1214,13 @@ Ext.onReady ( function() {
   }, this);
 
   grid.addListener('rowcontextmenu', onMessageContextMenu,this);
-  // patch in order to hidde the USR_UIR and PREVIOUS_USR_UID columns 
+  
+  // patch in order to hide the USR_UIR and PREVIOUS_USR_UID columns 
   var userIndex     = grid.getColumnModel().findColumnIndex('USR_UID');
-  grid.getColumnModel().setHidden(userIndex, true);
+  console.log (userIndex);
+  if ( userIndex >= 0 ) grid.getColumnModel().setHidden(userIndex, true);
   var prevUserIndex = grid.getColumnModel().findColumnIndex('PREVIOUS_USR_UID');
-  grid.getColumnModel().setHidden(prevUserIndex, true);
+  if ( prevUserIndex >= 0 ) grid.getColumnModel().setHidden(prevUserIndex, true);
   
   if (action=='to_reassign'){
     //grid.getColumnModel().setHidden(0, true);
