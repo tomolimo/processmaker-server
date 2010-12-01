@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PM 4.0.1\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-11-05 12:53+0100\n"
+"PO-Revision-Date: 2010-12-01 11:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -268,8 +268,8 @@ msgstr "Do you want to delete this user ?"
 # TRANSLATION
 # LABEL/ID_USERS_LIST
 #: LABEL/ID_USERS_LIST
-msgid "Users List"
-msgstr "Users List"
+msgid "[LABEL/ID_USERS_LIST] Users"
+msgstr "Users"
 
 # TRANSLATION
 # LABEL/ID_GROUP_USERS
@@ -562,8 +562,8 @@ msgstr "Attach"
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_CASES
 #: LABEL/ID_MSG_CONFIRM_DELETE_CASES
-msgid "Are you sure you want to delete this case?"
-msgstr "Are you sure you want to delete this case?"
+msgid "Are you sure  you want to delete all     selected cases?"
+msgstr "Are you sure  you want to delete all     selected cases?"
 
 # TRANSLATION
 # LABEL/ID_ALL
@@ -1630,8 +1630,8 @@ msgstr "Users"
 # TRANSLATION
 # LABEL/ID_ROLES
 #: LABEL/ID_ROLES
-msgid "ROLES"
-msgstr "ROLES"
+msgid "Roles"
+msgstr "Roles"
 
 # TRANSLATION
 # JAVASCRIPT/ID_PROCESSMAP_TASK_PROPERTIES_NOTIFICATIONS
@@ -1930,7 +1930,7 @@ msgstr "Groups"
 # TRANSLATION
 # LABEL/ID_CONFIRM_DELETE_CASE
 #: LABEL/ID_CONFIRM_DELETE_CASE
-msgid "[LABEL/ID_CONFIRM_DELETE_CASE] Are you sure you want to delete this case?"
+msgid "Are you sure you want to delete this case?"
 msgstr "Are you sure you want to delete this case?"
 
 # TRANSLATION
@@ -3094,8 +3094,8 @@ msgstr "Edit Action"
 # TRANSLATION
 # LABEL/ID_PROCESSING
 #: LABEL/ID_PROCESSING
-msgid "Processing, please wait..."
-msgstr "Processing, please wait..."
+msgid "Processing ..."
+msgstr "Processing ..."
 
 # TRANSLATION
 # LABEL/ID_FIELD_CANNOT_BE_PRIMARY_KEY
@@ -4528,8 +4528,8 @@ msgstr "Cases Lists"
 # TRANSLATION
 # LABEL/ID_APPCACHE_SETUP
 #: LABEL/ID_APPCACHE_SETUP
-msgid "Workflow Applications Cache"
-msgstr "Workflow Applications Cache"
+msgid "Cases List Cache Builder"
+msgstr "Cases List Cache Builder  "
 
 # TRANSLATION
 # LABEL/ID_CLEAR_CACHE_MSG1
@@ -4696,8 +4696,8 @@ msgstr "Processmaker Environment Settings"
 # TRANSLATION
 # LABEL/ID_PM_ENV_SETTINGS_USERFIELDSET_TITLE
 #: LABEL/ID_PM_ENV_SETTINGS_USERFIELDSET_TITLE
-msgid "User Info. Display Settings"
-msgstr "User Info. Display Settings"
+msgid "Display Information Settings"
+msgstr "Display Information Settings"
 
 # TRANSLATION
 # LABEL/IS_USER_NAME_DISPLAY_FORMAT
@@ -4816,14 +4816,14 @@ msgstr "All"
 # TRANSLATION
 # LABEL/ID_OPT_STARTED
 #: LABEL/ID_OPT_STARTED
-msgid "Started"
-msgstr "Started"
+msgid "Started by Me"
+msgstr "Started by Me"
 
 # TRANSLATION
 # LABEL/ID_OPT_COMPLETED
 #: LABEL/ID_OPT_COMPLETED
-msgid "[LABEL/ID_OPT_COMPLETED] Completed"
-msgstr "Completed"
+msgid "Completed by Me"
+msgstr "Completed by Me"
 
 # TRANSLATION
 # LABEL/ID_EMPTY_PROCESSES
@@ -5044,8 +5044,8 @@ msgstr "To delete a language you should select a  item from the list first."
 # TRANSLATION
 # LABEL/ID_DELETE_LANGUAGE_CONFIRM
 #: LABEL/ID_DELETE_LANGUAGE_CONFIRM
-msgid "Do you want remove the language \\"{0}\\" ?"
-msgstr "Do you want remove the language \\"{0}\\" ?"
+msgid "Do you want remove the language \"{0}\" ?"
+msgstr "Do you want remove the language \"{0}\" ?"
 
 # TRANSLATION
 # LABEL/ID_DELETE_LANGUAGE
@@ -5170,8 +5170,8 @@ msgstr "Variables"
 # TRANSLATION
 # LABEL/ID_OPEN_CASE
 #: LABEL/ID_OPEN_CASE
-msgid "Opening case :"
-msgstr "Opening case :"
+msgid "Open Case"
+msgstr "Open Case"
 
 # TRANSLATION
 # LABEL/ID_CASES_STATUS_CANCELLED
@@ -5498,16 +5498,304 @@ msgid "Select at least one item from the list"
 msgstr "Select at least one item from the list"
 
 # TRANSLATION
-# LABEL/ID_MSG_CONFIRM_DELETE_CASES2
-#: LABEL/ID_MSG_CONFIRM_DELETE_CASES2
-msgid "Are you sure  you want to delete all  selected case?"
-msgstr "Are you sure  you want to delete all  selected case?"
+# LABEL/ID_MSG_CONFIRM_CANCEL_CASE
+#: LABEL/ID_MSG_CONFIRM_CANCEL_CASE
+msgid "[LABEL/ID_MSG_CONFIRM_CANCEL_CASE] Are you sure you want to cancel this case?"
+msgstr "Are you sure you want to cancel this case?"
 
 # TRANSLATION
 # LABEL/ID_PAUSE_CASE_TO_DATE
 #: LABEL/ID_PAUSE_CASE_TO_DATE
 msgid "Do you want to pause the case to date:"
 msgstr "Do you want to pause the case to date: "
+
+# TRANSLATION
+# LABEL/ID_DELETING_ELEMENTS
+#: LABEL/ID_DELETING_ELEMENTS
+msgid "Deleting elements, please wait..."
+msgstr "Deleting elements, please wait..."
+
+# TRANSLATION
+# LABEL/ID_MSG_CONFIRM_DELETE_CASE
+#: LABEL/ID_MSG_CONFIRM_DELETE_CASE
+msgid "[LABEL/ID_MSG_CONFIRM_DELETE_CASE] Are you sure you want to delete this case?"
+msgstr "Are you sure you want to delete this case?"
+
+# TRANSLATION
+# LABEL/ID_MSG_CONFIRM_CANCEL_CASES
+#: LABEL/ID_MSG_CONFIRM_CANCEL_CASES
+msgid "Are you sure you want to cancel all   selected cases?"
+msgstr "Are you sure you want to cancel all   selected cases?"
+
+# TRANSLATION
+# LABEL/ID_PAUSE_CASE
+#: LABEL/ID_PAUSE_CASE
+msgid "Pause Case"
+msgstr "Pause Case"
+
+# TRANSLATION
+# LABEL/ID_PAUSE
+#: LABEL/ID_PAUSE
+msgid "[LABEL/ID_PAUSE] Pause"
+msgstr "Pause"
+
+# TRANSLATION
+# LABEL/ID_UNPAUSE_CASE
+#: LABEL/ID_UNPAUSE_CASE
+msgid "[LABEL/ID_UNPAUSE_CASE] Unpause"
+msgstr "Unpause"
+
+# TRANSLATION
+# LABEL/ID_OPEN_IN_POPUP
+#: LABEL/ID_OPEN_IN_POPUP
+msgid "[LABEL/ID_OPEN_IN_POPUP] Open in a popup"
+msgstr "Open in a popup"
+
+# TRANSLATION
+# JAVASCRIPT/ID_DYNAFORM_ASSIGN
+#: JAVASCRIPT/ID_DYNAFORM_ASSIGN
+msgid "You can not delete this dynaform. This is  assigned in some step."
+msgstr "You can not delete this dynaform. This is  assigned in some step."
+
+# TRANSLATION
+# JAVASCRIPT/ID_REQ_TITLE
+#: JAVASCRIPT/ID_REQ_TITLE
+msgid "You forgot to fill the Title field!"
+msgstr "You forgot to fill the Title field!"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_DELETE_LABEL
+#: LABEL/ID_PROCESS_DELETE_LABEL
+msgid "Do you want to delete the selected process?"
+msgstr "Do you want to delete the selected process?"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_DELETE_ALL_LABEL
+#: LABEL/ID_PROCESS_DELETE_ALL_LABEL
+msgid "Do you want to delete all selected processes?"
+msgstr "Do you want to delete all selected processes?"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_CANT_DELETE
+#: LABEL/ID_PROCESS_CANT_DELETE
+msgid "You can't delete the process \"{0}\" because  has {1} cases."
+msgstr "You can't delete the process \"{0}\" because  has {1} cases."
+
+# TRANSLATION
+# LABEL/ID_FILE
+#: LABEL/ID_FILE
+msgid "[LABEL/ID_FILE] File"
+msgstr "File"
+
+# TRANSLATION
+# LABEL/ID_OUT_PUT_DOC_UPLOAD_TITLE
+#: LABEL/ID_OUT_PUT_DOC_UPLOAD_TITLE
+msgid "Upload Output Document Template File"
+msgstr "Upload Output Document Template File"
+
+# TRANSLATION
+# LABEL/ID_UPLOADING_FILE
+#: LABEL/ID_UPLOADING_FILE
+msgid "Uploading file..."
+msgstr "Uploading file..."
+
+# TRANSLATION
+# JAVASCRIPT/ID_CLASS_TABLE_DOESNT_EXIST
+#: JAVASCRIPT/ID_CLASS_TABLE_DOESNT_EXIST
+msgid "This table class does not exist"
+msgstr "This table class does not exist"
+
+# TRANSLATION
+# LABEL/ID_LOAD_FROM_FILE
+#: LABEL/ID_LOAD_FROM_FILE
+msgid "Load from file"
+msgstr "Load from file"
+
+# TRANSLATION
+# LABEL/ID_SELECT_TEMPLATE_FILE
+#: LABEL/ID_SELECT_TEMPLATE_FILE
+msgid "Select a template file"
+msgstr "Select a template file"
+
+# TRANSLATION
+# LABEL/ID_CASES_DATE_MASK
+#: LABEL/ID_CASES_DATE_MASK
+msgid "[LABEL/ID_CASES_DATE_MASK] Date Format"
+msgstr "Date Format"
+
+# TRANSLATION
+# LABEL/ID_CASES_ROW_NUMBER
+#: LABEL/ID_CASES_ROW_NUMBER
+msgid "Number of Rows per Page"
+msgstr "Number of Rows per Page"
+
+# TRANSLATION
+# LABEL/ID_GLOBAL_DATE_FORMAT
+#: LABEL/ID_GLOBAL_DATE_FORMAT
+msgid "Global Date Format"
+msgstr "Global Date Format"
+
+# TRANSLATION
+# LABEL/ID_PM_ENV_SETTINGS_CASESLIST_TITLE
+#: LABEL/ID_PM_ENV_SETTINGS_CASESLIST_TITLE
+msgid "Cases Lists Settings"
+msgstr "Cases Lists Settings"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_1
+#: LABEL/ID_DATE_FORMAT_1
+msgid "Y-m-d H:i:s .... (2010-11-17 10:25:07)"
+msgstr " Y-m-d H:i:s .... (2010-11-17 10:25:07)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_2
+#: LABEL/ID_DATE_FORMAT_2
+msgid "d/m/Y .... (17/11/2010)"
+msgstr " d/m/Y .... (17/11/2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_3
+#: LABEL/ID_DATE_FORMAT_3
+msgid "m/d/Y .... (11/17/2010)"
+msgstr " m/d/Y .... (11/17/2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_4
+#: LABEL/ID_DATE_FORMAT_4
+msgid "Y/d/m .... (2010/17/11)"
+msgstr " Y/d/m .... (2010/17/11)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_5
+#: LABEL/ID_DATE_FORMAT_5
+msgid "Y/m/d .... (2010/11/17)"
+msgstr " Y/m/d .... (2010/11/17)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_6
+#: LABEL/ID_DATE_FORMAT_6
+msgid "F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
+msgstr " F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_7
+#: LABEL/ID_DATE_FORMAT_7
+msgid "m.d.y .... (11.17.10)"
+msgstr " m.d.y .... (11.17.10)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_8
+#: LABEL/ID_DATE_FORMAT_8
+msgid "j, n, Y .... (17,11,2010)"
+msgstr " j, n, Y .... (17,11,2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_9
+#: LABEL/ID_DATE_FORMAT_9
+msgid "D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
+msgstr " D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_10
+#: LABEL/ID_DATE_FORMAT_10
+msgid "D d M, Y .... (Thu 17 Nov, 2010)"
+msgstr " D d M, Y .... (Thu 17 Nov, 2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_11
+#: LABEL/ID_DATE_FORMAT_11
+msgid "D M, Y .... (Thu Nov, 2010)"
+msgstr " D M, Y .... (Thu Nov, 2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_12
+#: LABEL/ID_DATE_FORMAT_12
+msgid "d M, Y .... (17 Nov, 2010)"
+msgstr " d M, Y .... (17 Nov, 2010)"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_13
+#: LABEL/ID_DATE_FORMAT_13
+msgid "d m, Y .... (17 11, 2010)"
+msgstr " d m, Y .... (17 11, 2010)"
+
+# TRANSLATION
+# LABEL/ID_STEP_LIST
+#: LABEL/ID_STEP_LIST
+msgid "Step List"
+msgstr "Step List"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_1
+#: LABEL/ID_USERNAME_FORMAT_1
+msgid "@firstName @lastName .... (John Cooper)"
+msgstr " @firstName @lastName .... (John Cooper)"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_2
+#: LABEL/ID_USERNAME_FORMAT_2
+msgid "@firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
+msgstr " @firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_3
+#: LABEL/ID_USERNAME_FORMAT_3
+msgid "@userName .... (JohnLCooper)"
+msgstr " @userName .... (JohnLCooper)"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_4
+#: LABEL/ID_USERNAME_FORMAT_4
+msgid "@userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
+msgstr " @userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_5
+#: LABEL/ID_USERNAME_FORMAT_5
+msgid "@lastName @firstName .... (Cooper John)"
+msgstr " @lastName @firstName .... (Cooper John)"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_6
+#: LABEL/ID_USERNAME_FORMAT_6
+msgid "@lastName, @firstName .... (Cooper, John)"
+msgstr " @lastName, @firstName .... (Cooper, John)"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_FORMAT_7
+#: LABEL/ID_USERNAME_FORMAT_7
+msgid "@lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
+msgstr " @lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
+
+# TRANSLATION
+# LABEL/ID_EMPTY_USERS
+#: LABEL/ID_EMPTY_USERS
+msgid "Select a User..."
+msgstr "Select a User..."
+
+# TRANSLATION
+# LABEL/ID_DUPLICATE_CATEGORY_NAME
+#: LABEL/ID_DUPLICATE_CATEGORY_NAME
+msgid "[LABEL/ID_DUPLICATE_CATEGORY_NAME] Duplicate category name."
+msgstr "Duplicate category name."
+
+# TRANSLATION
+# LABEL/ID_INVALID_FILE
+#: LABEL/ID_INVALID_FILE
+msgid "Invalid FIle"
+msgstr "Invalid FIle"
+
+# TRANSLATION
+# LABEL/ID_CONFIGURE
+#: LABEL/ID_CONFIGURE
+msgid "Configure"
+msgstr "Configure"
+
+# TRANSLATION
+# LABEL/ID_VERSION
+#: LABEL/ID_VERSION
+msgid "[LABEL/ID_VERSION] Version"
+msgstr "Version"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -5959,6 +6247,12 @@ msgstr "@#ADD_TAB_NAME"
 msgid "Import PMTables"
 msgstr "Import PMTables"
 
+# additionalTables/additionalTablesToImport.xml?MAX_FILE_SIZE
+# additionalTables/additionalTablesToImport.xml
+#: edit - MAX_FILE_SIZE
+msgid "Max upload file size in bytes"
+msgstr "Max upload file size in bytes"
+
 # additionalTables/additionalTablesToImport.xml?FILENAME
 # additionalTables/additionalTablesToImport.xml
 #: file - FILENAME
@@ -6197,6 +6491,12 @@ msgstr ""
 # appFolder/appFolderDocumentList.xml
 #: link - versionHistory
 msgid "[appFolder/appFolderDocumentList.xml?versionHistory]"
+msgstr ""
+
+# appFolder/appFolderDocumentList.xml?APP_DOC_UID_VERSION
+# appFolder/appFolderDocumentList.xml
+#: checkboxtable - APP_DOC_UID_VERSION
+msgid "[appFolder/appFolderDocumentList.xml?APP_DOC_UID_VERSION]"
 msgstr ""
 
 # appFolder/appFolderDocumentListHeader.xml?FOLDER_UID
@@ -9547,6 +9847,12 @@ msgstr "Minutes"
 msgid "[cases/cases_Scheduler_Edit.xml?SCH_REPEAT_EVERY_OPT-2]"
 msgstr "Hours"
 
+# cases/cases_Scheduler_Edit.xml?SELECT_PLUGIN
+# cases/cases_Scheduler_Edit.xml
+#: subtitle - SELECT_PLUGIN
+msgid "Start a case based on following registered Plugin."
+msgstr "Start a case based on following registered Plugin."
+
 # cases/cases_Scheduler_Edit.xml?UPDATE
 # cases/cases_Scheduler_Edit.xml
 #: submit - UPDATE
@@ -10132,7 +10438,7 @@ msgstr "Hours"
 # cases/cases_Scheduler_New.xml?SELECT_PLUGIN
 # cases/cases_Scheduler_New.xml
 #: subtitle - SELECT_PLUGIN
-msgid "Start a case based on following registered Plugin."
+msgid "[cases/cases_Scheduler_New.xml?SELECT_PLUGIN] Start a case based on following registered Plugin."
 msgstr "Start a case based on following registered Plugin."
 
 # cases/cases_Scheduler_New.xml?SAVE
@@ -10362,6 +10668,60 @@ msgstr "DRAFT"
 #: dropdownpt - USERS
 msgid "Reassign to"
 msgstr "Reassign to"
+
+# cases/cases_ToReviseInputdocsList.xml?TITLE
+# cases/cases_ToReviseInputdocsList.xml
+#: text - TITLE
+msgid "[cases/cases_ToReviseInputdocsList.xml?TITLE] Title"
+msgstr "Title"
+
+# cases/cases_ToReviseInputdocsList.xml?DOC_VERSION_LABEL
+# cases/cases_ToReviseInputdocsList.xml
+#: text - DOC_VERSION_LABEL
+msgid "[cases/cases_ToReviseInputdocsList.xml?DOC_VERSION_LABEL] Version"
+msgstr "Version"
+
+# cases/cases_ToReviseInputdocsList.xml?CREATOR
+# cases/cases_ToReviseInputdocsList.xml
+#: text - CREATOR
+msgid "[cases/cases_ToReviseInputdocsList.xml?CREATOR] Creator"
+msgstr "Creator"
+
+# cases/cases_ToReviseInputdocsList.xml?COMMENT
+# cases/cases_ToReviseInputdocsList.xml
+#: text - COMMENT
+msgid "[cases/cases_ToReviseInputdocsList.xml?COMMENT] Comment"
+msgstr "Comment"
+
+# cases/cases_ToReviseInputdocsList.xml?APP_DOC_CREATE_DATE
+# cases/cases_ToReviseInputdocsList.xml
+#: date - APP_DOC_CREATE_DATE
+msgid "[cases/cases_ToReviseInputdocsList.xml?APP_DOC_CREATE_DATE] Created Date"
+msgstr "Created Date"
+
+# cases/cases_ToReviseInputdocsList.xml?DOWNLOAD
+# cases/cases_ToReviseInputdocsList.xml
+#: link - DOWNLOAD
+msgid "[cases/cases_ToReviseInputdocsList.xml?DOWNLOAD]"
+msgstr ""
+
+# cases/cases_ToReviseInputdocsList.xml?NEWVERSION
+# cases/cases_ToReviseInputdocsList.xml
+#: link - NEWVERSION
+msgid "[cases/cases_ToReviseInputdocsList.xml?NEWVERSION]"
+msgstr ""
+
+# cases/cases_ToReviseInputdocsList.xml?VERSION_HISTORY
+# cases/cases_ToReviseInputdocsList.xml
+#: link - VERSION_HISTORY
+msgid "[cases/cases_ToReviseInputdocsList.xml?VERSION_HISTORY]"
+msgstr ""
+
+# cases/cases_ToReviseInputdocsList.xml?DELETE
+# cases/cases_ToReviseInputdocsList.xml
+#: link - DELETE
+msgid "[cases/cases_ToReviseInputdocsList.xml?DELETE]"
+msgstr ""
 
 # cases/cases_TransferHistory.xml?TAS_TITLE
 # cases/cases_TransferHistory.xml
@@ -11862,6 +12222,18 @@ msgstr "Reports To"
 #: link - DELETE
 msgid "[departments/departments_UsersList.xml?DELETE]"
 msgstr ""
+
+# dynaforms/datemask.xml?mask
+# dynaforms/datemask.xml
+#: title - mask
+msgid "Options Mask"
+msgstr "Options Mask"
+
+# dynaforms/datemask.xml?option1
+# dynaforms/datemask.xml
+#: subtitle - option1
+msgid "%a — abbreviated weekday name<br> %A — full weekday name<br> %b — abbreviated month name<br> %B — full month name<br> %C — the century number<br> %d — the day of the month (range 01 to 31)<br> %e — the day of the month (range 1 to 31)<br> %H — hour, range 00 to 23 (24h format)<br> %I — hour, range 01 to 12 (12h format)<br> %j — day of the year (range 001 to 366)<br> %k — hour, range 0 to 23 (24h format)<br> %l — hour, range 1 to 12 (12h format)<br> %m — month, range 01 to 12<br> %o — month, range 1 to 12<br> %M — minute, range 00 to 59<br> %n — a newline character<br> %p — PM or AM<br> %P — pm or am<br> %s — UNIX time (number of seconds since 1970-01-01)<br> %S — seconds, range 00 to 59<br> %t — a tab character<br> %W — week number<br> %u — the day of the week (range 1 to 7, 1 = MON)<br> %w — the day of the week (range 0 to 6, 0 = SUN)<br> %y — year without the century (range 00 to 99)<br> %Y — year with the century<br> %% — a literal '%' character"
+msgstr "%a — abbreviated weekday name<br> %A — full weekday name<br> %b — abbreviated month name<br> %B — full month name<br> %C — the century number<br> %d — the day of the month (range 01 to 31)<br> %e — the day of the month (range 1 to 31)<br> %H — hour, range 00 to 23 (24h format)<br> %I — hour, range 01 to 12 (12h format)<br> %j — day of the year (range 001 to 366)<br> %k — hour, range 0 to 23 (24h format)<br> %l — hour, range 1 to 12 (12h format)<br> %m — month, range 01 to 12<br> %o — month, range 1 to 12<br> %M — minute, range 00 to 59<br> %n — a newline character<br> %p — PM or AM<br> %P — pm or am<br> %s — UNIX time (number of seconds since 1970-01-01)<br> %S — seconds, range 00 to 59<br> %t — a tab character<br> %W — week number<br> %u — the day of the week (range 1 to 7, 1 = MON)<br> %w — the day of the week (range 0 to 6, 0 = SUN)<br> %y — year without the century (range 00 to 99)<br> %Y — year with the century<br> %% — a literal '%' character"
 
 # dynaforms/dynaform_Fields.xml?XMLNODE_NAME
 # dynaforms/dynaform_Fields.xml
@@ -14692,7 +15064,7 @@ msgstr "Please press back button to continue working with this system."
 # login/nologin.xml?subtitle
 # login/nologin.xml
 #: subtitle - subtitle
-msgid "subtitle"
+msgid "[login/nologin.xml?subtitle]"
 msgstr ""
 
 # login/nologin.xml?BSUBMIT
@@ -15805,11 +16177,11 @@ msgstr "save"
 msgid "Delete Process Category"
 msgstr "Delete Process Category"
 
-# processCategory/processCategoryDelete.xml?LABEL_CATEGORY_UID
+# processCategory/processCategoryDelete.xml?LABEL_CATEGORY_NAME
 # processCategory/processCategoryDelete.xml
-#: caption - LABEL_CATEGORY_UID
-msgid "Category Uid"
-msgstr "Category Uid"
+#: caption - LABEL_CATEGORY_NAME
+msgid "Category Name"
+msgstr "Category Name"
 
 # processCategory/processCategoryDelete.xml?BTN_SUBMIT
 # processCategory/processCategoryDelete.xml
@@ -15832,7 +16204,7 @@ msgstr "Process Category form"
 # processCategory/processCategoryEdit.xml?CATEGORY_NAME
 # processCategory/processCategoryEdit.xml
 #: text - CATEGORY_NAME
-msgid "Category Name"
+msgid "[processCategory/processCategoryEdit.xml?CATEGORY_NAME] Category Name"
 msgstr "Category Name"
 
 # processCategory/processCategoryEdit.xml?BTN_SUBMIT
@@ -18127,6 +18499,12 @@ msgstr "Cancel"
 msgid "[setup/calendarEdit.xml?HOLIDAY_STATUS] Active"
 msgstr "Active"
 
+# setup/calendarEdit.xml?BUSINESS_DAY_STATUS
+# setup/calendarEdit.xml
+#: checkbox - BUSINESS_DAY_STATUS
+msgid "[setup/calendarEdit.xml?BUSINESS_DAY_STATUS] Active"
+msgstr "Active"
+
 # setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY
 # setup/calendarEdit_BusinessHours.xml
 #: dropdown - CALENDAR_BUSINESS_DAY
@@ -18161,7 +18539,7 @@ msgstr "TUE"
 # setup/calendarEdit_BusinessHours.xml
 #: dropdown - CALENDAR_BUSINESS_DAY - 3
 msgid "[setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY-3]"
-msgstr "WEN"
+msgstr "WED"
 
 # setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY-4
 # setup/calendarEdit_BusinessHours.xml
@@ -18736,7 +19114,7 @@ msgstr "Import Plugin"
 # setup/pluginImport.xml?MAX_FILE_SIZE
 # setup/pluginImport.xml
 #: edit - MAX_FILE_SIZE
-msgid "Max upload file size in bytes"
+msgid "[setup/pluginImport.xml?MAX_FILE_SIZE] Max upload file size in bytes"
 msgstr "Max upload file size in bytes"
 
 # setup/pluginImport.xml?PLUGIN_FILENAME
@@ -22807,17 +23185,17 @@ msgstr "Confirm Password"
 msgid "Preferences"
 msgstr "Preferences"
 
-# users/myInfo.xml?PREF_DEFAULT_LANG
-# users/myInfo.xml
-#: dropdown - PREF_DEFAULT_LANG
-msgid "Default languaje"
-msgstr "Default languaje"
-
 # users/myInfo.xml?PREF_DEFAULT_MENUSELECTED
 # users/myInfo.xml
 #: dropdown - PREF_DEFAULT_MENUSELECTED
-msgid "Default menu option"
-msgstr "Default menu option"
+msgid "Default Main Menu Option"
+msgstr "Default Main Menu Option"
+
+# users/myInfo.xml?PREF_DEFAULT_CASES_MENUSELECTED
+# users/myInfo.xml
+#: dropdown - PREF_DEFAULT_CASES_MENUSELECTED
+msgid "Default Cases Menu Option"
+msgstr "Default Cases Menu Option"
 
 # users/myInfo.xml?SUBMIT3
 # users/myInfo.xml
@@ -22996,13 +23374,13 @@ msgstr "Preferences"
 # users/myInfo2.xml?PREF_DEFAULT_LANG
 # users/myInfo2.xml
 #: dropdown - PREF_DEFAULT_LANG
-msgid "[users/myInfo2.xml?PREF_DEFAULT_LANG] Default languaje"
+msgid "Default languaje"
 msgstr "Default languaje"
 
 # users/myInfo2.xml?PREF_DEFAULT_MENUSELECTED
 # users/myInfo2.xml
 #: dropdown - PREF_DEFAULT_MENUSELECTED
-msgid "[users/myInfo2.xml?PREF_DEFAULT_MENUSELECTED] Default menu option"
+msgid "Default menu option"
 msgstr "Default menu option"
 
 # users/myInfo2.xml?SUBMIT3
@@ -23191,17 +23569,17 @@ msgstr "Confirm Password"
 msgid "[users/myInfoView.xml?TITLEPREF] Preferences"
 msgstr "Preferences"
 
-# users/myInfoView.xml?PREF_DEFAULT_LANG
-# users/myInfoView.xml
-#: dropdown - PREF_DEFAULT_LANG
-msgid "[users/myInfoView.xml?PREF_DEFAULT_LANG] Default languaje"
-msgstr "Default languaje"
-
 # users/myInfoView.xml?PREF_DEFAULT_MENUSELECTED
 # users/myInfoView.xml
 #: dropdown - PREF_DEFAULT_MENUSELECTED
-msgid "[users/myInfoView.xml?PREF_DEFAULT_MENUSELECTED] Default menu option"
-msgstr "Default menu option"
+msgid "[users/myInfoView.xml?PREF_DEFAULT_MENUSELECTED] Default Main Menu Option"
+msgstr "Default Main Menu Option"
+
+# users/myInfoView.xml?PREF_DEFAULT_CASES_MENUSELECTED
+# users/myInfoView.xml
+#: dropdown - PREF_DEFAULT_CASES_MENUSELECTED
+msgid "[users/myInfoView.xml?PREF_DEFAULT_CASES_MENUSELECTED] Default Cases Menu Option"
+msgstr "Default Cases Menu Option"
 
 # users/myInfoView.xml?SUBMIT3
 # users/myInfoView.xml
@@ -23388,6 +23766,12 @@ msgstr "Default languaje"
 #: dropdown - PREF_DEFAULT_MENUSELECTED
 msgid "[users/myInfoView2.xml?PREF_DEFAULT_MENUSELECTED] Default menu option"
 msgstr "Default menu option"
+
+# users/myInfoView2.xml?PREF_DEFAULT_CASES_MENUSELECTED
+# users/myInfoView2.xml
+#: dropdown - PREF_DEFAULT_CASES_MENUSELECTED
+msgid "Default Cases menu option"
+msgstr "Default Cases menu option"
 
 # users/myInfoView2.xml?SUBMIT3
 # users/myInfoView2.xml
@@ -23982,6 +24366,18 @@ msgstr ""
 #: date - USR_DUE_DATE
 msgid "[users/users_EditRT.xml?USR_DUE_DATE] Expiration Date"
 msgstr "Expiration Date"
+
+# users/users_EditRT.xml?USR_CALENDAR
+# users/users_EditRT.xml
+#: dropdown - USR_CALENDAR
+msgid "[users/users_EditRT.xml?USR_CALENDAR] Calendar"
+msgstr "Calendar"
+
+# users/users_EditRT.xml?USR_CALENDAR-''
+# users/users_EditRT.xml
+#: dropdown - USR_CALENDAR - ''
+msgid "[users/users_EditRT.xml?USR_CALENDAR-'']"
+msgstr "- None -"
 
 # users/users_EditRT.xml?USR_STATUS
 # users/users_EditRT.xml
@@ -25180,8 +25576,14 @@ msgstr "End Relative Date"
 # dynaforms/fields/date.xml?PME_SUBTITLE3x
 # dynaforms/fields/date.xml
 #: subtitle - PME_SUBTITLE3x
-msgid "<b>Mask Codes: </b>Y=Year, y=year (the two last digits at year), m=Month, d=Day"
-msgstr "<b>Mask Codes: </b>Y=Year, y=year (the two last digits at year), m=Month, d=Day"
+msgid "<b>Mask: </b>%Y=Year, %y=year (the two last digits at year), %m=Month, %d=Day"
+msgstr "<b>Mask: </b>%Y=Year, %y=year (the two last digits at year), %m=Month, %d=Day"
+
+# dynaforms/fields/date.xml?PME_SUBTITLE3xl
+# dynaforms/fields/date.xml
+#: link - PME_SUBTITLE3xl
+msgid "+Masks"
+msgstr "+Masks"
 
 # dynaforms/fields/date.xml?PME_MASK
 # dynaforms/fields/date.xml
