@@ -389,9 +389,9 @@ class Form extends XmlForm
                 $values[$k] = $this->fields[$k]->maskValue( $newValues[$k], $this );
             }
             if ($v->type == 'dropdown') {
-              if ($v->saveLabel == 1 && isset($v->option[$newValues[$k]])) {
+              if ($v->saveLabel == 1) {
               	if(isset($v->option[$newValues[$k]]))
-                  $values[$k . '_label'] = $v->option[$newValues[$k]];
+                $values[$k . '_label'] = $v->option[$newValues[$k]];
                 //* Fixed when the dropdowns has a sql statement
                 //* By krlos <carlos /a/ colosa.com>
                 //* Aug 3rd, 2010 
