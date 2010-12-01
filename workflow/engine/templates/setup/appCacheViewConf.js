@@ -99,6 +99,15 @@ Ext.onReady(function() {
       name: 'user',
       value: ''
     };
+
+    var txtHost = {
+      id   : 'txtHost',
+      xtype: 'textfield',
+      fieldLabel: 'Host',
+      disabled: false,
+      name: 'host',
+      value: ''
+    };
     
     var txtPasswd = {
       id   : 'txtPasswd',
@@ -151,7 +160,7 @@ Ext.onReady(function() {
       autoHeight  : true,
       defaults    : { width : 170 },
       defaultType : 'textfield',
-      items   : [txtUser, txtPasswd ],
+      items   : [txtHost, txtUser, txtPasswd ],
       buttons : [{
         text : 'Setup Password',
         handler : function() {
@@ -167,7 +176,7 @@ Ext.onReady(function() {
               Ext.Msg.hide();              
               Ext.Msg.alert ( 'Error', response.responseText );
             },
-            params: { request: 'recreate-root', lang: 'en', host: 'localhost', user: Ext.getCmp('txtUser').getValue(), password: Ext.getCmp('txtPasswd').getValue() },
+            params: { request: 'recreate-root', lang: 'en', host: Ext.getCmp('txtHost').getValue(), user: Ext.getCmp('txtUser').getValue(), password: Ext.getCmp('txtPasswd').getValue() },
             // timeout : 1000
             // 30 mins
             timeout : 1000*60*30 //30 mins
