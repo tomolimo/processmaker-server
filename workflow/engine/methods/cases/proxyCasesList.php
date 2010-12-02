@@ -306,7 +306,7 @@
   $rows = array();
   $index = $start;
   while($aRow = $oDataset->getRow()){
-    $aRow = $oAppCache->replaceRowUserData($aRow);
+    //$aRow = $oAppCache->replaceRowUserData($aRow);
     if( isset($aRow['APP_STATUS']) ){
       $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
     }

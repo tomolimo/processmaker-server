@@ -121,23 +121,23 @@ try {
   $oCurrentAppDel = AppDelegationPeer::retrieveByPk($_SESSION['APPLICATION'], $_SESSION['INDEX']+1 );
   $multipleDelegation = false;
   // check if there are multiple derivations
-  if(count($_POST['form']['TASKS'])>1){
+  if( count($_POST['form']['TASKS'] ) >1 ) {
     $multipleDelegation  = true;
   }
   // If the case has been delegated
   if ( isset($oCurrentAppDel) ) {
-      // if there is just a single derivation the TASK_UID can be set by the delegation data
-      if ( !$multipleDelegation ){
-          $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
-          $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $aCurrentAppDel['TAS_UID']);
-      } 
-      else {
-          // else we need to check every task and create the events if it have any
-          foreach ( $_POST['form']['TASKS'] as $taskDelegated ){
-              $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
-              $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $taskDelegated['TAS_UID']);
-          }
+    // if there is just a single derivation the TASK_UID can be set by the delegation data
+    if ( !$multipleDelegation ){
+      $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
+      $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $aCurrentAppDel['TAS_UID']);
+    } 
+    else {
+      // else we need to check every task and create the events if it have any
+      foreach ( $_POST['form']['TASKS'] as $taskDelegated ){
+        $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
+        $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $taskDelegated['TAS_UID']);
       }
+    }
   }
 	//Events - End
 
