@@ -304,11 +304,17 @@
   $result = array();
   $result['totalCount'] = $totalCount;
   $rows = array();
+  $aPriorities = array('1'=>'VL', '2'=>'L', '3'=>'N', '4'=>'H', '5'=>'VH');
   $index = $start;
   while($aRow = $oDataset->getRow()){
     //$aRow = $oAppCache->replaceRowUserData($aRow);
+    // replacing the status data with their respective translation 
     if( isset($aRow['APP_STATUS']) ){
       $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
+    }
+    // replacing the priority data with their respective translation
+    if( isset($aRow['DEL_PRIORITY']) ){
+      $aRow['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}");
     }
     $rows[] = $aRow;
     $oDataset->next();
