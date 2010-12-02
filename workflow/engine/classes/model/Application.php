@@ -361,7 +361,7 @@ class Application extends BaseApplication {
         $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
         Content::insertContent( 'APP_TITLE',       '', $this->getAppUid(), $lang,  '#' . $maxNumber  );
         Content::insertContent( 'APP_DESCRIPTION', '', $this->getAppUid(), $lang,  '' );
-        Content::insertContent( 'APP_PROC_CODE',   '', $this->getAppUid(), $lang,  '' );
+        //Content::insertContent( 'APP_PROC_CODE',   '', $this->getAppUid(), $lang,  '' );
 
         $con->commit();
         return $this->getAppUid();

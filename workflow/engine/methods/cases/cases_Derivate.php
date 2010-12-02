@@ -46,27 +46,23 @@ G::LoadClass('derivation');
 
 require_once 'classes/model/Event.php';
   
-
 /* GET , POST & $_SESSION Vars */
 /* Process the info */
 $sStatus = 'TO_DO';
 foreach ($_POST['form']['TASKS'] as $aValues){
-//	if ($aValues['TAS_ASSIGN_TYPE'] == 'SELF_SERVICE'){
-//		$sStatus = 'SELF_SERVICE';
-//	}
 }
 
 try {
 	//load data
 	$oCase = new Cases ();
-	$oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
+	//warning: we are not using the result value of function thisIsTheCurrentUser, so I'm commenting to optimize speed.
+	//$oCase->thisIsTheCurrentUser( $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
 	$appFields = $oCase->loadCase( $_SESSION['APPLICATION'] );
 	$appFields['APP_DATA'] = array_merge($appFields['APP_DATA'], G::getSystemConstants());
-
 	//cleaning debug variables
 	$_SESSION['TRIGGER_DEBUG']['DATA'] = Array();
-    $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = Array();
-    $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = Array();
+  $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = Array();
+  $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = Array();
 
 	$triggers = $oCase->loadTriggers( $_SESSION['TASK'], 'ASSIGN_TASK', -2, 'BEFORE');
 
@@ -122,34 +118,35 @@ try {
 	$oEvent = new Event();
 
 	$oEvent->closeAppEvents($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['TASK']);
-        $oCurrentAppDel = AppDelegationPeer::retrieveByPk($_SESSION['APPLICATION'], $_SESSION['INDEX']+1 );
-        $multipleDelegation = false;
-        // check if there are multiple derivations
-        if(count($_POST['form']['TASKS'])>1){
-          $multipleDelegation  = true;
-        }
-        // If the case has been delegated
-        if ( isset($oCurrentAppDel) ) {
-            // if there is just a single derivation the TASK_UID can be set by the delegation data
-            if ( !$multipleDelegation ){
-                $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
-                $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $aCurrentAppDel['TAS_UID']);
-            } else {
-                // else we need to check every task and create the events if it have any
-                foreach ( $_POST['form']['TASKS'] as $taskDelegated ){
-                    $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
-                    $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $taskDelegated['TAS_UID']);
-                }
-            }
-        }
-
+  $oCurrentAppDel = AppDelegationPeer::retrieveByPk($_SESSION['APPLICATION'], $_SESSION['INDEX']+1 );
+  $multipleDelegation = false;
+  // check if there are multiple derivations
+  if(count($_POST['form']['TASKS'])>1){
+    $multipleDelegation  = true;
+  }
+  // If the case has been delegated
+  if ( isset($oCurrentAppDel) ) {
+      // if there is just a single derivation the TASK_UID can be set by the delegation data
+      if ( !$multipleDelegation ){
+          $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
+          $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $aCurrentAppDel['TAS_UID']);
+      } 
+      else {
+          // else we need to check every task and create the events if it have any
+          foreach ( $_POST['form']['TASKS'] as $taskDelegated ){
+              $aCurrentAppDel = $oCurrentAppDel->toArray( BasePeer::TYPE_FIELDNAME);
+              $oEvent->createAppEvents($aCurrentAppDel['PRO_UID'], $aCurrentAppDel['APP_UID'], $aCurrentAppDel['DEL_INDEX'], $taskDelegated['TAS_UID']);
+          }
+      }
+  }
 	//Events - End
 
 	$aNextStep['PAGE'] = 'casesListExtJs';
 	if( isset($_SESSION['PMDEBUGGER']) && $_SESSION['PMDEBUGGER'] ){
 		$_SESSION['TRIGGER_DEBUG']['BREAKPAGE'] = $aNextStep['PAGE'];
 		G::header('location: ' . 'cases_Step?' .'breakpoint=triggerdebug');
-	} else {
+	} 
+	else {
 		G::header('location: casesListExtJs');
 	}
 }

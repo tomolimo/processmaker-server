@@ -648,12 +648,12 @@ class Cases {
    */
 
   function newRefreshCaseTitleAndDescription($sAppUid, $fields, $aAppData) {
-    $res['APP_TITLE']       = $fields['APP_TITLE']; 
-    $res['APP_DESCRIPTION'] = $fields['APP_DESCRIPTION'];
+    $res = array();
 
     $lang = defined('SYS_LANG') ? SYS_LANG : 'en';
     $bUpdatedDefTitle = false;
     $bUpdatedDefDescription = false;
+    
     $cri = new Criteria;
     $cri->clearSelectColumns();
     $cri->addSelectColumn(AppDelegationPeer::TAS_UID );
@@ -663,6 +663,7 @@ class Cases {
     $rsCri->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $rsCri->next();
     $rowCri = $rsCri->getRow();
+    
     while (is_array($rowCri)) {
       //load only the tas_def fields, because these three or two values are needed
       //SELECT CONTENT.CON_CATEGORY, CONTENT.CON_VALUE FROM CONTENT WHERE CONTENT.CON_ID='63515150649b03231c3b020026243292' AND CONTENT.CON_LANG='es'
@@ -670,7 +671,7 @@ class Cases {
       $c->clearSelectColumns();
       $c->addSelectColumn(ContentPeer::CON_CATEGORY);
       $c->addSelectColumn(ContentPeer::CON_VALUE);
-      $c->add(ContentPeer::CON_ID, $rowCri['TAS_UID'] );
+      $c->add(ContentPeer::CON_ID,   $rowCri['TAS_UID'] );
       $c->add(ContentPeer::CON_LANG, $lang);
       $rs = TaskPeer::doSelectRS($c);
       $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -679,18 +680,48 @@ class Cases {
       while (is_array($row)) {
         switch ($row['CON_CATEGORY']) {
           case 'TAS_DEF_TITLE' :
-            $tasDefTitle = $row['CON_VALUE'];
-            if ($tasDefTitle != '' && !$bUpdatedDefTitle) {
-              $res['APP_TITLE'] = G::replaceDataField($tasDefTitle, $aAppData);
+            if ($bUpdatedDefTitle) break;
+            $tasDefTitle = trim($row['CON_VALUE']);
+            if ($tasDefTitle != '' ) {
+              $newAppTitle = G::replaceDataField($tasDefTitle, $aAppData);
+              $res['APP_TITLE'] = $newAppTitle;
+              if ( isset($fields['APP_TITLE']) && $fields['APP_TITLE'] == $newAppTitle ) break;
+              
               $bUpdatedDefTitle = true;
-            }
+              /// updating the value in content for row (APP_TITLE,$lan)
+              $con = Propel::getConnection('workflow');
+              $c1 = new Criteria('workflow');
+              $c1->add(ContentPeer::CON_CATEGORY, 'APP_TITLE');
+              $c1->add(ContentPeer::CON_ID, $sAppUid);
+              $c1->add(ContentPeer::CON_LANG, $lang);
+               
+              // update set
+              $c2 = new Criteria('workflow');
+              $c2->add(ContentPeer::CON_VALUE, $newAppTitle );
+              BasePeer::doUpdate($c1, $c2,$con);
+            } 
             break;
-          case 'TAS_DEF_DESCRIPTION' : $tasDefDescription = $row['CON_VALUE'];
-            $tasDefDescription = $row['CON_VALUE'];
-            if ($tasDefDescription != '' && !$bUpdatedDefDescription) {
-              $res['APP_DESCRIPTION'] = G::replaceDataField($tasDefDescription, $aAppData);
+          case 'TAS_DEF_DESCRIPTION' : 
+            if ($bUpdatedDefDescription) break;
+            $tasDefDescription = trim($row['CON_VALUE']);
+            if ($tasDefDescription != '' ) {
+              $newAppDescription = G::replaceDataField($tasDefDescription, $aAppData);              
+              $res['APP_DESCRIPTION'] = $newAppDescription;
+              if ( isset($fields['APP_DESCRIPTION']) && $fields['APP_DESCRIPTION'] == $newAppDescription ) break;
+              
               $bUpdatedDefDescription = true;
-            }
+              /// updating the value in content for row (APP_TITLE,$lan)
+              $con = Propel::getConnection('workflow');
+              $c1 = new Criteria('workflow');
+              $c1->add(ContentPeer::CON_CATEGORY, 'APP_DESCRIPTION');
+              $c1->add(ContentPeer::CON_ID, $sAppUid);
+              $c1->add(ContentPeer::CON_LANG, $lang);
+               
+              // update set
+              $c2 = new Criteria('workflow');
+              $c2->add(ContentPeer::CON_VALUE, $newAppDescription );
+              BasePeer::doUpdate($c1, $c2,$con);
+            } 
             break;
         }
         $rs->next();
@@ -790,15 +821,19 @@ class Cases {
   function updateCase($sAppUid, $Fields = array()) {
     try {
       $aApplicationFields = $Fields['APP_DATA'];
-      $Fields['APP_UID'] = $sAppUid;
+      $Fields['APP_UID']         = $sAppUid;
       $Fields['APP_UPDATE_DATE'] = 'now';
-      $Fields['APP_DATA'] = serialize($Fields['APP_DATA']);
-      
+      $Fields['APP_DATA']        = serialize($Fields['APP_DATA']);
+      /*
       $oApp = new Application;
       $appFields = $oApp->load($sAppUid);
+*/
+      $oApp = ApplicationPeer::retrieveByPk( $sAppUid );
+      $appFields = $oApp->toArray(BasePeer::TYPE_FIELDNAME);
+      if (isset($Fields['APP_TITLE']))       $appFields['APP_TITLE']       = $Fields['APP_TITLE'];
+      if (isset($Fields['APP_DESCRIPTION'])) $appFields['APP_DESCRIPTION'] = $Fields['APP_DESCRIPTION'];
+     
       $newValues = $this->newRefreshCaseTitleAndDescription($sAppUid, $appFields, $aApplicationFields);
-      $Fields['APP_TITLE']       = $newValues['APP_TITLE'];       
-      $Fields['APP_DESCRIPTION'] = $newValues['APP_DESCRIPTION']; 
       
       //Start: Save History --By JHL
       if (isset($Fields['CURRENT_DYNAFORM'])) {//only when that variable is set.. from Save
@@ -820,19 +855,35 @@ class Cases {
       }
       //End Save History
 
+      //we are removing the app_title and app_description from this array, because they already be updated in  newRefreshCaseTitleAndDescription function
+      if (isset($Fields['APP_TITLE']))       unset ($Fields['APP_TITLE']);
+      if (isset($Fields['APP_DESCRIPTION'])) unset ($Fields['APP_DESCRIPTION']);
       $oApp->update($Fields);
 
       $DEL_INDEX = isset($Fields['DEL_INDEX']) ? $Fields['DEL_INDEX'] : '';
-      $TAS_UID = isset($Fields['TAS_UID']) ? $Fields['TAS_UID'] : '';
+      $TAS_UID   = isset($Fields['TAS_UID']) ? $Fields['TAS_UID'] : '';
       
       G::LoadClass('reportTables');
       $oReportTables = new ReportTables();
       $oReportTables->updateTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
 
+      //now update the priority in appdelegation table, using the defined variable in task
       if ($DEL_INDEX != '' && $TAS_UID != '') {
-        $oTask = new Task;
-        $array = $oTask->load($TAS_UID);
-        $VAR_PRI = substr($array['TAS_PRIORITY_VARIABLE'], 2);
+      	//optimized code to avoid load task content row.
+        $c = new Criteria();
+        $c->clearSelectColumns();
+        $c->addSelectColumn(TaskPeer::TAS_PRIORITY_VARIABLE);
+        $c->add(TaskPeer::TAS_UID,   $TAS_UID );
+        $rs = TaskPeer::doSelectRS($c);
+        $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $rs->next();
+        $row = $rs->getRow();
+        $VAR_PRI = substr($row['TAS_PRIORITY_VARIABLE'], 2);
+        
+        //$oTask = new Task;
+        //$array = $oTask->load($TAS_UID);
+        //$VAR_PRI = substr($array['TAS_PRIORITY_VARIABLE'], 2);
+        //end optimized code.
 
         $x = unserialize($Fields['APP_DATA']);
         if (isset($x[$VAR_PRI])) {
@@ -849,7 +900,8 @@ class Cases {
       }
 
       return $Fields;
-    } catch (exception $e) {
+    } 
+    catch (exception $e) {
       throw ($e);
     }
   }
@@ -1330,25 +1382,9 @@ class Cases {
   function newAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sPrevious, $iPriority, $sDelType, $iAppThreadIndex = 1) {
     try {
       $appDel = new AppDelegation();
-      //$delIndex = $appDel->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex, $iPriority);
-      $delIndex = $appDel->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex);
-      $aData = array();
-      $aData['APP_UID'] = $sAppUid;
-      $aData['DEL_INDEX'] = $delIndex;
-      $aData['DEL_PREVIOUS'] = $sPrevious;
-
-      //according schema posible values are NORMAL/ADHOC, but the logic in cases_Steps brings a PARALLEL
-      //$aData['DEL_TYPE'] = $sDelType;
-      if ($appDel->validate()) {
-        $appDel->update($aData);
-        return $delIndex;
-      } else {
-        $msg = '';
-        foreach ($appDel->getValidationFailures() as $objValidationFailure)
-          $msg .= $objValidationFailure->getMessage() . "<br/>";
-        throw (new Exception('Failed Data validation. ' . $msg));
-      }
-    } catch (exception $e) {
+      return $appDel->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex, 3, false, $sPrevious );
+    } 
+    catch (exception $e) {
       throw ($e);
     }
   }
@@ -1449,15 +1485,27 @@ class Cases {
 
   function updateAppThread($sAppUid, $iAppThreadIndex, $iNewDelIndex) {
     try {
+      /// updating the DEL_INDEX value in the APP_THREAD
+      $con = Propel::getConnection('workflow');
+      $c1 = new Criteria('workflow');
+      $c1->add(AppThreadPeer::APP_UID,          $sAppUid);
+      $c1->add(AppThreadPeer::APP_THREAD_INDEX, $iAppThreadIndex);
+       
+      // update set
+      $c2 = new Criteria('workflow');
+      $c2->add(AppThreadPeer::DEL_INDEX, $iNewDelIndex );
+      BasePeer::doUpdate($c1, $c2,$con);
+    	/*
       $appThread = new AppThread();
       $aData = array();
       $aData['APP_UID'] = $sAppUid;
       $aData['APP_THREAD_INDEX'] = $iAppThreadIndex;
-      $aData['DEL_INDEX'] = $iNewDelIndex;
-
+      $aData['DEL_INDEX'] = $iNewDelIndex;      
       $appThread->update($aData);
+      */
       return $iNewDelIndex;
-    } catch (exception $e) {
+    } 
+    catch (exception $e) {
       throw ($e);
     }
   }
@@ -1680,12 +1728,10 @@ class Cases {
 
         //DONE: Al ya existir un delegation, se puede "calcular" el caseTitle.
         $Fields = $Application->toArray(BasePeer::TYPE_FIELDNAME);
-        $aux = self::refreshCaseTitleAndDescription($sAppUid, $Fields);
-        $Fields['APP_TITLE'] = $aux['APP_TITLE'];       //self::refreshCaseTitle($sAppUid, $aApplicationFields);
-        $Fields['APP_DESCRIPTION'] = $aux['APP_DESCRIPTION']; //self::refreshCaseDescription($sAppUid, $aApplicationFields);
-        //$Fields['APP_TITLE']       = self::refreshCaseTitle      ($sAppUid, $aApplicationFields );
-        //$Fields['APP_DESCRIPTION'] = self::refreshCaseDescription($sAppUid, G::array_merges(G::getSystemConstants(), unserialize($Fields['APP_DATA'])));
-        //$Fields['APP_PROC_CODE']   = self::refreshCaseStatusCode ($sAppUid, G::array_merges(G::getSystemConstants(), unserialize($Fields['APP_DATA'])));
+        $aApplicationFields = $Fields['APP_DATA'];
+        $newValues = $this->newRefreshCaseTitleAndDescription($sAppUid, $Fields, $aApplicationFields );
+        if (! isset($newValues['APP_TITLE']) )       $newValues['APP_TITLE']       = '';
+
         $caseNumber = $Fields['APP_NUMBER'];
         $Application->update($Fields);
 
@@ -1702,7 +1748,7 @@ class Cases {
 
     //call plugin
     if (class_exists('folderData')) {
-      $folderData = new folderData($sProUid, $proFields['PRO_TITLE'], $sAppUid, $Fields['APP_TITLE'], $sUsrUid);
+      $folderData = new folderData($sProUid, $proFields['PRO_TITLE'], $sAppUid, $newValues['APP_TITLE'], $sUsrUid);
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
       $oPluginRegistry->executeTriggers(PM_CREATE_CASE, $folderData);
     }
@@ -3995,7 +4041,7 @@ class Cases {
           $aConfiguration = array();
         }
       }
-      if ($aConfiguration['MESS_ENABLED'] == '1') {
+      if (isset($aConfiguration['MESS_ENABLED']) && $aConfiguration['MESS_ENABLED'] == '1') {
         //Send derivation notification - Start
         $oTask = new Task();
         $aTaskInfo = $oTask->load($sCurrentTask);
@@ -4778,24 +4824,24 @@ class Cases {
    */
 
   function thisIsTheCurrentUser($sApplicationUID, $iIndex, $sUserUID, $sAction = '', $sURL = '') {
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->add(AppDelegationPeer::APP_UID, $sApplicationUID);
-    $oCriteria->add(AppDelegationPeer::DEL_INDEX, $iIndex);
-    $oCriteria->add(AppDelegationPeer::USR_UID, $sUserUID);
+    $c = new Criteria('workflow');
+    $c->add(AppDelegationPeer::APP_UID, $sApplicationUID);
+    $c->add(AppDelegationPeer::DEL_INDEX, $iIndex);
+    $c->add(AppDelegationPeer::USR_UID, $sUserUID);
     switch ($sAction) {
       case '':
-        return (boolean) AppDelegationPeer::doCount($oCriteria);
+        return (boolean) AppDelegationPeer::doCount($c);
         break;
       case 'REDIRECT':
-        if (!(boolean) AppDelegationPeer::doCount($oCriteria)) {
-          $oCriteria = new Criteria('workflow');
-          $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
-          $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-          $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
-          $oCriteria->add(AppDelegationPeer::APP_UID, $sApplicationUID);
-          $oCriteria->add(AppDelegationPeer::DEL_INDEX, $iIndex);
-          $oCriteria->addJoin(AppDelegationPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
-          $oDataset = AppDelegationPeer::doSelectRs($oCriteria);
+        if (!(boolean) AppDelegationPeer::doCount($c)) {
+          $c = new Criteria('workflow');
+          $c->addSelectColumn(UsersPeer::USR_USERNAME);
+          $c->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+          $c->addSelectColumn(UsersPeer::USR_LASTNAME);
+          $c->add(AppDelegationPeer::APP_UID, $sApplicationUID);
+          $c->add(AppDelegationPeer::DEL_INDEX, $iIndex);
+          $c->addJoin(AppDelegationPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+          $oDataset = AppDelegationPeer::doSelectRs($c);
           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
           $oDataset->next();
           $aData = $oDataset->getRow();
@@ -4804,8 +4850,8 @@ class Cases {
           die;
         } 
         else {
-          $oCriteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-          if (!(boolean) AppDelegationPeer::doCount($oCriteria)) {
+          $c->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+          if (!(boolean) AppDelegationPeer::doCount($c)) {
             G::SendMessageText(G::LoadTranslation('ID_CASE_ALREADY_DERIVATED'), 'error');
             G::header('Location: ' . $sURL);
             die;
@@ -4813,22 +4859,22 @@ class Cases {
         }
         break;
       case 'SHOW_MESSAGE':
-        if (!(boolean) AppDelegationPeer::doCount($oCriteria)) {
-          $oCriteria = new Criteria('workflow');
-          $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
-          $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-          $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
-          $oCriteria->add(AppDelegationPeer::APP_UID, $sApplicationUID);
-          $oCriteria->add(AppDelegationPeer::DEL_INDEX, $iIndex);
-          $oCriteria->addJoin(AppDelegationPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
-          $oDataset = AppDelegationPeer::doSelectRs($oCriteria);
+        if (!(boolean) AppDelegationPeer::doCount($c)) {
+          $c = new Criteria('workflow');
+          $c->addSelectColumn(UsersPeer::USR_USERNAME);
+          $c->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+          $c->addSelectColumn(UsersPeer::USR_LASTNAME);
+          $c->add(AppDelegationPeer::APP_UID, $sApplicationUID);
+          $c->add(AppDelegationPeer::DEL_INDEX, $iIndex);
+          $c->addJoin(AppDelegationPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+          $oDataset = AppDelegationPeer::doSelectRs($c);
           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
           $oDataset->next();
           $aData = $oDataset->getRow();
           die('<strong>' . G::LoadTranslation('ID_CASE_ALREADY_DERIVATED') . ': ' . $aData['USR_FIRSTNAME'] . ' ' . $aData['USR_LASTNAME'] . ' (' . $aData['USR_USERNAME'] . ')</strong>');
         } else {
-          $oCriteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-          if (!(boolean) AppDelegationPeer::doCount($oCriteria)) {
+          $c->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+          if (!(boolean) AppDelegationPeer::doCount($c)) {
             die('<strong>' . G::LoadTranslation('ID_CASE_ALREADY_DERIVATED') . '</strong>');
           }
         }
@@ -4846,12 +4892,12 @@ class Cases {
    */
 
   function getCriteriaUsersCases($status, $USR_UID) {
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addJoin(ApplicationPeer::APP_UID, AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
-    $oCriteria->add(ApplicationPeer::APP_STATUS, $status);
-    $oCriteria->add(AppDelegationPeer::USR_UID, $USR_UID);
-    $oCriteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-    return $oCriteria;
+    $c = new Criteria('workflow');
+    $c->addJoin(ApplicationPeer::APP_UID, AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
+    $c->add(ApplicationPeer::APP_STATUS, $status);
+    $c->add(AppDelegationPeer::USR_UID, $USR_UID);
+    $c->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+    return $c;
   }
 
   /*

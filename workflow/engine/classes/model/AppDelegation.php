@@ -51,7 +51,7 @@ class AppDelegation extends BaseAppDelegation {
    * @param $isSubprocess is a subprocess inside a process?
    * @return delegation index of the application delegation.
    */
-  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess=false ) {
+  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess=false, $sPrevious=-1 ) {
 
     if (!isset($sProUid) || strlen($sProUid) == 0 ) {
       throw ( new Exception ( 'Column "PRO_UID" cannot be null.' ) );
@@ -75,19 +75,17 @@ class AppDelegation extends BaseAppDelegation {
     $c = new Criteria ();
     $c->clearSelectColumns();
     $c->addSelectColumn ( 'MAX(' . AppDelegationPeer::DEL_INDEX . ') ' );
-    //$c->addSelectColumn ( AppDelegationPeer::DEL_STARTED ); //not needed
     $c->add ( AppDelegationPeer::APP_UID, $sAppUid );
     $rs = AppDelegationPeer::doSelectRS ( $c );
     $rs->next();
     $row = $rs->getRow();
     $delIndex = $row[0] + 1;
-    //$delStarted = $row[1]; ???? blame -> gustavo,..$row[1] doesn't exist 
 
     $this->setAppUid          ( $sAppUid );
     $this->setProUid          ( $sProUid );
     $this->setTasUid          ( $sTasUid );
     $this->setDelIndex        ( $delIndex );
-    $this->setDelPrevious     ( 0 );
+    $this->setDelPrevious     ( $sPrevious == -1 ? 0 : $sPrevious );
     $this->setUsrUid          ( $sUsrUid );
     $this->setDelType         ( 'NORMAL' );
     $this->setDelPriority     ( ($iPriority != '' ? $iPriority : '3') );
@@ -102,7 +100,6 @@ class AppDelegation extends BaseAppDelegation {
     // this condition assures that an internal delegation like a subprocess dont have an initial date setted
     if ( $delIndex == 1 &&  !$isSubprocess )  //the first delegation, init date this should be now for draft applications, in other cases, should be null.
       $this->setDelInitDate     ('now' );
-    
 
     if ($this->validate() ) {
       try {
@@ -119,7 +116,7 @@ class AppDelegation extends BaseAppDelegation {
       foreach($validationFailuresArray as $objValidationFailure) {
         $msg .= $objValidationFailure->getMessage() . "<br/>";
       }
-      throw ( new Exception ( 'Failed Data validation. ' . $msg ) );
+      throw ( new Exception ( 'Failed Data validation saving APP_DELEGATION row: ' . $msg ) );
     }
 
     return $this->getDelIndex();
