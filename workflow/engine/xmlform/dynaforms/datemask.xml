@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="helpdate" type="xmlform" width="100%">
+<A type="hidden"/>
+<mask type="title" enablehtml="0" btn_cancel="Cancel">
+<en>Options Mask</en>
+</mask>
+<option1 type="subtitle" enablehtml="1" btn_cancel="Cancel">
+<en><![CDATA[ %a — abbreviated weekday name
+<br> %A — full weekday name
+<br> %b — abbreviated month name
+<br> %B — full month name
+<br> %C — the century number
+<br> %d — the day of the month (range 01 to 31)
+<br> %e — the day of the month (range 1 to 31)
+<br> %H — hour, range 00 to 23 (24h format)
+<br> %I — hour, range 01 to 12 (12h format)
+<br> %j — day of the year (range 001 to 366)
+<br> %k — hour, range 0 to 23 (24h format)
+<br> %l — hour, range 1 to 12 (12h format)
+<br> %m — month, range 01 to 12
+<br> %o — month, range 1 to 12
+<br> %M — minute, range 00 to 59
+<br> %n — a newline character
+<br> %p — PM or AM
+<br> %P — pm or am
+<br> %s — UNIX time (number of seconds since 1970-01-01)
+<br> %S — seconds, range 00 to 59
+<br> %t — a tab character
+<br> %W — week number
+<br> %u — the day of the week (range 1 to 7, 1 = MON)
+<br> %w — the day of the week (range 0 to 6, 0 = SUN)
+<br> %y — year without the century (range 00 to 99)
+<br> %Y — year with the century
+<br> %% — a literal '%' character]]></en>
+</option1>
+
+</dynaForm> 

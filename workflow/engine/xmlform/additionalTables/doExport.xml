@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="processes_Export" type="xmlform" width="100%" labelWidth="100px">
+
+<TITLE type="title">
+  <en>Processmaker Tables export</en>
+</TITLE>
+
+<FILENAME type="phpVariable"/>
+<FILENAME_LINK type="phpVariable"/>
+<FILENAME_LABEL type="link" value="@#FILENAME" link="@#FILENAME_LINK" target="_blank">
+  <en>File</en>
+</FILENAME_LABEL>
+<SIZE type="caption">
+  <en>File size</en>
+</SIZE>
+<META type="caption" enableHTML="1">
+  <en>Sumary</en>
+</META>
+</dynaForm> 

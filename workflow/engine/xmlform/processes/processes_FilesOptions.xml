@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_NEWEMPTY type="link" value="" link="#" onclick="showCreateEmptyOptions(event);return false;" colAlign="left" colWidth="100px">
+	<en>New</en>
+</MNU_NEWEMPTY>
+
+<MNU_UPLOAD type="link" value="" link="#" onclick="uploadFilesScreen(@QPRO_UID, @QMAIN_DIRECTORY, @QCURRENT_DIRECTORY);return false;" colAlign="left" colWidth="150px">
+  <en>Upload</en>
+</MNU_UPLOAD>
+
+<PRO_UID type="private"/>
+
+<MAIN_DIRECTORY type="private"/>
+
+<CURRENT_DIRECTORY type="private"/>
+
+<JS type="javascript"><![CDATA[
+
+
+var CURRENT_PRO_UID = @QPRO_UID;
+var CURRENT_MAIN_DIRECTORY;
+var CURRENT_CURRENT_DIRECTORY;
+
+var oUploadFilesPanel;
+var uploadFilesScreen = function(PRO_UID, MAIN_DIRECTORY, CURRENT_DIRECTORY) {
+	CURRENT_MAIN_DIRECTORY = MAIN_DIRECTORY;
+	CURRENT_CURRENT_DIRECTORY = CURRENT_DIRECTORY;
+	
+	Pm.tmp.processFilesManagerPanel.events = {
+  		remove: function() { oUploadFilesPanel.remove(); }.extend(this)
+  	};
+	
+  	oUploadFilesPanel = new leimnud.module.panel();
+	oUploadFilesPanel.options={
+		limit	   : true,
+		size	   : {w:400,h:90},
+		position : {x:Pm.tmp.processFilesManagerPanel.options.position.x,y:Pm.tmp.processFilesManagerPanel.options.position.y-90,center:false},
+		title	   : '',
+		control	 : {close:true,resize:false},fx:{modal:true},
+		fx	     : {shadow:true,modal:true}
+	};
+	oUploadFilesPanel.make();
+	oIFrame = window.document.createElement('iframe');
+	oIFrame.style.border = '0';
+	oIFrame.style.width  = '100%';
+	oIFrame.style.height = '100%';
+	oIFrame.src          = 'processes_UploadFilesForm?PRO_UID=' + PRO_UID + '&MAIN_DIRECTORY=' + MAIN_DIRECTORY + '&CURRENT_DIRECTORY=' + CURRENT_DIRECTORY;
+	oUploadFilesPanel.addContent(oIFrame);
+};
+
+var oPanel;
+function editFile(pro_uid, fileName){
+var typofile = fileName.split(".");
+if( typofile[typofile.length-1].toLowerCase() != 'txt' && typofile[typofile.length-1].toLowerCase() != 'html' ){
+         	msgBox(G_STRINGS.HTML_FILES,"alert");return;
+         } 
+
+	oPanel = new leimnud.module.panel();
+	oPanel.options={
+		limit	   : true,
+		size	   : {w:800,h:600},
+		position : {x:50,y:50,center:true},
+		title	   : '',
+		control	 : {close:true,resize:false},fx:{modal:true},
+		fx	     : {shadow:true,modal:true}
+	};
+	oPanel.make();
+	
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+	  	url : 'processes_Ajax',
+	  	args: 'action=editFile&filename='+fileName+'&pro_uid='+pro_uid
+  	});
+
+	  oPanel.loader.show();
+  	oRPC.callback = function(rpc) {
+	  	oPanel.loader.hide();
+	  	oPanel.addContent(rpc.xmlhttp.responseText);
+	  	var scs=rpc.xmlhttp.responseText.extractScript();
+	  	scs.evalScript();
+	  	
+  	}.extend(this);
+	oRPC.make();
+}
+
+function saveFile(pro_uid, fileName){
+	fc = getField('fcontent').value;
+	fc = fc.replace(/&amp;/g, "@amp@");
+	fc = fc.replace(/\+/g, '%2B');
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+	  	url : 'processes_Ajax',
+	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+pro_uid+'&fcontent='+addslashes(fc)
+  	});
+  	oPanel.loader.show();
+  	oRPC.callback = function(rpc) {
+	  	oPanel.remove();
+  	}.extend(this);
+	oRPC.make();
+}
+
+var showCreateEmptyOptionsPanel;
+function showCreateEmptyOptions(e){
+	oPanel = new leimnud.module.panel();
+	oPanel.options={
+		limit	   : true,
+		size	   : {w:400,h:100},
+		position   : {x:e.clientX,y:e.clientY,center:false},
+		title	   : '',
+		control	 : {close:true,resize:false},fx:{modal:true},
+		fx	     : {shadow:true,modal:true}
+	};
+	oPanel.make();
+	var oRPC = new leimnud.module.rpc.xmlhttp({url : 'processes_Ajax', args: 'action=emptyFileOptions'});
+  	oPanel.loader.show();
+  	oRPC.callback = function(rpc) {
+		oPanel.loader.hide();
+	  	oPanel.addContent(rpc.xmlhttp.responseText);
+		var scs=rpc.xmlhttp.responseText.extractScript();
+	  	scs.evalScript();
+  	}.extend(this);
+	oRPC.make();
+	showCreateEmptyOptionsPanel = oPanel;
+}
+
+function saveEmptyFile(){
+	
+	var fileName = getField('emptyfilename').value + ".html";
+	fileName = fileName.trim();
+	
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+	  	url : 'processes_Ajax',
+	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+CURRENT_PRO_UID+'&fcontent='
+  	});
+  	
+  	oRPC.callback = function(rpc){
+		showCreateEmptyOptionsPanel.remove();
+		goToDirectory(CURRENT_PRO_UID, 'mailTemplates', '');
+		editFile(CURRENT_PRO_UID, fileName)
+	}.extend(this);
+	oRPC.make();
+}
+
+function xReaload(){    
+    goToDirectory(CURRENT_PRO_UID, CURRENT_MAIN_DIRECTORY, CURRENT_CURRENT_DIRECTORY);
+}
+
+
+]]></JS>
+
+</dynaForm>  

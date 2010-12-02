@@ -1,0 +1,190 @@
+body { background: White; font-family: Arial,Verdana,sans-serif; font-size: 10pt; color: Black; text-align: justify }
+ul { background: White; font-family: Arial,Verdana,sans-serif; font-size: 10pt; color: Black; text-align: justify }
+ol { background: White; font-family: Arial,Verdana,sans-serif; font-size: 10pt; color: Black; text-align: justify }
+p    { background: White; font-family: Arial,Verdana,sans-serif; font-size: 10pt; color: Black; text-align: justify }
+a    { font-family: Arial, Verdana, sans-serif; font-size: 9pt; color: #002364; font-decoration: none; font-weight: bold}
+
+.mnuOn { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #003366; background-color: #FFFFFF; text-align: center; padding-right: 6px; padding-left: 6px; border-color: #FF9900 #999999 #FFFFFF; padding-top: 3px; padding-bottom: 3px; height: 17px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-style: solid; border-top-width: 4px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0px}
+.mnuOff { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #666666; background-color: #CCCCCC; text-align: center; padding-right: 6px; padding-left: 6px; border-color: #5E8BB1 #999999 #999999; padding-top: 3px; padding-bottom: 3px; height: 17px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-style: solid; border-top-width: 4px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0px}
+mnuOff:hover { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #003366; background-color: #FFFFFF; text-align: center; padding-right: 6px; padding-left: 6px; border-color: #FF9900 #999999 #FFFFFF; padding-top: 3px; padding-bottom: 3px; height: 17px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-style: solid; border-top-width: 4px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px }
+
+.langLink {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; font-weight: bold; color: #3399CC; padding-right: 3px; padding-top: 3px; text-decoration: none; padding-left: 3px}
+A.langLink:hover {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; font-weight: bold; color: #66ccff; padding-right: 3px; padding-top: 3px; text-decoration: none; padding-left: 3px}
+
+.title { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: bold; color: #FFFFFF; padding-right: 10px; padding-bottom: 6px}
+.subTitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: bold; color: #FF9900}
+
+.mnuLink {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #666666; text-decoration: none}
+A.mnuLink:hover {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #003366; text-decoration: none}
+
+.subMnuLink { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #999999; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px ; text-decoration: none}
+A.subMnuLink:hover { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #666666; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; padding-left: 5px ; text-decoration: none}
+
+.mnuLinkOn {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #003366; text-decoration: none}
+A.mnuLinkOn:hover {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style: normal; font-weight: bold; color: #ff9900; text-decoration: none}
+
+.footerNotice  { font-family: Arial, Verdana, sans-serif; font-size: 8pt; font-decoration: none; font-style: normal; font-weight: normal; text-align: center; color: #999999}
+.smallLink       { font-family: Arial, Verdana, sans-serif; font-size: 8pt; color: #999999; text-decoration: none; font-weight: bold; font-style: normal; line-height: 100% }
+.smallLink:hover { font-family: Arial, Verdana, sans-serif; font-size: 8pt; color: #666666; text-decoration: none; font-weight: bold; font-style: normal; line-height: 100% }
+
+.frmTable { border: 1px solid; background: White; padding-top: 1px; padding-left: 1px; padding-bottom: 1px; padding-right: 1px ; border-color: #3366cc #3366CC #3366CC}
+.frmCell { border: 1px #cfcfcf solid; background: #efefef; padding-top: 2px; padding-left: 2px; padding-bottom: 2px; padding-right: 2px;
+           font-family: Arial,Verdana,sans-serif; font-size: 10pt; color: Black }
+.frmHidden { border: 0px #cfcfcf solid; padding-top: 0px; padding-left: 0px; padding-bottom: 0px; padding-right: 0px }
+
+.mnuTable { heigth:30; border: dashed; background: #002364; padding-top: 2px; padding-left: 1px; padding-bottom: 2px; padding-right: 1px; ; border-width: 0px 0px 1px; border-color: black black #002364 #000000}
+.mnuCell { border: 0px; padding-top: 2px; padding-left: 2px; padding-bottom: 2px; padding-right: 0px;
+           font-family: Arial,Verdana,sans-serif; font-size: 9pt; color: White; text-align: center }
+
+
+.smnuTable { border: 0px; background: #3366CC; padding-top: 2px; padding-left: 1px; padding-bottom: 2px; padding-right: 1px }
+.smnuCell { border: 0px; padding-top: 2px; padding-left: 2px; padding-bottom: 2px; padding-right: 2px;
+           font-family: Arial,Verdana,sans-serif; font-size: 10pt; color: White; text-align: center }
+
+.tblTable { border: 1px #336699 solid; background: White; padding-top: 1px; padding-left: 1px; padding-bottom: 1px; padding-right: 1px }
+.tblCell { border: 1px #CCCCCC solid; background: #EEEEEE; padding-top: 1px; padding-left: 2px; padding-bottom: 1px; padding-right: 2px;
+           font-family: Arial, Verdana, sans-serif; font-size: 9pt; color: #000000}
+.tblHeader { border: 1px #336699 solid; background: #B8CCDD;padding-top: 2px; padding-left: 2px; padding-bottom: 2px; padding-right: 2px;
+           font-family: Arial, Verdana, sans-serif; font-size: 10pt; color: #003366; text-align: center }
+
+.headCell { background-image: url( /skins/compendio/bg_top2.gif ); background-position: top left }
+.menuCell { background-image: url( /skins/compendio/bg_log1.gif ); background-position: top left }
+
+.sendMsg { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #000000; text-decoration: none; font-weight: normal; font-style: normal; padding-top: 4px; padding-right: 8px; padding-bottom: 4px; padding-left: 23px; border-color: black #999999 #999999 black; text-align: center; border-style: solid; border-top-width: 0px; border-right-width: 1px; border-bottom-width: 2px; border-left-width: 0px; margin-top: 5px; margin-bottom: 5px; white-space: nowrap; vertical-align: top; background-attachment: scroll; background-image: url(../../images/sendMsg.gif); background-position: left center; background-repeat: no-repeat; background-color: #FFFFCC}
+.sendMsgRojo { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #000000; text-decoration: none; font-weight: normal; font-style: normal; padding-top: 4px; padding-right: 8px; padding-bottom: 4px; padding-left: 23px; border-color: black #999999 #999999 black; text-align: center; border-style: solid; border-top-width: 0px; border-right-width: 1px; border-bottom-width: 2px; border-left-width: 0px; margin-top: 5px; margin-bottom: 5px; white-space: nowrap; vertical-align: top; background-attachment: scroll; background-image: url(../../images/sendMsgRojo.gif); background-position: left center; background-repeat: no-repeat; background-color: #FFCCCC}
+.sendMsgVerde { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #000000; text-decoration: none; font-weight: normal; font-style: normal; padding-top: 4px; padding-right: 8px; padding-bottom: 4px; padding-left: 23px; border-color: black #999999 #999999 black; text-align: center; border-style: solid; border-top-width: 0px; border-right-width: 1px; border-bottom-width: 2px; border-left-width: 0px; margin-top: 5px; margin-bottom: 5px; white-space: nowrap; vertical-align: top; background-attachment: scroll; background-image: url(../../images/sendMsgVerde.gif); background-position: left center; background-repeat: no-repeat; background-color: #CCFFCC}
+.sendMsgAzul { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10px; color: #000000; text-decoration: none; font-weight: normal; font-style: normal; padding-top: 4px; padding-right: 8px; padding-bottom: 4px; padding-left: 23px; border-color: black #999999 #999999 black; text-align: center; border-style: solid; border-top-width: 0px; border-right-width: 1px; border-bottom-width: 2px; border-left-width: 0px; margin-top: 5px; margin-bottom: 5px; white-space: nowrap; vertical-align: top; background-attachment: scroll; background-image: url(../../images/sendMsgAzul.gif); background-position: left center; background-repeat: no-repeat; background-color: #CCDEFF}
+.tblTablePrint { border: 1px #336699 solid; background: White; padding-top: 1px; padding-left: 1px; padding-bottom: 1px; padding-right: 1px }
+.tblCellPrint { border: 1px #CCCCCC solid; background: White; padding-top: 1px; padding-left: 2px; padding-bottom: 1px; padding-right: 2px;
+           font-family: Arial, Verdana, sans-serif; font-size: 9pt; color: #000000}
+.tblHeaderPrint { border: 1px #336699 solid; background: White;padding-top: 2px; padding-left: 2px; padding-bottom: 2px; padding-right: 2px;
+           font-family: Arial, Verdana, sans-serif; font-size: 10pt; color: Black ; text-align: center }
+
+.formTitle{
+	border: 1px solid #777777;
+	BACKGROUND: #B8CCDD;
+	COLOR:  #ffffff;
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 12px;
+	font-weight: bold;
+	padding-left: 7px;
+	margin-left: 0px;
+	margin-top: 10px;
+	text-transform: none;
+	text-indent: 7px;
+	height:19px;
+}
+.taskTxt {
+	COLOR: #002c72;
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	font-weight: normal;
+	padding-left: 10px;
+	height:12px;
+	}
+
+.formContent {
+	FONT-FAMILY: Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	line-height: 10px;
+	font-weight: normal;
+	padding-left: 10px;
+	padding-right: 10px;
+	BACKGROUND: #fcfcfc;
+	COLOR: #002c72;
+	border: 1px solid #777777;
+}
+
+/* Grid Options */
+.Grid {
+  border-collapse:collapse;
+  empty-cells:show;
+	border: 1px solid #777777;
+	width: 100%;
+	}
+
+
+.Header {
+	font-size: 11;
+	padding: 1px;
+	border-top: 1px solid #bbb; border-right: 1px solid #bbb;
+	vertical-align: top;
+	background-color: #B8CCDD;
+	}
+
+.Row1 td {
+	font-size: 11;
+	padding: 1px;
+	empty-cells: show;
+	border-top: 1px solid #bbb; border-right: 1px solid #bbb;
+	vertical-align: top;
+	background-color: #f4f4f4;
+	color: #000000;
+	}
+
+.Row2 td {
+	font-size: 11;
+	padding: 1px;
+	border-top: 1px solid #bbb; border-right: 1px solid #bbb;
+	vertical-align: top;
+	background-color: #ffffff;
+	color: #000000;
+	}
+
+.RowPointer td {
+	font-size: 11;
+	padding: 1px;
+	border-top: 1px solid #666; border-right: 1px solid #666;
+	vertical-align: top;
+	background-color: #c4c4c4;
+	color: #003366;
+	}
+
+
+.NoRecords td {
+	font-size: 80%;
+	padding: 3px;
+	border-left: 1px solid #777777;
+	background-color: #f7f7f7;
+	color: #000000;
+	vertical-align: top;
+	}
+
+.Footer1 td {
+	font-size: 10;
+	padding: 3px;
+	border-bottom: 1px solid #777777;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	color: #000000;
+	background-color: #B8CCDD;
+	}
+
+.Footer2 td {
+	font-size: 10;
+	padding: 3px;
+	border-top: 1px solid #777777;
+	color: #000000;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	color: #000000;
+	}
+
+
+/* Record Options Do Not Change*/
+.Record {
+	border: 1px solid #777777;
+	width: 100%;
+	}
+
+.Error td {
+	font-size: 80%;
+	padding: 3px;
+	border-top: 1px solid #777777; border-left: 1px solid #777777; border-bottom: 1px solid #777777;
+	color: #FF0000;
+	vertical-align: top;
+	background-color: #f7f7f7;
+	}

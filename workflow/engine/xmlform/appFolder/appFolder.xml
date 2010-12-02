@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="AppFolder" width="600" mode="edit" enableTemplate="0" border="0">
+
+<title1 type="title">
+  <en>AppFolder form</en>
+</title1>
+
+<FOLDER_UID type="text" size="32" maxlength="32">
+  <en>Er Uid</en>
+</FOLDER_UID>
+
+<FOLDER_PARENT_UID type="text" size="32" maxlength="32">
+  <en>Er Parent Uid</en>
+</FOLDER_PARENT_UID>
+
+<FOLDER_NAME type="textarea" size="25" maxlength="25">
+  <en>Er Name</en>
+</FOLDER_NAME>
+
+<FOLDER_CREATE_DATE type="date" size="25" maxlength="25">
+  <en>Er Create Date</en>
+</FOLDER_CREATE_DATE>
+
+<FOLDER_UPDATE_DATE type="date" size="25" maxlength="25">
+  <en>Er Update Date</en>
+</FOLDER_UPDATE_DATE>
+
+<BTN_SUBMIT type="submit">
+  <en>save</en>
+</BTN_SUBMIT>
+
+</dynaForm> 

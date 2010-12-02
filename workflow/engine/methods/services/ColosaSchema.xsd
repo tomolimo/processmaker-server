@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 (http://www.altova.com) by Robert Shapiro (private) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.9">
+	<xsd:element name="AfterTriggers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Trigger" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>	
+	<xsd:element name="Appearance">
+		<xsd:complexType>
+			<xsd:attribute name="Size" type="xsd:integer"/>
+			<xsd:attribute name="Rows" type="xsd:integer"/>
+			<xsd:attribute name="Columns" type="xsd:integer"/>
+			<xsd:attribute name="EnableHtml" type="xsd:boolean"/>
+			<xsd:attribute name="Mode">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Edit"/>
+						<xsd:enumeration value="View"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>	
+	<xsd:element name="Artifacts">
+		<xsd:complexType>
+			<xsd:choice maxOccurs="unbounded">
+				<xsd:element ref="TextAnnotation"/>
+				<xsd:element ref="Line"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="AssignmentRules">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="BeforeTriggers" minOccurs="0"/>
+				<xsd:choice>
+					<xsd:element name="CyclicalAssignment"/>
+					<xsd:element name="ManualAssignment"/>
+					<xsd:element ref="ValueBasedAssignment"/>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="BeforeTriggers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Trigger" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Behavior">
+		<xsd:complexType>
+			<xsd:attribute name="MaxLength" type="xsd:integer" default="64"/>
+			<xsd:attribute name="Currency" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>what goes here??</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="Validate">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Any"/>
+						<xsd:enumeration value="Alfa"/>
+						<xsd:enumeration value="AlfaNum"/>
+						<xsd:enumeration value="Int"/>
+						<xsd:enumeration value="Real"/>
+						<xsd:enumeration value="Email"/>
+						<xsd:enumeration value="Login"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Mask" type="xsd:string"/>
+			<xsd:attribute name="TextTransformTo">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="UPPER"/>
+						<xsd:enumeration value="LOWER"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Required" type="xsd:boolean" default="false"/>
+			<xsd:attribute name="ReadOnly" type="xsd:boolean" default="false"/>
+			<xsd:attribute name="Link" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>what type should Link be??</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="Value" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Used with Link. What Type??</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="DependentFields" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>if this can be a list of fields we may have to represent this as an element</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="DefaultValue" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="CaseLabels">
+		<xsd:complexType>
+			<xsd:attribute name="CaseTitle" type="xsd:string"/>
+			<xsd:attribute name="CaseDescription" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Code">
+		<xsd:complexType>
+			<xsd:attribute name="CodeString" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Coordinates">
+		<xsd:complexType>
+			<xsd:attribute name="XCoordinate" type="xsd:double" use="required"/>
+			<xsd:attribute name="YCoordinate" type="xsd:double" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Data">
+		<xsd:complexType>
+			<xsd:attribute name="SqlConnection" type="xsd:string"/>
+			<xsd:attribute name="Sql" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Dates">
+		<xsd:complexType>
+			<xsd:attribute name="StartDate" type="xsd:date"/>
+			<xsd:attribute name="EndDate" type="xsd:date"/>
+			<xsd:attribute name="StartRelative" type="xsd:string"/>
+			<xsd:attribute name="EndRelative" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DerivationRule">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="BeforeTriggers" minOccurs="0"/>
+				<xsd:choice>
+					<xsd:element ref="Sequential"/>
+					<xsd:element ref="Selections"/>
+					<xsd:element ref="Evaluations"/>
+					<xsd:element ref="ParallelForks"/>
+					<xsd:element ref="ParallelForksByEvaluation"/>
+					<xsd:element ref="ParallelJoin"/>
+				</xsd:choice>
+				<xsd:element ref="AfterTriggers" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Dynaform">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Field" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="Title" type="xsd:string"/>
+			<xsd:attribute name="Id" type="xsd:ID"/>
+			<xsd:attribute name="Type">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Normal"/>
+						<xsd:enumeration value="Grid"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Description" type="xsd:string"/>
+			<xsd:attribute name="Width" type="xsd:int"/>
+			<xsd:attribute name="Mode">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Edit"/>
+						<xsd:enumeration value="View"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Dynaforms">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Dynaform" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="DynaformRef">
+		<xsd:complexType>
+			<xsd:attribute name="DynaformId" type="xsd:IDREF" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="End"/>
+	<xsd:element name="Evaluation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NextTask"/>
+			</xsd:sequence>
+			<xsd:attribute name="Condition" type="xsd:string" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Evaluations">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Evaluation" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Field">
+		<xsd:annotation>
+			<xsd:documentation>Did not include properties for Grid Field: Grid,AddnewRows,DeleteRows</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="FieldGeneric"/>
+			</xsd:sequence>
+			<xsd:attribute name="Name" type="xsd:NMTOKEN" use="required"/>
+			<xsd:attribute name="Id" type="xsd:ID" use="required"/>
+			<xsd:attribute name="Label"/>
+			<xsd:attribute name="Content" type="xsd:string"/>
+			<xsd:attribute name="Code" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Used for JavaScript field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="JavaScriptOnClick" type="xsd:string"/>
+			<xsd:attribute name="FieldType">
+				<xsd:annotation>
+					<xsd:documentation>The last item in the enumeration is 'Grid'. Grid fields dont seem to work.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Text"/>
+						<xsd:enumeration value="Currency"/>
+						<xsd:enumeration value="Percentage"/>
+						<xsd:enumeration value="PassWord"/>
+						<xsd:enumeration value="Title"/>
+						<xsd:enumeration value="SubTitle"/>
+						<xsd:enumeration value="Button"/>
+						<xsd:enumeration value="Submit"/>
+						<xsd:enumeration value="Reset"/>
+						<xsd:enumeration value="DropDown"/>
+						<xsd:enumeration value="YesNo"/>
+						<xsd:enumeration value="ListBox"/>
+						<xsd:enumeration value="CheckBox"/>
+						<xsd:enumeration value="CheckGroup"/>
+						<xsd:enumeration value="RadioGroup"/>
+						<xsd:enumeration value="Date"/>
+						<xsd:enumeration value="Hidden"/>
+						<xsd:enumeration value="Link"/>
+						<xsd:enumeration value="File"/>
+						<xsd:enumeration value="JavaScript"/>
+						<xsd:enumeration value="Grid"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="FieldGeneric">
+		<xsd:annotation>
+			<xsd:documentation>Instead of designing attribute sets for each field type, I have a generic attribute set for all fields. This could be further refined.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Behavior"/>
+				<xsd:element ref="Dates"/>
+				<xsd:element ref="Appearance"/>
+				<xsd:element ref="Data"/>
+				<xsd:element ref="Options"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Group">
+		<xsd:complexType>
+			<xsd:attribute name="Name" type="xsd:string" use="required"/>
+			<xsd:attribute name="Status" use="required">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="Active"/>
+						<xsd:enumeration value="Inactive"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Members" type="xsd:NMTOKENS">
+				<xsd:annotation>
+					<xsd:documentation>It is possible to have a list of all the users who are members of this group</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Groups">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Group" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="InputDocument">
+		<xsd:complexType>
+			<xsd:attribute name="Title" type="xsd:string"/>
+			<xsd:attribute name="Id" type="xsd:ID"/>
+			<xsd:attribute name="DocumentType">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Digitial"/>
+						<xsd:enumeration value="Printed"/>
+						<xsd:enumeration value="DigitalPrinted"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Description" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="InputDocuments">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="InputDocument" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="InputDocumentRef">
+		<xsd:complexType>
+			<xsd:attribute name="InputDocumentId" type="xsd:IDREF" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="JavaScript"/>
+	<xsd:element name="Line">
+		<xsd:complexType>
+			<xsd:attribute name="Orientation" use="required">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Horizontal"/>
+						<xsd:enumeration value="Vertical"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Coordinate" type="xsd:double" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="NextTask">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref="TaskRef"/>
+				<xsd:element ref="End"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Notifications">
+		<xsd:complexType>
+			<xsd:attribute name="NotificationMessage" type="xsd:string" default=""/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Option">
+		<xsd:complexType>
+			<xsd:attribute name="Value" type="xsd:string"/>
+			<xsd:attribute name="Label" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Options">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Option" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="OutputDocument">
+		<xsd:complexType>
+			<xsd:attribute name="Title" type="xsd:string"/>
+			<xsd:attribute name="Id" type="xsd:ID"/>
+			<xsd:attribute name="FileNameGenerated" type="xsd:string"/>
+			<xsd:attribute name="Description" type="xsd:string"/>
+			<xsd:attribute name="Orientation">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Vertical"/>
+						<xsd:enumeration value="Horizontal"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="OutputDocumentToGenerate">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="BOTH"/>
+						<xsd:enumeration value="DOC"/>
+						<xsd:enumeration value="PDF"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Template" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="OutputDocuments">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="OutputDocument" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="OutputDocumentRef">
+		<xsd:complexType>
+			<xsd:attribute name="OutputDocumentId" type="xsd:IDREF" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Package">
+		<xsd:annotation>
+			<xsd:documentation>Comment describing your root element</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Processes">
+					<xsd:annotation>
+						<xsd:documentation>We will initially focus on a single process</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="Users" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>This info is really separate from the Process Definitions</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ParallelFork">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NextTask"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ParallelForks">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="ParallelFork" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ParallelForksByEvaluation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Evaluation" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ParallelJoin">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NextTask"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Password">
+		<xsd:complexType>
+			<xsd:attribute name="Password" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PersonalInformation">
+		<xsd:complexType>
+			<xsd:attribute name="FirstName" type="xsd:string"/>
+			<xsd:attribute name="LastName" type="xsd:string"/>
+			<xsd:attribute name="UserId" type="xsd:ID" use="required"/>
+			<xsd:attribute name="Email" type="xsd:string"/>
+			<xsd:attribute name="Address" type="xsd:string"/>
+			<xsd:attribute name="ZipCode" type="xsd:string"/>
+			<xsd:attribute name="Country">
+				<xsd:annotation>
+					<xsd:documentation>could be simply string or string derived by restriction with an enumeration</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value=""/>
+						<xsd:enumeration value="United Kingdom"/>
+						<xsd:enumeration value="United States"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="StateOrRegion" type="xsd:string"/>
+			<xsd:attribute name="Location" type="xsd:string"/>
+			<xsd:attribute name="Phone" type="xsd:string"/>
+			<xsd:attribute name="Position" type="xsd:string"/>
+			<xsd:attribute name="ExpirationDate" type="xsd:date" use="required"/>
+			<xsd:attribute name="Status">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="ACTIVE"/>
+						<xsd:enumeration value="INACTIVE"/>
+						<xsd:enumeration value="ON VACATION"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="Role" type="xsd:IDREF"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PhpCode">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="PhpCodeLine"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="PhpCodeLine">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref="VariableAssignment"/>
+				<xsd:element ref="Code"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Processes">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Process" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Process">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Tasks"/>
+				<xsd:element ref="Dynaforms" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Here as a convenience to support access to all the Dynaforms in a Process. Each Dynamform will be referenced as a step in a task. I assume a Dynaform is re-usable. </xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="InputDocuments" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Same comment as in Dynaforms</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="OutputDocuments" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Same comment as in Dynaforms</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="Triggers" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Again a convenience to support access to all triggers in the process. Triggers are directly associated with steps.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="Artifacts" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:attribute name="Description" type="xsd:string"/>
+			<xsd:attribute name="Title" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Properties"/>
+	<xsd:element name="Property"/>
+	<xsd:element name="Role">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Permissions" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Permission">
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:string">
+										<xsd:enumeration value="PM_LOGIN"/>
+										<xsd:enumeration value="PM_SETUP"/>
+										<xsd:enumeration value="PM_USERS"/>
+										<xsd:enumeration value="PM_FACTORY"/>
+										<xsd:enumeration value="PM_CASES"/>
+										<xsd:enumeration value="PM_ALLCASES"/>
+										<xsd:enumeration value="PM_REPORTS"/>
+										<xsd:enumeration value="PM_REASSIGNCASE"/>
+										<xsd:enumeration value="PM_SUPERVISOR"/>
+										<xsd:enumeration value="PM_SETUP_ADVANCE"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="Code" type="xsd:ID" use="required"/>
+			<xsd:attribute name="Status" use="required">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="Activive"/>
+						<xsd:enumeration value="Inactive"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="CreateDate" type="xsd:dateTime"/>
+			<xsd:attribute name="UpdateDate" type="xsd:dateTime"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Roles">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Role" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Selection">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NextTask"/>
+			</xsd:sequence>
+			<xsd:attribute name="Description" type="xsd:string" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Selections">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Selection" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Sequential">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="NextTask"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Step">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="BeforeTriggers" minOccurs="0"/>
+				<xsd:choice minOccurs="0">
+					<xsd:element ref="DynaformRef"/>
+					<xsd:element ref="InputDocumentRef"/>
+					<xsd:element ref="OutputDocumentRef"/>
+				</xsd:choice>
+				<xsd:element ref="AfterTriggers" minOccurs="0"/>
+			</xsd:sequence>
+			<xsd:attribute name="condition" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="SubProcess">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Coordinates"/>
+				<xsd:element name="VariablesIn" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="VariableIn" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="Origin" type="xsd:IDREF"/>
+									<xsd:attribute name="Target" type="xsd:IDREF"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="VariablesOut" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="VariableOut">
+								<xsd:complexType>
+									<xsd:attribute name="Origin" type="xsd:IDREF"/>
+									<xsd:attribute name="Target" type="xsd:IDREF"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="ProcessId" type="xsd:IDREF"/>
+			<xsd:attribute name="ProcessName"/>
+			<xsd:attribute name="InvocationType">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Synchronous"/>
+						<xsd:enumeration value="Asynchronous"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Task">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Coordinates"/>
+				<xsd:element ref="DerivationRule">
+					<xsd:annotation>
+						<xsd:documentation>Each Task has one derivation rule. A task with nothing else is a BPMN Gateway</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="AssignmentRules"/>
+				<xsd:element ref="TimingControl"/>
+				<xsd:element name="Permissions">
+					<xsd:complexType>
+						<xsd:attribute name="AllowArbitraryTransfer" default="true">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:boolean"/>
+							</xsd:simpleType>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element ref="CaseLabels"/>
+				<xsd:element ref="Notifications"/>
+				<xsd:element ref="Step" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="Id" type="xsd:ID"/>
+			<xsd:attribute name="Title" type="xsd:string"/>
+			<xsd:attribute name="Description" type="xsd:string"/>
+			<xsd:attribute name="VariableForCasePriority" type="xsd:IDREF">
+				<xsd:annotation>
+					<xsd:documentation>Refers to a Field</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="StartingTask" type="xsd:boolean"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="TaskRef">
+		<xsd:complexType>
+			<xsd:attribute name="TaskId" type="xsd:IDREF"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Tasks">
+		<xsd:complexType>
+			<xsd:choice maxOccurs="unbounded">
+				<xsd:element ref="SubProcess"/>
+				<xsd:element ref="Task"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="TextAnnotation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Coordinates"/>
+			</xsd:sequence>
+			<xsd:attribute name="Text" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="TimingControl">
+		<xsd:complexType>
+			<xsd:attribute name="TaskDuration" type="xsd:int" use="required"/>
+			<xsd:attribute name="UnitTime" use="optional" default="Days">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="Minutes"/>
+						<xsd:enumeration value="Hours"/>
+						<xsd:enumeration value="Days"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="DaysToEnter" use="optional">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="WorkDays"/>
+						<xsd:enumeration value="CalendarDays"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Trigger">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="PhpCode"/>
+			</xsd:sequence>
+			<xsd:attribute name="condition" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Triggers">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Trigger" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="User">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="PersonalInformation"/>
+				<xsd:element ref="Password"/>
+				<xsd:element name="AdditionalInformation">
+					<xsd:complexType>
+						<xsd:attribute name="Photo" type="xsd:string"/>
+						<xsd:attribute name="Resume" type="xsd:string"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Users">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="UsersList"/>
+				<xsd:element ref="Groups"/>
+				<xsd:element ref="Roles"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="UsersList">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="User" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="ValueBasedAssignment">
+		<xsd:complexType>
+			<xsd:attribute name="FieldId" type="xsd:IDREF"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Variable">
+		<xsd:complexType>
+			<xsd:attribute name="Id" type="xsd:ID"/>
+			<xsd:attribute name="Name" type="xsd:NMTOKEN"/>
+			<xsd:attribute name="Type" default="CASE">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="CASE"/>
+						<xsd:enumeration value="SYSTEM"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Variables"/>
+	<xsd:element name="VariableAssignment">
+		<xsd:complexType>
+			<xsd:attribute name="FieldId" type="xsd:IDREF"/>
+			<xsd:attribute name="Expression" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="VariableRef">
+		<xsd:complexType>
+			<xsd:attribute name="VariableId" type="xsd:IDREF"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

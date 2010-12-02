@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="dynaforms_Editor" type="xmlform" width="100%" enableTemplate="1">
+<toolbar type="toolbar" xmlfile="dynaforms/dynaforms_Toolbar"/>
+<URL type="phpvariable"/>
+<DYN_UID type="phpvariable"/>
+<PRO_UID type="phpvariable"/>
+<DYNAFORM_NAME type="phpvariable" defaultValue=""/>
+<title type="title" enableHTML="1">
+  <en><![CDATA[<table cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent">    <tr>      <td  class=\'FormTitle\'>Preview</td>      <td align="right"></td>    </tr>  </table>]]></en>
+</title>
+<dynaforms_Preview type="private" defaultValue="../dynaforms/dynaforms_Preview"/>
+<dynaforms_Ajax type="private" defaultValue="../dynaforms/dynaforms_Ajax"/>
+<processMap type="private" defaultValue="../processes/processes_Map"/>
+<SCRIPT type="javascript" replaceTags="1"><![CDATA[
+
+function loadEditor()
+{
+  if (!mainPanel.elements)
+  {
+    setTimeout("loadEditor();",100);
+    return;
+  }
+	dynaformEditor.views["preview"]=document.getElementById("dynaformEditor[3]");
+	dynaformEditor.views["xmlcode"]=document.getElementById("dynaformEditor[4]");
+	dynaformEditor.views["htmlcode"]=document.getElementById("dynaformEditor[5]");
+	dynaformEditor.views["fieldslist"]=document.getElementById("dynaformEditor[6]");
+	dynaformEditor.views["javascripts"]=document.getElementById("dynaformEditor[7]");
+	dynaformEditor.views["properties"]=document.getElementById("dynaformEditor[8]");
+  if (typeof(dynaformEditor)!=="object") return alert("dynaformEditor.js was not loaded.");
+  dynaformEditor.ajax=WebResource("@G::encryptLink(@#dynaforms_Ajax)");
+  dynaformEditor.A="@#URL";
+  dynaformEditor.dynUid="@#DYN_UID";
+  dynaformEditor._run();
+  mainPanel.events.remove = function()
+  {
+    var canClose=dynaformEditor.close();
+    if (canClose)
+    {
+      window.location.href="@G::encryptLink(@#processMap)?PRO_UID=@%PRO_UID";
+      return true;
+    }
+    else
+    {
+			mainPanel.cancelClose=true;
+			mainPanel.inRemove = false;
+      return false;
+    }
+  }
+}
+
+/*
+var currentView='Preview';
+var todoRefreshPreview=true;
+var todoRefreshXmlCode=true;
+refreshPreview();
+function closeDyna(){
+  if (!isModified()) {
+    var res=ajax_function('@G::encryptLink(@#dynaforms_Ajax)', 'closeDyna','A=@#URL&DYN_UID=@#DYN_UID');
+    if (res) alert(res);
+  } else {
+    if (confirm("@G::LoadTranslation(ID_DYNAFORM_EDITOR_SAVE_CHANGES)@#DYNAFORM_NAME?")){
+      saveDyna();
+    } else {
+      var res=ajax_function('@G::encryptLink(@#dynaforms_Ajax)', 'closeDyna','A=@#URL&DYN_UID=@#DYN_UID');
+      if (res) alert(res);
+    }
+  }
+}
+function saveDyna(){
+  try {
+    saveCurrentView();
+  } catch (e) {
+    alert(e);
+  }
+  var res=ajax_function('@G::encryptLink(@#dynaforms_Ajax)', 'saveDyna','A=@#URL&DYN_UID=@#DYN_UID');
+  if (res) alert(res); else alert('Saved');
+}
+function isModified(){
+  var res=ajax_function('@G::encryptLink(@#dynaforms_Ajax)', 'isModified','A=@#URL&DYN_UID=@#DYN_UID');
+  return eval(res);
+}
+function refreshCurrentView( callback, async ) {
+  switch(currentView){
+    case 'Preview':
+      refreshPreview( callback, async );
+      break;
+    case 'XmlCode':
+      refreshXmlCode();
+      if (callback) callback();
+      break;
+    case 'HtmlCode':
+      refreshHtmlCode();
+      if (callback) callback();
+      break;
+    case 'FieldsList':
+      refreshFieldsList();
+      if (callback) callback();
+      break;
+    case 'Javascripts':
+      refreshJavascripts();
+      if (callback) callback();
+      break;
+    case 'Properties':
+      refreshProperties();
+      if (callback) callback();
+      break;
+    }
+}
+function saveCurrentView(){
+  switch(currentView){
+    case 'Preview':
+      break;
+    case 'XmlCode':
+      saveXmlCode();
+      break;
+    case 'HtmlCode':
+      saveHtmlCode();
+      break;
+    case 'FieldsList':
+      saveFieldsList();
+      break;
+    case 'Javascripts':
+      saveJavascripts();
+      break;
+    case 'Properties':
+      saveProperties();
+      break;
+  }
+}
+function resetTemplate(){
+  if (confirm('@G::LoadTranslation(ID_MSG_CONFIRM_RESET_TEMPLATE)')) {
+    ajax_function( '@G::encryptLink(@#dynaforms_Ajax)' , 'resetTemplate','A=@#URL' );
+    refreshCurrentView();
+  }
+}
+function changoToPreview(){
+  refreshPreview();
+  currentView = 'Preview';
+}
+function refreshPreview( callback, async ) {
+  if (async){
+    //processbar.style.display = '';
+    ajax_message( '@G::encryptLink(@#dynaforms_Preview)' , '','A=@#URL', 'POST', function(result){
+      var editorPreview = document.getElementById('editorPreview');
+      todoRefreshPreview = editorPreview === null;
+      if (todoRefreshPreview) return;
+      editorPreview.innerHTML = result;
+      var myScripts = editorPreview.getElementsByTagName('SCRIPT');
+      for(var rr=0; rr<myScripts.length ; rr++){
+        try {
+          if (myScripts[rr].innerHTML!=='')
+            if (window.execScript)
+                window.execScript( myScripts[rr].innerHTML, 'javascript' );
+              else
+                window.setTimeout( myScripts[rr].innerHTML, 0 );
+        } catch (e) {
+          alert(e.description);
+        }
+      }
+      //processbar.style.display = 'none';
+      if (callback) callback();
+    }, true );
+  } else {
+    var editorPreview = document.getElementById('editorPreview');
+    todoRefreshPreview = editorPreview === null;
+    if (todoRefreshPreview) return;
+    editorPreview.innerHTML = ajax_function( '@G::encryptLink(@#dynaforms_Preview)' , '','A=@#URL' );
+    var myScripts = editorPreview.getElementsByTagName('SCRIPT');
+    for(var rr=0; rr<myScripts.length ; rr++){
+      try {
+        if (myScripts[rr].innerHTML!=='')
+          if (window.execScript)
+              window.execScript( myScripts[rr].innerHTML, 'javascript' );
+            else
+              window.setTimeout( myScripts[rr].innerHTML, 0 );
+      } catch (e) {
+        alert(e.description);
+      }
+    }
+  }
+}
+function saveXmlCode() {
+  var xmlCode = getField('XML');
+  todoRefreshXmlCode = xmlCode === null;
+  if (todoRefreshXmlCode) return;
+  var res = ajax_function( '@G::encryptLink(@#dynaforms_Ajax)' , 'xmlcodeSave','A=@#URL&xmlcode='+encodeURIComponent(xmlCode.value) );
+  if (res!=='') alert(res);
+}
+function changoToXmlCode(){
+  currentView = 'XmlCode';
+  refreshXmlCode();
+}
+function refreshXmlCode() {
+  var xmlCode = getField('XML');
+  todoRefreshXmlCode = xmlCode === null;
+  if (todoRefreshXmlCode) return;
+  xmlCode.value = ajax_function( '@G::encryptLink(@#dynaforms_Ajax)' , 'xmlcode','A=@#URL' );
+}
+
+function changoToHtmlCode(){
+  refreshHtmlCode();
+  currentView = 'HtmlCode';
+}
+function refreshHtmlCode() {
+  var dynaformEditorHTML = document.getElementById('dynaformEditor[5]');
+  loadPage('@G::encryptLink(@#dynaforms_Ajax)?function=htmlcode&A=@#URL', undefined, undefined,'', dynaformEditorHTML);
+}
+function saveHtmlCode() {
+  //FCKeditorAPI.GetInstance( 'form[HTML]' ).UpdateLinkedField();
+  var htmlCode = getField('HTML');
+  todoRefreshHtmlCode = htmlCode === null;
+  if (todoRefreshHtmlCode) return;
+  var res = ajax_function( '@G::encryptLink(@#dynaforms_Ajax)' , 'htmlcodeSave','A=@#URL&htmlcode='+encodeURIComponent(htmlCode.value) );
+  if (res!=='') alert(res);
+}
+function changoToFieldsList(){
+  currentView = 'FieldsList';
+  refreshFieldsList();
+}
+function refreshFieldsList() {
+bDl5ZXpaYmlwcDNqbzVmVzJxR2Q1WkM1bk5ha21xamdvQQ______.refresh();
+}
+function saveFieldsList(){
+}
+function changoToJavascripts(){
+  currentView = 'Javascripts';
+  refreshJavascripts();
+}
+function refreshJavascripts() {
+  var javascriptDiv = document.getElementById('dynaformEditor[7]');
+  loadPage('@G::encryptLink(@#dynaforms_Ajax)?function=javascripts&A=@#URL&DYN_UID=@#DYN_UID', undefined, undefined,'', javascriptDiv);
+}
+function saveJavascripts(){
+  var javascriptDiv = document.getElementById('dynaformEditor[7]');
+  var form = javascriptDiv.getElementsByTagName('form');
+  form=form[0];
+  if ((!form) || (form.action==='')) return;
+  ajax_post(form.action,form,'POST');
+}
+function changoToProperties(){
+  currentView = 'Properties';
+  refreshProperties();
+}
+function refreshProperties() {
+  var propertiesDiv = document.getElementById('dynaformEditor[8]');
+  propertiesDiv.style.visibility='hidden';
+  loadPage('@G::encryptLink(@#dynaforms_Ajax)?function=properties&A=@#URL&DYN_UID=@#DYN_UID', undefined, undefined,'', propertiesDiv);
+}
+function saveProperties(){
+  var propertiesDiv = document.getElementById('dynaformEditor[8]');
+  var form = propertiesDiv.getElementsByTagName('form');
+  form=form[0];
+  if ((!form) || (form.action==='')) return;
+  ajax_post(form.action,form,'POST');
+}
+*/
+]]></SCRIPT>
+</dynaForm> 

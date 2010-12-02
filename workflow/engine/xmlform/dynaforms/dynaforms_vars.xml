@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="conditionalShowHide" width="250" enabletemplate="1" mode="edit">
+  <!-- <tit1 type="title" enablehtml="0">
+    <en>Conditions Editor</en>
+  </tit1> -->
+  <vars type="listbox" required="0" size="6" width="200" sqlconnection = "dbarray">
+    SELECT * FROM DYNAFIELDS
+    <en></en>
+  </vars>
+</dynaForm> 

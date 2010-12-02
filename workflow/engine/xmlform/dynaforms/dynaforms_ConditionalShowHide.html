@@ -1,0 +1,149 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="height:{$form_height};" >
+	  <table width="99%" cellpadding="5" >
+      <tr>
+        <td valign='top'>
+        <input type="hidden" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" />
+        <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value='{$form_objectRequiredFields}' />
+           <table cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+              <td>{$form.FCD_UID}{$form.FCD_FIELDS}{$form.FCD_EVENTS}{$form.FCD_EVENT_OWNERS}</td>
+             </tr>
+             <!--<tr>
+              <td class='FormTitle' colspan="2" align="">{$form.tit1}</td>
+             </tr>-->
+             <tr>
+              <td class='FormFieldContent' colspan="2" style="padding-left:35px">{$FCD_FUNCTION}<br/>{$form.FCD_FUNCTION}</td>
+             </tr>
+             <tr>
+              
+              <td class='FormFieldContent' colspan="2" style="padding-left:35px">
+                <table cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+	             	<td>{$fields}</td><td>&nbsp;</td><td>{$fields_selected}</td>
+	              </tr>
+              	  <tr>
+              	   <td>{$form.fields}</td>
+              	   <td class='FormLabel' align="center">
+              	  	<a href="#" onclick="oConditional.toSelect('fields', 'fields_selected'); return false;"><img src="/images/icon-arrows-arrow-right.png" border="0" width="25" height="25"/></a>
+              	  	<br/><br/>
+              	  	<a href="#" onclick="oConditional.toSelect('fields_selected', 'fields'); return false;"><img src="/images/icon-arrows-arrow-left.png" border="0" width="25" height="25"/></a>
+              	   </td>
+              	   <td>{$form.fields_selected}</td>
+              	  </tr>
+             	</table>
+              </td>
+             </tr>
+             <tr>
+              <td class='FormFieldContent' align="left" style="padding-left:35px">
+                {$FCD_CONDITION}
+              </td>
+              <td class='FormFieldContent' >&nbsp;</td>
+             </tr>
+             <tr>
+              <td class='FormFieldContent' align="right" style="padding-left:35px">
+              	{$form.FCD_CONDITION}<br/>
+              	<table width="408px" cellpadding="5" cellspacing="0" border="0">
+			    <tr><td style="padding-left:35px" id="ResultMessageTD" align="center">&nbsp;</td></tr>
+				</table>
+              </td>
+              <td class='FormFieldContent' align="left" style="padding-left:35px">
+              	<table cellspacing="0" cellpadding="0" border="0">
+              	  <tr>
+              	    <td class='FormLabel' align="center">{$form.op1}</td>
+              		<td class='FormLabel' align="center">{$form.op2}</td>
+             		<td class='FormLabel' align="center">{$form.op3}</td>
+              		<td class='FormLabel' align="center">{$form.op4}</td>
+             	  </tr>
+                  <tr>
+              		<td class='FormButton' align="center">{$form.op5}</td>
+		            <td class='FormButton' align="center">{$form.op6}</td>
+		            <td class='FormButton' align="center">{$form.op7}</td>
+		            <td class='FormButton' align="center">{$form.op8}</td>
+             	  </tr>
+                  <tr>
+              		<td class='FormButton' align="center">{$form.op9}</td>
+		            <td class='FormButton' align="center">{$form.op10}</td>
+		            <td class='FormButton' align="center">{$form.op11}</td>
+		            <td class='FormButton' align="center">{$form.op12}</td>
+             	  </tr>
+                  <tr>
+              		<td class='FormButton' align="center">{$form.op13}</td>
+		            <td class='FormButton' align="center">{$form.op14}</td>
+		            <td class='FormButton' align="center">{$form.op15}</td>
+		            <td class='FormButton' align="center">{$form.op16}</td>
+             	  </tr>
+             	  <tr>
+              		<td class='FormButton' colspan="3" align="right">{$form.test_condition}</td>
+		            <td class='FormButton' align="center">
+		              <a href="#" title="Configure condition variables" onclick="oConditional.testConditionSetup(); ">
+                  		<img title="Test condition setup" src="/images/row_down.png" border="0" width="21" height="21" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')">
+                	  </a>
+                	</td>
+             	  </tr>
+             	</table>  
+              </td>
+             </tr>
+
+             <tr>
+              <td class='FormFieldContent' colspan="2" style="padding-left:35px">{$form.eventOnload}&nbsp;&nbsp;{$form.eventOnchange}</td>
+             </tr>
+             <!--<tr>
+              <td class='FormLabel' width="{$form_labelWidth}"></td>
+              <td class='FormFieldContent' colspan="2">{$form.eventOnload}</td>
+             </tr>
+             
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}"></td>
+              <td class='FormFieldContent' colspan="2">{$form.eventOnchange}</td>
+             </tr>-->
+             
+             <tr>
+              
+              <td class='FormFieldContent' colspan="2" style="padding-left:35px">
+                <table cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+	             	<td>{$event_owner}</td><td>&nbsp;</td><td>{$event_owner_selected}</td>
+	              </tr>
+              	  <tr>
+              	   <td>{$form.event_owner}</td>
+              	   <td class='FormLabel' align="center">
+              	  	<a href="#" onclick="oConditional.toSelect('event_owner', 'event_owner_selected'); return false;"><img src="/images/icon-arrows-arrow-right.png" border="0" width="25" height="25"/></a>
+              	  	<br/><br/>
+              	  	<a href="#" onclick="oConditional.toSelect('event_owner_selected', 'event_owner'); return false;"><img src="/images/icon-arrows-arrow-left.png" border="0" width="25" height="25"/></a>
+              	   </td>
+              	   <td>{$form.event_owner_selected}</td>
+              	  </tr>
+                  
+             	</table>
+                
+              </td>
+             </tr>
+
+             <tr>
+              <td class='FormFieldContent' colspan="2" style="padding-left:35px">{$form.FCD_STATUS}</td>
+             </tr>
+             
+             <tr>
+              <td class='FormFieldContent' colspan="2" align="center">
+                 {$form.save_condition} &nbsp; {$form.BTN_CANCEL}
+              </td>
+             </tr>
+           </table>
+        </td>
+      </tr>
+    </table>
+    		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+    <script type="text/javascript">
+    {$form.jsc}
+    </script>
+  </form>
+
+
+<script type="text/javascript">
+	try {literal}{{/literal} dynaformSetFocus();}catch(e){literal}{{/literal}}
+</script>
+

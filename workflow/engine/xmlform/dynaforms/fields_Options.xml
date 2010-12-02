@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PAGED_TABLE_ID type="private"/>
+<!--  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/> -->
+<URL type="private"/>
+<PAGED_TABLE_ID type="private"/>
+<fields_Edit type="private" defaultValue="../dynaforms/fields_Edit"/>
+<fields_Delete type="private" defaultValue="../dynaforms/fields_Delete"/>
+<fields_Order type="private" defaultValue="../dynaforms/fields_Order"/>
+<js type="javascript" replaceTags="1">
+<![CDATA[
+  var validatingForm;
+  function fieldsAdd( type ){
+    popupWindow('@G::LoadTranslation(ID_ADD) ' + type , '@G::encryptlink(@#fields_Edit)?A=@%URL&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
+  }
+  function fieldsEdit( uid ) {
+		popupWindow('@G::LoadTranslation(ID_EDIT_FIELD)', '@G::encryptlink(@#fields_Edit)?A=@%URL&XMLNODE_NAME='+ uid , 500, 650, null,false,true);
+  }
+  function fieldsSave( form ) {
+    if (pme_validating) {
+      validatingForm=form;
+      setTimeout('fieldsSave(validatingForm);',100);
+      return;
+    }
+    if (!G.getObject(form).verifyRequiredFields()){
+      return;
+    }
+    //processbar.style.display = '';
+    var res=ajax_post( form.action, form, 'POST' , null , false );
+    currentPopupWindow.remove();
+    dynaformEditor.refreshCurrentView();
+  }
+  function fieldsDelete( uid ) {
+    ajax_function('@G::encryptlink(@#fields_Delete)','','A=@#URL&XMLNODE_NAME='+uid,'POST');
+    @#PAGED_TABLE_ID.refresh();
+    dynaformEditor.refreshCurrentView();
+  }
+  function changePosition( uid , newPos ) {
+    ajax_function('@G::encryptlink(@#fields_Order)','','A=@#URL&XMLNODE_NAME='+uid+'&NEW_POS='+newPos,'POST');
+    @#PAGED_TABLE_ID.refresh();
+    dynaformEditor.refreshCurrentView();
+  }
+]]>
+</js>
+<!-- Default Search option -->
+<SEARCH_FILTER_FORM type="private"/>
+<!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this); return false;" colAlign="right" colWidth="130">
+  <en>Advanced Search</en>
+</MNU_SEARCH>-->
+</dynaForm> 

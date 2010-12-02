@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<URL_CONDITIONS_EDIT defaultValue="../steps/conditions_Edit" type="private"/>
+<!--<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>-->
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1">
+function editCondition(uid, sStepTitle)
+{
+  popupWindow('@G::LoadTranslation(ID_EDIT_CONDITIONS_OF_STEP)' + ': ' + sStepTitle, '@G::encryptLink(@#URL_CONDITIONS_EDIT)?UID='+ uid , 500, 216);
+}
+
+function saveCondition(oForm)
+{
+  ajax_post(oForm.action, oForm, 'POST');
+  currentPopupWindow.remove();
+  @#PAGED_TABLE_ID.refresh();
+}
+</JS>
+
+</dynaForm>  

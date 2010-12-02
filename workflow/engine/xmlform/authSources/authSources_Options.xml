@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" link="authSources_SelectType" colAlign="left" colWidth="35">
+  <en>New</en>
+</MNU_ADD>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var authSourcesDelete = function(sUID) {
+  new leimnud.module.app.confirm().make({
+    label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_AUTH_SOURCE)',
+    action:function() {
+      ajax_function(@G::encryptlink('authSources_Delete'), '', 'AUTH_SOURCE_UID=' + sUID, 'POST');
+      @#PAGED_TABLE_ID.refresh();
+    }.extend(this)
+  });
+};
+
+]]></JS>
+</dynaForm> 

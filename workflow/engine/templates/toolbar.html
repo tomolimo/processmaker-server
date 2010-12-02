@@ -1,0 +1,32 @@
+{if $printTemplate}
+{* this is the xmlform template *}
+<table id="{$form->name}" class="toolbarBackground" width='{$form->width}' cellspacing="0" cellpadding="0">
+ <tr>
+{*  LEFT MENU  *}
+  <td valign='top' class="pm__toolbar" width='{$form->width}'>
+{php}$this->assign('cols', 0);{/php}
+{foreach from=$form->fields item=field index=abc}
+{if ($field->type==='javascript')}
+{elseif ($field->type==='phpvariable')}
+{elseif ($field->type==='private')}
+{elseif ($field->type==='')}
+{else}
+{* elseif ($field->type==='link') || ($field->type==='menu') *}{$field->field}{/if}
+{/foreach}
+
+{php}
+//This will add registered HTML toolbar options from plugins
+$oPluginRegistry =& PMPluginRegistry::getSingleton();
+$oPluginRegistry->getToolbarOptions("NORMAL");
+{/php}
+  </td>
+</tr>
+</table>
+{foreach from=$form->fields item=field}
+	{if ($field->type==='javascript')}
+	<script type="text/javascript">
+		{$field->field}
+	</script>
+	{/if}
+{/foreach}
+{/if}

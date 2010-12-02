@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm
+  name="dynaforms_ChoseType"
+  type="xmlform"
+  width="350" enableTemplate="1"
+>
+
+<DYN_UID type="hidden" showInTable="0"/>
+<PRO_UID type="hidden" showInTable="0"/>
+
+<TITLE type="title" group="1">
+  <en>Please select the Dynaform Type</en>
+</TITLE>
+
+<DYN_SOURCE type="radiogroup" sqlConnection="dbarray" defaultvalue="normal">
+  <en>Type
+    <option name="normal">Blank Dynaform</option>
+    <option name="pmtable"> PM Table Dynaform</option>
+  </en>
+</DYN_SOURCE>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<ACCEPT type="button" onclick="choseDynaformType( this.form, false );">
+  <en>Select</en>
+</ACCEPT>
+
+<dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
+
+<JS type="javascript">
+<![CDATA[
+  function choseDynaformType( form, bOpen ) {
+    var action;
+    if (document.getElementsByName('form[DYN_SOURCE]')[0].checked) {
+        action = document.getElementsByName('form[DYN_SOURCE]')[0].value;
+    } else {
+        action = document.getElementsByName('form[DYN_SOURCE]')[1].value;
+    }
+    panel = popupWindowObject('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsNewPlugin)?PRO_UID=@%PRO_UID&ACTION='+action , 400, 350);
+    currentPopupWindow.remove();
+  }
+  
+function cancel(){
+    currentPopupWindow.remove();
+}
+  
+]]>
+</JS>
+
+</dynaForm>  

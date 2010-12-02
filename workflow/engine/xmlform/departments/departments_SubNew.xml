@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<dynaForm type="xmlform" labelWidth="250px" width="95%" enableTemplate="1">
+  <title type="title" colWidth="200" showInTable="0">
+    <en>Department Information </en>
+    <es><![CDATA[Información de departamento]]></es>
+  </title>
+  <DEP_UID type="hidden" showInTable="0"/>
+  <DEP_PARENT type="hidden" showInTable="0"/>
+  <DEP_PARENT_NAME type="text" colWidth="200" size="30" maxlength="64" readonly="1" mode="view">
+	select CON_VALUE, CON_VALUE FROM CONTENT WHERE CON_ID= '@#DEP_PARENT' 
+  <en>Parent Department </en>
+<es><![CDATA[Departamento Padre]]></es></DEP_PARENT_NAME>
+  <DEP_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
+    <en>Department Name</en>
+    <es><![CDATA[Nombre del departamento]]></es>
+  </DEP_TITLE>
+  <BTN_CANCEL type="button" onclick="cancel()">
+    <en>Cancel</en>
+    <es><![CDATA[Cancelar]]></es>
+  </BTN_CANCEL>
+  <button type="button" onclick="return validateLocalFields(this.form);" showInTable="0">
+    <en>Save</en>
+    <es><![CDATA[Guardar]]></es>
+  </button>
+  <JS type="javascript" replacetags="1">
+getField('DEP_TITLE').value ='';
+var sGroupname;
+//sGroupname = document.forms[0].elements['form[DEP_TITLE]'].value;
+
+var verifyDptoname = function()
+{ 
+  document.forms[0].elements['form[DEP_TITLE]'].disabled = true;
+  document.forms[0].elements['form[button]'].disabled = true;    
+  var sDepTitle = getField('DEP_TITLE').value;
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url    :'departments_Ajax',
+    async  : false,
+    method :'POST',
+    args   :'action=verifyDptoname&amp;sOriginalGroupname=' + sGroupname + '&amp;sGroupname=' + encodeURIComponent(sDepTitle)});
+  oRPC.make();
+  var sResponse = oRPC.xmlhttp.responseText; 
+  document.forms[0].elements['form[DEP_TITLE]'].disabled = false;
+  if (sResponse == '1')
+  {
+    new leimnud.module.app.alert().make({
+	    label: G_STRINGS.ID_MSJ_DEPTO
+  	});
+    document.forms[0].elements['form[DEP_TITLE]'].focus();
+  }
+  else
+  { 
+    document.forms[0].elements['form[button]'].disabled = false;
+  }
+};
+  
+leimnud.event.add(document.forms[0].elements['form[DEP_TITLE]'],'change',verifyDptoname);  
+// leimnud.event.add(getField('DEP_TITLE'),'change',verifyDptoname);  
+
+var validateLocalFields = function(oForm){
+//oAux1 = oForm.elements['form[DEP_TITLE]'];
+ var oAux1 = getField('DEP_TITLE');
+
+	if (oAux1.value == '')
+	{
+		new leimnud.module.app.alert().make({
+	    label:G_STRINGS.DBCONNECTIONS_ALERT
+  	});
+		oAux1.focus();
+		bContinue = false;
+		return false;
+	}
+     else{
+		savesubdepto( oForm);
+     }
+}
+function cancel(){
+    currentPopupWindow.remove();
+}
+
+</JS>
+</dynaForm>

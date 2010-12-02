@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="pbjectpmView" width="100%" mode="view">
+
+<thetitle type="title">
+  <en>Process Properties</en>
+</thetitle>
+
+<uid type="hidden"/>
+
+<title type="text">
+  <en>Title</en>
+</title>
+
+<version type="text">
+  <en>Version</en>
+</version>
+
+<pm_version type="text">
+  <en>P.M. rev. required</en>
+</pm_version>
+
+<category type="text">
+  <en>Category</en>
+</category>
+
+
+
+<rating type="text">
+  <en>Rating</en>
+</rating>
+
+<downloads type="text">
+  <en>Downloads</en>
+</downloads>
+
+<subscriptions type="text">
+  <en>Subscriptions</en>
+</subscriptions>
+
+<username type="text" colWidth="60">
+  <en>Author</en>
+</username>
+
+<privacy type="dropdown">
+  <en>Privacy
+  <option name="FREE">Free Download</option>
+  <option name="PUBLIC">Public</option>
+  <option name="PRIVATE">Private</option>
+  <option name="COLOSA">Colosa</option>
+  </en>
+</privacy>
+
+<createDate type="text">
+  <en>Create Date</en>
+</createDate>
+
+<updateDate type="text">
+  <en>Update Date</en>
+</updateDate>
+
+<description type="text" enableHtml="1">
+  <en>Description</en>
+</description>
+
+<subinstallSteps type="subtitle">
+  <en>Install Steps</en>
+</subinstallSteps>
+
+<installSteps type="text" enableHtml="1">
+  <en/>
+</installSteps>
+
+<link_label type="private"/>
+
+<link_href type="private"/>
+
+<link type="link" value="@#link_label" link="@#link_href">
+<en></en></link>
+
+<js type="javascript"><![CDATA[
+
+var registerPML = function(sUID) {
+  oPanel2 = new leimnud.module.panel();
+  oPanel2.options = {
+  	size:{w:450,h:240},
+  	position:{x:0,y:0,center:true},
+  	title:'',
+  	theme:'firefox',
+  	statusBar:true,
+  	control	:{resize:false,roll:false,drag:true},
+  	fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false}
+  };
+  oPanel2.events = {
+	  remove: function() { delete(oPanel2); }.extend(this)
+  };
+  oPanel2.make();
+  oPanel2.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+  	url : 'processes_Ajax',
+  	args: 'action=registerPML&data=' + {pro_uid:sUID}.toJSONString()
+  });
+  oRPC.callback = function(rpc){
+  	oPanel2.loader.hide();
+  	var scs = rpc.xmlhttp.responseText.extractScript();
+  	oPanel2.addContent(rpc.xmlhttp.responseText);
+  	scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var loginPML = function(sUID) {
+  if (registerPMLForm.onsubmit()) {
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url  : 'processes_Ajax',
+      async: false,
+      args : 'action=loginPML&data=' + {pro_uid:sUID,u:getField('PML_USER').value,p:getField('PML_PASSWORD').value}.toJSONString()
+    });
+    oRPC.make();
+    var oResponse = oRPC.xmlhttp.responseText.parseJSON();
+    if (oResponse.bExists) {
+      oPanel2.remove();
+      getField('link').href = oResponse.sLink;
+      getField('link').innerHTML = oResponse.sLabel;
+      window.location = oResponse.sLink;
+    }
+    else {
+      new leimnud.module.app.alert().make({
+        label:G_STRINGS.ID_INCORRECT_USER_OR_PASS
+			});
+    }
+  }
+};
+
+]]></js>
+
+</dynaForm>

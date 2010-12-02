@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="TaskList" width="500" mode="edit" border="0" enableTemplate="0" height="85px">
+
+<SESSION_ID type="text" size="36" maxlength="32">
+  <en>Session Id</en>
+<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
+
+<CASE_ID type="dropdown" sqlConnection="dbarray">
+  SELECT * from case
+  <en>Case ID</en>
+<es>ID de Caso</es></CASE_ID>
+
+<ACTION type="hidden">
+</ACTION>
+
+<ACTIONB type="button" onclick="submitThisForm(this.form);">
+  <en>TaskCase</en>
+<es>Caso de Tareas</es></ACTIONB>
+
+</dynaForm>  

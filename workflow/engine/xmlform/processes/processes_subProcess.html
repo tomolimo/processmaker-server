@@ -1,0 +1,76 @@
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  
+  <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="">
+	  <table width="99%">
+      <tbody><tr>
+        <td valign="top">
+        <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
+        <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                   <tbody><tr>
+              <td class="FormTitle" colspan="2" align="">{$form.TITLE1}</td>
+             </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.SP_UID}</td>
+             </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.PRO_PARENT}</td>
+             </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.TAS_PARENT}</td>
+             </tr>
+                                              <tr style="display: none;">
+              <td colspan="2">{$form.INDEX}</td>
+             </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$SPROCESS_NAME}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.SPROCESS_NAME} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.SPROCESS_NAME}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$TASKS}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.TASKS} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.TASKS}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$PROCESSES}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.PROCESSES} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PROCESSES}</td> 
+              </tr>
+                                                <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$SP_SYNCHRONOUS}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.SP_SYNCHRONOUS} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.SP_SYNCHRONOUS}</td> 
+              </tr>
+                                              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SUBTITLE1]" align="">
+                <span>{$form.SUBTITLE1}</span>
+                                </td>
+             </tr>
+                                               <tr>
+              <td colspan="2">{$form.grid1}</td>
+             </tr>
+                                              <tr>
+              <td class="FormSubTitle" colspan="2" id="form[SUBTITLE2]" align="">
+                <span>{$form.SUBTITLE2}</span>
+                                </td>
+             </tr>
+                                               <tr>
+              <td colspan="2">{$form.grid2}</td>
+             </tr>
+                                               <tr>
+              <td class="FormButton" colspan="2" align="center"> {$form.SAVE} &nbsp; {$form.BTN_CANCEL} </td>
+             </tr>
+                                                                   </tbody></table>
+        </td>
+      </tr>
+    </tbody></table>
+    		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+                                  <script type="text/javascript">
+    {$form.JS}
+  </script>
+  
+ </form>

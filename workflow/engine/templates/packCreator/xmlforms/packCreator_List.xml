@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm 
+  name="dynaforms_List"
+  type="filterform"
+  sql="{$pack->sql}"
+  sqlConnection=""
+  menu="{$pack->name}/{$pack->name}_Options"
+  filterForm="{$pack->name}/{$pack->name}_List"
+  width="100%"
+>
+{foreach from=$pack->fields item=field}
+{if $field->showInTable}{if $field->type==='hidden'}
+<{$field->name} type="hidden" showInTable="0"/>
+{else}
+<{$field->name} type="{$field->type}" {foreach from=$field->attributes item=attribute key=atribName}{$atribName}="{$attribute}" {/foreach}>
+{$field->sql}
+  <en>{$field->labelEN}</en>
+  <es>{$field->labelES}</es>
+</{$field->name}>
+{/if}{/if}
+{/foreach}
+
+<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="{$pack->name}Edit(@Q{$pack->key});return false;"/>
+<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm('@G::LoadXmlLabel(ID_MSG_CONFIRM_DELETE_{$pack->name|upper})')) {$pack->name}Delete(@Q{$pack->key});return false;"/>
+
+<!-- FILTER FORM -->
+<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+  <en>Apply Filter</en>
+  <es>Filtrar</es>
+</SEARCH>
+<PAGED_TABLE_ID type="private" showInTable="0"/>
+<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+function pagedTableFilter( form ) {literal}{{/literal}
+  @#PAGED_TABLE_ID.doFilter( form );
+{literal}}{/literal}
+</JSFILTER>
+</dynaForm>

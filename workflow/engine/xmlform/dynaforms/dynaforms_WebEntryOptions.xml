@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="webEntry_new(@QPRO_UID);return false;" colAlign="left" colWidth="50">
+  <en>New</en>
+</MNU_ASSIGN>
+
+<JS type="javascript"><![CDATA[
+
+var oPanel;
+var webEntry_new = function(sProcessUID) {
+  oPanel = new leimnud.module.panel();
+	oPanel.options = {
+		size	:{w:500,h:400},
+		position:{x:0,y:0,center:true},
+		title	:G_STRINGS.ID_WEB_ENTRY,
+		theme	:'processmaker',
+		statusBar:false,
+		control	:{resize:false,roll:false},
+		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+	oPanel.make();
+	oPanel.loader.show();
+	
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url : '../processes/processes_Ajax',
+		args:"action=webEntry_new&data="+{
+								PRO_UID	:sProcessUID
+							}.toJSONString()		
+  });
+  
+  oRPC.callback = function(rpc) {
+		oPanel.loader.hide();
+		oPanel.addContent(rpc.xmlhttp.responseText);
+		var scs = rpc.xmlhttp.responseText.extractScript();
+		scs.evalScript();
+  }.extend(this);
+	oRPC.make();
+};
+
+
+
+ function webEntry_delete(FILENAME, PRO_UID) {
+ 
+   	new leimnud.module.app.confirm().make({
+  		label:G_STRINGS.ID_CONFIRM_WEBENTRY_DELETE,
+    	action:function(){
+			
+			  
+			  var oRPC = new leimnud.module.rpc.xmlhttp({
+			  	url : '../processes/processes_Ajax',
+			  	args: "action=webEntry_delete&FILENAME="+FILENAME+"&PRO_UID="+PRO_UID
+			  });
+	 			
+	 			Pm.tmp.editProcessPanel.clearContent();     	
+	  	  Pm.tmp.editProcessPanel.loader.show();
+	  			
+			  oRPC.callback = function(rpc){
+			  	Pm.tmp.editProcessPanel.loader.hide();
+					Pm.tmp.editProcessPanel.clearContent();    
+					Pm.tmp.editProcessPanel.addContent(oRPC.xmlhttp.responseText);
+					var scs = oRPC.xmlhttp.responseText.extractScript();
+					scs.evalScript();
+				}.extend(this);
+				oRPC.make();
+			
+		  }.extend(this)
+  	});
+}
+
+]]></JS>
+
+</dynaForm> 

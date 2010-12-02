@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="text" type="xmlform" width="100%" enableTemplate="1">
+<PME_A type="hidden"/>
+<PME_TYPE type="hidden"/>
+<PME_PRO_UID type="hidden"/>
+<PME_PRO_UID type="hidden"/>
+<PME_DYN_TYPE type="phpvariable"/>
+<PME_TITLE type="title" enableHTML="1">
+  <en>Properties</en>
+</PME_TITLE>
+<PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
+  <en>Field Name</en>
+</PME_XMLNODE_NAME>
+<PME_XMLNODE_NAME_OLD type="hidden"/>
+
+<PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
+  SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
+</PME_VALIDATE_NAME>
+
+<PME_LABEL type="text" maxlength="255" size="50">
+  <en>Label</en>
+</PME_LABEL>
+
+<PME_SUBTITLE3 type="title" enableHTML="1">
+  <en>Behaviour</en>
+</PME_SUBTITLE3>
+
+<PME_MAXLENGTH type="text" maxlength="10" size="10" validate="Int" defaultvalue="64">
+  <en>Max. Length</en>
+</PME_MAXLENGTH>
+
+<PME_VALIDATE type="dropdown" defaultvalue="Any">
+  <en>Validate<option name="Any">Any</option><option name="Alpha">Alphabetic</option><option name="AlphaNum">Alphanumeric</option><option name="Int">Integer</option><option name="Real">Real Number</option><option name="Email">Email</option><option name="Login">Login</option></en>
+</PME_VALIDATE>
+
+<PME_MASK type="text" maxlength="50" size="30" defaultvalue="">
+  <en>Mask</en>
+</PME_MASK>
+<PME_STRTO type="dropdown" defaultvalue="">
+
+  <en>Text transform to<option name=""></option><option name="UPPER">UPPER</option><option name="LOWER">LOWER</option></en>
+</PME_STRTO>
+<PME_REQUIRED type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
+  <en>Required</en>
+</PME_REQUIRED>
+<PME_READONLY type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
+  <en>Read Only</en>
+</PME_READONLY>
+<PME_DEPENDENTFIELDS type="listbox" defaultvalue="" sqlconnection="XMLDB"><![CDATA[
+select XMLNODE_NAME, XMLNODE_NAME AS NAME FROM dynaForm WHERE	XMLNODE_NAME <> @@PME_XMLNODE_NAME AND XMLNODE_NAME <> ""	AND ( TYPE="text" or TYPE="textarea" or TYPE="dropdown" or TYPE="listbox" or TYPE="hidden" )
+  ]]><en>Dependent Fields<option name="">(none)</option></en>
+</PME_DEPENDENTFIELDS>
+<PME_DEFAULTVALUE type="text" maxlength="" size="30" defaultvalue="">
+  <en>Default Value</en>
+</PME_DEFAULTVALUE>
+<PME_HINT type="textarea" cols="47" rows="3">
+  <en>Hint</en>
+</PME_HINT>
+
+<PME_SUBTITLE type="title" enableHTML="1">
+  <en>Appearance</en>
+</PME_SUBTITLE>
+
+<PME_SIZE type="text" maxlength="10" size="10" validate="Int" defaultvalue="15">
+  <en>Size</en>
+</PME_SIZE>
+
+<PME_MODE type="dropdown" defaultvalue="edit">
+  <en>Mode<option name="edit">Edit</option><option name="view">View</option></en>
+</PME_MODE>
+
+<PME_SUBTITLE_OP type="title" enableHTML="1">
+  <en>Operations</en>
+</PME_SUBTITLE_OP>
+<PME_FORMULA type="text" maxlength="50" size="30" defaultvalue="">
+  <en>Formula</en>
+</PME_FORMULA>
+<PME_FUNCTION type="dropdown">
+  <en>Function<option name="">None</option><option name="sum">SUM</option><option name="avg">AVG</option></en>
+</PME_FUNCTION>
+
+<PME_SUBTITLE2 type="title" enableHTML="1">
+  <en>Data</en>
+</PME_SUBTITLE2>
+
+<PME_SQLCONNECTION type="dropdown" sqlconnection="dbarray"><![CDATA[
+  SELECT * FROM DB_CONNECTIONS
+  ]]><en>Sql Connection<option name="">(none)</option></en>
+</PME_SQLCONNECTION>
+
+<PME_XMLNODE_VALUE type="textarea" cols="47" rows="3">
+  <en>Sql</en>
+</PME_XMLNODE_VALUE>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
+  <en>Save</en>
+</PME_ACCEPT>
+
+<PME_JS type="javascript"><![CDATA[
+
+	var fieldForm="text"; 
+	var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
+	var savedFieldName=fieldName.value;
+	var pme_validating;
+	fieldName.focus();
+	fieldName.select();
+	
+	leimnud.event.add(fieldName, 'change', {method:dynaformVerifyFieldName, instance:fieldName, event:true});
+	
+	hideRowById('PME_SUBTITLE_OP');
+  hideRowById('PME_FORMULA');
+  hideRowById('PME_FUNCTION');
+
+var dyntype="@#PME_DYN_TYPE";
+var fv=getField('PME_VALIDATE');
+
+if(fv.value == 'Int' || fv.value == 'Real'){
+
+showRowById('PME_SUBTITLE_OP');
+    showRowById('PME_FORMULA');
+    var dyntype="@#PME_DYN_TYPE";
+    if(dyntype=='grid')
+      showRowById('PME_FUNCTION');
+     else hideRowById('PME_FUNCTION');
+
+}
+
+leimnud.event.add(fv,'change', function(){
+
+
+if (fv.value == 'Int' || fv.value == 'Real') {
+	          showRowById('PME_SUBTITLE_OP');
+            showRowById('PME_FORMULA');
+            if(dyntype=='grid')
+              showRowById('PME_FUNCTION');
+             else hideRowById('PME_FUNCTION');
+	    } else {
+	          hideRowById('PME_SUBTITLE_OP');
+            hideRowById('PME_FORMULA');
+            hideRowById('PME_FUNCTION');
+	    }
+});
+
+function cancel(){
+    currentPopupWindow.remove();
+}
+
+/*    
+    if (getField('PME_VALIDATE').value == 'Int' || getField('PME_VALIDATE').value == 'Real') {
+	  showRowById('PME_SUBTITLE_OP');
+    showRowById('PME_FORMULA');
+    var dyntype="@#PME_DYN_TYPE";
+    if(dyntype=='grid')
+      showRowById('PME_FUNCTION');
+     else hideRowById('PME_FUNCTION');
+	   } 
+	leimnud.event.add(getField('PME_VALIDATE'), 'change', function() {
+	    if (this.value == 'Int' || this.value == 'Real') {
+	          showRowById('PME_SUBTITLE_OP');
+            showRowById('PME_FORMULA');
+            var dyntype="@#PME_DYN_TYPE";
+            if(dyntype=='grid')
+              showRowById('PME_FUNCTION');
+             else hideRowById('PME_FUNCTION');
+	    } else {
+	          hideRowById('PME_SUBTITLE_OP');
+            hideRowById('PME_FORMULA');
+            hideRowById('PME_FUNCTION');
+	    }
+	});
+*/
+]]></PME_JS>
+</dynaForm>  

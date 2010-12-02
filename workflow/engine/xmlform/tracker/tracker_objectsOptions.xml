@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu"> 
+
+<PRO_UID type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="availableCaseTrackerObjects(@QPRO_UID);return false;" colAlign="left" colWidth="50">
+  <en>Assign</en>
+</MNU_ASSIGN>
+
+<PAGED_TABLE_ID type="private"/>
+
+<PRO_UID type="private"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var oPanel;
+var availableCaseTrackerObjects = function(sProcessUID) {
+  oPanel = new leimnud.module.panel();
+	oPanel.options = {
+		size	:{w:400,h:350},
+		position:{x:0,y:0,center:true},
+		title	:G_STRINGS.ID_ASSIGN_CASE_TRACKER_OBJECT,
+		theme	:'processmaker',
+		statusBar:false,
+		control	:{resize:false,roll:false},
+		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+	oPanel.make();
+	oPanel.loader.show();
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url : '../tracker/tracker_Ajax',
+		args: 'action=availableCaseTrackerObjects&PRO_UID=' + sProcessUID
+  });
+  oRPC.callback = function(rpc) {
+		oPanel.loader.hide();
+		oPanel.addContent(rpc.xmlhttp.responseText);
+		var scs = rpc.xmlhttp.responseText.extractScript();
+		scs.evalScript();
+  }.extend(this);
+	oRPC.make();
+};
+
+var assignCaseTrackerObject = function(sProcessUID, sObjectType, sObjectUID) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../tracker/tracker_Ajax',
+		async: false,
+		args : 'action=assignCaseTrackerObject&PRO_UID=' + sProcessUID + '&OBJECT_TYPE=' + sObjectType + '&OBJECT_UID=' + sObjectUID
+  });
+  oRPC.make();
+  oPanel.remove();
+  tracker_objectsList.refresh();
+};
+
+var removeCaseTrackerObject = function(sCOTUID, sProcessUID, iPosition) {
+  new leimnud.module.app.confirm().make({
+  	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_CASE_TRACKER_OBJECT)',
+  	action:function()
+  	{
+      var oRPC = new leimnud.module.rpc.xmlhttp({
+	    	url  : '../tracker/tracker_Ajax',
+	    	async: false,
+	    	args : 'action=removeCaseTrackerObject&CTO_UID=' + sCOTUID + '&PRO_UID=' + sProcessUID + '&STEP_POSITION=' + iPosition
+      });
+      oRPC.make();
+      tracker_objectsList.refresh();
+    }.extend(this)
+  });
+};
+
+var upCaseTrackerObject = function(sCOTUID, sProcessUID, iPosition) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../tracker/tracker_Ajax',
+		async: false,
+		args : 'action=upCaseTrackerObject&CTO_UID=' + sCOTUID + '&PRO_UID=' + sProcessUID + '&STEP_POSITION=' + iPosition
+  });
+  oRPC.make();
+  tracker_objectsList.refresh();
+};
+
+var downCaseTrackerObject = function(sCOTUID, sProcessUID, iPosition) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../tracker/tracker_Ajax',
+		async: false,
+		args : 'action=downCaseTrackerObject&CTO_UID=' + sCOTUID + '&PRO_UID=' + sProcessUID + '&STEP_POSITION=' + iPosition
+  });
+  oRPC.make();
+  tracker_objectsList.refresh();
+};
+
+var conditionCaseTrackerObject = function(sCOTUID) {
+  popupWindow('@G::LoadTranslation(ID_CONDITION)', '../tracker/tracker_ConditionsEdit?CTO_UID='+ sCOTUID, 500, 216);
+};
+
+var saveConditionCaseTrackerObject = function(oForm) {
+  ajax_post(oForm.action, oForm, 'POST');
+  currentPopupWindow.remove();
+};
+
+]]></JS>
+
+</dynaForm>

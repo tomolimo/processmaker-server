@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<MNU_ADD type="link" link="additionalTablesNew" colAlign="left" colWidth="50">
+  <en>New</en>
+</MNU_ADD>
+<MNU_IMPORT type="link" link="additionalTablesToImport" colAlign="left" colWidth="60">
+  <en>Import</en>
+</MNU_IMPORT>
+<MNU_EXPORT type="link" link="#" onclick="toExport()" colAlign="left" colWidth="100">
+  <en>Export</en>
+</MNU_EXPORT>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var additionalTablesDelete = function(sUID) {
+  new leimnud.module.app.confirm().make({
+    label:'Dou you want to delete this collection?',
+    action:function() {
+      ajax_function(@G::encryptlink('additionalTablesDelete'), '', 'sUID=' + sUID, 'POST');
+      @#PAGED_TABLE_ID.refresh();
+    }.extend(this)
+  });
+};
+
+var exportPanel;
+function toExport(){
+	oPanel = new leimnud.module.panel();
+	oPanel.options = {
+	  	size		:	{w:700,h:450},
+	  	position: {x:0,y:0,center:true},
+	  	title		: '',
+	  	theme		: "processmaker",
+	  	statusBar:false,
+	  	control	: {resize:false,roll:false,drag:true},
+	  	fx			: {modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:true}
+	 	};
+	 	oPanel.events = {
+	 		remove: function() { 
+	 			delete(oPanel); 
+	 			resetChecks();
+	 		}.extend(this)
+	 	};
+	oPanel.make();
+	oPanel.loader.show();
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+	  	url : 'additionalTablesAjax',
+	  	args: 'action=exportexporView'
+ 	});
+ 	oRPC.callback = function(rpc) {
+	  	oPanel.loader.hide();
+	  	var scs=rpc.xmlhttp.responseText.extractScript();
+	  	oPanel.addContent(rpc.xmlhttp.responseText);
+	  	scs.evalScript();
+ 	}.extend(this);
+	oRPC.make();
+	exportPanel = oPanel; 
+}
+
+function resetChecks(){
+	checks_selected_ids.length = 0;
+	checks_selected_schema.length = 0;
+	checks_selected_data.length = 0;
+}
+
+function doExport(){
+
+	if( checks_selected_ids.length == 0 ){
+		new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_SELECT_TABLE)'});
+		return 0;
+	}
+
+	var i;
+	for(i=0; i<checks_selected_ids.length; i++){
+		if( !in_arrayx(checks_selected_schema, checks_selected_ids[i])){
+			if( !in_arrayx(checks_selected_data, checks_selected_ids[i])){			
+				new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_SELECT_OPTION_TABLE)'});
+				return 0;
+			} 
+		}
+	}
+		
+  var answer;
+  answer = ajax_function(@G::encryptlink('additionalTablesAjax'), 'existClass', 'tables='+checks_selected_ids+'&schema='+checks_selected_schema+"&data="+checks_selected_data, 'POST');
+  if(answer.length > 1){
+    alert(G_STRINGS.ID_CLASS_TABLE_DOESNT_EXIST);return false;
+		//new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_CLASS_TABLE_DOESNT_EXIST)' + answer });
+		//return 0;
+  } 
+  
+		
+	exportPanel.loader.show();
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : 'additionalTablesAjax',
+      args  : 'action=doExport&tables='+checks_selected_ids+'&schema='+checks_selected_schema+"&data="+checks_selected_data
+    });
+    exportPanel.clearContent();
+    exportPanel.loader.show();
+    oRPC.callback = function(rpc) {
+	  	exportPanel.loader.hide();
+	  	var scs=rpc.xmlhttp.responseText.extractScript();
+	  	exportPanel.addContent(rpc.xmlhttp.responseText);
+	  	scs.evalScript();
+ 	  }.extend(this);
+    resetChecks();
+    oRPC.make();
+}
+
+function in_arrayx(a, e){
+	for(j=0; j<a.length; j++){
+		if(a[j] == e) return true;
+	}
+	return false;
+}
+
+]]></JS>
+</dynaForm>

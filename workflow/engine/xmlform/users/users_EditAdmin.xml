@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="myInfo" width="500px" labelWidth="200px" enableTemplate="0">
+
+<menuUser type="xmlmenu" xmlfile="users/users_EditOptions">
+  <en/>
+</menuUser>
+
+<START_DATE type="phpVariable"/>
+
+<END_DATE type="phpVariable"/>
+
+<TITLE1 type="title" group="1">
+  <en>Personal Information</en>
+<es><![CDATA[Información Personal]]></es><pt><![CDATA[Informações Pessoais]]></pt></TITLE1>
+
+<USR_UID type="private"/>
+
+<USR_FIRSTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>First Name</en>
+<es>Nombre</es><pt>Nome</pt></USR_FIRSTNAME>
+
+<USR_LASTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Last Name</en>
+<es>Apellido</es><pt>Sobrenome</pt></USR_LASTNAME>
+
+<USR_USERNAME type="text" size="15" maxlength="50" validate="" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
+  <en>User ID (*)</en>
+<es>ID de usuario (*)</es><pt><![CDATA[Identificador de Usuário (*)]]></pt></USR_USERNAME>
+
+<USR_EMAIL type="text" size="35" maxlength="100" validate="Email" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Email</en>
+<es><![CDATA[Correo Eletrónico]]></es><pt><![CDATA[Endereço de Correio Eletrônico]]></pt></USR_EMAIL>
+
+<USR_ADDRESS type="textarea" rows="3" cols="50" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Address</en>
+<es><![CDATA[Dirección]]></es><pt><![CDATA[Endereço]]></pt></USR_ADDRESS>
+
+<USR_ZIP_CODE type="text" size="30" maxlength="30" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Zip Code</en>
+<es><![CDATA[Código Postal]]></es><pt>CEP</pt></USR_ZIP_CODE>
+
+<USR_COUNTRY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
+SELECT IC_UID, IC_NAME FROM ISO_COUNTRY ORDER BY IC_NAME
+  <en>Country<option name=""></option></en>
+<es><![CDATA[País]]><option name=""/></es><pt><![CDATA[País]]><option name=""><![CDATA[País]]></option></pt></USR_COUNTRY>
+
+<USR_CITY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_LOCATION" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
+SELECT IS_UID, IS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = "@#USR_COUNTRY" ORDER BY IS_NAME
+  ]]><en>State or Region</en>
+<es><![CDATA[Estado o Región]]></es><pt><![CDATA[Estado da União]]></pt></USR_CITY>
+
+<USR_LOCATION type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
+SELECT IL_UID, IL_NAME FROM ISO_LOCATION WHERE IC_UID = "@#USR_COUNTRY" AND IS_UID = "@#USR_CITY" AND IS_UID NOT IN ("") ORDER BY IL_NAME
+  ]]><en>Location</en>
+<es><![CDATA[Ubicación]]></es><pt>Cidade</pt></USR_LOCATION>
+
+<USR_PHONE type="text" size="15" maxlength="16" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+  <en>Phone</en>
+<es><![CDATA[Teléfono]]></es><pt>Telefone</pt></USR_PHONE>
+
+<USR_POSITION type="text" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+
+  <en>Position</en>
+<es><![CDATA[Posición]]></es><pt><![CDATA[Função]]></pt></USR_POSITION>
+
+<USR_REPORTS_TO type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
+SELECT USR_UID, CONCAT(USR_LASTNAME, " ", USR_FIRSTNAME) FROM USERS WHERE USR_STATUS = 1 ORDER BY USR_LASTNAME
+  ]]><en>Reports to<option name=""></option></en>
+</USR_REPORTS_TO>
+
+<USR_REPLACED_BY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
+SELECT USR_UID, CONCAT(USR_LASTNAME, " ", USR_FIRSTNAME) FROM USERS WHERE USR_STATUS = 1 ORDER BY USR_LASTNAME
+  ]]><en>Replaced by<option name=""></option></en>
+</USR_REPLACED_BY>
+
+<USR_DUE_DATE type="date" mask="Y-m-d" startDate="@#START_DATE" endDate="@#END_DATE" defaultvalue="" required="1" group="1" readonly="0" noshowingrid="0" readonlyingrid="0">
+  <en>Expiration Date</en>
+<es>Fecha de vencimiento</es><pt><![CDATA[Data de Expiração]]></pt></USR_DUE_DATE>
+
+<USR_STATUS type="dropdown" group="1" required="0" mode="view">
+  <en>Status<option name="ACTIVE">ACTIVE</option><option name="INACTIVE">INACTIVE</option><option name="VACATION">ON VACATION</option></en>
+<es>Estado<option name="ACTIVE">ACTIVO</option><option name="INACTIVE">INACTIVO</option><option name="VACATION"><![CDATA[DE VACACIÓN]]></option></es><pt>Estado<option name="ACTIVE">ATIVO</option><option name="INACTIVE">INATIVO</option><option name="VACATION"><![CDATA[EM FÉRIAS]]></option></pt></USR_STATUS>
+
+<USR_ROLE type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0" mode="view"><![CDATA[
+SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '00000000000000000000000000000002' ORDER BY ROL_CODE
+  ]]><en>Role</en>
+<es>Rol</es><pt>Papel</pt></USR_ROLE>
+
+<TITLE2 type="title" group="1">
+  <en>Change Password</en>
+<es><![CDATA[Cambiar Contraseña]]></es><pt>Alterar Senha</pt></TITLE2>
+
+<USR_NEW_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
+  <en>New Password</en>
+<es><![CDATA[Nueva Contraseña]]></es><pt>Nova Senha</pt></USR_NEW_PASS>
+
+<USR_CNF_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
+  <en>Confirm Password</en>
+<es><![CDATA[Confirmar Contraseña]]></es><pt>Confirmar Senha</pt></USR_CNF_PASS>
+
+<TITLE3 type="title" group="1">
+  <en>Additional Information</en>
+<es><![CDATA[Información Adicional]]></es><pt><![CDATA[Informações Adicionais]]></pt></TITLE3>
+
+<USR_PHOTO type="file" group="1">
+  <en>Photo</en>
+<es><![CDATA[Fotografía]]></es><pt>Fotografia</pt></USR_PHOTO>
+<USR_RESUME type="file" group="1">
+  <en>Resume</en>
+<es>Hoja de vida</es><pt>Retomar</pt></USR_RESUME>
+
+<SUBMIT type="button" onclick="verifyUserInformation(this.form);" group="1">
+  <en>Save</en>
+<es>Guardar</es><pt>Salvar</pt></SUBMIT>
+
+<MESSAGE0 type="phpvariable"/>
+
+<MESSAGE1 type="phpvariable"/>
+
+<MESSAGE2 type="phpvariable"/>
+
+<MESSAGE3 type="phpvariable"/>
+
+<JS type="javascript" replacetags="1"><![CDATA[
+var sUsername;
+
+var dynaformOnload = function()
+{
+  sUsername = document.forms[1].elements['form[USR_USERNAME]'].value;
+  leimnud.event.add(document.forms[1].elements['form[USR_USERNAME]'], 'change', {method:verifyUsername, instance:document.forms[1].elements['form[USR_USERNAME]'], event:true});
+  leimnud.event.add(document.forms[1].elements['form[USR_CITY]'], 'change', {method:existsElements, instance:document.forms[1].elements['form[USR_CITY]'], event:true});
+  leimnud.event.add(document.forms[1].elements['form[USR_LOCATION]'], 'change', {method:existsElements, instance:document.forms[1].elements['form[USR_LOCATION]'], event:true});
+  if (document.forms[1].elements['form[USR_CITY]'].options.length == 0) {
+    hideRow(document.forms[0].elements['form[USR_CITY]']);
+    hideRow(document.forms[1].elements['form[USR_CITY]']);
+  }
+  if (document.forms[1].elements['form[USR_LOCATION]'].options.length == 0) {
+    hideRow(document.forms[0].elements['form[USR_LOCATION]']);
+    hideRow(document.forms[1].elements['form[USR_LOCATION]']);
+  }
+};
+
+var verifyUsername = function()
+{
+  document.forms[1].elements['form[USR_USERNAME]'].disabled = true;
+  document.forms[1].elements['form[SUBMIT]'].disabled = true;
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url    :'users_Ajax',
+    async  : false,
+    method :'POST',
+    args   :'function=verifyUsername&sOriginalUsername=' + sUsername + '&sUsername=' + encodeURIComponent(this.value)});
+  oRPC.make();
+  var sResponse = oRPC.xmlhttp.responseText;
+  document.forms[1].elements['form[USR_USERNAME]'].disabled = false;
+  if (sResponse == '1')
+  {
+    new leimnud.module.app.alert().make({
+	    label: "@#MESSAGE0"
+  	});
+    document.forms[1].elements['form[USR_USERNAME]'].focus();
+  }
+  else
+  {
+    document.forms[1].elements['form[SUBMIT]'].disabled = false;
+  }
+};
+
+var verifyUserInformation = function(oForm)
+{
+	var oAux1, oAux2;
+	var bContinue = true;
+	oAux1 = oForm.elements['form[USR_USERNAME]'];
+	if (oAux1.value == '')
+	{
+		new leimnud.module.app.alert().make({
+	    label: "@#MESSAGE1"
+  	});
+		oAux1.focus();
+		bContinue = false;
+	}
+        // note added by gustavo cruz gustavo-at-colosa-dot-com
+        // need also a further examination of this issue, seems that this problem
+        // could replicate in other manually tweaked forms as users_Edit 
+        // for example
+        sDate = document.getElementById('form[USR_DUE_DATE][div]').firstChild.nodeValue;
+        oAux1 = oForm.elements['form[USR_DUE_DATE]'];
+        oAux1.setAttribute('value',sDate.trim());
+	if (oAux1.value == '')
+	{
+		new leimnud.module.app.alert().make({
+	    label: "@#MESSAGE2"
+  	});
+		oAux1.focus();
+		bContinue = false;
+	}
+	oAux1 = oForm.elements['form[USR_NEW_PASS]'];
+	oAux2 = oForm.elements['form[USR_CNF_PASS]'];
+	if (oAux1.value != '')
+	{
+		if (oAux1.value != oAux2.value)
+		{
+		  new leimnud.module.app.alert().make({
+	      label: "@#MESSAGE3"
+  	  });
+		  oAux1.focus();
+		  bContinue = false;
+	  }
+	}
+	if (bContinue)
+	{
+		oForm.submit();
+	}
+};
+
+var existsElements = function () {
+  if (this.options.length > 0) {
+    showRow(this);
+  }
+  else {
+    hideRow(this);
+  }
+};
+]]></JS>
+
+</dynaForm>  

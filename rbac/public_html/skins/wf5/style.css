@@ -1,0 +1,120 @@
+<style>
+.basicTable {
+  font-family: Verdana, Arial, sans-serif ;
+  font-size: 12pt;
+  border: 1px solid #5E8BB1;
+  empty-cells: show;
+}
+
+.Header {
+  font-family: Verdana, Arial, sans-serif ;
+  font-size: 10pt;
+  border-collapse: collapse;
+  border: 1px solid #000;
+  width: 100%;
+ }
+
+.Header th {
+  background-color: #5E8BB1;
+  color: #fff;
+  font-weight: bold;
+  text-align: left;
+  padding: 3px;
+  width: 100%;
+  white-space: nowrap;
+  }
+
+.Header a:link {
+  color: #ffffff;
+  }
+
+.Header a:visited {
+  color: #ffffff;
+  }
+
+.Header a:hover, .Caption a:active {
+  color: #ffffff; text-decoration: none;
+  }
+
+.HeaderLeft {
+  background-image: url('Images/HeaderLeft.gif');
+  }
+
+.HeaderRight {
+  background-image: url('Images/HeaderRight.gif');
+  }
+
+.HeaderLeft img{
+  width: 3px;
+  }
+
+.HeaderRight img{
+  width: 9px;
+  }
+
+/* Record Options */
+.Record {
+  font-family: Verdana, Arial, sans-serif ;
+  font-size: 10pt;
+  border-collapse: collapse;
+  border: 1px solid #000;
+  width: 100%;
+}
+
+.FormTitle {
+    color: #000;
+    background-color: #efefe8;
+  border: solid 1px #000;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.FormSubTitle {
+  background-color: #f8f8f0;
+  color: #000;
+  border: solid 1px #000;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.FormLabel {
+  background-color: #efefef;
+  border: solid 1px #000;
+  border-right: solid 0px #efefef;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.FormField {
+  background-color: #fff;
+  border: solid 1px #000;
+  border-left: solid 0px #efefef;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.FormButton {
+  background-color: #efefef;
+  border: solid 1px #000;
+  border-right: solid 0px #efefef;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>

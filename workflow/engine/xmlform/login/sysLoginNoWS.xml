@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="sysLogin" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" >
+<TITLE type="title">
+  <en>Login</en>
+</TITLE>
+
+<USR_USERNAME type="text" size="30" maxlength="50" validate="Login" >
+  <en>User</en>
+</USR_USERNAME>
+
+<USR_PASSWORD type="password" size="30" maxlength="32" >
+  <en>Password</en>
+</USR_PASSWORD>
+
+<USER_ENV type="text" size="30" maxlength="50">
+<en>Workspace</en>
+</USER_ENV>
+
+<USER_LANG type="dropdown" sqlconnection="dbarray">
+SELECT LANG_ID, LANG_NAME FROM langOptions
+<en>Language</en>
+</USER_LANG>
+
+<BSUBMIT type="submit">
+  <en>Login</en>
+</BSUBMIT>
+
+<JS type="javascript"><![CDATA[
+
+
+setFocus (getField ('USR_USERNAME'));
+
+leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() { 
+    ws = getField('USER_ENV').value;
+    createCookie('pmos_generik2', '{"ws":"'+ws+'"}', 365);
+    
+    var client = getBrowserClient();
+    if (client.browser == "msie" || client.browser == "safari"){ 
+        document.sysLogin.submit();
+    } 
+}.extend(document.getElementById('form[BSUBMIT]'))); 
+
+try{
+    c = new String(readCookie('pmos_generik2'));
+    o = eval("("+c+")");
+    if( o != null){
+        getField('USER_ENV').value = o.ws; 
+    }
+} catch(e){}
+
+]]></JS>
+</dynaForm>  

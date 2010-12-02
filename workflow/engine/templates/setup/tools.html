@@ -1,0 +1,76 @@
+<body onresize="autoResizeWindow()">
+<table id="contentAdmTable" border="0" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td valign="top" width="{LeftWidth}px">
+      <div class="grid" style="" id="leftcontent">
+        <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+        <div class="content" style="">
+          <table style="" border="0">
+            <tr>
+              <td valign="top">
+                <div id="cpanel" style="overflow: auto; overflow-x: hidden;">
+                  <!-- START BLOCK : tool_options -->
+                  <div class="icon">
+                    <a class="iconmenu" href="{link}" onclick="{onclick}" target="{target}">
+                      <img style="float:left" src="/images/{icon}" alt="{label}" width="28" height="28">
+                      <span style="float:left"><br/>&nbsp;&nbsp;{label}</span>
+                    </a>
+                  </div>
+                  <!-- END BLOCK : tool_options -->
+                  <div class="icon" style="display:{displayLanguageTool}">
+                    <a class="iconmenu" href="../tools/translations?type=blank" onclick="" target="admToolsContent">
+                      <img style="float:left" src="/images/kcmdf.png" alt="language" width="28" height="28">
+                      <span style="float:left"><br/>&nbsp;&nbsp;Translatiions</span>
+                    </a>
+                  </div>
+                  <div class="icon" style="display:{displayNewSiteTool}">
+                    <a class="iconmenu" href="../install/newSite?type=blank" onclick="" target="admToolsContent">
+                      <img style="float:left" src="/images/kcmdf.png" alt="language" width="28" height="28">
+                      <span style="float:left"><br/>&nbsp;&nbsp;NewSite</span>
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+      </div>
+    </td>
+    <td valign="top">
+      <div class="grid"  id="contentAdm">
+        <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+        <div class="content" style="height:800" id="setupcontent">
+          <table style="" width="100%">
+            <tr>
+              <td valign="top">
+                <iframe name="admToolsContent" id="admToolsContent" src ="" width="100%" height="100%" frameborder="0">
+                  <p>Your browser does not support iframes.</p>
+                </iframe>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+      </div>
+    </td>
+  </tr>
+</table>
+</body>
+
+<script>
+  function autoResizeWindow(){
+    document.getElementById('pm_submenu').style.display = 'none';
+    document.documentElement.style.overflowY = 'hidden';
+
+    oCpanel = document.getElementById('cpanel');
+    oContent = document.getElementById('setupcontent');
+    oadmToolsContent = document.getElementById('admToolsContent');
+
+    oClientWinSize = getClientWindowSize();
+    oCpanel.style.height = oClientWinSize.height-135;
+    oContent.style.height = oClientWinSize.height-130;
+    oadmToolsContent.style.height = oClientWinSize.height-130;
+  }
+  autoResizeWindow();
+</script>

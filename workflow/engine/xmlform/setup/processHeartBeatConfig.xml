@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="ProcessHeartBeatConfig" width="55%" enableTemplate="1">
+
+<HB_TITLE type="title" enablehtml="0" btn_cancel="Cancel" enableHTML="1">  
+  <en>Processmaker Heartbeat</en>
+</HB_TITLE>
+
+<HB_OPTION type="dropdown" required="0" readonly="0"  savelabel="0" mode="edit" options="Array">  
+	<en>Enable Heartbeat
+		<option name="0">No</option>
+		<option  name="1">Yes</option>
+	</en>
+</HB_OPTION>
+
+<HB_SAVE type="button" onclick="sendValues(this.form);" >  
+	<en>save</en>
+</HB_SAVE>
+
+<HB_LINKINFO type="link" colWidth="60" titleAlign="left" align="left" link='processHeartBeatInfo' value ='Read Online Documentation' onclick="var k=window.open('http://wiki.processmaker.com/index.php/Heartbeat
+','_blank');return false;"/>
+
+<HB_JS type="javascript">
+	var sendValues=function(form){
+  var hbOption = getField('HB_OPTION').value;
+	ajax_function('processHeartBeatSave','','HB_OPTION='+hbOption,'POST') ;
+	window.location = 'processHeartBeatConfig';
+	};
+</HB_JS>
+
+</dynaForm>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm
+  name="cases_AttachInputDocumentInfo"
+  type="xmlform"
+  width="600px"
+
+  labelWidth="120px"
+>
+
+<__DYNAFORM_OPTIONS type="xmlmenu" xmlfile="gulliver/dynaforms_Options"   colWidth='200px'>
+  <en></en>
+</__DYNAFORM_OPTIONS>
+
+</dynaForm>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+<DOC_UID type="private"/>
+<labelFolderAddFolder type="private"/>
+<labelFolderAddFile type="private"/>
+
+<PAGED_TABLE_ID type="private"/>
+
+<!-- Default Search option -->
+
+<MNU_SEARCH_TITLE type="caption" label="@G::LoadTranslation(ID_SEARCH_RESULT)" colAlign="left"  colWidth="150" />
+<PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
+<MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right"  colWidth="50" onclick="getPMFolderSearchResult(getField('PAGED_TABLE_FAST_SEARCH',this.form).value,'ALL');"/>
+
+<PAGED_TABLE_ID type="private"/>
+
+<JS type="javascript">
+
+</JS>
+</dynaForm> 

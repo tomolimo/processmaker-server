@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PRO_UID type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="availableSupervisorInputs(@QPRO_UID);return false;" colAlign="left" colWidth="50">
+  <en>Assign</en>
+</MNU_ASSIGN>
+
+<PAGED_TABLE_ID type="private"/>
+
+<PRO_UID type="private"/>
+
+
+<JS type="javascript" replaceTags="1"><![CDATA[
+
+var oPanel;
+var availableSupervisorInputs = function(sProcessUID) {
+  oPanel = new leimnud.module.panel();
+	oPanel.options = {
+		size	:{w:400,h:350},
+		position:{x:0,y:0,center:true},
+		title	:G_STRINGS.ID_ASSIGN_INPUT_DOCUMENT,
+		theme	:'processmaker',
+		statusBar:false,
+		control	:{resize:false,roll:false},
+		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
+  };
+  oPanel.events = {
+  	remove: function() { delete(oPanel); }.extend(this)
+  };
+	oPanel.make();
+	oPanel.loader.show();
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+		url : '../steps/steps_SupervisorAjax',
+		args: 'action=availableSupervisorInputs&PRO_UID=' + sProcessUID
+  });
+  oRPC.callback = function(rpc) {
+		oPanel.loader.hide();
+		oPanel.addContent(rpc.xmlhttp.responseText);
+		var scs = rpc.xmlhttp.responseText.extractScript();
+		scs.evalScript();
+  }.extend(this);
+	oRPC.make();
+};
+
+var assignSupervisorInput = function(sProcessUID, sInputUID) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+		url  : '../steps/steps_SupervisorAjax',
+		async: false,
+		args : 'action=assignSupervisorInput&PRO_UID=' + sProcessUID + '&INP_DOC_UID=' + sInputUID
+  });
+  oRPC.make();
+  oPanel.remove();
+  inputdocs_SupervisorOptions.refresh();
+};
+
+var removeSupervisorInput = function(sStepUID, sProcessUID, sInputUID, iPosition) {
+  new leimnud.module.app.confirm().make({
+  	label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_SUPERVISOR_INPUT)',
+  	action:function()
+  	{
+      var oRPC = new leimnud.module.rpc.xmlhttp({
+	    	url  : '../steps/steps_SupervisorAjax',
+	    	async: false,
+	    	args : 'action=removeSupervisorInput&STEP_UID=' + sStepUID + '&PRO_UID=' + sProcessUID + '&INP_DOC_UID=' + sInputUID + '&STEP_POSITION=' + iPosition
+      });
+      oRPC.make();
+      inputdocs_SupervisorOptions.refresh();
+    }.extend(this)
+  });
+};
+
+]]></JS>
+
+</dynaForm> 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="dynaforms_Toolbar" version="1.0" type="toolbar" align="left" width="100%">
+<!--
+<save type="toolButton" onclick="fieldsAdd('dropdown')" buttonType="text">
+  <en>Save</en>
+</save>
+<saveAs type="toolButton" onclick="fieldsAdd('dropdown')" buttonType="text">
+  <en>Save as</en>
+</saveAs>
+<undo type="toolButton" onclick="fieldsAdd('dropdown')" buttonType="text">
+  <en>Undo</en>
+</undo>
+<redo type="toolButton" onclick="fieldsAdd('dropdown')" buttonType="text">
+  <en>Redo</en>
+</redo>
+<resetTemplate type="toolButton" onclick="resetTemplate()" buttonType="text">
+  <en>Reset Template</en>
+</resetTemplate>
+-->
+</dynaForm> 

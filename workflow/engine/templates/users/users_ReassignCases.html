@@ -1,0 +1,42 @@
+<form name="frmReassign" id="frmReassign" method="POST" action="users_Reassign">
+<div class="borderForm" style="width:; padding-left:0; padding-right:0; border-width:1;">
+<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+<div class="pagedTableDefault" style="height:100%;" >
+<table width="95%" align="center" cellpadding="2" cellspacing="0" border="0" class="pagedTable">
+  <tr>
+  <td class="pagedTableHeader"><img src="/js/maborak/core/images/separatorTable.gif" style=""/></td><td width="5%"  class="pagedTableHeader">{ID_NUMBER}</td>
+  <td class="pagedTableHeader"><img src="/js/maborak/core/images/separatorTable.gif" style=""/></td><td width="25%" class="pagedTableHeader">{ID_CASE}</td>
+  <td class="pagedTableHeader"><img src="/js/maborak/core/images/separatorTable.gif" style=""/></td><td width="20%" class="pagedTableHeader">{ID_TASK}</td>
+  <td class="pagedTableHeader"><img src="/js/maborak/core/images/separatorTable.gif" style=""/></td><td width="20%" class="pagedTableHeader">{ID_PROCESS}</td>
+  <td class="pagedTableHeader"><img src="/js/maborak/core/images/separatorTable.gif" style=""/></td><td width="5%" class="pagedTableHeader">{ID_STATUS}</td>
+  <td class="pagedTableHeader"><img src="/js/maborak/core/images/separatorTable.gif" style=""/></td><td width="25%" class="pagedTableHeader">{ID_REASSIGN_TO}</td>
+</tr>
+<!-- START BLOCK : cases -->
+<tr class="Row2" onmouseout="setRowClass(this, 'Row2');" onmouseover="setRowClass(this, 'RowPointer');">
+  <td /><td>{APP_NUMBER}</td>
+  <td /><td>{APP_TITLE}</td>
+  <td /><td>{APP_TAS_TITLE}</td>
+  <td /><td>{APP_PRO_TITLE}</td>
+  <td /><td>{ID_STATUS}</td>
+  <td /><td>
+          <input type="hidden" name="APPLICATIONS[]" id="APPLICATIONS[]" value="{APP_UID}" />
+          <input type="hidden" name="INDEXES[]" id="INDEXES[]" value="{DEL_INDEX}" />
+          <select name="USERS[]" id="USERS[]"><option value=""> - {ID_NO_REASSIGN} - </option>
+            <!-- START BLOCK : users -->
+            <option value="{USR_UID}">{USR_FULLNAME}</option>
+            <!-- END BLOCK : users -->
+          </select>
+        </td>
+</tr>
+<!-- END BLOCK : cases -->
+<tr height="50">
+  <td colspan="12" align="center">
+    <input type="hidden" name="USR_UID" id="USR_UID" value="{USR_UID}" />
+    <input type="submit" name="btnReassign" id="btnReassign" value="{ID_REASSIGN}" class="module_app_button___gray" />
+  </td>
+</tr>
+</table>
+</div>
+<div class="boxBottom"><div class="a"></div>
+<div class="b"></div><div class="c"></div></div>
+</form>

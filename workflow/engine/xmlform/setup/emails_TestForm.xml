@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="emails_TestForm" type="xmlform" width="100%" labelWidth="">
+
+<THETITLE type="title">
+  <en>Mail Configuration Test Page</en>
+</THETITLE>
+
+<FROM_NAME type="text" size="25" defaultValue="Process Maker [Test mail]">
+  <en>From Name:</en>
+</FROM_NAME>
+
+<FROM_EMAIL type="text" size="25" defaultValue="" validate="Email" required="true" mode="view">
+  <en>From Email:</en>
+</FROM_EMAIL>
+
+<TO type="text" size="25" validate="Email" required="true">
+  <en>To:</en>
+</TO>
+
+<SEND type="button" onclick="sendTestMail();">
+  <en>Send Email</en>
+</SEND>
+
+<JS type="javascript"><![CDATA[
+
+var sendTestMail = function() {
+  oAux = getField('FROM_EMAIL');
+  if (oAux.value == '') {
+    alert(G_STRINGS.ID_MESS_TEST_FROM_EMAIL);
+	  oAux.focus();
+	  return;
+  }
+  oAux = getField('TO');
+  if (oAux.value == '') {
+    alert(G_STRINGS.ID_MESS_TEST_TO);
+	  oAux.focus();
+	  return;
+  }
+  sValues  = 'MESS_ENGINE=' + getField('MESS_ENGINE').value + '&';
+  sValues += 'MESS_SERVER=' + getField('MESS_SERVER').value + '&';
+  sValues += 'MESS_PORT=' + getField('MESS_PORT').value + '&';
+  sValues += 'MESS_ACCOUNT=' + getField('MESS_ACCOUNT').value + '&';
+  sValues += 'MESS_PASSWORD=' + getField('MESS_PASSWORD').value + '&';
+  sValues += 'MESS_BACKGROUND=' + getField('MESS_BACKGROUND').checked + '&';
+  sValues += 'MESS_EXECUTE_EVERY=' + getField('MESS_EXECUTE_EVERY').value + '&';
+  sValues += 'MESS_SEND_MAX=' + getField('MESS_SEND_MAX').value + '&';
+  sValues += 'MESS_TRY_SEND_INMEDIATLY=' + getField('MESS_TRY_SEND_INMEDIATLY').checked + '&';
+  sValues += 'FROM_NAME=' + getField('FROM_NAME').value + '&';
+  sValues += 'FROM_EMAIL=' + getField('FROM_EMAIL').value + '&';
+  sValues += 'TO=' + getField('TO').value;
+  oPanel.clearContent();
+  oPanel.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+  	url : 'emails_Ajax',
+  	args: 'action=sendTestMail&' + sValues
+  });
+  oRPC.callback = function(rpc){
+    oPanel.loader.hide();
+  	oPanel.addContent(rpc.xmlhttp.responseText);
+  	var scs = rpc.xmlhttp.responseText.extractScript();
+  	scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+]]></JS>
+
+</dynaForm>  

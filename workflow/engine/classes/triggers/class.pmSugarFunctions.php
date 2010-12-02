@@ -1,0 +1,345 @@
+<?php
+/**
+ * class.pmSugar.pmFunctions.php
+ *
+ * ProcessMaker Open Source Edition
+ * Copyright (C) 2004 - 2008 Colosa Inc.
+ * *
+ */
+
+////////////////////////////////////////////////////
+// pmSugar PM Functions
+//
+// Copyright (C) 2007 COLOSA
+//
+// License: LGPL, see LICENSE
+////////////////////////////////////////////////////
+
+
+/**
+ * SugarCRM
+ * @class pmSugar
+ * @name Sugar CRM Triggers
+ * @icon /images/triggers/icon_SugarCRM.gif
+ * @className class.pmSugar.pmFunctions.php
+ */
+
+function sugarLogin($sugarSoap, $user, $password) {
+  $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+  $auth_array = array ('user_auth' => array ('user_name' => $user, 'password' => md5 ( $password ), 'version' => '1.0' ) );
+  $login_results = $client->__SoapCall ( 'login', $auth_array );
+
+  $session_id = $login_results->id;
+  $user_guid = $client->__SoapCall ( 'get_user_id', array ($session_id ) );
+  return $session_id;
+}
+
+function objectToArray($object) {
+  if (! is_object ( $object ) && ! is_array ( $object )) {
+    return $object;
+  }
+  if (is_object ( $object )) {
+    $object = get_object_vars ( $object );
+  }
+  return array_map ( "objectToArray", $object );
+}
+/**
+ * @method
+ *
+ * Gets SugarCRM entries from the indicated module.
+ *
+ * @name GetSugarEntries
+ * @label Get SugarCRM Entries
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $module | Module
+ * @param string | $query | Query
+ * @param string | $orderBy | Order By
+ * @param string | $selectedFields | Selected Fields
+ * @param string | $maxResults=50 | Max Results
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarEntries | Sugar Entries (array or object)
+ *
+ */
+
+function GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
+  $sessionId = sugarLogin ( $sugarSoap, $user, $password );
+  $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'query' => $query, 'order_by' => $orderBy );
+  $sugarEntriesO = $client->__SoapCall ( 'get_entry_list', $request_array );
+
+  switch($resultType){
+    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO );break;
+    case 'object':$sugarEntries = $sugarEntries ;break;
+    default: $sugarEntries = objectToArray ( $sugarEntries );
+  }
+
+  return $sugarEntries;
+
+}
+/**
+ * @method
+ *
+ * Gets SugarCRM entries from the Calls module
+ *
+ * @name GetSugarCalls
+ * @label Gets SugarCRM entries from the Calls module
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $query | Query
+ * @param string | $orderBy | Order By
+ * @param string | $selectedFields | Selected Fields
+ * @param string | $maxResults=50 | Max Results
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarCalls | Sugar Calls (array or object)
+ *
+ */
+
+function GetSugarCalls($sugarSoap, $user, $password, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
+  $module="Calls";
+  return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
+}
+/**
+ * @method
+ *
+ * Gets SugarCRM entries from the Leads module.
+ *
+ * @name GetSugarLeads
+ * @label Gets SugarCRM entries from the Leads module.
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $query | Query
+ * @param string | $orderBy | Order By
+ * @param string | $selectedFields | Selected Fields
+ * @param string | $maxResults=50 | Max Results
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarLeads | Sugar Leads (array or object)
+ *
+ */
+
+function GetSugarLeads($sugarSoap, $user, $password, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
+  $module="Leads";
+  return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
+}
+/**
+ * @method
+ *
+ * Gets SugarCRM entries from the Contacts module.
+ *
+ * @name GetSugarContacts
+ * @label Gets SugarCRM entries from the Contacts module.
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $query | Query
+ * @param string | $orderBy | Order By
+ * @param string | $selectedFields | Selected Fields
+ * @param string | $maxResults=50 | Max Results
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarContacts | Sugar Contacts (array or object)
+ *
+ */
+
+function GetSugarContacts($sugarSoap, $user, $password, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
+  $module="Contacts";
+  return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
+}
+/**
+ * @method
+ *
+ * Gets SugarCRM entries from the Opportunities module.
+ *
+ * @name GetSugarOpportunities
+ * @label Gets SugarCRM entries from the Opportunities module.
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $query | Query
+ * @param string | $orderBy | Order By
+ * @param string | $selectedFields | Selected Fields
+ * @param string | $maxResults=50 | Max Results
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarAccount | Sugar Opportunities (array or object)
+ *
+ */
+
+function GetSugarOpportunities($sugarSoap, $user, $password, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
+  $module="Opportunities";
+  return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
+}
+
+/**
+ * @method
+ *
+ * Gets SugarCRM entries from the Account module.
+ *
+ * @name GetSugarAccount
+ * @label Gets SugarCRM entries from the Account module.
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $query | Query
+ * @param string | $orderBy | Order By
+ * @param string | $selectedFields | Selected Fields
+ * @param string | $maxResults=50 | Max Results
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarAccount | Sugar Opportunities (array or object)
+ *
+ */
+
+function GetSugarAccount($sugarSoap, $user, $password, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
+  $module="Accounts";
+  return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
+}
+
+
+/**
+ * @method
+ *
+ * Creates SugarCRM entries from the Account module.
+ *
+ * @name CreateSugarAccount
+ *
+ * @label Creates SugarCRM entries from the Account module.
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $name | name
+ * @param string | $value | value
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarAccount | Sugar Opportunities (array or object)
+ *
+ */
+function CreateSugarAccount($sugarSoap, $user, $password, $name , $value, $resultType="array") {
+
+  $module = "Accounts";
+  $sessionId = sugarLogin ( $sugarSoap, $user, $password );
+  $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' => array(
+            array("name" => 'name', "value" => $value )
+            ) );
+  $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
+  $account_id = $sugarEntriesO ->id;
+
+  switch($resultType){
+    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO );break;
+    case 'object':$sugarEntries = $sugarEntries ;break;
+    default: $sugarEntries = objectToArray ( $sugarEntries );
+  }
+  return $sugarEntries;
+}
+
+/**
+ * @method
+ *
+ * Creates SugarCRM entries from the Account module
+ *
+ * @name CreateSugarContact
+ *
+ * @label Creates SugarCRM entries from the Account module
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $first_name | First Name
+ * @param string | $last_name | Last Name
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarContact | Sugar Opportunities (array or object)
+ *
+ */
+function CreateSugarContact($sugarSoap, $user, $password,
+    $first_name, $last_name,
+    $resultType="array") {
+
+    $module = "Contacts";
+    $aValue =  array(
+        array("name" => 'id',           "value" => G::generateUniqueID()),
+        array("name" => 'first_name',   "value" => $first_name),
+        array("name" => 'last_name',    "value" => $last_name),
+    );
+
+  $sessionId = sugarLogin ( $sugarSoap, $user, $password );
+  $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' => $aValue );
+
+  $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
+
+  switch($resultType){
+    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO ); break;
+    case 'object':$sugarEntries = $sugarEntries; break;
+    default: $sugarEntries = objectToArray ( $sugarEntries );
+  }
+  return $sugarEntries;
+}
+
+
+/**
+ * @method
+ *
+ * Creates SugarCRM entries from the Opportunities module.
+ *
+ * @name CreateSugarOpportunity
+
+ * @label Creates SugarCRM entries from the Opportunities module.
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $name | Name
+ * @param string | $account_name | Account Name
+ * @param string | $amount | Amount
+ * @param string | $date_closed | Date Closed
+ * @param string | $sales_stage | Prospecting, Qualification, Needs Analysis, Value Proposition, Id. Decision Makers, Perception Analysis, Proposal/Price Quote, Negotiation/Review, Closed Won, Closed Lost
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarOpportunity | Sugar Opportunities (array or object)
+ *
+ */
+function CreateSugarOpportunity($sugarSoap, $user, $password,
+        $name, $account_name, $amount, $date_closed, $sales_stage,
+    $resultType="array") {
+
+    $module = "Opportunities";
+
+    $aValue =  array(
+        array("name" => 'id',           "value" => G::generateUniqueID()),
+        array("name" => 'name',         "value" => $name),
+        array("name" => 'account_name', "value" => $account_name),
+        array("name" => 'amount',       "value" => $amount),
+        array("name" => 'date_closed',  "value" => $date_closed),
+        array("name" => 'sales_stage',  "value" => $sales_stage)
+        );
+
+  $sessionId = sugarLogin ( $sugarSoap, $user, $password );
+  $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' => $aValue );
+
+  $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
+
+  switch($resultType){
+    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO ); break;
+    case 'object':$sugarEntries = $sugarEntries; break;
+    default: $sugarEntries = objectToArray ( $sugarEntries );
+  }
+  return $sugarEntries;
+}

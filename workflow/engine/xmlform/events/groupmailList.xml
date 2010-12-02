@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm width="100%" rowsPerPage="5">
+
+<GRP_UID type="private" showInTable="0"/>
+
+<GROUP_TITLE type="text" colWidth="350" titleAlign="left" align="left">
+  <en>Group name</en>
+</GROUP_TITLE>
+
+<sel type="link" colWidth="3px" value="&lt;img src=/images/select-icon.png border=0 width=17 height=17/&gt;" link="#" onclick="e.toAdd(@qGRP_UID, @qGROUP_TITLE, &#039;grp&#039;);return false;" enableHTML="1"/>
+
+</dynaForm>  

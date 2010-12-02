@@ -1,0 +1,113 @@
+{if $printTemplate}
+{* this is the grid template *}
+<div class="grid">
+	<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+	<div class="content">
+<table class="" width="100%" cellpadding="0" cellspacing="0">
+ <tr>
+  <th>{$form->label}
+  	</th>
+ </tr>
+</table>
+<table class="tableGrid" align="center" id="form[{$form->name}]" cellpadding="0" cellspacing="0">
+  <tr><td valign='top'>
+{if ($form->addRow) }
+   <table class='Record'>
+     <tr><td></td>
+      <td><img id="form[{$form->name}][bullet]" src="/images/bulletButton.gif" />&nbsp;<a class="GridLink" href="#" value="Insert" onclick="form_{$form->owner->id}.getElementByName('{$form->name}').addGridRow();return false;">{$form->NewLabel}</a></td>
+     </tr>
+   </table>
+{/if}
+   <table class="tableGrid" name="{$form->name}" id="{$form->name}" cellpadding="0" cellspacing="0" border="0">
+     <tr>
+      <td> </td>
+{foreach from=$form->fields item=field}
+      <td class='vFormTitle'>{if (isset($field->required)&&$field->required&&$field->mode==='edit')}<font color="red">*  </font>{/if}{$field->label}</td>
+{/foreach}
+     </tr>
+{literal}
+{section name=row loop=$form_rows}
+{if ($smarty.section.row.index==0)}
+     <tr id="firstRow_{$form_name}" onmouseout="highlightRow(this, '#fff')" onmouseover="highlightRow(this, '#D9E8FF')">
+{else}
+     <tr onmouseout="highlightRow(this, '#fff')" onmouseover="highlightRow(this, '#D9E8FF')">
+{/if}
+      <td class='GridLabel'> {$smarty.section.row.index+1} </td>
+{/literal}
+{foreach from=$form->fields item=field}
+      <td style="">{$field->field}</td>
+{/foreach}
+{if $form->deleteRow == '1' }
+      <td align="center"><A class="GridLink" href="#" onclick="form_{$form->owner->id}.getElementByName('{$form->name}').deleteGridRow('[{literal}{$smarty.section.row.index+1}{/literal}]');return false;">{$form->DeleteLabel}</A>&nbsp;</td>
+{/if}
+{if ($form->editRow=='1')}
+      <td>edit"{$form->editRow}"</td>
+{/if}
+{literal}
+     </tr>
+{/section}
+{* TOTALIZABLE ROW *}
+     <tr>
+      <td></td>
+{/literal}
+{foreach from=$form->fields item=field}
+      <td>
+        {if isset($field->function) && $field->function!=='' }
+        {if $field->function=='sum'}
+      		<font color="black">Σ = </font><span id="form[SYS_GRID_AGGREGATE_{$form->name}__{$field->name}]">{$field->aggregate}</span><input type="hidden" name="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" id="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" value="{$field->aggregate}" />
+        {elseif $field->function=='avg'}
+          <font color="black"><span style="text-decoration: overline;">x</span> = </font><span id="form[SYS_GRID_AGGREGATE_{$form->name}__{$field->name}]">{$field->aggregate}</span><input type="hidden" name="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" id="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" value="{$field->aggregate}" />
+        {/if}
+        {/if}
+      </td>
+{/foreach}
+{literal}
+     </tr>
+{/literal}
+   </table>
+  </td></tr>
+</table>
+	</div>
+	<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+</div>
+{/if}
+{if $printJSFile}
+function grid_{$form->id}(myGrid)
+{literal}{{/literal}
+  {* setFunctions: Define the aggregate functions *}
+  {php}$this->assign('firstfield', true);{/php}
+  myGrid.setFunctions([
+    {foreach from=$form->fields item=field name=foreachField}
+      {if isset($field->function)&& $field->function!==''}
+        {if !$firstfield},{/if}
+        {literal}{{/literal}sFieldName: '{$field->name}', sFunction: '{$field->function}'{literal}}{/literal}
+        {php}$this->assign('firstfield', false);{/php}
+      {/if}
+    {/foreach}
+  ]);
+  {* setFormulas: Define the customs formulas *}
+  {php}$this->assign('firstfield', true);{/php}
+  myGrid.setFormulas([
+    {foreach from=$form->fields item=field name=foreachField}
+      {if isset($field->formula)}
+        {foreach from=$field->dependentOf() item=dependentOf name=foreachDependent}
+            {if !$firstfield},{/if}
+            {literal}{{/literal} sDependentOf: '{$dependentOf}', sFieldName: '{$field->name}', sFormula: '{$field->formula}'{literal}}{/literal}
+            {php}$this->assign('firstfield', false);{/php}
+        {/foreach}
+      {/if}
+    {/foreach}
+  ]);
+  {* setFields: Define the controles's javascript *}
+  {php}$this->assign('firstfield', true);{/php}
+  myGrid.setFields([
+    {foreach from=$form->fields item=field name=foreachField}
+      {if !$firstfield},{/if}
+      {literal}{{/literal}sFieldName: '{$field->name}', sType: '{$field->type}', oProperties:{$field->getAttributes()}, oEvents:{$field->getEvents()}{literal}}{/literal}
+      {php}$this->assign('firstfield', false);{/php}
+    {/foreach}
+  ]);
+{literal}}{/literal}
+{/if}
+{if $printJavaScript}
+{/if}

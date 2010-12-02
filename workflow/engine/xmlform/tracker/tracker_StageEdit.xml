@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<dynaForm name="tracker_StageEdit" width="100%" labelWidth="20%">
+
+<TITLE1 type="title" group="1">
+  <en>Stage Information</en>
+</TITLE1>
+
+<action type="hidden"/>
+
+<THEINDEX type="hidden"/>
+
+<STG_UID type="hidden"/>
+
+<PRO_UID type="hidden"/>
+
+<STG_TITLE type="text" size="50" maxlength="255" required="1">
+  <en>Title</en>
+</STG_TITLE>
+
+<SAVE type="button" onclick="updateStage(this.form);" group="1">
+  <en>Save</en>
+</SAVE>
+
+<JS type="javascript" replacetags="1"><![CDATA[
+var updateStage = function(oForm) {
+	ajax_post(oForm.action, oForm, 'POST');
+	Sm.data.db.stages[getField('THEINDEX').value].label = Sm.data.db.stages[getField('THEINDEX').value].object.elements.label.innerHTML = getField('STG_TITLE').value;
+  Sm.tmp.stagePanel.remove();
+};
+]]></JS>
+
+</dynaForm>

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="CalendarDefinition" width="600" enabletemplate="1" mode="edit">
+<CALENDAR_UID type="hidden" size='32' maxlength='32' >
+  <en>Ndar Uid
+  </en>
+</CALENDAR_UID>
+
+<DEFINITION_TITLE type="title" enablehtml="0">
+
+<en>Calendar Definition</en>
+</DEFINITION_TITLE>
+<CALENDAR_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="15" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0" onclick="setFocusByIdField;">
+<en>Name</en>
+</CALENDAR_NAME>
+<CALENDAR_DESCRIPTION type="textarea" required="0" readonly="0" rows="2" cols="32" mode="edit">
+<en>Description</en>
+</CALENDAR_DESCRIPTION>
+<CALENDAR_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="ACTIVE" labelonright="1" enablehtml="0">
+<en>Active</en>
+</CALENDAR_STATUS>
+
+<WorkDays type="title" enablehtml="0">
+<en>Work Days</en>
+</WorkDays>
+<CALENDAR_WORK_DAYS type="checkgroup" defaultvalue="1|2|3|4|5" mode="edit" options="Array">
+<en> <option name="0">SUN</option>
+<option name="1">MON</option>
+<option name="2">TUE</option>
+<option name="3">WED</option>
+<option name="4">THU</option>
+<option name="5">FRI</option>
+<option name="6">SAT</option>
+</en>
+</CALENDAR_WORK_DAYS>
+<BUSINESS_DAY_TITLE type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
+<en>Work Hours</en>
+</BUSINESS_DAY_TITLE>
+<BUSINESS_DAY type="grid" xmlgrid="setup/calendarEdit_BusinessHours" addrow="1" deleterow="1"/>
+<HOLIDAY_LABEL type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
+<en>Holidays</en>
+</HOLIDAY_LABEL>
+<HOLIDAY type="grid" xmlgrid="setup/calendarEdit_Holidays" addrow="1" deleterow="1"/>
+<SUBMIT type="submit" onclick="submit1(this);">
+<en>Save</en>
+</SUBMIT>
+<SUBMIT2 type="button" onclick="submit2();   ">
+<en>Save</en>
+</SUBMIT2>
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+<HOLIDAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
+<en></en>
+</HOLIDAY_STATUS>
+<BUSINESS_DAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
+<en></en>
+</BUSINESS_DAY_STATUS>
+<DEFAULT_CALENDAR_JS type="javascript">
+<![CDATA[
+function submit1 () {
+  getField('CALENDAR_WORK_DAYS][0').disabled=false;
+  getField('CALENDAR_WORK_DAYS][1').disabled=false;
+  getField('CALENDAR_WORK_DAYS][2').disabled=false;
+  getField('CALENDAR_WORK_DAYS][3').disabled=false;
+  getField('CALENDAR_WORK_DAYS][4').disabled=false;
+  getField('CALENDAR_WORK_DAYS][5').disabled=false;
+  getField('CALENDAR_WORK_DAYS][6').disabled=false;
+  getField('CALENDAR_STATUS').disabled=false;
+  getField('CALENDAR_NAME').disabled=false;
+  return validateForm(this.form);
+}
+
+function submit2 (){
+  getField('CALENDAR_WORK_DAYS][0').disabled=false;
+  getField('CALENDAR_WORK_DAYS][1').disabled=false;
+  getField('CALENDAR_WORK_DAYS][2').disabled=false;
+  getField('CALENDAR_WORK_DAYS][3').disabled=false;
+  getField('CALENDAR_WORK_DAYS][4').disabled=false;
+  getField('CALENDAR_WORK_DAYS][5').disabled=false;
+  getField('CALENDAR_WORK_DAYS][6').disabled=false;
+  if(getField('CALENDAR_NAME').value!=''){
+    getField('CALENDAR_STATUS').disabled=false;
+    getField('CALENDAR_NAME').disabled=false;
+    document.CalendarDefinition.submit();
+  } else {
+      alert('- Invalid Name');
+    }
+}
+
+
+function number_row(){ 
+  iRows = Number_Rows_Grid('BUSINESS_DAY','CALENDAR_BUSINESS_START');
+  return iRows;
+}
+
+function cleargrid(){
+  number_row();
+  i=iRows;
+  while (i>1) {
+    getObject('BUSINESS_DAY').deleteGridRownomsg('['+i+']');
+    i--;
+  }
+  return false;
+}
+
+leimnud.event.add(getField("BUSINESS_DAY_STATUS"), 'click', function() { 
+  if(getField("BUSINESS_DAY_STATUS").checked){
+    document.getElementById('gridbusiness').style.display="";
+    getField("CALENDAR_WORK_DAYS][0").disabled=true;
+    getField("CALENDAR_WORK_DAYS][1").disabled=true;
+    getField("CALENDAR_WORK_DAYS][2").disabled=true;
+    getField("CALENDAR_WORK_DAYS][3").disabled=true;
+    getField("CALENDAR_WORK_DAYS][4").disabled=true;
+    getField("CALENDAR_WORK_DAYS][5").disabled=true;
+    getField("CALENDAR_WORK_DAYS][6").disabled=true;
+  } else {
+      document.getElementById('gridbusiness').style.display="none";
+      cleargrid();
+      getField("CALENDAR_WORK_DAYS][0").disabled=false;
+      getField("CALENDAR_WORK_DAYS][1").disabled=false;
+      getField("CALENDAR_WORK_DAYS][2").disabled=false;
+      getField("CALENDAR_WORK_DAYS][3").disabled=false;
+      getField("CALENDAR_WORK_DAYS][4").disabled=false;
+      getField("CALENDAR_WORK_DAYS][5").disabled=false;
+      getField("CALENDAR_WORK_DAYS][6").disabled=false;
+    }
+});
+
+leimnud.event.add(getField("HOLIDAY_STATUS"), 'click', function() {
+  if(getField("HOLIDAY_STATUS").checked){
+    document.getElementById('gridholi').style.display="";
+    document.getElementById('hiddenb').style.display="";
+    document.getElementById('showb').style.display="none";
+  } else {
+      document.getElementById('gridholi').style.display="none";
+      document.getElementById('hiddenb').style.display="none";
+      document.getElementById('showb').style.display="";
+    }
+});
+
+function hiddenholidays() {
+  getField('HOLIDAY_STATUS').checked=false;
+  document.getElementById('gridholi').style.display="none";
+  document.getElementById('down').style.display="none";
+  document.getElementById('up').style.display="";
+  document.getElementById('hiddenb').style.display="none";
+  document.getElementById('showb').style.display="";
+}
+
+function showholidays() {
+  getField('HOLIDAY_STATUS').checked=true;
+  document.getElementById('gridholi').style.display="";
+  document.getElementById('down').style.display="";
+  document.getElementById('up').style.display="none";
+  document.getElementById('hiddenb').style.display="";
+  document.getElementById('showb').style.display="none";
+}
+
+function cleardrop() {
+  while(getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.length > 0) {
+    getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options[getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').length-1] = null;
+  }
+}
+
+function AddItem(Text,Value) {
+  var opt = document.createElement("option");
+  getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.add(opt);
+  opt.text = Text;
+  opt.value = Value;
+}
+
+function check() {
+  cleardrop();
+  Text='- ALL -';
+  Value=7;
+  AddItem(Text,Value);
+
+  if(getField("CALENDAR_WORK_DAYS][0").checked){
+    Text='SUN';
+    Value=0;
+    AddItem(Text,Value);
+  }
+
+  if(getField("CALENDAR_WORK_DAYS][1").checked){
+    Text='MON';
+    Value=1;
+    AddItem(Text,Value);
+  }
+
+  if(getField("CALENDAR_WORK_DAYS][2").checked){
+     Text='TUE';
+     Value=2;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][3").checked){
+     Text='WED';
+     Value=3;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][4").checked){
+     Text='THU';
+     Value=4;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][5").checked){
+     Text='FRI';
+     Value=5;
+     AddItem(Text,Value);
+   }
+
+   if(getField("CALENDAR_WORK_DAYS][6").checked){
+     Text='SAT';
+     Value=6;
+     AddItem(Text,Value);
+   }
+}
+
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][0"), 'click', function() {check();});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][1"), 'click', function() {check();});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][2"), 'click', function() {check();});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][3"), 'click', function() {check();});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][4"), 'click', function() {check();});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][5"), 'click', function() {check();});
+leimnud.event.add(getField("CALENDAR_WORK_DAYS][6"), 'click', function() {check();});
+
+	
+var dynaformOnload = function() {
+
+  rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
+  for(i=1;i<=rowsCount;i++){
+    timeValidatorWrap(i);
+  }
+  grid_BUSINESS_DAY.onaddrow = function (iRow) {
+    timeValidatorWrap(iRow);
+  }
+  getField("BUSINESS_DAY_STATUS").checked=true;
+  if(getField("BUSINESS_DAY_STATUS").checked){
+    document.getElementById('gridbusiness').style.display="";
+    getField("CALENDAR_WORK_DAYS][0").disabled=true;
+    getField("CALENDAR_WORK_DAYS][1").disabled=true;
+    getField("CALENDAR_WORK_DAYS][2").disabled=true;
+    getField("CALENDAR_WORK_DAYS][3").disabled=true;
+    getField("CALENDAR_WORK_DAYS][4").disabled=true;
+    getField("CALENDAR_WORK_DAYS][5").disabled=true;
+    getField("CALENDAR_WORK_DAYS][6").disabled=true;
+  } else{
+      document.getElementById('gridbusiness').style.display="none";
+      cleargrid();
+      getField("CALENDAR_WORK_DAYS][0").disabled=false;
+      getField("CALENDAR_WORK_DAYS][1").disabled=false;
+      getField("CALENDAR_WORK_DAYS][2").disabled=false;
+      getField("CALENDAR_WORK_DAYS][3").disabled=false;
+      getField("CALENDAR_WORK_DAYS][4").disabled=false;
+      getField("CALENDAR_WORK_DAYS][5").disabled=false;
+      getField("CALENDAR_WORK_DAYS][6").disabled=false;
+    }
+  if((getField("CALENDAR_UID").value=="00000000000000000000000000000001")||(getField("CALENDAR_UID").value=="00000000000000000000000000000002")){
+    getField("CALENDAR_STATUS").disabled=true;
+    getField("CALENDAR_NAME").disabled=true;
+    getField("CALENDAR_NAME").style.background="none";
+    getField("CALENDAR_NAME").style.border="0";
+  }
+}
+
+function timeValidatorWrap(iRow){
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START").onchange=function startValidation(){
+	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START"));
+	}
+	
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START").onblur=function startValidation(){
+	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START"));
+	}
+
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END").onchange=function startValidation(){
+	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END"));
+	}
+	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END").onblur=function startValidation(){
+	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END"));
+	}
+
+	
+	
+}
+function validateForm(form){
+ 	rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
+	msg="";
+	
+	for(i=1;i<=rowsCount;i++){		
+		msgStart="";	
+		msgStart=validateTime(getGridField("BUSINESS_DAY", i, "CALENDAR_BUSINESS_START"));
+		
+		if(msgStart!=""){
+			msg+="- "+msgStart+"\n";
+		}
+		msgEnd="";
+		msgEnd=validateTime(getGridField("BUSINESS_DAY", i, "CALENDAR_BUSINESS_END"));
+		if(msgEnd!=""){
+			msg+="- "+msgEnd+"\n";
+		}
+		
+	}
+	getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.replace(/^\s+/, "");
+
+	if(getField('CALENDAR_NAME').value==""){ 
+	msg+="- Invalid Name \n";
+	}
+	var flag=true;
+	var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
+	//alert(rowsHoliday);return false;
+	var j=0;
+	for(var j =1; j<= rowsHoliday;j++){
+		msgHolidays = getGridField("HOLIDAY", j, "CALENDAR_HOLIDAY_START");
+		if(msgHolidays.value==''){
+		flag=false;
+		}
+	}
+	if(!flag){
+	msgBox(G_STRINGS.ID_REQUIRED_FIELDS + ": \n Start Date ","alert"); return false;
+	}
+	if(msg!=""){
+		alert(msg);
+		return false;
+	}
+	
+	return true;
+
+}
+
+function validateTime(object){
+		timeToValidate=object.value;			
+		msgError="";
+		if(!isValidTime(timeToValidate)){
+			G.highLight(object);
+			msgError="Invalid: "+object.value;
+		}else{
+			object.style.background="";
+			msgError="";
+		}
+		return msgError;
+}
+
+function isValidTime(value) {
+   var hasMeridian = false;
+   var re = /^\d{1,2}[:]\d{2}([:]\d{2})?( [aApP][mM]?)?$/;
+   if (!re.test(value)) { return false; }
+   if (value.toLowerCase().indexOf("p") != -1) { hasMeridian = true; }
+   if (value.toLowerCase().indexOf("a") != -1) { hasMeridian = true; }
+   var values = value.split(":");
+   if ( (parseFloat(values[0]) < 0) || (parseFloat(values[0]) > 23) ) { return false; }
+   if (hasMeridian) {
+      if ( (parseFloat(values[0]) < 1) || (parseFloat(values[0]) > 12) ) { return false; }
+   }
+   if ( (parseFloat(values[1]) < 0) || (parseFloat(values[1]) > 59) ) { return false; }
+   if (values.length > 2) {
+      if ( (parseFloat(values[2]) < 0) || (parseFloat(values[2]) > 59) ) { return false; }
+   }
+   return true;
+}
+
+function cancel(){
+ 
+    window.location = 'calendarList';
+}
+ 
+
+]]>
+</DEFAULT_CALENDAR_JS>
+</dynaForm>  

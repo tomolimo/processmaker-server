@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="outputdocs/outputdocs_Edit" type="xmlform" width="100%">
+
+<PRO_UID type="hidden"/>
+
+<OUT_DOC_UID type="hidden" showInTable="0"/>
+
+<TITLE type="title" group="1">
+  <en>Output Document Information</en>
+</TITLE>
+
+<OUT_DOC_TYPE type="radiogroup" size="30">
+  <en>Type of Output Document<option name="HTML">HTML</option><option name="JRXML">Dynaform to PDF</option><option name="ACROFORM">Fill Adobe Acroform</option></en>
+</OUT_DOC_TYPE>
+
+<DYN_UID type="dropdown" colWidth="80" align="left" dataCompareField="DYN_TYPE" dataCompareType="="><![CDATA[
+  SELECT DYN_UID, T.CON_VALUE AS DYN_TITLE FROM DYNAFORM LEFT JOIN CONTENT as T ON (T.CON_ID=DYN_UID AND T.CON_CATEGORY='DYN_TITLE') 
+  LEFT JOIN CONTENT AS D ON (D.CON_ID=DYN_UID AND D.CON_CATEGORY='DYN_DESCRIPTION') 
+  where PRO_UID = @@PRO_UID
+  ORDER BY DYN_TITLE ASC
+  ]]><en>Dynaform</en>
+</DYN_UID>
+
+<OUT_DOC_TITLE type="text" style="width:90%">
+  <en>Title</en>
+</OUT_DOC_TITLE>
+
+<OUT_DOC_FILENAME type="textpm" size="30" maxlength="100" showVars="1" process="@#PRO_UID" symbol="@#" validate="Field"  required="true">
+  <en>Filename generated</en>
+</OUT_DOC_FILENAME>
+
+<OUT_DOC_DESCRIPTION type="textarea" rows="3" style="width:90%;">
+  <en>Description</en>
+</OUT_DOC_DESCRIPTION>
+
+<OUT_DOC_LANDSCAPE type="hidden" showInTable="0">
+</OUT_DOC_LANDSCAPE>
+
+<OUT_DOC_GENERATE type="hidden" showInTable="0">
+</OUT_DOC_GENERATE>
+
+<DYN_TYPE type="dropdown">
+  <en>Template<option name="1">Classic Template</option><option name="2">Tabular Template</option></en>
+</DYN_TYPE>
+
+<ACCEPT type="button" onclick="outputdocsPropertiesSave(this.form);">
+  <en>Save</en>
+</ACCEPT>
+<ACCEPT2 type="submit">
+  <en>Save submit</en>
+</ACCEPT2>
+
+<JS type="JavaScript"><![CDATA[
+
+var _oVarsPanel_;
+var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
+	_oVarsPanel_ = new leimnud.module.panel();
+	_oVarsPanel_.options = {
+    limit    : true,
+    size     : {w:400,h:600},
+    position : {x:0,y:0,center:true},
+    title    : '',
+    theme    : 'processmaker',
+    statusBar: false,
+    control  : {drag:false,resize:true,close:true},
+    fx       : {opacity:true,rolled:false,modal:true}
+  };
+  _oVarsPanel_.make();
+  _oVarsPanel_.events = {
+    remove:function() {
+      delete _oVarsPanel_;
+    }.extend(this)
+  };
+  _oVarsPanel_.loader.show();
+  oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : sAjaxServer,
+    method: 'POST',
+    args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sType=2'
+  });
+  oRPC.callback = function(oRPC) {
+    _oVarsPanel_.loader.hide();
+    var scs = oRPC.xmlhttp.responseText.extractScript();
+    _oVarsPanel_.addContent(oRPC.xmlhttp.responseText);
+    scs.evalScript();
+  }.extend(this);
+  oRPC.make();
+};
+
+var insertFormVar = function(sFieldName, sValue) {
+	oAux = document.getElementById(sFieldName);
+	if (oAux.setSelectionRange) {
+		var rangeStart = oAux.selectionStart;
+    var rangeEnd   = oAux.selectionEnd;
+    var tempStr1   = oAux.value.substring(0,rangeStart);
+    var tempStr2   = oAux.value.substring(rangeEnd);
+    oAux.value     = tempStr1 + sValue + tempStr2;
+	}
+	else {
+	  if (document.selection) {
+	    oAux.focus();
+      document.selection.createRange().text = sValue;
+	  }
+	}
+	_oVarsPanel_.remove();
+};
+
+]]></JS>
+
+</dynaForm>  

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="reportTables/reportTables_Edit" type="xmlform" width="100%" enableTemplate="1">
+<LANG type="private"/>
+
+<PRO_UID type="hidden"/>
+
+<REP_TAB_UID type="hidden"/>
+
+<TITLE type="title" group="1">
+  <en>Report Table Information</en>
+</TITLE>
+
+<REP_TAB_TITLE type="text" size="50" maxlength="150" required="1">
+  <en>Title</en>
+</REP_TAB_TITLE>
+
+<REP_TAB_NAME type="text" size="50" maxlength="100" validate="Field" required="1">
+  <en>Table Name</en>
+</REP_TAB_NAME>
+
+<REP_TAB_TYPE type="dropdown" required="1">
+  <en>Type<option name="NORMAL">Global</option><option name="GRID">Grid</option></en>
+</REP_TAB_TYPE>
+
+<REP_TAB_GRID type="dropdown" sqlConnection="dbarray" required="1">
+SELECT * FROM processGridFields
+  <en>Grid Fields</en>
+</REP_TAB_GRID>
+
+<FIELDS type="listbox" sqlConnection="dbarray" defaultValue="" required="1" size="20" width="350" >
+SELECT * FROM processFields
+  <en>Fields</en>
+</FIELDS>
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<SAVE type="button" onclick="reportTablesSave(this.form);">
+  <en>Save</en>
+</SAVE>
+
+<JS type="JavaScript"><![CDATA[
+var sOldTableName = getField('REP_TAB_NAME').value;
+leimnud.event.add(getField('REP_TAB_TYPE'), 'change', function() {
+  if (getField('REP_TAB_TYPE').value == 'NORMAL') {
+    hideRowById('REP_TAB_GRID');
+    showRowById('FIELDS');
+  }
+  else {
+    hideRowById('FIELDS');
+    showRowById('REP_TAB_GRID');
+  }
+});
+leimnud.event.add(getField('REP_TAB_NAME'), 'change', function() {
+  if (sOldTableName != getField('REP_TAB_NAME').value) {
+    oSaveButton = getField('SAVE');
+    oSaveButton.disabled = true;
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : '../reportTables/reportTables_Ajax',
+      async : false,
+      method: 'POST',
+      args  : 'action=tableExists&sTableName=' + getField('REP_TAB_NAME').value
+    });
+    oRPC.make();
+    if (oRPC.xmlhttp.responseText == '0') {
+      new leimnud.module.app.alert().make({
+        label:'@G::LoadTranslation(ID_TABLE_ALREADY_EXISTS)'
+      });
+    }
+    else {
+      oSaveButton.disabled = false;
+    }
+  }
+  else {
+    if (sOldTableName != '') {
+      oSaveButton.disabled = false;
+    }
+  }
+});
+if (getField('REP_TAB_TYPE').value == 'NORMAL') {
+  hideRowById('REP_TAB_GRID');
+}
+else {
+  hideRowById('FIELDS');
+}
+
+function cancel(){
+    currentPopupWindow.remove();
+}
+
+
+]]></JS>
+</dynaForm> 

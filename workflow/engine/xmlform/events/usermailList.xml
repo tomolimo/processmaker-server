@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm width="100%" rowsPerPage="5">
+
+<USR_UID type="private" showInTable="0"/>
+
+<USR_FULLNAME type="text" colWidth="220" titleAlign="left" align="left">
+  <en>Fullname</en>
+</USR_FULLNAME>
+
+<USR_EMAIL type="text" colWidth="120" titleAlign="left" align="left">
+  <en>email</en>
+</USR_EMAIL>
+
+<sel type="link" enableHTML="1" colWidth="3" link="#" onclick="e.toAdd(@qUSR_UID, @qUSR_FULLNAME, &#039;usr&#039;);return false;" value="&lt;img src=/images/select-icon.png border=0 width=17 height=17/&gt;"/>
+
+</dynaForm> 

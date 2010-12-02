@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<package version="1.0">
+  <name>OLE</name>
+  <summary>Package for reading and writing OLE containers</summary>
+  <description>This package allows reading and writing of OLE (Object Linking and Embedding) files, the format used as container for Excel, Word and other MS file formats.
+ Documentation for the OLE format can be found at: http://user.cs.tu-berlin.de/~schwartz/pmh/guide.html</description>
+  <maintainers>
+    <maintainer>
+      <user>xnoguer</user>
+      <name>Xavier Noguer</name>
+      <email>xnoguer@php.net</email>
+      <role>lead</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>0.5</version>
+    <date>2003-12-14</date>
+    <license>PHP</license>
+    <state>beta</state>
+    <notes>- BC break!!! OLE/OLE.php file moved to OLE.php to comply with PEAR
+  standards. You will have to change your require('OLE/OLE.php')'s
+  for require('OLE.php')'s
+- If you are using Spreadsheet_Excel_Writer, do not upgrade to this
+  version yet. A new version of Spreadsheet_Excel_Writer will be
+  released soon so the BC break won't affect you.
+- allowing setting of temp dir for OLE_PPS_File and OLE_PPS_Root objects
+- fixed problem when reading files (not reading the whole OLE tree)</notes>
+    <filelist>
+      <file role="php" baseinstalldir="/" md5sum="e5b6afd48dc9c66cb97dc473688ec450" name="OLE.php"/>
+      <file role="php" baseinstalldir="OLE" md5sum="fa6a698cae86e12813fbe750155c9252" name="PPS.php"/>
+      <file role="php" baseinstalldir="OLE" md5sum="689141fcd1fd079bbe986f43b872adf0" name="PPS/Root.php"/>
+      <file role="php" baseinstalldir="OLE" md5sum="ee9070b149e11818d950ed47fdc53650" name="PPS/File.php"/>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+      <version>0.4</version>
+      <date>2003-09-25</date>
+      <state>beta</state>
+      <notes>-deleting tmp files (Herman Kuiper).
+-fixed hardcoded tmp dir (Herman Kuiper).
+-fixed pass by reference warning (Herman Kuiper).
+</notes>
+    </release>
+    <release>
+      <version>0.3</version>
+      <date>2003-08-21</date>
+      <state>beta</state>
+      <notes>-added OLE_PPS_File::init() initialization method.
+-better error handling.
+</notes>
+    </release>
+    <release>
+      <version>0.2.1</version>
+      <date>2003-05-12</date>
+      <state>alpha</state>
+      <notes>Fixing install dir
+</notes>
+    </release>
+  </changelog>
+</package>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="ProcessCategory" width="600" mode="edit" enableTemplate="1" border="0">
+  <title1 type="title">
+    <en>Process Category form</en>
+    <es><![CDATA[Formulario de categoría del proceso]]></es>
+  </title1>
+  <CATEGORY_UID type="hidden" colWidth="32">
+    <en>category Uid</en>
+  </CATEGORY_UID>
+  <CATEGORY_PARENT type="hidden" size="32" maxlength="32">
+    <en>Gory Parent </en>
+  </CATEGORY_PARENT>
+  <CATEGORY_NAME type="text" size="60" maxlength="100">
+    <en>Category Name
+  </en>
+    <es><![CDATA[Nombre de la categoria]]></es>
+  </CATEGORY_NAME>
+  <CATEGORY_ICON type="hidden" size="60" maxlength="100">
+    <en>Category Icon
+  </en>
+  </CATEGORY_ICON>
+  <BTN_SUBMIT type="button" onclick="javascript:verifyName(this.form);">
+    <en>save</en>
+    <es><![CDATA[Guardar]]></es>
+  </BTN_SUBMIT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en>Cancel</en>
+    <es><![CDATA[Cancelar]]></es>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
+  
+   function trim(stringToTrim) {
+	    return stringToTrim.replace(/^\s+|\s+$/g,"");
+   }
+  var verifyName = function(oForm) {
+  var categoryName = trim(getField('CATEGORY_NAME').value);
+    if (categoryName != '') {
+      var answer;
+        answer = ajax_function(@G::encryptlink('processCategoryAjax'), 'checkCategoryName', 'CategoryName='+categoryName, 'POST');
+        if(answer == '1'){
+          new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_DUPLICATE_CATEGORY_NAME)' });
+          return false;
+        }
+      oForm.submit();
+    }
+    else {
+      msgBox('@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)', 'alert');
+    }
+  };
+
+function cancel(){
+    window.location = 'processCategoryList';
+}
+
+]]></JS>
+</dynaForm>

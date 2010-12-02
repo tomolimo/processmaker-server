@@ -1,0 +1,108 @@
+{if $printTemplate}
+{* this is the grid template *}
+<div class="pagedTableDefault">
+	<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+	<div class="content">
+<table class="FormSubTitle" width="100%" cellpadding="0" cellspacing="0">
+ <tr>
+  <th>{$form->label}
+  	</th>
+ </tr>
+</table>
+<table class="tableGrid_view" align="center" id="form[{$form->name}]" cellpadding="0" cellspacing="0">
+  <tr><td valign='top'>
+{if ($form->addRow) }
+   <table class='Record'>
+     <tr><td></td>
+      <td></td>
+     </tr>
+   </table>
+{/if}
+   <table class="pagedTable" width="100%" name="{$form->name}" id="{$form->name}" cellpadding="0" cellspacing="0" border="0">
+     <tr>
+      <td class="pagedTableHeader">&nbsp;</td>
+{foreach from=$form->fields item=field}
+      <td class="pagedTableHeader" class="height:50px"><img src="/js/maborak/core/images/separatorTable.gif" border="0">&nbsp;&nbsp;{$field->label}</td>
+{/foreach}
+     </tr>
+{literal}
+{section name=row loop=$form_rows}
+{if ($smarty.section.row.index==0)}
+     <tr id="firstRow_{$form_name}">
+{else}
+     <tr>
+{/if}
+      <td class='GridLabel' style="border:0px" width="10"> {$smarty.section.row.index+1} </td>
+{/literal}
+{foreach from=$form->fields item=field}
+      <td class="tdGrid_view">&nbsp;{$field->field}</td>
+{/foreach}
+
+{literal}
+     </tr>
+{/section}
+{* TOTALIZABLE ROW *}
+     <tr>
+      <td></td>
+{/literal}
+{foreach from=$form->fields item=field}
+      <td  style="border:0px">
+        {if isset($field->function) && $field->function!=='' }
+        {if $field->function=='sum'}
+      		Σ = <span id="form[SYS_GRID_AGGREGATE_{$form->name}__{$field->name}]">{$field->aggregate}</span><input type="hidden" name="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" id="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" value="{$field->aggregate}" />
+        {elseif $field->function=='avg'}
+          <span style="position:absolute">¯</span>X = <span id="form[SYS_GRID_AGGREGATE_{$form->name}__{$field->name}]">{$field->aggregate}</span><input type="hidden" name="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" id="form[SYS_GRID_AGGREGATE_{$form->name}_{$field->name}]" value="{$field->aggregate}" />
+        {/if}
+        {/if}
+      </td>
+{/foreach}
+{literal}
+     </tr>
+{/literal}
+   </table>
+  </td></tr>
+</table>
+	</div>
+	<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+</div>
+{/if}
+{if $printJSFile}
+function grid_{$form->id}(myGrid)
+{literal}{{/literal}
+  {* setFunctions: Define the aggregate functions *}
+  {php}$this->assign('firstfield', true);{/php}
+  myGrid.setFunctions([
+    {foreach from=$form->fields item=field name=foreachField}
+      {if isset($field->function)&& $field->function!==''}
+        {if !$firstfield},{/if}
+        {literal}{{/literal}sFieldName: '{$field->name}', sFunction: '{$field->function}'{literal}}{/literal}
+        {php}$this->assign('firstfield', false);{/php}
+      {/if}
+    {/foreach}
+  ]);
+  {* setFormulas: Define the customs formulas *}
+  {php}$this->assign('firstfield', true);{/php}
+  myGrid.setFormulas([
+    {foreach from=$form->fields item=field name=foreachField}
+      {if isset($field->formula)}
+        {foreach from=$field->dependentOf() item=dependentOf name=foreachDependent}
+            {if !$firstfield},{/if}
+            {literal}{{/literal} sDependentOf: '{$dependentOf}', sFieldName: '{$field->name}', sFormula: '{$field->formula}'{literal}}{/literal}
+            {php}$this->assign('firstfield', false);{/php}
+        {/foreach}
+      {/if}
+    {/foreach}
+  ]);
+  {* setFields: Define the controles's javascript *}
+  {php}$this->assign('firstfield', true);{/php}
+  myGrid.setFields([
+    {foreach from=$form->fields item=field name=foreachField}
+      {if !$firstfield},{/if}
+      {literal}{{/literal}sFieldName: '{$field->name}', sType: '{$field->type}', oProperties:{$field->getAttributes()}, oEvents:{$field->getEvents()}{literal}}{/literal}
+      {php}$this->assign('firstfield', false);{/php}
+    {/foreach}
+  ]);
+{literal}}{/literal}
+{/if}
+{if $printJavaScript}
+{/if}

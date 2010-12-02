@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm menu="steps/steps_Options" width="100%" rowsPerPage="10">
+
+<PROCESS type="hidden" showInTable="0"/>
+
+<TASK type="hidden" showInTable="0"/>
+
+<STEP_UID type="hidden" showInTable="0"/>
+
+<STEP_POSITION type="hidden" showInTable="0"/>
+
+<STEP_TITLE type="text" colWidth="280" titleAlign="left" align="left">
+  <en>Title</en>
+</STEP_TITLE>
+
+<STEP_TYPE_OBJ type="dropdown" colWidth="100" titleAlign="left" align="left">
+  <en>Type<option name="DYNAFORM">Dynaform</option><option name="INPUT_DOCUMENT">Input Document</option><option name="OUTPUT_DOCUMENT">Output Document</option><option name="EXTERNAL">External Step</option></en>
+</STEP_TYPE_OBJ>
+
+<linkEditValue type="link" value="@#linkEditValue" link="javascript:@#urlEdit" colWidth="40" align="center"/>
+
+<DELETE type="link" colWidth="30" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="stepDelete(@QSTEP_UID, @QSTEP_POSITION);return false;"><en></en></DELETE>
+
+<UP type="link" colWidth="20" value="@G::LoadTranslation(ID_UP)" link="#" onclick="stepUp(@QSTEP_UID, @QSTEP_POSITION);return false;"/>
+
+<DOWN type="link" colWidth="20" value="@G::LoadTranslation(ID_DOWN)" link="#" onclick="stepDown(@QSTEP_UID, @QSTEP_POSITION);return false;"/>
+
+
+<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+  <en>Apply Filter</en>
+</SEARCH>
+<PAGED_TABLE_ID type="private" showInTable="0"/>
+
+<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+function pagedTableFilter( form ) {
+  @#PAGED_TABLE_ID.doFilter( form );
+}
+</JSFILTER>
+
+</dynaForm>  

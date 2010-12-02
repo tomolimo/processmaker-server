@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm width="100%" rowsPerPage="5">
+  <id type="private" showInTable="0"/>
+  <name type="text" width="350" titleAlign="left" align="left">
+    <en>Var. name</en>
+  </name>
+  <dynaform type="text" colWidth="350" titleAlign="left" align="left">
+    <en>Dynaform</en>
+  </dynaform>
+  <sel type="link" colWidth="3px" value="&lt;img src=/images/select-icon.png border=0 width=17 height=17/&gt;" link="#" onclick="e.toAdd(@qid, @qname, &#039;dyn&#039;);return false;" enableHTML="1"/>
+</dynaForm> 

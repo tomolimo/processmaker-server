@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="105px" ajaxSubmit="true" callback="callbackWebService">
+
+<title type="title" size="32" maxlength="32">
+  <en>Login to WSDL Server</en>
+</title>
+
+<USER_ID type="text" size="32" maxlength="32">
+  <en>User ID</en>
+</USER_ID>
+
+<PASSWORD type="password" size="32" maxlength="32">
+  <en>Password</en>
+</PASSWORD>
+
+<ACTION type="hidden">
+</ACTION> 
+
+<ACTIONB type="button" onclick="submitThisForm(this.form);">
+  <en>Login</en>
+</ACTIONB>
+
+<JS type="javascript" replacetags="1"><![CDATA[
+var submitThisForm = function(oForm)
+{
+	var oAux;
+	var bContinue = true;
+	/*
+	oAux = oForm.elements['form[PRO_TITLE]'];
+	if (oAux.value == '')
+	{
+		alert("@#MESSAGE1");
+		oAux.focus();
+		bContinue = false;
+	}
+	*/
+	if (bContinue)
+	{
+		ajax_post(oForm.action, oForm, 'POST');
+	}
+};
+]]></JS>
+</dynaForm>  

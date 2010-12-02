@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="dynaforms_XmlEditor" type="xmlform" width="98%" border="0">
+
+
+<URL type="phpvariable"/>
+<XML withoutLabel="1" type="textarea" rows="30" cols="60" defaultvalue="" group="0" enablehtml="0" style="width:100%;font-family:">
+<en>XML</en>
+</XML>
+<PME_RESIZE_JS type="javascript"><![CDATA[
+function resizeXmlEditor(){
+  getField('XML','dynaforms_XmlEditor').style.height=
+  document.getElementById('dynaformEditor[4]').parentNode.clientHeight-32;
+}
+var XMLCodePress=false;
+function startXMLCodePress()
+{
+  var code=getField("XML").value;
+  getField("XML").className="codepress javascript linenumbers-on";
+  XMLCodePress=new CodePress(getField("XML"),'xmlform');
+  getField("XML").parentNode.insertBefore(XMLCodePress,getField("XML"));
+  XMLCodePress.edit(code,'xmlform');
+}
+]]></PME_RESIZE_JS>
+</dynaForm>  

@@ -1,0 +1,35 @@
+<form id="{$form_id}" name="{$form_name}" action="" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;">
+  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+		<div class="content" style="height:{$form_height};" >
+	  <table width="99%">
+      <tr>
+        <td valign='top'>
+           <table cellspacing="0" cellpadding="0" border="0" width="100%">
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$HTML}</td>
+              <td class='FormFieldContent' >{$form.HTML}</td>
+              </tr>
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}"></td>
+              <td class='FormButton'>
+               <span style="float:left;">{$form.PME_HTML_ENABLETEMPLATE}{$PME_HTML_ENABLETEMPLATE}</span><span style="float:right;">{$form.PME_REFRESH_VIEW}</span><span style="float:right;">{$form.PME_RESTORE_HTML}</span>
+              </td>
+             </tr>
+             <tr>
+              <td class='FormLabel' width="{$form_labelWidth}">{$HTML2}</td>
+              <td class='FormFieldContent' >{$form.HTML2}</td>
+             </tr>
+        </td>
+      </tr>
+    </table>
+    		</div>
+		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  </div>
+  <script type="text/javascript">
+    {$form.PME_SYNCH_JS}
+  </script>
+      <script type="text/javascript">
+    {$form.PME_RESIZE_JS}
+  </script>
+</form>

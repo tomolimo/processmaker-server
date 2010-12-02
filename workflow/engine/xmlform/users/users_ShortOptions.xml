@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlmenu">
+
+<PROCESS type="private"/>
+
+<TASK type="private"/>
+
+<TYPE type="private"/>
+
+<MNU_ASSIGN type="link" value="" link="#" onclick="popupWindow(&#039;Assign users group or user&#039;, &#039;../users/users_Ajax?function=availableUsers&amp;sProcess=@#PROCESS&amp;sTask=@#TASK&amp;iType=@#TYPE&#039;, 500, 420);return false;" colAlign="left" colWidth="50">
+  <en>Assign</en>
+</MNU_ASSIGN>
+
+<MNU_CHANGE type="link" value="" link="#" onclick="changeView(@#TYPE);return false;" colAlign="right" colWidth="200">
+  <en><![CDATA[View Users for "Adhoc"]]></en>
+</MNU_CHANGE>
+
+<js type="javascript"><![CDATA[
+
+var assignGroupOrUser = function(sTask, sUser, iType, iRelation) {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : '../users/users_Ajax',
+    async : false,
+    method: 'POST',
+    args  : 'function=assign&TAS_UID=' + sTask + '&USR_UID=' + sUser + '&TU_TYPE=' + iType + '&TU_RELATION=' + iRelation
+  });
+  oRPC.make();
+  currentPopupWindow.remove();
+  Pm.tmp.usersPanel.clearContent();
+  Pm.tmp.usersPanel.loader.show();
+  Pm.tmp.usersPanel.currentRPC.make();
+};
+
+var ofToAssignGroupOrUser = function(TAS_UID, USR_UID, TU_TYPE, TU_RELATION) {
+//  new leimnud.module.app.confirm().make({
+//  	label:'@#CONFIRM',
+//  	action:function() {
+  		var oRPC = new leimnud.module.rpc.xmlhttp({
+        url   : '../users/users_Ajax',
+        async : false,
+        method: 'POST',
+        args  : 'function=ofToAssign&TAS_UID=' + TAS_UID + '&USR_UID=' + USR_UID + '&TU_TYPE=' + TU_TYPE + '&TU_RELATION=' + TU_RELATION
+      });
+      oRPC.make();
+      Pm.tmp.usersPanel.clearContent();
+      Pm.tmp.usersPanel.loader.show();
+      Pm.tmp.usersPanel.currentRPC.make();
+//  	}.extend(this)
+//  });
+  return false;
+};
+
+var changeView = function(iType)
+{
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : '../users/users_Ajax',
+    async : false,
+    method: 'POST',
+    args  : 'function=changeView&TU_TYPE=' + (iType == 1 ? '2' : '1')
+  });
+  oRPC.make();
+  Pm.tmp.usersPanel.clearContent();
+  Pm.tmp.usersPanel.loader.show();
+  Pm.tmp.usersPanel.currentRPC.make();
+};
+
+var usersGroup = function(GRP_UID, c){
+	var div = document.getElementById('users'+c);
+	div.style.display = (div.style.display == 'none') ? 'block' : 'none';
+
+	var oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : '../users/users_Ajax',
+    async : false,
+    method: 'POST',
+    args  : 'function=usersGroup&GRP_UID=' + GRP_UID
+  });
+  oRPC.make();
+  div.innerHTML=oRPC.xmlhttp.responseText;
+}
+
+]]></js>
+</dynaForm>  

@@ -1,0 +1,91 @@
+<!-- <div class="treeBase" style="width:(WIDTH_PANEL)px"> -->
+    <div class="treeBase" style="width:400px">
+  <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+  
+  <div class="content">
+    <table class="treeNode" border="0">
+      <tr>
+        <td valign="top">
+          <div class="boxTopBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+          <div class="boxContentBlue">
+            <table  style="margin:0px;" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="userGroupTitle">{ID_DEPARTMENTS_USERS}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="boxBottomBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+          <div class="userDepartmentLink">
+            <a href="#" onclick="addDepto();return false;">{ID_NEW_DEPARTMENT}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" onclick="AddUnassignedUser('{uid}');return false;" >{ADD_UNASSIGNEDUSER}</a>
+          </div>
+          <div id="DepartmentsListDiv" style="height:350px; width:{WIDTH_PANEL_20}px; align:left; overflow:auto">
+            <table class="pagedTableDefault" width='100%' cellspacing="0" cellpadding="0" border="0" >
+              <!-- START BLOCK : department -->
+              <tr id="{xVar}" onmouseout="setRowClass(this, 'empty')" onmouseover="setRowClass(this, 'Selected' )" class="empty">
+                <td width="220px" >
+                  <table cellspacing="0" cellpadding="0" border="0" width="100%" height="22px" >
+                    <tr>
+                    <!-- START BLOCK : level -->
+                      <td valign="top" width="16px" background="/images/{background}.gif">
+                        <img height="22px" width="16px" src="/images/{image}.gif"/>
+                      </td>
+                    <!-- END BLOCK : level -->
+                      <td valign="top" width="2px" height="22px"><img height="2" width="2px" src="/images/ftv2blank.gif"/></td>
+                      <td width="100%" height="22px" valign="middle">{DEPO_TITLE}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>&nbsp;<font color=black>[</font><a class="normal" href="#" onclick="selectDpto('{UID}');return false;">{ID_EDIT}</a><font color=black>]</font></td>
+                <td>&nbsp;<font color=black>[</font><a class="normal" href="#" onclick="addSubDepto('{UID}');return false;">{ID_NEW}</a><font color=black>]</font></td>
+                <td> &nbsp;
+                <!-- START BLOCK : delete -->
+                  <font color=black>[</font><a  href="#" onclick="deleteDpto('{UID}');return false;">{ID_DELETE}</a><font color=black>]</font>
+                <!-- END BLOCK : delete -->
+                </td>
+              </tr>
+              <!-- END BLOCK : department -->
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+</div>
+
+<script language="Javascript">
+  function WindowSize() {
+	  var wSize = [0, 0];
+	  if (typeof window.innerWidth != 'undefined')
+	  {
+		  wSize = [
+	        window.innerWidth,
+	        window.innerHeight
+	    ];
+	  }
+	  else if (typeof document.documentElement != 'undefined'
+	      && typeof document.documentElement.clientWidth !=
+	      'undefined' && document.documentElement.clientWidth != 0)
+	  {
+		  wSize = [
+	        document.documentElement.clientWidth,
+	        document.documentElement.clientHeight
+	    ];
+	  }
+	  else   {
+		  wSize = [
+	        document.getElementsByTagName('body')[0].clientWidth,
+	        document.getElementsByTagName('body')[0].clientHeight
+	    ];
+	  }
+	  return wSize;
+	}
+
+  var screenX = WindowSize();
+  wW = screenX[0];
+  wH = screenX[1];
+
+  document.getElementById('DepartmentsListDiv').style.height = (wH/100)*70; 
+</script>

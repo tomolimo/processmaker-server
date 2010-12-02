@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="processes_EditObjectPermission" width="100%">
+<TITLE type="title">
+  <en>Edit Specific Permission</en>
+<es><![CDATA[Nuevo permiso específico]]></es><pt><![CDATA[Permissão Específica Nova]]></pt></TITLE>
+<LANG type="private"/>
+<PRO_UID type="hidden"/>
+<OP_UID type="hidden"/>
+
+<OP_CASE_STATUS type="dropdown" mode="edit">
+  <en>Status Case
+  <option name="ALL">ALL</option>
+  <option name="DRAFT">DRAFT</option>
+  <option name="TO_DO">TO_DO</option>
+  <option name="PAUSED">PAUSED</option>
+  <option name="COMPLETED">COMPLETED</option></en>
+  <es>Estado del Caso
+  <option name="">Todas las tareas</option>
+  </es>  
+</OP_CASE_STATUS>
+
+<TAS_UID type="dropdown" mode="edit"><![CDATA[
+SELECT TAS_UID, CON_VALUE AS TAS_TITLE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = @@LANG) WHERE PRO_UID = @@PRO_UID AND TAS_TYPE = 'NORMAL' ORDER BY TAS_TITLE
+  ]]><en>Target Task<option name="">All Tasks</option></en>
+<es>Tarea destino<option name="">Todas las tareas</option></es><pt>Tarefa Alvo<option name="">Todas as Tarefas</option></pt></TAS_UID>
+
+<GROUP_USER type="dropdown" mode="edit" sqlConnection="dbarray">
+SELECT * FROM usersGroups
+  <en>Group or User</en>
+<es>Grupo o usuario</es><pt><![CDATA[Grupo ou Usuário]]></pt></GROUP_USER>
+
+<OP_TASK_SOURCE type="dropdown" mode="edit"><![CDATA[
+SELECT TAS_UID, CON_VALUE AS TAS_TITLE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = @@LANG) WHERE PRO_UID = @@PRO_UID AND TAS_TYPE = 'NORMAL' ORDER BY TAS_TITLE
+  ]]><en>Origin Task<option name="">All Tasks</option></en>
+<es>Tarea origen<option name="">Todas las tareas</option></es><pt>Tarefa Origem<option name="">Todas as Tarefas</option></pt></OP_TASK_SOURCE>
+
+<OP_PARTICIPATE type="yesno" defaultvalue="1" mode="edit">
+  <en>Participation required?</en>
+<es><![CDATA[¿Participación requerida?]]></es><pt><![CDATA[Participação obrigatória?]]></pt></OP_PARTICIPATE>
+
+<OP_OBJ_TYPE type="dropdown" mode="edit" dependentfields="OP_OBJ_UID">
+  <en>Type<option name="ANY">All</option><option name="DYNAFORM">Dynaform</option><option name="INPUT">Input Document</option><option name="OUTPUT">Output Document</option></en>
+<es>Tipo<option name="ANY">Todo</option><option name="DYNAFORM">Dynaform</option><option name="INPUT">Input Document</option><option name="OUTPUT">Output Document</option></es><pt>Tipo<option name="ANY">Todas</option><option name="DYNAFORM"><![CDATA[Formulário Dinâmico]]></option><option name="INPUT">Documento de Entrada</option><option name="OUTPUT"><![CDATA[Documento de Saída]]></option></pt></OP_OBJ_TYPE>
+<ALL type="dropdown" mode="edit" sqlConnection="dbarray">
+SELECT * FROM allObjects
+  <en>Object<option name="">All</option></en>
+<es>Objeto<option name="">Todo</option></es><pt>Objeto<option name="">Todas</option></pt></ALL>
+<DYNAFORMS type="dropdown" mode="edit" sqlConnection="dbarray">
+SELECT * FROM allDynaforms
+  <en>DynaForm<option name="">All</option></en>
+<es>DynaForm    <option name="">Todo</option></es><pt><![CDATA[Formulário Dinâmico]]><option name="">Todas</option></pt></DYNAFORMS>
+<INPUTS type="dropdown" mode="edit" sqlConnection="dbarray">
+SELECT * FROM allInputs
+  <en>Input Document<option name="">All</option></en>
+<es>Input Document    <option name="">Todo</option></es><pt>Documento de Entrada<option name="">Todas</option></pt></INPUTS>
+<OUTPUTS type="dropdown" mode="edit" sqlConnection="dbarray">
+SELECT * FROM allOutputs
+  <en>Output Document<option name="">All</option></en>
+<es>Output Document    <option name="">Todo</option></es><pt><![CDATA[Documento de Saída]]><option name="">Todas</option></pt></OUTPUTS>
+<OP_ACTION type="dropdown" mode="edit">
+  <en>Permission<option name="VIEW">View</option><option name="BLOCK">Block</option></en>
+<es>Permiso<option name="VIEW">Ver</option><option name="BLOCK">Bloquear</option></es><pt><![CDATA[Permissão]]><option name="VIEW">Visualizar</option><option name="BLOCK">Bloquear</option></pt></OP_ACTION>
+<CREATE type="button" onclick="saveObjectPermission(this.form);">
+  <en>Save</en>
+</CREATE>
+<ID_DELETE type="private"/>
+<JS type="javascript"><![CDATA[
+if(getField('OP_OBJ_TYPE').value=='ANY')
+ { hideRowById(getField('ALL'));
+   hideRowById(getField('DYNAFORMS')); 
+   hideRowById(getField('INPUTS')); 
+	 hideRowById(getField('OUTPUTS')); 
+ }
+if(getField('OP_OBJ_TYPE').value=='DYNAFORM')
+ { hideRowById(getField('ALL')); 
+   hideRowById(getField('INPUTS')); 
+	 hideRowById(getField('OUTPUTS')); 
+ }
+if(getField('OP_OBJ_TYPE').value=='INPUT')
+ { hideRowById(getField('ALL'));
+   hideRowById(getField('DYNAFORMS')); 
+	 hideRowById(getField('OUTPUTS')); 
+ }
+if(getField('OP_OBJ_TYPE').value=='OUTPUT')
+ { hideRowById(getField('ALL'));
+   hideRowById(getField('DYNAFORMS')); 
+	 hideRowById(getField('INPUTS')); 
+ }
+
+leimnud.event.add(document.getElementById('form[OP_OBJ_TYPE]'), 'change', function() {
+	if(getField('OP_OBJ_TYPE').value=='DYNAFORM')
+	 { hideRowById(getField('ALL')); 
+	   hideRowById(getField('INPUTS')); 
+		 hideRowById(getField('OUTPUTS')); 
+		 showRowById(getField('DYNAFORMS')); 
+	 }
+	if(getField('OP_OBJ_TYPE').value=='INPUT')
+	 { hideRowById(getField('ALL'));
+	   hideRowById(getField('DYNAFORMS')); 
+		 hideRowById(getField('OUTPUTS')); 
+		 showRowById(getField('INPUTS')); 
+	 }
+	if(getField('OP_OBJ_TYPE').value=='OUTPUT')
+	 { hideRowById(getField('ALL'));
+	   hideRowById(getField('DYNAFORMS')); 
+		 hideRowById(getField('INPUTS')); 
+		 showRowById(getField('OUTPUTS')); 
+	 }
+});
+
+leimnud.event.add(document.getElementById('form[OP_CASE_STATUS]'), 'change', function() {
+  var target = document.getElementById('form[TAS_UID]');
+  var origin = document.getElementById('form[OP_TASK_SOURCE]');
+  var participate = document.getElementById('form[OP_PARTICIPATE]');
+  if (document.getElementById('form[OP_CASE_STATUS]').value=='COMPLETED')
+  {    
+     hideRowById(target); 
+		 hideRowById(origin); 
+		 hideRowById(participate);
+  }  
+  else
+  {     
+     showRowById(target); 
+		 showRowById(origin); 
+		 showRowById(participate);
+  }
+});
+
+]]></JS>
+</dynaForm>

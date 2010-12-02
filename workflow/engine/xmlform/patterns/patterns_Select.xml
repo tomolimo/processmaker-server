@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="patterns_Select" id="patterns_Select" type="xmlform" width="100%" enableTemplate="1">
+
+<action type="hidden"/>
+
+<LANG type="private"/>
+
+<ROU_UID type="hidden"/>
+
+<PROCESS type="hidden"/>
+
+<TASK type="hidden"/>
+
+<ROU_TYPE_OLD type="hidden"/>
+
+<TITLE type="title" showInTable="0">
+  <en>Selection</en>
+</TITLE>
+
+<ROU_TYPE type="hidden"/>
+
+<GRID_SELECT_TYPE type="grid" xmlgrid="patterns/patterns_GridSelectType" addRow="1" deleteRow="1" editRow=""/>
+
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<SAVE type="button" onclick="savePattern();">
+  <en>Save</en>
+</SAVE>
+
+<JS type="javascript"><![CDATA[
+var bModified = false;
+var modified  = function() {
+  bModified   = true;
+};
+var oGrid          = object_patterns_Select.getElementByName('GRID_SELECT_TYPE');
+oGrid.onaddrow     = modified;
+oGrid.ondeleterow  = modified;
+oGrid.setFunctions([{sFieldName: 'ROU_NEXT_TASK',    sFunction: modified}]);
+oGrid.setFunctions([{sFieldName: 'ROU_CONDITION',    sFunction: modified}]);
+oGrid.setFunctions([{sFieldName: 'ROU_TO_LAST_USER', sFunction: modified}]);
+Pm.tmp.derivationsPanel.events.remove = function() {
+  if (bModified) {
+    if(confirm(G_STRINGS.ID_SAVE_DERIVATION_RULES_BEFORE_CLOSING)){
+	  		savePattern();
+	  		return false;
+  		}else{
+  			return false;
+		  }
+    
+    /*Pm.tmp.derivationsPanel.cancelClose=true;
+    new leimnud.module.app.confirm().make({
+      label:  G_STRINGS.ID_SAVE_DERIVATION_RULES_BEFORE_CLOSING,
+      action: function() {
+        Pm.tmp.derivationsPanel.cancelClose=false;
+        bModified = false;
+        getField('SAVE').onclick();
+      }.extend(this),
+      cancel: function() {
+        bModified = false;
+        Pm.tmp.derivationsPanel.cancelClose=false;
+        Pm.tmp.derivationsPanel.remove();
+      }
+    });*/
+    return false;
+  }
+  else {
+    return true;
+  }
+};
+
+var savePattern = function(oForm)
+{ oForm=document.getElementById('patterns_Select');
+  var oAux;
+  var oType     = getField('ROU_TYPE');
+  var oOldType  = getField('ROU_TYPE_OLD');
+  var i         = 1;
+  var aData     = {};
+  var bContinue = true;
+  if (oType.value != oOldType.value)
+  {
+    if (!confirm('You are changing the pattern, are you sure?'))
+    {
+      return false;
+    }
+  }
+  switch (oType.value)
+  {
+    case 'SELECT':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_SELECT_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+    case 'EVALUATE':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_EVALUATE_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+    case 'PARALLEL':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_PARALLEL_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+    case 'PARALLEL-BY-EVALUATION':
+      var aAux = [];
+      while (oAux = document.getElementById('form[GRID_PARALLEL_EVALUATION_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        if (!aAux.inArray(oAux.value))
+        {
+          aAux.push(oAux.value);
+        }
+        else
+        {
+          bContinue = false;
+        }
+        i++;
+      }
+    break;
+  }
+  if (!bContinue)
+  {
+    alert('You cannot select to the same task several times!');
+    return bContinue;
+  }
+  i             = 1;
+  aData.tas_uid = getField('TASK').value;
+  aData.data    = [];
+  switch (oType.value)
+  {
+    case 'SEQUENTIAL':
+      aData.type = 0;
+      aData.data.push(getField('ROU_NEXT_TASK').value);
+    break;
+    case 'SELECT':
+      aData.type = 1;
+      while (oAux = document.getElementById('form[GRID_SELECT_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+
+    break;
+    case 'EVALUATE':
+      aData.type = 2;
+      while (oAux = document.getElementById('form[GRID_EVALUATE_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+    break;
+    case 'PARALLEL':
+      aData.type = 3;
+      while (oAux = document.getElementById('form[GRID_PARALLEL_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+    break;
+    case 'PARALLEL-BY-EVALUATION':
+      aData.type = 4;
+      while (oAux = document.getElementById('form[GRID_PARALLEL_EVALUATION_TYPE][' + i + '][ROU_NEXT_TASK]'))
+      {
+        aData.data.push(oAux.value);
+        i++;
+      }
+    break;
+    case 'SEC-JOIN':
+      aData.type = 5;
+      aData.data.push(getField('ROU_NEXT_TASK').value);
+    break;
+  }
+  Pm.data.build.derivation(aData);
+  ajax_post(oForm.action, oForm, 'POST');
+  bModified = false;
+  Pm.tmp.derivationsPanel.remove();
+};
+
+function cancel(){
+    Pm.tmp.derivationsPanel.remove();
+}
+
+]]></JS>
+
+</dynaForm>  

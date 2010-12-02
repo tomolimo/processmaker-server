@@ -1,0 +1,19 @@
+<ul id="pm_submenu">
+    {foreach from=$subMenus item=field key=name}
+    {if $field.icon neq ""}
+    <li  id="{$field.idName}" class="{$field.classname}">
+        <a href="{$field.target}" {$field.onclick} {$field.elementclass}>
+            <img src="{$field.icon}" border="0" alt="{$field.label}"/>
+            {$field.label}
+        </a>
+    </li>
+    {else}
+    <li  id="{$field.idName}"
+          class="{$field.classname}">
+        <a href="{$field.target}" {$field.onclick} {$field.elementclass}>
+            {$field.label}
+        </a>
+    </li>
+    {/if}
+    {/foreach}
+</ul>

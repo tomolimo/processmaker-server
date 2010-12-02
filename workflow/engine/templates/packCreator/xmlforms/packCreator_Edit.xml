@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm 
+  name="{$pack->name}_Edit"
+  type="xmlform"
+  width="100%"
+>
+<PRO_UID type="hidden"/>
+{foreach from=$pack->fields item=field}
+{if $field->type==='hidden'}
+<{$field->name} type="hidden" showInTable="0"/>
+{else}
+<{$field->name} type="{$field->type}" {foreach from=$field->attributes item=attribute key=atribName}{$atribName}="{$attribute}" {/foreach}>
+{$field->sql}
+  <en>{$field->labelEN}</en>
+  <es>{$field->labelES}</es>
+</{$field->name}>
+{/if}
+{/foreach}
+
+<ACCEPT type="button" onclick="{$pack->name}Save( this.form );">
+  <en>Save</en>
+  <es>Guardar</es>
+</ACCEPT>
+</dynaForm>

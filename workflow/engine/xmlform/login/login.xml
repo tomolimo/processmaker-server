@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="login" version="1.0" basedir="" xmlform_type="NORMAL" width="400px">
+  <TITLE type="title">
+    <en>Login</en>
+  </TITLE>
+  <USR_USERNAME type="text" size="30" maxlength="50" validate="Login">
+    <en>User</en>
+  </USR_USERNAME>
+  <USR_PASSWORD type="password" size="30" maxlength="32">
+    <en>Password</en>
+  </USR_PASSWORD>
+  <USER_LANG type="dropdown" sqlconnection="dbarray">
+  SELECT LANG_ID, LANG_NAME FROM langOptions
+    <en>Language</en>
+  </USER_LANG>
+  <URL type="hidden"/>
+  <LOGIN_VERIFY_MSG type="private" showInTable="0"/>
+  <BSUBMIT type="submit">
+    <en>Login</en>
+  </BSUBMIT>
+  
+  <JS type="javascript"><![CDATA[
+var panel;
+
+function processHbInfo(){
+  ajax_server="../services/processHeartBeat_Ajax.php";
+  parameters="action=processInformation";
+  method="POST";
+  callback="";
+  asynchronous=true;
+  ajax_post(ajax_server, parameters, method, callback, asynchronous );
+};
+
+function showGettingStarted () {
+  panel = new leimnud.module.panel();
+  panel.options={
+    size  :{w:620,h:500},
+    position:{x:50,y:50,center:true},
+    control :{close:true,resize:false},fx:{modal:true},
+    statusBar:false,
+    fx  :{shadow:true,modal:true}
+  };
+  panel.make();
+  panel.loader.show();
+  var r = new leimnud.module.rpc.xmlhttp({
+    url:"../services/login_getStarted.php",
+    method:"POST"
+  });
+  r.callback=function(rpc) {
+    panel.loader.hide();
+    panel.addContent(rpc.xmlhttp.responseText);
+  };
+  r.make();
+};
+
+var saveConfig = function() {
+  if(document.getElementById("getStarted").checked==true) {
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : '../login/login_Ajax',
+      async : false,
+      method: 'POST',
+      args  : 'function=getStarted_save'
+    });
+    oRPC.make();
+  }
+  panel.remove();
+}
+
+var dynaformOnload = function() {
+  setFocus (getField ('USR_USERNAME'));  
+  if (flagHeartBeat) processHbInfo();
+  if (flagGettingStarted) showGettingStarted();
+};
+
+var openInfoPanel = function() {
+  var oInfoPanel = new leimnud.module.panel();
+  oInfoPanel.options = {
+    size    :{w:500,h:424},
+    position:{x:0,y:0,center:true},
+    title   :'System Information',
+    theme   :'processmaker',
+    control :{
+      close :true,
+      drag  :false
+    },
+    fx:{
+      modal:true
+    }
+  };
+  oInfoPanel.setStyle = {modal: {
+    backgroundColor: 'white'
+  }};
+  oInfoPanel.make();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url   : '../login/dbInfo',
+    async : false,
+    method: 'POST',
+    args  : ''
+  });
+  oRPC.make();
+  oInfoPanel.addContent(oRPC.xmlhttp.responseText);
+};
+
+leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() { 
+  setNestedProperty(this, Array('disabled'), 'true');
+  setNestedProperty(this, Array('value'), @@LOGIN_VERIFY_MSG);
+  lang = getField('USER_LANG').value;
+  createCookie('pmos_generik', '{"lang":"'+lang+'"}', 365);
+    
+  var client = getBrowserClient();
+    
+  if (client.browser != "firefox"){ 
+    document.login.submit();
+  } 
+}.extend(document.getElementById('form[BSUBMIT]'))); 
+  
+try{
+  c = new String(readCookie('pmos_generik'));
+  o = eval("("+c+")");
+  if( o != null){
+    getField('USER_LANG').value = o.lang; 
+  }
+} 
+catch(e){}
+
+]]></JS>
+</dynaForm>
