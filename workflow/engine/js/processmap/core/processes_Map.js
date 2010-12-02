@@ -94,9 +94,10 @@ var saveTaskData = function(oForm, iForm, iType)
   iLastTab = iForm;
   saveDataTaskTemporal(iForm);
   oTaskData.TAS_UID = getField('TAS_UID').value;
-  while (oTaskData.TAS_TITLE.charAt(0)==' '){ 
+ /* while (oTaskData.TAS_TITLE.charAt(0)==' '){ 
 		oTaskData.TAS_TITLE = oTaskData.TAS_TITLE.substring(1,oTaskData.TAS_TITLE.length) ;
-	}    
+	}    */
+	oTaskData.TAS_TITLE=oTaskData.TAS_TITLE.trim();
   if(oTaskData.TAS_TITLE==''){
 	  alert(G_STRINGS.ID_REQ_TITLE );
 	  return false;
