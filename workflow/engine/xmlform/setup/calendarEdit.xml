@@ -50,10 +50,10 @@
   <en>Cancel</en>
 </BTN_CANCEL>
 <HOLIDAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
-<en>Active</en>
+<en></en>
 </HOLIDAY_STATUS>
 <BUSINESS_DAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
-<en>Active</en>
+<en></en>
 </BUSINESS_DAY_STATUS>
 <DEFAULT_CALENDAR_JS type="javascript">
 <![CDATA[

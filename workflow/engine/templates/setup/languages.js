@@ -311,13 +311,13 @@ Ext.onReady(function(){
         sortable : false
       }, {
         dataIndex : 'TRANSLATOR',
-        header : 'Translator',
+        header : TRANSLATIONS.ID_LAN_TRANSLATOR,
         width : 150,
         sortable : false,
         hidden: false
       }, {
         dataIndex : 'NUM_RECORDS',
-        header : '# Records',
+        header : TRANSLATIONS.ID_LAN_NUM_RECORDS,
         width : 60,
         sortable : false
       }
@@ -349,7 +349,7 @@ Ext.onReady(function(){
 
     tbar:[{
       xtype: 'tbsplit',
-      text: 'Actions',
+      text: TRANSLATIONS.ID_ACTIONS,
       menu: [removeOption]
     }, '-', installOption, exportOption]
 
