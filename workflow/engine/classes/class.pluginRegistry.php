@@ -190,7 +190,7 @@ class PMPluginRegistry {
       if ( $sNamespace == $namespace ) {
         $this->registerFolder($sNamespace, $sNamespace, $detail->sPluginFolder ); //register the default directory, later we can have more
         $this->_aPluginDetails[$sNamespace]->enabled = true;
-        $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+        $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
         $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
         if (method_exists($oPlugin, 'enable')) {
           $oPlugin->enable();
@@ -209,7 +209,7 @@ class PMPluginRegistry {
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
       if ( $sNamespace == $namespace ) {
         unset ($this->_aPluginDetails[$sNamespace]);
-        $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+        $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
         $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
         if (method_exists($oPlugin, 'disable')) {
           $oPlugin->disable();
@@ -298,7 +298,7 @@ class PMPluginRegistry {
   try {
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
       if ( $sNamespace == $namespace ) {
-      $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+      $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
       $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
       $oPlugin->install();
       }
@@ -769,7 +769,7 @@ class PMPluginRegistry {
           $sFilename = PATH_PLUGINS . $aux[ count($aux) -1];
           if (! file_exists($sFilename) ) continue;
           require_once( $sFilename);
-          $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+          $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
           $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
 
           $iPlugins++;

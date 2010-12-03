@@ -165,7 +165,7 @@ protected $depo_title = '';
     $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
     try {
       $oDept = DepartmentPeer::retrieveByPk( $DepUid );
-      if ( get_class ($oDept) == 'Department' ) { 
+      if (is_object ($oDept) && get_class ($oDept) == 'Department' ) {
         $aFields = $oDept->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         $aFields['DEPO_TITLE'] = $oDept->getDepTitle();

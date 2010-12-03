@@ -214,7 +214,7 @@ class Process extends BaseProcess {
     $con = Propel::getConnection(ProcessPeer::DATABASE_NAME);
     try {
       $oPro = ProcessPeer::retrieveByPk( $ProUid );
-      if ( get_class($oPro) == 'Process' ) {
+      if (is_object($oPro) && get_class($oPro) == 'Process' ) {
         return true;
       }
       else {

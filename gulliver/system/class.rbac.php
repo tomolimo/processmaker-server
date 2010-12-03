@@ -158,24 +158,22 @@ class RBAC
     //if we provide a path data and session we will cache the session Info for this user
     if ( $pathData != null && $sid != null ) {
       $pathData = $pathData . 'session' . PATH_SEP;
-      $filePath = $pathData . $sid . '.rbac';      
+      $filePath = $pathData . $sid . '.rbac';
       if ( file_exists ( $filePath ) && filesize($filePath) > 0 ) {
-        $this->aUserInfo = unserialize( file_get_contents ( $filePath ) );
+          $this->aUserInfo = unserialize( file_get_contents ( $filePath ) );
         return;
       }
     }
-    
     $this->sSystem = $sSystem;
     $fieldsSystem = $this->systemObj->loadByCode($sSystem);
     $fieldsRoles = $this->usersRolesObj->getRolesBySystem ($fieldsSystem['SYS_UID'], $sUser );
     $fieldsPermissions = $this->usersRolesObj->getAllPermissions ($fieldsRoles['ROL_UID'], $sUser );
-
     $this->aUserInfo[ $sSystem ]['SYS_UID'] = $fieldsSystem['SYS_UID'];
     $this->aUserInfo[ $sSystem ]['ROLE'] = $fieldsRoles;
     $this->aUserInfo[ $sSystem ]['PERMISSIONS'] = $fieldsPermissions;
-
+  
     if ( $pathData != null && $sid != null ) {
-      G::mk_dir ( $pathData );
+       G::mk_dir ( $pathData );
       file_put_contents( $filePath, serialize ( $this->aUserInfo ) );
     }
   }

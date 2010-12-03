@@ -31,6 +31,7 @@
 
 
 try {
+    
   $frm = $_POST['form'];
   $usr = '';
   $pwd = '';
@@ -74,7 +75,7 @@ try {
     case -5:
       G::SendTemporalMessage ('ID_AUTHENTICATION_SOURCE_INVALID', "warning");
       break;
-  }
+    }   
   $$sPwd= $pwd;
   
   //to avoid empty string in user field.  This will avoid a weird message "this row doesn't exist"
@@ -137,11 +138,11 @@ try {
   G::LoadClass('serverConfiguration');
   $oServerConf =& serverConf::getSingleton();
   $oServerConf->sucessfulLogin();
-
+  
   // Assign the uid of user to userloggedobj
   $RBAC->loadUserRolePermission($RBAC->sSystem, $uid);
   $res = $RBAC->userCanAccess('PM_LOGIN');
-  if ($res != 1 ) {
+   if ($res != 1 ) {
     if ($res == -2)
       G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', "error");
     else
@@ -195,18 +196,19 @@ try {
     $c = file_get_contents(PATH_DATA_SITE . PATH_SEP . '.server_info');
     if(md5($c) != md5($cput)){
       file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
-    }
+       }
   }
 
   /* Check password using policy - Start */
   require_once 'classes/model/UsersProperties.php';
   $oUserProperty = new UsersProperties();
-  $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_SESSION['USER_LOGGED'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($currentPwd)))));
+  $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_SESSION['USER_LOGGED'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($currentPwd)))));  
   $aErrors       = $oUserProperty->validatePassword($_POST['form']['USR_PASSWORD'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME']);
-  if (!empty($aErrors)) {
-    if (!defined('NO_DISPLAY_USERNAME')) {
+
+   if (!empty($aErrors)) {
+     if (!defined('NO_DISPLAY_USERNAME')) {
       define('NO_DISPLAY_USERNAME', 1);
-    }
+    }    
     $aFields = array();
     $aFields['DESCRIPTION']  = '<span style="font-weight:normal;">';
     $aFields['DESCRIPTION'] .= G::LoadTranslation('ID_POLICY_ALERT').':<br /><br />';
@@ -236,9 +238,9 @@ try {
     G::RenderPage('publish');
     die;
   }
-  /* Check password using policy - End */
+   /* Check password using policy - End */
   if ( isset($_POST['form']['URL']) && $_POST['form']['URL'] != '') {
-    $sLocation = $_POST['form']['URL'];
+      $sLocation = $_POST['form']['URL'];
   }
   else {
     $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
@@ -251,6 +253,7 @@ try {
   $oHeadPublisher->assign('uriReq', $sLocation);
   G::RenderPage('publish', 'extJs');
   //G::header('Location: ' . $sLocation);
+  
   die;
 
 }

@@ -15,10 +15,13 @@ require_once 'classes/model/om/BaseUsersProperties.php';
  * @package    classes.model
  */
 class UsersProperties extends BaseUsersProperties {
-  function UserPropertyExists($sUserUID) {
+    function UserPropertyExists($sUserUID) {
     try {
       $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
-      if (get_class($oUserProperty) == 'UsersProperties') {
+      var_dump($oUserProperty);
+      var_dump($sUserUID);
+      if (get_class($oUserProperty) == 'UsersProperties' && $oUserProperty != '') {
+          echo"inside";
         return true;
       }
       else {
