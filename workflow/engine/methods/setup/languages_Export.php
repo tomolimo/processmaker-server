@@ -22,6 +22,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
+
 require_once 'classes/model/IsoCountry.php';
 require_once 'classes/model/Language.php';
 require_once 'classes/model/Translation.php';
@@ -41,8 +43,12 @@ if( ! isset($_GET['LOCALE']) )
 $sPOFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . MAIN_POFILE . '.' . $_GET['LOCALE'] . '.po';
 $poFile = new i18n_PO($sPOFile);
 $poFile->buildInit();
-$locale = $_GET['LOCALE'];
+
 $language = new Language();
+
+$locale       = $_GET['LOCALE'];
+$_TARGET_LANG = $_GET['LOCALE'];
+$_BASE_LANG   = 'en';
 
 if( strpos($locale, Translation::$localeSeparator) !== false ) {
   list($LAN_ID, $IC_UID) = explode(Translation::$localeSeparator, $_GET['LOCALE']);
@@ -66,9 +72,9 @@ if( ! isset($langRecord['LAN_NAME']) )
 $sLanguage = $langRecord['LAN_NAME'];
 
 //setting headers
-$poFile->addHeader('Project-Id-Version'        , PO_SYSTEM_VERSION);
+$poFile->addHeader('Project-Id-Version'        , '1.8');
 $poFile->addHeader('POT-Creation-Date'         , '');
-$poFile->addHeader('PO-Revision-Date'          , date('Y-m-d H:i+0100'));
+$poFile->addHeader('PO-Revision-Date'          , date('Y-m-d H:i:s'));
 $poFile->addHeader('Last-Translator'           , '');
 $poFile->addHeader('Language-Team'             , 'Colosa Developers Team <developers@colosa.com>');
 $poFile->addHeader('MIME-Version'              , '1.0');
@@ -84,6 +90,8 @@ $poFile->addHeader('Content-Transfer-Encoding' , '8bit');
 
 $aLabels = array();
 $aMsgids = array();
+
+// selecting of all translations records of base language 'en' in the PM TRANSLATIONS table
 $oCriteria = new Criteria('workflow');
 $oCriteria->addSelectColumn(TranslationPeer::TRN_CATEGORY);
 $oCriteria->addSelectColumn(TranslationPeer::TRN_ID);
@@ -125,7 +133,7 @@ while ($aRow1 = $oDataset->getRow()) {
         $poFile->addReference($aRow1['TRN_CATEGORY'] . '/' . $aRow1['TRN_ID']);
         
         $msgstr = ($aRow2 && $aRow2['TRN_VALUE'] != '' ) ?  $aRow2['TRN_VALUE'] : $aRow1['TRN_VALUE'];
-        $poFile->addTranslation($msgid, $msgstr);
+        $poFile->addTranslation(stripslashes($msgid), stripslashes($msgstr));
         $aMsgids[$msgid] = true;
     } else { #Autocleaning, delete the inconsistant data 
         $oTranslation = new Translation;
@@ -148,133 +156,127 @@ $aXMLForms = array_merge($aXMLForms, $aXMLForms2);
 
 $aEnglishLabel    = array();
 $aOptions         = array();
+$nodesNames    = Array();
 
-foreach ($aXMLForms as $sXmlForm) {
-  $sXmlForm = str_replace( chr(92), '/', $sXmlForm);
-  $sXmlForm = str_replace( PATH_XMLFORM, '', $sXmlForm);
-  $oForm = new Form( $sXmlForm, '', 'en');
+G::loadSystem('dynaformhandler');
+
+foreach ($aXMLForms as $xmlFormPath) {
+  $xmlFormFile = str_replace( chr(92), '/', $xmlFormPath);
+  $xmlFormFile = str_replace( PATH_XMLFORM, '', $xmlFormPath);
+  //$oForm = new Form( $sXmlForm, '', 'en');
+  //echo $xmlFormPath;
+  //echo '<br>';
+  //echo '<br>';
+  $dynaForm = new dynaFormHandler($xmlFormPath);
+  
+  $dynaNodes = $dynaForm->getFields();
 
   //get all fields of each xmlform
-  foreach ($oForm->fields as $sNodeName => $oNode) {
-    if (is_object($oNode)) {
-      if (trim($oNode->label) != '') {
-          //$aEnglishLabel[$oNode->name] = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $oNode->label))));
-        $aEnglishLabel[$oNode->name] = stripslashes(trim(str_replace(chr(10), '', $oNode->label)));
-        $aOptions[$sXmlForm . '?' . $oNode->name] = $aEnglishLabel[$oNode->name];
+  foreach ($dynaNodes as $oNode) {
+  
+    $sNodeName = $oNode->nodeName;
+    //$arrayNode = $dynaForm->getArray($oNode, Array('type', $_BASE_LANG, $_BASE_LANG)); 
+    $arrayNode = $dynaForm->getArray($oNode);
+    //if has not native language translation
+    if( ! isset($arrayNode[$_BASE_LANG]) || ! isset($arrayNode['type']) || ( isset($arrayNode['type']) && in_array($arrayNode['type'], $aExceptionFields)) ){ 
+      continue; //just continue with the next node
+    }
+    
+    
+    // Getting the Base Origin Text
+    if( ! is_array($arrayNode[$_BASE_LANG]) )
+      $originNodeText = trim($arrayNode[$_BASE_LANG]);
+    else {
+      $langNode = $arrayNode[$_BASE_LANG][0];
+      $originNodeText = getTextValue($langNode);
+    }
+   
+    // Getting the Base Target Text
+    if( isset($arrayNode[$_TARGET_LANG]) ) {
+      if( ! is_array($arrayNode[$_TARGET_LANG]) )
+        $targetNodeText = trim($arrayNode[$_TARGET_LANG]);
+      else {
+        $langNode = $arrayNode[$_TARGET_LANG][0];
+        $targetNodeText = getTextValue($langNode);
       }
-      if (isset($oNode->options)) {
-        if (!empty($oNode->options)) {
-          foreach ($oNode->options as $sKey => $sValue) {
-            //$aEnglishLabel[$oNode->name . '-' . $sKey] = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $sValue))));
-            $aEnglishLabel[$oNode->name . '-' . $sKey] = stripslashes(ltrim(str_replace(chr(10), '', $sValue)));
-            if (isset($aOptions[$sXmlForm . '?' . $oNode->name])) {
-              if (!is_array($aOptions[$sXmlForm . '?' . $oNode->name])) {
-                  $sAux = $aOptions[$sXmlForm . '?' . $oNode->name];
-                  $aOptions[$sXmlForm . '?' . $oNode->name] = array();
-              }
+    } else {
+      $targetNodeText = $originNodeText;
+    }
+    
+    $nodeName = $arrayNode['__nodeName__'];
+    $nodeType = $arrayNode['type'];
+    /*echo 'NODENAME:'. $nodeName . '<br>';
+    echo 'ORIGIN text:'. $originNodeText.'<br>';
+    echo 'TARGET text:'. $targetNodeText.'<br>';
+    echo 'NODE TYPE'. $arrayNode['type'].'<br>';
+    */
+    $msgid = $originNodeText;
+    
+    // if the nodeName already exists in the po file, we need to create other msgid
+    if( isset($aMsgids[$msgid]) )
+      $msgid = '[' . $xmlFormFile . '?' . $nodeName . ']' . $originNodeText;
+    
+    $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName);
+    $poFile->addTranslatorComment($xmlFormFile);
+    $poFile->addReference($nodeType . ' - ' . $nodeName);
+    $poFile->addTranslation($msgid, stripslashes($targetNodeText));
+    
+    $aMsgids[$msgid] = true;
+    
+    //if it is a dropdown field
+    if( $arrayNode['type'] == 'dropdown' && isset($arrayNode[$_BASE_LANG]) && isset($arrayNode[$_BASE_LANG][0]) && isset($arrayNode[$_BASE_LANG][0]['option']) ){
+      
+      $originOptionNode = $arrayNode[$_BASE_LANG][0]['option']; //get the options
+      
+      $targetOptionExists = false;
+      if( $arrayNode['type'] == 'dropdown' && isset($arrayNode[$_TARGET_LANG]) && isset($arrayNode[$_TARGET_LANG][0]) && isset($arrayNode[$_TARGET_LANG][0]['option']) ) {
+        $targetOptionNode = $arrayNode[$_TARGET_LANG][0]['option'];
+        $targetOptionExists = true;
+      } 
+      
+      if ( ! is_array($originOptionNode) ){
+        if( is_string($originOptionNode) ){
+          $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName . '-'. $originOptionNode);
+          $poFile->addTranslatorComment($xmlFormFile);
+          $poFile->addReference($nodeType . ' - ' . $nodeName . ' - ' . $originOptionNode);
+          $poFile->addTranslation($msgid, stripslashes($originOptionNode));
+        }
+      } else {
+        foreach( $originOptionNode as $optionNode ) {
+          $optionName = $optionNode['name'];
+          $originOptionValue = getTextValue($optionNode);
+          
+          if( $targetOptionExists ){
+            $targetOptionValue = getMatchDropdownOptionValue($optionName, $targetOptionNode);
+            if( $targetOptionValue === false ){
+              $targetOptionValue = $originOptionValue;
             }
-            $aOptions[$sXmlForm . '?' . $oNode->name][$sKey] = $aEnglishLabel[$oNode->name . '-' . $sKey];
+          } else {
+            $targetOptionValue = $originOptionValue;
           }
+            
+          $targetOptionValue = ($targetOptionValue != '') ? $targetOptionValue : "''";
+          $targetOptionValue = ($optionName != '') ? $optionName : "''";
+          
+          $msgid = '[' . $xmlFormFile . '?' . $nodeName  . '-' . $optionName . ']';
+         /* g::dump($xmlFormFile . '?' . $nodeName . '-'. $originOptionValue);
+          g::dump($xmlFormFile);
+          g::dump($nodeType . ' - ' . $nodeName . ' - ' . $originOptionValue);
+          g::dump($msgid);
+          g::dump($targetOptionValue);*/
+          
+          $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName . '-'. $optionName);
+          $poFile->addTranslatorComment($xmlFormFile);
+          $poFile->addReference($nodeType . ' - ' . $nodeName . ' - ' . $optionName);
+          $poFile->addTranslation($msgid, stripslashes($targetOptionValue));
         }
       }
     }
 	} //end foreach
-  unset($oForm->fields);
-  unset($oForm->tree);
-  unset($oForm);
-
-  //now go to the fields array
-  $oForm = new Form($sXmlForm, '', $_GET['LOCALE']);
-  $i = 1;
-  $iNumberOfFields = count($oForm->fields);
-  foreach ($oForm->fields as $sNodeName => $oNode) {
-    if (is_object($oNode)) {
-      if ( isset($aEnglishLabel[$oNode->name]) ) {
-        $msgid = $aEnglishLabel[$oNode->name];
-        //$oNode->label = str_replace('"', '\"', stripslashes(ltrim(str_replace(chr(10), '', $oNode->label))));
-        $oNode->label = stripslashes(ltrim(str_replace(chr(10), '', $oNode->label)));
-      } else 
-        $msgid = '';
-      
-      if ( !in_array(strtolower($oNode->type), $aExceptionFields)) {
-        if ((strpos($msgid, '@G::LoadTranslation') === false) && (strpos($oNode->label, '@G::LoadTranslation') === false)) {
-          //if (in_array($msgid, $aMsgids)) {
-          if ( isset($aMsgids[$msgid]) ) {
-              $msgid = trim ( '[' . $sXmlForm . '?' . $oNode->name . '] ' . $oNode->label );
-          }
-          /*$aLabels[] = array(
-              0 => '# ' . $sXmlForm . '?' . $sNodeName,
-              1 => '# ' . $sXmlForm,
-              2 => '#: ' . $oNode->type . ' - ' . $sNodeName,
-              3 => 'msgid "' . $msgid . '"',
-              4 => 'msgstr "' . trim($oNode->label) . '"'
-          );*/
-          
-          $poFile->addTranslatorComment($sXmlForm . '?' . $sNodeName);
-          $poFile->addTranslatorComment($sXmlForm);
-          $poFile->addReference($oNode->type . ' - ' . $sNodeName);
-          $poFile->addTranslation($msgid, trim($oNode->label));
-          
-          //$aMsgids[] = $msgid;
-          $aMsgids[$msgid] = 1;
-          
-          if (isset($oNode->options)) {
-            if (!empty($oNode->options)) {
-              foreach ($oNode->options as $sKey => $sValue) {
-                if ($sKey === '') {
-                    $sKey = "''";
-                }
-                $msgid = '[' . $sXmlForm . '?' . $oNode->name  . '-' . $sKey . ']';
-                $poFile->addTranslatorComment($sXmlForm . '?' . $sNodeName . '-'. $sKey);
-                $poFile->addTranslatorComment($sXmlForm);
-                $poFile->addReference($oNode->type . ' - ' . $sNodeName . ' - ' . $sKey);
-                $poFile->addTranslation($msgid, $sValue);
-                
-                $aMsgids[$msgid] = true;
-              }
-            } else {
-              if (isset($aOptions[$sXmlForm . '?' . $sNodeName])) {
-                if (is_array($aOptions[$sXmlForm . '?' . $sNodeName])) {
-                  foreach ($aOptions[$sXmlForm . '?' . $sNodeName] as $sKey => $sValue) {
-                    if ($sKey === '')
-                      $sKey = "''";
-                      
-                    $msgid = '[' . $sXmlForm . '?' . $oNode->name  . '-' . $sKey . ']';
-                    $poFile->addTranslatorComment($sXmlForm . '?' . $sNodeName . '-'. $sKey);
-                    $poFile->addTranslatorComment($sXmlForm);
-                    $poFile->addReference($oNode->type . ' - ' . $sNodeName . ' - ' . $sKey);
-                    $poFile->addTranslation($msgid, $sValue);
-                    $aMsgids[$msgid] = true;
-                  }
-                }
-              }
-            }
-          } else {
-            if (isset($aOptions[$sXmlForm . '?' . $sNodeName])) {
-              if (is_array($aOptions[$sXmlForm . '?' . $sNodeName])) {
-                foreach ($aOptions[$sXmlForm . '?' . $sNodeName] as $sKey => $sValue) {
-                  if ($sKey === '')
-                      $sKey = "''";
-                  
-                  $msgid = '[' . $sXmlForm . '?' . $oNode->name  . '-' . $sKey . ']';
-                  $poFile->addTranslatorComment($sXmlForm . '?' . $sNodeName . '-'. $sKey);
-                  $poFile->addTranslatorComment($sXmlForm);
-                  $poFile->addReference($oNode->type . ' - ' . $sNodeName . ' - ' . $sKey);
-                  $poFile->addTranslation($msgid, $sValue);
-                  $aMsgids[$msgid] = true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    $i++;
-  }
-  unset($oForm->fields);
-  unset($oForm->tree);
-  unset($oForm);
+	
 }
+//die;
+//g::pr($aEnglishLabel); die;
 /*******************/
 //
 //$timer->setMarker('end xml files processed');
@@ -286,3 +288,18 @@ foreach ($aXMLForms as $sXmlForm) {
 
 G::streamFile($sPOFile, true);
 
+function getTextValue($arrayNode){
+  return isset($arrayNode['#text']) ? $arrayNode['#text']: (isset($arrayNode['#cdata-section']) ? $arrayNode['#cdata-section']: '');
+}
+
+function getMatchDropdownOptionValue($name, $options){
+  foreach($options as $option){
+    //echo $name .'=='. $option['name'];
+    //echo '----------------------------<br>';
+    if($name == $option['name']){
+      //echo '[[[[['.getTextValue($option).']]]]]';
+      return getTextValue($option);
+    }
+  }
+  return false;
+}

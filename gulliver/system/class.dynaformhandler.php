@@ -551,6 +551,39 @@ class dynaFormHandler
     } else 
       $xnode->appendChild($newNode);
   }
+  
+  function getArray($node, $attributes = null)
+  {
+    $array = false;
+    $array['__nodeName__'] = $node->nodeName;
+    if ($node->hasAttributes()){
+      if( isset($attributes) ){
+        foreach ($attributes as $attr) {
+          if( $node->hasAttribute($attr) )
+            $array[$attr] = $node->getAttribute($attr);
+        }
+      } else {
+        foreach ($node->attributes as $attr) {
+          $array[$attr->nodeName] = $attr->nodeValue;
+        }
+      }
+    }
+
+    if ($node->hasChildNodes()) {
+      if ($node->childNodes->length == 0)
+        $return;
+      else {
+        foreach ($node->childNodes as $childNode) {
+          if ($childNode->nodeType != XML_TEXT_NODE && $childNode->nodeType != XML_CDATA_SECTION_NODE)
+            $array[$childNode->nodeName][] = $this->getArray($childNode);
+          else
+            $array[$childNode->nodeName] = $childNode->nodeValue;
+        }
+      }
+    }
+
+    return $array;
+  } 
 }
 
 //examples...........
