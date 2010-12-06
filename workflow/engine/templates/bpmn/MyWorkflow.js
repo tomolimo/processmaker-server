@@ -1,0 +1,2245 @@
+MyWorkflow=function(id){
+Workflow.call(this,id);
+this.html.style.backgroundImage="url(/skins/ext/images/gray/shapes/grid_10.png)";
+};
+MyWorkflow.prototype=new Workflow;
+MyWorkflow.prototype.type="MyWorkflow";
+
+commandListener=function(){
+CommandStackEventListener.call(this);
+};
+commandListener.prototype=new CommandStackEventListener;
+commandListener.prototype.type="commandListener";
+
+MyWorkflow.prototype.subProcess= function(_6767)
+{
+   _6767.subProcessName = 'Sub Process' ;
+   var subProcess  = eval("new bpmnSubProcess(_6767) ");
+   var xPos = this.workflow.contextX;
+   var yPos = this.workflow.contextY;
+  _6767.scope.workflow.addFigure(subProcess, xPos, yPos);
+  subProcess.actiontype = 'addSubProcess';
+  this.workflow.saveShape(subProcess);
+  //this.currentSelection.actiontype = 'deletetask';
+  //this.workflow.deleteShape(this.currentSelection);
+  //Ext.MessageBox.alert('Status','Add Subprocess');
+}
+
+MyWorkflow.prototype.setBoundary = function (oShape) {
+  //Left Border
+  if (oShape.x < 75) {
+        oShape.x = 85;
+  }
+  //Right Border
+  if (oShape.x > 1300 - oShape.width) {
+    workflow.main.setWidth(oShape.x+150);
+  }
+  //Top Border
+  if (oShape.y < 55) {
+    oShape.y = 71;
+  }
+  //Bottom Border
+  if (oShape.y > 1000 - oShape.height) {
+       workflow.main.setHeight(oShape.y+75);
+   }
+}
+
+
+MyWorkflow.prototype.AddTaskContextMenu= function(_4092)
+{
+  //var pmosExtObj = new pmosExt();
+  var taskExtObj = new TaskContext();
+  if (_4092.id != null) {
+        this.canvasTask = Ext.get(_4092.id);
+        this.contextTaskmenu = new Ext.menu.Menu({
+            items: [{
+                text: 'Steps',
+                handler: taskExtObj.editTaskSteps,
+                scope: _4092
+            },
+            {
+                text: 'Users & Users Group',
+                handler: taskExtObj.editUsers,
+                scope: _4092
+            },
+            {
+                text: 'Users & Users Groups (ad-hoc)',
+                scope: _4092
+            },
+            {
+                text: 'Routing Rule',
+                handler: taskExtObj.editRoutingRule,
+                scope: _4092
+            },
+            {
+                text: 'Deleting Routing Rule',
+                scope: _4092
+            },
+            {
+                text: 'Delete Task',
+                scope: _4092
+            },
+            {
+                text: 'Transform To',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Sub Process',
+                            type:'bpmnSubProcess',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }
+                    ]
+                },
+                scope: this
+            },
+            {
+                text: 'Attach Event',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Timer Boundary Event',
+                            type:'bpmnEventBoundaryTimerInter',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }
+                    ]
+                },
+                scope: this
+            },
+            {
+                text: 'Properties',
+                handler: taskExtObj.editTaskProperties,
+                scope: _4092
+            }]
+        });
+    }
+
+    this.canvasTask.on('contextmenu', function (e) {
+        e.stopEvent();
+        this.contextTaskmenu.showAt(e.getXY());
+    }, this);
+
+}
+
+
+MyWorkflow.prototype.treeGrid = function(){
+
+    var tree = new Ext.ux.tree.TreeGrid({
+        title: 'Core Team Projects',
+        width: 500,
+        height: 300,
+        renderTo: Ext.getBody(),
+        enableDD: true,
+
+        columns:[{
+            header: 'Task',
+            dataIndex: 'task',
+            width: 230
+        },{
+            header: 'Duration',
+            width: 100,
+            dataIndex: 'duration',
+            align: 'center',
+            sortType: 'asFloat',
+            tpl: new Ext.XTemplate('{duration:this.formatHours}', {
+                formatHours: function(v) {
+                    if(v < 1) {
+                        return Math.round(v * 60) + ' mins';
+                    } else if (Math.floor(v) !== v) {
+                        var min = v - Math.floor(v);
+                        return Math.floor(v) + 'h ' + Math.round(min * 60) + 'm';
+                    } else {
+                        return v + ' hour' + (v === 1 ? '' : 's');
+                    }
+                }
+            })
+        },{
+            header: 'Assigned To',
+            width: 150,
+            dataIndex: 'user'
+        }],
+
+        dataUrl: 'treegrid-data.json'
+    });
+
+    var window = new Ext.Window({
+        title: 'Task Properties',
+        collapsible: false,
+        maximizable: false,
+        width: 650,
+        height: 400,
+        minWidth: 300,
+        minHeight: 200,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: tree,
+        buttons: [{
+            text: 'Save'
+        },{
+            text: 'Cancel'
+        }]
+    });
+    window.show();
+}
+
+MyWorkflow.prototype.connectionContextMenu=function(_4092)
+{
+    this.canvasEvent = Ext.get(_4092.id);
+    this.contextEventmenu = new Ext.menu.Menu({
+        items: [{
+            text: 'NULL Router',
+            scope: this,
+            handler: MyWorkflow.prototype.toggleConnection
+        }, {
+            text: 'Manhatten Router',
+            scope: this,
+            handler: MyWorkflow.prototype.toggleConnection
+        }, {
+            text: 'Bezier Router',
+            scope: this,
+            handler: MyWorkflow.prototype.toggleConnection
+        }, {
+            text: 'Fan Router',
+            scope: this,
+            handler: MyWorkflow.prototype.toggleConnection
+        }, {
+            text: 'Delete Router',
+            scope: this,
+            handler:function()
+            {
+                MyWorkflow.prototype.deleteRoute(_4092.workflow.currentSelection,0)
+            }
+        }]
+    });
+
+this.canvasEvent.on('contextmenu', function(e) {
+    e.stopEvent();
+    this.contextEventmenu.showAt(e.getXY());
+}, this);
+}
+
+
+MyWorkflow.prototype.toggleConnection=function(_4092)
+{
+    this.currentSelection.workflow.contextClicked = false;
+    switch (_4092.text) {
+            case 'NULL Router':
+                this.currentSelection.setRouter(null);
+            break;
+            case 'Manhatten Router':
+                this.currentSelection.setRouter(new ManhattanConnectionRouter());
+            break;
+            case 'Bezier Router':
+                this.currentSelection.setRouter(new BezierConnectionRouter());
+            break;
+            case 'Fan Router':
+                this.currentSelection.setRouter(new FanConnectionRouter());
+            break;
+            case 'Delete Router':
+                this.currentSelection.workflow.getCommandStack().execute(new CommandDelete(this.currentSelection.workflow.getCurrentSelection()));
+                ToolGeneric.prototype.execute.call(this);
+            break;
+      }
+}
+
+MyWorkflow.prototype.AddGatewayPorts = function(_40c5)
+{
+        var TaskPortName = ['inputPort1','inputPort2','outputPort1','outputPort2'];
+        var TaskPortType = ['InputPort','InputPort','OutputPort','OutputPort'];
+        var TaskPositionX= [0,_40c5.width/2,_40c5.width,_40c5.width/2];
+        var TaskPositionY= [_40c5.height/2,0,_40c5.height/2,_40c5.height];
+
+        for(var i=0; i< TaskPortName.length ; i++){
+            eval('_40c5.'+TaskPortName[i]+' = new '+TaskPortType[i]+'()');                               //Create New Port
+            eval('_40c5.'+TaskPortName[i]+'.setWorkflow(_40c5)');                                        //Add port to the workflow
+            eval('_40c5.'+TaskPortName[i]+'.setName("'+TaskPortName[i]+'")');                            //Set PortName
+            eval('_40c5.'+TaskPortName[i]+'.setZOrder(-1)');                                             //Set Z-Order of the port to -1. It will be below all the figure
+            eval('_40c5.'+TaskPortName[i]+'.setBackgroundColor(new Color(255, 255, 255))');              //Setting Background of the port to white
+            eval('_40c5.'+TaskPortName[i]+'.setColor(new Color(255, 255, 255))');                        //Setting Border of the port to white
+            this.workflow = _40c5.workflow;
+            this.workflow.currentSelection  =_40c5;
+            eval('_40c5.addPort(_40c5.'+TaskPortName[i]+','+TaskPositionX[i]+', '+TaskPositionY[i]+')');  //Setting Position of the port
+        }
+}
+
+MyWorkflow.prototype.AddGatewayContextMenu=function(_4092)
+{
+    this.canvasGateway = Ext.get(_4092.id);
+    this.contextGatewaymenu = new Ext.menu.Menu({
+        items: [{
+            text: 'Gateway Type',
+            menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Exclusive Gateway',
+                            type:'bpmnGatewayExclusiveData',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Inclusive Gateway',
+                            type:'bpmnGatewayInclusive',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Parallel Gateway',
+                            type:'bpmnGatewayParallel',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Complex Gateway',
+                            type:'bpmnGatewayComplex',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Event Based Gateway',
+                            type:'bpmnGatewayExclusiveEvent',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }
+                    ]
+                },
+            scope: this
+        },{
+            text: 'Properties',
+            handler: this.editGatewayProperties,
+            scope: this
+        }]
+    });
+
+this.canvasGateway.on('contextmenu', function(e) {
+    e.stopEvent();
+    this.contextGatewaymenu.showAt(e.getXY());
+}, this);
+}
+
+
+MyWorkflow.prototype.AddSubProcessContextMenu=function(_4092)
+{
+    this.canvasSubProcess = Ext.get(_4092.id);
+   // var currentSelection = _4092.scope.currentSelection;
+    //var pmosExtObj = new pmosExt();
+    this.contextSubProcessmenu = new Ext.menu.Menu({
+        items: [
+            {
+                text: 'Transform To',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Task',
+                            type:'bpmnTask',
+                            scope:_4092,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }
+                    ]
+                },
+                scope: this
+            },
+            {
+            text: 'Properties',
+            handler: this.editSubProcessProperties,
+            scope: this
+        }]
+    });
+
+this.canvasSubProcess.on('contextmenu', function(e) {
+    e.stopEvent();
+    this.contextSubProcessmenu.showAt(e.getXY());
+}, this);
+}
+
+
+MyWorkflow.prototype.editSubProcessProperties= function(_3525)
+{
+        var pro_uid = workflow.getUrlVars();
+        var taskId  = workflow.currentSelection.id;
+        //Variables Out Grid
+        var subProcessFields = Ext.data.Record.create([
+            {name: 'SP_UID',type: 'string'},
+            {name: 'TAS_UID',type: 'string'},
+            {name: 'PRO_PARENT',type: 'string'},
+            {name: 'TAS_PARENT',type: 'string'},
+            {name: 'SP_SYNCHRONOUS',type: 'string'},
+            {name: 'SPROCESS_NAME',type: 'string'},
+            {name: 'TASKS',type: 'string'},
+            {name: 'TAS_TITLE',type: 'string'},
+            {name: 'CON_VALUE',type: 'string'},
+            {name: 'VAR_OUT1',type: 'string'},
+            {name: 'VAR_OUT2',type: 'string'},
+            {name: 'VAR_IN1',type: 'string'},
+            {name: 'VAR_IN2',type: 'string'}
+       ]);
+
+    var editorOut = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+    var editorIn = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+    //Variable out grid configuration starts here
+    var btnAddOut = new Ext.Button({
+            id: 'btnAddOut',
+            text: 'Assign Variables Out',
+            iconCls: 'application_add',
+            handler: function(){
+                //var User = grid.getStore();
+                var e = new subProcessFields({
+                     //STEP_TITLE: User.data.items[0].data.STEP_TITLE,
+                     SP_UID         : '',
+                     PRO_PARENT     : '',
+                     SP_SYNCHRONOUS : '',
+                     TAS_PARENT     : '',
+                     VAR_OUT1       : '',
+                     VAR_OUT2	    : ''
+                });
+
+                    editorOut.stopEditing();
+                    variablesOutStore.insert(0, e);
+                    variableOutGrid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editorOut.startEditing(0, 0);
+            }
+        });
+
+    var btnRemoveOut = new Ext.Button({
+        id: 'btnRemoveOut',
+        text: 'Remove Variables Out',
+        iconCls: 'application_delete',
+        handler: function (s) {
+            editorOut.stopEditing();
+            var s = variableOutGrid.getSelectionModel().getSelections();
+            for(var i = 0, r; r = s[i]; i++){
+
+                //First Deleting step from Database using Ajax
+                /*var stepUID      = r.data.STEP_UID;
+                var stepPosition = r.data.STEP_POSITION;
+
+                //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
+                //else its a BLANK ROW for which Ajax should not be called.
+                if(r.data.STEP_UID != "")
+                {
+                    Ext.Ajax.request({
+                      url   : '../steps/steps_Delete.php',
+                      method: 'POST',
+                      params: {
+                            TASK            : taskId,
+                            STEP_UID        : stepUID,
+                            STEP_POSITION   : stepPosition
+                      },
+                      success: function(response) {
+                        Ext.MessageBox.alert ('Status','Step has been removed successfully.');
+                      }
+                    });
+                }*/
+
+                //Secondly deleting from Grid
+                variablesOutStore.remove(r);
+            }
+        }
+    });
+
+    var tbOut = new Ext.Toolbar({
+        items: [btnAddOut, btnRemoveOut]
+    });
+
+
+    //Variable out grid configuration starts here
+  var btnAddIn = new Ext.Button({
+        id: 'btnAddIn',
+        text: 'Assign Variables In',
+        iconCls: 'application_add',
+        handler: function(){
+            //var User = grid.getStore();
+            var e = new subProcessFields({
+                 //STEP_TITLE: User.data.items[0].data.STEP_TITLE,
+                 SP_UID         : '',
+                 PRO_PARENT     : '',
+                 SP_SYNCHRONOUS : '',
+                 TAS_PARENT     : '',
+                 VAR_IN1        : '',
+                 VAR_IN2	    : ''
+            });
+
+                editorIn.stopEditing();
+                variablesInStore.insert(0, e);
+                variableInGrid.getView().refresh();
+                //grid.getSelectionModel().selectRow(0);
+                editorIn.startEditing(0, 0);
+        }
+    });
+
+    var btnRemoveIn = new Ext.Button({
+        id: 'btnRemoveIn',
+        text: 'Remove Variables In',
+        iconCls: 'application_delete',
+        handler: function (s) {
+            editorIn.stopEditing();
+            var s = variableInGrid.getSelectionModel().getSelections();
+            for(var i = 0, r; r = s[i]; i++){
+
+
+                //Secondly deleting from Grid
+                variablesInStore.remove(r);
+            }
+        }
+    });
+
+    var tbIn = new Ext.Toolbar({
+        items: [btnAddIn, btnRemoveIn]
+    });
+
+    // create the Data Store of all Variables Out
+    var variablesOutStore = new Ext.data.JsonStore({
+        root         : 'data',
+        totalProperty: 'totalCount',
+        idProperty   : 'gridIndex',
+        remoteSort   : true,
+        fields       : subProcessFields,
+        proxy        : new Ext.data.HttpProxy({
+               url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
+        })
+      });
+      //taskUsers.setDefaultSort('LABEL', 'asc');
+      variablesOutStore.load();
+
+    // create the Data Store of all Variables In
+    var variablesInStore = new Ext.data.JsonStore({
+        root         : 'data',
+        totalProperty: 'totalCount',
+        idProperty   : 'gridIndex',
+        remoteSort   : true,
+        fields       : subProcessFields,
+        proxy        : new Ext.data.HttpProxy({
+               url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=1'  //type=1 specifies Variables In (Synchronous)
+        })
+      });
+      //taskUsers.setDefaultSort('LABEL', 'asc');
+      variablesInStore.load();
+
+    var variableOutGrid =  new Ext.grid.GridPanel({
+        store       : variablesOutStore,
+        id          : 'mygrid',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : true,
+        autoHeight  : true,
+        autoScroll  : true,
+        clicksToEdit: 1,
+        layout      : 'form',
+        plugins     : [editorOut],
+        columns     : [{
+                        id       : 'VAR_OUT1',
+                        header   : 'Origin',
+                        dataIndex: 'VAR_OUT1',
+                        width    : 200,
+                        sortable : true,
+                        editor   : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        },
+                        {
+                        id        : 'VAR_OUT2',
+                        header    : 'Target',
+                        dataIndex : 'VAR_OUT2',
+                        width     : 200,
+                        sortable  : true,
+                        editor    : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        }
+                      ],
+        viewConfig: {forceFit: true},
+        stripeRows: true,
+        tbar: tbOut
+     });
+
+    var variableInGrid =  new Ext.grid.GridPanel({
+        store       : variablesInStore,
+        id          : 'mygrid1',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : true,
+        autoHeight  : true,
+        autoScroll  : true,
+        //enableDragDrop   : true,
+        //ddGroup     : 'firstGridDDGroup',
+        clicksToEdit: 1,
+        layout      : 'form',
+        plugins     : [editorIn],
+        columns     : [{
+                        id       : 'VAR_IN1',
+                        header   : 'Origin',
+                        dataIndex: 'VAR_IN1',
+                        width    : 200,
+                        sortable : true,
+                        editor   : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        },
+                        {
+                        id        : 'VAR_IN2',
+                        header    : 'Target',
+                        dataIndex : 'VAR_IN2',
+                        width     : 200,
+                        sortable  : true,
+                        editor    : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        }
+                      ],
+        viewConfig: {forceFit: true},
+        stripeRows: true,
+        tbar: tbIn
+     });
+
+
+
+     editorOut.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+
+             var sTasks            = record.data.TASKS;
+             var sSync             = record.data.SP_SYNCHRONOUS;
+             var sSP_UID           = record.data.SP_UID;
+             var sProcess_Parent   = record.data.PRO_PARENT;
+             var sTask_Parent      = record.data.TAS_PARENT;
+             var sVar_Out1         = record.data.VAR_OUT1;
+             var sVar_Out2         = record.data.VAR_OUT2;
+
+             Ext.Ajax.request({
+              url   : 'processes_Ajax.php',
+              method: 'POST',
+              params: {
+                    action          : 'saveSubProcessDetails',
+                    TASKS           : sTasks,
+                    SP_SYNCHRONOUS  : sSync,
+                    SP_UID          : sSP_UID,
+                    PRO_PARENT      : sProcess_Parent,
+                    TAS_PARENT      : sTask_Parent,
+                    VAR_OUT1        : sVar_Out1,
+                    VAR_OUT2        : sVar_Out2
+              },
+              success: function(response) {
+                  Ext.MessageBox.alert ('Status','Variable Out has been saved successfully.');
+              }
+            });
+
+          }
+        });
+
+        editorIn.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+
+             var sTasks            = record.data.TASKS;
+             var sSync             = record.data.SP_SYNCHRONOUS;
+             var sSP_UID           = record.data.SP_UID;
+             var sProcess_Parent   = record.data.PRO_PARENT;
+             var sTask_Parent      = record.data.TAS_PARENT;
+             var sVar_In1          = record.data.VAR_IN1;
+             var sVar_In2          = record.data.VAR_IN2;
+
+             Ext.Ajax.request({
+              url   : 'processes_Ajax.php',
+              method: 'POST',
+              params: {
+                    action          : 'saveSubProcessDetails',
+                    TASKS           : sTasks,
+                    SP_SYNCHRONOUS  : sSync,
+                    SP_UID          : sSP_UID,
+                    PRO_PARENT      : sProcess_Parent,
+                    TAS_PARENT      : sTask_Parent,
+                    VAR_IN1         : sVar_In1,
+                    VAR_IN2         : sVar_In2
+              },
+              success: function(response) {
+                  Ext.MessageBox.alert ('Status','Variable In has been saved successfully.');
+              }
+            });
+
+          }
+        });
+
+    var subProcessProperties = new Ext.FormPanel({
+    labelWidth  : 110, // label settings here cascade unless overridden
+    //frame:true,
+    bodyStyle:'padding:5px 5px 0',
+    scope: _3525,
+    items: [
+            {
+            xtype:'fieldset',
+            title: 'Sub-Process',
+            collapsible: false,
+            autoHeight:true,
+            //width: 600,
+            defaultType: 'textfield',
+             items:[
+                   {
+                    id:    'subProcessName',
+                    xtype: 'textfield',
+                    width:  350,
+                    fieldLabel: 'SubProcess name',
+                    name      : 'SPROCESS_NAME',
+                    allowBlank: false
+                   },
+                   {
+                        width:          300,
+                        xtype:          'combo',
+                        mode:           'local',
+                        triggerAction:  'all',
+                        forceSelection: true,
+                        editable:       false,
+                        fieldLabel:     'Process',
+                        name:           'process',
+                        emptyText    : 'Select Process',
+                        //hiddenName:     'SPROCESS_NAME',
+                        displayField:   'PROCESSES',
+                        valueField:     'PROCESSES',
+                        //value:          'Select a process',
+                        store:          variablesOutStore
+                    },
+                    {
+                        width:          150,
+                        id   :          'spType',
+                        xtype:          'combo',
+                        mode:           'local',
+                        triggerAction:  'all',
+                        forceSelection: true,
+                        editable:       false,
+                        fieldLabel:     'Type',
+                        name:           'SP_SYNCHRONOUS',
+                        hiddenName:     'SP_SYNCHRONOUS',
+                        displayField:   'name',
+                        valueField:     'value',
+                        emptyText    : 'Select Type',
+                        //value: 'Asynchronous',
+                        store:          new Ext.data.JsonStore({
+                                    fields : ['name', 'value'],
+                                    data   : [
+                                        {name : 'Asynchronous',   value: 'Asynchronous'},
+                                        {name : 'Synchronous',   value: 'Synchronous'},
+                                    ]
+                                }),
+                       onSelect: function(record, index){
+                           if(record.data.name == 'Synchronous')
+                                Ext.getCmp("variablein").show();
+                           else
+                                Ext.getCmp("variablein").hide();
+
+                           this.setValue(record.data[this.valueField || this.displayField]);
+                           this.collapse();
+                       }
+                    }]
+            },
+            {
+            id   :'variableout',
+            xtype:'fieldset',
+            title: 'Variables Out',
+            collapsible: false,
+            labelAlign: 'top',
+            //autoHeight:true,
+            //width: 600,
+            //defaultType: 'textfield',
+             items:[variableOutGrid]
+            },
+            {
+            id   :'variablein',
+            xtype:'fieldset',
+            title: 'Variables In',
+            //hidden: true,
+            collapsible: false,
+            labelAlign: 'top',
+            items:[variableInGrid]
+            }]
+    });
+
+    //Loading Task Details into the form
+    subProcessProperties.form.load({
+        url:'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=2',
+        method:'GET',
+        //waitMsg:'Loading',
+        success:function(form, action) {
+           Ext.getCmp("subProcessName").setValue(action.result.data[0].TAS_TITLE);
+           if(action.result.data[0].SP_SYNCHRONOUS == 0)
+               {
+                   Ext.getCmp("variablein").hide();
+                   Ext.getCmp("spType").setValue("Asynchronous");
+               }
+           else
+               {
+                   Ext.getCmp("variablein").show();
+                   Ext.getCmp("spType").setValue("Synchronous");
+               }
+          workflow.subProcessProperties = action.result.data[0];
+
+           //Ext.MessageBox.alert('Message', 'Loaded OK');
+          //  setTaskAssignType(form);
+        },
+        failure:function(form, action) {
+            Ext.MessageBox.alert('Message', 'Load failed');
+        }
+     });
+
+    subProcessProperties.render(document.body);
+   // workflow.subProcessProperties = subProcessProperties;
+
+    var window = new Ext.Window({
+    title: 'Task: ',
+    collapsible: false,
+    maximizable: false,
+    width: 800,
+    height: 500,
+    minWidth: 300,
+    minHeight: 150,
+    layout: 'fit',
+    plain: true,
+    bodyStyle: 'padding:5px;',
+    buttonAlign: 'center',
+    items: subProcessProperties,
+    buttons: [{
+        text: 'Save',
+        handler: function(){
+            var getForm    = subProcessProperties.getForm().getValues();
+            var sTask_Parent = workflow.subProcessProperties.TAS_PARENT;
+            var sSPNAME = getForm.SPROCESS_NAME;
+           Ext.Ajax.request({
+              url   : 'processes_Ajax.php',
+              method: 'POST',
+              params: {
+                    action          : 'subprocessProperties',
+                    TAS_PARENT      : sTask_Parent,
+                    SPROCESS_NAME   : sSPNAME
+                  },
+              success: function(response) {
+                  Ext.MessageBox.alert ('Status','Sub Process Properties has been saved successfully.');
+              }
+            });
+
+            workflow.currentSelection.bpmnNewText.clear();
+            workflow.currentSelection.bpmnNewText.drawStringRect(sSPNAME,20,20,100,'left');
+            workflow.currentSelection.bpmnNewText.paint();
+            workflow.currentSelection.subProcessName = sSPNAME;
+            //var getstore = taskPropertiesTabs.getStore();
+            //var getData = getstore.data.items;
+            //taskExtObj.saveTaskProperties(_5625);
+        }
+    },{
+        text: 'Cancel',
+        handler: function(){
+            // when this button clicked,
+            window.close();
+        }
+    }]
+    });
+    window.show();
+
+}
+
+//Window pop up function when user clicks on Gateways properties
+
+MyWorkflow.prototype.editGatewayProperties= function()
+{
+        var myData = {
+		records : [
+			{ name : "Rec 0", column1 : "0", column2 : "0" },
+			{ name : "Rec 1", column1 : "1", column2 : "1" },
+			{ name : "Rec 2", column1 : "2", column2 : "2" },
+			{ name : "Rec 3", column1 : "3", column2 : "3" },
+			{ name : "Rec 4", column1 : "4", column2 : "4" },
+			{ name : "Rec 5", column1 : "5", column2 : "5" },
+			{ name : "Rec 6", column1 : "6", column2 : "6" },
+			{ name : "Rec 7", column1 : "7", column2 : "7" },
+			{ name : "Rec 8", column1 : "8", column2 : "8" },
+			{ name : "Rec 9", column1 : "9", column2 : "9" }
+		]
+	};
+
+
+	// Generic fields array to use in both store defs.
+	var fields = [
+		{name: 'name', mapping : 'name'},
+		{name: 'column1', mapping : 'column1'},
+		{name: 'column2', mapping : 'column2'}
+	];
+
+    // create the data store
+    var firstGridStore = new Ext.data.JsonStore({
+        	fields : fields,
+		data   : myData,
+		root   : 'records'
+    });
+
+
+	// Column Model shortcut array
+	var cols = [
+		{ id : 'name', header: "Record Name", width: 160, sortable: true, dataIndex: 'name'},
+		{header: "column1", width: 50, sortable: true, dataIndex: 'column1'},
+		{header: "column2", width: 50, sortable: true, dataIndex: 'column2'}
+	];
+
+	// declare the source Grid
+    var firstGrid = new Ext.grid.GridPanel({
+	ddGroup          : 'secondGridDDGroup',
+        getView : function(){
+                if(!this.view){
+                    this.view = new Ext.grid.GridView(this.viewConfig);
+                }
+                return this.view;
+            },
+        store            : firstGridStore,
+        columns          : cols,
+	enableDragDrop   : true,
+        stripeRows       : true,
+        autoExpandColumn : 'name',
+        title            : 'First Grid'
+    });
+
+    var secondGridStore = new Ext.data.JsonStore({
+        fields : fields,
+		root   : 'records'
+    });
+
+    // create the destination Grid
+    var secondGrid = new Ext.grid.GridPanel({
+	ddGroup          : 'firstGridDDGroup',
+        getView : function(){
+                if(!this.view){
+                    this.view = new Ext.grid.GridView(this.viewConfig);
+                }
+                return this.view;
+            },
+        store            : secondGridStore,
+        columns          : cols,
+	enableDragDrop   : true,
+        stripeRows       : true,
+        autoExpandColumn : 'name',
+        title            : 'Second Grid'
+    });
+
+    //Simple 'border layout' panel to house both grids
+	var displayPanel = new Ext.Panel({
+		width        : 650,
+		height       : 300,
+		layout       : 'hbox',
+		//renderTo     : 'panel',
+		defaults     : { flex : 1 }, //auto stretch
+		layoutConfig : { align : 'stretch' },
+		items        : [
+			firstGrid,
+			secondGrid
+		],
+		bbar    : [
+			'->', // Fill
+			{
+				text    : 'Reset both grids',
+				handler : function() {
+					//refresh source grid
+					firstGridStore.loadData(myData);
+
+					//purge destination grid
+					secondGridStore.removeAll();
+				}
+			}
+		]
+	});
+
+	// used to add records to the destination stores
+	var blankRecord =  Ext.data.Record.create(fields);
+
+        /****
+        * Setup Drop Targets
+        ***/
+        // This will make sure we only drop to the  view scroller element
+       // var view = new Ext.grid.GridView(this.viewConfig);
+        var firstGridDropTargetEl =  firstGrid.getView().scroller.dom;
+        var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
+                ddGroup    : 'firstGridDDGroup',
+                notifyDrop : function(ddSource, e, data){
+                        var records =  ddSource.dragData.selections;
+                        Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                        firstGrid.store.add(records);
+                        firstGrid.store.sort('name', 'ASC');
+                        return true
+                }
+        });
+
+
+        // This will make sure we only drop to the view scroller element
+        var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
+        var secondGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
+                ddGroup    : 'secondGridDDGroup',
+                notifyDrop : function(ddSource, e, data){
+                        var records =  ddSource.dragData.selections;
+                        Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                        secondGrid.store.add(records);
+                        secondGrid.store.sort('name', 'ASC');
+                        return true
+                }
+        });
+
+            firstGrid.render(document.body);
+            secondGrid.render(document.body);
+
+     var window = new Ext.Window({
+        title: 'Gateways Properties',
+        collapsible: false,
+        maximizable: false,
+        width: 500,
+        height: 400,
+        minWidth: 300,
+        minHeight: 200,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: displayPanel,
+        buttons: [{
+            text: 'Save'
+        },{
+            text: 'Cancel'
+        }]
+    });
+    window.show();
+
+}
+
+
+MyWorkflow.prototype.toggleShapes=function(item)
+{
+    
+    //Set the context Clicked Flag to false because context click action is performed
+    if(item.scope.workflow != null){
+    item.scope.workflow.contextClicked = false;
+    if(item.scope.workflow.currentSelection != null){
+
+        //Get all the ports of the shapes
+        var ports = item.scope.workflow.currentSelection.getPorts();
+        var len =ports.data.length;
+
+        //Get all the connection of the shape
+        var conn = new Array();
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                conn[i] = ports.data[i].getConnections();
+        }
+
+        //Initializing Arrays and variables
+        var connLength = conn.length;
+        var sourceNode = new Array();
+        var targetNode= new Array();
+        var countConn = 0;
+        var sourcePortName= new Array();
+        var targetPortName= new Array();
+        var sourcePortId= new Array();
+        var targetPortId= new Array();
+
+        //Get the pre-selected id into new variable to compare in future code
+        var shapeId = this.workflow.currentSelection.id;
+
+        //Get the current pre-selected figure object in the new object, because not accessible after adding new shapes
+        var oldWorkflow = this.workflow.currentSelection;
+
+        //Get the source and Target object of all the connections in an array
+        for(i = 0; i< connLength ; i++)
+            {
+                for(var j = 0; j < conn[i].data.length ; j++)
+                   {
+                    if(typeof conn[i].data[j] != 'undefined')
+                        {
+                            sourceNode[countConn] = conn[i].data[j].sourcePort.parentNode;
+                            targetNode[countConn] = conn[i].data[j].targetPort.parentNode;
+                            sourcePortName[countConn] = conn[i].data[j].sourcePort.properties.name;
+                            targetPortName[countConn] = conn[i].data[j].targetPort.properties.name;
+                            sourcePortId[countConn] = conn[i].data[j].sourcePort.parentNode.id;
+                            targetPortId[countConn] = conn[i].data[j].targetPort.parentNode.id;
+                            countConn++;
+                        }
+                    }
+            }
+
+        //Add new selected Figure
+        var x =item.scope.workflow.currentSelection.getX();  //Get x co-ordinate from figure
+        var y =item.scope.workflow.currentSelection.getY();  //Get y co-ordinate from figure
+        
+        if(item.type == 'bpmnEventBoundaryTimerInter')
+        {
+          workflow.boundaryEvent = true;
+          workflow.taskName = oldWorkflow.taskName;
+          var newShape = eval("new bpmnTask(workflow)");
+          //workflow.boundaryEvent = false;
+          
+        }
+        else if(item.type == 'bpmnSubProcess')
+            {
+                workflow.subProcessName = 'Sub Process';
+                newShape = eval("new "+item.type+"(this.workflow)");
+            }
+        else
+            newShape = eval("new "+item.type+"(this.workflow)");
+        
+        this.workflow.addFigure(newShape,x,y); //Add New Selected Gateway First
+
+        //Delete Old Shape
+        item.scope.workflow.getCommandStack().execute(new CommandDelete(oldWorkflow));
+        ToolGeneric.prototype.execute.call(item.scope);
+
+        //to create all the new connections again
+        var connObj;
+        for(i=0 ; i < countConn ; i++)
+            {
+               if(sourcePortId[i] == shapeId)  //If shapeId is equal to sourceId the , replace the oldShape object by new shape Object
+                   sourceNode[i] = newShape;
+               else
+                   targetNode[i] = newShape;
+
+               connObj = new DecoratedConnection();
+               connObj.setTarget(eval('targetNode[i].getPort(targetPortName[i])'));
+               connObj.setSource(eval('sourceNode[i].getPort(sourcePortName[i])'));
+               newShape.workflow.addFigure(connObj);
+            }
+
+         //Saving Asynchronously deleted shape and new created shape into DB
+         if(item.type.match(/Boundary/))
+         {
+            newShape.id = oldWorkflow.id;
+            newShape.html.id = oldWorkflow.id;
+            newShape.actiontype = 'updateTask';
+            workflow.saveShape(newShape);
+         }
+         if(newShape.type.match(/Event/)  && newShape.type.match(/Inter/) && !item.type.match(/Boundary/))
+         {
+              newShape.actiontype = 'updateEvent';
+              //Set the Old Id to the Newly created Event
+              newShape.html.id = oldWorkflow.id;
+              newShape.id = oldWorkflow.id;
+              newShape.workflow.saveShape(newShape);
+         }
+         if(newShape.type  == 'bpmnEventMessageStart' || newShape.type  == 'bpmnEventTimerStart')
+         {
+             newShape.workflow.currentSelection = newShape;
+             var task_details = workflow.getStartEventConn(newShape,'targetPort','OutputPort');
+             if(task_details.length > 0 )
+                 {
+                    var task_uid = task_details[0].value;
+                    newShape.task_uid = task_uid;
+                    newShape.actiontype = 'addEvent';
+                    newShape.workflow.saveShape(newShape);
+                 }
+         }
+         else if(newShape.type  == 'bpmnEventEmptyStart')
+         {
+             workflow.deleteEvent(oldWorkflow);
+             newShape.workflow.currentSelection = newShape;
+             var task_details = workflow.getStartEventConn(newShape,'targetPort','OutputPort');
+             if(task_details.length > 0 )
+                 {
+                    var task_uid = task_details[0].value;
+                    newShape.task_uid = task_uid;
+                    newShape.actiontype = 'saveStartEvent';
+                    newShape.workflow.saveShape(newShape);
+                 }
+         }
+         else if(newShape.type.match(/Gateway/))
+             {
+                 var shape = new Array();
+                 shape.type = '';
+                 newShape.workflow.saveRoute(newShape,shape);
+             }
+
+         //Swapping from Task to subprocess and vice -versa
+         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/))
+         {
+             newShape.actiontype = 'addSubProcess';
+             if(newShape.type == 'bpmnTask')
+                 newShape.actiontype = 'addTask';
+              newShape.workflow.saveShape(newShape);
+         }
+         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !item.type.match(/Boundary/) )
+         {
+             this.actiontype = 'deleteTask';
+             this.noAlert    = true;
+             if(this.type == 'bpmnSubProcess')
+                 this.actiontype = 'deleteSubProcess';
+             newShape.workflow.deleteSilently(this);
+         }
+         
+       }
+    }
+}
+
+MyWorkflow.prototype.swapTaskSubprocess=function(itemObj)
+{
+         if(itemObj.type == 'bpmnSubProcess')
+            {
+                workflow.subProcessName = 'Sub Process';
+                var newShape = eval("new "+itemObj.type+"(this.workflow)");
+            }
+         else
+            newShape = eval("new "+itemObj.type+"(this.workflow)");
+
+         //Swapping from Task to subprocess and vice -versa
+         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !itemObj.type.match(/Boundary/))
+         {
+             newShape.actiontype = 'addSubProcess';
+             if(newShape.type == 'bpmnTask')
+                 newShape.actiontype = 'addTask';
+              newShape.workflow.saveShape(newShape);
+         }
+         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !itemObj.type.match(/Boundary/) )
+         {
+             this.actiontype = 'deleteTask';
+             this.noAlert    = true;
+             if(this.type == 'bpmnSubProcess')
+                 this.actiontype = 'deleteSubProcess';
+             newShape.workflow.deleteShape(this);
+         }
+}
+
+MyWorkflow.prototype.checkConnectionsExist=function(port,portType,portTypeName)
+{
+       //Get all the ports of the shapes
+        var ports = port.workflow.currentSelection.getPorts();
+        var len =ports.data.length;
+
+        //Get all the connection of the shape
+        var conn = new Array();
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                if(ports.data[i].type == portTypeName)
+                    conn[i] = ports.data[i].getConnections();
+        }
+        //Initializing Arrays and variables
+        var countConn = 0;
+        var portParentId= new Array();
+        var portName = new Array();
+
+        //Get ALL the connections for the specified PORT
+        for(i = 0; i< conn.length ; i++)
+            {
+                if(typeof conn[i] != 'undefined')
+                for(var j = 0; j < conn[i].data.length ; j++)
+                   {
+                     if(typeof conn[i].data[j] != 'undefined')
+                        {
+                            portParentId[countConn] = eval('conn[i].data[j].'+portType+'.parentNode.id');
+                            portName[countConn] = eval('conn[i].data[j].'+portType+'.properties.name');
+                            countConn++;
+                        }
+                    }
+            }
+        var conx = 0;
+        var parentid;
+        for(i=0 ; i < countConn ; i++)
+            {
+                if(portParentId[i] == port.parentNode.id)
+                        conx++;
+            }
+            return conx;
+
+}
+
+MyWorkflow.prototype.AddEventStartContextMenu=function(_4093)
+{
+    this.canvasEvent = Ext.get(_4093.id);
+    this.contextEventmenu = new Ext.menu.Menu({
+        items: [{
+            text: 'Event Type',
+            menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Empty',
+                            type:'bpmnEventEmptyStart',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        },
+                        {
+                            text: 'Message',
+                            type:'bpmnEventMessageStart',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Timer',
+                            type:'bpmnEventTimerStart',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }/*, {
+                            text: 'Conditional',
+                            type:'bpmnEventRuleStart',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Signal',
+                            type:'bpmnEventSignalStart',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Multiple',
+                            type:'bpmnEventMulStart',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }*/
+                    ]
+                },
+            scope: this
+        },{
+            text: 'Properties',
+            scope: this,
+            handler: MyWorkflow.prototype.editEventProperties
+        }]
+    });
+
+this.canvasEvent.on('contextmenu', function(e) {
+    e.stopEvent();
+    this.contextEventmenu.showAt(e.getXY());
+}, this);
+}
+
+MyWorkflow.prototype.AddEventInterContextMenu=function(_4093)
+{
+    this.canvasEvent = Ext.get(_4093.id);
+    this.contextEventmenu = new Ext.menu.Menu({
+        items: [{
+            text: 'Event Type',
+            menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        /*{
+                            text: 'Empty',
+                            type:'bpmnEventEmptyInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        },*/
+                        {
+                            text: 'Message : Send',
+                            type:'bpmnEventMessageSendInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        },
+                        {
+                            text: 'Message :  Receive',
+                            type:'bpmnEventMessageRecInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        },
+                        {
+                            text: 'Timer',
+                            type:'bpmnEventTimerInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        },
+                        {
+                            text: 'Intermediate Boundary Timer',
+                            type:'bpmnEventBoundaryTimerInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }
+                        /*, {
+                            text: 'Compensate',
+                            type:'bpmnEventCompInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Conditional',
+                            type:'bpmnEventRuleInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Link',
+                            type:'bpmnEventLinkInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Signal',
+                            type:'bpmnEventInterSignal',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Multiple',
+                            type:'bpmnEventMultipleInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }*/
+                    ]
+                },
+            scope: this
+        },{
+            text: 'Properties',
+            handler: MyWorkflow.prototype.editEventProperties,
+            scope: this
+        }]
+    });
+
+this.canvasEvent.on('contextmenu', function(e) {
+    e.stopEvent();
+    this.contextEventmenu.showAt(e.getXY());
+}, this);
+}
+
+MyWorkflow.prototype.AddEventEndContextMenu=function(_4093)
+{
+    this.canvasEvent = Ext.get(_4093.id);
+    this.contextEventmenu = new Ext.menu.Menu({
+        items: [{
+            text: 'Event Type',
+            menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Empty',
+                            type:'bpmnEventEmptyEnd',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        },
+                        {
+                            text: 'Message',
+                            type:'bpmnEventMessageEnd',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }/*,
+                        {
+                            text: 'Error',
+                            type:'bpmnEventErrorEnd',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Cancel',
+                            type:'bpmnEventCancelEnd',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Compensate',
+                            type:'bpmnEventCompEnd',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Signal',
+                            type:'bpmnEventEndSignal',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Multiple',
+                            type:'bpmnEventMultipleEnd',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
+                            text: 'Terminate',
+                            type:'bpmnEventTerminate',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }*/
+                    ]
+                },
+            scope: this
+        },{
+            text: 'Properties',
+            handler: MyWorkflow.prototype.editEventProperties,
+            scope: this
+        }]
+    });
+
+this.canvasEvent.on('contextmenu', function(e) {
+    e.stopEvent();
+    this.contextEventmenu.showAt(e.getXY());
+}, this);
+}
+
+MyWorkflow.prototype.disablePorts=function(_4985)
+{
+  if(_4985.type != ''){
+    var ports ='';
+    if(_4985.type.match(/Task/) || _4985.type.match(/Gateway/) || _4985.type.match(/Inter/) || _4985.type.match(/SubProcess/)){
+      ports = ['output1','input1','output2','input2'];
+    }
+    else if(_4985.type.match(/End/)){
+      ports = ['input1','input2'];
+    }
+    else if(_4985.type.match(/Start/)){
+      ports = ['output1','output2'];
+    }
+    else if(_4985.type.match(/Annotation/)){
+      ports = ['input1'];
+    }
+    for(var i=0; i< ports.length ; i++){
+      eval('_4985.'+ports[i]+'.setZOrder(-1)');
+      eval('_4985.'+ports[i]+'.setBackgroundColor(new Color(255, 255, 255))');
+      eval('_4985.'+ports[i]+'.setColor(new Color(255, 255, 255))');
+    }
+  }
+}
+
+MyWorkflow.prototype.enablePorts=function(_39fd,port)
+{
+  /*Setting Background ,border and Z-order of the flow menu back to original when clicked
+   *on the shape
+  **/
+  for(var i=0; i< port.length ; i++){
+    if(port[i].match(/input/))
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setBackgroundColor(new Color(245, 115, 115))');
+    else
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setBackgroundColor(new Color(115, 115, 245))');
+
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setColor(new Color(90, 150, 90))');
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setZOrder(50000)');
+     }
+}
+
+MyWorkflow.prototype.disableFlowMenu =function(_39fd,port)
+{
+  /*Setting Background ,border and Z-order of the flow menu back to original when clicked
+   *on the shape
+  **/
+  for(var i=0; i< port.length ; i++){
+    if(port[i].match(/input/))
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setBackgroundColor(new Color(245, 115, 115))');
+    else
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setBackgroundColor(new Color(115, 115, 245))');
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setColor(new Color(90, 150, 90))');
+        eval('_39fd.workflow.currentSelection.'+port[i]+'.setZOrder(50000)');
+     }
+}
+
+MyWorkflow.prototype.handleContextMenu=function(_39fd)
+{
+    workflow.hideResizeHandles();
+    //Enable the contextClicked Flag
+    workflow.contextClicked = true;
+
+    //Set the current Selection to the selected Figure
+    workflow.setCurrentSelection(_39fd);
+
+    //Disable Resize of all the figures
+    //_39fd.workflow.hideResizeHandles();
+//    _39fd.setSelectable(false);
+//    _39fd.setResizeable(false);
+    //Handle the Right click menu
+    var pmosExtObj = new pmosExt();
+    //Load all the process Data
+    pmosExtObj.loadProcess(_39fd);
+    
+    //Load Dynaform List
+   // pmosExtObj.loadDynaforms(_39fd);
+
+     if(_39fd.type != ''){
+        if(_39fd.type.match(/Task/)){
+            _39fd.workflow.taskid = new Array();
+            _39fd.workflow.taskid.value = _39fd.id;
+             pmosExtObj.loadTask(_39fd);
+            _39fd.workflow.AddTaskContextMenu(_39fd);
+        }
+        else if(_39fd.type.match(/Start/)){
+            _39fd.workflow.taskUid = _39fd.workflow.getStartEventConn(_39fd,'targetPort','OutputPort');
+            pmosExtObj.loadDynaforms(_39fd);
+            if(_39fd.type.match(/Message/))
+                pmosExtObj.loadWebEntry(_39fd);
+            _39fd.workflow.AddEventStartContextMenu(_39fd);
+        }
+        else if(_39fd.type.match(/Inter/)){
+            _39fd.workflow.taskUidFrom = _39fd.workflow.getStartEventConn(_39fd,'sourcePort','InputPort');
+            //_39fd.workflow.taskid =  _39fd.workflow.taskUid[0];
+            _39fd.workflow.taskUidTo = _39fd.workflow.getStartEventConn(_39fd,'targetPort','OutputPort');
+            _39fd.workflow.taskid =  _39fd.workflow.taskUidFrom[0];
+            pmosExtObj.loadTask(_39fd);
+            pmosExtObj.getTriggerList(_39fd);
+            _39fd.workflow.AddEventInterContextMenu(_39fd);
+        }
+        else if(_39fd.type.match(/End/)){
+            _39fd.workflow.taskUid = _39fd.workflow.getStartEventConn(_39fd,'sourcePort','InputPort');
+            _39fd.workflow.AddEventEndContextMenu(_39fd);
+        }
+        else if(_39fd.type.match(/Gateway/)){
+            _39fd.workflow.AddGatewayContextMenu(_39fd);
+        }
+        else if(_39fd.type.match(/SubProcess/)){
+            _39fd.workflow.AddSubProcessContextMenu(_39fd);
+        }
+    }
+        //this.workflow.AddEventStartContextMenu(_39fd);
+        
+
+}
+
+
+MyWorkflow.prototype.getCommonConnections = function(_4356)
+{
+    var routes = new Array();
+    var counter = 0
+    for(var p=0; p < _4356.workflow.commonPorts.data.length; p++)
+    {
+        if(typeof _4356.workflow.commonPorts.data[p] === "object" && _4356.workflow.commonPorts.data[p] != null)
+            {
+                counter++;
+            }
+    }
+    for(var j=0; j< counter; j++)
+    {
+         //var temp1 = eval("this.workflow.commonPorts.data["+i+"].parentNode.output"+count+".getConnections()");
+         var tester = _4356.workflow.commonPorts.data;
+         var temp1 = eval("_4356.workflow.commonPorts.data["+j+"].getConnections()");
+            if(temp1.data[0]){
+                if(routes[j])
+                    {
+                       if(routes[j][1] != temp1.data[0].sourcePort.parentNode.id)
+                       {
+                           routes[j] = new Array(3);
+
+                           routes[j][0] = temp1.data[0].id;
+                           routes[j][1] = temp1.data[0].sourcePort.parentNode.id;
+                           routes[j][2] = temp1.data[0].targetPort.parentNode.id;
+                           routes[j][3] = temp1.data[0].targetPort.properties.name;
+                           routes[j][4] = temp1.data[0].sourcePort.properties.name;
+                       }
+                    }
+                 else
+                    {
+                        routes[j] = new Array(3);
+                        routes[j][0] = temp1.data[0].id;
+                        routes[j][1] = temp1.data[0].sourcePort.parentNode.id;
+                        routes[j][2] = temp1.data[0].targetPort.parentNode.id;
+                        routes[j][3] = temp1.data[0].targetPort.properties.name;
+                        routes[j][4] = temp1.data[0].sourcePort.properties.name;
+                     }
+             }
+	//j++;
+//            while(routes[j])
+//            {
+//                j++
+//            };
+//            j--;
+    }
+    var j = 0;
+    var serial = new Array();
+    for(key in routes)
+    {
+        if(typeof routes[key] === 'object'){
+        serial[j] = routes[key];
+        j++;
+        }
+    }
+    var routes = serial.getUniqueValues();
+    for(var i=0;i< routes.length ; i++)
+     {
+        routes[i] = routes[i].split(',');
+     }
+
+     return routes;
+}
+
+Array.prototype.getUniqueValues = function () {
+var hash = new Object();
+for (j = 0; j < this.length; j++) {hash[this[j]] = true}
+var array = new Array();
+for (value in hash) {array.push(value)};
+return array;
+}
+
+MyWorkflow.prototype.getUrlVars = function()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    var pro_uid = vars["PRO_UID"];
+    return pro_uid;
+}
+
+MyWorkflow.prototype.saveShape= function(newShapeObj)
+{
+    //Initializing variables
+
+    var pro_uid = this.getUrlVars();
+    var shapeId = newShapeObj.id;
+    var actiontype = newShapeObj.actiontype;
+    var xpos = newShapeObj.x;
+    var ypos = newShapeObj.y;
+    var pos = '{"x":'+xpos+',"y":'+ypos+'}';
+
+    var width = newShapeObj.width;
+    var height = newShapeObj.height;
+    var cordinates = '{"x":'+width+',"y":'+height+'}';
+
+    if(newShapeObj.type == 'bpmnTask'){
+        var newlabel = newShapeObj.taskName;
+    }
+    if(newShapeObj.type == 'bpmnAnnotation'){
+        newlabel = newShapeObj.annotationName;
+    }
+
+    //var urlparams = "action=addTask&data={"uid":"4708462724ca1d281210739068208635","position":{"x":707,"y":247}}";
+    var urlparams;
+    switch(actiontype)
+    {
+        case 'addTask':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
+            break;
+        case 'updateTask':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","boundary":"TIMER"}';
+            break;
+        case 'saveTaskPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
+        case 'saveTaskCordinates':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
+            break;
+        case 'saveAnnotationCordinates':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
+        break;
+        case 'updateTaskName':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'"}';
+            break;
+        case 'addSubProcess':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
+            break;
+        case 'addText':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","label":"'+newlabel+'","position":'+pos+'}';
+            break;
+        case 'updateText':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'"}';
+            break;
+        case 'saveTextPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
+        case 'saveStartEvent':
+            //If we change Event to start from Message/Timer then Delete the record from Events Table
+            this.deleteEvent(newShapeObj);
+            var tas_start = 'TRUE';
+            var tas_uid = newShapeObj.task_uid;
+            urlparams = '?action='+actiontype+'&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
+            break;
+        case 'addEvent':
+            var tas_uid = newShapeObj.workflow.taskUid[0].value;
+            var tas_type = newShapeObj.type;
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","tas_type":"'+tas_type+'"}';
+            break;
+        case 'updateEvent':
+            var evn_uid = newShapeObj.id
+            var evn_type = newShapeObj.type;
+            urlparams = '?action='+actiontype+'&data={"evn_uid":"'+evn_uid +'","evn_type":"'+evn_type+'"}';
+            break;
+    }
+    //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
+
+
+        Ext.Ajax.request({
+            url: "processes_Ajax.php"+ urlparams,
+            success: function(response) {
+                //Ext.Msg.alert (response.responseText);
+                  if(response.responseText != 1 && response.responseText != "")
+                   {
+                        this.workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
+                        newShapeObj.html.id = this.workflow.newTaskInfo.uid;
+                        newShapeObj.id = this.workflow.newTaskInfo.uid;
+                            if(newShapeObj.type == 'bpmnTask'){
+                                newShapeObj.taskName = this.workflow.newTaskInfo.label;
+                                //After Figure is added, Update Start Event connected to Task
+                                if(typeof this.workflow.preSelectedObj != 'undefined' )
+                                  {
+                                      var preSelectedFigure = this.workflow.preSelectedObj;
+                                      if(preSelectedFigure.type.match(/Start/) && preSelectedFigure.type.match(/Event/))
+                                        this.workflow.saveEvents(preSelectedFigure,newShapeObj);
+
+                                      if(preSelectedFigure.type.match(/Task/))
+                                         this.workflow.saveRoute(preSelectedFigure,newShapeObj);
+
+                                      if (preSelectedFigure.type.match(/Gateway/)) {
+                                         //preSelectedFigure.rou_type = 'SEQUENTIAL';
+                                        this.workflow.saveRoute(preSelectedFigure,newShapeObj);
+                                      }
+                                  }
+                            else if(newShapeObj.type == 'bpmnSubProcess'){
+                                newShapeObj.subProcessName = this.workflow.newTaskInfo.label;
+                        }
+                   }
+               }
+            },
+            failure: function(){
+                //Ext.Msg.alert ('Failure');
+            }
+            });
+}
+
+//Deleting shapes silently on swapping task to sub process and vice-versa
+MyWorkflow.prototype.deleteSilently= function(shapeObj)
+{
+    //Initializing variables
+
+    var pro_uid = this.getUrlVars();
+    var shapeId = shapeObj.id;
+    var actiontype = shapeObj.actiontype;
+    //var shapeName = '';
+
+     switch(actiontype)
+    {
+       case 'deleteTask':
+            var urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","tas_uid":"'+shapeId+'"}';
+            this.urlparameter = urlparams;
+            //shapeName = 'Task :'+ shapeObj.taskName;
+            break;
+       case 'deleteSubProcess':
+           urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","tas_uid":"'+shapeId+'"}';
+           this.urlparameter = urlparams;
+           //shapeName = shapeObj.subProcessName;
+           break;
+    }
+
+    Ext.Ajax.request({
+                        url: "processes_Ajax.php"+ urlparams,
+                        success: function(response) {
+                                //Ext.Msg.alert (response.responseText);
+                        },
+                        failure: function(){
+                                Ext.Msg.alert ('Failure');
+                        }
+                        });
+   //workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
+
+}
+
+MyWorkflow.prototype.deleteShape= function(shapeObj)
+{
+    //Initializing variables
+
+    var pro_uid = this.getUrlVars();
+    var shapeId = shapeObj.id;
+    var actiontype = shapeObj.actiontype;
+    var shapeName = '';
+
+    switch(actiontype)
+    {
+       case 'deleteTask':
+            var urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","tas_uid":"'+shapeId+'"}';
+            this.urlparameter = urlparams;
+            shapeName = 'Task :'+ shapeObj.taskName;
+            break;
+       case 'deleteSubProcess':
+           urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","tas_uid":"'+shapeId+'"}';
+           this.urlparameter = urlparams;
+           shapeName = shapeObj.subProcessName;
+           break;
+       case 'deleteText':
+           urlparams = '?action='+actiontype+'&data={"uid":"'+shapeId+'"}';
+           this.urlparameter = urlparams;
+           shapeName = 'Annotation';
+           break;
+       case 'saveStartEvent':
+           var task_detail = this.getStartEventConn(this.currentSelection,'targetPort','OutputPort');
+           if(task_detail.length > 0){
+               var tas_uid = task_detail[0].value;
+               var tas_start = 'FALSE';
+               urlparams = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
+               this.urlparameter = urlparams;
+               shapeName = 'Start Event';
+           }
+           break;
+       case 'deleteEndEvent':
+            shapeName = 'End Event';
+            shapeObj.workflow.getCommandStack().execute(new CommandDelete(shapeObj.workflow.getCurrentSelection()));
+            break;
+    }
+
+    //Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showResult);
+
+if(shapeObj.noAlert == null)
+    Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showResult);
+else
+    workflow.showResult('yes');
+}
+
+
+
+MyWorkflow.prototype.showResult = function(btn){
+        //this.workflow.confirm = btn;
+        if(typeof workflow.urlparameter != 'undefined')
+        {
+           var url = workflow.urlparameter;
+           if(btn == 'yes')
+            {
+                Ext.Ajax.request({
+                        url: "processes_Ajax.php"+ url,
+                        success: function(response) {
+                                //Ext.Msg.alert (response.responseText);
+                        },
+                        failure: function(){
+                            Ext.Msg.alert ('Failure');
+                        }
+                        });
+                workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
+            }
+        }
+        //Ext.example.msg('Button Click', 'You clicked the {0} button', btn);
+    };
+
+
+MyWorkflow.prototype.editEventProperties = function(_6752)
+{
+    var currentSelection = _6752.scope.currentSelection;
+    var pmosExtObj = new pmosExt();
+        
+    switch (currentSelection.type){
+        case 'bpmnEventMessageStart':
+            pmosExtObj.popWebEntry(currentSelection);
+            break;
+        case 'bpmnEventTimerStart':
+            pmosExtObj.popCaseSchedular(currentSelection);
+            break;
+        case 'bpmnEventMessageSendInter':
+            pmosExtObj.popTaskNotification(currentSelection);
+            break;
+        case 'bpmnEventTimerInter':
+            pmosExtObj.popMultipleEvent(currentSelection);
+            break;
+        case 'bpmnEventMessageEnd':
+            pmosExtObj.popMessageEvent(currentSelection);
+            break;
+    }
+}
+
+  /*
+  * Get the Source /Target shape
+  * param object _9854
+  * param string port
+  * return array
+  */
+
+MyWorkflow.prototype.getStartEventConn = function(_9854,port,portType)
+{
+     //Get all the ports of the shapes
+        var ports = _9854.workflow.currentSelection.getPorts();
+        var len =ports.data.length;
+
+        //Get all the connection of the shape
+        var conn = new Array();
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                if(ports.data[i].type == portType)
+                    conn[i] = ports.data[i].getConnections();
+        }
+        //Initializing Arrays and variables
+        var countConn = 0;
+        var startTask= new Array();
+        var type;
+        //Get ALL the connections for the specified PORT
+        for(i = 0; i< conn.length ; i++)
+            {
+                if(typeof conn[i] != 'undefined')
+                for(var j = 0; j < conn[i].data.length ; j++)
+                   {
+                     if(typeof conn[i].data[j] != 'undefined')
+                        {
+                            type = eval('conn[i].data[j].'+port+'.parentNode.type')
+                            if(type == 'bpmnTask')
+                            {
+                                startTask[countConn] = new Array();
+                                startTask[countConn].value = eval('conn[i].data[j].'+port+'.parentNode.id');
+                                startTask[countConn].name = eval('conn[i].data[j].'+port+'.parentNode.taskName');
+                                countConn++;
+                            }
+                        }
+                    }
+            }
+            return startTask;
+}
+
+MyWorkflow.prototype.saveEvents = function(event,tas_uid)
+{
+    var pro_uid = this.getUrlVars();
+    if(event.type.match(/Start/) && event.type.match(/Empty/))
+    {
+        var tas_start = 'TRUE';
+        var urlparams = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
+    }
+    else if(event.type.match(/Start/) && (event.type.match(/Message/) || event.type.match(/Timer/)) )
+    {
+        urlparams = '?action=addEvent&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","tas_type":"'+event.type+'"}';
+    }
+    else if(event.type.match(/Inter/))
+    {
+        urlparams = '?action=addEvent&data={"uid":"'+ pro_uid +'","tas_from":"'+tas_uid.taskFrom+'","tas_to":"'+tas_uid.taskTo+'","tas_type":"'+event.type+'"}';
+    }
+
+    if(urlparams != ''){
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    if(response.responseText != '')
+                      {
+                         //Save Route
+                         if(workflow.currentSelection.type == 'bpmnEventTimerInter'){
+                           workflow.currentSelection.id = response.responseText;
+                           var newObj = workflow.currentSelection;
+                           var preObj = new Array();
+                           preObj.type = 'bpmnTask';
+                           preObj.id = tas_uid.taskFrom;
+                           newObj.evn_uid = workflow.currentSelection.id;
+                           newObj.task_to = tas_uid.taskTo;
+                           this.workflow.saveRoute(preObj,newObj);
+                         }
+                      }
+                },
+                failure: function(){
+                    Ext.Msg.alert ('Failure');
+                }
+            });
+    }
+
+}
+
+MyWorkflow.prototype.saveRoute = function(preObj,newObj)
+{
+    var pro_uid = this.getUrlVars();
+    
+    var task_uid      = new Array();
+    var next_task_uid = new Array();
+    var rou_type      ='';
+    var rou_evn_uid   = '';
+    var port_numberIP   = '';
+    var port_numberOP   = '';
+
+    if(typeof newObj.sPortType != 'undefined')
+      {
+        sPortTypeIP          = newObj.sPortType;
+        sPortTypeOP          = preObj.sPortType;
+        var sPortType_lenIP  = sPortTypeIP.length;
+        var sPortType_lenOP  = sPortTypeOP.length;
+        var port_numberIP    = sPortTypeIP.charAt(sPortType_lenIP-1);
+        var port_numberOP    = sPortTypeOP.charAt(sPortType_lenOP-1);
+      }
+
+     if(preObj.type.match(/Task/) && newObj.type.match(/Event/) && newObj.type.match(/Inter/))
+      {
+         task_uid[0]      = preObj.id;
+         next_task_uid[0] = newObj.task_to;
+         rou_type         = 'SEQUENTIAL';
+         rou_evn_uid      = newObj.evn_uid;
+      }
+      //If both the Object are Task
+      else if(preObj.type.match(/Task/) && newObj.type.match(/Task/))
+      {
+        task_uid[0]          = preObj.id;
+        next_task_uid[0]     = newObj.id;
+        rou_type             = 'SEQUENTIAL';
+      }
+      else if(preObj.type.match(/Task/) && newObj.type.match(/End/) && newObj.type.match(/Event/))
+      {
+        this.deleteRoute(newObj.conn,1);
+        task_uid[0]      = preObj.id;
+        next_task_uid[0] = '-1';
+        rou_type         = 'SEQUENTIAL';
+      }
+      else if(preObj.type.match(/Gateway/))
+      {
+//         var task_uid = new Array();
+//         var next_task_uid = new Array();
+         switch(preObj.type){
+            case  'bpmnGatewayParallel':
+                    rou_type ='PARALLEL';
+                    break;
+            case  'bpmnGatewayExclusiveData':
+                    rou_type = 'EVALUATE';
+                    break;
+            case  'bpmnGatewayInclusive':
+                    rou_type = 'PARALLEL-BY-EVALUATION';
+                    break;
+            case  'bpmnGatewayComplex':
+                    rou_type = 'DISCRIMINATOR';
+                    break;
+        }
+        var ports = preObj.getPorts();
+        var len =ports.data.length;
+
+        //Get all the connection of the shape
+        var conn = new Array();
+        var count1 = 0;
+        var count2 = 0;
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                conn[i] = ports.data[i].getConnections();
+        }
+
+        //Get ALL the connections for the specified PORT
+        for(i = 0; i< conn.length ; i++)
+            {
+                if(typeof conn[i] != 'undefined')
+                for(var j = 0; j < conn[i].data.length ; j++)
+                   {
+                     if(typeof conn[i].data[j] != 'undefined')
+                        {
+                            if(conn[i].data[j].sourcePort.parentNode.type != preObj.type){
+                                   // task_uid[count1] = new Array();
+                                    task_uid[count1] = conn[i].data[j].sourcePort.parentNode.id;
+                                    count1++;
+                            }
+                            if(conn[i].data[j].targetPort.parentNode.type != preObj.type){
+                                   // task_uid[count2] = new Array();
+                                    next_task_uid[count2] = conn[i].data[j].targetPort.parentNode.id;
+                                    count2++;
+                            }
+                            
+                        }
+                    }
+            }
+    }
+
+    var staskUid     = 	Ext.util.JSON.encode(task_uid);
+    var sNextTaskUid     = 	Ext.util.JSON.encode(next_task_uid);
+    if(staskUid != '')
+        {
+            Ext.Ajax.request({
+                    url: "patterns_Ajax.php",
+                    success: function(response) {
+                        if(response.responseText != 0){
+                            if(typeof newObj.conn != 'undefined'){
+                                newObj.conn.html.id = response.responseText;
+                                newObj.conn.id = response.responseText;
+                            }
+                        }
+                    },
+                    failure: function(){
+                        Ext.Msg.alert ('Failure');
+                    },
+                    params: {
+                            action:'savePattern',
+                            PROCESS: pro_uid,
+                            TASK:staskUid,
+                            ROU_NEXT_TASK:sNextTaskUid,
+                            ROU_TYPE:rou_type,
+                            ROU_EVN_UID:rou_evn_uid,
+                            PORT_NUMBER_IP:port_numberIP,
+                            PORT_NUMBER_OP:port_numberOP,
+                            mode:'Ext'
+                        }
+                });
+        }
+}
+
+MyWorkflow.prototype.deleteRoute = function(conn,val){
+//var confirm = confirm('Are you sure you want to delete the route');
+//if(confirm){
+     var rou_uid = conn.id;
+     if(rou_uid != '')
+        {
+            var urlparams = '?action=deleteRoute&data={"uid":"'+ rou_uid +'"}';
+            Ext.Ajax.request({
+                    url: "processes_Ajax.php"+ urlparams,
+                    success: function(response) {
+                        if(val == 0)
+                           conn.workflow.getCommandStack().execute(new CommandDelete(conn));
+                    },
+                    failure: function(){
+                        Ext.Msg.alert ('Failure');
+                    }
+                });
+        }
+  //  }
+}
+
+MyWorkflow.prototype.deleteEvent = function(eventObj){
+
+     var event_uid = eventObj.id;
+     if(event_uid != '')
+        {
+            var urlparams = '?action=deleteEvent&data={"uid":"'+ event_uid +'"}';
+            Ext.Ajax.request({
+                    url: "processes_Ajax.php"+ urlparams,
+                    success: function(response) {
+                    },
+                    failure: function(){
+                        Ext.Msg.alert ('Failure');
+                    }
+                });
+        }
+}
+
+MyWorkflow.prototype.getDeleteCriteria = function()
+{
+   var shape = workflow.currentSelection.type;
+    switch (shape) {
+    case 'bpmnTask':
+        workflow.currentSelection.actiontype = 'deleteTask';
+        workflow.taskNo--;
+        break;
+    case 'bpmnSubProcess':
+        workflow.currentSelection.actiontype = 'deleteSubProcess';
+        break;
+    case 'bpmnAnnotation':
+        workflow.currentSelection.actiontype = 'deleteText';
+        break;
+    case 'bpmnEventEmptyStart':
+        workflow.currentSelection.actiontype = 'saveStartEvent';
+        break;
+    case 'bpmnEventEmptyEnd':
+        workflow.currentSelection.actiontype = 'deleteEndEvent';
+        var currentObj = workflow.currentSelection;
+        var ports = currentObj.getPorts();
+        var len =ports.data.length;
+
+        //Get all the connection of the shape
+        var conn = new Array();
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                conn[i] = ports.data[i].getConnections();
+        }
+        //Get ALL the connections for the specified PORT
+        for(i = 0; i< conn.length ; i++)
+            {
+                if(typeof conn[i] != 'undefined')
+                for(var j = 0; j < conn[i].data.length ; j++)
+                   {
+                     if(typeof conn[i].data[j] != 'undefined')
+                        {
+                            if(conn[i].data[j].targetPort.parentNode.id == currentObj.id){
+                                    route = conn[i].data[j];
+                                    break;
+                            }
+                        }
+                    }
+             }
+        workflow.deleteRoute(route,1);
+        break;
+}
+    workflow.deleteShape(workflow.currentSelection);
+}
