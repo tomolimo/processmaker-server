@@ -177,6 +177,11 @@ Ext.onReady(function(){
         icon: '/images/edit.gif',
         handler: editProcess
       },{
+        text:TRANSLATIONS.ID_EDIT,
+        iconCls: 'silk-add',
+        icon: '/images/edit.gif',
+        handler: editNewProcess
+      },{
         text:TRANSLATIONS.ID_STATUS,
         id:'activator',
         icon: '',
@@ -318,6 +323,23 @@ editProcess = function(){
   var rowSelected = processesGrid.getSelectionModel().getSelected();
   if( rowSelected ) {
     location.href = 'processes_Map?PRO_UID='+rowSelected.data.PRO_UID+'&rand='+Math.random()
+  } else {
+     Ext.Msg.show({
+      title:'',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      buttons: Ext.Msg.INFO,
+      fn: function(){},
+      animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
+    });
+  }
+}
+
+editNewProcess = function(){
+  var rowSelected = processesGrid.getSelectionModel().getSelected();
+  if( rowSelected ) {
+    location.href = '../bpmn/processmap?PRO_UID='+rowSelected.data.PRO_UID+'&rand='+Math.random()
   } else {
      Ext.Msg.show({
       title:'',
