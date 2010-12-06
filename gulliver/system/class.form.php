@@ -59,7 +59,7 @@ class Form extends XmlForm
   function setDefaultValues( )
   {
     foreach($this->fields as $name => $content) {
-      if (get_class($content) != '__PHP_Incomplete_Class') {
+      if (is_object($content) && get_class($content) != '__PHP_Incomplete_Class') {
         if (isset($content->defaultValue))
           $this->values[$name] = $content->defaultValue;
         else
@@ -233,7 +233,7 @@ class Form extends XmlForm
       }
     }
     foreach($this->fields as $k => $v){
-      if(get_class($this->fields[$k])!='__PHP_Incomplete_Class'){
+      if(is_object($this) && get_class($this->fields[$k])!='__PHP_Incomplete_Class'){
         $this->fields[$k]->owner =& $this;
       }
     }
@@ -493,7 +493,7 @@ class Form extends XmlForm
     $rFields = Array();
     $missingFields = Array();
     foreach ($this->fields as $o) {
-      if(property_exists(get_class($o), 'required')) {
+      if (is_object($o) && property_exists(get_class($o), 'required')) {
         if( $o->required == 1) {
           if (!in_array($o->name, $aNoRequiredByJS)) {
             array_push($rFields, $o->name);

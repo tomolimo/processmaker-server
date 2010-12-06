@@ -175,7 +175,7 @@ class PropelSQLTask extends AbstractPropelDataModelTask {
 
 					if (!$table->isSkipSql()) {
 						$builder = DataModelBuilder::builderFactory($table, 'ddl');
-						$this->log("\t+ " . $table->getName() . " [builder: " . get_class($builder) . "]");
+						$this->log("\t+ " . $table->getName() . " [builder: " . is_object($builder) && get_class($builder) . "]");
 						$ddl .= $builder->build();
 						foreach($builder->getWarnings() as $warning) {
 							$this->log($warning, PROJECT_MSG_WARN);

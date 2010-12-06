@@ -75,7 +75,7 @@ class Xml_Node
    */
   function addChildNode( $childNode )
   {
-    if (strcasecmp( get_class($childNode), 'Xml_Node' ) == 0 ) {
+    if (is_object($childNode) && strcasecmp( get_class($childNode), 'Xml_Node' ) == 0 ) {
       $this->type        = 'open';
       $childNode->parent = &$this;
       $this->children[]  = &$childNode;

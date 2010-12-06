@@ -290,7 +290,7 @@ class database extends database_base {
    * @param $aKeys array of keys
    * @return sql sentence
    */
-  public
+  
   public function generateAddKeysSQL($sTable, $indexName, $aKeys) {
     try {
       $indexType = 'INDEX';

@@ -2987,37 +2987,37 @@ class G
   	
    	switch($format){
      case '@firstName @lastName':
-     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $format);   
-     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);   
+     $infoUser = str_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $format);
+     $infoUser = str_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);
      break;
      case '@firstName @lastName (@userName)':
-     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $format);   
-     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);   
-     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);   
+     $infoUser = str_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $format);
+     $infoUser = str_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);
+     $infoUser = str_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);
      break;
      case '@userName':
-     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $format);   
+     $infoUser = str_replace('@userName', $aUserInfo['USR_USERNAME'], $format);
      break;
      case '@userName (@firstName @lastName)':
-     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $format);   
-     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
-     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);   
+     $infoUser = str_replace('@userName', $aUserInfo['USR_USERNAME'], $format);
+     $infoUser = str_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);
+     $infoUser = str_replace('@lastName', $aUserInfo['USR_LASTNAME'], $infoUser);
      break;
      case '@lastName @firstName':
-     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);   
-     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
+     $infoUser = str_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);
+     $infoUser = str_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);
      break;
      case '@lastName, @firstName':	
-     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);   
-     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
+     $infoUser = str_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);
+     $infoUser = str_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);
      break;
      case '@lastName, @firstName (@userName)':
-     $infoUser = ereg_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);   
-     $infoUser = ereg_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);   
-     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);   
+     $infoUser = str_replace('@lastName', $aUserInfo['USR_LASTNAME'], $format);
+     $infoUser = str_replace('@firstName', $aUserInfo['USR_FIRSTNAME'], $infoUser);
+     $infoUser = str_replace('@userName', $aUserInfo['USR_USERNAME'], $infoUser);
      break;
      default :
-     $infoUser = ereg_replace('@userName', $aUserInfo['USR_USERNAME'], '@userName');   
+     $infoUser = str_replace('@userName', $aUserInfo['USR_USERNAME'], '@userName');
      break;
      }
   	return $infoUser;
