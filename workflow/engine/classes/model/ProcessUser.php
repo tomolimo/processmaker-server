@@ -87,7 +87,7 @@ class ProcessUser extends BaseProcessUser {
   function Exists ( $sUid ) {
     try {
       $oObj = ProcessUserPeer::retrieveByPk($sUid);
-      return (get_class($oObj) == 'ProcessUser');
+      return (is_object($oObj) && get_class($oObj) == 'ProcessUser');
     }
     catch (Exception $oError) {
       throw($oError);

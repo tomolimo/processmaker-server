@@ -91,7 +91,7 @@ class FieldCondition extends BaseFieldCondition {
         try {
             if( isset($aData['FCD_UID']) && trim($aData['FCD_UID']) != '' ) {
                 $obj = FieldConditionPeer::retrieveByPk( $aData['FCD_UID'] );
-                if( get_class($obj) != 'FieldCondition') {
+                if(is_object($obj) && get_class($obj) != 'FieldCondition') {
                     $obj = new FieldCondition();
                 }
             } else {
@@ -335,7 +335,7 @@ class FieldCondition extends BaseFieldCondition {
     function Exists ( $sUid ) {
         try {
             $obj = FieldConditionPeer::retrieveByPk( $sUid );
-            return( get_class($obj) == 'FieldCondition') ;
+            return(is_object($obj) && get_class($obj) == 'FieldCondition') ;
         }
         catch (Exception $oError) {
             throw($oError);

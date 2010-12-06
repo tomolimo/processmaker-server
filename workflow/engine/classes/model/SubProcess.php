@@ -147,7 +147,7 @@ class SubProcess extends BaseSubProcess {
     $con = Propel::getConnection(SubProcessPeer::DATABASE_NAME);
     try {
       $oObj = SubProcessPeer::retrieveByPk( $sUid );
-      if ( get_class ($oObj) == 'SubProcess' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'SubProcess' ) {
         return true;
       }
       else {

@@ -105,7 +105,7 @@ class DbSource extends BaseDbSource
   function Exists ( $Uid ) {
     try {
       $oPro = DbSourcePeer::retrieveByPk( $Uid );
-      if ( get_class ($oPro) == 'DbSource' ) {                                               
+      if (is_object($oPro) && get_class ($oPro) == 'DbSource' ) {
         return true;
       }
       else {

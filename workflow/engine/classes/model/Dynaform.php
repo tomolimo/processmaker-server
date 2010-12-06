@@ -316,7 +316,7 @@ class Dynaform extends BaseDynaform {
     $con = Propel::getConnection(DynaformPeer::DATABASE_NAME);
     try {
       $oPro = DynaformPeer::retrieveByPk( $ProUid );
-      if ( get_class ($oPro) == 'Dynaform' ) {
+      if (is_object($oPro) && get_class ($oPro) == 'Dynaform' ) {
         $aFields = $oPro->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         $aFields['DYN_TITLE']       = $oPro->getDynTitle();
@@ -346,7 +346,7 @@ class Dynaform extends BaseDynaform {
     try {
       $con->begin();
       $oPro = DynaformPeer::retrieveByPK( $aData['DYN_UID'] );
-      if ( get_class ($oPro) == 'Dynaform' ) {
+      if (is_object($oPro) && get_class ($oPro) == 'Dynaform' ) {
         $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oPro->validate()) {
           if ( isset ( $aData['DYN_TITLE'] ) )
@@ -416,7 +416,7 @@ class Dynaform extends BaseDynaform {
   public function exists($DynUid)
   {
     $oPro = DynaformPeer::retrieveByPk( $DynUid );
-    return ( get_class ($oPro) == 'Dynaform' );
+    return (is_object($oPro) && get_class ($oPro) == 'Dynaform' );
   }
 
   /**
@@ -429,7 +429,7 @@ class Dynaform extends BaseDynaform {
     $con = Propel::getConnection(TaskPeer::DATABASE_NAME);
     try {
       $oDyn = DynaformPeer::retrieveByPk( $DynUid );
-      if ( get_class ($oDyn) == 'Dynaform' ) {
+      if (is_object($oDyn) && get_class ($oDyn) == 'Dynaform' ) {
         return true;
       }
       else {

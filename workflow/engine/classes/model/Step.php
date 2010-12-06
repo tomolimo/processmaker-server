@@ -368,7 +368,7 @@ class Step extends BaseStep {
     $con = Propel::getConnection(StepPeer::DATABASE_NAME);
     try {
       $oObj = StepPeer::retrieveByPk( $sUid );
-      if ( get_class ($oObj) == 'Step' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'Step' ) {
         return true;
       }
       else {

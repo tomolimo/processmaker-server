@@ -20,7 +20,7 @@ class UsersProperties extends BaseUsersProperties {
       $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
       var_dump($oUserProperty);
       var_dump($sUserUID);
-      if (get_class($oUserProperty) == 'UsersProperties' && $oUserProperty != '') {
+      if (is_object($oUserProperty) && get_class($oUserProperty) == 'UsersProperties') {
           echo"inside";
         return true;
       }

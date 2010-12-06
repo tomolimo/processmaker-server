@@ -255,7 +255,7 @@ class Triggers extends BaseTriggers {
     $con = Propel::getConnection(TriggersPeer::DATABASE_NAME);
     try {
       $oObj = TriggersPeer::retrieveByPk( $sUid );
-      if ( get_class ($oObj) == 'Triggers' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'Triggers' ) {
         return true;
       }
       else {

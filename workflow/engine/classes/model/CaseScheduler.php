@@ -863,7 +863,7 @@ class CaseScheduler extends BaseCaseScheduler {
   function Exists( $sUid ) {
     try {
       $oObj = CaseSchedulerPeer::retrieveByPk( $sUid );
-      return (get_class($oObj) == 'CaseScheduler');
+      return (is_object($oObj) && get_class($oObj) == 'CaseScheduler');
     }
     catch (Exception $oError) {
       throw($oError);

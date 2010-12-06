@@ -100,7 +100,7 @@ class CaseTrackerObject extends BaseCaseTrackerObject {
     $oConnection = Propel::getConnection(CaseTrackerObjectPeer::DATABASE_NAME);   
     try { 
       $oCaseTobj = CaseTrackerObjectPeer::retrieveByPK($sCTOUID);
-      if (get_class($oCaseTobj) == 'CaseTrackerObject')
+      if (is_object($oCaseTobj) && get_class($oCaseTobj) == 'CaseTrackerObject')
       { 
         $oConnection->begin();                
         $iResult = $oCaseTobj->delete();
@@ -143,7 +143,7 @@ class CaseTrackerObject extends BaseCaseTrackerObject {
   function caseTrackerObjectExists ( $Uid ) {
     try {
       $oObj = CaseTrackerObjectPeer::retrieveByPk( $Uid );
-      if ( get_class ($oObj) == 'CaseTrackerObject' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'CaseTrackerObject' ) {
         return true;
       }
       else {

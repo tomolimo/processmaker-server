@@ -104,7 +104,7 @@ class Groups
   {
     try {
       $oGrp = GroupUserPeer::retrieveByPk($GrpUid, $UsrUid);
-      if (get_class($oGrp) == 'GroupUser') {
+      if (is_object($oGrp) && get_class($oGrp) == 'GroupUser') {
         return true;
       } else {
         $oGrp = new GroupUser();
@@ -303,7 +303,7 @@ class Groups
   {
     try {
       $oGrp = GroupUserPeer::retrieveByPk($GrpUid, $UsrUid);
-      if (get_class($oGrp) == 'GroupUser') {
+      if (is_object($oGrp) && get_class($oGrp) == 'GroupUser') {
         return 1;
       } else {
         return 0;

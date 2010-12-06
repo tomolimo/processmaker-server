@@ -152,7 +152,7 @@ class StepTrigger extends BaseStepTrigger {
     $con = Propel::getConnection(StepTriggerPeer::DATABASE_NAME);
     try {
       $oObj = StepTriggerPeer::retrieveByPk($StepUid, $TasUid, $TriUid, $StType);
-      if ( get_class ($oObj) == 'StepTrigger' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'StepTrigger' ) {
         return true;
       }
       else {

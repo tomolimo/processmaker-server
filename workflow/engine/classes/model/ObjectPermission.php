@@ -53,7 +53,7 @@ class ObjectPermission extends BaseObjectPermission {
   function Exists ( $Uid ) {
     try {
       $oPro = ObjectPermissionPeer::retrieveByPk( $Uid );
-      if ( get_class ($oPro) == 'ObjectPermission' ) {
+      if (is_object($oPro) && get_class ($oPro) == 'ObjectPermission' ) {
         return true;
       }
       else {
@@ -70,7 +70,7 @@ class ObjectPermission extends BaseObjectPermission {
     $con = Propel::getConnection(ObjectPermissionPeer::DATABASE_NAME);
     try {
       $oObjPer = ObjectPermissionPeer::retrieveByPK($Uid);
-      if (get_class($oObjPer) == 'ObjectPermission')
+      if (is_object($oObjPer) && get_class($oObjPer) == 'ObjectPermission')
       {
         $con->begin();
         $iResult = $oObjPer->delete();

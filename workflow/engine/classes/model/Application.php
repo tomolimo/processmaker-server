@@ -284,7 +284,7 @@ class Application extends BaseApplication {
     $con = Propel::getConnection(ApplicationPeer::DATABASE_NAME);
     try {
       $oApplication = ApplicationPeer::retrieveByPk( $AppUid );
-      if ( get_class ($oApplication) == 'Application' ) {
+      if (is_object($oApplication) && get_class ($oApplication) == 'Application' ) {
         $aFields = $oApplication->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         
@@ -393,7 +393,7 @@ class Application extends BaseApplication {
     try {
       $con->begin();
       $oApp = ApplicationPeer::retrieveByPK( $aData['APP_UID'] );
-      if ( get_class ($oApp) == 'Application' ) {
+      if (is_object($oApp) && get_class ($oApp) == 'Application' ) {
         $oApp->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oApp->validate()) {
           if ( isset ( $aData['APP_TITLE'] ) )

@@ -205,7 +205,7 @@ class ReportTable extends BaseReportTable {
     $con = Propel::getConnection(ReportTablePeer::DATABASE_NAME);
     try {
       $oRepTabUid = ReportTablePeer::retrieveByPk( $RepTabUid );
-      if ( get_class ($oRepTabUid) == 'ReportTable' ) {
+      if (is_object($oRepTabUid) && get_class ($oRepTabUid) == 'ReportTable' ) {
         return true;
       }
       else {

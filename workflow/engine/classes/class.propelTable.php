@@ -395,7 +395,7 @@ class propelTable
       if(is_object($value)){
         $value = '';
       }
-      $this->tpl->assign( "value" , (eregi('^[[:space:]]', $value) && (substr($fieldName,0,3)!="PRO"))? str_ireplace(" ","&nbsp;",$htmlField):$htmlField );
+      $this->tpl->assign( "value" , (preg_match('^[[:space:]]^', $value) && (substr($fieldName,0,3)!="PRO"))? str_ireplace(" ","&nbsp;",$htmlField):$htmlField );
     }
     return $this->fields[$r]['Type'];
   }

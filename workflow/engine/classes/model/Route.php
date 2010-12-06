@@ -166,7 +166,7 @@ class Route extends BaseRoute {
     $con = Propel::getConnection(RoutePeer::DATABASE_NAME);
     try {
       $oRouUid = RoutePeer::retrieveByPk( $sRouUid );
-      if ( get_class ($oRouUid) == 'Route' ) {
+      if (is_object($oRouUid) && get_class ($oRouUid) == 'Route' ) {
         return true;
       }
       else {

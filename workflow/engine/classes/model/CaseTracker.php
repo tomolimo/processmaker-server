@@ -112,7 +112,7 @@ class CaseTracker extends BaseCaseTracker {
   function caseTrackerExists ( $sUid ) {
     try {
       $oObj = CaseTrackerPeer::retrieveByPk($sUid);
-      return (get_class($oObj) == 'CaseTracker');
+      return (is_object($oObj) && get_class($oObj) == 'CaseTracker');
     }
     catch (Exception $oError) {
       throw($oError);

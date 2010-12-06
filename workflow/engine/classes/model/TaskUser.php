@@ -117,7 +117,7 @@ class TaskUser extends BaseTaskUser {
     $con = Propel::getConnection(TaskUserPeer::DATABASE_NAME);
     try {
       $oTaskUser = TaskUserPeer::retrieveByPk($sTasUid, $sUserUid, $iType, $iRelation);
-      if ( get_class ($oTaskUser) == 'TaskUser' ) {
+      if ( is_object($oTaskUser) && get_class ($oTaskUser) == 'TaskUser' ) {
         return true;
       }
       else {

@@ -39,7 +39,7 @@ class StepSupervisor extends BaseStepSupervisor {
   function Exists ( $Uid ) {
     try {
       $oPro = StepSupervisorPeer::retrieveByPk( $Uid );
-      if ( get_class ($oPro) == 'StepSupervisor' ) {
+      if (is_object($oPro) && get_class ($oPro) == 'StepSupervisor' ) {
         return true;
       }
       else {

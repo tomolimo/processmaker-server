@@ -500,7 +500,7 @@ public function kgetassigType($pro_uid, $tas){
     $con = Propel::getConnection(TaskPeer::DATABASE_NAME);
     try {
       $oPro = TaskPeer::retrieveByPk( $TasUid );
-      if ( get_class ($oPro) == 'Task' ) {
+      if ( is_object($oPro) && get_class ($oPro) == 'Task' ) {
         return true;
       }
       else {

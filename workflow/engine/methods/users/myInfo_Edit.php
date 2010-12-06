@@ -52,7 +52,7 @@ try {
   //getting the user and department
   $oDepInfo = new Department();
   $oUser = UsersPeer::retrieveByPk( $aFields['USR_REPORTS_TO'] );
-  if ( get_class ($oUser) == 'Users' ) {
+  if (is_object($oUser) && get_class ($oUser) == 'Users' ) {
     $userFields = $oUser->toArray(BasePeer::TYPE_FIELDNAME);
     $aFields['USR_REPORTS_TO'] = $userFields['USR_FIRSTNAME'] . ' ' . $userFields['USR_LASTNAME'];
     try {

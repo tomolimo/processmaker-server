@@ -192,7 +192,7 @@ protected $depo_title = '';
     try {
       $con->begin(); 
       $oPro = DepartmentPeer::retrieveByPK( $aData['DEP_UID'] );
-      if ( get_class ($oPro) == 'Department' ) { 
+      if (is_object($oPro) && get_class ($oPro) == 'Department' ) {
         $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oPro->validate()) {
           if ( isset ( $aData['DEPO_TITLE'] ) )
@@ -251,7 +251,7 @@ protected $depo_title = '';
           $aFields['USR_UID'] = $aRow['USR_UID'];
           $aFields['DEP_UID'] = '';
           $oDepto = UsersPeer::retrieveByPk($aFields['USR_UID']);
-            if (get_class($oDepto) == 'UsersPeer') {
+            if (is_object($oDepto) && get_class($oDepto) == 'UsersPeer') {
                 return true;
             } else {
                 $oDepto = new Users();
@@ -290,7 +290,7 @@ protected $depo_title = '';
   function existsDepartment( $DepUid ) {
     $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
     $oPro = DepartmentPeer::retrieveByPk( $DepUid );
-    if ( get_class ($oPro) == 'Department' ) {
+    if (is_object($oPro) && get_class ($oPro) == 'Department' ) {
       return true;
     }
     else {
@@ -301,7 +301,7 @@ protected $depo_title = '';
   function existsUserInDepartment( $depId, $userId ) {
     $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
     $oUser = UsersPeer::retrieveByPk( $userId );
-    if ( get_class ($oUser) == 'Users' ) {
+    if (is_object($oUser) && get_class ($oUser) == 'Users' ) {
       if ( $oUser->getDepUid() == $depId )
         return true;
     }
@@ -313,7 +313,7 @@ protected $depo_title = '';
     $managerId = '';
     $depParent = '';
     $oDept = DepartmentPeer::retrieveByPk( $depId );
-    if ( get_class ($oDept) == 'Department' ) {
+    if (is_object($oDept) && get_class ($oDept) == 'Department' ) {
       $managerId = $oDept->getDepManager( );
       $depParent = $oDept->getDepParent( );
     }
@@ -331,10 +331,10 @@ protected $depo_title = '';
 
     // update manager's manager, getting the manager of PARENT DEPARTMENT in order to enable scalating
     $oUser = UsersPeer::retrieveByPk( $managerId );
-    if ( get_class ($oUser) == 'Users' ) {
+    if (is_object($oUser) && get_class ($oUser) == 'Users' ) {
       $oDept = DepartmentPeer::retrieveByPk( $depParent );
       $oUser->setUsrReportsTo( '' ); //by default no manager
-      if ( get_class ($oDept) == 'Department' ) {
+      if (is_object($oUser) && get_class ($oDept) == 'Department' ) {
         $managerParentId = $oDept->getDepManager( );
         if ( trim($managerParentId) != '' ) {
           $oUser->setUsrReportsTo( $managerParentId );
@@ -352,7 +352,7 @@ protected $depo_title = '';
     $oDataset->next();
     while ( $aRow = $oDataset->getRow() ) {
       $oUser = UsersPeer::retrieveByPk($aRow['DEP_MANAGER']);
-      if (get_class($oUser) == 'Users') {
+      if (is_object($oUser) && get_class($oUser) == 'Users') {
         $oUser->setUsrReportsTo ( $managerId );
         $oUser->save();
       }
@@ -366,7 +366,7 @@ protected $depo_title = '';
     try {
       //update the field in user table
       $oUser = UsersPeer::retrieveByPk( $userId );
-      if ( get_class ($oUser) == 'Users' ) {
+      if (is_object($oUser) && get_class ($oUser) == 'Users' ) {
         $oUser->setDepUid( $depId );
         $oUser->save();
       }
@@ -374,7 +374,7 @@ protected $depo_title = '';
       //if the user is a manager update Department Table
       if ( $manager ) {
         $oDept = DepartmentPeer::retrieveByPk( $depId );
-        if ( get_class ($oDept) == 'Department' ) {
+        if (is_object($oDept) && get_class ($oDept) == 'Department' ) {
           $oDept->setDepManager( $userId );
           $oDept->save();
         }
@@ -486,7 +486,7 @@ protected $depo_title = '';
     $aFields = array ('USR_UID'=> $UsrUid,'DEP_UID'=> '', 'USR_REPORTS_TO' => '');
     try {
       $oUser = UsersPeer::retrieveByPk( $UsrUid );
-      if ( get_class($oUser) == 'Users' ) {
+      if (is_object($oUser) && get_class($oUser) == 'Users' ) {
         //$oDepto = new Users();
         $oUser->setDepUid ( '');
         $oUser->setUsrReportsTo ( '');

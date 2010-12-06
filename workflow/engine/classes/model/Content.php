@@ -246,7 +246,7 @@ class Content extends BaseContent {
   {
     try {
       $oPro = ContentPeer::retrieveByPk($ConCategory, $ConParent, $ConId, $ConLang);
-      if ( get_class ($oPro) == 'Content' ) {                                               
+      if (is_object($oPro) && get_class ($oPro) == 'Content' ) {
         return true;
       } else {
         return false;

@@ -240,7 +240,7 @@ class Process extends BaseProcess {
     $con = Propel::getConnection(ProcessPeer::DATABASE_NAME);
     try {
       $oPro = ProcessPeer::retrieveByPk( $ProUid );
-      if ( get_class ($oPro) == 'Process' ) {
+      if (is_object ($oPro) && get_class ($oPro) == 'Process' ) {
         $aFields = $oPro->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         //optimized to avoid double and multiple execution of the same query
@@ -301,7 +301,7 @@ class Process extends BaseProcess {
         $aFields['PRO_CATEGORY_LABEL']=G::LoadTranslation("ID_PROCESS_NO_CATEGORY");        
         if($aFields['PRO_CATEGORY']!=""){        	
         	$oProCat = ProcessCategoryPeer::retrieveByPk( $aFields['PRO_CATEGORY'] );        	
-        	if ( get_class ($oProCat) == 'ProcessCategory' ) {
+        	if (is_object ($oProCat) && get_class ($oProCat) == 'ProcessCategory' ) {
         	$aFields['PRO_CATEGORY_LABEL']=$oProCat->getCategoryName();
         	}
         }        
@@ -336,7 +336,7 @@ class Process extends BaseProcess {
     try {
       $con->begin();
       $oPro = ProcessPeer::retrieveByPK( $aData['PRO_UID'] );
-      if ( get_class ($oPro) == 'Process' ) {
+      if (is_object ($oPro) && get_class ($oPro) == 'Process' ) {
         $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oPro->validate()) {
           if ( isset ( $aData['PRO_TITLE'] ) )
@@ -454,7 +454,7 @@ class Process extends BaseProcess {
   public function exists($ProUid)
   {
     $oPro = ProcessPeer::retrieveByPk( $ProUid );
-    return ( get_class ($oPro) == 'Process' );
+    return (is_object ($oPro) && get_class ($oPro) == 'Process' );
   }
 
   //new functions
