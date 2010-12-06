@@ -2,8 +2,6 @@
   	
   $oHeadPublisher =& headPublisher::getSingleton();
  //$oHeadPublisher->setExtSkin( 'xtheme-gray');
-  $oHeadPublisher->usingExtJs('ux/RowEditor');
-  $oHeadPublisher->addExtJsScript('bpmn/bpmnZoom',true);
   $oHeadPublisher->addExtJsScript('bpmn/MyWorkflow',true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/pmosExt', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/TaskContext', true );    //adding a javascript file .js

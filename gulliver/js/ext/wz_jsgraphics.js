@@ -866,7 +866,6 @@ Allows to specify the size of the text rectangle and to align the
 text both horizontally (e.g. right) and vertically within that rectangle */
 	this.drawStringRect = function(txt, x, y, width,height, halign)
 	{
-                this.ftSz = '11px';
 		this.htm += '<div style="position:absolute;overflow:hidden;'+
 			'left:' + x + 'px;'+
 			'top:' + y + 'px;'+

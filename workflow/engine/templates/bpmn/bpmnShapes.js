@@ -70,7 +70,7 @@ bpmnTask.prototype.paint = function () {
 /* Created New Object of jsGraphics to draw String.
  * New object is created to implement changing of Text functionality
  */
-    bpmnText = new jsGraphics(this.id);
+    this.bpmnText = new jsGraphics(this.id);
 
 /*if(this.taskName.length <= 17)
     {
@@ -101,8 +101,8 @@ bpmnTask.prototype.paint = function () {
     }
 
     var rectheight = this.getHeight() - padtop -7;
-
-    bpmnText.drawStringRect(this.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
+    this.bpmnText.setFont('verdana', '11px', Font.PLAIN);
+    this.bpmnText.drawStringRect(this.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
     // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
 
@@ -153,13 +153,13 @@ bpmnTask.prototype.paint = function () {
     boundaryTimer.drawLine(x[3]-x[3]/1.08+5,y[5]+4,x[3]-x[3]/1.08+8,y[5]+4);  //45th min line
     boundaryTimer.drawLine(x[3]-x[3]/1.08+8,y[5]-4,x[3]-x[3]/1.08+11,y[5]-1);  //50th min line
     boundaryTimer.drawLine(x[3]-x[3]/1.08+15,y[5]-7,x[3]-x[3]/1.08+15,y[5]-4);  //60th min line
-    
+
     if(this.boundaryEvent == true)
         boundaryTimer.paint();
     /****************************       Drawing Timer Boundary event ends here           *******************************/
 
-    bpmnText.paint();
-    this.bpmnNewText = bpmnText;
+    this.bpmnText.paint();
+    //this.bpmnNewText = this.bpmnText;
 
 /*Code Added to Dynamically shift Ports on resizing of shapes
  **/
@@ -185,7 +185,7 @@ jsGraphics.prototype.drawTextString = function (txt, x, y, dx, dy) {
 
 /*Workflow.prototype.onMouseUp=function(x,y){
   //Saving Task/Annotations position on Async Ajax call
-  
+
 this.dragging=false;
 this.draggingLine=null;
 };*/
@@ -278,7 +278,7 @@ InputPort.prototype.onDrop = function (port) {
 	newObj.sPortType =port.properties.name;
 	preObj.sPortType =this.properties.name;
 	this.workflow.saveRoute(preObj,newObj);
-	
+
         var _3f02 = new CommandConnect(this.parentNode.workflow, port, this);
         if (_3f02.source.type == _3f02.target.type) {
             return;
@@ -302,7 +302,7 @@ OutputPort.prototype.onDrop = function (port) {
 
 
     if (this.parentNode.id == port.parentNode.id || connect == false) {
-        
+
     } else {
         var _4070 = new CommandConnect(this.parentNode.workflow, this, port);
         if (_4070.source.type == _4070.target.type) {
@@ -344,7 +344,7 @@ OutputPort.prototype.onDrop = function (port) {
             }
         else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
             {
-             	
+
 		var preObj = this.workflow.currentSelection;
                 var newObj = port.parentNode;
                 newObj.conn = _4070.connection;
@@ -572,8 +572,8 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
         //@params - max X pos(canvas Width) = 918
         //@params - max Y pos(canvas Height) = 837
         ///////////////////////////////////////////
-      
-      
+
+
         //Preventing Task from drawing outside canvas Code Ends here
         if (_39fd.type == 'DecoratedConnection' || _39fd.workflow.contextClicked == true) {
             this.removechild(this.actionAdd);
@@ -732,8 +732,8 @@ bpmnTask.prototype.addShapes = function (_3896) {
     //Assigning values to newShape Object for Saving Task automatically (Async Ajax Call)
     newShape.x = xOffset;
     newShape.y = yOffset;
-    
-   
+
+
 
 
     var conn = new DecoratedConnection();
@@ -917,7 +917,7 @@ bpmnTask.prototype.trim = function (str) {
  * The string is first cleared and new string is painted.<br><br>
  **/
 bpmnTaskDialog.prototype.onOk = function () {
-    this.figure.bpmnNewText.clear();
+    this.figure.bpmnText.clear();
     //len = Math.ceil(this.input.value.length/16);
     var len = this.workflow.currentSelection.width / 18;
     if (len >= 6) {
@@ -952,9 +952,10 @@ bpmnTaskDialog.prototype.onOk = function () {
 
 
     //tempcoord = this.workflow.currentSelection.coord_converter(this.workflow.currentSelection.width, this.workflow.currentSelection.height, this.input.value.length)
-    this.figure.bpmnNewText.drawStringRect(this.input.value, padleft, padtop, this.figure.rectWidth, rectheight, 'center');
+    this.figure.bpmnText.setFont('verdana', '11px', Font.PLAIN);
+    this.figure.bpmnText.drawStringRect(this.input.value, padleft, padtop, this.figure.rectWidth, rectheight, 'center');
     // this.figure.bpmnNewText.drawTextString(this.input.value, this.workflow.currentSelection.width, this.workflow.currentSelection.height, tempcoord.temp_x, tempcoord.temp_y);
-    this.figure.bpmnNewText.paint();
+    this.figure.bpmnText.paint();
     this.workflow.currentSelection.taskName = this.input.value; //Set Updated Text value
     //Saving task name (whenever updated) onAsynch AJAX call
     this.figure.actiontype = 'updateTaskName';

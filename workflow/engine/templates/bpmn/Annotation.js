@@ -77,17 +77,17 @@ bpmnAnnotation.prototype.paint = function () {
     */
  /* New object is created to implement changing of Text functionality
  */
-    var bpmnText = new jsGraphics(this.id);
+    this.bpmnText = new jsGraphics(this.id);
     var padleft = 0.10*this.getWidth();
     var padtop = 0.18*this.getHeight();
     var rectwidth = this.getWidth() - padleft;
     var rectheight = this.getHeight() - 2*padtop;
-    bpmnText.drawStringRect(this.annotationName,0,padtop,rectwidth,rectheight,'center');
+    this.bpmnText.setFont('verdana', '11px', Font.PLAIN);
+    this.bpmnText.drawStringRect(this.annotationName,0,padtop,rectwidth,rectheight,'center');
     //bpmnText.drawStringRect(this.taskName,this.getWidth()/2-20,this.getHeight()/2-11,200,'left');
     //tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
-    bpmnText.paint();
-    this.bpmnNewText = bpmnText;
+    this.bpmnText.paint();
 
     if(this.input1!=null){
     this.input1.setPosition(0,this.height/2);
@@ -161,7 +161,7 @@ bpmnAnnotation.prototype.onDoubleClick = function () {
  * The string is first cleared and new string is painted.<br><br>
  **/
  bpmnAnnotationDialog.prototype.onOk = function () {
-    this.figure.bpmnNewText.clear();
+    this.figure.bpmnText.clear();
 
     len = Math.ceil(this.input.value.length/16);
     if(this.input.value.length < 19)
@@ -175,9 +175,9 @@ bpmnAnnotation.prototype.onDoubleClick = function () {
     else
         this.figure.rectWidth = 150;
     //tempcoord = this.workflow.currentSelection.coord_converter(this.workflow.currentSelection.width, this.workflow.currentSelection.height, this.input.value.length)
-    this.figure.bpmnNewText.drawStringRect(this.input.value,20,20,this.figure.rectWidth,'left');
+    this.figure.bpmnText.drawStringRect(this.input.value,20,20,this.figure.rectWidth,'left');
    // this.figure.bpmnNewText.drawTextString(this.input.value, this.workflow.currentSelection.width, this.workflow.currentSelection.height, tempcoord.temp_x, tempcoord.temp_y);
-    this.figure.bpmnNewText.paint();
+    this.figure.bpmnText.paint();
     this.figure.annotationName = this.input.value; //Set Updated Text value
 
     //Updating Annotation Text Async into the DB
