@@ -118,6 +118,27 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 	 */
 	protected $rou_targetanchor = 0;
 
+
+	/**
+	 * The value for the rou_to_port field.
+	 * @var        int
+	 */
+	protected $rou_to_port = 1;
+
+
+	/**
+	 * The value for the rou_from_port field.
+	 * @var        int
+	 */
+	protected $rou_from_port = 2;
+
+
+	/**
+	 * The value for the rou_evn_uid field.
+	 * @var        string
+	 */
+	protected $rou_evn_uid = '';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -273,6 +294,39 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 	{
 
 		return $this->rou_targetanchor;
+	}
+
+	/**
+	 * Get the [rou_to_port] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getRouToPort()
+	{
+
+		return $this->rou_to_port;
+	}
+
+	/**
+	 * Get the [rou_from_port] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getRouFromPort()
+	{
+
+		return $this->rou_from_port;
+	}
+
+	/**
+	 * Get the [rou_evn_uid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getRouEvnUid()
+	{
+
+		return $this->rou_evn_uid;
 	}
 
 	/**
@@ -562,6 +616,72 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 	} // setRouTargetanchor()
 
 	/**
+	 * Set the value of [rou_to_port] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setRouToPort($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->rou_to_port !== $v || $v === 1) {
+			$this->rou_to_port = $v;
+			$this->modifiedColumns[] = RoutePeer::ROU_TO_PORT;
+		}
+
+	} // setRouToPort()
+
+	/**
+	 * Set the value of [rou_from_port] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setRouFromPort($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->rou_from_port !== $v || $v === 2) {
+			$this->rou_from_port = $v;
+			$this->modifiedColumns[] = RoutePeer::ROU_FROM_PORT;
+		}
+
+	} // setRouFromPort()
+
+	/**
+	 * Set the value of [rou_evn_uid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setRouEvnUid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->rou_evn_uid !== $v || $v === '') {
+			$this->rou_evn_uid = $v;
+			$this->modifiedColumns[] = RoutePeer::ROU_EVN_UID;
+		}
+
+	} // setRouEvnUid()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -604,12 +724,18 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 
 			$this->rou_targetanchor = $rs->getInt($startcol + 12);
 
+			$this->rou_to_port = $rs->getInt($startcol + 13);
+
+			$this->rou_from_port = $rs->getInt($startcol + 14);
+
+			$this->rou_evn_uid = $rs->getString($startcol + 15);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 13; // 13 = RoutePeer::NUM_COLUMNS - RoutePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 16; // 16 = RoutePeer::NUM_COLUMNS - RoutePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Route object", $e);
@@ -851,6 +977,15 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 			case 12:
 				return $this->getRouTargetanchor();
 				break;
+			case 13:
+				return $this->getRouToPort();
+				break;
+			case 14:
+				return $this->getRouFromPort();
+				break;
+			case 15:
+				return $this->getRouEvnUid();
+				break;
 			default:
 				return null;
 				break;
@@ -884,6 +1019,9 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 			$keys[10] => $this->getRouSendEmail(),
 			$keys[11] => $this->getRouSourceanchor(),
 			$keys[12] => $this->getRouTargetanchor(),
+			$keys[13] => $this->getRouToPort(),
+			$keys[14] => $this->getRouFromPort(),
+			$keys[15] => $this->getRouEvnUid(),
 		);
 		return $result;
 	}
@@ -954,6 +1092,15 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 			case 12:
 				$this->setRouTargetanchor($value);
 				break;
+			case 13:
+				$this->setRouToPort($value);
+				break;
+			case 14:
+				$this->setRouFromPort($value);
+				break;
+			case 15:
+				$this->setRouEvnUid($value);
+				break;
 		} // switch()
 	}
 
@@ -990,6 +1137,9 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[10], $arr)) $this->setRouSendEmail($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setRouSourceanchor($arr[$keys[11]]);
 		if (array_key_exists($keys[12], $arr)) $this->setRouTargetanchor($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setRouToPort($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setRouFromPort($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setRouEvnUid($arr[$keys[15]]);
 	}
 
 	/**
@@ -1014,6 +1164,9 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(RoutePeer::ROU_SEND_EMAIL)) $criteria->add(RoutePeer::ROU_SEND_EMAIL, $this->rou_send_email);
 		if ($this->isColumnModified(RoutePeer::ROU_SOURCEANCHOR)) $criteria->add(RoutePeer::ROU_SOURCEANCHOR, $this->rou_sourceanchor);
 		if ($this->isColumnModified(RoutePeer::ROU_TARGETANCHOR)) $criteria->add(RoutePeer::ROU_TARGETANCHOR, $this->rou_targetanchor);
+		if ($this->isColumnModified(RoutePeer::ROU_TO_PORT)) $criteria->add(RoutePeer::ROU_TO_PORT, $this->rou_to_port);
+		if ($this->isColumnModified(RoutePeer::ROU_FROM_PORT)) $criteria->add(RoutePeer::ROU_FROM_PORT, $this->rou_from_port);
+		if ($this->isColumnModified(RoutePeer::ROU_EVN_UID)) $criteria->add(RoutePeer::ROU_EVN_UID, $this->rou_evn_uid);
 
 		return $criteria;
 	}
@@ -1091,6 +1244,12 @@ abstract class BaseRoute extends BaseObject  implements Persistent {
 		$copyObj->setRouSourceanchor($this->rou_sourceanchor);
 
 		$copyObj->setRouTargetanchor($this->rou_targetanchor);
+
+		$copyObj->setRouToPort($this->rou_to_port);
+
+		$copyObj->setRouFromPort($this->rou_from_port);
+
+		$copyObj->setRouEvnUid($this->rou_evn_uid);
 
 
 		$copyObj->setNew(true);

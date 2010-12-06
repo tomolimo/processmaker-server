@@ -2714,6 +2714,36 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="ROU_TO_PORT" type="INTEGER" required="true" default="1">
+      <vendor type="mysql">
+        <parameter name="Field" value="ROU_CASE"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="1"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ROU_FROM_PORT" type="INTEGER" required="true" default="2">
+      <vendor type="mysql">
+        <parameter name="Field" value="ROU_CASE"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="2"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ROU_EVN_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ROU_EVN_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <validator column="ROU_UID">
       <rule name="maxLength" value="32" message="Route UID can be no larger than ${value} in size" />
       <rule name="required" message="Route UID is required." />
@@ -2730,7 +2760,7 @@
       <rule name="required" message="Next Task UID is required." />
     </validator>
     <validator column="ROU_TYPE">
-      <rule name="validValues" value="SEQUENTIAL|EVALUATE|SELECT|PARALLEL|PARALLEL-BY-EVALUATION|SEC-JOIN" message="Please select a valid Route Type." />
+      <rule name="validValues" value="SEQUENTIAL|EVALUATE|SELECT|PARALLEL|PARALLEL-BY-EVALUATION|SEC-JOIN|DISCRIMINATOR" message="Please select a valid Route Type." />
       <rule name="required" message="Route type is required." />
     </validator>
     <validator column="ROU_TO_LAST_USER">
@@ -3004,6 +3034,26 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="SWI_WIDTH" type="INTEGER" required="true" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="SWI_WIDTH"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="SWI_HEIGHT" type="INTEGER" required="true" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="SWI_HEIGHT"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <validator column="SWI_UID">
       <rule name="maxLength" value="32" message="Swimlane Element UID can be no larger than ${value} in size" />
       <rule name="required" message="Swimlane Element UID is required." />
@@ -3155,6 +3205,26 @@
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value="@@SYS_NEXT_USER_TO_BE_ASSIGNED"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_MI_INSTANCE_VARIABLE" type="VARCHAR" size="100" required="true" default="@@SYS_VAR_TOTAL_INSTANCE">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_MI_INSTANCE_VARIABLE"/>
+        <parameter name="Type" value="varchar(100)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="@@SYS_VAR_TOTAL_INSTANCE"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_MI_COMPLETE_VARIABLE" type="VARCHAR" size="100" required="true" default="@@SYS_VAR_TOTAL_INSTANCES_COMPLETE">
+      <vendor type="mysql">
+        <parameter name="Field" value="	TAS_MI_COMPLETE_VARIABLE"/>
+        <parameter name="Type" value="varchar(100)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="@@SYS_VAR_TOTAL_INSTANCES_COMPLETE"/>
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
@@ -3368,9 +3438,49 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="TAS_WIDTH" type="INTEGER" required="true" default="110">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_WIDTH"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_HEIGHT" type="INTEGER" required="true" default="60">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_HEIGHT"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <column name="TAS_COLOR" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="TAS_COLOR"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_EVN_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_EVN_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_BOUNDARY" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_BOUNDARY"/>
         <parameter name="Type" value="varchar(32)"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
@@ -3388,7 +3498,7 @@
       <rule name="validValues" value="TRUE|FALSE" message="Please select a valid value for TAS_ALERT." />
     </validator>
     <validator column="TAS_ASSIGN_TYPE">
-      <rule name="validValues" value="BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE" message="Please select a valid value for TAS_ASSIGN_TYPE." />
+      <rule name="validValues" value="BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE|STATIC_MI|CANCEL_MI" message="Please select a valid value for TAS_ASSIGN_TYPE." />
     </validator>
     <validator column="TAS_ASSIGN_LOCATION">
       <rule name="validValues" value="TRUE|FALSE" message="Please select a valid value for TAS_ASSIGN_LOCATION." />
@@ -6051,6 +6161,46 @@
     <column name="TRI_UID" type="VARCHAR" size="32" required="false" default="">
       <vendor type="mysql">
         <parameter name="Field" value="TRI_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="EVN_POSX" type="INTEGER" required="true" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="EVN_POSX"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="EVN_POSY" type="INTEGER" required="true" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="EVN_POSY"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="EVN_TYPE" type="VARCHAR" size="32" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="EVN_TYPE"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_EVN_UID" type="VARCHAR" size="32" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_EVN_UID"/>
         <parameter name="Type" value="varchar(32)"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>

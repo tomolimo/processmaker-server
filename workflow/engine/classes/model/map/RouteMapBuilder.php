@@ -90,6 +90,12 @@ class RouteMapBuilder {
 
 		$tMap->addColumn('ROU_TARGETANCHOR', 'RouTargetanchor', 'int', CreoleTypes::INTEGER, false, null);
 
+		$tMap->addColumn('ROU_TO_PORT', 'RouToPort', 'int', CreoleTypes::INTEGER, true, null);
+
+		$tMap->addColumn('ROU_FROM_PORT', 'RouFromPort', 'int', CreoleTypes::INTEGER, true, null);
+
+		$tMap->addColumn('ROU_EVN_UID', 'RouEvnUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
 		$tMap->addValidator('ROU_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Route UID can be no larger than 32 in size');
 
 		$tMap->addValidator('ROU_UID', 'required', 'propel.validator.RequiredValidator', '', 'Route UID is required.');
@@ -104,7 +110,7 @@ class RouteMapBuilder {
 
 		$tMap->addValidator('ROU_NEXT_TASK', 'required', 'propel.validator.RequiredValidator', '', 'Next Task UID is required.');
 
-		$tMap->addValidator('ROU_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'SEQUENTIAL|EVALUATE|SELECT|PARALLEL|PARALLEL-BY-EVALUATION|SEC-JOIN', 'Please select a valid Route Type.');
+		$tMap->addValidator('ROU_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'SEQUENTIAL|EVALUATE|SELECT|PARALLEL|PARALLEL-BY-EVALUATION|SEC-JOIN|DISCRIMINATOR', 'Please select a valid Route Type.');
 
 		$tMap->addValidator('ROU_TYPE', 'required', 'propel.validator.RequiredValidator', '', 'Route type is required.');
 

@@ -94,6 +94,14 @@ class EventMapBuilder {
 
 		$tMap->addColumn('TRI_UID', 'TriUid', 'string', CreoleTypes::VARCHAR, false, 32);
 
+		$tMap->addColumn('EVN_POSX', 'EvnPosx', 'int', CreoleTypes::INTEGER, true, null);
+
+		$tMap->addColumn('EVN_POSY', 'EvnPosy', 'int', CreoleTypes::INTEGER, true, null);
+
+		$tMap->addColumn('EVN_TYPE', 'EvnType', 'string', CreoleTypes::VARCHAR, false, 32);
+
+		$tMap->addColumn('TAS_EVN_UID', 'TasEvnUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
 	} // doBuild()
 
 } // EventMapBuilder

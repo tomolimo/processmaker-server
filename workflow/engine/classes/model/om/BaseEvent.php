@@ -132,6 +132,34 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 	 */
 	protected $tri_uid = '';
 
+
+	/**
+	 * The value for the evn_posx field.
+	 * @var        int
+	 */
+	protected $evn_posx = 0;
+
+
+	/**
+	 * The value for the evn_posy field.
+	 * @var        int
+	 */
+	protected $evn_posy = 0;
+
+
+	/**
+	 * The value for the evn_type field.
+	 * @var        string
+	 */
+	protected $evn_type = '';
+
+
+	/**
+	 * The value for the tas_evn_uid field.
+	 * @var        string
+	 */
+	protected $tas_evn_uid = '';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -309,6 +337,50 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 	{
 
 		return $this->tri_uid;
+	}
+
+	/**
+	 * Get the [evn_posx] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getEvnPosx()
+	{
+
+		return $this->evn_posx;
+	}
+
+	/**
+	 * Get the [evn_posy] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getEvnPosy()
+	{
+
+		return $this->evn_posy;
+	}
+
+	/**
+	 * Get the [evn_type] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getEvnType()
+	{
+
+		return $this->evn_type;
+	}
+
+	/**
+	 * Get the [tas_evn_uid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getTasEvnUid()
+	{
+
+		return $this->tas_evn_uid;
 	}
 
 	/**
@@ -630,6 +702,94 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 	} // setTriUid()
 
 	/**
+	 * Set the value of [evn_posx] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setEvnPosx($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->evn_posx !== $v || $v === 0) {
+			$this->evn_posx = $v;
+			$this->modifiedColumns[] = EventPeer::EVN_POSX;
+		}
+
+	} // setEvnPosx()
+
+	/**
+	 * Set the value of [evn_posy] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setEvnPosy($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->evn_posy !== $v || $v === 0) {
+			$this->evn_posy = $v;
+			$this->modifiedColumns[] = EventPeer::EVN_POSY;
+		}
+
+	} // setEvnPosy()
+
+	/**
+	 * Set the value of [evn_type] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setEvnType($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->evn_type !== $v || $v === '') {
+			$this->evn_type = $v;
+			$this->modifiedColumns[] = EventPeer::EVN_TYPE;
+		}
+
+	} // setEvnType()
+
+	/**
+	 * Set the value of [tas_evn_uid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setTasEvnUid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->tas_evn_uid !== $v || $v === '') {
+			$this->tas_evn_uid = $v;
+			$this->modifiedColumns[] = EventPeer::TAS_EVN_UID;
+		}
+
+	} // setTasEvnUid()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -676,12 +836,20 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 
 			$this->tri_uid = $rs->getString($startcol + 14);
 
+			$this->evn_posx = $rs->getInt($startcol + 15);
+
+			$this->evn_posy = $rs->getInt($startcol + 16);
+
+			$this->evn_type = $rs->getString($startcol + 17);
+
+			$this->tas_evn_uid = $rs->getString($startcol + 18);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 15; // 15 = EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 19; // 19 = EventPeer::NUM_COLUMNS - EventPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Event object", $e);
@@ -929,6 +1097,18 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 			case 14:
 				return $this->getTriUid();
 				break;
+			case 15:
+				return $this->getEvnPosx();
+				break;
+			case 16:
+				return $this->getEvnPosy();
+				break;
+			case 17:
+				return $this->getEvnType();
+				break;
+			case 18:
+				return $this->getTasEvnUid();
+				break;
 			default:
 				return null;
 				break;
@@ -964,6 +1144,10 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 			$keys[12] => $this->getEvnConditions(),
 			$keys[13] => $this->getEvnActionParameters(),
 			$keys[14] => $this->getTriUid(),
+			$keys[15] => $this->getEvnPosx(),
+			$keys[16] => $this->getEvnPosy(),
+			$keys[17] => $this->getEvnType(),
+			$keys[18] => $this->getTasEvnUid(),
 		);
 		return $result;
 	}
@@ -1040,6 +1224,18 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 			case 14:
 				$this->setTriUid($value);
 				break;
+			case 15:
+				$this->setEvnPosx($value);
+				break;
+			case 16:
+				$this->setEvnPosy($value);
+				break;
+			case 17:
+				$this->setEvnType($value);
+				break;
+			case 18:
+				$this->setTasEvnUid($value);
+				break;
 		} // switch()
 	}
 
@@ -1078,6 +1274,10 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[12], $arr)) $this->setEvnConditions($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setEvnActionParameters($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setTriUid($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setEvnPosx($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setEvnPosy($arr[$keys[16]]);
+		if (array_key_exists($keys[17], $arr)) $this->setEvnType($arr[$keys[17]]);
+		if (array_key_exists($keys[18], $arr)) $this->setTasEvnUid($arr[$keys[18]]);
 	}
 
 	/**
@@ -1104,6 +1304,10 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(EventPeer::EVN_CONDITIONS)) $criteria->add(EventPeer::EVN_CONDITIONS, $this->evn_conditions);
 		if ($this->isColumnModified(EventPeer::EVN_ACTION_PARAMETERS)) $criteria->add(EventPeer::EVN_ACTION_PARAMETERS, $this->evn_action_parameters);
 		if ($this->isColumnModified(EventPeer::TRI_UID)) $criteria->add(EventPeer::TRI_UID, $this->tri_uid);
+		if ($this->isColumnModified(EventPeer::EVN_POSX)) $criteria->add(EventPeer::EVN_POSX, $this->evn_posx);
+		if ($this->isColumnModified(EventPeer::EVN_POSY)) $criteria->add(EventPeer::EVN_POSY, $this->evn_posy);
+		if ($this->isColumnModified(EventPeer::EVN_TYPE)) $criteria->add(EventPeer::EVN_TYPE, $this->evn_type);
+		if ($this->isColumnModified(EventPeer::TAS_EVN_UID)) $criteria->add(EventPeer::TAS_EVN_UID, $this->tas_evn_uid);
 
 		return $criteria;
 	}
@@ -1185,6 +1389,14 @@ abstract class BaseEvent extends BaseObject  implements Persistent {
 		$copyObj->setEvnActionParameters($this->evn_action_parameters);
 
 		$copyObj->setTriUid($this->tri_uid);
+
+		$copyObj->setEvnPosx($this->evn_posx);
+
+		$copyObj->setEvnPosy($this->evn_posy);
+
+		$copyObj->setEvnType($this->evn_type);
+
+		$copyObj->setTasEvnUid($this->tas_evn_uid);
 
 
 		$copyObj->setNew(true);

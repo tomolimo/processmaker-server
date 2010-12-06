@@ -24,7 +24,7 @@ abstract class BaseEventPeer {
 	const CLASS_DEFAULT = 'classes.model.Event';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 15;
+	const NUM_COLUMNS = 19;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -75,6 +75,18 @@ abstract class BaseEventPeer {
 	/** the column name for the TRI_UID field */
 	const TRI_UID = 'EVENT.TRI_UID';
 
+	/** the column name for the EVN_POSX field */
+	const EVN_POSX = 'EVENT.EVN_POSX';
+
+	/** the column name for the EVN_POSY field */
+	const EVN_POSY = 'EVENT.EVN_POSY';
+
+	/** the column name for the EVN_TYPE field */
+	const EVN_TYPE = 'EVENT.EVN_TYPE';
+
+	/** the column name for the TAS_EVN_UID field */
+	const TAS_EVN_UID = 'EVENT.TAS_EVN_UID';
+
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
 
@@ -86,10 +98,10 @@ abstract class BaseEventPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('EvnUid', 'ProUid', 'EvnStatus', 'EvnWhenOccurs', 'EvnRelatedTo', 'TasUid', 'EvnTasUidFrom', 'EvnTasUidTo', 'EvnTasEstimatedDuration', 'EvnWhen', 'EvnMaxAttempts', 'EvnAction', 'EvnConditions', 'EvnActionParameters', 'TriUid', ),
-		BasePeer::TYPE_COLNAME => array (EventPeer::EVN_UID, EventPeer::PRO_UID, EventPeer::EVN_STATUS, EventPeer::EVN_WHEN_OCCURS, EventPeer::EVN_RELATED_TO, EventPeer::TAS_UID, EventPeer::EVN_TAS_UID_FROM, EventPeer::EVN_TAS_UID_TO, EventPeer::EVN_TAS_ESTIMATED_DURATION, EventPeer::EVN_WHEN, EventPeer::EVN_MAX_ATTEMPTS, EventPeer::EVN_ACTION, EventPeer::EVN_CONDITIONS, EventPeer::EVN_ACTION_PARAMETERS, EventPeer::TRI_UID, ),
-		BasePeer::TYPE_FIELDNAME => array ('EVN_UID', 'PRO_UID', 'EVN_STATUS', 'EVN_WHEN_OCCURS', 'EVN_RELATED_TO', 'TAS_UID', 'EVN_TAS_UID_FROM', 'EVN_TAS_UID_TO', 'EVN_TAS_ESTIMATED_DURATION', 'EVN_WHEN', 'EVN_MAX_ATTEMPTS', 'EVN_ACTION', 'EVN_CONDITIONS', 'EVN_ACTION_PARAMETERS', 'TRI_UID', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('EvnUid', 'ProUid', 'EvnStatus', 'EvnWhenOccurs', 'EvnRelatedTo', 'TasUid', 'EvnTasUidFrom', 'EvnTasUidTo', 'EvnTasEstimatedDuration', 'EvnWhen', 'EvnMaxAttempts', 'EvnAction', 'EvnConditions', 'EvnActionParameters', 'TriUid', 'EvnPosx', 'EvnPosy', 'EvnType', 'TasEvnUid', ),
+		BasePeer::TYPE_COLNAME => array (EventPeer::EVN_UID, EventPeer::PRO_UID, EventPeer::EVN_STATUS, EventPeer::EVN_WHEN_OCCURS, EventPeer::EVN_RELATED_TO, EventPeer::TAS_UID, EventPeer::EVN_TAS_UID_FROM, EventPeer::EVN_TAS_UID_TO, EventPeer::EVN_TAS_ESTIMATED_DURATION, EventPeer::EVN_WHEN, EventPeer::EVN_MAX_ATTEMPTS, EventPeer::EVN_ACTION, EventPeer::EVN_CONDITIONS, EventPeer::EVN_ACTION_PARAMETERS, EventPeer::TRI_UID, EventPeer::EVN_POSX, EventPeer::EVN_POSY, EventPeer::EVN_TYPE, EventPeer::TAS_EVN_UID, ),
+		BasePeer::TYPE_FIELDNAME => array ('EVN_UID', 'PRO_UID', 'EVN_STATUS', 'EVN_WHEN_OCCURS', 'EVN_RELATED_TO', 'TAS_UID', 'EVN_TAS_UID_FROM', 'EVN_TAS_UID_TO', 'EVN_TAS_ESTIMATED_DURATION', 'EVN_WHEN', 'EVN_MAX_ATTEMPTS', 'EVN_ACTION', 'EVN_CONDITIONS', 'EVN_ACTION_PARAMETERS', 'TRI_UID', 'EVN_POSX', 'EVN_POSY', 'EVN_TYPE', 'TAS_EVN_UID', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
 	);
 
 	/**
@@ -99,10 +111,10 @@ abstract class BaseEventPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('EvnUid' => 0, 'ProUid' => 1, 'EvnStatus' => 2, 'EvnWhenOccurs' => 3, 'EvnRelatedTo' => 4, 'TasUid' => 5, 'EvnTasUidFrom' => 6, 'EvnTasUidTo' => 7, 'EvnTasEstimatedDuration' => 8, 'EvnWhen' => 9, 'EvnMaxAttempts' => 10, 'EvnAction' => 11, 'EvnConditions' => 12, 'EvnActionParameters' => 13, 'TriUid' => 14, ),
-		BasePeer::TYPE_COLNAME => array (EventPeer::EVN_UID => 0, EventPeer::PRO_UID => 1, EventPeer::EVN_STATUS => 2, EventPeer::EVN_WHEN_OCCURS => 3, EventPeer::EVN_RELATED_TO => 4, EventPeer::TAS_UID => 5, EventPeer::EVN_TAS_UID_FROM => 6, EventPeer::EVN_TAS_UID_TO => 7, EventPeer::EVN_TAS_ESTIMATED_DURATION => 8, EventPeer::EVN_WHEN => 9, EventPeer::EVN_MAX_ATTEMPTS => 10, EventPeer::EVN_ACTION => 11, EventPeer::EVN_CONDITIONS => 12, EventPeer::EVN_ACTION_PARAMETERS => 13, EventPeer::TRI_UID => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('EVN_UID' => 0, 'PRO_UID' => 1, 'EVN_STATUS' => 2, 'EVN_WHEN_OCCURS' => 3, 'EVN_RELATED_TO' => 4, 'TAS_UID' => 5, 'EVN_TAS_UID_FROM' => 6, 'EVN_TAS_UID_TO' => 7, 'EVN_TAS_ESTIMATED_DURATION' => 8, 'EVN_WHEN' => 9, 'EVN_MAX_ATTEMPTS' => 10, 'EVN_ACTION' => 11, 'EVN_CONDITIONS' => 12, 'EVN_ACTION_PARAMETERS' => 13, 'TRI_UID' => 14, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('EvnUid' => 0, 'ProUid' => 1, 'EvnStatus' => 2, 'EvnWhenOccurs' => 3, 'EvnRelatedTo' => 4, 'TasUid' => 5, 'EvnTasUidFrom' => 6, 'EvnTasUidTo' => 7, 'EvnTasEstimatedDuration' => 8, 'EvnWhen' => 9, 'EvnMaxAttempts' => 10, 'EvnAction' => 11, 'EvnConditions' => 12, 'EvnActionParameters' => 13, 'TriUid' => 14, 'EvnPosx' => 15, 'EvnPosy' => 16, 'EvnType' => 17, 'TasEvnUid' => 18, ),
+		BasePeer::TYPE_COLNAME => array (EventPeer::EVN_UID => 0, EventPeer::PRO_UID => 1, EventPeer::EVN_STATUS => 2, EventPeer::EVN_WHEN_OCCURS => 3, EventPeer::EVN_RELATED_TO => 4, EventPeer::TAS_UID => 5, EventPeer::EVN_TAS_UID_FROM => 6, EventPeer::EVN_TAS_UID_TO => 7, EventPeer::EVN_TAS_ESTIMATED_DURATION => 8, EventPeer::EVN_WHEN => 9, EventPeer::EVN_MAX_ATTEMPTS => 10, EventPeer::EVN_ACTION => 11, EventPeer::EVN_CONDITIONS => 12, EventPeer::EVN_ACTION_PARAMETERS => 13, EventPeer::TRI_UID => 14, EventPeer::EVN_POSX => 15, EventPeer::EVN_POSY => 16, EventPeer::EVN_TYPE => 17, EventPeer::TAS_EVN_UID => 18, ),
+		BasePeer::TYPE_FIELDNAME => array ('EVN_UID' => 0, 'PRO_UID' => 1, 'EVN_STATUS' => 2, 'EVN_WHEN_OCCURS' => 3, 'EVN_RELATED_TO' => 4, 'TAS_UID' => 5, 'EVN_TAS_UID_FROM' => 6, 'EVN_TAS_UID_TO' => 7, 'EVN_TAS_ESTIMATED_DURATION' => 8, 'EVN_WHEN' => 9, 'EVN_MAX_ATTEMPTS' => 10, 'EVN_ACTION' => 11, 'EVN_CONDITIONS' => 12, 'EVN_ACTION_PARAMETERS' => 13, 'TRI_UID' => 14, 'EVN_POSX' => 15, 'EVN_POSY' => 16, 'EVN_TYPE' => 17, 'TAS_EVN_UID' => 18, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
 	);
 
 	/**
@@ -232,6 +244,14 @@ abstract class BaseEventPeer {
 		$criteria->addSelectColumn(EventPeer::EVN_ACTION_PARAMETERS);
 
 		$criteria->addSelectColumn(EventPeer::TRI_UID);
+
+		$criteria->addSelectColumn(EventPeer::EVN_POSX);
+
+		$criteria->addSelectColumn(EventPeer::EVN_POSY);
+
+		$criteria->addSelectColumn(EventPeer::EVN_TYPE);
+
+		$criteria->addSelectColumn(EventPeer::TAS_EVN_UID);
 
 	}
 

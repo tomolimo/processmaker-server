@@ -62,6 +62,20 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 	 */
 	protected $swi_y = 0;
 
+
+	/**
+	 * The value for the swi_width field.
+	 * @var        int
+	 */
+	protected $swi_width = 0;
+
+
+	/**
+	 * The value for the swi_height field.
+	 * @var        int
+	 */
+	protected $swi_height = 0;
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -129,6 +143,28 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 	{
 
 		return $this->swi_y;
+	}
+
+	/**
+	 * Get the [swi_width] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getSwiWidth()
+	{
+
+		return $this->swi_width;
+	}
+
+	/**
+	 * Get the [swi_height] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getSwiHeight()
+	{
+
+		return $this->swi_height;
 	}
 
 	/**
@@ -242,6 +278,50 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 	} // setSwiY()
 
 	/**
+	 * Set the value of [swi_width] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setSwiWidth($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->swi_width !== $v || $v === 0) {
+			$this->swi_width = $v;
+			$this->modifiedColumns[] = SwimlanesElementsPeer::SWI_WIDTH;
+		}
+
+	} // setSwiWidth()
+
+	/**
+	 * Set the value of [swi_height] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setSwiHeight($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->swi_height !== $v || $v === 0) {
+			$this->swi_height = $v;
+			$this->modifiedColumns[] = SwimlanesElementsPeer::SWI_HEIGHT;
+		}
+
+	} // setSwiHeight()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -268,12 +348,16 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 
 			$this->swi_y = $rs->getInt($startcol + 4);
 
+			$this->swi_width = $rs->getInt($startcol + 5);
+
+			$this->swi_height = $rs->getInt($startcol + 6);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 5; // 5 = SwimlanesElementsPeer::NUM_COLUMNS - SwimlanesElementsPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 7; // 7 = SwimlanesElementsPeer::NUM_COLUMNS - SwimlanesElementsPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating SwimlanesElements object", $e);
@@ -491,6 +575,12 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 			case 4:
 				return $this->getSwiY();
 				break;
+			case 5:
+				return $this->getSwiWidth();
+				break;
+			case 6:
+				return $this->getSwiHeight();
+				break;
 			default:
 				return null;
 				break;
@@ -516,6 +606,8 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 			$keys[2] => $this->getSwiType(),
 			$keys[3] => $this->getSwiX(),
 			$keys[4] => $this->getSwiY(),
+			$keys[5] => $this->getSwiWidth(),
+			$keys[6] => $this->getSwiHeight(),
 		);
 		return $result;
 	}
@@ -562,6 +654,12 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 			case 4:
 				$this->setSwiY($value);
 				break;
+			case 5:
+				$this->setSwiWidth($value);
+				break;
+			case 6:
+				$this->setSwiHeight($value);
+				break;
 		} // switch()
 	}
 
@@ -590,6 +688,8 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[2], $arr)) $this->setSwiType($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setSwiX($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setSwiY($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setSwiWidth($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setSwiHeight($arr[$keys[6]]);
 	}
 
 	/**
@@ -606,6 +706,8 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(SwimlanesElementsPeer::SWI_TYPE)) $criteria->add(SwimlanesElementsPeer::SWI_TYPE, $this->swi_type);
 		if ($this->isColumnModified(SwimlanesElementsPeer::SWI_X)) $criteria->add(SwimlanesElementsPeer::SWI_X, $this->swi_x);
 		if ($this->isColumnModified(SwimlanesElementsPeer::SWI_Y)) $criteria->add(SwimlanesElementsPeer::SWI_Y, $this->swi_y);
+		if ($this->isColumnModified(SwimlanesElementsPeer::SWI_WIDTH)) $criteria->add(SwimlanesElementsPeer::SWI_WIDTH, $this->swi_width);
+		if ($this->isColumnModified(SwimlanesElementsPeer::SWI_HEIGHT)) $criteria->add(SwimlanesElementsPeer::SWI_HEIGHT, $this->swi_height);
 
 		return $criteria;
 	}
@@ -667,6 +769,10 @@ abstract class BaseSwimlanesElements extends BaseObject  implements Persistent {
 		$copyObj->setSwiX($this->swi_x);
 
 		$copyObj->setSwiY($this->swi_y);
+
+		$copyObj->setSwiWidth($this->swi_width);
+
+		$copyObj->setSwiHeight($this->swi_height);
 
 
 		$copyObj->setNew(true);

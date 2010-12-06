@@ -24,7 +24,7 @@ abstract class BaseSwimlanesElementsPeer {
 	const CLASS_DEFAULT = 'classes.model.SwimlanesElements';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 5;
+	const NUM_COLUMNS = 7;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -45,6 +45,12 @@ abstract class BaseSwimlanesElementsPeer {
 	/** the column name for the SWI_Y field */
 	const SWI_Y = 'SWIMLANES_ELEMENTS.SWI_Y';
 
+	/** the column name for the SWI_WIDTH field */
+	const SWI_WIDTH = 'SWIMLANES_ELEMENTS.SWI_WIDTH';
+
+	/** the column name for the SWI_HEIGHT field */
+	const SWI_HEIGHT = 'SWIMLANES_ELEMENTS.SWI_HEIGHT';
+
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
 
@@ -56,10 +62,10 @@ abstract class BaseSwimlanesElementsPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('SwiUid', 'ProUid', 'SwiType', 'SwiX', 'SwiY', ),
-		BasePeer::TYPE_COLNAME => array (SwimlanesElementsPeer::SWI_UID, SwimlanesElementsPeer::PRO_UID, SwimlanesElementsPeer::SWI_TYPE, SwimlanesElementsPeer::SWI_X, SwimlanesElementsPeer::SWI_Y, ),
-		BasePeer::TYPE_FIELDNAME => array ('SWI_UID', 'PRO_UID', 'SWI_TYPE', 'SWI_X', 'SWI_Y', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+		BasePeer::TYPE_PHPNAME => array ('SwiUid', 'ProUid', 'SwiType', 'SwiX', 'SwiY', 'SwiWidth', 'SwiHeight', ),
+		BasePeer::TYPE_COLNAME => array (SwimlanesElementsPeer::SWI_UID, SwimlanesElementsPeer::PRO_UID, SwimlanesElementsPeer::SWI_TYPE, SwimlanesElementsPeer::SWI_X, SwimlanesElementsPeer::SWI_Y, SwimlanesElementsPeer::SWI_WIDTH, SwimlanesElementsPeer::SWI_HEIGHT, ),
+		BasePeer::TYPE_FIELDNAME => array ('SWI_UID', 'PRO_UID', 'SWI_TYPE', 'SWI_X', 'SWI_Y', 'SWI_WIDTH', 'SWI_HEIGHT', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
 	);
 
 	/**
@@ -69,10 +75,10 @@ abstract class BaseSwimlanesElementsPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('SwiUid' => 0, 'ProUid' => 1, 'SwiType' => 2, 'SwiX' => 3, 'SwiY' => 4, ),
-		BasePeer::TYPE_COLNAME => array (SwimlanesElementsPeer::SWI_UID => 0, SwimlanesElementsPeer::PRO_UID => 1, SwimlanesElementsPeer::SWI_TYPE => 2, SwimlanesElementsPeer::SWI_X => 3, SwimlanesElementsPeer::SWI_Y => 4, ),
-		BasePeer::TYPE_FIELDNAME => array ('SWI_UID' => 0, 'PRO_UID' => 1, 'SWI_TYPE' => 2, 'SWI_X' => 3, 'SWI_Y' => 4, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+		BasePeer::TYPE_PHPNAME => array ('SwiUid' => 0, 'ProUid' => 1, 'SwiType' => 2, 'SwiX' => 3, 'SwiY' => 4, 'SwiWidth' => 5, 'SwiHeight' => 6, ),
+		BasePeer::TYPE_COLNAME => array (SwimlanesElementsPeer::SWI_UID => 0, SwimlanesElementsPeer::PRO_UID => 1, SwimlanesElementsPeer::SWI_TYPE => 2, SwimlanesElementsPeer::SWI_X => 3, SwimlanesElementsPeer::SWI_Y => 4, SwimlanesElementsPeer::SWI_WIDTH => 5, SwimlanesElementsPeer::SWI_HEIGHT => 6, ),
+		BasePeer::TYPE_FIELDNAME => array ('SWI_UID' => 0, 'PRO_UID' => 1, 'SWI_TYPE' => 2, 'SWI_X' => 3, 'SWI_Y' => 4, 'SWI_WIDTH' => 5, 'SWI_HEIGHT' => 6, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
 	);
 
 	/**
@@ -182,6 +188,10 @@ abstract class BaseSwimlanesElementsPeer {
 		$criteria->addSelectColumn(SwimlanesElementsPeer::SWI_X);
 
 		$criteria->addSelectColumn(SwimlanesElementsPeer::SWI_Y);
+
+		$criteria->addSelectColumn(SwimlanesElementsPeer::SWI_WIDTH);
+
+		$criteria->addSelectColumn(SwimlanesElementsPeer::SWI_HEIGHT);
 
 	}
 

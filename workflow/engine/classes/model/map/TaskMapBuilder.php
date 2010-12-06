@@ -88,6 +88,10 @@ class TaskMapBuilder {
 
 		$tMap->addColumn('TAS_ASSIGN_VARIABLE', 'TasAssignVariable', 'string', CreoleTypes::VARCHAR, true, 100);
 
+		$tMap->addColumn('TAS_MI_INSTANCE_VARIABLE', 'TasMiInstanceVariable', 'string', CreoleTypes::VARCHAR, true, 100);
+
+		$tMap->addColumn('TAS_MI_COMPLETE_VARIABLE', 'TasMiCompleteVariable', 'string', CreoleTypes::VARCHAR, true, 100);
+
 		$tMap->addColumn('TAS_ASSIGN_LOCATION', 'TasAssignLocation', 'string', CreoleTypes::VARCHAR, true, 20);
 
 		$tMap->addColumn('TAS_ASSIGN_LOCATION_ADHOC', 'TasAssignLocationAdhoc', 'string', CreoleTypes::VARCHAR, true, 20);
@@ -130,7 +134,15 @@ class TaskMapBuilder {
 
 		$tMap->addColumn('TAS_POSY', 'TasPosy', 'int', CreoleTypes::INTEGER, true, null);
 
+		$tMap->addColumn('TAS_WIDTH', 'TasWidth', 'int', CreoleTypes::INTEGER, true, null);
+
+		$tMap->addColumn('TAS_HEIGHT', 'TasHeight', 'int', CreoleTypes::INTEGER, true, null);
+
 		$tMap->addColumn('TAS_COLOR', 'TasColor', 'string', CreoleTypes::VARCHAR, true, 32);
+
+		$tMap->addColumn('TAS_EVN_UID', 'TasEvnUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
+		$tMap->addColumn('TAS_BOUNDARY', 'TasBoundary', 'string', CreoleTypes::VARCHAR, true, 32);
 
 		$tMap->addValidator('TAS_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'NORMAL|ADHOC|SUBPROCESS', 'Please select a valid value for TAS_TYPE.');
 
@@ -138,7 +150,7 @@ class TaskMapBuilder {
 
 		$tMap->addValidator('TAS_ALERT', 'validValues', 'propel.validator.ValidValuesValidator', 'TRUE|FALSE', 'Please select a valid value for TAS_ALERT.');
 
-		$tMap->addValidator('TAS_ASSIGN_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE', 'Please select a valid value for TAS_ASSIGN_TYPE.');
+		$tMap->addValidator('TAS_ASSIGN_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE|STATIC_MI|CANCEL_MI', 'Please select a valid value for TAS_ASSIGN_TYPE.');
 
 		$tMap->addValidator('TAS_ASSIGN_LOCATION', 'validValues', 'propel.validator.ValidValuesValidator', 'TRUE|FALSE', 'Please select a valid value for TAS_ASSIGN_LOCATION.');
 
