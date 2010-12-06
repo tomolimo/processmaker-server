@@ -29,15 +29,6 @@ if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVAN
   die;
 }
 
-if(class_exists('pmLicenseManager')){
-    	$pmLicenseManagerO =& pmLicenseManager::getSingleton();
-    	$expireIn=$pmLicenseManagerO->getExpireIn();
-    	if($expireIn<=0){
-				G::header("location: calendarEdit?id=00000000000000000000000000000001");
-			}
-		}else{
-			G::header("location: calendarEdit?id=00000000000000000000000000000001");
-		}
 $G_MAIN_MENU = 'processmaker';
 $G_SUB_MENU = 'setup';
 $G_ID_MENU_SELECTED = 'SETUP';

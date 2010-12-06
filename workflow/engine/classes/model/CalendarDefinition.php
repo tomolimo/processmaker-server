@@ -28,24 +28,16 @@ class CalendarDefinition extends BaseCalendarDefinition {
     $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UPDATE_DATE );
     $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_DESCRIPTION );
     $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_STATUS );
+    $Criteria->addAsColumn('DELETABLE', "IF (CALENDAR_UID <> '00000000000000000000000000000001', '".G::LoadTranslation('ID_DELETE')."','') ");
     // Note: This list doesn't show deleted items (STATUS = DELETED)
     if ($onlyActive) { // Show only active. Used on assignment lists
       $Criteria->add ( calendarDefinitionPeer::CALENDAR_STATUS, "ACTIVE", CRITERIA::EQUAL );
     } else { // Show Active and Inactive calendars. USed in main list
       $Criteria->add ( calendarDefinitionPeer::CALENDAR_STATUS, array ("ACTIVE", "INACTIVE" ), CRITERIA::IN );
     }
-    if(class_exists('pmLicenseManager')){
-      $pmLicenseManagerO =& pmLicenseManager::getSingleton();
-      $expireIn=$pmLicenseManagerO->getExpireIn();
-      if($expireIn>0){
-        $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "xx", CRITERIA::NOT_EQUAL );
-      }else{
-        $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "00000000000000000000000000000001", CRITERIA::EQUAL );
-      }
-    }else{
-      $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "00000000000000000000000000000001", CRITERIA::EQUAL );
 
-    }
+    $Criteria->add ( calendarDefinitionPeer::CALENDAR_UID, "xx", CRITERIA::NOT_EQUAL );
+
     if (! $arrayMode) {
       return $Criteria;
     } else {
@@ -67,6 +59,19 @@ class CalendarDefinition extends BaseCalendarDefinition {
   function getCalendarInfo($CalendarUid) {
     //if exists the row in the database propel will update it, otherwise will insert.
     $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+    
+    $defaultCalendar ['CALENDAR_UID'] = "00000000000000000000000000000001";
+      $defaultCalendar ['CALENDAR_NAME'] = "Default";
+      $defaultCalendar ['CALENDAR_CREATE_DATE'] = date ( "Y-m-d" );
+      $defaultCalendar ['CALENDAR_UPDATE_DATE'] = date ( "Y-m-d" );
+      $defaultCalendar ['CALENDAR_DESCRIPTION'] = "Default";
+      $defaultCalendar ['CALENDAR_STATUS'] = "ACTIVE";
+      $defaultCalendar ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
+      $defaultCalendar ['CALENDAR_WORK_DAYS'] = explode ( "|", "1|2|3|4|5" );
+      $defaultCalendar ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_DAY'] = 7;
+      $defaultCalendar ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_START'] = "09:00";
+      $defaultCalendar ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_END'] = "17:00";
+      $defaultCalendar ['HOLIDAY'] = array ();
 
     if ((is_object ( $tr ) && get_class ( $tr ) == 'CalendarDefinition')) {
       $fields ['CALENDAR_UID'] = $tr->getCalendarUid ();
@@ -78,18 +83,7 @@ class CalendarDefinition extends BaseCalendarDefinition {
       $fields ['CALENDAR_WORK_DAYS'] = $tr->getCalendarWorkDays ();
       $fields ['CALENDAR_WORK_DAYS_A'] = explode ( "|", $tr->getCalendarWorkDays () );
     } else {
-      $fields ['CALENDAR_UID'] = "00000000000000000000000000000001";
-      $fields ['CALENDAR_NAME'] = "Default";
-      $fields ['CALENDAR_CREATE_DATE'] = date ( "Y-m-d" );
-      $fields ['CALENDAR_UPDATE_DATE'] = date ( "Y-m-d" );
-      $fields ['CALENDAR_DESCRIPTION'] = "Default";
-      $fields ['CALENDAR_STATUS'] = "ACTIVE";
-      $fields ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
-      $fields ['CALENDAR_WORK_DAYS'] = explode ( "|", "1|2|3|4|5" );
-      $fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_DAY'] = 7;
-      $fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_START'] = "09:00";
-      $fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_END'] = "17:00";
-      $fields ['HOLIDAY'] = array ();
+      $fields=$defaultCalendar;
       $this->saveCalendarInfo ( $fields );
       $fields ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
       $fields ['CALENDAR_WORK_DAYS_A'] = explode ( "|", "1|2|3|4|5" );
@@ -102,9 +96,56 @@ class CalendarDefinition extends BaseCalendarDefinition {
     $CalendarHolidaysObj = new CalendarHolidays ( );
     $CalendarHolidays = $CalendarHolidaysObj->getCalendarHolidays ( $CalendarUid );
     $fields ['HOLIDAY'] = $CalendarHolidays;
+    
+    $fields=$this->validateCalendarInfo($fields, $defaultCalendar);
 
     return $fields;
 
+  }
+  function validateCalendarInfo($fields,$defaultCalendar){
+    try {
+      //Validate if Working days are Correct
+      //Minimun 3 ?
+      $workingDays=explode ( "|", $fields['CALENDAR_WORK_DAYS'] );
+      if(count($workingDays)<3){
+        throw (new Exception ( "You must define at least 3 Working Days!" ));        
+      }
+      //Validate that all Working Days have Bussines Hours      
+      if(count($fields ['BUSINESS_DAY'])<1){
+        throw (new Exception ( "You must define at least one Business Day for all days" ));
+      }
+      $workingDaysOK=array();
+      foreach($workingDays as $key => $day){
+        $workingDaysOK[$day]=false;
+      }
+      $sw_all=false;
+      foreach($fields ['BUSINESS_DAY'] as $keyB => $businessHours){
+       if(($businessHours['CALENDAR_BUSINESS_DAY']==7)){
+         $sw_all=true;
+       }elseif((in_array($workingDays,$businessHours['CALENDAR_BUSINESS_DAY']))){
+        $workingDaysOK[$businessHours['CALENDAR_BUSINESS_DAY']]=true;
+       }
+      }
+      $sw_days=true;
+      
+      foreach($workingDaysOK as $day =>$sw_day){
+        $sw_days=$sw_days && $sw_day;
+      }
+      if(!($sw_all || $sw_days)){
+        throw (new Exception ( "Not all working days have their correspondent business day" ));
+      }
+      //Validate Holidays
+      
+    return $fields;  
+    } catch (Exception $e) {
+      //print $e->getMessage();
+      $this->addCalendarLog("!!!!!!! BAD CALENDAR DEFINITION. ".$e->getMessage());
+      $defaultCalendar ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
+      $defaultCalendar ['CALENDAR_WORK_DAYS_A'] = explode ( "|", "1|2|3|4|5" );
+      return $defaultCalendar;
+    }
+    
+    
   }
   function saveCalendarInfo($aData) {
     $CalendarUid = $aData ['CALENDAR_UID'];
@@ -168,12 +209,12 @@ class CalendarDefinition extends BaseCalendarDefinition {
     //return array ( 'codError' => 0, 'rowsAffected' => $res, 'message' => '');
 
 
-  //to do: uniform  coderror structures for all classes
+    //to do: uniform  coderror structures for all classes
 
 
-  //if ( $res['codError'] < 0 ) {
-  //  G::SendMessageText ( $res['message'] , 'error' );
-  //}
+    //if ( $res['codError'] < 0 ) {
+    //  G::SendMessageText ( $res['message'] , 'error' );
+    //}
 
 
   }
@@ -210,12 +251,12 @@ class CalendarDefinition extends BaseCalendarDefinition {
     //return array ( 'codError' => 0, 'rowsAffected' => $res, 'message' => '');
 
 
-  //to do: uniform  coderror structures for all classes
+    //to do: uniform  coderror structures for all classes
 
 
-  //if ( $res['codError'] < 0 ) {
-  //  G::SendMessageText ( $res['message'] , 'error' );
-  //}
+    //if ( $res['codError'] < 0 ) {
+    //  G::SendMessageText ( $res['message'] , 'error' );
+    //}
 
 
   }
@@ -226,64 +267,36 @@ class CalendarDefinition extends BaseCalendarDefinition {
     $calendarUid = "00000000000000000000000000000001";
     $calendarOwner = "DEFAULT";
 
-    //Try to load a User Calendar if exist
-    $objectID = $userUid;
-    $Criteria->clearSelectColumns ();
+    //Load User,Task and Process calendars (if exist)
     $Criteria->addSelectColumn ( CalendarAssignmentsPeer::CALENDAR_UID );
     $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_UID );
     $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_TYPE );
-    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, $objectID, CRITERIA::EQUAL );
-    if (CalendarAssignmentsPeer::doCount ( $Criteria ) > 0) {
-      $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
-      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-      $oDataset->next ();
-      $aRow = $oDataset->getRow ();
-      $calendarUid = $aRow ['CALENDAR_UID'];
-      $calendarOwner = "USER";
-    }
-
-    //Try to load a Process Calendar if exist
-    $objectID = $proUid;
-    $Criteria->clearSelectColumns ();
-    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::CALENDAR_UID );
-    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_UID );
-    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_TYPE );
-    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, $objectID, CRITERIA::EQUAL );
-    if (CalendarAssignmentsPeer::doCount ( $Criteria ) > 0) {
-      $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
-      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-      $oDataset->next ();
-      $aRow = $oDataset->getRow ();
-      $calendarUid = $aRow ['CALENDAR_UID'];
-      $calendarOwner = "PROCESS";
-    }
-
-    //Try to load a Task Calendar if exist
-    $objectID = $tasUid;
-    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::CALENDAR_UID );
-    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_UID );
-    $Criteria->addSelectColumn ( CalendarAssignmentsPeer::OBJECT_TYPE );
-    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, $objectID, CRITERIA::EQUAL );
-    $Criteria->clearSelectColumns ();
-    if (CalendarAssignmentsPeer::doCount ( $Criteria ) > 0) {
-      $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
-      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
-      $oDataset->next ();
-      $aRow = $oDataset->getRow ();
-      $calendarUid = $aRow ['CALENDAR_UID'];
-      $calendarOwner = "TASK";
-    }
-
-    if(class_exists('pmLicenseManager')){
-      $pmLicenseManagerO =& pmLicenseManager::getSingleton();
-      $expireIn=$pmLicenseManagerO->getExpireIn();
-      if($expireIn>0){
-        $calendarUid=$calendarUid;
-      }else{
-        $calendarUid = "00000000000000000000000000000001";
+    $Criteria->add ( CalendarAssignmentsPeer::OBJECT_UID, array($userUid, $proUid, $tasUid), CRITERIA::IN );
+    $oDataset = CalendarAssignmentsPeer::doSelectRS ( $Criteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $calendarArray=array();
+    while(is_array($aRow = $oDataset->getRow ())){
+      if($aRow['OBJECT_UID']==$userUid){
+        $calendarArray['USER']=$aRow ['CALENDAR_UID'];
       }
-    }else{
-      $calendarUid = "00000000000000000000000000000001";
+      if($aRow['OBJECT_UID']==$proUid){
+        $calendarArray['PROCESS']=$aRow ['CALENDAR_UID'];
+      }
+      if($aRow['OBJECT_UID']==$tasUid){
+        $calendarArray['TASK']=$aRow ['CALENDAR_UID'];
+      }
+      $oDataset->next ();
+    }
+    if(isset($calendarArray['USER'])){
+      $calendarUid = $calendarArray['USER'];
+      $calendarOwner = "USER";
+    }elseif (isset($calendarArray['PROCESS'])){
+      $calendarUid = $calendarArray['PROCESS'];
+      $calendarOwner = "PROCESS";
+    }elseif (isset($calendarArray['TASK'])){
+      $calendarUid = $calendarArray['TASK'];
+      $calendarOwner = "TASK";
     }
 
     //print "<h1>$calendarUid</h1>";
