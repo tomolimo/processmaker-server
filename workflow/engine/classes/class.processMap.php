@@ -4005,5 +4005,254 @@ class processMap {
   }
 
 }
-
 // processMap
+/****************************All Functions for New ProcessMap******************************************************/
+  /*
+  * Edit the Process Map information
+  * @param string $sProcessUID
+  * @return boolean
+  */
+
+  function editProcessNew($sProcessUID)
+  {
+    try {
+      $oProcess = new Process ( );
+      if (! is_null ( $oProcess )) {
+        $calendar    = new Calendar ( );
+        $calendarObj = $calendar->getCalendarList ( true, true );
+
+        global $_DBArray;
+
+        $_DBArray ['availableCalendars'] = $calendarObj ['array'];
+
+        $_SESSION ['_DBArray'] = $_DBArray;
+        $aFields = $oProcess->load ( $sProcessUID );
+        $aFields ['THETYPE'] = 'UPDATE';
+        $calendarInfo = $calendar->getCalendarFor ( $sProcessUID, $sProcessUID, $sProcessUID );
+        //If the function returns a DEFAULT calendar it means that this object doesn't have assigned any calendar
+        $aFields ['PRO_CALENDAR'] = $calendarInfo ['CALENDAR_APPLIED'] != 'DEFAULT' ? $calendarInfo ['CALENDAR_UID'] : "";
+
+        return $aFields;
+      } else {
+        throw (new Exception ( 'This row doesn\'t exists!' ));
+      }
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+ /*
+  * Load all categories
+  * @return array
+  */
+
+  function loadProcessCategory()
+  {
+    require_once ( "classes/model/ProcessCategory.php" );
+    $Criteria = new Criteria('workflow');
+    $Criteria->clearSelectColumns ( );
+
+    $Criteria->addSelectColumn (  ProcessCategoryPeer::CATEGORY_UID );
+    $Criteria->addSelectColumn (  ProcessCategoryPeer::CATEGORY_PARENT );
+    $Criteria->addSelectColumn (  ProcessCategoryPeer::CATEGORY_NAME );
+    $Criteria->addSelectColumn (  ProcessCategoryPeer::CATEGORY_ICON );
+
+    $Criteria->add (  processCategoryPeer::CATEGORY_UID, "xx" , CRITERIA::NOT_EQUAL );
+    $oDataset = processCategoryPeer::doSelectRS ( $Criteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    while ( $aRow = $oDataset->getRow () ) {
+      $aProcessCategory[] = $aRow;
+      $oDataset->next ();
+    }
+
+    return $aProcessCategory;
+  }
+
+   /*
+  * Save the tasks Width and Height
+  * @param string $sTaskUID
+  * @param integer $iX
+  * @param integer $iY
+  * @return integer
+  */
+  function saveTaskCordinates($sTaskUID = '', $iX = 110, $iY = 60)
+  {
+    try {
+      $oTask   = new Task ( );
+      $aFields = $oTask->load ( $sTaskUID );
+
+      $aFields ['TAS_UID']    = $sTaskUID;
+      $aFields ['TAS_WIDTH']  = $iX;
+      $aFields ['TAS_HEIGHT'] = $iY;
+      return $oTask->update ( $aFields );
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+   /*
+  * Save the Annotation Width and Height
+  * @param string $sSwimLaneUID
+  * @param integer $iX
+  * @param integer $iY
+  * @return integer
+  */
+  function saveAnnotationCordinates($sSwimLaneUID = '', $iX = 110, $iY = 60)
+  {
+    try {
+      $oSL   = new SwimlanesElements( );
+      $aFields = $oSL->load ( $sSwimLaneUID );
+
+      $aFields ['SWI_UID']    = $sSwimLaneUID;
+      $aFields ['SWI_WIDTH']  = $iX;
+      $aFields ['SWI_HEIGHT'] = $iY;
+      return $oSL->update ( $aFields );
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+   /** get all the Active process
+   *
+   * SELECT PROCESS.PRO_UID AS UID, CONTENT.CON_VALUE AS VALUE FROM PROCESS, CONTENT
+	WHERE (PROCESS.PRO_UID=CONTENT.CON_ID AND PROCESS.PRO_STATUS!='DISABLED' AND CONTENT.CON_CATEGORY='PRO_TITLE' AND CONTENT.CON_LANG='en')
+	ORDER BY CONTENT.CON_VALUE
+	]]>
+   */
+  function getAllProcesses()
+  {
+
+    $aProcesses    = array ();
+    //$aProcesses [] = array ('PRO_UID' => 'char', 'PRO_TITLE' => 'char');
+    $oCriteria     = new Criteria ( 'workflow' );
+    $oCriteria->addSelectColumn ( ProcessPeer::PRO_UID );
+    $oCriteria->add ( ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL );
+    $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+
+    $oDataset->next ();
+    $oProcess = new Process ( );
+    while ( $aRow = $oDataset->getRow () ) {
+      $aProcess = $oProcess->load ( $aRow ['PRO_UID'] );
+      $aProcesses [] = array ('value' => $aProcess ['PRO_UID'], 'name' => $aProcess ['PRO_TITLE'] );
+      $oDataset->next ();
+    }
+    $oJSON = new Services_JSON ( );
+    return $oJSON->encode ( $aProcesses);
+  }
+
+  /*
+  * Return the steps list criteria object
+  * @param string $sTaskUID
+  * @return array
+  *
+  */
+  function getDynaformList($sTaskUID = '')
+  {
+    try {
+      //call plugin
+      $oPluginRegistry = &PMPluginRegistry::getSingleton ();
+      $externalSteps = $oPluginRegistry->getSteps ();
+
+      $aSteps = array ();
+      //$aSteps [] = array ('STEP_TITLE' => 'char', 'STEP_UID' => 'char', 'STEP_TYPE_OBJ' => 'char', 'STEP_CONDITION' => 'char', 'STEP_POSITION' => 'integer' );
+      $oCriteria = new Criteria ( 'workflow' );
+      $oCriteria->add ( StepPeer::TAS_UID, $sTaskUID );
+      $oCriteria->addAscendingOrderByColumn ( StepPeer::STEP_POSITION );
+      $oDataset = StepPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      while ( $aRow = $oDataset->getRow () ) {
+        $urlEdit = '';
+        $linkEditValue = '';
+
+        switch ($aRow ['STEP_TYPE_OBJ']) {
+          case 'DYNAFORM' :
+            $oDynaform = new Dynaform ( );
+            $aFields = $oDynaform->load ( $aRow ['STEP_UID_OBJ'] );
+            $sTitle = $aFields ['DYN_TITLE'];
+            $DYN_UID = $aFields ['DYN_UID'];
+            break;
+        }
+        $aSteps [] = array ('name' => $sTitle, 'value' => $DYN_UID);
+        $oDataset->next ();
+      }
+      return $aSteps;
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+   function listNewWebEntry($sProcessUID,$sEventUID)
+  {
+    try {
+      global $G_PUBLISH;
+      global $G_FORM;
+      $G_PUBLISH = new Publisher ( );
+
+      require_once 'classes/model/Event.php';
+      $oEvent = new Event();
+      $arlink = '';
+      $oEvent = EventPeer::retrieveByPK($sEventUID);
+      if (!is_null($oEvent)) {
+      $oData = $oEvent->load($sEventUID);
+
+      if($oData['EVN_ACTION'] != '' && $oData['EVN_ACTION'] != 'WEB_ENTRY')
+      {
+          require_once 'classes/model/Content.php';
+          $oContent = new Content();
+          $dynTitle = $oContent->load('DYN_TITLE', '', $oData['EVN_ACTION'], 'en');
+
+          if (G::is_https ())
+            $http = 'https://';
+          else
+            $http = 'http://';
+
+          $link = $http . $_SERVER ['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sProcessUID . '/';
+
+          $row = array ();
+          $c   = 0;
+
+          /*
+          $oTask = new Task ( );
+          $TaskFields = $oTask->kgetassigType ( $sProcessUID , $tas='');
+          */
+          $TaskFields ['TAS_ASSIGN_TYPE'] = '';
+          //$row [] = array ('W_TITLE' => '', 'W_DELETE' => '', 'TAS_ASSIGN_TYPE' => $TaskFields ['TAS_ASSIGN_TYPE'] );
+
+          if (is_dir ( PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $sProcessUID )) {
+            $dir = opendir ( PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $sProcessUID );
+            $dynTitle = str_replace ( ' ', '_', str_replace ( '/', '_', $dynTitle ) );
+            $alink = $link . $dynTitle.'.php';
+            $arlink     = "<a href='" . $alink . "' target='blank'><font color='#9999CC'>" . $alink . "</font></a>";
+          }
+        }
+      }
+     $row []     = array ('W_LINK' => $arlink);
+     $oJSON = new Services_JSON ( );
+     return $oJSON->encode ($row);
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+  /**
+   * webEntry_new
+   *
+   * @param   string     $sProcessUID
+   * @return  boolean    true
+   * @throw   Exception  $oError
+   */
+  function webEntry_new($sProcessUID)
+  {
+    try {
+      global $G_PUBLISH;
+      $G_PUBLISH = new Publisher ( );
+      $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'dynaforms/dynaforms_WebEntry', '', array ('PRO_UID' => $sProcessUID, 'LANG' => SYS_LANG ) );
+      G::RenderPage ( 'publish', 'raw' );
+      return true;
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
