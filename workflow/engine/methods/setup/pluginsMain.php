@@ -32,7 +32,8 @@ $oHeadPublisher =& headPublisher::getSingleton();
     'ID_CONFIGURE', 'ID_STATUS', 'ID_DELETE', 'ID_IMPORT', 'ID_SELECT',
     'ID_STATUS', 'ID_ACTIVATE', 'ID_DEACTIVATE',
     'ID_SELECT', 'ID_NO_SELECTION_WARNING', 'ID_MSG_REMOVE_PLUGIN',
-    'ID_TITLE', 'ID_VERSION', 'ID_STATUS', 'ID_TITLE', 'ID_VERSION', 'ID_DESCRIPTION', 'ID_STATUS'
+    'ID_TITLE', 'ID_VERSION', 'ID_STATUS', 'ID_TITLE', 'ID_VERSION', 'ID_DESCRIPTION', 
+    'ID_STATUS', 'ID_PLUGIN_CANT_DELETE'
   ));
   $oHeadPublisher->assign('TRANSLATIONS', $translations);
   G::RenderPage('publish', 'extJs');
