@@ -29,7 +29,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             text: 'New Dynaform',
             iconCls: 'application_add',
             handler: function () {
-                
+
             }
   });
 
@@ -299,7 +299,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             triggerAction:  'all',
                             forceSelection: true,
                             fieldLabel:     'Create from a PM Table',
-                            name:           'ADD_TABLE',
+                            //name:           'ADD_TABLE',
                             displayField:   'ADD_TAB_NAME',
                             valueField:     'ADD_TAB_UID',
                             value        : '---------------------------',
@@ -317,11 +317,17 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                                   }
                                 });*/
                                 Ext.getCmp("fieldsGrid").show();
-                                 
+                                Ext.getCmp("pmTable").setValue(record.data.ADD_TAB_UID);
+
                                 this.setValue(record.data[this.valueField || this.displayField]);
                                 this.collapse();
                              }
                          },{
+                            xtype:'hidden',//<--hidden field
+                            name:'ADD_TABLE',
+                            id  :'pmTable'
+                         },
+                         {
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
                             name      : 'DYN_TITLE',
@@ -353,14 +359,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             ]
 
     });
-    
+
  var gridWindow = new Ext.Window({
         title: 'Dynaform',
         collapsible: false,
         maximizable: true,
         width: 600,
         //autoHeight: true,
-        height: 500,
+        height: 450,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -379,32 +385,27 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     }
                 else
                     {
-                        //sAction   = getForm.ADD_TABLE;
-                        var aFields = new Array();
+                        var sAddTab     = getForm.ADD_TABLE;
                         var aStoreFields  = tablesFieldsStore.data.items;
                         var aData = '';
+                        //Creating string in JSON format
                         for(var i=0;i<aStoreFields.length;i++)
                             {
-                                /*aFields[i] = new Array();
-                                aFields[i] = aStoreFields[i].data.FLD_NAME;
-                                aFields[i] = aStoreFields[i].data.PRO_VARIABLE;*/
                                 var fName = aStoreFields[i].data.FLD_NAME;
                                 var pVar  = aStoreFields[i].data.PRO_VARIABLE;
-                                aData = '"FLD_NAME":"'+fName+'","PRO_VARIABLE":"'+pVar+'"';
+                                aData += '"FLD_NAME":"'+fName+'","PRO_VARIABLE":"'+pVar+'",';
                             }
-                        var sData = '[' +aData+ ']';
-                        //var sFields = Ext.util.JSON.encode(aData);
+                        var sData = '{'+aData.slice(0,aData.length-1)+'}';
                         sTitle    = getForm.DYN_TITLE[1];
                         sDesc     = getForm.DYN_DESCRIPTION[1];
-                        var sAddTab     = getForm.ADD_TABLE;
                     }
-                
-                
+
+
                 Ext.Ajax.request({
                   url   : '../dynaforms/dynaforms_Save.php',
                   method: 'POST',
                   params:{
-                      //ACTION        : sAction,
+                      ACTION          : sAction,
                       FIELDS          : sData,
                       ADD_TABLE       : sAddTab,
                       PRO_UID         : pro_uid,
