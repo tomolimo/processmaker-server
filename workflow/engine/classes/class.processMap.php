@@ -4004,7 +4004,6 @@ class processMap {
     }
   }
 
-}
 // processMap
 /****************************All Functions for New ProcessMap******************************************************/
   /*
@@ -4256,3 +4255,661 @@ class processMap {
       throw ($oError);
     }
   }
+
+  /*
+  * Users assigned to Tasks
+  * @param string $sProcessUID
+  * @param string $sTaskUID
+  * @return boolean
+  */
+  function usersExtList($sProcessUID = '', $sTaskUID = '')
+  {
+    try {
+      $oProcess = new Process ( );
+      $aFields  = $oProcess->load ( $sProcessUID );
+      $oTask    = new Task ( );
+      $aFields  = $oTask->load ( $sTaskUID );
+
+      $_SESSION ['iType'] = 1;
+
+      $aFields ['TASK']         = $sTaskUID;
+      $aFields ['TYPE']         = $_SESSION ['iType'];
+      $aFields ['OF_TO_ASSIGN'] = G::LoadTranslation ( 'ID_DE_ASSIGN' );
+      $aFields ['CONFIRM']      = G::LoadTranslation ( 'ID_MSG_CONFIRM_DEASIGN_USER_GROUP_MESSAGE' );
+      $aFields ['UIDS']         = "'0'";
+
+      $oTasks  = new Tasks ( );
+      $oGroups = new Groups ( );
+      $aAux1   = $oTasks->getGroupsOfTask ( $sTaskUID, $_SESSION ['iType'] );
+      foreach ( $aAux1 as $aGroup ) {
+        $aAux2 = $oGroups->getUsersOfGroup ( $aGroup ['GRP_UID'] );
+        foreach ( $aAux2 as $aUser ) {
+          $aFields ['UIDS'] .= ",'" . $aUser ['USR_UID'] . "'";
+        }
+      }
+      global $G_PUBLISH;
+      $G_PUBLISH = new Publisher ( );
+      $oTask = new Task ( );
+      $aTask = $oTask->load ( $sTaskUID );
+
+      $this->getExtTaskUsersCriteria ( $sTaskUID, $_SESSION ['iType'] );
+      return $_SESSION ['_DBArray']['taskUsers'];
+
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+  function getExtTaskUsersCriteria($sTaskUID = '', $iType = 1)
+  {
+    try {
+      $aUsers     = array ();
+      $aUsers []  = array ('LABEL' => 'char', 'TAS_UID' => 'char', 'USR_UID' => 'char', 'TU_TYPE' => 'integer', 'TU_RELATION' => 'integer' );
+      $sDelimiter = DBAdapter::getStringDelimiter ();
+      $oCriteria  = new Criteria ( 'workflow' );
+      $oCriteria->addAsColumn ( 'GRP_TITLE', 'C.CON_VALUE' );
+      $oCriteria->addSelectColumn ( TaskUserPeer::TAS_UID );
+      $oCriteria->addSelectColumn ( TaskUserPeer::USR_UID );
+      $oCriteria->addSelectColumn ( TaskUserPeer::TU_TYPE );
+      $oCriteria->addSelectColumn ( TaskUserPeer::TU_RELATION );
+      $oCriteria->addAlias ( 'C', 'CONTENT' );
+      $aConditions    = array ();
+      $aConditions [] = array (TaskUserPeer::USR_UID, 'C.CON_ID' );
+      $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'GRP_TITLE' . $sDelimiter );
+      $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+      $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+      $oCriteria->add ( TaskUserPeer::TAS_UID, $sTaskUID );
+      $oCriteria->add ( TaskUserPeer::TU_TYPE, $iType );
+      $oCriteria->add ( TaskUserPeer::TU_RELATION, 2 );
+      $oDataset = TaskUserPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $c = 0;
+      while ( $aRow = $oDataset->getRow () ) {
+        $c ++;
+        $oGroup  = new Groupwf ( );
+        $aFields = $oGroup->load ( $aRow ['USR_UID'] );
+        if ($aFields ['GRP_STATUS'] == 'ACTIVE') {
+          $oCriteria = new Criteria ( 'workflow' );
+          $oCriteria->addSelectColumn ( 'COUNT(*) AS MEMBERS_NUMBER' );
+          $oCriteria->add ( GroupUserPeer::GRP_UID, $aRow ['USR_UID'] );
+          $oDataset2 = GroupUserPeer::doSelectRS ( $oCriteria );
+          $oDataset2->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+          $oDataset2->next ();
+          $aRow2 = $oDataset2->getRow ();
+        } else {
+          $aRow2 ['GROUP_INACTIVE'] = '<strong>(' . G::LoadTranslation ( 'ID_GROUP_INACTIVE' ) . ')</strong>';
+        }
+        //$aUsers [] = array ('LABEL' => (! isset ( $aRow2 ['GROUP_INACTIVE'] ) ? $aRow ['GRP_TITLE'] . ' <a href="#" onclick="usersGroup(\'' . $aRow ['USR_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . (( int ) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation ( 'ID_USER' ) : G::LoadTranslation ( 'ID_USERS' )) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>' : $aRow ['GRP_TITLE'] . ' ' . $aRow2 ['GROUP_INACTIVE']), 'TAS_UID' => $aRow ['TAS_UID'], 'USR_UID' => $aRow ['USR_UID'], 'TU_TYPE' => $aRow ['TU_TYPE'], 'TU_RELATION' => $aRow ['TU_RELATION'] );
+        $aUsers [] = array ('LABEL' => (! isset ( $aRow2 ['GROUP_INACTIVE'] ) ? $aRow ['GRP_TITLE'] . ' <font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . (( int ) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation ( 'ID_USER' ) : G::LoadTranslation ( 'ID_USERS' )) . ')</strong></font><br /><div id="users' . $c . '" style="display: none"></div>' : $aRow ['GRP_TITLE'] . ' ' . $aRow2 ['GROUP_INACTIVE']), 'TAS_UID' => $aRow ['TAS_UID'], 'USR_UID' => $aRow ['USR_UID'], 'TU_TYPE' => $aRow ['TU_TYPE'], 'TU_RELATION' => $aRow ['TU_RELATION'] );
+        $oDataset->next ();
+      }
+      $oCriteria = new Criteria ( 'workflow' );
+      $oCriteria->addSelectColumn ( UsersPeer::USR_FIRSTNAME );
+      $oCriteria->addSelectColumn ( UsersPeer::USR_LASTNAME );
+      $oCriteria->addSelectColumn ( TaskUserPeer::TAS_UID );
+      $oCriteria->addSelectColumn ( TaskUserPeer::USR_UID );
+      $oCriteria->addSelectColumn ( TaskUserPeer::TU_TYPE );
+      $oCriteria->addSelectColumn ( TaskUserPeer::TU_RELATION );
+      $oCriteria->addJoin ( TaskUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN );
+      $oCriteria->add ( TaskUserPeer::TAS_UID, $sTaskUID );
+      $oCriteria->add ( TaskUserPeer::TU_TYPE, $iType );
+      $oCriteria->add ( TaskUserPeer::TU_RELATION, 1 );
+      $oDataset = TaskUserPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      while ( $aRow = $oDataset->getRow () ) {
+        $aUsers [] = array ('LABEL' => $aRow ['USR_FIRSTNAME'] . ' ' . $aRow ['USR_LASTNAME'], 'TAS_UID' => $aRow ['TAS_UID'], 'USR_UID' => $aRow ['USR_UID'], 'TU_TYPE' => $aRow ['TU_TYPE'], 'TU_RELATION' => $aRow ['TU_RELATION'] );
+        $oDataset->next ();
+      }
+      global $_DBArray;
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['taskUsers'] = $aUsers;
+      $_SESSION ['_DBArray']  = $_DBArray;
+      G::LoadClass ( 'ArrayPeer' );
+      $oCriteria = new Criteria ( 'dbarray' );
+      $oCriteria->setDBArrayTable ( 'taskUsers' );
+      $oCriteria->addDescendingOrderByColumn ( TaskUserPeer::TU_RELATION );
+      $oCriteria->addAscendingOrderByColumn ( 'LABEL' );
+      return $oCriteria;
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+
+  function getAvailableExtUsersCriteria($sTaskUID = '', $iType = 1)
+  {
+    try {
+      $oTasks = new Tasks ( );
+      $aAux   = $oTasks->getGroupsOfTask ( $sTaskUID, $iType );
+      $aUIDS1 = array ();
+      $aUIDS2 = array ();
+      foreach ( $aAux as $aGroup ) {
+        $aUIDS1 [] = $aGroup ['GRP_UID'];
+      }
+      $aAux = $oTasks->getUsersOfTask ( $sTaskUID, $iType );
+      foreach ( $aAux as $aUser ) {
+        $aUIDS2 [] = $aUser ['USR_UID'];
+      }
+      $aUsers     = array ();
+      //$aUsers []  = array ('LABEL' => 'char', 'TAS_UID' => 'char', 'USR_UID' => 'char', 'TU_TYPE' => 'integer', 'TU_RELATION' => 'integer' );
+      $sDelimiter = DBAdapter::getStringDelimiter ();
+      $oCriteria  = new Criteria ( 'workflow' );
+      $oCriteria->addSelectColumn ( GroupwfPeer::GRP_UID );
+      $oCriteria->addAsColumn ( 'GRP_TITLE', 'C.CON_VALUE' );
+      $oCriteria->addAlias ( 'C', 'CONTENT' );
+      $aConditions    = array ();
+      $aConditions [] = array (GroupwfPeer::GRP_UID, 'C.CON_ID' );
+      $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'GRP_TITLE' . $sDelimiter );
+      $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+      $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+      $oCriteria->add ( GroupwfPeer::GRP_STATUS, 'ACTIVE' );
+      $oCriteria->add ( GroupwfPeer::GRP_UID, $aUIDS1, Criteria::NOT_IN );
+      //$oCriteria->add(GroupwfPeer::GRP_UID, '', Criteria::NOT_EQUAL);
+      $oDataset = GroupwfPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $c = 0;
+      while ( $aRow = $oDataset->getRow () ) {
+        $c ++;
+        $oCriteria = new Criteria ( 'workflow' );
+        $oCriteria->addSelectColumn ( 'COUNT(*) AS MEMBERS_NUMBER' );
+        $oCriteria->add ( GroupUserPeer::GRP_UID, $aRow ['GRP_UID'] );
+        $oDataset2 = GroupUserPeer::doSelectRS ( $oCriteria );
+        $oDataset2->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+        $oDataset2->next ();
+        $aRow2     = $oDataset2->getRow ();
+        //$aUsers [] = array ('LABEL' => $aRow ['GRP_TITLE'] . ' <a href="#" onclick="usersGroup(\'' . $aRow ['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . (( int ) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation ( 'ID_USER' ) : G::LoadTranslation ( 'ID_USERS' )) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $aRow ['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2 );
+        $aUsers [] = array ('LABEL' => $aRow ['GRP_TITLE'] . ' <font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . (( int ) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation ( 'ID_USER' ) : G::LoadTranslation ( 'ID_USERS' )) . ')</strong></font><br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $aRow ['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2 );
+        $oDataset->next ();
+      }
+      $sDelimiter = DBAdapter::getStringDelimiter ();
+      $oCriteria  = new Criteria ( 'workflow' );
+      $oCriteria->addSelectColumn ( UsersPeer::USR_UID );
+      $oCriteria->addSelectColumn ( UsersPeer::USR_FIRSTNAME );
+      $oCriteria->addSelectColumn ( UsersPeer::USR_LASTNAME );
+      $oCriteria->add ( UsersPeer::USR_STATUS, 'ACTIVE' );
+      $oCriteria->add ( UsersPeer::USR_UID, $aUIDS2, Criteria::NOT_IN );
+      $oDataset = UsersPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      while ( $aRow = $oDataset->getRow () ) {
+        $aUsers [] = array ('LABEL' => $aRow ['USR_FIRSTNAME'] . ' ' . $aRow ['USR_LASTNAME'], 'TAS_UID' => $sTaskUID, 'USR_UID' => $aRow ['USR_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 1 );
+        $oDataset->next ();
+      }
+      global $_DBArray;
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['availableUsers'] = $aUsers;
+      $_SESSION ['_DBArray'] = $_DBArray;
+
+      //return $oCriteria;
+      return $_SESSION ['_DBArray']['availableUsers'];
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+  /*
+      * Return the Additional PM tables list created by user
+  * @return object
+  */
+  function getExtAdditionalTablesList($sTab_UID='')
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
+    $oCriteria->add(AdditionalTablesPeer::ADD_TAB_UID, '', Criteria::NOT_EQUAL);
+
+    $oDataset = AdditionalTablesPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    while ( $aRow = $oDataset->getRow () ) {
+        $aAdditionalTables [] = array ('ADD_TAB_UID' => $aRow ['ADD_TAB_UID'], 'ADD_TAB_NAME' => $aRow ['ADD_TAB_NAME'], 'ADD_TAB_DESCRIPTION' => $aRow ['ADD_TAB_DESCRIPTION']);
+        $oDataset->next ();
+      }
+     /*
+      $oAdditionalTables = new AdditionalTables();
+      $aData = $oAdditionalTables->load($sTab_UID, true);
+      $addTabName = $aData['ADD_TAB_NAME'];
+        foreach ($aData['FIELDS'] as $iRow => $aRow) {
+            if ($aRow['FLD_KEY'] == 1) {
+                $aFields['FIELDS'][$iRow] = $aRow;
+            }
+        }*/
+
+    return $aAdditionalTables;
+  }
+
+  /*
+  * Return the available building blocks list criteria object
+  * @param string $sProcessUID
+  * @param string $sTaskUID
+  * @return object
+  */
+  function getExtAvailableBBCriteria($sProcessUID = '', $sTaskUID = '')
+  {
+    try {
+      $oTasks = new Tasks ( );
+      $aSteps = $oTasks->getStepsOfTask ( $sTaskUID );
+      $sUIDs  = array ();
+      foreach ( $aSteps as $aStep ) {
+        $sUIDs [] = $aStep ['STEP_UID_OBJ'];
+      }
+      $aBB        = array ();
+      $aBB []     = array ('STEP_UID' => 'char', 'STEP_TITLE' => 'char', 'STEP_TYPE_OBJ' => 'char', 'STEP_MODE' => 'char','STEP_UID_OBJ' => 'char' );
+      $sDelimiter = DBAdapter::getStringDelimiter ();
+      $oCriteria  = new Criteria ( 'workflow' );
+      $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID );
+      $oCriteria->addAsColumn ( 'DYN_TITLE', 'C.CON_VALUE' );
+      $oCriteria->addAlias ( 'C', 'CONTENT' );
+      $aConditions    = array ();
+      $aConditions [] = array (DynaformPeer::DYN_UID, 'C.CON_ID' );
+      $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
+      $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+      $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+      $oCriteria->add ( DynaformPeer::PRO_UID, $sProcessUID );
+      $oCriteria->add ( DynaformPeer::DYN_UID, $sUIDs, Criteria::NOT_IN );
+      $oCriteria->add ( DynaformPeer::DYN_TYPE, 'xmlform' );
+      $oDataset = DynaformPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $i = 0;
+      while ( $aRow = $oDataset->getRow () ) {
+        $i ++;
+        /*$aBB [] = array ('STEP_UID' => $aRow ['DYN_UID'], 'STEP_TITLE' => $aRow ['DYN_TITLE'], 'STEP_TYPE_OBJ' => 'DYNAFORM', 'STEP_MODE' => '<select id="STEP_MODE_' . $aRow ['DYN_UID'] . '">
+                                            <option value="EDIT">Edit</option>
+                                            <option value="VIEW">View</option>
+                                           </select>' );*/
+        $aBB [] = array ('STEP_UID' => $aRow ['DYN_UID'], 'STEP_TITLE' => $aRow ['DYN_TITLE'], 'STEP_TYPE_OBJ' => 'DYNAFORM', 'STEP_MODE' => 'EDIT', 'STEP_UID_OBJ' => $aRow ['DYN_UID']);
+        $oDataset->next ();
+      }
+      $oCriteria = new Criteria ( 'workflow' );
+      $oCriteria->addSelectColumn ( InputDocumentPeer::INP_DOC_UID );
+      $oCriteria->addAsColumn ( 'INP_DOC_TITLE', 'C.CON_VALUE' );
+      $oCriteria->addAlias ( 'C', 'CONTENT' );
+      $aConditions    = array ();
+      $aConditions [] = array (InputDocumentPeer::INP_DOC_UID, 'C.CON_ID' );
+      $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter );
+      $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+      $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+      $oCriteria->add ( InputDocumentPeer::PRO_UID, $sProcessUID );
+      $oCriteria->add ( InputDocumentPeer::INP_DOC_UID, $sUIDs, Criteria::NOT_IN );
+      $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      while ( $aRow = $oDataset->getRow () ) {
+        $aBB [] = array ('STEP_UID' => $aRow ['INP_DOC_UID'], 'STEP_TITLE' => $aRow ['INP_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'INPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['INP_DOC_UID'] . '">' );
+        $oDataset->next ();
+      }
+      $oCriteria = new Criteria ( 'workflow' );
+      $oCriteria->addSelectColumn ( OutputDocumentPeer::OUT_DOC_UID );
+      $oCriteria->addAsColumn ( 'OUT_DOC_TITLE', 'C.CON_VALUE' );
+      $oCriteria->addAlias ( 'C', 'CONTENT' );
+      $aConditions    = array ();
+      $aConditions [] = array (OutputDocumentPeer::OUT_DOC_UID, 'C.CON_ID' );
+      $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TITLE' . $sDelimiter );
+      $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+      $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+      $oCriteria->add ( OutputDocumentPeer::PRO_UID, $sProcessUID );
+      $oCriteria->add ( OutputDocumentPeer::OUT_DOC_UID, $sUIDs, Criteria::NOT_IN );
+      $oDataset = OutputDocumentPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      while ( $aRow = $oDataset->getRow () ) {
+        $aBB [] = array ('STEP_UID' => $aRow ['OUT_DOC_UID'], 'STEP_TITLE' => $aRow ['OUT_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'OUTPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['OUT_DOC_UID'] . '">' );
+        $oDataset->next ();
+      }
+
+      //call plugin
+      $oPluginRegistry = &PMPluginRegistry::getSingleton ();
+      $externalSteps   = $oPluginRegistry->getSteps ();
+      if (is_array ( $externalSteps ) && count ( $externalSteps ) > 0) {
+        foreach ( $externalSteps as $key => $stepVar ) {
+          $aBB [] = array ('STEP_UID' => $stepVar->sStepId, 'STEP_TITLE' => $stepVar->sStepTitle, 'STEP_TYPE_OBJ' => 'EXTERNAL', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $stepVar->sStepId . '">' );
+        }
+      }
+
+      global $_DBArray;
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['availableBB'] = $aBB;
+      $_SESSION ['_DBArray'] = $_DBArray;
+      G::LoadClass ( 'ArrayPeer' );
+      $oCriteria = new Criteria ( 'dbarray' );
+      $oCriteria->setDBArrayTable ( 'availableBB' );
+      $oCriteria->addAscendingOrderByColumn ( 'STEP_TYPE_OBJ' );
+      $oCriteria->addAscendingOrderByColumn ( 'STEP_TITLE' );
+      //return $oCriteria;
+      return $_SESSION ['_DBArray']['availableBB'];
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+  /*
+  * Return the steps list criteria object
+  * @param string $sTaskUID
+  * @return array
+  */
+  function getExtStepsCriteria($sTaskUID = '')
+  {
+    try {
+      //call plugin
+      $oPluginRegistry = &PMPluginRegistry::getSingleton ();
+      $externalSteps = $oPluginRegistry->getSteps ();
+
+      $aSteps = array ();
+      $aSteps [] = array ('STEP_TITLE' => 'char', 'STEP_UID' => 'char', 'STEP_TYPE_OBJ' => 'char', 'STEP_CONDITION' => 'char', 'STEP_POSITION' => 'integer','STEP_MODE' => 'char','STEP_UID_OBJ' => 'char' );
+      $oCriteria = new Criteria ( 'workflow' );
+      $oCriteria->add ( StepPeer::TAS_UID, $sTaskUID );
+      $oCriteria->addAscendingOrderByColumn ( StepPeer::STEP_POSITION );
+      $oDataset = StepPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      while ( $aRow = $oDataset->getRow () ) {
+        $urlEdit = '';
+        $linkEditValue = '';
+
+        switch ($aRow ['STEP_TYPE_OBJ']) {
+          case 'DYNAFORM' :
+            $oDynaform = new Dynaform ( );
+            $aFields = $oDynaform->load ( $aRow ['STEP_UID_OBJ'] );
+            $sTitle = $aFields ['DYN_TITLE'];
+            /** @@@init2 PROCCESS FOR DIRECT EDIT LINK @by erik@colosa.com ON DATE 02/06/2008 18:48:13*/
+            $DYN_UID = $aFields ['DYN_UID'];
+            $urlEdit = "dynaformEdit('" . $DYN_UID . "', '" . $aRow ['PRO_UID'] . "');";
+            $linkEditValue = 'Edit';
+            /** @@@end2*/
+            break;
+          case 'INPUT_DOCUMENT' :
+            $oInputDocument = new InputDocument ( );
+            $aFields = $oInputDocument->load ( $aRow ['STEP_UID_OBJ'] );
+            $sTitle = $aFields ['INP_DOC_TITLE'];
+            break;
+          case 'OUTPUT_DOCUMENT' :
+            $oOutputDocument = new OutputDocument ( );
+            $aFields = $oOutputDocument->load ( $aRow ['STEP_UID_OBJ'] );
+            $sTitle = $aFields ['OUT_DOC_TITLE'];
+            break;
+          case 'EXTERNAL' :
+            $sTitle = 'unknown ' . $aRow ['STEP_UID'];
+            foreach ( $externalSteps as $key => $val ) {
+              if ($val->sStepId == $aRow ['STEP_UID_OBJ']) {
+                $sTitle = $val->sStepTitle;
+                if (trim ( $val->sSetupStepPage ) != '') {
+                  $urlEdit = "externalStepEdit('" . $aRow ['STEP_UID'] . "', '" . $val->sSetupStepPage . "');";
+                  $linkEditValue = 'Edit';
+                } else {
+                  $urlEdit = "";
+                  $linkEditValue = '';
+                }
+              }
+            }
+            break;
+        }
+        $aSteps [] = array ('STEP_TITLE' => $sTitle, 'STEP_UID' => $aRow ['STEP_UID'], 'STEP_TYPE_OBJ' => $aRow ['STEP_TYPE_OBJ'], 'STEP_CONDITION' => $aRow ['STEP_CONDITION'], 'STEP_POSITION' => $aRow ['STEP_POSITION'], 'urlEdit' => $urlEdit, 'linkEditValue' => $linkEditValue, 'PRO_UID' => $aRow ['PRO_UID'],'STEP_MODE' => $aRow['STEP_MODE'],'STEP_UID_OBJ' => $aRow['STEP_UID_OBJ'] );
+        $oDataset->next ();
+      }
+
+      global $_DBArray;
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['steps'] = $aSteps;
+      $_SESSION ['_DBArray'] = $_DBArray;
+      G::LoadClass ( 'ArrayPeer' );
+      $oCriteria = new Criteria ( 'dbarray' );
+      $oCriteria->setDBArrayTable ( 'steps' );
+      $oCriteria->addAscendingOrderByColumn ( 'STEP_POSITION' );
+      //return $oCriteria;
+      return $_SESSION ['_DBArray']['steps'];
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+  /*
+  * Return the steps trigger criteria array
+  * @param string $sTaskUID
+  * @return array
+  */
+  function getExtStepTriggersCriteria($sStepUID = '', $sTaskUID = '', $sType = '')
+  {
+    $aBB        = array ();
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria  = new Criteria ( 'workflow' );
+    $oCriteria->addSelectColumn ( 'C.CON_VALUE' );
+    $oCriteria->addSelectColumn ( 'STEP_UID' );
+    $oCriteria->addSelectColumn ( 'TRI_UID' );
+    $oCriteria->addSelectColumn ( 'ST_TYPE' );
+    $oCriteria->addSelectColumn ( 'ST_CONDITION' );
+    $oCriteria->addSelectColumn ( StepTriggerPeer::ST_POSITION );
+    $oCriteria->addAsColumn ( 'TRI_TITLE', 'C.CON_VALUE' );
+    $oCriteria->addAlias ( 'C', 'CONTENT' );
+    $aConditions    = array ();
+    $aConditions [] = array (StepTriggerPeer::TRI_UID, 'C.CON_ID' );
+    $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter );
+    $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $oCriteria->add ( StepTriggerPeer::STEP_UID, $sStepUID );
+    $oCriteria->add ( StepTriggerPeer::TAS_UID, $sTaskUID );
+    $oCriteria->add ( StepTriggerPeer::ST_TYPE, $sType );
+    $oCriteria->addAscendingOrderByColumn ( StepTriggerPeer::ST_POSITION );
+    $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    while ( $aRow = $oDataset->getRow () ) {
+        $aBB [] = array ('CON_VALUE' => $aRow ['CON_VALUE'],'STEP_UID' => $aRow ['STEP_UID'], 'ST_TYPE' => $aRow ['ST_TYPE'],'ST_POSITION' => $aRow ['ST_POSITION'],'ST_CONDITION' => $aRow ['ST_CONDITION'], 'TRI_UID' => $aRow ['TRI_UID'],'TRI_TITLE' => $aRow ['TRI_TITLE'] );
+        $oDataset->next ();
+      }
+    return $aBB;
+  }
+
+  /*
+  * Return the available step triggers list object
+  * @param string $sStepUID
+  * @param string $sTaskUID
+  * @param string $sType
+  * @return object
+  */
+  function getExtAvailableStepTriggersCriteria($sProcessUID = '',$sStepUID = '', $sTaskUID = '', $sType = '')
+  {
+      try
+      {
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn('TRI_UID');
+      $oCriteria->add(StepTriggerPeer::TAS_UID , $sTaskUID);
+      $oCriteria->add(StepTriggerPeer::STEP_UID, $sStepUID);
+      $oCriteria->add(StepTriggerPeer::ST_TYPE , $sType);
+      $oDataset = StepTriggerPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      $sUIDs = "'0'";
+      $aUIDs = array();
+      while ($aRow = $oDataset->getRow()) {
+      	$sUIDs .= ",'" . $aRow['TRI_UID'] . "'";
+      	$aUIDs[] = $aRow['TRI_UID'];
+      	$oDataset->next();
+      }
+      $sDelimiter = DBAdapter::getStringDelimiter ();
+      $oCriteria = new Criteria('workflow');
+      //$oCriteria->addSelectColumn ( ContentPeer::CON_ID );
+      $oCriteria->addSelectColumn('TRI_UID');
+      $oCriteria->addSelectColumn('C.CON_VALUE');
+      $oCriteria->addAsColumn ( 'TRI_TITLE', 'C.CON_VALUE' );
+      $oCriteria->addAlias ( 'C', 'CONTENT' );
+      $aConditions    = array ();
+      $aConditions [] = array ('TRI_UID', 'C.CON_ID' );
+      $aConditions [] = array ('C.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter );
+      $aConditions [] = array ('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+      $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+      $oCriteria->add(TriggersPeer::TRI_UID, $aUIDs, Criteria::NOT_IN);
+      $oCriteria->add(TriggersPeer::PRO_UID, $sProcessUID);
+      $oDataset = TriggersPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while ( $aRow = $oDataset->getRow () ) {
+        $aBB [] = array ('CON_VALUE' => $aRow ['CON_VALUE'],'STEP_UID' => $sStepUID, 'ST_TYPE' => $sType,'TRI_UID' => $aRow ['TRI_UID'],'TRI_TITLE' => $aRow ['TRI_TITLE'] );
+        $oDataset->next ();
+      }
+      return $aBB;
+      }
+      catch ( Exception $e ) {
+  	throw ($e);
+        }
+  }
+
+  /*
+  * Return the dynaforms list array
+  * @param string $sProcessUID
+  * @return object
+  */
+  function getExtDynaformsList($sProcessUID = '')
+  {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria  = new Criteria ( 'workflow' );
+    $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID );
+    $oCriteria->addSelectColumn ( DynaformPeer::PRO_UID );
+    $oCriteria->addSelectColumn ( DynaformPeer::DYN_TYPE );
+    $oCriteria->addAsColumn ( 'DYN_TITLE', 'C1.CON_VALUE' );
+    $oCriteria->addAsColumn ( 'DYN_DESCRIPTION', 'C2.CON_VALUE' );
+    $oCriteria->addAlias ( 'C1', 'CONTENT' );
+    $oCriteria->addAlias ( 'C2', 'CONTENT' );
+    $aConditions    = array ();
+    $aConditions [] = array (DynaformPeer::DYN_UID, 'C1.CON_ID' );
+    $aConditions [] = array ('C1.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
+    $aConditions [] = array ('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $aConditions    = array ();
+    $aConditions [] = array (DynaformPeer::DYN_UID, 'C2.CON_ID' );
+    $aConditions [] = array ('C2.CON_CATEGORY', $sDelimiter . 'DYN_DESCRIPTION' . $sDelimiter );
+    $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $oCriteria->add ( DynaformPeer::PRO_UID, $sProcessUID );
+
+    $oDataset = DynaformPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $dynaformArray = array ();
+    $dynaformArray [] = array ('d' => 'char' );
+    while ( $aRow = $oDataset->getRow () ) {
+      if (($aRow ['DYN_TITLE'] == NULL)||($aRow ['DYN_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+
+        $aRow ['DYN_TITLE'] = Content::Load("DYN_TITLE","",$aRow ['DYN_UID'],SYS_LANG);
+
+      }
+    if (($aRow ['DYN_DESCRIPTION'] == NULL)||($aRow ['DYN_DESCRIPTION'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+
+        $aRow ['DYN_DESCRIPTION'] = Content::Load("DYN_DESCRIPTION","",$aRow ['DYN_UID'],SYS_LANG);
+
+      }
+      $dynaformArray [] = $aRow;
+      $oDataset->next ();
+    }
+
+    return $dynaformArray;
+  }
+
+  /**
+   * subProcess_Properties New Processmap
+   *
+   * @param   string    $sProcessUID
+   * @param   string    $sTaskUID
+   * @param   string    $sIndex
+   * @param   string    $sType  (0=>'Asynchronous' , 1=>'Synchronous')
+   * @return  void
+   * @throw   Exception $oError
+   */
+  function subProcessExtProperties($sProcessUID = '', $sTaskUID = '', $sIndex = '',$sType = '')
+  {
+    try { //echo "$sProcessUID = '', $sTaskUID = '', $sIndex = ''";
+      $SP_VARIABLES_OUT = array ();
+      $SP_VARIABLES_IN  = array ();
+
+      /* Prepare page before to show */
+      global $_DBArray;
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['NewCase'] = $this->subProcess_TaskIni ( $sProcessUID );
+      unset ( $_DBArray ['TheProcesses'] );
+      $_DBArray ['TheProcesses'] [] = array ('pro_uid' => 'char', 'value' => 'char' );
+      $i = 0;
+      foreach ( $_DBArray ['NewCase'] as $aRow ) {
+        if ($i > 0) {
+          $_DBArray ['TheProcesses'] [] = array ('pro_uid' => $aRow ['pro_uid'] . '_' . $i, 'value' => $aRow ['value'] );
+        }
+        $i ++;
+      }
+      //print'<hr>';print_r($_DBArray['NewCase']);print'<hr>';
+      $oCriteria = new Criteria ( 'workflow' );
+      $del       = DBAdapter::getStringDelimiter ();
+      $oCriteria->add ( SubProcessPeer::PRO_PARENT, $sProcessUID );
+      $oCriteria->add ( SubProcessPeer::PRO_PARENT, $sProcessUID );
+      $oCriteria->add ( SubProcessPeer::TAS_PARENT, $sTaskUID );
+
+      $oCriteria->addAsColumn ( 'CON_VALUE', 'C1.CON_VALUE', 'CON_TITLE' );
+      $oCriteria->addAlias ( "C1", 'CONTENT' );
+      $tasTitleConds    = array ();
+      $tasTitleConds [] = array (SubProcessPeer::TAS_PARENT, 'C1.CON_ID' );
+      $tasTitleConds [] = array ('C1.CON_CATEGORY', $del . 'TAS_TITLE' . $del );
+      $tasTitleConds [] = array ('C1.CON_LANG', $del . SYS_LANG . $del );
+      $oCriteria->addJoinMC ( $tasTitleConds, Criteria::LEFT_JOIN );
+
+      $oDataset = SubProcessPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset->next ();
+      $aRow = $oDataset->getRow ();
+      /*while($aRow = $oDataset->getRow ())  {
+
+        $aSubProcess [] = array ('CON_VALUE' => $aRow ['CON_VALUE'], 'TAS_UID' => $sTaskUID, 'TASKS' => $sTaskUID,'TAS_TITLE' => $aRow ['CON_VALUE'],
+                                'SPROCESS_NAME' => $aRow ['CON_VALUE']
+            );
+        $oDataset->next ();
+      }*/
+
+      $aRow ['TASKS'] = $aRow ['TAS_UID'];
+      //print "<hr>".$aRow['TASKS']."<hr>";
+      //$aRow['SPROCESS_NAME'] = $aRow['TAS_TITLE'];
+      $aRow ['TAS_TITLE'] = $aRow ['CON_VALUE'];
+      $aRow ['SPROCESS_NAME'] = $aRow ['CON_VALUE'];
+
+      if($sType == 0)
+      {
+          $SP_VARIABLES_OUT = unserialize ( $aRow ['SP_VARIABLES_OUT'] );
+          if (is_array ( $SP_VARIABLES_OUT )) {
+            $i = 0;
+            $aRow1 = array();
+            foreach ( $SP_VARIABLES_OUT as $indice => $valor ) {
+              $aRow1   [$i]             =  $aRow;
+              $aRow1   [$i]['VAR_OUT1'] =  $indice;
+              $aRow1   [$i]['VAR_OUT2'] =  $valor;
+              //$aRow1   [$i]['PROCESSES'] =  $_DBArray ['TheProcesses'];
+              $i ++;
+            }
+          }
+      }
+
+      if($sType == 1)
+      {
+          $SP_VARIABLES_IN = unserialize ( $aRow ['SP_VARIABLES_IN'] );
+          if (is_array ( $SP_VARIABLES_IN )) {
+            $j = 0;
+            foreach ( $SP_VARIABLES_IN as $indice => $valor ) {
+              $aRow1  [$j]             = $aRow;
+              $aRow1  [$j] ['VAR_IN1'] = $indice;
+              $aRow1  [$j] ['VAR_IN2'] = $valor;
+              //$aRow1   [$i]['PROCESSES'] =  $_DBArray ['TheProcesses'];
+              $j ++;
+            }
+          }
+      }
+      $aRow ['INDEX'] = $sIndex;
+      //print '<hr>';print_r($aRow);
+      return $aRow1;
+      //return $aSubProcess;
+
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
+}
+
