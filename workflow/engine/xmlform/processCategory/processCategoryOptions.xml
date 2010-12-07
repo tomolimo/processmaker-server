@@ -3,6 +3,8 @@
 
   <processCategoryNew type="private" defaultValue="../processCategory/processCategoryNew"/>
   
-  <MNU_NEW type="link" label="New" value='' link="@G::encryptLink(@#processCategoryNew)" colAlign="left" colWidth="85"></MNU_NEW>
+  <MNU_NEW type="link" value='' link="@G::encryptLink(@#processCategoryNew)" colAlign="left" colWidth="85">
+    <en>New</en>
+  </MNU_NEW>
 
 </dynaForm>
