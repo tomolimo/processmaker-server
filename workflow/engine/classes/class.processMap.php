@@ -4236,25 +4236,6 @@ class processMap {
     }
   }
 
-  /**
-   * webEntry_new
-   *
-   * @param   string     $sProcessUID
-   * @return  boolean    true
-   * @throw   Exception  $oError
-   */
-  function webEntry_new($sProcessUID)
-  {
-    try {
-      global $G_PUBLISH;
-      $G_PUBLISH = new Publisher ( );
-      $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'dynaforms/dynaforms_WebEntry', '', array ('PRO_UID' => $sProcessUID, 'LANG' => SYS_LANG ) );
-      G::RenderPage ( 'publish', 'raw' );
-      return true;
-    } catch ( Exception $oError ) {
-      throw ($oError);
-    }
-  }
 
   /*
   * Users assigned to Tasks
