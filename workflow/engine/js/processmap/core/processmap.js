@@ -171,132 +171,136 @@ var processmap=function(){
 					bbk[lanzado]();
 				},
 				panel:function()
-				{
-					/* Toolbar Begin */
-					var panel;
-					panel = this.panels.toolbar=new leimnud.module.panel();
-					this.panels.toolbar.options={
-						limit	:true,
-						size	:{w:230,h:31},
-						position:{x:this.options.target.clientWidth-242,y:4},
-						title	:"",
-						theme	:"processmaker",
-						target	:this.options.target,
-						//limit	:true,
-						titleBar:false,
-						statusBar:false,
-						elementToDrag:"content",
-						cursorToDrag:"default",
-						control	:{drag:true,resize:false},
-						fx	:{opacity:true,shadow:false}
-					};
-					panel.setStyle={
-						containerWindow:{border:"1px solid buttonshadow"},
-						frontend:{backgroundColor:"buttonface"},
-						content:{border:"1px solid transparent",backgroundColor:"transparent",margin:0,overflow:"hidden",padding:1}
-					};
-					this.panels.toolbar.make();
-					var div = document.createElement("div");
-					this.parent.dom.setStyle(div,{
-						textAlign:"center"
-					});
-									var dr1 = document.createElement("img");
-									dr1.src	= this.options.images_dir+"0.gif";
-									dr1.title	= G_STRINGS.ID_PROCESSMAP_SEQUENTIAL;
-									div.appendChild(dr1);
-									//dr1.style.marginTop=7;
-									//div.appendChild(document.createElement("p"));
-									var dr2 = document.createElement("img");
-									//dr2.style.marginTop=7;
-									dr2.src	= this.options.images_dir+"1.gif";
-									dr2.title	= G_STRINGS.ID_PROCESSMAP_SELECTION;
+                                        {
+                                         /* Toolbar Begin */
+                                         var panel;
+                                         panel = this.panels.toolbar=new leimnud.module.panel();
+                                         this.panels.toolbar.options={
+                                          limit :true,
+                                          size :{w:260,h:31},
+                                          position:{x:this.options.target.clientWidth-278,y:4},
+                                          title :"",
+                                          theme :"processmaker",
+                                          target :this.options.target,
+                                          //limit :true,
+                                          titleBar:false,
+                                          statusBar:false,
+                                          elementToDrag:"content",
+                                          cursorToDrag:"default",
+                                          control :{drag:true,resize:false},
+                                          fx :{opacity:true,shadow:false}
+                                         };
+                                         panel.setStyle={
+                                          containerWindow:{border:"1px solid buttonshadow"},
+                                          frontend:{backgroundColor:"buttonface"},
+                                          content:{border:"1px solid transparent",backgroundColor:"transparent",margin:0,overflow:"hidden",padding:1}
+                                         };
+                                         this.panels.toolbar.make();
+                                         var div = document.createElement("div");
+                                         this.parent.dom.setStyle(div,{
+                                          textAlign:"center"
+                                         });
+                                             var dr1 = document.createElement("img");
+                                             dr1.src = this.options.images_dir+"0.gif";
+                                             dr1.title = G_STRINGS.ID_PROCESSMAP_SEQUENTIAL;
+                                             div.appendChild(dr1);
+                                             //dr1.style.marginTop=7;
+                                             //div.appendChild(document.createElement("p"));
+                                             var dr2 = document.createElement("img");
+                                             //dr2.style.marginTop=7;
+                                             dr2.src = this.options.images_dir+"1.gif";
+                                             dr2.title = G_STRINGS.ID_PROCESSMAP_SELECTION;
 
-									div.appendChild(dr2);
-									//div.appendChild(document.createElement("p"));
-									var dr3 = document.createElement("img");
-									dr3.src	= this.options.images_dir+"2.gif";
-									dr3.title	= G_STRINGS.ID_PROCESSMAP_EVALUATION;
-									//dr3.style.marginTop=7;
-									div.appendChild(dr3);
-									//div.appendChild(document.createElement("p"));
-									var dr4 = document.createElement("img");
-									dr4.src	= this.options.images_dir+"3.gif";
-									dr4.title	= G_STRINGS.ID_PROCESSMAP_PARALLEL_FORK;
-									//dr4.style.marginTop=7;
-									div.appendChild(dr4);
-									//div.appendChild(document.createElement("p"));
-									var dr5 = document.createElement("img");
-									dr5.src = this.options.images_dir+"4.gif";
-									dr5.title	= G_STRINGS.ID_PROCESSMAP_PARALLEL_EVALUATION_FORK;
-									//dr5.style.marginTop=7;
-									div.appendChild(dr5);
+                                             div.appendChild(dr2);
+                                             //div.appendChild(document.createElement("p"));
+                                             var dr3 = document.createElement("img");
+                                             dr3.src = this.options.images_dir+"2.gif";
+                                             dr3.title = G_STRINGS.ID_PROCESSMAP_EVALUATION;
+                                             //dr3.style.marginTop=7;
+                                             div.appendChild(dr3);
+                                             //div.appendChild(document.createElement("p"));
+                                             var dr4 = document.createElement("img");
+                                             dr4.src = this.options.images_dir+"3.gif";
+                                             dr4.title = G_STRINGS.ID_PROCESSMAP_PARALLEL_FORK;
+                                             //dr4.style.marginTop=7;
+                                             div.appendChild(dr4);
+                                             //div.appendChild(document.createElement("p"));
+                                             var dr5 = document.createElement("img");
+                                             dr5.src = this.options.images_dir+"4.gif";
+                                             dr5.title = G_STRINGS.ID_PROCESSMAP_PARALLEL_EVALUATION_FORK;
+                                             //dr5.style.marginTop=7;
+                                             div.appendChild(dr5);
 
-									var dr6 = document.createElement("img");
-									dr6.src = this.options.images_dir+"5.gif";
-									dr6.title	= G_STRINGS.ID_PROCESSMAP_PARALLEL_JOIN;
-									div.appendChild(dr6);
+                                             var dr6 = document.createElement("img");
+                                             dr6.src = this.options.images_dir+"5.gif";
+                                             dr6.title = G_STRINGS.ID_PROCESSMAP_PARALLEL_JOIN;
+                                             div.appendChild(dr6);
 
-									var fin = document.createElement("img");
-									fin.src = this.options.images_dir+"6.gif";
-									fin.title	= G_STRINGS.ID_END_OF_PROCESS;
-									div.appendChild(fin);
+                                             var fin = document.createElement("img");
+                                             fin.src = this.options.images_dir+"6.gif";
+                                             fin.title = G_STRINGS.ID_END_OF_PROCESS;
+                                             div.appendChild(fin);
 
-                                	var ini = document.createElement("img");
-									ini.src = this.options.images_dir+"7.gif";
-									ini.title	= "Starting task";
-									div.appendChild(ini);
+                                                                                                            var ini = document.createElement("img");
+                                             ini.src = this.options.images_dir+"7.gif";
+                                             ini.title = "Starting task";
+                                             div.appendChild(ini);
 
+                                                                                                            var dis = document.createElement("img");
+                                             dis.src = this.options.images_dir+"8.gif";
+                                             dis.title = "Discriminator";
+                                             div.appendChild(dis);
 
-									[dr1,dr2,dr3,dr4,dr5,dr6,fin,ini].map(function(el){
-										el.className ="processmap_toolbarItem___"+this.options.theme
-									}.extend(this));
-									this.dragables.derivation = new this.parent.module.drag({
-									elements:[dr1,dr2,dr3,dr4,dr5,dr6,fin,ini],
-										fx:{
-											type	: "clone",
-											target	: this.panels.editor.elements.content,
-											zIndex	: 11
-										}
-									});
-									this.dragables.derivation.typesDerivation=["simple","double","conditional","conditional1","conditional2","conditional3","final","initial"];
-									this.dragables.derivation.events={
-										init	:[function(){
-											this.dragables.derivation.noDrag=true;
-										}.extend(this)],
-										move:this.dropables.derivation.capture.args(this.dragables.derivation),
-										finish	: this.parent.closure({instance:this,method:function(){
-											//clearInterval(this.timeToOutControl);
+                                             [dr1,dr2,dr3,dr4,dr5,dr6,fin,ini,dis].map(function(el){
+                                              el.className ="processmap_toolbarItem___"+this.options.theme
+                                             }.extend(this));
+                                             this.dragables.derivation = new this.parent.module.drag({ //Add to enable dragging of image from panel
+                                             elements:[dr1,dr2,dr3,dr4,dr5,dr6,fin,ini,dis],
+                                              fx:{
+                                               type : "clone",
+                                               target : this.panels.editor.elements.content,
+                                               zIndex : 11
+                                              }
+                                             });
+                                             this.dragables.derivation.typesDerivation=["simple","double","conditional","conditional1","conditional2","conditional3","final","initial","discriminator"];
+                                             this.dragables.derivation.events={
+                                              init :[function(){
+                                               this.dragables.derivation.noDrag=true;
+                                              }.extend(this)],
+                                              move:this.dropables.derivation.capture.args(this.dragables.derivation),
+                                              finish : this.parent.closure({instance:this,method:function(){
+                                               //clearInterval(this.timeToOutControl);
 
-											this.parent.dom.remove(this.dropables.derivation.drag || this.dragables.derivation.currentElementDrag);
-											this.parent.dom.remove(this.dragables.derivation.currentElementDrag);
-											if(this.dropables.derivation.selected!==false)
-											{
-												this.dropables.derivation.launchEvents(this.dropables.derivation.elements[this.dropables.derivation.selected].events.out);
-												vAux = this.dropables.derivation.launchEvents(this.dropables.derivation.elements[this.dropables.derivation.selected].events.click);
-												this.dropables.derivation.selected = false;
-												return vAux;
-											}
-											else
-											{
-												this.dragables.derivation.noDrag=false;
-											}
-										}})
-									};
-									this.dragables.derivation.make();
-									//drg.options.elements=[];
-									this.parent.dom.setStyle([dr1,dr2,dr3,dr4,dr5,dr6,fin,ini],{
-										cursor:"move"
-									});
-					panel.loader.hide();
-					panel.addContent(div);
+                                               this.parent.dom.remove(this.dropables.derivation.drag || this.dragables.derivation.currentElementDrag);
+                                               this.parent.dom.remove(this.dragables.derivation.currentElementDrag);
+                                               if(this.dropables.derivation.selected!==false)
+                                               {
+                                                this.dropables.derivation.launchEvents(this.dropables.derivation.elements[this.dropables.derivation.selected].events.out);
+                                                vAux = this.dropables.derivation.launchEvents(this.dropables.derivation.elements[this.dropables.derivation.selected].events.click);
+                                                this.dropables.derivation.selected = false;
+                                                return vAux;
+                                               }
+                                               else
+                                               {
+                                                this.dragables.derivation.noDrag=false;
+                                               }
+                                              }})
+                                             };
+                                             this.dragables.derivation.make();
+                                             //drg.options.elements=[];
+                                             this.parent.dom.setStyle([dr1,dr2,dr3,dr4,dr5,dr6,fin,ini,dis],{
+                                              cursor:"move"
+                                             });
+                                         panel.loader.hide();
+                                         panel.addContent(div);
 
-					leimnud._panel=['O'],leimnud.ipanel=0;
-					/* Toolbar End  */
-				},
-				components:{
+                                         leimnud._panel=['O'],leimnud.ipanel=0;
+                                         /* Toolbar End  */
+                                        },
+                                        components:{
 
-				}
-			},
+                                        }
+                                       },
 			base:function(xml)
 			{
 				this.panels.editor.loader.hide();
@@ -376,6 +380,7 @@ var processmap=function(){
 					{separator:true},
 					{image:"/images/add.png",text:G_STRINGS.ID_PROCESSMAP_ADD_TASK,launch:this.addTask.extend(this,{tp:'task'})},
 					{image:"/images/subProcess.png",text:G_STRINGS.ID_PROCESSMAP_ADD_SUBPROCESS,launch:this.addTask.extend(this,{tp:'subprocess'})},  //add subprocess whith blabla
+                                        {image:"/images/add.png",text:"Add Task Hidden",launch:this.addTask.extend(this,{tp:'hidden'})},  //add subprocess whith blabla
 					{image:"/images/addtext.png",text:G_STRINGS.ID_PROCESSMAP_ADD_TEXT,launch:this.addText.extend(this)},
 					{image:"/images/linhori.png",text:G_STRINGS.ID_PROCESSMAP_HORIZONTAL_LINE,launch:this.addGuide.extend(this,"horizontal")},
 					{image:"/images/linver.png",text:G_STRINGS.ID_PROCESSMAP_VERTICAL_LINE,launch:this.addGuide.extend(this,"vertical")},
@@ -647,103 +652,161 @@ var processmap=function(){
 						r.make();
 					}.extend(this)} ,
         {image:"/images/events.gif",text:G_STRINGS.ID_EVENTS,submenu:[
-						{image:"/images/event_message.png",text:"Message",launch:function(event){
-						this.tmp.eventsPanel = panel =new leimnud.module.panel();
-						panel.options={
-							limit	:true,
-							size	:{w:700,h:380},
-							position:{x:50,y:50,center:true},
-							title	:G_STRINGS.ID_EVENT_MESSAGE,
-							theme	:this.options.theme,
-							control	:{close:true,resize:false},fx:{modal:true},
-							statusBar:false,
-							fx	:{shadow:true,modal:true}
-						};
-						panel.make();
-						panel.loader.show();
-						var r = new leimnud.module.rpc.xmlhttp({
-							url:this.options.dataServer,
-							args:"action=events&data="+{
-								pro_uid	:this.options.uid,
+                                    {image:"/images/event_message.png",text:"start message event",launch:function(event){
+                                      this.tmp.editProcessPanel = panel =new leimnud.module.panel();
+                                      panel.options={
+                                       limit :true,
+                                       size :{w:500,h:380},
+                                       position:{x:50,y:50,center:true},
+                                       title :G_STRINGS.ID_WEB_ENTRY,
+                                       theme :this.options.theme,
+                                       control :{close:true,resize:false},fx:{modal:true},
+                                       statusBar:false,
+                                       fx :{shadow:true,modal:true}
+                                      };
+                                      panel.make();
+                                      panel.loader.show();
+                                      var r = new leimnud.module.rpc.xmlhttp({
+                                       url:this.options.dataServer,
+                                       args:"action=webEntry&data="+{
+                                        pro_uid :this.options.uid
+                                       }.toJSONString()
+                                      });
+                                      r.callback=function(rpc,panel)
+                                      {
+                                       panel.loader.hide();
+                                       var scs = rpc.xmlhttp.responseText.extractScript();
+                                       panel.addContent(rpc.xmlhttp.responseText);
+                                       scs.evalScript();
+                                       //Pm.objeto.innerHTML="asdasd";
+                                      }.extend(this,panel);
+                                      r.make();
+                                     }.extend(this)},
+
+                                                                    {image:"/images/event_timer.png",text:"Start timer event",launch:function(event){
+                                      this.tmp.eventsPanel = panel =new leimnud.module.panel();
+                                      panel.options={
+                                       limit :true,
+                                       size :{w:830,h:800},
+                                       position:{x:50,y:50,center:true},
+                                       title :"CASES SCHEDULER",
+                                       theme :this.options.theme,
+                                       control :{close:true,resize:false},fx:{modal:true},
+                                       statusBar:false,
+                                       fx :{shadow:true,modal:true}
+                                      };
+                                      panel.make();
+                                      panel.loader.show();
+                                      var r = new leimnud.module.rpc.xmlhttp({
+                                       url:this.options.dataServer,
+                                       args:"action=case_scheduler&PRO_UID="+this.options.uid
+                                      });
+                                      r.callback=function(rpc,panel)
+                                      {
+                                       panel.loader.hide();
+                                       var scs = rpc.xmlhttp.responseText.extractScript();
+                                       panel.addContent(rpc.xmlhttp.responseText);
+                                       scs.evalScript();
+                                       //Pm.objeto.innerHTML="asdasd";
+                                      }.extend(this,panel);
+                                      r.make();
+                                      }.extend(this)},
+                                                                    {image:"/images/event_messageThrow.png",text:"intermediate message event",launch:function(event){
+                                                                      this.tmp.eventsPanel = panel =new leimnud.module.panel();
+                                      panel.options={
+                                       limit :true,
+                                       size :{w:700,h:380},
+                                       position:{x:50,y:50,center:true},
+                                       title :G_STRINGS.ID_EVENT_MESSAGE,
+                                       theme :this.options.theme,
+                                       control :{close:true,resize:false},fx:{modal:true},
+                                       statusBar:false,
+                                       fx :{shadow:true,modal:true}
+                                      };
+                                      panel.make();
+                                      panel.loader.show();
+                                      var r = new leimnud.module.rpc.xmlhttp({
+                                       url:this.options.dataServer,
+                                       args:"action=events&data="+{
+                                        pro_uid :this.options.uid,
+                                                type:"message"
+                                       }.toJSONString()
+                                      });
+                                      r.callback=function(rpc,panel)
+                                      {
+                                       panel.loader.hide();
+                                       var scs = rpc.xmlhttp.responseText.extractScript();
+                                       panel.addContent(rpc.xmlhttp.responseText);
+                                       scs.evalScript();
+                                       //Pm.objeto.innerHTML="asdasd";
+                                      }.extend(this,panel);
+                                      r.make();
+                                     }.extend(this)},
+                                                                    {image:"/images/event_timer.png",text:"intermediate timer event ",launch:function(event){
+
+                                                                      this.tmp.eventsPanel = panel =new leimnud.module.panel();
+                                      panel.options={
+                                       limit :true,
+                                       size :{w:700,h:380},
+                                       position:{x:50,y:50,center:true},
+                                       title :G_STRINGS.ID_EVENT_MULTIPLE,
+                                       theme :this.options.theme,
+                                       control :{close:true,resize:false},fx:{modal:true},
+                                       statusBar:false,
+                                       fx :{shadow:true,modal:true}
+                                      };
+                                      panel.make();
+                                      panel.loader.show();
+                                      var r = new leimnud.module.rpc.xmlhttp({
+                                       url:this.options.dataServer,
+                                       args:"action=events&data="+{
+                                        pro_uid :this.options.uid,
+                                                type:"multiple"
+                                       }.toJSONString()
+                                      });
+                                      r.callback=function(rpc,panel)
+                                      {
+                                       panel.loader.hide();
+                                       var scs = rpc.xmlhttp.responseText.extractScript();
+                                       panel.addContent(rpc.xmlhttp.responseText);
+                                       scs.evalScript();
+                                       //Pm.objeto.innerHTML="asdasd";
+                                      }.extend(this,panel);
+                                      r.make();
+                                     }.extend(this)},
+                                    {image:"/images/event_timer.png",text:" intermediate Boundary timer event",launch:function(event){}},
+                               /* {image:"/images/event_messageThrow.png",text:"end message event",launch:function(event){
+      this.tmp.eventsPanel = panel =new leimnud.module.panel();
+      panel.options={
+       limit :true,
+       size :{w:700,h:380},
+       position:{x:50,y:50,center:true},
+       title :G_STRINGS.ID_EVENT_MESSAGE,
+       theme :this.options.theme,
+       control :{close:true,resize:false},fx:{modal:true},
+       statusBar:false,
+       fx :{shadow:true,modal:true}
+      };
+      panel.make();
+      panel.loader.show();
+      var r = new leimnud.module.rpc.xmlhttp({
+       url:this.options.dataServer,
+       args:"action=events&data="+{
+        pro_uid :this.options.uid,
                 type:"message"
-							}.toJSONString()
-						});
-						r.callback=function(rpc,panel)
-						{
-							panel.loader.hide();
-							var scs = rpc.xmlhttp.responseText.extractScript();
-							panel.addContent(rpc.xmlhttp.responseText);
-							scs.evalScript();
-							//Pm.objeto.innerHTML="asdasd";
-						}.extend(this,panel);
-						r.make();
-					}.extend(this)},
-
-					{image:"/images/event_conditional.png",text:"Conditional",launch:function(event){
-					this.tmp.eventsPanel = panel =new leimnud.module.panel();
-						panel.options={
-							limit	:true,
-							size	:{w:700,h:380},
-							position:{x:50,y:50,center:true},
-							title	:G_STRINGS.ID_EVENT_CONDITIONAL,
-							theme	:this.options.theme,
-							control	:{close:true,resize:false},fx:{modal:true},
-							statusBar:false,
-							fx	:{shadow:true,modal:true}
-						};
-						panel.make();
-						panel.loader.show();
-						var r = new leimnud.module.rpc.xmlhttp({
-							url:this.options.dataServer,
-							args:"action=events&data="+{
-								pro_uid	:this.options.uid,
-                type:"conditional"
-							}.toJSONString()
-						});
-						r.callback=function(rpc,panel)
-						{
-							panel.loader.hide();
-							var scs = rpc.xmlhttp.responseText.extractScript();
-							panel.addContent(rpc.xmlhttp.responseText);
-							scs.evalScript();
-							//Pm.objeto.innerHTML="asdasd";
-						}.extend(this,panel);
-						r.make();
-					}.extend(this)},
-        {image:"/images/event_multiple.png",text:"Multiple",launch:function(event){
-						this.tmp.eventsPanel = panel =new leimnud.module.panel();
-						panel.options={
-							limit	:true,
-							size	:{w:700,h:380},
-							position:{x:50,y:50,center:true},
-							title	:G_STRINGS.ID_EVENT_MULTIPLE,
-							theme	:this.options.theme,
-							control	:{close:true,resize:false},fx:{modal:true},
-							statusBar:false,
-							fx	:{shadow:true,modal:true}
-						};
-						panel.make();
-						panel.loader.show();
-						var r = new leimnud.module.rpc.xmlhttp({
-							url:this.options.dataServer,
-							args:"action=events&data="+{
-								pro_uid	:this.options.uid,
-                type:"multiple"
-							}.toJSONString()
-						});
-						r.callback=function(rpc,panel)
-						{
-							panel.loader.hide();
-							var scs = rpc.xmlhttp.responseText.extractScript();
-							panel.addContent(rpc.xmlhttp.responseText);
-							scs.evalScript();
-							//Pm.objeto.innerHTML="asdasd";
-						}.extend(this,panel);
-						r.make();
-					}.extend(this)}
-
-
-					]}
+       }.toJSONString()
+      });
+      r.callback=function(rpc,panel)
+      {
+       panel.loader.hide();
+       var scs = rpc.xmlhttp.responseText.extractScript();
+       panel.addContent(rpc.xmlhttp.responseText);
+       scs.evalScript();
+       //Pm.objeto.innerHTML="asdasd";
+      }.extend(this,panel);
+      r.make();
+     }.extend(this)},*/
+   ]}
 
 					]
 				});
@@ -752,19 +815,24 @@ var processmap=function(){
 				this.data.render.task();
 			},
 			task:function()
-			{
-				var lngt = this.data.db.task.length;
-				for(var i =0;i<lngt;i++)
-				{
-					//console.log(this.data.db.task[i]);
-					var tt = ((this.data.db.task[i].task_type==='NORMAL') || (this.data.db.task[i].task_type==='ADHOC'))?'task':'subprocess';
-					//this.parent.exec(this.data.build.task,[this.data.db.task[i],i],false,this);
-					this.data.build.task(i,{tp:tt});
-				}
-				this.data.render.taskINI();
-				this.data.render.guide();
-				//this.parent.exec(this.data.build.derivation,false,false,this);
-			},
+                           {
+                            var lngt = this.data.db.task.length;
+                            for(var i =0;i<lngt;i++)
+                            {
+                             //console.log(this.data.db.task[i]);
+
+                               var tt = ((this.data.db.task[i].task_type==='NORMAL') || (this.data.db.task[i].task_type==='ADHOC'))?'task':'subprocess';
+                               if(this.data.db.task[i].task_type==='HIDDEN'){
+                                 tt = 'hidden';
+                               }
+                             //this.parent.exec(this.data.build.task,[this.data.db.task[i],i],false,this);
+                              this.data.build.task(i,{tp:tt});
+
+                            }
+                            this.data.render.taskINI();
+                            this.data.render.guide();
+                            //this.parent.exec(this.data.build.derivation,false,false,this);
+                           },
 			taskINI:function()
 			{
 				var lngt = this.data.db.task.length;
@@ -825,7 +893,7 @@ var processmap=function(){
 							deri.to[i].object.line.remove();
 							this.observers.lineas.unregister(deri.to[i].object.indexObserver);
 						}
-						if(deri.type===5)
+						if(deri.type===5 || deri.type===8)
 						{
 							var toTask = this.data.db.task[this.tools.getIndexOfUid(deri.to[i].task)];
 							toTask.object.inJoin = toTask.object.inJoin-1;
@@ -1014,16 +1082,9 @@ var processmap=function(){
 						var toTask=this.data.db.task[uid];
 						var to	 = toTask.object.elements.task;
 
-						if(task.derivation.type!==5)
+						if(task.derivation.type === 8 || task.derivation.type ===5)
 						{
-							this.parent.dom.setStyle(task.object.elements.derivation,{
-								//background:((task.derivation.type===0)?"":"url("+this.options.images_dir+task.derivation.type+"t.gif?aa="+Math.random()+")")
-								background:"url("+this.options.images_dir+task.derivation.type+"t.gif?aa="+Math.random()+")"
-							});
-						}
-						else
-						{
-							var ij = toTask.object.inJoin;
+                                                    var ij = toTask.object.inJoin;
 							ij = (ij)?ij+1:1;
 							toTask.object.inJoin = ij;
 							this.parent.dom.setStyle(toTask.object.elements.init,{
@@ -1031,6 +1092,14 @@ var processmap=function(){
 								background:"url("+this.options.images_dir+task.derivation.type+"t.gif?aa="+Math.random()+")",
 								backgroundPosition:"2 0",
 								backgroundRepeat:"no-repeat"
+							});
+
+						}
+						else
+						{
+							this.parent.dom.setStyle(task.object.elements.derivation,{
+								//background:((task.derivation.type===0)?"":"url("+this.options.images_dir+task.derivation.type+"t.gif?aa="+Math.random()+")")
+								background:"url("+this.options.images_dir+task.derivation.type+"t.gif?aa="+Math.random()+")"
 							});
 						}
 
@@ -1086,6 +1155,9 @@ var processmap=function(){
 
 				if (this.options.rw) {
 				  options.color = ((options_task.tp==='task')?"auto":"#9B88CA");
+                                  if(options_task.tp==='hidden'){
+                                    options.color = "transparent";
+                                  }
 				}
 
 				var db		= this.data.db, task=db.task[index];
@@ -1099,7 +1171,15 @@ var processmap=function(){
 					backgroundColor:(options.color ? options.color : 'auto')
 				});
 
-				var subp = ((options_task.tp==='task')?"":"url(/images/subp.png)");
+				    if(options.color == '#9B88CA'){
+                                      var subp = ((options_task.tp==='task')?"":"url(/images/subp.png)");
+                                    }
+                                    if(options.color == 'transparent'){
+                                      var subp = ((options_task.tp==='task')?"":"url(/images/0t.gif)");
+                                    }
+                                    if(options_task.tp==='hidden'){
+                                       options_task.tp = 'task';
+                                    }
 				var b = document.createElement("div");
 				b.className="processmap_task_label___"+this.options.theme;
 				this.parent.dom.setStyle(b,{
@@ -1111,14 +1191,29 @@ var processmap=function(){
 				});
 				b.innerHTML = options.label;
 
+                                 if(options.color == 'transparent'){
+                                   var b = document.createElement("div");
+                                                                    b.className="processmap_task_label___"+this.options.theme;
+                                                               this.parent.dom.setStyle(b,{
+                                                                        cursor:((this.options.rw===true)?"move":"default"),
+                                                                        background:subp,
+                                                                        backgroundRepeat:"repeat-y",
+                                                                        backgroundPosition:"top",
+                                                                        height:100
+                                                                 });
+                                                               b.innerHTML = options.label;
+                                              }
+
 				var b1 = document.createElement("div");
-				this.parent.dom.setStyle(b1,{
+                                if(options.color != 'transparent'){
+				  this.parent.dom.setStyle(b1,{
 					top:'2',
 					left:'5',
 					border:"0px solid red",
 					height:13,
 					position:"absolute"
-				});
+				  });
+                                }
 				if(task.statusIcons){
 
 					for(var i=0;i<task.statusIcons.length;i++){
@@ -2105,6 +2200,10 @@ var processmap=function(){
 				  iWidth  = 450;
 				  iHeight = 205;
 				break;
+                                case 8:
+				  iWidth  = 550;
+				  iHeight = 300;
+				break;
 			}
 
 
@@ -2151,7 +2250,7 @@ var processmap=function(){
 			        vars['delete'] = true;
 			        var r = new leimnud.module.rpc.xmlhttp({
 		             		url:this.options.dataServer,
-			             	args:"action=saveNewPattern&data="+vars.toJSONString()
+			             	args:"action=saveNewPattern&data="+vars.toJSONString() //Save into the db
 			        });
 			        r.make();
   	        }.extend(this)
@@ -2403,20 +2502,35 @@ processmap.prototype={
 				r.make();
 		}
 		else
-	  {
-	     this.data.build.task(index,{tp:'subprocess'});
-				var r = new leimnud.module.rpc.xmlhttp({
-					url:this.options.dataServer,
-					args:"action=addSubProcess&data="+{uid:this.options.uid,position:pos}.toJSONString()
-				});
-				r.callback=this.parent.closure({instance:this,method:function(index,rpc){
-					var rs = rpc.xmlhttp.responseText.parseJSON();
-					var data = this.data.db.task[index];
-					data.label=data.object.elements.label.innerHTML=rs.label || "";
-					data.uid=rs.uid || false;
-				},args:[index,r]});
-				r.make();
-	  }
+                   { if(options.tp=='subprocess'){
+                       this.data.build.task(index,{tp:'subprocess'});
+                       var r = new leimnud.module.rpc.xmlhttp({
+                       url:this.options.dataServer,
+                       args:"action=addSubProcess&data="+{uid:this.options.uid,position:pos}.toJSONString()
+                       });
+                       r.callback=this.parent.closure({instance:this,method:function(index,rpc){
+                       var rs = rpc.xmlhttp.responseText.parseJSON();
+                       var data = this.data.db.task[index];
+                       data.label=data.object.elements.label.innerHTML=rs.label || "";
+                       data.uid=rs.uid || false;
+                       },args:[index,r]});
+                       r.make();
+                    }
+                    else{
+                       this.data.build.task(index,{tp:'hidden'});
+                       var r = new leimnud.module.rpc.xmlhttp({
+                       url:this.options.dataServer,
+                       args:"action=addTaskHidden&data="+{uid:this.options.uid,position:pos}.toJSONString()
+                       });
+                       r.callback=this.parent.closure({instance:this,method:function(index,rpc){
+                       var rs = rpc.xmlhttp.responseText.parseJSON();
+                       var data = this.data.db.task[index];
+                       data.label=data.object.elements.label.innerHTML=rs.label || "";
+                       data.uid=rs.uid || false;
+                       },args:[index,r]});
+                       r.make();
+                    }
+                   }
 
 	},
 	addText:function(evt)

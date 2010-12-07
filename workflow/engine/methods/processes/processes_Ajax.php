@@ -142,7 +142,12 @@ try {
   	case 'addSubProcess':
   	  $sOutput = $oProcessMap->addSubProcess($oData->uid, $oData->position->x, $oData->position->y);
   	break;
-
+        case 'taskColor':
+  	  $oTask->taskColor($oData->pro_uid, $oData->tas_uid);
+  	break;
+       case 'addTaskHidden':
+  	  $sOutput = $oProcessMap->addTaskHidden($oData->uid, $oData->position->x, $oData->position->y);
+  	break;
   	case 'editTaskProperties':
   	  $oProcessMap->editTaskProperties($oData->uid, (isset($oData->iForm) ? $oData->iForm : 1), $oData->index);
   	break;
@@ -228,6 +233,9 @@ try {
   	    	case 5:
   	    	  $oData->type = 'SEC-JOIN';
   	    	break;
+                case 8:
+  	    	  $oData->type = 'DISCRIMINATOR';
+  	    	break;
   	    }
   	    $oProcessMap->newPattern($oData->pro_uid, $oData->tas_uid, $oData->next_task, $oData->type);
   	  }
@@ -253,14 +261,17 @@ try {
   	  	case 5:
   	  	  $sType = 'SEC-JOIN';
   	  	break;
+                case 8:
+  	  	  $sType = 'DISCRIMINATOR';
+  	  	break;
   	  }
-  	  if (($oData->type != 0) && ($oData->type != 5)) {
+  	  if (($oData->type != 0) && ($oData->type != 5) && ($oData->type != 8)) {
   	    if ($oProcessMap->getNumberOfRoutes($oData->pro_uid, $oData->tas_uid, $oData->next_task, $sType) > 0) {
   	    	die;
   	    }
   	    unset($aRow);
   	  }
-  	  if (($oData->delete) || ($oData->type == 0) || ($oData->type == 5)) {
+  	  if (($oData->delete) || ($oData->type == 0) || ($oData->type == 5) || ($oData->type == 8)) {
   	  	G::LoadClass('tasks');
   	  	$oTasks = new Tasks();
   	    $oTasks->deleteAllRoutesOfTask($oData->pro_uid, $oData->tas_uid);

@@ -170,6 +170,9 @@ class processMap {
             case 'SEC-JOIN' :
               $aRow2 ['ROU_TYPE'] = 5;
               break;
+            case 'DISCRIMINATOR' :
+              $aRow2 ['ROU_TYPE'] = 8;
+              break;
           }
           $oTo = null;
           $oTo->task = $aRow2 ['ROU_NEXT_TASK'];
@@ -2247,6 +2250,18 @@ class processMap {
             }
             $sXmlform = 'patterns_ParallelByEvaluation';
             break;
+            case 'DISCRIMINATOR' :
+               G::LoadClass ( 'xmlfield_InputPM' );
+               $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_UID'] [$aRow ['ROU_CASE']]       = $aRow ['ROU_UID'];
+               $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_NEXT_TASK'] [$aRow ['ROU_CASE']] = $aRow ['ROU_NEXT_TASK'];
+               $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_CONDITION'] [$aRow ['ROU_CASE']] = $aRow ['ROU_CONDITION'];
+               $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_OPTIONAL'] [$aRow ['ROU_CASE']] = $aRow ['ROU_OPTIONAL'];
+               G::LoadClass('tasks');
+               $oTasks = new Tasks();
+               $routeData = $oTasks->getRouteByType($sProcessUID, $aRow['ROU_NEXT_TASK'], $aRow['ROU_TYPE']);
+               $aFields['ROUTE_COUNT'] =  count($routeData);
+               $sXmlform = 'patterns_Discriminator';
+            break;
         }
       }
       $aFields ['action'] = 'savePattern';
@@ -2337,6 +2352,19 @@ class processMap {
                 $oDataset->next();
               }
               break;
+            case 'DISCRIMINATOR' :
+              $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_UID'] [$aRow ['ROU_CASE']]       = $aRow ['ROU_UID'];
+              $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_NEXT_TASK'] [$aRow ['ROU_CASE']] = $aRow ['ROU_NEXT_TASK'];
+              $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_CONDITION'] [$aRow ['ROU_CASE']] = $aRow ['ROU_CONDITION'];
+              $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_OPTIONAL'] [$aRow ['ROU_CASE']] = $aRow ['ROU_OPTIONAL'];
+              while ( $aRow = $oDataset->getRow () ) {
+                $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_UID'] [$aRow ['ROU_CASE']]       = $aRow ['ROU_UID'];
+                $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_NEXT_TASK'] [$aRow ['ROU_CASE']] = $aRow ['ROU_NEXT_TASK'];
+                $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_CONDITION'] [$aRow ['ROU_CASE']] = $aRow ['ROU_CONDITION'];
+                $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_OPTIONAL'] [$aRow ['ROU_CASE']] = $aRow ['ROU_OPTIONAL'];
+                $oDataset->next ();
+              }
+              break;
           }
         } else {
 
@@ -2374,6 +2402,13 @@ class processMap {
           $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_NEXT_TASK'] [$iRow] = $sNextTask;
           $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_CONDITION'] [$iRow] = '';
           $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_TO_LAST_USER'] [$iRow] = '';
+          break;
+        case 'DISCRIMINATOR' :
+          $iRow = (isset ( $aFields ['GRID_DISCRIMINATOR_TYPE'] ) ? count ( $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_UID'] ) + 1 : 0);
+          $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_UID'] [$iRow]          = '';
+          $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_NEXT_TASK'] [$iRow]    = $sNextTask;
+          $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_CONDITION'] [$iRow]    = '';
+          $aFields ['GRID_DISCRIMINATOR_TYPE'] ['ROU_TO_LAST_USER'] [$iRow] = '';
           break;
       }
       $aFields ['action'] = 'savePattern';

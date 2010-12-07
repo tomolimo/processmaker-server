@@ -5160,4 +5160,46 @@ class Cases {
     }
   }
 
+  function discriminateCases($aData){
+    $siblingThreadData = $this->GetAllOpenDelegation($aData);
+    foreach($siblingThreadData as $thread => $threadData)
+    {
+        $this->closeAppThread ( $aData['APP_UID'], $threadData['DEL_INDEX']); //Close Sibling AppThreads
+        $this->CloseCurrentDelegation ($aData['APP_UID'], $threadData['DEL_INDEX']); //Close Sibling AppDelegations
+    }
+  }
+
+  /*
+  * We're getting all threads in a task
+  *
+  * @name GetAllThreads of Particular Parent Thread
+  * @param string $sAppUid
+  * @param string $sAppParent
+  * @return $aThreads
+  */
+  function GetAllOpenDelegation($aData)
+  {
+    //('SELECT * FROM APP_THREAD WHERE APP_UID='".$aData['APP_UID']."' AND APP_THREAD_PARENT = '".$aData['APP_THREAD_PARENT']."'");
+    try {
+      $aThreads = array();
+      $c        = new Criteria();
+      $c->add(AppDelegationPeer::APP_UID, $aData['APP_UID']);
+      $c->add(AppDelegationPeer::DEL_PREVIOUS, $aData['APP_THREAD_PARENT']);
+      $c->add(AppDelegationPeer::DEL_THREAD_STATUS,'OPEN');
+      $rs = AppDelegationPeer::doSelectRs($c);
+      $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $rs->next();
+      $row = $rs->getRow();
+      while (is_array($row)) {
+          $aThreads[] = $row;
+          $rs->next();
+          $row = $rs->getRow();
+      }
+      return $aThreads;
+    }
+    catch (exception $e) {
+      throw ($e);
+    }
+  }
+  
 }

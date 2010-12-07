@@ -43,7 +43,17 @@ var saveDataTaskTemporal = function(iForm)
         {
           oTaskData.TAS_ASSIGN_TYPE = 'EVALUATE';
         }
+        if (getField('TAS_ASSIGN_TYPE][STATIC_MI').checked)
+        {
+          oTaskData.TAS_ASSIGN_TYPE = 'STATIC_MI';
+        }
+        if (getField('TAS_ASSIGN_TYPE][CANCEL_MI').checked)
+        {
+          oTaskData.TAS_ASSIGN_TYPE = 'CANCEL_MI';
+        }
         oTaskData.TAS_ASSIGN_VARIABLE = getField('TAS_ASSIGN_VARIABLE').value;
+        oTaskData.TAS_MI_INSTANCE_VARIABLE = getField('TAS_MI_INSTANCE_VARIABLE').value;
+        oTaskData.TAS_MI_COMPLETE_VARIABLE = getField('TAS_MI_COMPLETE_VARIABLE').value;
       break;
       case 3:
       case '3':
@@ -51,7 +61,7 @@ var saveDataTaskTemporal = function(iForm)
         oTaskData.TAS_TIMEUNIT     = getField('TAS_TIMEUNIT').value;
         oTaskData.TAS_TYPE_DAY     = getField('TAS_TYPE_DAY').value;
         oTaskData.TAS_CALENDAR     = getField('TAS_CALENDAR').value;
-        //oTaskData.TAS_TRANSFER_FLY = (getField('TAS_TRANSFER_FLY').checked ? 'TRUE' : 'FALSE');
+        oTaskData.TAS_TRANSFER_FLY = (getField('TAS_TRANSFER_FLY').checked ? 'TRUE' : 'FALSE');
       break;
       case 4:
       case '4':

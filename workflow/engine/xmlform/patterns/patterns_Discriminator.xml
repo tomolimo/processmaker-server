@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="patterns_Sequential" type="xmlform" width="100%" enableTemplate="1">
+
+<action type="hidden"/>
+
+<LANG type="private"/>
+
+<ROU_UID type="hidden"/>
+
+<ROUTE_COUNT type="hidden"/>
+
+<PROCESS type="hidden"/>
+
+<TASK type="hidden"/>
+
+<ROU_TYPE_OLD type="hidden"/>
+
+<TITLE type="title" showInTable="0">
+  <en>Discriminator</en>
+</TITLE>
+
+<ROU_TYPE type="hidden"/>
+
+<GRID_DISCRIMINATOR_TYPE type="grid" xmlgrid="patterns/patterns_GridDiscriminator" addRow="0" deleteRow="0" editRow="" />
+
+<BTN_CANCEL type="button" onclick="cancel();">
+  <en>Cancel</en>
+</BTN_CANCEL>
+
+<SAVE type="button" onclick="savePattern(this.form);">
+  <en>Save</en>
+</SAVE>
+
+<JS type="javascript"><![CDATA[
+
+var savePattern = function(oForm)
+{
+  var oAux;
+  var oType     = getField('ROU_TYPE');
+  var routeCount     = getField('ROUTE_COUNT').value;
+  var oOldType  = getField('ROU_TYPE_OLD');
+  var i         = 1;
+  var aData     = {};
+  var bContinue = true;
+  if (oType.value != oOldType.value)
+  {
+    if (!confirm('You are changing the pattern, are you sure?'))
+    {
+      return false;
+    }
+  }
+  i             = 1;
+  aData.tas_uid = getField('TASK').value;
+  aData.data    = [];
+  aData.type = 8;
+  while (oAux = document.getElementById('form[GRID_DISCRIMINATOR_TYPE][' + i + '][ROU_NEXT_TASK]'))
+   {
+        oCond = document.getElementById('form[GRID_DISCRIMINATOR_TYPE][' + i + '][ROU_CONDITION]');
+        if(oCond.value >= routeCount)
+        {
+            new leimnud.module.app.alert().make({label: 'No of Discriminators cannot be Greater than equal to Parallel Tasks'});
+            return false;
+        }
+        else if(oCond.value == 0)
+        {
+            new leimnud.module.app.alert().make({label: 'Zero Task cannot be Discriminated'});
+            return false;
+        }
+        aData.data.push(oAux.value);
+        i++;
+  }
+  Pm.data.build.derivation(aData);
+  ajax_post(oForm.action, oForm, 'POST');
+  bModified = false;
+  Pm.tmp.derivationsPanel.remove();
+};
+
+function cancel(){
+    Pm.tmp.derivationsPanel.remove();
+}
+]]></JS>
+
+</dynaForm> 

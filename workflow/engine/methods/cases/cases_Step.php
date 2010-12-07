@@ -53,6 +53,7 @@
   G::LoadClass('case');
   G::LoadClass('derivation');
 
+
   /* GET , POST & $_SESSION Vars */
   if(isset($_GET['POSITION'])) {
     $_SESSION['STEP_POSITION'] = (int)$_GET['POSITION'];
@@ -87,7 +88,7 @@
   $G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
 
   $oCase = new Cases();
-  
+
   $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
   $Fields['APP_DATA'] = array_merge($Fields['APP_DATA'], G::getSystemConstants());
   $sStatus = $Fields['APP_STATUS'];
@@ -95,15 +96,12 @@
   $APP_NUMBER = $Fields['APP_NUMBER'];
   $APP_TITLE = $Fields['TITLE'];
 
-  //optimize for speed, we are reading process info once
-  //$oProcess = new Process();
-  //$oProcessFields = $oProcess->Load($_SESSION['PROCESS']);
-  $oProcess = ProcessPeer::retrieveByPk( $_SESSION['PROCESS'] );
-  $oProcessFields = $oProcess->toArray(BasePeer::TYPE_FIELDNAME);
+  $oProcess = new Process();
+  $oProcessFieds = $oProcess->Load($_SESSION['PROCESS']);
 
   #trigger debug routines...
 
-  if( isset($oProcessFields['PRO_DEBUG']) && $oProcessFields['PRO_DEBUG'] ) { #here we must verify if is a debugg session
+  if( isset($oProcessFieds['PRO_DEBUG']) && $oProcessFieds['PRO_DEBUG'] ) { #here we must verify if is a debugg session
     $_SESSION['TRIGGER_DEBUG']['ISSET'] = 1;
     $_SESSION['PMDEBUGGER']= true;
   }
@@ -115,7 +113,7 @@
   //cleaning debug variables
   if( !isset($_GET['breakpoint']) ) {
   	if( isset($_SESSION['TRIGGER_DEBUG']['info']) ) unset($_SESSION['TRIGGER_DEBUG']['info']);
-  	
+
     if (!isset($_SESSION['_NO_EXECUTE_TRIGGERS_'])) {
       $_SESSION['TRIGGER_DEBUG']['ERRORS'] = Array();
     }
@@ -154,7 +152,7 @@
    * Here we throw the debug view
    */
   if ( isset($_GET['breakpoint']) ) {
-    
+
   	$G_PUBLISH->AddContent('view', 'cases/showDebugFrameLoader');
     $G_PUBLISH->AddContent('view', 'cases/showDebugFrameBreaker');
     G::RenderPage('publish', 'blank');
@@ -204,7 +202,7 @@
       /** Added By erik  16-05-08
       * Description: this was added for the additional database connections */
       G::LoadClass ('dbConnections');
-      $oDbConnections = new dbConnections(NULL);
+      $oDbConnections = new dbConnections($_SESSION['PROCESS']);
       $oDbConnections->loadAdditionalConnections();
       $_SESSION['CURRENT_DYN_UID'] = $_GET['UID'];
 
@@ -213,7 +211,7 @@
 
     case 'INPUT_DOCUMENT':
       $oInputDocument = new InputDocument();
-      $Fields = $oInputDocument->load($_GET['UID']);      
+      $Fields = $oInputDocument->load($_GET['UID']);
       if (!$aPreviousStep) {
         $Fields['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
         $Fields['PREVIOUS_STEP_LABEL'] = '';
@@ -221,7 +219,7 @@
       else {
         $Fields['__DYNAFORM_OPTIONS']['PREVIOUS_STEP'] = $aPreviousStep['PAGE'];
         $Fields['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = G::loadTranslation("ID_PREVIOUS_STEP");
-        
+
         $Fields['PREVIOUS_STEP'] = $aPreviousStep['PAGE'];
         $Fields['PREVIOUS_STEP_LABEL'] = G::loadTranslation("ID_PREVIOUS_STEP");
       }
@@ -248,14 +246,14 @@
           $Fields['MESSAGE2'] = G::LoadTranslation('ID_PLEASE_SELECT_FILE');
         //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
         $oPluginRegistry =& PMPluginRegistry::getSingleton();
-        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator        	
-        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );        	        	
-        }         
+        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator
+        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
+        }
 				//END: If there is a Break Step registered from Plugin
-          
+
           $G_PUBLISH->AddContent('propeltable', 'cases/paged-table-inputDocuments', 'cases/cases_InputdocsList', $oCase->getInputDocumentsCriteria($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_GET['UID']), array_merge(array('DOC_UID'=>$_GET['UID']),$Fields));//$aFields
-            
-          //call plugin          
+
+          //call plugin
           //if ( $oPluginRegistry->existsTrigger ( PM_CASE_DOCUMENT_LIST ) ) {
           //  $folderData = new folderData (null, null, $_SESSION['APPLICATION'], null, $_SESSION['USER_LOGGED'] );
           //  $oPluginRegistry =& PMPluginRegistry::getSingleton();
@@ -264,15 +262,15 @@
           //}
           //else
           //  $G_PUBLISH->AddContent('propeltable', 'cases/paged-table-inputDocuments', 'cases/cases_InputdocsList', $oCase->getInputDocumentsCriteria($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_GET['UID']), array_merge(array('DOC_UID'=>$_GET['UID']),$Fields));//$aFields
-            
-          $oHeadPublisher =& headPublisher::getSingleton();            
+
+          $oHeadPublisher =& headPublisher::getSingleton();
           $titleDocument="<h3>".$Fields['INP_DOC_TITLE']."<br><small>".G::LoadTranslation('ID_INPUT_DOCUMENT')."</small></h3>";
           if($Fields['INP_DOC_DESCRIPTION']) $titleDocument.= " ".str_replace("\n","",str_replace("'","\'",nl2br(htmlentities(utf8_decode($Fields['INP_DOC_DESCRIPTION'])))))."";
-            
+
           $oHeadPublisher->addScriptCode("documentName='{$titleDocument}';");
           break;
 
-        case 'VIEW':        
+        case 'VIEW':
           require_once 'classes/model/AppDocument.php';
           require_once 'classes/model/Users.php';
           $oAppDocument = new AppDocument();
@@ -304,7 +302,6 @@
       require_once 'classes/model/OutputDocument.php';
       $oOutputDocument = new OutputDocument();
       $aOD = $oOutputDocument->load( $_GET['UID'] );
-
       if (!$aPreviousStep) {
         $aOD['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
       }
@@ -319,43 +316,19 @@
         case 'GENERATE':
 	        //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
 	        $oPluginRegistry =& PMPluginRegistry::getSingleton();
-	        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator        	
-	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED'],'DOC_UID'=>$_GET['UID'],'PRO_UID'=>$_SESSION['PROCESS']) );        	        	
-	        }         
+	        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator
+	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
+	        }
 					//END: If there is a Break Step registered from Plugin
-        
+
           $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
           if ( $sFilename == '' ) $sFilename='_';
           $pathOutput = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP ;
           G::mk_dir ( $pathOutput );
           switch ( $aOD['OUT_DOC_TYPE'] ) {
-            case 'HTML' : 
-                $aProperties = array();                //maui
-                
-                if(!isset($aOD['OUT_DOC_MEDIA']))
-                	$aOD['OUT_DOC_MEDIA'] = 'Letter';
-                if(!isset($aOD['OUT_DOC_LEFT_MARGIN']))
-                	$aOD['OUT_DOC_LEFT_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_RIGHT_MARGIN']))
-                	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
-                	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
-                	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
-                	
-                if(isset($aOD['OUT_DOC_VERSIONING']) && $aOD['OUT_DOC_VERSIONING']!=0){
-                 $oAppDocument= new AppDocument();          
-                 $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
-                 $lastDocVersion = $lastDocVersion +1;
-                 $lastDocVersion = '_'.$lastDocVersion;
-                }else {
-                	$lastDocVersion='';
-                }
-
-                $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
-                $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
+            case 'HTML' :
                 $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
-                   $sFilename.$lastDocVersion, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
+                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
                 break;
             case 'JRXML' :
                 //creating the xml with the application data;
@@ -365,22 +338,22 @@
                 }
                 $xmlData .= "</dynaform>\n";
                 $iSize = file_put_contents ( $javaOutput .  'addressBook.xml' , $xmlData );
-              
+
                 G::LoadClass ('javaBridgePM');
                 $JBPM = new JavaBridgePM();
                 $JBPM->checkJavaExtension();
-              
+
                 $util = new Java("com.processmaker.util.pmutils");
                 $util->setInputPath( $javaInput );
                 $util->setOutputPath( $javaOutput );
-              
+
                 //$content = file_get_contents ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml' );
                 //$iSize = file_put_contents ( $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml', $content );
                 copy ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml', $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml' );
-              
+
                $outputFile = $javaOutput . $sFilename . '.pdf' ;
                 print $util->jrxml2pdf( $aOD['OUT_DOC_UID'] . '.jrxml' , basename($outputFile) );
-              
+
                 //$content = file_get_contents ( $outputFile );
                 //$iSize = file_put_contents ( $pathOutput .  $sFilename . '.pdf' , $content );
                 copy ( $outputFile, $pathOutput .  $sFilename . '.pdf' );
@@ -394,46 +367,46 @@
                   }
                   $xmlData .= "</dynaform>\n";
                   //$iSize = file_put_contents ( $javaOutput .  'addressBook.xml' , $xmlData );
-                
+
                   G::LoadClass ('javaBridgePM');
                   $JBPM = new JavaBridgePM();
                   $JBPM->checkJavaExtension();
-                
+
                   $util = new Java("com.processmaker.util.pmutils");
                   $util->setInputPath( $javaInput );
                   $util->setOutputPath( $javaOutput );
-                
+
                   copy ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.pdf', $javaInput .  $aOD['OUT_DOC_UID'] . '.pdf' );
-                  
+
                   $outputFile = $javaOutput . $sFilename . '.pdf' ;
                   print $util->writeVarsToAcroFields( $aOD['OUT_DOC_UID'] . '.pdf' , $xmlData );
-                
+
                   copy ( $javaOutput. $aOD['OUT_DOC_UID'] . '.pdf', $pathOutput .  $sFilename . '.pdf' );
-                
+
                 break;
               default :
                 throw ( new Exception ('invalid output document' ));
           }
-          
+
           require_once 'classes/model/AppFolder.php';
           require_once 'classes/model/AppDocument.php';
-          
-          //Get the Custom Folder ID (create if necessary)         
+
+          //Get the Custom Folder ID (create if necessary)
           $oFolder=new AppFolder();
           $folderId=$oFolder->createFromPath($aOD['OUT_DOC_DESTINATION_PATH']);
-          
+
           //Tags
           $fileTags=$oFolder->parseTags($aOD['OUT_DOC_TAGS']);
-          
+
           //Get last Document Version and apply versioning if is enabled
-          
-          $oAppDocument= new AppDocument();          
+
+          $oAppDocument= new AppDocument();
           $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
-          
+
           //if(($aOD['OUT_DOC_VERSIONING'])||($lastDocVersion==0)){
           //  $lastDocVersion++;
           //}
-          
+
           $oCriteria = new Criteria('workflow');
           $oCriteria->add(AppDocumentPeer::APP_UID,      $_SESSION['APPLICATION']);
           //$oCriteria->add(AppDocumentPeer::DEL_INDEX,    $_SESSION['INDEX']);
@@ -442,9 +415,9 @@
           $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
           $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-          $oDataset->next();          
-          if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output            
-            if ($aRow = $oDataset->getRow()) {                
+          $oDataset->next();
+          if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output
+            if ($aRow = $oDataset->getRow()) {
                 $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
                                  'APP_UID'             => $_SESSION['APPLICATION'],
                                  'DEL_INDEX'           => $_SESSION['INDEX'],
@@ -456,12 +429,12 @@
                                  'APP_DOC_FILENAME'    => $sFilename,
                                  'FOLDER_UID'          => $folderId,
                                  'APP_DOC_TAGS'        => $fileTags);
-                $oAppDocument = new AppDocument();                  
-                $oAppDocument->create($aFields);                
+                $oAppDocument = new AppDocument();
+                $oAppDocument->create($aFields);
                 $sDocUID = $aRow['APP_DOC_UID'];
             }
           }else{//No versioning so Update a current Output or Create new if no exist
-            if ($aRow = $oDataset->getRow()) { //Update                
+            if ($aRow = $oDataset->getRow()) { //Update
                 $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
                                  'APP_UID'             => $_SESSION['APPLICATION'],
                                  'DEL_INDEX'           => $_SESSION['INDEX'],
@@ -476,7 +449,7 @@
                 $oAppDocument = new AppDocument();
                 $oAppDocument->update($aFields);
                 $sDocUID = $aRow['APP_DOC_UID'];
-             }else{ //create                
+             }else{ //create
                 if($lastDocVersion==0) $lastDocVersion++;
                 $aFields = array('APP_UID'             => $_SESSION['APPLICATION'],
                              'DEL_INDEX'           => $_SESSION['INDEX'],
@@ -490,7 +463,7 @@
                              'APP_DOC_TAGS'        => $fileTags);
                 $oAppDocument = new AppDocument();
                 $aFields['APP_DOC_UID']=$sDocUID = $oAppDocument->create($aFields);
-                
+
             }
           }
 
@@ -506,17 +479,17 @@
 
           //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
           $oPluginRegistry =& PMPluginRegistry::getSingleton();
-          if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {          	
-          	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );          	
-          	$aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;          	
-          	
+          if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
+          	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
+          	$aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
+
           	$oAppDocument1 = new AppDocument();
             $oAppDocument1->update($aFields);
-           
+
           	$sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
 
             $oData['APP_UID']   = $_SESSION['APPLICATION'];
-            $oData['ATTACHMENT_FOLDER'] = true;            
+            $oData['ATTACHMENT_FOLDER'] = true;
             switch($aOD['OUT_DOC_GENERATE']){
                 case "BOTH":
                     $documentData = new uploadDocumentData (
@@ -534,7 +507,7 @@
                     if($uploadReturn){//Only delete if the file was saved correctly
                     	unlink ( $pathOutput . $sFilename. '.pdf' );
                   	}
-                    
+
 
 
                     $documentData = new uploadDocumentData (
@@ -597,55 +570,50 @@
           G::header('location: '.$outputNextStep);
 					die;
           break;
-        case 'VIEW':        
+        case 'VIEW':
           require_once 'classes/model/AppDocument.php';
           $oAppDocument = new AppDocument();
           $lastVersion=$oAppDocument->getLastAppDocVersion($_GET['DOC'],$_SESSION['APPLICATION']);
           $aFields = $oAppDocument->load($_GET['DOC'],$lastVersion);
+
           $listing=false;
 			    $oPluginRegistry = & PMPluginRegistry::getSingleton();
 			    if($oPluginRegistry->existsTrigger(PM_CASE_DOCUMENT_LIST)) {
 			      $folderData = new folderData(null, null, $_SESSION['APPLICATION'], null, $_SESSION['USER_LOGGED']);
 			      $folderData->PMType = "OUTPUT";
-			      $folderData->returnList = true;			      
-			      $listing=$oPluginRegistry->executeTriggers(PM_CASE_DOCUMENT_LIST, $folderData);			     
+			      $folderData->returnList = true;
+			      $listing=$oPluginRegistry->executeTriggers(PM_CASE_DOCUMENT_LIST, $folderData);
 			    }
-          
+
 
           require_once 'classes/model/OutputDocument.php';
           $oOutputDocument = new OutputDocument();
           $aGields = $oOutputDocument->load($aFields['DOC_UID']);
-          
-          if(isset($aGields['OUT_DOC_VERSIONING']) && $aGields['OUT_DOC_VERSIONING']!=0){
-         	  $oAppDocument= new AppDocument();          
-            $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
-          }else {
-           	$lastDocVersion='';
-          }
+
           $aFields['VIEW1'] = G::LoadTranslation('ID_OPEN');
-          
+
           $aFields['VIEW2'] = G::LoadTranslation('ID_OPEN');
 
-          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=doc&random=' . rand();
+          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=doc&random=' . rand();
 
-          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=pdf&random=' . rand();
-          
+          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=pdf&random=' . rand();
+
 
           if ( is_array ($listing) ){//If exist in Plugin Document List
 		        foreach($listing as $folderitem) {
-		            if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='DOC')){		            	
+		            if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='DOC')){
 		                $aFields['VIEW1'] = G::LoadTranslation('ID_GET_EXTERNAL_FILE');
 		                $aFields['FILE1'] = $folderitem->downloadScript;
 		                continue;
 		            }
-		            if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='PDF')){		            	
+		            if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='PDF')){
 		                $aFields['VIEW2'] = G::LoadTranslation('ID_GET_EXTERNAL_FILE');
 		                $aFields['FILE2'] = $folderitem->downloadScript;
 		                continue;
 		            }
 		        }
-        	}        	
-          
+        	}
+
           if(($aGields['OUT_DOC_GENERATE']=='BOTH')||($aGields['OUT_DOC_GENERATE']==''))
               $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_ViewOutputDocument1', '', G::array_merges($aOD, $aFields), '');
 
@@ -655,17 +623,16 @@
           if($aGields['OUT_DOC_GENERATE']=='PDF')
               $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_ViewOutputDocument3', '', G::array_merges($aOD, $aFields), '');
 
-         
+
           break;
         }
       break;
 
     case 'ASSIGN_TASK':
       $oDerivation = new Derivation();
-      //$oProcess    = new Process();  //optimized for speed, we already load process row
+      $oProcess    = new Process();
       $aData       = $oCase->loadCase($_SESSION['APPLICATION']);
-      //$aFields['PROCESS']              = $oProcess->load($_SESSION['PROCESS']);
-      $aFields['PROCESS']              = $oProcessFields;
+      $aFields['PROCESS']              = $oProcess->load($_SESSION['PROCESS']);
       $aFields['PREVIOUS_PAGE']        = $aPreviousStep['PAGE'];
       $aFields['PREVIOUS_PAGE_LABEL']  = G::LoadTranslation('ID_PREVIOUS_STEP');
       $aFields['ASSIGN_TASK']          = G::LoadTranslation('ID_ASSIGN_TASK');
@@ -677,18 +644,23 @@
       $aFields['CONTINUE']             = G::LoadTranslation('ID_CONTINUE');
       $aFields['CONTINUE_WITH_OPTION'] = G::LoadTranslation('ID_CONTINUE_WITH_OPTION');
       $aFields['FINISH_WITH_OPTION']   = G::LoadTranslation('ID_FINISH_WITH_OPTION');
+      $aFields['TAS_TIMING_TITLE']     = 'Timing Control';
+      $aFields['TAS_DURATION']         = 'Task Duration';
+      $aFields['TAS_TIMEUNIT']         = 'Task Unit';
+      $aFields['TAS_TYPE_DAY']         = 'Count Days By';
+      $aFields['TAS_CALENDAR']         = 'Calendar';
       $aFields['TASK'] = $oDerivation->prepareInformation(
                          array( 'USER_UID'  => $_SESSION['USER_LOGGED'],
                                 'APP_UID'   => $_SESSION['APPLICATION'],
                                 'DEL_INDEX' => $_SESSION['INDEX'])
                          );
       if ( empty($aFields['TASK']) )  {
-        throw ( new Exception ( G::LoadTranslation ( 'ID_NO_DERIVATION_RULE')  ) );
+        throw ( new Exception ( G::LoadTranslation( 'ID_NO_DERIVATION_RULE')  ) );
       }
       //take the first derivation rule as the task derivation rule type.
       $aFields['PROCESS']['ROU_TYPE'] = $aFields['TASK'][1]['ROU_TYPE'];
       $aFields['PROCESS']['ROU_FINISH_FLAG'] = false;
-      
+
       foreach ( $aFields['TASK'] as $sKey => &$aValues)
       {
         $sPriority = '';//set priority value
@@ -715,7 +687,7 @@
               $hiddenName = "form[TASKS][" . $sKey . "][USR_UID]";
               $aFields['TASK'][$sKey]['NEXT_TASK']['USR_UID'] = $aFields['TASK'][$sKey]['NEXT_TASK']['USER_ASSIGNED']['USR_FULLNAME'];
               $aFields['TASK'][$sKey]['NEXT_TASK']['USR_HIDDEN_FIELD'] = '<input type="hidden" name="' . $hiddenName . '" id="' . $hiddenName . '" value="' . $aValues['NEXT_TASK']['USER_ASSIGNED']['USR_UID'] . '">';
-
+              //var_dump($aFields);
               //there is a error with reportsTo, when the USR_UID is empty means there are no manager for this user, so we are disabling buttons
               //but this validation is not for SELF_SERVICE
               if ( $aValues['NEXT_TASK']['TAS_ASSIGN_TYPE'] != 'SELF_SERVICE' )
@@ -739,6 +711,96 @@
 
               $aFields['TASK'][$sKey]['NEXT_TASK']['USR_UID'] = $sAux;
               break;
+          case 'CANCEL_MI':
+          case 'STATIC_MI':
+              //count the Users in the group
+              $cntInstanceUsers = count($aValues['NEXT_TASK']['USER_ASSIGNED']);
+
+               //set TAS_MI_INSTANCE_VARIABLE value
+               $sMIinstanceVar = '';
+               if ($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_INSTANCE_VARIABLE'] != '') {
+                   if (isset($aData['APP_DATA'][str_replace('@@', '', $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_INSTANCE_VARIABLE'])]))
+                    {
+                        $sMIinstanceVar = $aData['APP_DATA'][str_replace('@@', '', $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_INSTANCE_VARIABLE'])];
+                        if($sMIinstanceVar > $cntInstanceUsers)
+                            throw (new Exception("Total Multiple Instance Task cannot be greater than number of users in the group."));
+                        else if($sMIinstanceVar == 0)
+                            throw (new Exception("Total Multiple Instance Task cannot be zero."));
+                    }
+                    else if(is_int((int)$aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_INSTANCE_VARIABLE']))
+                    {
+                        $sMIinstanceVar = $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_INSTANCE_VARIABLE'];
+                        if($sMIinstanceVar > $cntInstanceUsers)
+                            throw (new Exception("Total Multiple Instance Task cannot be greater than number of users in the group."));
+                    }
+                    else
+                       throw (new Exception("Total Multiple Instance Task variable doesn't have valid value."));
+               }
+                 else
+                    throw (new Exception("Total Multiple Instance Task variable doesn't have valid value."));
+               ////set TAS_MI_INSTANCE_VARIABLE value
+
+               //set TAS_MI_COMPLETE_VARIABLE value
+               $sMIcompleteVar = '';
+               if ($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_COMPLETE_VARIABLE'] != '') {
+                   if (isset($aData['APP_DATA'][str_replace('@@', '', $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_COMPLETE_VARIABLE'])]))
+                    {
+                        $sMIcompleteVar = $aData['APP_DATA'][str_replace('@@', '', $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_COMPLETE_VARIABLE'])];
+                        //
+                        if($sMIcompleteVar > $sMIinstanceVar)
+                            throw (new Exception("Total Multiple Instance Task to complete cannot be greater than Total number of Instances."));
+                    }
+                    else if(is_int((int)$aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_COMPLETE_VARIABLE']))
+                    {
+                        $sMIcompleteVar = $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_MI_COMPLETE_VARIABLE'];
+                        if($sMIcompleteVar > $sMIinstanceVar)
+                            throw (new Exception("Total Multiple Instance Task to complete cannot be greater than Total number of Instances."));
+                    }
+                    else
+                        throw ( new Exception("Total Multiple Instance Task to complete variable doesn't have valid value.") ) ;
+
+               }
+                 else
+                    throw ( new Exception("Total Multiple Instance Task to complete variable doesn't have valid value.") ) ;
+               //set TAS_MI_COMPLETE_VARIABLE value
+                $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_NEXT'] = $aValues['NEXT_TASK']['TAS_ASSIGN_TYPE'];
+
+               //If the Users in the group is equal to the MI Instance variable then Show all the users without Dropdown
+               if($sMIinstanceVar == $cntInstanceUsers)
+               {
+                  foreach ($aValues['NEXT_TASK']['USER_ASSIGNED'] as $key=>$aUser)
+                  {
+                    $hiddenName = "form[TASKS][" . $sKey . "][NEXT_TASK][USER_ASSIGNED][".$key."][USR_UID]";
+                    $aFields['TASK'][$sKey]['NEXT_TASK']['USER_ASSIGNED'][$key]['USR_UID'] = $aUser['USR_FULLNAME'];
+                    $aFields['TASK'][$sKey]['NEXT_TASK']['USER_ASSIGNED'][$key]['USR_HIDDEN_FIELD'] = '<input type="hidden" name="' . $hiddenName . '" id="' . $hiddenName . '" value="' . $aUser['USR_UID'] . '">';
+                  }
+              }
+              //If the Users in the group is not equal to the MI Instance variable then Show Only count users in dropdown
+              else
+              {
+                    $Aux = array();
+                    foreach ($aValues['NEXT_TASK']['USER_ASSIGNED'] as $aUser)
+                    {
+                          $Aux[$aUser['USR_UID']] = $aUser['USR_FULLNAME'];
+                    }
+                    asort($Aux);
+                    $aAux = '<option value="" enabled>'.G::LoadTranslation('ID_SELECT').'</option>';
+                    foreach ($Aux as $akey => $value)
+                    {
+                        $aAux .= '<option value="' . $akey . '">' . $value . '</option>';
+                    }
+
+                    for($key=0; $key < $sMIinstanceVar; $key++)
+                    {
+                        $hiddenName = "form[TASKS][" . $sKey . "][NEXT_TASK][USER_ASSIGNED][".$key."][USR_UID]";
+                        $sAux      = "<select name=$hiddenName id=$hiddenName";
+                        $sAux .= $aAux;
+                        $sAux .= '</select>';
+                        $aFields['TASK'][$sKey]['NEXT_TASK']['USER_ASSIGNED'][$key]['USR_HIDDEN_FIELD'] = "<input type='hidden' name='hidden' id='hidden' value=''>";
+                        $aFields['TASK'][$sKey]['NEXT_TASK']['USER_ASSIGNED'][$key]['USR_UID'] = $sAux;
+                    }
+              }
+              break;
           case '':  //when this task is the Finish process
               $userFields = $oDerivation->getUsersFullNameFromArray ( $aFields['TASK'][$sKey]['USER_UID'] );
               $aFields['TASK'][$sKey]['NEXT_TASK']['USR_UID'] = $userFields['USR_FULLNAME'];
@@ -747,18 +809,75 @@
               break;
         }
         $hiddenName = 'form[TASKS][' . $sKey . ']';
-        $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_ASSIGN_TYPE']   = '<input type="hidden" name="' . $hiddenName . '[TAS_ASSIGN_TYPE]"   id="' . $hiddenName . '[TAS_ASSIGN_TYPE]"   value="' . $aValues['NEXT_TASK']['TAS_ASSIGN_TYPE'] . '">';
-        if (isset ($aValues['NEXT_TASK']['TAS_DEF_PROC_CODE'])){
-          $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_DEF_PROC_CODE'] = '<input type="hidden" name="' . $hiddenName . '[TAS_DEF_PROC_CODE]" id="' . $hiddenName . '[TAS_DEF_PROC_CODE]" value="' . $aValues['NEXT_TASK']['TAS_DEF_PROC_CODE'] . '">';
-        } else {
-          $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_DEF_PROC_CODE'] = '<input type="hidden" name="' . $hiddenName . '[TAS_DEF_PROC_CODE]" id="' . $hiddenName . '[TAS_DEF_PROC_CODE]" value="">';
-        }
-        $aFields['TASK'][$sKey]['NEXT_TASK']['DEL_PRIORITY']      = '<input type="hidden" name="' . $hiddenName . '[DEL_PRIORITY]"      id="' . $hiddenName . '[DEL_PRIORITY]"      value="' . $sPriority . '">';
-        $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_PARENT']        = '<input type="hidden" name="' . $hiddenName . '[TAS_PARENT]"        id="' . $hiddenName . '[TAS_PARENT]"        value="' . $aValues['NEXT_TASK']['TAS_PARENT'] . '">';
-      }
 
+        /* Allow user defined Timing Control
+         * Values in the dropdown will be populated from the Table TASK.
+         */
+        if($aValues['NEXT_TASK']['TAS_ASSIGN_TYPE'] != '') //Check for End of Process
+        {
+            $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TRANSFER_FLY'] = strtolower($aValues['NEXT_TASK']['TAS_TRANSFER_FLY']);
+            $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TRANSFER_HIDDEN_FLY'] = "<input type=hidden name='".$hiddenName."[NEXT_TASK][TAS_TRANSFER_HIDDEN_FLY]' id='".$hiddenName."[NEXT_TASK][TAS_TRANSFER_HIDDEN_FLY]' value=".$aValues['NEXT_TASK']['TAS_TRANSFER_FLY'].">";
+            if($aValues['NEXT_TASK']['TAS_TRANSFER_FLY'] == 'true')
+            {
+                $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_DURATION'] = '<input type="text" size="5" name="' . $hiddenName . '[NEXT_TASK][TAS_DURATION]" id="' . $hiddenName . '[NEXT_TASK][TAS_DURATION]" value="' . $aValues['NEXT_TASK']['TAS_DURATION'] . '">';
+                $hoursSelected = $daysSelected = '';
+                if($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TIMEUNIT'] == 'HOURS')
+                    $hoursSelected = "selected = 'selected'";
+                else
+                    $daysSelected = "selected = 'selected'";
+
+                $sAux  = '<select name='.$hiddenName.'[NEXT_TASK][TAS_TIMEUNIT] id= '.$hiddenName.'[NEXT_TASK][TAS_TIMEUNIT] ';
+                $sAux .= "<option ".$hoursSelected." value='HOURS'>Hours</option> ";
+                $sAux .= "<option ".$daysSelected." value='DAYS'>Days</option> ";
+                $sAux .= '</select>';
+                $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TIMEUNIT'] = $sAux;
+
+                $workSelected = $calendarSelected = '';
+                if($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TYPE_DAY'] == '1')
+                    $workSelected = "selected = 'selected'";
+                else
+                    $calendarSelected = "selected = 'selected'";
+
+                $sAux  = '<select name='.$hiddenName.'[NEXT_TASK][TAS_TYPE_DAY] id= '.$hiddenName.'[NEXT_TASK][TAS_TYPE_DAY] ';
+                $sAux .= "<option ".$workSelected." value='1'>Work Days</option> ";
+                $sAux .= "<option ".$calendarSelected." value='2'>Calendar Days</option> ";
+                $sAux .= '</select>';
+                $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TYPE_DAY'] = $sAux;
+
+                //Check for
+                  G::LoadClass ( 'calendar' );
+                  $calendar    = new Calendar ( );
+                  $calendarObj = $calendar->getCalendarList ( true, true );
+                  $availableCalendar = $calendarObj ['array'];
+                  $aCalendar['CALENDAR_UID'] = '00000000000000000000000000000001';
+                  $aCalendar['CALENDAR_NAME'] = 'DEFAULT';
+                  $sAux  = '<select name='.$hiddenName.'[NEXT_TASK][TAS_CALENDAR] id= '.$hiddenName.'[NEXT_TASK][TAS_CALENDAR] ';
+                  $sAux .= "<option value='none'>-None-</option> ";
+                    foreach($availableCalendar as $aCalendar)
+                    {
+                      if(is_array($aCalendar))
+                        {
+                            $sAux .= "<option value='".$aCalendar['CALENDAR_UID']."'>".$aCalendar['CALENDAR_NAME']."</option> ";
+                        }
+                    }
+                  $sAux .= '</select>';
+                  $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_CALENDAR'] = $sAux;
+                
+              }
+
+
+            $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_ASSIGN_TYPE']   = '<input type="hidden" name="' . $hiddenName . '[TAS_ASSIGN_TYPE]"   id="' . $hiddenName . '[TAS_ASSIGN_TYPE]"   value="' . $aValues['NEXT_TASK']['TAS_ASSIGN_TYPE'] . '">';
+            if (isset ($aValues['NEXT_TASK']['TAS_DEF_PROC_CODE'])){
+              $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_DEF_PROC_CODE'] = '<input type="hidden" name="' . $hiddenName . '[TAS_DEF_PROC_CODE]" id="' . $hiddenName . '[TAS_DEF_PROC_CODE]" value="' . $aValues['NEXT_TASK']['TAS_DEF_PROC_CODE'] . '">';
+            } else {
+              $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_DEF_PROC_CODE'] = '<input type="hidden" name="' . $hiddenName . '[TAS_DEF_PROC_CODE]" id="' . $hiddenName . '[TAS_DEF_PROC_CODE]" value="">';
+            }
+            $aFields['TASK'][$sKey]['NEXT_TASK']['DEL_PRIORITY']      = '<input type="hidden" name="' . $hiddenName . '[DEL_PRIORITY]"      id="' . $hiddenName . '[DEL_PRIORITY]"      value="' . $sPriority . '">';
+            $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_PARENT']        = '<input type="hidden" name="' . $hiddenName . '[TAS_PARENT]"        id="' . $hiddenName . '[TAS_PARENT]"        value="' . $aValues['NEXT_TASK']['TAS_PARENT'] . '">';
+          }
+      }
       $aFields['PROCESSING_MESSAGE'] = G::loadTranslation('ID_PROCESSING');
-      
+
       $G_PUBLISH->AddContent('smarty', 'cases/cases_ScreenDerivation', '', '', $aFields);
 /*
       if (isset( $aFields['TASK'][1]['NEXT_TASK']['USER_ASSIGNED'])){
@@ -776,7 +895,7 @@
       }else{
       	$G_PUBLISH->AddContent('smarty', 'cases/cases_ScreenDerivation', '', '', $aFields);
       	}
-*/      	
+*/
       break;
     case 'EXTERNAL':
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
@@ -803,7 +922,7 @@
       /** Added By erik date: 16-05-08
       * Description: this was added for the additional database connections */
       G::LoadClass ('dbConnections');
-      $oDbConnections = new dbConnections(NULL);
+      $oDbConnections = new dbConnections($_SESSION['PROCESS']);
       $oDbConnections->loadAdditionalConnections();
       $stepFilename = "$sNamespace/$sStepName";
       $G_PUBLISH->AddContent('content', $stepFilename );
@@ -812,7 +931,7 @@
     }
   //Add content content step - End
   }
-  catch ( Exception $e ) {  	
+  catch ( Exception $e ) {
     G::SendTemporalMessage($e->getMessage(), 'error', 'string', 3, 100);
     $aMessage = array();
     $aMessage['MESSAGE'] = G::LoadTranslation('ID_PROCESS_DEF_PROBLEM').'<br/>'.G::LoadTranslation('ID_CONTACT_ADMIN');
@@ -862,10 +981,10 @@
   ');
 
   if( defined('SYS_SKIN') )
-    $skin = SYS_SKIN; 
-  else 
-    $skin = "green"; 
-  
+    $skin = SYS_SKIN;
+  else
+    $skin = "green";
+
   G::RenderPage('publish', $skin . '-submenu');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){

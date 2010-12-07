@@ -36,7 +36,7 @@
 							</table>
 							</td>
 						</tr>
-			
+
 						<tr>
 							{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
 							<td class='FormTitle' colspan="2" align="">{$END_OF_PROCESS}</td>
@@ -44,66 +44,107 @@
 							<td class='FormTitle' colspan="2" align="">{$ASSIGN_TASK}</td>
 							{/if}
 						</tr>
-			
+
 						{foreach key=id item=data from=$TASK}
 						<tr height="5">
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 						</tr>
-			
+
 						{if $PROCESS.ROU_TYPE eq 'SELECT'}
 						<form name="frmDerivation{$id}" id="frmDerivation{$id}" action="cases_Derivate" method="POST" class="formDefault" method="post" style="margin: 0px;"><input type="hidden" name="form[ROU_TYPE]" id="form[ROU_TYPE]" value="{$PROCESS.ROU_TYPE}">
 						<tr>
 							<td class="FormLabel" width="100">{$OPTION_LABEL} {$id}:</td>
 							<td class="FormFieldContent">{$data.ROU_CONDITION }</td>
 						</tr>
-						{/if} 
+						{/if}
 						{if $PROCESS.ERROR eq '' }
 						<tr>
 							<td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
 							<td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
 						</tr>
-						{/if} 
+						{/if}
 						{if not $data.NEXT_TASK.ROU_FINISH_FLAG }
-						<tr>
-							<td class="FormLabel" width="100">{$EMPLOYEE}:</td>
-							<td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
-						</tr>
+
+                                                    {if $data.NEXT_TASK.TAS_NEXT eq 'STATIC_MI' || $data.NEXT_TASK.TAS_NEXT eq 'CANCEL_MI'}
+                                                        {foreach key=id item=dataUser from=$data.NEXT_TASK.USER_ASSIGNED}
+                                                        {if $dataUser.USR_HIDDEN_FIELD neq ''}
+                                                        <tr>
+                                                                <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                                                                <td class="FormFieldContent">{$dataUser.USR_UID}{$dataUser.USR_HIDDEN_FIELD}</td>
+                                                        </tr>
+                                                        {/if}
+                                                        {/foreach}
+                                                    {/if}
+                                                    {if $data.NEXT_TASK.TAS_NEXT eq ''}
+                                                        <tr>
+                                                            <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                                                             <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                                                        </tr>
+                                                    {/if}
+                                                    {if $data.NEXT_TASK.TAS_TRANSFER_FLY eq 'true'}
+                                                       <tr>
+							  <td class='FormSubTitle' colspan="2" align="">{$TAS_TIMING_TITLE} For {$data.NEXT_TASK.TAS_TITLE} Task</td>
+                                                       </tr>
+                                                       <tr>
+                                                             <td class="FormLabel" width="100">{$TAS_DURATION}:</td>
+                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_DURATION}</td>
+                                                       </tr>
+                                                        <tr>
+                                                             <td class="FormLabel" width="100">{$TAS_TIMEUNIT}:</td>
+                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TIMEUNIT}</td>
+                                                        </tr>
+                                                        <tr>
+                                                             <td class="FormLabel" width="100">{$TAS_TYPE_DAY}:</td>
+                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TYPE_DAY}</td>
+                                                        </tr>
+                                                        {if $data.NEXT_TASK.TAS_CALENDAR neq ''}
+                                                        <tr>
+                                                             <td class="FormLabel" width="100">{$TAS_CALENDAR}:</td>
+                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_CALENDAR}</td>
+                                                        </tr>
+                                                        {/if}
+                                                        <tr height="0">
+							<td colspan="2">
+								{$data.NEXT_TASK.TAS_TRANSFER_HIDDEN_FLY}
+							</td>
+                                                        </tr>
+                                                     {/if}
 						{else}
 						<tr>
 							<td class="FormLabel" width="100">{$LAST_EMPLOYEE}:</td>
 							<td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
 						</tr>
 						{/if}
-			
+
 						<tr height="0">
 							<td colspan="2">
 								{$data.NEXT_TASK.TAS_ASSIGN_TYPE}{$data.NEXT_TASK.TAS_DEF_PROC_CODE}{$data.NEXT_TASK.DEL_PRIORITY}{$data.NEXT_TASK.TAS_PARENT}
 							</td>
 						</tr>
-			
+
 						{if $PROCESS.ROU_TYPE eq 'SELECT'}
 						<tr>
 							<td colspan="2" align="center">
-								{if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && not $data.NEXT_TASK.ROU_FINISH_FLAG } 
-								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE_WITH_OPTION} {$id} "> 
-								{/if} {if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && $data.NEXT_TASK.ROU_FINISH_FLAG } 
-								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH_WITH_OPTION} {$id} "> 
-									{$data.NEXT_TASK.TAS_ASSIGN_TYPE} 
+								{if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && not $data.NEXT_TASK.ROU_FINISH_FLAG }
+								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE_WITH_OPTION} {$id} ">
+								{/if} {if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && $data.NEXT_TASK.ROU_FINISH_FLAG }
+								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH_WITH_OPTION} {$id} ">
+									{$data.NEXT_TASK.TAS_ASSIGN_TYPE}
 								{/if}
 							</td>
 						</tr>
-			
+
 						</form>
-						{/if} 
-						{/foreach} 
+						{/if}
+						{/foreach}
 						{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && ! $PROCESS.ROU_FINISH_FLAG }
 						<tr>
 							<td colspan="2" align="center">
 								<input type="button" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE}" {$PROCESS.DISABLED} />
 							</td>
 						</tr>
-						{/if} 
+						{/if}
 						{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
 						<tr>
 							<td colspan="2" align="center">
@@ -112,12 +153,12 @@
 						</tr>
 						{/if}
 					</table>
-			
+
 					</td>
 				</tr>
 			</table>
 		</div>
-		
+
 		<div class="boxBottom">
 			<div class="a"></div>
 			<div class="b"></div>
@@ -155,7 +196,7 @@ if(!sw){
  	{literal} if (client.browser == "msie" || client.browser == "safari" || client.browser == "firefox"){ {/literal}
  		document.frmDerivation.submit();
  	{literal} } {/literal}
- {literal} 
+ {literal}
 
 
 }.extend(document.getElementById('btnContinue'))); {/literal}

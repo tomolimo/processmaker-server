@@ -36,7 +36,7 @@ require_once 'classes/model/Users.php';
 /**
  * Tasks - Tasks class
  * @package ProcessMaker
- * @author Julio Cesar Laura Avendaño
+ * @author Julio Cesar Laura Avendaï¿½o
  * @copyright 2007 COLOSA
  */
 
@@ -648,5 +648,35 @@ class Tasks
       throw($oError);
     }
   }
+
+/**
+  * Get Routes for any Process,route type,route next task
+  * @param string $sProUid, $sTaskUid
+  * @return array
+  * by Girish
+  */
+  public function getRouteByType($sProUid, $sRouteNextTaskUid,$sRouteType)
+  {
+    try {
+      $aRoutes   = array();
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(RoutePeer::PRO_UID,     $sProUid);
+      $oCriteria->add(RoutePeer::ROU_NEXT_TASK,    $sRouteNextTaskUid);
+      $oCriteria->add(RoutePeer::ROU_TYPE,    $sRouteType);
+      $oDataset = RoutePeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while ($aRow = $oDataset->getRow()) {
+        $aRoutes[] = $aRow;
+        $oDataset->next();
+      }
+
+      return $aRoutes;
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+ }
+
 }
 ?>

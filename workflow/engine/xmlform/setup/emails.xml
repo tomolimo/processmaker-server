@@ -86,12 +86,12 @@ var send_test_mail;
 var mail_to;
 
 function verifyFields(oForm)
-{  
+{
    switch (getField('MESS_ENGINE').value) {
-      case 'PHPMAILER':   
+      case 'PHPMAILER':
    verifyPassword = 0;
    oAuxS = $('form[MESS_SERVER]').value;
-   if (oAuxS == ''){    
+   if (oAuxS == ''){
       new leimnud.module.app.alert().make({
       label:G_STRINGS.ID_SERVER_REQUIRED
       });
@@ -99,7 +99,7 @@ function verifyFields(oForm)
    }
    else{
       oAuxA = $('form[MESS_ACCOUNT]').value;
-      if(oAuxA == ''){    
+      if(oAuxA == ''){
         new leimnud.module.app.alert().make({
         label:G_STRINGS.ID_MESS_ACCOUNT_REQUIRED
         });
@@ -108,22 +108,22 @@ function verifyFields(oForm)
      else{
        if ($('form[MESS_RAUTH]').checked) {
           oAuxP = $('form[MESS_PASSWORD]').value;
-          if (oAuxP == ''){   
+          if (oAuxP == ''){
             new leimnud.module.app.alert().make({
             label:G_STRINGS.ID_PASSWORD_REQUIRED
             });
           return false;
           }
-          else{       
+          else{
             verifyPassword = 1;
-          }     
+          }
        } else {
           verifyPassword = 1;
-       }   
+       }
        if(verifyPassword == 1){
          if ($('form[MESS_TEST_MAIL]').checked) {
            oAuxE = $('form[MESS_TEST_MAIL_TO]').value;
-           if (oAuxE == ''){   
+           if (oAuxE == ''){
              new leimnud.module.app.alert().make({
              label:G_STRINGS.ID_EMAIL_REQUIRED
              });
@@ -131,7 +131,7 @@ function verifyFields(oForm)
            }
            else{
             testConnection();
-           }     
+           }
          } else {
              testConnection();
          }
@@ -142,7 +142,7 @@ function verifyFields(oForm)
    case 'MAIL':
    if ($('form[MESS_TEST_MAIL]').checked) {
     oAuxE = $('form[MESS_TEST_MAIL_TO]').value;
-    if (oAuxE == ''){   
+    if (oAuxE == ''){
       new leimnud.module.app.alert().make({
       label:G_STRINGS.ID_EMAIL_REQUIRED
      });
@@ -150,13 +150,13 @@ function verifyFields(oForm)
     }
     else{
       testConnectionMail();
-    }     
-  } 
+    }
+  }
   else {
     testConnectionMail();
   }
    break;
-   
+
    }
 }
 function testConnection() {
@@ -216,7 +216,7 @@ function testConnection() {
 
 
 
-function testConnectionMail() 
+function testConnectionMail()
 {
   resultset = true;
   if ($('form[MESS_TEST_MAIL]').checked) {
@@ -245,14 +245,14 @@ function testConnectionMail()
         else {
           if( result == 'FAILED' ) {
             alert(G_STRINGS.ID_MAIL_FAILED);
-          } 
+          }
           if( result == 'INVALID' ) {
             alert(G_STRINGS.ID_INVALID_EMAIL);
-          } 
+          }
         }
   }.extend(this);
   oRPC.make();
-   } 
+   }
   else {
     alert(G_STRINGS.ID_CHECK_REQUIRED);
   }
@@ -354,7 +354,7 @@ function AJAX()
 
 
 function initSet(){
-  //$('form[MESS_RAUTH]').checked = true;  
+  //$('form[MESS_RAUTH]').checked = true;
   hideRowById('MESS_TEST_MAIL_TO');
   if(!($('form[MESS_ENABLED]').checked)) {
     hideRowById('MESS_ENGINE');
@@ -394,7 +394,7 @@ leimnud.event.add(getField('MESS_RAUTH'), 'click', function() {
 leimnud.event.add(getField('MESS_TEST_MAIL'), 'click', function() {
   if (this.checked) {
     showRowById('MESS_TEST_MAIL_TO');
-    
+
   } else {
     hideRowById('MESS_TEST_MAIL_TO');
     }
@@ -422,7 +422,7 @@ leimnud.event.add(getField('MESS_ENABLED'), 'click', function() {
       hideRowById('MESS_TEST_MAIL_TO');
       }
       $('form[SAVE_CHANGES]').disabled = true;
-    
+
       break;
       case 'PHPMAILER':
         hideRowById('SAVE_CHANGES2');
