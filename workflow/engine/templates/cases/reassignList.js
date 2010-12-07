@@ -55,10 +55,18 @@
 
   // create the combo instance
   var comboUsersToReassign = new Ext.form.ComboBox({
-    //typeAhead     : true,
-    fieldLabel    : 'Reassign to',
+    width         : 280,
+    boxMaxWidth   : 180,
+    editable      : true,
+    forceSelection: false,
+    minChars      : 2,
+    valueField    : 'userId',
+    displayField  : 'userFullname',
+    selectOnFocus : true,
+    typeAhead     : true,
+    autocomplete  : true,
+    mode          : 'remote',
     triggerAction : 'all',
-    width         : '150',
     //lazyRender    : true,
 //    store         : new Ext.data.Store(),
     store         : storeUsersToReassign,
@@ -69,9 +77,8 @@
         row.set('APP_REASSIGN_USER', record.get('userFullname'));
         this.setValue(record.get('userFullname'));
       }
-    },
-    valueField    : 'userId',
-    displayField  : 'userFullname'
+    }
+
   });
 
 //alert (this.fields.);
