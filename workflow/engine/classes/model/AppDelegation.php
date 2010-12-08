@@ -137,7 +137,7 @@ class AppDelegation extends BaseAppDelegation {
     $con = Propel::getConnection(AppDelegationPeer::DATABASE_NAME);
     try {
       $oAppDel = AppDelegationPeer::retrieveByPk( $AppUid, $sDelIndex );
-      if ( get_class ($oAppDel) == 'AppDelegation' ) {
+      if (is_object($oAppDel) && get_class ($oAppDel) == 'AppDelegation' ) {
         $aFields = $oAppDel->toArray( BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         return $aFields;
@@ -163,7 +163,7 @@ class AppDelegation extends BaseAppDelegation {
     try {
       $con->begin();
       $oApp = AppDelegationPeer::retrieveByPK( $aData['APP_UID'], $aData['DEL_INDEX'] );
-      if ( get_class ($oApp) == 'AppDelegation' ) {
+      if (is_object($oApp) && get_class ($oApp) == 'AppDelegation' ) {
         $oApp->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oApp->validate()) {
           $res = $oApp->save();
@@ -193,7 +193,7 @@ class AppDelegation extends BaseAppDelegation {
     try {
       $oConnection->begin();
       $oApp = AppDelegationPeer::retrieveByPK( $sApplicationUID, $iDelegationIndex );
-      if ( get_class ($oApp) == 'AppDelegation' ) {
+      if (is_object($oApp) && get_class ($oApp) == 'AppDelegation' ) {
         $result = $oApp->delete();
       }
       $oConnection->commit();

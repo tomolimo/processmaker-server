@@ -194,7 +194,7 @@ class ymlTestCases
   {
     $results=array();
     //$this->addToPlan( $count, $start );
-    $functions=get_class_methods(is_object($testerObject) && get_class($testerObject) );
+    $functions=get_class_methods( get_class($testerObject) );
     foreach($functions as $id=>$fn) 
       $functions[$id]=strtolower($fn);
     foreach($this->testCases as $index => $testCase){

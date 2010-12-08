@@ -318,7 +318,7 @@ class pagedTable
     else
       trigger_Error('Warning: sql query is empty',E_USER_WARNING);
     // Config attributes from XMLFORM file
-      $myAttributes=get_class_vars(is_object($this) && get_class($this));
+    $myAttributes=get_class_vars(get_class($this));
     foreach ($this->xmlForm->xmlform->tree->attribute as $atrib => $value)
       if (array_key_exists( $atrib, $myAttributes)){
         eval('settype($value,gettype($this->'.$atrib.'));');
@@ -637,8 +637,8 @@ class pagedTable
     $this->xmlForm->setDefaultValues();
     $this->xmlForm->setValues( $result );
     $this->xmlForm->fields[ $this->fields[$r]['Name'] ]->mode = 'view';
-    if ((array_search( 'rendergrid', get_class_methods(is_object($this) && get_class($this->xmlForm->fields[ $this->fields[$r]['Name'] ])) )!==FALSE)
-       ||(array_search( 'renderGrid', get_class_methods(is_object($this) && get_class($this->xmlForm->fields[ $this->fields[$r]['Name'] ])) )!==FALSE)) {
+    if ((array_search( 'rendergrid', get_class_methods( get_class($this->xmlForm->fields[ $this->fields[$r]['Name'] ])) )!==FALSE)
+       ||(array_search( 'renderGrid', get_class_methods( get_class($this->xmlForm->fields[ $this->fields[$r]['Name'] ])) )!==FALSE)) {
       $htmlField = $this->xmlForm->fields[ $this->fields[$r]['Name'] ]->renderGrid( array($value) , $this->xmlForm );
       $this->tpl->assign( "value" , $htmlField[0] );
     } else {

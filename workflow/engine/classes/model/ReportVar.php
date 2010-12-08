@@ -144,7 +144,7 @@ class ReportVar extends BaseReportVar {
     $con = Propel::getConnection(ReportVarPeer::DATABASE_NAME);
     try {
       $oRepVarUid = ReportVarPeer::retrieveByPk( $sRepVarUid );
-      if ( get_class ($oRepVarUid) == 'ReportVar' ) {
+      if (is_object($oRepVarUid) && get_class ($oRepVarUid) == 'ReportVar' ) {
         return true;
       }
       else {

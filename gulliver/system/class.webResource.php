@@ -111,7 +111,7 @@ class WebResource
 if (!function_exists('json_encode')) {
   G::LoadThirdParty('pear/json','class.json');
   function json_encode(&$value) {
-    $json=& new Services_JSON;
+    $json= new Services_JSON;
     return $json->encode($value);
   }
 }
@@ -119,7 +119,7 @@ if (!function_exists('json_encode')) {
 if (!function_exists('json_decode')) {
   G::LoadThirdParty('pear/json','class.json');
   function json_decode(&$value) {
-    $json=& new Services_JSON;
+    $json= new Services_JSON;
     return $json->decode($value);
   }
 }

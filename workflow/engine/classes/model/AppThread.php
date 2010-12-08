@@ -93,7 +93,7 @@ class AppThread extends BaseAppThread {
     try {
       $con->begin(); 
       $oApp = AppThreadPeer::retrieveByPK( $aData['APP_UID'], $aData['APP_THREAD_INDEX'] );
-      if ( get_class ($oApp) == 'AppThread' ) { 
+      if (is_object($oApp) && get_class ($oApp) == 'AppThread' ) {
         $oApp->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oApp->validate()) {
           $res = $oApp->save();

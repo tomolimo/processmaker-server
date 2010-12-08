@@ -50,7 +50,7 @@ class Systems extends BaseSystems {
     $con = Propel::getConnection(SystemsPeer::DATABASE_NAME);
     try {
       $oSystem = SystemsPeer::retrieveByPk( $SysUid );
-      if ( get_class ($oSystem) == 'Systems' ) { 
+      if (is_object($oSystem) && get_class ($oSystem) == 'Systems' ) {
         $aFields = $oSystem->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         return $aFields;

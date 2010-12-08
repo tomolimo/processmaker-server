@@ -142,7 +142,7 @@ class Groupwf extends BaseGroupwf {
     $con = Propel::getConnection(GroupwfPeer::DATABASE_NAME);
     try {
       $oPro = GroupwfPeer::retrieveByPk( $ProUid );
-      if ( get_class ($oPro) == 'Groupwf' ) { 
+      if (is_object($oPro) && get_class ($oPro) == 'Groupwf' ) {
         $aFields = $oPro->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         $aFields['GRP_TITLE']       = $oPro->getGrpTitle();
@@ -170,7 +170,7 @@ class Groupwf extends BaseGroupwf {
     try {
       $con->begin(); 
       $oPro = GroupwfPeer::retrieveByPK( $aData['GRP_UID'] );
-      if ( get_class ($oPro) == 'Groupwf' ) { 
+      if (is_object($oPro) && get_class ($oPro) == 'Groupwf' ) {
         $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
         if ($oPro->validate()) {
           if ( isset ( $aData['GRP_TITLE'] ) )
@@ -234,7 +234,7 @@ class Groupwf extends BaseGroupwf {
     $con = Propel::getConnection(GroupwfPeer::DATABASE_NAME);
     try {
       $oPro = GroupwfPeer::retrieveByPk( $GrpUid );
-      if ( get_class ($oPro) == 'Groupwf' ) {
+      if (is_object($oPro) && get_class ($oPro) == 'Groupwf' ) {
         return true;
       }
       else {

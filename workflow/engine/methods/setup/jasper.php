@@ -4,7 +4,7 @@
 
   $response = $oJasper->ws_list("/");
 
-  if (get_class($response) == 'SOAP_Fault') {
+  if (is_object($response) && get_class($response) == 'SOAP_Fault') {
     $errorMessage = $response->getFault()->faultstring;
   }
   else {
@@ -68,7 +68,7 @@
   $result = $oJasper->ws_runReport($currentUri, $report_params,  $output_params, $attachments);
  
   // 4. 
-  if (get_class($result) == 'SOAP_Fault') {
+  if (is_object($result) && get_class($result) == 'SOAP_Fault') {
     $errorMessage = $result->getFault()->faultstring;
     
     echo $errorMessage;

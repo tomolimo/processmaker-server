@@ -180,7 +180,7 @@ function swimlanesElementsExists ( $sSwiEleUid ) {
     $con = Propel::getConnection(SwimlanesElementsPeer::DATABASE_NAME);
     try {
       $oSwiEleUid = SwimlanesElementsPeer::retrieveByPk( $sSwiEleUid );
-      if ( get_class ($oSwiEleUid) == 'SwimlanesElements' ) {
+      if (is_object($oSwiEleUid) && get_class ($oSwiEleUid) == 'SwimlanesElements' ) {
         return true;
       }
       else {

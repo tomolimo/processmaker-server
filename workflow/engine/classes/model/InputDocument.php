@@ -302,7 +302,7 @@ class InputDocument extends BaseInputDocument {
     $con = Propel::getConnection(InputDocumentPeer::DATABASE_NAME);
     try {
       $oObj = InputDocumentPeer::retrieveByPk( $sUid );
-      if ( get_class ($oObj) == 'InputDocument' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'InputDocument' ) {
         return true;
       }
       else {

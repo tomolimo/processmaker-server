@@ -781,7 +781,7 @@ class OutputDocument extends BaseOutputDocument {
     $con = Propel::getConnection(OutputDocumentPeer::DATABASE_NAME);
     try {
       $oObj = OutputDocumentPeer::retrieveByPk( $sUid );
-      if ( get_class ($oObj) == 'OutputDocument' ) {
+      if (is_object($oObj) && get_class ($oObj) == 'OutputDocument' ) {
         return true;
       }
       else {

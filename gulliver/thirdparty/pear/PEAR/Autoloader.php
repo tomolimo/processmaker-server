@@ -38,7 +38,7 @@ require_once "PEAR.php";
  * methods, an instance of each class providing separated methods is
  * stored and called every time the aggregated method is called.
  *
- * @author Stig Sæther Bakken <ssb@php.net>
+ * @author Stig Sï¿½ther Bakken <ssb@php.net>
  */
 class PEAR_Autoloader extends PEAR
 {
@@ -146,7 +146,7 @@ class PEAR_Autoloader extends PEAR
         $classname = strtolower($classname);
         reset($this->_method_map);
         while (list($method, $obj) = each($this->_method_map)) {
-            if (get_class($obj) == $classname) {
+            if (is_object($obj) && get_class($obj) == $classname) {
                 unset($this->_method_map[$method]);
                 $ok = true;
             }
