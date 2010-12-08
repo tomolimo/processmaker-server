@@ -429,3 +429,494 @@ ProcessOptions.prototype.addDynaform= function(_5625)
    gridWindow.show();
 }
 
+ProcessOptions.prototype.addInputDoc= function(_5625)
+{
+  var pro_uid = workflow.getUrlVars();
+  //var taskId  = workflow.currentSelection.id;
+
+  var dynaFields = Ext.data.Record.create([
+            {
+                name: 'INP_DOC_UID',
+                type: 'string'
+            },
+            {
+                name: 'PRO_UID',
+                type: 'string'
+            },
+            {
+                name: 'INP_DOC_TITLE',
+                type: 'string'
+            },
+            {
+                name: 'INP_DOC_DESCRIPTION',
+                type: 'string'
+            }
+            ]);
+
+            var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+            });
+
+            
+  
+    var inputDocStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : dynaFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyInputDocument?pid='+pro_uid
+            })
+          });
+ inputDocStore.load();
+
+ var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Delete Input Document',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = inputDocGrid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting dynaform from Database using Ajax
+                    var inputDocUID      = r.data.INP_DOC_UID;
+
+                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                    if(r.data.INP_DOC_UID != "")
+                    {
+                        Ext.Ajax.request({
+                          url   : '../inputdocs/inputdocs_Delete.php',
+                          method: 'POST',
+                          params: {
+                                INP_DOC_UID        : inputDocUID
+                          },
+                          success: function(response) {
+                            Ext.MessageBox.alert ('Status','Input document has been removed successfully.');
+                          }
+                        });
+                    }
+
+                    //Secondly deleting from Grid
+                    inputDocStore.remove(r);
+                }
+            }
+        });
+
+        var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'New Input Document',
+            iconCls: 'application_add',
+            handler: function () {
+            newIOWindow.show();
+            }
+  });
+
+    var inputDocForm = new Ext.FormPanel({
+        
+        labelWidth: 100,
+        bodyStyle :'padding:5px 5px 0',
+        width     : 500,
+        items:
+                [{
+                    xtype: 'fieldset',
+                    layout: 'form',
+                    border:true,
+                    title: 'Input Document Information',
+                    width: 500,
+                    collapsible: false,
+                    labelAlign: '',
+                    items:[{
+                            xtype     : 'textfield',
+                            fieldLabel: 'Title',
+                            name      : 'INP_DOC_TITLE'
+                         },{
+                            width:          150,
+                            xtype:          'combo',
+                            mode:           'local',
+                            editable:       false,
+                            fieldLabel:     'Type',
+                            triggerAction:  'all',
+                            forceSelection: true,
+                            name:           'INP_DOC_FORM_NEEDED',
+                            displayField:   'name',
+                            emptyText    : 'Select Type',
+                            valueField:     'value',
+                            //value        : 'Normal',
+                            store:          new Ext.data.JsonStore({
+                                        fields : ['name', 'value'],
+                                        data   : [
+                                            {name : 'Digital',   value: 'Digital'},
+                                            {name : 'Printed',   value: 'Printed'},
+                                            {name : 'Digital/Printed',   value: 'Digital/Printed'}]}),
+                           onSelect: function(record, index) {
+                            if(record.data.value != 'Digital')
+                                {
+                                    Ext.getCmp("formType").show();
+                                }
+                            else
+                                {
+                                    Ext.getCmp("formType").hide();
+                                }
+
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                this.collapse();
+                            }
+                         },{
+                    xtype: 'fieldset',
+                    layout: 'form',
+                    id:'formType',
+                    border: false,
+                    hidden:true,
+                    labelAlign: '',
+                   items:[{
+                            xtype:          'combo',
+                            width:          150,
+                            mode:           'local',
+                            editable:       false,
+                            fieldLabel:     'Format',
+                            triggerAction:  'all',
+                            forceSelection: true,
+                            name:           'INP_DOC_ORIGINAL',
+                            displayField:   'name',
+                            emptyText    : 'Select Format',
+                            valueField:     'value',
+                            //value        : 'Normal',
+                            store:          new Ext.data.JsonStore({
+                                        fields : ['name', 'value'],
+                                        data   : [
+                                            {name : 'ORIGINAL',   value: 'ORIGINAL'},
+                                            {name : 'LEGAL COPY',   value: 'LEGAL COPY'},
+                                            {name : 'COPY',   value: 'COPY'}
+                                            ]})
+                    }]},{
+                            xtype     : 'textarea',
+                            fieldLabel: 'Description',
+                            name      : 'INP_DOC_DESCRIPTION',
+                            height    : 120,
+                            width     : 350
+                         },{
+                            width:          150,
+                            xtype:          'combo',
+                            mode:           'local',
+                            editable:       false,
+                            fieldLabel:     'Enable Versioning',
+                            triggerAction:  'all',
+                            forceSelection: true,
+                            name:           'INP_DOC_VERSIONING',
+                            displayField:   'name',
+                            valueField:     'value',
+                            //value        : 'Normal',
+                            store:          new Ext.data.JsonStore({
+                                        fields : ['name', 'value'],
+                                        data   : [
+                                            {name : 'No',   value: 'No'},
+                                            {name : 'Yes',   value: 'Yes'},
+                                            ]})
+                         }, {
+                    xtype: 'fieldset',
+                    layout:'column',
+                    border:false,
+                    width: 550,
+                    items:[{
+                        columnWidth:.6,
+                        layout: 'form',
+                        border:false,
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: 'Destination Path',
+                            name: 'INP_DOC_DESTINATION_PATH',
+                            anchor:'100%'
+                         }]
+                    },{
+                        columnWidth:.3,
+                        layout: 'form',
+                        border:false,
+                        items: [{
+                            xtype:'button',
+                            title: ' ',
+                            text: '@@',
+                            name: 'selectorigin'
+                            //anchor:'15%'
+                        }]
+                    }]
+                },{
+                    xtype: 'fieldset',
+                    layout:'column',
+                    border:false,
+                    width: 550,
+                    items:[{
+                        columnWidth:.6,
+                        layout: 'form',
+                        border:false,
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: 'Tags',
+                            name: 'INP_DOC_TAGS',
+                            anchor:'100%'
+                         }]
+                    },{
+                        columnWidth:.3,
+                        layout: 'form',
+                        border:false,
+                        items: [{
+                            xtype:'button',
+                            title: ' ',
+                            text: '@@',
+                            name: 'selectorigin'
+                            //anchor:'15%'
+                        }]
+                      }]
+                    }]
+                  }]
+                });
+
+
+                         
+
+       var inputDocColumns = new Ext.grid.ColumnModel({
+            columns: [
+                {
+                    id: 'INP_DOC_TITLE',
+                    header: 'Title',
+                    dataIndex: 'INP_DOC_TITLE',
+                    width: 280,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
+                },
+                {
+                    sortable: false,
+                    renderer: function(val, meta, record)
+                       {
+                            return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
+                       }
+                }
+                ]
+        });
+
+
+var tb = new Ext.Toolbar({
+            items: [btnRemove, btnAdd]
+            });
+
+ var inputDocGrid = new Ext.grid.GridPanel({
+        store: inputDocStore,
+        id : 'mygrid',
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        cm: inputDocColumns,
+        stripeRows: true,
+        tbar: tb,
+        viewConfig: {forceFit: true}
+   });
+
+ 
+ var gridWindow = new Ext.Window({
+        title: 'Input Document',
+        collapsible: false,
+        maximizable: false,
+        width: 550,
+        height: 450,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        items: inputDocGrid,
+        buttonAlign: 'center'
+          });
+
+    var newIOWindow = new Ext.Window({
+        title: 'Input Document',
+        collapsible: false,
+        maximizable: false,
+        width: 550,
+        height: 550,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        items: inputDocForm,
+        buttonAlign: 'center',
+        buttons: [{
+            text: 'Save',
+            handler: function(){
+                var getForm   = inputDocForm.getForm().getValues();
+                //var sDynaType = getForm.DYN_SOURCE;
+                        //var sUid            = getForm.INP_DOC_UID;
+                        var sDocType        = getForm.INP_DOC_TITLE
+                        var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
+                        var sOrig = '';
+
+                        if(getForm.INP_DOC_ORIGINAL == 'Normal')
+                            {
+                                sOrig           = getForm.INP_DOC_ORIGINAL;
+                            }
+                        
+                        
+                        var sDesc           = getForm.INP_DOC_DESCRIPTION;
+                        var sVers           = getForm.INP_DOC_VERSIONING;
+                        var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
+                        var sTags           = getForm.INP_DOC_TAGS;
+
+
+                Ext.Ajax.request({
+                  url   : '../inputdocs/inputdocs_Save.php',
+                  method: 'POST',
+                  params:{
+                      INP_DOC_TITLE:sDocType,
+                      INP_DOC_UID                   : '',
+                      PRO_UID                       : pro_uid,
+                     // INP_DOC_FORM_NEEDED           : sFormNeeded,
+                      INP_DOC_FORM_NEEDED           : 'VIRTUAL',
+                      //INP_DOC_ORIGINAL              : sOrig,
+                      INP_DOC_ORIGINAL              : 'ORIGINAL',
+                      INP_DOC_VERSIONING            : sVers,
+                      INP_DOC_TAGS                  : 'INPUT',
+                      INP_DOC_DESCRIPTION           : sDesc
+                      
+                      
+                      
+                      
+
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Input document has been created successfully.');
+                  }
+                });
+
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskUsers(getData);
+
+            newIOWindow.close();
+            inputDocStore.load();
+            }
+            
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                newIOWindow.close();
+            }
+        }]
+        
+
+
+    });
+   gridWindow.show();
+   //Ext.getCmp("blankInputDoc").hide();
+}
+
+
+
+ProcessOptions.prototype.addOutputDoc= function(_5625)
+{
+  var pro_uid = workflow.getUrlVars();
+  //var taskId  = workflow.currentSelection.id;
+
+  var dynaFields = Ext.data.Record.create([
+            {
+                name: 'OUT_DOC_UID',
+                type: 'string'
+            },
+            {
+                name: 'OUT_DOC_TITLE',
+                type: 'string'
+            },
+            {
+                name: 'OUT_DOC_DESCRIPTION',
+                type: 'string'
+            }
+            ]);
+
+            var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+            });
+
+
+
+    var outputDocStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : dynaFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyOutputDocument?pid='+pro_uid
+            })
+          });
+ outputDocStore.load();
+
+ var outputDocColumns = new Ext.grid.ColumnModel({
+            columns: [
+                {
+                    id: 'OUT_DOC_TITLE',
+                    header: 'Title',
+                    dataIndex: 'OUT_DOC_TITLE',
+                    width: 280,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
+                },
+                {
+                    sortable: false,
+                    renderer: function(val, meta, record)
+                       {
+                            return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
+                       }
+                }
+                ]
+        });
+
+
+ var outputDocGrid = new Ext.grid.GridPanel({
+        store: outputDocStore,
+        id : 'mygrid',
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        cm: outputDocColumns,
+        stripeRows: true,
+        //tbar: tb,
+        viewConfig: {forceFit: true}
+   });
+
+
+ var gridWindow = new Ext.Window({
+        title: 'Output Document',
+        collapsible: false,
+        maximizable: false,
+        width: 550,
+        height: 450,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        items: outputDocGrid,
+        buttonAlign: 'center'
+          });
+
+   gridWindow.show();
+   //Ext.getCmp("blankInputDoc").hide();
+}
+
