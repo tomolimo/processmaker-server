@@ -107,6 +107,8 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
                     //Secondly deleting from Grid
                     taskSteps.remove(r);
+                    //Reloading store after removing steps
+                    availableSteps.reload();
                 }
             }
         });
@@ -139,6 +141,8 @@ TaskContext.prototype.editTaskSteps = function(_3252){
              autoLoad        : true,
              fields          : stepsFields
          });
+         //availableSteps.load();
+
 
          var conditionsColumns = new Ext.grid.ColumnModel({
             columns: [
@@ -282,7 +286,6 @@ TaskContext.prototype.editTaskSteps = function(_3252){
           scope: this,
           afteredit: function(roweditor, changes, record, rowIndex) {
 
-             
              var stepUIDObj    = record.data.STEP_UID_OBJ;
              var stepTypeObj   = record.data.STEP_TYPE_OBJ;
              var stepMode      = record.data.STEP_MODE;
@@ -301,7 +304,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                   Ext.MessageBox.alert ('Status','Step has been assigned successfully.');
               }
             });
-
+            availableSteps.reload();
             //Deleting previously assigned step on updating/replacing with new step.
             if(changes != '' && typeof record.json != 'undefined')
             {
@@ -321,6 +324,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                }
              });
             }
+            
           }
         });
 
@@ -474,7 +478,7 @@ TaskContext.prototype.editUsers= function(_5625)
                      TU_RELATION: ''
                 });
 
-
+                //storeUsers.reload();
                 if(storeUsers.data.items.length == 0)
                      Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
                 else
@@ -525,6 +529,9 @@ TaskContext.prototype.editUsers= function(_5625)
                      }
                     //Secondly deleting from Grid
                     taskUsers.remove(r);
+
+                    //Reloading available user store
+                    storeUsers.reload();
                 }
             }
         });
@@ -557,6 +564,7 @@ TaskContext.prototype.editUsers= function(_5625)
                  autoLoad        : true,
                  fields          : userFields
               });
+              
 
         var grid = new Ext.grid.GridPanel({
         store: taskUsers,
@@ -661,6 +669,7 @@ TaskContext.prototype.editUsers= function(_5625)
                       }
                     });
             }
+            storeUsers.reload();
           }
         });
 
@@ -1438,7 +1447,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
 
     var tree = new Ext.tree.TreePanel({
             //renderTo    : 'cases-grid',
-            dataUrl     : 'get-tree.php?tid='+taskId,
+            dataUrl     : 'get-triggers-tree.php?tid='+taskId,
             border      : false,
             rootVisible : false,
             height      : 320,
@@ -1447,35 +1456,13 @@ TaskContext.prototype.stepTriggers = function(_5625)
             autoScroll  : true,
             animate     : true,
             root        : new Ext.tree.AsyncTreeNode({text: 'treeRoot',id:'0'})
-            });
+         });
 
     //tree.render('tree');
     tree.on('click', function (node){
          if(node.isLeaf()){
              var sStepUID = node.attributes.id;
              workflow.selectedStepUID = sStepUID;
-
-//              var stepsTriggers = new Ext.data.JsonStore({
-//                root            : 'data',
-//                url             : 'proxyStepTriggers?tid='+taskId+'&stepid='+sStepUID,
-//                totalProperty   : 'totalCount',
-//                idProperty      : 'gridIndex',
-//                remoteSort      : true,
-//                fields          : triggersFields
-//              });
-
-              /*var newUrl = 'proxyStepTriggers?pid='+pro_uid+'&tid='+taskId+'&stepid='+sStepUID;
-              var availableTriggers = new Ext.data.JsonStore({
-                 root            : 'data',
-                 url             : 'proxyStepTriggers?pid='+pro_uid+'&tid='+taskId+'&stepid='+sStepUID,
-                 totalProperty   : 'totalCount',
-                 idProperty      : 'gridIndex',
-                 remoteSort      : false, //true,
-                 autoLoad        : true,
-                 fields          : triggersFields
-              });*/
-             //var columns = triggerGrid.getColumnModel();
-             //triggerGrid.reconfigure(stepsTriggers,triggerGrid.getColumnModel());
 
              stepsTriggers.on({
                 beforeload: {
@@ -1566,6 +1553,8 @@ TaskContext.prototype.stepTriggers = function(_5625)
 
                 //Secondly deleting from Grid
                 stepsTriggers.remove(r);
+
+                availableTriggers.reload();
             }
         }
     });
@@ -1726,6 +1715,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
                   }
                 });
             }
+            availableTriggers.reload();
           }
         });
 
