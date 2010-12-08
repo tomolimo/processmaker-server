@@ -847,7 +847,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       $sXml  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       $sXml .= '<dynaForm width="100%" menu="xmlLists/additionalTablesDataOptions">' . "\n".
             '<xtitle type="title">
-             <en><![CDATA[<center><b>Table: '.$aData['ADD_TAB_NAME'].'</b></center>]]></en>
+             <en><![CDATA[<center><b>' . G::LoadTranslation("ID_TABLE") . ': '.$aData['ADD_TAB_NAME'].'</b></center>]]></en>
              </xtitle>';
       
       //$sXml .= '<PM_UNIQUE_ID type="private" showInTable="0" />' . "\n";
