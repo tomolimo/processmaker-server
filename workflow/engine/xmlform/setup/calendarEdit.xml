@@ -57,6 +57,7 @@
 </BUSINESS_DAY_STATUS>
 <DEFAULT_CALENDAR_JS type="javascript">
 <![CDATA[
+var invalidCalendarName = '';
 function submit1 () {
   getField('CALENDAR_WORK_DAYS][0').disabled=false;
   getField('CALENDAR_WORK_DAYS][1').disabled=false;
@@ -79,14 +80,14 @@ function submit2 (){
   getField('CALENDAR_WORK_DAYS][5').disabled=false;
   getField('CALENDAR_WORK_DAYS][6').disabled=false;
   getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
-  if(getField('CALENDAR_NAME').value!=''){
+  if(getField('CALENDAR_NAME').value!=''&& invalidCalendarName == ''){
     getField('CALENDAR_STATUS').disabled=false;
     getField('CALENDAR_NAME').disabled=false;
     document.CalendarDefinition.submit();
   } else {
-      alert('- Invalid Name');
+      msgBox('Invalid Name','alert');
     }
-}
+  }
 
 
 function number_row(){ 
@@ -364,7 +365,24 @@ function cancel(){
  
     window.location = 'calendarList';
 }
- 
+
+leimnud.event.add(getField("CALENDAR_NAME"), 'change', function() {
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+    url : 'calendarValidate',
+    args: 'action=calendarName&name='+getField("CALENDAR_NAME").value
+  });
+  oRPC.callback = function(rpc){
+    var scs = rpc.xmlhttp.responseText;
+    if (scs != ''){
+      //notValidFields['CALENDAR_NAME'] = scs;
+      invalidCalendarName = scs;
+      msgBox(scs,'alert');
+    } else {
+      invalidCalendarName = '';
+    }
+  }.extend(this);
+  oRPC.make();
+});
 
 ]]>
 </DEFAULT_CALENDAR_JS>
