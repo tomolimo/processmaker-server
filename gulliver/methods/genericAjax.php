@@ -115,7 +115,8 @@ if( isset($request) ){
 
       } catch(Exception $e){
         $err = $e->getMessage();
-        $err = eregi_replace("[\n|\r|\n\r]", ' ', $err);
+        //$err = eregi_replace("[\n|\r|\n\r]", ' ', $err);
+        $err = preg_replace("[\n|\r|\n\r]", ' ', $err);//Made compatible to PHP 5.3
         echo '{"status":1, "message":"'.$err.'"}';
       }
     break;
@@ -138,7 +139,8 @@ if( isset($request) ){
         echo '{status:0, message:"success"}';
       }catch( Exception $e){
         $err = $e->getMessage();
-        $err = eregi_replace("[\n|\r|\n\r]", ' ', $err);
+        //$err = eregi_replace("[\n|\r|\n\r]", ' ', $err);
+        $err = preg_replace("[\n|\r|\n\r]", ' ', $err);//Made compatible to PHP 5.3
         echo '{result:1, message:"'.$err.'"}';
       }
       break;

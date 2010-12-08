@@ -59,7 +59,7 @@ function node_have_class($root, $target_class) {
   $classes = preg_split("/\s+/", strtolower($root->get_attribute('class')));
 
   foreach ($classes as $class) {
-    if ($class == $target_class) { 
+    if (is_object($target_class) && $class == $target_class) {
       return true; 
     };
   };

@@ -789,7 +789,8 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
 				* added by krlos carlos/a/colosa.com
         * in here we are validation if a xmlform has a submit action
         */
-        if(!eregi('type="submit"',$copy) && !eregi('type="grid"',$copy) && !isset($_SESSION['submitAction']) ){
+        if(!preg_match("/type=\"submit\"/",$copy) && !preg_match("/type=\"grid\"/",$copy) && !isset($_SESSION['submitAction']) ){
+            
         	$_SESSION['submitAction']= 1;
         	$answer = 'noSub';
         }

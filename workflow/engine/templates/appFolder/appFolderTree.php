@@ -51,7 +51,7 @@ $html = '
            'Internet Explorer 4' => '(MSIE 4\.[0-9]+)',
  );
  foreach($browsers as $browser=>$pattern){
-        if (eregi($pattern, $user_agent))
+        if (preg_match($pattern, $user_agent))
         return $browser;
      }
  return 'Unknown';
