@@ -156,16 +156,20 @@ switch ($REQUEST) {
 		break;   
     
     case 'assignUserToRole':
-    	$USR_UID = $_POST['USR_UID']; 
-    	$ROL_UID = $_POST['ROL_UID']; 
-    	$sData['USR_UID'] = $USR_UID;
-    	$sData['ROL_UID'] = $ROL_UID;
-    	$RBAC->assignUserToRole($sData);
+
+    	$ROL_UID = $_POST['ROL_UID'];
     	
+      $aUserIuds = explode(",",$_POST['aUsers']);
+      foreach($aUserIuds as $key=>$val){
+        $sData['USR_UID'] = $val;
+    	  $sData['ROL_UID'] = $ROL_UID;
+        $RBAC->assignUserToRole($sData);
+      }
+
     	$_GET['ROL_UID'] = $ROL_UID;
-		$G_PUBLISH = new Publisher;
-		$G_PUBLISH->AddContent('view', 'roles/roles_Tree' );
-		G::RenderPage('publish', 'raw');
+      $G_PUBLISH = new Publisher;
+      $G_PUBLISH->AddContent('view', 'roles/roles_Tree' );
+      G::RenderPage('publish', 'raw');
     	break;
     	
      case 'assignPermissionToRole':
