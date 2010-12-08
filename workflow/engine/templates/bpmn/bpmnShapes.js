@@ -91,7 +91,7 @@ bpmnTask.prototype.paint = function () {
     if (len >= 6) {
         //len = 1.5;
         var padleft = 0.12 * this.getWidth();
-        var padtop = 0.32 * this.getHeight() -3;
+        var padtop = 0.40 * this.getHeight() -3;
         this.rectWidth = this.getWidth() - 2 * padleft;
     }
     else {
