@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" link="additionalTablesNew" colAlign="left" colWidth="50">
-  <en>New</en>
-</MNU_ADD>
-<MNU_IMPORT type="link" link="additionalTablesToImport" colAlign="left" colWidth="60">
-  <en>Import</en>
-</MNU_IMPORT>
-<MNU_EXPORT type="link" link="#" onclick="toExport()" colAlign="left" colWidth="100">
-  <en>Export</en>
-</MNU_EXPORT>
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+  <MNU_ADD type="link" link="additionalTablesNew" colAlign="left" colWidth="50">
+    <en>New</en>
+  </MNU_ADD>
+  <MNU_IMPORT type="link" link="additionalTablesToImport" colAlign="left" colWidth="60">
+    <en>Import</en>
+  </MNU_IMPORT>
+  <MNU_EXPORT type="link" link="#" onclick="toExport()" colAlign="left" colWidth="100">
+    <en>Export</en>
+  </MNU_EXPORT>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var additionalTablesDelete = function(sUID) {
   new leimnud.module.app.confirm().make({
-    label:'Dou you want to delete this collection?',
+    label: '@G::LoadTranslation(ID_DELETE_TABLE_COLLECTION)', 
     action:function() {
       ajax_function(@G::encryptlink('additionalTablesDelete'), '', 'sUID=' + sUID, 'POST');
       @#PAGED_TABLE_ID.refresh();
