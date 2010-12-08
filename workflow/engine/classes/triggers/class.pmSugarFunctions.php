@@ -72,8 +72,8 @@ function GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy
   $sugarEntriesO = $client->__SoapCall ( 'get_entry_list', $request_array );
 
   switch($resultType){
-    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO );break;
-    case 'object':$sugarEntries = $sugarEntries ;break;
+    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO ); break;
+    case 'object':$sugarEntries = $sugarEntriesO; break;
     default: $sugarEntries = objectToArray ( $sugarEntries );
   }
 
@@ -243,7 +243,8 @@ function CreateSugarAccount($sugarSoap, $user, $password, $name , $value, $resul
     case 'object':$sugarEntries = $sugarEntries ;break;
     default: $sugarEntries = objectToArray ( $sugarEntries );
   }
-  return $sugarEntries;
+  //return $sugarEntries;
+  return $account_id;
 }
 
 /**
@@ -260,26 +261,36 @@ function CreateSugarAccount($sugarSoap, $user, $password, $name , $value, $resul
  * @param string | $password | Password
  * @param string | $first_name | First Name
  * @param string | $last_name | Last Name
+ * @param string | $email | Email
+ * @param string | $title | Title
+ * @param string | $phone | Phone Work
+ * @param string | $account_id | Valid id account
  * @param string | $resultType=array | Result type (array or object)
  *
  * @return array/object | $sugarContact | Sugar Opportunities (array or object)
  *
  */
-function CreateSugarContact($sugarSoap, $user, $password,
-    $first_name, $last_name,
-    $resultType="array") {
+function CreateSugarContact($sugarSoap, $user, $password, $first_name, $last_name, $email, $title, $phone, $account_id, $resultType="array") {
 
     $module = "Contacts";
-    $aValue =  array(
+/*    $aValue =  array(
         array("name" => 'id',           "value" => G::generateUniqueID()),
         array("name" => 'first_name',   "value" => $first_name),
         array("name" => 'last_name',    "value" => $last_name),
     );
-
+*/
   $sessionId = sugarLogin ( $sugarSoap, $user, $password );
   $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
 
-  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' => $aValue );
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, array(
+            array("name" => 'first_name',"value" => $first_name),
+            array("name" => 'last_name',"value" => $last_name),
+            array("name" => 'email1',"value" => $email),
+            array("name" => 'title',"value" => $title),
+            array("name" => 'phone_work',"value" => $phone),
+         //   array("name" => 'account_id',"value" => '8cd10a60-101f-4363-1e0b-4cfd4106bd7e')
+            array("name" => 'account_id',"value" => $account_id)
+            ));
 
   $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
 
@@ -305,7 +316,7 @@ function CreateSugarContact($sugarSoap, $user, $password,
  * @param string | $user | User
  * @param string | $password | Password
  * @param string | $name | Name
- * @param string | $account_name | Account Name
+ * @param string | $account_id | Valid id account
  * @param string | $amount | Amount
  * @param string | $date_closed | Date Closed
  * @param string | $sales_stage | Prospecting, Qualification, Needs Analysis, Value Proposition, Id. Decision Makers, Perception Analysis, Proposal/Price Quote, Negotiation/Review, Closed Won, Closed Lost
@@ -314,25 +325,29 @@ function CreateSugarContact($sugarSoap, $user, $password,
  * @return array/object | $sugarOpportunity | Sugar Opportunities (array or object)
  *
  */
-function CreateSugarOpportunity($sugarSoap, $user, $password,
-        $name, $account_name, $amount, $date_closed, $sales_stage,
-    $resultType="array") {
-
+function CreateSugarOpportunity($sugarSoap, $user, $password, $name,$account_id,$amount, $date_closed, $sales_stage,$resultType="array") {
+// * @param string | $account_id | Account Id
     $module = "Opportunities";
 
-    $aValue =  array(
+  /*  $aValue =  array(
         array("name" => 'id',           "value" => G::generateUniqueID()),
         array("name" => 'name',         "value" => $name),
         array("name" => 'account_name', "value" => $account_name),
         array("name" => 'amount',       "value" => $amount),
         array("name" => 'date_closed',  "value" => $date_closed),
         array("name" => 'sales_stage',  "value" => $sales_stage)
-        );
+        );*/
 
   $sessionId = sugarLogin ( $sugarSoap, $user, $password );
   $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
 
-  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' => $aValue );
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' =>array(
+                      array('name' => 'name','value' => $name),
+                      array("name" => 'account_id',"value" => $account_id),
+                      array('name' => 'amount','value' => $amount),
+                      array('name' => 'date_closed','value' => $date_closed),
+                      array('name' => 'sales_stage','value' => $sales_stage),
+                    ));
 
   $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
 
