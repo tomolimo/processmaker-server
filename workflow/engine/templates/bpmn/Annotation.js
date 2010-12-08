@@ -83,7 +83,7 @@ bpmnAnnotation.prototype.paint = function () {
     var rectwidth = this.getWidth() - padleft;
     var rectheight = this.getHeight() - 2*padtop;
     this.bpmnText.setFont('verdana', '11px', Font.PLAIN);
-    this.bpmnText.drawStringRect(this.annotationName,0,padtop,rectwidth,rectheight,'center');
+    this.bpmnText.drawStringAnno(this.annotationName,0,padtop,rectwidth,rectheight,'left');
     //bpmnText.drawStringRect(this.taskName,this.getWidth()/2-20,this.getHeight()/2-11,200,'left');
     //tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
@@ -95,9 +95,21 @@ bpmnAnnotation.prototype.paint = function () {
 
 };
 
-   jsGraphics.prototype.drawTextString = function (txt, x, y, dx, dy) {
-    this.htm += '<div style="position:absolute; display:table-cell; vertical-align:middle; height:' + y + '; width:' + x + ';' + 'margin-left:' + dx + 'px;' + 'margin-top:' + dy + 'px;' + 'font-family:' + this.ftFam + ';' + 'font-size:' + this.ftSz + ';' + 'color:' + this.color + ';' + this.ftSty + '">' + txt + '<\/div>';
-};
+   jsGraphics.prototype.drawStringAnno = function(txt, x, y, width,height, halign)
+	{
+		this.htm += '<div style="position:absolute;overflow:hidden;'+
+			'left:' + x + 'px;'+
+			'top:' + y + 'px;'+
+			'width:'+width +'px;'+
+			'height:'+height +'px;'+
+			'text-align:'+halign+';'+
+			'font-family:' +  this.ftFam + ';'+
+			'font-size:' + this.ftSz + ';'+
+                        'padding-left:6px;'+
+			'color:' + this.color + ';' + this.ftSty + '">'+
+			txt +
+			'<\/div>';
+	};
 
 
 
@@ -175,7 +187,7 @@ bpmnAnnotation.prototype.onDoubleClick = function () {
     else
         this.figure.rectWidth = 150;
     //tempcoord = this.workflow.currentSelection.coord_converter(this.workflow.currentSelection.width, this.workflow.currentSelection.height, this.input.value.length)
-    this.figure.bpmnText.drawStringRect(this.input.value,20,20,this.figure.rectWidth,'left');
+    this.figure.bpmnText.drawStringAnno(this.input.value,20,20,this.figure.rectWidth,'left');
    // this.figure.bpmnNewText.drawTextString(this.input.value, this.workflow.currentSelection.width, this.workflow.currentSelection.height, tempcoord.temp_x, tempcoord.temp_y);
     this.figure.bpmnText.paint();
     this.figure.annotationName = this.input.value; //Set Updated Text value
