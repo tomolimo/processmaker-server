@@ -53,7 +53,7 @@
     $G_ID_MENU_SELECTED     = 'PROCESSES';
     $G_PUBLISH = new Publisher;
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ImportExistingXpdl', '', $Fields, 'processes_ImportExistingXpdl'  );
-    G::RenderPage('publish');
+    G::RenderPage('publish', "blank");
     die;
   }
   // code added by gustavo cruz gustavo-at-colosa-dot-com
@@ -88,7 +88,7 @@
     $G_ID_MENU_SELECTED     = 'PROCESSES';
     $G_PUBLISH = new Publisher;
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_ValidatingGroups', '', $Fields, 'processes_ImportFile'  );
-    G::RenderPage('publish');
+    G::RenderPage('publish', "blank");
     die;
   }
   // end added code
@@ -101,5 +101,5 @@ catch ( Exception $e ){
   $G_PUBLISH = new Publisher;
 	$aMessage['MESSAGE'] = $e->getMessage();
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-  G::RenderPage('publish');
+  G::RenderPage('publish', "blank");
 }

@@ -36,9 +36,14 @@ try {
 
 /* Includes */
 G::LoadClass('processes');
+G::LoadClass('xpdl');
 $oProcess  = new Processes();
+$oXpdl     = new Xpdl();
 $proFields = $oProcess->serializeProcess( $sProUid );
 $Fields = $oProcess->saveSerializedProcess ( $proFields );
+$xpdlFields = $oXpdl->xmdlProcess($sProUid);
+$Fields['FILENAMEXPDL'] = $xpdlFields['FILENAMEXPDL'];
+$Fields['FILENAME_LINKXPDL'] = $xpdlFields['FILENAME_LINKXPDL'];
 
   /* Render page */
   $G_PUBLISH = new Publisher;

@@ -200,6 +200,11 @@ Ext.onReady(function(){
         iconCls: 'silk-add',
         icon: '/images/import.gif',
         handler:importProcess
+      },{
+        text:'Import XPDL',
+        iconCls: 'silk-add',
+        icon: '/images/import.gif',
+        handler:importXPDLProcess
       },/*{
         text:'Export',
         iconCls: 'silk-add',
@@ -444,6 +449,10 @@ deleteProcess = function(){
 
 importProcess = function(){
   window.location = 'processes_Import';
+}
+
+importXPDLProcess = function(){
+  window.location = 'processes_ImportXpdl';
 }
 
 browseLibrary = function(){
