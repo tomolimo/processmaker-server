@@ -874,6 +874,7 @@ text both horizontally (e.g. right) and vertically within that rectangle */
 			'text-align:'+halign+';'+
 			'font-family:' +  this.ftFam + ';'+
 			'font-size:' + this.ftSz + ';'+
+                        'line-height: 100%;'+
 			'color:' + this.color + ';' + this.ftSty + '">'+
 			txt +
 			'<\/div>';
