@@ -66,7 +66,7 @@ if($action==="check")
 		)
 	));
 	$data=null;
-	$data->phpVersion	=(version_compare(PHP_VERSION,"5.1.0",">="))?true:false;
+	$data->phpVersion	=(version_compare(PHP_VERSION,"5.1.0",">"))?true:false;
 	if(trim($dataClient->mysqlH)=='' || trim($dataClient->mysqlU)=='')
 	{
 		$con = array('connection'=>false,'grant'=>false,'message'=>'Please complete the input fields (Hostname/Username)');
