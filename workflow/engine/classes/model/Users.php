@@ -224,6 +224,22 @@ class Users extends BaseUsers {
     throw $oException;
   }
   }
+  function getAvailableUsersCriteria($sGroupUID = '')
+  {
+    try {
+
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+      $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+      $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+      $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+
+      return $oCriteria;
+    }
+    catch (exception $oError) {
+      throw ($oError);
+    }
+  }
 } // Users
 
 ?>

@@ -51,7 +51,7 @@
 		</table>
 	</div>
 	<div class="boxBottomBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-	<div class="userGroupLink"><a href="#" onclick="showUsers(\''.$_GET['ROL_UID'].'\');return false;">'.G::LoadTranslation('ID_ASSIGN_ROLE').'</a></div>';
+	<div class="userGroupLink"><a href="#" onclick="showUsersLoad(\''.$_GET['ROL_UID'].'\');return false;">'.G::LoadTranslation('ID_ASSIGN_ROLE').'</a></div>';
 
 	$tree->showSign = false;
 

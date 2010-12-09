@@ -17,6 +17,7 @@
 
 
 PROCESS_REQUEST_FILE = '../roles/roles_Ajax';
+PROCESS_REQUEST_FILE_USER = '../roles/roles_AddUser';
 
 function newRol() {
 	popupWindow('', '../roles/roles_Ajax?request=newRole', 350, 225);
@@ -182,10 +183,11 @@ function deleteRole(ROL_UID) {
 			ajax.send(uri);
 };
 
+
 function usersIntoRole(ROL_UID)
 {
 	var uri = 'request=usersIntoRole&ROL_UID='+ROL_UID;
-	popupWindow('', '../roles/roles_Ajax?'+uri, 500, 450);
+	myRoleWindow = popupWindow('', '../roles/roles_Ajax?'+uri, 500, 450);
 }
 
 function deleteUserRole(ROL_UID, USR_UID){
@@ -208,8 +210,29 @@ function deleteUserRole(ROL_UID, USR_UID){
 
 function showUsers(ROL_UID)
 {
+oPanel = new leimnud.module.panel();
+    oPanel.options = {
+        size  :{w:400,h:512},
+        position:{x:0,y:0,center:true},
+        title : 'Roles',
+        theme :"processmaker",
+        statusBar:false,
+        control :{resize:false,roll:false,drag:true},
+        fx  :{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:true}
+      };
+      oPanel.events = {
+        remove: function() { 
+          delete(oPanel);
+          resetChecks();
+        }.extend(this)
+      };
+    oPanel.make();
+    oPanel.loader.show();
+    currentPopupWindow = oPanel;
+
+
 	var oRPC = new leimnud.module.rpc.xmlhttp({
-		url   : PROCESS_REQUEST_FILE,
+		url   : PROCESS_REQUEST_FILE_USER,
 		async : false,
 		method: 'POST',
 		args  : 'request=showUsers&ROL_UID=' + ROL_UID
@@ -218,11 +241,63 @@ function showUsers(ROL_UID)
     currentPopupWindow.clearContent();
 	currentPopupWindow.addContent(oRPC.xmlhttp.responseText);	
 }
+var checks_selected_Rolid = new Array();
+function showUsersLoad( ROL_UID ){
+     currentPopupWindow.remove();
+    oPanel = new leimnud.module.panel();
+    oPanel.options = {
+        size  :{w:500,h:512},
+        position:{x:0,y:0,center:true},
+        title : 'Roles',
+        theme :"processmaker",
+        statusBar:false,
+        control :{resize:false,roll:false,drag:true},
+        fx  :{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:true}
+      };
+      oPanel.events = {
+        remove: function() { 
+          delete(oPanel);
+          resetChecks();
+        }.extend(this)
+      };
+    oPanel.make();
+    oPanel.loader.show();
+    currentPopupWindow = oPanel;
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+        url : '../roles/roles_AddUser?ROL_UID='+ROL_UID,
+        args: ''
+      });
 
+    //currentPopupWindow.clearContent();
+	  //currentPopupWindow.addContent(oRPC.xmlhttp.responseText);	
+      checks_selected_Rolid.push(ROL_UID);
+      oRPC.callback = function(rpc) {
+        oPanel.loader.hide();
+        var scs=rpc.xmlhttp.responseText.extractScript();
+        oPanel.addContent(rpc.xmlhttp.responseText);
+        scs.evalScript();
+        var inputs = document.getElementsByTagName("input");
+        for(i=0; i<inputs.length; i++){
+          if( inputs[i].type == "checkbox" ){
+            try{
+              inputs[i].onclick = function(){
+                 if(this.checked){
+                 checks_selected_ids.push(this.value);
+                } else {
+                checks_selected_ids.deleteByValue(this.value);
+                }
+             };
+           }catch(e){alert(e)}
+         }
+       }  
+      }.extend(this);
+    oRPC.make();
+
+    
+  }
 function assignUserToRole(ROL_UID, USR_UID)
 {
-	
-	var oRPC = new leimnud.module.rpc.xmlhttp({
+		var oRPC = new leimnud.module.rpc.xmlhttp({
 		url   : PROCESS_REQUEST_FILE,
 		async : false,
 		method: 'POST',
@@ -339,7 +414,34 @@ String.prototype.trim = function()
 function $(id){
 	return document.getElementById(id);
 }
+function saveUsers(){
 
+  if(checks_selected_Rolid.length>1){
+    rolUid = checks_selected_Rolid[1];
+  }else{
+    rolUid = checks_selected_Rolid;
+  }
+
+  if( checks_selected_ids.length == 0 ){
+    new leimnud.module.app.alert().make({label: G_STRINGS.ID_MSG_GROUPS_ADDCONFIRM});
+    return 0;
+  }
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+   		url   : PROCESS_REQUEST_FILE,
+      async : false,
+      method: 'POST',
+      args  : 'request=assignUserToRole&ROL_UID=' + rolUid + '&aUsers=' + checks_selected_ids
+    });
+    resetChecks();
+    oRPC.make();
+    currentPopupWindow.remove();
+    
+    usersIntoRole(rolUid);
+}
+
+function resetChecks(){
+  checks_selected_ids.length = 0;
+}
 ]]></JS>
 
 </dynaForm>
