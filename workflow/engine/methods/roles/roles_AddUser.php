@@ -23,6 +23,7 @@
  *
  */
 
+    require_once ( 'classes/class.xmlfield_InputPM.php' );
 		$G_PUBLISH = new Publisher;
     
     require_once 'classes/model/Users.php';
