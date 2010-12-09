@@ -907,15 +907,18 @@ Ext.extend(
 
         otherAttributes = selectedNode.attributes.otherAttributes;
         
-        
-        
+        calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
+        calendarObj={};        
+        for(i=0;i<calendarDays.length;i++){
+        	calendarObj[calendarDays[i]]=true;
+        }
         Ext.getCmp('process-detail-panel').getForm().setValues({
         	processName : otherAttributes.PRO_TITLE,
         	taskName : selectedNode.attributes.text,
         	calendarName : otherAttributes.CALENDAR_NAME,
         	calendarDescription : otherAttributes.CALENDAR_DESCRIPTION,
         	processCalendar:otherAttributes.CALENDAR_NAME+" "+otherAttributes.CALENDAR_DESCRIPTION,
-        	calendarWorkDays : (otherAttributes.CALENDAR_WORK_DAYS).split("|"),
+        	calendarWorkDays : calendarObj,/*(otherAttributes.CALENDAR_WORK_DAYS).split("|"),*/
         	processCategory : otherAttributes.PRO_CATEGORY_LABEL,
         	processDebug : otherAttributes.PRO_DEBUG,
         	processDescription : otherAttributes.PRO_DESCRIPTION,
