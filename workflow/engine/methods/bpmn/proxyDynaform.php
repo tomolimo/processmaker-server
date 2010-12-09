@@ -19,8 +19,6 @@ try
                 $rows[] = $aRow;
             }
         }
-     //echo json_encode( $rows ) ;
-     //die;
    }
    //Getting Additional PM tables list created by user for combobox
    else

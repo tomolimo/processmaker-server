@@ -29,7 +29,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             text: 'New Dynaform',
             iconCls: 'application_add',
             handler: function () {
-
+                formWindow.show();
             }
   });
 
@@ -308,14 +308,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                                 var link = 'proxyDynaform?tabId='+record.data.ADD_TAB_UID;
                                 tablesFieldsStore.proxy.setUrl(link, true);
                                 tablesFieldsStore.load();
-                                /*Ext.Ajax.request({
-                                  url   : 'proxyDynaform?tabId='+record.data.ADD_TAB_UID,
-                                  method: 'GET',
-                                  success: function(response) {
-                                      var fields = Ext.util.JSON.decode(response.responseText);
-                                      Ext.getCmp("FLD_NAME").setValue(fields[0].FLD_NAME);
-                                  }
-                                });*/
+                                
                                 Ext.getCmp("fieldsGrid").show();
                                 Ext.getCmp("pmTable").setValue(record.data.ADD_TAB_UID);
 
@@ -431,6 +424,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                       Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
                   }
                 });
+                formWindow.close();
+                taskDynaform.reload();
             }
         },{
             text: 'Cancel',
@@ -440,7 +435,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             }
         }]
     });
-   formWindow.show();
+   gridWindow.show();
 }
 
 ProcessOptions.prototype.addInputDoc= function(_5625)
@@ -467,9 +462,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             }
             ]);
 
-            var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
-            });
+    var editor = new Ext.ux.grid.RowEditor({
+    saveText: 'Update'
+    });
 
             
   
@@ -483,9 +478,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
               url: 'proxyInputDocument?pid='+pro_uid
             })
           });
- inputDocStore.load();
+    inputDocStore.load();
 
- var btnRemove = new Ext.Button({
+    var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete Input Document',
             iconCls: 'application_delete',
@@ -526,7 +521,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             handler: function () {
             newIOWindow.show();
             }
-  });
+        });
 
     var inputDocForm = new Ext.FormPanel({
         
@@ -592,9 +587,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 forceSelection: true,
                                 name:           'INP_DOC_ORIGINAL',
                                 displayField:   'name',
-                                emptyText    : 'Select Format',
+                                //emptyText    : 'Select Format',
                                 valueField:     'value',
-                                //value        : 'ORIGINAL',
+                                value        : 'ORIGINAL',
                                 store:          new Ext.data.JsonStore({
                                             fields : ['name', 'value'],
                                             data   : [
@@ -711,11 +706,11 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         });
 
 
-var tb = new Ext.Toolbar({
-            items: [btnRemove, btnAdd]
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove]
             });
 
- var inputDocGrid = new Ext.grid.GridPanel({
+  var inputDocGrid = new Ext.grid.GridPanel({
         store: inputDocStore,
         id : 'mygrid',
         loadMask: true,
@@ -774,10 +769,7 @@ var tb = new Ext.Toolbar({
                     sOrig           = 'COPYLEGAL';
 
                 if(sFormNeeded == 'Digital')
-                {
                      sFormNeeded     = 'VIRTUAL';
-                     sOrig       = '';
-                }
                 else if(sFormNeeded == 'Printed')
                     sFormNeeded     = 'REAL';
                 else
@@ -816,7 +808,7 @@ var tb = new Ext.Toolbar({
                 //taskExtObj.saveTaskUsers(getData);
 
             newIOWindow.close();
-            inputDocStore.load();
+            inputDocStore.reload();
           }
         },{
             text: 'Cancel',
