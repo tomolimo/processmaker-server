@@ -264,7 +264,7 @@ Ext.onReady(function(){
       }, {
         dataIndex : 'LOCALE',
         id : 'LOCALE',
-        header : 'ID_LOCALE',
+        header : TRANSLATIONS.ID_LAN_LOCALE,
         width : 60,
         sortable : false
       }, {
