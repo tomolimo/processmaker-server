@@ -72,7 +72,7 @@ var installer=function()
 
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"PHP Version < 5.3.0",className:"inst_td0",colSpan:2}),
+			new DOM('td',{innerHTML:"PHP Version > 5.1.0",className:"inst_td0",colSpan:2}),
 			this.phpVersion = new DOM('td',{innerHTML:'Loading...',className:"inst_td1",colSpan:2})
 		);
 
