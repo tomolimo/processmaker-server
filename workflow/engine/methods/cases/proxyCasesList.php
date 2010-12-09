@@ -380,6 +380,8 @@
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -388,14 +390,14 @@
         $rows[] = $fields['DEL_TASK_DUE_DATE'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['DEL_PRIORITY'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'draft' :    //#, Case, task, process, due date, Last Modify, Priority },
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -403,13 +405,13 @@
         $rows[] = $fields['DEL_TASK_DUE_DATE'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['DEL_PRIORITY'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'sent' : // #, Case, task, process, current user, sent by, Last Modify, Status
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -418,26 +420,26 @@
         $rows[] = $fields['APP_CURRENT_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'unassigned' :  //#, Case, task, process, completed by user, finish date
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
         $rows[] = $fields['APP_TAS_TITLE'];
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'paused' : //#, Case, task, process, sent by
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -446,13 +448,13 @@
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_THREAD_INDEX'];
         $rows[] = $fields['APP_DEL_INDEX'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
       case 'completed' : //#, Case, task, process, completed by user, finish date
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -467,6 +469,8 @@
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -480,8 +484,10 @@
       case 'to_revise' : //#, Case, task, process, due date, Last Modify
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
-        $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
+        $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
         $rows[] = $fields['APP_TAS_TITLE'];
@@ -489,8 +495,6 @@
         $rows[] = $fields['APP_CURRENT_USER'];
         $rows[] = $fields['DEL_PRIORITY'];
         $rows[] = $fields['APP_STATUS'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'to_reassign' : //#, Case, task, process, due date, Last Modify
@@ -498,6 +502,8 @@
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['TAS_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -507,14 +513,16 @@
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
 //        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
+
 
         break;
 
       case 'all' : //#, Case, task, process, due date, Last Modify
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
+        $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -523,14 +531,14 @@
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
 
       case 'gral' : //#, Case, task, process, due date, Last Modify
         $fields = setDefaultFields();
         $rows[] = $fields['APP_UID'];
         $rows[] = $fields['DEL_INDEX'];
+        $rows[] = $fields['USR_UID'];
+        $rows[] = $fields['PREVIOUS_USR_UID'];
         $rows[] = $fields['APP_NUMBER'];
         $rows[] = $fields['APP_TITLE'];
         $rows[] = $fields['APP_PRO_TITLE'];
@@ -539,8 +547,6 @@
         $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
-        $rows[] = $fields['USR_UID'];
-        $rows[] = $fields['PREVIOUS_USR_UID'];
         break;
     }
     return $rows;

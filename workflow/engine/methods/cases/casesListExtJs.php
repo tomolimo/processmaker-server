@@ -368,6 +368,8 @@
     
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
@@ -381,8 +383,6 @@
 
     $caseReaderFields[] = array( 'name' => 'APP_CURRENT_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y' );  
   }
@@ -401,6 +401,8 @@
     
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
@@ -414,8 +416,6 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -435,6 +435,8 @@
     
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
@@ -448,8 +450,7 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
+
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
    }
@@ -470,6 +471,8 @@
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
@@ -484,8 +487,6 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
    }
@@ -503,6 +504,8 @@
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
@@ -516,8 +519,6 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -536,6 +537,8 @@
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
@@ -549,8 +552,7 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
+
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -571,6 +573,8 @@
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
@@ -583,8 +587,6 @@
     $caseReaderFields[] = array( 'name' => 'DEL_PRIORITY' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
     $caseReaderFields[] = array( 'name' => 'APP_FINISH_DATE' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -608,6 +610,8 @@
     $caseReaderFields[] = array( 'name' => 'TAS_UID' );
     $caseReaderFields[] = array( 'name' => 'DEL_INDEX' );
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
@@ -616,8 +620,7 @@
 //    $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
+
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
@@ -637,6 +640,8 @@
 
     $caseReaderFields = array();
     $caseReaderFields[] = array( 'name' => 'APP_UID' );
+    $caseReaderFields[] = array( 'name' => 'USR_UID' );
+    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
     $caseReaderFields[] = array( 'name' => 'APP_NUMBER' );
     $caseReaderFields[] = array( 'name' => 'APP_TITLE' );
     $caseReaderFields[] = array( 'name' => 'APP_TAS_TITLE' );
@@ -645,8 +650,7 @@
     $caseReaderFields[] = array( 'name' => 'APP_DEL_PREVIOUS_USER' );
     $caseReaderFields[] = array( 'name' => 'APP_UPDATE_DATE' );
     $caseReaderFields[] = array( 'name' => 'APP_STATUS' );
-    $caseReaderFields[] = array( 'name' => 'USR_UID' );
-    $caseReaderFields[] = array( 'name' => 'PREVIOUS_USR_UID' );
+
 
     return array ( 'caseColumns' => $caseColumns, 'caseReaderFields' => $caseReaderFields, 'rowsperpage' => 20, 'dateformat' => 'M d, Y'  );
   }
