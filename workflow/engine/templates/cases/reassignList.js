@@ -57,9 +57,10 @@
   var comboUsersToReassign = new Ext.form.ComboBox({
     width         : 280,
     boxMaxWidth   : 180,
+    fieldLabel    : 'Search',
     editable      : true,
     forceSelection: false,
-    minChars      : 2,
+    minChars      : 0,
     valueField    : 'userId',
     displayField  : 'userFullname',
     selectOnFocus : true,
