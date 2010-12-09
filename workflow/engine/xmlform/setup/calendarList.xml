@@ -22,7 +22,7 @@
   <en></en>
 </LINK1 >
 
-<LINK2 type="link" colWidth="20" titleAlign="left" value="@G::LoadTranslation(ID_DELETE)" align="left" onclick='return confirm("Sure?")' link='calendarDelete?id=@!CALENDAR_UID' >
+<LINK2 type="link" colWidth="20" titleAlign="left" value="@!DELETABLE" align="left" onclick='return confirm("Sure?")' link='calendarDelete?id=@!CALENDAR_UID' >
   <en></en>
 </LINK2 >
 

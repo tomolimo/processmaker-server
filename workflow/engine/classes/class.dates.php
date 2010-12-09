@@ -64,7 +64,7 @@ class dates {
    */
   function calculateDate( $sInitDate, $iDuration, $sTimeUnit, $iTypeDay, $UsrUid = NULL, $ProUid = NULL, $TasUid =NULL ) 
   {
-    $oldDate=$this->calculateDate_noCalendar( $sInitDate, $iDuration, $sTimeUnit, $iTypeDay, $UsrUid, $ProUid, $TasUid);
+    //$oldDate=$this->calculateDate_noCalendar( $sInitDate, $iDuration, $sTimeUnit, $iTypeDay, $UsrUid, $ProUid, $TasUid);
     //Set Calendar when the object is instanced in this order/priority (Task, User, Process, Default)
     G::LoadClass('calendar');
     $calendarObj=new calendar($UsrUid,$ProUid,$TasUid);
@@ -76,6 +76,11 @@ class dates {
     $dateArray   = explode(" ",$sInitDate);
     $currentDate = $dateArray[0];
     $currentTime = isset($dateArray[1])? $dateArray[1]: "00:00:00";
+    
+    $startTime=(float) array_sum(explode(' ',microtime()));
+
+    
+    $calendarObj->addCalendarLog("* Starting at: $startTime");
     $calendarObj->addCalendarLog(">>>>> Hours to Process: $hoursToProcess");
     $calendarObj->addCalendarLog(">>>>> Current Date: $currentDate");
     $calendarObj->addCalendarLog(">>>>> Current Time: $currentTime");
@@ -131,8 +136,13 @@ class dates {
      $calendarObj->addCalendarLog("+++++++++++ Calculated Due Date $currentDate $currentTime");
      $result['DUE_DATE']            = $currentDate." ".$currentTime;
      $result['DUE_DATE_SECONDS']    = strtotime($currentDate." ".$currentTime);
-     $result['OLD_DUE_DATE']        = date("Y-m-d H:i:s",$oldDate);
-     $result['OLD_DUE_DATE_SECONDS']= $oldDate;
+     //$result['OLD_DUE_DATE']        = date("Y-m-d H:i:s",$oldDate);
+     //$result['OLD_DUE_DATE_SECONDS']= $oldDate;
+     
+     $endTime=(float) array_sum(explode(' ',microtime())); 
+     $calendarObj->addCalendarLog("* Ending at: $endTime");
+     $calcTime=round($endTime-$startTime,3);
+     $calendarObj->addCalendarLog("** Processing time: ". sprintf("%.4f", ($endTime-$startTime))." seconds");
      $result['DUE_DATE_LOG']        = $calendarObj->calendarLog;
      return $result;
   }

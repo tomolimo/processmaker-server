@@ -14,6 +14,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   
   define ('DEBUG_SQL_LOG', 0 ); 
   define ('DEBUG_TIME_LOG', 0 );
+  define ('DEBUG_CALENDAR_LOG', 0 );
 
 //*** process the $_POST with magic_quotes enabled 
   function strip_slashes(&$vVar) {

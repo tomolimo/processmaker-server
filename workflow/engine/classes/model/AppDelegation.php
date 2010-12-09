@@ -98,7 +98,12 @@ class AppDelegation extends BaseAppDelegation {
     //The function return an array now.  By JHL
     $delTaskDueDate=$this->calculateDueDate($sNextTasParam);
     $this->setDelTaskDueDate  ( $delTaskDueDate['DUE_DATE'] ); // Due date formatted
-    $this->setDelData  ( $delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
+    
+    if((defined("DEBUG_CALENDAR_LOG"))&&(DEBUG_CALENDAR_LOG)){
+      $this->setDelData  ($delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
+    }else{
+        $this->setDelData  ( '' ); 
+    }
 
     // this condition assures that an internal delegation like a subprocess dont have an initial date setted
     if ( $delIndex == 1 &&  !$isSubprocess )  //the first delegation, init date this should be now for draft applications, in other cases, should be null.
