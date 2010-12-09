@@ -224,12 +224,12 @@ foreach ($aXMLForms as $xmlFormPath) {
     $aMsgids[$msgid] = true;
     
     //if it is a dropdown field
-    if( $arrayNode['type'] == 'dropdown' && isset($arrayNode[$_BASE_LANG]) && isset($arrayNode[$_BASE_LANG][0]) && isset($arrayNode[$_BASE_LANG][0]['option']) ){
+    if( isset($arrayNode[$_BASE_LANG]) && isset($arrayNode[$_BASE_LANG][0]) && isset($arrayNode[$_BASE_LANG][0]['option']) ){
       
       $originOptionNode = $arrayNode[$_BASE_LANG][0]['option']; //get the options
       
       $targetOptionExists = false;
-      if( $arrayNode['type'] == 'dropdown' && isset($arrayNode[$_TARGET_LANG]) && isset($arrayNode[$_TARGET_LANG][0]) && isset($arrayNode[$_TARGET_LANG][0]['option']) ) {
+      if( isset($arrayNode[$_TARGET_LANG]) && isset($arrayNode[$_TARGET_LANG][0]) && isset($arrayNode[$_TARGET_LANG][0]['option']) ) {
         $targetOptionNode = $arrayNode[$_TARGET_LANG][0]['option'];
         $targetOptionExists = true;
       } 
@@ -247,6 +247,7 @@ foreach ($aXMLForms as $xmlFormPath) {
           $originOptionValue = getTextValue($optionNode);
           
           if( $targetOptionExists ){
+
             $targetOptionValue = getMatchDropdownOptionValue($optionName, $targetOptionNode);
             if( $targetOptionValue === false ){
               $targetOptionValue = $originOptionValue;
@@ -255,11 +256,11 @@ foreach ($aXMLForms as $xmlFormPath) {
             $targetOptionValue = $originOptionValue;
           }
             
-          $targetOptionValue = ($targetOptionValue != '') ? $targetOptionValue : "''";
-          $targetOptionValue = ($optionName != '') ? $optionName : "''";
+          $targetOptionValue = ($targetOptionValue != '') ? $targetOptionValue : "''"; 
+          $optionName = ($optionName != '') ? $optionName : "''";
           
           $msgid = '[' . $xmlFormFile . '?' . $nodeName  . '-' . $optionName . ']';
-         /* g::dump($xmlFormFile . '?' . $nodeName . '-'. $originOptionValue);
+          /*g::dump($xmlFormFile . '?' . $nodeName . '-'. $originOptionValue);
           g::dump($xmlFormFile);
           g::dump($nodeType . ' - ' . $nodeName . ' - ' . $originOptionValue);
           g::dump($msgid);

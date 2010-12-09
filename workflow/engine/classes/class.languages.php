@@ -299,7 +299,10 @@ class languages {
             $countItemsSuccess++;
         } else if( $updateXml ){
           $xmlForm = $context;
-          $codes   = explode(' - ', $reference);
+          $codes   = explode('-', $reference);
+          foreach($codes as $i=>$code){
+            $codes[$i] = trim($code);
+          }
           $fieldName = trim($codes[1]);
           
           if( ! file_exists(PATH_XMLFORM . $xmlForm) ) {
