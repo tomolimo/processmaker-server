@@ -9,7 +9,8 @@ function lookup($target)
 {
   global $ntarget;
   $msg = $target . ' => ';
-  if( eregi('[a-zA-Z]', $target) )
+  //if( eregi('[a-zA-Z]', $target) )
+  if( preg_match('[a-zA-Z]', $target)) //Made compatible to PHP 5.3
     $ntarget = gethostbyname($target);
   else
     $ntarget = gethostbyaddr($target);

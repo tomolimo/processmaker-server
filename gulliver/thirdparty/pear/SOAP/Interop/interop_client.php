@@ -178,7 +178,7 @@ class Interop_Client
         if ($soap_test->headers) {
             foreach ($soap_test->headers as $h) {
                 $destination = 0;
-                if (strtolower(get_class($h)) == 'soap_header') {
+                if (is_object($h) && strtolower(get_class($h)) == 'soap_header') {
                     if ($h->attributes['SOAP-ENV:actor'] == 'http://schemas.xmlsoap.org/soap/actor/next') {
                         $destination = 1;
                     }
@@ -383,7 +383,7 @@ class Interop_Client
                 // $header is already a SOAP_Header class
                 for ($i = 0, $hc = count($soap_test->headers); $i < $hc; $i++) {
                     $header = $soap_test->headers[$i];
-                    if (strtolower(get_class($header)) != 'soap_header') {
+                    if (is_object($header) && strtolower(get_class($header)) != 'soap_header') {
                         // Assume it's an array.
                         $header = new SOAP_Header($header[0], null, $header[1], $header[2], $header[3], $header[4]);
                     }
@@ -551,7 +551,7 @@ class Interop_Client
                     $thc = count($soap_test->headers);
                     for ($thi = 0; $thi < $thc; $thi++) {
                         $header = $soap_test->headers[$thi];
-                        if (strtolower(get_class($header)) == 'soap_header') {
+                        if (is_object($header) && strtolower(get_class($header)) == 'soap_header') {
                             if ($header->name == $m[2]) {
                                 $gotit = $header->attributes['SOAP-ENV:actor'] == ($m[3] ? SOAP_TEST_ACTOR_NEXT : SOAP_TEST_ACTOR_OTHER);
                                 $gotit = $gotit && $header->attributes['SOAP-ENV:mustUnderstand'] == $m[4];

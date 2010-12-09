@@ -93,7 +93,7 @@ class SOAP_Interop_Base {
 
     function echoStruct($inputStruct)
     {
-        if (strtolower(get_class($inputStruct)) == 'soapstruct') {
+        if (is_object($inputStruct) && strtolower(get_class($inputStruct)) == 'soapstruct') {
             return $inputStruct->__to_soap();
         }
         return $inputStruct;
