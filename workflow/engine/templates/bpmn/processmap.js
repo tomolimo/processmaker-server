@@ -166,7 +166,14 @@ Ext.onReady ( function() {
                                 processObj.addDynaform();
                             }
                         },
-                    {text: 'Input Document'},{text: 'Output Document'},{text: 'Trigger'},{text: 'Report Table'},{text: 'Database Connection'},{text: 'Cases Scheduler'}]
+                        {
+                            text: 'Input Document',
+                            handler : function() {
+                                processObj.addInputDoc();
+                            }
+                        },{
+                            text: 'Output Document'
+                        },{text: 'Trigger'},{text: 'Report Table'},{text: 'Database Connection'},{text: 'Cases Scheduler'}]
             })
 
         },
