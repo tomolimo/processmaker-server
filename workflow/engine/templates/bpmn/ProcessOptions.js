@@ -178,7 +178,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                 ]
         });
 
- /*var dynaformGrid = new Ext.grid.GridPanel({
+ var dynaformGrid = new Ext.grid.GridPanel({
         store: taskDynaform,
         id : 'mygrid',
         loadMask: true,
@@ -194,7 +194,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         stripeRows: true,
         tbar: tb,
         viewConfig: {forceFit: true}
-   });*/
+   });
 
  var dynaformDetails = new Ext.FormPanel({
         labelWidth: 100,
@@ -371,6 +371,20 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
+        items: dynaformGrid
+    });
+
+ var formWindow = new Ext.Window({
+        title: 'Dynaform',
+        collapsible: false,
+        maximizable: true,
+        width: 550,
+        //autoHeight: true,
+        height: 400,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
         items: dynaformDetails,
         buttons: [{
             text: 'Save',
@@ -422,11 +436,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                gridWindow.close();
+                formWindow.close();
             }
         }]
     });
-   gridWindow.show();
+   formWindow.show();
 }
 
 ProcessOptions.prototype.addInputDoc= function(_5625)
@@ -542,56 +556,54 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             forceSelection: true,
                             name:           'INP_DOC_FORM_NEEDED',
                             displayField:   'name',
-                            emptyText    : 'Select Type',
+                            value       :   'Digital',
                             valueField:     'value',
-                            //value        : 'Normal',
                             store:          new Ext.data.JsonStore({
                                         fields : ['name', 'value'],
                                         data   : [
-                                            {name : 'Digital',   value: 'Digital'},
-                                            {name : 'Printed',   value: 'Printed'},
-                                            {name : 'Digital/Printed',   value: 'Digital/Printed'}]}),
+                                            {name : 'Digital',   value: 'VIRTUAL'},
+                                            {name : 'Printed',   value: 'REAL'},
+                                            {name : 'Digital/Printed',   value: 'VREAL'}]}),
+
                            onSelect: function(record, index) {
-                            if(record.data.value != 'Digital')
-                                {
-                                    Ext.getCmp("formType").show();
-                                }
-                            else
-                                {
-                                    Ext.getCmp("formType").hide();
-                                }
+                                //Show-Hide Format Type Field
+                                if(record.data.value != 'VIRTUAL')
+                                        Ext.getCmp("formType").show();
+                                else
+                                        Ext.getCmp("formType").hide();
 
                                 this.setValue(record.data[this.valueField || this.displayField]);
                                 this.collapse();
-                            }
+                             }
                          },{
-                    xtype: 'fieldset',
-                    layout: 'form',
-                    id:'formType',
-                    border: false,
-                    hidden:true,
-                    labelAlign: '',
-                   items:[{
-                            xtype:          'combo',
-                            width:          150,
-                            mode:           'local',
-                            editable:       false,
-                            fieldLabel:     'Format',
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            name:           'INP_DOC_ORIGINAL',
-                            displayField:   'name',
-                            emptyText    : 'Select Format',
-                            valueField:     'value',
-                            //value        : 'Normal',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'ORIGINAL',   value: 'ORIGINAL'},
-                                            {name : 'LEGAL COPY',   value: 'LEGAL COPY'},
-                                            {name : 'COPY',   value: 'COPY'}
-                                            ]})
-                    }]},{
+                            xtype: 'fieldset',
+                            layout: 'form',
+                            id:'formType',
+                            border: false,
+                            hidden:true,
+                            labelAlign: '',
+                            items:[{
+                                xtype:          'combo',
+                                width:          150,
+                                mode:           'local',
+                                editable:       false,
+                                fieldLabel:     'Format',
+                                triggerAction:  'all',
+                                forceSelection: true,
+                                name:           'INP_DOC_ORIGINAL',
+                                displayField:   'name',
+                                emptyText    : 'Select Format',
+                                valueField:     'value',
+                                //value        : 'ORIGINAL',
+                                store:          new Ext.data.JsonStore({
+                                            fields : ['name', 'value'],
+                                            data   : [
+                                                {name : 'ORIGINAL',   value: 'ORIGINAL'},
+                                                {name : 'LEGAL COPY',   value: 'COPYLEGAL'},
+                                                {name : 'COPY',   value: 'COPY'}
+                                                ]})
+                                }]
+                        },{
                             xtype     : 'textarea',
                             fieldLabel: 'Description',
                             name      : 'INP_DOC_DESCRIPTION',
@@ -608,12 +620,12 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             name:           'INP_DOC_VERSIONING',
                             displayField:   'name',
                             valueField:     'value',
-                            //value        : 'Normal',
+                            value         : 'No',
                             store:          new Ext.data.JsonStore({
                                         fields : ['name', 'value'],
                                         data   : [
-                                            {name : 'No',   value: 'No'},
-                                            {name : 'Yes',   value: 'Yes'},
+                                            {name : 'No',   value: ''},
+                                            {name : 'Yes',   value: '1'},
                                             ]})
                          }, {
                     xtype: 'fieldset',
@@ -754,43 +766,46 @@ var tb = new Ext.Toolbar({
             text: 'Save',
             handler: function(){
                 var getForm   = inputDocForm.getForm().getValues();
-                //var sDynaType = getForm.DYN_SOURCE;
-                        //var sUid            = getForm.INP_DOC_UID;
-                        var sDocType        = getForm.INP_DOC_TITLE
-                        var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
-                        var sOrig = '';
+                
+                var sDocType        = getForm.INP_DOC_TITLE
+                var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
+                var sOrig           = getForm.INP_DOC_ORIGINAL;
+                if(sOrig == 'LEGAL COPY')
+                    sOrig           = 'COPYLEGAL';
 
-                        if(getForm.INP_DOC_ORIGINAL == 'Normal')
-                            {
-                                sOrig           = getForm.INP_DOC_ORIGINAL;
-                            }
-                        
-                        
-                        var sDesc           = getForm.INP_DOC_DESCRIPTION;
-                        var sVers           = getForm.INP_DOC_VERSIONING;
-                        var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
-                        var sTags           = getForm.INP_DOC_TAGS;
+                if(sFormNeeded == 'Digital')
+                {
+                     sFormNeeded     = 'VIRTUAL';
+                     sOrig       = '';
+                }
+                else if(sFormNeeded == 'Printed')
+                    sFormNeeded     = 'REAL';
+                else
+                    sFormNeeded     = 'VREAL';
 
+                
+                var sDesc = getForm.INP_DOC_DESCRIPTION;
+                var sVers           = getForm.INP_DOC_VERSIONING;
+                if(sVers == 'Yes')
+                    sVers = '1';
+                else
+                    sVers = '';
+                
+                var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
+                var sTags           = getForm.INP_DOC_TAGS;
 
-                Ext.Ajax.request({
+               Ext.Ajax.request({
                   url   : '../inputdocs/inputdocs_Save.php',
                   method: 'POST',
                   params:{
-                      INP_DOC_TITLE:sDocType,
+                      INP_DOC_TITLE                 :sDocType,
                       INP_DOC_UID                   : '',
                       PRO_UID                       : pro_uid,
-                     // INP_DOC_FORM_NEEDED           : sFormNeeded,
-                      INP_DOC_FORM_NEEDED           : 'VIRTUAL',
-                      //INP_DOC_ORIGINAL              : sOrig,
-                      INP_DOC_ORIGINAL              : 'ORIGINAL',
+                      INP_DOC_FORM_NEEDED           : sFormNeeded,
+                      INP_DOC_ORIGINAL              : sOrig,
                       INP_DOC_VERSIONING            : sVers,
-                      INP_DOC_TAGS                  : 'INPUT',
+                      INP_DOC_TAGS                  : 'INPUT',    //By Default
                       INP_DOC_DESCRIPTION           : sDesc
-                      
-                      
-                      
-                      
-
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Input document has been created successfully.');
@@ -802,8 +817,7 @@ var tb = new Ext.Toolbar({
 
             newIOWindow.close();
             inputDocStore.load();
-            }
-            
+          }
         },{
             text: 'Cancel',
             handler: function(){
@@ -811,12 +825,8 @@ var tb = new Ext.Toolbar({
                 newIOWindow.close();
             }
         }]
-        
-
-
     });
    gridWindow.show();
-   //Ext.getCmp("blankInputDoc").hide();
 }
 
 
@@ -917,6 +927,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
           });
 
    gridWindow.show();
-   //Ext.getCmp("blankInputDoc").hide();
+   
 }
 

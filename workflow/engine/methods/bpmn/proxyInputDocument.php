@@ -8,12 +8,7 @@ try
        $rows        = $oProcessMap->getExtInputDocumentsCriteria($_GET['pid']);
        array_shift($rows);
    }
-//   else
-//   {
-//       $rows        = $oProcessMap->getExtInputDocumentsCriteria($_GET['pid']);
-//   }
-
-   
+  
     $result['totalCount'] = count($rows);
     $result['data'] = $rows;
     print json_encode( $result) ;

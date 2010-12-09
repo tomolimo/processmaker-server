@@ -37,8 +37,10 @@ try {
   	break;
   }
 
-  
-  $sfunction =$_POST['function']; 
+  if(isset($_POST['function']))
+    $sfunction =$_POST['function'];
+  else
+    $sfunction ='';
   
   switch($sfunction){
   case 'lookForNameInput':
@@ -76,24 +78,30 @@ try {
   default:
   
 	  require_once 'classes/model/InputDocument.php';
-	  G::LoadClass( 'processMap' );
-	  
-	  $oInputDocument = new InputDocument();
-	  if ($_POST['form']['INP_DOC_UID'] == '') {
-	    unset($_POST['form']['INP_DOC_UID']);
-	  	$oInputDocument->create($_POST['form']);
-	  }
-	  else {
-	  	$oInputDocument->update($_POST['form']);
-	  }
-	  
-	  //refresh dbarray with the last change in inputDocument
-	  $oMap = new processMap();
-	  $oCriteria = $oMap->getInputDocumentsCriteria($_POST['form']['PRO_UID']);
+          G::LoadClass( 'processMap' );
+
+          $oInputDocument = new InputDocument();
+          if(isset($_POST['form'])){
+            $aData = $_POST['form'];}
+          else{
+            $aData = $_POST;}
+
+          if ($aData['INP_DOC_UID'] == '') {
+             unset($aData['INP_DOC_UID']);
+                $oInputDocument->create($aData);
+          }
+          else {
+                $oInputDocument->update($aData);
+          }
+
+          //refresh dbarray with the last change in inputDocument
+          $oMap = new processMap();
+          $oCriteria = $oMap->getInputDocumentsCriteria($aData['PRO_UID']);
   break;
  }
 }
 catch (Exception $oException) {
 	die($oException->getMessage());
 }
+
 ?>
