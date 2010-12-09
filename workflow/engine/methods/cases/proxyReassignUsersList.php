@@ -1,5 +1,6 @@
 <?php
   $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
+  $query    = isset($_POST['query'])    ? $_POST['query']    : '';
   $dir      = isset($_POST['dir'])      ? $_POST['dir']    : 'DESC';
   $sort     = isset($_POST['sort'])     ? $_POST['sort']   : '';
   $start    = isset($_POST['start'])    ? $_POST['start']  : '0';
@@ -11,8 +12,47 @@
   $status   = isset($_POST['status'])   ? strtoupper($_POST['status']) : '';
   $action   = isset($_GET['action'])    ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : 'todo');
   $type     = isset($_GET['type'])      ? $_GET['type'] : (isset($_POST['type']) ? $_POST['type'] : 'extjs');
-  $user     = isset($_POST['user'])     ? $_POST['user'] : '';
 
+function array_sort($array, $on, $order=SORT_ASC, $query='')
+{
+    $new_array = array();
+    $sortable_array = array();
+
+    if (count($array) > 0) {
+        foreach ($array as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $k2 => $v2) {
+                    if ($k2 == $on) {
+                        $sortable_array[$k] = $v2;
+                    }
+                }
+            } else {
+                $sortable_array[$k] = $v;
+            }
+        }
+
+        switch ($order) {
+            case SORT_ASC:
+                asort($sortable_array);
+            break;
+            case SORT_DESC:
+                arsort($sortable_array);
+            break;
+        }
+
+        foreach ($sortable_array as $k => $v) {
+            if ($query==''){
+                $new_array[] = $array[$k];
+            } else {
+                $pos1 = stripos($array[$k]['userFullname'], $query);
+                if ($pos1!==false&&$pos1==0){
+                    $new_array[] = $array[$k];
+                }
+            }
+        }
+    }
+    return $new_array;
+}
 //  $APP_UIDS          = explode(',', $_POST['APP_UID']);
   
   $appUid = isset($_POST['application']) ? $_POST['application'] : '';
@@ -73,5 +113,6 @@
 //            $oTmp = new stdClass();
 //            $oTmp->items = $aUsersInvolved;
         $result = array();
+        $aUsersInvolved = array_sort($aUsersInvolved,'userFullname',SORT_ASC, $query);
         $result['data'] = $aUsersInvolved;
         print G::json_encode( $result ) ;

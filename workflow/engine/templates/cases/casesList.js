@@ -1306,8 +1306,9 @@ var gridForm = new Ext.FormPanel({
                             }
                         }
                         comboUsersToReassign.clearValue();
+                        storeUsersToReassign.removeAll();
                         storeUsersToReassign.setBaseParam('application',application);
-                        storeUsersToReassign.load();
+                        //storeUsersToReassign.load();
                         //alert(record.USERS);
                     } // Allow rows to be rendered.
                 }
