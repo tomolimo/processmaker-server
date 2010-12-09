@@ -78,6 +78,7 @@ function submit2 (){
   getField('CALENDAR_WORK_DAYS][4').disabled=false;
   getField('CALENDAR_WORK_DAYS][5').disabled=false;
   getField('CALENDAR_WORK_DAYS][6').disabled=false;
+  getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
   if(getField('CALENDAR_NAME').value!=''){
     getField('CALENDAR_STATUS').disabled=false;
     getField('CALENDAR_NAME').disabled=false;
@@ -214,7 +215,7 @@ function check() {
    if(getField("CALENDAR_WORK_DAYS][6").checked){
      Text='SAT';
      Value=6;
-     AddItem(Text,Value);
+     AddItem(Text,Value); 
    }
 }
 
@@ -302,8 +303,7 @@ function validateForm(form){
 		}
 		
 	}
-	getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.replace(/^\s+/, "");
-
+        getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
 	if(getField('CALENDAR_NAME').value==""){ 
 	msg+="- Invalid Name \n";
 	}
