@@ -80,13 +80,6 @@ Ext.onReady(function(){
     plugins: expander,
     cls : '',
     columnLines: true,
-
-    
-    /*view: new Ext.grid.GroupingView({
-        //forceFit:true,
-        //groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-        groupTextTpl: '{text}'
-    }),*/
     viewConfig: {
       forceFit:true
     },
@@ -109,7 +102,6 @@ Ext.onReady(function(){
         }},
 
         {header: '', dataIndex: 'setup' , hidden:true, hideable:false},
-
         {header: '', dataIndex: 'sFile', hidden:true, hideable:false },
         {header: '', dataIndex: 'sStatusFile', hidden:true, hideable:false}
       ]
@@ -180,31 +172,21 @@ Ext.onReady(function(){
   });
 
   Grid.store.load({params: {"function":"pluginsList"}});
-
-  //////////////////////store.load({params: {"function":"xml"}});
-
-  
-  //processesGrid.render('processes-panel');
-  
-  //processesGrid.render(document.body);
-  //fp.render('form-panel');
-
-
+  //store.load({params: {"function":"xml"}});
   var viewport = new Ext.Viewport({
     layout: 'border',
     autoScroll: true,
-    items: [
-      Grid
-    ]
+    items: [Grid]
   });
 });
 
 
 deletePlugin = function(){
   var rowSelected = Grid.getSelectionModel().getSelected();
-  //var rows = processesGrid.getSelectionModel().getSelections();
   if( rowSelected ) {
     namespace = rowSelected.get('namespace');
+    status    = rowSelected.get('status');
+    if(status == 0) {
       Ext.Msg.confirm(
         TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_REMOVE_PLUGIN,
         function(btn, text){
@@ -221,7 +203,17 @@ deletePlugin = function(){
           }
         }
       );
-    
+    } else {
+      Ext.Msg.show({
+        title:'',
+        msg: TRANSLATIONS.ID_PLUGIN_CANT_DELETE,
+        buttons: Ext.Msg.INFO,
+        fn: function(){},
+        animEl: 'elId',
+        icon: Ext.MessageBox.INFO,
+        buttons: Ext.MessageBox.OK
+      });
+    }
   } else {
     Ext.Msg.show({
       title:'',
