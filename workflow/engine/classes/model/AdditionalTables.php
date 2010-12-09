@@ -819,11 +819,11 @@ public function loadByName($name) {
 <ADD_TAB_UID type="private" showInTable="0" />
 
 <MNU_ADD type="link" link="additionalTablesDataNew?sUID=@#ADD_TAB_UID" colAlign="left" colWidth="100">
-  <en>New</en>
+  <en>' . G::LoadTranslation("ID_NEW") . '</en>
 </MNU_ADD>
 
 <MNU_IMPORT_DATA type="link" link="additionalTablesDataImportForm?sUID=@#ADD_TAB_UID" colAlign="left" colWidth="100">
-  <en>Import</en>
+  <en>' . G::LoadTranslation("ID_IMPORT") . '</en>
 </MNU_IMPORT_DATA>
 
 <PAGED_TABLE_ID type="private" />
