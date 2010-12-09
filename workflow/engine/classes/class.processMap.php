@@ -4825,6 +4825,112 @@ class processMap {
     return $dynaformArray;
   }
 
+
+  /*
+  * Return the Input Documents list array
+  * @param string $sProcessUID
+  * @return object
+  */
+  function getExtInputDocumentsCriteria($sProcessUID = '')
+  {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria  = new Criteria ( 'workflow' );
+    $oCriteria->addSelectColumn ( InputDocumentPeer::INP_DOC_UID );
+    $oCriteria->addSelectColumn ( InputDocumentPeer::PRO_UID );
+    $oCriteria->addAsColumn ( 'INP_DOC_TITLE', 'C1.CON_VALUE' );
+    $oCriteria->addAsColumn ( 'INP_DOC_DESCRIPTION', 'C2.CON_VALUE' );
+    $oCriteria->addAlias ( 'C1', 'CONTENT' );
+    $oCriteria->addAlias ( 'C2', 'CONTENT' );
+    $aConditions    = array ();
+    $aConditions [] = array (InputDocumentPeer::INP_DOC_UID, 'C1.CON_ID' );
+    $aConditions [] = array ('C1.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter );
+    $aConditions [] = array ('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $aConditions    = array ();
+    $aConditions [] = array (InputDocumentPeer::INP_DOC_UID, 'C2.CON_ID' );
+    $aConditions [] = array ('C2.CON_CATEGORY', $sDelimiter . 'INP_DOC_DESCRIPTION' . $sDelimiter );
+    $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $oCriteria->add ( InputDocumentPeer::PRO_UID, $sProcessUID );
+
+    $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $inputDocArray    = "";
+    $inputDocArray [] = array ('INP_DOC_UID' => 'char', 'PRO_UID' => 'char', 'INP_DOC_TITLE' => 'char', 'INP_DOC_DESCRIPTION' => 'char' );
+    while ( $aRow = $oDataset->getRow () ) {
+      if (($aRow ['INP_DOC_TITLE'] == NULL)||($aRow ['INP_DOC_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+        $inputDocument                = new InputDocument ( );
+        $inputDocumentObj             = $inputDocument->load ( $aRow ['INP_DOC_UID'] );
+        $aRow ['INP_DOC_TITLE']       = $inputDocumentObj ['INP_DOC_TITLE'];
+        $aRow ['INP_DOC_DESCRIPTION'] = $inputDocumentObj ['INP_DOC_DESCRIPTION'];
+      }
+      $inputDocArray [] = $aRow;
+      $oDataset->next ();
+    }
+      /*global $_DBArray;
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['inputDocArrayMain'] = $inputDocArray;
+      //$_SESSION ['_DBArray']['inputDocArrayMain']        = $_DBArray;*/
+
+
+    return $inputDocArray;
+  }
+
+  /*
+  * Return the Output Documents list array
+  * @param string $sProcessUID
+  * @return object
+  */
+  function getExtOutputDocumentsCriteria($sProcessUID = '')
+  {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria  = new Criteria ( 'workflow' );
+    $oCriteria->addSelectColumn ( OutputDocumentPeer::OUT_DOC_UID );
+    $oCriteria->addSelectColumn ( OutputDocumentPeer::OUT_DOC_TYPE );
+    $oCriteria->addSelectColumn ( OutputDocumentPeer::PRO_UID );
+    $oCriteria->addAsColumn ( 'OUT_DOC_TITLE', 'C1.CON_VALUE' );
+    $oCriteria->addAsColumn ( 'OUT_DOC_DESCRIPTION', 'C2.CON_VALUE' );
+    $oCriteria->addAlias ( 'C1', 'CONTENT' );
+    $oCriteria->addAlias ( 'C2', 'CONTENT' );
+    $aConditions    = array ();
+    $aConditions [] = array (OutputDocumentPeer::OUT_DOC_UID, 'C1.CON_ID' );
+    $aConditions [] = array ('C1.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TITLE' . $sDelimiter );
+    $aConditions [] = array ('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $aConditions    = array ();
+    $aConditions [] = array (OutputDocumentPeer::OUT_DOC_UID, 'C2.CON_ID' );
+    $aConditions [] = array ('C2.CON_CATEGORY', $sDelimiter . 'OUT_DOC_DESCRIPTION' . $sDelimiter );
+    $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
+    $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
+    $oCriteria->add ( OutputDocumentPeer::PRO_UID, $sProcessUID );
+
+    $oDataset = OutputDocumentPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $outputDocArray = array ();
+    $outputDocArray [] = array ('d' => 'char' );
+    while ( $aRow = $oDataset->getRow () ) {
+      if (($aRow ['OUT_DOC_TITLE'] == NULL)||($aRow ['OUT_DOC_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+        $outputDocument               = new OutputDocument ( );
+        $outputDocumentObj            = $outputDocument->load ( $aRow ['OUT_DOC_UID'] );
+        $aRow ['OUT_DOC_TITLE']       = $outputDocumentObj ['OUT_DOC_TITLE'];
+        $aRow ['OUT_DOC_DESCRIPTION'] = $outputDocumentObj ['OUT_DOC_DESCRIPTION'];
+      }
+      $outputDocArray [] = $aRow;
+      $oDataset->next ();
+    }
+    global $_DBArray;
+    $_DBArray                    = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+    $_DBArray ['outputDocArray'] = $outputDocArray;
+    $_SESSION ['_DBArray']       = $_DBArray;
+    G::LoadClass ( 'ArrayPeer' );
+    $oCriteria                   = new Criteria ( 'dbarray' );
+    $oCriteria->setDBArrayTable ( 'outputDocArray' );
+
+    return $outputDocArray;
+  }
+
   /**
    * subProcess_Properties New Processmap
    *
