@@ -7,9 +7,9 @@
 </head>
 
 <body>
-<table width="100%" height="75" border="0" cellpadding="0" cellspacing="0" bgcolor="#003366">
+<table width="100%" height="75" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff">
   <tr>
-    <td width="20px" align="center">&nbsp;</td>
+    <td width="20%" align="center">&nbsp;</td>
     <td width="100px" align="center" scope="col"><img src="/js/common/core/images/default_logo.gif"></td>
     <td width="45%" scope="col">&nbsp;</td>
     <td width="35%" class="mxbOnlineText" scope="col"><?= $ERROR_TEXT ?></td>

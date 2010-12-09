@@ -23,15 +23,22 @@
  * 
  */
   session_start();
+  if (isset($_GET['url']))
+    $url = $_GET['url'];
+  else if (isset ($_GET['p']))
+    $url = $_GET['p'];
+  else
+    $url = "";
+  
   if( ! isset($_GET['p']) )
     if ( isset ( $_SESSION['phpFileNotFound'] ) )
-      $uri = $_SESSION['phpFileNotFound'];
+      $file = $_SESSION['phpFileNotFound'];
     else
-      $uri = 'undefined';
+      $file = 'undefined';
   else
-    $uri = $_GET['p'];
+    $file = 'undefined';
   
-  $referer =  isset ( $_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+  $referer =  isset ( $_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'undefined';
   
  $ERROR_TEXT = "404 Not Found ";
  $ERROR_DESCRIPTION = "
@@ -39,20 +46,25 @@
       that this server could not understand.<br />
       <br />
       <strong>Possible reasons: </strong><br />
+      <ul>
+      <li>
       Your link is broken. This may occur when you receive
       a link via email, but your client software adds line breaks, thus distorting
-      long URLs. <br />
-      <br />
-      The page you requested is no longer active. <br />
-      <br />
+      long URLs.
+      </li>
+      <li>
+      The page you requested is no longer active.
+      </li>
+      <li>
       There is a typographic
       error in the link, in case you entered the URL into the browser's address
-      toolbar.<br />
-      <br />
-      <br />
+      toolbar.
+      </li>
+      </ul>
       <table>
-      <tr><td><small>url</small></td>    <td><small>$uri</small></td></tr>
-      <tr><td><small>referer</small></td><td><small>$referer</small></td></tr>
+      <tr><td><small>url:</small></td>    <td><small>$url</small></td></tr>
+      <tr><td><small>file:</small></td>    <td><small>$file</small></td></tr>
+      <tr><td><small>referer:</small></td><td><small>$referer</small></td></tr>
       </table>
   ";
 

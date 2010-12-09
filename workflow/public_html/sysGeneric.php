@@ -193,7 +193,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         die;
         break;
       case 'errorFile':
-        header ("location: /errors/error404.php");
+        header ("location: /errors/error404.php?url=" . urlencode($_SERVER['REQUEST_URI']));
         if ( DEBUG_TIME_LOG ) logTimeByPage(); //log this page
         die;
         break;
@@ -451,7 +451,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
     if ( ! file_exists( $phpFile ) ) {
         $_SESSION['phpFileNotFound'] = $phpFile;
         print $phpFile;
-        header ("location: /errors/error404.php");
+        header ("location: /errors/error404.php?url=" . urlencode($_SERVER['REQUEST_URI']));
         die;
     }
   }
