@@ -24,8 +24,15 @@
   $lang = isset($oConf->aConfig['LANG']) ? $oConf->aConfig['LANG'] : 'en';
   
   //$oHeadPublisher->assign('appCacheViewEnabled', $appCacheViewEnabled);
-  $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING'); 		 			
-  $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
+
+  $labels = G::getTranslations(Array(
+  'ID_PROCESSING', 'ID_CACHE_LANGUAGE',  'ID_CACHE_HOST', 'ID_CACHE_USER', 'ID_CACHE_PASSWORD',
+  'ID_CACHE_TITLE_INFO', 'ID_CACHE_SUBTITLE_REBUILD', 'ID_CACHE_BTN_BUILD',
+  'ID_CACHE_BUILDING', 'ID_CACHE_SUBTITLE_SETUP_DB', 'ID_CACHE_BTN_SETUP_PASSWRD'
+  ));
+  $oHeadPublisher->assign('TRANSLATIONS', $labels);
+  // $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING');
+  // $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   $oHeadPublisher->assign( 'currentLang',    $lang);  //current language  
-  
+
   G::RenderPage('publish', 'extJs');

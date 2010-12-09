@@ -43,7 +43,7 @@ Ext.onReady(function() {
       stripeRows : true,
       autoHeight : true,
       width : 400,
-      title : 'Workflow Applications Cache Info',
+      title : TRANSLATIONS.ID_CACHE_TITLE_INFO, // 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
       stateId : 'grid',
@@ -69,7 +69,7 @@ Ext.onReady(function() {
     var fieldset;
     
     var cmbLanguages = new Ext.form.ComboBox({
-      fieldLabel : 'Language',
+      fieldLabel : TRANSLATIONS.ID_CACHE_LANGUAGE, // 'Language'
       hiddenName : 'lang',
       store : new Ext.data.Store( {
         proxy : new Ext.data.HttpProxy( {
@@ -94,7 +94,7 @@ Ext.onReady(function() {
     var txtUser = {
       id   : 'txtUser',
       xtype: 'textfield',
-      fieldLabel: 'User',
+      fieldLabel: TRANSLATIONS.ID_CACHE_USER, // 'User',
       disabled: false,
       name: 'user',
       value: ''
@@ -103,7 +103,7 @@ Ext.onReady(function() {
     var txtHost = {
       id   : 'txtHost',
       xtype: 'textfield',
-      fieldLabel: 'Host',
+      fieldLabel: TRANSLATIONS.ID_CACHE_HOST, // 'Host',
       disabled: false,
       name: 'host',
       value: ''
@@ -113,7 +113,7 @@ Ext.onReady(function() {
       id   : 'txtPasswd',
       inputType: 'password',
       xtype:'textfield',
-      fieldLabel: 'Password',
+      fieldLabel: TRANSLATIONS.ID_CACHE_PASSWORD, // 'Password',
       disabled: false,
       hidden: false,
       value: ''
@@ -121,14 +121,14 @@ Ext.onReady(function() {
     
     fieldset = {
       xtype : 'fieldset',
-      title : 'Rebuild Workflow Application Cache',
+      title : TRANSLATIONS.ID_CACHE_SUBTITLE_REBUILD, // 'Rebuild Workflow Application Cache',
       collapsible : false,
       autoHeight  : true,
       defaults    : { width : 170 },
       defaultType : 'textfield',
       items   : [cmbLanguages],
       buttons : [{
-        text : 'Build Cache',
+        text : TRANSLATIONS.ID_CACHE_BTN_BUILD, // 'Build Cache',
         handler : function() {
           Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
           Ext.Ajax.request({
@@ -145,7 +145,7 @@ Ext.onReady(function() {
               Ext.Msg.alert ( 'Error', response.responseText );
             },
             params: {request: 'build', lang: 'en' },
-            waitMsg : 'Building Workflow Application Cache...',
+            waitMsg : TRANSLATIONS.ID_CACHE_BUILDING, // 'Building Workflow Application Cache...',
             timeout : 1000*60*30 //30 mins
           });
         }
@@ -155,14 +155,14 @@ Ext.onReady(function() {
     
     fieldsetRoot = {
       xtype : 'fieldset',
-      title : 'Setup MySql Root Password',
+      title : TRANSLATIONS.ID_CACHE_SUBTITLE_SETUP_DB, // 'Setup MySql Root Password',
       collapsible : false,
       autoHeight  : true,
       defaults    : { width : 170 },
       defaultType : 'textfield',
       items   : [txtHost, txtUser, txtPasswd ],
       buttons : [{
-        text : 'Setup Password',
+        text : TRANSLATIONS.ID_CACHE_BTN_SETUP_PASSWRD, // 'Setup Password',
         handler : function() {
           Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
           Ext.Ajax.request({
