@@ -611,7 +611,7 @@ Ext.onReady ( function() {
                         NewShape = eval("new bpmnTask(_4562.workflow)");
                         NewShape.taskName = shapes.tasks[k][1];
                         _4562.workflow.addFigure(NewShape, srctaskxpos, srctaskypos);
-                        workflow.setBoundary(NewShape);
+                        //workflow.setBoundary(NewShape);
                         //Setting newshape id to the old shape id
                         NewShape.html.id = shapes.tasks[k][0];
                         NewShape.id = shapes.tasks[k][0];
@@ -624,7 +624,7 @@ Ext.onReady ( function() {
                         var srcypos = shapes.gateways[k][3];
                         NewShape = eval("new "+srctype+"(_4562.workflow)");
                         _4562.workflow.addFigure(NewShape, srcxpos, srcypos);
-                        workflow.setBoundary(NewShape);
+                       // workflow.setBoundary(NewShape);
                         //Setting newshape id to the old shape id
                         NewShape.html.id = shapes.gateways[k][0];
                         NewShape.id = shapes.gateways[k][0];
@@ -639,7 +639,7 @@ Ext.onReady ( function() {
                                 var srceventypos = shapes.events[k][3];
                                 NewShape = eval("new "+srceventtype+"(_4562.workflow)");
                                 _4562.workflow.addFigure(NewShape, srceventxpos, srceventypos);
-                                workflow.setBoundary(NewShape);
+                               // workflow.setBoundary(NewShape);
                                 //Setting newshape id to the old shape id
                                 NewShape.html.id = shapes.events[k][0];
                                 NewShape.id = shapes.events[k][0];
@@ -658,7 +658,7 @@ Ext.onReady ( function() {
                         workflow.anno_height = height;
                         NewShape = eval("new bpmnAnnotation(_4562.workflow)");
                         _4562.workflow.addFigure(NewShape, srcannotationxpos, srcannotationypos);
-                        workflow.setBoundary(NewShape);
+                        //workflow.setBoundary(NewShape);
                         //Setting newshape id to the old shape id
                         NewShape.html.id = shapes.annotations[k][0];
                         NewShape.id = shapes.annotations[k][0];
@@ -673,7 +673,7 @@ Ext.onReady ( function() {
                     _4562.workflow.subProcessName = shapes.subprocess[k][1];
                     NewShape = eval("new bpmnSubProcess(_4562.workflow)");
                     _4562.workflow.addFigure(NewShape, srctaskxpos, srctaskypos);
-                    workflow.setBoundary(NewShape);
+                    //workflow.setBoundary(NewShape);
                     //Setting newshape id to the old shape id
                     NewShape.html.id = shapes.subprocess[k][0];
                     NewShape.id = shapes.subprocess[k][0];

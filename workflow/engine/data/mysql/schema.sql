@@ -467,7 +467,7 @@ CREATE TABLE `ROUTE`
 	`ROU_TARGETANCHOR` INTEGER default 0,
 	`ROU_TO_PORT` INTEGER default 1 NOT NULL,
 	`ROU_FROM_PORT` INTEGER default 2 NOT NULL,
-	`ROU_EVN_UID` VARCHAR(32) default '' NOT NULL,
+	`ROU_EVN_UID` VARCHAR(32) default '' NULL,
 	PRIMARY KEY (`ROU_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Differents flows for a flow in business process';
 #-----------------------------------------------------------------------------
@@ -571,8 +571,8 @@ CREATE TABLE `TASK`
 	`TAS_WIDTH` INTEGER default 110 NOT NULL,
 	`TAS_HEIGHT` INTEGER default 60 NOT NULL,
 	`TAS_COLOR` VARCHAR(32) default '' NOT NULL,
-	`TAS_EVN_UID` VARCHAR(32) default '' NOT NULL,
-	`TAS_BOUNDARY` VARCHAR(32) default '' NOT NULL,
+	`TAS_EVN_UID` VARCHAR(32) default '' NULL,
+	`TAS_BOUNDARY` VARCHAR(32) default '' NULL,
 	PRIMARY KEY (`TAS_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Task of workflow';
 #-----------------------------------------------------------------------------
@@ -1012,8 +1012,8 @@ CREATE TABLE `EVENT`
 	`TRI_UID` VARCHAR(32) default '',
 	`EVN_POSX` INTEGER default 0 NOT NULL,
 	`EVN_POSY` INTEGER default 0 NOT NULL,
-	`EVN_TYPE` VARCHAR(32) default '',
-	`TAS_EVN_UID` VARCHAR(32) default '',
+	`EVN_TYPE` VARCHAR(32) default '' NULL,
+	`TAS_EVN_UID` VARCHAR(32) default '' NULL,
 	PRIMARY KEY (`EVN_UID`),
 	KEY `indexEventTable`(`EVN_UID`)
 )Type=MyISAM  DEFAULT CHARSET='utf8';
