@@ -50,7 +50,8 @@
   }
 
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
-
+// the script responds an ajax request in order to check the dependent fields,
+// and generate a json output of the values that the dependent field must have.
 $sDynUid    = G::getUIDName(urlDecode($_POST['DYN_UID']));
 $json=new Services_JSON();
 $formValues=($json->decode($_POST['fields']));
@@ -59,13 +60,9 @@ $sMasterField = '';
 $sPath = PATH_DYNAFORM;
 $G_FORM = new form( $sDynUid , $sPath );
 $aux = array();
-//g::pr($newValues);
 $newValues=$json->decode(urlDecode(stripslashes($_POST['form'])));
-//g::pr($formValues);
 
   if (isset($_POST['grid'])) {
-//    echo ("is grid");
-//    die();
     $_POST['row'] = (int)$_POST['row'];
     $aAux = array();
     foreach ($newValues as $sKey => $newValue) {
@@ -78,9 +75,6 @@ $newValues=$json->decode(urlDecode(stripslashes($_POST['form'])));
       $aValues[$_POST['row']] = array($aKeys[0] => $newValue[$aKeys[0]]);
       $newValues[$sKey]->$_POST['grid'] = $aValues;
       unset($newValues[$sKey]->$aKeys[0]);
-      //echo "<pre>";
-
-      //echo "</pre>";
     }
   }
 
@@ -103,9 +97,6 @@ $newValues=$json->decode(urlDecode(stripslashes($_POST['form'])));
   		  $_SESSION[$G_FORM->id][$k] = $v;
   	  }
   	  else {
-//        echo "-$r-";
-//        g::pr($v);
-//        echo "--";
   	    foreach($v[$_POST['row']] as $k1 => $v1) {
   	      $myDependentFields = subDependencies( $k1 , $G_FORM , $aux, $_POST['grid'] );
           if(!$found){
@@ -129,6 +120,4 @@ $newValues=$json->decode(urlDecode(stripslashes($_POST['form'])));
     break;
   }
   
-//echo "one<br>";
-
 ?>
