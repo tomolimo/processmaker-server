@@ -172,7 +172,10 @@ Ext.onReady ( function() {
                                 processObj.addInputDoc();
                             }
                         },{
-                            text: 'Output Document'
+                            text: 'Output Document',
+                            handler : function() {
+                                processObj.addOutputDoc();
+                            }
                         },{text: 'Trigger'},{text: 'Report Table'},{text: 'Database Connection'},{text: 'Cases Scheduler'}]
             })
 
