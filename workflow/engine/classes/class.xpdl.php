@@ -3745,6 +3745,7 @@ class Xpdl extends processes
           $arrayRoutes[$countRoutes]['2']= $idRoute;
           $arrayRoutes[$countRoutes]['3']= $toPort;
           $arrayRoutes[$countRoutes]['4']= $fromPort;
+          $arrayRoutes[$countRoutes]['5']= $typeRoute;
           $countRoutes                   = $countRoutes + 1;
         }
         $events[$countEvents]['0'] = $idRoute;

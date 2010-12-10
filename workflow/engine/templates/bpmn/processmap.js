@@ -436,7 +436,7 @@ Ext.onReady ( function() {
             {
                 if(typeof this.workflow.figures.data[conn] === 'object')
                 {
-                    if(targetid == '-1')
+                    if(targetid == '-1' || typeof shapes.routes[i][5] != 'undefined' && shapes.routes[i][5] == 'EVALUATE')
                     {
                         targetObj = eval("new bpmnEventEmptyEnd (this.workflow)");
                         this.workflow.addFigure(targetObj,sourceObj.x+67,sourceObj.y+60);
