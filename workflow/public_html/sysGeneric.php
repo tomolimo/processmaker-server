@@ -12,7 +12,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG', 0 ); 
+  define ('DEBUG_SQL_LOG',  1 );
   define ('DEBUG_TIME_LOG', 0 );
   define ('DEBUG_CALENDAR_LOG', 0 );
 
@@ -493,7 +493,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       and  SYS_TARGET != 'autoinstallPlugins'
       and  SYS_TARGET != 'heartbeatStatus'        
       and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
-      and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'cases_ShowDocument') {
+      and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'dynaforms_checkDependentFields' and SYS_TARGET != 'cases_ShowDocument') {
         $bRedirect = true;
         if (isset($_GET['sid'])) {
           G::LoadClass('sessions');
