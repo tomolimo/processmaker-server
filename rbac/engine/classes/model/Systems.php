@@ -70,7 +70,7 @@ class Systems extends BaseSystems {
       $c = new Criteria( 'rbac' );
       $c->add ( SystemsPeer::SYS_CODE, $SysUid );
       $rs = SystemsPeer::doSelect( $c );
-      if ( is_array($rs) && isset( $rs[0] ) && get_class ( $rs[0] ) == 'Systems' ) { 
+      if ( is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'Systems' ) {
         $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
         return $aFields;
@@ -91,7 +91,7 @@ class Systems extends BaseSystems {
       $c = new Criteria( 'rbac' );
       $c->add ( SystemsPeer::SYS_CODE, $SysUid );
       $rs = SystemsPeer::doSelect( $c );
-      $exists = ( is_array($rs) && isset( $rs[0] ) && get_class ( $rs[0] ) == 'Systems' );
+      $exists = ( is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'Systems' );
       
       if ( $exists ) return; 
 

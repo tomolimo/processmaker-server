@@ -1300,12 +1300,13 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                     return $token;
                 }
                 // If it's a string (of maximum 255 characters)
-                elseif (ereg("^\"[^\"]{0,255}\"$",$token))
+                //elseif (ereg("^\"[^\"]{0,255}\"$",$token))
+                elseif (preg_match("/{0,255}/",$token))
                 {
                     return $token;
                 }
                 // if it's a function call
-                elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$token) and ($this->_lookahead == "("))
+                elseif (preg_match("/[A-Z0-9\xc0-\xdc\.]/",$token) and ($this->_lookahead == "("))
                 {
                     return $token;
                 }
@@ -1582,7 +1583,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             return $result;
         }
         // if it's a function call
-        elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$this->_current_token))
+        elseif (preg_match("/[A-Z0-9\xc0-\xdc\.]/",$this->_current_token))
         {
             $result = $this->_func();
             return $result;

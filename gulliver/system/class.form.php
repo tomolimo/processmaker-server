@@ -233,7 +233,7 @@ class Form extends XmlForm
       }
     }
     foreach($this->fields as $k => $v){
-      if(is_object($this) && get_class($this->fields[$k])!='__PHP_Incomplete_Class'){
+      if(is_object($this->fields[$k]) && get_class($this->fields[$k])!='__PHP_Incomplete_Class'){
         $this->fields[$k]->owner =& $this;
       }
     }

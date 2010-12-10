@@ -249,7 +249,7 @@ class OS_Guess
     {
         if (strcspn($fragment, '*?') < strlen($fragment)) {
             $reg = '^' . str_replace(array('*', '?', '/'), array('.*', '.', '\\/'), $fragment) . '$';
-            return eregi($reg, $value);
+            return preg_match($reg, $value);
         }
         return ($fragment == '*' || !strcasecmp($fragment, $value));
     }

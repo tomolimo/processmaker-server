@@ -61,7 +61,7 @@ class XMLLeaf extends Leaf {
 	  */
 	function setParentXML(&$xml) {
 		$success = false;
-		if(strtolower(get_class($xml)) == "xml" || strtolower(get_class($xml)) == "xmlbranch") {
+		if((is_object($xml) == "xml" && strtolower(get_class($xml)) == "xml" || strtolower(get_class($xml)) == "xmlbranch")) {
 			$this->parentXML = &$xml;
 			$success = true;
 		}

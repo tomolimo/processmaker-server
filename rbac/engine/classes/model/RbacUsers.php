@@ -68,7 +68,7 @@ class RbacUsers extends BaseRbacUsers {
       $c = new Criteria( 'rbac' );
       $c->add ( RbacUsersPeer::USR_USERNAME, $sUsername );
       $rs = RbacUsersPeer::doSelect( $c );
-      if ( is_array($rs) && isset( $rs[0] ) && get_class ( $rs[0] ) == 'RbacUsers' ) {
+      if ( is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'RbacUsers' ) {
         $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
         //verify password with md5, and md5 format
         //if ( $aFields['USR_PASSWORD'] == md5 ($sPassword ) ) {
@@ -101,7 +101,7 @@ class RbacUsers extends BaseRbacUsers {
       $c = new Criteria( 'rbac' );
       $c->add ( RbacUsersPeer::USR_USERNAME, $sUsername );
       $rs = RbacUsersPeer::doSelect( $c );
-      if (is_array($rs) && isset( $rs[0] ) && get_class ( $rs[0] ) == 'RbacUsers')
+      if (is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'RbacUsers')
       {
       	//return the row for futher check of which Autentificacion method belongs this user
       	$this->fields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);;
@@ -126,7 +126,7 @@ class RbacUsers extends BaseRbacUsers {
       $c = new Criteria( 'rbac' );
       $c->add ( RbacUsersPeer::USR_UID, $sUserId );
       $rs = RbacUsersPeer::doSelect( $c );
-      if (is_array($rs) && isset( $rs[0] ) && get_class ( $rs[0] ) == 'RbacUsers')
+      if (is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'RbacUsers')
       {
         return 1;
       }
@@ -147,7 +147,7 @@ class RbacUsers extends BaseRbacUsers {
       $c = new Criteria( 'rbac' );
       $c->add ( RbacUsersPeer::USR_UID, $sUsrUid );
       $rs = RbacUsersPeer::doSelect( $c );
-      if ( is_array($rs) && isset( $rs[0] ) && get_class ( $rs[0] ) == 'RbacUsers' ) {
+      if ( is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'RbacUsers' ) {
         $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
         return $aFields;
       }

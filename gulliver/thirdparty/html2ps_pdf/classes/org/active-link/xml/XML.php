@@ -228,7 +228,7 @@ class XML_ extends Tree {
 			}
 			else {
 				foreach($this->nodes as $node) {
-					if(strtolower(get_class($node)) == "xmlbranch")
+					if(is_object($node) && strtolower(get_class($node)) == "xmlbranch")
 						if($node->tag->getTagName() == $tags[1]) {
 							$newTagPath = implode($this->pathSeparator, array_slice($tags, 1));
 							$attributeValue = $node->getTagAttribute($attributeName, $newTagPath);
@@ -255,7 +255,7 @@ class XML_ extends Tree {
 				$tagValue = $this->getXMLContent();
 			else {
 				foreach($this->nodes as $node) {
-					if(strtolower(get_class($node)) == "xmlbranch")
+					if(is_object($node) && strtolower(get_class($node)) == "xmlbranch")
 						if($node->tag->getTagName() == $tags[1]) {
 							$newTagPath = implode($this->pathSeparator, array_slice($tags, 1));
 							$tagValue = $node->getTagContent($newTagPath);
@@ -337,7 +337,7 @@ class XML_ extends Tree {
 	function hasBranch() {
 		$hasBranch = false;
 		foreach($this->nodes as $node) {
-			if(strtolower(get_class($node)) == "xmlbranch") {
+			if(is_object($node) && strtolower(get_class($node)) == "xmlbranch") {
 				$hasBranch = true;
 				break;
 			}
@@ -353,7 +353,7 @@ class XML_ extends Tree {
 	function hasLeaf() {
 		$hasLeaf = false;
 		foreach($this->nodes as $node) {
-			if(strtolower(get_class($node)) == "xmlleaf") {
+			if(is_object($node) && strtolower(get_class($node)) == "xmlleaf") {
 				$hasLeaf = true;
 				break;
 			}
@@ -407,7 +407,7 @@ class XML_ extends Tree {
 	  */
 	function removeAllBranches() {
 		foreach($this->nodes as $key => $value) {
-			if(strtolower(get_class($value)) == "xmlbranch")
+			if(is_object($value) && strtolower(get_class($value)) == "xmlbranch")
 				unset($this->nodes[$key]);
 		}
 	}
@@ -418,7 +418,7 @@ class XML_ extends Tree {
 	  */
 	function removeAllLeafs() {
 		foreach($this->nodes as $key => $value) {
-			if(strtolower(get_class($value)) == "xmlleaf")
+			if(is_object($value) && strtolower(get_class($value)) == "xmlleaf")
 				unset($this->nodes[$key]);
 		}
 	}
@@ -469,7 +469,7 @@ class XML_ extends Tree {
 	  */
 	function setBranchTag($branchId, $tag) {
 		$success = true;
-		if(strtolower(get_class($this->nodes[$branchId])) == "xmlbranch" && strtolower(get_class($tag)) == "tag")
+		if(is_object($this->nodes[$branchId]) && (strtolower(get_class($this->nodes[$branchId])) == "xmlbranch" && strtolower(get_class($tag)) == "tag"))
 			$this->nodes[$branchId]->setTag($tag);
 		else
 			$success = false;
@@ -484,7 +484,7 @@ class XML_ extends Tree {
 	  */
 	function setTag($tag) {
 		$success = true;
-		if(strtolower(get_class($tag)) == "tag")
+		if(is_object($tag) && strtolower(get_class($tag)) == "tag")
 			$this->tag = $tag;
 		else
 			$success = false;
@@ -513,7 +513,7 @@ class XML_ extends Tree {
 				$arrKeys = array_keys($this->nodes);
 				for($index = 0; $index < count($arrKeys); $index ++) {
 					$node =& $this->nodes[$arrKeys[$index]];
-					if(strtolower(get_class($node)) == "xmlbranch")
+					if(is_object($node) && strtolower(get_class($node)) == "xmlbranch")
 						if($node->tag->getTagName() == $tags[1]) {
 							$newTagPath = implode($this->pathSeparator, array_slice($tags, 1));
 							$success = $node->setTagAttribute($attributeName, $attributeValue, $newTagPath);
@@ -553,7 +553,7 @@ class XML_ extends Tree {
 				$arrKeys = array_keys($this->nodes);
 				for($index = 0; $index < count($arrKeys); $index ++) {
 					$node =& $this->nodes[$arrKeys[$index]];
-					if(strtolower(get_class($node)) == "xmlbranch")
+					if(is_object($node) && strtolower(get_class($node)) == "xmlbranch")
 						if($node->tag->getTagName() == $tags[1]) {
 							$newTagPath = implode($this->pathSeparator, array_slice($tags, 1));
 							$success = $node->setTagContent($content, $newTagPath);

@@ -171,7 +171,7 @@ function MakeFontDescriptor($fm,$symbolic)
   //StemV
   if(isset($fm['StdVW']))
     $stemv=$fm['StdVW'];
-  elseif(isset($fm['Weight']) and eregi('(bold|black)',$fm['Weight']))
+  elseif(isset($fm['Weight']) and preg_match('/(bold|black)/',$fm['Weight']))
     $stemv=120;
   else
     $stemv=70;
@@ -289,9 +289,9 @@ function CheckTTF($file)
 }
 
 /*******************************************************************************
- * $fontfile : chemin du fichier TTF (ou chaîne vide si pas d'incorporation)    *
+ * $fontfile : chemin du fichier TTF (ou chaï¿½ne vide si pas d'incorporation)    *
  * $afmfile :  chemin du fichier AFM                                            *
- * $enc :      encodage (ou chaîne vide si la police est symbolique)            *
+ * $enc :      encodage (ou chaï¿½ne vide si la police est symbolique)            *
  * $patch :    patch optionnel pour l'encodage                                  *
  * $type :     type de la police si $fontfile est vide                          *
  *******************************************************************************/

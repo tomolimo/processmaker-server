@@ -104,7 +104,7 @@ class AppMessage extends BaseAppMessage {
     if(isset($aData['app_msg_uid'])) {
       $o = EmployeePeer::retrieveByPk($aData['app_msg_uid']);
     }
-    if (isset($o) && get_class($o) == 'AppMessage') {
+    if (isset($o) && is_object($o)&& get_class($o) == 'AppMessage') {
       $o->fromArray($aData, BasePeer::TYPE_FIELDNAME);
       $o->setAppMsgDate(date('Y-m-d H:i:s'));
       $o->save();
