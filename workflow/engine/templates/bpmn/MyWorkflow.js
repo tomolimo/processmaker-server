@@ -2243,3 +2243,83 @@ MyWorkflow.prototype.getDeleteCriteria = function()
 }
     workflow.deleteShape(workflow.currentSelection);
 }
+
+MyWorkflow.prototype.zoom = function(sType)
+{
+   var figures = workflow.getDocument().getFigures();
+   for(f = 0;f<figures.getSize();f++){
+   var fig = figures.get(f);
+   var width = fig.getWidth();
+   var height = fig.getHeight();
+   if(sType == 'in')
+     {
+        width  += 20;
+        height += 20
+     }
+    else
+     {
+       width  -= 20;
+       height -= 20
+     }
+   fig.setDimension(width,height);
+   if(fig.type == 'bpmnTask')
+      {
+        fig.bpmnText.clear();
+        //len = Math.ceil(this.input.value.length/16);
+        var len = fig.width / 18;
+        if (len >= 6) {
+          // len = 1.5;
+          var padleft = 0.12 * fig.width;
+          var padtop = 0.32 * fig.height  - 3;
+          fig.rectWidth = fig.width - 2 * padleft;
+        }
+        else {
+               padleft = 0.1 * fig.width;
+               padtop = 0.09 * fig.height  - 3;
+               fig.rectWidth = fig.width - 2 * padleft;
+        }
+        var rectheight = fig.height - 2*padtop;
+        if(typeof fig.size == 'undefined')
+          fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
+        else
+          fig.size = fig.size;
+          
+        if(sType == 'in')
+          fig.size = parseInt(fig.size) + 4;
+        else
+          fig.size = parseInt(fig.size) - 4;
+
+        eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
+        fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
+        fig.bpmnText.paint();
+        }
+        else if(fig.type == 'bpmnAnnotation')
+        {
+          fig.bpmnText.clear();
+          var text = fig.annotationName;
+          len = Math.ceil(text.length/16);
+          if(text.length < 19)
+          {
+            len = 1.5;
+            if(text.length > 9)
+              fig.rectWidth = text.length*8;
+            else
+              fig.rectWidth = 48;
+          }
+          else
+            fig.rectWidth = 150;
+          if(typeof fig.size == 'undefined')
+            fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
+          else
+            fig.size = fig.size;
+
+          if(sType == 'in')
+          fig.size = parseInt(fig.size) + 4;
+        else
+          fig.size = parseInt(fig.size) - 4;
+          eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
+          fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
+          fig.bpmnText.paint();
+        }
+    }
+}
