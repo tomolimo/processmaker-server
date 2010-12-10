@@ -122,7 +122,7 @@ class CalendarDefinition extends BaseCalendarDefinition {
       foreach($fields ['BUSINESS_DAY'] as $keyB => $businessHours){
        if(($businessHours['CALENDAR_BUSINESS_DAY']==7)){
          $sw_all=true;
-       }elseif((in_array($workingDays,$businessHours['CALENDAR_BUSINESS_DAY']))){
+       }elseif((in_array($businessHours['CALENDAR_BUSINESS_DAY'],$workingDays))){
         $workingDaysOK[$businessHours['CALENDAR_BUSINESS_DAY']]=true;
        }
       }
