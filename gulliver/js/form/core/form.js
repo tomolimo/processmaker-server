@@ -228,7 +228,7 @@ function G_Field ( form, element, name )
             if(a=='formula' && attributes[a]){
                 //here we called a this function if it has a formula
                 sumaformu(this.element,attributes[a],attributes['mask']);
-            }
+            }//end formula
         
             switch (typeof(attributes[a])) {
                 case 'string':
@@ -1953,6 +1953,9 @@ function iniAcum(sym){
   
 }
 */
+
+var objectsWithFormula = Array();
+
 function sumaformu(ee,fma,mask){
     //copy the formula
     afma=fma;
@@ -1972,22 +1975,56 @@ function sumaformu(ee,fma,mask){
     //without spaces in the inicio of the formula
     wos=nfma.replace(/^\s+/g,'');
     nfma=wos.replace(/\s+$/g,'');
-  
     theelemts=nfma.split(" ");
+     
+    objectsWithFormula[objectsWithFormula.length]= {ee:ee,fma:afma,mask:mask,theElements:theelemts};
 
     for (var i=0; i < theelemts.length; i++){
         leimnud.event.add(getField(theelemts[i]),'keyup',function(){
-            calValue(afma,nfma,ee,mask);
-        });
-    
-    }
+          //leimnud.event.add(getField(objectsWithFormula[objectsWithFormula.length-1].theElements[i]),'keyup',function(){
+        myId=this.id.replace("form[","").replace("]","");            
+
+      for(i_elements=0;i_elements < objectsWithFormula.length; i_elements++){
+
+
+        for(i_elements2=0;i_elements2 < objectsWithFormula[i_elements].theElements.length;i_elements2++){
+          if(objectsWithFormula[i_elements].theElements[i_elements2]==myId)
+          {
+
+          //calValue(afma,nfma,ee,mask);
+
+          formula = objectsWithFormula[i_elements].fma;
+          ans = objectsWithFormula[i_elements].ee;
+          theelemts=objectsWithFormula[i_elements].theElements;
+
+           nfk = '';
+           //to replace the field for the value and to evaluate the formula
+           for (var i=0; i < theelemts.length; i++){
+            if(!isnumberk(theelemts[i])){//alert(getField(theelemts[i]).name);
+              val = (getField(theelemts[i]).value == '')? 0 : getField(theelemts[i]).value;
+              formula=formula.replace(theelemts[i],val);
+            }
+           }
+           
+           var rstop=eval(formula);
+           if(mask!=''){
+            putmask(rstop,mask,ans);
+           }else{
+            ans.value=rstop;
+           }
+
+          }
+        }
+      }       
+    }); 
+   } 
 }
 
 function calValue(afma,nfma,ans,mask){
     theelemts=nfma.split(" ");
     //to replace the field for the value and to evaluate the formula
     for (var i=0; i < theelemts.length; i++){
-        if(!isnumberk(theelemts[i])){
+        if(!isnumberk(theelemts[i])){//alert(getField(theelemts[i]).name);
             if(getField(theelemts[i]).value){
                 nfk=afma.replace(theelemts[i],getField(theelemts[i]).value)
                 afma=nfk;
