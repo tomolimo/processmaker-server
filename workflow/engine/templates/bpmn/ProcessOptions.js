@@ -834,6 +834,10 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 type: 'string'
             },
             {
+                name: 'OUT_DOC_TYPE',
+                type: 'string'
+            },
+            {
                 name: 'OUT_DOC_TITLE',
                 type: 'string'
             },
@@ -861,6 +865,55 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
           });
  outputDocStore.load();
 
+ var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Delete Output Document',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = outputDocGrid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting dynaform from Database using Ajax
+                    var outputDocUID      = r.data.OUT_DOC_UID;
+
+                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                    if(r.data.OUT_DOC_UID != "")
+                    {
+                        Ext.Ajax.request({
+                          url   : '../outputdocs/outputdocs_Delete.php',
+                          method: 'POST',
+                          params: {
+                                OUT_DOC_UID        : outputDocUID
+                          },
+                          success: function(response) {
+                            Ext.MessageBox.alert ('Status','Output document has been removed successfully.');
+                          }
+                        });
+                    }
+
+                    //Secondly deleting from Grid
+                    outputDocStore.remove(r);
+                }
+            }
+        });
+
+
+         var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'New Output Document',
+            iconCls: 'application_add',
+            handler: function () {
+            newOPWindow.show();
+            }
+        });
+
+var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove]
+       });
+
+
  var outputDocColumns = new Ext.grid.ColumnModel({
             columns: [
                 {
@@ -885,40 +938,344 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
 
  var outputDocGrid = new Ext.grid.GridPanel({
-        store: outputDocStore,
-        id : 'mygrid',
-        loadMask: true,
-        loadingText: 'Loading...',
-        renderTo: 'cases-grid',
-        frame: false,
-        autoHeight:false,
+        store       : outputDocStore,
+        id          : 'mygrid',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : false,
+        autoHeight  :false,
         clicksToEdit: 1,
-        minHeight:400,
-        height   :400,
-        layout: 'fit',
-        cm: outputDocColumns,
-        stripeRows: true,
-        //tbar: tb,
-        viewConfig: {forceFit: true}
+        minHeight   :400,
+        height      :400,
+        layout      : 'fit',
+        cm          : outputDocColumns,
+        stripeRows  : true,
+        tbar        : tb,
+        viewConfig  : {forceFit: true}
    });
 
+   var outputDocForm = new Ext.FormPanel({
 
+        labelWidth      : 100,
+        bodyStyle       :'padding:5px 5px 0',
+        defaults        :{ autoScroll:true },
+        width           : 500,
+        items           :[{
+                    xtype       : 'fieldset',
+                    layout      : 'form',
+                    border      :true,
+                    title       : 'Output Document Information',
+                    width       : 500,
+                    collapsible : false,
+                    labelAlign  : '',
+                    items       :[{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Title',
+                    allowBlank  : true,
+                    name        : 'OUT_DOC_TITLE'
+               },{
+                    xtype: 'fieldset',
+                    layout:'column',
+                    border:false,
+                    allowBlank: true,
+                    width: 550,
+                    items:[{
+                    columnWidth:.6,
+                    layout: 'form',
+                    border:false,
+                    items: [{
+                    xtype: 'textfield',
+                    fieldLabel: 'Filename generated',
+                    name: 'OUT_DOC_FILENAME',
+                    anchor:'100%'
+                         }]
+                },{
+                    columnWidth:.3,
+                    layout: 'form',
+                    border:false,
+                    items: [{
+                    xtype:'button',
+                    title: ' ',
+                    text: '@@',
+                    name: 'selectorigin'
+                    //anchor:'15%'
+                        }]
+                    }]
+                },{
+                    xtype           : 'textarea',
+                    fieldLabel      : 'Description',
+                    name            : 'OUT_DOC_DESCRIPTION',
+                    height          : 120,
+                    width           : 350
+                },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Orientation',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'OUT_DOC_LANDSCAPE',
+                    displayField    :'name',
+                    value           :'Digital',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'Portrait',   value: '0'},
+                                                        {name : 'Landscape',   value: '1'}]})
+                           
+                },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Media',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'OUT_DOC_MEDIA',
+                    displayField    :'name',
+                    value           :'Digital',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                            fields : ['name', 'value'],
+                                                            data   : [
+                                                            {name : 'Letter',   value: 'Letter'},
+                                                            {name : 'Legal',   value: 'Legal'},
+                                                            {name : 'Executive',   value: 'Executive'},
+                                                            {name : 'B5',   value: 'B5'},
+                                                            {name : 'Folio',   value: 'Folio'},
+                                                            {name : 'A0Oversize',   value: 'A0Oversize'},
+                                                            {name : 'A0',   value: 'A0'},
+                                                            {name : 'A1',   value: 'A1'},
+                                                            {name : 'A2',   value: 'A2'},
+                                                            {name : 'A3',   value: 'A3'},
+                                                            {name : 'A4',   value: 'A4'},
+                                                            {name : 'A5',   value: 'A5'},
+                                                            {name : 'A6',   value: 'A6'},
+                                                            {name : 'A7',   value: 'A7'},
+                                                            {name : 'A8',   value: 'A8'},
+                                                            {name : 'A9',   value: 'A9'},
+                                                            {name : 'A10',   value: 'A10'},
+                                                            {name : 'Screenshot640',   value: 'Screenshot640'},
+                                                            {name : 'Screenshot800',   value: 'Screenshot800'},
+                                                            {name : 'Screenshot1024',   value: 'Screenshot1024'}]})
+                           
+                },{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Left Margin',
+                    // allowBlank: true,
+                    name        : 'OUT_DOC_LEFT_MARGIN'
+                },{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Right Margin',
+                    // allowBlank: true,
+                    name        : 'OUT_DOC_RIGHT_MARGIN'
+                },{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Top Margin',
+                    // allowBlank: true,
+                    name        : 'OUT_DOC_TOP_MARGIN'
+                },{
+                            xtype     : 'textfield',
+                            fieldLabel: 'Bottom Margin',
+                           // allowBlank: true,
+                            name      : 'OUT_DOC_BOTTOM_MARGIN'
+                },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Output Document to Generate',
+                    triggerAction   :'all',
+                    forceSelection  :true,
+                    name            :'OUT_DOC_GENERATE',
+                    displayField    :'name',
+                    value           :'Digital',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                    fields          :['name', 'value'],
+                    data            :[
+                                    {name : 'BOTH',   value: 'BOTH'},
+                                    {name : 'DOC',   value: 'DOC'},
+                                    {name : 'PDF',   value: 'PDF'}]})
+                },{
+                    width           : 150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Enable Versioning',
+                    triggerAction   :'all',
+                    forceSelection  :true,
+                    name            :'OUT_DOC_VERSIONING',
+                    displayField    :'name',
+                    value           :'Digital',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                    fields          : ['name', 'value'],
+                    data            : [
+                                    {name : 'NO',   value: '0'},
+                                    {name : 'YES',   value: '1'}]})
+                },{
+                    xtype       : 'fieldset',
+                    layout      :'column',
+                    border      :false,
+                    allowBlank  : true,
+                    width       : 550,
+                    items       :[{
+                    columnWidth :.6,
+                    layout      : 'form',
+                    border      :false,
+                    items       : [{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Destination Path',
+                    name        : 'OUT_DOC_DESTINATION_PATH',
+                    anchor      :'100%'
+                    }]
+                },{
+                    columnWidth     :.3,
+                    layout          : 'form',
+                    border          :false,
+                    items           : [{
+                    xtype           :'button',
+                    title           : ' ',
+                    text            : '@@',
+                    name            : 'selectorigin'
+                  //anchor          :'15%'
+                        }]
+                    }]
+                },{
+                    xtype       : 'fieldset',
+                    layout      :'column',
+                    border      :false,
+                    allowBlank  : true,
+                    width       : 550,
+                    items       :[{
+                    columnWidth :.6,
+                    layout      : 'form',
+                    border      :false,
+                    items       : [{
+                    xtype       : 'textfield',
+                    fieldLabel  : 'Tags',
+                    name        : 'OUT_DOC_TAGS',
+                    anchor      :'100%'
+                    }]
+                    },{
+                        columnWidth :.3,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                        xtype       :'button',
+                        title       : ' ',
+                        text        : '@@',
+                        name        : 'selectorigin'
+                      //anchor      :'15%'
+                            }]
+                        }]
+                     }]
+                  }]
+                });
+
+
+
+
+    var newOPWindow = new Ext.Window({
+        title       : 'Output Document',
+        collapsible : false,
+        maximizable : false,
+        width       : 550,
+        defaults    :{ autoScroll:true },
+        height      : 550,
+        minWidth    : 200,
+        minHeight   : 150,
+        layout      : 'fit',
+        plain       : true,
+        bodyStyle   : 'padding:5px;',
+        items       : outputDocForm,
+        buttonAlign : 'center',
+        buttons     : [{
+        text        : 'Save',
+        handler     : function(){
+                var getForm   = outputDocForm.getForm().getValues();
+
+                var sDocTitle     = getForm.OUT_DOC_TITLE;
+                var sFilename     = getForm.OUT_DOC_FILENAME;
+                var sDesc         = getForm.OUT_DOC_DESCRIPTION;
+                var sLandscape    = getForm.OUT_DOC_LANDSCAPE;
+                    if(getForm.OUT_DOC_LANDSCAPE == 'Portrait')
+                        getForm.OUT_DOC_LANDSCAPE=0;
+                    if(getForm.OUT_DOC_LANDSCAPE == 'Landscape')
+                        getForm.OUT_DOC_LANDSCAPE=1;
+                var sMedia        = getForm.OUT_DOC_MEDIA;
+                var sLeftMargin   = getForm.OUT_DOC_LEFT_MARGIN;
+                var sRightMargin  = getForm.OUT_DOC_RIGHT_MARGIN;
+                var sTopMargin    = getForm.OUT_DOC_TOP_MARGIN;
+                var sBottomMargin = getForm.OUT_DOC_BOTTOM_MARGIN;
+                var sGenerated                   = getForm.OUT_DOC_GENERATE;
+                var sVersioning              = getForm.OUT_DOC_VERSIONING;
+                    if(getForm.OUT_DOC_VERSIONING == 'No')
+                        getForm.OUT_DOC_VERSIONING=0;
+                    if(getForm.OUT_DOC_VERSIONING == 'Yes')
+                        getForm.OUT_DOC_VERSIONING=1;
+                var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
+                var sTags         = getForm.OUT_DOC_TAGS;
+
+               Ext.Ajax.request({
+                  url   : '../outputdocs/outputdocs_Save.php',
+                  method: 'POST',
+                  params:{
+                      OUT_DOC_TITLE            :sDocTitle,
+                      OUT_DOC_FILENAME         : sFilename,
+                      OUT_DOC_DESCRIPTION      : sDesc,
+                      OUT_DOC_LANDSCAPE        : sLandscape,
+                      OUT_DOC_MEDIA            : sMedia,
+                      OUT_DOC_LEFT_MARGIN      : sLeftMargin,
+                      OUT_DOC_RIGHT_MARGIN     : sRightMargin,
+                      OUT_DOC_TOP_MARGIN       : sTopMargin,
+                      OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
+                      OUT_DOC_GENERATE         : sGenerated,
+                      OUT_DOC_VERSIONING       : sVersioning,
+                      OUT_DOC_DESTINATION_PATH : sDestPath,
+                      OUT_DOC_TAGS             : sTags
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Input document has been created successfully.');
+                  }
+                });
+
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskUsers(getData);
+
+            newOPWindow.close();
+            outputDocStore.reload();
+          }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                newOPWindow.close();
+            }
+        }]
+    });
+   
  var gridWindow = new Ext.Window({
-        title: 'Output Document',
-        collapsible: false,
-        maximizable: false,
-        width: 550,
-        height: 450,
-        minWidth: 200,
-        minHeight: 150,
-        layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        items: outputDocGrid,
-        buttonAlign: 'center'
+        title       : 'Output Document',
+        collapsible : false,
+        maximizable : false,
+        width       : 550,
+        defaults    :{ autoScroll:true },
+        height      : 450,
+        minWidth    : 200,
+        minHeight   : 150,
+        layout      : 'fit',
+        plain       : true,
+        bodyStyle   : 'padding:5px;',
+        items       : outputDocGrid,
+        buttonAlign : 'center'
           });
 
-   gridWindow.show();
+        gridWindow.show();
    
 }
 
