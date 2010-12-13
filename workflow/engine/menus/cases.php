@@ -24,25 +24,9 @@
  */
   global $RBAC;
   global $G_TMP_MENU;
-
-  $G_TMP_MENU->AddIdRawOption('CASES_HOME',           'casesStartPage',                           G::LoadTranslation('ID_CASES_START_PAGE'), '',                   '', 'blockHeader');
-  $G_TMP_MENU->AddIdRawOption('CASES_START_CASE',     'casesStartPage?action=startCase',  G::LoadTranslation('ID_NEW_CASE'),              '' );
-  //$G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     'casesStartPage?action=documents',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
-  //$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',     'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
-
-  //Load Other registered Dashboards (From plugins)
-  $oPluginRegistry = & PMPluginRegistry::getSingleton ();
-  $dashBoardPages = $oPluginRegistry->getDashboardPages ();
-  foreach($dashBoardPages as $key => $tabInfo) {
-    $tabNameSpace=$tabInfo->sNamespace;
-    $tabName=$tabInfo->sName;
-    $tabIcon=str_replace("ICON_","",$tabInfo->sIcon); 
-    if ( $tabName!= "" ) {
-      $G_TMP_MENU->AddIdRawOption($tabIcon,     'casesStartPage?action='.$tabNameSpace.'-'.$tabName, ucwords(strtolower($tabName)),              '' );
-    }      
-  }
   
   $G_TMP_MENU->AddIdRawOption('FOLDERS',           '',                                 G::LoadTranslation('ID_CASES_MENU_FOLDERS'), '',                   '', 'blockHeader');
+  $G_TMP_MENU->AddIdRawOption('CASES_START_CASE',     'casesStartPage?action=startCase',  G::LoadTranslation('ID_NEW_CASE'),              '' );
   $G_TMP_MENU->AddIdRawOption('CASES_INBOX',       'casesListExtJs?action=todo',       G::LoadTranslation('ID_INBOX'),              'icon-cases-inbox.png' );
   $G_TMP_MENU->AddIdRawOption('CASES_DRAFT',       'casesListExtJs?action=draft',      G::LoadTranslation('ID_DRAFT'),              'mail-mark-task.png'   );
   $G_TMP_MENU->AddIdRawOption('CASES_SENT',        'casesListExtJs?action=sent',       G::LoadTranslation('ID_SENT'),               'icon-cases-outbox.png');
@@ -72,6 +56,23 @@
   if ( $RBAC->userCanAccess('PM_REASSIGNCASE') == 1 ) {
     //$G_TMP_MENU->AddIdRawOption('CASES_TO_REASSIGN_NORMAL', 'cases_List?l=to_reassign',   G::LoadTranslation('ID_TO_REASSIGN'),         'reassing.png'   );
     $G_TMP_MENU->AddIdRawOption('CASES_TO_REASSIGN', 'casesListExtJs?action=to_reassign', G::LoadTranslation('ID_TO_REASSIGN'),         'reassing.png'   );
+  }
+
+  $G_TMP_MENU->AddIdRawOption('CASES_HOME',           'casesStartPage',                           G::LoadTranslation('ID_CASES_START_PAGE'), '',                   '', 'blockHeader');
+  
+  //$G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     'casesStartPage?action=documents',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
+  //$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',     'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
+
+  //Load Other registered Dashboards (From plugins)
+  $oPluginRegistry = & PMPluginRegistry::getSingleton ();
+  $dashBoardPages = $oPluginRegistry->getDashboardPages ();
+  foreach($dashBoardPages as $key => $tabInfo) {
+    $tabNameSpace=$tabInfo->sNamespace;
+    $tabName=$tabInfo->sName;
+    $tabIcon=str_replace("ICON_","",$tabInfo->sIcon); 
+    if ( $tabName!= "" ) {
+      $G_TMP_MENU->AddIdRawOption($tabIcon,     'casesStartPage?action='.$tabNameSpace.'-'.$tabName, ucwords(strtolower($tabName)),              '' );
+    }      
   }
 
 
