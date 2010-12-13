@@ -28,6 +28,7 @@ G::LoadClass('tasks');
 G::LoadClass('derivation');
 require_once 'classes/model/Users.php';
 require_once 'classes/model/Configuration.php';
+require_once 'classes/model/Gateway.php';
 require_once 'classes/model/Event.php';
 class Xpdl extends processes
 {  
@@ -3456,8 +3457,8 @@ class Xpdl extends processes
                 $coordinateY=$idVal['TAS_POSY'];
                 }
             }
-            $positionX=$coordinateX+35;
-            $positionY=$coordinateY+85;
+            $positionX=$coordinateX+62;
+            $positionY=$coordinateY+55;
             if($idTask != $taskParallel){
               $taskParallel = $idTask;
               $routeParallel = $idRoute;
@@ -3538,8 +3539,8 @@ class Xpdl extends processes
                 $coordinateY=$idVal['TAS_POSY'];
                 }
             }
-            $positionX=$coordinateX+35;
-            $positionY=$coordinateY+85;
+            $positionX=$coordinateX+62;
+            $positionY=$coordinateY+55;
             if($idTask != $taskEvaluate){
               $taskEvaluate  = $idTask;
               $routeEvaluate = $idRoute;
@@ -3586,8 +3587,8 @@ class Xpdl extends processes
                 $coordinateY = $idVal['TAS_POSY'];
                 }
             }
-            $positionX=$coordinateX+60;
-            $positionY=$coordinateY+40;
+            $positionX=$coordinateX+62;
+            $positionY=$coordinateY+55;
             if($idTask != $taskParallelEv){
               $taskParallelEv  = $idTask;
               $routeParallelEv = $idRoute;
