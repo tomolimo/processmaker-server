@@ -30,7 +30,7 @@ CREATE TABLE `APPLICATION`
 	`APP_PIN` VARCHAR(32) default '',
 	PRIMARY KEY (`APP_UID`),
 	KEY `indexApp`(`PRO_UID`, `APP_STATUS`, `APP_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='The application';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_DELEGATION
 #-----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ CREATE TABLE `APP_DELEGATION`
 	`DEL_DATA` TEXT  NOT NULL,
 	`APP_OVERDUE_PERCENTAGE` DOUBLE default 0 NOT NULL,
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_DOCUMENT
 #-----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ CREATE TABLE `APP_DOCUMENT`
 	`APP_DOC_STATUS` VARCHAR(32) default 'ACTIVE' NOT NULL,
 	`APP_DOC_STATUS_DATE` DATETIME,
 	PRIMARY KEY (`APP_DOC_UID`,`DOC_VERSION`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Documents in an Application';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_MESSAGE
 #-----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ CREATE TABLE `APP_MESSAGE`
 	`APP_MSG_ATTACH` TEXT,
 	`APP_MSG_SEND_DATE` DATETIME  NOT NULL,
 	PRIMARY KEY (`APP_MSG_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Messages in an Application';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_OWNER
 #-----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ CREATE TABLE `APP_OWNER`
 	`OWN_UID` VARCHAR(32) default '' NOT NULL,
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`APP_UID`,`OWN_UID`,`USR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CONFIGURATION
 #-----------------------------------------------------------------------------
@@ -146,7 +146,7 @@ CREATE TABLE `CONFIGURATION`
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
 	`APP_UID` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`CFG_UID`,`OBJ_UID`,`PRO_UID`,`USR_UID`,`APP_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Stores the users, processes and/or applications configuratio';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CONTENT
 #-----------------------------------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE `CONTENT`
 	`CON_VALUE` TEXT  NOT NULL,
 	PRIMARY KEY (`CON_CATEGORY`,`CON_PARENT`,`CON_ID`,`CON_LANG`),
 	KEY `indexUid`(`CON_ID`, `CON_CATEGORY`, `CON_LANG`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- DEPARTMENT
 #-----------------------------------------------------------------------------
@@ -183,7 +183,7 @@ CREATE TABLE `DEPARTMENT`
 	PRIMARY KEY (`DEP_UID`),
 	KEY `DEP_BYPARENT`(`DEP_PARENT`),
 	KEY `BY_DEP_LDAP_DN`(`DEP_LDAP_DN`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Departments';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- DYNAFORM
 #-----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ CREATE TABLE `DYNAFORM`
 	`DYN_TYPE` VARCHAR(20) default 'xmlform' NOT NULL,
 	`DYN_FILENAME` VARCHAR(100) default '' NOT NULL,
 	PRIMARY KEY (`DYN_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Forms required';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- GROUPWF
 #-----------------------------------------------------------------------------
@@ -211,7 +211,7 @@ CREATE TABLE `GROUPWF`
 	`GRP_UID` VARCHAR(32) default '' NOT NULL,
 	`GRP_STATUS` CHAR(8) default 'ACTIVE' NOT NULL,
 	PRIMARY KEY (`GRP_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- GROUP_USER
 #-----------------------------------------------------------------------------
@@ -224,7 +224,7 @@ CREATE TABLE `GROUP_USER`
 	`GRP_UID` VARCHAR(32) default '0' NOT NULL,
 	`USR_UID` VARCHAR(32) default '0' NOT NULL,
 	PRIMARY KEY (`GRP_UID`,`USR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- HOLIDAY
 #-----------------------------------------------------------------------------
@@ -238,7 +238,7 @@ CREATE TABLE `HOLIDAY`
 	`HLD_DATE` VARCHAR(10) default '0000-00-00' NOT NULL,
 	`HLD_DESCRIPTION` VARCHAR(200) default '' NOT NULL,
 	PRIMARY KEY (`HLD_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- INPUT_DOCUMENT
 #-----------------------------------------------------------------------------
@@ -257,7 +257,7 @@ CREATE TABLE `INPUT_DOCUMENT`
 	`INP_DOC_DESTINATION_PATH` TEXT,
 	`INP_DOC_TAGS` TEXT,
 	PRIMARY KEY (`INP_DOC_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Documentation required';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- ISO_COUNTRY
 #-----------------------------------------------------------------------------
@@ -271,7 +271,7 @@ CREATE TABLE `ISO_COUNTRY`
 	`IC_NAME` VARCHAR(255),
 	`IC_SORT_ORDER` VARCHAR(255),
 	PRIMARY KEY (`IC_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- ISO_LOCATION
 #-----------------------------------------------------------------------------
@@ -287,7 +287,7 @@ CREATE TABLE `ISO_LOCATION`
 	`IL_NORMAL_NAME` VARCHAR(255),
 	`IS_UID` VARCHAR(4),
 	PRIMARY KEY (`IC_UID`,`IL_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- ISO_SUBDIVISION
 #-----------------------------------------------------------------------------
@@ -301,7 +301,7 @@ CREATE TABLE `ISO_SUBDIVISION`
 	`IS_UID` VARCHAR(4) default '' NOT NULL,
 	`IS_NAME` VARCHAR(255) default '' NOT NULL,
 	PRIMARY KEY (`IC_UID`,`IS_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- LANGUAGE
 #-----------------------------------------------------------------------------
@@ -319,7 +319,7 @@ CREATE TABLE `LANGUAGE`
 	`LAN_ENABLED` CHAR(1) default '1' NOT NULL,
 	`LAN_CALENDAR` VARCHAR(30) default 'GREGORIAN' NOT NULL,
 	PRIMARY KEY (`LAN_ID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- LEXICO
 #-----------------------------------------------------------------------------
@@ -334,7 +334,7 @@ CREATE TABLE `LEXICO`
 	`LEX_VALUE` VARCHAR(128) default '' NOT NULL,
 	`LEX_CAPTION` VARCHAR(128) default '' NOT NULL,
 	PRIMARY KEY (`LEX_TOPIC`,`LEX_KEY`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='LEXICOS, una tabla que contiene tablas';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- OUTPUT_DOCUMENT
 #-----------------------------------------------------------------------------
@@ -360,7 +360,7 @@ CREATE TABLE `OUTPUT_DOCUMENT`
 	`OUT_DOC_DESTINATION_PATH` TEXT,
 	`OUT_DOC_TAGS` TEXT,
 	PRIMARY KEY (`OUT_DOC_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- PROCESS
 #-----------------------------------------------------------------------------
@@ -394,7 +394,7 @@ CREATE TABLE `PROCESS`
 	`PRO_TITLE_Y` INTEGER default 6 NOT NULL,
 	`PRO_DEBUG` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`PRO_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Store process Information';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- PROCESS_OWNER
 #-----------------------------------------------------------------------------
@@ -407,7 +407,7 @@ CREATE TABLE `PROCESS_OWNER`
 	`OWN_UID` VARCHAR(32) default '' NOT NULL,
 	`PRO_UID` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`OWN_UID`,`PRO_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- REPORT_TABLE
 #-----------------------------------------------------------------------------
@@ -426,7 +426,7 @@ CREATE TABLE `REPORT_TABLE`
 	`REP_TAB_CREATE_DATE` DATETIME  NOT NULL,
 	`REP_TAB_STATUS` CHAR(8) default 'ACTIVE' NOT NULL,
 	PRIMARY KEY (`REP_TAB_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- REPORT_VAR
 #-----------------------------------------------------------------------------
@@ -442,7 +442,7 @@ CREATE TABLE `REPORT_VAR`
 	`REP_VAR_NAME` VARCHAR(255) default '' NOT NULL,
 	`REP_VAR_TYPE` VARCHAR(20) default '' NOT NULL,
 	PRIMARY KEY (`REP_VAR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- ROUTE
 #-----------------------------------------------------------------------------
@@ -467,9 +467,9 @@ CREATE TABLE `ROUTE`
 	`ROU_TARGETANCHOR` INTEGER default 0,
 	`ROU_TO_PORT` INTEGER default 1 NOT NULL,
 	`ROU_FROM_PORT` INTEGER default 2 NOT NULL,
-	`ROU_EVN_UID` VARCHAR(32) default '' NULL,
+	`ROU_EVN_UID` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`ROU_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Differents flows for a flow in business process';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- STEP
 #-----------------------------------------------------------------------------
@@ -488,7 +488,7 @@ CREATE TABLE `STEP`
 	`STEP_POSITION` INTEGER default 0 NOT NULL,
 	`STEP_MODE` VARCHAR(10) default 'EDIT',
 	PRIMARY KEY (`STEP_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- STEP_TRIGGER
 #-----------------------------------------------------------------------------
@@ -505,7 +505,7 @@ CREATE TABLE `STEP_TRIGGER`
 	`ST_CONDITION` VARCHAR(255) default '' NOT NULL,
 	`ST_POSITION` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`STEP_UID`,`TAS_UID`,`TRI_UID`,`ST_TYPE`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- SWIMLANES_ELEMENTS
 #-----------------------------------------------------------------------------
@@ -523,7 +523,7 @@ CREATE TABLE `SWIMLANES_ELEMENTS`
 	`SWI_WIDTH` INTEGER default 0 NOT NULL,
 	`SWI_HEIGHT` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`SWI_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- TASK
 #-----------------------------------------------------------------------------
@@ -571,10 +571,10 @@ CREATE TABLE `TASK`
 	`TAS_WIDTH` INTEGER default 110 NOT NULL,
 	`TAS_HEIGHT` INTEGER default 60 NOT NULL,
 	`TAS_COLOR` VARCHAR(32) default '' NOT NULL,
-	`TAS_EVN_UID` VARCHAR(32) default '' NULL,
-	`TAS_BOUNDARY` VARCHAR(32) default '' NULL,
+	`TAS_EVN_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_BOUNDARY` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`TAS_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Task of workflow';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- TASK_USER
 #-----------------------------------------------------------------------------
@@ -589,7 +589,7 @@ CREATE TABLE `TASK_USER`
 	`TU_TYPE` INTEGER default 1 NOT NULL,
 	`TU_RELATION` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`TAS_UID`,`USR_UID`,`TU_TYPE`,`TU_RELATION`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- TRANSLATION
 #-----------------------------------------------------------------------------
@@ -604,7 +604,7 @@ CREATE TABLE `TRANSLATION`
 	`TRN_LANG` VARCHAR(10) default 'en' NOT NULL,
 	`TRN_VALUE` VARCHAR(200) default '' NOT NULL,
 	PRIMARY KEY (`TRN_CATEGORY`,`TRN_ID`,`TRN_LANG`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- TRIGGERS
 #-----------------------------------------------------------------------------
@@ -620,7 +620,7 @@ CREATE TABLE `TRIGGERS`
 	`TRI_WEBBOT` TEXT  NOT NULL,
 	`TRI_PARAM` TEXT,
 	PRIMARY KEY (`TRI_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- USERS
 #-----------------------------------------------------------------------------
@@ -656,7 +656,7 @@ CREATE TABLE `USERS`
 	`USR_REPORTS_TO` VARCHAR(32) default '',
 	`USR_REPLACED_BY` VARCHAR(32) default '',
 	PRIMARY KEY (`USR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Users';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_THREAD
 #-----------------------------------------------------------------------------
@@ -672,7 +672,7 @@ CREATE TABLE `APP_THREAD`
 	`APP_THREAD_STATUS` VARCHAR(32) default 'OPEN' NOT NULL,
 	`DEL_INDEX` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`APP_UID`,`APP_THREAD_INDEX`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='APP_THREAD';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_DELAY
 #-----------------------------------------------------------------------------
@@ -698,7 +698,7 @@ CREATE TABLE `APP_DELAY`
 	`APP_AUTOMATIC_DISABLED_DATE` DATETIME,
 	PRIMARY KEY (`APP_DELAY_UID`),
 	KEY `indexAppDelay`(`PRO_UID`, `APP_UID`, `APP_THREAD_INDEX`, `APP_DEL_INDEX`, `APP_NEXT_TASK`, `APP_DELEGATION_USER`, `APP_DISABLE_ACTION_USER`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='APP_DELAY';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- PROCESS_USER
 #-----------------------------------------------------------------------------
@@ -713,7 +713,7 @@ CREATE TABLE `PROCESS_USER`
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
 	`PU_TYPE` VARCHAR(20) default '' NOT NULL,
 	PRIMARY KEY (`PU_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- SESSION
 #-----------------------------------------------------------------------------
@@ -732,7 +732,7 @@ CREATE TABLE `SESSION`
 	`SES_END_DATE` VARCHAR(19) default '' NOT NULL,
 	PRIMARY KEY (`SES_UID`),
 	KEY `indexSession`(`SES_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='SESSION';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- DB_SOURCE
 #-----------------------------------------------------------------------------
@@ -753,7 +753,7 @@ CREATE TABLE `DB_SOURCE`
 	`DBS_ENCODE` VARCHAR(32) default '',
 	PRIMARY KEY (`DBS_UID`),
 	KEY `indexDBSource`(`PRO_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='DB_SOURCE';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- STEP_SUPERVISOR
 #-----------------------------------------------------------------------------
@@ -770,7 +770,7 @@ CREATE TABLE `STEP_SUPERVISOR`
 	`STEP_POSITION` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`STEP_UID`),
 	KEY `indexStepSupervisor`(`PRO_UID`, `STEP_TYPE_OBJ`, `STEP_UID_OBJ`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='STEP_SUPERVISOR';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- OBJECT_PERMISSION
 #-----------------------------------------------------------------------------
@@ -793,7 +793,7 @@ CREATE TABLE `OBJECT_PERMISSION`
 	`OP_CASE_STATUS` VARCHAR(10) default '0',
 	PRIMARY KEY (`OP_UID`),
 	KEY `indexObjctPermission`(`PRO_UID`, `TAS_UID`, `USR_UID`, `OP_TASK_SOURCE`, `OP_OBJ_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='OBJECT_PERMISSION';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CASE_TRACKER
 #-----------------------------------------------------------------------------
@@ -808,7 +808,7 @@ CREATE TABLE `CASE_TRACKER`
 	`CT_DERIVATION_HISTORY` INTEGER default 0 NOT NULL,
 	`CT_MESSAGE_HISTORY` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`PRO_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='CASE_TRACKER';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CASE_TRACKER_OBJECT
 #-----------------------------------------------------------------------------
@@ -826,7 +826,7 @@ CREATE TABLE `CASE_TRACKER_OBJECT`
 	`CTO_POSITION` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`CTO_UID`),
 	KEY `indexCaseTrackerObject`(`PRO_UID`, `CTO_UID_OBJ`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- STAGE
 #-----------------------------------------------------------------------------
@@ -842,7 +842,7 @@ CREATE TABLE `STAGE`
 	`STG_POSY` INTEGER default 0 NOT NULL,
 	`STG_INDEX` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`STG_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- SUB_PROCESS
 #-----------------------------------------------------------------------------
@@ -866,7 +866,7 @@ CREATE TABLE `SUB_PROCESS`
 	`SP_GRID_IN` VARCHAR(50) default '' NOT NULL,
 	PRIMARY KEY (`SP_UID`),
 	KEY `indexSubProcess`(`PRO_UID`, `PRO_PARENT`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- SUB_APPLICATION
 #-----------------------------------------------------------------------------
@@ -886,7 +886,7 @@ CREATE TABLE `SUB_APPLICATION`
 	`SA_INIT_DATE` DATETIME,
 	`SA_FINISH_DATE` DATETIME,
 	PRIMARY KEY (`APP_UID`,`APP_PARENT`,`DEL_INDEX_PARENT`,`DEL_THREAD_PARENT`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- LOGIN_LOG
 #-----------------------------------------------------------------------------
@@ -905,7 +905,7 @@ CREATE TABLE `LOGIN_LOG`
 	`LOG_CLIENT_HOSTNAME` VARCHAR(100) default '' NOT NULL,
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`LOG_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- USERS_PROPERTIES
 #-----------------------------------------------------------------------------
@@ -920,7 +920,7 @@ CREATE TABLE `USERS_PROPERTIES`
 	`USR_LOGGED_NEXT_TIME` INTEGER default 0,
 	`USR_PASSWORD_HISTORY` TEXT,
 	PRIMARY KEY (`USR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- ADDITIONAL_TABLES
 #-----------------------------------------------------------------------------
@@ -943,7 +943,7 @@ CREATE TABLE `ADDITIONAL_TABLES`
 	`ADD_TAB_PLG_UID` VARCHAR(32) default '' NOT NULL,
 	`DBS_UID` VARCHAR(32) default '0',
 	PRIMARY KEY (`ADD_TAB_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- FIELDS
 #-----------------------------------------------------------------------------
@@ -966,7 +966,7 @@ CREATE TABLE `FIELDS`
 	`FLD_FOREIGN_KEY` TINYINT default 0 NOT NULL,
 	`FLD_FOREIGN_KEY_TABLE` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`FLD_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- SHADOW_TABLE
 #-----------------------------------------------------------------------------
@@ -985,7 +985,7 @@ CREATE TABLE `SHADOW_TABLE`
 	`SHD_DATE` DATETIME,
 	PRIMARY KEY (`SHD_UID`),
 	KEY `indexShadowTable`(`SHD_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- EVENT
 #-----------------------------------------------------------------------------
@@ -1012,11 +1012,26 @@ CREATE TABLE `EVENT`
 	`TRI_UID` VARCHAR(32) default '',
 	`EVN_POSX` INTEGER default 0 NOT NULL,
 	`EVN_POSY` INTEGER default 0 NOT NULL,
-	`EVN_TYPE` VARCHAR(32) default '' NULL,
-	`TAS_EVN_UID` VARCHAR(32) default '' NULL,
+	`EVN_TYPE` VARCHAR(32) default '',
+	`TAS_EVN_UID` VARCHAR(32) default '',
 	PRIMARY KEY (`EVN_UID`),
 	KEY `indexEventTable`(`EVN_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
+#-----------------------------------------------------------------------------
+#-- GATEWAY
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GATEWAY`;
+
+
+CREATE TABLE `GATEWAY`
+(
+	`GAT_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`GAT_X` INTEGER default 0 NOT NULL,
+	`GAT_Y` INTEGER default 0 NOT NULL,
+	PRIMARY KEY (`GAT_UID`)
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_EVENT
 #-----------------------------------------------------------------------------
@@ -1034,7 +1049,7 @@ CREATE TABLE `APP_EVENT`
 	`APP_EVN_LAST_EXECUTION_DATE` DATETIME,
 	`APP_EVN_STATUS` VARCHAR(32) default 'OPEN' NOT NULL,
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`,`EVN_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_CACHE_VIEW
 #-----------------------------------------------------------------------------
@@ -1077,7 +1092,7 @@ CREATE TABLE `APP_CACHE_VIEW`
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
 	KEY `indexAppNumber`(`APP_NUMBER`),
 	KEY `indexAppUser`(`USR_UID`, `APP_STATUS`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Delegation a task to user';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- DIM_TIME_DELEGATE
 #-----------------------------------------------------------------------------
@@ -1096,7 +1111,7 @@ CREATE TABLE `DIM_TIME_DELEGATE`
 	`QTR_NAME` VARCHAR(4) default '' NOT NULL,
 	`QTR_DESC` VARCHAR(9) default '' NOT NULL,
 	PRIMARY KEY (`TIME_ID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='The application';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- DIM_TIME_COMPLETE
 #-----------------------------------------------------------------------------
@@ -1115,7 +1130,7 @@ CREATE TABLE `DIM_TIME_COMPLETE`
 	`QTR_NAME` VARCHAR(4) default '' NOT NULL,
 	`QTR_DESC` VARCHAR(9) default '' NOT NULL,
 	PRIMARY KEY (`TIME_ID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='The application';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_HISTORY
 #-----------------------------------------------------------------------------
@@ -1135,7 +1150,7 @@ CREATE TABLE `APP_HISTORY`
 	`HISTORY_DATE` DATETIME,
 	`HISTORY_DATA` TEXT  NOT NULL,
 	KEY `indexAppHistory`(`APP_UID`, `TAS_UID`, `USR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='History table for Dynaforms';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- APP_FOLDER
 #-----------------------------------------------------------------------------
@@ -1151,7 +1166,7 @@ CREATE TABLE `APP_FOLDER`
 	`FOLDER_CREATE_DATE` DATETIME  NOT NULL,
 	`FOLDER_UPDATE_DATE` DATETIME  NOT NULL,
 	PRIMARY KEY (`FOLDER_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Folder System PM Documents';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- FIELD_CONDITION
 #-----------------------------------------------------------------------------
@@ -1170,7 +1185,7 @@ CREATE TABLE `FIELD_CONDITION`
 	`FCD_STATUS` VARCHAR(10),
 	`FCD_DYN_UID` VARCHAR(32)  NOT NULL,
 	PRIMARY KEY (`FCD_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Conditions store to show or hide dynaform fields..';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- LOG_CASES_SCHEDULER
 #-----------------------------------------------------------------------------
@@ -1191,7 +1206,7 @@ CREATE TABLE `LOG_CASES_SCHEDULER`
 	`WS_CREATE_CASE_STATUS` TEXT  NOT NULL,
 	`WS_ROUTE_CASE_STATUS` TEXT  NOT NULL,
 	PRIMARY KEY (`LOG_CASE_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Cases Launched with Case Scheduler';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CASE_SCHEDULER
 #-----------------------------------------------------------------------------
@@ -1227,7 +1242,7 @@ CREATE TABLE `CASE_SCHEDULER`
 	`SCH_REPEAT_STOP_IF_RUNNING` TINYINT default 0,
 	`CASE_SH_PLUGIN_UID` VARCHAR(100),
 	PRIMARY KEY (`SCH_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Conditions store to show or hide dynaform fields..';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CALENDAR_DEFINITION
 #-----------------------------------------------------------------------------
@@ -1245,7 +1260,7 @@ CREATE TABLE `CALENDAR_DEFINITION`
 	`CALENDAR_DESCRIPTION` TEXT  NOT NULL,
 	`CALENDAR_STATUS` VARCHAR(8) default 'ACTIVE' NOT NULL,
 	PRIMARY KEY (`CALENDAR_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Calendar Definition used by PM';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CALENDAR_BUSINESS_HOURS
 #-----------------------------------------------------------------------------
@@ -1260,7 +1275,7 @@ CREATE TABLE `CALENDAR_BUSINESS_HOURS`
 	`CALENDAR_BUSINESS_START` VARCHAR(10) default '' NOT NULL,
 	`CALENDAR_BUSINESS_END` VARCHAR(10) default '' NOT NULL,
 	PRIMARY KEY (`CALENDAR_UID`,`CALENDAR_BUSINESS_DAY`,`CALENDAR_BUSINESS_START`,`CALENDAR_BUSINESS_END`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Calendar Business Hours';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CALENDAR_HOLIDAYS
 #-----------------------------------------------------------------------------
@@ -1275,7 +1290,7 @@ CREATE TABLE `CALENDAR_HOLIDAYS`
 	`CALENDAR_HOLIDAY_START` DATETIME  NOT NULL,
 	`CALENDAR_HOLIDAY_END` DATETIME  NOT NULL,
 	PRIMARY KEY (`CALENDAR_UID`,`CALENDAR_HOLIDAY_NAME`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Calendar Holidays';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- CALENDAR_ASSIGNMENTS
 #-----------------------------------------------------------------------------
@@ -1289,7 +1304,7 @@ CREATE TABLE `CALENDAR_ASSIGNMENTS`
 	`CALENDAR_UID` VARCHAR(32) default '' NOT NULL,
 	`OBJECT_TYPE` VARCHAR(100) default '' NOT NULL,
 	PRIMARY KEY (`OBJECT_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Calendar Holidays';
+)Type=MyISAM ;
 #-----------------------------------------------------------------------------
 #-- PROCESS_CATEGORY
 #-----------------------------------------------------------------------------
@@ -1304,6 +1319,6 @@ CREATE TABLE `PROCESS_CATEGORY`
 	`CATEGORY_NAME` VARCHAR(100) default '' NOT NULL,
 	`CATEGORY_ICON` VARCHAR(100) default '',
 	PRIMARY KEY (`CATEGORY_UID`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Calendar Holidays';
+)Type=MyISAM ;
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
