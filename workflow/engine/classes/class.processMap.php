@@ -4082,6 +4082,7 @@ class processMap {
 
   function loadProcessCategory()
   {
+    $aProcessCategory = '';
     require_once ( "classes/model/ProcessCategory.php" );
     $Criteria = new Criteria('workflow');
     $Criteria->clearSelectColumns ( );
