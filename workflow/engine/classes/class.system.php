@@ -42,7 +42,196 @@ class System {
   var $sRevision;
   var $sPath;
   var $newSystemClass;
+
+  /**
+  * List currently installed plugins
+  *
+  * @param
+  * @return array with the names of the plugins
+  */
+  public static function getPlugins() {
+    $plugins = array ();
+
+    foreach (glob(PATH_PLUGINS . "*") as $filename) {
+      $info = pathinfo($filename);
+      if (array_key_exists("extension", $info) && (strcmp($info["extension"], "php") == 0)) {
+        $plugins[] = $info["basename"];
+      }
+    }
+
+    sort($plugins, SORT_STRING);
+    return $plugins;
+  }
+
+  /**
+   * Lists existing workspaces, returning an array of workspaceTools object
+   * for each.
+   * This is a class method, it does not require an instance.
+   *
+   * @author Alexandre Rosenfeld <alexandre@colosa.com>
+   * @access public
+   * @return array of workspace tools objects
+   */
+  public static function listWorkspaces() {
+    $oDirectory = dir(PATH_DB);
+    $aWorkspaces = array();
+    foreach (glob(PATH_DB . "*") as $filename) {
+      if (is_dir($filename) && file_exists($filename . "/db.php"))
+        $aWorkspaces[] = new workspaceTools (basename($filename));
+    }
+    return $aWorkspaces;
+  }
+
+  /** 
+  * Get system information
+  *
+  * @param 
+  * @return array with system information
+  */ 
+  public static function getSysInfo() {
+    if( file_exists(PATH_METHODS . 'login/version-pmos.php') ) {
+      require_once (PATH_METHODS . 'login/version-pmos.php');
+    } else {
+      define('PM_VERSION', 'Development Version');
+    }
+
+    $ipe = explode(" ", $_SERVER['SSH_CONNECTION']);
+
+    if( getenv('HTTP_CLIENT_IP') ) {
+      $ip = getenv('HTTP_CLIENT_IP');
+    } elseif( getenv('HTTP_X_FORWARDED_FOR') ) {
+      $ip = getenv('HTTP_X_FORWARDED_FOR');
+    } else {
+      $ip = getenv('REMOTE_ADDR');
+    }
+
+    /* For distros with the lsb_release, this returns a one-line description of
+     * the distro name, such as "CentOS release 5.3 (Final)" or "Ubuntu 10.10"
+     */
+    $distro = exec("lsb_release -d -s 2> /dev/null");
+
+    /* For distros without lsb_release, we look for *release (such as
+     * redhat-release, gentoo-release, SuSE-release, etc) or *version (such as
+     * debian_version, slackware-version, etc)
+     */
+    if (empty($distro)) {
+      foreach (glob("/etc/*release") as $filename) {
+        $distro = trim(file_get_contents($filename));
+        if (!empty($distro))
+          break;
+      }
+      if (empty($distro)) {
+        foreach (glob("/etc/*version") as $filename) {
+          $distro = trim(file_get_contents($filename));
+          if (!empty($distro))
+            break;
+        }
+      }
+    }
+
+    /* CentOS returns a string with quotes, remove them and append
+     * the OS name (such as LINUX, WINNT, DARWIN, etc)
+     */
+    $distro = trim($distro, "\"") . " (" . PHP_OS . ")";
+
+    $Fields = array();
+    $Fields['SYSTEM'] = $distro;
+    $Fields['PHP'] = phpversion();
+    $Fields['PM_VERSION'] = PM_VERSION;
+    $Fields['SERVER_ADDR'] = $ipe[2]; //lookup($ipe[2]);
+    $Fields['IP'] = $ipe[0]; //lookup($ipe[0]);
+
+    $Fields['PLUGINS_LIST'] = System::getPlugins();
+
+    return $Fields;
+  }
   
+  /** 
+  * Print the system information gathered from getSysInfo
+  *
+  * @return
+  */ 
+  public static function printSysInfo() {
+    $fields = System::getSysInfo();
+
+    $info = array(
+        'ProcessMaker Version' => $fields['PM_VERSION'],
+        'System'               => $fields['SYSTEM'],
+        'PHP Version'          => $fields['PHP'],
+        'Server Address'       => $fields['SERVER_ADDR'],
+        'Client IP Address'    => $fields['IP'],
+        'Plugins'              => (count($fields['PLUGINS_LIST']) > 0) ? $fields['PLUGINS_LIST'][0] : 'None'
+    );
+
+    foreach( $fields['PLUGINS_LIST'] as $k => $v ) {
+      if ($k == 0)
+        continue;
+      $info[] = $v;
+    }
+
+    foreach ($info as $k => $v) {
+      if (is_numeric($k)) $k = "";
+      printf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO'));
+    }
+  }
+
+  public static function listPoFiles() {
+    $folders = glob(PATH_CORE . '/content/translations/*');
+
+    $items = glob(PATH_CORE . '/content/*.po');
+    foreach ($folders as $folder) {
+      if (is_dir($folder)) {
+        $add = glob($folder . "/*.po");
+        $items = array_merge($items, $add);
+      }
+    }
+    
+    return $items;
+  }
+
+  public static function getFilesChecksum($dir, $root = NULL) {
+    if (!isset($root))
+      $root = $dir;
+    $dir = realpath($dir);
+    $root = realpath($root);
+    $items = glob($dir . "/*");
+    $checksums = array();
+    foreach ($items as $item) {
+      $checksums["." . substr($item, strlen($root))] = md5_file($item);
+      if (is_dir($item)) {
+        $checksums = array_merge($checksums, System::getFilesChecksum($item, $root));
+      }
+    }
+    return $checksums;
+  }
+
+  public static function verifyChecksum() {
+    $filesChecksum = System::getFilesChecksum(PATH_TRUNK);
+    $lines = explode("\n", file_get_contents(PATH_TRUNK . "checksum.txt"));
+    $originalChecksum = array();
+    foreach ($lines as $line) {
+      if (empty($line))
+        continue;
+      list($checksum, $empty, $filename) = explode(" ", $line);
+      $originalChecksum[$filename] = $checksum;
+    }
+    $result = array("diff" => array(), "missing" => array());
+    foreach ($originalChecksum as $filename => $checksum) {
+      //Skip hidden files that start with a dot.
+      if (substr(basename($filename), 0, 1) === '.')
+        continue;
+      //Skip xmlform files, since they always change.
+      if (strpos($filename, "/xmlform/") !== false)
+        continue;
+      if (!array_key_exists($filename, $filesChecksum)) {
+        $result['missing'][] = $filename;
+      } else if (strcmp($checksum, $filesChecksum[$filename]) != 0) {
+        $result['diff'][] = $filename;
+      }
+    }
+    return $result;
+  }
+
   /** 
   * This function checks files to do updated to pm
   *
@@ -518,4 +707,181 @@ class System {
     $sContent = str_replace(");", ';', $sContent);
     return $sContent;
   }
+
+  /**
+  * Retrieves a schema array from a file.
+  *
+  * @param string $sSchemaFile schema filename
+  * @param string $dbAdapter database adapter name
+  * @return $sContent
+  */
+  public static function getSchema() {
+    $sSchemaFile = PATH_TRUNK . "workflow/engine/config/schema.xml";
+    $dbAdapter = "mysql";
+    $aSchema = array();
+    $oXml = new DomDocument();
+    $oXml->load($sSchemaFile);
+    $aTables = $oXml->getElementsByTagName('table');
+    foreach ($aTables as $oTable) {
+      $aPrimaryKeys = array();
+      $sTableName = $oTable->getAttribute('name');
+      $aSchema[$sTableName] = array();
+      $aColumns = $oTable->getElementsByTagName('column');
+      foreach ($aColumns as $oColumn) {
+        $sColumName = $oColumn->getAttribute('name');
+        $aSchema[$sTableName][$sColumName] = array();
+        $aVendors = $oColumn->getElementsByTagName('vendor');
+        foreach ($aVendors as $oVendor) {
+          if ($oVendor->getAttribute('type') == $dbAdapter) {
+            break;
+          }
+        }
+        $aParameters = $oColumn->getElementsByTagName('parameter');
+        foreach ($aParameters as $oParameter) {
+          $parameterName = ucwords($oParameter->getAttribute('name'));
+          if ( $parameterName == 'Key' && strtoupper($oParameter->getAttribute('value')) == 'PRI' ) {
+          	$aPrimaryKeys[] = $oColumn->getAttribute('name');
+          }
+
+        	if ( in_array ( $parameterName, array('Field','Type','Null','Default') ) ) {
+            $aSchema[$sTableName][$sColumName][$parameterName] = $oParameter->getAttribute('value');
+          }
+        }
+      }
+
+      if ( is_array($aPrimaryKeys) && count($aPrimaryKeys) > 0 ) {
+        $aSchema[$sTableName]['INDEXES']['PRIMARY'] = $aPrimaryKeys;
+      }
+      $aIndexes = $oTable->getElementsByTagName('index');
+      foreach ($aIndexes as $oIndex) {
+      	$aIndex = array();
+        $aIndexesColumns = $oIndex->getElementsByTagName('index-column');
+        foreach ($aIndexesColumns as $oIndexColumn) {
+          $aIndex[] = $oIndexColumn->getAttribute('name');
+        }
+        $aSchema[$sTableName]['INDEXES'][ $oIndex->getAttribute('name') ] = $aIndex;
+      }
+    }
+    return $aSchema;
+  }
+
+  /**
+  * Returns the difference between two schema arrays
+  *
+  * @param array $aOldSchema original schema array
+  * @param array $aNewSchema new schema array
+  * @return array with tablesToAdd, tablesToAlter, tablesWithNewIndex and tablesToAlterIndex
+  */
+  public static function compareSchema($aOldSchema, $aNewSchema) {
+    //$aChanges = array('tablesToDelete' => array(), 'tablesToAdd' => array(), 'tablesToAlter' => array());
+    //Tables to delete, but this is disabled
+    //foreach ($aOldSchema as $sTableName => $aColumns) {
+    //  if ( !isset($aNewSchema[$sTableName])) {
+    //    if (!in_array($sTableName, array('KT_APPLICATION', 'KT_DOCUMENT', 'KT_PROCESS'))) {
+    //      $aChanges['tablesToDelete'][] = $sTableName;
+    //    }
+    //  }
+    //}
+
+    $aChanges = array('tablesToAdd' => array(), 'tablesToAlter' => array(), 'tablesWithNewIndex' => array(), 'tablesToAlterIndex'=> array());
+
+    //new tables  to create and alter
+    foreach ($aNewSchema as $sTableName => $aColumns) {
+      if (!isset($aOldSchema[$sTableName])) {
+        $aChanges['tablesToAdd'][$sTableName] = $aColumns;
+      }
+      else {
+        //drop old columns
+        foreach ($aOldSchema[$sTableName] as $sColumName => $aParameters) {
+          if (!isset($aNewSchema[$sTableName][$sColumName])) {
+            if (!isset($aChanges['tablesToAlter'][$sTableName])) {
+              $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
+            }
+            $aChanges['tablesToAlter'][$sTableName]['DROP'][$sColumName] = $sColumName;
+          }
+        }
+
+        //create new columns
+        //foreach ($aNewSchema[$sTableName] as $sColumName => $aParameters) {
+        foreach ($aColumns as $sColumName => $aParameters) {
+          if ($sColumName != 'INDEXES') {
+            if (!isset($aOldSchema[$sTableName][$sColumName])) { //this column doesnt exist in oldschema
+              if (!isset($aChanges['tablesToAlter'][$sTableName])) {
+                $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
+              }
+              $aChanges['tablesToAlter'][$sTableName]['ADD'][$sColumName] = $aParameters;
+            }
+            else {  //the column exists
+              $newField = $aNewSchema[$sTableName][$sColumName];
+              $oldField = $aOldSchema[$sTableName][$sColumName];
+              //both are null, no change is required
+              if ( !isset($newField['Default']) && !isset($oldField['Default'])) $changeDefaultAttr = false;
+              //one of them is null, change IS required
+              if ( !isset($newField['Default']) && isset($oldField['Default']) && $oldField['Default']!= '')  $changeDefaultAttr = true;
+              if (  isset($newField['Default']) && !isset($oldField['Default'])) $changeDefaultAttr = true;
+              //both are defined and they are different.
+              if ( isset($newField['Default']) && isset($oldField['Default']) ) {
+                 if ( $newField['Default'] != $oldField['Default'] )
+                   $changeDefaultAttr = true;
+                 else
+                   $changeDefaultAttr = false;
+              }
+              //special cases
+              // BLOB and TEXT columns cannot have DEFAULT values.  http://dev.mysql.com/doc/refman/5.0/en/blob.html
+              if ( in_array(strtolower($newField['Type']), array('text','mediumtext') ) )
+                $changeDefaultAttr = false;
+
+              //#1067 - Invalid default value for datetime field
+              if ( in_array($newField['Type'], array('datetime')) && isset($newField['Default']) && $newField['Default']== '' )
+                $changeDefaultAttr = false;
+
+              //#1067 - Invalid default value for int field
+              if ( substr($newField['Type'], 0, 3 ) && isset($newField['Default']) && $newField['Default']== '' )
+                $changeDefaultAttr = false;
+
+              //if any difference exists, then insert the difference in aChanges
+              if ( $newField['Field']   != $oldField['Field'] ||
+                   $newField['Type']    != $oldField['Type'] ||
+                   $newField['Null']    != $oldField['Null'] ||
+                   $changeDefaultAttr ) {
+                if (!isset($aChanges['tablesToAlter'][$sTableName])) {
+                  $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
+                }
+                $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Field']   = $newField['Field'];
+                $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Type']    = $newField['Type'];
+                $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Null']    = $newField['Null'];
+                if ( isset($newField['Default']) )
+                  $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Default'] = $newField['Default'];
+                else
+                  $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Default'] = null;
+
+              }
+            }
+          } //only columns, no the indexes column
+        }//foreach $aColumns
+
+        //now check the indexes of table
+        if ( isset($aNewSchema[$sTableName]['INDEXES']) ) {
+          foreach ( $aNewSchema[$sTableName]['INDEXES'] as $indexName => $indexFields ) {
+            if (!isset( $aOldSchema[$sTableName]['INDEXES'][$indexName]) ) {
+              if (!isset($aChanges['tablesWithNewIndex'][$sTableName])) {
+                $aChanges['tablesWithNewIndex'][$sTableName] = array();
+              }
+              $aChanges['tablesWithNewIndex'][$sTableName][$indexName] = $indexFields;
+            }
+            else {
+              if ( $aOldSchema[$sTableName]['INDEXES'][$indexName] != $indexFields ) {
+                if (!isset($aChanges['tablesToAlterIndex'][$sTableName])) {
+                  $aChanges['tablesToAlterIndex'][$sTableName] = array();
+                }
+                $aChanges['tablesToAlterIndex'][$sTableName][$indexName] = $indexFields;
+              }
+            }
+          }
+        }
+      }  //for-else table exists
+    }  //for new schema
+    return $aChanges;
+  }
+
 }// end System class

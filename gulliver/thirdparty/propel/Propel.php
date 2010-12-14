@@ -31,7 +31,7 @@ include_once 'adapter/DBAdapter.php';
  *
  * @author     Hans Lellelid <hans@xmpl.rg> (Propel)
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
- * @author     Magnús Þór Torfason <magnus@handtolvur.is> (Torque)
+ * @author     Magnï¿½s ï¿½ï¿½r Torfason <magnus@handtolvur.is> (Torque)
  * @author     Jason van Zyl <jvanzyl@apache.org> (Torque)
  * @author     Rafal Krzewski <Rafal.Krzewski@e-point.pl> (Torque)
  * @author     Martin Poeschl <mpoeschl@marmot.at> (Torque)
@@ -256,6 +256,12 @@ class Propel {
 		self::configure($c);
 		self::initialize();
 	}
+
+  public static function initConfiguration($configuration)
+  {
+    self::$configuration = $configuration;
+    self::initialize();
+  }
 
 	/**
 	 * Determine whether Propel has already been initialized.

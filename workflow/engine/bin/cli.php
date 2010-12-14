@@ -23,6 +23,15 @@
  *
  */
 
+register_shutdown_function('shutdownFunction');
+function shutDownFunction() {
+    $error = error_get_last();
+    if ($error['type'] == 1) {
+        //print_r($error);
+        debug_print_backtrace();
+    }
+} 
+
   /* Windows supports both / and \ as path separators, so use the Unix separator
    * for maximum compatibility.
    */
@@ -43,9 +52,12 @@
   require_once( PATH_THIRDPARTY . 'pake/pakeGetopt.class.php');
   require_once( PATH_CORE . 'config/environments.php');
 
+  /* Hide notice, otherwise we get a lot of messages */
+  error_reporting(E_ALL ^ E_NOTICE);
+
   // register tasks
-  $dir = PATH_HOME . 'engine/bin/commands';
-  $tasks = pakeFinder::type('file')->name( 'cmd*.php' )->in($dir);
+  $dir = PATH_HOME . 'engine/bin/tasks';
+  $tasks = pakeFinder::type('file')->name( 'cli*.php' )->in($dir);
 
   foreach ($tasks as $task) {
     include_once($task);

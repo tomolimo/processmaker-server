@@ -5,77 +5,186 @@
  *
  * @author Alexandre Rosenfeld
  */
+
 class workspaceTools {
-  var $workspaceName = NULL;
-  var $dbFile = NULL;
+  var $name = NULL;
+  var $path = NULL;
+  var $db = NULL;
+  var $dbPath = NULL;
+  var $dbInfo = NULL;
   var $dbInfoRegExp = "/( *define *\( *'(?P<key>.*?)' *, *\n* *')(?P<value>.*?)(' *\) *;.*)/";
 
+  private function verbose($message) {
+    //if ($this->$verbose) {
+    echo $message;
+    //}
+  }
+
   /**
-   * Create a workspace tools object
+   * Create a workspace tools object. Note that workspace might not exist when
+   * this object is created, however most methods requires that a workspace with
+   * this name does exists.
    *
    * @author Alexandre Rosenfeld <alexandre@colosa.com>
    * @access public
    * @param  string $workspaceName name of the workspace
    * @return void
    */
-  function  __construct($workspaceName)
-  {
-    $this->workspaceName = $workspaceName;
-    $this->dbFile = PATH_DB . $this->workspaceName . '/db.php';
+  function  __construct($workspaceName)  {
+    $this->name = $workspaceName;
+    $this->path = PATH_DB . $this->name;
+    $this->dbPath = $this->path . '/db.php';
+    if ($this->workspaceExists())
+      $this->dbInfo = $this->getDBInfo ();
   }
 
-  function listWorkspaces() {
-    $oDirectory = dir(PATH_DB);
-    $aWorkspaces = array ();
-    while( ($sObject = $oDirectory->read()) ) {
-      if( is_dir(PATH_DB . $sObject) && substr($sObject, 0, 1) != '.' && file_exists(PATH_DB . $sObject . PATH_SEP . 'db.php') ) {
-        $aWorkspaces[] = new workspaceTools($sObject);
-      }
+  public function workspaceExists() {
+    return (file_exists($this->path) && file_exists($this->dbPath));
+  }
+
+  public function upgrade() {
+    $this->verbose("> Updating translations...\n");
+    $this->upgradeTranslation();
+    $this->verbose("> Updating database...\n");
+    $this->repairSchema();
+    $this->verbose("> Updating cache view...\n");
+    $this->upgradeCacheView();
+    $this->verbose("> Done.\n");
+  }
+
+  public function getDBInfo() {
+    if (!$this->workspaceExists())
+      throw new Exception("Could not get db.php in workspace " . $this->name);
+    $sDbFile = file_get_contents($this->dbPath);
+    /* This regular expression will match any "define ('<key>', '<value>');"
+     * with any combination of whitespace between words.
+     * Each match will have these groups:
+     * ((define('(<key>)2', ')1 (<value>)3 (');)4 )0
+     */
+    preg_match_all($this->dbInfoRegExp, $sDbFile, $matches, PREG_SET_ORDER);
+    $values = array();
+    foreach ($matches as $match) {
+      $values[$match['key']] = $match['value'];
     }
-    return $aWorkspaces;
+    $this->dbAdapter = $values["DB_ADAPTER"];
+    $this->dbName = $values["DB_NAME"];
+    $this->dbHost = $values["DB_HOST"];
+    $this->dbUser = $values["DB_USER"];
+    $this->dbPass = $values["DB_PASS"];
+    return $this->dbInfo = $values;
   }
 
-  function getDBInfo() {
-    if( file_exists($this->dbFile) ) {
-      $sDbFile = file_get_contents($this->dbFile);
-      /* This regular expression will match any "define ('<key>', '<value>');"
-       * with any combination of whitespace between words.
-       * Each match will have these groups:
-       * ((define('(<key>)2', ')1 (<value>)3 (');)4 )0
-       */
-      preg_match_all($this->dbInfoRegExp, $sDbFile, $matches, PREG_SET_ORDER);
-      $config = array();
-      foreach ($matches as $match) {
-        $config[$match['key']] = $match['value'];
-      }
-      return $config;
-    } else {
-      throw new Exception("Workspace db.php not found.");
-    }
-  }
-
-  function getSchema() {
+  public function getDBCredentials($dbName) {
+    $prefixes = array(
+        "wf" => "",
+        "rp" => "REPORT_",
+        "rb" => "RBAC_"
+    );
+    $prefix = $prefixes[$dbName];
     $dbInfo = $this->getDBInfo();
-    $DB_ADAPTER = $dbInfo["DB_ADAPTER"];
-    $DB_HOST = $dbInfo["DB_HOST"];
-    $DB_USER = $dbInfo["DB_USER"];
-    $DB_PASS = $dbInfo["DB_PASS"];
-    $DB_NAME = $dbInfo["DB_NAME"];
+    return array(
+      'adapter' => $dbInfo["DB_ADAPTER"],
+      'name' => $dbInfo["DB_".$prefix."NAME"],
+      'host' => $dbInfo["DB_".$prefix."HOST"],
+      'user' => $dbInfo["DB_".$prefix."USER"],
+      'pass' => $dbInfo["DB_".$prefix."PASS"],
+      'dsn'  => sprintf("%s://%s:%s@%s/%s?encoding=utf8", $dbInfo['DB_ADAPTER'] ,
+        $dbInfo["DB_".$prefix."USER"], $dbInfo["DB_".$prefix."PASS"],
+        $dbInfo["DB_".$prefix."HOST"], $dbInfo["DB_".$prefix."NAME"])
+    );
+  }
+
+  private function initPropel($root = false) {
+    $wfDetails = $this->getDBCredentials("wf");
+    $rbDetails = $this->getDBCredentials("rb");
+    $rpDetails = $this->getDBCredentials("rp");
+
+    $config = array(
+        'datasources' => array(
+            'workflow' => array(
+                'connection' => $wfDetails["dsn"],
+                'adapter'    => $wfDetails["adapter"]
+            ),
+            'rbac' => array(
+                'connection' => $rbDetails["dsn"],
+                'adapter'    => $rbDetails["adapter"]
+            ),
+            'rp' => array(
+                'connection' => $rpDetails["dsn"],
+                'adapter'    => $rpDetails["adapter"]
+            )
+        )
+    );
+
+    if ($root) {
+      $dbHash = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
+
+      $dbInfo = $this->getDBInfo();
+      $host = $dbHash[0];
+      $user = $dbHash[1];
+      $pass = $dbHash[2];
+      $dbName = $dbInfo["DB_NAME"];
+
+      $rootConfig = array(
+          'datasources' => array(
+              'root' => array(
+                  'connection' => "mysql://$user:$pass@$host/$dbName?encoding=utf8",
+                  'adapter' => "mysql"
+              )
+          )
+      );
+      
+
+      $config["datasources"] = array_merge($config["datasources"], $rootConfig["datasources"]);
+    }
+
+    require_once ( "propel/Propel.php" );
+    require_once ( "creole/Creole.php" );
+
+    Propel::initConfiguration($config);
+  }
+
+  public function upgradeTranslation($updateXml = true) {
+    $this->initPropel(true);
+    G::LoadClass('languages');
+    G::LoadThirdParty('pear/json', 'class.json');
+    $languages = new languages();
+    foreach (System::listPoFiles() as $poFile) {
+      $this->verbose("Updating language ".$poFile."\n");
+      $languages->importLanguage($poFile, $updateXml);
+    }
+  }
+
+  private function getDatabase() {
+    if (isset($this->db) && $this->db->isConnected())
+      return $this->db;
+    if (!isset($this->dbInfo))
+      $this->getDBInfo ();
+    G::LoadSystem( 'database_' . strtolower($this->dbAdapter));
+    $this->db = new database($this->dbAdapter, $this->dbHost, $this->dbUser,
+      $this->dbPass, $this->dbName);
+    if ( !$this->db->isConnected() ) {
+      $this->db->logQuery ('No available connection to database!');
+      throw new Exception("Could not connect to database");
+    }
+    return $this->db;
+  }
+
+  private function closeDatabase() {
+    if (!isset($this->db))
+      return;
+    $this->db->close();
+    $this->db = NULL;
+  }
+
+  public function getSchema() {
+    $oDataBase = $this->getDatabase();
+
+    $aOldSchema = array();
 
     try {
-      G::LoadSystem( 'database_' . strtolower($DB_ADAPTER));
-
-      $aOldSchema = array();
-      $oDataBase = new database($DB_ADAPTER, $DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-
-      if ( !$oDataBase->isConnected() ) {
-        $oDataBase->logQuery ('Not exists an available connection!');
-        return NULL;
-      }
-
       $oDataBase->iFetchType = MYSQL_NUM;
       $oDataset1 = $oDataBase->executeQuery($oDataBase->generateShowTablesSQL());
-
     } catch ( Exception $e ) {
       $oDataBase->logQuery ( $e->getmessage() );
       return NULL;
@@ -118,181 +227,79 @@ class workspaceTools {
     return $aOldSchema;
   }
 
-  function getSchemaFromFile($sSchemaFile, $dbAdapter) {
-    $aSchema = array();
-    $oXml = new DomDocument();
-    $oXml->load($sSchemaFile);
-    $aTables = $oXml->getElementsByTagName('table');
-    foreach ($aTables as $oTable) {
-      $aPrimaryKeys = array();
-      $sTableName = $oTable->getAttribute('name');
-      $aSchema[$sTableName] = array();
-      $aColumns = $oTable->getElementsByTagName('column');
-      foreach ($aColumns as $oColumn) {
-        $sColumName = $oColumn->getAttribute('name');
-        $aSchema[$sTableName][$sColumName] = array();
-        $aVendors = $oColumn->getElementsByTagName('vendor');
-        foreach ($aVendors as $oVendor) {
-          if ($oVendor->getAttribute('type') == $dbAdapter) {
-            break;
-          }
-        }
-        $aParameters = $oColumn->getElementsByTagName('parameter');
-        foreach ($aParameters as $oParameter) {
-          $parameterName = ucwords($oParameter->getAttribute('name'));
-          if ( $parameterName == 'Key' && strtoupper($oParameter->getAttribute('value')) == 'PRI' ) {
-          	$aPrimaryKeys[] = $oColumn->getAttribute('name');
-          }
+  public function upgradeCacheView($checkOnly = false, $lang = "en") {
+    $this->initPropel(true);
 
-        	if ( in_array ( $parameterName, array('Field','Type','Null','Default') ) ) {
-            $aSchema[$sTableName][$sColumName][$parameterName] = $oParameter->getAttribute('value');
-          }
-        }
-      }
+    require_once('classes/model/AppCacheView.php');
 
-      if ( is_array($aPrimaryKeys) && count($aPrimaryKeys) > 0 ) {
-        $aSchema[$sTableName]['INDEXES']['PRIMARY'] = $aPrimaryKeys;
-      }
-      $aIndexes = $oTable->getElementsByTagName('index');
-      foreach ($aIndexes as $oIndex) {
-      	$aIndex = array();
-        $aIndexesColumns = $oIndex->getElementsByTagName('index-column');
-        foreach ($aIndexesColumns as $oIndexColumn) {
-          $aIndex[] = $oIndexColumn->getAttribute('name');
-        }
-        $aSchema[$sTableName]['INDEXES'][ $oIndex->getAttribute('name') ] = $aIndex;
-      }
+    //check the language, if no info in config about language, the default is 'en'
+    G::loadClass('configuration');
+    $oConf = new Configurations;
+    $oConf->loadConfig($x, 'APP_CACHE_VIEW_ENGINE','','','','');
+    $appCacheViewEngine = $oConf->aConfig;
+
+    //setup the appcacheview object, and the path for the sql files
+    $appCache = new AppCacheView();
+    $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP );
+
+    $userGrants = $appCache->checkGrantsForUser( false );
+
+    $currentUser        = $res['user'];
+    $currentUserIsSuper = $res['super'];
+
+    //if user does not have the SUPER privilege we need to use the root user and grant the SUPER priv. to normal user.
+    if (!$currentUserIsSuper && !$checkOnly) {
+      $res = $appCache->checkGrantsForUser( true );
+      $res = $appCache->setSuperForUser( $currentUser );
+      $currentUserIsSuper = true;
     }
-    return $aSchema;
+
+    $this->verbose("Creating table");
+    //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.
+    if (!$checkOnly) {
+      $res = $appCache->checkAppCacheView();
+    }
+
+    $this->verbose(", triggers");
+    //now check if we have the triggers installed
+    $triggers = array();
+    $triggers[] = $appCache->triggerAppDelegationInsert($lang, $checkOnly);
+    $triggers[] = $appCache->triggerAppDelegationUpdate($lang, $checkOnly);
+    $triggers[] = $appCache->triggerApplicationUpdate($lang, $checkOnly);
+    $triggers[] = $appCache->triggerApplicationDelete($lang, $checkOnly);
+
+    if (!$checkOnly) {
+      $this->verbose(", filling cache view... ");
+      //build using the method in AppCacheView Class
+      $res = $appCache->fillAppCacheView($lang);
+      $this->verbose("done");
+    }
+    $this->verbose("\n");
+    //set status in config table
+    $confParams = Array(
+      'LANG' => $lang,
+      'STATUS'=> 'active'
+    );        
+    $oConf->aConfig = $confParams;
+    $oConf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
+
+    // removing casesList configuration records. TODO: removing these lines that resets all the configurations records
+    $oCriteria = new Criteria();
+    $oCriteria->add(ConfigurationPeer::CFG_UID,'casesList');
+    ConfigurationPeer::doDelete($oCriteria);
+    // end of reset 
   }
 
-  function getSchemaChanges($aOldSchema, $aNewSchema) {
-    //$aChanges = array('tablesToDelete' => array(), 'tablesToAdd' => array(), 'tablesToAlter' => array());
-    //Tables to delete, but this is disabled
-    //foreach ($aOldSchema as $sTableName => $aColumns) {
-    //  if ( !isset($aNewSchema[$sTableName])) {
-    //    if (!in_array($sTableName, array('KT_APPLICATION', 'KT_DOCUMENT', 'KT_PROCESS'))) {
-    //      $aChanges['tablesToDelete'][] = $sTableName;
-    //    }
-    //  }
-    //}
-
-    $aChanges = array('tablesToAdd' => array(), 'tablesToAlter' => array(), 'tablesWithNewIndex' => array(), 'tablesToAlterIndex'=> array());
-
-    //new tables  to create and alter
-    foreach ($aNewSchema as $sTableName => $aColumns) {
-      if (!isset($aOldSchema[$sTableName])) {
-        $aChanges['tablesToAdd'][$sTableName] = $aColumns;
-      }
-      else {
-        //drop old columns
-        foreach ($aOldSchema[$sTableName] as $sColumName => $aParameters) {
-          if (!isset($aNewSchema[$sTableName][$sColumName])) {
-            if (!isset($aChanges['tablesToAlter'][$sTableName])) {
-              $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
-            }
-            $aChanges['tablesToAlter'][$sTableName]['DROP'][$sColumName] = $sColumName;
-          }
-        }
-
-        //create new columns
-        //foreach ($aNewSchema[$sTableName] as $sColumName => $aParameters) {
-        foreach ($aColumns as $sColumName => $aParameters) {
-          if ($sColumName != 'INDEXES') {
-            if (!isset($aOldSchema[$sTableName][$sColumName])) { //this column doesnt exist in oldschema
-              if (!isset($aChanges['tablesToAlter'][$sTableName])) {
-                $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
-              }
-              $aChanges['tablesToAlter'][$sTableName]['ADD'][$sColumName] = $aParameters;
-            }
-            else {  //the column exists
-              $newField = $aNewSchema[$sTableName][$sColumName];
-              $oldField = $aOldSchema[$sTableName][$sColumName];
-              //both are null, no change is required
-              if ( !isset($newField['Default']) && !isset($oldField['Default'])) $changeDefaultAttr = false;
-              //one of them is null, change IS required
-              if ( !isset($newField['Default']) && isset($oldField['Default']) && $oldField['Default']!= '')  $changeDefaultAttr = true;
-              if (  isset($newField['Default']) && !isset($oldField['Default'])) $changeDefaultAttr = true;
-              //both are defined and they are different.
-              if ( isset($newField['Default']) && isset($oldField['Default']) ) {
-                 if ( $newField['Default'] != $oldField['Default'] )
-                   $changeDefaultAttr = true;
-                 else
-                   $changeDefaultAttr = false;
-              }
-              //special cases
-              // BLOB and TEXT columns cannot have DEFAULT values.  http://dev.mysql.com/doc/refman/5.0/en/blob.html
-              if ( in_array(strtolower($newField['Type']), array('text','mediumtext') ) )
-                $changeDefaultAttr = false;
-
-              //#1067 - Invalid default value for datetime field
-              if ( in_array($newField['Type'], array('datetime')) && isset($newField['Default']) && $newField['Default']== '' )
-                $changeDefaultAttr = false;
-
-              //#1067 - Invalid default value for int field
-              if ( substr($newField['Type'], 0, 3 ) && isset($newField['Default']) && $newField['Default']== '' )
-                $changeDefaultAttr = false;
-
-              //if any difference exists, then insert the difference in aChanges
-              if ( $newField['Field']   != $oldField['Field'] ||
-                   $newField['Type']    != $oldField['Type'] ||
-                   $newField['Null']    != $oldField['Null'] ||
-                   $changeDefaultAttr ) {
-                if (!isset($aChanges['tablesToAlter'][$sTableName])) {
-                  $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
-                }
-                $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Field']   = $newField['Field'];
-                $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Type']    = $newField['Type'];
-                $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Null']    = $newField['Null'];
-                if ( isset($newField['Default']) )
-                  $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Default'] = $newField['Default'];
-                else
-                  $aChanges['tablesToAlter'][$sTableName]['CHANGE'][$sColumName]['Default'] = null;
-
-              }
-            }
-          } //only columns, no the indexes column
-        }//foreach $aColumns
-
-        //now check the indexes of table
-        if ( isset($aNewSchema[$sTableName]['INDEXES']) ) {
-          foreach ( $aNewSchema[$sTableName]['INDEXES'] as $indexName => $indexFields ) {
-            if (!isset( $aOldSchema[$sTableName]['INDEXES'][$indexName]) ) {
-              if (!isset($aChanges['tablesWithNewIndex'][$sTableName])) {
-                $aChanges['tablesWithNewIndex'][$sTableName] = array();
-              }
-              $aChanges['tablesWithNewIndex'][$sTableName][$indexName] = $indexFields;
-            }
-            else {
-              if ( $aOldSchema[$sTableName]['INDEXES'][$indexName] != $indexFields ) {
-                if (!isset($aChanges['tablesToAlterIndex'][$sTableName])) {
-                  $aChanges['tablesToAlterIndex'][$sTableName] = array();
-                }
-                $aChanges['tablesToAlterIndex'][$sTableName][$indexName] = $indexFields;
-              }
-            }
-          }
-        }
-      }  //for-else table exists
-    }  //for new schema
-    return $aChanges;
-  }
-
-  function repairSchema($checkOnly = false, $progress = true) {
+  public function repairSchema($checkOnly = false) {
     $dbInfo = $this->getDBInfo();
-    $DB_ADAPTER = $dbInfo["DB_ADAPTER"];
-    $DB_HOST = $dbInfo["DB_HOST"];
-    $DB_USER = $dbInfo["DB_USER"];
-    $DB_PASS = $dbInfo["DB_PASS"];
-    $DB_NAME = $dbInfo["DB_NAME"];
 
-    if (strcmp($DB_ADAPTER, "mysql") != 0) {
-      throw new Exception("Only MySQL is supported\n");
+    if (strcmp($dbInfo["DB_ADAPTER"], "mysql") != 0) {
+      throw new Exception("Only MySQL is supported");
     }
 
-    $currentSchema = $this->getSchemaFromFile(PATH_TRUNK . "workflow/engine/config/schema.xml", "mysql");
+    $currentSchema = System::getSchema();
     $workspaceSchema = $this->getSchema();
-    $changes = $this->getSchemaChanges($workspaceSchema, $currentSchema);
+    $changes = System::compareSchema($workspaceSchema, $currentSchema);
     $changed = (count($changes['tablesToAdd']) > 0 ||
                 count($changes['tablesToAlter']) > 0 ||
                 count($changes['tablesWithNewIndex']) > 0 ||
@@ -304,16 +311,12 @@ class workspaceTools {
         return $changed;
     }
 
-    $oDataBase = new database($DB_ADAPTER, $DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-    if ( !$oDataBase->isConnected() ) {
-      throw new Exception("Could not connect to the database");
-    }
+    $oDataBase = $this->getDatabase();
     $oDataBase->iFetchType = MYSQL_NUM;
 
     $oDataBase->logQuery ( count ($changes ) );
 
-    if ($progress)
-      echo "Adding " . count($changes['tablesToAdd']) . " tables\n";
+    $this->verbose( "Adding " . count($changes['tablesToAdd']) . " tables\n");
     foreach ($changes['tablesToAdd'] as $sTable => $aColumns) {
       $oDataBase->executeQuery($oDataBase->generateCreateTableSQL($sTable, $aColumns));
       if (isset($changes['tablesToAdd'][$sTable]['INDEXES'])) {
@@ -323,9 +326,7 @@ class workspaceTools {
       }
     }
 
-
-    if ($progress)
-      echo "Altering " . count($changes['tablesToAlter']) . " tables\n";
+    $this->verbose("Altering " . count($changes['tablesToAlter']) . " tables\n");
     foreach ($changes['tablesToAlter'] as $sTable => $aActions) {
       foreach ($aActions as $sAction => $aAction) {
         foreach ($aAction as $sColumn => $vData) {
@@ -344,26 +345,104 @@ class workspaceTools {
       }
     }
 
-
-    if ($progress)
-      echo "Adding indexes to " . count($changes['tablesWithNewIndex']) . " tables\n";
+    $this->verbose("Adding indexes to " . count($changes['tablesWithNewIndex']) . " tables\n");
     foreach ($changes['tablesWithNewIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
 
-
-    if ($progress)
-      echo "Altering indexes to " . count($changes['tablesWithNewIndex']) . " tables\n";
+    $this->verbose("Altering indexes to " . count($changes['tablesWithNewIndex']) . " tables\n");
     foreach ($changes['tablesToAlterIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateDropKeySQL($sTable, $sIndexName ));
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
-    $oDataBase->close();
+    $this->closeDatabase();
     return true;
+  }
+
+  public function getMetadata() {
+    $Fields = array_merge(System::getSysInfo(), $this->getDBInfo());
+    $Fields['WORKSPACE_NAME'] = $this->name;
+
+    if(isset($this->dbHost)) {
+
+      //TODO: This code stopped working with the refactoring
+      //require_once ("propel/Propel.php");
+      //G::LoadClass('dbConnections');
+      //$dbConns = new dbConnections('');
+      //$availdb = '';
+      //foreach( $dbConns->getDbServicesAvailables() as $key => $val ) {
+      //if(!empty($availdb))
+      //  $availdb .= ', ';
+      //  $availdb .= $val['name'];
+      //}
+
+      G::LoadClass('net');
+      $dbNetView = new NET($this->dbHost);
+      $dbNetView->loginDbServer($this->dbUser, $this->dbPass);
+      try {
+        $sMySQLVersion = $dbNetView->getDbServerVersion('mysql');
+      } catch( Exception $oException ) {
+        $sMySQLVersion = 'Unknown';
+      }
+
+      $Fields['DATABASE'] = $dbNetView->dbName($this->dbAdapter) . ' (Version ' . $sMySQLVersion . ')';
+      $Fields['DATABASE_SERVER'] = $this->dbHost;
+      $Fields['DATABASE_NAME'] = $this->dbName;
+      $Fields['AVAILABLE_DB'] = "Not defined";
+      //$Fields['AVAILABLE_DB'] = $availdb;
+    } else {
+      $Fields['DATABASE'] = "Not defined";
+      $Fields['DATABASE_SERVER'] = "Not defined";
+      $Fields['DATABASE_NAME'] = "Not defined";
+      $Fields['AVAILABLE_DB'] = "Not defined";
+    }
+
+    return $Fields;
+  }
+
+  public function printMetadata($printSysInfo = true) {
+    $fields = $this->getMetadata();
+
+    if ($printSysInfo) {
+      System::printSysInfo ();
+      echo "\n";
+    }
+
+    $wfDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_USER'] . ':' . $fields['DB_PASS'] . '@' . $fields['DB_HOST'] . '/' . $fields['DB_NAME'];
+    $rbDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_RBAC_USER'] . ':' . $fields['DB_RBAC_PASS'] . '@' . $fields['DB_RBAC_HOST'] . '/' . $fields['DB_RBAC_NAME'];
+    $rpDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_REPORT_USER'] . ':' . $fields['DB_REPORT_PASS'] . '@' . $fields['DB_REPORT_HOST'] . '/' . $fields['DB_REPORT_NAME'];
+
+    $info = array(
+        'Workspace Name'       => $fields['WORKSPACE_NAME'],
+        'Available Databases'  => $fields['AVAILABLE_DB'],
+        'Workflow Database'    => sprintf("%s://%s:%s@%s/%s", $fields['DB_ADAPTER'] , $fields['DB_USER'], $fields['DB_PASS'], $fields['DB_HOST'], $fields['DB_NAME']),
+        'RBAC Database'        => sprintf("%s://%s:%s@%s/%s", $fields['DB_ADAPTER'] , $fields['DB_RBAC_USER'], $fields['DB_RBAC_PASS'], $fields['DB_RBAC_HOST'], $fields['DB_RBAC_NAME']),
+        'Report Database'      => sprintf("%s://%s:%s@%s/%s", $fields['DB_ADAPTER'] , $fields['DB_REPORT_USER'], $fields['DB_REPORT_PASS'], $fields['DB_REPORT_HOST'], $fields['DB_REPORT_NAME']),
+        'MySql Version'        => $fields['DATABASE'],
+    );
+
+    foreach ($info as $k => $v) {
+      if (is_numeric($k)) $k = "";
+      printf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO'));
+    }
+  }
+
+  public function exportDatabase($path) {
+    $dbInfo = $this->getDBInfo();
+    $databases = array("wf", "rp", "rb");
+    foreach ($databases as $db) {
+      $dbInfo = $this->getDBCredentials($db);
+      $oDbMaintainer = new DataBaseMaintenance($dbInfo["host"], $dbInfo["user"],
+        $dbInfo["pass"]);
+      $oDbMaintainer->connect($dbInfo["name"]);
+      $oDbMaintainer->setTempDir($path . $dbInfo["name"] . "/");
+      $oDbMaintainer->backupDataBaseSchema($oDbMaintainer->getTempDir() . $dbInfo["name"] . ".sql");
+      $oDbMaintainer->backupSqlData();
+    }
   }
 
 }
