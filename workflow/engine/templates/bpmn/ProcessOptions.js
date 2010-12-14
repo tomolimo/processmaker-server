@@ -12,7 +12,6 @@ ProcessOptions.prototype.type="ProcessOptions";
 ProcessOptions.prototype.addDynaform= function(_5625)
 {
   var pro_uid = workflow.getUrlVars();
-  //var taskId  = workflow.currentSelection.id;
 
   var dynaFields = Ext.data.Record.create([
             { name: 'DYN_UID', type: 'string'},
@@ -200,6 +199,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
         width     : 550,
+        autoHeight: true,
         items:
                 [{
                     xtype: 'fieldset',
@@ -339,8 +339,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             ds: tablesFieldsStore,
                             cm: addTableColumns,
                             width: 550,
-                            height: 300,
-                            //autoHeight: true,
+                            //height: 300,
+                            autoHeight: true,
                             plugins: [editor],
                             //loadMask    : true,
                             loadingText : 'Loading...',
@@ -373,7 +373,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         maximizable: true,
         width: 550,
         //autoHeight: true,
-        height: 400,
+        //height: 500,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -441,7 +441,6 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
   var pro_uid = workflow.getUrlVars();
-  //var taskId  = workflow.currentSelection.id;
 
   var dynaFields = Ext.data.Record.create([
             {
@@ -466,9 +465,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
     saveText: 'Update'
     });
 
-            
-  
-    var inputDocStore = new Ext.data.JsonStore({
+  var inputDocStore = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
             idProperty   : 'gridIndex',
@@ -478,9 +475,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
               url: 'proxyInputDocument?pid='+pro_uid
             })
           });
-    inputDocStore.load();
+  inputDocStore.load();
 
-    var btnRemove = new Ext.Button({
+  var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete Input Document',
             iconCls: 'application_delete',
@@ -514,7 +511,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             }
         });
 
-        var btnAdd = new Ext.Button({
+  var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'New Input Document',
             iconCls: 'application_add',
@@ -523,13 +520,12 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             }
         });
 
-    var inputDocForm = new Ext.FormPanel({
-        
+  var inputDocForm = new Ext.FormPanel({
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
         width     : 500,
-        items:
-                [{
+        autoHeight: true,
+        items:[{
                     xtype: 'fieldset',
                     layout: 'form',
                     border:true,
@@ -655,35 +651,32 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     border:false,
                     width: 550,
                     items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Tags',
-                            name: 'INP_DOC_TAGS',
-                            anchor:'100%'
-                         }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin'
-                            //anchor:'15%'
-                        }]
-                      }]
-                    }]
+                            columnWidth:.6,
+                            layout: 'form',
+                            border:false,
+                            items: [{
+                                xtype: 'textfield',
+                                fieldLabel: 'Tags',
+                                name: 'INP_DOC_TAGS',
+                                anchor:'100%'
+                             }]
+                          },{
+                            columnWidth:.3,
+                            layout: 'form',
+                            border:false,
+                            items: [{
+                                xtype:'button',
+                                title: ' ',
+                                text: '@@',
+                                name: 'selectorigin'
+                                //anchor:'15%'
+                            }]
+                          }]
                   }]
-                });
+               }]
+         });
 
-
-                         
-
-       var inputDocColumns = new Ext.grid.ColumnModel({
+  var inputDocColumns = new Ext.grid.ColumnModel({
             columns: [
                 {
                     id: 'INP_DOC_TITLE',
@@ -729,7 +722,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
    });
 
  
- var gridWindow = new Ext.Window({
+  var gridWindow = new Ext.Window({
         title: 'Input Document',
         collapsible: false,
         maximizable: false,
@@ -744,7 +737,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         buttonAlign: 'center'
           });
 
-    var newIOWindow = new Ext.Window({
+  var newIOWindow = new Ext.Window({
         title: 'Input Document',
         collapsible: false,
         maximizable: false,
@@ -826,7 +819,6 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 ProcessOptions.prototype.addOutputDoc= function(_5625)
 {
   var pro_uid = workflow.getUrlVars();
-  //var taskId  = workflow.currentSelection.id;
 
   var dynaFields = Ext.data.Record.create([
             {
@@ -847,13 +839,13 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             }
             ]);
 
-            var editor = new Ext.ux.grid.RowEditor({
+  var editor = new Ext.ux.grid.RowEditor({
             saveText: 'Update'
             });
 
 
 
-    var outputDocStore = new Ext.data.JsonStore({
+  var outputDocStore = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
             idProperty   : 'gridIndex',
@@ -863,9 +855,9 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
               url: 'proxyOutputDocument?pid='+pro_uid
             })
           });
- outputDocStore.load();
+  outputDocStore.load();
 
- var btnRemove = new Ext.Button({
+  var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete Output Document',
             iconCls: 'application_delete',
@@ -900,7 +892,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         });
 
 
-         var btnAdd = new Ext.Button({
+  var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'New Output Document',
             iconCls: 'application_add',
@@ -909,12 +901,12 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             }
         });
 
-var tb = new Ext.Toolbar({
+  var tb = new Ext.Toolbar({
             items: [btnAdd, btnRemove]
        });
 
 
- var outputDocColumns = new Ext.grid.ColumnModel({
+  var outputDocColumns = new Ext.grid.ColumnModel({
             columns: [
                 {
                     id: 'OUT_DOC_TITLE',
@@ -937,7 +929,7 @@ var tb = new Ext.Toolbar({
         });
 
 
- var outputDocGrid = new Ext.grid.GridPanel({
+  var outputDocGrid = new Ext.grid.GridPanel({
         store       : outputDocStore,
         id          : 'mygrid',
         loadMask    : true,
@@ -955,7 +947,7 @@ var tb = new Ext.Toolbar({
         viewConfig  : {forceFit: true}
    });
 
-   var outputDocForm = new Ext.FormPanel({
+  var outputDocForm = new Ext.FormPanel({
 
         labelWidth      : 100,
         bodyStyle       :'padding:5px 5px 0',
@@ -1175,12 +1167,9 @@ var tb = new Ext.Toolbar({
                         }]
                      }]
                   }]
-                });
+       });
 
-
-
-
-    var newOPWindow = new Ext.Window({
+  var newOPWindow = new Ext.Window({
         title       : 'Output Document',
         collapsible : false,
         maximizable : false,
@@ -1244,9 +1233,6 @@ var tb = new Ext.Toolbar({
                   }
                 });
 
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-
             newOPWindow.close();
             outputDocStore.reload();
           }
@@ -1273,9 +1259,8 @@ var tb = new Ext.Toolbar({
         bodyStyle   : 'padding:5px;',
         items       : outputDocGrid,
         buttonAlign : 'center'
-          });
-
-        gridWindow.show();
+     });
+ gridWindow.show();
    
 }
 
