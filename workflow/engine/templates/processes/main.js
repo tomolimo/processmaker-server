@@ -166,20 +166,20 @@ Ext.onReady(function(){
     tbar:[
       {
         text:TRANSLATIONS.ID_NEW,
-        iconCls: 'silk-add',
-        icon: '/images/addc.png',
+        iconCls: 'button_menu_ext ss_sprite ss_add',
+        //icon: '/images/addc.png',
         handler: newProcess
       },
     	'-'  
       ,{
         text:TRANSLATIONS.ID_EDIT,
-        iconCls: 'silk-add',
-        icon: '/images/edit.gif',
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        //icon: '/images/edit.gif',
         handler: editProcess
       },{
         text:TRANSLATIONS.ID_EDIT,
-        iconCls: 'silk-add',
-        icon: '/images/edit.gif',
+        iconCls: 'button_menu_ext',
+        icon: '/images/pencil_beta.png',
         handler: editNewProcess
       },{
         text:TRANSLATIONS.ID_STATUS,
@@ -190,8 +190,8 @@ Ext.onReady(function(){
         disabled:true
       },{
         text:TRANSLATIONS.ID_DELETE,
-        iconCls: 'silk-add',
-        icon: '/images/delete-16x16.gif',
+        iconCls: 'button_menu_ext ss_sprite  ss_delete',
+        //icon: '/images/delete-16x16.gif',
         handler:deleteProcess
       },{
         xtype: 'tbseparator'
@@ -211,8 +211,8 @@ Ext.onReady(function(){
         icon: '/images/export.png',
       },*/{
         text:TRANSLATIONS.ID_BROWSE_LIBRARY,
-        iconCls: 'silk-add',
-        icon: '/images/icon-pmwebservices.png',
+        iconCls: 'button_menu_ext ss_sprite  ss_world',
+        //icon: '/images/icon-pmwebservices.png',
         handler: browseLibrary
       },
       {
