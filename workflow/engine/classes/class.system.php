@@ -206,6 +206,8 @@ class System {
   }
 
   public static function verifyChecksum() {
+    if (!file_exists(PATH_TRUNK . "checksum.txt"))
+      return false;
     $filesChecksum = System::getFilesChecksum(PATH_TRUNK);
     $lines = explode("\n", file_get_contents(PATH_TRUNK . "checksum.txt"));
     $originalChecksum = array();
