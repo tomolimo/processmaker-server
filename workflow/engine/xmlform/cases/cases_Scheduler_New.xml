@@ -450,13 +450,18 @@ leimnud.event.add(getField('SCH_START_TIME'), 'change', function() {
 
     if(parties[0]>23){
         msgBox('The time can not be increased to 23:59', 'alert');
-        getField('SCH_REPEAT_UNTIL').value='';
-        getField('SCH_REPEAT_UNTIL').focus();
+        getField('SCH_START_TIME').value='';
+        //getField('SCH_REPEAT_UNTIL').value='';
+        //getField('SCH_REPEAT_UNTIL').focus();
+        getField('SAVE').focus();
+
     } 
     if(parties[1]>59){ 
         msgBox('The minutes can not be greater than 59', 'alert');
-        getField('SCH_REPEAT_UNTIL').value='';
-        getField('SCH_REPEAT_UNTIL').focus();
+        getField('SCH_START_TIME').value='';
+        //getField('SCH_REPEAT_UNTIL').value='';
+        //getField('SCH_REPEAT_UNTIL').focus();
+        getField('SAVE').focus();
     }
 });
 
@@ -676,6 +681,7 @@ function loadTasksDropdown(process,user_uid){
     oRPCTasks.callback = function(rpc){
        document.getElementById("taskListDropdown").innerHTML = rpc.xmlhttp.responseText;
        // if the user is assigned to the task the default task value will be diferent than char
+
        if (getField('TAS_UID').value!='char'){
            showProperties();
        } else {
