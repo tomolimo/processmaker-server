@@ -41,6 +41,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
        if(isset($aData['FIELDS']))
        {
            //$test = '{"1":{"TESTID":"1223","PRO_VARIABLE":"saaa"},"2":{"TESTID":"420","PRO_VARIABLE":"sas"}}';
+           //$aData['FIELDS'] = (array)$oJSON->decode($test);
            $oData = $oJSON->decode($_POST['FIELDS']);
            $aData['FIELDS'] = '';
            for($i=0;$i<count($oData);$i++)

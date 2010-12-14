@@ -44,7 +44,10 @@ try {
   require_once 'classes/model/ObjectPermission.php';
   G::LoadClass( 'processMap' );
   
-  $sfunction =$_POST['function'];
+  if(isset($_POST['function']))
+    $sfunction =$_POST['function'];
+  else
+    $sfunction =$_POST['functions'];
   
   switch($sfunction){
   	case 'getRelationInfDoc': 

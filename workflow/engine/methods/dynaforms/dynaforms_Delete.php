@@ -34,7 +34,10 @@ require_once 'classes/model/CaseTrackerObject.php';
 In here we are deleting all datas about this Dynaform into DB
 */
 
-$sfunction =$_POST['function'];
+if(isset($_POST['function']))
+    $sfunction =$_POST['function'];
+else
+    $sfunction =$_POST['functions'];
   
   switch($sfunction){
 

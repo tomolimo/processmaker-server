@@ -52,21 +52,59 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                           url   : '../dynaforms/dynaforms_Delete.php',
                           method: 'POST',
                           params: {
+                                functions      : 'getDynaformAssign',
+                                PRO_UID        : pro_uid,
                                 DYN_UID        : dynUID
                           },
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
+                             //First check whether selected Dynaform is assigned to a task steps or not.
+                            //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
+                             if(response.responseText == "")
+                              {
+                               Ext.Ajax.request({
+                                  url   : '../dynaforms/dynaforms_Delete.php',
+                                  method: 'POST',
+                                  params: {
+                                        functions      : 'getRelationInfDynaform',
+                                        DYN_UID        : dynUID
+                                  },
+                                  success: function(response) {
+                                    //Second check whether selected Dynaform is assigned to a processes supervisors or not.
+                                    //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
+                                    if(response.responseText == "")
+                                      {
+                                         Ext.Ajax.request({
+                                          url   : '../dynaforms/dynaforms_Delete.php',
+                                          method: 'POST',
+                                          params: {
+                                                functions      : 'deleteDynaform',
+                                                DYN_UID        : dynUID
+                                          },
+                                          success: function(response) {
+                                            Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
+                                            //Secondly deleting from Grid
+                                            taskDynaform.remove(r);
+                                            //Reloading store after deleting dynaform
+                                            taskDynaform.reload();
+                                          }
+                                        });
+                                      }
+                                     else
+                                       Ext.MessageBox.alert ('Status','Dynaform assigned to a process supervisors cannot be deleted.');
+                                  }
+                                });
+                              }
+                              else
+                                Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
                           }
-                        });
+                     });
                     }
-
-                    //Secondly deleting from Grid
-                    taskDynaform.remove(r);
+                    
                 }
             }
         });
 
-        var tb = new Ext.Toolbar({
+  var tb = new Ext.Toolbar({
             items: [btnAdd, btnRemove]
         });
 
@@ -497,16 +535,35 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                           url   : '../inputdocs/inputdocs_Delete.php',
                           method: 'POST',
                           params: {
+                                functions          : 'getRelationInfDoc',
                                 INP_DOC_UID        : inputDocUID
                           },
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Input document has been removed successfully.');
+                            //First check whether selected input document is assigned to a process supervisor or not.
+                            //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
+                            if(response.responseText == "")
+                             {
+                                Ext.Ajax.request({
+                                  url   : '../inputdocs/inputdocs_Delete.php',
+                                  method: 'POST',
+                                  params: {
+                                        functions          : 'deleteInputDocument',
+                                        INP_DOC_UID        : inputDocUID
+                                  },
+                                  success: function(response) {
+                                    Ext.MessageBox.alert ('Status','Input document has been removed successfully.');
+                                    //Secondly deleting from Grid
+                                    inputDocStore.remove(r);
+                                    //reloading store after deleting input document
+                                    inputDocStore.reload();
+                                  }
+                                });
+                             }
+                             else
+                               Ext.MessageBox.alert ('Status','Input document assigned to a process supervisors cannot be deleted.');
                           }
                         });
                     }
-
-                    //Secondly deleting from Grid
-                    inputDocStore.remove(r);
                 }
             }
         });
@@ -881,12 +938,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                           },
                           success: function(response) {
                             Ext.MessageBox.alert ('Status','Output document has been removed successfully.');
+
+                            //Secondly deleting from Grid
+                            outputDocStore.remove(r);
+                            //reloading store after deleting output document
+                            outputDocStore.reload();
                           }
                         });
                     }
-
-                    //Secondly deleting from Grid
-                    outputDocStore.remove(r);
                 }
             }
         });
@@ -1214,24 +1273,43 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                   url   : '../outputdocs/outputdocs_Save.php',
                   method: 'POST',
                   params:{
-                      OUT_DOC_TITLE            :sDocTitle,
-                      OUT_DOC_FILENAME         : sFilename,
-                      OUT_DOC_DESCRIPTION      : sDesc,
-                      OUT_DOC_LANDSCAPE        : sLandscape,
-                      OUT_DOC_MEDIA            : sMedia,
-                      OUT_DOC_LEFT_MARGIN      : sLeftMargin,
-                      OUT_DOC_RIGHT_MARGIN     : sRightMargin,
-                      OUT_DOC_TOP_MARGIN       : sTopMargin,
-                      OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
-                      OUT_DOC_GENERATE         : sGenerated,
-                      OUT_DOC_VERSIONING       : sVersioning,
-                      OUT_DOC_DESTINATION_PATH : sDestPath,
-                      OUT_DOC_TAGS             : sTags
+                      functions                : 'lookForNameOutput',
+                      NAMEOUTPUT               : sDocTitle,
+                      proUid                   : pro_uid
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Input document has been created successfully.');
+                    if(response.responseText == "1")
+                    {
+                      Ext.Ajax.request({
+                          url   : '../outputdocs/outputdocs_Save.php',
+                          method: 'POST',
+                          params:{
+                              OUT_DOC_UID              : '',
+                              OUT_DOC_TITLE            : sDocTitle,
+                              OUT_DOC_FILENAME         : sFilename,
+                              OUT_DOC_DESCRIPTION      : sDesc,
+                              OUT_DOC_LANDSCAPE        : sLandscape,
+                              OUT_DOC_MEDIA            : sMedia,
+                              OUT_DOC_LEFT_MARGIN      : sLeftMargin,
+                              OUT_DOC_RIGHT_MARGIN     : sRightMargin,
+                              OUT_DOC_TOP_MARGIN       : sTopMargin,
+                              OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
+                              OUT_DOC_GENERATE         : sGenerated,
+                              OUT_DOC_VERSIONING       : sVersioning,
+                              OUT_DOC_DESTINATION_PATH : sDestPath,
+                              OUT_DOC_TAGS             : sTags,
+                              PRO_UID                  : pro_uid
+                          },
+                          success: function(response) {
+                            Ext.MessageBox.alert ('Status','Output document has been created successfully.');
+                          }
+                      });
+                      
                   }
-                });
+                  else
+                      Ext.MessageBox.alert ('Status','Output document title exist with same name.');
+                }
+        });
 
             newOPWindow.close();
             outputDocStore.reload();

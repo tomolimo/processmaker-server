@@ -101,14 +101,15 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                           },
                           success: function(response) {
                             Ext.MessageBox.alert ('Status','Step has been removed successfully.');
+                            //Secondly deleting from Grid
+                            taskSteps.remove(r);
+                            //Reloading store after removing steps
+                            availableSteps.reload();
                           }
                         });
                     }
-
-                    //Secondly deleting from Grid
-                    taskSteps.remove(r);
-                    //Reloading store after removing steps
-                    availableSteps.reload();
+                    else
+                       taskSteps.remove(r);
                 }
             }
         });
@@ -524,14 +525,16 @@ TaskContext.prototype.editUsers= function(_5625)
                           },*/
                           success: function(response) {
                               Ext.MessageBox.alert ('Status','User has been removed successfully.');
+                              //Secondly deleting from Grid
+                              taskUsers.remove(r);
+
+                              //Reloading available user store
+                              storeUsers.reload();
                           }
                         });
                      }
-                    //Secondly deleting from Grid
-                    taskUsers.remove(r);
-
-                    //Reloading available user store
-                    storeUsers.reload();
+                     else
+                         taskUsers.remove(r);
                 }
             }
         });
@@ -1547,14 +1550,16 @@ TaskContext.prototype.stepTriggers = function(_5625)
                       url   : '../steps/steps_Ajax.php' + urlparams,
                       success: function(response) {
                         Ext.MessageBox.alert ('Status','Trigger has been removed successfully.');
+
+                        //Secondly deleting from Grid
+                        stepsTriggers.remove(r);
+
+                        availableTriggers.reload();
                       }
                     });
                 }
-
-                //Secondly deleting from Grid
-                stepsTriggers.remove(r);
-
-                availableTriggers.reload();
+                else
+                    stepsTriggers.remove(r);
             }
         }
     });

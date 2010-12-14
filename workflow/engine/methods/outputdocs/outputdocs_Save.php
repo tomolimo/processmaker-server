@@ -36,13 +36,16 @@ try {
   	  die;
   	break;
   }
+
+  if(isset($_POST['function']))
+    $sfunction =$_POST['function'];
+  else
+    $sfunction =$_POST['functions'];
+   
+  //if(isset($_POST['function']) && $_POST['function']=='lookForNameOutput'){
+  if($sfunction=='lookForNameOutput'){
   
-  
-  //$sfunction =$_POST['function']; 
-  
-  if(isset($_POST['function']) && $_POST['function']=='lookForNameOutput'){
-  
-	require_once('classes/model/Content.php');
+  require_once('classes/model/Content.php');
   require_once ( "classes/model/OutputDocument.php" );
   
   $snameInput=urldecode($_POST['NAMEOUTPUT']);
@@ -80,28 +83,33 @@ try {
     
     $oOutputDocument = new OutputDocument();
 
-    if ($_POST['form']['OUT_DOC_UID'] == '') {
-      if ((isset($_POST['form']['OUT_DOC_TYPE']))&&( $_POST['form']['OUT_DOC_TYPE'] == 'JRXML' )) {
-        $dynaformUid = $_POST['form']['DYN_UID'];
+    if(isset($_POST['form']))
+      $aData = $_POST['form'];  //For old process map form
+    else
+      $aData = $_POST;         //For Extjs (Since we are not using form in ExtJS)
 
-        $outDocUid = $oOutputDocument->create($_POST['form']);
+    if ($aData['OUT_DOC_UID'] == '') {
+      if ((isset($aData['OUT_DOC_TYPE']))&&( $aData['OUT_DOC_TYPE'] == 'JRXML' )) {
+        $dynaformUid = $aData['DYN_UID'];
+
+        $outDocUid = $oOutputDocument->create($aData);
         G::LoadClass ('javaBridgePM');
         $jbpm = new JavaBridgePM ();
         print $jbpm->generateJrxmlFromDynaform ( $outDocUid, $dynaformUid, 'classic' );
 
       }
       else {
-        $outDocUid = $oOutputDocument->create($_POST['form']);
+        $outDocUid = $oOutputDocument->create($aData);
       }
     }
     else {
-      $oOutputDocument->update($_POST['form']);
+      $oOutputDocument->update($aData);
     }
     
-    if( isset($_POST['form']['PRO_UID']) ){
+    if( isset($aData['PRO_UID']) ){
       //refresh dbarray with the last change in outputDocument
       $oMap = new processMap();
-      $oCriteria = $oMap->getOutputDocumentsCriteria($_POST['form']['PRO_UID']);
+      $oCriteria = $oMap->getOutputDocumentsCriteria($aData['PRO_UID']);
     }
   }
 }
