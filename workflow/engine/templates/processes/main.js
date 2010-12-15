@@ -177,7 +177,7 @@ Ext.onReady(function(){
         //icon: '/images/edit.gif',
         handler: editProcess
       },{
-        text:TRANSLATIONS.ID_EDIT,
+        text:TRANSLATIONS.ID_EDIT_BPMN,
         iconCls: 'button_menu_ext',
         icon: '/images/pencil_beta.png',
         handler: editNewProcess
