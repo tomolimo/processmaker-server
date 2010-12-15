@@ -581,6 +581,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
         width     : 500,
+        height    : 380,
         autoHeight: true,
         items:[{
                     xtype: 'fieldset',
@@ -676,37 +677,33 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                             {name : 'Yes',   value: '1'},
                                             ]})
                          }, {
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 550,
-                    items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Destination Path',
-                            name: 'INP_DOC_DESTINATION_PATH',
-                            anchor:'100%'
-                         }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin'
-                            //anchor:'15%'
+                            layout:'column',
+                            border:false,
+                            items:[{
+                                columnWidth:.6,
+                                layout: 'form',
+                                border:false,
+                                items: [{
+                                    xtype: 'textfield',
+                                    fieldLabel: 'Destination Path',
+                                    name: 'INP_DOC_DESTINATION_PATH',
+                                    anchor:'100%'
+                                 }]
+                        },{
+                               columnWidth:.4,
+                               layout: 'form',
+                               border:false,
+                               items: [{
+                                   xtype:'button',
+                                   title: ' ',
+                                   text: '@@',
+                                   name: 'selectorigin'
+                                   //anchor:'15%'
                         }]
                     }]
                 },{
-                    xtype: 'fieldset',
                     layout:'column',
                     border:false,
-                    width: 550,
                     items:[{
                             columnWidth:.6,
                             layout: 'form',
@@ -718,7 +715,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 anchor:'100%'
                              }]
                           },{
-                            columnWidth:.3,
+                            columnWidth:.4,
                             layout: 'form',
                             border:false,
                             items: [{
@@ -735,6 +732,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
   var inputDocColumns = new Ext.grid.ColumnModel({
             columns: [
+                new Ext.grid.RowNumberer(),
                 {
                     id: 'INP_DOC_TITLE',
                     header: 'Title',
@@ -799,7 +797,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         collapsible: false,
         maximizable: false,
         width: 550,
-        height: 550,
+        height: 400,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -960,13 +958,34 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             }
         });
 
+  var btnEdit = new Ext.Button({
+            id: 'btnEdit',
+            text: 'Edit',
+            iconCls: 'application_add',
+            handler: function (s) {
+                outputDocGrid.stopEditing();
+                var selectedRow = outputDocGrid.getSelectionModel().getSelections();
+                var outDocUID   = selectedRow[0].data.OUT_DOC_UID;
+            }
+        });
+
+  var btnProperties = new Ext.Button({
+            id: 'btnProperties',
+            text: 'Properties',
+            iconCls: 'application_add',
+            handler: function (s) {
+                outputDocGrid.stopEditing();
+                var selectedRow = outputDocGrid.getSelectionModel().getSelections();
+                var outDocUID   = selectedRow.data[0].OUT_DOC_UID;
+            }
+        });
   var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove]
+            items: [btnAdd, btnRemove,btnEdit,btnProperties]
        });
-
-
+    
   var outputDocColumns = new Ext.grid.ColumnModel({
             columns: [
+                new Ext.grid.RowNumberer(),
                 {
                     id: 'OUT_DOC_TITLE',
                     header: 'Title',
@@ -978,12 +997,21 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     })
                 },
                 {
+                    id: 'OUT_DOC_TYPE',
+                    header: 'Type',
+                    dataIndex: 'OUT_DOC_TYPE',
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
+                }/*,
+                {
                     sortable: false,
                     renderer: function(val, meta, record)
                        {
                             return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
                        }
-                }
+                }*/
                 ]
         });
 
@@ -1007,7 +1035,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
    });
 
   var outputDocForm = new Ext.FormPanel({
-
+        monitorValid    :true,
         labelWidth      : 100,
         bodyStyle       :'padding:5px 5px 0',
         defaults        :{ autoScroll:true },
@@ -1023,34 +1051,35 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     items       :[{
                     xtype       : 'textfield',
                     fieldLabel  : 'Title',
-                    allowBlank  : true,
+                    allowBlank  : false,
+                    blankText   : 'Enter Title of Output Document',
                     name        : 'OUT_DOC_TITLE'
                },{
-                    xtype: 'fieldset',
+                    //xtype: 'fieldset',
                     layout:'column',
                     border:false,
-                    allowBlank: true,
-                    width: 550,
                     items:[{
-                    columnWidth:.6,
-                    layout: 'form',
-                    border:false,
-                    items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Filename generated',
-                    name: 'OUT_DOC_FILENAME',
-                    anchor:'100%'
+                        columnWidth:.6,
+                        layout: 'form',
+                        border:false,
+                        items: [{
+                            xtype       : 'textfield',
+                            fieldLabel  : 'Filename generated',
+                            name        : 'OUT_DOC_FILENAME',
+                            allowBlank  : false,
+                            blankText   : 'Select Filename generated',
+                            anchor      : '100%'
                          }]
                 },{
-                    columnWidth:.3,
+                    columnWidth:.4,
                     layout: 'form',
                     border:false,
                     items: [{
-                    xtype:'button',
-                    title: ' ',
-                    text: '@@',
-                    name: 'selectorigin'
-                    //anchor:'15%'
+                            xtype:'button',
+                            title: ' ',
+                            text: '@@',
+                            name: 'selectorigin'
+                            //anchor:'95%'
                         }]
                     }]
                 },{
@@ -1058,7 +1087,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     fieldLabel      : 'Description',
                     name            : 'OUT_DOC_DESCRIPTION',
                     height          : 120,
-                    width           : 350
+                    width           : 280
                 },{
                     width           :150,
                     xtype           :'combo',
@@ -1069,14 +1098,13 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     forceSelection  : true,
                     name            :'OUT_DOC_LANDSCAPE',
                     displayField    :'name',
-                    value           :'Digital',
+                    value           :'Portrait',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                                                         fields : ['name', 'value'],
                                                         data   : [
                                                         {name : 'Portrait',   value: '0'},
                                                         {name : 'Landscape',   value: '1'}]})
-                           
                 },{
                     width           :150,
                     xtype           :'combo',
@@ -1087,7 +1115,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     forceSelection  : true,
                     name            :'OUT_DOC_MEDIA',
                     displayField    :'name',
-                    value           :'Digital',
+                    value           :'Letter',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                                                             fields : ['name', 'value'],
@@ -1111,28 +1139,25 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                                             {name : 'A10',   value: 'A10'},
                                                             {name : 'Screenshot640',   value: 'Screenshot640'},
                                                             {name : 'Screenshot800',   value: 'Screenshot800'},
-                                                            {name : 'Screenshot1024',   value: 'Screenshot1024'}]})
-                           
+                                                            {name : 'Screenshot1024',   value: 'Screenshot1024'}
+                                                           ]
+                                                       })
                 },{
-                    xtype       : 'textfield',
+                    xtype       : 'numberfield',
                     fieldLabel  : 'Left Margin',
-                    // allowBlank: true,
                     name        : 'OUT_DOC_LEFT_MARGIN'
                 },{
-                    xtype       : 'textfield',
+                    xtype       : 'numberfield',
                     fieldLabel  : 'Right Margin',
-                    // allowBlank: true,
                     name        : 'OUT_DOC_RIGHT_MARGIN'
                 },{
-                    xtype       : 'textfield',
+                    xtype       : 'numberfield',
                     fieldLabel  : 'Top Margin',
-                    // allowBlank: true,
                     name        : 'OUT_DOC_TOP_MARGIN'
                 },{
-                            xtype     : 'textfield',
-                            fieldLabel: 'Bottom Margin',
-                           // allowBlank: true,
-                            name      : 'OUT_DOC_BOTTOM_MARGIN'
+                    xtype       : 'numberfield',
+                    fieldLabel  : 'Bottom Margin',
+                    name        : 'OUT_DOC_BOTTOM_MARGIN'
                 },{
                     width           :150,
                     xtype           :'combo',
@@ -1143,7 +1168,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     forceSelection  :true,
                     name            :'OUT_DOC_GENERATE',
                     displayField    :'name',
-                    value           :'Digital',
+                    value           :'Doc',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                     fields          :['name', 'value'],
@@ -1161,7 +1186,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     forceSelection  :true,
                     name            :'OUT_DOC_VERSIONING',
                     displayField    :'name',
-                    value           :'Digital',
+                    value           :'NO',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                     fields          : ['name', 'value'],
@@ -1169,81 +1194,60 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                     {name : 'NO',   value: '0'},
                                     {name : 'YES',   value: '1'}]})
                 },{
-                    xtype       : 'fieldset',
                     layout      :'column',
                     border      :false,
-                    allowBlank  : true,
-                    width       : 550,
                     items       :[{
                     columnWidth :.6,
                     layout      : 'form',
                     border      :false,
                     items       : [{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Destination Path',
-                    name        : 'OUT_DOC_DESTINATION_PATH',
-                    anchor      :'100%'
+                            xtype       : 'textfield',
+                            fieldLabel  : 'Destination Path',
+                            name        : 'OUT_DOC_DESTINATION_PATH',
+                            anchor      :'100%'
                     }]
                 },{
-                    columnWidth     :.3,
+                    columnWidth     :.4,
                     layout          : 'form',
                     border          :false,
                     items           : [{
-                    xtype           :'button',
-                    title           : ' ',
-                    text            : '@@',
-                    name            : 'selectorigin'
-                  //anchor          :'15%'
+                            xtype           :'button',
+                            title           : ' ',
+                            text            : '@@',
+                            name            : 'selectorigin'
+                          //anchor          :'15%'
                         }]
                     }]
                 },{
-                    xtype       : 'fieldset',
                     layout      :'column',
                     border      :false,
-                    allowBlank  : true,
-                    width       : 550,
                     items       :[{
-                    columnWidth :.6,
-                    layout      : 'form',
-                    border      :false,
-                    items       : [{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Tags',
-                    name        : 'OUT_DOC_TAGS',
-                    anchor      :'100%'
-                    }]
-                    },{
-                        columnWidth :.3,
+                        columnWidth :.6,
                         layout      : 'form',
                         border      :false,
                         items       : [{
-                        xtype       :'button',
-                        title       : ' ',
-                        text        : '@@',
-                        name        : 'selectorigin'
-                      //anchor      :'15%'
+                        xtype       : 'textfield',
+                        fieldLabel  : 'Tags',
+                        name        : 'OUT_DOC_TAGS',
+                        anchor      :'100%'
+                        }]
+                    },{
+                        columnWidth :.4,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                                xtype       :'button',
+                                title       : ' ',
+                                text        : '@@',
+                                name        : 'selectorigin'
+                              //anchor      :'15%'
                             }]
                         }]
                      }]
-                  }]
-       });
-
-  var newOPWindow = new Ext.Window({
-        title       : 'Output Document',
-        collapsible : false,
-        maximizable : false,
-        width       : 550,
-        defaults    :{ autoScroll:true },
-        height      : 550,
-        minWidth    : 200,
-        minHeight   : 150,
-        layout      : 'fit',
-        plain       : true,
-        bodyStyle   : 'padding:5px;',
-        items       : outputDocForm,
-        buttonAlign : 'center',
-        buttons     : [{
+                  }],
+     buttons     : [{
         text        : 'Save',
+        formBind    :true,
         handler     : function(){
                 var getForm   = outputDocForm.getForm().getValues();
 
@@ -1251,21 +1255,21 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 var sFilename     = getForm.OUT_DOC_FILENAME;
                 var sDesc         = getForm.OUT_DOC_DESCRIPTION;
                 var sLandscape    = getForm.OUT_DOC_LANDSCAPE;
-                    if(getForm.OUT_DOC_LANDSCAPE == 'Portrait')
-                        getForm.OUT_DOC_LANDSCAPE=0;
-                    if(getForm.OUT_DOC_LANDSCAPE == 'Landscape')
-                        getForm.OUT_DOC_LANDSCAPE=1;
+                if(getForm.OUT_DOC_LANDSCAPE == 'Portrait')
+                        sLandscape=0;
+                if(getForm.OUT_DOC_LANDSCAPE == 'Landscape')
+                        sLandscape=1;
                 var sMedia        = getForm.OUT_DOC_MEDIA;
                 var sLeftMargin   = getForm.OUT_DOC_LEFT_MARGIN;
                 var sRightMargin  = getForm.OUT_DOC_RIGHT_MARGIN;
                 var sTopMargin    = getForm.OUT_DOC_TOP_MARGIN;
                 var sBottomMargin = getForm.OUT_DOC_BOTTOM_MARGIN;
-                var sGenerated                   = getForm.OUT_DOC_GENERATE;
-                var sVersioning              = getForm.OUT_DOC_VERSIONING;
-                    if(getForm.OUT_DOC_VERSIONING == 'No')
-                        getForm.OUT_DOC_VERSIONING=0;
-                    if(getForm.OUT_DOC_VERSIONING == 'Yes')
-                        getForm.OUT_DOC_VERSIONING=1;
+                var sGenerated    = getForm.OUT_DOC_GENERATE;
+                var sVersioning   = getForm.OUT_DOC_VERSIONING;
+                if(getForm.OUT_DOC_VERSIONING == 'NO')
+                        sVersioning=0;
+                if(getForm.OUT_DOC_VERSIONING == 'YES')
+                        sVersioning=1;
                 var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
                 var sTags         = getForm.OUT_DOC_TAGS;
 
@@ -1284,6 +1288,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                           url   : '../outputdocs/outputdocs_Save.php',
                           method: 'POST',
                           params:{
+                              functions                : '',
                               OUT_DOC_UID              : '',
                               OUT_DOC_TITLE            : sDocTitle,
                               OUT_DOC_FILENAME         : sFilename,
@@ -1302,25 +1307,39 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                           },
                           success: function(response) {
                             Ext.MessageBox.alert ('Status','Output document has been created successfully.');
+                            outputDocStore.reload();
+                            newOPWindow.close();
                           }
                       });
-                      
+
                   }
                   else
-                      Ext.MessageBox.alert ('Status','Output document title exist with same name.');
+                      Ext.MessageBox.alert ('Status','There is an Output Document with the same  name in  this process. It is not saving');
                 }
         });
-
-            newOPWindow.close();
-            outputDocStore.reload();
-          }
+         }
         },{
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
                 newOPWindow.close();
             }
-        }]
+        }],
+     buttonAlign : 'center'
+       });
+
+  var newOPWindow = new Ext.Window({
+        title       : 'Output Document',
+        width       : 550,
+        defaults    :{ autoScroll:true },
+        height      : 450,
+        minWidth    : 200,
+        minHeight   : 150,
+        layout      : 'fit',
+        plain       : true,
+        bodyStyle   : 'padding:5px;',
+        items       : outputDocForm,
+        buttonAlign : 'center'
     });
    
  var gridWindow = new Ext.Window({
