@@ -7,7 +7,7 @@
   <en>Title</en>
 </STEP_TITLE>
 <STEP_TYPE_OBJ type="dropdown" colWidth="100" titleAlign="left" align="left">
-  <en>Type<option name="DYNAFORM">Dynaform</option><option name="OUTPUT_DOCUMENT">Output Document</option><option name="INPUT_DOCUMENT">Documentation</option><option name="EXTERNAL">External Step</option></en>
+  <en>Type<option name="DYNAFORM">Dynaform</option><option name="OUTPUT_DOCUMENT">Output Document</option><option name="INPUT_DOCUMENT">Input Document</option><option name="EXTERNAL">External Step</option></en>
 </STEP_TYPE_OBJ>     
 
 <STEP_MODE type="text" colWidth="250" titleAlign="left" align="left" enableHtml="1">
