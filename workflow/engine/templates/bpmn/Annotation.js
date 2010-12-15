@@ -1,4 +1,4 @@
-bpmnAnnotation = function (_30ab) {
+bpmnAnnotation = function (_30ab ) {
     VectorFigure.call(this);
     if(typeof _30ab.anno_width != 'undefined' && typeof _30ab.anno_height != 'undefined')
         this.setDimension(_30ab.anno_width, _30ab.anno_height);
