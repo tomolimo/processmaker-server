@@ -3767,8 +3767,11 @@ class XmlForm
     
     $this->fileName = $filename;
     $parsedFile = dirname ( $filename ) . PATH_SEP . basename ( $filename, 'xml' ) . $language;
-    $parsedFile = (defined ( 'PATH_C' ) ? PATH_C : PATH_DATA) . 'xmlform/' . substr ( $parsedFile, strlen ( $this->home ) );
-    $this->parsedFile = $parsedFile;
+    
+    $parsedFilePath = defined ( 'PATH_C' ) ? ( defined('SYS_SYS') ? PATH_C . 'ws' . PATH_SEP . SYS_SYS . PATH_SEP: PATH_C ) : PATH_DATA;
+    $parsedFilePath .= 'xmlform/' . substr ( $parsedFile, strlen ( $this->home ) );
+
+    $this->parsedFile = $parsedFilePath;
     //Note that scriptFile must be public URL.
     $realPath = substr ( realpath ( $this->fileName ), strlen ( realpath ( $this->home ) ), - 4 );
     if (substr ( $realPath, 0, 1 ) != PATH_SEP)
