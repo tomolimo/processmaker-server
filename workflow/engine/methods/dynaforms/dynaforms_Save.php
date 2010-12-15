@@ -30,6 +30,12 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   $dynaform = new dynaform();
   $oJSON = new Services_JSON();
 
+  if(isset($_POST['function']) && $_POST['function']=='lookforNameDynaform'){
+    $existsName = $dynaform->verifyExistingName($_POST['NAMEDYNAFORM'], $_POST['proUid']);
+    print $existsName;
+    die();
+  }
+
   if(isset($_POST['form']))
   {
       $aData = $_POST['form'];             //For old process map form

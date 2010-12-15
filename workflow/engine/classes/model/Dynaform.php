@@ -464,6 +464,35 @@ class Dynaform extends BaseDynaform {
     $G_FORM->parseFile( $filename , SYS_LANG, true );
     
     return $G_FORM->fields;
-  }    
+  }
+
+  function verifyExistingName($sName,$sProUid){
+    $sNameDyanform=urldecode($sName);
+    $sProUid=urldecode($sProUid);
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID );
+    $oCriteria->add( DynaformPeer::PRO_UID, $sProUid );
+    $oDataset = DynaformPeer::doSelectRS( $oCriteria );
+    $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+    $flag=true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->addSelectColumn('COUNT(*) AS DYNAFORMS');
+      $oCriteria1->add(ContentPeer::CON_CATEGORY, 'DYN_TITLE');
+      $oCriteria1->add(ContentPeer::CON_ID,    $aRow['DYN_UID']);
+      $oCriteria1->add(ContentPeer::CON_VALUE,    $sNameDyanform);
+      $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);
+      $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+      $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset1->next();
+      $aRow1 = $oDataset1->getRow();
+      if($aRow1['DYNAFORMS']) {
+        $flag =false;
+        break;
+      }
+    }
+    return $flag;
+  }
 
 } // Dynaform

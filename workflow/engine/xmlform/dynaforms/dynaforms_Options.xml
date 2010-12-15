@@ -75,26 +75,28 @@
   }
 
   function dynaformSave ( form, bOpen ) {
-   var nameDynaForm = getField('DYN_TITLE').value;
-   var proUid = getField('PRO_UID').value;
+  var nameDynaForm = getField('DYN_TITLE').value;
+  var proUid = getField('PRO_UID').value;
    
-   if(nameDynaForm==''){
-     alert(G_STRINGS.ID_REQUIRED_NAME_DYNAFORM);return false;
-   }
+  if(nameDynaForm==''){
+    // G_STRINGS.ID_REQUIRED_NAME_DYNAFORM
+    msgBox('@G::LoadTranslation(ID_REQUIRED_NAME_DYNAFORM)','alert');
+    return false;
+  }
    
-   reqName=ajax_function(form.action,'lookforNameDynaform','NAMEDYNAFORM='+encodeURIComponent(nameDynaForm)+'&proUid='+encodeURIComponent(proUid),'POST') ;
-   if(!reqName){
-   		alert(G_STRINGS.ID_EXIST_DYNAFORM);return false;
-   }else{
-	   if (!bOpen) {
+  reqName=ajax_function(form.action,'lookforNameDynaform','NAMEDYNAFORM='+encodeURIComponent(nameDynaForm)+'&proUid='+encodeURIComponent(proUid),'POST') ;
+    if(!reqName){
+//    alert(G_STRINGS.ID_EXIST_DYNAFORM);return false;
+      msgBox('@G::LoadTranslation(ID_EXIST_DYNAFORM)','alert');
+    }else{
+           if (!bOpen) {
 	      ajax_post( form.action, form, 'POST' );
 	      lastPopupWindow.remove();
 	      @#PAGED_TABLE_ID.refresh();
-	    }
-	    else {
+	   } else {
 	      ajax_post( form.action, form, 'POST', openDynaform );
-	    }
-   }
+	   }
+     }
   
   }
 

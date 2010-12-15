@@ -30,10 +30,17 @@
 <JS type="javascript"><![CDATA[
 
 
-function dynaformSaveas ( frm, bOpen ) {
+function dynaformSaveas ( frm ) {
    if(document.getElementById("form[DYN_TITLENEW]").value){
-      ajax_post( frm.action, frm, 'POST' );
-      currentPopupWindow.remove();
+     var nameDynaForm = document.getElementById("form[DYN_TITLENEW]").value;
+     var proUid = getField('PRO_UID').value;
+     reqName=ajax_function('dynaforms_Save','lookforNameDynaform','NAMEDYNAFORM='+encodeURIComponent(nameDynaForm)+'&proUid='+encodeURIComponent(proUid),'POST') ;
+       if(!reqName){
+         msgBox('@G::LoadTranslation(ID_EXIST_DYNAFORM)','alert');
+       }else {
+         ajax_post( frm.action, frm, 'POST' );
+         currentPopupWindow.remove();
+       }
     }
     else {
       alert(G_STRINGS.ID_TITLE_EMPTY);
