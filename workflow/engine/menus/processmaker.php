@@ -37,12 +37,12 @@ if ($RBAC->userCanAccess('PM_DASHBOARD') == 1 ) {
 
 #CASES MODULE
 if ($RBAC->userCanAccess('PM_CASES') == 1) {
-  $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_CASES'));
+  $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_HOME'));
 }
 
 #PROCESSES MODULE
 if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_APPLICATIONS'));
+  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_DESIGNER'));
 }
 
 
