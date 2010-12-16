@@ -257,6 +257,12 @@ class Propel {
 		self::initialize();
 	}
 
+  public static function initConfiguration($configuration)
+  {
+    self::$configuration = $configuration;
+    self::initialize();
+  }
+
 	/**
 	 * Determine whether Propel has already been initialized.
 	 *

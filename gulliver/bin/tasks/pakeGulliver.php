@@ -1683,18 +1683,38 @@ function getSysInfo() {
     $ip = getenv('REMOTE_ADDR');
   }
 
-  $redhat = '';
-  if( file_exists('/etc/redhat-release') ) {
-    $fnewsize = filesize('/etc/redhat-release');
-    $fp = fopen('/etc/redhat-release', 'r');
-    $redhat = trim(fread($fp, $fnewsize));
-    fclose($fp);
+  /* For distros with the lsb_release, this returns a one-line description of
+   * the distro name, such as "CentOS release 5.3 (Final)" or "Ubuntu 10.10"
+   */
+  $distro = exec("lsb_release -d -s 2> /dev/null");
+
+  /* For distros without lsb_release, we look for *release (such as
+   * redhat-release, gentoo-release, SuSE-release, etc) or *version (such as
+   * debian_version, slackware-version, etc)
+   */
+  if (empty($distro)) {
+    foreach (glob("/etc/*release") as $filename) {
+      $distro = trim(file_get_contents($filename));
+      if (!empty($distro))
+        break;
+    }
+    if (empty($distro)) {
+      foreach (glob("/etc/*version") as $filename) {
+        $distro = trim(file_get_contents($filename));
+        if (!empty($distro))
+          break;
+      }
+    }
   }
-  $redhat .= " (" . PHP_OS . ")";
+
+  /* CentOS returns a string with quotes, remove them! */
+  $distro = trim($distro, "\"");
+
+  $distro .= " (" . PHP_OS . ")";
 
   $Fields = array();
   
-  $Fields['SYSTEM'] = $redhat;
+  $Fields['SYSTEM'] = $distro;
   $Fields['PHP'] = phpversion();
   $Fields['PM_VERSION'] = PM_VERSION;
   $Fields['SERVER_ADDR'] = lookup($ipe[2]);
