@@ -23,15 +23,6 @@
  *
  */
 
-register_shutdown_function('shutdownFunction');
-function shutDownFunction() {
-    $error = error_get_last();
-    if ($error['type'] == 1) {
-        //print_r($error);
-        debug_print_backtrace();
-    }
-} 
-
   /* Windows supports both / and \ as path separators, so use the Unix separator
    * for maximum compatibility.
    */
