@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-12-13 19:14:25\n"
+"PO-Revision-Date: 2010-12-16 12:30:14\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -5928,6 +5928,24 @@ msgstr "Do you want to delete this collection?"
 #: LABEL/ID_TABLE
 msgid "Table"
 msgstr "Table"
+
+# TRANSLATION
+# LABEL/ID_DESIGNER
+#: LABEL/ID_DESIGNER
+msgid "Designer"
+msgstr "Designer"
+
+# TRANSLATION
+# LABEL/ID_HOME
+#: LABEL/ID_HOME
+msgid "Home"
+msgstr "Home"
+
+# TRANSLATION
+# LABEL/ID_EDIT_BPMN
+#: LABEL/ID_EDIT_BPMN
+msgid "Edit BPMN"
+msgstr "Edit BPMN"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -21771,7 +21789,7 @@ msgstr "Output Document"
 # steps/steps_availableBB.xml
 #: dropdown - STEP_TYPE_OBJ - INPUT_DOCUMENT
 msgid "[steps/steps_availableBB.xml?STEP_TYPE_OBJ-INPUT_DOCUMENT]"
-msgstr "Documentation"
+msgstr "Input Document"
 
 # steps/steps_availableBB.xml?STEP_TYPE_OBJ-EXTERNAL
 # steps/steps_availableBB.xml
