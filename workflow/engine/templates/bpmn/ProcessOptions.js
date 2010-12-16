@@ -445,27 +445,43 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sDesc     = getForm.DYN_DESCRIPTION[1];
                     }
 
-
                 Ext.Ajax.request({
                   url   : '../dynaforms/dynaforms_Save.php',
                   method: 'POST',
                   params:{
-                      ACTION          : sAction,
-                      FIELDS          : sData,
-                      ADD_TABLE       : sAddTab,
-                      PRO_UID         : pro_uid,
-                      DYN_TITLE       : sTitle,
-                      DYN_TYPE        : 'xmlform',
-                      DYN_DESCRIPTION : sDesc
+                      functions                : 'lookforNameDynaform',
+                      NAMEDYNAFORM             : sTitle,
+                      proUid                   : pro_uid
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
-                  }
-                });
-                formWindow.close();
-                taskDynaform.reload();
+                    if(response.responseText == "1")
+                    {
+                        Ext.Ajax.request({
+                          url   : '../dynaforms/dynaforms_Save.php',
+                          method: 'POST',
+                          params:{
+                              functions       : '',
+                              ACTION          : sAction,
+                              FIELDS          : sData,
+                              ADD_TABLE       : sAddTab,
+                              PRO_UID         : pro_uid,
+                              DYN_TITLE       : sTitle,
+                              DYN_TYPE        : 'xmlform',
+                              DYN_DESCRIPTION : sDesc
+                          },
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
+                          }
+                        });
+                        formWindow.close();
+                        taskDynaform.reload();
+                    }
+                    else
+                      Ext.MessageBox.alert ('Status','There is an Dynaform with the same  name in  this process. It is not saving');
             }
-        },{
+          })
+        }
+    },{
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,

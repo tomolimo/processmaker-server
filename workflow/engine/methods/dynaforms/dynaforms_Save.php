@@ -26,51 +26,84 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   //G::genericForceLogin( 'WF_MYINFO' , 'login/noViewPage', $urlLogin = 'login/login' );
 
   require_once('classes/model/Dynaform.php');
+  require_once('classes/model/Content.php');
 
-  $dynaform = new dynaform();
   $oJSON = new Services_JSON();
 
-  if(isset($_POST['function']) && $_POST['function']=='lookforNameDynaform'){
-    $existsName = $dynaform->verifyExistingName($_POST['NAMEDYNAFORM'], $_POST['proUid']);
-    print $existsName;
-    die();
-  }
-
-  if(isset($_POST['form']))
-  {
-      $aData = $_POST['form'];             //For old process map form
-       if ($aData['DYN_UID']==='') unset($aData['DYN_UID']);
-  }
+  if(isset($_POST['function']))
+    $sfunction =$_POST['function'];
   else
-  {
-      $aData = $_POST;                    //For Extjs (Since we are not using form in ExtJS)
-       if(isset($aData['FIELDS']))
-       {
-           //$test = '{"1":{"TESTID":"1223","PRO_VARIABLE":"saaa"},"2":{"TESTID":"420","PRO_VARIABLE":"sas"}}';
-           //$aData['FIELDS'] = (array)$oJSON->decode($test);
-           $oData = $oJSON->decode($_POST['FIELDS']);
-           $aData['FIELDS'] = '';
-           for($i=0;$i<count($oData);$i++)
-           {
-                $aData['FIELDS'][$i+1] = (array)$oData[$i];
-           }
-       }
-  }
-  //if ($aData['DYN_UID']==='') unset($aData['DYN_UID']);
+    $sfunction =$_POST['functions'];
 
-  if (isset($aData['DYN_UID']))
-  {
-    $dynaform->Save( $aData );
-  }
-  else
-  {
-    if (!isset($aData['ADD_TABLE'])||$aData['ADD_TABLE']==""){
-        $aFields=$dynaform->create( $aData );
-    } else {
-        $aFields=$dynaform->createFromPMTable( $aData, $aData['ADD_TABLE']);
+  if($sfunction=='lookforNameDynaform'){
+	  $snameDyanform=urldecode($_POST['NAMEDYNAFORM']);
+	  $sPRO_UID=urldecode($_POST['proUid']);
+
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID  );
+    $oCriteria->add(DynaformPeer::PRO_UID, $sPRO_UID);
+    $oDataset = DynaformPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $flag=true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+
+      $oCriteria1 = new Criteria('workflow');
+	    $oCriteria1->addSelectColumn('COUNT(*) AS DYNAFORMS');
+	    $oCriteria1->add(ContentPeer::CON_CATEGORY, 'DYN_TITLE');
+	    $oCriteria1->add(ContentPeer::CON_ID,    $aRow['DYN_UID']);
+	    $oCriteria1->add(ContentPeer::CON_VALUE,    $snameDyanform);
+	    $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);
+	    $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+	    $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+	    $oDataset1->next();
+	    $aRow1 = $oDataset1->getRow();
+
+	    if($aRow1['DYNAFORMS'])$flag=false;
+
+
     }
-    $aData['DYN_UID']=$dynaform->getDynUid();
-    $dynaform->update( $aData );
-  }
-  echo $dynaform->getDynUid();
+    print $flag;
+
+   } else {
+              $dynaform = new dynaform();
+
+              if(isset($_POST['form']))
+              {
+                  $aData = $_POST['form'];             //For old process map form
+                   if ($aData['DYN_UID']==='') unset($aData['DYN_UID']);
+              }
+              else
+              {
+                  $aData = $_POST;                    //For Extjs (Since we are not using form in ExtJS)
+                   if(isset($aData['FIELDS']))
+                   {
+                       //$test = '{"1":{"TESTID":"1223","PRO_VARIABLE":"saaa"},"2":{"TESTID":"420","PRO_VARIABLE":"sas"}}';
+                       //$aData['FIELDS'] = (array)$oJSON->decode($test);
+                       $oData = $oJSON->decode($_POST['FIELDS']);
+                       $aData['FIELDS'] = '';
+                       for($i=0;$i<count($oData);$i++)
+                       {
+                            $aData['FIELDS'][$i+1] = (array)$oData[$i];
+                       }
+                   }
+              }
+              //if ($aData['DYN_UID']==='') unset($aData['DYN_UID']);
+
+              if (isset($aData['DYN_UID']))
+              {
+                $dynaform->Save( $aData );
+              }
+              else
+              {
+                if (!isset($aData['ADD_TABLE'])||$aData['ADD_TABLE']==""){
+                    $aFields=$dynaform->create( $aData );
+                } else {
+                    $aFields=$dynaform->createFromPMTable( $aData, $aData['ADD_TABLE']);
+                }
+                $aData['DYN_UID']=$dynaform->getDynUid();
+                $dynaform->update( $aData );
+              }
+              echo $dynaform->getDynUid();
+	 }
 ?>
