@@ -47,6 +47,18 @@ function error($message) {
   return pakeColor::colorize($message, "ERROR");
 }
 
+function logging($message, $filename = NULL) {
+  static $log_file = NULL;
+  if (isset($filename)) {
+    $log_file = fopen($filename, "a");
+    fwrite($log_file, " -- " . date("c") . " " . $message . " --\n");
+  } else {
+    if (isset($log_file))
+      fwrite($log_file, $message);
+    echo $message;
+  }
+}
+
 function get_workspaces_from_args($args, $includeAll = true) {
   $opts = parse_args($args);
   $workspaces = array();

@@ -145,35 +145,6 @@ class System {
 
     return $Fields;
   }
-  
-  /** 
-  * Print the system information gathered from getSysInfo
-  *
-  * @return
-  */ 
-  public static function printSysInfo() {
-    $fields = System::getSysInfo();
-
-    $info = array(
-        'ProcessMaker Version' => $fields['PM_VERSION'],
-        'System'               => $fields['SYSTEM'],
-        'PHP Version'          => $fields['PHP'],
-        'Server Address'       => $fields['SERVER_ADDR'],
-        'Client IP Address'    => $fields['IP'],
-        'Plugins'              => (count($fields['PLUGINS_LIST']) > 0) ? $fields['PLUGINS_LIST'][0] : 'None'
-    );
-
-    foreach( $fields['PLUGINS_LIST'] as $k => $v ) {
-      if ($k == 0)
-        continue;
-      $info[] = $v;
-    }
-
-    foreach ($info as $k => $v) {
-      if (is_numeric($k)) $k = "";
-      printf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO'));
-    }
-  }
 
   public static function listPoFiles() {
     $folders = glob(PATH_CORE . '/content/translations/*');
@@ -197,9 +168,18 @@ class System {
     $items = glob($dir . "/*");
     $checksums = array();
     foreach ($items as $item) {
-      $checksums["." . substr($item, strlen($root))] = md5_file($item);
+      $relname = substr($item, strlen($root));
+      //Skip xmlform files, since they always change.
+      if (strpos($relname, "/xmlform/") !== false)
+        continue;
+      //Skip shared and compiled directories.
+      if ((strpos($relname, "/shared") === 0) || (strpos($relname, "/compiled") === 0)) {
+        continue;
+      }
       if (is_dir($item)) {
         $checksums = array_merge($checksums, System::getFilesChecksum($item, $root));
+      } else {
+        $checksums[".$relname"] = md5_file($item);
       }
     }
     return $checksums;

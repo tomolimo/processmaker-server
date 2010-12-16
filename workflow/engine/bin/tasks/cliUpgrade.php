@@ -6,34 +6,43 @@ G::LoadClass("wsTools");
 pake_task("upgrade");
 
 function run_upgrade($command, $args) {
-  echo "Checking files integrity...\n";
+  logging("UPGRADE", PROCESSMAKER_PATH . "upgrade.log");
+  logging("Checking files integrity...\n");
   $checksum = System::verifyChecksum();
   if ($checksum === false) {
-    echo error("checksum.txt not found, integrity check is not possible") . "\n";
+    logging(error("checksum.txt not found, integrity check is not possible") . "\n");
   } else {
     if (!empty($checksum['missing'])) {
-      echo error("The following files were not found in the installation:")."\n";
+      logging(error("The following files were not found in the installation:")."\n");
       foreach($checksum['missing'] as $missing) {
-        echo " $missing\n";
+        logging(" $missing\n");
       }
     }
     if (!empty($checksum['diff'])) {
-      echo error("The following files have modifications:")."\n";
+      logging(error("The following files have modifications:")."\n");
       foreach($checksum['diff'] as $diff) {
-        echo " $diff\n";
+        logging(" $diff\n");
       }
     }
   }
-  echo "Upgrading workspaces...\n";
+  //TODO: Ask to continue if errors are found.
+  logging("Clearing cache...\n");
+  if(defined('PATH_C'))
+    G::rm_dir(PATH_C);
   $workspaces = get_workspaces_from_args($args);
-  foreach ($workspaces as $workspace) {
+  $count = count($workspaces);
+  $first = true;
+  foreach ($workspaces as $index => $workspace) {
     try {
-      echo "Upgrading " . info($workspace->name) . "\n";
-      $workspace->upgrade();
+      logging("Upgrading workspaces ($index/$count): " . info($workspace->name) . "\n");
+      $workspace->upgrade($first);
+      $workspace->close();
+      $first = false;
     } catch (Exception $e) {
-      echo "Errors upgrading workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
+      logging("Errors upgrading workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n");
     }
   }
+  logging("Upgrade successful\n");
 }
 
 ?>

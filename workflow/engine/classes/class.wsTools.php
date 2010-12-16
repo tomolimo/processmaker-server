@@ -13,12 +13,8 @@ class workspaceTools {
   var $dbPath = NULL;
   var $dbInfo = NULL;
   var $dbInfoRegExp = "/( *define *\( *'(?P<key>.*?)' *, *\n* *')(?P<value>.*?)(' *\) *;.*)/";
-
-  private function verbose($message) {
-    //if ($this->$verbose) {
-    echo $message;
-    //}
-  }
+  var $initPropel = false;
+  var $initPropelRoot = false;
 
   /**
    * Create a workspace tools object. Note that workspace might not exist when
@@ -35,26 +31,27 @@ class workspaceTools {
     $this->path = PATH_DB . $this->name;
     $this->dbPath = $this->path . '/db.php';
     if ($this->workspaceExists())
-      $this->dbInfo = $this->getDBInfo ();
+      $this->getDBInfo ();
   }
 
   public function workspaceExists() {
     return (file_exists($this->path) && file_exists($this->dbPath));
   }
 
-  public function upgrade() {
-    $this->verbose("> Updating translations...\n");
-    $this->upgradeTranslation();
-    $this->verbose("> Updating database...\n");
-    $this->repairSchema();
-    $this->verbose("> Updating cache view...\n");
+  public function upgrade($first = false) {
+    logging("> Updating database...\n");
+    $this->upgradeDatabase();
+    logging("> Updating translations...\n");
+    $this->upgradeTranslation($first);
+    logging("> Updating cache view...\n");
     $this->upgradeCacheView();
-    $this->verbose("> Done.\n");
   }
 
   public function getDBInfo() {
     if (!$this->workspaceExists())
       throw new Exception("Could not get db.php in workspace " . $this->name);
+    if (isset($this->dbInfo))
+      return $this->dbInfo;
     $sDbFile = file_get_contents($this->dbPath);
     /* This regular expression will match any "define ('<key>', '<value>');"
      * with any combination of whitespace between words.
@@ -95,6 +92,8 @@ class workspaceTools {
   }
 
   private function initPropel($root = false) {
+    if (($this->initPropel && !$root) || ($this->initPropelRoot && $root))
+      return;
     $wfDetails = $this->getDBCredentials("wf");
     $rbDetails = $this->getDBCredentials("rb");
     $rpDetails = $this->getDBCredentials("rp");
@@ -133,15 +132,24 @@ class workspaceTools {
               )
           )
       );
-      
 
       $config["datasources"] = array_merge($config["datasources"], $rootConfig["datasources"]);
+
+      $this->initPropelRoot = true;
     }
+
+    $this->initPropel = true;
 
     require_once ( "propel/Propel.php" );
     require_once ( "creole/Creole.php" );
 
     Propel::initConfiguration($config);
+  }
+
+  private function closePropel() {
+    Propel::close();
+    $this->initPropel = false;
+    $this->initPropelRoot = false;
   }
 
   public function upgradeTranslation($updateXml = true) {
@@ -150,7 +158,7 @@ class workspaceTools {
     G::LoadThirdParty('pear/json', 'class.json');
     $languages = new languages();
     foreach (System::listPoFiles() as $poFile) {
-      $this->verbose("Updating language ".$poFile."\n");
+      logging("Updating language ".basename($poFile)."\n");
       $languages->importLanguage($poFile, $updateXml);
     }
   }
@@ -158,8 +166,6 @@ class workspaceTools {
   private function getDatabase() {
     if (isset($this->db) && $this->db->isConnected())
       return $this->db;
-    if (!isset($this->dbInfo))
-      $this->getDBInfo ();
     G::LoadSystem( 'database_' . strtolower($this->dbAdapter));
     $this->db = new database($this->dbAdapter, $this->dbHost, $this->dbUser,
       $this->dbPass, $this->dbName);
@@ -175,6 +181,11 @@ class workspaceTools {
       return;
     $this->db->close();
     $this->db = NULL;
+  }
+
+  public function close() {
+    $this->closePropel();
+    $this->closeDatabase();
   }
 
   public function getSchema() {
@@ -254,13 +265,13 @@ class workspaceTools {
       $currentUserIsSuper = true;
     }
 
-    $this->verbose("Creating table");
+    logging("Creating table");
     //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.
     if (!$checkOnly) {
       $res = $appCache->checkAppCacheView();
     }
 
-    $this->verbose(", triggers");
+    logging(", triggers");
     //now check if we have the triggers installed
     $triggers = array();
     $triggers[] = $appCache->triggerAppDelegationInsert($lang, $checkOnly);
@@ -269,12 +280,12 @@ class workspaceTools {
     $triggers[] = $appCache->triggerApplicationDelete($lang, $checkOnly);
 
     if (!$checkOnly) {
-      $this->verbose(", filling cache view... ");
+      logging(", filling cache view");
       //build using the method in AppCacheView Class
       $res = $appCache->fillAppCacheView($lang);
-      $this->verbose("done");
+      logging(".");
     }
-    $this->verbose("\n");
+    logging("\n");
     //set status in config table
     $confParams = Array(
       'LANG' => $lang,
@@ -290,7 +301,7 @@ class workspaceTools {
     // end of reset 
   }
 
-  public function repairSchema($checkOnly = false) {
+  public function upgradeDatabase($checkOnly = false) {
     $dbInfo = $this->getDBInfo();
 
     if (strcmp($dbInfo["DB_ADAPTER"], "mysql") != 0) {
@@ -316,7 +327,7 @@ class workspaceTools {
 
     $oDataBase->logQuery ( count ($changes ) );
 
-    $this->verbose( "Adding " . count($changes['tablesToAdd']) . " tables\n");
+    logging( "" . count($changes['tablesToAdd']) . " tables to add");
     foreach ($changes['tablesToAdd'] as $sTable => $aColumns) {
       $oDataBase->executeQuery($oDataBase->generateCreateTableSQL($sTable, $aColumns));
       if (isset($changes['tablesToAdd'][$sTable]['INDEXES'])) {
@@ -326,7 +337,7 @@ class workspaceTools {
       }
     }
 
-    $this->verbose("Altering " . count($changes['tablesToAlter']) . " tables\n");
+    logging(", " . count($changes['tablesToAlter']) . " tables to alter");
     foreach ($changes['tablesToAlter'] as $sTable => $aActions) {
       foreach ($aActions as $sAction => $aAction) {
         foreach ($aAction as $sColumn => $vData) {
@@ -345,20 +356,21 @@ class workspaceTools {
       }
     }
 
-    $this->verbose("Adding indexes to " . count($changes['tablesWithNewIndex']) . " tables\n");
+    logging(", " . count($changes['tablesWithNewIndex']) . " indexes to add");
     foreach ($changes['tablesWithNewIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
 
-    $this->verbose("Altering indexes to " . count($changes['tablesWithNewIndex']) . " tables\n");
+    logging(", " . count($changes['tablesWithNewIndex']) . " indexes to alter");
     foreach ($changes['tablesToAlterIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateDropKeySQL($sTable, $sIndexName ));
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
+    logging("\n");
     $this->closeDatabase();
     return true;
   }
@@ -404,12 +416,41 @@ class workspaceTools {
     return $Fields;
   }
 
+ /** 
+  * Print the system information gathered from getSysInfo
+  *
+  * @return
+  */ 
+  public static function printSysInfo() {
+    $fields = System::getSysInfo();
+
+    $info = array(
+        'ProcessMaker Version' => $fields['PM_VERSION'],
+        'System'               => $fields['SYSTEM'],
+        'PHP Version'          => $fields['PHP'],
+        'Server Address'       => $fields['SERVER_ADDR'],
+        'Client IP Address'    => $fields['IP'],
+        'Plugins'              => (count($fields['PLUGINS_LIST']) > 0) ? $fields['PLUGINS_LIST'][0] : 'None'
+    );
+
+    foreach( $fields['PLUGINS_LIST'] as $k => $v ) {
+      if ($k == 0)
+        continue;
+      $info[] = $v;
+    }
+
+    foreach ($info as $k => $v) {
+      if (is_numeric($k)) $k = "";
+      logging(sprintf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO')));
+    }
+  }
+
   public function printMetadata($printSysInfo = true) {
     $fields = $this->getMetadata();
 
     if ($printSysInfo) {
-      System::printSysInfo ();
-      echo "\n";
+      workspaceTools::printSysInfo ();
+      logging("\n");
     }
 
     $wfDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_USER'] . ':' . $fields['DB_PASS'] . '@' . $fields['DB_HOST'] . '/' . $fields['DB_NAME'];
@@ -427,7 +468,7 @@ class workspaceTools {
 
     foreach ($info as $k => $v) {
       if (is_numeric($k)) $k = "";
-      printf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO'));
+      logging(sprintf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO')));
     }
   }
 
