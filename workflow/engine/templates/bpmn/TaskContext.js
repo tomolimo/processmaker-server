@@ -104,7 +104,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                             //Secondly deleting from Grid
                             taskSteps.remove(r);
                             //Reloading store after removing steps
-                            availableSteps.reload();
+                            taskSteps.reload();
                           }
                         });
                     }
@@ -403,7 +403,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         collapsible: false,
         maximizable: false,
         width: 800,
-        height: 500,
+        height: 470,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -434,8 +434,8 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 TaskContext.prototype.editUsers= function(_5625)
 {
         var taskExtObj = new TaskContext();
-        var pro_uid = _5625.scope.workflow.getUrlVars();
-        var taskId  = _5625.scope.workflow.currentSelection.id;
+        var pro_uid = workflow.getUrlVars();
+        var taskId  = workflow.currentSelection.id;
 
         var userFields = Ext.data.Record.create([
             {
@@ -529,7 +529,7 @@ TaskContext.prototype.editUsers= function(_5625)
                               taskUsers.remove(r);
 
                               //Reloading available user store
-                              storeUsers.reload();
+                              taskUsers.reload();
                           }
                         });
                      }

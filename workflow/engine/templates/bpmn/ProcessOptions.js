@@ -445,7 +445,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sDesc     = getForm.DYN_DESCRIPTION[1];
                     }
 
-                Ext.Ajax.request({
+                /*Ext.Ajax.request({
                   url   : '../dynaforms/dynaforms_Save.php',
                   method: 'POST',
                   params:{
@@ -455,12 +455,12 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                   },
                   success: function(response) {
                     if(response.responseText == "1")
-                    {
+                    {*/
                         Ext.Ajax.request({
                           url   : '../dynaforms/dynaforms_Save.php',
                           method: 'POST',
                           params:{
-                              functions       : '',
+                              functions       : 'saveDynaform',
                               ACTION          : sAction,
                               FIELDS          : sData,
                               ADD_TABLE       : sAddTab,
@@ -473,14 +473,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                               Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
                           }
                         });
-                        formWindow.close();
-                        taskDynaform.reload();
-                    }
+                        //formWindow.close();
+                        //taskDynaform.reload();
+                    /*}
                     else
-                      Ext.MessageBox.alert ('Status','There is an Dynaform with the same  name in  this process. It is not saving');
+                      Ext.MessageBox.alert ('Status','There is an Dynaform with the same  name in  this process. It is not saving');*/
             }
-          })
-        }
+         // })
+        //}
     },{
             text: 'Cancel',
             handler: function(){
@@ -580,6 +580,8 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                           }
                         });
                     }
+                    else
+                        inputDocStore.remove(r);
                 }
             }
         });

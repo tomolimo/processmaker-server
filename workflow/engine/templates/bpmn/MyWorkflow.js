@@ -2089,16 +2089,23 @@ MyWorkflow.prototype.zoom = function(sType)
    var fig = figures.get(f);
    var width = fig.getWidth();
    var height = fig.getHeight();
+   var xPos = fig.getX();
+   var yPos = fig.getY();
    if(sType == 'in')
      {
         width  += 20;
-        height += 20
+        height += 20;
      }
     else
      {
        width  -= 20;
-       height -= 20
+       height -= 20;
      }
+   if(sType == 'in')
+    fig.setPosition(xPos,yPos - 15);
+   else if(sType == 'out')
+    fig.setPosition(xPos,yPos + 15);
+
    fig.setDimension(width,height);
    if(fig.type == 'bpmnTask')
       {
@@ -2127,6 +2134,10 @@ MyWorkflow.prototype.zoom = function(sType)
         else
           fig.size = parseInt(fig.size) - 4;
 
+        //Setting font minimum limit
+        if(fig.size < 11)
+            fig.size = 11;
+
         eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
         fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
         fig.bpmnText.paint();
@@ -2152,9 +2163,14 @@ MyWorkflow.prototype.zoom = function(sType)
             fig.size = fig.size;
 
           if(sType == 'in')
-          fig.size = parseInt(fig.size) + 4;
-        else
-          fig.size = parseInt(fig.size) - 4;
+              fig.size = parseInt(fig.size) + 4;
+          else
+              fig.size = parseInt(fig.size) - 4;
+
+          //Setting font minimum limit i.e. 11px
+          if(fig.size < 11)
+            fig.size = 11;
+
           eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
           fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
           fig.bpmnText.paint();
