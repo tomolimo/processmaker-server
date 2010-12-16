@@ -5034,5 +5034,29 @@ class processMap {
     }
   }
 
+
+  function showExtDBConnList() {
+    $oProcess = new processMap();
+    $oCriteria = $oProcess->getConditionProcessList();
+    if( ProcessPeer::doCount($oCriteria) > 0 ){
+            $aProcesses = array();
+            $aProcesses[] = array('PRO_UID' => 'char', 'PRO_TITLE' => 'char');
+            $oDataset = ArrayBasePeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $oDataset->next();
+            $sProcessUID = '';
+            while( $aRow = $oDataset->getRow() ){
+                    if( $sProcessUID == '' ){
+                            $sProcessUID = $aRow['PRO_UID'];
+                    }
+                    $aProcesses[] = array('PRO_UID' => (isset($aRow['PRO_UID']) ? $aRow['PRO_UID'] : ''), 'PRO_TITLE' => (isset($aRow['PRO_TITLE']) ? $aRow['PRO_TITLE'] : ''));
+                    $oDataset->next();
+            }
+
+            $_DBArray['PROCESSES'] = $aProcesses;
+            $_SESSION['_DBArray'] = $_DBArray;
+            return $_SESSION ['_DBArray']['PROCESSES'];
+     }
+  }
 }
 
