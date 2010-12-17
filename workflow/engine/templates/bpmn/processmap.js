@@ -1,7 +1,7 @@
 Ext.onReady ( function() {
 
     workflow  = new MyWorkflow("paintarea");
-    workflow.setEnableSmoothFigureHandling(true);
+    workflow.setEnableSmoothFigureHandling(false);
     workflow.scrollArea.width = 2000;
     //For Undo and Redo Options
    // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
@@ -20,30 +20,6 @@ Ext.onReady ( function() {
                 Ext.Msg.alert ('Failure');
             }
         });
-
-    //load all the Information related to the process
-//    var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
-//    Ext.Ajax.request({
-//      url: "processes_Ajax.php"+ urlparams,
-//        success: function(response) {
-//          this.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
-//        },
-//        failure: function(){
-//          Ext.Msg.alert ('Failure');
-//        }
-//    });
-
-    //Get All the processes
-    //        var urlparams = '?action=getProcesses';
-    //        Ext.Ajax.request({
-    //                url: "processes_Ajax.php"+ urlparams,
-    //                success: function(response) {
-    //                    this.workflow.processName = Ext.util.JSON.decode(response.responseText);
-    //                },
-    //                failure: function(){
-    //                    Ext.Msg.alert ('Failure');
-    //                }
-    //            });
     }
 
 
@@ -534,10 +510,6 @@ Ext.onReady ( function() {
             {
                 case 'tasks':
                     for(var k=0;k<shapes.tasks.length;k++){
-                        var srctaskxpos = shapes.tasks[k][2];
-                        var srctaskypos = shapes.tasks[k][3];
-                        var task_width = shapes.tasks[k][4];
-                        var task_height = shapes.tasks[k][5];
                         var task_boundary = shapes.tasks[k][6];
                         if(task_boundary != null && task_boundary == 'TIMER' && task_boundary == '')
                             _4562.workflow.boundaryEvent = true;
@@ -548,13 +520,14 @@ Ext.onReady ( function() {
                             _4562.workflow.taskNo++;
 
                         _4562.workflow.taskName = shapes.tasks[k][1];
-                        workflow.task_width = task_width;
-                        workflow.task_height = task_height;
+                        workflow.task_width = shapes.tasks[k][4];
+                        workflow.task_height = shapes.tasks[k][5];
                         NewShape = eval("new bpmnTask(_4562.workflow)");
+                        NewShape.x = shapes.tasks[k][2];
+                        NewShape.y = shapes.tasks[k][3];
                         NewShape.taskName = shapes.tasks[k][1];
-                        _4562.workflow.addFigure(NewShape, srctaskxpos, srctaskypos);
-                        //workflow.setBoundary(NewShape);
-                        //Setting newshape id to the old shape id
+                        workflow.setBoundary(NewShape);
+                        _4562.workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                         NewShape.html.id = shapes.tasks[k][0];
                         NewShape.id = shapes.tasks[k][0];
                     }
@@ -562,11 +535,12 @@ Ext.onReady ( function() {
                 case 'gateways':
                     for(var k=0;k<shapes.gateways.length;k++){
                         var srctype = shapes.gateways[k][1];
-                        var srcxpos = shapes.gateways[k][2];
-                        var srcypos = shapes.gateways[k][3];
+                        
                         NewShape = eval("new "+srctype+"(_4562.workflow)");
-                        _4562.workflow.addFigure(NewShape, srcxpos, srcypos);
-                       // workflow.setBoundary(NewShape);
+                        NewShape.x = shapes.gateways[k][2];
+                        NewShape.y = shapes.gateways[k][3];
+                        workflow.setBoundary(NewShape);
+                        _4562.workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                         //Setting newshape id to the old shape id
                         NewShape.html.id = shapes.gateways[k][0];
                         NewShape.id = shapes.gateways[k][0];
@@ -577,11 +551,11 @@ Ext.onReady ( function() {
                             var srceventtype = shapes.events[k][1];
                             if(! srceventtype.match(/End/))
                             {
-                                var srceventxpos = shapes.events[k][2];
-                                var srceventypos = shapes.events[k][3];
                                 NewShape = eval("new "+srceventtype+"(_4562.workflow)");
-                                _4562.workflow.addFigure(NewShape, srceventxpos, srceventypos);
-                               // workflow.setBoundary(NewShape);
+                                NewShape.x = shapes.events[k][2];
+                                NewShape.y = shapes.events[k][3];
+                                workflow.setBoundary(NewShape);
+                                _4562.workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                                 //Setting newshape id to the old shape id
                                 NewShape.html.id = shapes.events[k][0];
                                 NewShape.id = shapes.events[k][0];
@@ -590,17 +564,14 @@ Ext.onReady ( function() {
                     break;
                 case 'annotations':
                     for(var k=0;k<shapes.annotations.length;k++){
-                        //var srcannotationname = shapes[j][k][1];
-                        var srcannotationxpos = shapes.annotations[k][2];
-                        var srcannotationypos = shapes.annotations[k][3];
-                        var width = shapes.annotations[k][4];
-                        var height = shapes.annotations[k][5];
                         _4562.workflow.annotationName = shapes.annotations[k][1];
-                        workflow.anno_width = width;
-                        workflow.anno_height = height;
+                        workflow.anno_width = shapes.annotations[k][4];
+                        workflow.anno_height = shapes.annotations[k][5];
                         NewShape = eval("new bpmnAnnotation(_4562.workflow)");
-                        _4562.workflow.addFigure(NewShape, srcannotationxpos, srcannotationypos);
-                        //workflow.setBoundary(NewShape);
+                        NewShape.x = shapes.annotations[k][2];
+                        NewShape.y = shapes.annotations[k][3];
+                        workflow.setBoundary(NewShape);
+                        _4562.workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                         //Setting newshape id to the old shape id
                         NewShape.html.id = shapes.annotations[k][0];
                         NewShape.id = shapes.annotations[k][0];
@@ -608,14 +579,12 @@ Ext.onReady ( function() {
                     break;
             case 'subprocess':
                 for(var k=0;k<shapes.subprocess.length;k++){
-                    var srctaskxpos = shapes.subprocess[k][2];
-                    var srctaskypos = shapes.subprocess[k][3];
-
-                    //_4562.workflow.taskNo++;
                     _4562.workflow.subProcessName = shapes.subprocess[k][1];
                     NewShape = eval("new bpmnSubProcess(_4562.workflow)");
+                    NewShape.x = shapes.subprocess[k][2];
+                    NewShape.y = shapes.subprocess[k][3];
+                    workflow.setBoundary(NewShape);
                     _4562.workflow.addFigure(NewShape, srctaskxpos, srctaskypos);
-                    //workflow.setBoundary(NewShape);
                     //Setting newshape id to the old shape id
                     NewShape.html.id = shapes.subprocess[k][0];
                     NewShape.id = shapes.subprocess[k][0];
