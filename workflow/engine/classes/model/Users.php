@@ -63,6 +63,24 @@ class Users extends BaseUsers {
       throw($e);
     }
   }
+  
+public function userExists($UsrUid)
+  {
+    try {
+      $oRow = UsersPeer::retrieveByPK( $UsrUid );
+      if (!is_null($oRow))
+      {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    catch (Exception $oError) {
+      return false;
+    }
+  }
+  
   public function load($UsrUid)
   {
     try {

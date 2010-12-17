@@ -24,7 +24,12 @@ class AppFolder extends BaseAppFolder {
    * @param strin(32) $folderParent
    * @return Ambigous <>|number
    */
-  function createFolder($folderName, $folderParent = "/") {
+  function createFolder($folderName, $folderParent = "/", $action="createifnotexists") {
+    $validActions=array("createifnotexists","create","update");
+    if(!in_array($action,$validActions)) $action="createifnotexists";
+    //Clean Folder and Parent names (delete spaces...)
+    $folderName=trim($folderName);
+    $folderParent=trim($folderParent);
     //Try to Load the folder (Foldername+FolderParent)
     $oCriteria = new Criteria ( 'workflow' );
     $oCriteria->add ( AppFolderPeer::FOLDER_NAME, $folderName );
@@ -32,11 +37,13 @@ class AppFolder extends BaseAppFolder {
     $oDataset = AppFolderPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
-    if ($aRow = $oDataset->getRow ()) { //Folder exist, then return the ID
-      return ($aRow ['FOLDER_UID']);
-    } else { //Folder doesn't exist. Create and return the ID
-      
-
+    if ($aRow = $oDataset->getRow ()) {//Folder exist, then return the ID
+      $response['success']=false;
+      $response['message']=$response['error']="Can't create folder <br /> A folder with same name already exists. <br /> $folderParent$folderName";
+      $response['folderUID']=$aRow ['FOLDER_UID'];
+      //return ($aRow ['FOLDER_UID']);
+      return ($response);
+    } else {//Folder doesn't exist. Create and return the ID
       $folderUID = G::GenerateUniqueID ();
       $tr = new AppFolder ( );
       $tr->setFolderUid ( $folderUID );
@@ -47,7 +54,11 @@ class AppFolder extends BaseAppFolder {
       if ($tr->validate ()) {
         // we save it, since we get no validation errors, or do whatever else you like.
         $res = $tr->save ();
-        return $folderUID;
+        $response['success']=true;
+        $response['message']=$response['error']="Folder successfully created. <br /> $folderParent$folderName";
+        $response['folderUID']=$folderUID;
+        return ($response);
+        //return $folderUID;
       } else {
         // Something went wrong. We can now get the validationFailures and handle them.
         $msg = '';
@@ -55,7 +66,10 @@ class AppFolder extends BaseAppFolder {
         foreach ( $validationFailuresArray as $objValidationFailure ) {
           $msg .= $objValidationFailure->getMessage () . "<br/>";
         }
-        krumo ( $msg );
+        $response['success']=false;
+
+        $response['message']=$response['error']="Can't create folder \n A  \n ".$msg;
+        return ($response);
       }
     }
   }
@@ -64,45 +78,46 @@ class AppFolder extends BaseAppFolder {
    * @param strin(32) $sessionID
    * @return string Last Folder ID generated
    */
-  function createFromPath($folderPath, $sessionID = "") {   
+  function createFromPath($folderPath, $sessionID = "") {
     if ($sessionID == "")
-      $sessionID = $_SESSION ['APPLICATION'];
-      //Get current Application Fields
+    $sessionID = $_SESSION ['APPLICATION'];
+    //Get current Application Fields
     $oApplication = new Application ( );
-    
+
     $appFields = $oApplication->Load ( $sessionID );
-    
+
     $folderPathParsed = G::replaceDataField ( $folderPath, $appFields );
     $folderPathParsed = G::replaceDataField ( $folderPath, unserialize ( $appFields ['APP_DATA'] ) );
-    
+
     $folderPathParsedArray = explode ( "/", $folderPathParsed );
-    
+
     $folderRoot = "/"; //Always starting from Root
     foreach ( $folderPathParsedArray as $folderName ) {
       if (trim ( $folderName ) != "") {
-        $folderRoot = $this->createFolder ( $folderName, $folderRoot );
+        $response = $this->createFolder ( $folderName, $folderRoot );
+        $folderRoot=$response['folderUID'];
       }
     }
     return $folderRoot != "/" ? $folderRoot : "";
   }
-  
+
   /**
-   * @param string $fileTags  
+   * @param string $fileTags
    * @param string(32) $sessionID Application ID
    * @return string
    */
   function parseTags($fileTags, $sessionID = "") {
-    
+
     if ($sessionID == "")
-      $sessionID = $_SESSION ['APPLICATION'];
-      //Get current Application Fields
+    $sessionID = $_SESSION ['APPLICATION'];
+    //Get current Application Fields
     $oApplication = new Application ( );
-    
+
     $appFields = $oApplication->Load ( $sessionID );
-    
+
     $fileTagsParsed = G::replaceDataField ( $fileTags, $appFields );
     $fileTagsParsed = G::replaceDataField ( $fileTags, unserialize ( $appFields ['APP_DATA'] ) );
-    
+
     return $fileTagsParsed;
   }
   /**
@@ -112,17 +127,17 @@ class AppFolder extends BaseAppFolder {
   function getFolderList($folderID) {
     $Criteria = new Criteria ( 'workflow' );
     $Criteria->clearSelectColumns ()->clearOrderByColumns ();
-    
+
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_UID );
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_PARENT_UID );
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_NAME );
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_CREATE_DATE );
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_UPDATE_DATE );
-    
+
     $Criteria->add ( appFolderPeer::FOLDER_PARENT_UID, $folderID, CRITERIA::EQUAL );
-    
+
     $Criteria->addAscendingOrderByColumn ( AppFolderPeer::FOLDER_NAME );
-    
+
     $rs = appFolderPeer::doSelectRS ( $Criteria );
     $rs->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $rs->next ();
@@ -157,32 +172,32 @@ class AppFolder extends BaseAppFolder {
     return $fields;
   }
   function getFolderStructure($folderId) {
-    
+
     $folderObj = $this->load ( $folderId );
     $folderArray [$folderObj ['FOLDER_UID']] = array ("NAME" => $folderObj ['FOLDER_NAME'], "PARENT" => $folderObj ['FOLDER_PARENT_UID'] );
     $folderArray ['PATH_ARRAY'] [] = $folderObj ['FOLDER_NAME'];
-    
+
     while ( $folderObj ['FOLDER_PARENT_UID'] != "" ) {
       $folderObj = $this->load ( $folderObj ['FOLDER_PARENT_UID'] );
       $folderArray [$folderObj ['FOLDER_UID']] = array ("NAME" => $folderObj ['FOLDER_NAME'], "PARENT" => $folderObj ['FOLDER_PARENT_UID'] );
       $folderArray ['PATH_ARRAY'] [] = $folderObj ['FOLDER_NAME'];
     }
-    
+
     $folderArray ['PATH'] = str_replace ( "//", "/", implode ( "/", array_reverse ( $folderArray ['PATH_ARRAY'] ) ) );
     return $folderArray;
   }
-  
+
   function getFolderContent($folderID, $docIdFilter = array(), $keyword = NULL, $searchType = NULL) {
     require_once ("classes/model/AppDocument.php");
     require_once ("classes/model/InputDocument.php");
     require_once ("classes/model/OutputDocument.php");
     require_once ("classes/model/Users.php");
-    
+
     G::LoadClass ( 'case' );
     $oCase = new Cases ( );
     G::LoadClass ( 'process' );
     $oProcess = new Process ( );
-    
+
     $oAppDocument = new AppDocument ( );
     $oCriteria = new Criteria ( );
     if ((is_array ( $docIdFilter )) && (count ( $docIdFilter ) > 0)) { //Search by App Doc UID no matter what Folder it is
@@ -192,11 +207,15 @@ class AppFolder extends BaseAppFolder {
     } elseif ($searchType == "TAG") {
       $oCriteria->add ( AppDocumentPeer::APP_DOC_TAGS, "%" . $keyword . "%", CRITERIA::LIKE );
     }
-    
+
     $oCase->verifyTable ();
-    
+
+    $oCriteria->setOffset(0);
+    $oCriteria->setLimit(150);
+
     $oCriteria->addAscendingOrderByColumn ( AppDocumentPeer::APP_DOC_INDEX );
-    
+    $oCriteria->addDescendingOrderByColumn ( AppDocumentPeer::DOC_VERSION );
+
     $rs = AppDocumentPeer::doSelectRS ( $oCriteria );
     $rs->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $rs->next ();
@@ -205,12 +224,13 @@ class AppFolder extends BaseAppFolder {
       //**** start get Doc Info
       $oApp = new Application ( );
       if (($oApp->exists ( $row ['APP_UID'] )) || ($row ['APP_UID'] == "00000000000000000000000000000000")) {
-        
+
+        $completeInfo = array("APP_DOC_FILENAME" => $row ["APP_DOC_UID"],"APP_DOC_UID"=>$row ['APP_UID']);
         $completeInfo = $this->getCompleteDocumentInfo ( $row ['APP_UID'], $row ['APP_DOC_UID'], $row ['DOC_VERSION'], $row ['DOC_UID'], $row ['USR_UID'] );
-        
+
         $oAppDocument = new AppDocument ( );
         $lastVersion = $oAppDocument->getLastAppDocVersion ( $row ['APP_DOC_UID'], $row ['APP_UID'] );
-        
+        $filesResult [] = $completeInfo;
         if ($completeInfo ['APP_DOC_STATUS'] != "DELETED") {
           if ((in_array ( $row ['APP_DOC_UID'], $completeInfo ['INPUT_DOCUMENTS'] )) || (in_array ( $row ['APP_DOC_UID'], $completeInfo ['OUTPUT_DOCUMENTS'] )) || (in_array ( $completeInfo ['USR_UID'], array ($_SESSION ['USER_LOGGED'], '-1' ) ))) {
             if (count ( $docIdFilter ) > 0) {
@@ -221,12 +241,12 @@ class AppFolder extends BaseAppFolder {
               if ($searchType == "ALL") {// If search in name of docs is active then filter
                 if ((stripos ( $completeInfo ['APP_DOC_FILENAME'], $keyword ) !== false) || (stripos ( $completeInfo ['APP_DOC_TAGS'], $keyword ) !== false)) {
                   $filesResult [] = $completeInfo;
-                }             
+                }
               } else {//No search filter active
                 $filesResult [] = $completeInfo;
               }
             }
-          
+
           }
         }
       }
@@ -257,7 +277,7 @@ class AppFolder extends BaseAppFolder {
         $row3 = $oProcess->Load ( $row2 ['PRO_UID'] );
       }
       $lastVersion = $oAppDocument->getLastAppDocVersion ( $appDocUid, $appUid );
-      
+
       switch ($row1 ['APP_DOC_TYPE']) {
         case "OUTPUT" :
           $oOutputDocument = new OutputDocument ( );
@@ -283,7 +303,7 @@ class AppFolder extends BaseAppFolder {
               $downloadLabel1 = ".doc";
               break;
           }
-          
+
           break;
         case "INPUT" :
           $oInputDocument = new InputDocument ( );
@@ -316,15 +336,15 @@ class AppFolder extends BaseAppFolder {
           $downloadLabel = G::LoadTranslation ( 'ID_DOWNLOAD' );
           $downloadLabel1 = "";
           break;
-      
+
       }
       $oUser = new Users ( );
-      if ($usrId != "-1") {
+      if (($usrId != "-1")&&($oUser->userExists($usrId))) {
         $row5 = $oUser->load ( $usrId );
       } else {
         $row5 ['USR_USERNAME'] = "***";
       }
-      
+
       //Labels/Links
       $row6 = array ();
       $row6 ['DELETE_LABEL'] = G::LoadTranslation('ID_DELETE');
@@ -340,12 +360,12 @@ class AppFolder extends BaseAppFolder {
         $row6 ['NEWVERSION_LABEL'] = G::LoadTranslation ( 'ID_NEW_VERSION' );
       }
       $row6 ['APP_DOC_UID_VERSION'] = $appDocUid . "_" . $docVersion;
-      
+
       if ($appUid == "00000000000000000000000000000000") { //External Files
         $row1 ['APP_DOC_TYPE'] = G::LoadTranslation ( 'ID_EXTERNAL_FILE' );
       }
       //**** End get docinfo
-      
+
 
       $infoMerged = array_merge ( $row1, $row2, $row3, $row4, $row5, $row6 );
       //krumo($infoMerged);
@@ -355,7 +375,7 @@ class AppFolder extends BaseAppFolder {
       if (isset ( $infoMerged ['PRO_UID'] )) {
         $aObjectPermissions = $oCase->getAllObjects ( $infoMerged ['PRO_UID'], $infoMerged ['APP_UID'], '', $sUserUID );
       }
-      
+
       if (! is_array ( $aObjectPermissions )) {
         $aObjectPermissions = array ('DYNAFORMS' => array (- 1 ), 'INPUT_DOCUMENTS' => array (- 1 ), 'OUTPUT_DOCUMENTS' => array (- 1 ) );
       }
@@ -381,7 +401,7 @@ class AppFolder extends BaseAppFolder {
         }
       }
       //****************************************************************************************************
-      
+
 
       return array_merge ( $infoMerged, $aObjectPermissions );
     }
@@ -395,26 +415,26 @@ class AppFolder extends BaseAppFolder {
     }
     return (array_merge ( $folderArray, $foldersList ));
   }
-  
+
   function getFolderTags($rootFolder) {
     $folderArray [$rootFolder] = $rootFolder;
     $foldersToProcess = $this->getFolderChilds ( $rootFolder, $folderArray );
     $tagsInfo = array ();
-    
+
     foreach ( $foldersToProcess as $folderkey => $foldername ) {
       $filesList = $this->getFolderContent ( $folderkey );
-      
+
       foreach ( $filesList as $key => $fileInfo ) {
         $fileTags = explode ( ",", $fileInfo ['APP_DOC_TAGS'] );
         foreach ( $fileTags as $key1 => $tag ) {
           if (! (isset ( $tagsInfo [$tag] )))
-            $tagsInfo [$tag] = 0;
+          $tagsInfo [$tag] = 0;
           $tagsInfo [$tag] ++;
         }
       }
     }
     return $tagsInfo;
-  
+
   }
   function remove ($FolderUid, $rootfolder ) {
     $oCriteria = new Criteria('workflow');
