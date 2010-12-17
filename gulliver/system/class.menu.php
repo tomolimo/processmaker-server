@@ -141,10 +141,10 @@ class Menu
   * @access public
   * @param string $strLabel label to show
   * @param string $strURL link
-  * @param string $strType type, defualt value ='relative'
+  * @param string $strType type, defualt value ='plugins'
   * @return void
   */
-  function AddOption( $strLabel, $strURL, $strType = "relative" )
+  function AddOption( $strLabel, $strURL, $strType = "plugins" )
   {
     $pos = $this->OptionCount();
     $this->Options[$pos] = $strURL;
@@ -163,10 +163,10 @@ class Menu
   * @param string $strId menu id
   * @param string $strLabel label to show
   * @param string $strURL link
-  * @param string $strType type, defualt value ='relative'
+  * @param string $strType type, defualt value ='plugins'
   * @return void
   */
-  function AddIdOption( $strId, $strLabel, $strURL, $strType = "relative" )
+  function AddIdOption( $strId, $strLabel, $strURL, $strType = "plugins" )
   {
     $pos = $this->OptionCount();
     $this->Options[$pos] = $strURL;
@@ -188,10 +188,10 @@ class Menu
   * @author Fernando Ontiveros Lira <fernando@colosa.com>
   * @access public
   * @param string $strURL link
-  * @param string $strType type, defualt value ='relative'
+  * @param string $strType type, defualt value ='plugins'
   * @return void
   */
-  function AddRawOption( $strURL = "", $strType = "relative" )
+  function AddRawOption( $strURL = "", $strType = "plugins" )
   {
     $pos = $this->OptionCount();
     $this->Options[$pos] = $strURL;
@@ -210,11 +210,11 @@ class Menu
   * @param string $strId menu id
   * @param string $strLabel label to show
   * @param string $strURL link
-  * @param string $strType type, defualt value ='relative'
+  * @param string $strType type, defualt value ='plugins'
   * @param string $elementClass default value =''
   * @return void
   */
-  function AddIdRawOption( $strId, $strURL = "", $label = "", $icon = "",$js = "",  $strType = "relative",$elementClass = '' )
+  function AddIdRawOption( $strId, $strURL = "", $label = "", $icon = "",$js = "",  $strType = "plugins",$elementClass = '' )
   {
     $pos = $this->OptionCount();
     $this->Options[$pos] = $strURL;
