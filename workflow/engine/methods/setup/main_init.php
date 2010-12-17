@@ -56,9 +56,10 @@
     $i++;
   }
 
-  $oHeadPublisher->addExtJsScript('setup/main', false);    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('setup/main', true);    //adding a javascript file .js
   $oHeadPublisher->addContent('setup/main'); //adding a html file  .html.
   $oHeadPublisher->assign('tabItems', $tabItems);
+  $oHeadPublisher->assign('_item_selected', (isset($_SESSION['ADMIN_SELECTED'])?$_SESSION['ADMIN_SELECTED']:''));
 
   G::RenderPage('publish', 'extJs');
   // this patch enables the load of the plugin list panel inside de main admin panel iframe

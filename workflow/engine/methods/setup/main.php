@@ -35,6 +35,13 @@ else {
   unset($_SESSION['DEV_FLAG']);
   unset($_SESSION['TOOLS_VIEWTYPE']);
 }
+
+if( isset($_GET['s']) )
+  $_SESSION['ADMIN_SELECTED'] = $_GET['s'];
+else {
+  unset($_SESSION['ADMIN_SELECTED']);
+}
+
 $G_PUBLISH->AddContent('view', 'setup/main_Load');
 G::RenderPage('publish');
 

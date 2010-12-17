@@ -251,6 +251,10 @@ function activeDeactive(){
       method: 'GET',
       success: function ( result, request ) {
         //Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
+    	  
+    	parent.parent.location.href = 'main?s='+parent._NODE_SELECTED;
+    	return;
+    	  
         store.reload();
 
         plugins = parent.Ext.getCmp('plugins');
