@@ -152,7 +152,12 @@ Ext.onReady ( function() {
                             handler : function() {
                                 processObj.addOutputDoc();
                             }
-                        },{text: 'Trigger'},{text: 'Report Table'},{text: 'Database Connection'}]
+                        },{text: 'Trigger'},{text: 'Report Table'},
+                        {
+                            text: 'Database Connection',handler : function() {
+                                processObj.dbConnection();
+                            }
+                        }]
             })
 
         },
@@ -219,6 +224,25 @@ Ext.onReady ( function() {
             text: 'Process Permission',
             handler: ProcessMapObj.processPermission,
             scope: this
+        },{
+            text: 'Process Supervisor',
+            menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Supervisors',
+                            handler: ProcessMapObj.processSupervisors
+                        },
+                        {
+                            text: 'DynaForm',
+                            handler: ProcessMapObj.processDynaform
+                        },
+                        {
+                            text: 'Input Documents',
+                            handler: ProcessMapObj.processIODoc
+                        }
+                    ]
+                }
         },{
             text: 'Case Tracker',
             handler: ProcessMapObj.caseTracker,

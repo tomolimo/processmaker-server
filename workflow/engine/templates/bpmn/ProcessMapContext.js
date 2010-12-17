@@ -325,6 +325,658 @@ ProcessMapContext.prototype.processPermission= function()
   Ext.MessageBox.alert('Status','Process Permission');
 }
 
+ProcessMapContext.prototype.processSupervisors= function()
+{
+  var pro_uid = workflow.getUrlVars();
+
+  var processUserFields = Ext.data.Record.create([
+            {name: 'PU_UID',type: 'string'},
+            {name: 'USR_UID',type: 'string'},
+            {name: 'PU_TYPE',type: 'string'},
+            {name: 'USR_FIRSTNAME',type: 'string'},
+            {name: 'USR_LASTNAME',type: 'string'},
+            {name: 'USR_EMAIL',type: 'string'}
+            ]);
+  var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+  var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'Assign Supervisor',
+            iconCls: 'application_add',
+            handler: function(){
+                var User = grid.getStore();
+                var e = new processUserFields({
+                     PU_UID: '',
+                     USR_UID: '',
+                     PU_TYPE: '',
+                     //USR_FIRSTNAME: '',
+                     USR_LASTNAME: '',
+                     USR_EMAIL: ''
+                });
+
+                //storeUsers.reload();
+                if(availableProcessesUser.data.items.length == 0)
+                     Ext.MessageBox.alert ('Status','No supervisors are available. All supervisors have been already assigned.');
+                else
+                {
+                    editor.stopEditing();
+                    processUser.insert(0, e);
+                    grid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editor.startEditing(0, 0);
+                }
+            }
+        });
+
+  var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Remove Supervisor',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = grid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting assigned users from Database
+                    var puID            = r.data.PU_UID;
+                    var urlparams       = '?action=removeProcessUser&data={"PU_UID":"'+puID+'"}';
+
+                    //if USR_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                     if(r.data.PU_UID != "")
+                     {
+                        Ext.Ajax.request({
+                          url   : 'processes_Ajax.php'+urlparams,
+                          method: 'GET',
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','Supervisor  has been removed successfully from Process.');
+                              //Secondly deleting from Grid
+                              processUser.remove(r);
+                              //Reloading available user store
+                              processUser.reload();
+                              availableProcessesUser.reload();
+                          }
+                        });
+                     }
+                     else
+                         processUser.remove(r);
+                }
+            }
+        });
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove]
+        });
+
+  // create the Data Store of users that are already assigned to a process supervisor
+  var processUser = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : processUserFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyProcessSupervisors?pid='+pro_uid+'&action=process_User'
+            })
+          });
+  processUser.load();
+
+  // create the Data Store of users that are not assigned to a process supervisor
+  var availableProcessesUser = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyProcessSupervisors?pid='+pro_uid+'&action=availableProcessesUser',
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : processUserFields
+              });
+
+
+  var grid = new Ext.grid.GridPanel({
+        store: processUser,
+        id : 'mygrid',
+        //cm: cm,
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        plugins: [editor],
+        columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'USR_FIRSTNAME',
+                    header: 'First Name',
+                    dataIndex: 'USR_FIRSTNAME',
+                    width: 200,
+                    sortable: true,
+                    editor: new Ext.form.ComboBox({
+                            xtype: 'combo',
+                            fieldLabel: 'Users_groups',
+                            hiddenName: 'number',
+                            store        : availableProcessesUser,
+                            displayField : 'USR_FIRSTNAME'  ,
+                            valueField   : 'USR_FIRSTNAME',
+                            name         : 'USR_FIRSTNAME',
+                            triggerAction: 'all',
+                            emptyText: 'Select Supervisor',
+                            allowBlank: false,
+                             onSelect: function(record, index){
+                                var User = grid.getStore();
+
+                                var selectedrowIndex = '0';
+
+                                User.data.items[selectedrowIndex].data.PU_UID      = record.data.PU_UID;
+                                User.data.items[selectedrowIndex].data.USR_UID      = record.data.USR_UID;
+                                User.data.items[selectedrowIndex].data.PU_TYPE      = record.data.PU_TYPE;
+                                //User.data.items[selectedrowIndex].data.USR_FIRSTNAME  = record.data.USR_FIRSTNAME;
+                                User.data.items[selectedrowIndex].data.USR_LASTNAME  = record.data.USR_LASTNAME;
+                                User.data.items[selectedrowIndex].data.USR_EMAIL  = record.data.USR_EMAIL;
+
+                                Ext.getCmp("lastname").setValue(record.data.USR_LASTNAME);
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                this.collapse();
+                              }
+                        })
+                },{
+                    //id: 'USR_LASTNAME',
+                    header: 'Last Name',
+                    dataIndex: 'USR_LASTNAME',
+                    width: 200,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                        id: 'lastname',
+                        allowBlank : true
+                    })
+                }
+                ],
+        stripeRows: true,
+        viewConfig: {forceFit: true},
+        tbar: tb
+        });
+
+        availableProcessesUser.load();
+
+        editor.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+            var userID      = record.data.USR_UID;
+            var urlparams   = '?action=assignProcessUser&data={"PRO_UID":"'+pro_uid+'","USR_UID":"'+userID+'"}';
+
+            Ext.Ajax.request({
+                    url: 'processes_Ajax.php'+urlparams,
+                    method: 'GET',
+                    success: function (response) {      // When saving data success
+                        Ext.MessageBox.alert ('Status','Supervisor has been successfully assigned to a Process');
+                        processUser.reload();
+                        availableProcessesUser.reload();
+                    },
+                    failure: function () {      // when saving data failed
+                        Ext.MessageBox.alert ('Status','Failed saving Supervisor Assigned to process');
+                    }
+                 });
+          }
+        });
+
+        var window = new Ext.Window({
+        title: 'Assign Process Supervisor',
+        collapsible: false,
+        maximizable: false,
+        width: 400,
+        height: 350,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: grid
+    });
+    window.show();
+}
+
+ProcessMapContext.prototype.processDynaform= function()
+{
+  var pro_uid = workflow.getUrlVars();
+
+  var supervisorDynaformsFields = Ext.data.Record.create([
+            {name: 'DYN_TITLE',type: 'string'},
+            {name: 'STEP_UID',type: 'string'},
+            {name: 'STEP_UID_OBJ',type: 'string'},
+            {name: 'STEP_TYPE_OBJ',type: 'string'},
+            {name: 'STEP_POSITION',type: 'string'},
+            {name: 'DYN_UID',type: 'string'}
+            ]);
+  var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+  var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'Assign Dynaform',
+            iconCls: 'application_add',
+            handler: function(){
+                var User = grid.getStore();
+                var e = new supervisorDynaformsFields({
+                     DYN_UID: '',
+                     STEP_UID: '',
+                     STEP_UID_OBJ: '',
+                     STEP_TYPE_OBJ: '',
+                     STEP_POSITION: ''
+                });
+
+                //storeUsers.reload();
+                if(availableSupervisorDynaforms.data.items.length == 0)
+                     Ext.MessageBox.alert ('Status','No dynaform are available. All dynaforms have been already assigned.');
+                else
+                {
+                    editor.stopEditing();
+                    supervisorDynaforms.insert(0, e);
+                    grid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editor.startEditing(0, 0);
+                }
+            }
+        });
+
+  var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Remove Dynaform',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = grid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting assigned users from Database
+                    var dynUID          = r.data.DYN_UID;
+                    var stepUID         = r.data.STEP_UID;
+                    var sPos            = r.data.STEP_POSITION;
+
+                    //if DYN_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                     if(r.data.DYN_UID != "")
+                     {
+                        Ext.Ajax.request({
+                          url   : '../steps/steps_SupervisorAjax.php',
+                          method: 'POST',
+                          params: {
+                              STEP_UID           : stepUID,
+                              PRO_UID            : pro_uid,
+                              DYN_UID            : dynUID,
+                              STEP_POSITION      : sPos,
+                              action             : 'removeSupervisorDynaform'
+                          },
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','Dynaform  has been removed successfully from Process.');
+                              //Secondly deleting from Grid
+                              supervisorDynaforms.remove(r);
+                              //Reloading available user store
+                              supervisorDynaforms.reload();
+                              availableSupervisorDynaforms.reload();
+                          }
+                        });
+                     }
+                     else
+                         supervisorDynaforms.remove(r);
+                }
+            }
+        });
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove]
+        });
+
+  // create the Data Store of users that are already assigned to a process supervisor
+  var supervisorDynaforms = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : supervisorDynaformsFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyProcessSupervisors?pid='+pro_uid+'&action=supervisorDynaforms'
+            })
+          });
+  supervisorDynaforms.load();
+
+  // create the Data Store of users that are not assigned to a process supervisor
+  var availableSupervisorDynaforms = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyProcessSupervisors?pid='+pro_uid+'&action=availableSupervisorDynaforms',
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : supervisorDynaformsFields
+              });
+
+
+  var grid = new Ext.grid.GridPanel({
+        store: supervisorDynaforms,
+        id : 'mygrid',
+        //cm: cm,
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        plugins: [editor],
+        columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'DYN_TITLE',
+                    header: 'Title',
+                    dataIndex: 'DYN_TITLE',
+                    width: 200,
+                    sortable: true,
+                    editor: new Ext.form.ComboBox({
+                            xtype: 'combo',
+                            fieldLabel: 'Users_groups',
+                            hiddenName: 'number',
+                            store        : availableSupervisorDynaforms,
+                            displayField : 'DYN_TITLE'  ,
+                            valueField   : 'DYN_TITLE',
+                            name         : 'DYN_TITLE',
+                            triggerAction: 'all',
+                            emptyText: 'Select Dynaform',
+                            allowBlank: false,
+                             onSelect: function(record, index){
+                                var User = grid.getStore();
+                                var selectedrowIndex = '0';
+
+                                User.data.items[selectedrowIndex].data.STEP_UID      = record.data.STEP_UID;
+                                User.data.items[selectedrowIndex].data.STEP_UID_OBJ      = record.data.STEP_UID_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ      = record.data.STEP_TYPE_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_POSITION      = record.data.STEP_POSITION;
+                                User.data.items[selectedrowIndex].data.DYN_UID  = record.data.DYN_UID;
+
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                this.collapse();
+                              }
+                        })
+                }
+                ],
+        stripeRows: true,
+        viewConfig: {forceFit: true},
+        tbar: tb
+        });
+
+        //availableSupervisorDynaforms.load();
+
+        editor.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+            var dynUID      = record.data.DYN_UID;
+            //var urlparams   = '?action=assignsupervisorDynaforms&data={"PRO_UID":"'+pro_uid+'","USR_UID":"'+userID+'"}';
+
+            Ext.Ajax.request({
+                    url   : '../steps/steps_SupervisorAjax.php',
+                    method: 'POST',
+                    params: {
+                        action      : 'assignSupervisorDynaform',
+                        PRO_UID     : pro_uid,
+                        DYN_UID     : dynUID
+                    },
+                    success: function (response) {      // When saving data success
+                        Ext.MessageBox.alert ('Status','Dynaform has been successfully assigned to a Process');
+                        supervisorDynaforms.reload();
+                        availableSupervisorDynaforms.reload();
+                    },
+                    failure: function () {      // when saving data failed
+                        Ext.MessageBox.alert ('Status','Failed saving Dynaform Assigned to process');
+                    }
+                 });
+          }
+        });
+
+        var window = new Ext.Window({
+        title: 'Assign Dynaform',
+        collapsible: false,
+        maximizable: false,
+        width: 400,
+        height: 350,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: grid
+    });
+    window.show();
+}
+
+ProcessMapContext.prototype.processIODoc= function()
+{
+  var pro_uid = workflow.getUrlVars();
+
+  var supervisorInputDocFields = Ext.data.Record.create([
+            {name: 'INP_DOC_TITLE',type: 'string'},
+            {name: 'STEP_UID',type: 'string'},
+            {name: 'STEP_UID_OBJ',type: 'string'},
+            {name: 'STEP_TYPE_OBJ',type: 'string'},
+            {name: 'STEP_POSITION',type: 'string'},
+            {name: 'INP_DOC_UID',type: 'string'}
+            ]);
+  var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+  var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'Assign Input Document',
+            iconCls: 'application_add',
+            handler: function(){
+                var User = grid.getStore();
+                var e = new supervisorInputDocFields({
+                     INP_DOC_UID: '',
+                     STEP_UID: '',
+                     STEP_UID_OBJ: '',
+                     STEP_TYPE_OBJ: '',
+                     STEP_POSITION: ''
+                });
+
+                //storeUsers.reload();
+                if(availableSupervisorInputDoc.data.items.length == 0)
+                     Ext.MessageBox.alert ('Status','No Input Document are available. All Input Document have been already assigned.');
+                else
+                {
+                    editor.stopEditing();
+                    supervisorInputDoc.insert(0, e);
+                    grid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editor.startEditing(0, 0);
+                }
+            }
+        });
+
+  var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Remove Input Document',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = grid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting assigned users from Database
+                    var inputDocUID     = r.data.INP_DOC_UID;
+                    var stepUID         = r.data.STEP_UID;
+                    var sPos            = r.data.STEP_POSITION;
+
+                    //if DYN_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                     if(r.data.DYN_UID != "")
+                     {
+                        Ext.Ajax.request({
+                          url   : '../steps/steps_SupervisorAjax.php',
+                          method: 'POST',
+                          params: {
+                              STEP_UID           : stepUID,
+                              PRO_UID            : pro_uid,
+                              INP_DOC_UID        : inputDocUID,
+                              STEP_POSITION      : sPos,
+                              action             : 'removeSupervisorInput'
+                          },
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','Input Document  has been removed successfully from Process.');
+                              //Secondly deleting from Grid
+                              supervisorInputDoc.remove(r);
+                              //Reloading available user store
+                              supervisorInputDoc.reload();
+                              availableSupervisorInputDoc.reload();
+                          }
+                        });
+                     }
+                     else
+                         supervisorInputDoc.remove(r);
+                }
+            }
+        });
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove]
+        });
+
+  // create the Data Store of users that are already assigned to a process supervisor
+  var supervisorInputDoc = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : supervisorInputDocFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyProcessSupervisors?pid='+pro_uid+'&action=supervisorInputDoc'
+            })
+          });
+  supervisorInputDoc.load();
+
+  // create the Data Store of users that are not assigned to a process supervisor
+  var availableSupervisorInputDoc = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyProcessSupervisors?pid='+pro_uid+'&action=availableSupervisorInputDoc',
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : supervisorInputDocFields
+              });
+
+
+  var grid = new Ext.grid.GridPanel({
+        store: supervisorInputDoc,
+        id : 'mygrid',
+        //cm: cm,
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        plugins: [editor],
+        columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'INP_DOC_TITLE',
+                    header: 'Title',
+                    dataIndex: 'INP_DOC_TITLE',
+                    width: 200,
+                    sortable: true,
+                    editor: new Ext.form.ComboBox({
+                            xtype: 'combo',
+                            fieldLabel: 'Users_groups',
+                            hiddenName: 'number',
+                            store        : availableSupervisorInputDoc,
+                            displayField : 'INP_DOC_TITLE'  ,
+                            valueField   : 'INP_DOC_TITLE',
+                            name         : 'INP_DOC_TITLE',
+                            triggerAction: 'all',
+                            emptyText: 'Select Input Document',
+                            allowBlank: false,
+                             onSelect: function(record, index){
+                                var User = grid.getStore();
+                                var selectedrowIndex = '0';
+
+                                User.data.items[selectedrowIndex].data.STEP_UID      = record.data.STEP_UID;
+                                User.data.items[selectedrowIndex].data.STEP_UID_OBJ      = record.data.STEP_UID_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ      = record.data.STEP_TYPE_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_POSITION      = record.data.STEP_POSITION;
+                                User.data.items[selectedrowIndex].data.INP_DOC_UID  = record.data.INP_DOC_UID;
+
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                this.collapse();
+                              }
+                        })
+                }
+                ],
+        stripeRows: true,
+        viewConfig: {forceFit: true},
+        tbar: tb
+        });
+
+        //availableSupervisorInputDoc.load();
+
+        editor.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+            var inputDocUID      = record.data.INP_DOC_UID;
+            //var urlparams   = '?action=assignsupervisorInputDoc&data={"PRO_UID":"'+pro_uid+'","USR_UID":"'+userID+'"}';
+
+            Ext.Ajax.request({
+                    url   : '../steps/steps_SupervisorAjax.php',
+                    method: 'POST',
+                    params: {
+                        action      : 'assignSupervisorInput',
+                        PRO_UID     : pro_uid,
+                        INP_DOC_UID : inputDocUID
+                    },
+                    success: function (response) {      // When saving data success
+                        Ext.MessageBox.alert ('Status','Input Document has been successfully assigned to a Process');
+                        supervisorInputDoc.reload();
+                        availableSupervisorInputDoc.reload();
+                    },
+                    failure: function () {      // when saving data failed
+                        Ext.MessageBox.alert ('Status','Failed saving Input Document Assigned to process');
+                    }
+                 });
+          }
+        });
+
+        var window = new Ext.Window({
+        title: 'Assign Dynaform',
+        collapsible: false,
+        maximizable: false,
+        width: 400,
+        height: 350,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: grid
+    });
+    window.show();
+}
+
 ProcessMapContext.prototype.caseTracker= function()
 {
   Ext.MessageBox.alert('Status','Case Tracker');

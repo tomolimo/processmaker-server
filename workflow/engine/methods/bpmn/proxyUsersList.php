@@ -21,3 +21,4 @@ try
   catch ( Exception $e ) {
   	print json_encode ( $e->getMessage() );
   }
+?>

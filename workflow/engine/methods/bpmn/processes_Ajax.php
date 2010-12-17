@@ -128,7 +128,14 @@ if ( isset ($_REQUEST['action']) ) {
           echo $sOutput;
           break;
 
-   case 'saveInterMessageEvent':
+    case 'assignProcessUser':
+  	  $oProcessMap->assignProcessUser($oData->PRO_UID, $oData->USR_UID);
+  	break;
+    case 'removeProcessUser':
+  	  $oProcessMap->removeProcessUser($oData->PU_UID);
+  	break;
+
+    case 'saveInterMessageEvent':
           $aData['TAS_UID'] = $oData->uid;
           $aData['TAS_SEND_LAST_EMAIL'] = strtoupper($oData->tas_send);
           $aData['TAS_DEF_MESSAGE'] = $oData->data;
