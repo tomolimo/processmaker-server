@@ -55,7 +55,7 @@ class System {
     foreach (glob(PATH_PLUGINS . "*") as $filename) {
       $info = pathinfo($filename);
       if (array_key_exists("extension", $info) && (strcmp($info["extension"], "php") == 0)) {
-        $plugins[] = $info["basename"];
+        $plugins[] = basename($filename, ".php");
       }
     }
 
@@ -691,14 +691,31 @@ class System {
   }
 
   /**
+  * Retrieves the system schema.
+  *
+  * @return schema content in an array
+  */
+  public static function getSystemSchema() {
+    return System::getSchema(PATH_TRUNK . "workflow/engine/config/schema.xml");
+  }
+
+  /**
+  * Retrieves the schema for a plugin.
+  *
+  * @param string $pluginName name of the plugin
+  * @return $sContent
+  */
+  public static function getPluginSchema($pluginName) {
+    return System::getSchema(PATH_PLUGINS . $pluginName . "/config/schema.xml");
+  }
+
+  /**
   * Retrieves a schema array from a file.
   *
   * @param string $sSchemaFile schema filename
-  * @param string $dbAdapter database adapter name
   * @return $sContent
   */
-  public static function getSchema() {
-    $sSchemaFile = PATH_TRUNK . "workflow/engine/config/schema.xml";
+  public static function getSchema($sSchemaFile) {
     $dbAdapter = "mysql";
     $aSchema = array();
     $oXml = new DomDocument();

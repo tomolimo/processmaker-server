@@ -10,6 +10,8 @@ pake_task('cacheview-upgrade');
 pake_task('database-upgrade');
 pake_task('database-check');
 
+pake_task('plugins-database-upgrade');
+
 pake_task('database-export');
 pake_task('database-import');
 
@@ -58,6 +60,18 @@ function run_cacheview_upgrade($command, $args) {
       $workspace->upgradeCacheView();
     } catch (Exception $e) {
       echo "Errors upgrading translation of workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
+    }
+  }
+}
+
+function run_plugins_database_upgrade($command, $args) {
+  $workspaces = get_workspaces_from_args($args);
+  foreach ($workspaces as $workspace) {
+    try {
+      logging("Upgrading plugins database for " . info($workspace->name) . "\n");
+      $workspace->upgradePluginsDatabase();
+    } catch (Exception $e) {
+      logging("Errors upgrading plugins database: " . error($e->getMessage()));
     }
   }
 }

@@ -301,7 +301,19 @@ class workspaceTools {
     // end of reset 
   }
 
-  public function upgradeDatabase($checkOnly = false) {
+  public function upgradePluginsDatabase() {
+    foreach (System::getPlugins() as $pluginName) {
+      $pluginSchema = System::getPluginSchema($pluginName);
+      $this->upgradeSchema($pluginSchema);
+    }
+  }
+
+  public function upgradeDatabase($checkOnly) {
+    $systemSchema = System::getSystemSchema();
+    return $this->upgradeSchema($systemSchema);
+  }
+
+  public function upgradeSchema($schema, $checkOnly = false) {
     $dbInfo = $this->getDBInfo();
 
     if (strcmp($dbInfo["DB_ADAPTER"], "mysql") != 0) {
