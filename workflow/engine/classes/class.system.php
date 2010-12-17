@@ -706,7 +706,10 @@ class System {
   * @return $sContent
   */
   public static function getPluginSchema($pluginName) {
-    return System::getSchema(PATH_PLUGINS . $pluginName . "/config/schema.xml");
+    if (file_exists(PATH_PLUGINS . $pluginName . "/config/schema.xml"))
+      return System::getSchema(PATH_PLUGINS . $pluginName . "/config/schema.xml");
+    else
+      return false;
   }
 
   /**

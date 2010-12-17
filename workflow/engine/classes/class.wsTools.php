@@ -304,7 +304,8 @@ class workspaceTools {
   public function upgradePluginsDatabase() {
     foreach (System::getPlugins() as $pluginName) {
       $pluginSchema = System::getPluginSchema($pluginName);
-      $this->upgradeSchema($pluginSchema);
+      if ($pluginSchema !== false)
+        $this->upgradeSchema($pluginSchema);
     }
   }
 
@@ -320,9 +321,8 @@ class workspaceTools {
       throw new Exception("Only MySQL is supported");
     }
 
-    $currentSchema = System::getSchema();
     $workspaceSchema = $this->getSchema();
-    $changes = System::compareSchema($workspaceSchema, $currentSchema);
+    $changes = System::compareSchema($workspaceSchema, $schema);
     $changed = (count($changes['tablesToAdd']) > 0 ||
                 count($changes['tablesToAlter']) > 0 ||
                 count($changes['tablesWithNewIndex']) > 0 ||
