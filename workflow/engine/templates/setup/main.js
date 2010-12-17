@@ -3,11 +3,13 @@
  * Aug 20th, 2010 
  */
 
+var _NODE_SELECTED;
 var main = function(){
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   
-  items = Array();
-  
+  var items = Array();
+  var i;
+ 
   for(i=0; i<tabItems.length; i++){
     
     items[i] = new Ext.tree.TreePanel({
@@ -31,8 +33,23 @@ var main = function(){
       listeners: {
         'click': function(tp) {
           if( tp.attributes.url ){
+            _NODE_SELECTED = tp.id;
             document.getElementById('setup-frame').src = tp.attributes.url;
           }
+        },
+        'render': function(tp){
+        	
+          var loader = tp.getLoader();
+	    	loader.on("load", function(){
+	        if( _item_selected != '' ){
+	          node = tp.getNodeById(_item_selected);
+	    	  document.getElementById('setup-frame').src = node.attributes.url;
+	    	  if(node){
+	    	    node.select();
+	    	    _NODE_SELECTED = node.attributes.id;
+	    	  }
+	    	}
+	      });
         }
       }
     });
