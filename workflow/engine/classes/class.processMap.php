@@ -5034,7 +5034,261 @@ class processMap {
     }
   }
 
+  /**
+   * listProcessesUser for Extjs
+   *
+   * @param  string           $sProcessUID
+   * @return array(aProcessUser) $aProcessUser
+   */
+  function listExtProcessesUser($sProcessUID) {
 
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(ProcessUserPeer::PU_UID);
+    $oCriteria->addSelectColumn(ProcessUserPeer::USR_UID);
+    $oCriteria->addSelectColumn(ProcessUserPeer::PRO_UID);
+    $oCriteria->addSelectColumn(ProcessUserPeer::PU_TYPE);
+    $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+    $oCriteria->addJoin(ProcessUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
+
+    $oDataset = ProcessUserPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aProcessUser = '';
+    while ( $aRow = $oDataset->getRow () ) {
+        $aProcessUser [] = array ('PU_UID' => $aRow ['PU_UID'],'USR_UID' => $aRow ['USR_UID'],'PU_TYPE' => $aRow ['PU_TYPE'],'USR_FIRSTNAME' => $aRow ['USR_FIRSTNAME'],'USR_LASTNAME' => $aRow ['USR_LASTNAME'],'USR_EMAIL' => $aRow ['USR_EMAIL']);
+        $oDataset->next ();
+    }
+    return $aProcessUser;
+  }
+
+  /**
+   * listExtNoProcessesUser for Extjs
+   *
+   * @param  string           $sProcessUID
+   * @return array(aAvailableUser) $aAvailableUser
+   */
+  function listExtNoProcessesUser($sProcessUID) {
+    G::LoadSystem('rbac');
+
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(ProcessUserPeer::USR_UID);
+    $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(ProcessUserPeer::PU_TYPE, 'SUPERVISOR');
+    $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aUIDS = array();
+    while ($aRow = $oDataset->getRow()) {
+      $aUIDS [] = $aRow ['USR_UID'];
+      $oDataset->next();
+    }
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+    $oCriteria->add(UsersPeer::USR_UID, $aUIDS, Criteria::NOT_IN);
+    $oDataset = UsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aUIDS = array();
+    $oRBAC = RBAC::getSingleton ();
+    while ($aRow = $oDataset->getRow()) {
+      $oRBAC->loadUserRolePermission($oRBAC->sSystem, $aRow ['USR_UID']);
+      $aPermissions = $oRBAC->aUserInfo [$oRBAC->sSystem] ['PERMISSIONS'];
+      $bInclude = false;
+      foreach ($aPermissions as $aPermission) {
+        if ($aPermission ['PER_CODE'] == 'PM_SUPERVISOR') {
+          $bInclude = true;
+        }
+      }
+      if ($bInclude) {
+        $aUIDS [] = $aRow ['USR_UID'];
+      }
+      $oDataset->next();
+    }
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+    $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $oCriteria->add(UsersPeer::USR_UID, $aUIDS, Criteria::IN);
+
+    $oDataset = UsersPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aAvailableUser = '';
+     while ( $aRow = $oDataset->getRow () ) {
+        $aAvailableUser [] = array ('USR_UID' => $aRow ['USR_UID'],'USR_FIRSTNAME' => $aRow ['USR_FIRSTNAME'],'USR_LASTNAME' => $aRow ['USR_LASTNAME']);
+        $oDataset->next ();
+    }
+    return $aAvailableUser;
+  }
+
+  /*
+   * Return the supervisors dynaforms list array
+   * @param string $sProcessUID
+   * @return array
+   */
+
+  function getExtSupervisorDynaformsList($sProcessUID = '') {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_UID);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::PRO_UID);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_TYPE_OBJ);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_UID_OBJ);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_POSITION);
+    $oCriteria->addSelectColumn(DynaformPeer::DYN_UID);
+    $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(StepSupervisorPeer::STEP_UID_OBJ, DynaformPeer::DYN_UID);
+    $aConditions [] = array(StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'DYNAFORM' . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $aConditions = array();
+    $aConditions [] = array(DynaformPeer::DYN_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(StepSupervisorPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
+    $oCriteria->addAscendingOrderByColumn(StepSupervisorPeer::STEP_POSITION);
+
+    $oDataset = StepSupervisorPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aProcessDynaform = '';
+     while ( $aRow = $oDataset->getRow () ) {
+        $aProcessDynaform [] = array ('DYN_TITLE' => $aRow ['DYN_TITLE'],'DYN_UID' => $aRow ['DYN_UID'],'STEP_UID' => $aRow ['STEP_UID'],'STEP_UID_OBJ' => $aRow ['STEP_UID_OBJ'],'STEP_TYPE_OBJ' => $aRow ['STEP_TYPE_OBJ'],'STEP_POSITION' => $aRow ['STEP_POSITION']);
+        $oDataset->next ();
+    }
+    return $aProcessDynaform;
+  }
+
+  /*
+   * Return the available supervisors dynaforms list array
+   * @param string $sProcessUID
+   * @return array
+   */
+
+  function getExtAvailableSupervisorDynaformsList($sProcessUID = '') {
+    $oCriteria = $this->getSupervisorDynaformsCriteria($sProcessUID);
+    $oDataset = StepSupervisorPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aUIDS = array();
+    while ($aRow = $oDataset->getRow()) {
+      $aUIDS [] = $aRow ['STEP_UID_OBJ'];
+      $oDataset->next();
+    }
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(DynaformPeer::DYN_UID);
+    $oCriteria->addSelectColumn(DynaformPeer::PRO_UID);
+    $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(DynaformPeer::DYN_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(DynaformPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(DynaformPeer::DYN_TYPE, 'xmlform');
+    $oCriteria->add(DynaformPeer::DYN_UID, $aUIDS, Criteria::NOT_IN);
+
+    $oDataset = DynaformPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aAvailableProcessDynaform = '';
+     while ( $aRow = $oDataset->getRow () ) {
+        $aAvailableProcessDynaform [] = array ('DYN_TITLE' => $aRow ['DYN_TITLE'],'DYN_UID' => $aRow ['DYN_UID']);
+        $oDataset->next ();
+    }
+    return $aAvailableProcessDynaform;
+  }
+
+  /*
+   * Return the supervisors input document list array
+   * @param string $sProcessUID
+   * @return array
+   */
+
+  function getExtSupervisorInputsList($sProcessUID = '') {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_UID);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::PRO_UID);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_TYPE_OBJ);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_UID_OBJ);
+    $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_POSITION);
+    $oCriteria->addSelectColumn(InputDocumentPeer::INP_DOC_UID);
+    $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(StepSupervisorPeer::STEP_UID_OBJ, InputDocumentPeer::INP_DOC_UID);
+    $aConditions [] = array(StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'INPUT_DOCUMENT' . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $aConditions = array();
+    $aConditions [] = array(InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(StepSupervisorPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(StepSupervisorPeer::STEP_TYPE_OBJ, 'INPUT_DOCUMENT');
+    $oCriteria->addAscendingOrderByColumn(StepSupervisorPeer::STEP_POSITION);
+    $oDataset = StepSupervisorPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aProcessInputDoc = '';
+     while ( $aRow = $oDataset->getRow () ) {
+        $aProcessInputDoc [] = array ('INP_DOC_TITLE' => $aRow ['INP_DOC_TITLE'],'INP_DOC_UID' => $aRow ['INP_DOC_UID'],'STEP_UID' => $aRow ['STEP_UID'],'STEP_UID_OBJ' => $aRow ['STEP_UID_OBJ'],'STEP_TYPE_OBJ' => $aRow ['STEP_TYPE_OBJ'],'STEP_POSITION' => $aRow ['STEP_POSITION']);
+        $oDataset->next ();
+    }
+    return $aProcessInputDoc;
+  }
+
+  /*
+   * Return the available supervisors input documents list array
+   * @param string $sProcessUID
+   * @return array
+   */
+
+  function getExtAvailableSupervisorInputsList($sProcessUID = '') {
+    $oCriteria = $this->getSupervisorInputsCriteria($sProcessUID);
+    $oDataset = StepSupervisorPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aUIDS = array();
+    while ($aRow = $oDataset->getRow()) {
+      $aUIDS [] = $aRow ['STEP_UID_OBJ'];
+      $oDataset->next();
+    }
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(InputDocumentPeer::INP_DOC_UID);
+    $oCriteria->addSelectColumn(InputDocumentPeer::PRO_UID);
+    $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(InputDocumentPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(InputDocumentPeer::INP_DOC_UID, $aUIDS, Criteria::NOT_IN);
+    $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    $aAvailableProcessIODoc = '';
+     while ( $aRow = $oDataset->getRow () ) {
+        $aAvailableProcessIODoc [] = array ('INP_DOC_TITLE' => $aRow ['INP_DOC_TITLE'],'INP_DOC_UID' => $aRow ['INP_DOC_UID']);
+        $oDataset->next ();
+    }
+    return $aAvailableProcessIODoc;
+  }
+
+  
   function showExtDBConnList() {
     $oProcess = new processMap();
     $oCriteria = $oProcess->getConditionProcessList();
@@ -5061,7 +5315,13 @@ class processMap {
      }
   }
 
-  function getExtCriteriaDBSList($sProcessUID)
+ /**
+   * listDBSConnection
+   *
+   * @param  string           $sProcessUID
+   * @return array(aDBList)   $aDBList
+   */
+ function getExtCriteriaDBSList($sProcessUID)
     {
        try
        {
@@ -5088,7 +5348,7 @@ class processMap {
         $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
         $oDataset->next ();
         while ( $aRow = $oDataset->getRow () ) {
-            $aDBList [] = array ('DBS_UID' => $aRow ['DBS_UID'],'DBS_TYPE' => $aRow ['DBS_TYPE'],'DBS_SERVER' => $aRow ['DBS_SERVER'],'DBS_DATABASE_NAME' => $aRow ['DBS_DATABASE_NAME'],'DBS_USERNAME' => $aRow ['DBS_USERNAME'],'DBS_PASSWORD' => $aRow ['DBS_PASSWORD'],'DBS_DESCRIPTION' => $aRow ['CON_VALUE'],'DBS_PORT' => $aRow ['DBS_PORT']);
+            $aDBList [] = array ('DBS_UID' => $aRow ['DBS_UID'],'DBS_TYPE' => $aRow ['DBS_TYPE'],'DBS_SERVER' => $aRow ['DBS_SERVER'],'DBS_DATABASE_NAME' => $aRow ['DBS_DATABASE_NAME'],'DBS_USERNAME' => $aRow ['DBS_USERNAME'],'DBS_PASSWORD' => $aRow ['DBS_PASSWORD'],'DBS_DESCRIPTION' => $aRow ['DBS_DESCRIPTION'],'DBS_PORT' => $aRow ['DBS_PORT']);
             $oDataset->next ();
         }
         return $aDBList;
