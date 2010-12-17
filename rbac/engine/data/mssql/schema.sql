@@ -34,9 +34,10 @@ CREATE TABLE [PERMISSIONS]
 (
 	[PER_UID] VARCHAR(32) default '' NOT NULL,
 	[PER_CODE] VARCHAR(32) default '' NOT NULL,
-	[PER_CREATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
-	[PER_UPDATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
+	[PER_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
+	[PER_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[PER_STATUS] INT default 1 NOT NULL,
+	[PER_SYSTEM] VARCHAR(32) default '00000000000000000000000000000002' NOT NULL,
 	CONSTRAINT PERMISSIONS_PK PRIMARY KEY ([PER_UID])
 );
 
@@ -77,8 +78,8 @@ CREATE TABLE [ROLES]
 	[ROL_PARENT] VARCHAR(32) default '' NOT NULL,
 	[ROL_SYSTEM] VARCHAR(32) default '' NOT NULL,
 	[ROL_CODE] VARCHAR(32) default '' NOT NULL,
-	[ROL_CREATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
-	[ROL_UPDATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
+	[ROL_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
+	[ROL_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[ROL_STATUS] INT default 1 NOT NULL,
 	CONSTRAINT ROLES_PK PRIMARY KEY ([ROL_UID])
 );
@@ -156,18 +157,18 @@ CREATE TABLE [SYSTEMS]
 (
 	[SYS_UID] VARCHAR(32) default '' NOT NULL,
 	[SYS_CODE] VARCHAR(32) default '' NOT NULL,
-	[SYS_CREATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
-	[SYS_UPDATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
+	[SYS_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
+	[SYS_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[SYS_STATUS] INT default 0 NOT NULL,
 	CONSTRAINT SYSTEMS_PK PRIMARY KEY ([SYS_UID])
 );
 
 /* ---------------------------------------------------------------------- */
-/* USERS											*/
+/* RBAC_USERS											*/
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'USERS')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_USERS')
 BEGIN
 	 DECLARE @reftable_5 nvarchar(60), @constraintname_5 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -179,7 +180,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'USERS'
+		 and tables.name = 'RBAC_USERS'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_5, @constraintname_5
 	 while @@FETCH_STATUS = 0
@@ -189,11 +190,11 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [USERS]
+	 DROP TABLE [RBAC_USERS]
 END
 
 
-CREATE TABLE [USERS]
+CREATE TABLE [RBAC_USERS]
 (
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[USR_USERNAME] VARCHAR(100) default '' NOT NULL,
@@ -201,11 +202,15 @@ CREATE TABLE [USERS]
 	[USR_FIRSTNAME] VARCHAR(50) default '' NOT NULL,
 	[USR_LASTNAME] VARCHAR(50) default '' NOT NULL,
 	[USR_EMAIL] VARCHAR(100) default '' NOT NULL,
-	[USR_DUE_DATE] DATETIME default '0000-00-00' NOT NULL,
-	[USR_CREATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
-	[USR_UPDATE_DATE] DATETIME default '0000-00-00 00:00:00' NOT NULL,
+	[USR_DUE_DATE] CHAR(19) default '0000-00-00' NOT NULL,
+	[USR_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
+	[USR_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[USR_STATUS] INT default 1 NOT NULL,
-	CONSTRAINT USERS_PK PRIMARY KEY ([USR_UID])
+	[USR_AUTH_TYPE] VARCHAR(32) default '' NOT NULL,
+	[UID_AUTH_SOURCE] VARCHAR(32) default '' NOT NULL,
+	[USR_AUTH_USER_DN] VARCHAR(MAX) NULL,
+	[USR_AUTH_SUPERVISOR_DN] VARCHAR(255) default '' NOT NULL,
+	CONSTRAINT RBAC_USERS_PK PRIMARY KEY ([USR_UID])
 );
 
 /* ---------------------------------------------------------------------- */
@@ -245,3 +250,112 @@ CREATE TABLE [USERS_ROLES]
 	[ROL_UID] VARCHAR(32) default '' NOT NULL,
 	CONSTRAINT USERS_ROLES_PK PRIMARY KEY ([USR_UID],[ROL_UID])
 );
+
+/* ---------------------------------------------------------------------- */
+/* AUTHENTICATION_SOURCE											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'AUTHENTICATION_SOURCE')
+BEGIN
+	 DECLARE @reftable_7 nvarchar(60), @constraintname_7 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'AUTHENTICATION_SOURCE'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_7, @constraintname_7
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_7+' drop constraint '+@constraintname_7)
+	   FETCH NEXT from refcursor into @reftable_7, @constraintname_7
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [AUTHENTICATION_SOURCE]
+END
+
+
+CREATE TABLE [AUTHENTICATION_SOURCE]
+(
+	[AUTH_SOURCE_UID] VARCHAR(32) default '' NOT NULL,
+	[AUTH_SOURCE_NAME] VARCHAR(50) default '' NOT NULL,
+	[AUTH_SOURCE_PROVIDER] VARCHAR(20) default '' NOT NULL,
+	[AUTH_SOURCE_SERVER_NAME] VARCHAR(50) default '' NOT NULL,
+	[AUTH_SOURCE_PORT] INT default 389 NULL,
+	[AUTH_SOURCE_ENABLED_TLS] INT default 0 NULL,
+	[AUTH_SOURCE_VERSION] VARCHAR(16) default '3' NOT NULL,
+	[AUTH_SOURCE_BASE_DN] VARCHAR(128) default '' NOT NULL,
+	[AUTH_ANONYMOUS] INT default 0 NULL,
+	[AUTH_SOURCE_SEARCH_USER] VARCHAR(128) default '' NOT NULL,
+	[AUTH_SOURCE_PASSWORD] VARCHAR(32) default '' NOT NULL,
+	[AUTH_SOURCE_ATTRIBUTES] VARCHAR(255) default '' NOT NULL,
+	[AUTH_SOURCE_OBJECT_CLASSES] VARCHAR(255) default '' NOT NULL,
+	[AUTH_SOURCE_DATA] TEXT  NULL,
+	CONSTRAINT AUTHENTICATION_SOURCE_PK PRIMARY KEY ([AUTH_SOURCE_UID])
+);
+
+
+/* ---------------------------------------------------------------------- */
+/* USERS											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'USERS')
+BEGIN
+	 DECLARE @reftable_5 nvarchar(60), @constraintname_5 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'USERS'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_5, @constraintname_5
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_5+' drop constraint '+@constraintname_5)
+	   FETCH NEXT from refcursor into @reftable_5, @constraintname_5
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [USERS]
+END
+
+CREATE TABLE [USERS]
+(
+	[USR_UID] VARCHAR(32) default '' NOT NULL,
+	[USR_USERNAME] VARCHAR(100) default '' NOT NULL,
+	[USR_PASSWORD] VARCHAR(32) default '' NOT NULL,
+	[USR_FIRSTNAME] VARCHAR(50) default '' NOT NULL,
+	[USR_LASTNAME] VARCHAR(50) default '' NOT NULL,
+	[USR_EMAIL] VARCHAR(100) default '' NOT NULL,
+	[USR_DUE_DATE] CHAR(19) default '0000-00-00' NOT NULL,
+	[USR_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
+	[USR_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
+	[USR_STATUS] INT default 1 NOT NULL,
+	
+	[USR_AUTH_TYPE] VARCHAR(32) NOT NULL DEFAULT ('MSSQL'),
+	[UID_AUTH_SOURCE] VARCHAR(32) NOT NULL DEFAULT ('00000000000000000000000000000000'),
+	[USR_AUTH_USER_DN] VARCHAR(255) NOT NULL,
+	[USR_AUTH_SUPERVISOR_DN] VARCHAR(255) NULL,
+
+	[USR_REPLACED_BY] varchar(32) NULL,
+	[USR_REPORTS_TO] varchar(32) NULL,
+
+
+	CONSTRAINT USERS_PK PRIMARY KEY ([USR_UID])
+);
+
+
+

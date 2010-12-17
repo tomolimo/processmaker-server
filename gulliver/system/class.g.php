@@ -1527,8 +1527,9 @@ class G
    * @param string $sqlString  The string to be escaped
    * @param string $DBEngine   Target DBMS
    */
-  function sqlEscape( $sqlString, $DBEngine = 'mysql' )
+  function sqlEscape( $sqlString, $DBEngine = DB_ADAPTER )
   {
+    $DBEngine = DB_ADAPTER;
     switch($DBEngine){
       case 'mysql':
         $con = Propel::getConnection('workflow') ;

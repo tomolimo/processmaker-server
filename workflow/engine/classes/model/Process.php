@@ -489,7 +489,7 @@ class Process extends BaseProcess {
     $oCriteria->addSelectColumn(ProcessCategoryPeer::TABLE_NAME . '.*');
     
     $oCriteria->add(ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL);
-    $oCriteria->addJoin(ProcessPeer::PRO_CREATE_USER, UsersPeer::USR_UID);
+    $oCriteria->addJoin(ProcessPeer::PRO_CREATE_USER, UsersPeer::USR_UID, Criteria::INNER_JOIN);
     $oCriteria->addJoin(ProcessPeer::PRO_CATEGORY, ProcessCategoryPeer::CATEGORY_UID, Criteria::LEFT_JOIN);
     $oCriteria->addDescendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
 

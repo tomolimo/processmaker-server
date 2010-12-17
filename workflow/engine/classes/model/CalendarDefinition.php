@@ -28,7 +28,8 @@ class CalendarDefinition extends BaseCalendarDefinition {
     $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UPDATE_DATE );
     $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_DESCRIPTION );
     $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_STATUS );
-    $Criteria->addAsColumn('DELETABLE', "IF (CALENDAR_UID <> '00000000000000000000000000000001', '".G::LoadTranslation('ID_DELETE')."','') ");
+    // $Criteria->addAsColumn('DELETABLE', "IF (CALENDAR_UID <> '00000000000000000000000000000001', '".G::LoadTranslation('ID_DELETE')."','') ");
+    $Criteria->addAsColumn('DELETABLE', "CASE WHEN CALENDAR_UID <> '00000000000000000000000000000001' THEN '".G::LoadTranslation('ID_DELETE')."' ELSE '' END ");
     // Note: This list doesn't show deleted items (STATUS = DELETED)
     if ($onlyActive) { // Show only active. Used on assignment lists
       $Criteria->add ( calendarDefinitionPeer::CALENDAR_STATUS, "ACTIVE", CRITERIA::EQUAL );

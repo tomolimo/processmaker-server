@@ -59,7 +59,11 @@
   define( 'PATH_RBAC_MYSQL_DATA',  PATH_RBAC_CORE . 'data' . PATH_SEP.'mysql'.PATH_SEP);
   
   define( 'FILE_PATHS_INSTALLED', PATH_CORE . 'config' . PATH_SEP . 'paths_installed.php' );
-  
+
+  define( 'PATH_WORKFLOW_MSSQL_DATA',  PATH_CORE . 'data' . PATH_SEP.'mssql'.PATH_SEP);
+  define( 'PATH_RBAC_MSSQL_DATA',  PATH_RBAC_CORE . 'data' . PATH_SEP.'mssql'.PATH_SEP);
+
+
 //************ include Gulliver Class **************
   require_once( PATH_GULLIVER . PATH_SEP . 'class.g.php');
   

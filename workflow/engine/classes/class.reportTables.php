@@ -559,10 +559,20 @@ class ReportTables
    */
   function tableExist()
   {
+    /*
     $bExists  = true;
     $oConnection = mysql_connect(DB_HOST, DB_USER, DB_PASS);
     mysql_select_db(DB_NAME);
     $oDataset = mysql_query('SELECT COUNT(*) FROM REPORT_TABLE') || ($bExists = false);
+    return $bExists;
+    */
+    $bExists  = true;
+    $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+    if(G::LoadSystemExist($sDataBase)){
+      G::LoadSystem($sDataBase);
+      $oDataBase = new database();
+      $bExists   = $oDataBase->reportTableExist();
+    } 
     return $bExists;
   }
   
