@@ -11,6 +11,10 @@ function run_upgrade($command, $args) {
   $checksum = System::verifyChecksum();
   if ($checksum === false) {
     logging(error("checksum.txt not found, integrity check is not possible") . "\n");
+    if (!question("Integrity check failed, do you want to continue the upgrade?")) {
+      logging("Upgrade failed\n");
+      die();
+    }
   } else {
     if (!empty($checksum['missing'])) {
       logging(error("The following files were not found in the installation:")."\n");
@@ -24,8 +28,13 @@ function run_upgrade($command, $args) {
         logging(" $diff\n");
       }
     }
+    if (!(empty($checksum['missing']) || empty($checksum['diff']))) {
+      if (!question("Integrity check failed, do you want to continue the upgrade?")) {
+        logging("Upgrade failed\n");
+        die();
+      }
+    }
   }
-  //TODO: Ask to continue if errors are found.
   logging("Clearing cache...\n");
   if(defined('PATH_C'))
     G::rm_dir(PATH_C);

@@ -304,12 +304,14 @@ class workspaceTools {
   public function upgradePluginsDatabase() {
     foreach (System::getPlugins() as $pluginName) {
       $pluginSchema = System::getPluginSchema($pluginName);
-      if ($pluginSchema !== false)
+      if ($pluginSchema !== false) {
+        logging("Updating plugin " . info($pluginName) . "\n");
         $this->upgradeSchema($pluginSchema);
+      }
     }
   }
 
-  public function upgradeDatabase($checkOnly) {
+  public function upgradeDatabase($checkOnly = false) {
     $systemSchema = System::getSystemSchema();
     return $this->upgradeSchema($systemSchema);
   }
@@ -484,6 +486,36 @@ class workspaceTools {
     }
   }
 
+  public function dumpDatabase($dbname) {
+    $sql="show tables;";
+    $result= mysql_query($sql);
+    if( $result)
+    {
+      while( $row= mysql_fetch_row($result))
+      {
+        $table = $row[0];
+
+        echo "/* Table structure for table `$table` */\n";
+        echo "DROP TABLE IF EXISTS `$table`;\n\n";
+        $sql="show create table `$table`; ";
+        $result=mysql_query($sql);
+        if( $result)
+        {
+          if($row= mysql_fetch_assoc($result))
+          {
+            echo $row['Create Table'].";\n\n";
+          }
+        }
+        
+  		}
+    }
+    else
+    {
+      echo "/* no tables in $mysql_database */\n";
+    }
+    mysql_free_result($result);
+  }
+
   public function exportDatabase($path) {
     $dbInfo = $this->getDBInfo();
     $databases = array("wf", "rp", "rb");
@@ -496,6 +528,29 @@ class workspaceTools {
       $oDbMaintainer->backupDataBaseSchema($oDbMaintainer->getTempDir() . $dbInfo["name"] . ".sql");
       $oDbMaintainer->backupSqlData();
     }
+  }
+
+  public function addToBackup($backup, $filename, $root) {
+    if (is_file($filename)) {
+      $backup->addModify($filename, "", $root);
+    } else {
+      foreach (glob($filename . "/*") as $item) {
+        $this->addToBackup($backup, $item, $root);
+}
+    }
+  }
+
+  public function backup($filename, $compress = true) {
+    G::LoadThirdParty('pear/Archive', 'Tar');
+    $tar = new Archive_Tar($filename);
+    //Get a temporary directory for database backup
+    $tempDirectory = tempnam(__FILE__, '');
+    if (file_exists($tempDirectory)) {
+      unlink($tempDirectory);
+    }
+    $this->exportDatabase($tempDirectory);
+    $this->addToBackup($backup, $tempDirectory, $tempDirectory);
+    $this->addToBackup($backup, $filename, $root);
   }
 
 }

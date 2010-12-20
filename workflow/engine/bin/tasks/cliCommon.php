@@ -47,6 +47,18 @@ function error($message) {
   return pakeColor::colorize($message, "ERROR");
 }
 
+function prompt($message) {
+  echo "$message";
+  $handle = fopen ("php://stdin","r");
+  $line = fgets($handle);
+  return $line;
+}
+
+function question($message) {
+  $input = strtolower(prompt("$message [Y/n] "));
+  return (array_search(trim($input), array("y", "")) !== false);
+}
+
 function logging($message, $filename = NULL) {
   static $log_file = NULL;
   if (isset($filename)) {

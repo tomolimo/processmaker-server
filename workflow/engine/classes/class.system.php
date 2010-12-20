@@ -160,55 +160,24 @@ class System {
     return $items;
   }
 
-  public static function getFilesChecksum($dir, $root = NULL) {
-    if (!isset($root))
-      $root = $dir;
-    $dir = realpath($dir);
-    $root = realpath($root);
-    $items = glob($dir . "/*");
-    $checksums = array();
-    foreach ($items as $item) {
-      $relname = substr($item, strlen($root));
-      //Skip xmlform files, since they always change.
-      if (strpos($relname, "/xmlform/") !== false)
-        continue;
-      //Skip shared and compiled directories.
-      if ((strpos($relname, "/shared") === 0) || (strpos($relname, "/compiled") === 0)) {
-        continue;
-      }
-      if (is_dir($item)) {
-        $checksums = array_merge($checksums, System::getFilesChecksum($item, $root));
-      } else {
-        $checksums[".$relname"] = md5_file($item);
-      }
-    }
-    return $checksums;
-  }
-
   public static function verifyChecksum() {
     if (!file_exists(PATH_TRUNK . "checksum.txt"))
       return false;
-    $filesChecksum = System::getFilesChecksum(PATH_TRUNK);
     $lines = explode("\n", file_get_contents(PATH_TRUNK . "checksum.txt"));
-    $originalChecksum = array();
+    $result = array("diff" => array(), "missing" => array());
     foreach ($lines as $line) {
       if (empty($line))
         continue;
       list($checksum, $empty, $filename) = explode(" ", $line);
-      $originalChecksum[$filename] = $checksum;
-    }
-    $result = array("diff" => array(), "missing" => array());
-    foreach ($originalChecksum as $filename => $checksum) {
-      //Skip hidden files that start with a dot.
-      if (substr(basename($filename), 0, 1) === '.')
-        continue;
-      //Skip xmlform files, since they always change.
+      //Skip xmlform because these files always change.
       if (strpos($filename, "/xmlform/") !== false)
         continue;
-      if (!array_key_exists($filename, $filesChecksum)) {
+      if (file_exists(realpath($filename))) {
+        if (strcmp($checksum, md5_file(realpath($filename))) != 0) {
+          $result['diff'][] = $filename;
+        }
+      } else {
         $result['missing'][] = $filename;
-      } else if (strcmp($checksum, $filesChecksum[$filename]) != 0) {
-        $result['diff'][] = $filename;
       }
     }
     return $result;
