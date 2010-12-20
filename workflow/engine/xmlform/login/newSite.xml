@@ -39,7 +39,10 @@
   <en>Test</en>
 </NW_SUB>
 <JS type="JavaScript"><![CDATA[
-		var data={
+    var data = new Array();
+    var ed = new Array();
+    leimnud.event.add(window,'load',function(){
+    data={
 		name:new input(getField('NW_TITLE')).setStyle({fontWeight:'bold'}),
 		submit:new button(getField('NW_SUB')),
 		ao_db_wf:new input(getField('AO_DB_WF')),
@@ -70,7 +73,7 @@
 	data.loader= data.submit.parentNode.appendChild(new DOM('img',{src:'/js/maborak/core/images/loader_B.gif'},{width:22,height:22,position:'relative',display:'block'}));
 	data.loader.setStyle({visibility:'hidden'});
 
-	var ed = function(mod)
+  ed = function(mod)
 	{
 		data.name[mod]();
 		data.ao_db_wf[mod]();
@@ -81,7 +84,26 @@
 		data.ao_admin_pass2[mod]();
 		data.ao_db_drop.disabled=(mod=='enable')?false:true;
 	};
-	var status_in_progress=function(form)
+
+	data.name.focus();
+	leimnud.event.add(data.name,'keyup',function(){
+		var v = data.name.value;
+		data.ao_db_wf.value='wf_'+v;
+		data.ao_db_rb.value='rb_'+v;
+		data.ao_db_rp.value='rp_'+v;
+	});
+	data.submit.onmouseup=function()
+	{
+		ed('disable');
+	};
+	//data.name.passed();
+	
+  });
+  	function redirectLogin(){
+		location.href="/sys"+data.name.value+"/en/green/login/login";
+	}
+
+  	var status_in_progress=function(form)
 	{
 		data.loader.setStyle({visibility:'visible'});
 		data.submit.disable();
@@ -107,7 +129,7 @@
 		data.ao_admin_pass2[(rp.result.admin.password)?'passed':'failed']().title=(rp.result.admin.password)?'OK':'PASSED';
 		data.name.focus();
 		data.submit.enable();
-		
+
 		if(rp.created)
 		{
 			ed('disable');
@@ -124,44 +146,28 @@
 			var confirm = new leimnud.module.app.confirm().make({
 		  		label: G_STRINGS.NEW_SITE_SUCCESS +" "+ data.name.value +"<br/>"+ G_STRINGS.NEW_SITE_SUCCESS_CONFIRM+"<br/>"+ G_STRINGS.NEW_SITE_SUCCESS_CONFIRMNOTE,
 		    	action: function(){
-		    	 
+
 		    	parent.parent.window.location="/sys"+data.name.value+"/en/green/login/login";
-		    
+
 		 /*  	   if (typeof(window.parent.admToolsContent) != 'undefined'){
-		    	  
+
 					 parent.parent.window.location="/sys"+data.name.value+"/en/green/login/login";
-					} else {						
+					} else {
 					    setTimeout('redirectLogin()', 1000);
 					}*/
 				}.extend(this),
 				cancel: function(){
-					
+
 					//window.location="../install/newSite?type=blank";
 				},
 				width:380,
 				height:140
 		  	});
-			  	
+
 			data.goto.enable();
 			data.submit.disable();
 			data.reset.disable();
 		}
 	};
-	data.name.focus();
-	leimnud.event.add(data.name,'keyup',function(){
-		var v = data.name.value;
-		data.ao_db_wf.value='wf_'+v;
-		data.ao_db_rb.value='rb_'+v;
-		data.ao_db_rp.value='rp_'+v;
-	});
-	data.submit.onmouseup=function()
-	{
-		ed('disable');
-	};
-	//data.name.passed();
-	
-	function redirectLogin(){
-		location.href="/sys"+data.name.value+"/en/green/login/login";
-	}
 ]]></JS>
 </dynaForm>    
