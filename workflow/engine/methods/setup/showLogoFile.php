@@ -27,16 +27,61 @@
 	$ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
 	$dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
 	$imagen = $dir .PATH_SEP.G::decrypt($_GET['id'],'imagen');
-	if (is_file($imagen))
+
+  if (is_file($imagen))
 	{
-	  $ext = substr($imagen, strrpos($imagen, '.') + 1); // extension
+    showLogo($imagen);
+
+	}else{
+
+  $newDir = PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos"; 
+  $dir = PATH_HOME . "public_html/files/logos";
+  
+  if(!is_dir($newDir)){
+   G::mk_dir($newDir);
+  }
+  cpyMoreLogos($dir,$newDir);
+  $newDir .= PATH_SEP.G::decrypt($_GET['id'],'imagen');
+  showLogo($newDir);
+  die;
+
+  }
+
+
+  function showLogo($imagen){
+    $ext = substr($imagen, strrpos($imagen, '.') + 1); // extension
 	
 	  header('content-type: image/'.$ext);
 	  readfile($imagen);
 	  exit;
-	}
+  }
+
+  function cpyMoreLogos($dir,$newDir){
+    if (file_exists($dir)) {
+        if ($handle = opendir($dir)) {
+          while (false !== ($file = readdir($handle))) {
+            if(($file!=".")&&($file!="..")) {
+              $extention=explode(".", $file);
+              $aImageProp=getimagesize($dir.'/'.$file, $info);
+              $sfileExtention = strtoupper($extention[count($extention)-1]);
+              if( in_array($sfileExtention, array('JPG','JPEG','PNG','GIF') ) ) {
+
+                $dir1 = $dir.PATH_SEP.$file;
+                $dir2 = $newDir.PATH_SEP.$file;
+                //print $dir1 ."  *** ".$dir2."<br><br>";
+                copy($dir1,$dir2);
+
+
+              }
+            }
+          }
+          closedir($handle);
+        }
+      }
+  }
 
 die;
+	
 
 ?>
 <script>
