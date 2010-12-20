@@ -2091,22 +2091,61 @@ MyWorkflow.prototype.zoom = function(sType)
    var height = fig.getHeight();
    var xPos = fig.getX();
    var yPos = fig.getY();
+
+   var lines=workflow.getLines();
+   var size=lines.getSize();
+   for(var i=0;i<size;i++){
+       var startX = lines.data[i].startX;
+       var startY = lines.data[i].startY;
+       var endX = lines.data[0].endX;
+       var endY = lines.data[0].endY;
+       var yDiff = endX - endY;
+       var source = lines.get(i).getSource().parentNode;
+       var target = lines.get(i).getTarget().parentNode;
+       lines.data[i].setStartPoint(startX,source.y );
+       lines.data[i].setEndPoint(endX,target.y + yDiff);
+   }
+
+   
    if(sType == 'in')
      {
-        width  += 20;
-        height += 20;
+        if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+          {
+              width  += 5;
+              height += 5;
+          }
+        else
+          {
+             width  += 20;
+             height += 20;
+          }
+       /*var source = lines.get(0).getSource().parentNode;
+       var target = lines.get(0).getTarget().parentNode;
+       var startX = lines.data[0].startX;
+       var endX = lines.data[0].endX;
+       lines.data[0].setStartPoint(startX,source.y);
+       lines.data[0].setEndPoint(endX,target.y);*/
      }
     else
      {
-       width  -= 20;
-       height -= 20;
+       if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+          {
+              width  -= 5;
+              height -= 5;
+          }
+        else
+          {
+             width  -= 20;
+             height -= 20;
+          }
      }
-   if(sType == 'in')
-    fig.setPosition(xPos,yPos - 15);
-   else if(sType == 'out')
-    fig.setPosition(xPos,yPos + 15);
+//   if(sType == 'in' )
+//    fig.setPosition(xPos,yPos + 20);
+//   else if(sType == 'out')
+//    fig.setPosition(xPos,yPos - 10);
 
    fig.setDimension(width,height);
+
    if(fig.type == 'bpmnTask')
       {
         fig.bpmnText.clear();
