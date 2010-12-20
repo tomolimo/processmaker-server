@@ -3097,6 +3097,133 @@ class processMap {
     return $oCriteria;
   }
 
+  function getExtObjectsPermissions($sProcessUID) {
+    G::LoadClass('case');
+    Cases::verifyTable ();
+    $aObjectsPermissions = array();
+    //$aObjectsPermissions [] = array('OP_UID' => 'char', 'TASK_TARGET' => 'char', 'GROUP_USER' => 'char', 'TASK_SOURCE' => 'char', 'OBJECT_TYPE' => 'char', 'OBJECT' => 'char', 'PARTICIPATED' => 'char', 'ACTION' => 'char', 'OP_CASE_STATUS' => 'char');
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_UID);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::TAS_UID);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::USR_UID);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_USER_RELATION);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_TASK_SOURCE);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_PARTICIPATE);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_OBJ_TYPE);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_OBJ_UID);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_ACTION);
+    $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_CASE_STATUS);
+    $oCriteria->add(ObjectPermissionPeer::PRO_UID, $sProcessUID);
+    $oDataset = ObjectPermissionPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      //Obtain task target
+      if (($aRow ['TAS_UID'] != '') && ($aRow ['TAS_UID'] != '0')) {
+        try {
+          $oTask = new Task ( );
+          $aFields = $oTask->load($aRow ['TAS_UID']);
+          $sTaskTarget = $aFields ['TAS_TITLE'];
+        } catch (Exception $oError) {
+          $sTaskTarget = 'All Tasks';
+        }
+      } else {
+        $sTaskTarget = G::LoadTranslation('ID_ANY_TASK');
+      }
+      //Obtain user or group
+      if ($aRow ['OP_USER_RELATION'] == 1) {
+        $oUser = new Users ( );
+        $aFields = $oUser->load($aRow ['USR_UID']);
+        $sUserGroup = $aFields ['USR_FIRSTNAME'] . ' ' . $aFields ['USR_LASTNAME'] . ' (' . $aFields ['USR_USERNAME'] . ')';
+      } else {
+        $oGroup = new Groupwf ( );
+        if ($aRow ['USR_UID'] != '') {
+          try {
+            $aFields = $oGroup->load($aRow ['USR_UID']);
+            $sUserGroup = $aFields ['GRP_TITLE'];
+          } catch (Exception $oError) {
+            $sUserGroup = '(GROUP DELETED)';
+          }
+        } else {
+          $sUserGroup = G::LoadTranslation('ID_ANY');
+        }
+      }
+      //Obtain task source
+      if (($aRow ['OP_TASK_SOURCE'] != '') && ($aRow ['OP_TASK_SOURCE'] != '0')) {
+        try {
+          $oTask = new Task ( );
+          $aFields = $oTask->load($aRow ['OP_TASK_SOURCE']);
+          $sTaskSource = $aFields ['TAS_TITLE'];
+        } catch (Exception $oError) {
+          $sTaskSource = 'All Tasks';
+        }
+      } else {
+        $sTaskSource = G::LoadTranslation('ID_ANY_TASK');
+      }
+      //Obtain object and type
+      switch ($aRow ['OP_OBJ_TYPE']) {
+        case 'ANY' :
+          $sObjectType = G::LoadTranslation('ID_ALL');
+          $sObject = G::LoadTranslation('ID_ALL');
+          break;
+        /* case 'ANY_DYNAFORM':
+          $sObjectType = G::LoadTranslation('ID_ANY_DYNAFORM');
+          $sObject     = G::LoadTranslation('ID_ALL');
+          break;
+          case 'ANY_INPUT':
+          $sObjectType = G::LoadTranslation('ID_ANY_INPUT');
+          $sObject     = G::LoadTranslation('ID_ALL');
+          break;
+          case 'ANY_OUTPUT':
+          $sObjectType = G::LoadTranslation('ID_ANY_OUTPUT');
+          $sObject     = G::LoadTranslation('ID_ALL');
+          break; */
+        case 'DYNAFORM' :
+          $sObjectType = G::LoadTranslation('ID_DYNAFORM');
+          if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
+            $oDynaform = new Dynaform ( );
+            $aFields = $oDynaform->load($aRow ['OP_OBJ_UID']);
+            $sObject = $aFields ['DYN_TITLE'];
+          } else {
+            $sObject = G::LoadTranslation('ID_ALL');
+          }
+          break;
+        case 'INPUT' :
+          $sObjectType = G::LoadTranslation('ID_INPUT_DOCUMENT');
+          if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
+            $oInputDocument = new InputDocument ( );
+            $aFields = $oInputDocument->load($aRow ['OP_OBJ_UID']);
+            $sObject = $aFields ['INP_DOC_TITLE'];
+          } else {
+            $sObject = G::LoadTranslation('ID_ALL');
+          }
+          break;
+        case 'OUTPUT' :
+          $sObjectType = G::LoadTranslation('ID_OUTPUT_DOCUMENT');
+          if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
+            $oOutputDocument = new OutputDocument ( );
+            $aFields = $oOutputDocument->load($aRow ['OP_OBJ_UID']);
+            $sObject = $aFields ['OUT_DOC_TITLE'];
+          } else {
+            $sObject = G::LoadTranslation('ID_ALL');
+          }
+          break;
+      }
+      //Participated
+      if ($aRow ['OP_PARTICIPATE'] == 0) {
+        $sParticipated = G::LoadTranslation('ID_NO');
+      } else {
+        $sParticipated = G::LoadTranslation('ID_YES');
+      }
+      //Obtain action (permission)
+      $sAction = G::LoadTranslation('ID_' . $aRow ['OP_ACTION']);
+      //Add to array
+      $aObjectsPermissions [] = array('OP_UID' => $aRow ['OP_UID'], 'TASK_TARGET' => $sTaskTarget, 'GROUP_USER' => $sUserGroup, 'TASK_SOURCE' => $sTaskSource, 'OBJECT_TYPE' => $sObjectType, 'OBJECT' => $sObject, 'PARTICIPATED' => $sParticipated, 'ACTION' => $sAction, 'OP_CASE_STATUS' => $aRow ['OP_CASE_STATUS']);
+      $oDataset->next();
+    }
+    return $aObjectsPermissions;
+  }
+
   /**
    * objectsPermissionsList
    *
@@ -5357,5 +5484,90 @@ class processMap {
             throw ($e);
         }
     }
+
+    function newExtObjectPermission($sProcessUID)
+    {
+    $aUsersGroups = array();
+    $aUsersGroups [] = array('UID' => 'char', 'LABEL' => 'char');
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $oCriteria->addAsColumn('GRP_TITLE', ContentPeer::CON_VALUE);
+    $aConditions = array();
+    $aConditions [] = array(GroupwfPeer::GRP_UID, ContentPeer::CON_ID);
+    $aConditions [] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter () . 'GRP_TITLE' . DBAdapter::getStringDelimiter ());
+    $aConditions [] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
+    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aUsersGroups [] = array('UID' => '2|' . $aRow ['GRP_UID'], 'LABEL' => $aRow ['GRP_TITLE'] . ' (' . G::LoadTranslation('ID_GROUP') . ')');
+      $oDataset->next();
+    }
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+    $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $oDataset = UsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aUsersGroups [] = array('UID' => '1|' . $aRow ['USR_UID'], 'LABEL' => $aRow ['USR_FIRSTNAME'] . ' ' . $aRow ['USR_LASTNAME'] . ' (' . $aRow ['USR_USERNAME'] . ')');
+      $oDataset->next();
+    }
+    $aAllObjects = array();
+    $aAllObjects [] = array('UID' => 'char', 'LABEL' => 'char');
+    $aAllDynaforms = array();
+    $aAllDynaforms [] = array('UID' => 'char', 'LABEL' => 'char');
+    $aAllInputs = array();
+    $aAllInputs [] = array('UID' => 'char', 'LABEL' => 'char');
+    $aAllOutputs = array();
+    $aAllOutputs [] = array('UID' => 'char', 'LABEL' => 'char');
+    $oCriteria = $this->getDynaformsCriteria($sProcessUID);
+    $oCriteria->add(DynaformPeer::DYN_TYPE, 'XMLFORM');
+    $oDataset = DynaformPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aRow ['DYN_TITLE'] = (isset($aRow ['DYN_TITLE'])) ? $aRow ['DYN_TITLE'] : '';
+      $aAllObjects [] = array('UID' => 'DYNAFORM|' . $aRow ['DYN_UID'],
+          'LABEL' => $aRow ['DYN_TITLE'] . ' (' . G::LoadTranslation('ID_DYNAFORM') . ')');
+      $aAllDynaforms [] = array('UID' => $aRow ['DYN_UID'],
+          'LABEL' => $aRow ['DYN_TITLE']);
+      $oDataset->next();
+    }
+    G::LoadClass('ArrayPeer');
+    $oDataset = ArrayBasePeer::doSelectRS($this->getInputDocumentsCriteria($sProcessUID));
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aAllObjects [] = array('UID' => 'INPUT_DOCUMENT|' . $aRow ['INP_DOC_UID'],
+          'LABEL' => $aRow ['INP_DOC_TITLE'] . ' (' . G::LoadTranslation('ID_INPUT_DOCUMENT') . ')');
+      $aAllInputs [] = array('UID' => $aRow ['INP_DOC_UID'],
+          'LABEL' => $aRow ['INP_DOC_TITLE']);
+      $oDataset->next();
+    }
+    G::LoadClass('ArrayPeer');
+    $oDataset = ArrayBasePeer::doSelectRS($this->getOutputDocumentsCriteria($sProcessUID));
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aAllObjects [] = array('UID' => 'OUTPUT_DOCUMENT|' . $aRow ['OUT_DOC_UID'], 'LABEL' => $aRow ['OUT_DOC_TITLE'] . ' (' . G::LoadTranslation('ID_OUTPUT_DOCUMENT') . ')');
+      $aAllOutputs [] = array('UID' => $aRow ['OUT_DOC_UID'], 'LABEL' => $aRow ['OUT_DOC_TITLE']);
+      $oDataset->next();
+    }
+    global $_DBArray;
+    $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
+    $_DBArray ['usersGroups'] = $aUsersGroups;
+    $_DBArray ['allObjects'] = $aAllObjects;
+    $_DBArray ['allDynaforms'] = $aAllDynaforms;
+    $_DBArray ['allInputs'] = $aAllInputs;
+    $_DBArray ['allOutputs'] = $aAllOutputs;
+    $_SESSION ['_DBArray'] = $_DBArray;
+    return($_SESSION['_DBArray']);
+  }
 }
 

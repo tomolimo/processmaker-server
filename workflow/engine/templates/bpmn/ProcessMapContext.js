@@ -322,7 +322,367 @@ ProcessMapContext.prototype.delLines= function()
 
 ProcessMapContext.prototype.processPermission= function()
 {
-  Ext.MessageBox.alert('Status','Process Permission');
+  var pro_uid = workflow.getUrlVars();
+  //Database store code starts here
+  var dbConnFields = Ext.data.Record.create([
+            { name: 'OP_UID',type: 'string'},
+            { name: 'TASK_TARGET',type: 'string'},
+            { name: 'GROUP_USER',type: 'string'},
+            { name: 'TASK_SOURCE',type: 'string'},
+            { name: 'PARTICIPATED',type: 'string'},
+            { name: 'OBJECT_TYPE',type: 'string'},
+            { name: 'OBJECT',type: 'string'},
+            { name: 'ACTION',type: 'string'},
+            { name: 'OP_CASE_STATUS',type: 'string'}
+        ]);
+
+var PermissionStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : dbConnFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyObjectPermissions.php?pid='+pro_uid
+            })
+          });
+ PermissionStore.load();
+
+var PermissionGridColumn =  new Ext.grid.ColumnModel({
+      columns: [
+                new Ext.grid.RowNumberer(),
+                    {
+                        id: 'TASK_TARGET',
+                        header: 'Target Task',
+                        dataIndex: 'TASK_TARGET',
+                        //width: 100,
+                        editable: false,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'GROUP_USER',
+                        header: 'Group or Users',
+                        dataIndex: 'GROUP_USER',
+                        //width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'TASK_SOURCE',
+                        header: 'Origin Task',
+                        dataIndex: 'TASK_SOURCE',
+                        //width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'PARTICIPATED',
+                        header: 'Participation',
+                        dataIndex: 'PARTICIPATED',
+                        width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'OBJECT_TYPE',
+                        header: 'Type',
+                        dataIndex: 'OBJECT_TYPE',
+                        //width: 100,
+                        editable: false,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'OBJECT',
+                        header: 'Object',
+                        dataIndex: 'OBJECT',
+                        //width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'ACTION',
+                        header: 'Permission',
+                        dataIndex: 'ACTION',
+                        //width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'OP_CASE_STATUS',
+                        header: 'Status',
+                        dataIndex: 'OP_CASE_STATUS',
+                        width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    }
+                ]
+     });
+
+  var PermissionGrid = new Ext.grid.GridPanel({
+        store: PermissionStore,
+        id : 'mygrid',
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        width:450,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        cm: PermissionGridColumn,
+        stripeRows: true,
+        //tbar: tb,
+        viewConfig: {forceFit: true}
+   });
+
+ var gridWindow = new Ext.Window({
+        title: 'Process Permissions',
+        collapsible: false,
+        maximizable: true,
+        width: 600,
+        //autoHeight: true,
+        height: 450,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: PermissionGrid
+
+ });
+  var btnNew = new Ext.Button({
+            id: 'btnNew',
+            text: 'New',
+            iconCls: 'application_add',
+            handler: function () {
+                formWindow.show();
+            }
+  })
+
+  var PermissionForm =new Ext.FormPanel({
+   //   title:"Add new Database Source",
+      collapsible: false,
+      maximizable: true,
+      width:450,
+      frame:true,
+      plain: true,
+      bodyStyle: 'padding:5px;',
+      buttonAlign: 'center',
+
+                      items:[{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Status Case',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'OP_CASE_STATUS',
+                    displayField    :'name',
+                    value           :'ALL',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'ALL',   value: '0'},
+                                                        {name : 'DRAFTS',   value: '1'},
+                                                        {name : 'TO DO',   value: '2'},
+                                                        {name : 'PAUSED',   value: '3'},
+                                                        {name : 'COMPLETED',   value: '4'}]})
+                },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Target Task',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'TASK_TARGET',
+                    displayField    :'name',
+                    value           :'All Tasks',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'All tasks',   value: '0'},
+                                                        {name : 'Apply for leave',   value: '1'},
+                                                        {name : 'HR approval',   value: '2'},
+                                                        {name : 'Supervisor Approval',   value: '3'}]})
+                },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Group or Users',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'GROUP_USER',
+                    displayField    :'name',
+                    value           :'Administrator(Admin)',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'Administrator(Admin)',   value: '0'}]})
+               },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Origin Task',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'TASK_SOURCE',
+                    displayField    :'name',
+                    value           :'All Tasks',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'All tasks',   value: '0'},
+                                                        {name : 'Apply for leave',   value: '1'},
+                                                        {name : 'HR approval',   value: '2'},
+                                                        {name : 'Supervisor Approval',   value: '3'}]})
+                 },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Participation Required?',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'PARTICIPATED',
+                    displayField    :'name',
+                    value           :'Yes',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'Yes',   value: '0'},
+                                                        {name : 'No',   value: '1'}]})
+              },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Type',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'OBJECT_TYPE',
+                    displayField    :'name',
+                    value           :'All',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'All',   value: '0'},
+                                                        {name : 'Dynaform',   value: '1'},
+                                                        {name : 'Input Document',   value: '2'},
+                                                        {name : 'Output Document',   value: '3'}]})
+           },{
+                    width           :150,
+                    xtype           :'combo',
+                    mode            :'local',
+                    editable        :false,
+                    fieldLabel      :'Permission',
+                    triggerAction   :'all',
+                    forceSelection  : true,
+                    name            :'ACTION',
+                    displayField    :'name',
+                    value           :'View',
+                    valueField      :'value',
+                    store           :new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   : [
+                                                        {name : 'View',   value: '0'},
+                                                        {name : 'Block',   value: '1'}]})
+           }
+                      ]
+  })
+
+var formStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : dbConnFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyObjectPermissions.php?pid='+pro_uid+'&t=1'
+            })
+          });
+ formStore.load();
+
+var formWindow = new Ext.Window({
+        title: 'New specific Permission',
+        collapsible: false,
+        maximizable: true,
+        width: 450,
+        //autoHeight: true,
+        height: 400,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: PermissionForm,
+        buttons: [{
+            text: 'Create',
+            handler: function(){
+                var getForm         = PermissionForm.getForm().getValues();
+                var Status          = getForm.OP_CASE_STATUS;
+                var TargetTask      = getForm.TASK_TARGET;
+                var GroupUser       = getForm.GROUP_USER;
+                var OriginTask      = getForm.TASK_SOURCE;
+                var Participation   = getForm.PARTICIPATED;
+                var Type            = getForm.OBJECT_TYPE;
+                var Permission      = getForm.ACTION;
+                Ext.Ajax.request({
+                  url   : '../bpmn/processes_Ajax.php',
+                  method: 'POST',
+                  params:{
+                      type     :Type,
+                      2625          :Server,
+                      db_name  :DatabaseName,
+                      user     :Username ,
+                      passwd   :Password,
+                      port     :Port,
+                      desc     :Description,
+                      action   :'newObjectPermission'
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                  }
+                });
+
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskUsers(getData);
+
+            formWindow.close();
+            dbStore.reload();
+          }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                formWindow.close();
+          }
+        }]
+    });
+
+
+  gridWindow.show();
+
 }
 
 ProcessMapContext.prototype.processSupervisors= function()
