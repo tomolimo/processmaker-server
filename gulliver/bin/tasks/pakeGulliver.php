@@ -1998,20 +1998,24 @@ function run_workspace_backup($task, $args) {
     $row = $rs->getRow();
     $mysqlVersion = $row[0];
     $aSerializeData['DATABASE'] = $mysqlVersion;
-    $fileMetadata = PATH_TRUNK . 'backups' . PATH_SEP . 'metadata.txt';
+
+    //new db restore rotines, by Erik <erik@colosa.com> on May 17th, 2010
+    //set the temporal directory for all tables into wf, rb, and rp databases
+    $tmpDir = G::getSysTemDir() . PATH_SEP . 'pmDbBackup' . PATH_SEP;
+    //create the db maintenance temporal dir
+    G::mk_dir($tmpDir);
+
+    $fileMetadata = $tmpDir . 'metadata.txt';
     $sMetadata = file_put_contents($fileMetadata, serialize($aSerializeData));
+    if ($sMetadata === false) {
+      throw new Exception("Metadata file could not be written");
+    }
     
     G::LoadThirdParty('pear/Archive', 'Tar');
     
     $tar = new Archive_Tar($fileTar);
     if (!isset($gzipPath))
       $tar->_compress = $compress;
-    
-    //new db restore rotines, by Erik <erik@colosa.com> on May 17th, 2010
-    //set the temporal directory for all tables into wf, rb, and rp databases
-    $tmpDir = G::getSysTemDir() . PATH_SEP . 'pmDbBackup' . PATH_SEP;
-    //create the db maintenance temporal dir
-    G::mk_dir($tmpDir);
     
     /*** WORKFLOW DATABASE BACKUP ***/
     $dbSettings = getDataBaseConfiguration($configuration['datasources']['workflow']['connection']);
