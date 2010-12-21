@@ -1542,6 +1542,20 @@ class G
         return addslashes(stripslashes($sqlString));
     }
   }
+  
+  function MySQLSintaxis()
+  {
+    $DBEngine = DB_ADAPTER;
+    switch($DBEngine){
+      case 'mysql' :
+        return TRUE;
+        break;
+      case 'mssql' :
+      default:
+        return FALSE;
+        break;
+    }
+  }
   /* Returns a sql string with @@parameters replaced with its values defined
    * in array $result using the next notation:
    * NOTATION:

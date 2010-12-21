@@ -273,7 +273,9 @@
       //now get users, just for the Search action
       $cUsers = $oAppCache->getToReassignListCriteria();
       $cUsers->addSelectColumn(AppCacheViewPeer::USR_UID);
-      $cUsers->addGroupByColumn(AppCacheViewPeer::USR_UID);
+			
+			if(g::MySQLSintaxis())
+				$cUsers->addGroupByColumn(AppCacheViewPeer::USR_UID);
 
       $cUsers->addAscendingOrderByColumn ( AppCacheViewPeer::APP_CURRENT_USER );
       $oDataset = AppCacheViewPeer::doSelectRS($cUsers);
