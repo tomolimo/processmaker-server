@@ -88,126 +88,7 @@ function getDefaultDashboard(dashboardTabPanels) {
 }
 
 Docs = {};
-// console.info("Doc Panel - Start");
-/*
-DocPanel = Ext.extend(Ext.Panel,
-		{
-			closable : true,
-			autoScroll : true,
 
-			initComponent : function() {
-				// var ps = this.cclass.split('.');
-				// this.title = ps[ps.length-1];
-				Ext.apply(this, {
-					tbar : [
-							'->',
-							{
-								text : 'Config Options',
-								handler : this.scrollToMember.createDelegate(
-										this, [ 'configs' ]),
-								iconCls : 'icon-config'
-							},
-							'-',
-							{
-								text : 'Properties',
-								handler : this.scrollToMember.createDelegate(
-										this, [ 'props' ]),
-								iconCls : 'icon-prop'
-							},
-							'-',
-							{
-								text : 'Methods',
-								handler : this.scrollToMember.createDelegate(
-										this, [ 'methods' ]),
-								iconCls : 'icon-method'
-							},
-							'-',
-							{
-								text : 'Events',
-								handler : this.scrollToMember.createDelegate(
-										this, [ 'events' ]),
-								iconCls : 'icon-event'
-							},
-							'-',
-							{
-								text : 'Direct Link',
-								handler : this.directLink,
-								scope : this,
-								iconCls : 'icon-fav'
-							},
-							'-',
-							{
-								tooltip : 'Hide Inherited Members',
-								iconCls : 'icon-hide-inherited',
-								enableToggle : true,
-								scope : this,
-								toggleHandler : function(b, pressed) {
-									this.body[pressed ? 'addClass'
-											: 'removeClass']('hide-inherited');
-								}
-							},
-							'-',
-							{
-								tooltip : 'Expand All Members',
-								iconCls : 'icon-expand-members',
-								enableToggle : true,
-								scope : this,
-								toggleHandler : function(b, pressed) {
-									this.body[pressed ? 'addClass'
-											: 'removeClass']('full-details');
-								}
-							} ]
-				});
-				DocPanel.superclass.initComponent.call(this);
-			},
-
-			directLink : function() {
-				var link = String.format(
-						"<a href=\"{0}\" target=\"_blank\">{0}</a>",
-						document.location.href + '?class=' + this.cclass);
-				Ext.Msg.alert('Direct Link to ' + this.cclass, link);
-			},
-
-			scrollToMember : function(member) {
-				var el = Ext.fly(this.cclass + '-' + member);
-				if (el) {
-					var top = (el.getOffsetsTo(this.body)[1])
-							+ this.body.dom.scrollTop;
-					this.body.scrollTo('top', top - 25, {
-						duration : 0.75,
-						callback : this.hlMember.createDelegate(this,
-								[ member ])
-					});
-				}
-			},
-
-			scrollToSection : function(id) {
-				var el = Ext.getDom(id);
-				if (el) {
-					var top = (Ext.fly(el).getOffsetsTo(this.body)[1])
-							+ this.body.dom.scrollTop;
-					this.body.scrollTo('top', top - 25, {
-						duration : 0.5,
-						callback : function() {
-							Ext.fly(el).next('h2').pause(0.2).highlight(
-									'#8DB2E3', {
-										attr : 'color'
-									});
-						}
-					});
-				}
-			},
-
-			hlMember : function(member) {
-				var el = Ext.fly(this.cclass + '-' + member);
-				if (el) {
-					if (tr = el.up('tr')) {
-						tr.highlight('#cadaf9');
-					}
-				}
-			}
-		});
-*/
 var newCaseTree = {
 	xtype : 'treepanel',
 	id : 'processTree',
@@ -312,13 +193,13 @@ var startCaseTab = {
         title:'Process Information',
         layout:'form',
         defaults: {width: 350},
-        defaultType: 'textfield',
+        defaultType: 'displayfield',
         items: [{
             fieldLabel: 'Process',
             name: 'processName',
             allowBlank:false,
             value: '',
-            disabled: true,
+            //disabled: true,
             // readonly:true,
             id:"processName"
         },{
@@ -326,38 +207,42 @@ var startCaseTab = {
             name: 'taskName',
             allowBlank:false,
             value: '',
-            disabled: true,
+            //disabled: true,
             id:"taskName"
         },{
         	xtype:'textarea',
             fieldLabel: 'Description',
             name: 'processDescription',
             value: '',
-            disabled: true,
+            readOnly: true,
+            //disabled: true,
             id:"processDescription"
         },{
             fieldLabel: 'Category',
             name: 'processCategory',
             value: '',
-            disabled: true,
+            readOnly: true,
+            //disabled: true,
             id:"processCategory"
         }, {
             fieldLabel: 'Calendar',
             name: 'calendarName',            
-            disabled: true,
+            //disabled: true,
             id:"calendarName"
       },{
       	xtype:'textarea',
         fieldLabel: 'Calendar Description',
         name: 'calendarDescription',
         value: '',
-        disabled: true,
+        //disabled: true,
+        readOnly: true,
         id:"calendarDescription"
     },{
     	xtype:'checkboxgroup',
           fieldLabel: 'Working days',
           name: 'calendarWorkDays',
-          disabled: true,
+          //disabled: true,
+          readOnly: true,
           id:"calendarWorkDays",
         	  columns: 7,
         	    items: [
@@ -372,9 +257,10 @@ var startCaseTab = {
      }, {
     	xtype:'checkbox',
         fieldLabel: 'Debug Mode',
-        name: 'debugMode',        
-        disabled: true,
-        id:"debugMode"
+        name: 'processDebug',        
+        //disabled: true,
+        readOnly: true,
+        id:"processDebug"
   }]
       }
   ],
@@ -813,7 +699,7 @@ var startCaseTab = {
 				}
 				dir = datastore.directory;
 			}
-			Ext.Msg.alert("Debug", datastore.directory );
+			//Ext.Msg.alert("Debug", datastore.directory );
 			var requestParams = {
 				option: 'new',
 				dir: datastore.directory,
@@ -1032,8 +918,12 @@ function renderFileName(value, p, record) {
 			'<img src="{0}" alt="* " align="absmiddle" />&nbsp;<b>{1}</b>',
 			record.get('icon'), value);
 }
-function renderType(value) {
-	return String.format('<i>{0}</i>', value);
+function renderType(value, p, record) {	
+	if(record.get('appDocType')!=""){
+		return String.format('{1} - <i>{0}</i>', value,record.get('appDocType'));
+	}else{
+		return String.format('<i>{0}</i>', value);
+	}
 }
 function renderVersion(value, p, record) {
 	// addcc.png
@@ -1112,7 +1002,7 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_editcopy.png',
 					tooltip : 'Copy',
 					cls : 'x-btn-icon',
-					disabled : 'true',
+					disabled : true,
 					handler : function() {
 						openActionDialog(this, 'copy');
 					}
@@ -1123,7 +1013,7 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_move.png',
 					tooltip : 'Move',
 					cls : 'x-btn-icon',
-					disabled : 'true',
+					disabled : true,
 					handler : function() {
 						openActionDialog(this, 'move');
 					}
@@ -1134,7 +1024,7 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_editdelete.png',
 					tooltip : 'dellink',
 					cls : 'x-btn-icon',
-					disabled : 'true',
+					disabled : true,
 					handler : function() {
 						openActionDialog(this, 'delete');
 					}
@@ -1145,7 +1035,7 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_fonts.png',
 					tooltip : 'renamelink',
 					cls : 'x-btn-icon',
-					disabled : 'true',
+					disabled : true,
 					handler : function() {
 						openActionDialog(this, 'rename');
 					}
@@ -1157,7 +1047,7 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_down.png',
 					tooltip : 'downlink',
 					cls : 'x-btn-icon',
-					disabled : 'true',
+					disabled : true,
 					handler : function() {
 						openActionDialog(this, 'download');
 					}
@@ -1235,10 +1125,10 @@ var gridbb = new Ext.PagingToolbar({
 	store : datastore,
 	pageSize : 25 ,
 	displayInfo : true,
-	displayMsg : '% % %',
+	//displayMsg : '% % %',
 	emptyMsg : 'No items to display',
 	beforePageText : 'Page',
-	afterPageText : 'of %',
+	//afterPageText : 'of %',
 	firstText : 'First',
 	lastText : 'Last',
 	nextText : 'Next',
@@ -1258,7 +1148,7 @@ var cm = new Ext.grid.ColumnModel([ {
 					// .x-grid-col-topic b { color:#333 })
 	header : "Name",
 	dataIndex : 'name',
-	width : 250,
+	width : 200,
 	renderer : renderFileName,
 	editor : new Ext.form.TextField({
 		allowBlank : false
@@ -1273,22 +1163,23 @@ var cm = new Ext.grid.ColumnModel([ {
 }, {
 	header : "Modified",
 	dataIndex : 'appDocCreateDate',
-	width : 90
+	width : 65
 }, {
 	header : "Owner",
 	dataIndex : 'owner',
-	width : 150
+	width : 100
 	// sortable : false
 }, {
 	header : "PM Type",
 	dataIndex : 'appDocType',
-	width : 70// ,
+	width : 70,
+	hidden:true
 	// align : 'right'
 	// renderer : renderType
 }, {
 	header : "Type",
 	dataIndex : 'type',
-	width : 70,
+	width : 100,
 	// align : 'right',
 	renderer : renderType
 }, {
@@ -1354,10 +1245,6 @@ var cm = new Ext.grid.ColumnModel([ {
 
 // by default columns are sortable
 cm.defaultSortable = true;
-
-// Unregister the default double click action (which makes the name field
-// editable - we want this when the user clicks "Rename" in the menu)
-// ext_itemgrid.un('celldblclick', ext_itemgrid.onCellDblClick);
 
 function handleRowClick(sm, rowIndex) {
 	//console.log("Row Clicked: "+rowIndex);
@@ -1647,7 +1534,7 @@ var documentsTab = {
 				collapsible: true,
 				collapseMode: 'mini',
 				// collapsed:true,
-				width : 250,
+				width : 180,
 				titlebar : true,
 				autoScroll : true,
 				animate : true,
@@ -1865,6 +1752,7 @@ var documentsTab = {
 					fn : function() {
 						// alert(Ext.getCmp("locationbarcmp"));
 						// Ext.getCmp("documents").
+						/*
 						if(typeof(sw_afterlayout)!="undefined"){
 							//console.log("starting locatiobar");
 							Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTree");
@@ -1872,7 +1760,7 @@ var documentsTab = {
 							//console.log("location abr started");
 							return;
 						} 
-							
+						*/	
 						//console.log(typeof(sw_afterlayout));
 						sw_afterlayout=true;
 						ext_itemgrid = Ext.getCmp("gridpanel");
@@ -1911,7 +1799,7 @@ var documentsTab = {
 						chDir('');
 						//console.log("starting locatiobar first time");
 						Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTree");
-						// Ext.getCmp("locationbarcmp").initComponent();
+						Ext.getCmp("locationbarcmp").initComponent();
 						//console.log("location abr started first time");
 						
 					}
@@ -1934,7 +1822,7 @@ var MainPanel = function() {
 		tabWidth : 135,
 		plugins : new Ext.ux.TabCloseMenu(),
 		enableTabScroll : true,
-		activeTab : 0,
+		activeTab : -1,
 		items : [ startCaseTab, documentsTab /* , dashboardTab */]
 	});
 };
@@ -1974,53 +1862,20 @@ Ext
 							}
 						}
 					},
-/*
-					loadClass : function(href, cls, member) {
-						var id = 'docs-' + cls;
-						var tab = this.getComponent(id);
-						if (tab) {
-							this.setActiveTab(tab);
-							if (member) {
-								tab.scrollToMember(member);
-							}
-						} else {
-							var autoLoad = {
-								url : href
-							};
-							if (member) {
-								autoLoad.callback = function() {
-									Ext.getCmp(id).scrollToMember(member);
-								};
-							}
-							var p = this.add(new DocPanel({
-								id : id,
-								cclass : cls,
-								autoLoad : autoLoad
-							}));
-							this.setActiveTab(p);
-						}
-					},
-*/
-				
+					
 					showDetails : function(selectedNode) {
 
 						// console.log(selectedNode);
 						var detailEl = Ext.getCmp('process-detail-panel').body;
 						if (selectedNode) {
-    	
-        // this.initTemplates();
-							// detailEl.hide();
-							// detailEl.sequenceFx();
-							// detailEl.slideOut('l',
-							// {stopFx:true,duration:.9});
-
-							otherAttributes = selectedNode.attributes.otherAttributes;
+    								otherAttributes = selectedNode.attributes.otherAttributes;
         
         calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
         calendarObj={};        
         for(i=0;i<calendarDays.length;i++){
         	calendarObj[calendarDays[i]]=true;
         }
+        //console.log(otherAttributes);
         Ext.getCmp('process-detail-panel').getForm().setValues({
         	processName : otherAttributes.PRO_TITLE,
         	taskName : selectedNode.attributes.text,
