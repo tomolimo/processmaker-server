@@ -74,7 +74,8 @@ class Xpdl extends processes
   * @return boolean
   */
   function updateProcessFromDataXpdl ($oData, $tasks ) {
-    $this->updateProcessRow ($oData->process );
+    if(is_array($oData->process))
+      $this->updateProcessRow ($oData->process );
     $this->removeProcessRows ($oData->process['PRO_UID'] );
     $uid  = $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);

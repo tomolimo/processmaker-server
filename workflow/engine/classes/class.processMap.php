@@ -5567,7 +5567,7 @@ class processMap {
     $_DBArray ['allInputs'] = $aAllInputs;
     $_DBArray ['allOutputs'] = $aAllOutputs;
     $_SESSION ['_DBArray'] = $_DBArray;
-    return($_SESSION['_DBArray']);
+    return $_SESSION['_DBArray']['usersGroups'];
   }
 }
 
