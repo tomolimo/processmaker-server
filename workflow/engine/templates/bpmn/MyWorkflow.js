@@ -2123,22 +2123,6 @@ MyWorkflow.prototype.zoom = function(sType)
    var height = fig.getHeight();
    var xPos = fig.getX();
    var yPos = fig.getY();
-
-   var lines=workflow.getLines();
-   var size=lines.getSize();
-   for(var i=0;i<size;i++){
-       var startX = lines.data[i].startX;
-       var startY = lines.data[i].startY;
-       var endX = lines.data[0].endX;
-       var endY = lines.data[0].endY;
-       var yDiff = endX - endY;
-       var source = lines.get(i).getSource().parentNode;
-       var target = lines.get(i).getTarget().parentNode;
-       lines.data[i].setStartPoint(startX,source.y );
-       lines.data[i].setEndPoint(endX,target.y + yDiff);
-   }
-
-   
    if(sType == 'in')
      {
         if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
@@ -2151,12 +2135,6 @@ MyWorkflow.prototype.zoom = function(sType)
              width  += 20;
              height += 20;
           }
-       /*var source = lines.get(0).getSource().parentNode;
-       var target = lines.get(0).getTarget().parentNode;
-       var startX = lines.data[0].startX;
-       var endX = lines.data[0].endX;
-       lines.data[0].setStartPoint(startX,source.y);
-       lines.data[0].setEndPoint(endX,target.y);*/
      }
     else
      {
@@ -2171,12 +2149,27 @@ MyWorkflow.prototype.zoom = function(sType)
              height -= 20;
           }
      }
-//   if(sType == 'in' )
-//    fig.setPosition(xPos,yPos + 20);
-//   else if(sType == 'out')
+   //if(sType == 'in' && !fig.type.match(/Event/))
+    //fig.setPosition(xPos,yPos + 10);
+//   else if(sType == 'out' && !fig.type.match(/Event/))
 //    fig.setPosition(xPos,yPos - 10);
 
    fig.setDimension(width,height);
+   var lines=workflow.getLines();
+   var size=lines.getSize();
+   for(var i=0;i<size;i++){
+       var startX = lines.data[i].startX;
+       var startY = lines.data[i].startY;
+       var endX = lines.data[i].endX;
+       var endY = lines.data[i].endY;
+       var yDiff = endY - startY;
+       var source = lines.get(i).getSource().parentNode;
+       var target = lines.get(i).getTarget().parentNode;
+       lines.data[i].setStartPoint(startX,source.y + yDiff);
+       lines.data[i].setEndPoint(endX,target.y + yDiff);
+       if(sType == 'in' && !fig.type.match(/Event/))
+            target.setPosition(xPos,yPos + 10);
+   }
 
    if(fig.type == 'bpmnTask')
       {
@@ -2212,7 +2205,7 @@ MyWorkflow.prototype.zoom = function(sType)
         eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
         fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
         fig.bpmnText.paint();
-        }
+       }
         else if(fig.type == 'bpmnAnnotation')
         {
           fig.bpmnText.clear();
@@ -2247,4 +2240,5 @@ MyWorkflow.prototype.zoom = function(sType)
           fig.bpmnText.paint();
         }
     }
+   
 }
