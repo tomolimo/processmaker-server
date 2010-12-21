@@ -40,8 +40,11 @@
   if(!is_dir($newDir)){
    G::mk_dir($newDir);
   }
-  cpyMoreLogos($dir,$newDir);
+  //this function does copy all logos from public_html/files/logos to /shared/site/yourSite/files/logos
+  //cpyMoreLogos($dir,$newDir);
   $newDir .= PATH_SEP.G::decrypt($_GET['id'],'imagen');
+  $dir    .= PATH_SEP.G::decrypt($_GET['id'],'imagen');
+  copy($dir,$newDir);
   showLogo($newDir);
   die;
 
