@@ -323,9 +323,10 @@ ProcessMapContext.prototype.delLines= function()
 ProcessMapContext.prototype.processPermission= function()
 {
   var pro_uid = workflow.getUrlVars();
-  //Database store code starts here
+  //Process Permission store code starts here
   var dbConnFields = Ext.data.Record.create([
             { name: 'OP_UID',type: 'string'},
+            { name: 'LABEL',type: 'string'},
             { name: 'TASK_TARGET',type: 'string'},
             { name: 'GROUP_USER',type: 'string'},
             { name: 'TASK_SOURCE',type: 'string'},
@@ -429,6 +430,19 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 ]
      });
 
+  var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'New',
+            iconCls: 'application_add',
+            handler: function () {
+                formWindow.show();
+            }
+  })
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd]
+            });
+
   var PermissionGrid = new Ext.grid.GridPanel({
         store: PermissionStore,
         id : 'mygrid',
@@ -444,7 +458,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         layout: 'fit',
         cm: PermissionGridColumn,
         stripeRows: true,
-        //tbar: tb,
+        tbar: tb,
         viewConfig: {forceFit: true}
    });
 
@@ -462,16 +476,20 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         items: PermissionGrid
 
  });
-  var btnNew = new Ext.Button({
-            id: 'btnNew',
-            text: 'New',
-            iconCls: 'application_add',
-            handler: function () {
-                formWindow.show();
-            }
-  })
 
-  var PermissionForm =new Ext.FormPanel({
+ var formStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : dbConnFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyObjectPermissions.php?pid='+pro_uid+'&t=1'
+            })
+          });
+ formStore.load();
+ 
+ var PermissionForm =new Ext.FormPanel({
    //   title:"Add new Database Source",
       collapsible: false,
       maximizable: true,
@@ -520,7 +538,17 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                                         {name : 'Apply for leave',   value: '1'},
                                                         {name : 'HR approval',   value: '2'},
                                                         {name : 'Supervisor Approval',   value: '3'}]})
-                },{
+                },new Ext.form.ComboBox({
+                    fieldLabel: 'Group or Users',
+                    hiddenName:'popType',
+                    store: formStore,
+                    valueField:'LABEL',
+                    displayField:'LABEL',
+                    triggerAction: 'all',
+                    emptyText:'Select',
+                    editable: true
+                    })
+                ,/*{
                     width           :150,
                     xtype           :'combo',
                     mode            :'local',
@@ -536,7 +564,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                                         fields : ['name', 'value'],
                                                         data   : [
                                                         {name : 'Administrator(Admin)',   value: '0'}]})
-               },{
+               },*/{
                     width           :150,
                     xtype           :'combo',
                     mode            :'local',
@@ -612,17 +640,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                       ]
   })
 
-var formStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : dbConnFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyObjectPermissions.php?pid='+pro_uid+'&t=1'
-            })
-          });
- formStore.load();
+
 
 var formWindow = new Ext.Window({
         title: 'New specific Permission',
@@ -669,7 +687,7 @@ var formWindow = new Ext.Window({
                 //taskExtObj.saveTaskUsers(getData);
 
             formWindow.close();
-            dbStore.reload();
+            PermissionStore.reload();
           }
         },{
             text: 'Cancel',

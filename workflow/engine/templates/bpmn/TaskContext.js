@@ -1322,8 +1322,6 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         }
     });
 
-  
-
     taskPropertiesTabs.render(document.body);
     _5625.scope.workflow.taskPropertiesTabs = taskPropertiesTabs;
 
