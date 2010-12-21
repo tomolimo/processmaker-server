@@ -242,8 +242,8 @@ function activeDeactive(){
   if( rowSelected ) {
     var ids = '';
 
-    status = rowSelected.get('status');
-    file = rowSelected.get('sFile');
+    var status = rowSelected.get('status');
+    var file = rowSelected.get('sFile');
     
     Ext.Ajax.request({
       url : 'pluginsChange?id='+file+'&status='+status ,
