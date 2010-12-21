@@ -73,7 +73,7 @@ Ext.onReady(function(){
             buttons: [{
                 text: TRANSLATIONS.ID_UPLOAD,
                 handler: function(){
-                  uploader = Ext.getCmp('uploader');
+                  var uploader = Ext.getCmp('uploader');
 
                   if(uploader.getForm().isValid()){
                     uploader.getForm().submit({
