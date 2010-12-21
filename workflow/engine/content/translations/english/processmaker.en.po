@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-12-16 12:30:14\n"
+"PO-Revision-Date: 2010-12-21 11:04:02\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -4498,8 +4498,8 @@ msgstr "Conditional Event"
 # TRANSLATION
 # LABEL/ID_CASES_START_PAGE
 #: LABEL/ID_CASES_START_PAGE
-msgid "Extended Features"
-msgstr "Extended Features"
+msgid "Start Pages"
+msgstr "Start Pages"
 
 # TRANSLATION
 # LABEL/ID_PROCESS_NO_CATEGORY
@@ -4529,7 +4529,7 @@ msgstr "Cases Lists"
 # LABEL/ID_APPCACHE_SETUP
 #: LABEL/ID_APPCACHE_SETUP
 msgid "Cases List Cache Builder"
-msgstr "Cases List Cache Builder  "
+msgstr "Cases List Cache Builder"
 
 # TRANSLATION
 # LABEL/ID_CLEAR_CACHE_MSG1
@@ -5267,25 +5267,25 @@ msgstr "There is a process with the same name. this  process will not save"
 # JAVASCRIPT/ID_EXIST_DYNAFORM
 #: JAVASCRIPT/ID_EXIST_DYNAFORM
 msgid "There is a Dynaform with the same name in  this process. It is not saving"
-msgstr "There is a Dynaform with the same name in  this process. It is not saving "
+msgstr "There is a Dynaform with the same name in  this process. It is not saving"
 
 # TRANSLATION
 # LABEL/ID_CLASS_TABLE_DOESNT_EXIST
 #: LABEL/ID_CLASS_TABLE_DOESNT_EXIST
 msgid "This Class Table doesn't exists!"
-msgstr "This Class Table doesn't exists! "
+msgstr "This Class Table doesn't exists!"
 
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_INPUTDOCUMENT
 #: JAVASCRIPT/ID_EXIST_INPUTDOCUMENT
 msgid "There is an Input Document with the same  name in  this process. It is not saving"
-msgstr "There is an Input Document with the same  name in  this process. It is not saving "
+msgstr "There is an Input Document with the same  name in  this process. It is not saving"
 
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_OUTPUTDOCUMENT
 #: JAVASCRIPT/ID_EXIST_OUTPUTDOCUMENT
 msgid "There is an Output Document with the same  name in  this process. It is not saving"
-msgstr "There is an Output Document with the same  name in  this process. It is not saving "
+msgstr "There is an Output Document with the same  name in  this process. It is not saving"
 
 # TRANSLATION
 # LABEL/ID_DELEGATE_DATE_FROM
@@ -5507,7 +5507,7 @@ msgstr "Are you sure you want to cancel this case?"
 # LABEL/ID_PAUSE_CASE_TO_DATE
 #: LABEL/ID_PAUSE_CASE_TO_DATE
 msgid "Do you want to pause the case to date:"
-msgstr "Do you want to pause the case to date: "
+msgstr "Do you want to pause the case to date:"
 
 # TRANSLATION
 # LABEL/ID_DELETING_ELEMENTS
@@ -5645,79 +5645,79 @@ msgstr "Cases Lists Settings"
 # LABEL/ID_DATE_FORMAT_1
 #: LABEL/ID_DATE_FORMAT_1
 msgid "Y-m-d H:i:s .... (2010-11-17 10:25:07)"
-msgstr " Y-m-d H:i:s .... (2010-11-17 10:25:07)"
+msgstr "Y-m-d H:i:s .... (2010-11-17 10:25:07)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_2
 #: LABEL/ID_DATE_FORMAT_2
 msgid "d/m/Y .... (17/11/2010)"
-msgstr " d/m/Y .... (17/11/2010)"
+msgstr "d/m/Y .... (17/11/2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_3
 #: LABEL/ID_DATE_FORMAT_3
 msgid "m/d/Y .... (11/17/2010)"
-msgstr " m/d/Y .... (11/17/2010)"
+msgstr "m/d/Y .... (11/17/2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_4
 #: LABEL/ID_DATE_FORMAT_4
 msgid "Y/d/m .... (2010/17/11)"
-msgstr " Y/d/m .... (2010/17/11)"
+msgstr "Y/d/m .... (2010/17/11)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_5
 #: LABEL/ID_DATE_FORMAT_5
 msgid "Y/m/d .... (2010/11/17)"
-msgstr " Y/m/d .... (2010/11/17)"
+msgstr "Y/m/d .... (2010/11/17)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_6
 #: LABEL/ID_DATE_FORMAT_6
 msgid "F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
-msgstr " F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
+msgstr "F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_7
 #: LABEL/ID_DATE_FORMAT_7
 msgid "m.d.y .... (11.17.10)"
-msgstr " m.d.y .... (11.17.10)"
+msgstr "m.d.y .... (11.17.10)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_8
 #: LABEL/ID_DATE_FORMAT_8
 msgid "j, n, Y .... (17,11,2010)"
-msgstr " j, n, Y .... (17,11,2010)"
+msgstr "j, n, Y .... (17,11,2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_9
 #: LABEL/ID_DATE_FORMAT_9
 msgid "D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
-msgstr " D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
+msgstr "D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_10
 #: LABEL/ID_DATE_FORMAT_10
 msgid "D d M, Y .... (Thu 17 Nov, 2010)"
-msgstr " D d M, Y .... (Thu 17 Nov, 2010)"
+msgstr "D d M, Y .... (Thu 17 Nov, 2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_11
 #: LABEL/ID_DATE_FORMAT_11
 msgid "D M, Y .... (Thu Nov, 2010)"
-msgstr " D M, Y .... (Thu Nov, 2010)"
+msgstr "D M, Y .... (Thu Nov, 2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_12
 #: LABEL/ID_DATE_FORMAT_12
 msgid "d M, Y .... (17 Nov, 2010)"
-msgstr " d M, Y .... (17 Nov, 2010)"
+msgstr "d M, Y .... (17 Nov, 2010)"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_13
 #: LABEL/ID_DATE_FORMAT_13
 msgid "d m, Y .... (17 11, 2010)"
-msgstr " d m, Y .... (17 11, 2010)"
+msgstr "d m, Y .... (17 11, 2010)"
 
 # TRANSLATION
 # LABEL/ID_STEP_LIST
@@ -5729,43 +5729,43 @@ msgstr "Step List"
 # LABEL/ID_USERNAME_FORMAT_1
 #: LABEL/ID_USERNAME_FORMAT_1
 msgid "@firstName @lastName .... (John Cooper)"
-msgstr " @firstName @lastName .... (John Cooper)"
+msgstr "@firstName @lastName .... (John Cooper)"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_2
 #: LABEL/ID_USERNAME_FORMAT_2
 msgid "@firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
-msgstr " @firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
+msgstr "@firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_3
 #: LABEL/ID_USERNAME_FORMAT_3
 msgid "@userName .... (JohnLCooper)"
-msgstr " @userName .... (JohnLCooper)"
+msgstr "@userName .... (JohnLCooper)"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_4
 #: LABEL/ID_USERNAME_FORMAT_4
 msgid "@userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
-msgstr " @userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
+msgstr "@userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_5
 #: LABEL/ID_USERNAME_FORMAT_5
 msgid "@lastName @firstName .... (Cooper John)"
-msgstr " @lastName @firstName .... (Cooper John)"
+msgstr "@lastName @firstName .... (Cooper John)"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_6
 #: LABEL/ID_USERNAME_FORMAT_6
 msgid "@lastName, @firstName .... (Cooper, John)"
-msgstr " @lastName, @firstName .... (Cooper, John)"
+msgstr "@lastName, @firstName .... (Cooper, John)"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_7
 #: LABEL/ID_USERNAME_FORMAT_7
 msgid "@lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
-msgstr " @lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
+msgstr "@lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
 
 # TRANSLATION
 # LABEL/ID_EMPTY_USERS
@@ -5928,6 +5928,12 @@ msgstr "Do you want to delete this collection?"
 #: LABEL/ID_TABLE
 msgid "Table"
 msgstr "Table"
+
+# TRANSLATION
+# LABEL/ID_EXTENDED_FEATURES
+#: LABEL/ID_EXTENDED_FEATURES
+msgid "Extended Features"
+msgstr "Extended Features"
 
 # TRANSLATION
 # LABEL/ID_DESIGNER
@@ -15981,24 +15987,6 @@ msgstr "Last executant of the task"
 msgid "[patterns/patterns_Current.xml?SAVE]Save"
 msgstr "Save"
 
-# patterns/patterns_Discriminator.xml?TITLE
-# patterns/patterns_Discriminator.xml
-#: title - TITLE
-msgid "Discriminator"
-msgstr "Discriminator"
-
-# patterns/patterns_Discriminator.xml?BTN_CANCEL
-# patterns/patterns_Discriminator.xml
-#: button - BTN_CANCEL
-msgid "[patterns/patterns_Discriminator.xml?BTN_CANCEL]Cancel"
-msgstr "Cancel"
-
-# patterns/patterns_Discriminator.xml?SAVE
-# patterns/patterns_Discriminator.xml
-#: button - SAVE
-msgid "[patterns/patterns_Discriminator.xml?SAVE]Save"
-msgstr "Save"
-
 # patterns/patterns_Evaluate.xml?TITLE
 # patterns/patterns_Evaluate.xml
 #: title - TITLE
@@ -16016,38 +16004,6 @@ msgstr "Cancel"
 #: button - SAVE
 msgid "[patterns/patterns_Evaluate.xml?SAVE]Save"
 msgstr "Save"
-
-# patterns/patterns_GridDiscriminator.xml?ROU_NEXT_TASK
-# patterns/patterns_GridDiscriminator.xml
-#: dropdown - ROU_NEXT_TASK
-msgid "[patterns/patterns_GridDiscriminator.xml?ROU_NEXT_TASK]Next Task"
-msgstr "Next Task"
-
-# patterns/patterns_GridDiscriminator.xml?ROU_CONDITION
-# patterns/patterns_GridDiscriminator.xml
-#: text - ROU_CONDITION
-msgid "No of Task to be Discriminated"
-msgstr "No of Task to be Discriminated"
-
-# patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL
-# patterns/patterns_GridDiscriminator.xml
-#: dropdown - ROU_OPTIONAL
-msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL]\n"
-""
-msgstr "\n"
-""
-
-# patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-FALSE
-# patterns/patterns_GridDiscriminator.xml
-#: dropdown - ROU_OPTIONAL - FALSE
-msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-FALSE]"
-msgstr "Structured"
-
-# patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-TRUE
-# patterns/patterns_GridDiscriminator.xml
-#: dropdown - ROU_OPTIONAL - TRUE
-msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-TRUE]"
-msgstr "Cancelling"
 
 # patterns/patterns_GridEvaluateType.xml?ROU_NEXT_TASK
 # patterns/patterns_GridEvaluateType.xml
@@ -16759,12 +16715,6 @@ msgstr "Size in bytes"
 msgid "[processes/processes_Export.xml?FILENAME_LABEL]File"
 msgstr "File"
 
-# processes/processes_Export.xml?FILENAME_LABEL1
-# processes/processes_Export.xml
-#: link - FILENAME_LABEL1
-msgid "File xpdl"
-msgstr "File xpdl"
-
 # processes/processes_FileEdit.xml?TITLE
 # processes/processes_FileEdit.xml
 #: title - TITLE
@@ -16903,54 +16853,6 @@ msgstr "Save"
 msgid "[processes/processes_ImportExisting.xml?BTN_CANCEL]Cancel"
 msgstr "Cancel"
 
-# processes/processes_ImportExistingXpdl.xml?title
-# processes/processes_ImportExistingXpdl.xml
-#: title - title
-msgid "[processes/processes_ImportExistingXpdl.xml?title]<div align=\"center\">Importing Existing Process</div>"
-msgstr "<div align=\"center\">Importing Existing Process</div>"
-
-# processes/processes_ImportExistingXpdl.xml?TITLE1
-# processes/processes_ImportExistingXpdl.xml
-#: subtitle - TITLE1
-msgid "[processes/processes_ImportExistingXpdl.xml?TITLE1]The process you are trying to import already exists. Please select one of the following options to continue:"
-msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
-
-# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION
-# processes/processes_ImportExistingXpdl.xml
-#: radiogroup - IMPORT_OPTION
-msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION]"
-msgstr ""
-
-# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-1
-# processes/processes_ImportExistingXpdl.xml
-#: radiogroup - IMPORT_OPTION - 1
-msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-1]"
-msgstr "Update the current process, overwriting all tasks and steps"
-
-# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-2
-# processes/processes_ImportExistingXpdl.xml
-#: radiogroup - IMPORT_OPTION - 2
-msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-2]"
-msgstr "Disable the current process and create a new version of the process"
-
-# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-3
-# processes/processes_ImportExistingXpdl.xml
-#: radiogroup - IMPORT_OPTION - 3
-msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-3]"
-msgstr "Create a completely new process without changing the current process"
-
-# processes/processes_ImportExistingXpdl.xml?SUBMIT
-# processes/processes_ImportExistingXpdl.xml
-#: submit - SUBMIT
-msgid "[processes/processes_ImportExistingXpdl.xml?SUBMIT]Save"
-msgstr "Save"
-
-# processes/processes_ImportExistingXpdl.xml?BTN_CANCEL
-# processes/processes_ImportExistingXpdl.xml
-#: button - BTN_CANCEL
-msgid "[processes/processes_ImportExistingXpdl.xml?BTN_CANCEL]Cancel"
-msgstr "Cancel"
-
 # processes/processes_ImportSucessful.xml?title
 # processes/processes_ImportSucessful.xml
 #: title - title
@@ -16998,30 +16900,6 @@ msgstr ""
 #: submit - SUBMIT
 msgid "[processes/processes_ImportSucessful.xml?SUBMIT]Continue"
 msgstr "Continue"
-
-# processes/processes_ImportXpdl.xml?TITLE1
-# processes/processes_ImportXpdl.xml
-#: title - TITLE1
-msgid "[processes/processes_ImportXpdl.xml?TITLE1]Import Process"
-msgstr "Import Process"
-
-# processes/processes_ImportXpdl.xml?PROCESS_FILENAME
-# processes/processes_ImportXpdl.xml
-#: file - PROCESS_FILENAME
-msgid "[processes/processes_ImportXpdl.xml?PROCESS_FILENAME]File"
-msgstr "File"
-
-# processes/processes_ImportXpdl.xml?SAVE
-# processes/processes_ImportXpdl.xml
-#: button - SAVE
-msgid "[processes/processes_ImportXpdl.xml?SAVE]Import"
-msgstr "Import"
-
-# processes/processes_ImportXpdl.xml?BTN_CANCEL
-# processes/processes_ImportXpdl.xml
-#: button - BTN_CANCEL
-msgid "[processes/processes_ImportXpdl.xml?BTN_CANCEL]Cancel"
-msgstr "Cancel"
 
 # processes/processes_List.xml?PRO_CATEGORY_LABEL
 # processes/processes_List.xml
@@ -21789,7 +21667,7 @@ msgstr "Output Document"
 # steps/steps_availableBB.xml
 #: dropdown - STEP_TYPE_OBJ - INPUT_DOCUMENT
 msgid "[steps/steps_availableBB.xml?STEP_TYPE_OBJ-INPUT_DOCUMENT]"
-msgstr "Input Document"
+msgstr "Documentation"
 
 # steps/steps_availableBB.xml?STEP_TYPE_OBJ-EXTERNAL
 # steps/steps_availableBB.xml
@@ -21929,35 +21807,11 @@ msgstr "Reports to"
 msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-SELF_SERVICE]"
 msgstr "Self Service"
 
-# tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-STATIC_MI
-# tasks/tasks_AssignmentRules.xml
-#: radiogroup - TAS_ASSIGN_TYPE - STATIC_MI
-msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-STATIC_MI]"
-msgstr "Static Partial Join for Multiple Instances"
-
-# tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-CANCEL_MI
-# tasks/tasks_AssignmentRules.xml
-#: radiogroup - TAS_ASSIGN_TYPE - CANCEL_MI
-msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-CANCEL_MI]"
-msgstr "Cancelling Partial Join for Multiple Instances"
-
 # tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_VARIABLE
 # tasks/tasks_AssignmentRules.xml
 #: textpm - TAS_ASSIGN_VARIABLE
 msgid "Variable for Value Based Assignment"
 msgstr "Variable for Value Based Assignment"
-
-# tasks/tasks_AssignmentRules.xml?TAS_MI_INSTANCE_VARIABLE
-# tasks/tasks_AssignmentRules.xml
-#: textpm - TAS_MI_INSTANCE_VARIABLE
-msgid "Variable for No of Instances"
-msgstr "Variable for No of Instances"
-
-# tasks/tasks_AssignmentRules.xml?TAS_MI_COMPLETE_VARIABLE
-# tasks/tasks_AssignmentRules.xml
-#: textpm - TAS_MI_COMPLETE_VARIABLE
-msgid "Variable for No of Instances to complete"
-msgstr "Variable for No of Instances to complete"
 
 # tasks/tasks_Definition.xml?TAS_TITLE
 # tasks/tasks_Definition.xml
@@ -22090,12 +21944,6 @@ msgstr "Exceptions Handling"
 #: checkbox - TAS_TYPE
 msgid "Allow arbitrary transfer (Ad hoc)"
 msgstr "Allow arbitrary transfer (Ad hoc)"
-
-# tasks/tasks_TimingControl.xml?TAS_TRANSFER_FLY
-# tasks/tasks_TimingControl.xml
-#: checkbox - TAS_TRANSFER_FLY
-msgid "Allow user defined timing control"
-msgstr "Allow user defined timing control"
 
 # tasks/tasks_TimingControl.xml?TAS_DURATION
 # tasks/tasks_TimingControl.xml
