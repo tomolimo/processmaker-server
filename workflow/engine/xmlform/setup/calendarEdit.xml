@@ -6,93 +6,18 @@
   </CALENDAR_UID>
   <DEFINITION_TITLE type="title" enablehtml="0">
     <en><![CDATA[Calendar Definition]]></en>
-    <ar-EG><![CDATA[Calendar Definition]]></ar-EG>
-    <cs-CZ><![CDATA[Calendar Definition]]></cs-CZ>
-    <da-DK><![CDATA[Calendar Definition]]></da-DK>
-    <de-DE><![CDATA[Calendar Definition]]></de-DE>
-    <es><![CDATA[Definición de calendario]]></es>
-    <fi-FI><![CDATA[Calendar Definition]]></fi-FI>
-    <fr-FR><![CDATA[Definition Calendrier]]></fr-FR>
-    <it-IT><![CDATA[Calendar Definition]]></it-IT>
-    <he-IL><![CDATA[Calendar Definition]]></he-IL>
-    <nl-NL><![CDATA[Calendar Definition]]></nl-NL>
-    <pl-PL><![CDATA[Calendar Definition]]></pl-PL>
-    <pt-BR><![CDATA[Calendar Definition]]></pt-BR>
-    <ru-RU><![CDATA[Настройки рабочего календаря]]></ru-RU>
-    <zh-CN><![CDATA[Calendar Definition]]></zh-CN>
-    <zh-TW><![CDATA[Calendar Definition]]></zh-TW>
   </DEFINITION_TITLE>
   <CALENDAR_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="15" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0" onclick="setFocusByIdField;">
     <en><![CDATA[Name]]></en>
-    <ar-EG><![CDATA[Name]]></ar-EG>
-    <cs-CZ><![CDATA[Name]]></cs-CZ>
-    <da-DK><![CDATA[Name]]></da-DK>
-    <de-DE><![CDATA[Name]]></de-DE>
-    <es><![CDATA[Nombre]]></es>
-    <fi-FI><![CDATA[Name]]></fi-FI>
-    <fr-FR><![CDATA[Nom]]></fr-FR>
-    <it-IT><![CDATA[Name]]></it-IT>
-    <he-IL><![CDATA[Name]]></he-IL>
-    <nl-NL><![CDATA[Name]]></nl-NL>
-    <pl-PL><![CDATA[Name]]></pl-PL>
-    <pt-BR><![CDATA[Name]]></pt-BR>
-    <ru-RU><![CDATA[Имя]]></ru-RU>
-    <zh-CN><![CDATA[Name]]></zh-CN>
-    <zh-TW><![CDATA[Name]]></zh-TW>
   </CALENDAR_NAME>
   <CALENDAR_DESCRIPTION type="textarea" required="0" readonly="0" rows="2" cols="32" mode="edit">
     <en><![CDATA[Description]]></en>
-    <ar-EG><![CDATA[Description]]></ar-EG>
-    <cs-CZ><![CDATA[Description]]></cs-CZ>
-    <da-DK><![CDATA[Description]]></da-DK>
-    <de-DE><![CDATA[Beschreibung]]></de-DE>
-    <es><![CDATA[Descripción]]></es>
-    <fi-FI><![CDATA[Description]]></fi-FI>
-    <fr-FR><![CDATA[Description]]></fr-FR>
-    <it-IT><![CDATA[Description]]></it-IT>
-    <he-IL><![CDATA[Description]]></he-IL>
-    <nl-NL><![CDATA[Description]]></nl-NL>
-    <pl-PL><![CDATA[Description]]></pl-PL>
-    <pt-BR><![CDATA[Description]]></pt-BR>
-    <ru-RU><![CDATA[Описание]]></ru-RU>
-    <zh-CN><![CDATA[Description]]></zh-CN>
-    <zh-TW><![CDATA[Description]]></zh-TW>
   </CALENDAR_DESCRIPTION>
   <CALENDAR_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="ACTIVE" labelonright="1" enablehtml="0">
     <en><![CDATA[Active]]></en>
-    <ar-EG><![CDATA[Active]]></ar-EG>
-    <cs-CZ><![CDATA[Active]]></cs-CZ>
-    <da-DK><![CDATA[Active]]></da-DK>
-    <de-DE><![CDATA[Aktiv]]></de-DE>
-    <es><![CDATA[Activo]]></es>
-    <fi-FI><![CDATA[Active]]></fi-FI>
-    <fr-FR><![CDATA[Actif]]></fr-FR>
-    <it-IT><![CDATA[Active]]></it-IT>
-    <he-IL><![CDATA[Active]]></he-IL>
-    <nl-NL><![CDATA[Active]]></nl-NL>
-    <pl-PL><![CDATA[Active]]></pl-PL>
-    <pt-BR><![CDATA[Active]]></pt-BR>
-    <ru-RU><![CDATA[Действующий]]></ru-RU>
-    <zh-CN><![CDATA[Active]]></zh-CN>
-    <zh-TW><![CDATA[Active]]></zh-TW>
   </CALENDAR_STATUS>
   <WorkDays type="title" enablehtml="0">
     <en><![CDATA[Work Days]]></en>
-    <ar-EG><![CDATA[Work Days]]></ar-EG>
-    <cs-CZ><![CDATA[Work Days]]></cs-CZ>
-    <da-DK><![CDATA[Work Days]]></da-DK>
-    <de-DE><![CDATA[Arbeitstage]]></de-DE>
-    <es><![CDATA[Días de trabajo]]></es>
-    <fi-FI><![CDATA[Work Days]]></fi-FI>
-    <fr-FR><![CDATA[Jours de travail]]></fr-FR>
-    <it-IT><![CDATA[Work Days]]></it-IT>
-    <he-IL><![CDATA[Work Days]]></he-IL>
-    <nl-NL><![CDATA[Work Days]]></nl-NL>
-    <pl-PL><![CDATA[Work Days]]></pl-PL>
-    <pt-BR><![CDATA[Work Days]]></pt-BR>
-    <ru-RU><![CDATA[Рабочие дни]]></ru-RU>
-    <zh-CN><![CDATA[Work Days]]></zh-CN>
-    <zh-TW><![CDATA[Work Days]]></zh-TW>
   </WorkDays>
   <CALENDAR_WORK_DAYS type="checkgroup" defaultvalue="1|2|3|4|5" mode="edit" options="Array">
     <en>
@@ -104,269 +29,29 @@
       <option name="5"><![CDATA[FRI]]></option>
       <option name="6"><![CDATA[SAT]]></option>
     </en>
-    <ar-EG>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </ar-EG>
-    <cs-CZ>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </cs-CZ>
-    <da-DK>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </da-DK>
-    <de-DE>
-      <option name="0"><![CDATA[SON]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[DIE]]></option>
-      <option name="3"><![CDATA[MIT]]></option>
-      <option name="4"><![CDATA[DON]]></option>
-      <option name="5"><![CDATA[FRE]]></option>
-      <option name="6"><![CDATA[SAM]]></option>
-    </de-DE>
-    <es>
-      <option name="0"><![CDATA[DOM]]></option>
-      <option name="1"><![CDATA[LUN]]></option>
-      <option name="2"><![CDATA[MAR]]></option>
-      <option name="3"><![CDATA[MIE]]></option>
-      <option name="4"><![CDATA[JUE]]></option>
-      <option name="5"><![CDATA[VIE]]></option>
-      <option name="6"><![CDATA[SAB]]></option>
-    </es>
-    <fi-FI>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </fi-FI>
-    <fr-FR>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </fr-FR>
-    <it-IT>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </it-IT>
-    <he-IL>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </he-IL>
-    <nl-NL>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </nl-NL>
-    <pl-PL>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </pl-PL>
-    <pt-BR>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </pt-BR>
-    <ru-RU>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </ru-RU>
-    <zh-CN>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </zh-CN>
-    <zh-TW>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </zh-TW>
   </CALENDAR_WORK_DAYS>
   <BUSINESS_DAY_TITLE type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
     <en><![CDATA[Work Hours]]></en>
-    <ar-EG><![CDATA[Work Hours]]></ar-EG>
-    <cs-CZ><![CDATA[Work Hours]]></cs-CZ>
-    <da-DK><![CDATA[Work Hours]]></da-DK>
-    <de-DE><![CDATA[Arbeitstag]]></de-DE>
-    <es><![CDATA[Día laborable]]></es>
-    <fi-FI><![CDATA[Work Hours]]></fi-FI>
-    <fr-FR><![CDATA[Jour ouvrables]]></fr-FR>
-    <it-IT><![CDATA[Work Hours]]></it-IT>
-    <he-IL><![CDATA[Work Hours]]></he-IL>
-    <nl-NL><![CDATA[Business Day]]></nl-NL>
-    <pl-PL><![CDATA[Work Hours]]></pl-PL>
-    <pt-BR><![CDATA[Work Hours]]></pt-BR>
-    <ru-RU><![CDATA[Рабочий день]]></ru-RU>
-    <zh-CN><![CDATA[Work Hours]]></zh-CN>
-    <zh-TW><![CDATA[Work Hours]]></zh-TW>
   </BUSINESS_DAY_TITLE>
   <BUSINESS_DAY type="grid" xmlgrid="setup/calendarEdit_BusinessHours" addrow="1" deleterow="1"/>
   <HOLIDAY_LABEL type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
     <en><![CDATA[Holidays]]></en>
-    <ar-EG><![CDATA[Holidays]]></ar-EG>
-    <cs-CZ><![CDATA[Holidays]]></cs-CZ>
-    <da-DK><![CDATA[Holidays]]></da-DK>
-    <de-DE><![CDATA[Feiertag]]></de-DE>
-    <es><![CDATA[Feriados]]></es>
-    <fi-FI><![CDATA[Holidays]]></fi-FI>
-    <fr-FR><![CDATA[Vacances]]></fr-FR>
-    <it-IT><![CDATA[Holidays]]></it-IT>
-    <he-IL><![CDATA[Holidays]]></he-IL>
-    <nl-NL><![CDATA[Holidays]]></nl-NL>
-    <pl-PL><![CDATA[Holidays]]></pl-PL>
-    <pt-BR><![CDATA[Holidays]]></pt-BR>
-    <ru-RU><![CDATA[Выходные]]></ru-RU>
-    <zh-CN><![CDATA[Holidays]]></zh-CN>
-    <zh-TW><![CDATA[Holidays]]></zh-TW>
   </HOLIDAY_LABEL>
   <HOLIDAY type="grid" xmlgrid="setup/calendarEdit_Holidays" addrow="1" deleterow="1"/>
   <SUBMIT type="submit" onclick="submit1(this);">
     <en><![CDATA[Save]]></en>
-    <ar-EG><![CDATA[Save]]></ar-EG>
-    <cs-CZ><![CDATA[Save]]></cs-CZ>
-    <da-DK><![CDATA[Save]]></da-DK>
-    <de-DE><![CDATA[Speichern]]></de-DE>
-    <es><![CDATA[Guardar]]></es>
-    <fi-FI><![CDATA[Save]]></fi-FI>
-    <fr-FR><![CDATA[Sauver]]></fr-FR>
-    <it-IT><![CDATA[Save]]></it-IT>
-    <he-IL><![CDATA[Save]]></he-IL>
-    <nl-NL><![CDATA[Save]]></nl-NL>
-    <pl-PL><![CDATA[Save]]></pl-PL>
-    <pt-BR><![CDATA[Save]]></pt-BR>
-    <ru-RU><![CDATA[Сохранить]]></ru-RU>
-    <zh-CN><![CDATA[Save]]></zh-CN>
-    <zh-TW><![CDATA[Save]]></zh-TW>
   </SUBMIT>
   <SUBMIT2 type="button" onclick="submit2();   ">
     <en><![CDATA[Save]]></en>
-    <ar-EG><![CDATA[Save]]></ar-EG>
-    <cs-CZ><![CDATA[Save]]></cs-CZ>
-    <da-DK><![CDATA[Save]]></da-DK>
-    <de-DE><![CDATA[Save]]></de-DE>
-    <es><![CDATA[Guardar]]></es>
-    <fi-FI><![CDATA[Save]]></fi-FI>
-    <fr-FR><![CDATA[Save]]></fr-FR>
-    <it-IT><![CDATA[Save]]></it-IT>
-    <he-IL><![CDATA[Save]]></he-IL>
-    <nl-NL><![CDATA[Save]]></nl-NL>
-    <pl-PL><![CDATA[Save]]></pl-PL>
-    <pt-BR><![CDATA[Save]]></pt-BR>
-    <ru-RU><![CDATA[Save]]></ru-RU>
-    <zh-CN><![CDATA[Save]]></zh-CN>
-    <zh-TW><![CDATA[Save]]></zh-TW>
   </SUBMIT2>
   <BTN_CANCEL type="button" onclick="cancel();">
     <en><![CDATA[Cancel]]></en>
-    <ar-EG><![CDATA[Cancel]]></ar-EG>
-    <cs-CZ><![CDATA[Cancel]]></cs-CZ>
-    <da-DK><![CDATA[Cancel]]></da-DK>
-    <de-DE><![CDATA[Abbrechen]]></de-DE>
-    <es><![CDATA[Cancelar]]></es>
-    <fi-FI><![CDATA[Cancel]]></fi-FI>
-    <fr-FR><![CDATA[Annuler]]></fr-FR>
-    <it-IT><![CDATA[Cancel]]></it-IT>
-    <he-IL><![CDATA[Cancel]]></he-IL>
-    <nl-NL><![CDATA[Annuleer]]></nl-NL>
-    <pl-PL><![CDATA[Cancel]]></pl-PL>
-    <pt-BR><![CDATA[Cancel]]></pt-BR>
-    <ru-RU><![CDATA[Отменить]]></ru-RU>
-    <zh-CN><![CDATA[Cancel]]></zh-CN>
-    <zh-TW><![CDATA[Cancel]]></zh-TW>
   </BTN_CANCEL>
   <HOLIDAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
     <en/>
-    <ar-EG><![CDATA[Active]]></ar-EG>
-    <cs-CZ><![CDATA[Active]]></cs-CZ>
-    <da-DK><![CDATA[Active]]></da-DK>
-    <de-DE><![CDATA[Active]]></de-DE>
-    <es/>
-    <fi-FI><![CDATA[Active]]></fi-FI>
-    <fr-FR><![CDATA[Active]]></fr-FR>
-    <it-IT><![CDATA[Active]]></it-IT>
-    <he-IL><![CDATA[Active]]></he-IL>
-    <nl-NL><![CDATA[Active]]></nl-NL>
-    <pl-PL><![CDATA[Active]]></pl-PL>
-    <pt-BR><![CDATA[Active]]></pt-BR>
-    <ru-RU><![CDATA[Active]]></ru-RU>
-    <zh-CN><![CDATA[Active]]></zh-CN>
-    <zh-TW><![CDATA[Active]]></zh-TW>
   </HOLIDAY_STATUS>
   <BUSINESS_DAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
     <en/>
-    <ar-EG/>
-    <cs-CZ/>
-    <da-DK/>
-    <es></es>
-    <de-DE/>
-    <fi-FI><![CDATA[Active]]></fi-FI>
-    <fr-FR/>
-    <it-IT/>
-    <he-IL/>
-    <nl-NL/>
-    <pl-PL/>
-    <pt-BR/>
-    <ru-RU/>
-    <zh-CN><![CDATA[Active]]></zh-CN>
-    <zh-TW><![CDATA[Active]]></zh-TW>
   </BUSINESS_DAY_STATUS>
   <DEFAULT_CALENDAR_JS type="javascript"><![CDATA[
 var invalidCalendarName = '';
@@ -384,8 +69,10 @@ function submit1 () {
 }
 
 function submit2 (){
-  var startHourMessage = '';
-  var endHourMessage = '';
+  invalidCalendarName = validateCalendarName();
+  var startHourMessage= '';
+  var endHourMessage='';
+  var invalidNameMessage = '';
   getField('CALENDAR_WORK_DAYS][0').disabled=false;
   getField('CALENDAR_WORK_DAYS][1').disabled=false;
   getField('CALENDAR_WORK_DAYS][2').disabled=false;
@@ -433,12 +120,15 @@ function submit2 (){
     if (endHourMessage!=''){
       endHourMessage = '@G::LoadTranslation(ID_INVALID_END_HOURS)' + endHourMessage
     }
-    msgBox('@G::LoadTranslation(ID_INVALID_NAME)'+'<br>'+startHourMessage+'<br>'+endHourMessage,'alert');
+    if (invalidCalendarName!=''){
+      invalidNameMessage = '@G::LoadTranslation(ID_INVALID_NAME)';
+    }
+    msgBox(invalidNameMessage+'<br>'+startHourMessage+'<br>'+endHourMessage,'alert');
   }
 }
 
 
-function number_row(){ 
+function number_row(){
   iRows = Number_Rows_Grid('BUSINESS_DAY','CALENDAR_BUSINESS_START');
   return iRows;
 }
@@ -453,7 +143,7 @@ function cleargrid(){
   return false;
 }
 
-leimnud.event.add(getField("BUSINESS_DAY_STATUS"), 'click', function() { 
+leimnud.event.add(getField("BUSINESS_DAY_STATUS"), 'click', function() {
   if(getField("BUSINESS_DAY_STATUS").checked){
     document.getElementById('gridbusiness').style.display="";
     getField("CALENDAR_WORK_DAYS][0").disabled=true;
@@ -565,7 +255,7 @@ function check() {
    if(getField("CALENDAR_WORK_DAYS][6").checked){
      Text='SAT';
      Value=6;
-     AddItem(Text,Value); 
+     AddItem(Text,Value);
    }
 
    if((getField("CALENDAR_WORK_DAYS][0").checked==false)&&(getField("CALENDAR_WORK_DAYS][1").checked==false)&&(getField("CALENDAR_WORK_DAYS][2").checked==false)&&(getField("CALENDAR_WORK_DAYS][3").checked==false)&&(getField("CALENDAR_WORK_DAYS][4").checked==false)&&(getField("CALENDAR_WORK_DAYS][5").checked==false)&&(getField("CALENDAR_WORK_DAYS][6").checked==false)){
@@ -581,7 +271,7 @@ leimnud.event.add(getField("CALENDAR_WORK_DAYS][4"), 'click', function() {check(
 leimnud.event.add(getField("CALENDAR_WORK_DAYS][5"), 'click', function() {check();});
 leimnud.event.add(getField("CALENDAR_WORK_DAYS][6"), 'click', function() {check();});
 
-	
+
 var dynaformOnload = function() {
 
   rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
@@ -624,7 +314,7 @@ function timeValidatorWrap(iRow){
 	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START").onchange=function startValidation(){
 	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START"));
 	}
-	
+
 	getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START").onblur=function startValidation(){
 	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_START"));
 	}
@@ -636,17 +326,17 @@ function timeValidatorWrap(iRow){
 	validateTime(getGridField("BUSINESS_DAY", iRow, "CALENDAR_BUSINESS_END"));
 	}
 
-	
-	
+
+
 }
 function validateForm(form){
  	rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
 	msg="";
-	
-	for(i=1;i<=rowsCount;i++){		
-		msgStart="";	
+
+	for(i=1;i<=rowsCount;i++){
+		msgStart="";
 		msgStart=validateTime(getGridField("BUSINESS_DAY", i, "CALENDAR_BUSINESS_START"));
-		
+
 		if(msgStart!=""){
 			msg+="- "+msgStart+"\n";
 		}
@@ -655,10 +345,10 @@ function validateForm(form){
 		if(msgEnd!=""){
 			msg+="- "+msgEnd+"\n";
 		}
-		
+
 	}
         getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
-	if(getField('CALENDAR_NAME').value==""){ 
+	if(getField('CALENDAR_NAME').value==""){
 	msg+="- Invalid Name \n";
 	}
 	var flag=true;
@@ -678,13 +368,13 @@ function validateForm(form){
 		alert(msg);
 		return false;
 	}
-	
+
 	return true;
 
 }
 
 function validateTime(object){
-		timeToValidate=object.value;			
+		timeToValidate=object.value;
 		msgError="";
 		if(!isValidTime(timeToValidate)){
 			G.highLight(object);
@@ -715,32 +405,27 @@ function isValidTime(value) {
 }
 
 function cancel(){
- 
+
     window.location = 'calendarList';
 }
 
-leimnud.event.add(getField("CALENDAR_NAME"), 'change', function() {
+function validateCalendarName(){
+  var validateMessage = '';
   var oRPC = new leimnud.module.rpc.xmlhttp({
-    url : 'calendarValidate',
-    args: 'action=calendarName&name='+getField("CALENDAR_NAME").value
+    url   : 'calendarValidate',
+    async : false,
+    args  : 'action=calendarName&name='+getField("CALENDAR_NAME").value
   });
-  oRPC.callback = function(rpc){
-    var scs = rpc.xmlhttp.responseText;
-    if (scs != ''){
-      //notValidFields['CALENDAR_NAME'] = scs;
-      invalidCalendarName = scs;
-      msgBox(scs,'alert');
-    } else {
-      invalidCalendarName = '';
-    }
-  }.extend(this);
   oRPC.make();
-});
+  validateMessage=oRPC.xmlhttp.responseText;
+  if (validateMessage!=''){
+    G.highLight(getField("CALENDAR_NAME"));
+  } else {
+    getField("CALENDAR_NAME").style.background="";
+  }
+  return (validateMessage);
+}
 
-<<<<<<< .mine
-]]></DEFAULT_CALENDAR_JS>
-</dynaForm>
-=======
 function validateHours(){
   var fields = new Array();
   var invalidStartHours = new Array();
@@ -766,13 +451,7 @@ function validateHours(){
   fields['CALENDAR_BUSINESS_START'] = invalidStartHours;
   fields['CALENDAR_BUSINESS_END']   = invalidEndHours;
   return (fields);
-  //getGridField(string grid_name,int row_number,string field_name)
-  /*for (var i in gridForm){
-    alert(gridForm[i].CALENDAR_BUSINESS_DAY);
-  }*/
 }
-
 ]]>
 </DEFAULT_CALENDAR_JS>
-</dynaForm>  
->>>>>>> .r125
+</dynaForm>
