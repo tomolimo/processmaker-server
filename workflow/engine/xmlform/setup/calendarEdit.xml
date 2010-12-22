@@ -72,6 +72,7 @@ function submit1 () {
 }
 
 function submit2 (){
+  invalidCalendarName = validateCalendarName();
   getField('CALENDAR_WORK_DAYS][0').disabled=false;
   getField('CALENDAR_WORK_DAYS][1').disabled=false;
   getField('CALENDAR_WORK_DAYS][2').disabled=false;
@@ -371,23 +372,22 @@ function cancel(){
     window.location = 'calendarList';
 }
 
-leimnud.event.add(getField("CALENDAR_NAME"), 'change', function() {
+function validateCalendarName(){
+  var validateMessage = '';
   var oRPC = new leimnud.module.rpc.xmlhttp({
-    url : 'calendarValidate',
-    args: 'action=calendarName&name='+getField("CALENDAR_NAME").value
+    url   : 'calendarValidate',
+    async : false,
+    args  : 'action=calendarName&name='+getField("CALENDAR_NAME").value
   });
-  oRPC.callback = function(rpc){
-    var scs = rpc.xmlhttp.responseText;
-    if (scs != ''){
-      //notValidFields['CALENDAR_NAME'] = scs;
-      invalidCalendarName = scs;
-      msgBox(scs,'alert');
-    } else {
-      invalidCalendarName = '';
-    }
-  }.extend(this);
   oRPC.make();
-});
+  validateMessage=oRPC.xmlhttp.responseText;
+  if (validateMessage!=''){
+    G.highLight(getField("CALENDAR_NAME"));
+  } else {
+    getField("CALENDAR_NAME").style.background="";
+  }
+  return (validateMessage);
+}
 
 ]]>
 </DEFAULT_CALENDAR_JS>
