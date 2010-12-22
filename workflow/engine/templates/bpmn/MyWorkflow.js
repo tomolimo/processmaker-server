@@ -2117,6 +2117,39 @@ MyWorkflow.prototype.getDeleteCriteria = function()
 MyWorkflow.prototype.zoom = function(sType)
 {
    var figures = workflow.getDocument().getFigures();
+
+    var lines=workflow.getLines();
+   var size=lines.getSize();
+   for(var i=0;i<size;i++){
+       var startX = lines.data[i].startX;
+       var startY = lines.data[i].startY;
+       var endX = lines.data[i].endX;
+       var endY = lines.data[i].endY;
+       var yDiff = endY - startY;
+       var source = lines.get(i).getSource().parentNode;
+       var target = lines.get(i).getTarget().parentNode;
+//       var sourceX = source.x;
+//       var targetX = target.x;
+//       var sourceY = source.y;
+//       var targetY = target.y;
+
+       var diffY = endY - startY;
+       var diffX = endX - startX;
+       
+       
+       if(typeof source.diffX  == 'undefined' && typeof source.diffY  == 'undefined')
+       {
+          source.diffX = diffX;
+          source.diffY = diffY;
+       }
+       
+       if(typeof target.diffX  == 'undefined' && typeof target.diffY  == 'undefined')
+       {
+         target.diffX = diffX;
+         target.diffY = diffY;
+       }
+   }
+
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    var width = fig.getWidth();
@@ -2149,28 +2182,19 @@ MyWorkflow.prototype.zoom = function(sType)
              height -= 20;
           }
      }
-   //if(sType == 'in' && !fig.type.match(/Event/))
-    //fig.setPosition(xPos,yPos + 10);
-//   else if(sType == 'out' && !fig.type.match(/Event/))
-//    fig.setPosition(xPos,yPos - 10);
+
+     
+
+   if(sType == 'in' && fig.type != 'bpmnAnnotation')
+       {
+      //  fig.setPosition(xPos+fig.diffX*2,yPos+fig.diffY*2);
+        alert(fig.diffX);
+        alert(fig.diffY);
+       }
+   //else if(sType == 'out' && !fig.type.match(/Event/))
+    //fig.setPosition(xPos,yPos - 10);
 
    fig.setDimension(width,height);
-   var lines=workflow.getLines();
-   var size=lines.getSize();
-   for(var i=0;i<size;i++){
-       var startX = lines.data[i].startX;
-       var startY = lines.data[i].startY;
-       var endX = lines.data[i].endX;
-       var endY = lines.data[i].endY;
-       var yDiff = endY - startY;
-       var source = lines.get(i).getSource().parentNode;
-       var target = lines.get(i).getTarget().parentNode;
-       lines.data[i].setStartPoint(startX,source.y + yDiff);
-       lines.data[i].setEndPoint(endX,target.y + yDiff);
-       if(sType == 'in' && !fig.type.match(/Event/))
-            target.setPosition(xPos,yPos + 10);
-   }
-
    if(fig.type == 'bpmnTask')
       {
         fig.bpmnText.clear();
