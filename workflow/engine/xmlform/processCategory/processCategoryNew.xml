@@ -35,6 +35,12 @@
   var verifyName = function(oForm) {
   var categoryName = trim(getField('CATEGORY_NAME').value);
     if (categoryName != '') {
+      var answer;
+        answer = ajax_function(@G::encryptlink('processCategoryAjax'), 'checkCategoryName', 'CategoryName='+categoryName, 'POST');
+        if(answer == '1'){
+          new leimnud.module.app.alert().make({label: '@G::LoadTranslation(ID_DUPLICATE_CATEGORY_NAME)' });
+          return false;
+        }
       oForm.submit();
     }
     else {
