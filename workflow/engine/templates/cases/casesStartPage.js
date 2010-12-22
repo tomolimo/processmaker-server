@@ -119,7 +119,7 @@ var newCaseTree = {
 					msg : 'Starting new case<br><br><b>' + n.attributes.text
 							+ '</b>',
 					icon : Ext.MessageBox.INFO,
-					//width:300,
+					// width:300,
 					wait:true,
 			        waitConfig: {interval:500}
 				});
@@ -205,7 +205,7 @@ var startCaseTab = {
           },
         
 // minWidth : 150,
-        //frame: true,
+        // frame: true,
         labelAlign: 'right',
         labelWidth: 85,
   // width:340,
@@ -219,7 +219,7 @@ var startCaseTab = {
             name: 'processName',
             allowBlank:false,
             value: '',
-            //disabled: true,
+            // disabled: true,
             // readonly:true,
             id:"processName"
         },{
@@ -227,7 +227,7 @@ var startCaseTab = {
             name: 'taskName',
             allowBlank:false,
             value: '',
-            //disabled: true,
+            // disabled: true,
             id:"taskName"
         },{
         	xtype:'textarea',
@@ -235,33 +235,33 @@ var startCaseTab = {
             name: 'processDescription',
             value: '',
             readOnly: true,
-            //disabled: true,
+            // disabled: true,
             id:"processDescription"
         },{
             fieldLabel: 'Category',
             name: 'processCategory',
             value: '',
             readOnly: true,
-            //disabled: true,
+            // disabled: true,
             id:"processCategory"
         }, {
             fieldLabel: 'Calendar',
             name: 'calendarName',            
-            //disabled: true,
+            // disabled: true,
             id:"calendarName"
       },{
       	xtype:'textarea',
         fieldLabel: 'Calendar Description',
         name: 'calendarDescription',
         value: '',
-        //disabled: true,
+        // disabled: true,
         readOnly: true,
         id:"calendarDescription"
     },{
     	xtype:'checkboxgroup',
           fieldLabel: 'Working days',
           name: 'calendarWorkDays',
-          //disabled: true,
+          // disabled: true,
           readOnly: true,
           id:"calendarWorkDays",
         	  columns: 7,
@@ -278,7 +278,7 @@ var startCaseTab = {
     	xtype:'checkbox',
         fieldLabel: 'Debug Mode',
         name: 'processDebug',        
-        //disabled: true,
+        // disabled: true,
         readOnly: true,
         id:"processDebug"
   }]
@@ -363,7 +363,8 @@ var startCaseTab = {
 
 
 		    function chDir( directory, loadGridOnly ) {
-		   		//console.info("**** Changing Directory: "+directory+" -- "+loadGridOnly);
+		   		// console.info("**** Changing Directory: "+directory+" --
+				// "+loadGridOnly);
 		    	if( datastore.directory.replace( /\//g, '' ) == directory.replace( /\//g, '' )
 		    		&& datastore.getTotalCount() > 0 && directory != '') {
 		    		// Prevent double loading
@@ -381,12 +382,12 @@ var startCaseTab = {
 		    }
 			
 			function expandTreeToDir( node, dir ) {
-				//console.info("Expanding Tree to Dir "+node+" - "+dir);
+				// console.info("Expanding Tree to Dir "+node+" - "+dir);
 				dir = dir ? dir : new String('');
 				var dirs = dir.split('/');
 				if( dirs[0] == '') { dirs.shift(); }
 				if( dirs.length > 0 ) {
-					//console.log("Dir to expand... "+dirs[0]);
+					// console.log("Dir to expand... "+dirs[0]);
 					node = dirTree.getNodeById( dirs[0] );
 					if( !node ) return;
 					if( node.isExpanded() ) {
@@ -398,7 +399,7 @@ var startCaseTab = {
 				}
 			}
 			function expandNode( node, dir ) {
-				//console.info("Expanding Node "+node+" - "+dir);
+				// console.info("Expanding Node "+node+" - "+dir);
 				var fulldirpath, dirpath;
 			
 				var dirs = dir.split('/');
@@ -441,13 +442,13 @@ var startCaseTab = {
 			}
 		    function handleNodeClick( sm, node ) {		    	
 		    	if( node && node.id ) {
-		    		//console.log("Node Clicked: "+node);
+		    		// console.log("Node Clicked: "+node);
 		    		chDir( node.id );
 		    	}
 		    } 
 		   
 		function showLoadingIndicator( el, replaceContent ) {
-			//console.info("showLoadingIndicator");
+			// console.info("showLoadingIndicator");
 			if( !el ) return;
 			var loadingimg = '/images/documents/_indicator.gif';
 			var imgtag = '<' + 'img src="'+ loadingimg + '" alt="Loading..." border="0" name="Loading" align="absmiddle" />';
@@ -460,8 +461,8 @@ var startCaseTab = {
 			}
 		}
 		function getURLParam( strParamName, myWindow){
-			//console.info("getURLParam");
-			//console.trace();
+			// console.info("getURLParam");
+			// console.trace();
 			if( !myWindow ){
 				myWindow = window;
 			}
@@ -482,7 +483,7 @@ var startCaseTab = {
 		}
 
 		function openActionDialog( caller, action ) {
-			//console.log("Dialog open: "+caller+" ->"+action);
+			// console.log("Dialog open: "+caller+" ->"+action);
 			var dialog;
 			var selectedRows = ext_itemgrid.getSelectionModel().getSelections();
 			if( selectedRows.length < 1 ) {
@@ -520,16 +521,16 @@ var startCaseTab = {
 		                    minHeight:200,
 		                    proxyDrag: true,
 		                    resizable: true,
-		                    //renderTo: Ext.getBody(),
+		                    // renderTo: Ext.getBody(),
 		                    keys: {
 							    key: 27,
 							    fn  : function(){
 			                        dialog.hide();
 			                    }
-							}//,
+							}// ,
 		                    // animateTarget: typeof caller.getEl == 'function'
 							// ? caller.getEl() : caller,
-							//title: 'dialog_title'
+							// title: 'dialog_title'
 		                   
 		            	});			
 					}
@@ -572,7 +573,7 @@ var startCaseTab = {
 															// so we can simply
 															// add it to the
 															// Window
-															//console.log(json);
+															// console.log(json);
 															dialog.add(json);
 															if( json.dialogtitle ) {
 																// if the
@@ -653,8 +654,8 @@ var startCaseTab = {
 			}
 		}
 		function handleCallback(requestParams, node) {
-			//console.log("handleCallback "+requestParams +" -- "+node);
-			//console.trace();
+			// console.log("handleCallback "+requestParams +" -- "+node);
+			// console.trace();
 			var conn = new Ext.data.Connection();
 
 			conn.request({
@@ -691,7 +692,7 @@ var startCaseTab = {
 			});
 		}
 		function getRequestParams() {
-			//console.info("Get Request params ");
+			// console.info("Get Request params ");
 			var selitems, dir, node;
 			var selectedRows = ext_itemgrid.getSelectionModel().getSelections();
 			if( selectedRows.length < 1 ) {
@@ -719,7 +720,7 @@ var startCaseTab = {
 				}
 				dir = datastore.directory;
 			}
-			//Ext.Msg.alert("Debug", datastore.directory );
+			// Ext.Msg.alert("Debug", datastore.directory );
 			var requestParams = {
 				option: 'new',
 				dir: datastore.directory,
@@ -791,10 +792,10 @@ var startCaseTab = {
 
 
 		function statusBarMessage( msg, isLoading, success ) {
-			//console.log("Status Bar needed");
+			// console.log("Status Bar needed");
 			var statusBar = Ext.getCmp('statusPanel');
 			if( !statusBar ) return;
-			//console.log("Status bar acceced: "+msg);
+			// console.log("Status bar acceced: "+msg);
 			if( isLoading ) {
 				statusBar.showBusy();
 			}
@@ -821,7 +822,7 @@ var startCaseTab = {
 		}
 
 		function selectFile( dir, file ) {
-			//console.log("file selected: "+dir+" - "+file);
+			// console.log("file selected: "+dir+" - "+file);
 			chDir( dir );
 			var conn = datastore.proxy.getConnection();
 		   	if( conn.isLoading() ) {
@@ -972,9 +973,9 @@ var gridtb = new Ext.Toolbar(
 					xtype : "tbbutton",
 					id : 'tb_home',
 					icon : '/images/documents/_home.png',
-					//text : 'Root',
+					// text : 'Root',
 					tooltip : 'Root Folder',
-					//cls : 'x-btn-text-icon',
+					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					handler : function() {
 						chDir('');
@@ -984,9 +985,9 @@ var gridtb = new Ext.Toolbar(
 					xtype : "tbbutton",
 					id : 'tb_reload',
 					icon : '/images/documents/_reload.png',
-					//text : 'Reload',
+					// text : 'Reload',
 					tooltip : 'Reload',
-					//cls : 'x-btn-text-icon',
+					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					handler : loadDir
 				},
@@ -995,9 +996,9 @@ var gridtb = new Ext.Toolbar(
 					xtype : "tbbutton",
 					id : 'tb_search',
 					icon : '/images/documents/_filefind.png',
-					//text : 'Search',
+					// text : 'Search',
 					tooltip : 'Search',
-					//cls : 'x-btn-text-icon',
+					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					disabled : true,
 					handler : function() {
@@ -1081,16 +1082,15 @@ var gridtb = new Ext.Toolbar(
 					disabled : false,
 					handler : function() {
 						/*
-						Ext.ux.OnDemandLoad
-								.load("/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.css");
-						Ext.ux.OnDemandLoad
-								.load("/scripts/extjs3-ext/ux.swfupload/SwfUpload.js");
-						Ext.ux.OnDemandLoad
-								.load(
-										"/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.js",
-										function(options) {
-											openActionDialog(this, 'upload');
-										});*/
+						 * Ext.ux.OnDemandLoad
+						 * .load("/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.css");
+						 * Ext.ux.OnDemandLoad
+						 * .load("/scripts/extjs3-ext/ux.swfupload/SwfUpload.js");
+						 * Ext.ux.OnDemandLoad .load(
+						 * "/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.js",
+						 * function(options) { openActionDialog(this, 'upload');
+						 * });
+						 */
 						openActionDialog(this, 'uploadDocument');
 					}
 				},
@@ -1145,10 +1145,10 @@ var gridbb = new Ext.PagingToolbar({
 	store : datastore,
 	pageSize : 25 ,
 	displayInfo : true,
-	//displayMsg : '% % %',
+	// displayMsg : '% % %',
 	emptyMsg : 'No items to display',
 	beforePageText : 'Page',
-	//afterPageText : 'of %',
+	// afterPageText : 'of %',
 	firstText : 'First',
 	lastText : 'Last',
 	nextText : 'Next',
@@ -1267,7 +1267,7 @@ var cm = new Ext.grid.ColumnModel([ {
 cm.defaultSortable = true;
 
 function handleRowClick(sm, rowIndex) {
-	//console.log("Row Clicked: "+rowIndex);
+	// console.log("Row Clicked: "+rowIndex);
 	var selections = sm.getSelections();
 	tb = ext_itemgrid.getTopToolbar();
 	if (selections.length > 1) {
@@ -1292,8 +1292,8 @@ function handleRowClick(sm, rowIndex) {
 
 // trigger the data store load
 function loadDir() {
-	//console.info("loadDir");
-	//console.trace();
+	// console.info("loadDir");
+	// console.trace();
 	datastore.load({
 		params : {
 			start : 0,
@@ -1308,7 +1308,7 @@ function loadDir() {
 }
 
 function rowContextMenu(grid, rowIndex, e, f) {
-	//console.log("Context menu: "+grid+" - "+rowIndex);
+	// console.log("Context menu: "+grid+" - "+rowIndex);
 	if (typeof e == 'object') {
 		e.preventDefault();
 	} else {
@@ -1384,7 +1384,7 @@ gridCtxMenu = new Ext.menu.Menu({
 });
 
 function dirContext(node, e) {
-	//console.log("Dir context menu: "+node);
+	// console.log("Dir context menu: "+node);
 	// Select the node that was right clicked
 	node.select();
 	// Unselect all files in the grid
@@ -1728,9 +1728,11 @@ var documentsTab = {
 															.getSelections();
 													if (!selections[0]
 															.get('is_file')) {
-														//console.log(datastore.directory);
-														chDir(/*datastore.directory																
-																+ "/"+*/selections[0]
+														// console.log(datastore.directory);
+														chDir(/*
+																 * datastore.directory +
+																 * "/"+
+																 */selections[0]
 																		.get('id'));
 													} else if (selections[0]
 															.get('is_editable')) {
@@ -1773,23 +1775,22 @@ var documentsTab = {
 						// alert(Ext.getCmp("locationbarcmp"));
 						// Ext.getCmp("documents").
 						/*
-						if(typeof(sw_afterlayout)!="undefined"){
-							//console.log("starting locatiobar");
-							Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTree");
-							Ext.getCmp("locationbarcmp").initComponent();
-							//console.log("location abr started");
-							return;
-						} 
-						*/	
-						//console.log(typeof(sw_afterlayout));
+						 * if(typeof(sw_afterlayout)!="undefined"){
+						 * //console.log("starting locatiobar");
+						 * Ext.getCmp("locationbarcmp").tree =
+						 * Ext.getCmp("dirTree");
+						 * Ext.getCmp("locationbarcmp").initComponent();
+						 * //console.log("location abr started"); return; }
+						 */	
+						// console.log(typeof(sw_afterlayout));
 						sw_afterlayout=true;
 						ext_itemgrid = Ext.getCmp("gridpanel");
-						//console.log("variable ext_itemgrid created");
-						//console.trace();
+						// console.log("variable ext_itemgrid created");
+						// console.trace();
 						ext_itemgrid.un('celldblclick', ext_itemgrid.onCellDblClick);
-						//console.log("celldoublde click removed");
+						// console.log("celldoublde click removed");
 						dirTree = Ext.getCmp("dirTree");
-						//console.log("dirtree created");
+						// console.log("dirtree created");
 						
 						/*
 						 * dirTree.loader.on('load', function(loader, o,
@@ -1800,7 +1801,7 @@ var documentsTab = {
 						 */
 
 						var tsm = dirTree.getSelectionModel();
-						//console.log("tried to gtet selection model");
+						// console.log("tried to gtet selection model");
 						tsm.on('selectionchange',
 								handleNodeClick);
 
@@ -1813,14 +1814,14 @@ var documentsTab = {
 									blankText : 'A name is required',
 									selectOnFocus : true
 								});
-						//console.log("tree editor created");
+						// console.log("tree editor created");
 
-						//console.log("before the first chdir");
+						// console.log("before the first chdir");
 						chDir('');
-						//console.log("starting locatiobar first time");
+						// console.log("starting locatiobar first time");
 						Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTree");
 						Ext.getCmp("locationbarcmp").initComponent();
-						//console.log("location abr started first time");
+						// console.log("location abr started first time");
 						
 					}
 	
@@ -1891,11 +1892,12 @@ Ext
     								otherAttributes = selectedNode.attributes.otherAttributes;
         
         calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
-        calendarObj={};        
+        calendarObj={};
+        
         for(i=0;i<calendarDays.length;i++){
         	calendarObj[calendarDays[i]]=true;
         }
-        //console.log(otherAttributes);
+        // console.log(otherAttributes);
         Ext.getCmp('process-detail-panel').getForm().setValues({
         	processName : otherAttributes.PRO_TITLE,
         	taskName : selectedNode.attributes.text,
