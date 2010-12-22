@@ -118,7 +118,10 @@ var newCaseTree = {
 					title : 'Start Case',
 					msg : 'Starting new case<br><br><b>' + n.attributes.text
 							+ '</b>',
-					icon : Ext.MessageBox.INFO
+					icon : Ext.MessageBox.INFO,
+					//width:300,
+					wait:true,
+			        waitConfig: {interval:500}
 				});
 				Ext.Ajax.request({
 					url : 'casesStartPage_Ajax.php',
@@ -128,18 +131,35 @@ var newCaseTree = {
 						taskId : n.attributes.tas_uid
 					},
 					success : function(response) {
-						var res = Ext.util.JSON.decode(response.responseText);
-						if (res.openCase) {
-							window.location = res.openCase.PAGE;
-						} else {
-							Ext.Msg.show({
-								title : 'Error creating a new Case',
-								msg : '<textarea cols="50" rows="10">'
-										+ res.message + '</textarea>',
-								icon : Ext.MessageBox.ERROR,
-								buttons : Ext.Msg.OK
-							});
-						}
+						
+						try{ 
+							var res = Ext.util.JSON.decode(response.responseText);
+							
+							if (res.openCase) {
+								window.location = res.openCase.PAGE;
+							} else {
+								Ext.Msg.show({
+									title : 'Error creating a new Case',
+									msg : '<textarea cols="50" rows="10">'
+											+ res.message + '</textarea>',
+									icon : Ext.MessageBox.ERROR,
+									buttons : Ext.Msg.OK
+								});
+							}						
+					} catch(e) {						
+						Ext.Msg.show({
+							title : 'Error creating a new Case',
+							msg : 'JSON Decode Error:<br /><textarea cols="50" rows="2">'
+									+ e.message + '</textarea><br />Server Response<br /><textarea cols="50" rows="5">'+response.responseText+'</textarea>',
+							icon : Ext.MessageBox.ERROR,
+							buttons : Ext.Msg.OK
+						});
+						 
+					}
+						
+						
+						
+						
 					},
 					failure : function() {
 						// grid.getGridEl().unmask(true);
