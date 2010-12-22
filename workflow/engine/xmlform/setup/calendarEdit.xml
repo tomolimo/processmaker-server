@@ -169,6 +169,7 @@ function AddItem(Text,Value) {
   getField('BUSINESS_DAY][1][CALENDAR_BUSINESS_DAY').options.add(opt);
   opt.text = Text;
   opt.value = Value;
+  getField("BUSINESS_DAY_STATUS").disabled=false;
 }
 
 function check() {
@@ -217,6 +218,10 @@ function check() {
      Text='SAT';
      Value=6;
      AddItem(Text,Value); 
+   }
+
+    if((getField("CALENDAR_WORK_DAYS][0").checked==false)&&(getField("CALENDAR_WORK_DAYS][1").checked==false)&&(getField("CALENDAR_WORK_DAYS][2").checked==false)&&(getField("CALENDAR_WORK_DAYS][3").checked==false)&&(getField("CALENDAR_WORK_DAYS][4").checked==false)&&(getField("CALENDAR_WORK_DAYS][5").checked==false)&&(getField("CALENDAR_WORK_DAYS][6").checked==false)){
+     getField("BUSINESS_DAY_STATUS").disabled=true;
    }
 }
 
