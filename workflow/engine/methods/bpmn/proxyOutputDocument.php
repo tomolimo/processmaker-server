@@ -13,10 +13,22 @@ try
 //       $rows        = $oProcessMap->getExtInputDocumentsCriteria($_GET['pid']);
 //   }
 
+if (isset($_GET['tid']))
+   {
+       require_once 'classes/model/OutputDocument.php';
+       $oOutputDocument = new OutputDocument();
+       $rows = $oOutputDocument->load($_GET['tid']);
+   }
    
-    $result['totalCount'] = count($rows);
+   $tmpData = json_encode( $rows ) ;
+    $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+
+    $result = $tmpData;
+    echo $result;
+
+ /*   $result['totalCount'] = count($rows);
     $result['data'] = $rows;
-    print json_encode( $result) ;
+    print json_encode( $result) ;*/
  
  }
   catch ( Exception $e ) {

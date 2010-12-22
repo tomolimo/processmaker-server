@@ -429,6 +429,17 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     }
                 ]
      });
+  var btnCreate = new Ext.Button({
+            id: 'btnCreate',
+            text: 'New',
+            iconCls: 'application_add',
+            handler: function () {
+                formWindow.show();
+            }
+  })
+var tb = new Ext.Toolbar({
+            items: [btnCreate]
+        });
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
@@ -448,7 +459,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         id : 'mygrid',
         loadMask: true,
         loadingText: 'Loading...',
-        renderTo: 'cases-grid',
+        //renderTo: 'cases-grid',
         frame: false,
         autoHeight:false,
         clicksToEdit: 1,
@@ -739,7 +750,7 @@ var formWindow = new Ext.Window({
                   method: 'POST',
                   params:{
                       type     :Type,
-                      2625          :Server,
+                      2625     :Server,
                       db_name  :DatabaseName,
                       user     :Username ,
                       passwd   :Password,

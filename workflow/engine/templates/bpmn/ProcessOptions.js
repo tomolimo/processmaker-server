@@ -492,6 +492,519 @@ ProcessOptions.prototype.addDynaform= function(_5625)
    gridWindow.show();
 }
 
+
+ProcessOptions.prototype.dbConnection = function()
+{
+  var pro_uid = workflow.getUrlVars();
+  //Database store code starts here
+
+  var dbConnFields = Ext.data.Record.create([
+            { name: 'DBS_UID',type: 'string'},
+            { name: 'DBS_TYPE',type: 'string'},
+            { name: 'DBS_SERVER',type: 'string'},
+            { name: 'DBS_DATABASE_NAME',type: 'string'},
+            { name: 'DBS_USERNAME',type: 'string'},
+            { name: 'DBS_PASSWORD',type: 'string'},
+            { name: 'DBS_PORT',type: 'string'},
+            { name: 'DBS_DESCRIPTION',type: 'string'}
+        ]);
+
+  var btnNew = new Ext.Button({
+            id: 'btnNew',
+            text: 'New',
+            iconCls: 'application_add',
+            handler: function () {
+                formWindow.show();
+            }
+  });
+
+  var btnEdit = new Ext.Button({
+            id: 'btnEdit',
+            text: 'Edit',
+            iconCls: 'application_add',
+            handler: function (s) {
+                var s = dbGrid.getSelectionModel().getSelections();
+                var dbConnUID = s[0].data.DBS_UID;
+                dbconnForm.form.load({
+                url:'proxyDatabaseConn.php?tid='+dbConnUID,
+                    method:'GET',
+                    waitMsg:'Loading',
+                    success:function(form, action) {
+                        formWindow.show();
+                      //Ext.MessageBox.alert('Message', 'Loaded OK');
+                     // setTaskAssignType(form);
+                    },
+                    failure:function(form, action) {
+                        Ext.MessageBox.alert('Message', 'Load failed');
+                    }
+                });
+            }
+  });
+
+   var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Remove Step',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = dbGrid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting step from Database using Ajax
+                    var dbUID      = r.data.DBS_UID;
+                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                    if(r.data.DBS_UID != "")
+                    {
+                        Ext.Ajax.request({
+                          url   : '../dbConnections/dbConnectionsAjax.php',
+                          method: 'POST',
+                          params: {
+                                dbs_uid         : dbUID,
+                                action          :'deleteDbConnection'
+                          },
+
+                          success: function(response) {
+                            Ext.MessageBox.alert ('Status','Step has been removed successfully.');
+                            //Secondly deleting from Grid
+                            dbStore.remove(r);
+                            //Reloading store after removing steps
+                            dbStore.reload();
+                          }
+                        });
+                    }
+                    else
+                       dbStore.remove(r);
+                }
+            }
+        });
+
+        var tb = new Ext.Toolbar({
+            items: [btnNew,btnEdit, btnRemove]
+        });
+
+  var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+  var dbStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : dbConnFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyDatabaseConn.php?pid='+pro_uid
+            })
+          });
+  dbStore.load();
+
+  var dbGridColumn =  new Ext.grid.ColumnModel({
+      columns: [
+                new Ext.grid.RowNumberer(),
+                    {
+                        id: 'DBS_TYPE',
+                        header: 'Type',
+                        dataIndex: 'DBS_TYPE',
+                        //width: 100,
+                        editable: false,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'DBS_SERVER',
+                        header: 'Server',
+                        dataIndex: 'DBS_SERVER',
+                        //width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'DBS_DATABASE_NAME',
+                        header: 'Database Name',
+                        dataIndex: 'DBS_DATABASE_NAME',
+                        //width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    },{
+                        id: 'DBS_DESCRIPTION',
+                        header: 'Description',
+                        dataIndex: 'DBS_DESCRIPTION',
+                        width: 100,
+                        sortable: true,
+                        editor: new Ext.form.TextField({
+                            //allowBlank: false
+                            })
+                    }
+                ]
+     });
+
+  var dbGrid = new Ext.grid.GridPanel({
+        store: dbStore,
+        id : 'mygrid',
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        width:450,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        cm: dbGridColumn,
+        stripeRows: true,
+        tbar: tb,
+        viewConfig: {forceFit: true}
+   });
+
+  var dbconnForm =new Ext.FormPanel({
+   //   title:"Add new Database Source",
+      collapsible: false,
+      maximizable: true,
+      width:450,
+      frame:true,
+      plain: true,
+      bodyStyle: 'padding:5px;',
+      buttonAlign: 'center',
+      
+                      items:[{
+                      xtype: 'combo',
+                      width:  150,
+                      mode: 'local',
+                      editable:       false,
+                      fieldLabel: 'Engine',
+                      triggerAction: 'all',
+                      forceSelection: true,
+                      name: 'DBS_TYPE',
+                      displayField:  'name',
+                      //emptyText    : 'Select Format',
+                      valueField   : 'value',
+                      value        : 'Select',
+                      store: new Ext.data.JsonStore({
+                             fields : ['name', 'value'],
+                             data   : [
+                                        {name : 'Select', value: 'select'},
+                                        {name : 'MySql',   value: 'MySql'},
+                                        {name : 'PostGreSql',   value: 'PostGreSql'},
+                                        {name : 'Microsoft SQL server',   value: 'Microsoft SQL server'}
+                                      ]}),
+                      onSelect: function(record, index) {
+                                //Show-Hide Format Type Field
+                                if(record.data.value == 'MySql')
+                                        {Ext.getCmp("encode").show();
+                                        Ext.getCmp("postgre").hide();
+                                        Ext.getCmp("port").setValue('3306')}
+                                else if(record.data.value == 'PostGreSql')
+                                       {Ext.getCmp("postgre").show();
+                                       Ext.getCmp("encode").hide();
+                                        Ext.getCmp("port").setValue('5432')}
+                                else
+                                    {Ext.getCmp("sqlserver").show();
+                                    Ext.getCmp("postgre").hide();
+                                Ext.getCmp("port").setValue('1433')}
+                               this.setValue(record.data[this.valueField || this.displayField]);
+                               this.collapse();
+                      }
+                      },
+                      {
+                          xtype: 'fieldset',
+                          id:    'encode',
+                          border:false,
+                          hidden: true,
+                          items: [{
+                                  xtype: 'combo',
+                                  width:  150,
+                                  mode: 'local',
+                               //   hidden: true,
+                                  editable:       false,
+                                  fieldLabel: 'Encode',
+                                  triggerAction: 'all',
+                                  forceSelection: true,
+                                  //dataIndex : 'ENGINE',
+                                  displayField:   'name',
+                                  valueField:     'value',
+                                  name: 'DBS_ENCODE',
+                                  store: new Ext.data.JsonStore({
+                                         fields : ['name', 'value'],
+                                         data   :  [
+                                  {name:'big5', value: 'big5'},
+                                  {name:'dec8',     value:'dec8' },
+                                  {name:'cp850',    value:'cp850'},
+                                  {name:'hp8',      value:'hp8' },
+                                  {name:'koi8r',    value:'koi8r'},
+                                  {name:'latin1',   value:'latin1'},
+                                  {name:'latin2',   value:'latin2'},
+                                  {name:'swe7',     value:'swe7' },
+                                  {name:'ascii',    value:'ascii'},
+                                  {name:'ujis',     value:'ujis' },
+                                  {name:'sjis',     value:'sjis' },
+                                  {name:'hebrew',   value:'hebrew'},
+                                  {name:'tis620',   value:'tis620' },
+                                  {name:'euckr',    value:'euckr'},
+                                  {name:'koi8u',    value:'koi8u' },
+                                  {name:'gb2312',   value:'gb2312'},
+                                  {name:'greek',    value:'greek'},
+                                  {name:'cp1250',   value:'cp1250'},
+                                  {name:'gbk',      value:'gbk' },
+                                  {name:'latin5',   value:'latin5' },
+                                  {name:'armscii8', value:'armscii8'},
+                                  {name:'utf8',     value:'utf8' },
+                                  {name:'ucs2',     value:'ucs2'},
+                                  {name:'cp866',    value:'cp866'},
+                                  {name:'keybcs2',  value:'keybcs2' },
+                                  {name:'macce',    value:'macce'},
+                                  {name:'macroman', value:'macroman' },
+                                  {name:'cp852',    value:'cp852' },
+                                  {name:'latin7',   value:'atin7' },
+                                  {name:'cp1251',   value:'cp1251'},
+                                  {name:'cp1256',   value:'cp1256'},
+                                  {name:'cp1257',   value:'cp1257'},
+                                  {name:'binary',   value:'binary'},
+                                  {name:'geostd8',  value:'geostd8'},
+                                  {name:'cp932',    value:'cp932'},
+                                  {name:'eucjpms',  value:'eucjpms'}
+                                ]})
+              }]
+          //displayField:  'name',
+          //emptyText    : 'Select Format',
+         // valueField   : 'value',
+         // value        : 'Select'
+          }, {
+              xtype: 'fieldset',
+                id: 'postgre',
+             border:false,
+             hidden: true,
+              items:[{
+                              xtype: 'combo',
+                               width:  150,
+                              mode: 'local',
+                             // hidden: true,
+                              editable:false,
+                              fieldLabel: 'Encode',
+                              triggerAction: 'all',
+                              forceSelection: true,
+                              //dataIndex : 'ENGINE',
+                              displayField:   'name',
+                              valueField:     'value',
+                              name: 'DBS_ENCODE',
+                              store: new Ext.data.JsonStore({
+                                     fields : ['name', 'value'],
+                                     data   :  [
+                          {name:"BIG5",        value:"BIG5"},
+                          {name:"EUC_CN",      value:"EUC_CN"},
+                          {name:"EUC_JP",      value:"EUC_JP"},
+                          {name:"EUC_KR",      value:"EUC_KR"},
+                          {name:"EUC_TW",      value:"EUC_TW"},
+                          {name:"GB18030",     value:"GB18030"},
+                          {name:"GBK",         value:"GBK"},
+                          {name:"ISO_8859_5",  value:"ISO_8859_5"},
+                          {name:"ISO_8859_6",  value:"ISO_8859_6"},
+                          {name:"ISO_8859_7",  value:"ISO_8859_7"},
+                          {name:"ISO_8859_8",  value: "ISO_8859_8"},
+                          {name:"JOHAB",       value:"JOHAB"},
+                          {name:"KOI8",        value: "KOI8"},
+                          {name:"selected",    value:  "LATIN1"},
+                          {name:"LATIN2",      value:"LATIN2"},
+                          {name:"LATIN3",      value:"LATIN3"},
+                          {name:"LATIN4",      value: "LATIN4"},
+                          {name:"LATIN5",      value:"LATIN5"},
+                          {name:"LATIN6",      value: "LATIN6"},
+                          {name:"LATIN7",      value:"LATIN7"},
+                          {name:"LATIN8",      value:"LATIN8"},
+                          {name:"LATIN9",      value:"LATIN9"},
+                          {name:"LATIN10",     value:"LATIN10"},
+                          {name:"SJIS",        value:"SJIS"},
+                          {name:"SQL_ASCII",   value:"SQL_ASCII"},
+                          {name:"UHC",         value: "UHC"},
+                          {name:"UTF8",        value: "UTF8"},
+                          {name:"WIN866",      value: "WIN866"},
+                          {name:"WIN874",      value:"WIN874"},
+                          {name:"WIN1250",     value:"WIN1250"},
+                          {name:"WIN1251",     value:"WIN1251"},
+                          {name:"WIN1252",     value:"WIN1252"},
+                          {name:"WIN1256",     value:"WIN1256"},
+                          {name:"WIN1258",     value:"WIN1258"}
+                                    ]})
+              }]
+          //displayField:  'name',
+          //emptyText    : 'Select Format',
+         // valueField   : 'value',
+         // value        : 'Select'
+          }, {
+              xtype: 'fieldset',
+                id: 'sqlserver',
+             border:false,
+             hidden: true,
+              items:[{
+                      xtype: 'combo',
+                      width:  150,
+                      mode: 'local',
+                   //   hidden: true,
+                      editable:       false,
+                      fieldLabel: 'Encode',
+                      triggerAction: 'all',
+                      forceSelection: true,
+                      //dataIndex : 'ENGINE',
+                      displayField:   'name',
+                      valueField:     'value',
+                      name: 'DBS_ENCODE',
+                      store: new Ext.data.JsonStore({
+                             fields : ['name', 'value'],
+                             data   :  [
+                      {name:'utf8',    value: 'utf8'}
+                       ]})
+              }]
+                  //displayField:  'name',
+          //emptyText    : 'Select Format',
+         // valueField   : 'value',
+         // value        : 'Select'
+          }, {
+
+              xtype: 'textfield',
+              fieldLabel: 'Server',
+              name: 'DBS_SERVER',
+               allowBlank: false
+          }, {
+              xtype: 'textfield',
+              fieldLabel: 'Database name',
+              name: 'DBS_DATABASE_NAME',
+               allowBlank: false
+          },{
+              xtype: 'textfield',
+              fieldLabel: 'Username',
+              name: 'DBS_USERNAME',
+              allowBlank: false
+          }, {
+              xtype: 'textfield',
+              fieldLabel: 'Password',
+              name: 'DBS_PASSWORD',
+              allowBlank: true
+          }, {
+              xtype: 'textfield',
+              fieldLabel: 'Port',
+              name: 'DBS_PORT',
+              id:'port',
+              allowBlank: false
+          }, {
+              xtype: 'textarea',
+              fieldLabel: 'Description',
+              name: 'DBS_DESCRIPTION',
+              allowBlank: true
+          },{
+              id : 'DBS_UID',
+              xtype: 'hidden',
+              name : 'DBS_UID'
+          }
+      ]
+  })
+
+var formWindow = new Ext.Window({
+        title: 'Add new Database Source',
+        collapsible: false,
+        maximizable: true,
+        width: 450,
+        //autoHeight: true,
+        height: 400,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: dbconnForm,
+        buttons: [{
+            text: 'Save',
+            handler: function(){
+                var getForm         = dbconnForm.getForm().getValues();
+                var dbConnUID       = getForm.DBS_UID;
+                var Type            = getForm.DBS_TYPE;
+                var Server          = getForm.DBS_SERVER;
+                var DatabaseName    = getForm.DBS_DATABASE_NAME;
+                var Username        = getForm.DBS_USERNAME;
+                var Password        = getForm.DBS_PASSWORD;
+                var Port            = getForm.DBS_PORT;
+                var Description     = getForm.DBS_DESCRIPTION;
+
+                if(dbConnUID=='')
+                    {
+                Ext.Ajax.request({
+                  url   : '../dbConnections/dbConnectionsAjax.php',
+                  method: 'POST',
+                  params:{
+                      DBS_uid  :dbConnUID,
+                      type     :Type,
+                      server   :Server,
+                      db_name  :DatabaseName,
+                      user     :Username ,
+                      passwd   :Password,
+                      port     :Port,
+                      desc     :Description,
+                      action   :'saveConnection'
+
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                  }
+                });
+                    }
+                    else
+                         {
+                Ext.Ajax.request({
+                  url   : '../dbConnections/dbConnectionsAjax.php',
+                  method: 'POST',
+                  params:{
+                      dbs_uid  :dbConnUID,
+                      type     :Type,
+                      server   :Server,
+                      db_name  :DatabaseName,
+                      user     :Username ,
+                      passwd   :Password,
+                      port     :Port,
+                      desc     :Description,
+                      action   :'saveEditConnection'
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Connection Edited Successfully.');
+                  }
+                });
+                    }
+
+
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskUsers(getData);
+
+            formWindow.close();
+            dbStore.reload();
+          }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                formWindow.close();
+          }
+        }]
+    });
+
+   var gridWindow = new Ext.Window({
+        title: 'Database Source List',
+        collapsible: false,
+        maximizable: true,
+        width: 550,
+        //autoHeight: true,
+        height: 400,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: dbGrid
+    });
+   gridWindow.show();
+}
+
+
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
   var pro_uid = workflow.getUrlVars();
@@ -862,7 +1375,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 var sDocUID        = getForm.INP_DOC_UID;
                 var sDocTitle        = getForm.INP_DOC_TITLE;
                 var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
-                var sOrig           = getForm.INP_DOC_ORIGINAL;
+                var sOrig           = getForm.INP_DOC_ORIGINAL;f(sDocUID == "")
                 if(sOrig == 'LEGAL COPY')
                     sOrig           = 'COPYLEGAL';
 
@@ -960,7 +1473,6 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 }
 
 
-
 ProcessOptions.prototype.addOutputDoc= function(_5625)
 {
   var pro_uid = workflow.getUrlVars();
@@ -983,6 +1495,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 type: 'string'
             }
             ]);
+
 
   var editor = new Ext.ux.grid.RowEditor({
             saveText: 'Update'
@@ -1053,9 +1566,21 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             text: 'Edit',
             iconCls: 'application_add',
             handler: function (s) {
-                outputDocGrid.stopEditing();
-                var selectedRow = outputDocGrid.getSelectionModel().getSelections();
-                var outDocUID   = selectedRow[0].data.OUT_DOC_UID;
+                var s = outputDocGrid.getSelectionModel().getSelections();
+                var outputDocUID = s[0].data.OUT_DOC_UID;
+                outputDocForm.form.load({
+                    url:'proxyOutputDocument.php?tid='+outputDocUID,
+                    method:'GET',
+                    waitMsg:'Loading',
+                    success:function(form, action) {
+                        newOPWindow.show();
+                     //  Ext.MessageBox.alert('Message', 'Loaded OK');
+                      //  setTaskAssignType(form);
+                    },
+                    failure:function(form, action) {
+                        Ext.MessageBox.alert('Message', 'Load failed');
+                    }
+                });
             }
 
         });
@@ -1070,6 +1595,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 var outDocUID   = selectedRow.data[0].OUT_DOC_UID;
             }
         });
+        
   var tb = new Ext.Toolbar({
             items: [btnAdd, btnRemove,btnEdit,btnProperties]
        });
@@ -1131,6 +1657,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         bodyStyle       :'padding:5px 5px 0',
         defaults        :{ autoScroll:true },
         width           : 500,
+
         items           :[{
                     xtype       : 'fieldset',
                     layout      : 'form',
@@ -1140,133 +1667,136 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     collapsible : false,
                     labelAlign  : '',
                     items       :[{
-                    xtype       : 'textfield',
-                    fieldLabel  : 'Title',
-                    allowBlank  : false,
-                    blankText   : 'Enter Title of Output Document',
-                    name        : 'OUT_DOC_TITLE'
-               },{
-                    //xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype       : 'textfield',
-                            fieldLabel  : 'Filename generated',
-                            name        : 'OUT_DOC_FILENAME',
-                            allowBlank  : false,
-                            blankText   : 'Select Filename generated',
-                            anchor      : '100%'
-                         }]
-                },{
-                    columnWidth:.4,
-                    layout: 'form',
-                    border:false,
-                    items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin'
-                            //anchor:'95%'
-                        }]
-                    }]
-                },{
-                    xtype           : 'textarea',
-                    fieldLabel      : 'Description',
-                    name            : 'OUT_DOC_DESCRIPTION',
-                    height          : 120,
-                    width           : 280
-                },{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :'Orientation',
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'OUT_DOC_LANDSCAPE',
-                    displayField    :'name',
-                    value           :'Portrait',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'Portrait',   value: '0'},
-                                                        {name : 'Landscape',   value: '1'}]})
-                },{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :'Media',
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'OUT_DOC_MEDIA',
-                    displayField    :'name',
-                    value           :'Letter',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                            fields : ['name', 'value'],
-                                                            data   : [
-                                                            {name : 'Letter',   value: 'Letter'},
-                                                            {name : 'Legal',   value: 'Legal'},
-                                                            {name : 'Executive',   value: 'Executive'},
-                                                            {name : 'B5',   value: 'B5'},
-                                                            {name : 'Folio',   value: 'Folio'},
-                                                            {name : 'A0Oversize',   value: 'A0Oversize'},
-                                                            {name : 'A0',   value: 'A0'},
-                                                            {name : 'A1',   value: 'A1'},
-                                                            {name : 'A2',   value: 'A2'},
-                                                            {name : 'A3',   value: 'A3'},
-                                                            {name : 'A4',   value: 'A4'},
-                                                            {name : 'A5',   value: 'A5'},
-                                                            {name : 'A6',   value: 'A6'},
-                                                            {name : 'A7',   value: 'A7'},
-                                                            {name : 'A8',   value: 'A8'},
-                                                            {name : 'A9',   value: 'A9'},
-                                                            {name : 'A10',   value: 'A10'},
-                                                            {name : 'Screenshot640',   value: 'Screenshot640'},
-                                                            {name : 'Screenshot800',   value: 'Screenshot800'},
-                                                            {name : 'Screenshot1024',   value: 'Screenshot1024'}
-                                                           ]
-                                                       })
-                },{
-                    xtype       : 'numberfield',
-                    fieldLabel  : 'Left Margin',
-                    name        : 'OUT_DOC_LEFT_MARGIN'
-                },{
-                    xtype       : 'numberfield',
-                    fieldLabel  : 'Right Margin',
-                    name        : 'OUT_DOC_RIGHT_MARGIN'
-                },{
-                    xtype       : 'numberfield',
-                    fieldLabel  : 'Top Margin',
-                    name        : 'OUT_DOC_TOP_MARGIN'
-                },{
-                    xtype       : 'numberfield',
-                    fieldLabel  : 'Bottom Margin',
-                    name        : 'OUT_DOC_BOTTOM_MARGIN'
-                },{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :'Output Document to Generate',
-                    triggerAction   :'all',
-                    forceSelection  :true,
-                    name            :'OUT_DOC_GENERATE',
-                    displayField    :'name',
-                    value           :'Doc',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                    fields          :['name', 'value'],
-                    data            :[
-                                    {name : 'BOTH',   value: 'BOTH'},
-                                    {name : 'DOC',   value: 'DOC'},
-                                    {name : 'PDF',   value: 'PDF'}]})
+                             //   xtype: 'hiddenfield',
+                              //  name:'OUT_DOC_UID'
+                              //  },{
+                                    xtype       : 'textfield',
+                                    fieldLabel  : 'Title',
+                                    allowBlank  : false,
+                                    blankText   : 'Enter Title of Output Document',
+                                    name        : 'OUT_DOC_TITLE'
+                                },{
+                                    //xtype: 'fieldset',
+                                    layout:'column',
+                                    border:false,
+                                    items:[{
+                                        columnWidth:.6,
+                                        layout: 'form',
+                                        border:false,
+                                        items: [{
+                                            xtype       : 'textfield',
+                                            fieldLabel  : 'Filename generated',
+                                            name        : 'OUT_DOC_FILENAME',
+                                            allowBlank  : false,
+                                            blankText   : 'Select Filename generated',
+                                            anchor      : '100%'
+                                         }]
+                                },{
+                                    columnWidth:.4,
+                                    layout: 'form',
+                                    border:false,
+                                    items: [{
+                                            xtype:'button',
+                                            title: ' ',
+                                            text: '@@',
+                                            name: 'selectorigin'
+                                            //anchor:'95%'
+                                        }]
+                                    }]
+                                },{
+                                    xtype           : 'textarea',
+                                    fieldLabel      : 'Description',
+                                    name            : 'OUT_DOC_DESCRIPTION',
+                                    height          : 120,
+                                    width           : 280
+                                },{
+                                    width           :150,
+                                    xtype           :'combo',
+                                    mode            :'local',
+                                    editable        :false,
+                                    fieldLabel      :'Orientation',
+                                    triggerAction   :'all',
+                                    forceSelection  : true,
+                                    name            :'OUT_DOC_LANDSCAPE',
+                                    displayField    :'name',
+                                    value           :'Portrait',
+                                    valueField      :'value',
+                                    store           :new Ext.data.JsonStore({
+                                                                        fields : ['name', 'value'],
+                                                                        data   : [
+                                                                        {name : 'Portrait',   value: '0'},
+                                                                        {name : 'Landscape',   value: '1'}]})
+                                },{
+                                    width           :150,
+                                    xtype           :'combo',
+                                    mode            :'local',
+                                    editable        :false,
+                                    fieldLabel      :'Media',
+                                    triggerAction   :'all',
+                                    forceSelection  : true,
+                                    name            :'OUT_DOC_MEDIA',
+                                    displayField    :'name',
+                                    value           :'Letter',
+                                    valueField      :'value',
+                                    store           :new Ext.data.JsonStore({
+                                                                            fields : ['name', 'value'],
+                                                                            data   : [
+                                                                            {name : 'Letter',   value: 'Letter'},
+                                                                            {name : 'Legal',   value: 'Legal'},
+                                                                            {name : 'Executive',   value: 'Executive'},
+                                                                            {name : 'B5',   value: 'B5'},
+                                                                            {name : 'Folio',   value: 'Folio'},
+                                                                            {name : 'A0Oversize',   value: 'A0Oversize'},
+                                                                            {name : 'A0',   value: 'A0'},
+                                                                            {name : 'A1',   value: 'A1'},
+                                                                            {name : 'A2',   value: 'A2'},
+                                                                            {name : 'A3',   value: 'A3'},
+                                                                            {name : 'A4',   value: 'A4'},
+                                                                            {name : 'A5',   value: 'A5'},
+                                                                            {name : 'A6',   value: 'A6'},
+                                                                            {name : 'A7',   value: 'A7'},
+                                                                            {name : 'A8',   value: 'A8'},
+                                                                            {name : 'A9',   value: 'A9'},
+                                                                            {name : 'A10',   value: 'A10'},
+                                                                            {name : 'Screenshot640',   value: 'Screenshot640'},
+                                                                            {name : 'Screenshot800',   value: 'Screenshot800'},
+                                                                            {name : 'Screenshot1024',   value: 'Screenshot1024'}
+                                                                           ]
+                                                                       })
+                                },{
+                                                    xtype       : 'numberfield',
+                                                    fieldLabel  : 'Left Margin',
+                                                    name        : 'OUT_DOC_LEFT_MARGIN'
+                                                },{
+                                                    xtype       : 'numberfield',
+                                                    fieldLabel  : 'Right Margin',
+                                                    name        : 'OUT_DOC_RIGHT_MARGIN'
+                                                },{
+                                                    xtype       : 'numberfield',
+                                                    fieldLabel  : 'Top Margin',
+                                                    name        : 'OUT_DOC_TOP_MARGIN'
+                                                },{
+                                                    xtype       : 'numberfield',
+                                                    fieldLabel  : 'Bottom Margin',
+                                                    name        : 'OUT_DOC_BOTTOM_MARGIN'
+                                                },{
+                                                    width           :150,
+                                                    xtype           :'combo',
+                                                    mode            :'local',
+                                                    editable        :false,
+                                                    fieldLabel      :'Output Document to Generate',
+                                                    triggerAction   :'all',
+                                                    forceSelection  :true,
+                                                    name            :'OUT_DOC_GENERATE',
+                                                    displayField    :'name',
+                                                    value           :'Doc',
+                                                    valueField      :'value',
+                                                    store           :new Ext.data.JsonStore({
+                                                    fields          :['name', 'value'],
+                                                    data            :[
+                                                                    {name : 'BOTH',   value: 'BOTH'},
+                                                                    {name : 'DOC',   value: 'DOC'},
+                                                                    {name : 'PDF',   value: 'PDF'}]})
                 },{
                     width           : 150,
                     xtype           :'combo',
@@ -1334,14 +1864,19 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                               //anchor      :'15%'
                             }]
                         }]
-                     }]
+                     },{
+                      id : 'OUT_DOC_UID',
+                      xtype: 'hidden',
+                      name : 'OUT_DOC_UID'
+                  }
+                 ]
                   }],
      buttons     : [{
         text        : 'Save',
         formBind    :true,
         handler     : function(){
-                var getForm   = outputDocForm.getForm().getValues();
-
+                var getForm       = outputDocForm.getForm().getValues();
+                var sDocUID       = getForm.OUT_DOC_UID;
                 var sDocTitle     = getForm.OUT_DOC_TITLE;
                 var sFilename     = getForm.OUT_DOC_FILENAME;
                 var sDesc         = getForm.OUT_DOC_DESCRIPTION;
@@ -1364,7 +1899,10 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
                 var sTags         = getForm.OUT_DOC_TAGS;
 
-               Ext.Ajax.request({
+
+             if(sDocUID == "")
+               {
+              Ext.Ajax.request({
                   url   : '../outputdocs/outputdocs_Save.php',
                   method: 'POST',
                   params:{
@@ -1380,7 +1918,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                           method: 'POST',
                           params:{
                               functions                : '',
-                              OUT_DOC_UID              : '',
+                              OUT_DOC_UID              : sDocUID,
                               OUT_DOC_TITLE            : sDocTitle,
                               OUT_DOC_FILENAME         : sFilename,
                               OUT_DOC_DESCRIPTION      : sDesc,
@@ -1404,11 +1942,50 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                       });
 
                   }
+
+
                   else
                       Ext.MessageBox.alert ('Status','There is an Output Document with the same  name in  this process. It is not saving');
                 }
         });
-         }
+               }
+         else
+               {
+             Ext.Ajax.request({
+                          url   : '../outputdocs/outputdocs_Save.php',
+                          method: 'POST',
+                          params:{
+                              functions                : '',
+                              OUT_DOC_UID              : sDocUID,
+                              OUT_DOC_TITLE            : sDocTitle,
+                              OUT_DOC_FILENAME         : sFilename,
+                              OUT_DOC_DESCRIPTION      : sDesc,
+                              OUT_DOC_LANDSCAPE        : sLandscape,
+                              OUT_DOC_MEDIA            : sMedia,
+                              OUT_DOC_LEFT_MARGIN      : sLeftMargin,
+                              OUT_DOC_RIGHT_MARGIN     : sRightMargin,
+                              OUT_DOC_TOP_MARGIN       : sTopMargin,
+                              OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
+                              OUT_DOC_GENERATE         : sGenerated,
+                              OUT_DOC_VERSIONING       : sVersioning,
+                              OUT_DOC_DESTINATION_PATH : sDestPath,
+                              OUT_DOC_TAGS             : sTags,
+                              PRO_UID                  : pro_uid
+                          },
+                          success: function(response) {
+                            Ext.MessageBox.alert ('Status','Output document has been updated successfully.');
+                            outputDocStore.reload();
+                            newOPWindow.close();
+                          }
+                      });
+
+               }
+
+
+
+
+}
+
         },{
             text: 'Cancel',
             handler: function(){
@@ -1449,10 +2026,10 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         buttonAlign : 'center'
      });
  gridWindow.show();
-   
 }
 
-ProcessOptions.prototype.dbConnection = function()
+
+/*ProcessOptions.prototype.dbConnection = function()
 {
   var pro_uid = workflow.getUrlVars();
   //Database store code starts here
@@ -1466,7 +2043,7 @@ ProcessOptions.prototype.dbConnection = function()
             { name: 'DBS_PORT',type: 'string'},
             { name: 'DBS_DESCRIPTION',type: 'string'}
         ]);
-
+}
   var btnNew = new Ext.Button({
             id: 'btnNew',
             text: 'New',
@@ -1904,5 +2481,5 @@ ProcessOptions.prototype.dbConnection = function()
         buttonAlign: 'center',
         items: dbGrid
     });
-   gridWindow.show();
-}
+   gridWindow.show();*/
+
