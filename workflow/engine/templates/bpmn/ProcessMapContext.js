@@ -477,18 +477,66 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
 
  });
 
- var formStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : dbConnFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyObjectPermissions.php?pid='+pro_uid+'&t=1'
-            })
-          });
- formStore.load();
- 
+ //Creating different stores required for fields in form
+ var selectField = Ext.data.Record.create([
+                        { name: 'LABEL',type: 'string'},
+                        { name: 'UID',type: 'string'}
+                    ]);
+ var selectTaskStore = new Ext.data.JsonStore({
+                    root         : 'data',
+                    totalProperty: 'totalCount',
+                    idProperty   : 'gridIndex',
+                    remoteSort   : true,
+                    fields       : selectField,
+                    proxy: new Ext.data.HttpProxy({
+                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=task'
+                    })
+                  });
+
+ var usersStore = new Ext.data.JsonStore({
+                    root         : 'data',
+                    totalProperty: 'totalCount',
+                    idProperty   : 'gridIndex',
+                    remoteSort   : true,
+                    fields       : selectField,
+                    proxy: new Ext.data.HttpProxy({
+                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=users'
+                    })
+                  });
+
+ var dynaformStore = new Ext.data.JsonStore({
+                    root         : 'data',
+                    totalProperty: 'totalCount',
+                    idProperty   : 'gridIndex',
+                    remoteSort   : true,
+                    fields       : selectField,
+                    proxy: new Ext.data.HttpProxy({
+                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=dynaform'
+                    })
+                  });
+
+ var inputDocStore = new Ext.data.JsonStore({
+                    root         : 'data',
+                    totalProperty: 'totalCount',
+                    idProperty   : 'gridIndex',
+                    remoteSort   : true,
+                    fields       : selectField,
+                    proxy: new Ext.data.HttpProxy({
+                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=input'
+                    })
+                  });
+
+ var outputDocStore = new Ext.data.JsonStore({
+                    root         : 'data',
+                    totalProperty: 'totalCount',
+                    idProperty   : 'gridIndex',
+                    remoteSort   : true,
+                    fields       : selectField,
+                    proxy: new Ext.data.HttpProxy({
+                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=output'
+                    })
+                  });
+
  var PermissionForm =new Ext.FormPanel({
    //   title:"Add new Database Source",
       collapsible: false,
@@ -498,8 +546,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
       plain: true,
       bodyStyle: 'padding:5px;',
       buttonAlign: 'center',
-
-                      items:[{
+      items:[{
                     width           :150,
                     xtype           :'combo',
                     mode            :'local',
@@ -519,71 +566,43 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                                         {name : 'TO DO',   value: '2'},
                                                         {name : 'PAUSED',   value: '3'},
                                                         {name : 'COMPLETED',   value: '4'}]})
-                },{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :'Target Task',
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'TASK_TARGET',
-                    displayField    :'name',
-                    value           :'All Tasks',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'All tasks',   value: '0'},
-                                                        {name : 'Apply for leave',   value: '1'},
-                                                        {name : 'HR approval',   value: '2'},
-                                                        {name : 'Supervisor Approval',   value: '3'}]})
-                },new Ext.form.ComboBox({
+                },
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Target Task',
+                    hiddenName:'popType',
+                    autoload: true,
+                    store: selectTaskStore,
+                    valueField:'LABEL',
+                    displayField:'LABEL',
+                    triggerAction: 'all',
+                    emptyText:'Select',
+                    editable: true
+                    }),
+                    
+                 new Ext.form.ComboBox({
                     fieldLabel: 'Group or Users',
                     hiddenName:'popType',
-                    store: formStore,
+                    autoload: true,
+                    store: usersStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
                     editable: true
                     })
-                ,/*{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :'Group or Users',
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'GROUP_USER',
-                    displayField    :'name',
-                    value           :'Administrator(Admin)',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'Administrator(Admin)',   value: '0'}]})
-               },*/{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :'Origin Task',
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'TASK_SOURCE',
-                    displayField    :'name',
-                    value           :'All Tasks',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'All tasks',   value: '0'},
-                                                        {name : 'Apply for leave',   value: '1'},
-                                                        {name : 'HR approval',   value: '2'},
-                                                        {name : 'Supervisor Approval',   value: '3'}]})
-                 },{
+                ,
+                new Ext.form.ComboBox({
+                    fieldLabel: 'Origin Task',
+                    hiddenName:'popType',
+                    autoload: true,
+                    store: selectTaskStore,
+                    valueField:'LABEL',
+                    displayField:'LABEL',
+                    triggerAction: 'all',
+                    emptyText:'Select',
+                    editable: true
+                    }),
+                  {
                     width           :150,
                     xtype           :'combo',
                     mode            :'local',
@@ -619,7 +638,57 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                                         {name : 'Dynaform',   value: '1'},
                                                         {name : 'Input Document',   value: '2'},
                                                         {name : 'Output Document',   value: '3'}]})
+           },
+           {
+               xtype: 'fieldset',
+               id   : 'dynaform',
+               hidden: false,
+               items: [{
+                    xtype: 'combo',
+                    fieldLabel: 'Dynaform',
+                    hiddenName:'popType',
+                    autoload: true,
+                    store: dynaformStore,
+                    valueField:'LABEL',
+                    displayField:'LABEL',
+                    triggerAction: 'all',
+                    emptyText:'Select',
+                    editable: true
+               }]
            },{
+               xtype: 'fieldset',
+               id   : 'inputdoc',
+               hidden: false,
+               items: [{
+                    xtype: 'combo',
+                    fieldLabel: 'Input Document',
+                    hiddenName:'popType',
+                    autoload: true,
+                    store: inputDocStore,
+                    valueField:'LABEL',
+                    displayField:'LABEL',
+                    triggerAction: 'all',
+                    emptyText:'Select',
+                    editable: true
+               }]
+           },{
+               xtype: 'fieldset',
+               id   : 'outputdoc',
+               hidden: false,
+               items: [{
+                    xtype: 'combo',
+                    fieldLabel: 'Output Document',
+                    hiddenName:'popType',
+                    autoload: true,
+                    store: outputDocStore,
+                    valueField:'LABEL',
+                    displayField:'LABEL',
+                    triggerAction: 'all',
+                    emptyText:'Select',
+                    editable: true
+               }]
+           },
+           {
                     width           :150,
                     xtype           :'combo',
                     mode            :'local',

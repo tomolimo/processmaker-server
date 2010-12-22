@@ -5485,7 +5485,7 @@ class processMap {
         }
     }
 
-    function newExtObjectPermission($sProcessUID)
+    function newExtObjectPermission($sProcessUID,$sAction)
     {
     $aUsersGroups = array();
     $aUsersGroups [] = array('UID' => 'char', 'LABEL' => 'char');
@@ -5561,13 +5561,23 @@ class processMap {
     }
     global $_DBArray;
     $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
-    $_DBArray ['usersGroups'] = $aUsersGroups;
-    $_DBArray ['allObjects'] = $aAllObjects;
-    $_DBArray ['allDynaforms'] = $aAllDynaforms;
-    $_DBArray ['allInputs'] = $aAllInputs;
-    $_DBArray ['allOutputs'] = $aAllOutputs;
-    $_SESSION ['_DBArray'] = $_DBArray;
-    return $_SESSION['_DBArray']['usersGroups'];
+
+    switch($sAction){
+        case 'users':
+           return $aUsersGroups;
+            break;
+        case 'dynaform':
+           return $aAllDynaforms;
+            break;
+        case 'input':
+           return $aAllInputs;
+            break;
+        case 'output':
+           return $aAllOutputs;
+            break;
+    }
+    
+    //return $_SESSION['_DBArray'];
   }
 }
 
