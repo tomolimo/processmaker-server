@@ -86,7 +86,7 @@ function submit2 (){
     getField('CALENDAR_NAME').disabled=false;
     document.CalendarDefinition.submit();
   } else {
-      msgBox('Invalid Name','alert');
+      msgBox('@G::LoadTranslation(ID_INVALID_NAME)','alert');
     }
   }
 
@@ -220,8 +220,7 @@ function check() {
      Value=6;
      AddItem(Text,Value); 
    }
-
-    if((getField("CALENDAR_WORK_DAYS][0").checked==false)&&(getField("CALENDAR_WORK_DAYS][1").checked==false)&&(getField("CALENDAR_WORK_DAYS][2").checked==false)&&(getField("CALENDAR_WORK_DAYS][3").checked==false)&&(getField("CALENDAR_WORK_DAYS][4").checked==false)&&(getField("CALENDAR_WORK_DAYS][5").checked==false)&&(getField("CALENDAR_WORK_DAYS][6").checked==false)){
+   if((getField("CALENDAR_WORK_DAYS][0").checked==false)&&(getField("CALENDAR_WORK_DAYS][1").checked==false)&&(getField("CALENDAR_WORK_DAYS][2").checked==false)&&(getField("CALENDAR_WORK_DAYS][3").checked==false)&&(getField("CALENDAR_WORK_DAYS][4").checked==false)&&(getField("CALENDAR_WORK_DAYS][5").checked==false)&&(getField("CALENDAR_WORK_DAYS][6").checked==false)){
      getField("BUSINESS_DAY_STATUS").disabled=true;
    }
 }
