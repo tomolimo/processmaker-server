@@ -73,6 +73,9 @@ function submit1 () {
 
 function submit2 (){
   invalidCalendarName = validateCalendarName();
+  var startHourMessage= '';
+  var endHourMessage='';
+  var invalidNameMessage = '';
   getField('CALENDAR_WORK_DAYS][0').disabled=false;
   getField('CALENDAR_WORK_DAYS][1').disabled=false;
   getField('CALENDAR_WORK_DAYS][2').disabled=false;
@@ -81,14 +84,51 @@ function submit2 (){
   getField('CALENDAR_WORK_DAYS][5').disabled=false;
   getField('CALENDAR_WORK_DAYS][6').disabled=false;
   getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
-  if(getField('CALENDAR_NAME').value!=''&& invalidCalendarName == ''){
+  var invalidFields     = validateHours();
+  var invalidStartHours = invalidFields['CALENDAR_BUSINESS_START'];
+  var invalidEndHours   = invalidFields['CALENDAR_BUSINESS_END'];
+  for (var i in invalidStartHours){
+    if (i>0) {
+      if (invalidStartHours[i]!=undefined && invalidStartHours[i]!=''){
+        if (startHourMessage==''){
+          separator = '';
+        } else {
+          separator = ',';
+        }
+        startHourMessage = startHourMessage + separator + i.toString();
+      }
+    }
+  }
+
+  for (var i in invalidEndHours){
+    if (i>0) {
+      if (invalidEndHours[i]!=undefined && invalidEndHours[i]!=''){
+        if (endHourMessage==''){
+          separator = '';
+        } else {
+          separator = ',';
+        }
+        endHourMessage = endHourMessage + separator + i.toString();
+      }
+    }
+  }
+  if(getField('CALENDAR_NAME').value!=''&& invalidCalendarName == '' && startHourMessage=='' && endHourMessage==''){
     getField('CALENDAR_STATUS').disabled=false;
     getField('CALENDAR_NAME').disabled=false;
     document.CalendarDefinition.submit();
   } else {
-      msgBox('@G::LoadTranslation(ID_INVALID_NAME)','alert');
+    if (startHourMessage!=''){
+      startHourMessage = '@G::LoadTranslation(ID_INVALID_START_HOURS)' + startHourMessage;
     }
+    if (endHourMessage!=''){
+      endHourMessage = '@G::LoadTranslation(ID_INVALID_END_HOURS)' + endHourMessage
+    }
+    if (invalidCalendarName!=''){
+      invalidNameMessage = '@G::LoadTranslation(ID_INVALID_NAME)';
+    }
+    msgBox(invalidNameMessage+'<br>'+startHourMessage+'<br>'+endHourMessage,'alert');
   }
+}
 
 
 function number_row(){ 
@@ -388,6 +428,32 @@ function validateCalendarName(){
   return (validateMessage);
 }
 
+function validateHours(){
+  var fields = new Array();
+  var invalidStartHours = new Array();
+  var invalidEndHours   = new Array();
+  var gridForm = getObject('BUSINESS_DAY');
+  var rows     = Number_Rows_Grid('BUSINESS_DAY', 'CALENDAR_BUSINESS_DAY');
+  var re = /(00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23)[:](0|1|2|3|4|5)\d{1}/;
+  //alert (rows);
+  for ( var i = 1; i <= rows ; i++ ){
+    var field_start = getGridField( 'BUSINESS_DAY', i, 'CALENDAR_BUSINESS_START' );
+    if (!re.test(field_start.value)){
+      invalidStartHours[i] = field_start.value;
+    } else {
+      invalidStartHours[i] = '';
+    }
+    var field_end = getGridField( 'BUSINESS_DAY', i, 'CALENDAR_BUSINESS_END' );
+    if (!re.test(field_end.value)){
+      invalidEndHours[i] = field_end.value;
+    } else {
+      invalidEndHours[i] = '';
+    }
+  }
+  fields['CALENDAR_BUSINESS_START'] = invalidStartHours;
+  fields['CALENDAR_BUSINESS_END']   = invalidEndHours;
+  return (fields);
+}
 ]]>
 </DEFAULT_CALENDAR_JS>
 </dynaForm>  
