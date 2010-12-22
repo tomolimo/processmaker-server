@@ -32,7 +32,6 @@ class G
 
   /**
    * is_https
-   *
    * @return void
    */   
   function is_https()
@@ -165,7 +164,6 @@ class G
 
   /**
    * Get the current version of gulliver classes
-   *
    * @author Fernando Ontiveros Lira <fernando@colosa.com>
    * @access public
    * @return string
@@ -178,7 +176,6 @@ class G
 
   /**
    * getIpAddress
-   *
    * @return string $ip
    */   
   /*public static*/ function getIpAddress () 
@@ -197,8 +194,6 @@ class G
   
   /**
    * getMacAddress
-   *
-   *
    * @return string $mac
    */   
   function getMacAddress() 
@@ -215,7 +210,6 @@ class G
 
   /**
    * microtime_float
-   *
    * @return array_sum(explode(' ',microtime()))
    */   
   /*public static*/ function microtime_float() {
@@ -230,27 +224,28 @@ class G
    *
    * @return boolean true
    */   
-  /*public static*/ function &setFatalErrorHandler( $newFatalErrorHandler = null )
-  {
-    if ( isset ( $newFatalErrorHandler ) ) {
-      set_error_handler( $newFatalErrorHandler );
-    }
-    else {
-      ob_start( array ( 'G', 'fatalErrorHandler' ) );
-    }
-    return true;
-  }
+  /*public static*/
+  function &setFatalErrorHandler( $newFatalErrorHandler = null )
+     {
+     if ( isset ( $newFatalErrorHandler ) ) {
+       set_error_handler( $newFatalErrorHandler );
+     }
+     else {
+       ob_start( array ( 'G', 'fatalErrorHandler' ) );
+     }
+     return true;
+     }
 
   /**
    * setErrorHandler
-   *
    * @param  string setErrorHandler
    * @param  object $newCustomErrorHandler 
    *
    * @return boolean true
    */   
-  /*public static*/ function setErrorHandler( $newCustomErrorHandler = null )
-  {
+  /*public static*/
+  function setErrorHandler( $newCustomErrorHandler = null )
+    {
     if ( isset ( $newCustomErrorHandler ) ) {
       set_error_handler( $newCustomErrorHandler );
     }
@@ -258,7 +253,7 @@ class G
       set_error_handler( array("G", "customErrorHandler"));
     }
     return true;
-  }
+    }
 
   /**
    * fatalErrorHandler
@@ -283,7 +278,7 @@ class G
   }
 
   /**
-   * customErrorHandler 
+   * customErrorHandler
    *
    * @param  string $errno
    * @param  string $msg
@@ -293,7 +288,8 @@ class G
    *
    * @return void
    */   
-  /*public static*/ function customErrorHandler ( $errno, $msg, $file, $line, $context) {
+  /*public static*/
+  function customErrorHandler ( $errno, $msg, $file, $line, $context) {
     switch ($errno) {
       case E_ERROR:
       case E_USER_ERROR:
@@ -387,7 +383,7 @@ class G
   }
 
   /**
-   * customErrorLog 
+   * customErrorLog
    *
    * @param  string $type 
    * @param  string $msg 
@@ -396,8 +392,9 @@ class G
    *
    * @return void
    */   
-  /*public static*/ function customErrorLog ($type, $msg, $file, $line)
-  {
+  /*public static*/
+  function customErrorLog ($type, $msg, $file, $line)
+    {
     global $HTTP_X_FORWARDED_FOR, $REMOTE_ADDR, $HTTP_USER_AGENT, $REQUEST_URI;
 
     $ip_addr = G::getIpAddress();
@@ -414,11 +411,10 @@ class G
     $REQUEST_URI     = getenv ( 'REQUEST_URI' );
     $HTTP_USER_AGENT = getenv ( 'HTTP_USER_AGENT' );
     error_log ("[$date] [$ip_addr] [$name] $type: $msg [$HTTP_USER_AGENT] URI: $REQUEST_URI", 0);
-  }
-
+    }
 
   /**
-   * verboseError 
+   * verboseError
    *
    * @param  string $type 
    * @param  string $errno 
@@ -448,7 +444,6 @@ class G
   }
 
   /*** Encrypt and decrypt functions ****/
-
   /**
    * Encrypt string
    *
@@ -459,7 +454,7 @@ class G
    * @return string
    */
   function encrypt($string, $key) 
-  {
+    {
     //print $string;
     //    if ( defined ( 'ENABLE_ENCRYPT' ) && ENABLE_ENCRYPT == 'yes' ) {
     if (strpos($string, '|', 0) !== false) return $string;
@@ -469,7 +464,7 @@ class G
       $keychar = substr($key, ($i % strlen($key))-1, 1);
       $char    = chr(ord($char)+ord($keychar));
       $result .= $char;
-    }
+     }
     //echo $result . '<br>';
     $result = base64_encode($result);
     $result = str_replace ( '/' , '°' , $result);
@@ -479,7 +474,7 @@ class G
     //  $result = $string;
 
     return $result;
-  }
+    }
 
   /**
    * Decrypt string
@@ -533,7 +528,7 @@ class G
   }
 
   /***************  path functions *****************/
-
+  
   /*public static*/ function mk_dir( $strPath, $rights = 0777)
   {
     $folder_path = array($strPath);
@@ -770,6 +765,7 @@ class G
   /**
    * Include all model plugin files
    *
+   * LoadAllPluginModelClasses
    * @author Hugo Loza <hugo@colosa.com>
    * @access public
    * @return void
@@ -841,7 +837,7 @@ class G
     require_once( $classfile );
   }
   /**
-   * Loads a Class. If the class is not defined by the aplication, it
+   * If the class is not defined by the aplication, it
    * attempt to load the class from gulliver.system
    *
    * @author Fernando Ontiveros Lira <fernando@colosa.com>, David S. Callizaya
@@ -1144,7 +1140,7 @@ class G
   }
 
   /**
-   * sendHeaders 
+   * sendHeaders
    *
    * @param  string  $filename 
    * @param  string  $contentType default value ''
@@ -1240,7 +1236,6 @@ class G
     return false;
   }
 
-
   /**
    * Create an encrypted unique identifier based on $id and the selected scope id.
    *
@@ -1260,7 +1255,8 @@ class G
   
   /**
    * (Create an encrypted unique identificator based on $id and the selected scope id.) ^-1
-   *
+   * getUIDName
+   * 
    * @author David S. Callizaya S. <davidsantos@colosa.com>
    * @access public
    * @param  string $id
@@ -1781,7 +1777,7 @@ class G
 
   /**
    * Render message from XML file
-   *
+   * 
    * @author Fernando Ontiveros Lira <fernando@colosa.com>
    * @access public
    * @param  string $msgID
@@ -1908,7 +1904,6 @@ class G
     }
 
   }
-
 
   /**
    * Function getTranslations
@@ -2058,7 +2053,6 @@ class G
    * toLower
    *
    * @param  string $sText
-   *
    * @return string strtolower($sText)
    */   
   function toLower($sText)
@@ -2921,19 +2915,7 @@ class G
       $oJSON = new Services_JSON();
       return $oJSON->decode($Json);
     }
-  }
-  
-  /**
-   * isHttpRequest
-   *
-   * @return boolean true or false
-   */   
-  function isHttpRequest(){
-    if( isset($_SERVER['SERVER_SOFTWARE']) && strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache') !== false ){
-      return true;
-    }
-    return false;
-  }
+  }  
   
   /**
    * Get the type of a variable
@@ -3038,20 +3020,6 @@ class G
      }
   	return $infoUser;
   }
-
-  function in_array_column($text, $column, $array)
-  {
-      if (!empty($array) && is_array($array))
-      {
-          for ($i=0; $i < count($array); $i++)
-          {
-              if ($array[$i][$column]==$text || strcmp($array[$i][$column],$text)==0) return true;
-          }
-      }
-      return false;
-  }
-
-
 };
 
 /**

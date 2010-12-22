@@ -673,7 +673,7 @@ class XmlForm_Field {
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_Title extends XmlForm_Field 
+class XmlForm_Field_Title extends XmlForm_Field
 {
   /**
    * Function render
@@ -702,7 +702,7 @@ class XmlForm_Field_Title extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_Subtitle extends XmlForm_Field 
+class XmlForm_Field_Subtitle extends XmlForm_Field
 {
   /**
    * Function render
@@ -732,7 +732,7 @@ class XmlForm_Field_Subtitle extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_SimpleText extends XmlForm_Field 
+class XmlForm_Field_SimpleText extends XmlForm_Field
 {
   var $size       = 15;
   var $maxLength  = '';
@@ -811,7 +811,7 @@ class XmlForm_Field_SimpleText extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field_SimpleText
  */
-class XmlForm_Field_Text extends XmlForm_Field_SimpleText 
+class XmlForm_Field_Text extends XmlForm_Field_SimpleText
 {
   var $size             = 15;
   var $maxLength        = 64;
@@ -1355,7 +1355,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
 
         if (stristr ( $_SERVER ['HTTP_USER_AGENT'], 'iPhone' )) {
           //$result[] = '<div style="overflow:hidden;height:25px;padding:0px;margin:0px;">'.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'</div>';
-       
+
             $result [] = $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' );
         } else { //start add Alvaro
                    $varaux = '<textarea class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"  wrap="hard" rows="' . $this->rows . '"cols="'.$this->cols.'" required="' . $isRequired . '">'.$this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ).'</textarea>';
@@ -1422,31 +1422,8 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
     } else {
       return $this->htmlentities ( $value, ENT_QUOTES, 'utf-8' );
     }
+  }
 
-
-}
-  //function render( $value = NULL )
-//{
-//  return '<input id="form['.$this->name.']" name="form['.$this->name.']" type=\'text\' size="'.$this->size.'" value=\''. $this->htmlentities($value, ENT_QUOTES, 'utf-8') .'\'>';
-//}
-//function renderGrid( $values=array() , $owner )
-//{
-//  $result=array();$r=1;
-//  foreach($values as $v)  {
-//    if ($this->mode==='edit') {
-//      if ($this->readOnly)
-//        $result[] = '<input id="form['. $owner->name .']['.$r.']['.$this->name.']" name="form['. $owner->name .']['.$r.']['.$this->name.']" type ="text" size="'.$this->size.'" maxlength="'.$this->maxLength.'" value=\''.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'\' readOnly="readOnly"/>';
-//      else
-//        $result[] = '<input id="form['. $owner->name .']['.$r.']['.$this->name.']" name="form['. $owner->name .']['.$r.']['.$this->name.']" type ="text" size="'.$this->size.'" maxlength="'.$this->maxLength.'" value=\''.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'\' />';
-//    } elseif ($this->mode==='view') {
-//        $result[] = $this->htmlentities( $value , ENT_COMPAT, 'utf-8');
-//    } else {
-//        $result[] = $this->htmlentities( $value , ENT_COMPAT, 'utf-8');
-//    }
-//    $r++;
-//  }
-//  return $result;
-//}
 }
 
 /*DEPRECATED*/
@@ -1506,31 +1483,8 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText {
       return $this->htmlentities ( $value, ENT_QUOTES, 'utf-8' );
     }
 
+  }
 
-}
-
-  //function render( $value = NULL )
-//{
-//  return '<input id="form['.$this->name.']" name="form['.$this->name.']" type=\'text\' value=\''. $value .'\'>';
-//}
-//function renderGrid( $values=array() , $owner )
-//{
-//  $result=array();$r=1;
-//  foreach($values as $v)  {
-//    if ($this->mode==='edit') {
-//      if ($this->readOnly)
-//        $result[] = '<input id="form['. $owner->name .']['.$r.']['.$this->name.']" name="form['. $owner->name .']['.$r.']['.$this->name.']" type ="text" size="'.$this->size.'" maxlength="'.$this->maxLength.'" value=\''.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'\' readOnly="readOnly"/>';
-//      else
-//        $result[] = '<input id="form['. $owner->name .']['.$r.']['.$this->name.']" name="form['. $owner->name .']['.$r.']['.$this->name.']" type ="text" size="'.$this->size.'" maxlength="'.$this->maxLength.'" value=\''.$this->htmlentities( $v , ENT_COMPAT, 'utf-8').'\' />';
-//    } elseif ($this->mode==='view') {
-//        $result[] = $this->htmlentities( $value , ENT_COMPAT, 'utf-8');
-//    } else {
-//        $result[] = $this->htmlentities( $value , ENT_COMPAT, 'utf-8');
-//    }
-//    $r++;
-//  }
-//  return $result;
-//}
 }
 
 /*DEPRECATED*/
@@ -1765,7 +1719,7 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText {
 }
 
 /*DEPRECATED*/
-class XmlForm_Field_DateView extends XmlForm_Field 
+class XmlForm_Field_DateView extends XmlForm_Field
 {
   /**
    * Function render
@@ -1786,7 +1740,7 @@ class XmlForm_Field_DateView extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_YesNo extends XmlForm_Field 
+class XmlForm_Field_YesNo extends XmlForm_Field
 {
   var $required = false;
   var $readonly = false;
@@ -1959,33 +1913,6 @@ class XmlForm_Field_File extends XmlForm_Field {
     return $html;
   }
 }
-/*
-//DEPRECATED
-class XmlForm_Field_BasicForm extends XmlForm_Field
-{
-  //Instead of size --> dynaform
-  var $dynaform='';
-  var $times=1;
-  //Possible values: "[ADD][,DELETE][,EDIT]"
-  var $configurationgrid2='';
-  function render( $value = NULL )
-  {
-    return $this->htmlentities( $value ,ENT_COMPAT,'utf-8').' this is a basicform';
-  }
-}
-
-class XmlForm_Field_BasicFormView extends XmlForm_Field
-{
-  //Instead of size --> dynaform
-  var $dynaform;
-  var $times=1;
-  var $required=false;
-  function render( $value = NULL )
-  {
-    return $this->htmlentities( $value ,ENT_COMPAT,'utf-8');
-  }
-}
-*/
 
 /*hook, dropdown field for Propel table @By <erik@colosa.com>*/
 class XmlForm_Field_Dropdownpt extends XmlForm_Field {
@@ -2067,7 +1994,7 @@ class XmlForm_Field_Checkboxpt extends XmlForm_Field {
   }
 }
 
-class XmlForm_Field_Checkbox extends XmlForm_Field 
+class XmlForm_Field_Checkbox extends XmlForm_Field
 {
   var $required     = false;
   var $value        = 'on';
@@ -2185,7 +2112,7 @@ class XmlForm_Field_Checkbox2 extends XmlForm_Field {
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_Button extends XmlForm_Field 
+class XmlForm_Field_Button extends XmlForm_Field
 {
   var $onclick = '';
   var $align   = 'center';
@@ -2218,7 +2145,7 @@ class XmlForm_Field_Button extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_Reset extends XmlForm_Field 
+class XmlForm_Field_Reset extends XmlForm_Field
 {
   /**
    * Function render
@@ -2271,7 +2198,7 @@ class XmlForm_Field_Submit extends XmlForm_Field {
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_Hidden extends XmlForm_Field 
+class XmlForm_Field_Hidden extends XmlForm_Field
 {
   var $sqlConnection   = 0;
   var $sql             = '';
@@ -2405,13 +2332,13 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
       } elseif ($this->mode === 'view') {
         $html = $this->htmlentities ( isset ( $this->options [$value] ) ? $this->options [$value] : '', ENT_COMPAT, 'utf-8' );
         $html .= '<select '.$readOnlyField.' required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" style="display:none" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
-      } 
+      }
       foreach ( $this->option as $optionName => $option ) {
         // if change the type with the settype function then compare "0" == "" so both can be diferentiated
         settype($optionName,'string');
         $html .= '<option value="' . $optionName . '" ' . ($optionName === $value ? 'selected="selected"' : ''). '>' . $option . '</option>';
       }
-      foreach ( $this->sqlOption as $optionName => $option ) {  
+      foreach ( $this->sqlOption as $optionName => $option ) {
         // if change the type with the settype function then compare "0" == "" so both can be diferentiated
         settype($optionName,'string');
         $html .= '<option value="' . $optionName . '" ' . ($optionName === $value ? 'selected="selected"' : '') . '>' . $option . '</option>';
@@ -2464,7 +2391,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_Listbox extends XmlForm_Field 
+class XmlForm_Field_Listbox extends XmlForm_Field
 {
   var $defaultValue  = '';
   var $required      = false;
@@ -2617,7 +2544,7 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
 }
 
 /*DEPRECATED*/
-class XmlForm_Field_RadioGroupView extends XmlForm_Field 
+class XmlForm_Field_RadioGroupView extends XmlForm_Field
 {
   var $defaultValue  = '';
   var $required      = false;
@@ -2651,7 +2578,7 @@ class XmlForm_Field_RadioGroupView extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_CheckGroup extends XmlForm_Field 
+class XmlForm_Field_CheckGroup extends XmlForm_Field
 {
   var $required      = false;
   var $option        = array ();
@@ -2709,7 +2636,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
 }
 
 /* TODO: DEPRECATED */
-class XmlForm_Field_CheckGroupView extends XmlForm_Field 
+class XmlForm_Field_CheckGroupView extends XmlForm_Field
 {
   var $option        = array ();
   var $sqlConnection = 0;
@@ -2738,7 +2665,7 @@ class XmlForm_Field_CheckGroupView extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field  XmlForm  xmlformTemplate
  */
-class XmlForm_Field_Grid extends XmlForm_Field 
+class XmlForm_Field_Grid extends XmlForm_Field
 {
   var $xmlGrid   = '';
   var $initRows  = 1;
@@ -2888,7 +2815,7 @@ class XmlForm_Field_Grid extends XmlForm_Field
  * @access public
  * @dependencies XmlForm_Field
  */
-class XmlForm_Field_JavaScript extends XmlForm_Field 
+class XmlForm_Field_JavaScript extends XmlForm_Field
 {
   var $code        = '';
   var $replaceTags = true;
@@ -2985,7 +2912,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
   public $mask            = '%Y-%m-%d';
   public $dependentFields = '';
-  public $editable;  
+  public $editable;
   var $hint;
   /**
    * Verify the format of a date
@@ -3108,7 +3035,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       if (! $this->verifyDateFormat ( $startDate ))
         $startDate = '';
     }
-    
+
     if (isset ( $beforeDate ) && $beforeDate != '') {
       if ($this->isvalidBeforeFormat ( $beforeDate ))
         $startDate = $this->calculateBeforeFormat ( $beforeDate, 1 );
@@ -3135,13 +3062,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     if (isset ( $this->maxlength ) && is_numeric ( $this->maxlength ) && $this->maxlength >= 1900 && $this->maxlength <= 2100) {
       $endDate = $this->maxlength . '-01-01';
     }
-    
+
     if ($endDate == '') {
       // the default is the current date + 2 years
-      $endDate = date ( 'Y-m-d', mktime ( 0, 0, 0, date ( 'm' ), date ( 'd' ), date ( 'Y' ) + 2 ) ); 
+      $endDate = date ( 'Y-m-d', mktime ( 0, 0, 0, date ( 'm' ), date ( 'd' ), date ( 'Y' ) + 2 ) );
     }
 
-    //validating the mask, if it is not set, 
+    //validating the mask, if it is not set,
     if( isset($this->mask) && $this->mask != '' ){
       $mask = $this->mask;
     } else {
@@ -3155,7 +3082,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
      */
     if($mask == 'yyyy-mm-dd')
       $mask = '%Y-%m-%d';
-    
+
     if( strpos($mask, '%') === false ) {
       if( strpos($mask, '-') !== false ) { // case '-' saparator
         $maskparts = explode('-', $mask);
@@ -3166,7 +3093,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
           $mask .= '%'.$part;
         }
       }
-      
+
       if( strpos($mask, '/') !== false ) { // case '/' saparator
         $maskparts = explode('/', $mask);
         $mask = '';
@@ -3204,34 +3131,34 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
        $sizehour = strpos($mask, $hour);
        $sizemin = strpos($mask, $hour);
        $sizesec = strpos($mask, $hour);
-       
+
        $Time = 'false';
         if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
           $sizeend = $maskleng + 2;
           $Time = 'true';
         } else {
           $sizeend = $maskleng + 2;
-        } 
+        }
         if ( $this->editable != "0") {
            	$html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"/>
             	<a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
-            	<a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';		
+            	<a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';
         } else {
              $html = '<input id="'.$pID.'" name="'.$pID.'" class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" readonly/>
              <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
-             <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\', '.$Time.')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';			
+             <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\', '.$Time.')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';
         }
 
     } else {
       $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
     }
-    
+
     if($this->hint){
       $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
              . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>'
              . '</a>';
     }
-     
+
     return $html;
   }
 }
@@ -3696,7 +3623,7 @@ class XmlForm_Field_Xmlform extends XmlForm_Field {
  * @access public
  * @dependencies Xml_document  XmlForm_Field  xmlformTemplate
  */
-class XmlForm 
+class XmlForm
 {
   var $tree;
   var $id                = '';
@@ -3740,11 +3667,11 @@ class XmlForm
     $this->language = $language;
     $filenameInitial=$filename;
     $filename = $this->home . $filename;
-    
+
     //if the xmlform file doesn't exists, then try with the plugins folders
       if ( !is_file ( $filename ) ) {
         $aux = explode ( PATH_SEP, $filenameInitial );
-        //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment        
+        //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment
         if(count($aux) > 2){//Subfolders
           $filename=array_pop($aux);
           $aux0=implode(PATH_SEP,$aux);
@@ -3764,10 +3691,10 @@ class XmlForm
           }
         }
       }
-    
+
     $this->fileName = $filename;
     $parsedFile = dirname ( $filename ) . PATH_SEP . basename ( $filename, 'xml' ) . $language;
-    
+
     $parsedFilePath = defined ( 'PATH_C' ) ? ( defined('SYS_SYS') ? PATH_C . 'ws' . PATH_SEP . SYS_SYS . PATH_SEP: PATH_C ) : PATH_DATA;
     $parsedFilePath .= 'xmlform/' . substr ( $parsedFile, strlen ( $this->home ) );
 
@@ -3954,7 +3881,7 @@ class XmlForm
  * @access public
  * @dependencies Smarty
  */
-class xmlformTemplate extends Smarty 
+class xmlformTemplate extends Smarty
 {
   var $template;
   var $templateFile;
