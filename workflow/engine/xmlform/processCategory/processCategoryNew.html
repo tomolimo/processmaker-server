@@ -9,20 +9,29 @@
         <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
            <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                    <tbody><tr>
-             <td class="FormTitle" colspan="2" align="">{$form.title1}</td>
+              <td class="FormTitle" colspan="2" align="">{$form.title1}</td>
              </tr>
-             <tr style="display: none;">
-               <td colspan="2">{$form.CATEGORY_NAME }</td>
-             </tr>
-             <tr>
-               <td class="FormLabel" width="{$form_labelWidth}">{$LABEL_CATEGORY_NAME}</td>
-               <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.LABEL_CATEGORY_NAME }</td>
-             </tr>
-           
+            <tr style="display: none;">
+              <td colspan="2">{$form.CATEGORY_UID }</td>
+             </tr>          
+		<tr style="display: none;">
+              <td colspan="2">{$form.CATEGORY_PARENT}</td>
+             </tr>                                                    
+            <tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">* </font>{$CATEGORY_NAME }</td>
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.CATEGORY_NAME }</td> 
+              </tr>		             
+            <tr style="display: none;">
+              <td colspan="2">{$form.CATEGORY_ICON}</td>
+             </tr>                               
 	      <tr>
-              <td class="FormButton" colspan="2" align="center"> <br/> {$form.BTN_SUBMIT} &nbsp; {$form.BTN_CANCEL } {$form.CATEGORY_UID}</td>
+              <td class="FormButton" colspan="2" align="center"> <br/> {$form.BTN_SUBMIT} &nbsp; {$form.BTN_CANCEL } </td>
              </tr>
-		
+		<tr><td class="FormButton" colspan="2" align="center">
+		<div id = "REQUIRED"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}
+		</div>
+		</td>
+             </tr>
             </tbody>
 		</table>
         </td>

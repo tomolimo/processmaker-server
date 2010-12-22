@@ -5,7 +5,8 @@
   <en>Delete Process Category</en>
 </title1>
 
-
+<CATEGORY_UID type="hidden" colWidth='32'  >
+</CATEGORY_UID>
 
 <LABEL_CATEGORY_NAME type="caption" colWidth='32'  >
   <en>Category Name</en>

@@ -22,6 +22,6 @@ if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVAN
 
 
   $G_PUBLISH = new Publisher;
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processCategory/processCategoryEdit', '', $fields, 'processCategorySave' );  
+  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processCategory/processCategoryNew', '', $fields, 'processCategorySave' );  
   G::RenderPage('publishBlank', 'blank');   
 ?>
