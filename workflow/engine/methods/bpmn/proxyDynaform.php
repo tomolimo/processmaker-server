@@ -35,14 +35,3 @@ try
   catch ( Exception $e ) {
   	print json_encode ( $e->getMessage() );
   }
-
-
-     G::LoadClass('processMap');
-   $oProcessMap = new processMap(new DBConnection);
-
-   $rows        = $oProcessMap->showExtDBConnList();
-       array_shift($rows);
-
-         $result['totalCount'] = count($rows);
-   $result['data'] = $rows;
-   print json_encode( $result ) ;

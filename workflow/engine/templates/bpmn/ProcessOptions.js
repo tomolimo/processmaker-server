@@ -595,6 +595,32 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             }
         });
 
+ var btnEdit = new Ext.Button({
+            id: 'btnEdit',
+            text: 'Edit',
+            iconCls: 'application_add',
+            handler: function (s) {
+                var selectedRow = inputDocGrid.getSelectionModel().getSelections();
+                var inputDocUID   = selectedRow[0].data.INP_DOC_UID;
+
+                 //Loading Task Details into the form
+                  inputDocForm.form.load({
+                        url:'proxyInputDocument.php?INP_DOC_UID=' +inputDocUID,
+                        method:'GET',
+                        waitMsg:'Loading',
+                        success:function(form, action) {
+                           //Ext.MessageBox.alert('Message', 'Loaded OK');
+                           newIOWindow.show();
+                           Ext.getCmp("INP_DOC_UID").setValue(inputDocUID);
+                        },
+                        failure:function(form, action) {
+                            Ext.MessageBox.alert('Message', 'Load failed');
+                        }
+                    });
+            }
+
+        });
+
   var inputDocForm = new Ext.FormPanel({
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
@@ -744,6 +770,10 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 //anchor:'15%'
                             }]
                           }]
+                  },{
+                      id : 'INP_DOC_UID',
+                      xtype: 'hidden',
+                      name : 'INP_DOC_UID'
                   }]
                }]
          });
@@ -773,7 +803,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
 
   var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove]
+            items: [btnAdd, btnRemove,btnEdit]
             });
 
   var inputDocGrid = new Ext.grid.GridPanel({
@@ -810,6 +840,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         buttonAlign: 'center'
           });
 
+
   var newIOWindow = new Ext.Window({
         title: 'Input Document',
         collapsible: false,
@@ -828,7 +859,8 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             handler: function(){
                 var getForm   = inputDocForm.getForm().getValues();
                 
-                var sDocType        = getForm.INP_DOC_TITLE
+                var sDocUID        = getForm.INP_DOC_UID;
+                var sDocTitle        = getForm.INP_DOC_TITLE;
                 var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
                 var sOrig           = getForm.INP_DOC_ORIGINAL;
                 if(sOrig == 'LEGAL COPY')
@@ -852,30 +884,69 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
                 var sTags           = getForm.INP_DOC_TAGS;
 
-               Ext.Ajax.request({
-                  url   : '../inputdocs/inputdocs_Save.php',
-                  method: 'POST',
-                  params:{
-                      INP_DOC_TITLE                 :sDocType,
-                      INP_DOC_UID                   : '',
-                      PRO_UID                       : pro_uid,
-                      INP_DOC_FORM_NEEDED           : sFormNeeded,
-                      INP_DOC_ORIGINAL              : sOrig,
-                      INP_DOC_VERSIONING            : sVers,
-                      INP_DOC_TAGS                  : 'INPUT',    //By Default
-                      INP_DOC_DESCRIPTION           : sDesc
-                  },
-                  success: function(response) {
-                      Ext.MessageBox.alert ('Status','Input document has been created successfully.');
+               if(sDocUID == "")
+               {
+                    Ext.Ajax.request({
+                      url   : '../inputdocs/inputdocs_Save.php',
+                      method: 'POST',
+                      params:{
+                          functions                : 'lookForNameInput',
+                          NAMEINPUT                : sDocTitle,
+                          proUid                   : pro_uid
+                      },
+                      success: function(response) {
+                        if(response.responseText == "1")
+                        {
+                           Ext.Ajax.request({
+                              url   : '../inputdocs/inputdocs_Save.php',
+                              method: 'POST',
+                              params:{
+                                  functions                     : '',
+                                  INP_DOC_TITLE                 : sDocTitle,
+                                  INP_DOC_UID                   : sDocUID,
+                                  PRO_UID                       : pro_uid,
+                                  INP_DOC_FORM_NEEDED           : sFormNeeded,
+                                  INP_DOC_ORIGINAL              : sOrig,
+                                  INP_DOC_VERSIONING            : sVers,
+                                  INP_DOC_TAGS                  : 'INPUT',    //By Default
+                                  INP_DOC_DESCRIPTION           : sDesc
+                              },
+                              success: function(response) {
+                                  Ext.MessageBox.alert ('Status','Input document has been created successfully.');
+                                  newIOWindow.close();
+                                  inputDocStore.reload();
+                              }
+                            });
+                        }
+                        else
+                            Ext.MessageBox.alert ('Status','There is an Input Document with the same  name in  this process. It is not saving');
                   }
-                });
-
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-
-            newIOWindow.close();
-            inputDocStore.reload();
-          }
+                 })
+                }
+                else
+                {
+                    Ext.Ajax.request({
+                          url   : '../inputdocs/inputdocs_Save.php',
+                          method: 'POST',
+                          params:{
+                              functions                     : '',
+                              INP_DOC_TITLE                 : sDocTitle,
+                              INP_DOC_UID                   : sDocUID,
+                              PRO_UID                       : pro_uid,
+                              INP_DOC_FORM_NEEDED           : sFormNeeded,
+                              INP_DOC_ORIGINAL              : sOrig,
+                              INP_DOC_VERSIONING            : sVers,
+                              INP_DOC_TAGS                  : 'INPUT',    //By Default
+                              INP_DOC_DESCRIPTION           : sDesc
+                          },
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','Input document has been updated successfully.');
+                              newIOWindow.close();
+                              inputDocStore.reload();
+                          }
+                        });
+                }
+           }
         },{
             text: 'Cancel',
             handler: function(){
@@ -885,6 +956,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         }]
     });
    gridWindow.show();
+
 }
 
 
@@ -985,6 +1057,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 var selectedRow = outputDocGrid.getSelectionModel().getSelections();
                 var outDocUID   = selectedRow[0].data.OUT_DOC_UID;
             }
+
         });
 
   var btnProperties = new Ext.Button({

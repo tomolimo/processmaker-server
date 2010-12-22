@@ -40,7 +40,7 @@ try {
   if(isset($_POST['function']))
     $sfunction =$_POST['function'];
   else
-    $sfunction ='';
+    $sfunction =$_POST['functions'];
   
   switch($sfunction){
   case 'lookForNameInput':
