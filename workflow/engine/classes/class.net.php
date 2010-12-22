@@ -399,6 +399,7 @@ class NET
   
     if(isset($this->ip) && isset($this->db_user) && isset($this->db_passwd)) {
         try{
+            /*
             switch($driver)
             {
                 case 'mysql':
@@ -418,8 +419,34 @@ class NET
                         throw new Exception(@pg_last_error($link));
                     }
                     break;
+                case 'mssql':
+                    if(strlen(trim($this->ip))<=0)
+                      $this->ip = DB_HOST;
+                    if($link = @mssql_connect($this->ip, $this->db_user, $this->db_passwd)){
+                      @mssql_select_db( DB_NAME, $link );
+                      $oResult = @mssql_query("select substring(@@version, 21, 6) + ' (' + CAST(SERVERPROPERTY ('productlevel') as varchar(10)) + ') ' + CAST(SERVERPROPERTY('productversion') AS VARCHAR(15)) + ' ' + CAST(SERVERPROPERTY ('edition') AS VARCHAR(25))  as version; ", $link); 
+                      $aResult = @mssql_fetch_array($oResult);
+                      @mssql_free_result($oResult);
+                      $v = $aResult[0];
+                    } else {
+                      throw new Exception(@mssql_error($link));
+                    }
+                    break;                  
             }
             return (isset($v))?$v:'none';
+            */
+            
+            if(!isset($this->db_sourcename))
+              $this->db_sourcename = DB_NAME;
+            $value = 'none';
+            $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+            if(G::LoadSystemExist($sDataBase)){
+              G::LoadSystem($sDataBase);
+              $oDataBase = new database();
+              $value = $oDataBase->getServerVersion($driver, $this->ip, $this->db_port, $this->db_user, $this->db_passwd, $this->db_sourcename);
+            }
+            return $value;
+          
         } catch (Exception $e){
             throw new Exception($e->getMessage());
         }

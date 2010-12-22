@@ -622,16 +622,14 @@ class database extends database_base {
       $dbIP = DB_HOST;
     if($link = @mssql_connect($dbIP, $dbUser, $dbPasswd)){
       @mssql_select_db( DB_NAME, $link );
-      $oResult = @mssql_query("select substring(@@version, 21, 32) as version; ", $link); 
+      $oResult = @mssql_query("select substring(@@version, 21, 6) + ' (' + CAST(SERVERPROPERTY ('productlevel') as varchar(10)) + ') ' + CAST(SERVERPROPERTY('productversion') AS VARCHAR(15)) + ' ' + CAST(SERVERPROPERTY ('edition') AS VARCHAR(25)) as version; ", $link); 
       $aResult = @mssql_fetch_array($oResult);
       @mssql_free_result($oResult);
       $v = $aResult[0];
     } else {
       throw new Exception(@mssql_error($link));
     }
-            
     return (isset($v))?$v:'none';
-    
     
   }
   

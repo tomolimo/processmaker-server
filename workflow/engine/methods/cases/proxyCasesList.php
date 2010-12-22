@@ -288,11 +288,9 @@
       $Criteria->addAscendingOrderByColumn( $sort );
     }
 
-	if(g::MySQLSintaxis()) {
-		//limit the results according the interface    
-		$Criteria->setLimit( $limit );
-		$Criteria->setOffset( $start );
-	} 
+	//limit the results according the interface    
+	$Criteria->setLimit( $limit );
+	$Criteria->setOffset( $start );
   $params = array();
   $sSql   = BasePeer::createSelectSql($Criteria, $params);
 //  var_dump($sSql);
