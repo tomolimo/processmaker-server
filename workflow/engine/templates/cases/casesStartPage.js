@@ -113,60 +113,9 @@ var newCaseTree = {
 	}),
 	listeners : {
 		dblclick : function(n) {
-			if (n.attributes.optionType == "startProcess") {
-				Ext.Msg.show({
-					title : 'Start Case',
-					msg : 'Starting new case<br><br><b>' + n.attributes.text
-							+ '</b>',
-					icon : Ext.MessageBox.INFO,
-					// width:300,
-					wait:true,
-			        waitConfig: {interval:500}
-				});
-				Ext.Ajax.request({
-					url : 'casesStartPage_Ajax.php',
-					params : {
-						action : 'startCase',
-						processId : n.attributes.pro_uid,
-						taskId : n.attributes.tas_uid
-					},
-					success : function(response) {
-						
-						try{ 
-							var res = Ext.util.JSON.decode(response.responseText);
-							
-							if (res.openCase) {
-								window.location = res.openCase.PAGE;
-							} else {
-								Ext.Msg.show({
-									title : 'Error creating a new Case',
-									msg : '<textarea cols="50" rows="10">'
-											+ res.message + '</textarea>',
-									icon : Ext.MessageBox.ERROR,
-									buttons : Ext.Msg.OK
-								});
-							}						
-					} catch(e) {						
-						Ext.Msg.show({
-							title : 'Error creating a new Case',
-							msg : 'JSON Decode Error:<br /><textarea cols="50" rows="2">'
-									+ e.message + '</textarea><br />Server Response<br /><textarea cols="50" rows="5">'+response.responseText+'</textarea>',
-							icon : Ext.MessageBox.ERROR,
-							buttons : Ext.Msg.OK
-						});
-						 
-					}
-						
-						
-						
-						
-					},
-					failure : function() {
-						// grid.getGridEl().unmask(true);
-						Ext.Msg.alert('Error', 'Unable to start a case');
-					}
-				});
-			}
+			mainPanel.openCase(n);
+			
+			
 		},
 		click : function(n) {
 			mainPanel.showDetails(n);
@@ -222,14 +171,47 @@ var startCaseTab = {
             // disabled: true,
             // readonly:true,
             id:"processName"
-        },{
-            fieldLabel: 'Task',
-            name: 'taskName',
-            allowBlank:false,
-            value: '',
-            // disabled: true,
-            id:"taskName"
-        },{
+        },
+        {
+            xtype: 'compositefield',
+            
+            items: [
+                
+                {
+                	   xtype     : 'displayfield',
+                       
+                    fieldLabel: 'Task',
+                    name: 'taskName',
+                    allowBlank:false,
+                    value: '',
+                    width:200,
+                    // disabled: true,
+                    id:"taskName"
+                },
+                {
+                	xtype : 'button',
+                	id : 'starCaseButton',
+                	disabled : true,
+                	//cls : 'x-btn-icon',
+                	//icon : '/images/refresh.gif',
+                	iconCls: "ICON_CASES_START_CASE",
+                	text:"Start Case",
+                	//margins:"5 5 5 5",
+                	autoWidth:true,
+                	handler : function() {				
+                		tree = Ext.getCmp('startCaseTreePanel');
+                		var selectedNode = tree.getSelectionModel().getSelectedNode();
+                		if(selectedNode){
+                			mainPanel.openCase(selectedNode);
+                		}
+                	}
+                }
+            ]
+        },
+
+       
+        
+        {
         	xtype:'textarea',
             fieldLabel: 'Description',
             name: 'processDescription',
@@ -1883,6 +1865,62 @@ Ext
 							}
 						}
 					},
+					openCase : function(n){
+						if (n.attributes.optionType == "startProcess") {
+							Ext.Msg.show({
+								title : 'Start Case',
+								msg : 'Starting new case<br><br><b>' + n.attributes.text
+										+ '</b>',
+								icon : Ext.MessageBox.INFO,
+								// width:300,
+								wait:true,
+						        waitConfig: {interval:500}
+							});
+							Ext.Ajax.request({
+								url : 'casesStartPage_Ajax.php',
+								params : {
+									action : 'startCase',
+									processId : n.attributes.pro_uid,
+									taskId : n.attributes.tas_uid
+								},
+								success : function(response) {
+									
+									try{ 
+										var res = Ext.util.JSON.decode(response.responseText);
+										
+										if (res.openCase) {
+											window.location = res.openCase.PAGE;
+										} else {
+											Ext.Msg.show({
+												title : 'Error creating a new Case',
+												msg : '<textarea cols="50" rows="10">'
+														+ res.message + '</textarea>',
+												icon : Ext.MessageBox.ERROR,
+												buttons : Ext.Msg.OK
+											});
+										}						
+								} catch(e) {						
+									Ext.Msg.show({
+										title : 'Error creating a new Case',
+										msg : 'JSON Decode Error:<br /><textarea cols="50" rows="2">'
+												+ e.message + '</textarea><br />Server Response<br /><textarea cols="50" rows="5">'+response.responseText+'</textarea>',
+										icon : Ext.MessageBox.ERROR,
+										buttons : Ext.Msg.OK
+									});
+									 
+								}
+									
+									
+									
+									
+								},
+								failure : function() {
+									// grid.getGridEl().unmask(true);
+									Ext.Msg.alert('Error', 'Unable to start a case');
+								}
+							});
+						}
+					},
 					
 					showDetails : function(selectedNode) {
 
@@ -1898,9 +1936,11 @@ Ext
         	calendarObj[calendarDays[i]]=true;
         }
         // console.log(otherAttributes);
+        //starCaseButton
+        Ext.ComponentMgr.get("starCaseButton").enable();
         Ext.getCmp('process-detail-panel').getForm().setValues({
         	processName : otherAttributes.PRO_TITLE,
-        	taskName : selectedNode.attributes.text,
+        	taskName : otherAttributes.PRO_TAS_TITLE,
         	calendarName : otherAttributes.CALENDAR_NAME,
         	calendarDescription : otherAttributes.CALENDAR_DESCRIPTION,
         	processCalendar:otherAttributes.CALENDAR_NAME+" "+otherAttributes.CALENDAR_DESCRIPTION,
@@ -1918,10 +1958,11 @@ Ext
         
         
         // this.detailsTemplate.overwrite(detailEl, data);
-							// detailEl.slideIn('t', {stopFx:true,duration:.0});
-							detailEl.highlight('#c3daf9', {
+						//	detailEl.slideIn('t', {stopFx:true,duration:.0});
+		/*					
+        detailEl.highlight('#c3daf9', {
 								block : true
-							});
+							});*/
 						} else {
 							detailEl.update('');
 						}

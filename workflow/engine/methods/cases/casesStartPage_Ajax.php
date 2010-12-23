@@ -79,6 +79,7 @@ function getProcessList() {
         $processInfoChild ['myInbox']=0;
         $processInfoChild ['totalInbox']=0;
         $tempTreeChild ['otherAttributes'] = array_merge($processInfoChild,$oProcess->load ( $processInfoChild ['pro_uid'] ),$calendar->getCalendarFor ( $processInfoChild ['uid'], $processInfoChild ['uid'], $processInfoChild ['uid'] ));
+        $tempTreeChild ['otherAttributes']['PRO_TAS_TITLE']=str_replace(")","",str_replace("(","",trim(str_replace($tempTreeChild ['otherAttributes']['PRO_TITLE'],"",$tempTreeChild ['otherAttributes']["value"]))));
         $tempTreeChild ['qtip']=$tempTreeChild ['otherAttributes']['PRO_DESCRIPTION']; 
         
         //$tempTree['cls']='file';
@@ -106,6 +107,7 @@ function getProcessList() {
         $processInfo ['myInbox']=0;
         $processInfo ['totalInbox']=0;
         $tempTree ['otherAttributes'] = array_merge($processInfo,$oProcess->load ( $processInfo ['pro_uid'] ),$calendar->getCalendarFor ( $processInfo ['uid'], $processInfo ['uid'], $processInfo ['uid'] ));
+        $tempTree ['otherAttributes']['PRO_TAS_TITLE']=str_replace(")","",str_replace("(","",trim(str_replace($tempTree ['otherAttributes']['PRO_TITLE'],"",$tempTree ['otherAttributes']["value"]))));
         $tempTree ['qtip']=$tempTree ['otherAttributes']['PRO_DESCRIPTION']; 
         //$tempTree['cls']='file';
         $processListTree [] = $tempTree;
