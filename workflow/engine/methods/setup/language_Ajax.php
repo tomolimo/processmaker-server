@@ -51,7 +51,7 @@ try {
       $translationRow = new Translation();
       $response = new stdClass();
       $translationsEnvList = $translationRow->getTranslationEnvironments();
-
+      //print_r($translationsEnvList); die;
       $i = 0;
       foreach( $translationsEnvList as $locale=>$translationRow) {
       

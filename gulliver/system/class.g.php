@@ -3020,6 +3020,11 @@ class G
      }
   	return $infoUser;
   }
+
+  function getModel($model){
+    require_once "classes/model/$model.php";
+    return new $model();
+  }
 };
 
 /**

@@ -52,7 +52,7 @@
   define( 'PATH_FIXTURES',    PATH_TEST . 'fixtures'     . PATH_SEP );
   define( 'PATH_RTFDOCS' ,    PATH_CORE . 'rtf_templates' . PATH_SEP );
   define( 'PATH_DYNACONT',    PATH_CORE . 'content' . PATH_SEP . 'dynaform' . PATH_SEP );
-  define( 'PATH_LANGUAGECONT',PATH_CORE . 'content' . PATH_SEP . 'languages' . PATH_SEP );
+  //define( 'PATH_LANGUAGECONT',PATH_CORE . 'content' . PATH_SEP . 'languages' . PATH_SEP );
   define( 'SYS_UPLOAD_PATH',  PATH_HOME . "public_html/files/" );
   define( 'PATH_UPLOAD',      PATH_HTML . 'files' . PATH_SEP);
   define( 'PATH_WORKFLOW_MYSQL_DATA',  PATH_CORE . 'data' . PATH_SEP.'mysql'.PATH_SEP);
@@ -77,6 +77,8 @@
     }
     
     require_once ( FILE_PATHS_INSTALLED );
+    
+    define( 'PATH_LANGUAGECONT', PATH_DATA . "META-INF" . PATH_SEP );
 
     // TODO: This path defines where to save temporal data, similar to $_SESSION.
     define( 'PATH_TEMPORAL', PATH_C . 'dynEditor/');

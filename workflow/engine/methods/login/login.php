@@ -22,6 +22,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
+
   if (! isset ( $_GET ['u'] )) {
     $aFields ['URL'] = '';
   }
@@ -89,8 +91,9 @@
   $_SESSION ['FAILED_LOGINS'] = $sFailedLogins;
   
   //translation
-  require_once "classes/model/Translation.php"; 
-  $translationsTable = Translation::getTranslationEnvironments();
+  $Translations = G::getModel("Translation");
+  $translationsTable = $Translations->getTranslationEnvironments();
+  
   $availableLangArray = array ();
   $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
   foreach ( $translationsTable as $locale ) {

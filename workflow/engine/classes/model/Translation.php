@@ -42,6 +42,12 @@ class Translation extends BaseTranslation {
   public static $meta;
   public static $localeSeparator = '-';
 
+  private $envFilePath;
+
+  function __construct(){
+    $this->envFilePath = PATH_DATA . "META-INF" . PATH_SEP . "translations.env";
+  }
+
   function getAllCriteria(){
     
     //SELECT * from TRANSLATION WHERE TRN_LANG = 'en' order by TRN_CATEGORY, TRN_ID 
@@ -150,7 +156,7 @@ class Translation extends BaseTranslation {
 
   function addTranslationEnvironment($locale, $headers, $numRecords)
   {
-    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $filePath = $this->envFilePath;
     $environments = Array();
     
     if( file_exists($filePath) ) {
@@ -179,7 +185,7 @@ class Translation extends BaseTranslation {
   
   function removeTranslationEnvironment($locale)
   {
-    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $filePath = $this->envFilePath;
     if( strpos($locale, self::$localeSeparator) !== false ) {
       list($LAN_ID, $IC_UID) = explode('-', strtoupper($locale));
     } else {
@@ -198,22 +204,26 @@ class Translation extends BaseTranslation {
   }
 
   function getTranslationEnvironments(){
-    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $filePath = $this->envFilePath;
     $envs = Array();
     
     if( ! file_exists($filePath) ) {
       //the transaltions table file doesn't exist, then build it
+
+      if( ! is_dir(dirname($this->envFilePath)) )
+        G::mk_dir(dirname($this->envFilePath));
+      
       $translationsPath = PATH_CORE . "content" . PATH_SEP . 'translations' . PATH_SEP;
       $basePOFile = $translationsPath . 'english' . PATH_SEP . 'processmaker.en.po';
       
       $params = self::getInfoFromPOFile($basePOFile);
-      self::addTranslationEnvironment($params['LOCALE'], $params['HEADERS'], $params['COUNT']);
+      $this->addTranslationEnvironment($params['LOCALE'], $params['HEADERS'], $params['COUNT']);
       
       //getting more lanuguage translations
       $files = glob($translationsPath . "*.po");
       foreach( $files as $file ){
         $params = self::getInfoFromPOFile($file);
-        self::addTranslationEnvironment($params['LOCALE'], $params['HEADERS'], $params['COUNT']);
+        $this->addTranslationEnvironment($params['LOCALE'], $params['HEADERS'], $params['COUNT']);
       }
     }
     $envs = unserialize(file_get_contents($filePath));
@@ -286,7 +296,7 @@ class Translation extends BaseTranslation {
   }
 
   function getTranslationEnvironment($locale){
-    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $filePath = $this->envFilePath;
     $environments = Array();
 
     if( ! file_exists($filePath) ) {
@@ -308,7 +318,7 @@ class Translation extends BaseTranslation {
   }
   
   function saveTranslationEnvironment($locale, $data){
-    $filePath = PATH_LANGUAGECONT . "translations.environments";
+    $filePath = $this->envFilePath;
     $environments = Array();
 
     if( ! file_exists($filePath) ) {

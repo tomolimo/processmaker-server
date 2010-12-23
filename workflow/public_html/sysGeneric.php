@@ -388,6 +388,21 @@ $startingTime =  array_sum(explode(' ',microtime()));
   session_start();
   ob_start();
 
+//Rebuild the base Workflow translations if not exists
+  if( ! is_file(PATH_LANGUAGECONT . 'translation.en') ){
+    require_once ( "classes/model/Translation.php" );
+    $fields = Translation::generateFileTranslation('en');
+  }
+//TODO: Verify if the language set into url is defined in translations env.
+  if( SYS_LANG != 'en' && ! is_file(PATH_LANGUAGECONT . 'translation.' . SYS_LANG) ){
+    require_once ( "classes/model/Translation.php" );
+    $fields = Translation::generateFileTranslation(SYS_LANG);
+  }
+
+
+
+
+
 //********* Setup plugins *************
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
   $avoidChangedWorkspaceValidation = false;

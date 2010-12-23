@@ -77,11 +77,9 @@ function getWorkspacesAvailable() {
 }
 $availableWorkspace = getWorkspacesAvailable ();
 
-require_once "classes/model/Translation.php";
-
-$translationsTable = Translation::getTranslationEnvironments();
-//g::pr($translationsTable); die;
-//$availableLang = getLangFiles ();
+//Translations
+$Translations = G::getModel("Translation");
+$translationsTable = $Translations->getTranslationEnvironments();
 
 $availableLangArray = array ();
 $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
