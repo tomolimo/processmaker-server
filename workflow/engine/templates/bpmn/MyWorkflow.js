@@ -1860,7 +1860,7 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
                     if(response.responseText != '')
                       {
                          //Save Route
-                         if(workflow.currentSelection.type == 'bpmnEventTimerInter'){
+                         if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
                            workflow.currentSelection.id = response.responseText;
                            var newObj = workflow.currentSelection;
                            var preObj = new Array();
@@ -1885,7 +1885,7 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
  * @Param  newObj     Object
  * @Author Girish joshi
  */
-MyWorkflow.prototype.saveRoute = function(preObj,newObj)
+MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
 {
     var pro_uid = this.getUrlVars();
     

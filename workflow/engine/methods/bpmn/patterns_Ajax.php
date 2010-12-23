@@ -92,7 +92,7 @@ switch ($aData['action']) {
 	  	  foreach ($aData['ROU_NEXT_TASK'] as $iKey => $aRow)
 	  	  {
 	  	    $aFields['PRO_UID']          = $aData['PROCESS'];
-	  	    $aFields['TAS_UID']          = $aData['TASK'];
+	  	    $aFields['TAS_UID']          = $aData['TASK'][0];
 	  	    $aFields['ROU_NEXT_TASK']    = $aRow;
 	  	    $aFields['ROU_CASE']         = $iKey;
 	  	    $aFields['ROU_TYPE']         = $aData['ROU_TYPE'];

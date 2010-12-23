@@ -272,7 +272,7 @@ InputPort.prototype.onDrop = function (port) {
         return;
     }
     if (this.parentNode.id == port.parentNode.id) {} else {
-	var newObj = new Array();
+	/*var newObj = new Array();
 	newObj = this.workflow.currentSelection;
 	var preObj = port.parentNode;
 	newObj.sPortType =port.properties.name;
@@ -284,7 +284,62 @@ InputPort.prototype.onDrop = function (port) {
             return;
         }
         _3f02.setConnection(new DecoratedConnection());
-        this.parentNode.workflow.getCommandStack().execute(_3f02);
+        this.parentNode.workflow.getCommandStack().execute(_3f02);*/
+        var _4070 = new CommandConnect(this.parentNode.workflow, port, this);
+        if (_4070.source.type == _4070.target.type) {
+            return;
+        }
+        _4070.setConnection(new DecoratedConnection());
+        this.parentNode.workflow.getCommandStack().execute(_4070);
+
+        //Saving Start Event
+        var preObj = new Array();
+        var bpmnType = this.workflow.currentSelection.type;
+        if(bpmnType.match(/Event/) && bpmnType.match(/Start/) && port.parentNode.type.match(/Task/))
+            {
+                var tas_uid = port.parentNode.id;
+                this.workflow.saveEvents(this.workflow.currentSelection,tas_uid);
+            }
+        else if(bpmnType.match(/End/) && bpmnType.match(/Event/) && port.parentNode.type.match(/Task/))
+            {
+                preObj = this.workflow.currentSelection;
+                var newObj = port.parentNode;
+                newObj.conn = _4070.connection;
+                this.workflow.saveRoute(preObj,newObj);
+            }
+        else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/))
+            {
+                var taskFrom = workflow.getStartEventConn(this,'sourcePort','InputPort');
+                var taskTo =  workflow.getStartEventConn(this,'targetPort','OutputPort');
+
+                if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined')
+                  {
+                    preObj.type = 'Task';
+                    preObj.taskFrom = taskFrom[0].value;
+                    preObj.taskTo = taskTo[0].value;
+
+                    //save Event First
+                    tas_uid = port.parentNode.id;
+                    this.workflow.saveEvents(workflow.currentSelection,preObj);
+                  }
+            }
+        else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
+            {
+
+		preObj = this.workflow.currentSelection;
+                newObj = port.parentNode;
+                newObj.conn = _4070.connection;
+		newObj.sPortType =port.properties.name;
+		preObj.sPortType =this.properties.name;
+                this.workflow.saveRoute(preObj,newObj);
+            }
+        else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/))
+            {
+                 var shape = new Array();
+                 shape.type = '';
+                 preObj = this.workflow.currentSelection;
+                 this.workflow.saveRoute(preObj,shape);
+            }
     }
 };
 
@@ -338,15 +393,15 @@ OutputPort.prototype.onDrop = function (port) {
                     preObj.taskTo = taskTo[0].value;
 
                     //save Event First
-                    var tas_uid = port.parentNode.id;
+                    tas_uid = port.parentNode.id;
                     this.workflow.saveEvents(workflow.currentSelection,preObj);
                   }
             }
         else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
             {
 
-		var preObj = this.workflow.currentSelection;
-                var newObj = port.parentNode;
+		preObj = this.workflow.currentSelection;
+                newObj = port.parentNode;
                 newObj.conn = _4070.connection;
 		newObj.sPortType =port.properties.name;
 		preObj.sPortType =this.properties.name;
@@ -356,7 +411,7 @@ OutputPort.prototype.onDrop = function (port) {
             {
                  var shape = new Array();
                  shape.type = '';
-                 var preObj = this.workflow.currentSelection;
+                 preObj = this.workflow.currentSelection;
                  this.workflow.saveRoute(preObj,shape);
             }
 
