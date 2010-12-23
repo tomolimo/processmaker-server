@@ -94,7 +94,7 @@ class Derivation
       $bContinue   = true;
 
       //evaluate the condition if there are conditions defined.
-      if( isset( $aDerivation['ROU_CONDITION'] ) && $aDerivation['ROU_CONDITION'] != ''
+      if( isset( $aDerivation['ROU_CONDITION'] ) && trim($aDerivation['ROU_CONDITION']) != ''
          && ( $aDerivation['ROU_TYPE'] != 'SELECT' ||  $aDerivation['ROU_TYPE'] == 'PARALLEL-BY-EVALUATION') ) {
         $AppFields = $this->case->loadCase( $aData['APP_UID'] );
         G::LoadClass('pmScript');
