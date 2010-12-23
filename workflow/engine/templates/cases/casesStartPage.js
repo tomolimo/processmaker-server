@@ -10,6 +10,21 @@ Ext.QuickTips.init();
 var conn = new Ext.data.Connection();
 
 
+var processNumbers = new Ext.data.ArrayStore({
+    fields: [
+       {name: 'CASES_COUNT_TO_DO', type: 'integer'},
+       {name: 'CASES_COUNT_DRAFT', type: 'integer'},
+       {name: 'CASES_COUNT_COMPLETED', type: 'integer'},
+       {name: 'CASES_COUNT_CANCELLED', type: 'integer'},
+       {name: 'CASES_COUNT', type: 'integer'}
+    ]
+});
+
+var processNumbersData = [
+                          [0,0,0,0,0]
+                          ];
+processNumbers.loadData(processNumbersData);
+
 function getOtherDashboards(dashboardTabPanels) {
 	conn.request({
 		url : 'casesStartPage_Ajax.php',
@@ -188,6 +203,7 @@ var startCaseTab = {
                     name: 'taskName',
                     allowBlank:false,
                     value: '',
+                    //autoWitdh:true,
                     width:200,
                     // disabled: true,
                     id:"taskName"
@@ -229,9 +245,38 @@ var startCaseTab = {
             name: 'processCategory',
             value: '',
             readOnly: true,
+            labelStyle: 'font-weight:bold;',
             // disabled: true,
             id:"processCategory"
-        }, {
+        }, 
+        {
+            xtype: 'grid',
+           
+            ds: processNumbers,
+            cm: new Ext.grid.ColumnModel([
+                                          {id:'inbox',header: "Inbox", width:70, sortable: false, locked:true, dataIndex: 'CASES_COUNT_TO_DO'},
+                                          {id:'draft',header: "Draft", width:70,  sortable: false, locked:true,  dataIndex: 'CASES_COUNT_DRAFT'},
+                                          {id:'completed',header: "Completed", width:70,  sortable: false, locked:true, dataIndex: 'CASES_COUNT_COMPLETED'},
+                                          {id:'canceled',header: "Canceled", width:70,  sortable: false, locked:true,  dataIndex: 'CASES_COUNT_CANCELLED'},
+                                          {id:'totalCases',header: "Total Cases", width:70,  sortable: false, locked:true , dataIndex: 'CASES_COUNT'}
+                                          
+                                      ])
+,
+            
+            //autoExpandColumn: 'company',
+            //height: 350,
+            width:355,
+			title:'General Process Numbers',
+            border: true,
+            listeners: {
+                viewready: function(g) {
+                    //g.getSelectionModel().selectRow(0);
+                } // Allow rows to be rendered.
+            }
+        },
+
+        
+        {
             fieldLabel: 'Calendar',
             name: 'calendarName',
             labelStyle: 'font-weight:bold;',
@@ -1935,7 +1980,7 @@ Ext
 
 						// console.log(selectedNode);
 						var detailEl = Ext.getCmp('process-detail-panel').body;
-						if (selectedNode) {
+						if ((selectedNode)&&(selectedNode.attributes.otherAttributes)) {
     								otherAttributes = selectedNode.attributes.otherAttributes;
         
         calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
@@ -1961,6 +2006,11 @@ Ext
             totalInbox : otherAttributes.totalInbox
 
         });
+        
+        processNumbersData = [
+                                  [otherAttributes.CASES_COUNT_TO_DO,otherAttributes.CASES_COUNT_DRAFT,otherAttributes.CASES_COUNT_COMPLETED,otherAttributes.CASES_COUNT_CANCELLED,otherAttributes.CASES_COUNT]
+                                  ];
+        processNumbers.loadData(processNumbersData);
 
         
         
@@ -1973,7 +2023,7 @@ Ext
 								block : true
 							});*/
 						} else {
-							detailEl.update('');
+							//detailEl.update('');
 						}
 
 						return;

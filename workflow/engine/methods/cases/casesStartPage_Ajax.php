@@ -47,6 +47,16 @@ function getProcessList() {
       $node = $_REQUEST ['node'];
     }
     
+    //Get ProcessStatistics Info
+  $start = 0;
+$limit = '';
+
+
+    $proData = $oProcess->getAllProcesses($start, $limit);
+    foreach($proData as $key => $proInfo){
+      $proData[$proInfo['PRO_UID']]=$proInfo;
+    }
+    
     $processListTree = array ();
     if ($node == 'root') {
       foreach ( $processList as $key => $processInfo ) {
@@ -78,7 +88,7 @@ function getProcessList() {
         $tempTreeChild ['tas_uid'] = $processInfoChild ['uid'];
         $processInfoChild ['myInbox']=0;
         $processInfoChild ['totalInbox']=0;
-        $tempTreeChild ['otherAttributes'] = array_merge($processInfoChild,$oProcess->load ( $processInfoChild ['pro_uid'] ),$calendar->getCalendarFor ( $processInfoChild ['uid'], $processInfoChild ['uid'], $processInfoChild ['uid'] ));
+        $tempTreeChild ['otherAttributes'] = array_merge($processInfoChild,$proData[ $processInfoChild ['pro_uid'] ],$calendar->getCalendarFor ( $processInfoChild ['uid'], $processInfoChild ['uid'], $processInfoChild ['uid'] ));
         $tempTreeChild ['otherAttributes']['PRO_TAS_TITLE']=str_replace(")","",str_replace("(","",trim(str_replace($tempTreeChild ['otherAttributes']['PRO_TITLE'],"",$tempTreeChild ['otherAttributes']["value"]))));
         $tempTreeChild ['qtip']=$tempTreeChild ['otherAttributes']['PRO_DESCRIPTION']; 
         
@@ -106,7 +116,7 @@ function getProcessList() {
         $tempTree ['tas_uid'] = $processInfo ['uid'];
         $processInfo ['myInbox']=0;
         $processInfo ['totalInbox']=0;
-        $tempTree ['otherAttributes'] = array_merge($processInfo,$oProcess->load ( $processInfo ['pro_uid'] ),$calendar->getCalendarFor ( $processInfo ['uid'], $processInfo ['uid'], $processInfo ['uid'] ));
+        $tempTree ['otherAttributes'] = array_merge($processInfo,$proData[ $processInfo ['pro_uid'] ],$calendar->getCalendarFor ( $processInfo ['uid'], $processInfo ['uid'], $processInfo ['uid'] ));
         $tempTree ['otherAttributes']['PRO_TAS_TITLE']=str_replace(")","",str_replace("(","",trim(str_replace($tempTree ['otherAttributes']['PRO_TITLE'],"",$tempTree ['otherAttributes']["value"]))));
         $tempTree ['qtip']=$tempTree ['otherAttributes']['PRO_DESCRIPTION']; 
         //$tempTree['cls']='file';
