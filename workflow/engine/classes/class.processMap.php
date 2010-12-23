@@ -5485,8 +5485,34 @@ class processMap {
         }
     }
 
+    /**
+   * newExtObjectPermission
+   *
+   * @param  string           $sProcessUID
+   * @param  string           $sAction
+   * @return array depending on action
+   */
     function newExtObjectPermission($sProcessUID,$sAction)
     {
+    $aAllTasks    = array();
+    $aAllTasks [] = array('UID' => 'char', 'LABEL' => 'char');
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(TaskPeer::PRO_UID);
+    $oCriteria->addSelectColumn(TaskPeer::TAS_UID);
+    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $aConditions = array();
+    $aConditions [] = array(0 => TaskPeer::TAS_UID, 1 => ContentPeer::CON_ID);
+    $aConditions [] = array(0 => ContentPeer::CON_CATEGORY, 1 => DBAdapter::getStringDelimiter () . 'TAS_TITLE' . DBAdapter::getStringDelimiter ());
+    $aConditions [] = array(0 => ContentPeer::CON_LANG, 1 => DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(TaskPeer::PRO_UID, $sProcessUID);
+    $oDataset = TaskPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aAllTasks [] = array('UID' => 'TASKS|' . $aRow ['TAS_UID'], 'LABEL' => $aRow ['CON_VALUE']);
+      $oDataset->next();
+    }
     $aUsersGroups = array();
     $aUsersGroups [] = array('UID' => 'char', 'LABEL' => 'char');
     $oCriteria = new Criteria('workflow');
@@ -5563,6 +5589,9 @@ class processMap {
     $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
 
     switch($sAction){
+        case 'tasks':
+           return $aAllTasks;
+            break;
         case 'users':
            return $aUsersGroups;
             break;

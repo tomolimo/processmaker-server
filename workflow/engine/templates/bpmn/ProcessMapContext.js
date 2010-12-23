@@ -500,7 +500,7 @@ var tb = new Ext.Toolbar({
                     remoteSort   : true,
                     fields       : selectField,
                     proxy: new Ext.data.HttpProxy({
-                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=task'
+                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=tasks'
                     })
                   });
 
@@ -580,8 +580,9 @@ var tb = new Ext.Toolbar({
                 },
                 new Ext.form.ComboBox({
                     fieldLabel: 'Target Task',
-                    hiddenName:'popType',
+                    //hiddenName:'popType',
                     autoload: true,
+                    name: 'TARGET TASK',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
@@ -592,7 +593,7 @@ var tb = new Ext.Toolbar({
                     
                  new Ext.form.ComboBox({
                     fieldLabel: 'Group or Users',
-                    hiddenName:'popType',
+                    //hiddenName:'popType',
                     autoload: true,
                     store: usersStore,
                     valueField:'LABEL',
@@ -604,7 +605,7 @@ var tb = new Ext.Toolbar({
                 ,
                 new Ext.form.ComboBox({
                     fieldLabel: 'Origin Task',
-                    hiddenName:'popType',
+                    //hiddenName:'popType',
                     autoload: true,
                     store: selectTaskStore,
                     valueField:'LABEL',
@@ -657,7 +658,7 @@ var tb = new Ext.Toolbar({
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Dynaform',
-                    hiddenName:'popType',
+                    //hiddenName:'UID',
                     autoload: true,
                     store: dynaformStore,
                     valueField:'LABEL',
@@ -673,10 +674,10 @@ var tb = new Ext.Toolbar({
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Input Document',
-                    hiddenName:'popType',
+                    //hiddenName:'UID',
                     autoload: true,
                     store: inputDocStore,
-                    valueField:'LABEL',
+                    valueField:'UID',
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
@@ -689,7 +690,7 @@ var tb = new Ext.Toolbar({
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Output Document',
-                    hiddenName:'popType',
+                    //hiddenName:'popType',
                     autoload: true,
                     store: outputDocStore,
                     valueField:'LABEL',
@@ -745,7 +746,7 @@ var formWindow = new Ext.Window({
                 var Participation   = getForm.PARTICIPATED;
                 var Type            = getForm.OBJECT_TYPE;
                 var Permission      = getForm.ACTION;
-                Ext.Ajax.request({
+                /*Ext.Ajax.request({
                   url   : '../bpmn/processes_Ajax.php',
                   method: 'POST',
                   params:{
@@ -761,7 +762,7 @@ var formWindow = new Ext.Window({
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
                   }
-                });
+                });*/
 
                 //var getData = getstore.data.items;
                 //taskExtObj.saveTaskUsers(getData);
