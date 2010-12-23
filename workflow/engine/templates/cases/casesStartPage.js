@@ -168,19 +168,23 @@ var startCaseTab = {
             name: 'processName',
             allowBlank:false,
             value: '',
+            labelStyle: 'font-weight:bold;',
             // disabled: true,
             // readonly:true,
             id:"processName"
         },
         {
             xtype: 'compositefield',
+            fieldLabel: 'Task',
+            labelStyle: 'font-weight:bold;',
             
             items: [
                 
                 {
                 	   xtype     : 'displayfield',
                        
-                    fieldLabel: 'Task',
+                    //fieldLabel: 'Task',
+                    //labelStyle: 'font-weight:bold;',
                     name: 'taskName',
                     allowBlank:false,
                     value: '',
@@ -217,6 +221,7 @@ var startCaseTab = {
             name: 'processDescription',
             value: '',
             readOnly: true,
+            labelStyle: 'font-weight:bold;',
             // disabled: true,
             id:"processDescription"
         },{
@@ -228,7 +233,8 @@ var startCaseTab = {
             id:"processCategory"
         }, {
             fieldLabel: 'Calendar',
-            name: 'calendarName',            
+            name: 'calendarName',
+            labelStyle: 'font-weight:bold;',
             // disabled: true,
             id:"calendarName"
       },{
@@ -236,6 +242,7 @@ var startCaseTab = {
         fieldLabel: 'Calendar Description',
         name: 'calendarDescription',
         value: '',
+        labelStyle: 'font-weight:bold;',
         // disabled: true,
         readOnly: true,
         id:"calendarDescription"
@@ -245,6 +252,7 @@ var startCaseTab = {
           name: 'calendarWorkDays',
           // disabled: true,
           readOnly: true,
+          labelStyle: 'font-weight:bold;',
           id:"calendarWorkDays",
         	  columns: 7,
         	    items: [
@@ -259,7 +267,8 @@ var startCaseTab = {
      }, {
     	xtype:'checkbox',
         fieldLabel: 'Debug Mode',
-        name: 'processDebug',        
+        name: 'processDebug',
+        labelStyle: 'font-weight:bold;',
         // disabled: true,
         readOnly: true,
         id:"processDebug"
