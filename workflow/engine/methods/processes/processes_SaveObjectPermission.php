@@ -43,10 +43,15 @@ if( $access != 1 ){
   	  die;
   	break;  	
   }
-}  
-list($iRelation, $sUserGroup) = explode('|', $_POST['form']['GROUP_USER']);
+}
+if(isset($_POST['form']))
+    $sValue = $_POST['form'];   //For old processmap
+else
+    $sValue = $_POST;          //For new processmap EXtjs
+
+list($iRelation, $sUserGroup) = explode('|', $sValue['GROUP_USER']);
 $sObjectUID = '';
-switch ($_POST['form']['OP_OBJ_TYPE']) {
+switch ($sValue['OP_OBJ_TYPE']) {
   case 'ANY':
   /*case 'ANY_DYNAFORM':
   case 'ANY_INPUT':
@@ -54,30 +59,30 @@ switch ($_POST['form']['OP_OBJ_TYPE']) {
     $sObjectUID = '';
   break;
   case 'DYNAFORM':
-    $sObjectUID = $_POST['form']['DYNAFORMS'];
+    $sObjectUID = $sValue['DYNAFORMS'];
   break;
   case 'INPUT':
-    $sObjectUID = $_POST['form']['INPUTS'];
+    $sObjectUID = $sValue['INPUTS'];
   break;
   case 'OUTPUT':
-    $sObjectUID = $_POST['form']['OUTPUTS'];
+    $sObjectUID = $sValue['OUTPUTS'];
   break;
 }
 require_once 'classes/model/ObjectPermission.php';
 $oOP = new ObjectPermission();
 $aData = array('OP_UID'           => G::generateUniqueID(),
-               'PRO_UID'          => $_POST['form']['PRO_UID'],
-               'TAS_UID'          => $_POST['form']['TAS_UID'],
+               'PRO_UID'          =>$sValue['PRO_UID'],
+               'TAS_UID'          => $sValue['TAS_UID'],
                'USR_UID'          => (string)$sUserGroup,
                'OP_USER_RELATION' => $iRelation,
-               'OP_TASK_SOURCE'   => $_POST['form']['OP_TASK_SOURCE'],
-               'OP_PARTICIPATE'   => $_POST['form']['OP_PARTICIPATE'],
-               'OP_OBJ_TYPE'      => $_POST['form']['OP_OBJ_TYPE'],
+               'OP_TASK_SOURCE'   => $sValue['OP_TASK_SOURCE'],
+               'OP_PARTICIPATE'   => $sValue['OP_PARTICIPATE'],
+               'OP_OBJ_TYPE'      => $sValue['OP_OBJ_TYPE'],
                'OP_OBJ_UID'       => $sObjectUID,
-               'OP_ACTION'        => $_POST['form']['OP_ACTION'],
-               'OP_CASE_STATUS'   => $_POST['form']['OP_CASE_STATUS']);
+               'OP_ACTION'        => $sValue['OP_ACTION'],
+               'OP_CASE_STATUS'   => $sValue['OP_CASE_STATUS']);
 $oOP->fromArray($aData,BasePeer::TYPE_FIELDNAME);
 $oOP->save();
 G::LoadClass('processMap');
 $oProcessMap = new ProcessMap();
-$oProcessMap->getObjectsPermissionsCriteria($_POST['form']['PRO_UID']);
+$oProcessMap->getObjectsPermissionsCriteria($sValue['PRO_UID']);

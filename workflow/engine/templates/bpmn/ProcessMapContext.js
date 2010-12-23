@@ -353,9 +353,9 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
       columns: [
                 new Ext.grid.RowNumberer(),
                     {
-                        id: 'TASK_TARGET',
+                        id: 'TAS_UID',
                         header: 'Target Task',
-                        dataIndex: 'TASK_TARGET',
+                        dataIndex: 'TAS_UID',
                         //width: 100,
                         editable: false,
                         sortable: true,
@@ -372,34 +372,34 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             //allowBlank: false
                             })
                     },{
-                        id: 'TASK_SOURCE',
+                        id: 'OP_TASK_SOURCE',
                         header: 'Origin Task',
-                        dataIndex: 'TASK_SOURCE',
+                        dataIndex: 'OP_TASK_SOURCE',
                         //width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
                     },{
-                        id: 'PARTICIPATED',
+                        id: 'OP_PARTICIPATE',
                         header: 'Participation',
-                        dataIndex: 'PARTICIPATED',
+                        dataIndex: 'OP_PARTICIPATE',
                         width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
                     },{
-                        id: 'OBJECT_TYPE',
+                        id: 'OP_OBJ_TYPE',
                         header: 'Type',
-                        dataIndex: 'OBJECT_TYPE',
+                        dataIndex: 'OP_OBJ_TYPE',
                         //width: 100,
                         editable: false,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
-                    },{
+                    /*},{
                         id: 'OBJECT',
                         header: 'Object',
                         dataIndex: 'OBJECT',
@@ -407,11 +407,11 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
-                            })
+                            })*/
                     },{
-                        id: 'ACTION',
+                        id: 'OP_ACTION',
                         header: 'Permission',
-                        dataIndex: 'ACTION',
+                        dataIndex: 'OP_ACTION',
                         //width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
@@ -588,7 +588,14 @@ var tb = new Ext.Toolbar({
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
-                    editable: true
+                    editable: true,
+                    onSelect: function(record,index)
+                    {
+                        //var taskUID = record.data.UID;
+                        Ext.getCmp("TAS_UID").setValue(record.data.UID);
+                       this.setValue(record.data[this.valueField || this.displayField]);
+                       this.collapse();
+                    }
                     }),
                     
                  new Ext.form.ComboBox({
@@ -600,7 +607,15 @@ var tb = new Ext.Toolbar({
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
-                    editable: true
+                    editable: true,
+                    onSelect: function(record,index)
+                    {
+                        //var taskUID = record.data.UID;
+
+                       Ext.getCmp("GROUP_USER").setValue(record.data.UID);
+                        this.setValue(record.data[this.valueField || this.displayField]);
+                        this.collapse();
+                    }
                     })
                 ,
                 new Ext.form.ComboBox({
@@ -612,7 +627,14 @@ var tb = new Ext.Toolbar({
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
-                    editable: true
+                    editable: true,
+                    onSelect: function(record,index)
+                    {
+                        //var taskUID = record.data.UID;
+                        Ext.getCmp("OP_TASK_SOURCE").setValue(record.data.UID);
+                        this.setValue(record.data[this.valueField || this.displayField]);
+                        this.collapse();
+                    }
                     }),
                   {
                     width           :150,
@@ -622,7 +644,7 @@ var tb = new Ext.Toolbar({
                     fieldLabel      :'Participation Required?',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'PARTICIPATED',
+                    name            :'OP_PARTICIPATE',
                     displayField    :'name',
                     value           :'Yes',
                     valueField      :'value',
@@ -665,7 +687,14 @@ var tb = new Ext.Toolbar({
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
-                    editable: true
+                    editable: true,
+                    onSelect: function(record,index)
+                    {
+                        //var taskUID = record.data.UID;
+                        Ext.getCmp("DYNAFORMS").setValue(record.data.UID);
+                        this.setValue(record.data[this.valueField || this.displayField]);
+                        this.collapse();
+                    }
                }]
            },{
                xtype: 'fieldset',
@@ -681,7 +710,14 @@ var tb = new Ext.Toolbar({
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
-                    editable: true
+                    editable: true,
+                    onSelect: function(record,index)
+                    {
+                        //var taskUID = record.data.UID;
+                        Ext.getCmp("INPUTS").setValue(record.data.UID);
+                        this.setValue(record.data[this.valueField || this.displayField]);
+                        this.collapse();
+                    }
                }]
            },{
                xtype: 'fieldset',
@@ -697,7 +733,15 @@ var tb = new Ext.Toolbar({
                     displayField:'LABEL',
                     triggerAction: 'all',
                     emptyText:'Select',
-                    editable: true
+                    editable: true,
+                    onSelect: function(record,index)
+                    {
+                        //var taskUID = record.data.UID;
+                        Ext.getCmp("OUTPUTS").setValue(record.data.UID);
+                        this.setValue(record.data[this.valueField || this.displayField]);
+                        this.collapse();
+                    }
+
                }]
            },
            {
@@ -717,8 +761,34 @@ var tb = new Ext.Toolbar({
                                                         data   : [
                                                         {name : 'View',   value: '0'},
                                                         {name : 'Block',   value: '1'}]})
+           },{
+               xtype :'hidden',
+               name :'TAS_UID',
+               id :'TAS_UID'
+           },{
+               xtype:'hidden',
+               name:'GROUP_USER',
+               id:'GROUP_USER'
+           },{
+               xtype:'hidden',
+               name:'OP_TASK_SOURCE',
+               id:'OP_TASK_SOURCE'
+           },{
+               xtype:'hidden',
+               name:'DYNAFORMS',
+               id:'DYNAFORMS'
+           },{
+               xtype:'hidden',
+               name:'INPUTS',
+               id:'INPUTS'
+           },{
+               xtype:'hidden',
+               name:'OUTPUTS',
+               id:'OUTPUTS'
            }
-                      ]
+
+
+       ]
   })
 
 
@@ -739,30 +809,36 @@ var formWindow = new Ext.Window({
             text: 'Create',
             handler: function(){
                 var getForm         = PermissionForm.getForm().getValues();
-                var Status          = getForm.OP_CASE_STATUS;
-                var TargetTask      = getForm.TASK_TARGET;
+                var TargetTask      = getForm.TAS_UID;
                 var GroupUser       = getForm.GROUP_USER;
-                var OriginTask      = getForm.TASK_SOURCE;
-                var Participation   = getForm.PARTICIPATED;
-                var Type            = getForm.OBJECT_TYPE;
-                var Permission      = getForm.ACTION;
-                /*Ext.Ajax.request({
-                  url   : '../bpmn/processes_Ajax.php',
+                var OriginTask      = getForm.OP_TASK_SOURCE;
+                var Dynaforms       = getForm.DYNAFORMS;
+                var Inputs          = getForm.INPUTS;
+                var Outputs         = getForm.OUTPUTS;
+                var Status          = getForm.OP_CASE_STATUS;
+                var Participation   = getForm.OP_PARTICIPATE;
+                var Type            = getForm.OP_OBJ_TYPE;
+                var Permission      = getForm.OP_ACTION;
+                Ext.Ajax.request({
+                  url   : '../processes/processes_SaveObjectPermission.php',
                   method: 'POST',
                   params:{
-                      type     :Type,
-                      2625     :Server,
-                      db_name  :DatabaseName,
-                      user     :Username ,
-                      passwd   :Password,
-                      port     :Port,
-                      desc     :Description,
-                      action   :'newObjectPermission'
+                      OP_OBJ_TYPE     :Type,
+                      TAS_UID         :TargetTask,
+                      OP_CASE_STATUS  :Status,
+                      GROUP_USER      :GroupUser,
+                      OP_TASK_SOURCE  :OriginTask,
+                      OP_PARTICIPATE  :Participation,
+                      OP_OBJ_TYPE     :Permission,
+                      DYNAFORMS       :Dynaforms,
+                      INPUTS          :Inputs,
+                      OUTPUTS         :Outputs
+                     
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
                   }
-                });*/
+                });
 
                 //var getData = getstore.data.items;
                 //taskExtObj.saveTaskUsers(getData);

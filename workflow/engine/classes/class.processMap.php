@@ -5510,7 +5510,7 @@ class processMap {
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     while ($aRow = $oDataset->getRow()) {
-      $aAllTasks [] = array('UID' => 'TASKS|' . $aRow ['TAS_UID'], 'LABEL' => $aRow ['CON_VALUE']);
+      $aAllTasks [] = array('UID' => $aRow ['TAS_UID'], 'LABEL' => $aRow ['CON_VALUE']);
       $oDataset->next();
     }
     $aUsersGroups = array();
