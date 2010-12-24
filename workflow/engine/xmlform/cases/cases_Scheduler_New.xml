@@ -485,6 +485,11 @@ function case_userSchedulerValidate(username, password) {
     //G.alert(password);
     var user_uid;
 
+    if(username=='' && password==''){
+     msgBox(G_STRINGS.ID_CASE_SCHEDULER_VALIDATE_ALERT, "alert");
+     return false;
+    }
+     
     var oRPC = new leimnud.module.rpc.xmlhttp({
        	    url   : '../cases/cases_SchedulerValidateUser',
              async : true,
