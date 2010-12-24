@@ -353,10 +353,10 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
       columns: [
                 new Ext.grid.RowNumberer(),
                     {
-                        id: 'TAS_UID',
+                        id: 'TASK_TARGET',
                         header: 'Target Task',
-                        dataIndex: 'TAS_UID',
-                        //width: 100,
+                        dataIndex: 'TASK_TARGET',
+                        autoWidth: true,
                         editable: false,
                         sortable: true,
                         editor: new Ext.form.TextField({
@@ -390,9 +390,9 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             //allowBlank: false
                             })
                     },{
-                        id: 'OP_OBJ_TYPE',
+                        id: 'OBJECT_TYPE',
                         header: 'Type',
-                        dataIndex: 'OP_OBJ_TYPE',
+                        dataIndex: 'OBJECT_TYPE',
                         //width: 100,
                         editable: false,
                         sortable: true,
@@ -569,7 +569,7 @@ var tb = new Ext.Toolbar({
                                                         fields : ['name', 'value'],
                                                         data   : [
                                                         {name : 'ALL',   value: '0'},
-                                                        {name : 'DRAFTS',   value: '1'},
+                                                        {name : 'DRAFT',   value: '1'},
                                                         {name : 'TO DO',   value: '2'},
                                                         {name : 'PAUSED',   value: '3'},
                                                         {name : 'COMPLETED',   value: '4'}]})
@@ -750,13 +750,13 @@ var tb = new Ext.Toolbar({
                     forceSelection  : true,
                     name            :'OP_ACTION',
                     displayField    :'name',
-                    value           :'View',
+                    value           :'VIEW',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                                                         fields : ['name', 'value'],
                                                         data   : [
-                                                        {name : 'View',   value: '0'},
-                                                        {name : 'Block',   value: '1'}]})
+                                                        {name : 'VIEW',   value: 'VIEW'},
+                                                        {name : 'BLOCK',   value: 'BLOCK'}]})
            },{
                xtype :'hidden',
                name :'TAS_UID',
@@ -795,7 +795,7 @@ var formWindow = new Ext.Window({
         maximizable: true,
         width: 450,
         //autoHeight: true,
-        height: 400,
+        height: 420,
         //layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -819,6 +819,7 @@ var formWindow = new Ext.Window({
                   url   : '../processes/processes_SaveObjectPermission.php',
                   method: 'POST',
                   params:{
+                      PRO_UID         :pro_uid,
                       OP_OBJ_TYPE     :Type,
                       TAS_UID         :TargetTask,
                       OP_CASE_STATUS  :Status,
@@ -831,15 +832,11 @@ var formWindow = new Ext.Window({
                       OUTPUTS         :Outputs
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                      Ext.MessageBox.alert ('Status','Process Permission created successfully.');
+                      formWindow.close();
+                      PermissionStore.reload();
                   }
                 });
-
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-
-            formWindow.close();
-            PermissionStore.reload();
           }
         },{
             text: 'Cancel',
@@ -849,10 +846,7 @@ var formWindow = new Ext.Window({
           }
         }]
     });
-
-
   gridWindow.show();
-
 }
 
 ProcessMapContext.prototype.processSupervisors= function()
