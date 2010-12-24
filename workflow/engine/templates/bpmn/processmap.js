@@ -245,8 +245,22 @@ Ext.onReady ( function() {
                 }
         },{
             text: 'Case Tracker',
-            handler: ProcessMapObj.caseTracker,
-            scope: this
+
+            menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                        {
+                            text: 'Properties',
+                            handler: ProcessMapObj.caseTrackerProperties,
+                            scope:this
+                        },
+                        {
+                            text: 'Objects',
+                            handler: ProcessMapObj.caseTrackerObjects,
+                            scope:this
+                        }
+                    ]
+                }
         }, {
             text: 'Process File Manager',
             menu: {        // <-- submenu by nested config object

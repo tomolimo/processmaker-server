@@ -657,7 +657,7 @@ var tb = new Ext.Toolbar({
                     fieldLabel      :'Type',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'OBJECT_TYPE',
+                    name            :'OP_OBJ_TYPE',
                     displayField    :'name',
                     value           :'All',
                     valueField      :'value',
@@ -833,6 +833,8 @@ var formWindow = new Ext.Window({
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Process Permission created successfully.');
+                      formWindow.close();
+                      PermissionStore.reload();
                       formWindow.close();
                       PermissionStore.reload();
                   }
@@ -1501,10 +1503,10 @@ ProcessMapContext.prototype.processIODoc= function()
     window.show();
 }
 
-ProcessMapContext.prototype.caseTracker= function()
+/*ProcessMapContext.prototype.caseTracker= function()
 {
   Ext.MessageBox.alert('Status','Case Tracker');
-}
+}*/
 ProcessMapContext.prototype.processFileManager= function()
 {
   var AwesomeUploaderInstance = new AwesomeUploader({
@@ -1566,3 +1568,248 @@ ProcessMapContext.prototype.processFileManager= function()
     });
     window.show();
 }
+
+ProcessMapContext.prototype.caseTrackerProperties= function()
+{
+  var pro_uid = workflow.getUrlVars();
+
+   var PropertiesForm = new Ext.FormPanel({
+        labelWidth: 75, // label settings here cascade unless overridden
+        frame:true,
+        bodyStyle:'padding:5px 5px 0',
+        width: 500,
+        height: 400,
+        defaults: {width: 350},
+        defaultType: 'textfield',
+                items: [{
+                         width:          100,
+                        xtype:          'combo',
+                        mode:           'local',
+                        triggerAction:  'all',
+                        forceSelection: true,
+                        editable:       false,
+                        fieldLabel:     'Map Type',
+                        name:           'CT_MAP_TYPE',
+                        displayField:   'name',
+                        value: 'Process Map',
+                        valueField:     'value',
+                        store:          new Ext.data.JsonStore({
+                                                fields : ['name', 'value'],
+                                                data   :[{name: 'None', value:'0'},
+                                                        {name: 'Process Map', value: '1'},
+                                                        {name: 'Stages Map', value:'2'}]
+
+                                            })
+                    },{
+                        xtype: 'checkbox',
+                        fieldLabel: 'Derivation History',
+                        name: 'CT_DERIVATION_HISTORY'
+                        //checked:checkDerivation
+                    },{
+                        xtype: 'checkbox',
+                        fieldLabel: 'Messages History',
+                        name: 'CT_MESSAGE_HISTORY'
+                       // checked:checkMessages
+                    }
+   ]
+        
+    });
+var Propertieswindow = new Ext.Window({
+        title: 'Edit Process',
+        collapsible: false,
+        maximizable: false,
+        width: 500,
+        height: 400,
+        minWidth: 300,
+        minHeight: 200,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: PropertiesForm,
+        buttons: [{
+                text: 'Save',
+            handler: function(){
+                var getForm             = PropertiesForm.getForm().getValues();
+                var pro_uid             = getForm.PRO_UID;
+                var MapType             = getForm.CT_MAP_TYPE;
+                var DerivationHistory   = getForm.CT_DERIVATION_HISTORY;
+                var MessageHistory      = getForm.CT_MESSAGE_HISTORY;
+                    
+                Ext.Ajax.request({
+                  url   : '../tracker/tracker_save.php',
+                  method: 'POST',
+                  params:{
+                      PRO_UID  :pro_uid,
+                      CT_MAP_TYPE     :MapType,
+                      CT_DERIVATION_HISTORY   :DerivationHistory,
+                      CT_MESSAGE_HISTORY  :MessageHistory
+                        },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                  }
+                });
+            }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                Propertieswindow.close();
+             }
+        }
+        ]
+});
+Propertieswindow.show();
+}
+  ProcessMapContext.prototype.caseTrackerObjects= function()
+{
+     var pro_uid = workflow.getUrlVars();
+     var taskId  = workflow.currentSelection.id;
+
+   var ObjectFields = Ext.data.Record.create([
+            {
+                name: 'OBJECT_UID',
+                type: 'string'
+            },
+            {
+                name: 'OBJECT_TYPE',
+                type: 'string'
+            },
+            {
+                name: 'OBJECT_TITLE',
+                type: 'string'
+            }
+            ]);
+        var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+        var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'Assign',
+            iconCls: 'application_add',
+            handler: function(){
+                var User = Objectsgrid.getStore();
+                var e = new ObjectFields({
+                     //LABEL: 'Select User or Group',
+                     //LABEL: User.data.items[0].data.LABEL,
+                     OBJECT_UID: '',
+                     OBJECT_TYPE: '',
+                     OBJECT_TITLE: '' 
+                });
+
+                //storeUsers.reload();
+                if(AvailableTitle.data.items.length == 0)
+                     Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+                else
+                {
+                    editor.stopEditing();
+                    SelectedTitle.insert(0, e);
+                    Objectsgrid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editor.startEditing(0, 0);
+                }
+            }
+        });
+         var tb = new Ext.Toolbar({
+            items: [btnAdd]
+        });
+
+        // create the Data Store of users that are already assigned to a task
+        var SelectedTitle = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : ObjectFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyUsersList?pid='+pro_uid+'&tid='+taskId
+            })
+          });
+          //taskUsers.setDefaultSort('LABEL', 'asc');
+          SelectedTitle.load();
+
+         // create the Data Store of users that are not assigned to a task
+         var AvailableTitle = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyUsersList?tid='+taskId,
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : ObjectFields
+              });
+
+
+        var Objectsgrid = new Ext.grid.GridPanel({
+        store: SelectedTitle,
+        id : 'mygrid',
+        //cm: cm,
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        plugins: [editor],
+        columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'OBJECT_TITLE',
+                    header: 'Title',
+                    dataIndex: 'OBJECT_TITLE',
+                    width: 100,
+                    sortable: true,
+                    editor: new Ext.form.ComboBox({
+                            xtype: 'combo',
+                            fieldLabel: 'Title',
+                            hiddenName: 'number',
+                            store        : AvailableTitle,
+                            displayField : 'OBJECT_TITLE'  ,
+                            valueField   : 'OBJECT_TITLE',
+                            name         : 'OBJECT_TITLE',
+                            scope        : _5625,
+                            triggerAction: 'all',
+                            emptyText: 'Select User or Group',
+                            allowBlank: false,
+                             onSelect: function(record, index){
+                                var User = Objectsgrid.getStore();
+
+                                if(typeof _5625.scope.workflow.currentrowIndex == 'undefined')
+                                        var selectedrowIndex = '0';
+                                else
+                                        selectedrowIndex     = _5625.scope.workflow.currentrowIndex;    //getting Index of the row that has been edited
+
+                                 //User.data.items[0].data.LABEL= record.data.LABEL;
+                                 User.data.items[selectedrowIndex].data.OBJECT_UID      = record.data.OBJECT_UID;
+                                 User.data.items[selectedrowIndex].data.OBJECT_TYPE      = record.data.OBJECT_TYPE;
+                                 User.data.items[selectedrowIndex].data.OBJECT_TITLE      = record.data.OBJECT_TITLE;
+                                 //User.data.items[selectedrowIndex].data.TU_RELATION  = record.data.TU_RELATION;
+
+                                 this.setValue(record.data[this.valueField || this.displayField]);
+                                 this.collapse();
+                              }
+                        })
+                }
+                ],
+        sm: new Ext.grid.RowSelectionModel({
+                singleSelect: true,
+                listeners: {
+                     rowselect: function(smObj, rowIndex, record) {
+                         _5625.scope.workflow.currentrowIndex = rowIndex;
+                    }
+               }
+            }),
+        stripeRows: true,
+        viewConfig: {forceFit: true},
+        tbar: tb
+        });
+
+        AvailableTitle.load();
+}
+
+
+
