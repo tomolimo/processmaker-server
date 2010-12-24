@@ -1859,13 +1859,38 @@ function datePicker4(obj, id, mask, startDate, endDate, showTIme){
     animation: _BROWSER.name =='msie'? false: true,
     showTime: showTIme,
     opacity: 1,
-    onSelect: function() { this.hide(); }}
+    onSelect: function() {
+        this.hide();
+        
+        fireEvent(document.getElementById(id),'change');
+
+        
+        //if(document.getElementById(id).onchange)
+           //document.getElementById(id).onchange();
+    }
+
+}
   );
 
   if( _BROWSER.name != 'msie' )
     obj.onmouseover = undefined;
 
 }
+
+function fireEvent(element,event){
+    if (document.createEventObject){
+    // dispatch for IE
+    var evt = document.createEventObject();
+    return element.fireEvent('on'+event,evt)
+    }
+    else{
+    // dispatch for firefox + others
+    var evt = document.createEvent("HTMLEvents");
+    evt.initEvent(event, true, true ); // event type,bubbling,cancelable
+    return !element.dispatchEvent(evt);
+    }
+}
+
 
 function elementAttributesNS(e, ns) {
   if (!this.__namespaceRegexps)
