@@ -5605,8 +5605,6 @@ class processMap {
            return $aAllOutputs;
             break;
     }
-    
-    //return $_SESSION['_DBArray'];
   }
 }
 

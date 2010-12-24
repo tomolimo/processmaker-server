@@ -372,18 +372,18 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             //allowBlank: false
                             })
                     },{
-                        id: 'OP_TASK_SOURCE',
+                        id: 'TASK_SOURCE',
                         header: 'Origin Task',
-                        dataIndex: 'OP_TASK_SOURCE',
+                        dataIndex: 'TASK_SOURCE',
                         //width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
                     },{
-                        id: 'OP_PARTICIPATE',
+                        id: 'PARTICIPATED',
                         header: 'Participation',
-                        dataIndex: 'OP_PARTICIPATE',
+                        dataIndex: 'PARTICIPATED',
                         width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
@@ -399,7 +399,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
-                    /*},{
+                    },{
                         id: 'OBJECT',
                         header: 'Object',
                         dataIndex: 'OBJECT',
@@ -407,11 +407,11 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
-                            })*/
+                            })
                     },{
-                        id: 'OP_ACTION',
+                        id: 'ACTION',
                         header: 'Permission',
-                        dataIndex: 'OP_ACTION',
+                        dataIndex: 'ACTION',
                         //width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
@@ -449,10 +449,6 @@ var tb = new Ext.Toolbar({
                 formWindow.show();
             }
   })
-
-  var tb = new Ext.Toolbar({
-            items: [btnAdd]
-            });
 
   var PermissionGrid = new Ext.grid.GridPanel({
         store: PermissionStore,
@@ -669,9 +665,9 @@ var tb = new Ext.Toolbar({
                                                         fields : ['name', 'value'],
                                                         data   : [
                                                         {name : 'All',   value: '0'},
-                                                        {name : 'Dynaform',   value: '1'},
-                                                        {name : 'Input Document',   value: '2'},
-                                                        {name : 'Output Document',   value: '3'}]})
+                                                        {name : 'DYNAFORM',   value: '1'},
+                                                        {name : 'INPUT',   value: '2'},
+                                                        {name : 'OUTPUT',   value: '3'}]})
            },
            {
                xtype: 'fieldset',
@@ -752,7 +748,7 @@ var tb = new Ext.Toolbar({
                     fieldLabel      :'Permission',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'ACTION',
+                    name            :'OP_ACTION',
                     displayField    :'name',
                     value           :'View',
                     valueField      :'value',
@@ -829,11 +825,10 @@ var formWindow = new Ext.Window({
                       GROUP_USER      :GroupUser,
                       OP_TASK_SOURCE  :OriginTask,
                       OP_PARTICIPATE  :Participation,
-                      OP_OBJ_TYPE     :Permission,
+                      OP_ACTION       :Permission,
                       DYNAFORMS       :Dynaforms,
                       INPUTS          :Inputs,
                       OUTPUTS         :Outputs
-                     
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
