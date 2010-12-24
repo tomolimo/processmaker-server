@@ -239,7 +239,17 @@ class Dynaform extends BaseDynaform {
 //
 //      }
 
-      $sql = 'DESC '.$addTabName;
+      // Determines the engine to use
+      // For a description of a table
+      $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+      if(G::LoadSystemExist($sDataBase)){
+        G::LoadSystem($sDataBase);
+        $oDataBase = new database();
+        $sql = $oDataBase->getTableDescription($addTabName);
+      } else {
+        $sql = 'DESC '.$addTabName;
+      }
+      
       $dbh =  Propel::getConnection(AdditionalTablesPeer::DATABASE_NAME);
       $sth = $dbh->createStatement();
       $res = $sth->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
@@ -258,7 +268,8 @@ class Dynaform extends BaseDynaform {
         $fieldXML->Save($attributes, $labels, $options);
       }
       while ($res->next()){
-        if(strtoupper($res->get('Null'))=='NO'){
+        // if(strtoupper($res->get('Null'))=='NO') {
+        if(strtoupper($res->get($oDataBase->getFieldNull() ))=='NO'){  
           $required = '1';
         } else {
           $required = '0';
