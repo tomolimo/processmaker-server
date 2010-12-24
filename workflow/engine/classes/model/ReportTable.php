@@ -157,7 +157,17 @@ class ReportTable extends BaseReportTable {
       $con->begin();
       $this->load($fields['REP_TAB_UID']);
       $this->fromArray($fields,BasePeer::TYPE_FIELDNAME);
-      if($this->validate())
+      
+      $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+      if(G::LoadSystemExist($sDataBase)){
+        G::LoadSystem($sDataBase);
+        $oDataBase = new database();
+        $oValidate = $oDataBase->getValidate($this->validate());
+      } else {
+        $oValidate = $this->validate();
+      }
+      // if($this->validate())
+      if($oValidate)
       {
         $contentResult=0;
         if (array_key_exists("REP_TAB_TITLE", $fields)) $contentResult+=$this->setRepTabTitle($fields["REP_TAB_TITLE"]);
