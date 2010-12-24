@@ -498,9 +498,9 @@ class RBAC
   * @param  string $sCode
   * @return void
   */
-  function loadPermissionByCode($sCode) {
-    return $this->permissionsObj->loadByCode($sCode);
-  }
+//  function loadPermissionByCode($sCode) {
+//    return $this->permissionsObj->loadByCode($sCode);
+//  }
 
   /**
   * create permission 
@@ -524,9 +524,9 @@ class RBAC
   * @param  string $sCode
   * @return void
   */
-  function loadRoleByCode($sCode) {
-    return $this->rolesObj->loadByCode($sCode);
-  }
+//  function loadRoleByCode($sCode) {
+//    return $this->rolesObj->loadByCode($sCode);
+//  }
 
   /**
   * list all roles

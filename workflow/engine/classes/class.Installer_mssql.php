@@ -167,13 +167,7 @@ class Installer
     if($test['created']===true)
     {
       $local = Array('localhost','127.0.0.1');
-
-//    $this->wf_site_name = $wf = "wf_".$this->options['name'];
-
       $this->wf_site_name = $wf = $this->options['advanced']['ao_db_wf'];
-
-//    $this->rbac_site_name = $rb = "rbac_".$this->options['name'];
-
       $this->rbac_site_name   = $rb = $this->options['advanced']['ao_db_rb'];
       $this->report_site_name = $rp = $this->options['advanced']['ao_db_rp'];
 
@@ -241,21 +235,6 @@ class Installer
       $qwv = $this->query_sql_file(PATH_WORKFLOW_MSSQL_DATA.$values,$this->connection_database);
       $this->log($qwv);
 
-/*
-      // No funciona correctamente en 2000
-      $bulk_country  = "BULK INSERT ISO_COUNTRY      FROM '" . PATH_WORKFLOW_MSSQL_DATA . "ISO_COUNTRY.txt' " .
-         " WITH ( FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ); ";
-         
-      $bulk_location = " BULK INSERT ISO_LOCATION     FROM '" . PATH_WORKFLOW_MSSQL_DATA . "ISO_LOCATION.txt' " .
-         " WITH ( FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ); ";
-      $bulk_subdivision = " BULK INSERT ISO_SUBDIVISION  FROM '" . PATH_WORKFLOW_MSSQL_DATA . "ISO_SUBDIVISION.txt' " .
-         " WITH ( FIELDTERMINATOR ='|', ROWTERMINATOR ='\n' ); ";
-      
-      $bulk = @mssql_query($bulk_country, $this->connection_database);
-      $bulk = @mssql_query($bulk_location, $this->connection_database);
-      $bulk = @mssql_query($bulk_subdivision, $this->connection_database);
-*/
-
       /* Dump schema rbac && data  */
       $pws = PATH_RBAC_MSSQL_DATA.$schema;
       mssql_select_db($rb,$this->connection_database);
@@ -297,13 +276,8 @@ class Installer
       $ff =  @fputs( $fp, $db_text, strlen($db_text));
       $this->log("Write: ".$db_file."  => ".((!$ff)?$ff:"OK")."\n");
 
-      fclose( $fp );
-      
-      // Added reading and writing roles.
-      ///-- $this->setRolesPrivileges($wf, (($this->cc_status==1)?$wf:$this->options['database']['username']), (($this->cc_status==1)?$this->options['password']:$this->options['database']['password']) );
-      ///-- $this->setRolesPrivileges($rb, (($this->cc_status==1)?$rb:$this->options['database']['username']), (($this->cc_status==1)?$this->options['password']:$this->options['database']['password']) );
-      ///-- $this->setRolesPrivileges($rp, (($this->cc_status==1)?$rp:$this->options['database']['username']), (($this->cc_status==1)?$this->options['password']:$this->options['database']['password']) );
-      
+      fclose( $fp );     
+     
       $this->set_admin();
     }
     return $test;
@@ -331,33 +305,6 @@ class Installer
       $sAddRoleSysAdmin = "EXEC master..sp_addsrvrolemember @loginame = N'" . $psUser . "', @rolename = N'sysadmin';";
       $ac = @mssql_query($sAddRoleSysAdmin , $this->connection_database);
       $this->log($sAddRoleSysAdmin.": => ".((!$ac)? "Failed to set permissions" :"OK")."\n");
-      
-      return true;
-  }
-
-
-  function setRolesPrivileges($psDB, $psUser, $psPassword )
-  {
-      mssql_select_db($psDB);
-      
-      $sAddRoleDataReader = "sp_addrolemember 'db_datareader', '" . $psUser . "';";
-      $ac = @mssql_query($sAddRoleDataReader , $this->connection_database);
-      $this->log($sAddRoleDataReader.": => ".((!$ac)? "Failed to set read permissions" :"OK")."\n");
-      
-      ///-- mssql_select_db($psDB);
-      $sAddRoleDataWriter = "sp_addrolemember 'db_datawriter', '" . $psUser . "';";
-      $ac = @mssql_query($sAddRoleDataWriter , $this->connection_database);
-      $this->log($sAddRoleDataWriter .": => ".((!$ac)? "Failed to set write permissions" :"OK")."\n");
-      
-      ///-- mssql_select_db($psDB);
-      $sAddRoleDDLAdmin = "sp_addrolemember 'db_ddladmin', '" . $psUser . "';";
-      $ac = @mssql_query($sAddRoleDDLAdmin , $this->connection_database);
-      $this->log($sAddRoleDDLAdmin .": => ".((!$ac)? "Failed to set DLL permissions" :"OK")."\n");
-
-      ///-- mssql_select_db($psDB);
-      $sAddRoleDDLAdmin = "sp_addrolemember 'db_owner', '" . $psUser . "';";
-      $ac = @mssql_query($sAddRoleDDLAdmin , $this->connection_database);
-      $this->log($sAddRoleDDLAdmin .": => ".((!$ac)? "Failed to set DLL permissions" :"OK")."\n");
       
       return true;
   }
@@ -393,33 +340,7 @@ class Installer
       'SQL_FILE' => $file,
       'errors'   => array(),
       'querys'   => 0
-    );
-    /** Deprecated
-     * new routines written for this process....
-     * evaluating its performance..... So, that why this deprecated code was not deleted yet..
-     * the problem with this code is the \n dependence,.. in insert.sql always not ending with \n
-     * <erik@colosa.com>
-     * ........................................................... 
-    $content = @fread(@fopen($file,"rt"),@filesize($file));
-    if(!$content)
-    {
-      $report['errors']="Error reading SQL";
-      return $report;
-    }
-    $ret = array();
-    for ($i=0 ; $i < strlen($content)-1; $i++)
-    {
-      if ( $content[$i] == ";" )
-      {
-              if ( $content[$i+1] == "\n" )
-              {
-          $ret[] = substr($content, 0, $i);
-          $content = substr($content, $i + 1);
-          $i = 0;
-              }
-          }
-      }
-   */
+    );    
     
     #<--
     if( !is_file($file) ) {
@@ -440,8 +361,7 @@ class Installer
       }
     }
     return $report;
-  }
-  
+  }  
 
   /**
    * check_path
@@ -555,17 +475,7 @@ class Installer
       if(! @mssql_select_db($dbName,$this->connection_database) && $this->cc_status!=1) {
         return Array('status' => false, 'message' => 'Unable to establish connection (2)');
       }
-      else {
-        
-/*        var_dump($this->options['advanced']['ao_db_drop'],$this->cc_status,$this->check_db_empty($dbName));
-        if(($this->options['advanced']['ao_db_drop']===false && $this->cc_status!=1 && !$this->check_db_empty($dbName)) )
-        {
-          return Array('status'=>false,'message'=>'Database is not empty');
-        }
-        else
-        {
-          return Array('status'=>true,'message'=>'OK');
-        }*/
+      else {      
         
         if($this->options['advanced']['ao_db_drop']===true || $this->check_db_empty($dbName)) {
           return Array('status' => true,  'message' => 'PASSED');

@@ -372,130 +372,130 @@ class pagedTable
    * @parameter string table
    * @return string
    */
-  function setupFromTable($table)
-  {
-//  var_dump2($table);
-    //Config
-      $this->rowsPerPage=25;
-      if (isset($_GET['page'])) 
-        $this->currentPage = $_GET['page']; 
-      else 
-        $this->currentPage = 1;
-      if (isset($_GET['order'])) 
-        $this->orderBy = urldecode($_GET['order']); 
-      else 
-        $this->orderBy = "";
-      if (isset($_GET['filter'])) 
-        $this->filter = urldecode($_GET['filter']);
-      else 
-        $this->filter = "";
-      $xmlPopup='';
-      $this->xmlFormFile="";
-/*      if ($table->Action)
-        $this->ajaxServer=G::encryptLink($table->Action);
-      else*/
-      $this->ajaxServer=G::encryptLink('../gulliver/pagedTableAjax');
-      $this->popupPage = $this->ajaxServer . '?function=printForm&filename=' . urlencode($xmlPopup);
-      $this->ownerPage=G::encryptLink(SYS_CURRENT_URI);
-      $this->sqlConnection='';
-      if (isset($table->_source))
-        $this->sqlSelect=$table->_source;
-      if (isset($table->WhereClause)){
-        if (strpos(strtoupper($table->WhereClause),'GROUP BY')!==FALSE)
-          preg_match("/(.+)(GROUP BY)(.*)/",$table->WhereClause,$matches);
-        else{  
-          $matches[1]=$table->WhereClause;$matches[2]='';
-        }
-        $this->sqlWhere=$matches[1];
-        if (strcasecmp($matches[2],'GROUP BY')==0)
-          $this->sqlGroupBy=' GROUP BY '.$matches[3];
-      }
-      if (strpos(strtoupper($this->sqlSelect),'WHERE')!==FALSE){
-        preg_match("/SELECT(.+)FROM(.+)WHERE(.+)/",$this->sqlSelect,$matches);
-        $this->sqlSelect='SELECT '.$matches[1].' FROM '.$matches[2];
-        $this->sqlWhere=$matches[3];
-      }
-    // DBConnection
-    //      $this->prepareQuery();
-    //Prepare the fields
-      if ($table->show_nummbers=='YES'){
-        $r=-1;
-        $this->fields[$r]['Name']='numberlabel';
-        $this->fields[$r]['Type']='numberlabel';
-        $this->fields[$r]['Label']='#';
-      }
-      foreach ($table->Columns as $r => $value){
-        $this->fields[$r]['Name']=$value['Name'];
-        $this->fields[$r]['Type']=$value['Type'];
-        $this->fields[$r]['Label']=((isset($table->Labels[$r]))?$table->Labels[$r]:'');
-        //Default values for Label if it was empty
-        if ($this->fields[$r]['Label']=='')
-          switch($table->Columns[$r]['Type']){
-           case 'image':
-           case 'image-text': 
-           case 'jslink':
-             //var_dump2($table->Columns[$r]);
-            $this->fields[$r]['Label']=$value['Name'];
-        }
-        //Print the type of the field
-        //$this->fields[$r]['Label'].='('.$this->fields[$r]['Type'].')';
-        $r++;
-      }
-    //Add a delete column if sqlDelete is established
-    /*  if ($this->sqlDelete!='')
-      {
-        $this->fields[$r]['Name']='';
-        $this->fields[$r]['Type']='linknew';
-        $this->fields[$r]['Label']=G::LoadXml('labels','ID_DELETE');
-      }*/
-    //Set the default settings
-      $this->defaultStyle();
-    /*  if ($this->sqlDelete!='')
-      {
-        $this->style[$r]['href']="#";
-        $this->style[$r]['onclick']="document.getElementById('pagedTable').outerHTML=ajax_function('{$this->ajaxServer}','delete','".$this->fieldDataList."');";
-      }*/
-    //Prepare the columns's properties
-      if ($table->show_nummbers=='YES'){
-        $r=-1;
-        $this->style[$r]['data']='@@_row__';
-        $this->style[$r]['colWidth']=30;
-      }
-      $this->gridWidth='';
-      $this->gridFields='';
-      foreach ($table->Columns as $r => $value){
-        //var_dump($value['Width']);
-        $this->style[$r]['colWidth']=$value['Width'];
-        $this->style[$r]['titleAlign']=$value['Align'];
-        $this->style[$r]['href']=$value['Target'];
-        // Add the row reference
-        switch ($this->fields[$r]['Type']){
-          case 'image-text':
-          case 'textimage':
-          case 'image':
-          case 'link':
-            //$this->style[$r]['href'].='/@@_row__.html';  // No
-            if (substr($value['Content'],0,1)=='&')
-              $this->style[$r]['href'].='/@@_'.substr($value['Content'],1).'.html';
-        }
-        // Extra events for each field
-        $this->style[$r]['event']=$value['Extra'];
-        if ($this->fields[$r]['Label']==''){
-          $this->style[$r]['titleVisibility']='0';
-          $this->fields[$r]['Label']=$this->fields[$r]['Name'];
-        }
-        //if ($value['orderByThis']===true) $this->orderBy=$value['Name'];
-        //Needed for javascript
-        //only the visible columns's width and name are stored
-        if ($this->style[$r]['showInTable']!='0'){
-          $this->gridWidth.=','.$this->style[$r]['colWidth'];
-          $this->gridFields.=',"form['.$this->fields[$r]['Name'].']"';
-        }
-        $r++;
-      }
-      echo('<br>');
-//    var_dump2($this);
-  }
+//  function setupFromTable($table)
+//  {
+////  var_dump2($table);
+//    //Config
+//      $this->rowsPerPage=25;
+//      if (isset($_GET['page']))
+//        $this->currentPage = $_GET['page'];
+//      else
+//        $this->currentPage = 1;
+//      if (isset($_GET['order']))
+//        $this->orderBy = urldecode($_GET['order']);
+//      else
+//        $this->orderBy = "";
+//      if (isset($_GET['filter']))
+//        $this->filter = urldecode($_GET['filter']);
+//      else
+//        $this->filter = "";
+//      $xmlPopup='';
+//      $this->xmlFormFile="";
+///*      if ($table->Action)
+//        $this->ajaxServer=G::encryptLink($table->Action);
+//      else*/
+//      $this->ajaxServer=G::encryptLink('../gulliver/pagedTableAjax');
+//      $this->popupPage = $this->ajaxServer . '?function=printForm&filename=' . urlencode($xmlPopup);
+//      $this->ownerPage=G::encryptLink(SYS_CURRENT_URI);
+//      $this->sqlConnection='';
+//      if (isset($table->_source))
+//        $this->sqlSelect=$table->_source;
+//      if (isset($table->WhereClause)){
+//        if (strpos(strtoupper($table->WhereClause),'GROUP BY')!==FALSE)
+//          preg_match("/(.+)(GROUP BY)(.*)/",$table->WhereClause,$matches);
+//        else{
+//          $matches[1]=$table->WhereClause;$matches[2]='';
+//        }
+//        $this->sqlWhere=$matches[1];
+//        if (strcasecmp($matches[2],'GROUP BY')==0)
+//          $this->sqlGroupBy=' GROUP BY '.$matches[3];
+//      }
+//      if (strpos(strtoupper($this->sqlSelect),'WHERE')!==FALSE){
+//        preg_match("/SELECT(.+)FROM(.+)WHERE(.+)/",$this->sqlSelect,$matches);
+//        $this->sqlSelect='SELECT '.$matches[1].' FROM '.$matches[2];
+//        $this->sqlWhere=$matches[3];
+//      }
+//    // DBConnection
+//    //      $this->prepareQuery();
+//    //Prepare the fields
+//      if ($table->show_nummbers=='YES'){
+//        $r=-1;
+//        $this->fields[$r]['Name']='numberlabel';
+//        $this->fields[$r]['Type']='numberlabel';
+//        $this->fields[$r]['Label']='#';
+//      }
+//      foreach ($table->Columns as $r => $value){
+//        $this->fields[$r]['Name']=$value['Name'];
+//        $this->fields[$r]['Type']=$value['Type'];
+//        $this->fields[$r]['Label']=((isset($table->Labels[$r]))?$table->Labels[$r]:'');
+//        //Default values for Label if it was empty
+//        if ($this->fields[$r]['Label']=='')
+//          switch($table->Columns[$r]['Type']){
+//           case 'image':
+//           case 'image-text':
+//           case 'jslink':
+//             //var_dump2($table->Columns[$r]);
+//            $this->fields[$r]['Label']=$value['Name'];
+//        }
+//        //Print the type of the field
+//        //$this->fields[$r]['Label'].='('.$this->fields[$r]['Type'].')';
+//        $r++;
+//      }
+//    //Add a delete column if sqlDelete is established
+//    /*  if ($this->sqlDelete!='')
+//      {
+//        $this->fields[$r]['Name']='';
+//        $this->fields[$r]['Type']='linknew';
+//        $this->fields[$r]['Label']=G::LoadXml('labels','ID_DELETE');
+//      }*/
+//    //Set the default settings
+//      $this->defaultStyle();
+//    /*  if ($this->sqlDelete!='')
+//      {
+//        $this->style[$r]['href']="#";
+//        $this->style[$r]['onclick']="document.getElementById('pagedTable').outerHTML=ajax_function('{$this->ajaxServer}','delete','".$this->fieldDataList."');";
+//      }*/
+//    //Prepare the columns's properties
+//      if ($table->show_nummbers=='YES'){
+//        $r=-1;
+//        $this->style[$r]['data']='@@_row__';
+//        $this->style[$r]['colWidth']=30;
+//      }
+//      $this->gridWidth='';
+//      $this->gridFields='';
+//      foreach ($table->Columns as $r => $value){
+//        //var_dump($value['Width']);
+//        $this->style[$r]['colWidth']=$value['Width'];
+//        $this->style[$r]['titleAlign']=$value['Align'];
+//        $this->style[$r]['href']=$value['Target'];
+//        // Add the row reference
+//        switch ($this->fields[$r]['Type']){
+//          case 'image-text':
+//          case 'textimage':
+//          case 'image':
+//          case 'link':
+//            //$this->style[$r]['href'].='/@@_row__.html';  // No
+//            if (substr($value['Content'],0,1)=='&')
+//              $this->style[$r]['href'].='/@@_'.substr($value['Content'],1).'.html';
+//        }
+//        // Extra events for each field
+//        $this->style[$r]['event']=$value['Extra'];
+//        if ($this->fields[$r]['Label']==''){
+//          $this->style[$r]['titleVisibility']='0';
+//          $this->fields[$r]['Label']=$this->fields[$r]['Name'];
+//        }
+//        //if ($value['orderByThis']===true) $this->orderBy=$value['Name'];
+//        //Needed for javascript
+//        //only the visible columns's width and name are stored
+//        if ($this->style[$r]['showInTable']!='0'){
+//          $this->gridWidth.=','.$this->style[$r]['colWidth'];
+//          $this->gridFields.=',"form['.$this->fields[$r]['Name'].']"';
+//        }
+//        $r++;
+//      }
+//      echo('<br>');
+////    var_dump2($this);
+//  }
   
   /**
    * Function count

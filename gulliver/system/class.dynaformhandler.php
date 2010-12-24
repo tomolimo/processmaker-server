@@ -84,13 +84,10 @@ class dynaFormHandler
    * @return void
    */
   function __cloneEmpty()
-  {
-    //$cloneObj = clone $this;
-    //$cloneObj->xmlfile = '__Clone__' . $cloneObj->xmlfile;
+  {    
     $xPath = new DOMXPath($this->dom);
     $nodeList = $xPath->query('/dynaForm/*');
     foreach ($nodeList as $domElement){
-      //echo $domElement->nodeName.'<br>';
       $elements[] = $domElement->nodeName;
     }
     $this->remove($elements);
@@ -134,14 +131,6 @@ class dynaFormHandler
     return $newnode;
   }
 
-  /*
-    $child_childs = Array(
-      Array(name=>'option', value=>'uno', 'attributes'=>Array('name'=>1)),
-      Array(name=>'option', value=>'dos', 'attributes'=>Array('name'=>2)),
-      Array(name=>'option', value=>'tres', 'attributes'=>Array('name'=>3)),
-    )
-  */
-  
  /**
   * Add Function
   * @param string $name
@@ -233,7 +222,6 @@ class dynaFormHandler
       $this->xmlfile = $fname;
       $this->dom->save($this->xmlfile);
     }
-    //$this->fixXmlFile();
   }
 
 /**
@@ -501,14 +489,6 @@ class dynaFormHandler
             $xnode = $this->dom->createElement($childNode->nodeName);
             $xnode->appendChild($this->dom->createCDATASection($child_text));
                 
-            /*if( $childNode->hasChildNodes() ) {
-              foreach ($childNode->childNodes as $domElement){
-                $domNode = $domElement->cloneNode(true);
-                if( $domNode->nodeType != 4 ) {
-                  $xnode->appendChild($domNode);
-                }
-              }
-            }*/
             $element->replaceChild($xnode, $childNode); 
             $childNode = $element->getElementsByTagName($child_name)->item(0);
           }
@@ -521,7 +501,6 @@ class dynaFormHandler
             foreach($cc['attributes'] as $cc_att_name => $cc_att_value) {
               $ccnode->setAttribute($cc_att_name, $cc_att_value);
             }
-            //$this->addOrUpdateChild($childNode, $cc['name'], $cc['value'], $cc['attributes']);
           }
         }
       }
@@ -533,10 +512,7 @@ class dynaFormHandler
   }
 
 
-  function addOrUpdateChild($xnode, $childName, $childValue, $childAttributes){
-    //$element = $this->root->getElementsByTagName($nodeName)->item(0);
-    //$childNode = $element->getElementsByTagName($childName)->item(0);
-    
+  function addOrUpdateChild($xnode, $childName, $childValue, $childAttributes){    
     $newNode = $this->dom->createElement($childName);
     $newNode->appendChild($this->dom->createCDATASection($childValue));
     
@@ -588,28 +564,3 @@ class dynaFormHandler
     return $array;
   } 
 }
-
-//examples...........
-//$o = new dynaFormHandler('xxx.xml');
-//attributes (String node-name, Array attributes(atribute-name =>attribute-value, ..., ...), Array childs(child-name=>child-content), Array Child-childs())
-/*$child_childs = Array(
-  Array('name'=>'option', 'value'=>'uno2', 'attributes'=>Array('name'=>1112)),
-  Array('name'=>'option', 'value'=>'dos', 'attributes'=>Array('name'=>222)),
-  Array('name'=>'option', 'value'=>'tres', 'attributes'=>Array('name'=>333)),
-);*/
-//$o->add('erik', Array('att1'=>1, 'att2'=>'dos'), Array('en'=>'hello'), $child_childs);
-//$o->addChilds('neyek', Array('en'=>'deutch'), $child_childs);
-//print_r($o->getFieldNames());
-
-/* for($i=1; $i<=5; $i++){
-  $o->add('lastnamex'.$i, Array('type'=>'text', 'defaultvalue'=>'Ortiz'), Array('es'=>'Apellido'));
-}*/
-/*
-$child_childs = Array(
-  Array('name'=>'option', 'value'=>'uno', 'attributes'=>Array('name'=>111)),
-  Array('name'=>'option', 'value'=>'tres', 'attributes'=>Array('name'=>333)),
-);
-$o->replace('antiguedad', 'antiguedad_replaced', Array('type'=>'dropdown', 'required'=>'0'), Array('es'=>'Antiguedad !!'), $child_childs);
-*/
-//$o->remove('usr_email');
-//$o->replace('usr_uid', 'usr_uid222', Array('type'=>'text', 'defaultvalue'=>'111'), Array('es'=>'fucking id'));

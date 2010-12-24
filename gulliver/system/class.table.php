@@ -541,27 +541,13 @@ class Table
       $res = "<th class=\"$strClass\" align=\"left\" height=\"25\"";
       if ( $col["Width"] > 0) $res .= " width=\"" . $col["Width"] . "\"";
       $res .= ">";
-      /*if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        if($HTTP_SESSION_VARS['OrderDir'] == 'DESC')
-          $res .= "<img src='/images/arrow_order_desc.gif' border=0><br>";
-      }*/
+      
       //$res .= "<a class=\"" . $strClass . "Link\" href=\"";
       $res .= "<a class=\"" . $strClass . "\" href=\"";
       $res .= (ENABLE_ENCRYPT=='yes'?str_replace(G::encrypt('sys' . SYS_SYS, URL_KEY), SYS_SYS, G::encryptUrl(urldecode(SYS_CURRENT_URI), URL_KEY)):SYS_CURRENT_URI) . "?order=" . $this->Columns[$intPos]['Name']."&page=".$pa."&label=true";
       //$res .= $_SERVER['REDIRECT_URL'] . "?order=" . $this->Columns[$intPos]['Name']."&page=".$pa."&label=true";
       $res .= "\">" . $this->Labels[$intPos] . "</a>";
-      /*if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        if($HTTP_SESSION_VARS['OrderDir'] == 'ASC')
-          $res .= "<br><img src='/images/arrow_order_asc.gif' border=0>";
-      }*/
-      /*
-      if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        $img_dir = 'asc';
-        if($HTTP_SESSION_VARS['OrderDir'] == 'DESC')
-          $img_dir = 'desc';
-        $res .= "<br><img src='/images/arrow_order_$img_dir.gif' border=0>";
-      }
-      */
+     
       $res .= "</th>\n";//echo $res;die;
     }
     else {
@@ -593,12 +579,7 @@ class Table
       $res = "<th class=\"$strClass\" align=\"left\" height=\"25\"";
       if ( $col["Width"] > 0) $res .= " width=\"" . $col["Width"] . "\"";
       $res .= ">";
-      /*
-      if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        if($HTTP_SESSION_VARS['OrderDir'] == 'DESC')
-          $res .= "<img src='/images/arrow_order_desc.gif' border=0><br>";
-      }
-      */
+     
       //$res .= "<a class=\"" . $strClass . "Link\" href=\"";
       $res .= "<a class=\"" . $strClass . "\" href=\"";
       $_temp_var=$this->Columns[$intPos]['Name'];
@@ -611,18 +592,7 @@ class Table
         else
           $res .= "&nbsp;<img src='/images/arrow_order_asc.gif' border=0>";
       }
-      /*if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        if($HTTP_SESSION_VARS['OrderDir'] == 'ASC')
-          $res .= "<br><img src='/images/arrow_order_asc.gif' border=0>";
-      }*/
-/*
-      if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        $img_dir = 'asc';
-        if($HTTP_SESSION_VARS['OrderDir'] == 'DESC')
-          $img_dir = 'desc';
-        $res .= "<br><img src='/images/arrow_order_$img_dir.gif' border=0>";
-      }
-*/
+  
       $res .= "</th>\n";//echo $res;die;
     }
     else {
@@ -670,28 +640,14 @@ class Table
       $res .= "<th class=\"$strClass\" align=\"left\" height=\"25\"";
       if ( $col["Width"] > 0) $res .= " width=\"" . $col["Width"] . "\"";
       $res .= ">&nbsp;";
-      /*if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        if($HTTP_SESSION_VARS['OrderDir'] == 'DESC')
-          $res .= "<img src='/images/arrow_order_desc.gif' border=0><br>";
-      }*/
+      
       $res .= "<a class=\"" . $strClass . "\" href=\"";
       if ($fil != '') $fil .= '&';
       $direccion = $target."?".$fil."order=" . $this->Columns[$intPos]['Name']."&page=".$pa."&label=true";
       $res .= "javascript:bsearch('$direccion')";
       //$res .= $target . "?".$fil."order=" . $this->Columns[$intPos]['Name']."&page=".$pa."&label=true";
       $res .= "\">" . $this->Labels[$intPos] . "</a>";
-      /*if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        if($HTTP_SESSION_VARS['OrderDir'] == 'ASC')
-          $res .= "<br><img src='/images/arrow_order_asc.gif' border=0>";
-      }*/
-      /*
-      if($HTTP_SESSION_VARS['OrderBy'] == $this->Columns[$intPos]['Name'] ){
-        $img_dir = 'asc';
-        if($HTTP_SESSION_VARS['OrderDir'] == 'DESC')
-          $img_dir = 'desc';
-        $res .= "<br><img src='/images/arrow_order_$img_dir.gif' border=0>";
-      }
-      */
+      
       $res .= "</th>\n";
     }
     else {
@@ -737,7 +693,6 @@ class Table
       break;
     default:
       $fieldname = $col['Name'];
-      //$val = utf8_encode($this->_row_values[$fieldname]);
       $val = isset ( $this->_row_values[$fieldname] ) ? $this->_row_values[$fieldname] : '' ;
     }
 
@@ -824,28 +779,7 @@ class Table
                         break;
       case 'LITERAL'   :$res .= formatDate('$M $d $Y',$val);
                         break;
-    }
-        /*
-        if ($G_DATE_FORMAT == 'DD/MM/AAAA') {
-          $dateFormat = $aux[2] . "/" . $aux[1] . "/" . $aux[0];
-          $res .= htmlentities( $dateFormat ) . ' ' . $part[1] . ($G_DATE_FORMAT == 'MM/DD/AAAA' ? ' ' : '',ENT_QUOTES,'utf-8');
-        }
-
-        if ($G_DATE_FORMAT == 'MM/DD/AAAA') {
-          $dateFormat = $aux[1] . "-" . $aux[2] . "-" . $aux[0];
-          $res .= htmlentities( $dateFormat ,ENT_QUOTES,'utf-8') . ' ' . $part[1] . ($G_DATE_FORMAT == 'MM/DD/AAAA' ? ' <small>EST</small>' : '');
-        }
-
-        if ($G_DATE_FORMAT == 'AAAA/MM/DD') {
-          $dateFormat = $aux[0] . "-" . $aux[1] . "-" . $aux[2];
-          $res .= htmlentities( $dateFormat ,ENT_QUOTES,'utf-8') . ' ' . $part[1] . ($G_DATE_FORMAT == 'MM/DD/AAAA' ? ' ' : '');
-        }
-
-    if ($G_TABLE_DATE_FORMAT == 'LITERAL') {
-          // mejorar esto porque solo funciona hasta el 2038
-          $dateFormat = date ( 'M d, Y', mktime (0,0,0, $aux[1], $aux[2], $aux[0]) );
-        }
-/**/
+    }      
 
       }
       else
@@ -907,7 +841,7 @@ class Table
     break;
 
     case "image":
-    //print_r ($this->_row_values);
+   
     if (is_array($col["Condition"])) //By JHL to enable Condition to display a image -- New parameter Condition in Addrawcolumn
     {
       $field_compare=$col["Condition"]['field'];
@@ -935,7 +869,7 @@ class Table
         // Hay mas de un valor para el link
         $values = $col['Content'];
         $n = count($values);
-        //$res .= "<a class='$strClassLink' $title href=\"" . $col["Target"] . "/" ;
+        
         $res .= "<a class='$txtin3' $title href=\"" . (ENABLE_ENCRYPT=='yes'?G::encryptUrl(urldecode($col["Target"]), URL_KEY):$col["Target"]) . "/" ;
 
         for ($i=0; $i < $n; $i++) {
@@ -968,7 +902,6 @@ class Table
         $values = $col['Content'];
         $n = count($values);
 
-        //$res .= "<a class='$strClassLink' $title href=\"" . $col["Target"] . "/" ;
         $res .= "<a class='$strClassLink' $title href=\"" . (ENABLE_ENCRYPT=='yes'?G::encryptUrl(urldecode($col["Target"]), URL_KEY):$col["Target"]) . "/" ;
 
         for ($i=0; $i < $n; $i++) {
@@ -1242,8 +1175,7 @@ class Table
     if (is_array($this->contexto)) {
       $this->contexto[0][] = $contexto;
       $this->contexto[1][] = $nombre;
-      // array_push($this->contexto[0], $contexto);
-      // array_push($this->contexto[1], $nombre);
+      
       } else {
       $this->contexto = array();
       $this->contexto[0][] = $contexto;
@@ -1321,7 +1253,6 @@ class Table
     While ($i<=$len and $i <= $number){
          $car=substr($value,$i,1);
          $br = strtoupper(substr($value,$i,4));
-         //print "<br>".$car." ".$i;
          if ($car == '<'){
               $Flag = 0;
          }

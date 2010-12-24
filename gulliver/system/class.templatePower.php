@@ -384,7 +384,6 @@ class TemplatePowerParser
   }
 }
 
-
    /**
     * class TemplatePower
     *
@@ -421,7 +420,6 @@ class TemplatePower extends TemplatePowerParser
      * @param string $stpl_file
      * @param string  $tplvar
      * @return void
-     *
      * @access private
      */
   function __deSerializeTPL( $stpl_file, $type )
@@ -443,7 +441,6 @@ class TemplatePower extends TemplatePowerParser
      * TemplatePower::__makeContentRoot()
      *
      * @return void
-     *
      * @access private
      */
   function __makeContentRoot()
@@ -482,7 +479,6 @@ class TemplatePower extends TemplatePowerParser
      * @param string $varname
      * @param string $value
      * @return void
-     *
      * @access private
      */
   function __assignGlobal( $varname, $value )
@@ -496,7 +492,6 @@ class TemplatePower extends TemplatePowerParser
      *
      * @param string $blockname
      * @return void
-     *
      * @access private
      */
   function __outputContent( $blockname )
@@ -555,7 +550,6 @@ class TemplatePower extends TemplatePowerParser
      * function __printVars
      *
      * @return void
-     *
      * @access public
      */
   function __printVars()
@@ -588,7 +582,6 @@ class TemplatePower extends TemplatePowerParser
      *
      * @param $state
      * @return void
-     *
      * @access public
      */
   function showUnAssigned( $state = true )
@@ -600,7 +593,6 @@ class TemplatePower extends TemplatePowerParser
      * TemplatePower::prepare()
      *
      * @return void
-     *
      * @access public
      */
   function prepare()
@@ -618,7 +610,6 @@ class TemplatePower extends TemplatePowerParser
      *
      * @param string $blockname
      * @return void
-     *
      * @access public
      */
   function newBlock( $blockname )
@@ -665,7 +656,6 @@ class TemplatePower extends TemplatePowerParser
       $this->__assignGlobal( $varname, $value );
     }
   }
-
 
     /**
      * TemplatePower::assign()
@@ -733,7 +723,6 @@ class TemplatePower extends TemplatePowerParser
      * TemplatePower::printToScreen()
      *
      * @return void
-     *
      * @access public
      */
   function printToScreen()
@@ -750,7 +739,6 @@ class TemplatePower extends TemplatePowerParser
      * TemplatePower::getOutputContent()
      *
      * @return void
-     *
      * @access public
      */
   function getOutputContent()

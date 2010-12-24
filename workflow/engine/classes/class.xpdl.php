@@ -121,16 +121,16 @@ class Xpdl extends processes
   * @param array  $fields
   * @return boolean
   */
- function updateDynaformsPmxml($uid,$fields)
- {
-   $oData->dynaforms = $this->getDynaformRows ( $uid);
-   $count = sizeof($oData->dynaforms);
-   foreach ($fields as $val => $id){
-     $oData->dynaforms[$count]= $id;
-     $count = $count + 1 ;
-   } 
-   $this->createDynaformRows ($oData->dynaforms );
- }
+// function updateDynaformsPmxml($uid,$fields)
+// {
+//   $oData->dynaforms = $this->getDynaformRows ( $uid);
+//   $count = sizeof($oData->dynaforms);
+//   foreach ($fields as $val => $id){
+//     $oData->dynaforms[$count]= $id;
+//     $count = $count + 1 ;
+//   }
+//   $this->createDynaformRows ($oData->dynaforms );
+// }
  
  /**
   * This function create the subProcess from data
@@ -780,37 +780,7 @@ class Xpdl extends processes
           $idTasks['YM']      = $coordinateYM;
           $idTasks['PORT']    = $port;
           $arrayTasks[]  = $idTasks;
-        }
-       /* $dataTasks .='
-        <Activity Id="'.$idEvent.'" Name="'.$description.'">
-          <Description>'.$description.'</Description>
-          <Event>
-            <IntermediateEvent Trigger="Message" Implementation="Other">
-              <TriggerResultMessage CatchThrow="THROW">
-              <Message Id="'.$idEvent.'" From="jeaqueline@colosa.com" To="'.$to.'" Name="'.$description.'">
-              </Message>  
-              </TriggerResultMessage>
-            </IntermediateEvent>
-          </Event>
-          <Documentation>'.$description.'</Documentation>
-          <ExtendedAttributes />
-          <NodeGraphicsInfos>
-            <NodeGraphicsInfo ToolId="BizAgi_Process_Modeler" Height="30" Width="30" BorderColor="-6909623" FillColor="-66833">
-              <Coordinates XCoordinate="'.$coordinateX.'" YCoordinate="'.$coordinateY.'" />
-            </NodeGraphicsInfo>
-          </NodeGraphicsInfos>
-          <IsForCompensationSpecified>false</IsForCompensationSpecified>
-        </Activity>';
-        $transitions.='
-        <Transition Id="t'.$idEvent.'" From="'.$idTask.'" To="'.$idEvent.'" Name="">
-          <Condition />
-          <Description />
-          <ExtendedAttributes />
-          <ConnectorGraphicsInfos>
-            <ConnectorGraphicsInfo ToolId="Processmaker" BorderColor="0" FromPort="4" ToPort="3">
-            </ConnectorGraphicsInfo>
-          </ConnectorGraphicsInfos>
-        </Transition>';*/
+        }       
       }
     }
     $idTasks    = array();
