@@ -1936,13 +1936,23 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
         next_task_uid[0]     = newObj.id;
         rou_type             = 'SEQUENTIAL';
       }
-      else if(preObj.type.match(/Task/) && newObj.type.match(/End/) && newObj.type.match(/Event/))
+      else if(preObj.type.match(/Task/) && newObj.type.match(/End/) && newObj.type.match(/Event/) || newObj.reverse == 1)
       {
         this.deleteRoute(newObj.conn,1);
-        task_uid[0]      = preObj.id;
+        if(newObj.reverse == 1)      //Reverse Routing
+            task_uid[0]      = newObj.id;
+        else
+            task_uid[0]      = preObj.id;
         next_task_uid[0] = '-1';
         rou_type         = 'SEQUENTIAL';
       }
+      /*else if(preObj.type.match(/Event/) && preObj.type.match(/End/) && newObj.type.match(/Task/))
+      {
+        this.deleteRoute(newObj.conn,1);
+        task_uid[0]      = newObj.id;
+        next_task_uid[0] = '-1';
+        rou_type         = 'SEQUENTIAL';
+      }*/
       else if(preObj.type.match(/Gateway/))
       {
 //         var task_uid = new Array();
