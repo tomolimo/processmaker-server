@@ -3486,7 +3486,7 @@ class processMap {
    * getAvailableCaseTrackerObjectsCriteria
    *
    * @param  string             $sProcessUID Default value empty
-   * @return object(Criteria)   $oCriteria 
+   * @return object(Criteria)   $oCriteria
    */
   function getAvailableCaseTrackerObjectsCriteria($sProcessUID = '') {
     $oCriteria = $this->getCaseTrackerObjectsCriteria($sProcessUID);
@@ -3585,7 +3585,7 @@ class processMap {
    * @param  string    $sProcessUID
    * @param  string    $sObjType
    * @param  string    $sObjUID
-   * @return void     
+   * @return void
    */
   function assignCaseTrackerObject($sProcessUID, $sObjType, $sObjUID) {
     $oCriteria = new Criteria('workflow');
@@ -3601,7 +3601,7 @@ class processMap {
    * @param  string    $sCTOUID
    * @param  string    $sProcessUID
    * @param  integer   $iPosition
-   * @return void     
+   * @return void
    */
   function removeCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
     $oCaseTrackerObject = new CaseTrackerObject ( );
@@ -3615,7 +3615,7 @@ class processMap {
    * @param  string    $sCTOUID
    * @param  string    $sProcessUID
    * @param  integer   $iPosition
-   * @return void     
+   * @return void
    */
   function upCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
     if ($iPosition > 1) {
@@ -3640,7 +3640,7 @@ class processMap {
    * @param  string    $sCTOUID
    * @param  string    $sProcessUID
    * @param  integer   $iPosition
-   * @return void     
+   * @return void
    */
   function downCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
     $oCriteria = new Criteria('workflow');
@@ -3669,7 +3669,7 @@ class processMap {
    * processFilesManager
    *
    * @param  string    $sProcessUID
-   * @return void     
+   * @return void
    */
   function processFilesManager($sProcessUID) {
     $aDirectories = array();
@@ -3695,7 +3695,7 @@ class processMap {
    * @param  string    $sProcessUID
    * @param  string    $sMainDirectory
    * @param  string    $sCurrentDirectory
-   * @return void     
+   * @return void
    */
   function exploreDirectory($sProcessUID, $sMainDirectory, $sCurrentDirectory) {
     switch ($sMainDirectory) {
@@ -3762,7 +3762,7 @@ class processMap {
    * @param  string    $sMainDirectory
    * @param  string    $sCurrentDirectory
    * @param  string    $sFile
-   * @return void     
+   * @return void
    */
   function deleteFile($sProcessUID, $sMainDirectory, $sCurrentDirectory, $sFile) {
     switch ($sMainDirectory) {
@@ -3788,7 +3788,7 @@ class processMap {
    * @param  string    $sMainDirectory
    * @param  string    $sCurrentDirectory
    * @param  string    $sDirToDelete
-   * @return void     
+   * @return void
    */
   function deleteDirectory($sProcessUID, $sMainDirectory, $sCurrentDirectory, $sDirToDelete) {
     switch ($sMainDirectory) {
@@ -3888,8 +3888,8 @@ class processMap {
    * @param   string    $sProcessUID
    * @param   string    $sTaskUID
    * @param   string    $sIndex
-   * @return  void     
-   * @throw   Exception $oError 
+   * @return  void
+   * @throw   Exception $oError
    */
   function subProcess_Properties($sProcessUID = '', $sTaskUID = '', $sIndex = '') {
     try { //echo "$sProcessUID = '', $sTaskUID = '', $sIndex = ''";
@@ -5315,7 +5315,6 @@ class processMap {
     return $aAvailableProcessIODoc;
   } 
 
-
  /**
    * listDBSConnection
    *
@@ -5480,5 +5479,276 @@ class processMap {
             break;
     }
   }
-}
 
+  function ExtcaseTracker($sProcessUID) {
+    $oCriteria = new Criteria ( );
+    $oCriteria->add(CaseTrackerPeer::PRO_UID, $sProcessUID);
+    $oCaseTracker = new CaseTracker ( );
+    if (CaseTrackerPeer::doCount($oCriteria) === 0) {
+      $aCaseTracker = array('PRO_UID' => $sProcessUID, 'CT_MAP_TYPE' => 'PROCESSMAP', 'CT_DERIVATION_HISTORY' => 1, 'CT_MESSAGE_HISTORY' => 1);
+      $oCaseTracker->create($aCaseTracker);
+    } else {
+      $aCaseTracker = $oCaseTracker->load($sProcessUID);
+    }
+    return $aCaseTracker;
+    /*global $G_PUBLISH;
+    $G_PUBLISH = new Publisher ( );
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'tracker/tracker_Configuration', '', $aCaseTracker, '../tracker/tracker_Save');
+    G::RenderPage('publish', 'raw');
+    return true;*/
+  }
+
+
+  /**
+   * getCaseTrackerObjectsCriteria
+   *
+   * @param  string           $sProcessUID
+   * @return object(Criteria) $oCriteria
+   */
+  function getExtCaseTrackerObjectsCriteria($sProcessUID) {
+    $aObjects = array();
+    $aObjects [] = array('CTO_TITLE' => 'char', 'CTO_UID' => 'char', 'CTO_TYPE_OBJ' => 'char', 'CTO_UID_OBJ' => 'char', 'CTO_CONDITION' => 'char', 'CTO_POSITION' => 'integer');
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
+    $oCriteria->addAscendingOrderByColumn(CaseTrackerObjectPeer::CTO_POSITION);
+    $oDataset = CaseTrackerObjectPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      try {
+        switch ($aRow ['CTO_TYPE_OBJ']) {
+          case 'DYNAFORM' :
+            $oDynaform = new Dynaform ( );
+            $aFields = $oDynaform->load($aRow ['CTO_UID_OBJ']);
+            $sTitle = $aFields ['DYN_TITLE'];
+            break;
+          case 'INPUT_DOCUMENT' :
+            $oInputDocument = new InputDocument ( );
+            $aFields = $oInputDocument->load($aRow ['CTO_UID_OBJ']);
+            $sTitle = $aFields ['INP_DOC_TITLE'];
+            break;
+          case 'OUTPUT_DOCUMENT' :
+            $oOutputDocument = new OutputDocument ( );
+            $aFields = $oOutputDocument->load($aRow ['CTO_UID_OBJ']);
+            $sTitle = $aFields ['OUT_DOC_TITLE'];
+            break;
+        }
+        $aObjects [] = array('CTO_TITLE' => $sTitle, 'CTO_UID' => $aRow ['CTO_UID'], 'CTO_TYPE_OBJ' => $aRow ['CTO_TYPE_OBJ'], 'CTO_UID_OBJ' => $aRow ['CTO_UID_OBJ'], 'CTO_CONDITION' => $aRow ['CTO_CONDITION'], 'CTO_POSITION' => $aRow ['CTO_POSITION']);
+
+
+      }
+
+      catch (Exception $oError) { //Nothing
+      }
+      $oDataset->next();
+    }
+   // return $aObjects;
+    global $_DBArray;
+    $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
+    $_DBArray ['objects'] = $aObjects;
+    $_SESSION ['_DBArray'] = $_DBArray;
+    G::LoadClass('ArrayPeer');
+    $oCriteria = new Criteria('dbarray');
+    $oCriteria->setDBArrayTable('objects');
+    $oCriteria->addAscendingOrderByColumn('CTO_POSITION');
+    return $aObjects;
+  }
+
+  /**
+   * availableCaseTrackerObjects
+   *
+   * @param  string     $sProcessUID
+   * @return boolean    true
+   */
+  function availableExtCaseTrackerObjects($sProcessUID) {
+    global $G_PUBLISH;
+    $G_PUBLISH = new Publisher ( );
+    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_AvailableCaseTrackerObjects', $this->getAvailableCaseTrackerObjectsCriteria($sProcessUID), array('PRO_UID' => $sProcessUID));
+    G::RenderPage('publish', 'raw');
+    return true;
+  }
+
+  /**
+   * getAvailableCaseTrackerObjectsCriteria
+   *
+   * @param  string             $sProcessUID Default value empty
+   * @return object(Criteria)   $oCriteria
+   */
+  function getAvailableExtCaseTrackerObjects($sProcessUID = '') {
+    $oCriteria = $this->getCaseTrackerObjectsCriteria($sProcessUID);
+    $oDataset = CaseTrackerObjectPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aDynaformsUIDS = array();
+    $aInputsUIDS = array();
+    $aOutputsUIDS = array();
+    while ($aRow = $oDataset->getRow()) {
+      switch ($aRow ['CTO_TYPE_OBJ']) {
+        case 'DYNAFORM' :
+          $aDynaformsUIDS [] = $aRow ['CTO_UID_OBJ'];
+          break;
+        case 'INPUT_DOCUMENT' :
+          $aInputsUIDS [] = $aRow ['CTO_UID_OBJ'];
+          break;
+        case 'OUTPUT_DOCUMENT' :
+          $aOutputsUIDS [] = $aRow ['CTO_UID_OBJ'];
+          break;
+      }
+      $oDataset->next();
+    }
+    $aAvailableObjects = array();
+    $aAvailableObjects [] = array('OBJECT_UID' => 'char', 'OBJECT_TYPE' => 'char', 'OBJECT_TITLE' => 'char');
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(DynaformPeer::DYN_UID);
+    $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(DynaformPeer::DYN_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(DynaformPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(DynaformPeer::DYN_TYPE, 'xmlform');
+    $oCriteria->add(DynaformPeer::DYN_UID, $aDynaformsUIDS, Criteria::NOT_IN);
+    $oDataset = DynaformPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aAvailableObjects [] = array('OBJECT_UID' => $aRow ['DYN_UID'], 'OBJECT_TYPE' => 'DYNAFORM', 'OBJECT_TITLE' => $aRow ['DYN_TITLE']);
+      $oDataset->next();
+    }
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(InputDocumentPeer::INP_DOC_UID);
+    $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(InputDocumentPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(InputDocumentPeer::INP_DOC_UID, $aInputsUIDS, Criteria::NOT_IN);
+    $oDataset = InputDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aAvailableObjects [] = array('OBJECT_UID' => $aRow ['INP_DOC_UID'], 'OBJECT_TYPE' => 'INPUT_DOCUMENT', 'OBJECT_TITLE' => $aRow ['INP_DOC_TITLE']);
+      $oDataset->next();
+    }
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_UID);
+    $oCriteria->addAsColumn('OUT_DOC_TITLE', 'C.CON_VALUE');
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(OutputDocumentPeer::OUT_DOC_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(OutputDocumentPeer::PRO_UID, $sProcessUID);
+    $oCriteria->add(OutputDocumentPeer::OUT_DOC_UID, $aOutputsUIDS, Criteria::NOT_IN);
+
+    $oDataset = OutputDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aAvailableObjects [] = array('OBJECT_UID' => $aRow ['OUT_DOC_UID'], 'OBJECT_TYPE' => 'OUTPUT_DOCUMENT', 'OBJECT_TITLE' => $aRow ['OUT_DOC_TITLE']);
+      $oDataset->next();
+    }
+    return $aAvailableObjects;
+    /*global $_DBArray;
+    $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
+    $_DBArray ['availableObjects'] = $aAvailableObjects;
+    $_SESSION ['_DBArray'] = $_DBArray;
+    G::LoadClass('ArrayPeer');
+    $oCriteria = new Criteria('dbarray');
+    $oCriteria->setDBArrayTable('availableObjects');
+    return $oCriteria;*/
+  }
+
+  /**
+   * assignCaseTrackerObject
+   *
+   * @param  string    $sProcessUID
+   * @param  string    $sObjType
+   * @param  string    $sObjUID
+   * @return void
+   */
+  function assignExtCaseTrackerObject($sProcessUID, $sObjType, $sObjUID) {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
+    $iPosition = CaseTrackerObjectPeer::doCount($oCriteria) + 1;
+    $oCaseTrackerObject = new CaseTrackerObject ( );
+    $oCaseTrackerObject->create(array('PRO_UID' => $sProcessUID, 'CTO_TYPE_OBJ' => $sObjType, 'CTO_UID_OBJ' => $sObjUID, 'CTO_POSITION' => $iPosition));
+  }
+
+  /**
+   * removeCaseTrackerObject
+   *
+   * @param  string    $sCTOUID
+   * @param  string    $sProcessUID
+   * @param  integer   $iPosition
+   * @return void
+   */
+  function removeExtCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
+    $oCaseTrackerObject = new CaseTrackerObject ( );
+    $oCaseTrackerObject->remove($sCTOUID);
+    $oCaseTrackerObject->reorderPositions($sProcessUID, $iPosition);
+  }
+
+  /**
+   * upCaseTrackerObject
+   *
+   * @param  string    $sCTOUID
+   * @param  string    $sProcessUID
+   * @param  integer   $iPosition
+   * @return void
+   */
+  function upExtCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
+    if ($iPosition > 1) {
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, $iPosition);
+      $oCriteria2 = new Criteria('workflow');
+      $oCriteria2->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
+      $oCriteria2->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition - 1));
+      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
+
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition - 1));
+      $oCriteria2 = new Criteria('workflow');
+      $oCriteria2->add(CaseTrackerObjectPeer::CTO_UID, $sCTOUID);
+      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
+    }
+  }
+
+  /**
+   * downCaseTrackerObject
+   *
+   * @param  string    $sCTOUID
+   * @param  string    $sProcessUID
+   * @param  integer   $iPosition
+   * @return void
+   */
+  function downExtCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn('COUNT(*) AS MAX_POSITION');
+    $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
+    $oDataset = CaseTrackerObjectPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    if ($iPosition < (int) $aRow ['MAX_POSITION']) {
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, $iPosition);
+      $oCriteria2 = new Criteria('workflow');
+      $oCriteria2->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
+      $oCriteria2->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition + 1));
+      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition + 1));
+      $oCriteria2 = new Criteria('workflow');
+      $oCriteria2->add(CaseTrackerObjectPeer::CTO_UID, $sCTOUID);
+      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
+    }
+  }
+}

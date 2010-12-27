@@ -14,7 +14,7 @@ ProcessMapContext.prototype.editProcess= function(_5678)
         var checkDebug = true;
         if(debug  == '0')
             checkDebug = false;
-        
+
             var processCalendar = new Array();
             processCalendar[0]  = new Array();
             processCalendar[1]  = new Array();
@@ -100,7 +100,7 @@ ProcessMapContext.prototype.editProcess= function(_5678)
 
     editProcess.render(document.body);
     _5678.scope.workflow.editProcessForm = editProcess;
-    
+
      var window = new Ext.Window({
         title: 'Edit Process',
         collapsible: false,
@@ -128,7 +128,7 @@ ProcessMapContext.prototype.editProcess= function(_5678)
                      pro_debug = '1';
                  else
                      pro_debug = '0';
-                 
+
                   var pro_uid = _5678.scope.workflow.getUrlVars();
 
                   var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
@@ -593,7 +593,7 @@ var tb = new Ext.Toolbar({
                        this.collapse();
                     }
                     }),
-                    
+
                  new Ext.form.ComboBox({
                     fieldLabel: 'Group or Users',
                     //hiddenName:'popType',
@@ -1612,7 +1612,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                        // checked:checkMessages
                     }
    ]
-        
+
     });
 var Propertieswindow = new Ext.Window({
         title: 'Edit Process',
@@ -1635,7 +1635,7 @@ var Propertieswindow = new Ext.Window({
                 var MapType             = getForm.CT_MAP_TYPE;
                 var DerivationHistory   = getForm.CT_DERIVATION_HISTORY;
                 var MessageHistory      = getForm.CT_MESSAGE_HISTORY;
-                    
+
                 Ext.Ajax.request({
                   url   : '../tracker/tracker_save.php',
                   method: 'POST',
@@ -1661,28 +1661,71 @@ var Propertieswindow = new Ext.Window({
 });
 Propertieswindow.show();
 }
-  ProcessMapContext.prototype.caseTrackerObjects= function()
-{
-     var pro_uid = workflow.getUrlVars();
-     var taskId  = workflow.currentSelection.id;
 
-   var ObjectFields = Ext.data.Record.create([
+ProcessMapContext.prototype.caseTrackerObjects= function()
+{
+  var pro_uid = workflow.getUrlVars();
+     //var taskId  = workflow.currentSelection.id;
+
+  var ObjectFields = Ext.data.Record.create([
             {
-                name: 'OBJECT_UID',
+                name: 'CTO_TITLE',
                 type: 'string'
             },
             {
-                name: 'OBJECT_TYPE',
+                name: 'CTO_UID',
                 type: 'string'
             },
             {
-                name: 'OBJECT_TITLE',
+                name: 'CTO_TYPE_OBJ',
                 type: 'string'
+            },{
+                name:'CTO_UID_OBJ',
+                type:'string'
+            },{
+                name:'CTO_CONDITION',
+                type:'string'
+            },{
+                name:'CTO_POSITION',
+                type:'string'
+            },{
+                name:'OBJECT_UID',
+                type:'string'
+            },{
+                name:'OBJECT_TITLE',
+                type:'string'
+            },{
+                name:'OBJECT_TYPE',
+                type:'string'
             }
             ]);
-        var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+  var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Assign'
         });
+
+  var assignedStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : ObjectFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyCaseTrackerObjects?pid='+pro_uid
+            })
+          });
+          //taskUsers.setDefaultSort('LABEL', 'asc');
+  assignedStore.load();
+
+         // create the Data Store of users that are not assigned to a task
+  var availableStore = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyCaseTrackerObjects?tid='+pro_uid,
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : ObjectFields
+              });
 
         var btnAdd = new Ext.Button({
             id: 'btnAdd',
@@ -1693,56 +1736,86 @@ Propertieswindow.show();
                 var e = new ObjectFields({
                      //LABEL: 'Select User or Group',
                      //LABEL: User.data.items[0].data.LABEL,
-                     OBJECT_UID: '',
-                     OBJECT_TYPE: '',
-                     OBJECT_TITLE: '' 
+                     OBJECT_TITLE:'',
+                     OBJECT_TYPE:'',
+                     OBJECT_UID: ''
                 });
 
                 //storeUsers.reload();
-                if(AvailableTitle.data.items.length == 0)
+                if(availableStore.data.items.length == 0)
                      Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
                 else
                 {
                     editor.stopEditing();
-                    SelectedTitle.insert(0, e);
+                    assignedStore.insert(0, e);
                     Objectsgrid.getView().refresh();
                     //grid.getSelectionModel().selectRow(0);
                     editor.startEditing(0, 0);
                 }
+
+            }
+
+                });
+
+  var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Remove User',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = Objectsgrid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting assigned users from Database
+                    var title       = r.data.CTO_TITLE;
+                    var UID         = r.data.CTO_UID;
+                    var type        = r.data.CTO_TYPE_OBJ;
+                    var objUID      =r.data.CTO_UID_OBJ;
+                    var condition   =r.data.CTO_CONDITION;
+                    var position    =r.data.CTO_POSITION
+
+                    //var urlparams       = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
+
+                    //if USR_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                     if(r.data.USR_UID != "")
+                     {
+                        Ext.Ajax.request({
+                          url   : '../tracker/tracker_Ajax.php',
+                          method: 'POST',
+                          params: {
+                                action          :'removeCaseTrackerObject',
+                                CTO_UID         : UID,
+                                PRO_UID         : pro_uid,
+                                STEP_POSITION   : position
+                                  },
+
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','Object has been removed successfully.');
+                              //Secondly deleting from Grid
+                              assignedStore.remove(r);
+
+                              //Reloading available user store
+                              assignedStore.reload();
+                          }
+                        });
+                     }
+                     else
+                         assignedStore.remove(r);
+                }
             }
         });
+
          var tb = new Ext.Toolbar({
-            items: [btnAdd]
+            items: [btnAdd, btnRemove]
         });
 
         // create the Data Store of users that are already assigned to a task
-        var SelectedTitle = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : ObjectFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyUsersList?pid='+pro_uid+'&tid='+taskId
-            })
-          });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-          SelectedTitle.load();
 
-         // create the Data Store of users that are not assigned to a task
-         var AvailableTitle = new Ext.data.JsonStore({
-                 root            : 'data',
-                 url             : 'proxyUsersList?tid='+taskId,
-                 totalProperty   : 'totalCount',
-                 idProperty      : 'gridIndex',
-                 remoteSort      : false, //true,
-                 autoLoad        : true,
-                 fields          : ObjectFields
-              });
 
 
         var Objectsgrid = new Ext.grid.GridPanel({
-        store: SelectedTitle,
+        store: assignedStore,
         id : 'mygrid',
         //cm: cm,
         loadMask: true,
@@ -1758,48 +1831,62 @@ Propertieswindow.show();
         columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    id: 'OBJECT_TITLE',
+                    id: 'CTO_TITLE',
                     header: 'Title',
-                    dataIndex: 'OBJECT_TITLE',
+                    dataIndex: 'CTO_TITLE',
                     width: 100,
                     sortable: true,
                     editor: new Ext.form.ComboBox({
                             xtype: 'combo',
+                            store:availableStore,
                             fieldLabel: 'Title',
                             hiddenName: 'number',
-                            store        : AvailableTitle,
                             displayField : 'OBJECT_TITLE'  ,
                             valueField   : 'OBJECT_TITLE',
                             name         : 'OBJECT_TITLE',
-                            scope        : _5625,
                             triggerAction: 'all',
                             emptyText: 'Select User or Group',
                             allowBlank: false,
                              onSelect: function(record, index){
                                 var User = Objectsgrid.getStore();
 
-                                if(typeof _5625.scope.workflow.currentrowIndex == 'undefined')
+                                //if(typeof workflow.currentrowIndex == 'undefined')
                                         var selectedrowIndex = '0';
-                                else
-                                        selectedrowIndex     = _5625.scope.workflow.currentrowIndex;    //getting Index of the row that has been edited
+                                //else
+                                      //  selectedrowIndex     = workflow.currentrowIndex;    //getting Index of the row that has been edited
 
                                  //User.data.items[0].data.LABEL= record.data.LABEL;
-                                 User.data.items[selectedrowIndex].data.OBJECT_UID      = record.data.OBJECT_UID;
-                                 User.data.items[selectedrowIndex].data.OBJECT_TYPE      = record.data.OBJECT_TYPE;
-                                 User.data.items[selectedrowIndex].data.OBJECT_TITLE      = record.data.OBJECT_TITLE;
+                                 User.data.items[selectedrowIndex].data.OBJECT_UID   = record.data.OBJECT_UID;
+                                 User.data.items[selectedrowIndex].data.OBJECT_TYPE  = record.data.OBJECT_TYPE;
+                                 User.data.items[selectedrowIndex].data.OBJECT_TITLE = record.data.OBJECT_TITLE;
                                  //User.data.items[selectedrowIndex].data.TU_RELATION  = record.data.TU_RELATION;
 
                                  this.setValue(record.data[this.valueField || this.displayField]);
                                  this.collapse();
                               }
                         })
-                }
+                },
+                  {
+                    //id: 'STEP_TITLE',
+                    header: 'Condition',
+                    dataIndex: 'OBJ_CONDITION',
+                    //width: 200,
+                    editable: true,
+                    editor: new Ext.form.TextField({
+                        allowBlank: true
+                    })
+                },
+                  {
+                    header: 'Assign Condition',
+                    //width: 50,
+                    renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
+                  }
                 ],
         sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
                 listeners: {
                      rowselect: function(smObj, rowIndex, record) {
-                         _5625.scope.workflow.currentrowIndex = rowIndex;
+                         workflow.currentrowIndex = rowIndex;
                     }
                }
             }),
@@ -1808,7 +1895,78 @@ Propertieswindow.show();
         tbar: tb
         });
 
-        AvailableTitle.load();
+        //availableStore.load();
+
+         editor.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+            //var processId       = record.data.PRO_UID;
+            var objType         = record.data.OBJECT_TYPE;
+            var objUID          = record.data.OBJECT_UID;
+            var objTitle        = record.data.OBJECT_TITLE;
+            //var urlparams   = '?action=assign&data={"PRO_UID":"'+processId+'","CTO_TYPE_OBJ":"'+objType+'","CTO_UID_OBJ":"'+objUID+'","CTO_POSITION":"'+position+'"}';
+            Ext.Ajax.request({
+                  url   : '../tracker/tracker_Ajax.php',
+                  method: 'POST',
+                  params:
+                      {
+                        PRO_UID     : pro_uid,
+                        OBJECT_TYPE : objType,
+                        OBJECT_UID  : objUID,
+                        action      :'assignCaseTrackerObject'
+                     },
+                  success: function (response)
+                  {      // When saving data success
+                    Ext.MessageBox.alert ('Status','Objects has been successfully assigned');
+                    availableStore.reload();
+                    assignedStore.reload();
+                  },
+                  failure: function () {      // when saving data failed
+                        Ext.MessageBox.alert ('Status','Failed to assign Objects');
+                  }
+             })
+          }
+
+        });
+
+
+
+
+            //Updating the user incase if already assigned user has been replaced by other user
+            /*if(changes != '' && typeof record.json != 'undefined')
+            {
+                var user_TURel      = record.json.TU_RELATION;
+                var userUID         = record.json.USR_UID;
+                var user_TUtype     = record.json.TU_TYPE;
+                urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
+                Ext.Ajax.request({
+                      url   : 'processes_Ajax.php' +urlparams ,
+                      success: function(response) {
+                          //Ext.MessageBox.alert ('Status','User has been updated successfully.');
+                      }
+                    });
+            }*/
+            assignedStore.reload();
+            availableStore.reload();
+
+
+   var gridObjectWindow = new Ext.Window({
+        title       : 'Objects',
+        collapsible : false,
+        maximizable : false,
+        width       : 550,
+        defaults    :{ autoScroll:true },
+        height      : 450,
+        minWidth    : 200,
+        minHeight   : 150,
+        layout      : 'fit',
+        plain       : true,
+        bodyStyle   : 'padding:5px;',
+        items       : Objectsgrid,
+        buttonAlign : 'center'
+     });
+ gridObjectWindow.show();
 }
 
 
