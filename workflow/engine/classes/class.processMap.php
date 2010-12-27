@@ -1990,36 +1990,6 @@ class processMap {
   }
 
   /*
-   * Return the Scheduled Tasks List criteria object
-   * @param string $sProcessUID
-   * @return object
-   */
-
-  function getCaseSchedulerCriteria($sProcessUID = '') {
-    $sDelimiter = DBAdapter::getStringDelimiter ();
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(TriggersPeer::TRI_UID);
-    $oCriteria->addSelectColumn(TriggersPeer::PRO_UID);
-    $oCriteria->addAsColumn('TRI_TITLE', 'C1.CON_VALUE');
-    $oCriteria->addAsColumn('TRI_DESCRIPTION', 'C2.CON_VALUE');
-    $oCriteria->addAlias('C1', 'CONTENT');
-    $oCriteria->addAlias('C2', 'CONTENT');
-    $aConditions = array();
-    $aConditions [] = array(TriggersPeer::TRI_UID, 'C1.CON_ID');
-    $aConditions [] = array('C1.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter);
-    $aConditions [] = array('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-    $aConditions = array();
-    $aConditions [] = array(TriggersPeer::TRI_UID, 'C2.CON_ID');
-    $aConditions [] = array('C2.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter);
-    $aConditions [] = array('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-    $oCriteria->add(TriggersPeer::PRO_UID, $sProcessUID);
-    $oCriteria->addAscendingOrderByColumn('TRI_TITLE');
-    return $oCriteria;
-  }
-
-  /*
    * Presents a small list of Scheduled Task Logs of the process
    * @param string $sProcessUID
    * @return void
@@ -2048,14 +2018,8 @@ class processMap {
       $_SESSION['_DBArray'] = $_DBArray;
 
       $oCriteria = new Criteria('dbarray');
-      $oCriteria->setDBArrayTable('log_cases_scheduler');
-      //krumo($oCriteria);
-      //$G_MAIN_MENU            = 'processmaker';
-      //$G_SUB_MENU             = 'cases';
-      //
-      //$G_ID_MENU_SELECTED     = 'CASES';
-      //$G_ID_SUB_MENU_SELECTED = 'CASES_SCHEDULER_LOG';
-
+      $oCriteria->setDBArrayTable('log_cases_scheduler');    
+     
       $G_PUBLISH = new Publisher;
       $G_PUBLISH->ROWS_PER_PAGE = 10;
       $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_Scheduler_Log', $oCriteria);
@@ -2065,37 +2029,7 @@ class processMap {
       throw ($oError);
     }
   }
-
-  /*
-   * Return the Scheduled Tasks Log List criteria object
-   * @param string $sProcessUID
-   * @return object
-   */
-
-  function getLogCaseSchedulerCriteria($sProcessUID = '') {
-    $sDelimiter = DBAdapter::getStringDelimiter ();
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(TriggersPeer::TRI_UID);
-    $oCriteria->addSelectColumn(TriggersPeer::PRO_UID);
-    $oCriteria->addAsColumn('TRI_TITLE', 'C1.CON_VALUE');
-    $oCriteria->addAsColumn('TRI_DESCRIPTION', 'C2.CON_VALUE');
-    $oCriteria->addAlias('C1', 'CONTENT');
-    $oCriteria->addAlias('C2', 'CONTENT');
-    $aConditions = array();
-    $aConditions [] = array(TriggersPeer::TRI_UID, 'C1.CON_ID');
-    $aConditions [] = array('C1.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter);
-    $aConditions [] = array('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-    $aConditions = array();
-    $aConditions [] = array(TriggersPeer::TRI_UID, 'C2.CON_ID');
-    $aConditions [] = array('C2.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter);
-    $aConditions [] = array('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-    $oCriteria->add(TriggersPeer::PRO_UID, $sProcessUID);
-    $oCriteria->addAscendingOrderByColumn('TRI_TITLE');
-    return $oCriteria;
-  }
-
+  
   /*
    * Presents a small list of messages of the process
    * @param string $sProcessUID
@@ -3031,19 +2965,7 @@ class processMap {
         case 'ANY' :
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
-          break;
-        /* case 'ANY_DYNAFORM':
-          $sObjectType = G::LoadTranslation('ID_ANY_DYNAFORM');
-          $sObject     = G::LoadTranslation('ID_ALL');
-          break;
-          case 'ANY_INPUT':
-          $sObjectType = G::LoadTranslation('ID_ANY_INPUT');
-          $sObject     = G::LoadTranslation('ID_ALL');
-          break;
-          case 'ANY_OUTPUT':
-          $sObjectType = G::LoadTranslation('ID_ANY_OUTPUT');
-          $sObject     = G::LoadTranslation('ID_ALL');
-          break; */
+          break;       
         case 'DYNAFORM' :
           $sObjectType = G::LoadTranslation('ID_DYNAFORM');
           if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
@@ -3165,19 +3087,7 @@ class processMap {
         case 'ANY' :
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
-          break;
-        /* case 'ANY_DYNAFORM':
-          $sObjectType = G::LoadTranslation('ID_ANY_DYNAFORM');
-          $sObject     = G::LoadTranslation('ID_ALL');
-          break;
-          case 'ANY_INPUT':
-          $sObjectType = G::LoadTranslation('ID_ANY_INPUT');
-          $sObject     = G::LoadTranslation('ID_ALL');
-          break;
-          case 'ANY_OUTPUT':
-          $sObjectType = G::LoadTranslation('ID_ANY_OUTPUT');
-          $sObject     = G::LoadTranslation('ID_ALL');
-          break; */
+          break;        
         case 'DYNAFORM' :
           $sObjectType = G::LoadTranslation('ID_DYNAFORM');
           if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
@@ -4612,17 +4522,7 @@ class processMap {
     while ( $aRow = $oDataset->getRow () ) {
         $aAdditionalTables [] = array ('ADD_TAB_UID' => $aRow ['ADD_TAB_UID'], 'ADD_TAB_NAME' => $aRow ['ADD_TAB_NAME'], 'ADD_TAB_DESCRIPTION' => $aRow ['ADD_TAB_DESCRIPTION']);
         $oDataset->next ();
-      }
-     /*
-      $oAdditionalTables = new AdditionalTables();
-      $aData = $oAdditionalTables->load($sTab_UID, true);
-      $addTabName = $aData['ADD_TAB_NAME'];
-        foreach ($aData['FIELDS'] as $iRow => $aRow) {
-            if ($aRow['FLD_KEY'] == 1) {
-                $aFields['FIELDS'][$iRow] = $aRow;
-            }
-        }*/
-
+      }     
     return $aAdditionalTables;
   }
 
@@ -5413,34 +5313,8 @@ class processMap {
         $oDataset->next ();
     }
     return $aAvailableProcessIODoc;
-  }
+  } 
 
-  
-  function showExtDBConnList() {
-    $oProcess = new processMap();
-    $oCriteria = $oProcess->getConditionProcessList();
-    if( ProcessPeer::doCount($oCriteria) > 0 ){
-            $aProcesses = array();
-            $aProcesses[] = array('PRO_UID' => 'char', 'PRO_TITLE' => 'char');
-            $oDataset = ArrayBasePeer::doSelectRS($oCriteria);
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $oDataset->next();
-            $sProcessUID = '';
-            while( $aRow = $oDataset->getRow() ){
-                    if( $sProcessUID == '' ){
-                            $sProcessUID = $aRow['PRO_UID'];
-                    }
-                    $aProcesses[] = array('PRO_UID' => (isset($aRow['PRO_UID']) ? $aRow['PRO_UID'] : ''), 'PRO_TITLE' => (isset($aRow['PRO_TITLE']) ? $aRow['PRO_TITLE'] : ''));
-                    $oDataset->next();
-            }
-
-            $_DBArray['PROCESSES'] = $aProcesses;
-            $_SESSION['_DBArray'] = $_DBArray;
-
-            $oCriteria = $oDBSource->getCriteriaDBSList($_SESSION['PROCESS']);
-            return $_SESSION ['_DBArray']['PROCESSES'];
-     }
-  }
 
  /**
    * listDBSConnection
