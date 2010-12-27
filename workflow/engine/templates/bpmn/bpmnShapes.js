@@ -268,34 +268,6 @@ bpmnTask.prototype.setWorkflow = function (_40c5) {
 };
 
 
-InputOutputPort.prototype.onDrop = function (port) {
-    if (port.getMaxFanOut && port.getMaxFanOut() <= port.getFanOut()) {
-        return;
-    }
-
-    if (this.parentNode.id == port.parentNode.id) {} else {
-        var _4070 = new CommandConnect(this.parentNode.workflow, port, this);
-        if (_4070.source.type == _4070.target.type) {
-            return;
-        }
-        _4070.setConnection(new DecoratedConnection());
-        this.parentNode.workflow.getCommandStack().execute(_4070);
-
-        var dragObj = this.workflow.currentSelection;
-        var dropObj = port.parentNode;
-        var dragObjType = dragObj.type;
-        var dropObjType = dropObj.type;
-        if(dragObjType.match(/Task/) && dropObjType.match(/End/) && dropObjType.match(/Event/))
-            {
-                //preObj = this.workflow.currentSelection;
-                //var newObj = port.parentNode;
-                dropObj.conn = _4070.connection;
-                this.workflow.saveRouteTest(dragObj,dropObj);
-            }
-    }
-}
-
-
 InputPort.prototype.onDrop = function (port) {
     if (port.getMaxFanOut && port.getMaxFanOut() <= port.getFanOut()) {
         return;
