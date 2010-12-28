@@ -1754,7 +1754,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
     var btnRemove = new Ext.Button({
       id: 'btnRemove',
-      text: 'Remove User',
+      text: 'Remove',
       iconCls: 'application_delete',
       handler: function (s) {
         editor.stopEditing();
@@ -1962,7 +1962,182 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       buttonAlign : 'center'
     });
   gridObjectWindow.show()
-}
 
+  }
 
+ProcessMapContext.prototype.ExtVariables = function()
+  {
+    var pro_uid = workflow.getUrlVars();
+     //var taskId  = workflow.currentSelection.id;
+var varFields = Ext.data.Record.create([
+            {
+                name: 'variable',
+                type: 'string'
+            },
+            {
+                name: 'type',
+                type: 'string'
+            },
+            {
+                name: 'label',
+                type: 'string'
+            }
+       ]);
 
+  var varStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : varFields,
+            proxy        : new Ext.data.HttpProxy({
+                   url   : 'proxyVariable?pid='+pro_uid+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
+            })
+          });
+          //taskUsers.setDefaultSort('LABEL', 'asc');
+          varStore.load();
+
+var allVarGrid =  new Ext.grid.GridPanel({
+            store       : varStore,
+            id          : 'mygrid',
+            loadMask    : true,
+            loadingText : 'Loading...',
+            //renderTo    : 'cases-grid',
+            frame       : false,
+            autoHeight  : false,
+            enableDragDrop   : true,
+            ddGroup     : 'firstGridDDGroup',
+            clicksToEdit: 1,
+            minHeight   :400,
+            height      :400,
+            layout      : 'form',
+            //plugins     : [editor],
+            columns     : [{
+                        id: 'variable',
+                        header: 'Variable',
+                        dataIndex: 'variable',
+                        width: 200,
+                        sortable: true
+            },{
+                id: 'label',
+                header: 'Label',
+                dataIndex: 'label',
+                width: 200,
+                sortable: true
+              }]
+            });
+
+var sysStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : varFields,
+            proxy        : new Ext.data.HttpProxy({
+            url   : 'proxyVariable?pid='+pro_uid+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
+            })
+          });
+          //taskUsers.setDefaultSort('LABEL', 'asc');
+          sysStore.load();
+
+var sysGrid =  new Ext.grid.GridPanel({
+            store       : sysStore,
+            id          : 'mygrid',
+            loadMask    : true,
+            loadingText : 'Loading...',
+            //renderTo    : 'cases-grid',
+            frame       : false,
+            autoHeight  : false,
+            enableDragDrop   : true,
+            ddGroup     : 'firstGridDDGroup',
+            clicksToEdit: 1,
+            minHeight   :400,
+            height      :400,
+            layout      : 'form',
+            //plugins     : [editor],
+            columns     : [{
+                        id: 'variable',
+                        header: 'Variable',
+                        dataIndex: 'variable',
+                        width: 200,
+                        sortable: true
+            },{
+                id: 'Label',
+                header: 'Label',
+                dataIndex: 'label',
+                width: 200,
+                sortable: true
+              }]
+            });
+var varForm = new Ext.FormPanel({
+        labelWidth: 100,
+        bodyStyle :'padding:5px 5px 0',
+        width     : 850,
+        height    : 500,
+        items:
+            {
+            xtype:'tabpanel',
+            activeTab: 0,
+            defaults:{
+                autoHeight:true,
+                bodyStyle:'padding:10px'
+            },
+            items:[{
+                title:'All Variables',
+                layout:'fit',
+                defaults: {
+                    width: 400
+                },
+                items:[allVarGrid]
+            },{
+                title:'System',
+                layout:'fit',
+                defaults: {
+                    width: 400
+                },
+                items:[sysGrid]
+            },{
+                title:'Process',
+                layout:'form',
+                defaults: {
+                    width: 400
+                },
+                items:[]
+            }]
+        }
+    });
+
+    //varForm.render(document.body);
+  //workflow.taskStepsTabs = varForm;
+
+    var window = new Ext.Window({
+        title: 'Steps Of',
+        collapsible: false,
+        maximizable: false,
+        width: 800,
+        height: 470,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: varForm
+        /*buttons: [{
+            text: 'Save',
+            handler: function(){
+                //var getstore = grid.getStore();
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskSteps(getData);
+            }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                window.close();
+            }
+        }]*/
+    });
+    window.show();
+
+  }

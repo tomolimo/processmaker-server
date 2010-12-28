@@ -258,6 +258,11 @@ Ext.onReady ( function() {
                             text: 'Objects',
                             handler: ProcessMapObj.caseTrackerObjects,
                             scope:this
+                        },
+                         {
+                            text: 'Test',
+                            handler: ProcessMapObj.ExtVariables,
+                            scope:this
                         }
                     ]
                 }
