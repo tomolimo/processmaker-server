@@ -273,20 +273,6 @@ InputPort.prototype.onDrop = function (port) {
         return;
     }
     if (this.parentNode.id == port.parentNode.id) {} else {
-/*	var newObj = new Array();
-	newObj = this.workflow.currentSelection;
-	var preObj = port.parentNode;
-	newObj.sPortType =port.properties.name;
-	preObj.sPortType =this.properties.name;
-	this.workflow.saveRoute(preObj,newObj);
-
-        var _3f02 = new CommandConnect(this.parentNode.workflow, port, this);
-        if (_3f02.source.type == _3f02.target.type) {
-            return;
-        }
-        _3f02.setConnection(new DecoratedConnection());
-        this.parentNode.workflow.getCommandStack().execute(_3f02);
-*/
         var _4070 = new CommandConnect(this.parentNode.workflow, port, this);
         if (_4070.source.type == _4070.target.type) {
             return;

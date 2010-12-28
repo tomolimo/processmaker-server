@@ -1879,21 +1879,6 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
     }
 
 }
-MyWorkflow.prototype.saveRouteTest =    function(dragObj,dropObj){
-    var pro_uid = this.getUrlVars();
-    var task_uid      = new Array();
-    var next_task_uid = new Array();
-    var rou_type      ='';
-    
-    if(dragObj.type.match(/Task/) && dropObj.type.match(/End/) && dropObj.type.match(/Event/))
-      {
-        this.deleteRoute(dropObj.conn,1);
-        task_uid[0]      = dragObj.id;
-        next_task_uid[0] = '-1';
-        rou_type         = 'SEQUENTIAL';
-      }
-}
-
 
 /**
  * save Route on Changing of route Ports depending on the Shape Type
@@ -2290,5 +2275,4 @@ MyWorkflow.prototype.zoom = function(sType)
           fig.bpmnText.paint();
         }
     }
-   
 }
