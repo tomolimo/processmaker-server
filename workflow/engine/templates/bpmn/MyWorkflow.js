@@ -281,7 +281,7 @@ this.canvasGateway.on('contextmenu', function(e) {
 MyWorkflow.prototype.AddSubProcessContextMenu=function(_4092)
 {
     this.canvasSubProcess = Ext.get(_4092.id);
-   // var currentSelection = _4092.scope.currentSelection;
+    //var currentSelection = _4092.scope.currentSelection;
     //var pmosExtObj = new pmosExt();
     this.contextSubProcessmenu = new Ext.menu.Menu({
         items: [
@@ -352,9 +352,7 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
             text: 'Assign Variables Out',
             iconCls: 'application_add',
             handler: function(){
-                //var User = grid.getStore();
                 var e = new subProcessFields({
-                     //STEP_TITLE: User.data.items[0].data.STEP_TITLE,
                      SP_UID         : '',
                      PRO_PARENT     : '',
                      SP_SYNCHRONOUS : '',
@@ -395,9 +393,7 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
         text: 'Assign Variables In',
         iconCls: 'application_add',
         handler: function(){
-            //var User = grid.getStore();
             var e = new subProcessFields({
-                 //STEP_TITLE: User.data.items[0].data.STEP_TITLE,
                  SP_UID         : '',
                  PRO_PARENT     : '',
                  SP_SYNCHRONOUS : '',
@@ -409,7 +405,6 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
                 editorIn.stopEditing();
                 variablesInStore.insert(0, e);
                 variableInGrid.getView().refresh();
-                //grid.getSelectionModel().selectRow(0);
                 editorIn.startEditing(0, 0);
         }
     });
@@ -445,7 +440,6 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
                url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
         })
       });
-      //taskUsers.setDefaultSort('LABEL', 'asc');
       variablesOutStore.load();
 
     // create the Data Store of all Variables In
@@ -523,8 +517,6 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
         frame       : true,
         autoHeight  : true,
         autoScroll  : true,
-        //enableDragDrop   : true,
-        //ddGroup     : 'firstGridDDGroup',
         clicksToEdit: 1,
         layout      : 'form',
         plugins     : [editorIn],
@@ -670,10 +662,8 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
                         fieldLabel:     'Process',
                         name:           'process',
                         emptyText    : 'Select Process',
-                        //hiddenName:     'SPROCESS_NAME',
                         displayField:   'PROCESSES',
                         valueField:     'PROCESSES',
-                        //value:          'Select a process',
                         store:          variablesOutStore
                     },
                     {
@@ -690,7 +680,6 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
                         displayField:   'name',
                         valueField:     'value',
                         emptyText    : 'Select Type',
-                        //value: 'Asynchronous',
                         store:          new Ext.data.JsonStore({
                                     fields : ['name', 'value'],
                                     data   : [
@@ -749,9 +738,6 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
                    Ext.getCmp("spType").setValue("Synchronous");
                }
           workflow.subProcessProperties = action.result.data[0];
-
-           //Ext.MessageBox.alert('Message', 'Loaded OK');
-          //  setTaskAssignType(form);
         },
         failure:function(form, action) {
             Ext.MessageBox.alert('Message', 'Load failed');
