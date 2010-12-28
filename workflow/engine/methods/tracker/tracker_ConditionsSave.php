@@ -42,8 +42,13 @@ try {
   }
   require_once 'classes/model/CaseTrackerObject.php';
   $oCaseTrackerObject = new CaseTrackerObject();
-  $aFields = $oCaseTrackerObject->load($_POST['form']['CTO_UID']);
-  $aFields['CTO_CONDITION'] = $_POST['form']['CTO_CONDITION'];
+  if(isset ($_POST['form']))
+      $value=$_POST['form'];
+  else
+      $value=$_POST;
+  
+  $aFields = $oCaseTrackerObject->load($value['CTO_UID']);
+  $aFields['CTO_CONDITION'] = $value['CTO_CONDITION'];
   $oCaseTrackerObject->update($aFields);
 }
 catch (Exception $oException) {
