@@ -46,7 +46,7 @@ class CaseTrackerObject extends BaseCaseTrackerObject {
         $oConnection->begin();
         $iResult = $oCaseTrackerObject->save();
         $oConnection->commit();
-        return true;
+        return $aData['CTO_UID'];
       }
       else {
         $sMessage = '';

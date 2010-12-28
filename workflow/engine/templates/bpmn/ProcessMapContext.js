@@ -1891,34 +1891,30 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
         Ext.Ajax.request({
           url   : '../tracker/tracker_Ajax.php',
           method: 'POST',
-          params:
-            {
-            PRO_UID     : pro_uid,
-            OBJECT_TYPE : objType,
-            OBJECT_UID  : objUID,
-            action      :'assignCaseTrackerObject'
+          params:{
+                PRO_UID     : pro_uid,
+                OBJECT_TYPE : objType,
+                OBJECT_UID  : objUID,
+                action      :'assignCaseTrackerObject'
             },
           success: function (response)
-            {      // When saving data success
-            Ext.MessageBox.alert ('Status','Objects has been successfully assigned');
-            availableStore.reload();
-            assignedStore.reload();
-            if (condition !='')
-                {
-            Ext.Ajax.request({
-
-          url   : '../tracker/tracker_ConditionsSave.php',
-          method: 'POST',
-          params:
             {
-            PRO_UID         : pro_uid,
-            CTO_UID         : objUID,
-            CTO_CONDITION   : condition
-            //action          :'assignCaseTrackerObject'
-            }
-          
-        })
-                }
+                cto_uid = response.responseText;
+                    Ext.Ajax.request({
+                      url   : '../tracker/tracker_ConditionsSave.php',
+                      method: 'POST',
+                      params:
+                        {
+                            PRO_UID         : pro_uid,
+                            CTO_UID         : cto_uid,
+                            CTO_CONDITION   : condition
+                        },
+                      success: function (response){
+                        Ext.MessageBox.alert ('Status','Objects has been successfully assigned');
+                        availableStore.reload();
+                        assignedStore.reload();
+                      }
+                    })
             },
           failure: function () {      // when saving data failed
             Ext.MessageBox.alert ('Status','Failed to assign Objects');

@@ -35,8 +35,9 @@ try {
     case 'assignCaseTrackerObject':
       G::LoadClass('processMap');
       $oProcessMap = new ProcessMap();
-      $oProcessMap->assignCaseTrackerObject($_POST['PRO_UID'], $_POST['OBJECT_TYPE'], $_POST['OBJECT_UID']);
+      $cto_UID = $oProcessMap->assignCaseTrackerObject($_POST['PRO_UID'], $_POST['OBJECT_TYPE'], $_POST['OBJECT_UID']);
       $oProcessMap->getCaseTrackerObjectsCriteria($_POST['PRO_UID']);
+      echo $cto_UID;
     break;
     case 'removeCaseTrackerObject':
       G::LoadClass('processMap');
