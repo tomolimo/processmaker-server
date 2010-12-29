@@ -40,8 +40,12 @@ try {
 
 
 	$aData = get_object_vars($oJSON->decode($_POST['oData']));
-	
-	switch ($_POST['function']) {
+
+        if(isset($_POST['function']))
+            $sAction = $_POST['function'];
+        else
+            $sAction = $_POST['functions'];
+	switch ($sAction) {
 		case 'saveTaskData':
 			require_once 'classes/model/Task.php';
 			$oTask = new Task();

@@ -883,7 +883,16 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         boxLabel: 'Value Based',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'EVALUATE',
-                        checked:    'EVALUATE'
+                        //checked:    'EVALUATE',
+                        listeners: {
+                            'check':{
+                                fn: function(){
+                                    Ext.getCmp("evaluate").show();
+                                    Ext.getCmp("staticMI").hide();
+                                    Ext.getCmp("cancelMI").hide();
+                                }
+                            }
+                        }
                     },
 
                     {
@@ -903,65 +912,56 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         boxLabel: 'Static Partial Join for Multiple Instance',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'STATIC_MI',
-                        checked:    'STATIC_MI'
+                        //checked:    'STATIC_MI',
+                        listeners: {
+                            'check':{
+                                fn: function(){
+                                    Ext.getCmp("staticMI").show();
+                                    Ext.getCmp("cancelMI").show();
+                                    Ext.getCmp("evaluate").hide();
+                                }
+                            }
+                        }
                     },
 
                     {
                         boxLabel: 'Cancelling Partial Join for Multiple Instance',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'CANCEL_MI',
-                        checked:    'CANCEL_MI'
-                    }
-                    // {boxLabel: 'Item 2', name: 'rb-auto', inputValue: 2, listeners: {'check':{fn: function(){Ext.getCmp("txt-test4").hide();Ext.getCmp("toggler").collapse();(function(){Ext.getCmp("toggler").hide();}).defer(1000);},scope: this}}}
-                    ],
-                    listeners: {
-                                    
-                        change: function(radiogroup, radio) {
-                            var assignmentfieldset = _5625.scope.workflow.taskPropertiesTabs.items.items[0].items.items[1];
-                            var fields = assignmentfieldset.items.items;
-                        
-                            
-                            //fields[1] =>  Value Based fieldset
-                            //fields[2] =>  Static / Cancelling Partial Join for Multiple Instance fieldset1
-                            //fields[3] =>  Static / Cancelling Partial Join for Multiple Instance fieldset2
-                            
-                            if(radio.inputValue == 'EVALUATE'){
-                                fields[1].show();
-                                fields[2].hide();
-                                fields[3].hide();
+                        //checked:    'CANCEL_MI',
+                        listeners: {
+                            'check':{
+                                fn: function(){
+                                    Ext.getCmp("staticMI").show();
+                                    Ext.getCmp("cancelMI").show();
+                                    Ext.getCmp("evaluate").hide();
+                                }
                             }
-                    
-                            else if(radio.inputValue == 'STATIC_MI' || radio.inputValue == 'CANCEL_MI'){
-                                fields[2].show();
-                                fields[3].show();
-                                fields[1].hide();
-                            }
-                            else   {
-                                fields[1].hide();
-                                fields[2].hide();
-                                fields[3].hide();
-                            }
-
                         }
                     }
+                    /*{boxLabel: 'Item 2', name: 'rb-auto', inputValue: 2,
+                        listeners: {
+                            'check':{fn: function(){Ext.getCmp("txt-test4").hide();Ext.getCmp("toggler").collapse();(function(){Ext.getCmp("toggler").hide();}).defer(1000);},scope: this}}
+                    }*/
+                    ]
                 },{
                     xtype: 'fieldset',
                     layout:'column',
                     border:false,
                     width: 550,
                     //title: 'valueBased',
-                    hidden: 'hideEvaluateField',
+                    hidden: true,
                     id: 'evaluate',
                     items:[{
-                        columnWidth:.5,
+                        columnWidth:.6,
                         layout: 'form',
                         border:false,
                         items: [{
                             xtype: 'textfield',
                             fieldLabel: 'Variable for Value Based Assignment',
-                            name: 'TAS_ASSIGN_VARIABLE'
+                            name: 'TAS_ASSIGN_VARIABLE',
                             //value: _5625.scope.workflow.taskDetails.TAS_ASSIGN_VARIABLE
-                        //anchor:'65%'
+                            anchor:'100%'
                         }]
                     },{
                         columnWidth:.3,
@@ -981,18 +981,18 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                     border:false,
                     width: 550,
                     //title: 'MI',
-                    hidden: 'hidePartialJoinField',
+                    hidden: true,
                     id: 'staticMI',
                     items:[{
-                        columnWidth:.5,
+                        columnWidth:.6,
                         layout: 'form',
                         border:false,
                         items: [{
                             xtype: 'textfield',
                             fieldLabel: 'Variable for No of Instances',
-                            name: 'TAS_MI_INSTANCE_VARIABLE'
+                            name: 'TAS_MI_INSTANCE_VARIABLE',
                             //value: _5625.scope.workflow.taskDetails.TAS_MI_INSTANCE_VARIABLE
-                        //anchor:'65%'
+                            anchor:'100%'
                         }]
                     },{
                         columnWidth:.3,
@@ -1012,18 +1012,18 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                     border:false,
                     width: 550,
                     //title: 'MI2',
-                    hidden: 'hidePartialJoinField',
+                    hidden: true,
                     id: 'cancelMI',
                     items:[{
-                        columnWidth:.5,
+                        columnWidth:.6,
                         layout: 'form',
                         border:false,
                         items: [{
                             xtype: 'textfield',
                             fieldLabel: 'Variable for No of Instances to complete',
-                            name: 'TAS_MI_COMPLETE_VARIABLE'
+                            name: 'TAS_MI_COMPLETE_VARIABLE',
                             //value: _5625.scope.workflow.taskDetails.TAS_MI_COMPLETE_VARIABLE
-                        //anchor:'65%'
+                            anchor:'100%'
                         }]
                     },{
                         columnWidth:.3,
@@ -1314,7 +1314,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
-           Ext.MessageBox.alert('Message', 'Loaded OK');
+           //Ext.MessageBox.alert('Message', 'Loaded OK');
           //  setTaskAssignType(form);
         },
         failure:function(form, action) {
@@ -1330,8 +1330,8 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         title: 'Task: ',
         collapsible: false,
         maximizable: false,
-        width: 620,
-        height: 500,
+        width: 600,
+        height: 450,
         minWidth: 300,
         minHeight: 150,
         layout: 'fit',
