@@ -2017,11 +2017,24 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
  * @Author Girish joshi
  */
 MyWorkflow.prototype.deleteRoute = function(oConn,iVal){
-     var rou_uid = oConn.id;
-     if(rou_uid != '')
-        {
+
+     var sourceObjType = oConn.sourcePort.parentNode.type;
+     var targetObjType = oConn.targetPort.parentNode.type;
+     var rou_uid       = oConn.id;
+
+     //Setting Condition for VALID ROUTE_UID present in Route Table
+     //For start and gateway event, we dont have entry in ROUTE table
+     if(rou_uid != '' && !sourceObjType.match(/Gateway/) && !sourceObjType.match(/Start/) && !targetObjType.match(/Gateway/))
             var urlparams = '?action=deleteRoute&data={"uid":"'+ rou_uid +'"}';
-            Ext.Ajax.request({
+
+    //Deleting route for Start event and also deleting start event
+    else if(sourceObjType.match(/Start/)){
+        var targetObj = oConn.targetPort.parentNode;  //Task
+        var tas_uid   = targetObj.id;
+        var tas_start = 'FALSE';
+        urlparams = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
+    }
+      Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
                         if(iVal == 0)
@@ -2031,7 +2044,6 @@ MyWorkflow.prototype.deleteRoute = function(oConn,iVal){
                         Ext.Msg.alert ('Failure');
                     }
                 });
-        }
 }
 
 /**
