@@ -1962,10 +1962,9 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
   }
 
 ProcessMapContext.prototype.ExtVariables = function()
-  {
-    var pro_uid = workflow.getUrlVars();
-     //var taskId  = workflow.currentSelection.id;
-var varFields = Ext.data.Record.create([
+{
+  var pro_uid = workflow.getUrlVars();
+  var varFields = Ext.data.Record.create([
             {
                 name: 'variable',
                 type: 'string'
@@ -1979,8 +1978,8 @@ var varFields = Ext.data.Record.create([
                 type: 'string'
             }
        ]);
-
-  var varStore = new Ext.data.JsonStore({
+  var varStore = '';
+  varStore = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
             idProperty   : 'gridIndex',
@@ -1990,86 +1989,33 @@ var varFields = Ext.data.Record.create([
                    url   : 'proxyVariable?pid='+pro_uid+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
             })
           });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-          varStore.load();
+  //varStore.load();
 
-var allVarGrid =  new Ext.grid.GridPanel({
-            store       : varStore,
-            id          : 'mygrid',
-            loadMask    : true,
-            loadingText : 'Loading...',
-            //renderTo    : 'cases-grid',
-            frame       : false,
-            autoHeight  : false,
-            enableDragDrop   : true,
-            ddGroup     : 'firstGridDDGroup',
-            clicksToEdit: 1,
-            minHeight   :400,
-            height      :400,
-            layout      : 'form',
-            //plugins     : [editor],
-            columns     : [{
-                        id: 'variable',
+  var varColumns = new Ext.grid.ColumnModel({
+            columns: [
+                new Ext.grid.RowNumberer(),
+                    {
+                        id: 'FLD_NAME',
                         header: 'Variable',
                         dataIndex: 'variable',
-                        width: 200,
+                        width: 170,
+                        editable: false,
                         sortable: true
-            },{
-                id: 'label',
-                header: 'Label',
-                dataIndex: 'label',
-                width: 200,
-                sortable: true
-              }]
-            });
-
-var sysStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : varFields,
-            proxy        : new Ext.data.HttpProxy({
-            url   : 'proxyVariable?pid='+pro_uid+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
-            })
-          });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-          sysStore.load();
-
-var sysGrid =  new Ext.grid.GridPanel({
-            store       : sysStore,
-            id          : 'mygrid',
-            loadMask    : true,
-            loadingText : 'Loading...',
-            //renderTo    : 'cases-grid',
-            frame       : false,
-            autoHeight  : false,
-            enableDragDrop   : true,
-            ddGroup     : 'firstGridDDGroup',
-            clicksToEdit: 1,
-            minHeight   :400,
-            height      :400,
-            layout      : 'form',
-            //plugins     : [editor],
-            columns     : [{
-                        id: 'variable',
-                        header: 'Variable',
-                        dataIndex: 'variable',
-                        width: 200,
+                    },{
+                        id: 'PRO_VARIABLE',
+                        header: 'Label',
+                        dataIndex: 'label',
+                        width: 150,
                         sortable: true
-            },{
-                id: 'Label',
-                header: 'Label',
-                dataIndex: 'label',
-                width: 200,
-                sortable: true
-              }]
-            });
-var varForm = new Ext.FormPanel({
+                    }
+                ]
+        });
+
+  var varForm = new Ext.FormPanel({
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
-        width     : 850,
-        height    : 500,
+        width     : 400,
+        height    : 350,
         items:
             {
             xtype:'tabpanel',
@@ -2080,38 +2026,83 @@ var varForm = new Ext.FormPanel({
             },
             items:[{
                 title:'All Variables',
-                layout:'fit',
-                defaults: {
-                    width: 400
-                },
-                items:[allVarGrid]
+                id   :'allVar',
+                layout:'form',
+                listeners: {
+		activate: function(tabPanel){
+                                            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                            var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                            varStore.proxy.setUrl(link, true);
+                                            varStore.load();
+                         }
+		  },
+                items:[{
+                        xtype: 'grid',
+                        ds: varStore,
+                        cm: varColumns,
+                        width: 380,
+                        autoHeight: true,
+                        //plugins: [editor],
+                        //loadMask    : true,
+                        loadingText : 'Loading...',
+                        border: false
+                }]
             },{
                 title:'System',
-                layout:'fit',
-                defaults: {
-                    width: 400
-                },
-                items:[sysGrid]
+                id:'system',
+                layout:'form',
+                listeners: {
+		activate: function(tabPanel){
+                                            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                            var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                            varStore.proxy.setUrl(link, true);
+                                            varStore.load();
+                         }
+		  },
+                items:[{
+                        xtype: 'grid',
+                        ds: varStore,
+                        cm: varColumns,
+                        width: 380,
+                        autoHeight: true,
+                        //plugins: [editor],
+                        //loadMask    : true,
+                        loadingText : 'Loading...',
+                        border: false
+                }]
             },{
                 title:'Process',
+                id   :'process',
                 layout:'form',
-                defaults: {
-                    width: 400
-                },
-                items:[]
+                listeners: {
+		activate: function(tabPanel){
+                                            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                            var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                            varStore.proxy.setUrl(link, true);
+                                            varStore.load();
+                         }
+		  },
+                items:[{
+                        xtype: 'grid',
+                        ds: varStore,
+                        cm: varColumns,
+                        width: 380,
+                        autoHeight: true,
+                        //plugins: [editor],
+                        //loadMask    : true,
+                        loadingText : 'Loading...',
+                        border: false
+                }]
             }]
         }
     });
 
-    //varForm.render(document.body);
-  //workflow.taskStepsTabs = varForm;
-
-    var window = new Ext.Window({
+  var window = new Ext.Window({
         title: 'Steps Of',
         collapsible: false,
         maximizable: false,
-        width: 800,
-        height: 470,
+        width: 400,
+        height: 350,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -2135,5 +2126,4 @@ var varForm = new Ext.FormPanel({
         }]*/
     });
     window.show();
-
-  }
+}
