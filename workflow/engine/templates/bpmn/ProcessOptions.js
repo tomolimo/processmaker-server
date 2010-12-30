@@ -2104,6 +2104,23 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         //viewConfig  : {forceFit: true}
    });
 
+   var gridWindow = new Ext.Window({
+        title       : 'Report Tables',
+        collapsible : false,
+        maximizable : false,
+        width       : 550,
+        defaults    :{ autoScroll:true },
+        height      : 450,
+        minWidth    : 200,
+        minHeight   : 150,
+        layout      : 'fit',
+        plain       : true,
+        bodyStyle   : 'padding:5px;',
+        items       : reportGrid,
+        buttonAlign : 'center'
+     });
+ gridWindow.show();
+
 var reportForm =new Ext.FormPanel({
    //   title:"Add new Database Source",
       collapsible: false,
@@ -2180,12 +2197,16 @@ var reportForm =new Ext.FormPanel({
                                   editable:true,
                                   fieldLabel: 'Fields',
                                   triggerAction: 'all',
+                                  allowblank: false,
                                   forceSelection: true,
                                   dataIndex : 'FIELD_NAME',
                                   name: 'FIELDS',
                                   valueField: 'FIELD_NAME',
                                   displayField: 'FIELD_NAME',
                                   store: reportStore
+                                   
+                //text: 'clear',
+                
                                  }]
           //displayField:  'name',
           //emptyText    : 'Select Format',
