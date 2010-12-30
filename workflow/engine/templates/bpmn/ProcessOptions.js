@@ -2027,3 +2027,281 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
      });
  gridWindow.show();
 }
+
+ProcessOptions.prototype.addReportTable= function(_5625)
+{
+  var pro_uid = workflow.getUrlVars();
+
+  var reportFields = Ext.data.Record.create([
+            {
+                name: 'REP_TAB_TITLE',
+                type: 'string'
+            }
+            
+       ]);
+  
+ var reportStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : reportFields,
+            proxy        : new Ext.data.HttpProxy({
+            url          : 'proxyReportTables?pid='+pro_uid
+            })
+          });
+          
+  var reportColumns = new Ext.grid.ColumnModel({
+            columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'REP_TAB_TITLE',
+                    header: 'Title',
+                    dataIndex: 'REP_TAB_TITLE',
+                    width: 280,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
+                }
+            ]
+  });
+
+  var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'New Report Table',
+            iconCls: 'application_add',
+            handler: function () {
+                formWindow.show();
+            }
+  });
+
+
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd]
+        });
+
+   var reportGrid = new Ext.grid.GridPanel({
+        store       : reportStore,
+        id          : 'mygrid',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : false,
+        autoHeight  :false,
+        clicksToEdit: 1,
+        minHeight   :400,
+        height      :400,
+        layout      : 'fit',
+        cm          : reportColumns,
+        stripeRows  : true,
+        tbar        : tb
+        //viewConfig  : {forceFit: true}
+   });
+
+var reportForm =new Ext.FormPanel({
+   //   title:"Add new Database Source",
+      collapsible: false,
+      maximizable: true,
+      width:450,
+      frame:true,
+      plain: true,
+      bodyStyle: 'padding:5px;',
+      buttonAlign: 'center',
+
+                      items:[{
+
+              xtype: 'textfield',
+              fieldLabel: 'Title',
+              name: 'REP_TAB_TITLE',
+               allowBlank: false
+          },{
+
+              xtype: 'textfield',
+              fieldLabel: 'Table Name',
+              name: 'REP_TAB_NAME',
+               allowBlank: false
+          },
+
+                          {
+
+
+                      xtype: 'combo',
+                      width:  150,
+                      mode: 'local',
+                      editable:       false,
+                      fieldLabel: 'Type',
+                      triggerAction: 'all',
+                      forceSelection: true,
+                      name: 'REP_TAB_TYPE',
+                      displayField:  'name',
+                      //emptyText    : 'Select Format',
+                      valueField   : 'value',
+                      value        : 'global',
+                      store: new Ext.data.JsonStore({
+                             fields : ['name', 'value'],
+                             data   : [
+                                        {name : 'Global', value: 'global'},
+                                        {name : 'Grid',   value: 'grid'}
+                                     ]}),
+                      onSelect: function(record, index) {
+                                //Show-Hide Format Type Field
+                                if(record.data.value == 'global')
+                                        {Ext.getCmp("fields").show();
+                                       Ext.getCmp("gridfields").hide();
+                                        }
+                                else
+                                    {Ext.getCmp("gridfields").show();
+                                    Ext.getCmp("fields").hide();
+                                
+                                }
+                               this.setValue(record.data[this.valueField || this.displayField]);
+                               this.collapse();
+                      }
+                      },
+                      {
+                          xtype: 'fieldset',
+                          id:    'fields',
+                          border:false,
+                          hidden: false,
+                          items: [{
+                                  xtype: 'multiselect',
+                                  width:  150,
+                                  mode: 'local',
+                               //   hidden: true,
+                                  editable:       false,
+                                  fieldLabel: 'Fields',
+                                  triggerAction: 'all',
+                                  forceSelection: true,
+                                  //dataIndex : 'ENGINE',
+                                  name: 'FIELDS',
+                                  store: new Ext.data.JsonStore({
+                                         fields : ['name', 'value'],
+                                         data   :  [
+                                  
+                              
+                                ]})
+              }]
+          //displayField:  'name',
+          //emptyText    : 'Select Format',
+         // valueField   : 'value',
+         // value        : 'Select'
+          }, {
+              xtype: 'fieldset',
+                id: 'gridfields',
+             border:false,
+             hidden: true,
+              items:[{
+                              xtype: 'combo',
+                               width:  150,
+                              mode: 'local',
+                             // hidden: true,
+                              editable:false,
+                              fieldLabel: 'Grid Fields',
+                              triggerAction: 'all',
+                              forceSelection: true,
+                              //dataIndex : 'ENGINE',
+                              displayField:   'name',
+                              valueField:     'value',
+                              name: 'DBS_ENCODE',
+                              store: new Ext.data.JsonStore({
+                                     fields : ['name', 'value'],
+                                     data   :  [
+                          
+                                    ]})
+              }]
+         
+          
+          }
+      ]
+  })
+
+var formWindow = new Ext.Window({
+        title: 'New Report Table',
+        collapsible: false,
+        maximizable: true,
+        width: 450,
+        //autoHeight: true,
+        height: 400,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: reportForm,
+        buttons: [{
+            text: 'Save',
+            handler: function(){
+                var getForm         = reportForm.getForm().getValues();
+                var tableUID        = getForm.REP_TAB_UID;
+                var Title           = getForm.REP_TAB_TITLE;
+                var Name            = getForm.REP_TAB_NAME;
+                var Type            = getForm.REP_TAB_TYPE;
+                var Grid            = getForm.REP_TAB_GRID;
+                var Fields          = getForm.FIELDS;
+                var VariableName    = getForm.REP_VAR_NAME;
+                var VariableType    = getForm.REP_VAR_TYPE
+                
+                //if(dbConnUID=='')
+                    
+                Ext.Ajax.request({
+                  url   : '../reportTables/reportTables_Save.php',
+                  method: 'POST',
+                  params:{
+                      PRO_UID         :pro_uid,
+                      REP_TAB_UID     :tableUID,
+                      REP_TAB_TITLE   :Title,
+                      REP_TAB_NAME    :Name,
+                      REP_TAB_TYPE    :Type ,
+                      REP_TAB_GRID    :Grid,
+                      FIELDS          :Fields,
+                      REP_VAR_NAME    : VariableName,
+                      REP_VAR_TYPE    : VariableType
+                   
+                      
+
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Report Table Saved Successfully.');
+                  }
+                });
+                    
+                    /*else
+                         {
+                Ext.Ajax.request({
+                  url   : '../dbConnections/dbConnectionsAjax.php',
+                  method: 'POST',
+                  params:{
+                      dbs_uid  :dbConnUID,
+                      type     :Type,
+                      server   :Server,
+                      db_name  :DatabaseName,
+                      user     :Username ,
+                      passwd   :Password,
+                      port     :Port,
+                      desc     :Description,
+                      action   :'saveEditConnection'
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Connection Edited Successfully.');
+                  }
+                });
+                    }*/
+
+
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskUsers(getData);
+
+            formWindow.close();
+           // dbStore.reload();
+          }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                formWindow.close();
+          }
+        }]
+    });
+}
+

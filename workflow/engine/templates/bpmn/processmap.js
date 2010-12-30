@@ -152,7 +152,13 @@ Ext.onReady ( function() {
                             handler : function() {
                                 processObj.addOutputDoc();
                             }
-                        },{text: 'Trigger'},{text: 'Report Table'},
+                        },{text: 'Trigger'},
+                        {
+                            text: 'Report Table',
+                            handler : function() {
+                                processObj.addReportTable();
+                            }
+                        },
                         {
                             text: 'Database Connection',handler : function() {
                                 processObj.dbConnection();

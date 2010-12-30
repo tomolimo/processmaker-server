@@ -5752,4 +5752,32 @@ class processMap {
       BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
     }
   }
+  function getExtReportTables($sProcessUID = '') {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(ReportTablePeer::REP_TAB_UID);
+    $oCriteria->addSelectColumn(ReportTablePeer::PRO_UID);
+    // $oCriteria->addAsColumn ( 'REP_TAB_TITLE', 'C.CON_VALUE' );
+    $oCriteria->addAsColumn('REP_TAB_TITLE', "CASE WHEN C.CON_VALUE IS NULL THEN (SELECT DISTINCT MAX(A.CON_VALUE) FROM CONTENT A WHERE A.CON_ID = REPORT_TABLE.REP_TAB_UID ) ELSE C.CON_VALUE  END ");
+    $oCriteria->addAlias('C', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(ReportTablePeer::REP_TAB_UID, 'C.CON_ID');
+    $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'REP_TAB_TITLE' . $sDelimiter);
+    $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(ReportTablePeer::PRO_UID, $sProcessUID);
+
+    $oDataset = ReportTablePeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+      $aReportTable[] = array('REP_TAB_UID' => $aRow ['REP_TAB_UID'], 'REP_TAB_TITLE' => $aRow['REP_TAB_TITLE']);
+      $oDataset->next();
+    }
+    return $aReportTable;
+
+  }
+ 
+
 }
+
