@@ -2036,8 +2036,11 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             {
                 name: 'REP_TAB_TITLE',
                 type: 'string'
+            },
+            {
+                name: 'FIELD_NAME',
+                type: 'string'
             }
-            
        ]);
   
  var reportStore = new Ext.data.JsonStore({
@@ -2050,7 +2053,8 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             url          : 'proxyReportTables?pid='+pro_uid
             })
           });
-          
+  reportStore.load();
+  
   var reportColumns = new Ext.grid.ColumnModel({
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -2111,18 +2115,17 @@ var reportForm =new Ext.FormPanel({
       buttonAlign: 'center',
 
                       items:[{
+                              xtype: 'textfield',
+                              fieldLabel: 'Title',
+                              name: 'REP_TAB_TITLE',
+                               allowBlank: false
+                          },{
 
-              xtype: 'textfield',
-              fieldLabel: 'Title',
-              name: 'REP_TAB_TITLE',
-               allowBlank: false
-          },{
-
-              xtype: 'textfield',
-              fieldLabel: 'Table Name',
-              name: 'REP_TAB_NAME',
-               allowBlank: false
-          },
+                              xtype: 'textfield',
+                              fieldLabel: 'Table Name',
+                              name: 'REP_TAB_NAME',
+                               allowBlank: false
+                          },
 
                           {
 
@@ -2148,16 +2151,21 @@ var reportForm =new Ext.FormPanel({
                       onSelect: function(record, index) {
                                 //Show-Hide Format Type Field
                                 if(record.data.value == 'global')
-                                        {Ext.getCmp("fields").show();
-                                       Ext.getCmp("gridfields").hide();
+                                        {
+                                            Ext.getCmp("fields").show();
+                                            Ext.getCmp("gridfields").hide();
                                         }
                                 else
-                                    {Ext.getCmp("gridfields").show();
-                                    Ext.getCmp("fields").hide();
+                                     {
+                                        Ext.getCmp("gridfields").show();
+                                        Ext.getCmp("fields").hide();
+                                     }
+                                var link = 'proxyReportTables?pid='+pro_uid+'&type='+record.data.value;
+                                reportStore.proxy.setUrl(link, true);
+                                reportStore.load();
                                 
-                                }
-                               this.setValue(record.data[this.valueField || this.displayField]);
-                               this.collapse();
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                this.collapse();
                       }
                       },
                       {
@@ -2169,20 +2177,16 @@ var reportForm =new Ext.FormPanel({
                                   xtype: 'multiselect',
                                   width:  150,
                                   mode: 'local',
-                               //   hidden: true,
-                                  editable:       false,
+                                  editable:true,
                                   fieldLabel: 'Fields',
                                   triggerAction: 'all',
                                   forceSelection: true,
-                                  //dataIndex : 'ENGINE',
+                                  dataIndex : 'FIELD_NAME',
                                   name: 'FIELDS',
-                                  store: new Ext.data.JsonStore({
-                                         fields : ['name', 'value'],
-                                         data   :  [
-                                  
-                              
-                                ]})
-              }]
+                                  valueField: 'FIELD_NAME',
+                                  displayField: 'FIELD_NAME',
+                                  store: reportStore
+                                 }]
           //displayField:  'name',
           //emptyText    : 'Select Format',
          // valueField   : 'value',
@@ -2216,6 +2220,21 @@ var reportForm =new Ext.FormPanel({
           }
       ]
   })
+var gridWindow = new Ext.Window({
+        title: 'New Report Table',
+        collapsible: false,
+        maximizable: true,
+        width: 450,
+        //autoHeight: true,
+        height: 400,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: reportGrid
+});
+gridWindow.show();
+
 
 var formWindow = new Ext.Window({
         title: 'New Report Table',
