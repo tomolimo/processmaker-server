@@ -2150,7 +2150,7 @@ var reportForm =new Ext.FormPanel({
                       xtype: 'combo',
                       width:  150,
                       mode: 'local',
-                      editable:       false,
+                      editable:false,
                       fieldLabel: 'Type',
                       triggerAction: 'all',
                       forceSelection: true,
@@ -2197,8 +2197,8 @@ var reportForm =new Ext.FormPanel({
                                   editable:true,
                                   fieldLabel: 'Fields',
                                   triggerAction: 'all',
-                                  allowblank: false,
-                                  forceSelection: true,
+                                  allowblank: true,
+                                  forceSelection: false,
                                   dataIndex : 'FIELD_NAME',
                                   name: 'FIELDS',
                                   valueField: 'FIELD_NAME',
@@ -2280,31 +2280,31 @@ var formWindow = new Ext.Window({
                 var Grid            = getForm.REP_TAB_GRID;
                 var Fields          = getForm.FIELDS;
                 var VariableName    = getForm.REP_VAR_NAME;
-                var VariableType    = getForm.REP_VAR_TYPE
+                var VariableType    = getForm.REP_VAR_TYPE;
+                var Connection      = getForm.REP_TAB_CONNECTION
                 
-                //if(dbConnUID=='')
-                    
+           
                 Ext.Ajax.request({
                   url   : '../reportTables/reportTables_Save.php',
                   method: 'POST',
                   params:{
                       PRO_UID         :pro_uid,
-                      REP_TAB_UID     :tableUID,
+                      REP_TAB_UID     :'',
                       REP_TAB_TITLE   :Title,
                       REP_TAB_NAME    :Name,
                       REP_TAB_TYPE    :Type ,
                       REP_TAB_GRID    :Grid,
                       FIELDS          :Fields,
                       REP_VAR_NAME    : VariableName,
-                      REP_VAR_TYPE    : VariableType
-                   
+                      REP_VAR_TYPE    : VariableType,
+                      REP_TAB_CONNECTION: Connection
                       
-
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Report Table Saved Successfully.');
                   }
                 });
+                    
                     
                     /*else
                          {
@@ -2333,7 +2333,7 @@ var formWindow = new Ext.Window({
                 //taskExtObj.saveTaskUsers(getData);
 
             formWindow.close();
-           // dbStore.reload();
+           reportStore.reload();
           }
         },{
             text: 'Cancel',
