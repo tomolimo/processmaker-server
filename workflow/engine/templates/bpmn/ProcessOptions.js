@@ -673,55 +673,114 @@ ProcessOptions.prototype.dbConnection = function()
       buttonAlign: 'center',
 
                       items:[{
-                      xtype: 'combo',
-                      width:  150,
-                      mode: 'local',
-                      editable:       false,
-                      fieldLabel: 'Engine',
-                      triggerAction: 'all',
-                      forceSelection: true,
-                      name: 'DBS_TYPE',
-                      displayField:  'name',
-                      //emptyText    : 'Select Format',
-                      valueField   : 'value',
-                      value        : 'Select',
-                      store: new Ext.data.JsonStore({
-                             fields : ['name', 'value'],
-                             data   : [
-                                        {name : 'Select', value: 'select'},
-                                        {name : 'MySql',   value: 'MySql'},
-                                        {name : 'PostGreSql',   value: 'PostGreSql'},
-                                        {name : 'Microsoft SQL server',   value: 'Microsoft SQL server'}
-                                      ]}),
-                      onSelect: function(record, index) {
-                                //Show-Hide Format Type Field
+                        xtype: 'combo',
+                        width:  150,
+                        mode: 'local',
+                        editable:       false,
+                        fieldLabel: 'Engine',
+                        triggerAction: 'all',
+                        forceSelection: true,
+                        name: 'DBS_TYPE',
+                        displayField:  'name',
+                        //emptyText    : 'Select Format',
+                        valueField   : 'value',
+                        value        : 'Select',
+                        store: new Ext.data.JsonStore({
+                                 fields : ['name', 'value'],
+                                 data   : [
+                                          {name : 'Select', value: 'select'},
+                                          {name : 'MySql',   value: 'MySql'},
+                                          {name : 'PostGreSql',   value: 'PostGreSql'},
+                                          {name : 'Microsoft SQL server',   value: 'Microsoft SQL server'}
+                                          ]}),
+                        onSelect: function(record, index) {
+                                 //Show-Hide Format Type Field
                                 if(record.data.value == 'MySql')
                                         {Ext.getCmp("encode").show();
-                                        Ext.getCmp("postgre").hide();
-                                        Ext.getCmp("port").setValue('3306')}
+                                         Ext.getCmp("postgre").hide();
+                                         Ext.getCmp("port").setValue('3306')}
                                 else if(record.data.value == 'PostGreSql')
-                                       {Ext.getCmp("postgre").show();
-                                       Ext.getCmp("encode").hide();
-                                        Ext.getCmp("port").setValue('5432')}
+                                        {Ext.getCmp("postgre").show();
+                                         Ext.getCmp("encode").hide();
+                                         Ext.getCmp("port").setValue('5432')}
                                 else
-                                    {Ext.getCmp("sqlserver").show();
-                                    Ext.getCmp("postgre").hide();
-                                Ext.getCmp("port").setValue('1433')}
-                               this.setValue(record.data[this.valueField || this.displayField]);
-                               this.collapse();
-                      }
-                      },
-                      {
-                          xtype: 'fieldset',
-                          id:    'encode',
-                          border:false,
-                          hidden: true,
-                          items: [{
+                                        {Ext.getCmp("sqlserver").show();
+                                         Ext.getCmp("postgre").hide();
+                                         Ext.getCmp("port").setValue('1433')}
+                                         this.setValue(record.data[this.valueField || this.displayField]);
+                                         this.collapse();
+                        }
+                      },{
+                              xtype: 'fieldset',
+                              id:    'encode',
+                              border:false,
+                              hidden: true,
+                              items: [{
+                                      xtype: 'combo',
+                                      width:  150,
+                                      mode: 'local',
+                                   //   hidden: true,
+                                      editable:       false,
+                                      fieldLabel: 'Encode',
+                                      triggerAction: 'all',
+                                      forceSelection: true,
+                                      //dataIndex : 'ENGINE',
+                                      displayField:   'name',
+                                      valueField:     'value',
+                                      name: 'DBS_ENCODE',
+                                      store: new Ext.data.JsonStore({
+                                             fields : ['name', 'value'],
+                                             data   :  [
+                                      {name:'big5', value: 'big5'},
+                                      {name:'dec8',     value:'dec8' },
+                                      {name:'cp850',    value:'cp850'},
+                                      {name:'hp8',      value:'hp8' },
+                                      {name:'koi8r',    value:'koi8r'},
+                                      {name:'latin1',   value:'latin1'},
+                                      {name:'latin2',   value:'latin2'},
+                                      {name:'swe7',     value:'swe7' },
+                                      {name:'ascii',    value:'ascii'},
+                                      {name:'ujis',     value:'ujis' },
+                                      {name:'sjis',     value:'sjis' },
+                                      {name:'hebrew',   value:'hebrew'},
+                                      {name:'tis620',   value:'tis620' },
+                                      {name:'euckr',    value:'euckr'},
+                                      {name:'koi8u',    value:'koi8u' },
+                                      {name:'gb2312',   value:'gb2312'},
+                                      {name:'greek',    value:'greek'},
+                                      {name:'cp1250',   value:'cp1250'},
+                                      {name:'gbk',      value:'gbk' },
+                                      {name:'latin5',   value:'latin5' },
+                                      {name:'armscii8', value:'armscii8'},
+                                      {name:'utf8',     value:'utf8' },
+                                      {name:'ucs2',     value:'ucs2'},
+                                      {name:'cp866',    value:'cp866'},
+                                      {name:'keybcs2',  value:'keybcs2' },
+                                      {name:'macce',    value:'macce'},
+                                      {name:'macroman', value:'macroman' },
+                                      {name:'cp852',    value:'cp852' },
+                                      {name:'latin7',   value:'atin7' },
+                                      {name:'cp1251',   value:'cp1251'},
+                                      {name:'cp1256',   value:'cp1256'},
+                                      {name:'cp1257',   value:'cp1257'},
+                                      {name:'binary',   value:'binary'},
+                                      {name:'geostd8',  value:'geostd8'},
+                                      {name:'cp932',    value:'cp932'},
+                                      {name:'eucjpms',  value:'eucjpms'}
+                                    ]})
+                             }]
+          
+                      },{
+                         xtype: 'fieldset',
+                         id: 'postgre',
+                         border:false,
+                         hidden: true,
+                         items:[{
                                   xtype: 'combo',
-                                  width:  150,
+                                   width:  150,
                                   mode: 'local',
-                               //   hidden: true,
-                                  editable:       false,
+                                 // hidden: true,
+                                  editable:false,
                                   fieldLabel: 'Encode',
                                   triggerAction: 'all',
                                   forceSelection: true,
@@ -732,276 +791,198 @@ ProcessOptions.prototype.dbConnection = function()
                                   store: new Ext.data.JsonStore({
                                          fields : ['name', 'value'],
                                          data   :  [
-                                  {name:'big5', value: 'big5'},
-                                  {name:'dec8',     value:'dec8' },
-                                  {name:'cp850',    value:'cp850'},
-                                  {name:'hp8',      value:'hp8' },
-                                  {name:'koi8r',    value:'koi8r'},
-                                  {name:'latin1',   value:'latin1'},
-                                  {name:'latin2',   value:'latin2'},
-                                  {name:'swe7',     value:'swe7' },
-                                  {name:'ascii',    value:'ascii'},
-                                  {name:'ujis',     value:'ujis' },
-                                  {name:'sjis',     value:'sjis' },
-                                  {name:'hebrew',   value:'hebrew'},
-                                  {name:'tis620',   value:'tis620' },
-                                  {name:'euckr',    value:'euckr'},
-                                  {name:'koi8u',    value:'koi8u' },
-                                  {name:'gb2312',   value:'gb2312'},
-                                  {name:'greek',    value:'greek'},
-                                  {name:'cp1250',   value:'cp1250'},
-                                  {name:'gbk',      value:'gbk' },
-                                  {name:'latin5',   value:'latin5' },
-                                  {name:'armscii8', value:'armscii8'},
-                                  {name:'utf8',     value:'utf8' },
-                                  {name:'ucs2',     value:'ucs2'},
-                                  {name:'cp866',    value:'cp866'},
-                                  {name:'keybcs2',  value:'keybcs2' },
-                                  {name:'macce',    value:'macce'},
-                                  {name:'macroman', value:'macroman' },
-                                  {name:'cp852',    value:'cp852' },
-                                  {name:'latin7',   value:'atin7' },
-                                  {name:'cp1251',   value:'cp1251'},
-                                  {name:'cp1256',   value:'cp1256'},
-                                  {name:'cp1257',   value:'cp1257'},
-                                  {name:'binary',   value:'binary'},
-                                  {name:'geostd8',  value:'geostd8'},
-                                  {name:'cp932',    value:'cp932'},
-                                  {name:'eucjpms',  value:'eucjpms'}
-                                ]})
-              }]
-          //displayField:  'name',
-          //emptyText    : 'Select Format',
-         // valueField   : 'value',
-         // value        : 'Select'
-          }, {
-              xtype: 'fieldset',
-                id: 'postgre',
-             border:false,
-             hidden: true,
-              items:[{
-                              xtype: 'combo',
-                               width:  150,
-                              mode: 'local',
-                             // hidden: true,
-                              editable:false,
-                              fieldLabel: 'Encode',
-                              triggerAction: 'all',
-                              forceSelection: true,
-                              //dataIndex : 'ENGINE',
-                              displayField:   'name',
-                              valueField:     'value',
-                              name: 'DBS_ENCODE',
-                              store: new Ext.data.JsonStore({
-                                     fields : ['name', 'value'],
-                                     data   :  [
-                          {name:"BIG5",        value:"BIG5"},
-                          {name:"EUC_CN",      value:"EUC_CN"},
-                          {name:"EUC_JP",      value:"EUC_JP"},
-                          {name:"EUC_KR",      value:"EUC_KR"},
-                          {name:"EUC_TW",      value:"EUC_TW"},
-                          {name:"GB18030",     value:"GB18030"},
-                          {name:"GBK",         value:"GBK"},
-                          {name:"ISO_8859_5",  value:"ISO_8859_5"},
-                          {name:"ISO_8859_6",  value:"ISO_8859_6"},
-                          {name:"ISO_8859_7",  value:"ISO_8859_7"},
-                          {name:"ISO_8859_8",  value: "ISO_8859_8"},
-                          {name:"JOHAB",       value:"JOHAB"},
-                          {name:"KOI8",        value: "KOI8"},
-                          {name:"selected",    value:  "LATIN1"},
-                          {name:"LATIN2",      value:"LATIN2"},
-                          {name:"LATIN3",      value:"LATIN3"},
-                          {name:"LATIN4",      value: "LATIN4"},
-                          {name:"LATIN5",      value:"LATIN5"},
-                          {name:"LATIN6",      value: "LATIN6"},
-                          {name:"LATIN7",      value:"LATIN7"},
-                          {name:"LATIN8",      value:"LATIN8"},
-                          {name:"LATIN9",      value:"LATIN9"},
-                          {name:"LATIN10",     value:"LATIN10"},
-                          {name:"SJIS",        value:"SJIS"},
-                          {name:"SQL_ASCII",   value:"SQL_ASCII"},
-                          {name:"UHC",         value: "UHC"},
-                          {name:"UTF8",        value: "UTF8"},
-                          {name:"WIN866",      value: "WIN866"},
-                          {name:"WIN874",      value:"WIN874"},
-                          {name:"WIN1250",     value:"WIN1250"},
-                          {name:"WIN1251",     value:"WIN1251"},
-                          {name:"WIN1252",     value:"WIN1252"},
-                          {name:"WIN1256",     value:"WIN1256"},
-                          {name:"WIN1258",     value:"WIN1258"}
-                                    ]})
-              }]
-          //displayField:  'name',
-          //emptyText    : 'Select Format',
-         // valueField   : 'value',
-         // value        : 'Select'
-          }, {
-              xtype: 'fieldset',
-                id: 'sqlserver',
-             border:false,
-             hidden: true,
-              items:[{
-                      xtype: 'combo',
-                      width:  150,
-                      mode: 'local',
-                   //   hidden: true,
-                      editable:       false,
-                      fieldLabel: 'Encode',
-                      triggerAction: 'all',
-                      forceSelection: true,
-                      //dataIndex : 'ENGINE',
-                      displayField:   'name',
-                      valueField:     'value',
-                      name: 'DBS_ENCODE',
-                      store: new Ext.data.JsonStore({
-                             fields : ['name', 'value'],
-                             data   :  [
-                      {name:'utf8',    value: 'utf8'}
-                       ]})
-              }]
-                  //displayField:  'name',
-          //emptyText    : 'Select Format',
-         // valueField   : 'value',
-         // value        : 'Select'
-          }, {
-
-              xtype: 'textfield',
-              fieldLabel: 'Server',
-              name: 'DBS_SERVER',
-               allowBlank: false
-          }, {
-              xtype: 'textfield',
-              fieldLabel: 'Database name',
-              name: 'DBS_DATABASE_NAME',
-               allowBlank: false
-          },{
-              xtype: 'textfield',
-              fieldLabel: 'Username',
-              name: 'DBS_USERNAME',
-              allowBlank: false
-          }, {
-              xtype: 'textfield',
-              fieldLabel: 'Password',
-              name: 'DBS_PASSWORD',
-              allowBlank: true
-          }, {
-              xtype: 'textfield',
-              fieldLabel: 'Port',
-              name: 'DBS_PORT',
-              id:'port',
-              allowBlank: false
-          }, {
-              xtype: 'textarea',
-              fieldLabel: 'Description',
-              name: 'DBS_DESCRIPTION',
-              allowBlank: true
-          },{
-              id : 'DBS_UID',
-              xtype: 'hidden',
-              name : 'DBS_UID'
-          }
-      ]
+                                                      {name:"BIG5",        value:"BIG5"},
+                                                      {name:"EUC_CN",      value:"EUC_CN"},
+                                                      {name:"EUC_JP",      value:"EUC_JP"},
+                                                      {name:"EUC_KR",      value:"EUC_KR"},
+                                                      {name:"EUC_TW",      value:"EUC_TW"},
+                                                      {name:"GB18030",     value:"GB18030"},
+                                                      {name:"GBK",         value:"GBK"},
+                                                      {name:"ISO_8859_5",  value:"ISO_8859_5"},
+                                                      {name:"ISO_8859_6",  value:"ISO_8859_6"},
+                                                      {name:"ISO_8859_7",  value:"ISO_8859_7"},
+                                                      {name:"ISO_8859_8",  value: "ISO_8859_8"},
+                                                      {name:"JOHAB",       value:"JOHAB"},
+                                                      {name:"KOI8",        value: "KOI8"},
+                                                      {name:"selected",    value:  "LATIN1"},
+                                                      {name:"LATIN2",      value:"LATIN2"},
+                                                      {name:"LATIN3",      value:"LATIN3"},
+                                                      {name:"LATIN4",      value: "LATIN4"},
+                                                      {name:"LATIN5",      value:"LATIN5"},
+                                                      {name:"LATIN6",      value: "LATIN6"},
+                                                      {name:"LATIN7",      value:"LATIN7"},
+                                                      {name:"LATIN8",      value:"LATIN8"},
+                                                      {name:"LATIN9",      value:"LATIN9"},
+                                                      {name:"LATIN10",     value:"LATIN10"},
+                                                      {name:"SJIS",        value:"SJIS"},
+                                                      {name:"SQL_ASCII",   value:"SQL_ASCII"},
+                                                      {name:"UHC",         value: "UHC"},
+                                                      {name:"UTF8",        value: "UTF8"},
+                                                      {name:"WIN866",      value: "WIN866"},
+                                                      {name:"WIN874",      value:"WIN874"},
+                                                      {name:"WIN1250",     value:"WIN1250"},
+                                                      {name:"WIN1251",     value:"WIN1251"},
+                                                      {name:"WIN1252",     value:"WIN1252"},
+                                                      {name:"WIN1256",     value:"WIN1256"},
+                                                      {name:"WIN1258",     value:"WIN1258"}
+                                                   ]})
+                               }]
+                      },{
+                         xtype: 'fieldset',
+                         id: 'sqlserver',
+                         border:false,
+                         hidden: true,
+                         items:[{
+                                  xtype: 'combo',
+                                  width:  150,
+                                  mode: 'local',
+                                  editable:       false,
+                                  fieldLabel: 'Encode',
+                                  triggerAction: 'all',
+                                  forceSelection: true,
+                                  //dataIndex : 'ENGINE',
+                                  displayField:   'name',
+                                  valueField:     'value',
+                                  name: 'DBS_ENCODE',
+                                  store: new Ext.data.JsonStore({
+                                         fields : ['name', 'value'],
+                                  data   :  [
+                                            {name:'utf8',    value: 'utf8'}
+                                  ]})
+                               }]
+                  
+                      },{
+                         xtype: 'textfield',
+                         fieldLabel: 'Server',
+                         name: 'DBS_SERVER',
+                         allowBlank: false
+                      },{
+                         xtype: 'textfield',
+                         fieldLabel: 'Database name',
+                         name: 'DBS_DATABASE_NAME',
+                         allowBlank: false
+                      },{
+                        xtype: 'textfield',
+                        fieldLabel: 'Username',
+                        name: 'DBS_USERNAME',
+                        allowBlank: false
+                      },{
+                        xtype: 'textfield',
+                        fieldLabel: 'Password',
+                        name: 'DBS_PASSWORD',
+                        allowBlank: true
+                      },{
+                        xtype: 'textfield',
+                        fieldLabel: 'Port',
+                        name: 'DBS_PORT',
+                        id:'port',
+                        allowBlank: false
+                      },{
+                        xtype: 'textarea',
+                        fieldLabel: 'Description',
+                        name: 'DBS_DESCRIPTION',
+                        allowBlank: true
+                      },{
+                        id : 'DBS_UID',
+                        xtype: 'hidden',
+                        name : 'DBS_UID'
+                      }
+                     ]
   })
 
-var formWindow = new Ext.Window({
-        title: 'Add new Database Source',
-        collapsible: false,
-        maximizable: true,
-        width: 450,
-        //autoHeight: true,
-        height: 400,
-        //layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: dbconnForm,
-        buttons: [{
-            text: 'Save',
-            handler: function(){
-                var getForm         = dbconnForm.getForm().getValues();
-                var dbConnUID       = getForm.DBS_UID;
-                var Type            = getForm.DBS_TYPE;
-                var Server          = getForm.DBS_SERVER;
-                var DatabaseName    = getForm.DBS_DATABASE_NAME;
-                var Username        = getForm.DBS_USERNAME;
-                var Password        = getForm.DBS_PASSWORD;
-                var Port            = getForm.DBS_PORT;
-                var Description     = getForm.DBS_DESCRIPTION;
+  var formWindow = new Ext.Window({
+    title: 'Add new Database Source',
+    collapsible: false,
+    maximizable: true,
+    width: 450,
+    //autoHeight: true,
+    height: 400,
+    //layout: 'fit',
+    plain: true,
+    bodyStyle: 'padding:5px;',
+    buttonAlign: 'center',
+    items: dbconnForm,
+    buttons: [{
+        text: 'Save',
+        handler: function(){
+            var getForm         = dbconnForm.getForm().getValues();
+            var dbConnUID       = getForm.DBS_UID;
+            var Type            = getForm.DBS_TYPE;
+            var Server          = getForm.DBS_SERVER;
+            var DatabaseName    = getForm.DBS_DATABASE_NAME;
+            var Username        = getForm.DBS_USERNAME;
+            var Password        = getForm.DBS_PASSWORD;
+            var Port            = getForm.DBS_PORT;
+            var Description     = getForm.DBS_DESCRIPTION;
 
-                if(dbConnUID=='')
-                    {
-                Ext.Ajax.request({
-                  url   : '../dbConnections/dbConnectionsAjax.php',
-                  method: 'POST',
-                  params:{
-                      DBS_uid  :dbConnUID,
-                      type     :Type,
-                      server   :Server,
-                      db_name  :DatabaseName,
-                      user     :Username ,
-                      passwd   :Password,
-                      port     :Port,
-                      desc     :Description,
-                      action   :'saveConnection'
-
-                  },
-                  success: function(response) {
-                      Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
-                  }
-                });
+            if(dbConnUID=='')
+                {
+                   Ext.Ajax.request({
+                       url   : '../dbConnections/dbConnectionsAjax.php',
+                       method: 'POST',
+                       params:{
+                               DBS_uid  :dbConnUID,
+                               type     :Type,
+                               server   :Server,
+                               db_name  :DatabaseName,
+                               user     :Username ,
+                               passwd   :Password,
+                               port     :Port,
+                               desc     :Description,
+                               action   :'saveConnection'
+                              },
+                        success: function(response) {
+                        Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                        }
+                  });
+                }
+            else
+                {
+                 Ext.Ajax.request({
+                     url   : '../dbConnections/dbConnectionsAjax.php',
+                     method: 'POST',
+                     params:{
+                              dbs_uid  :dbConnUID,
+                              type     :Type,
+                              server   :Server,
+                              db_name  :DatabaseName,
+                              user     :Username ,
+                              passwd   :Password,
+                              port     :Port,
+                              desc     :Description,
+                              action   :'saveEditConnection'
+                            },
+                    success: function(response) {
+                    Ext.MessageBox.alert ('Status','Connection Edited Successfully.');
                     }
-                    else
-                         {
-                Ext.Ajax.request({
-                  url   : '../dbConnections/dbConnectionsAjax.php',
-                  method: 'POST',
-                  params:{
-                      dbs_uid  :dbConnUID,
-                      type     :Type,
-                      server   :Server,
-                      db_name  :DatabaseName,
-                      user     :Username ,
-                      passwd   :Password,
-                      port     :Port,
-                      desc     :Description,
-                      action   :'saveEditConnection'
-                  },
-                  success: function(response) {
-                      Ext.MessageBox.alert ('Status','Connection Edited Successfully.');
-                  }
                 });
-                    }
-
-
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-
+            }
+           formWindow.close();
+           dbStore.reload();
+        }
+    },{
+        text: 'Cancel',
+        handler: function(){
+            // when this button clicked,
             formWindow.close();
-            dbStore.reload();
-          }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                formWindow.close();
-          }
-        }]
-    });
+        }
+    }]
+  });
 
-   var gridWindow = new Ext.Window({
-        title: 'Database Source List',
-        collapsible: false,
-        maximizable: true,
-        width: 550,
-        //autoHeight: true,
-        height: 400,
-        //layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: dbGrid
-    });
-   gridWindow.show();
+  var gridWindow = new Ext.Window({
+    title: 'Database Source List',
+    collapsible: false,
+    maximizable: true,
+    width: 550,
+    //autoHeight: true,
+    height: 400,
+    //layout: 'fit',
+    plain: true,
+    bodyStyle: 'padding:5px;',
+    buttonAlign: 'center',
+    items: dbGrid
+  });
+  gridWindow.show();
 }
 
 
@@ -2279,8 +2260,8 @@ var formWindow = new Ext.Window({
                 var Type            = getForm.REP_TAB_TYPE;
                 var Grid            = getForm.REP_TAB_GRID;
                 var Fields          = getForm.FIELDS;
-                var VariableName    = getForm.REP_VAR_NAME;
-                var VariableType    = getForm.REP_VAR_TYPE;
+               // var VariableName    = getForm.REP_VAR_NAME;
+               // var VariableType    = getForm.REP_VAR_TYPE;
                 var Connection      = getForm.REP_TAB_CONNECTION
                 
            
@@ -2289,14 +2270,14 @@ var formWindow = new Ext.Window({
                   method: 'POST',
                   params:{
                       PRO_UID         :pro_uid,
-                      REP_TAB_UID     :'',
+                      REP_TAB_UID     :tableUID,
                       REP_TAB_TITLE   :Title,
                       REP_TAB_NAME    :Name,
                       REP_TAB_TYPE    :Type ,
                       REP_TAB_GRID    :Grid,
                       FIELDS          :Fields,
-                      REP_VAR_NAME    : VariableName,
-                      REP_VAR_TYPE    : VariableType,
+                      //REP_VAR_NAME    : VariableName,
+                      //REP_VAR_TYPE    : VariableType,
                       REP_TAB_CONNECTION: Connection
                       
                   },

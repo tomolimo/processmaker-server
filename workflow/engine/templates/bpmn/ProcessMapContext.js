@@ -1582,36 +1582,34 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         defaults: {width: 350},
         defaultType: 'textfield',
                 items: [{
-                         width:          100,
-                        xtype:          'combo',
-                        mode:           'local',
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     'Map Type',
-                        name:           'CT_MAP_TYPE',
-                        displayField:   'name',
-                        value: 'Process Map',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                                                fields : ['name', 'value'],
-                                                data   :[{name: 'None', value:'0'},
-                                                        {name: 'Process Map', value: '1'},
-                                                        {name: 'Stages Map', value:'2'}]
-
-                                                              })
-                    },{
+                        width          :100,
+                        xtype           :'combo',
+                        mode            :'local',
+                        triggerAction   :'all',
+                        forceSelection  :true,
+                        editable        :false,
+                        fieldLabel      :'Map Type',
+                        name            :'CT_MAP_TYPE',
+                        displayField    :'name',
+                        value           :'Process Map',
+                        valueField      :'value',
+                        store           :new Ext.data.JsonStore({
+                                         fields : ['name', 'value'],
+                                         data   :[{name: 'None', value:'0'},
+                                                  {name: 'Process Map', value: '1'},
+                                                  {name: 'Stages Map', value:'2'}]
+                                         })
+                },{
                         xtype: 'checkbox',
                         fieldLabel: 'Derivation History',
                         name: 'CT_DERIVATION_HISTORY'
                         //checked:checkDerivation
-                    },{
+                },{
                         xtype: 'checkbox',
                         fieldLabel: 'Messages History',
                         name: 'CT_MESSAGE_HISTORY'
                        // checked:checkMessages
-                    }
-                ]
+                }]
 
    });
    var Propertieswindow = new Ext.Window({
@@ -1629,7 +1627,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         items: PropertiesForm,
         buttons: [{
                 text: 'Save',
-            handler: function(){
+                handler: function(){
                 var getForm             = PropertiesForm.getForm().getValues();
                 var pro_uid             = getForm.PRO_UID;
                 var MapType             = getForm.CT_MAP_TYPE;
@@ -1637,26 +1635,25 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                 var MessageHistory      = getForm.CT_MESSAGE_HISTORY;
 
                    Ext.Ajax.request({
-                   url   : '../tracker/tracker_save.php',
-                   method: 'POST',
-                   params:{
-                      PRO_UID  :pro_uid,
-                      CT_MAP_TYPE     :MapType,
-                      CT_DERIVATION_HISTORY   :DerivationHistory,
-                      CT_MESSAGE_HISTORY  :MessageHistory
-                          },
-                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
-                                               }
+                       url   : '../tracker/tracker_save.php',
+                       method: 'POST',
+                       params:{
+                          PRO_UID               :pro_uid,
+                          CT_MAP_TYPE           :MapType,
+                          CT_DERIVATION_HISTORY :DerivationHistory,
+                          CT_MESSAGE_HISTORY    :MessageHistory
+                       },
+                       success: function(response) {
+                          Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                                                   }
                    });
-            }
-                 },{
-                     text: 'Cancel',
-                     handler: function(){
-                     Propertieswindow.close();
-                     }
-                   }
-        ]
+                }
+        },{
+           text: 'Cancel',
+           handler: function(){
+           Propertieswindow.close();
+          }
+        }]
    });
   Propertieswindow.show();
 }
@@ -1701,19 +1698,17 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
     });
 
     var assignedStore = new Ext.data.JsonStore({
-      root         : 'data',
-      totalProperty: 'totalCount',
-      idProperty   : 'gridIndex',
-      remoteSort   : true,
-      fields       : ObjectFields,
-      proxy: new Ext.data.HttpProxy({
-        url: 'proxyCaseTrackerObjects?pid='+pro_uid
-        })
+      root          : 'data',
+      totalProperty : 'totalCount',
+      idProperty    : 'gridIndex',
+      remoteSort    : true,
+      fields        : ObjectFields,
+      proxy         : new Ext.data.HttpProxy({
+      url           : 'proxyCaseTrackerObjects?pid='+pro_uid
+      })
     });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
     assignedStore.load();
 
-         // create the Data Store of users that are not assigned to a task
     var availableStore = new Ext.data.JsonStore({
       root            : 'data',
       url             : 'proxyCaseTrackerObjects?tid='+pro_uid,
@@ -1731,22 +1726,21 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       handler: function(){
          var User = Objectsgrid.getStore();
          var e = new ObjectFields({
-           OBJECT_TITLE:'',
-           OBJECT_TYPE:'',
-           OBJECT_UID: ''
+           OBJECT_TITLE :'',
+           OBJECT_TYPE  :'',
+           OBJECT_UID   : ''
       });
 
-                //storeUsers.reload();
-      if(availableStore.data.items.length == 0)
-      Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
-      else
-        {
-        editor.stopEditing();
-        assignedStore.insert(0, e);
-        Objectsgrid.getView().refresh();
-        //grid.getSelectionModel().selectRow(0);
-        editor.startEditing(0, 0);
-        }
+         if(availableStore.data.items.length == 0)
+            Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+         else
+            {
+                editor.stopEditing();
+                assignedStore.insert(0, e);
+                Objectsgrid.getView().refresh();
+                //grid.getSelectionModel().selectRow(0);
+                editor.startEditing(0, 0);
+            }
 
       }
 
@@ -1791,7 +1785,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
               });
             }
             else
-            assignedStore.remove(r);
+             assignedStore.remove(r);
         }
       }
     });
@@ -1826,15 +1820,15 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
           editor: new Ext.form.ComboBox({
             xtype: 'combo',
             store:availableStore,
-            fieldLabel: 'Title',
-            hiddenName: 'number',
+            fieldLabel   : 'Title',
+            hiddenName   : 'number',
             displayField : 'OBJECT_TITLE'  ,
             valueField   : 'OBJECT_TITLE',
             name         : 'OBJECT_TITLE',
             triggerAction: 'all',
-            emptyText: 'Select User or Group',
-            allowBlank: false,
-            onSelect: function(record, index){
+            emptyText    : 'Select User or Group',
+            allowBlank   : false,
+            onSelect     : function(record, index){
               var User = Objectsgrid.getStore();
               var selectedrowIndex = '0';
               User.data.items[selectedrowIndex].data.OBJECT_UID   = record.data.OBJECT_UID;
@@ -1844,36 +1838,29 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
               this.collapse();
             }
           })
-        },
-        {
-          header: 'Type',
-          dataIndex: 'CTO_TYPE_OBJ',
-          //width: 200,
-          editable: false
-        },
-        {
-          header: 'Condition',
-          dataIndex: 'CTO_CONDITION',
-          name: 'CTO_CONDITION',
-          //width: 200,
+        },{
+          header    : 'Type',
+          dataIndex : 'CTO_TYPE_OBJ',
+          editable  : false
+        },{
+          header    : 'Condition',
+          dataIndex : 'CTO_CONDITION',
+          name      : 'CTO_CONDITION',
           editable: true,
           editor: new Ext.form.TextField({
-          allowBlank: true
+            allowBlank: true
           })
-        },
-        {
+        },{
           header: 'Assign Condition',
-          //width: 50,
           renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
-        }
-      ],
+        }],
       sm: new Ext.grid.RowSelectionModel({
         singleSelect: true,
         listeners: {
           rowselect: function(smObj, rowIndex, record) {
             workflow.currentrowIndex = rowIndex;
             }
-        }
+         }
       }),
       stripeRows: true,
       viewConfig: {forceFit: true},
@@ -1924,20 +1911,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       }
 
     });
-    //Updating the user incase if already assigned user has been replaced by other user
-    /*if(changes != '' && typeof record.json != 'undefined')
-    {
-        var user_TURel      = record.json.TU_RELATION;
-        var userUID         = record.json.USR_UID;
-        var user_TUtype     = record.json.TU_TYPE;
-        urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
-        Ext.Ajax.request({
-              url   : 'processes_Ajax.php' +urlparams ,
-              success: function(response) {
-                  //Ext.MessageBox.alert ('Status','User has been updated successfully.');
-    }
-    });
-    }*/
+   
     assignedStore.reload();
     availableStore.reload();
 
@@ -2016,48 +1990,49 @@ ProcessMapContext.prototype.ExtVariables = function()
         bodyStyle :'padding:5px 5px 0',
         width     : 400,
         height    : 350,
+        renderer: function(val){return '<table border=1> <tr> <td> @@ </td> <td> Replace the value in quotes </td> </tr> </table>';},
         items:
             {
-            xtype:'tabpanel',
-            activeTab: 0,
-            defaults:{
-                autoHeight:true,
-                bodyStyle:'padding:10px'
-            },
-            items:[{
-                title:'All Variables',
-                id   :'allVar',
-                layout:'form',
-                listeners: {
-		activate: function(tabPanel){
-                                            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                            var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
-                                            varStore.proxy.setUrl(link, true);
-                                            varStore.load();
-                         }
-		  },
+                xtype:'tabpanel',
+                activeTab: 0,
+                defaults:{
+                    autoHeight:true,
+                    bodyStyle:'padding:10px'
+                },
                 items:[{
-                        xtype: 'grid',
-                        ds: varStore,
-                        cm: varColumns,
-                        width: 380,
-                        autoHeight: true,
-                        //plugins: [editor],
-                        //loadMask    : true,
-                        loadingText : 'Loading...',
-                        border: false
-                }]
-            },{
+                        title:'All Variables',
+                        id   :'allVar',
+                        layout:'form',
+                        listeners: {
+                            activate: function(tabPanel){
+                                                        // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                                        var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                        varStore.proxy.setUrl(link, true);
+                                                        varStore.load();
+                            }
+                        },
+                        items:[{
+                                xtype: 'grid',
+                                ds: varStore,
+                                cm: varColumns,
+                                width: 380,
+                                autoHeight: true,
+                                //plugins: [editor],
+                                //loadMask    : true,
+                                loadingText : 'Loading...',
+                                border: false
+                        }]
+                },{
                 title:'System',
                 id:'system',
                 layout:'form',
-                listeners: {
-		activate: function(tabPanel){
-                                            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                            var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
-                                            varStore.proxy.setUrl(link, true);
-                                            varStore.load();
-                         }
+                listeners:{
+                    activate: function(tabPanel){
+                                                // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                                var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                varStore.proxy.setUrl(link, true);
+                                                varStore.load();
+                    }
 		  },
                 items:[{
                         xtype: 'grid',
@@ -2070,18 +2045,18 @@ ProcessMapContext.prototype.ExtVariables = function()
                         loadingText : 'Loading...',
                         border: false
                 }]
-            },{
+                },{
                 title:'Process',
                 id   :'process',
                 layout:'form',
                 listeners: {
-		activate: function(tabPanel){
-                                            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                            var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
-                                            varStore.proxy.setUrl(link, true);
-                                            varStore.load();
-                         }
-		  },
+                    activate: function(tabPanel){
+                                                // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                                var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                varStore.proxy.setUrl(link, true);
+                                                varStore.load();
+                    }
+		},
                 items:[{
                         xtype: 'grid',
                         ds: varStore,
@@ -2093,14 +2068,16 @@ ProcessMapContext.prototype.ExtVariables = function()
                         loadingText : 'Loading...',
                         border: false
                 }]
-            }]
-        }
-    });
+                }]
+            }
+
+  });
 
   var window = new Ext.Window({
         title: 'Steps Of',
         collapsible: false,
         maximizable: false,
+        scrollable: true,
         width: 400,
         height: 350,
         minWidth: 200,
@@ -2109,7 +2086,10 @@ ProcessMapContext.prototype.ExtVariables = function()
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
-        items: varForm
+        items: [varForm]
+
+    
+        
         /*buttons: [{
             text: 'Save',
             handler: function(){

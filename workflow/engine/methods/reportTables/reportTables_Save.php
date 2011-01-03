@@ -25,38 +25,42 @@
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
 
 G::LoadClass('reportTables');
-
+if(isset($_POST['form']))
+    $value= $_POST['form'];
+    else
+        $value=$_POST;
+    
 $oReportTable = new ReportTable();
-if (!isset($_POST['form']['REP_TAB_CONNECTION'])) {
-  $_POST['form']['REP_TAB_CONNECTION'] = 'report';
+if (!isset($value['REP_TAB_CONNECTION'])) {
+  $value['REP_TAB_CONNECTION'] = 'report';
 }
-if ($_POST['form']['REP_TAB_UID'] != '') {
-  $aReportTable   = $oReportTable->load($_POST['form']['REP_TAB_UID']);
+if ($value['REP_TAB_UID'] != '') {
+  $aReportTable   = $oReportTable->load($value['REP_TAB_UID']);
   $sOldTableName  = $aReportTable['REP_TAB_NAME'];
   $sOldConnection = $aReportTable['REP_TAB_CONNECTION'];
 }
 else {
-  $sOldTableName  = $_POST['form']['REP_TAB_NAME'];
-  $sOldConnection = $_POST['form']['REP_TAB_CONNECTION'];
-  $oReportTable->create($_POST['form']);
-  $_POST['form']['REP_TAB_UID'] = $oReportTable->getRepTabUid();
+  $sOldTableName  = $value['REP_TAB_NAME'];
+  $sOldConnection = $value['REP_TAB_CONNECTION'];
+  $oReportTable->create($value);
+  $value['REP_TAB_UID'] = $oReportTable->getRepTabUid();
 }
 
-$oReportTable->update($_POST['form']);
+$oReportTable->update($value);
 $oReportVar = new ReportVar();
 $oReportTables = new ReportTables();
-$oReportTables->deleteAllReportVars($_POST['form']['REP_TAB_UID']);
+$oReportTables->deleteAllReportVars($value['REP_TAB_UID']);
 $aFields = array();
-if ($_POST['form']['REP_TAB_TYPE'] == 'GRID') {
-  $aAux = explode('-', $_POST['form']['REP_TAB_GRID']);
+if ($value['REP_TAB_TYPE'] == 'GRID') {
+  $aAux = explode('-', $value['REP_TAB_GRID']);
   global $G_FORM;
-  $G_FORM = new Form($_POST['form']['PRO_UID'] . '/' . $aAux[1], PATH_DYNAFORM, SYS_LANG, false);
+  $G_FORM = new Form($value['PRO_UID'] . '/' . $aAux[1], PATH_DYNAFORM, SYS_LANG, false);
   $aAux = $G_FORM->getVars(false);
   foreach ($aAux as $aField) {
-    $_POST['form']['FIELDS'][] = $aField['sName'] . '-' . $aField['sType'];
+    $value['FIELDS'][] = $aField['sName'] . '-' . $aField['sType'];
   }
 }
-foreach ($_POST['form']['FIELDS'] as $sField) {
+foreach ($value['FIELDS'] as $sField) {
   $aField = explode('-', $sField);
   switch ($aField[1]) {
     case 'currency':
@@ -82,13 +86,13 @@ foreach ($_POST['form']['FIELDS'] as $sField) {
       $sType = 'char';
     break;
   }
-  $oReportVar->create(array('REP_TAB_UID'  => $_POST['form']['REP_TAB_UID'],
-                            'PRO_UID'      => $_POST['form']['PRO_UID'],
+  $oReportVar->create(array('REP_TAB_UID'  => $value['REP_TAB_UID'],
+                            'PRO_UID'      => $value['PRO_UID'],
                             'REP_VAR_NAME' => $aField[0],
                             'REP_VAR_TYPE' => $sType));
   $aFields[] = array('sFieldName' => $aField[0], 'sType' => $sType);
 }
 $oReportTables->dropTable($sOldTableName, $sOldConnection);
-$oReportTables->createTable($_POST['form']['REP_TAB_NAME'], $_POST['form']['REP_TAB_CONNECTION'], $_POST['form']['REP_TAB_TYPE'], $aFields);
-$oReportTables->populateTable($_POST['form']['REP_TAB_NAME'], $_POST['form']['REP_TAB_CONNECTION'], $_POST['form']['REP_TAB_TYPE'], $aFields, $_POST['form']['PRO_UID'], $_POST['form']['REP_TAB_GRID']);
+$oReportTables->createTable($value['REP_TAB_NAME'], $value['REP_TAB_CONNECTION'], $value['REP_TAB_TYPE'], $aFields);
+$oReportTables->populateTable($value['REP_TAB_NAME'], $value['REP_TAB_CONNECTION'], $value['REP_TAB_TYPE'], $aFields, $value['PRO_UID'], $value['REP_TAB_GRID']);
 ?>
