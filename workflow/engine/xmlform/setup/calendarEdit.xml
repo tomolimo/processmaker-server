@@ -4,6 +4,8 @@
   <en>Ndar Uid
   </en>
 </CALENDAR_UID>
+<OLD_NAME type="hidden" size='32' maxlength='32' >
+</OLD_NAME>
  
 <DEFINITION_TITLE type="title" enablehtml="0">
 
@@ -71,8 +73,13 @@ function submit1 () {
   return validateForm(this.form);
 }
 
-function submit2 (){
-  invalidCalendarName = validateCalendarName();
+function submit2 () {
+  if (getField('OLD_NAME').value==''){
+    invalidCalendarName = validateCalendarName('');
+  } else {
+    invalidCalendarName = validateCalendarName(getField('OLD_NAME').value);
+  }
+
   var startHourMessage= '';
   var endHourMessage='';
   var invalidNameMessage = '';
@@ -411,12 +418,18 @@ function cancel(){
     window.location = 'calendarList';
 }
 
-function validateCalendarName(){
+function validateCalendarName(name){
   var validateMessage = '';
+  var oldName = '';
+  if (name!='') {
+    oldName = '&oldName='+name;
+  }
+  var arguments = 'action=calendarName&name='+getField("CALENDAR_NAME").value+oldName;
+
   var oRPC = new leimnud.module.rpc.xmlhttp({
     url   : 'calendarValidate',
     async : false,
-    args  : 'action=calendarName&name='+getField("CALENDAR_NAME").value
+    args  : arguments
   });
   oRPC.make();
   validateMessage=oRPC.xmlhttp.responseText;
