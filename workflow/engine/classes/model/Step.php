@@ -386,17 +386,71 @@ class Step extends BaseStep {
    * @param      string $sproUid   the uid of the process
    * @param      string $sObjUID   the uid of the dynaform
    */
-  function loadInfoAssigDynaform($sproUid,$sObjUID){
-  
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->add(StepPeer::PRO_UID,  $sproUid);
-    $oCriteria->add(StepPeer::STEP_UID_OBJ,  $sObjUID);
-    $oCriteria->add(StepPeer::STEP_TYPE_OBJ,  'DYNAFORM');
-    $oDataset = StepPeer::doSelectRS($oCriteria);
+ function loadInfoAssigDynaform($sproUid,$sObjUID){
+
+   require_once ( "classes/model/DynaformPeer.php" );
+   G::LoadSystem('dynaformhandler');     
+
+    $oC = new Criteria('workflow');
+    $oC->add(DynaformPeer::DYN_UID,  $sObjUID);
+    $oC->add(DynaformPeer::PRO_UID,  $sproUid);
+    $oDataset = DynaformPeer::doSelectRS($oC);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     $aRow = $oDataset->getRow();
-    return($aRow);
+
+
+    if($aRow['DYN_TYPE']!='xmlform') {
+
+    $oC1 = new Criteria('workflow');
+    $oC1->add(DynaformPeer::PRO_UID,  $sproUid);
+    $oC1->add(DynaformPeer::DYN_TYPE, "xmlform");
+    $oDataset = DynaformPeer::doSelectRS($oC1);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      while($oDataset->next()){
+        $aRow1 = $oDataset->getRow();
+        //print_r($aRow1);
+        $dynHandler = new dynaFormHandler(PATH_DYNAFORM.$_POST['PRO_UID']."/".$aRow1['DYN_UID'].".xml");
+         $dynFields = $dynHandler->getFields();
+         $sxmlgrid = '';
+         $sType = '';
+         $check=0;
+         foreach($dynFields as $field){
+          $sType = $this->getAttribute($field, 'type');
+          if($sType == 'grid'){
+           $sxmlgrid = $this->getAttribute($field, 'xmlgrid');
+           $aGridInfo= explode("/",$sxmlgrid);
+            if($aGridInfo[0] == $sproUid && $aGridInfo[1] == $sObjUID){
+             $check=1;
+            }
+           }
+         }      
+      } 
+      return ($check==1)?$aGridInfo:'';
+    }else{
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(StepPeer::PRO_UID,  $sproUid);
+      $oCriteria->add(StepPeer::STEP_UID_OBJ,  $sObjUID);
+      $oCriteria->add(StepPeer::STEP_TYPE_OBJ,  'DYNAFORM');
+      $oDataset = StepPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      $aRow = $oDataset->getRow();
+      return($aRow);
+    }
+   die;
   }
+
+ function getAttribute($node, $attName){
+
+   foreach ( $node->attributes as $attribute )
+   {
+    if ( $attribute->name == $attName ) 
+    {
+        return $attribute->value;
+    }
+
+  }
+ }
 
 } // Step
