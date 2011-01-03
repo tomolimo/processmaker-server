@@ -116,8 +116,10 @@
   function dynaformDelete ( uid,proUid ){
 
     isokDependent = ajax_function('@G::encryptlink(@#dynaformsDelete)','getDynaformAssign','DYN_UID='+uid+'&PRO_UID='+proUid,'POST');
+
 	  if(isokDependent){
-	  alert(G_STRINGS.ID_DYNAFORM_ASSIGN);return false;
+	  msgBox(G_STRINGS.ID_DYNAFORM_ASSIGN,"alert");
+	  return false;
 	  }
 	  result = ajax_function('@G::encryptlink(@#dynaformsDelete)','getRelationInfDynaform','DYN_UID='+uid,'POST');
 	  labelToshow = (result)?'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_IDOCUMENT)':'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DYNAFORM)';
