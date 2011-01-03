@@ -2197,8 +2197,8 @@ MyWorkflow.prototype.zoom = function(sType)
    if(sType == 'in' && fig.type != 'bpmnAnnotation')
        {
       //  fig.setPosition(xPos+fig.diffX*2,yPos+fig.diffY*2);
-        alert(fig.diffX);
-        alert(fig.diffY);
+        //alert(fig.diffX);
+       // alert(fig.diffY);
        }
    //else if(sType == 'out' && !fig.type.match(/Event/))
     //fig.setPosition(xPos,yPos - 10);
