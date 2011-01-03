@@ -8,7 +8,7 @@ try
         $rows        = $oProcessMap->getExtReportTables($_GET['pid']);
     }
 
-    else if(isset($_GET['pid']) && $_GET['type'] == 'global')
+    else if(isset($_GET['pid']) && $_GET['type'] == 'NORMAL')
     {
         $aTheFields = array();
         $aTheFields = getDynaformsVars($_GET['pid'], false);
@@ -18,7 +18,7 @@ try
         }
     }
     
-    else if(isset($_GET['pid']) && $_GET['type'] == 'grid'){
+    else if(isset($_GET['pid']) && $_GET['type'] == 'GRID'){
         $aTheFields = array();
         $aTheFields = getGridsVars($_GET['pid']);
         foreach ($aTheFields as $aField) {
