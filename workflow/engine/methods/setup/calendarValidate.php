@@ -39,6 +39,8 @@ switch ($RBAC->userCanAccess('PM_SETUP_ADVANCE'))
 }
 // validating the fields
 $message = array();
+$oldName = isset($_POST['oldName'])?$_POST['oldName']:'';
+
 switch ($_POST['action']){
   case 'calendarName':
     require_once ('classes/model/CalendarDefinition.php');
@@ -50,13 +52,20 @@ switch ($_POST['action']){
     $aCalendarDefinitions = end($aCalendars);
 //    var_dump($aCalendarDefinitions);
     foreach($aCalendarDefinitions as $aDefinitions) {
-      if ($aDefinitions['CALENDAR_NAME']!=$_POST['name']){
-        $validated = true;
-      } else {
+      if (trim($_POST['name'])==''){
         $validated = false;
         $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
         break;
       }
+      if ($aDefinitions['CALENDAR_NAME']!=$_POST['name']){
+        $validated = true;
+      } else {
+        if ($aDefinitions['CALENDAR_NAME']!=$oldName) {
+        $validated = false;
+        $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
+        break;
+      }
+    }
     }
     break;
   case 'calendarDates':

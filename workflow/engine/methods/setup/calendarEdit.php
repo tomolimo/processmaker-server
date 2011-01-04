@@ -39,10 +39,12 @@ G::LoadClass ( 'calendar' );
 $calendarObj = new calendar ( );
 if ((isset ( $_GET ['id'] )) && ($_GET ['id'] != "")) {
 	$fields = $calendarObj->getCalendarInfo ( $CalendarUid );
+        $fields ['OLD_NAME'] = $fields['CALENDAR_NAME'];
 }
 
 if (! (isset ( $fields ['CALENDAR_UID'] ))) { //For a new Calendar
 	$fields ['CALENDAR_UID'] = $CalendarUid;
+        $fields ['OLD_NAME'] = '';
 	//Default Business Hour
 	$fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_DAY'] = 7;
 	$fields ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_START'] = "09:00";
