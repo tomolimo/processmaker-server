@@ -3147,13 +3147,17 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
           $sizeend = $maskleng + 2;
         }
         if ( $this->editable != "0") {
-          $html = '<input id="'.$pID.'" name="'.$pID.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"/>
-          <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
-          <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';
+          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"/>'
+                . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
+                . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
+                . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
+                . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
         } else {
-          $html = '<input id="'.$pID.'" name="'.$pID.'" '.$onchange.'  class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" readonly/>
-          <a onclick="removeValue(\''.$pID.'\'); return false;"/> <img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>
-          <a id="'.$pID.'[btn]" onmouseover="datePicker4(this, \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\', '.$Time.')"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>';
+          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" readonly="readonly"/>'
+                . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
+                . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
+                . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
+                . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
         }
 
     } else {

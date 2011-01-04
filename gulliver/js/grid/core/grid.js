@@ -164,8 +164,13 @@ var G_Grid = function(oForm, sGridName) {
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 
               aObjects[0].setAttribute('id', newID);
-              aObjects[0].setAttribute('name',  newID);
-
+              aObjects[0].name = newID;
+              if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
+                aObjects[0].mergeAttributes(document.createElement("<INPUT name='" + newID + "'/>"), false);
+              }
+  
+              //alert(aObjects[0].name);
+                
               if (aObjects[0].type != 'checkbox') {
                 aObjects[0].value = '';
               } else {
@@ -180,20 +185,38 @@ var G_Grid = function(oForm, sGridName) {
                 }
               }
               
-              //verifying if it is a datepickey
+              //verifying if it is a datepicker
               tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
+              
               if( tags.length == 2 ){ //then it is a datepicker
+                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                datePickerTriggerId = tags[1].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
+                attributes = elementAttributesNS(aObjects[0], 'pm');
+                
+                oNewRow.getElementsByTagName('td')[i].removeChild(scriptTags[0]);
+                oNewRow.getElementsByTagName('td')[i].removeChild(tags[1]);
                 
                 if (tags[0].onclick) {
                   evOnclick = new String(tags[0].onclick);
                   eval('tags[0].onclick = ' + evOnclick.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
                 }
-                tags[1].id = tags[1].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');              
-                //alert(tags[1].onmouseover);
-                if (tags[1].onmouseover) {
-                  evOnclick = new String(tags[1].onmouseover);
-                  eval('tags[1].onmouseover = ' + evOnclick.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
-                }
+
+                var datePickerTrigger = document.createElement('a');
+                datePickerTrigger.id = datePickerTriggerId;
+                datePickerTrigger.name = datePickerTriggerId;
+                
+                var datePickerTriggerImg = document.createElement('img');
+                datePickerTriggerImg.src = '/images/pmdateicon.png';
+                datePickerTriggerImg.border = 0;
+                datePickerTriggerImg.width = 12;
+                datePickerTriggerImg.height = 12;
+                datePickerTriggerImg.style.position = 'relative';
+                datePickerTriggerImg.style.left = '-17px';
+                datePickerTriggerImg.style.top = '0px';
+                
+                datePickerTrigger.appendChild(datePickerTriggerImg);
+                oNewRow.getElementsByTagName('td')[i].appendChild(datePickerTrigger);
+                datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
               }
             }
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('span');
@@ -237,6 +260,8 @@ var G_Grid = function(oForm, sGridName) {
                 }
               }
             }
+            
+            //alert(oNewRow.getElementsByTagName('td')[i].innerHTML);
             break;
           case 'select':
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('select');
