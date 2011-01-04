@@ -468,6 +468,7 @@ CREATE TABLE `ROUTE`
 	`ROU_TO_PORT` INTEGER default 1 NOT NULL,
 	`ROU_FROM_PORT` INTEGER default 2 NOT NULL,
 	`ROU_EVN_UID` VARCHAR(32) default '' NOT NULL,
+	`GAT_UID` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`ROU_UID`)
 )Type=MyISAM ;
 #-----------------------------------------------------------------------------

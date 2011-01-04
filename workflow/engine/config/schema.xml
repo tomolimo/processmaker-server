@@ -2744,6 +2744,16 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="GAT_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="GAT_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <validator column="ROU_UID">
       <rule name="maxLength" value="32" message="Route UID can be no larger than ${value} in size" />
       <rule name="required" message="Route UID is required." />
