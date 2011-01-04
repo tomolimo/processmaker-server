@@ -254,14 +254,17 @@ class DBTable
   function insert () {
     $strFields = "";
     $strValues = "";
-
+    if( defined('DB_ADAPTER'))
+      $DBEngine = DB_ADAPTER;
+    else 
+      $DBEngine = 'mysql';
     foreach( $this->Fields as $field => $val ) {
       $strFields .= $field . ",";
       $iskey = false;
       if ( isset ( $this->table_keys ) && is_array ( $this->table_keys ) )
         $iskey = in_array( $field, $this->table_keys ) && strtoupper(substr(trim($val),0,7) ) == "NEXTVAL";
 
-      $dbcType = isset ( $this->_dbc->type ) ? $this->_dbc->type : 'mysql';
+      $dbcType = isset ( $this->_dbc->type ) ? $this->_dbc->type : $DBEngine;
       if( ! $iskey )
         $val = "'" . G::sqlEscape( $val , $dbcType ) . "'";
       $strValues .= " $val ,";
@@ -290,20 +293,26 @@ class DBTable
 
     $stWhere = '';
     $remainKeys = array();
+
+    if(defined('DB_ADAPTER'))
+      $DBEngine = DB_ADAPTER;
+    else 
+      $DBEngine = 'mysql';
+
     foreach ( $this->table_keys as $k => $v ) $remainKeys[ $v ] = false;
     foreach( $this->Fields as $field => $val )
     {
       $iskey = false;
       $iskey = in_array( $field, $this->table_keys );
         if( $iskey == false ) {
-          $stQry .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : 'mysql' ) . "', ";
+          $stQry .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine ) . "', ";
         }
         else {
           if( $stWhere == "" ) {
-            $stWhere .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : 'mysql' ) . "'";
+            $stWhere .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine ) . "'";
           }
           else {
-            $stWhere .= " AND " . $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : 'mysql' ) . "'";
+            $stWhere .= " AND " . $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine ) . "'";
           }
           $remainKeys[ $field ] = true;
         }
@@ -358,6 +367,10 @@ class DBTable
 
     $stWhere = '';
     $remainKeys = array();
+    if(defined('DB_ADAPTER'))
+      $DBEngine = DB_ADAPTER;
+    else 
+      $DBEngine = 'mysql';
     foreach ( $this->table_keys as $k => $v ) $remainKeys[ $v ] = false;
 
     if ( is_array ( $this->Fields ) ) {
@@ -367,10 +380,10 @@ class DBTable
         $iskey = in_array( $field, $this->table_keys );
           if( $iskey == true ) {
             if( $stWhere == "" ) {
-              $stWhere .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : 'mysql'  ) . "'";
+              $stWhere .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine  ) . "'";
             }
             else {
-              $stWhere .= " AND " . $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : 'mysql' ) . "'";
+              $stWhere .= " AND " . $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine ) . "'";
             }
             $remainKeys[ $field ] = true;
           }

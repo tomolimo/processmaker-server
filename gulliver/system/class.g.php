@@ -1539,6 +1539,12 @@ class G
     }
   }
   
+  /**
+   * Function MySQLSintaxis
+   * @access public
+   * @parameter
+   * @return Boolean
+   **/
   function MySQLSintaxis()
   {
     $DBEngine = DB_ADAPTER;
