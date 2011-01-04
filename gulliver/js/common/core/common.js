@@ -1848,7 +1848,7 @@ function removeValue(id){
 }
 
 function datePicker4(obj, id, mask, startDate, endDate, showTIme){  
-
+  //alert('->'+id);
   new Calendar({
     inputField: id,
     dateFormat: mask,
@@ -1861,20 +1861,10 @@ function datePicker4(obj, id, mask, startDate, endDate, showTIme){
     opacity: 1,
     onSelect: function() {
         this.hide();
-        
-        fireEvent(document.getElementById(id),'change');
-
-        
-        //if(document.getElementById(id).onchange)
-           //document.getElementById(id).onchange();
+        fireEvent(document.getElementById(id), 'change');
     }
 
-}
-  );
-
-  if( _BROWSER.name != 'msie' )
-    obj.onmouseover = undefined;
-
+  });
 }
 
 function fireEvent(element,event){
@@ -1910,3 +1900,4 @@ function elementAttributesNS(e, ns) {
   }
   return result;
 }
+
