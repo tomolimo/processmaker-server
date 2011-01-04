@@ -424,7 +424,7 @@ class Cases {
       $oApp = new Application;
       $aFields = $oApp->Load($sAppUid);
       //$aFields = $oApp->toArray(BasePeer::TYPE_FIELDNAME);
-      $aFields['APP_DATA'] = G::array_merges(G::getSystemConstants(), unserialize($aFields['APP_DATA']));
+      $aFields['APP_DATA'] = G::array_merges(G::getSystemConstants(), @unserialize($aFields['APP_DATA']));
       switch ($oApp->getAppStatus()) {
         case 'COMPLETED':
           $aFields['STATUS'] = G::LoadTranslation('ID_COMPLETED');
@@ -868,7 +868,7 @@ class Cases {
       $oReportTables->updateTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
 
       //now update the priority in appdelegation table, using the defined variable in task
-      if ($DEL_INDEX != '' && $TAS_UID != '') {
+      if (trim($DEL_INDEX) != '' && trim($TAS_UID) != '') {
       	//optimized code to avoid load task content row.
         $c = new Criteria();
         $c->clearSelectColumns();
@@ -887,7 +887,7 @@ class Cases {
 
         $x = unserialize($Fields['APP_DATA']);
         if (isset($x[$VAR_PRI])) {
-          if ($x[$VAR_PRI] != '') {
+          if (trim($x[$VAR_PRI]) != '') {
             $oDel = new AppDelegation;
             $array = array();
             $array['APP_UID'] = $sAppUid;
@@ -1818,7 +1818,7 @@ class Cases {
           $oStep = new Step;
           $oStep = $oStep->loadByProcessTaskPosition($sProUid, $sTaskUid, $iPosition);
           if ($oStep) {
-            if ($oStep->getStepCondition() !== '') {
+            if (trim($oStep->getStepCondition()) !== '') {
               $oPMScript->setScript($oStep->getStepCondition());
               $bAccessStep = $oPMScript->evaluate();
             } else {
@@ -1925,7 +1925,7 @@ class Cases {
           $oStep = new Step;
           $oStep = $oStep->loadByProcessTaskPosition($sProUid, $sTaskUid, $iPosition);
           if ($oStep) {
-            if ($oStep->getStepCondition() !== '') {
+            if (trim($oStep->getStepCondition()) !== '') {
               $oPMScript->setScript($oStep->getStepCondition());
               $bAccessStep = $oPMScript->evaluate();
             } else {
@@ -2060,13 +2060,22 @@ class Cases {
     $c->addSelectColumn(AppDelegationPeer::TAS_UID);
     $c->addSelectColumn(AppDelegationPeer::APP_UID);
     $c->addSelectColumn(AppDelegationPeer::DEL_INDEX);
-    $c->addAsColumn('USR_NAME', "CONCAT(USR_LASTNAME, ' ', USR_FIRSTNAME)");
+    ///-- $c->addAsColumn('USR_NAME', "CONCAT(USR_LASTNAME, ' ', USR_FIRSTNAME)");
+    $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+    if(G::LoadSystemExist($sDataBase)){
+      G::LoadSystem($sDataBase);
+      $oDataBase = new database();
+      $c->addAsColumn('USR_NAME', $oDataBase->concatString("USR_LASTNAME", "' '", "USR_FIRSTNAME"));
+      $c->addAsColumn('DEL_FINISH_DATE', $oDataBase->getCaseWhen("DEL_FINISH_DATE IS NULL", "'-'", AppDelegationPeer::DEL_FINISH_DATE ) );
+      $c->addAsColumn('APP_TYPE', $oDataBase->getCaseWhen("DEL_FINISH_DATE IS NULL", "'IN_PROGRESS'",  AppDelayPeer::APP_TYPE  ) );
+    }
+    
     $c->addSelectColumn(AppDelegationPeer::DEL_INIT_DATE);
     //$c->addSelectColumn(AppDelegationPeer::DEL_FINISH_DATE);
-    $c->addAsColumn('DEL_FINISH_DATE', "IF (DEL_FINISH_DATE IS NULL, '-', " . AppDelegationPeer::DEL_FINISH_DATE . ") ");
+    ///-- $c->addAsColumn('DEL_FINISH_DATE', "IF (DEL_FINISH_DATE IS NULL, '-', " . AppDelegationPeer::DEL_FINISH_DATE . ") ");
 
     //$c->addSelectColumn(AppDelayPeer::APP_TYPE);
-    $c->addAsColumn('APP_TYPE', "IF (DEL_FINISH_DATE IS NULL, 'IN_PROGRESS', " . AppDelayPeer::APP_TYPE . ") ");
+    ///-- $c->addAsColumn('APP_TYPE', "IF (DEL_FINISH_DATE IS NULL, 'IN_PROGRESS', " . AppDelayPeer::APP_TYPE . ") ");
     $c->addSelectColumn(AppDelayPeer::APP_ENABLE_ACTION_DATE);
     $c->addSelectColumn(AppDelayPeer::APP_DISABLE_ACTION_DATE);
     //APP_DELEGATION LEFT JOIN USERS
@@ -3975,6 +3984,10 @@ class Cases {
     $oCriteria->addJoin(StepPeer::STEP_UID_OBJ, DynaformPeer::DYN_UID);
     $oCriteria->add(StepPeer::STEP_TYPE_OBJ, 'DYNAFORM');
     $oCriteria->add(StepPeer::STEP_UID_OBJ, $aObjectPermissions['DYNAFORMS'], Criteria::IN);
+    
+    ///-- Adding column STEP_POSITION for standardization 
+    $oCriteria->addSelectColumn(StepPeer::STEP_POSITION); 
+    
     $oCriteria->addAscendingOrderByColumn(StepPeer::STEP_POSITION);
     $oCriteria->setDistinct();
     $oDataset = DynaformPeer::doSelectRS($oCriteria);
@@ -4463,10 +4476,21 @@ class Cases {
    * @return object
    */
 
-  function verifyTable() {
+  function verifyTable()
+  {
+  
     $oCriteria = new Criteria('workflow');
     $del = DBAdapter::getStringDelimiter();
-    $sql = "CREATE TABLE IF NOT EXISTS `OBJECT_PERMISSION` (
+
+    $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+    if(G::LoadSystemExist($sDataBase)){
+      G::LoadSystem($sDataBase);
+      $oDataBase = new database();
+      $sql = $oDataBase->createTableObjectPermission();
+    }
+    
+/*
+     $sql = "CREATE TABLE IF NOT EXISTS `OBJECT_PERMISSION` (
                    `OP_UID` varchar(32) NOT NULL,
                    `PRO_UID` varchar(32) NOT NULL,
                    `TAS_UID` varchar(32) NOT NULL,
@@ -4479,7 +4503,7 @@ class Cases {
                    `OP_ACTION` varchar(10) NOT NULL default 'VIEW',
                    KEY `PRO_UID` (`PRO_UID`,`TAS_UID`,`USR_UID`,`OP_TASK_SOURCE`,`OP_OBJ_UID`)
                    )ENGINE=MyISAM DEFAULT CHARSET=latin1;";
-
+*/
     $con = Propel::getConnection("workflow");
     $stmt = $con->prepareStatement($sql);
     $rs = $stmt->executeQuery();

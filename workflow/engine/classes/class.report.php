@@ -63,6 +63,7 @@ class Report {
     $proTitleConds[] = array( 'C1.CON_LANG' ,     $del . SYS_LANG . $del );
     $oCriteria->addJoinMC($proTitleConds ,    Criteria::LEFT_JOIN);
     $oCriteria->addGroupByColumn(AppDelegationPeer::PRO_UID);
+    $oCriteria->addGroupByColumn('C1.CON_VALUE');
 
     $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -142,6 +143,7 @@ class Report {
     if($startedby!='') $oCriteria->add(ApplicationPeer::APP_INIT_USER,  $startedby);
 
     $oCriteria->addGroupByColumn(AppDelegationPeer::PRO_UID);
+    $oCriteria->addGroupByColumn('C1.CON_VALUE');
 
     $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -436,7 +438,8 @@ class Report {
     $proTitleConds[] = array( 'C1.CON_LANG' ,     $del . SYS_LANG . $del );
     $oCriteria->addJoinMC($proTitleConds ,    Criteria::LEFT_JOIN);
     $oCriteria->addGroupByColumn(AppDelegationPeer::PRO_UID);
-
+    $oCriteria->addGroupByColumn('C1.CON_VALUE');
+    
     $oCriteria->add($oCriteria->getNewCriterion(AppDelegationPeer::DEL_INIT_DATE, $from.' 00:00:00', Criteria::GREATER_EQUAL)->addAnd($oCriteria->getNewCriterion(AppDelegationPeer::DEL_INIT_DATE,  $to.' 23:59:59', Criteria::LESS_EQUAL)));
 
     if($startedby!='') $oCriteria->add(AppDelegationPeer::USR_UID,  $startedby);

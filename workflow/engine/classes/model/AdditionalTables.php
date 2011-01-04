@@ -15,6 +15,26 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  * @package    classes.model
  */
 class AdditionalTables extends BaseAdditionalTables {
+  private $aDef = array('mysql' => array('TEXT' => 'TEXT',
+                                         'CHAR'   => 'CHAR',
+                                         'VARCHAR'   => 'VARCHAR',
+                                         'INT'   => 'INT',
+                                         'FLOAT' => 'FLOAT',
+                                         'DATE'   => 'DATE'),
+                      'pgsql' => array('TEXT' => 'TEXT',
+                                       'CHAR'   => 'CHAR',
+                                       'VARCHAR'   => 'VARCHAR',
+                                       'INT'   => 'INTEGER',
+                                       'FLOAT' => 'REAL',
+                                       'DATE'   => 'DATE'),
+                      'mssql' => array('TEXT' => 'TEXT',
+                                       'CHAR'   => 'NCHAR',
+                                       'VARCHAR'   => 'NVARCHAR',
+                                       'INT'   => 'INTEGER',
+                                       'FLOAT' => 'FLOAT',
+                                       'DATE'   => 'CHAR (19)') 
+                      );
+  
   public function load($sUID, $bFields = false) {
     try {
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($sUID);
@@ -267,6 +287,66 @@ public function loadByName($name) {
             throw new Exception('Cannot create the table "' . $sTableName . '"!');
           }
         break;
+        case 'mssql':
+          $sDBAdapter = DB_ADAPTER;
+          $sDBUser    = DB_USER;
+          $sDBPass    = DB_PASS;
+          $sDBHost    = DB_HOST; // substr(DB_HOST, 0, strpos(DB_HOST,':')); 
+          $sDBName    = DB_NAME;
+          
+          $sDBHost = substr($sDBHost, 0, strpos($sDBHost,':'));
+          
+          $dsn        = $sDBAdapter . '://' . $sDBUser . ':' . $sDBPass . '@' . $sDBHost . '/' . $sDBName;
+          
+          
+          $db =& DB::Connect( $dsn);
+          if (PEAR::isError($db)) { die($db->getMessage()); }         
+          
+          $sQuery = 'CREATE TABLE ' . $sTableName . ' (';
+          $aPKs   = array();
+          foreach ($aFields as $aField) {
+            switch ($aField['sType']) {
+              case 'VARCHAR':
+                $sQuery .= ' ' . $aField['sFieldName'] . ' ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+              break;
+              case 'TEXT':
+                $sQuery .= ' ' . $aField['sFieldName'] . ' ' . $aField['sType'] . ' ,' ; ///-- " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+              break;
+              case 'DATE':
+                //  In cases of incompatibility, use char(19)
+                $sQuery .=  $aField['sFieldName'] . " char(19) " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0000-00-00',";
+              break;
+              case 'INT':
+                $sQuery .=  $aField['sFieldName'] . ' ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . ' ' . ($aField['bAI'] ? 'AUTO_INCREMENT' : "DEFAULT '0'") . ',';
+                if ($aField['bAI']) {
+                  if (!in_array(' ' . $aField['sFieldName'] . ' ', $aPKs)) {
+                    $aPKs[] = ' ' . $aField['sFieldName'] . ' ';
+                  }
+                }
+              break;
+              case 'FLOAT':
+                $sQuery .= ' ' . $aField['sFieldName'] . '  ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0',";
+              break;
+            }
+            if ($aField['bPrimaryKey'] == 1) {
+              if (!in_array(' ' . $aField['sFieldName'] . ' ', $aPKs)) {
+                $aPKs[] = ' ' . $aField['sFieldName'] . ' ';
+              }
+            }
+          }
+          $sQuery  = substr($sQuery, 0, -1);
+          if (!empty($aPKs)) {
+            $sQuery .= ',PRIMARY KEY (' . implode(',', $aPKs) . ')';
+          }
+          $sQuery .= ') ';
+          $res = @$db->query($sQuery);
+          if (!$res) {
+            throw new Exception('Cannot create the table "' . $sTableName . '"!');
+          }
+          
+        break;
+     
+      
       }
     }
     catch (Exception $oError) {
