@@ -1356,7 +1356,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 var sDocUID        = getForm.INP_DOC_UID;
                 var sDocTitle        = getForm.INP_DOC_TITLE;
                 var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
-                var sOrig           = getForm.INP_DOC_ORIGINAL;f(sDocUID == "")
+                var sOrig           = getForm.INP_DOC_ORIGINAL;
                 if(sOrig == 'LEGAL COPY')
                     sOrig           = 'COPYLEGAL';
 
