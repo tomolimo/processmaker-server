@@ -57,6 +57,7 @@ require_once 'classes/model/Task.php';
 require_once 'classes/model/TaskUser.php';
 require_once 'classes/model/Triggers.php';
 require_once 'classes/model/Users.php';
+require_once 'classes/model/Gateway.php';
 
 /**
  * processMap - Process Map class
@@ -2393,12 +2394,14 @@ class processMap {
    * @param  string    $sTaskUID    Default value empty
    * @param  string    $sNextTask   Default value empty
    * @param  string    $sType       Default value empty
+   * @param  boolean   $sDelete     
    * @return array     void
    */
-  function saveNewPattern($sProcessUID = '', $sTaskUID = '', $sNextTask = '', $sType = '') {
+  function saveNewPattern($sProcessUID = '', $sTaskUID = '', $sNextTask = '', $sType = '', $sDelete='') {
     try {
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('COUNT(*) AS ROUTE_NUMBER');
+      $oCriteria->addSelectColumn('GAT_UID');
       $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);
       $oCriteria->add(RoutePeer::TAS_UID, $sTaskUID);
       $oCriteria->add(RoutePeer::ROU_TYPE, $sType);
@@ -2412,8 +2415,47 @@ class processMap {
       $aFields ['ROU_TYPE'] = $sType;
       $aFields ['ROU_CASE'] = (int) $aRow ['ROUTE_NUMBER'] + 1;
 
+      $sGatewayUID = $aRow['GAT_UID'];     
+
+      if($sDelete && $sGatewayUID != ''){
+          $oGateway = new Gateway ( );
+          $oGateway->remove($sGatewayUID);
+      }
+      //Getting Gateway UID after saving gateway
+      if($sType != 'SEQUENTIAL' && $sGatewayUID == '')
+      {
+          $oProcessMap = new processMap();
+          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID);
+      }
+
+      $aFields ['GAT_UID'] = $sGatewayUID;
       $oRoute = new Route ( );
       $oRoute->create($aFields);
+    } catch (Exception $oError) {
+      throw ($oError);
+    }
+  }
+
+  /**
+   * saveNewGateway
+   *
+   * @param  string    $sProcessUID Default value empty
+   * @param  string    $sTaskUID    Default value empty
+   * @return string    $sGatewayUID
+   */
+  function saveNewGateway($sProcessUID = '', $sTaskUID = '') {
+    try {
+      $oTask = new Task();
+      $aTaskDetails  = $oTask->load($sTaskUID);
+      $aFields ['PRO_UID'] = $sProcessUID;
+      $aFields ['GAT_X'] = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
+      $aFields ['GAT_Y'] = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
+
+      $oGateway = new Gateway ( );
+      $sGatewayUID = $oGateway->create($aFields);
+      
+      return $sGatewayUID;
+      
     } catch (Exception $oError) {
       throw ($oError);
     }
@@ -5535,8 +5577,6 @@ class processMap {
             break;
         }
         $aObjects [] = array('CTO_TITLE' => $sTitle, 'CTO_UID' => $aRow ['CTO_UID'], 'CTO_TYPE_OBJ' => $aRow ['CTO_TYPE_OBJ'], 'CTO_UID_OBJ' => $aRow ['CTO_UID_OBJ'], 'CTO_CONDITION' => $aRow ['CTO_CONDITION'], 'CTO_POSITION' => $aRow ['CTO_POSITION']);
-
-
       }
 
       catch (Exception $oError) { //Nothing
@@ -5555,20 +5595,7 @@ class processMap {
     return $aObjects;
   }
 
-  /**
-   * availableCaseTrackerObjects
-   *
-   * @param  string     $sProcessUID
-   * @return boolean    true
-   */
-  function availableExtCaseTrackerObjects($sProcessUID) {
-    global $G_PUBLISH;
-    $G_PUBLISH = new Publisher ( );
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_AvailableCaseTrackerObjects', $this->getAvailableCaseTrackerObjectsCriteria($sProcessUID), array('PRO_UID' => $sProcessUID));
-    G::RenderPage('publish', 'raw');
-    return true;
-  }
-
+ 
   /**
    * getAvailableCaseTrackerObjectsCriteria
    *
@@ -5667,92 +5694,7 @@ class processMap {
     return $oCriteria;*/
   }
 
-  /**
-   * assignCaseTrackerObject
-   *
-   * @param  string    $sProcessUID
-   * @param  string    $sObjType
-   * @param  string    $sObjUID
-   * @return void
-   */
-  function assignExtCaseTrackerObject($sProcessUID, $sObjType, $sObjUID) {
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
-    $iPosition = CaseTrackerObjectPeer::doCount($oCriteria) + 1;
-    $oCaseTrackerObject = new CaseTrackerObject ( );
-    $oCaseTrackerObject->create(array('PRO_UID' => $sProcessUID, 'CTO_TYPE_OBJ' => $sObjType, 'CTO_UID_OBJ' => $sObjUID, 'CTO_POSITION' => $iPosition));
-  }
-
-  /**
-   * removeCaseTrackerObject
-   *
-   * @param  string    $sCTOUID
-   * @param  string    $sProcessUID
-   * @param  integer   $iPosition
-   * @return void
-   */
-  function removeExtCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
-    $oCaseTrackerObject = new CaseTrackerObject ( );
-    $oCaseTrackerObject->remove($sCTOUID);
-    $oCaseTrackerObject->reorderPositions($sProcessUID, $iPosition);
-  }
-
-  /**
-   * upCaseTrackerObject
-   *
-   * @param  string    $sCTOUID
-   * @param  string    $sProcessUID
-   * @param  integer   $iPosition
-   * @return void
-   */
-  function upExtCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
-    if ($iPosition > 1) {
-      $oCriteria1 = new Criteria('workflow');
-      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, $iPosition);
-      $oCriteria2 = new Criteria('workflow');
-      $oCriteria2->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
-      $oCriteria2->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition - 1));
-      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
-
-      $oCriteria1 = new Criteria('workflow');
-      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition - 1));
-      $oCriteria2 = new Criteria('workflow');
-      $oCriteria2->add(CaseTrackerObjectPeer::CTO_UID, $sCTOUID);
-      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
-    }
-  }
-
-  /**
-   * downCaseTrackerObject
-   *
-   * @param  string    $sCTOUID
-   * @param  string    $sProcessUID
-   * @param  integer   $iPosition
-   * @return void
-   */
-  function downExtCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn('COUNT(*) AS MAX_POSITION');
-    $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
-    $oDataset = CaseTrackerObjectPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    $aRow = $oDataset->getRow();
-    if ($iPosition < (int) $aRow ['MAX_POSITION']) {
-      $oCriteria1 = new Criteria('workflow');
-      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, $iPosition);
-      $oCriteria2 = new Criteria('workflow');
-      $oCriteria2->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
-      $oCriteria2->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition + 1));
-      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
-      $oCriteria1 = new Criteria('workflow');
-      $oCriteria1->add(CaseTrackerObjectPeer::CTO_POSITION, ($iPosition + 1));
-      $oCriteria2 = new Criteria('workflow');
-      $oCriteria2->add(CaseTrackerObjectPeer::CTO_UID, $sCTOUID);
-      BasePeer::doUpdate($oCriteria2, $oCriteria1, Propel::getConnection('workflow'));
-    }
-  }
-  function getExtReportTables($sProcessUID = '') {
+    function getExtReportTables($sProcessUID = '') {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(ReportTablePeer::REP_TAB_UID);
@@ -5775,9 +5717,6 @@ class processMap {
       $oDataset->next();
     }
     return $aReportTable;
-
   }
- 
-
 }
 

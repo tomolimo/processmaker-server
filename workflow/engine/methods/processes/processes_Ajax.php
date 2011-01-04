@@ -276,7 +276,7 @@ try {
   	  	$oTasks = new Tasks();
   	    $oTasks->deleteAllRoutesOfTask($oData->pro_uid, $oData->tas_uid);
   	  }
-  	  $oProcessMap->saveNewPattern($oData->pro_uid, $oData->tas_uid, $oData->next_task, $sType);
+  	  $oProcessMap->saveNewPattern($oData->pro_uid, $oData->tas_uid, $oData->next_task, $sType, $oData->delete);
   	break;
   	case 'deleteAllRoutes':
   	  G::LoadClass('tasks');

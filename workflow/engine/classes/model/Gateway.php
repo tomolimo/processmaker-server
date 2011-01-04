@@ -16,29 +16,32 @@ require_once 'classes/model/om/BaseGateway.php';
  */
 class Gateway extends BaseGateway {
 
-  function create ($aData)
+  public function create ($aData)
   {
-    $con = Propel::getConnection(GatewayPeer::DATABASE_NAME);
-    try
-    {
-      $this->fromArray($aData, BasePeer::TYPE_FIELDNAME);
-      if($this->validate())
-      {
-        $result=$this->save();
+    $oConnection = Propel::getConnection(GatewayPeer::DATABASE_NAME);
+    try {
+      $sGatewayUID        = G::generateUniqueID();
+      $aData['GAT_UID'] = $sGatewayUID;
+      $oGateway           = new Gateway();
+      $oGateway->fromArray($aData, BasePeer::TYPE_FIELDNAME);
+      if ($oGateway->validate()) {
+        $oConnection->begin();
+        $iResult = $oGateway->save();
+        $oConnection->commit();
+        return $sGatewayUID;
       }
-      else
-      {
-        $e=new Exception("Failed Validation in class ".get_class($this).".");
-        $e->aValidationFailures=$this->getValidationFailures();
-        throw($e);
+      else {
+        $sMessage = '';
+        $aValidationFailures = $oGateway->getValidationFailures();
+        foreach($aValidationFailures as $oValidationFailure) {
+          $sMessage .= $oValidationFailure->getMessage() . '<br />';
+        }
+        throw(new Exception('The registry cannot be created!<br />'.$sMessage));
       }
-      $con->commit();
-      return $result;
     }
-    catch(Exception $e)
-    {
-      $con->rollback();
-      throw($e);
+    catch (Exception $oError) {
+      $oConnection->rollback();
+      throw($oError);
     }
   }
 
@@ -88,22 +91,27 @@ class Gateway extends BaseGateway {
       throw($e);
     }
   }
-  
-  function remove($GatewayUid)
+
+  public function remove($GatewayUid)
   {
-    $con = Propel::getConnection(GatewayPeer::DATABASE_NAME);
-    try
-    {
-      $con->begin();
-      $this->setGatUid($GatewayUid);
-      $result=$this->delete();
-      $con->commit();
-      return $result;
+    $oConnection = Propel::getConnection(GatewayPeer::DATABASE_NAME);
+    try {
+      $oGateWay = RoutePeer::retrieveByPK($GatewayUid);
+      if (!is_null($oGateWay))
+      {
+        $oConnection->begin();
+        $iResult = $oGateWay->delete();
+        $oConnection->commit();
+        return $iResult;
+      }
+      else {
+        throw(new Exception('This row doesn\'t exists!'));
+      }
     }
-    catch(Exception $e)
-    {
-      $con->rollback();
-      throw($e);
+    catch (Exception $oError) {
+      $oConnection->rollback();
+      throw($oError);
     }
   }
+  
 } // Gateway
