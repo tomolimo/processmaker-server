@@ -52,6 +52,11 @@ switch ($_POST['action']){
     $aCalendarDefinitions = end($aCalendars);
 //    var_dump($aCalendarDefinitions);
     foreach($aCalendarDefinitions as $aDefinitions) {
+      if (trim($_POST['name'])==''){
+        $validated = false;
+        $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
+        break;
+      }
       if ($aDefinitions['CALENDAR_NAME']!=$_POST['name']){
         $validated = true;
       } else {
