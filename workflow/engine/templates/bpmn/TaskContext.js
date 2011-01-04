@@ -126,7 +126,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
             remoteSort   : true,
             fields       : stepsFields,
             proxy        : new Ext.data.HttpProxy({
-                   url   : 'proxyTaskSteps?tid='+taskId
+                   url   : 'proxyExtjs?tid='+taskId+'&action=getSteps'
             })
           });
           //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -135,7 +135,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         // create the Data Store of all Steps that are not been assigned to a task i.e available steps
         var availableSteps = new Ext.data.JsonStore({
              root            : 'data',
-             url             : 'proxyTaskSteps?pid='+pro_uid+'&tid='+taskId,
+             url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAvailableSteps',
              totalProperty   : 'totalCount',
              idProperty      : 'gridIndex',
              remoteSort      : false,
@@ -551,7 +551,7 @@ TaskContext.prototype.editUsers= function(_5625)
             remoteSort   : true,
             fields       : userFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyUsersList?pid='+pro_uid+'&tid='+taskId
+              url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAssignedUsersList'
             })
           });
           //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -560,7 +560,7 @@ TaskContext.prototype.editUsers= function(_5625)
          // create the Data Store of users that are not assigned to a task
          var storeUsers = new Ext.data.JsonStore({
                  root            : 'data',
-                 url             : 'proxyUsersList?tid='+taskId,
+                 url             : 'proxyExtjs?tid='+taskId+'&action=getAvailableUsersList',
                  totalProperty   : 'totalCount',
                  idProperty      : 'gridIndex',
                  remoteSort      : false, //true,

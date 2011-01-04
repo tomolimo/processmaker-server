@@ -6,13 +6,13 @@ try
    if ( isset($_GET['pid'] ) )
    {
        //Getting available Steps Criteria that have been not selected for a particular task
-       $rows        = $oProcessMap->getExtAvailableBBCriteria($_GET['pid'], $_GET['tid']);
+       $rows = $oProcessMap->getExtAvailableBBCriteria($_GET['pid'], $_GET['tid']);
        array_shift($rows);
    }
    else
    {
        //Getting all Steps Criteria that have been selected for a particular task
-       $rows        = $oProcessMap->getExtStepsCriteria($_GET['tid']);
+       $rows = $oProcessMap->getExtStepsCriteria($_GET['tid']);
        array_shift($rows);
    }
 

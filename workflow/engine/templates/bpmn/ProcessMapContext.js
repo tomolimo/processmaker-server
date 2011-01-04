@@ -1704,14 +1704,14 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       remoteSort    : true,
       fields        : ObjectFields,
       proxy         : new Ext.data.HttpProxy({
-      url           : 'proxyCaseTrackerObjects?pid='+pro_uid
+      url           : 'proxyExtjs?pid='+pro_uid+'&action=getAssignedCaseTrackerObjects'
       })
     });
     assignedStore.load();
 
     var availableStore = new Ext.data.JsonStore({
       root            : 'data',
-      url             : 'proxyCaseTrackerObjects?tid='+pro_uid,
+      url             : 'proxyExtjs?tid='+pro_uid+'&action=getAvailableCaseTrackerObjects',
       totalProperty   : 'totalCount',
       idProperty      : 'gridIndex',
       remoteSort      : false, //true,

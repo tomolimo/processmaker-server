@@ -114,9 +114,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             idProperty   : 'gridIndex',
             remoteSort   : true,
             fields       : dynaFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyDynaform?pid='+pro_uid
-            })
+            proxy        : new Ext.data.HttpProxy({
+                           url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
+                           })
           });
  taskDynaform.load();
 
@@ -134,7 +134,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             remoteSort   : true,
             fields       : additionalTablesFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyDynaform'
+              url: 'proxyExtjs?action=getAdditionalTables'
             })
           });
  additionalTables.load();
@@ -343,7 +343,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             value        : '---------------------------',
                             store        : additionalTables,
                             onSelect: function(record, index){
-                                var link = 'proxyDynaform?tabId='+record.data.ADD_TAB_UID;
+                                var link = 'proxyExtjs?tabId='+record.data.ADD_TAB_UID+'&action=getPMTableDynaform';
                                 tablesFieldsStore.proxy.setUrl(link, true);
                                 tablesFieldsStore.load();
 
@@ -444,18 +444,6 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sTitle    = getForm.DYN_TITLE[1];
                         sDesc     = getForm.DYN_DESCRIPTION[1];
                     }
-
-                /*Ext.Ajax.request({
-                  url   : '../dynaforms/dynaforms_Save.php',
-                  method: 'POST',
-                  params:{
-                      functions                : 'lookforNameDynaform',
-                      NAMEDYNAFORM             : sTitle,
-                      proUid                   : pro_uid
-                  },
-                  success: function(response) {
-                    if(response.responseText == "1")
-                    {*/
                         Ext.Ajax.request({
                           url   : '../dynaforms/dynaforms_Save.php',
                           method: 'POST',
@@ -471,16 +459,13 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                           },
                           success: function(response) {
                               Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
+                              taskDynaform.reload();
+                              formWindow.close()
                           }
                         });
-                        //formWindow.close();
-                        //taskDynaform.reload();
-                    /*}
-                    else
-                      Ext.MessageBox.alert ('Status','There is an Dynaform with the same  name in  this process. It is not saving');*/
+                        
             }
-         // })
-        //}
+         
     },{
             text: 'Cancel',
             handler: function(){
@@ -526,7 +511,7 @@ ProcessOptions.prototype.dbConnection = function()
                 var s = dbGrid.getSelectionModel().getSelections();
                 var dbConnUID = s[0].data.DBS_UID;
                 dbconnForm.form.load({
-                url:'proxyDatabaseConn.php?tid='+dbConnUID,
+                url:'proxyExtjs.php?tid='+dbConnUID+'&action=editDatabaseConnection',
                     method:'GET',
                     waitMsg:'Loading',
                     success:function(form, action) {
@@ -594,7 +579,7 @@ ProcessOptions.prototype.dbConnection = function()
             remoteSort   : true,
             fields       : dbConnFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyDatabaseConn.php?pid='+pro_uid
+              url: 'proxyExtjs.php?pid='+pro_uid+'&action=getDatabaseConnectionList'
             })
           });
   dbStore.load();
@@ -1020,7 +1005,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             remoteSort   : true,
             fields       : dynaFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyInputDocument?pid='+pro_uid
+              url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
             })
           });
   inputDocStore.load();
@@ -1099,7 +1084,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
                  //Loading Task Details into the form
                   inputDocForm.form.load({
-                        url:'proxyInputDocument.php?INP_DOC_UID=' +inputDocUID,
+                        url:'proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
                         method:'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
@@ -1490,10 +1475,10 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             idProperty   : 'gridIndex',
             remoteSort   : true,
             fields       : dynaFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyOutputDocument?pid='+pro_uid
-            })
-          });
+            proxy        : new Ext.data.HttpProxy({
+                           url: 'proxyExtjs?pid='+pro_uid+'&action=getOutputDocument'
+                           })
+  });
   outputDocStore.load();
 
   var btnRemove = new Ext.Button({
@@ -1550,7 +1535,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 var s = outputDocGrid.getSelectionModel().getSelections();
                 var outputDocUID = s[0].data.OUT_DOC_UID;
                 outputDocForm.form.load({
-                    url:'proxyOutputDocument.php?tid='+outputDocUID,
+                    url:'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
                     method:'GET',
                     waitMsg:'Loading',
                     success:function(form, action) {
@@ -2015,6 +2000,10 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
   var reportFields = Ext.data.Record.create([
             {
+                name:'REP_TAB_UID',
+                type: 'string'
+            },
+            {
                 name: 'REP_TAB_TITLE',
                 type: 'string'
             },
@@ -2039,9 +2028,9 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             remoteSort   : true,
             fields       : reportFields,
             proxy        : new Ext.data.HttpProxy({
-            url          : 'proxyReportTables?pid='+pro_uid
-            })
-          });
+                           url : 'proxyExtjs?pid='+pro_uid+'&action=getReportTables'
+                           })
+ });
   reportStore.load();
   
   var reportColumns = new Ext.grid.ColumnModel({
@@ -2054,7 +2043,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                     width: 380,
                     editable: false,
                     editor: new Ext.form.TextField({
-                    //allowBlank: false
+                        //allowBlank: false
                     })
                 }
             ]
@@ -2192,7 +2181,7 @@ var reportForm =new Ext.FormPanel({
                                                 Ext.getCmp("gridfields").show();
                                                 Ext.getCmp("fields").hide();
                                              }
-                                        var link = 'proxyReportTables?pid='+pro_uid+'&type='+record.data.value;
+                                        var link = 'proxyReportTables?pid='+pro_uid+'&type='+record.data.value+'action=getReportTableType';
                                         reportStore.proxy.setUrl(link, true);
                                         reportStore.load();
 
@@ -2261,6 +2250,7 @@ var formWindow = new Ext.Window({
             text: 'Save',
             handler: function(){
                 var getForm         = reportForm.getForm().getValues();
+                var pro_uid         = getForm.PRO_UID;
                 var tableUID        = getForm.REP_TAB_UID;
                 var Title           = getForm.REP_TAB_TITLE;
                 var Name            = getForm.REP_TAB_NAME;
@@ -2276,7 +2266,8 @@ var formWindow = new Ext.Window({
                // var VariableType    = getForm.REP_VAR_TYPE;
                // var Connection      = getForm.REP_TAB_CONNECTION
                 
-           
+           if(tableUID=='')
+               {
                 Ext.Ajax.request({
                   url   : '../reportTables/reportTables_Save.php',
                   method: 'POST',
@@ -2297,29 +2288,30 @@ var formWindow = new Ext.Window({
                       Ext.MessageBox.alert ('Status','Report Table Saved Successfully.');
                   }
                 });
+               }
                     
-                    
-                    /*else
+                    else
                          {
                 Ext.Ajax.request({
-                  url   : '../dbConnections/dbConnectionsAjax.php',
+                  url   : '../reportTables/reportTables_Edit.php',
                   method: 'POST',
                   params:{
-                      dbs_uid  :dbConnUID,
-                      type     :Type,
-                      server   :Server,
-                      db_name  :DatabaseName,
-                      user     :Username ,
-                      passwd   :Password,
-                      port     :Port,
-                      desc     :Description,
-                      action   :'saveEditConnection'
+                      PRO_UID         :pro_uid,
+                      REP_TAB_UID     :tableUID,
+                      REP_TAB_TITLE   :Title,
+                      REP_TAB_NAME    :Name,
+                      REP_TAB_TYPE    :Type ,
+                      REP_TAB_GRID    :Grid,
+                      FIELDS          :Fields,
+                      //REP_VAR_NAME    : VariableName,
+                      //REP_VAR_TYPE    : VariableType,
+                      REP_TAB_CONNECTION: Connection
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Connection Edited Successfully.');
+                      Ext.MessageBox.alert ('Status','Report Table Edited Successfully.');
                   }
                 });
-                    }*/
+                    }
 
 
                 //var getData = getstore.data.items;

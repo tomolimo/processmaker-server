@@ -26,6 +26,13 @@ try
                                          'FIELD_NAME' => $aField['sName']);
         }
     }
+    if(isset($_GET['tid']))
+    {
+        require_once 'classes/model/ReportTable.php';
+        $o = new ReportTable();
+	$rows = $o->load($_GET['tid']);
+    }
+
 
     $result['totalCount'] = count($rows);
     $result['data'] = $rows;
