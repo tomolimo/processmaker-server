@@ -234,6 +234,7 @@ switch($_POST['action']) {
 			case 'MANUAL':
 				$sAux = '<select name="form[TASKS][1][USR_UID]" id="form[TASKS][1][USR_UID]">';
 				$oSession = new DBSession(new DBConnection());
+				/*
 				$oDataset = $oSession->Execute("SELECT
 												TU.USR_UID AS USR_UID,
 												CONCAT(U.USR_LASTNAME, ' ', U.USR_FIRSTNAME) AS USR_FULLNAME
@@ -249,6 +250,30 @@ switch($_POST['action']) {
 												TU.TU_TYPE     = 1 AND
 												TU.TU_RELATION = 1 AND
 												U.USR_STATUS   = 1");
+				*/
+        $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+        if(G::LoadSystemExist($sDataBase)){
+          G::LoadSystem($sDataBase);
+          $oDataBase = new database();
+          $sConcat = $oDataBase->concatString("U.USR_LASTNAME", "' '", "U.USR_FIRSTNAME");
+        }
+        $sSQL     = "SELECT
+                        TU.USR_UID AS USR_UID, " .
+                        $sConcat . " AS USR_FULLNAME
+                      FROM
+                        TASK_USER AS TU
+                      LEFT JOIN
+                        USERS AS U
+                      ON (
+                        TU.USR_UID = U.USR_UID
+                      )
+                      WHERE
+                        TU.TAS_UID     = '" . $_POST['TAS_UID'] . "' AND
+                        TU.TU_TYPE     = 1 AND
+                        TU.TU_RELATION = 1 AND
+                        U.USR_STATUS   = 1";
+        $oDataset = $oSession->Execute($sSQL);
+				
 				while($aRow = $oDataset->Read()) {
 					$sAux .= '<option value="' . $aRow['USR_UID'] . '">' . $aRow['USR_FULLNAME'] . '</option>';
 				}
