@@ -42,7 +42,7 @@
 <en>Holidays</en>
 </HOLIDAY_LABEL>
 <HOLIDAY type="grid" xmlgrid="setup/calendarEdit_Holidays" addrow="1" deleterow="1"/>
-<SUBMIT type="submit" onclick="submit1(this);">
+<SUBMIT type="button" onclick="submit1(this);">
 <en>Save</en>
 </SUBMIT>
 <SUBMIT2 type="button" onclick="submit2();   ">
@@ -61,6 +61,7 @@
 <![CDATA[
 var invalidCalendarName = '';
 function submit1 () {
+  
   getField('CALENDAR_WORK_DAYS][0').disabled=false;
   getField('CALENDAR_WORK_DAYS][1').disabled=false;
   getField('CALENDAR_WORK_DAYS][2').disabled=false;
@@ -70,7 +71,7 @@ function submit1 () {
   getField('CALENDAR_WORK_DAYS][6').disabled=false;
   getField('CALENDAR_STATUS').disabled=false;
   getField('CALENDAR_NAME').disabled=false;
-  return validateForm(this.form);
+  validateForm(this.form);
 }
 
 function submit2 () {
@@ -358,7 +359,8 @@ function validateForm(form){
 	}
         getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
 	if(getField('CALENDAR_NAME').value==""){ 
-	msg+="- Invalid Name \n";
+	 msg+=G_STRINGS.ID_REQUIRED_FIELDS + ": \n\n ";
+	 msg+="- "+ '@G::LoadTranslation(ID_NAME)' +" \n";	
 	}
 	var flag=true;
 	var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
@@ -371,14 +373,17 @@ function validateForm(form){
 		}
 	}
 	if(!flag){
-	msgBox(G_STRINGS.ID_REQUIRED_FIELDS + ": \n "+G_STRINGS.ID_START_DATE,"alert"); return false;
+	 if(!flag && getField('CALENDAR_NAME').value!=""){	msg+=G_STRINGS.ID_REQUIRED_FIELDS + ": \n\n ";}
+	 //msgBox(G_STRINGS.ID_REQUIRED_FIELDS + ": \n "+G_STRINGS.ID_START_DATE,"alert"); //return false;
+ 	 msg +="- "+G_STRINGS.ID_START_DATE+"\n";
 	}
 	if(msg!=""){
+    //msgBox(msg,"alert");
 		alert(msg);
 		return false;
 	}
-	
-	return true;
+  document.CalendarDefinition.submit();
+  //return true;
 
 }
 
