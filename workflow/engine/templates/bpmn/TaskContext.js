@@ -126,7 +126,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
             remoteSort   : true,
             fields       : stepsFields,
             proxy        : new Ext.data.HttpProxy({
-                   url   : 'proxyExtjs?tid='+taskId+'&action=getSteps'
+                   url   : 'proxyExtjs?tid='+taskId+'&action=getAssignedSteps'
             })
           });
           //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -1469,7 +1469,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
                 beforeload: {
                         fn: function (store, options) {
                                 // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                var link = 'proxyStepTriggers?tid='+taskId+'&stepid='+sStepUID;
+                                var link = 'proxyExtjs?tid='+taskId+'&stepid='+sStepUID+'&action=getAssignedStepTriggers';
                                 store.proxy.setUrl(link, true);
                         }
                 }
@@ -1479,7 +1479,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
                 beforeload: {
                         fn: function (store, options) {
                                 // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                var link = 'proxyStepTriggers?pid='+pro_uid+'&tid='+taskId+'&stepid='+sStepUID;
+                                var link = 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&stepid='+sStepUID+'&action=getAvailableStepTriggers';
                                 store.proxy.setUrl(link, true);
                         }
                 }
@@ -1570,7 +1570,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
     // create the Data Store of users that are already assigned to a task
     var stepsTriggers = new Ext.data.JsonStore({
         root            : 'data',
-        url             : 'proxyStepTriggers?tid='+taskId,//+'&stepid='+workflow.selectedStepUID,
+        url             : 'proxyExtjs?tid='+taskId+'&action=',//+'&stepid='+workflow.selectedStepUID,
         totalProperty   : 'totalCount',
         idProperty      : 'gridIndex',
         remoteSort      : true,
@@ -1581,7 +1581,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
 
      var availableTriggers = new Ext.data.JsonStore({
          root            : 'data',
-         url             : 'proxyStepTriggers?pid='+pro_uid+'&tid='+taskId,//+'&stepid='+workflow.selectedStepUID,
+         url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=',//+'&stepid='+workflow.selectedStepUID,
          totalProperty   : 'totalCount',
          idProperty      : 'gridIndex',
          remoteSort      : false, //true,
