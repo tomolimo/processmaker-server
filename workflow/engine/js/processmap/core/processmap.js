@@ -2070,6 +2070,7 @@ var processmap=function(){
 
 		if (event)
 		{
+
 			if (typeof(this.data.db.task[index].derivation.type) == 'undefined')
 			{
 				new leimnud.module.app.alert().make(
@@ -2537,7 +2538,7 @@ function showCaseSchedulerList(PRO_UID)
 	mainPanel.options = {
 	  	size	:{w:850,h:570},
 	  	position:{x:0,y:0,center:true},
-	  	title	:"Case Scheduler List",
+	  	title	:G_STRINGS.ID_PROCESSMAP_CASE_SCHEDULER_TITLE,
 	  	theme	:"processmaker",
 	  	statusBar:false,
 	  	control	:{resize:false,roll:false,drag:true},
