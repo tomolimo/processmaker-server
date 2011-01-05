@@ -371,7 +371,7 @@ function validateForm(form){
 		}
 	}
 	if(!flag){
-	msgBox(G_STRINGS.ID_REQUIRED_FIELDS + ": \n Start Date ","alert"); return false;
+	msgBox(G_STRINGS.ID_REQUIRED_FIELDS + ": \n "+G_STRINGS.ID_START_DATE,"alert"); return false;
 	}
 	if(msg!=""){
 		alert(msg);
