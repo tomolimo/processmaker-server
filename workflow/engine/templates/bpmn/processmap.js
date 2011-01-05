@@ -633,7 +633,7 @@ Ext.onReady ( function() {
                     NewShape.x = shapes.subprocess[k][2];
                     NewShape.y = shapes.subprocess[k][3];
                     workflow.setBoundary(NewShape);
-                    _4562.workflow.addFigure(NewShape, srctaskxpos, srctaskypos);
+                    _4562.workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                     //Setting newshape id to the old shape id
                     NewShape.html.id = shapes.subprocess[k][0];
                     NewShape.id = shapes.subprocess[k][0];
