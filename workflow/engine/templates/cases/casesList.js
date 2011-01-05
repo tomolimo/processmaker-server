@@ -820,9 +820,7 @@ Ext.onReady ( function() {
   var btnJump = new Ext.Button ({
     text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
-//      alert ('prev');
       var caseNumber = parseFloat(Ext.util.Format.trim(Ext.getCmp('textJump').getValue()));
-      alert (caseNumber);
       if (caseNumber){
         jumpToCase(caseNumber);
       } else {
