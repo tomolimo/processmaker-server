@@ -1067,6 +1067,7 @@ CREATE TABLE [ROUTE]
   [ROU_EVN_UID] 	  VARCHAR(32) NULL,
   [ROU_TO_PORT]     INT NULL,
   [ROU_FROM_PORT]   INT NULL,
+  [GAT_UID] VARCHAR(32) NULL,
 	CONSTRAINT ROUTE_PK PRIMARY KEY ([ROU_UID])
 );
 
@@ -1271,7 +1272,7 @@ CREATE TABLE [TASK]
   [TAS_WIDTH]     INT NULL,
   [TAS_HEIGHT]    INT NULL,
   [TAS_EVN_UID]   VARCHAR(32) NULL,
-  ]TAS_BOUNDARY]  VARCHAR(32) NULL,
+  [TAS_BOUNDARY]  VARCHAR(32) NULL,
 	CONSTRAINT TASK_PK PRIMARY KEY ([TAS_UID])
 );
 
@@ -2277,6 +2278,45 @@ CREATE TABLE [EVENT]
 );
 
 CREATE INDEX [indexEventTable] ON [EVENT] ([EVN_UID]);
+
+
+/* ---------------------------------------------------------------------- */
+/* GATEWAY											*/
+/* ---------------------------------------------------------------------- */
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'GATEWAY')
+BEGIN
+	 DECLARE @reftable_50_1 nvarchar(60), @constraintname_50_1 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'GATEWAY'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_50_1, @constraintname_50_1
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_50_1+' drop constraint '+@constraintname_50_1)
+	   FETCH NEXT from refcursor into @reftable_50_1, @constraintname_50_1
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [EVENT]
+END
+
+CREATE TABLE [GATEWAY]
+(
+	[GAT_UID] VARCHAR(32) default '' NOT NULL,
+	[PRO_UID] VARCHAR(32) default '' NOT NULL,
+	[GAT_X] INTEGER default 0 NOT NULL,
+	[GAT_Y] INTEGER default 0 NOT NULL,
+	CONSTRAINT GATEWAY_PK PRIMARY KEY ([GAT_UID])
+) ;
+
 
 /* ---------------------------------------------------------------------- */
 /* APP_EVENT											*/
