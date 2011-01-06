@@ -95,7 +95,7 @@ class Translation extends BaseTranslation {
 
 
     $f = fopen( $cacheFile , 'w');
-    fwrite( $f , "<?\n" );
+    fwrite( $f , "<?php\n" );
     fwrite( $f , '$translation =' . 'unserialize(\'' . addcslashes( serialize ( $translation ), '\\\'' ) . "');\n");
     fwrite( $f , "?>" );
     fclose( $f );

@@ -47,7 +47,7 @@ if (isset($_SESSION['G_MESSAGE_TYPE']) && isset($_SESSION['G_MESSAGE'])) {
   }
   ?>
 <table width="100%" cellpadding="5" cellspacing="0" border="0">
-<?  
+<?php
   if( is_array( $G_PUBLISH->Parts ) )
   {
     $nplim = count( $G_PUBLISH->Parts );
@@ -60,10 +60,10 @@ if (isset($_SESSION['G_MESSAGE_TYPE']) && isset($_SESSION['G_MESSAGE'])) {
 	  	  for( $npcount = 1; $npcount < $nplim; $npcount++ )    {
 	  	    print( "<tr>\n<td align=\"left\" valign=\"top\">\n" );
 	  	    ?>
-	  	    <?
+	  	    <?php
 	  	    $G_PUBLISH->RenderContent( $npcount, ($RBAC->userCanAccess('WF_SHOW_XMLFORM_NAME')==1?true:false) );
 	  	    ?>
-	  	    <?
+	  	    <?php
 	  	    print( "</td>\n</tr>\n" );
 	  	  }
 	  	  print "</table>";

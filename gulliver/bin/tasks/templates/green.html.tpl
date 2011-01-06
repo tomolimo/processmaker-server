@@ -51,7 +51,7 @@
         </tr>
         <tr>
           <td width="50%" height="16" valign="bottom" class="title">
-            <div align="right"><? //aca iba el título ?></div>
+            <div align="right"><?php //aca iba el título ?></div>
           </td>
         </tr>
 </table>

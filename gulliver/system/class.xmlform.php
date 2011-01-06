@@ -3779,7 +3779,7 @@ class XmlForm
       //ERROR CODE [2] : Failed to open cache file
       if ($f === FALSE)
         return 2;
-      fwrite ( $f, "<?\n" );
+      fwrite ( $f, "<?php\n" );
       /*  fwrite ($f, '$this = unserialize( \'' .
                   addcslashes( serialize ( $this ), '\\\'' ) . '\' );' . "\n" );*/
       foreach ( $this as $key => $value ) {

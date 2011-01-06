@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * wf.php
  *  
@@ -37,7 +37,7 @@
 ?>
 <html>
 <head>
-<title><? if ( $HTTP_SESSION_VARS['USER_NAME']  != "") print " (" .$HTTP_SESSION_VARS['USER_NAME'] . ")" ?></title>
+<title><?php if ( $HTTP_SESSION_VARS['USER_NAME']  != "") print " (" .$HTTP_SESSION_VARS['USER_NAME'] . ")" ?></title>
   <meta http-equiv="PRAGMA" content="NO-CACHE" />
   <meta http-equiv="CACHE-CONTROL" content="NO-STORE" />
   <link rel="stylesheet" type="text/css" href="/skins/wf/general.css" />
@@ -48,18 +48,18 @@
 
 <body bgcolor="#FFFFFF" text="#000000" link="#000000" vlink="#000000" alink="#999999" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0" rightmargin="0">
 <table background="/skins/wf/topBackgr.jpg" width="100%" height="48" border="0" cellspacing="0" cellpadding="0">
-    <td width="50%" rowspan="2" height="48" valign="top"><img src="/skins/wf/test.gif" width="125" height="48"><font color=white><? /*acá iba el nombre*/ ?></font></td>
+    <td width="50%" rowspan="2" height="48" valign="top"><img src="/skins/wf/test.gif" width="125" height="48"><font color=white><? /*acï¿½ iba el nombre*/ ?></font></td>
     <td width="50%" height="24" valign="top" >
       <div align="right" class="title"><small><? /*= PEAR_DATABASE*/ ?></small> &nbsp; &nbsp;</div>
     </td>
   </tr>
   <tr>
     <td width="50%" height="24" valign="bottom" class="title">
-      <div align="right"><? //aca iba el título ?></div>
+      <div align="right"><? //aca iba el tï¿½tulo ?></div>
     </td>
   </tr>
 </table>
-<?
+<?php
   $pageSplit = explode ( '/', $CURRENT_PAGE );
   $path = '/' .$pageSplit[1] . '/' .$pageSplit[2] . '/'.$pageSplit[3] . '/';
   if( $G_MAIN_MENU != "" ) {
@@ -123,7 +123,7 @@
   </tr>
 </table>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<?
+<?php
   global $HTTP_SESSION_VARS;
   if (!isset($HTTP_SESSION_VARS['G_MESSAGE']))
   {
@@ -153,7 +153,7 @@
 <? } ?>
     <tr>
       <td align="center">
-         <? if( $G_TEMPLATE != "" ) G::LoadTemplate($G_TEMPLATE); ?>
+         <?php if( $G_TEMPLATE != "" ) G::LoadTemplate($G_TEMPLATE); ?>
       </td>
     </tr>
 

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * inc.JSForms.php
  *  
@@ -34,7 +34,7 @@ $serverAjax = G::encryptLink($path.$showFieldAjax);
 <script language="JavaScript">
 function RefreshDependentFields(ObjectName, Fields, InitValue) { 
 
-<?  
+<?php
   //global $G_FORM;
   $HTTP_SESSION_VARS['INIT_VALUES'] = $G_FORM->Values;
   global $HTTP_GET_VARS;
@@ -73,7 +73,7 @@ function RefreshDependentFields(ObjectName, Fields, InitValue) {
         }
       }
     }
-<?
+<?php
  // }
 ?>
 }
@@ -85,7 +85,7 @@ function registerDate ( field, options ) {
 	Obj = getField( divName);
 	value = Obj.value;
   myDatePicker = new Bs_DatePicker();
-<?
+<?php
 global $G_DATE_FORMAT;
 global $HTTP_SESSION_VARS;
 

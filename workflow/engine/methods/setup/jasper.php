@@ -1,4 +1,4 @@
-<? 
+<?php 
   G::LoadClass ( 'jasperReports' ); 
   $oJasper = new jasperReports( '192.168.0.51', 8080, 'jasperadmin', 'jasperadmin' );
 

@@ -52,7 +52,7 @@ a.krumo-name {
 	line-height:12px;
 	}	
 </style>
-<?
+<?php
     
   if ( isset ( $_POST["epr"] )  )  {
   	$_SESSION['END_POINT'] = $_POST["epr"];
@@ -92,7 +92,7 @@ a.krumo-name {
 	<a class="krumo-name">createUser</a>
 	<ul class="krumo-node krumo-first">
 	  <div class="krumo-element" >
-			Session Id <input type="text" size="36" maxlength="32" name="sessionid" value="<? print $sessionId ?>">
+			Session Id <input type="text" size="36" maxlength="32" name="sessionid" value="<?php print $sessionId ?>">
 	  </div>
 	  <div class="krumo-element" >
 			User Id <input type="text" size="16" maxlength="20" name="userid" value="">
@@ -116,7 +116,7 @@ a.krumo-name {
 	<a class="krumo-name">assignUserToGroup</a>
 	<ul class="krumo-node krumo-first">
 	  <div class="krumo-element" >
-			Session Id <input type="text" size="36" maxlength="32" name="sessionid" value="<? print $sessionId ?>">
+			Session Id <input type="text" size="36" maxlength="32" name="sessionid" value="<?php print $sessionId ?>">
 	  </div>
 	  <div class="krumo-element" >
 			User Id <input type="text" size="16" maxlength="20" name="userid" value="">
@@ -134,7 +134,7 @@ a.krumo-name {
 	<a class="krumo-name">newCase</a>
 	<ul class="krumo-node krumo-first">
 	  <div class="krumo-element" >
-			Session Id <input type="text" size="36" maxlength="32" name="sessionid" value="<? print $sessionId ?>">
+			Session Id <input type="text" size="36" maxlength="32" name="sessionid" value="<?php print $sessionId ?>">
 	  </div>
 	  <div class="krumo-element" >
 			Process Id <input type="text" size="16" maxlength="20" name="processid" value="">
@@ -146,7 +146,7 @@ a.krumo-name {
 </div>
 </form >
 	
-<? 
+<?php
 
   if ( ! isset ( $_POST["action"] ) or $_POST["action"] == 'change endpoint'  )  {
 	  die;

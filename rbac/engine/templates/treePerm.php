@@ -161,7 +161,7 @@ $dbc = new DBConnection(DB_HOST, DB_RBAC_USER, DB_RBAC_PASS, DB_RBAC_NAME );
       <td width=16></td>
       <td width=506></td>
       </tr>
-      <?
+      <?php
        walkLevel (0, "*", 0);
       ?>
     </table>

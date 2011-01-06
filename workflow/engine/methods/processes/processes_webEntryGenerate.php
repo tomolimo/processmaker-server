@@ -52,7 +52,7 @@ try {
     $oDynaform = new Dynaform ( );
     $aDynaform = $oDynaform->load ( $sDYNAFORM );
     $dynTitle = str_replace ( ' ', '_', str_replace ( '/', '_', $aDynaform['DYN_TITLE'] ) );
-    $sContent = "<?\n";
+    $sContent = "<?php\n";
     $sContent .= "global \$_DBArray;\n";
     $sContent .= "if (!isset(\$_DBArray)) {\n";
     $sContent .= "  \$_DBArray = array();\n";

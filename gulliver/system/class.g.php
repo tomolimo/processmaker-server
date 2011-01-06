@@ -365,7 +365,7 @@ class G
           <td colspan=2 nowrap><font color=gray>File: $file</font></td></tr>
           ";
     for ($i = $start; $i <= $end; $i++) {
-      $str  = @highlight_string ("<?" . $__src_array[$file][$i-1] . "?>", TRUE);
+      $str  = @highlight_string ("<?php" . $__src_array[$file][$i-1] . "?>", TRUE);
 
       $pos1 = strpos ($str,"&lt;?");
       $pos2 = strrpos ($str,"?&gt;");
@@ -1651,7 +1651,7 @@ class G
         }
       }
       $f = fopen( $cacheFile , 'w');
-      fwrite( $f , "<?\n" );
+      fwrite( $f , "<?php\n" );
       fwrite( $f , '$arrayXmlMessages[\'' . $languageFile . '\']=' . 'unserialize(\'' .
               addcslashes( serialize ( $arrayXmlMessages[ $languageFile ] ), '\\\'' ) .
                   "');\n");
