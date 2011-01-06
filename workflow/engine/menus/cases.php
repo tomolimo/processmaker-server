@@ -58,9 +58,10 @@
     $G_TMP_MENU->AddIdRawOption('CASES_TO_REASSIGN', 'casesListExtJs?action=to_reassign', G::LoadTranslation('ID_TO_REASSIGN'),         'reassing.png'   );
   }
 
-  $G_TMP_MENU->AddIdRawOption('CASES_HOME',           'casesStartPage',                           G::LoadTranslation('ID_EXTENDED_FEATURES'), '',                   '', 'blockHeader');
+  $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     'casesStartPage?action=documents',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif','','blockHeaderNoChild'         );
+  $G_TMP_MENU->AddIdRawOption('PLUGINS',           '',                           G::LoadTranslation('ID_PLUGINS'), '',                   '', 'blockHeader');
   
-  $G_TMP_MENU->AddIdRawOption('CASES_FOLDERS',     'casesStartPage?action=documents',       G::LoadTranslation('ID_FOLDERS'),            'folderV2.gif'         );
+  
   //$G_TMP_MENU->AddIdRawOption('CASES_START_PAGE',     'casesStartPage?action=mainDashboard', ucwords(strtolower(G::LoadTranslation('ID_DASHBOARD'))),              '' );
 
   //Load Other registered Dashboards (From plugins)

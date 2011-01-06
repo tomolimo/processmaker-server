@@ -642,7 +642,7 @@ Ext.extend(Ext.data.DynamicJsonReader, Ext.data.JsonReader, {
 
 Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
   processAttributes : function(attr){
-    
+    //console.log(attr);
     if(attr.blockNestedTree){
       //console.log(attr);
       attr.text = attr.blockTitle;
@@ -670,7 +670,18 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
         };
                  
 				      
-    }else if(attr.blockTitle){
+    }else if(attr.blockHeaderNoChild){
+        //console.info(attr);
+        attr.text = attr.blockTitle;
+        attr.iconCls = 'ICON_' + attr.id;
+        attr.loaded = true;
+        attr.expanded = false;
+        //attr.disabled=true;
+        attr.expandable=true;
+        attr.qtip=attr.blockTitle;
+         
+        				      
+      }else if(attr.blockTitle){
       attr.text = attr.blockTitle;
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;

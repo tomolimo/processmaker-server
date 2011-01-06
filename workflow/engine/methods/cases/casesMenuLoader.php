@@ -74,8 +74,11 @@
         $menuCases[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
         $menuCases[$CurrentBlockID]['blockType'] = $oMenu->Types[$i];
         $menuCases[$CurrentBlockID]['loaderurl'] = $oMenu->Options[$i];
-        
-        
+      }elseif( $oMenu->Types[$i] == 'blockHeaderNoChild' ){
+        $CurrentBlockID = $oMenu->Id[$i];
+        $menuCases[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
+        $menuCases[$CurrentBlockID]['blockType'] = $oMenu->Types[$i];
+        $menuCases[$CurrentBlockID]['link'] = $oMenu->Options[$i];       
       }else {
         $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = Array (
           'label' => $oMenu->Labels[$i],
@@ -112,6 +115,10 @@
         $xml .= '</menu_block>';
       }elseif( isset($aMenuBlock['blockType']) && $aMenuBlock['blockType']=="blockNestedTree" ) {
         $xml .= '<menu_block blockTitle="'.$aMenuBlock['blockTitle'].'" blockNestedTree = "'.$aMenuBlock['loaderurl'].'" id="'.$menu.'" folderId="0">';
+        $xml .= '</menu_block>';
+      }elseif( isset($aMenuBlock['blockType']) && $aMenuBlock['blockType']=="blockHeaderNoChild" ) {
+        $xml .= '<menu_block blockTitle="'.$aMenuBlock['blockTitle'].'" blockHeaderNoChild="blockHeaderNoChild" url = "'.$aMenuBlock['link'].'" id="'.$menu.'">';
+        //$xml .= '<option title="" id="" ></option>';
         $xml .= '</menu_block>';
       }
     }
