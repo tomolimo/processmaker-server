@@ -398,7 +398,8 @@ class Process extends BaseProcess {
     $this->setProTitleX       ( $aData['PRO_TITLE_X'] );
     $this->setProTitleY       ( $aData['PRO_TITLE_Y'] );
     if ( $this->validate() ) {
-      $con->begin();
+			///-- Does not allow dual Begin
+      ///-- $con->begin();
       $res = $this->save();
 
       if (isset ( $aData['PRO_TITLE'] ) )

@@ -78,6 +78,8 @@ class AppDelegation extends BaseAppDelegation {
     $c->addSelectColumn ( 'MAX(' . AppDelegationPeer::DEL_INDEX . ') ' );
     $c->addSelectColumn ( AppDelegationPeer::DEL_STARTED );
     $c->add ( AppDelegationPeer::APP_UID, $sAppUid );
+    ///-- Group by DEL_STARTED, Adjustment for standardization (SQL)
+    $c->addGroupByColumn(AppDelegationPeer::DEL_STARTED);
     $rs = AppDelegationPeer::doSelectRS ( $c );
     $rs->next();
     $row = $rs->getRow();
