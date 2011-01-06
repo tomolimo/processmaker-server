@@ -2401,7 +2401,7 @@ class processMap {
     try {
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('COUNT(*) AS ROUTE_NUMBER');
-      $oCriteria->addSelectColumn('GAT_UID');
+      $oCriteria->addSelectColumn('TAS_UID');
       $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);
       $oCriteria->add(RoutePeer::TAS_UID, $sTaskUID);
       $oCriteria->add(RoutePeer::ROU_TYPE, $sType);
@@ -2415,7 +2415,7 @@ class processMap {
       $aFields ['ROU_TYPE'] = $sType;
       $aFields ['ROU_CASE'] = (int) $aRow ['ROUTE_NUMBER'] + 1;
 
-      $sGatewayUID = $aRow['GAT_UID'];     
+      $sGatewayUID = $aRow['GATEWAY_UID'];
 
       if($sDelete && $sGatewayUID != ''){
           $oGateway = new Gateway ( );

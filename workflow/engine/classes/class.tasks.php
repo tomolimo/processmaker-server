@@ -318,6 +318,36 @@ class Tasks
     }
   }
 
+  /**
+  * Delete all routes from a task
+  * @param string $sProcessUID
+  * @param string $sTaskUID
+  * @return boolean
+  */
+  public function deleteAllGatewayOfTask($sProcessUID = '', $sTaskUID = '', $bAll = false)
+  {
+    try {
+      $oProcess  = new Process();
+      $aFields   = $oProcess->load($sProcessUID);
+      $oTask     = new Task();
+      $aFields   = $oTask->load($sTaskUID);
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(GatewayPeer::PRO_UID, $sProcessUID);
+      $oCriteria->add(GatewayPeer::TAS_UID, $sTaskUID);
+      GatewayPeer::doDelete($oCriteria);
+      if ($bAll) {
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->add(GatewayPeer::PRO_UID,   $sProcessUID);
+        $oCriteria->add(GatewayPeer::ROU_NEXT_TASK, $sTaskUID);
+        GatewayPeer::doDelete($oCriteria);
+      }
+      return true;
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
  /**
   * Assign a user to task
   * @param string $sTaskUID
