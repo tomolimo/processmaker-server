@@ -834,7 +834,7 @@
           target     : "cases_target",
           dataServer : "cases_Ajax?TYPE=' . (isset($_GET['TYPE']) ? $_GET['TYPE'] : '') . '&UID=' . (isset($_GET['UID']) ? $_GET['UID'] : '') . '&POSITION=' . (isset($_GET['POSITION']) ? $_GET['POSITION'] : '') . '&ACTION=' . (isset($_GET['ACTION']) ? $_GET['ACTION'] : '') . '&DOC=' . (isset($_GET['DOC']) ? $_GET['DOC'] : '') . '",
           action     : "steps",
-          title      : "Steps",
+          title      : G_STRINGS.ID_PROCESSMAP_STEPS,
           lang       : "' . SYS_LANG . '",
           theme      : "processmaker",
           images_dir :leimnud.path_root + "cases/core/images/"
