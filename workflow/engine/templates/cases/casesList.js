@@ -799,13 +799,15 @@ Ext.onReady ( function() {
 
   textJump = {
     xtype: 'numberfield',
+    id   : 'textJump',
     allowBlank: true,
     width: 50,
     emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID,
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
-          caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
+          // defining an id and using the Ext.getCmp method improves the accesibility of Ext components
+          caseNumber = parseFloat(Ext.util.Format.trim(Ext.getCmp('textJump').getValue()));
           if( caseNumber )
             jumpToCase(caseNumber);
           else
@@ -818,12 +820,12 @@ Ext.onReady ( function() {
   var btnJump = new Ext.Button ({
     text: TRANSLATIONS.LABEL_OPT_JUMP,
     handler: function(){
-      caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
-       caseNumber = parseFloat(Ext.util.Format.trim(textJump.getValue()));
-          if( caseNumber )
+      var caseNumber = parseFloat(Ext.util.Format.trim(Ext.getCmp('textJump').getValue()));
+      if (caseNumber){
         jumpToCase(caseNumber);
-      else
+      } else {
             msgBox('Input Error', 'You have set a invalid Application Number', 'error');
+    }
     }
   });
 
