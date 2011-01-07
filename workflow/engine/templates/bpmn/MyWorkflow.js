@@ -77,6 +77,7 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
             },
             {
                 text: 'Users & Users Groups (ad-hoc)',
+                handler: taskExtObj.editUsersAdHoc,
                 scope: oShape
             },
             {

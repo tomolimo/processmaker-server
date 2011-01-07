@@ -402,8 +402,8 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         title: 'Steps Of',
         collapsible: false,
         maximizable: false,
-        width: 800,
-        height: 470,
+        width: 700,
+        height: 380,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -683,7 +683,7 @@ TaskContext.prototype.editUsers= function(_5625)
         });
 
         var window = new Ext.Window({
-        title: 'Assign User',
+        title: 'Users and User Groups',
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -771,7 +771,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         remoteSort   : true,
         //fields       : taskFields,
         proxy: new Ext.data.HttpProxy({
-          url: 'proxyTaskPropertiesDetails?tid='+taskId
+          url: 'proxyExtjs?tid='+taskId+'&action=getPropertiesList'
         })
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -1310,7 +1310,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
     
   //Loading Task Details into the form
   taskPropertiesTabs.form.load({
-        url:'proxyTaskPropertiesDetails.php?tid=' +taskId,
+        url:'proxyExtjs.php?tid='+taskId+'&action=getPropertiesList',
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
@@ -1327,11 +1327,11 @@ TaskContext.prototype.editTaskProperties= function(_5625)
 
 
     var window = new Ext.Window({
-        title: 'Task: ',
+        title: 'Task:',
         collapsible: false,
         maximizable: false,
         width: 600,
-        height: 450,
+        height: 400,
         minWidth: 300,
         minHeight: 150,
         layout: 'fit',
@@ -1775,4 +1775,287 @@ TaskContext.prototype.stepTriggers = function(_5625)
         }]
     });
     window.show();*/
+}
+TaskContext.prototype.editUsersAdHoc= function(_5625)
+{
+        var taskExtObj = new TaskContext();
+        var pro_uid = workflow.getUrlVars();
+        var taskId  = workflow.currentSelection.id;
+
+        var userFields = Ext.data.Record.create([
+            {
+                name: 'LABEL',
+                type: 'string'
+            },
+            {
+                name: 'TU_TYPE',
+                type: 'string'
+            },
+            {
+                name: 'TU_RELATION',
+                type: 'string'
+            },
+            {
+                name: 'TAS_UID',
+                type: 'string'
+            },
+            {
+                name: 'USR_UID',
+                type: 'string'
+            }
+            ]);
+        var editor = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+
+        var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: 'Assign User',
+            iconCls: 'application_add',
+            handler: function(){
+                var User = grid.getStore();
+                var e = new userFields({
+                     //LABEL: 'Select User or Group',
+                     //LABEL: User.data.items[0].data.LABEL,
+                     TAS_UID: '',
+                     TU_TYPE: '',
+                     USR_UID: '',
+                     TU_RELATION: ''
+                });
+
+                //storeUsers.reload();
+                if(storeUsers.data.items.length == 0)
+                     Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+                else
+                {
+                    editor.stopEditing();
+                    taskUsers.insert(0, e);
+                    grid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editor.startEditing(0, 0);
+                }
+            }
+        });
+
+        var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Remove User',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = grid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting assigned users from Database
+                    var user_TURel      = r.data.TU_RELATION;
+                    var userUID         = r.data.USR_UID;
+                    var user_TUtype     = r.data.TU_TYPE;
+                    var urlparams       = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
+
+                    //if USR_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                     if(r.data.USR_UID != "")
+                     {
+                        Ext.Ajax.request({
+                          url   : 'processes_Ajax.php' +urlparams ,
+                          /*method: 'POST',
+                          params: {
+                                functions       : 'ofToAssign',
+                                TAS_UID         : taskId,
+                                TU_RELATION     : user_TURel,
+                                USR_UID         : userUID,
+                                TU_TYPE         : user_TUtype
+
+                          },*/
+                          success: function(response) {
+                              Ext.MessageBox.alert ('Status','User has been removed successfully.');
+                              //Secondly deleting from Grid
+                              taskUsers.remove(r);
+
+                              //Reloading available user store
+                              taskUsers.reload();
+                          }
+                        });
+                     }
+                     else
+                         taskUsers.remove(r);
+                }
+            }
+        });
+
+        var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove]
+        });
+
+        // create the Data Store of users that are already assigned to a task
+        var taskUsers = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : userFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=assignedUsers'
+            })
+          });
+          //taskUsers.setDefaultSort('LABEL', 'asc');
+          taskUsers.load();
+
+         // create the Data Store of users that are not assigned to a task
+         var storeUsers = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyExtjs?tid='+taskId+'&action=availableUsers',
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : userFields
+              });
+
+
+        var grid = new Ext.grid.GridPanel({
+        store: taskUsers,
+        id : 'mygrid',
+        //cm: cm,
+        loadMask: true,
+        loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :400,
+        layout: 'fit',
+        plugins: [editor],
+        columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'LABEL',
+                    header: 'Group or User',
+                    dataIndex: 'LABEL',
+                    width: 100,
+                    sortable: true,
+                    editor: new Ext.form.ComboBox({
+                            xtype: 'combo',
+                            fieldLabel: 'Users_groups',
+                            hiddenName: 'number',
+                            store        : storeUsers,
+                            displayField : 'LABEL'  ,
+                            valueField   : 'LABEL',
+                            name         : 'LABEL',
+                            scope        : _5625,
+                            triggerAction: 'all',
+                            emptyText: 'Select User or Group',
+                            allowBlank: false,
+                             onSelect: function(record, index){
+                                var User = grid.getStore();
+
+                                if(typeof _5625.scope.workflow.currentrowIndex == 'undefined')
+                                        var selectedrowIndex = '0';
+                                else
+                                        selectedrowIndex     = _5625.scope.workflow.currentrowIndex;    //getting Index of the row that has been edited
+
+                                 //User.data.items[0].data.LABEL= record.data.LABEL;
+                                 User.data.items[selectedrowIndex].data.TAS_UID      = record.data.TAS_UID;
+                                 User.data.items[selectedrowIndex].data.TU_TYPE      = record.data.TU_TYPE;
+                                 User.data.items[selectedrowIndex].data.USR_UID      = record.data.USR_UID;
+                                 User.data.items[selectedrowIndex].data.TU_RELATION  = record.data.TU_RELATION;
+
+                                 this.setValue(record.data[this.valueField || this.displayField]);
+                                 this.collapse();
+                              }
+                        })
+                }
+                ],
+        sm: new Ext.grid.RowSelectionModel({
+                singleSelect: true,
+                listeners: {
+                     rowselect: function(smObj, rowIndex, record) {
+                         _5625.scope.workflow.currentrowIndex = rowIndex;
+                    }
+               }
+            }),
+        stripeRows: true,
+        viewConfig: {forceFit: true},
+        tbar: tb
+        });
+
+        storeUsers.load();
+
+        editor.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+            var taskId      = record.data.TAS_UID;
+            var userId      = record.data.USR_UID;
+            var tu_Type     = record.data.TU_TYPE;
+            var tu_Relation = record.data.TU_RELATION;
+            var urlparams   = '?action=assign&data={"TAS_UID":"'+taskId+'","USR_UID":"'+userId+'","TU_TYPE":"'+tu_Type+'","TU_RELATION":"'+tu_Relation+'"}';
+
+            Ext.Ajax.request({
+                    url: 'processes_Ajax.php' +urlparams ,
+                    success: function (response) {      // When saving data success
+                        Ext.MessageBox.alert ('Status','User has been successfully assigned');
+                    },
+                    failure: function () {      // when saving data failed
+                        Ext.MessageBox.alert ('Status','Failed saving User Assigned to Task');
+                    }
+                 });
+
+            //Updating the user incase if already assigned user has been replaced by other user
+            if(changes != '' && typeof record.json != 'undefined')
+            {
+                var user_TURel      = record.json.TU_RELATION;
+                var userUID         = record.json.USR_UID;
+                var user_TUtype     = record.json.TU_TYPE;
+                urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
+                Ext.Ajax.request({
+                      url   : 'processes_Ajax.php' +urlparams ,
+                      success: function(response) {
+                          //Ext.MessageBox.alert ('Status','User has been updated successfully.');
+                      }
+                    });
+            }
+            storeUsers.reload();
+          }
+        });
+
+        var panel = new Ext.Panel({
+            id: 'panel',
+            renderTo: Ext.getBody(),
+            items: [grid]
+        });
+
+        var window = new Ext.Window({
+        title: 'Users and User Groups',
+        collapsible: false,
+        maximizable: false,
+        width: 400,
+        height: 350,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: panel
+        /*buttons: [{
+            text: 'Save',
+            handler: function(){
+                Ext.MessageBox.alert ("User has been successfully assigned");
+                //var getstore = grid.getStore();
+                //var getData = getstore.data.items;
+                //taskExtObj.saveTaskUsers(getData);
+
+            }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                window.close();
+            }
+        }]*/
+    });
+    window.show();
 }

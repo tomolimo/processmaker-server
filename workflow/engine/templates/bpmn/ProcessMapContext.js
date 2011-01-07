@@ -1053,7 +1053,7 @@ ProcessMapContext.prototype.processSupervisors= function()
         });
 
         var window = new Ext.Window({
-        title: 'Assign Process Supervisor',
+        title: 'Supervisor',
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -1270,7 +1270,7 @@ ProcessMapContext.prototype.processDynaform= function()
         });
 
         var window = new Ext.Window({
-        title: 'Assign Dynaform',
+        title: 'Dynaform',
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -1487,7 +1487,7 @@ ProcessMapContext.prototype.processIODoc= function()
         });
 
         var window = new Ext.Window({
-        title: 'Assign Dynaform',
+        title: 'Input Documents',
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -1517,7 +1517,7 @@ ProcessMapContext.prototype.processFileManager= function()
 		,height:300
 	});
 
-         var window = new Ext.Window({
+        var window = new Ext.Window({
         title: 'Edit Process',
         collapsible: false,
         maximizable: false,
@@ -1577,29 +1577,53 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         labelWidth: 75, // label settings here cascade unless overridden
         frame:true,
         bodyStyle:'padding:5px 5px 0',
-        width: 500,
-        height: 400,
-        defaults: {width: 350},
+        width: 300,
+        height: 300,
+        //defaults: {width: 350},
         defaultType: 'textfield',
                 items: [{
-                        width          :100,
-                        xtype           :'combo',
-                        mode            :'local',
-                        triggerAction   :'all',
-                        forceSelection  :true,
-                        editable        :false,
-                        fieldLabel      :'Map Type',
-                        name            :'CT_MAP_TYPE',
-                        displayField    :'name',
-                        value           :'Process Map',
-                        valueField      :'value',
-                        store           :new Ext.data.JsonStore({
-                                         fields : ['name', 'value'],
-                                         data   :[{name: 'None', value:'0'},
-                                                  {name: 'Process Map', value: '1'},
-                                                  {name: 'Stages Map', value:'2'}]
-                                         })
-                },{
+                   xtype: 'fieldset',
+                   layout:'column',
+                   border:false,
+                   width: 400,
+                   //title: 'valueBased',
+                   hidden: false,
+                   id: 'evaluate',
+                   items:[{
+                       columnWidth:.6,
+                       layout: 'form',
+                       border:false,
+                       items: [{
+                           width          :100,
+                       xtype           :'combo',
+                       mode            :'local',
+                       triggerAction   :'all',
+                       forceSelection  :true,
+                       editable        :false,
+                       fieldLabel      :'Map Type',
+                       name            :'CT_MAP_TYPE',
+                       displayField    :'name',
+                       value           :'PROCESSMAP',
+                       valueField      :'value',
+                       store           :new Ext.data.JsonStore({
+                                        fields : ['name', 'value'],
+                                        data   :[{name: 'None', value:'NONE'},
+                                                 {name: 'PROCESSMAP', value: 'PROCESSMAP'},
+                                                 {name: 'STAGES', value:'STAGES'}]
+                                        })
+                       }]
+                   },{
+                       columnWidth:.3,
+                       layout: 'form',
+                       border:false,
+                       items: [{
+                             xtype: 'box',
+                             bodyStyle: 'padding:0 0 0 50px;',
+                             autoEl: {tag: 'a', href: '../tracker/tracker_Ajax?PRO_UID=pro_uid&action=editStagesMap', children: [{tag: 'div', html: 'Edit'}]},
+                             style: 'cursor:pointer;'
+                       }]
+                   }]
+               },{
                         xtype: 'checkbox',
                         fieldLabel: 'Derivation History',
                         name: 'CT_DERIVATION_HISTORY'
@@ -1609,17 +1633,17 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                         fieldLabel: 'Messages History',
                         name: 'CT_MESSAGE_HISTORY'
                        // checked:checkMessages
-                }]
+               }]
 
    });
    var Propertieswindow = new Ext.Window({
-        title: 'Edit Process',
+        title: 'Case tracker',
         collapsible: false,
         maximizable: false,
-        width: 500,
-        height: 400,
-        minWidth: 300,
-        minHeight: 200,
+        width: 300,
+        height: 300,
+        //minWidth: 300,
+        //minHeight: 200,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -1629,13 +1653,22 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                 text: 'Save',
                 handler: function(){
                 var getForm             = PropertiesForm.getForm().getValues();
-                var pro_uid             = getForm.PRO_UID;
+                //var pro_uid             = getForm.PRO_UID;
                 var MapType             = getForm.CT_MAP_TYPE;
                 var DerivationHistory   = getForm.CT_DERIVATION_HISTORY;
                 var MessageHistory      = getForm.CT_MESSAGE_HISTORY;
+                if(DerivationHistory == 'on')
+                    DerivationHistory = '1';
+                else
+                    DerivationHistory = '0';
 
+                if(MessageHistory == 'on')
+                    MessageHistory = '1';
+                else
+                    MessageHistory = '0';
+                
                    Ext.Ajax.request({
-                       url   : '../tracker/tracker_save.php',
+                       url   : '../tracker/tracker_Save.php',
                        method: 'POST',
                        params:{
                           PRO_UID               :pro_uid,
@@ -1645,7 +1678,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                        },
                        success: function(response) {
                           Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
-                                                   }
+                                                                            }
                    });
                 }
         },{

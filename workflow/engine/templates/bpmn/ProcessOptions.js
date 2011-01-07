@@ -528,7 +528,7 @@ ProcessOptions.prototype.dbConnection = function()
 
    var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove Step',
+            text: 'Remove',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -861,7 +861,8 @@ ProcessOptions.prototype.dbConnection = function()
                         fieldLabel: 'Port',
                         name: 'DBS_PORT',
                         id:'port',
-                        allowBlank: false
+                        allowBlank: false,
+                        editable:false
                       },{
                         xtype: 'textarea',
                         fieldLabel: 'Description',
@@ -879,9 +880,9 @@ ProcessOptions.prototype.dbConnection = function()
     title: 'Add new Database Source',
     collapsible: false,
     maximizable: true,
-    width: 450,
+    width: 300,
     //autoHeight: true,
-    height: 400,
+    //height: 400,
     //layout: 'fit',
     plain: true,
     bodyStyle: 'padding:5px;',
@@ -958,7 +959,7 @@ ProcessOptions.prototype.dbConnection = function()
     title: 'Database Source List',
     collapsible: false,
     maximizable: true,
-    width: 550,
+    width: 480,
     //autoHeight: true,
     height: 400,
     //layout: 'fit',
@@ -1295,7 +1296,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         autoHeight:false,
         clicksToEdit: 1,
         minHeight:400,
-        height   :400,
+        height   :350,
         layout: 'fit',
         cm: inputDocColumns,
         stripeRows: true,
