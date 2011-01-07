@@ -54,10 +54,10 @@
   $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
   $oPMScript = new PMScript();
   $oPMScript->setFields($Fields['APP_DATA'] );
-  foreach ( $rs as $key => $aRow  )
+	foreach ( $rs as $key => $aRow  )
   {
     $bAccessStep = false;
-    if ($aRow->getStepCondition() != '') {
+    if (trim($aRow->getStepCondition()) != '') {
       $oPMScript->setScript( $aRow->getStepCondition() );
       $bAccessStep = $oPMScript->evaluate();
     }
