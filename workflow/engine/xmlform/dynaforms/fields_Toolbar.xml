@@ -37,7 +37,7 @@
 </textarea>
 <!--.-->
 <separator3 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<title type="toolButton" onclick="fieldsAdd('title')" file="images/dynamicForm/title.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
+<title type="toolButton" onclick="fieldsAdd(G_STRINGS.ID_TITLE_FIELD)" file="images/dynamicForm/title.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
   <en>title</en>
 </title>
 <subtitle type="toolButton" onclick="fieldsAdd('subtitle')" file="images/dynamicForm/subtitle.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
