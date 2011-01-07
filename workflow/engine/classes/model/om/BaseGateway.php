@@ -43,6 +43,13 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 
 
 	/**
+	 * The value for the tas_uid field.
+	 * @var        string
+	 */
+	protected $tas_uid = '';
+
+
+	/**
 	 * The value for the gat_x field.
 	 * @var        int
 	 */
@@ -89,6 +96,17 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 	{
 
 		return $this->pro_uid;
+	}
+
+	/**
+	 * Get the [tas_uid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getTasUid()
+	{
+
+		return $this->tas_uid;
 	}
 
 	/**
@@ -158,6 +176,28 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 	} // setProUid()
 
 	/**
+	 * Set the value of [tas_uid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setTasUid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->tas_uid !== $v || $v === '') {
+			$this->tas_uid = $v;
+			$this->modifiedColumns[] = GatewayPeer::TAS_UID;
+		}
+
+	} // setTasUid()
+
+	/**
 	 * Set the value of [gat_x] column.
 	 * 
 	 * @param      int $v new value
@@ -222,16 +262,18 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 
 			$this->pro_uid = $rs->getString($startcol + 1);
 
-			$this->gat_x = $rs->getInt($startcol + 2);
+			$this->tas_uid = $rs->getString($startcol + 2);
 
-			$this->gat_y = $rs->getInt($startcol + 3);
+			$this->gat_x = $rs->getInt($startcol + 3);
+
+			$this->gat_y = $rs->getInt($startcol + 4);
 
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 4; // 4 = GatewayPeer::NUM_COLUMNS - GatewayPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 5; // 5 = GatewayPeer::NUM_COLUMNS - GatewayPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Gateway object", $e);
@@ -441,9 +483,12 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 				return $this->getProUid();
 				break;
 			case 2:
-				return $this->getGatX();
+				return $this->getTasUid();
 				break;
 			case 3:
+				return $this->getGatX();
+				break;
+			case 4:
 				return $this->getGatY();
 				break;
 			default:
@@ -468,8 +513,9 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 		$result = array(
 			$keys[0] => $this->getGatUid(),
 			$keys[1] => $this->getProUid(),
-			$keys[2] => $this->getGatX(),
-			$keys[3] => $this->getGatY(),
+			$keys[2] => $this->getTasUid(),
+			$keys[3] => $this->getGatX(),
+			$keys[4] => $this->getGatY(),
 		);
 		return $result;
 	}
@@ -508,9 +554,12 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 				$this->setProUid($value);
 				break;
 			case 2:
-				$this->setGatX($value);
+				$this->setTasUid($value);
 				break;
 			case 3:
+				$this->setGatX($value);
+				break;
+			case 4:
 				$this->setGatY($value);
 				break;
 		} // switch()
@@ -538,8 +587,9 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 
 		if (array_key_exists($keys[0], $arr)) $this->setGatUid($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setProUid($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setGatX($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setGatY($arr[$keys[3]]);
+		if (array_key_exists($keys[2], $arr)) $this->setTasUid($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setGatX($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setGatY($arr[$keys[4]]);
 	}
 
 	/**
@@ -553,6 +603,7 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 
 		if ($this->isColumnModified(GatewayPeer::GAT_UID)) $criteria->add(GatewayPeer::GAT_UID, $this->gat_uid);
 		if ($this->isColumnModified(GatewayPeer::PRO_UID)) $criteria->add(GatewayPeer::PRO_UID, $this->pro_uid);
+		if ($this->isColumnModified(GatewayPeer::TAS_UID)) $criteria->add(GatewayPeer::TAS_UID, $this->tas_uid);
 		if ($this->isColumnModified(GatewayPeer::GAT_X)) $criteria->add(GatewayPeer::GAT_X, $this->gat_x);
 		if ($this->isColumnModified(GatewayPeer::GAT_Y)) $criteria->add(GatewayPeer::GAT_Y, $this->gat_y);
 
@@ -610,6 +661,8 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 	{
 
 		$copyObj->setProUid($this->pro_uid);
+
+		$copyObj->setTasUid($this->tas_uid);
 
 		$copyObj->setGatX($this->gat_x);
 

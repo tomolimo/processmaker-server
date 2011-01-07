@@ -24,7 +24,7 @@ abstract class BaseGatewayPeer {
 	const CLASS_DEFAULT = 'classes.model.Gateway';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 4;
+	const NUM_COLUMNS = 5;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -35,6 +35,9 @@ abstract class BaseGatewayPeer {
 
 	/** the column name for the PRO_UID field */
 	const PRO_UID = 'GATEWAY.PRO_UID';
+
+	/** the column name for the TAS_UID field */
+	const TAS_UID = 'GATEWAY.TAS_UID';
 
 	/** the column name for the GAT_X field */
 	const GAT_X = 'GATEWAY.GAT_X';
@@ -53,10 +56,10 @@ abstract class BaseGatewayPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('GatUid', 'ProUid', 'GatX', 'GatY', ),
-		BasePeer::TYPE_COLNAME => array (GatewayPeer::GAT_UID, GatewayPeer::PRO_UID, GatewayPeer::GAT_X, GatewayPeer::GAT_Y, ),
-		BasePeer::TYPE_FIELDNAME => array ('GAT_UID', 'PRO_UID', 'GAT_X', 'GAT_Y', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('GatUid', 'ProUid', 'TasUid', 'GatX', 'GatY', ),
+		BasePeer::TYPE_COLNAME => array (GatewayPeer::GAT_UID, GatewayPeer::PRO_UID, GatewayPeer::TAS_UID, GatewayPeer::GAT_X, GatewayPeer::GAT_Y, ),
+		BasePeer::TYPE_FIELDNAME => array ('GAT_UID', 'PRO_UID', 'TAS_UID', 'GAT_X', 'GAT_Y', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
 	/**
@@ -66,10 +69,10 @@ abstract class BaseGatewayPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('GatUid' => 0, 'ProUid' => 1, 'GatX' => 2, 'GatY' => 3, ),
-		BasePeer::TYPE_COLNAME => array (GatewayPeer::GAT_UID => 0, GatewayPeer::PRO_UID => 1, GatewayPeer::GAT_X => 2, GatewayPeer::GAT_Y => 3, ),
-		BasePeer::TYPE_FIELDNAME => array ('GAT_UID' => 0, 'PRO_UID' => 1, 'GAT_X' => 2, 'GAT_Y' => 3, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('GatUid' => 0, 'ProUid' => 1, 'TasUid' => 2, 'GatX' => 3, 'GatY' => 4, ),
+		BasePeer::TYPE_COLNAME => array (GatewayPeer::GAT_UID => 0, GatewayPeer::PRO_UID => 1, GatewayPeer::TAS_UID => 2, GatewayPeer::GAT_X => 3, GatewayPeer::GAT_Y => 4, ),
+		BasePeer::TYPE_FIELDNAME => array ('GAT_UID' => 0, 'PRO_UID' => 1, 'TAS_UID' => 2, 'GAT_X' => 3, 'GAT_Y' => 4, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
 	/**
@@ -173,6 +176,8 @@ abstract class BaseGatewayPeer {
 		$criteria->addSelectColumn(GatewayPeer::GAT_UID);
 
 		$criteria->addSelectColumn(GatewayPeer::PRO_UID);
+
+		$criteria->addSelectColumn(GatewayPeer::TAS_UID);
 
 		$criteria->addSelectColumn(GatewayPeer::GAT_X);
 

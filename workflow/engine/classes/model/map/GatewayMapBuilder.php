@@ -68,6 +68,8 @@ class GatewayMapBuilder {
 
 		$tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+		$tMap->addColumn('TAS_UID', 'TasUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
 		$tMap->addColumn('GAT_X', 'GatX', 'int', CreoleTypes::INTEGER, true, null);
 
 		$tMap->addColumn('GAT_Y', 'GatY', 'int', CreoleTypes::INTEGER, true, null);

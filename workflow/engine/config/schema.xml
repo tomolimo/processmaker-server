@@ -6280,6 +6280,16 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="TAS_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="PRO_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <column name="GAT_X" type="INTEGER" required="true" default="0">
       <vendor type="mysql">
         <parameter name="Field" value="SWI_X"/>
