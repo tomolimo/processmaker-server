@@ -1,4 +1,4 @@
-<?
+<?php
 /** 
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -116,7 +116,7 @@
 						case 'radiogroup': $type = 'radio_group';  	break;
 						case 'file':        		$type = 'upload_files'; 	break;
 					}?>
-                    <? if ( is_file(PATH_HTML.'images'.PATH_SEP.'dynamicForm'.PATH_SEP."$type.gif") ){?>
+                    <?php if ( is_file(PATH_HTML.'images'.PATH_SEP.'dynamicForm'.PATH_SEP."$type.gif") ){?>
 					<img src="/images/dynamicForm/<?=$type?>.gif"/>
                     <?} else {?>
                     <img src="/images/unknown_icon.gif" border="0" width="20" height="16"/>
@@ -129,7 +129,7 @@
                         &nbsp;<?php echo "$node_name";?>
                     </td>      
 					<td><p style="font-size:13px; color:#1C3166; font-weight:bold">
-					<? if( isset($node['__CONTENT__'][SYS_LANG]['__VALUE__']) ){
+					<?php if( isset($node['__CONTENT__'][SYS_LANG]['__VALUE__']) ){
 						  if( strlen($node['__CONTENT__'][SYS_LANG]['__VALUE__']) > 30 ){
 						  	$label = substr(trim(strip_tags(G::stripCDATA($node['__CONTENT__'][SYS_LANG]['__VALUE__']))), 0, 30 ) . '...';
 						  } else {
@@ -142,7 +142,7 @@
   					?></p>
 					</td>
 					<td width="40px" class="options" align="right">
-                        <? if( in_array($node['__ATTRIBUTES__']['type'], $_POST['fieldsList']) ){ ?>
+                        <?php if( in_array($node['__ATTRIBUTES__']['type'], $_POST['fieldsList']) ){ ?>
 						<!-- <div class="tool"><img src="/images/options.png" width="12" height="12" border="0"/> </div>-->
 						<div class="jq-checkpointSubhead" style="display:block">
 							<a title="<?php echo G::loadTranslation('ID_EDIT_FIELD')?>" href="#" onclick="__ActionEdit('<?=$node_name?>'); return false;"><img src="/images/e_Edit.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
