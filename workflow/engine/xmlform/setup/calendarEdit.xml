@@ -6,6 +6,8 @@
 </CALENDAR_UID>
 <OLD_NAME type="hidden" size='32' maxlength='32' >
 </OLD_NAME>
+<EDITED_HOLIDAYS type="hidden" size='32' maxlength='32' >
+</EDITED_HOLIDAYS>
  
 <DEFINITION_TITLE type="title" enablehtml="0">
 
@@ -283,7 +285,7 @@ leimnud.event.add(getField("CALENDAR_WORK_DAYS][6"), 'click', function() {check(
 
 	
 var dynaformOnload = function() {
-
+ 
   rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
   for(i=1;i<=rowsCount;i++){
     timeValidatorWrap(i);
@@ -317,6 +319,9 @@ var dynaformOnload = function() {
     getField("CALENDAR_NAME").disabled=true;
     getField("CALENDAR_NAME").style.background="none";
     getField("CALENDAR_NAME").style.border="0";
+  }
+  if (getField('EDITED_HOLIDAYS').value=='true'){
+    showholidays();
   }
 }
 
