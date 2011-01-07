@@ -2422,7 +2422,7 @@ class processMap {
           $oGateway->remove($sGatewayUID);
       }
       //Getting Gateway UID after saving gateway
-      if($sType != 'SEQUENTIAL' && $sGatewayUID == '')
+      if($sType != 'SEQUENTIAL' && $sGatewayUID == '' && $sDelete == '1')
       {
           $oProcessMap = new processMap();
           $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID);
@@ -2448,6 +2448,7 @@ class processMap {
       $oTask = new Task();
       $aTaskDetails  = $oTask->load($sTaskUID);
       $aFields ['PRO_UID'] = $sProcessUID;
+      $aFields ['TAS_UID'] = $sTaskUID;
       $aFields ['GAT_X'] = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
       $aFields ['GAT_Y'] = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
 

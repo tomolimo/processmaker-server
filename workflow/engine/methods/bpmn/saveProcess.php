@@ -59,7 +59,7 @@ try{
   $aAnnotations           = json_decode ( $_POST['annotations'] );
   $aSubprocess            = json_decode ( $_POST['subprocess'] );
   $fields                 = $oProcess->serializeProcess($idProcess);
-//$oData                  = unserialize($fields);
+  $oData                  = unserialize($fields);
   $aRoutes                = $oProcess->super_unique($aRoutes);
   $sOutput                = '';
   $subProcesses           = array();
@@ -122,6 +122,7 @@ try{
     $routesArray   = $oProcess->createGateways($routeTransitions,$endArray,$oData->routes,$numberRoutes,$idProcess,$taskHidden);
     $oData->routes = $routesArray;
   }
+
   $oProcess->updateProcessFromDataXpdl($oData,$oData->tasks);
   }
 catch (Exception $oException) {
