@@ -5781,16 +5781,17 @@ class processMap {
       $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
       $_DBArray ['availableUsers'] = $aUsers;
       $_SESSION ['_DBArray'] = $_DBArray;
-      G::LoadClass('ArrayPeer');
-      $oCriteria = new Criteria('dbarray');
-      $oCriteria->setDBArrayTable('availableUsers');
-      $oCriteria->addDescendingOrderByColumn(TaskUserPeer::TU_RELATION);
-      $oCriteria->addAscendingOrderByColumn('LABEL');
+      return $_SESSION ['_DBArray']['availableUsers'];
       return $oCriteria;
     } catch (Exception $oError) {
       throw ($oError);
     }
   }
+
+
+
+
+
   function getExtusersadhoc($sProcessUID = '', $sTaskUID = '') {
     try {
       $oProcess = new Process ( );
@@ -5820,13 +5821,13 @@ class processMap {
       $oTask = new Task ( );
       $aTask = $oTask->load($sTaskUID);
 
-      $G_PUBLISH->AddContent('propeltable', 'paged-table', 'users/users_ShortListAdhoc', $this->getTaskUsersCriteria($sTaskUID, $_SESSION ['iType']), $aFields);
+      $this->getExtTaskUsersCriteria ( $sTaskUID, $_SESSION ['iType'] );
+      return $_SESSION ['_DBArray']['taskUsers'];
 
-      G::RenderPage('publish', 'raw');
-      return true;
-    } catch (Exception $oError) {
+    } catch ( Exception $oError ) {
       throw ($oError);
     }
   }
 }
 
+ 

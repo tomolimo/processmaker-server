@@ -854,6 +854,7 @@ ProcessOptions.prototype.dbConnection = function()
                       },{
                         xtype: 'textfield',
                         fieldLabel: 'Password',
+                        inputType:'password',
                         name: 'DBS_PASSWORD',
                         allowBlank: true
                       },{
@@ -1283,14 +1284,14 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
 
   var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove,btnEdit]
+            items: [btnAdd, btnRemove, btnEdit]
             });
 
   var inputDocGrid = new Ext.grid.GridPanel({
         store: inputDocStore,
         id : 'mygrid',
         loadMask: true,
-        loadingText: 'Loading...',
+        //loadingText: 'Loading...',
         renderTo: 'cases-grid',
         frame: false,
         autoHeight:false,
@@ -2059,8 +2060,32 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             }
   });
 
+   var btnEdit = new Ext.Button({
+            id: 'btnEdit',
+            text: 'Edit',
+            iconCls: 'application_add',
+            handler: function (s) {
+                var s = reportGrid.getSelectionModel().getSelections();
+                var repTabUID = s[0].data.REP_TAB_UID;
+                reportForm.form.load({
+                url:'proxyExtjs.php?REP_TAB_UID='+repTabUID+'&action=editReportTables',
+                    method:'GET',
+                    waitMsg:'Loading',
+                    success:function(form, action) {
+                        formWindow.show();
+                      //Ext.MessageBox.alert('Message', 'Loaded OK');
+                     // setTaskAssignType(form);
+                    },
+                    failure:function(form, action) {
+                        Ext.MessageBox.alert('Message', 'Load failed');
+                    }
+                });
+            }
+  });
+
+
   var btnRemove = new Ext.Button({
-            id: 'btnAdd',
+            id: 'btnRemove',
             text: 'Delete Report Table',
             iconCls: 'application_add',
             handler: function () {
@@ -2093,14 +2118,15 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
 
   var tb = new Ext.Toolbar({
-            items: [btnAdd,btnRemove]
+            items: [btnAdd,btnRemove, btnEdit]
         });
+       
 
   var reportGrid = new Ext.grid.GridPanel({
         store       : reportStore,
         id          : 'mygrid',
         loadMask    : true,
-        loadingText : 'Loading...',
+        //loadingText : 'Loading...',
         renderTo    : 'cases-grid',
         frame       : false,
         autoHeight  :false,
@@ -2182,7 +2208,7 @@ var reportForm =new Ext.FormPanel({
                                                 Ext.getCmp("gridfields").show();
                                                 Ext.getCmp("fields").hide();
                                              }
-                                        var link = 'proxyReportTables?pid='+pro_uid+'&type='+record.data.value+'action=getReportTableType';
+                                        var link = 'proxyReportTables?pid='+pro_uid+'&type='+record.data.value+'&action=getReportTableType';
                                         reportStore.proxy.setUrl(link, true);
                                         reportStore.load();
 
@@ -2251,7 +2277,7 @@ var formWindow = new Ext.Window({
             text: 'Save',
             handler: function(){
                 var getForm         = reportForm.getForm().getValues();
-                var pro_uid         = getForm.PRO_UID;
+                //var pro_uid         = getForm.PRO_UID;
                 var tableUID        = getForm.REP_TAB_UID;
                 var Title           = getForm.REP_TAB_TITLE;
                 var Name            = getForm.REP_TAB_NAME;
@@ -2267,7 +2293,7 @@ var formWindow = new Ext.Window({
                // var VariableType    = getForm.REP_VAR_TYPE;
                // var Connection      = getForm.REP_TAB_CONNECTION
                 
-           if(tableUID=='')
+           if(typeof tableUID=='undefined')
                {
                 Ext.Ajax.request({
                   url   : '../reportTables/reportTables_Save.php',

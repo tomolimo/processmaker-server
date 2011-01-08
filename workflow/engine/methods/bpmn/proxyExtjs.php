@@ -71,6 +71,12 @@ switch($_GET['action'])
                $rows        = $oProcessMap->getExtReportTables($_GET['pid']);
                break;
 
+      case 'editReportTables':
+                require_once 'classes/model/ReportTable.php';
+                $oReportTable = new ReportTable();
+                $rows = $oReportTable->load($_GET['REP_TAB_UID']);
+                break;
+
        case 'getReportTableType':
               if(isset($_GET['pid']) && $_GET['type'] == 'NORMAL')
                 {
@@ -167,13 +173,13 @@ switch($_GET['action'])
                $rows = $oProcessMap->getExtAvailableUsersList($_GET['tid']);
                break;
 
-            case 'assignedUsers':
-                $rows        = $oProcessMap->getExtusersadhoc($_GET['pid'], $_GET['tid']);
-                array_shift($rows);
-                break;
+       case 'assignedUsers':
+               $rows        = $oProcessMap->getExtusersadhoc($_GET['pid'], $_GET['tid']);
+               array_shift($rows);
+               break;
 
     }
-        //$result['totalCount'] = count($rows);
+   //$result['totalCount'] = count($rows);
    //$result['data'] = $rows;
    //print json_encode( $result ) ;
     $tmpData = json_encode( $rows ) ;

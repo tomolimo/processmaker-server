@@ -2028,7 +2028,7 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
         });
 
         var window = new Ext.Window({
-        title: 'Users and User Groups',
+        title: 'Users and User Groups(Ad Hoc)',
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -2040,22 +2040,6 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: panel
-        /*buttons: [{
-            text: 'Save',
-            handler: function(){
-                Ext.MessageBox.alert ("User has been successfully assigned");
-                //var getstore = grid.getStore();
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.close();
-            }
-        }]*/
-    });
+        });
     window.show();
 }
