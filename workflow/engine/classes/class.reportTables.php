@@ -90,7 +90,8 @@ class ReportTables
           $rs = $stmt->executeQuery( 'DROP TABLE IF EXISTS `' . $sTableName . '`');
           break;
         case 'mssql':
-          $rs = $stmt->executeQuery( 'DROP TABLE [' . $sTableName . ']');
+          $rs = $stmt->executeQuery( "IF OBJECT_ID (N'" . $sTableName . "', N'U') IS NOT NULL 
+																		  DROP TABLE [" . $sTableName . "]");
           break; 
       }
     }
@@ -149,6 +150,41 @@ class ReportTables
           $sQuery .= ' DEFAULT CHARSET=utf8;';
           $rs = $stmt->executeQuery( $sQuery );
         break;
+
+        case 'mssql':
+          $sQuery  = 'CREATE TABLE [' . $sTableName . '] (';
+          if ($bDefaultFields) {
+            $sQuery .= "[APP_UID] VARCHAR(32) NOT NULL DEFAULT '', [APP_NUMBER] INT NOT NULL,";
+            if ($sType == 'GRID') {
+              $sQuery .= "[ROW] INT NOT NULL,";
+            }
+          }
+          foreach ($aFields as $aField) {
+            switch ($aField['sType']) {
+              case 'number':
+                $sQuery .= '[' . $aField['sFieldName'] . '] ' . $this->aDef['mssql'][$aField['sType']] . " NOT NULL DEFAULT '0',";
+              break;
+              case 'char':
+                $sQuery .= '[' . $aField['sFieldName'] . '] ' . $this->aDef['mssql'][$aField['sType']] . " NOT NULL DEFAULT '',";
+              break;
+              case 'text':
+                $sQuery .= '[' . $aField['sFieldName'] . '] ' . $this->aDef['mssql'][$aField['sType']] . " NOT NULL DEFAULT '',";
+              break;
+              case 'date':
+                $sQuery .= '[' . $aField['sFieldName'] . '] ' . $this->aDef['mssql'][$aField['sType']] . " NULL,";
+              break;
+            }
+          }
+          if ($bDefaultFields) {
+            $sQuery .= 'PRIMARY KEY (APP_UID' . ($sType == 'GRID' ? ',ROW' : '') . ')) ';
+          }
+          else {
+            $sQuery .= ' ';
+          }
+          
+          $rs = $stmt->executeQuery( $sQuery );
+        break;			
+			
       }
     }
     catch (Exception $oError) {
@@ -286,7 +322,7 @@ class ReportTables
                       if (!isset($aData[$aField['sFieldName']])) {
                         $aData[$aField['sFieldName']] = '';
                       }
-                      $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? mssql_real_escape_string($aData[$aField['sFieldName']]) : '') . "'";
+                      $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? mysql_real_escape_string($aData[$aField['sFieldName']]) : '') . "'";
                     break;
                     case 'date':
                       $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? $aData[$aField['sFieldName']] : '') . "'";
@@ -706,7 +742,7 @@ class ReportTables
                         if (!isset($aGridRow[$aField['sFieldName']])) {
                           $aGridRow[$aField['sFieldName']] = '';
                         }
-                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mssql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
+                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
                       break;
                       case 'date':
                         $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? $aGridRow[$aField['sFieldName']] : '') . "'";
