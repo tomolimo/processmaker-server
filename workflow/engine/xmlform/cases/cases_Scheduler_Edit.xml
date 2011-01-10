@@ -253,6 +253,17 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 
 // hideAll();
 // hideProperties();
+
+function $_GET(q,s) {
+    s = (s) ? s : self.location.search;
+    var re = new RegExp('&'+q+'=([^&]*)','i');
+    return (s=s.replace(/^\?/,'&').match(re)) ? s=s[1] : s='';
+}
+
+function backToList(){
+  //alert($_GET('PRO_UID'));
+  self.location = 'cases_Scheduler_List?PRO_UID='+$_GET('PRO_UID');
+}
 document.getElementById('form[EDIT_USER]').style.display='none';
 switch (getField('SCH_OPTION').value){
     case '1':
@@ -548,14 +559,18 @@ leimnud.event.add(getField('SCH_START_TIME'), 'change', function() {
     var parties = answer.split(':');
 
     if(parties[0]>23){
-        msgBox('The time can not be increased to 23:59', 'alert');
-        getField('SCH_REPEAT_UNTIL').value='';
-        getField('SCH_REPEAT_UNTIL').focus();
+        msgBox(G_STRINGS.ID_SCHEDULER_CANT_PUT_TIME, 'alert');
+        getField('SCH_START_TIME').value='';
+        //getField('SCH_REPEAT_UNTIL').value='';
+        //getField('SCH_REPEAT_UNTIL').focus();
+        getField('UPDATE').focus();
     } 
     if(parties[1]>59){ 
-        msgBox('The mininutos can not be greater than about 59', 'alert');
-        getField('SCH_REPEAT_UNTIL').value='';
-        getField('SCH_REPEAT_UNTIL').focus();
+        msgBox(G_STRINGS.ID_SCHEDULER_CANT_PUT_MINUTES, 'alert');
+        getField('SCH_START_TIME').value='';
+        //getField('SCH_REPEAT_UNTIL').value='';
+        //getField('SCH_REPEAT_UNTIL').focus();
+        getField('UPDATE').focus();
     }
 });
 
@@ -567,14 +582,18 @@ leimnud.event.add(getField('SCH_REPEAT_UNTIL'), 'change', function() {
     var parties = answer.split(':');
 
     if(parties[0]>23){
-        msgBox('The time can not be increased to 23:59', 'alert');
-        getField('SCH_REPEAT_UNTIL').value='';
-        getField('SCH_REPEAT_UNTIL').focus();
+        msgBox(G_STRINGS.ID_SCHEDULER_CANT_PUT_TIME, 'alert');
+        getField('SCH_START_TIME').value='';
+        //getField('SCH_REPEAT_UNTIL').value='';
+        //getField('SCH_REPEAT_UNTIL').focus();
+        getField('UPDATE').focus();
+
     } 
     if(parties[1]>59){ 
-        msgBox('The mininutos can not be greater than about 59', 'alert');
-        getField('SCH_REPEAT_UNTIL').value='';
-        getField('SCH_REPEAT_UNTIL').focus();
+        msgBox(G_STRINGS.ID_SCHEDULER_CANT_PUT_MINUTES, 'alert');
+        //getField('SCH_REPEAT_UNTIL').value='';
+        //getField('SCH_REPEAT_UNTIL').focus();
+        getField('UPDATE').focus();
     }
 });
 /*
