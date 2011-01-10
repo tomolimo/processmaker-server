@@ -22,7 +22,7 @@
   <en></en>
 </LINK1 >
 
-<LINK2 type="link" colWidth="20" titleAlign="left" value="@!DELETABLE" align="left" onclick='return confirm("Sure?")' link='calendarDelete?id=@!CALENDAR_UID' >
+<LINK2 type="link" colWidth="20" titleAlign="left" value="@!DELETABLE" align="left" onclick='return confirm(G_STRINGS.ID_PROCESSMAP_CALENDAR_CONFIRM_DELETE)' link='calendarDelete?id=@!CALENDAR_UID' >
   <en></en>
 </LINK2 >
 
