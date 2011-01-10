@@ -229,6 +229,7 @@
 hideAll();
 hideProperties();
 
+
 function $_GET(q,s) {
     s = (s) ? s : self.location.search;
     var re = new RegExp('&'+q+'=([^&]*)','i');
@@ -451,7 +452,7 @@ leimnud.event.add(getField('SCH_START_TIME'), 'change', function() {
     var parties = answer.split(':');
 
     if(parties[0]>23){
-        msgBox('The time can not be increased to 23:59', 'alert');
+        msgBox(G_STRINGS.ID_SCHEDULER_CANT_PUT_TIME, 'alert');
         getField('SCH_START_TIME').value='';
         //getField('SCH_REPEAT_UNTIL').value='';
         //getField('SCH_REPEAT_UNTIL').focus();
