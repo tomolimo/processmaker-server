@@ -282,6 +282,20 @@ leimnud.event.add(getField("CALENDAR_WORK_DAYS][6"), 'click', function() {check(
 
 
 var dynaformOnload = function() {
+if (getField("HOLIDAY][1][CALENDAR_HOLIDAY_START").value==''){
+ getField("HOLIDAY_STATUS").checked=false;
+ } else{
+ getField("HOLIDAY_STATUS").checked=true;
+ }
+ if(getField("HOLIDAY_STATUS").checked){
+    document.getElementById('gridholi').style.display="";
+    document.getElementById('hiddenb').style.display="";
+    document.getElementById('showb').style.display="none";
+  } else {
+      document.getElementById('gridholi').style.display="none";
+      document.getElementById('hiddenb').style.display="none";
+      document.getElementById('showb').style.display="";
+    }
 
   rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
   for(i=1;i<=rowsCount;i++){
