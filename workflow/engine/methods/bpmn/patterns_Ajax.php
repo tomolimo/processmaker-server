@@ -23,6 +23,7 @@
  * 
  */
 G::LoadInclude('ajax');
+G::LoadClass('processMap');
 $oJSON   = new Services_JSON();
 if(isset($_POST['mode']) && $_POST['mode'] != '')
 {
@@ -30,6 +31,10 @@ if(isset($_POST['mode']) && $_POST['mode'] != '')
     $aData['TASK']  = $oJSON->decode($_POST['TASK']);
     $aData['ROU_NEXT_TASK']  = $oJSON->decode($_POST['ROU_NEXT_TASK']);
 }
+
+//Saving Gateway details into Gateway table
+$oProcessMap = new processMap();
+$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0]);
 
 
 G::LoadClass('tasks');
@@ -97,6 +102,8 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_CASE']         = $iKey;
 	  	    $aFields['ROU_TYPE']         = $aData['ROU_TYPE'];
 	  	    $aFields['ROU_CONDITION']    = $aRow['ROU_CONDITION'];
+	  	    $aFields['GAT_UID']          = $sGatewayUID;
+
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT']    = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))
@@ -118,6 +125,8 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_NEXT_TASK'] = $aRow;
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
+                    $aFields['GAT_UID']       = $sGatewayUID;
+                    
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT'] = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))
@@ -140,6 +149,8 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_NEXT_TASK'] = $aRow;
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
+                    $aFields['GAT_UID']       = $sGatewayUID;
+                    
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT']  = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))
@@ -158,6 +169,8 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_NEXT_TASK'] = $aData['ROU_NEXT_TASK'][0];
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
+                    $aFields['GAT_UID']       = $sGatewayUID;
+
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT'] = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))

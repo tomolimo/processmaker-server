@@ -411,6 +411,7 @@ OutputPort.prototype.onDrop = function (port) {
 		preObj.sPortType =this.properties.name;
                 this.workflow.saveRoute(preObj,newObj);
             }
+        //Routing from gateway to task
         else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/))
             {
                  var shape = new Array();

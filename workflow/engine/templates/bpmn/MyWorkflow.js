@@ -1980,7 +1980,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
     }
 
     var staskUid     = 	Ext.util.JSON.encode(task_uid);
-    var sNextTaskUid     = 	Ext.util.JSON.encode(next_task_uid);
+    var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
     if(staskUid != '')
         {
             Ext.Ajax.request({
@@ -2005,6 +2005,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                             ROU_EVN_UID:rou_evn_uid,
                             PORT_NUMBER_IP:port_numberIP,
                             PORT_NUMBER_OP:port_numberOP,
+                            GAT_UID       : '',
                             mode:'Ext'
                         }
                 });
