@@ -5719,7 +5719,9 @@ class processMap {
     }
     return $aReportTable;
   }
-  function getExtAvailableUsersList($sTaskUID = '', $iType = 1) {
+
+  
+  function getExtAvailableUsersList($sTaskUID = '', $iType = 2) {
     try {
       $oTasks = new Tasks ( );
       $aAux = $oTasks->getGroupsOfTask($sTaskUID, $iType);
@@ -5782,13 +5784,85 @@ class processMap {
       $_DBArray ['availableUsers'] = $aUsers;
       $_SESSION ['_DBArray'] = $_DBArray;
       return $_SESSION ['_DBArray']['availableUsers'];
-      return $oCriteria;
     } catch (Exception $oError) {
       throw ($oError);
     }
   }
 
-
+function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
+    try {
+      $aUsers = array();
+      $aUsers [] = array('LABEL' => 'char', 'TAS_UID' => 'char', 'USR_UID' => 'char', 'TU_TYPE' => 'integer', 'TU_RELATION' => 'integer');
+      $sDelimiter = DBAdapter::getStringDelimiter ();
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addAsColumn('GRP_TITLE', 'C.CON_VALUE');
+      $oCriteria->addSelectColumn(TaskUserPeer::TAS_UID);
+      $oCriteria->addSelectColumn(TaskUserPeer::USR_UID);
+      $oCriteria->addSelectColumn(TaskUserPeer::TU_TYPE);
+      $oCriteria->addSelectColumn(TaskUserPeer::TU_RELATION);
+      $oCriteria->addAlias('C', 'CONTENT');
+      $aConditions = array();
+      $aConditions [] = array(TaskUserPeer::USR_UID, 'C.CON_ID');
+      $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'GRP_TITLE' . $sDelimiter);
+      $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+      $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+      $oCriteria->add(TaskUserPeer::TAS_UID, $sTaskUID);
+      $oCriteria->add(TaskUserPeer::TU_TYPE, $iType);
+      $oCriteria->add(TaskUserPeer::TU_RELATION, 2);
+      $oDataset = TaskUserPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      $c = 0;
+      while ($aRow = $oDataset->getRow()) {
+        $c++;
+        $oGroup = new Groupwf ( );
+        $aFields = $oGroup->load($aRow ['USR_UID']);
+        if ($aFields ['GRP_STATUS'] == 'ACTIVE') {
+          $oCriteria = new Criteria('workflow');
+          $oCriteria->addSelectColumn('COUNT(*) AS MEMBERS_NUMBER');
+          $oCriteria->add(GroupUserPeer::GRP_UID, $aRow ['USR_UID']);
+          $oDataset2 = GroupUserPeer::doSelectRS($oCriteria);
+          $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+          $oDataset2->next();
+          $aRow2 = $oDataset2->getRow();
+        } else {
+          $aRow2 ['GROUP_INACTIVE'] = '<strong>(' . G::LoadTranslation('ID_GROUP_INACTIVE') . ')</strong>';
+        }
+        $aUsers [] = array('LABEL' => (!isset($aRow2 ['GROUP_INACTIVE']) ? $aRow ['GRP_TITLE'] . ' <a href="#" onclick="usersGroup(\'' . $aRow ['USR_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>' : $aRow ['GRP_TITLE'] . ' ' . $aRow2 ['GROUP_INACTIVE']), 'TAS_UID' => $aRow ['TAS_UID'], 'USR_UID' => $aRow ['USR_UID'], 'TU_TYPE' => $aRow ['TU_TYPE'], 'TU_RELATION' => $aRow ['TU_RELATION']);
+        $oDataset->next();
+      }
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+      $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+      $oCriteria->addSelectColumn(TaskUserPeer::TAS_UID);
+      $oCriteria->addSelectColumn(TaskUserPeer::USR_UID);
+      $oCriteria->addSelectColumn(TaskUserPeer::TU_TYPE);
+      $oCriteria->addSelectColumn(TaskUserPeer::TU_RELATION);
+      $oCriteria->addJoin(TaskUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+      $oCriteria->add(TaskUserPeer::TAS_UID, $sTaskUID);
+      $oCriteria->add(TaskUserPeer::TU_TYPE, $iType);
+      $oCriteria->add(TaskUserPeer::TU_RELATION, 1);
+      $oDataset = TaskUserPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while ($aRow = $oDataset->getRow()) {
+        $aUsers [] = array('LABEL' => $aRow ['USR_FIRSTNAME'] . ' ' . $aRow ['USR_LASTNAME'], 'TAS_UID' => $aRow ['TAS_UID'], 'USR_UID' => $aRow ['USR_UID'], 'TU_TYPE' => $aRow ['TU_TYPE'], 'TU_RELATION' => $aRow ['TU_RELATION']);
+        $oDataset->next();
+      }
+      global $_DBArray;
+      $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
+      $_DBArray ['taskUsers'] = $aUsers;
+      $_SESSION ['_DBArray'] = $_DBArray;
+      G::LoadClass('ArrayPeer');
+      $oCriteria = new Criteria('dbarray');
+      $oCriteria->setDBArrayTable('taskUsers');
+      $oCriteria->addDescendingOrderByColumn(TaskUserPeer::TU_RELATION);
+      $oCriteria->addAscendingOrderByColumn('LABEL');
+      return $oCriteria;
+    } catch (Exception $oError) {
+      throw ($oError);
+    }
+  }
 
 
 
@@ -5820,8 +5894,8 @@ class processMap {
       $G_PUBLISH = new Publisher ( );
       $oTask = new Task ( );
       $aTask = $oTask->load($sTaskUID);
-
-      $this->getExtTaskUsersCriteria ( $sTaskUID, $_SESSION ['iType'] );
+      //$assignedUsers = getExtTaskUsersCriteria($sTaskUID, $_SESSION ['iType']);
+     $this->getExtTaskUsersAdHocCriteria ( $sTaskUID, $_SESSION ['iType'] );
       return $_SESSION ['_DBArray']['taskUsers'];
 
     } catch ( Exception $oError ) {

@@ -42,8 +42,15 @@ try {
   {
   	$_POST = $_POST['form'];
   }
-  $_POST['function'] = get_ajax_value('function');
-  switch ($_POST['function'])
+  if(isset($_POST['function']))
+      {$value= $_POST['function'];
+      $value = get_ajax_value('function');}
+  else
+      {$value= $_POST['functions'];
+      $value = get_ajax_value('functions');}
+  
+  
+  switch ($value)
   {
   	case 'verifyUsername':
   	  //print_r($_POST); die;

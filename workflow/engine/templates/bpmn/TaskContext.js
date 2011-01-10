@@ -1807,6 +1807,29 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
         var editor = new Ext.ux.grid.RowEditor({
             saveText: 'Update'
         });
+         var taskUsers = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : userFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=assignedUsers'
+            })
+          });
+          //taskUsers.setDefaultSort('LABEL', 'asc');
+          taskUsers.load();
+
+         // create the Data Store of users that are not assigned to a task
+         var storeUsers = new Ext.data.JsonStore({
+                 root            : 'data',
+                 url             : 'proxyExtjs?tid='+taskId+'&action=availableUsers',
+                 totalProperty   : 'totalCount',
+                 idProperty      : 'gridIndex',
+                 remoteSort      : false, //true,
+                 autoLoad        : true,
+                 fields          : userFields
+              });
 
 
         var btnAdd = new Ext.Button({
@@ -1834,8 +1857,11 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                     grid.getView().refresh();
                     //grid.getSelectionModel().selectRow(0);
                     editor.startEditing(0, 0);
+                    
                 }
-            }
+            
+        }
+
         });
 
         var btnRemove = new Ext.Button({
@@ -1889,29 +1915,7 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
         });
 
         // create the Data Store of users that are already assigned to a task
-        var taskUsers = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : userFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=assignedUsers'
-            })
-          });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-          taskUsers.load();
-
-         // create the Data Store of users that are not assigned to a task
-         var storeUsers = new Ext.data.JsonStore({
-                 root            : 'data',
-                 url             : 'proxyExtjs?tid='+taskId+'&action=availableUsers',
-                 totalProperty   : 'totalCount',
-                 idProperty      : 'gridIndex',
-                 remoteSort      : false, //true,
-                 autoLoad        : true,
-                 fields          : userFields
-              });
+       
 
 
         var grid = new Ext.grid.GridPanel({
@@ -1941,7 +1945,7 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                             fieldLabel: 'Users_groups',
                             hiddenName: 'number',
                             store        : storeUsers,
-                            displayField : 'LABEL'  ,
+                            displayField : 'LABEL',
                             valueField   : 'LABEL',
                             name         : 'LABEL',
                             scope        : _5625,
@@ -1991,12 +1995,21 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
             var userId      = record.data.USR_UID;
             var tu_Type     = record.data.TU_TYPE;
             var tu_Relation = record.data.TU_RELATION;
-            var urlparams   = '?action=assign&data={"TAS_UID":"'+taskId+'","USR_UID":"'+userId+'","TU_TYPE":"'+tu_Type+'","TU_RELATION":"'+tu_Relation+'"}';
+            ///var urlparams   = '?action=assign&data={"TAS_UID":"'+taskId+'","USR_UID":"'+userId+'","TU_TYPE":"'+tu_Type+'","TU_RELATION":"'+tu_Relation+'"}';
 
             Ext.Ajax.request({
-                    url: 'processes_Ajax.php' +urlparams ,
+                    url: '../users/users_Ajax.php',
+                    METHOD:'post',
                     success: function (response) {      // When saving data success
                         Ext.MessageBox.alert ('Status','User has been successfully assigned');
+                    },
+                    params:{
+                        functions : 'assign',
+                        TAS_UID  :  taskId,
+                        USR_UID : userId,
+                        TU_TYPE : tu_Type,
+                        TU_RELATION:tu_Relation
+
                     },
                     failure: function () {      // when saving data failed
                         Ext.MessageBox.alert ('Status','Failed saving User Assigned to Task');
@@ -2009,15 +2022,24 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                 var user_TURel      = record.json.TU_RELATION;
                 var userUID         = record.json.USR_UID;
                 var user_TUtype     = record.json.TU_TYPE;
-                urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
+                //urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
                 Ext.Ajax.request({
-                      url   : 'processes_Ajax.php' +urlparams ,
+                      url   : '../users/users_Ajax.php',
+                      method: 'POST',
                       success: function(response) {
-                          //Ext.MessageBox.alert ('Status','User has been updated successfully.');
-                      }
+                          Ext.MessageBox.alert ('Status','User has been updated successfully.');
+                      },
+                      params:{
+                        functions : 'ofToAssign',
+                        TAS_UID  :  taskId,
+                        USR_UID : userId,
+                        TU_TYPE : tu_Type,
+                        TU_RELATION:tu_Relation
+
+                    }
                     });
             }
-            storeUsers.reload();
+            //storeUsers.reload();
           }
         });
 

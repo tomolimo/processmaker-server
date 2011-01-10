@@ -2337,6 +2337,8 @@ var formWindow = new Ext.Window({
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Report Table Edited Successfully.');
                   }
+
+
                 });
                     }
 
@@ -2346,6 +2348,7 @@ var formWindow = new Ext.Window({
 
             formWindow.close();
             reportStore.reload();
+            
           }
         },{
             text: 'Cancel',
@@ -2355,5 +2358,6 @@ var formWindow = new Ext.Window({
           }
         }]
     });
+    gridWindow.show();
 }
 

@@ -171,6 +171,7 @@ switch($_GET['action'])
 
        case 'availableUsers':
                $rows = $oProcessMap->getExtAvailableUsersList($_GET['tid']);
+               array_shift($rows);
                break;
 
        case 'assignedUsers':
