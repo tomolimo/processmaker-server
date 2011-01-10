@@ -433,7 +433,7 @@ function validateCalendarName(name){
   var oRPC = new leimnud.module.rpc.xmlhttp({
     url   : 'calendarValidate',
     async : false,
-    args  : arguments
+    args  : arguments     
   });
   oRPC.make();
   validateMessage=oRPC.xmlhttp.responseText;
