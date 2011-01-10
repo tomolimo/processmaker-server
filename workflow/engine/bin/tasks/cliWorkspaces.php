@@ -4,6 +4,8 @@ pake_task('info');
 
 pake_task('workspace-upgrade');
 
+pake_task('workspace-backup');
+
 pake_task('translation-upgrade');
 pake_task('cacheview-upgrade');
 
@@ -77,7 +79,6 @@ function run_plugins_database_upgrade($command, $args) {
 }
 
 function run_database_export($command, $args) {
-  G::LoadSystem('dbMaintenance');
   if (count($args) < 2)
     throw new Exception ("Please provide a workspace name and a directory for export");
   $workspace = new workspaceTools($args[0]);
@@ -105,7 +106,7 @@ function database_upgrade($command, $args) {
     else
       print_r("Upgrading database in ".pakeColor::colorize($workspace->name, "INFO")." ");
     try {
-      $changes = $workspace->repairSchema($checkOnly);
+      $changes = $workspace->upgradeDatabase($checkOnly);
       if ($changes != false) {
         if ($checkOnly) {
           echo "> ".pakeColor::colorize("Run upgrade", "INFO")."\n";
@@ -208,6 +209,15 @@ function run_drafts_clean($task, $args) {
     }
   }
   echo "\n";
+}
+
+function run_workspace_backup($task, $args) {
+  $workspace = new workspaceTools($args[0]);
+  if (isset($args[1]))
+    $filename = $args[1];
+  else
+    $filename = PATH_DATA . "backups/" . $workspace->name . ".tar";
+  $workspace->backup($filename);
 }
 
 ?>

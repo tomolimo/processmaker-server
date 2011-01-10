@@ -6,6 +6,8 @@
  * @author Alexandre Rosenfeld
  */
 
+G::LoadSystem('dbMaintenance');
+
 class workspaceTools {
   var $name = NULL;
   var $path = NULL;
@@ -486,36 +488,6 @@ class workspaceTools {
     }
   }
 
-  public function dumpDatabase($dbname) {
-    $sql="show tables;";
-    $result= mysql_query($sql);
-    if( $result)
-    {
-      while( $row= mysql_fetch_row($result))
-      {
-        $table = $row[0];
-
-        echo "/* Table structure for table `$table` */\n";
-        echo "DROP TABLE IF EXISTS `$table`;\n\n";
-        $sql="show create table `$table`; ";
-        $result=mysql_query($sql);
-        if( $result)
-        {
-          if($row= mysql_fetch_assoc($result))
-          {
-            echo $row['Create Table'].";\n\n";
-          }
-        }
-        
-  		}
-    }
-    else
-    {
-      echo "/* no tables in $mysql_database */\n";
-    }
-    mysql_free_result($result);
-  }
-
   public function exportDatabase($path) {
     $dbInfo = $this->getDBInfo();
     $databases = array("wf", "rp", "rb");
@@ -524,7 +496,7 @@ class workspaceTools {
       $oDbMaintainer = new DataBaseMaintenance($dbInfo["host"], $dbInfo["user"],
         $dbInfo["pass"]);
       $oDbMaintainer->connect($dbInfo["name"]);
-      $oDbMaintainer->setTempDir($path . $dbInfo["name"] . "/");
+      $oDbMaintainer->setTempDir($path . "/" . $dbInfo["name"] . "/");
       $oDbMaintainer->backupDataBaseSchema($oDbMaintainer->getTempDir() . $dbInfo["name"] . ".sql");
       $oDbMaintainer->backupSqlData();
     }
@@ -536,21 +508,38 @@ class workspaceTools {
     } else {
       foreach (glob($filename . "/*") as $item) {
         $this->addToBackup($backup, $item, $root);
-}
+      }
     }
   }
 
-  public function backup($filename, $compress = true) {
+  static public function createBackup($filename, $compress = true) {
     G::LoadThirdParty('pear/Archive', 'Tar');
-    $tar = new Archive_Tar($filename);
+    $backup = new Archive_Tar($filename);
+    return $backup;
+  }
+
+  public function backup($filename, $compress = true) {
+    if (is_string($filename))
+      $backup = $this->createBackup($filename);
+    else
+      $backup = $filename;
     //Get a temporary directory for database backup
     $tempDirectory = tempnam(__FILE__, '');
     if (file_exists($tempDirectory)) {
       unlink($tempDirectory);
     }
-    $this->exportDatabase($tempDirectory);
+    mkdir($tempDirectory);
+    //$this->exportDatabase($tempDirectory);
+    //print_r(info("Database: $tempDirectory\n"));
+    $metaFilename = "$tempDirectory/{$this->name}.meta";
+    file_put_contents($metaFilename,
+      str_replace(array(",", "{", "}"), array(",\n  ", "{\n  ", "\n}\n"),
+                  G::json_encode($this->getMetadata())));
     $this->addToBackup($backup, $tempDirectory, $tempDirectory);
-    $this->addToBackup($backup, $filename, $root);
+    $this->addToBackup($backup, $this->path, $this->path);
+    //print_r(file_get_contents($metaFilename));
+    //print_r(G::json_decode(file_get_contents($metaFilename)));
+    //$this->addToBackup($backup, $filename, $root);
   }
 
 }
