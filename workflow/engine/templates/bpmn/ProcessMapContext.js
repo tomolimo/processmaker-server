@@ -110,6 +110,7 @@ ProcessMapContext.prototype.editProcess= function(_5678)
         minWidth: 300,
         minHeight: 200,
         layout: 'fit',
+        autoScroll: true,
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
@@ -189,7 +190,7 @@ ProcessMapContext.prototype.exportProcess= function()
           //taskUsers.setDefaultSort('LABEL', 'asc');
   exportProcess.load();*/
 
-
+ var obj='FILENAME_LINKXPDL';
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
   frame         : true,
@@ -230,11 +231,12 @@ ProcessMapContext.prototype.exportProcess= function()
                         name        : 'FILENAME_LINK',
                         readOnly  :true
                       },{
-                        xtype       : 'textfield',
+                        xtype       : 'button',
                         fieldLabel  : 'File XPDL',
                         name        : 'FILENAME_LINKXPDL',
                         dataIndex   : 'FILENAME_LINKXPDL',
-                        readOnly  :true
+                        html        : '<a href="javascript: Ext.ux.classobj.method(' + Ext.util.JSON.encode(obj) + ')" ></a>'
+                        //readOnly  :true
                       },{
                         xtype   : 'button',
                         name    : 'FILENAME_LINK',
@@ -292,6 +294,7 @@ ProcessMapContext.prototype.exportProcess= function()
     minHeight  : 200,
     layout     : 'fit',
     plain      : true,
+    autoScroll: true,
     bodyStyle  : 'padding:5px;',
     buttonAlign: 'center',
     items      : exportProcessForm
@@ -358,6 +361,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         dataIndex: 'TASK_TARGET',
                         autoWidth: true,
                         editable: false,
+                        width:120,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -366,7 +370,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'GROUP_USER',
                         header: 'Group or Users',
                         dataIndex: 'GROUP_USER',
-                        //width: 100,
+                        width: 150,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -375,7 +379,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'TASK_SOURCE',
                         header: 'Origin Task',
                         dataIndex: 'TASK_SOURCE',
-                        //width: 100,
+                        width: 120,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -384,7 +388,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'PARTICIPATED',
                         header: 'Participation',
                         dataIndex: 'PARTICIPATED',
-                        width: 100,
+                        width: 120,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -393,7 +397,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'OBJECT_TYPE',
                         header: 'Type',
                         dataIndex: 'OBJECT_TYPE',
-                        //width: 100,
+                        width: 100,
                         editable: false,
                         sortable: true,
                         editor: new Ext.form.TextField({
@@ -403,7 +407,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'OBJECT',
                         header: 'Object',
                         dataIndex: 'OBJECT',
-                        //width: 100,
+                        width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -412,7 +416,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'ACTION',
                         header: 'Permission',
                         dataIndex: 'ACTION',
-                        //width: 100,
+                        width: 120,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -421,7 +425,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         id: 'OP_CASE_STATUS',
                         header: 'Status',
                         dataIndex: 'OP_CASE_STATUS',
-                        width: 100,
+                        width: 120,
                         sortable: true,
                         editor: new Ext.form.TextField({
                             //allowBlank: false
@@ -473,8 +477,8 @@ var tb = new Ext.Toolbar({
         title: 'Process Permissions',
         collapsible: false,
         maximizable: true,
-        width: 600,
-        //autoHeight: true,
+        width: 800,
+        autoScroll: true,
         height: 450,
         layout: 'fit',
         plain: true,
@@ -794,6 +798,7 @@ var formWindow = new Ext.Window({
         collapsible: false,
         maximizable: true,
         width: 450,
+        autoScroll: true,
         //autoHeight: true,
         height: 420,
         //layout: 'fit',
@@ -1060,6 +1065,7 @@ ProcessMapContext.prototype.processSupervisors= function()
         height: 350,
         minWidth: 200,
         minHeight: 150,
+        autoScroll: true,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -1223,11 +1229,11 @@ ProcessMapContext.prototype.processDynaform= function()
                                 var User = grid.getStore();
                                 var selectedrowIndex = '0';
 
-                                User.data.items[selectedrowIndex].data.STEP_UID      = record.data.STEP_UID;
-                                User.data.items[selectedrowIndex].data.STEP_UID_OBJ      = record.data.STEP_UID_OBJ;
-                                User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ      = record.data.STEP_TYPE_OBJ;
-                                User.data.items[selectedrowIndex].data.STEP_POSITION      = record.data.STEP_POSITION;
-                                User.data.items[selectedrowIndex].data.DYN_UID  = record.data.DYN_UID;
+                                User.data.items[selectedrowIndex].data.STEP_UID         = record.data.STEP_UID;
+                                User.data.items[selectedrowIndex].data.STEP_UID_OBJ     = record.data.STEP_UID_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ    = record.data.STEP_TYPE_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_POSITION    = record.data.STEP_POSITION;
+                                User.data.items[selectedrowIndex].data.DYN_UID          = record.data.DYN_UID;
 
                                 this.setValue(record.data[this.valueField || this.displayField]);
                                 this.collapse();
@@ -1278,6 +1284,7 @@ ProcessMapContext.prototype.processDynaform= function()
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
+        autoScroll: true,
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
@@ -1441,10 +1448,10 @@ ProcessMapContext.prototype.processIODoc= function()
                                 var selectedrowIndex = '0';
 
                                 User.data.items[selectedrowIndex].data.STEP_UID      = record.data.STEP_UID;
-                                User.data.items[selectedrowIndex].data.STEP_UID_OBJ      = record.data.STEP_UID_OBJ;
-                                User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ      = record.data.STEP_TYPE_OBJ;
-                                User.data.items[selectedrowIndex].data.STEP_POSITION      = record.data.STEP_POSITION;
-                                User.data.items[selectedrowIndex].data.INP_DOC_UID  = record.data.INP_DOC_UID;
+                                User.data.items[selectedrowIndex].data.STEP_UID_OBJ  = record.data.STEP_UID_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ = record.data.STEP_TYPE_OBJ;
+                                User.data.items[selectedrowIndex].data.STEP_POSITION = record.data.STEP_POSITION;
+                                User.data.items[selectedrowIndex].data.INP_DOC_UID   = record.data.INP_DOC_UID;
 
                                 this.setValue(record.data[this.valueField || this.displayField]);
                                 this.collapse();
@@ -1494,6 +1501,7 @@ ProcessMapContext.prototype.processIODoc= function()
         height: 350,
         minWidth: 200,
         minHeight: 150,
+        autoScroll: true,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -1518,13 +1526,14 @@ ProcessMapContext.prototype.processFileManager= function()
 	});
 
         var window = new Ext.Window({
-        title: 'Edit Process',
+        title: 'Process File Manager',
         collapsible: false,
         maximizable: false,
         width: 500,
         height: 400,
         minWidth: 300,
         minHeight: 200,
+        autoScroll: true,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -1594,7 +1603,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                        layout: 'form',
                        border:false,
                        items: [{
-                           width          :100,
+                       width           :100,
                        xtype           :'combo',
                        mode            :'local',
                        triggerAction   :'all',
@@ -1645,6 +1654,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         //minWidth: 300,
         //minHeight: 200,
         layout: 'fit',
+        autoScroll: true,
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
@@ -1960,6 +1970,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       minHeight   : 150,
       layout      : 'fit',
       plain       : true,
+      autoScroll  : true,
       bodyStyle   : 'padding:5px;',
       items       : Objectsgrid,
       buttonAlign : 'center'
@@ -2115,6 +2126,7 @@ ProcessMapContext.prototype.ExtVariables = function()
         height: 350,
         minWidth: 200,
         minHeight: 150,
+        autoScroll: true,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',

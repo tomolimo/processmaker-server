@@ -25,7 +25,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         });
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New Dynaform',
+            text: 'New',
             iconCls: 'application_add',
             handler: function () {
                 formWindow.show();
@@ -34,7 +34,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete Dynaform',
+            text: 'Delete',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -393,6 +393,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
  var gridWindow = new Ext.Window({
         title: 'Dynaform',
+        autoScroll: true,
         collapsible: false,
         maximizable: true,
         width: 600,
@@ -407,6 +408,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
  var formWindow = new Ext.Window({
         title: 'Dynaform',
+        autoScroll: true,
         collapsible: false,
         maximizable: true,
         width: 550,
@@ -1014,7 +1016,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete Input Document',
+            text: 'Delete',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1069,7 +1071,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New Input Document',
+            text: 'New',
             iconCls: 'application_add',
             handler: function () {
             newIOWindow.show();
@@ -1318,18 +1320,20 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         plain: true,
         bodyStyle: 'padding:5px;',
         items: inputDocGrid,
-        buttonAlign: 'center'
+        buttonAlign: 'center',
+        autoScroll: true
           });
 
 
   var newIOWindow = new Ext.Window({
-        title: 'Input Document',
+        title: 'New Input Document',
         collapsible: false,
         maximizable: false,
         width: 550,
         height: 400,
         minWidth: 200,
         minHeight: 150,
+        autoScroll: true,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -1485,7 +1489,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete Output Document',
+            text: 'Delete',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1522,7 +1526,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New Output Document',
+            text: 'New',
             iconCls: 'application_add',
             handler: function () {
             newOPWindow.show();
@@ -2053,7 +2057,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New Report Table',
+            text: 'New',
             iconCls: 'application_add',
             handler: function () {
                 formWindow.show();
@@ -2086,7 +2090,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete Report Table',
+            text: 'Delete',
             iconCls: 'application_add',
             handler: function () {
                 editor.stopEditing();
