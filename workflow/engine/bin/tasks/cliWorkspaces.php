@@ -91,7 +91,7 @@ function database_upgrade($command, $args) {
     else
       print_r("Upgrading database in ".pakeColor::colorize($workspace->name, "INFO")." ");
     try {
-      $changes = $workspace->repairSchema($checkOnly);
+      $changes = $workspace->upgradeDatabase($checkOnly);
       if ($changes != false) {
         if ($checkOnly) {
           echo "> ".pakeColor::colorize("Run upgrade", "INFO")."\n";
