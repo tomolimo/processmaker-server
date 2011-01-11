@@ -3422,6 +3422,7 @@ class Xpdl extends processes
       $oRoute = new Route ( );
       $aRouteDetails = $oRoute->load($idRoute);
       $sGateUID      = $aRouteDetails['GAT_UID'];
+      //if route is of SEQUENTIAL type,assign route id to GAT_UID
       if($sGateUID == '')
           $sGateUID = $idRoute;
       
@@ -3440,7 +3441,7 @@ class Xpdl extends processes
             $positionY=$coordinateY+55;
             if($idTask != $taskParallel){
               $taskParallel = $idTask;
-              $routeParallel = $idRoute;
+              $routeParallel = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayParallel';
               $arrayGateways[$countG]['2']   = $positionX;
@@ -3481,7 +3482,7 @@ class Xpdl extends processes
             $positionY=$coordinateY-45;
             if($nextTask != $taskSecJoin){
               $taskSecJoin  = $nextTask;
-              $routeSecJoin = $idRoute;
+              $routeSecJoin = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayParallel';
               $arrayGateways[$countG]['2']   = $positionX;
@@ -3570,7 +3571,7 @@ class Xpdl extends processes
             $positionY=$coordinateY+55;
             if($idTask != $taskParallelEv){
               $taskParallelEv  = $idTask;
-              $routeParallelEv = $idRoute;
+              $routeParallelEv = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayInclusive';
               $arrayGateways[$countG]['2']   = $positionX;
@@ -3611,7 +3612,7 @@ class Xpdl extends processes
             $positionY=$coordinateY+40;
             if($idTask != $taskSelect){
               $taskSelect  = $idTask;
-              $routeSelect = $idRoute;
+              $routeSelect = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayExclusiveData';
               $arrayGateways[$countG]['2']   = $positionX;
@@ -3658,7 +3659,7 @@ class Xpdl extends processes
             $positionY=$coordinateY-45;
             if($nextTask != $taskDiscriminator){
               $taskDiscriminator  = $nextTask;
-              $routeDiscriminator = $idRoute;
+              $routeDiscriminator = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayComplex';
               $arrayGateways[$countG]['2']   = $positionX;

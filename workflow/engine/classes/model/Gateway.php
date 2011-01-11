@@ -96,7 +96,7 @@ class Gateway extends BaseGateway {
   {
     $oConnection = Propel::getConnection(GatewayPeer::DATABASE_NAME);
     try {
-      $oGateWay = RoutePeer::retrieveByPK($GatewayUid);
+      $oGateWay = GatewayPeer::retrieveByPK($GatewayUid);
       if (!is_null($oGateWay))
       {
         $oConnection->begin();

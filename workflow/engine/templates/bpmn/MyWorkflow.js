@@ -2114,7 +2114,8 @@ MyWorkflow.prototype.getDeleteCriteria = function()
                         }
                     }
              }
-        workflow.deleteRoute(route,1);
+        if(typeof route != 'undefined')
+             workflow.deleteRoute(route,1);
         break;
 }
     workflow.deleteShape(workflow.currentSelection);

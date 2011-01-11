@@ -448,6 +448,7 @@ class processMap {
       $oOutputDocument = new OutputDocument ( );
       $oTrigger = new Triggers ( );
       $oRoute = new Route ( );
+      $oGateway = new Gateway ( );
       $oSwimlaneElement = new SwimlanesElements ( );
       $oConfiguration = new Configuration ( );
       $oDbSource = new DbSource ( );
@@ -527,6 +528,18 @@ class processMap {
         $oRoute->remove($aRow ['ROU_UID']);
         $oDataset->next();
       }
+
+      //Delete the gateways of process
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(GatewayPeer::PRO_UID, $sProcessUID);
+      $oDataset = GatewayPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while ($aRow = $oDataset->getRow()) {
+        $oGateway->remove($aRow ['GAT_UID']);
+        $oDataset->next();
+      }
+      
       //Delete the swimlanes elements of process
       $oCriteria = new Criteria('workflow');
       $oCriteria->add(SwimlanesElementsPeer::PRO_UID, $sProcessUID);
@@ -2401,7 +2414,7 @@ class processMap {
     try {
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('COUNT(*) AS ROUTE_NUMBER');
-      $oCriteria->addSelectColumn('TAS_UID');
+      $oCriteria->addSelectColumn('GAT_UID AS GATEWAY_UID');
       $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);
       $oCriteria->add(RoutePeer::TAS_UID, $sTaskUID);
       $oCriteria->add(RoutePeer::ROU_TYPE, $sType);

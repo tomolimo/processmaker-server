@@ -13,7 +13,7 @@ Ext.onReady ( function() {
         Ext.Ajax.request({
             url: 'openProcess.php?PRO_UID=' + pro_uid,
             success: function(response) {
-                var shapesData =  createShapes(response.responseText,this);
+                shapesData =  createShapes(response.responseText,this);
                 createConnection(shapesData);
             },
             failure: function(){
@@ -22,6 +22,7 @@ Ext.onReady ( function() {
         });
     }
 
+    
 
     /**********************************************************************************
    *
@@ -95,13 +96,15 @@ Ext.onReady ( function() {
         height:200,
         xtype	:	"panel",
         titlebar: true,
-        title   : 'BPMN Processmap',
+        title   : "BPMN Processmap",
         autoScroll:true,
         fitToFrame:true,
         region	:	"center"
 
     };
 
+    
+        
     var processObj = new ProcessOptions();
 
     var main = new Ext.Panel({
@@ -187,6 +190,19 @@ Ext.onReady ( function() {
         width     : 1300,
         items   : [west,north,center]
     });
+
+    //Getting Process name and setting Title of center region to that processname
+    var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+    Ext.Ajax.request({
+            url: "processes_Ajax.php"+ urlparams,
+            success: function(response) {
+                var processes = Ext.util.JSON.decode(response.responseText);
+                main.items.items[2].setTitle(processes.title.label);
+            },
+            failure: function(){
+                Ext.Msg.alert ('Failure');
+            }
+        });
 
     //Get main into workflow object
     workflow.main = main;
