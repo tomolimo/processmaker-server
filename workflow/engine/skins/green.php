@@ -91,9 +91,9 @@ $oServerConf->setProperty("extSkin",$extSkin);
     	$pmLicenseManagerO =& pmLicenseManager::getSingleton();
     	$expireIn=$pmLicenseManagerO->getExpireIn();
     	$expireInLabel=$pmLicenseManagerO->getExpireInLabel();
-    	if($expireIn<=30){
+    	//if($expireIn<=30){
     		$smarty->assign('msgVer', '<br><label class="textBlack">'.$expireInLabel.'</label>&nbsp;&nbsp;');
-    	}
+    	//}
     }
     
     if (defined('SYS_SYS'))
@@ -108,7 +108,7 @@ $oServerConf->setProperty("extSkin",$extSkin);
     $smarty->assign('tpl_submenu', PATH_TEMPLATE . 'submenu.html');
     G::LoadClass( 'replacementLogo' );
     $oLogoR = new replacementLogo();
-    if(isset($_SESSION['USER_LOGGED'])){
+    if(defined("SYS_SYS")){
       $aFotoSelect   = $oLogoR->getNameLogo((isset($_SESSION['USER_LOGGED']))?$_SESSION['USER_LOGGED']:'');
       if ( is_array ( $aFotoSelect ) ) {
         $sFotoSelect   = trim($aFotoSelect['DEFAULT_LOGO_NAME']);
@@ -120,7 +120,7 @@ $oServerConf->setProperty("extSkin",$extSkin);
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
       if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect,SYS_SYS)) ){
         $sCompanyLogo = $oPluginRegistry->getCompanyLogo($sFotoSelect);
-        $sCompanyLogo= "../setup/showLogoFile.php?id=".G::encrypt($sCompanyLogo,"imagen");
+        $sCompanyLogo= "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".G::encrypt($sCompanyLogo,"imagen");
       }
       else {
          $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
