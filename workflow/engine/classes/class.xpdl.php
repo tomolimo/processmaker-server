@@ -3523,7 +3523,7 @@ class Xpdl extends processes
             $positionY=$coordinateY+55;
             if($idTask != $taskEvaluate){
               $taskEvaluate  = $idTask;
-              $routeEvaluate = $idRoute;
+              $routeEvaluate = $sGateUID;
               if($nextTask != "-1"){
                 $arrayGateways[$countG]['0']   = $sGateUID;
                 $arrayGateways[$countG]['1']   = 'bpmnGatewayExclusiveData';

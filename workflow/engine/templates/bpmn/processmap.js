@@ -477,6 +477,7 @@ Ext.onReady ( function() {
             {
                 if(typeof this.workflow.figures.data[conn] === 'object')
                 {
+                    //If End Process or Evaluate
                     if(targetid == '-1' || typeof shapes.routes[i][5] != 'undefined' && shapes.routes[i][5] == 'EVALUATE')
                     {
                         targetObj = eval("new bpmnEventEmptyEnd (this.workflow)");
