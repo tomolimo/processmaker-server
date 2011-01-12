@@ -254,28 +254,26 @@
     } else{
       $distinct = true;
     }
-    // needs a litle bit of analysis to understant whats going on
-    // first check if there is a PMTable defined within the list maybe this code will be deprecated
+    
+    // first check if there is a PMTable defined within the list, 
     // the issue that brokes the normal criteria query seems to be fixed
-//    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
-//      // then
-//      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
-//      $tableName = $oAdditionalTables->getAddTabName();
-//      $tableName = strtolower($tableName);
-//      $tableNameArray = explode('_',$tableName);
-//      foreach ($tableNameArray as $item){
-//        $newTableName[] = ucfirst($item);
-//      }
-//      $tableName = implode('',$newTableName);
-////
-//      if (!class_exists($tableName)){
-//        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
-//      }
-//      eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
-//
-//    } else {
-//      $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
-//    }
+    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
+      // then
+      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
+      $tableName = $oAdditionalTables->getAddTabName();
+      $tableName = strtolower($tableName);
+      $tableNameArray = explode('_',$tableName);
+      foreach ($tableNameArray as $item){
+        $newTableName[] = ucfirst($item);
+      }
+      $tableName = implode('',$newTableName);
+      // so the pm table class can be invoqued from the pm table model clases
+      if (!class_exists($tableName)){
+        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
+      }
+      //eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
+
+    } 
     $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
 
   }
