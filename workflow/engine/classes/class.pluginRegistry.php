@@ -166,6 +166,9 @@ class PMPluginRegistry {
     if ( isset ($plugin->bPrivate) )
       $detail->bPrivate = $plugin->bPrivate;
     $this->_aPluginDetails[$sNamespace] = $detail;
+    if ( isset( $this->_aPluginDetails[$sNamespace] ) ){
+      $detail->enabled=$this->_aPluginDetails[$sNamespace]->enabled;
+    }
   }
 
   /**
