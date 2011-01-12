@@ -3112,7 +3112,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     } else {
       switch(strtolower($value)){
         case 'today':
-          $value = date($tmp);
+       //   $value = date($tmp);
+              $value=masktophp ($mask);    
         break;
         default:
           if(!$this->verifyDateFormat($value))
@@ -4189,3 +4190,20 @@ class XmlForm_Field_Image extends XmlForm_Field
     .' alt ="'.htmlentities($value,ENT_QUOTES,'utf-8').'"/>';
   }
 }
+
+  // function mask to php
+  function masktophp ($mask){
+    $tmp = str_replace("%", "", $mask);
+  if(ereg('b',$tmp)) {
+         $tmp2 = str_replace("b", "M", $tmp);
+       $value=date($tmp2);
+       return $value;
+    }
+     if(ereg('B',$tmp)) {
+         $tmp2 = str_replace("B", "F", $tmp);
+       $value=date($tmp2);
+       return $value;
+    }
+  $value = date($tmp);
+  return $value;
+  }
