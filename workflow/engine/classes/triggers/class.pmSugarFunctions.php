@@ -358,3 +358,54 @@ function CreateSugarOpportunity($sugarSoap, $user, $password, $name,$account_id,
   }
   return $sugarEntries;
 }
+
+
+
+/**
+ * @method
+ *
+ * Creates SugarCRM entries from the Account module
+ *
+ * @name CreateSugarLeads
+ *
+ * @label Creates SugarCRM entries from the Account module
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $first_name | First Name
+ * @param string | $last_name | Last Name
+ * @param string | $email | Email
+ * @param string | $title | Title
+ * @param string | $phone | Phone Work
+ * @param string | $account_id | Valid id account
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarContact | Sugar Opportunities (array or object)
+ *
+ */
+function CreateSugarLeads($sugarSoap, $user, $password, $first_name, $last_name, $email, $title, $phone, $account_id, $resultType="array") {
+
+  $module = "Leads";
+  $sessionId = sugarLogin ( $sugarSoap, $user, $password );
+  $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, array(
+            array("name" => 'first_name',"value" => $first_name),
+            array("name" => 'last_name',"value" => $last_name),
+            array("name" => 'email1',"value" => $email),
+            array("name" => 'title',"value" => $title),
+            array("name" => 'phone_work',"value" => $phone),
+         //   array("name" => 'account_id',"value" => '8cd10a60-101f-4363-1e0b-4cfd4106bd7e')
+            array("name" => 'account_id',"value" => $account_id)
+            ));
+
+  $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
+
+  switch($resultType){
+    case 'array':$sugarEntries = objectToArray ( $sugarEntriesO ); break;
+    case 'object':$sugarEntries = $sugarEntries; break;
+    default: $sugarEntries = objectToArray ( $sugarEntries );
+  }
+  return $sugarEntries;
+}
