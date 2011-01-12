@@ -559,9 +559,33 @@ function getElementByPMClass(__class){
   }
 
   function fieldsAdd( type,label ){	  
-	  if(!label){
-		  label=type; 
-	  }
+	  switch (type){
+    case 'text'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TEXT;break;
+    case 'currency'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_CURRENCY;break;
+    case 'percentage': label=TRANSLATIONS.ID_FIELD_DYNAFORM_PERCENTAGE;break;
+    case 'password'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_PASSWORD;break;
+    case 'suggest'   : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUGGEST;break;
+    case 'textarea'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TEXTAREA;break;
+    case 'title'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TITLE;break;
+    case 'subtitle'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUBTITLE;break;
+    case 'button'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_BUTTON;break;
+    case 'submit'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUBMIT;break;
+    case 'reset'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_RESET;break;
+    case 'dropdown'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_DROPDOWN;break;
+    case 'yesno'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_YESNO;break;
+    case 'listbox'   : label=TRANSLATIONS.ID_FIELD_DYNAFORM_LISTBOX;break;
+    case 'checkbox'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_CHECKBOX;break;
+    case 'checkgroup': label=TRANSLATIONS.ID_FIELD_DYNAFORM_CHECKGROUP;break;
+    case 'radiogroup': label=TRANSLATIONS.ID_FIELD_DYNAFORM_RADIOGROUP;break;
+    case 'date'      : label=TRANSLATIONS.DATE_LABEL;break;
+    case 'hidden'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_HIDDEN;break;
+    case 'link'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_LINK;break;
+    case 'file'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_FILE;break;
+    case 'javascript': label=TRANSLATIONS.ID_FIELD_DYNAFORM_JAVASCRIPT;break;
+    case 'grid'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_GRID;break;
+
+    default : label=type; break
+    }
 	  popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
   }
 
