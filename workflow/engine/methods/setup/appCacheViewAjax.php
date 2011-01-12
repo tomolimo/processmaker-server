@@ -166,12 +166,6 @@
         $conf->aConfig = $confParams;
         $conf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
 
-        // removing casesList configuration records. TODO: removing these lines that resets all the configurations records
-        $oCriteria = new Criteria();
-        $oCriteria->add(ConfigurationPeer::CFG_UID,'casesList');
-        ConfigurationPeer::doDelete($oCriteria);
-        // end of reset 
-
         $response = new StdClass();
         $result->success = true;
         $result->msg     = "Completed successfully";
