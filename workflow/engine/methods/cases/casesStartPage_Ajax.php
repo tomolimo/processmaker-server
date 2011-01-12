@@ -30,7 +30,7 @@ function getProcessList() {
     $processListInitial = $oCase->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category' );
     $processList = array ();
     foreach ( $processListInitial as $key => $procInfo ) {
-      if (isset ( $procInfo ['cat'] )) {
+      if (isset ( $procInfo ['pro_uid'] )) {
         if (trim ( $procInfo ['cat'] ) == "")
           $procInfo ['cat'] = "_OTHER_";
         $processList [$procInfo ['catname']] [$procInfo ['value']] = $procInfo;
