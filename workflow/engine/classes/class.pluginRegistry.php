@@ -38,17 +38,17 @@ class pluginDetail {
   var $bPrivate = false;
 
   /**
-  * This function is the constructor of the pluginDetail class
-  * @param string $sNamespace
-  * @param string $sClassName
-  * @param string $sFilename
-  * @param string $sFriendlyName
-  * @param string $sPluginFolder
-  * @param string $sDescription
-  * @param string $sSetupPage
-  * @param integer $iVersion
-  * @return void
-  */
+   * This function is the constructor of the pluginDetail class
+   * @param string $sNamespace
+   * @param string $sClassName
+   * @param string $sFilename
+   * @param string $sFriendlyName
+   * @param string $sPluginFolder
+   * @param string $sDescription
+   * @param string $sSetupPage
+   * @param integer $iVersion
+   * @return void
+   */
   function __construct( $sNamespace, $sClassName, $sFilename, $sFriendlyName = '', $sPluginFolder ='', $sDescription ='', $sSetupPage ='', $iVersion = 0) {
     $this->sNamespace = $sNamespace;
     $this->sClassName = $sClassName;
@@ -58,9 +58,9 @@ class pluginDetail {
     $this->iVersion      = $iVersion;
     $this->sFilename     = $sFilename;
     if ( $sPluginFolder == '')
-      $this->sPluginFolder = $sNamespace;
+    $this->sPluginFolder = $sNamespace;
     else
-      $this->sPluginFolder = $sPluginFolder ;
+    $this->sPluginFolder = $sPluginFolder ;
   }
 }
 
@@ -83,17 +83,17 @@ class PMPluginRegistry {
   static private $instance = NULL;
 
   /**
-  * This function is the constructor of the PMPluginRegistry class
-  * @param
-  * @return void
-  */
+   * This function is the constructor of the PMPluginRegistry class
+   * @param
+   * @return void
+   */
   private function __construct() {}
 
   /**
-  * This function is instancing to this class
-  * @param
-  * @return object
-  */
+   * This function is instancing to this class
+   * @param
+   * @return object
+   */
   function &getSingleton() {
     if (self::$instance == NULL) {
       self::$instance = new PMPluginRegistry ();
@@ -102,19 +102,19 @@ class PMPluginRegistry {
   }
 
   /**
-  * This function generates a storable representation of a value
-  * @param
-  * @return void
-  */
+   * This function generates a storable representation of a value
+   * @param
+   * @return void
+   */
   function serializeInstance() {
     return serialize ( self::$instance);
   }
 
   /**
-  * This function takes a single serialized variable and converts it back a code
-  * @param string $serialized
-  * @return void
-  */
+   * This function takes a single serialized variable and converts it back a code
+   * @param string $serialized
+   * @return void
+   */
   function unSerializeInstance( $serialized ) {
     if (self::$instance == NULL) {
       self::$instance = new PMPluginRegistry ();
@@ -126,16 +126,16 @@ class PMPluginRegistry {
 
   //delete this function, it was here, only for test and debug purposes
   function showArrays () {
-  krumo ( $this->_aPluginDetails);
-  krumo ( $this->_aPlugins);
-  krumo ( $this->_aMenus);
-  krumo ( $this->_aFolders);
-  krumo ( $this->_aTriggers);
-  krumo ( $this->_aDashboards);
-  krumo ( $this->_aReports);
-  krumo ( $this->_aPmFunctions);
-  krumo ( $this->_aRedirectLogin);
-  krumo ( $this->_aSteps);
+    krumo ( $this->_aPluginDetails);
+    krumo ( $this->_aPlugins);
+    krumo ( $this->_aMenus);
+    krumo ( $this->_aFolders);
+    krumo ( $this->_aTriggers);
+    krumo ( $this->_aDashboards);
+    krumo ( $this->_aReports);
+    krumo ( $this->_aPmFunctions);
+    krumo ( $this->_aRedirectLogin);
+    krumo ( $this->_aSteps);
   }
 
   /**
@@ -153,18 +153,21 @@ class PMPluginRegistry {
     //require_once ( $sFilename );
     $plugin = new $sClassName ($sNamespace, $sFilename);
     $detail = new pluginDetail (
-            $sNamespace,
-            $sClassName,
-            $sFilename,
-            $plugin->sFriendlyName,
-            $plugin->sPluginFolder,
-            $plugin->sDescription,
-            $plugin->sSetupPage,
-            $plugin->iVersion  );
+    $sNamespace,
+    $sClassName,
+    $sFilename,
+    $plugin->sFriendlyName,
+    $plugin->sPluginFolder,
+    $plugin->sDescription,
+    $plugin->sSetupPage,
+    $plugin->iVersion  );
     if ( isset ($plugin->aWorkspaces) )
-      $detail->aWorkspaces = $plugin->aWorkspaces;
+    $detail->aWorkspaces = $plugin->aWorkspaces;
     if ( isset ($plugin->bPrivate) )
       $detail->bPrivate = $plugin->bPrivate;
+    if ( isset( $this->_aPluginDetails[$sNamespace] ) ){
+      $detail->enabled=$this->_aPluginDetails[$sNamespace]->enabled;
+    }
     $this->_aPluginDetails[$sNamespace] = $detail;
   }
 
@@ -176,7 +179,7 @@ class PMPluginRegistry {
   function getPluginDetails( $sFilename ) {
     foreach ( $this->_aPluginDetails as $key => $row ) {
       if ( $sFilename == baseName ( $row->sFilename ) )
-        return $row;
+      return $row;
     }
   }
 
@@ -218,58 +221,58 @@ class PMPluginRegistry {
     }
 
     foreach ( $this->_aMenus as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aMenus[ $key ] );
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aMenus[ $key ] );
     }
     foreach ( $this->_aFolders as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aFolders[ $key ] );
-     }
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aFolders[ $key ] );
+    }
 
     foreach ( $this->_aTriggers as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aTriggers[ $key ] );
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aTriggers[ $key ] );
     }
 
-   foreach ( $this->_aDashboards as $key=>$detail ) {
-       if ( $detail == $sNamespace )
-         unset ( $this->_aDashboards[ $key ] );
+    foreach ( $this->_aDashboards as $key=>$detail ) {
+      if ( $detail == $sNamespace )
+      unset ( $this->_aDashboards[ $key ] );
     }
 
-   foreach ( $this->_aReports as $key=>$detail ) {
-       if ( $detail == $sNamespace )
-         unset ( $this->_aReports[ $key ] );
+    foreach ( $this->_aReports as $key=>$detail ) {
+      if ( $detail == $sNamespace )
+      unset ( $this->_aReports[ $key ] );
     }
 
-   foreach ( $this->_aPmFunctions as $key=>$detail ) {
-       if ( $detail == $sNamespace )
-         unset ( $this->_aPmFunctions[ $key ] );
+    foreach ( $this->_aPmFunctions as $key=>$detail ) {
+      if ( $detail == $sNamespace )
+      unset ( $this->_aPmFunctions[ $key ] );
     }
 
-   foreach ( $this->_aRedirectLogin as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aRedirectLogin[ $key ] );
+    foreach ( $this->_aRedirectLogin as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aRedirectLogin[ $key ] );
     }
 
-   foreach ( $this->_aSteps as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aSteps[ $key ] );
+    foreach ( $this->_aSteps as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aSteps[ $key ] );
     }
-   foreach ( $this->_aToolbarFiles as $key=>$detail ) {
-     if ( $detail->sNamespace == $sNamespace )
-       unset ( $this->_aToolbarFiles[ $key ] );
-   }
-   foreach ( $this->_aDashboardPages as $key=>$detail ) {
-     if ( $detail->sNamespace == $sNamespace )
-       unset ( $this->_aDashboardPages[ $key ] );
-   }
-   foreach ( $this->_aCSSStyleSheets as $key=>$detail ) {
-     if ( $detail->sNamespace == $sNamespace )
-       unset ( $this->_aCSSStyleSheets[ $key ] );
-   }
-   foreach ( $this->_aCaseSchedulerPlugin as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aCaseSchedulerPlugin[ $key ] );
+    foreach ( $this->_aToolbarFiles as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aToolbarFiles[ $key ] );
+    }
+    foreach ( $this->_aDashboardPages as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aDashboardPages[ $key ] );
+    }
+    foreach ( $this->_aCSSStyleSheets as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aCSSStyleSheets[ $key ] );
+    }
+    foreach ( $this->_aCaseSchedulerPlugin as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aCaseSchedulerPlugin[ $key ] );
     }
   }
 
@@ -281,10 +284,10 @@ class PMPluginRegistry {
   function getStatusPlugin($sNamespace ) {
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
       if ( $sNamespace == $namespace )
-        if ( $this->_aPluginDetails[$sNamespace]->enabled )
-          return 'enabled';
-        else
-          return 'disabled';
+      if ( $this->_aPluginDetails[$sNamespace]->enabled )
+      return 'enabled';
+      else
+      return 'disabled';
     }
     return 0;
   }
@@ -295,23 +298,23 @@ class PMPluginRegistry {
    * @param unknown_type $sNamespace
    */
   function installPlugin($sNamespace ) {
-  try {
-    foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
-      if ( $sNamespace == $namespace ) {
-      $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
-      $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
-      $oPlugin->install();
+    try {
+      foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
+        if ( $sNamespace == $namespace ) {
+          $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+          $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
+          $oPlugin->install();
+        }
       }
     }
-  }
-  catch ( Exception $e ) {
-    global $G_PUBLISH;
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH  = new Publisher;
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish' );
-    die;
-  }
+    catch ( Exception $e ) {
+      global $G_PUBLISH;
+      $aMessage['MESSAGE'] = $e->getMessage();
+      $G_PUBLISH  = new Publisher;
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
+      G::RenderPage( 'publish' );
+      die;
+    }
 
   }
 
@@ -324,10 +327,10 @@ class PMPluginRegistry {
    */
   function registerMenu($sNamespace, $sMenuId, $sFilename ) {
     $found = false;
-     foreach ( $this->_aMenus as $row=>$detail ) {
+    foreach ( $this->_aMenus as $row=>$detail ) {
       if ( $sMenuId == $detail->sMenuId && $sNamespace == $detail->sNamespace )
-        $found = true;
-     }
+      $found = true;
+    }
     if ( !$found ) {
       $menuDetail = new menuDetail ($sNamespace, $sMenuId, $sFilename);
       $this->_aMenus[] = $menuDetail;
@@ -345,34 +348,34 @@ class PMPluginRegistry {
     $found = false;
     foreach ( $this->_aDashboards as $row=>$detail ) {
       if ( $sNamespace == $detail )
-        $found = true;
+      $found = true;
     }
     if ( !$found ) {
       $this->_aDashboards[] = $sNamespace;
     }
   }
-  
-/**
+
+  /**
    * Register a dashboard page for cases in the singleton
    *
    * @param unknown_type $sNamespace
    * @param unknown_type $sPage
    */
   function registerDashboardPage($sNamespace, $sPage, $sName, $sIcon ) {
-  $found = false;
-     foreach ( $this->_aDashboardPages as $row=>$detail ) {
+    $found = false;
+    foreach ( $this->_aDashboardPages as $row=>$detail ) {
       if ( $sPage == $detail->sPage && $sNamespace == $detail->sNamespace ){
         $detail->sName=$sName;
         $detail->sIcon=$sIcon;
-      	$found = true;
+        $found = true;
       }
-     }
+    }
     if ( !$found ) {
       $dashboardPage = new dashboardPage ($sNamespace, $sPage, $sName, $sIcon);
       $this->_aDashboardPages[] = $dashboardPage;
     }
   }
-  
+
   /**
    * return all dashboard pages
    *
@@ -381,7 +384,7 @@ class PMPluginRegistry {
   function getDashboardPages() {
     return  $this->_aDashboardPages;
   }
-  
+
   /**
    * Register a stylesheet in the singleton
    *
@@ -389,19 +392,19 @@ class PMPluginRegistry {
    * @param unknown_type $sPage
    */
   function registerCss($sNamespace, $sCssFile ) {
-  $found = false;
-     foreach ( $this->_aCSSStyleSheets as $row=>$detail ) {
+    $found = false;
+    foreach ( $this->_aCSSStyleSheets as $row=>$detail ) {
       if ( $sCssFile == $detail->sCssFile && $sNamespace == $detail->sNamespace ){
-        $detail->sCssFile=$sCssFile;        
-      	$found = true;
+        $detail->sCssFile=$sCssFile;
+        $found = true;
       }
-     }
+    }
     if ( !$found ) {
       $cssFile = new cssFile ($sNamespace, $sCssFile);
       $this->_aCSSStyleSheets[] = $cssFile;
     }
   }
-  
+
   /**
    * return all dashboard pages
    *
@@ -410,7 +413,7 @@ class PMPluginRegistry {
   function getRegisteredCss() {
     return  $this->_aCSSStyleSheets;
   }
-  
+
 
   /**
    * Register a reports class in the singleton
@@ -423,7 +426,7 @@ class PMPluginRegistry {
     $found = false;
     foreach ( $this->_aReports as $row=>$detail ) {
       if ( $sNamespace == $detail )
-        $found = true;
+      $found = true;
     }
     if ( !$found ) {
       $this->_aReports[] = $sNamespace;
@@ -441,7 +444,7 @@ class PMPluginRegistry {
     $found = false;
     foreach ( $this->_aPmFunctions as $row=>$detail ) {
       if ( $sNamespace == $detail )
-        $found = true;
+      $found = true;
     }
     if ( !$found ) {
       $this->_aPmFunctions[] = $sNamespace;
@@ -458,8 +461,8 @@ class PMPluginRegistry {
   function registerRedirectLogin($sNamespace, $sRole, $sPathMethod ) {
     $found = false;
     foreach ( $this->_aRedirectLogin as $row=>$detail ) {
-       if (( $sNamespace == $detail->sNamespace )&&( $sRole == $detail->sRoleCode )) //Filters based on Workspace and Role Code
-        $found = true;
+      if (( $sNamespace == $detail->sNamespace )&&( $sRole == $detail->sRoleCode )) //Filters based on Workspace and Role Code
+      $found = true;
     }
     if ( !$found ) {
       $this->_aRedirectLogin[] = new redirectDetail ( $sNamespace, $sRole, $sPathMethod);
@@ -474,8 +477,8 @@ class PMPluginRegistry {
   function registerFolder($sNamespace, $sFolderId, $sFolderName ) {
     $found = false;
     foreach ( $this->_aFolders as $row=>$detail )
-      if ( $sFolderId == $detail->sFolderId && $sNamespace == $detail->sNamespace )
-        $found = true;
+    if ( $sFolderId == $detail->sFolderId && $sNamespace == $detail->sNamespace )
+    $found = true;
 
     if ( !$found ) {
       $this->_aFolders[] = new folderDetail ( $sNamespace, $sFolderId, $sFolderName);
@@ -490,8 +493,8 @@ class PMPluginRegistry {
   function registerStep($sNamespace, $sStepId, $sStepName, $sStepTitle, $setupStepPage = '') {
     $found = false;
     foreach ( $this->_aSteps as $row=>$detail )
-      if ( $sStepId == $detail->sStepId && $sNamespace == $detail->sNamespace )
-        $found = true;
+    if ( $sStepId == $detail->sStepId && $sNamespace == $detail->sNamespace )
+    $found = true;
 
     if ( !$found ) {
       $this->_aSteps[] = new stepDetail ( $sNamespace, $sStepId, $sStepName, $sStepTitle, $setupStepPage);
@@ -617,10 +620,10 @@ class PMPluginRegistry {
           if (PEAR::isError($response) ) {
             print $response->getMessage();  return;
           }
-         return $response;
+          return $response;
         }
         else
-          print "error in call method " . $detail->sTriggerName;
+        print "error in call method " . $detail->sTriggerName;
       }
     }
   }
@@ -681,7 +684,7 @@ class PMPluginRegistry {
     $found = false;
     foreach ( $this->_aTriggers as $row=>$detail ) {
       if ( $sTriggerId == $detail->sTriggerId && $sNamespace == $detail->sNamespace )
-        $found = true;
+      $found = true;
     }
     if ( !$found ) {
       $triggerDetail = new triggerDetail ($sNamespace, $sTriggerId, $sTriggerName);
@@ -690,140 +693,140 @@ class PMPluginRegistry {
   }
 
   /**
-  * get plugin
-  *
-  * @param unknown_type $sNamespace
-  * @return void
-  */
+   * get plugin
+   *
+   * @param unknown_type $sNamespace
+   * @return void
+   */
   function &getPlugin($sNamespace) {
     if (array_key_exists($sNamespace, $this->_aPlugins)) {
-        return $this->_aPlugins[$sNamespace];
+      return $this->_aPlugins[$sNamespace];
     }
-/*
-    $aDetails = KTUtil::arrayGet($this->_aPluginDetails, $sNamespace);
-    if (empty($aDetails)) {
-        return null;
-    }
-    $sFilename = $aDetails[2];
-    if (!empty($sFilename)) {
-        require_once($sFilename);
-    }
-    $sClassName = $aDetails[0];
-    $oPlugin =& new $sClassName($sFilename);
-    $this->_aPlugins[$sNamespace] =& $oPlugin;
-    return $oPlugin;
-*/
+    /*
+     $aDetails = KTUtil::arrayGet($this->_aPluginDetails, $sNamespace);
+     if (empty($aDetails)) {
+     return null;
+     }
+     $sFilename = $aDetails[2];
+     if (!empty($sFilename)) {
+     require_once($sFilename);
+     }
+     $sClassName = $aDetails[0];
+     $oPlugin =& new $sClassName($sFilename);
+     $this->_aPlugins[$sNamespace] =& $oPlugin;
+     return $oPlugin;
+     */
   }
 
   /**
-  * set company logo
-  *
-  * @param unknown_type $sNamespace
-  * @param unknown_type $filename
-  * @return void
-  */
+   * set company logo
+   *
+   * @param unknown_type $sNamespace
+   * @param unknown_type $filename
+   * @return void
+   */
   function setCompanyLogo( $sNamespace, $filename ) {
     $found = false;
     foreach ( $this->_aPluginDetails as $row=>$detail ) {
       if ( $sNamespace == $detail->sNamespace )
-        $this->_aPluginDetails[ $sNamespace ]->sCompanyLogo = $filename;
+      $this->_aPluginDetails[ $sNamespace ]->sCompanyLogo = $filename;
     }
   }
 
   /**
-  * get company logo
-  *
-  * @param unknown_type $default
-  * @return void
-  */
+   * get company logo
+   *
+   * @param unknown_type $default
+   * @return void
+   */
   function getCompanyLogo( $default ) {
     $sCompanyLogo = $default;
     foreach ( $this->_aPluginDetails as $row=>$detail ) {
       if ( trim($detail->sCompanyLogo) != '' )
-        $sCompanyLogo = $detail->sCompanyLogo;
+      $sCompanyLogo = $detail->sCompanyLogo;
     }
     return $sCompanyLogo;
   }
 
   /**
-  * get setup Plugins
-  *
-  * @param unknown_type $default
-  * @return void
-  */
+   * get setup Plugins
+   *
+   * @param unknown_type $default
+   * @return void
+   */
   function setupPlugins() {
-  try {
-    $iPlugins = 0;
-    G::LoadClass ( 'serverConfiguration' );
-    $oServerConf = & serverConf::getSingleton ();
-    $oServerConf->addPlugin ( SYS_SYS,$this->_aPluginDetails );
-    foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
-      if ( isset($detail->enabled ) && $detail->enabled ) {
-        if ( !empty( $detail->sFilename) && file_exists ($detail->sFilename) ) {
-          if (strpos($detail->sFilename, PATH_SEP) !== false) {
-            $aux = explode ( PATH_SEP, $detail->sFilename );
-          }
-          else {
-            $aux = explode ( chr(92), $detail->sFilename );
-          }
-          $sFilename = PATH_PLUGINS . $aux[ count($aux) -1];
-          if (! file_exists($sFilename) ) continue;
-          require_once( $sFilename);
-          $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
-          $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
+    try {
+      $iPlugins = 0;
+      G::LoadClass ( 'serverConfiguration' );
+      $oServerConf = & serverConf::getSingleton ();
+      $oServerConf->addPlugin ( SYS_SYS,$this->_aPluginDetails );
+      foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
+        if ( isset($detail->enabled ) && $detail->enabled ) {
+          if ( !empty( $detail->sFilename) && file_exists ($detail->sFilename) ) {
+            if (strpos($detail->sFilename, PATH_SEP) !== false) {
+              $aux = explode ( PATH_SEP, $detail->sFilename );
+            }
+            else {
+              $aux = explode ( chr(92), $detail->sFilename );
+            }
+            $sFilename = PATH_PLUGINS . $aux[ count($aux) -1];
+            if (! file_exists($sFilename) ) continue;
+            require_once( $sFilename);
+            $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+            $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
 
-          $iPlugins++;
-          //print ( "$iPlugins $namespace <br>");
-          $oPlugin->setup();
+            $iPlugins++;
+            //print ( "$iPlugins $namespace <br>");
+            $oPlugin->setup();
+          }
         }
       }
+      $this->eevalidate();
+      return $iPlugins;
     }
-    $this->eevalidate();
-    return $iPlugins;
-  }
-  catch ( Exception $e ) {
-    global $G_PUBLISH;
-    $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH  = new Publisher;
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish' );
-    die;
-  }
+    catch ( Exception $e ) {
+      global $G_PUBLISH;
+      $aMessage['MESSAGE'] = $e->getMessage();
+      $G_PUBLISH  = new Publisher;
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
+      G::RenderPage( 'publish' );
+      die;
+    }
 
   }
 
   /**
-  * this function execute a Method
-  *
-  * @param string $sNamespace
-  * @param string $methodName
-  * @param object $oData
-  * @return object
-  */
+   * this function execute a Method
+   *
+   * @param string $sNamespace
+   * @param string $methodName
+   * @param object $oData
+   * @return object
+   */
   function executeMethod( $sNamespace, $methodName, $oData ) {
     $response = null;
     try {
-    $details = $this->_aPluginDetails[$sNamespace];
-    $pluginFolder = $details->sPluginFolder;
-    $className    = $details->sClassName;
-    $classFile = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'class.' . $pluginFolder .'.php';
-    if ( file_exists ( $classFile ) ) {
-      require_once ( $classFile );
-      $sClassName=substr_replace($className,"class",-6,6);
-  //$sClassName = str_replace ( 'plugin', 'class', $className );
-      $obj = new $sClassName( );
-      if ( !in_array ( $methodName, get_class_methods ($obj) ) ) {
-        throw ( new Exception ( "The method '$methodName' doesn't exist in class '$sClassName' ") );
+      $details = $this->_aPluginDetails[$sNamespace];
+      $pluginFolder = $details->sPluginFolder;
+      $className    = $details->sClassName;
+      $classFile = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'class.' . $pluginFolder .'.php';
+      if ( file_exists ( $classFile ) ) {
+        require_once ( $classFile );
+        $sClassName=substr_replace($className,"class",-6,6);
+        //$sClassName = str_replace ( 'plugin', 'class', $className );
+        $obj = new $sClassName( );
+        if ( !in_array ( $methodName, get_class_methods ($obj) ) ) {
+          throw ( new Exception ( "The method '$methodName' doesn't exist in class '$sClassName' ") );
+        }
+        $obj->sNamespace    = $details->sNamespace;
+        $obj->sClassName    = $details->sClassName;
+        $obj->sFilename     = $details->sFilename;
+        $obj->iVersion      = $details->iVersion;
+        $obj->sFriendlyName = $details->sFriendlyName;
+        $obj->sPluginFolder = $details->sPluginFolder;
+        $response = $obj->{$methodName}( $oData );
       }
-      $obj->sNamespace    = $details->sNamespace;
-      $obj->sClassName    = $details->sClassName;
-      $obj->sFilename     = $details->sFilename;
-      $obj->iVersion      = $details->iVersion;
-      $obj->sFriendlyName = $details->sFriendlyName;
-      $obj->sPluginFolder = $details->sPluginFolder;
-      $response = $obj->{$methodName}( $oData );
-    }
-    return $response;
+      return $response;
     }
     catch ( Exception $e ) {
       throw ($e);
@@ -831,22 +834,22 @@ class PMPluginRegistry {
   }
 
   /**
-  * this function gets Fields For Page  on Setup
-  *
-  * @param string $sNamespace
-  * @return object
-  */
+   * this function gets Fields For Page  on Setup
+   *
+   * @param string $sNamespace
+   * @return object
+   */
   function getFieldsForPageSetup( $sNamespace ) {
     $oData = NULL;
     return $this->executeMethod ( $sNamespace, 'getFieldsForPageSetup', $oData);
   }
 
   /**
-  * this function updates Fields For Page on Setup
-  *
-  * @param string $sNamespace
-  * @return void
-  */
+   * this function updates Fields For Page on Setup
+   *
+   * @param string $sNamespace
+   * @return void
+   */
   function updateFieldsForPageSetup( $sNamespace, $oData ) {
     if ( !isset ($this->_aPluginDetails[$sNamespace] ) ) {
       throw ( new Exception ( "The namespace '$sNamespace' doesn't exist in plugins folder." ) );
@@ -875,10 +878,10 @@ class PMPluginRegistry {
    */
   function registerToolbarFile($sNamespace, $sToolbarId, $sFilename ) {
     $found = false;
-     foreach ( $this->_aToolbarFiles as $row=>$detail ) {
+    foreach ( $this->_aToolbarFiles as $row=>$detail ) {
       if ( $sToolbarId == $detail->sToolbarId && $sNamespace == $detail->sNamespace )
-        $found = true;
-     }
+      $found = true;
+    }
     if ( !$found ) {
       $toolbarDetail = new toolbarDetail ($sNamespace, $sToolbarId, $sFilename);
       $this->_aToolbarFiles[] = $toolbarDetail;
@@ -903,14 +906,14 @@ class PMPluginRegistry {
   function registerCaseSchedulerPlugin($sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields) {
     $found = false;
     foreach ( $this->_aCaseSchedulerPlugin as $row=>$detail )
-      if ( $sActionId == $detail->sActionId && $sNamespace == $detail->sNamespace )
-        $found = true;
+    if ( $sActionId == $detail->sActionId && $sNamespace == $detail->sNamespace )
+    $found = true;
 
     if ( !$found ) {
       $this->_aCaseSchedulerPlugin[] = new caseSchedulerPlugin ( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields);
     }
   }
-/**
+  /**
    * This function returns all Case Scheduler Plugins registered
    *
    * @return string
