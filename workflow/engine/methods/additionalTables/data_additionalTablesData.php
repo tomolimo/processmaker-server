@@ -1,6 +1,6 @@
 <?php
 /**
- * additionalTablesDelete.php
+ * data_additionalTablesList.php
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -22,23 +22,18 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-global $RBAC;
-if ($RBAC->userCanAccess('PM_SETUP') != 1) {
-  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	G::header('location: ../login/login');
-	die;
-}
-
-if (!isset($_GET['sUID'])) {
-  die;
-}
-
-if ($_GET['sUID'] == '') {
-  die;
-}
 
 require_once 'classes/model/AdditionalTables.php';
 $oAdditionalTables = new AdditionalTables();
-$oAdditionalTables->deleteAll($_GET['sUID']);
+$oAdditionalTables->createXmlList($_GET['sUID']);
 
-G::Header('Location: additionalTablesList');
+$ocaux = $oAdditionalTables->getDataCriteria($_GET['sUID']);
+
+$rs = AdditionalTablesPeer::DoSelectRs ($ocaux);
+$rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+
+$rows = Array();
+while($rs->next()){
+	$rows[] = $rs->getRow();
+}
+echo G::json_encode($rows);

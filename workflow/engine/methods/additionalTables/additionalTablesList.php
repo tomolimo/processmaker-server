@@ -22,8 +22,24 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-
 global $RBAC;
+$RBAC->requirePermissions('PM_SETUP_ADVANCE');
+$G_PUBLISH = new Publisher;
+
+$oHeadPublisher =& headPublisher::getSingleton();
+
+//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
+$oHeadPublisher->addExtJsScript('additionalTables/additionalTablesList', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('additionalTables/additionalTablesList'); //adding a html file  .html.
+
+$labels = G::getTranslations(Array('ID_EXPORT','ID_IMPORT','ID_EDIT','ID_DELETE', 'ID_DATA',
+  'ID_NEW_ADD_TABLE','ID_DESCRIPTION','ID_NAME','ID_CONFIRM','ID_ADDITIONAL_TABLES','ID_SELECT_FIRST_PM_TABLE_ROW',
+  'ID_CONFIRM_DELETE_PM_TABLE'));
+
+$oHeadPublisher->assign('TRANSLATIONS', $labels);
+G::RenderPage('publish', 'extJs');
+
+/*global $RBAC;
 if ($RBAC->userCanAccess('PM_SETUP') != 1) {
   G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
 	G::header('location: ../login/login');
@@ -44,4 +60,4 @@ $G_ID_MENU_SELECTED     = 'SETUP';
 
 $G_PUBLISH = new Publisher;
 $G_PUBLISH->AddContent('propeltable', 'paged-table', 'additionalTables/additionalTablesList', $oCriteria, '', '');
-G::RenderPage('publishBlank', 'blank');
+G::RenderPage('publishBlank', 'blank');*/
