@@ -148,8 +148,8 @@ class PMPluginRegistry {
   function registerPlugin( $sNamespace, $sFilename = null)
   {
     $sClassName = $sNamespace . 'plugin';
-    if ( isset( $this->_aPluginDetails[$sNamespace] ) )
-      return;
+    //if ( isset( $this->_aPluginDetails[$sNamespace] ) )
+    //  return;
     //require_once ( $sFilename );
     $plugin = new $sClassName ($sNamespace, $sFilename);
     $detail = new pluginDetail (
