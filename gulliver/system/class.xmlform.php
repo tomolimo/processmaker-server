@@ -2990,6 +2990,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     }
     //$this->defaultValue = G::replaceDataField( $this->defaultValue, $owner->values);
     $id = "form[$this->name]";
+    //print('alvaro   '. $value.'  ');
     return $this->__draw_widget ( $id, $value, $owner );
   }
 
@@ -3094,7 +3095,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
           $mask .= '%'.$part;
         }
       }
-
+ 
       if( strpos($mask, '/') !== false ) { // case '/' saparator
         $maskparts = explode('/', $mask);
         $mask = '';
@@ -3105,22 +3106,29 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
       }
     }
+
+ 
+
+
     /** - end - Backward compatibility **/
-    $tmp = str_replace("%", "", $mask);
+    $tmp = str_replace("%", "", $mask);   
+ //     print($value.' '.$tmp.'-------');
+    $auxtmp=$value;
     if ( trim ($value) == '' or $value == NULL ) {
       $value = ''; //date ($tmp);
-    } else {
+    } else { 
       switch(strtolower($value)){
         case 'today':
-          $value = date($tmp);
+         // $value = date($tmp);
+          $value=masktophp ($mask);          
         break;
         default:
           if(!$this->verifyDateFormat($value))
             $value='';
         break;
       }
-    }
 
+    }
     //onchange
     if( isset($this->onchange) && $this->onchange != '' )
       $onchange = 'onchange="'.$this->onchange.'"';
@@ -3146,6 +3154,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         } else {
           $sizeend = $maskleng + 2;
         }
+        //recuperar valor
+        if($value==''){
+          $value =$auxtmp;
+        }
+
+  
+
         if ( $this->editable != "0") {
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
@@ -3169,7 +3184,6 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
              . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>'
              . '</a>';
     }
-
     return $html;
   }
 }
@@ -4188,3 +4202,20 @@ class XmlForm_Field_Image extends XmlForm_Field
     .' alt ="'.htmlentities($value,ENT_QUOTES,'utf-8').'"/>';
   }
 }
+
+  // function mask to php
+  function masktophp ($mask){ 
+    $tmp = str_replace("%", "", $mask);
+  if(ereg('b',$tmp)) {
+         $tmp2 = str_replace("b", "M", $tmp);
+       $value=date($tmp2);         
+       return $value;
+    }
+     if(ereg('B',$tmp)) {
+         $tmp2 = str_replace("B", "F", $tmp);
+       $value=date($tmp2);
+       return $value;
+    }
+  $value = date($tmp);
+  return $value;
+  }
