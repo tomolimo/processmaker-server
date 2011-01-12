@@ -444,7 +444,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         G::streamFile ( $phpFile );
         die;
       }
-      //$avoidChangedWorkspaceValidation=true;
+      $avoidChangedWorkspaceValidation=true;
       $bWE = true;
       //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
     }
