@@ -121,6 +121,32 @@ Ext.onReady(function() {
 					labelStyle: 'font-weight:bold;',
 							
 					items: [
+															{
+																xtype : 'button',
+																id : 'starCaseButton',
+																disabled : true,
+																// cls :
+																// 'x-btn-icon',
+																// icon :
+																// '/images/refresh.gif',
+																iconCls : "ICON_CASES_START_CASE",
+																text : TRANSLATIONS.ID_TITLE_START_CASE, // "Start
+																											// Case",
+																// margins:"5 5
+																// 5 5",
+																autoWidth : true,
+																handler : function() {
+																	tree = Ext
+																			.getCmp('startCaseTreePanel');
+																	var selectedNode = tree
+																			.getSelectionModel()
+																			.getSelectedNode();
+																	if (selectedNode) {
+																		//mainPanel.openCase(selectedNode);
+																		openCaseA(selectedNode);
+																	}
+																}
+															},
 									{
 										xtype     : 'displayfield',
 												 
@@ -133,26 +159,8 @@ Ext.onReady(function() {
 										width:200,
 										// disabled: true,
 										id:"taskName"
-									},
-									{
-										xtype : 'button',
-										id : 'starCaseButton',
-										disabled : true,
-										//cls : 'x-btn-icon',
-										//icon : '/images/refresh.gif',
-										iconCls: "ICON_CASES_START_CASE",
-										text: TRANSLATIONS.ID_TITLE_START_CASE, // "Start Case",
-										//margins:"5 5 5 5",
-										autoWidth:true,
-										handler : function() {				
-											tree = Ext.getCmp('startCaseTreePanel');
-											var selectedNode = tree.getSelectionModel().getSelectedNode();
-											if(selectedNode){
-												//mainPanel.openCase(selectedNode);
-												openCaseA(selectedNode);
-											}
-										}
 									}
+									
 							]
 					},
 					
@@ -191,7 +199,7 @@ Ext.onReady(function() {
 							//autoExpandColumn: 'company',
 							//height: 350,
 							width: 355,
-							title: TRANSLATIONS.ID_GENERAL_PROCESS_NUMBERS,  // 'General Process Numbers',
+							//title: TRANSLATIONS.ID_GENERAL_PROCESS_NUMBERS,  // 'General Process Numbers',
 							border: true,
 							listeners: {
 									viewready: function(g) {
@@ -206,7 +214,7 @@ Ext.onReady(function() {
 							labelStyle: 'font-weight:bold;',
 							// disabled: true,
 							id:"calendarName"
-				},{
+				},/*{
 					xtype:'textarea',
 					fieldLabel: TRANSLATIONS.ID_CALENDAR_DESCRIPTION,  // 'Calendar Description',
 					name: 'calendarDescription',
@@ -215,7 +223,7 @@ Ext.onReady(function() {
 					// disabled: true,
 					readOnly: true,
 					id:"calendarDescription"
-			},{
+			},*/{
 				xtype:'checkboxgroup',
 						fieldLabel: TRANSLATIONS.ID_WORKING_DAYS, // 'Working days',
 						name: 'calendarWorkDays',
