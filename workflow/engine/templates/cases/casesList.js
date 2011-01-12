@@ -975,7 +975,7 @@ Ext.onReady ( function() {
   var toolbarTodo = [
     {
       xtype: 'tbsplit',
-      text: 'Actions',
+      text: TRANSLATIONS.LABEL_ACTIONS, // 'Actions',
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
@@ -1045,7 +1045,7 @@ Ext.onReady ( function() {
   var toolbarDraft = [
     {
       xtype: 'tbsplit',
-      text: 'Actions',
+      text: TRANSLATIONS.LABEL_ACTIONS, // 'Actions',
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
