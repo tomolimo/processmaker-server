@@ -190,7 +190,7 @@ ProcessMapContext.prototype.exportProcess= function()
           //taskUsers.setDefaultSort('LABEL', 'asc');
   exportProcess.load();*/
 
- var obj='FILENAME_LINKXPDL';
+
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
   frame         : true,
@@ -230,14 +230,28 @@ ProcessMapContext.prototype.exportProcess= function()
                         fieldLabel  : 'File',
                         name        : 'FILENAME_LINK',
                         readOnly  :true
-                      },{
-                        xtype       : 'button',
-                        fieldLabel  : 'File XPDL',
-                        name        : 'FILENAME_LINKXPDL',
-                        dataIndex   : 'FILENAME_LINKXPDL',
-                        html        : '<a href="javascript: Ext.ux.classobj.method(' + Ext.util.JSON.encode(obj) + ')" ></a>'
+                      //},{
+                       // xtype       : 'button',
+                       // fieldLabel  : 'File XPDL',
+                       // name        : 'FILENAME_LINKXPDL',
+                        //dataIndex   : 'FILENAME_LINKXPDL',
+                       // html        : '<a href="javascript: Ext.ux.classobj.method(' + Ext.util.JSON.encode(obj) + ')" ></a>'
                         //readOnly  :true
                       },{
+                        xtype: "panel",
+                        html: new Ext.XTemplate("<a href='#'>{value}").apply({
+                        value:'FILENAME_LINKXPDL'
+                        })
+                      },{
+                        xtype: 'box',
+                        autoEl: {
+                            tag: 'a',
+
+                            html: '3. Dom element created by a DomHelper and wrapped as Component',
+                            href: '#'
+            }},
+
+                      {
                         xtype   : 'button',
                         name    : 'FILENAME_LINK',
                         html    : '<a href=\"http:\/\/www.google.at\">Link<\/a>',
@@ -671,17 +685,36 @@ var tb = new Ext.Toolbar({
                                                         {name : 'All',   value: '0'},
                                                         {name : 'DYNAFORM',   value: '1'},
                                                         {name : 'INPUT',   value: '2'},
-                                                        {name : 'OUTPUT',   value: '3'}]})
+                                                        {name : 'OUTPUT',   value: '3'}]}),
+                    onSelect: function(record, index) {
+                                 //Show-Hide Format Type Field
+                                                        if(record.data.value == '1')
+                                                                {Ext.getCmp("dynaform").show();
+                                                                 Ext.getCmp("inputdoc").hide();
+                                                                 Ext.getCmp("outputdoc").hide()}
+                                                        else if(record.data.value == '2')
+                                                                {Ext.getCmp("inputdoc").show();
+                                                                 Ext.getCmp("dynaform").hide();
+                                                                    Ext.getCmp("outputdoc").hide()}
+                                                        else
+                                                                {Ext.getCmp("outputdoc").show();
+                                                                 Ext.getCmp("inputdoc").hide();
+                                                                 Ext.getCmp("dynaform").hide()}
+                                                                 this.setValue(record.data[this.valueField || this.displayField]);
+                                                                 this.collapse();
+                                     }
+
            },
            {
                xtype: 'fieldset',
                id   : 'dynaform',
-               hidden: false,
+               hidden: true,
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Dynaform',
                     //hiddenName:'UID',
                     autoload: true,
+                    width:200,
                     store: dynaformStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
@@ -699,11 +732,12 @@ var tb = new Ext.Toolbar({
            },{
                xtype: 'fieldset',
                id   : 'inputdoc',
-               hidden: false,
+               hidden: true,
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Input Document',
                     //hiddenName:'UID',
+                    width:200,
                     autoload: true,
                     store: inputDocStore,
                     valueField:'UID',
@@ -722,11 +756,12 @@ var tb = new Ext.Toolbar({
            },{
                xtype: 'fieldset',
                id   : 'outputdoc',
-               hidden: false,
+               hidden: true,
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Output Document',
                     //hiddenName:'popType',
+                    width:200,
                     autoload: true,
                     store: outputDocStore,
                     valueField:'LABEL',

@@ -1310,7 +1310,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
     
   //Loading Task Details into the form
   taskPropertiesTabs.form.load({
-        url:'proxyExtjs.php?tid='+taskId+'&action=getPropertiesList',
+        url:'proxyExtjs.php?tid='+taskId+'&action=getTaskPropertiesList',
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
