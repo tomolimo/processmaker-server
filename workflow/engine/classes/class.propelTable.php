@@ -395,7 +395,13 @@ class propelTable
       if(is_object($value)){
         $value = '';
       }
-      $this->tpl->assign( "value" , (preg_match('^[[:space:]]^', $value) && (substr($fieldName,0,3)!="PRO"))? str_ireplace(" ","&nbsp;",$htmlField):$htmlField );
+      // checking if the value variable is a html field, a html tag content can't contain &nbsp; as white spaces
+      $testValue = preg_match( "/<\/?\w+((\s+(\w|\w[\w-]*\w)(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/i", $value, $matches );
+      if (empty($matches)){
+        $this->tpl->assign( "value" , (preg_match('^[[:space:]]^', $value) && (substr($fieldName,0,3)!="PRO"))? str_ireplace(" ","&nbsp;",$htmlField):$htmlField );
+      } else {
+        $this->tpl->assign( "value" , $htmlField );
+      }
     }
     return $this->fields[$r]['Type'];
   }
