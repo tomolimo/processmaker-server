@@ -112,7 +112,7 @@
   </USR_STATUS>
 
   <USR_ROLE type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
-  SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '00000000000000000000000000000002' ORDER BY ROL_CODE
+  SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '00000000000000000000000000000002' AND ROL_STATUS = 1 ORDER BY ROL_CODE
     ]]><en>Role</en>
   </USR_ROLE>
 

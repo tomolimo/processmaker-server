@@ -52,7 +52,7 @@ switch ($REQUEST) {
     	
     	$ROL_UID = $_GET['ROL_UID'];
     	$aFields = $RBAC->loadById($ROL_UID);
-    	
+//    	print_r($aFields);
     	$G_PUBLISH = new Publisher();
         $G_PUBLISH->AddContent('xmlform', 'xmlform', 'roles/roles_Edit', '', $aFields);
         G::RenderPage('publish', 'raw');
@@ -114,8 +114,37 @@ switch ($REQUEST) {
         break;
     
     case 'updateDataRole':
-		$response = ($RBAC->verifyNewRole($_GET['code']))?'true':'false';
-		print($response);
+      require_once 'classes/model/om/BaseRoles.php';
+      require_once 'classes/model/Content.php';
+      $oCriteria = new Criteria('rbac');
+      $oCriteria->addSelectColumn(RolesPeer::ROL_UID);
+      $oCriteria->addSelectColumn(RolesPeer::ROL_PARENT);
+      $oCriteria->addSelectColumn(RolesPeer::ROL_SYSTEM);
+      $oCriteria->addSelectColumn(RolesPeer::ROL_CODE);
+      $oCriteria->addSelectColumn(RolesPeer::ROL_CREATE_DATE);
+      $oCriteria->addSelectColumn(RolesPeer::ROL_UPDATE_DATE);
+      $oCriteria->addSelectColumn(RolesPeer::ROL_STATUS);
+      $oCriteria->add(RolesPeer::ROL_CODE, $_GET['code']);
+        
+      $result = RolesPeer::doSelectRS($oCriteria);
+      $result->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $result->next();
+      $row = $result->getRow();
+      
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->add(ContentPeer::CON_CATEGORY, 'ROL_NAME');
+      $oCriteria1->add(ContentPeer::CON_ID,    $row['ROL_UID']);
+      $oCriteria1->add(ContentPeer::CON_LANG,     SYS_LANG);
+      $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+      $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset1->next();
+      $aRow1 = $oDataset1->getRow();
+      $row['ROL_NAME'] = $aRow1['CON_VALUE'];
+     	$row['ROL_UPDATE_DATE'] = date("Y-M-d H:i:s");
+
+      $RBAC->updateRole($row);          
+		//$response = ($RBAC->verifyNewRole($_GET['code']))?'true':'false';
+
         break;
         
     case 'usersIntoRole':
