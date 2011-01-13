@@ -20,7 +20,7 @@ PROCESS_REQUEST_FILE = '../roles/roles_Ajax';
 PROCESS_REQUEST_FILE_USER = '../roles/roles_AddUser';
 
 function newRol() {
-	popupWindow('', '../roles/roles_Ajax?request=newRole', 350, 225);
+	popupWindow('', '../roles/roles_Ajax?request=newRole', 350, 265);
 }
 
 
@@ -86,7 +86,7 @@ function editRole(ROL_UID)
 	if(ROL_UID!='00000000000000000000000000000002')
 	 {	 
     	var uri = 'request=editRole&ROL_UID='+ROL_UID;	
-    	popupWindow('', '../roles/roles_Ajax?'+uri, 350, 225);
+    	popupWindow('', '../roles/roles_Ajax?'+uri, 350, 265);
    }
    else
    {  

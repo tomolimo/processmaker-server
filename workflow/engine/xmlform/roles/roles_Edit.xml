@@ -17,7 +17,7 @@
 </ROL_NAME>
 
 <ROL_STATUS type="dropdown" size="25" maxlength="32" defaultvalue="Active">
-  <en>Status<option name="1">Active</option><option name="">Inactive</option></en>
+  <en>Status<option name="1">Active</option><option name="0">Inactive</option></en>
 </ROL_STATUS>
 
 <BTN_CANCEL type="button" onclick="cancel()">
