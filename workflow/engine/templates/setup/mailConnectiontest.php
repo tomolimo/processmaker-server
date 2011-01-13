@@ -54,11 +54,7 @@
 		'Establishing connection to host <b>'.$host->hostname.'</b>'
     );
 	$tests[] = 'Login as <b>'.$_POST['account'].'</b> on '.$host->hostname.' SMTP Server';
-// 	if($_POST['auth_required'] == 'yes'){
-// 		$tests[] = 'Login as <b>'.$_POST['account'].'</b> on '.$host->hostname.' SMTP Server';
-// 	} else {
-// 		$tests[] = '<b><font color="black">Without autentification!<font></b>';
-// 	}
+
 	
 	if($_POST['send_test_mail'] == 'yes'){
 		$tests[] = 'Sending a test mail from <b>'.$_POST['account'].'</b> to '.$_POST['mail_to'].'...';
@@ -71,18 +67,14 @@
 		<div id='test_$i' style='display:none'>
 		<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border:0px;'>
 			<tr>
-				<td width='10' class='treeNode' style='border:0px;background-color:transparent;'>
-					<IMG src=\"/images/".$n[$i].".gif\" width=\"25\" height=\"25\" align=\"left\" border=\"0\">
-				</td>
+				<td width=10 class='treeNode' style='border:0px;background-color:transparent;'><span id='status_$i'></span></td>
 				<td width='*' class='treeNode' style='border:0px;background-color:transparent;'>
-				<div id='action_$i'>$tests[$i]</div>
+				  &nbsp;<span id='action_$i'>$tests[$i]</span>
 				</td>
 			</tr>
 			<tr>
-				<td width='10' class='treeNode' style='border:0px;background-color:transparent;'>
-				</td>
-				<td  class='treeNode' style='border:0px;background-color:transparent;'>
-					<div id='status_$i'></div>
+				<td width='*' class='treeNode' style='border:0px;background-color:transparent;' colspan='2'>
+				  <span id='status2_$i'></span>
 				</td>
 			</tr>
 		</table>

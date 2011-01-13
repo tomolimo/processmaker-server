@@ -68,7 +68,12 @@ $rows[] = array ( 'uid' => 'MAIL', 'name' => 'Mail (PHP)'  );
 $_DBArray['mails'] = $rows;
 $_SESSION['_DBArray'] = $_DBArray;
 
+$trn = G::getTranslations(Array('ID_SUCESS', 'ID_FAIL', ''));
 
 $G_PUBLISH = new Publisher;
+$oHeadPublisher = headPublisher::getSingleton();
+$oHeadPublisher->addScriptCode('var TRANSLATIONS='.json_encode($trn).';');
+$oHeadPublisher->addScriptFile('/jscore/setup/emails.js');
+
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'setup/emails', '', $aFields, 'emails_Save');
 G::RenderPage('publishBlank', 'blank');
