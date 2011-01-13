@@ -632,7 +632,7 @@ Ext.onReady ( function() {
   });
 
   var btnSelectAll = new Ext.Button ({
-    text: 'Check All',
+    text: TRANSLATIONS.LABEL_CHECK_ALL, // 'Check All',
 //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       grid.getSelectionModel().selectAll();
@@ -640,7 +640,7 @@ Ext.onReady ( function() {
   });
 
   var btnUnSelectAll = new Ext.Button ({
-    text: 'Un-Check All',
+    text: TRANSLATIONS.LABEL_UN_CHECK_ALL, // 'Un-Check All',
 //    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
       grid.getSelectionModel().clearSelections();
@@ -648,7 +648,7 @@ Ext.onReady ( function() {
   });
 
   var btnReassign = new Ext.Button ({
-    text: 'Reassign',
+    text: TRANSLATIONS.LABEL_REASSIGN, // 'Reassign', 
 //    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
         reassign();

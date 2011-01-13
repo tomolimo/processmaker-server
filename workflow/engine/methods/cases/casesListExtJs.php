@@ -114,8 +114,10 @@
   $TRANSLATIONS['LABEL_DISPLAY_EMPTY']         = G::LoadTranslation('ID_DISPLAY_EMPTY');
   $TRANSLATIONS['LABEL_OPEN_CASE']             = G::LoadTranslation('ID_OPEN_CASE');
   $TRANSLATIONS['LABEL_ACTIONS']             	 = G::LoadTranslation('ID_ACTIONS');
-		
- 
+  $TRANSLATIONS['LABEL_CHECK_ALL']           	 = G::LoadTranslation('ID_CHECK_ALL');
+  $TRANSLATIONS['LABEL_UN_CHECK_ALL']        	 = G::LoadTranslation('ID_UN_CHECK_ALL');
+  $TRANSLATIONS['LABEL_REASSIGN']        	     = G::LoadTranslation('ID_REASSIGN');
+  
   $TRANSLATIONS2 = G::getTranslations(Array(
     'ID_CASESLIST_APP_UID', 'ID_CONFIRM', 'ID_MSG_CONFIRM_DELETE_CASES', 'ID_DELETE', 'ID_REASSIGN', 
     'ID_VIEW', 'ID_UNPAUSE', 'ID_PROCESSING', 'ID_CONFIRM_UNPAUSE_CASE',
