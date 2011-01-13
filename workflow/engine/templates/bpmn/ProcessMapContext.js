@@ -1738,6 +1738,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
 
 ProcessMapContext.prototype.caseTrackerObjects= function()
   {
+    var ProcMapObj= new ProcessMapContext();
     var pro_uid = workflow.getUrlVars();
      //var taskId  = workflow.currentSelection.id;
 
@@ -1868,8 +1869,20 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       }
     });
 
+
+
+    var btnCondition = new Ext.Button({
+      id: 'btnCondition',
+      text: 'Assign Condition',
+      handler: function () {
+                ProcMapObj.ExtVariables();
+            }
+    
+
+    })
+
     var tb = new Ext.Toolbar({
-      items: [btnAdd, btnRemove]
+      items: [btnAdd, btnRemove,btnCondition]
     });
 
         // create the Data Store of objects that are already assigned
@@ -2145,7 +2158,16 @@ ProcessMapContext.prototype.ExtVariables = function()
                         //plugins: [editor],
                         //loadMask    : true,
                         loadingText : 'Loading...',
-                        border: false
+                        border: false,
+                         listeners: {
+                                 //rowdblclick: alert("ok"),
+                                 rowclick: function(){
+                                   var rowSelected = this.getSelectionModel().getSelected();
+                                   var rowLabel=rowSelected.data.label;
+                                   alert(rowLabel);
+                                   //Ext.getCmp('activator').setIcon();
+                                 }
+                              }
                 }]
                 }]
             }
@@ -2167,23 +2189,6 @@ ProcessMapContext.prototype.ExtVariables = function()
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: [varForm]
-
-    
-        
-        /*buttons: [{
-            text: 'Save',
-            handler: function(){
-                //var getstore = grid.getStore();
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskSteps(getData);
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.close();
-            }
-        }]*/
-    });
+  });
     window.show();
 }
