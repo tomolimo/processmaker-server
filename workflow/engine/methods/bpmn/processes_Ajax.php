@@ -57,6 +57,10 @@ if ( isset ($_REQUEST['action']) ) {
   	  $sOutput = $oProcessMap->saveTaskPosition($oData->uid, $oData->position->x, $oData->position->y);
           echo $sOutput;
   	break;
+      case 'saveGatewayPosition':
+  	  $sOutput = $oProcessMap->saveGatewayPosition($oData->uid, $oData->position->x, $oData->position->y);
+          echo $sOutput;
+  	break;
       case 'saveTaskCordinates':
   	  $sOutput = $oProcessMap->saveTaskCordinates($oData->uid, $oData->position->x, $oData->position->y);
           echo $sOutput;

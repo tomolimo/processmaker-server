@@ -206,6 +206,11 @@ if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection 
             currObj.workflow.saveShape(currObj);
             break;
         }
+        if(currObj.type.match(/Gateway/))
+        {
+            currObj.actiontype = 'saveGatewayPosition';
+            currObj.workflow.saveShape(currObj);
+        }
         workflow.setBoundary(currObj);
   }
 

@@ -1529,6 +1529,28 @@ class processMap {
   }
 
   /*
+   * Save the gateways positions
+   * @param string $sGatewayUID
+   * @param integer $iX
+   * @param integer $iY
+   * @return integer
+   */
+
+  function saveGatewayPosition($sGatewayUID = '', $iX = 0, $iY = 0) {
+    try {
+      $oGateway = new Gateway ( );
+      $aFields = $oGateway->load($sGatewayUID);
+
+      $aFields ['GAT_UID'] = $sGatewayUID;
+      $aFields ['GAT_X']   = $iX;
+      $aFields ['GAT_Y']   = $iY;
+      return $oGateway->update($aFields);
+    } catch (Exception $oError) {
+      throw ($oError);
+    }
+  }
+
+  /*
    * Presents a small list of dynaforms of the process
    * @param string $sProcessUID
    * @return boolean

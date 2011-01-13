@@ -1586,6 +1586,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             var evn_type = oNewShape.type;
             urlparams = '?action='+actiontype+'&data={"evn_uid":"'+evn_uid +'","evn_type":"'+evn_type+'"}';
             break;
+        case 'saveGatewayPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
     }
     //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
 

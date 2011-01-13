@@ -3422,6 +3422,16 @@ class Xpdl extends processes
       $oRoute = new Route ( );
       $aRouteDetails = $oRoute->load($idRoute);
       $sGateUID      = $aRouteDetails['GAT_UID'];
+
+      //Get Gateway details from above GAT_UID
+      $oGateway = new Gateway ( );
+      if($sGateUID != '')
+      {
+          $aGatewayDetails = $oGateway->load($sGateUID);
+          $gatPosX         = $aGatewayDetails['GAT_X'];
+          $gatPosY         = $aGatewayDetails['GAT_Y'];
+      }
+
       //if route is of SEQUENTIAL type,assign route id to GAT_UID
       if($sGateUID == '')
           $sGateUID = $idRoute;
@@ -3444,8 +3454,8 @@ class Xpdl extends processes
               $routeParallel = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayParallel';
-              $arrayGateways[$countG]['2']   = $positionX;
-              $arrayGateways[$countG]['3']   = $positionY; 
+              $arrayGateways[$countG]['2']   = $gatPosX;
+              $arrayGateways[$countG]['3']   = $gatPosY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $taskParallel;
@@ -3485,8 +3495,8 @@ class Xpdl extends processes
               $routeSecJoin = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayParallel';
-              $arrayGateways[$countG]['2']   = $positionX;
-              $arrayGateways[$countG]['3']   = $positionY; 
+              $arrayGateways[$countG]['2']   = $gatPosX;
+              $arrayGateways[$countG]['3']   = $gatPosY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $routeSecJoin;
@@ -3527,8 +3537,8 @@ class Xpdl extends processes
               if($nextTask != "-1"){
                 $arrayGateways[$countG]['0']   = $sGateUID;
                 $arrayGateways[$countG]['1']   = 'bpmnGatewayExclusiveData';
-                $arrayGateways[$countG]['2']   = $positionX;
-                $arrayGateways[$countG]['3']   = $positionY; 
+                $arrayGateways[$countG]['2']   = $gatPosX;
+                $arrayGateways[$countG]['3']   = $gatPosY;
                 $countG                        = $countG + 1;
                 $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
                 $arrayRoutes[$countRoutes]['1']= $taskEvaluate;
@@ -3574,8 +3584,8 @@ class Xpdl extends processes
               $routeParallelEv = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayInclusive';
-              $arrayGateways[$countG]['2']   = $positionX;
-              $arrayGateways[$countG]['3']   = $positionY; 
+              $arrayGateways[$countG]['2']   = $gatPosX;
+              $arrayGateways[$countG]['3']   = $gatPosY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $taskParallelEv;
@@ -3615,8 +3625,8 @@ class Xpdl extends processes
               $routeSelect = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayExclusiveData';
-              $arrayGateways[$countG]['2']   = $positionX;
-              $arrayGateways[$countG]['3']   = $positionY; 
+              $arrayGateways[$countG]['2']   = $gatPosX;
+              $arrayGateways[$countG]['3']   = $gatPosY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $taskSelect;
@@ -3662,8 +3672,8 @@ class Xpdl extends processes
               $routeDiscriminator = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayComplex';
-              $arrayGateways[$countG]['2']   = $positionX;
-              $arrayGateways[$countG]['3']   = $positionY; 
+              $arrayGateways[$countG]['2']   = $gatPosX;
+              $arrayGateways[$countG]['3']   = $gatPosY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $routeDiscriminator;
