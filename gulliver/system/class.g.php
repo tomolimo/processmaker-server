@@ -3030,6 +3030,45 @@ class G
     require_once "classes/model/$model.php";
     return new $model();
   }
+  
+  /**
+   * Recursive Is writeable function
+   * 
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * 
+   * @param $path path to scan recursively the write permission
+   * @param $pattern pattern to filter some especified files
+   * @return <boolean> if the $path, assuming that is a directory -> all files in it are writeables or not 
+   */
+  function is_rwritable($path, $pattern='*')
+  {
+    $files = G::rglob($pattern, 0, $path);
+    foreach ($files as $file) {
+      if( ! is_writable($file) )
+        return false;
+    }
+    return true;
+  }
+  
+  /**
+   * Recursive version of glob php standard function
+   * 
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * 
+   * @param $path path to scan recursively the write permission
+   * @param $flags to notive glob function
+   * @param $pattern pattern to filter some especified files
+   * @return <array> array containing the recursive glob results 
+   */
+  function rglob($pattern='*', $flags = 0, $path='')
+  {
+    $paths = glob($path.'*', GLOB_MARK|GLOB_ONLYDIR|GLOB_NOSORT);
+    $files = glob($path.$pattern, $flags);
+    foreach ($paths as $path) { 
+      $files = array_merge($files, G::rglob($pattern, $flags, $path)); 
+    }
+    return $files;
+  }
 };
 
 /**
