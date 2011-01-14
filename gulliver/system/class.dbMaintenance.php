@@ -27,8 +27,10 @@
  * 
  * Database Maintenance class
  * 
- * @author Erik A. Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
- * @date May 17th, 2010
+ * author Erik A. Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
+ * date May 17th, 2010
+ *
+ * @package gulliver.system
  */
 
 class DataBaseMaintenance 

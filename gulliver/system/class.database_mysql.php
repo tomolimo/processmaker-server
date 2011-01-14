@@ -23,6 +23,10 @@
  *
  */
 
+/**
+ * @package gulliver.system
+*/
+
 G::LoadSystem('database_base');
 
 class database extends database_base {
@@ -443,8 +447,8 @@ class database extends database_base {
    * concatString
    * Generates a string equivalent to the chosen database.
    *
-   * @author Hector Cortez <hector@gmail.com>
-   * @date 2010-08-04
+   * author Hector Cortez <hector@gmail.com>
+   * date 2010-08-04
    *
    * @return string $sConcat
    */ 
@@ -475,8 +479,8 @@ class database extends database_base {
    * concatString
    * Generates a string equivalent to the case when
    *
-   * @author Hector Cortez <hector@gmail.com>
-   * @date 2010-08-04
+   * author Hector Cortez <hector@gmail.com>
+   * date 2010-08-04
    *
    * @return string $sCompare 
    */ 
@@ -696,7 +700,7 @@ class database extends database_base {
 
   /**
    * It is part of class.pagedTable.php
-   *
+   * @package gulliver.system
    */
   function getLimitRenderTable($nCurrentPage, $nRowsPerPage)
   {

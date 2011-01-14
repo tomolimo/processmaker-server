@@ -34,9 +34,10 @@
 +-------------------------------------------------------------------------------------------------*/
 
 /**
-* @Author Erik Amaru Ortiz
-* @Date Aug 26th, 2009
-* @Description This class is a Dynaform handler for modify directly into file
+* Author Erik Amaru Ortiz
+* Date Aug 26th, 2009
+* Description This class is a Dynaform handler for modify directly into file
+* @package gulliver.system
 */
 
 class dynaFormHandler

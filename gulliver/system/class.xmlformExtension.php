@@ -22,6 +22,11 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
+
+ /**
+  * @package gulliver.system
+  */
+
 class XmlForm_Field_Label extends XmlForm_Field
 {
   var $withoutValue = true;
@@ -86,6 +91,7 @@ class XmlForm_Field_cellMark extends XmlForm_Field
  * XmlForm_Field_DVEditor
  *
  * extends XmlForm_Field
+ * @package gulliver.system
  *
  */
 class XmlForm_Field_DVEditor extends XmlForm_Field
@@ -136,7 +142,8 @@ class XmlForm_Field_DVEditor extends XmlForm_Field
  *   <PAGED_TABLE_ID type="private"/>
  *   <PAGED_TABLE_FAST_SEARCH type="text" colAlign="right"  colWidth="180" onkeypress="if (event.keyCode===13)@#PAGED_TABLE_ID.doFastSearch(this.value);if (event.keyCode===13)return false;">
  *     <en>Search</en>
- *   </PAGED_TABLE_FAST_SEARCH> 
+ *   </PAGED_TABLE_FAST_SEARCH>
+ * @package gulliver.system
  */
 class XmlForm_Field_FastSearch extends XmlForm_Field_Text
 {

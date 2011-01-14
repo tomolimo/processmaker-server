@@ -22,6 +22,10 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
+
+ /**
+ * @package gulliver.system
+ **/
 G::LoadSystem ( 'ymlDomain');
 G::LoadSystem ( 'ymlTestCases');
 G::LoadSystem ( 'unitTest');
@@ -167,9 +171,9 @@ class testTools
 /**
  * domain
  *
- * @param  string $location
- *
+ * @param  string $location *
  * @return object $result
+ * @package gulliver.system
  */   
 
 function domain($location)

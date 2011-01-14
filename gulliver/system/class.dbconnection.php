@@ -23,7 +23,7 @@
  * 
  */
 /**
- * @package home.gulliver.system2
+ * @package gulliver.system
 */
 /**
  * require dummy line
@@ -39,7 +39,7 @@ define ( 'DB_ERROR_SHOWALL_AND_CONTINUE', 4);
  /**
  * DBConnection class definition
  * It is useful to stablish a connection
- * @package home.gulliver.system2
+ * @package gulliver.system
  * @author Fernando Ontiveros Lira <fernando@colosa.com>
  * @copyright (C) 2002 by Colosa Development Team.
  */

@@ -24,7 +24,7 @@
  */
 
 /**
- * @package home.gulliver.system2
+ * @package gulliver.system
  */
 
 class G
@@ -1542,7 +1542,6 @@ class G
   /**
    * Function MySQLSintaxis
    * @access public
-   * @parameter
    * @return Boolean
    **/
   function MySQLSintaxis()

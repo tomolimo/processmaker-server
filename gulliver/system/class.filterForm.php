@@ -22,6 +22,11 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
+
+ /**
+ * @package gulliver.system
+ **/
+
 class filterForm extends form
 {
   var $cols       = 3;
@@ -36,7 +41,7 @@ class filterForm extends form
   * @param  string $template
   * @param  string $scriptContent
   * @return string
-  *
+  * @package gulliver.system
   */
   function render( $template, &$scriptContent )
   {

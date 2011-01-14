@@ -50,6 +50,10 @@ define('G_ERROR_USER_INACTIVE',           -116);
 define('G_ERROR_DUE_DATE',                -117);
 define('G_ERROR_ALREADY_ASSIGNED',        -118);
 
+/**
+ * @package gulliver.system
+*/
+
 class G_Error extends PEAR_Error
 {
   /**
@@ -72,7 +76,7 @@ class G_Error extends PEAR_Error
   /**
   * this function returns the kind of Error
   * @author
-  *
+  * @package gulliver.system
   * @access public
   * @param  string $code
   * @return string

@@ -23,13 +23,13 @@
  *
  */
 /**
- * @package home.gulliver.system2
+ * @package gulliver.system
 */
 /**
  *
  * Menu class definition
  * Render Menus
- * @package home.gulliver.system2
+ * @package gulliver.system
  * @author Fernando Ontiveros Lira <fernando@colosa.com>
  * @copyright (C) 2002 by Colosa Development Team.
  *

@@ -28,7 +28,11 @@
  * _Function = don't encode
  * JS_function = javascript function.
  * @example: h2b2x/territoriesAjax.php
- * @dependencies: grest.js
+ * @dependencies: grest.js * 
+ */
+
+ /**
+ * @package gulliver.system
  */
 class WebResource
 {
@@ -39,7 +43,7 @@ class WebResource
    *
    * @param  string $uri
    * @param  string $post
-   *
+   * 
    * @return none
    */     
   function WebResource($uri, $post)
@@ -67,7 +71,7 @@ class WebResource
   
   /**
    * _encode
-   *
+   * 
    * @return none
    */     
   function _encode()

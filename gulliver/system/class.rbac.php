@@ -27,7 +27,7 @@
  *
  * RBAC class definition
  *
- * @package gulliver
+ * @package gulliver.system
  * @copyright (C) 2002 by Colosa Development Team.
  * @link http://www.colosa.com
  *
@@ -39,7 +39,7 @@
 /**
  * Clase Wrapper
  *
- * @package rbac
+ * @package gulliver.system
  * @author Fernando Ontiveros
  */
 

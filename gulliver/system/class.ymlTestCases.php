@@ -39,6 +39,10 @@
  * TestCasesGroup2:
  *   ...
  */
+
+ /**
+ * @package gulliver.system
+ */
 class ymlTestCases
 {
   var $testCaseFile;

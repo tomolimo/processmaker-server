@@ -38,6 +38,11 @@ G::LoadThirdParty('phpmailer','class.phpmailer');
  * @author David Callizaya <davidsantos@colosa.com>
  */
 
+
+ /**
+ * @package gulliver.system
+ **/
+
 class mailer
 {
   
@@ -258,7 +263,7 @@ class mailer
    * html2text
    *
    * empty
-   *
+   * @package gulliver.system
    * @return none
    */   
   function html2text()

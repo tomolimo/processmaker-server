@@ -23,13 +23,13 @@
  *
  */
 /**
- * @package gulliver.system2
+ * @package gulliver
 */
 
  /**
  * Publisher class definition
  * It is to publish all content in a page
- * @package gulliver.system2
+ * @package gulliver.system
  * @author Fernando Ontiveros Lira <fernando@colosa.com>
  * @copyright (C) 2002 by Colosa Development Team.
  *

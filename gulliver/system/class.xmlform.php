@@ -25,7 +25,7 @@
 /**
  * Class XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies Services_JSON
  */
@@ -669,7 +669,7 @@ class XmlForm_Field {
 /**
  * Class XmlForm_Field_Title
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -698,7 +698,7 @@ class XmlForm_Field_Title extends XmlForm_Field
 /**
  * Class XmlForm_Field_Subtitle
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -728,7 +728,7 @@ class XmlForm_Field_Subtitle extends XmlForm_Field
 /**
  * Class XmlForm_Field_SimpleText
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -807,7 +807,7 @@ class XmlForm_Field_SimpleText extends XmlForm_Field
 /**
  * Class XmlForm_Field_Text
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field_SimpleText
  */
@@ -937,7 +937,7 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
 /**
  * Class XmlForm_Field_Suggest
  * @author Erik Amaru Ortiz <erik@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field_SimpleText
  */
@@ -1102,7 +1102,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
 /**
  * prepare the field for printing
- *
+ * @package gulliver.system
  */
 class XmlForm_Field_Print extends XmlForm_Field_SimpleText //by neyek
 {
@@ -1144,6 +1144,7 @@ class XmlForm_Field_Print extends XmlForm_Field_SimpleText //by neyek
 /*DEPRECATED*/
 /**
  * caption field for dynaforms
+ * @package gulliver.system
  */
 class XmlForm_Field_Caption extends XmlForm_Field {
 
@@ -1222,7 +1223,7 @@ class XmlForm_Field_Caption extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Password
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -1271,7 +1272,7 @@ class XmlForm_Field_Password extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Textarea
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -1374,7 +1375,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Currency
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field_SimpleText
  */
@@ -1398,6 +1399,7 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
    * @param <String> $value
    * @param <String> $owner
    * @return <String>
+   * @package gulliver.system
    */
   function render( $value = NULL, $owner = NULL) {
     $onkeypress = G::replaceDataField ( $this->onkeypress, $owner->values );
@@ -1442,7 +1444,7 @@ class XmlForm_Field_CaptionCurrency extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Percentage
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field_SimpleText
  */
@@ -1503,7 +1505,7 @@ class XmlForm_Field_CaptionPercentage extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Date
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field_SimpleText
  */
@@ -1647,6 +1649,7 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText {
    * @param  $owner
    * @param  $onlyValue
    * @return <String>
+   * @package gulliver.system
    */
   function renderGrid($values = NULL, $owner = NULL, $onlyValue = false) {
     $result = array ();
@@ -1736,7 +1739,7 @@ class XmlForm_Field_DateView extends XmlForm_Field
 /**
  * Class XmlForm_Field_YesNo
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -1799,7 +1802,7 @@ class XmlForm_Field_YesNo extends XmlForm_Field
 /**
  * Class XmlForm_Field_Link
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -1877,7 +1880,7 @@ class XmlForm_Field_Link extends XmlForm_Field {
 /**
  * Class XmlForm_Field_File
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -1891,6 +1894,7 @@ class XmlForm_Field_File extends XmlForm_Field {
    * @access public
    * @param string value
    * @return string
+   * @package gulliver.system
    */
   function render($value = NULL) {
     $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
@@ -1935,6 +1939,7 @@ class XmlForm_Field_Dropdownpt extends XmlForm_Field {
   }
 
   /* Used in Form::validatePost
+   * @package gulliver.system
    */
   function maskValue($value, &$owner) {
     return ($value === $this->value) ? $value : $this->falseValue;
@@ -1988,6 +1993,7 @@ class XmlForm_Field_Checkboxpt extends XmlForm_Field {
    * @param $value
    * @param &$owner
    * @return either the value or falseValue attributes
+   * @package gulliver.system
    */
   function maskValue($value, &$owner) {
     return ($value === $this->value) ? $value : $this->falseValue;
@@ -2084,6 +2090,7 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
    * @param  $value
    * @param  $owner
    * @return either the value or falseValue
+   * @package gulliver.system
    */
   function maskValue($value, &$owner)
   {
@@ -2108,7 +2115,7 @@ class XmlForm_Field_Checkbox2 extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Button
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2141,7 +2148,7 @@ class XmlForm_Field_Button extends XmlForm_Field
 /**
  * Class XmlForm_Field_Reset
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2165,7 +2172,7 @@ class XmlForm_Field_Reset extends XmlForm_Field
 /**
  * Class XmlForm_Field_Submit
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2194,7 +2201,7 @@ class XmlForm_Field_Submit extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Hidden
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2270,7 +2277,7 @@ class XmlForm_Field_Hidden extends XmlForm_Field
 /**
  * Class XmlForm_Field_Dropdown
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2387,7 +2394,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
 /**
  * Class XmlForm_Field_Listbox
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2469,7 +2476,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
 /**
  * Class XmlForm_Field_RadioGroup
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2502,6 +2509,7 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
    * @param string value
    * @param string owner
    * @return string
+   * @package gulliver.system
    */
   function render($value = NULL, $owner)
   {
@@ -2574,7 +2582,7 @@ class XmlForm_Field_RadioGroupView extends XmlForm_Field
 /**
  * Class XmlForm_Field_CheckGroup
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2598,6 +2606,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
    * @param string value
    * @param string owner
    * @return string
+   * @package gulliver.system
    */
   function render($value = NULL, $owner = NULL)
   {
@@ -2661,7 +2670,7 @@ class XmlForm_Field_CheckGroupView extends XmlForm_Field
 /**
  * Class XmlForm_Field_Grid
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field  XmlForm  xmlformTemplate
  */
@@ -2811,7 +2820,7 @@ class XmlForm_Field_Grid extends XmlForm_Field
 /**
  * Class XmlForm_Field_JavaScript
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xmlform
+ * @package gulliver.system
  * @access public
  * @dependencies XmlForm_Field
  */
@@ -2868,6 +2877,7 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
    * @param string value
    * @param string owner
    * @return string
+   * @package gulliver.system
    */
   function renderGrid($value, $owner)
   {
@@ -2878,6 +2888,7 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
    * A javascript node has no value
    * @param $value
    * @return false
+   * @package gulliver.system
    */
   function validateValue($value)
   {
@@ -3080,6 +3091,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
      * - init - Backward compatibility
      *
      * By Erik A. O. <erik@colosa.com>
+     * @package gulliver.system
      */
     if($mask == 'yyyy-mm-dd')
       $mask = '%Y-%m-%d';
@@ -3506,6 +3518,7 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
    * @param <Date> $date
    * @param  $mask
    * @return <type>
+   * @package gulliver.system
    */
   function getSplitDate($date, $mask){
   $sw1 = false;
@@ -4158,6 +4171,7 @@ class xmlformTemplate extends Smarty
    * @param string tpl_name
    * @param string smarty_obj
    * @return string
+   * @package gulliver.system
    */
   function _get_trusted($tpl_name, &$smarty_obj)
   {

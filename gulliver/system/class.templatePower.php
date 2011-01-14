@@ -60,7 +60,8 @@ define("TP_ROOTBLOCK",    '_ROOT');
 
    /**
     * class TemplatePowerParser
-    *
+    * @package gulliver.system
+    * 
     */
 class TemplatePowerParser
 {
@@ -79,7 +80,6 @@ class TemplatePowerParser
     *
     * @param string $tpl_file
     * @param string $type
-    * @return
     * @access private
     */
   function TemplatePowerParser( $tpl_file, $type )
@@ -94,7 +94,6 @@ class TemplatePowerParser
     * TemplatePowerParser::__errorAlert()
     *
     * @param string $message
-    * @return
     *
     * @access private
     */
@@ -140,7 +139,6 @@ class TemplatePowerParser
      *
      * @param string $tpl_file
      * @param string $type
-     * @return
      * @access private
      */
   function __prepareTemplate( $tpl_file, $type )
@@ -166,8 +164,7 @@ class TemplatePowerParser
      * @param string $tplvar
      * @param string $blockname
      * @param string $initdev
-     * @return 
-     * @access private
+      * @access private
      */
   function __parseTemplate( $tplvar, $blockname, $initdev )
   {
@@ -386,7 +383,7 @@ class TemplatePowerParser
 
    /**
     * class TemplatePower
-    *
+    * @package gulliver.system
     */
 class TemplatePower extends TemplatePowerParser
 {
@@ -700,7 +697,6 @@ class TemplatePower extends TemplatePowerParser
      * TemplatePower::getVarValue()
      *
      * @param $varname
-     * @return
      * @param string $varname
      * @access public
      */
@@ -740,6 +736,7 @@ class TemplatePower extends TemplatePowerParser
      *
      * @return void
      * @access public
+     * @package gulliver.system
      */
   function getOutputContent()
   {

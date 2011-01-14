@@ -29,7 +29,7 @@
  * 
  * @package gulliver.system
  * @author Erik Amaru Ortiz <erik@colosa.com>
- * @date Aug 31th, 2010
+ * date Aug 31th, 2010
  * @copyright (C) 2002 by Colosa Development Team.
  */
  

@@ -23,12 +23,13 @@
  * 
  */
 /**
- * @package home.gulliver.system2
+ * @package gulliver.system
 */
  /**
  * DBRecordset class definition
  * Provides access to a generalized table it assumes that the dbconnection object is already initialized for the table should be also provided in order to provide
- * @package home.gulliver.system2
+ * @package gulliver.system
+ *
  * @author Fernando Ontiveros Lira <fernando@colosa.com>
  * @copyright (C) 2002 by Colosa Development Team.
  */

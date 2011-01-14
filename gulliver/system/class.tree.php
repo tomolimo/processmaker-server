@@ -22,6 +22,10 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
+
+ /**
+ * @package gulliver.system
+ */
   G::LoadSystem('objectTemplate');
   class Tree extends Xml_Node {
     var $template     = 'tree.html';
@@ -137,7 +141,7 @@
     
     /**
      * render
-     *
+     * @package gulliver.system
      * @return $obj->printObject( array( 'node' => &$this ) )
      */   
     function render() {

@@ -25,7 +25,7 @@
 /**
  * Class Xml_Node
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xml
+ * @package gulliver.system
  * @access public
  * @dependencies Xml_Node
  */
@@ -230,7 +230,7 @@ class Xml_Node
 /**
  * Class Xml_document
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system.xml
+ * @package gulliver.system
  * @access public
  * @dependencies Xml_Node
  */

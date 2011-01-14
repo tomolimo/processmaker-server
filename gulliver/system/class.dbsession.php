@@ -23,13 +23,13 @@
  * 
  */
 /**
- * @package home.gulliver.system2
+ * @package gulliver.system
 */
 
  /**
  * DBSession class definition
  * It is useful to stablish a database connection using an specific database
- * @package home.gulliver.system2
+ * @package gulliver.system
  * @author Fernando Ontiveros Lira <fernando@colosa.com>
  * @copyright (C) 2002 by Colosa Development Team.
  *

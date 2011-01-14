@@ -22,6 +22,11 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
+
+ /**
+ * @package gulliver.system
+ **/
+
 class XmlForm_Field_HTML extends XmlForm_Field_Textarea
 {
  /* //'default','office2003','silver'
@@ -52,6 +57,7 @@ class XmlForm_Field_HTML extends XmlForm_Field_Textarea
   * @access public
   * @param  string $element
   * @return string
+  * @package gulliver.system
   *
   */
   function attachEvents($element) {

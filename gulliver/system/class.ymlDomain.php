@@ -26,6 +26,7 @@ require_once( PATH_THIRDPARTY.'lime/yaml.class.php');
 /**
  * ymlDomain class 
  * @copyright (C) 2002 by Colosa Development Team.
+ * @package gulliver.system
  */
 
 class ymlDomain

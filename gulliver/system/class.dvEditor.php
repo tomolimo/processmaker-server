@@ -26,7 +26,7 @@
  /**
  * XmlForm_Field_HTML class definition
  * It is useful to see dynaforms how are built
- * @package home.gulliver.system2
+ * @package gulliver.system
  * @author 
  * @copyright (C) 2002 by Colosa Development Team.
  *

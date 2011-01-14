@@ -23,7 +23,7 @@
  *
  */
 /**
- * @package home.gulliver.system2
+ * @package gulliver.system
 */
 
 /**
@@ -31,7 +31,7 @@
  * This class provides acces to a generalized table
  * it assumes that the dbconnection object is already initialized, the table name, as well as the primary keys
  * for the table should be also provided in order to provide the class a way to generate an UPDATE query properly.
- * @package home.gulliver.system2
+ * @package gulliver.system
  * @author Fernando Ontiveros Lira <fernando@colosa.com>
  * @copyright (C) 2002 by Colosa Development Team.
  *
