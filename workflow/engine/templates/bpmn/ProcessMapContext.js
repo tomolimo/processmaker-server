@@ -1874,8 +1874,11 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
     var btnCondition = new Ext.Button({
       id: 'btnCondition',
       text: 'Assign Condition',
-      handler: function () {
+      handler: function (s) {
+                var rowSelected = Objectsgrid.getSelectionModel().getSelections();
+                workflow.gridRowSelected = rowSelected;
                 ProcMapObj.ExtVariables();
+                //console.log(rowData);
             }
     
 
@@ -2135,7 +2138,19 @@ ProcessMapContext.prototype.ExtVariables = function()
                         //plugins: [editor],
                         //loadMask    : true,
                         loadingText : 'Loading...',
-                        border: false
+                        border: false,
+                        listeners: {
+                                 //rowdblclick: alert("ok"),
+                                 rowdblclick: function(){
+                                   var objectGridRow = workflow.gridRowSelected;
+                                   var rowSelected = this.getSelectionModel().getSelected();
+                                   var rowLabel    = rowSelected.data.label;
+                                   objectGridRow[0].set("CTO_CONDITION",rowLabel);
+                                   window.hide();
+                                   //return rowSelected;
+                                   //Ext.getCmp('activator').setIcon();
+                                 }
+                              }
                 }]
                 },{
                 title:'Process',
@@ -2163,8 +2178,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                  //rowdblclick: alert("ok"),
                                  rowclick: function(){
                                    var rowSelected = this.getSelectionModel().getSelected();
-                                   var rowLabel=rowSelected.data.label;
-                                   alert(rowLabel);
+                                   var rowLabel    = rowSelected.data.label;
+                                   return rowSelected;
+                                   window.hide();
                                    //Ext.getCmp('activator').setIcon();
                                  }
                               }
