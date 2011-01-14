@@ -38,8 +38,13 @@ if( $access != 1 ) {
 $result = new stdClass();
 
 try {
-  if(!is_writable(PATH_XMLFORM))
+  //if the xmlform path is writeable
+  if( ! is_writable(PATH_XMLFORM) )
     throw new Exception(G::LoadTranslation('IMPORT_LANGUAGE_ERR_NO_WRITABLE'));
+    
+  //if all xml files within the xmlform directory are writeable
+  if( ! G::is_rwritable(PATH_XMLFORM) )
+    throw new Exception(G::LoadTranslation('IMPORT_LANGUAGE_ERR_NO_WRITABLE2'));
   
   $sMaxExecutionTime = ini_get('max_execution_time');
   ini_set('max_execution_time', '0');
