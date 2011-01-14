@@ -1807,7 +1807,8 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
          var e = new ObjectFields({
            OBJECT_TITLE :'',
            OBJECT_TYPE  :'',
-           OBJECT_UID   : ''
+           OBJECT_UID   : '',
+           CTO_CONDITION: ''
       });
 
          if(availableStore.data.items.length == 0)
@@ -1876,7 +1877,12 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       text: 'Assign Condition',
       handler: function (s) {
                 var rowSelected = Objectsgrid.getSelectionModel().getSelections();
-                workflow.gridRowSelected = rowSelected;
+                if(rowSelected == '')
+                    workflow.gridObjectRowSelected = rowSelected.store.items[0];
+                else
+                    workflow.gridObjectRowSelected = rowSelected;
+                //var rowSelected = Objectsgrid;
+                //workflow.gridObject = Objectsgrid;
                 ProcMapObj.ExtVariables();
                 //console.log(rowData);
             }
@@ -2142,10 +2148,11 @@ ProcessMapContext.prototype.ExtVariables = function()
                         listeners: {
                                  //rowdblclick: alert("ok"),
                                  rowdblclick: function(){
-                                   var objectGridRow = workflow.gridRowSelected;
+                                   var getObjectGridRow = workflow.gridObjectRowSelected;
+                                  
                                    var rowSelected = this.getSelectionModel().getSelected();
                                    var rowLabel    = rowSelected.data.label;
-                                   objectGridRow[0].set("CTO_CONDITION",rowLabel);
+                                   getObjectGridRow[0].set("CTO_CONDITION",rowLabel);
                                    window.hide();
                                    //return rowSelected;
                                    //Ext.getCmp('activator').setIcon();
