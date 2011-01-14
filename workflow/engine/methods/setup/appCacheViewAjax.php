@@ -192,12 +192,15 @@
       $filename = PATH_HOME.'engine'.PATH_SEP.'config'.PATH_SEP.'paths_installed.php';
       $lines = file($filename);
 
+      $count = 1;
       foreach ($lines as $line_num => $line) {
-        if ($line_num<5){
-          $content = $content. $line;
-        }
+        $pos = strpos($line, "define");
+          if ($pos!==false&&$count<3) {
+            $content = $content. $line;
+            $count++;
+          }
       }
-      $content = $content.$insertStatements."\n";
+      $content = "<?php \n".$content."\n".$insertStatements."\n";
       if (file_put_contents($filename, $content)!=false){
         echo G::loadTranslation('ID_MESSAGE_ROOT_CHANGE_SUCESS');
       } else {
