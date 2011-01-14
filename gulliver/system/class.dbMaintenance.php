@@ -114,7 +114,8 @@ class DataBaseMaintenance
   public function setTempDir($tmpDir) 
   {
     $this->tmpDir = $tmpDir;
-    mkdir($this->tmpDir);
+    if (!file_exists($tmpDir))
+      mkdir($this->tmpDir);
   }
   
 /**
@@ -313,11 +314,6 @@ class DataBaseMaintenance
       
     }
     
-    printf("%-70s", "UNLOCK TABLES");
-    if( @mysql_query("UNLOCK TABLES;") )
-      echo "    [OK]\n";
-    else
-      echo "[FAILED]\n";
     return true;
   }
   
@@ -414,6 +410,28 @@ class DataBaseMaintenance
     $mysqli->close();
   }
   
+  function lockTables() {
+    $aTables = $this->getTablesList();
+    if (empty($aTables))
+      return false;
+    printf("%-70s", "LOCK TABLES");
+    if( @mysql_query("LOCK TABLES ".implode(" READ, ", $aTables)." READ; ") ) {
+      echo "    [OK]\n";
+      return true;
+    } else {
+      echo "[FAILED]\n".mysql_error()."\n";
+      return false;
+    }
+  }
+
+  function unlockTables() {
+    printf("%-70s", "UNLOCK TABLES");
+    if( @mysql_query("UNLOCK TABLES;") )
+      echo "    [OK]\n";
+    else
+      echo "[FAILED]\n".mysql_error()."\n";
+  }
+
 /**
  * dumpSqlInserts
  *
@@ -421,51 +439,21 @@ class DataBaseMaintenance
  *
  * @return integer $bytesSaved;
  */   
-  function dumpSqlInserts($table) 
+  function dumpSqlInserts($table)
   {
     
     $bytesSaved    = 0;
-    $this->outfile = $this->tmpDir . $table . '.sql';
-    $metadatafile  = $this->tmpDir . $table . '.meta';
-    
-    //if the file exists delete it
-    if( is_file($this->outfile) ) {
-      @unlink($this->outfile);
-    }
-    $fp = fopen($this->outfile, "wb");
-    $fpmd = fopen($metadatafile, "wb");
-    printf("%-70s", "LOCK TABLES $table READ");
-    if( @mysql_query("LOCK TABLES $table READ; ") )
-      echo "    [OK]\n";
-    else
-      echo "[FAILED]\n".mysql_error()."\n";
     $result = @mysql_query("SELECT * FROM `$table`");
-    
-    //echo "FLUSH TABLES WITH READ LOCK ................";
-    /*if( @mysql_query("FLUSH TABLES WITH READ LOCK;") )
-      echo "[OK]\n";
-    else
-      echo "[FAILED] - ".mysql_error()."\n";
-      */
       
     $num_rows   = mysql_num_rows($result);
     $num_fields = mysql_num_fields($result);
-    
+
+    $data = "";
     for( $i = 0; $i < $num_rows; $i ++ ) {
       
       $row  = mysql_fetch_object($result);
-      $data = "INSERT INTO `$table` (";
-      
-      // Field names
-      for( $x = 0; $x < $num_fields; $x ++ ) {
-        $field_name = mysql_field_name($result, $x);
-        $data .= "`{$field_name}`";
-        $data .= ($x < ($num_fields - 1)) ? ", " : false;
-      }
-      
-      $data .= ") VALUES (";
-      
-      // Values
+      $data .= "INSERT INTO `$table` VALUES (";
+
       for( $x = 0; $x < $num_fields; $x ++ ) {
         $field_name = mysql_field_name($result, $x);
         
@@ -474,22 +462,10 @@ class DataBaseMaintenance
       }
       
       $data .= ");\n";
-      $fsData = sprintf("%09d", strlen($data));
-      fwrite($fpmd, "$fsData\n");
-      $bytesSaved += fwrite($fp, $data);
     }
-
-    printf("%-59s%20s", "Dump of table $table", "$bytesSaved Bytes Saved\n");
     
-    printf("%-70s", "UNLOCK TABLES");
-    if( @mysql_query("UNLOCK TABLES;") )
-      echo "    [OK]\n";
-    else
-      echo "[FAILED]\n".mysql_error()."\n";
-
-    fclose($fp);
-    fclose($fpmd);
-    return $bytesSaved;
+    printf("%-59s%20s", "Dump of table $table", strlen($data) . " Bytes Saved\n");
+    return $data;
   }
 
 /**
@@ -499,7 +475,7 @@ class DataBaseMaintenance
  *
  * @return none
  */   
-  function backupDataBaseSchema($outfile) 
+  function backupDataBase($outfile) 
   {
     $aTables = $this->getTablesList();
     $ws      = explode('_', $this->dbName);
@@ -509,24 +485,23 @@ class DataBaseMaintenance
     $schema .= " --\n";
     $schema .= " -- Workspace: " . $ws . "\n";
     $schema .= " -- Data Base: " . $this->dbName . "\n";
-    $schema .= " -- Tables:\t  " . (count($aTables)) . "\n";
-    $schema .= " -- Date:\t\t  " . (date('l jS \of F Y h:i:s A')) . "\n";
+    $schema .= " -- Tables:    " . (count($aTables)) . "\n";
+    $schema .= " -- Date:      " . (date('l jS \of F Y h:i:s A')) . "\n";
     $schema .= " --\n\n";
     
-    $metafile = str_replace('.sql', '.meta', $outfile);
-    $fpmd     = fopen($metafile, "wb");
-    
-    $sx = strlen($schema);
+    $file = fopen($outfile, "w+");
+
+    fwrite($file, $schema);
+
     foreach( $aTables as $table ) {
-      $tableSchema = $this->getSchemaFromTable($table);
-      $schema .= $tableSchema;
-      $fsData = sprintf("%09d", (strlen($tableSchema) + $sx));
-      fwrite($fpmd, "$fsData\n");
-      $sx = 0;
+      $tableSchema = "\nDROP TABLE IF EXISTS `$table`;\n\n";
+      $tableSchema .= $this->getSchemaFromTable($table);
+      $data = $this->dumpSqlInserts($table);
+      fwrite($file, $tableSchema);
+      fwrite($file, $data);
     }
-    
-    fclose($fpmd);
-    file_put_contents($outfile, $schema);
+
+    fclose($file);
   }
 
 /**

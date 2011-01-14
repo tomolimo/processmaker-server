@@ -26,7 +26,6 @@ class workspaceTools {
    * @author Alexandre Rosenfeld <alexandre@colosa.com>
    * @access public
    * @param  string $workspaceName name of the workspace
-   * @return void
    */
   function  __construct($workspaceName)  {
     $this->name = $workspaceName;
@@ -36,10 +35,20 @@ class workspaceTools {
       $this->getDBInfo ();
   }
 
+  /**
+   * Returns true if the workspace already exists
+   *
+   * @return  bool
+   */
   public function workspaceExists() {
     return (file_exists($this->path) && file_exists($this->dbPath));
   }
 
+  /**
+   * Upgrade this workspace to the latest system version
+   *
+   * @param   bool $first true if this is the first workspace to be upgrade
+   */
   public function upgrade($first = false) {
     logging("> Updating database...\n");
     $this->upgradeDatabase();
@@ -49,6 +58,11 @@ class workspaceTools {
     $this->upgradeCacheView();
   }
 
+  /**
+   * Scan the db.php file for database information and return it as an array
+   *
+   * @return  array with database information
+   */
   public function getDBInfo() {
     if (!$this->workspaceExists())
       throw new Exception("Could not get db.php in workspace " . $this->name);
@@ -73,6 +87,75 @@ class workspaceTools {
     return $this->dbInfo = $values;
   }
 
+  private function resetDBInfoCallback($matches) {
+    /* This function changes the values of defines while keeping their formatting
+     * intact.
+     * $matches will contain several groups:
+     * ((define('(<key>)2', ')1 (<value>)3 (');)4 )0
+     */
+    $dbPrefix = array(
+        'DB_NAME' => 'wf_',
+        'DB_USER' => 'wf_',
+        'DB_RBAC_NAME' => 'rb_',
+        'DB_RBAC_USER' => 'rb_',
+        'DB_REPORT_NAME' => 'rp_',
+        'DB_REPORT_USER' => 'rp_');
+    $key = $matches['key'];
+    $value = $matches['value'];
+    if (array_search($key, array('DB_HOST', 'DB_RBAC_HOST', 'DB_REPORT_HOST')) !== false) {
+      /* Change the database hostname for these keys */
+      $value = $this->newHost;
+    } else if (array_key_exists($key, $dbPrefix)) {
+      if ($this->resetDBNames) {
+        /* Change the database name to the new workspace, following the standard
+         * of prefix (either wf_, rp_, rb_) and the workspace name.
+         */
+        $this->resetDBDiff[$value] = $dbPrefix[$key] . $this->name;
+        $value = $dbPrefix[$key] . $this->name;
+      }
+    }
+    return $matches[1].$value.$matches[4];
+  }
+
+  /**
+   * Reset the database information to that of a newly created workspace.
+   *
+   * This assumes this workspace already has a db.php file, which will be changed
+   * to contain the new information
+   *
+   * @param   string $newHost the new hostname for the database
+   * @param   bool $resetDBNames if true, also reset all database names
+   * @return  bool true on success
+   */
+  public function resetDBInfo($newHost, $resetDBNames = true) {
+    if (count(explode(":", $newHost)) < 2)
+      $newHost .= ':3306';
+    $this->newHost = $newHost;
+    $this->resetDBNames = $resetDBNames;
+    $this->resetDBDiff = array();
+
+    logging("Resetting db info\n");
+    if (!$this->workspaceExists())
+      throw new Exception("Could not find db.php in the restore");
+    $sDbFile = file_get_contents($this->dbPath);
+    /* Match all defines in the config file. Check updateDBCallback to know what
+     * keys are changed and what groups are matched.
+     * This regular expression will match any "define ('<key>', '<value>');"
+     * with any combination of whitespace between words.
+     */
+    $sNewDbFile = preg_replace_callback("/( *define *\( *'(?P<key>.*?)' *, *\n* *')(?P<value>.*?)(' *\) *;.*)/",
+      array(&$this, 'resetDBInfoCallback'),
+      $sDbFile);
+    file_put_contents($this->dbPath, $sNewDbFile);
+    return $this->resetDBDiff;
+  }
+
+  /**
+   * Get DB information for this workspace, such as hostname, username and password.
+   *
+   * @param   string $dbName a db name, such as wf, rp and rb
+   * @return  array with all the database information.
+   */
   public function getDBCredentials($dbName) {
     $prefixes = array(
         "wf" => "",
@@ -93,6 +176,12 @@ class workspaceTools {
     );
   }
 
+  /**
+   * Initialize a Propel connection to the database
+   *
+   * @param   bool $root wheter to also initialize a root connection
+   * @return  the Propel connection
+   */
   private function initPropel($root = false) {
     if (($this->initPropel && !$root) || ($this->initPropelRoot && $root))
       return;
@@ -148,12 +237,20 @@ class workspaceTools {
     Propel::initConfiguration($config);
   }
 
+  /**
+   * Close the propel connection from initPropel
+   */
   private function closePropel() {
     Propel::close();
     $this->initPropel = false;
     $this->initPropelRoot = false;
   }
 
+  /**
+   * Upgrade this workspace translations from all avaliable languages.
+   *
+   * @param   bool $updateXml if true, update the xmlforms
+   */
   public function upgradeTranslation($updateXml = true) {
     $this->initPropel(true);
     G::LoadClass('languages');
@@ -165,6 +262,11 @@ class workspaceTools {
     }
   }
 
+  /**
+   * Get a connection to this workspace wf database
+   *
+   * @return  database connection
+   */
   private function getDatabase() {
     if (isset($this->db) && $this->db->isConnected())
       return $this->db;
@@ -178,6 +280,9 @@ class workspaceTools {
     return $this->db;
   }
 
+  /**
+   * Close any database opened with getDatabase
+   */
   private function closeDatabase() {
     if (!isset($this->db))
       return;
@@ -185,11 +290,19 @@ class workspaceTools {
     $this->db = NULL;
   }
 
+  /**
+   * Close all currently opened databases
+   */
   public function close() {
     $this->closePropel();
     $this->closeDatabase();
   }
 
+  /**
+   * Get the current workspace database schema
+   *
+   * @return  array with the database schema
+   */
   public function getSchema() {
     $oDataBase = $this->getDatabase();
 
@@ -240,6 +353,14 @@ class workspaceTools {
     return $aOldSchema;
   }
 
+  /**
+   * Upgrade the AppCacheView table to the latest system version.
+   *
+   * This recreates the table and populates with data.
+   *
+   * @param   bool $checkOnly only check if the upgrade is needed if true
+   * @param  string $lang not currently used
+   */
   public function upgradeCacheView($checkOnly = false, $lang = "en") {
     $this->initPropel(true);
 
@@ -303,6 +424,9 @@ class workspaceTools {
     // end of reset 
   }
 
+  /**
+   * Upgrade this workspace database to the latest plugins schema
+   */
   public function upgradePluginsDatabase() {
     foreach (System::getPlugins() as $pluginName) {
       $pluginSchema = System::getPluginSchema($pluginName);
@@ -313,11 +437,26 @@ class workspaceTools {
     }
   }
 
+  /**
+   * Upgrade this workspace database to the latest system schema
+   *
+   * @param   bool $checkOnly only check if the upgrade is needed if true
+   * @return  array|bool see upgradeSchema for more information
+   */
   public function upgradeDatabase($checkOnly = false) {
     $systemSchema = System::getSystemSchema();
     return $this->upgradeSchema($systemSchema);
   }
 
+
+  /**
+   * Upgrade this workspace database from a schema
+   *
+   * @param   array $schema the schema information, such as returned from getSystemSchema
+   * @param   bool  $checkOnly only check if the upgrade is needed if true
+   * @return  array|bool returns the changes if checkOnly is true, else return
+   *                     true on success
+   */
   public function upgradeSchema($schema, $checkOnly = false) {
     $dbInfo = $this->getDBInfo();
 
@@ -391,6 +530,12 @@ class workspaceTools {
     return true;
   }
 
+  /**
+   * Get metadata from this workspace
+   *
+   * @param   string $path the directory where to create the sql files
+   * @return  array information about this workspace
+   */
   public function getMetadata() {
     $Fields = array_merge(System::getSysInfo(), $this->getDBInfo());
     $Fields['WORKSPACE_NAME'] = $this->name;
@@ -434,8 +579,6 @@ class workspaceTools {
 
  /** 
   * Print the system information gathered from getSysInfo
-  *
-  * @return
   */ 
   public static function printSysInfo() {
     $fields = System::getSysInfo();
@@ -461,6 +604,11 @@ class workspaceTools {
     }
   }
 
+  /**
+   * Print workspace information
+   *
+   * @param   bool $printSysInfo include sys info as well or not
+   */
   public function printMetadata($printSysInfo = true) {
     $fields = $this->getMetadata();
 
@@ -488,58 +636,257 @@ class workspaceTools {
     }
   }
 
+  /**
+   * exports this workspace database to the specified path
+   *
+   * This function is used mainly for backup purposes.
+   *
+   * @param   string $path the directory where to create the sql files
+   */
   public function exportDatabase($path) {
     $dbInfo = $this->getDBInfo();
     $databases = array("wf", "rp", "rb");
+    $dbNames = array();
     foreach ($databases as $db) {
       $dbInfo = $this->getDBCredentials($db);
       $oDbMaintainer = new DataBaseMaintenance($dbInfo["host"], $dbInfo["user"],
         $dbInfo["pass"]);
+      logging("Saving database {$dbInfo["name"]}\n");
       $oDbMaintainer->connect($dbInfo["name"]);
-      $oDbMaintainer->setTempDir($path . "/" . $dbInfo["name"] . "/");
-      $oDbMaintainer->backupDataBaseSchema($oDbMaintainer->getTempDir() . $dbInfo["name"] . ".sql");
-      $oDbMaintainer->backupSqlData();
+      $oDbMaintainer->lockTables();
+      $oDbMaintainer->setTempDir($path . "/");
+      $oDbMaintainer->backupDataBase($oDbMaintainer->getTempDir() . $dbInfo["name"] . ".sql");
+      $oDbMaintainer->unlockTables();
+      $dbNames[] = $dbInfo;
     }
+    return $dbNames;
   }
 
-  public function addToBackup($backup, $filename, $root) {
+  /**
+   * adds files to the backup archive
+   */
+  private function addToBackup($backup, $filename, $pathRoot, $archiveRoot = "") {
     if (is_file($filename)) {
-      $backup->addModify($filename, "", $root);
+      $backup->addModify($filename, $archiveRoot, $pathRoot);
     } else {
       foreach (glob($filename . "/*") as $item) {
-        $this->addToBackup($backup, $item, $root);
+        $this->addToBackup($backup, $item, $pathRoot, $archiveRoot);
       }
     }
   }
 
+  /**
+   * Creates a backup archive, which can be used instead of a filename to backup
+   *
+   * @param   string $filename the backup filename
+   * @param   bool   $compress wheter to compress or not
+   */
   static public function createBackup($filename, $compress = true) {
     G::LoadThirdParty('pear/Archive', 'Tar');
+    if (file_exists($filename))
+      unlink ($filename);
     $backup = new Archive_Tar($filename);
     return $backup;
   }
 
+  /**
+   * create a backup of this workspace
+   *
+   * Exports the database and copies the files to an archive specified, so this
+   * workspace can later be restored.
+   *
+   * @param   string|archive $filename archive filename to use as backup or
+   *                         archive object create from createBackup
+   * @param   bool $compress specifies wheter the backup is compressed or not
+   */
   public function backup($filename, $compress = true) {
+    /* $filename can be a string, in which case it's used as the filename of
+     * the backup, or it can be a previously created tar, which allows for
+     * multiple workspaces in one backup.
+     */
     if (is_string($filename))
       $backup = $this->createBackup($filename);
     else
       $backup = $filename;
     //Get a temporary directory for database backup
     $tempDirectory = tempnam(__FILE__, '');
-    if (file_exists($tempDirectory)) {
+    //tempnam gives us a file, so remove it and create a directory instead.
+    if (file_exists($tempDirectory))
       unlink($tempDirectory);
-    }
     mkdir($tempDirectory);
-    //$this->exportDatabase($tempDirectory);
-    //print_r(info("Database: $tempDirectory\n"));
+    $metadata = $this->getMetadata();
+    logging("Backing up database...\n");
+    $metadata["databases"] = $this->exportDatabase($tempDirectory);
+    $metadata["directories"] = array("{$this->name}.files");
+    $metadata["version"] = 1;
     $metaFilename = "$tempDirectory/{$this->name}.meta";
+    /* Write metadata to file, but make it prettier before. The metadata is just
+     * a JSON codified array.
+     */
     file_put_contents($metaFilename,
       str_replace(array(",", "{", "}"), array(",\n  ", "{\n  ", "\n}\n"),
-                  G::json_encode($this->getMetadata())));
+                  G::json_encode($metadata)));
+    logging("Copying database to backup...\n");
     $this->addToBackup($backup, $tempDirectory, $tempDirectory);
-    $this->addToBackup($backup, $this->path, $this->path);
-    //print_r(file_get_contents($metaFilename));
-    //print_r(G::json_decode(file_get_contents($metaFilename)));
-    //$this->addToBackup($backup, $filename, $root);
+    logging("Copying files to backup...\n");
+    
+    $this->addToBackup($backup, $this->path, $this->path, "{$this->name}.files");
+    //Remove leftovers.
+    G::rm_dir($tempDirectory);
+
+    $this->printMetadata();
+  }
+
+  //TODO: Move to class.dbMaintenance.php
+  /**
+   * create a user in the database
+   *
+   * Create a user specified by the parameters and grant all priviledges for
+   * the database specified, when the user connects from the hostname.
+   * This function only supports MySQL.
+   *
+   * @param   string $username username
+   * @param   string $password password
+   * @param   string $hostname the hostname the user will be connecting from
+   * @param   string $database the database to grant permissions
+   */
+  private function createDBUser($username, $password, $hostname, $database) {
+    mysql_select_db("mysql");
+    $hostname = array_shift(explode(":", $hostname));
+    $sqlstmt = "SELECT * FROM user WHERE user = '$username' AND host = '$hostname'";
+    $result = mysql_query($sqlstmt);
+    if ($result === false)
+      throw new Exception("Unable to retrieve users: " . mysql_error ());
+    $users = mysql_num_rows($result);
+    if ($users != 0) {
+      $result = mysql_query("DROP USER '$username'@'$hostname'");
+      if ($result === false)
+        throw new Exception("Unable to drop user: " . mysql_error ());
+    }
+    logging("Creating user $username for $hostname\n");
+    $result = mysql_query("CREATE USER '$username'@'$hostname' IDENTIFIED BY '$password'");
+    if ($result === false)
+      throw new Exception("Unable to create user: " . mysql_error ());
+    $result = mysql_query("GRANT ALL ON $database.* TO '$username'@'$hostname'");
+    if ($result === false)
+      throw new Exception("Unable to grant priviledges: " . mysql_error ());
+  }
+
+  //TODO: Move to class.dbMaintenance.php
+  /**
+   * executes a mysql script
+   * 
+   * This function supports scripts with -- comments in the beginning of a line
+   * and multi-line statements.
+   * It does not support other forms of comments (such as /*... or {{...}}).
+   *
+   * @param   string $filename the script filename
+   * @param   string $database the database to execute this script into
+   */
+  private function executeSQLScript($database, $filename) {
+    mysql_select_db($database);
+    $script = file_get_contents($filename);
+    $lines = explode("\n", $script);
+    $previous = NULL;
+    foreach ($lines as $j => $line) {
+      // Remove comments from the script
+      $line = trim($line);
+      if (strpos($line, "--") === 0) {
+        $line = substr($line, 0, strpos($line, "--"));
+      }
+      if (empty($line))
+        continue;
+      // Concatenate the previous line, if any, with the current
+      if ($previous)
+        $line = $previous . " " . $line;
+      $previous = NULL;
+      // If the current line doesnt end with ; then put this line together
+      // with the next one, thus supporting multi-line statements.
+      if (strrpos($line, ";") != strlen($line) - 1) {
+        $previous = $line;
+        continue;
+      }
+      $line = substr($line, 0, strrpos($line, ";"));
+      $result = mysql_query($line);
+      if ($result === false)
+        throw new Exception("Error when running script '$filename', line $j, query '$line': " . mysql_error ());
+    }
+  }
+
+  static public function restoreLegacy($directory) {
+    throw new Exception("Legacy restore not implemented");
+  }
+
+  /**
+   * restore an archive into a workspace
+   *
+   * Restores any database and files included in the backup, either as a new
+   * workspace, or overwriting a previous one
+   *
+   * @param   string $filename the backup filename
+   * @param   string $newWorkspaceName if defined, supplies the name for the
+   *                 workspace to restore to
+   */
+  static public function restore($filename, $newWorkspaceName = NULL) {
+    G::LoadThirdParty('pear/Archive', 'Tar');
+    $backup = new Archive_Tar($filename);
+    //Get a temporary directory in the upgrade directory
+    $tempDirectory = PATH_DATA . "upgrade/" . basename(tempnam(__FILE__, ''));
+    mkdir($tempDirectory);
+    //Extract all backup file, including database scripts and workspace files
+    $backup->extract($tempDirectory);
+    //Search for metafiles in the new standard (the old standard would contain
+    //txt files.
+    $metaFiles = glob($tempDirectory . "/*.meta");
+    print_r($metaFiles);
+    if (empty($metaFiles)) {
+      return workspaceTools::restoreLegacy($tempDirectory);
+    }
+    foreach ($metaFiles as $metaFile) {
+      $metadata = G::json_decode(file_get_contents($metaFile));
+      print_r($metadata);
+      if ($metadata->version != 1)
+        throw new Exception("Backup version {$metadata->version} not supported");
+      $backupWorkspace = $metadata->WORKSPACE_NAME;
+      if (isset($newWorkspaceName)) {
+        $workspaceName = $newWorkspaceName;
+        $createWorkspace = true;
+      } else {
+        $workspaceName = $metadata->WORKSPACE_NAME;
+        $createWorkspace = false;
+      }
+      $workspace = new workspaceTools($workspaceName);
+      if ($workspace->workspaceExists())
+      //  throw new Exception("Workspace exists");
+        logging("Workspace $workspaceName already exists, overwriting!\n");
+
+      if (file_exists($workspace->path))
+        G::rm_dir($workspace->path);
+
+      foreach ($metadata->directories as $dir) {
+        logging("Restoring directory '$dir'\n");
+
+        if (!rename("$tempDirectory/$dir", $workspace->path)) {
+          throw new Exception("There was an error copying the backup files ($tempDirectory/$dir) to the workspace directory {$workspace->path}.\n");
+        }
+      }
+
+      list($dbHost, $dbUser, $dbPass) = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
+      mysql_connect($dbHost, $dbUser, $dbPass);
+
+      $newDBNames = $workspace->resetDBInfo($dbHost, $createWorkspace);
+      
+      foreach ($metadata->databases as $db) {
+        $dbName = $newDBNames[$db->name];
+        logging("Restoring database {$db->name} to $dbName\n");
+        $workspace->executeSQLScript($dbName, "$tempDirectory/{$db->name}.sql");
+        $workspace->createDBUser($dbName, $db->pass, "localhost", $dbName);
+        $workspace->createDBUser($dbName, $db->pass, "%", $dbName);
+      }
+
+    }
+    
+    G::rm_dir($tempDirectory);
   }
 
 }

@@ -5,6 +5,7 @@ pake_task('info');
 pake_task('workspace-upgrade');
 
 pake_task('workspace-backup');
+pake_task('workspace-restore');
 
 pake_task('translation-upgrade');
 pake_task('cacheview-upgrade');
@@ -218,6 +219,11 @@ function run_workspace_backup($task, $args) {
   else
     $filename = PATH_DATA . "backups/" . $workspace->name . ".tar";
   $workspace->backup($filename);
+}
+
+function run_workspace_restore($task, $args) {
+  //$workspace = new workspaceTools($args[0]);
+  workspaceTools::restore($args[0], $args[1]);
 }
 
 ?>
