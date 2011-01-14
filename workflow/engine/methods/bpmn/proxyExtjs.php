@@ -137,6 +137,7 @@ switch($_GET['action'])
 
        case 'getAvailableCaseTrackerObjects':
                 $rows = $oProcessMap->getAvailableExtCaseTrackerObjects($_GET['tid']);
+                array_shift($rows);
                 break;
 
        case 'getAvailableSteps':
