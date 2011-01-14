@@ -1878,7 +1878,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       handler: function (s) {
                 var rowSelected = Objectsgrid.getSelectionModel().getSelections();
                 if(rowSelected == '')
-                    workflow.gridObjectRowSelected = rowSelected.store.items[0];
+                    workflow.gridObjectRowSelected = Objectsgrid.store.data.items;
                 else
                     workflow.gridObjectRowSelected = rowSelected;
                 //var rowSelected = Objectsgrid;
@@ -2151,8 +2151,14 @@ ProcessMapContext.prototype.ExtVariables = function()
                                    var getObjectGridRow = workflow.gridObjectRowSelected;
                                   
                                    var rowSelected = this.getSelectionModel().getSelected();
-                                   var rowLabel    = rowSelected.data.label;
-                                   getObjectGridRow[0].set("CTO_CONDITION",rowLabel);
+                                   var rowLabel    = rowSelected.data.variable;
+
+                                   //Assigned new object with condition
+                                   if(typeof getObjectGridRow.colModel != 'undefined')
+                                    sfddsfdf;
+                                   //Assigning / updating Contion for a row
+                                   else
+                                       getObjectGridRow[0].set("CTO_CONDITION",rowLabel);
                                    window.hide();
                                    //return rowSelected;
                                    //Ext.getCmp('activator').setIcon();
