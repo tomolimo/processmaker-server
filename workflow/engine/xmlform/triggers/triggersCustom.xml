@@ -20,7 +20,7 @@
 
 <TRI_WEBBOT type="textareapm" class="formLabel" cols="50" rows="15" width="100%" height="380px" showVars="1" process="@#PRO_UID">
 </TRI_WEBBOT>
-<SAVE type="button" onclick="triggerSave(this.form);">
+<SAVE type="button" onclick="triggerSave1(this.form);">
   <en>Save</en>
 </SAVE>
 <BTN_CANCEL type="button" onclick="cancel();triggerFromLibrary()">

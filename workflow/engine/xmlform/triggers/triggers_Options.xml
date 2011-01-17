@@ -80,27 +80,59 @@
 
   function triggerSave(form)
   {
-
-   var triUid = getField('TRI_UID').value;
-   if(triUid==''){
-   var triTitle =getField('TRI_TITLE').value;
+  var triUid = "";
+  if(document.getElementById('TRI_UID')) { //  alert('alvaro2');
+    var triUid = document.getElementById('TRI_UID').value;
+  } 
+   if(triUid==''){  
+   var triTitle =document.getElementById('TRI_TITLE').value;   
    if(triTitle==''){
      alert(G_STRINGS.ID_REQUIRED_NAME_TRIGGERS);return false;
-   }
-   reqName=ajax_function(form.action,'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+encodeURIComponent(getField('PRO_UID').value),'POST') ;
+   }   
+   reqName=ajax_function("../triggers/triggers_Save",'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+(document.getElementById('PRO_UID').value),'POST') ;  
    if(!reqName){
-   	  alert(G_STRINGS.ID_EXIST_TRIGGERS);return false;
+     alert(G_STRINGS.ID_EXIST_TRIGGERS);return false;
    }else{
-	    ajax_post(form.action, form, 'POST');
-	    currentPopupWindow.remove();
-	    @#PAGED_TABLE_ID.refresh();
+     ajax_post(form.action, form, 'POST');
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
    }
-   }else{
+   }else{ alert('alvaro888');
 	     ajax_post(form.action, form, 'POST');
 		   currentPopupWindow.remove();
 		   @#PAGED_TABLE_ID.refresh();
    }
   }
+
+  //for trigger no wizard
+ function triggerSave1(form)
+  {
+  var triUid = ""; 
+  if(getField('TRI_UID')) { //  alert('alvaro2');
+    var triUid = getField('TRI_UID').value;
+  } 
+   if(triUid==''){  
+   var triTitle =getField('TRI_TITLE').value;   
+   if(triTitle==''){
+     alert(G_STRINGS.ID_REQUIRED_NAME_TRIGGERS);return false;
+   }   
+   reqName=ajax_function("../triggers/triggers_Save",'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+(getField('PRO_UID').value),'POST') ;
+   if(!reqName){
+     alert(G_STRINGS.ID_EXIST_TRIGGERS);return false;
+   }else{
+     ajax_post(form.action, form, 'POST');
+    currentPopupWindow.remove();
+    @#PAGED_TABLE_ID.refresh();
+   }
+   }else{ alert('alvaro888');
+	     ajax_post(form.action, form, 'POST');
+		   currentPopupWindow.remove();
+		   @#PAGED_TABLE_ID.refresh();
+   }
+  }
+
+
+//end for trigger no wirzard
 
   function triggerDelete(sUID) {
     var validateResult;
