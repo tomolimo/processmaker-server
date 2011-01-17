@@ -282,8 +282,6 @@ this.canvasGateway.on('contextmenu', function(e) {
 MyWorkflow.prototype.AddSubProcessContextMenu=function(_4092)
 {
     this.canvasSubProcess = Ext.get(_4092.id);
-    //var currentSelection = _4092.scope.currentSelection;
-    //var pmosExtObj = new pmosExt();
     this.contextSubProcessmenu = new Ext.menu.Menu({
         items: [
             {
@@ -705,9 +703,6 @@ MyWorkflow.prototype.editSubProcessProperties= function(_3525)
             title: 'Variables Out',
             collapsible: false,
             labelAlign: 'top',
-            //autoHeight:true,
-            //width: 600,
-            //defaultType: 'textfield',
              items:[variableOutGrid]
             },
             {

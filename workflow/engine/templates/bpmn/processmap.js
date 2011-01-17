@@ -8,8 +8,7 @@ Ext.onReady ( function() {
     //Getting process id from the URL using getUrlvars function
     var pro_uid = getUrlVars();
 
-    if(typeof pro_uid != 'undefined')
-    {
+    if(typeof pro_uid !== 'undefined') {
         Ext.Ajax.request({
             url: 'openProcess.php?PRO_UID=' + pro_uid,
             success: function(response) {
@@ -42,18 +41,19 @@ Ext.onReady ( function() {
         margins:'3 0 3 3',
         cmargins:'3 3 3 3',
         items:{
-            html:'<div id="x-shapes"><p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
-                                             <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
-                                             <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
-                                             <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
-                                             <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
-                                             <p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
-                                             <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
-                                             <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
-                                             <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
-                                             <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
-                                             <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>\n\
-                                             </div>'
+            html:'<div id="x-shapes">\n\
+                        <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
+                        <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
+                        <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
+                        <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
+                        <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
+                        <p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
+                        <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
+                        <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
+                        <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
+                        <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
+                        <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>\n\
+                  </div>'
         }
     };
 
@@ -181,7 +181,7 @@ Ext.onReady ( function() {
             handler: function() {
                 workflow.zoom('out');
             }
-        },
+        }
     ],
         renderTo  : "center1",
         layout    : "border",
@@ -197,7 +197,7 @@ Ext.onReady ( function() {
             url: "processes_Ajax.php"+ urlparams,
             success: function(response) {
                 var processes = Ext.util.JSON.decode(response.responseText);
-                main.items.items[2].setTitle(processes.title.label);
+                main.items.items[2].setTitle(processes.title.label);     //items[2]=>center region
             },
             failure: function(){
                 Ext.Msg.alert ('Failure');
@@ -514,7 +514,6 @@ Ext.onReady ( function() {
             hash = hashes[i].split('=');
             vars.push(hash[0]);
             vars[hash[0]] = hash[1];
-
         }
         var pro_uid = vars["PRO_UID"];
         return pro_uid;

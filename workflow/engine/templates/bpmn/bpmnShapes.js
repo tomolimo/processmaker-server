@@ -18,8 +18,6 @@ bpmnTask.prototype.type = "bpmnTask"
 
 
 bpmnTask.prototype.coord_converter = function (bound_width, bound_height, text_length) {
-    //bound_width = this.workflow.currentSelection.width;
-    //bound_height = this.workflow.currentSelection.height;
     input_width = text_length * 6
     input_height = 10
 
