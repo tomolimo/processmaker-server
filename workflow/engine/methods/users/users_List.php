@@ -71,7 +71,7 @@ $oCriteria->addAsColumn('USR_VIEW', $sDelimiter . G::LoadTranslation('ID_DETAIL'
 $oCriteria->addAsColumn('USR_EDIT', $sDelimiter . G::LoadTranslation('ID_EDIT') . $sDelimiter);
 $oCriteria->addAsColumn('USR_DELETE', $sDelimiter . G::LoadTranslation('ID_DELETE') . $sDelimiter);
 $oCriteria->addAsColumn('USR_AUTH', $sDelimiter . G::LoadTranslation('ID_AUTHENTICATION') . $sDelimiter);
-$oCriteria->addAsColumn('USR_REASSIGN', $sDelimiter . G::LoadTranslation('ID_REASSIGN_CASES') . $sDelimiter);
+//$oCriteria->addAsColumn('USR_REASSIGN', $sDelimiter . G::LoadTranslation('ID_REASSIGN_CASES') . $sDelimiter);
 $oCriteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);
 
 $G_PUBLISH = new Publisher;
