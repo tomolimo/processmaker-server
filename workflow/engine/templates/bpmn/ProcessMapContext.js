@@ -1876,6 +1876,8 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       id: 'btnCondition',
       text: 'Assign Condition',
       handler: function (s) {
+                workflow.variablesAction = 'grid';
+                workflow.gridField = 'CTO_CONDITION';
                 var rowSelected = Objectsgrid.getSelectionModel().getSelections();
                 if(rowSelected == '')
                     workflow.gridObjectRowSelected = Objectsgrid;
@@ -2125,7 +2127,39 @@ ProcessMapContext.prototype.ExtVariables = function()
                                 //plugins: [editor],
                                 //loadMask    : true,
                                 loadingText : 'Loading...',
-                                border: false
+                                border: false,
+                                listeners: {
+                                 //rowdblclick: alert("ok"),
+                                 rowdblclick: function(){
+                                   var objectSelected = workflow.variablesAction;
+                                   switch(objectSelected)
+                                        {
+                                           case 'grid':
+                                               var getObjectGridRow = workflow.gridObjectRowSelected;
+                                               var rowSelected = this.getSelectionModel().getSelected();
+                                               var FieldSelected = workflow.gridField;
+                                               var rowLabel    = rowSelected.data.variable;
+                                               //Assigned new object with condition
+                                               if(typeof getObjectGridRow.colModel != 'undefined')
+                                                   getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
+                                               //Assigning / updating Condition for a row
+                                               else
+                                                   getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                               window.hide();
+                                               break;
+                                           case 'form':
+                                               var FormSelected = workflow.formSelected;
+                                                var rowSelected = this.getSelectionModel().getSelected();
+                                                var FieldSelected =  workflow.fieldId;
+                                               var rowLabel    = rowSelected.data.variable;
+                                              Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                                window.hide();
+                                               break;
+                                               
+                                        }
+                                  
+                                   }
+                              }
                         }]
                 },{
                 title:'System',
@@ -2152,21 +2186,34 @@ ProcessMapContext.prototype.ExtVariables = function()
                         listeners: {
                                  //rowdblclick: alert("ok"),
                                  rowdblclick: function(){
-                                   var getObjectGridRow = workflow.gridObjectRowSelected;
-                                  
-                                   var rowSelected = this.getSelectionModel().getSelected();
-                                   var rowLabel    = rowSelected.data.variable;
+                                   var objectSelected = workflow.variablesAction;
+                                   switch(objectSelected)
+                                        {
+                                           case 'grid':
+                                               var getObjectGridRow = workflow.gridObjectRowSelected;
+                                               var rowSelected = this.getSelectionModel().getSelected();
+                                               var FieldSelected = workflow.gridField;
+                                               var rowLabel    = rowSelected.data.variable;
+                                               //Assigned new object with condition
+                                               if(typeof getObjectGridRow.colModel != 'undefined')
+                                                   getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
+                                               //Assigning / updating Condition for a row
+                                               else
+                                                   getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                               window.hide();
+                                               break;
+                                           case 'form':
+                                               var FormSelected = workflow.formSelected;
+                                                var rowSelected = this.getSelectionModel().getSelected();
+                                                var FieldSelected =  workflow.fieldId;
+                                               var rowLabel    = rowSelected.data.variable;
+                                              Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                                window.hide();
+                                               break;
 
-                                   //Assigned new object with condition
-                                   if(typeof getObjectGridRow.colModel != 'undefined')
-                                   getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
-                                   //Assigning / updating Condition for a row
-                                   else
-                                       getObjectGridRow[0].set("CTO_CONDITION",rowLabel);
-                                   window.hide();
-                                   //return rowSelected;
-                                   //Ext.getCmp('activator').setIcon();
-                                 }
+                                        }
+
+                                   }
                               }
                 }]
                 },{
@@ -2191,15 +2238,37 @@ ProcessMapContext.prototype.ExtVariables = function()
                         //loadMask    : true,
                         loadingText : 'Loading...',
                         border: false,
-                         listeners: {
+                        listeners: {
                                  //rowdblclick: alert("ok"),
-                                 rowclick: function(){
-                                   var rowSelected = this.getSelectionModel().getSelected();
-                                   var rowLabel    = rowSelected.data.label;
-                                   return rowSelected;
-                                   window.hide();
-                                   //Ext.getCmp('activator').setIcon();
-                                 }
+                                 rowdblclick: function(){
+                                   var objectSelected = workflow.variablesAction;
+                                   switch(objectSelected)
+                                        {
+                                           case 'grid':
+                                               var getObjectGridRow = workflow.gridObjectRowSelected;
+                                               var rowSelected = this.getSelectionModel().getSelected();
+                                               var FieldSelected = workflow.gridField;
+                                               var rowLabel    = rowSelected.data.variable;
+                                               //Assigned new object with condition
+                                               if(typeof getObjectGridRow.colModel != 'undefined')
+                                                   getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
+                                               //Assigning / updating Condition for a row
+                                               else
+                                                   getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                               window.hide();
+                                               break;
+                                           case 'form':
+                                               var FormSelected = workflow.formSelected;
+                                                var rowSelected = this.getSelectionModel().getSelected();
+                                                var FieldSelected =  workflow.fieldId;
+                                               var rowLabel    = rowSelected.data.variable;
+                                              Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                                window.hide();
+                                               break;
+
+                                        }
+
+                                   }
                               }
                 }]
                 }]

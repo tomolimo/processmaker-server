@@ -7,6 +7,7 @@ TaskContext.prototype.type="TaskContext";
 
 TaskContext.prototype.editTaskSteps = function(_3252){
     var taskExtObj = new TaskContext();
+     var ProcMapObj= new ProcessMapContext();
     var pro_uid = _3252.scope.workflow.getUrlVars();
     var taskId  = _3252.scope.workflow.currentSelection.id;
     
@@ -141,39 +142,86 @@ TaskContext.prototype.editTaskSteps = function(_3252){
              remoteSort      : false,
              autoLoad        : true,
              fields          : stepsFields
+
          });
-         //availableSteps.load();
+
+    var btnCondition = new Ext.Button({
+      id: 'btnCondition',
+      text: 'Assign Condition',
+      handler: function (s) {
+                workflow.variablesAction = 'grid';
+                workflow.gridField = 'STEP_CONDITION';
+                var rowSelected = conditionGrid.getSelectionModel().getSelections();
+                if(rowSelected == '')
+                    workflow.gridObjectRowSelected = conditionGrid;
+                else
+                    workflow.gridObjectRowSelected = rowSelected;
+                //var rowSelected = Objectsgrid;
+                //workflow.gridObject = Objectsgrid;
+                var rowData = ProcMapObj.ExtVariables();
+                console.log(rowData);
+                //var a = Ext.getCmp('btnCondition');
+                //alert (a);
+
+                //console.log(rowData);
+            }
 
 
-         var conditionsColumns = new Ext.grid.ColumnModel({
-            columns: [
-                {
-                    id: 'STEP_TITLE',
-                    header: 'Title',
-                    dataIndex: 'STEP_TITLE',
-                    width: 280,
-                    editor: new Ext.form.TextField({
-                    //allowBlank: false
-                    })
-                },
-                {
-                    //id: 'STEP_TITLE',
-                    header: 'Condition',
-                    dataIndex: 'STEP_CONDITION',
-                    width: 250,
-                    editable: true,
-                    editor: new Ext.form.TextField({
-                    })
-                },
-                  {
-                    header: 'Assign Condition',
-                    width: 200,
-                    renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
-                  }
-                ]
+    })
+     
+
+ var toolbar = new Ext.Toolbar({
+            items: [btnCondition]
         });
+         //availableSteps.load();
+          var conditionGrid =  new Ext.grid.GridPanel({
+            store       : taskSteps,
+            id          : 'conditiongrid',
+            loadMask    : true,
+            loadingText : 'Loading...',
+           // renderTo    : 'cases-grid',
+            
+            frame       : false,
+            autoHeight  : false,
+            enableDragDrop   : true,
+            layout      : 'form',
+            tbar: toolbar,
+            ddGroup     : 'firstGridDDGroup',
+           
+         
+            clicksToEdit: 1,
+            minHeight   :400,
+            height      :400,
+           
+           
+            
+            //plugins     : [editor],
+            columns     : [{
+                            id: 'STEP_TITLE',
+                            header: 'Title',
+                            dataIndex: 'STEP_TITLE',
+                            width: 280,
+                            editor: new Ext.form.TextField({
+                            //alloBlank: false
+                            })
+                        },
+                        {
+                            id: 'STEP_CONDITION',
+                            header: 'Condition',
+                            dataIndex: 'STEP_CONDITION',
+                            width: 250,
+                            editable: true,
+                            editor: new Ext.form.TextField({
+                            })
+                        }
+                          
+                        ]
+                
+            
 
-       
+                    });
+
+        
                  
       var grid =  new Ext.grid.GridPanel({
             store       : taskSteps,
@@ -375,15 +423,17 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                 defaults: {
                     width: 400
                 },
-                items:[{
-                        xtype: 'grid',
+                items:[conditionGrid]
+                        /*xtype: 'grid',
+                        name: 'conditionGrid',
                         ds: taskSteps,
                         cm: conditionsColumns,
                         height: 350,
                         loadMask    : true,
                         loadingText : 'Loading...',
-                        border: false
-                }]
+                        border: false,
+                        tbar: toolbar }]*/
+               
             },{
                 title:'Triggers',
                 layout:'form',
@@ -427,6 +477,8 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         }]*/
     });
     window.show();
+
+
 
 }
 
@@ -718,7 +770,7 @@ TaskContext.prototype.editUsers= function(_5625)
 
 TaskContext.prototype.editTaskProperties= function(_5625)
 {
-    
+    var ProcMapObj= new ProcessMapContext();
     var taskExtObj = new TaskContext();
     var taskId  = _5625.scope.workflow.currentSelection.id;
 
@@ -827,9 +879,11 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         border:false,
                         items: [{
                             xtype: 'textfield',
+                            id: 'priorityVariable',
                             fieldLabel: 'Variable for Case priority',
                             name: 'TAS_PRIORITY_VARIABLE',
                             anchor:'100%'
+                            
                          }]
                     },{
                         columnWidth:.3,
@@ -839,7 +893,14 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             xtype:'button',
                             title: ' ',
                             text: '@@',
-                            name: 'selectorigin'
+                            name: 'selectorigin',
+                            handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                    workflow.fieldId= 'priorityVariable' ;
+                                    workflow.formSelected = taskPropertiesTabs;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                    console.log(rowData);
+                                   }
                             //anchor:'15%'
                         }]
                     }]
@@ -1211,6 +1272,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         items: [{
                             xtype: 'textarea',
                             fieldLabel: 'Case Title',
+                            id: 'caseTitle',
                             name: 'TAS_DEF_TITLE',
                             height : 100,
                             //value: _5625.scope.workflow.taskDetails.TAS_ASSIGN_VARIABLE
@@ -1225,7 +1287,14 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             xtype:'button',
                             title: ' ',
                             text: '@#',
-                            name: 'selectCaseTitle'
+                            name: 'selectCaseTitle',
+                            handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                    workflow.fieldId= 'caseTitle' ;
+                                    workflow.formSelected = taskPropertiesTabs;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                    console.log(rowData);
+                                   }
                             //anchor:'10%'
                         }]
                     }]
@@ -1241,10 +1310,12 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         border:false,
                         items: [{
                             xtype: 'textarea',
+                            id: 'caseDescription',
                             fieldLabel: 'Case Description',
                             name: 'TAS_DEF_DESCRIPTION',
                             height : 100,
                             anchor:'100%'
+
                         }]
                     },{
                         columnWidth:.3,
@@ -1255,7 +1326,14 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             xtype:'button',
                             title: ' ',
                             text: '@#',
-                            name: 'selectCaseDesc'
+                            name: 'selectCaseDesc',
+                            handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                    workflow.fieldId= 'caseDescription' ;
+                                    workflow.formSelected = taskPropertiesTabs;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                    console.log(rowData);
+                                   }
                             //anchor:'10%'
                         }]
                     }]
@@ -1409,6 +1487,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
 {
     var pro_uid = _5625.scope.workflow.getUrlVars();
     var taskId  = _5625.scope.workflow.currentSelection.id;
+     var ProcMapObj= new ProcessMapContext();
 
     var triggersFields = Ext.data.Record.create([
                 {
@@ -1561,9 +1640,32 @@ TaskContext.prototype.stepTriggers = function(_5625)
             }
         }
     });
+     var btnCondition = new Ext.Button({
+      id: 'btnCondition',
+      text: 'Assign Condition',
+      handler: function (s) {
+                workflow.variablesAction = 'grid';
+                workflow.gridField = 'ST_CONDITION';
+                var rowSelected = triggerGrid.getSelectionModel().getSelections();
+                if(rowSelected == '')
+                    workflow.gridObjectRowSelected = triggerGrid;
+                else
+                    workflow.gridObjectRowSelected = rowSelected;
+                //var rowSelected = Objectsgrid;
+                //workflow.gridObject = Objectsgrid;
+                var rowData = ProcMapObj.ExtVariables();
+                console.log(rowData);
+                //var a = Ext.getCmp('btnCondition');
+                //alert (a);
+
+                //console.log(rowData);
+            }
+
+
+    });
 
     var toolBar = new Ext.Toolbar({
-        items: [addBtn, removeBtn]
+        items: [addBtn, removeBtn, btnCondition]
     });
 
 

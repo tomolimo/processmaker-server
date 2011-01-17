@@ -977,6 +977,7 @@ ProcessOptions.prototype.dbConnection = function()
 
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
+     var ProcMapObj= new ProcessMapContext();
   var pro_uid = workflow.getUrlVars();
 
   var dynaFields = Ext.data.Record.create([
@@ -1212,6 +1213,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 border:false,
                                 items: [{
                                     xtype: 'textfield',
+                                    id: 'DestPath',
                                     fieldLabel: 'Destination Path',
                                     name: 'INP_DOC_DESTINATION_PATH',
                                     anchor:'100%'
@@ -1224,8 +1226,15 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                    xtype:'button',
                                    title: ' ',
                                    text: '@@',
-                                   name: 'selectorigin'
-                                   //anchor:'15%'
+                                   name: 'selectorigin',
+                                   handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                    workflow.fieldId= 'DestPath' ;
+                                    workflow.formSelected = inputDocForm;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                    console.log(rowData);
+                                   }
+                                   
                         }]
                     }]
                 },{
@@ -1237,6 +1246,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             border:false,
                             items: [{
                                 xtype: 'textfield',
+                                id:'tags',
                                 fieldLabel: 'Tags',
                                 name: 'INP_DOC_TAGS',
                                 anchor:'100%'
@@ -1249,8 +1259,15 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 xtype:'button',
                                 title: ' ',
                                 text: '@@',
-                                name: 'selectorigin'
-                                //anchor:'15%'
+                                name: 'selectorigin',
+                                handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                     workflow.fieldId= 'tags' ;
+                                    workflow.formSelected = inputDocForm;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                    console.log(rowData);
+                                   }
+                                
                             }]
                           }]
                   },{
@@ -1393,8 +1410,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                   INP_DOC_FORM_NEEDED           : sFormNeeded,
                                   INP_DOC_ORIGINAL              : sOrig,
                                   INP_DOC_VERSIONING            : sVers,
-                                  INP_DOC_TAGS                  : 'INPUT',    //By Default
-                                  INP_DOC_DESCRIPTION           : sDesc
+                                  INP_DOC_TAGS                  : sTags,
+                                  INP_DOC_DESCRIPTION           : sDesc,
+                                  INP_DOC_DESTINATION_PATH      : sDestPath
                               },
                               success: function(response) {
                                   Ext.MessageBox.alert ('Status','Input document has been created successfully.');
@@ -1448,6 +1466,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 ProcessOptions.prototype.addOutputDoc= function(_5625)
 {
   var pro_uid = workflow.getUrlVars();
+   var ProcMapObj= new ProcessMapContext();
 
   var dynaFields = Ext.data.Record.create([
             {
@@ -1657,6 +1676,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                         border:false,
                                         items: [{
                                             xtype       : 'textfield',
+                                            id          : 'filenameGenerated',
                                             fieldLabel  : 'Filename generated',
                                             name        : 'OUT_DOC_FILENAME',
                                             allowBlank  : false,
@@ -1671,7 +1691,15 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                             xtype:'button',
                                             title: ' ',
                                             text: '@@',
-                                            name: 'selectorigin'
+                                            name: 'selectorigin',
+                                             handler: function (s) {
+                                                workflow.variablesAction = 'form';
+                                                workflow.fieldId= 'filenameGenerated' ;
+                                                workflow.formSelected = outputDocForm;
+                                                var rowData = ProcMapObj.ExtVariables();
+                                                console.log(rowData);
+                                   }
+
                                             //anchor:'95%'
                                         }]
                                     }]
@@ -1795,6 +1823,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     border      :false,
                     items       : [{
                             xtype       : 'textfield',
+                            id          : 'DestPath',
                             fieldLabel  : 'Destination Path',
                             name        : 'OUT_DOC_DESTINATION_PATH',
                             anchor      :'100%'
@@ -1807,7 +1836,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                             xtype           :'button',
                             title           : ' ',
                             text            : '@@',
-                            name            : 'selectorigin'
+                            name            : 'selectorigin',
+                             handler: function (s) {
+                                                workflow.variablesAction = 'form';
+                                                workflow.fieldId= 'DestPath' ;
+                                                workflow.formSelected = outputDocForm;
+                                                var rowData = ProcMapObj.ExtVariables();
+                                                console.log(rowData);
+                                   }
                           //anchor          :'15%'
                         }]
                     }]
@@ -1820,6 +1856,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         border      :false,
                         items       : [{
                         xtype       : 'textfield',
+                        id          :'tags',
                         fieldLabel  : 'Tags',
                         name        : 'OUT_DOC_TAGS',
                         anchor      :'100%'
@@ -1832,7 +1869,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 xtype       :'button',
                                 title       : ' ',
                                 text        : '@@',
-                                name        : 'selectorigin'
+                                name        : 'selectorigin',
+                                handler: function (s) {
+                                                workflow.variablesAction = 'form';
+                                                workflow.fieldId= 'tags' ;
+                                                workflow.formSelected = outputDocForm;
+                                                var rowData = ProcMapObj.ExtVariables();
+                                                console.log(rowData);
+                                   }
                               //anchor      :'15%'
                             }]
                         }]
