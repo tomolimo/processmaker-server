@@ -305,6 +305,8 @@ DocPanel = Ext.extend(Ext.Panel, {
 
 
 var newCaseTree = {
+
+
   xtype : 'treepanel',
   id : 'processTree',
   style : {
@@ -330,9 +332,9 @@ var newCaseTree = {
     dblclick : function(n) {
       if (n.attributes.optionType == "startProcess") {
         Ext.Msg.show({
-          title : 'Start Case',
-          msg : 'Starting new case<br><br><b>'
-              + n.attributes.text
+          title : TRANSLATIONS.ID_TITLE_START_CASE, // 'Start Case',
+          msg : TRANSLATIONS.ID_STARTING_NEW_CASE  // 'Starting new case'
+              + '<br><br><b>' + n.attributes.text
               + '</b>',
           icon : Ext.MessageBox.INFO
         });
@@ -349,7 +351,7 @@ var newCaseTree = {
               window.location = res.openCase.PAGE;
             } else {
               Ext.Msg.show({
-                title : 'Error creating a new Case',
+                title : TRANSLATIONS.ID_ERROR_CREATING_NEW_CASE, // 'Error creating a new Case',
                 msg : '<textarea cols="50" rows="10">'
                     + res.message
                     + '</textarea>',
@@ -360,7 +362,8 @@ var newCaseTree = {
           },
           failure : function() {
             // grid.getGridEl().unmask(true);
-            Ext.Msg.alert('Error', 'Unable to start a case');
+            // Ext.Msg.alert('Error', 'Unable to start a case');
+            Ext.Msg.alert(TRANSLATIONS.ID_ERROR, TRANSLATIONS.ID_UNABLE_START_CASE); 
           }
         });
       }
@@ -377,203 +380,6 @@ var newCaseTree = {
   }
 };
 
-var startCaseTab = {
-  id : 'startCase',
-  title : 'Start Case',
-  iconCls : 'ICON_CASES_START_CASE',
-  layout : 'border',
-  items : [
-      {
-        id : 'img-chooser-view',
-        region : 'center',
-        style : {
-            width : '50%'
-          	
-          },
-        // autoScroll: true,
-        items : [ newCaseTree ]
-      }, {
-    	  xtype:'form',
-        id : 'process-detail-panel',
-        region : 'east',
-        //autoHeight : true,
-        split : true,
-        style : {
-            width : '50%'
-          	
-          },
-        
-//        minWidth : 150,
-        frame: true,
-        labelAlign: 'right',
-        labelWidth: 85,
-  //      width:340,
-        waitMsgTarget: true,
-        title:'Process Information',
-        layout:'form',
-        defaults: {width: 350},
-        defaultType: 'textfield',
-
-
-        items: [{
-            fieldLabel: 'Process',
-            name: 'processName',
-            allowBlank:false,
-            value: '',
-            disabled: true,
-            //readonly:true,
-            id:"processName"
-        },{
-            fieldLabel: 'Task',
-            name: 'taskName',
-            allowBlank:false,
-            value: '',
-            disabled: true,
-            id:"taskName"
-        },{
-        	xtype:'textarea',
-            fieldLabel: 'Description',
-            name: 'processDescription',
-            value: '',
-            disabled: true,
-            id:"processDescription"
-        },{
-            fieldLabel: 'Category',
-            name: 'processCategory',
-            value: '',
-            disabled: true,
-            id:"processCategory"
-        }, {
-            fieldLabel: 'Calendar',
-            name: 'calendarName',            
-            disabled: true,
-            id:"calendarName"
-      },{
-      	xtype:'textarea',
-        fieldLabel: 'Calendar Description',
-        name: 'calendarDescription',
-        value: '',
-        disabled: true,
-        id:"calendarDescription"
-    },{
-    	xtype:'checkboxgroup',
-          fieldLabel: 'Working days',
-          name: 'calendarWorkDays',
-          disabled: true,
-          id:"calendarWorkDays",
-        	  columns: 7,
-        	    items: [
-        	        {boxLabel: 'Sun', name: '0'},
-        	        {boxLabel: 'Mon', name: '1'},
-        	        {boxLabel: 'Tue', name: '2'},
-        	        {boxLabel: 'Wen', name: '3'},
-        	        {boxLabel: 'Thu', name: '4'},
-        	        {boxLabel: 'Fri', name: '5'},
-        	        {boxLabel: 'Sat', name: '6'}
-        	    ]
-
-     }, {
-    	xtype:'checkbox',
-        fieldLabel: 'Debug Mode',
-        name: 'debugMode',        
-        disabled: true,
-        id:"debugMode"
-  }]
-      }
-  ],
-
-  tbar : [
-      {
-        xtype : 'textfield',
-        name : 'processesFilter',
-        id: 'processesFilter',
-        emptyText : 'Find a Process',
-        enableKeyEvents : true,
-        listeners : {
-          render : function(f) {
-            /*Ext.getCmp("startCaseTreePanel").filter = new Ext.tree.TreeFilter(
-              this,
-              {
-                clearBlank : true,
-                autoClear : true
-              }
-            );*/
-
-            startCaseFilter = new Ext.ux.tree.TreeFilterX(Ext.getCmp('startCaseTreePanel'));
-          }, /*
-          keydown : function(t, e) {
-            treeFiltered = Ext.getCmp("startCaseTreePanel");
-            //console.log(treeFiltered);
-
-            var text = t.getValue();
-
-            //console.log(text);
-            if (!text) {
-              treeFiltered.filter.clear();
-              return;
-            }
-            treeFiltered.expandAll();
-
-            var re = new RegExp('^'+ Ext.escapeRe(text), 'i');
-            console.log(re);
-            treeFiltered.filter.filterBy(function(n) {
-              return !n.attributes.isClass || re.test(n.text);
-            });
-          },*/
-          specialkey: function(f,e){
-            if (e.getKey() == e.ENTER) {
-              txt = Ext.getCmp('processesFilter').getValue();
-              startCaseFilter.clear();
-              var re = new RegExp('.*' + txt + '.*', 'i');
-              startCaseFilter.filter(re, 'text');
-            }
-          },
-          scope : this
-        }
-      },
-      {
-        text:'X',
-        ctCls:'pm_search_x_button',
-        handler: function(){
-          Ext.getCmp('processesFilter').setValue('');
-          startCaseFilter.clear();
-        }
-      },
-      ' ',
-      ' ',
-      {
-        iconCls : 'icon-expand-all',
-        tooltip : 'Expand All',
-        handler : function() {
-          Ext.getCmp("startCaseTreePanel").root.expand(true);
-        },
-        scope : this
-      },
-      '-',
-      {
-        iconCls : 'icon-collapse-all',
-        tooltip : 'Collapse All',
-        handler : function() {
-          Ext.getCmp("startCaseTreePanel").root.collapse(true);
-        },
-        scope : this
-      },
-      ' ',
-      ' ',
-      {
-        xtype : 'tbbutton',
-        cls : 'x-btn-icon',
-        icon : '/images/refresh.gif',
-
-        handler : function() {
-          tree = Ext
-              .getCmp('startCaseTreePanel');
-          tree.getLoader().load(
-              tree.root);
-        }
-      }
-   ]
-};
 
 var documentsTab = {
   id : 'documents',
@@ -770,19 +576,226 @@ var dashboardTab = {
   items : getDashboardItems()
 };
 */
-var MainPanel = function() {
-	MainPanel.superclass.constructor.call(this, {
-    id : 'doc-body',
-    region : 'center',
-    resizeTabs : true,
-    minTabWidth : 135,
-    tabWidth : 135,
-    plugins : new Ext.ux.TabCloseMenu(),
-    enableTabScroll : true,
-    activeTab : 0,
-    items : [startCaseTab/*, documentsTab, dashboardTab*/]
-  });
-};
+
+
+Ext.onReady(function() {
+  ///--- Begin MainPanel
+  var MainPanel = function() {
+	  MainPanel.superclass.constructor.call(this, {
+      id : 'doc-body',
+      region : 'center',
+      resizeTabs : true,
+      minTabWidth : 135,
+      tabWidth : 135,
+      plugins : new Ext.ux.TabCloseMenu(),
+      enableTabScroll : true,
+      activeTab : 0,
+      items : [
+        ///-- startCaseTab
+        /*, documentsTab, dashboardTab*/
+        {
+          id : 'startCase',
+          title : TRANSLATIONS.ID_TITLE_START_CASE, // 'Start Case', // 
+          iconCls : 'ICON_CASES_START_CASE',
+          layout : 'border',
+          items : [
+              {
+                id : 'img-chooser-view',
+                region : 'center',
+                style : {
+                    width : '50%'
+                  	
+                  },
+                // autoScroll: true,
+                items : [ newCaseTree ]
+              }, {
+            	  xtype:'form',
+                id : 'process-detail-panel',
+                region : 'east',
+                //autoHeight : true,
+                split : true,
+                style : {
+                    width : '50%'
+                  	
+                  },
+                
+        //        minWidth : 150,
+                frame: true,
+                labelAlign: 'right',
+                labelWidth: 85,
+          //      width:340,
+                waitMsgTarget: true,
+                title: TRANSLATIONS.ID_PROCESS_INFORMATION, 
+                layout:'form',
+                defaults: {width: 350},
+                defaultType: 'textfield',
+
+
+                items: [{
+                    fieldLabel: TRANSLATIONS.ID_PROCESS, // 'Process',
+                    name: 'processName',
+                    allowBlank:false,
+                    value: '',
+                    disabled: true,
+                    //readonly:true,
+                    id:"processName"
+                },{
+                    fieldLabel: TRANSLATIONS.ID_TASK, // 'Task',
+                    name: 'taskName',
+                    allowBlank:false,
+                    value: '',
+                    disabled: true,
+                    id:"taskName"
+                },{
+                	xtype:'textarea',
+                    fieldLabel: TRANSLATIONS.ID_DESCRIPTION, // 'Description',
+                    name: 'processDescription',
+                    value: '',
+                    disabled: true,
+                    id:"processDescription"
+                },{
+                    fieldLabel: TRANSLATIONS.ID_CATEGORY, // 'Category',
+                    name: 'processCategory',
+                    value: '',
+                    disabled: true,
+                    id:"processCategory"
+                }, {
+                    fieldLabel: TRANSLATIONS.ID_CALENDAR, // 'Calendar',
+                    name: 'calendarName',            
+                    disabled: true,
+                    id:"calendarName"
+              },{
+              	xtype:'textarea',
+                fieldLabel: TRANSLATIONS.ID_CALENDAR_DESCRIPTION,  // 'Calendar Description',
+                name: 'calendarDescription',
+                value: '',
+                disabled: true,
+                id:"calendarDescription"
+            },{
+            	xtype:'checkboxgroup',
+                  fieldLabel: TRANSLATIONS.ID_WORKING_DAYS, // 'Working days',
+                  name: 'calendarWorkDays',
+                  disabled: true,
+                  id:"calendarWorkDays",
+                	  columns: 7,
+                	    items: [
+                	        {boxLabel: TRANSLATIONS.ID_SUN, name: '0'},
+                	        {boxLabel: TRANSLATIONS.ID_MON, name: '1'},
+                	        {boxLabel: TRANSLATIONS.ID_TUE, name: '2'},
+                	        {boxLabel: TRANSLATIONS.ID_WEN, name: '3'},
+                	        {boxLabel: TRANSLATIONS.ID_THU, name: '4'},
+                	        {boxLabel: TRANSLATIONS.ID_FRI, name: '5'},
+                	        {boxLabel: TRANSLATIONS.ID_SAT, name: '6'}
+                	    ]
+
+             }, {
+            	xtype:'checkbox',
+                fieldLabel: TRANSLATIONS.ID_DEBUG_MODE, // 'Debug Mode',
+                name: 'debugMode',        
+                disabled: true,
+                id:"debugMode"
+          }]
+              }
+          ],
+
+          tbar : [
+              {
+                xtype : 'textfield',
+                name : 'processesFilter',
+                id: 'processesFilter',
+                emptyText : TRANSLATIONS.ID_FIND_A_PROCESS,  // 'Find a Process',
+                enableKeyEvents : true,
+                listeners : {
+                  render : function(f) {
+                    /*Ext.getCmp("startCaseTreePanel").filter = new Ext.tree.TreeFilter(
+                      this,
+                      {
+                        clearBlank : true,
+                        autoClear : true
+                      }
+                    );*/
+
+                    startCaseFilter = new Ext.ux.tree.TreeFilterX(Ext.getCmp('startCaseTreePanel'));
+                  }, /*
+                  keydown : function(t, e) {
+                    treeFiltered = Ext.getCmp("startCaseTreePanel");
+                    //console.log(treeFiltered);
+
+                    var text = t.getValue();
+
+                    //console.log(text);
+                    if (!text) {
+                      treeFiltered.filter.clear();
+                      return;
+                    }
+                    treeFiltered.expandAll();
+
+                    var re = new RegExp('^'+ Ext.escapeRe(text), 'i');
+                    console.log(re);
+                    treeFiltered.filter.filterBy(function(n) {
+                      return !n.attributes.isClass || re.test(n.text);
+                    });
+                  },*/
+                  specialkey: function(f,e){
+                    if (e.getKey() == e.ENTER) {
+                      txt = Ext.getCmp('processesFilter').getValue();
+                      startCaseFilter.clear();
+                      var re = new RegExp('.*' + txt + '.*', 'i');
+                      startCaseFilter.filter(re, 'text');
+                    }
+                  },
+                  scope : this
+                }
+              },
+              {
+                text:'X',
+                ctCls:'pm_search_x_button',
+                handler: function(){
+                  Ext.getCmp('processesFilter').setValue('');
+                  startCaseFilter.clear();
+                }
+              },
+              ' ',
+              ' ',
+              {
+                iconCls : 'icon-expand-all',
+                tooltip : 'Expand All',
+                handler : function() {
+                  Ext.getCmp("startCaseTreePanel").root.expand(true);
+                },
+                scope : this
+              },
+              '-',
+              {
+                iconCls : 'icon-collapse-all',
+                tooltip : 'Collapse All',
+                handler : function() {
+                  Ext.getCmp("startCaseTreePanel").root.collapse(true);
+                },
+                scope : this
+              },
+              ' ',
+              ' ',
+              {
+                xtype : 'tbbutton',
+                cls : 'x-btn-icon',
+                icon : '/images/refresh.gif',
+
+                handler : function() {
+                  tree = Ext
+                      .getCmp('startCaseTreePanel');
+                  tree.getLoader().load(
+                      tree.root);
+                }
+              }
+           ]
+        }
+
+      ]
+
+    });
+  };
+  ///-- End MainPanel
 
 // console.info("Main Panel - End");
 Ext.extend(
@@ -898,12 +911,10 @@ Ext.extend(
       if (selectedNode) {
     	
         //this.initTemplates();
-         //detailEl.hide();
+        //detailEl.hide();
         // detailEl.sequenceFx();
         // detailEl.slideOut('l',
         // {stopFx:true,duration:.9});
-    	  
-    	    
 
         otherAttributes = selectedNode.attributes.otherAttributes;
         
@@ -927,10 +938,6 @@ Ext.extend(
 
         });
 
-        
-        
-        
-        
         //this.detailsTemplate.overwrite(detailEl, data);
         //detailEl.slideIn('t', {stopFx:true,duration:.0});
         //detailEl.highlight('#000', {
@@ -1015,9 +1022,9 @@ Ext.extend(
 
   });
 
-var mainPanel = new MainPanel();
+  ///---  var mainPanel = new MainPanel();
+  mainPanel = new MainPanel(); // Global var
 
-Ext.onReady(function() {
 	var Cookies = {};
 	Cookies.set = function(name, value) {
 		var argv = arguments;

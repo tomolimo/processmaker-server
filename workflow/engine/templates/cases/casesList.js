@@ -326,7 +326,7 @@ Ext.onReady ( function() {
             });
 
   var btnCloseReassign = new Ext.Button ({
-    text: 'Close',
+    text: TRANSLATIONS.ID_CLOSE,
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       newPopUp.hide();
@@ -334,7 +334,8 @@ Ext.onReady ( function() {
   });
 
   var btnExecReassign = new Ext.Button ({
-    text: 'Reassign All',
+    text: TRANSLATIONS.ID_REASSIGN_ALL,
+    // text: 'Reassign All',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       
@@ -366,7 +367,8 @@ Ext.onReady ( function() {
   });
   
   var btnExecReassignSelected = new Ext.Button ({
-    text: 'Reassign',
+    text: TRANSLATIONS.ID_REASSIGN,
+    // text: 'Reassign',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       newPopUp.hide();
@@ -632,24 +634,27 @@ Ext.onReady ( function() {
   });
 
   var btnSelectAll = new Ext.Button ({
-    text: 'Check All',
-//    text: TRANSLATIONS.LABEL_SELECT_ALL,
+    text: TRANSLATIONS.CHECK_ALL,
+    // text: 'Check All',
+    // text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       grid.getSelectionModel().selectAll();
     }
   });
 
   var btnUnSelectAll = new Ext.Button ({
-    text: 'Un-Check All',
-//    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
+    text: TRANSLATIONS.UNCHECK_ALL,
+    // text: 'Un-Check All',
+    // text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
       grid.getSelectionModel().clearSelections();
     }
   });
 
   var btnReassign = new Ext.Button ({
-    text: 'Reassign',
-//    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
+    text: TRANSLATIONS.ID_REASSIGN,
+    // text: 'Reassign',
+    // text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
         reassign();
     }
@@ -680,7 +685,7 @@ Ext.onReady ( function() {
     plain:true,
     items:[nav],
     buttons:[{
-      text:'submit',
+      text: TRANSLATIONS.ID_SUBMIT,
       handler:function(){
         Ext.Msg.alert('OK','save ?');
         Ext.Msg.prompt('Name','please enter your name: ',function(btn,text){
@@ -690,7 +695,7 @@ Ext.onReady ( function() {
         });
       }
     }, {
-      text:'close',
+      text: TRANSLATIONS.ID_CLOSE,
       handler:function() {
         reassignPopup.hide();
       }
@@ -738,7 +743,7 @@ Ext.onReady ( function() {
     valueField    : 'USR_UID',
     mode          : 'local',
     forceSelection: false,
-    emptyText: 'Select',
+    emptyText: TRANSLATIONS.ID_SELECT,
     selectOnFocus: true,
 
     typeAhead: true,
@@ -790,7 +795,7 @@ Ext.onReady ( function() {
 
   var resetSearchButton = {
     text:'X',
-	  ctCls:'pm_search_x_button',
+    ctCls:'pm_search_x_button',
     handler: function(){
       textSearch.setValue('');
       doSearch();
@@ -975,7 +980,7 @@ Ext.onReady ( function() {
   var toolbarTodo = [
     {
       xtype: 'tbsplit',
-      text: 'Actions',
+      text: TRANSLATIONS.ID_ACTIONS,
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
@@ -1045,7 +1050,7 @@ Ext.onReady ( function() {
   var toolbarDraft = [
     {
       xtype: 'tbsplit',
-      text: 'Actions',
+      text: TRANSLATIONS.ID_ACTIONS,
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
