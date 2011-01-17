@@ -2370,7 +2370,7 @@ class Processes {
     $fp = fopen( $pmFilename, "rb");
     $fsData = intval( fread ( $fp, 9)); //reading the size of $oData
     $contents = '';
-    $contents  = fread( $fp, $fsData );    //reading string $oData
+    $contents  = @fread( $fp, $fsData );    //reading string $oData
 
     if ($contents != '') {
       $oData = unserialize ($contents);
