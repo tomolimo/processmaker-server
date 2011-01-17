@@ -25,6 +25,10 @@
  */
 //dont work mb_internal_encoding('UTF-8');
 
+ /**
+ * @package gulliver.system
+ */
+
 
 pake_desc('gulliver version');
 pake_task('version', 'project_exists');

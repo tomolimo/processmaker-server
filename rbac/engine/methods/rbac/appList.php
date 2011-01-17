@@ -26,7 +26,7 @@
 {
   function render( $value = NULL )
   {
-    return "·asdsad";
+    return "ï¿½asdsad";
   }
 }
 class filterForm extends form

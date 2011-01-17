@@ -14,7 +14,7 @@ include_once 'classes/model/AuthenticationSourcePeer.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    classes.model
  */
 abstract class BaseAuthenticationSource extends BaseObject  implements Persistent {
 

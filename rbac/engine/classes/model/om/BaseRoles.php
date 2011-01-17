@@ -14,7 +14,7 @@ include_once 'classes/model/RolesPeer.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    classes.model
  */
 abstract class BaseRoles extends BaseObject  implements Persistent {
 

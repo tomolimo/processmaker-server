@@ -31,6 +31,10 @@
  * file that was distributed with this source code.
  */
 
+ /**
+ * @package gulliver.system
+ */
+
 pake_desc('create classes for current model');
 pake_task('propel-build-model', 'project_exists');
 

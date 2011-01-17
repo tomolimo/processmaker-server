@@ -10,7 +10,7 @@ include_once 'classes/model/RolesPermissions.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    classes.model
  */
 abstract class BaseRolesPermissionsPeer {
 

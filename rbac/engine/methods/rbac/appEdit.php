@@ -23,6 +23,10 @@
  * 
  */
 
+/**
+ * @package    classes.model
+ */
+
 $G_MAIN_MENU = "rbac";
 $G_SUB_MENU  = "rbac.appEdit";
 $G_MENU_SELECTED = 1;
