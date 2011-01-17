@@ -166,7 +166,7 @@ var G_Grid = function(oForm, sGridName) {
               aObjects[0].setAttribute('id', newID);
               aObjects[0].name = newID;
               if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
-                aObjects[0].mergeAttributes(document.createElement("<INPUT name='" + newID + "'/>"), false);
+                aObjects[0].mergeAttributes(document.createElement("<INPUT id='" + newID + "' name='" + newID + "'/>"), false);
               }
   
               //alert(aObjects[0].name);
@@ -261,7 +261,7 @@ var G_Grid = function(oForm, sGridName) {
               }
             }
             
-            //alert(oNewRow.getElementsByTagName('td')[i].innerHTML);
+           // alert(oNewRow.getElementsByTagName('td')[i].innerHTML);
             break;
           case 'select':
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('select');
@@ -365,8 +365,9 @@ var G_Grid = function(oForm, sGridName) {
                  aObjects1[0].checked = aObjects2[0].checked;
                 }
                 aObjects1[0].value = aObjects2[0].value;
-                /*if(oCell1.innerHTML.indexOf('<div id=')!=-1)
-                 oCell1.innerHTML = oCell2.innerHTML;*/
+
+               /* if(oCell1.innerHTML.indexOf('<div id=')!=-1)
+                oCell1.innerHTML = oCell2.innerHTML;*/
               }
 
               aObjects = oCell1.getElementsByTagName('div');
