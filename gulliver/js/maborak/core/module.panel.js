@@ -16,7 +16,7 @@ leimnud.Package.Public({
 		this.uid	= this.parent.tools.createUID();
 		this.zIndex	= 0;
 		this.stepZindex	= 5;
-		this.controlSize= {w:13,h:13};
+		this.controlSize= {w:15,h:15};
 		this.elements	= {};
 		this.setStyle	= {};
 		this.events	= {};

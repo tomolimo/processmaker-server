@@ -628,7 +628,7 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 }
 
 .x-grid3-row-selected {
-	background-color:#CCCCCC !important;
+	background-color:#CCCCCC;
 	background-image: none;
 	border-color:#ACACAC;
 }

@@ -350,6 +350,8 @@ INPUT {
 	border: 1px solid #C0C0C0;
 	border: 1px solid #1983BD;
 	border: 1px solid #66667E;
+	border:1px solid #AAA;
+
 	oveflow:hidden;
 	/*border: 1px solid #5394BF;
 	border-left:1px solid #8BBDDF;
@@ -398,8 +400,7 @@ INPUT {
 	height:23px;
 	overflow:hidden;
 	background-color:white;
-	background-image: url('/images/panel_title.jpg');
-	background-image: url('../images/panel.bg.title.1x23.gif');
+	background-image:url("/skins/ext/images/gray/window/top-bottom.png");
 	background-repeat:repeat-x;
 	background-position:0px -1px;
 	border-bottom:0px solid #DBE0E5;
@@ -415,6 +416,8 @@ INPUT {
 	padding-left: 5px;
 	padding-top: 5px;
 	z-index: 1;
+	text-shadow:#fff 0px 1px 1px;
+	color:#444;
 }
 .panel_close___processmaker{
 	position:absolute;
@@ -424,7 +427,7 @@ INPUT {
 	border:0px solid red;
 	z-index:2;
 	cursor:pointer;
-	background:url(../images/panel.close.static.gif);
+  background:url("/skins/ext/images/gray/panel/tool-sprites.gif") 0 0 no-repeat;
 }
 .panel_roll___processmaker{
 	position:absolute;

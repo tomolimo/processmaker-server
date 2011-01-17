@@ -21,14 +21,14 @@
 
 .x-tree-node-icon{
   width:18px !important;
-  background-image:url( /images/icons_silk/sprites.gif.png);
+  background-image:url( /images/icons_silk/sprites.png);
   height:18px;
 }
 
 
 .ICON_FOLDERS {
   /*.ss_folder_explore*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -7777px !important;
 }
 
@@ -46,32 +46,32 @@
 
 .ICON_CASES_INBOX {
   /*ss_folder_page*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -7957px !important;
 }
 
 .ICON_CASES_DRAFT {
   /*ss_pencil*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -12439px !important;
 }
 
 .ICON_CASES_SENT {
   /*ss_page_white_go*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -11773px !important;
 }
 
 .ICON_CASES_SELFSERVICE {
   /*ss_arrow_rotate_anticlockwise */
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -955px !important;
 }
 
 .ICON_CASES_PAUSED {
   /*ss_clock*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
-  background-position:0 -4033px !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
+  background-position:0px -4969px !important;
 }
 
 .ICON_CASES_COMPLETED {
@@ -84,7 +84,7 @@
 
 .ICON_CASES_FOLDERS {
   /*ss_report */
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -13213px !important;
 }
 
@@ -95,41 +95,41 @@
 }
 .ICON_CASES_SEARCH {
   /*ss_page_find*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -11089px !important;
 }
 
 .ICON_ADMIN {
    /*ss_user_suit*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -17371px !important;
 }
 
 .ICON_CASES_TO_REVISE {
   /*ss_page_white_magnify*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -11881px !important;
 }
 
 .ICON_CASES_TO_REASSIGN {
   /*ss_arrow_rotate_clockwise*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -973px !important;
 }
 
 .ICON_CASES_START_PAGE {
   /*ss_chart_pie*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -3925px !important;
 }
 .ICON_CASES_START_CASE {
   /*ss_add*/
-  background-image:url( /images/icons_silk/sprites.gif.png) !important;
+  background-image:url( /images/icons_silk/sprites.png) !important;
   background-position:0 -19px !important;
 }
 .ICON_CASES_HOME {
   /*ss_house*/
-  background-image:url(/images/icons_silk/sprites.gif.png) !important;
+  background-image:url(/images/icons_silk/sprites.png) !important;
   background-position:0 -8497px !important;
 }
 
@@ -179,8 +179,8 @@
 }
 .x-grid3-row:nth-child(odd) { background-color:#FFF; }
 .x-grid3-row:nth-child(even) { background-color:#F6F6F6; }
-.x-grid3-row-over{
-  background: #E0EAEF !important;
+.x-grid3-row.x-grid3-row-over{
+  background: #E0EAEF;
   cursor: pointer;
 }
 .x-grid3-hd-inner{
@@ -196,9 +196,8 @@
 .x-grid3-col-openLink a:after{
   content:'';
 }
-
-.x-grid3-row-selected{
-  background-color:#F6E095 !important;
+.x-grid3-row.x-grid3-row-selected{
+  background-color:#F6E095;
 }
 /*Checkboxes*/
 .grid_with_checkbox .x-grid3-header-offset{
@@ -262,11 +261,11 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 }
 /*Cambiamos el menos y más*/
 #ext-gen38.x-tree-root-ct .x-tree-elbow-minus,#ext-gen38.x-tree-root-ct .x-tree-elbow-end-minus{
-  background-image:url(/images/icons_silk/sprites.gif.png) !important;
+  background-image:url(/images/icons_silk/sprites.png) !important;
   background-position:0 -2395px !important;
 }
 #ext-gen38.x-tree-root-ct .x-tree-elbow-plus,#ext-gen38.x-tree-root-ct .x-tree-elbow-end-plus{
-  background-image:url(/images/icons_silk/sprites.gif.png) !important;
+  background-image:url(/images/icons_silk/sprites.png) !important;
   background-position:0 -2359px !important;
 }
 /*Item selecciondo en el TREE*/
@@ -315,10 +314,7 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 }
 
 /*STARTCASE RIGHT PANEL*/
-
-#process-detail-panel .details{
-
-}
+#process-detail-panel .details{}
 #process-detail-panel .details .details-info{
   padding:10px;
 }
@@ -328,12 +324,12 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 
 .icon-expand-all{
   /*ss_bullet_toggle_plus*/
-  background-image:url(/images/icons_silk/sprites.gif.png) !important;
+  background-image:url(/images/icons_silk/sprites.png) !important;
   background-position:0 -2359px !important;
 }
 .icon-collapse-all{
   /*ss_bullet_toggle_minus*/
-  background-image:url(/images/icons_silk/sprites.gif.png) !important;
+  background-image:url(/images/icons_silk/sprites.png) !important;
   background-position:0 -2395px !important;
 }
 #startCaseTreePanel .x-tree-elbow-end-minus,

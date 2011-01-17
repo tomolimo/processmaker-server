@@ -251,3 +251,36 @@
 .x-locationbar .x-btn-menu-active .x-btn-center {
     background:transparent url(/skins/ext/images/gray/locationbar/tb-btn-sprite.gif) repeat-x scroll 0pt -105px;
 }
+
+/*Los botones de EXT solamente s even iguales en los x-form*/
+.x-window button.x-btn-text,.x-form-label-right button.x-btn-text,.x-form button.x-btn-text{
+  color:#333;
+  font-size:10px;
+  font-weight:400;
+}
+ .x-window .x-btn-small,.x-form-label-right .x-btn-small,.x-form .x-btn-small{
+	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow:0 1px 2px rgba(0,0,0,0.2);
+}
+
+.x-panel-header-text{
+  text-shadow:#fff 0px 1px 1px;
+  color:#444;
+}
+
+/*Texto en ExtJS*/
+.x-btn-text,.xtb-text{
+	color:#333;
+}
+.x-btn-pressed .x-btn-text{
+	color:#000;
+}
+/*Tabs con ícono en EXT*/
+.x-tab-strip span.x-tab-strip-text{
+	padding:4px 0;
+	font-weight: normal;
+}
+.ext-gecko .x-tab-strip span.x-tab-strip-text,
+.ext-webkit .x-tab-strip span.x-tab-strip-text{
+	height:12px;
+}
