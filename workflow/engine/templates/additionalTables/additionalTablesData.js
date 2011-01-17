@@ -32,6 +32,7 @@ var expander;
 var cmodel;
 var infoGrid;
 var viewport;
+var smodel;
 
 var FIELD_CM;
 var FIELD_DS
@@ -51,14 +52,16 @@ Ext.onReady(function(){
 		text: TRANSLATIONS.ID_EDIT,
 		iconCls: 'button_menu_ext ss_sprite  ss_pencil',
 		//icon: '/images/addc.png',
-		handler: EditPMTableRow
+		handler: EditPMTableRow,
+		disabled: true
 	});
 
 	deleteButton = new Ext.Action({
 		text: TRANSLATIONS.ID_DELETE,
 		iconCls: 'button_menu_ext ss_sprite  ss_delete',
 		//icon: '/images/addc.png',
-		handler: DeletePMTableRow
+		handler: DeletePMTableRow,
+		disabled: true
 	});
 
 	importButton = new Ext.Action({
@@ -89,6 +92,30 @@ Ext.onReady(function(){
 	
 	xColumns.unshift(idField);
   
+	smodel = new Ext.grid.CheckboxSelectionModel({
+    	listeners:{
+    		selectionchange: function(sm){
+    			var count_rows = sm.getCount();
+    			switch(count_rows){
+    			case 0:
+    				editButton.disable();
+    				deleteButton.disable();
+    				break;
+    			case 1:
+    				editButton.enable();
+    				deleteButton.enable();
+    				break;
+    			default:
+    				editButton.disable();
+					deleteButton.disable();
+    				break;
+    			}
+    		}
+    	}
+    });
+	
+	xColumns.unshift(smodel);
+	
 	store = new Ext.data.GroupingStore( {
 		proxy : new Ext.data.HttpProxy({
 			url: 'data_additionalTablesData?sUID=' + TABLES.UID
@@ -98,15 +125,14 @@ Ext.onReady(function(){
 			fields : xFields
 		})
 	});	
-
-	cmodel = new Ext.grid.ColumnModel({
-      defaults: {
-          width: 50,
-          sortable: true
-      },
-      columns: xColumns
-	});
 	
+	cmodel = new Ext.grid.ColumnModel({
+	      defaults: {
+	          width: 50,
+	          sortable: true
+	      },
+	      columns: xColumns
+	});
 	
     
 	infoGrid = new Ext.grid.GridPanel({
@@ -123,23 +149,19 @@ Ext.onReady(function(){
 		enableColumnResize: true,
 		enableHdMenu: true,
 		frame:false,
-		plugins: expander,
-		cls : 'grid_with_checkbox',
+		//plugins: expander,
+		//cls : 'grid_with_checkbox',
+		iconCls:'icon-grid',
 		columnLines: false,
 		viewConfig: {
 			forceFit:true
 		},
 		store: store,
 		cm: cmodel,
+		sm: smodel,
 		tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
 		listeners: {
-			rowdblclick: EditPMTableRow,
-			rowclick: DoNothing,
-			render: function(){
-				infoGrid.getSelectionModel().on('rowselect', function(){
-					var rowSelected = infoGrid.getSelectionModel().getSelected();
-				});
-			}
+			rowdblclick: EditPMTableRow
 		},
 		view: new Ext.grid.GroupingView({
 			forceFit:true,
@@ -178,47 +200,21 @@ NewPMTableRow = function(){
 
 //Load PM Table Edition Row Form
 EditPMTableRow = function(){
-    iGrid = Ext.getCmp('infoGrid');
-    var rowSelected = iGrid.getSelectionModel().getSelected();
-    if( rowSelected ) {
-    	location.href = 'additionalTablesDataEdit?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+rowSelected.data[TABLES.PKF];
-    } else {
-    	Ext.Msg.show({
-    		title:'',
-    		msg: TRANSLATIONS.ID_SELECT_FIRST_ROW,
-    		buttons: Ext.Msg.INFO,
-    		fn: DoNothing,
-    		animEl: 'elId',
-    		icon: Ext.MessageBox.INFO,
-    		buttons: Ext.MessageBox.OK
-    	});
-    }
+	iGrid = Ext.getCmp('infoGrid');
+	rowsSelected = iGrid.getSelectionModel().getSelections();
+   	location.href = 'additionalTablesDataEdit?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+RetrieveRowsID(rowsSelected);
 }
 
 //Confirm PM Table Row Deletion Tasks
 DeletePMTableRow = function(){
 	iGrid = Ext.getCmp('infoGrid');
-    var rowSelected = iGrid.getSelectionModel().getSelected();
-    if( rowSelected ) {
-    	confirmMsg = TRANSLATIONS.ID_MSG_CONFIRM_DELETE_ROW;
-    	//confirmMsg = confirmMsg.replace('{0}',rowSelected.data.ADD_TAB_NAME);
-        Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, confirmMsg,
-        function(btn, text){
-            if (btn=="yes"){
-            	location.href = 'additionalTablesDataDelete?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+rowSelected.data[TABLES.PKF];
-            }
-        });
-    } else {
-    	Ext.Msg.show({
-    		title:'',
-    		msg: TRANSLATIONS.ID_SELECT_FIRST_ROW,
-    		buttons: Ext.Msg.INFO,
-    		fn: DoNothing,
-    		animEl: 'elId',
-    		icon: Ext.MessageBox.INFO,
-    		buttons: Ext.MessageBox.OK
-    	});
-    }
+	rowsSelected = iGrid.getSelectionModel().getSelections();
+	Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_CONFIRM_DELETE_ROW,
+	        function(btn, text){
+	            if (btn=="yes"){
+	            	location.href = 'additionalTablesDataDelete?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+RetrieveRowsID(rowsSelected);
+	            }
+	});
 }
 
 //Load Import PM Table From CSV Source
@@ -229,4 +225,13 @@ ImportPMTableCSV = function(){
 //Load PM Table List
 BackPMList = function(){
 	location.href = 'additionalTablesList';
+}
+
+//Gets UIDs from a array of rows
+RetrieveRowsID = function(rows){
+	var arrAux = new Array();
+	for(var c=0; c<rows.length; c++){
+		arrAux[c] = rows[c].get(TABLES.PKF);
+	}
+	return arrAux.join(',');
 }

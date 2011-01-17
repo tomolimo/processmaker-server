@@ -39,6 +39,6 @@ if ($_GET['sUID'] == '') {
 
 require_once 'classes/model/AdditionalTables.php';
 $oAdditionalTables = new AdditionalTables();
-$oAdditionalTables->deleteAll($_GET['sUID']);
+$oAdditionalTables->deleteMultiple($_GET['sUID']);
 
 G::Header('Location: additionalTablesList');

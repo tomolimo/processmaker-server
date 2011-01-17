@@ -25,7 +25,7 @@ var newButton;
 var editButton;
 var deleteButton;
 var importButton;
-//var exportButton;
+var exportButton;
 var dataButton;
 
 var store;
@@ -33,6 +33,9 @@ var expander;
 var cmodel;
 var infoGrid;
 var viewport;
+var smodel; 
+
+var rowsSelected;
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
@@ -48,14 +51,16 @@ Ext.onReady(function(){
     	text: TRANSLATIONS.ID_EDIT,
     	iconCls: 'button_menu_ext ss_sprite  ss_pencil',
     	//icon: '/images/addc.png',
-    	handler: EditPMTable
+    	handler: EditPMTable,
+    	disabled: true
     });
 
     deleteButton = new Ext.Action({
     	text: TRANSLATIONS.ID_DELETE,
     	iconCls: 'button_menu_ext ss_sprite  ss_delete',
     	//icon: '/images/addc.png',
-    	handler: DeletePMTable
+    	handler: DeletePMTable,
+    	disabled: true
     });
     
     importButton = new Ext.Action({
@@ -69,14 +74,16 @@ Ext.onReady(function(){
     	text: TRANSLATIONS.ID_EXPORT,
     	iconCls: 'silk-add',
     	icon: '/images/export.png',
-    	handler: ExportPMTable
+    	handler: ExportPMTable,
+    	disabled: true
     });
     
     dataButton = new Ext.Action({
     	text: TRANSLATIONS.ID_DATA,
     	iconCls: 'silk-add',
     	icon: '/images/cases-draft.png',
-    	handler: PMTableData
+    	handler: PMTableData,
+    	disabled: true
     });
 
 
@@ -94,10 +101,32 @@ Ext.onReady(function(){
     	})
     });
     
-    expander = new Ext.ux.grid.RowExpander({
-    	tpl : new Ext.Template(
-    			'<p><b>UID:</b> {ADD_TAB_UID}</p><br>'
-    			)
+    smodel = new Ext.grid.CheckboxSelectionModel({
+    	listeners:{
+    		selectionchange: function(sm){
+    			var count_rows = sm.getCount();
+    			switch(count_rows){
+    			case 0:
+    				editButton.disable();
+    				deleteButton.disable();
+    				exportButton.disable();
+    				dataButton.disable();
+    				break;
+    			case 1:
+    				editButton.enable();
+    				deleteButton.enable();
+    				exportButton.enable();
+    				dataButton.enable();
+    				break;
+    			default:
+    				editButton.disable();
+					deleteButton.enable();
+					exportButton.enable();
+					dataButton.disable();
+    				break;
+    			}
+    		}
+    	}
     });
     
     cmodel = new Ext.grid.ColumnModel({
@@ -106,7 +135,7 @@ Ext.onReady(function(){
             sortable: true
         },
         columns: [
-            expander,
+            smodel,
             {id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false},
             {header: TRANSLATIONS.ID_NAME, dataIndex: 'ADD_TAB_NAME', width: 20, align:'left'},
             {header: TRANSLATIONS.ID_DESCRIPTION, dataIndex: 'ADD_TAB_DESCRIPTION', width: 50, hidden:false, align:'left'}
@@ -127,23 +156,19 @@ Ext.onReady(function(){
     	enableColumnResize: true,
     	enableHdMenu: true,
     	frame:false,
-    	plugins: expander,
-    	cls : 'grid_with_checkbox',
+    	//plugins: expander,
+    	iconCls:'icon-grid',
+    	//cls : 'grid_with_checkbox',
     	columnLines: false,
     	viewConfig: {
     		forceFit:true
     	},
     	store: store,
     	cm: cmodel,
+    	sm: smodel,
     	tbar:[newButton,'-', editButton, deleteButton,'-', dataButton,{xtype: 'tbfill'} , importButton, exportButton],
     	listeners: {
     		rowdblclick: PMTableData,
-    		rowclick: DoNothing,
-    		render: function(){
-    		    infoGrid.getSelectionModel().on('rowselect', function(){
-    		    	var rowSelected = infoGrid.getSelectionModel().getSelected();
-    		    });
-    		}
     	},
     	view: new Ext.grid.GroupingView({
     		forceFit:true,
@@ -180,47 +205,21 @@ NewPMTable = function(){
 
 //Load PM Table Edition Forms
 EditPMTable = function(){
-    iGrid = Ext.getCmp('infoGrid');
-    var rowSelected = iGrid.getSelectionModel().getSelected();
-    if( rowSelected ) {
-    	location.href = 'additionalTablesEdit?sUID='+rowSelected.data.ADD_TAB_UID+'&rand='+Math.random();
-    } else {
-    	Ext.Msg.show({
-    		title:'',
-    		msg: TRANSLATIONS.ID_SELECT_FIRST_PM_TABLE_ROW,
-    		buttons: Ext.Msg.INFO,
-    		fn: DoNothing,
-    		animEl: 'elId',
-    		icon: Ext.MessageBox.INFO,
-    		buttons: Ext.MessageBox.OK
-    	});
-    }
+	iGrid = Ext.getCmp('infoGrid');
+	rowsSelected = iGrid.getSelectionModel().getSelections();
+    location.href = 'additionalTablesEdit?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
 }
 
 //Confirm PM Table Deletion Tasks
 DeletePMTable = function(){
 	iGrid = Ext.getCmp('infoGrid');
-    var rowSelected = iGrid.getSelectionModel().getSelected();
-    if( rowSelected ) {
-    	confirmMsg = TRANSLATIONS.ID_CONFIRM_DELETE_PM_TABLE;
-    	confirmMsg = confirmMsg.replace('{0}',rowSelected.data.ADD_TAB_NAME);
-        Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, confirmMsg,
+	rowsSelected = iGrid.getSelectionModel().getSelections();
+    Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_CONFIRM_DELETE_PM_TABLE,
         function(btn, text){
             if (btn=="yes"){
-                location.href = 'additionalTablesDelete?sUID='+rowSelected.data.ADD_TAB_UID+'&rand='+Math.random();
+                location.href = 'additionalTablesDelete?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
             }
-        });
-    } else {
-    	Ext.Msg.show({
-    		title:'',
-    		msg: TRANSLATIONS.ID_SELECT_FIRST_PM_TABLE_ROW,
-    		buttons: Ext.Msg.INFO,
-    		fn: DoNothing,
-    		animEl: 'elId',
-    		icon: Ext.MessageBox.INFO,
-    		buttons: Ext.MessageBox.OK
-    	});
-    }
+    });
 }
 
 //Load Import PM Table Form
@@ -230,24 +229,23 @@ ImportPMTable = function(){
 
 //Load Export PM Tables Form
 ExportPMTable = function(){
-	location.href = 'additionalTablesToExport';
+	iGrid = Ext.getCmp('infoGrid');
+	rowsSelected = iGrid.getSelectionModel().getSelections();
+	location.href = 'additionalTablesToExport?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
 }
 
 //Load PM TAble Data
 PMTableData = function(){
 	iGrid = Ext.getCmp('infoGrid');
-    var rowSelected = iGrid.getSelectionModel().getSelected();
-    if( rowSelected ) {
-        location.href = 'additionalTablesData?sUID='+rowSelected.data.ADD_TAB_UID+'&rand='+Math.random();
-    } else {
-    	Ext.Msg.show({
-    		title:'',
-    		msg: TRANSLATIONS.ID_SELECT_FIRST_PM_TABLE_ROW,
-    		buttons: Ext.Msg.INFO,
-    		fn: DoNothing,
-    		animEl: 'elId',
-    		icon: Ext.MessageBox.INFO,
-    		buttons: Ext.MessageBox.OK
-    	});
-    }
+	rowsSelected = iGrid.getSelectionModel().getSelections();
+    location.href = 'additionalTablesData?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
+}
+
+//Gets UIDs from a array of rows
+RetrieveRowsID = function(rows){
+	var arrAux = new Array();
+	for(var c=0; c<rows.length; c++){
+		arrAux[c] = rows[c].get('ADD_TAB_UID');
+	}
+	return arrAux.join(',');
 }

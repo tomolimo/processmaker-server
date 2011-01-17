@@ -91,6 +91,7 @@ if(isset($_POST['action'])) {
       		        
   
       $EXPORT_TRACEBACK = Array();
+      $c = 0;
       foreach ($tables as $uid) {
         
         $aTable = new additionalTables();
@@ -112,6 +113,8 @@ if(isset($_POST['action'])) {
   	  	  'num_regs' => sizeof($rows),
   		    'schema' => in_array($uid, $schema)? 'yes': 'no',
     		  'data' => in_array($uid, $data)? 'yes': 'no'
+//          'schema' => ($schema[$c]=='Export')? 'yes': 'no',
+//  	      'data' => ($data[$c]=='Export')? 'yes': 'no'
     	  ));
   	  }
       

@@ -860,6 +860,13 @@ public function loadByName($name) {
     }
     return implode('', $aAux);
   }
+  
+  function deleteMultiple($arrUID){
+  	$arrUIDs = explode(",",$arrUID);
+  	foreach ($arrUIDs as $UID){
+  		$this->deleteAll($UID);
+  	}
+  }
 
   function deleteAll($sUID) {
     try {
@@ -1168,7 +1175,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       throw($oError);
     }
   }
-
+  
   function deleteDataInTable($sUID, $aKeys) {
     try {
       $aData  = $this->load($sUID, true);
