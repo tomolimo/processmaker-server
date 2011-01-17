@@ -2463,7 +2463,7 @@ class processMap {
           $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID);
       }
 
-      $aFields ['GAT_UID'] = $sGatewayUID;
+      $aFields ['GAT_UID'] = (isset($sGatewayUID))?$sGatewayUID:'';
       $oRoute = new Route ( );
       $oRoute->create($aFields);
     } catch (Exception $oError) {
