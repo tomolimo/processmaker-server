@@ -1164,6 +1164,11 @@ switch ($_POST ['action']) {
                                 }
 
 //                              G::pr ( $_SESSION );
+                           if(!isset($_POST['form']['INPUT_DOCUMENT'])){
+                               $_POST['form']['INPUT_DOCUMENT'] = '';
+                           }
+
+
                                 if (isset($_SESSION['_DBArray']['inputDocument'])){
                                     foreach($_SESSION['_DBArray']['inputDocument'] as $inputDocument){
                                         if ($inputDocument['guid']==$_POST['form']['INPUT_DOCUMENT']){
