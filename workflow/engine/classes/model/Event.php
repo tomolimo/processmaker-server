@@ -771,7 +771,7 @@ class Event extends BaseEvent {
   function Exists ( $sUid ) {
     try {
       $oObj = EventPeer::retrieveByPk($sUid);
-      return (get_class($oObj) == 'Event');
+      return (is_object($oObj) && get_class($oObj) == 'Event');
     }
     catch (Exception $oError) {
       throw($oError);
