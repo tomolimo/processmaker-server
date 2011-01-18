@@ -3108,6 +3108,10 @@ ul#pm_submenu a{
   line-height:18px;
   height: auto !important; /*IE se pone loco con el height 18px del ss_sprite*/
 }
+ul#pm_submenu a img{
+  float:left;
+  max-height: 18px;sudo 
+}
 ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
   background-color: #CCC;
 }
@@ -3116,7 +3120,8 @@ ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
 }
 
 
-ul#pm_menu a:focus,button.x-btn-text:focus,.x-combo-selected{
+button.x-btn-text:focus,.x-combo-selected{
   -moz-outline-style:none;
   outline:none;
 }
+

@@ -284,3 +284,8 @@
 .ext-webkit .x-tab-strip span.x-tab-strip-text{
 	height:12px;
 }
+
+button.x-btn-text:focus,.x-combo-selected{
+  -moz-outline-style:none;
+  outline:none;
+}

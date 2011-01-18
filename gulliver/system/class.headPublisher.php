@@ -308,6 +308,7 @@ class headPublisher {
     
     //new interactive css decorator
     $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/decorator?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
+    $script .= "  <link rel='stylesheet' type='text/css' href='/images/icons_silk/sprite.css' />\n";
     
     // Load external/plugin css
     // NOTE is necesary to move this to decorator server      
