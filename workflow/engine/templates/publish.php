@@ -72,9 +72,11 @@ if (isset($_SESSION['G_MESSAGE_TYPE']) && isset($_SESSION['G_MESSAGE'])) {
       $G_MSG_WIDTH = '65%';
     }
 
-    echo('<table width="'.$G_MSG_WIDTH.'" cellpadding="5" cellspacing="0" border="0">');
-    echo('<tr><td id="temporalMessageTD" class="temporalMessage'.$msgType.'" align="center"><div id="temporalMessage'.$msgType.'"><strong>' . G::capitalize($msg) . '</strong>: ' . $_SESSION['G_MESSAGE'] . '</div></td></tr>');
-	  echo('</table><script>PMOS_TemporalMessage('.$timeToHideTmpMsg.')</script>');
+    echo '<table width="'.$G_MSG_WIDTH.'" cellpadding="5" cellspacing="0" border="0">';
+    echo '<tr><td id="temporalMessageTD" class="temporalMessage'.$msgType.'" align="center">';
+    echo '<div id="temporalMessage'.$msgType.'"><strong>';
+    echo $msg . '</strong>: ' . $_SESSION['G_MESSAGE'] . '</div></td></tr>';
+	  echo '</table><script>PMOS_TemporalMessage('.$timeToHideTmpMsg.')</script>';
 
     unset($_SESSION['G_MESSAGE_TYPE']);
     unset($_SESSION['G_MESSAGE']);
