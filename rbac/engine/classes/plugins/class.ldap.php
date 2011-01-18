@@ -27,6 +27,9 @@
  * LDAP plugin for RBAC class
  *
  * @author Fernando Ontiveros
+ * @package  rbac-classes-model
+ * @access public
+
  */
 
 class LDAP
