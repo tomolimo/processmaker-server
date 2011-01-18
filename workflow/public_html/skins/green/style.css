@@ -3046,3 +3046,77 @@ table.DynarchCalendar-titleCont {
   background: url("../shadow-b.png") repeat-x 0 0;
 }
 
+
+
+/*Menu Principal*/
+#pm_main_table .mainMenuBG{
+  border-top:2px solid #b1cedb;
+  background-color:#347898;
+  background-image:none;
+  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(74,149,184)),color-stop(0.97, rgb(46,112,143)));
+  background-image: -moz-linear-gradient(center bottom,rgb(74,149,184) 0%,rgb(46,112,143) 97%);
+}
+ul#pm_menu{
+  list-style: none;
+  margin:0;
+  padding:0 0 0 13px;
+}
+ul#pm_menu li{
+  float:left;
+  margin:3px 2px 0 0;
+  padding:0;
+  -moz-border-radius:3px 3px 0 0;
+  border-radius:3px 3px 0 0;
+}
+ul#pm_menu a{
+  font-weight: bold;
+  color:#fff;
+  font-size:11px;
+  text-decoration: none;
+  display:block;
+  padding:4px 30px;
+  text-transform: uppercase;
+}
+ul#pm_menu li.SelectedMenu,ul#pm_menu li:hover{
+  background-color: #eee;
+  background-image: -webkit-gradient ( linear, left bottom, left top, color-stop(0.39, rgb(245,245,245)), color-stop(0.83, rgb(227,227,227))  );
+  background-image:  -moz-linear-gradient( center bottom, rgb(245,245,245) 39%, rgb(227,227,227) 83%  );
+}
+ul#pm_menu li.SelectedMenu a,ul#pm_menu li:hover a{
+  color:#333;
+}
+ul#pm_submenu{
+  list-style: none;
+  margin:0;
+  padding:0 0 0 2px;
+}
+ul#pm_submenu li{
+  float:left;
+  margin:1px 1px 0 0;
+  -moz-border-radius:3px 3px 0 0;
+  border-radius:3px 3px 0 0;
+  padding:3px;
+}
+ul#pm_submenu a{
+  font-weight: bold;
+  color:#333;
+  font-size:9px;
+  text-decoration: none;
+  display:block;
+  padding-top:0px;
+  text-transform: uppercase;
+  line-height:18px;
+  height: auto !important; /*IE se pone loco con el height 18px del ss_sprite*/
+}
+ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
+  background-color: #CCC;
+}
+ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
+  color:#333;
+}
+
+
+ul#pm_menu a:focus,button.x-btn-text:focus,.x-combo-selected{
+  -moz-outline-style:none;
+  outline:none;
+}

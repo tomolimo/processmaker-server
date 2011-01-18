@@ -16,48 +16,14 @@ form.formDefault .FormTitle,form.formDefault .FormSubTitle{
 .x-grid3-row.x-grid3-row-selected{
   background-color:#F6E095;
 }
-*/
-
-/*Menu Principal*/
 #pm_main_table .mainMenuBG{
-	border-top:2px solid #b1cedb;
-  background-color:#347898;
   background-image:none;
-  background-image: -webkit-gradient(
-		 linear,
-		 left bottom,
-		 left top,
-		 color-stop(0, rgb(74,149,184)),
-		 color-stop(0.97, rgb(46,112,143))
-	);
-	  background-image: -moz-linear-gradient(
-		 center bottom,
-		 rgb(74,149,184) 0%,
-		 rgb(46,112,143) 97%
-	);
-}
-ul#pm_menu{
-  list-style: none;
-  margin:0;
-  padding:0 0 0 13px;
-}
-ul#pm_menu li{
-  float:left;
-  margin:3px 2px 0 0;
-  padding:0;
-  -moz-border-radius:3px 3px 0 0;
-  border-radius:3px 3px 0 0;
-}
-ul#pm_menu a{
-  font-weight: bold;
-  color:#fff;
-  font-size:11px;
-  text-decoration: none;
-  display:block;
-  padding:4px 30px;
-  text-transform: uppercase;
+  background-color:#347898;
+  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(74,149,184)),color-stop(0.97, rgb(46,112,143)));
+  background-image: -moz-linear-gradient(center bottom,rgb(74,149,184) 0%,rgb(46,112,143) 97%);
 }
 ul#pm_menu li.SelectedMenu,ul#pm_menu li:hover{
+  background-image:none;
   background-color: #eee;
   background-image: -webkit-gradient ( linear, left bottom, left top, color-stop(0.39, rgb(245,245,245)), color-stop(0.83, rgb(227,227,227))  );
   background-image:  -moz-linear-gradient( center bottom, rgb(245,245,245) 39%, rgb(227,227,227) 83%  );
@@ -65,57 +31,16 @@ ul#pm_menu li.SelectedMenu,ul#pm_menu li:hover{
 ul#pm_menu li.SelectedMenu a,ul#pm_menu li:hover a{
   color:#333;
 }
-ul#pm_submenu{
-  list-style: none;
-  margin:0;
-  padding:0 0 0 2px;
-}
-ul#pm_submenu li{
-  float:left;
-  margin:1px 1px 0 0;
-  -moz-border-radius:3px 3px 0 0;
-  border-radius:3px 3px 0 0;
-  padding:3px;
-}
-ul#pm_submenu a{
-  font-weight: bold;
-  color:#333;
-  font-size:9px;
-  text-decoration: none;
-  display:block;
-  padding-top:0px;
-  text-transform: uppercase;
-  line-height:18px;
-  height: auto; /*IE se pone loco con el height 18px del ss_sprite*/
-}
-ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
-  background-color: #CCC;
-}
-ul#pm_submenu li.SelectedSubMenu a,ul#pm_submenu li:hover a{
-  color:#333;
-}
+*/
 
-
-ul#pm_menu a:focus,button.x-btn-text:focus,.x-combo-selected{
-  -moz-outline-style:none;
-  outline:none;
-}
-
-input::-moz-focus-inner { border: 0; }
-button::-moz-focus-inner { border: 0; }
-
-.module_app_input___gray{
-	max-width: 400px;
-}
-
-
+input::-moz-focus-inner{border:0;}
+button::-moz-focus-inner{border:0;}
+.module_app_input___gray{max-width: 400px;}
 
 /*Botones*/
 .pagedTableDefault .pagedTable .RowLink a,.module_app_button___gray,.button_pm,.module_app_buttonjs___gray,.module_app_buttonDisabled___gray{
-  -moz-border-radius:4px;
-  border-radius:4px;
-  -moz-box-shadow:0 1px 2px rgba(0,0,0,0.2);
-  -webkit-box-shadow:0 1px 2px rgba(0,0,0,0.2);
+  -moz-border-radius:4px;border-radius:4px;
+  -moz-box-shadow:0 1px 2px rgba(0,0,0,0.2);-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.2);
   background-color:#EEE;
   background-image: none;
   color:#333;
@@ -126,26 +51,28 @@ button::-moz-focus-inner { border: 0; }
   padding:3px 8px;
   text-decoration:none;
   line-height: 14px;
-  /*text-shadow:0 1px 0px rgba(255,255,255,1);*/
   font-family: Arial,serif;
   cursor:pointer;
   border:1px solid #aaa;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -1096px transparent;
 }
+/*HOVER*/
 .pagedTableDefault .pagedTable .RowLink a:hover,.module_app_button___gray:hover,.button_pm:hover,.module_app_buttonHover___gray{
   background-color:#AAA;
   border:1px solid #666;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -2168px transparent;
-
 }
-.pagedTableDefault .pagedTable .RowLink a:focus,.module_app_button___gray:focus,.button_pm:focus{/*,*/
+/*FOCUS*/
+.pagedTableDefault .pagedTable .RowLink a:focus,.module_app_button___gray:focus,.button_pm:focus{
   border:1px solid #45626F;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
+/*NO BUTTON*/
 .pagedTableDefault .pagedTable .RowLink a:empty{
 	display:none;
 	margin:0;
 }
+/*DISABLED*/
 .module_app_buttonDisabled___gray{
 	border:1px solid #bbb;
 	background-position:0 -3240px;
@@ -155,8 +82,6 @@ button::-moz-focus-inner { border: 0; }
 .module_app_buttonDisabled___gray:hover{
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
-
-
 
 /*
 Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
