@@ -239,6 +239,8 @@ class Tasks
       $aFields = $oTask->load($sTaskUID);
       //Delete routes
       $oTasks->deleteAllRoutesOfTask($aFields['PRO_UID'], $sTaskUID, true);
+      //Delete gateways
+      $oTasks->deleteAllGatewayOfTask($aFields['PRO_UID'], $sTaskUID, true);
       //Delete the users assigned to task
       $oCriteria = new Criteria('workflow');
       $oCriteria->add(TaskUserPeer::TAS_UID, $sTaskUID);
@@ -338,7 +340,7 @@ class Tasks
       if ($bAll) {
         $oCriteria = new Criteria('workflow');
         $oCriteria->add(GatewayPeer::PRO_UID,   $sProcessUID);
-        $oCriteria->add(GatewayPeer::ROU_NEXT_TASK, $sTaskUID);
+        $oCriteria->add(GatewayPeer::GAT_NEXT_TASK, $sTaskUID);
         GatewayPeer::doDelete($oCriteria);
       }
       return true;
