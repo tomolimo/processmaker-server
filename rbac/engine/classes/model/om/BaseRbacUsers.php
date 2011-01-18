@@ -14,7 +14,7 @@ include_once 'classes/model/RbacUsersPeer.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseRbacUsers extends BaseObject  implements Persistent {
 

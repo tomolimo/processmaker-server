@@ -10,7 +10,7 @@ include_once 'classes/model/RolesPermissions.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseRolesPermissionsPeer {
 

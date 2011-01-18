@@ -14,7 +14,7 @@ include_once 'classes/model/UsersRolesPeer.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseUsersRoles extends BaseObject  implements Persistent {
 

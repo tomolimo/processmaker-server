@@ -10,7 +10,7 @@ include_once 'classes/model/UsersRoles.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseUsersRolesPeer {
 

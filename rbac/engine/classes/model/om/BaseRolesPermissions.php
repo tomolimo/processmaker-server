@@ -14,7 +14,7 @@ include_once 'classes/model/RolesPermissionsPeer.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseRolesPermissions extends BaseObject  implements Persistent {
 

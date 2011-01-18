@@ -14,7 +14,7 @@ include_once 'classes/model/SystemsPeer.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseSystems extends BaseObject  implements Persistent {
 

@@ -10,7 +10,7 @@ include_once 'classes/model/AuthenticationSource.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseAuthenticationSourcePeer {
 

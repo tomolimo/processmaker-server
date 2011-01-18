@@ -10,7 +10,7 @@ include_once 'classes/model/RbacUsers.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseRbacUsersPeer {
 

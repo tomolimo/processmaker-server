@@ -14,7 +14,7 @@ include_once 'classes/model/AuthenticationSourcePeer.php';
  *
  * 
  *
- * @package    classes.model
+ * @package  rbac-classes-model
  */
 abstract class BaseAuthenticationSource extends BaseObject  implements Persistent {
 
