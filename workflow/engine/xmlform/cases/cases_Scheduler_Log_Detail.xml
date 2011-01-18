@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm type="xmlform" menu="" searchBy="">
+<dynaForm type="xmlform" menu="" searchBy="" width="570">
 
 <SCH_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
   <en>Scheduled Task ID</en>
@@ -35,8 +35,4 @@
 <WS_ROUTE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="140" mode="view">
   <en>Routed Case Status</en>
 </WS_ROUTE_CASE_STATUS>
-
-<VIEW type="link" colWidth="40" value="" link="cases_Scheduler_Log" onclick="">
-  <en>Back to List</en>
-</VIEW>
 </dynaForm>

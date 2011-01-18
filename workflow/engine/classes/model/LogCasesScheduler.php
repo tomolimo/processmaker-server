@@ -30,7 +30,7 @@ class LogCasesScheduler extends BaseLogCasesScheduler {
         $c->addSelectColumn(LogCasesSchedulerPeer::WS_ROUTE_CASE_STATUS);
         return $c;
     }
-
+    
     function getAll(){
         $oCriteria = $this->getAllCriteria();
         $oDataset = LogCasesSchedulerPeer::doSelectRS($oCriteria);
@@ -51,6 +51,7 @@ class LogCasesScheduler extends BaseLogCasesScheduler {
 
     return $aRows;
     }
+    
     function saveLogParameters($params){
 
         if ( isset ( $params['LOG_CASE_UID'] ) && $params['LOG_CASE_UID']== '' )

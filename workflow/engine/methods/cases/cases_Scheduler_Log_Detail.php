@@ -64,7 +64,7 @@ try {
 //  var_dump(htmlspecialchars($_GET['WS_ROUTE']));
 //  var_dump(htmlentities($_GET['WS_ROUTE']));
 
-  $oCriteria->add(LogCasesSchedulerPeer::LOG_CASE_UID,$_GET['LOG_CASE_UID']);
+  $oCriteria->add(LogCasesSchedulerPeer::LOG_CASE_UID,$_REQUEST['LOG_CASE_UID']);
 
   $result = LogCasesSchedulerPeer::doSelectRS($oCriteria);
   $result->next();
@@ -84,8 +84,6 @@ try {
    
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_Scheduler_Log_Detail.xml', '', $aFields, '');
   G::RenderPage('publishBlank', 'blank');
-
-  
   
 }
 catch (Exception $oException) {
