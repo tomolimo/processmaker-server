@@ -1178,6 +1178,9 @@ switch ($_POST ['action']) {
                                 } else {
                                     $doc_uid  = "default";
                                 }
+                                if(!isset($_SESSION['_DBArray']['WS_TMP_CASE_UID'])){
+                               $_SESSION['_DBArray']['WS_TMP_CASE_UID'] = '';
+                                }
                                 $usr_uid  = $_SESSION['USER_LOGGED'];
                                 $app_uid  = $_SESSION['_DBArray']['WS_TMP_CASE_UID'];
                                 $del_index = 1;
