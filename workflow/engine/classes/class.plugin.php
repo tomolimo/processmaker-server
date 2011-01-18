@@ -297,6 +297,26 @@ class caseSchedulerPlugin {
     $this->sActionGetFields = $sActionGetFields;
    }
 }
+class taskExtendedProperty {
+  var $sNamespace;
+  var $sPage;
+  var $sName;  
+  var $sIcon;    
+  /**
+  * This function is the constructor of the taskExtendedProperty class
+  * @param string $sNamespace
+  * @param string $sPage  
+  * @param string $sName
+  * @param string $sIcon
+  * @return void
+  */
+  function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
+    $this->sNamespace = $sNamespace;
+    $this->sPage    = $sPage;    
+    $this->sName    = $sName;
+    $this->sIcon    = $sIcon;
+  }
+ }
 
 class PMPlugin {
   var $sNamespace;
@@ -515,5 +535,14 @@ class PMPlugin {
   function registerCaseSchedulerPlugin($sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields) {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields );
+  }
+/**
+  * With this function we can register a Dashboard Page for Cases Dashboard
+  * @param string $sPage
+  * @return void
+  */
+  function registerTaskExtendedProperty( $sPage, $sName, $sIcon="") {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $oPluginRegistry->registerTaskExtendedProperty ( $this->sNamespace, $sPage, $sName, $sIcon );
   }
 }

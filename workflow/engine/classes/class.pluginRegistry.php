@@ -79,6 +79,7 @@ class PMPluginRegistry {
   private $_aCSSStyleSheets = array();
   private $_aToolbarFiles = array();
   private $_aCaseSchedulerPlugin = array();
+  private $_aTaskExtendedProperties = array();
 
   static private $instance = NULL;
 
@@ -148,8 +149,8 @@ class PMPluginRegistry {
   function registerPlugin( $sNamespace, $sFilename = null)
   {
     $sClassName = $sNamespace . 'plugin';
-    //if ( isset( $this->_aPluginDetails[$sNamespace] ) )
-    //  return;
+    if ( isset( $this->_aPluginDetails[$sNamespace] ) )
+      return;
     //require_once ( $sFilename );
     $plugin = new $sClassName ($sNamespace, $sFilename);
     $detail = new pluginDetail (
@@ -165,9 +166,9 @@ class PMPluginRegistry {
     $detail->aWorkspaces = $plugin->aWorkspaces;
     if ( isset ($plugin->bPrivate) )
       $detail->bPrivate = $plugin->bPrivate;
-    if ( isset( $this->_aPluginDetails[$sNamespace] ) ){
-      $detail->enabled=$this->_aPluginDetails[$sNamespace]->enabled;
-    }
+    //if ( isset( $this->_aPluginDetails[$sNamespace] ) ){
+    //  $detail->enabled=$this->_aPluginDetails[$sNamespace]->enabled;
+    //}
     $this->_aPluginDetails[$sNamespace] = $detail;
   }
 
@@ -274,6 +275,12 @@ class PMPluginRegistry {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aCaseSchedulerPlugin[ $key ] );
     }
+  	foreach ( $this->_aTaskExtendedProperties as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aTaskExtendedProperties[ $key ] );
+    }
+    
+    
   }
 
   /**
@@ -920,5 +927,36 @@ class PMPluginRegistry {
    */
   function getCaseSchedulerPlugins( ) {
     return $this->_aCaseSchedulerPlugin;
+  }
+  
+   /**
+   * Register a Task Extended property page in the singleton
+   *
+   * @param unknown_type $sNamespace
+   * @param unknown_type $sPage
+   */
+  
+  function registerTaskExtendedProperty($sNamespace, $sPage, $sName, $sIcon ) {
+    $found = false;
+    foreach ( $this->_aTaskExtendedProperties as $row=>$detail ) {
+      if ( $sPage == $detail->sPage && $sNamespace == $detail->sNamespace ){
+        $detail->sName=$sName;
+        $detail->sIcon=$sIcon;
+        $found = true;
+      }
+    }
+    if ( !$found ) {
+      $taskExtendedProperty = new taskExtendedProperty ($sNamespace, $sPage, $sName, $sIcon);
+      $this->_aTaskExtendedProperties[] = $taskExtendedProperty;
+    }
+  }
+
+  /**
+   * return all dashboard pages
+   *
+   * @return array
+   */
+  function getTaskExtendedProperties() {
+    return  $this->_aTaskExtendedProperties;
   }
 }
