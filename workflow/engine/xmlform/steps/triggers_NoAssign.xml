@@ -2,7 +2,7 @@
 <dynaForm name="triggers_NoAssign" type="xmlform" width="100%">
 
 <MESSAGE type="subtitle" align="center">
-<en>All the triggers available were assigned!</en>
+<en>Triggers not created or all the triggers available were assigned!</en>
 </MESSAGE>
 
 <ClOSE type="button" onclick="currentPopupWindow.remove();">
