@@ -187,15 +187,10 @@ TaskContext.prototype.editTaskSteps = function(_3252){
             layout      : 'form',
             tbar: toolbar,
             ddGroup     : 'firstGridDDGroup',
-           
-         
             clicksToEdit: 1,
             minHeight   :400,
             height      :400,
-           
-           
-            
-            //plugins     : [editor],
+            plugins: [editor],
             columns     : [{
                             id: 'STEP_TITLE',
                             header: 'Title',
@@ -1640,7 +1635,9 @@ TaskContext.prototype.stepTriggers = function(_5625)
             }
         }
     });
-     var btnCondition = new Ext.Button({
+
+
+  var btnCondition = new Ext.Button({
       id: 'btnCondition',
       text: 'Assign Condition',
       handler: function (s) {

@@ -2389,13 +2389,8 @@ var formWindow = new Ext.Window({
 
                 });
                     }
-
-
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-
             formWindow.close();
-            reportStore.reload();
+           // reportStore.reload();
             
           }
         },{
