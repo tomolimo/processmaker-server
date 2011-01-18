@@ -1304,7 +1304,6 @@ class processMap {
           $sFilename = 'tasks/tasks_Notifications.xml';
           break;
         default:
-        	print "<h1>$iForm</h1>";
         	//if the $iForm is not one of the defaults then search under Plugins for an extended property. By JHL Jan 18, 2011
 	      $oPluginRegistry =& PMPluginRegistry::getSingleton();
 		  $activePluginsForTaskProperties=$oPluginRegistry->getTaskExtendedProperties();
