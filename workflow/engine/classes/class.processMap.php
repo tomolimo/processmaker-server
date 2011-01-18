@@ -4615,6 +4615,7 @@ class processMap {
   {
     try {
       $oTasks = new Tasks ( );
+      $_SESSION['TASK'] = $sTaskUID;
       $aSteps = $oTasks->getStepsOfTask ( $sTaskUID );
       $sUIDs  = array ();
       foreach ( $aSteps as $aStep ) {

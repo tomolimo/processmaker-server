@@ -1230,6 +1230,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                    handler: function (s) {
                                     workflow.variablesAction = 'form';
                                     workflow.fieldId= 'DestPath' ;
+                                    workflow.variable = '@@',
                                     workflow.formSelected = inputDocForm;
                                     var rowData = ProcMapObj.ExtVariables();
                                     console.log(rowData);
@@ -1262,7 +1263,8 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 name: 'selectorigin',
                                 handler: function (s) {
                                     workflow.variablesAction = 'form';
-                                     workflow.fieldId= 'tags' ;
+                                    workflow.fieldId= 'tags' ;
+                                    workflow.variable = '@@',
                                     workflow.formSelected = inputDocForm;
                                     var rowData = ProcMapObj.ExtVariables();
                                     console.log(rowData);
@@ -1439,8 +1441,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                               INP_DOC_FORM_NEEDED           : sFormNeeded,
                               INP_DOC_ORIGINAL              : sOrig,
                               INP_DOC_VERSIONING            : sVers,
-                              INP_DOC_TAGS                  : 'INPUT',    //By Default
-                              INP_DOC_DESCRIPTION           : sDesc
+                              INP_DOC_TAGS                  : sTags,
+                              INP_DOC_DESCRIPTION           : sDesc,
+                              INP_DOC_DESTINATION_PATH      : sDestPath
                           },
                           success: function(response) {
                               Ext.MessageBox.alert ('Status','Input document has been updated successfully.');
@@ -1612,15 +1615,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     editor: new Ext.form.TextField({
                     //allowBlank: false
                     })
-                }/*,
-                {
-                    sortable: false,
-                    renderer: function(val, meta, record)
-                       {
-                            return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
-                       }
-                }*/
-                ]
+                }
+            ]
         });
 
 
@@ -1658,9 +1654,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     collapsible : false,
                     labelAlign  : '',
                     items       :[{
-                             //   xtype: 'hiddenfield',
-                              //  name:'OUT_DOC_UID'
-                              //  },{
                                     xtype       : 'textfield',
                                     fieldLabel  : 'Title',
                                     allowBlank  : false,
@@ -1694,15 +1687,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                             name: 'selectorigin',
                                              handler: function (s) {
                                                 workflow.variablesAction = 'form';
-                                                workflow.fieldId= 'filenameGenerated' ;
-                                                workflow.formSelected = outputDocForm;
+                                                workflow.fieldId         = 'filenameGenerated' ;
+                                                workflow.variable        = '@@',
+                                                workflow.formSelected    = outputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
                                                 console.log(rowData);
-                                   }
-
-                                            //anchor:'95%'
-                                        }]
+                                        }
                                     }]
+                                 }]
                                 },{
                                     xtype           : 'textarea',
                                     fieldLabel      : 'Description',
@@ -1818,34 +1810,34 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     layout      :'column',
                     border      :false,
                     items       :[{
-                    columnWidth :.6,
-                    layout      : 'form',
-                    border      :false,
-                    items       : [{
-                            xtype       : 'textfield',
-                            id          : 'DestPath',
-                            fieldLabel  : 'Destination Path',
-                            name        : 'OUT_DOC_DESTINATION_PATH',
-                            anchor      :'100%'
-                    }]
-                },{
-                    columnWidth     :.4,
-                    layout          : 'form',
-                    border          :false,
-                    items           : [{
-                            xtype           :'button',
-                            title           : ' ',
-                            text            : '@@',
-                            name            : 'selectorigin',
-                             handler: function (s) {
-                                                workflow.variablesAction = 'form';
-                                                workflow.fieldId= 'DestPath' ;
-                                                workflow.formSelected = outputDocForm;
-                                                var rowData = ProcMapObj.ExtVariables();
-                                                console.log(rowData);
-                                   }
-                          //anchor          :'15%'
+                        columnWidth :.6,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                                xtype       : 'textfield',
+                                id          : 'DestPath',
+                                fieldLabel  : 'Destination Path',
+                                name        : 'OUT_DOC_DESTINATION_PATH',
+                                anchor      :'100%'
                         }]
+                    },{
+                        columnWidth     :.4,
+                        layout          : 'form',
+                        border          :false,
+                        items           : [{
+                                xtype           :'button',
+                                title           : ' ',
+                                text            : '@@',
+                                name            : 'selectorigin',
+                                 handler: function (s) {
+                                                    workflow.variablesAction = 'form';
+                                                    workflow.fieldId         = 'DestPath' ;
+                                                    workflow.variable        = '@@',
+                                                    workflow.formSelected    = outputDocForm;
+                                                    var rowData = ProcMapObj.ExtVariables();
+                                                    console.log(rowData);
+                                            }
+                            }]
                     }]
                 },{
                     layout      :'column',
@@ -1872,13 +1864,13 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 name        : 'selectorigin',
                                 handler: function (s) {
                                                 workflow.variablesAction = 'form';
-                                                workflow.fieldId= 'tags' ;
-                                                workflow.formSelected = outputDocForm;
+                                                workflow.fieldId         = 'tags' ;
+                                                workflow.variable        = '@@',
+                                                workflow.formSelected    = outputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
                                                 console.log(rowData);
                                    }
-                              //anchor      :'15%'
-                            }]
+                              }]
                         }]
                      },{
                       id : 'OUT_DOC_UID',
@@ -1914,9 +1906,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         sVersioning=1;
                 var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
                 var sTags         = getForm.OUT_DOC_TAGS;
-
-
-             if(sDocUID == "")
+            if(sDocUID == "")
                {
               Ext.Ajax.request({
                   url   : '../outputdocs/outputdocs_Save.php',
@@ -1996,10 +1986,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                       });
 
                }
-
-
-
-
 }
 
         },{
@@ -2337,11 +2323,8 @@ var formWindow = new Ext.Window({
                 
                 var Grid            = getForm.REP_TAB_GRID;
                 var Fields          = getForm.FIELDS;
-               // var VariableName    = getForm.REP_VAR_NAME;
-               // var VariableType    = getForm.REP_VAR_TYPE;
-               // var Connection      = getForm.REP_TAB_CONNECTION
-                
-           if(typeof tableUID=='undefined')
+               
+            if(typeof tableUID=='undefined')
                {
                 Ext.Ajax.request({
                   url   : '../reportTables/reportTables_Save.php',
@@ -2354,17 +2337,12 @@ var formWindow = new Ext.Window({
                       REP_TAB_TYPE    :Type ,
                       REP_TAB_GRID    :Grid,
                       FIELDS          :Fields
-                      //REP_VAR_NAME    : VariableName,
-                      //REP_VAR_TYPE    : VariableType,
-                      //REP_TAB_CONNECTION: Connection
-                      
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Report Table Saved Successfully.');
                   }
                 });
                }
-                    
                     else
                          {
                 Ext.Ajax.request({
@@ -2390,7 +2368,7 @@ var formWindow = new Ext.Window({
                 });
                     }
             formWindow.close();
-           // reportStore.reload();
+          reportStore.reload();
             
           }
         },{

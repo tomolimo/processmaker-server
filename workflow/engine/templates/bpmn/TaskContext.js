@@ -7,200 +7,191 @@ TaskContext.prototype.type="TaskContext";
 
 TaskContext.prototype.editTaskSteps = function(_3252){
     var taskExtObj = new TaskContext();
-     var ProcMapObj= new ProcessMapContext();
+    var ProcMapObj= new ProcessMapContext();
     var pro_uid = _3252.scope.workflow.getUrlVars();
     var taskId  = _3252.scope.workflow.currentSelection.id;
     
     var stepsFields = Ext.data.Record.create([
-            {
-                name: 'STEP_TITLE',
-                type: 'string'
-            },
-            {
-                name: 'STEP_UID',
-                type: 'string'
-            },
-            {
-                name: 'STEP_TYPE_OBJ',
-                type: 'string'
-            },
-            {
-                name: 'STEP_CONDITION',
-                type: 'string'
-            },
-            {
-                name: 'STEP_POSITION',
-                type: 'string'
-            },
-            {
-                name: 'STEP_MODE',
-                type: 'string'
-            },
-            {
-                name: 'STEP_UID_OBJ',
-                type: 'string'
-            }
-       ]);
+        {
+            name: 'STEP_TITLE',
+            type: 'string'
+        },
+        {
+            name: 'STEP_UID',
+            type: 'string'
+        },
+        {
+            name: 'STEP_TYPE_OBJ',
+            type: 'string'
+        },
+        {
+            name: 'STEP_CONDITION',
+            type: 'string'
+        },
+        {
+            name: 'STEP_POSITION',
+            type: 'string'
+        },
+        {
+            name: 'STEP_MODE',
+            type: 'string'
+        },
+        {
+            name: 'STEP_UID_OBJ',
+            type: 'string'
+        }
+   ]);
 
     var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+        saveText: 'Update'
         });
 
     var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: 'Assign Step',
-            iconCls: 'application_add',
-            handler: function(){
-                var User = grid.getStore();
-                var e = new stepsFields({
-                     //STEP_TITLE: User.data.items[0].data.STEP_TITLE,
-                     STEP_UID       : '',
-                     STEP_TYPE_OBJ  : '',
-                     STEP_CONDITION : '',
-                     STEP_POSITION  : '',
-                     STEP_MODE      : '',
-                     STEP_UID_OBJ   : ''
-                });
-                
-                if(availableSteps.data.items.length == 0)
-                     Ext.MessageBox.alert ('Status','No steps are available. All Steps have been already assigned.');
-                else
-                {
-                    editor.stopEditing();
-                    taskSteps.insert(0, e);
-                    grid.getView().refresh();
-                    //grid.getSelectionModel().selectRow(0);
-                    editor.startEditing(0, 0);
-                }
-            }
-        });
+        id: 'btnAdd',
+        text: 'Assign Step',
+        iconCls: 'application_add',
+        handler: function(){
+            var User = grid.getStore();
+            var e = new stepsFields({
+                 //STEP_TITLE: User.data.items[0].data.STEP_TITLE,
+                 STEP_UID       : '',
+                 STEP_TYPE_OBJ  : '',
+                 STEP_CONDITION : '',
+                 STEP_POSITION  : '',
+                 STEP_MODE      : '',
+                 STEP_UID_OBJ   : ''
+            });
 
-        var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: 'Remove Step',
-            iconCls: 'application_delete',
-            handler: function (s) {
+            if(availableSteps.data.items.length == 0)
+                 Ext.MessageBox.alert ('Status','No steps are available. All Steps have been already assigned.');
+            else
+            {
                 editor.stopEditing();
-                var s = grid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
-
-                    //First Deleting step from Database using Ajax
-                    var stepUID      = r.data.STEP_UID;
-                    var stepPosition = r.data.STEP_POSITION;
-
-                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.STEP_UID != "")
-                    {
-                        Ext.Ajax.request({
-                          url   : '../steps/steps_Delete.php',
-                          method: 'POST',
-                          params: {
-                                TASK            : taskId,
-                                STEP_UID        : stepUID,
-                                STEP_POSITION   : stepPosition
-                          },
-                          success: function(response) {
-                            Ext.MessageBox.alert ('Status','Step has been removed successfully.');
-                            //Secondly deleting from Grid
-                            taskSteps.remove(r);
-                            //Reloading store after removing steps
-                            taskSteps.reload();
-                          }
-                        });
-                    }
-                    else
-                       taskSteps.remove(r);
-                }
+                taskSteps.insert(0, e);
+                grid.getView().refresh();
+                //grid.getSelectionModel().selectRow(0);
+                editor.startEditing(0, 0);
             }
-        });
+        }
+    });
 
-        var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove]
+    var btnRemove = new Ext.Button({
+        id: 'btnRemove',
+        text: 'Remove Step',
+        iconCls: 'application_delete',
+        handler: function (s) {
+            editor.stopEditing();
+            var s = grid.getSelectionModel().getSelections();
+            for(var i = 0, r; r = s[i]; i++){
+
+                //First Deleting step from Database using Ajax
+                var stepUID      = r.data.STEP_UID;
+                var stepPosition = r.data.STEP_POSITION;
+
+                //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
+                //else its a BLANK ROW for which Ajax should not be called.
+                if(r.data.STEP_UID != "")
+                {
+                    Ext.Ajax.request({
+                      url   : '../steps/steps_Delete.php',
+                      method: 'POST',
+                      params: {
+                            TASK            : taskId,
+                            STEP_UID        : stepUID,
+                            STEP_POSITION   : stepPosition
+                      },
+                      success: function(response) {
+                        Ext.MessageBox.alert ('Status','Step has been removed successfully.');
+                        //Secondly deleting from Grid
+                        taskSteps.remove(r);
+                        //Reloading store after removing steps
+                        taskSteps.reload();
+                      }
+                    });
+                }
+                else
+                   taskSteps.remove(r);
+            }
+        }
+    });
+
+    var tb = new Ext.Toolbar({
+        items: [btnAdd, btnRemove]
         });
 
         // create the Data Store of all Steps that are already been assigned to a task
-        var taskSteps = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : stepsFields,
-            proxy        : new Ext.data.HttpProxy({
-                   url   : 'proxyExtjs?tid='+taskId+'&action=getAssignedSteps'
-            })
-          });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-          taskSteps.load();
+    var taskSteps = new Ext.data.JsonStore({
+        root         : 'data',
+        totalProperty: 'totalCount',
+        idProperty   : 'gridIndex',
+        remoteSort   : true,
+        fields       : stepsFields,
+        proxy        : new Ext.data.HttpProxy({
+        url   : 'proxyExtjs?tid='+taskId+'&action=getAssignedSteps'
+        })
+      });
+      //taskUsers.setDefaultSort('LABEL', 'asc');
+      taskSteps.load();
 
         // create the Data Store of all Steps that are not been assigned to a task i.e available steps
-        var availableSteps = new Ext.data.JsonStore({
-             root            : 'data',
-             url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAvailableSteps',
-             totalProperty   : 'totalCount',
-             idProperty      : 'gridIndex',
-             remoteSort      : false,
-             autoLoad        : true,
-             fields          : stepsFields
+    var availableSteps = new Ext.data.JsonStore({
+         root            : 'data',
+         url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAvailableSteps',
+         totalProperty   : 'totalCount',
+         idProperty      : 'gridIndex',
+         remoteSort      : false,
+         autoLoad        : true,
+         fields          : stepsFields
 
-         });
+     });
 
-    var btnCondition = new Ext.Button({
-      id: 'btnCondition',
-      text: 'Assign Condition',
-      handler: function (s) {
-                workflow.variablesAction = 'grid';
-                workflow.gridField = 'STEP_CONDITION';
-                var rowSelected = conditionGrid.getSelectionModel().getSelections();
-                if(rowSelected == '')
-                    workflow.gridObjectRowSelected = conditionGrid;
-                else
-                    workflow.gridObjectRowSelected = rowSelected;
-                //var rowSelected = Objectsgrid;
-                //workflow.gridObject = Objectsgrid;
-                var rowData = ProcMapObj.ExtVariables();
-                console.log(rowData);
-                //var a = Ext.getCmp('btnCondition');
-                //alert (a);
+    var btnStepsCondition = new Ext.Button({
+        id: 'btnCondition',
+        text: 'Assign Condition',
+        handler: function (s) {
+                    workflow.variablesAction = 'grid';
+                    workflow.variable        = '@@',
+                    workflow.gridField       = 'STEP_CONDITION';
+                    var rowSelected = conditionGrid.getSelectionModel().getSelections();
+                    if(rowSelected == '')
+                        workflow.gridObjectRowSelected = conditionGrid;
+                    else
+                        workflow.gridObjectRowSelected = rowSelected;
 
-                //console.log(rowData);
-            }
-
-
-    })
+                    var rowData = ProcMapObj.ExtVariables();
+                    console.log(rowData);
+                }
+        })
      
 
- var toolbar = new Ext.Toolbar({
-            items: [btnCondition]
+    var toolbar = new Ext.Toolbar({
+        items: [btnStepsCondition]
         });
          //availableSteps.load();
-          var conditionGrid =  new Ext.grid.GridPanel({
-            store       : taskSteps,
-            id          : 'conditiongrid',
-            loadMask    : true,
-            loadingText : 'Loading...',
-           // renderTo    : 'cases-grid',
-            
-            frame       : false,
-            autoHeight  : false,
-            enableDragDrop   : true,
-            layout      : 'form',
-            tbar: toolbar,
-            ddGroup     : 'firstGridDDGroup',
-            clicksToEdit: 1,
-            minHeight   :400,
-            height      :400,
-            plugins: [editor],
-            columns     : [{
+    var conditionGrid =  new Ext.grid.GridPanel({
+        store           : taskSteps,
+        id              : 'conditiongrid',
+        loadMask        : true,
+        loadingText     : 'Loading...',
+        frame           : false,
+        autoHeight      : false,
+        enableDragDrop  : true,
+        layout          : 'form',
+        tbar            : toolbar,
+        ddGroup         : 'firstGridDDGroup',
+        clicksToEdit    : 1,
+        minHeight       :400,
+        height          :400,
+        plugins         : [editor],
+        columns         : [{
                             id: 'STEP_TITLE',
                             header: 'Title',
                             dataIndex: 'STEP_TITLE',
                             width: 280,
                             editor: new Ext.form.TextField({
-                            //alloBlank: false
                             })
-                        },
-                        {
+                            },
+                            {
                             id: 'STEP_CONDITION',
                             header: 'Condition',
                             dataIndex: 'STEP_CONDITION',
@@ -208,32 +199,28 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                             editable: true,
                             editor: new Ext.form.TextField({
                             })
-                        }
-                          
-                        ]
-                
-            
-
-                    });
+                            }
+                           ]
+                        });
 
         
                  
-      var grid =  new Ext.grid.GridPanel({
-            store       : taskSteps,
-            id          : 'mygrid',
-            loadMask    : true,
-            loadingText : 'Loading...',
-            renderTo    : 'cases-grid',
-            frame       : false,
-            autoHeight  : false,
-            enableDragDrop   : true,
-            ddGroup     : 'firstGridDDGroup',
-            clicksToEdit: 1,
-            minHeight   :400,
-            height      :400,
-            layout      : 'form',
-            plugins     : [editor],
-            columns     : [{
+    var grid =  new Ext.grid.GridPanel({
+        store       : taskSteps,
+        id          : 'mygrid',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : false,
+        autoHeight  : false,
+        enableDragDrop   : true,
+        ddGroup     : 'firstGridDDGroup',
+        clicksToEdit: 1,
+        minHeight   :400,
+        height      :400,
+        layout      : 'form',
+        plugins     : [editor],
+        columns     : [{
                         id: 'STEP_TITLE',
                         header: 'Title',
                         dataIndex: 'STEP_TITLE',
@@ -242,11 +229,9 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                         editor: new Ext.form.ComboBox({
                                 xtype        : 'combo',
                                 fieldLabel   : 'Users_groups',
-                                //hiddenName   : 'number',
                                 store        :  availableSteps,
                                 displayField : 'STEP_TITLE'  ,
                                 valueField   : 'STEP_TITLE',
-                                //name         : 'STEP_TITLE',
                                 scope        :  this,
                                 triggerAction: 'all',
                                 emptyText    : 'Select Step',
@@ -260,12 +245,12 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                                         selectedrowIndex     = _3252.scope.workflow.currentrowIndex;    //getting Index of the row that has been edited
 
                                      //User.data.items[0].data.STEP_TITLE= record.data.STEP_TITLE;
-                                     User.data.items[selectedrowIndex].data.STEP_UID= record.data.STEP_UID;
-                                     User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ=record.data.STEP_TYPE_OBJ;
-                                     User.data.items[selectedrowIndex].data.STEP_CONDITION=record.data.STEP_CONDITION;
-                                     User.data.items[selectedrowIndex].data.STEP_POSITION=record.data.STEP_POSITION;
-                                     User.data.items[selectedrowIndex].data.STEP_UID_OBJ=record.data.STEP_UID_OBJ;
-                                     User.data.items[selectedrowIndex].data.STEP_MODE=record.data.STEP_MODE;
+                                     User.data.items[selectedrowIndex].data.STEP_UID        = record.data.STEP_UID;
+                                     User.data.items[selectedrowIndex].data.STEP_TYPE_OBJ   =record.data.STEP_TYPE_OBJ;
+                                     User.data.items[selectedrowIndex].data.STEP_CONDITION  =record.data.STEP_CONDITION;
+                                     User.data.items[selectedrowIndex].data.STEP_POSITION   =record.data.STEP_POSITION;
+                                     User.data.items[selectedrowIndex].data.STEP_UID_OBJ    =record.data.STEP_UID_OBJ;
+                                     User.data.items[selectedrowIndex].data.STEP_MODE       =record.data.STEP_MODE;
 
                                      this.setValue(record.data[this.valueField || this.displayField]);
                                      this.collapse();
@@ -374,17 +359,17 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
        // Setup Drop Targets
       // This will make sure we only drop to the  view scroller element
-      var firstGridDropTargetEl =  grid.getView().scroller.dom;
-      var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
+    var firstGridDropTargetEl =  grid.getView().scroller.dom;
+    var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
                 ddGroup    : 'firstGridDDGroup',
-                   notifyDrop : function(ddSource, e, data){
-                     var records =  ddSource.dragData.selections;
-                     Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                     grid.store.add(records);
-                     grid.store.commitChanges();
-                     //firstGrid.store.sort('gridIndex', 'ASC');
-                     return true
-                   }
+                notifyDrop : function(ddSource, e, data){
+                                     var records =  ddSource.dragData.selections;
+                                     Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                                     grid.store.add(records);
+                                     grid.store.commitChanges();
+                                     //firstGrid.store.sort('gridIndex', 'ASC');
+                                     return true
+                                   }
       });
       firstGridDropTarget.addToGroup('firstGridDDGroup');
 
@@ -419,16 +404,6 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                     width: 400
                 },
                 items:[conditionGrid]
-                        /*xtype: 'grid',
-                        name: 'conditionGrid',
-                        ds: taskSteps,
-                        cm: conditionsColumns,
-                        height: 350,
-                        loadMask    : true,
-                        loadingText : 'Loading...',
-                        border: false,
-                        tbar: toolbar }]*/
-               
             },{
                 title:'Triggers',
                 layout:'form',
@@ -456,20 +431,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: taskStepsTabs
-        /*buttons: [{
-            text: 'Save',
-            handler: function(){
-                //var getstore = grid.getStore();
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskSteps(getData);
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.close();
-            }
-        }]*/
+        
     });
     window.show();
 
@@ -480,11 +442,10 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
 TaskContext.prototype.editUsers= function(_5625)
 {
-        var taskExtObj = new TaskContext();
-        var pro_uid = workflow.getUrlVars();
-        var taskId  = workflow.currentSelection.id;
-
-        var userFields = Ext.data.Record.create([
+    var taskExtObj = new TaskContext();
+    var pro_uid    = workflow.getUrlVars();
+    var taskId     = workflow.currentSelection.id;
+    var userFields = Ext.data.Record.create([
             {
                 name: 'LABEL',
                 type: 'string'
@@ -506,61 +467,57 @@ TaskContext.prototype.editUsers= function(_5625)
                 type: 'string'
             }
             ]);
-        var editor = new Ext.ux.grid.RowEditor({
+    var editor = new Ext.ux.grid.RowEditor({
             saveText: 'Update'
         });
 
        
-        var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: 'Assign User',
-            iconCls: 'application_add',
-            handler: function(){
-                var User = grid.getStore();
-                var e = new userFields({
-                     //LABEL: 'Select User or Group',
-                     //LABEL: User.data.items[0].data.LABEL,
-                     TAS_UID: '',
-                     TU_TYPE: '',
-                     USR_UID: '',
-                     TU_RELATION: ''
-                });
-
-                //storeUsers.reload();
-                if(storeUsers.data.items.length == 0)
-                     Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
-                else
-                {
-                    editor.stopEditing();
-                    taskUsers.insert(0, e);
-                    grid.getView().refresh();
-                    //grid.getSelectionModel().selectRow(0);
-                    editor.startEditing(0, 0);
-                }
-            }
-        });
-
-        var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: 'Remove User',
-            iconCls: 'application_delete',
-            handler: function (s) {
+    var btnAdd = new Ext.Button({
+        id: 'btnAdd',
+        text: 'Assign User',
+        iconCls: 'application_add',
+        handler: function(){
+            var User = grid.getStore();
+            var e = new userFields({
+                 TAS_UID    : '',
+                 TU_TYPE    : '',
+                 USR_UID    : '',
+                 TU_RELATION: ''
+            });
+            //storeUsers.reload();
+            if(storeUsers.data.items.length == 0)
+                 Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+            else
+            {
                 editor.stopEditing();
-                var s = grid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
+                taskUsers.insert(0, e);
+                grid.getView().refresh();
+                editor.startEditing(0, 0);
+            }
+        }
+    });
 
-                    //First Deleting assigned users from Database
-                    var user_TURel      = r.data.TU_RELATION;
-                    var userUID         = r.data.USR_UID;
-                    var user_TUtype     = r.data.TU_TYPE;
-                    var urlparams       = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
-                    
-                    //if USR_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                     if(r.data.USR_UID != "")
+    var btnRemove = new Ext.Button({
+        id: 'btnRemove',
+        text: 'Remove User',
+        iconCls: 'application_delete',
+        handler: function (s) {
+            editor.stopEditing();
+            var s = grid.getSelectionModel().getSelections();
+            for(var i = 0, r; r = s[i]; i++){
+
+                //First Deleting assigned users from Database
+                var user_TURel      = r.data.TU_RELATION;
+                var userUID         = r.data.USR_UID;
+                var user_TUtype     = r.data.TU_TYPE;
+                var urlparams       = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
+
+                //if USR_UID is properly defined (i.e. set to valid value) then only delete the row
+                //else its a BLANK ROW for which Ajax should not be called.
+                 if(r.data.USR_UID != "")
                      {
                         Ext.Ajax.request({
-                          url   : 'processes_Ajax.php' +urlparams ,
+                        url   : 'processes_Ajax.php' +urlparams ,
                           /*method: 'POST',
                           params: {
                                 functions       : 'ofToAssign',
@@ -570,28 +527,28 @@ TaskContext.prototype.editUsers= function(_5625)
                                 TU_TYPE         : user_TUtype
 
                           },*/
-                          success: function(response) {
-                              Ext.MessageBox.alert ('Status','User has been removed successfully.');
-                              //Secondly deleting from Grid
-                              taskUsers.remove(r);
+                        success: function(response) {
+                          Ext.MessageBox.alert ('Status','User has been removed successfully.');
+                          //Secondly deleting from Grid
+                          taskUsers.remove(r);
 
-                              //Reloading available user store
-                              taskUsers.reload();
-                          }
+                          //Reloading available user store
+                          taskUsers.reload();
+                      }
                         });
                      }
-                     else
-                         taskUsers.remove(r);
-                }
+                 else
+                     taskUsers.remove(r);
             }
-        });
+        }
+    });
 
-        var tb = new Ext.Toolbar({
+    var tb = new Ext.Toolbar({
             items: [btnAdd, btnRemove]
         });
 
         // create the Data Store of users that are already assigned to a task
-        var taskUsers = new Ext.data.JsonStore({
+    var taskUsers = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
             idProperty   : 'gridIndex',
@@ -605,7 +562,7 @@ TaskContext.prototype.editUsers= function(_5625)
           taskUsers.load();
 
          // create the Data Store of users that are not assigned to a task
-         var storeUsers = new Ext.data.JsonStore({
+    var storeUsers = new Ext.data.JsonStore({
                  root            : 'data',
                  url             : 'proxyExtjs?tid='+taskId+'&action=getAvailableUsersList',
                  totalProperty   : 'totalCount',
@@ -616,7 +573,7 @@ TaskContext.prototype.editUsers= function(_5625)
               });
               
 
-        var grid = new Ext.grid.GridPanel({
+    var grid = new Ext.grid.GridPanel({
         store: taskUsers,
         id : 'mygrid',
         //cm: cm,
@@ -688,7 +645,6 @@ TaskContext.prototype.editUsers= function(_5625)
         editor.on({
           scope: this,
           afteredit: function(roweditor, changes, record, rowIndex) {
-
             var taskId      = record.data.TAS_UID;
             var userId      = record.data.USR_UID;
             var tu_Type     = record.data.TU_TYPE;
@@ -723,13 +679,13 @@ TaskContext.prototype.editUsers= function(_5625)
           }
         });
 
-        var panel = new Ext.Panel({
-            id: 'panel',
-            renderTo: Ext.getBody(),
-            items: [grid]
-        });
+    var panel = new Ext.Panel({
+        id: 'panel',
+        renderTo: Ext.getBody(),
+        items: [grid]
+    });
 
-        var window = new Ext.Window({
+    var window = new Ext.Window({
         title: 'Users and User Groups',
         collapsible: false,
         maximizable: false,
@@ -742,23 +698,7 @@ TaskContext.prototype.editUsers= function(_5625)
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: panel
-        /*buttons: [{
-            text: 'Save',
-            handler: function(){
-                Ext.MessageBox.alert ("User has been successfully assigned");
-                //var getstore = grid.getStore();
-                //var getData = getstore.data.items;
-                //taskExtObj.saveTaskUsers(getData);
-                
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.close();
-            }
-        }]*/
-    });
+     });
     window.show();
 }
 
@@ -769,49 +709,8 @@ TaskContext.prototype.editTaskProperties= function(_5625)
     var taskExtObj = new TaskContext();
     var taskId  = _5625.scope.workflow.currentSelection.id;
 
-    /*function setTaskAssignType(formData){
-       for(var i=0;i<formData.items.items.length;i++)
-           {
-                if(formData.items.items[i].xtype == 'radiogroup')
-                    {
-                        //var taskAssignType = formData.items.items[i].getValue();
-                        //var taskAssignType1 = taskPropertiesTabs.getForm().findField('TAS_ASSIGN_TYPE').getGroupValue();
-                        //var taskAssignType1 = Ext.getCmp("assignType").items.get(0).getGroupValue();
-                         //var checkedItem = Ext.getCmp('assignType').items.first().getGroupValue();
-
-                        switch(checkedItem)
-                        {
-                            case 'SELF_SERVICE':
-                                this.workflow.selfServiceChecked = true;
-                            break;
-                            case 'REPORT_TO':
-                                this.workflow.reportToChecked = true;
-                            break;
-                            case 'BALANCED':
-                                this.workflow.balancedChecked = true;
-                            break;
-                            case 'MANUAL':
-                                this.workflow.manualChecked = true;
-                            break;
-                            case 'EVALUATE':
-                                this.workflow.evaluateChecked      = true;
-                                this.workflow.hideEvaluateField    = false;
-                            break;
-                            case 'STATIC_MI':
-                                this.workflow.staticMIChecked      = true;
-                                this.workflow.hidePartialJoinField = false;
-                            break;
-                            case 'CANCEL_MI':
-                                this.workflow.cancelMIChecked      = true;
-                                this.workflow.hidePartialJoinField = false;
-                            break;
-                        }
-                    }
-           }
-      }*/
-    
-     // create the Data Store for processes
-      var taskDetails = new Ext.data.JsonStore({
+    // create the Data Store for processes
+    var taskDetails = new Ext.data.JsonStore({
         root         : 'data',
         totalProperty: 'totalCount',
         idProperty   : 'gridIndex',
@@ -827,7 +726,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
 
     var taskPropertiesTabs = new Ext.FormPanel({
         labelWidth  : 100,
-       // store       : taskDetails,
+        // store       : taskDetails,
         //url         : 'proxyTaskPropertiesDetails.php',
         bodyStyle   : 'padding:5px 5px 0',
         width       : 600,
@@ -862,8 +761,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                     allowBlank: false,
                     width: 300,
                     height : 150
-                },
-                {
+                },{
                     xtype: 'fieldset',
                     layout:'column',
                     border:false,
@@ -891,30 +789,26 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             name: 'selectorigin',
                             handler: function (s) {
                                     workflow.variablesAction = 'form';
-                                    workflow.fieldId= 'priorityVariable' ;
-                                    workflow.formSelected = taskPropertiesTabs;
+                                    workflow.fieldId         = 'priorityVariable' ;
+                                    workflow.formSelected    = taskPropertiesTabs;
                                     var rowData = ProcMapObj.ExtVariables();
                                     console.log(rowData);
                                    }
-                            //anchor:'15%'
                         }]
                     }]
-                },
-                {
-                    xtype: 'checkbox',
-                    fieldLabel: 'Starting Task',
-                    name: 'TAS_START',
-                    //dataIndex: 'TAS_START'
-                    checked: 'TAS_START'
-                }]
+            },{
+                xtype: 'checkbox',
+                fieldLabel: 'Starting Task',
+                name: 'TAS_START',
+                checked: 'TAS_START'
+              }]
             },{
                 title:'Assignment Rules',
                 layout:'form',
                 defaults: {
                     width: 260
                 },
-                //defaultType: 'textfield',
-                items: [{
+               items: [{
                     xtype: 'radiogroup',
                     id:    'assignType',
                     fieldLabel: 'Cases to be Assigned by',
@@ -1050,7 +944,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             //value: _5625.scope.workflow.taskDetails.TAS_MI_INSTANCE_VARIABLE
                             anchor:'100%'
                         }]
-                    },{
+                },{
                         columnWidth:.3,
                         layout: 'form',
                         border:false,
@@ -1081,21 +975,19 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             //value: _5625.scope.workflow.taskDetails.TAS_MI_COMPLETE_VARIABLE
                             anchor:'100%'
                         }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin'
-                        //anchor:'35%'
-                        }]
+                },{
+                    columnWidth:.3,
+                    layout: 'form',
+                    border:false,
+                    items: [{
+                        xtype:'button',
+                        title: ' ',
+                        text: '@@',
+                        name: 'selectorigin'
+                    //anchor:'35%'
                     }]
-                }
-
-                ]
+                    }]
+                }]
             },{
                 title:'Timing Control Rules',
                 layout:'form',
@@ -1105,12 +997,12 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                 bodyStyle:'padding:5px 5px 0 30px',
                 defaultType: 'textfield',
                 items: [{
-                    xtype: 'checkbox',
-                    boxLabel: 'Allow user defined timing control',
-                    name: 'TAS_TRANSFER_FLY',
-                    checked: 'TAS_TRANSFER_FLY',
-                    labelWidth: 100,
-                     listeners: {
+                        xtype: 'checkbox',
+                        boxLabel: 'Allow user defined timing control',
+                        name: 'TAS_TRANSFER_FLY',
+                        checked: 'TAS_TRANSFER_FLY',
+                        labelWidth: 100,
+                        listeners: {
                                     /**Listeners for hiding all the fields
                                      * under "Timing Control Rules" tabs
                                      * when user clicks on 'Allow user defined timing control' checkbox
@@ -1123,9 +1015,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                                     }
                                 }
 
-                },
-                  
-                {
+                },{
                     xtype: 'fieldset',
                     layout:'form',
                     border:false,
@@ -1141,8 +1031,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         //value: _5625.scope.workflow.taskDetails.TAS_DURATION,
                         width : 100,
                         allowBlank:false
-                    },
-                    {
+                    },{
                         width:          100,
                         xtype:          'combo',
                         mode:           'local',
@@ -1161,16 +1050,12 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             {
                                 name : 'Days',
                                 value: 'Days'
-                            },
-
-                            {
+                            },{
                                 name : 'Hours',
                                 value: 'Hours'
-                            },
-                            ]
+                            }]
                         })
-                    },
-                    {
+                    },{
                         width:          120,
                         xtype:          'combo',
                         mode:           'local',
@@ -1198,8 +1083,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             },
                             ]
                         })
-                    },
-                    {
+                    },{
                         width:          100,
                         xtype:          'combo',
                         mode:           'local',
@@ -1230,8 +1114,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                     }]
                             
                 }]
-            },
-            {
+            },{
                 title:'Permission',
                 layout:'form',
                 defaults: {
@@ -1245,9 +1128,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                     checked: 'TAS_TYPE',
                     name: 'TAS_TYPE'
                 }]
-            },
-
-            {
+            },{
                 title:'Case Labels',
                 layout:'form',
                 defaults: {
@@ -1285,16 +1166,15 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             name: 'selectCaseTitle',
                             handler: function (s) {
                                     workflow.variablesAction = 'form';
-                                    workflow.fieldId= 'caseTitle' ;
-                                    workflow.formSelected = taskPropertiesTabs;
+                                    workflow.variable        = '@%23',
+                                    workflow.fieldId         = 'caseTitle' ;
+                                    workflow.formSelected    = taskPropertiesTabs;
                                     var rowData = ProcMapObj.ExtVariables();
                                     console.log(rowData);
                                    }
-                            //anchor:'10%'
-                        }]
+                           }]
                     }]
-                },
-                {
+                },{
                     xtype: 'fieldset',
                     layout:'column',
                     border:false,
@@ -1324,6 +1204,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                             name: 'selectCaseDesc',
                             handler: function (s) {
                                     workflow.variablesAction = 'form';
+                                    workflow.variable = '@%23',
                                     workflow.fieldId= 'caseDescription' ;
                                     workflow.formSelected = taskPropertiesTabs;
                                     var rowData = ProcMapObj.ExtVariables();
@@ -1333,8 +1214,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         }]
                     }]
                 }]
-                },
-           {
+                },{
                 title:'Notification',
                 layout:'form',
                 defaultType: 'textfield',
@@ -1637,11 +1517,12 @@ TaskContext.prototype.stepTriggers = function(_5625)
     });
 
 
-  var btnCondition = new Ext.Button({
-      id: 'btnCondition',
+  var btnTriggerCondition = new Ext.Button({
+      //id: 'btnCondition',
       text: 'Assign Condition',
       handler: function (s) {
                 workflow.variablesAction = 'grid';
+                workflow.variable = '@@',
                 workflow.gridField = 'ST_CONDITION';
                 var rowSelected = triggerGrid.getSelectionModel().getSelections();
                 if(rowSelected == '')
@@ -1662,7 +1543,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
     });
 
     var toolBar = new Ext.Toolbar({
-        items: [addBtn, removeBtn, btnCondition]
+        items: [addBtn, removeBtn, btnTriggerCondition]
     });
 
 
@@ -1808,6 +1689,8 @@ TaskContext.prototype.stepTriggers = function(_5625)
                 var sTrigger     = record.json.TRI_UID;
                 sType            = record.json.ST_TYPE;
                 var iPosition    = record.json.ST_POSITION;
+                var condition    = record.json.ST_CONDITION;
+
                 var urlparams    = '?action=ofToAssignTrigger&sStep=' + stepUID + '&sTrigger=' + sTrigger + '&sType=' + sType + '&iPosition=' + iPosition
 
                 Ext.Ajax.request({
@@ -1846,67 +1729,35 @@ TaskContext.prototype.stepTriggers = function(_5625)
     });
     
     return treeGrid;
-    /*var window = new Ext.Window({
-        title: 'Steps Of',
-        collapsible: false,
-        maximizable: false,
-        width: 700,
-        height: 500,
-        //minWidth: 200,
-        //autoHeight: true,
-        minHeight : 150,
-        layout    : 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: [treeGrid],
-        buttons: [{
-            text: 'Save',
-            handler: function(){
-
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.close();
-            }
-        }]
-    });
-    window.show();*/
 }
+
 TaskContext.prototype.editUsersAdHoc= function(_5625)
 {
-        var taskExtObj = new TaskContext();
-        var pro_uid = workflow.getUrlVars();
-        var taskId  = workflow.currentSelection.id;
-
-        var userFields = Ext.data.Record.create([
+    var taskExtObj = new TaskContext();
+    var pro_uid = workflow.getUrlVars();
+    var taskId  = workflow.currentSelection.id;
+    var userFields = Ext.data.Record.create([
             {
                 name: 'LABEL',
                 type: 'string'
-            },
-            {
+            },{
                 name: 'TU_TYPE',
                 type: 'string'
-            },
-            {
+            },{
                 name: 'TU_RELATION',
                 type: 'string'
-            },
-            {
+            },{
                 name: 'TAS_UID',
                 type: 'string'
-            },
-            {
+            },{
                 name: 'USR_UID',
                 type: 'string'
             }
             ]);
-        var editor = new Ext.ux.grid.RowEditor({
+    var editor = new Ext.ux.grid.RowEditor({
             saveText: 'Update'
         });
-         var taskUsers = new Ext.data.JsonStore({
+    var taskUsers = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
             idProperty   : 'gridIndex',

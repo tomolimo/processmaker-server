@@ -127,21 +127,21 @@ ProcessMapContext.prototype.editProcess= function(_5678)
                   var pro_debug       = fields[0].items.items[4].getValue();
                   if(pro_debug == true)
                      pro_debug = '1';
-                 else
+                  else
                      pro_debug = '0';
 
                   var pro_uid = _5678.scope.workflow.getUrlVars();
 
                   var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
                   Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
-                    success: function(response) {
-                        window.close();
-                    },
-                    failure: function(){
-                        Ext.Msg.alert ('Failure');
-                    }
-                });
+                        url: "processes_Ajax.php"+ urlparams,
+                        success: function(response) {
+                            window.close();
+                        },
+                        failure: function(){
+                            Ext.Msg.alert ('Failure');
+                        }
+                    });
              }
         },{
             text: 'Cancel',
@@ -160,37 +160,7 @@ ProcessMapContext.prototype.exportProcess= function()
   workflow.FILENAME_LINK = '';
   workflow.FILENAME_LINKXPDL = '';
 
-  /*var exportProcessFields = Ext.data.Record.create([
-    {
-       name: 'PRO_TITLE',
-       type: 'string'
-    },{
-       name: 'PRO_DESCRIPTION',
-       type: 'string'
-    },{
-       name: 'SIZE',
-       type: 'string'
-    },{
-       name: 'File',
-       type: 'string'
-    }]);
-
-  var pro_uid = workflow.getUrlVars();
-  exportProcess = new Ext.data.JsonStore
-  ({
-      root         : 'data',
-      totalProperty: 'totalCount',
-      idProperty   : 'gridIndex',
-      remoteSort   : true,
-      fields       : exportProcessFields,
-      proxy        : new Ext.data.HttpProxy({
-      url          : 'proxyProcesses_Export?pro_uid='+pro_uid
-     })
-  });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-  exportProcess.load();*/
-
-
+  
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
   frame         : true,
@@ -1042,7 +1012,6 @@ ProcessMapContext.prototype.processSupervisors= function()
                                 User.data.items[selectedrowIndex].data.PU_UID      = record.data.PU_UID;
                                 User.data.items[selectedrowIndex].data.USR_UID      = record.data.USR_UID;
                                 User.data.items[selectedrowIndex].data.PU_TYPE      = record.data.PU_TYPE;
-                                //User.data.items[selectedrowIndex].data.USR_FIRSTNAME  = record.data.USR_FIRSTNAME;
                                 User.data.items[selectedrowIndex].data.USR_LASTNAME  = record.data.USR_LASTNAME;
                                 User.data.items[selectedrowIndex].data.USR_EMAIL  = record.data.USR_EMAIL;
 
@@ -1052,7 +1021,6 @@ ProcessMapContext.prototype.processSupervisors= function()
                               }
                         })
                 },{
-                    //id: 'USR_LASTNAME',
                     header: 'Last Name',
                     dataIndex: 'USR_LASTNAME',
                     width: 200,
@@ -1092,7 +1060,7 @@ ProcessMapContext.prototype.processSupervisors= function()
           }
         });
 
-        var window = new Ext.Window({
+  var window = new Ext.Window({
         title: 'Supervisor',
         collapsible: false,
         maximizable: false,
@@ -1528,7 +1496,7 @@ ProcessMapContext.prototype.processIODoc= function()
           }
         });
 
-        var window = new Ext.Window({
+  var window = new Ext.Window({
         title: 'Input Documents',
         collapsible: false,
         maximizable: false,
@@ -1560,7 +1528,7 @@ ProcessMapContext.prototype.processFileManager= function()
 		,height:300
 	});
 
-        var window = new Ext.Window({
+  var window = new Ext.Window({
         title: 'Process File Manager',
         collapsible: false,
         maximizable: false,
@@ -1711,7 +1679,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                     MessageHistory = '1';
                 else
                     MessageHistory = '0';
-                
+
                    Ext.Ajax.request({
                        url   : '../tracker/tracker_Save.php',
                        method: 'POST',
@@ -1872,32 +1840,25 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
 
 
-    var btnCondition = new Ext.Button({
+    var btnObjectsCondition = new Ext.Button({
       id: 'btnCondition',
       text: 'Assign Condition',
       handler: function (s) {
                 workflow.variablesAction = 'grid';
-                workflow.gridField = 'CTO_CONDITION';
-                var rowSelected = Objectsgrid.getSelectionModel().getSelections();
+                workflow.gridField       = 'CTO_CONDITION';
+                var rowSelected          = Objectsgrid.getSelectionModel().getSelections();
                 if(rowSelected == '')
                     workflow.gridObjectRowSelected = Objectsgrid;
                 else
                     workflow.gridObjectRowSelected = rowSelected;
-                //var rowSelected = Objectsgrid;
-                //workflow.gridObject = Objectsgrid;
                 var rowData = ProcMapObj.ExtVariables();
                 console.log(rowData);
-                //var a = Ext.getCmp('btnCondition');
-                //alert (a);
-
-                //console.log(rowData);
-            }
-    
-
-    })
+                
+        }
+   })
 
     var tb = new Ext.Toolbar({
-      items: [btnAdd, btnRemove,btnCondition]
+      items: [btnAdd, btnRemove,btnObjectsCondition]
     });
 
         // create the Data Store of objects that are already assigned
@@ -2013,11 +1974,11 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             Ext.MessageBox.alert ('Status','Failed to assign Objects');
             }
         })
-    
+
       }
 
     });
-   
+
     assignedStore.reload();
     availableStore.reload();
 
@@ -2136,9 +2097,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                         {
                                            case 'grid':
                                                var getObjectGridRow = workflow.gridObjectRowSelected;
-                                               var rowSelected = this.getSelectionModel().getSelected();
-                                               var FieldSelected = workflow.gridField;
-                                               var rowLabel    = rowSelected.data.variable;
+                                               var rowSelected      = this.getSelectionModel().getSelected();
+                                               var FieldSelected    = workflow.gridField;
+                                               var rowLabel         = rowSelected.data.variable;
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
                                                    getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
@@ -2148,16 +2109,16 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                window.hide();
                                                break;
                                            case 'form':
-                                               var FormSelected = workflow.formSelected;
-                                                var rowSelected = this.getSelectionModel().getSelected();
-                                                var FieldSelected =  workflow.fieldId;
-                                               var rowLabel    = rowSelected.data.variable;
-                                              Ext.getCmp(FieldSelected).setValue(rowLabel);
-                                                window.hide();
+                                               var FormSelected     = workflow.formSelected;
+                                               var rowSelected      = this.getSelectionModel().getSelected();
+                                               var FieldSelected    =  workflow.fieldId;
+                                               var rowLabel         = rowSelected.data.variable;
+                                               Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                               window.hide();
                                                break;
-                                               
+
                                         }
-                                  
+
                                    }
                               }
                         }]
@@ -2191,9 +2152,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                         {
                                            case 'grid':
                                                var getObjectGridRow = workflow.gridObjectRowSelected;
-                                               var rowSelected = this.getSelectionModel().getSelected();
-                                               var FieldSelected = workflow.gridField;
-                                               var rowLabel    = rowSelected.data.variable;
+                                               var rowSelected      = this.getSelectionModel().getSelected();
+                                               var FieldSelected    = workflow.gridField;
+                                               var rowLabel         = rowSelected.data.variable;
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
                                                    getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
@@ -2203,12 +2164,12 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                window.hide();
                                                break;
                                            case 'form':
-                                               var FormSelected = workflow.formSelected;
-                                                var rowSelected = this.getSelectionModel().getSelected();
-                                                var FieldSelected =  workflow.fieldId;
-                                               var rowLabel    = rowSelected.data.variable;
-                                              Ext.getCmp(FieldSelected).setValue(rowLabel);
-                                                window.hide();
+                                               var FormSelected     = workflow.formSelected;
+                                               var rowSelected      = this.getSelectionModel().getSelected();
+                                               var FieldSelected    =  workflow.fieldId;
+                                               var rowLabel         = rowSelected.data.variable;
+                                               Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                               window.hide();
                                                break;
 
                                         }
@@ -2246,9 +2207,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                         {
                                            case 'grid':
                                                var getObjectGridRow = workflow.gridObjectRowSelected;
-                                               var rowSelected = this.getSelectionModel().getSelected();
-                                               var FieldSelected = workflow.gridField;
-                                               var rowLabel    = rowSelected.data.variable;
+                                               var rowSelected      = this.getSelectionModel().getSelected();
+                                               var FieldSelected    = workflow.gridField;
+                                               var rowLabel         = rowSelected.data.variable;
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
                                                    getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
@@ -2258,11 +2219,11 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                window.hide();
                                                break;
                                            case 'form':
-                                               var FormSelected = workflow.formSelected;
-                                                var rowSelected = this.getSelectionModel().getSelected();
-                                                var FieldSelected =  workflow.fieldId;
-                                               var rowLabel    = rowSelected.data.variable;
-                                              Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                               var FormSelected     = workflow.formSelected;
+                                               var rowSelected      = this.getSelectionModel().getSelected();
+                                               var FieldSelected    =  workflow.fieldId;
+                                               var rowLabel         = rowSelected.data.variable;
+                                               Ext.getCmp(FieldSelected).setValue(rowLabel);
                                                 window.hide();
                                                break;
 
