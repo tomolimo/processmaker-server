@@ -20,13 +20,11 @@
  * 
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
+ * /**
+ *  @package gulliver.bin.tasks
  */
-
- /**
- *  @package gulliver.system
- */
-
+ 
 
   if (! PATH_THIRDPARTY ) {
     die("You must launch gulliver command line with the gulliver script\n");
