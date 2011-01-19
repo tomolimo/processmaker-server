@@ -76,7 +76,7 @@ if($action==="check")
 	$data->databaseMessage	=$s['result']['database']['message'];
 	$data->mysqlVersion	=$s['result']['database']['version'];
 	$data->path_data	=$s['result']['path_data'];
-	$data->path_compiled	=$s['result']['path_compiled'];
+	$data->path_compiled	= true;
 	$data->checkMemory	=(((int)ini_get("memory_limit"))>=40)?true:false;
 	#$data->checkmqgpc	=(get_magic_quotes_gpc())?false:true;
 	$data->checkPI		=$inst->is_dir_writable(PATH_CORE."config/");
