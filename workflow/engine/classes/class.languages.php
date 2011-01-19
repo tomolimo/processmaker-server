@@ -79,10 +79,10 @@ class languages {
         $sLanguageID = $aRow['LAN_ID'];
       }
       else {
-        throw new Exception('The .po file have a invalid language!');
+        throw new Exception(G::loadTranslation('MSG_PO_FILE_INVALID_LANGUAJE'));
       }
       if (!$bFind) {
-        throw new Exception('The .po file have a bad format!');
+        throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
       }
       $oTranslation = new Translation();
       $sAux = '';
@@ -90,32 +90,32 @@ class languages {
         if (strpos($sLine, '.xml') === false) {
           $aAux = explode('/', str_replace('# ', '', $sLine));
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           $oTranslation->addTranslation($aAux[0], trim(str_replace(chr(10), '', $aAux[1])), $sLanguageID, substr(trim(str_replace(chr(10), '', $sLine)), 8, -1));
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           $sLine = fgets($oFile);
         }
         else {
           $sXmlForm = trim(str_replace('# ', '', $sLine));
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           $aAux       = explode(' - ', $sLine);
           $sFieldName = trim(str_replace(chr(10), '', $aAux[1]));
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           if (file_exists(PATH_XMLFORM . $sXmlForm) && $bXml) {
             if ($sAux == '') {
@@ -202,7 +202,7 @@ class languages {
             }
           }
           if (!($sLine = fgets($oFile))) {
-            throw new Exception('The .po file have a bad format!');
+            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
           }
           $sLine = fgets($oFile);
         }
