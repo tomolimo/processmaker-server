@@ -3985,6 +3985,11 @@ class Cases {
     $oCriteria->add(StepPeer::STEP_TYPE_OBJ, 'DYNAFORM');
     $oCriteria->add(StepPeer::STEP_UID_OBJ, $aObjectPermissions['DYNAFORMS'], Criteria::IN);
     
+    //These fields are missing now is completed   
+    $oCriteria->addSelectColumn(DynaformPeer::DYN_UID); 
+    $oCriteria->addSelectColumn(DynaformPeer::DYN_TYPE); 
+    $oCriteria->addSelectColumn(DynaformPeer::DYN_FILENAME); 
+    $oCriteria->addSelectColumn(ApplicationPeer::PRO_UID); 
     ///-- Adding column STEP_POSITION for standardization 
     $oCriteria->addSelectColumn(StepPeer::STEP_POSITION); 
     
