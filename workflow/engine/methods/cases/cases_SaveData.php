@@ -65,6 +65,7 @@ if ($_SESSION ['TRIGGER_DEBUG'] ['NUM_TRIGGERS'] != 0) {
 }
 
 //save data in PM Tables if necessary
+$newValues = array ();
 foreach ( $_POST ['form'] as $sField => $sAux ) {
 	if (isset ( $oForm->fields [$sField]->pmconnection ) && isset ( $oForm->fields [$sField]->pmfield )) {
 		if (($oForm->fields [$sField]->pmconnection != '') && ($oForm->fields [$sField]->pmfield != '')) {
@@ -109,7 +110,18 @@ foreach ( $_POST ['form'] as $sField => $sAux ) {
 					}
 				} else {
 					try {
-						$oAdditionalTables->saveDataInTable ( $oForm->fields [$oForm->fields [$sField]->pmconnection]->pmtable, $aValues );
+                                          // assembling the field list in order to save the data ina new record of a pm table
+                                          if (empty($newValues)){
+                                            $newValues = $aValues;
+                                          } else {
+                                            foreach ($aValues as $aValueKey=>$aValueCont) {
+                                              if (trim($newValues[$aValueKey])==''){
+                                                $newValues[$aValueKey] = $aValueCont;
+                                              }
+                                            }
+                                          }
+				          //$oAdditionalTables->saveDataInTable ( $oForm->fields [$oForm->fields [$sField]->pmconnection]->pmtable, $aValues );
+                                          
 					} catch ( Exception $oError ) {
 						//Nothing
 					}
@@ -118,7 +130,10 @@ foreach ( $_POST ['form'] as $sField => $sAux ) {
 		}
 	}
 }
-
+// saving the data ina pm table in case that is a new record
+if (!empty($newValues)){
+  $oAdditionalTables->saveDataInTable ( $oForm->fields [$oForm->fields [$sField]->pmconnection]->pmtable, $newValues);
+}
 //save data
 $aData = array ();
 $aData ['APP_NUMBER']       = $Fields ['APP_NUMBER'];
