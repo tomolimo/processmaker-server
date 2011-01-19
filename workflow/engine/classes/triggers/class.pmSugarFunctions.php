@@ -386,7 +386,7 @@ function CreateSugarOpportunity($sugarSoap, $user, $password, $name,$account_id,
  */
 function CreateSugarLeads($sugarSoap, $user, $password, $first_name, $last_name, $email, $title, $phone, $account_id, $resultType="array") {
 
-  $module = "Leads";
+  $module = "Leads"; 
   $sessionId = sugarLogin ( $sugarSoap, $user, $password );
   $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
 
