@@ -247,13 +247,15 @@ class spoolRun {
    */
   private function handleEnvelopeTo() {
     $hold = array ();
+    $holdcc = array ();
+    $holdbcc = array ();
     $text = trim($this->fileData['to']);
     if( isset($this->fileData['cc']) && trim($this->fileData['cc']) != '' ) {
-      $text .= ',' . trim($this->fileData['cc']);
+      $textcc = trim($this->fileData['cc']);
     }
-    
+
     if( isset($this->fileData['bcc']) && trim($this->fileData['bcc']) != '' ) {
-      $text .= ',' . trim($this->fileData['bcc']);
+      $textbcc = trim($this->fileData['bcc']);
     }
     
     if( false !== (strpos($text, ',')) ) {
@@ -267,6 +269,32 @@ class spoolRun {
     } else {
       $this->fileData['envelope_to'][] = "$text";
     }
+    //for cc add by alvaro
+     if( false !== (strpos($textcc, ',')) ) {
+      $holdcc = explode(',', $textcc);
+
+      foreach( $holdcc as $valcc ) {
+        if( strlen($valcc) > 0 ) {
+          $this->fileData['envelope_cc'][] = "$valcc";
+        }
+      }
+    } else {
+      $this->fileData['envelope_cc'][] = "$textcc";
+    }
+    //forbcc add by alvaro
+     if( false !== (strpos($textbcc, ',')) ) {
+      $holdbcc = explode(',', $textbcc);
+
+      foreach( $holdbcc as $valbcc ) {
+        if( strlen($valbcc) > 0 ) {
+          $this->fileData['envelope_bcc'][] = "$valbcc";
+        }
+      }
+    } else {
+      $this->fileData['envelope_bcc'][] = "$textbcc";
+    }
+
+
   }
   
   /**
@@ -337,6 +365,33 @@ class spoolRun {
               $oPHPMailer->AddAddress($sEmail);
             }
           }
+          //add cc add by alvaro
+           foreach( $this->fileData['envelope_cc'] as $sEmail ) {
+            $evalMail = strpos($sEmail, '<');
+
+            if( strpos($sEmail, '<') !== false ) {
+              preg_match($this->longMailEreg, $sEmail, $matches);
+              $sTo = trim($matches[3]);
+              $sToName = trim($matches[1]);
+              $oPHPMailer->AddCC($sTo, $sToName);
+            } else {
+              $oPHPMailer->AddCC($sEmail);
+            }
+          }
+           //add bcc add by alvaro
+           foreach( $this->fileData['envelope_bcc'] as $sEmail ) {
+            $evalMail = strpos($sEmail, '<');
+
+            if( strpos($sEmail, '<') !== false ) {
+              preg_match($this->longMailEreg, $sEmail, $matches);
+              $sTo = trim($matches[3]);
+              $sToName = trim($matches[1]);
+              $oPHPMailer->AddBCC($sTo, $sToName);
+            } else {
+              $oPHPMailer->AddBCC($sEmail);
+            }
+          }
+
           
           $oPHPMailer->IsHTML(true);
           if( $oPHPMailer->Send() ) {
