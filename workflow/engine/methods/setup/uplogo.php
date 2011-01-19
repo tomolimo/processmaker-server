@@ -71,7 +71,7 @@
       ajax_function('replacementLogo','replacementLogo','NAMELOGO='+encodeURIComponent(nameLogo),'GET') ;
       //parent.window.location.href = 'main_init';
       if(_BROWSER.name == 'msie' )
-        parent.parent.window.location.href = 'main';
+        parent.parent.window.location.href = 'main?s=LOGO';
       else 
         parent.window.location.href = 'main_init';
       history.go(0);
