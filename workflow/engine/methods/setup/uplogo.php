@@ -75,7 +75,6 @@
       else 
         parent.window.location.href = 'main_init';
       history.go(0);
-      jumbshowlogo();
     }});
   
   }
@@ -91,7 +90,6 @@
       action:function(){
         ajax_function('logo_Delete','','NAMELOGO='+nameLogo,'GET') ;
         history.go(0);
-        jumbshowlogo();
       }
     });
     return false;
@@ -107,16 +105,4 @@
     //parent.window.location.href = 'setup';
     parent.window.location.href = 'main_init';
   }
-  
-  /*
-   * By krlos April 07, 2010
-   * we're going to go to the logo option
-   * parameter
-   */ 
-  var jumbshowlogo = function() {
-    //parent.admToolsContent.location='uplogo';   
-    //parent.document.getElementById('setup-frame').location='uplogo';
-    document.getElementById('setup-frame').src = 'uplogo';
-  } 
-  
 </script>
