@@ -40,8 +40,6 @@ $G_TMP_MENU->AddIdRawOption('ENVIRONMENT_SETTINGS', 'environmentSettings', G::Lo
 if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
   $G_TMP_MENU->AddIdRawOption('APPCACHEVIEW_SETUP', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'settings');
 $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'settings' );
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
-  $G_TMP_MENU->AddIdRawOption('UPGRADE', 'upgrade',     G::LoadTranslation('ID_UPGRADE'), 'icon-system-upgrade.png', '', 'settings');
 
 if ($RBAC->userCanAccess('PM_SETUP') == 1)
   $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'settings');
