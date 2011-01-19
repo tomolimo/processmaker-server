@@ -559,34 +559,37 @@ function getElementByPMClass(__class){
   }
 
   function fieldsAdd( type,label ){
+    var typePopup = 0;
     switch (type){
-    case 'text'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TEXT;break;
-    case 'currency'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_CURRENCY;break;
-    case 'percentage': label=TRANSLATIONS.ID_FIELD_DYNAFORM_PERCENTAGE;break;
-    case 'password'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_PASSWORD;break;
-    case 'suggest'   : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUGGEST;break;
-    case 'textarea'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TEXTAREA;break;
-    case 'title'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TITLE;break;
-    case 'subtitle'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUBTITLE;break;
-    case 'button'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_BUTTON;break;
-    case 'submit'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUBMIT;break;
-    case 'reset'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_RESET;break;
-    case 'dropdown'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_DROPDOWN;break;
-    case 'yesno'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_YESNO;break;
-    case 'listbox'   : label=TRANSLATIONS.ID_FIELD_DYNAFORM_LISTBOX;break;
-    case 'checkbox'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_CHECKBOX;break;
-    case 'checkgroup': label=TRANSLATIONS.ID_FIELD_DYNAFORM_CHECKGROUP;break;
-    case 'radiogroup': label=TRANSLATIONS.ID_FIELD_DYNAFORM_RADIOGROUP;break;
-    case 'date'      : label=TRANSLATIONS.DATE_LABEL;break;
-    case 'hidden'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_HIDDEN;break;
-    case 'link'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_LINK;break;
-    case 'file'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_FILE;break;
-    case 'javascript': label=TRANSLATIONS.ID_FIELD_DYNAFORM_JAVASCRIPT;break;
-    case 'grid'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_GRID;break;
+    case 'text'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TEXT;      var typePopup = 1; break;
+    case 'currency'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_CURRENCY;  var typePopup = 1; break;
+    case 'percentage': label=TRANSLATIONS.ID_FIELD_DYNAFORM_PERCENTAGE;var typePopup = 1; break;
+    case 'password'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_PASSWORD;  var typePopup = 1; break;
+    case 'suggest'   : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUGGEST;   var typePopup = 1; break;
+    case 'textarea'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TEXTAREA;  var typePopup = 1; break;
+    case 'title'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_TITLE;     var typePopup = 0; break;
+    case 'subtitle'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUBTITLE;  var typePopup = 0; break;
+    case 'button'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_BUTTON;    var typePopup = 0; break;
+    case 'submit'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_SUBMIT;    var typePopup = 0; break;
+    case 'reset'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_RESET;     var typePopup = 0; break;
+    case 'dropdown'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_DROPDOWN;  var typePopup = 1; break;
+    case 'yesno'     : label=TRANSLATIONS.ID_FIELD_DYNAFORM_YESNO;     var typePopup = 1; break;
+    case 'listbox'   : label=TRANSLATIONS.ID_FIELD_DYNAFORM_LISTBOX;   var typePopup = 1; break;
+    case 'checkbox'  : label=TRANSLATIONS.ID_FIELD_DYNAFORM_CHECKBOX;  var typePopup = 1; break;
+    case 'checkgroup': label=TRANSLATIONS.ID_FIELD_DYNAFORM_CHECKGROUP;var typePopup = 1; break;
+    case 'radiogroup': label=TRANSLATIONS.ID_FIELD_DYNAFORM_RADIOGROUP;var typePopup = 1; break;
+    case 'date'      : label=TRANSLATIONS.DATE_LABEL;                  var typePopup = 1; break;
+    case 'hidden'    : label=TRANSLATIONS.ID_FIELD_DYNAFORM_HIDDEN;    var typePopup = 0; break;
+    case 'link'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_LINK;      var typePopup = 0; break;
+    case 'file'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_FILE;      var typePopup = 0; break;
+    case 'javascript': label=TRANSLATIONS.ID_FIELD_DYNAFORM_JAVASCRIPT;var typePopup = 0; break;
+    case 'grid'      : label=TRANSLATIONS.ID_FIELD_DYNAFORM_GRID;      var typePopup = 0; break;
 
     default : label=type; break
     }
-
-	  popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
+    if(typePopup == 0)
+  	  popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
+    else
+      popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 400 );
   }
 
