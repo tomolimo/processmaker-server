@@ -81,7 +81,7 @@
   function triggerSave(form)
   {
   var triUid = "";
-  if(document.getElementById('TRI_UID')) { //  alert('alvaro2');
+  if(document.getElementById('TRI_UID')) {
     var triUid = document.getElementById('TRI_UID').value;
   } 
    if(triUid==''){  
@@ -97,7 +97,7 @@
     currentPopupWindow.remove();
     @#PAGED_TABLE_ID.refresh();
    }
-   }else{ alert('alvaro888');
+   }else{
 	     ajax_post(form.action, form, 'POST');
 		   currentPopupWindow.remove();
 		   @#PAGED_TABLE_ID.refresh();
@@ -108,7 +108,7 @@
  function triggerSave1(form)
   {
   var triUid = ""; 
-  if(getField('TRI_UID')) { //  alert('alvaro2');
+  if(getField('TRI_UID')) {
     var triUid = getField('TRI_UID').value;
   } 
    if(triUid==''){  
@@ -124,7 +124,7 @@
     currentPopupWindow.remove();
     @#PAGED_TABLE_ID.refresh();
    }
-   }else{ alert('alvaro888');
+   }else{
 	     ajax_post(form.action, form, 'POST');
 		   currentPopupWindow.remove();
 		   @#PAGED_TABLE_ID.refresh();
