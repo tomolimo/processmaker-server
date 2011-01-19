@@ -1942,6 +1942,8 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
         var objTitle        = record.data.OBJECT_TITLE;
         var cto_uid         = record.data.CTO_UID;
         var condition       = record.data.CTO_CONDITION;
+
+      
         Ext.Ajax.request({
           url   : '../tracker/tracker_Ajax.php',
           method: 'POST',
@@ -1974,6 +1976,9 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             Ext.MessageBox.alert ('Status','Failed to assign Objects');
             }
         })
+            
+            
+
 
       }
 
@@ -2097,8 +2102,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                         {
                                            case 'grid':
                                                var getObjectGridRow = workflow.gridObjectRowSelected;
-                                               var rowSelected      = this.getSelectionModel().getSelected();
                                                var FieldSelected    = workflow.gridField;
+                                               //getting selected row of variables
+                                               var rowSelected      = this.getSelectionModel().getSelected();
                                                var rowLabel         = rowSelected.data.variable;
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
@@ -2106,13 +2112,68 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                //Assigning / updating Condition for a row
                                                else
                                                    getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                                   if(FieldSelected=='CTO_CONDITION')
+                                                       {
+                                                   Ext.Ajax.request({
+                                                                      url   : '../tracker/tracker_ConditionsSave.php',
+                                                                      method: 'POST',
+                                                                      params:
+                                                                        {
+                                                                            PRO_UID         : pro_uid,
+                                                                            CTO_UID         : getObjectGridRow[0].data.CTO_UID,
+                                                                            CTO_CONDITION   : getObjectGridRow[0].data.CTO_CONDITION
+                                                                        },
+                                                                      success: function (response){
+                                                                        Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
+                                                                       }
+                                                                    })
+                                                       }
+                                                     else if (FieldSelected=='STEP_CONDITION')
+                                                         {
+                                                   Ext.Ajax.request({
+                                                                      url   : '../steps/conditions_Save.php',
+                                                                      method: 'POST',
+                                                                      params:
+                                                                        {
+                                                                            PRO_UID         : pro_uid,
+                                                                            STEP_UID         : getObjectGridRow[0].data.STEP_UID,
+                                                                            STEP_CONDITION   : getObjectGridRow[0].data.STEP_CONDITION
+                                                                        },
+                                                                      success: function (response){
+                                                                        Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
+                                                                       }
+                                                                    })
+                                                         }
+                                                    else if (FieldSelected=='ST_CONDITION')
+                                                         {
+                                                   Ext.Ajax.request({
+                                                                      url   : '../steps/steps_Ajax.php',
+                                                                      method: 'POST',
+                                                                      params:
+                                                                        {
+                                                                            PRO_UID         : pro_uid,
+                                                                            STEP_UID        : getObjectGridRow[0].data.STEP_UID,
+                                                                            ST_CONDITION    : getObjectGridRow[0].data.STEP_CONDITION,
+                                                                           // TAS_UID         :
+                                                                            TRI_UID         :getObjectGridRow[0].data.TRI_UID,
+                                                                            ST_TYPE         :getObjectGridRow[0].data.ST_TYPE,
+                                                                            action          :'saveTriggerCondition'
+                                                                        },
+                                                                      success: function (response){
+                                                                        Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
+                                                                       }
+                                                                    })
+                                                         }
+
                                                window.hide();
+
+
                                                break;
                                            case 'form':
-                                               var FormSelected     = workflow.formSelected;
-                                               var rowSelected      = this.getSelectionModel().getSelected();
-                                               var FieldSelected    =  workflow.fieldId;
-                                               var rowLabel         = rowSelected.data.variable;
+                                                FormSelected     = workflow.formSelected;
+                                                rowSelected      = this.getSelectionModel().getSelected();
+                                                FieldSelected    =  workflow.fieldId;
+                                                rowLabel         = rowSelected.data.variable;
                                                Ext.getCmp(FieldSelected).setValue(rowLabel);
                                                window.hide();
                                                break;
@@ -2152,8 +2213,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                         {
                                            case 'grid':
                                                var getObjectGridRow = workflow.gridObjectRowSelected;
-                                               var rowSelected      = this.getSelectionModel().getSelected();
                                                var FieldSelected    = workflow.gridField;
+                                               //getting selected row of variables
+                                               var rowSelected      = this.getSelectionModel().getSelected();
                                                var rowLabel         = rowSelected.data.variable;
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
@@ -2161,13 +2223,30 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                //Assigning / updating Condition for a row
                                                else
                                                    getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                                   if(CTO_UID!='')
+                                                       {
+                                                   Ext.Ajax.request({
+                                                                      url   : '../tracker/tracker_ConditionsSave.php',
+                                                                      method: 'POST',
+                                                                      params:
+                                                                        {
+                                                                            PRO_UID         : pro_uid,
+                                                                            CTO_UID         : getObjectGridRow[0].data.CTO_UID,
+                                                                            CTO_CONDITION   : getObjectGridRow[0].data.CTO_CONDITION
+                                                                        },
+                                                                      success: function (response){
+                                                                        Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
+                                                                       }
+                                                                    })
                                                window.hide();
+                                                       }
+                                            
                                                break;
                                            case 'form':
-                                               var FormSelected     = workflow.formSelected;
-                                               var rowSelected      = this.getSelectionModel().getSelected();
-                                               var FieldSelected    =  workflow.fieldId;
-                                               var rowLabel         = rowSelected.data.variable;
+                                                FormSelected     = workflow.formSelected;
+                                                rowSelected      = this.getSelectionModel().getSelected();
+                                                FieldSelected    =  workflow.fieldId;
+                                                rowLabel         = rowSelected.data.variable;
                                                Ext.getCmp(FieldSelected).setValue(rowLabel);
                                                window.hide();
                                                break;
@@ -2207,8 +2286,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                         {
                                            case 'grid':
                                                var getObjectGridRow = workflow.gridObjectRowSelected;
-                                               var rowSelected      = this.getSelectionModel().getSelected();
                                                var FieldSelected    = workflow.gridField;
+                                               //getting selected row of variables
+                                               var rowSelected      = this.getSelectionModel().getSelected();
                                                var rowLabel         = rowSelected.data.variable;
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
@@ -2216,15 +2296,28 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                //Assigning / updating Condition for a row
                                                else
                                                    getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                                   Ext.Ajax.request({
+                                                                      url   : '../tracker/tracker_ConditionsSave.php',
+                                                                      method: 'POST',
+                                                                      params:
+                                                                        {
+                                                                            PRO_UID         : pro_uid,
+                                                                            CTO_UID         : getObjectGridRow[0].data.CTO_UID,
+                                                                            CTO_CONDITION   : getObjectGridRow[0].data.CTO_CONDITION
+                                                                        },
+                                                                      success: function (response){
+                                                                        Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
+                                                                       }
+                                                                    })
                                                window.hide();
                                                break;
                                            case 'form':
-                                               var FormSelected     = workflow.formSelected;
-                                               var rowSelected      = this.getSelectionModel().getSelected();
-                                               var FieldSelected    =  workflow.fieldId;
-                                               var rowLabel         = rowSelected.data.variable;
+                                                FormSelected     = workflow.formSelected;
+                                                rowSelected      = this.getSelectionModel().getSelected();
+                                                FieldSelected    =  workflow.fieldId;
+                                                rowLabel         = rowSelected.data.variable;
                                                Ext.getCmp(FieldSelected).setValue(rowLabel);
-                                                window.hide();
+                                               window.hide();
                                                break;
 
                                         }

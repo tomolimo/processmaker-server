@@ -4822,6 +4822,7 @@ class processMap {
   */
   function getExtStepTriggersCriteria($sStepUID = '', $sTaskUID = '', $sType = '')
   {
+    //$_SESSION['TASK'] = $sTaskUID;
     $aBB        = array ();
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria  = new Criteria ( 'workflow' );
@@ -4863,6 +4864,7 @@ class processMap {
   {
       try
       {
+      $_SESSION['TASK'] = $sTaskUID;
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('TRI_UID');
       $oCriteria->add(StepTriggerPeer::TAS_UID , $sTaskUID);

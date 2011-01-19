@@ -38,10 +38,14 @@ try {
   }
   require_once 'classes/model/Step.php';
   $oStep = new Step();
-  $oStep->update(array('STEP_UID' => $_POST['form']['STEP_UID'], 'STEP_CONDITION' => $_POST['form']['STEP_CONDITION']));
+  if(isset ($_POST['form']))
+      $value=$_POST['form'];
+  else
+      $value=$_POST;
+  $oStep->update(array('STEP_UID' => $value['STEP_UID'], 'STEP_CONDITION' => $value['STEP_CONDITION']));
   G::LoadClass('processMap');
   $oProcessMap = new ProcessMap();
-  $oProcessMap->getStepsCriteria($_POST['form']['TAS_UID']);
+  $oProcessMap->getStepsCriteria($value['TAS_UID']);
 }
 catch (Exception $oException) {
 	die($oException->getMessage());
