@@ -3096,7 +3096,7 @@ function eprintln($s="", $c=null){
     } else 
       echo "<pre>$s</pre>";
   } else {
-    if(isset($c)){
+    if(isset($c) && (PHP_OS != 'WINNT')){
       switch($c){
         case 'green':
           printf("\033[0;35;32m$s\033[0m\n");
