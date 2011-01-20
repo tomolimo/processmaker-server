@@ -3674,7 +3674,8 @@ class XmlForm
   var $border            = 1;
   var $mode              = '';
   // var $labelWidth = 140;
-  var $labelWidth        = 180;
+  // var $labelWidth        = 180;
+  var $labelWidth =  "40%";
   var $onsubmit          = '';
   var $requiredFields    = array ();
   var $fieldContentWidth = 450;
