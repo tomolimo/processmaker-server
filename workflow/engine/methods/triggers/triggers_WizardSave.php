@@ -62,18 +62,19 @@ foreach ( $aInfoFunction as $k => $v ) {
 		if ($aDataTriggers [$sOptionTrigger] != '') {
 			
 			if ((strstr ( $aDataTriggers [$sOptionTrigger], "@@" ))) {
-				$option = $aDataTriggers [$sOptionTrigger];
+				$option = trim($aDataTriggers [$sOptionTrigger]);
 			} else {
-				$option = "'" . $aDataTriggers [$sOptionTrigger] . "'";
+				$option = "'" . trim($aDataTriggers [$sOptionTrigger]) . "'";
 			}
 		} else {
-			$option = "' '";
+			$option = "''";
 		}
 		$methodParamsFinal [] = $option;
 	
 	}
 
 }
+G::pr($methodParamsFinal);die;
 $sPMfunction .= (isset ( $aDataTriggers ['TRI_ANSWER'] ) && $aDataTriggers ['TRI_ANSWER'] != '') ? $aDataTriggers ['TRI_ANSWER'] . " = " : "";
 $sPMfunction .= $aDataTriggers ['PMFUNTION_NAME'] . " (" . implode ( ",", $methodParamsFinal ) . ");";
 
