@@ -34,7 +34,7 @@
   <en>Type<option name="SINGLE">Single Task</option><option name="MULTIPLE">Multiple Tasks</option></en>
 </EVN_RELATED_TO>
 
-<TAS_UID type="dropdown" sqlconnection="dbarray" required="0">
+<TAS_UID type="dropdown" sqlconnection="dbarray" required="1">
 SELECT TAS_UID, TAS_TITLE FROM tasks
   <en>The time starts with task</en>
 </TAS_UID>
