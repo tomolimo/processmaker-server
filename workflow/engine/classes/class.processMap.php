@@ -1280,6 +1280,7 @@ class processMap {
    */
 
   function editTaskProperties($sTaskUID = '', $iForm = 1, $iIndex = 0) {
+  	$sw_template=false;
     try {
       switch ($iForm) {
         case 1 :
@@ -1311,7 +1312,8 @@ class processMap {
 	      foreach($activePluginsForTaskProperties as $key => $taskPropertiesInfo){
 		      $id=$taskPropertiesInfo->sNamespace."--".$taskPropertiesInfo->sName;
 		      if($id==$iForm){
-		      	$sFilename=$taskPropertiesInfo->sPage;		      	
+		      	$sFilename=$taskPropertiesInfo->sPage;
+		      	$sw_template=true;		      	
 		      }
 	      }
         	
@@ -1342,7 +1344,12 @@ class processMap {
       global $G_PUBLISH;
       G::LoadClass('xmlfield_InputPM');
       $G_PUBLISH = new Publisher ( );
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
+      if($sw_template){
+      	$G_PUBLISH->AddContent('view', $sFilename);
+      }else{
+      	$G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
+      }
+      
       G::RenderPage('publish', 'raw');
       return true;
     } catch (Exception $oError) {
