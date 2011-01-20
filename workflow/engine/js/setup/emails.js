@@ -9,7 +9,7 @@ function verifyFields(oForm) {
 	switch (getField('MESS_ENGINE').value) {
 	case 'PHPMAILER':
 		verifyPassword = 0;
-		oAuxS = $('form[MESS_SERVER]').value;
+		oAuxS = $('form[MESS_SERVER]').value.trim();
 		if (oAuxS == '') {
 			new leimnud.module.app.alert().make({
 				label : G_STRINGS.ID_SERVER_REQUIRED
@@ -56,7 +56,7 @@ function verifyFields(oForm) {
 		break;
 	case 'MAIL':
 		if ($('form[MESS_TEST_MAIL]').checked) {
-			oAuxE = $('form[MESS_TEST_MAIL_TO]').value;
+			oAuxE = $('form[MESS_TEST_MAIL_TO]').value.trim();
 			if (oAuxE == '') {
 				new leimnud.module.app.alert().make({
 					label : G_STRINGS.ID_EMAIL_REQUIRED
@@ -74,7 +74,7 @@ function verifyFields(oForm) {
 
 function testConnection() {
 	resultset = true;
-	params  = 'srv=' + getField('MESS_SERVER').value;
+	params  = 'srv=' + getField('MESS_SERVER').value.trim();
 	params += '&port='+ ((getField('MESS_PORT').value.trim() != '') ? getField('MESS_PORT').value : 'default');
 	params += '&account=' + getField('MESS_ACCOUNT').value;
 	params += '&passwd=' + getField('MESS_PASSWORD').value;
@@ -117,7 +117,7 @@ function testConnectionMail() {
 	resultset = true;
 	if ($('form[MESS_TEST_MAIL]').checked) {
 		send_test_mail = 'yes';
-		mail_to = $('form[MESS_TEST_MAIL_TO]').value;
+		mail_to = $('form[MESS_TEST_MAIL_TO]').value.trim();
 		var uri = 'send_test_mail=' + send_test_mail + '&mail_to=' + mail_to;
 		var oRPC = new leimnud.module.rpc.xmlhttp({
 			url : PROCESS_REQUEST_FILE,
@@ -158,7 +158,7 @@ function testSMTPHost(step) {
 	var requestfile = PROCESS_REQUEST_FILE;
 	
 	var params = 'request=testConnection&step=' + step;
-	params += '&srv=' + getField('MESS_SERVER').value;
+	params += '&srv=' + getField('MESS_SERVER').value.trim();
 	params += '&port='+ ((getField('MESS_PORT').value.trim() != '') ? getField('MESS_PORT').value : 'default');
 	params += '&account=' + getField('MESS_ACCOUNT').value;
 	params += '&passwd=' + getField('MESS_PASSWORD').value;
@@ -275,7 +275,7 @@ var verifyData = function(oForm) {
 		case 'PHPMAILER':
 		case 'OPENMAIL':
 			oAux = getField('MESS_SERVER');
-			if (oAux.value == '') {
+			if (oAux.value.trim() == '') {
 				alert(G_STRINGS.ID_MESS_SERVER_REQUIRED);
 				oAux.focus();
 				return;
@@ -305,7 +305,7 @@ var oPanel;
 var testEmailConfiguration = function() {
 	if (getField('MESS_ENGINE').value != 'MAIL') {
 		oAux = getField('MESS_SERVER');
-		if (oAux.value == '') {
+		if (oAux.value.trim() == '') {
 			alert(G_STRINGS.ID_MESS_SERVER_REQUIRED);
 			oAux.focus();
 			return;
