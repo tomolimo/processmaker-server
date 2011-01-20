@@ -1,3 +1,6 @@
+var xmlEditor = null;
+var clientWinSize = null;
+
 if (typeof(dynaformEditor)==="undefined")
 {
 var dynaformEditor={
@@ -56,31 +59,31 @@ var dynaformEditor={
 	  url='dynaforms_Saveas';
 		popupWindow('Save as', url+'?DYN_UID='+this.dynUid+'&AA='+this.A , 500, 350);
 	},
-        /*
-         * @function close
-         * @author unknow
-         * @modifier Gustavo Cruz
-         * @desc  this function handles the close of a dynaform editor window
-         *          now whenever a dynaform window is close, if the form wasn't
-         *          saved the function also delete the temporal *_tmp0.xml files
-         *          discarding all the changes that were made, bug 3861.
-         */
+  /*
+  * @function close
+  * @author unknow
+  * @modifier Gustavo Cruz
+  * @desc  this function handles the close of a dynaform editor window
+  *          now whenever a dynaform window is close, if the form wasn't
+  *          saved the function also delete the temporal *_tmp0.xml files
+  *          discarding all the changes that were made, bug 3861.
+  */
 	close:function()
 	{
 		var modified=this.ajax.is_modified(this.A,this.dynUid);
 		if (typeof(modified)==="boolean")
 		{
-                    if (!modified || confirm(G_STRINGS.ID_EXIT_WITHOUT_SAVING))
+      if (!modified || confirm(G_STRINGS.ID_EXIT_WITHOUT_SAVING))
 			{
-                                res=this.ajax.close(this.A);
-                                    if (res==0) {
-                                        //alert(G_STRINGS.ID_DYNAFORM_NOT_SAVED);
-                                    }
-                                    else
-                                    {
-                                        //alert(res["response"]);
-                                        alert(res["*message"]);
-                                    }
+        res=this.ajax.close(this.A);
+        if (res==0) {
+          //alert(G_STRINGS.ID_DYNAFORM_NOT_SAVED);
+        }
+        else
+        {
+          //alert(res["response"]);
+          alert(res["*message"]);
+        }
 				return true;
 			}
 			else
@@ -169,10 +172,26 @@ var dynaformEditor={
 		
 		this.refresh_xmlcode();
 		this.currentView="xmlcode";
-		if (this.loadPressLoaded && !XMLCodePress)
-		{
-			startXMLCodePress();
-		}
+		//if (this.loadPressLoaded && !XMLCodePress)
+		//{
+			//startXMLCodePress(); -> removing codepress editor
+		//}
+    
+    if( ! xmlEditor ) {
+      clientWinSize = getClientWindowSize();
+      
+      xmlEditor = CodeMirror.fromTextArea('form[XML]', {
+        height: (clientWinSize.height - 120) + "px",
+        width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
+        parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js",
+                     "../contrib/php/js/tokenizephp.js", "../contrib/php/js/parsephp.js",
+                     "../contrib/php/js/parsephphtmlmixed.js"],
+        stylesheet: ["css/xmlcolors.css", "css/jscolors.css", "css/csscolors.css", "contrib/php/css/phpcolors.css"],
+        path: "js/",
+        lineNumbers: true,
+        continuousScanning: 500
+      });
+    }  
 	},
 	changeToHtmlCode:function()
 	{
@@ -369,26 +388,33 @@ var dynaformEditor={
 	},
 	getXMLCode:function()
 	{
-		if (XMLCodePress)
+		/*if (XMLCodePress)
 		{
 			return XMLCodePress.getCode();
 		}
 		else
-		{
+		{*/
+      //alert(getField("XML","dynaforms_XmlEditor").value);
+      xmlEditor.save();
 			return getField("XML","dynaforms_XmlEditor").value;
-		}
+		//}
 	},
 	setXMLCode:function(newCode)
 	{
-		if (XMLCodePress)
-		{
-			XMLCodePress.setCode(newCode);
+		//if (XMLCodePress)
+		//{
+			//XMLCodePress.setCode(newCode);
 			//XMLCodePress.edit(newCode,"xmlform");
+		//}
+		if( xmlEditor )
+		{
+		  xmlEditor.setCode(newCode);
 		}
 		else
 		{
 			var code=getField("XML","dynaforms_XmlEditor");
 			code.value=newCode;
+      //xmlEditor.toTextArea();
 		}
 	},
 	setEnableTemplate:function(value)

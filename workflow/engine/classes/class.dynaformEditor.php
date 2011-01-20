@@ -58,35 +58,35 @@ class dynaformEditor extends WebResource
    *   top: 'getAbsoluteTop(document.getElementById("dynaformEditor[0]"))',
    */
   var $defaultConfig = array(
-                            'Editor'    =>array(
-                                                'left'  =>'0',
-                                                'top'   =>'0',
-                                                'width' =>'document.body.clientWidth-4',
-                                                'height'=>'document.body.clientHeight-4'
-                                               ),
-                             'Toolbar'  =>array(
-                                                'left'  =>'document.body.clientWidth-2-toolbar.clientWidth-24-3+7',
-                                                'top'   =>'52'
-                                                ),
-                            'FieldsList'=>array(
-                                                'left'  =>'4+toolbar.clientWidth+24',
-                                                'top'   =>'getAbsoluteTop(document.getElementById("dynaformEditor[0]"))',
-                                                'width' => 244,
-                                                'height'=> 400,
-                                                )
-                            );
+    'Editor'  => array(
+      'left'  => '0',
+      'top'   => '0',
+      'width' => 'document.body.clientWidth-4',
+      'height'=> 'document.body.clientHeight-4'
+    ),
+    'Toolbar' => array(
+      'left'  => 'document.body.clientWidth-2-toolbar.clientWidth-24-3+7',
+      'top'   => '52'
+    ),
+    'FieldsList' => array(
+      'left'  =>'4+toolbar.clientWidth+24',
+      'top'   =>'getAbsoluteTop(document.getElementById("dynaformEditor[0]"))',
+      'width' => 244,
+      'height'=> 400,
+    )
+  );
   var $panelConf=array(
-                      'style'       =>array(
-                                           'title'=>array('textAlign'=>'center')
-                                           ),
-                      'width'       =>700,
-                      'height'      =>600,
-                      'tabWidth'    =>120,
-                      'modal'       =>true,
-                      'drag'        =>false,
-                      'resize'      =>false,
-                      'blinkToFront'=>false
-    );
+    'style'  => array(
+      'title'=> array('textAlign'=>'center')
+    ),
+    'width'       => 700,
+    'height'      => 600,
+    'tabWidth'    => 120,
+    'modal'       => true,
+    'drag'        => false,
+    'resize'      => false,
+    'blinkToFront'=> false
+  );
     
   /**
    * Constructor of the class dynaformEditor
@@ -145,29 +145,30 @@ class dynaformEditor extends WebResource
     $script='';
     /* Start Block: Load (Create if not exists) the xmlform */
     $Parameters = array(
-                        'SYS_LANG'     => SYS_LANG,
-                        'URL'          => G::encrypt( $this->file , URL_KEY ),
-                        'DYN_UID'      => $this->dyn_uid,
-                        'PRO_UID'      => $this->pro_uid,
-                        'DYNAFORM_NAME'=> $this->dyn_title,
-                        'FILE'         => $this->file,
-                        );
+      'SYS_LANG'     => SYS_LANG,
+      'URL'          => G::encrypt( $this->file , URL_KEY ),
+      'DYN_UID'      => $this->dyn_uid,
+      'PRO_UID'      => $this->pro_uid,
+      'DYNAFORM_NAME'=> $this->dyn_title,
+      'FILE'         => $this->file,
+    );
     $_SESSION['Current_Dynafom']['Parameters'] = $Parameters;
     $XmlEditor = array(
-                       'URL'=> G::encrypt( $this->file , URL_KEY ),
-                       'XML'=> ''//$openDoc->getXml()
-                       );
+      'URL'=> G::encrypt( $this->file , URL_KEY ),
+      'XML'=> ''//$openDoc->getXml()
+    );
     $JSEditor  = array(
-                       'URL'=> G::encrypt( $this->file , URL_KEY ),
-                      );
-    $A=G::encrypt( $this->file , URL_KEY );
+      'URL'=> G::encrypt( $this->file , URL_KEY ),
+    );
+    
+    $A = G::encrypt( $this->file , URL_KEY );
+    
     try {
       $openDoc = new Xml_Document();
       $fileName= $this->home . $this->file . '.xml';
       if (file_exists($fileName)) {
         $openDoc->parseXmlFile($fileName);
-      } 
-      else {
+      } else {
         $this->_createDefaultXmlForm($fileName);
         $openDoc->parseXmlFile($fileName);
       }
@@ -250,14 +251,16 @@ class dynaformEditor extends WebResource
     $G_PUBLISH->AddContent('panel-tab',G::LoadTranslation("ID_CONDITIONS_EDITOR"),$sName.'[9]','dynaformEditor.changeToShowHide','dynaformEditor.saveShowHide');
     $G_PUBLISH->AddContent('panel-close');
     $oHeadPublisher->addScriptFile('/jscore/dynaformEditor/core/dynaformEditor.js');
-    $oHeadPublisher->addScriptFile('/js/dveditor/core/dveditor.js');
-    $oHeadPublisher->addScriptFile('/codepress/codepress.js',1);
+    //$oHeadPublisher->addScriptFile('/js/dveditor/core/dveditor.js');
+    //$oHeadPublisher->addScriptFile('/codepress/codepress.js',1);
+    $oHeadPublisher->addScriptFile('/js/codemirror/js/codemirror.js',1);
+    
     $oHeadPublisher->addScriptFile('/js/grid/core/grid.js');
     $oHeadPublisher->addScriptCode('
     var DYNAFORM_URL="'.$Parameters['URL'].'";
     leimnud.event.add(window,"load",function(){ loadEditor(); });
     ');
-    G::RenderPage( "publish-treeview" );
+    G::RenderPage( "publish", 'blank' );
   }
   
   /**

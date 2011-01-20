@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="dynaforms_XmlEditor" type="xmlform" width="98%" border="0">
+<dynaForm name="dynaforms_XmlEditor" type="xmlform" width="98%" border="0" enabletemplate="1">
 
 
 <URL type="phpvariable"/>
@@ -7,7 +7,7 @@
 <en>XML</en>
 </XML>
 <PME_RESIZE_JS type="javascript"><![CDATA[
-function resizeXmlEditor(){
+/*function resizeXmlEditor(){
   getField('XML','dynaforms_XmlEditor').style.height=
   document.getElementById('dynaformEditor[4]').parentNode.clientHeight-32;
 }
@@ -19,6 +19,7 @@ function startXMLCodePress()
   XMLCodePress=new CodePress(getField("XML"),'xmlform');
   getField("XML").parentNode.insertBefore(XMLCodePress,getField("XML"));
   XMLCodePress.edit(code,'xmlform');
-}
+}*/
+
 ]]></PME_RESIZE_JS>
 </dynaForm>  

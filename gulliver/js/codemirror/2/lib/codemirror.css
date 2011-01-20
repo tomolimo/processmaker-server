@@ -1,0 +1,41 @@
+.CodeMirror {
+  position: relative;
+  border: 1px solid black;
+}
+
+.CodeMirror-cursor {
+  width: 1px;
+  height: 1.2em !important;
+  background: black;
+  position: absolute;
+  margin-top: -.1em;
+  display: none;
+}
+
+.CodeMirror-focused .CodeMirror-cursor {
+  display: block;
+}
+
+.CodeMirror-code {
+  position: relative;
+  white-space: pre;
+  overflow: auto;
+  height: 300px;
+  font-family: monospace;
+  line-height: 1em;
+  padding: .4em;
+}
+
+.CodeMirror-code div {
+  height: 1em;
+  min-width: 1px;
+}
+
+span.CodeMirror-selected {
+  background: #bbb !important;
+  color: white !important;
+}
+
+.CodeMirror-focused .CodeMirror-selected {
+  background: #88f !important;
+}
