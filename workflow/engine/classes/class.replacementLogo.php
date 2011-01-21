@@ -80,12 +80,13 @@ class replacementLogo {
   * @param 
   * @return array
   */ 
-  function getNameLogo() {
+  function getNameLogo($usrUid) {
     
     require_once 'classes/model/Configuration.php';
     $oCriteria = new Criteria ( 'workflow' );
     $oCriteria->addSelectColumn ( ConfigurationPeer::CFG_VALUE );
     $oCriteria->add ( ConfigurationPeer::CFG_UID, 'USER_LOGO_REPLACEMENT' );
+    $oCriteria->add ( ConfigurationPeer::USR_UID, $usrUid );
     $oDataset = ConfigurationPeer::doSelectRS ( $oCriteria );
     $oDataset->next ();
     $aRow = $oDataset->getRow ();
