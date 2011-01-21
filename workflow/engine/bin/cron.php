@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 ini_set('memory_limit', '300M'); // nore: this may need to be higher for many projects
 $mem_limit = (int) ini_get('memory_limit');
 
@@ -68,14 +70,14 @@ if( $WS=='' ){
 
         if (file_exists(PATH_DB . $sObject . PATH_SEP . 'db.php')) {
           $cws++;
-          system("php -f ".dirname(__FILE__).PATH_SEP."cron_single.php $sObject \"$sDate\" $argsx", $retval);
+          system("php -f \"".dirname(__FILE__).PATH_SEP."cron_single.php\" $sObject \"$sDate\" $argsx", $retval);
         }
       }
     }
   }
 } else {
   $cws = 1;
-  system("php -f ".dirname(__FILE__).PATH_SEP."cron_single.php $WS \"$sDate\" $argsx", $retval);
+  system("php -f \"".dirname(__FILE__).PATH_SEP."cron_single.php\" $WS \"$sDate\" $argsx", $retval);
 }
 eprintln("Finished $cws workspaces processed.");
 
