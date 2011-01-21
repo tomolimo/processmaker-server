@@ -285,6 +285,7 @@ class Content extends BaseContent {
 
       $c->add ( ContentPeer::CON_LANG, $lanId );
       $result = ContentPeer::doSelectRS ( $c );
+      $result->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $result->next ();
       $row = $result->getRow ();
       while ( is_array ( $row ) ) {

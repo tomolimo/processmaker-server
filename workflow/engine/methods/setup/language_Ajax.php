@@ -132,6 +132,7 @@ try {
       include_once 'classes/model/Translation.php';
       include_once 'classes/model/Content.php';
       $locale = $_POST['LOCALE'];
+      $trn = new Translation();
 
       if( strpos($locale, Translation::$localeSeparator) )
         list($LAN_ID, $IC_UID) = explode(Translation::$localeSeparator, $locale);
@@ -154,7 +155,7 @@ try {
       if( $aRow[0] == 0 ) { //so we can delete this language
         try{
           Content::removeLanguageContent($locale);
-          Translation::removeTranslationEnvironment($locale);
+          $trn->removeTranslationEnvironment($locale);
           echo G::LoadTranslation('ID_LANGUAGE_DELETED_SUCCESSFULLY');
         } catch (Exception $e){
           echo $e->getMessage();
