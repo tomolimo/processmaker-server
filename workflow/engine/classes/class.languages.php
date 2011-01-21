@@ -330,8 +330,9 @@ class languages {
       $oLanguage = new Language();
       $oLanguage->update(array('LAN_ID' => $languageID, 'LAN_ENABLED' => '1'));
 
-      Translation::generateFileTranslation($LOCALE);
-      Translation::addTranslationEnvironment($LOCALE, $POHeaders, $countItemsSuccess);
+      $trn = new Translation();
+      $trn->generateFileTranslation($LOCALE);
+      $trn->addTranslationEnvironment($LOCALE, $POHeaders, $countItemsSuccess);
       
       $this->log( "checking and updating CONTENT");
       $content = new Content();

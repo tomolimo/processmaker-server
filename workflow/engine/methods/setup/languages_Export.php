@@ -223,7 +223,7 @@ foreach ($aXMLForms as $xmlFormPath) {
     
     $aMsgids[$msgid] = true;
     
-    //if it is a dropdown field
+    //if this node has options child nodes
     if( isset($arrayNode[$_BASE_LANG]) && isset($arrayNode[$_BASE_LANG][0]) && isset($arrayNode[$_BASE_LANG][0]['option']) ){
       
       $originOptionNode = $arrayNode[$_BASE_LANG][0]['option']; //get the options
@@ -256,8 +256,8 @@ foreach ($aXMLForms as $xmlFormPath) {
             $targetOptionValue = $originOptionValue;
           }
             
-          $targetOptionValue = ($targetOptionValue != '') ? $targetOptionValue : "''"; 
-          $optionName = ($optionName != '') ? $optionName : "''";
+          //$targetOptionValue = ($targetOptionValue != '') ? $targetOptionValue : "''"; 
+          //$optionName = ($optionName != '') ? $optionName : "''";
           
           $msgid = '[' . $xmlFormFile . '?' . $nodeName  . '-' . $optionName . ']';
           /*g::dump($xmlFormFile . '?' . $nodeName . '-'. $originOptionValue);
