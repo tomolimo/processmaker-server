@@ -668,7 +668,7 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_editcopy.png',
 					tooltip : 'Copy',
 					cls : 'x-btn-icon',
-					disabled : true,
+					disabled : false,
 					handler : function() {
 						openActionDialog(this, 'copy');
 					}
