@@ -284,15 +284,22 @@ class Content extends BaseContent {
       $c->addSelectColumn(ContentPeer::CON_LANG);
 
       $c->add ( ContentPeer::CON_LANG, $lanId );
+      
       $result = ContentPeer::doSelectRS ( $c );
       $result->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $result->next ();
       $row = $result->getRow ();
+
       while ( is_array ( $row ) ) {
-        ContentPeer::doDelete ( array ($row['CON_CATEGORY'], $row['CON_PARENT'], $row['CON_ID'], $lanId ) );
+        $content = ContentPeer::retrieveByPK( $row['CON_CATEGORY'], '', $row['CON_ID'], $lanId);
+
+        if( get_class($content) == 'Content' )
+          $content->delete();
+        
         $result->next ();
         $row = $result->getRow ();
       }
+
     } catch ( Exception $e ) {
       throw ($e);
     }

@@ -142,7 +142,9 @@ try {
       }
 
       $oCriteria = new Criteria('workflow');
-      $oCriteria->addSelectColumn('COUNT('.ContentPeer::CON_CATEGORY.')');
+      //$oCriteria->addSelectColumn('COUNT('.ContentPeer::CON_CATEGORY.')');
+      $oCriteria->addSelectColumn(ContentPeer::CON_CATEGORY);
+      $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
       $oCriteria->add(ContentPeer::CON_LANG, $locale);
       $oCriteria->add(ContentPeer::CON_CATEGORY, 'APP_TITLE', Criteria::EQUAL );
       $oDataset = ContentPeer::doSelectRS($oCriteria);

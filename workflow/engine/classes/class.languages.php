@@ -293,7 +293,7 @@ class languages {
             $category,
             $id,
             $LOCALE,
-            trim(str_replace(chr(10), '', $rowTranslation['msgstr']))
+            trim(str_replace(chr(10), '', stripslashes($rowTranslation['msgstr'])))
           );
           if( $result['codError'] == 0 )
             $countItemsSuccess++;
