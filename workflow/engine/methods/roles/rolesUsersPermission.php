@@ -1,6 +1,6 @@
 <?php
 /**
- * roles_List.php
+ * rolesUsersPermission.php
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -21,9 +21,10 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
- */
-    global $RBAC;
-    switch ($RBAC->userCanAccess('PM_USERS')) {
+ **/
+
+global $RBAC;
+switch ($RBAC->userCanAccess('PM_USERS')) {
         case - 2:
             G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
             G::header('location: ../login/login');
@@ -39,56 +40,36 @@
               G::header('location: ../login/login');
               die;
             break;
-	}
+}
 	
-	$G_MAIN_MENU = 'processmaker';
-	$G_SUB_MENU = 'users';
-	$G_ID_MENU_SELECTED = 'USERS';
-	$G_ID_SUB_MENU_SELECTED = 'ROLES';
+$G_MAIN_MENU = 'processmaker';
+$G_SUB_MENU = 'users';
+$G_ID_MENU_SELECTED = 'USERS';
+$G_ID_SUB_MENU_SELECTED = 'ROLES';
 	
-//	require_once (PATH_RBAC . "model/RolesPeer.php");
-//	G::LoadClass('ArrayPeer');
-//	$aRoles = $RBAC->getAllRoles();
-//	       
-//    $fields = Array(        
-//    	'ROL_UID'=>'char', 
-//    	'ROL_PARENT'=>'char', 
-//    	'ROL_SYSTEM'=>'char', 
-//    	'ROL_CREATE_DATE'=>'char', 
-//    	'ROL_UPDATE_DATE'=>'char',
-//    	'ROL_STATUS'=>'char'
-//    );
-//    
-//    $rows = array_merge(Array($fields), $aRoles);
-//    
-//    global $_DBArray;
-//    $_DBArray['roles'] = $rows;
-//    $_SESSION['_DBArray'] = $_DBArray;    
-//    $oCriteria = new Criteria('dbarray');
-//    $oCriteria->setDBArrayTable('roles');
-//	
-//	$G_PUBLISH = new Publisher;
-//	$G_PUBLISH->AddContent('propeltable', 'paged-table', 'roles/roles_List', $oCriteria);
-//	
-//	G::RenderPage('publish','blank');
 
 $G_PUBLISH = new Publisher;
 
 $oHeadPublisher =& headPublisher::getSingleton();
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
-$oHeadPublisher->addExtJsScript('roles/rolesList', false);    //adding a javascript file .js
-$oHeadPublisher->addContent('roles/rolesList'); //adding a html file  .html.
+$oHeadPublisher->addExtJsScript('roles/rolesUsersPermission', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('roles/rolesUsersPermission'); //adding a html file  .html.
 
 $labels = G::getTranslations(Array('ID_PRO_CREATE_DATE','ID_CODE','ID_NAME','ID_LAN_UPDATE_DATE', 'ID_ROLES',
   'ID_USERS','ID_PERMISSIONS','ID_EDIT','ID_DELETE','ID_NEW','ID_STATUS','ID_SAVE','ID_CLOSE',
   'ID_ACTIVE','ID_INACTIVE','ID_ROLES_MSG','ID_ROLES_CAN_NOT_DELETE','ID_ROLES_SUCCESS_NEW','ID_ROLES_SUCCESS_UPDATE',
-  'ID_ROLES_SUCCESS_DELETE','ID_REMOVE_ROLE','ID_SEARCH','ID_ENTER_SEARCH_TERM','ID_SELECT_STATUS'));
+  'ID_ROLES_SUCCESS_DELETE','ID_REMOVE_ROLE','ID_ASSIGN','ID_REMOVE','ID_BACK','ID_PROCESSING',
+  'ID_REMOVE_ALL_PERMISSIONS','ID_ASSIGN_ALL_PERMISSIONS','ID_ASSIGN_ALL_USERS','ID_REMOVE_ALL_USERS',
+  'ID_USER_NAME','ID_PERMISSION_CODE','ID_AVAILABLE_PERMISSIONS','ID_ASSIGNED_PERMISSIONS',
+  'ID_FIRST_NAME','ID_LAST_NAME','ID_AVAILABLE_USERS','ID_ASSIGNED_USERS','ID_MSG_CONFIRM_ASSIGN_ALL_USERS','ID_MSG_AJAX_FAILURE'));
+
+$roles = Array();
+$roles['ROL_UID'] = $_GET['rUID'];
+$roles['ROL_CODE'] = $RBAC->getRoleCode($_GET['rUID']);
+$roles['CURRENT_TAB'] = ($_GET['tab']=='permissions') ? 1 : 0;
 
 $oHeadPublisher->assign('TRANSLATIONS', $labels);
+$oHeadPublisher->assign('ROLES', $roles);
 G::RenderPage('publish', 'extJs');
 	
 ?>
-
-
-

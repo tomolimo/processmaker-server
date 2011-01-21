@@ -86,8 +86,9 @@ class Roles extends BaseRoles {
         }
     }
     
-    function listAllRoles($systemCode = 'PROCESSMAKER') {
+    function listAllRoles($systemCode = 'PROCESSMAKER', $filter = '') {
         try {
+        	
             $oCriteria = new Criteria('rbac');
             $oCriteria->addSelectColumn(RolesPeer::ROL_UID);
             $oCriteria->addSelectColumn(RolesPeer::ROL_PARENT);
@@ -101,14 +102,38 @@ class Roles extends BaseRoles {
             $oCriteria->add(SystemsPeer::SYS_CODE, $systemCode);
             $oCriteria->add(RolesPeer::ROL_CREATE_DATE, '', Criteria::NOT_EQUAL);
             $oCriteria->add(RolesPeer::ROL_UPDATE_DATE, '', Criteria::NOT_EQUAL);
+            //Added by QENNIX Jan 21th, 2011
+            if ($filter != ''){
+              $oCriteria->add(RolesPeer::ROL_CODE, '%'.$filter.'%', Criteria::LIKE);	
+            }
             $oCriteria->addJoin(RolesPeer::ROL_SYSTEM, SystemsPeer::SYS_UID);
-            
+                        
             return $oCriteria;
         
         } catch( exception $oError ) {
             throw (new Exception("Class ROLES::FATAL ERROR. Criteria with rbac Can't initialized "));
         }
     }
+    
+    //Added by QENNIX 
+	function getAllRolesFilter($filter='') {
+		$systemCode = 'PROCESSMAKER';
+        $c = $this->listAllRoles($systemCode,$filter);
+		$rs = RolesPeer::DoSelectRs($c);
+        $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        
+        $aRows = Array();
+        while($rs->next()){
+        	$row = $rs->getRow();
+        	$o = new Roles();
+        	$o->load($row['ROL_UID']);
+        	$row['ROL_NAME'] = $o->getRolName();
+        	$aRows[] = $row;
+        }
+        return $aRows;
+    }
+    
+    
     
     function getAllRoles($systemCode = 'PROCESSMAKER') {
         $c = $this->listAllRoles($systemCode);

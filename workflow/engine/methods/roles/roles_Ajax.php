@@ -34,6 +34,7 @@ switch ($REQUEST) {
         break;
 
     case 'saveNewRole':
+
     	
     	$newid = md5($_POST['code'].date("d-M-Y_H:i:s"));
     	g::pr($_POST);
@@ -187,18 +188,17 @@ switch ($REQUEST) {
     case 'assignUserToRole':
 
     	$ROL_UID = $_POST['ROL_UID'];
-    	
-      $aUserIuds = explode(",",$_POST['aUsers']);
-      foreach($aUserIuds as $key=>$val){
-        $sData['USR_UID'] = $val;
-    	  $sData['ROL_UID'] = $ROL_UID;
-        $RBAC->assignUserToRole($sData);
-      }
+        $aUserIuds = explode(",",$_POST['aUsers']);
+      	foreach($aUserIuds as $key=>$val){
+        	$sData['USR_UID'] = $val;
+    	  	$sData['ROL_UID'] = $ROL_UID;
+        	$RBAC->assignUserToRole($sData);
+      	}
 
-    	$_GET['ROL_UID'] = $ROL_UID;
-      $G_PUBLISH = new Publisher;
-      $G_PUBLISH->AddContent('view', 'roles/roles_Tree' );
-      G::RenderPage('publish', 'raw');
+//    	$_GET['ROL_UID'] = $ROL_UID;
+//      $G_PUBLISH = new Publisher;
+//      $G_PUBLISH->AddContent('view', 'roles/roles_Tree' );
+//      G::RenderPage('publish', 'raw');
     	break;
     	
      case 'assignPermissionToRole':
@@ -208,10 +208,10 @@ switch ($REQUEST) {
     	$sData['ROL_UID'] = $ROL_UID;
     	$RBAC->assignPermissionRole($sData);
     	
-    	$_GET['ROL_UID'] = $ROL_UID;
-		$G_PUBLISH = new Publisher;
-		$G_PUBLISH->AddContent('view', 'roles/roles_permissionsTree' );
-		G::RenderPage('publish', 'raw');
+//    	$_GET['ROL_UID'] = $ROL_UID;
+//		$G_PUBLISH = new Publisher;
+//		$G_PUBLISH->AddContent('view', 'roles/roles_permissionsTree' );
+//		G::RenderPage('publish', 'raw');
     	break;
     
 	case 'viewPermitions':
@@ -231,6 +231,35 @@ switch ($REQUEST) {
 		$G_PUBLISH = new Publisher;
 		$G_PUBLISH->AddContent('view', 'roles/roles_permissionsTree');
 		G::RenderPage('publish', 'raw');
+    	break;
+    	
+    case 'assignPermissionToRoleMultiple':
+    	$USR_UID = $_POST['PER_UID']; 
+    	$ROL_UID = $_POST['ROL_UID']; 
+    	$arrPer = explode(',',$USR_UID);
+    	foreach ($arrPer as $PER_UID){	
+    	  unset($sData);
+    	  $sData['PER_UID'] = $PER_UID;
+    	  $sData['ROL_UID'] = $ROL_UID;
+    	  $RBAC->assignPermissionRole($sData);
+    	}
+    	break;
+    	
+    case 'deletePermissionToRoleMultiple':
+    	$USR_UID = $_POST['PER_UID']; 
+    	$ROL_UID = $_POST['ROL_UID']; 
+    	$arrPer = explode(',',$USR_UID);
+    	foreach ($arrPer as $PER_UID){	
+    	  $RBAC->deletePermissionRole($ROL_UID, $PER_UID);
+    	}
+    	break;
+    case 'deleteUserRoleMultiple':
+    	$USR_UID = $_POST['USR_UID'];
+    	$ROL_UID = $_POST['ROL_UID'];
+    	$arrUsers = explode(',',$USR_UID);
+    	foreach ($arrUsers as $aUID){
+    	  $RBAC->deleteUserRole($ROL_UID, $aUID);	
+    	}
     	break;
 	         
 	default: echo 'default';

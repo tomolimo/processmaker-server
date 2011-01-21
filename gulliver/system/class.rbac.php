@@ -554,6 +554,18 @@ class RBAC
   function getAllRoles ( $systemCode = 'PROCESSMAKER') {
       return $this->rolesObj->getAllRoles($systemCode);
   }
+  
+/**
+  * getting all roles by filter
+  *
+  *
+  * @access public
+  * @param  string $filter
+  * @return $this->rolesObj->getAllRolesFilter
+  */  
+  function getAllRolesFilter ($filter) {
+      return $this->rolesObj->getAllRolesFilter($filter);
+  }
 
   /**
   * list all permission
