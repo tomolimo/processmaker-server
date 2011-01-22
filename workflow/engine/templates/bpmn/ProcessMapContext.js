@@ -324,7 +324,7 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'OP_CASE_STATUS',type: 'string'}
         ]);
 
-var PermissionStore = new Ext.data.JsonStore({
+  var PermissionStore = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
             idProperty   : 'gridIndex',
@@ -2111,7 +2111,8 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                    getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
                                                //Assigning / updating Condition for a row
                                                else
-                                                   getObjectGridRow[0].set(FieldSelected,rowLabel);
+                                                       getObjectGridRow[0].set(FieldSelected,rowLabel);
+
                                                    if(FieldSelected=='CTO_CONDITION')
                                                        {
                                                    Ext.Ajax.request({

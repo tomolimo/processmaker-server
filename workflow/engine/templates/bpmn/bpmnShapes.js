@@ -5,10 +5,16 @@ bpmnTask = function (_30ab) {
    {
       this.boundaryEvent = _30ab.boundaryEvent;
    }
+   //Getting width and height from DB
    if(typeof _30ab.task_width != 'undefined' && typeof _30ab.task_height != 'undefined')
         this.setDimension(_30ab.task_width, _30ab.task_height);
-    else
-    this.setDimension(165, 40);
+   else
+        this.setDimension(165, 40);
+
+   //Setting width and height values as per the zoom ratio
+   if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
+        this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
+
 
     this.taskName = _30ab.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
@@ -99,7 +105,14 @@ bpmnTask.prototype.paint = function () {
     }
 
     var rectheight = this.getHeight() - padtop -7;
-    this.bpmnText.setFont('verdana', '11px', Font.PLAIN);
+
+    //Setting text size to zoom font size if Zoomed
+//    if(typeof workflow.zoomTaskTextSize != 'undefined')
+//        var fontSize = workflow.zoomTaskTextSize;
+//    else
+        var fontSize = 11;
+
+    this.bpmnText.setFont('verdana', +fontSize+'px', Font.PLAIN);
     this.bpmnText.drawStringRect(this.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
     // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);

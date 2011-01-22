@@ -1,6 +1,10 @@
 bpmnSubProcess = function (_30ab) {
     VectorFigure.call(this);
-    this.setDimension(165, 50);
+    //Setting width and height values as per the zoom ratio
+    if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
+          this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
+    else
+        this.setDimension(165, 50);
     this.subProcessName = _30ab.subProcessName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 

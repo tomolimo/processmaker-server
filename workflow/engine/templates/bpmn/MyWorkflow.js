@@ -2128,7 +2128,7 @@ MyWorkflow.prototype.zoom = function(sType)
 {
    var figures = workflow.getDocument().getFigures();
 
-    var lines=workflow.getLines();
+   var lines=workflow.getLines();
    var size=lines.getSize();
    for(var i=0;i<size;i++){
        var startX = lines.data[i].startX;
@@ -2172,11 +2172,22 @@ MyWorkflow.prototype.zoom = function(sType)
           {
               width  += 5;
               height += 5;
+              workflow.zoomWidth  = width;
+              workflow.zoomHeight = height;
+          }
+        else if(fig.type.match(/Annotation/))
+          {
+             width  += 20;
+             height += 20;
+             workflow.zoomAnnotationWidth  = width;
+             workflow.zoomAnnotationHeight = height;
           }
         else
           {
              width  += 20;
              height += 20;
+             workflow.zoomTaskWidth  = width;
+             workflow.zoomTaskHeight = height;
           }
      }
     else
@@ -2185,15 +2196,26 @@ MyWorkflow.prototype.zoom = function(sType)
           {
               width  -= 5;
               height -= 5;
+              workflow.zoomWidth  = width;
+              workflow.zoomHeight = height;
+          }
+        else if(fig.type.match(/Annotation/))
+          {
+             width  -= 20;
+             height -= 20;
+             workflow.zoomAnnotationWidth  = width;
+             workflow.zoomAnnotationHeight = height;
           }
         else
           {
              width  -= 20;
              height -= 20;
+             workflow.zoomTaskWidth  = width;
+             workflow.zoomTaskHeight = height;
           }
      }
 
-     
+
 
    if(sType == 'in' && fig.type != 'bpmnAnnotation')
        {
@@ -2235,7 +2257,7 @@ MyWorkflow.prototype.zoom = function(sType)
         //Setting font minimum limit
         if(fig.size < 11)
             fig.size = 11;
-
+        workflow.zoomTaskTextSize = fig.size;
         eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
         fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
         fig.bpmnText.paint();
@@ -2269,6 +2291,7 @@ MyWorkflow.prototype.zoom = function(sType)
           if(fig.size < 11)
             fig.size = 11;
 
+          workflow.zoomAnnotationTextSize = fig.size;
           eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
           fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
           fig.bpmnText.paint();

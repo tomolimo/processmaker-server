@@ -1,6 +1,10 @@
 bpmnEventLinkEnd=function(){
 VectorFigure.call(this);
-this.setDimension(45,45);
+//Setting width and height values as per the zoom ratio
+if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
+      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
+else
+    this.setDimension(45,45);
 this.stroke=3;
 };
 bpmnEventLinkEnd.prototype=new VectorFigure;

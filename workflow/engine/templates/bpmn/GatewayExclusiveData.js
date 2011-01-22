@@ -1,7 +1,11 @@
 bpmnGatewayExclusiveData=function(width,_30ab){
 VectorFigure.call(this);
 this.stroke =2;
-this.setDimension(40,40);
+//Setting width and height values as per the zoom ratio
+if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
+      this.setDimension(workflow.zoomWidth+10, workflow.zoomHeight+10);
+else
+    this.setDimension(40,40);
 };
 bpmnGatewayExclusiveData.prototype=new VectorFigure;
 bpmnGatewayExclusiveData.prototype.type="bpmnGatewayExclusiveData";

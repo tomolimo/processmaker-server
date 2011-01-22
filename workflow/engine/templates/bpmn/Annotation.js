@@ -1,10 +1,16 @@
 bpmnAnnotation = function (_30ab ) {
     VectorFigure.call(this);
-    if(typeof _30ab.anno_width != 'undefined' && typeof _30ab.anno_height != 'undefined')
+   //Getting width and height from DB
+   if(typeof _30ab.anno_width != 'undefined' && typeof _30ab.anno_height != 'undefined')
         this.setDimension(_30ab.anno_width, _30ab.anno_height);
-    else
-    this.setDimension(110, 60);
-    this.setAnnotationName(_30ab.annotationName); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+   else
+        this.setDimension(110, 60);
+
+   //Setting width and height values as per the zoom ratio
+   if(typeof workflow.zoomAnnotationWidth != 'undefined' || typeof workflow.zoomAnnotationHeight != 'undefined')
+        this.setDimension(workflow.zoomAnnotationWidth, workflow.zoomAnnotationHeight);
+
+   this.setAnnotationName(_30ab.annotationName); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnAnnotation.prototype = new VectorFigure;
@@ -82,7 +88,14 @@ bpmnAnnotation.prototype.paint = function () {
     var padtop = 0.18*this.getHeight();
     var rectwidth = this.getWidth() - padleft;
     var rectheight = this.getHeight() - 2*padtop;
-    this.bpmnText.setFont('verdana', '11px', Font.PLAIN);
+
+    //Setting text size to zoom font size if Zoomed
+    if(typeof workflow.zoomAnnotationTextSize != 'undefined')
+        var fontSize = workflow.zoomAnnotationTextSize;
+    else
+        fontSize = '11px';
+
+    this.bpmnText.setFont('verdana', fontSize, Font.PLAIN);
     this.bpmnText.drawStringAnno(this.annotationName,0,padtop,rectwidth,rectheight,'left');
     //bpmnText.drawStringRect(this.taskName,this.getWidth()/2-20,this.getHeight()/2-11,200,'left');
     //tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
