@@ -31,7 +31,7 @@
 
 /**
  * GroupUser - GroupUser class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author Julio Cesar Laura Avendaño
  * @copyright 2007 COLOSA
  */

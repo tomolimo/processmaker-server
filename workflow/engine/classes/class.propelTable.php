@@ -31,7 +31,7 @@
 /**
  * Class pagedTable
  * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package gulliver.system
+ * @package workflow.gulliver.system
  * @access public
  * @dependencies TemplatePower  Form  XmlForm
  */

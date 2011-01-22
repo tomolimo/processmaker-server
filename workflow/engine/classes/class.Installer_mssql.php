@@ -32,7 +32,7 @@
 
 /**
  * Processmaker Installer_mssql
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author 
  * @copyright 2008 COLOSA
  */

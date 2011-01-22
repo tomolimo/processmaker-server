@@ -35,7 +35,7 @@ require_once 'classes/model/Content.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the input directory.
  *
- * @package    classes.model
+ * @package    workflow.classes.model
  */
 class TaskUser extends BaseTaskUser {
 

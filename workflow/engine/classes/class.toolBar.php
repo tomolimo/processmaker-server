@@ -25,7 +25,7 @@
  
 /**
  * ToolBar - ToolBar class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  */
 class ToolBar extends form 
 {
@@ -35,7 +35,7 @@ class ToolBar extends form
   
  /**
  * XmlForm_Field_ToolBar - XmlForm_Field_ToolBar class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  */
 class XmlForm_Field_ToolBar extends XmlForm_Field   
 {
@@ -78,7 +78,7 @@ class XmlForm_Field_ToolBar extends XmlForm_Field
 
 /**
  * XmlForm_Field_toolButton - XmlForm_Field_toolButton class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  */
 class XmlForm_Field_toolButton extends XmlForm_Field
 {

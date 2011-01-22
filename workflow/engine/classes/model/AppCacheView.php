@@ -12,7 +12,6 @@ require_once 'classes/model/om/BaseAppCacheView.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    classes.model
  */
  
 require_once 'classes/model/Application.php';
@@ -20,7 +19,12 @@ require_once 'classes/model/AppDelegation.php';
 require_once 'classes/model/AppDelay.php';
 require_once 'classes/model/Task.php';
 require_once 'classes/model/AdditionalTables.php';
- 
+
+
+/**
+ * @package   workflow.classes.model
+ * @access public
+**/
 class AppCacheView extends BaseAppCacheView {
 	var $confCasesList;
 	var $pathToAppCacheFiles;

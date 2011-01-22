@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package workflow-engine-bin-tasks
+ **/
 
 G::LoadClass("system");
 G::LoadClass("wsTools");

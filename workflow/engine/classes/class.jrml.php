@@ -26,7 +26,7 @@
 
 /**
  * Jrml - Jrml class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author Maborak <maborak@maborak.com>
  * @copyright 2008 COLOSA
  */

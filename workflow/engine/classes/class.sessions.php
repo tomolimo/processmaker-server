@@ -25,7 +25,7 @@
 require_once 'classes/model/Session.php';
 /**
  * Sessions - Sessions class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author Everth S. Berrios Morales
  * @copyright 2008 COLOSA
  */

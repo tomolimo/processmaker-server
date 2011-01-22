@@ -27,6 +27,7 @@
  * @created 2010-03-22
  *
  * @author Hugo Loza <hugo@colosa.com> 2010-03-22
+ * @package    workflow.classes
  */
    
   require_once ( "classes/model/CalendarDefinition.php" );

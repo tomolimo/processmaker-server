@@ -25,8 +25,8 @@
 
 /**
  * Dashboards - Dashboard class
- * @package ProcessMaker
- * @author Julio Cesar Laura Avendaño
+ * @package workflow.ProcessMaker
+ * @author Julio Cesar Laura Avendaï¿½o
  * @copyright 2007 COLOSA
  */
 

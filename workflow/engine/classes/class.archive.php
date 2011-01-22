@@ -12,12 +12,16 @@
  | only if this copyright statement is not removed
  +--------------------------------------------------*/
 
+ /**
+  * @package    workflow.classes
+ **/
 class archive
 {
  /** 
   * This function is the constructor of the class archive
   * @param string $name
   * @return void
+  * 
   */
   function archive($name)
   {

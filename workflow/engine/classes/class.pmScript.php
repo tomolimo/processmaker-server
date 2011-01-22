@@ -31,8 +31,7 @@
 ////////////////////////////////////////////////////
 
 /**
- * PMScript - PMScript class
- * @package ProcessMaker
+ * PMScript - PMScript class 
  * @author Julio Cesar Laura Avenda�o <juliocesar@colosa.com>
  * @last modify 2008.08.13 by Erik Amaru Ortiz <erik@colosa.com>
  * @last modify comment was added and adapted the catch errors
@@ -84,6 +83,7 @@ if (file_exists($dir)){
 /**
  * PMScript - PMScript class
  * @copyright 2007 COLOSA
+ * @package  workflow.ProcessMaker
  */
 class PMScript
 {

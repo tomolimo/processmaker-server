@@ -4,6 +4,7 @@
  * Utility functions to manage a workspace.
  *
  * @author Alexandre Rosenfeld
+ * @package workflow.classes
  */
 
 G::LoadSystem('dbMaintenance');

@@ -32,7 +32,7 @@
 
 /**
  * Processmaker Installer
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author maborak
  * @copyright 2008 COLOSA
  */

@@ -7,6 +7,7 @@ require_once "System.php";
  * ProcessMaker Filesystem access using WebDAV
  *
  * @access public
+ * @package workflow.classes
 */
 class ProcessMakerWebDav extends HTTP_WebDAV_Server 
 {

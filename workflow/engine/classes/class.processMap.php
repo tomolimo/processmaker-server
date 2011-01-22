@@ -21,7 +21,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
+ * /**
+ * @package workflow.ProcessMaker
  */
 G::LoadThirdParty('pear/json', 'class.json');
 G::LoadClass('groups');
@@ -61,7 +62,7 @@ require_once 'classes/model/Gateway.php';
 
 /**
  * processMap - Process Map class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author Julio Cesar Laura Avendano
  * @copyright 2007 COLOSA
  */

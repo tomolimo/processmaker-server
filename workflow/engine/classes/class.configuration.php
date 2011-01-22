@@ -32,7 +32,6 @@
 
 /**
  * ProcessConfiguration - ProcessConfiguration class
- * @package ProcessMaker
  * @author  David S. Callizaya S.
  * @copyright 2007 COLOSA
  */
@@ -46,6 +45,7 @@ require_once 'classes/model/Configuration.php';
  *
  * @copyright  2007 COLOSA
  * @version    Release: @package_version@
+ * @package  workflow.ProcessMaker
  */ 
 class Configurations // extends Configuration
 {

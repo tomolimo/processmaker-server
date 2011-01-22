@@ -28,7 +28,7 @@ require_once 'classes/model/Users.php';
 
 /**
  * Groups - Groups class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @copyright 2007 COLOSA
  */
 

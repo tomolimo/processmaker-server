@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package workflow-engine-bin-tasks
+ **/
 
 pake_task('info');
 

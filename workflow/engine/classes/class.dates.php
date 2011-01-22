@@ -20,7 +20,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
+ * /**
+ * @package    workflow.classes
  */
 /*
  * Created on 21/01/2008

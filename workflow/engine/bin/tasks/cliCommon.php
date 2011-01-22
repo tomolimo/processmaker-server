@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package workflow-engine-bin-tasks
+ **/
 
 /* Get the size of the terminal (only works on Linux, on Windows it's always 80) */
 preg_match_all("/rows.([0-9]+);.columns.([0-9]+);/", strtolower(exec('stty -a |grep columns')), $output);

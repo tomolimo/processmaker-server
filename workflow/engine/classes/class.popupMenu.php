@@ -26,7 +26,7 @@
  
 /**
  * popupMenu - popupMenu class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @copyright COLOSA
  */
  
@@ -78,7 +78,7 @@ class popupMenu extends form
 
 /**
  * XmlForm_Field_popupOption - XmlForm_Field_popupOption class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @copyright COLOSA
  */
 

@@ -34,7 +34,7 @@ require_once 'classes/model/om/BaseAppMessage.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    classes.model
+ * @package    workflow.classes.model
  */
 class AppMessage extends BaseAppMessage {
   

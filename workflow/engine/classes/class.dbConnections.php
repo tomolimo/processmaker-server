@@ -9,7 +9,7 @@
  *
  * Email bugs/suggestions to erik@colosa.com 
  * 
- *
+ * @package    workflow.classes
  */
 
 require_once 'model/DbSource.php';

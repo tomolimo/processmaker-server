@@ -38,7 +38,7 @@
 
 /**
  * derivation - derivation class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  *
  */
 

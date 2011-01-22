@@ -20,7 +20,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
+ * /**
+ * @package workflow.classes
  */
 // DEPRECATED this class is also part of the xmlform package this class will be also removed
 // in future releases of pm, its discouraged the inclusion this class in the future from a

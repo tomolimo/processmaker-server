@@ -31,7 +31,7 @@ include_once 'classes/model/Application.php';
 /**
  * Base static class for performing query and update operations on the 'APPLICATION' table.
  *    
- * @package    classes.model.om
+ * @package    workflow.classes.model
  */
 abstract class ArrayBasePeer {
 

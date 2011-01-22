@@ -31,7 +31,7 @@ G::LoadClass('xmlDb');
 
 /**
  * languages - Languages class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  */
 class languages {
 

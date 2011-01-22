@@ -20,7 +20,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
+ * /**
+ * @package workflow.classes
  */
 require_once 'classes/model/GroupUser.php';
 require_once 'classes/model/Groupwf.php';
@@ -35,7 +36,7 @@ require_once 'classes/model/Users.php';
 
 /**
  * Tasks - Tasks class
- * @package ProcessMaker
+ * @package workflow.ProcessMaker
  * @author Julio Cesar Laura Avenda�o
  * @copyright 2007 COLOSA
  */

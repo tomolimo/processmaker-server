@@ -31,6 +31,7 @@
 * ProcessMaker Open Source Edition
 *
 * @copyright (C) 2004 - 2008 Colosa Inc.23
+* @package workflow.ProcessMaker
 */ 
 class XMLDB 
 {

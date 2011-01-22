@@ -12,7 +12,8 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  * <juliocesar@colosa.com, julces2000@gmail.com>
- * @package    classes.model
+ * /**
+ * @package    workflow.classes.model
  */
 class AdditionalTables extends BaseAdditionalTables {
   private $aDef = array('mysql' => array('TEXT' => 'TEXT',

@@ -33,7 +33,7 @@ include_once 'classes/model/Application.php';
  *
  *
  *
- * @package    classes.model.om
+ * @package    workflow.classes.model
  */
 abstract class GulliverBasePeer {
 

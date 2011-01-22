@@ -24,8 +24,7 @@
  */
 
 /**
- * spoolRun - brief send email from the spool database, and see if we have all the addresses we send to.
- * @package ProcessMaker
+ * spoolRun - brief send email from the spool database, and see if we have all the addresses we send to. 
  * @author Ian K Armstrong <ika@[REMOVE_THESE_CAPITALS]openmail.cc>
  * @copyright Copyright (c) 2007, Ian K Armstrong
  * @license http://www.opensource.org/licenses/gpl-3.0.html GNU Public License
@@ -45,6 +44,11 @@
  */
 
 require_once ('classes/model/AppMessage.php');
+
+ /**
+  * @package  workflow.ProcessMaker
+  */
+
 
 class spoolRun {
   private $config;

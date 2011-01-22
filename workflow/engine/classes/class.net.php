@@ -13,6 +13,8 @@
 +--------------------------------------------------*/
 /**
 * @LastModification 30/05/2008
+* /**
+* @package workflow.classes
 */
 
 class NET
