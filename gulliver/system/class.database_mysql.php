@@ -701,7 +701,6 @@ class database extends database_base {
 
   /**
    * It is part of class.pagedTable.php
-   * @package gulliver.system
    */
   function getLimitRenderTable($nCurrentPage, $nRowsPerPage)
   {

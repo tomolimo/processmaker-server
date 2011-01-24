@@ -143,7 +143,6 @@
     
     /**
      * render
-     * @package gulliver.system
      * @return $obj->printObject( array( 'node' => &$this ) )
      */   
     function render() {

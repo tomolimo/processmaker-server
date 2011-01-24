@@ -58,7 +58,6 @@ class XmlForm_Field_HTML extends XmlForm_Field_Textarea
   * @access public
   * @param  string $element
   * @return string
-  * @package gulliver.system
   *
   */
   function attachEvents($element) {

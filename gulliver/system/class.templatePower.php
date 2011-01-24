@@ -54,9 +54,6 @@
 //
 // $Id: Version 3.0.2$
 
-/**
- * @package gulliver.system
-*/
 define("T_BYFILE",              0);
 define("T_BYVAR",               1);
 
@@ -740,7 +737,6 @@ class TemplatePower extends TemplatePowerParser
      *
      * @return void
      * @access public
-     * @package gulliver.system
      */
   function getOutputContent()
   {

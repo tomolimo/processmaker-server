@@ -264,7 +264,6 @@ class mailer
    * html2text
    *
    * empty
-   * @package gulliver.system
    * @return none
    */   
   function html2text()

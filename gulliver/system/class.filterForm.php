@@ -42,7 +42,6 @@ class filterForm extends form
   * @param  string $template
   * @param  string $scriptContent
   * @return string
-  * @package gulliver.system
   */
   function render( $template, &$scriptContent )
   {

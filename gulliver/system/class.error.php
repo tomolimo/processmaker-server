@@ -24,9 +24,6 @@
  * 
  */
 
-/**
- * @package gulliver.system
-*/
 
 require_once 'PEAR.php';
 
@@ -82,7 +79,6 @@ class G_Error extends PEAR_Error
   /**
   * this function returns the kind of Error
   * @author
-  * @package gulliver.system
   * @access public
   * @param  string $code
   * @return string

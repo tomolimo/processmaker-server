@@ -175,7 +175,6 @@ class testTools
  *
  * @param  string $location *
  * @return object $result
- * @package gulliver.system
  */   
 
 function domain($location)

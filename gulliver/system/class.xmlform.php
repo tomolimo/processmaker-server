@@ -2085,7 +2085,6 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
    * @param  $value
    * @param  $owner
    * @return either the value or falseValue
-   * @package gulliver.system
    */
   function maskValue($value, &$owner)
   {
@@ -2591,7 +2590,6 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
    * @param string value
    * @param string owner
    * @return string
-   * @package gulliver.system
    */
   function render($value = NULL, $owner = NULL)
   {
@@ -3171,7 +3169,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
 
 /**
- * @description   Calendar Widget with Javascript Routines
+ * Calendar Widget with Javascript Routines
  * @author      Erik amaru Ortiz <aortiz@gmail.com, erik@colosa.com>
  * @package gulliver.system
  */

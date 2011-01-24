@@ -24,9 +24,6 @@
  * 
  */
 
-/**
- * @package gulliver.system
-*/
 require_once ("DB.php");
 
 define ( 'DB_ERROR_NO_SHOW_AND_CONTINUE', 0);
