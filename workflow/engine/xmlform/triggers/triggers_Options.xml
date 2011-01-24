@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value='' link="#" onclick="triggerFromLibrary(); return false;" colAlign="left" colWidth="70">
-  <en>New</en>
-</MNU_ADD>
-
-
-
-
-<PRO_UID type="private"/>
-
-<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
-
-<triggersEditCustom type="private" defaultValue="../triggers/triggers_EditCustom"/>
-
-<triggersDelete type="private" defaultValue="../triggers/triggers_Delete"/>
-
-<triggersProperties type="private" defaultValue="../triggers/triggersProperties"/>
-
-<triggersOptionList type="private" defaultValue="../triggers/triggersTree"/>
-
-<triggerNewWizard type="private" defaultValue="../triggers/triggers_CreateWizard"/>
-
-<triggerNewTalend type="private" defaultValue="../triggers/triggers_CreateTalend"/>
-
-<triggerNewGoogleWebContent type="private" defaultValue="../triggers/triggers_CreateGoogleWebContent"/>
-
-<triggerNewGoogleCreateEvent type="private" defaultValue="../triggers/triggers_CreateGoogleEvent"/>
-
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1">
-<![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="triggerFromLibrary(); return false;" colAlign="left" colWidth="70">
+    <en><![CDATA[New]]></en>
+    <es><![CDATA[Nuevo]]></es>
+    <ar-EG><![CDATA[جديد]]></ar-EG>
+    <cs-CZ><![CDATA[Nový]]></cs-CZ>
+    <da-DK><![CDATA[Ny]]></da-DK>
+    <de-DE><![CDATA[Neu]]></de-DE>
+    <fi-FI/>
+    <fr-FR><![CDATA[Nouveau]]></fr-FR>
+    <iw-IL><![CDATA[חדש]]></iw-IL>
+    <it-IT><![CDATA[Nuovo]]></it-IT>
+    <nl-NL><![CDATA[Nieuw]]></nl-NL>
+    <pt-BR><![CDATA[Novo]]></pt-BR>
+  </MNU_ADD>
+  <PRO_UID type="private"/>
+  <triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+  <triggersEditCustom type="private" defaultValue="../triggers/triggers_EditCustom"/>
+  <triggersDelete type="private" defaultValue="../triggers/triggers_Delete"/>
+  <triggersProperties type="private" defaultValue="../triggers/triggersProperties"/>
+  <triggersOptionList type="private" defaultValue="../triggers/triggersTree"/>
+  <triggerNewWizard type="private" defaultValue="../triggers/triggers_CreateWizard"/>
+  <triggerNewTalend type="private" defaultValue="../triggers/triggers_CreateTalend"/>
+  <triggerNewGoogleWebContent type="private" defaultValue="../triggers/triggers_CreateGoogleWebContent"/>
+  <triggerNewGoogleCreateEvent type="private" defaultValue="../triggers/triggers_CreateGoogleEvent"/>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 /*
 	document.onkeypress=function(e){
 	var esIE=(document.all);
@@ -81,7 +74,7 @@
   function triggerSave(form)
   {
   var triUid = "";
-  if(document.getElementById('TRI_UID')) { //  alert('alvaro2');
+  if(document.getElementById('TRI_UID')) { 
     var triUid = document.getElementById('TRI_UID').value;
   } 
    if(triUid==''){  
@@ -97,7 +90,7 @@
     currentPopupWindow.remove();
     @#PAGED_TABLE_ID.refresh();
    }
-   }else{ alert('alvaro888');
+   }else{ 
 	     ajax_post(form.action, form, 'POST');
 		   currentPopupWindow.remove();
 		   @#PAGED_TABLE_ID.refresh();
@@ -108,7 +101,7 @@
  function triggerSave1(form)
   {
   var triUid = ""; 
-  if(getField('TRI_UID')) { //  alert('alvaro2');
+  if(getField('TRI_UID')) { 
     var triUid = getField('TRI_UID').value;
   } 
    if(triUid==''){  
@@ -124,7 +117,7 @@
     currentPopupWindow.remove();
     @#PAGED_TABLE_ID.refresh();
    }
-   }else{ alert('alvaro888');
+   }else{ 
 	     ajax_post(form.action, form, 'POST');
 		   currentPopupWindow.remove();
 		   @#PAGED_TABLE_ID.refresh();
@@ -167,14 +160,10 @@
     popupWindow('@G::LoadTranslation(ID_NEW_TRIGGERS)', '@G::encryptlink(@#triggerNewWizard)?PRO_UID=@%PRO_UID&NAME_FUN='+nameFunction+'&LIBRARY='+library+'&PAGED_TABLE_ID='+@#PAGED_TABLE_ID , 600, 600);
   }
   
-]]>
-</JS>
-
+]]></JS>
 <!-- Default Search option -->
 <!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this);return false;" colAlign="right" colWidth="130">
   <en>Advanced Search</en>
 </MNU_SEARCH>-->
-
-<SEARCH_FILTER_FORM type="private"/>
-
-</dynaForm> 
+  <SEARCH_FILTER_FORM type="private"/>
+</dynaForm>
