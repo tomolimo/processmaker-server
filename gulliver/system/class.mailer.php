@@ -1,9 +1,10 @@
 <?php
 /**
  * class.mailer.php
- *  
+ * @package gulliver.system 
+ *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as

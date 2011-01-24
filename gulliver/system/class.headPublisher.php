@@ -28,7 +28,6 @@
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies none
  */
 class headPublisher {
   private static $instance = NULL;
