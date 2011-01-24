@@ -1391,7 +1391,6 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
    * @param <String> $value
    * @param <String> $owner
    * @return <String>
-   * @package gulliver.system
    */
   function render( $value = NULL, $owner = NULL) {
     $onkeypress = G::replaceDataField ( $this->onkeypress, $owner->values );
@@ -1638,7 +1637,6 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText {
    * @param  $owner
    * @param  $onlyValue
    * @return <String>
-   * @package gulliver.system
    */
   function renderGrid($values = NULL, $owner = NULL, $onlyValue = false) {
     $result = array ();
@@ -1876,7 +1874,6 @@ class XmlForm_Field_File extends XmlForm_Field {
    * @access public
    * @param string value
    * @return string
-   * @package gulliver.system
    */
   function render($value = NULL) {
     $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
@@ -1927,7 +1924,6 @@ class XmlForm_Field_Dropdownpt extends XmlForm_Field {
   }
 
   /* Used in Form::validatePost
-   * @package gulliver.system
    */
   function maskValue($value, &$owner) {
     return ($value === $this->value) ? $value : $this->falseValue;
@@ -1987,7 +1983,6 @@ class XmlForm_Field_Checkboxpt extends XmlForm_Field {
    * @param $value
    * @param &$owner
    * @return either the value or falseValue attributes
-   * @package gulliver.system
    */
   function maskValue($value, &$owner) {
     return ($value === $this->value) ? $value : $this->falseValue;
@@ -2498,7 +2493,6 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
    * @param string value
    * @param string owner
    * @return string
-   * @package gulliver.system
    */
   function render($value = NULL, $owner)
   {
@@ -2541,7 +2535,7 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
 }
 
 /*DEPRECATED*/
-/*
+/**
  * @package gulliver.system
 */
 class XmlForm_Field_RadioGroupView extends XmlForm_Field
@@ -2636,10 +2630,9 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
 }
 
 /* TODO: DEPRECATED */
-/*
+/**
  * @package gulliver.system
 */
-
 class XmlForm_Field_CheckGroupView extends XmlForm_Field
 {
   var $option        = array ();
@@ -2870,7 +2863,6 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
    * @param string value
    * @param string owner
    * @return string
-   * @package gulliver.system
    */
   function renderGrid($value, $owner)
   {
@@ -2881,7 +2873,6 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
    * A javascript node has no value
    * @param $value
    * @return false
-   * @package gulliver.system
    */
   function validateValue($value)
   {
@@ -2890,10 +2881,8 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
 }
 
 /**
- * @description   Calendar Widget with Javascript Routines
  * @author      Erik amaru Ortiz <erik@colosa.com>
- * @Last Modification 2008-07-29
- * @Modification 2008-07-29 Comment Working for after and before date attributes
+ * Comment Working for after and before date attributes
  * @package gulliver.system
  */
 class XmlForm_Field_Date extends XmlForm_Field_SimpleText
@@ -3511,7 +3500,6 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
    * @param <Date> $date
    * @param  $mask
    * @return <type>
-   * @package gulliver.system
    */
   function getSplitDate($date, $mask){
   $sw1 = false;
@@ -3555,7 +3543,7 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
 }
 
  
-/*
+/**
  * @package gulliver.system
  * AVOID TO ENTER HERE : EXPERIMENTAL !!!
  * by Caleeli.
@@ -4166,7 +4154,6 @@ class xmlformTemplate extends Smarty
    * @param string tpl_name
    * @param string smarty_obj
    * @return string
-   * @package gulliver.system
    */
   function _get_trusted($tpl_name, &$smarty_obj)
   {

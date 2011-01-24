@@ -34,7 +34,7 @@ class XmlForm_Field_Label extends XmlForm_Field
   var $align        = 'left';
 }
 
-/* 
+/** 
  * Special class for pagedTable
  * condition: PHP expression whose result defines whether to "mark" 
  * the following columns (that is if true)
