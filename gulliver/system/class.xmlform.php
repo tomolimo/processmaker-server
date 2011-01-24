@@ -1387,7 +1387,7 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
   var $readOnly  = false;
   var $maxLength = 15;
 
-  var $mask      = '_###,###,###,###;###,###,###,###.##';
+  var $mask      = '_###,###,###,###;###,###,###,###.## $';
   var $currency  = '$';
   //Atributes only for grids
   var $formula   = '';
