@@ -28,7 +28,6 @@
  * Class objectTemplate
  * @package gulliver.system
  * @access public
- * @dependencies smarty
  */
 
 class objectTemplate extends smarty 

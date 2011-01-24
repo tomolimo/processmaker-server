@@ -536,7 +536,7 @@ class RBAC
   * @param  string $systemCode
   * @return $this->rolesObj
   */
-  /** @erik adds ****/
+
   function listAllRoles ( $systemCode = 'PROCESSMAKER') {
       return $this->rolesObj->listAllRoles($systemCode);
   }

@@ -32,7 +32,6 @@ G::LoadClass('xmlMenu');
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies DBConnection  DBSession  TemplatePower  Form  XmlForm
  */
 
 class pagedTable

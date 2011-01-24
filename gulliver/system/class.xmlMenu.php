@@ -36,6 +36,7 @@
    * XmlForm_Field_XmlMenu
    *
    * extends XmlForm_Field   
+   * @package gulliver.system
    *
    */  
   class XmlForm_Field_XmlMenu extends XmlForm_Field   

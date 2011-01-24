@@ -28,7 +28,6 @@
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies Services_JSON
  */
 class XmlForm_Field {
   var $name             = '';
@@ -672,7 +671,6 @@ class XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Title extends XmlForm_Field
 {
@@ -701,7 +699,6 @@ class XmlForm_Field_Title extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Subtitle extends XmlForm_Field
 {
@@ -731,7 +728,6 @@ class XmlForm_Field_Subtitle extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_SimpleText extends XmlForm_Field
 {
@@ -810,7 +806,6 @@ class XmlForm_Field_SimpleText extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field_SimpleText
  */
 class XmlForm_Field_Text extends XmlForm_Field_SimpleText
 {
@@ -940,7 +935,6 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
  * @author Erik Amaru Ortiz <erik@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field_SimpleText
  */
 class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 {
@@ -1226,7 +1220,6 @@ class XmlForm_Field_Caption extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Password extends XmlForm_Field {
   var $size         = 15;
@@ -1275,7 +1268,6 @@ class XmlForm_Field_Password extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Textarea extends XmlForm_Field {
   var $rows     = 12;
@@ -1378,7 +1370,6 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field_SimpleText
  */
 class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
   var $group     = 0;
@@ -1430,6 +1421,9 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
 }
 
 /*DEPRECATED*/
+/**
+ * @package gulliver.system
+ */
 class XmlForm_Field_CaptionCurrency extends XmlForm_Field {
   /**
    * Function render
@@ -1447,7 +1441,6 @@ class XmlForm_Field_CaptionCurrency extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field_SimpleText
  */
 class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText {
   var $size      = 15;
@@ -1491,14 +1484,10 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText {
 }
 
 /*DEPRECATED*/
+/**
+ * @package gulliver.system
+ */
 class XmlForm_Field_CaptionPercentage extends XmlForm_Field {
-  /**
-   * Function render
-   * @author David S. Callizaya S. <davidsantos@colosa.com>
-   * @access public
-   * @param string value
-   * @return string
-   */
   function render($value = NULL) {
     return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
   }
@@ -1508,7 +1497,6 @@ class XmlForm_Field_CaptionPercentage extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field_SimpleText
  */
 class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText {
   //Instead of size --> startDate
@@ -1723,15 +1711,11 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText {
 }
 
 /*DEPRECATED*/
+/**
+ * @package gulliver.system
+ */
 class XmlForm_Field_DateView extends XmlForm_Field
 {
-  /**
-   * Function render
-   * @author David S. Callizaya S. <davidsantos@colosa.com>
-   * @access public
-   * @param string value
-   * @return string
-   */
   function render($value = NULL)
   {
     return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
@@ -1742,7 +1726,6 @@ class XmlForm_Field_DateView extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_YesNo extends XmlForm_Field
 {
@@ -1805,7 +1788,6 @@ class XmlForm_Field_YesNo extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Link extends XmlForm_Field {
   //Instead of var --> link
@@ -1883,7 +1865,6 @@ class XmlForm_Field_Link extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_File extends XmlForm_Field {
   var $required = false;
@@ -1919,7 +1900,13 @@ class XmlForm_Field_File extends XmlForm_Field {
   }
 }
 
-/*hook, dropdown field for Propel table @By <erik@colosa.com>*/
+/**
+ * Class XmlForm_Field_Dropdownpt
+ * hook, dropdown field for Propel table
+ * @author Erik Amaru <erik@colosa.com>
+ * @package gulliver.system
+ * @access public
+ */
 class XmlForm_Field_Dropdownpt extends XmlForm_Field {
   var $value;
 
@@ -1947,7 +1934,13 @@ class XmlForm_Field_Dropdownpt extends XmlForm_Field {
   }
 }
 
-/*hook, checkbox field for Propel table @By <erik@colosa.com>*/
+/**
+ * Class XmlForm_Field_Checkboxpt
+ * checkbox field for Propel table
+ * @author Erik Amaru <erik@colosa.com>
+ * @package gulliver.system
+ * @access public
+ */
 class XmlForm_Field_Checkboxpt extends XmlForm_Field {
   var $required     = false;
   var $value        = 'on';
@@ -2001,6 +1994,12 @@ class XmlForm_Field_Checkboxpt extends XmlForm_Field {
   }
 }
 
+/**
+ * Class XmlForm_Field_Checkbox
+ * @author Erik Amaru <erik@colosa.com>
+ * @package gulliver.system
+ * @access public
+ */
 class XmlForm_Field_Checkbox extends XmlForm_Field
 {
   var $required     = false;
@@ -2100,15 +2099,11 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
 }
 
 /*DEPRECATED*/
+/**
+ * @package gulliver.system
+ */
 class XmlForm_Field_Checkbox2 extends XmlForm_Field {
   var $required = false;
-  /**
-   * Function render
-   * @author David S. Callizaya S. <davidsantos@colosa.com>
-   * @access public
-   * @param string value
-   * @return string
-   */
   function render($value = NULL) {
     return '<input class="FormCheck" name="' . $this->name . '" type ="checkbox" disabled>' . $this->label . '</input>';
   }
@@ -2118,7 +2113,6 @@ class XmlForm_Field_Checkbox2 extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Button extends XmlForm_Field
 {
@@ -2151,7 +2145,6 @@ class XmlForm_Field_Button extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Reset extends XmlForm_Field
 {
@@ -2175,7 +2168,6 @@ class XmlForm_Field_Reset extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Submit extends XmlForm_Field {
   var $onclick = '';
@@ -2204,7 +2196,6 @@ class XmlForm_Field_Submit extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Hidden extends XmlForm_Field
 {
@@ -2280,7 +2271,6 @@ class XmlForm_Field_Hidden extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Dropdown extends XmlForm_Field {
   var $defaultValue    = '';
@@ -2397,7 +2387,6 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_Listbox extends XmlForm_Field
 {
@@ -2479,7 +2468,6 @@ class XmlForm_Field_Listbox extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_RadioGroup extends XmlForm_Field {
   var $defaultValue  = '';
@@ -2553,6 +2541,9 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
 }
 
 /*DEPRECATED*/
+/*
+ * @package gulliver.system
+*/
 class XmlForm_Field_RadioGroupView extends XmlForm_Field
 {
   var $defaultValue  = '';
@@ -2585,7 +2576,6 @@ class XmlForm_Field_RadioGroupView extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_CheckGroup extends XmlForm_Field
 {
@@ -2646,6 +2636,10 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
 }
 
 /* TODO: DEPRECATED */
+/*
+ * @package gulliver.system
+*/
+
 class XmlForm_Field_CheckGroupView extends XmlForm_Field
 {
   var $option        = array ();
@@ -2673,7 +2667,6 @@ class XmlForm_Field_CheckGroupView extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field  XmlForm  xmlformTemplate
  */
 class XmlForm_Field_Grid extends XmlForm_Field
 {
@@ -2823,7 +2816,6 @@ class XmlForm_Field_Grid extends XmlForm_Field
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm_Field
  */
 class XmlForm_Field_JavaScript extends XmlForm_Field
 {
@@ -2898,11 +2890,11 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
 }
 
 /**
- * @Description   Calendar Widget with Javascript Routines
- * @Author      Erik amaru Ortiz <erik@colosa.com>
- * @creation date   2008-07-25
+ * @description   Calendar Widget with Javascript Routines
+ * @author      Erik amaru Ortiz <erik@colosa.com>
  * @Last Modification 2008-07-29
  * @Modification 2008-07-29 Comment Working for after and before date attributes
+ * @package gulliver.system
  */
 class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 {
@@ -3190,9 +3182,9 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
 
 /**
- * @Description   Calendar Widget with Javascript Routines
- * @Author      Erik amaru Ortiz <aortiz@gmail.com, erik@colosa.com>
- * @creation date   Oct 5th, 2009
+ * @description   Calendar Widget with Javascript Routines
+ * @author      Erik amaru Ortiz <aortiz@gmail.com, erik@colosa.com>
+ * @package gulliver.system
  */
 class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
 {
@@ -3562,9 +3554,12 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
   }
 }
 
-/**  AVOID TO ENTER HERE : EXPERIMENTAL !!!
- *  by Caleeli.
- */
+ 
+/*
+ * @package gulliver.system
+ * AVOID TO ENTER HERE : EXPERIMENTAL !!!
+ * by Caleeli.
+*/
 class XmlForm_Field_Xmlform extends XmlForm_Field {
   var $xmlfile   = '';
   var $initRows  = 1;
@@ -3647,7 +3642,6 @@ class XmlForm_Field_Xmlform extends XmlForm_Field {
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies Xml_document  XmlForm_Field  xmlformTemplate
  */
 class XmlForm
 {
@@ -3906,7 +3900,6 @@ class XmlForm
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies Smarty
  */
 class xmlformTemplate extends Smarty
 {
@@ -4182,6 +4175,9 @@ class xmlformTemplate extends Smarty
 
 }
 
+/**
+ * @package gulliver.system
+*/
 
 class XmlForm_Field_Image extends XmlForm_Field
 {

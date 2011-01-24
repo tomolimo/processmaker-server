@@ -1,9 +1,10 @@
 <?php
 /**
  * class.table.php
- *  
+ * @package gulliver.system 
+ *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,9 +23,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-/**
- * @package gulliver.system
-*/
+
 /**
  *
  * Table class definition
@@ -34,66 +33,6 @@
  * @copyright (C) 2002 by Colosa Development Team.
  *
  */
-
-//global $HTTP_SESSION_VARS;
-
-
-/* ***********************************************************************
- * Historia de Cambios
- *
- * 16-Jun-2005 Jorge Hugo Loza *JHL
- *            La Funcion AddRawColumn soporta ahora un nuevo tipo "textimage"
- *            el cual permite tener un campo con texto (field) e im?gen tipo
- *            Icono, se visualiza con el siguiente formato -><img> ($field)<-
- *            incluye los par?ntesis. La sintaxis es similar a la de texto,
-              pero al final se incluye un par?metro que es la im?gen
- * 11-Feb-2005 Fernando Ontiveros Lira
- *            Se agrega el Campo BOLD_FIELD para indicar que un registro debe
- *            ser mostrado en negrita
- *
- * 01-Jun-2005 Fernando Ontiveros Lira
- *            Se agrega el Campo TOOL_TIP para mostrar el tooltip o hint que
- *            aparece cuando se mueve el cursor en un link
- *
- * 30-Jul-2003 Fernando Ontiveros Lira
- *            La funcion AddRawColumn soporta ahora el nuevo tipo jsimagelink
- *            Utilizado para crear enlaces tipo javascript
- *
- * 2-Abr-2003 Hardy Beltran Monasterios
- *            La funcion AddRawColumn soporta ahora el nuevo tipo jslink
- *            Utilizado para crear enlaces tipo javascript
- *
- * 3-Abr-2003 Hardy Beltran Monasterios
- *            La funcion RenderColumn admite un valor de columna constante,
- *            si el valor (2do par?metro) empieza por el signo '='
- *
- *            La funcion AddRawColumn soporta un par?metro extra, que es
- *            incluido al final en las columnas tipo link (link, iflink,
- *            jslink). Se penso su uso para eventos JavaScript, como
- *            onCLick
- *
- * 8-Abr-2003 Hardy Beltran Monasterios
- *            Se ha agregado nuevas funciones para que sea posible
- *            traducir o convertir el valor recuperado de una tabla
- *            Por ejemplo si una tabla contiene una columna con valores
- *            numericos estos pueden ser convertidos a un texto, que es
- *            mostrado en la tabla. Para ver un ejemplo de su uso vea el
- *            archivo /home/wf/engine/tables/tramite.history.del.php:
- *            Vea las funciones:
- *                - setTranslate
- *                - translateValue
- *                - setContext
- * 10-Abr-2003 Fernando Ontiveros
- *            El tipo 'checkbox' dibujar el control con la marca de seleccion
- *            si tiene cualquiera de los siguientes valores:
- *            'TRUE', 'yes',  1
- *
- * 2-Jun-2003 Hardy Beltran Monasterios
- *            La funci?n AddRawColumn soporta ahora arreglos como parametros
- *            para el link, para permitir pasar varios valores.
- *
- ************************************************************************/
-
 
 class Table
 {

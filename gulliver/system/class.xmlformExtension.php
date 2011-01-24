@@ -34,9 +34,11 @@ class XmlForm_Field_Label extends XmlForm_Field
   var $align        = 'left';
 }
 
-/* Special class for pagedTable
+/* 
+ * Special class for pagedTable
  * condition: PHP expression whose result defines whether to "mark" 
  * the following columns (that is if true)
+ * @package gulliver.system
  */
 class XmlForm_Field_cellMark extends XmlForm_Field
 {
@@ -133,7 +135,7 @@ class XmlForm_Field_DVEditor extends XmlForm_Field
  *    
  * The PAGED_TABLE_ID reserved field must be defined in the xml.
  * Use PAGED_TABLE_FAST_SEARCH reserved field, it contains the saved value for each table.
- * @example
+ * example:
  * Ex1.
  *   <PAGED_TABLE_ID type="private"/>
  *   <PAGED_TABLE_FAST_SEARCH type="FastSearch">
