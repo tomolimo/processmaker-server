@@ -168,7 +168,7 @@ Ext.onReady(function(){
     	sm: smodel,
     	tbar:[newButton,'-', editButton, deleteButton,'-', dataButton,{xtype: 'tbfill'} , importButton, exportButton],
     	listeners: {
-    		rowdblclick: PMTableData,
+    		rowdblclick: PMTableData
     	},
     	view: new Ext.grid.GroupingView({
     		forceFit:true,

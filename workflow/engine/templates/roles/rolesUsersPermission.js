@@ -56,7 +56,7 @@ var backButton;
 var sw_func_permissions;
 var sw_func_users;
 
-const pm_admin = '00000000000000000000000000000002';
+var pm_admin = '00000000000000000000000000000002';
 
 Ext.onReady(function(){
 	

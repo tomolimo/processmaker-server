@@ -97,7 +97,7 @@ Ext.onReady(function(){
     	cm: cmodel,
     	bbar: [{xtype: 'tbfill'}, bbarpaging],
     	listeners: {
-    		rowdblclick: ShowSelectedLog,
+    		rowdblclick: ShowSelectedLog
     	},
     	view: new Ext.grid.GroupingView({
     		forceFit:true,

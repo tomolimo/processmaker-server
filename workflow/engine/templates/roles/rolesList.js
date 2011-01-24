@@ -99,7 +99,7 @@ Ext.onReady(function(){
     });
     
     contextMenu = new Ext.menu.Menu({
-    	items: [editButton, deleteButton,'-',usersButton, permissionsButton],
+    	items: [editButton, deleteButton,'-',usersButton, permissionsButton]
     });
     
     searchText = new Ext.form.TextField ({
