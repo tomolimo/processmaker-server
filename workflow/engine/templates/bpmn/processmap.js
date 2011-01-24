@@ -378,7 +378,7 @@ Ext.onReady ( function() {
             name: "bpmnGatewayExclusiveData"
         }
     });
-    var dragsource=new Ext.dd.DragSource("x-shapes-dataobject", {
+    /*var dragsource=new Ext.dd.DragSource("x-shapes-dataobject", {
         ddGroup:'TreeDD',
         dragData:{
             name: "bpmnDataobject"
@@ -389,7 +389,7 @@ Ext.onReady ( function() {
         dragData:{
             name: "bpmnPool"
         }
-    });
+    });*/
     var dragsource=new Ext.dd.DragSource("x-shapes-annotation", {
         ddGroup:'TreeDD',
         dragData:{

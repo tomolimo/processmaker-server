@@ -2489,10 +2489,11 @@ class processMap {
           $oGateway->remove($sGatewayUID);
       }
       //Getting Gateway UID after saving gateway
-      if($sType != 'SEQUENTIAL' && $sGatewayUID == '' && $sDelete == '1')
+      //if($sType != 'SEQUENTIAL' && $sGatewayUID == '' && $sDelete == '1')
+      if($sType != 'SEQUENTIAL')
       {
           $oProcessMap = new processMap();
-          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID);
+          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID, $sNextTask);
       }
 
       $aFields ['GAT_UID'] = (isset($sGatewayUID))?$sGatewayUID:'';
@@ -2508,14 +2509,16 @@ class processMap {
    *
    * @param  string    $sProcessUID Default value empty
    * @param  string    $sTaskUID    Default value empty
+   * @param  string    $sNextTask    Default value empty
    * @return string    $sGatewayUID
    */
-  function saveNewGateway($sProcessUID = '', $sTaskUID = '') {
+  function saveNewGateway($sProcessUID = '', $sTaskUID = '', $sNextTask = '') {
     try {
       $oTask = new Task();
       $aTaskDetails  = $oTask->load($sTaskUID);
       $aFields ['PRO_UID'] = $sProcessUID;
       $aFields ['TAS_UID'] = $sTaskUID;
+      $aFields ['GAT_NEXT_TASK'] = $sNextTask;
       $aFields ['GAT_X'] = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
       $aFields ['GAT_Y'] = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
 
@@ -4646,6 +4649,7 @@ class processMap {
   function getExtAvailableBBCriteria($sProcessUID = '', $sTaskUID = '')
   {
     try {
+      $_SESSION['TASK'] = $sTaskUID;
       $oTasks = new Tasks ( );
       $_SESSION['TASK'] = $sTaskUID;
       $aSteps = $oTasks->getStepsOfTask ( $sTaskUID );

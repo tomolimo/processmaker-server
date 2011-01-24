@@ -2126,6 +2126,7 @@ MyWorkflow.prototype.getDeleteCriteria = function()
  */
 MyWorkflow.prototype.zoom = function(sType)
 {
+   //workflow.zoomFactor = 1;
    var figures = workflow.getDocument().getFigures();
 
    var lines=workflow.getLines();
@@ -2160,6 +2161,24 @@ MyWorkflow.prototype.zoom = function(sType)
        }
    }
 
+    if(typeof workflow.zoomFactor != 'undefined' && sType == 'in')
+        {
+            var zoomFactor = workflow.zoomFactor + 0.2;
+            workflow.zoomFactor = zoomFactor;
+        }
+    else if(typeof workflow.zoomFactor != 'undefined' && sType == 'out')
+        {
+            zoomFactor = workflow.zoomFactor - 0.2;
+            workflow.zoomFactor = zoomFactor;
+        }
+    else
+        {
+            zoomFactor = 0.2;
+            workflow.zoomFactor = zoomFactor;
+        }
+
+
+
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    var width = fig.getWidth();
@@ -2168,31 +2187,38 @@ MyWorkflow.prototype.zoom = function(sType)
    var yPos = fig.getY();
    if(sType == 'in')
      {
-        if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
-          {
-              width  += 5;
-              height += 5;
+        
+
+        //if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+          //{
+              width  = width*zoomFactor + width;
+              height = height*zoomFactor + height;
               workflow.zoomWidth  = width;
               workflow.zoomHeight = height;
-          }
-        else if(fig.type.match(/Annotation/))
+          //}
+        /*else if(fig.type.match(/Annotation/))
           {
-             width  += 20;
-             height += 20;
+             width  *= zoomFactor;
+             height *= zoomFactor;
              workflow.zoomAnnotationWidth  = width;
              workflow.zoomAnnotationHeight = height;
           }
         else
           {
-             width  += 20;
-             height += 20;
+             width  *= zoomFactor;
+             height *= zoomFactor;
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
-          }
+          }*/
      }
     else
      {
-       if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+         width  = width*zoomFactor - width;
+         height = height*zoomFactor - height;
+         workflow.zoomWidth  = width;
+         workflow.zoomHeight = height;
+
+       /*if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
           {
               width  -= 5;
               height -= 5;
@@ -2212,7 +2238,7 @@ MyWorkflow.prototype.zoom = function(sType)
              height -= 20;
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
-          }
+          }*/
      }
 
 
@@ -2227,6 +2253,7 @@ MyWorkflow.prototype.zoom = function(sType)
     //fig.setPosition(xPos,yPos - 10);
 
    fig.setDimension(width,height);
+   fig.setPosition(xPos,yPos + zoomFactor*yPos);
    if(fig.type == 'bpmnTask')
       {
         fig.bpmnText.clear();

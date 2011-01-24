@@ -1002,6 +1002,26 @@ class Processes {
     return $this->getAllLanes( $sProUid );
   }
 
+  /**
+  * Get Gateway Rows from a process and returns those in an array.
+  * @param  $sProUid string for the process Uid
+  * @return $oTask array
+  */
+  function getGatewayRows ($sProUid ){
+    $oTask = new Tasks( );
+    return $oTask->getAllGateways( $sProUid );
+  }
+
+   /**
+  * Create Gateway Rows from a $aGateways array data and returns those in an array.
+  * @param  $aGateways array
+  * @return $oGateway array
+  */
+  function createGatewayRows ($aGateways ){
+    $oTask = new Tasks( );
+    return $oTask->createGatewayRows( $aGateways );
+  }
+
  /**
   * Create Lane Rows from a $aLanes array data and returns those in an array.
   * @param  $aLanes array.
@@ -2128,6 +2148,7 @@ class Processes {
     $oData->tasks             = $this->getTaskRows( $sProUid );
     $oData->routes            = $this->getRouteRows( $sProUid );
     $oData->lanes             = $this->getLaneRows( $sProUid );
+    $oData->gateways          = $this->getGatewayRows( $sProUid );
     $oData->inputs            = $this->getInputRows( $sProUid );
     $oData->outputs           = $this->getOutputRows( $sProUid );
     $oData->dynaforms         = $this->getDynaformRows ( $sProUid );
@@ -2991,6 +3012,7 @@ class Processes {
     $this->createTaskRows($oData->tasks);
     $this->createRouteRows($oData->routes);
     $this->createLaneRows($oData->lanes);
+    $this->createGatewayRows($oData->gateways);
     $this->createDynaformRows($oData->dynaforms);
     $this->createInputRows($oData->inputs);
     $this->createOutputRows($oData->outputs);

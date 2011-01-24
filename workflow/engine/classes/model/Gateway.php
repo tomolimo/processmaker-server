@@ -113,5 +113,68 @@ class Gateway extends BaseGateway {
       throw($oError);
     }
   }
+
+  /**
+   * verify if Gateway row specified in [GatUid] exists.
+   *
+   * @param      string $sProUid   the uid of the Prolication
+   */
+
+  function gatewayExists ( $GatUid ) {
+    $con = Propel::getConnection(GatewayPeer::DATABASE_NAME);
+    try {
+      $oPro = GatewayPeer::retrieveByPk( $GatUid );
+      if ( is_object($oPro) && get_class ($oPro) == 'Gateway' ) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
+  /**
+   * create a new Gateway
+   *
+   * @param      array $aData with new values
+   * @return     void
+   */
+  function createRow($aData)
+  {
+    $con = Propel::getConnection(GatewayPeer::DATABASE_NAME);
+    try
+    {
+      $con->begin();
+
+      $this->fromArray($aData,BasePeer::TYPE_FIELDNAME);
+      if($this->validate())
+      {
+        $this->setGatUid((isset($aData['GAT_UID']) ? $aData['GAT_UID']: ''));
+        $this->setProUid((isset($aData['PRO_UID']) ? $aData['PRO_UID']: ''));
+        $this->setTasUid((isset($aData['TAS_UID']) ? $aData['TAS_UID']: ''));
+        $this->setGatNextTask((isset($aData['GAT_NEXT_TASK']) ? $aData['GAT_NEXT_TASK']: ''));
+        $this->setGatX((isset($aData['GAT_X']) ? $aData['GAT_X']: ''));
+        $this->setGatY((isset($aData['GAT_Y']) ? $aData['GAT_Y']: ''));
+        $this->save();
+        $con->commit();
+        return;
+      }
+      else
+      {
+        $con->rollback();
+        $e=new Exception("Failed Validation in class ".get_class($this).".");
+        $e->aValidationFailures=$this->getValidationFailures();
+        throw($e);
+      }
+    }
+    catch(Exception $e)
+    {
+      $con->rollback();
+      throw($e);
+    }
+  }
   
 } // Gateway

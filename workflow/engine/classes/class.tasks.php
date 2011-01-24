@@ -33,6 +33,7 @@ require_once 'classes/model/StepTrigger.php';
 require_once 'classes/model/Task.php';
 require_once 'classes/model/TaskUser.php';
 require_once 'classes/model/Users.php';
+require_once 'classes/model/Gateway.php';
 
 /**
  * Tasks - Tasks class
@@ -319,6 +320,48 @@ class Tasks
     catch (Exception $oError) {
       throw($oError);
     }
+  }
+
+  /**
+  * Get all gateways for any Process
+  * @param string $sProUid
+  * @return array
+  */
+  public function getAllGateways($sProUid)
+  {
+    try {
+      $aGateways = array();
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(GatewayPeer::PRO_UID,     $sProUid);
+      $oDataset = GatewayPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while ($aRow = $oDataset->getRow()) {
+        $oGateway = new Gateway();
+        $aGateways[] = $oGateway->Load($aRow['GAT_UID']);
+        $oDataset->next();
+      }
+      return $aGateways;
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
+  /**
+  * creates row tasks from an Task Array
+  * @param string $aTasks
+  * @return array
+  */
+  public function createGatewayRows( $aGateway )
+  {
+    foreach ( $aGateway as $key => $row ) {
+      $oGateway = new Gateway();
+      if($oGateway->gatewayExists ($row['GAT_UID']))
+          $oGateway->remove($row['GAT_UID']);
+      $res = $oGateway->createRow($row);
+    }
+    return;
   }
 
   /**
