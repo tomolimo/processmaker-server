@@ -1,9 +1,10 @@
 <?php
 /**
  * class.g.php
+ * @package gulliver.system 
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -1852,13 +1853,11 @@ class G
   }
   /**
    * Function LoadTranslationObject
-   * @description It generates a global Translation variable that will be used in all the system. Per script
+   * It generates a global Translation variable that will be used in all the system. Per script
    * @author Hugo Loza. <hugo@colosa.com>
    * @access public
    * @parameter string lang    
    * @return void
-   *
-   * @note Refactored By Erik A.O. <erik@colosa.com> in Sep 9th, 2010
    */
   function LoadTranslationObject($lang = SYS_LANG){
     $defaultTranslations = Array();
@@ -2479,7 +2478,6 @@ class G
     
     ################################################################################################
     # Added for compatibility betweek aplication called from web Entry that uses just WS functions
-    # @By neyek
     ################################################################################################
     
     if( $params != NULL ){
@@ -2552,8 +2550,7 @@ class G
    * Xml parse collection functions
    * Returns a associative array within the xml structure and data
    *
-   * @Author Erik Amaru Ortiz <erik@colosa.com>
-   * @Date   Aug 24th, 2009
+   * @author Erik Amaru Ortiz <erik@colosa.com>
    */
   function xmlParser(&$string) {
     $parser = xml_parser_create();
@@ -2697,10 +2694,10 @@ class G
   /**
    *  Inflects a string with accented characters and other characteres not suitable for file names, by defaul replace with undescore
    *
-   *  @Author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gamil.com>
-   *  @Param (string) string to convert
-   *  @Param (string) character for replace
-   *  @Param (array) additional characteres map
+   *  @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gamil.com>
+   *  @param (string) string to convert
+   *  @param (string) character for replace
+   *  @param (array) additional characteres map
    *
    */
   function inflect($string, $replacement = '_', $map = array()) {
@@ -2775,7 +2772,7 @@ class G
   
   /**
    * Get the temporal directory path on differents O.S.  i.e. /temp -> linux, C:/Temp -> win 
-   * @By <erik@colosa.com> 
+   * @author <erik@colosa.com> 
    */
   function getSysTemDir() {
     if ( !function_exists('sys_get_temp_dir') ){
@@ -2809,7 +2806,7 @@ class G
    * Get the content of a compose pmos web service response
    * Returns an array when has a valid reponse, if the response is invalid returns an object containing a status_code and message properties.
    *   
-   * @By <erik@colosa.com> 
+   * @author <erik@colosa.com> 
    */
   function PMWSCompositeResponse($oResp, $prop) {
     $Resp = new stdClass();
@@ -2863,7 +2860,6 @@ class G
    * Validate and emai address in complete forms, 
    * 
    * @author Erik A.O. <erik@gmail.com, aortiz.erik@gmail.com>
-   * @date Apr 29th, 2010
    * i.e. if the param. is 'erik a.o. <erik@colosa.com>' 
    *      -> returns a object within $o->email => erik@colosa.com and $o->name => erik A.O. in other case returns false  
    *  
@@ -2894,7 +2890,6 @@ class G
    * JSON encode 
    * 
    * @author Erik A.O. <erik@gmail.com, aortiz.erik@gmail.com>
-   * @date Apr 29th, 2010
    */
   function json_encode($Json){
     if( function_exists('json_encode') ){
@@ -2910,7 +2905,6 @@ class G
    * JSON decode 
    * 
    * @author Erik A.O. <erik@gmail.com, aortiz.erik@gmail.com>
-   * @date Apr 29th, 2010
    */
   function json_decode($Json){
     if( function_exists('json_decode') ){
