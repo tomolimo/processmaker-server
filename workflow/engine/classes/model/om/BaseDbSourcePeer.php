@@ -419,6 +419,9 @@ abstract class BaseDbSourcePeer {
 			$comparison = $criteria->getComparison(DbSourcePeer::DBS_UID);
 			$selectCriteria->add(DbSourcePeer::DBS_UID, $criteria->remove(DbSourcePeer::DBS_UID), $comparison);
 
+			$comparison = $criteria->getComparison(DbSourcePeer::PRO_UID);
+			$selectCriteria->add(DbSourcePeer::PRO_UID, $criteria->remove(DbSourcePeer::PRO_UID), $comparison);
+
 		} else { // $values is DbSource object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
@@ -479,7 +482,24 @@ abstract class BaseDbSourcePeer {
 		} else {
 			// it must be the primary key
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(DbSourcePeer::DBS_UID, (array) $values, Criteria::IN);
+			// primary key is composite; we therefore, expect
+			// the primary key passed to be an array of pkey
+			// values
+			if(count($values) == count($values, COUNT_RECURSIVE))
+			{
+				// array is not multi-dimensional
+				$values = array($values);
+			}
+			$vals = array();
+			foreach($values as $value)
+			{
+
+				$vals[0][] = $value[0];
+				$vals[1][] = $value[1];
+			}
+
+			$criteria->add(DbSourcePeer::DBS_UID, $vals[0], Criteria::IN);
+			$criteria->add(DbSourcePeer::PRO_UID, $vals[1], Criteria::IN);
 		}
 
 		// Set the correct dbName
@@ -539,53 +559,24 @@ abstract class BaseDbSourcePeer {
 	}
 
 	/**
-	 * Retrieve a single object by pkey.
-	 *
-	 * @param      mixed $pk the primary key.
-	 * @param      Connection $con the connection to use
+	 * Retrieve object using using composite pkey values.
+	 * @param string $dbs_uid
+	   @param string $pro_uid
+	   
+	 * @param      Connection $con
 	 * @return     DbSource
 	 */
-	public static function retrieveByPK($pk, $con = null)
-	{
+	public static function retrieveByPK( $dbs_uid, $pro_uid, $con = null) {
 		if ($con === null) {
 			$con = Propel::getConnection(self::DATABASE_NAME);
 		}
-
-		$criteria = new Criteria(DbSourcePeer::DATABASE_NAME);
-
-		$criteria->add(DbSourcePeer::DBS_UID, $pk);
-
-
+		$criteria = new Criteria();
+		$criteria->add(DbSourcePeer::DBS_UID, $dbs_uid);
+		$criteria->add(DbSourcePeer::PRO_UID, $pro_uid);
 		$v = DbSourcePeer::doSelect($criteria, $con);
 
-		return !empty($v) > 0 ? $v[0] : null;
+		return !empty($v) ? $v[0] : null;
 	}
-
-	/**
-	 * Retrieve multiple objects by pkey.
-	 *
-	 * @param      array $pks List of primary keys
-	 * @param      Connection $con the connection to use
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function retrieveByPKs($pks, $con = null)
-	{
-		if ($con === null) {
-			$con = Propel::getConnection(self::DATABASE_NAME);
-		}
-
-		$objs = null;
-		if (empty($pks)) {
-			$objs = array();
-		} else {
-			$criteria = new Criteria();
-			$criteria->add(DbSourcePeer::DBS_UID, $pks, Criteria::IN);
-			$objs = DbSourcePeer::doSelect($criteria, $con);
-		}
-		return $objs;
-	}
-
 } // BaseDbSourcePeer
 
 // static code to register the map builder for this Peer with the main Propel class

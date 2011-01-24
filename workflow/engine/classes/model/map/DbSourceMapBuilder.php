@@ -66,7 +66,7 @@ class DbSourceMapBuilder {
 
 		$tMap->addPrimaryKey('DBS_UID', 'DbsUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
-		$tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
+		$tMap->addPrimaryKey('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
 		$tMap->addColumn('DBS_TYPE', 'DbsType', 'string', CreoleTypes::VARCHAR, true, 8);
 

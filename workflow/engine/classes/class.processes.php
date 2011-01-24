@@ -1379,7 +1379,7 @@ class Processes {
     $map = array ();
     $aSqlConnections = array(); 
     foreach ( $oData->dbconnections as $key => $val ) {
-      $newGuid = $this->getUnusedDBSourceGUID();
+      $newGuid = $val['DBS_UID']; ///--  $this->getUnusedDBSourceGUID();
       $map[ $val['DBS_UID'] ] = $newGuid;
       $oData->dbconnections[$key]['DBS_UID'] = $newGuid;
     }
@@ -1848,7 +1848,7 @@ class Processes {
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
         $oConnection = new DbSource();
-        $aConnections[] = $oConnection->Load($aRow['DBS_UID']);
+        $aConnections[] = $oConnection->Load($aRow['DBS_UID'], $aRow['PRO_UID']);
         $oDataset->next();
       }
       return $aConnections;
@@ -2016,8 +2016,8 @@ class Processes {
   function createDBConnectionsRows ($aConnections ) {
     foreach ( $aConnections as $sKey => $aRow ) {
       $oConnection = new DbSource();
-      if( $oConnection->Exists($aRow['DBS_UID']) ) {
-       $oConnection->remove($aRow['DBS_UID']);
+      if( $oConnection->Exists($aRow['DBS_UID'], $aRow['PRO_UID']) ) {
+       $oConnection->remove($aRow['DBS_UID'], $aRow['PRO_UID']);
       }
       $oConnection->create($aRow);
       
@@ -2882,8 +2882,8 @@ class Processes {
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     while ($aRow = $oDataset->getRow()) {
-      if ($oConnection->Exists($aRow['DBS_UID']))
-        $oConnection->remove($aRow['DBS_UID']);
+      if ($oConnection->Exists($aRow['DBS_UID'], $aRow['PRO_UID']))
+        $oConnection->remove($aRow['DBS_UID'], $aRow['PRO_UID']);
       $oDataset->next();
     }
 

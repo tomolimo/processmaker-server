@@ -122,7 +122,7 @@ switch ( $action ){
 		$_SESSION['_DBArray'] = $_DBArray;
 
 		$o = new DbSource();
-		$aFields = $o->load($_POST['DBS_UID']);
+		$aFields = $o->load($_POST['DBS_UID'], $_SESSION['PROCESS']);
 		if ($aFields['DBS_PORT'] == '0') {
 		  $aFields['DBS_PORT'] = '';
 		}
@@ -178,7 +178,8 @@ switch ( $action ){
 		$oContent = new Content();
 
 		$DBS_UID = $_POST['dbs_uid'];
-		$oDBSource->remove($DBS_UID);
+    $PRO_UID = $_SESSION['PROCESS'];
+		$oDBSource->remove($DBS_UID, $PRO_UID);
 		$oContent->removeContent('DBS_DESCRIPTION', "", $DBS_UID);
 		break;
 

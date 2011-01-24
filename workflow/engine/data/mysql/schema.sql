@@ -752,7 +752,7 @@ CREATE TABLE `DB_SOURCE`
 	`DBS_PASSWORD` VARCHAR(32) default '',
 	`DBS_PORT` INTEGER default 0,
 	`DBS_ENCODE` VARCHAR(32) default '',
-	PRIMARY KEY (`DBS_UID`),
+	PRIMARY KEY (`DBS_UID`,`PRO_UID`),
 	KEY `indexDBSource`(`PRO_UID`)
 )Type=MyISAM ;
 #-----------------------------------------------------------------------------

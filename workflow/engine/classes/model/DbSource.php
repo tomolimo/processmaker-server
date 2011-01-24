@@ -83,10 +83,10 @@ class DbSource extends BaseDbSource
         return $oCriteria;
     }
 
-    public function load($Uid)
+    public function load($Uid, $ProUID)
     {
         try {
-            $oRow = DbSourcePeer::retrieveByPK($Uid);
+            $oRow = DbSourcePeer::retrieveByPK($Uid, $ProUID);
             if (!is_null($oRow)) {
                 $aFields = $oRow->toArray(BasePeer::TYPE_FIELDNAME);
                 $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
@@ -94,7 +94,7 @@ class DbSource extends BaseDbSource
                 $this->setNew(false);
                 return $aFields;
             } else {
-        throw(new Exception( "The row '$Uid' in table DbSource doesn't exist!" ));
+        throw(new Exception( "The row '$Uid'/'$ProUID' in table DbSource doesn't exist!" ));
             }
         }
         catch (exception $oError) {
@@ -102,9 +102,9 @@ class DbSource extends BaseDbSource
         }
     }
 
-  function Exists ( $Uid ) {
+  function Exists ( $Uid, $ProUID ) {
     try {
-      $oPro = DbSourcePeer::retrieveByPk( $Uid );
+      $oPro = DbSourcePeer::retrieveByPk( $Uid, $ProUID );
       if (is_object($oPro) && get_class ($oPro) == 'DbSource' ) {
         return true;
       }
@@ -125,7 +125,7 @@ class DbSource extends BaseDbSource
         $con = Propel::getConnection(DbSourcePeer::DATABASE_NAME);
         try {
             $con->begin();
-            $this->load($fields['DBS_UID']);
+            $this->load($fields['DBS_UID'], $fields['PRO_UID']);
             $this->fromArray($fields, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
@@ -142,16 +142,17 @@ class DbSource extends BaseDbSource
         }
     }
 
-    function remove($DbsUid)
+    function remove($DbsUid, $ProUID )
     {
         $con = Propel::getConnection(DbSourcePeer::DATABASE_NAME);
         try {
             $con->begin();
             $this->setDbsUid($DbsUid);
+            $this->setProUid($ProUID);
             // note added by gustavo cruz gustavo-at-colosa-dot-com
             // we assure that the _delete attribute must be set to false
             // if a record exists in the database with that uid.
-            if ($this->Exists($DbsUid)){
+            if ($this->Exists($DbsUid, $ProUID)){
                 $this->setDeleted(false);
             }
             $result = $this->delete();

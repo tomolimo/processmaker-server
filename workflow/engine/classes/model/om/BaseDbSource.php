@@ -827,28 +827,40 @@ abstract class BaseDbSource extends BaseObject  implements Persistent {
 		$criteria = new Criteria(DbSourcePeer::DATABASE_NAME);
 
 		$criteria->add(DbSourcePeer::DBS_UID, $this->dbs_uid);
+		$criteria->add(DbSourcePeer::PRO_UID, $this->pro_uid);
 
 		return $criteria;
 	}
 
 	/**
-	 * Returns the primary key for this object (row).
-	 * @return     string
+	 * Returns the composite primary key for this object.
+	 * The array elements will be in same order as specified in XML.
+	 * @return     array
 	 */
 	public function getPrimaryKey()
 	{
-		return $this->getDbsUid();
+		$pks = array();
+
+		$pks[0] = $this->getDbsUid();
+
+		$pks[1] = $this->getProUid();
+
+		return $pks;
 	}
 
 	/**
-	 * Generic method to set the primary key (dbs_uid column).
+	 * Set the [composite] primary key.
 	 *
-	 * @param      string $key Primary key.
+	 * @param      array $keys The elements of the composite key (order must match the order in XML file).
 	 * @return     void
 	 */
-	public function setPrimaryKey($key)
+	public function setPrimaryKey($keys)
 	{
-		$this->setDbsUid($key);
+
+		$this->setDbsUid($keys[0]);
+
+		$this->setProUid($keys[1]);
+
 	}
 
 	/**
@@ -863,8 +875,6 @@ abstract class BaseDbSource extends BaseObject  implements Persistent {
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
-
-		$copyObj->setProUid($this->pro_uid);
 
 		$copyObj->setDbsType($this->dbs_type);
 
@@ -884,6 +894,8 @@ abstract class BaseDbSource extends BaseObject  implements Persistent {
 		$copyObj->setNew(true);
 
 		$copyObj->setDbsUid(''); // this is a pkey column, so set to default value
+
+		$copyObj->setProUid('0'); // this is a pkey column, so set to default value
 
 	}
 

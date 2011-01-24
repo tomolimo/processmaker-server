@@ -4532,12 +4532,12 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="PRO_UID" type="VARCHAR" size="32" required="true" default="0">
+    <column name="PRO_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="0">
       <vendor type="mysql">
         <parameter name="Field" value="PRO_UID"/>
         <parameter name="Type" value="varchar(32)"/>
         <parameter name="Null" value="NO"/>
-        <parameter name="Key" value=""/>
+        <parameter name="Key" value="PRI"/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
