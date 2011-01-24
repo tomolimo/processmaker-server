@@ -1,7 +1,10 @@
 <?php
 /** 
+ * class.dynaformhandler.php
+ * @package gulliver.system 
+
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2008 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,18 +23,6 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-/*------------------------------------------------------------------------------------------------
-| dynaformhandler.class.php
-| By Erik Amaru Ortiz
-| Email: aortiz.erik@gmail.com
-+--------------------------------------------------
-| Email bugs/suggestions to aortiz.erik@gmail.com
-+--------------------------------------------------
-| This script has been created and released under
-| the GNU GPL and is free to use and redistribute
-| only if this copyright statement is not removed
-| You can see www.gnu.org the GPL lisence reference
-+-------------------------------------------------------------------------------------------------*/
 
 /**
 * Author Erik Amaru Ortiz

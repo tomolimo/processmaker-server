@@ -1,9 +1,10 @@
 <?php
 /**
  * class.dbrecordset.php
+ * @package gulliver.system 
  *  
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,9 +23,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-/**
- * @package gulliver.system
-*/
+
  /**
  * DBRecordset class definition
  * Provides access to a generalized table it assumes that the dbconnection object is already initialized for the table should be also provided in order to provide
