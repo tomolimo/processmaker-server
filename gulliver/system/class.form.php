@@ -28,7 +28,6 @@
  * @author David S. Callizaya S. <davidsantos@colosa.com>
  * @package gulliver.system
  * @access public
- * @dependencies XmlForm  xmlformTemplate
  */
 class Form extends XmlForm
 {

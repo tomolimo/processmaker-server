@@ -458,7 +458,7 @@ class database extends database_base {
    * Generates a string equivalent to the case when
    *
    * @author Hector Cortez <hector@gmail.com>
-   * @date 2010-08-04
+   * date 2010-08-04
    *
    * @return string $sCompare 
    */ 
