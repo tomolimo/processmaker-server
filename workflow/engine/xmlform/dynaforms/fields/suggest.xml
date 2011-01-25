@@ -95,10 +95,10 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Show no results message</en>
 </PME_SHOWNORESULTS>
 
-<PME_SAVELABEL type="dropdown" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
-  <en>Save on dynaform
-    <option name="0">Id</option>
-    <option name="1">Value</option>
+ <PME_SAVELABEL type="dropdown" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
+  <en>Save selected option as
+    <option name="0">Value</option>
+    <option name="1">Label</option>
   </en>
 </PME_SAVELABEL>
 
