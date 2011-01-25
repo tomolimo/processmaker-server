@@ -74,7 +74,7 @@ foreach ( $aInfoFunction as $k => $v ) {
 	}
 
 }
-G::pr($methodParamsFinal);die;
+//G::pr($methodParamsFinal);die;
 $sPMfunction .= (isset ( $aDataTriggers ['TRI_ANSWER'] ) && $aDataTriggers ['TRI_ANSWER'] != '') ? $aDataTriggers ['TRI_ANSWER'] . " = " : "";
 $sPMfunction .= $aDataTriggers ['PMFUNTION_NAME'] . " (" . implode ( ",", $methodParamsFinal ) . ");";
 
