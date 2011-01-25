@@ -195,37 +195,14 @@ switch($_GET['action'])
                         $rows[$key] = 'Work Days';
                     else if($key == 'TAS_TYPE_DAY' && $value == '2')
                         $rows[$key] = 'Calendar Days';
+                    if($key == 'TAS_TYPE' && $value == 'NORMAL')
+                         $rows[$key] = false;
+                    else if($key == 'TAS_TYPE' && $value == 'ADHOC')
+                           $rows[$key] = true;
 
-                    if($key == 'TAS_ASSIGN_TYPE')
-                    {
-                        switch($value)
-                        {
-                            case 'SELF_SERVICE':
-                               $rows[$value] = 'true';
-                            break;
-                            case 'REPORT_TO':
-                               $rows[$value] = 'true';
-                            break;
-                            case 'BALANCED':
-                                $rows[$value] = 'true';
-                            break;
-                            case 'MANUAL':
-                                $rows[$value] = 'true';
-                            break;
-                            case 'EVALUATE':
-                                $rows[$value] = 'true';
-                                $rows['hideEvaluateField']    = 'false';
-                            break;
-                            case 'STATIC_MI':
-                                $rows[$value] = 'true';
-                                $rows['hidePartialJoinField'] = 'false';
-                            break;
-                            case 'CANCEL_MI':
-                                $rows[$value] = 'true';
-                                $rows['hidePartialJoinField'] = 'false';
-                            break;
-                        }
-                    }
+
+
+                    
                 }
 
     }

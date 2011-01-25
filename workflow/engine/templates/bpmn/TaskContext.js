@@ -48,7 +48,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
     var btnAdd = new Ext.Button({
         id: 'btnAdd',
-        text: 'Assign Step',
+        text: 'Assign',
         iconCls: 'application_add',
         handler: function(){
             var User = grid.getStore();
@@ -77,7 +77,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
     var btnRemove = new Ext.Button({
         id: 'btnRemove',
-        text: 'Remove Step',
+        text: 'Remove',
         iconCls: 'application_delete',
         handler: function (s) {
             editor.stopEditing();
@@ -147,8 +147,9 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
     var btnStepsCondition = new Ext.Button({
         id: 'btnCondition',
-        text: 'Assign Condition',
+        text: 'Condition',
         handler: function (s) {
+                    workflow.taskUID         = taskId
                     workflow.variablesAction = 'grid';
                     workflow.variable        = '@@',
                     workflow.gridField       = 'STEP_CONDITION';
@@ -422,7 +423,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         title: 'Steps Of',
         collapsible: false,
         maximizable: false,
-        width: 700,
+        width: 750,
         height: 380,
         minWidth: 200,
         minHeight: 150,
@@ -474,7 +475,7 @@ TaskContext.prototype.editUsers= function(_5625)
        
     var btnAdd = new Ext.Button({
         id: 'btnAdd',
-        text: 'Assign User',
+        text: 'Assign',
         iconCls: 'application_add',
         handler: function(){
             var User = grid.getStore();
@@ -499,7 +500,7 @@ TaskContext.prototype.editUsers= function(_5625)
 
     var btnRemove = new Ext.Button({
         id: 'btnRemove',
-        text: 'Remove User',
+        text: 'Remove',
         iconCls: 'application_delete',
         handler: function (s) {
             editor.stopEditing();
@@ -796,11 +797,11 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                                    }
                         }]
                     }]
-            },{
+               },{
                 xtype: 'checkbox',
                 fieldLabel: 'Starting Task',
-                name: 'TAS_START',
-                checked: 'TAS_START'
+                name: 'TAS_START'
+                //checked: 'TAS_START'
               }]
             },{
                 title:'Assignment Rules',
@@ -817,20 +818,23 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                     items: [
                     {
                         boxLabel: 'Cyclic Assignment',
+                        id: 'BALANCED',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'BALANCED',
-                        checked:    'BALANCED'
+                        inputValue: 'BALANCED'
+                        //checked:    'BALANCED'
                     },
 
                     {
                         boxLabel: 'Manual Assignment',
+                        id: 'MANUAL',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'MANUAL',
-                        checked:    'MANUAL'
+                        inputValue: 'MANUAL'
+                        //checked:    'MANUAL'
                     },
 
                     {
                         boxLabel: 'Value Based',
+                        id:'EVALUATE',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'EVALUATE',
                         //checked:    'EVALUATE',
@@ -847,19 +851,22 @@ TaskContext.prototype.editTaskProperties= function(_5625)
 
                     {
                         boxLabel: 'Reports to',
+                        id:'REPORT_TO',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'REPORT_TO',
-                        checked:    'REPORT_TO'
+                        inputValue: 'REPORT_TO'
+                        //checked:    'REPORT_TO'
                     },
                     {
                         boxLabel: 'Self Service',
+                        id:'SELF_SERVICE',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'SELF_SERVICE',
-                        checked:    'SELF_SERVICE'
+                        inputValue: 'SELF_SERVICE'
+                        //checked:    'SELF_SERVICE'
                     },
 
                     {
                         boxLabel: 'Static Partial Join for Multiple Instance',
+                        id:'STATIC_MI',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'STATIC_MI',
                         //checked:    'STATIC_MI',
@@ -876,6 +883,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
 
                     {
                         boxLabel: 'Cancelling Partial Join for Multiple Instance',
+                        id:'CANCEL_MI',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'CANCEL_MI',
                         //checked:    'CANCEL_MI',
@@ -1124,7 +1132,9 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                 labelWidth: 170,
                 items: [{
                     xtype: 'checkbox',
+                    //id: 'ADHOC',
                     fieldLabel: 'Allow arbitary transfer (Ad hoc)',
+                    //inputValue:'ADHOC',
                     checked: 'TAS_TYPE',
                     name: 'TAS_TYPE'
                 }]
@@ -1267,6 +1277,16 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
+        //var fID =  action.result.data.TAS_TYPE;
+        var ID = action.result.data.TAS_ASSIGN_TYPE;
+        
+        Ext.getCmp(ID).setValue(true);
+       
+       // Ext.getCmp(fID).setValue(true);
+
+      
+       
+
            //Ext.MessageBox.alert('Message', 'Loaded OK');
           //  setTaskAssignType(form);
         },
@@ -1277,7 +1297,6 @@ TaskContext.prototype.editTaskProperties= function(_5625)
 
     taskPropertiesTabs.render(document.body);
     _5625.scope.workflow.taskPropertiesTabs = taskPropertiesTabs;
-
 
     var window = new Ext.Window({
         title: 'Task:',
@@ -1359,12 +1378,11 @@ TaskContext.prototype.saveTaskProperties= function(_5625)
 }
 
 TaskContext.prototype.stepTriggers = function(_5625)
-{
-    var pro_uid = _5625.scope.workflow.getUrlVars();
-    var taskId  = _5625.scope.workflow.currentSelection.id;
+    {
+     var pro_uid = _5625.scope.workflow.getUrlVars();
+     var taskId  = _5625.scope.workflow.currentSelection.id;
      var ProcMapObj= new ProcessMapContext();
-
-    var triggersFields = Ext.data.Record.create([
+     var triggersFields = Ext.data.Record.create([
                 {
                     name: 'CON_VALUE',
                     type: 'string'
@@ -1451,7 +1469,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
 
     var addBtn = new Ext.Button({
         id: 'addBtn',
-        text: 'Add Triggers',
+        text: 'Add',
         handler: function(){
             //var User = triggerGrid.getStore();
             var e1 = new triggersFields({
@@ -1481,7 +1499,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
 
     var removeBtn = new Ext.Button({
         id: 'removeBtn',
-        text: 'Remove Triggers',
+        text: 'Remove',
         handler: function (s) {
             triggerEditor.stopEditing();
             var s = triggerGrid.getSelectionModel().getSelections();
@@ -1519,7 +1537,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
 
   var btnTriggerCondition = new Ext.Button({
       //id: 'btnCondition',
-      text: 'Assign Condition',
+      text: 'Condition',
       handler: function (s) {
                 workflow.variablesAction = 'grid';
                 workflow.variable = '@@',
@@ -1590,6 +1608,15 @@ TaskContext.prototype.stepTriggers = function(_5625)
         columns: [
                 new Ext.grid.RowNumberer(),
                 {
+                    id: 'blank',
+                    hidden : true,
+                    width:0,
+                    editable: true,
+                    editor: new Ext.form.TextField({
+                        allowBlank: true
+                    })
+                },
+                {
                     id: 'CON_VALUE',
                     header: 'Triggers',
                     dataIndex: 'CON_VALUE',
@@ -1608,7 +1635,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
                             triggerAction: 'all',
                             emptyText    : 'Select Triggers',
                             allowBlank   : false,
-                             onSelect: function(record, index){
+                            onSelect     : function(record, index){
                                 var triggerStore  = triggerGrid.getStore();
 
                                 if(typeof _5625.scope.workflow.currentRowTrigger == 'undefined')
@@ -1638,12 +1665,8 @@ TaskContext.prototype.stepTriggers = function(_5625)
                     editor: new Ext.form.TextField({
                         allowBlank: true
                     })
-                },
-                  {
-                    header: 'Assign Condition',
-                    //width: 50,
-                    renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
-                  }
+                }
+                
                 ],
         sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
@@ -1784,7 +1807,7 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
 
         var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign User',
+            text: 'Assign',
             iconCls: 'application_add',
             handler: function(){
                 var User = grid.getStore();
@@ -1816,7 +1839,7 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
 
         var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove User',
+            text: 'Remove',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1848,7 +1871,6 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                               Ext.MessageBox.alert ('Status','User has been removed successfully.');
                               //Secondly deleting from Grid
                               taskUsers.remove(r);
-
                               //Reloading available user store
                               taskUsers.reload();
                           }
@@ -1865,9 +1887,6 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
         });
 
         // create the Data Store of users that are already assigned to a task
-       
-
-
         var grid = new Ext.grid.GridPanel({
         store: taskUsers,
         id : 'mygrid',

@@ -879,7 +879,7 @@ ProcessMapContext.prototype.processSupervisors= function()
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign Supervisor',
+            text: 'Assign',
             iconCls: 'application_add',
             handler: function(){
                 var User = grid.getStore();
@@ -908,7 +908,7 @@ ProcessMapContext.prototype.processSupervisors= function()
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove Supervisor',
+            text: 'Remove',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1096,7 +1096,7 @@ ProcessMapContext.prototype.processDynaform= function()
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign Dynaform',
+            text: 'Assign',
             iconCls: 'application_add',
             handler: function(){
                 var User = grid.getStore();
@@ -1124,7 +1124,7 @@ ProcessMapContext.prototype.processDynaform= function()
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove Dynaform',
+            text: 'Remove',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1314,7 +1314,7 @@ ProcessMapContext.prototype.processIODoc= function()
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign Input Document',
+            text: 'Assign',
             iconCls: 'application_add',
             handler: function(){
                 var User = grid.getStore();
@@ -1342,7 +1342,7 @@ ProcessMapContext.prototype.processIODoc= function()
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove Input Document',
+            text: 'Remove',
             iconCls: 'application_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1606,7 +1606,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                        layout: 'form',
                        border:false,
                        items: [{
-                       width           :100,
+                       width           :120,
                        xtype           :'combo',
                        mode            :'local',
                        triggerAction   :'all',
@@ -1622,10 +1622,22 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                                         data   :[{name: 'None', value:'NONE'},
                                                  {name: 'PROCESSMAP', value: 'PROCESSMAP'},
                                                  {name: 'STAGES', value:'STAGES'}]
-                                        })
+                                        }),
+                                        onSelect: function(record, index) {
+                                 //Show-Hide Format Type Field
+                                if(record.data.value == 'NONE')
+                                        {Ext.getCmp("edit").hide();}
+                                else if(record.data.value == 'PROCESSMAP')
+                                        {Ext.getCmp("edit").hide();}
+                                else
+                                        {Ext.getCmp("edit").show();}
+                                       this.setValue(record.data[this.valueField || this.displayField]);
+                                         this.collapse();}
                        }]
                    },{
                        columnWidth:.3,
+                       id:'edit',
+                       hidden: true,
                        layout: 'form',
                        border:false,
                        items: [{
@@ -1842,7 +1854,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
     var btnObjectsCondition = new Ext.Button({
       id: 'btnCondition',
-      text: 'Assign Condition',
+      text: 'Condition',
       handler: function (s) {
                 workflow.variablesAction = 'grid';
                 workflow.gridField       = 'CTO_CONDITION';
@@ -1917,9 +1929,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
           editor: new Ext.form.TextField({
             allowBlank: true
           })
-        },{
-          header: 'Assign Condition',
-          renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
         }],
       sm: new Ext.grid.RowSelectionModel({
         singleSelect: true,
@@ -1976,16 +1985,38 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             Ext.MessageBox.alert ('Status','Failed to assign Objects');
             }
         })
-            
-            
+        //Updating the user incase if already assigned user has been replaced by other user
+            if(changes != '' && typeof record.json != 'undefined')
+            {
+                var obj_type      = record.json.CTO_TYPE_OBJ;
+                var obj_UID       = record.json.CTO_UID;
+                var obj_title     = record.json.CTO_TITLE;
+                var obj_uid       = record.json.CTO_UID;
+                var obj_condition = record.json.CTO_CONDITION;
+                var obj_position = record.json.CTO_POSITION;
 
-
+                Ext.Ajax.request({
+                      url: '../tracker/tracker_Ajax.php',
+                      method: 'POST',
+                      params: {
+                      action          :'removeCaseTrackerObject',
+                      CTO_UID         : obj_UID,
+                      PRO_UID         : pro_uid,
+                      STEP_POSITION   : obj_position
+                      },
+                      success: function(response) {
+                          Ext.MessageBox.alert ('Status','User has been updated successfully.');
+                      }
+                    });
+            }
+             availableStore.reload();
+             assignedStore.reload();
       }
 
     });
 
-    assignedStore.reload();
-    availableStore.reload();
+   // assignedStore.reload();
+   // availableStore.reload();
 
 
     var gridObjectWindow = new Ext.Window({
@@ -2106,6 +2137,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                //getting selected row of variables
                                                var rowSelected      = this.getSelectionModel().getSelected();
                                                var rowLabel         = rowSelected.data.variable;
+                                              
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
                                                    getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
@@ -2152,13 +2184,14 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                                       method: 'POST',
                                                                       params:
                                                                         {
+                                                                            action          : 'saveTriggerCondition',
                                                                             PRO_UID         : pro_uid,
                                                                             STEP_UID        : getObjectGridRow[0].data.STEP_UID,
                                                                             ST_CONDITION    : getObjectGridRow[0].data.STEP_CONDITION,
-                                                                           // TAS_UID         :
-                                                                            TRI_UID         :getObjectGridRow[0].data.TRI_UID,
-                                                                            ST_TYPE         :getObjectGridRow[0].data.ST_TYPE,
-                                                                            action          :'saveTriggerCondition'
+                                                                            TAS_UID         : taskId,
+                                                                            TRI_UID         : getObjectGridRow[0].data.TRI_UID,
+                                                                            ST_TYPE         : getObjectGridRow[0].data.ST_TYPE
+                                                                            
                                                                         },
                                                                       success: function (response){
                                                                         Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
