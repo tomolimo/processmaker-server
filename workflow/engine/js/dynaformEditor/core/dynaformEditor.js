@@ -1,4 +1,6 @@
 var xmlEditor = null;
+var jsEditor  = null;
+
 var clientWinSize = null;
 
 if (typeof(dynaformEditor)==="undefined")
@@ -59,15 +61,6 @@ var dynaformEditor={
 	  url='dynaforms_Saveas';
 		popupWindow('Save as', url+'?DYN_UID='+this.dynUid+'&AA='+this.A , 500, 350);
 	},
-  /*
-  * @function close
-  * @author unknow
-  * @modifier Gustavo Cruz
-  * @desc  this function handles the close of a dynaform editor window
-  *          now whenever a dynaform window is close, if the form wasn't
-  *          saved the function also delete the temporal *_tmp0.xml files
-  *          discarding all the changes that were made, bug 3861.
-  */
 	close:function()
 	{
 		var modified=this.ajax.is_modified(this.A,this.dynUid);
@@ -118,7 +111,7 @@ var dynaformEditor={
 	},
 	saveXmlCode:function()
 	{
-//		var xmlCode = getField("XML").value;
+    //var xmlCode = getField("XML").value;
 		var xmlCode = this.getXMLCode();
 		var todoRefreshXmlCode = xmlCode === null;
 		if (todoRefreshXmlCode) return;
@@ -137,6 +130,7 @@ var dynaformEditor={
 	{
 		var field=getField("JS_LIST","dynaforms_JSEditor");
 		var code=this.getJSCode();
+    
 		if (field.value)
 		{
 			var res=this.ajax.set_javascript(this.A,field.value,code.replace(/\+/g, '%2B'));
@@ -166,17 +160,11 @@ var dynaformEditor={
 	},
 	changeToXmlCode:function()
 	{
-		//to adecuate the view perspective @Neyek
 		content_div = getElementByPMClass('panel_content___processmaker')
 		content_div.style.overflow='auto';
 		
 		this.refresh_xmlcode();
 		this.currentView="xmlcode";
-		//if (this.loadPressLoaded && !XMLCodePress)
-		//{
-			//startXMLCodePress(); -> removing codepress editor
-		//}
-    
     if( ! xmlEditor ) {
       clientWinSize = getClientWindowSize();
       
@@ -216,9 +204,9 @@ var dynaformEditor={
 		var field=getField("JS_LIST","dynaforms_JSEditor");
 		var res=this.ajax.get_javascripts(this.A,field.value);
 		
-
 		this.currentView="javascripts";
-		  this.refreshJavascripts();
+		this.refreshJavascripts();
+		
 		if(field.value!='' || typeof(res.aOptions[0])!='undefined'){
 		  hideRowById('JS_TITLE');
 			showRowById('JS');
@@ -230,16 +218,26 @@ var dynaformEditor={
 		  	
 		  //this.currentView="javascripts";
 		  //this.refreshJavascripts();
-		  if (this.loadPressLoaded && !JSCodePress)
+		  //if (this.loadPressLoaded && !JSCodePress)
+		  if( ! jsEditor )
 		  {
-		  	startJSCodePress();
+        clientWinSize = getClientWindowSize();
+		  	//startJSCodePress(); //
+		    jsEditor = CodeMirror.fromTextArea('form[JS]', {
+	        height: (clientWinSize.height - 120) + "px",
+	        width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
+	        parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+	        stylesheet: ["css/jscolors.css"],
+	        path: "js/",
+	        lineNumbers: true,
+	        continuousScanning: 500
+	      });
 		  }
-		}else{
+		} else {
 			showRowById('JS_TITLE');
 			hideRowById('JS');
 			hideRowById('JS_LIST');
-			
-			}
+    }
 	},
 	changeToProperties:function()
 	{
@@ -364,21 +362,24 @@ var dynaformEditor={
 	},
 	getJSCode:function()
 	{
-		if (JSCodePress)
+		//if (JSCodePress)
+    if(jsEditor)
 		{
-			return JSCodePress.getCode();
+			//return JSCodePress.getCode();
+      jsEditor.save();
+      return getField("JS","dynaforms_JSEditor").value;
 		}
 		else
 		{
+      xmlEditor.save();
 			return getField("JS","dynaforms_JSEditor").value;
 		}
 	},
 	setJSCode:function(newCode)
 	{
-		if (JSCodePress)
-		{
-			JSCodePress.setCode(newCode);
-			//JSCodePress.edit(newCode,"javascript");
+		//if (JSCodePress)
+    if( jsEditor ) {
+      jsEditor.setCode(newCode);
 		}
 		else
 		{
@@ -388,33 +389,18 @@ var dynaformEditor={
 	},
 	getXMLCode:function()
 	{
-		/*if (XMLCodePress)
-		{
-			return XMLCodePress.getCode();
+		if (xmlEditor) {
+      xmlEditor.save();	
 		}
-		else
-		{*/
-      //alert(getField("XML","dynaforms_XmlEditor").value);
-      xmlEditor.save();
-			return getField("XML","dynaforms_XmlEditor").value;
-		//}
+    return getField("XML","dynaforms_XmlEditor").value;
 	},
 	setXMLCode:function(newCode)
 	{
-		//if (XMLCodePress)
-		//{
-			//XMLCodePress.setCode(newCode);
-			//XMLCodePress.edit(newCode,"xmlform");
-		//}
-		if( xmlEditor )
-		{
+		if( xmlEditor ) {
 		  xmlEditor.setCode(newCode);
-		}
-		else
-		{
-			var code=getField("XML","dynaforms_XmlEditor");
-			code.value=newCode;
-      //xmlEditor.toTextArea();
+		} else {
+			var code = getField("XML","dynaforms_XmlEditor");
+			code.value = newCode;
 		}
 	},
 	setEnableTemplate:function(value)
@@ -476,10 +462,10 @@ var dynaformEditor={
 		  hideRowById('JS_TITLE');
 		  showRowById('JS');
 			showRowById('JS_LIST');
-			if (this.loadPressLoaded && !JSCodePress)
-		  {
-		  	startJSCodePress();
-		  }
+			//if (this.loadPressLoaded && !JSCodePress)
+		  //{
+		  	//startJSCodePress();
+		  //}
 		}else{
 			showRowById('JS_TITLE');hideRowById('JS_LIST');hideRowById('JS');}
 	

@@ -648,12 +648,18 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     try {
       $sCode = rtrim($sCode);
       $file  = G::decrypt( $A , URL_KEY );
-      $dbc2  = new DBConnection( PATH_DYNAFORM . $file . '.xml' ,'','','','myxml' );
+      /*$dbc2  = new DBConnection( PATH_DYNAFORM . $file . '.xml' ,'','','','myxml' );
       $ses2  = new DBSession($dbc2);
       $ses2->execute(G::replaceDataField("UPDATE dynaForm SET XMLNODE_VALUE = @@CODE WHERE XMLNODE_NAME = @@FIELDNAME ", array('FIELDNAME'=>$fieldName,'CODE'=>$sCode), "myxml" ));
+      */
+      
+      G::LoadSystem('dynaformhandler');
+			              
+		  $dynaform = new dynaFormHandler(PATH_DYNAFORM."{$file}.xml");
+      $dynaform->replace($fieldName, $fieldName, Array('type'=>'javascript', '#cdata'=>$sCode));
+          
       return 0;
-    }
-    catch(Exception $e) {
+    } catch(Exception $e) {
       return (array) $e;
     }
   }

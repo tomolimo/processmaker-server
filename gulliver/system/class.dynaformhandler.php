@@ -25,9 +25,9 @@
  */
 
 /**
-* Author Erik Amaru Ortiz
-* Date Aug 26th, 2009
-* Description This class is a Dynaform handler for modify directly into file
+* @author Erik Amaru Ortiz <erik@colosa.com>
+* @date Aug 26th, 2009
+* @description This class is a Dynaform handler for modify directly into file
 * @package gulliver.system
 */
 
@@ -169,18 +169,32 @@ class dynaFormHandler
    * @param array $childs_childs
    * @return void
    */
-  function replace($replaced, $name, $attributes, $childs, $childs_childs=null)
+  function replace($replaced, $name, $attributes, $childs=null, $childs_childs=null)
   {
     $element = $this->root->getElementsByTagName($replaced)->item(0);
     $this->root->replaceChild($this->dom->createElement($name), $element);
     $newnode = $element = $this->root->getElementsByTagName($name)->item(0);
+    
+    if( isset($attributes['#text']) ) {
+      $newnode->appendChild($this->dom->createTextNode($attributes['#text']));
+      unset($attributes['#text']);
+    }
+    if( isset($attributes['#cdata']) ) {
+      $newnode->appendChild($this->dom->createCDATASection($attributes['#cdata']));
+      unset($attributes['#cdata']);
+    }
+    
     foreach($attributes as $att_name => $att_value) {
       $newnode->setAttribute($att_name, $att_value);
     }
     if(is_array($childs)){
       foreach($childs as $child_name => $child_text) {
         $newnode_child = $newnode->appendChild($this->dom->createElement($child_name));
-        $newnode_child->appendChild($this->dom->createTextNode($child_text));
+        if( is_string($child_text) )
+          $newnode_child->appendChild($this->dom->createTextNode($child_text));
+        else if( is_array($child_text) && isset($child_text['cdata']) )
+          $newnode_child->appendChild($this->dom->createCDATASection($child_text));
+        
         if($childs_childs != null and is_array($childs_childs)){
           foreach($childs_childs as $cc) {
             $ccmode = $newnode_child->appendChild($this->dom->createElement($cc['name']));
@@ -191,7 +205,7 @@ class dynaFormHandler
           }
         }
       }
-    } else {
+    } else if( isset($childs) ){
       $text_node = $childs;
       $newnode->appendChild($this->dom->createTextNode($text_node));
     }
