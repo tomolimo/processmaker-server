@@ -2131,42 +2131,14 @@ MyWorkflow.prototype.zoom = function(sType)
 
    var lines=workflow.getLines();
    var size=lines.getSize();
-   for(var i=0;i<size;i++){
-       var startX = lines.data[i].startX;
-       var startY = lines.data[i].startY;
-       var endX = lines.data[i].endX;
-       var endY = lines.data[i].endY;
-       var yDiff = endY - startY;
-       var source = lines.get(i).getSource().parentNode;
-       var target = lines.get(i).getTarget().parentNode;
-//       var sourceX = source.x;
-//       var targetX = target.x;
-//       var sourceY = source.y;
-//       var targetY = target.y;
+   
 
-       var diffY = endY - startY;
-       var diffX = endX - startX;
-       
-       
-       if(typeof source.diffX  == 'undefined' && typeof source.diffY  == 'undefined')
-       {
-          source.diffX = diffX;
-          source.diffY = diffY;
-       }
-       
-       if(typeof target.diffX  == 'undefined' && typeof target.diffY  == 'undefined')
-       {
-         target.diffX = diffX;
-         target.diffY = diffY;
-       }
-   }
-
-    if(typeof workflow.zoomFactor != 'undefined' && sType == 'in')
+    if(typeof workflow.zoomFactor != 'undefined' && sType == 'in' && workflow.zoomFactor != 0.2)
         {
             var zoomFactor = workflow.zoomFactor + 0.2;
             workflow.zoomFactor = zoomFactor;
         }
-    else if(typeof workflow.zoomFactor != 'undefined' && sType == 'out')
+    else if(typeof workflow.zoomFactor != 'undefined' && sType == 'out' && workflow.zoomFactor != 0.2)
         {
             zoomFactor = workflow.zoomFactor - 0.2;
             workflow.zoomFactor = zoomFactor;
@@ -2177,7 +2149,10 @@ MyWorkflow.prototype.zoom = function(sType)
             workflow.zoomFactor = zoomFactor;
         }
 
-
+//   for(var i=0;i<size;i++){
+//        lines.data[i].setStartPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
+//        lines.data[i].setEndPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
+//   }
 
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
@@ -2187,61 +2162,40 @@ MyWorkflow.prototype.zoom = function(sType)
    var yPos = fig.getY();
    if(sType == 'in')
      {
-        
-
-        //if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
-          //{
-              width  = width*zoomFactor + width;
-              height = height*zoomFactor + height;
+        if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+          {
+              width  += zoomFactor*25;
+              height += zoomFactor*25;
               workflow.zoomWidth  = width;
               workflow.zoomHeight = height;
-          //}
-        /*else if(fig.type.match(/Annotation/))
-          {
-             width  *= zoomFactor;
-             height *= zoomFactor;
-             workflow.zoomAnnotationWidth  = width;
-             workflow.zoomAnnotationHeight = height;
           }
         else
           {
-             width  *= zoomFactor;
-             height *= zoomFactor;
+             width  += zoomFactor*100;
+             height += zoomFactor*100;
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
-          }*/
+          }
+       fig.setPosition(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
      }
     else
      {
-         width  = width*zoomFactor - width;
-         height = height*zoomFactor - height;
-         workflow.zoomWidth  = width;
-         workflow.zoomHeight = height;
-
-       /*if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+       if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
           {
-              width  -= 5;
-              height -= 5;
+              width  -= zoomFactor*25;
+              height -= zoomFactor*25;
               workflow.zoomWidth  = width;
               workflow.zoomHeight = height;
           }
-        else if(fig.type.match(/Annotation/))
-          {
-             width  -= 20;
-             height -= 20;
-             workflow.zoomAnnotationWidth  = width;
-             workflow.zoomAnnotationHeight = height;
-          }
         else
           {
-             width  -= 20;
-             height -= 20;
+             width  -= zoomFactor*100;
+             height -= zoomFactor*100;
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
-          }*/
+          }
+       fig.setPosition(xPos - zoomFactor*xPos,yPos - zoomFactor*yPos);
      }
-
-
 
    if(sType == 'in' && fig.type != 'bpmnAnnotation')
        {
@@ -2253,7 +2207,11 @@ MyWorkflow.prototype.zoom = function(sType)
     //fig.setPosition(xPos,yPos - 10);
 
    fig.setDimension(width,height);
-   fig.setPosition(xPos,yPos + zoomFactor*yPos);
+   /*if(fig.type.match(/Start/))
+    fig.setPosition(xPos,yPos + zoomFactor*25);
+   else*/
+    
+
    if(fig.type == 'bpmnTask')
       {
         fig.bpmnText.clear();
