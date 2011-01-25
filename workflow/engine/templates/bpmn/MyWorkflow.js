@@ -2153,7 +2153,7 @@ MyWorkflow.prototype.zoom = function(sType)
 //        lines.data[i].setStartPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
 //        lines.data[i].setEndPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
 //   }
-
+    var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    var width = fig.getWidth();
@@ -2197,12 +2197,7 @@ MyWorkflow.prototype.zoom = function(sType)
        fig.setPosition(xPos - zoomFactor*xPos,yPos - zoomFactor*yPos);
      }
 
-   if(sType == 'in' && fig.type != 'bpmnAnnotation')
-       {
-      //  fig.setPosition(xPos+fig.diffX*2,yPos+fig.diffY*2);
-        //alert(fig.diffX);
-       // alert(fig.diffY);
-       }
+   
    //else if(sType == 'out' && !fig.type.match(/Event/))
     //fig.setPosition(xPos,yPos - 10);
 
