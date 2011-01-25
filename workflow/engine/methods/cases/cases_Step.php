@@ -642,6 +642,7 @@
       $aFields['LAST_EMPLOYEE']        = G::LoadTranslation('ID_LAST_EMPLOYEE');
       $aFields['OPTION_LABEL']         = G::LoadTranslation('ID_OPTION');
       $aFields['CONTINUE']             = G::LoadTranslation('ID_CONTINUE');
+      $aFields['FINISH']               = G::LoadTranslation('ID_FINISH');
       $aFields['CONTINUE_WITH_OPTION'] = G::LoadTranslation('ID_CONTINUE_WITH_OPTION');
       $aFields['FINISH_WITH_OPTION']   = G::LoadTranslation('ID_FINISH_WITH_OPTION');
       $aFields['TAS_TIMING_TITLE']     = 'Timing Control';

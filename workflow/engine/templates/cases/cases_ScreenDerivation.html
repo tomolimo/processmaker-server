@@ -140,16 +140,16 @@
 						{/foreach}
 						{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && ! $PROCESS.ROU_FINISH_FLAG }
 						<tr>
-							<td colspan="2" align="center">
-								<input type="button" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE}" {$PROCESS.DISABLED} />
-							</td>
+						  <td colspan="2" align="center">
+		<input type="button" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE}" {$PROCESS.DISABLED} />        </td>
 						</tr>
 						{/if}
 						{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
 						<tr>
-							<td colspan="2" align="center">
-								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="Finish">
-							</td>
+						  <td colspan="2" align="center">
+						    <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH}">
+						   <!-- <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="Finish">-->
+						  </td>
 						</tr>
 						{/if}
 					</table>
