@@ -1,4 +1,5 @@
 <?
+    
 $action = isset($POST['action'])? $POST['action']: isset($_GET['action'])? $_GET['action']: '';
 
 switch($action){
@@ -15,14 +16,18 @@ switch($action){
   break;
   
   case 'getTemplateFile':
-    $aExtensions = array ( "exe", "com", "dll", "ocx", "fon", "ttf", "doc", "xls", "mdb", "rtf",
+    $aExtensions = array ( "exe", "com", "dll", "ocx", "fon", "ttf", "doc", "xls", "mdb", "rtf", "bin",
                           "jpeg", "jpg", "jif", "jfif", "gif", "tif", "tiff", "png", "bmp", "pdf",
                           "aac", "mp3", "mp3pro", "vorbis", "realaudio", "vqf", "wma",
                           "aiff", "flac", "wav", "midi", "mka", "ogg", "jpeg", "ilbm", 
-                          "tar", "zip", "rar", "arj", "gzip", "bzip2", "afio", "kgb",
-                          "asf", "avi", "mov", "iff", "ogg", "ogm", "mkv", "3gp" );
+                          "tar", "zip", "rar", "arj", "gzip", "bzip2", "afio", "kgb", "gz",
+                          "asf", "avi", "mov", "iff", "ogg", "ogm", "mkv", "3gp",
+                          );
     $sFileName = strtolower($_SESSION['outpudocs_tmpFile']);
-    $sExtension = substr($sFileName, strpos($sFileName,'.') + 1, strlen($sFileName));
+    $strRev = strrev($sFileName);
+    $searchPos = strpos($strRev, '.');
+    $pos = (strlen($sFileName) - 1) - $searchPos;
+    $sExtension = substr($sFileName, $pos+1, strlen($sFileName));
     if(! in_array($sExtension, $aExtensions))
       echo $content = file_get_contents($_SESSION['outpudocs_tmpFile']);
   break;
