@@ -92,9 +92,11 @@ class Translation extends BaseTranslation {
         $translationJS[ $row->getTrnId() ] = $row->getTrnValue();
       }
     }
-
-
-    $f = fopen( $cacheFile , 'w');
+	
+    if( ! is_dir(dirname($cacheFile)) ) 
+      G::mk_dir(dirname($cacheFile));
+    
+    $f = fopen( $cacheFile , 'w+');
     fwrite( $f , "<?php\n" );
     fwrite( $f , '$translation =' . 'unserialize(\'' . addcslashes( serialize ( $translation ), '\\\'' ) . "');\n");
     fwrite( $f , "?>" );
