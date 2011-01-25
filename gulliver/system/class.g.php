@@ -2033,7 +2033,7 @@ class G
     $capitalized = '';
     $singleWords = preg_split( "/\W+/m" , $string );
     for($r=0; $r < sizeof($singleWords) ; $r++ ) {
-      $string = substr($string , 0 , $singleWords[$r][1]) .
+      @$string = substr($string , 0 , $singleWords[$r][1]) .
       strtoupper( substr($singleWords[$r][0], 0,1) ) .
       strtolower( substr($singleWords[$r][0], 1) ) .
       substr( $string , $singleWords[$r][1] + strlen($singleWords[$r][0]) );
