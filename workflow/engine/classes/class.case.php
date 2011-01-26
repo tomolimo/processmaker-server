@@ -1108,6 +1108,10 @@ class Cases {
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
         $aPrevious = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid);
+        echo "-------------<br><pre>";
+        var_dump ($aPrevious);
+        echo "</pre>-------------<br>";
+//        die();
         if (!(is_array($aPrevious) && count($aPrevious) == 0 ))
           $aThreads[] = array_merge($aPrevious, $aThreads);
         $oDataset->next();
@@ -1119,16 +1123,18 @@ class Cases {
     }
   }
 
-  /*
+  /**
    * This function looks for the open previous task
    * get an array with all sibling previous threads open from next task
    *
    * @name searchOpenPreviousTasks,
+   * @param string $taskUid
    * @param string $sAppUid
+   * @param array $aPreviousTasks optional array that serves to trace the task routes in order to avoid infinite loops.
    * @return $aThreads
    */
 
-  function searchOpenPreviousTasks($taskUid, $sAppUid) {
+  function searchOpenPreviousTasks($taskUid, $sAppUid, $aPreviousTasks = array()) {
     //in this array we are storing all open delegation rows.
     $aTaskReviewed = array();
 
@@ -1168,34 +1174,39 @@ class Cases {
     $oDataset->next();
     $aRow = $oDataset->getRow();
     while (is_array($aRow)) {
-      $aPreviousTask[] = $aRow['TAS_UID'];
+          
+        $oCriteria2 = new Criteria('workflow');
+        $oCriteria2->add(AppDelegationPeer::APP_UID, $sAppUid);
+        $oCriteria2->add(AppDelegationPeer::TAS_UID, $aRow['TAS_UID']);
+        $oCriteria2->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
+        $oDataset2 = AppDelegationPeer::doSelectRs($oCriteria2);
+        $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $oDataset2->next();
+        $aRow2 = $oDataset2->getRow();
+        if (is_array($aRow2)) {
+          //there is an open delegation, so we need to return the delegation row
+          $aTaskReviewed[] = $aRow2;
+        } else {
+          $oCriteria3 = new Criteria('workflow');
+          $oCriteria3->add(AppDelegationPeer::APP_UID, $sAppUid);
+          $oCriteria3->add(AppDelegationPeer::TAS_UID, $aRow['TAS_UID']);
+          $oDataset3 = AppDelegationPeer::doSelectRs($oCriteria3);
+          $oDataset3->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+          $oDataset3->next();
+          $aRow3 = $oDataset3->getRow();
+          if (is_array($aRow3)) {
+            //there are closed delegations, so we need to get back without returning delegation rows
+          } else { //if not we start the recursion searching previous open tasks from this task.
 
-      $oCriteria2 = new Criteria('workflow');
-      $oCriteria2->add(AppDelegationPeer::APP_UID, $sAppUid);
-      $oCriteria2->add(AppDelegationPeer::TAS_UID, $aRow['TAS_UID']);
-      $oCriteria2->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
-      $oDataset2 = AppDelegationPeer::doSelectRs($oCriteria2);
-      $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset2->next();
-      $aRow2 = $oDataset2->getRow();
-      if (is_array($aRow2)) {
-        //there is an open delegation, so we need to return the delegation row
-        $aTaskReviewed[] = $aRow2;
-      } else {
-        $oCriteria3 = new Criteria('workflow');
-        $oCriteria3->add(AppDelegationPeer::APP_UID, $sAppUid);
-        $oCriteria3->add(AppDelegationPeer::TAS_UID, $aRow['TAS_UID']);
-        $oDataset3 = AppDelegationPeer::doSelectRs($oCriteria3);
-        $oDataset3->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset3->next();
-        $aRow3 = $oDataset3->getRow();
-        if (is_array($aRow3)) {
-          //there are closed delegations, so we need to get back without returning delegation rows
-        } else { //if not we start the recursion searching previous open tasks from this task.
-          $aTaskReviewed[] = searchOpenPreviousTasks($aRow['TAS_UID']);
+            if (!in_array($aRow['TAS_UID'],$aPreviousTasks)){
+              // storing the current task uid of the task currently checked
+              $aPreviousTasks[] = $aRow['TAS_UID'];
+              // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
+              $aTaskReviewed[]  = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
+            }
+          }
         }
-      }
-
+      
       //$this->searchOpenPreviousTasks();
       $oDataset->next();
       $aRow = $oDataset->getRow();
