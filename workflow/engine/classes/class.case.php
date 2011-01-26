@@ -1108,10 +1108,6 @@ class Cases {
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
         $aPrevious = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid);
-        echo "-------------<br><pre>";
-        var_dump ($aPrevious);
-        echo "</pre>-------------<br>";
-//        die();
         if (!(is_array($aPrevious) && count($aPrevious) == 0 ))
           $aThreads[] = array_merge($aPrevious, $aThreads);
         $oDataset->next();
