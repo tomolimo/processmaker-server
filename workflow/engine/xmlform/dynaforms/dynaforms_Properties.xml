@@ -37,10 +37,11 @@
   <en>Width</en>
 </WIDTH>
 
-<MODE type="dropdown" colWidth="80" align="center">
+<MODE type="dropdown" colWidth="80" align="center" defaultvalue="edit">
   <en>Mode
-  <option name="edit">Edit</option>
-  <option name="view">View</option>
+  <option name="">Determined by Fields</option>
+  <option name="edit">All Edit</option>
+  <option name="view">All View</option>
   </en>
 </MODE>
 
