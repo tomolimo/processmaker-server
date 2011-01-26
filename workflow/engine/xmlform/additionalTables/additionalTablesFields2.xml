@@ -23,11 +23,14 @@
   <en>Null</en>
 </FLD_NULL>
 
-
-
 <FLD_KEY type="checkbox" defaultValue="on">
   <en>Primary Key</en>
 </FLD_KEY>
+
+<FLD_NULL_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
+</FLD_NULL_HDN>
+<FLD_KEY_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
+</FLD_KEY_HDN>
 
 <FLD_UP_LINK type="link" link="#" onclick="changeValues(this.id.split(&#039;][&#039;)[1], &#039;UP&#039;);return false;" value="@G::LoadTranslation(ID_UP)"/>
 

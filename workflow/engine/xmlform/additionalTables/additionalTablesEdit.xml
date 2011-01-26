@@ -287,10 +287,16 @@ var verifyData = function(oForm) {
 	     }
       }
     }
-    var bContinueKey = false;
+    var bContinueKey = false; 
     for (var i = 1; i <= iRows; i++) {
       if (getGridField('FIELDS', i, 'FLD_KEY').checked) {
         bContinueKey = true;
+      }
+      if (getGridField('FIELDS', i, 'FLD_KEY').checked) {
+        getGridField('FIELDS', i, 'FLD_KEY_HDN').value = "on" ;
+      }
+      if (getGridField('FIELDS', i, 'FLD_NULL').checked) {
+        getGridField('FIELDS', i, 'FLD_NULL_HDN').value = "on" ;
       }
     }
     if (bContinue && bContinueKey) {
@@ -365,7 +371,10 @@ var changeValues = function(iRow, sType) {
   var FLD_SIZE        = getGridField('FIELDS', iOtherRow, 'FLD_SIZE').value;
   var FLD_NULL        = getGridField('FIELDS', iOtherRow, 'FLD_NULL').checked;
   var FLD_KEY         = getGridField('FIELDS', iOtherRow, 'FLD_KEY').checked;
-
+  
+  var FLD_NULL_HDN    = getGridField('FIELDS', iOtherRow, 'FLD_NULL_HDN').value;
+  var FLD_KEY_HDN     = getGridField('FIELDS', iOtherRow, 'FLD_KEY_HDN').value;
+  
   getGridField('FIELDS', iOtherRow, 'FLD_UID').value         = getGridField('FIELDS', iRow, 'FLD_UID').value;
   getGridField('FIELDS', iOtherRow, 'FLD_NAME').value        = getGridField('FIELDS', iRow, 'FLD_NAME').value;
   getGridField('FIELDS', iOtherRow, 'FLD_DESCRIPTION').value = getGridField('FIELDS', iRow, 'FLD_DESCRIPTION').value;
@@ -374,6 +383,10 @@ var changeValues = function(iRow, sType) {
   getGridField('FIELDS', iOtherRow, 'FLD_NULL').checked      = getGridField('FIELDS', iRow, 'FLD_NULL').checked;
   getGridField('FIELDS', iOtherRow, 'FLD_KEY').checked       = getGridField('FIELDS', iRow, 'FLD_KEY').checked;
 
+  getGridField('FIELDS', iOtherRow, 'FLD_NULL_HDN').value    = getGridField('FIELDS', iRow, 'FLD_NULL_HDN').value;
+  getGridField('FIELDS', iOtherRow, 'FLD_KEY_HDN').value     = getGridField('FIELDS', iRow, 'FLD_KEY_HDN').value;
+  
+
   getGridField('FIELDS', iRow, 'FLD_UID').value         = FLD_UID;
   getGridField('FIELDS', iRow, 'FLD_NAME').value        = FLD_NAME;
   getGridField('FIELDS', iRow, 'FLD_DESCRIPTION').value = FLD_DESCRIPTION;
@@ -381,6 +394,10 @@ var changeValues = function(iRow, sType) {
   getGridField('FIELDS', iRow, 'FLD_SIZE').value        = FLD_SIZE;
   getGridField('FIELDS', iRow, 'FLD_NULL').checked      = FLD_NULL;
   getGridField('FIELDS', iRow, 'FLD_KEY').checked       = FLD_KEY;
+
+  getGridField('FIELDS', iRow, 'FLD_NULL_HDN').value    = FLD_NULL_HDN;
+  getGridField('FIELDS', iRow, 'FLD_KEY_HDN').value     = FLD_KEY_HDN;
+
 
   onChangeType(iRow, false);
   onChangeType(iOtherRow, false);
@@ -410,8 +427,9 @@ var dynaformOnload = function() {
     onChangeType(iRow, true);
     //onClickForeignKey(iRow, true);
 
-    document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[8].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[8].innerHTML.replace('[1]', '[' + iRow + ']');
-    document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[9].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[9].innerHTML.replace('[1]', '[' + iRow + ']');
+    document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[10].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[10].innerHTML.replace('[1]', '[' + iRow + ']');
+    document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[11].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[11].innerHTML.replace('[1]', '[' + iRow + ']');
+    
   };
   //
 };

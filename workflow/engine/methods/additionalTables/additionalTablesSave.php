@@ -58,7 +58,22 @@ foreach ($_POST['form']['FIELDS'] as $iRow => $aRow) {
   if (!isset($_POST['form']['FIELDS'][$iRow]['FLD_FOREIGN_KEY_TABLE'])) {
     $_POST['form']['FIELDS'][$iRow]['FLD_FOREIGN_KEY_TABLE'] = '';
   }
+  
+  if (!isset($_POST['form']['FIELDS'][$iRow]['FLD_NULL_HDN'])) {
+    $_POST['form']['FIELDS'][$iRow]['FLD_NULL_HDN'] = '';
+  }
+  if (!isset($_POST['form']['FIELDS'][$iRow]['FLD_KEY_HDN'])) {
+    $_POST['form']['FIELDS'][$iRow]['FLD_KEY_HDN'] = '';
+  }
+  // replace values check
+  if (isset($_POST['form']['FIELDS'][$iRow]['FLD_KEY']) && $_POST['form']['FIELDS'][$iRow]['FLD_KEY_HDN'] == 'on') {
+    $_POST['form']['FIELDS'][$iRow]['FLD_KEY'] = $_POST['form']['FIELDS'][$iRow]['FLD_KEY_HDN'];
+  }
+  if (isset($_POST['form']['FIELDS'][$iRow]['FLD_NULL']) && $_POST['form']['FIELDS'][$iRow]['FLD_NULL_HDN'] == 'on') {
+    $_POST['form']['FIELDS'][$iRow]['FLD_NULL'] = $_POST['form']['FIELDS'][$iRow]['FLD_NULL_HDN'];
+  }
 }
+
 $aKeys   = array();
 $aDynavars   = array();
 $aNoKeys = array();

@@ -290,6 +290,12 @@ var verifyData = function(oForm) {
       if (getGridField('FIELDS', i, 'FLD_KEY').checked) {
         bContinueKey = true;
       }
+      if (getGridField('FIELDS', i, 'FLD_KEY').checked) {
+        getGridField('FIELDS', i, 'FLD_KEY_HDN').value = "on" ;
+      }
+      if (getGridField('FIELDS', i, 'FLD_NULL').checked) {
+        getGridField('FIELDS', i, 'FLD_NULL_HDN').value = "on" ;
+      }
     }
     if (bContinue && bContinueKey) {
       oForm.submit();

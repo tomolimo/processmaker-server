@@ -23,10 +23,13 @@
   <en>Null</en>
 </FLD_NULL>
 
-
-
 <FLD_KEY type="checkbox" defaultValue="on">
   <en>Primary Key</en>
 </FLD_KEY>
+
+<FLD_NULL_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
+</FLD_NULL_HDN>
+<FLD_KEY_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
+</FLD_KEY_HDN>
 
 </dynaForm>
