@@ -168,6 +168,70 @@ class Groups
       throw $e;
     }
   }
+  
+  /**
+  * Get Available Groups for a single user
+  * @author Qennix
+  * @param string $sUserUid
+  * @return object
+  */
+  
+  function getAvailableGroupsCriteria($sUserUid){
+  	try{
+  		$oCriteria = new Criteria('workflow');
+  		$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
+  		$oCriteria->add(GroupUserPeer::USR_UID,$sUserUid);
+  		$oCriteria->add(GroupUserPeer::GRP_UID,'',Criteria::NOT_EQUAL);
+  		$oDataset = GroupUserPeer::doSelectRS($oCriteria);
+      	$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      	$oDataset->next();
+        $gUIDs = array();
+        while ($aRow = $oDataset->getRow()) {
+          $gUIDs[] = $aRow['GRP_UID'];
+          $oDataset->next();
+        }
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+        $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+        $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+        $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+        $oCriteria->add(GroupwfPeer::GRP_UID, $gUIDs, Criteria::NOT_IN);
+        $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
+        $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+        $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+      	return $oCriteria;
+  	}
+  	catch(exception $e){
+  	   throw $e;
+  	}
+  }
+  
+/**
+  * Get Assigned Groups for a single user
+  * @author Qennix
+  * @param string $sUserUid
+  * @return object
+  */
+  
+  function getAssignedGroupsCriteria($sUserUid){
+  	try{
+  		$oCriteria = new Criteria('workflow');
+        $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+        $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+        $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+        $oCriteria->addJoin(GroupUserPeer::GRP_UID, GroupwfPeer::GRP_UID, Criteria::LEFT_JOIN);
+        $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+        $oCriteria->add(GroupUserPeer::USR_UID, $sUserUid, Criteria::EQUAL);
+        $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
+        $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+        $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+      	return $oCriteria;
+  	}
+  	catch(exception $e){
+  	   throw $e;
+  	}
+  }
+  
 
 
  /**

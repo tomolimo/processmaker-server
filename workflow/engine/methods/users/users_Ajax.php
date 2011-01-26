@@ -155,6 +155,151 @@ try {
             echo $aValues['USR_FIRSTNAME'] . ' ' . $aValues['USR_LASTNAME'] . '<br>';
           }
           break;
+        case 'canDeleteUser':
+        	G::LoadClass('case');
+        	$oProcessMap = new Cases();
+    		$USR_UID = $_POST['uUID'];
+	       	$total = 0;
+	       	$history = 0;
+	       	
+  			$c = $oProcessMap->getCriteriaUsersCases('TO_DO', $USR_UID);  
+  			$total += ApplicationPeer::doCount($c);
+            $c = $oProcessMap->getCriteriaUsersCases('DRAFT', $USR_UID);
+  			$total += ApplicationPeer::doCount($c);
+  			
+  			$c = $oProcessMap->getCriteriaUsersCases('COMPLETED', $USR_UID);
+  			$history += ApplicationPeer::doCount($c);
+  			$c = $oProcessMap->getCriteriaUsersCases('CANCELLED', $USR_UID);
+  			$history += ApplicationPeer::doCount($c);
+  			
+  			$response = '{success: true, candelete: ';
+  			$response .= ($total > 0) ? 'false' : 'true';
+  			$response .= ', hashistory: ';
+  			$response .= ($history > 0) ? 'true' : 'false';
+  			$response .= '}';
+  			echo $response;
+  			break;
+        case 'deleteUser':
+        	$UID = $_POST['USR_UID'];
+        	G::LoadClass('tasks');
+  			$oTasks = new Tasks();
+  			$oTasks->ofToAssignUserOfAllTasks($UID);
+  			G::LoadClass('groups');
+  			$oGroups = new Groups();
+  			$oGroups->removeUserOfAllGroups($UID);
+  			$RBAC->changeUserStatus($UID, 'CLOSED');
+  			$_GET['USR_USERNAME']='';
+  			$RBAC->updateUser(array('USR_UID' => $UID, 'USR_USERNAME' => $_GET['USR_USERNAME']),'');
+
+  			require_once 'classes/model/Users.php';
+  			$oUser                 = new Users();
+  			$aFields               = $oUser->load($UID);
+  			$aFields['USR_STATUS'] = 'CLOSED';
+  			$aFields['USR_USERNAME'] = '';
+  			$oUser->update($aFields);
+  			break;
+        case 'availableGroups':
+        	G::LoadClass('groups');
+        	
+        	$groups = new Groups();
+        	$criteria = $groups->getAvailableGroupsCriteria($_REQUEST['uUID']);
+      		$objects  = GroupwfPeer::doSelectRS($criteria);
+      		$objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      		$arr = Array();
+      		while ($objects->next()){
+      			$arr[] = $objects->getRow();
+      		}
+      		echo '{groups: '.G::json_encode($arr).'}';
+        	break;
+         case 'assignedGroups':
+        	G::LoadClass('groups');
+        	
+        	$groups = new Groups();
+        	$criteria = $groups->getAssignedGroupsCriteria($_REQUEST['uUID']);
+      		$objects  = GroupwfPeer::doSelectRS($criteria);
+      		$objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      		$arr = Array();
+      		while ($objects->next()){
+      			$arr[] = $objects->getRow();
+      		}
+      		echo '{groups: '.G::json_encode($arr).'}';
+        	break;
+         case 'assignGroupsToUserMultiple':
+         	$USR_UID = $_POST['USR_UID'];
+         	$gUIDs = explode(',',$_POST['GRP_UID']);
+         	G::LoadClass('groups');
+            $oGroup = new Groups();
+         	foreach ($gUIDs as $GRP_UID){
+               $oGroup->addUserToGroup($GRP_UID, $USR_UID);		
+         	}
+         	break;
+         case 'deleteGroupsToUserMultiple':
+         	$USR_UID = $_POST['USR_UID'];
+         	$gUIDs = explode(',',$_POST['GRP_UID']);
+         	G::LoadClass('groups');
+            $oGroup = new Groups();
+         	foreach ($gUIDs as $GRP_UID){
+               $oGroup->removeUserOfGroup($GRP_UID, $USR_UID);		
+         	}
+         	break;
+         case 'authSources':
+         	$criteria = $RBAC->getAllAuthSources();
+         	$objects  = AuthenticationSourcePeer::doSelectRS($criteria);
+      		$objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      		
+      		$started = Array();
+      		$started['AUTH_SOURCE_UID'] = '00000000000000000000000000000000';
+      		$started['AUTH_SOURCE_NAME'] = 'ProcessMaker';
+      		$started['AUTH_SOURCE_TYPE'] = 'MYSQL';
+      		$arr = Array();
+      		$arr[] = $started;
+      		while ($objects->next()){
+      			$arr[] = $objects->getRow();
+      		}
+      		echo '{sources: '.G::json_encode($arr).'}';
+      		break;
+         case 'loadAuthSourceByUID':
+         	require_once 'classes/model/Users.php';
+            $oCriteria=$RBAC->load($_POST['uUID']);
+            $UID_AUTH = $oCriteria['UID_AUTH_SOURCE'];
+            if (($UID_AUTH!='00000000000000000000000000000000')&&($UID_AUTH!='')){
+              $aFields = $RBAC->getAuthSource($UID_AUTH);
+            }else{
+              $arr = Array();
+              $arr['AUTH_SOURCE_NAME'] = 'ProcessMaker';
+              $arr['AUTH_SOURCE_PROVIDER'] = 'MYSQL';
+              $aFields = $arr;	
+            }
+            $res = Array();
+            $res['data'] = $oCriteria;
+            $res['auth'] = $aFields;
+            echo G::json_encode($res);
+            break;
+         case 'updateAuthServices':
+         	$aData = $RBAC->load($_POST['usr_uid']);
+         	unset($aData['USR_ROLE']);
+         	$auth_uid = $_POST['auth_source'];
+         	$auth_uid2 =  $_POST['auth_source_uid'];
+         	if ($auth_uid == $auth_uid2){
+         		$auth_uid = $aData['UID_AUTH_SOURCE'];
+         	}
+         	if (($auth_uid=='00000000000000000000000000000000')||($auth_uid=='')){
+         		$aData['USR_AUTH_TYPE']   = 'MYSQL';
+  				$aData['UID_AUTH_SOURCE'] = '';
+         	}else{
+         		$aFields = $RBAC->getAuthSource($auth_uid);
+  				$aData['USR_AUTH_TYPE']   = $aFields['AUTH_SOURCE_PROVIDER'];
+  				$aData['UID_AUTH_SOURCE'] = $auth_uid;
+         	}
+         	if (isset($_POST['auth_dn'])){ 
+         		$auth_dn = $_POST['auth_dn'];
+         	}else{
+         		$auth_dn = "";
+         	}
+      		$aData['USR_AUTH_USER_DN'] = $auth_dn;
+      		$RBAC->updateUser($aData);
+      		echo '{success: true}';
+         	break;
       }
 }
 catch (Exception $oException) {
