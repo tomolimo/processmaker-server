@@ -89,7 +89,7 @@
   $_SESSION ['FAILED_LOGINS'] = $sFailedLogins;
   
   //translation
-  require_once "classes/model/Translation.php"; 
+  require_once "classes/model/Translation.php";
   $translationsTable = Translation::getTranslationEnvironments();
   $availableLangArray = array ();
   $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
@@ -138,11 +138,11 @@
   $oCriteria->add ( ConfigurationPeer::PRO_UID, '' );
   $oCriteria->add ( ConfigurationPeer::USR_UID, '' );
   $oCriteria->add ( ConfigurationPeer::APP_UID, '' );
-  $flagGettingStarted =  ConfigurationPeer::doCount ( $oCriteria );  
+  $flagGettingStarted =  ConfigurationPeer::doCount ( $oCriteria );
   if( $flagGettingStarted == 0 ) {
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
   }
   else
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 0; ');
 
-  G::RenderPage ( "publish","greenAnnouncement" );
+  G::RenderPage ( "publish" );
