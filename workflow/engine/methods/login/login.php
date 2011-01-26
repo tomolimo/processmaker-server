@@ -145,4 +145,4 @@
   else
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 0; ');
 
-  G::RenderPage ( "publish" );
+  G::RenderPage ( "publish","greenAnnouncement" );

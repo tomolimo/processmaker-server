@@ -148,8 +148,8 @@ class PMPluginRegistry {
   function registerPlugin( $sNamespace, $sFilename = null)
   {
     $sClassName = $sNamespace . 'plugin';
-    //if ( isset( $this->_aPluginDetails[$sNamespace] ) )
-    //  return;
+    if ( isset( $this->_aPluginDetails[$sNamespace] ) )
+      return;
     //require_once ( $sFilename );
     $plugin = new $sClassName ($sNamespace, $sFilename);
     $detail = new pluginDetail (
@@ -166,9 +166,9 @@ class PMPluginRegistry {
     if ( isset ($plugin->bPrivate) )
       $detail->bPrivate = $plugin->bPrivate;
     $this->_aPluginDetails[$sNamespace] = $detail;
-    if ( isset( $this->_aPluginDetails[$sNamespace] ) ){
-      $detail->enabled=$this->_aPluginDetails[$sNamespace]->enabled;
-    }
+    //if ( isset( $this->_aPluginDetails[$sNamespace] ) ){
+    //  $detail->enabled=$this->_aPluginDetails[$sNamespace]->enabled;
+    //}
   }
 
   /**
@@ -395,7 +395,7 @@ class PMPluginRegistry {
   $found = false;
      foreach ( $this->_aCSSStyleSheets as $row=>$detail ) {
       if ( $sCssFile == $detail->sCssFile && $sNamespace == $detail->sNamespace ){
-        $detail->sCssFile=$sCssFile;        
+        $detail->sCssFile=$sCssFile;
       	$found = true;
       }
      }
