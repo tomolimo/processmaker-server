@@ -52,7 +52,7 @@ class AppDelegation extends BaseAppDelegation {
    * @param $isSubprocess is a subprocess inside a process?
    * @return delegation index of the application delegation.
    */
-  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $sNextTasParam,$iPriority = 3, $isSubprocess=false ) {
+  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $sNextTasParam=null,$iPriority = 3, $isSubprocess=false ) {
 
     if (!isset($sProUid) || strlen($sProUid) == 0 ) {
       throw ( new Exception ( 'Column "PRO_UID" cannot be null.' ) );
