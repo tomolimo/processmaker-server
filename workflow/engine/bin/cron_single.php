@@ -247,7 +247,7 @@ function executePlugins(){
             $className = $filename . 'ClassCron';
 
             include_once ( $pathCronPlugins . $file );  //$filename. ".php"
-            $oPlugin =& new $className();
+            $oPlugin = new $className();
             if (method_exists($oPlugin, 'executeCron')) {
  	      $oPlugin->executeCron();
               setExecutionMessage("Executing Pentaho Reports Plugin");

@@ -2917,6 +2917,18 @@ class G
   }  
   
   /**
+   * isHttpRequest
+   *
+   * @return boolean true or false
+   */   
+  function isHttpRequest(){
+    if( isset($_SERVER['SERVER_SOFTWARE']) && strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache') !== false ){
+      return true;
+    }
+    return false;
+  }
+    
+  /**
    * Get the type of a variable
    * Returns the type of the PHP variable var. 
    *

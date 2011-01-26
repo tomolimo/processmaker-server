@@ -4191,12 +4191,12 @@ class XmlForm_Field_Image extends XmlForm_Field
   // function mask to php
   function masktophp ($mask){
     $tmp = str_replace("%", "", $mask);
-  if(ereg('b',$tmp)) {
+  if(preg_match('/b/',$tmp)) {
          $tmp2 = str_replace("b", "M", $tmp);
        $value=date($tmp2);
        return $value;
     }
-     if(ereg('B',$tmp)) {
+     if(preg_match('/B/',$tmp)) {
          $tmp2 = str_replace("B", "F", $tmp);
        $value=date($tmp2);
        return $value;
