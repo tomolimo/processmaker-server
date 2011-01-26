@@ -1121,16 +1121,18 @@ class Cases {
     }
   }
 
-  /*
+  /**
    * This function looks for the open previous task
    * get an array with all sibling previous threads open from next task
    *
    * @name searchOpenPreviousTasks,
+   * @param string $taskUid
    * @param string $sAppUid
+   * @param array $aPreviousTasks optional array that serves to trace the task routes in order to avoid infinite loops.
    * @return $aThreads
    */
 
-  function searchOpenPreviousTasks($taskUid, $sAppUid) {
+  function searchOpenPreviousTasks($taskUid, $sAppUid, $aPreviousTasks = array()) {
     //in this array we are storing all open delegation rows.
     $aTaskReviewed = array();
 
@@ -1170,7 +1172,6 @@ class Cases {
     $oDataset->next();
     $aRow = $oDataset->getRow();
     while (is_array($aRow)) {
-      $aPreviousTask[] = $aRow['TAS_UID'];
 
       $oCriteria2 = new Criteria('workflow');
       $oCriteria2->add(AppDelegationPeer::APP_UID, $sAppUid);
@@ -1194,9 +1195,15 @@ class Cases {
         if (is_array($aRow3)) {
           //there are closed delegations, so we need to get back without returning delegation rows
         } else { //if not we start the recursion searching previous open tasks from this task.
-          $aTaskReviewed[] = searchOpenPreviousTasks($aRow['TAS_UID']);
+
+            if (!in_array($aRow['TAS_UID'],$aPreviousTasks)){
+              // storing the current task uid of the task currently checked
+              $aPreviousTasks[] = $aRow['TAS_UID'];
+              // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
+              $aTaskReviewed[]  = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
         }
       }
+        }
 
       //$this->searchOpenPreviousTasks();
       $oDataset->next();
