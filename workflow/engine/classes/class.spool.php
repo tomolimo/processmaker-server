@@ -250,6 +250,8 @@ class spoolRun {
     $holdcc = array ();
     $holdbcc = array ();
     $text = trim($this->fileData['to']);
+    $textcc ='';
+    $textbcc=''; 
     if( isset($this->fileData['cc']) && trim($this->fileData['cc']) != '' ) {
       $textcc = trim($this->fileData['cc']);
     }
