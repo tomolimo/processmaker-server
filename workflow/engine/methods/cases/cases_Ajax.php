@@ -326,7 +326,7 @@ switch($_POST['action']) {
 		break;
 
 	case 'pauseCase':
-		$unpausedate = $_POST['unpausedate'];
+		$unpauseDate = $_POST['unpausedate'];
   	$oCase = new Cases();
 		if( isset($_POST['APP_UID']) && isset($_POST['DEL_INDEX']) ) {
 			$APP_UID   = $_POST['APP_UID'];
