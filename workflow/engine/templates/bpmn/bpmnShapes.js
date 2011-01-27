@@ -783,11 +783,11 @@ bpmnTask.prototype.addShapes = function (_3896) {
     }
 
     if (_3896.newShapeName.match(/Event/)) {
-        xOffset = _3896.workflow.currentSelection.getX() + 40; //Setting new offset value when newShape is not Task i.e aligning events
+        xOffset = _3896.workflow.currentSelection.getX() + 67; //Setting new offset value when newShape is not Task i.e aligning events
     }
 
     if (_3896.newShapeName.match(/Gateway/)) {
-        xOffset = _3896.workflow.currentSelection.getX() + 35; //Setting new offset value when newShape is not Task i.e aligning gateways
+        xOffset = _3896.workflow.currentSelection.getX() + 62; //Setting new offset value when newShape is not Task i.e aligning gateways
     }
 
     /* Incrementing Task No and assigning it to a local variable
