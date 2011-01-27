@@ -34,8 +34,8 @@ if(isset($_POST['mode']) && $_POST['mode'] != '')
 
 //Saving Gateway details into Gateway table
 $oProcessMap = new processMap();
-$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0]);
-
+$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
+echo $sGatewayUID.'|';
 
 G::LoadClass('tasks');
 $oTasks = new Tasks();

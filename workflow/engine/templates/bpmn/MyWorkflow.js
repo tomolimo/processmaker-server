@@ -1706,6 +1706,11 @@ MyWorkflow.prototype.deleteShape= function(oShape)
             shapeName = 'End Event';
             oShape.workflow.getCommandStack().execute(new CommandDelete(oShape.workflow.getCurrentSelection()));
             break;
+       case 'deleteGateway':
+           shapeName = 'Gateway';
+           urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+shapeId+'"}';
+           this.urlparameter = urlparams;
+           break;
     }
 
     //Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showResult);
@@ -1986,8 +1991,12 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                     success: function(response) {
                         if(response.responseText != 0){
                             if(typeof newObj.conn != 'undefined'){
-                                newObj.conn.html.id = response.responseText;
-                                newObj.conn.id = response.responseText;
+                                var resp = response.responseText.split("|");     //resp[0] => gateway UID , resp[1] => route UID
+                                newObj.conn.html.id = resp[1];
+                                newObj.conn.id = resp[1];
+
+                                //replacing old gateway UID with response UID
+                                preObj.id = resp[0];
                             }
                         }
                     },
@@ -2090,6 +2099,7 @@ MyWorkflow.prototype.getDeleteCriteria = function()
         var currentObj = workflow.currentSelection;
         var ports = currentObj.getPorts();
         var len =ports.data.length;
+    
 
         //Get all the connection of the shape
         var conn = new Array();
@@ -2115,8 +2125,15 @@ MyWorkflow.prototype.getDeleteCriteria = function()
         if(typeof route != 'undefined')
              workflow.deleteRoute(route,1);
         break;
-}
+  }
     workflow.deleteShape(workflow.currentSelection);
+
+    if(shape.match(/Gateway/))
+        {
+            workflow.currentSelection.actiontype = 'deleteGateway';
+            workflow.deleteShape(workflow.currentSelection);
+        }
+
 }
 
 /**

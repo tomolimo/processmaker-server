@@ -1397,6 +1397,27 @@ class processMap {
   }
 
   /*
+   * Delete a gateway
+   * @param string $sGatewayUID
+   * @return boolean
+   */
+
+  function deleteGateway($sGatewayUID = '') {
+    try {
+      $oGateway = new Gateway ( );
+      if($oGateway->gatewayExists($sGatewayUID))
+      {
+          $oTasks = new Tasks ( );
+          $oTasks->deleteRoutesusingGateway($sGatewayUID);
+          $res = $oGateway->remove($sGatewayUID);
+      }
+      return;
+    } catch (Exception $oError) {
+      throw ($oError);
+    }
+  }
+
+  /*
    * Add a new guide
    * @param string $sProcessUID
    * @param integer $iPosition

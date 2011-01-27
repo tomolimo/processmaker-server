@@ -52,6 +52,7 @@ require_once 'classes/model/CaseScheduler.php';
 
 G::LoadClass('tasks');
 G::LoadClass('reportTables');
+G::LoadClass('processMap');
 G::LoadThirdParty('pear/json','class.json');
 
 class Processes {
@@ -3010,9 +3011,33 @@ class Processes {
     $this->removeProcessRows ($oData->process['PRO_UID'] );
     $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
-    $this->createRouteRows($oData->routes);
+    $aRoutesUID = $this->createRouteRows($oData->routes);
     $this->createLaneRows($oData->lanes);
-    $this->createGatewayRows($oData->gateways);
+
+    if($oData->gateways == ''){
+           //Adding gateway information while importing processes from older version
+          //Making compatible with old export process
+          $oRoutes = $oData->routes;
+          for($i=0;$i<count($oRoutes);$i++){
+              $routeUID  = $aRoutesUID[$i];
+              $routeType = $oRoutes[$i]['ROU_TYPE'];
+              $sTaskUID  = $oRoutes[$i]['TAS_UID'];
+              $sNextTask = $oRoutes[$i]['ROU_NEXT_TASK'];
+              if($routeType != 'SEQUENTIAL')
+              {
+                  $oProcessMap = new processMap();
+                  $sGatewayUID = $oProcessMap->saveNewGateway($oData->process['PRO_UID'], $sTaskUID, $sNextTask);
+
+                  //Updating Route table (GAT_UID column) after inserting Gateway data into GATEWAY table
+                  $aData  = array('ROU_UID'=>$routeUID,'GAT_UID'=>$sGatewayUID);
+                  $oRoute = new Route();
+                  $oRoute->update($aData);
+              }
+         }
+    }
+    else
+        $this->createGatewayRows($oData->gateways);
+
     $this->createDynaformRows($oData->dynaforms);
     $this->createInputRows($oData->inputs);
     $this->createOutputRows($oData->outputs);

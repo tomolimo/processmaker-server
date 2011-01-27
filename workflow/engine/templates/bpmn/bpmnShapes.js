@@ -1,13 +1,13 @@
-bpmnTask = function (_30ab) {
+bpmnTask = function () {
     VectorFigure.call(this);
 
-   if(typeof _30ab.boundaryEvent != 'undefined' && _30ab.boundaryEvent == true)
+   if(typeof workflow.boundaryEvent != 'undefined' && workflow.boundaryEvent == true)
    {
-      this.boundaryEvent = _30ab.boundaryEvent;
+      this.boundaryEvent = workflow.boundaryEvent;
    }
    //Getting width and height from DB
-   if(typeof _30ab.task_width != 'undefined' && typeof _30ab.task_height != 'undefined')
-        this.setDimension(_30ab.task_width, _30ab.task_height);
+   if(typeof workflow.task_width != 'undefined' && typeof workflow.task_height != 'undefined')
+        this.setDimension(workflow.task_width, workflow.task_height);
    else
         this.setDimension(165, 40);
 
@@ -16,7 +16,7 @@ bpmnTask = function (_30ab) {
         this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
 
 
-    this.taskName = _30ab.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+    this.taskName = workflow.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnTask.prototype = new VectorFigure;
@@ -260,9 +260,9 @@ this.workflow.onKeyDown(_3e0e,ctrl);
 }
 };
 
-bpmnTask.prototype.setWorkflow = function (_40c5) {
-    VectorFigure.prototype.setWorkflow.call(this, _40c5);
-    if (_40c5 != null) {
+bpmnTask.prototype.setWorkflow = function () {
+    VectorFigure.prototype.setWorkflow.call(this, workflow);
+    if (workflow != null) {
 /*Adding Port to the Task After dragging Task on the Canvas
          *Ports will be invisibe After Drag and Drop, But It will be created
          */
@@ -273,7 +273,7 @@ bpmnTask.prototype.setWorkflow = function (_40c5) {
 
         for (var i = 0; i < TaskPortName.length; i++) {
             eval('this.' + TaskPortName[i] + ' = new ' + TaskPortType[i] + '()'); //Create New Port
-            eval('this.' + TaskPortName[i] + '.setWorkflow(_40c5)'); //Add port to the workflow
+            eval('this.' + TaskPortName[i] + '.setWorkflow()'); //Add port to the workflow
             eval('this.' + TaskPortName[i] + '.setName("' + TaskPortName[i] + '")'); //Set PortName
             eval('this.' + TaskPortName[i] + '.setZOrder(-1)'); //Set Z-Order of the port to -1. It will be below all the figure
             eval('this.' + TaskPortName[i] + '.setBackgroundColor(new Color(255, 255, 255))'); //Setting Background of the port to white
@@ -775,11 +775,11 @@ bpmnTask.prototype.addShapes = function (_3896) {
 
 
     if (_3896.newShapeName == 'bpmnTask' && shape.match(/Event/)) {
-        xOffset = _3896.workflow.currentSelection.getX() - 40; //Setting new offset value when currentselection is not Task i.e deriving task from events
+        xOffset = _3896.workflow.currentSelection.getX() - 67; //Setting new offset value when currentselection is not Task i.e deriving task from events
     }
 
     if (_3896.newShapeName == 'bpmnTask' && shape.match(/Gateway/)) {
-        xOffset = _3896.workflow.currentSelection.getX() - 35; //Setting new offset value when currentselection is not Task i.e deriving task from gateways
+        xOffset = _3896.workflow.currentSelection.getX() - 62; //Setting new offset value when currentselection is not Task i.e deriving task from gateways
     }
 
     if (_3896.newShapeName.match(/Event/)) {

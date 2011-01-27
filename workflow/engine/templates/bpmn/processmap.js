@@ -593,7 +593,7 @@ Ext.onReady ( function() {
                         _4562.workflow.taskName = shapes.tasks[k][1];
                         workflow.task_width = shapes.tasks[k][4];
                         workflow.task_height = shapes.tasks[k][5];
-                        NewShape = eval("new bpmnTask(_4562.workflow)");
+                        NewShape = eval("new bpmnTask()");
                         NewShape.x = shapes.tasks[k][2];
                         NewShape.y = shapes.tasks[k][3];
                         NewShape.taskName = shapes.tasks[k][1];
