@@ -33,7 +33,7 @@
   ini_set('magic_quotes_runtime', 'Off');
   
    /**
-   * Copyright (C) 2004 - 2011 Colosa Inc.
+   * require_once pakeFunction.php
    */
     require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeFunction.php');
     require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeGetopt.class.php');
