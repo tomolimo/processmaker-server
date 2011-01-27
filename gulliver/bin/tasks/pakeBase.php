@@ -1,9 +1,10 @@
 <?php
 /**
  * pakeBase.php
- *  
+ * @package gulliver.bin.tasks
+ * 
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,15 +21,18 @@
  * 
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- * /**
- *  @package gulliver.bin.tasks
+ *  
  */
 
 
 pake_task('project_exists');
 pake_task('app_exists', 'project_exists');
 pake_task('module_exists', 'app_exists');
+
+  /**
+   * Function run_project_exists
+   * access public
+   */
 
 function run_project_exists($task, $args)
 {
@@ -40,6 +44,10 @@ function run_project_exists($task, $args)
 //  pake_properties('config/properties.ini');
 }
 
+/**
+   * Function run_app_exists
+   * access public
+   */
 function run_app_exists($task, $args)
 {
   if (!count($args))

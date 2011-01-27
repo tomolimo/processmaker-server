@@ -2,9 +2,10 @@
 
 /**
  * pakeGulliver.php
- *
+ * @package gulliver.bin.tasks
+ * 
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,8 +22,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *  /**
- * @package gulliver.bin.tasks
+ *  
+ * 
  */
 //dont work mb_internal_encoding('UTF-8');
 
@@ -62,6 +63,11 @@ pake_task('workspace-restore', 'project_exists');
 
 pake_desc("check standard code\n   args: <directory>");
 pake_task('check-standard-code', 'project_exists' );
+
+/**
+   * Function run_version
+   * access public
+   */
 
 function run_version($task, $args) {
   printf("Gulliver version %s\n", pakeColor::colorize(trim(file_get_contents(PATH_GULLIVER . 'VERSION')), 'INFO'));

@@ -1,9 +1,10 @@
 <?php
 /**
  * gulliver.php
- *  
+ * @package gulliver.bin.tasks
+ * 
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,21 +21,23 @@
  * 
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- * /**
- *  @package gulliver.bin.tasks
+ * 
  */
  
 
   if (! PATH_THIRDPARTY ) {
     die("You must launch gulliver command line with the gulliver script\n");
   }
-
+ 
   // set magic_quotes_runtime to off
   ini_set('magic_quotes_runtime', 'Off');
-  require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeFunction.php');
-  require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeGetopt.class.php');
-  require_once( PATH_CORE . 'config' . PATH_SEP . 'environments.php');
+  
+   /**
+   * Copyright (C) 2004 - 2011 Colosa Inc.
+   */
+    require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeFunction.php');
+    require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeGetopt.class.php');
+    require_once( PATH_CORE . 'config' . PATH_SEP . 'environments.php');
 
   // trap -V before pake
   if (in_array('-V', $argv) || in_array('--version', $argv))

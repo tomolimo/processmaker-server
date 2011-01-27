@@ -1,9 +1,10 @@
 <?php
 /**
  * pakePropel.php
- *
+ * @package gulliver.bin.tasks
+ * 
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.23
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,8 +21,7 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *  /**
- * @package gulliver.bin.tasks
+ * 
  */
 
 /*
@@ -67,6 +67,11 @@ pake_task('propel-insert-sql', 'project_exists');
 
 //pake_desc('generate propel model and sql and initialize database, and load data');
 //pake_task('propel-build-all-load', 'propel-build-all');
+
+/**
+   * Function run_propel_convert_yml_schema
+   * access public
+   */
 
 function run_propel_convert_yml_schema($task, $args)
 {
@@ -351,8 +356,8 @@ function run_propel_build_schema($task, $args)
 /**
  * Dumps yml database data to fixtures directory.
  *
- * @example symfony dump-data frontend data.yml
- * @example symfony dump-data frontend data.yml dev
+ * example symfony dump-data frontend data.yml
+ * example symfony dump-data frontend data.yml dev
  *
  * @param object $task
  * @param array $args
@@ -385,8 +390,8 @@ function run_propel_dump_data($task, $args)
 /**
  * Loads yml data from fixtures directory and inserts into database.
  *
- * @example symfony load-data frontend
- * @example symfony load-data frontend dev fixtures append
+ * example symfony load-data frontend
+ * example symfony load-data frontend dev fixtures append
  *
  * @todo replace delete argument with flag -d
  *
