@@ -171,9 +171,18 @@ var G_Grid = function(oForm, sGridName) {
                var aux = oNewRow.getElementsByTagName('td')[i].innerHTML;                
               }
   
-              //alert(aObjects[0].name);
-                
-              if (aObjects[0].type != 'checkbox') {
+              tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
+              if( tags.length == 0 ){ //then it is a datepicker
+                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                attributes = elementAttributesNS(aObjects[0], 'pm');
+                if(attributes.defaultvalue!= undefined)
+                 attributDefaultValue=attributes.defaultvalue;
+              }
+
+              if (aObjects[0].type != 'checkbox' ) {
+               if(attributDefaultValue!='')
+                aObjects[0].value = attributDefaultValue;
+               else
                 aObjects[0].value = '';
               } else {
                 aObjects[0].checked = false;
