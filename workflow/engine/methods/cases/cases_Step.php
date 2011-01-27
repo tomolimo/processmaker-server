@@ -570,12 +570,11 @@
           G::header('location: '.$outputNextStep);
 					die;
           break;
-        case 'VIEW':
+       case 'VIEW':
           require_once 'classes/model/AppDocument.php';
           $oAppDocument = new AppDocument();
           $lastVersion=$oAppDocument->getLastAppDocVersion($_GET['DOC'],$_SESSION['APPLICATION']);
           $aFields = $oAppDocument->load($_GET['DOC'],$lastVersion);
-
           $listing=false;
 			    $oPluginRegistry = & PMPluginRegistry::getSingleton();
 			    if($oPluginRegistry->existsTrigger(PM_CASE_DOCUMENT_LIST)) {
@@ -590,13 +589,19 @@
           $oOutputDocument = new OutputDocument();
           $aGields = $oOutputDocument->load($aFields['DOC_UID']);
 
+          if(isset($aGields['OUT_DOC_VERSIONING']) && $aGields['OUT_DOC_VERSIONING']!=0){
+         	  $oAppDocument= new AppDocument();
+            $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
+          }else {
+           	$lastDocVersion='';
+          }
           $aFields['VIEW1'] = G::LoadTranslation('ID_OPEN');
 
           $aFields['VIEW2'] = G::LoadTranslation('ID_OPEN');
 
-          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=doc&random=' . rand();
+          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=doc&random=' . rand();
 
-          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$aFields['DOC_VERSION'] . '&ext=pdf&random=' . rand();
+          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=pdf&random=' . rand();
 
 
           if ( is_array ($listing) ){//If exist in Plugin Document List
