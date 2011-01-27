@@ -34,7 +34,8 @@ $oHeadPublisher->addExtJsScript('cases/casesSchedulerLog', false);    //adding a
 $oHeadPublisher->addContent('cases/casesSchedulerLog'); //adding a html file  .html.
 
 $labels = G::getTranslations(Array('ID_DATE_LABEL','ID_TIME_LABEL','ID_USER','ID_RESULT', 'ID_CREATED_CASE_STATUS',
-  'ID_ROUTED_CASE_STATUS','ID_CLOSE','ID_LOG_CASE_SCHEDULER','ID_VIEW','ID_TITLE_LOG_DETAIL'));
+  'ID_ROUTED_CASE_STATUS','ID_CLOSE','ID_LOG_CASE_SCHEDULER','ID_VIEW','ID_TITLE_LOG_DETAIL','ID_ENTER_SEARCH_TERM','ID_SEARCH',
+  'ID_SCHEDULER_TASK','ID_TASK_ID','ID_PROCESS_ID','ID_EXECUTION_DATE','ID_EXECUTION_HOUR','ID_EXECUTION_STATUS'));
 
 $oHeadPublisher->assign('TRANSLATIONS', $labels);
 G::RenderPage('publish', 'extJs');

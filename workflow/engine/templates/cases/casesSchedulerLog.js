@@ -23,14 +23,82 @@ new Ext.KeyMap(document, {
 
 var store;
 var cmodel;
+var smodel;
 var infoGrid;
 var viewport;
 var bbarpaging;
 var w;
+
+var viewButton;
+var searchButton;
+var contextMenu;
  
 
 Ext.onReady(function(){
-    Ext.QuickTips.init();
+	Ext.QuickTips.init();
+    
+    viewButton = new Ext.Action({
+    	text: TRANSLATIONS.ID_VIEW,
+    	iconCls: 'button_menu_ext ss_sprite  ss_table',
+    	handler: ShowSelectedLog,
+    	disabled: true
+    });
+    
+    searchButton = new Ext.Action({
+    	text: TRANSLATIONS.ID_SEARCH,
+    	handler: DoSearch
+    });
+    
+    contextMenu = new Ext.menu.Menu({
+    	items: [viewButton]
+    });
+    
+    searchText = new Ext.form.TextField ({
+        id: 'searchTxt',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 150,
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+            	DoSearch();
+            }
+          },
+          focus: function(f,e) {
+       	   			var row = infoGrid.getSelectionModel().getSelected();
+       	   			infoGrid.getSelectionModel().deselectRow(infoGrid.getStore().indexOf(row));
+          		 }
+        }
+    });
+    
+    clearTextButton = new Ext.Action({
+    	text: 'X',
+    	ctCls:'pm_search_x_button',
+    	handler: GridByDefault
+    });
+    
+    viewForm = new Ext.FormPanel({
+    	url: 'data_casesSchedulerLog',
+    	frame: true,
+    	title: TRANSLATIONS.ID_TITLE_LOG_DETAIL,
+    	labelWidth: 150,
+    	items:[
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_SCHEDULER_TASK, id: 'stask', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_TASK_ID, id: 'task', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_PROCESS_ID, id: 'process', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_USER, id: 'user', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_EXECUTION_DATE, id: 'date', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_EXECUTION_HOUR, id: 'hour', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_EXECUTION_STATUS, id: 'status', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_CREATED_CASE_STATUS, id: 'cstatus', width: 250},
+    	       {xtype: 'label', fieldLabel: TRANSLATIONS.ID_ROUTED_CASE_STATUS, id: 'rstatus', width: 250}
+    	      ],
+    	       
+    	 buttons: [
+    	       {text: TRANSLATIONS.ID_CLOSE, handler: CloseView}
+    	 ]
+    });
 
     store = new Ext.data.GroupingStore( {
         proxy : new Ext.data.HttpProxy({
@@ -66,9 +134,20 @@ Ext.onReady(function(){
             {header: TRANSLATIONS.ID_USER, dataIndex: 'USR_NAME', width: 40, hidden:false, align:'left'},
             {header: TRANSLATIONS.ID_RESULT, dataIndex: 'RESULT', width: 40, hidden:false, align:'left'},
             {header: TRANSLATIONS.ID_CREATED_CASE_STATUS, dataIndex: 'WS_CREATE_CASE_STATUS', width: 80, hidden:false, align:'left'},
-            {header: TRANSLATIONS.ID_ROUTED_CASE_STATUS, dataIndex: 'WS_ROUTE_CASE_STATUS', width: 80, hidden:false, align:'left'},
-            {header: TRANSLATIONS.ID_VIEW, dataIndex: 'LOG_CASE_UID', width: 20, hidden:false, align:'center', renderer: view_button}
-        ]
+            {header: TRANSLATIONS.ID_ROUTED_CASE_STATUS, dataIndex: 'WS_ROUTE_CASE_STATUS', width: 80, hidden:false, align:'left'}
+         ]
+    });
+    
+    smodel = new Ext.grid.RowSelectionModel({
+    	singleSelect: true,
+    	listeners:{
+    		rowselect: function(sm){
+    			viewButton.enable();
+    		},
+    		rowdeselect: function(sm){
+    			viewButton.disable();
+    		}
+    	}
     });
     
     bbarpaging = new Ext.PagingToolbar({
@@ -77,17 +156,17 @@ Ext.onReady(function(){
     });
 
     infoGrid = new Ext.grid.GridPanel({
+    	title : TRANSLATIONS.ID_LOG_CASE_SCHEDULER,
     	region: 'center',
     	layout: 'fit',
     	id: 'infoGrid',
     	height:100,
     	autoWidth : true,
-    	title : TRANSLATIONS.ID_LOG_CASE_SCHEDULER,
     	stateful : true,
     	stateId : 'grid',
     	enableColumnResize: true,
     	enableHdMenu: true,
-    	frame:true,
+    	frame:false,
     	iconCls:'icon-grid',
     	columnLines: false,
     	viewConfig: {
@@ -95,6 +174,8 @@ Ext.onReady(function(){
     	},
     	store: store,
     	cm: cmodel,
+    	sm: smodel,
+    	tbar: [viewButton,{xtype: 'tbfill'},searchText,clearTextButton,searchButton],
     	bbar: [{xtype: 'tbfill'}, bbarpaging],
     	listeners: {
     		rowdblclick: ShowSelectedLog
@@ -104,8 +185,25 @@ Ext.onReady(function(){
     		groupTextTpl: '{text}'
     	})
     });
+    
+    infoGrid.on('rowcontextmenu', 
+    		function (grid, rowIndex, evt) {
+        		var sm = grid.getSelectionModel();
+        		sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+    		},
+    		this
+    );
+    
+    infoGrid.on('contextmenu', 
+    		function (evt) {
+        		evt.preventDefault();
+    		}, 
+    		this
+    );
+    
+    infoGrid.addListener('rowcontextmenu',onMessageContextMenu,this);
 
-    infoGrid.store.load({params: {"function":"caseSchedulerLog"}});
+    GridByDefault();
 
     viewport = new Ext.Viewport({
     	layout: 'fit',
@@ -116,56 +214,55 @@ Ext.onReady(function(){
     });
 });
 
+//Funtion Handles Context Menu Opening
+onMessageContextMenu = function (grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    contextMenu.showAt([coords[0], coords[1]]);
+}
+
 //Do Nothing Function
 DoNothing = function(){}
 
 //Handles DoubleClick's Grid
 ShowSelectedLog = function(){
-	iGrid = Ext.getCmp('infoGrid');
-	rowSelected = iGrid.getSelectionModel().getSelected();
+	rowSelected = infoGrid.getSelectionModel().getSelected();
 	if (rowSelected){
-		ViewLogScheduler(rowSelected.data.LOG_CASE_UID);
+		Ext.getCmp('stask').setText(rowSelected.data.SCH_UID);
+		Ext.getCmp('task').setText(rowSelected.data.TAS_UID);
+		Ext.getCmp('process').setText(rowSelected.data.PRO_UID);
+		Ext.getCmp('user').setText(rowSelected.data.USR_NAME);
+		Ext.getCmp('date').setText(rowSelected.data.EXEC_DATE);
+		Ext.getCmp('hour').setText(rowSelected.data.EXEC_HOUR);
+		Ext.getCmp('status').setText(rowSelected.data.RESULT);
+		Ext.getCmp('cstatus').setText(rowSelected.data.WS_CREATE_CASE_STATUS);
+		Ext.getCmp('rstatus').setText(rowSelected.data.WS_ROUTE_CASE_STATUS);
+		w = new Ext.Window({
+			height: 320, 
+			width: 550,
+			resizable: false,
+			closable: false,
+			items: [viewForm]
+		});
+		w.show();
 	}
 }
 
-//Renderer Button on Grid
-view_button = function(val){
-	var sep = "'";
-	return '<input type="button" value="' + TRANSLATIONS.ID_VIEW + '" onclick="ViewLogScheduler(' + sep + val + sep + ');" />';
-}
 
-//Open Popup View Log Window
-ViewLogScheduler = function(value){
-	Ext.Ajax.request({
-	   url: 'cases_Scheduler_Log_Detail',
- 	   success: SuccessViewLog,
- 	   failure: DoNothing,
- 	   params: {LOG_CASE_UID: value}
- 
-	});
+//Load Grid By Default
+GridByDefault = function(){
+	searchText.reset();
+	infoGrid.store.load();
 }
-
-//Response View Handler
-SuccessViewLog = function(response, opts){
-	w = new Ext.Window({
-		height: 320, 
-		width: 600,
-		resizable: false,
-	    html: response.responseText,
-	    autoscroll: false,
-		title: TRANSLATIONS.ID_TITLE_LOG_DETAIL,
-		closable: true,
-		buttons: [{
-			text: TRANSLATIONS.ID_CLOSE,
-			handler: CloseView
-		}]
-	});
-	w.show();
-} 
 
 //Close View Dialog
 CloseView = function(){
-	w.close();
+	w.hide();
+}
+
+//Do Search Function
+DoSearch = function(){
+	infoGrid.store.load({params: {textFilter: searchText.getValue()}});
 }
 
 

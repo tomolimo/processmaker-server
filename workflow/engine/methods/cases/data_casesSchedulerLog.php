@@ -29,6 +29,8 @@ require_once 'classes/model/LogCasesScheduler.php';
 $start = isset($_REQUEST['start'])? $_REQUEST['start'] : 0;
 $limit = isset($_REQUEST['limit'])? $_REQUEST['limit'] : 20; 
 
+$filter = (isset($_POST['textFilter'])) ? $_POST['textFilter'] : '';
+
 $oCriteria = new Criteria('workflow');
 $oCriteria->clearSelectColumns();
 $oCriteria->addSelectColumn(LogCasesSchedulerPeer::LOG_CASE_UID);
@@ -41,6 +43,21 @@ $oCriteria->addSelectColumn(LogCasesSchedulerPeer::RESULT);
 $oCriteria->addSelectColumn(LogCasesSchedulerPeer::SCH_UID);
 $oCriteria->addSelectColumn(LogCasesSchedulerPeer::WS_CREATE_CASE_STATUS);
 $oCriteria->addSelectColumn(LogCasesSchedulerPeer::WS_ROUTE_CASE_STATUS);
+
+if ($filter != ''){
+	$c_or = $oCriteria->getNewCriterion(LogCasesSchedulerPeer::WS_CREATE_CASE_STATUS, '%'.$filter.'%', Criteria::LIKE)->addOr(
+			$oCriteria->getNewCriterion(LogCasesSchedulerPeer::WS_ROUTE_CASE_STATUS,'%'.$filter.'%', Criteria::LIKE));
+	$oCriteria->add($c_or);
+}
+
+$oDataset = LogCasesSchedulerPeer::doSelectRS ( $oCriteria );
+$oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+
+$addTables = Array();
+while( $oDataset->next() ) {
+    $addTables[] = $oDataset->getRow();
+}
+$results = count($addTables);
 
 $oCriteria->setOffset($start);
 $oCriteria->setLimit($limit);
@@ -61,8 +78,8 @@ while( $oDataset->next() ) {
     $addTables[] = $oDataset->getRow();
 }
 
-$oLogCasesScheduler = new LogCasesScheduler();
-$arrData = $oLogCasesScheduler->getAll();
-$results = count($arrData);
+//$oLogCasesScheduler = new LogCasesScheduler();
+//$arrData = $oLogCasesScheduler->getAll();
+
 
 echo '{results: '.$results.', rows: '.G::json_encode($addTables).'}';
