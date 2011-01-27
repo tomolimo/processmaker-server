@@ -1,5 +1,27 @@
 <?php
 /**
+ * cliCommon.php
+ *
+ * ProcessMaker Open Source Edition
+ * Copyright (C) 2011 Colosa Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
+ * Coral Gables, FL, 33134, USA, or email info@colosa.com.
+ *
+ * @author Alexandre Rosenfeld <alexandre@colosa.com>
  * @package workflow-engine-bin-tasks
  **/
 
@@ -12,130 +34,17 @@ if(sizeof($output) == 3) {
 }
 
 /**
- * From http://www.php.net/manual/en/function.getopt.php#83414
- * Parses $args for parameters and assigns them to an array.
+ * Returns workspace objects from an array of workspace names.
  *
- * Supports:
- * -e
- * -e <value>
- * --long-param
- * --long-param=<value>
- * --long-param <value>
- * <value>
- *
- * @param array $noopt List of parameters without values
+ * @param  array $args an array of workspace names
+ * @param  bool $includeAll if true and no workspace is specified in args,
+ *                          returns all available workspaces
+ * @return array of workspace objects
  */
-function parse_args($args, $noopt = array()) {
-  $result = array();
-  while (list($tmp, $p) = each($args)) {
-      if ($p{0} == '-') {
-          $pname = substr($p, 1);
-          $value = true;
-          if ($pname{0} == '-') {
-              // long-opt (--<param>)
-              $pname = substr($pname, 1);
-              if (strpos($p, '=') !== false) {
-                  // value specified inline (--<param>=<value>)
-                  list($pname, $value) = explode('=', substr($p, 2), 2);
-              }
-          }
-          // check if next parameter is a descriptor or a value
-          $nextparm = current($args);
-          if (!in_array($pname, $noopt) && $value === true && $nextparm !== false && $nextparm{0} != '-') list($tmp, $value) = each($args);
-          $result[$pname] = $value;
-      } else {
-          // param doesn't belong to any option
-          $result[] = $p;
-      }
-  }
-  return $result;
-}
-
-function info($message) {
-  return pakeColor::colorize($message, "INFO");
-}
-
-function error($message) {
-  return pakeColor::colorize($message, "ERROR");
-}
-
-function prompt($message) {
-  echo "$message";
-  $handle = fopen ("php://stdin","r");
-  $line = fgets($handle);
-  return $line;
-}
-
-function question($message) {
-  $input = strtolower(prompt("$message [Y/n] "));
-  return (array_search(trim($input), array("y", "")) !== false);
-}
-
-function logging($message, $filename = NULL) {
-  static $log_file = NULL;
-  if (isset($filename)) {
-    $log_file = fopen($filename, "a");
-    fwrite($log_file, " -- " . date("c") . " " . $message . " --\n");
-  } else {
-    if (isset($log_file))
-      fwrite($log_file, $message);
-    echo $message;
-  }
-}
-
-function progress($done, $total, $size=30) {
-
-    static $start_time;
-
-    // if we go over our bound, just ignore it
-    if($done > $total) return;
-
-    if(empty($start_time)) $start_time=time();
-    $now = time();
-
-    $perc=(double)($done/$total);
-
-    $bar=floor($perc*$size);
-
-    $status_bar="\r[";
-    $status_bar.=str_repeat("=", $bar);
-    if($bar<$size){
-        $status_bar.=">";
-        $status_bar.=str_repeat(" ", $size-$bar);
-    } else {
-        $status_bar.="=";
-    }
-
-    $disp=number_format($perc*100, 0);
-
-    $status_bar.="] $disp%  $done/$total";
-
-    $rate = ($now-$start_time)/$done;
-    $left = $total - $done;
-    $eta = round($rate * $left, 2);
-
-    $elapsed = $now - $start_time;
-
-    $status_bar.= " remaining: ".number_format($eta)." sec.  elapsed: ".number_format($elapsed)." sec.";
-
-    echo "$status_bar  ";
-
-    flush();
-
-    // when done, send a newline
-    if($done == $total) {
-        echo "\n";
-    }
-
-}
-
 function get_workspaces_from_args($args, $includeAll = true) {
-  $opts = parse_args($args);
   $workspaces = array();
-  foreach ($opts as $opt => $arg) {
-    if (is_int($opt)) {
-      $workspaces[] = new workspaceTools($arg);
-    }
+  foreach ($args as $arg) {
+    $workspaces[] = new workspaceTools($arg);
   }
   if (empty($workspaces) && $includeAll) {
     $workspaces = System::listWorkspaces();

@@ -8,6 +8,7 @@
  */
 
 G::LoadSystem('dbMaintenance');
+G::LoadClass("cli");
 
 class workspaceTools {
   var $name = NULL;
@@ -51,11 +52,11 @@ class workspaceTools {
    * @param   bool $first true if this is the first workspace to be upgrade
    */
   public function upgrade($first = false) {
-    logging("> Updating database...\n");
+    CLI::logging("> Updating database...\n");
     $this->upgradeDatabase();
-    logging("> Updating translations...\n");
+    CLI::logging("> Updating translations...\n");
     $this->upgradeTranslation($first);
-    logging("> Updating cache view...\n");
+    CLI::logging("> Updating cache view...\n");
     $this->upgradeCacheView();
   }
 
@@ -135,7 +136,7 @@ class workspaceTools {
     $this->resetDBNames = $resetDBNames;
     $this->resetDBDiff = array();
 
-    logging("Resetting db info\n");
+    CLI::logging("Resetting db info\n");
     if (!$this->workspaceExists())
       throw new Exception("Could not find db.php in the restore");
     $sDbFile = file_get_contents($this->dbPath);
@@ -258,7 +259,7 @@ class workspaceTools {
     G::LoadThirdParty('pear/json', 'class.json');
     $languages = new languages();
     foreach (System::listPoFiles() as $poFile) {
-      logging("Updating language ".basename($poFile)."\n");
+      CLI::logging("Updating language ".basename($poFile)."\n");
       $languages->importLanguage($poFile, $updateXml);
     }
   }
@@ -389,13 +390,13 @@ class workspaceTools {
       $currentUserIsSuper = true;
     }
 
-    logging("Creating table");
+    CLI::logging("Creating table");
     //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.
     if (!$checkOnly) {
       $res = $appCache->checkAppCacheView();
     }
 
-    logging(", triggers");
+    CLI::logging(", triggers");
     //now check if we have the triggers installed
     $triggers = array();
     $triggers[] = $appCache->triggerAppDelegationInsert($lang, $checkOnly);
@@ -404,12 +405,12 @@ class workspaceTools {
     $triggers[] = $appCache->triggerApplicationDelete($lang, $checkOnly);
 
     if (!$checkOnly) {
-      logging(", filling cache view");
+      CLI::logging(", filling cache view");
       //build using the method in AppCacheView Class
       $res = $appCache->fillAppCacheView($lang);
-      logging(".");
+      CLI::logging(".");
     }
-    logging("\n");
+    CLI::logging("\n");
     //set status in config table
     $confParams = Array(
       'LANG' => $lang,
@@ -432,7 +433,7 @@ class workspaceTools {
     foreach (System::getPlugins() as $pluginName) {
       $pluginSchema = System::getPluginSchema($pluginName);
       if ($pluginSchema !== false) {
-        logging("Updating plugin " . info($pluginName) . "\n");
+        CLI::logging("Updating plugin " . CLI::info($pluginName) . "\n");
         $this->upgradeSchema($pluginSchema);
       }
     }
@@ -483,7 +484,7 @@ class workspaceTools {
 
     $oDataBase->logQuery ( count ($changes ) );
 
-    logging( "" . count($changes['tablesToAdd']) . " tables to add");
+    CLI::logging( "" . count($changes['tablesToAdd']) . " tables to add");
     foreach ($changes['tablesToAdd'] as $sTable => $aColumns) {
       $oDataBase->executeQuery($oDataBase->generateCreateTableSQL($sTable, $aColumns));
       if (isset($changes['tablesToAdd'][$sTable]['INDEXES'])) {
@@ -493,7 +494,7 @@ class workspaceTools {
       }
     }
 
-    logging(", " . count($changes['tablesToAlter']) . " tables to alter");
+    CLI::logging(", " . count($changes['tablesToAlter']) . " tables to alter");
     foreach ($changes['tablesToAlter'] as $sTable => $aActions) {
       foreach ($aActions as $sAction => $aAction) {
         foreach ($aAction as $sColumn => $vData) {
@@ -512,21 +513,21 @@ class workspaceTools {
       }
     }
 
-    logging(", " . count($changes['tablesWithNewIndex']) . " indexes to add");
+    CLI::logging(", " . count($changes['tablesWithNewIndex']) . " indexes to add");
     foreach ($changes['tablesWithNewIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
 
-    logging(", " . count($changes['tablesWithNewIndex']) . " indexes to alter");
+    CLI::logging(", " . count($changes['tablesWithNewIndex']) . " indexes to alter");
     foreach ($changes['tablesToAlterIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateDropKeySQL($sTable, $sIndexName ));
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
-    logging("\n");
+    CLI::logging("\n");
     $this->closeDatabase();
     return true;
   }
@@ -601,7 +602,7 @@ class workspaceTools {
 
     foreach ($info as $k => $v) {
       if (is_numeric($k)) $k = "";
-      logging(sprintf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO')));
+      CLI::logging(sprintf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO')));
     }
   }
 
@@ -615,7 +616,7 @@ class workspaceTools {
 
     if ($printSysInfo) {
       workspaceTools::printSysInfo ();
-      logging("\n");
+      CLI::logging("\n");
     }
 
     $wfDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_USER'] . ':' . $fields['DB_PASS'] . '@' . $fields['DB_HOST'] . '/' . $fields['DB_NAME'];
@@ -633,7 +634,7 @@ class workspaceTools {
 
     foreach ($info as $k => $v) {
       if (is_numeric($k)) $k = "";
-      logging(sprintf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO')));
+      CLI::logging(sprintf("%20s %s\n", $k, pakeColor::colorize($v, 'INFO')));
     }
   }
 
@@ -652,7 +653,7 @@ class workspaceTools {
       $dbInfo = $this->getDBCredentials($db);
       $oDbMaintainer = new DataBaseMaintenance($dbInfo["host"], $dbInfo["user"],
         $dbInfo["pass"]);
-      logging("Saving database {$dbInfo["name"]}\n");
+      CLI::logging("Saving database {$dbInfo["name"]}\n");
       $oDbMaintainer->connect($dbInfo["name"]);
       $oDbMaintainer->lockTables();
       $oDbMaintainer->setTempDir($path . "/");
@@ -716,7 +717,7 @@ class workspaceTools {
       unlink($tempDirectory);
     mkdir($tempDirectory);
     $metadata = $this->getMetadata();
-    logging("Backing up database...\n");
+    CLI::logging("Backing up database...\n");
     $metadata["databases"] = $this->exportDatabase($tempDirectory);
     $metadata["directories"] = array("{$this->name}.files");
     $metadata["version"] = 1;
@@ -727,9 +728,9 @@ class workspaceTools {
     file_put_contents($metaFilename,
       str_replace(array(",", "{", "}"), array(",\n  ", "{\n  ", "\n}\n"),
                   G::json_encode($metadata)));
-    logging("Copying database to backup...\n");
+    CLI::logging("Copying database to backup...\n");
     $this->addToBackup($backup, $tempDirectory, $tempDirectory);
-    logging("Copying files to backup...\n");
+    CLI::logging("Copying files to backup...\n");
     
     $this->addToBackup($backup, $this->path, $this->path, "{$this->name}.files");
     //Remove leftovers.
@@ -764,7 +765,7 @@ class workspaceTools {
       if ($result === false)
         throw new Exception("Unable to drop user: " . mysql_error ());
     }
-    logging("Creating user $username for $hostname\n");
+    CLI::logging("Creating user $username for $hostname\n");
     $result = mysql_query("CREATE USER '$username'@'$hostname' IDENTIFIED BY '$password'");
     if ($result === false)
       throw new Exception("Unable to create user: " . mysql_error ());
@@ -859,13 +860,13 @@ class workspaceTools {
       $workspace = new workspaceTools($workspaceName);
       if ($workspace->workspaceExists())
       //  throw new Exception("Workspace exists");
-        logging("Workspace $workspaceName already exists, overwriting!\n");
+        CLI::logging("Workspace $workspaceName already exists, overwriting!\n");
 
       if (file_exists($workspace->path))
         G::rm_dir($workspace->path);
 
       foreach ($metadata->directories as $dir) {
-        logging("Restoring directory '$dir'\n");
+        CLI::logging("Restoring directory '$dir'\n");
 
         if (!rename("$tempDirectory/$dir", $workspace->path)) {
           throw new Exception("There was an error copying the backup files ($tempDirectory/$dir) to the workspace directory {$workspace->path}.\n");
@@ -879,7 +880,7 @@ class workspaceTools {
       
       foreach ($metadata->databases as $db) {
         $dbName = $newDBNames[$db->name];
-        logging("Restoring database {$db->name} to $dbName\n");
+        CLI::logging("Restoring database {$db->name} to $dbName\n");
         $workspace->executeSQLScript($dbName, "$tempDirectory/{$db->name}.sql");
         $workspace->createDBUser($dbName, $db->pass, "localhost", $dbName);
         $workspace->createDBUser($dbName, $db->pass, "%", $dbName);

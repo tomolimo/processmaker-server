@@ -1,9 +1,9 @@
 <?php
 /**
- * commands.php
+ * cli.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2010 Colosa Inc.
+ * Copyright (C) 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,6 +21,7 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
+ * @author Alexandre Rosenfeld <alexandre@colosa.com>
  */
 
   /* Windows supports both / and \ as path separators, so use the Unix separator
@@ -43,19 +44,30 @@
   require_once( PATH_THIRDPARTY . 'pake/pakeGetopt.class.php');
   require_once( PATH_CORE . 'config/environments.php');
 
+  G::LoadClass("cli");
+
   /* Hide notice, otherwise we get a lot of messages */
   error_reporting(E_ALL ^ E_NOTICE);
+  ini_set('display_errors', 1);
 
-  // register tasks
-  $dir = PATH_HOME . 'engine/bin/tasks';
-  $tasks = pakeFinder::type('file')->name( 'cli*.php' )->in($dir);
-
-  foreach ($tasks as $task) {
-    include_once($task);
+  // trap -V before pake
+  if (in_array('-v', $argv) || in_array('-V', $argv) || in_array('--version', $argv))
+  {
+    printf("ProcessMaker version %s\n", pakeColor::colorize(trim(file_get_contents( PATH_GULLIVER . 'VERSION')), 'INFO'));
+    exit(0);
   }
 
-  // run task
-  pakeApp::get_instance()->run(null, null, false);
+  // register tasks
+  //TODO: include plugins
+  $directories = array(PATH_HOME . 'engine/bin/tasks');
+
+  foreach ($directories as $dir) {
+    foreach (glob("$dir/*.php") as $filename) {
+      include_once($filename);
+    }
+  }
+
+  CLI::run();
 
   exit(0);
 
