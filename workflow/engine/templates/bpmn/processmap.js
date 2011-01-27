@@ -112,6 +112,7 @@ Ext.onReady ( function() {
         {
             text: 'Save',
             cls: 'x-btn-text-icon',
+            iconCls: 'button_menu_ext ss_sprite ss_disk',
             handler: function() {
                 saveProcess();
             }
@@ -122,6 +123,7 @@ Ext.onReady ( function() {
 
         {
             text:'Undo',
+            iconCls: 'button_menu_ext ss_sprite ss_arrow_undo',
             handler: function() {
                 workflow.getCommandStack().undo();
             }
@@ -130,6 +132,7 @@ Ext.onReady ( function() {
 
         {
             text:'Redo',
+            iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
             handler: function() {
                 workflow.getCommandStack().redo();
             }
@@ -137,6 +140,7 @@ Ext.onReady ( function() {
 
         {
             xtype: 'tbsplit',
+            iconCls: 'button_menu_ext ss_sprite ss_application',
             text: 'Process',
             menu: new Ext.menu.Menu({
                 items: [{
@@ -172,12 +176,14 @@ Ext.onReady ( function() {
         },
         {
             text:'Zoom In',
+            iconCls: 'button_menu_ext ss_sprite ss_zoom_in',
             handler: function() {
                 workflow.zoom('in');
             }
         },
         {
             text:'Zoom Out',
+            iconCls: 'button_menu_ext ss_sprite ss_zoom_out',
             handler: function() {
                 workflow.zoom('out');
             }

@@ -33,8 +33,8 @@ ul#pm_menu li.SelectedMenu a,ul#pm_menu li:hover a{
 */
 /*Edicion de botones copiar de default.css (Final)*/
 
-input::-moz-focus-inner{border:0;}
-button::-moz-focus-inner{border:0;}
+input:-moz-focus-inner{border:0;}
+button:-moz-focus-inner{border:0;}
 .module_app_input___gray{max-width: 400px;}
 
 /*

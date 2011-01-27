@@ -4,10 +4,10 @@ Workflow.call(this,id);
 ProcessMapContext.prototype=new Workflow;
 ProcessMapContext.prototype.type="ProcessMap";
 
-ProcessMapContext.prototype.editProcess= function(_5678)
+ProcessMapContext.prototype.editProcess= function()
 {
-        var editProcessData     = _5678.scope.workflow.processEdit;
-        var processCategoryData = _5678.scope.workflow.processCategory;
+        var editProcessData     = workflow.processEdit;
+        var processCategoryData = workflow.processCategory;
         var debug               = editProcessData.PRO_DEBUG;
         var pro_category        = editProcessData.PRO_CATEGORY;
         var pro_category_label  = editProcessData.PRO_CATEGORY_LABEL;
@@ -99,7 +99,7 @@ ProcessMapContext.prototype.editProcess= function(_5678)
     });
 
     editProcess.render(document.body);
-    _5678.scope.workflow.editProcessForm = editProcess;
+    workflow.editProcessForm = editProcess;
 
      var window = new Ext.Window({
         title: 'Edit Process',
@@ -130,7 +130,7 @@ ProcessMapContext.prototype.editProcess= function(_5678)
                   else
                      pro_debug = '0';
 
-                  var pro_uid = _5678.scope.workflow.getUrlVars();
+                  var pro_uid = workflow.getUrlVars();
 
                   var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
                   Ext.Ajax.request({

@@ -435,13 +435,10 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         
     });
     window.show();
-
-
-
 }
 
 
-TaskContext.prototype.editUsers= function(_5625)
+TaskContext.prototype.editUsers= function()
 {
     var taskExtObj = new TaskContext();
     var pro_uid    = workflow.getUrlVars();
@@ -604,17 +601,16 @@ TaskContext.prototype.editUsers= function(_5625)
                             displayField : 'LABEL'  ,
                             valueField   : 'LABEL',
                             name         : 'LABEL',
-                            scope        : _5625,
                             triggerAction: 'all',
                             emptyText: 'Select User or Group',
                             allowBlank: false,
                              onSelect: function(record, index){
                                 var User = grid.getStore();
 
-                                if(typeof _5625.scope.workflow.currentrowIndex == 'undefined')
+                                if(typeof workflow.currentrowIndex == 'undefined')
                                         var selectedrowIndex = '0';
                                 else
-                                        selectedrowIndex     = _5625.scope.workflow.currentrowIndex;    //getting Index of the row that has been edited
+                                        selectedrowIndex     = workflow.currentrowIndex;    //getting Index of the row that has been edited
 
                                  //User.data.items[0].data.LABEL= record.data.LABEL;
                                  User.data.items[selectedrowIndex].data.TAS_UID      = record.data.TAS_UID;
@@ -632,7 +628,7 @@ TaskContext.prototype.editUsers= function(_5625)
                 singleSelect: true,
                 listeners: {
                      rowselect: function(smObj, rowIndex, record) {
-                         _5625.scope.workflow.currentrowIndex = rowIndex;
+                         workflow.currentrowIndex = rowIndex;
                     }
                }
             }),
@@ -704,11 +700,11 @@ TaskContext.prototype.editUsers= function(_5625)
 }
 
 
-TaskContext.prototype.editTaskProperties= function(_5625)
+TaskContext.prototype.editTaskProperties= function()
 {
     var ProcMapObj= new ProcessMapContext();
     var taskExtObj = new TaskContext();
-    var taskId  = _5625.scope.workflow.currentSelection.id;
+    var taskId  = workflow.currentSelection.id;
 
     // create the Data Store for processes
     var taskDetails = new Ext.data.JsonStore({
@@ -731,7 +727,6 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         //url         : 'proxyTaskPropertiesDetails.php',
         bodyStyle   : 'padding:5px 5px 0',
         width       : 600,
-        scope       : _5625,
         items: {
             xtype:'tabpanel',
             activeTab: 0,
@@ -820,16 +815,16 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         boxLabel: 'Cyclic Assignment',
                         id: 'BALANCED',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'BALANCED'
-                        //checked:    'BALANCED'
+                        inputValue: 'BALANCED',
+                        checked: false
                     },
 
                     {
                         boxLabel: 'Manual Assignment',
                         id: 'MANUAL',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'MANUAL'
-                        //checked:    'MANUAL'
+                        inputValue: 'MANUAL',
+                        checked:false
                     },
 
                     {
@@ -837,7 +832,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         id:'EVALUATE',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'EVALUATE',
-                        //checked:    'EVALUATE',
+                        checked:false,
                         listeners: {
                             'check':{
                                 fn: function(){
@@ -853,15 +848,15 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         boxLabel: 'Reports to',
                         id:'REPORT_TO',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'REPORT_TO'
-                        //checked:    'REPORT_TO'
+                        inputValue: 'REPORT_TO',
+                        checked:false
                     },
                     {
                         boxLabel: 'Self Service',
                         id:'SELF_SERVICE',
                         name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'SELF_SERVICE'
-                        //checked:    'SELF_SERVICE'
+                        inputValue: 'SELF_SERVICE',
+                        checked:false
                     },
 
                     {
@@ -869,7 +864,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         id:'STATIC_MI',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'STATIC_MI',
-                        //checked:    'STATIC_MI',
+                        checked:false,
                         listeners: {
                             'check':{
                                 fn: function(){
@@ -886,7 +881,7 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                         id:'CANCEL_MI',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'CANCEL_MI',
-                        //checked:    'CANCEL_MI',
+                        checked:false,
                         listeners: {
                             'check':{
                                 fn: function(){
@@ -1132,10 +1127,10 @@ TaskContext.prototype.editTaskProperties= function(_5625)
                 labelWidth: 170,
                 items: [{
                     xtype: 'checkbox',
-                    //id: 'ADHOC',
+                    id: 'ADHOC',
                     fieldLabel: 'Allow arbitary transfer (Ad hoc)',
-                    //inputValue:'ADHOC',
-                    checked: 'TAS_TYPE',
+                    inputValue:'ADHOC',
+                    checked: false,
                     name: 'TAS_TYPE'
                 }]
             },{
@@ -1277,26 +1272,53 @@ TaskContext.prototype.editTaskProperties= function(_5625)
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
-        //var fID =  action.result.data.TAS_TYPE;
-        var ID = action.result.data.TAS_ASSIGN_TYPE;
-        
-        Ext.getCmp(ID).setValue(true);
-       
-       // Ext.getCmp(fID).setValue(true);
+        //To load the values of the selecte radio button in Assignment Rules
+                       if(action.result.data.TAS_ASSIGN_TYPE=='BALANCED')
+                           form.items.items[4].items[0].checked=true;
 
-      
-       
+                       else  if(action.result.data.TAS_ASSIGN_TYPE=='MANUAL')
+                           form.items.items[4].items[1].checked=true;
 
-           //Ext.MessageBox.alert('Message', 'Loaded OK');
-          //  setTaskAssignType(form);
-        },
+                       else if(action.result.data.TAS_ASSIGN_TYPE=='EVALUATE')
+                            {
+                                form.items.items[4].items[2].checked=true;
+                                Ext.getCmp("evaluate").show();
+                            }
+
+                       else if(action.result.data.TAS_ASSIGN_TYPE=='REPORT_TO')
+                           form.items.items[4].items[3].checked=true;
+
+                       else  if(action.result.data.TAS_ASSIGN_TYPE=='SELF_SERVICE')
+                           form.items.items[4].items[4].checked=true;
+
+                       else if(action.result.data.TAS_ASSIGN_TYPE=='STATIC_MI')
+                            {
+                                form.items.items[4].items[5].checked=true;
+                                Ext.getCmp("staticMI").show();
+                                Ext.getCmp("cancelMI").show();
+                                Ext.getCmp("evaluate").hide();
+                            }
+
+                       else  if(action.result.data.TAS_ASSIGN_TYPE=='CANCEL_MI')
+                           {
+                               form.items.items[4].items[6].checked=true;
+                               Ext.getCmp("staticMI").show();
+                               Ext.getCmp("cancelMI").show();
+                               Ext.getCmp("evaluate").hide();
+                           }
+
+                      if(action.result.data.TAS_TYPE == 'ADHOC')
+                           form.items.items[13].checked=false;
+                       else
+                            form.items.items[13].checked=true;
+       },
         failure:function(form, action) {
             Ext.MessageBox.alert('Message', 'Load failed');
         }
     });
 
     taskPropertiesTabs.render(document.body);
-    _5625.scope.workflow.taskPropertiesTabs = taskPropertiesTabs;
+    workflow.taskPropertiesTabs = taskPropertiesTabs;
 
     var window = new Ext.Window({
         title: 'Task:',
@@ -1316,7 +1338,9 @@ TaskContext.prototype.editTaskProperties= function(_5625)
             handler: function(){
                 //var getstore = taskPropertiesTabs.getStore();
                 //var getData = getstore.data.items;
-                taskExtObj.saveTaskProperties(_5625);
+                taskExtObj.saveTaskProperties();
+                 window.close();
+
             }
         },{
             text: 'Cancel',
@@ -1330,10 +1354,10 @@ TaskContext.prototype.editTaskProperties= function(_5625)
 
 }
 
-TaskContext.prototype.saveTaskProperties= function(_5625)
+TaskContext.prototype.saveTaskProperties= function()
 {
-                 var saveTaskform = _5625.scope.workflow.taskPropertiesTabs.getForm().getValues();
-                 var taskId = _5625.scope.workflow.currentSelection.id;
+                 var saveTaskform = workflow.taskPropertiesTabs.getForm().getValues();
+                 var taskId = workflow.currentSelection.id;
                  var newTaskValues = new Array();
                  var oData = null;
                  for (var key in saveTaskform )
@@ -1377,10 +1401,10 @@ TaskContext.prototype.saveTaskProperties= function(_5625)
                  });
 }
 
-TaskContext.prototype.stepTriggers = function(_5625)
+TaskContext.prototype.stepTriggers = function()
     {
-     var pro_uid = _5625.scope.workflow.getUrlVars();
-     var taskId  = _5625.scope.workflow.currentSelection.id;
+     var pro_uid = _workflow.getUrlVars();
+     var taskId  = workflow.currentSelection.id;
      var ProcMapObj= new ProcessMapContext();
      var triggersFields = Ext.data.Record.create([
                 {
@@ -1535,7 +1559,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
     });
 
 
-  var btnTriggerCondition = new Ext.Button({
+    var btnTriggerCondition = new Ext.Button({
       //id: 'btnCondition',
       text: 'Condition',
       handler: function (s) {
@@ -1638,10 +1662,10 @@ TaskContext.prototype.stepTriggers = function(_5625)
                             onSelect     : function(record, index){
                                 var triggerStore  = triggerGrid.getStore();
 
-                                if(typeof _5625.scope.workflow.currentRowTrigger == 'undefined')
+                                if(typeof workflow.currentRowTrigger == 'undefined')
                                         var selectedrowIndex = '0';
                                 else
-                                        selectedrowIndex     = _5625.scope.workflow.currentRowTrigger;    //getting Index of the row that has been edited
+                                        selectedrowIndex     = workflow.currentRowTrigger;    //getting Index of the row that has been edited
 
                                  //User.data.items[0].data.CON_VALUE                 = record.data.CON_VALUE;
                                  triggerStore.data.items[selectedrowIndex].data.ST_TYPE      = record.data.ST_TYPE;
@@ -1672,7 +1696,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
                 singleSelect: true,
                 listeners: {
                      rowselect: function(smObj, rowIndex, record) {
-                        _5625.scope.workflow.currentRowTrigger = rowIndex;
+                        workflow.currentRowTrigger = rowIndex;
                     }
                }
             }),
@@ -1754,7 +1778,7 @@ TaskContext.prototype.stepTriggers = function(_5625)
     return treeGrid;
 }
 
-TaskContext.prototype.editUsersAdHoc= function(_5625)
+TaskContext.prototype.editUsersAdHoc= function()
 {
     var taskExtObj = new TaskContext();
     var pro_uid = workflow.getUrlVars();
@@ -1917,17 +1941,16 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                             displayField : 'LABEL',
                             valueField   : 'LABEL',
                             name         : 'LABEL',
-                            scope        : _5625,
                             triggerAction: 'all',
                             emptyText: 'Select User or Group',
                             allowBlank: false,
                              onSelect: function(record, index){
                                 var User = grid.getStore();
 
-                                if(typeof _5625.scope.workflow.currentrowIndex == 'undefined')
+                                if(typeof workflow.currentrowIndex == 'undefined')
                                         var selectedrowIndex = '0';
                                 else
-                                        selectedrowIndex     = _5625.scope.workflow.currentrowIndex;    //getting Index of the row that has been edited
+                                        selectedrowIndex     = workflow.currentrowIndex;    //getting Index of the row that has been edited
 
                                  //User.data.items[0].data.LABEL= record.data.LABEL;
                                  User.data.items[selectedrowIndex].data.TAS_UID      = record.data.TAS_UID;
@@ -1945,7 +1968,7 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                 singleSelect: true,
                 listeners: {
                      rowselect: function(smObj, rowIndex, record) {
-                         _5625.scope.workflow.currentrowIndex = rowIndex;
+                         workflow.currentrowIndex = rowIndex;
                     }
                }
             }),
@@ -1999,10 +2022,10 @@ TaskContext.prototype.editUsersAdHoc= function(_5625)
                           Ext.MessageBox.alert ('Status','User has been updated successfully.');
                       },
                       params:{
-                        functions : 'ofToAssign',
-                        TAS_UID  :  taskId,
-                        USR_UID : userId,
-                        TU_TYPE : tu_Type,
+                        functions  : 'ofToAssign',
+                        TAS_UID    :  taskId,
+                        USR_UID    : userId,
+                        TU_TYPE    : tu_Type,
                         TU_RELATION:tu_Relation
 
                     }
