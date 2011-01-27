@@ -1,9 +1,10 @@
 <?php
 /**
  * UsersRolesPeer.php
- *  
+ * @package  rbac-classes-model
+ * 
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,7 +23,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-
+  /**
+  * @access public
+  */
   // include base peer class
   require_once 'classes/model/om/BaseUsersRolesPeer.php';
 

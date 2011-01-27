@@ -1,13 +1,7 @@
 <?php
-
-  // include base peer class
-  require_once 'classes/model/om/BaseAuthenticationSourcePeer.php';
-
-  // include object class
-  include_once 'classes/model/AuthenticationSource.php';
-
-
 /**
+ * AuthenticationSourcePeer.php
+ * @package  rbac-classes-model *
  * Skeleton subclass for performing query and update operations on the 'AUTHENTICATION_SOURCE' table.
  *
  * 
@@ -16,8 +10,20 @@
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package  rbac-classes-model
  */
+
+ /**
+ * @access public
+ */
+  // include base peer class
+  require_once 'classes/model/om/BaseAuthenticationSourcePeer.php';
+
+  // include object class
+  include_once 'classes/model/AuthenticationSource.php';
+
+  /**
+   * @package  rbac-classes-model
+  */
 class AuthenticationSourcePeer extends BaseAuthenticationSourcePeer {
 
 } // AuthenticationSourcePeer

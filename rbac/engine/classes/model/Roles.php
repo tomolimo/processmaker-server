@@ -1,9 +1,10 @@
 <?php
 /**
  * Roles.php
- *  
+ * @package  rbac-classes-model
+ * 
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,7 +23,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-
+ /**
+  * @access public
+  */
 require_once 'classes/model/Permissions.php';
 require_once 'classes/model/Systems.php';
 require_once 'classes/model/RolesPermissions.php';
@@ -47,7 +50,12 @@ require_once 'classes/model/Content.php';
 class Roles extends BaseRoles {
     
     public $rol_name;
-    
+
+   /**
+    * Function load
+    * access public
+   */
+
     public function load($Uid) {
         try {
             $oRow = RolesPeer::retrieveByPK($Uid);

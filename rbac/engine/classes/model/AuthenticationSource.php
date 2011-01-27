@@ -1,19 +1,25 @@
 <?php
-
-require_once 'classes/model/om/BaseAuthenticationSource.php';
-
-
 /**
+ *  AuthenticationSource.php
+ *  @package  rbac-classes-model
  * Skeleton subclass for representing a row from the 'AUTHENTICATION_SOURCE' table.
- *
  *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
- *
- * @package  rbac-classes-model
+ * 
  */
+
+ /**
+  * access public
+  */
+require_once 'classes/model/om/BaseAuthenticationSource.php';
+
+ /**
+  * @package  rbac-classes-model
+  */
+
 class AuthenticationSource extends BaseAuthenticationSource {
   function getAllAuthSources() {
     $oCriteria = new Criteria('rbac');
@@ -21,7 +27,7 @@ class AuthenticationSource extends BaseAuthenticationSource {
     $oCriteria->add(AuthenticationSourcePeer::AUTH_SOURCE_UID, '', Criteria::NOT_EQUAL);
     return $oCriteria;
   }
-
+  
   public function load($sUID) {
   	try {
   	  $oAuthenticationSource = AuthenticationSourcePeer::retrieveByPK($sUID);
@@ -107,6 +113,10 @@ class AuthenticationSource extends BaseAuthenticationSource {
     }
   }
 
+  /**
+   * Function remove
+   * access public
+   */
   function remove($sUID) {
     $oConnection = Propel::getConnection(AuthenticationSourcePeer::DATABASE_NAME);
   	try {

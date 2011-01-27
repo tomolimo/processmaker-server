@@ -1,9 +1,10 @@
 <?php
 /**
  * RbacUsers.php
+ * @package  rbac-classes-model
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,7 +23,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-
+  /**
+  * @access public
+  */
 require_once 'classes/model/om/BaseRbacUsers.php';
 
 
@@ -44,8 +47,9 @@ class RbacUsers extends BaseRbacUsers {
    * verifica que un usuario tiene derechos de iniciar una aplicacion
    *
    * @author Fernando Ontiveros Lira <fernando@colosa.com>
-   * @access public
-
+   * access public
+   * Function verifyLogin
+   *
    * @param  string $strUser    UserId  (login) de usuario
    * @param  string $strPass    Password
    * @return

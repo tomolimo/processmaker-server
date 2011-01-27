@@ -1,6 +1,7 @@
 <?php
 /**
  * PermissionsPeer.php
+ * @package  rbac-classes-model
  *  
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -23,6 +24,9 @@
  * 
  */
 
+  /**
+  * @access public
+  */
   // include base peer class
   require_once 'classes/model/om/BasePermissionsPeer.php';
 
