@@ -35,7 +35,7 @@
   <en>Last Name</en>
 </USR_LASTNAME>
 
-<USR_USERNAME type="text" size="15" maxlength="50" validate="Email" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
+<USR_USERNAME type="text" size="15" maxlength="50" validate="Login" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
   <en>User ID (*)</en>
 </USR_USERNAME>
 
