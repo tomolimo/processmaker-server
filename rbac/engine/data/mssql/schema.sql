@@ -309,7 +309,7 @@ CREATE TABLE [AUTHENTICATION_SOURCE]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'USERS')
 BEGIN
-	 DECLARE @reftable_5 nvarchar(60), @constraintname_5 nvarchar(60)
+	 DECLARE @reftable_8 nvarchar(60), @constraintname_8 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -321,11 +321,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'USERS'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_5, @constraintname_5
+	 FETCH NEXT from refcursor into @reftable_8, @constraintname_8
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_5+' drop constraint '+@constraintname_5)
-	   FETCH NEXT from refcursor into @reftable_5, @constraintname_5
+	   exec ('alter table '+@reftable_8+' drop constraint '+@constraintname_8)
+	   FETCH NEXT from refcursor into @reftable_8, @constraintname_8
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
