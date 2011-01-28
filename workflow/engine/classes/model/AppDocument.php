@@ -570,5 +570,18 @@ class AppDocument extends BaseAppDocument {
     return $res;
   }
 
-
+  function getObject($APP_UID, $DEL_INDEX, $STEP_UID_OBJ, $APP_DOC_TYPE)
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(AppDocumentPeer::APP_UID,      $APP_UID);
+    $oCriteria->add(AppDocumentPeer::DEL_INDEX,    $DEL_INDEX);
+    $oCriteria->add(AppDocumentPeer::DOC_UID,      $STEP_UID_OBJ);
+    $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, $APP_DOC_TYPE);
+    $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+            
+    return $oDataset->getRow();
+  }
+  
 } // AppDocument

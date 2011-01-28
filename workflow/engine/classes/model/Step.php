@@ -452,5 +452,38 @@ class Step extends BaseStep {
 
   }
  }
+ 
+  /**
+   * Get related steps for a determinated case
+   *
+   * @author Erik A. O. <erik@colosa.com>
+   */ 
+  function getAllCaseSteps($PRO_UID, $TAS_UID, $APP_UID)
+  {
+  
+    $c = new Criteria();
+    $c->addSelectColumn('*');
+    $c->add(StepPeer::PRO_UID, $PRO_UID);
+    $c->add(StepPeer::TAS_UID, $TAS_UID);
+    $c->addAscendingOrderByColumn (StepPeer::STEP_POSITION);
+    
+    return StepPeer::doSelect($c);
+  }
 
 } // Step
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
