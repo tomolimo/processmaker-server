@@ -102,7 +102,8 @@ class Gateway extends BaseGateway {
         $oConnection->begin();
         $iResult = $oGateWay->delete();
         $oConnection->commit();
-        return $iResult;
+        //return $iResult;
+        return true;
       }
       else {
         throw(new Exception('This row doesn\'t exists!'));
