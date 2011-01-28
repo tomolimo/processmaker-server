@@ -14,7 +14,7 @@
   <en>Cancel</en>
 </BTN_CANCEL>
 
-<SAVE type="button" onclick="triggerSave(this.form);">
+<SAVE type="button" onclick="triggerSave1(this.form);">
   <en>Save</en>
 </SAVE>
 <JS type="JavaScript"><![CDATA[
