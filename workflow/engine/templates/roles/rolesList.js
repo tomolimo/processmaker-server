@@ -30,6 +30,16 @@ new Ext.KeyMap(document, [
 			CanDeleteRole();
 		}
 	}
+},
+{
+	key: Ext.EventObject.F2,
+	fn: function(k,e){
+		iGrid = Ext.getCmp('infoGrid');
+		rowSelected = iGrid.getSelectionModel().getSelected();
+		if (rowSelected){
+			EditRole();
+		}
+	}
 }
 ]);
 
@@ -103,7 +113,7 @@ Ext.onReady(function(){
     });
     
     searchText = new Ext.form.TextField ({
-        id: 'searchTxt',
+        id: 'searchText',
         ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 150,
@@ -134,8 +144,7 @@ Ext.onReady(function(){
     
     newForm = new Ext.FormPanel({
     	url: 'roles_Ajax?request=saveNewRole',
-    	frame: true,
-    	title: 'Create a new role',
+    	frame: true, 	
     	items:[
     	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_CODE, name: 'code', width: 250, allowBlank: false},
     	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_NAME, name: 'name', width: 200, allowBlank: false},
@@ -163,7 +172,6 @@ Ext.onReady(function(){
     editForm = new Ext.FormPanel({
     	url: 'roles_Ajax?request=updateRole',
     	frame: true,
-    	title: 'Updating role',
     	items:[
     	       {xtype: 'textfield', name: 'rol_uid', hidden: true },
     	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_CODE, name: 'code', width: 250, allowBlank: false},
@@ -310,9 +318,9 @@ DoNothing = function(){}
 //Open New Role Form
 NewRoleWindow = function(){
 	w = new Ext.Window({
-		height: 190,
+		title: TRANSLATIONS.ID_CREATE_ROLE_TITLE,
+		autoHeight: true,
 		width: 420,
-		title: TRANSLATIONS.ID_ROLES,
 		items: [newForm]
 	});
 	w.show();
@@ -329,7 +337,7 @@ SaveNewRole = function(){
 		success: function(f,a){
 			w.hide(); //Hide popup widow
 			newForm.getForm().reset(); //Set empty form to next use
-			textSearch.reset();
+			searchText.reset();
 			infoGrid.store.load(); //Reload store grid
 			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_SUCCESS_NEW);
 		},
@@ -339,7 +347,6 @@ SaveNewRole = function(){
 				//Ext.Msg.alert('New Role Form','Invalid Data');
 				break;
 			}
-			
 		}
 	});
 }
@@ -367,8 +374,7 @@ UpdateRole = function(){
 
 //Edit Selected Role
 EditRole = function(){
-	iGrid = Ext.getCmp('infoGrid');
-	rowSelected = iGrid.getSelectionModel().getSelected();
+	rowSelected = infoGrid.getSelectionModel().getSelected();
 	if (rowSelected){
 		if (rowSelected.data.ROL_UID == '00000000000000000000000000000002'){
 			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_MSG);
@@ -378,9 +384,9 @@ EditRole = function(){
 			editForm.getForm().findField('name').setValue(rowSelected.data.ROL_NAME);
 			editForm.getForm().findField('status').setValue(rowSelected.data.ROL_STATUS);
 			w = new Ext.Window({
-				height: 190,
+				autoHeight: true,
 				width: 420,
-				title: TRANSLATIONS.ID_ROLES,
+				title: TRANSLATIONS.ID_EDIT_ROLE_TITLE,
 				items: [editForm]
 			});
 			w.show();
@@ -391,8 +397,7 @@ EditRole = function(){
 
 //Check Can Delete Role
 CanDeleteRole = function(){
-	iGrid = Ext.getCmp('infoGrid');
-	rowSelected = iGrid.getSelectionModel().getSelected();
+	rowSelected = infoGrid.getSelectionModel().getSelected();
 	if (rowSelected){
 		var swDelete = false;
 		Ext.Ajax.request({
@@ -410,6 +415,8 @@ CanDeleteRole = function(){
 					            			infoGrid.store.load(); //Reload store grid
 					            			editButton.disable();  //Disable Edit Button
 					            			deleteButton.disable(); //Disable Delete Button
+					            			usersButton.disable(); //Disable Delete Button
+					            			permissionsButton.disable(); //Disable Delete Button
 					            			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_SUCCESS_DELETE);
 					            		},
 					            		failure: DoNothing

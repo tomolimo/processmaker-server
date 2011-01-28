@@ -34,10 +34,7 @@ switch ($REQUEST) {
         break;
 
     case 'saveNewRole':
-
-    	
     	$newid = md5($_POST['code'].date("d-M-Y_H:i:s"));
-    	g::pr($_POST);
     	$aData['ROL_UID'] = $newid;
     	//$aData['ROL_PARENT'] = $_POST['parent'];
     	$aData['ROL_SYSTEM'] = '00000000000000000000000000000002';
@@ -47,6 +44,7 @@ switch ($REQUEST) {
     	$aData['ROL_UPDATE_DATE'] = date("Y-M-d H:i:s");
     	$aData['ROL_STATUS'] = $_POST['status'];
     	$oCriteria = $RBAC->createRole($aData);
+    	echo '{success: true}';
         break;
         
     case 'editRole':
@@ -68,6 +66,7 @@ switch ($REQUEST) {
     	$aData['ROL_UPDATE_DATE'] = date("Y-M-d H:i:s");
     	$aData['ROL_STATUS'] = $_POST['status'];
     	$oCriteria = $RBAC->updateRole($aData);
+    	echo '{success: true}';
         break;
 
 	case 'show':
