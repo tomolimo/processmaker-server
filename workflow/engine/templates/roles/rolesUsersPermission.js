@@ -63,12 +63,12 @@ Ext.onReady(function(){
 	sw_func_permissions = false;
 	sw_func_users = false;
 	
-	assignButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_ASSIGN,
-    	iconCls: 'button_menu_ext ss_sprite  ss_add',
-    	handler: AssignPermissionAction,
-    	disabled: true
-    });
+//	assignButton = new Ext.Action({
+//    	text: TRANSLATIONS.ID_ASSIGN,
+//    	iconCls: 'button_menu_ext ss_sprite  ss_add',
+//    	handler: AssignPermissionAction,
+//    	disabled: true
+//    });
 	
 	assignAllButton = new Ext.Action({
     	text: TRANSLATIONS.ID_ASSIGN_ALL_PERMISSIONS,
@@ -76,12 +76,12 @@ Ext.onReady(function(){
     	handler: AssignAllPermissionsAction
     });
 	
-	removeButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_REMOVE,
-    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
-    	handler: RemovePermissionAction,
-    	disabled: true
-    });
+//	removeButton = new Ext.Action({
+//    	text: TRANSLATIONS.ID_REMOVE,
+//    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
+//    	handler: RemovePermissionAction,
+//    	disabled: true
+//    });
 	
 	removeAllButton = new Ext.Action({
     	text: TRANSLATIONS.ID_REMOVE_ALL_PERMISSIONS,
@@ -90,12 +90,12 @@ Ext.onReady(function(){
     	disabled: (ROLES.ROL_UID==pm_admin) ? true : false
     });
 	
-	assignUButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_ASSIGN,
-    	iconCls: 'button_menu_ext ss_sprite  ss_add',
-    	handler: AssignUserAction,
-    	disabled: true
-    });
+//	assignUButton = new Ext.Action({
+//    	text: TRANSLATIONS.ID_ASSIGN,
+//    	iconCls: 'button_menu_ext ss_sprite  ss_add',
+//    	handler: AssignUserAction,
+//    	disabled: true
+//    });
 	
 	assignUAllButton = new Ext.Action({
     	text: TRANSLATIONS.ID_ASSIGN_ALL_USERS,
@@ -103,12 +103,12 @@ Ext.onReady(function(){
     	handler: AssignAllUsersAction
     });
 	
-	removeUButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_REMOVE,
-    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
-    	handler: RemoveUserAction,
-    	disabled: true
-    });
+//	removeUButton = new Ext.Action({
+//    	text: TRANSLATIONS.ID_REMOVE,
+//    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
+//    	handler: RemoveUserAction,
+//    	disabled: true
+//    });
 	
 	removeUAllButton = new Ext.Action({
     	text: TRANSLATIONS.ID_REMOVE_ALL_USERS,
@@ -168,8 +168,8 @@ Ext.onReady(function(){
 		listeners:{
 			selectionchange: function(sm){
     			switch(sm.getCount()){
-    			case 0: assignButton.disable(); break;
-    			default: assignButton.enable(); break;	
+    			case 0: Ext.getCmp('assignButton').disable(); break;
+    			default: Ext.getCmp('assignButton').enable(); break;	
     			}
     		}
 		}
@@ -180,12 +180,54 @@ Ext.onReady(function(){
 		listeners:{
 			selectionchange: function(sm){
     			switch(sm.getCount()){
-    			case 0: removeButton.disable(); break;
-    			default: (ROLES.ROL_UID==pm_admin) ? removeButton.disable() : removeButton.enable(); break;	
+    			case 0: Ext.getCmp('removeButton').disable(); break;
+    			default: (ROLES.ROL_UID==pm_admin)? Ext.getCmp('removeButton').disable() : Ext.getCmp('removeButton').enable(); break;	
     			}
     		}
 		}
 	});
+	
+	searchTextA = new Ext.form.TextField ({
+        id: 'searchTextA',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 110,
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+            	DoSearchA();
+            }
+          }
+        }
+    });
+	
+	clearTextButtonA = new Ext.Action({
+    	text: 'X',
+    	ctCls:'pm_search_x_button',
+    	handler: GridByDefaultA
+    });
+	
+	searchTextP = new Ext.form.TextField ({
+        id: 'searchTextP',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 110,
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+            	DoSearchP();
+            }
+          }
+        }
+    });
+	
+	clearTextButtonP = new Ext.Action({
+    	text: 'X',
+    	ctCls:'pm_search_x_button',
+    	handler: GridByDefaultP
+    });
 	
   	availableGrid = new Ext.grid.GridPanel({
   		    layout			: 'fit',
@@ -208,7 +250,7 @@ Ext.onReady(function(){
         	frame			: false,
         	columnLines		: false,
         	viewConfig		: {forceFit:true},
-            tbar: [TRANSLATIONS.ID_AVAILABLE_PERMISSIONS,{xtype: 'tbfill'},'-',assignButton],
+            tbar: [TRANSLATIONS.ID_AVAILABLE_PERMISSIONS,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
             bbar: [{xtype: 'tbfill'}, assignAllButton],
             listeners: {rowdblclick: AssignPermissionAction} 
     });
@@ -233,9 +275,24 @@ Ext.onReady(function(){
         	frame			: false,
         	columnLines		: false,
         	viewConfig		: {forceFit:true},
-            tbar: [TRANSLATIONS.ID_ASSIGNED_PERMISSIONS,{xtype: 'tbfill'},'-',removeButton],
+            tbar: [TRANSLATIONS.ID_ASSIGNED_PERMISSIONS,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
             bbar: [{xtype: 'tbfill'},removeAllButton],
         	listeners: {rowdblclick: RemovePermissionAction} 
+    });
+  	
+  	buttonsPanel = new Ext.Panel({
+	    width	 	 : 40,
+		layout       : {
+            type:'vbox',
+            padding:'0',
+            pack:'center',
+            align:'center'
+        },
+        defaults:{margins:'0 0 35 0'},
+        items:[
+               {xtype:'button',text: '>>', handler: AssignPermissionAction, id: 'assignButton', disabled: true},
+               {xtype:'button',text: '<<', handler: RemovePermissionAction, id: 'removeButton', disabled: true}
+               ]
     });
   	
   	RefreshPermissions();
@@ -247,7 +304,7 @@ Ext.onReady(function(){
     		layout       : 'hbox',
    		    defaults     : { flex : 1 }, //auto stretch
     		layoutConfig : { align : 'stretch' },
-    		items        : [availableGrid,{xtype: '', width: 10},assignedGrid],
+    		items        : [availableGrid,buttonsPanel,assignedGrid],
     		viewConfig	 : {forceFit:true}
 
     });
@@ -300,8 +357,8 @@ Ext.onReady(function(){
 		listeners:{
 			selectionchange: function(sm){
     			switch(sm.getCount()){
-    			case 0: assignUButton.disable(); break;
-    			default: assignUButton.enable(); break;	
+    			case 0: Ext.getCmp('assignUButton').disable(); break;
+    			default: Ext.getCmp('assignUButton').enable(); break;	
     			}
     		}
 		}
@@ -312,12 +369,54 @@ Ext.onReady(function(){
 		listeners:{
 			selectionchange: function(sm){
     			switch(sm.getCount()){
-    			case 0: removeUButton.disable(); break;
-    			default: removeUButton.enable(); break;	
+    			case 0: Ext.getCmp('removeUButton').disable(); break;
+    			default: Ext.getCmp('removeUButton').enable(); break;	
     			}
     		}
 		}
 	});
+	
+	searchTextU = new Ext.form.TextField ({
+        id: 'searchTextU',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 110,
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+            	DoSearchU();
+            }
+          }
+        }
+    });
+	
+	clearTextButtonU = new Ext.Action({
+    	text: 'X',
+    	ctCls:'pm_search_x_button',
+    	handler: GridByDefaultU
+    });
+	
+	searchTextX = new Ext.form.TextField ({
+        id: 'searchTextX',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 110,
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+            	DoSearchX();
+            }
+          }
+        }
+    });
+	
+	clearTextButtonX = new Ext.Action({
+    	text: 'X',
+    	ctCls:'pm_search_x_button',
+    	handler: GridByDefaultX
+    });
     
     availableUGrid = new Ext.grid.GridPanel({
 		    layout			: 'fit',
@@ -340,7 +439,7 @@ Ext.onReady(function(){
     	frame			: false,
     	columnLines		: false,
     	viewConfig		: {forceFit:true},
-        tbar: [TRANSLATIONS.ID_AVAILABLE_USERS,{xtype: 'tbfill'},'-',assignUButton],
+        tbar: [TRANSLATIONS.ID_AVAILABLE_USERS,{xtype: 'tbfill'},'-',searchTextU, clearTextButtonU],
         bbar: [{xtype: 'tbfill'}, assignUAllButton],
         listeners: {rowdblclick: AssignUserAction} 
     });
@@ -365,9 +464,24 @@ Ext.onReady(function(){
     	frame			: false,
     	columnLines		: false,
     	viewConfig		: {forceFit:true},
-        tbar: [TRANSLATIONS.ID_ASSIGNED_USERS,{xtype: 'tbfill'},'-',removeUButton],
+        tbar: [TRANSLATIONS.ID_ASSIGNED_USERS,{xtype: 'tbfill'},'-',searchTextX, clearTextButtonX],
         bbar: [{xtype: 'tbfill'},removeUAllButton],
     	listeners: {rowdblclick: RemoveUserAction} 
+    });
+    
+    buttonsUPanel = new Ext.Panel({
+	    width	 	 : 40,
+		layout       : {
+            type:'vbox',
+            padding:'0',
+            pack:'center',
+            align:'center'
+        },
+        defaults:{margins:'0 0 35 0'},
+        items:[
+               {xtype:'button',text: '>>', handler: AssignUserAction, id: 'assignUButton', disabled: true},
+               {xtype:'button',text: '<<', handler: RemoveUserAction, id: 'removeUButton', disabled: true}
+               ]
     });
     
     RefreshUsers();
@@ -379,7 +493,7 @@ Ext.onReady(function(){
     		layout       : 'hbox',
    		    defaults     : { flex : 1 }, //auto stretch
     		layoutConfig : { align : 'stretch' },
-    		items        : [availableUGrid,{xtype: '', width: 10},assignedUGrid],
+    		items        : [availableUGrid,buttonsUPanel,assignedUGrid],
     		viewConfig	 : {forceFit:true}
     });
     
@@ -495,14 +609,14 @@ DDLoadUsers = function(){
 
 //REFRESH PERMISSION GRIDS
 RefreshPermissions = function(){
-	availableGrid.store.load();
-	assignedGrid.store.load();
+	DoSearchA();
+	DoSearchP();
 }
 
 //REFRESH USERS GRIDS
 RefreshUsers = function(){
-	availableUGrid.store.load();
-	assignedUGrid.store.load();
+	DoSearchX();
+	DoSearchU();
 }
 
 //FAILURE AJAX FUNCTION
@@ -682,6 +796,46 @@ RemoveAllUsersAction = function(){
 	}
 }
 
+//Function DoSearch Available
+DoSearchA = function(){
+	availableGrid.store.load({params: {textFilter: searchTextA.getValue()}});
+}
 
+//Function DoSearch Assigned
+DoSearchP = function(){
+	assignedGrid.store.load({params: {textFilter: searchTextP.getValue()}});
+}
 
+//Load Grid By Default Available Members
+GridByDefaultA = function(){
+	searchTextA.reset();
+	availableGrid.store.load();
+}
 
+//Load Grid By Default Assigned Members
+GridByDefaultP = function(){
+	searchTextP.reset();
+	assignedGrid.store.load();
+}
+
+//Function DoSearch Available
+DoSearchU = function(){
+	availableUGrid.store.load({params: {textFilter: searchTextU.getValue()}});
+}
+
+//Function DoSearch Assigned
+DoSearchX = function(){
+	assignedUGrid.store.load({params: {textFilter: searchTextX.getValue()}});
+}
+
+//Load Grid By Default Available Members
+GridByDefaultU = function(){
+	searchTextU.reset();
+	availableUGrid.store.load();
+}
+
+//Load Grid By Default Assigned Members
+GridByDefaultX = function(){
+	searchTextX.reset();
+	assignedUGrid.store.load();
+}

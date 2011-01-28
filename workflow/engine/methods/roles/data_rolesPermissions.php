@@ -28,8 +28,10 @@ $TYPE_DATA = $_GET["type"];
 
 global $RBAC;
 
-if ($TYPE_DATA=='list') $oDataset = $RBAC->getRolePermissions($ROL_UID);
-if ($TYPE_DATA=='show') $oDataset = $RBAC->getAllPermissions($ROL_UID,$RBAC->sSystem);
+$filter = (isset($_REQUEST['textFilter']))? $_REQUEST['textFilter'] : '';
+
+if ($TYPE_DATA=='list') $oDataset = $RBAC->getRolePermissions($ROL_UID,$filter);
+if ($TYPE_DATA=='show') $oDataset = $RBAC->getAllPermissions($ROL_UID,$RBAC->sSystem,$filter);
 
 $rows = Array();
 while($oDataset->next()){

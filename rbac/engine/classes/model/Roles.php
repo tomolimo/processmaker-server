@@ -313,7 +313,7 @@ class Roles extends BaseRoles {
         return $ret;
     }
     
-    function getRoleUsers($ROL_UID) {
+    function getRoleUsers($ROL_UID, $filter='') {
         try {
             $criteria = new Criteria();
             $criteria->addSelectColumn(RolesPeer::ROL_UID);
@@ -335,6 +335,14 @@ class Roles extends BaseRoles {
             $criteria->addJoin(RolesPeer::ROL_UID, UsersRolesPeer::ROL_UID);
             $criteria->addJoin(UsersRolesPeer::USR_UID, RbacUsersPeer::USR_UID);
             
+            if ($filter != ''){
+            	$criteria->add(
+            	  $criteria->getNewCriterion(RbacUsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+            	  $criteria->getNewCriterion(RbacUsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+            	  $criteria->getNewCriterion(RbacUsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)))
+            	);
+            }
+            
             $oDataset = RolesPeer::doSelectRS($criteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             return $oDataset;
@@ -344,7 +352,7 @@ class Roles extends BaseRoles {
         }
     }
     
-    function getAllUsers($ROL_UID) {
+    function getAllUsers($ROL_UID, $filter='') {
         try {
             $c = new Criteria();
             $c->addSelectColumn(RbacUsersPeer::USR_UID);
@@ -370,6 +378,14 @@ class Roles extends BaseRoles {
             $criteria->addSelectColumn(RbacUsersPeer::USR_LASTNAME);
             $criteria->add(RbacUsersPeer::USR_STATUS, 1, Criteria::EQUAL);
             $criteria->add(RbacUsersPeer::USR_UID, $a, Criteria::NOT_IN);
+            
+            if ($filter != ''){
+            	$criteria->add(
+            	  $criteria->getNewCriterion(RbacUsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+            	  $criteria->getNewCriterion(RbacUsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+            	  $criteria->getNewCriterion(RbacUsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)))
+            	);
+            }
             
             $oDataset = RbacUsersPeer::doSelectRS($criteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -436,7 +452,7 @@ class Roles extends BaseRoles {
         UsersRolesPeer::doDelete($crit);
     }
     
-    function getRolePermissions($ROL_UID) {
+    function getRolePermissions($ROL_UID, $filter='') {
         try {
             $criteria = new Criteria();
             $criteria->addSelectColumn(RolesPeer::ROL_UID);
@@ -456,6 +472,10 @@ class Roles extends BaseRoles {
             $criteria->addJoin(RolesPeer::ROL_UID, RolesPermissionsPeer::ROL_UID);
             $criteria->addJoin(RolesPermissionsPeer::PER_UID, PermissionsPeer::PER_UID);
             
+            if ($filter != ''){
+            	$criteria->add(PermissionsPeer::PER_CODE, '%'.$filter.'%',Criteria::LIKE);
+            }
+            
             $oDataset = RolesPeer::doSelectRS($criteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             return $oDataset;
@@ -465,7 +485,7 @@ class Roles extends BaseRoles {
         }
     }
     
-    function getAllPermissions($ROL_UID, $PER_SYSTEM = "") {
+    function getAllPermissions($ROL_UID, $PER_SYSTEM = "", $filter='') {
         try {
             $c = new Criteria();
             $c->addSelectColumn(PermissionsPeer::PER_UID);
@@ -496,6 +516,10 @@ class Roles extends BaseRoles {
                 $criteria->add(SystemsPeer::SYS_CODE, $PER_SYSTEM);
             }
             $criteria->addJoin(PermissionsPeer::PER_SYSTEM, SystemsPeer::SYS_UID);
+            
+        	if ($filter != ''){
+            	$criteria->add(PermissionsPeer::PER_CODE, '%'.$filter.'%',Criteria::LIKE);
+            }
             
             $oDataset = PermissionsPeer::doSelectRS($criteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);

@@ -200,9 +200,9 @@ try {
   			break;
         case 'availableGroups':
         	G::LoadClass('groups');
-        	
+        	$filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
         	$groups = new Groups();
-        	$criteria = $groups->getAvailableGroupsCriteria($_REQUEST['uUID']);
+        	$criteria = $groups->getAvailableGroupsCriteria($_REQUEST['uUID'],$filter);
       		$objects  = GroupwfPeer::doSelectRS($criteria);
       		$objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       		$arr = Array();
@@ -213,9 +213,9 @@ try {
         	break;
          case 'assignedGroups':
         	G::LoadClass('groups');
-        	
+        	$filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
         	$groups = new Groups();
-        	$criteria = $groups->getAssignedGroupsCriteria($_REQUEST['uUID']);
+        	$criteria = $groups->getAssignedGroupsCriteria($_REQUEST['uUID'],$filter);
       		$objects  = GroupwfPeer::doSelectRS($criteria);
       		$objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       		$arr = Array();

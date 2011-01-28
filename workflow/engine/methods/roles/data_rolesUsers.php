@@ -28,8 +28,10 @@ $TYPE_DATA = $_GET["type"];
 
 global $RBAC;
 
-if ($TYPE_DATA=='list') $oDataset = $RBAC->getRoleUsers($ROL_UID);
-if ($TYPE_DATA=='show') $oDataset = $RBAC->getAllUsers($ROL_UID);
+$filter = (isset($_REQUEST['textFilter']))? $_REQUEST['textFilter'] : '';
+
+if ($TYPE_DATA=='list') $oDataset = $RBAC->getRoleUsers($ROL_UID, $filter);
+if ($TYPE_DATA=='show') $oDataset = $RBAC->getAllUsers($ROL_UID, $filter);
 
 $rows = Array();
 while($oDataset->next()){

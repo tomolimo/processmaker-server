@@ -176,7 +176,7 @@ class Groups
   * @return object
   */
   
-  function getAvailableGroupsCriteria($sUserUid){
+  function getAvailableGroupsCriteria($sUserUid, $filter=''){
   	try{
   		$oCriteria = new Criteria('workflow');
   		$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
@@ -199,6 +199,11 @@ class Groups
         $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
         $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
         $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+        
+  		if ($filter !=''){
+        	$oCriteria->add(ContentPeer::CON_VALUE,'%'.$filter.'%',Criteria::LIKE);
+        }
+        
       	return $oCriteria;
   	}
   	catch(exception $e){
@@ -213,7 +218,7 @@ class Groups
   * @return object
   */
   
-  function getAssignedGroupsCriteria($sUserUid){
+  function getAssignedGroupsCriteria($sUserUid, $filter=''){
   	try{
   		$oCriteria = new Criteria('workflow');
         $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
@@ -225,6 +230,11 @@ class Groups
         $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
         $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
         $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+        
+        if ($filter !=''){
+        	$oCriteria->add(ContentPeer::CON_VALUE,'%'.$filter.'%',Criteria::LIKE);
+        }
+        
       	return $oCriteria;
   	}
   	catch(exception $e){

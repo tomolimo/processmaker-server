@@ -653,8 +653,8 @@ class RBAC
   * @param  string $ROL_UID
   * @return $this->rolesObj->getRoleUsers
   */
-  function getRoleUsers($ROL_UID){
-  return $this->rolesObj->getRoleUsers($ROL_UID);
+  function getRoleUsers($ROL_UID,$filter=''){
+  return $this->rolesObj->getRoleUsers($ROL_UID,$filter);
   }
   
   /**
@@ -693,8 +693,8 @@ class RBAC
   * @param  string $ROL_UID
   * @return $this->rolesObj->getAllUsers
   */
-  function getAllUsers($ROL_UID){
-  return $this->rolesObj->getAllUsers($ROL_UID);
+  function getAllUsers($ROL_UID, $filter=''){
+  return $this->rolesObj->getAllUsers($ROL_UID,$filter);
   }
   
   /**
@@ -719,8 +719,8 @@ class RBAC
   * @param  string $ROL_UID
   * @return $this->rolesObj->getRolePermissions
   */
-  function getRolePermissions($ROL_UID){
-  return $this->rolesObj->getRolePermissions($ROL_UID);
+  function getRolePermissions($ROL_UID, $filter=''){
+  return $this->rolesObj->getRolePermissions($ROL_UID,$filter);
   }
   
   /**
@@ -733,8 +733,8 @@ class RBAC
   * @param  string $PER_SYSTEM
   * @return $this->rolesObj->getAllPermissions
   */
-  function getAllPermissions($ROL_UID,$PER_SYSTEM=""){      
-      return $this->rolesObj->getAllPermissions($ROL_UID,$PER_SYSTEM);
+  function getAllPermissions($ROL_UID,$PER_SYSTEM="",$filter=''){      
+      return $this->rolesObj->getAllPermissions($ROL_UID,$PER_SYSTEM,$filter);
   }
   
   /**
