@@ -435,17 +435,22 @@ function replaceAll( text, busca, reemplaza ){
     this.putFormatNumber =function (evt) { 
     if((typeof(evt)==="undefined" || evt===0) && me.mask!='' ){ 
       var numberSet=me.element.value.split('.');
-      if(numberSet.length >=2)return;
+//      if(numberSet.length >=2)return;
       
       maskD = me.mask.split(';');
       maskL = (maskD.length >1)?maskD[1]:maskD[0];  
       maskWithoutC =replaceAll(maskL,",",""); 
       //maskWithoutC =replaceAll(maskWithoutC,".","");
       //maskWithoutC  =replaceAll(maskWithoutC,"#","");
-      maskWithoutC  =replaceAll(maskWithoutC,"%","");	
+      //maskWithoutC  =replaceAll(maskWithoutC,"%","");	
       maskWithoutC  =replaceAll(maskWithoutC," ","");
       maskWithoutPto=replaceAll(maskWithoutC,".","");
-      
+      if(numberSet.length >=2){
+       if(maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length) =="%")
+        me.element.value  =	me.element.value+' '+maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length);
+      return;
+      }
+
       maskElemnts = maskWithoutC.split('.');
       maskpartInt = maskElemnts[0].split('');
       //in here is the int part maskpartInt
@@ -504,7 +509,13 @@ function replaceAll( text, busca, reemplaza ){
           onlynumber =parseInt(onlynumber / 10);               
           cc++;
           }
-          me.element.value = newnamber;
+          if(maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length) =="%")
+           me.element.value = newnamber+' '+maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length); 
+          else
+           me.element.value = newnamber;
+        } else {
+            if(maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length) =="%")
+             me.element.value =  onlynumber +' '+maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length); 
         }
       }
     }
