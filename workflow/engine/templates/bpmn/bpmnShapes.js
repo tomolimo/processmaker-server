@@ -76,21 +76,6 @@ bpmnTask.prototype.paint = function () {
  */
     this.bpmnText = new jsGraphics(this.id);
 
-/*if(this.taskName.length <= 17)
-    {
-        var padleft = 0.025*this.getWidth();
-        var padtop = 0.36*this.getHeight();
-        var rectwidth = this.getWidth() - padleft;
-        var rectheight = 0.54*this.getHeight();
-    }
-    else
-    {
-        padleft = 0.1*this.getWidth();
-        padtop = 0.15*this.getHeight();
-        rectwidth = this.getWidth() - padleft;
-        rectheight = 0.75*this.getHeight();
-    }
-*/
     var len = this.getWidth() / 18;
     if (len >= 6) {
         //len = 1.5;

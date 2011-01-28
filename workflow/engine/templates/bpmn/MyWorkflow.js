@@ -1996,6 +1996,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                                 newObj.conn.id = resp[1];
 
                                 //replacing old gateway UID with response UID
+                                preObj.html.id = resp[0];
                                 preObj.id = resp[0];
                             }
                         }
@@ -2126,13 +2127,15 @@ MyWorkflow.prototype.getDeleteCriteria = function()
              workflow.deleteRoute(route,1);
         break;
   }
-    workflow.deleteShape(workflow.currentSelection);
-
-    if(shape.match(/Gateway/))
+  if(shape.match(/Gateway/))
         {
             workflow.currentSelection.actiontype = 'deleteGateway';
             workflow.deleteShape(workflow.currentSelection);
         }
+  else
+        workflow.deleteShape(workflow.currentSelection);
+
+    
 
 }
 

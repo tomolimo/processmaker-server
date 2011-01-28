@@ -393,29 +393,6 @@ class Tasks
       throw($oError);
     }
   }
-
-   /*
-   * Delete a route using gatewayUID
-   * @param string $sGatewayUID
-   * @return boolean
-   */
-  public function deleteRoutesusingGateway($sGatewayUID = '')
-  {
-      try {
-      $oCriteria = new Criteria('workflow');
-      //$oCriteria->addSelectColumn('ROU_UID');
-      $oCriteria->add(RoutePeer::GAT_UID, $sGatewayUID);
-      RoutePeer::doDelete($oCriteria);
-      return true;
-//      $oDataset = RoutePeer::doSelectRS($oCriteria);
-//      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-//      $oDataset->next();
-//      $aRow = $oDataset->getRow();
-     }
-     catch (Exception $oError) {
-      throw($oError);
-    }
-  }
   
  /**
   * Assign a user to task

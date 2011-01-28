@@ -1398,18 +1398,37 @@ class processMap {
 
   /*
    * Delete a gateway
+   * @param string $sProcessUID
    * @param string $sGatewayUID
    * @return boolean
    */
 
-  function deleteGateway($sGatewayUID = '') {
+  function deleteGateway($sProcessUID = '', $sGatewayUID = '') {
     try {
+      //First get all routes information related to $sGatewayUID
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn('ROU_UID');
+      $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);
+      $oCriteria->add(RoutePeer::GAT_UID, $sGatewayUID);
+      $oDataset = RoutePeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while($aRow = $oDataset->getRow()){
+          $aRoutes [] = $aRow ['ROU_UID'];
+          $oDataset->next();
+      }
+
       $oGateway = new Gateway ( );
       if($oGateway->gatewayExists($sGatewayUID))
       {
           $oTasks = new Tasks ( );
-          $oTasks->deleteRoutesusingGateway($sGatewayUID);
           $res = $oGateway->remove($sGatewayUID);
+          if($res){
+              $oRoute = new Route( );
+              foreach($aRoutes as $sRouteId){
+                    $oRoute->remove($sRouteId);
+              }
+          }
       }
       return;
     } catch (Exception $oError) {

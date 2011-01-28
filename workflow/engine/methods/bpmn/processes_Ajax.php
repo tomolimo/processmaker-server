@@ -59,7 +59,7 @@ if ( isset ($_REQUEST['action']) ) {
   	break;
       case 'saveGatewayPosition':
   	  $sOutput = $oProcessMap->saveGatewayPosition($oData->uid, $oData->position->x, $oData->position->y);
-          echo $sOutput;
+          //echo $sOutput;
   	break;
       case 'saveTaskCordinates':
   	  $sOutput = $oProcessMap->saveTaskCordinates($oData->uid, $oData->position->x, $oData->position->y);
@@ -74,7 +74,7 @@ if ( isset ($_REQUEST['action']) ) {
           echo $sOutput;
   	break;
      case 'deleteGateway':
-  	  $sOutput = $oProcessMap->deleteGateway($oData->gat_uid);
+  	  $sOutput = $oProcessMap->deleteGateway($oData->pro_uid, $oData->gat_uid);
           echo $sOutput;
   	break;
       case 'updateTaskName':
