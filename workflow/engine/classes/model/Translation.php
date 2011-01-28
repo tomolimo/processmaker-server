@@ -98,10 +98,6 @@ class Translation extends BaseTranslation {
       if( ! is_dir(dirname($cacheFile)) ) 
         G::mk_dir(dirname($cacheFile));
 
-      if (!file_exists($cacheFile) || !file_exists($cacheFileJS)){
-          $error = 'translation file does not exist';
-          throw new Exception($error);
-      }
       $f = fopen( $cacheFile , 'w+');
       fwrite( $f , "<?php\n" );
       fwrite( $f , '$translation =' . 'unserialize(\'' . addcslashes( serialize ( $translation ), '\\\'' ) . "');\n");
@@ -120,9 +116,8 @@ class Translation extends BaseTranslation {
       $res['rowsJS'] = count (  $translationJS );
       return $res;    
     } catch( Exception $e ) {
-      //echo 'Caught exception: ',  $e->getMessage(), "\n";
+      echo $e->getMessage();
     }
-
   }
 
   /**
