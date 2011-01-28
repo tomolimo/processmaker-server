@@ -1373,8 +1373,7 @@ var processmap=function(){
 							};
 						panel.events = {
 						  remove: function() {
-							if(PROCESSMAP_STEP_EDIT)
-							  window.location.href = window.location;
+							
 					      }.extend(this)
 						};	
 						panel.make();
@@ -1394,8 +1393,7 @@ var processmap=function(){
 						};
 						panel.events = { //neyek
 						  remove: function() {
-							if(PROCESSMAP_USER_EDIT)
-							  window.location.href = window.location;
+							
 					      }.extend(this)
 						};	
 						panel.make();
