@@ -1,13 +1,13 @@
-bpmnTask = function () {
+bpmnTask = function (_30ab) {
     VectorFigure.call(this);
 
-   if(typeof workflow.boundaryEvent != 'undefined' && workflow.boundaryEvent == true)
+   if(typeof _30ab.boundaryEvent != 'undefined' && _30ab.boundaryEvent == true)
    {
-      this.boundaryEvent = workflow.boundaryEvent;
+      this.boundaryEvent = _30ab.boundaryEvent;
    }
    //Getting width and height from DB
-   if(typeof workflow.task_width != 'undefined' && typeof workflow.task_height != 'undefined')
-        this.setDimension(workflow.task_width, workflow.task_height);
+   if(typeof _30ab.task_width != 'undefined' && typeof _30ab.task_height != 'undefined')
+        this.setDimension(_30ab.task_width, _30ab.task_height);
    else
         this.setDimension(165, 40);
 
@@ -16,7 +16,7 @@ bpmnTask = function () {
         this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
 
 
-    this.taskName = workflow.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+    this.taskName = _30ab.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnTask.prototype = new VectorFigure;
@@ -245,9 +245,9 @@ this.workflow.onKeyDown(_3e0e,ctrl);
 }
 };
 
-bpmnTask.prototype.setWorkflow = function () {
-    VectorFigure.prototype.setWorkflow.call(this, workflow);
-    if (workflow != null) {
+bpmnTask.prototype.setWorkflow = function (_40c5) {
+    VectorFigure.prototype.setWorkflow.call(this, _40c5);
+    if (_40c5 != null) {
 /*Adding Port to the Task After dragging Task on the Canvas
          *Ports will be invisibe After Drag and Drop, But It will be created
          */
@@ -258,7 +258,7 @@ bpmnTask.prototype.setWorkflow = function () {
 
         for (var i = 0; i < TaskPortName.length; i++) {
             eval('this.' + TaskPortName[i] + ' = new ' + TaskPortType[i] + '()'); //Create New Port
-            eval('this.' + TaskPortName[i] + '.setWorkflow()'); //Add port to the workflow
+            eval('this.' + TaskPortName[i] + '.setWorkflow(_40c5)'); //Add port to the workflow
             eval('this.' + TaskPortName[i] + '.setName("' + TaskPortName[i] + '")'); //Set PortName
             eval('this.' + TaskPortName[i] + '.setZOrder(-1)'); //Set Z-Order of the port to -1. It will be below all the figure
             eval('this.' + TaskPortName[i] + '.setBackgroundColor(new Color(255, 255, 255))'); //Setting Background of the port to white
@@ -267,7 +267,6 @@ bpmnTask.prototype.setWorkflow = function () {
         }
     }
 };
-
 
 InputPort.prototype.onDrop = function (port) {
     if (port.getMaxFanOut && port.getMaxFanOut() <= port.getFanOut()) {
@@ -294,7 +293,7 @@ InputPort.prototype.onDrop = function (port) {
                 newObj.reverse = 1;           //setting reverse parameter if user is routing from down to up
                 this.workflow.saveRoute(preObj,newObj);
             }
-            
+
        //Routing from task to start event
        else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Event/) && port.parentNode.type.match(/Start/))
             {
@@ -344,7 +343,7 @@ InputPort.prototype.onDrop = function (port) {
                     this.workflow.saveEvents(preObj,workflow.currentSelection);
                   }
             }
-        
+
     }
 };
 
