@@ -3014,7 +3014,7 @@ class Processes {
     $aRoutesUID = $this->createRouteRows($oData->routes);
     $this->createLaneRows($oData->lanes);
 
-    if($oData->gateways == ''){
+    if(!isset($oData->gateways)){
            //Adding gateway information while importing processes from older version
           //Making compatible with old export process
           $oRoutes = $oData->routes;
