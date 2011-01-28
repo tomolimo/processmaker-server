@@ -142,11 +142,11 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 </SELECT_3>
 
 <SCH_START_DAY type="radiogroup" required="0" mode="edit" options="Array">
-<en>Day <option name="1">Day</option>
+<en> <option name="1">Day</option>
 <option name="2">The</option>
 </en>
 </SCH_START_DAY>
-<SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Any" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
+<SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Int" mask="##" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
 <en/>
 </SCH_START_DAY_OPT_1>
 <SCH_START_DAY_OPT_2_WEEKS type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array" dependentfields="" defaultvalue="" hint="" sqlconnection="">

@@ -128,7 +128,7 @@
 <option name="2">The day </option>
 </en>
 </SCH_START_DAY>
-<SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Any" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
+<SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Int" mask="##" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
 <en/>
 </SCH_START_DAY_OPT_1>
 <SCH_START_DAY_OPT_2_WEEKS type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array" dependentfields="" defaultvalue="" hint="" sqlconnection="">
