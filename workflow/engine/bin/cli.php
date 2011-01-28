@@ -1,7 +1,8 @@
 <?php
 /**
  * cli.php
- *
+ * @package workflow-engine-bin
+ * 
  * ProcessMaker Open Source Edition
  * Copyright (C) 2011 Colosa Inc.
  *
@@ -26,7 +27,7 @@
 
   /* Windows supports both / and \ as path separators, so use the Unix separator
    * for maximum compatibility.
-   */
+   */ 
   define('PATH_SEP', '/');
 
   define('PATH_HOME',     WORKFLOW_PATH );

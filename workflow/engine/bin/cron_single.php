@@ -1,4 +1,8 @@
 <?php
+/**
+ * cron_single.php
+ * @package workflow-engine-bin
+ */
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ini_set('memory_limit', '128M');

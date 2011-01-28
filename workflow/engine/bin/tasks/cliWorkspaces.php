@@ -23,7 +23,7 @@
  *
  * @author Alexandre Rosenfeld <alexandre@colosa.com>
  * @package workflow-engine-bin-tasks
- **/
+ */
 
 CLI::taskName('info');
 CLI::taskDescription(<<<EOT
@@ -145,6 +145,10 @@ EOT
 CLI::taskArg('workspace-name', true, true);
 CLI::taskRun(run_translation_upgrade);
 
+  /**
+   * Function run_info
+   * access public
+   */
 function run_info($args, $opts) {
   $workspaces = get_workspaces_from_args($args, false);
   workspaceTools::printSysInfo();

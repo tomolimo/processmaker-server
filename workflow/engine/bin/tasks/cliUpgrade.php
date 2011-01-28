@@ -23,7 +23,7 @@
  *
  * @author Alexandre Rosenfeld <alexandre@colosa.com>
  * @package workflow-engine-bin-tasks
- **/
+ */
 
 G::LoadClass("system");
 G::LoadClass("wsTools");

@@ -23,11 +23,11 @@
  *
  * @author Alexandre Rosenfeld <alexandre@colosa.com>
  * @package workflow-engine-bin-tasks
- **/
+ */
 
 /* Get the size of the terminal (only works on Linux, on Windows it's always 80) */
 preg_match_all("/rows.([0-9]+);.columns.([0-9]+);/", strtolower(exec('stty -a |grep columns')), $output);
-if(sizeof($output) == 3) {
+if(sizeof($output) == 3) { 
   define("COLUMNS", $output[2][0]);
 } else {
   define("COLUMNS", 80);
