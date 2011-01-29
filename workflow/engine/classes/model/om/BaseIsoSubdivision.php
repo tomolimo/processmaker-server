@@ -1,4 +1,8 @@
 <?php
+/**
+ * BaseIsoSubdivision.php
+ * @package    workflow.classes.model.om
+ */
 
 require_once 'propel/om/BaseObject.php';
 
@@ -14,7 +18,7 @@ include_once 'classes/model/IsoSubdivisionPeer.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    workflow.classes.model.om
  */
 abstract class BaseIsoSubdivision extends BaseObject  implements Persistent {
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * BaseCalendarBusinessHours.php
+ * @package    workflow.classes.model.om
+ */
 
 require_once 'propel/om/BaseObject.php';
 
@@ -14,7 +18,7 @@ include_once 'classes/model/CalendarBusinessHoursPeer.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    workflow.classes.model.om
  */
 abstract class BaseCalendarBusinessHours extends BaseObject  implements Persistent {
 

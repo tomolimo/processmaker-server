@@ -1,4 +1,8 @@
 <?php
+/**
+ * BaseAppDelay.php
+ * @package    workflow.classes.model.om
+ */
 
 require_once 'propel/om/BaseObject.php';
 
@@ -14,7 +18,7 @@ include_once 'classes/model/AppDelayPeer.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    workflow.classes.model.om
  */
 abstract class BaseAppDelay extends BaseObject  implements Persistent {
 

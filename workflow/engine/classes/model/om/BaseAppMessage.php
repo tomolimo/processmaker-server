@@ -1,12 +1,13 @@
 <?php
+/**
+ * BaseAppMessage.php
+ * @package    workflow.classes.model.om
+ */
 
 require_once 'propel/om/BaseObject.php';
-
 require_once 'propel/om/Persistent.php';
 
-
 include_once 'propel/util/Criteria.php';
-
 include_once 'classes/model/AppMessagePeer.php';
 
 /**
@@ -14,7 +15,7 @@ include_once 'classes/model/AppMessagePeer.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    workflow.classes.model.om
  */
 abstract class BaseAppMessage extends BaseObject  implements Persistent {
 

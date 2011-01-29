@@ -1,4 +1,8 @@
 <?php
+/**
+ * BaseDbSourcePeer.php
+ * @package    workflow.classes.model.om
+ */
 
 require_once 'propel/util/BasePeer.php';
 // The object class -- needed for instanceof checks in this class.
@@ -10,7 +14,7 @@ include_once 'classes/model/DbSource.php';
  *
  * 
  *
- * @package    classes.model.om
+ * @package    workflow.classes.model.om
  */
 abstract class BaseDbSourcePeer {
 

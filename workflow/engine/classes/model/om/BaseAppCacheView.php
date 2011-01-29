@@ -1,20 +1,19 @@
 <?php
+/**
+ * BaseAppCacheView.php
+ * @package    workflow.classes.model.om
+ */
 
 require_once 'propel/om/BaseObject.php';
-
 require_once 'propel/om/Persistent.php';
 
-
 include_once 'propel/util/Criteria.php';
-
 include_once 'classes/model/AppCacheViewPeer.php';
 
 /**
  * Base class that represents a row from the 'APP_CACHE_VIEW' table.
  *
- * 
- *
- * @package    classes.model.om
+ * @package    workflow.classes.model.om
  */
 abstract class BaseAppCacheView extends BaseObject  implements Persistent {
 
