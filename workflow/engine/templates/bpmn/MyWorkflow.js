@@ -67,26 +67,31 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
         this.contextTaskmenu = new Ext.menu.Menu({
             items: [{
                 text: 'Steps',
+                iconCls: 'button_menu_ext ss_sprite ss_shape_move_forwards',
                 handler: taskExtObj.editTaskSteps,
                 scope: oShape
             },
             {
                 text: 'Users & Users Group',
+                iconCls: 'button_menu_ext ss_sprite ss_group',
                 handler: taskExtObj.editUsers,
                 scope: oShape
             },
             {
                 text: 'Users & Users Groups (ad-hoc)',
+                iconCls: 'button_menu_ext ss_sprite ss_group',
                 handler: taskExtObj.editUsersAdHoc,
                 scope: oShape
             },
             {
                 text: 'Transform To',
+                iconCls: 'button_menu_ext ss_sprite ss_page_refresh',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'Sub Process',
+                            iconCls: 'button_menu_ext ss_sprite ss_layout_link',
                             type:'bpmnSubProcess',
                             scope:oShape,
                             handler: MyWorkflow.prototype.toggleShapes
@@ -97,11 +102,13 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
             },
             {
                 text: 'Attach Event',
+                iconCls: 'button_menu_ext ss_sprite ss_link',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'Timer Boundary Event',
+                            iconCls: 'button_menu_ext ss_sprite ss_clock',
                             type:'bpmnEventBoundaryTimerInter',
                             scope:oShape,
                             handler: MyWorkflow.prototype.toggleShapes

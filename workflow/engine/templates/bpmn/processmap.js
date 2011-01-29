@@ -145,29 +145,39 @@ Ext.onReady ( function() {
             menu: new Ext.menu.Menu({
                 items: [{
                             text    : 'Dynaform',
+                            iconCls: 'button_menu_ext ss_sprite ss_application_form',
                             handler : function() {
                                 processObj.addDynaform();
                             }
                         },
                         {
                             text: 'Input Document',
+                            iconCls: 'button_menu_ext ss_sprite ss_page_white_put',
                             handler : function() {
                                 processObj.addInputDoc();
                             }
                         },{
                             text: 'Output Document',
+                            iconCls: 'button_menu_ext ss_sprite ss_page_white_get',
+
                             handler : function() {
                                 processObj.addOutputDoc();
                             }
-                        },{text: 'Trigger'},
+                        },{
+                            text: 'Trigger',
+                            iconCls: 'button_menu_ext ss_sprite ss_cog'
+                        },
                         {
                             text: 'Report Table',
+                            iconCls: 'button_menu_ext ss_sprite ss_table',
                             handler : function() {
                                 processObj.addReportTable();
                             }
                         },
                         {
-                            text: 'Database Connection',handler : function() {
+                            text: 'Database Connection',
+                            iconCls: 'button_menu_ext ss_sprite ss_database_connect',
+                            handler : function() {
                                 processObj.dbConnection();
                             }
                         }]
@@ -222,19 +232,23 @@ Ext.onReady ( function() {
         items: [{
             text: 'Edit Process',
             handler: ProcessMapObj.editProcess,
-            icon: '/skins/ext/images/gray/shapes/more.gif',
+            //icon: '/skins/ext/images/gray/shapes/more.gif',
+            iconCls: 'button_menu_ext ss_sprite ss_page_white_edit',
             scope: this
         }, {
             text: 'Export Process',
             handler: ProcessMapObj.exportProcess,
+            iconCls: 'button_menu_ext ss_sprite ss_script_go',
             scope: this
         }, {
             text: 'Add Task',
             handler: ProcessMapObj.addTask,
+            iconCls: 'button_menu_ext ss_sprite ss_layout_add',
             scope: this
         }, {
             text: 'Add Subprocess',
             handler: workflow.subProcess,
+            iconCls: 'button_menu_ext ss_sprite ss_layout_link',
             scope: this
         },/* {
             text: 'Horizontal Line',
@@ -250,40 +264,48 @@ Ext.onReady ( function() {
             scope: this
         }, */{
             text: 'Process Permission',
+            iconCls: 'button_menu_ext ss_sprite ss_application_key',
             handler: ProcessMapObj.processPermission,
             scope: this
         },{
             text: 'Process Supervisor',
+            iconCls: 'button_menu_ext ss_sprite ss_group',
             menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'Supervisors',
+                            iconCls: 'button_menu_ext ss_sprite ss_group',
                             handler: ProcessMapObj.processSupervisors
                         },
                         {
                             text: 'DynaForm',
+                            iconCls: 'button_menu_ext ss_sprite ss_application_form',
                             handler: ProcessMapObj.processDynaform
                         },
                         {
                             text: 'Input Documents',
+                            iconCls: 'button_menu_ext ss_sprite ss_page_white_put',
                             handler: ProcessMapObj.processIODoc
                         }
                     ]
                 }
         },{
             text: 'Case Tracker',
+            iconCls: 'button_menu_ext ss_sprite ss_exclamation',
 
             menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'Properties',
+                            iconCls: 'button_menu_ext ss_sprite ss_exclamation',
                             handler: ProcessMapObj.caseTrackerProperties,
                             scope:this
                         },
                         {
                             text: 'Objects',
+                            iconCls: 'button_menu_ext ss_sprite ss_exclamation',
                             handler: ProcessMapObj.caseTrackerObjects,
                             scope:this
                         },
@@ -296,15 +318,18 @@ Ext.onReady ( function() {
                 }
         }, {
             text: 'Process File Manager',
+            iconCls: 'button_menu_ext ss_sprite ss_folder',
             menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'mailTemplates',
+                            iconCls: 'button_menu_ext ss_sprite ss_email',
                             handler: ProcessMapObj.processFileManager
                         },
                         {
                             text: 'public',
+                            iconCls: 'button_menu_ext ss_sprite ss_folder_go',
                             handler: ProcessMapObj.processFileManager
                         }
                     ]
