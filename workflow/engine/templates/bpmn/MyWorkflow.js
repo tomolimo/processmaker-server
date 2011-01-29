@@ -2158,24 +2158,21 @@ MyWorkflow.prototype.zoom = function(sType)
 
    var lines=workflow.getLines();
    var size=lines.getSize();
-   
 
-    if(typeof workflow.zoomFactor != 'undefined' && sType == 'in' && workflow.zoomFactor != 0.2)
-        {
-            var zoomFactor = workflow.zoomFactor + 0.2;
-            workflow.zoomFactor = zoomFactor;
-        }
-    else if(typeof workflow.zoomFactor != 'undefined' && sType == 'out' && workflow.zoomFactor != 0.2)
-        {
-            zoomFactor = workflow.zoomFactor - 0.2;
-            workflow.zoomFactor = zoomFactor;
-        }
-    else
-        {
-            zoomFactor = 0.2;
-            workflow.zoomFactor = zoomFactor;
-        }
+   if(typeof workflow.limitFlag == 'undefined')
+       workflow.limitFlag = 0;
 
+    var zoomFactor = 0.2;
+
+        /*if( sType == 'in' )
+        {
+            ++workflow.limitFlag;
+        }
+        else if(sType == 'out')
+        {
+            --workflow.limitFlag;
+        }*/
+    
 //   for(var i=0;i<size;i++){
 //        lines.data[i].setStartPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
 //        lines.data[i].setEndPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
@@ -2187,6 +2184,7 @@ MyWorkflow.prototype.zoom = function(sType)
    var height = fig.getHeight();
    var xPos = fig.getX();
    var yPos = fig.getY();
+  
    if(sType == 'in')
      {
         if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
@@ -2203,11 +2201,12 @@ MyWorkflow.prototype.zoom = function(sType)
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
           }
+          ++workflow.limitFlag;
        fig.setPosition(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
      }
-    else
+    else if(sType == 'out' && workflow.limitFlag > 0)
      {
-       if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
+       if(fig.type.match(/Event/) || fig.type.match(/Gateway/) )
           {
               width  -= zoomFactor*25;
               height -= zoomFactor*25;
@@ -2221,10 +2220,10 @@ MyWorkflow.prototype.zoom = function(sType)
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
           }
+          --workflow.limitFlag;
        fig.setPosition(xPos - zoomFactor*xPos,yPos - zoomFactor*yPos);
      }
 
-   
    //else if(sType == 'out' && !fig.type.match(/Event/))
     //fig.setPosition(xPos,yPos - 10);
 
