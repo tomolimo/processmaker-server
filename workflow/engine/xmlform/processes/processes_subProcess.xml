@@ -28,7 +28,7 @@
 </PROCESSES>
 
 <SP_SYNCHRONOUS type="dropdown" defaultvalue="0">
-  <en>Type<option name="">Asynchronous</option><option name="1">Synchronous</option></en>
+  <en>Type<option name="0">Asynchronous</option><option name="1">Synchronous</option></en>
 </SP_SYNCHRONOUS>
 
 <SUBTITLE1 type="subtitle">
