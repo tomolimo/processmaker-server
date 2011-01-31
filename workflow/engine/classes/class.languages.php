@@ -42,10 +42,16 @@ class languages {
   */
   function log ( $text ) 
   {
-    $logFile = PATH_DATA . 'log' . PATH_SEP . 'query.log';
+    $logDir = PATH_DATA . 'log';
+    if (!file_exists($logDir))
+      if (!mkdir($logDir))
+        return;
+    $logFile = "$logDir/query.log";
     $fp      = fopen ( $logFile, 'a+' );
-    fwrite ( $fp, date("Y-m-d H:i:s") . " " . $text  . "\n" );
-    fclose ( $fp );
+    if ($fp !== false) {
+      fwrite ( $fp, date("Y-m-d H:i:s") . " " . $text  . "\n" );
+      fclose ( $fp );
+    }
   }
   
   /*

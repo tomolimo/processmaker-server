@@ -382,10 +382,16 @@ class database extends database_base {
       if ( substr($sQuery,0, 4) == 'DESC'   ) $found = true;
       if ( substr($sQuery,0, 4) == 'USE '   ) $found = true;
       if ( ! $found ) {
-      $logFile = PATH_DATA . 'log' . PATH_SEP . 'query.log';
-      $fp = fopen ( $logFile, 'a+' );
-      fwrite ( $fp, date("Y-m-d H:i:s") . " " . $this->sDataBase . " " . $sQuery  . "\n" );
-      fclose ( $fp );
+        $logDir = PATH_DATA . 'log';
+        if (!file_exists($logDir))
+          if (!mkdir($logDir))
+            return;
+        $logFile = "$logDir/query.log";
+        $fp = fopen ( $logFile, 'a+' );
+        if ($fp !== false) {
+          fwrite ( $fp, date("Y-m-d H:i:s") . " " . $this->sDataBase . " " . $sQuery  . "\n" );
+          fclose ( $fp );
+        }
       }
     }
     catch (Exception $oException) { 
