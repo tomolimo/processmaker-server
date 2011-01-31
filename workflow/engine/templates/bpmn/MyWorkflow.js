@@ -1620,6 +1620,11 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                                          //preSelectedFigure.rou_type = 'SEQUENTIAL';
                                         this.workflow.saveRoute(preSelectedFigure,oNewShape);
                                       }
+
+                                      if (preSelectedFigure.type.match(/Inter/)) {
+                                         //preSelectedFigure.rou_type = 'SEQUENTIAL';
+                                        this.workflow.saveEvents(preSelectedFigure,oNewShape);
+                                      }
                                   }
                             else if(oNewShape.type == 'bpmnSubProcess'){
                                 oNewShape.subProcessName = this.workflow.newTaskInfo.label;
@@ -1836,6 +1841,9 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
 MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
 {
     var pro_uid = this.getUrlVars();
+    var task_uid      = new Array();
+    var next_task_uid = new Array();
+
     if(oEvent.type.match(/Start/) && oEvent.type.match(/Empty/))
     {
         var tas_start = 'TRUE';
@@ -1847,7 +1855,44 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
     }
     else if(oEvent.type.match(/Inter/))
     {
-        urlparams = '?action=addEvent&data={"uid":"'+ pro_uid +'","tas_from":"'+sTaskUID.taskFrom+'","tas_to":"'+sTaskUID.taskTo+'","tas_type":"'+oEvent.type+'"}';
+        var ports = oEvent.getPorts();
+        var len =ports.data.length;
+
+        //Get all the connection of the shape
+        var conn = new Array();
+        var count1 = 0;
+        var count2 = 0;
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                conn[i] = ports.data[i].getConnections();
+        }
+
+        //Get ALL the connections for the specified PORT
+        for(i = 0; i< conn.length ; i++)
+            {
+                if(typeof conn[i] != 'undefined')
+                for(var j = 0; j < conn[i].data.length ; j++)
+                   {
+                     if(typeof conn[i].data[j] != 'undefined')
+                        {
+                            if(conn[i].data[j].sourcePort.parentNode.type != oEvent.type){
+                                   // task_uid[count1] = new Array();
+                                    task_uid[count1] = conn[i].data[j].sourcePort.parentNode.id;
+                                    count1++;
+                            }
+                            if(conn[i].data[j].targetPort.parentNode.type != oEvent.type){
+                                   // task_uid[count2] = new Array();
+                                    next_task_uid[count2] = conn[i].data[j].targetPort.parentNode.id;
+                                    count2++;
+                            }
+
+                        }
+                    }
+    }
+
+    var staskUid     = 	Ext.util.JSON.encode(task_uid);
+    var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
+        urlparams = '?action=addEvent&data={"uid":"'+ pro_uid +'","tas_from":"'+staskUid+'","tas_to":"'+sNextTaskUid+'","tas_type":"'+oEvent.type+'"}';
     }
 
     if(urlparams != ''){
@@ -1862,9 +1907,9 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
                            var newObj = workflow.currentSelection;
                            var preObj = new Array();
                            preObj.type = 'bpmnTask';
-                           preObj.id = sTaskUID.taskFrom;
+                           preObj.id = task_uid[0];
                            newObj.evn_uid = workflow.currentSelection.id;
-                           newObj.task_to = sTaskUID.taskTo;
+                           newObj.task_to = next_task_uid[0];
                            this.workflow.saveRoute(preObj,newObj);
                          }
                       }
@@ -1998,7 +2043,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                     success: function(response) {
                         if(response.responseText != 0){
                             if(typeof newObj.conn != 'undefined'){
-                                var resp = response.responseText.split("|");     //resp[0] => gateway UID , resp[1] => route UID
+                                var resp = response.responseText.split("|");     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
                                 newObj.conn.html.id = resp[1];
                                 newObj.conn.id = resp[1];
 
@@ -2194,6 +2239,12 @@ MyWorkflow.prototype.zoom = function(sType)
               workflow.zoomWidth  = width;
               workflow.zoomHeight = height;
           }
+        else if(fig.type.match(/Annotation/)) {
+             width  += zoomFactor*100;
+             height += zoomFactor*100;
+             workflow.zoomAnnotationWidth  = width;
+             workflow.zoomAnnotationHeight = height;
+          }
         else
           {
              width  += zoomFactor*100;
@@ -2212,6 +2263,12 @@ MyWorkflow.prototype.zoom = function(sType)
               height -= zoomFactor*25;
               workflow.zoomWidth  = width;
               workflow.zoomHeight = height;
+          }
+        else if(fig.type.match(/Annotation/)) {
+             width  -= zoomFactor*100;
+             height -= zoomFactor*100;
+             workflow.zoomAnnotationWidth  = width;
+             workflow.zoomAnnotationHeight = height;
           }
         else
           {
@@ -2263,7 +2320,7 @@ MyWorkflow.prototype.zoom = function(sType)
         //Setting font minimum limit
         if(fig.size < 11)
             fig.size = 11;
-        workflow.zoomTaskTextSize = fig.size;
+        //workflow.zoomTaskTextSize = fig.size;
         eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
         fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
         fig.bpmnText.paint();
@@ -2297,7 +2354,7 @@ MyWorkflow.prototype.zoom = function(sType)
           if(fig.size < 11)
             fig.size = 11;
 
-          workflow.zoomAnnotationTextSize = fig.size;
+          //workflow.zoomAnnotationTextSize = fig.size;
           eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
           fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
           fig.bpmnText.paint();

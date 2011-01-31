@@ -33,9 +33,14 @@ if(isset($_POST['mode']) && $_POST['mode'] != '')
 }
 
 //Saving Gateway details into Gateway table
-$oProcessMap = new processMap();
-$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
-echo $sGatewayUID.'|';
+if($aData['ROU_TYPE'] != 'SEQUENTIAL')
+{
+    $oProcessMap = new processMap();
+    $sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
+    echo $sGatewayUID.'|';
+}
+else
+    echo $aData['ROU_EVN_UID'].'|';   //sending route_event_uid in response
 
 G::LoadClass('tasks');
 $oTasks = new Tasks();
