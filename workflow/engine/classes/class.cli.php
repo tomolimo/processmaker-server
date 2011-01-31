@@ -162,7 +162,8 @@ EOT;
     while ($taskName{0} == '-')
       $taskName = array_shift($args);
     if (!$taskName) {
-      self::help();
+      echo self::error("Specify a task from the list below.") . "\n\n";
+      self::help(NULL, NULL);
       return;
     }
     $taskData = NULL;
@@ -172,12 +173,20 @@ EOT;
         break;
       }
     }
+    if (!$taskData) {
+      echo self::error("Command not found: '$taskName'") . "\n\n";
+      self::help(NULL, NULL);
+      return;
+    }
     G::LoadThirdParty('pear/Console', 'Getopt');
     $short = "h" . $taskData['opt']['short'];
     $long = array_merge(array("help"), $taskData['opt']['long']);
     list($options, $arguments) = Console_GetOpt::getopt2($args, $short, $long);
-    call_user_func($taskData['function'], $arguments, $options);
-    die();
+    try {
+      call_user_func($taskData['function'], $arguments, $options);
+    } catch (Exception $e) {
+      echo self::error("\n  Error executing '$taskName':\n\n  {$e->getMessage()}\n") . "\n";
+    }
   }
 
   /**
