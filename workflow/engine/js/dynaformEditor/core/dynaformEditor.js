@@ -109,6 +109,33 @@ var dynaformEditor={
 				break;
 		}
 	},
+
+  saveShowHide:function()
+  {
+    ///-- this.save();
+    try {
+      this.saveCurrentView();
+    } catch (e) {
+      alert(e);
+    }
+    res=this.ajax.save(this.A,this.dynUid);
+    switch(this.currentView)
+    {
+      case "xmlcode":
+        this.saveXmlCode();
+        break;
+      case "htmlcode":
+        this.saveHtmlCode();
+        break;
+      case "javascripts":
+        this.saveJavascript();
+        break;
+      case "properties":
+        this.saveProperties();
+        break;
+    }
+  },
+
 	saveXmlCode:function()
 	{
     //var xmlCode = getField("XML").value;
