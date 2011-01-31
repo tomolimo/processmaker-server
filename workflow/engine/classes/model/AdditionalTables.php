@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * AdditionalTables.php
+ * @package    workflow.engine.classes.model
+ */
 require_once 'classes/model/om/BaseAdditionalTables.php';
 
 
@@ -12,8 +15,8 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  * <juliocesar@colosa.com, julces2000@gmail.com>
- * /**
- * @package    workflow.classes.model
+ * 
+ * @package    workflow.engine.classes.model
  */
 class AdditionalTables extends BaseAdditionalTables {
   private $aDef = array('mysql' => array('TEXT' => 'TEXT',
@@ -35,7 +38,10 @@ class AdditionalTables extends BaseAdditionalTables {
                                        'FLOAT' => 'FLOAT',
                                        'DATE'   => 'CHAR (19)') 
                       );
-  
+  /**
+   * Function load
+   * access public
+   */
   public function load($sUID, $bFields = false) {
     try {
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($sUID);

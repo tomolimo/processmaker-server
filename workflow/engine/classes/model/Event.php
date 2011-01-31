@@ -1,4 +1,8 @@
 <?php
+/**
+ * Event.php
+ * @package    workflow.engine.classes.model
+ */
 
 require_once 'classes/model/Content.php';
 require_once 'classes/model/om/BaseEvent.php';
@@ -20,7 +24,7 @@ require_once 'classes/model/AppEvent.php';
 require_once 'classes/model/Triggers.php';
 
  /**
-  * @package    workflow.classes.model
+  * @package    workflow.engine.classes.model
   */
 
 class Event extends BaseEvent {

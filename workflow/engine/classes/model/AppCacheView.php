@@ -1,4 +1,8 @@
 <?php
+/**
+ * AppCacheView.php
+ * @package    workflow.engine.classes.model
+ */
 
 require_once 'classes/model/om/BaseAppCacheView.php';
 
@@ -22,9 +26,9 @@ require_once 'classes/model/AdditionalTables.php';
 
 
 /**
- * @package   workflow.classes.model
+ * @package    workflow.engine.classes.model
  * @access public
-**/
+ */
 class AppCacheView extends BaseAppCacheView {
 	var $confCasesList;
 	var $pathToAppCacheFiles;

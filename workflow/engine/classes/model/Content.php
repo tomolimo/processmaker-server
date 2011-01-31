@@ -1,9 +1,10 @@
 <?php
 /**
  * Content.php
+ * @package    workflow.engine.classes.model
  *  
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,7 +35,7 @@ require_once 'classes/model/om/BaseContent.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    workflow.classes.model
+ * @package    workflow.engine.classes.model
  */
 class Content extends BaseContent {
   

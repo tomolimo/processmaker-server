@@ -1,4 +1,8 @@
 <?php
+/**
+ * AppFolder.php
+ * @package    workflow.engine.classes.model
+ */
 
 require_once 'classes/model/om/BaseAppFolder.php';
 require_once 'classes/model/Application.php';
@@ -15,7 +19,7 @@ require_once 'classes/model/Application.php';
  */
 /**
  * @author hugo loza
- * @package    workflow.classes.model
+ * @package    workflow.engine.classes.model
  */
 class AppFolder extends BaseAppFolder {
   /**

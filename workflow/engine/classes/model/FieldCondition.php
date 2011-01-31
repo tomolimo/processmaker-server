@@ -1,4 +1,8 @@
 <?php
+/**
+ * FieldCondition.php
+ * @package    workflow.engine.classes.model
+ */
 
 require_once 'classes/model/om/BaseFieldCondition.php';
 require_once 'classes/model/Dynaform.php';
@@ -13,7 +17,7 @@ require_once 'classes/model/Dynaform.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    workflow.classes.model
+ * @package    workflow.engine.classes.model
  */
 class FieldCondition extends BaseFieldCondition {
 

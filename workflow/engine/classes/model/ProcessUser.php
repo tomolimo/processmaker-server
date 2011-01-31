@@ -1,4 +1,8 @@
 <?php
+/**
+ * ProcessUser.php
+ * @package    workflow.engine.classes.model
+ */
 
 require_once 'classes/model/om/BaseProcessUser.php';
 
@@ -12,7 +16,7 @@ require_once 'classes/model/om/BaseProcessUser.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    workflow.classes.model
+ * @package    workflow.engine.classes.model
  */
 class ProcessUser extends BaseProcessUser {
   public function create($aData)
