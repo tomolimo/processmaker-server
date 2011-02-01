@@ -66,6 +66,7 @@ try {
 	if ($methodLink != "") {
 		$template->newBlock ( 'methodLink' );
 		$template->assign ( 'LIBRARY_METHOD_LINK', $methodLink );
+    $template->assign ( 'MORE_INFO', G::LoadTranslation ( 'ID_MORE_INFO' ) );			
 		$template->gotoBlock ( '_ROOT' );
 	}
 	
