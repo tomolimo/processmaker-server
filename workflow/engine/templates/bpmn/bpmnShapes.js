@@ -14,8 +14,6 @@ bpmnTask = function (_30ab) {
    //Setting width and height values as per the zoom ratio
    if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
         this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
-
-
     this.taskName = _30ab.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
@@ -98,7 +96,7 @@ bpmnTask.prototype.paint = function () {
         var fontSize = 11;
 
     this.bpmnText.setFont('verdana', +fontSize+'px', Font.PLAIN);
-    this.bpmnText.drawStringRect(this.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
+    this.bpmnText.drawStringRect(workflow.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
     // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
 
@@ -353,7 +351,7 @@ OutputPort.prototype.onDrop = function (port) {
     }
 
     var connect = true;
-    var conn = this.workflow.checkConnectionsExist(port, 'targetPort', 'OutputPort');
+    var conn = port.workflow.checkConnectionsExist(port, 'targetPort', 'OutputPort');
     if (conn == 0) //If no connection Exist then Allow connect
     connect = true;
     else if (conn < 2) //If One connection exist then Do not Allow to connect
@@ -779,8 +777,8 @@ bpmnTask.prototype.addShapes = function (_3896) {
      * taskNo will have Last Task count
      * */
     if (_3896.newShapeName == 'bpmnTask') {
-        count = ++_3896.workflow.taskNo;
-        _3896.workflow.taskName = 'Task ' + count;
+        count = ++workflow.taskNo;
+        workflow.taskName = 'Task ' + count;
     }
 
     workflow.subProcessName = 'Sub Process';

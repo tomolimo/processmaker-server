@@ -1,7 +1,7 @@
 bpmnLane = function (_30ab) {
     VectorFigure.call(this);
     this.setDimension(500, 300);
-    this.setTaskName(_30ab.taskNo); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+  //  this.setTaskName(_30ab.taskNo); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnLane.prototype = new VectorFigure;

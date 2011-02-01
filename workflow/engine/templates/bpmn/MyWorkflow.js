@@ -1638,6 +1638,37 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             });
 }
 
+MyWorkflow.prototype.saveTask= function(actiontype,xpos,ypos)
+{
+    if(actiontype != '')
+        {
+            var pro_uid = this.getUrlVars();
+            var actiontype = actiontype;
+            var pos = '{"x":'+xpos+',"y":'+ypos+'}';
+            switch(actiontype)
+            {
+                case 'addTask':
+                    urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
+                    break;
+
+            }
+             Ext.Ajax.request({
+                    url: "processes_Ajax.php"+ urlparams,
+                    success: function(response) {
+                        //Ext.Msg.alert (response.responseText);
+                          if(response.responseText != 1 && response.responseText != "")
+                           {
+                               workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
+                               workflow.taskName = this.workflow.newTaskInfo.label;
+                               workflow.task  = eval("new bpmnTask(workflow) ");
+                               workflow.addFigure(workflow.task, xpos, ypos);
+                               workflow.task.html.id = workflow.newTaskInfo.uid;
+                               workflow.task.id = workflow.newTaskInfo.uid;
+                           }
+                       }
+                    })
+        }
+}
 //Deleting shapes silently on swapping task to sub process and vice-versa
 MyWorkflow.prototype.deleteSilently= function(oShape)
 {
@@ -2136,7 +2167,8 @@ MyWorkflow.prototype.getDeleteCriteria = function()
     switch (shape) {
     case 'bpmnTask':
         workflow.currentSelection.actiontype = 'deleteTask';
-        workflow.taskNo--;
+        if(workflow.taskNo > 0)
+            workflow.taskNo--;
         break;
     case 'bpmnSubProcess':
         workflow.currentSelection.actiontype = 'deleteSubProcess';

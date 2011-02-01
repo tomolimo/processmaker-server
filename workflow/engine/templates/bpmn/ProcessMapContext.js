@@ -161,7 +161,7 @@ ProcessMapContext.prototype.exportProcess= function()
   workflow.FILENAME_LINK = '';
   workflow.FILENAME_LINKXPDL = '';
 
-  
+
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
   frame         : true,
@@ -291,7 +291,14 @@ ProcessMapContext.prototype.exportProcess= function()
 
 ProcessMapContext.prototype.addTask= function()
 {
-  Ext.MessageBox.alert('Status','Add Task');
+    var count = ++workflow.taskNo; //Incrementing Task No and assigning it to a local variable
+    workflow.taskName = 'Task '+count;
+    var newShape = eval("new bpmnTask(workflow)");
+    var xPos = workflow.contextX;
+    var yPos = workflow.contextY;
+    workflow.addFigure(newShape, xPos, yPos);
+    newShape.actiontype = 'addTask';
+    workflow.saveShape(newShape);      //Saving Annotations when user drags and drops it
 }
 
 ProcessMapContext.prototype.horiLine= function()
@@ -1872,7 +1879,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                     workflow.gridObjectRowSelected = rowSelected;
                 var rowData = ProcMapObj.ExtVariables();
                 console.log(rowData);
-                
+
         }
    })
 
@@ -1959,7 +1966,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
         var cto_uid         = record.data.CTO_UID;
         var condition       = record.data.CTO_CONDITION;
 
-      
+
         Ext.Ajax.request({
           url   : '../tracker/tracker_Ajax.php',
           method: 'POST',
@@ -2145,7 +2152,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                //getting selected row of variables
                                                var rowSelected      = this.getSelectionModel().getSelected();
                                                var rowLabel         = rowSelected.data.variable;
-                                              
+
                                                //Assigned new object with condition
                                                if(typeof getObjectGridRow.colModel != 'undefined')
                                                    getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
@@ -2199,7 +2206,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                                             TAS_UID         : taskId,
                                                                             TRI_UID         : getObjectGridRow[0].data.TRI_UID,
                                                                             ST_TYPE         : getObjectGridRow[0].data.ST_TYPE
-                                                                            
+
                                                                         },
                                                                       success: function (response){
                                                                         Ext.MessageBox.alert ('Status','Objects has been edited successfully ');
@@ -2282,7 +2289,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                                                                     })
                                                window.hide();
                                                        }
-                                            
+
                                                break;
                                            case 'form':
                                                 FormSelected     = workflow.formSelected;
