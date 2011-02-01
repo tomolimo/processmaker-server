@@ -977,7 +977,7 @@ ProcessOptions.prototype.dbConnection = function()
 
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
-     var ProcMapObj= new ProcessMapContext();
+  var ProcMapObj= new ProcessMapContext();
   var pro_uid = workflow.getUrlVars();
 
   var dynaFields = Ext.data.Record.create([
@@ -1075,9 +1075,11 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
-            newIOWindow.show();
+               inputDocForm.getForm().reset();
+               newIOWindow.show();
             }
         });
+ 
 
  var btnEdit = new Ext.Button({
             id: 'btnEdit',
@@ -1102,7 +1104,6 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                         }
                     });
             }
-
         });
 
   var inputDocForm = new Ext.FormPanel({
@@ -1110,6 +1111,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         bodyStyle :'padding:5px 5px 0',
         width     : 500,
         height    : 380,
+        monitorValid : true,
         autoHeight: true,
         items:[{
                     xtype: 'fieldset',
@@ -1122,7 +1124,8 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     items:[{
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
-                            name      : 'INP_DOC_TITLE'
+                            name      : 'INP_DOC_TITLE',
+                            allowBlank: false
                          },{
                             width:          150,
                             xtype:          'combo',
@@ -1204,40 +1207,40 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                             {name : 'No',   value: ''},
                                             {name : 'Yes',   value: '1'},
                                             ]})
-                         }, {
+                         }/*,{
                             layout:'column',
                             border:false,
+                            // defaults for columns
+                            defaults:{
+                             columnWidth:0.7
+                             ,layout:'form'
+                             ,border:false
+                             ,xtype:'panel'
+                             ,bodyStyle:'padding:0 18px 0 0'
+                             },
                             items:[{
-                                columnWidth:.6,
-                                layout: 'form',
-                                border:false,
-                                items: [{
-                                    xtype: 'textfield',
-                                    id: 'DestPath',
-                                    fieldLabel: 'Destination Path',
-                                    name: 'INP_DOC_DESTINATION_PATH',
-                                    anchor:'100%'
-                                 }]
-                        },{
-                               columnWidth:.4,
-                               layout: 'form',
-                               border:false,
-                               items: [{
-                                   xtype:'button',
-                                   title: ' ',
-                                   text: '@@',
-                                   name: 'selectorigin',
-                                   handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.fieldId= 'DestPath' ;
-                                    workflow.variable = '@@',
-                                    workflow.formSelected = inputDocForm;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                    console.log(rowData);
+                              //defaults:{anchor:'100%'},
+                               items:[{
+                                        xtype: 'textfield',
+                                        //id: 'DestPath',
+                                        fieldLabel: 'Destination Path',
+                                        name: 'INP_DOC_DESTINATION_PATH',
+                                        anchor:'100%'
+                                     },{
+                                       xtype:'button',
+                                       title: ' ',
+                                       text: '@@',
+                                       name: 'selectorigin',
+                                       handler: function (s) {
+                                        workflow.variablesAction = 'form';
+                                        workflow.fieldId= 'DestPath' ;
+                                        workflow.variable = '@@',
+                                        workflow.formSelected = inputDocForm;
+                                        var rowData = ProcMapObj.ExtVariables();
                                    }
-                                   
+                                }]
                         }]
-                    }]
+                              
                 },{
                     layout:'column',
                     border:false,
@@ -1247,7 +1250,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             border:false,
                             items: [{
                                 xtype: 'textfield',
-                                id:'tags',
+                                //id:'tags',
                                 fieldLabel: 'Tags',
                                 name: 'INP_DOC_TAGS',
                                 anchor:'100%'
@@ -1267,99 +1270,76 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                     workflow.variable = '@@',
                                     workflow.formSelected = inputDocForm;
                                     var rowData = ProcMapObj.ExtVariables();
-                                    console.log(rowData);
                                    }
                                 
                             }]
-                          }]
-                  },{
+                       }]
+                  }*/,{
+                 // column layout with 2 columns
+                 layout:'column',
+                 border:false,
+                 // defaults for columns
+                 defaults:{
+                 columnWidth:0.5,
+                 layout:'form',
+                 border:false,
+                 xtype:'panel',
+                 bodyStyle:'padding:0 18px 0 0'
+                 },
+                 items:[{
+                 // left column
+                 // defaults for fields
+                 defaults:{anchor:'100%'},
+                 items:[{
+                 xtype:'textfield',
+                 //id: 'DestPath',
+                 fieldLabel: 'Destination Path',
+                 name: 'INP_DOC_DESTINATION_PATH'
+                 },{
+                 xtype:'textfield',
+                // id:'tags',
+                 fieldLabel: 'Tags',
+                 name: 'INP_DOC_TAGS'
+                 }]
+                 },{
+                 // right column
+                 // defaults for fields
+                 defaults:{anchor:'10%'}
+                 ,items:[{
+                 xtype:'button',
+                 //               title: ' ',
+                                text: '@@',
+                 //               name: 'selectorigin',
+                                handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                    workflow.fieldId= 'tags' ;
+                                    workflow.variable = '@@',
+                                    workflow.formSelected = inputDocForm;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                   }
+                 },{
+                 xtype:'button',
+                   //             title: ' ',
+                                text: '@@',
+                  //              name: 'selectorigin',
+                                handler: function (s) {
+                                    workflow.variablesAction = 'form';
+                                    workflow.fieldId= 'tags' ;
+                                    workflow.variable = '@@',
+                                    workflow.formSelected = inputDocForm;
+                                    var rowData = ProcMapObj.ExtVariables();
+                                   }
+                 }]
+                 }]
+                },{
                       id : 'INP_DOC_UID',
                       xtype: 'hidden',
                       name : 'INP_DOC_UID'
                   }]
-               }]
-         });
-
-  var inputDocColumns = new Ext.grid.ColumnModel({
-            columns: [
-                new Ext.grid.RowNumberer(),
-                {
-                    id: 'INP_DOC_TITLE',
-                    header: 'Title',
-                    dataIndex: 'INP_DOC_TITLE',
-                    width: 280,
-                    editable: false,
-                    editor: new Ext.form.TextField({
-                    //allowBlank: false
-                    })
-                },
-                {
-                    sortable: false,
-                    renderer: function(val, meta, record)
-                       {
-                            return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
-                       }
-                }
-                ]
-        });
-
-
-  var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove, btnEdit]
-            });
-
-  var inputDocGrid = new Ext.grid.GridPanel({
-        store: inputDocStore,
-        id : 'mygrid',
-        loadMask: true,
-        //loadingText: 'Loading...',
-        renderTo: 'cases-grid',
-        frame: false,
-        autoHeight:false,
-        clicksToEdit: 1,
-        minHeight:400,
-        height   :350,
-        layout: 'fit',
-        cm: inputDocColumns,
-        stripeRows: true,
-        tbar: tb,
-        viewConfig: {forceFit: true}
-   });
-
-
-  var gridWindow = new Ext.Window({
-        title: 'Input Document',
-        collapsible: false,
-        maximizable: false,
-        width: 550,
-        height: 450,
-        minWidth: 200,
-        minHeight: 150,
-        layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        items: inputDocGrid,
-        buttonAlign: 'center',
-        autoScroll: true
-          });
-
-
-  var newIOWindow = new Ext.Window({
-        title: 'New Input Document',
-        collapsible: false,
-        maximizable: false,
-        width: 550,
-        height: 400,
-        minWidth: 200,
-        minHeight: 150,
-        autoScroll: true,
-        layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        items: inputDocForm,
-        buttonAlign: 'center',
+               }],
         buttons: [{
             text: 'Save',
+            formBind    :true,
             handler: function(){
                 var getForm   = inputDocForm.getForm().getValues();
 
@@ -1447,7 +1427,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                           },
                           success: function(response) {
                               Ext.MessageBox.alert ('Status','Input document has been updated successfully.');
-                              newIOWindow.close();
+                              newIOWindow.hide();
                               inputDocStore.reload();
                           }
                         });
@@ -1457,13 +1437,87 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                newIOWindow.close();
+                newIOWindow.hide();
             }
-        }]
+        }],
+       buttonAlign : 'center'
+    });
+
+  var inputDocColumns = new Ext.grid.ColumnModel({
+            columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    id: 'INP_DOC_TITLE',
+                    header: 'Title',
+                    dataIndex: 'INP_DOC_TITLE',
+                    width: 280,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
+                },
+                {
+                    sortable: false,
+                    renderer: function(val, meta, record)
+                       {
+                            return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
+                       }
+                }
+                ]
+        });
+
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove, btnEdit]
+            });
+
+  var inputDocGrid = new Ext.grid.GridPanel({
+        store: inputDocStore,
+        id : 'mygrid',
+        loadMask: true,
+        //loadingText: 'Loading...',
+        renderTo: 'cases-grid',
+        frame: false,
+        autoHeight:false,
+        clicksToEdit: 1,
+        minHeight:400,
+        height   :350,
+        layout: 'fit',
+        cm: inputDocColumns,
+        stripeRows: true,
+        tbar: tb,
+        viewConfig: {forceFit: true}
+   });
+
+
+  var gridWindow = new Ext.Window({
+        title: 'Input Document',
+        width: 550,
+        height: 450,
+        minWidth: 200,
+        minHeight: 150,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        items: inputDocGrid,
+        autoScroll: true
+ });
+
+ var newIOWindow = new Ext.Window({
+        title: 'New Input Document',
+        width: 550,
+        height: 400,
+        minWidth: 200,
+        minHeight: 150,
+        autoScroll: true,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        items: inputDocForm
     });
    gridWindow.show();
-
 }
+
 
 
 ProcessOptions.prototype.addOutputDoc= function(_5625)
@@ -1835,7 +1889,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                                     workflow.variable        = '@@',
                                                     workflow.formSelected    = outputDocForm;
                                                     var rowData = ProcMapObj.ExtVariables();
-                                                    console.log(rowData);
                                             }
                             }]
                     }]
@@ -1868,7 +1921,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                                 workflow.variable        = '@@',
                                                 workflow.formSelected    = outputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
-                                                console.log(rowData);
                                    }
                               }]
                         }]
@@ -1986,9 +2038,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                       });
 
                }
-}
-
-        },{
+        }
+       },{
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
