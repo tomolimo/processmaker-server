@@ -176,10 +176,10 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         loadingText     : 'Loading...',
         frame           : false,
         autoHeight      : false,
-        enableDragDrop  : true,
+        //enableDragDrop  : true,
         layout          : 'form',
         tbar            : toolbar,
-        ddGroup         : 'firstGridDDGroup',
+        //ddGroup         : 'firstGridDDGroup',
         clicksToEdit    : 1,
         minHeight       :400,
         height          :400,
@@ -211,11 +211,11 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         id          : 'mygrid',
         loadMask    : true,
         loadingText : 'Loading...',
-        renderTo    : 'cases-grid',
+        //renderTo    : 'cases-grid',
         frame       : false,
         autoHeight  : false,
-        enableDragDrop   : true,
-        ddGroup     : 'firstGridDDGroup',
+        //enableDragDrop   : true,
+        //ddGroup     : 'firstGridDDGroup',
         clicksToEdit: 1,
         minHeight   :400,
         height      :400,
@@ -334,7 +334,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                   Ext.MessageBox.alert ('Status','Step has been assigned successfully.');
               }
             });
-            availableSteps.reload();
+            //availableSteps.reload();
             //Deleting previously assigned step on updating/replacing with new step.
             if(changes != '' && typeof record.json != 'undefined')
             {
@@ -360,7 +360,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
        // Setup Drop Targets
       // This will make sure we only drop to the  view scroller element
-    var firstGridDropTargetEl =  grid.getView().scroller.dom;
+   /* var firstGridDropTargetEl =  grid.getView().scroller.dom;
     var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
                 ddGroup    : 'firstGridDDGroup',
                 notifyDrop : function(ddSource, e, data){
@@ -372,7 +372,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                                      return true
                                    }
       });
-      firstGridDropTarget.addToGroup('firstGridDDGroup');
+      firstGridDropTarget.addToGroup('firstGridDDGroup');*/
 
     //Getting triggers data using stepTriggers function
     var treeGrid = taskExtObj.stepTriggers(_3252);
@@ -756,7 +756,7 @@ TaskContext.prototype.editTaskProperties= function()
                     name: 'TAS_DESCRIPTION',
                     //dataIndex: 'TAS_DESCRIPTION',
                     //value: _5625.scope.workflow.taskDetails.TAS_DESCRIPTION,
-                    allowBlank: false,
+                    allowBlank: true,
                     width: 300,
                     height : 150
                 },{
@@ -1295,8 +1295,11 @@ TaskContext.prototype.editTaskProperties= function()
                            form.items.items[4].items[0].checked=true;
 
                        else  if(action.result.data.TAS_ASSIGN_TYPE=='MANUAL')
-                           form.items.items[4].items[1].checked=true;
-
+                        {
+                            form.items.items[4].items[1].checked=true;
+                            Ext.getCmp(ID).setValue(true);
+                            Ext.getCmp('BALANCED').setValue(true);
+                        }
                        else if(action.result.data.TAS_ASSIGN_TYPE=='EVALUATE')
                             {
                                 form.items.items[4].items[2].checked=true;
@@ -1405,7 +1408,7 @@ TaskContext.prototype.saveTaskProperties= function()
 
 TaskContext.prototype.stepTriggers = function()
     {
-     var pro_uid = _workflow.getUrlVars();
+     var pro_uid = workflow.getUrlVars();
      var taskId  = workflow.currentSelection.id;
      var ProcMapObj= new ProcessMapContext();
      var triggersFields = Ext.data.Record.create([

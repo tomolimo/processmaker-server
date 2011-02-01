@@ -1214,136 +1214,76 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                             {name : 'No',   value: ''},
                                             {name : 'Yes',   value: '1'},
                                             ]})
-                         }/*,{
-                            layout:'column',
-                            border:false,
-                            // defaults for columns
-                            defaults:{
-                             columnWidth:0.7
-                             ,layout:'form'
-                             ,border:false
-                             ,xtype:'panel'
-                             ,bodyStyle:'padding:0 18px 0 0'
-                             },
-                            items:[{
-                              //defaults:{anchor:'100%'},
-                               items:[{
-                                        xtype: 'textfield',
-                                        //id: 'DestPath',
-                                        fieldLabel: 'Destination Path',
-                                        name: 'INP_DOC_DESTINATION_PATH',
-                                        anchor:'100%'
-                                     },{
-                                       xtype:'button',
-                                       title: ' ',
-                                       text: '@@',
-                                       name: 'selectorigin',
-                                       handler: function (s) {
-                                        workflow.variablesAction = 'form';
-                                        workflow.fieldId= 'DestPath' ;
-                                        workflow.variable = '@@',
-                                        workflow.formSelected = inputDocForm;
-                                        var rowData = ProcMapObj.ExtVariables();
-                                   }
-                                }]
+                         },{
+                    layout      :'column',
+                    border      :false,
+                    items       :[{
+                        columnWidth :.6,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                                xtype       : 'textfield',
+                                id          : 'DestPath',
+                                fieldLabel  : 'Destination Path',
+                                name        : 'INP_DOC_DESTINATION_PATH',
+                                anchor      :'100%'
                         }]
-                              
-                },{
-                    layout:'column',
-                    border:false,
-                    items:[{
-                            columnWidth:.6,
-                            layout: 'form',
-                            border:false,
-                            items: [{
-                                xtype: 'textfield',
-                                //id:'tags',
-                                fieldLabel: 'Tags',
-                                name: 'INP_DOC_TAGS',
-                                anchor:'100%'
-                             }]
-                          },{
-                            columnWidth:.4,
-                            layout: 'form',
-                            border:false,
-                            items: [{
-                                xtype:'button',
-                                title: ' ',
-                                text: '@@',
-                                name: 'selectorigin',
-                                handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.fieldId= 'tags' ;
-                                    workflow.variable = '@@',
-                                    workflow.formSelected = inputDocForm;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                   }
-                                
+                    },{
+                        columnWidth     :.4,
+                        layout          : 'form',
+                        border          :false,
+                        items           : [{
+                                xtype           :'button',
+                                title           : ' ',
+                                text            : '@@',
+                                name            : 'selectorigin',
+                                 handler: function (s) {
+                                                    workflow.variablesAction = 'form';
+                                                    workflow.fieldId         = 'DestPath' ;
+                                                    workflow.variable        = '@@',
+                                                    workflow.formSelected    = inputDocForm;
+                                                    var rowData = ProcMapObj.ExtVariables();
+                                            }
                             }]
-                       }]
-                  }*/,{
-                 // column layout with 2 columns
-                 layout:'column',
-                 border:false,
-                 // defaults for columns
-                 defaults:{
-                 columnWidth:0.5,
-                 layout:'form',
-                 border:false,
-                 xtype:'panel',
-                 bodyStyle:'padding:0 18px 0 0'
-                 },
-                 items:[{
-                 // left column
-                 // defaults for fields
-                 defaults:{anchor:'100%'},
-                 items:[{
-                 xtype:'textfield',
-                 //id: 'DestPath',
-                 fieldLabel: 'Destination Path',
-                 name: 'INP_DOC_DESTINATION_PATH'
-                 },{
-                 xtype:'textfield',
-                // id:'tags',
-                 fieldLabel: 'Tags',
-                 name: 'INP_DOC_TAGS'
-                 }]
-                 },{
-                 // right column
-                 // defaults for fields
-                 defaults:{anchor:'10%'}
-                 ,items:[{
-                 xtype:'button',
-                 //               title: ' ',
-                                text: '@@',
-                 //               name: 'selectorigin',
-                                handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.fieldId= 'tags' ;
-                                    workflow.variable = '@@',
-                                    workflow.formSelected = inputDocForm;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                   }
-                 },{
-                 xtype:'button',
-                   //             title: ' ',
-                                text: '@@',
-                  //              name: 'selectorigin',
-                                handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.fieldId= 'tags' ;
-                                    workflow.variable = '@@',
-                                    workflow.formSelected = inputDocForm;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                   }
-                 }]
-                 }]
+                    }]
                 },{
+                    layout      :'column',
+                    border      :false,
+                    items       :[{
+                        columnWidth :.6,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                        xtype       : 'textfield',
+                        id          :'tags',
+                        fieldLabel  : 'Tags',
+                        name        : 'INP_DOC_TAGS',
+                        anchor      :'100%'
+                        }]
+                    },{
+                        columnWidth :.4,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                                xtype       :'button',
+                                title       : ' ',
+                                text        : '@@',
+                                name        : 'selectorigin',
+                                handler: function (s) {
+                                                workflow.variablesAction = 'form';
+                                                workflow.fieldId         = 'tags' ;
+                                                workflow.variable        = '@@',
+                                                workflow.formSelected    = inputDocForm;
+                                                var rowData = ProcMapObj.ExtVariables();
+                                   }
+                              }]
+                        }]
+                     },{
                       id : 'INP_DOC_UID',
                       xtype: 'hidden',
                       name : 'INP_DOC_UID'
-                  }]
-               }],
+               }]
+        }],
         buttons: [{
             text: 'Save',
             formBind    :true,
@@ -1353,6 +1293,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 var sDocTitle        = getForm.INP_DOC_TITLE;
                 var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
                 var sOrig           = getForm.INP_DOC_ORIGINAL;
+                if(sOrig == "")
+                    sOrig           = 'ORIGINAL';
+                
                 if(sOrig == 'LEGAL COPY')
                     sOrig           = 'COPYLEGAL';
 

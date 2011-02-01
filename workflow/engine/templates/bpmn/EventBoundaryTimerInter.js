@@ -1,4 +1,4 @@
-bpmnEventBoundaryTimerInter=function(){
+bpmnEventBoundaryInter=function(){
 VectorFigure.call(this);
 //Setting width and height values as per the zoom ratio
 if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
@@ -7,9 +7,9 @@ else
       this.setDimension(30,30);
 this.stroke = 2;
 };
-bpmnEventBoundaryTimerInter.prototype=new VectorFigure;
-bpmnEventBoundaryTimerInter.prototype.type="bpmnEventBoundaryTimerInter";
-bpmnEventBoundaryTimerInter.prototype.paint=function(){
+bpmnEventBoundaryInter.prototype=new VectorFigure;
+bpmnEventBoundaryInter.prototype.type="bpmnEventBoundaryTimerInter";
+bpmnEventBoundaryInter.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
 var x_cir1=0;
 var y_cir1=0;
@@ -74,7 +74,7 @@ this.output2.setPosition(this.width,this.height/2);
 }
 };
 
-bpmnEventBoundaryTimerInter.prototype.setWorkflow=function(_40c5){
+bpmnEventBoundaryInter.prototype.setWorkflow=function(_40c5){
 VectorFigure.prototype.setWorkflow.call(this,_40c5);
 if(_40c5!=null){
     var eventPortName = ['input2','output2'];
@@ -94,7 +94,7 @@ if(_40c5!=null){
 }
 };
 
-bpmnEventBoundaryTimerInter.prototype.getContextMenu=function(){
+bpmnEventBoundaryInter.prototype.getContextMenu=function(){
 if(this.id != null){
    this.workflow.handleContextMenu(this);
 }

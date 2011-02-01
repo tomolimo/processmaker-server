@@ -4740,7 +4740,7 @@ class processMap {
       $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $oDataset->next ();
       while ( $aRow = $oDataset->getRow () ) {
-        $aBB [] = array ('STEP_UID' => $aRow ['INP_DOC_UID'], 'STEP_TITLE' => $aRow ['INP_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'INPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['INP_DOC_UID'] . '">' );
+        $aBB [] = array ('STEP_UID' => $aRow ['INP_DOC_UID'], 'STEP_UID_OBJ' => $aRow ['INP_DOC_UID'], 'STEP_TITLE' => $aRow ['INP_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'INPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['INP_DOC_UID'] . '">' );
         $oDataset->next ();
       }
       $oCriteria = new Criteria ( 'workflow' );
@@ -4758,7 +4758,7 @@ class processMap {
       $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $oDataset->next ();
       while ( $aRow = $oDataset->getRow () ) {
-        $aBB [] = array ('STEP_UID' => $aRow ['OUT_DOC_UID'], 'STEP_TITLE' => $aRow ['OUT_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'OUTPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['OUT_DOC_UID'] . '">' );
+        $aBB [] = array ('STEP_UID' => $aRow ['OUT_DOC_UID'],'STEP_UID_OBJ' => $aRow ['OUT_DOC_UID'], 'STEP_TITLE' => $aRow ['OUT_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'OUTPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['OUT_DOC_UID'] . '">' );
         $oDataset->next ();
       }
 

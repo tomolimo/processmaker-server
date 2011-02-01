@@ -1159,7 +1159,7 @@ MyWorkflow.prototype.AddEventInterContextMenu=function(_4093)
                         },
                         {
                             text: 'Intermediate Boundary Timer',
-                            type:'bpmnEventBoundaryTimerInter',
+                            type:'bpmnEventBoundaryInter',
                             scope:_4093,
                             handler: MyWorkflow.prototype.toggleShapes
                         }
