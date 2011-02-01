@@ -1,9 +1,10 @@
 <?php
 /**
  * class.reportTables.php
+ * @package workflow.engine.ProcessMaker
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -27,7 +28,7 @@ G::LoadClass('case');
 
 /**
  * ReportTables - Report tables class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author Julio Cesar Laura Avenda�o
  * @copyright 2007 COLOSA
  */

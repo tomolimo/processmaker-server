@@ -1,9 +1,10 @@
 <?php
 /**
  * class.xmlfield_Image.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,12 +21,15 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * /**
- * @package workflow.classes
  */
+
 // DEPRECATED this class is also part of the xmlform package this class will be also removed
 // in future releases of pm, its discouraged the inclusion this class in the future from a
 // external file like this
+ /**
+ * @package workflow.engine.classes
+ */
+
 class XmlForm_Field_Image extends XmlForm_Field
 {
   var $file = '';

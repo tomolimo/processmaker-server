@@ -1,6 +1,7 @@
 <?php
 /**
  * class.Installer_mssql.php
+ * @package workflow.engine.ProcessMaker
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -32,7 +33,7 @@
 
 /**
  * Processmaker Installer_mssql
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author 
  * @copyright 2008 COLOSA
  */

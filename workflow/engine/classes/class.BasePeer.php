@@ -1,9 +1,10 @@
 <?php
 /**
  * class.BasePeer.php
+ * @package   workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -33,7 +34,7 @@ include_once 'classes/model/Application.php';
  *
  *
  *
- * @package    workflow.classes.model
+ * @package   workflow.engine.classes
  */
 abstract class GulliverBasePeer {
 

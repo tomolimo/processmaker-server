@@ -1,10 +1,10 @@
 <?php
-
 /**
  * upgrade_System.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,15 +21,15 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * /**
- * @package workflow.classes
+ * 
  */
 
 /**
  * class system for workflow mantanance routines
  * 
- * @uthor Erik A.O.<erik@colosa.com>
- * @date May 12th, 2010
+ * author Erik A.O.<erik@colosa.com>
+ * date May 12th, 2010
+ * @package workflow.engine.classes
  * 
  */
 
@@ -47,7 +47,7 @@ class System {
   /**
   * List currently installed plugins
   *
-  * @param
+  * param
   * @return array with the names of the plugins
   */
   public static function getPlugins() {
@@ -86,7 +86,7 @@ class System {
   /** 
   * Get system information
   *
-  * @param 
+  * param 
   * @return array with system information
   */ 
   public static function getSysInfo() {
@@ -190,7 +190,7 @@ class System {
   * 
   * @name verifyFileForUpgrade
   *
-  * @param 
+  * param 
   * @return boolean
   */ 
   function verifyFileForUpgrade() 
@@ -214,7 +214,7 @@ class System {
   * 
   * @name getUpgradedFilesList
   *
-  * @param 
+  * param 
   * @return void
   */
   function getUpgradedFilesList() 
@@ -244,7 +244,7 @@ class System {
   * 
   * @name verifyForBootstrapUpgrade
   *
-  * @param 
+  * param 
   * @return boolean
   */
   function verifyForBootstrapUpgrade()
@@ -264,7 +264,7 @@ class System {
   * 
   * @name upgrade
   *
-  * @param 
+  * param 
   * @return array
   */
   function upgrade() 
@@ -571,7 +571,7 @@ class System {
   * 
   * @name cleanupUpgradeDirectory
   *
-  * @param 
+  * param 
   * @return array
   */
   function cleanupUpgradeDirectory() 

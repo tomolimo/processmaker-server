@@ -1,9 +1,10 @@
 <?php
 /**
  * class.propelTable.php
+ * @package workflow.gulliver.system
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -30,10 +31,10 @@
 
 /**
  * Class pagedTable
- * @author David S. Callizaya S. <davidsantos@colosa.com>
- * @package workflow.gulliver.system
+ * @author David S. Callizaya S. <davidsantos@colosa.com> * 
  * @access public
- * @dependencies TemplatePower  Form  XmlForm
+ * @package workflow.gulliver.system
+ * dependencies TemplatePower  Form  XmlForm
  */
 
 class propelTable
@@ -197,7 +198,7 @@ class propelTable
    * Function setupFromXmlform
    *
    * @author David S. Callizaya S. <davidsantos@colosa.com>
-   * @editedby Hugo Loza <hugo@colosa.com>
+   * editedby Hugo Loza <hugo@colosa.com>
    * @access public
    * @parameter string xmlForm
    * @return string

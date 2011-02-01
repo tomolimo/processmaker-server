@@ -13,8 +13,8 @@
  +--------------------------------------------------*/
 
  /**
-  * @package    workflow.classes
- **/
+  * @package    workflow.engine.classes
+  */
 class archive
 {
  /** 
@@ -349,6 +349,7 @@ class archive
 
 /**
  * This class is derived from the class archive, is imployed to use files .tar
+ * @package    workflow.engine.classes
  * 
  */ 
 class tar_file extends archive
@@ -509,7 +510,8 @@ class tar_file extends archive
 
  /**
   * This class is derived of the class archive, is employed to use archives .gzip
-  *
+  * @package    workflow.engine.classes
+  * 
   */
 class gzip_file extends tar_file
 {
@@ -564,7 +566,8 @@ class gzip_file extends tar_file
 /**
  *
  * This class is derived from the class archive, is employed to use files .bzip
- *
+ * @package    workflow.engine.classes
+ * 
  */ 
 class bzip_file extends tar_file
 {
@@ -619,6 +622,7 @@ class bzip_file extends tar_file
 
  /**
   * This class is derived from the class archive, is imployed to use files .zip
+  * @package    workflow.engine.classes
   */ 
 
 class zip_file extends archive

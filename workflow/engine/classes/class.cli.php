@@ -1,6 +1,7 @@
 <?php
 /**
  * class.cli.php
+ * @package    workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2011 Colosa Inc.
@@ -24,6 +25,9 @@
  * @author Alexandre Rosenfeld <alexandre@colosa.com>
  */
 
+/**
+ * @package    workflow.engine.classes
+ */
 class CLI {
   public static $tasks = array();
   public static $currentTask = NULL;

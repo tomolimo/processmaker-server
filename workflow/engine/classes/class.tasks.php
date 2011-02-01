@@ -1,6 +1,7 @@
 <?php
 /**
  * class.tasks.php
+ * @package workflow.engine.ProcessMaker
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -20,9 +21,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * /**
- * @package workflow.classes
  */
+
 require_once 'classes/model/GroupUser.php';
 require_once 'classes/model/Groupwf.php';
 require_once 'classes/model/ObjectPermission.php';
@@ -37,7 +37,7 @@ require_once 'classes/model/Gateway.php';
 
 /**
  * Tasks - Tasks class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author Julio Cesar Laura Avenda�o
  * @copyright 2007 COLOSA
  */

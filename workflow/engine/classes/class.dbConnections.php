@@ -1,15 +1,14 @@
 <?php
 /**
- * @Author:   Erik Amaru Ortiz <erik@colosa.com>
- * @Description:This is a class for load all additional connections; if exist in a particular proccess
- * @Date:     15-05-2008   
+ * Author:   Erik Amaru Ortiz <erik@colosa.com>
+ * Description:This is a class for load all additional connections; if exist in a particular proccess
+ * Date:     15-05-2008   
  *
  *
  * class.dbConnections.php
  *
  * Email bugs/suggestions to erik@colosa.com 
- * 
- * @package    workflow.classes
+ *  
  */
 
 require_once 'model/DbSource.php';
@@ -20,6 +19,7 @@ require_once 'model/Content.php';
  *
  *
  * @copyright  2008 Colosa
+ * @package    workflow.engine.classes
  *
  */ 
 class dbConnections

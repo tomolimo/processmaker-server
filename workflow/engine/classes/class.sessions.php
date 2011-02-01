@@ -1,9 +1,10 @@
 <?php
 /**
  * class.Sessions.php
+ * @package workflow.engine.ProcessMaker
  *  
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -25,7 +26,7 @@
 require_once 'classes/model/Session.php';
 /**
  * Sessions - Sessions class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author Everth S. Berrios Morales
  * @copyright 2008 COLOSA
  */
@@ -242,7 +243,7 @@ class Sessions {
   * 
   * @name deleteTmpfile
   *
-  * @param 
+  * param 
   * @return void
   */
   private function deleteTmpfile(){

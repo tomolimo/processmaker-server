@@ -12,9 +12,9 @@
 | only if this copyright statement is not removed
 +--------------------------------------------------*/
 /**
-* @LastModification 30/05/2008
+* LastModification 30/05/2008
 * /**
-* @package workflow.classes
+* @package workflow.engine.classes
 */
 
 class NET
@@ -501,7 +501,7 @@ class NET
   
   /** 
   * This function gets an error
-  * @param
+  * param
   * @return string
   */
   function getErrno()
@@ -511,7 +511,7 @@ class NET
   
   /** 
   * This function gets an error message
-  * @param
+  * param
   * @return string
   */
   function getErrmsg()
@@ -521,6 +521,9 @@ class NET
 
  }
 
+ /**
+ * @package workflow.engine.classes
+ */
   class Stat
   {
       public $stutus;

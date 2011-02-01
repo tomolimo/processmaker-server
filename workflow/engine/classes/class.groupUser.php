@@ -1,6 +1,7 @@
 <?php
 /**
  * class.groupUser.php
+ * @package workflow.engine.ProcessMaker
  *  
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -31,7 +32,7 @@
 
 /**
  * GroupUser - GroupUser class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author Julio Cesar Laura Avendaño
  * @copyright 2007 COLOSA
  */

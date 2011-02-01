@@ -1,6 +1,7 @@
 <?php
 /**
  * class.serverConfiguration.php
+ * @package workflow.engine.ProcessMaker
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.
@@ -20,8 +21,6 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * /**
- * @package workflow.ProcessMaker
  */
 
 /**
@@ -29,6 +28,7 @@
  * @author Hugo Loza
  * @copyright 2010 COLOSA
  * @license GNU Affero General Public License
+ * @package workflow.engine.ProcessMaker
  */
 class serverConf {
   private $_aProperties = array ();
@@ -61,7 +61,7 @@ class serverConf {
 
   /**
    * This function is instancing to this object
-   * @param
+   * param
    * @return object
    */
   function &getSingleton() {
@@ -76,7 +76,7 @@ class serverConf {
 
   /**
    * This function generates a storable representation of this obejct
-   * @param
+   * param
    * @return void
    */
   function serializeInstance() {
@@ -100,7 +100,7 @@ class serverConf {
 
   /**
    * This will save the object in the specified file (defined as a property of this class)
-   * @param
+   * param
    * @return void
    */
 
@@ -148,7 +148,7 @@ class serverConf {
 
   /**
    * Used to have a record of succesful logins to the system (total and by WS)
-   * @param
+   * param
    * @return void
    */
   function sucessfulLogin() {
@@ -194,7 +194,7 @@ class serverConf {
   /**
    * Check only if the server address or server name has changed,
    * to send another beat in next minute.
-   * @param
+   * param
    * @return boolean
    */
   function checkIfHostNameHasChanged() {
@@ -212,7 +212,7 @@ class serverConf {
   /**
    * Will return a list of all WS in this system and their related information.
    * @uses getWorkspaceInfo
-   * @param
+   * param
    * @return array
    */
   function getWSList() {
@@ -277,8 +277,8 @@ class serverConf {
 
   /**
    * Will list the plugins of the system
-   * @param
-   * @retun array
+   * param
+   * @return array
    */
   function getPluginsList() {
     return $this->pluginsA;
@@ -317,9 +317,9 @@ class serverConf {
     return $sMySQLVersion;
   }
 
-    /**
+   /**
    * Will reset all the logins' count
-   * @param
+   * param
    * @return void
    */
   function resetLogins() {

@@ -1,14 +1,17 @@
 <?php
-
 /**
  * Utility functions to manage a workspace.
  *
- * @author Alexandre Rosenfeld
- * @package workflow.classes
+ * @author Alexandre Rosenfeld 
  */
 
 G::LoadSystem('dbMaintenance');
 G::LoadClass("cli");
+
+/**
+ * @package workflow.engine.classes
+ * class workspaceTools
+ */
 
 class workspaceTools {
   var $name = NULL;

@@ -1,9 +1,10 @@
 <?php
 /**
  * class.dynaformEditor.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,8 +21,6 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * /**
- * @package workflow.classes
  */
  
 /**
@@ -37,6 +36,10 @@ G::LoadClass('dynaFormField');
 require_once('classes/model/Process.php');
 require_once('classes/model/Dynaform.php');
 G::LoadClass('xmlDb');
+
+/**
+ * @package workflow.engine.classes
+ */
 
 class dynaformEditor extends WebResource 
 {
@@ -346,7 +349,9 @@ interface iDynaformEditorAjax
 }
 
 /**
- * DynaformEditorAjax - DynaformEditorAjax class 
+ * DynaformEditorAjax - DynaformEditorAjax class
+ * 
+ * @package workflow.engine.classes
  */
 
 class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax 

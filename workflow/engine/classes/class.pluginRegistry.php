@@ -1,9 +1,10 @@
 <?php
 /**
  * class.pluginRegistry.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,9 +21,11 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- * /**
- * @package workflow.classes
+ */
+
+
+/**
+ * @package workflow.engine.classes
  */
 
 class pluginDetail {
@@ -66,6 +69,10 @@ class pluginDetail {
   }
 }
 
+/**
+ * @package workflow.engine.classes
+ */
+
 class PMPluginRegistry {
   private $_aPluginDetails = array();
   private $_aPlugins = array();
@@ -87,14 +94,14 @@ class PMPluginRegistry {
 
   /**
    * This function is the constructor of the PMPluginRegistry class
-   * @param
+   * param
    * @return void
    */
   private function __construct() {}
 
   /**
    * This function is instancing to this class
-   * @param
+   * param
    * @return object
    */
   function &getSingleton() {
@@ -106,7 +113,7 @@ class PMPluginRegistry {
 
   /**
    * This function generates a storable representation of a value
-   * @param
+   * param
    * @return void
    */
   function serializeInstance() {

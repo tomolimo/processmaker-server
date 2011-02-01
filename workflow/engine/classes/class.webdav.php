@@ -1,4 +1,8 @@
 <?php
+/**
+ * class.webdav.php
+ * @package workflow.engine.classes
+ */
 
 require_once "HTTP/WebDAV/Server.php";
 require_once "System.php";
@@ -7,7 +11,7 @@ require_once "System.php";
  * ProcessMaker Filesystem access using WebDAV
  *
  * @access public
- * @package workflow.classes
+ * @package workflow.engine.classes
 */
 class ProcessMakerWebDav extends HTTP_WebDAV_Server 
 {

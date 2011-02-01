@@ -1,9 +1,10 @@
 <?php
 /**
  * class.plugin.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,10 +21,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- * /**
- * @package workflow.classes
  */
+ 
 
 require_once ( 'class.pluginRegistry.php');
 
@@ -42,6 +41,9 @@ define ( 'PM_CASE_DOCUMENT_LIST_ARR', 1010 );
 define ( 'PM_LOGIN', 1011 );
 define ( 'PM_UPLOAD_DOCUMENT_BEFORE', 1012 );
 
+/**
+ * @package workflow.engine.classes
+ */
 
 class menuDetail {
   var $sNamespace;
@@ -49,9 +51,9 @@ class menuDetail {
   var $sFilename;
   /**
   * This function is the constructor of the menuDetail class
-  * @param string $sNamespace
-  * @param string $sMenuId
-  * @param string $sFilename
+  * param string $sNamespace
+  * param string $sMenuId
+  * param string $sFilename
   * @return void
   */
   function __construct( $sNamespace, $sMenuId, $sFilename ) {
@@ -60,15 +62,19 @@ class menuDetail {
     $this->sFilename  = $sFilename;
   }
  }
+/**
+ * @package workflow.engine.classes
+ */
+
 class toolbarDetail {
   var $sNamespace;
   var $sToolbarId;
   var $sFilename;
   /**
   * This function is the constructor of the menuDetail class
-  * @param string $sNamespace
-  * @param string $sMenuId
-  * @param string $sFilename
+  * param string $sNamespace
+  * param string $sMenuId
+  * param string $sFilename
   * @return void
   */
   function __construct( $sNamespace, $sToolbarId, $sFilename ) {
@@ -77,6 +83,9 @@ class toolbarDetail {
     $this->sFilename  = $sFilename;
   }
  }
+ /**
+ * @package workflow.engine.classes
+ */
  class dashboardPage {
   var $sNamespace;
   var $sPage;
@@ -84,8 +93,8 @@ class toolbarDetail {
   var $sIcon;    
   /**
   * This function is the constructor of the dashboardPage class
-  * @param string $sNamespace
-  * @param string $sPage  
+  * param string $sNamespace
+  * param string $sPage  
   * @return void
   */
   function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
@@ -96,13 +105,16 @@ class toolbarDetail {
   }
  }
 
+ /**
+ * @package workflow.engine.classes
+ */
 class cssFile {
   var $sNamespace;
   var $sCssFile;
   /**
   * This function is the constructor of the dashboardPage class
-  * @param string $sNamespace
-  * @param string $sPage  
+  * param string $sNamespace
+  * param string $sPage  
   * @return void
   */
   function __construct( $sNamespace, $sCssFile) {
@@ -110,7 +122,9 @@ class cssFile {
     $this->sCssFile    = $sCssFile;        
   }
  }
- 
+ /**
+ * @package workflow.engine.classes
+ */
 class triggerDetail {
   var $sNamespace;
   var $sTriggerId;
@@ -118,9 +132,9 @@ class triggerDetail {
 
   /**
   * This function is the constructor of the triggerDetail class
-  * @param string $sNamespace
-  * @param string $sTriggerId
-  * @param string $sTriggerName
+  * param string $sNamespace
+  * param string $sTriggerId
+  * param string $sTriggerName
   * @return void
   */
   function __construct( $sNamespace, $sTriggerId, $sTriggerName ) {
@@ -129,7 +143,9 @@ class triggerDetail {
     $this->sTriggerName = $sTriggerName;
   }
 }
-
+/**
+ * @package workflow.engine.classes
+ */
 class folderDetail {
   var $sNamespace;
   var $sFolderId;
@@ -137,9 +153,9 @@ class folderDetail {
 
   /**
   * This function is the constructor of the folderDetail class
-  * @param string $sNamespace
-  * @param string $sFolderId
-  * @param string $sFolderName
+  * param string $sNamespace
+  * param string $sFolderId
+  * param string $sFolderName
   * @return void
   */
   function __construct( $sNamespace, $sFolderId, $sFolderName ) {
@@ -148,7 +164,9 @@ class folderDetail {
     $this->sFolderName = $sFolderName;
    }
 }
-
+/**
+ * @package workflow.engine.classes
+ */
 class stepDetail {
   var $sNamespace;
   var $sStepId;
@@ -158,11 +176,11 @@ class stepDetail {
 
   /**
   * This function is the constructor of the stepDetail class
-  * @param string $sNamespace
-  * @param string $sStepId
-  * @param string $sStepName
-  * @param string $sStepTitle
-  * @param string $sSetupStepPage
+  * param string $sNamespace
+  * param string $sStepId
+  * param string $sStepName
+  * param string $sStepTitle
+  * param string $sSetupStepPage
   * @return void
   */
   function __construct( $sNamespace, $sStepId, $sStepName, $sStepTitle, $sSetupStepPage ) {
@@ -173,7 +191,9 @@ class stepDetail {
     $this->sSetupStepPage = $sSetupStepPage;
    }
 }
-
+/**
+ * @package workflow.engine.classes
+ */
 class redirectDetail {
   var $sNamespace;
   var $sRoleCode;
@@ -181,9 +201,9 @@ class redirectDetail {
 
   /**
   * This function is the constructor of the redirectDetail class
-  * @param string $sNamespace
-  * @param string $sRoleCode
-  * @param string $sPathMethod
+  * param string $sNamespace
+  * param string $sRoleCode
+  * param string $sPathMethod
   * @return void
   */
   function __construct( $sNamespace, $sRoleCode, $sPathMethod ) {
@@ -192,7 +212,9 @@ class redirectDetail {
     $this->sPathMethod = $sPathMethod;
    }
 }
-
+/**
+ * @package workflow.engine.classes
+ */
 class folderData {
   var $sProcessUid;
   var $sProcessTitle;
@@ -204,13 +226,13 @@ class folderData {
 
   /**
   * This function is the constructor of the folderData class
-  * @param string $sProcessUid
-  * @param string $sProcessTitle
-  * @param string $sApplicationUid
-  * @param string $sApplicationTitle
-  * @param string $sUserUid
-  * @param string $sUserLogin
-  * @param string $sUserFullName
+  * param string $sProcessUid
+  * param string $sProcessTitle
+  * param string $sApplicationUid
+  * param string $sApplicationTitle
+  * param string $sUserUid
+  * param string $sUserLogin
+  * param string $sUserFullName
   * @return void
   */
   function __construct( $sProcessUid, $sProcessTitle, $sApplicationUid, $sApplicationTitle, $sUserUid, $sUserLogin = '', $sUserFullName ='') {
@@ -223,7 +245,9 @@ class folderData {
     $this->sUserFullName     = $sUserFullName;
    }
 }
-
+/**
+ * @package workflow.engine.classes
+ */
 class uploadDocumentData {
   var $sApplicationUid;
   var $sUserUid;
@@ -235,12 +259,12 @@ class uploadDocumentData {
 
   /**
   * This function is the constructor of the uploadDocumentData class
-  * @param string $sApplicationUid
-  * @param string $sUserUid
-  * @param string $sFilename
-  * @param string $sFileTitle
-  * @param string $sDocumentUid
-  * @param integer $iVersion
+  * param string $sApplicationUid
+  * param string $sUserUid
+  * param string $sFilename
+  * param string $sFileTitle
+  * param string $sDocumentUid
+  * param integer $iVersion
   * @return void
   */
   function __construct( $sApplicationUid, $sUserUid, $sFilename, $sFileTitle, $sDocumentUid, $iVersion = 1 ) {
@@ -253,6 +277,9 @@ class uploadDocumentData {
     $this->iVersion    = $iVersion;
    }
 }
+/**
+ * @package workflow.engine.classes
+ */
 class loginInfo {
   var $lName;
   var $lPassword;
@@ -260,9 +287,9 @@ class loginInfo {
 
   /**
   * This function is the constructor of the loginInfo class
-  * @param string $lName
-  * @param string $lPassword
-  * @param string $lSession
+  * param string $lName
+  * param string $lPassword
+  * param string $lSession
   * @return void
   */
   function __construct( $lName, $lPassword, $lSession ) {
@@ -271,7 +298,9 @@ class loginInfo {
     $this->lSession  = $lSession;
   }
 }
-
+/**
+ * @package workflow.engine.classes
+ */
 class caseSchedulerPlugin {
   var $sNamespace;
   var $sActionId;
@@ -282,12 +311,12 @@ class caseSchedulerPlugin {
 
   /**
   * This function is the constructor of the caseSchedulerPlugin class
-  * @param string $sNamespace
-  * @param string $sActionId
-  * @param string $sActionForm
-  * @param string $sActionSave
-  * @param string $sActionExecute
-  * $param string $sActionGetFields
+  * param string $sNamespace
+  * param string $sActionId
+  * param string $sActionForm
+  * param string $sActionSave
+  * param string $sActionExecute
+  * param string $sActionGetFields
   * @return void
   */
   function __construct( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields ) {
@@ -299,6 +328,9 @@ class caseSchedulerPlugin {
     $this->sActionGetFields = $sActionGetFields;
    }
 }
+/**
+ * @package workflow.engine.classes
+ */
 class taskExtendedProperty {
   var $sNamespace;
   var $sPage;
@@ -306,10 +338,10 @@ class taskExtendedProperty {
   var $sIcon;    
   /**
   * This function is the constructor of the taskExtendedProperty class
-  * @param string $sNamespace
-  * @param string $sPage  
-  * @param string $sName
-  * @param string $sIcon
+  * param string $sNamespace
+  * param string $sPage  
+  * param string $sName
+  * param string $sIcon
   * @return void
   */
   function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
@@ -319,7 +351,9 @@ class taskExtendedProperty {
     $this->sIcon    = $sIcon;
   }
  }
-
+/**
+ * @package workflow.engine.classes
+ */
 class PMPlugin {
   var $sNamespace;
   var $sClassName;
@@ -357,7 +391,7 @@ class PMPlugin {
 
  /**
   * With this function we can register the dashboard
-  * @param
+  * param
   * @return void
   */
   function registerDashboard( ) {
@@ -368,7 +402,7 @@ class PMPlugin {
 
   /**
   * With this function we can register the report
-  * @param
+  * param
   * @return void
   */
   function registerReport( ) {
@@ -378,7 +412,7 @@ class PMPlugin {
 
   /**
   * With this function we can register the pm's function
-  * @param
+  * param
   * @return void
   */
   function registerPmFunction( ) {
@@ -388,7 +422,7 @@ class PMPlugin {
 
   /**
   * With this function we can set the company's logo
-  * @param
+  * param
   * @return void
   */
   function setCompanyLogo( $filename ) {
@@ -398,7 +432,7 @@ class PMPlugin {
 
   /**
   * With this function we can register the pm's function
-  * @param
+  * param
   * @return void
   */
   function redirectLogin( $role, $pathMethod ) {
@@ -418,7 +452,7 @@ class PMPlugin {
 
   /**
   * With this function we can register the steps
-  * @param
+  * param
   * @return void
   */
   function registerStep($sStepId, $sStepName, $sStepTitle, $sSetupStepPage  = '') {
@@ -531,7 +565,7 @@ class PMPlugin {
   }
   /**
   * With this function we can register a Case Scheduler Plugin/Addon
-  * @param
+  * param
   * @return void
   */
   function registerCaseSchedulerPlugin($sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields) {

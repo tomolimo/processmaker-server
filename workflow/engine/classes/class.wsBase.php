@@ -1,9 +1,10 @@
 <?php
 /**
  * class.wsBase.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,9 +21,6 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- * /**
- * @package workflow.classes
  */
 
 
@@ -66,9 +64,10 @@
  /**
  * Copyright (C) 2009 COLOSA
  * License: LGPL, see LICENSE
- * @Last Modify: 26.06.2008 10:05:00
- * @Last modify by: Erik Amaru Ortiz <erik@colosa.com>
- * @Last Modify comment(26.06.2008): the session expired verification was removed from here to soap class
+ * Last Modify: 26.06.2008 10:05:00
+ * Last modify by: Erik Amaru Ortiz <erik@colosa.com>
+ * Last Modify comment(26.06.2008): the session expired verification was removed from here to soap class
+ * @package workflow.engine.classes
  */
 
 class wsBase

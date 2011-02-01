@@ -1,9 +1,10 @@
 <?php
 /**
  * class.report.php
+ * @package workflow.engine.ProcessMaker
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -26,7 +27,7 @@
 
 /**
  * Report - Report class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author Everth S. Berrios Morales
  * @copyright 2008 COLOSA
  */
@@ -39,7 +40,7 @@ class Report {
   * 
   * @name generatedReport1
   *
-  * @param 
+  * param 
   * @return object
   */ 
   function generatedReport1()
@@ -257,7 +258,7 @@ class Report {
   * 
   * @name generatedReport2
   *
-  * @param 
+  * param 
   * @return object
   */
   function generatedReport2()
@@ -672,7 +673,7 @@ class Report {
   * 
   * @name generatedReport4
   *
-  * @param
+  * param
   * @return object
   */
   function generatedReport4()
@@ -961,7 +962,7 @@ class Report {
   * 
   * @name getAvailableReports
   *
-  * @param 
+  * param 
   * @return array
   */
   function getAvailableReports() 
@@ -975,7 +976,7 @@ class Report {
   * 
   * @name reportsPatch
   *
-  * @param 
+  * param 
   * @return void
   */
   
