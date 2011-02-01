@@ -129,9 +129,12 @@ class Event extends BaseEvent {
 
       if(isset($aData['EVN_CONDITIONS']))
           $oEvent->setEvnConditions( $aData['EVN_CONDITIONS'] );
-
-      $oEvent->setEvnStatus( $aData['EVN_STATUS'] );
-      $oEvent->setEvnWhen( $aData['EVN_WHEN'] );
+          
+      if(isset($aData['EVN_STATUS']))
+        $oEvent->setEvnStatus( $aData['EVN_STATUS'] );
+        
+      if(isset($aData['EVN_WHEN']))
+        $oEvent->setEvnWhen( $aData['EVN_WHEN'] );
 
       $oEvent->setEvnMaxAttempts( 3 );
 
@@ -221,11 +224,11 @@ class Event extends BaseEvent {
         if(isset($aData['EVN_WHEN_OCCURS']))
             $oEvent->setEvnWhenOccurs( $aData['EVN_WHEN_OCCURS'] );
 
-        if(isset($aData['EVN_WHEN_OCCURS']))
-            $oEvent->setEvnStatus( $aData['EVN_WHEN_OCCURS'] );
+        if(isset($aData['EVN_STATUS']))
+            $oEvent->setEvnStatus( $aData['EVN_STATUS'] );
 
-        if(isset($aData['EVN_WHEN_OCCURS']))
-            $oEvent->setEvnWhen( $aData['EVN_WHEN_OCCURS'] );
+        if(isset($aData['EVN_WHEN']))
+            $oEvent->setEvnWhen( $aData['EVN_WHEN'] );
 
         if(isset($aData['TRI_UID']))
             $oEvent->setTriUid( $aData['TRI_UID'] );
