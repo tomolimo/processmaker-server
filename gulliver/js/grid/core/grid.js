@@ -172,11 +172,13 @@ var G_Grid = function(oForm, sGridName) {
               }
   
               tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
-              if( tags.length == 0 ){ //then it is a datepicker
+              if( tags.length == 0 ){ //then it is not a datepicker
                 scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
                 attributes = elementAttributesNS(aObjects[0], 'pm');
                 if(attributes.defaultvalue!= undefined)
                  attributDefaultValue=attributes.defaultvalue;
+              } else {
+                 attributDefaultValue='';
               }
 
               if (aObjects[0].type != 'checkbox' ) {
