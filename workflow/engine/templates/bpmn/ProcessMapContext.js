@@ -28,6 +28,7 @@ ProcessMapContext.prototype.editProcess= function()
         var editProcess = new Ext.FormPanel({
         labelWidth: 75, // label settings here cascade unless overridden
         frame:true,
+        monitorValid : true,
         bodyStyle:'padding:5px 5px 0',
         width: 500,
         height: 400,
@@ -95,28 +96,9 @@ ProcessMapContext.prototype.editProcess= function()
                         checked:checkDebug
                     }
                 ]
-        }]
-    });
-
-    editProcess.render(document.body);
-    workflow.editProcessForm = editProcess;
-
-     var window = new Ext.Window({
-        title: 'Edit Process',
-        collapsible: false,
-        maximizable: false,
-        width: 500,
-        height: 400,
-        minWidth: 300,
-        minHeight: 200,
-        layout: 'fit',
-        autoScroll: true,
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: editProcess,
-        buttons: [{
+        }],buttons: [{
             text: 'Save',
+            formBind    :true,
             handler: function(){
                 //waitMsg: 'Saving...',       // Wait Message
                   var fields          = editProcess.items.items;
@@ -136,7 +118,7 @@ ProcessMapContext.prototype.editProcess= function()
                   Ext.Ajax.request({
                         url: "processes_Ajax.php"+ urlparams,
                         success: function(response) {
-                            window.close();
+                            window.hide();
                         },
                         failure: function(){
                             Ext.Msg.alert ('Failure');
@@ -147,10 +129,29 @@ ProcessMapContext.prototype.editProcess= function()
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                window.close();
+                window.hide();
              }
         }]
     });
+
+    editProcess.render(document.body);
+    workflow.editProcessForm = editProcess;
+
+     var window = new Ext.Window({
+        title: 'Edit Process',
+        collapsible: false,
+        maximizable: false,
+        width: 500,
+        height: 400,
+        minWidth: 300,
+        minHeight: 200,
+        layout: 'fit',
+        autoScroll: true,
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: editProcess
+        });
     window.show();
 
 }
@@ -164,6 +165,7 @@ ProcessMapContext.prototype.exportProcess= function()
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
   frame         : true,
+  monitorValid : true,
   title         : '',
   bodyStyle     : 'padding:5px 5px 0',
   width         : 500,
@@ -273,7 +275,7 @@ ProcessMapContext.prototype.exportProcess= function()
     collapsible: false,
     maximizable: false,
     width      : 450,
-    height     : 450,
+    height     : 300,
     minWidth   : 300,
     minHeight  : 200,
     layout     : 'fit',
@@ -434,6 +436,7 @@ var tb = new Ext.Toolbar({
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
+                PermissionForm.getForm().reset();
                 formWindow.show();
             }
   })
@@ -536,7 +539,8 @@ var tb = new Ext.Toolbar({
    //   title:"Add new Database Source",
       collapsible: false,
       maximizable: true,
-      width:450,
+      width:350,
+      monitorValid : true,
       frame:true,
       plain: true,
       bodyStyle: 'padding:5px;',
@@ -793,26 +797,9 @@ var tb = new Ext.Toolbar({
            }
 
 
-       ]
-  })
-
-
-
-var formWindow = new Ext.Window({
-        title: 'New specific Permission',
-        collapsible: false,
-        maximizable: true,
-        width: 450,
-        autoScroll: true,
-        //autoHeight: true,
-        height: 420,
-        //layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: PermissionForm,
-        buttons: [{
+       ], buttons: [{
             text: 'Create',
+            formBind    :true,
             handler: function(){
                 var getForm         = PermissionForm.getForm().getValues();
                 var TargetTask      = getForm.TAS_UID;
@@ -843,9 +830,9 @@ var formWindow = new Ext.Window({
                   },
                   success: function(response) {
                       Ext.MessageBox.alert ('Status','Process Permission created successfully.');
-                      formWindow.close();
+                      formWindow.hide();
                       PermissionStore.reload();
-                      formWindow.close();
+                      formWindow.hide();
                       PermissionStore.reload();
                   }
                 });
@@ -854,10 +841,27 @@ var formWindow = new Ext.Window({
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                formWindow.close();
+                formWindow.hide();
           }
         }]
-    });
+  })
+
+
+
+var formWindow = new Ext.Window({
+        title: 'New specific Permission',
+        collapsible: false,
+        maximizable: true,
+        width: 400,
+        autoScroll: true,
+        //autoHeight: true,
+        height: 350,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: PermissionForm
+       });
   gridWindow.show();
 }
 
@@ -1544,6 +1548,7 @@ ProcessMapContext.prototype.processFileManager= function()
         items: AwesomeUploaderInstance,
         buttons: [{
             text: 'Save',
+            formBind    :true,
             handler: function(){
                 //waitMsg: 'Saving...',       // Wait Message
                   var fields          = editProcess.items.items;
@@ -1563,7 +1568,7 @@ ProcessMapContext.prototype.processFileManager= function()
                   Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
-                        window.close();
+                        window.hide();
                     },
                     failure: function(){
                         Ext.Msg.alert ('Failure');
@@ -1574,7 +1579,7 @@ ProcessMapContext.prototype.processFileManager= function()
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                window.close();
+                window.hide();
              }
         }]
     });
@@ -1588,6 +1593,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
    var PropertiesForm = new Ext.FormPanel({
         labelWidth: 75, // label settings here cascade unless overridden
         frame:true,
+        monitorValid : true,
         bodyStyle:'padding:5px 5px 0',
         width: 300,
         height: 300,
@@ -1657,25 +1663,9 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                         fieldLabel: 'Messages History',
                         name: 'CT_MESSAGE_HISTORY'
                        // checked:checkMessages
-               }]
-
-   });
-   var Propertieswindow = new Ext.Window({
-        title: 'Case tracker',
-        collapsible: false,
-        maximizable: false,
-        width: 300,
-        height: 300,
-        //minWidth: 300,
-        //minHeight: 200,
-        layout: 'fit',
-        autoScroll: true,
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: PropertiesForm,
-        buttons: [{
+               }], buttons: [{
                 text: 'Save',
+                formBind    :true,
                 handler: function(){
                 var getForm             = PropertiesForm.getForm().getValues();
                 //var pro_uid             = getForm.PRO_UID;
@@ -1709,9 +1699,26 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         },{
            text: 'Cancel',
            handler: function(){
-           Propertieswindow.close();
+           Propertieswindow.hide();
           }
         }]
+
+   });
+   var Propertieswindow = new Ext.Window({
+        title: 'Case tracker',
+        collapsible: false,
+        maximizable: false,
+        width: 300,
+        height: 300,
+        //minWidth: 300,
+        //minHeight: 200,
+        layout: 'fit',
+        autoScroll: true,
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: PropertiesForm
+       
    });
   Propertieswindow.show();
 }
@@ -2091,6 +2098,7 @@ ProcessMapContext.prototype.ExtVariables = function()
 
   var varForm = new Ext.FormPanel({
         labelWidth: 100,
+        monitorValid : true,
         bodyStyle :'padding:5px 5px 0',
         width     : 400,
         height    : 350,

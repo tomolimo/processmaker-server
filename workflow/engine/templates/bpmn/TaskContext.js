@@ -381,6 +381,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
     var taskStepsTabs = new Ext.FormPanel({
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
+        monitorValid : true,
         width     : 850,
         height    : 500,
         items:
@@ -723,6 +724,7 @@ TaskContext.prototype.editTaskProperties= function()
 
     var taskPropertiesTabs = new Ext.FormPanel({
         labelWidth  : 100,
+        monitorValid : true,
         // store       : taskDetails,
         //url         : 'proxyTaskPropertiesDetails.php',
         bodyStyle   : 'padding:5px 5px 0',
@@ -1262,7 +1264,23 @@ TaskContext.prototype.editTaskProperties= function()
                 }]
               
             }
-            ]
+            ],buttons: [{
+            text: 'Save',
+            formBind    :true,
+            handler: function(){
+                //var getstore = taskPropertiesTabs.getStore();
+                //var getData = getstore.data.items;
+                taskExtObj.saveTaskProperties();
+                 window.hide();
+
+            }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                window.hide();
+            }
+        }]
         }
     });
     
@@ -1332,24 +1350,8 @@ TaskContext.prototype.editTaskProperties= function()
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
-        items: taskPropertiesTabs,
-        buttons: [{
-            text: 'Save',
-            handler: function(){
-                //var getstore = taskPropertiesTabs.getStore();
-                //var getData = getstore.data.items;
-                taskExtObj.saveTaskProperties();
-                 window.close();
-
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.close();
-            }
-        }]
-    });
+        items: taskPropertiesTabs
+        });
     window.show();
 
 }
@@ -1753,6 +1755,7 @@ TaskContext.prototype.stepTriggers = function()
 
     var treeGrid = new Ext.FormPanel({
         frame: true,
+        monitorValid : true,
         labelAlign: 'left',
         bodyStyle:'padding:5px',
         width:  750,

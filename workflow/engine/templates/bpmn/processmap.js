@@ -308,11 +308,6 @@ Ext.onReady ( function() {
                             iconCls: 'button_menu_ext ss_sprite ss_exclamation',
                             handler: ProcessMapObj.caseTrackerObjects,
                             scope:this
-                        },
-                         {
-                            text: 'Test',
-                            handler: ProcessMapObj.ExtVariables,
-                            scope:this
                         }
                     ]
                 }

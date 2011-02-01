@@ -1140,13 +1140,13 @@ MyWorkflow.prototype.AddEventInterContextMenu=function(_4093)
                             handler: MyWorkflow.prototype.toggleShapes
                         },*/
                         {
-                            text: 'Message : Send',
+                            text: 'Message : Throw',
                             type:'bpmnEventMessageSendInter',
                             scope:_4093,
                             handler: MyWorkflow.prototype.toggleShapes
                         },
                         {
-                            text: 'Message :  Receive',
+                            text: 'Message :  Catch',
                             type:'bpmnEventMessageRecInter',
                             scope:_4093,
                             handler: MyWorkflow.prototype.toggleShapes
@@ -1616,11 +1616,11 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                                       if(preSelectedFigure.type.match(/Task/))
                                          this.workflow.saveRoute(preSelectedFigure,oNewShape);
 
-                                      if (preSelectedFigure.type.match(/Gateway/)) {
+                                      if (preSelectedFigure.type.match(/Gateway/)) 
                                          //preSelectedFigure.rou_type = 'SEQUENTIAL';
                                         this.workflow.saveRoute(preSelectedFigure,oNewShape);
-                                      }
 
+                                      
                                       if (preSelectedFigure.type.match(/Inter/)) {
                                          //preSelectedFigure.rou_type = 'SEQUENTIAL';
                                         this.workflow.saveEvents(preSelectedFigure,oNewShape);
@@ -2073,7 +2073,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
 }
 
 /**
- * Delting Route Silently
+ * Deleting Route Silently
  * @Param  oConn     Object
  * @Param  iVal    Integer
  * @Author Girish joshi

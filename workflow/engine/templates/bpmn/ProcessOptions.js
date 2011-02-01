@@ -28,6 +28,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
+                dynaformDetails.getForm().reset();
                 formWindow.show();
             }
   });
@@ -169,7 +170,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         width: 280,
                         editable: false,
                         editor: new Ext.form.TextField({
-                        //allowBlank: false
+                        allowBlank: false
                         })
                     },
                     {
@@ -194,7 +195,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sortable: true,
                         editor: {
                             xtype: 'textfield',
-                            allowBlank: false,
+                            //allowBlank: false,
                             name      : 'FLD_NAME'
                         }
                     },{
@@ -205,7 +206,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sortable: true,
                         editor: {
                             xtype: 'textfield',
-                            allowBlank: false,
+                           // allowBlank: false,
                             name      : 'PRO_VARIABLE'
                         }
                     },{
@@ -237,6 +238,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         labelWidth: 100,
         bodyStyle :'padding:5px 5px 0',
         width     : 550,
+        monitorValid : true,
         autoHeight: true,
         items:
                 [{
@@ -293,8 +295,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     items:[{
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
-                            name      : 'DYN_TITLE',
-                            allowBlank: false
+                            name      : 'DYN_TITLE'
+                            //allowBlank: false
                          },{
                             width:          150,
                             xtype:          'combo',
@@ -362,7 +364,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
                             name      : 'DYN_TITLE',
-                            allowBlank: false
+                           // allowBlank: false
                          },{
                             xtype     : 'textarea',
                             fieldLabel: 'Description',
@@ -387,40 +389,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                          }
                      ]
                 }
-            ]
-
-    });
-
- var gridWindow = new Ext.Window({
-        title: 'Dynaform',
-        autoScroll: true,
-        collapsible: false,
-        maximizable: true,
-        width: 600,
-        //autoHeight: true,
-        height: 450,
-        layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: dynaformGrid
-    });
-
- var formWindow = new Ext.Window({
-        title: 'Dynaform',
-        autoScroll: true,
-        collapsible: false,
-        maximizable: true,
-        width: 550,
-        //autoHeight: true,
-        //height: 500,
-        layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: dynaformDetails,
-        buttons: [{
+            ], buttons: [{
             text: 'Save',
+            formBind    :true,
             handler: function(){
                 var getForm   = dynaformDetails.getForm().getValues();
                 //var sDynaType = getForm.DYN_SOURCE;
@@ -462,19 +433,51 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                           success: function(response) {
                               Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
                               taskDynaform.reload();
-                              formWindow.close()
+                              formWindow.hide()
                           }
                         });
-                        
+
             }
-         
+
     },{
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                formWindow.close();
+                formWindow.hide();
             }
         }]
+
+    });
+
+ var gridWindow = new Ext.Window({
+        title: 'Dynaform',
+        autoScroll: true,
+        collapsible: false,
+        maximizable: true,
+        width: 600,
+        //autoHeight: true,
+        height: 450,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: dynaformGrid
+    });
+
+ var formWindow = new Ext.Window({
+        title: 'Dynaform',
+        autoScroll: true,
+        collapsible: false,
+        maximizable: true,
+        width: 550,
+        //autoHeight: true,
+        //height: 500,
+        layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: dynaformDetails
+       
     });
    gridWindow.show();
 }
@@ -501,6 +504,7 @@ ProcessOptions.prototype.dbConnection = function()
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
+                dbconnForm.getForm().reset();
                 formWindow.show();
             }
   });
@@ -597,7 +601,7 @@ ProcessOptions.prototype.dbConnection = function()
                         editable: false,
                         sortable: true,
                         editor: new Ext.form.TextField({
-                            //allowBlank: false
+                        //allowBlank: false
                             })
                     },{
                         id: 'DBS_SERVER',
@@ -615,7 +619,7 @@ ProcessOptions.prototype.dbConnection = function()
                         //width: 100,
                         sortable: true,
                         editor: new Ext.form.TextField({
-                            //allowBlank: false
+                       // allowBlank: false
                             })
                     },{
                         id: 'DBS_DESCRIPTION',
@@ -653,8 +657,10 @@ ProcessOptions.prototype.dbConnection = function()
    //   title:"Add new Database Source",
       collapsible: false,
       maximizable: true,
+      //allowBlank:false,
       width:450,
       frame:true,
+      monitorValid : true,
       plain: true,
       bodyStyle: 'padding:5px;',
       buttonAlign: 'center',
@@ -864,7 +870,7 @@ ProcessOptions.prototype.dbConnection = function()
                         fieldLabel: 'Port',
                         name: 'DBS_PORT',
                         id:'port',
-                        allowBlank: false,
+                        //allowBlank: false,
                         editable:false
                       },{
                         xtype: 'textarea',
@@ -876,23 +882,9 @@ ProcessOptions.prototype.dbConnection = function()
                         xtype: 'hidden',
                         name : 'DBS_UID'
                       }
-                     ]
-  })
-
-  var formWindow = new Ext.Window({
-    title: 'Add new Database Source',
-    collapsible: false,
-    maximizable: true,
-    width: 300,
-    //autoHeight: true,
-    //height: 400,
-    //layout: 'fit',
-    plain: true,
-    bodyStyle: 'padding:5px;',
-    buttonAlign: 'center',
-    items: dbconnForm,
-    buttons: [{
+                     ], buttons: [{
         text: 'Save',
+        formBind    :true,
         handler: function(){
             var getForm         = dbconnForm.getForm().getValues();
             var dbConnUID       = getForm.DBS_UID;
@@ -946,16 +938,31 @@ ProcessOptions.prototype.dbConnection = function()
                     }
                 });
             }
-           formWindow.close();
+           formWindow.hide();
            dbStore.reload();
         }
     },{
         text: 'Cancel',
         handler: function(){
             // when this button clicked,
-            formWindow.close();
+            formWindow.hide();
         }
     }]
+  })
+
+  var formWindow = new Ext.Window({
+    title: 'Add new Database Source',
+    collapsible: false,
+    maximizable: true,
+    width: 300,
+    //autoHeight: true,
+    //height: 400,
+    //layout: 'fit',
+    plain: true,
+    bodyStyle: 'padding:5px;',
+    buttonAlign: 'center',
+    items: dbconnForm
+   
   });
 
   var gridWindow = new Ext.Window({
@@ -1341,8 +1348,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             text: 'Save',
             formBind    :true,
             handler: function(){
-                var getForm   = inputDocForm.getForm().getValues();
-
+                var getForm         = inputDocForm.getForm().getValues();
                 var sDocUID        = getForm.INP_DOC_UID;
                 var sDocTitle        = getForm.INP_DOC_TITLE;
                 var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
@@ -1398,7 +1404,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                               },
                               success: function(response) {
                                   Ext.MessageBox.alert ('Status','Input document has been created successfully.');
-                                  newIOWindow.close();
+                                  newIOWindow.hide();
                                   inputDocStore.reload();
                               }
                             });
@@ -1605,6 +1611,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
+            outputDocForm.getForm().reset();
             newOPWindow.show();
             }
         });
@@ -1995,7 +2002,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                           success: function(response) {
                             Ext.MessageBox.alert ('Status','Output document has been created successfully.');
                             outputDocStore.reload();
-                            newOPWindow.close();
+                            newOPWindow.hide();
                           }
                       });
 
@@ -2033,7 +2040,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                           success: function(response) {
                             Ext.MessageBox.alert ('Status','Output document has been updated successfully.');
                             outputDocStore.reload();
-                            newOPWindow.close();
+                            newOPWindow.hide();
                           }
                       });
 
@@ -2043,7 +2050,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                newOPWindow.close();
+                newOPWindow.hide();
             }
         }],
      buttonAlign : 'center'
@@ -2141,6 +2148,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
+                reportForm.getForm().reset();
                 formWindow.show();
             }
   });
@@ -2248,6 +2256,7 @@ var reportForm =new Ext.FormPanel({
       width:450,
       height:380,
       frame:true,
+      monitorValid : true,
       plain: true,
       bodyStyle: 'padding:5px;',
       buttonAlign: 'center',
@@ -2343,23 +2352,9 @@ var reportForm =new Ext.FormPanel({
                                      })
                        }]
           }
-      ]
-  })
-
-var formWindow = new Ext.Window({
-        title: 'New Report Table',
-        collapsible: false,
-        maximizable: true,
-        width: 400,
-        //autoHeight: true,
-        height: 400,
-        //layout: 'fit',
-        plain: true,
-        bodyStyle: 'padding:5px;',
-        buttonAlign: 'center',
-        items: reportForm,
-        buttons: [{
+      ], buttons: [{
             text: 'Save',
+            formBind    :true,
             handler: function(){
                 var getForm         = reportForm.getForm().getValues();
                 //var pro_uid         = getForm.PRO_UID;
@@ -2371,10 +2366,10 @@ var formWindow = new Ext.Window({
                     Type = 'NORMAL';
                 else
                     Type = 'GRID';
-                
+
                 var Grid            = getForm.REP_TAB_GRID;
                 var Fields          = getForm.FIELDS;
-               
+
             if(typeof tableUID=='undefined')
                {
                 Ext.Ajax.request({
@@ -2418,17 +2413,32 @@ var formWindow = new Ext.Window({
 
                 });
                     }
-            formWindow.close();
+            formWindow.hide();
           reportStore.reload();
-            
+
           }
         },{
             text: 'Cancel',
             handler: function(){
                 // when this button clicked,
-                formWindow.close();
+                formWindow.hide();
           }
         }]
+  })
+
+var formWindow = new Ext.Window({
+        title: 'New Report Table',
+        collapsible: false,
+        maximizable: true,
+        width: 400,
+        //autoHeight: true,
+        height: 400,
+        //layout: 'fit',
+        plain: true,
+        bodyStyle: 'padding:5px;',
+        buttonAlign: 'center',
+        items: reportForm
+       
     });
     gridWindow.show();
 }
