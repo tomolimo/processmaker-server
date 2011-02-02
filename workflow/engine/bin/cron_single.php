@@ -221,13 +221,14 @@ function resendEmails() {
 
 function unpauseApplications() {
   global $sFilter;
+  global $sNow;
   if($sFilter!='' &&  strpos($sFilter, 'unpause') === false) return false;
   setExecutionMessage("Unpausing applications");
 
   try {
     G::LoadClass('case');
     $oCases = new Cases();
-    $oCases->ThrowUnpauseDaemon();
+    $oCases->ThrowUnpauseDaemon($sNow);
     setExecutionResultMessage('DONE');
     saveLog('unpauseApplications', 'action', 'Unpausing Applications');
   }
