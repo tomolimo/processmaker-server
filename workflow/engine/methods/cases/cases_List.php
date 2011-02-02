@@ -60,7 +60,7 @@ $oCases = new Cases();
 
 /** here we verify if there is a any case with a unpause on this day*/
 if( $sTypeList === 'to_do' or $sTypeList === 'draft' or $sTypeList === 'paused') {
-    $oCases->ThrowUnpauseDaemon();
+    $oCases->ThrowUnpauseDaemon(date('Y-m-d'));
 }
 
 /* *

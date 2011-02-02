@@ -2807,8 +2807,8 @@ class Cases {
    * @Description: This method set all cases with the APP_DISABLE_ACTION_DATE for today
    * @return void
    */
-  function ThrowUnpauseDaemon() {
-    $today = date('Y-m-d');
+  function ThrowUnpauseDaemon($today) {
+    $today = ($today==date('Y-m-d'))?date('Y-m-d'):$today;
     $c = new Criteria('workflow');
     $c->clearSelectColumns();
     $c->add($c->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL)->addOr($c->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0)));
