@@ -93,7 +93,7 @@ include_once 'creole/CreoleTypes.php';
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  *
- * @package    ".$this->getPackage()."
+ * @package    workflow.".$this->getPackage()."
  */
 class ".$this->getClassname()." {
 ";

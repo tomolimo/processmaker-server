@@ -138,7 +138,7 @@ include_once '".$this->getStubPeerBuilder()->getClassFilePath()."';
  *";
 		}
 		$script .= "
- * @package    ".$this->getPackage()."
+ * @package    workflow.".$this->getPackage()."
  */
 abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->getBaseClass())." ";
 

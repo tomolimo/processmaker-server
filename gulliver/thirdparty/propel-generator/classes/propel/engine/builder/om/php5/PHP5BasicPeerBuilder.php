@@ -100,7 +100,7 @@ include_once '$objectFile';";
  *";
 		}
 		$script .= "
- * @package    ".$this->getPackage()."
+ * @package    workflow.".$this->getPackage()."
  */
 abstract class ".$this->getClassname()." {
 ";
