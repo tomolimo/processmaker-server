@@ -104,6 +104,7 @@ $allWebservices [] = 'OutputDocumentList';
 $allWebservices [] = 'RemoveDocument';
 $allWebservices [] = 'TaskCase';
 $allWebservices [] = 'ReassignCase';
+$allWebservices [] = 'removeUserFromGroup';
 
 foreach ( $allWebservices as $ws ) {
 	$ID_TEST = G::LoadTranslation ( 'ID_TEST' );
@@ -130,4 +131,5 @@ foreach ( $allWebservices as $ws ) {
 	$ch->point = '<img src="/images/trigger.gif" />';
 }
 print ($tree->render ()) ;
+
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="105px">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en>Session Id</en>
+  </SESSION_ID>
+  <USER_ID type="dropdown" sqlConnection="dbarray">
+  SELECT * from user
+  <en>User ID</en>
+  <GROUP_ID type="dropdown" sqlConnection="dbarray">
+   SELECT * from group
+  <en>Group ID</en>
+  <ACTION type="hidden">
+</ACTION>
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en>RemoveUserToGroup</en>    
+  </ACTIONB>
+</dynaForm>
+

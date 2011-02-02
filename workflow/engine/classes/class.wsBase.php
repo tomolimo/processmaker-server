@@ -1,9 +1,10 @@
 <?php
 /**
  * class.wsBase.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.
+ * Copyright (C) 2004 - 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -63,9 +64,10 @@
  /**
  * Copyright (C) 2009 COLOSA
  * License: LGPL, see LICENSE
- * @Last Modify: 26.06.2008 10:05:00
- * @Last modify by: Erik Amaru Ortiz <erik@colosa.com>
- * @Last Modify comment(26.06.2008): the session expired verification was removed from here to soap class
+ * Last Modify: 26.06.2008 10:05:00
+ * Last modify by: Erik Amaru Ortiz <erik@colosa.com>
+ * Last Modify comment(26.06.2008): the session expired verification was removed from here to soap class
+ * @package workflow.engine.classes
  */
 
 class wsBase
@@ -930,6 +932,49 @@ class wsBase
       $result = wsCreateDepartmentResponse (100 , $e->getMessage(), '' );
       return $result;
     }
+  }
+
+  /*
+  * remove user from group
+  * @param string $appDocUid
+  * @return $result will return an object
+  */
+  public function removeUserFromGroup($userId, $groupId) {
+      try {
+      G::LoadClass('groups');
+      global $RBAC;
+      $RBAC->initRBAC();
+      $user=$RBAC->verifyUserId($userId);
+      if($user==0){
+        $result = new wsResponse (3, "User not registered in the system");
+        return $result;
+      }
+
+      $groups = new Groups;
+      $very_group = $groups->verifyGroup( $groupId );
+      if ( $very_group==0 ) {
+        $result = new wsResponse (9, "Group not registered in the system");
+        return $result;
+      }
+
+      $very_user = $groups->verifyUsertoGroup( $groupId, $userId);
+      if($very_user==1){
+        $oGroup = new Groups();
+        $oGroup->removeUserOfGroup($groupId, $userId);
+        $result = new wsResponse (0, "command executed successfuly");
+        return $result;
+      }
+      //$oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
+      $result = new wsResponse (8, "User not registered in the group");
+      return $result;
+    }
+    catch ( Exception $e ) {
+      $result = new wsResponse (100, $e->getMessage());
+      return $result;
+    }
+//G::LoadClass('groups');
+//	  $oGroup = new Groups();
+//	  $oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
   }
 
    /*
@@ -2025,5 +2070,7 @@ class wsBase
       return $result;
     }
   }
+
+  
 
 }
