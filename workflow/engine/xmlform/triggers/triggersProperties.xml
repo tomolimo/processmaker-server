@@ -3,25 +3,20 @@
   <PRO_UID type="hidden"/>
   <TITLE type="title" group="1">
     <en>Trigger Information</en>
-    <es><![CDATA[Información de Trigger]]></es>
   </TITLE>
   <TRI_UID type="hidden"/>
   <TRI_TITLE type="text" size="80" maxlength="100">
     <en>Title</en>
-    <es><![CDATA[Título]]></es>
   </TRI_TITLE>
   <TRI_TYPE type="hidden"/>
   <TRI_DESCRIPTION type="textarea" rows="8" cols="77">
     <en>Description</en>
-    <es><![CDATA[Descripción]]></es>
   </TRI_DESCRIPTION>
   <BTN_CANCEL type="button" onclick="cancel();">
     <en>Cancel</en>
-    <es><![CDATA[Cancelar]]></es>
   </BTN_CANCEL>
   <SAVE type="button" onclick="triggerSave1(this.form);">
     <en>Save</en>
-    <es><![CDATA[Guardar]]></es>
   </SAVE>
   <JS type="JavaScript"><![CDATA[
 
