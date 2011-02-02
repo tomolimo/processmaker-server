@@ -158,6 +158,10 @@ if ( isset ($_REQUEST['action']) ) {
   	  $sOutput = $oTask->update($aData);
           echo $sOutput;
           break;
+        case 'editObjectPermission':
+          // we also need the process uid variable for the function.
+          $oProcessMap->editObjectPermission($oData->op_uid,$oData->pro_uid);
+        break;
       case 'triggersList':
   	  $sOutput = $oProcessMap->getTriggers($oData->pro_uid);
           $sOutput = $oJSON->encode($sOutput);

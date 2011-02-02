@@ -426,27 +426,85 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     }
                 ]
      });
+  var editor = new Ext.ux.grid.RowEditor({
+    saveText: 'Update'
+    });
+
+
   var btnCreate = new Ext.Button({
             id: 'btnCreate',
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
                 formWindow.show();
+                PermissionForm.getForm().reset();
             }
-  })
-var tb = new Ext.Toolbar({
-            items: [btnCreate]
+  });
+  var btnEdit = new Ext.Button({
+            id: 'btnEdit',
+            text: 'Edit',
+            iconCls: 'application_add',
+            handler: function (s) {
+                var selectedRow = PermissionGrid.getSelectionModel().getSelections();
+                var opUID   = selectedRow[0].data.OP_UID;
+                 //Loading Task Details into the form
+                  PermissionForm.form.load({
+                        url:'proxyExtjs.php?pid='+pro_uid+'&op_uid=' +opUID+'&action=editObjectPermission',
+                        method:'GET',
+                        waitMsg:'Loading',
+                        success:function(form, action) {
+                           //Ext.MessageBox.alert('Message', 'Loaded OK');
+                           formWindow.show();
+                           //Ext.getCmp("OP_UID").setValue(opUID);
+                        },
+                        failure:function(form, action) {
+                            Ext.MessageBox.alert('Message', 'Load failed');
+                        }
+                    });
+            }
         });
 
-  var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: 'New',
-            iconCls: 'application_add',
-            handler: function () {
-                PermissionForm.getForm().reset();
-                formWindow.show();
+  var btnRemove = new Ext.Button({
+            id: 'btnRemove',
+            text: 'Delete',
+            iconCls: 'application_delete',
+            handler: function (s) {
+                editor.stopEditing();
+                var s = PermissionGrid.getSelectionModel().getSelections();
+                for(var i = 0, r; r = s[i]; i++){
+
+                    //First Deleting process permission from Database using Ajax
+                    var opUID      = r.data.OP_UID;
+
+                    //if OP_UID is properly defined (i.e. set to valid value) then only delete the row
+                    //else its a BLANK ROW for which Ajax should not be called.
+                    if(r.data.OP_UID != "")
+                    {
+                          Ext.Ajax.request({
+                                  url   : '../inputdocs/inputdocs_Delete.php',
+                                  method: 'POST',
+                                  params: {
+                                        functions          : 'deleteInputDocument',
+                                        OP_UID             : opUID
+                                  },
+                                  success: function(response) {
+                                    Ext.MessageBox.alert ('Status','Process Permission has been removed successfully.');
+                                    //Secondly deleting from Grid
+                                    PermissionStore.remove(r);
+                                    //reloading store after deleting input document
+                                    PermissionStore.reload();
+                                  }
+                                });
+                    }
+                    else
+                        PermissionStore.remove(r);
+                }
             }
-  })
+        });
+        
+  var tb = new Ext.Toolbar({
+            items: [btnCreate,btnRemove,btnEdit]
+        });
 
   var PermissionGrid = new Ext.grid.GridPanel({
         store: PermissionStore,
@@ -690,6 +748,7 @@ var tb = new Ext.Toolbar({
                xtype: 'fieldset',
                id   : 'dynaform',
                hidden: true,
+               border: false,
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Dynaform',
@@ -714,6 +773,7 @@ var tb = new Ext.Toolbar({
                xtype: 'fieldset',
                id   : 'inputdoc',
                hidden: true,
+               border: false,
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Input Document',
@@ -738,6 +798,7 @@ var tb = new Ext.Toolbar({
                xtype: 'fieldset',
                id   : 'outputdoc',
                hidden: true,
+               border: false,
                items: [{
                     xtype: 'combo',
                     fieldLabel: 'Output Document',
@@ -804,7 +865,8 @@ var tb = new Ext.Toolbar({
            }
 
 
-       ], buttons: [{
+       ],
+       buttons: [{
             text: 'Create',
             formBind    :true,
             handler: function(){

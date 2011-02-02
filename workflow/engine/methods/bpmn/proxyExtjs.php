@@ -61,6 +61,11 @@ switch($_GET['action'])
                 array_shift($rows);
                 break;
 
+      case 'editObjectPermission':
+                $rows = $oProcessMap->editExtObjectPermission($_GET['op_uid'],$_GET['pid']);
+                array_shift($rows);
+                break;
+
        case 'editOutputDocument':
                 require_once 'classes/model/OutputDocument.php';
                 $oOutputDocument = new OutputDocument();
@@ -195,6 +200,7 @@ switch($_GET['action'])
                         $rows[$key] = 'Work Days';
                     else if($key == 'TAS_TYPE_DAY' && $value == '2')
                         $rows[$key] = 'Calendar Days';
+
                     if($key == 'TAS_TYPE' && $value == 'NORMAL')
                          $rows[$key] = false;
                     else if($key == 'TAS_TYPE' && $value == 'ADHOC')

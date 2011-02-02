@@ -36,6 +36,9 @@ if( isset($_POST['action']) ){
 	throw new Exception('dbconnections Fatal error, No action defined!...');
 }
 
+if(isset($_POST['PROCESS']))
+    $_SESSION['PROCESS'] = $_POST['PROCESS'];
+
 #Global Definitions
 require_once 'classes/model/DbSource.php';
 require_once 'classes/model/Content.php';

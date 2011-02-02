@@ -1264,23 +1264,7 @@ TaskContext.prototype.editTaskProperties= function()
                 }]
               
             }
-            ],buttons: [{
-            text: 'Save',
-            formBind    :true,
-            handler: function(){
-                //var getstore = taskPropertiesTabs.getStore();
-                //var getData = getstore.data.items;
-                taskExtObj.saveTaskProperties();
-                 window.hide();
-
-            }
-        },{
-            text: 'Cancel',
-            handler: function(){
-                // when this button clicked,
-                window.hide();
-            }
-        }]
+            ]
         }
     });
     
@@ -1353,7 +1337,24 @@ TaskContext.prototype.editTaskProperties= function()
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
-        items: taskPropertiesTabs
+        items: taskPropertiesTabs,
+        buttons: [{
+            text: 'Save',
+            formBind    :true,
+            handler: function(){
+                //var getstore = taskPropertiesTabs.getStore();
+                //var getData = getstore.data.items;
+                taskExtObj.saveTaskProperties();
+                 window.hide();
+
+            }
+        },{
+            text: 'Cancel',
+            handler: function(){
+                // when this button clicked,
+                window.hide();
+            }
+        }]
         });
     window.show();
 

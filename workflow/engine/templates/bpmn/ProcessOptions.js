@@ -363,7 +363,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                          {
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
-                            name      : 'DYN_TITLE',
+                            name      : 'DYN_TITLE'
                            // allowBlank: false
                          },{
                             xtype     : 'textarea',
@@ -895,6 +895,8 @@ ProcessOptions.prototype.dbConnection = function()
             var Password        = getForm.DBS_PASSWORD;
             var Port            = getForm.DBS_PORT;
             var Description     = getForm.DBS_DESCRIPTION;
+            var encode          = getForm.DBS_ENCODE;
+
 
             if(dbConnUID=='')
                 {
@@ -910,6 +912,8 @@ ProcessOptions.prototype.dbConnection = function()
                                passwd   :Password,
                                port     :Port,
                                desc     :Description,
+                               PROCESS  :pro_uid,
+                               enc      :encode,
                                action   :'saveConnection'
                               },
                         success: function(response) {
@@ -930,7 +934,9 @@ ProcessOptions.prototype.dbConnection = function()
                               user     :Username ,
                               passwd   :Password,
                               port     :Port,
+                              PROCESS  :pro_uid,
                               desc     :Description,
+                              enc      :encode,
                               action   :'saveEditConnection'
                             },
                     success: function(response) {
@@ -1082,8 +1088,8 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
-               inputDocForm.getForm().reset();
                newIOWindow.show();
+               inputDocForm.getForm().reset();
             }
         });
  
@@ -2051,6 +2057,10 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             {
                 name: 'FIELD_NAME',
                 type: 'string'
+            },
+            {
+                name: 'FIELD_UID',
+                type: 'string'
             }
        ]);
 
@@ -2069,6 +2079,18 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                            })
  });
   reportStore.load();
+
+ var reportTableTypeStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : reportFields,
+            proxy        : new Ext.data.HttpProxy({
+                           url : 'proxyExtjs?pid='+pro_uid+'&type=NORMAL&action=getReportTableType'
+                           })
+ });
+  reportTableTypeStore.load();
   
   var reportColumns = new Ext.grid.ColumnModel({
             columns: [
@@ -2091,8 +2113,8 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             text: 'New',
             iconCls: 'application_add',
             handler: function () {
-                reportForm.getForm().reset();
                 formWindow.show();
+                reportForm.getForm().reset();
             }
   });
 
@@ -2144,7 +2166,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                                 //Secondly deleting from Grid
                                 reportGrid.remove(r);
                                 //Reloading store after deleting report table
-                                reportGrid.reload();
+                                reportStore.reload();
                               }
                      });
                     }
@@ -2226,7 +2248,7 @@ var reportForm =new Ext.FormPanel({
                               name: 'REP_TAB_TYPE',
                               displayField:  'name',
                               valueField   : 'value',
-                              value        : 'global',
+                              value        : 'Global',
                               store: new Ext.data.JsonStore({
                                      fields : ['name', 'value'],
                                      data   : [
@@ -2245,9 +2267,9 @@ var reportForm =new Ext.FormPanel({
                                                 Ext.getCmp("gridfields").show();
                                                 Ext.getCmp("fields").hide();
                                              }
-                                        var link = 'proxyReportTables?pid='+pro_uid+'&type='+record.data.value+'&action=getReportTableType';
-                                        reportStore.proxy.setUrl(link, true);
-                                        reportStore.load();
+                                        var link = 'proxyExtjs?pid='+pro_uid+'&type='+record.data.value+'&action=getReportTableType';
+                                        reportTableTypeStore.proxy.setUrl(link, true);
+                                        reportTableTypeStore.load();
 
                                         this.setValue(record.data[this.valueField || this.displayField]);
                                         this.collapse();
@@ -2269,9 +2291,9 @@ var reportForm =new Ext.FormPanel({
                                   forceSelection: false,
                                   dataIndex : 'FIELD_NAME',
                                   name: 'FIELDS',
-                                  valueField: 'FIELD_NAME',
+                                  valueField: 'FIELD_UID',
                                   displayField: 'FIELD_NAME',
-                                  store: reportStore
+                                  store: reportTableTypeStore
                                  }]
           }, {
                  xtype: 'fieldset',
@@ -2357,7 +2379,7 @@ var reportForm =new Ext.FormPanel({
                 });
                     }
             formWindow.hide();
-          reportStore.reload();
+            //reportStore.reload();
 
           }
         },{
@@ -2376,13 +2398,12 @@ var formWindow = new Ext.Window({
         width: 400,
         //autoHeight: true,
         height: 400,
-        //layout: 'fit',
+        layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: reportForm
-       
     });
-    gridWindow.show();
+   //gridWindow.show();
 }
 
