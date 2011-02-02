@@ -603,7 +603,7 @@ Ext.onReady ( function() {
                 case 'tasks':
                     for(var k=0;k<shapes.tasks.length;k++){
                         var task_boundary = shapes.tasks[k][6];
-                        if(task_boundary != null && task_boundary == 'TIMER' && task_boundary == '')
+                        if(task_boundary != null && task_boundary == 'TIMER' && task_boundary != '')
                             workflow.boundaryEvent = true;
                         else
                             workflow.boundaryEvent = false;
