@@ -453,9 +453,10 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         method:'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
+
                            //Ext.MessageBox.alert('Message', 'Loaded OK');
                            formWindow.show();
-                           //Ext.getCmp("OP_UID").setValue(opUID);
+                           Ext.getCmp("ext-comp-1062").setValue(form.item.item[2].displayField);
                         },
                         failure:function(form, action) {
                             Ext.MessageBox.alert('Message', 'Load failed');
@@ -716,12 +717,12 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     forceSelection  : true,
                     name            :'OP_OBJ_TYPE',
                     displayField    :'name',
-                    value           :'All',
+                    value           :'ANY',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                                                         fields : ['name', 'value'],
                                                         data   : [
-                                                        {name : 'All',   value: '0'},
+                                                        {name : 'ANY',   value: '0'},
                                                         {name : 'DYNAFORM',   value: '1'},
                                                         {name : 'INPUT',   value: '2'},
                                                         {name : 'OUTPUT',   value: '3'}]}),
@@ -881,6 +882,8 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 var Participation   = getForm.OP_PARTICIPATE;
                 var Type            = getForm.OP_OBJ_TYPE;
                 var Permission      = getForm.OP_ACTION;
+                if(TargetTask == "")
+                    {
                 Ext.Ajax.request({
                   url   : '../processes/processes_SaveObjectPermission.php',
                   method: 'POST',
@@ -905,6 +908,34 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                       PermissionStore.reload();
                   }
                 });
+            }
+            else
+                {
+                    Ext.Ajax.request({
+                  url   : '../processes/processes_SaveObjectPermission.php',
+                  method: 'POST',
+                  params:{
+                      PRO_UID         :pro_uid,
+                      OP_OBJ_TYPE     :Type,
+                      TAS_UID         :TargetTask,
+                      OP_CASE_STATUS  :Status,
+                      GROUP_USER      :GroupUser,
+                      OP_TASK_SOURCE  :OriginTask,
+                      OP_PARTICIPATE  :Participation,
+                      OP_ACTION       :Permission,
+                      DYNAFORMS       :Dynaforms,
+                      INPUTS          :Inputs,
+                      OUTPUTS         :Outputs
+                  },
+                  success: function(response) {
+                      Ext.MessageBox.alert ('Status','Process Permission edited successfully.');
+                      formWindow.hide();
+                      PermissionStore.reload();
+                      formWindow.hide();
+                      PermissionStore.reload();
+                  }
+                });
+                }
           }
         },{
             text: 'Cancel',

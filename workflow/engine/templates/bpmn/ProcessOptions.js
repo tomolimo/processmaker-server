@@ -881,8 +881,60 @@ ProcessOptions.prototype.dbConnection = function()
                         id : 'DBS_UID',
                         xtype: 'hidden',
                         name : 'DBS_UID'
-                      }
-                     ], buttons: [{
+                      },{}], 
+         buttons: [{text:'Test Connection',
+                                   id: 'test',
+                                    //formbind: true,
+                                    handler: function(){
+                                       // testConnWindow.show();
+
+                                       Ext.fly('p3text').update('Working');
+                                        mybar.wait({
+                                            interval:200,
+                                            duration:5000,
+                                            increment:15,
+                                            fn:function(){
+                                                btn3.dom.disabled = false;
+                                                Ext.fly('p3text').update('Done');
+                                            }
+                                        });
+
+                                       var getForm         = dbconnForm.getForm().getValues();
+                                        //var dbConnUID       = getForm.DBS_UID;
+                                        var Type            = getForm.DBS_TYPE;
+                                        var Server          = getForm.DBS_SERVER;
+                                        var DatabaseName    = getForm.DBS_DATABASE_NAME;
+                                        var Username        = getForm.DBS_USERNAME;
+                                        var Password        = getForm.DBS_PASSWORD;
+                                        var Port            = getForm.DBS_PORT;
+                                       
+                                       //var Description     = getForm.DBS_DESCRIPTION;
+                                       for(var Step=1;Step<=4;Step++)
+                                          // {
+                                               {
+                                               Ext.Ajax.request({
+                                                   url   : '../dbConnections/dbConnectionsAjax.php',
+                                                   method: 'POST',
+                                                   params:{
+                                                           step     :Step,
+                                                           type     :Type,
+                                                           server   :Server,
+                                                           db_name  :DatabaseName,
+                                                           user     :Username ,
+                                                           passwd   :Password,
+                                                           port     :Port,
+                                                           //desc     :Description,
+                                                           action   :'testConnection'
+                                                          },
+                                                    success: function(response) {
+                                                    Ext.MessageBox.alert ('Status','Connection Tested Successfully.');
+                                                    }
+                                              });
+                                            }
+                                           }
+                                    
+                     },{
+
         text: 'Save',
         formBind    :true,
         handler: function(){
@@ -955,6 +1007,25 @@ ProcessOptions.prototype.dbConnection = function()
         }
     }]
   })
+
+   /*var testConnBar = new Ext.ProgressBar({
+    id: 'loadBar',
+    text: 'Loading...'
+});
+
+var testConnWindow = new Ext.Window({
+    closable: false,
+    collapsible: false,
+    draggable: false,
+    resizable: false,
+    el: 'gridDiv',
+    layout:'fit',
+    width:500,
+    height:40,
+    plain: true,
+    modal: true,
+    items: testConnBar
+});*/
 
   var formWindow = new Ext.Window({
     title: 'Add new Database Source',
