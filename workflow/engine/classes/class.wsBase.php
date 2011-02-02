@@ -934,6 +934,49 @@ class wsBase
     }
   }
 
+  /*
+  * remove user from group
+  * @param string $appDocUid
+  * @return $result will return an object
+  */
+  public function removeUserFromGroup($userId, $groupId) {
+      try {
+      G::LoadClass('groups');
+      global $RBAC;
+      $RBAC->initRBAC();
+      $user=$RBAC->verifyUserId($userId);
+      if($user==0){
+        $result = new wsResponse (3, "User not registered in the system");
+        return $result;
+      }
+
+      $groups = new Groups;
+      $very_group = $groups->verifyGroup( $groupId );
+      if ( $very_group==0 ) {
+        $result = new wsResponse (9, "Group not registered in the system");
+        return $result;
+      }
+
+      $very_user = $groups->verifyUsertoGroup( $groupId, $userId);
+      if($very_user==1){
+        $oGroup = new Groups();
+        $oGroup->removeUserOfGroup($groupId, $userId);
+        $result = new wsResponse (0, "command executed successfuly");
+        return $result;
+      }
+      //$oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
+      $result = new wsResponse (8, "User not registered in the group");
+      return $result;
+    }
+    catch ( Exception $e ) {
+      $result = new wsResponse (100, $e->getMessage());
+      return $result;
+    }
+//G::LoadClass('groups');
+//	  $oGroup = new Groups();
+//	  $oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
+  }
+
    /*
     * assigns a user to a group 
     * @param string $userId
@@ -2027,5 +2070,7 @@ class wsBase
       return $result;
     }
   }
+
+  
 
 }

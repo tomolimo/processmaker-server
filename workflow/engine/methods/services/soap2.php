@@ -30,7 +30,7 @@
   G::LoadClass('wsBase');
 
   function login( $params ) {
-    
+
     $ws = new wsBase ();
     $res = $ws->login( $params->userid, $params->password );
     return array(
@@ -42,27 +42,27 @@
   }
 
   function ProcessList( $params ) {
-      
+
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
       $o->guid = $vsResult->status_code. ' ' . $vsResult->message;
       $o->name = '';
       return array("processes" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_FACTORY') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("processes" => $o);
     }
-    
+
     /** if you are not an admin user, then this function will return only your valid process **/
     if ( ifPermission( $params->sessionId, 'PM_FACTORY') == 0 ) {
       G::LoadClass('sessions');
       $oSessions = new Sessions();
       $session   = $oSessions->getSessionUser($params->sessionId);
       $userId    = $session['USR_UID'];
-      
+
       $ws = new wsBase ();
       $res = $ws->processListVerified( $userId );
       return array("processes" => $res );
@@ -74,20 +74,20 @@
   }
 
   function RoleList( $params ) {
-      
+
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
       $o->guid = $vsResult->status_code. ' ' . $vsResult->message;
       $o->name = '';
       return array("roles" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("roles" => $o);
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->roleList();
     return array("roles" => $res );
@@ -100,13 +100,13 @@
       $o->name = '';
       return array("groups" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("groups" => $o);
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->groupList();
     return array("groups" => $res );
@@ -119,13 +119,13 @@
       $o->name = '';
       return array("departments" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("departments" => $o);
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->departmentList();
     return array("departments" => $res );
@@ -140,7 +140,7 @@
       $o->delIndex = '';
       return array("cases" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
@@ -166,13 +166,13 @@
       $o->name = '';
       return array("users" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("users" => $o);
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->userList();
     return array("users" => $res );
@@ -186,14 +186,14 @@
       $o->processId = '';
       return array("triggers" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       $o->processId = '';
       return array("triggers" => $o);
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->triggerList();
     return array("triggers" => $res );
@@ -213,7 +213,7 @@
       $o->link = '';
       return array("documents" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->filename = '';
@@ -232,7 +232,7 @@
     $session   = $oSessions->getSessionUser($params->sessionId);
     $userId    = $session['USR_UID'];
 
-    
+
     $ws = new wsBase ();
     $res = $ws->outputDocumentList( $params->caseId, $userId );
     return array("documents" => $res );
@@ -252,7 +252,7 @@
       $o->link = '';
       return array("documents" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->filename = '';
@@ -270,7 +270,7 @@
     $oSessions = new Sessions();
     $session   = $oSessions->getSessionUser($params->sessionId);
     $userId    = $session['USR_UID'];
-    
+
     $ws = new wsBase ();
     $res = $ws->inputDocumentList( $params->caseId, $userId );
     return array("documents" => $res );
@@ -284,7 +284,7 @@
       $o->description = '';
       return array("documents" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
@@ -302,12 +302,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsResponse (2, "You have not privileges to execute this function");
       return $result;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->removeDocument( $params->appDocUid );
     return  $res;
@@ -318,12 +318,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult->getPayloadArray();
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ) {
       $result = new wsResponse (2, "You do not have privileges");
       return $result->getPayloadArray();
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->sendMessage(
       $params->caseId,
@@ -342,12 +342,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-   
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ) {
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->getCaseInfo( $params->caseId, $params->delIndex );
     return  $res;
@@ -358,12 +358,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ) {
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
     }
-  
+
     $ws = new wsBase();
     $variables = $params->variables;
     $Fields = Array();
@@ -376,12 +376,12 @@
         }
       }
     }
-    
+
     $params->variables = $Fields;
     $res = $ws->sendVariables($params->caseId, $params->variables);
 
     return  $res->getPayloadArray();
-    
+
   }
 
   function GetVariables( $params ) {
@@ -389,12 +389,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsGetVariableResponse (2, "You do not have privileges", NULL );
       return $result;
     }
-    
+
     $ws = new wsBase ();
 
     $res = $ws->getVariables($params->caseId, $params->variables);
@@ -403,12 +403,12 @@
 
   function DerivateCase( $params ) {
     $oSession = new Sessions();
-    
+
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-   
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
@@ -425,12 +425,12 @@
 
   function RouteCase( $params ) {
     $oSession = new Sessions();
-    
+
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-   
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
@@ -452,7 +452,7 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
@@ -461,7 +461,7 @@
     $oSession = new Sessions();
     $user  = $oSession->getSessionUser($params->sessionId);
 
-    
+
     $ws = new wsBase ();
     $delIndex = ( isset ( $params->delIndex ) ) ? $params->delIndex : 1 ;
     $res = $ws->executeTrigger( $user['USR_UID'], $params->caseId, $params->triggerIndex, $delIndex);
@@ -473,12 +473,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
     }
-    
+
     $ws = new wsBase ();
     $variables = $params->variables;
     foreach ( $variables as $key=>$val ){
@@ -492,14 +492,14 @@
   }
 
   function NewCase( $params ) {
-  	
+
     G::LoadClass('sessions');
-    
+
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if ( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result;
@@ -509,7 +509,7 @@
     $session   = $oSessions->getSessionUser($params->sessionId);
     $userId    = $session['USR_UID'];
 	$variables = $params->variables;
-	  
+
 /* this code is for previous version of ws, and apparently this will work for grids inside the variables..
     if (!isset($params->variables) ) {
       $variables = array();
@@ -549,28 +549,28 @@
     }
 */
     $variables = $params->variables;
-   
-    
+
+
     if ( is_object ($variables) ) {
       $Fields[ $variables->name ]= $variables->value ;
     }
     if ( is_array ( $variables) ) {
       foreach ( $variables as $key=>$val ) {
       	if (!is_object($val->value)){
-            eval('$Fields[ "' . $val->name . '" ]= $val->value ;');
+            eval('$Fields[ ' . $val->name . ' ]= $val->value ;');
         }
       }
     }
     $params->variables = $Fields;
     $ws = new wsBase ();
     $res = $ws->newCase($params->processId, $userId, $params->taskId, $params->variables);
-    
+
     ######################################################################
     # we need to register the case id for a stored session variable. like a normal Session.
     ######################################################################
     $oSessions->registerGlobal('APPLICATION', $res->caseId);
     ######################################################################
-      
+
     return  $res;
   }
 
@@ -579,7 +579,7 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult->getPayloadArray();
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result->getPayloadArray();
@@ -587,12 +587,12 @@
     G::LoadClass('sessions');
     $sessions = new Sessions;
     $user=$sessions->getSessionUser($params->sessionId);
-    
+
     if(!is_array($user)){
       return new wsResponse (3, 'User not registered in the system');
     }
 
-    
+
     $ws = new wsBase ();
     $res = $ws->assignUserToGroup( $params->userId, $params->groupId);
     return  $res->getPayloadArray();
@@ -603,7 +603,7 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult->getPayloadArray();
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
       $result = new wsResponse (2, "You do not have privileges");
       return $result->getPayloadArray();
@@ -611,12 +611,12 @@
     G::LoadClass('sessions');
     $sessions = new Sessions;
     $user=$sessions->getSessionUser($params->sessionId);
-    
+
     if(!is_array($user)){
       return new wsResponse (3, 'User not registered in the system');
     }
 
-    
+
     $ws = new wsBase ();
     $res = $ws->AssignUserToDepartment( $params->userId, $params->departmentId, $params->manager );
     return  $res->getPayloadArray();
@@ -627,12 +627,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0){
       $result = new wsCreateUserResponse (2, "You do not have privileges");
       return $result;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->createUser( $params->userId, $params->firstname, $params->lastname, $params->email, $params->role, $params->password);
     return  $res;
@@ -644,12 +644,12 @@
       $result = new wsCreateGroupResponse ($vsResult->status_code , $vsResult->message, '' );
       return $result;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ) {
       $result = new wsCreateGroupResponse (2, "You do not have privileges", '');
       return $result;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->createGroup( $params->name );
     return  $res;
@@ -660,12 +660,12 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0){
       $result = new wsCreateUserResponse (2, "You do not have privileges");
       return $result;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->CreateDepartment( $params->name, $params->parentUID );
     return  $res;
@@ -678,13 +678,13 @@
       $o->name = '';
       return array("tasks" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("tasks" => $o);
     }
-    
+
     G::LoadClass('sessions');
     $ws = new wsBase ();
     $oSessions = new Sessions();
@@ -701,13 +701,13 @@
       $o->name = '';
       return array("taskCases" => $o);
     }
-    
+
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
       $o->name = '';
       return array("taskCases" => $o);
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->taskCase( $params->caseId );
     return array("taskCases" => $res );
@@ -718,7 +718,7 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->reassignCase($params->sessionId, $params->caseId, $params->delIndex, $params->userIdSource, $params->userIdTarget );
     return $res ;
@@ -729,7 +729,7 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->systemInformation( );
     return $res;
@@ -740,17 +740,17 @@
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
     }
-    
+
     $ws = new wsBase ();
     $res = $ws->importProcessFromLibrary( $params->processId ,$params->version ,$params->importOption ,$params->usernameLibrary ,$params->passwordLibrary  );
     return $res;
   }
 
   /*************/
-  
+
   #added By Erik AO <erik@colosa.com> in datetime 26.06.2008 10:00:00
   # modified 12-01-2010 by erik
-  
+
   function isValidSession($sessionId){
     G::LoadClass('sessions');
     $oSessions = new Sessions();
@@ -758,11 +758,22 @@
     if( is_array($session) ) {
       return new wsResponse (0, 'Session active');
     } else {
-      
+
       return new wsResponse (9, 'Session expired');
     }
   }
+//add removeUserFromGroup
+  function removeUserFromGroup( $params ) {
+    $vsResult = isValidSession($params->sessionId);
+    if( $vsResult->status_code !== 0 ){
+      return $vsResult;
+    }
 
+    $ws = new wsBase ();
+    $res = $ws->removeUserFromGroup($params->userId, $params->groupId);
+    return $res ;
+  }
+    //end add
   function ifPermission( $sessionId, $permission ){
       global $RBAC;
             $RBAC->initRBAC();
@@ -782,8 +793,8 @@
       }
       return $sw;
   }
-  
-  
+
+
 $server = new SoapServer( $wsdl );
 $server->addFunction("Login");
 $server->addFunction("ProcessList");
@@ -816,6 +827,6 @@ $server->addFunction("TaskCase");
 $server->addFunction("ReassignCase");
 $server->addFunction("systemInformation");
 $server->addFunction("importProcessFromLibrary");
-
+$server->addFunction("removeUserFromGroup");
 $server->handle();
 

@@ -1075,7 +1075,25 @@ switch ($_POST ['action']) {
 		        
 				G::RenderPage ( 'publish', 'raw' );
 				break;
+//add removeUserFromGroup
+case "removeUserFromGroup" :
+				$sessionId = $frm ["SESSION_ID"];
+				$userId = $frm ["USER_ID"];
+				$groupId = $frm ["GROUP_ID"];
+				$params = array ('sessionId' => $sessionId, 'userId' => $userId, 'groupId' => $groupId );
+				$result = $client->__SoapCall ( 'removeUserFromGroup', array ($params ) );
+				$G_PUBLISH = new Publisher ( );
+				$fields ['status_code'] = $result->status_code;
+				$fields ['message'] = $result->message;
+				$fields ['time_stamp'] = $result->timestamp;
+		                if( $result->status_code == 9 ){
+				    $_SESSION ['WS_SESSION_ID'] = '';
+				}
 
+				$G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'setup/wsShowResult', null, $fields );
+				G::RenderPage ( 'publish', 'raw' );
+				break;
+//end add
 			case "RemoveDocument" :
 				$appDocUid = $frm ["APP_DOC_UID"];
 				$sessionId = $frm ["SESSION_ID"];
