@@ -160,9 +160,11 @@ function run_info($args, $opts) {
 
 function run_workspace_upgrade($args, $opts) {
   $workspaces = get_workspaces_from_args($args);
+  $first = true;
   foreach ($workspaces as $workspace) {
     try {
-      $workspace->upgrade();
+      $workspace->upgrade($first);
+      $first = false;
     } catch (Exception $e) {
       echo "Errors upgrading workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
     }
@@ -171,12 +173,12 @@ function run_workspace_upgrade($args, $opts) {
 
 function run_translation_upgrade($args, $opts) {
   $workspaces = get_workspaces_from_args($args);
-  $updateXml = true;
+  $first = true;
   foreach ($workspaces as $workspace) {
     try {
       echo "Upgrading translation for " . pakeColor::colorize($workspace->name, "INFO") . "\n";
-      $workspace->upgradeTranslation($updateXml);
-      $updateXml = false;
+      $workspace->upgradeTranslation($first);
+      $first = false;
     } catch (Exception $e) {
       echo "Errors upgrading translation of workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
     }
@@ -185,7 +187,6 @@ function run_translation_upgrade($args, $opts) {
 
 function run_cacheview_upgrade($args, $opts) {
   $workspaces = get_workspaces_from_args($args);
-  $updateXml = true;
   foreach ($workspaces as $workspace) {
     try {
       echo "Upgrading cache view for " . pakeColor::colorize($workspace->name, "INFO") . "\n";

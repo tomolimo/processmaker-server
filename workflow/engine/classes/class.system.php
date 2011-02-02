@@ -150,7 +150,7 @@ class System {
   public static function listPoFiles() {
     $folders = glob(PATH_CORE . '/content/translations/*');
 
-    $items = glob(PATH_CORE . '/content/*.po');
+    $items = glob(PATH_CORE . '/content/translations/*.po');
     foreach ($folders as $folder) {
       if (is_dir($folder)) {
         $add = glob($folder . "/*.po");

@@ -243,7 +243,7 @@ class languages {
   }
 
 
-  public function importLanguage($sLanguageFile, $updateXml = true)
+  public function importLanguage($sLanguageFile, $updateXml = true, $updateDB = true)
   {
     try {
       G::LoadSystem('i18n_po');
@@ -294,16 +294,17 @@ class languages {
         $reference  = $POFile->references[0];
         
         if( $identifier == 'TRANSLATION') {
-          
-          list($category, $id) = explode('/', $context);
-          $result = $oTranslation->addTranslation(
-            $category,
-            $id,
-            $LOCALE,
-            trim(str_replace(chr(10), '', stripslashes($rowTranslation['msgstr'])))
-          );
-          if( $result['codError'] == 0 )
-            $countItemsSuccess++;
+          if ($updateDB) {
+            list($category, $id) = explode('/', $context);
+            $result = $oTranslation->addTranslation(
+              $category,
+              $id,
+              $LOCALE,
+              trim(str_replace(chr(10), '', stripslashes($rowTranslation['msgstr'])))
+            );
+            if( $result['codError'] == 0 )
+              $countItemsSuccess++;
+          }
         } else if( $updateXml ){
           $xmlForm = $context;
           $codes   = explode('-', $reference);
