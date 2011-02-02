@@ -27,7 +27,9 @@
 
 CLI::taskName('info');
 CLI::taskDescription(<<<EOT
-Print information about the current system and specified workspaces.
+Print information about the current system and any specified workspaces.
+
+  If no workspace is specified, show information about all available workspaces
 EOT
 );
 CLI::taskArg('workspace-name', true, true);
@@ -37,15 +39,15 @@ CLI::taskName('workspace-backup');
 CLI::taskDescription(<<<EOT
   Backup the specified workspace to an archive.
 
-  BACKUP-NAME is the backup filename. If it contains slashes, it will be
-  treated as a filename, either absolute or relative. Otherwise it will be
-  treated as a filename inside the backups directory in the 'shared' folder.
-  If no BACKUP-NAME is specified, it will use the workspace name as the 
+  BACKUP-FILE is the backup filename. If it contains slashes, it will be
+  treated as a path and filename, either absolute or relative. Otherwise, it
+  will be treated as a filename inside the 'shared/backups' directory.
+  If no BACKUP-FILE is specified, it will use the workspace name as the
   filename.
 
   A backup archive will contain all information about the specified workspace
-  so that it can be restored later. A database dump will be created and all
-  the workspace files will be included in the archive.
+  so that it can be restored later. The archive includes a database dump and
+  all the workspace files.
 EOT
 );
 CLI::taskArg('workspace', false);
@@ -56,12 +58,12 @@ CLI::taskName('workspace-restore');
 CLI::taskDescription(<<<EOT
   Restore a workspace from a backup.
 
-  BACKUP-NAME is the backup filename. If it contains slashes, it will be
-  treated as a filename, either absolute or relative. Otherwise it will be
-  treated as a filename inside the backups directory in the 'shared' folder.
+  BACKUP-FILE is the backup filename. If it contains slashes, it will be
+  treated as a path and filename, either absolute or relative. Otherwise, it
+  will be treated as a filename inside the 'shared/backups' directory.
 
-  If WORKSPACE is specified, it will be used as the workspace to restore to,
-  otherwise the workspace will be restored using the same name as before.
+  Specify the WORKSPACE to restore to a different workspace name. Otherwise,
+  it will restore to the same workspace name as the original backup.
 EOT
 );
 CLI::taskArg('backup-file', false);
@@ -70,16 +72,16 @@ CLI::taskRun(run_workspace_restore);
 
 CLI::taskName('cacheview-repair');
 CLI::taskDescription(<<<EOT
-  Create and populate APP_CACHE_VIEW
+  Create and populate the APP_CACHE_VIEW table
 
-  You can specify as many workspaces as you want and if no workspace is
-  specified, it will run the upgrade on all available workspaces.
+  Specify the workspaces whose cases cache should be repaired. If no workspace
+  is specified, then the cases will be repaired on all available workspaces.
 
   In order to improve the performance, ProcessMaker includes a cache of cases
   in the table APP_CACHE_VIEW. This table must be in sync with the database
-  to present the right information in the inbox. This command will create the
-  table and populate it with the right information. You only need to use this
-  command after upgrading or if the inbox is out of sync.
+  to present the correct information in the cases inbox. This command will
+  create the table and populate it with the right information. This only needs
+  to be used after upgrading ProcessMaker or if the cases inbox is out of sync.
 EOT
 );
 CLI::taskArg('workspace', true, true);
@@ -87,15 +89,16 @@ CLI::taskRun(run_cacheview_upgrade);
 
 CLI::taskName('database-upgrade');
 CLI::taskDescription(<<<EOT
-  Repair the database schema to the latest version
+  Upgrade or repair the database schema to match the latest version
 
-  You can specify as many workspaces as you want and if no workspace is
-  specified, it will run the upgrade on all available workspaces.
+  Specify the workspaces whose database schema should be upgraded or repaired.
+  If no workspace is specified, then the database schema will be upgraded or
+  repaired on all available workspaces.
 
-  This command will read the system schema and attempt to modify the workspaces
-  tables to this new schema. This is useful after an upgrade when the workspace
-  database is not upgraded or when the database does not contain the right
-  schema.
+  This command will read the system schema and attempt to modify the workspaces
+  tables to match this new schema. Use this command to fix corrupted database
+  schemas or after ProcessMaker has been upgraded, so the database schemas will
+  changed to match the new ProcessMaker code.
 EOT
 );
 CLI::taskArg('workspace', true, true);
@@ -103,13 +106,14 @@ CLI::taskRun(run_database_upgrade);
 
 CLI::taskName('plugins-database-upgrade');
 CLI::taskDescription(<<<EOT
-  Repair the database schema to the latest version
+  Upgrade or repair the database schema for plugins to match the latest version
 
-  You can specify as many workspaces as you want and if no workspace is
-  specified, it will run the upgrade on all available workspaces.
+  Specify the workspaces whose database schema should be upgraded or repaired
+  for plugins. If no workspace is specified, then the database schema will be
+  upgraded or repaired on all available workspaces.
 
-  The same as database-upgrade but works with schemas provided by plugins.
-  This is useful if there are installed plugins that include database schemas.
+  The same as database-upgrade but works with schemas provided by plugins.
+  This is useful if there are installed plugins that include database schemas.
 EOT
 );
 CLI::taskArg('workspace', true, true);
@@ -119,13 +123,15 @@ CLI::taskName('workspace-upgrade');
 CLI::taskDescription(<<<EOT
   Upgrade the workspace(s) specified.
 
-  If no workspace is specified, the command will be run in all workspaces. You
-  can specify more then one workspace.
+  If no workspace is specified, the command will be run in all workspaces. More
+  than one workspace can be specified.
   
-  This command is a shortcut to execute all upgrade commands in this workspace.
-  Upgrading a workspace will make it corresponds to this version of
-  ProcessMaker. Use this command to upgrade workspaces individually, otherwise
-  use the upgrade command to upgrade the entire system.
+  This command is a shortcut to execute all upgrade commands for workspaces.
+  Upgrading a workspace will make it correspond to the current version of
+  ProcessMaker.
+
+  Use this command to upgrade workspaces individually, otherwise use the
+  upgrade command to upgrade the entire system.
 EOT
 );
 CLI::taskArg('workspace-name', true, true);
@@ -133,13 +139,14 @@ CLI::taskRun(run_workspace_upgrade);
 
 CLI::taskName('translation-repair');
 CLI::taskDescription(<<<EOT
-  Upgrade translations for the specified workspace(s).
+  Upgrade or repair translations for the specified workspace(s).
 
-  If no workspace is specified, the command will be run in all workspaces. You
-  can specify more then one workspace.
-
+  If no workspace is specified, the command will be run in all workspaces. More
+  than one workspace can be specified.
+  
   This command will go through each language installed in ProcessMaker and
-  update this workspace translations to match the installed translations.
+  update this workspace translations to match the current version of
+  ProcessMaker.
 EOT
 );
 CLI::taskArg('workspace-name', true, true);
@@ -150,7 +157,7 @@ CLI::taskRun(run_translation_upgrade);
    * access public
    */
 function run_info($args, $opts) {
-  $workspaces = get_workspaces_from_args($args, false);
+  $workspaces = get_workspaces_from_args($args);
   workspaceTools::printSysInfo();
   foreach ($workspaces as $workspace) {
     echo "\n";

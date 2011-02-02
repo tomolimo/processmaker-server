@@ -254,7 +254,7 @@ class workspaceTools {
   /**
    * Upgrade this workspace translations from all avaliable languages.
    *
-   * @param   bool $updateXml if true, update the xmlforms
+   * @param   bool $first if updating a series of workspace, true if the first
    */
   public function upgradeTranslation($first = true) {
     $this->initPropel(true);
