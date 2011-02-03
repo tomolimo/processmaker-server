@@ -289,9 +289,12 @@ try {
   	  $oProcessMap->caseTrackerObjects($oData->pro_uid);
   	break;
   	case 'processFilesManager':
+      $_SESSION['PFMDirectory'] = '';
   	  $oProcessMap->processFilesManager($oData->pro_uid);
   	break;
   	case 'exploreDirectory':
+      $objData = json_decode($_POST['data']); 
+      $_SESSION['PFMDirectory'] = $objData->{'main_directory'};
   	  $oProcessMap->exploreDirectory($oData->pro_uid, $oData->main_directory, $oData->directory);
   	break;
   	case 'deleteFile':
@@ -409,7 +412,19 @@ try {
     	//echo $_POST['filename'];
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();
-	  	$sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+	  	///-- $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+      $sDir = "";
+      if(isset($_SESSION['PFMDirectory']))
+        $sDir = $_SESSION['PFMDirectory'];
+
+      switch($sDir){
+        case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+                break;
+        case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+                break;
+        default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+                break;
+      }
 
 	  	$fcontent = file_get_contents($sDirectory);
 			$extion=explode(".",$_POST['filename']);
@@ -431,8 +446,18 @@ try {
     case 'saveFile':
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();
-	  	$sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
-
+	  	///-- $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+      $sDir = "";
+      if(isset($_POST['MAIN_DIRECTORY']))
+        $sDir = $_POST['MAIN_DIRECTORY'];
+      switch($sDir){
+        case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+                break;
+        case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+                break;
+        default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+                break;
+      }
 	  	$fp = fopen($sDirectory, 'w');
 	  	$content = stripslashes($_POST['fcontent']);
 	  	$content = str_replace("@amp@", "&", $content);
@@ -443,7 +468,7 @@ try {
     case 'events':
       $oProcessMap->eventsList($oData->pro_uid, $oData->type);
     break;
-	
+/*	
 	case 'saveFile':
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();
@@ -456,7 +481,7 @@ try {
 	  	fclose($fp);
 	  	echo 'saved: '. $sDirectory;
     break;
-    
+ */   
     case 'emptyFileOptions':
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();

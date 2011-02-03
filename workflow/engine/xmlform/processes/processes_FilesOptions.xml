@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
 
-<MNU_NEWEMPTY type="link" value="" link="#" onclick="showCreateEmptyOptions(event);return false;" colAlign="left" colWidth="100px">
+<MNU_NEWEMPTY type="link" value="" link="#" onclick="showCreateEmptyOptions(event, @QMAIN_DIRECTORY);return false;" colAlign="left" colWidth="100px">
 	<en>New</en>
 </MNU_NEWEMPTY>
 
@@ -89,7 +89,7 @@ function saveFile(pro_uid, fileName){
 	fc = fc.replace(/\+/g, '%2B');
 	var oRPC = new leimnud.module.rpc.xmlhttp({
 	  	url : 'processes_Ajax',
-	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+pro_uid+'&fcontent='+addslashes(fc)
+	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+pro_uid+'&MAIN_DIRECTORY='+CURRENT_MAIN_DIRECTORY+'&fcontent='+addslashes(fc)
   	});
   	oPanel.loader.show();
   	oRPC.callback = function(rpc) {
@@ -99,7 +99,8 @@ function saveFile(pro_uid, fileName){
 }
 
 var showCreateEmptyOptionsPanel;
-function showCreateEmptyOptions(e){
+function showCreateEmptyOptions(e, MAIN_DIRECTORY){
+  CURRENT_MAIN_DIRECTORY = MAIN_DIRECTORY;
 	oPanel = new leimnud.module.panel();
 	oPanel.options={
 		limit	   : true,
@@ -110,7 +111,7 @@ function showCreateEmptyOptions(e){
 		fx	     : {shadow:true,modal:true}
 	};
 	oPanel.make();
-	var oRPC = new leimnud.module.rpc.xmlhttp({url : 'processes_Ajax', args: 'action=emptyFileOptions'});
+	var oRPC = new leimnud.module.rpc.xmlhttp({url : 'processes_Ajax', args: 'action=emptyFileOptions&MAIN_DIRECTORY='+CURRENT_MAIN_DIRECTORY });
   	oPanel.loader.show();
   	oRPC.callback = function(rpc) {
 		oPanel.loader.hide();
@@ -129,12 +130,17 @@ function saveEmptyFile(){
 	
 	var oRPC = new leimnud.module.rpc.xmlhttp({
 	  	url : 'processes_Ajax',
-	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+CURRENT_PRO_UID+'&fcontent='
+	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+CURRENT_PRO_UID+'&MAIN_DIRECTORY='+CURRENT_MAIN_DIRECTORY+'&fcontent='
   	});
   	
   	oRPC.callback = function(rpc){
 		showCreateEmptyOptionsPanel.remove();
-		goToDirectory(CURRENT_PRO_UID, 'mailTemplates', '');
+		/// goToDirectory(CURRENT_PRO_UID, 'mailTemplates', '');
+    if(typeof(CURRENT_MAIN_DIRECTORY) != "undefined" ) {
+      goToDirectory(CURRENT_PRO_UID, CURRENT_MAIN_DIRECTORY, '');
+    } else {
+      goToDirectory(CURRENT_PRO_UID, 'mailTemplates', '');
+    }
 		editFile(CURRENT_PRO_UID, fileName)
 	}.extend(this);
 	oRPC.make();
