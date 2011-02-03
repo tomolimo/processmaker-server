@@ -180,8 +180,10 @@
 
   try {
   //Add content content step - Start
+  $oApp = ApplicationPeer::retrieveByPK( $_SESSION['APPLICATION'] );
   $array['APP_NUMBER'] = $APP_NUMBER;
-  $array['APP_TITLE'] = $APP_TITLE;
+  $sTitleCase = $oApp->getAppTitle();
+  $array['APP_TITLE'] = $sTitleCase;
   $array['CASE'] = G::LoadTranslation('ID_CASE');
   $array['TITLE'] = G::LoadTranslation('ID_TITLE');
   $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
