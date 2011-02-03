@@ -28,10 +28,10 @@
 <NW_USERNAME type="text" size="30" maxlength="32" validate="Email" defaultValue="admin" style="width:100%;">
   <en>Username:</en>
 </NW_USERNAME>
-<NW_PASSWORD type="password" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
-  <en>Password (admin):</en>
+<NW_PASSWORD type="password" size="30" maxlength="20" validate="Any" defaultValue="admin" style="width:100%;">
+  <en>Password (admin) <![CDATA[<br>]]> (Max. length 20):</en>
 </NW_PASSWORD>
-<NW_PASSWORD2 type="password" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
+<NW_PASSWORD2 type="password" size="30" maxlength="20" validate="Any" defaultValue="admin" style="width:100%;">
   <en>Re-type Password:</en>
 </NW_PASSWORD2>
 <ACTION type="hidden" defaultValue="test"/>

@@ -814,6 +814,11 @@ class wsBase
          return $result;
       }
 
+      if(strlen($password)>20)
+      {  $result = new wsCreateUserResponse (28, "Password surprases the maximun length allowed", '');
+         return $result;
+      }
+
       global $RBAC;
       $RBAC->initRBAC();
 
