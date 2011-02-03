@@ -1606,6 +1606,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                         oNewShape.id = this.workflow.newTaskInfo.uid;
                             if(oNewShape.type == 'bpmnTask'){
                                 oNewShape.taskName = this.workflow.newTaskInfo.label;
+                                workflow.redrawTaskText(oNewShape,'');
                                 //After Figure is added, Update Start Event connected to Task
                                 if(typeof this.workflow.preSelectedObj != 'undefined' )
                                   {
@@ -2079,8 +2080,11 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                                 newObj.conn.id = resp[1];
 
                                 //replacing old gateway UID with response UID
-                                preObj.html.id = resp[0];
-                                preObj.id = resp[0];
+                                if(! preObj.type.match(/Task/))
+                                    {
+                                        preObj.html.id = resp[0];
+                                        preObj.id = resp[0];
+                                    }
                             }
                         }
                     },
@@ -2167,8 +2171,6 @@ MyWorkflow.prototype.getDeleteCriteria = function()
     switch (shape) {
     case 'bpmnTask':
         workflow.currentSelection.actiontype = 'deleteTask';
-        if(workflow.taskNo > 0)
-            workflow.taskNo--;
         break;
     case 'bpmnSubProcess':
         workflow.currentSelection.actiontype = 'deleteSubProcess';
@@ -2239,22 +2241,8 @@ MyWorkflow.prototype.zoom = function(sType)
    if(typeof workflow.limitFlag == 'undefined')
        workflow.limitFlag = 0;
 
-    var zoomFactor = 0.2;
-
-        /*if( sType == 'in' )
-        {
-            ++workflow.limitFlag;
-        }
-        else if(sType == 'out')
-        {
-            --workflow.limitFlag;
-        }*/
-    
-//   for(var i=0;i<size;i++){
-//        lines.data[i].setStartPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
-//        lines.data[i].setEndPoint(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
-//   }
-    var figSize = figures.getSize();
+   var zoomFactor = 0.2;
+   var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    var width = fig.getWidth();
@@ -2312,84 +2300,86 @@ MyWorkflow.prototype.zoom = function(sType)
           --workflow.limitFlag;
        fig.setPosition(xPos - zoomFactor*xPos,yPos - zoomFactor*yPos);
      }
-
-   //else if(sType == 'out' && !fig.type.match(/Event/))
-    //fig.setPosition(xPos,yPos - 10);
-
    fig.setDimension(width,height);
-   /*if(fig.type.match(/Start/))
-    fig.setPosition(xPos,yPos + zoomFactor*25);
-   else*/
-    
-
    if(fig.type == 'bpmnTask')
       {
-        fig.bpmnText.clear();
-        //len = Math.ceil(this.input.value.length/16);
-        var len = fig.width / 18;
-        if (len >= 6) {
-          // len = 1.5;
-          var padleft = 0.12 * fig.width;
-          var padtop = 0.32 * fig.height  - 3;
-          fig.rectWidth = fig.width - 2 * padleft;
-        }
-        else {
-               padleft = 0.1 * fig.width;
-               padtop = 0.09 * fig.height  - 3;
-               fig.rectWidth = fig.width - 2 * padleft;
-        }
-        var rectheight = fig.height - 2*padtop;
-        if(typeof fig.size == 'undefined')
-          fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
-        else
-          fig.size = fig.size;
-          
-        if(sType == 'in')
-          fig.size = parseInt(fig.size) + 4;
-        else
-          fig.size = parseInt(fig.size) - 4;
-
-        //Setting font minimum limit
-        if(fig.size < 11)
-            fig.size = 11;
-        //workflow.zoomTaskTextSize = fig.size;
-        eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
-        fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
-        fig.bpmnText.paint();
-       }
-        else if(fig.type == 'bpmnAnnotation')
-        {
-          fig.bpmnText.clear();
-          var text = fig.annotationName;
-          len = Math.ceil(text.length/16);
-          if(text.length < 19)
-          {
-            len = 1.5;
-            if(text.length > 9)
-              fig.rectWidth = text.length*8;
-            else
-              fig.rectWidth = 48;
-          }
-          else
-            fig.rectWidth = 150;
-          if(typeof fig.size == 'undefined')
-            fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
-          else
-            fig.size = fig.size;
-
-          if(sType == 'in')
-              fig.size = parseInt(fig.size) + 4;
-          else
-              fig.size = parseInt(fig.size) - 4;
-
-          //Setting font minimum limit i.e. 11px
-          if(fig.size < 11)
-            fig.size = 11;
-
-          //workflow.zoomAnnotationTextSize = fig.size;
-          eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
-          fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
-          fig.bpmnText.paint();
-        }
+        workflow.redrawTaskText(fig,sType);
+      }
+      else if(fig.type == 'bpmnAnnotation')
+      {
+        workflow.redrawAnnotationText(fig,sType);
+      }
     }
+}
+
+
+MyWorkflow.prototype.redrawTaskText = function(fig,sType)
+{
+  fig.bpmnText.clear();
+  //len = Math.ceil(this.input.value.length/16);
+  var len = fig.getWidth() / 18;
+  if (len >= 6) {
+      //len = 1.5;
+      var padleft = 0.12 * fig.getWidth();
+      var padtop = 0.40 * fig.getHeight() -3;
+      fig.rectWidth = fig.getWidth() - 2 * padleft;
+    }
+    else {
+      padleft = 0.1 * fig.getWidth();
+      padtop = 0.09 * fig.getHeight() -3;
+      fig.rectWidth = fig.getWidth() - 2 * padleft;
+    }
+  var rectheight = fig.getHeight() - padtop -7;
+
+  if(typeof fig.size == 'undefined')
+    fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
+  else
+    fig.size = fig.size;
+
+  if(sType == 'in' && sType != '')
+    fig.size = parseInt(fig.size) + 4;
+  else if(sType == 'out' && sType != '')
+    fig.size = parseInt(fig.size) - 4;
+
+   //Setting font minimum limit
+   if(fig.size < 11)
+      fig.size = 11;
+   eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
+   fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
+   fig.bpmnText.paint();
+}
+
+MyWorkflow.prototype.redrawAnnotationText = function(fig,sType)
+{
+  fig.bpmnText.clear();
+  var text = fig.annotationName;
+  len = Math.ceil(text.length/16);
+  if(text.length < 19)
+  {
+    len = 1.5;
+    if(text.length > 9)
+      fig.rectWidth = text.length*8;
+    else
+      fig.rectWidth = 48;
+  }
+  else
+    fig.rectWidth = 150;
+  if(typeof fig.size == 'undefined')
+    fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
+  else
+    fig.size = fig.size;
+
+  if(sType == 'in')
+      fig.size = parseInt(fig.size) + 4;
+  else
+      fig.size = parseInt(fig.size) - 4;
+
+  //Setting font minimum limit i.e. 11px
+  if(fig.size < 11)
+    fig.size = 11;
+
+  //workflow.zoomAnnotationTextSize = fig.size;
+  eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
+  fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
+  fig.bpmnText.paint();
 }

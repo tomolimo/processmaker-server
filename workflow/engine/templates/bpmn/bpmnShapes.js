@@ -14,7 +14,7 @@ bpmnTask = function (_30ab) {
    //Setting width and height values as per the zoom ratio
    if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
         this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
-    this.taskName = _30ab.taskName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+    this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnTask.prototype = new VectorFigure;
@@ -69,9 +69,9 @@ bpmnTask.prototype.paint = function () {
     this.graphics.paint();
     this.x_text = this.workflow.getAbsoluteX(); //Get x co-ordinate from figure
     this.y_text = this.workflow.getAbsoluteY(); //Get x co-ordinate from figure
-/* Created New Object of jsGraphics to draw String.
- * New object is created to implement changing of Text functionality
- */
+    /* Created New Object of jsGraphics to draw String.
+     * New object is created to implement changing of Text functionality
+     */
     this.bpmnText = new jsGraphics(this.id);
 
     var len = this.getWidth() / 18;
@@ -89,14 +89,13 @@ bpmnTask.prototype.paint = function () {
 
     var rectheight = this.getHeight() - padtop -7;
 
-    //Setting text size to zoom font size if Zoomed
-//    if(typeof workflow.zoomTaskTextSize != 'undefined')
-//        var fontSize = workflow.zoomTaskTextSize;
-//    else
-        var fontSize = 11;
+    var fontSize = 11;
 
     this.bpmnText.setFont('verdana', +fontSize+'px', Font.PLAIN);
-    this.bpmnText.drawStringRect(workflow.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
+    if(typeof this.taskName == 'undefined')
+        this.taskName = '';
+    
+    this.bpmnText.drawStringRect(this.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
     // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
 
@@ -772,15 +771,7 @@ bpmnTask.prototype.addShapes = function (_3896) {
         xOffset = _3896.workflow.currentSelection.getX() + 62; //Setting new offset value when newShape is not Task i.e aligning gateways
     }
 
-    /* Incrementing Task No and assigning it to a local variable
-     * taskNo Globally Declared in processmap.js
-     * taskNo will have Last Task count
-     * */
-    if (_3896.newShapeName == 'bpmnTask') {
-        count = ++workflow.taskNo;
-        workflow.taskName = 'Task ' + count;
-    }
-
+   
     workflow.subProcessName = 'Sub Process';
     var newShape = eval("new " + _3896.newShapeName + "(_3896.workflow)");
 

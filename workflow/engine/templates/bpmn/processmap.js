@@ -443,9 +443,7 @@ Ext.onReady ( function() {
             var yOffset    = workflow.getAbsoluteY();
             if(data.name == 'bpmnTask')
             {
-                count = ++workflow.taskNo; //Incrementing Task No and assigning it to a local variable
                 workflow.boundaryEvent = false;
-                workflow.taskName = 'Task '+count;
             }
 
 
@@ -463,7 +461,7 @@ Ext.onReady ( function() {
                 {
                     NewShape.actiontype = 'addTask';
                     workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
-                    NewShape.taskName = workflow.taskName;
+                   // NewShape.taskName = workflow.taskName;
                 }
 
 
@@ -684,7 +682,7 @@ Ext.onReady ( function() {
                 break;
             }
         }
-        if(typeof(workflow.taskNo) != 'undefined')
+        if(typeof(workflow.taskNo) != 'undefined' && workflow.taskNo != 0)
             workflow.taskNo++;
         return shapes;
     }
