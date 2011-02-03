@@ -517,15 +517,6 @@ TaskContext.prototype.editUsers= function()
                      {
                         Ext.Ajax.request({
                         url   : 'processes_Ajax.php' +urlparams ,
-                          /*method: 'POST',
-                          params: {
-                                functions       : 'ofToAssign',
-                                TAS_UID         : taskId,
-                                TU_RELATION     : user_TURel,
-                                USR_UID         : userUID,
-                                TU_TYPE         : user_TUtype
-
-                          },*/
                         success: function(response) {
                           Ext.MessageBox.alert ('Status','User has been removed successfully.');
                           //Secondly deleting from Grid
@@ -557,10 +548,10 @@ TaskContext.prototype.editUsers= function()
               url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAssignedUsersList'
             })
           });
-          //taskUsers.setDefaultSort('LABEL', 'asc');
-          taskUsers.load();
+   taskUsers.setDefaultSort('LABEL', 'asc');
+   
 
-         // create the Data Store of users that are not assigned to a task
+   // create the Data Store of users that are not assigned to a task
     var storeUsers = new Ext.data.JsonStore({
                  root            : 'data',
                  url             : 'proxyExtjs?tid='+taskId+'&action=getAvailableUsersList',
@@ -570,12 +561,19 @@ TaskContext.prototype.editUsers= function()
                  autoLoad        : true,
                  fields          : userFields
               });
-              
+     //storeUsers.load();
+       // paging bar on the bottom
+     var paging = new Ext.PagingToolbar({
+            pageSize: 10,
+            store: taskUsers,
+            displayInfo: true,
+            displayMsg: 'Displaying users {0} - {1} of {2}',
+            emptyMsg: "No users to display"
+        });
 
     var grid = new Ext.grid.GridPanel({
         store: taskUsers,
         id : 'mygrid',
-        //cm: cm,
         loadMask: true,
         loadingText: 'Loading...',
         renderTo: 'cases-grid',
@@ -583,22 +581,26 @@ TaskContext.prototype.editUsers= function()
         autoHeight:false,
         clicksToEdit: 1,
         minHeight:400,
-        height   :400,
+        height   :300,
         layout: 'fit',
         plugins: [editor],
-        columns: [
+        cm: new Ext.grid.ColumnModel({
+              defaults: {
+                  width: 200,
+                  sortable: true
+              },
+              columns: [
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'LABEL',
                     header: 'Group or User',
                     dataIndex: 'LABEL',
                     width: 100,
-                    sortable: true,
                     editor: new Ext.form.ComboBox({
                             xtype: 'combo',
                             fieldLabel: 'Users_groups',
                             hiddenName: 'number',
-                            store        : storeUsers,
+                            //store        : storeUsers,
                             displayField : 'LABEL'  ,
                             valueField   : 'LABEL',
                             name         : 'LABEL',
@@ -623,8 +625,9 @@ TaskContext.prototype.editUsers= function()
                                  this.collapse();
                               }
                         })
-                }
-                ],
+                },
+                ]
+        }),
         sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
                 listeners: {
@@ -633,12 +636,14 @@ TaskContext.prototype.editUsers= function()
                     }
                }
             }),
+         
         stripeRows: true,
         viewConfig: {forceFit: true},
+        bbar:paging,
         tbar: tb
         });
 
-        storeUsers.load();
+        taskUsers.load({params:{start:0, limit:10}});
 
         editor.on({
           scope: this,

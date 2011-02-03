@@ -140,7 +140,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
               url: 'proxyExtjs?action=getAdditionalTables'
             })
           });
- additionalTables.load();
+ //additionalTables.load();
 
  //Creating store for getting list of Fields of additional PM tables
   var TablesFields = Ext.data.Record.create([
@@ -161,6 +161,35 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             })
           });
  //tablesFieldsStore.load();
+
+ // Renderer function
+    function renderInstall(value, id, r)
+    {
+
+            var id = Ext.id();
+            var uidbutton = createGridButton.defer(1, this, ['Install', id, r]);
+            return uidbutton;
+            //return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+            /*if (r.data.registered == false)
+            {
+                createGridButton.defer(1, this, ['Install', id, r]);
+                return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+            }else
+            {
+                createGridButton.defer(1, this, ['ReInstall', id, r]);
+                return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+            }*/
+
+    }
+    function createGridButton(value, id, record) {
+        new Ext.Button({
+            text: 'UID'
+            ,iconCls: 'button_menu_ext ss_sprite ss_delete'
+            ,handler : function(btn, e) {
+                // do whatever you want here
+            }
+        });
+    }
 
  var dynaformColumns = new Ext.grid.ColumnModel({
             columns: [
@@ -188,7 +217,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sortable: false,
                         renderer: function(val, meta, record)
                            {
-                                return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,record.data.DYN_UID);
+                                return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
+                           }
+                    },
+                    {
+                        sortable: false,
+                        renderer: function(val, meta, record)
+                           {
+                                return String.format("<input type='submit' name='UID' value='UID' onclick='renderInstall()'>",record.data.DYN_UID);
                            }
                     }
                 ]
@@ -516,10 +552,10 @@ ProcessOptions.prototype.dbConnection = function()
   var btnNew = new Ext.Button({
             id: 'btnNew',
             text: 'New',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
-                dbconnForm.getForm().reset();
                 formWindow.show();
+                dbconnForm.getForm().reset();
             }
   });
 
@@ -528,10 +564,10 @@ ProcessOptions.prototype.dbConnection = function()
             text: 'Edit',
             iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
-                var s = dbGrid.getSelectionModel().getSelections();
-                var dbConnUID = s[0].data.DBS_UID;
+                var selectedRow = dbGrid.getSelectionModel().getSelections();
+                var dbConnUID   = selectedRow[0].data.DBS_UID;
                 dbconnForm.form.load({
-                url:'proxyExtjs.php?tid='+dbConnUID+'&action=editDatabaseConnection',
+                url:'proxyExtjs.php?pid='+pro_uid+'&dbs_uid='+dbConnUID+'&action=editDatabaseConnection',
                     method:'GET',
                     waitMsg:'Loading',
                     success:function(form, action) {
@@ -891,7 +927,9 @@ ProcessOptions.prototype.dbConnection = function()
                         xtype: 'textarea',
                         fieldLabel: 'Description',
                         name: 'DBS_DESCRIPTION',
-                        allowBlank: true
+                        allowBlank: true,
+                        width: 200,
+                        height:100
                       },{
                         id : 'DBS_UID',
                         xtype: 'hidden',
@@ -1046,7 +1084,7 @@ var testConnWindow = new Ext.Window({
     title: 'Add new Database Source',
     collapsible: false,
     maximizable: true,
-    width: 300,
+    width: 450,
     //autoHeight: true,
     //height: 400,
     //layout: 'fit',
@@ -2528,3 +2566,9 @@ var formWindow = new Ext.Window({
    //gridWindow.show();
 }
 
+ProcessOptions.prototype.addTriggers= function()
+{
+  var pro_uid = workflow.getUrlVars();
+  
+
+}

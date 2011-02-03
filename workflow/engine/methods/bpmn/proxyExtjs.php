@@ -113,7 +113,7 @@ switch($_GET['action'])
        case 'editDatabaseConnection':
                 require_once 'classes/model/DbSource.php';
                 $o = new DbSource();
-                $rows = $o->load($_GET['tid']);
+                $rows = $o->load($_GET['dbs_uid'],$_GET['pid']);
                 break;
 
        case 'process_User':

@@ -165,7 +165,10 @@ Ext.onReady ( function() {
                             }
                         },{
                             text: 'Trigger',
-                            iconCls: 'button_menu_ext ss_sprite ss_cog'
+                            iconCls: 'button_menu_ext ss_sprite ss_cog',
+                            handler : function() {
+                                processObj.addTriggers();
+                            }
                         },
                         {
                             text: 'Report Table',

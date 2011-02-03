@@ -1,7 +1,7 @@
 <?php
   	
   $oHeadPublisher =& headPublisher::getSingleton();
- //$oHeadPublisher->setExtSkin( 'xtheme-gray');
+  //$oHeadPublisher->setExtSkin( 'xtheme-gray');
   $oHeadPublisher->addExtJsScript('bpmn/MyWorkflow',true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/pmosExt', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/TaskContext', true );    //adding a javascript file .js
@@ -53,11 +53,6 @@
   $oHeadPublisher->addExtJsScript('bpmn/GatewayComplex' );
   $oHeadPublisher->addExtJsScript('bpmn/GridPanel');
   $oHeadPublisher->addExtJsScript('bpmn/SubProcess' );
-  $oHeadPublisher->addExtJsScript('bpmn/AwesomeUploader' );
-  $oHeadPublisher->addExtJsScript('bpmn/Ext.ux.form.FileUploadField' );
-  $oHeadPublisher->addExtJsScript('bpmn/Ext.ux.XHRUpload' );
-  $oHeadPublisher->addExtJsScript('bpmn/swfupload' );
-  $oHeadPublisher->addExtJsScript('bpmn/swfupload.swfobject' );
   $oHeadPublisher->addExtJsScript('bpmn/ProcessOptions',true);
 
   $oHeadPublisher->addContent( 'bpmn/processmap'); //adding a html file  .html.

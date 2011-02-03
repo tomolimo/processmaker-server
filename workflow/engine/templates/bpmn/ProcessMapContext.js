@@ -849,7 +849,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                                         {name : 'BLOCK',   value: 'BLOCK'}]})
            },{
                xtype :'hidden',
-               name :'TAS_UID',
+               name :'TASK_TARGET',
                id :'TAS_UID'
            },{
                xtype:'hidden',
@@ -857,8 +857,8 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                id:'GROUP_USER'
            },{
                xtype:'hidden',
-               name:'OP_TASK_SOURCE',
-               id:'OP_TASK_SOURCE'
+               name:'TASK_SOURCE',
+               id:'TASK_SOURCE'
            },{
                xtype:'hidden',
                name:'DYNAFORMS',
