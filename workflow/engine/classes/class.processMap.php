@@ -6009,25 +6009,25 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
     $aFields ['OP_UID'] = $aRows ['OP_UID'];
     $aFields ['PRO_UID'] = $aRows ['PRO_UID'];
     $aFields ['OP_CASE_STATUS'] = $aRows ['OP_CASE_STATUS'];
-    $aFields ['TAS_UID'] = $aRows ['TAS_UID'];
+    $aFields ['TASK_TARGET'] = $aRows ['TAS_UID'];
     $aFields ['GROUP_USER'] = $user;
-    $aFields ['OP_TASK_SOURCE'] = $aRows ['OP_TASK_SOURCE'];
-    $aFields ['OP_PARTICIPATE'] = $aRows ['OP_PARTICIPATE'];
-    $aFields ['OP_OBJ_TYPE'] = $aRows ['OP_OBJ_TYPE'];
-    $aFields ['OP_ACTION'] = $aRows ['OP_ACTION'];
+    $aFields ['TASK_SOURCE'] = $aRows ['OP_TASK_SOURCE'];
+    $aFields ['PARTICIPATED'] = $aRows ['OP_PARTICIPATE'];
+    $aFields ['OBJECT_TYPE'] = $aRows ['OP_OBJ_TYPE'];
+    $aFields ['ACTION'] = $aRows ['OP_ACTION'];
 
     switch ($aRows ['OP_OBJ_TYPE']) {
       /* case 'ANY':
         $aFields['OP_OBJ_TYPE'] = '';
         break; */
       case 'DYNAFORM' :
-        $aFields ['DYNAFORMS'] = $aRows ['OP_OBJ_UID'];
+        $aFields ['DYNAFORM'] = $aRows ['OP_OBJ_UID'];
         break;
       case 'INPUT' :
-        $aFields ['INPUTS'] = $aRows ['OP_OBJ_UID'];
+        $aFields ['INPUT'] = $aRows ['OP_OBJ_UID'];
         break;
       case 'OUTPUT' :
-        $aFields ['OUTPUTS'] = $aRows ['OP_OBJ_UID'];
+        $aFields ['OUTPUT'] = $aRows ['OP_OBJ_UID'];
         break;
     }
     /*

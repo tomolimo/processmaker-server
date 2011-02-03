@@ -330,7 +330,10 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'OBJECT_TYPE',type: 'string'},
             { name: 'OBJECT',type: 'string'},
             { name: 'ACTION',type: 'string'},
-            { name: 'OP_CASE_STATUS',type: 'string'}
+            { name: 'OP_CASE_STATUS',type: 'string'},
+            { name: 'DYNAFORM',type: 'string'},
+            { name: 'INPUT',type: 'string'},
+            { name: 'OUTPUT',type: 'string'}
         ]);
 
   var PermissionStore = new Ext.data.JsonStore({
@@ -456,7 +459,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
 
                            //Ext.MessageBox.alert('Message', 'Loaded OK');
                            formWindow.show();
-                           Ext.getCmp("ext-comp-1062").setValue(form.item.item[2].displayField);
+                           //Ext.getCmp("ext-comp-1062").setValue(form.item.item[2].displayField);
                         },
                         failure:function(form, action) {
                             Ext.MessageBox.alert('Message', 'Load failed');
@@ -635,18 +638,18 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 new Ext.form.ComboBox({
                     fieldLabel: 'Target Task',
                     //hiddenName:'popType',
-                    autoload: true,
-                    name: 'TARGET TASK',
+                    //autoload: true,
+                    name: 'TASK_TARGET',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
-                    emptyText:'Select',
+                    //emptyText:'Select',
                     editable: true,
                     onSelect: function(record,index)
                     {
                         //var taskUID = record.data.UID;
-                        Ext.getCmp("TAS_UID").setValue(record.data.UID);
+                        Ext.getCmp("TASK_TARGET").setValue(record.data.UID);
                        this.setValue(record.data[this.valueField || this.displayField]);
                        this.collapse();
                     }
@@ -655,12 +658,13 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                  new Ext.form.ComboBox({
                     fieldLabel: 'Group or Users',
                     //hiddenName:'popType',
-                    autoload: true,
+                    name: 'GROUP_USER',
+                    //autoload: true,
                     store: usersStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
-                    emptyText:'Select',
+                    //emptyText:'Select',
                     editable: true,
                     onSelect: function(record,index)
                     {
@@ -675,17 +679,18 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 new Ext.form.ComboBox({
                     fieldLabel: 'Origin Task',
                     //hiddenName:'popType',
-                    autoload: true,
+                    name    : 'TASK_SOURCE',
+                    //autoload: true,
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
-                    emptyText:'Select',
+                    //emptyText:'Select',
                     editable: true,
                     onSelect: function(record,index)
                     {
                         //var taskUID = record.data.UID;
-                        Ext.getCmp("OP_TASK_SOURCE").setValue(record.data.UID);
+                        Ext.getCmp("TASK_SOURCE").setValue(record.data.UID);
                         this.setValue(record.data[this.valueField || this.displayField]);
                         this.collapse();
                     }
@@ -698,7 +703,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel      :'Participation Required?',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'OP_PARTICIPATE',
+                    name            :'PARTICIPATED',
                     displayField    :'name',
                     value           :'Yes',
                     valueField      :'value',
@@ -715,7 +720,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel      :'Type',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'OP_OBJ_TYPE',
+                    name            :'OBJECT_TYPE',
                     displayField    :'name',
                     value           :'ANY',
                     valueField      :'value',
@@ -757,6 +762,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     autoload: true,
                     width:200,
                     store: dynaformStore,
+                    name: 'DYNAFORM',
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
@@ -779,6 +785,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype: 'combo',
                     fieldLabel: 'Input Document',
                     //hiddenName:'UID',
+                    name: 'INPUT',
                     width:200,
                     autoload: true,
                     store: inputDocStore,
@@ -807,6 +814,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     width:200,
                     autoload: true,
                     store: outputDocStore,
+                    name: 'OUTPUT',
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
@@ -830,7 +838,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel      :'Permission',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'OP_ACTION',
+                    name            :'ACTION',
                     displayField    :'name',
                     value           :'VIEW',
                     valueField      :'value',
