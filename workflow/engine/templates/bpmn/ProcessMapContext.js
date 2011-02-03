@@ -2322,9 +2322,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                            case 'form':
                                                 FormSelected     = workflow.formSelected;
                                                 rowSelected      = this.getSelectionModel().getSelected();
-                                                FieldSelected    =  workflow.fieldId;
+                                                FieldSelected    =  workflow.fieldName;
                                                 rowLabel         = rowSelected.data.variable;
-                                               Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                               var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
                                                window.hide();
                                                break;
 
@@ -2395,10 +2395,10 @@ ProcessMapContext.prototype.ExtVariables = function()
                                            case 'form':
                                                 FormSelected     = workflow.formSelected;
                                                 rowSelected      = this.getSelectionModel().getSelected();
-                                                FieldSelected    =  workflow.fieldId;
+                                                FieldSelected    =  workflow.fieldName;
                                                 rowLabel         = rowSelected.data.variable;
-                                               Ext.getCmp(FieldSelected).setValue(rowLabel);
-                                               window.hide();
+                                                var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
+                                                window.hide();
                                                break;
 
                                         }
@@ -2464,9 +2464,9 @@ ProcessMapContext.prototype.ExtVariables = function()
                                            case 'form':
                                                 FormSelected     = workflow.formSelected;
                                                 rowSelected      = this.getSelectionModel().getSelected();
-                                                FieldSelected    =  workflow.fieldId;
+                                                FieldSelected    =  workflow.fieldName;
                                                 rowLabel         = rowSelected.data.variable;
-                                               Ext.getCmp(FieldSelected).setValue(rowLabel);
+                                               var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
                                                window.hide();
                                                break;
 

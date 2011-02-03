@@ -17,7 +17,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             { name: 'DYN_UID', type: 'string'},
             { name: 'DYN_TYPE', type: 'string'},
             { name: 'DYN_TITLE', type: 'string'},
-            { name: 'DYN_DISCRIPTION',type: 'string'}
+            { name: 'DYN_DISCRIPTION',type: 'string'},
+            {name: 'ACTION', type: 'string'}
             ]);
 
   var editor = new Ext.ux.grid.RowEditor({
@@ -26,7 +27,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'New',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
+            //iconCls: 'application_add',
             handler: function () {
                 dynaformDetails.getForm().reset();
                 formWindow.show();
@@ -36,7 +38,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = dynaformGrid.getSelectionModel().getSelections();
@@ -172,6 +174,15 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         editor: new Ext.form.TextField({
                         allowBlank: false
                         })
+                    },{
+                        id: 'ACTION',
+                        header: 'Type',
+                        dataIndex: 'ACTION',
+                        width: 280,
+                        editable: false,
+                        editor: new Ext.form.TextField({
+                        allowBlank: false
+                        })
                     },
                     {
                         sortable: false,
@@ -236,8 +247,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
  var dynaformDetails = new Ext.FormPanel({
         labelWidth: 100,
+        buttonAlign: 'center',
         bodyStyle :'padding:5px 5px 0',
-        width     : 550,
+        width     : 490,
         monitorValid : true,
         autoHeight: true,
         items:
@@ -246,12 +258,12 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     layout: 'fit',
                     border:true,
                     title: 'Please select the Dynaform Type',
-                    width: 550,
+                    width: 500,
                     collapsible: false,
                     labelAlign: 'top',
                     items:[{
                             xtype: 'radiogroup',
-                            id:    'dynaformType',
+                            //id:    'dynaformType',
                             layout: 'fit',
                             fieldLabel: 'Type',
                             itemCls: 'x-check-group-alt',
@@ -273,13 +285,13 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             change: function(radiogroup, radio) {
                             if(radio.inputValue == 'blankDyna')
                                 {
-                                    Ext.getCmp("blankDynaform").show();
-                                    Ext.getCmp("pmTableDynaform").hide();
+                                    Ext.get("blankDynaform").show();
+                                    Ext.get("pmTableDynaform").hide();
                                 }
                             else
                                 {
-                                    Ext.getCmp("blankDynaform").hide();
-                                    Ext.getCmp("pmTableDynaform").show();
+                                    Ext.get("blankDynaform").hide();
+                                    Ext.get("pmTableDynaform").show();
                                 }
                         }
                          }
@@ -291,15 +303,17 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     border:true,
                     hidden: false,
                     title: 'Dynaform Information',
-                    width: 550,
+                    width: 500,
                     items:[{
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
-                            name      : 'DYN_TITLE'
-                            //allowBlank: false
+                            name      : 'DYN_TITLE',
+                            width     : 350,
+                            allowBlank: false
                          },{
-                            width:          150,
+                            width     : 350,
                             xtype:          'combo',
+                            allowBlank: false,
                             mode:           'local',
                             editable:       false,
                             fieldLabel:     'Type',
@@ -330,7 +344,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     border:true,
                     hidden: true,
                     title: 'Dynaform Information',
-                    width: 550,
+                    width: 500,
                     items:[{
                             width:          150,
                             xtype:          'combo',
@@ -399,7 +413,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     {
                         var sAction   = getForm.ACTION;
                         var sTitle    = getForm.DYN_TITLE[0];
-                        var sDesc     = getForm.DYN_DESCRIPTION[0];
+                       var sDesc     = getForm.DYN_DESCRIPTION[0];
                     }
                 else
                     {
@@ -456,7 +470,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         maximizable: true,
         width: 600,
         //autoHeight: true,
-        height: 450,
+        height: 420,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -512,7 +526,7 @@ ProcessOptions.prototype.dbConnection = function()
   var btnEdit = new Ext.Button({
             id: 'btnEdit',
             text: 'Edit',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var s = dbGrid.getSelectionModel().getSelections();
                 var dbConnUID = s[0].data.DBS_UID;
@@ -535,7 +549,7 @@ ProcessOptions.prototype.dbConnection = function()
    var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Remove',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = dbGrid.getSelectionModel().getSelections();
@@ -706,6 +720,7 @@ ProcessOptions.prototype.dbConnection = function()
                       },{
                               xtype: 'fieldset',
                               id:    'encode',
+                              
                               border:false,
                               hidden: true,
                               items: [{
@@ -1080,6 +1095,12 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             {
                 name: 'INP_DOC_DESCRIPTION',
                 type: 'string'
+            },{
+                name: 'INP_DOC_VERSIONING',
+                type: 'string'
+            },{
+                name: 'INP_DOC_DESTINATION_PATH',
+                type: 'string'
             }
             ]);
 
@@ -1102,7 +1123,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = inputDocGrid.getSelectionModel().getSelections();
@@ -1157,7 +1178,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'New',
-            iconCls: 'application_add',
+           iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                newIOWindow.show();
                inputDocForm.getForm().reset();
@@ -1168,7 +1189,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
  var btnEdit = new Ext.Button({
             id: 'btnEdit',
             text: 'Edit',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var selectedRow = inputDocGrid.getSelectionModel().getSelections();
                 var inputDocUID   = selectedRow[0].data.INP_DOC_UID;
@@ -1203,15 +1224,17 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     border:true,
                     title: 'Input Document Information',
                     width: 500,
+                    //height:500,
                     collapsible: false,
                     labelAlign: '',
                     items:[{
                             xtype     : 'textfield',
                             fieldLabel: 'Title',
+                            width     : 200,
                             name      : 'INP_DOC_TITLE',
                             allowBlank: false
                          },{
-                            width:          150,
+                            width     : 200,
                             xtype:          'combo',
                             mode:           'local',
                             editable:       false,
@@ -1244,6 +1267,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             layout: 'form',
                             id:'formType',
                             border: false,
+                            width     : 300,
                             hidden:true,
                             labelAlign: '',
                             items:[{
@@ -1262,9 +1286,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 store:          new Ext.data.JsonStore({
                                             fields : ['name', 'value'],
                                             data   : [
-                                                {name : 'ORIGINAL',   value: 'ORIGINAL'},
-                                                {name : 'LEGAL COPY',   value: 'COPYLEGAL'},
-                                                {name : 'COPY',   value: 'COPY'}
+                                                {name : 'original',   value: 'ORIGINAL'},
+                                                {name : 'legal copy',   value: 'COPYLEGAL'},
+                                                {name : 'copy',   value: 'COPY'}
                                                 ]})
                                 }]
                         },{
@@ -1272,9 +1296,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             fieldLabel: 'Description',
                             name      : 'INP_DOC_DESCRIPTION',
                             height    : 120,
-                            width     : 350
+                            width     : 300
                          },{
-                            width:          150,
+                            width     : 200,
                             xtype:          'combo',
                             mode:           'local',
                             editable:       false,
@@ -1295,28 +1319,30 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     layout      :'column',
                     border      :false,
                     items       :[{
-                        columnWidth :.6,
+                        //columnWidth :.6,
                         layout      : 'form',
                         border      :false,
                         items       : [{
                                 xtype       : 'textfield',
-                                id          : 'DestPath',
+                                width     : 200,
+                                //id          : 'DestPath',
                                 fieldLabel  : 'Destination Path',
                                 name        : 'INP_DOC_DESTINATION_PATH',
                                 anchor      :'100%'
                         }]
                     },{
-                        columnWidth     :.4,
+                        //columnWidth     :.4,
                         layout          : 'form',
                         border          :false,
                         items           : [{
                                 xtype           :'button',
                                 title           : ' ',
+                                width:50,
                                 text            : '@@',
-                                name            : 'selectorigin',
+                               name            : 'selectorigin',
                                  handler: function (s) {
                                                     workflow.variablesAction = 'form';
-                                                    workflow.fieldId         = 'DestPath' ;
+                                                    workflow.fieldName         = 'INP_DOC_DESTINATION_PATH' ;
                                                     workflow.variable        = '@@',
                                                     workflow.formSelected    = inputDocForm;
                                                     var rowData = ProcMapObj.ExtVariables();
@@ -1327,12 +1353,13 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     layout      :'column',
                     border      :false,
                     items       :[{
-                        columnWidth :.6,
+                        //columnWidth :.6,
                         layout      : 'form',
                         border      :false,
                         items       : [{
                         xtype       : 'textfield',
-                        id          :'tags',
+                        width     : 200,
+                        //id          :'tags',
                         fieldLabel  : 'Tags',
                         name        : 'INP_DOC_TAGS',
                         anchor      :'100%'
@@ -1344,11 +1371,12 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                         items       : [{
                                 xtype       :'button',
                                 title       : ' ',
+                                width:50,
                                 text        : '@@',
                                 name        : 'selectorigin',
                                 handler: function (s) {
                                                 workflow.variablesAction = 'form';
-                                                workflow.fieldId         = 'tags' ;
+                                                workflow.fieldName         = 'INP_DOC_TAGS' ;
                                                 workflow.variable        = '@@',
                                                 workflow.formSelected    = inputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
@@ -1373,7 +1401,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 if(sOrig == "")
                     sOrig           = 'ORIGINAL';
                 
-                if(sOrig == 'LEGAL COPY')
+                if(sOrig == 'legal copy')
                     sOrig           = 'COPYLEGAL';
 
                 if(sFormNeeded == 'Digital')
@@ -1481,14 +1509,32 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     editor: new Ext.form.TextField({
                     //allowBlank: false
                     })
+                },{
+                    id: 'INP_DOC_VERSIONING',
+                    header: 'Versioning',
+                    dataIndex: 'INP_DOC_VERSIONING',
+                    width: 280,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
+                },{
+                    id: 'INP_DOC_DESTINATION_PATH',
+                    header: 'Destination Path',
+                    dataIndex: 'INP_DOC_DESTINATION_PATH',
+                    width: 280,
+                    editable: false,
+                    editor: new Ext.form.TextField({
+                    //allowBlank: false
+                    })
                 },
-                {
+                /*{
                     sortable: false,
                     renderer: function(val, meta, record)
                        {
                             return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
                        }
-                }
+                }*/
                 ]
         });
 
@@ -1519,7 +1565,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
   var gridWindow = new Ext.Window({
         title: 'Input Document',
         width: 550,
-        height: 450,
+        height: 420,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -1592,7 +1638,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = outputDocGrid.getSelectionModel().getSelections();
@@ -1629,7 +1675,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'New',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
             outputDocForm.getForm().reset();
             newOPWindow.show();
@@ -1639,7 +1685,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var btnEdit = new Ext.Button({
             id: 'btnEdit',
             text: 'Edit',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var s = outputDocGrid.getSelectionModel().getSelections();
                 var outputDocUID = s[0].data.OUT_DOC_UID;
@@ -1750,7 +1796,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                         border:false,
                                         items: [{
                                             xtype       : 'textfield',
-                                            id          : 'filenameGenerated',
+                                            //id          : 'filenameGenerated',
                                             fieldLabel  : 'Filename generated',
                                             name        : 'OUT_DOC_FILENAME',
                                             allowBlank  : false,
@@ -1768,7 +1814,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                             name: 'selectorigin',
                                              handler: function (s) {
                                                 workflow.variablesAction = 'form';
-                                                workflow.fieldId         = 'filenameGenerated' ;
+                                                workflow.fieldName         = 'OUT_DOC_FILENAME' ;
                                                 workflow.variable        = '@@',
                                                 workflow.formSelected    = outputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
@@ -1896,7 +1942,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         border      :false,
                         items       : [{
                                 xtype       : 'textfield',
-                                id          : 'DestPath',
+                                //id          : 'DestPath',
                                 fieldLabel  : 'Destination Path',
                                 name        : 'OUT_DOC_DESTINATION_PATH',
                                 anchor      :'100%'
@@ -1912,7 +1958,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 name            : 'selectorigin',
                                  handler: function (s) {
                                                     workflow.variablesAction = 'form';
-                                                    workflow.fieldId         = 'DestPath' ;
+                                                    workflow.fieldName         = 'OUT_DOC_DESTINATION_PATH' ;
                                                     workflow.variable        = '@@',
                                                     workflow.formSelected    = outputDocForm;
                                                     var rowData = ProcMapObj.ExtVariables();
@@ -1928,7 +1974,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         border      :false,
                         items       : [{
                         xtype       : 'textfield',
-                        id          :'tags',
+                        //id          :'tags',
                         fieldLabel  : 'Tags',
                         name        : 'OUT_DOC_TAGS',
                         anchor      :'100%'
@@ -1944,7 +1990,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 name        : 'selectorigin',
                                 handler: function (s) {
                                                 workflow.variablesAction = 'form';
-                                                workflow.fieldId         = 'tags' ;
+                                                workflow.fieldName         = 'OUT_DOC_TAGS' ;
                                                 workflow.variable        = '@@',
                                                 workflow.formSelected    = outputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
@@ -2096,7 +2142,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         maximizable : false,
         width       : 550,
         defaults    :{ autoScroll:true },
-        height      : 450,
+        height      : 420,
         minWidth    : 200,
         minHeight   : 150,
         layout      : 'fit',
@@ -2182,7 +2228,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'New',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                 formWindow.show();
                 reportForm.getForm().reset();
@@ -2192,7 +2238,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
    var btnEdit = new Ext.Button({
             id: 'btnEdit',
             text: 'Edit',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var s = reportGrid.getSelectionModel().getSelections();
                 var repTabUID = s[0].data.REP_TAB_UID;
@@ -2216,7 +2262,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function () {
                 editor.stopEditing();
                 var s = reportGrid.getSelectionModel().getSelections();
@@ -2299,12 +2345,14 @@ var reportForm =new Ext.FormPanel({
       items:[{
                               xtype: 'textfield',
                               fieldLabel: 'Title',
+                              width: 150,
                               name: 'REP_TAB_TITLE',
                                allowBlank: false
                           },{
 
                               xtype: 'textfield',
                               fieldLabel: 'Table Name',
+                              width: 150,
                               name: 'REP_TAB_NAME',
                                allowBlank: false
                           },
@@ -2353,8 +2401,9 @@ var reportForm =new Ext.FormPanel({
                           hidden: false,
                           items: [{
                                   xtype: 'multiselect',
-                                  width:  200,
+                                  width:  150,
                                   mode: 'local',
+                                  style : 'margin-bottom:10px',
                                   editable:true,
                                   fieldLabel: 'Fields',
                                   triggerAction: 'all',
@@ -2371,6 +2420,7 @@ var reportForm =new Ext.FormPanel({
                  id: 'gridfields',
                  border:false,
                  hidden: true,
+                 align:'left',
                   items:[{
                                   xtype: 'combo',
                                   width:  150,
