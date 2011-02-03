@@ -21,9 +21,7 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
- * @package workflow.engine.ProcessMaker
- */
+ */ 
 
 require_once 'classes/model/Content.php';
 require_once 'classes/model/Process.php';
@@ -62,6 +60,7 @@ class Processes {
   * change Status of any Process
   * @param string $sProUid
   * @return boolean
+  * @package workflow.engine.ProcessMaker
   */
   function changeStatus ( $sProUid = '') {
     $oProcess = new Process();
@@ -3258,6 +3257,7 @@ class Processes {
 
 /**
  * Object Document class
+ * @package workflow.engine.ProcessMaker
  */
 class ObjectDocument{
   public $type;
@@ -3278,6 +3278,7 @@ class ObjectDocument{
 
 /**
  * ObjectDocument Collection
+ * @package workflow.engine.ProcessMaker
  */
 class ObjectCellection{
   public $num;

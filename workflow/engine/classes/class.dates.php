@@ -21,9 +21,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
- * @package    workflow.engine.classes
- */
+ * /
+
 /*
  * Created on 21/01/2008
  * This class is used for handling dates
@@ -34,6 +33,9 @@
   require_once ( "classes/model/TaskPeer.php" );
   require_once ( "classes/model/HolidayPeer.php" );
   
+ /**
+  * @package    workflow.engine.classes
+  */
 class dates {
   private $holidays      = array();
   private $weekends      = array();
@@ -401,7 +403,7 @@ class dates {
   /**
    * Compare if the date is in range
    * @param $iDate = valid timestamp
-   * @return:true if it is within any of the ranges defined.
+   * @return true if it is within any of the ranges defined.
    */
   private function inRange( $iDate )
   {

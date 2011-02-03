@@ -8,9 +8,9 @@
 G::LoadSystem('dbMaintenance');
 G::LoadClass("cli");
 
-/**
- * @package workflow.engine.classes
+/** 
  * class workspaceTools
+ * @package workflow.engine.classes
  */
 
 class workspaceTools {

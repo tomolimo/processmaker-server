@@ -18,10 +18,10 @@
 
 /**
  * SugarCRM
- * @class pmSugar
+ * class pmSugar
  * @name Sugar CRM Triggers
- * @icon /images/triggers/icon_SugarCRM.gif
- * @className class.pmSugar.pmFunctions.php
+ * icon /images/triggers/icon_SugarCRM.gif
+ * className class.pmSugar.pmFunctions.php
  */
 
 function sugarLogin($sugarSoap, $user, $password) {
@@ -44,12 +44,12 @@ function objectToArray($object) {
   return array_map ( "objectToArray", $object );
 }
 /**
- * @method
+ * method
  *
  * Gets SugarCRM entries from the indicated module.
  *
  * @name GetSugarEntries
- * @label Get SugarCRM Entries
+ * label Get SugarCRM Entries
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -81,12 +81,12 @@ function GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy
 
 }
 /**
- * @method
+ * method
  *
  * Gets SugarCRM entries from the Calls module
  *
  * @name GetSugarCalls
- * @label Gets SugarCRM entries from the Calls module
+ * label Gets SugarCRM entries from the Calls module
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -106,12 +106,12 @@ function GetSugarCalls($sugarSoap, $user, $password, $query, $orderBy, $selected
   return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
 }
 /**
- * @method
+ * method
  *
  * Gets SugarCRM entries from the Leads module.
  *
  * @name GetSugarLeads
- * @label Gets SugarCRM entries from the Leads module.
+ * label Gets SugarCRM entries from the Leads module.
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -131,12 +131,12 @@ function GetSugarLeads($sugarSoap, $user, $password, $query, $orderBy, $selected
   return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
 }
 /**
- * @method
+ * method
  *
  * Gets SugarCRM entries from the Contacts module.
  *
  * @name GetSugarContacts
- * @label Gets SugarCRM entries from the Contacts module.
+ * label Gets SugarCRM entries from the Contacts module.
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -156,12 +156,12 @@ function GetSugarContacts($sugarSoap, $user, $password, $query, $orderBy, $selec
   return GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType);
 }
 /**
- * @method
+ * method
  *
  * Gets SugarCRM entries from the Opportunities module.
  *
  * @name GetSugarOpportunities
- * @label Gets SugarCRM entries from the Opportunities module.
+ * label Gets SugarCRM entries from the Opportunities module.
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -182,12 +182,12 @@ function GetSugarOpportunities($sugarSoap, $user, $password, $query, $orderBy, $
 }
 
 /**
- * @method
+ * method
  *
  * Gets SugarCRM entries from the Account module.
  *
  * @name GetSugarAccount
- * @label Gets SugarCRM entries from the Account module.
+ * label Gets SugarCRM entries from the Account module.
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -209,13 +209,13 @@ function GetSugarAccount($sugarSoap, $user, $password, $query, $orderBy, $select
 
 
 /**
- * @method
+ * method
  *
  * Creates SugarCRM entries from the Account module.
  *
  * @name CreateSugarAccount
  *
- * @label Creates SugarCRM entries from the Account module.
+ * label Creates SugarCRM entries from the Account module.
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -248,13 +248,13 @@ function CreateSugarAccount($sugarSoap, $user, $password, $name , $value, $resul
 }
 
 /**
- * @method
+ * method
  *
  * Creates SugarCRM entries from the Account module
  *
  * @name CreateSugarContact
  *
- * @label Creates SugarCRM entries from the Account module
+ * label Creates SugarCRM entries from the Account module
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -304,13 +304,13 @@ function CreateSugarContact($sugarSoap, $user, $password, $first_name, $last_nam
 
 
 /**
- * @method
+ * method
  *
  * Creates SugarCRM entries from the Opportunities module.
  *
  * @name CreateSugarOpportunity
 
- * @label Creates SugarCRM entries from the Opportunities module.
+ * label Creates SugarCRM entries from the Opportunities module.
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
@@ -362,13 +362,13 @@ function CreateSugarOpportunity($sugarSoap, $user, $password, $name,$account_id,
 
 
 /**
- * @method
+ * method
  *
  * Creates SugarCRM entries from the Account module
  *
  * @name CreateSugarLeads
  *
- * @label Creates SugarCRM entries from the Account module
+ * label Creates SugarCRM entries from the Account module
  *
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User

@@ -17,21 +17,21 @@
 
 /**
  * Talend ETL Integration
- * @class pmTalend
- * @name Talend ETL Integration
- * @icon /images/triggers/TalendOpenStudio.gif
- * @className class.pmTalend.pmFunctions.php
+ * class pmTalend
+ * name Talend ETL Integration
+ * icon /images/triggers/TalendOpenStudio.gif
+ * className class.pmTalend.pmFunctions.php
  */
 
 
 
 /**
- * @method
+ * method
  *
  * Executes a Talend Web Service..
  *
  * @name executeTalendWebservice
- * @label Executes a Talend Web Service.
+ * label Executes a Talend Web Service.
  *
  * @param string | $wsdl | Talend Web Service (including ?WSDL)
  * @param array(array(n1 v1) array(n2 v2) array(nN vN)) | $params | Array of params. Pairs of param Name Value

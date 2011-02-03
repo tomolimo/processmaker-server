@@ -21,7 +21,9 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ */
+
+/**
  * @package workflow.engine.ProcessMaker
  */
 G::LoadThirdParty('pear/json', 'class.json');
@@ -62,7 +64,7 @@ require_once 'classes/model/Gateway.php';
 
 /**
  * processMap - Process Map class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @author Julio Cesar Laura Avendano
  * @copyright 2007 COLOSA
  */
@@ -2648,7 +2650,7 @@ class processMap {
    *
    * @param  string     $sProcessUID
    * @return boolean    true
-   * @throw  Exception  $oError
+   * throw  Exception  $oError
    */
   function supervisorInputs($sProcessUID) {
     try {
@@ -2667,7 +2669,7 @@ class processMap {
    *
    * @param  string    $sProcessUID
    * @return boolean    true
-   * @throw  Exception  $oError
+   * throw  Exception  $oError
    */
   function webEntry($sProcessUID) {
     try {
@@ -2742,7 +2744,7 @@ class processMap {
    *
    * @param   string     $sProcessUID
    * @return  boolean    true
-   * @throw   Exception  $oError
+   * throw   Exception  $oError
    */
   function webEntry_new($sProcessUID) {
     try {
@@ -4011,7 +4013,7 @@ class processMap {
    * @param   string    $sProcessUID
    * @param   string    $sTaskUID
    * @return  boolean   true
-   * @throw   Exception $oError
+   * throw   Exception $oError
    */
   function deleteSubProcess($sProcessUID = '', $sTaskUID = '') {
     try {
@@ -4043,7 +4045,7 @@ class processMap {
    * @param   string    $sTaskUID
    * @param   string    $sIndex
    * @return  void
-   * @throw   Exception $oError
+   * throw   Exception $oError
    */
   function subProcess_Properties($sProcessUID = '', $sTaskUID = '', $sIndex = '') {
     try { //echo "$sProcessUID = '', $sTaskUID = '', $sIndex = ''";
@@ -4160,7 +4162,7 @@ class processMap {
    * @param   string     $sProcessUID
    * @param   string     $type
    * @return  boolean    true
-   * @throw   Exception $oError
+   * throw   Exception $oError
    */
   function eventsList($sProcessUID, $type) {
     try {
@@ -5125,7 +5127,7 @@ class processMap {
    * @param   string    $sIndex
    * @param   string    $sType  (0=>'Asynchronous' , 1=>'Synchronous')
    * @return  void
-   * @throw   Exception $oError
+   * throw   Exception $oError
    */
   function subProcessExtProperties($sProcessUID = '', $sTaskUID = '', $sIndex = '',$sType = '')
   {

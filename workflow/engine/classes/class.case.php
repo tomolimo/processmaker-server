@@ -22,8 +22,7 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- * @package    workflow.engine.classes
+ * 
  */
 
 require_once ("classes/model/Application.php");
@@ -64,6 +63,7 @@ G::LoadClass('pmScript');
 /**
  * A Cases object where you can do start, load, update, refresh about cases
  * This object is applied to Task
+ * @package    workflow.engine.classes
  */
 
 class Cases {
@@ -2728,7 +2728,7 @@ class Cases {
    * @name loadCaseByDelegation
    * @param string $appUid,
    * @param string $delIndex
-   * @Author gustavo cruz
+   * @author gustavo cruz
    * @return array
    */
   function loadCaseByDelegation($appUid, $delIndex) {
@@ -2815,8 +2815,8 @@ class Cases {
   /**
    *
    * @name ThrowUnpauseDaemon
-   * @Author: erik@colosa.com
-   * @Description: This method set all cases with the APP_DISABLE_ACTION_DATE for today
+   * author: erik@colosa.com
+   * Description: This method set all cases with the APP_DISABLE_ACTION_DATE for today
    * @return void
    */
   function ThrowUnpauseDaemon($today) {
@@ -4138,7 +4138,7 @@ class Cases {
   /**
    * Obtain all user permits for Dynaforms, Input and output documents
    *
-   * @function getAllObjects ($PRO_UID, $APP_UID, $TAS_UID, $USR_UID)
+   * function getAllObjects ($PRO_UID, $APP_UID, $TAS_UID, $USR_UID)
    * @author Erik Amaru Ortiz <erik@colosa.com>
    * @access public
    * @param  Process ID, Application ID, Task ID and User ID
@@ -4167,7 +4167,7 @@ class Cases {
   /**
    * Obtain all user permits for Dynaforms, Input and output documents from some action [VIEW, BLOCK, etc...]
    *
-   * @function getAllObjectsFrom ($PRO_UID, $APP_UID, $TAS_UID, $USR_UID, $ACTION)
+   * function getAllObjectsFrom ($PRO_UID, $APP_UID, $TAS_UID, $USR_UID, $ACTION)
    * @author Erik Amaru Ortiz <erik@colosa.com>
    * @access public
    * @param  Process ID, Application ID, Task ID, User ID, Action

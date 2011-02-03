@@ -12,10 +12,12 @@
 | only if this copyright statement is not removed
 +--------------------------------------------------*/
 /**
-* LastModification 30/05/2008
-* /**
-* @package workflow.engine.classes
+* LastModification 30/05/2008 
 */
+
+/**
+ * @package workflow.engine.classes
+ */
 
 class NET
 {

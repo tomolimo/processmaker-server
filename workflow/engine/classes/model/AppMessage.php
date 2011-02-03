@@ -54,11 +54,11 @@ class AppMessage extends BaseAppMessage {
   
   /**
    * AppMessgae quick Save method
-   * @Param   Array(msg_uid, app_uid, del_index, app_msg_type, app_msg_subject, app_msg_from, app_msg_to,
+   * @param   Array(msg_uid, app_uid, del_index, app_msg_type, app_msg_subject, app_msg_from, app_msg_to,
    *      app_msg_body, app_msg_cc, app_msg_bcc, app_msg_attach, app_msg_template, app_msg_status )
    * 
-   * @Author  Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmai.com>
-   * @Date  Aug 31th, 2009 
+   * @author  Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmai.com>
+   * Date  Aug 31th, 2009 
    */
   public function quickSave2($data_spool) {
     $this->data_spool = $data_spool;

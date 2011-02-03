@@ -22,10 +22,6 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
- * 
- * @package workflow.engine.ProcessMaker
- *
- *
  */
 ////////////////////////////////////////////////////
 // PM Functions
@@ -39,21 +35,21 @@
  * ProcessMaker has made a number of its PHP functions available be used in triggers and conditions.
  * Most of these functions are wrappers for internal functions used in Gulliver, which is the development framework
  * used by ProcessMaker.
- * @class pmFunctions
+ * class pmFunctions
  * @name ProcessMaker Functions
- * @icon /images/pm.gif
- * @className class.pmFunctions.php
+ * icon /images/pm.gif
+ * className class.pmFunctions.php
  */
 
 
 /**
- * @method
+ * method
  *
  * Returns the current date formated in the format "yyyy-mm-dd", with leading zeros in the
  * month and day if less than 10. This function is equivalent to PHP's date("Y-m-d").
  *
  * @name getCurrentDate
- * @label Get Current Date
+ * label Get Current Date
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#getCurrentDate.28.29
  *
  * @return date | $date | Current Date (Y-m-d) | It returns the current date as a string value.
@@ -63,13 +59,13 @@ function getCurrentDate() {
   return G::CurDate('Y-m-d');
 }
 /**
- * @method
+ * method
  *
  * Returns the current time in the format "hh:mm:ss" with leading zeros when the hours,
  * minutes or seconds are less than 10.
  *
  * @name getCurrentTime
- * @label Get Current Time
+ * label Get Current Time
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#getCurrentTime.28.29
  *
  * @return time | $time | Current Time (H:i:s)| The function returns the current time as a string.
@@ -79,12 +75,12 @@ function getCurrentTime() {
   return G::CurDate('H:i:s');
 }
 /**
- * @method
+ * method
  *
  * Retrieves information about a user with a given ID.
  *
  * @name userInfo
- * @label User Info
+ * label User Info
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#userInfo.28.29
  *
  * @param string(32) | $user_id | User ID | The user unique ID
@@ -102,12 +98,12 @@ function userInfo($user_uid) {
   }
 }
 /**
- * @method
+ * method
  *
  * Returns a string converted into all UPPERCASE letters.
  *
  * @name upperCase
- * @label Upper Case
+ * label Upper Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#upperCase.28.29
  *
  * @param string(32) | $sText | Text To Convert | A string to convert to UPPERCASE letters.
@@ -118,12 +114,12 @@ function upperCase($sText) {
   return G::toUpper($sText);
 }
 /**
- * @method
+ * method
  *
  * Returns a string with all the letters converted into lower case letters.
  *
  * @name lowerCase
- * @label Lower Case
+ * label Lower Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#lowerCase.28.29
  *
  * @param string(32) | $sText | Text To Convert | A string to convert to lower case letters.
@@ -134,13 +130,13 @@ function lowerCase($sText) {
   return G::toLower($sText);
 }
 /**
- * @method
+ * method
  *
  * Converts the first letter in each word into an uppercase letter.
  * Subsequent letters in each word are changed into lowercase letters.
  *
  * @name capitalize
- * @label Capitalize
+ * label Capitalize
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#capitalize.28.29
  *
  * @param string(32) | $sText | Text To Convert | The string to capitalize.
@@ -151,12 +147,12 @@ function capitalize($sText) {
   return G::capitalizeWords($sText);
 }
 /**
- * @method
+ * method
  *
  * Returns a string formatted according to the given date format and given language
  *
  * @name formatDate
- * @label Format Date
+ * label Format Date
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#formatDate.28.29
  *
  * @param string(32) | $date | Date | The input date to be reformatted. The input date must be a string in the format 'yyyy-mm-dd'.
@@ -176,12 +172,12 @@ function formatDate($date, $format='', $lang='en') {
   }
 }
 /**
- * @method
+ * method
  *
  * Returns a specified date written out in a given language, with full month names.
  *
  * @name literalDate
- * @label Literal Date
+ * label Literal Date
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#literalDate.28.29
  *
  * @param string(32) | $date | date | The input date in standard format (yyyy-mm-dd) that is a string.
@@ -206,12 +202,12 @@ function literalDate($date, $lang = 'en') {
   }
 }
 /**
- * @method
+ * method
  *
  * Pauses a specified case.
  *
  * @name pauseCase
- * @label Pause Case
+ * label Pause Case
  * @link  http://wiki.processmaker.com/index.php/ProcessMaker_Functions#pauseCase.28.29
  *
  * @param string(32) | $sApplicationUID= "" | ID of the case | The unique ID of the case. The UID of the current case can be found in the system variable @@APPLICATION.
@@ -241,13 +237,13 @@ function pauseCase($sApplicationUID = '', $iDelegation = 0, $sUserUID = '', $sUn
   }
 }
 /**
- * @method
+ * method
  *
  * Executes a SQL statement in a database connection or in one of ProcessMaker's
  * internal databases.
  *
  * @name executeQuery
- * @label execute Query
+ * label execute Query
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#executeQuery.28.29
  *
  * @param string(32) | $SqlStatement | Sql query | The SQL statement to be executed. Do NOT include the database name in the SQL statement.
@@ -301,12 +297,12 @@ function executeQuery($SqlStatement, $DBConnectionUID = 'workflow') {
   }
 }
 /**
- * @method
+ * method
  *
  * Sorts a grid according to a specified field in ascending or descending order.
  *
  * @name orderGrid
- * @label order Grid
+ * label order Grid
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#orderGrid.28.29
  *
  * @param array | $dataM | User ID |  A grid, which is a numbered array containing associative arrays with field names and their values, it has to be set like this "@=".
@@ -339,12 +335,12 @@ function orderGrid($dataM, $field, $ord = 'ASC') {
   return $dataM;
 }
 /**
- * @method
+ * method
  *
  * Executes operations among the grid fields, such as addition, substraction, etc
  *
  * @name evaluateFunction
- * @label evaluate Function
+ * label evaluate Function
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#evaluateFunction.28.29
  *
  * @param array | $aGrid | Grid | The input grid.
@@ -373,12 +369,12 @@ function evaluateFunction($aGrid, $sExpresion) {
 
 /** Web Services Functions **/
 /**
- * @method
+ * method
  *
  * Logs in a user to initiate a web services session in a ProcessMaker server.
  *
  * @name WSLogin
- * @label WS Login
+ * label WS Login
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSLogin.28.29
  *
  * @param string(32) | $user | Username of the user | The username of the user who will login to ProcessMaker. All subsequent actions will be limited to the permissions of that user.
@@ -404,13 +400,13 @@ function WSLogin($user, $pass, $endpoint='') {
   }
 }
 /**
- * @method
+ * method
  *
  * Opens a connection for web services and returns a SOAP client object which is
  * used by all subsequent other WS function calls
  *
  * @name WSOpen
- * @label WS Open
+ * label WS Open
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSOpen.28.29
  *
  * @param boolean | $force=false | Optional Parameter | Optional parameter. Set to true to force a new connection to be created even if a valid connection already exists.
@@ -430,12 +426,12 @@ function WSOpen($force=false) {
   }
 }
 /**
- * @method
+ * method
  *
  * Returns all the tasks which has open delegations for the indicated case.
  *
  * @name WSTaskCase
- * @label WS Task Case
+ * label WS Task Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSTaskCase.28.29
  *
  * @param string(32) | $caseId | Case ID | The unique ID for the case. Case UIDs can be found with WSCaseList() and are stored in the field wf_<WORKSPACE>.APPLICATION.APP_UID.
@@ -471,13 +467,13 @@ function WSTaskCase($caseId) {
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of tasks in which the logged-in user can initiate cases or is
  * assigned to these cases.
  *
  * @name WSTaskList
- * @label WS Task List
+ * label WS Task List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSTaskList.28.29
  *
  * @return array | $rows |List of tasks | This function returns a list of tasks
@@ -511,12 +507,12 @@ function WSTaskList() {
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of users whose status is "ACTIVE" in the current workspace.
  *
  * @name WSUserList
- * @label WS User List
+ * label WS User List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSUserList.28.29
  *
  * @return array | $rows | List | List of Active users in the workspace
@@ -550,12 +546,12 @@ function WSUserList() {
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of active groups in a workspace.
  *
  * @name WSGroupList
- * @label WS Group List
+ * label WS Group List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSGroupList.28.29
  *
  * @return array | $rows | List | List of active groups in the workspace
@@ -590,12 +586,12 @@ function WSGroupList() {
 }
 
 /**
- * @method
+ * method
  *
  * Returns a list of roles in the current workspace.
  *
  * @name WSRoleList
- * @label WS Role List
+ * label WS Role List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSRoleList.28.29
  *
  * @return array | $rows | List | List of roles in the workspace
@@ -628,14 +624,14 @@ function WSRoleList() {
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of the cases which the current logged-in user has privileges to
  * open.
  *
  * @name WSCaseList
- * @label WS Case List
- * @Link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSCaseList.28.29
+ * label WS Case List
+ * Link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSCaseList.28.29
  *
  * @return array | $rows | List of the cases |It returns a list of cases
  *
@@ -669,13 +665,13 @@ function WSCaseList() {
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of processes in the current workspace.
  *
  * @name WSProcessList
- * @label WS Process List
- * @Link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSProcessList.28.29
+ * label WS Process List
+ * Link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSProcessList.28.29
  *
  * @return array | $rows | List of processes | A list of processes
  *
@@ -708,12 +704,12 @@ function WSProcessList() {
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of processes in the current workspace.
  *
  * @name getEmailConfiguration
- * @label WS Get Email Configuration
+ * label WS Get Email Configuration
  *
  *
  * @return array | $aFields | Array |Get current email configuration
@@ -749,12 +745,12 @@ function getEmailConfiguration () {
 }
 
 /**
- * @method
+ * method
  *
  * Sends an email using a template file.
  *
  * @name PMFSendMessage
- * @label PMF Send Message
+ * label PMF Send Message
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFSendMessage.28.29
  *
  * @param string(32) | $caseId | UID for case | The UID (unique identification) for a case, which is a string of 32 hexadecimal characters to identify the case.
@@ -781,13 +777,13 @@ function PMFSendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplat
 }
 
 /**
- * @method
+ * method
  *
  * Sends two variables to the specified case.
  * It will create new case variables if they don't already exist
  *
  * @name WSSendVariables
- * @label WS Send Variables
+ * label WS Send Variables
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSSendVariables.28.29
  *
  * @param string(32) | $caseId | UID for case | The unique ID of the case which will receive the variables.
@@ -815,13 +811,13 @@ function WSSendVariables($caseId, $name1, $value1, $name2, $value2) {
   return $fields;
 }
 /**
- * @method
+ * method
  *
  * Routes (derivates) a case, moving the case to the next task in the process
  * according its routing rules.
  *
  * @name WSDerivateCase
- * @label WS Derivate Case
+ * label WS Derivate Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSDerivateCase.28.29
  *
  * @param string(32) | $CaseId | Case ID |The unique ID for a case, which can be found with WSCaseList() or by examining the field wf_<WORKSPACE>.APPLICATION.APP_UID.
@@ -842,12 +838,12 @@ function WSDerivateCase($caseId, $delIndex) {
   return $fields;
 }
 /**
- * @method
+ * method
  *
  * Creates a case with any user with two initial case variables.
  *
  * @name WSNewCaseImpersonate
- * @label WS New Case Impersonate
+ * label WS New Case Impersonate
  * @link  http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSNewCaseImpersonate.28.29
  *
  * @param string(32) | $processId | Process ID | The unique ID for the process.
@@ -877,13 +873,13 @@ function WSNewCaseImpersonate($processId, $userId, $name1, $value1, $name2, $val
   return $fields;
 }
 /**
- * @method
+ * method
  *
  * Creates a new case starting with a specified task and using two initial case
  * variables.
  *
  * @name WSNewCase
- * @label WS New Case
+ * label WS New Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSNewCase.28.29
  *
  * @param string(32) | $processId | Process ID | The unique ID for the process. To use the current process, use the system variable @@PROCESS.
@@ -913,13 +909,13 @@ function WSNewCase($processId, $taskId, $name1, $value1, $name2, $value2) {
   return $fields;
 }
 /**
- * @method
+ * method
  *
  * Assigns a user to a group (as long as the logged in user has the PM_USERS
  * permission in their role).
  *
  * @name WSAssignUserToGroup
- * @label WS Assign User To Group
+ * label WS Assign User To Group
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSAssignUserToGroup.28.29
  *
  * @param string(32) | $userId | User ID | The unique ID for a user.
@@ -940,12 +936,12 @@ function WSAssignUserToGroup($userId, $groupId) {
   return $fields;
 }
 /**
- * @method
+ * method
  *
  * Creates a new user in ProcessMaker.
  *
  * @name WSCreateUser
- * @label WS Create User
+ * label WS Create User
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSCreateUser.28.29
  *
  * @param string(32) | $userId | User ID | The username of the new user, which can be up to 32 characters long.
@@ -969,12 +965,12 @@ function WSCreateUser($userId, $password, $firstname, $lastname, $email, $role) 
   return $fields;
 }
 /**
- * @method
+ * method
  *
  * Returns the unique ID for the current active session.
  *
  * @name WSGetSession
- * @label WS Get Session
+ * label WS Get Session
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSGetSession.28.29
  *
  * @return string | $userId | Sesion ID | The unique ID for the current active session.
@@ -993,12 +989,12 @@ function WSGetSession() {
 /** Local Services Functions **/
 
 /**
- * @method
+ * method
  *
  * Returns all the tasks for the specified case which have open delegations.
  *
  * @name PMFTaskCase
- * @label PMF Task Case
+ * label PMF Task Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFTaskCase.28.29
  *
  * @param string(32) | $caseId | Case ID | The unique ID for a case.
@@ -1020,12 +1016,12 @@ function PMFTaskCase($caseId) #its test was successfull
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of tasks which the specified user has initiated.
  *
  * @name PMFTaskList
- * @label PMF Task List
+ * label PMF Task List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFTaskList.28.29
  *
  * @param string(32) | $userid | User ID | The unique ID of a user.
@@ -1047,12 +1043,12 @@ function PMFTaskList($userId) #its test was successfull
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of users whose status is set to "ACTIVE" for the current workspace.
  *
  * @name PMFUserList
- * @label PMF User List
+ * label PMF User List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFUserList.28.29
  *
  * @return array | $rows | List of users | An array of users
@@ -1073,12 +1069,12 @@ function PMFUserList() #its test was successfull
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Generates an Output Document
  *
  * @name PMFGenerateOutputDocument
- * @label PMF Generate Output Document
+ * label PMF Generate Output Document
  *
  * @param string(32) | $outputID | Output ID | Output Document ID
  * @return none | $none | None | None
@@ -1107,12 +1103,12 @@ function PMFGenerateOutputDocument($outputID) {
 
 } 
 /**
- * @method
+ * method
  *
  * Returns a list of groups from the current workspace
  *
  * @name PMFGroupList
- * @label PMF Group List
+ * label PMF Group List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFGroupList.28.29
  *
  * @return array | $rows | List of groups | An array of groups
@@ -1134,12 +1130,12 @@ function PMFGroupList() #its test was successfull
 }
 
 /**
- * @method
+ * method
  *
  * Returns a list of roles whose status is "ACTIVE" for the current workspace.
  *
  * @name PMFRoleList
- * @label PMF Role List
+ * label PMF Role List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFRoleList.28.29
  *
  * @return array | $rows | List of roles | This function returns an array of roles
@@ -1160,12 +1156,12 @@ function PMFRoleList() #its test was successfull
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of the pending cases for a specified user
  *
  * @name PMFCaseList
- * @label PMF Case List
+ * label PMF Case List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFCaseList.28.29
  *
  * @param string(32) | $userId | User ID | The unique ID of a user who is assigned to work on the cases.
@@ -1187,12 +1183,12 @@ function PMFCaseList($userId) #its test was successfull
   return $rows;
 }
 /**
- * @method
+ * method
  *
  * Returns a list of processes for the current workspace
  *
  * @name PMFProcessList
- * @label PMF Process List
+ * label PMF Process List
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFProcessList.28.29
  *
  * @return array | $rows | Lis ot Processes | An array of tasks in the indicated case which have open delegations
@@ -1214,12 +1210,12 @@ function PMFProcessList() #its test was successfull
 }
 
 /**
- * @method
+ * method
  *
  * Sends an array of case variables to a specified case.
  *
  * @name PMFSendVariables
- * @label PMF Send Variables
+ * label PMF Send Variables
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFSendVariables.28.29
  *
  * @param string(32) | $caseId | Case ID | The unique ID of the case to receive the variable.
@@ -1239,12 +1235,12 @@ function PMFSendVariables($caseId, $variables) {
   }
 }
 /**
- * @method
+ * method
  *
  * Derivates (routes) a case to the next task in the process.
  *
  * @name PMFDerivateCase
- * @label PMF Derivate Case
+ * label PMF Derivate Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFDerivateCase.28.29
  *
  * @param string(32) | $caseId | Case ID | The unique ID for the case to be derivated (routed)
@@ -1270,13 +1266,13 @@ function PMFDerivateCase($caseId, $delIndex, $bExecuteTriggersBeforeAssignment =
   }
 }
 /**
- * @method
+ * method
  *
  * Creates a new case with a user who can impersonate a user with the proper
  * privileges.
  *
  * @name PMFNewCaseImpersonate
- * @label PMF New Case Impersonate
+ * label PMF New Case Impersonate
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFNewCaseImpersonate.28.29
  *
  * @param string(32) | $processId | Process ID | The unique ID of the process.
@@ -1297,12 +1293,12 @@ function PMFNewCaseImpersonate($processId, $userId, $variables) {
   }
 }
 /**
- * @method
+ * method
  *
  * Creates a new case starting with the specified task
  *
  * @name PMFNewCase
- * @label PMF New Case
+ * label PMF New Case
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFNewCase.28.29
  *
  * @param string(32) | $processId | Process ID | The unique ID of the process.
@@ -1325,12 +1321,12 @@ function PMFNewCase($processId, $userId, $taskId, $variables) {
   }
 }
 /**
- * @method
+ * method
  *
  * Assigns a user to a group.
  *
  * @name PMFAssignUserToGroup
- * @label PMF Assign User To Group
+ * label PMF Assign User To Group
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFNewCase.28.29
  *
  * @param string(32) | $userId | User ID | The unique ID of the user.
@@ -1350,12 +1346,12 @@ function PMFAssignUserToGroup($userId, $groupId) {
   }
 }
 /**
- * @method
+ * method
  *
  * Creates a new user with the given data.
  *
  * @name PMFCreateUser
- * @label PMF Create User
+ * label PMF Create User
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFCreateUser.28.29
  *
  * @param string(32) | $userId | User ID | The username for the new user.
@@ -1379,13 +1375,13 @@ function PMFCreateUser($userId, $password, $firstname, $lastname, $email, $role)
   }
 }
 /**
- * @method
+ * method
  *
  * Creates a random string of letters and/or numbers of a specified length,which
  * can be used as the PINs (public identification numbers) and codes for cases.
  *
  * @name generateCode
- * @label generate Code
+ * label generate Code
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#generateCode.28.29
  *
  * @param int | $iDigits = 4 | Number of characters | The number of characters to be generated.
@@ -1398,12 +1394,12 @@ function generateCode ( $iDigits = 4, $sType = 'NUMERIC' ) {
 }
 
 /**
- * @method
+ * method
  *
  * Sets the code and PIN for a case.
  *
  * @name setCaseTrackerCode
- * @label set Case Tracker Code
+ * label set Case Tracker Code
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#setCaseTrackerCode.28.29
  *
  * @param string(32) | $sApplicationUID | Case ID | The unique ID for a case (which can be found with WSCaseList()
@@ -1430,12 +1426,12 @@ function setCaseTrackerCode($sApplicationUID, $sCode, $sPIN = '') {
   }
 }
 /**
- * @method
+ * method
  *
  * Routes (derivates) a case and then displays the case list.
  *
  * @name jumping
- * @label jumping
+ * label jumping
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#jumping.28.29
  *
  * @param string(32) | $caseId | Case ID | The unique ID for the case to be routed (derivated).
@@ -1451,13 +1447,13 @@ function jumping ( $caseId, $delIndex ) {
   G::header('Location: cases_List');
 }
 /**
- * @method
+ * method
  *
  * Returns the label of a specified option from a dropdown box, listbox,
  * checkgroup or radiogroup.
  *
  * @name PMFgetLabelOption
- * @label PMF get Label Option
+ * label PMF get Label Option
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFgetLabelOption.28.29
  *
  * @param string(32) | $PROCESS | Process ID | The unique ID of the process which contains the field.
@@ -1476,14 +1472,14 @@ function PMFgetLabelOption($PROCESS, $DYNAFORM_UID, $FIELD_NAME, $FIELD_SELECTED
   }
 }
 /**
- * @method
+ * method
  *
  * Redirects a case to any step in the current task. In order for the step to
  * be executed, the specified step much exist and if it contains a condition,
  * it must evaluate to true.
  *
  * @name PMFRedirectToStep
- * @label PMF Redirect To Step
+ * label PMF Redirect To Step
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFRedirectToStep.28.29
  *
  * @param string(32) | $sApplicationUID | Case ID | The unique ID for a case,
@@ -1543,12 +1539,12 @@ function PMFRedirectToStep($sApplicationUID, $iDelegation, $sStepType, $sStepUid
 }
 
 /**
- * @method
+ * method
  *
  * Returns a list of the next assigned users to a case.
  *
  * @name PMFGetNextAssignedUsers
- * @label PMFGet Next Assigned Users
+ * label PMFGet Next Assigned Users
  *
  * @param string(32) | $application | Case ID | Id of the case
  * @return array | $array | List of users | Return a list of users

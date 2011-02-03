@@ -34,8 +34,8 @@
 /**
  * PMScript - PMScript class 
  * @author Julio Cesar Laura Avenda�o <juliocesar@colosa.com>
- * @last modify 2008.08.13 by Erik Amaru Ortiz <erik@colosa.com>
- * @last modify comment was added and adapted the catch errors
+ * last modify 2008.08.13 by Erik Amaru Ortiz <erik@colosa.com>
+ * last modify comment was added and adapted the catch errors
  * @copyright 2007 COLOSA
  */
 
@@ -548,8 +548,8 @@ function pmSqlEscape($vValue)
 
 /***************************************************************************
 * Error handler
-* @author: Julio Cesar Laura Avenda�o <juliocesar@colosa.com>
-* @date: 2009-10-01
+* author: Julio Cesar Laura Avenda�o <juliocesar@colosa.com>
+* date: 2009-10-01
 ***************************************************************************/
 /*
  * Convert to data base escaped string

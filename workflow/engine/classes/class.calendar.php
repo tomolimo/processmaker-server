@@ -25,10 +25,9 @@
  *
  *
  * @name calendar
- * @created 2010-03-22
+ * created 2010-03-22
  *
- * @author Hugo Loza <hugo@colosa.com> 2010-03-22
- * @package    workflow.engine.classes
+ * @author Hugo Loza <hugo@colosa.com> 2010-03-22 * 
  */
    
   require_once ( "classes/model/CalendarDefinition.php" );
@@ -40,6 +39,7 @@
  * 
  * @author Hugo Loza <hugo@colosa.com> 2010-03-22
  * @uses CalendarDefinition
+ * @package    workflow.engine.classes
  *
  */
 class calendar extends CalendarDefinition

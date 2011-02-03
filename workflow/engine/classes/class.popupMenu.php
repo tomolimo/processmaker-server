@@ -79,7 +79,7 @@ class popupMenu extends form
 
 /**
  * XmlForm_Field_popupOption - XmlForm_Field_popupOption class
- * @package workflow.ProcessMaker
+ * @package workflow.engine.ProcessMaker
  * @copyright COLOSA
  */
 
