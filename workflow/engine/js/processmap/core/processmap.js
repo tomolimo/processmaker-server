@@ -380,7 +380,7 @@ var processmap=function(){
 					{separator:true},
 					{image:"/images/add.png",text:G_STRINGS.ID_PROCESSMAP_ADD_TASK,launch:this.addTask.extend(this,{tp:'task'})},
 					{image:"/images/subProcess.png",text:G_STRINGS.ID_PROCESSMAP_ADD_SUBPROCESS,launch:this.addTask.extend(this,{tp:'subprocess'})},  //add subprocess whith blabla
-                                        {image:"/images/add.png",text:"Add Task Hidden",launch:this.addTask.extend(this,{tp:'hidden'})},  //add subprocess whith blabla
+                                        //{image:"/images/add.png",text:"Add Task Hidden",launch:this.addTask.extend(this,{tp:'hidden'})},  //add subprocess whith blabla
 					{image:"/images/addtext.png",text:G_STRINGS.ID_PROCESSMAP_ADD_TEXT,launch:this.addText.extend(this)},
 					{image:"/images/linhori.png",text:G_STRINGS.ID_PROCESSMAP_HORIZONTAL_LINE,launch:this.addGuide.extend(this,"horizontal")},
 					{image:"/images/linver.png",text:G_STRINGS.ID_PROCESSMAP_VERTICAL_LINE,launch:this.addGuide.extend(this,"vertical")},
