@@ -30,8 +30,8 @@
  * @Param  var action from POST request
  */
 
-if( isset($_POST['action']) ){
-	$action = $_POST['action'];
+if( isset($_POST['action']) || isset($_POST['function']) ){
+	$action = (isset($_POST['action']))?$_POST['action']:$_POST['function'];
 } else {
 	throw new Exception('dbconnections Fatal error, No action defined!...');
 }
@@ -50,7 +50,12 @@ G::LoadClass ('dbConnections');
 global $_DBArray;
 
 switch ( $action ){
-
+  
+  case 'loadInfoAssigConnecctionDB':
+   $oStep = new Step();
+    return print ($oStep->loadInfoAssigConnecctionDB($_POST['PRO_UID'],$_POST['DBS_UID']));
+  break;
+  
 	case 'showDbConnectionsList':
 
 		$oProcess = new processMap();

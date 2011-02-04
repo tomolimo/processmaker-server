@@ -454,6 +454,65 @@ class Step extends BaseStep {
   }
  }
  
+ /**
+   * verify if a dbconnection is assigned in some dynaforms or triggers
+   *
+   * @param      string $sproUid   the uid of the process
+   * @param      string $sdbsUid   the uid of the db connection
+   */
+  function loadInfoAssigConnecctionDB($sproUid,$sdbsUid){
+
+   require_once ( "classes/model/DynaformPeer.php" );
+   G::LoadSystem('dynaformhandler');     
+    $swDynaform = true;
+    $swTriggers = true;
+    //we are looking for triggers if there is at least one db connection
+    $oC = new Criteria('workflow');
+    $oC->add(TriggersPeer::PRO_UID,  $sproUid);
+    $oDataset = TriggersPeer::doSelectRS($oC);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    //print $sproUid;
+    while($aRowT = $oDataset->getRow()){  
+     $uidConnection =preg_quote($sdbsUid) ;
+     if( strrpos($uidConnection,$aRowT['TRI_WEBBOT']) ) { 
+      $swTriggers = false;
+     }
+    $oDataset->next();
+    }
+    //we are looking for dynaforms if there is at least one db connection
+    $oC = new Criteria('workflow');
+    $oC->add(DynaformPeer::PRO_UID,  $sproUid);
+    $oDataset = DynaformPeer::doSelectRS($oC);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    while($aRow = $oDataset->getRow()){
+      if($aRow['DYN_TYPE']=='xmlform') {
+        $dynHandler = new dynaFormHandler(PATH_DYNAFORM.$aRow['DYN_FILENAME'].".xml");
+        $dynFields = $dynHandler->getFields();
+        $sxmlgrid = '';
+        $sType = '';
+        $check=0;
+        foreach($dynFields as $field){
+         $ssqlConnection = $this->getAttribute($field, 'sqlconnection');
+         if($ssqlConnection==$sdbsUid)
+          $swDynaform=false;
+        }//end foreach 
+        
+      }//end if
+    $oDataset->next();
+    }//end while
+   //is there a connecction?
+   if ($swDynaform && $swTriggers){
+   //there is no db connection, you can delete this connection
+    return true;
+   } else {
+   //there is a db connection, you can not delete this connection
+    return false;
+   }
+  die;
+  }
+ 
   /**
    * Get related steps for a determinated case
    *

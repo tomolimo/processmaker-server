@@ -157,8 +157,15 @@ function editDbConnection(DBS_UID)
 	oRPC.make();
 }
 
-function deleteDbConnection(DBS_UID)
+function deleteDbConnection(DBS_UID,PRO_UID)
 {
+
+   isokDependent = ajax_function(PROCESS_REQUEST_FILE,'loadInfoAssigConnecctionDB','DBS_UID='+DBS_UID+'&PRO_UID='+PRO_UID,'POST');
+
+   if(!isokDependent){
+	  msgBox(G_STRINGS.ID_DB_CONNECTION_ASSIGN,"alert");
+	  return;
+   }
   	new leimnud.module.app.confirm().make({
   		label:G_STRINGS.ID_MSG_CONFIRM_REMOVE_DBS,
     	action:function(){
