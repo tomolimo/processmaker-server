@@ -18,6 +18,13 @@ switch($type){
     
     $helper->serve();
   break;
+  
+  case 'js-translations':
+    $locale = $_GET['locale'];
+    G::LoadTranslationObject($locale);
+    global $translation;
+    print 'var TRANSLATIONS = ' . G::json_encode($translation) . ';';
+  break;
 }
 
 

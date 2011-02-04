@@ -420,5 +420,26 @@ class Configurations // extends Configuration
 
     return $formats;
   }
+  
+  function getSystemDate($dateTime)
+  {
+    $oConf = new Configurations;
+    $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+    $creationDateMask = isset($oConf->aConfig['dateFormat'])? $oConf->aConfig['dateFormat']: '';
+    
+    if( $creationDateMask != '' ) {
+      if( strpos($dateTime, ' ') !== false ) {
+        list($date, $time) = explode(' ', $dateTime);
+        list($y, $m, $d) = explode('-', $date);
+        list($h, $i, $s) = explode(':', $time);
+        $dateTime = date($creationDateMask, mktime($h, $i, $s, $m, $d, $y));
+      } else {
+        list($y, $m, $d) = explode('-', $dateTime);
+        $dateTime = date($creationDateMask, mktime(0, 0, 0, $m, $d, $y));
+      } 
+    } 
+    
+    return $dateTime;
+  }
 }
 ?>

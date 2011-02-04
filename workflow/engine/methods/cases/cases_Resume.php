@@ -73,11 +73,13 @@
         $Fields['STATUS'] = ucfirst(strtolower(G::LoadTranslation('ID_CANCELLED')));
       break;
     }
+    
     //$Fields['STATUS'] = $aRow['APP_TYPE'];
   }
-
+  
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, false)");
   $oHeadPublisher->addScriptCode('
   var Cse = {};
   Cse.panels = {};
@@ -105,4 +107,4 @@
   $oHeadPublisher->addScriptFile('/jscore/cases/core/cases_Step.js');
   $G_PUBLISH = new Publisher;
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_Resume.xml', '', $Fields, '');
-  G::RenderPage( 'publish', 'green-submenu');
+  G::RenderPage( 'publish', 'blank');

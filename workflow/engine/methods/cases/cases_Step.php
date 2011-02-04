@@ -933,7 +933,7 @@
       $oDbConnections = new dbConnections($_SESSION['PROCESS']);
       $oDbConnections->loadAdditionalConnections();
       $stepFilename = "$sNamespace/$sStepName";
-      $G_PUBLISH->AddContent('content', $stepFilename );
+      $G_PUBLISH->AddContent('content', $stepFilename);
       break;
 
     }
@@ -951,6 +951,7 @@
 
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(true, true, true);");
   $oHeadPublisher->addScriptCode('
     var showSteps = function()
     {
@@ -993,7 +994,7 @@
   else
     $skin = "green";
 
-  G::RenderPage('publish', $skin . '-submenu');
+  G::RenderPage('publish', 'blank');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){
     G::evalJScript('showdebug();');

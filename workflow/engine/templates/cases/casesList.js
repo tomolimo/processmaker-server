@@ -31,7 +31,7 @@ function openCase(){
       var appUid   = rowModel.data.APP_UID;
       var delIndex = rowModel.data.DEL_INDEX;
       var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
-
+      
       Ext.Msg.show({
         msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
         width:300,
@@ -48,7 +48,8 @@ function openCase(){
         case 'sent': // = participated
           params += 'APP_UID=' + appUid;
           params += '&DEL_INDEX=' + delIndex;
-          requestFile = '../cases/cases_Open';
+          //requestFile = '../cases/cases_Open';
+          requestFile = 'open';
         break;
         case 'todo':
         case 'draft':
@@ -57,10 +58,12 @@ function openCase(){
         default:
           params += 'APP_UID=' + appUid;
           params += '&DEL_INDEX=' + delIndex;
-          requestFile = '../cases/cases_Open';
+          //requestFile = '../cases/cases_Open';
+          requestFile = 'open';
           break;
       }
 
+      parent._CASE_TITLE  = caseTitle;
       params += '&action=' + action;
       redirect(requestFile + '?' + params);
 

@@ -5241,4 +5241,49 @@ class Cases {
     }
   }
   
+  
+  function getUsersToReassign($TAS_UID, $USR_UID)
+  {
+    G::LoadClass('groups');
+    G::LoadClass('tasks');
+
+    $oTasks = new Tasks();
+    $aAux = $oTasks->getGroupsOfTask($TAS_UID, 1);
+    $row = array();
+
+    $groups = new Groups();
+    foreach($aAux as $aGroup) {
+      $aUsers = $groups->getUsersOfGroup($aGroup['GRP_UID']);
+      foreach($aUsers as $aUser) {
+        if($aUser['USR_UID'] != $USR_UID) {
+          $row[] = $aUser['USR_UID'];
+        }
+      }
+    }
+
+    $aAux = $oTasks->getUsersOfTask($TAS_UID, 1);
+    foreach($aAux as $aUser) {
+      if($aUser['USR_UID'] != $USR_UID) {
+        $row[] = $aUser['USR_UID'];
+      }
+    }
+
+    require_once 'classes/model/Users.php';
+    $c = new Criteria('workflow');
+    $c->addSelectColumn(UsersPeer::USR_UID);
+    $c->addSelectColumn(UsersPeer::USR_USERNAME);
+    $c->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $c->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $c->add(UsersPeer::USR_UID, $row, Criteria::IN);
+    
+    $rs = UsersPeer::doSelectRs($c);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+    $rows = Array();
+    while( $rs->next() ) {
+      $rows[] = $rs->getRow();
+    }
+    
+    return $rows;
+  }
 }

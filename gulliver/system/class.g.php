@@ -1890,18 +1890,27 @@ class G
    * @access public
    * @parameter string msgID
    * @parameter string file
+   * @parameter array data // erik: associative array within data input to replace for formatted string i.e "any messsage {replaced_label} that contains a replace label"
    * @return string
    */
-  function LoadTranslation( $msgID , $lang = SYS_LANG )
+  function LoadTranslation( $msgID , $lang = SYS_LANG, $data = null)
   {
     global $translation;      
+    
     if ( isset ( $translation[$msgID] ) ){
-      //return eregi_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
-      return preg_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
-    }else{
-      if(defined("UNTRANSLATED_MARK")){
+      $translationString = preg_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
+    
+      if( isset($data) && is_array($data) ) {
+        foreach($data as $label=>$value) {
+          $translationString = str_replace('{'.$label.'}', $value, $translationString);
+        }
+      }
+      
+      return $translationString;
+    } else {
+      if( defined("UNTRANSLATED_MARK") ) {
         $untranslatedMark = strip_tags(UNTRANSLATED_MARK);
-      }else{
+      } else {
         $untranslatedMark = "**";
       }
       return $untranslatedMark . $msgID . $untranslatedMark;

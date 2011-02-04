@@ -26,8 +26,8 @@ var debugVariablesFilter;
 var ReloadTreeMenuItemDetail;
 var NOTIFIER_FLAG = false;
 var result;
-
 var _action = '';
+var _CASE_TITLE;
 
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
@@ -710,3 +710,6 @@ function setDefaultOption(){
   //document.getElementById('casesSubFrame').src = "casesListExtJs";
 }
 
+var notify = function(title, msg){
+  PMExt.notify(title, msg);
+}

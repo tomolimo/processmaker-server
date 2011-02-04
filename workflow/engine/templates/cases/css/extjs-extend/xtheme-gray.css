@@ -379,3 +379,10 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
   border:1px solid #c1c1c1 !important;
   border-right:none !important;
 }
+
+.ICON_STEPS {
+  background-image:url(/images/steps.png) !important;
+}
+.ICON_ASSIGN_TASK {
+  background-image:url(/images/flechav1A.png) !important;
+}

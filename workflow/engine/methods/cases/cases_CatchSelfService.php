@@ -83,6 +83,7 @@ $G_SUB_MENU               = 'caseOptions';
 $G_ID_MENU_SELECTED       = 'CASES';
 $G_ID_SUB_MENU_SELECTED   = '_';
 $oHeadPublisher =& headPublisher::getSingleton();
+$oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, false)");
 $oHeadPublisher->addScriptCode('
       var Cse = {};
       Cse.panels = {};
@@ -101,4 +102,4 @@ $oHeadPublisher->addScriptFile('/jscore/cases/core/cases_Step.js');
 
 $G_PUBLISH = new Publisher;
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_CatchSelfService.xml', '', $Fields, 'cases_CatchExecute');
-G::RenderPage( 'publish', 'green-submenu');
+G::RenderPage( 'publish', 'blank');

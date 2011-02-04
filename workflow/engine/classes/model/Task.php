@@ -560,4 +560,26 @@ public function kgetassigType($pro_uid, $tas){
   $calendarObj->assignCalendarTo($taskUid,$calendarUid,'TASK');
   }
 
+  function getDelegatedTaskData($TAS_UID, $APP_UID, $DEL_INDEX)
+  {
+    require_once 'classes/model/AppDelegation.php';
+		require_once 'classes/model/Task.php';
+		$oTask = new Task();
+		$aFields = $oTask->load($TAS_UID);
+		$oCriteria = new Criteria('workflow');
+		$oCriteria->add(AppDelegationPeer::APP_UID, $APP_UID);
+		$oCriteria->add(AppDelegationPeer::DEL_INDEX, $DEL_INDEX);
+		$oDataset = AppDelegationPeer::doSelectRS($oCriteria);
+		$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+		$oDataset->next();
+    $taskData = $oDataset->getRow();
+            
+   	$iDiff = strtotime($taskData['DEL_FINISH_DATE']) - strtotime($taskData['DEL_INIT_DATE']);
+		$aFields['INIT_DATE'] = ($taskData['DEL_INIT_DATE'] != null ? $taskData['DEL_INIT_DATE'] : G::LoadTranslation('ID_CASE_NOT_YET_STARTED'));
+		$aFields['DUE_DATE'] = ($taskData['DEL_TASK_DUE_DATE'] != null ? $taskData['DEL_TASK_DUE_DATE'] : G::LoadTranslation('ID_NOT_FINISHED'));
+		$aFields['FINISH'] = ($taskData['DEL_FINISH_DATE'] != null ? $taskData['DEL_FINISH_DATE'] : G::LoadTranslation('ID_NOT_FINISHED'));
+		$aFields['DURATION'] = ($taskData['DEL_FINISH_DATE'] != null ? (int) ($iDiff / 3600) . ' ' . ((int) ($iDiff / 3600) == 1 ? G::LoadTranslation('ID_HOUR') : G::LoadTranslation('ID_HOURS')) . ' ' . (int) (($iDiff % 3600) / 60) . ' ' . ((int) (($iDiff % 3600) / 60) == 1 ? G::LoadTranslation('ID_MINUTE') : G::LoadTranslation('ID_MINUTES')) . ' ' . (int) (($iDiff % 3600) % 60) . ' ' . ((int) (($iDiff % 3600) % 60) == 1 ? G::LoadTranslation('ID_SECOND') : G::LoadTranslation('ID_SECONDS')) : G::LoadTranslation('ID_NOT_FINISHED'));
+    
+		return $aFields;
+  }
 } // Task

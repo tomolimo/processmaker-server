@@ -184,13 +184,10 @@ class headPublisher {
     }
     if ($this->disableHeaderScripts)
       return '';
+      
+     // die(SYS_LANG);
     $this->addScriptFile ( "/js/widgets/js-calendar/lang/" . SYS_LANG . ".js" );
-    /*$this->addScriptFile("/js/widgets/calendar/pmcalendar.js");
-  /*$this->addScriptFile("/js/widgets/calendar/dhtmlSuite-common.js");
-  $this->addScriptFile("/js/widgets/calendar/dhtmlSuite-calendar.js");
-  $this->addScriptFile("/js/widgets/calendar/dhtmlSuite-dragDropSimple.js");
-  $this->addScriptFile("/js/widgets/calendar/neyek-abstractionCalendar.js");
-  */
+    //$this->addScriptFile ( '/gulliver/loader?t=js-translations&locale='.SYS_LANG);
     
     $head = '';
     $head .= '<TITLE>' . $this->title . "</TITLE>\n";
@@ -282,6 +279,8 @@ class headPublisher {
     $head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+    $head .= "  <script type='text/javascript' src='/gulliver/loader?t=js-translations&locale=".SYS_LANG."'></script>\n";
+    $head .= "  <script type='text/javascript' src='/js/ext/pmos-common.js'></script>\n";
     
     if (! isset ( $this->extJsSkin ) || $this->extJsSkin == '') {
       $this->extJsSkin = 'xtheme-gray';
@@ -307,7 +306,7 @@ class headPublisher {
     //DEPRECATED, this will be removed in a future -->
     
     //new interactive css decorator
-    $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/decorator?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
+    $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/loader?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/images/icons_silk/sprite.css' />\n";
     
     // Load external/plugin css
