@@ -1,7 +1,7 @@
 <?php
 /**
- * class.tasks.php
- * @package workflow.engine.ProcessMaker
+ * class.spool.php
+ * @package workflow.engine.classes
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
