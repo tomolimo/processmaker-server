@@ -25,7 +25,7 @@
   <en>Edit</en>
 </DBS_EDIT>
 
-<DBS_DELETE type="link" colWidth="50" link="javascript:deleteDbConnection(&#039;@#DBS_UID&#039;)">
+<DBS_DELETE type="link" colWidth="50" link="javascript:deleteDbConnection(&#039;@#DBS_UID&#039;,&#039;@#PRO_UID&#039;)">
   <en>Delete</en>
 </DBS_DELETE>
 
