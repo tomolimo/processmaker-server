@@ -341,7 +341,7 @@ ProcessMapContext.prototype.processPermission= function()
             remoteSort   : true,
             fields       : dbConnFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyObjectPermissions.php?pid='+pro_uid
+            url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermission'
             })
           });
  PermissionStore.load();
@@ -435,7 +435,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
   var btnCreate = new Ext.Button({
             id: 'btnCreate',
             text: 'New',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                 formWindow.show();
                 PermissionForm.getForm().reset();
@@ -444,7 +444,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
   var btnEdit = new Ext.Button({
             id: 'btnEdit',
             text: 'Edit',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var selectedRow = PermissionGrid.getSelectionModel().getSelections();
                 var opUID   = selectedRow[0].data.OP_UID;
@@ -469,7 +469,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Delete',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = PermissionGrid.getSelectionModel().getSelections();
@@ -483,12 +483,9 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     if(r.data.OP_UID != "")
                     {
                           Ext.Ajax.request({
-                                  url   : '../inputdocs/inputdocs_Delete.php',
-                                  method: 'POST',
-                                  params: {
-                                        functions          : 'deleteInputDocument',
-                                        OP_UID             : opUID
-                                  },
+                                  url   : '../processes/processes_DeleteObjectPermission.php?opUID='+OP_UID,
+                                  method: 'GET',
+                                  
                                   success: function(response) {
                                     Ext.MessageBox.alert ('Status','Process Permission has been removed successfully.');
                                     //Secondly deleting from Grid
@@ -547,6 +544,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         { name: 'LABEL',type: 'string'},
                         { name: 'UID',type: 'string'}
                     ]);
+
  var selectTaskStore = new Ext.data.JsonStore({
                     root         : 'data',
                     totalProperty: 'totalCount',
@@ -554,7 +552,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     remoteSort   : true,
                     fields       : selectField,
                     proxy: new Ext.data.HttpProxy({
-                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=tasks'
+                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=tasks'
                     })
                   });
 
@@ -565,7 +563,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     remoteSort   : true,
                     fields       : selectField,
                     proxy: new Ext.data.HttpProxy({
-                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=users'
+                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=users'
                     })
                   });
 
@@ -576,7 +574,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     remoteSort   : true,
                     fields       : selectField,
                     proxy: new Ext.data.HttpProxy({
-                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=dynaform'
+                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=dynaform'
                     })
                   });
 
@@ -587,7 +585,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     remoteSort   : true,
                     fields       : selectField,
                     proxy: new Ext.data.HttpProxy({
-                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=input'
+                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=input'
                     })
                   });
 
@@ -598,7 +596,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     remoteSort   : true,
                     fields       : selectField,
                     proxy: new Ext.data.HttpProxy({
-                      url: 'proxyObjectPermissions.php?pid='+pro_uid+'&action=output'
+                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=output'
                     })
                   });
 
@@ -848,7 +846,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
            },{
                xtype :'hidden',
                name :'TASK_TARGET',
-               id :'TAS_UID'
+               id :'TASK_TARGET'
            },{
                xtype:'hidden',
                name:'GROUP_USER',
@@ -888,7 +886,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 var Participation   = getForm.OP_PARTICIPATE;
                 var Type            = getForm.OP_OBJ_TYPE;
                 var Permission      = getForm.OP_ACTION;
-                if(TargetTask == "")
+                if(TAS_UID == "")
                     {
                 Ext.Ajax.request({
                   url   : '../processes/processes_SaveObjectPermission.php',
@@ -1019,7 +1017,7 @@ ProcessMapContext.prototype.processSupervisors= function()
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Remove',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = grid.getSelectionModel().getSelections();
@@ -1235,7 +1233,7 @@ ProcessMapContext.prototype.processDynaform= function()
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Remove',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = grid.getSelectionModel().getSelections();
@@ -1453,7 +1451,7 @@ ProcessMapContext.prototype.processIODoc= function()
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
             text: 'Remove',
-            iconCls: 'application_delete',
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = grid.getSelectionModel().getSelections();
@@ -1922,7 +1920,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
     var btnRemove = new Ext.Button({
       id: 'btnRemove',
       text: 'Remove',
-      iconCls: 'application_delete',
+     iconCls: 'button_menu_ext ss_sprite ss_delete',
       handler: function (s) {
         editor.stopEditing();
         var s = Objectsgrid.getSelectionModel().getSelections();
