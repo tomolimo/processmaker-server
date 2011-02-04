@@ -63,47 +63,27 @@ bpmnAnnotation.prototype.paint = function () {
     this.graphics.drawLine(0,0,0,this.getHeight());
     this.graphics.drawLine(0,this.getHeight(),this.getWidth()/4,this.getHeight());
     this.graphics.paint();
-    /*var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
-    var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
-    this.graphics.setStroke(this.stroke);
-    this.graphics.setColor("#c0c0c0");
-    this.graphics.fillPolygon(x, y);
-
-    for (var i = 0; i < x.length; i++) {
-        x[i] = x[i] - 3;
-        y[i] = y[i] - 3;
-    }
-    this.graphics.setColor("#ffffff");
-    this.graphics.fillPolygon(x, y);
-    this.graphics.setColor("#ff0f0f");
-    this.graphics.drawPolygon(x, y);
-    this.graphics.paint();
-    this.x_text = this.workflow.getAbsoluteX(); //Get x co-ordinate from figure
-    this.y_text = this.workflow.getAbsoluteY(); //Get x co-ordinate from figure
+  
+    /* New object is created to implement changing of Text functionality
     */
- /* New object is created to implement changing of Text functionality
- */
     this.bpmnText = new jsGraphics(this.id);
-    var padleft = 0.10*this.getWidth();
-    var padtop = 0.18*this.getHeight();
-    var rectwidth = this.getWidth() - padleft;
-    var rectheight = this.getHeight() - 2*padtop;
+    this.padleft = 0.10*this.getWidth();
+    this.padtop = 0.18*this.getHeight();
+    this.rectwidth = this.getWidth() - this.padleft;
+    this.rectheight = this.getHeight() - 2 * this.padtop;
 
     //Setting text size to zoom font size if Zoomed
-    if(typeof workflow.zoomAnnotationTextSize != 'undefined')
-        var fontSize = workflow.zoomAnnotationTextSize;
-    else
-        fontSize = '11px';
+    if(typeof this.fontSize == 'undefined' || this.fontSize == '')
+        this.fontSize = 11;
+    else if(this.fontSize < 11)
+        this.fontSize = 11;
 
-    this.bpmnText.setFont('verdana', fontSize, Font.PLAIN);
-    this.bpmnText.drawStringAnno(this.annotationName,0,padtop,rectwidth,rectheight,'left');
-    //bpmnText.drawStringRect(this.taskName,this.getWidth()/2-20,this.getHeight()/2-11,200,'left');
-    //tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
-    //bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
+    this.bpmnText.setFont('verdana', this.fontSize, Font.PLAIN);
+    this.bpmnText.drawStringAnno(this.annotationName,0,this.padtop,this.rectwidth,this.rectheight,'left');
     this.bpmnText.paint();
 
     if(this.input1!=null){
-    this.input1.setPosition(0,this.height/2);
+        this.input1.setPosition(0,this.height/2);
     }
 
 };

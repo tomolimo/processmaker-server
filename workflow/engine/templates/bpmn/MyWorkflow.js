@@ -1789,15 +1789,15 @@ MyWorkflow.prototype.zoom = function(sType)
               workflow.zoomHeight = height;
           }
         else if(fig.type.match(/Annotation/)) {
-             width  += zoomFactor*100;
-             height += zoomFactor*100;
+             width  += zoomFactor*50;
+             height += zoomFactor*50;
              workflow.zoomAnnotationWidth  = width;
              workflow.zoomAnnotationHeight = height;
           }
         else
           {
-             width  += zoomFactor*100;
-             height += zoomFactor*100;
+             width  += zoomFactor*50;
+             height += zoomFactor*50;
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
           }
@@ -1816,15 +1816,15 @@ MyWorkflow.prototype.zoom = function(sType)
               workflow.zoomHeight = height;
           }
         else if(fig.type.match(/Annotation/)) {
-             width  -= zoomFactor*100;
-             height -= zoomFactor*100;
+             width  -= zoomFactor*50;
+             height -= zoomFactor*50;
              workflow.zoomAnnotationWidth  = width;
              workflow.zoomAnnotationHeight = height;
           }
         else
           {
-             width  -= zoomFactor*100;
-             height -= zoomFactor*100;
+             width  -= zoomFactor*50;
+             height -= zoomFactor*50;
              workflow.zoomTaskWidth  = width;
              workflow.zoomTaskHeight = height;
           }
@@ -1857,35 +1857,13 @@ MyWorkflow.prototype.redrawTaskText = function(fig,sType)
 
 MyWorkflow.prototype.redrawAnnotationText = function(fig,sType)
 {
-  fig.bpmnText.clear();
-  var text = fig.annotationName;
-  len = Math.ceil(text.length/16);
-  if(text.length < 19)
-  {
-    len = 1.5;
-    if(text.length > 9)
-      fig.rectWidth = text.length*8;
-    else
-      fig.rectWidth = 48;
-  }
-  else
-    fig.rectWidth = 150;
-  if(typeof fig.size == 'undefined')
-    fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
-  else
-    fig.size = fig.size;
-
   if(sType == 'in')
-      fig.size = parseInt(fig.size) + 4;
+      fig.fontSize = parseInt(fig.fontSize) + 4;
   else
-      fig.size = parseInt(fig.size) - 4;
+      fig.fontSize = parseInt(fig.fontSize) - 4;
 
   //Setting font minimum limit i.e. 11px
-  if(fig.size < 11)
-    fig.size = 11;
-
-  //workflow.zoomAnnotationTextSize = fig.size;
-  eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
-  fig.bpmnText.drawStringRect(text,20,20,fig.rectWidth,'left');
-  fig.bpmnText.paint();
+  if(fig.fontSize < 11)
+    fig.fontSize = 11;
+  fig.paint();
 }
