@@ -118,6 +118,7 @@ ProcessMapContext.prototype.editProcess= function()
                   Ext.Ajax.request({
                         url: "processes_Ajax.php"+ urlparams,
                         success: function(response) {
+                            workflow.main.items.items[2].setTitle(fields[0].items.items[0].getValue());
                             window.hide();
                         },
                         failure: function(){
