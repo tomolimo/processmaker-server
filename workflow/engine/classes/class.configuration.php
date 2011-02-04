@@ -239,8 +239,10 @@ class Configurations // extends Configuration
         $row  = $oCfg->toArray(BasePeer::TYPE_FIELDNAME);
         $result = unserialize($row['CFG_VALUE']);
         if ( is_array($result) && sizeof($result)==1 ) {
-          return $result[0];
-        } else {
+        	$arrayKeys = Array_keys( $result );
+          return $result[ $arrayKeys[0]];
+        } 
+        else {
           return $result;
         }
       }
