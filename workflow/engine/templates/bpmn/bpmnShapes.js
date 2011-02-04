@@ -77,78 +77,76 @@ bpmnTask.prototype.paint = function () {
     var len = this.getWidth() / 18;
     if (len >= 6) {
         //len = 1.5;
-        var padleft = 0.12 * this.getWidth();
-        var padtop = 0.40 * this.getHeight() -3;
-        this.rectWidth = this.getWidth() - 2 * padleft;
+        this.padleft = 0.12 * this.getWidth();
+        this.padtop = 0.40 * this.getHeight() -3;
+        this.rectWidth = this.getWidth() - 2 * this.padleft;
     }
     else {
-        padleft = 0.1 * this.getWidth();
-        padtop = 0.09 * this.getHeight() -3;
-        this.rectWidth = this.getWidth() - 2 * padleft;
+        this.padleft = 0.1 * this.getWidth();
+        this.padtop = 0.09 * this.getHeight() -3;
+        this.rectWidth = this.getWidth() - 2 * this.padleft;
     }
 
-    var rectheight = this.getHeight() - padtop -7;
+    this.rectheight = this.getHeight() - this.padtop -7;
+   
+    if(typeof this.fontSize == 'undefined' || this.fontSize == '')
+        this.fontSize = 11;
+    else if(this.fontSize < 11)
+        this.fontSize = 11;
+   
 
-    var fontSize = 11;
-
-    this.bpmnText.setFont('verdana', +fontSize+'px', Font.PLAIN);
+    this.bpmnText.setFont('verdana', +this.fontSize+'px', Font.PLAIN);
+    
     if(typeof this.taskName == 'undefined')
         this.taskName = '';
     
-    this.bpmnText.drawStringRect(this.taskName, padleft, padtop, this.rectWidth, rectheight, 'center');
+    this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center');
     // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
     //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
 
     /****************************       Drawing Timer Boundary event starts here           *******************************/
 
-    var boundaryTimer = new jsGraphics(this.id);
+    this.boundaryTimer = new jsGraphics(this.id);
 
     var x_cir1=5;
     var y_cir1=45;
-    boundaryTimer.setColor("#c0c0c0");
-    boundaryTimer.fillEllipse(x[3]-x[3]/1.08,y[4]-12,30,30);
+    this.x3 = x[3];
+    this.y4 = y[4];
+    this.y5 = y[5];
 
-    boundaryTimer.setStroke(this.stroke);
-    boundaryTimer.setColor( "#f9faf2" );
-    boundaryTimer.fillEllipse(x[3]-x[3]/1.08,y[5]-12,30,30);
-    boundaryTimer.setColor("#adae5e");
-    boundaryTimer.drawEllipse(x[3]-x[3]/1.08,y[5]-12,30,30);
+    this.boundaryTimer.setColor("#c0c0c0");
+    this.boundaryTimer.fillEllipse(this.x3-this.x3/1.08,this.y4-12,30,30);
+
+    this.boundaryTimer.setStroke(this.stroke);
+    this.boundaryTimer.setColor( "#f9faf2" );
+    this.boundaryTimer.fillEllipse(this.x3-this.x3/1.08,this.y5-12,30,30);
+    this.boundaryTimer.setColor("#adae5e");
+    this.boundaryTimer.drawEllipse(this.x3-this.x3/1.08,this.y5-12,30,30);
     var x_cir2=8;
     var y_cir2=48;
-    boundaryTimer.setColor( "#f9faf2" );
-    boundaryTimer.fillEllipse(x[3]-x[3]/1.08+3,y[5]-9,30-6,30-6);
-    boundaryTimer.setColor("#adae5e");
-    boundaryTimer.drawEllipse(x[3]-x[3]/1.08+3,y[5]-9,30-6,30-6);
+    this.boundaryTimer.setColor( "#f9faf2" );
+    this.boundaryTimer.fillEllipse(this.x3-this.x3/1.08+3,this.y5-9,30-6,30-6);
+    this.boundaryTimer.setColor("#adae5e");
+    this.boundaryTimer.drawEllipse(this.x3-this.x3/1.08+3,this.y5-9,30-6,30-6);
 
-    /*
-    //drawing clock's minutes lines
-    this.graphics.setColor("#adae5e");
+    this.boundaryTimer.setColor("#adae5e");
     //this.graphics.drawEllipse(x_cir3,y_cir3,30-20,30-20);
-    this.graphics.drawLine(30/2,30/2,30/1.3,30/2);
-    this.graphics.drawLine(30/2,30/2,30/2,30/4.5);
-    */
+    this.boundaryTimer.drawLine(30/2.2+this.x3-this.x3/1.08,30/2+this.y5-10,30/1.6+this.x3-this.x3/1.08,30/2+this.y5-10);  //horizontal line
+    this.boundaryTimer.drawLine(30/2.2+this.x3-this.x3/1.08,30/2+this.y5-10,30/2.2+this.x3-this.x3/1.08,30/3.7+this.y5-10);  //vertical line
 
-
-    //var x_cir3=10;
-    //var y_cir3=10;
-    //this.graphics.setColor( "#f9faf2" );
-    //this.graphics.fillEllipse(x_cir3,y_cir3,30-20,30-20);
-    boundaryTimer.setColor("#adae5e");
-    //this.graphics.drawEllipse(x_cir3,y_cir3,30-20,30-20);
-    boundaryTimer.drawLine(30/2.2+x[3]-x[3]/1.08,30/2+y[5]-10,30/1.6+x[3]-x[3]/1.08,30/2+y[5]-10);  //horizontal line
-    boundaryTimer.drawLine(30/2.2+x[3]-x[3]/1.08,30/2+y[5]-10,30/2.2+x[3]-x[3]/1.08,30/3.7+y[5]-10);  //vertical line
-
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+24,y[5]-3,x[3]-x[3]/1.08+20,y[5]);  //10th min line 24,8,20,11
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+21,y[5]+4,x[3]-x[3]/1.08+25,y[5]+4);  //15th min line
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+24,y[5]+11,x[3]-x[3]/1.08+19,y[5]+9);  //25th min line
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+15,y[5]+11,x[3]-x[3]/1.08+15,y[5]+14);  //30th min line
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+8,y[5]+11,x[3]-x[3]/1.08+12,y[5]+8);  //40th min line
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+5,y[5]+4,x[3]-x[3]/1.08+8,y[5]+4);  //45th min line
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+8,y[5]-4,x[3]-x[3]/1.08+11,y[5]-1);  //50th min line
-    boundaryTimer.drawLine(x[3]-x[3]/1.08+15,y[5]-7,x[3]-x[3]/1.08+15,y[5]-4);  //60th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+24,this.y5-3,this.x3-this.x3/1.08+20,this.y5);  //10th min line 24,8,20,11
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+21,this.y5+4,this.x3-this.x3/1.08+25,this.y5+4);  //15th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+24,this.y5+11,this.x3-this.x3/1.08+19,this.y5+9);  //25th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+15,this.y5+11,this.x3-this.x3/1.08+15,this.y5+14);  //30th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+8,this.y5+11,this.x3-this.x3/1.08+12,this.y5+8);  //40th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+5,this.y5+4,this.x3-this.x3/1.08+8,this.y5+4);  //45th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+8,this.y5-4,this.x3-this.x3/1.08+11,this.y5-1);  //50th min line
+    this.boundaryTimer.drawLine(this.x3-this.x3/1.08+15,this.y5-7,this.x3-this.x3/1.08+15,this.y5-4);  //60th min line
 
     if(this.boundaryEvent == true)
-        boundaryTimer.paint();
+        {
+           this.boundaryTimer.paint();
+        }
     /****************************       Drawing Timer Boundary event ends here           *******************************/
 
     this.bpmnText.paint();

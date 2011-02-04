@@ -291,8 +291,6 @@ ProcessMapContext.prototype.exportProcess= function()
 
 ProcessMapContext.prototype.addTask= function()
 {
-    var count = ++workflow.taskNo; //Incrementing Task No and assigning it to a local variable
-    workflow.taskName = 'Task '+count;
     var newShape = eval("new bpmnTask(workflow)");
     var xPos = workflow.contextX;
     var yPos = workflow.contextY;

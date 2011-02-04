@@ -872,11 +872,11 @@ MyWorkflow.prototype.toggleShapes=function(item)
         
         if(item.type == 'bpmnEventBoundaryTimerInter')
         {
-          workflow.boundaryEvent = true;
-          workflow.taskName = oldWorkflow.taskName;
-          var newShape = eval("new bpmnTask(workflow)");
-          //workflow.boundaryEvent = false;
-          
+            workflow.currentSelection.boundaryEvent = true;
+            workflow.taskName = oldWorkflow.taskName;
+            var newShape = workflow.currentSelection;
+            newShape.setDimension(newShape.getWidth(),newShape.getHeight());
+
         }
         else if(item.type == 'bpmnSubProcess')
             {
@@ -885,33 +885,34 @@ MyWorkflow.prototype.toggleShapes=function(item)
             }
         else
             newShape = eval("new "+item.type+"(this.workflow)");
-        
-        this.workflow.addFigure(newShape,x,y); //Add New Selected Gateway First
 
-        //Delete Old Shape
-        item.scope.workflow.getCommandStack().execute(new CommandDelete(oldWorkflow));
-        ToolGeneric.prototype.execute.call(item.scope);
+        if(item.type != 'bpmnEventBoundaryTimerInter')
+        {
+            this.workflow.addFigure(newShape,x,y); //Add New Selected Shape First
+            //Delete Old Shape
+            item.scope.workflow.getCommandStack().execute(new CommandDelete(oldWorkflow));
+            ToolGeneric.prototype.execute.call(item.scope);
+        
 
         //to create all the new connections again
-        var connObj;
-        for(i=0 ; i < countConn ; i++)
-            {
-               if(sourcePortId[i] == shapeId)  //If shapeId is equal to sourceId the , replace the oldShape object by new shape Object
-                   sourceNode[i] = newShape;
-               else
-                   targetNode[i] = newShape;
+           var connObj;
+           for(i=0 ; i < countConn ; i++)
+             {
+                if(sourcePortId[i] == shapeId)  //If shapeId is equal to sourceId the , replace the oldShape object by new shape Object
+                  sourceNode[i] = newShape;
+                else
+                  targetNode[i] = newShape;
 
-               connObj = new DecoratedConnection();
-               connObj.setTarget(eval('targetNode[i].getPort(targetPortName[i])'));
-               connObj.setSource(eval('sourceNode[i].getPort(sourcePortName[i])'));
-               newShape.workflow.addFigure(connObj);
-            }
-
+                  connObj = new DecoratedConnection();
+                  connObj.setTarget(eval('targetNode[i].getPort(targetPortName[i])'));
+                  connObj.setSource(eval('sourceNode[i].getPort(sourcePortName[i])'));
+                  newShape.workflow.addFigure(connObj);
+              }
+        }
+        
          //Saving Asynchronously deleted shape and new created shape into DB
          if(item.type.match(/Boundary/))
          {
-            newShape.id = oldWorkflow.id;
-            newShape.html.id = oldWorkflow.id;
             newShape.actiontype = 'updateTask';
             workflow.saveShape(newShape);
          }
@@ -1604,7 +1605,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                         this.workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
                         oNewShape.html.id = this.workflow.newTaskInfo.uid;
                         oNewShape.id = this.workflow.newTaskInfo.uid;
-                            if(oNewShape.type == 'bpmnTask'){
+                            if(oNewShape.type == 'bpmnTask' && oNewShape.boundaryEvent != true){
                                 oNewShape.taskName = this.workflow.newTaskInfo.label;
                                 workflow.redrawTaskText(oNewShape,'');
                                 //After Figure is added, Update Start Event connected to Task
@@ -1620,17 +1621,16 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                                       if (preSelectedFigure.type.match(/Gateway/)) 
                                          //preSelectedFigure.rou_type = 'SEQUENTIAL';
                                         this.workflow.saveRoute(preSelectedFigure,oNewShape);
-
                                       
                                       if (preSelectedFigure.type.match(/Inter/)) {
                                          //preSelectedFigure.rou_type = 'SEQUENTIAL';
                                         this.workflow.saveEvents(preSelectedFigure,oNewShape);
                                       }
                                   }
+                            }
                             else if(oNewShape.type == 'bpmnSubProcess'){
                                 oNewShape.subProcessName = this.workflow.newTaskInfo.label;
-                        }
-                   }
+                            }
                }
             },
             failure: function(){
@@ -2107,14 +2107,9 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
         }
 }
 
-/**
- * Deleting Route Silently
- * @Param  oConn     Object
- * @Param  iVal    Integer
- * @Author Girish joshi
- */
 MyWorkflow.prototype.deleteRoute = function(oConn,iVal){
 
+     workflow.oConn = oConn;
      var sourceObjType = oConn.sourcePort.parentNode.type;
      var targetObjType = oConn.targetPort.parentNode.type;
      var rou_uid       = oConn.id;
@@ -2122,27 +2117,42 @@ MyWorkflow.prototype.deleteRoute = function(oConn,iVal){
      //Setting Condition for VALID ROUTE_UID present in Route Table
      //For start and gateway event, we dont have entry in ROUTE table
      if(rou_uid != '' && !sourceObjType.match(/Gateway/) && !sourceObjType.match(/Start/) && !targetObjType.match(/Gateway/))
-            var urlparams = '?action=deleteRoute&data={"uid":"'+ rou_uid +'"}';
+         {
+            workflow.urlDeleteparameter = '?action=deleteRoute&data={"uid":"'+ rou_uid +'"}';
+         }
 
-    //Deleting route for Start event and also deleting start event
-    else if(sourceObjType.match(/Start/)){
-        var targetObj = oConn.targetPort.parentNode;  //Task
-        var tas_uid   = targetObj.id;
-        var tas_start = 'FALSE';
-        urlparams = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
-    }
-      Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
+        //Deleting route for Start event and also deleting start event
+        else if(sourceObjType.match(/Start/)){
+            var targetObj = oConn.targetPort.parentNode;  //Task
+            var tas_uid   = targetObj.id;
+            var tas_start = 'FALSE';
+            workflow.urlDeleteparameter = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
+        }
+        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the Event',this.showEventResult);
+
+}
+
+MyWorkflow.prototype.showEventResult = function(btn){
+        //this.workflow.confirm = btn;
+        if(typeof workflow.urlDeleteparameter != 'undefined')
+        {
+           var url = workflow.urlDeleteparameter;
+           if(btn == 'yes')
+            {
+                Ext.Ajax.request({
+                    url: "processes_Ajax.php"+ url,
                     success: function(response) {
                         if(iVal == 0)
-                           oConn.workflow.getCommandStack().execute(new CommandDelete(oConn));
+                           workflow.getCommandStack().execute(new CommandDelete(workflow.oConn));
                     },
                     failure: function(){
                         Ext.Msg.alert ('Failure');
                     }
                 });
-}
+            }
+        }
 
+    };
 /**
  * Deleting Event
  * @Param  eventObj     Object
@@ -2182,7 +2192,7 @@ MyWorkflow.prototype.getDeleteCriteria = function()
         workflow.currentSelection.actiontype = 'saveStartEvent';
         break;
     case 'bpmnEventEmptyEnd':
-        workflow.currentSelection.actiontype = 'deleteEndEvent';
+        //workflow.currentSelection.actiontype = 'deleteEndEvent';
         var currentObj = workflow.currentSelection;
         var ports = currentObj.getPorts();
         var len =ports.data.length;
@@ -2210,18 +2220,18 @@ MyWorkflow.prototype.getDeleteCriteria = function()
                     }
              }
         if(typeof route != 'undefined')
-             workflow.deleteRoute(route,1);
+            {
+                workflow.deleteRoute(route,1);
+            }
         break;
-  }
-  if(shape.match(/Gateway/))
-        {
+        case shape.match(/Gateway/):
             workflow.currentSelection.actiontype = 'deleteGateway';
             workflow.deleteShape(workflow.currentSelection);
-        }
-  else
-        workflow.deleteShape(workflow.currentSelection);
+            break;
+  }
 
-    
+  if(workflow.currentSelection.actiontype != '')
+        workflow.deleteShape(workflow.currentSelection);
 
 }
 
@@ -2273,7 +2283,9 @@ MyWorkflow.prototype.zoom = function(sType)
              workflow.zoomTaskHeight = height;
           }
           ++workflow.limitFlag;
-       fig.setPosition(xPos + zoomFactor*xPos,yPos + zoomFactor*yPos);
+          xPos = xPos + zoomFactor*xPos;
+          yPos = yPos + zoomFactor*yPos
+          fig.setPosition(xPos,yPos);
      }
     else if(sType == 'out' && workflow.limitFlag > 0)
      {
@@ -2298,55 +2310,30 @@ MyWorkflow.prototype.zoom = function(sType)
              workflow.zoomTaskHeight = height;
           }
           --workflow.limitFlag;
-       fig.setPosition(xPos - zoomFactor*xPos,yPos - zoomFactor*yPos);
+          xPos = xPos - zoomFactor*xPos;
+          yPos = yPos - zoomFactor*yPos
+          fig.setPosition(xPos,yPos);
      }
    fig.setDimension(width,height);
    if(fig.type == 'bpmnTask')
-      {
         workflow.redrawTaskText(fig,sType);
-      }
       else if(fig.type == 'bpmnAnnotation')
-      {
         workflow.redrawAnnotationText(fig,sType);
-      }
     }
 }
 
 
 MyWorkflow.prototype.redrawTaskText = function(fig,sType)
 {
-  fig.bpmnText.clear();
-  //len = Math.ceil(this.input.value.length/16);
-  var len = fig.getWidth() / 18;
-  if (len >= 6) {
-      //len = 1.5;
-      var padleft = 0.12 * fig.getWidth();
-      var padtop = 0.40 * fig.getHeight() -3;
-      fig.rectWidth = fig.getWidth() - 2 * padleft;
-    }
-    else {
-      padleft = 0.1 * fig.getWidth();
-      padtop = 0.09 * fig.getHeight() -3;
-      fig.rectWidth = fig.getWidth() - 2 * padleft;
-    }
-  var rectheight = fig.getHeight() - padtop -7;
-
-  if(typeof fig.size == 'undefined')
-    fig.size  = fig.bpmnText.ftSz.substr(0,fig.bpmnText.ftSz.length-2);
-  else
-    fig.size = fig.size;
-
   if(sType == 'in' && sType != '')
-    fig.size = parseInt(fig.size) + 4;
+    fig.fontSize = parseInt(fig.fontSize) + 4;
   else if(sType == 'out' && sType != '')
-    fig.size = parseInt(fig.size) - 4;
+    fig.fontSize = parseInt(fig.fontSize) - 4;
 
-   //Setting font minimum limit
-   if(fig.size < 11)
-      fig.size = 11;
-   eval("fig.bpmnText.setFont('verdana','"+fig.size+"px', Font.PLAIN)");
-   fig.bpmnText.drawStringRect(fig.taskName, padleft, padtop, fig.rectWidth, rectheight, 'center');
-   fig.bpmnText.paint();
+  //Setting font minimum limit
+  if(this.fontSize < 11)
+        this.fontSize = 11;
+   fig.paint();
 }
 
 MyWorkflow.prototype.redrawAnnotationText = function(fig,sType)
