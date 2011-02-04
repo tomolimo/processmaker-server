@@ -1,20 +1,12 @@
 <?php
-
-  if( ! isset($_GET['PRO_UID']) )
-    throw new Exception('The Process ID was not set!');
-
-  require_once 'classes/model/Process.php';
-  $process = ProcessPeer::retrieveByPK($_GET['PRO_UID']);
-  
+  	
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->usingExtJs('ux/miframe');
-  
   //$oHeadPublisher->setExtSkin( 'xtheme-gray');
   $oHeadPublisher->addExtJsScript('bpmn/MyWorkflow',true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/pmosExt', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/TaskContext', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/ProcessMapContext', true );    //adding a javascript file .js
-  $oHeadPublisher->addExtJsScript('bpmn/processmap', true );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('bpmn/designer', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/Annotation' );
   $oHeadPublisher->addExtJsScript('bpmn/FlowConnector');
   $oHeadPublisher->addExtJsScript('bpmn/GroupFigure');
@@ -63,9 +55,7 @@
   $oHeadPublisher->addExtJsScript('bpmn/SubProcess' );
   $oHeadPublisher->addExtJsScript('bpmn/ProcessOptions',true);
 
-  $oHeadPublisher->addContent( 'bpmn/processmap'); //adding a html file  .html.
-  
-  $oHeadPublisher->assign('pro_title', $process->getProTitle());
-  $oHeadPublisher->assign('pro_uid', $process->getProUid());
+  $oHeadPublisher->addContent( 'bpmn/designer'); //adding a html file  .html.
+  $oHeadPublisher->assign('pro_uid', (isset($_GET['PRO_UID']) ? $_GET['PRO_UID']: ''));
   G::RenderPage('publish', 'extJs');
  
