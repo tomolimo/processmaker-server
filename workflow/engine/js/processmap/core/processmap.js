@@ -1488,6 +1488,18 @@ var processmap=function(){
 									noClear : true
 								}]
 							};
+						var taskOptions = this.data.db.taskOptions;
+						this.loadExtendedProperties = function(){
+							for(i=0;i<taskOptions.length;i++){
+								anElement={
+										title	: taskOptions[i].title,
+										content	: this.parent.closure({instance:this,method:iForm,args:[panel,index,taskOptions[i].id]}),
+										noClear : true
+								};
+								panel.tab.options.push(anElement);	
+							}
+						};
+						this.loadExtendedProperties();
 						panel.make();
 					},args:index})}
 					]:

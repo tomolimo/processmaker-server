@@ -79,6 +79,7 @@ class PMPluginRegistry {
   private $_aCSSStyleSheets = array();
   private $_aToolbarFiles = array();
   private $_aCaseSchedulerPlugin = array();
+  private $_aTaskExtendedProperties = array();
 
   static private $instance = NULL;
 
@@ -258,21 +259,9 @@ class PMPluginRegistry {
        if ( $detail->sNamespace == $sNamespace )
          unset ( $this->_aSteps[ $key ] );
     }
-   foreach ( $this->_aToolbarFiles as $key=>$detail ) {
-     if ( $detail->sNamespace == $sNamespace )
-       unset ( $this->_aToolbarFiles[ $key ] );
-   }
-   foreach ( $this->_aDashboardPages as $key=>$detail ) {
-     if ( $detail->sNamespace == $sNamespace )
-       unset ( $this->_aDashboardPages[ $key ] );
-   }
-   foreach ( $this->_aCSSStyleSheets as $key=>$detail ) {
-     if ( $detail->sNamespace == $sNamespace )
-       unset ( $this->_aCSSStyleSheets[ $key ] );
-   }
-   foreach ( $this->_aCaseSchedulerPlugin as $key=>$detail ) {
-       if ( $detail->sNamespace == $sNamespace )
-         unset ( $this->_aCaseSchedulerPlugin[ $key ] );
+  	foreach ( $this->_aTaskExtendedProperties as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aTaskExtendedProperties[ $key ] );
     }
   }
 
@@ -920,5 +909,36 @@ class PMPluginRegistry {
    */
   function getCaseSchedulerPlugins( ) {
     return $this->_aCaseSchedulerPlugin;
+  }
+  
+   /**
+   * Register a Task Extended property page in the singleton
+   *
+   * @param unknown_type $sNamespace
+   * @param unknown_type $sPage
+   */
+  
+  function registerTaskExtendedProperty($sNamespace, $sPage, $sName, $sIcon ) {
+    $found = false;
+    foreach ( $this->_aTaskExtendedProperties as $row=>$detail ) {
+      if ( $sPage == $detail->sPage && $sNamespace == $detail->sNamespace ){
+        $detail->sName=$sName;
+        $detail->sIcon=$sIcon;
+        $found = true;
+      }
+    }
+    if ( !$found ) {
+      $taskExtendedProperty = new taskExtendedProperty ($sNamespace, $sPage, $sName, $sIcon);
+      $this->_aTaskExtendedProperties[] = $taskExtendedProperty;
+    }
+  }
+
+  /**
+   * return all dashboard pages
+   *
+   * @return array
+   */
+  function getTaskExtendedProperties() {
+    return  $this->_aTaskExtendedProperties;
   }
 }

@@ -350,6 +350,16 @@ class processMap {
         $oDataset->next();
       }
       $oPM->derivation = array('Sequential', 'Evaluate (manual)', 'Evaluate (auto)', 'Parallel (fork)', 'Parallel by evaluation (fork)', 'Parallel (sequential join)', 'Parallel (sequential main join)');
+      
+      //Load extended task properties from plugin. By JHL Jan 18, 2011
+      $oPluginRegistry =& PMPluginRegistry::getSingleton();
+	  $activePluginsForTaskProperties=$oPluginRegistry->getTaskExtendedProperties();
+      $oPM->taskOptions = array();
+      foreach($activePluginsForTaskProperties as $key => $taskPropertiesInfo){
+	      $taskOption['title']=$taskPropertiesInfo->sName;
+		  $taskOption['id']=$taskPropertiesInfo->sNamespace."--".$taskPropertiesInfo->sName;
+	      $oPM->taskOptions[]=$taskOption;
+      }
 
       $oJSON = new Services_JSON ( );
       return $oJSON->encode($oPM);
@@ -1253,6 +1263,7 @@ class processMap {
    */
 
   function editTaskProperties($sTaskUID = '', $iForm = 1, $iIndex = 0) {
+  	$sw_template=false;
     try {
       switch ($iForm) {
         case 1 :
@@ -1275,6 +1286,21 @@ class processMap {
           break;
         case 7 :
           $sFilename = 'tasks/tasks_Notifications.xml';
+          break;
+        default:
+        	//if the $iForm is not one of the defaults then search under Plugins for an extended property. By JHL Jan 18, 2011
+	      $oPluginRegistry =& PMPluginRegistry::getSingleton();
+		  $activePluginsForTaskProperties=$oPluginRegistry->getTaskExtendedProperties();
+	      $oPM->taskOptions = array();
+	      foreach($activePluginsForTaskProperties as $key => $taskPropertiesInfo){
+		      $id=$taskPropertiesInfo->sNamespace."--".$taskPropertiesInfo->sName;
+		      if($id==$iForm){
+		      	$sFilename=$taskPropertiesInfo->sPage;
+		      	$sw_template=true;		      	
+		      }
+	      }
+        	
+          //$sFilename = 'tasks/tasks_Owner.xml';
           break;
       }
       $oTask = new Task ( );
@@ -1301,7 +1327,12 @@ class processMap {
       global $G_PUBLISH;
       G::LoadClass('xmlfield_InputPM');
       $G_PUBLISH = new Publisher ( );
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
+      if($sw_template){
+      	$G_PUBLISH->AddContent('view', $sFilename);
+      }else{
+      	$G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
+      }
+      
       G::RenderPage('publish', 'raw');
       return true;
     } catch (Exception $oError) {

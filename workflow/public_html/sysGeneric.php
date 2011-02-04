@@ -1,8 +1,8 @@
 <?php
-//sysGeneric, this file is used initialize main variables and redirect to each and all pages 
+//sysGeneric, this file is used initialize main variables and redirect to each and all pages
 $startingTime =  array_sum(explode(' ',microtime()));
 
-//*** ini setting, enable display_error On to caught even fatal errors 
+//*** ini setting, enable display_error On to caught even fatal errors
   ini_set('display_errors','On');
   ini_set('error_reporting', E_ALL  );
   ini_set('short_open_tag', 'on');
@@ -12,11 +12,11 @@ $startingTime =  array_sum(explode(' ',microtime()));
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG',  0 );
-  define ('DEBUG_TIME_LOG', 0 );
-  define ('DEBUG_CALENDAR_LOG', 0 );
+  define ('DEBUG_SQL_LOG',  1 );
+  define ('DEBUG_TIME_LOG', 1 );
+  define ('DEBUG_CALENDAR_LOG', 1 );
 
-//*** process the $_POST with magic_quotes enabled 
+//*** process the $_POST with magic_quotes enabled
   function strip_slashes(&$vVar) {
     if (is_array($vVar)) {
       foreach($vVar as $sKey => $vValue) {
@@ -42,7 +42,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   	$serverAddr = $_SERVER['SERVER_ADDR'];
   	global $startingTime;
   	$endTime =  array_sum(explode(' ',microtime()));
-  	$time = $endTime - $startingTime;  	
+  	$time = $endTime - $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
     fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
@@ -80,7 +80,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   //to do: make different environments.  sys
   //G::setErrorHandler ( );
   //G::setFatalErrorHandler ( );
-  define ('ERROR_SHOW_SOURCE_CODE', true);  // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE 
+  define ('ERROR_SHOW_SOURCE_CODE', true);  // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE
   //define ( 'ERROR_LOG_NOTICE_ERROR', true );  //enable ERROR_LOG_NOTICE_ERROR to log Notices messages in default apache log
 
 //  ***** create headPublisher singleton *****************
@@ -392,7 +392,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
   $avoidChangedWorkspaceValidation = false;
   
-  //Load custom Classes and Model from Plugins. 
+  //Load custom Classes and Model from Plugins.
   G::LoadAllPluginModelClasses();
   
 //*********jump to php file in methods directory *************
@@ -406,7 +406,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   else
     $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . SYS_TARGET.'.php';
 
-  //services is a special folder, 
+  //services is a special folder,
   if ( SYS_COLLECTION == 'services' ) {
     $avoidChangedWorkspaceValidation = true;
     $targetPlugin = explode( '/', SYS_TARGET );
@@ -456,7 +456,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
     }
   }
 //G::pr($_SESSION);
-//G::dump($avoidChangedWorkspaceValidation);die;  
+//G::dump($avoidChangedWorkspaceValidation);die;
 //redirect to login, if user changed the workspace in the URL
   if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
@@ -492,7 +492,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       and  SYS_TARGET != 'autoinstallProcesses'
       and  SYS_TARGET != 'autoinstallPlugins'
       and  SYS_TARGET != 'heartbeatStatus'
-      and  SYS_TARGET != 'showLogoFile'        
+      and  SYS_TARGET != 'showLogoFile'
       and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
       and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'dynaforms_checkDependentFields' and SYS_TARGET != 'cases_ShowDocument') {
         $bRedirect = true;
