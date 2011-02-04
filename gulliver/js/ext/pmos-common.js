@@ -116,3 +116,41 @@ function _(ID_LABEL)
   }
   return trn;
 }
+
+var getBrowserInf = function(){
+  var aBrowFull = new Array("opera", "msie", "firefox", "opera", "safari");
+  var sInfo = navigator.userAgent.toLowerCase();
+  var sBrowser = "";
+  var screen;
+  
+  var wSize = [0, 0];
+  if (typeof window.innerWidth != 'undefined'){
+    wSize = [
+      window.innerWidth,
+      window.innerHeight
+    ];
+  } else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0){
+    wSize = [
+      document.documentElement.clientWidth,
+      document.documentElement.clientHeight
+    ];
+  } else {
+    wSize = [
+      document.getElementsByTagName('body')[0].clientWidth,
+      document.getElementsByTagName('body')[0].clientHeight
+    ];
+  }
+  
+  screen = {width:wSize[0], height:wSize[1]};
+  
+  for (var i = 0; i < aBrowFull.length; i++){
+    if ((sBrowser == "") && (sInfo.indexOf(aBrowFull[i]) != -1)){
+      sBrowser = aBrowFull[i];
+      sVersion = String(parseFloat(sInfo.substr(sInfo.indexOf(aBrowFull[i]) + aBrowFull[i].length + 1)));
+      return {name:sBrowser, version:sVersion, screen: screen}
+    }
+  }
+  
+  return {name:'unknow', version:'', screen: screen}
+};
+var _BROWSER = getBrowserInf();
