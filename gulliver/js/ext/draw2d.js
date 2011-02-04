@@ -1663,11 +1663,11 @@ VectorFigure.prototype.paint.call(this);
 this.graphics.setStroke(this.stroke);
 if(this.bgColor!=null){
 this.graphics.setColor(this.bgColor.getHTMLStyle());
-this.graphics.fillOval(0,0,this.getWidth()-1,this.getHeight()-1);
+this.graphics.fillOval(0,0,this.getWidth()+2,this.getHeight()+2);
 }
 if(this.lineColor!=null){
 this.graphics.setColor(this.lineColor.getHTMLStyle());
-this.graphics.drawOval(0,0,this.getWidth()-1,this.getHeight()-1);
+this.graphics.drawOval(0,0,this.getWidth()+2,this.getHeight()+2);
 }
 this.graphics.paint();
 };
