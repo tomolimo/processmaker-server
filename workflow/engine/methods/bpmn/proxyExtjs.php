@@ -205,11 +205,23 @@ switch($_GET['action'])
                          $rows[$key] = false;
                     else if($key == 'TAS_TYPE' && $value == 'ADHOC')
                            $rows[$key] = true;
+                 }
+               break;
 
+      case 'getObjectPermission':
+               $rows = $oProcessMap->getExtObjectsPermissions($_GET['pid']);
+               break;
+
+      case 'getObjectPermissionType':
+               $rows = $oProcessMap->newExtObjectPermission($_GET['pid'],$_GET['objectType']);
+               array_shift($rows);
+               break;
+
+            
 
 
                     
-                }
+                
 
     }
    //$result['totalCount'] = count($rows);
