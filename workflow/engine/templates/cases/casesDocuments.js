@@ -5,337 +5,343 @@ Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
 // The Quicktips are used for the toolbar and Tree mouseover tooltips!
 Ext.QuickTips.init();
 
+try{rc=new RegExp('^("(\\\\.|[^"\\\\\\n\\r])*?"|[,:{}\\[\\]0-9.\\-+Eaeflnr-u \\n\\r\\t])+?$')}
+catch(z){rc=/^(true|false|null|\[.*\]|\{.*\}|".*"|\d+|\d+\.\d+)$/}
+
 var conn = new Ext.data.Connection();
 
-		    function chDir( directory, loadGridOnly ) {
-		   		// console.info("**** Changing Directory: "+directory+" --
-				// "+loadGridOnly);
-		    	if( datastore.directory.replace( /\//g, '' ) == directory.replace( /\//g, '' )
-		    		&& datastore.getTotalCount() > 0 && directory != '') {
-		    		// Prevent double loading
-		    		return;
-		    	}
-		    	datastore.directory = directory;
-		    	var conn = datastore.proxy.getConnection();
-		    	if( directory == '' || conn && !conn.isLoading()) {
-		    		datastore.load({params:{start:0, limit:150, dir: directory, node: directory, option:'gridDocuments', action:'expandNode', sendWhat: datastore.sendWhat }});
-		    	}
+function chDir( directory, loadGridOnly ) {
+	// console.info("**** Changing Directory: "+directory+" --
+	// "+loadGridOnly);
+	if( datastore.directory.replace( /\//g, '' ) == directory.replace( /\//g, '' )
+		&& datastore.getTotalCount() > 0 && directory != '') {
+		// Prevent double loading
+		return;
+	}
+	datastore.directory = directory;
+	var conn = datastore.proxy.getConnection();
+	if( directory == '' || conn && !conn.isLoading()) {
+		datastore.load({params:{start:0, limit:150, dir: directory, node: directory, option:'gridDocuments', action:'expandNode', sendWhat: datastore.sendWhat }});
+	}
+
+    if( !loadGridOnly ) {
+		expandTreeToDir( null, directory );
+	}
+}
+			
+function expandTreeToDir( node, dir ) {
+	// console.info("Expanding Tree to Dir "+node+" - "+dir);
+	dir = dir ? dir : new String('');
+	var dirs = dir.split('/');
+	if( dirs[0] == '') { dirs.shift(); }
+	if( dirs.length > 0 ) {
+		// console.log("Dir to expand... "+dirs[0]);
+		node = dirTree.getNodeById( dirs[0] );
+		if( !node ) return;
+		if( node.isExpanded() ) {
+			expandNode( node, dir );
+			return;
+		}
+		node.on('load', function() { expandNode( node, dir ); } );
+		node.expand();
+	}
+}
+function expandNode( node, dir ) {
+	// console.info("Expanding Node "+node+" - "+dir);
+	var fulldirpath, dirpath;
+
+	var dirs = dir.split('/');
+	if( dirs[0] == '') { dirs.shift(); }
+	if( dirs.length > 0 ) {
+		fulldirpath = '';
+		for( i=0; i < dirs.length; i++ ) {
+			fulldirpath += dirs[i];
+		}
+		if( node.id.substr( 0, 5 ) != '_RRR_' ) {
+			fulldirpath = fulldirpath.substr( 5 );
+		}
 	
-			    if( !loadGridOnly ) {
-					expandTreeToDir( null, directory );
-		    	}
-		    }
-			
-			function expandTreeToDir( node, dir ) {
-				// console.info("Expanding Tree to Dir "+node+" - "+dir);
-				dir = dir ? dir : new String('');
-				var dirs = dir.split('/');
-				if( dirs[0] == '') { dirs.shift(); }
-				if( dirs.length > 0 ) {
-					// console.log("Dir to expand... "+dirs[0]);
-					node = dirTree.getNodeById( dirs[0] );
-					if( !node ) return;
-					if( node.isExpanded() ) {
-						expandNode( node, dir );
-						return;
-					}
-					node.on('load', function() { expandNode( node, dir ); } );
-					node.expand();
-				}
-			}
-			function expandNode( node, dir ) {
-				// console.info("Expanding Node "+node+" - "+dir);
-				var fulldirpath, dirpath;
-			
-				var dirs = dir.split('/');
-				if( dirs[0] == '') { dirs.shift(); }
-				if( dirs.length > 0 ) {
-					fulldirpath = '';
-					for( i=0; i < dirs.length; i++ ) {
-						fulldirpath += dirs[i];
-					}
-					if( node.id.substr( 0, 5 ) != '_RRR_' ) {
-						fulldirpath = fulldirpath.substr( 5 );
-					}
-				
-					if( node.id != fulldirpath ) {
-						dirpath = '';
-				
-						var nodedirs = node.id.split('_RRR_');
-						if( nodedirs[0] == '' ) nodedirs.shift();
-						for( i=0; i < dirs.length; i++ ) {
-							if( nodedirs[i] ) {
-								dirpath += '_RRR_'+ dirs[i];
-							} else {
-								dirpath += '_RRR_'+ dirs[i];
-								// dirpath = dirpath.substr( 5 );
-								var nextnode = dirTree.getNodeById( dirpath );
-								if( !nextnode ) { return; }
-								if( nextnode.isExpanded() ) { expandNode( nextnode, dir ); return;}
-								nextnode.on( 'load', function() { expandNode( nextnode, dir ); } );	
+		if( node.id != fulldirpath ) {
+			dirpath = '';
+	
+			var nodedirs = node.id.split('_RRR_');
+			if( nodedirs[0] == '' ) nodedirs.shift();
+			for( i=0; i < dirs.length; i++ ) {
+				if( nodedirs[i] ) {
+					dirpath += '_RRR_'+ dirs[i];
+				} else {
+					dirpath += '_RRR_'+ dirs[i];
+					// dirpath = dirpath.substr( 5 );
+					var nextnode = dirTree.getNodeById( dirpath );
+					if( !nextnode ) { return; }
+					if( nextnode.isExpanded() ) { expandNode( nextnode, dir ); return;}
+					nextnode.on( 'load', function() { expandNode( nextnode, dir ); } );	
 
-								nextnode.expand();
-								break;
-							}
-						}
-					}
-					else {
-						node.select();
-					}
-					
+					nextnode.expand();
+					break;
 				}
 			}
-		    function handleNodeClick( sm, node ) {		    	
-		    	if( node && node.id ) {
-		    		// console.log("Node Clicked: "+node);
-		    		chDir( node.id );
-		    	}
-		    } 
+		}
+		else {
+			node.select();
+		}
+		
+	}
+}
+function handleNodeClick( sm, node ) {		    	
+	if( node && node.id ) {
+		// console.log("Node Clicked: "+node);
+		chDir( node.id );
+	}
+} 
 		   
-		function showLoadingIndicator( el, replaceContent ) {
-			// console.info("showLoadingIndicator");
-			if( !el ) return;
-			var loadingimg = '/images/documents/_indicator.gif';
-			var imgtag = '<' + 'img src="'+ loadingimg + '" alt="Loading..." border="0" name="Loading" align="absmiddle" />';
+function showLoadingIndicator( el, replaceContent ) {
+	// console.info("showLoadingIndicator");
+	if( !el ) return;
+	var loadingimg = '/images/documents/_indicator.gif';
+	var imgtag = '<' + 'img src="'+ loadingimg + '" alt="Loading..." border="0" name="Loading" align="absmiddle" />';
 
-			if( replaceContent ) {
-				el.innerHTML = imgtag;
+	if( replaceContent ) {
+		el.innerHTML = imgtag;
+	}
+	else {
+		el.innerHTML += imgtag;
+	}
+}
+function getURLParam( strParamName, myWindow){
+	// console.info("getURLParam");
+	// console.trace();
+	if( !myWindow ){
+		myWindow = window;
+	}
+  var strReturn = "";
+  var strHref = myWindow.location.href;
+  if ( strHref.indexOf("?") > -1 ){
+    var strQueryString = strHref.substr(strHref.indexOf("?")).toLowerCase();
+    var aQueryString = strQueryString.split("&");
+    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+      if ( aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+        var aParam = aQueryString[iParam].split("=");
+        strReturn = aParam[1];
+        break;
+      }
+    }
+  }
+  return strReturn;
+}
+
+function openActionDialog( caller, action ) {
+	// console.log("Dialog open: "+caller+" ->"+action);
+	var dialog;
+	var selectedRows = ext_itemgrid.getSelectionModel().getSelections();
+	if( selectedRows.length < 1 ) {
+		var selectedNode = dirTree.getSelectionModel().getSelectedNode();
+		if( selectedNode ) {
+			selectedRows = Array( dirTree.getSelectionModel().getSelectedNode().id.replace( /_RRR_/g, '/' ) );
+		}
+	}
+	var dontNeedSelection = { newFolder:1, uploadDocument:1, search:1 };
+	if( dontNeedSelection[action] == null  && selectedRows.length < 1 ) {
+		Ext.Msg.alert( 'error','No items Selected');
+		return false;
+	}
+
+	switch( action ) {
+		case 'copyAction':
+		case 'edit':
+		case 'newFolder':
+		case 'move':
+		case 'rename':
+		case 'search':
+		case 'uploadDocument':
+		case 'move':
+			requestParams = getRequestParams();
+			requestParams.action = action;
+			if( action != "edit" ) {
+            	dialog = new Ext.Window( {
+            		id: "dialog",
+                    autoCreate: true,
+                    modal:true,
+                    width:600,
+                    height:400,
+                    shadow:true,
+                    minWidth:300,
+                    minHeight:200,
+                    proxyDrag: true,
+                    resizable: true,
+                    // renderTo: Ext.getBody(),
+                    keys: {
+					    key: 27,
+					    fn  : function(){
+	                        dialog.hide();
+	                    }
+					}// ,
+                    // animateTarget: typeof caller.getEl == 'function'
+					// ? caller.getEl() : caller,
+					// title: 'dialog_title'
+                   
+            	});			
+			}
+			Ext.Ajax.request( { url: '../appFolder/appFolderAjax.php',
+								params: Ext.urlEncode( requestParams ),
+								scripts: true,
+								callback: function(oElement, bSuccess, oResponse) {
+											if( !bSuccess ) {
+												msgbox = Ext.Msg.alert( "Ajax communication failure!");
+												msgbox.setIcon( Ext.MessageBox.ERROR );
+											}
+											if( oResponse && oResponse.responseText ) {
+												
+												// Ext.Msg.alert("Debug",
+												// oResponse.responseText
+												// );
+												try{ 
+													json = Ext.decode( oResponse.responseText );
+													
+												if( json.error && typeof json.error != 'xml' ) {																
+														Ext.Msg.alert( "error", json.error );
+														dialog.destroy();
+														return false;
+													}
+												} catch(e) {
+													msgbox = Ext.Msg.alert( "error", "JSON Decode Error: " + e.message );
+													msgbox.setIcon( Ext.MessageBox.ERROR );
+													return false; 
+												}
+												if( action == "edit" ) {
+													Ext.getCmp("mainpanel").add(json);
+													Ext.getCmp("mainpanel").activate(json.id);
+												}
+												else {
+													// we expect the
+													// returned JSON to
+													// be an object that
+													// contains an
+													// "Ext.Component"
+													// or derivative in
+													// xtype notation
+													// so we can simply
+													// add it to the
+													// Window
+													// console.log(json);
+													dialog.add(json);
+													if( json.dialogtitle ) {
+														// if the
+														// component
+														// delivers a
+														// title for our
+														// dialog we can
+														// set the title
+														// of the window
+														dialog.setTitle(json.dialogtitle);
+													}
+
+													try {
+														// recalculate
+														// layout
+														dialog.doLayout();
+														// recalculate
+														// dimensions,
+														// based on
+														// those of the
+														// newly added
+														// child
+														// component
+														firstComponent = dialog.getComponent(0);
+														newWidth = firstComponent.getWidth() + dialog.getFrameWidth();
+														newHeight = firstComponent.getHeight() + dialog.getFrameHeight();
+														dialog.setSize( newWidth, newHeight );
+														
+													} catch(e) {}
+													// alert( "Before:
+													// Dialog.width: " +
+													// dialog.getWidth()
+													// + ", Client
+													// Width: "+
+													// Ext.getBody().getWidth());
+													if( dialog.getWidth() >= Ext.getBody().getWidth() ) {
+														dialog.setWidth( Ext.getBody().getWidth() * 0.8 );
+													}
+													// alert( "After:
+													// Dialog.width: " +
+													// dialog.getWidth()
+													// + ", Client
+													// Width: "+
+													// Ext.getBody().getWidth());
+													if( dialog.getHeight() >= Ext.getBody().getHeight() ) {
+														dialog.setHeight( Ext.getBody().getHeight() * 0.7 );
+													} else if( dialog.getHeight() < Ext.getBody().getHeight() * 0.3 ) {
+														dialog.setHeight( Ext.getBody().getHeight() * 0.5 );
+													}
+
+													// recalculate
+													// Window size
+													dialog.syncSize();
+													// center the window
+													dialog.center();
+												}
+											} else if( !response || !oResponse.responseText) {
+												msgbox = Ext.Msg.alert( "error", "Received an empty response");
+												msgbox.setIcon( Ext.MessageBox.ERROR );
+
+											}
+										}
+							});
+            
+			if( action != "edit" ) {
+            	dialog.on( 'hide', function() { dialog.destroy(true); } );
+            	dialog.show();
+            }
+            break;
+
+		case 'delete':
+			var num = selectedRows.length;
+			Ext.Msg.confirm('dellink?', String.format("miscdelitems", num ), deleteFiles);
+			break;
+		case 'download':
+			document.location = '?option=com_extplorer&action=download&item='+ encodeURIComponent(ext_itemgrid.getSelectionModel().getSelected().get('name')) + '&dir=' + encodeURIComponent( datastore.directory );
+			break;
+	}
+}
+
+function handleCallback(requestParams, node) {
+	// console.log("handleCallback "+requestParams +" -- "+node);
+	// console.trace();
+	var conn = new Ext.data.Connection();
+
+	conn.request({
+		url: '../appFolder/appFolderAjax.php',
+		params: requestParams,
+		callback: function(options, success, response ) {
+			if( success ) {
+				json = Ext.decode( response.responseText );
+				if( json.success ) {
+					statusBarMessage( json.message, false, true );
+					try {
+						if( dropEvent) {
+							dropEvent.target.parentNode.reload();
+							dropEvent = null;
+						}
+						if( node ) {
+							if( options.params.action == 'delete' || options.params.action == 'rename' ) {
+								node.parentNode.select();
+							}
+							node.parentNode.reload();
+						} else {
+							datastore.reload();
+						}
+					} catch(e) { datastore.reload(); }
+				} else {
+					Ext.Msg.alert( 'Failure', json.error );
+				}
 			}
 			else {
-				el.innerHTML += imgtag;
+				Ext.Msg.alert( 'Error', 'Failed to connect to the server.');
 			}
+
 		}
-		function getURLParam( strParamName, myWindow){
-			// console.info("getURLParam");
-			// console.trace();
-			if( !myWindow ){
-				myWindow = window;
-			}
-		  var strReturn = "";
-		  var strHref = myWindow.location.href;
-		  if ( strHref.indexOf("?") > -1 ){
-		    var strQueryString = strHref.substr(strHref.indexOf("?")).toLowerCase();
-		    var aQueryString = strQueryString.split("&");
-		    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
-		      if ( aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
-		        var aParam = aQueryString[iParam].split("=");
-		        strReturn = aParam[1];
-		        break;
-		      }
-		    }
-		  }
-		  return strReturn;
-		}
-
-		function openActionDialog( caller, action ) {
-			// console.log("Dialog open: "+caller+" ->"+action);
-			var dialog;
-			var selectedRows = ext_itemgrid.getSelectionModel().getSelections();
-			if( selectedRows.length < 1 ) {
-				var selectedNode = dirTree.getSelectionModel().getSelectedNode();
-				if( selectedNode ) {
-					selectedRows = Array( dirTree.getSelectionModel().getSelectedNode().id.replace( /_RRR_/g, '/' ) );
-				}
-			}
-			var dontNeedSelection = { newFolder:1, uploadDocument:1, search:1 };
-			if( dontNeedSelection[action] == null  && selectedRows.length < 1 ) {
-				Ext.Msg.alert( 'error','No items Selected');
-				return false;
-			}
-
-			switch( action ) {
-				case 'copy':
-				case 'edit':
-				case 'newFolder':
-				case 'move':
-				case 'rename':
-				case 'search':
-				case 'uploadDocument':
-				case 'move':
-					requestParams = getRequestParams();
-					requestParams.action = action;
-					if( action != "edit" ) {
-		            	dialog = new Ext.Window( {
-		            		id: "dialog",
-		                    autoCreate: true,
-		                    modal:true,
-		                    width:600,
-		                    height:400,
-		                    shadow:true,
-		                    minWidth:300,
-		                    minHeight:200,
-		                    proxyDrag: true,
-		                    resizable: true,
-		                    // renderTo: Ext.getBody(),
-		                    keys: {
-							    key: 27,
-							    fn  : function(){
-			                        dialog.hide();
-			                    }
-							}// ,
-		                    // animateTarget: typeof caller.getEl == 'function'
-							// ? caller.getEl() : caller,
-							// title: 'dialog_title'
-		                   
-		            	});			
-					}
-					Ext.Ajax.request( { url: '../appFolder/appFolderAjax.php',
-										params: Ext.urlEncode( requestParams ),
-										scripts: true,
-										callback: function(oElement, bSuccess, oResponse) {
-													if( !bSuccess ) {
-														msgbox = Ext.Msg.alert( "Ajax communication failure!");
-														msgbox.setIcon( Ext.MessageBox.ERROR );
-													}
-													if( oResponse && oResponse.responseText ) {
-														
-														// Ext.Msg.alert("Debug",
-														// oResponse.responseText
-														// );
-														try{ json = Ext.decode( oResponse.responseText );
-															if( json.error && typeof json.error != 'xml' ) {																
-																Ext.Msg.alert( "error", json.error );
-																dialog.destroy();
-																return false;
-															}
-														} catch(e) {
-															msgbox = Ext.Msg.alert( "error", "JSON Decode Error: " + e.message );
-															msgbox.setIcon( Ext.MessageBox.ERROR );
-															return false; 
-														}
-														if( action == "edit" ) {
-															Ext.getCmp("mainpanel").add(json);
-															Ext.getCmp("mainpanel").activate(json.id);
-														}
-														else {
-															// we expect the
-															// returned JSON to
-															// be an object that
-															// contains an
-															// "Ext.Component"
-															// or derivative in
-															// xtype notation
-															// so we can simply
-															// add it to the
-															// Window
-															// console.log(json);
-															dialog.add(json);
-															if( json.dialogtitle ) {
-																// if the
-																// component
-																// delivers a
-																// title for our
-																// dialog we can
-																// set the title
-																// of the window
-																dialog.setTitle(json.dialogtitle);
-															}
-
-															try {
-																// recalculate
-																// layout
-																dialog.doLayout();
-																// recalculate
-																// dimensions,
-																// based on
-																// those of the
-																// newly added
-																// child
-																// component
-																firstComponent = dialog.getComponent(0);
-																newWidth = firstComponent.getWidth() + dialog.getFrameWidth();
-																newHeight = firstComponent.getHeight() + dialog.getFrameHeight();
-																dialog.setSize( newWidth, newHeight );
-																
-															} catch(e) {}
-															// alert( "Before:
-															// Dialog.width: " +
-															// dialog.getWidth()
-															// + ", Client
-															// Width: "+
-															// Ext.getBody().getWidth());
-															if( dialog.getWidth() >= Ext.getBody().getWidth() ) {
-																dialog.setWidth( Ext.getBody().getWidth() * 0.8 );
-															}
-															// alert( "After:
-															// Dialog.width: " +
-															// dialog.getWidth()
-															// + ", Client
-															// Width: "+
-															// Ext.getBody().getWidth());
-															if( dialog.getHeight() >= Ext.getBody().getHeight() ) {
-																dialog.setHeight( Ext.getBody().getHeight() * 0.7 );
-															} else if( dialog.getHeight() < Ext.getBody().getHeight() * 0.3 ) {
-																dialog.setHeight( Ext.getBody().getHeight() * 0.5 );
-															}
-
-															// recalculate
-															// Window size
-															dialog.syncSize();
-															// center the window
-															dialog.center();
-														}
-													} else if( !response || !oResponse.responseText) {
-														msgbox = Ext.Msg.alert( "error", "Received an empty response");
-														msgbox.setIcon( Ext.MessageBox.ERROR );
-
-													}
-												}
-									});
-		            
-					if( action != "edit" ) {
-		            	dialog.on( 'hide', function() { dialog.destroy(true); } );
-		            	dialog.show();
-		            }
-		            break;
-
-				case 'delete':
-					var num = selectedRows.length;
-					Ext.Msg.confirm('dellink?', String.format("miscdelitems", num ), deleteFiles);
-					break;
-				case 'download':
-					document.location = '?option=com_extplorer&action=download&item='+ encodeURIComponent(ext_itemgrid.getSelectionModel().getSelected().get('name')) + '&dir=' + encodeURIComponent( datastore.directory );
-					break;
-			}
-		}
-		function handleCallback(requestParams, node) {
-			// console.log("handleCallback "+requestParams +" -- "+node);
-			// console.trace();
-			var conn = new Ext.data.Connection();
-
-			conn.request({
-				url: '../appFolder/appFolderAjax.php',
-				params: requestParams,
-				callback: function(options, success, response ) {
-					if( success ) {
-						json = Ext.decode( response.responseText );
-						if( json.success ) {
-							statusBarMessage( json.message, false, true );
-							try {
-								if( dropEvent) {
-									dropEvent.target.parentNode.reload();
-									dropEvent = null;
-								}
-								if( node ) {
-									if( options.params.action == 'delete' || options.params.action == 'rename' ) {
-										node.parentNode.select();
-									}
-									node.parentNode.reload();
-								} else {
-									datastore.reload();
-								}
-							} catch(e) { datastore.reload(); }
-						} else {
-							Ext.Msg.alert( 'Failure', json.error );
-						}
-					}
-					else {
-						Ext.Msg.alert( 'Error', 'Failed to connect to the server.');
-					}
-
-				}
-			});
-		}
+	});
+}
 		function getRequestParams() {
 			// console.info("Get Request params ");
 			var selitems, dir, node;
@@ -670,7 +676,7 @@ var gridtb = new Ext.Toolbar(
 					cls : 'x-btn-icon',
 					disabled : false,
 					handler : function() {
-						openActionDialog(this, 'copy');
+						openActionDialog(this, 'copyAction');
 					}
 				},
 				{
@@ -993,7 +999,7 @@ gridCtxMenu = new Ext.menu.Menu({
 		icon : '/images/documents/_editcopy.png',
 		text : 'copylink',
 		handler : function() {
-			openActionDialog(this, 'copy');
+			openActionDialog(this, 'copyAction');
 		}
 	}, {
 		id : 'gc_move',
@@ -1100,7 +1106,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 						text : 'Copy',
 						handler : function() {
 							dirCtxMenu.hide();
-							openActionDialog(this, 'copy');
+							openActionDialog(this, 'copyAction');
 						}
 					},
 					{
@@ -1155,7 +1161,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 		text : 'copylink',
 		handler : function() {
 			copymoveCtxMenu.hide();
-			copymove('copy');
+			copymove('copyAction');
 		}
 	}, {
 		id : 'copymoveCtxMenu_move',
@@ -1300,6 +1306,7 @@ var documentsTab = {
 									tbar : gridtb,
 									bbar : gridbb,
 									ddGroup : 'TreeDD',
+									enableDragDrop: true,
 									selModel : new Ext.grid.RowSelectionModel({
 										listeners : {
 											'rowselect' : {
@@ -1318,7 +1325,7 @@ var documentsTab = {
 												stopEvent : true,
 												handler : function() {
 													openActionDialog(this,
-															'copy');
+															'copyAction');
 												}
 
 											},

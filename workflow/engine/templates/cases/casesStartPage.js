@@ -7,7 +7,6 @@ Ext.QuickTips.init();
 
 var conn = new Ext.data.Connection();
 
-
 function getOtherDashboards(dashboardTabPanels) {
 	conn.request({
 		url : 'casesStartPage_Ajax.php',
@@ -108,7 +107,7 @@ Ext
 				{
 					initEvents : function() {
 						MainPanel.superclass.initEvents.call(this);
-						 this.body.on('click', this.onClick, this);
+						 //this.body.on('click', this.onClick, this);
 					},
 
 					onClick : function(e, target, elementselected) {
@@ -149,6 +148,8 @@ Ext
 								"action" : 'getRegisteredDashboards'
 							},
 							success : function(responseObject) {
+								
+								
 								var response = Ext.util.JSON
 										.decode(responseObject.responseText);
 								for (var i in response) {

@@ -91,7 +91,7 @@ $limit = '';
         if(isset($proData[ $processInfoChild ['pro_uid'] ])){
         $tempTreeChild ['otherAttributes'] = array_merge($processInfoChild,$proData[ $processInfoChild ['pro_uid'] ],$calendar->getCalendarFor ( $processInfoChild ['uid'], $processInfoChild ['uid'], $processInfoChild ['uid'] ));
         $tempTreeChild ['otherAttributes']['PRO_TAS_TITLE']=str_replace(")","",str_replace("(","",trim(str_replace($tempTreeChild ['otherAttributes']['PRO_TITLE'],"",$tempTreeChild ['otherAttributes']["value"]))));
-        $tempTreeChild ['qtip']=$tempTreeChild ['otherAttributes']['PRO_DESCRIPTION']; 
+        $tempTreeChild ['qtip']=$tempTreeChild ['otherAttributes']['PRO_DESCRIPTION'];
         
         //$tempTree['cls']='file';
         
@@ -120,7 +120,7 @@ $limit = '';
         $processInfo ['totalInbox']=0;
         $tempTree ['otherAttributes'] = array_merge($processInfo,$proData[ $processInfo ['pro_uid'] ],$calendar->getCalendarFor ( $processInfo ['uid'], $processInfo ['uid'], $processInfo ['uid'] ));
         $tempTree ['otherAttributes']['PRO_TAS_TITLE']=str_replace(")","",str_replace("(","",trim(str_replace($tempTree ['otherAttributes']['PRO_TITLE'],"",$tempTree ['otherAttributes']["value"]))));
-        $tempTree ['qtip']=$tempTree ['otherAttributes']['PRO_DESCRIPTION']; 
+        $tempTree ['qtip']=$tempTree ['otherAttributes']['PRO_DESCRIPTION'];
         //$tempTree['cls']='file';
         $processListTree [] = $tempTree;
       }
@@ -181,7 +181,7 @@ function startCase() {
     
     $aData ['status'] = 'success';
     print (G::json_encode ( $aData )) ;
-  } 
+  }
   catch ( Exception $e ) {
     $aData ['status'] = 'failure';
     $aData ['message'] = $e->getMessage ();
@@ -225,7 +225,7 @@ function getSimpleDashboardData() {
 
   $Criteria->add ( AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN' );
   
-  //execute the query      
+  //execute the query
   $oDataset = AppCacheViewPeer::doSelectRS ( $Criteria );
   $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
   $oDataset->next ();
