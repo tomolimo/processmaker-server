@@ -713,7 +713,7 @@ TaskContext.prototype.editTaskProperties= function()
     var taskId  = workflow.currentSelection.id;
 
     // create the Data Store for processes
-    var taskDetails = new Ext.data.JsonStore({
+    /*var taskDetails = new Ext.data.JsonStore({
         root         : 'data',
         totalProperty: 'totalCount',
         idProperty   : 'gridIndex',
@@ -722,9 +722,9 @@ TaskContext.prototype.editTaskProperties= function()
         proxy: new Ext.data.HttpProxy({
           url: 'proxyExtjs?tid='+taskId+'&action=getPropertiesList'
         })
-      });
+      });*/
       //taskUsers.setDefaultSort('LABEL', 'asc');
-      taskDetails.load();
+      //taskDetails.load();
 
 
     var taskPropertiesTabs = new Ext.FormPanel({
@@ -775,7 +775,7 @@ TaskContext.prototype.editTaskProperties= function()
                         border:false,
                         items: [{
                             xtype: 'textfield',
-                            id: 'priorityVariable',
+                            //id: 'priorityVariable',
                             fieldLabel: 'Variable for Case priority',
                             name: 'TAS_PRIORITY_VARIABLE',
                             anchor:'100%'
@@ -823,7 +823,8 @@ TaskContext.prototype.editTaskProperties= function()
                         id: 'BALANCED',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'BALANCED',
-                        checked: false
+                        checked: false,
+                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                     },
 
                     {
@@ -831,7 +832,8 @@ TaskContext.prototype.editTaskProperties= function()
                         id: 'MANUAL',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'MANUAL',
-                        checked:false
+                        checked:false,
+                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                     },
 
                     {
@@ -856,14 +858,16 @@ TaskContext.prototype.editTaskProperties= function()
                         id:'REPORT_TO',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'REPORT_TO',
-                        checked:false
+                        checked:false,
+                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                     },
                     {
                         boxLabel: 'Self Service',
                         id:'SELF_SERVICE',
                         name: 'TAS_ASSIGN_TYPE',
                         inputValue: 'SELF_SERVICE',
-                        checked:false
+                        checked:false,
+                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                     },
 
                     {
@@ -1084,12 +1088,12 @@ TaskContext.prototype.editTaskProperties= function()
                             data   : [
                             {
                                 name : 'Work Days',
-                                value: 'Work Days'
+                                value: '1'
                             },
 
                             {
                                 name : 'Calendar Days',
-                                value: 'Calendar Days'
+                                value: '2'
                             },
                             ]
                         })
@@ -2068,4 +2072,487 @@ TaskContext.prototype.editUsersAdHoc= function()
         items: panel
         });
     window.show();
+}
+
+/**
+ * ExtJs Form of SubProcess Properties
+ * @Param  Shape Object
+ * @Author Safan Maredia
+ */
+TaskContext.prototype.editSubProcessProperties= function(_3525)
+{
+        var pro_uid = workflow.getUrlVars();
+        var taskId  = workflow.currentSelection.id;
+        //Variables Out Grid
+        var subProcessFields = Ext.data.Record.create([
+            {name: 'SP_UID',type: 'string'},
+            {name: 'TAS_UID',type: 'string'},
+            {name: 'PRO_PARENT',type: 'string'},
+            {name: 'TAS_PARENT',type: 'string'},
+            {name: 'SP_SYNCHRONOUS',type: 'string'},
+            {name: 'SPROCESS_NAME',type: 'string'},
+            {name: 'TASKS',type: 'string'},
+            {name: 'TAS_TITLE',type: 'string'},
+            {name: 'CON_VALUE',type: 'string'},
+            {name: 'VAR_OUT1',type: 'string'},
+            {name: 'VAR_OUT2',type: 'string'},
+            {name: 'VAR_IN1',type: 'string'},
+            {name: 'VAR_IN2',type: 'string'}
+       ]);
+
+    var editorOut = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+    var editorIn = new Ext.ux.grid.RowEditor({
+            saveText: 'Update'
+        });
+
+    //Variable out grid configuration starts here
+    var btnAddOut = new Ext.Button({
+            id: 'btnAddOut',
+            text: 'Assign Variables Out',
+            iconCls: 'application_add',
+            handler: function(){
+                var e = new subProcessFields({
+                     SP_UID         : '',
+                     PRO_PARENT     : '',
+                     SP_SYNCHRONOUS : '',
+                     TAS_PARENT     : '',
+                     VAR_OUT1       : '',
+                     VAR_OUT2	    : ''
+                });
+
+                    editorOut.stopEditing();
+                    variablesOutStore.insert(0, e);
+                    variableOutGrid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editorOut.startEditing(0, 0);
+            }
+        });
+
+    var btnRemoveOut = new Ext.Button({
+        id: 'btnRemoveOut',
+        text: 'Remove Variables Out',
+        iconCls: 'application_delete',
+        handler: function (s) {
+            editorOut.stopEditing();
+            var s = variableOutGrid.getSelectionModel().getSelections();
+            for(var i = 0, r; r = s[i]; i++){
+                variablesOutStore.remove(r);
+            }
+        }
+    });
+
+    var tbOut = new Ext.Toolbar({
+        items: [btnAddOut, btnRemoveOut]
+    });
+
+
+    //Variable out grid configuration starts here
+  var btnAddIn = new Ext.Button({
+        id: 'btnAddIn',
+        text: 'Assign Variables In',
+        iconCls: 'application_add',
+        handler: function(){
+            var e = new subProcessFields({
+                 SP_UID         : '',
+                 PRO_PARENT     : '',
+                 SP_SYNCHRONOUS : '',
+                 TAS_PARENT     : '',
+                 VAR_IN1        : '',
+                 VAR_IN2	    : ''
+            });
+
+                editorIn.stopEditing();
+                variablesInStore.insert(0, e);
+                variableInGrid.getView().refresh();
+                editorIn.startEditing(0, 0);
+        }
+    });
+
+    var btnRemoveIn = new Ext.Button({
+        id: 'btnRemoveIn',
+        text: 'Remove Variables In',
+        iconCls: 'application_delete',
+        handler: function (s) {
+            editorIn.stopEditing();
+            var s = variableInGrid.getSelectionModel().getSelections();
+            for(var i = 0, r; r = s[i]; i++){
+
+
+                //Secondly deleting from Grid
+                variablesInStore.remove(r);
+            }
+        }
+    });
+
+    var tbIn = new Ext.Toolbar({
+        items: [btnAddIn, btnRemoveIn]
+    });
+
+    // create the Data Store of all Variables Out
+    var variablesOutStore = new Ext.data.JsonStore({
+        root         : 'data',
+        totalProperty: 'totalCount',
+        idProperty   : 'gridIndex',
+        remoteSort   : true,
+        fields       : subProcessFields,
+        proxy        : new Ext.data.HttpProxy({
+               url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
+        })
+      });
+      variablesOutStore.load();
+
+    // create the Data Store of all Variables In
+    var variablesInStore = new Ext.data.JsonStore({
+        root         : 'data',
+        totalProperty: 'totalCount',
+        idProperty   : 'gridIndex',
+        remoteSort   : true,
+        fields       : subProcessFields,
+        proxy        : new Ext.data.HttpProxy({
+               url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=1'  //type=1 specifies Variables In (Synchronous)
+        })
+      });
+      //taskUsers.setDefaultSort('LABEL', 'asc');
+      variablesInStore.load();
+
+    var variableOutGrid =  new Ext.grid.GridPanel({
+        store       : variablesOutStore,
+        id          : 'mygrid',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : true,
+        autoHeight  : true,
+        autoScroll  : true,
+        clicksToEdit: 1,
+        layout      : 'form',
+        plugins     : [editorOut],
+        columns     : [{
+                        id       : 'VAR_OUT1',
+                        header   : 'Origin',
+                        dataIndex: 'VAR_OUT1',
+                        width    : 200,
+                        sortable : true,
+                        editor   : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        },
+                        {
+                        id        : 'VAR_OUT2',
+                        header    : 'Target',
+                        dataIndex : 'VAR_OUT2',
+                        width     : 200,
+                        sortable  : true,
+                        editor    : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        }
+                      ],
+        viewConfig: {forceFit: true},
+        stripeRows: true,
+        tbar: tbOut
+     });
+
+    var variableInGrid =  new Ext.grid.GridPanel({
+        store       : variablesInStore,
+        id          : 'mygrid1',
+        loadMask    : true,
+        loadingText : 'Loading...',
+        renderTo    : 'cases-grid',
+        frame       : true,
+        autoHeight  : true,
+        autoScroll  : true,
+        clicksToEdit: 1,
+        layout      : 'form',
+        plugins     : [editorIn],
+        columns     : [{
+                        id       : 'VAR_IN1',
+                        header   : 'Origin',
+                        dataIndex: 'VAR_IN1',
+                        width    : 200,
+                        sortable : true,
+                        editor   : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        },
+                        {
+                        id        : 'VAR_IN2',
+                        header    : 'Target',
+                        dataIndex : 'VAR_IN2',
+                        width     : 200,
+                        sortable  : true,
+                        editor    : new Ext.form.TextField({
+                                allowBlank: true
+                            })
+                        },
+                        {
+                         sortable: false,
+                         renderer: function()
+                            {
+                                return '<input type="button" value="@@" />';
+                            }
+                        }
+                      ],
+        viewConfig: {forceFit: true},
+        stripeRows: true,
+        tbar: tbIn
+     });
+
+
+
+     editorOut.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+
+             var sTasks            = record.data.TASKS;
+             var sSync             = record.data.SP_SYNCHRONOUS;
+             var sSP_UID           = record.data.SP_UID;
+             var sProcess_Parent   = record.data.PRO_PARENT;
+             var sTask_Parent      = record.data.TAS_PARENT;
+             var sVar_Out1         = record.data.VAR_OUT1;
+             var sVar_Out2         = record.data.VAR_OUT2;
+
+             Ext.Ajax.request({
+              url   : 'processes_Ajax.php',
+              method: 'POST',
+              params: {
+                    action          : 'saveSubProcessDetails',
+                    TASKS           : sTasks,
+                    SP_SYNCHRONOUS  : sSync,
+                    SP_UID          : sSP_UID,
+                    PRO_PARENT      : sProcess_Parent,
+                    TAS_PARENT      : sTask_Parent,
+                    VAR_OUT1        : sVar_Out1,
+                    VAR_OUT2        : sVar_Out2
+              },
+              success: function(response) {
+                  Ext.MessageBox.alert ('Status','Variable Out has been saved successfully.');
+              }
+            });
+
+          }
+        });
+
+        editorIn.on({
+          scope: this,
+          afteredit: function(roweditor, changes, record, rowIndex) {
+
+
+             var sTasks            = record.data.TASKS;
+             var sSync             = record.data.SP_SYNCHRONOUS;
+             var sSP_UID           = record.data.SP_UID;
+             var sProcess_Parent   = record.data.PRO_PARENT;
+             var sTask_Parent      = record.data.TAS_PARENT;
+             var sVar_In1          = record.data.VAR_IN1;
+             var sVar_In2          = record.data.VAR_IN2;
+
+             Ext.Ajax.request({
+              url   : 'processes_Ajax.php',
+              method: 'POST',
+              params: {
+                    action          : 'saveSubProcessDetails',
+                    TASKS           : sTasks,
+                    SP_SYNCHRONOUS  : sSync,
+                    SP_UID          : sSP_UID,
+                    PRO_PARENT      : sProcess_Parent,
+                    TAS_PARENT      : sTask_Parent,
+                    VAR_IN1         : sVar_In1,
+                    VAR_IN2         : sVar_In2
+              },
+              success: function(response) {
+                  Ext.MessageBox.alert ('Status','Variable In has been saved successfully.');
+              }
+            });
+
+          }
+        });
+
+    var subProcessProperties = new Ext.FormPanel({
+    labelWidth  : 110, // label settings here cascade unless overridden
+    //frame:true,
+    bodyStyle:'padding:5px 5px 0',
+    scope: _3525,
+    items: [
+            {
+            xtype:'fieldset',
+            title: 'Sub-Process',
+            collapsible: false,
+            autoHeight:true,
+            //width: 600,
+            defaultType: 'textfield',
+             items:[
+                   {
+                    id:    'subProcessName',
+                    xtype: 'textfield',
+                    width:  350,
+                    fieldLabel: 'SubProcess name',
+                    name      : 'SPROCESS_NAME',
+                    allowBlank: false
+                   },
+                   {
+                        width:          300,
+                        xtype:          'combo',
+                        mode:           'local',
+                        triggerAction:  'all',
+                        forceSelection: true,
+                        editable:       false,
+                        fieldLabel:     'Process',
+                        name:           'process',
+                        emptyText    : 'Select Process',
+                        displayField:   'PROCESSES',
+                        valueField:     'PROCESSES',
+                        store:          variablesOutStore
+                    },
+                    {
+                        width:          150,
+                        id   :          'spType',
+                        xtype:          'combo',
+                        mode:           'local',
+                        triggerAction:  'all',
+                        forceSelection: true,
+                        editable:       false,
+                        fieldLabel:     'Type',
+                        name:           'SP_SYNCHRONOUS',
+                        hiddenName:     'SP_SYNCHRONOUS',
+                        displayField:   'name',
+                        valueField:     'value',
+                        emptyText    : 'Select Type',
+                        store:          new Ext.data.JsonStore({
+                                    fields : ['name', 'value'],
+                                    data   : [
+                                        {name : 'Asynchronous',   value: 'Asynchronous'},
+                                        {name : 'Synchronous',   value: 'Synchronous'},
+                                    ]
+                                }),
+                       onSelect: function(record, index){
+                           if(record.data.name == 'Synchronous')
+                                Ext.getCmp("variablein").show();
+                           else
+                                Ext.getCmp("variablein").hide();
+
+                           this.setValue(record.data[this.valueField || this.displayField]);
+                           this.collapse();
+                       }
+                    }]
+            },
+            {
+            id   :'variableout',
+            xtype:'fieldset',
+            title: 'Variables Out',
+            collapsible: false,
+            labelAlign: 'top',
+             items:[variableOutGrid]
+            },
+            {
+            id   :'variablein',
+            xtype:'fieldset',
+            title: 'Variables In',
+            //hidden: true,
+            collapsible: false,
+            labelAlign: 'top',
+            items:[variableInGrid]
+            }]
+    });
+
+    //Loading Task Details into the form
+    subProcessProperties.form.load({
+        url:'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=2',
+        method:'GET',
+        //waitMsg:'Loading',
+        success:function(form, action) {
+           Ext.getCmp("subProcessName").setValue(action.result.data[0].TAS_TITLE);
+           if(action.result.data[0].SP_SYNCHRONOUS == 0)
+               {
+                   Ext.getCmp("variablein").hide();
+                   Ext.getCmp("spType").setValue("Asynchronous");
+               }
+           else
+               {
+                   Ext.getCmp("variablein").show();
+                   Ext.getCmp("spType").setValue("Synchronous");
+               }
+          workflow.subProcessProperties = action.result.data[0];
+        },
+        failure:function(form, action) {
+            Ext.MessageBox.alert('Message', 'Load failed');
+        }
+     });
+
+    subProcessProperties.render(document.body);
+   // workflow.subProcessProperties = subProcessProperties;
+
+    var window = new Ext.Window({
+    title: 'Task: ',
+    collapsible: false,
+    maximizable: false,
+    width: 800,
+    height: 500,
+    minWidth: 300,
+    minHeight: 150,
+    layout: 'fit',
+    plain: true,
+    bodyStyle: 'padding:5px;',
+    buttonAlign: 'center',
+    items: subProcessProperties,
+    buttons: [{
+        text: 'Save',
+        handler: function(){
+            var getForm    = subProcessProperties.getForm().getValues();
+            var sTask_Parent = workflow.subProcessProperties.TAS_PARENT;
+            var sSPNAME = getForm.SPROCESS_NAME;
+           Ext.Ajax.request({
+              url   : 'processes_Ajax.php',
+              method: 'POST',
+              params: {
+                    action          : 'subprocessProperties',
+                    TAS_PARENT      : sTask_Parent,
+                    SPROCESS_NAME   : sSPNAME
+                  },
+              success: function(response) {
+                  Ext.MessageBox.alert ('Status','Sub Process Properties has been saved successfully.');
+              }
+            });
+
+            workflow.currentSelection.bpmnNewText.clear();
+            workflow.currentSelection.bpmnNewText.drawStringRect(sSPNAME,20,20,100,'left');
+            workflow.currentSelection.bpmnNewText.paint();
+            workflow.currentSelection.subProcessName = sSPNAME;
+            //var getstore = taskPropertiesTabs.getStore();
+            //var getData = getstore.data.items;
+            //taskExtObj.saveTaskProperties(_5625);
+        }
+    },{
+        text: 'Cancel',
+        handler: function(){
+            // when this button clicked,
+            window.close();
+        }
+    }]
+    });
+    window.show();
+
 }

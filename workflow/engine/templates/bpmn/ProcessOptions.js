@@ -140,7 +140,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
               url: 'proxyExtjs?action=getAdditionalTables'
             })
           });
- //additionalTables.load();
+ additionalTables.load();
 
  //Creating store for getting list of Fields of additional PM tables
   var TablesFields = Ext.data.Record.create([
@@ -224,7 +224,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sortable: false,
                         renderer: function(val, meta, record)
                            {
-                                return String.format("<input type='submit' name='UID' value='UID' onclick='renderInstall()'>",record.data.DYN_UID);
+                                return String.format("<input type='submit' name='UID' value='UID' onclick=''>",record.data.DYN_UID);
                            }
                     }
                 ]
@@ -240,22 +240,18 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         width: 200,
                         editable: false,
                         sortable: true,
-                        editor: {
-                            xtype: 'textfield',
-                            //allowBlank: false,
-                            name      : 'FLD_NAME'
-                        }
+                        editor: new Ext.form.TextField({
+                                allowBlank: false
+                            })
                     },{
                         id: 'PRO_VARIABLE',
                         header: 'Variables',
                         dataIndex: 'PRO_VARIABLE',
                         width: 200,
                         sortable: true,
-                        editor: {
-                            xtype: 'textfield',
-                           // allowBlank: false,
-                            name      : 'PRO_VARIABLE'
-                        }
+                        editor: new Ext.form.TextField({
+                                allowBlank: false
+                            })
                     },{
                         sortable: false,
                         renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
@@ -321,13 +317,13 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             change: function(radiogroup, radio) {
                             if(radio.inputValue == 'blankDyna')
                                 {
-                                    Ext.get("blankDynaform").show();
-                                    Ext.get("pmTableDynaform").hide();
+                                    Ext.getCmp("blankDynaform").show();
+                                    Ext.getCmp("pmTableDynaform").hide();
                                 }
                             else
                                 {
-                                    Ext.get("blankDynaform").hide();
-                                    Ext.get("pmTableDynaform").show();
+                                    Ext.getCmp("blankDynaform").hide();
+                                    Ext.getCmp("pmTableDynaform").show();
                                 }
                         }
                          }
@@ -385,11 +381,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             width:          150,
                             xtype:          'combo',
                             mode:           'local',
-                            editable:       false,
+                            editable:       true,
                             triggerAction:  'all',
                             forceSelection: true,
                             fieldLabel:     'Create from a PM Table',
-                            //name:           'ADD_TABLE',
+                            emptyText    : 'Select Table',
                             displayField:   'ADD_TAB_NAME',
                             valueField:     'ADD_TAB_UID',
                             value        : '---------------------------',
@@ -426,16 +422,17 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             xtype: 'grid',
                             id:'fieldsGrid',
                             hidden: true,
-                            ds: tablesFieldsStore,
+                            store: tablesFieldsStore,
                             cm: addTableColumns,
                             width: 550,
                             //height: 300,
                             autoHeight: true,
+                            clicksToEdit: 1,
                             plugins: [editor],
                             //loadMask    : true,
                             loadingText : 'Loading...',
-                            border: true,
-                            renderTo : Ext.getBody()
+                            border: false
+                            //renderTo : Ext.getBody()
                          }
                      ]
                 }
@@ -554,8 +551,9 @@ ProcessOptions.prototype.dbConnection = function()
             text: 'New',
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
-                formWindow.show();
                 dbconnForm.getForm().reset();
+                formWindow.show();
+                
             }
   });
 
@@ -710,6 +708,7 @@ ProcessOptions.prototype.dbConnection = function()
       //allowBlank:false,
       width:450,
       frame:true,
+      autoDestroy : true,
       monitorValid : true,
       plain: true,
       bodyStyle: 'padding:5px;',
@@ -725,9 +724,10 @@ ProcessOptions.prototype.dbConnection = function()
                         forceSelection: true,
                         name: 'DBS_TYPE',
                         displayField:  'name',
-                        //emptyText    : 'Select Format',
+                        emptyText    : 'Select Format',
                         valueField   : 'value',
-                        value        : 'Select',
+                        allowBlank: false,
+                        //value        : 'Select',
                         store: new Ext.data.JsonStore({
                                  fields : ['name', 'value'],
                                  data   : [

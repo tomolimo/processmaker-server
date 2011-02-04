@@ -5485,6 +5485,8 @@ class processMap {
     {
        try
        {
+        $aDBList = array ();
+        //$aDBList [] = array ('STEP_TITLE' => 'char', 'STEP_UID' => 'char', 'STEP_TYPE_OBJ' => 'char', 'STEP_CONDITION' => 'char', 'STEP_POSITION' => 'integer','STEP_MODE' => 'char','STEP_UID_OBJ' => 'char' );
         $sDelimiter = DBAdapter::getStringDelimiter();
         $oCriteria = new Criteria('workflow');
         $oCriteria->addSelectColumn(DbSourcePeer::DBS_UID);
