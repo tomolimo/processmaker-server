@@ -856,12 +856,12 @@ class wsBase
       $aData['USR_UID']         = $sUserUID;
       $aData['USR_PASSWORD']    = md5($sUserUID);
       $aData['USR_STATUS']      = 'ACTIVE';
-      $aData['USR_COUNTRY']     = 'US';
-      $aData['USR_CITY']        = 'FL';
-      $aData['USR_LOCATION']    = 'MIA';
+      $aData['USR_COUNTRY']     = '';
+      $aData['USR_CITY']        = '';
+      $aData['USR_LOCATION']    = '';
       $aData['USR_ADDRESS']     = '';
       $aData['USR_PHONE']       = '';
-      $aData['USR_ZIP_CODE']    = '33314';
+      $aData['USR_ZIP_CODE']    = '';
       $aData['USR_POSITION']    = '';
       $aData['USR_RESUME']      = '';
       $aData['USR_BIRTHDAY']    = date('Y-m-d');
