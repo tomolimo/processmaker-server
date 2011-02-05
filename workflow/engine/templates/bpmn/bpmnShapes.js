@@ -621,7 +621,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
     if (_39fd != null) {
         //Get the workflow object of the selected Figure object, so that we can compare with the new selected figure to remove ports
         _39fd.workflow.preSelectedFigure = _39fd.workflow.currentSelection;
-       // workflow.setBoundary(workflow.currentSelection);
+         //workflow.setBoundary(workflow.currentSelection);
         //Preventing Task from drawing outside canvas Code Starts here
         //@params - max X pos(canvas Width) = 918
         //@params - max Y pos(canvas Height) = 837

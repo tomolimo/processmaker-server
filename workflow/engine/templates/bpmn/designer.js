@@ -560,7 +560,7 @@ Ext.onReady ( function() {
                       NewShape.x = shapes.tasks[k][2];
                       NewShape.y = shapes.tasks[k][3];
                       NewShape.taskName = shapes.tasks[k][1];
-                    //  workflow.setBoundary(NewShape);
+                      workflow.setBoundary(NewShape);
                       workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                       NewShape.html.id = shapes.tasks[k][0];
                       NewShape.id = shapes.tasks[k][0];
@@ -588,7 +588,7 @@ Ext.onReady ( function() {
                               NewShape = eval("new "+srceventtype+"(_4562.workflow)");
                               NewShape.x = shapes.events[k][2];
                               NewShape.y = shapes.events[k][3];
-                           //   workflow.setBoundary(NewShape);
+                              workflow.setBoundary(NewShape);
                               workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                               //Setting newshape id to the old shape id
                               NewShape.html.id = shapes.events[k][0];
@@ -604,7 +604,7 @@ Ext.onReady ( function() {
                       NewShape = eval("new bpmnAnnotation(_4562.workflow)");
                       NewShape.x = shapes.annotations[k][2];
                       NewShape.y = shapes.annotations[k][3];
-                     // workflow.setBoundary(NewShape);
+                      workflow.setBoundary(NewShape);
                       workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                       //Setting newshape id to the old shape id
                       NewShape.html.id = shapes.annotations[k][0];
@@ -617,7 +617,7 @@ Ext.onReady ( function() {
                   NewShape = eval("new bpmnSubProcess(_4562.workflow)");
                   NewShape.x = shapes.subprocess[k][2];
                   NewShape.y = shapes.subprocess[k][3];
-                 // workflow.setBoundary(NewShape);
+                  workflow.setBoundary(NewShape);
                   workflow.addFigure(NewShape, NewShape.x, NewShape.y);
                   //Setting newshape id to the old shape id
                   NewShape.html.id = shapes.subprocess[k][0];

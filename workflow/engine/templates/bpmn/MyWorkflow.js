@@ -45,8 +45,8 @@ MyWorkflow.prototype.setBoundary = function (oShape) {
     workflow.main.setWidth(oShape.x+150);
   }
   //Top Border
-  if (oShape.y < 55) {
-    oShape.y = 60;
+  if (oShape.y < 20) {
+    oShape.y = 20;
   }
   //Bottom Border
   if (oShape.y > 1000 - oShape.height) {
