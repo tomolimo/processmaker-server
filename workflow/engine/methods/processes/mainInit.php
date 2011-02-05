@@ -38,7 +38,4 @@
   $oHeadPublisher->assign('TRANSLATIONS', $translations);
   G::RenderPage('publish', 'extJs');
   
-  
-  
-  
-  
+

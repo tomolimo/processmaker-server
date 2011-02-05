@@ -1,3 +1,20 @@
+new Ext.KeyMap(document, {
+  key: Ext.EventObject.F5,
+  fn: function(keycode, e) {
+  	//here (in the toolbar) we are disabling the ctrl-f5
+    e.stopEvent();      
+    //if (! e.ctrlKey) {
+    //  if (Ext.isIE)
+    //    e.browserEvent.keyCode = 8;
+    //  e.stopEvent();
+      //Ext.Msg.alert('Refresh', 'You clicked: F5');
+      //document.location = document.location;
+    //}
+    //else
+      //Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+  }
+});
+
 Ext.onReady ( function() {
 
   workflow  = new MyWorkflow("paintarea");
@@ -213,6 +230,14 @@ Ext.onReady ( function() {
         iconCls: 'button_menu_ext ss_sprite ss_zoom_out',
         handler: function() {
           document.getElementById('designerFrame').contentWindow.workflow.zoom('out');
+        }
+      }, {
+        text:'Edit Process',
+        iconCls: 'button_menu_ext ss_sprite ss_pencil',
+        handler: function() {
+          if(typeof pro_uid !== 'undefined') {
+        	  location.href = '../processes/processes_Map?PRO_UID=' +pro_uid+ '&rand=' +Math.random()
+        	}
         }
       }
     ]

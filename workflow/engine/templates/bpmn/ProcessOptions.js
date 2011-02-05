@@ -1,5 +1,5 @@
 ProcessOptions=function(id){
-Workflow.call(this,id);
+  Workflow.call(this,id);
 };
 ProcessOptions.prototype=new Workflow;
 ProcessOptions.prototype.type="ProcessOptions";
@@ -14,223 +14,223 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var pro_uid = workflow.getUrlVars();
 
   var dynaFields = Ext.data.Record.create([
-            { name: 'DYN_UID', type: 'string'},
-            { name: 'DYN_TYPE', type: 'string'},
-            { name: 'DYN_TITLE', type: 'string'},
-            { name: 'DYN_DISCRIPTION',type: 'string'},
-            {name: 'ACTION', type: 'string'}
-            ]);
+    { name: 'DYN_UID', type: 'string'},
+    { name: 'DYN_TYPE', type: 'string'},
+    { name: 'DYN_TITLE', type: 'string'},
+    { name: 'DYN_DISCRIPTION',type: 'string'},
+    {name: 'ACTION', type: 'string'}
+    ]);
 
   var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
-        });
+    saveText: 'Update'
+  });
   var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: 'New',
-            iconCls: 'button_menu_ext ss_sprite ss_add',
-            //iconCls: 'application_add',
-            handler: function () {
-                dynaformDetails.getForm().reset();
-                formWindow.show();
-            }
+    id: 'btnAdd',
+    text: 'New',
+    iconCls: 'button_menu_ext ss_sprite ss_add',
+    //iconCls: 'application_add',
+    handler: function () {
+      dynaformDetails.getForm().reset();
+      formWindow.show();
+    }
   });
 
   var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: 'Delete',
-            iconCls: 'button_menu_ext ss_sprite ss_delete',
-            handler: function (s) {
-                editor.stopEditing();
-                var s = dynaformGrid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
-
-                    //First Deleting dynaform from Database using Ajax
-                    var dynUID      = r.data.DYN_UID;
-
-                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.DYN_UID != "")
+    id: 'btnRemove',
+    text: 'Delete',
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: function (s) {
+      editor.stopEditing();
+      var s = dynaformGrid.getSelectionModel().getSelections();
+      for(var i = 0, r; r = s[i]; i++){
+        //First Deleting dynaform from Database using Ajax
+        var dynUID      = r.data.DYN_UID;
+      
+        //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
+        //else its a BLANK ROW for which Ajax should not be called.
+        if( r.data.DYN_UID != "")
+        {
+          Ext.Ajax.request({
+            url   : '../dynaforms/dynaforms_Delete.php',
+            method: 'POST',
+            params: {
+              functions      : 'getDynaformAssign',
+              PRO_UID        : pro_uid,
+              DYN_UID        : dynUID
+            },
+            success: function(response) {
+              //First check whether selected Dynaform is assigned to a task steps or not.
+              //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
+              if(response.responseText == "")
+              {
+                Ext.Ajax.request({
+                  url   : '../dynaforms/dynaforms_Delete.php',
+                  method: 'POST',
+                  params: {
+                    functions      : 'getRelationInfDynaform',
+                    DYN_UID        : dynUID
+                  },
+                  success: function(response) {
+                    //Second check whether selected Dynaform is assigned to a processes supervisors or not.
+                    //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
+                    if(response.responseText == "")
                     {
-                        Ext.Ajax.request({
-                          url   : '../dynaforms/dynaforms_Delete.php',
-                          method: 'POST',
-                          params: {
-                                functions      : 'getDynaformAssign',
-                                PRO_UID        : pro_uid,
-                                DYN_UID        : dynUID
-                          },
-                          success: function(response) {
-                             //First check whether selected Dynaform is assigned to a task steps or not.
-                            //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
-                             if(response.responseText == "")
-                              {
-                               Ext.Ajax.request({
-                                  url   : '../dynaforms/dynaforms_Delete.php',
-                                  method: 'POST',
-                                  params: {
-                                        functions      : 'getRelationInfDynaform',
-                                        DYN_UID        : dynUID
-                                  },
-                                  success: function(response) {
-                                    //Second check whether selected Dynaform is assigned to a processes supervisors or not.
-                                    //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
-                                    if(response.responseText == "")
-                                      {
-                                         Ext.Ajax.request({
-                                          url   : '../dynaforms/dynaforms_Delete.php',
-                                          method: 'POST',
-                                          params: {
-                                                functions      : 'deleteDynaform',
-                                                DYN_UID        : dynUID
-                                          },
-                                          success: function(response) {
-                                            Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
-                                            //Secondly deleting from Grid
-                                            taskDynaform.remove(r);
-                                            //Reloading store after deleting dynaform
-                                            taskDynaform.reload();
-                                          }
-                                        });
-                                      }
-                                     else
-                                       Ext.MessageBox.alert ('Status','Dynaform assigned to a process supervisors cannot be deleted.');
-                                  }
-                                });
-                              }
-                              else
-                                Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
-                          }
-                     });
+                      Ext.Ajax.request({
+                        url   : '../dynaforms/dynaforms_Delete.php',
+                        method: 'POST',
+                        params: {
+                          functions      : 'deleteDynaform',
+                          DYN_UID        : dynUID
+                        },
+                        success: function(response) {
+                        	PMExt.notify( _('ID_MY_LABEL_WITH_ANY_TITLE') , _('ID_MY_MSG') );
+                          //Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
+                          //Secondly deleting from Grid
+                          taskDynaform.remove(r);
+                          //Reloading store after deleting dynaform
+                          taskDynaform.reload();
+                        }
+                      });
                     }
-
-                }
+                    else
+                      PMExt.warning(_('ID_STATUS'), _('ID_CONFIRM_CANCEL_CASE'));
+                      Ext.MessageBox.alert ('Status','Dynaform assigned to a process supervisors cannot be deleted.');
+                  }
+                });
+              }
+              else
+                  Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
             }
-        });
+          });
+        }      
+      }
+    }
+  });
 
   var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove]
-        });
+    items: [btnAdd, btnRemove]
+  });
 
   var taskDynaform = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : dynaFields,
-            proxy        : new Ext.data.HttpProxy({
-                           url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
-                           })
-          });
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : dynaFields,
+    proxy        : new Ext.data.HttpProxy({
+      url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
+    })
+  });
  taskDynaform.load();
 
  //Creating store for getting list of additional PM tables
  var additionalTablesFields = Ext.data.Record.create([
-            { name: 'ADD_TAB_UID', type: 'string'},
-            { name: 'ADD_TAB_NAME', type: 'string'},
-            { name: 'ADD_TAB_DESCRIPTION',type: 'string'}
-            ]);
+   { name: 'ADD_TAB_UID', type: 'string'},
+   { name: 'ADD_TAB_NAME', type: 'string'},
+   { name: 'ADD_TAB_DESCRIPTION',type: 'string'}
+   ]);
 
  var additionalTables = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : additionalTablesFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?action=getAdditionalTables'
-            })
-          });
+   root         : 'data',
+   totalProperty: 'totalCount',
+   idProperty   : 'gridIndex',
+   remoteSort   : true,
+   fields       : additionalTablesFields,
+   proxy: new Ext.data.HttpProxy({
+     url: 'proxyExtjs?action=getAdditionalTables'
+   })
+ });
  additionalTables.load();
 
  //Creating store for getting list of Fields of additional PM tables
   var TablesFields = Ext.data.Record.create([
-            { name: 'FLD_UID',type: 'string'},
-            { name: 'FLD_NAME',type: 'string'},
-            { name: 'FLD_DESCRIPTION',type: 'string'},
-            { name: 'FLD_TYPE',type: 'string'}
-            ]);
+    { name: 'FLD_UID',type: 'string'},
+    { name: 'FLD_NAME',type: 'string'},
+    { name: 'FLD_DESCRIPTION',type: 'string'},
+    { name: 'FLD_TYPE',type: 'string'}
+    ]);
 
- var tablesFieldsStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : TablesFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyDynaform'
-            })
-          });
+  var tablesFieldsStore = new Ext.data.JsonStore({
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : TablesFields,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyDynaform'
+    })
+  });
  //tablesFieldsStore.load();
 
  // Renderer function
-    function renderInstall(value, id, r)
+  function renderInstall(value, id, r)
+  {
+    var id = Ext.id();
+    var uidbutton = createGridButton.defer(1, this, ['Install', id, r]);
+    return uidbutton;
+    //return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+    /*if (r.data.registered == false)
     {
+        createGridButton.defer(1, this, ['Install', id, r]);
+        return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+    }else
+    {
+        createGridButton.defer(1, this, ['ReInstall', id, r]);
+        return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+    }*/
+    
+  }
+  
+  function createGridButton(value, id, record) {
+    new Ext.Button({
+        text: 'UID'
+        ,iconCls: 'button_menu_ext ss_sprite ss_delete'
+        ,handler : function(btn, e) {
+            // do whatever you want here
+        }
+    });
+  }
 
-            var id = Ext.id();
-            var uidbutton = createGridButton.defer(1, this, ['Install', id, r]);
-            return uidbutton;
-            //return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-            /*if (r.data.registered == false)
-            {
-                createGridButton.defer(1, this, ['Install', id, r]);
-                return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-            }else
-            {
-                createGridButton.defer(1, this, ['ReInstall', id, r]);
-                return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-            }*/
+  var dynaformColumns = new Ext.grid.ColumnModel({
+    columns: [
+    new Ext.grid.RowNumberer(),
+        {
+            id: 'DYN_TITLE',
+            header: 'Title',
+            dataIndex: 'DYN_TITLE',
+            width: 280,
+            editable: false,
+            editor: new Ext.form.TextField({
+            allowBlank: false
+            })
+        },{
+            id: 'ACTION',
+            header: 'Type',
+            dataIndex: 'ACTION',
+            width: 280,
+            editable: false,
+            editor: new Ext.form.TextField({
+            allowBlank: false
+            })
+        },
+        {
+            sortable: false,
+            renderer: function(val, meta, record)
+               {
+                    return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
+               }
+        },
+        {
+            sortable: false,
+            renderer: function(val, meta, record)
+               {
+                    return String.format("<input type='submit' name='UID' value='UID' onclick=''>",record.data.DYN_UID);
+               }
+        }
+    ]
+  });
 
-    }
-    function createGridButton(value, id, record) {
-        new Ext.Button({
-            text: 'UID'
-            ,iconCls: 'button_menu_ext ss_sprite ss_delete'
-            ,handler : function(btn, e) {
-                // do whatever you want here
-            }
-        });
-    }
-
- var dynaformColumns = new Ext.grid.ColumnModel({
-            columns: [
-                new Ext.grid.RowNumberer(),
-                    {
-                        id: 'DYN_TITLE',
-                        header: 'Title',
-                        dataIndex: 'DYN_TITLE',
-                        width: 280,
-                        editable: false,
-                        editor: new Ext.form.TextField({
-                        allowBlank: false
-                        })
-                    },{
-                        id: 'ACTION',
-                        header: 'Type',
-                        dataIndex: 'ACTION',
-                        width: 280,
-                        editable: false,
-                        editor: new Ext.form.TextField({
-                        allowBlank: false
-                        })
-                    },
-                    {
-                        sortable: false,
-                        renderer: function(val, meta, record)
-                           {
-                                return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
-                           }
-                    },
-                    {
-                        sortable: false,
-                        renderer: function(val, meta, record)
-                           {
-                                return String.format("<input type='submit' name='UID' value='UID' onclick=''>",record.data.DYN_UID);
-                           }
-                    }
-                ]
-        });
-
- var addTableColumns = new Ext.grid.ColumnModel({
+  var addTableColumns = new Ext.grid.ColumnModel({
             columns: [
                 new Ext.grid.RowNumberer(),
                     {

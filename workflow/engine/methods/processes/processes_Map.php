@@ -46,6 +46,7 @@ if( $access != 1 ){
 }  
 $processUID = $_GET['PRO_UID'];
 $_SESSION['PROCESS'] = $processUID;
+$_SESSION['PROCESSMAP'] = 'LEIMNUD';
 
 $oTemplatePower = new TemplatePower(PATH_TPL . 'processes/processes_Map.html');
 $oTemplatePower->prepare();

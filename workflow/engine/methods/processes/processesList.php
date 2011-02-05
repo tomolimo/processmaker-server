@@ -3,7 +3,7 @@
  * processes_List.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2008 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -35,7 +35,8 @@ if( isset($_POST['category']) && $_POST['category'] !== '<reset>' ){
     $proData = $oProcess->getAllProcesses($start, $limit, $_POST['category'], $_POST['processName']);
   else
     $proData = $oProcess->getAllProcesses($start, $limit, $_POST['category']);
-} else {
+} 
+else {
   if( isset($_POST['processName']) )
     $proData = $oProcess->getAllProcesses($start, $limit, null, $_POST['processName']);
   else
@@ -43,9 +44,6 @@ if( isset($_POST['category']) && $_POST['category'] !== '<reset>' ){
 }
 $r->data = $proData;
 
-$r->totalCount = 0; //$oProcess->getAllProcessesCount();
+$r->totalCount = count($proData); //$oProcess->getAllProcessesCount();
 
-//print_R($r)
 echo G::json_encode($r);
-
-

@@ -3,8 +3,12 @@
   if( ! isset($_GET['PRO_UID']) )
     throw new Exception('The Process ID was not set!');
 
+  $processUID = $_GET['PRO_UID'];
+  $_SESSION['PROCESS'] = $processUID;
+  $_SESSION['PROCESSMAP'] = 'BPMN';
+  
   require_once 'classes/model/Process.php';
-  $process = ProcessPeer::retrieveByPK($_GET['PRO_UID']);
+  $process = ProcessPeer::retrieveByPK( $processUID );
   
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->usingExtJs('ux/miframe');

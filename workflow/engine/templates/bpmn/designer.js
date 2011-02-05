@@ -1,3 +1,16 @@
+new Ext.KeyMap(document, {
+  key: Ext.EventObject.F5,
+  fn: function(keycode, e) {
+    e.stopEvent();      
+    if (Ext.isIE)
+      e.browserEvent.keyCode = 8;
+    e.stopEvent();
+    Ext.Msg.alert('Refresh', 'You clicked: F5');
+    location = "../bpmn/designer?PRO_UID=" + pro_uid;
+    document.location = document.location;
+  }
+});
+
 Ext.onReady ( function() {
 
   workflow  = new MyWorkflow("paintarea");

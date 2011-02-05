@@ -38,7 +38,9 @@ if( $access != 1 ) {
   }
   exit();
 }*/
-
+//next two variables store the current process uid and the last processmap used 
+//print_r ($_SESSION['PROCESS'] );
+//print_r ($_SESSION['PROCESSMAP'] );
 $RBAC->requirePermissions('PM_FACTORY');
 
 $G_MAIN_MENU            = 'processmaker';
@@ -48,9 +50,9 @@ $G_ID_SUB_MENU_SELECTED = '-';
 
 $G_PUBLISH = new Publisher;
 $oHeadPublisher =& headPublisher::getSingleton();
-$oHeadPublisher->addScriptFile('/jscore/processes/main.js');
+//$oHeadPublisher->addScriptFile('/jscore/processes/main.js');
 $G_PUBLISH->AddContent('view', 'processes/mainLoad');
-//G::RenderPage('publish');
+
 if( isset($_GET['type']) )
 	  G::RenderPage( "publishBlank", "blank");
 	else

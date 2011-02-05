@@ -1192,44 +1192,44 @@ ProcessMapContext.prototype.processDynaform= function()
   var pro_uid = workflow.getUrlVars();
 
   var supervisorDynaformsFields = Ext.data.Record.create([
-            {name: 'DYN_TITLE',type: 'string'},
-            {name: 'STEP_UID',type: 'string'},
-            {name: 'STEP_UID_OBJ',type: 'string'},
-            {name: 'STEP_TYPE_OBJ',type: 'string'},
-            {name: 'STEP_POSITION',type: 'string'},
-            {name: 'DYN_UID',type: 'string'}
-            ]);
+    {name: 'DYN_TITLE',type: 'string'},
+    {name: 'STEP_UID',type: 'string'},
+    {name: 'STEP_UID_OBJ',type: 'string'},
+    {name: 'STEP_TYPE_OBJ',type: 'string'},
+    {name: 'STEP_POSITION',type: 'string'},
+    {name: 'DYN_UID',type: 'string'}
+  ]);
   var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
-        });
+    saveText: 'Update'
+  });
 
   var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: 'Assign',
-            iconCls: 'application_add',
-            handler: function(){
-                var User = grid.getStore();
-                var e = new supervisorDynaformsFields({
-                     DYN_UID: '',
-                     STEP_UID: '',
-                     STEP_UID_OBJ: '',
-                     STEP_TYPE_OBJ: '',
-                     STEP_POSITION: ''
-                });
-
-                //storeUsers.reload();
-                if(availableSupervisorDynaforms.data.items.length == 0)
-                     Ext.MessageBox.alert ('Status','No dynaform are available. All dynaforms have been already assigned.');
-                else
-                {
-                    editor.stopEditing();
-                    supervisorDynaforms.insert(0, e);
-                    grid.getView().refresh();
-                    //grid.getSelectionModel().selectRow(0);
-                    editor.startEditing(0, 0);
-                }
-            }
-        });
+    id: 'btnAdd',
+    text: 'Assign',
+    iconCls: 'application_add',
+    handler: function(){
+      var User = grid.getStore();
+      var e = new supervisorDynaformsFields({
+        DYN_UID: '',
+        STEP_UID: '',
+        STEP_UID_OBJ: '',
+        STEP_TYPE_OBJ: '',
+        STEP_POSITION: ''
+      });
+      
+      //storeUsers.reload();
+      if(availableSupervisorDynaforms.data.items.length == 0)
+           Ext.MessageBox.alert ('Status','No dynaform are available. All dynaforms have been already assigned.');
+      else
+      {
+        editor.stopEditing();
+        supervisorDynaforms.insert(0, e);
+        grid.getView().refresh();
+        //grid.getSelectionModel().selectRow(0);
+        editor.startEditing(0, 0);
+      }
+    }
+  });
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
