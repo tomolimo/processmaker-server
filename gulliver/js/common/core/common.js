@@ -2,7 +2,7 @@
  */
   function get_xmlhttp() {
     try {
-      xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+      xmlhttp = new ActiveXObject("Msxml2.XMLHTTP1");
     } catch (e) {
       try {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
@@ -904,7 +904,7 @@ function refillDropdown( fldName, ajax_server, values , InitValue)
 
 function iframe_get_xmlhttp() {
   try {
-    xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+    xmlhttp = new ActiveXObject('Msxml2.XMLHTTP2');
   } catch (e) {
     try {
       xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
@@ -919,22 +919,24 @@ function iframe_get_xmlhttp() {
 }
 
 function get_xmlhttp() {
-        try {
-                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-        } catch (e) {
-                try {
-                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (E) {
-                        xmlhttp = false;
-                }
-        }
-        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-                xmlhttp = new XMLHttpRequest();
-        }
-        return xmlhttp;
+  try {
+  	xmlhttp = false;
+  	if ( window.ActiveXObject )
+      xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  } 
+  catch (e) {
+    try {
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    } 
+    catch (E) {
+      xmlhttp = false;
+    }
+  }
+  if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+    xmlhttp = new XMLHttpRequest();
+  }
+  return xmlhttp;
 }
-
-
 
 function refillTextError( div_container, fldName, ajax_server, values )
 {
@@ -976,7 +978,7 @@ function refillTextError( div_container, fldName, ajax_server, values )
 
 function iframe_get_xmlhttp() {
   try {
-    xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+    xmlhttp = new ActiveXObject('Msxml2.XMLHTTP5');
   } catch (e) {
     try {
       xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');

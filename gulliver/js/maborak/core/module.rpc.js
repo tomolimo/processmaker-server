@@ -60,17 +60,19 @@ leimnud.Package.Public({
 			this.core = function()
 			{
 				try{
-					var xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  		  	xmlhttp = false;
+					if ( window.ActiveXObject ) 
+					xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
 				}
 				catch(e)
 				{
 					try
 					{
-						var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 					}
 					catch(e)
 					{
-						var xmlhttp = false;
+						xmlhttp = false;
 					}
 				}
 				return (!xmlhttp && typeof XMLHttpRequest!='undefined')?
