@@ -220,17 +220,55 @@ Ext.onReady ( function() {
         })
 
       }, {
-        text:'Zoom In',
+        xtype: 'tbsplit',
+        text:'Zoom',
         iconCls: 'button_menu_ext ss_sprite ss_zoom_in',
-        handler: function() {
-          document.getElementById('designerFrame').contentWindow.workflow.zoom('in');
-        }
+         menu: new Ext.menu.Menu({
+          items: [{
+              text    : '25%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('25');
+               }
+            },{
+              text    : '50%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('50');
+               }
+            },{
+              text    : '75%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('75');
+               }
+            },{
+              text    : '100%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('100');
+               }
+            },{
+              text    : '125%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('125');
+               }
+            },{
+              text    : '150%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('150');
+               }
+            },{
+              text    : '200%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('200');
+               }
+            }
+          ]
+        })
+       
       }, {
-        text:'Zoom Out',
-        iconCls: 'button_menu_ext ss_sprite ss_zoom_out',
-        handler: function() {
-          document.getElementById('designerFrame').contentWindow.workflow.zoom('out');
-        }
+//        text:'Zoom Out',
+//        iconCls: 'button_menu_ext ss_sprite ss_zoom_out',
+//        handler: function() {
+//          document.getElementById('designerFrame').contentWindow.workflow.zoom('out');
+//        }
       }, {
         text:'Edit Process',
         iconCls: 'button_menu_ext ss_sprite ss_pencil',
