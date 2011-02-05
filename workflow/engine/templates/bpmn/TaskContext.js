@@ -708,7 +708,7 @@ TaskContext.prototype.editUsers= function()
 
 TaskContext.prototype.editTaskProperties= function()
 {
-    var ProcMapObj= new ProcessMapContext();
+    var ProcMapObj = new ProcessMapContext();
     var taskExtObj = new TaskContext();
     var taskId  = workflow.currentSelection.id;
 
@@ -728,549 +728,511 @@ TaskContext.prototype.editTaskProperties= function()
 
 
     var taskPropertiesTabs = new Ext.FormPanel({
-        labelWidth  : 100,
+        labelWidth  : 140,
+        //border      : false,
         monitorValid : true,
         // store       : taskDetails,
         //url         : 'proxyTaskPropertiesDetails.php',
-        bodyStyle   : 'padding:5px 5px 0',
         width       : 600,
         items: {
             xtype:'tabpanel',
             activeTab: 0,
+            bodyStyle   : 'padding:10 10 0 ',
             defaults:{
-                autoHeight:true,
-                bodyStyle:'padding:10px'
+              labelWidth : 140,
+              height : 300
             },
             items:[{
-                title:'Defination',
-                layout:'form',
-                defaults: {
-                    width: 230
-                },
-                defaultType: 'textfield',
-                items: [{
-                    fieldLabel: 'Title',
-                    name: 'TAS_TITLE',
-                    //dataIndex: 'TAS_TITLE',
-                    //value:  _5625.scope.workflow.taskDetails.TAS_TITLE,
-                    allowBlank: false,
-                    width: 300
+              title:'Definition',
+              layout:'form',
+              defaults: {
+                width: 230
+              },
+              defaultType: 'textfield',
+              items: [{
+                fieldLabel: 'Title',
+                name: 'TAS_TITLE',
+                width: 350
+              },{
+                xtype: 'textarea',
+                fieldLabel: 'Description',
+                name: 'TAS_DESCRIPTION',
+                allowBlank: true,
+                width: 350,
+                height : 150
+              },{
+                xtype: 'fieldset',
+                layout:'column',
+                border : false,
+                width: 550,
+                items:[{
+                  columnWidth:.7,
+                  layout: 'form',
+                  border : false,
+                  items: [{
+                    xtype: 'textfield',
+                    labelWidth : 130,
+                    fieldLabel: 'Variable for Case priority',
+                    name: 'TAS_PRIORITY_VARIABLE',
+                    anchor:'100%'                            
+                  }]
                 },{
-                    xtype: 'textarea',
-                    fieldLabel: 'Description',
-                    name: 'TAS_DESCRIPTION',
-                    //dataIndex: 'TAS_DESCRIPTION',
-                    //value: _5625.scope.workflow.taskDetails.TAS_DESCRIPTION,
-                    allowBlank: true,
-                    width: 300,
-                    height : 150
-                },{
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 550,
-                    items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textfield',
-                            //id: 'priorityVariable',
-                            fieldLabel: 'Variable for Case priority',
-                            name: 'TAS_PRIORITY_VARIABLE',
-                            anchor:'100%'
-                            
-                         }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin',
-                            handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.fieldId         = 'priorityVariable' ;
-                                    workflow.formSelected    = taskPropertiesTabs;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                    console.log(rowData);
-                                   }
-                        }]
-                    }]
+                  columnWidth:.2,
+                  layout: 'form',
+                  border:false,
+                  items: [{
+                    xtype:'button',
+                    title: ' ',
+                    text: '@@',
+                    name: 'selectorigin',
+                    handler: function (s) {
+                      workflow.variablesAction = 'form';
+                      workflow.fieldId         = 'priorityVariable' ;
+                      workflow.formSelected    = taskPropertiesTabs;
+                      var rowData = ProcMapObj.ExtVariables();
+                      console.log(rowData);
+                    }
+                  }]
+                }]
                },{
                 xtype: 'checkbox',
                 fieldLabel: 'Starting Task',
                 name: 'TAS_START'
-                //checked: 'TAS_START'
               }]
             },{
-                title:'Assignment Rules',
-                layout:'form',
-                defaults: {
-                    width: 260
-                },
-               items: [{
-                    xtype: 'radiogroup',
-                    id:    'assignType',
-                    fieldLabel: 'Cases to be Assigned by',
-                    itemCls: 'x-check-group-alt',
-                    columns: 1,
-                    items: [
-                    {
-                        boxLabel: 'Cyclic Assignment',
-                        id: 'BALANCED',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'BALANCED',
-                        checked: false,
-                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
-                    },
-
-                    {
-                        boxLabel: 'Manual Assignment',
-                        id: 'MANUAL',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'MANUAL',
-                        checked:false,
-                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
-                    },
-
-                    {
-                        boxLabel: 'Value Based',
-                        id:'EVALUATE',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'EVALUATE',
-                        checked:false,
-                        listeners: {
-                            'check':{
-                                fn: function(){
-                                    Ext.getCmp("evaluate").show();
-                                    Ext.getCmp("staticMI").hide();
-                                    Ext.getCmp("cancelMI").hide();
-                                }
-                            }
-                        }
-                    },
-
-                    {
-                        boxLabel: 'Reports to',
-                        id:'REPORT_TO',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'REPORT_TO',
-                        checked:false,
-                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
-                    },
-                    {
-                        boxLabel: 'Self Service',
-                        id:'SELF_SERVICE',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'SELF_SERVICE',
-                        checked:false,
-                        listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
-                    },
-
-                    {
-                        boxLabel: 'Static Partial Join for Multiple Instance',
-                        id:'STATIC_MI',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'STATIC_MI',
-                        checked:false,
-                        listeners: {
-                            'check':{
-                                fn: function(){
-                                    Ext.getCmp("staticMI").show();
-                                    Ext.getCmp("cancelMI").show();
-                                    Ext.getCmp("evaluate").hide();
-                                }
-                            }
-                        }
-                    },
-
-                    {
-                        boxLabel: 'Cancelling Partial Join for Multiple Instance',
-                        id:'CANCEL_MI',
-                        name: 'TAS_ASSIGN_TYPE',
-                        inputValue: 'CANCEL_MI',
-                        checked:false,
-                        listeners: {
-                            'check':{
-                                fn: function(){
-                                    Ext.getCmp("staticMI").show();
-                                    Ext.getCmp("cancelMI").show();
-                                    Ext.getCmp("evaluate").hide();
-                                }
-                            }
-                        }
+              title:'Assignment Rules',
+              layout     : 'form',
+              defaults: {
+                width: 260
+              },
+              items: [{
+                xtype: 'radiogroup',
+                id:    'assignType',
+                fieldLabel: 'Cases to be Assigned by',
+                itemCls: 'x-check-group-alt',
+                columns: 1,
+                items: [{
+                  boxLabel: 'Cyclic Assignment',
+                  id: 'BALANCED',
+                  name: 'TAS_ASSIGN_TYPE',
+                  inputValue: 'BALANCED',
+                  checked: false,
+                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
+                },{
+                  boxLabel: 'Manual Assignment',
+                  id: 'MANUAL',
+                  name: 'TAS_ASSIGN_TYPE',
+                  inputValue: 'MANUAL',
+                  checked:false,
+                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
+                },{
+                  boxLabel: 'Value Based',
+                  id:'EVALUATE',
+                  name: 'TAS_ASSIGN_TYPE',
+                  inputValue: 'EVALUATE',
+                  checked:false,
+                  listeners: {
+                    'check':{
+                      fn: function(){
+                        Ext.getCmp("evaluate").show();
+                        Ext.getCmp("staticMI").hide();
+                        Ext.getCmp("cancelMI").hide();
+                      }
                     }
-                    /*{boxLabel: 'Item 2', name: 'rb-auto', inputValue: 2,
-                        listeners: {
-                            'check':{fn: function(){Ext.getCmp("txt-test4").hide();Ext.getCmp("toggler").collapse();(function(){Ext.getCmp("toggler").hide();}).defer(1000);},scope: this}}
-                    }*/
-                    ]
+                  }
                 },{
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 550,
-                    //title: 'valueBased',
-                    hidden: true,
-                    id: 'evaluate',
-                    items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Variable for Value Based Assignment',
-                            name: 'TAS_ASSIGN_VARIABLE',
-                            //value: _5625.scope.workflow.taskDetails.TAS_ASSIGN_VARIABLE
-                            anchor:'100%'
-                        }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin'
-                        //anchor:'35%'
-                        }]
-                    }]
+                  boxLabel: 'Reports to',
+                  id:'REPORT_TO',
+                  name: 'TAS_ASSIGN_TYPE',
+                  inputValue: 'REPORT_TO',
+                  checked:false,
+                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                 },{
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 550,
-                    //title: 'MI',
-                    hidden: true,
-                    id: 'staticMI',
-                    items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Variable for No of Instances',
-                            name: 'TAS_MI_INSTANCE_VARIABLE',
-                            //value: _5625.scope.workflow.taskDetails.TAS_MI_INSTANCE_VARIABLE
-                            anchor:'100%'
-                        }]
+                  boxLabel: 'Self Service',
+                  id:'SELF_SERVICE',
+                  name: 'TAS_ASSIGN_TYPE',
+                  inputValue: 'SELF_SERVICE',
+                  checked:false,
+                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                 },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@@',
-                            name: 'selectorigin'
-                        //anchor:'35%'
-                        }]
-                    }]
+                  boxLabel: 'Static Partial Join for Multiple Instance',
+                  id:'STATIC_MI',
+                  name: 'TAS_ASSIGN_TYPE',
+                  inputValue: 'STATIC_MI',
+                  checked:false,
+                  listeners: {
+                    'check':{
+                      fn: function(){
+                        Ext.getCmp("staticMI").show();
+                        Ext.getCmp("cancelMI").show();
+                        Ext.getCmp("evaluate").hide();
+                      }
+                    }
+                  }
                 },{
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 550,
-                    //title: 'MI2',
-                    hidden: true,
-                    id: 'cancelMI',
-                    items:[{
-                        columnWidth:.6,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Variable for No of Instances to complete',
-                            name: 'TAS_MI_COMPLETE_VARIABLE',
-                            //value: _5625.scope.workflow.taskDetails.TAS_MI_COMPLETE_VARIABLE
-                            anchor:'100%'
-                        }]
+                  boxLabel: 'Cancelling Partial Join for Multiple Instance',
+                  id   : 'CANCEL_MI',
+                  name : 'TAS_ASSIGN_TYPE',
+                  inputValue: 'CANCEL_MI',
+                  checked:false,
+                  listeners: {
+                    'check':{
+                      fn: function(){
+                        Ext.getCmp("staticMI").show();
+                        Ext.getCmp("cancelMI").show();
+                        Ext.getCmp("evaluate").hide();
+                      }
+                    }
+                  }
+                }]
                 },{
-                    columnWidth:.3,
+                  xtype: 'fieldset',
+                  layout:'column',
+                  border:false,
+                  width: 550,
+                  hidden: true,
+                  id: 'evaluate',
+                  items:[{
+                    columnWidth:.8,
                     layout: 'form',
                     border:false,
                     items: [{
+                      xtype: 'textfield',
+                      fieldLabel: 'Variable for Value Based Assignment',
+                      name: 'TAS_ASSIGN_VARIABLE',
+                      anchor:'100%'
+                    }]
+                    },{
+                      columnWidth:.2,
+                      layout: 'form',
+                      border:false,
+                      items: [{
                         xtype:'button',
                         title: ' ',
                         text: '@@',
                         name: 'selectorigin'
-                    //anchor:'35%'
+                      }]
+                    }
+                  ]
+                },{
+                  xtype: 'fieldset',
+                  layout:'column',
+                  border:false,
+                  width: 550,
+                  bodyStyle   : 'padding:0 0 0 ',
+                  hidden: true,
+                  id: 'staticMI',
+                  items:[{
+                    columnWidth:.8,
+                    layout: 'form',
+                    border:false,
+                    items: [{
+                      xtype: 'textfield',
+                      fieldLabel: 'Variable for No of Instances',
+                      name: 'TAS_MI_INSTANCE_VARIABLE',
+                      anchor:'100%'
                     }]
+                  },{
+                    columnWidth:.2,
+                    layout: 'form',
+                    border:false,
+                    items: [{
+                      xtype:'button',
+                      title: ' ',
+                      text: '@@',
+                      name: 'selectorigin'
+                        }]
                     }]
-                }]
-            },{
-                title:'Timing Control Rules',
-                layout:'form',
-                defaults: {
-                    width: 260
-                },
-                bodyStyle:'padding:5px 5px 0 30px',
-                defaultType: 'textfield',
-                items: [{
-                        xtype: 'checkbox',
-                        boxLabel: 'Allow user defined timing control',
-                        name: 'TAS_TRANSFER_FLY',
-                        checked: 'TAS_TRANSFER_FLY',
-                        labelWidth: 100,
-                        listeners: {
-                                    /**Listeners for hiding all the fields
-                                     * under "Timing Control Rules" tabs
-                                     * when user clicks on 'Allow user defined timing control' checkbox
-                                    **/
-                                    check : function(a,checked,c) {
-                                            if(checked == true)
-                                                Ext.getCmp("userDefinedTiming").hide();
-                                            else
-                                                Ext.getCmp("userDefinedTiming").show();
-                                    }
-                                }
-
                 },{
                     xtype: 'fieldset',
-                    layout:'form',
+                    layout:'column',
                     border:false,
                     width: 550,
-                    //title: 'MI',
-                    hidden: false,
-                    id: 'userDefinedTiming',
-
-                    items:[{
-                        xtype: 'textfield',
-                        fieldLabel: 'Task Duration',
-                        name: 'TAS_DURATION',
-                        //value: _5625.scope.workflow.taskDetails.TAS_DURATION,
-                        width : 100,
-                        allowBlank:false
-                    },{
-                        width:          100,
-                        xtype:          'combo',
-                        mode:           'local',
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     'Time Unit',
-                        name:           'TAS_TIMEUNIT',
-                        hiddenName:     'TAS_TIMEUNIT',
-                        displayField:   'name',
-                        //value: _5625.scope.workflow.taskDetails.TAS_TIMEUNIT,
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                            fields : ['name', 'value'],
-                            data   : [
-                            {
-                                name : 'Days',
-                                value: 'Days'
-                            },{
-                                name : 'Hours',
-                                value: 'Hours'
-                            }]
-                        })
-                    },{
-                        width:          120,
-                        xtype:          'combo',
-                        mode:           'local',
-                        //value:          '- None -',
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     'Count Days by',
-                        name:           'TAS_TYPE_DAY',
-                        hiddenName:     'TAS_TYPE_DAY',
-                        displayField:   'name',
-                        //value: 'TAS_TYPE_DAY',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                            fields : ['name', 'value'],
-                            data   : [
-                            {
-                                name : 'Work Days',
-                                value: '1'
-                            },
-
-                            {
-                                name : 'Calendar Days',
-                                value: '2'
-                            },
-                            ]
-                        })
-                    },{
-                        width:          100,
-                        xtype:          'combo',
-                        mode:           'local',
-                        value:          'Default',
-                        forceSelection: true,
-                        triggerAction:  'all',
-                        editable:       false,
-                        fieldLabel:     'Calendar',
-                        name:           'TAS_CALENDAR',
-                        hiddenName:     'TAS_CALENDAR',
-                        displayField:   'name',
-                        //value: _5625.scope.workflow.taskDetails.TAS_CALENDAR,
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                            fields : ['name', 'value'],
-                            data   : [
-                            {
-                                name : '- None-',
-                                value: '- None-'
-                            },
-
-                            {
-                                name : 'Default',
-                                value: 'Default'
-                            },
-                            ]
-                        })
-                    }]
-                            
-                }]
-            },{
-                title:'Permission',
-                layout:'form',
-                defaults: {
-                    width: 260
-                },
-                defaultType: 'textfield',
-                labelWidth: 170,
-                items: [{
-                    xtype: 'checkbox',
-                    id: 'ADHOC',
-                    fieldLabel: 'Allow arbitary transfer (Ad hoc)',
-                    inputValue:'ADHOC',
-                    checked: false,
-                    name: 'TAS_TYPE'
-                }]
-            },{
-                title:'Case Labels',
-                layout:'form',
-                defaults: {
-                    width: 800
-                },
-                defaultType: 'textfield',
-                labelWidth: 70,
-                items: [{
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 700,
-                    items:[{
-                        columnWidth:.5,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textarea',
-                            fieldLabel: 'Case Title',
-                            id: 'caseTitle',
-                            name: 'TAS_DEF_TITLE',
-                            height : 100,
-                            //value: _5625.scope.workflow.taskDetails.TAS_ASSIGN_VARIABLE
-                            anchor:'100%'
-                        }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        bodyStyle: 'padding:35px;',
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@#',
-                            name: 'selectCaseTitle',
-                            handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.variable        = '@%23',
-                                    workflow.fieldId         = 'caseTitle' ;
-                                    workflow.formSelected    = taskPropertiesTabs;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                    console.log(rowData);
-                                   }
-                           }]
-                    }]
-                },{
-                    xtype: 'fieldset',
-                    layout:'column',
-                    border:false,
-                    width: 700,
-                    items:[{
-                        columnWidth:.5,
-                        layout: 'form',
-                        border:false,
-                        items: [{
-                            xtype: 'textarea',
-                            id: 'caseDescription',
-                            fieldLabel: 'Case Description',
-                            name: 'TAS_DEF_DESCRIPTION',
-                            height : 100,
-                            anchor:'100%'
-
-                        }]
-                    },{
-                        columnWidth:.3,
-                        layout: 'form',
-                        border:false,
-                        bodyStyle: 'padding:35px;',
-                        items: [{
-                            xtype:'button',
-                            title: ' ',
-                            text: '@#',
-                            name: 'selectCaseDesc',
-                            handler: function (s) {
-                                    workflow.variablesAction = 'form';
-                                    workflow.variable = '@%23',
-                                    workflow.fieldId= 'caseDescription' ;
-                                    workflow.formSelected = taskPropertiesTabs;
-                                    var rowData = ProcMapObj.ExtVariables();
-                                    console.log(rowData);
-                                   }
-                            //anchor:'10%'
-                        }]
-                    }]
-                }]
-                },{
-                title:'Notification',
-                layout:'form',
-                defaultType: 'textfield',
-                labelWidth: 170,
-                items: [{
-                    xtype: 'checkbox',
-                    boxLabel: 'After routing notify the next assigned user(s).',
-                    labelWidth: 100,
-                    name:   'TAS_DEF_MESSAGE_CHECKBOX',
-                    checked:   'TAS_DEF_MESSAGE_CHECKBOX',
-                     listeners: {
-                                     /**Listeners for showing "TAS_DEF_MESSAGE" textarea field
-                                     * under "Notification" tab
-                                     * when user clicks on 'After routing notify the next assigned user(s).' checkbox
-                                    **/
-                                    check : function(a,checked,c) {
-                                            if(checked == true)
-                                                Ext.getCmp("notifyUser").show();
-                                            else
-                                                Ext.getCmp("notifyUser").hide();
-                                    }
-                                }
-
-                },{
-                    xtype: 'fieldset',
-                    id:    'notifyUser',
-                    border: false,
-                    defaults: {
-                        width: 400
-                    },
-                    labelWidth: 50,
+                    bodyStyle   : 'padding:0 0 0 ',
                     hidden: true,
-                    items :[{
-                        xtype: 'textarea',
-                        name: 'TAS_DEF_MESSAGE',
-                        //value: _5625.scope.workflow.taskDetails.TAS_DEF_MESSAGE,
-                        width: 400,
-                        height : 180
+                    id: 'cancelMI',
+                    items:[{
+                      columnWidth:.8,
+                      layout: 'form',
+                      border:false,
+                      items: [{
+                        xtype: 'textfield',
+                        fieldLabel: 'Variable for No of Instances to complete',
+                        name: 'TAS_MI_COMPLETE_VARIABLE',
+                        anchor:'100%'
+                      }]
+                    },{
+                      columnWidth:.2,
+                      layout: 'form',
+                      border:false,
+                      items: [{
+                        xtype:'button',
+                        title: ' ',
+                        text: '@@',
+                        name: 'selectorigin'
+                      }]
                     }]
                 }]
+            },{
+              title:'Timing Control Rules',
+              layout:'form',
+              defaults: {
+                width: 260
+              },
+              bodyStyle:'padding:5px 5px 0 30px',
+              defaultType: 'textfield',
+              items: [{
+                xtype: 'checkbox',
+                boxLabel: 'Allow user defined timing control',
+                name: 'TAS_TRANSFER_FLY',
+                checked: 'TAS_TRANSFER_FLY',
+                labelWidth: 100,
+                listeners: {
+                  /**Listeners for hiding all the fields
+                  * under "Timing Control Rules" tabs
+                  * when user clicks on 'Allow user defined timing control' checkbox
+                  **/
+                  check : function(a,checked,c) {
+                    if(checked == true)
+                      Ext.getCmp("userDefinedTiming").hide();
+                    else
+                      Ext.getCmp("userDefinedTiming").show();
+                  }
+                }
+              },{
+                xtype: 'fieldset',
+                layout:'form',
+                border:false,
+                width: 550,
+                hidden: false,
+                id: 'userDefinedTiming',
+
+                items:[{
+                  xtype: 'textfield',
+                  fieldLabel: 'Task Duration',
+                  name: 'TAS_DURATION',
+                  width : 100,
+                  allowBlank:false
+                },{
+                  width:          100,
+                  xtype:          'combo',
+                  mode:           'local',
+                  triggerAction:  'all',
+                  forceSelection: true,
+                  editable:       false,
+                  fieldLabel:     'Time Unit',
+                  name:           'TAS_TIMEUNIT',
+                  hiddenName:     'TAS_TIMEUNIT',
+                  displayField:   'name',
+                    valueField:     'value',
+                    store:          new Ext.data.JsonStore({
+                    fields : ['name', 'value'],
+                    data   : [
+                      {
+                        name : 'Days',
+                        value: 'Days'
+                      },{
+                        name : 'Hours',
+                        value: 'Hours'
+                      }]
+                    })
+                },{
+                  width:          120,
+                  xtype:          'combo',
+                  mode:           'local',
+                  //value:          '- None -',
+                  triggerAction:  'all',
+                  forceSelection: true,
+                  editable:       false,
+                  fieldLabel:     'Count Days by',
+                  name:           'TAS_TYPE_DAY',
+                  hiddenName:     'TAS_TYPE_DAY',
+                  displayField:   'name',
+                  //value: 'TAS_TYPE_DAY',
+                  valueField:     'value',
+                  store:          new Ext.data.JsonStore({
+                    fields : ['name', 'value'],
+                    data   : [
+                    {
+                        name : 'Work Days',
+                        value: '1'
+                    },
+
+                    {
+                        name : 'Calendar Days',
+                        value: '2'
+                    },
+                    ]
+                  })
+                },{
+                  width:          100,
+                  xtype:          'combo',
+                  mode:           'local',
+                  value:          'Default',
+                  forceSelection: true,
+                  triggerAction:  'all',
+                  editable:       false,
+                  fieldLabel:     'Calendar',
+                  name:           'TAS_CALENDAR',
+                  hiddenName:     'TAS_CALENDAR',
+                  displayField:   'name',
+                  valueField:     'value',
+                  store:          new Ext.data.JsonStore({
+                    fields : ['name', 'value'],
+                    data   : [
+                    {
+                      name : '- None-',
+                      value: '- None-'
+                    },
+
+                    {
+                      name : 'Default',
+                      value: 'Default'
+                    },
+                    ]
+                  })
+                }]
+              }]
+            },{
+              title:'Permission',
+              layout:'form',
+              defaults: {
+                  width: 260
+              },
+              defaultType: 'textfield',
+              labelWidth: 200,
+              items: [{
+                  xtype: 'checkbox',
+                  id: 'ADHOC',
+                  fieldLabel: 'Allow arbitary transfer (Ad hoc)',
+                  inputValue:'ADHOC',
+                  checked: false,
+                  name: 'TAS_TYPE'
+              }]
+            },{
+              title:'Case Labels',
+              layout:'form',
+              defaults: {
+                width: 600
+              },
+              defaultType: 'textfield',
+              labelWidth: 70,
+              items: [{
+                xtype: 'fieldset',
+                layout:'column',
+                border:false,
+                width: 600,
+                items:[{
+                  columnWidth:.8,
+                  layout: 'form',
+                  border:false,
+                  items: [{
+                      xtype: 'textarea',
+                      fieldLabel: 'Case Title',
+                      id: 'caseTitle',
+                      name: 'TAS_DEF_TITLE',
+                      height : 120,
+                      //value: _5625.scope.workflow.taskDetails.TAS_ASSIGN_VARIABLE
+                      anchor:'100%'
+                  }]
+                },{
+                    columnWidth:.2,
+                    layout: 'form',
+                    border:false,
+                    bodyStyle: 'padding:10px;',
+                    items: [{
+                        xtype:'button',
+                        title: ' ',
+                        text: '@#',
+                        name: 'selectCaseTitle',
+                        handler: function (s) {
+                                workflow.variablesAction = 'form';
+                                workflow.variable        = '@%23',
+                                workflow.fieldId         = 'caseTitle' ;
+                                workflow.formSelected    = taskPropertiesTabs;
+                                var rowData = ProcMapObj.ExtVariables();
+                                console.log(rowData);
+                               }
+                       }]
+                }]
+              },{
+                  xtype: 'fieldset',
+                  layout:'column',
+                  border:false,
+                  width: 600,
+                  items:[{
+                      columnWidth:.8,
+                      layout: 'form',
+                      border:false,
+                      items: [{
+                          xtype: 'textarea',
+                          id: 'caseDescription',
+                          fieldLabel: 'Case Description',
+                          name: 'TAS_DEF_DESCRIPTION',
+                          height : 120,
+                          anchor:'100%'
+
+                      }]
+                  },{
+                      columnWidth:.2,
+                      layout: 'form',
+                      border:false,
+                      bodyStyle: 'padding:35px;',
+                      items: [{
+                          xtype:'button',
+                          title: ' ',
+                          text: '@#',
+                          name: 'selectCaseDesc',
+                          handler: function (s) {
+                            workflow.variablesAction = 'form';
+                            workflow.variable = '@%23',
+                            workflow.fieldId= 'caseDescription' ;
+                            workflow.formSelected = taskPropertiesTabs;
+                            var rowData = ProcMapObj.ExtVariables();
+                            console.log(rowData);
+                          }
+                      }]
+                  }]
+              }]
+              },{
+              title:'Notification',
+              layout:'form',
+              defaultType: 'textfield',
+              labelWidth: 170,
+              items: [{
+                xtype: 'checkbox',
+                boxLabel: 'After routing notify the next assigned user(s).',
+                labelWidth: 100,
+                name:   'TAS_DEF_MESSAGE_CHECKBOX',
+                checked:   'TAS_DEF_MESSAGE_CHECKBOX',
+                listeners: {
+                  /**Listeners for showing "TAS_DEF_MESSAGE" textarea field
+                  * under "Notification" tab
+                  * when user clicks on 'After routing notify the next assigned user(s).' checkbox
+                  **/
+                  check : function(a,checked,c) {
+                    if(checked == true)
+                      Ext.getCmp("notifyUser").show();
+                    else
+                      Ext.getCmp("notifyUser").hide();
+                  }
+               }
+              },{
+                xtype: 'fieldset',
+                id:    'notifyUser',
+                border: false,
+                defaults: {
+                    width: 400
+                },
+                labelWidth: 50,
+                hidden: true,
+                items :[{
+                  xtype: 'textarea',
+                  name: 'TAS_DEF_MESSAGE',
+                  width: 400,
+                  height : 180
+                }]
+              }]
               
             }
             ]
@@ -1344,7 +1306,7 @@ TaskContext.prototype.editTaskProperties= function()
         minHeight: 150,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
+        //bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: taskPropertiesTabs,
         buttons: [{
@@ -2119,7 +2081,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                      SP_SYNCHRONOUS : '',
                      TAS_PARENT     : '',
                      VAR_OUT1       : '',
-                     VAR_OUT2	    : ''
+                     VAR_OUT2     : ''
                 });
 
                     editorOut.stopEditing();
@@ -2160,7 +2122,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                  SP_SYNCHRONOUS : '',
                  TAS_PARENT     : '',
                  VAR_IN1        : '',
-                 VAR_IN2	    : ''
+                 VAR_IN2      : ''
             });
 
                 editorIn.stopEditing();
