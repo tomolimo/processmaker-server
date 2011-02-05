@@ -117,22 +117,23 @@ switch($_GET['action'])
                 break;
 
        case 'process_User':
-                $rows = $oProcessMap->listExtProcessesUser($processUID);
+                $rows = $oProcessMap->listExtProcessesUser($_GET['pid']);
                 break;
+            
        case 'availableProcessesUser':
-                $rows = $oProcessMap->listExtNoProcessesUser($processUID);
+                $rows = $oProcessMap->listExtNoProcessesUser($_GET['pid']);
                 break;
        case 'supervisorDynaforms':
-                $rows = $oProcessMap->getExtSupervisorDynaformsList($processUID);
+                $rows = $oProcessMap->getExtSupervisorDynaformsList($_GET['pid']);
                 break;
        case 'availableSupervisorDynaforms':
-                $rows = $oProcessMap->getExtAvailableSupervisorDynaformsList($processUID);
+                $rows = $oProcessMap->getExtAvailableSupervisorDynaformsList($_GET['pid']);
                 break;
        case 'supervisorInputDoc':
-                $rows = $oProcessMap->getExtSupervisorInputsList($processUID);
+                $rows = $oProcessMap->getExtSupervisorInputsList($_GET['pid']);
                 break;
        case 'availableSupervisorInputDoc':
-                $rows = $oProcessMap->getExtAvailableSupervisorInputsList($processUID);
+                $rows = $oProcessMap->getExtAvailableSupervisorInputsList($_GET['pid']);
                 break;
 
        case 'getAssignedCaseTrackerObjects':
