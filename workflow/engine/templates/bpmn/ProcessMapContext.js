@@ -332,7 +332,13 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'OP_CASE_STATUS',type: 'string'},
             { name: 'DYNAFORM',type: 'string'},
             { name: 'INPUT',type: 'string'},
-            { name: 'OUTPUT',type: 'string'}
+            { name: 'OUTPUT',type: 'string'},
+            { name: 'TAS_UID',type: 'string'},
+            { name: 'OP_TASK_SOURCE',type: 'string'},
+            { name: 'OP_PARTICIPATE',type: 'string'},
+            { name: 'OP_OBJ_TYPE',type: 'string'},
+            { name: 'OP_GROUP_USER',type: 'string'},
+            { name: 'OP_ACTION',type: 'string'}
         ]);
 
   var PermissionStore = new Ext.data.JsonStore({
@@ -455,10 +461,11 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                         method:'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
-
-                           //Ext.MessageBox.alert('Message', 'Loaded OK');
                            formWindow.show();
-                           //Ext.getCmp("ext-comp-1062").setValue(form.item.item[2].displayField);
+                           if(action.result.data.OP_PARTICIPATE == 1)
+                               form.findField('OP_PARTICIPATE').setValue('Yes');
+                           else
+                               form.findField('OP_PARTICIPATE').setValue('No');
                         },
                         failure:function(form, action) {
                             Ext.MessageBox.alert('Message', 'Load failed');
@@ -531,7 +538,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         maximizable: true,
         width: 800,
         autoScroll: true,
-        height: 450,
+        height: 380,
         layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -605,7 +612,8 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
    //   title:"Add new Database Source",
       collapsible: false,
       maximizable: true,
-      width:350,
+      width:360,
+      //height: 30,
       monitorValid : true,
       frame:true,
       plain: true,
@@ -636,12 +644,12 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel: 'Target Task',
                     //hiddenName:'popType',
                     //autoload: true,
-                    name: 'TASK_TARGET',
+                    name: 'TAS_UID',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
-                    //emptyText:'Select',
+                    emptyText:'Select Target Task',
                     editable: true,
                     onSelect: function(record,index)
                     {
@@ -655,18 +663,16 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                  new Ext.form.ComboBox({
                     fieldLabel: 'Group or Users',
                     //hiddenName:'popType',
-                    name: 'GROUP_USER',
+                    name: 'OP_GROUP_USER',
                     //autoload: true,
                     store: usersStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
-                    //emptyText:'Select',
+                    emptyText:'Select Group or Users',
                     editable: true,
                     onSelect: function(record,index)
                     {
-                        //var taskUID = record.data.UID;
-
                        Ext.getCmp("GROUP_USER").setValue(record.data.UID);
                         this.setValue(record.data[this.valueField || this.displayField]);
                         this.collapse();
@@ -675,14 +681,12 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 ,
                 new Ext.form.ComboBox({
                     fieldLabel: 'Origin Task',
-                    //hiddenName:'popType',
-                    name    : 'TASK_SOURCE',
-                    //autoload: true,
+                    name    : 'OP_TASK_SOURCE',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
-                    //emptyText:'Select',
+                    emptyText:'Select Source Task',
                     editable: true,
                     onSelect: function(record,index)
                     {
@@ -700,7 +704,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel      :'Participation Required?',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'PARTICIPATED',
+                    name            :'OP_PARTICIPATE',
                     displayField    :'name',
                     value           :'Yes',
                     valueField      :'value',
@@ -717,14 +721,14 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel      :'Type',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'OBJECT_TYPE',
+                    name            :'OP_OBJ_TYPE',
                     displayField    :'name',
-                    value           :'ANY',
+                    value           :'ALL',
                     valueField      :'value',
                     store           :new Ext.data.JsonStore({
                                                         fields : ['name', 'value'],
                                                         data   : [
-                                                        {name : 'ANY',   value: '0'},
+                                                        {name : 'ALL',   value: '0'},
                                                         {name : 'DYNAFORM',   value: '1'},
                                                         {name : 'INPUT',   value: '2'},
                                                         {name : 'OUTPUT',   value: '3'}]}),
@@ -835,7 +839,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel      :'Permission',
                     triggerAction   :'all',
                     forceSelection  : true,
-                    name            :'ACTION',
+                    name            :'OP_ACTION',
                     displayField    :'name',
                     value           :'VIEW',
                     valueField      :'value',
@@ -877,17 +881,17 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
             formBind    :true,
             handler: function(){
                 var getForm         = PermissionForm.getForm().getValues();
-                var TargetTask      = getForm.TAS_UID;
+                var TargetTask      = getForm.TASK_TARGET;
                 var GroupUser       = getForm.GROUP_USER;
-                var OriginTask      = getForm.OP_TASK_SOURCE;
+                var OriginTask      = getForm.TASK_SOURCE;
                 var Dynaforms       = getForm.DYNAFORMS;
                 var Inputs          = getForm.INPUTS;
                 var Outputs         = getForm.OUTPUTS;
                 var Status          = getForm.OP_CASE_STATUS;
-                var Participation   = getForm.OP_PARTICIPATE;
+                var Participation   = getForm.PARTICIPATED;
                 var Type            = getForm.OP_OBJ_TYPE;
                 var Permission      = getForm.OP_ACTION;
-                if(TAS_UID == "")
+                if(TASK_TARGET == "")
                     {
                 Ext.Ajax.request({
                   url   : '../processes/processes_SaveObjectPermission.php',
@@ -960,7 +964,7 @@ var formWindow = new Ext.Window({
         width: 400,
         autoScroll: true,
         //autoHeight: true,
-        height: 350,
+        height: 320,
         //layout: 'fit',
         plain: true,
         bodyStyle: 'padding:5px;',
@@ -989,7 +993,7 @@ ProcessMapContext.prototype.processSupervisors= function()
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'Assign',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var User = grid.getStore();
                 var e = new processUserFields({
@@ -1204,31 +1208,19 @@ ProcessMapContext.prototype.processDynaform= function()
   });
 
   var btnAdd = new Ext.Button({
-    id: 'btnAdd',
-    text: 'Assign',
-    iconCls: 'application_add',
-    handler: function(){
-      var User = grid.getStore();
-      var e = new supervisorDynaformsFields({
-        DYN_UID: '',
-        STEP_UID: '',
-        STEP_UID_OBJ: '',
-        STEP_TYPE_OBJ: '',
-        STEP_POSITION: ''
-      });
-      
-      //storeUsers.reload();
-      if(availableSupervisorDynaforms.data.items.length == 0)
-           Ext.MessageBox.alert ('Status','No dynaform are available. All dynaforms have been already assigned.');
-      else
-      {
-        editor.stopEditing();
-        supervisorDynaforms.insert(0, e);
-        grid.getView().refresh();
-        //grid.getSelectionModel().selectRow(0);
-        editor.startEditing(0, 0);
-      }
-    }
+            id: 'btnAdd',
+            text: 'Assign',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
+            handler: function(){
+                var User = grid.getStore();
+                var e = new supervisorDynaformsFields({
+                     DYN_UID: '',
+                     STEP_UID: '',
+                     STEP_UID_OBJ: '',
+                     STEP_TYPE_OBJ: '',
+                     STEP_POSITION: ''
+                });
+            }
   });
 
   var btnRemove = new Ext.Button({
@@ -1405,7 +1397,7 @@ ProcessMapContext.prototype.processDynaform= function()
     window.show();
 }
 
-ProcessMapContext.prototype.processIODoc= function()
+ProcessMapContext.prototype.processIODoc = function()
 {
   var pro_uid = workflow.getUrlVars();
 
@@ -1424,7 +1416,7 @@ ProcessMapContext.prototype.processIODoc= function()
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: 'Assign',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var User = grid.getStore();
                 var e = new supervisorInputDocFields({
@@ -1893,7 +1885,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
     var btnAdd = new Ext.Button({
       id: 'btnAdd',
       text: 'Assign',
-      iconCls: 'application_add',
+      iconCls: 'button_menu_ext ss_sprite ss_add',
       handler: function(){
          var User = Objectsgrid.getStore();
          var e = new ObjectFields({

@@ -49,7 +49,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
     var btnAdd = new Ext.Button({
         id: 'btnAdd',
         text: 'Assign',
-        iconCls: 'application_add',
+        iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             var User = grid.getStore();
             var e = new stepsFields({
@@ -78,7 +78,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
     var btnRemove = new Ext.Button({
         id: 'btnRemove',
         text: 'Remove',
-        iconCls: 'application_delete',
+        iconCls: 'button_menu_ext ss_sprite ss_pencil',
         handler: function (s) {
             editor.stopEditing();
             var s = grid.getSelectionModel().getSelections();
@@ -711,21 +711,6 @@ TaskContext.prototype.editTaskProperties= function()
     var ProcMapObj = new ProcessMapContext();
     var taskExtObj = new TaskContext();
     var taskId  = workflow.currentSelection.id;
-
-    // create the Data Store for processes
-    /*var taskDetails = new Ext.data.JsonStore({
-        root         : 'data',
-        totalProperty: 'totalCount',
-        idProperty   : 'gridIndex',
-        remoteSort   : true,
-        //fields       : taskFields,
-        proxy: new Ext.data.HttpProxy({
-          url: 'proxyExtjs?tid='+taskId+'&action=getPropertiesList'
-        })
-      });*/
-      //taskUsers.setDefaultSort('LABEL', 'asc');
-      //taskDetails.load();
-
 
     var taskPropertiesTabs = new Ext.FormPanel({
         labelWidth  : 140,
@@ -2050,6 +2035,8 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
             {name: 'SP_UID',type: 'string'},
             {name: 'TAS_UID',type: 'string'},
             {name: 'PRO_PARENT',type: 'string'},
+            {name: 'PRO_UID',type: 'string'},
+            {name: 'PRO_TITLE',type: 'string'},
             {name: 'TAS_PARENT',type: 'string'},
             {name: 'SP_SYNCHRONOUS',type: 'string'},
             {name: 'SPROCESS_NAME',type: 'string'},
@@ -2073,13 +2060,16 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     var btnAddOut = new Ext.Button({
             id: 'btnAddOut',
             text: 'Assign Variables Out',
-            iconCls: 'application_add',
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
+                var storeData = variableOutGrid.getStore();
+                 //STEP_TITLE: storeData.data.items[0].data.STEP_TITLE,
                 var e = new subProcessFields({
                      SP_UID         : '',
                      PRO_PARENT     : '',
                      SP_SYNCHRONOUS : '',
                      TAS_PARENT     : '',
+                     TASKS          : '',
                      VAR_OUT1       : '',
                      VAR_OUT2     : ''
                 });
@@ -2095,7 +2085,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     var btnRemoveOut = new Ext.Button({
         id: 'btnRemoveOut',
         text: 'Remove Variables Out',
-        iconCls: 'application_delete',
+        iconCls: 'button_menu_ext ss_sprite ss_delete',
         handler: function (s) {
             editorOut.stopEditing();
             var s = variableOutGrid.getSelectionModel().getSelections();
@@ -2114,7 +2104,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
   var btnAddIn = new Ext.Button({
         id: 'btnAddIn',
         text: 'Assign Variables In',
-        iconCls: 'application_add',
+        iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             var e = new subProcessFields({
                  SP_UID         : '',
@@ -2122,7 +2112,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                  SP_SYNCHRONOUS : '',
                  TAS_PARENT     : '',
                  VAR_IN1        : '',
-                 VAR_IN2      : ''
+                 VAR_IN2	: ''
             });
 
                 editorIn.stopEditing();
@@ -2135,7 +2125,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     var btnRemoveIn = new Ext.Button({
         id: 'btnRemoveIn',
         text: 'Remove Variables In',
-        iconCls: 'application_delete',
+        iconCls: 'button_menu_ext ss_sprite ss_delete',
         handler: function (s) {
             editorIn.stopEditing();
             var s = variableInGrid.getSelectionModel().getSelections();
@@ -2177,7 +2167,19 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         })
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
-      variablesInStore.load();
+    variablesInStore.load();
+
+    var processListStore = new Ext.data.JsonStore({
+        root         : 'data',
+        totalProperty: 'totalCount',
+        idProperty   : 'gridIndex',
+        remoteSort   : true,
+        fields       : subProcessFields,
+        proxy        : new Ext.data.HttpProxy({
+               url   : '../processes/processesList'
+        })
+      });
+    processListStore.load();
 
     var variableOutGrid =  new Ext.grid.GridPanel({
         store       : variablesOutStore,
@@ -2289,20 +2291,20 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
           scope: this,
           afteredit: function(roweditor, changes, record, rowIndex) {
 
-
-             var sTasks            = record.data.TASKS;
-             var sSync             = record.data.SP_SYNCHRONOUS;
-             var sSP_UID           = record.data.SP_UID;
-             var sProcess_Parent   = record.data.PRO_PARENT;
-             var sTask_Parent      = record.data.TAS_PARENT;
-             var sVar_Out1         = record.data.VAR_OUT1;
-             var sVar_Out2         = record.data.VAR_OUT2;
+             var sSP_UID           =  spUID;
+             var sProcess_Parent   =  proParent;
+             var sSync             =  spSync;
+             var sTask_Parent      =  tasParent;
+             var sTasks            =  tasks;
+             var sVar_Out1         =  record.data.VAR_OUT1;
+             var sVar_Out2         =  record.data.VAR_OUT2;
 
              Ext.Ajax.request({
               url   : 'processes_Ajax.php',
               method: 'POST',
               params: {
-                    action          : 'saveSubProcessDetails',
+                    action          : 'saveSubProcessVariables',
+                    PRO_UID         : pro_uid,
                     TASKS           : sTasks,
                     SP_SYNCHRONOUS  : sSync,
                     SP_UID          : sSP_UID,
@@ -2322,21 +2324,19 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         editorIn.on({
           scope: this,
           afteredit: function(roweditor, changes, record, rowIndex) {
-
-
-             var sTasks            = record.data.TASKS;
-             var sSync             = record.data.SP_SYNCHRONOUS;
-             var sSP_UID           = record.data.SP_UID;
-             var sProcess_Parent   = record.data.PRO_PARENT;
-             var sTask_Parent      = record.data.TAS_PARENT;
-             var sVar_In1          = record.data.VAR_IN1;
-             var sVar_In2          = record.data.VAR_IN2;
+             var sSP_UID           =  spUID;
+             var sProcess_Parent   =  proParent;
+             var sSync             =  spSync;
+             var sTask_Parent      =  tasParent;
+             var sTasks            =  tasks;
+             var sVar_In1          =  record.data.VAR_IN1;
+             var sVar_In2          =  record.data.VAR_IN2;
 
              Ext.Ajax.request({
               url   : 'processes_Ajax.php',
               method: 'POST',
               params: {
-                    action          : 'saveSubProcessDetails',
+                    action          : 'saveSubProcessVariables',
                     TASKS           : sTasks,
                     SP_SYNCHRONOUS  : sSync,
                     SP_UID          : sSP_UID,
@@ -2357,7 +2357,8 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     labelWidth  : 110, // label settings here cascade unless overridden
     //frame:true,
     bodyStyle:'padding:5px 5px 0',
-    scope: _3525,
+    width: 800,
+    autoScroll: true,
     items: [
             {
             xtype:'fieldset',
@@ -2383,12 +2384,22 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         forceSelection: true,
                         editable:       false,
                         fieldLabel:     'Process',
-                        name:           'process',
+                        name:           'PRO_UID',
                         emptyText    : 'Select Process',
-                        displayField:   'PROCESSES',
-                        valueField:     'PROCESSES',
-                        store:          variablesOutStore
-                    },
+                        displayField:   'PRO_TITLE',
+                        valueField:     'PRO_TITLE',
+                        store:          processListStore,
+                        onSelect: function(record, index){
+                                 //processListStore.data.items[0].data.PRO_UID      = record.data.PRO_UID;
+                                 Ext.getCmp("SEL_PROCESS").setValue(record.data.PRO_UID);
+                                 this.setValue(record.data[this.valueField || this.displayField]);
+                                 this.collapse();
+                              }
+                    },{
+                           xtype :'hidden',
+                           name :'SEL_PROCESS',
+                           id :'SEL_PROCESS'
+                       },
                     {
                         width:          150,
                         id   :          'spType',
@@ -2406,8 +2417,8 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         store:          new Ext.data.JsonStore({
                                     fields : ['name', 'value'],
                                     data   : [
-                                        {name : 'Asynchronous',   value: 'Asynchronous'},
-                                        {name : 'Synchronous',   value: 'Synchronous'},
+                                        {name : 'Asynchronous',   value: '0'},
+                                        {name : 'Synchronous',   value: '1'},
                                     ]
                                 }),
                        onSelect: function(record, index){
@@ -2444,20 +2455,27 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     subProcessProperties.form.load({
         url:'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=2',
         method:'GET',
-        //waitMsg:'Loading',
+        waitMsg:'Loading....',
         success:function(form, action) {
-           Ext.getCmp("subProcessName").setValue(action.result.data[0].TAS_TITLE);
-           if(action.result.data[0].SP_SYNCHRONOUS == 0)
+               spUID        = action.result.data[0].SP_UID;
+               proParent    = action.result.data[0].PRO_PARENT;
+               spSync       = action.result.data[0].SP_SYNCHRONOUS;
+               tasParent    = action.result.data[0].TAS_PARENT;
+               tasks        = action.result.data[0].TASKS;
+           var processName  = action.result.data[0].SPROCESS_NAME;
+           if(action.result.data.SP_SYNCHRONOUS == 0)
                {
                    Ext.getCmp("variablein").hide();
-                   Ext.getCmp("spType").setValue("Asynchronous");
+                   form.findField('SP_SYNCHRONOUS').setValue('Asynchronous');
                }
            else
                {
                    Ext.getCmp("variablein").show();
-                   Ext.getCmp("spType").setValue("Synchronous");
+                   form.findField('SP_SYNCHRONOUS').setValue('Synchronous');
                }
-          workflow.subProcessProperties = action.result.data[0];
+          form.findField('PRO_UID').setValue(action.result.data[0].PRO_UID);
+          form.findField('SPROCESS_NAME').setValue(processName);
+          //workflow.subProcessProperties = action.result.data[0];
         },
         failure:function(form, action) {
             Ext.MessageBox.alert('Message', 'Load failed');
@@ -2471,10 +2489,8 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     title: 'Task: ',
     collapsible: false,
     maximizable: false,
-    width: 800,
-    height: 500,
-    minWidth: 300,
-    minHeight: 150,
+    width: 900,
+    height: 400,
     layout: 'fit',
     plain: true,
     bodyStyle: 'padding:5px;',
@@ -2483,16 +2499,23 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     buttons: [{
         text: 'Save',
         handler: function(){
-            var getForm    = subProcessProperties.getForm().getValues();
-            var sTask_Parent = workflow.subProcessProperties.TAS_PARENT;
-            var sSPNAME = getForm.SPROCESS_NAME;
+            var getForm      = subProcessProperties.getForm().getValues();
+            var sTask_Parent = getForm.SEL_PROCESS;
+            var sSPNAME      = getForm.SPROCESS_NAME;
+            var sSync        = getForm.SP_SYNCHRONOUS;
+            if(sSync == 'Synchronous')
+                sSync = 0;
+            else
+                sSync = 1;
            Ext.Ajax.request({
               url   : 'processes_Ajax.php',
               method: 'POST',
               params: {
-                    action          : 'subprocessProperties',
-                    TAS_PARENT      : sTask_Parent,
-                    SPROCESS_NAME   : sSPNAME
+                    action          : 'saveSubprocessDetails',
+                    SP_UID          : spUID,
+                    PRO_UID      : sTask_Parent,
+                    SPROCESS_NAME   : sSPNAME,
+                    SP_SYNCHRONOUS  : sSync
                   },
               success: function(response) {
                   Ext.MessageBox.alert ('Status','Sub Process Properties has been saved successfully.');

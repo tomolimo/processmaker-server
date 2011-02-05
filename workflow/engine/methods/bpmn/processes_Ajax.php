@@ -275,18 +275,18 @@ if ( isset ($_REQUEST['action']) ) {
   	  }
   	break;
 
-        case 'saveSubProcessDetails':
+        case 'saveSubProcessVariables':
             //$aTask=$oTask->load($_POST['form']['TASKS']);
             //$aTask=$oTask->load($_POST['form']['PRO_UID']);
-            if($_POST['VAR_OUT1'] != '')
+            $out = array();
+            $in = array();
+            if(isset($_POST['VAR_OUT1']))
             {
-               $out = array();
                $out[$_POST['VAR_OUT1']] = $_POST['VAR_OUT2'];
             }
 
-            if($_POST['VAR_IN1'] != '')
+            if(isset($_POST['VAR_IN1']))
             {
-               $in = array();
                $in[$_POST['VAR_IN1']]   =  $_POST['VAR_IN2'];
             }
             
@@ -304,7 +304,7 @@ if ( isset ($_REQUEST['action']) ) {
             require_once 'classes/model/SubProcess.php';
             $oOP = new SubProcess();
             $aData = array('SP_UID'          	 => $_POST['SP_UID'],//G::generateUniqueID(),
-                           'PRO_UID'         	 => $aTask['PRO_UID'],
+                           'PRO_UID'         	 => $_POST['PRO_UID'],
                            'TAS_UID'         	 => $_POST['TASKS'],
                            'PRO_PARENT'      	 => $_POST['PRO_PARENT'],
                            'TAS_PARENT'		 => $_POST['TAS_PARENT'],
@@ -319,6 +319,21 @@ if ( isset ($_REQUEST['action']) ) {
 
             $oOP->update($aData);
             break;
+
+            case'saveSubprocessDetails':
+                 require_once 'classes/model/SubProcess.php';
+                 $oOP = new SubProcess();
+                 $aData = array(
+                                'SP_UID'          	 => $_POST['SP_UID'],
+                           'PRO_UID'       	 => $_POST['PRO_UID'],
+                           'SP_SYNCHRONOUS'   	 => $_POST['SP_SYNCHRONOUS'],
+                   );
+                 $oOP->update($aData);
+                 
+                //require_once 'classes/model/Content.php';
+                //$lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+                //$cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
+             break;
 
             case 'subprocessProperties':
                 require_once 'classes/model/Content.php';
