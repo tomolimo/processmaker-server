@@ -241,26 +241,26 @@ this.workflow.onKeyDown(_3e0e,ctrl);
 };
 
 bpmnTask.prototype.setWorkflow = function (_40c5) {
-    VectorFigure.prototype.setWorkflow.call(this, _40c5);
-    if (_40c5 != null) {
-/*Adding Port to the Task After dragging Task on the Canvas
-         *Ports will be invisibe After Drag and Drop, But It will be created
-         */
-        var TaskPortName = ['output1', 'output2', 'input1', 'input2'];
-        var TaskPortType = ['OutputPort', 'OutputPort', 'InputPort', 'InputPort'];
-        var TaskPositionX = [this.width / 2, this.width, 0, this.width / 2];
-        var TaskPositionY = [this.height, this.height / 2, this.height / 2, 0];
-
-        for (var i = 0; i < TaskPortName.length; i++) {
-            eval('this.' + TaskPortName[i] + ' = new ' + TaskPortType[i] + '()'); //Create New Port
-            eval('this.' + TaskPortName[i] + '.setWorkflow(_40c5)'); //Add port to the workflow
-            eval('this.' + TaskPortName[i] + '.setName("' + TaskPortName[i] + '")'); //Set PortName
-            eval('this.' + TaskPortName[i] + '.setZOrder(-1)'); //Set Z-Order of the port to -1. It will be below all the figure
-            eval('this.' + TaskPortName[i] + '.setBackgroundColor(new Color(255, 255, 255))'); //Setting Background of the port to white
-            eval('this.' + TaskPortName[i] + '.setColor(new Color(255, 255, 255))'); //Setting Border of the port to white
-            eval('this.addPort(this.' + TaskPortName[i] + ',' + TaskPositionX[i] + ', ' + TaskPositionY[i] + ')'); //Setting Position of the port
-        }
+  VectorFigure.prototype.setWorkflow.call(this, _40c5);
+  if (_40c5 != null) {
+    /*Adding Port to the Task After dragging Task on the Canvas
+    *Ports will be invisibe After Drag and Drop, But It will be created
+    */
+    var TaskPortName = ['output1', 'output2', 'input1', 'input2'];
+    var TaskPortType = ['OutputPort', 'OutputPort', 'InputPort', 'InputPort'];
+    var TaskPositionX = [this.width / 2, this.width, 0, this.width / 2];
+    var TaskPositionY = [this.Height-1, this.height / 2, this.height / 2, 0+1];
+    
+    for (var i = 0; i < TaskPortName.length; i++) {
+      eval('this.' + TaskPortName[i] + ' = new ' + TaskPortType[i] + '()'); //Create New Port
+      eval('this.' + TaskPortName[i] + '.setWorkflow(_40c5)'); //Add port to the workflow
+      eval('this.' + TaskPortName[i] + '.setName("' + TaskPortName[i] + '")'); //Set PortName
+      eval('this.' + TaskPortName[i] + '.setZOrder(-1)'); //Set Z-Order of the port to -1. It will be below all the figure
+      eval('this.' + TaskPortName[i] + '.setBackgroundColor(new Color(255, 255, 255))'); //Setting Background of the port to white
+      eval('this.' + TaskPortName[i] + '.setColor(new Color(255, 255, 255))'); //Setting Border of the port to white
+      eval('this.addPort(this.' + TaskPortName[i] + ',' + TaskPositionX[i] + ', ' + TaskPositionY[i] + ')'); //Setting Position of the port
     }
+  }
 };
 
 InputPort.prototype.onDrop = function (port) {
