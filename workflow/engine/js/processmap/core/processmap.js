@@ -1119,6 +1119,13 @@ var processmap=function(){
 					height:13,
 					position:"absolute"
 				});
+
+/**
+ * Reviewed by recharge in the process design
+ * 
+ */
+/*
+
 				if(task.statusIcons){
 
 					for(var i=0;i<task.statusIcons.length;i++){
@@ -1142,6 +1149,7 @@ var processmap=function(){
 
 					}
 				}
+*/
 				//clip: "rect(0,0,0,0)"
         /*if (task.derivation.type==5) {
           for(var it=0;it< db.task.length;it++)
