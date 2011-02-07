@@ -338,6 +338,7 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'OP_PARTICIPATE',type: 'string'},
             { name: 'OP_OBJ_TYPE',type: 'string'},
             { name: 'OP_GROUP_USER',type: 'string'},
+            { name: 'OBJ_NAME',type: 'string'},
             { name: 'OP_ACTION',type: 'string'}
         ]);
 
@@ -644,7 +645,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel: 'Target Task',
                     //hiddenName:'popType',
                     //autoload: true,
-                    name: 'TAS_UID',
+                    name: 'TASK_TARGET',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
@@ -681,7 +682,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 ,
                 new Ext.form.ComboBox({
                     fieldLabel: 'Origin Task',
-                    name    : 'OP_TASK_SOURCE',
+                    name    : 'TASK_SOURCE',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
