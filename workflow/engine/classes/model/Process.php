@@ -517,7 +517,7 @@ class Process extends BaseProcess {
     
     if($start != '')
       $oCriteria->setOffset($start);
-    if($limit != '')
+    if($limit != '' && !isset($category) && !isset($processName))
       $oCriteria->setLimit($limit);
     
     //execute a query to obtain numbers, how many cases there are by process
