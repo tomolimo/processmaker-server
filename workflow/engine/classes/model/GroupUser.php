@@ -99,5 +99,20 @@ class GroupUser extends BaseGroupUser {
       throw($oError);
     }
   }
+  
+  function getCountAllUsersByGroup(){
+  	$oCriteria = new Criteria('workflow');
+  	$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
+  	$oCriteria->addSelectColumn('COUNT(*) AS CNT');
+  	$oCriteria->addGroupByColumn(GroupUserPeer::GRP_UID);
+  	$oDataset = GroupUserPeer::doSelectRS($oCriteria);
+  	$oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+	  $aRows = Array();
+  	while ($oDataset->next()){
+	    $row = $oDataset->getRow();
+	    $aRows[$row['GRP_UID']] = $row['CNT'];
+    }
+	  return $aRows;
+  }
 
 } // GroupUser

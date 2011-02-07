@@ -57,39 +57,42 @@ var searchButton;
 
 var searchText;
 var contextMenu;
+var pageSize;
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
     
+    pageSize = parseInt(CONFIG.pageSize);
+    
     newButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_NEW,
+    	text: _('ID_NEW'),
     	iconCls: 'button_menu_ext ss_sprite  ss_add',
     	handler: NewGroupWindow
     });
     
     editButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_EDIT,
+    	text: _('ID_EDIT'),
     	iconCls: 'button_menu_ext ss_sprite  ss_pencil',
     	handler: EditGroupWindow,
     	disabled: true	
     });
     
     deleteButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_DELETE,
+    	text: _('ID_DELETE'),
     	iconCls: 'button_menu_ext ss_sprite  ss_delete',
     	handler: DeleteButtonAction,
     	disabled: true
     });
     
     membersButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_MEMBERS,
+    	text: _('ID_MEMBERS'),
     	iconCls: 'button_menu_ext ss_sprite ss_user_add',
     	handler: MembersAction,
     	disabled: true
     });
     
     searchButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_SEARCH,
+    	text: _('ID_SEARCH'),
     	handler: DoSearch
     });
     
@@ -102,7 +105,7 @@ Ext.onReady(function(){
         ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 150,
-        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        emptyText: _('ID_ENTER_SEARCH_TERM'),
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
@@ -148,10 +151,10 @@ Ext.onReady(function(){
     	url: 'groups_Ajax?action=saveNewGroup',
     	frame: true,
     	items:[
-    	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_GROUP_NAME, name: 'name', width: 200, allowBlank: false},
+    	       {xtype: 'textfield', fieldLabel: _('ID_GROUP_NAME'), name: 'name', width: 200, allowBlank: false},
     	       {
     	    	   xtype: 'combo', 
-    	    	   fieldLabel: TRANSLATIONS.ID_STATUS, 
+    	    	   fieldLabel: _('ID_STATUS'), 
     	    	   hiddenName: 'status',
     	    	   typeAhead: true,
     	    	   mode: 'local', 
@@ -160,13 +163,13 @@ Ext.onReady(function(){
     	    	   valueField:'value',
     	    	   allowBlank: false, 
     	    	   triggerAction: 'all',
-                   emptyText: TRANSLATIONS.ID_SELECT_STATUS,
+                   emptyText: _('ID_SELECT_STATUS'),
                    selectOnFocus:true
     	    	   }
     	       ],
     	 buttons: [
-    	       {text: TRANSLATIONS.ID_CLOSE, handler: CloseWindow},
-    	       {text: TRANSLATIONS.ID_SAVE, handler: SaveNewGroupAction}
+    	       {text: _('ID_SAVE'), handler: SaveNewGroupAction},
+    	       {text: _('ID_CANCEL'), handler: CloseWindow}
     	 ]
     });
     
@@ -175,10 +178,10 @@ Ext.onReady(function(){
     	frame: true,
     	items:[
     	       {xtype: 'textfield', name: 'grp_uid', hidden: true},
-    	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_GROUP_NAME, name: 'name', width: 200, allowBlank: false},
+    	       {xtype: 'textfield', fieldLabel: _('ID_GROUP_NAME'), name: 'name', width: 200, allowBlank: false},
     	       {
     	    	   xtype: 'combo', 
-    	    	   fieldLabel: TRANSLATIONS.ID_STATUS, 
+    	    	   fieldLabel: _('ID_STATUS'), 
     	    	   hiddenName: 'status',
     	    	   typeAhead: true,
     	    	   mode: 'local', 
@@ -187,13 +190,13 @@ Ext.onReady(function(){
     	    	   valueField:'value',
     	    	   allowBlank: false, 
     	    	   triggerAction: 'all',
-                   emptyText: TRANSLATIONS.ID_SELECT_STATUS,
+                   emptyText: _('ID_SELECT_STATUS'),
                    selectOnFocus:true
     	    	   }
     	       ],
     	 buttons: [
-    	       {text: TRANSLATIONS.ID_CLOSE, handler: CloseWindow},
-    	       {text: TRANSLATIONS.ID_SAVE, handler: SaveEditGroupAction}
+    	       {text: _('ID_SAVE'), handler: SaveEditGroupAction},
+    	       {text: _('ID_CANCEL'), handler: CloseWindow},
     	 ]
     });
 
@@ -203,10 +206,13 @@ Ext.onReady(function(){
           }),
     	reader : new Ext.data.JsonReader( {
     		root: 'groups',
+    		totalProperty: 'total_groups',
     		fields : [
     		    {name : 'GRP_UID'},
     		    {name : 'GRP_STATUS'},
-    		    {name : 'CON_VALUE'}
+    		    {name : 'CON_VALUE'},
+    		    {name : 'GRP_TASKS', type: 'int'},
+    		    {name : 'GRP_USERS', type: 'int'}
     		    ]
     	})
     });
@@ -218,10 +224,47 @@ Ext.onReady(function(){
         },
         columns: [
             {id:'GRP_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-            {header: 'Group Name', dataIndex: 'CON_VALUE', width: 60, align:'left'},
-            {header: 'Status', dataIndex: 'GRP_STATUS', width: 30, align:'center'}
+            {header: _('ID_GROUP_NAME'), dataIndex: 'CON_VALUE', width: 400, align:'left'},
+            {header: _('ID_STATUS'), dataIndex: 'GRP_STATUS', width: 130, align:'center', renderer: render_status},
+            {header: _('ID_MEMBERS'), dataIndex: 'GRP_USERS', width: 100, align:'center'},
+            {header: _('ID_TASKS'), dataIndex: 'GRP_TASKS', width: 100, align:'center'}
             ]
     });
+    
+    storePageSize = new Ext.data.SimpleStore({
+        fields: ['size'],
+         data: [['20'],['30'],['40'],['50'],['100']],
+         autoLoad: true
+      });
+        
+      comboPageSize = new Ext.form.ComboBox({
+        typeAhead     : false,
+        mode          : 'local',
+        triggerAction : 'all',
+        store: storePageSize,
+        valueField: 'size',
+        displayField: 'size',
+        width: 50,
+        editable: false,
+        listeners:{
+          select: function(c,d,i){
+            UpdatePageConfig(d.data['size']);
+            bbarpaging.pageSize = parseInt(d.data['size']);
+            bbarpaging.moveFirst();
+          }
+        }
+      });
+        
+      comboPageSize.setValue(pageSize);
+      
+      bbarpaging = new Ext.PagingToolbar({
+        pageSize: pageSize,
+        store: store,
+        displayInfo: true,
+        displayMsg: _('ID_GRID_PAGE_DISPLAYING_GROUPS_MESSAGE') + '&nbsp; &nbsp; ',
+        emptyMsg: _('ID_GRID_PAGE_NO_GROUPS_MESSAGE'),
+        items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
+      });
     
     
     infoGrid = new Ext.grid.GridPanel({
@@ -240,11 +283,12 @@ Ext.onReady(function(){
     	viewConfig: {
     		forceFit:true
     	},
-    	title : TRANSLATIONS.ID_GROUPS,
+    	title : _('ID_GROUPS'),
     	store: store,
     	cm: cmodel,
     	sm: smodel,
     	tbar: [newButton, '-', editButton, deleteButton,'-',membersButton, {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
+    	bbar: bbarpaging,
     	listeners: {
     		rowdblclick: EditGroupWindow
     	},
@@ -280,65 +324,68 @@ onMessageContextMenu = function (grid, rowIndex, e) {
     e.stopEvent();
     var coords = e.getXY();
     contextMenu.showAt([coords[0], coords[1]]);
-}
+};
 
 //Do Nothing Function
-DoNothing = function(){}
+DoNothing = function(){};
 
 //Open New Group Form
 NewGroupWindow = function(){
 	w = new Ext.Window({
-		height: 130,
+		autoHeight: true,
 		width: 400,
-		title: TRANSLATIONS.ID_CREATE_GROUP_TITLE,
+		title: _('ID_CREATE_GROUP_TITLE'),
 		closable: false,
 		modal: true,
 		items: [newForm]
 	});
 	w.show();
-}
+};
 
 //Load Grid By Default
 GridByDefault = function(){
 	searchText.reset();
 	infoGrid.store.load();
-}
+};
 
 //Do Search Function
 DoSearch = function(){
    infoGrid.store.load({params: {textFilter: searchText.getValue()}});	
-}
+};
 
 //Close Popup Window
 CloseWindow = function(){
 	w.hide();
-}
+};
 
 //Check Group Name Availability
 CheckGroupName = function(grp_name, function_success, function_failure){
+	viewport.getEl().mask(_('ID_PROCESSING'));
 	Ext.Ajax.request({
 		url: 'groups_Ajax',
 		params: {action: 'exitsGroupName', GRP_NAME: grp_name},
 		success: function(resp, opt){
+			viewport.getEl().unmask();
 			var checked = eval(resp.responseText);
 			(!checked) ? function_success() : function_failure();
 		},
 		failure: function(r,o) {
+			viewport.getEl().unmask();
 			function_failure();
 		}
 	});
-}
+};
 
 //Save Group Button
 SaveNewGroupAction = function(){
 	var group = newForm.getForm().findField('name').getValue();
 	if (group != '') CheckGroupName(group, SaveNewGroup, DuplicateGroupName);
-}
+};
 
 //Show Duplicate Group Name Message
 DuplicateGroupName = function(){
-	Ext.Msg.alert(TRANSLATIONS.ID_GROUPS, TRANSLATIONS.ID_MSG_GROUP_NAME_EXISTS);
-}
+	PMExt.warning(_('ID_GROUPS'), _('ID_MSG_GROUP_NAME_EXISTS'));
+};
 
 //Save New Group
 SaveNewGroup = function(){
@@ -348,7 +395,8 @@ SaveNewGroup = function(){
 			newForm.getForm().reset(); //Set empty form to next use
 			searchText.reset();
 			infoGrid.store.load(); //Reload store grid
-			Ext.Msg.alert(TRANSLATIONS.ID_GROUPS,TRANSLATIONS.ID_GROUPS_SUCCESS_NEW);
+			PMExt.notify(_('ID_GROUPS'),_('ID_GROUPS_SUCCESS_NEW'));
+			//Ext.Msg.alert(_('ID_GROUPS,_('ID_GROUPS_SUCCESS_NEW);
 		},
 		failure: function(f,a){
 			switch(a.failureType){
@@ -359,7 +407,7 @@ SaveNewGroup = function(){
 			
 		}
 	});
-}
+};
 
 //Open Edit Group Form
 EditGroupWindow = function(){
@@ -368,15 +416,15 @@ EditGroupWindow = function(){
 	editForm.getForm().findField('name').setValue(rowSelected.data.CON_VALUE);
 	editForm.getForm().findField('status').setValue(rowSelected.data.GRP_STATUS);
 	w = new Ext.Window({
-		height: 130,
+		autoHeight: true,
 		width: 440,
-		title: TRANSLATIONS.ID_EDIT_GROUP_TITLE,
+		title: _('ID_EDIT_GROUP_TITLE'),
 		closable: false,
 		modal: true,
 		items: [editForm]
 	});
 	w.show();
-}
+};
 
 //Save Edit Group Button
 SaveEditGroupAction = function(){
@@ -389,7 +437,7 @@ SaveEditGroupAction = function(){
 			CheckGroupName(group, SaveEditGroup, DuplicateGroupName);	
 		}
 	}
-}
+};
 
 //Save Edit Group
 SaveEditGroup = function(){
@@ -400,7 +448,7 @@ SaveEditGroup = function(){
 			editButton.disable();  //Disable Edit Button
 			deleteButton.disable(); //Disable Delete Button
 			membersButton.disable(); //Disable Members Button
-			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_GROUPS_SUCCESS_UPDATE);
+			PMExt.notify(_('ID_GROUPS'),_('ID_GROUPS_SUCCESS_UPDATE'));
 		},
 		failure: function(f,a){
 			switch(a.failureType){
@@ -411,33 +459,55 @@ SaveEditGroup = function(){
 			
 		}
 	});
-}
+};
 
 //Delete Button Action
 DeleteButtonAction = function(){
-	Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_CONFIRM_DELETE_GROUP,
+	Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_GROUP'),
 			function(btn, text){
         		if (btn=="yes"){
         			rowSelected = infoGrid.getSelectionModel().getSelected();
+        			viewport.getEl().mask(_('ID_PROCESSING'));
         			Ext.Ajax.request({
         				url: 'groups_Ajax',
         				params: {action: 'deleteGroup', GRP_UID: rowSelected.data.GRP_UID},
         				success: function(r,o){
-        				   DoSearch();
-        				   editButton.disable();  //Disable Edit Button
-        				   deleteButton.disable(); //Disable Delete Button
-        				   membersButton.disable(); //Disable Members Button
-        				   Ext.Msg.alert(TRANSLATIONS.ID_GROUPS, TRANSLATIONS.ID_GROUPS_SUCCESS_DELETE);
+        				  viewport.getEl().unmask();
+        				  DoSearch();
+        				  editButton.disable();  //Disable Edit Button
+        				  deleteButton.disable(); //Disable Delete Button
+        				  membersButton.disable(); //Disable Members Button
+        				  PMExt.notify(_('ID_GROUPS'), _('ID_GROUPS_SUCCESS_DELETE'));
+        				},
+        				failure: function(){
+        				  viewport.getEl().unmask();
         				}
         			});
         			
         		}
 	       	}
 	);
-}
+};
+
+//Render Status
+render_status = function(v){
+  switch(v){
+  case 'ACTIVE': return '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
+  case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
+  case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
+  }
+};
 
 //Members Button Action
 MembersAction = function(){
 	rowSelected = infoGrid.getSelectionModel().getSelected();
 	location.href = 'groupsMembers?GRP_UID=' + rowSelected.data.GRP_UID;
-}
+};
+
+//Update Page Size Configuration
+UpdatePageConfig = function(pageSize){
+  Ext.Ajax.request({
+  url: 'groups_Ajax',
+  params: {action:'updatePageSize', size: pageSize}
+  });
+};

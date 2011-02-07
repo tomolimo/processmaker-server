@@ -295,6 +295,7 @@ Ext.onReady(function(){
     url: 'users_Ajax?function=updateAuthServices',
     frame: true,
     title: _('ID_AUTHENTICATION_FORM_TITLE'),
+    labelWidth: 150,
     items:[
       {xtype: 'textfield', name: 'usr_uid', hidden: true },
       {

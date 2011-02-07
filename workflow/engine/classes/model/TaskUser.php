@@ -129,5 +129,22 @@ class TaskUser extends BaseTaskUser {
       throw($oError);
     }
   }
+  
+  function getCountAllTaksByGroups(){
+  	 $oCriteria = new Criteria('workflow');
+  	 $oCriteria->addAsColumn('GRP_UID', TaskUserPeer::USR_UID);
+  	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+  	 $oCriteria->add(TaskUserPeer::TU_TYPE,1);
+  	 $oCriteria->add(TaskUserPeer::TU_RELATION,2);
+  	 $oCriteria->addGroupByColumn(TaskUserPeer::USR_UID);
+  	 $oDataset = TaskUserPeer::doSelectRS($oCriteria);
+  	 $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+	   $aRows = Array();
+  	 while ($oDataset->next()){
+	     $row = $oDataset->getRow();
+	     $aRows[$row['GRP_UID']] = $row['CNT'];
+     }
+	   return $aRows;
+  }
 
 } // TaskUser

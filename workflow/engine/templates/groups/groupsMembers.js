@@ -42,20 +42,33 @@ var backButton;
 
 Ext.onReady(function(){
 	
-	assignAllButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_ASSIGN_ALL_MEMBERS,
-    	iconCls: 'button_menu_ext ss_sprite  ss_add',
-    	handler: AssignAllUsersAction
-    });
+	editMembersButton = new Ext.Action({
+	    text: _('ID_EDIT_MEMBERS'),
+	    iconCls: 'button_menu_ext ss_sprite  ss_user_add',
+	    handler: EditMembersAction
+	  });
+
+	cancelEditMembersButton = new Ext.Action({
+	    text: _('ID_FINISH_EDITION'),
+	    iconCls: 'button_menu_ext ss_sprite ss_cancel',
+	    handler: CancelEditMembersAction,
+	    hidden: true
+	  });
 	
-	removeAllButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_REMOVE_ALL_MEMBERS,
-    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
-    	handler: RemoveAllUsersAction
-    });
+//	assignAllButton = new Ext.Action({
+//    	text: _('ID_ASSIGN_ALL_MEMBERS'),
+//    	iconCls: 'button_menu_ext ss_sprite  ss_add',
+//    	handler: AssignAllUsersAction
+//    });
+	
+//	removeAllButton = new Ext.Action({
+//    	text: _('ID_REMOVE_ALL_MEMBERS'),
+//    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
+//    	handler: RemoveAllUsersAction
+//    });
 	
 	backButton = new Ext.Action({
-		text: TRANSLATIONS.ID_BACK,
+		text: _('ID_BACK'),
 		iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
 		handler: BackToGroups
 	});
@@ -81,7 +94,7 @@ Ext.onReady(function(){
         ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 110,
-        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        emptyText: _('ID_ENTER_SEARCH_TERM'),
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
@@ -102,7 +115,7 @@ Ext.onReady(function(){
         ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 110,
-        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,
+        emptyText: _('ID_ENTER_SEARCH_TERM'),
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
@@ -141,9 +154,11 @@ Ext.onReady(function(){
         },
         columns: [
             {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-            {header: TRANSLATIONS.ID_LAST_NAME, dataIndex: 'USR_LASTNAME', width: 60, align:'left'},
-            {header: TRANSLATIONS.ID_FIRST_NAME, dataIndex: 'USR_FIRSTNAME', width: 60, align:'left'},
-            {header: TRANSLATIONS.ID_USER_NAME, dataIndex: 'USR_USERNAME', width: 60, align:'left'}
+            {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME', width: 140, align:'left'},
+            {header: _('ID_FIRST_NAME'), dataIndex: 'USR_FIRSTNAME', width: 200, align:'left'},
+            {header: _('ID_LAST_NAME'), dataIndex: 'USR_LASTNAME', width: 200, align:'left'}
+            
+            
         ]
     });
 	
@@ -192,9 +207,10 @@ Ext.onReady(function(){
         	frame			: false,
         	columnLines		: false,
         	viewConfig		: {forceFit:true},
-            tbar: [TRANSLATIONS.ID_AVAILABLE_MEMBERS,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
-            bbar: [{xtype: 'tbfill'}, assignAllButton],
-            listeners: {rowdblclick: AssignUsersAction} 
+            tbar: [_('ID_AVAILABLE_MEMBERS'),{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
+            //bbar: [{xtype: 'tbfill'}, assignAllButton],
+            listeners: {rowdblclick: AssignUsersAction},
+            hidden: true
     });
 
   	assignedGrid = new Ext.grid.GridPanel({
@@ -217,9 +233,12 @@ Ext.onReady(function(){
         	frame			: false,
         	columnLines		: false,
         	viewConfig		: {forceFit:true},
-            tbar: [TRANSLATIONS.ID_ASSIGNED_MEMBERS,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
-            bbar: [{xtype: 'tbfill'},removeAllButton],
-        	listeners: {rowdblclick: RemoveUsersAction} 
+            tbar: [_('ID_ASSIGNED_MEMBERS'),{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
+            //bbar: [{xtype: 'tbfill'},removeAllButton],
+        	listeners: {rowdblclick: function(){
+        		(availableGrid.hidden)? DoNothing() : RemoveUsersAction();
+        		}
+        	}
     });
   	
   	buttonsPanel = new Ext.Panel({
@@ -232,9 +251,12 @@ Ext.onReady(function(){
         },
         defaults:{margins:'0 0 35 0'},
         items:[
-               {xtype:'button',text: '>>', handler: AssignUsersAction, id: 'assignButton', disabled: true},
-               {xtype:'button',text: '<<', handler: RemoveUsersAction, id: 'removeButton', disabled: true}
-               ]
+               {xtype:'button',text: '>', handler: AssignUsersAction, id: 'assignButton', disabled: true},
+               {xtype:'button',text: '<', handler: RemoveUsersAction, id: 'removeButton', disabled: true},
+               {xtype:'button',text: '>>', handler: AssignAllUsersAction, id: 'assignButtonAll', disabled: false},
+               {xtype:'button',text: '<<', handler: RemoveAllUsersAction, id: 'removeButtonAll', disabled: false}
+               ],
+       hidden: true
     });
   	
   	RefreshMembers();
@@ -248,7 +270,8 @@ Ext.onReady(function(){
     		layoutConfig : { align : 'stretch' },
     		items        : [availableGrid,buttonsPanel,assignedGrid],
     		viewConfig	 : {forceFit:true},
-    		tbar: [TRANSLATIONS.ID_GROUPS + ' : ' + GROUPS.GRP_TITLE ,{xtype: 'tbfill'},backButton]
+    		tbar: ['<b>'+_('ID_GROUP') + ' : ' + GROUPS.GRP_TITLE+'</b>' ,{xtype: 'tbfill'},backButton],
+    		bbar: [{xtype: 'tbfill'},editMembersButton, cancelEditMembersButton]
 
     });
    
@@ -263,12 +286,12 @@ Ext.onReady(function(){
 });
 
 //Do Nothing Function
-DoNothing = function(){}
+DoNothing = function(){};
 
 //Return to Groups Main Page
 BackToGroups = function(){
 	location.href = 'groups';
-}
+};
 
 //Loads Drag N Drop Functionality for Users
 DDLoadUsers = function(){
@@ -301,23 +324,23 @@ DDLoadUsers = function(){
                             return true;
                     }
      });
-}
+};
 
 //REFRESH GROUPS GRIDS
 RefreshMembers = function(){
 	DoSearchA();
 	DoSearchP();
-}
+};
 
 //FAILURE AJAX FUNCTION
 FailureProcess = function(){
-	Ext.Msg.alert(TRANSLATIONS.ID_GROUPS, TRANSLATIONS.ID_MSG_AJAX_FAILURE);
-}
+	Ext.Msg.alert(_('ID_GROUPS'), _('ID_MSG_AJAX_FAILURE'));
+};
 
 //ASSIGN GROUPS TO A USER
 SaveGroupsUser = function(arr_usr, function_success, function_failure){
 	var sw_response;
-	viewport.getEl().mask(TRANSLATIONS.ID_PROCESSING);
+	viewport.getEl().mask(_('ID_PROCESSING'));
 	Ext.Ajax.request({
 		url: 'groups_Ajax',
 		params: {action: 'assignUsersToGroupsMultiple', GRP_UID: GROUPS.GRP_UID, USR_UID: arr_usr.join(',')},
@@ -330,12 +353,12 @@ SaveGroupsUser = function(arr_usr, function_success, function_failure){
 					viewport.getEl().unmask();
 		}
 	});
-}
+};
 
 //REMOVE USERS FROM A GROUP
 DeleteGroupsUser = function(arr_usr, function_success, function_failure){
 	var sw_response;
-	viewport.getEl().mask(TRANSLATIONS.ID_PROCESSING);
+	viewport.getEl().mask(_('ID_PROCESSING'));
 	Ext.Ajax.request({
 		url: 'groups_Ajax',
 		params: {action: 'deleteUsersToGroupsMultiple', GRP_UID: GROUPS.GRP_UID, USR_UID: arr_usr.join(',')},
@@ -348,7 +371,7 @@ DeleteGroupsUser = function(arr_usr, function_success, function_failure){
 					viewport.getEl().unmask();
 		}
 	});
-}
+};
 
 //AssignButton Functionality
 AssignUsersAction = function(){
@@ -358,7 +381,7 @@ AssignUsersAction = function(){
 		arrAux[a] = rowsSelected[a].get('USR_UID');
 	}
 	SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
-}
+};
 
 //RemoveButton Functionality
 RemoveUsersAction = function(){
@@ -368,7 +391,7 @@ RemoveUsersAction = function(){
 		arrAux[a] = rowsSelected[a].get('USR_UID');
 	}
 	DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
-}
+};
 
 //AssignALLButton Functionality
 AssignAllUsersAction = function(){
@@ -381,7 +404,7 @@ AssignAllUsersAction = function(){
 		}
 		SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
 	}
-}
+};
 
 //RevomeALLButton Functionality
 RemoveAllUsersAction = function(){
@@ -394,26 +417,44 @@ RemoveAllUsersAction = function(){
 		}
 		DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
 	}
-}
+};
 
 //Function DoSearch Available
 DoSearchA = function(){
 	availableGrid.store.load({params: {textFilter: searchTextA.getValue()}});
-}
+};
 
 //Function DoSearch Assigned
 DoSearchP = function(){
 	assignedGrid.store.load({params: {textFilter: searchTextP.getValue()}});
-}
+};
 
 //Load Grid By Default Available Members
 GridByDefaultA = function(){
 	searchTextA.reset();
 	availableGrid.store.load();
-}
+};
 
 //Load Grid By Default Assigned Members
 GridByDefaultP = function(){
 	searchTextP.reset();
 	assignedGrid.store.load();
-}
+};
+
+//edit members action
+EditMembersAction = function(){
+  availableGrid.show();
+  buttonsPanel.show();
+  editMembersButton.hide();
+  cancelEditMembersButton.show();
+  MembersPanel.doLayout();
+};
+
+//CancelEditMenbers Function
+CancelEditMembersAction = function(){
+  availableGrid.hide();
+  buttonsPanel.hide();
+  editMembersButton.show();
+  cancelEditMembersButton.hide();
+  MembersPanel.doLayout();
+};

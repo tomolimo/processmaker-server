@@ -55,37 +55,16 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_USERS"))!=1) return $RBAC_Response;
   
 $G_PUBLISH = new Publisher;
 
-$oHeadPublisher =& headPublisher::getSingleton();
+G::LoadClass('configuration');
+$c = new Configurations();
+$configPage = $c->getConfiguration('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$configEnv = $c->getConfiguration('ENVIRONMENT_SETTINGS', '');
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
+$oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('groups/groupsList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('groups/groupsList'); //adding a html file  .html.
+$oHeadPublisher->assign('CONFIG', $Config);
 
-$labels = G::getTranslations(Array('ID_GROUPS','ID_EDIT','ID_DELETE','ID_NEW','ID_SEARCH','ID_ENTER_SEARCH_TERM','ID_GROUP_NAME','ID_SAVE','ID_CLOSE',
-  'ID_STATUS','ID_SELECT_STATUS','ID_MEMBERS','ID_MSG_GROUP_NAME_EXISTS','ID_GROUPS_SUCCESS_NEW','ID_GROUPS_SUCCESS_UPDATE',
-  'ID_MSG_CONFIRM_DELETE_GROUP','ID_GROUPS_SUCCESS_DELETE','ID_CREATE_GROUP_TITLE','ID_EDIT_GROUP_TITLE'));
-
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
 G::RenderPage('publish', 'extJs');
-  
-//  
-//
-//  $dbc = new DBConnection();
-//  $ses = new DBSession($dbc);
-//
-//  $Fields['WHERE'] = '';
-//
-//  $G_PUBLISH = new Publisher;
-//  $oHeadPublisher =& headPublisher::getSingleton();
-//  $oHeadPublisher->addScriptFile('/jscore/groups/groups.js');
-//  
-//  $G_PUBLISH->AddContent('view', 'groups/groups_Tree' );
-//  $G_PUBLISH->AddContent('smarty', 'groups/groups_usersList', '', '', array());
-//
-//  G::RenderPage( "publish-treeview",'blank' );
-//
-//  $groups_Edit = G::encryptlink('groups_Edit');
-//  $groups_Delete = G::encryptlink('groups_Delete');
-//  $groups_List = G::encryptlink('groups_List');
-//  $groups_AddUser = G::encryptlink('groups_AddUser');
 ?>

@@ -71,7 +71,7 @@ $oGroup->load($_REQUEST['GRP_UID']);
 $groups['GRP_UID'] = $_REQUEST['GRP_UID'];
 $groups['GRP_TITLE'] = $oGroup->getGrpTitle();
 
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
+//$oHeadPublisher->assign('TRANSLATIONS', $labels);
 $oHeadPublisher->assign('GROUPS', $groups);
 G::RenderPage('publish', 'extJs');
 ?>

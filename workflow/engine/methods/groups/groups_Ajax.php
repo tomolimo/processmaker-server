@@ -28,242 +28,270 @@ $_POST['action'] = get_ajax_value('action');
 
 switch ($_POST['action'])
 {
-	case 'showUsers':
-	  G::LoadClass('groups');
-	  $oGroups = new Groups();
-	  $oGroup  = new Groupwf();
-	  $aFields = $oGroup->load($_POST['sGroupUID']);
-	  global $G_PUBLISH;
-  	$G_PUBLISH = new Publisher();
-  	//$G_PUBLISH->AddContent('xmlform', 'xmlform', 'groups/groups_UsersListTitle', '', array('GRP_NAME' => $aFields['GRP_TITLE']));
-  	$G_PUBLISH->AddContent('propeltable', 'groups/paged-table2', 'groups/groups_UsersList', $oGroups->getUsersGroupCriteria($_POST['sGroupUID']), array('GRP_UID' => $_POST['sGroupUID'], 'GRP_NAME' => $aFields['GRP_TITLE']));
+  case 'showUsers':
+    G::LoadClass('groups');
+    $oGroups = new Groups();
+    $oGroup  = new Groupwf();
+    $aFields = $oGroup->load($_POST['sGroupUID']);
+    global $G_PUBLISH;
+    $G_PUBLISH = new Publisher();
+    //$G_PUBLISH->AddContent('xmlform', 'xmlform', 'groups/groups_UsersListTitle', '', array('GRP_NAME' => $aFields['GRP_TITLE']));
+    $G_PUBLISH->AddContent('propeltable', 'groups/paged-table2', 'groups/groups_UsersList', $oGroups->getUsersGroupCriteria($_POST['sGroupUID']), array('GRP_UID' => $_POST['sGroupUID'], 'GRP_NAME' => $aFields['GRP_TITLE']));
     
     $oHeadPublisher =& headPublisher::getSingleton();
     $oHeadPublisher->addScriptCode("groupname=\"{$aFields["GRP_TITLE"]}\";");
     
     G::RenderPage('publish', 'raw');
-	break;
+  break;
 
-	case 'assignUser':
-	  G::LoadClass('groups');
-	  $oGroup = new Groups();
-	  $oGroup->addUserToGroup($_POST['GRP_UID'], $_POST['USR_UID']);
-	break;
+  case 'assignUser':
+    G::LoadClass('groups');
+    $oGroup = new Groups();
+    $oGroup->addUserToGroup($_POST['GRP_UID'], $_POST['USR_UID']);
+  break;
 
-	case 'assignAllUsers':
-	  G::LoadClass('groups');
-	  $oGroup = new Groups();
-	  $aUsers=explode(',', $_POST['aUsers']);
-	  
-	  for($i=0; $i<count($aUsers); $i++)
-	  {
-	  	$oGroup->addUserToGroup($_POST['GRP_UID'], $aUsers[$i]);
-	  }
-	break;
+  case 'assignAllUsers':
+    G::LoadClass('groups');
+    $oGroup = new Groups();
+    $aUsers=explode(',', $_POST['aUsers']);
+    
+    for($i=0; $i<count($aUsers); $i++)
+    {
+      $oGroup->addUserToGroup($_POST['GRP_UID'], $aUsers[$i]);
+    }
+  break;
 
-	case 'ofToAssignUser':
-	  G::LoadClass('groups');
-	  $oGroup = new Groups();
-	  $oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
-	break;
+  case 'ofToAssignUser':
+    G::LoadClass('groups');
+    $oGroup = new Groups();
+    $oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
+  break;
 
-	case 'verifyGroupname':
-  	  $_POST['sOriginalGroupname'] = get_ajax_value('sOriginalGroupname');
-  	  $_POST['sGroupname']         = get_ajax_value('sGroupname');
-  	  if ($_POST['sOriginalGroupname'] == $_POST['sGroupname'])
-  	  {
-  	    echo '0';
-  	  }
-  	  else
-  	  {
-  	  	require_once 'classes/model/Groupwf.php';
-  	  	G::LoadClass('Groupswf');
-	      $oGroup = new Groupwf();
-	      $oCriteria=$oGroup->loadByGroupname($_POST['sGroupname']);
-  	  	$oDataset = GroupwfPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
-        $aRow = $oDataset->getRow();
-        if (!$aRow)
-  	  	{
-  	  		echo '0';
-  	  	}
-  	  	else
-  	  	{
-  	  		echo '1';
-  	  	}
-  	  }
-  	break;
-	case 'groupsList':
-		require_once 'classes/model/Groupwf.php';
-		$oCriteria = new Criteria('workflow');
-		$oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
-		$oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
-		$oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
-		$oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
-        $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
-        $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
-        
-        $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
-        if ($filter != ''){
-           $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
-        }
-        
-        $oDataset = GroupwfPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        
-        $arrData = Array();
-        while ($oDataset->next()){
-           $arrData[] = $oDataset->getRow();
-        }
-        
-        echo '{success: true, groups: '.G::json_encode($arrData).'}';
-        break;
-	case 'exitsGroupName':
-		require_once 'classes/model/Groupwf.php';
-		G::LoadClass('Groupswf');
-	    $oGroup = new Groupwf();
-	    $oCriteria=$oGroup->loadByGroupname($_POST['GRP_NAME']);
-	    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
-        $aRow = $oDataset->getRow();
-        $response = ($aRow) ? 'true' : 'false';
-        echo $response;
-        break; 
-	case 'saveNewGroup':
-		G::LoadClass('groups');
-		$newGroup['GRP_UID'] = '';
-		$newGroup['GRP_STATUS'] = G::toUpper($_POST['status']);
-		$newGroup['GRP_TITLE'] = $_POST['name'];
-		unset($newGroup['GRP_UID']);
-        $group = new Groupwf();
-        $group->create($newGroup);
-        echo '{success: true}';
-        break;
-	case 'saveEditGroup':
-		G::LoadClass('groups');
-		$editGroup['GRP_UID'] = $_POST['grp_uid'];
-		$editGroup['GRP_STATUS'] = G::toUpper($_POST['status']);
-		$editGroup['GRP_TITLE'] = $_POST['name'];
-	    $group = new Groupwf();
-        $group->update($editGroup);
-        echo '{success: true}';
-        break;
-	case 'deleteGroup':
-		G::LoadClass('groups');
-    	$group = new Groupwf();
-		if (!isset($_POST['GRP_UID'])) return;
-    	$group->remove(urldecode($_POST['GRP_UID']));
-   		require_once 'classes/model/TaskUser.php';
-  		$oProcess   = new TaskUser();
-		$oCriteria = new Criteria('workflow');
-		$oCriteria->add(TaskUserPeer::USR_UID, $_POST['GRP_UID']);
-		TaskUserPeer::doDelete($oCriteria);
-		echo '{success: true}';
-        break;
-	case 'assignedMembers':
-		require_once 'classes/model/Users.php';
-		require_once 'classes/model/GroupUser.php';
-		$sGroupUID = $_REQUEST['gUID'];
-		$oCriteria = new Criteria('workflow');
-      	$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_UID);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
-		$oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
-      	$oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
-      	$oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
-      	$oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
-
-		$filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
-        if ($filter != ''){
-           $oCriteria->add(
-              $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
-              $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
-              $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE)))
-            );
-        }	
-      	
-      	$oDataset = UsersPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-        $arrData = Array();
-        while ($oDataset->next()){
-           $arrData[] = $oDataset->getRow();
-        }
-        echo '{success: true, members: '.G::json_encode($arrData).'}';
-        break;
-     case 'availableMembers':
-		require_once 'classes/model/Users.php';
-		require_once 'classes/model/GroupUser.php';
-		$sGroupUID = $_REQUEST['gUID'];
-		$oCriteria = new Criteria('workflow');
-      	$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_UID);
-      	$oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
-      	$oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
-      	$oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
-      	
-      	$oDataset = UsersPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      	
-		$oDataset->next();
-        $uUIDs = array();
-        while ($aRow = $oDataset->getRow()) {
-          $uUIDs[] = $aRow['USR_UID'];
-          $oDataset->next();
-        }
-        
-        $oCriteria = new Criteria('workflow');
-      	$oCriteria->addSelectColumn(UsersPeer::USR_UID);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-      	$oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
-		$oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
-      	$oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
-      	$oCriteria->add(UsersPeer::USR_UID, $uUIDs, Criteria::NOT_IN);
-
-		$filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
-        if ($filter != ''){
-           $oCriteria->add(
-              $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
-              $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
-              $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE)))
-            );
-        }	
-      	
-      	$oDataset = UsersPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-        $arrData = Array();
-        while ($oDataset->next()){
-           $arrData[] = $oDataset->getRow();
-        }
-        echo '{success: true, members: '.G::json_encode($arrData).'}';
-        break;
-     case 'assignUsersToGroupsMultiple':
-     	$GRP_UID = $_POST['GRP_UID'];
-        $uUIDs = explode(',',$_POST['USR_UID']);
-        G::LoadClass('groups');
-        $oGroup = new Groups();
-        foreach ($uUIDs as $USR_UID){
-            $oGroup->addUserToGroup($GRP_UID, $USR_UID);		
-        }
-        break;
-   	case 'deleteUsersToGroupsMultiple':
-         	$GRP_UID = $_POST['GRP_UID'];
-         	$uUIDs = explode(',',$_POST['USR_UID']);
-         	G::LoadClass('groups');
-            $oGroup = new Groups();
-         	foreach ($uUIDs as $USR_UID){
-               $oGroup->removeUserOfGroup($GRP_UID, $USR_UID);		
-         	}
-         	break;
-        
-        
-        
-        
-		
+  case 'verifyGroupname':
+    $_POST['sOriginalGroupname'] = get_ajax_value('sOriginalGroupname');
+    $_POST['sGroupname']         = get_ajax_value('sGroupname');
+    if ($_POST['sOriginalGroupname'] == $_POST['sGroupname'])
+    {
+      echo '0';
+    }
+    else
+    {
+      require_once 'classes/model/Groupwf.php';
+      G::LoadClass('Groupswf');
+      $oGroup = new Groupwf();
+      $oCriteria=$oGroup->loadByGroupname($_POST['sGroupname']);
+      $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      $aRow = $oDataset->getRow();
+      if (!$aRow)
+      {
+        echo '0';
+      }
+      else
+      {
+        echo '1';
+      }
+    }
+    break;
+  case 'groupsList':
+    require_once 'classes/model/Groupwf.php';
+    require_once 'classes/model/TaskUser.php';
+    require_once 'classes/model/GroupUser.php';
+    G::LoadClass('configuration');
+    
+    $co = new Configurations();
+    $config = $co->getConfiguration('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    $env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
+    $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+    $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+    $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
+    $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+    
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+    if ($filter != ''){
+      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
+    }
+    $totalRows = GroupwfPeer::doCount($oCriteria);
+    
+    $oCriteria = new Criteria('workflow');   
+    $oCriteria->clearSelectColumns();
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $oCriteria->addAsColumn('GRP_TASKS', 0);
+    $oCriteria->addAsColumn('GRP_USERS', 0);
+    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+    if ($filter != ''){
+      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
+    }
+    $oCriteria->setOffset($start);
+    $oCriteria->setLimit($limit);
+    
+    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+    $tasks = new TaskUser();
+    $aTask = $tasks->getCountAllTaksByGroups();
+    
+    $members = new GroupUser();
+    $aMembers = $members->getCountAllUsersByGroup();
+    
+    $arrData = Array();
+    while ($oDataset->next()){
+      $arrData[] = $oDataset->getRow();
+      $index = sizeof($arrData)-1;
+      $arrData[$index]['GRP_TASKS'] = isset($aTask[$arrData[$index]['GRP_UID']]) ? $aTask[$arrData[$index]['GRP_UID']] : 0;
+      $arrData[$index]['GRP_USERS'] = isset($aMembers[$arrData[$index]['GRP_UID']]) ? $aMembers[$arrData[$index]['GRP_UID']] : 0;
+    }
+    echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}';
+    break;
+  case 'exitsGroupName':
+    require_once 'classes/model/Groupwf.php';
+    G::LoadClass('Groupswf');
+    $oGroup = new Groupwf();
+    $oCriteria=$oGroup->loadByGroupname($_POST['GRP_NAME']);
+    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    $response = ($aRow) ? 'true' : 'false';
+    echo $response;
+    break; 
+  case 'saveNewGroup':
+    G::LoadClass('groups');
+    $newGroup['GRP_UID'] = '';
+    $newGroup['GRP_STATUS'] = G::toUpper($_POST['status']);
+    $newGroup['GRP_TITLE'] = $_POST['name'];
+    unset($newGroup['GRP_UID']);
+    $group = new Groupwf();
+    $group->create($newGroup);
+    echo '{success: true}';
+    break;
+  case 'saveEditGroup':
+    G::LoadClass('groups');
+    $editGroup['GRP_UID'] = $_POST['grp_uid'];
+    $editGroup['GRP_STATUS'] = G::toUpper($_POST['status']);
+    $editGroup['GRP_TITLE'] = $_POST['name'];
+    $group = new Groupwf();
+    $group->update($editGroup);
+    echo '{success: true}';
+    break;
+  case 'deleteGroup':
+    G::LoadClass('groups');
+    $group = new Groupwf();
+    if (!isset($_POST['GRP_UID'])) return;
+    $group->remove(urldecode($_POST['GRP_UID']));
+    require_once 'classes/model/TaskUser.php';
+    $oProcess   = new TaskUser();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(TaskUserPeer::USR_UID, $_POST['GRP_UID']);
+    TaskUserPeer::doDelete($oCriteria);
+    echo '{success: true}';
+    break;
+  case 'assignedMembers':
+    require_once 'classes/model/Users.php';
+    require_once 'classes/model/GroupUser.php';
+    $sGroupUID = $_REQUEST['gUID'];
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
+    $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+    $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+    $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+    $oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
+    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
+    if ($filter != ''){
+      $oCriteria->add(
+      $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE))));
+    }  
+    $oDataset = UsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $arrData = Array();
+    while ($oDataset->next()){
+      $arrData[] = $oDataset->getRow();
+    }
+    echo '{success: true, members: '.G::json_encode($arrData).'}';
+    break;
+  case 'availableMembers':
+    require_once 'classes/model/Users.php';
+    require_once 'classes/model/GroupUser.php';
+    $sGroupUID = $_REQUEST['gUID'];
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
+    $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+    $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+    $oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
+    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $oDataset = UsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $uUIDs = array();
+    while ($aRow = $oDataset->getRow()) {
+      $uUIDs[] = $aRow['USR_UID'];
+      $oDataset->next();
+    }
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(UsersPeer::USR_UID);
+    $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $oCriteria->add(UsersPeer::USR_UID, $uUIDs, Criteria::NOT_IN);
+    $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
+    if ($filter != ''){
+      $oCriteria->add(
+      $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE))));
+    }  
+    $oDataset = UsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $arrData = Array();
+    while ($oDataset->next()){
+      $arrData[] = $oDataset->getRow();
+    }
+    echo '{success: true, members: '.G::json_encode($arrData).'}';
+    break;
+  case 'assignUsersToGroupsMultiple':
+    $GRP_UID = $_POST['GRP_UID'];
+    $uUIDs = explode(',',$_POST['USR_UID']);
+    G::LoadClass('groups');
+    $oGroup = new Groups();
+    foreach ($uUIDs as $USR_UID){
+      $oGroup->addUserToGroup($GRP_UID, $USR_UID);    
+    }
+    break;
+  case 'deleteUsersToGroupsMultiple':
+    $GRP_UID = $_POST['GRP_UID'];
+    $uUIDs = explode(',',$_POST['USR_UID']);
+    G::LoadClass('groups');
+    $oGroup = new Groups();
+    foreach ($uUIDs as $USR_UID){
+      $oGroup->removeUserOfGroup($GRP_UID, $USR_UID);    
+    }
+    break;
+  case 'updatePageSize':
+    G::LoadClass('configuration');
+    $c = new Configurations();
+    $arr['pageSize'] = $_REQUEST['size'];
+    $arr['dateSave'] = date('Y-m-d H:i:s');
+    $config = Array();
+    $config[] = $arr;
+    $c->aConfig = $config;
+    $c->saveConfig('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    echo '{success: true}';
+    break;
 }
