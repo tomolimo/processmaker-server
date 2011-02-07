@@ -109,5 +109,35 @@ class LoginLog extends BaseLoginLog {
       throw($e);
     }
   }
+  
+  //Added by Qennix
+  function getLastLoginByUser($sUID){
+  	 $c = new Criteria();
+  	 $c->addSelectColumn(LoginLogPeer::LOG_INIT_DATE);
+  	 $c->add(LoginLogPeer::USR_UID,$sUID);
+  	 $c->setLimit(1);
+  	 $c->addDescendingOrderByColumn(LoginLogPeer::LOG_INIT_DATE);
+  	 $Dat = LoginLogPeer::doSelectRS ($c);
+	 $Dat->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+	 $Dat->next();
+	 $aRow = $Dat->getRow();
+	 return isset($aRow['LOG_INIT_DATE']) ? $aRow['LOG_INIT_DATE'] : ''; 
+  }
+  
+  //Added by Qennix
+  function getLastLoginAllUsers(){
+  	 $c = new Criteria();
+  	 $c->addSelectColumn(LoginLogPeer::USR_UID);
+  	 $c->addAsColumn('LAST_LOGIN', 'MAX(LOG_INIT_DATE)');
+  	 $c->addGroupByColumn(LoginLogPeer::USR_UID);
+  	 $Dat = LoginLogPeer::doSelectRS ($c);
+	 $Dat->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+	 $aRows = Array();
+	 while ($Dat->next()){
+	 	$row = $Dat->getRow();
+	 	$aRows[$row['USR_UID']] = $row['LAST_LOGIN'];
+	 }
+	 return $aRows;
+  }
     
 } // LoginLog

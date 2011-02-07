@@ -46,6 +46,7 @@ if( $access != 1 ){
   	break;  	
   }
 }
+
 $G_MAIN_MENU            = 'processmaker';
 $G_SUB_MENU             = 'users';
 $G_ID_MENU_SELECTED     = 'USERS';
@@ -53,17 +54,17 @@ $G_ID_SUB_MENU_SELECTED = 'USERS';
 
 $G_PUBLISH = new Publisher;
 
-$oHeadPublisher =& headPublisher::getSingleton();
+G::LoadClass('configuration');
+$c = new Configurations();
+$configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$configEnv = $c->getConfiguration('ENVIRONMENT_SETTINGS', '');
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+$Config['fullNameFormat'] = isset($configEnv['format']) ? $configEnv['format'] : '@userName';
+$Config['dateFormat'] = isset($configEnv['dateFormat']) ? $configEnv['dateFormat'] : 'Y/m/d';
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
+$oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('users/usersList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('users/usersList'); //adding a html file  .html.
+$oHeadPublisher->assign('CONFIG', $Config);
 
-$labels = G::getTranslations(Array('ID_USERS','ID_EDIT','ID_DELETE','ID_NEW','ID_GROUPS','ID_USERS_DELETE_WITH_HISTORY',
-                                    'ID_USER_NAME','ID_PHOTO','ID_EMAIL','ID_FULL_NAME','ID_SEARCH','ID_ENTER_SEARCH_TERM',
-									'ID_ROLE','ID_DUE_DATE','ID_CANNOT_DELETE_ADMIN_USER','ID_CONFIRM','ID_MSG_CONFIRM_DELETE_USER',
-									'ID_MSG_CANNOT_DELETE_USER','ID_USERS_SUCCESS_DELETE','ID_AUTHENTICATION'));
-
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
 G::RenderPage('publish', 'extJs');
- 

@@ -52,6 +52,7 @@ class Configurations // extends Configuration
 {
   var $aConfig           = array();
   private $Configuration = null;
+  private $UserConfig = null;
   
   /**
    * Set Configurations
@@ -254,6 +255,33 @@ class Configurations // extends Configuration
       return null;
     }
   }
+  
+  /**
+   * usersNameFormat
+   * @author Qennix
+   * @param  string   $username
+   * @param  string   $firstname  
+   * @param  string   $lastname
+   * @return string User Name Well-Formatted
+   */
+  
+  function usersNameFormat($username, $firstname, $lastname){
+  	try{
+  		if (!isset($this->UserConfig)) $this->UserConfig = $this->getConfiguration('ENVIRONMENT_SETTINGS', '');
+  		if (isset($this->UserConfig['format'])){
+  		   $aux = '';
+  		   $aux = str_replace('@userName', $username, $this->UserConfig['format']);
+  		   $aux = str_replace('@firstName', $firstname, $aux);
+  		   $aux = str_replace('@lastName', $lastname, $aux);
+  		   return $aux;	
+  		}else{
+  		   return $username;	
+  		}
+  	}catch(Exception $oError){
+  		return null;
+  	}
+  }
+  
     
   /**
    * setConfig

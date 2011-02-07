@@ -394,19 +394,35 @@ protected $depo_title = '';
 
   // select departments
   // this function is used to draw the hierachy tree view
-  function getDepartments( $DepParent )  {
+function getDepartments( $DepParent )  {
     try {
       $result = array();
       $criteria = new Criteria('workflow');
       $criteria->add(DepartmentPeer::DEP_PARENT, $DepParent, Criteria::EQUAL);
       $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
       $objects = DepartmentPeer::doSelect($criteria, $con);
+      global $RBAC;
+      
       foreach( $objects as $oDepartment ) {
         $node = array();
         $node['DEP_UID']      = $oDepartment->getDepUid();
         $node['DEP_PARENT']   = $oDepartment->getDepParent();
         $node['DEP_TITLE']    = $oDepartment->getDepTitle();
+        $node['DEP_STATUS']   = $oDepartment->getDepStatus();
+        $node['DEP_MANAGER']  = $oDepartment->getDepManager();
         $node['DEP_LAST']     = 0;
+        
+        $manager = $oDepartment->getDepManager();
+        if ($manager != ''){
+          $UserUID = $RBAC->load($manager);
+          $node['DEP_MANAGER_USERNAME'] = $UserUID['USR_USERNAME'];
+          $node['DEP_MANAGER_FIRSTNAME'] = $UserUID['USR_FIRSTNAME'];
+          $node['DEP_MANAGER_LASTNAME'] = $UserUID['USR_LASTNAME'];
+        }else{
+          $node['DEP_MANAGER_USERNAME'] = '';	
+          $node['DEP_MANAGER_FIRSTNAME'] = '';
+          $node['DEP_MANAGER_LASTNAME'] = '';
+        }
 
         $criteriaCount = new Criteria('workflow');
         $criteriaCount->clearSelectColumns();
@@ -555,5 +571,23 @@ protected $depo_title = '';
 		    $c->add(ContentPeer::CON_LANG,  SYS_LANG );          
 		    return $c;   
 		  }
+		  
+	//Added by Qennix
+	function getAllDepartmentsByUser(){
+		$c = new Criteria('workflow');
+		$c->addSelectColumn(UsersPeer::USR_UID);
+		$c->addAsColumn('DEP_TITLE', ContentPeer::CON_VALUE);
+		$c->add(ContentPeer::CON_LANG,defined(SYS_LANG)?SYS_LANG:'en');
+		$c->add(ContentPeer::CON_CATEGORY,'DEPO_TITLE');
+		$c->addJoin(UsersPeer::DEP_UID, ContentPeer::CON_ID,Criteria::INNER_JOIN);
+		$Dat = UsersPeer::doSelectRS ($c);
+		$Dat->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+		$aRows = Array();
+		while ($Dat->next()){
+	   		$row = $Dat->getRow();
+	   		$aRows[$row['USR_UID']] = $row['DEP_TITLE'];
+		}
+		return $aRows;
+	}
 
 } // Department

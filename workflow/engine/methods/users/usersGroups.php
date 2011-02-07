@@ -1,6 +1,6 @@
 <?php
 /**
- * users_List.php
+ * usersGroups.php
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -53,20 +53,12 @@ $G_ID_SUB_MENU_SELECTED = 'USERS';
 
 $G_PUBLISH = new Publisher;
 
-$oHeadPublisher =& headPublisher::getSingleton();
-
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
-$oHeadPublisher->addExtJsScript('users/usersGroups', false);    //adding a javascript file .js
-$oHeadPublisher->addContent('users/usersGroups'); //adding a html file  .html.
-
-$labels = G::getTranslations(Array('ID_USERS','ID_ASSIGN','ID_ASSIGN_ALL_GROUPS','ID_REMOVE','ID_REMOVE_ALL_GROUPS',
-					'ID_BACK','ID_GROUP_NAME','ID_AVAILABLE_GROUPS','ID_ASSIGNED_GROUPS','ID_GROUPS','ID_USERS',
-					'ID_MSG_AJAX_FAILURE','ID_PROCESSING','ID_AUTHENTICATION','ID_CLOSE','ID_SAVE','ID_AUTHENTICATION_SOURCE',
-					'ID_AUTHENTICATION_DN','ID_AUTHENTICATION_FORM_TITLE','ID_SELECT_AUTH_SOURCE','ID_SAVE_CHANGES','ID_DISCARD_CHANGES',
-                    'ID_ENTER_SEARCH_TERM'));
+G::LoadClass('configuration');
+$c = new Configurations();
+$configEnv = $c->getConfiguration('ENVIRONMENT_SETTINGS', '');
+$Config['fullNameFormat'] = isset($configEnv['format']) ? $configEnv['format'] : '@userName';
 
 require_once 'classes/model/Users.php';
-
 $oCriteria = new Criteria();
 $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
 $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
@@ -77,13 +69,23 @@ $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 $oDataset->next();
 $aRow = $oDataset->getRow();
 
+switch($_REQUEST['type']){
+	case 'summary': $ctab = 0; break;
+	case 'group': $ctab = 1; break;
+	case 'auth': $ctab = 2; break;
+}
+
 $users = Array();
 $users['USR_UID'] = $_GET['uUID'];
-$users['USR_COMPLETENAME'] = $aRow['USR_LASTNAME'].' '.$aRow['USR_FIRSTNAME'];
+$users['USR_FIRSTNAME'] = $aRow['USR_FIRSTNAME'];
+$users['USR_LASTNAME'] = $aRow['USR_LASTNAME'];
 $users['USR_USERNAME'] = $aRow['USR_USERNAME'];
-$users['CURRENT_TAB'] = ($_REQUEST['type']=='group') ? 0 : 1;
+$users['fullNameFormat'] = $Config['fullNameFormat'];
+$users['CURRENT_TAB'] = $ctab;
 
-
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
+$oHeadPublisher =& headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('users/usersGroups', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('users/usersGroups'); //adding a html file  .html.
 $oHeadPublisher->assign('USERS', $users);
+
 G::RenderPage('publish', 'extJs');

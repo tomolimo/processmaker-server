@@ -1194,4 +1194,20 @@ class AppCacheView extends BaseAppCacheView {
     return ($rowData);
   }
   
+  //Added By Qennix
+  function getTotalCasesByAllUsers(){
+  	$oCriteria  = new Criteria('workflow');
+    $oCriteria->addSelectColumn(AppCacheViewPeer::USR_UID);
+    $oCriteria->addAsColumn('CNT', 'COUNT(DISTINCT(APP_UID))');
+    $oCriteria->addGroupByColumn(AppCacheViewPeer::USR_UID);
+    $Dat = AppCacheViewPeer::doSelectRS ($oCriteria);
+	$Dat->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+	$aRows = Array();
+	while ($Dat->next()){
+	   $row = $Dat->getRow();
+	   $aRows[$row['USR_UID']] = $row['CNT'];
+	}
+	return $aRows;
+  }
+  
 } // AppCacheView
