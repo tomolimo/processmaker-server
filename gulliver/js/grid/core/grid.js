@@ -176,8 +176,13 @@ var G_Grid = function(oForm, sGridName) {
                 attributes = elementAttributesNS(aObjects[0], 'pm');
                 if(attributes.defaultvalue!= undefined)
                  attributDefaultValue=attributes.defaultvalue;
-              } else {
-                 attributDefaultValue='';
+              } else {                
+                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                attributes = elementAttributesNS(aObjects[0],'pm');
+                if(attributes.defaultvalue != undefined)
+                  attributDefaultValue=attributes.defaultvalue;
+                else
+                  attributDefaultValue='';
               }
 
               if (aObjects[0].type != 'checkbox') {
