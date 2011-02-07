@@ -135,7 +135,7 @@ Ext.onReady ( function() {
     frameConfig:{name:'designerFrame', id:'designerFrame'},
     defaultSrc : 'designer?PRO_UID=' + pro_uid,
     loadMask:{msg:'Loading...'},
-    bodyStyle:{height: (_BROWSER.screen.height-55) + 'px', overflow:'scroll'},
+    bodyStyle:{height: (_BROWSER.screen.height-55) + 'px'},
     width:'1024px'
   };
 

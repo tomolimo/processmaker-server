@@ -42,58 +42,49 @@ Ext.onReady ( function() {
   *
   **********************************************************************************/
   var west= {
-      /*xtype	:"panel",
-      title: 'Palette',
-      region: 'west',
-      split: false,
-      width: 75,
-      collapsible: false,
-      margins:'3 0 3 3',
-      cmargins:'3 3 3 3',*/
-      id         : 'palette',
-      title      : 'Palette',
-      region     : 'west',
-      width      : 65,
-      border     : false,
-      autoScroll : true,
-      collapsible :true,
-      split       :true,
-      //collapseMode:'mini',
-      hideCollapseTool: false,
-      
-      items:{
-        html:'<div id="x-shapes">\n\
-                <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
-                <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
-                <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
-                <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
-                <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
-                <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
-                <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
-                <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
-                <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
-                <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
-                <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
-              </div>'
-      }
+    id         : 'palette',
+    title      : 'Palette',
+    region     : 'west',
+    width      : 65,
+    border     : false,
+    autoScroll : true,
+    collapsible :true,
+    split       :true,
+    //collapseMode:'mini',
+    hideCollapseTool: false,
+
+    items:{
+      html:'<div id="x-shapes">\n\
+        <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
+        <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
+        <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
+        <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
+        <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
+        <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
+        <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
+        <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
+        <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
+        <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
+        <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
+      </div>'
+    }
   };
   
   var east= {
-      
-      id         : 'eastPanel',
-      title      : '',
-      region     : 'east',
-      width      : 150,
-      border     : false,
-      autoScroll : true,
-      collapsible :true,
-      split       :true,
-      collapseMode:'mini',
-      hideCollapseTool: false,
-      
-      items:{
-        html:'east panel'
-      }
+    id         : 'eastPanel',
+    title      : '',
+    region     : 'east',
+    width      : 150,
+    border     : false,
+    autoScroll : true,
+    collapsible :true,
+    split       :true,
+    collapseMode:'mini',
+    hideCollapseTool: false,
+
+    items:{
+      html:'east panel'
+    }
   };
 
   var north= {
@@ -107,45 +98,37 @@ Ext.onReady ( function() {
   };
   
   var south= {
-      xtype	:	"panel",
-      initialSize: 120,
-      height: 100,
-      split:true,
-      titlebar: false,
-      collapsible: true,
-      autoScroll:true,
-      animate: true,
-      region	:	"south",
-      items: {
-          region: 'center',
-          xtype: 'tabpanel',
-          items: [{
-              title: 'Properties',
-              html: 'Properties'
-          },
-          {
-              title: 'Debug Console',
-              html: 'Debug Console'
-          }]
-      }
+    xtype	:	"panel",
+    initialSize: 120,
+    height: 100,
+    split:true,
+    titlebar: false,
+    collapsible: true,
+    autoScroll:true,
+    animate: true,
+    region	:	"south",
+    items: {
+      region: 'center',
+      xtype: 'tabpanel',
+      items: [{
+        title: 'Properties',
+        html: 'Properties'
+      },
+      {
+        title: 'Debug Console',
+        html: 'Debug Console'
+      }]
+    }
   };
 
   var center= {
-      width:100,
-      height:2000,
-      xtype	:	"panel",
-      //autoScroll:true,
-      fitToFrame:true,
-      region	:	"center"
-      //bodyStyle: 'background-color:red; overflow:scroll; height:3000px',
-      
-      /*bodyCfg: {
-        tag: 'div',
-        cls: 'x-panel-body',  // Default class not applied if Custom element specified
-        style: 'height:3000; overflow:scroll;',
-        html: 'Message'
-      },*/
-    
+    id: 'centerRegion',
+    width:100,
+    height:2000,
+    xtype	:	"panel",
+    //autoScroll:true,
+    fitToFrame:true,
+    region	:	"center"
   };
 
   var processObj = new ProcessOptions();
@@ -157,26 +140,96 @@ Ext.onReady ( function() {
     autoScroll: true,
     height    : 1000,
     width     : 1300,
-    items   : [west, north, center]
+    //items   : [west, north, center]
+    items   : [north, center]
   });
+  
+  
+
+  var designaerToolbar = new Ext.Window({
+    id: 'designaerToolbar',
+    title: '<center>Toolbar</center>',
+    titleAlign: 'center',
+    width: 320,
+    height:70,
+    x: 0,
+    y: 0,
+    minimizable: false,
+    closable: false,
+    resizable: false,
+    plugin: new Ext.ux.WindowAlwaysOnTop,
+    html: '<div id="x-shapes">\n\
+      <p id="x-shapes-task" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
+      <p id="x-shapes-startEvent" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
+      <p id="x-shapes-interEvent" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
+      <p id="x-shapes-endEvent" title="" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
+      <p id="x-shapes-gateways" title="" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/><br/></p>\n\
+      <p id="x-shapes-annotation" title="" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
+      <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
+      <p id="x-shapes-dataobject" title="Data Object" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
+      <p id="x-shapes-pool" title="Pool" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
+      <p id="x-shapes-lane" title="Lane" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
+      <p id="x-shapes-milestone" title="Milestone" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
+    </div>'
+  });
+  
+  designaerToolbar.show();
+
+  new Ext.ToolTip({
+      target: 'x-shapes-task',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Task'
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-startEvent',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Start'
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-interEvent',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Intermediate Event'
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-endEvent',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'End Event'
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-gateways',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Gateway'
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-annotation',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Annotation'
+  });
+
 
   //Getting Process name and setting Title of center region to that processname
   /*var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
   Ext.Ajax.request({
-          url: "processes_Ajax.php"+ urlparams,
-          success: function(response) {
-              var processes = Ext.util.JSON.decode(response.responseText);
-              main.items.items[2].setTitle(processes.title.label);     //items[2]=>center region
-          },
-          failure: function(){
-              Ext.Msg.alert ('Failure');
-          }
-      });*/
+      url: "processes_Ajax.php"+ urlparams,
+      success: function(response) {
+          var processes = Ext.util.JSON.decode(response.responseText);
+          main.items.items[2].setTitle(processes.title.label);     //items[2]=>center region
+      },
+      failure: function(){
+          Ext.Msg.alert ('Failure');
+      }
+  });*/
 
   //Get main into workflow object
   workflow.main = main;
   //items[3]=>'center region'
-  var centerRegionId = main.items.items[2].body.id;
+  var centerRegionId = Ext.getCmp('centerRegion').body.id;
   canvas = Ext.get(centerRegionId);
 
   //Context Menu of ProcessMap
@@ -806,3 +859,12 @@ Ext.onReady ( function() {
 
 });
 
+Ext.ux.WindowAlwaysOnTop = function(){
+       this.init = function(win){
+            win.on('deactivate', function(){
+               var i=1;
+               this.manager.each(function(){i++});
+               this.setZIndex(this.manager.zseed + (i*10));
+            })
+       }
+}
