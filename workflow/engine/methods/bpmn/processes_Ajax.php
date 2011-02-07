@@ -275,20 +275,35 @@ if ( isset ($_REQUEST['action']) ) {
   	  }
   	break;
 
-        case 'saveSubProcessVariables':
+        case 'saveSubprocessDetails':
             //$aTask=$oTask->load($_POST['form']['TASKS']);
             //$aTask=$oTask->load($_POST['form']['PRO_UID']);
             $out = array();
             $in = array();
-            if(isset($_POST['VAR_OUT1']))
+
+            if(isset($_POST['VAR_OUT']) && $_POST['VAR_OUT'] != '')
             {
-               $out[$_POST['VAR_OUT1']] = $_POST['VAR_OUT2'];
+               $varOut = explode('|',$_POST['VAR_OUT']);
+               $aVarOut1 = json_decode($varOut[0]);
+               $aVarOut2 = json_decode($varOut[1]);
+                for($i=1; $i<=count($aVarOut1); $i++)
+                {
+                                $out[$aVarOut1[$i-1]]= $aVarOut2[$i-1];
+                }
             }
 
-            if(isset($_POST['VAR_IN1']))
+            if(isset($_POST['VAR_IN']) && $_POST['VAR_IN'] != '')
             {
-               $in[$_POST['VAR_IN1']]   =  $_POST['VAR_IN2'];
+               $varIn = explode('|',$_POST['VAR_IN']);
+               $aVarIn1 = json_decode($varIn[0]);
+               $aVarIn2 = json_decode($varIn[1]);
+                for($i=1; $i<=count($aVarIn1); $i++)
+                {
+                                $in[$aVarIn1[$i-1]]= $aVarIn2[$i-1];
+                }
             }
+            if($_POST['VAR_IN'] == '')
+                $in[$_POST['VAR_IN']] = '';
             
             $aTask=($_POST['TASKS']!=0)?$oTask->load($_POST['TASKS']):0;
             //$aTask['PRO_UID']=0;
@@ -297,14 +312,14 @@ if ( isset ($_REQUEST['action']) ) {
                     $_POST['SP_SYNCHRONOUS'] = '0';
             }
 
-            if ( !isset ( $_POST['form']['SP_SYNCHRONOUS']) ) {
+            if ( !isset ( $_POST['SP_SYNCHRONOUS']) ) {
                     $_POST['SP_SYNCHRONOUS'] = '0';
             }
 
             require_once 'classes/model/SubProcess.php';
             $oOP = new SubProcess();
             $aData = array('SP_UID'          	 => $_POST['SP_UID'],//G::generateUniqueID(),
-                           'PRO_UID'         	 => $_POST['PRO_UID'],
+                           'PRO_UID'         	 => $aTask['PRO_UID'],
                            'TAS_UID'         	 => $_POST['TASKS'],
                            'PRO_PARENT'      	 => $_POST['PRO_PARENT'],
                            'TAS_PARENT'		 => $_POST['TAS_PARENT'],
@@ -316,17 +331,19 @@ if ( isset ($_REQUEST['action']) ) {
                            'SP_VARIABLES_IN'     => serialize($in),
                            'SP_GRID_IN'          => '');
 
-
             $oOP->update($aData);
             break;
 
-            case'saveSubprocessDetails':
+            case'saveSubprocessDetails11':
+                 //$aTask=($_POST['TASKS']!=0)?$oTask->load($_POST['TASKS']):0;
                  require_once 'classes/model/SubProcess.php';
                  $oOP = new SubProcess();
                  $aData = array(
-                                'SP_UID'          	 => $_POST['SP_UID'],
-                           'PRO_UID'       	 => $_POST['PRO_UID'],
-                           'SP_SYNCHRONOUS'   	 => $_POST['SP_SYNCHRONOUS'],
+                           'SP_UID'         => $_POST['SP_UID'],
+                           'PRO_UID'        => $_POST['PRO_UID'],
+                           'PRO_PARENT'     => $_POST['PRO_PARENT'],
+                           'TAS_PARENT'     => $_POST['TAS_PARENT'],
+                           'SP_SYNCHRONOUS' => $_POST['SP_SYNCHRONOUS']
                    );
                  $oOP->update($aData);
                  

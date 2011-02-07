@@ -14,10 +14,10 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var pro_uid = workflow.getUrlVars();
 
   var dynaFields = Ext.data.Record.create([
-    { name: 'DYN_UID', type: 'string'},
-    { name: 'DYN_TYPE', type: 'string'},
-    { name: 'DYN_TITLE', type: 'string'},
-    { name: 'DYN_DISCRIPTION',type: 'string'},
+    {name: 'DYN_UID', type: 'string'},
+    {name: 'DYN_TYPE', type: 'string'},
+    {name: 'DYN_TITLE', type: 'string'},
+    {name: 'DYN_DISCRIPTION',type: 'string'},
     {name: 'ACTION', type: 'string'}
     ]);
 
@@ -127,9 +127,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
  //Creating store for getting list of additional PM tables
  var additionalTablesFields = Ext.data.Record.create([
-   { name: 'ADD_TAB_UID', type: 'string'},
-   { name: 'ADD_TAB_NAME', type: 'string'},
-   { name: 'ADD_TAB_DESCRIPTION',type: 'string'}
+   {name: 'ADD_TAB_UID', type: 'string'},
+   {name: 'ADD_TAB_NAME', type: 'string'},
+   {name: 'ADD_TAB_DESCRIPTION',type: 'string'}
    ]);
 
  var additionalTables = new Ext.data.JsonStore({
@@ -146,10 +146,10 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
  //Creating store for getting list of Fields of additional PM tables
   var TablesFields = Ext.data.Record.create([
-    { name: 'FLD_UID',type: 'string'},
-    { name: 'FLD_NAME',type: 'string'},
-    { name: 'FLD_DESCRIPTION',type: 'string'},
-    { name: 'FLD_TYPE',type: 'string'}
+    {name: 'FLD_UID',type: 'string'},
+    {name: 'FLD_NAME',type: 'string'},
+    {name: 'FLD_DESCRIPTION',type: 'string'},
+    {name: 'FLD_TYPE',type: 'string'}
     ]);
 
   var tablesFieldsStore = new Ext.data.JsonStore({
@@ -192,6 +192,19 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         }
     });
   }
+  function renderName(value, metaData, record, rowIndex, colIndex, store) {
+    var returnString = "<strong>";
+    if(record.get("sex") == "male")    {
+        metaData.attr = 'style="color: blue;"';
+        returnString += "Mr.";
+    }
+    if(record.get("sex") == "female")  {
+        metaData.attr = 'style="color: red;"';
+        returnString += "Mrs.";
+    }
+    returnString += "</strong> "+value;
+    return returnString;
+}
 
   var dynaformColumns = new Ext.grid.ColumnModel({
     columns: [
@@ -214,7 +227,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             editor: new Ext.form.TextField({
             allowBlank: false
             })
-        },
+        },{ header: "Name",  dataIndex: "name", renderer: renderName},
         {
             sortable: false,
             renderer: function(val, meta, record)
@@ -538,14 +551,14 @@ ProcessOptions.prototype.dbConnection = function()
   //Database store code starts here
 
   var dbConnFields = Ext.data.Record.create([
-            { name: 'DBS_UID',type: 'string'},
-            { name: 'DBS_TYPE',type: 'string'},
-            { name: 'DBS_SERVER',type: 'string'},
-            { name: 'DBS_DATABASE_NAME',type: 'string'},
-            { name: 'DBS_USERNAME',type: 'string'},
-            { name: 'DBS_PASSWORD',type: 'string'},
-            { name: 'DBS_PORT',type: 'string'},
-            { name: 'DBS_DESCRIPTION',type: 'string'}
+            {name: 'DBS_UID',type: 'string'},
+            {name: 'DBS_TYPE',type: 'string'},
+            {name: 'DBS_SERVER',type: 'string'},
+            {name: 'DBS_DATABASE_NAME',type: 'string'},
+            {name: 'DBS_USERNAME',type: 'string'},
+            {name: 'DBS_PASSWORD',type: 'string'},
+            {name: 'DBS_PORT',type: 'string'},
+            {name: 'DBS_DESCRIPTION',type: 'string'}
         ]);
 
   var btnNew = new Ext.Button({
@@ -1326,9 +1339,9 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 store:          new Ext.data.JsonStore({
                                             fields : ['name', 'value'],
                                             data   : [
-                                                {name : 'original',   value: 'ORIGINAL'},
-                                                {name : 'legal copy',   value: 'COPYLEGAL'},
-                                                {name : 'copy',   value: 'COPY'}
+                                                {name : 'Original',   value: 'ORIGINAL'},
+                                                {name : 'Legal Copy',   value: 'COPYLEGAL'},
+                                                {name : 'Copy',   value: 'COPY'}
                                                 ]})
                                 }]
                         },{
@@ -1438,10 +1451,10 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 var sDocTitle        = getForm.INP_DOC_TITLE;
                 var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
                 var sOrig           = getForm.INP_DOC_ORIGINAL;
-                if(sOrig == "")
+                if(sOrig == "" || sOrig == "Original")
                     sOrig           = 'ORIGINAL';
                 
-                if(sOrig == 'legal copy')
+                if(sOrig == 'Legal Copy')
                     sOrig           = 'COPYLEGAL';
 
                 if(sFormNeeded == 'Digital')
@@ -1809,7 +1822,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         monitorValid    :true,
         labelWidth      : 100,
         bodyStyle       :'padding:5px 5px 0',
-        defaults        :{ autoScroll:true },
+        defaults        :{autoScroll:true},
         width           : 500,
 
         items           :[{
@@ -2165,7 +2178,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var newOPWindow = new Ext.Window({
         title       : _('ID_OUTPUT_DOCUMENTS'),
         width       : 550,
-        defaults    :{ autoScroll:true },
+        defaults    :{autoScroll:true},
         height      : 450,
         minWidth    : 200,
         minHeight   : 150,
@@ -2181,7 +2194,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         collapsible : false,
         maximizable : false,
         width       : 550,
-        defaults    :{ autoScroll:true },
+        defaults    :{autoScroll:true},
         height      : 420,
         minWidth    : 200,
         minHeight   : 150,
@@ -2360,7 +2373,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         collapsible : false,
         maximizable : false,
         width       : 400,
-        defaults    :{ autoScroll:true },
+        defaults    :{autoScroll:true},
         height      : 450,
         minWidth    : 200,
         minHeight   : 150,
