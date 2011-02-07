@@ -1039,7 +1039,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
 {
     //Initializing variables
 
-    var pro_uid = this.getUrlVars();
+    //var pro_uid = this.getUrlVars();
     var shapeId = oNewShape.id;
     var actiontype = oNewShape.actiontype;
     var xpos = oNewShape.x;
@@ -1126,7 +1126,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                         oNewShape.id = this.workflow.newTaskInfo.uid;
                             if(oNewShape.type == 'bpmnTask' && oNewShape.boundaryEvent != true){
                                 oNewShape.taskName = this.workflow.newTaskInfo.label;
-                                workflow.redrawTaskText(oNewShape,'');
+                                workflow.redrawTaskText(oNewShape);
                                 //After Figure is added, Update Start Event connected to Task
                                 if(typeof this.workflow.preSelectedObj != 'undefined' )
                                   {
@@ -1766,50 +1766,64 @@ MyWorkflow.prototype.zoom = function(sType)
 
    var lines=workflow.getLines();
    var size=lines.getSize();
+
    
+
    sType =sType/100;
    var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
-   
-   if(typeof fig.limitFlag == 'undefined')
+
+
+   if(typeof fig.limitFlag == 'undefined' || fig.limitFlag == false)
    {
      fig.originalWidth = fig.getWidth();
      fig.originalHeight = fig.getHeight();
      fig.orgXPos = fig.getX();
      fig.orgYPos = fig.getY();
      fig.orgFontSize =fig.fontSize;
+
+     if(fig.boundaryEvent == true)
+        {
+          fig.orgx3Pos = fig.x3;
+          fig.orgy4Pos = fig.y4;
+          fig.orgy5Pos = fig.y5;
+        }
      fig.limitFlag = true;
    }
-   
+
+   //If zooming is 100% disable resizing of shapes again
+   if(sType == '1')
+       {
+            fig.limitFlag = false;
+       }
+       
    var width  = fig.originalWidth*sType;
    var height = fig.originalHeight*sType;
-   
+   if(fig.boundaryEvent == true)
+        {
+          fig.x3 = fig.orgx3Pos *sType;
+          fig.y4 = fig.orgy4Pos *sType;
+          fig.y5 = fig.orgy5Pos *sType;
+        }
+
    var xPos =  fig.orgXPos * sType;
    var yPos =  fig.orgYPos * sType;
-
-   fig.setPosition(xPos,yPos);
-   fig.setDimension(width,height);
    if(fig.type == 'bpmnTask')
         {
             fig.fontSize = parseInt(fig.orgFontSize) * sType;
-            fig.paint();
         }
    else if(fig.type == 'bpmnAnnotation')
         {
             fig.fontSize = parseInt(fig.orgFontSize) * sType;
-            fig.paint();
         }
+        fig.setPosition(xPos,yPos);
+        fig.setDimension(width,height);
    }
 }
 
-MyWorkflow.prototype.redrawTaskText = function(fig,sType)
+MyWorkflow.prototype.redrawTaskText = function(fig)
 {
-  if(sType == 'in' && sType != '')
-    fig.fontSize = parseInt(fig.fontSize) + 4;
-  else if(sType == 'out' && sType != '')
-    fig.fontSize = parseInt(fig.fontSize) - 4;
-
   //Setting font minimum limit
   if(this.fontSize < 11)
         this.fontSize = 11;

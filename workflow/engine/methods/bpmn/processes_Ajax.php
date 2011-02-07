@@ -98,7 +98,7 @@ if ( isset ($_REQUEST['action']) ) {
   	break;
         case 'addText':
   	  $sOutput = $oProcessMap->addText($oData->uid, $oData->label, $oData->position->x, $oData->position->y);
-          //echo $sOutput;
+          echo $sOutput;
   	break;
         case 'updateText':
           $sOutput = $oProcessMap->updateText($oData->uid, $oData->label);
