@@ -3023,6 +3023,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
     $afterDate  = G::replaceDataField ( $this->afterDate, $owner->values );
+ $value=$this->defaultValue;
 
     if ($startDate != '') {
       if (! $this->verifyDateFormat ( $startDate ))

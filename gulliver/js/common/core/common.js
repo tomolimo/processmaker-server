@@ -1851,6 +1851,8 @@ function removeValue(id){
 
 function datePicker4(obj, id, mask, startDate, endDate, showTIme){  
   //alert('->'+id);
+  if(showTIme=='false')
+  showTIme=false;
   new Calendar({
     inputField: id,
     dateFormat: mask,
