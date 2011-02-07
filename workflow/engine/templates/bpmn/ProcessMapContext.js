@@ -339,7 +339,9 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'OP_OBJ_TYPE',type: 'string'},
             { name: 'OP_GROUP_USER',type: 'string'},
             { name: 'OBJ_NAME',type: 'string'},
-            { name: 'OP_ACTION',type: 'string'}
+            { name: 'OP_ACTION',type: 'string'},
+            { name: 'USR_FULLNAME',type: 'string'}
+
         ]);
 
   var PermissionStore = new Ext.data.JsonStore({
@@ -645,7 +647,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     fieldLabel: 'Target Task',
                     //hiddenName:'popType',
                     //autoload: true,
-                    name: 'TASK_TARGET',
+                    name: 'TASK_TARGET_NAME',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
@@ -664,7 +666,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                  new Ext.form.ComboBox({
                     fieldLabel: 'Group or Users',
                     //hiddenName:'popType',
-                    name: 'OP_GROUP_USER',
+                    name: 'USR_FULLNAME',
                     //autoload: true,
                     store: usersStore,
                     valueField:'LABEL',
@@ -682,7 +684,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 ,
                 new Ext.form.ComboBox({
                     fieldLabel: 'Origin Task',
-                    name    : 'TASK_SOURCE',
+                    name    : 'TASK_SOURCE_NAME',
                     store: selectTaskStore,
                     valueField:'LABEL',
                     displayField:'LABEL',
@@ -764,7 +766,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     autoload: true,
                     width:200,
                     store: dynaformStore,
-                    name: 'DYNAFORM',
+                    name: 'OBJ_NAME',
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
@@ -787,7 +789,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype: 'combo',
                     fieldLabel: 'Input Document',
                     //hiddenName:'UID',
-                    name: 'INPUT',
+                    name: 'OBJ_NAME',
                     width:200,
                     autoload: true,
                     store: inputDocStore,
@@ -816,7 +818,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     width:200,
                     autoload: true,
                     store: outputDocStore,
-                    name: 'OUTPUT',
+                    name: 'OBJ_NAME',
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',

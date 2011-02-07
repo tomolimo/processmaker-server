@@ -26,7 +26,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   });
   var btnAdd = new Ext.Button({
     id: 'btnAdd',
-    text: 'New',
+    text: _('ID_NEW'),
     iconCls: 'button_menu_ext ss_sprite ss_add',
     //iconCls: 'application_add',
     handler: function () {
@@ -37,7 +37,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
   var btnRemove = new Ext.Button({
     id: 'btnRemove',
-    text: 'Delete',
+    text: _('ID_DELETE'),
     iconCls: 'button_menu_ext ss_sprite ss_delete',
     handler: function (s) {
       editor.stopEditing();
@@ -198,7 +198,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     new Ext.grid.RowNumberer(),
         {
             id: 'DYN_TITLE',
-            header: 'Title',
+            header: _('ID_TITLE_FIELD'),
             dataIndex: 'DYN_TITLE',
             width: 280,
             editable: false,
@@ -207,7 +207,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             })
         },{
             id: 'ACTION',
-            header: 'Type',
+            header: _('ID_TYPE'),
             dataIndex: 'ACTION',
             width: 280,
             editable: false,
@@ -226,7 +226,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             sortable: false,
             renderer: function(val, meta, record)
                {
-                    return String.format("<input type='submit' name='UID' value='UID' onclick=''>",record.data.DYN_UID);
+                    return String.format("<input type='submit' name='UID' value='UID' onclick=''    >",record.data.DYN_UID);
                }
         }
     ]
@@ -340,7 +340,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     width: 500,
                     items:[{
                             xtype     : 'textfield',
-                            fieldLabel: 'Title',
+                            fieldLabel: _('ID_TITLE'),
                             name      : 'DYN_TITLE',
                             width     : 350,
                             allowBlank: false
@@ -350,7 +350,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             allowBlank: false,
                             mode:           'local',
                             editable:       false,
-                            fieldLabel:     'Type',
+                            fieldLabel:     _('ID_TYPE'),
                             triggerAction:  'all',
                             forceSelection: true,
                             name:           'ACTION',
@@ -366,7 +366,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                                     })
                          },{
                             xtype     : 'textarea',
-                            fieldLabel: 'Description',
+                            fieldLabel: _('ID_DESCRIPTION'),
                             name      : 'DYN_DESCRIPTION',
                             height    : 120,
                             width     : 350
@@ -410,12 +410,12 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                          },
                          {
                             xtype     : 'textfield',
-                            fieldLabel: 'Title',
+                            fieldLabel: _('ID_TITLE'),
                             name      : 'DYN_TITLE'
                            // allowBlank: false
                          },{
                             xtype     : 'textarea',
-                            fieldLabel: 'Description',
+                            fieldLabel: _('ID_DESCRIPTION'),
                             name      : 'DYN_DESCRIPTION',
                             height    : 120,
                             width     : 350
@@ -439,7 +439,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                      ]
                 }
             ], buttons: [{
-            text: 'Save',
+            text: _('ID_SAVE'),
             formBind    :true,
             handler: function(){
                 var getForm   = dynaformDetails.getForm().getValues();
@@ -489,7 +489,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             }
 
     },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 formWindow.hide();
@@ -499,7 +499,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     });
 
  var gridWindow = new Ext.Window({
-        title: 'Dynaform',
+        title: _('ID_DYNAFORMS'),
         autoScroll: true,
         collapsible: false,
         maximizable: true,
@@ -514,7 +514,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     });
 
  var formWindow = new Ext.Window({
-        title: 'Dynaform',
+        title: _('ID_NEW_DYNAFORM'),
         autoScroll: true,
         collapsible: false,
         maximizable: true,
@@ -550,7 +550,7 @@ ProcessOptions.prototype.dbConnection = function()
 
   var btnNew = new Ext.Button({
             id: 'btnNew',
-            text: 'New',
+            text: _('ID_NEW'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                 dbconnForm.getForm().reset();
@@ -561,7 +561,7 @@ ProcessOptions.prototype.dbConnection = function()
 
   var btnEdit = new Ext.Button({
             id: 'btnEdit',
-            text: 'Edit',
+            text: _('ID_EDIT'),
             iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var selectedRow = dbGrid.getSelectionModel().getSelections();
@@ -584,7 +584,7 @@ ProcessOptions.prototype.dbConnection = function()
 
    var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove',
+            text: _('ID_DELETE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -625,7 +625,7 @@ ProcessOptions.prototype.dbConnection = function()
         });
 
   var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
 
   var dbStore = new Ext.data.JsonStore({
@@ -1162,7 +1162,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete',
+            text: _('ID_DELETE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1228,7 +1228,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
  var btnEdit = new Ext.Button({
             id: 'btnEdit',
-            text: 'Edit',
+            text: _('ID_EDIT'),
             iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var selectedRow = inputDocGrid.getSelectionModel().getSelections();
@@ -1677,7 +1677,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete',
+            text: _('ID_DELETE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1724,7 +1724,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var btnEdit = new Ext.Button({
             id: 'btnEdit',
-            text: 'Edit',
+            text: _('ID_EDIT'),
             iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var s = outputDocGrid.getSelectionModel().getSelections();
@@ -1748,7 +1748,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var btnProperties = new Ext.Button({
             id: 'btnProperties',
-            text: 'Properties',
+            text: _('ID_PROPERTIES'),
             iconCls: 'application_add',
             handler: function (s) {
                 outputDocGrid.stopEditing();
@@ -2163,7 +2163,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
        });
 
   var newOPWindow = new Ext.Window({
-        title       : 'Output Document',
+        title       : _('ID_OUTPUT_DOCUMENTS'),
         width       : 550,
         defaults    :{ autoScroll:true },
         height      : 450,
@@ -2277,7 +2277,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
    var btnEdit = new Ext.Button({
             id: 'btnEdit',
-            text: 'Edit',
+            text: _('ID_EDIT'),
             iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var s = reportGrid.getSelectionModel().getSelections();
@@ -2301,7 +2301,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete',
+            text: _('ID_DELETE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function () {
                 editor.stopEditing();

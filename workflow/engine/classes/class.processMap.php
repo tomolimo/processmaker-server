@@ -61,6 +61,7 @@ require_once 'classes/model/TaskUser.php';
 require_once 'classes/model/Triggers.php';
 require_once 'classes/model/Users.php';
 require_once 'classes/model/Gateway.php';
+require_once 'classes/model/om/BaseUsers.php';
 
 /**
  * processMap - Process Map class
@@ -6021,9 +6022,16 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
     $aFields ['OP_OBJ_TYPE'] = $aRows ['OP_OBJ_TYPE'];
     $aFields ['OP_ACTION'] = $aRows ['OP_ACTION'];
 
+
+
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
-    $aFields['TASK_TARGET'] = Content::load ( 'TAS_TITLE', '', $aRows ['TAS_UID'] , $lang );
-    $aFields['TASK_SOURCE'] = Content::load ( 'TAS_TITLE', '', $aRows ['OP_TASK_SOURCE'] , $lang );
+    $aFields['TASK_TARGET_NAME'] = Content::load ( 'TAS_TITLE', '', $aRows ['TAS_UID'] , $lang );
+    $aFields['TASK_SOURCE_NAME'] = Content::load ( 'TAS_TITLE', '', $aRows ['OP_TASK_SOURCE'] , $lang );
+    $oUser = UsersPeer::retrieveByPK( $aRows ['USR_UID'] );
+    $aFields ['USR_FULLNAME'] = $oUser->getUsrFirstname() . ' ' . $oUser->getUsrLastname() ;
+    
+
+
     
     switch ($aRows ['OP_OBJ_TYPE']) {
       /* case 'ANY':
