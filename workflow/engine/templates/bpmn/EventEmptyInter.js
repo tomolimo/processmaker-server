@@ -11,7 +11,7 @@ bpmnEventEmptyInter.prototype=new VectorFigure;
 bpmnEventEmptyInter.prototype.type="bpmnEventEmptyInter";
 bpmnEventEmptyInter.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if (this.getWidth() < 30 || this.getHeight() < 30) {
+if ((this.getWidth() < 30 || this.getHeight() < 30) && this.limitFlag != true) {
         this.setDimension(30, 30);
  }
 this.graphics.setStroke(this.stroke);

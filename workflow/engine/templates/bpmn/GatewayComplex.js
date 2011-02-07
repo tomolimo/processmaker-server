@@ -43,6 +43,19 @@ this.graphics.drawLine(this.getWidth()/2,this.getHeight()/1.3,this.getWidth()/2,
 this.graphics.drawLine(this.getWidth()/1.5,this.getHeight()/1.5,this.getWidth()/3,this.getHeight()/3);   //cross line
 this.graphics.paint();
 
+if (this.input1 != null) {
+ this.input1.setPosition(0, this.height / 2);
+}
+if (this.input2 != null) {
+  this.input2.setPosition(this.width / 2, 0);
+}
+if (this.output1 != null) {
+ this.output1.setPosition(this.height / 2, this.width);
+}
+if (this.output2 != null) {
+  this.output2.setPosition(this.width, this.height / 2);
+}
+
 };
 
 bpmnGatewayComplex.prototype.setWorkflow=function(_40c5){

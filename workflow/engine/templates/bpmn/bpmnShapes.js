@@ -44,12 +44,12 @@ bpmnTask.prototype.paint = function () {
     VectorFigure.prototype.paint.call(this);
 
     //Set the Task Limitation
-//    if (this.getWidth() > 200 || this.getHeight() > 100) {
-//        this.setDimension(200, 100);
-//    }
-//    else if (this.getWidth() < 165 || this.getHeight() < 40) {
-//        this.setDimension(165, 40);
-//    }
+    if ((this.getWidth() > 200 || this.getHeight() > 100 ) && this.limitFlag != true) {
+        this.setDimension(200, 100);
+    }
+    else if ((this.getWidth() < 165 || this.getHeight() < 40) && this.limitFlag != true) {
+        this.setDimension(165, 40);
+    }
 
     var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
     var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);

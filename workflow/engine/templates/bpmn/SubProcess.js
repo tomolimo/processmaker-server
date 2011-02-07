@@ -103,6 +103,19 @@ bpmnSubProcess.prototype.paint = function () {
     
     this.bpmnNewText = bpmnText;
 
+     if (this.input1 != null) {
+        this.input1.setPosition(0, this.height / 2);
+    }
+    if (this.output1 != null) {
+        this.output1.setPosition(this.width / 2, this.height);
+    }
+    if (this.input2 != null) {
+        this.input2.setPosition(this.width / 2, 0);
+    }
+    if (this.output2 != null) {
+        this.output2.setPosition(this.width, this.height / 2);
+    }
+
 };
 
   jsGraphics.prototype.drawTextString = function (txt, x, y, dx, dy) {

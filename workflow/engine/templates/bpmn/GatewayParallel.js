@@ -37,6 +37,19 @@ this.graphics.fillPolygon(x,y);
 this.graphics.setColor("#a27628");
 this.graphics.drawPolygon(x,y);
 this.graphics.paint();
+
+if (this.input1 != null) {
+ this.input1.setPosition(0, this.height / 2);
+}
+if (this.input2 != null) {
+  this.input2.setPosition(this.width / 2, 0);
+}
+if (this.output1 != null) {
+ this.output1.setPosition(this.height / 2, this.width);
+}
+if (this.output2 != null) {
+  this.output2.setPosition(this.width, this.height / 2);
+}
 };
 
 bpmnGatewayParallel.prototype.setWorkflow=function(_40c5){

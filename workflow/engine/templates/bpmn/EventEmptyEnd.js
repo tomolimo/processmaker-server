@@ -11,7 +11,7 @@ bpmnEventEmptyEnd.prototype=new VectorFigure;
 bpmnEventEmptyEnd.prototype.type="bpmnEventEmptyEnd";
 bpmnEventEmptyEnd.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if (this.getWidth() < 30 || this.getHeight() < 30) {
+if ((this.getWidth() < 30 || this.getHeight() < 30) && this.limitFlag != true) {
         this.setDimension(30, 30);
  }
 var x=0;

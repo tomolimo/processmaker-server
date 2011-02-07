@@ -83,8 +83,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                           DYN_UID        : dynUID
                         },
                         success: function(response) {
-                        	PMExt.notify( _('ID_MY_LABEL_WITH_ANY_TITLE') , _('ID_MY_MSG') );
-                          //Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
+                        	//PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE') );
+                          Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
                           //Secondly deleting from Grid
                           taskDynaform.remove(r);
                           //Reloading store after deleting dynaform
@@ -94,12 +94,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     }
                     else
                       PMExt.warning(_('ID_STATUS'), _('ID_CONFIRM_CANCEL_CASE'));
-                      Ext.MessageBox.alert ('Status','Dynaform assigned to a process supervisors cannot be deleted.');
+                  	PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE') );
+                     //  Ext.MessageBox.alert ('Status','Dynaform assigned to a process supervisors cannot be deleted.');
                   }
                 });
               }
               else
-                  Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
+                  PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE_JS') );
+                  //Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
             }
           });
         }      

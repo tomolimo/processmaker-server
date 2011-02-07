@@ -35,6 +35,18 @@ var y_cross=new Array(this.getHeight()/1.3,this.getHeight()/1.7,this.getHeight()
 this.graphics.setColor( "#a27628" );
 this.graphics.fillPolygon(x_cross,y_cross);
 this.graphics.paint();
+if (this.input1 != null) {
+ this.input1.setPosition(0, this.height / 2);
+}
+if (this.input2 != null) {
+  this.input2.setPosition(this.width / 2, 0);
+}
+if (this.output1 != null) {
+ this.output1.setPosition(this.height / 2, this.width);
+}
+if (this.output2 != null) {
+  this.output2.setPosition(this.width, this.height / 2);
+}
 
 };
 

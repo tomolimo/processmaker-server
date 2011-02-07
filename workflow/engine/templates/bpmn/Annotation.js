@@ -48,11 +48,11 @@ bpmnAnnotation.prototype.paint = function () {
     VectorFigure.prototype.paint.call(this);
 
      //Set the Task Limitation
-    if(this.getWidth() > 200 || this.getHeight() > 100)
+    if((this.getWidth() > 200 || this.getHeight() > 100 ) && this.limitFlag != true)
     {
         this.setDimension(200, 100);
     }
-    if(this.getWidth() < 110 || this.getHeight() < 60)
+    if((this.getWidth() < 110 || this.getHeight() < 60 ) && this.limitFlag != true)
     {
         this.setDimension(110, 60);
     }

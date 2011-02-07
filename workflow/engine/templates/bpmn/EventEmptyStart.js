@@ -11,7 +11,7 @@ bpmnEventEmptyStart.prototype=new VectorFigure;
 bpmnEventEmptyStart.prototype.type="bpmnEventEmptyStart";
 bpmnEventEmptyStart.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if (this.getWidth() < 30 || this.getHeight() < 30) {
+if ((this.getWidth() < 30 || this.getHeight() < 30 ) && this.limitFlag != true) {
         this.setDimension(30, 30);
  }
 
@@ -27,19 +27,11 @@ this.graphics.setColor("#4aa533");
 this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
 this.graphics.paint();
 
-
-
-    
+  
 /*Code Added to Dynamically shift Ports on resizing of shapes
  **/
-if(this.input1!=null){
-this.input1.setPosition(0,this.height/2);
-}
 if(this.output1!=null){
 this.output1.setPosition(this.width/2,this.height);
-}
-if(this.input2!=null){
-this.input2.setPosition(this.width/2,0);
 }
 if(this.output2!=null){
 this.output2.setPosition(this.width,this.height/2);

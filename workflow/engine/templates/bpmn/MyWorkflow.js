@@ -1759,88 +1759,6 @@ MyWorkflow.prototype.getDeleteCriteria = function()
  * @Param  sType  string(in/out)
  * @Author Girish joshi
  */
-//MyWorkflow.prototype.zoom = function(sType)
-//{
-//   //workflow.zoomFactor = 1;
-//   var figures = workflow.getDocument().getFigures();
-//
-//   var lines=workflow.getLines();
-//   var size=lines.getSize();
-//
-//   if(typeof workflow.limitFlag == 'undefined')
-//       workflow.limitFlag = 0;
-//
-//   var zoomFactor = 0.2;
-//   var figSize = figures.getSize();
-//   for(f = 0;f<figures.getSize();f++){
-//   var fig = figures.get(f);
-//   var width = fig.getWidth();
-//   var height = fig.getHeight();
-//   var xPos = fig.getX();
-//   var yPos = fig.getY();
-//
-//   if(sType == 'in')
-//     {
-//        if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
-//          {
-//              width  += zoomFactor*25;
-//              height += zoomFactor*25;
-//              workflow.zoomWidth  = width;
-//              workflow.zoomHeight = height;
-//          }
-//        else if(fig.type.match(/Annotation/)) {
-//             width  += zoomFactor*50;
-//             height += zoomFactor*50;
-//             workflow.zoomAnnotationWidth  = width;
-//             workflow.zoomAnnotationHeight = height;
-//          }
-//        else
-//          {
-//             width  += zoomFactor*50;
-//             height += zoomFactor*50;
-//             workflow.zoomTaskWidth  = width;
-//             workflow.zoomTaskHeight = height;
-//          }
-//          ++workflow.limitFlag;
-//          xPos = xPos + zoomFactor*xPos;
-//          yPos = yPos + zoomFactor*yPos
-//          fig.setPosition(xPos,yPos);
-//     }
-//    else if(sType == 'out' && workflow.limitFlag > 0)
-//     {
-//       if(fig.type.match(/Event/) || fig.type.match(/Gateway/) )
-//          {
-//              width  -= zoomFactor*25;
-//              height -= zoomFactor*25;
-//              workflow.zoomWidth  = width;
-//              workflow.zoomHeight = height;
-//          }
-//        else if(fig.type.match(/Annotation/)) {
-//             width  -= zoomFactor*50;
-//             height -= zoomFactor*50;
-//             workflow.zoomAnnotationWidth  = width;
-//             workflow.zoomAnnotationHeight = height;
-//          }
-//        else
-//          {
-//             width  -= zoomFactor*50;
-//             height -= zoomFactor*50;
-//             workflow.zoomTaskWidth  = width;
-//             workflow.zoomTaskHeight = height;
-//          }
-//          --workflow.limitFlag;
-//          xPos = xPos - zoomFactor*xPos;
-//          yPos = yPos - zoomFactor*yPos
-//          fig.setPosition(xPos,yPos);
-//     }
-//   fig.setDimension(width,height);
-//   if(fig.type == 'bpmnTask')
-//        workflow.redrawTaskText(fig,sType);
-//      else if(fig.type == 'bpmnAnnotation')
-//        workflow.redrawAnnotationText(fig,sType);
-//    }
-//}
-
 MyWorkflow.prototype.zoom = function(sType)
 {
    //workflow.zoomFactor = 1;
@@ -1848,64 +1766,41 @@ MyWorkflow.prototype.zoom = function(sType)
 
    var lines=workflow.getLines();
    var size=lines.getSize();
-
    
    sType =sType/100;
-   //var zoomFactor = 0.2;
    var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
-//   var width = fig.getWidth();
-//   var height = fig.getHeight();
-//   var xPos = fig.getX();
-//   var yPos = fig.getY();
    
-   if(typeof workflow.limitFlag == 'undefined')
+   if(typeof fig.limitFlag == 'undefined')
    {
      fig.originalWidth = fig.getWidth();
      fig.originalHeight = fig.getHeight();
      fig.orgXPos = fig.getX();
      fig.orgYPos = fig.getY();
      fig.orgFontSize =fig.fontSize;
+     fig.limitFlag = true;
    }
-       
-   if(fig.type.match(/Event/) || fig.type.match(/Gateway/))
-     {
-        width  = fig.originalWidth*sType;
-        height = fig.originalHeight*sType;
-        workflow.zoomWidth  = width;
-        workflow.zoomHeight = height;
-     }
-     else if(fig.type.match(/Annotation/)) {
-       width  = fig.originalWidth*sType;
-       height = fig.originalHeight*sType;
-       workflow.zoomAnnotationWidth  = width;
-       workflow.zoomAnnotationHeight = height;
-    }
-    else
-    {
-       width  = fig.originalWidth*sType;
-       height = fig.originalHeight*sType;
-       workflow.zoomTaskWidth  = width;
-       workflow.zoomTaskHeight = height;
-    }
-    xPos =  fig.orgXPos * sType;
-    yPos =  fig.orgYPos * sType;
+   
+   var width  = fig.originalWidth*sType;
+   var height = fig.originalHeight*sType;
+   
+   var xPos =  fig.orgXPos * sType;
+   var yPos =  fig.orgYPos * sType;
 
-    fig.setPosition(xPos,yPos);
-    fig.setDimension(width,height);
-    if(fig.type == 'bpmnTask')
+   fig.setPosition(xPos,yPos);
+   fig.setDimension(width,height);
+   if(fig.type == 'bpmnTask')
         {
             fig.fontSize = parseInt(fig.orgFontSize) * sType;
             fig.paint();
         }
-    else if(fig.type == 'bpmnAnnotation')
+   else if(fig.type == 'bpmnAnnotation')
         {
             fig.fontSize = parseInt(fig.orgFontSize) * sType;
             fig.paint();
         }
-    }
-    workflow.limitFlag = 1;
+   }
 }
 
 MyWorkflow.prototype.redrawTaskText = function(fig,sType)

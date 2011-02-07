@@ -262,14 +262,7 @@ Ext.onReady ( function() {
             }
           ]
         })
-       
-      }, {
-//        text:'Zoom Out',
-//        iconCls: 'button_menu_ext ss_sprite ss_zoom_out',
-//        handler: function() {
-//          document.getElementById('designerFrame').contentWindow.workflow.zoom('out');
-//        }
-      }, {
+      },{
         text:'Edit Process',
         iconCls: 'button_menu_ext ss_sprite ss_pencil',
         handler: function() {
