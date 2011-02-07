@@ -773,7 +773,7 @@ var processmap=function(){
              }.extend(this,panel);
              r.make();
             }.extend(this)},
-           {image:"/images/event_timer.png",text:" intermediate Boundary timer event",launch:function(event){}},
+           {image:"/images/event_timer.png",text:" intermediate Boundary timer event",launch:function(event){}.extend(this)}
                                /* {image:"/images/event_messageThrow.png",text:"end message event",launch:function(event){
       this.tmp.eventsPanel = panel =new leimnud.module.panel();
       panel.options={
