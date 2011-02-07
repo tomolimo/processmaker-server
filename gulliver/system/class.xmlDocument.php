@@ -167,15 +167,17 @@ class Xml_Node
       case 'open':
         $xml  = '<'.$this->name;
         foreach( $this->attributes as $attib => $value ) {
-          if($attib == "hint"){
+          $value = htmlspecialchars( $value, ENT_QUOTES, 'utf-8' );
+          /*if(($attib == "hint")||($attib == "defaultvalue")){
             $value = str_replace("&", "&amp;", $value);
             $value = str_replace("'", "\'", $value);
             $value = str_replace(">", "&gt;", $value);
             $value = str_replace("<", "&lt;", $value);
-          } else{ 
-            $value = htmlentities( $value, ENT_QUOTES, 'utf-8' );
           }
-          
+          //else{
+            $value = htmlentities( $value, ENT_QUOTES, 'utf-8' );
+          //}
+          */
           $xml .= ' ' . $attib . '="' . $value . '"';
           //check if the htmlentities result value is the euro symbol and
           //replaced by their numeric character representation
