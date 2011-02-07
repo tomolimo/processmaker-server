@@ -179,9 +179,9 @@ var G_Grid = function(oForm, sGridName) {
                  attributDefaultValue=attributes.defaultvalue;
               } else {
                 scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                attributes = elementAttributesNS(aObjects[0]);
-                if(attributes.value != undefined)
-                  attributDefaultValue=attributes.value;
+                attributes = elementAttributesNS(aObjects[0],'pm');
+                if(attributes.defaultvalue != undefined)
+                  attributDefaultValue=attributes.defaultvalue;
                 else
                   attributDefaultValue='';
               }
