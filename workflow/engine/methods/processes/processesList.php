@@ -44,6 +44,7 @@ else {
 }
 $r->data = $proData;
 
-$r->totalCount = count($proData); //$oProcess->getAllProcessesCount();
+//$r->totalCount = count($proData); 
+$r->totalCount = $oProcess->getAllProcessesCount();
 
 echo G::json_encode($r);

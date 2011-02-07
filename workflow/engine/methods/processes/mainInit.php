@@ -24,6 +24,8 @@
  */
 
   $oHeadPublisher =& headPublisher::getSingleton(); 
+  G::loadClass('configuration');
+  $conf = new Configurations;
   
   $oHeadPublisher->addExtJsScript('processes/main', false );    //adding a javascript file .js
   $oHeadPublisher->addContent('processes/main'); //adding a html file  .html.
@@ -35,6 +37,9 @@
     'ID_SELECT', 'ID_SEARCH', 'ID_NO_SELECTION_WARNING', 'ID_PROCESS_DELETE_LABEL', 'ID_PROCESS_DELETE_ALL_LABEL',
     'ID_PROCESS_CANT_DELETE', 'ID_EDIT_BPMN'
   ));
+  
+  $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));
+  
   $oHeadPublisher->assign('TRANSLATIONS', $translations);
   G::RenderPage('publish', 'extJs');
   

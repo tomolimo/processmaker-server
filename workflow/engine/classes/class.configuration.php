@@ -443,5 +443,18 @@ class Configurations // extends Configuration
     
     return $dateTime;
   }
+  
+  function getEnvSetting($key=null)
+  {
+    $this->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+    
+    if( isset($key) ) {        
+      if( isset($this->aConfig[$key]) ) {        
+        return $this->aConfig[$key];
+      } else
+        return '';
+    } else
+      return $this->aConfig;
+  }
 }
 ?>

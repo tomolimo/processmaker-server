@@ -511,20 +511,20 @@ class Process extends BaseProcess {
 
     $oCriteria->addJoin(ProcessPeer::PRO_CREATE_USER, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
     $oCriteria->addJoin(ProcessPeer::PRO_CATEGORY, ProcessCategoryPeer::CATEGORY_UID, Criteria::LEFT_JOIN);
-    $oCriteria->addDescendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
+    //$oCriteria->addDescendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
 
-
-    /*if($start != '')
+    $this->tmpCriteria = clone $oCriteria;    
+    
+    if($start != '')
       $oCriteria->setOffset($start);
     if($limit != '')
       $oCriteria->setLimit($limit);
-    */
-
+    
     //execute a query to obtain numbers, how many cases there are by process
     $casesCnt = $this->getCasesCountInAllProcesses();
 
     //execute the query    
-    $this->tmpCriteria = $oCriteria;
+    
     $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $processes = Array();
@@ -611,6 +611,8 @@ class Process extends BaseProcess {
       $aProcesses[] = $process;
       
     }
+    
+    usort($aProcesses, 'ordProcessByProTitle');
     return $aProcesses;
   }
 
@@ -638,3 +640,15 @@ class Process extends BaseProcess {
     return $aProcesses;
   }
 } // Process
+
+function ordProcessByProTitle($a, $b){
+   
+  if ($a['PRO_TITLE']>$b['PRO_TITLE']) {
+    return 1;
+  } elseif ($a['PRO_TITLE']<$b['PRO_TITLE']) {
+    return -1;
+  } else {
+    return 0; 
+  }
+   
+}

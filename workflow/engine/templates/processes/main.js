@@ -22,7 +22,7 @@ new Ext.KeyMap(document, {
 
 
 Ext.onReady(function(){
-  //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   Ext.QuickTips.init();
 
   store = new Ext.data.GroupingStore( {
@@ -107,7 +107,44 @@ Ext.onReady(function(){
         store.load({params:{category: filter, start : 0 , limit : 25 }});
       }}
     })
-  
+/*  storePageSize = new Ext.data.SimpleStore({
+    fields: ['size'],
+    data: [['20'],['30'],['40'],['50'],['100']],
+    autoLoad: true
+  });
+    
+  var comboPageSize = new Ext.form.ComboBox({
+    typeAhead     : false,
+    mode          : 'local',
+    triggerAction : 'all',
+    store: storePageSize,
+    valueField: 'size',
+    displayField: 'size',
+    width: 50,
+    editable: false,
+    listeners:{
+      select: function(c,d,i){
+        //UpdatePageConfig(d.data['size']);
+        bbar.pageSize = parseInt(d.data['size']);
+        bbar.moveFirst();
+        
+        //Ext.getCmp('bbar').setPageSize(comboPageSize.getValue());
+      }
+    }
+  });
+
+  comboPageSize.setValue(pageSize);
+
+
+  var bbar = new Ext.PagingToolbar({
+    id: 'bbar',
+    pageSize: '15',
+    store: store,
+    displayInfo: true,
+    displayMsg: 'Displaying Processes {0} - {1} of {2}',
+    emptyMsg: "",
+    items:[_('ID_PAGE_SIZE')+':',comboPageSize]
+  })  */  
   processesGrid = new Ext.grid.GridPanel( {
     region: 'center',
     layout: 'fit',
@@ -253,14 +290,14 @@ Ext.onReady(function(){
       }
     ],
  // paging bar on the bottom
-    /*bbar: new Ext.PagingToolbar({
+    bbar: new Ext.PagingToolbar({
         pageSize: 15,
         store: store,
         displayInfo: true,
-        displayMsg: 'Displaying topics {0} - {1} of {2}',
-        emptyMsg: "No topics to display",
+        displayMsg: 'Displaying Processes {0} - {1} of {2}',
+        emptyMsg: "",
         items:[]
-    }),*/
+    }),
     listeners: {
       rowdblclick: editProcess,
       rowclick: function(){
