@@ -166,6 +166,7 @@ class Tasks
   */
   public function createRouteRows( $aRoutes ) 
   {
+  	$routeID = array();
     foreach ( $aRoutes as $key => $row ) {
       $oRoute = new Route();
       //unset ($row['ROU_UID']);
