@@ -258,7 +258,7 @@ class Configurations // extends Configuration
   
   /**
    * usersNameFormat
-   * @author Qennix
+   * @author Enrique Ponce de Leon enrique@colosa.com
    * @param  string   $username
    * @param  string   $firstname  
    * @param  string   $lastname
@@ -280,6 +280,23 @@ class Configurations // extends Configuration
   	}catch(Exception $oError){
   		return null;
   	}
+  }
+  
+  /**
+   * getFormats
+   * @author Enrique Ponce de Leon enrique@colosa.com
+   * @return FORMATS array
+   */
+  
+  function getFormats(){
+  	if (!isset($this->UserConfig)) $this->UserConfig = $this->getConfiguration('ENVIRONMENT_SETTINGS', '');
+  	$formats = Array();
+  	$formats['FullNameFormat'] = isset($this->UserConfig['format']) ? $this->UserConfig['format'] : '@lastName @firstName (@userName)';
+  	$formats['DateFormat'] = isset($this->UserConfig['dateFormat']) ? $this->UserConfig['dateFormat'] : 'm/d/Y';
+  	$formats['CasesListDateFormat'] = isset($this->UserConfig['casesListDateFormat']) ? $this->UserConfig['casesListDateFormat'] : 'm/d/Y';
+  	$formats['CasesListRowNumber'] = isset($this->UserConfig['casesListRowNumber']) ? $this->UserConfig['casesListRowNumber'] : 10;
+  	$formats['TimeZone'] = date('T');
+    return $formats;
   }
   
     
