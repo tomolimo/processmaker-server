@@ -11,6 +11,9 @@ new Ext.KeyMap(document, {
   }
 });
 
+
+var saveProcess;
+
 Ext.onReady ( function() {
 
   workflow  = new MyWorkflow("paintarea");
@@ -144,7 +147,6 @@ Ext.onReady ( function() {
     items   : [north, center]
   });
   
-  
 
   var designaerToolbar = new Ext.Window({
     id: 'designaerToolbar',
@@ -154,9 +156,13 @@ Ext.onReady ( function() {
     height:70,
     x: 0,
     y: 0,
-    minimizable: false,
+    minimizable: true,
+    maximizable: false,
     closable: false,
     resizable: false,
+    floating: true,
+      
+    shim: true,
     plugin: new Ext.ux.WindowAlwaysOnTop,
     html: '<div id="x-shapes">\n\
       <p id="x-shapes-task" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
@@ -172,44 +178,131 @@ Ext.onReady ( function() {
       <p id="x-shapes-milestone" title="Milestone" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
     </div>'
   });
+  designaerToolbar.on('minimize',function(w){
+    //console.debug('minimizing...');
+    if( w.collapsed )
+      designaerToolbar.expand();
+    else
+      designaerToolbar.collapse(); //collapse the window
+    
+  });
   
   designaerToolbar.show();
 
+
+var win = Ext.getCmp('designaerToolbar');
+var divScroll = document.body;
+
+// custom variables
+win._posRelToView = win.getPosition(true);
+win._scrollPosTimer = false;
+win._moveBlocker = false;
+win.show();
+
+
+
+// save relative pos to view when moving (for scrolling event below)
+// also, manually do a constrain, else the win would be lost if moved outside the view
+win.on('move', function() {
+    // lock function (because we move the window again inside)
+    if (win._moveBlocker) return;
+    win._moveBlocker = true;
+
+    var winPos = win.getPosition(true);
+    win._posRelToView = [winPos[0] - divScroll.scrollLeft, winPos[1] - divScroll.scrollTop];
+
+    // manually do what constrain should do if it worked as assumed
+    var layersize = [Ext.get(divScroll).getWidth(), Ext.get(divScroll).getHeight()];
+    var windowsize = [win.getSize().width, win.getSize().height];
+    // assumed width of the scrollbar (true for windows 7) plus some padding to be sure
+    var scrollSize = 17 + 5;
+    if (win._posRelToView[0] < 0) { // too far left
+        win.setPosition(divScroll.scrollLeft, winPos[1]);
+        win._posRelToView = [0, win._posRelToView[1]];
+    } else if (win._posRelToView[0] >= (layersize[0] - windowsize[0])) { // too far right
+        win.setPosition(((divScroll.scrollLeft + layersize[0]) - windowsize[0] - scrollSize), winPos[1]);
+        win._posRelToView = [(layersize[0] - windowsize[0] - scrollSize), win._posRelToView[1]];
+    }
+
+    winPos = win.getPosition(true); // update pos
+    if (win._posRelToView[1] < 0) { // too high up
+        win.setPosition(winPos[0], divScroll.scrollTop);
+        win._posRelToView = [win._posRelToView[0], 0];
+    } else if (win._posRelToView[1] >= layersize[1]) { // too low
+        win.setPosition(winPos[0], ((divScroll.scrollTop + layersize[1]) - windowsize[1] - scrollSize));
+        win._posRelToView = [win._posRelToView[0], (layersize[1] - windowsize[1] - scrollSize)];
+    }
+
+    // release function
+    win._moveBlocker = false;
+});
+
+
+
+  Ext.fly(document).on("scroll", function(){
+    //console.log("body scrolled");
+    //alert(document.body.scrollTop);
+    
+    
+    //var _posRelToView = win.getPosition(true);
+
+    //alert(win.x +'   '+ win.y);
+    //win.setPosition(_posRelToView[0] + divScroll.scrollLeft, _posRelToView[1] + divScroll.scrollTop)
+
+
+
+    if (win._scrollPosTimer) {
+        clearTimeout(win._scrollPosTimer);
+    }
+    win._scrollPosTimer = setTimeout(function() {
+        win.setPosition(win._posRelToView[0] + divScroll.scrollLeft, win._posRelToView[1] + divScroll.scrollTop);
+    }, 100);
+    
+  });
+
+   
+
   new Ext.ToolTip({
       target: 'x-shapes-task',
-      anchor: 'right',
+      title: 'Task',
       trackMouse: true,
-      html: 'Task'
+      anchor: 'top',
+      html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-startEvent',
-      anchor: 'right',
+      title: '  Start Event',
       trackMouse: true,
-      html: 'Start'
+      anchor: 'top',
+      html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-interEvent',
-      anchor: 'right',
+      title: 'Intermediate Event',
       trackMouse: true,
-      html: 'Intermediate Event'
+      anchor: 'top',
+      html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-endEvent',
-      anchor: 'right',
+      title: 'End Event',
       trackMouse: true,
-      html: 'End Event'
+      anchor: 'top',
+      html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-gateways',
-      anchor: 'right',
+      title: 'Gateway',
       trackMouse: true,
-      html: 'Gateway'
+      anchor: 'top',
+      html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-annotation',
-      anchor: 'right',
+      title: 'Annotation',
+      anchor: 'left',
       trackMouse: true,
-      html: 'Annotation'
+      html: ''
   });
 
 
@@ -716,7 +809,7 @@ Ext.onReady ( function() {
       console.innerHTML=console.innerHTML+"<br>"+msg;
   }
 
-  function saveProcess()
+  saveProcess = function()
   {
       // console.dir(this.workflow);
 
@@ -830,15 +923,24 @@ Ext.onReady ( function() {
       var aRoutes       = 	Ext.util.JSON.encode(routes);
       var aSubProcess   = Ext.util.JSON.encode(subprocess);
 
-      var pro_uid = getUrlVars();
-
+      //var pro_uid = getUrlVars();
+      var loadMask = new Ext.LoadMask(document.body, {msg:'Saving..'});
+      loadMask.show();
+    
       if(typeof pro_uid != 'undefined')
       {
           Ext.Ajax.request({
               url: 'saveProcess.php',
               method: 'POST',
               success: function(response) {
-                  Ext.Msg.alert ('Done', response.responseText);
+                var result = Ext.util.JSON.decode(response.responseText);
+                loadMask.hide();
+                
+                if( result.success ) {
+                  PMExt.notify(_('ID_PROCESS_SAVE'), result.msg);
+                } else {
+                  PMExt.error(_('ID_ERROR'), result.msg);
+                }
               },
               failure: function(){},
               params: {

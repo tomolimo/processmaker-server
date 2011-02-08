@@ -155,7 +155,7 @@ Ext.onReady ( function() {
         cls: 'x-btn-text-icon',
         iconCls: 'button_menu_ext ss_sprite ss_disk',
         handler: function() {
-          saveProcess();
+          document.getElementById('designerFrame').contentWindow.saveProcess();
         }
       }, {
           text:'Save as'

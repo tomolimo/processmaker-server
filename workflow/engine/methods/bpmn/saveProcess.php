@@ -122,9 +122,15 @@ try{
     $routesArray   = $oProcess->createGateways($routeTransitions,$endArray,$oData->routes,$numberRoutes,$idProcess,$taskHidden);
     $oData->routes = $routesArray;
   }
-
+  
   $oProcess->updateProcessFromDataXpdl($oData,$oData->tasks);
-  }
-catch (Exception $oException) {
- die($oException->getMessage());
+
+  $result->success = true;
+  $result->msg = G::LoadTranslation('ID_PROCESS_SAVE_SUCCESS');
+
+} catch (Exception $e) {
+  $result->success = false;
+  $result->msg = $e->getMessage();
 }
+
+print G::json_encode($result);
