@@ -150,11 +150,10 @@ function openActionDialog( caller, action ) {
 		case 'copyAction':
 		case 'edit':
 		case 'newFolder':
-		case 'move':
+		case 'moveAction':
 		case 'rename':
 		case 'search':
 		case 'uploadDocument':
-		case 'move':
 			requestParams = getRequestParams();
 			requestParams.action = action;
 			if( action != "edit" ) {
@@ -316,6 +315,7 @@ function handleCallback(requestParams, node) {
 			if( success ) {
 				json = Ext.decode( response.responseText );
 				if( json.success ) {
+					if( json.success == "success"){
 					statusBarMessage( json.message, false, true );
 					try {
 						if( dropEvent) {
@@ -331,6 +331,9 @@ function handleCallback(requestParams, node) {
 							datastore.reload();
 						}
 					} catch(e) { datastore.reload(); }
+					}else{
+						statusBarMessage( json.message, false, false );
+					}
 				} else {
 					Ext.Msg.alert( 'Failure', json.error );
 				}
@@ -444,6 +447,7 @@ function handleCallback(requestParams, node) {
 
 		function statusBarMessage( msg, isLoading, success ) {
 			// console.log("Status Bar needed");
+			console.log(msg);
 			var statusBar = Ext.getCmp('statusPanel');
 			if( !statusBar ) return;
 			// console.log("Status bar acceced: "+msg);
@@ -460,12 +464,13 @@ function handleCallback(requestParams, node) {
 				    clear: true
 				});
 				Ext.msgBoxSlider.msg('success', msg );
-			} else if( success != null ) {
+			} else {
 				statusBar.setStatus({
 				    text: 'error: ' + msg,
 				    iconCls: 'error',
 				    clear: true
 				});
+				Ext.msgBoxSlider.msg('error', msg );
 				
 			}
 			
@@ -685,9 +690,9 @@ var gridtb = new Ext.Toolbar(
 					icon : '/images/documents/_move.png',
 					tooltip : 'Move',
 					cls : 'x-btn-icon',
-					disabled : true,
+					disabled : false,
 					handler : function() {
-						openActionDialog(this, 'move');
+						openActionDialog(this, 'moveAction');
 					}
 				},
 				{
@@ -1006,7 +1011,7 @@ gridCtxMenu = new Ext.menu.Menu({
 		icon : '/images/documents/_move.png',
 		text : 'movelink',
 		handler : function() {
-			openActionDialog(this, 'move');
+			openActionDialog(this, 'moveAction');
 		}
 	}, {
 		id : 'gc_delete',
@@ -1115,7 +1120,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 						text : 'Move',
 						handler : function() {
 							dirCtxMenu.hide();
-							openActionDialog(this, 'move');
+							openActionDialog(this, 'moveAction');
 						}
 					},					
 					{
@@ -1161,7 +1166,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 		text : 'copylink',
 		handler : function() {
 			copymoveCtxMenu.hide();
-			copymove('copyAction');
+			copymove('copyExecute');
 		}
 	}, {
 		id : 'copymoveCtxMenu_move',
@@ -1169,7 +1174,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 		text : 'movelink',
 		handler : function() {
 			copymoveCtxMenu.hide();
-			copymove('move');
+			copymove('moveExecute');
 		}
 	}, '-', {
 		id : 'copymoveCtxMenu_cancel',
@@ -1335,7 +1340,7 @@ var documentsTab = {
 												stopEvent : true,
 												handler : function() {
 													openActionDialog(this,
-															'move');
+															'moveAction');
 												}
 
 											},

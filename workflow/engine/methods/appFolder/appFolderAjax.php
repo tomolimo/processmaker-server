@@ -583,15 +583,25 @@ function uploadDocument(){
      G::RenderPage ( 'publish', 'raw' );
      */
 }
-
 function copyAction(){
+    copyMoveAction("copy");
+}
+function moveAction(){
+    copyMoveAction("move");
+}
+function copyMoveAction($type){
     $dir=$_REQUEST['dir'];
    $copyDialog["xtype"]="form";
    $copyDialog["id"]="simpleform";
    $copyDialog["labelWidth"]=125;
 	$copyDialog["width"]=340;
 	$copyDialog["url"]="URL_SCRIPT";
-	$copyDialog["dialogtitle"]= "Copy/Move";
+	if($type=="copy"){
+	$copyDialog["dialogtitle"]= "Copy";
+	}else{
+	 $copyDialog["dialogtitle"]= "Move";
+	}
+	
 	$copyDialog["frame"]= true;
 	$copyDialog["items"]=array();
 	
@@ -609,24 +619,38 @@ function copyAction(){
     $copyDialog["buttons"]=array();
     
     $itemButton=array();
-    $itemButton["text"]= "Create";
+    if($type=="copy"){
+    $itemButton["text"]= "Copy";
+    }else{
+    $itemButton["text"]= "Move";
+    }
     $itemButton["handler"]="copyDialogCreateButtonFunction";
     $functionsToReplace["copyDialogCreateButtonFunction"]="function() {
     		form =  Ext.getCmp('simpleform').getForm();
 			statusBarMessage( 'Please wait...', true );
 		    var requestParams = getRequestParams();
 		    requestParams.confirm = 'true';
-		    requestParams.action  = 'copyExecute';
+		    requestParams.action  = '".$type."Execute';
 		    form.submit({
 		        //reset: true,
 		        reset: false,
 		        success: function(form, action) {
+		        if(action.result.success){
+		        if(action.result.success=='success'){
 		        	statusBarMessage( action.result.message, false, true );
 		        	try{
 		        		dirTree.getSelectionModel().getSelectedNode().reload();
 		        	} catch(e) {}
 					datastore.reload();
 					Ext.getCmp('dialog').destroy();
+					}else{
+					statusBarMessage( action.result.message, false, false );
+					}
+					}else{
+					if( !action.result ) return;
+					Ext.MessageBox.alert('Error!', action.result.error);
+					statusBarMessage( action.result.error, false, false );
+					}
 		        },
 		        failure: function(form, action) {
 		        	if( !action.result ) return;
