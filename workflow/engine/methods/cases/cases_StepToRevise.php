@@ -88,9 +88,13 @@ $oHeadPublisher->addScriptCode('
   
 
 	//Obtain previous and next step - Start
+  if(isset($_GET['type'])) 
+    $sType = $_GET['type'];
+  else 
+    $sType = '';
 	try {
-	    $aNextStep = $oCase->getNextSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $_GET['type']);
-	    $aPreviousStep = $oCase->getPreviousSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $_GET['type']);
+	    $aNextStep = $oCase->getNextSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $sType);
+	    $aPreviousStep = $oCase->getPreviousSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $sType);
 	}
 	catch (exception $e) {
 
