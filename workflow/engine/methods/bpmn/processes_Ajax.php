@@ -319,7 +319,7 @@ if ( isset ($_REQUEST['action']) ) {
             require_once 'classes/model/SubProcess.php';
             $oOP = new SubProcess();
             $aData = array('SP_UID'          	 => $_POST['SP_UID'],//G::generateUniqueID(),
-                           'PRO_UID'         	 => $aTask['PRO_UID'],
+                           'PRO_UID'         	 => $_POST['PRO_UID'],
                            'TAS_UID'         	 => $_POST['TASKS'],
                            'PRO_PARENT'      	 => $_POST['PRO_PARENT'],
                            'TAS_PARENT'		 => $_POST['TAS_PARENT'],
@@ -332,6 +332,10 @@ if ( isset ($_REQUEST['action']) ) {
                            'SP_GRID_IN'          => '');
 
             $oOP->update($aData);
+            require_once 'classes/model/Content.php';
+            $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+            //$cont = Content::addContent( 'SP_TITLE', '', $_POST['form']['SP_UID'], $lang, $_POST['form']['SPROCESS_NAME'] );
+            $cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
             break;
 
             case'saveSubprocessDetails11':

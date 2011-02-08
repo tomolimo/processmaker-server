@@ -2523,7 +2523,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         forceSelection: true,
                         editable:       false,
                         fieldLabel:     'Process',
-                        name:           'PRO_UID',
+                        name:           'PRO_TITLE',
                         emptyText    : 'Select Process',
                         displayField:   'PRO_TITLE',
                         valueField:     'PRO_TITLE',
@@ -2601,6 +2601,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                var response = action.response.responseText;
                var aData = Ext.util.JSON.decode(response);
                spUID        = aData.data[0].SP_UID;
+               proUID        = aData.data[0].PRO_UID;
                proParent    = aData.data[0].PRO_PARENT;
                spSync       = aData.data[0].SP_SYNCHRONOUS;
                tasParent    = aData.data[0].TAS_PARENT;
@@ -2616,9 +2617,8 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                    Ext.getCmp("variablein").show();
                    form.findField('SP_SYNCHRONOUS').setValue('Synchronous');
                }
-          form.findField('PRO_UID').setValue(action.result.data[0].PRO_UID);
+          form.findField('PRO_TITLE').setValue(action.result.data[0].PRO_TITLE);
           form.findField('SPROCESS_NAME').setValue(processName);
-          //workflow.subProcessProperties = action.result.data[0];
         },
         failure:function(form, action) {
             Ext.MessageBox.alert('Message', 'Load failed');
@@ -2626,7 +2626,6 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
      });
 
     subProcessProperties.render(document.body);
-   // workflow.subProcessProperties = subProcessProperties;
 
     var window = new Ext.Window({
     title: 'Task: ',
@@ -2665,16 +2664,15 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
              }
             
             var sProcessUID = getForm.SEL_PROCESS;
+            if(sProcessUID == '')
+                sProcessUID = proUID;
+            
             var sSPNAME      = getForm.SPROCESS_NAME;
             var sSync        = getForm.SP_SYNCHRONOUS;
-            if(sSync == 'Synchronous')
-                {
-                    sSync = 1;
+            if(sSync == 1)
                     var varIn = Ext.util.JSON.encode(varIn1)+'|'+Ext.util.JSON.encode(varIn2);
-                }
             else
                 {
-                    sSync = 0;
                     varIn = new Array();
                     varIn[0] = '';
                 }
@@ -2686,7 +2684,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
               params: {
                     action          : 'saveSubprocessDetails',
                     SP_UID          : spUID,
-                    TASKS           : tasks,
+                    TASKS           : tasks,  //problem
                     PRO_UID         : sProcessUID,
                     SPROCESS_NAME   : sSPNAME,
                     PRO_PARENT      : proParent,
@@ -2697,6 +2695,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                   },
               success: function(response) {
                   Ext.MessageBox.alert ('Status','Sub Process Properties has been saved successfully.');
+                  window.close();
               }
             });
 

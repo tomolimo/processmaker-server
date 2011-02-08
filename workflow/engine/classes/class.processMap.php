@@ -5181,6 +5181,8 @@ class processMap {
       //$aRow['SPROCESS_NAME'] = $aRow['TAS_TITLE'];
       $aRow ['TAS_TITLE'] = $aRow ['CON_VALUE'];
       $aRow ['SPROCESS_NAME'] = $aRow ['CON_VALUE'];
+      $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+      $aRow ['PRO_TITLE'] =  Content::load ( 'PRO_TITLE', '', $aRow ['PRO_UID'] , $lang );
 
       if($sType == 0)
       {
