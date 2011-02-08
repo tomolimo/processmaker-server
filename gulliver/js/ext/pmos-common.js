@@ -82,7 +82,7 @@ Ext.msgBoxSlider = function(){
   return {
     msg : function(title, format) {
       if( ! msgCt ) {
-          msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+          msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);
       }
       msgCt.alignTo(document, 't-t');
       var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
