@@ -186,7 +186,6 @@ var G_Grid = function(oForm, sGridName) {
                 else
                   attributDefaultValue='';
               }
-alert(attributDefaultValue);
               if (aObjects[0].type != 'checkbox' ) {
                if(attributDefaultValue!='' && attributDefaultValue != undefined)
                 aObjects[0].value = attributDefaultValue;
