@@ -5,6 +5,14 @@ if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'un
       this.setDimension(workflow.zoomWidth+10, workflow.zoomHeight+10);
 else
     this.setDimension(40,40);
+
+//Setting width and height values as per the zoom ratio
+if(typeof workflow.zoomType != 'undefined')
+{
+   var zoomWidth = 40 * workflow.zoomType;
+   var zoomHeight = 40 * workflow.zoomType;
+   this.setDimension(zoomWidth, zoomHeight);
+}
 this.stroke=2;
 };
 bpmnGatewayComplex.prototype=new VectorFigure;

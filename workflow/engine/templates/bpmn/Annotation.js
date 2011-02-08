@@ -10,6 +10,14 @@ bpmnAnnotation = function (_30ab ) {
    if(typeof workflow.zoomAnnotationWidth != 'undefined' || typeof workflow.zoomAnnotationHeight != 'undefined')
         this.setDimension(workflow.zoomAnnotationWidth, workflow.zoomAnnotationHeight);
 
+   //Setting width and height values as per the zoom ratio
+   if(typeof workflow.zoomType != 'undefined')
+   {
+       var zoomWidth = 110 * workflow.zoomType;
+       var zoomHeight = 60 * workflow.zoomType;
+       this.setDimension(zoomWidth, zoomHeight);
+   }
+
    this.setAnnotationName(_30ab.annotationName); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 

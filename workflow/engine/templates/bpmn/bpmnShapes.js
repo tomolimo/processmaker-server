@@ -11,10 +11,15 @@ bpmnTask = function (_30ab) {
    else
         this.setDimension(165, 40);
 
-   //Setting width and height values as per the zoom ratio
-   if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
-        this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
-    this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+      //Setting width and height values as per the zoom ratio
+   if(typeof workflow.zoomType != 'undefined')
+   {
+       var zoomWidth = 165 * workflow.zoomType;
+       var zoomHeight = 40 * workflow.zoomType;
+       this.setDimension(zoomWidth, zoomHeight);
+   }
+
+   this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnTask.prototype = new VectorFigure;
@@ -44,12 +49,13 @@ bpmnTask.prototype.paint = function () {
     VectorFigure.prototype.paint.call(this);
 
     //Set the Task Limitation
-    if ((this.getWidth() > 200 || this.getHeight() > 100 ) && this.limitFlag != true) {
-        this.setDimension(200, 100);
-    }
-    else if ((this.getWidth() < 165 || this.getHeight() < 40) && this.limitFlag != true) {
-        this.setDimension(165, 40);
-    }
+//    if ((this.getWidth() > 200 || this.getHeight() > 100 ) && this.limitFlag != true) {
+//        this.setDimension(200, 100);
+//    }
+//    else if ((this.getWidth() < 165 || this.getHeight() < 40) && this.limitFlag != true) {
+//        this.setDimension(165, 40);
+//    }
+
 
     var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
     var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);

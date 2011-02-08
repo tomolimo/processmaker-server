@@ -1770,6 +1770,7 @@ MyWorkflow.prototype.zoom = function(sType)
    
 
    sType =sType/100;
+   workflow.zoomType = sType;
    var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
