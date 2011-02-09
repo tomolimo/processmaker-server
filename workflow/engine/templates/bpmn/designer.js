@@ -150,18 +150,21 @@ Ext.onReady ( function() {
 
   var designaerToolbar = new Ext.Window({
     id: 'designaerToolbar',
-    title: '<center>Toolbar</center>',
-    titleAlign: 'center',
+    //title: '<span style="font-size:10px; font-weight:bold; align:center;">&nbsp;&nbsp;</span>',
+    headerAsText: true,
     width: 320,
-    height:70,
+    height:60,
     x: 0,
     y: 0,
-    minimizable: true,
+    minimizable: false,
     maximizable: false,
     closable: false,
     resizable: false,
     floating: true,
-      
+    frame:true,
+    shadow:false,
+    border:true,
+    
     shim: true,
     plugin: new Ext.ux.WindowAlwaysOnTop,
     html: '<div id="x-shapes">\n\
