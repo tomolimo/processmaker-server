@@ -25,30 +25,30 @@ bpmnTask.prototype.type = "bpmnTask"
 
 
 bpmnTask.prototype.coord_converter = function (bound_width, bound_height, text_length) {
-    input_width = text_length * 6
-    input_height = 10
+  input_width = text_length * 6;
+  input_height = 10;
 
-    temp_width = bound_width - input_width;
-    temp_width /= 2;
-    temp_x = temp_width;
+  temp_width = bound_width - input_width;
+  temp_width /= 2;
+  temp_x = temp_width;
 
-    temp_height = bound_height - 10;
-    temp_height /= 2;
-    temp_y = temp_height;
+  temp_height = bound_height - 10;
+  temp_height /= 2;
+  temp_y = temp_height;
 
-    var temp_coord = new Object();
-    temp_coord.temp_x = temp_x;
-    temp_coord.temp_y = temp_y;
-    return temp_coord;
+  var temp_coord = new Object();
+  temp_coord.temp_x = temp_x;
+  temp_coord.temp_y = temp_y;
+  return temp_coord;
 };
 
 //curWidth = this.getWidth();
 bpmnTask.prototype.paint = function () {
-    VectorFigure.prototype.paint.call(this);
+  VectorFigure.prototype.paint.call(this);
 
-if(typeof workflow.sType == 'undefined')
-  workflow.sType = 1;
-//For Zooming
+  if(typeof workflow.sType == 'undefined')
+    workflow.sType = 1;
+  //For Zooming
 
  if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
    {
@@ -62,6 +62,10 @@ if(typeof workflow.sType == 'undefined')
   this.width  = this.originalWidth * workflow.sType;
   this.height = this.originalHeight  * workflow.sType;
 
+  if(typeof this.fontSize == 'undefined' || this.fontSize == '')
+    this.fontSize = 11;
+  else if(this.fontSize < 11)
+    this.fontSize = 11;
 
   var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
   var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
@@ -86,96 +90,93 @@ if(typeof workflow.sType == 'undefined')
   */
   this.bpmnText = new jsGraphics(this.id);
 
+  var zoomRate = this.getWidth()/165 ;
   var len = this.getWidth() / 18;
-    if (len >= 6) {
-        //len = 1.5;
-      this.padleft = 0.12 * this.getWidth();
-      this.padtop = 0.40 * this.getHeight() -3;
-      this.rectWidth = this.getWidth() - 2 * this.padleft;
-    }
-    else {
-      this.padleft = 0.1 * this.getWidth();
-      this.padtop = 0.09 * this.getHeight() -3;
-      this.rectWidth = this.getWidth() - 2 * this.padleft;
-    }
+  if (len >= 6) {
+    this.padleft = 0.05 * this.getWidth();
+    this.padtop  = 0.13 * this.getHeight() -1;
+    this.rectWidth = this.getWidth() - 2 * this.padleft;
+  }
+  else {
+    this.padleft = 2; //0.06 * this.getWidth();
+    this.padtop = 2; //0.09 * this.getHeight() -3;
+    this.rectWidth = this.getWidth() - 2 * this.padleft;
+    this.fontSize = 0.8 * this.fontSize;
+  }
 
-   this.rectheight = this.getHeight() - this.padtop -7;
-   
-   if(typeof this.fontSize == 'undefined' || this.fontSize == '')
-     this.fontSize = 11;
-   else if(this.fontSize < 11)
-     this.fontSize = 11;
-   
-   this.bpmnText.setFont('verdana', +this.fontSize+'px', Font.PLAIN);
+  this.rectheight = this.getHeight() - this.padtop -3;
+  if ( this.rectheight < 7 ) this.rectheight = 7;
+  
+  this.bpmnText.setFont('verdana', +this.fontSize+'px', Font.PLAIN);
     
-   if(typeof this.taskName == 'undefined')
-     this.taskName = '';
+  if(typeof this.taskName == 'undefined')
+    this.taskName = '';
     
-   this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center');
-   // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
-   //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
+  this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center');
 
-   /****************************       Drawing Timer Boundary event starts here           *******************************/
+  /****************************       Drawing Timer Boundary event starts here           *******************************/
+  this.boundaryTimer = new jsGraphics(this.id);
 
-   this.boundaryTimer = new jsGraphics(this.id);
+  var x_cir1=5;
+  var y_cir1=45;
+  this.x3 = x[3];
+  this.y4 = y[4];
+  this.y5 = y[5];
 
-   var x_cir1=5;
-   var y_cir1=45;
-   this.x3 = x[3];
-   this.y4 = y[4];
-   this.y5 = y[5];
+  var xbt = 13*zoomRate;           //x-base boundaryTimer
+  var ybt = this.y4 - 13*zoomRate; //y-base boundaryTimer
+  var dbt = 30*zoomRate;           //diameter boundaryTimer
+  var ycbt = ybt + 11*zoomRate;    //y-center boundaryTimer
+  this.boundaryTimer.setColor("#c0c0c0");
+  this.boundaryTimer.fillEllipse(xbt+2, ybt+2, dbt, dbt);
+  this.boundaryTimer.setStroke(this.stroke);
+  this.boundaryTimer.setColor( "#f9faf2" );
+  this.boundaryTimer.fillEllipse(xbt, ybt, dbt, dbt);
+  this.boundaryTimer.setColor("#adae5e");
+  this.boundaryTimer.drawEllipse(xbt,ybt, dbt, dbt);
 
-   this.boundaryTimer.setColor("#c0c0c0");
-   this.boundaryTimer.fillEllipse(this.x3-this.x3/1.08,this.y4-12,30,30);
+  var x_cir2=8;
+  var y_cir2=48;
+  //this.boundaryTimer.setColor( "#f9faf2" );
+  //this.boundaryTimer.fillEllipse(xbt, ybt-9*zoomRate,(30-6)*zoomRate,(30-6)*zoomRate);
+  this.boundaryTimer.setColor("#adae5e");
+  this.boundaryTimer.drawEllipse(xbt+(3*zoomRate), ybt+3*zoomRate,(24.4)*zoomRate,(24.4)*zoomRate);
 
-   this.boundaryTimer.setStroke(this.stroke);
-   this.boundaryTimer.setColor( "#f9faf2" );
-   this.boundaryTimer.fillEllipse(this.x3-this.x3/1.08,this.y5-12,30,30);
-   this.boundaryTimer.setColor("#adae5e");
-   this.boundaryTimer.drawEllipse(this.x3-this.x3/1.08,this.y5-12,30,30);
-   var x_cir2=8;
-   var y_cir2=48;
-   this.boundaryTimer.setColor( "#f9faf2" );
-   this.boundaryTimer.fillEllipse(this.x3-this.x3/1.08+3,this.y5-9,30-6,30-6);
-   this.boundaryTimer.setColor("#adae5e");
-   this.boundaryTimer.drawEllipse(this.x3-this.x3/1.08+3,this.y5-9,30-6,30-6);
-   this.boundaryTimer.setColor("#adae5e");
-    //this.graphics.drawEllipse(x_cir3,y_cir3,30-20,30-20);
-   this.boundaryTimer.drawLine(30/2.2+this.x3-this.x3/1.08,30/2+this.y5-10,30/1.6+this.x3-this.x3/1.08,30/2+this.y5-10);  //horizontal line
-   this.boundaryTimer.drawLine(30/2.2+this.x3-this.x3/1.08,30/2+this.y5-10,30/2.2+this.x3-this.x3/1.08,30/3.7+this.y5-10);  //vertical line
+  this.boundaryTimer.setColor("#adae5e");
+  this.boundaryTimer.drawLine(dbt*0.45 +xbt, dbt*0.45+this.y5-10*zoomRate, dbt/1.6+xbt, dbt/2  +this.y5-10*zoomRate);  //horizontal line
+  this.boundaryTimer.drawLine(dbt*0.45 +xbt, dbt*0.45+this.y5-10*zoomRate, dbt/2.2+xbt, dbt/3.7+this.y5-10*zoomRate);  //vertical line
+  
+  this.boundaryTimer.setStroke(this.stroke-1);
+  this.boundaryTimer.drawLine(xbt +24*zoomRate,ycbt  -3*zoomRate, xbt+20*zoomRate, ycbt            );  //10th min line 
+  this.boundaryTimer.drawLine(xbt +21*zoomRate,ycbt  +4*zoomRate, xbt+25*zoomRate, ycbt +4*zoomRate);  //15th min line
+  this.boundaryTimer.drawLine(xbt +24*zoomRate,ycbt +11*zoomRate, xbt+19*zoomRate, ycbt +9*zoomRate);  //25th min line
+  this.boundaryTimer.drawLine(xbt +15*zoomRate,ycbt +11*zoomRate, xbt+15*zoomRate, ycbt+14*zoomRate);  //30th min line
+  this.boundaryTimer.drawLine(xbt +8 *zoomRate,ycbt +11*zoomRate, xbt+12*zoomRate, ycbt +8*zoomRate);  //40th min line
+  this.boundaryTimer.drawLine(xbt +5 *zoomRate,ycbt  +4*zoomRate, xbt+8 *zoomRate, ycbt +4*zoomRate);  //45th min line
+  this.boundaryTimer.drawLine(xbt +8 *zoomRate,ycbt  -4*zoomRate, xbt+11*zoomRate, ycbt -1*zoomRate);  //50th min line
+  this.boundaryTimer.drawLine(xbt+15 *zoomRate,ycbt  -7*zoomRate, xbt+15*zoomRate, ycbt -4*zoomRate);  //60th min line
 
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+24,this.y5-3,this.x3-this.x3/1.08+20,this.y5);  //10th min line 24,8,20,11
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+21,this.y5+4,this.x3-this.x3/1.08+25,this.y5+4);  //15th min line
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+24,this.y5+11,this.x3-this.x3/1.08+19,this.y5+9);  //25th min line
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+15,this.y5+11,this.x3-this.x3/1.08+15,this.y5+14);  //30th min line
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+8,this.y5+11,this.x3-this.x3/1.08+12,this.y5+8);  //40th min line
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+5,this.y5+4,this.x3-this.x3/1.08+8,this.y5+4);  //45th min line
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+8,this.y5-4,this.x3-this.x3/1.08+11,this.y5-1);  //50th min line
-   this.boundaryTimer.drawLine(this.x3-this.x3/1.08+15,this.y5-7,this.x3-this.x3/1.08+15,this.y5-4);  //60th min line
+  if(this.boundaryEvent == true) {
+    this.boundaryTimer.paint();
+  }
+  /****************************       Drawing Timer Boundary event ends here           *******************************/
+  
+  this.bpmnText.paint();
 
-   if(this.boundaryEvent == true)
-   {
-      this.boundaryTimer.paint();
-   }
-   /****************************       Drawing Timer Boundary event ends here           *******************************/
+  //Code Added to Dynamically shift Ports on resizing of shapes 
+  if (this.input1 != null) {
+    this.input1.setPosition(0, this.height / 2 -1);
+  }
+  if (this.output1 != null) {
+    this.output1.setPosition(this.width / 2, this.height -3);
+  }
+  if (this.input2 != null) {
+    this.input2.setPosition(this.width / 2, 0);
+  }
+  if (this.output2 != null) {
+    this.output2.setPosition(this.width-3, this.height / 2-1);
+  }
 
-   this.bpmnText.paint();
-   //this.bpmnNewText = this.bpmnText;
-
-/*Code Added to Dynamically shift Ports on resizing of shapes
- **/
-    if (this.input1 != null) {
-        this.input1.setPosition(0, this.height / 2);
-    }
-    if (this.output1 != null) {
-        this.output1.setPosition(this.width / 2, this.height);
-    }
-    if (this.input2 != null) {
-        this.input2.setPosition(this.width / 2, 0);
-    }
-    if (this.output2 != null) {
-        this.output2.setPosition(this.width, this.height / 2);
-    }
 };
 
 jsGraphics.prototype.drawTextString = function (txt, x, y, dx, dy) {
@@ -311,11 +312,11 @@ InputPort.prototype.onDrop = function (port) {
       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
             {
 
-		preObj = this.workflow.currentSelection;
+    preObj = this.workflow.currentSelection;
                 newObj = port.parentNode;
                 newObj.conn = _4070.connection;
-		newObj.sPortType =port.properties.name;
-		preObj.sPortType =this.properties.name;
+    newObj.sPortType =port.properties.name;
+    preObj.sPortType =this.properties.name;
                 this.workflow.saveRoute(newObj,preObj);
             }
 
@@ -407,11 +408,11 @@ OutputPort.prototype.onDrop = function (port) {
         else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
             {
 
-		preObj = this.workflow.currentSelection;
+    preObj = this.workflow.currentSelection;
                 newObj = port.parentNode;
                 newObj.conn = _4070.connection;
-		newObj.sPortType =port.properties.name;
-		preObj.sPortType =this.properties.name;
+    newObj.sPortType =port.properties.name;
+    preObj.sPortType =this.properties.name;
                 this.workflow.saveRoute(preObj,newObj);
             }
         //Routing from gateway to task
@@ -438,8 +439,8 @@ if(this.command.newSourcePort.type == this.command.newTargetPort.type)
 else
     {
         this.command.newTargetPort.parentNode.conn = this.command.con;
-	this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
-	this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
+  this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
+  this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
         this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
         this.getWorkflow().getCommandStack().execute(this.command);
     }
@@ -459,8 +460,8 @@ if(this.command.newSourcePort.type == this.command.newTargetPort.type)
 else
     {
         this.command.newTargetPort.parentNode.conn = this.command.con;
-	this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
-	this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
+  this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
+  this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
         this.command.newTargetPort.parentNode.conn = this.command.con;
         this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
         this.getWorkflow().getCommandStack().execute(this.command);
