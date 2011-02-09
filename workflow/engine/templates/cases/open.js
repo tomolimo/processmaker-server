@@ -182,7 +182,7 @@ Ext.onReady(function(){
           frameConfig:{name:'openCaseFrame', id:'openCaseFrame'},
           defaultSrc : uri,
           loadMask:{msg:'Loading...'},
-          bodyStyle:{height: (_BROWSER.screen.height-55) + 'px', overflow:'scroll'},
+          bodyStyle:{height: (PMExt.getBrowser().screen.height-55) + 'px', overflow:'scroll'},
           width:'1024px'
           
           }/*{
@@ -549,7 +549,7 @@ Ext.onReady(function(){
           id: 'submitPauseCase',
           text : 'Pause Case',
           handler : Actions.pauseCase,
-          disabled:false,
+          disabled:false
         },{
           text : 'Cancel',
           handler : function() {
@@ -602,7 +602,7 @@ Ext.onReady(function(){
           parent.notify('PAUSE CASE', req.result.msg);
           location.href = 'casesListExtJs';
         } else {
-          PMExt.error('Error', req.result.msg);
+          PMExt.error(_('ID_ERROR'), req.result.msg);
         }
       } 
     });
@@ -610,18 +610,47 @@ Ext.onReady(function(){
 
   Actions.unpauseCase = function()
   {
-    
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_UNPAUSE_CASE'), function(){
+      var loadMask = new Ext.LoadMask(document.body, {msg:'Unpausing case...'});
+      loadMask.show();
+      
+      Ext.Ajax.request({
+        url : 'ajaxListener' ,
+        params : { action : 'unpauseCase' },
+        success: function ( result, request ) {
+          loadMask.hide();
+          var data = Ext.util.JSON.decode(result.responseText); 
+          if( data.success ) {
+            parent.PMExt.notify(_('ID_UNPAUSE_ACTION'), data.msg);
+            location.href = 'casesListExtJs';
+          } else {
+            PMExt.error(_('ID_ERROR'), data.msg);
+          }
+        },
+        failure: function ( result, request) {
+          Ext.MessageBox.alert('Failed', result.responseText);
+        }
+      });
+    });
   }
 
   Actions.deleteCase = function()
   {
     PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_DELETE_CASE'), function(){
+      var loadMask = new Ext.LoadMask(document.body, {msg:'Deleting case...'});
+      loadMask.show();
       Ext.Ajax.request({
         url : 'ajaxListener' ,
         params : { action : 'deleteCase' },
         success: function ( result, request ) {
-          parent.notify('', 'The case ' + parent._CASE_TITLE + ' was cancelled!');
-          location.href = 'casesListExtJs';
+          loadMask.hide();
+          var data = Ext.util.JSON.decode(result.responseText); 
+          if( data.success ) {
+            parent.PMExt.notify(_('ID_DELETE_ACTION'), data.msg);
+            location.href = 'casesListExtJs';
+          } else {
+            PMExt.error(_('ID_ERROR'), data.msg);
+          }
         },
         failure: function ( result, request) {
           Ext.MessageBox.alert('Failed', result.responseText);
@@ -632,7 +661,27 @@ Ext.onReady(function(){
 
   Actions.reactivateCase = function()
   {
-    
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_REACTIVATE_CASE'), function(){
+      var loadMask = new Ext.LoadMask(document.body, {msg:'Reactivating case...'});
+      loadMask.show();
+      Ext.Ajax.request({
+        url : 'ajaxListener' ,
+        params : { action : 'reactivateCase' },
+        success: function ( result, request ) {
+          loadMask.hide();
+          var data = Ext.util.JSON.decode(result.responseText); 
+          if( data.success ) {
+            parent.PMExt.notify(_('ID_REACTIVATE_ACTION'), data.msg);
+            location.href = 'casesListExtJs';
+          } else {
+            PMExt.error(_('ID_ERROR'), data.msg);
+          }
+        },
+        failure: function ( result, request) {
+          Ext.MessageBox.alert('Failed', result.responseText);
+        }
+      });
+    });
   }
   
   //

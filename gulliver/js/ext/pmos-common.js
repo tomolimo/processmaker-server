@@ -59,6 +59,30 @@ PMExtJSCommon = function() {
   {
     Ext.msgBoxSlider.msg(title, msg);
   }
+  
+  this.getBrowser = function()
+  {
+    var browsersList = new Array("opera", "msie", "firefox", "opera", "safari");
+    var browserMeta = navigator.userAgent.toLowerCase();
+    var name = 'Unknow';
+    var version = '';
+    var screen = {
+      width  : Ext.getBody().getViewSize().width, 
+      height : Ext.getBody().getViewSize().height
+    };
+    
+    var so = Ext.isLinux ? 'Linux' : ( Ext.isWindows ? 'Windows' :  (Ext.isMac ? 'Mac OS' : 'Unknow') );
+    
+    for (var i = 0; i < browsersList.length; i++){
+      if ((name == "") && (browserMeta.indexOf(browsersList[i]) != -1)){
+        name = browsersList[i];
+        version = String(parseFloat(browserMeta.substr(browserMeta.indexOf(browsersList[i]) + browsersList[i].length + 1)));
+        break;
+      }
+    }
+      
+    return {name:name, version:version, screen: screen}
+  }
 } 
 var PMExt = new PMExtJSCommon();
 
@@ -117,31 +141,37 @@ function _(ID_LABEL)
   return trn;
 }
 
-var getBrowserInf = function(){
+var getBrowserInf = function()
+{
+  var sBrowser = "";
+  var screen;
   var aBrowFull = new Array("opera", "msie", "firefox", "opera", "safari");
   var sInfo = navigator.userAgent.toLowerCase();
   var sBrowser = "";
+  
   var screen;
-  
   var wSize = [0, 0];
-  if (typeof window.innerWidth != 'undefined'){
-    wSize = [
-      window.innerWidth,
-      window.innerHeight
-    ];
-  } else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0){
-    wSize = [
-      document.documentElement.clientWidth,
-      document.documentElement.clientHeight
-    ];
-  } else {
-    wSize = [
-      document.getElementsByTagName('body')[0].clientWidth,
-      document.getElementsByTagName('body')[0].clientHeight
-    ];
-  }
   
-  screen = {width:wSize[0], height:wSize[1]};
+  if( typeof( window.innerWidth ) == 'number' ) {
+    //Non-IE
+    width = window.innerWidth;
+    height = window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    //IE 6+ in 'standards compliant mode'
+    width = document.documentElement.clientWidth;
+    height = document.documentElement.clientHeight;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    //IE 4 compatible
+    width = document.body.clientWidth;
+    height = document.body.clientHeight;
+  } else {
+    width = document.getElementsByTagName('body')[0].clientWidth;
+    height = document.getElementsByTagName('body')[0].clientHeight;
+  }
+
+  
+  screen = {width:width, height:height};
+  //screen = { width: Ext.getBody().getViewSize().width, height:Ext.getBody().getViewSize().height};
   
   for (var i = 0; i < aBrowFull.length; i++){
     if ((sBrowser == "") && (sInfo.indexOf(aBrowFull[i]) != -1)){
@@ -153,7 +183,6 @@ var getBrowserInf = function(){
   
   return {name:'unknow', version:'', screen: screen}
 };
-var _BROWSER = getBrowserInf();
 
 /** 
  * Environment Formats function for full name

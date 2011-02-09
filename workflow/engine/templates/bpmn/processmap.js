@@ -16,6 +16,7 @@ new Ext.KeyMap(document, {
 });
 
 Ext.onReady ( function() {
+  var _BROWSER = getBrowserInf();
 
   workflow  = new MyWorkflow("paintarea");
   workflow.setEnableSmoothFigureHandling(false);
@@ -124,7 +125,7 @@ Ext.onReady ( function() {
         }]
     }
   };
-
+  
   var center= {
     region: 'center',
     width:100,
@@ -135,7 +136,7 @@ Ext.onReady ( function() {
     frameConfig:{name:'designerFrame', id:'designerFrame'},
     defaultSrc : 'designer?PRO_UID=' + pro_uid,
     loadMask:{msg:'Loading...'},
-    bodyStyle:{height: (_BROWSER.screen.height-55) + 'px'},
+    bodyStyle:{height: (PMExt.getBrowser().screen.height-55) + 'px'},
     width:'1024px'
   };
 

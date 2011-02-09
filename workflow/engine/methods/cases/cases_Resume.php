@@ -77,9 +77,13 @@
     //$Fields['STATUS'] = $aRow['APP_TYPE'];
   }
   
+  $actions = 'false';
+  if( $_GET['action'] == 'paused' || $_GET['action'] == 'search')
+    $actions = 'true';
+  
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, false)");
+  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, $actions)");
   $oHeadPublisher->addScriptCode('
   var Cse = {};
   Cse.panels = {};

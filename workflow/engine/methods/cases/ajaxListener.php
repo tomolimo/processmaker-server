@@ -27,7 +27,15 @@
   * @author Erik Amaru Ortiz <erik@colosa.com>
   * @date Jan 3th, 2010
   */
-  
+
+require_once 'classes/model/Application.php';
+require_once 'classes/model/Users.php';
+require_once 'classes/model/AppThread.php';
+require_once 'classes/model/AppDelay.php';
+require_once 'classes/model/Process.php';
+require_once 'classes/model/Task.php';
+G::LoadClass('case');
+
 $action = $_REQUEST['action'];
 $ajax = new Ajax();
 $ajax->$action();
@@ -193,11 +201,6 @@ class Ajax
 
   function getActionOptions()
   {
-    require_once 'classes/model/AppThread.php';
-    require_once 'classes/model/AppDelay.php';
-    G::LoadClass('tree');
-    G::LoadClass('case');
-
     $APP_UID = $_SESSION['APPLICATION'];
 
     $c = new Criteria('workflow');
@@ -210,16 +213,6 @@ class Ajax
     $oCase = new Cases();
     $aFields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );
 
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->add(AppDelayPeer::APP_UID, $_SESSION['APPLICATION']);
-    $oCriteria->add(AppDelayPeer::APP_DEL_INDEX, $_SESSION['INDEX']);
-    $oCriteria->add(AppDelayPeer::APP_TYPE, 'PAUSE');
-    $oCriteria->add(AppDelayPeer::APP_DISABLE_ACTION_USER, null);
-
-    $oDataset = AppDelayPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    $aRow = $oDataset->getRow();
     GLOBAL $RBAC;
 
     $options = Array();
@@ -227,7 +220,7 @@ class Ajax
     switch($aFields['APP_STATUS'])
     {
       case 'DRAFT':
-          if( !$aRow ) {
+          if( ! AppDelay::isPaused($_SESSION['APPLICATION'], $_SESSION['INDEX']) ) {
             $options[] = Array('text'=>G::LoadTranslation('ID_PAUSED_CASE'), 'fn'=>'setUnpauseCaseDate');
           } else {
             $options[] = Array('text'=>G::LoadTranslation('ID_UNPAUSE'), 'fn'=>'unpauseCase');
@@ -241,7 +234,7 @@ class Ajax
       break;
 
       case 'TO_DO':
-          if(!$aRow) {
+          if( ! AppDelay::isPaused($_SESSION['APPLICATION'], $_SESSION['INDEX']) ) {
             $options[] = Array('text'=>G::LoadTranslation('ID_PAUSED_CASE'), 'fn'=>'setUnpauseCaseDate');
 
             if ($cant == 1) {
@@ -260,13 +253,14 @@ class Ajax
         $options[] = Array('text'=>G::LoadTranslation('ID_REACTIVATE'), 'fn'=>'reactivateCase');
       break;
     }
-
-    $oTask = new Task();
-    $aTask = $oTask->load($_SESSION['TASK']);
-    if ($aTask['TAS_TYPE'] == 'ADHOC') {
-      $options[] = Array('text'=>G::LoadTranslation('ID_ADHOC_ASSIGNMENT'), 'fn'=>'');
+    
+    if( $_SESSION['TASK'] != '-1' ) {
+      $oTask = new Task();
+      $aTask = $oTask->load($_SESSION['TASK']);
+      if ($aTask['TAS_TYPE'] == 'ADHOC') {
+        $options[] = Array('text'=>G::LoadTranslation('ID_ADHOC_ASSIGNMENT'), 'fn'=>'');
+      }
     }
-
     print(G::json_encode($options));
   }
 
@@ -372,27 +366,25 @@ class Ajax
 
   function getProcessInformation()
   {
-    require_once 'classes/model/Process.php';
-		$process = new Process();
-		$processData = $process->load($_SESSION['PROCESS']);
-		require_once 'classes/model/Users.php';
-		$user = new Users();
-		try {
-			$userData = $user->load($processData['PRO_CREATE_USER']);
-			$processData['PRO_AUTHOR'] = $userData['USR_FIRSTNAME'] . ' ' . $userData['USR_LASTNAME'];
-		} catch ( Exception $oError ) {
-			$processData['PRO_AUTHOR'] = '(USER DELETED)';
-		}
-    
-		$processData['PRO_CREATE_DATE'] = date('F j, Y', strtotime($processData['PRO_CREATE_DATE']));
-		
+    $process = new Process();
+    $processData = $process->load($_SESSION['PROCESS']);
+    require_once 'classes/model/Users.php';
+    $user = new Users();
+    try {
+      $userData = $user->load($processData['PRO_CREATE_USER']);
+      $processData['PRO_AUTHOR'] = $userData['USR_FIRSTNAME'] . ' ' . $userData['USR_LASTNAME'];
+    } catch ( Exception $oError ) {
+      $processData['PRO_AUTHOR'] = '(USER DELETED)';
+    }
+
+    $processData['PRO_CREATE_DATE'] = date('F j, Y', strtotime($processData['PRO_CREATE_DATE']));
+
     print(G::json_encode($processData));
   }
   
   function getTaskInformation()
   {
-		require_once 'classes/model/Task.php';
-		$task = new Task();
+    $task = new Task();
     $taskData = $task->getDelegatedTaskData($_SESSION['TASK'], $_SESSION['APPLICATION'], $_SESSION['INDEX']);
     
     print(G::json_encode($taskData));
@@ -401,7 +393,6 @@ class Ajax
   function caseHistory()
   {
     global $G_PUBLISH;
-    G::LoadClass("case");
 		$c = Cases::getTransferHistoryCriteria($_SESSION['APPLICATION']);
 		$G_PUBLISH = new Publisher();
 		$G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_TransferHistory', $c, array());
@@ -411,7 +402,6 @@ class Ajax
   function messageHistory()
   {
     global $G_PUBLISH;
-    G::LoadClass("case");
     $oCase = new Cases();
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_Messages', $oCase->getHistoryMessagesTracker($_SESSION['APPLICATION']));
@@ -421,7 +411,6 @@ class Ajax
   function dynaformHistory()
   {
     global $G_PUBLISH;
-    G::LoadClass("case");
     $oCase = new Cases();
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllDynaformsList', $oCase->getallDynaformsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
@@ -430,8 +419,7 @@ class Ajax
   
   function uploadedDocuments()
   {
-    global $G_PUBLISH;
-    G::LoadClass("case");
+    global $G_PUBLISH;    
     $oCase = new Cases();
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllInputdocsList', $oCase->getAllUploadedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
@@ -441,7 +429,6 @@ class Ajax
   function generatedDocuments()
   {
     global $G_PUBLISH;
-    G::LoadClass("case");
     $oCase = new Cases();
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllOutputdocsList', $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
@@ -450,7 +437,6 @@ class Ajax
   
   function cancelCase()
   {
-    G::LoadClass("case");
     $oCase = new Cases();
     $multiple = false;
 
@@ -479,7 +465,6 @@ class Ajax
   
   function getUsersToReassign()
   {
-    G::LoadClass("case");
     $case = new Cases();
     $result->data = $case->getUsersToReassign($_SESSION['TASK'], $_SESSION['USER_LOGGED']);
     
@@ -489,9 +474,6 @@ class Ajax
   
   function reassignCase()
   {
-    require_once 'classes/model/Application.php';
-    require_once 'classes/model/Users.php';
-    G::LoadClass("case");
     $cases = new Cases();
     $user = new Users();
     $app = new Application();
@@ -518,7 +500,6 @@ class Ajax
   function pauseCase()
   {
     try{
-      G::LoadClass("case");
       $unpauseDate = $_REQUEST['unpauseDate'];
       $oCase = new Cases();
       if( isset($_POST['APP_UID']) && isset($_POST['DEL_INDEX']) ) {
@@ -545,6 +526,71 @@ class Ajax
       $result->msg = $e->getMessage();
     }
     echo G::json_encode($result);
+  }
+  
+  function unpauseCase()
+  {
+    try{
+      $applicationUID = (isset($_POST['APP_UID'])) ? $_POST['APP_UID'] : $_SESSION['APPLICATION'];
+      $delIndex = (isset($_POST['DEL_INDEX'])) ? $_POST['DEL_INDEX'] : $_SESSION['INDEX'];
+      $oCase = new Cases();
+      $oCase->unpauseCase($applicationUID, $delIndex, $_SESSION['USER_LOGGED']);
+      
+      $app = new Application();
+      $caseData = $app->load($applicationUID);
+      $data['APP_NUMBER'] = $caseData['APP_NUMBER'];
+      
+      $result->success = true;
+      $result->msg = G::LoadTranslation('ID_CASE_UNPAUSED_SUCCESSFULLY', SYS_LANG, $data);
+    } catch(Exception $e) {
+      $result->success = false;
+      $result->msg = $e->getMessage();
+    }
+    
+    print G::json_encode($result);
+  }
+
+  function deleteCase()
+  {
+    try{
+      $applicationUID = (isset($_POST['APP_UID'])) ? $_POST['APP_UID'] : $_SESSION['APPLICATION'];
+      $app = new Application();
+      $caseData = $app->load($applicationUID);
+      $data['APP_NUMBER'] = $caseData['APP_NUMBER'];
+      
+      $oCase = new Cases();
+      $oCase->removeCase($applicationUID);
+      
+      $result->success = true;
+      $result->msg = G::LoadTranslation('ID_CASE_DELETED_SUCCESSFULLY', SYS_LANG, $data);
+    } catch(Exception $e) {
+      $result->success = false;
+      $result->msg = $e->getMessage();
+    }
+    
+    print G::json_encode($result);
+  }
+  
+  function reactivateCase()
+  {
+    try{
+      $applicationUID = (isset($_POST['APP_UID'])) ? $_POST['APP_UID'] : $_SESSION['APPLICATION'];
+      $delIndex = (isset($_POST['DEL_INDEX'])) ? $_POST['DEL_INDEX'] : $_SESSION['INDEX'];
+      $app = new Application();
+      $caseData = $app->load($applicationUID);
+      $data['APP_NUMBER'] = $caseData['APP_NUMBER'];
+      
+      $oCase = new Cases();
+      $oCase->reactivateCase($applicationUID, $delIndex, $_SESSION['USER_LOGGED']);
+      
+      $result->success = true;
+      $result->msg = G::LoadTranslation('ID_CASE_REACTIVATED_SUCCESSFULLY', SYS_LANG, $data);
+    } catch(Exception $e) {
+      $result->success = false;
+      $result->msg = $e->getMessage();
+    }
+    
+    print G::json_encode($result);
   }
   
 }
