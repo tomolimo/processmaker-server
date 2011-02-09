@@ -113,17 +113,18 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     items: [btnAdd, btnRemove]
   });
 
-  var taskDynaform = new Ext.data.JsonStore({
-    root         : 'data',
-    totalProperty: 'totalCount',
+  var taskDynaform = new Ext.data.GroupingStore({
     idProperty   : 'gridIndex',
-    remoteSort   : true,
-    fields       : dynaFields,
+    reader : new Ext.data.JsonReader( {
+          totalProperty: 'totalCount',
+          root: 'data',
+          fields : dynaFields
+        }),
     proxy        : new Ext.data.HttpProxy({
       url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
     })
   });
- taskDynaform.load();
+ taskDynaform.load({params:{start:0, limit:5}});
 
  //Creating store for getting list of additional PM tables
  var additionalTablesFields = Ext.data.Record.create([
@@ -164,47 +165,17 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   });
  //tablesFieldsStore.load();
 
- // Renderer function
-  function renderInstall(value, id, r)
-  {
-    var id = Ext.id();
-    var uidbutton = createGridButton.defer(1, this, ['Install', id, r]);
-    return uidbutton;
-    //return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-    /*if (r.data.registered == false)
+// Renderer function
+    function renderInstall(value, id, r)
     {
-        createGridButton.defer(1, this, ['Install', id, r]);
-        return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-    }else
-    {
-        createGridButton.defer(1, this, ['ReInstall', id, r]);
-        return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-    }*/
-    
-  }
+        //var id = Ext.id();
+        //createGridButton(1, this);
+              //return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
+              return ("<input type='button' value='UID' onclick=workflow.createGridButton(value);>")
+    }
+
+
   
-  function createGridButton(value, id, record) {
-    new Ext.Button({
-        text: 'UID'
-        ,iconCls: 'button_menu_ext ss_sprite ss_delete'
-        ,handler : function(btn, e) {
-            // do whatever you want here
-        }
-    });
-  }
-  function renderName(value, metaData, record, rowIndex, colIndex, store) {
-    var returnString = "<strong>";
-    if(record.get("sex") == "male")    {
-        metaData.attr = 'style="color: blue;"';
-        returnString += "Mr.";
-    }
-    if(record.get("sex") == "female")  {
-        metaData.attr = 'style="color: red;"';
-        returnString += "Mrs.";
-    }
-    returnString += "</strong> "+value;
-    return returnString;
-}
 
   var dynaformColumns = new Ext.grid.ColumnModel({
     columns: [
@@ -213,7 +184,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             id: 'DYN_TITLE',
             header: _('ID_TITLE_FIELD'),
             dataIndex: 'DYN_TITLE',
-            width: 280,
+            //width: 280,
             editable: false,
             editor: new Ext.form.TextField({
             allowBlank: false
@@ -227,21 +198,15 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             editor: new Ext.form.TextField({
             allowBlank: false
             })
-        },{ header: "Name",  dataIndex: "name", renderer: renderName},
-        {
-            sortable: false,
-            renderer: function(val, meta, record)
-               {
-                    return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
-               }
         },
         {
             sortable: false,
             renderer: function(val, meta, record)
                {
-                    return String.format("<input type='submit' name='UID' value='UID' onclick=''    >",record.data.DYN_UID);
+                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
                }
         }
+
     ]
   });
 
@@ -285,17 +250,26 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         clicksToEdit: 1,
         minHeight:400,
         height   :400,
+        width: '',
         layout: 'fit',
         cm: dynaformColumns,
+        stateful : true,
+        stateId : 'grid',
         stripeRows: true,
         tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 5,
+            store: taskDynaform,
+            displayInfo: true,
+            displayMsg: 'Displaying dynaforms {0} - {1} of {2}',
+            emptyMsg: "No users to display"
+        }),
         viewConfig: {forceFit: true}
    });
 
  var dynaformDetails = new Ext.FormPanel({
         labelWidth: 100,
         buttonAlign: 'center',
-        bodyStyle :'padding:5px 5px 0',
         width     : 490,
         monitorValid : true,
         autoHeight: true,
@@ -467,15 +441,15 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     {
                         var sAddTab     = getForm.ADD_TABLE;
                         var aStoreFields  = tablesFieldsStore.data.items;
-                        var aData = '';
-                        //Creating string in JSON format
+                        var fName = new Array();
+                        var pVar = new Array();
                         for(var i=0;i<aStoreFields.length;i++)
-                            {
-                                var fName = aStoreFields[i].data.FLD_NAME;
-                                var pVar  = aStoreFields[i].data.PRO_VARIABLE;
-                                aData += '"FLD_NAME":"'+fName+'","PRO_VARIABLE":"'+pVar+'",';
-                            }
-                        var sData = '{'+aData.slice(0,aData.length-1)+'}';
+                        {
+                            fName[i] = aStoreFields[i].data.FLD_NAME;
+                            pVar[i]  = aStoreFields[i].data.PRO_VARIABLE;
+                        }
+                        var fieldname = Ext.util.JSON.encode(fName);
+                        var variable = Ext.util.JSON.encode(pVar);
                         sTitle    = getForm.DYN_TITLE[1];
                         sDesc     = getForm.DYN_DESCRIPTION[1];
                     }
@@ -485,7 +459,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                           params:{
                               functions       : 'saveDynaform',
                               ACTION          : sAction,
-                              FIELDS          : sData,
+                              FIELDS          : fieldname,
+                              VARIABLES       : variable,
                               ADD_TABLE       : sAddTab,
                               PRO_UID         : pro_uid,
                               DYN_TITLE       : sTitle,
@@ -498,9 +473,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                               formWindow.hide()
                           }
                         });
-
             }
-
     },{
             text: _('ID_CANCEL'),
             handler: function(){
@@ -521,7 +494,6 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         height: 420,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: dynaformGrid
     });
@@ -536,7 +508,6 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         //height: 500,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: dynaformDetails
        
@@ -693,7 +664,13 @@ ProcessOptions.prototype.dbConnection = function()
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
-                    }
+                    },{
+                            sortable: false,
+                            renderer: function(val, meta, record)
+                               {
+                                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DBS_UID);
+                               }
+                      }
                 ]
      });
 
@@ -726,7 +703,6 @@ ProcessOptions.prototype.dbConnection = function()
       autoDestroy : true,
       monitorValid : true,
       plain: true,
-      bodyStyle: 'padding:5px;',
       buttonAlign: 'center',
 
                       items:[{
@@ -776,7 +752,7 @@ ProcessOptions.prototype.dbConnection = function()
                               hidden: true,
                               items: [{
                                       xtype: 'combo',
-                                      width:  150,
+                                      width:  250,
                                       mode: 'local',
                                    //   hidden: true,
                                       editable:       false,
@@ -784,7 +760,7 @@ ProcessOptions.prototype.dbConnection = function()
                                       triggerAction: 'all',
                                       forceSelection: true,
                                       //dataIndex : 'ENGINE',
-                                      displayField:   'name',
+                                      displayField:   'value',
                                       valueField:     'value',
                                       name: 'DBS_ENCODE',
                                       store: new Ext.data.JsonStore({
@@ -1104,7 +1080,6 @@ var testConnWindow = new Ext.Window({
     //height: 400,
     //layout: 'fit',
     plain: true,
-    bodyStyle: 'padding:5px;',
     buttonAlign: 'center',
     items: dbconnForm
    
@@ -1119,7 +1094,6 @@ var testConnWindow = new Ext.Window({
     height: 400,
     //layout: 'fit',
     plain: true,
-    bodyStyle: 'padding:5px;',
     buttonAlign: 'center',
     items: dbGrid
   });
@@ -1266,7 +1240,6 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
   var inputDocForm = new Ext.FormPanel({
         labelWidth: 100,
-        bodyStyle :'padding:5px 5px 0',
         width     : 500,
         height    : 380,
         monitorValid : true,
@@ -1581,13 +1554,14 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     //allowBlank: false
                     })
                 },
-                /*{
+                {
                     sortable: false,
                     renderer: function(val, meta, record)
                        {
-                            return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}'>Edit</a>",pro_uid,pro_uid);
+                            return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.INP_DOC_UID);
                        }
-                }*/
+                }
+
                 ]
         });
 
@@ -1623,7 +1597,6 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         minHeight: 150,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         items: inputDocGrid,
         autoScroll: true
  });
@@ -1637,7 +1610,6 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         autoScroll: true,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         items: inputDocForm
     });
    gridWindow.show();
@@ -1795,6 +1767,12 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     editor: new Ext.form.TextField({
                     //allowBlank: false
                     })
+                },{
+                    sortable: false,
+                    renderer: function(val, meta, record)
+                       {
+                            return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.OUT_DOC_UID);
+                       }
                 }
             ]
         });
@@ -1821,7 +1799,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var outputDocForm = new Ext.FormPanel({
         monitorValid    :true,
         labelWidth      : 100,
-        bodyStyle       :'padding:5px 5px 0',
         defaults        :{autoScroll:true},
         width           : 500,
 
@@ -2184,7 +2161,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         minHeight   : 150,
         layout      : 'fit',
         plain       : true,
-        bodyStyle   : 'padding:5px;',
         items       : outputDocForm,
         buttonAlign : 'center'
     });
@@ -2200,7 +2176,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         minHeight   : 150,
         layout      : 'fit',
         plain       : true,
-        bodyStyle   : 'padding:5px;',
         items       : outputDocGrid,
         buttonAlign : 'center'
      });
@@ -2379,7 +2354,6 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         minHeight   : 150,
         layout      : 'fit',
         plain       : true,
-        bodyStyle   : 'padding:5px;',
         items       : reportGrid,
         buttonAlign : 'center'
      });
@@ -2393,7 +2367,6 @@ var reportForm =new Ext.FormPanel({
       frame:true,
       monitorValid : true,
       plain: true,
-      bodyStyle: 'padding:5px;',
       buttonAlign: 'center',
       items:[{
                               xtype: 'textfield',
@@ -2574,7 +2547,6 @@ var formWindow = new Ext.Window({
         height: 400,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: reportForm
     });

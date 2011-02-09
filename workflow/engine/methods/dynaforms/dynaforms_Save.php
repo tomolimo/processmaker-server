@@ -78,17 +78,15 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
       else
       {
           $aData = $_POST;                    //For Extjs (Since we are not using form in ExtJS)
-           if(isset($aData['FIELDS']))
+          if(isset($aData['FIELDS']))
            {
-               $test = '{"1":{"TESTID":"1223","PRO_VARIABLE":"saaa"},"2":{"TESTID":"420","PRO_VARIABLE":"sas"}}';
-               //$aData['FIELDS'] = (array)$oJSON->decode($test);
-               $oData = json_decode($_POST['FIELDS']);
-               //$oData1 = $oJSON->decode($test);
-               $aData['FIELDS'] = '';
-               for($i=0;$i<count($oData);$i++)
-               {
-                    $aData['FIELDS'][$i+1] = (array)$oData[$i];
-               }
+              $aFields = json_decode($_POST['FIELDS']);
+              $aVariables = json_decode($_POST['VARIABLES']);
+           }
+           $aData['FIELDS'] = array();
+           for($i=0;$i<count($aFields);$i++){
+               $aData['FIELDS'][$i+1]['FLD_NAME'] = $aFields[$i];
+               $aData['FIELDS'][$i+1]['PRO_VARIABLE'] = $aVariables[$i];
            }
       }
       //if ($aData['DYN_UID']==='') unset($aData['DYN_UID']);
@@ -102,7 +100,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
         if (!isset($aData['ADD_TABLE'])||$aData['ADD_TABLE']==""){
             $aFields=$dynaform->create( $aData );
         } else {
-           // $aFields=$dynaform->createFromPMTable( $aData, $aData['ADD_TABLE']);
+            $aFields=$dynaform->createFromPMTable( $aData, $aData['ADD_TABLE']);
         }
         $aData['DYN_UID']=$dynaform->getDynUid();
         $dynaform->update( $aData );

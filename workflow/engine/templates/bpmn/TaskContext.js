@@ -380,7 +380,6 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
     var taskStepsTabs = new Ext.FormPanel({
         labelWidth: 100,
-        bodyStyle :'padding:5px 5px 0',
         monitorValid : true,
         width     : 850,
         height    : 500,
@@ -389,8 +388,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
             xtype:'tabpanel',
             activeTab: 0,
             defaults:{
-                autoHeight:true,
-                bodyStyle:'padding:10px'
+                autoHeight:true
             },
             items:[{
                 title:_('ID_STEPS'),
@@ -430,7 +428,6 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         minHeight: 150,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: taskStepsTabs
         
@@ -698,7 +695,6 @@ TaskContext.prototype.editUsers= function()
         minHeight: 150,
         //layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: panel
      });
@@ -722,7 +718,6 @@ TaskContext.prototype.editTaskProperties= function()
         items: [{
             xtype:'tabpanel',
             activeTab: 0,
-            bodyStyle   : 'padding:10 10 0 ',
             defaults:{
               labelWidth : 140,
               height : 300
@@ -997,7 +992,6 @@ TaskContext.prototype.editTaskProperties= function()
                   layout:'column',
                   border:false,
                   width: 550,
-                  bodyStyle   : 'padding:0 0 0 ',
                   hidden: true,
                   id: 'staticMI',
                   items:[{
@@ -1044,7 +1038,6 @@ TaskContext.prototype.editTaskProperties= function()
                     layout:'column',
                     border:false,
                     width: 550,
-                    bodyStyle   : 'padding:0 0 0 ',
                     hidden: true,
                     id: 'cancelMI',
                     items:[{
@@ -1218,7 +1211,6 @@ TaskContext.prototype.editTaskProperties= function()
                         columnWidth:.3,
                         layout: 'form',
                         border:false,
-                        bodyStyle: 'padding:35px;',
                         items: [{
                             xtype:'button',
                             title: ' ',
@@ -1256,7 +1248,6 @@ TaskContext.prototype.editTaskProperties= function()
                         columnWidth:.3,
                         layout: 'form',
                         border:false,
-                        bodyStyle: 'padding:35px;',
                         items: [{
                             xtype:'button',
                             title: ' ',
@@ -1296,7 +1287,6 @@ TaskContext.prototype.editTaskProperties= function()
                       columnWidth:.2,
                       layout: 'form',
                       border:false,
-                      bodyStyle: 'padding:35px;',
                       items: [{
                           xtype:'button',
                           title: ' ',
@@ -1425,7 +1415,6 @@ TaskContext.prototype.editTaskProperties= function()
         minHeight: 150,
         layout: 'fit',
         plain: true,
-        //bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: taskPropertiesTabs,
         buttons: [{
@@ -1851,7 +1840,6 @@ TaskContext.prototype.stepTriggers = function()
         frame: true,
         monitorValid : true,
         labelAlign: 'left',
-        bodyStyle:'padding:5px',
         width:  750,
         height: 500,
         layout: 'column',    
@@ -2148,7 +2136,6 @@ TaskContext.prototype.editUsersAdHoc= function()
         minHeight: 150,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: panel
         });
@@ -2495,7 +2482,6 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     var subProcessProperties = new Ext.FormPanel({
     labelWidth  : 110, // label settings here cascade unless overridden
     //frame:true,
-    bodyStyle:'padding:5px 5px 0',
     width: 800,
     autoScroll: true,
     items: [
@@ -2635,7 +2621,6 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     height: 400,
     layout: 'fit',
     plain: true,
-    bodyStyle: 'padding:5px;',
     buttonAlign: 'center',
     items: subProcessProperties,
     buttons: [{

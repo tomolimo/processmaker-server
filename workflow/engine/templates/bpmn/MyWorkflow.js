@@ -1845,3 +1845,8 @@ MyWorkflow.prototype.redrawAnnotationText = function(fig,sType)
     fig.fontSize = 11;
   fig.paint();
 }
+
+
+ MyWorkflow.prototype.createUIDButton = function (value) {
+         Ext.MessageBox.alert ('Info','UID: '+value);
+    }

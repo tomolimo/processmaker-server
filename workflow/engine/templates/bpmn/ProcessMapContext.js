@@ -29,7 +29,6 @@ ProcessMapContext.prototype.editProcess= function()
         labelWidth: 75, // label settings here cascade unless overridden
         frame:true,
         monitorValid : true,
-        bodyStyle:'padding:5px 5px 0',
         width: 500,
         height: 400,
         defaults: {width: 350},
@@ -149,7 +148,6 @@ ProcessMapContext.prototype.editProcess= function()
         layout: 'fit',
         autoScroll: true,
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: editProcess
         });
@@ -168,7 +166,6 @@ ProcessMapContext.prototype.exportProcess= function()
   frame         : true,
   monitorValid : true,
   title         : '',
-  bodyStyle     : 'padding:5px 5px 0',
   width         : 500,
   height        : 400,
   defaultType   : 'textfield',
@@ -282,7 +279,6 @@ ProcessMapContext.prototype.exportProcess= function()
     layout     : 'fit',
     plain      : true,
     autoScroll: true,
-    bodyStyle  : 'padding:5px;',
     buttonAlign: 'center',
     items      : exportProcessForm
   });
@@ -544,7 +540,6 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         height: 380,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: PermissionGrid
 
@@ -620,7 +615,6 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
       monitorValid : true,
       frame:true,
       plain: true,
-      bodyStyle: 'padding:5px;',
       buttonAlign: 'center',
       items:[{
                     width           :150,
@@ -970,7 +964,6 @@ var formWindow = new Ext.Window({
         height: 320,
         //layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: PermissionForm
        });
@@ -1187,7 +1180,6 @@ ProcessMapContext.prototype.processSupervisors= function()
         autoScroll: true,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: grid
     });
@@ -1393,7 +1385,6 @@ ProcessMapContext.prototype.processDynaform= function()
         layout: 'fit',
         autoScroll: true,
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: grid
     });
@@ -1611,7 +1602,6 @@ ProcessMapContext.prototype.processIODoc = function()
         autoScroll: true,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: grid
     });
@@ -1643,7 +1633,6 @@ ProcessMapContext.prototype.processFileManager= function()
         autoScroll: true,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: AwesomeUploaderInstance,
         buttons: [{
@@ -1694,7 +1683,6 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         labelWidth: 75, // label settings here cascade unless overridden
         frame:true,
         monitorValid : true,
-        bodyStyle:'padding:5px 5px 0',
         width: 300,
         height: 300,
         //defaults: {width: 350},
@@ -1748,7 +1736,6 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                        border:false,
                        items: [{
                              xtype: 'box',
-                             bodyStyle: 'padding:0 0 0 50px;',
                              autoEl: {tag: 'a', href: '../tracker/tracker_Ajax?PRO_UID=pro_uid&action=editStagesMap', children: [{tag: 'div', html: 'Edit'}]},
                              style: 'cursor:pointer;'
                        }]
@@ -1815,7 +1802,6 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         layout: 'fit',
         autoScroll: true,
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: PropertiesForm
        
@@ -2138,7 +2124,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       layout      : 'fit',
       plain       : true,
       autoScroll  : true,
-      bodyStyle   : 'padding:5px;',
       items       : Objectsgrid,
       buttonAlign : 'center'
     });
@@ -2199,7 +2184,6 @@ ProcessMapContext.prototype.ExtVariables = function()
   var varForm = new Ext.FormPanel({
         labelWidth: 100,
         monitorValid : true,
-        bodyStyle :'padding:5px 5px 0',
         width     : 400,
         height    : 350,
         renderer: function(val){return '<table border=1> <tr> <td> @@ </td> <td> Replace the value in quotes </td> </tr> </table>';},
@@ -2209,7 +2193,6 @@ ProcessMapContext.prototype.ExtVariables = function()
                 activeTab: 0,
                 defaults:{
                     autoHeight:true,
-                    bodyStyle:'padding:10px'
                 },
                 items:[{
                         title:'All Variables',
@@ -2484,7 +2467,6 @@ ProcessMapContext.prototype.ExtVariables = function()
         autoScroll: true,
         layout: 'fit',
         plain: true,
-        bodyStyle: 'padding:5px;',
         buttonAlign: 'center',
         items: [varForm]
   });
