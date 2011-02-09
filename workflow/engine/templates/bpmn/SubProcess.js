@@ -37,8 +37,23 @@ bpmnSubProcess.prototype.coord_converter = function (bound_width, bound_height, 
 //curWidth = this.getWidth();
 
 bpmnSubProcess.prototype.paint = function () {
-    VectorFigure.prototype.paint.call(this);
+  VectorFigure.prototype.paint.call(this);
+  if(typeof workflow.sType == 'undefined')
+  workflow.sType = 1;
+  //For Zooming
 
+  if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+   {
+     this.originalWidth = 165;
+     this.originalHeight = 40;
+     this.orgXPos = this.getX();
+     this.orgYPos = this.getY();
+     this.orgFontSize =this.fontSize;
+   }
+
+  this.width  = this.originalWidth * workflow.sType;
+  this.height = this.originalHeight  * workflow.sType;
+  
     var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
     var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
     this.graphics.setStroke(this.stroke);

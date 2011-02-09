@@ -309,19 +309,6 @@ win.on('move', function() {
   });
 
 
-  //Getting Process name and setting Title of center region to that processname
-  /*var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
-  Ext.Ajax.request({
-      url: "processes_Ajax.php"+ urlparams,
-      success: function(response) {
-          var processes = Ext.util.JSON.decode(response.responseText);
-          main.items.items[2].setTitle(processes.title.label);     //items[2]=>center region
-      },
-      failure: function(){
-          Ext.Msg.alert ('Failure');
-      }
-  });*/
-
   //Get main into workflow object
   workflow.main = main;
   //items[3]=>'center region'
