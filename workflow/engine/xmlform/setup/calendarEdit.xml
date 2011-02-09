@@ -69,7 +69,23 @@ function submit1 () {
   getField('CALENDAR_WORK_DAYS][6').disabled=false;
   getField('CALENDAR_STATUS').disabled=false;
   getField('CALENDAR_NAME').disabled=false;
-  validateForm(this.form);
+  var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
+
+  var j=0;
+    for(var j =1; j<= rowsHoliday;j++){
+      var date1=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START').value;
+      var date2=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END').value;
+      var date11=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START');
+      var date22=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END');
+      var aux=100;
+     aux1 = validatedate(date1,date2,date11,date22,aux);
+    }
+   
+    if(aux1=='-1')
+     validateForm(this.form);
+    else
+      return false;
+
 }
 
 function submit2 () {
@@ -78,6 +94,23 @@ function submit2 () {
   } else {
     invalidCalendarName = validateCalendarName(getField('OLD_NAME').value);
   }
+  var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
+
+  var j=0;
+    for(var j =1; j<= rowsHoliday;j++){
+     var date1=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START').value;
+      var date2=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END').value;
+      var date11=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START');
+      var date22=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END');
+      var aux=100;
+      validatedate(date1,date2,date11,date22,aux);
+    }
+    alert(aux);
+    if(aux=='-1')
+      return true;
+    else
+      return false;
+
 
   var startHourMessage= '';
   var endHourMessage='';
@@ -486,6 +519,67 @@ function validateHours(){
   fields['CALENDAR_BUSINESS_END']   = invalidEndHours;
   return (fields);
 }
+function validatedate(date1,date2,date11,date22,aux){
+dat1=date1.split("-");
+dat2=date2.split("-"); 
+if(dat1[0]>dat2[0])
+{
+var aux = 1;
+G.highLight(date11);
+G.highLight(date22);
+return aux;
+}
+else if(dat1[0]<dat2[0])
+{
+var aux = '-1';
+date11.style.background="";
+date22.style.background="";
+return aux;
+}
+else
+{
+if(dat1[1]>dat2[1])
+{
+var aux = 1;
+G.highLight(date11);
+G.highLight(date22);
+return aux;
+}
+else if(dat1[1]<dat2[1])
+{
+var aux = -1;
+date11.style.background="";
+date22.style.background="";
+return aux;
+}
+else
+{
+if(dat1[2]>dat2[2])
+{
+var aux = 1;
+G.highLight(date11);
+G.highLight(date22);
+return aux;
+}
+else if(dat1[2]<dat2[2])
+{
+var aux = '-1';
+date11.style.background="";
+date22.style.background="";
+return aux;
+}
+else
+{
+var aux = 0;
+G.highLight(date11);
+G.highLight(date22);
+return aux;
+}
+}
+}
+}
+
+
 ]]>
-</DEFAULT_CALENDAR_JS>
+</DEFAULT_CALENDAR_JS> 
 </dynaForm>
