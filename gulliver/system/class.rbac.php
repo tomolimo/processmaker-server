@@ -562,8 +562,8 @@ class RBAC
   * @param  string $filter
   * @return $this->rolesObj->getAllRolesFilter
   */  
-  function getAllRolesFilter ($filter) {
-      return $this->rolesObj->getAllRolesFilter($filter);
+  function getAllRolesFilter ($start,$limit,$filter) {
+      return $this->rolesObj->getAllRolesFilter($start,$limit,$filter);
   }
 
   /**
@@ -655,6 +655,19 @@ class RBAC
   */
   function getRoleUsers($ROL_UID,$filter=''){
   return $this->rolesObj->getRoleUsers($ROL_UID,$filter);
+  }
+  
+/**
+  * this function gets the number of users by roles
+  *
+  *
+  * @access public
+  * @author: Enrique Ponce de Leon <enrique@colosa.com>
+  * 
+  * @return $this->rolesObj->getAllUsersByRole
+  */
+  function getAllUsersByRole(){
+    return $this->rolesObj->getAllUsersByRole();
   }
   
   /**

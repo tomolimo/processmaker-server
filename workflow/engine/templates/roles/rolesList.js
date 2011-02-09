@@ -48,63 +48,59 @@ var cmodel;
 var infoGrid;
 var viewport;
 var smodel;
-
 var newButton;
 var editButton;
 var deleteButton;
 var usersButton;
 var permissionsButton;
 var searchButton;
-
 var serachText;
-
 var newForm;
 var comboStatusStore;
 var editForm;
-
 var contextMenu;
-
 var w;
  
-
 Ext.onReady(function(){
     Ext.QuickTips.init();
     
+    pageSize = parseInt(CONFIG.pageSize);
+    
     newButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_NEW,
+    	text: _('ID_NEW'),
     	iconCls: 'button_menu_ext ss_sprite  ss_add',
     	handler: NewRoleWindow
     });
     
     editButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_EDIT,
+    	text: _('ID_EDIT'),
     	iconCls: 'button_menu_ext ss_sprite  ss_pencil',
     	handler: EditRole,
     	disabled: true	
     });
     
     deleteButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_DELETE,
+    	text: _('ID_DELETE'),
     	iconCls: 'button_menu_ext ss_sprite  ss_delete',
     	handler: CanDeleteRole,
     	disabled: true
     });
     
     usersButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_USERS,
+    	text: _('ID_USERS'),
     	iconCls: 'button_menu_ext ss_sprite  ss_user_add',
     	handler: RolesUserPage,
     	disabled: true
     });
     permissionsButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_PERMISSIONS,
+    	text: _('ID_PERMISSIONS'),
     	iconCls: 'button_menu_ext ss_sprite  ss_key_add',
     	handler: RolesPermissionPage,
     	disabled: true
     });
     
     searchButton = new Ext.Action({
-    	text: TRANSLATIONS.ID_SEARCH,
+    	text: _('ID_SEARCH'),
     	handler: DoSearch
     });
     
@@ -117,7 +113,7 @@ Ext.onReady(function(){
         ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 150,
-        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
+        emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
@@ -139,18 +135,18 @@ Ext.onReady(function(){
     
     comboStatusStore = new Ext.data.SimpleStore({
     	fields: ['id','value'],
-    	data: [['1',TRANSLATIONS.ID_ACTIVE],['0',TRANSLATIONS.ID_INACTIVE]]
+    	data: [['1',_('ID_ACTIVE')],['0',_('ID_INACTIVE')]]
     });
     
     newForm = new Ext.FormPanel({
     	url: 'roles_Ajax?request=saveNewRole',
     	frame: true, 	
     	items:[
-    	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_CODE, name: 'code', width: 250, allowBlank: false},
-    	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_NAME, name: 'name', width: 200, allowBlank: false},
+    	       {xtype: 'textfield', fieldLabel: _('ID_CODE'), name: 'code', width: 250, allowBlank: false},
+    	       {xtype: 'textfield', fieldLabel: _('ID_NAME'), name: 'name', width: 200, allowBlank: false},
     	       {
     	    	   xtype: 'combo', 
-    	    	   fieldLabel: TRANSLATIONS.ID_STATUS, 
+    	    	   fieldLabel: _('ID_STATUS'), 
     	    	   hiddenName: 'status',
     	    	   typeAhead: true,
     	    	   mode: 'local', 
@@ -159,13 +155,14 @@ Ext.onReady(function(){
     	    	   valueField:'id',
     	    	   allowBlank: false, 
     	    	   triggerAction: 'all',
-                   emptyText: TRANSLATIONS.ID_SELECT_STATUS,
+                   emptyText: _('ID_SELECT_STATUS'),
                    selectOnFocus:true
     	    	   }
     	       ],
     	 buttons: [
-    	       {text: TRANSLATIONS.ID_CLOSE, handler: CloseWindow},
-    	       {text: TRANSLATIONS.ID_SAVE, handler: SaveNewRole}
+               {text: _('ID_SAVE'), handler: SaveNewRole},
+    	       {text: _('ID_CANCEL'), handler: CloseWindow}
+    	       
     	 ]
     });
     
@@ -174,11 +171,11 @@ Ext.onReady(function(){
     	frame: true,
     	items:[
     	       {xtype: 'textfield', name: 'rol_uid', hidden: true },
-    	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_CODE, name: 'code', width: 250, allowBlank: false},
-    	       {xtype: 'textfield', fieldLabel: TRANSLATIONS.ID_NAME, name: 'name', width: 200, allowBlank: false},
+    	       {xtype: 'textfield', fieldLabel: _('ID_CODE'), name: 'code', width: 250, allowBlank: false},
+    	       {xtype: 'textfield', fieldLabel: _('ID_NAME'), name: 'name', width: 200, allowBlank: false},
     	       {
     	    	   xtype: 'combo', 
-    	    	   fieldLabel: TRANSLATIONS.ID_STATUS, 
+    	    	   fieldLabel: _('ID_STATUS'), 
     	    	   hiddenName: 'status',
     	    	   typeAhead: true,
     	    	   mode: 'local', 
@@ -187,13 +184,13 @@ Ext.onReady(function(){
     	    	   valueField:'id',
     	    	   allowBlank: false, 
     	    	   triggerAction: 'all',
-                   emptyText: TRANSLATIONS.ID_SELECT_STATUS,
+                   emptyText: _('ID_SELECT_STATUS'),
                    selectOnFocus:true
     	    	   }
     	       ],
     	 buttons: [
-    	       {text: TRANSLATIONS.ID_CLOSE, handler: CloseWindow},
-    	       {text: TRANSLATIONS.ID_SAVE, handler: UpdateRole}
+    	       {text: _('ID_SAVE'), handler: UpdateRole},
+    	       {text: _('ID_CANCEL'), handler: CloseWindow}
     	 ]
     });
     
@@ -217,17 +214,19 @@ Ext.onReady(function(){
 
     store = new Ext.data.GroupingStore( {
         proxy : new Ext.data.HttpProxy({
-            url: 'data_rolesList'
+            url: 'roles_Ajax?request=rolesList'
           }),
     	reader : new Ext.data.JsonReader( {
     		root: 'roles',
+    		totalProperty: 'total_roles',
     		fields : [
     		    {name : 'ROL_UID'},
     		    {name : 'ROL_CODE'},
     		    {name : 'ROL_NAME'},
     		    {name : 'ROL_CREATE_DATE'},
     		    {name : 'ROL_UPDATE_DATE'},
-    		    {name : 'ROL_STATUS'}
+    		    {name : 'ROL_STATUS'},
+    		    {name : 'TOTAL_USERS'}
     		    ]
     	})
     });
@@ -239,13 +238,49 @@ Ext.onReady(function(){
         },
         columns: [
             {id:'ROL_UID', dataIndex: 'ROL_UID', hidden:true, hideable:false},
-            {header: TRANSLATIONS.ID_CODE, dataIndex: 'ROL_CODE', width: 60, align:'left'},
-            {header: TRANSLATIONS.ID_NAME, dataIndex: 'ROL_NAME', width: 60, hidden:false, align:'left'},
-            {header: TRANSLATIONS.ID_STATUS, dataIndex: 'ROL_STATUS', width: 20, hidden: false, align: 'center', renderer: status_role},
-            {header: TRANSLATIONS.ID_PRO_CREATE_DATE, dataIndex: 'ROL_CREATE_DATE', width: 40, hidden:false, align:'center'},
-            {header: TRANSLATIONS.ID_LAN_UPDATE_DATE, dataIndex: 'ROL_UPDATE_DATE', width: 40, hidden:false, align:'center'}
+            {header: _('ID_CODE'), dataIndex: 'ROL_CODE', width: 220, align:'left'},
+            {header: _('ID_NAME'), dataIndex: 'ROL_NAME', width: 180, hidden:false, align:'left'},
+            {header: _('ID_STATUS'), dataIndex: 'ROL_STATUS', width: 80, hidden: false, align: 'center', renderer: status_role},
+            {header: _('ID_USERS'), dataIndex: 'TOTAL_USERS', width: 50, hidden: false, align: 'center'},
+            {header: _('ID_PRO_CREATE_DATE'), dataIndex: 'ROL_CREATE_DATE', width: 100, hidden:false, align:'center', renderer: render_date},
+            {header: _('ID_LAN_UPDATE_DATE'), dataIndex: 'ROL_UPDATE_DATE', width: 100, hidden:false, align:'center', renderer: render_date}
         ]
     });
+    
+    storePageSize = new Ext.data.SimpleStore({
+        fields: ['size'],
+         data: [['20'],['30'],['40'],['50'],['100']],
+         autoLoad: true
+      });
+        
+      comboPageSize = new Ext.form.ComboBox({
+        typeAhead     : false,
+        mode          : 'local',
+        triggerAction : 'all',
+        store: storePageSize,
+        valueField: 'size',
+        displayField: 'size',
+        width: 50,
+        editable: false,
+        listeners:{
+          select: function(c,d,i){
+            UpdatePageConfig(d.data['size']);
+            bbarpaging.pageSize = parseInt(d.data['size']);
+            bbarpaging.moveFirst();
+          }
+        }
+      });
+        
+      comboPageSize.setValue(pageSize);
+      
+      bbarpaging = new Ext.PagingToolbar({
+        pageSize: pageSize,
+        store: store,
+        displayInfo: true,
+        displayMsg: _('ID_GRID_PAGE_DISPLAYING_ROLES_MESSAGE') + '&nbsp; &nbsp; ',
+        emptyMsg: _('ID_GRID_PAGE_NO_ROLES_MESSAGE'),
+        items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
+      });
     
     infoGrid = new Ext.grid.GridPanel({
     	region: 'center',
@@ -263,11 +298,12 @@ Ext.onReady(function(){
     	viewConfig: {
     		forceFit:true
     	},
-    	title : TRANSLATIONS.ID_ROLES,
+    	title : _('ID_ROLES'),
     	store: store,
     	cm: cmodel,
     	sm: smodel,
     	tbar: [newButton, '-', editButton, deleteButton,'-',usersButton, permissionsButton, {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
+    	bbar: bbarpaging,
     	listeners: {
     		rowdblclick: EditRole
     	},
@@ -310,26 +346,26 @@ onMessageContextMenu = function (grid, rowIndex, e) {
     e.stopEvent();
     var coords = e.getXY();
     contextMenu.showAt([coords[0], coords[1]]);
-}
+};
 
 //Do Nothing Function
-DoNothing = function(){}
+DoNothing = function(){};
 
 //Open New Role Form
 NewRoleWindow = function(){
 	w = new Ext.Window({
-		title: TRANSLATIONS.ID_CREATE_ROLE_TITLE,
+		title: _('ID_CREATE_ROLE_TITLE'),
 		autoHeight: true,
 		width: 420,
 		items: [newForm]
 	});
 	w.show();
-}
+};
 
 //Close Popup Window
 CloseWindow = function(){
 	w.hide();
-}
+};
 
 //Save New Role
 SaveNewRole = function(){
@@ -339,7 +375,7 @@ SaveNewRole = function(){
 			newForm.getForm().reset(); //Set empty form to next use
 			searchText.reset();
 			infoGrid.store.load(); //Reload store grid
-			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_SUCCESS_NEW);
+			PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_NEW'));
 		},
 		failure: function(f,a){
 			switch(a.failureType){
@@ -349,7 +385,7 @@ SaveNewRole = function(){
 			}
 		}
 	});
-}
+};
 
 //Update Selected Role
 UpdateRole = function(){
@@ -359,7 +395,7 @@ UpdateRole = function(){
 			DoSearch(); //Reload store grid
 			editButton.disable();  //Disable Edit Button
 			deleteButton.disable(); //Disable Delete Button
-			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_SUCCESS_UPDATE);
+			PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_UPDATE'));
 		},
 		failure: function(f,a){
 			switch(a.failureType){
@@ -370,14 +406,14 @@ UpdateRole = function(){
 			
 		}
 	});
-}
+};
 
 //Edit Selected Role
 EditRole = function(){
 	rowSelected = infoGrid.getSelectionModel().getSelected();
 	if (rowSelected){
 		if (rowSelected.data.ROL_UID == '00000000000000000000000000000002'){
-			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_MSG);
+			PMExt.warning(_('ID_ROLES'),_('ID_ROLES_MSG'));
 		}else{
 			editForm.getForm().findField('rol_uid').setValue(rowSelected.data.ROL_UID);
 			editForm.getForm().findField('code').setValue(rowSelected.data.ROL_CODE);
@@ -386,52 +422,56 @@ EditRole = function(){
 			w = new Ext.Window({
 				autoHeight: true,
 				width: 420,
-				title: TRANSLATIONS.ID_EDIT_ROLE_TITLE,
+				title: _('ID_EDIT_ROLE_TITLE'),
 				items: [editForm]
 			});
 			w.show();
 		}
 			
 	}
-}
+};
 
 //Check Can Delete Role
 CanDeleteRole = function(){
 	rowSelected = infoGrid.getSelectionModel().getSelected();
 	if (rowSelected){
 		var swDelete = false;
+		viewport.getEl().mask(_('ID_PROCESSING'));
 		Ext.Ajax.request({
 			url: 'roles_Ajax',
 			success: function(response, opts){
+				viewport.getEl().unmask();
 				swDelete = (response.responseText=='true') ? true : false;
 				if (swDelete){
-					Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_REMOVE_ROLE,
+					Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_REMOVE_ROLE'),
 					        function(btn, text){
 					            if (btn=="yes"){
+					            	viewport.getEl().mask(_('ID_PROCESSING'));
 					            	Ext.Ajax.request({
 					            		url: 'roles_Ajax',
 					            		params: {request: 'deleteRole', ROL_UID: rowSelected.data.ROL_UID},
 					            		success: function(r,o){
+					            			viewport.getEl().unmask();
 					            			infoGrid.store.load(); //Reload store grid
 					            			editButton.disable();  //Disable Edit Button
 					            			deleteButton.disable(); //Disable Delete Button
 					            			usersButton.disable(); //Disable Delete Button
 					            			permissionsButton.disable(); //Disable Delete Button
-					            			Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_SUCCESS_DELETE);
+					            			PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_DELETE'));
 					            		},
-					            		failure: DoNothing
+					            		failure: function(){viewport.getEl().unmask(); DoNothing();}
 					            	});
 					            }
 					});
 				}else{
-					Ext.Msg.alert(TRANSLATIONS.ID_ROLES,TRANSLATIONS.ID_ROLES_CAN_NOT_DELETE);
+					PMExt.error(_('ID_ROLES'),_('ID_ROLES_CAN_NOT_DELETE'));
 				}
 			},
-			failure: DoNothing,
+			failure: function(){viewport.getEl().unmask(); DoNothing();},
 			params: {request: 'canDeleteRole', ROL_UID: rowSelected.data.ROL_UID}
 		});
 	}
-}
+};
 
 
 //Open User-Roles Manager
@@ -442,7 +482,7 @@ RolesUserPage = function(value){
 	    value = rowSelected.data.ROL_UID;
 	    location.href = 'rolesUsersPermission?rUID=' + value + '&tab=users';
 	  }
-}
+};
 
 
 //Open Permission-Roles Manager
@@ -453,20 +493,38 @@ RolesPermissionPage = function(value){
     value = rowSelected.data.ROL_UID;
     location.href = 'rolesUsersPermission?rUID=' + value + '&tab=permissions';
   }
-}
+};
 
 //Renderer Active/Inactive Role
 status_role = function(value){
-	return (value==1) ? TRANSLATIONS.ID_ACTIVE : TRANSLATIONS.ID_INACTIVE;
-}
+  var aux;
+  switch(value){
+    case '1': aux = '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
+	case '0': aux = '<font color="red">'+ _('ID_INACTIVE') + '</font>'; break;
+  }
+  return aux;
+};
 
 //Load Grid By Default
 GridByDefault = function(){
 	searchText.reset();
 	infoGrid.store.load();
-}
+};
 
 //Do Search Function
 DoSearch = function(){
    infoGrid.store.load({params: {textFilter: searchText.getValue()}});	
-}
+};
+
+//Render Date Function
+render_date = function(v){
+  return _DF(v);
+};
+
+//Update Page Size Configuration
+UpdatePageConfig = function(pageSize){
+  Ext.Ajax.request({
+  url: 'roles_Ajax',
+  params: {request:'updatePageSize', size: pageSize}
+  });
+};

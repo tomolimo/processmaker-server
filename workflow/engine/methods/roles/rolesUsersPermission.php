@@ -55,20 +55,13 @@ $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('roles/rolesUsersPermission', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('roles/rolesUsersPermission'); //adding a html file  .html.
 
-$labels = G::getTranslations(Array('ID_PRO_CREATE_DATE','ID_CODE','ID_NAME','ID_LAN_UPDATE_DATE', 'ID_ROLES',
-  'ID_USERS','ID_PERMISSIONS','ID_EDIT','ID_DELETE','ID_NEW','ID_STATUS','ID_SAVE','ID_CLOSE',
-  'ID_ACTIVE','ID_INACTIVE','ID_ROLES_MSG','ID_ROLES_CAN_NOT_DELETE','ID_ROLES_SUCCESS_NEW','ID_ROLES_SUCCESS_UPDATE',
-  'ID_ROLES_SUCCESS_DELETE','ID_REMOVE_ROLE','ID_ASSIGN','ID_REMOVE','ID_BACK','ID_PROCESSING',
-  'ID_REMOVE_ALL_PERMISSIONS','ID_ASSIGN_ALL_PERMISSIONS','ID_ASSIGN_ALL_USERS','ID_REMOVE_ALL_USERS',
-  'ID_USER_NAME','ID_PERMISSION_CODE','ID_AVAILABLE_PERMISSIONS','ID_ASSIGNED_PERMISSIONS','ID_ENTER_SEARCH_TERM',
-  'ID_FIRST_NAME','ID_LAST_NAME','ID_AVAILABLE_USERS','ID_ASSIGNED_USERS','ID_MSG_CONFIRM_ASSIGN_ALL_USERS','ID_MSG_AJAX_FAILURE'));
 
 $roles = Array();
 $roles['ROL_UID'] = $_GET['rUID'];
 $roles['ROL_CODE'] = $RBAC->getRoleCode($_GET['rUID']);
 $roles['CURRENT_TAB'] = ($_GET['tab']=='permissions') ? 1 : 0;
 
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
+
 $oHeadPublisher->assign('ROLES', $roles);
 G::RenderPage('publish', 'extJs');
 	

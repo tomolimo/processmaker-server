@@ -124,28 +124,57 @@ class Roles extends BaseRoles {
     }
     
     //Added by QENNIX 
-	function getAllRolesFilter($filter='') {
+	function getAllRolesFilter($start, $limit, $filter='') {
+		//echo $start.'<<<<'.$limit;
 		$systemCode = 'PROCESSMAKER';
-        $c = $this->listAllRoles($systemCode,$filter);
-		$rs = RolesPeer::DoSelectRs($c);
-        $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        
-        $aRows = Array();
-        while($rs->next()){
-        	$row = $rs->getRow();
-        	$o = new Roles();
-        	$o->load($row['ROL_UID']);
-        	$row['ROL_NAME'] = $o->getRolName();
-        	$aRows[] = $row;
-        }
-        return $aRows;
+		$oCriteria2 = new Criteria('rbac');
+		$result = Array();
+		
+		$oCriteria2->addSelectColumn('COUNT(*) AS CNT');
+		$oCriteria2->add(RolesPeer::ROL_UID, '', Criteria::NOT_EQUAL);
+    $oCriteria2->add(SystemsPeer::SYS_CODE, $systemCode);
+    $oCriteria2->add(RolesPeer::ROL_CREATE_DATE, '', Criteria::NOT_EQUAL);
+    $oCriteria2->add(RolesPeer::ROL_UPDATE_DATE, '', Criteria::NOT_EQUAL);
+    $oCriteria2->addJoin(RolesPeer::ROL_SYSTEM, SystemsPeer::SYS_UID);
+	  if ($filter != ''){
+      $oCriteria2->add(RolesPeer::ROL_CODE, '%'.$filter.'%', Criteria::LIKE);	
     }
+    $result['COUNTER'] = $oCriteria2;
+    $oCriteria = new Criteria('rbac');
+    $oCriteria->clear();
+    $oCriteria->addSelectColumn(RolesPeer::ROL_UID);
+    $oCriteria->addSelectColumn(RolesPeer::ROL_PARENT);
+    $oCriteria->addSelectColumn(RolesPeer::ROL_SYSTEM);
+    $oCriteria->addSelectColumn(SystemsPeer::SYS_CODE);
+    $oCriteria->addSelectColumn(RolesPeer::ROL_CODE);
+    $oCriteria->addSelectColumn(RolesPeer::ROL_CREATE_DATE);
+    $oCriteria->addSelectColumn(RolesPeer::ROL_UPDATE_DATE);
+    $oCriteria->addSelectColumn(RolesPeer::ROL_STATUS);
+    $oCriteria->add(RolesPeer::ROL_UID, '', Criteria::NOT_EQUAL);
+    $oCriteria->add(SystemsPeer::SYS_CODE, $systemCode);
+    $oCriteria->add(RolesPeer::ROL_CREATE_DATE, '', Criteria::NOT_EQUAL);
+    $oCriteria->add(RolesPeer::ROL_UPDATE_DATE, '', Criteria::NOT_EQUAL);
+    $oCriteria->addJoin(RolesPeer::ROL_SYSTEM, SystemsPeer::SYS_UID);
+   
+    if ($filter != ''){
+      $oCriteria->add(RolesPeer::ROL_CODE, '%'.$filter.'%', Criteria::LIKE);	
+    }
+    
+    $oCriteria->setOffset($start);
+    $oCriteria->setLimit($limit);
+    
+    $result['LIST'] = $oCriteria;
+    
+    return $result;
+	}
+       
+		
     
     
     
     function getAllRoles($systemCode = 'PROCESSMAKER') {
         $c = $this->listAllRoles($systemCode);
-		$rs = RolesPeer::DoSelectRs($c);
+		    $rs = RolesPeer::DoSelectRs($c);
         $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         
         $aRows = Array();
@@ -311,6 +340,23 @@ class Roles extends BaseRoles {
         $ret = $row['ROL_CODE'];
         
         return $ret;
+    }
+    
+    //Added by Enrique at Feb 9th, 2011
+    //Gets number of users by role
+    function getAllUsersByRole(){
+    	 $oCriteria = new Criteria('rbac');
+    	 $oCriteria->addSelectColumn(UsersRolesPeer::ROL_UID);
+    	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    	 $oCriteria->addGroupByColumn(UsersRolesPeer::ROL_UID);
+    	 $oDataset = UsersRolesPeer::doSelectRS($oCriteria);
+    	 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    	 $aRoles = array();
+    	 while ($oDataset->next()){
+    	 	 $row = $oDataset->getRow();
+    	 	 $aRoles[$row['ROL_UID']] = $row['CNT'];
+    	 }
+    	 return $aRoles;
     }
     
     function getRoleUsers($ROL_UID, $filter='') {

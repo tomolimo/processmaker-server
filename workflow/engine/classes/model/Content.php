@@ -305,4 +305,24 @@ class Content extends BaseContent {
       throw ($e);
     }
   }
+  //Added by Enrique at Feb 9th,2011
+  //Gets all Role Names by Role 
+  function getAllContentsByRole($sys_lang=SYS_LANG){
+  	if (!isset($sys_lang)) $sys_lang = 'en';
+  	$oCriteria = new Criteria('workflow');
+  	$oCriteria->clearSelectColumns();
+  	$oCriteria->addSelectColumn(ContentPeer::CON_ID);
+  	$oCriteria->addAsColumn('ROL_NAME', ContentPeer::CON_VALUE);
+  	//$oCriteria->addAsColumn('ROL_UID', ContentPeer::CON_ID);
+  	$oCriteria->add(ContentPeer::CON_CATEGORY,'ROL_NAME');
+  	$oCriteria->add(ContentPeer::CON_LANG, $sys_lang);
+  	$oDataset = ContentPeer::doSelectRS($oCriteria);
+  	$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  	$aRoles = Array();
+  	while ($oDataset->next()){
+  		$xRow = $oDataset->getRow();
+  		$aRoles[$xRow['CON_ID']] = $xRow['ROL_NAME']; 
+  	}
+  	return $aRoles;
+  }
 } // Content

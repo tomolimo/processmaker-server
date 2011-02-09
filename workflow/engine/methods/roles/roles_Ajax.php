@@ -260,6 +260,58 @@ switch ($REQUEST) {
     	  $RBAC->deleteUserRole($ROL_UID, $aUID);	
     	}
     	break;
+    case 'rolesList':
+    	require_once (PATH_RBAC . "model/RolesPeer.php");
+    	require_once ("classes/model/Content.php");
+    	G::LoadClass('configuration');
+      $co = new Configurations();
+      $config = $co->getConfiguration('rolesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+      $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+   	
+      $start = isset($_POST['start']) ? $_POST['start'] : 0;
+      $limit = isset($_POST['limit']) ? $_POST['limit'] : $limit_size;
+      $filter = isset($_REQUEST['textFilter'])? $_REQUEST['textFilter'] : '';
+
+      
+      global $RBAC;
+      $Criterias = $RBAC->getAllRolesFilter($start,$limit,$filter);
+      
+      $rs = RolesPeer::DoSelectRs($Criterias['LIST']);
+      $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      
+      $content = new Content();
+      $rNames = $content->getAllContentsByRole();
+      $aUsers = $RBAC->getAllUsersByRole();
+        
+      $aRows = Array();
+      while($rs->next()){
+      	$aRows[] = $rs->getRow();
+      	$index = sizeof($aRows)-1;
+       	$aRows[$index]['ROL_NAME'] = isset($rNames[$aRows[$index]['ROL_UID']])? $rNames[$aRows[$index]['ROL_UID']] : '';
+       	$aRows[$index]['TOTAL_USERS'] = isset($aUsers[$aRows[$index]['ROL_UID']])? $aUsers[$aRows[$index]['ROL_UID']] : 0;
+      }
+      
+      $oData = RolesPeer::doSelectRS($Criterias['COUNTER']);
+      $oData->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oData->next();
+      $row = $oData->getRow();
+      $total_roles = $row['CNT'];
+            
+      echo '{roles: '.G::json_encode($aRows).', total_roles: '.$total_roles.'}';
+      break;
+    case 'updatePageSize':
+       G::LoadClass('configuration');
+       $c = new Configurations();
+       $arr['pageSize'] = $_REQUEST['size'];
+       $arr['dateSave'] = date('Y-m-d H:i:s');
+       $config = Array();
+       $config[] = $arr;
+       $c->aConfig = $config;
+       $c->saveConfig('rolesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+       echo '{success: true}';
+       break;
+
+      
 	         
 	default: echo 'default';
 }

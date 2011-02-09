@@ -235,28 +235,39 @@ try {
        break;
     case 'authSources':
       $criteria = $RBAC->getAllAuthSources();
-       $objects  = AuthenticationSourcePeer::doSelectRS($criteria);
+      $objects  = AuthenticationSourcePeer::doSelectRS($criteria);
       $objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $started = Array();
       $started['AUTH_SOURCE_UID'] = '00000000000000000000000000000000';
-      $started['AUTH_SOURCE_NAME'] = 'ProcessMaker';
-      $started['AUTH_SOURCE_TYPE'] = 'MYSQL';
+      //$started['AUTH_SOURCE_NAME'] = 'ProcessMaker';
+      //$started['AUTH_SOURCE_TYPE'] = 'MYSQL';
+      $started['AUTH_SOURCE_SHOW'] = 'ProcessMaker (MYSQL)';
       $arr = Array();
       $arr[] = $started;
       while ($objects->next()){
-        $arr[] = $objects->getRow();
+      	$row = $objects->getRow();
+      	$aux = Array();
+        $aux['AUTH_SOURCE_UID'] =  $row['AUTH_SOURCE_UID'];
+        //$aux['AUTH_SOURCE_NAME'] =  $row['AUTH_SOURCE_NAME'];
+        //$aux['AUTH_SOURCE_TYPE'] =  $row['AUTH_SOURCE_TYPE'];
+        $aux['AUTH_SOURCE_SHOW'] = $row['AUTH_SOURCE_NAME'].' ('.$row['AUTH_SOURCE_PROVIDER'].')';
+        $arr[] = $aux;
       }
       echo '{sources: '.G::json_encode($arr).'}';
       break;
     case 'loadAuthSourceByUID':
-       require_once 'classes/model/Users.php';
+      require_once 'classes/model/Users.php';
       $oCriteria=$RBAC->load($_POST['uUID']);
       $UID_AUTH = $oCriteria['UID_AUTH_SOURCE'];
       if (($UID_AUTH!='00000000000000000000000000000000')&&($UID_AUTH!='')){
-        $aFields = $RBAC->getAuthSource($UID_AUTH);
+        $aux = $RBAC->getAuthSource($UID_AUTH);
+        $arr = Array();
+        $arr['AUTH_SOURCE_NAME'] = $aux['AUTH_SOURCE_NAME'].' ('.$aux['AUTH_SOURCE_PROVIDER'].')';
+        $arr['AUTH_SOURCE_PROVIDER'] = $aux['AUTH_SOURCE_PROVIDER'];
+        $aFields = $arr;
       }else{
         $arr = Array();
-        $arr['AUTH_SOURCE_NAME'] = 'ProcessMaker';
+        $arr['AUTH_SOURCE_NAME'] = 'ProcessMaker (MYSQL)';
         $arr['AUTH_SOURCE_PROVIDER'] = 'MYSQL';
         $aFields = $arr;  
       }
@@ -291,28 +302,27 @@ try {
        echo '{success: true}';
        break;
     case 'usersList':
-       require_once 'classes/model/Users.php';
-       require_once 'classes/model/LoginLog.php';
-       require_once 'classes/model/Department.php';
-       require_once 'classes/model/AppCacheView.php';
-       G::LoadClass('configuration');
-       $co = new Configurations();
-       $config = $co->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
-       $env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
-       $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
-       $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+      require_once 'classes/model/Users.php';
+      require_once 'classes/model/LoginLog.php';
+      require_once 'classes/model/Department.php';
+      require_once 'classes/model/AppCacheView.php';
+      G::LoadClass('configuration');
+      $co = new Configurations();
+      $config = $co->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
+      $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+      $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
       $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
       $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('COUNT(*) AS CNT');
-       if ($filter != ''){ 
+      if ($filter != ''){ 
         $cc = $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
           $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
           $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)));
         $oCriteria->add($cc);
-       }
+      }
       $oCriteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);
-       $oDataset = UsersPeer::DoSelectRs ($oCriteria);
+      $oDataset = UsersPeer::DoSelectRs ($oCriteria);
       $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
       $row = $oDataset->getRow();
@@ -351,18 +361,14 @@ try {
       $Department = new Department();
       $aDepart = $Department->getAllDepartmentsByUser();
       
-      $dateFormat = $env['dateFormat'];
-      
       $rows = Array();
       while($oDataset->next()){
         $rows[] = $oDataset->getRow();
         $index = sizeof($rows) - 1;
-         $rows[$index]['DUE_DATE_OK'] = (date('Y-m-d')>date('Y-m-d',strtotime($rows[$index]['USR_DUE_DATE'])))? 0 : 1;
+        $rows[$index]['DUE_DATE_OK'] = (date('Y-m-d')>date('Y-m-d',strtotime($rows[$index]['USR_DUE_DATE'])))? 0 : 1;
         $rows[$index]['LAST_LOGIN'] = isset($aLogin[$rows[$index]['USR_UID']]) ?  $aLogin[$rows[$index]['USR_UID']] : '';
         $rows[$index]['TOTAL_CASES'] = isset($aCases[$rows[$index]['USR_UID']]) ? $aCases[$rows[$index]['USR_UID']] : 0;
         $rows[$index]['DEP_TITLE'] = isset($aDepart[$rows[$index]['USR_UID']]) ? $aDepart[$rows[$index]['USR_UID']] : '';
-        $rows[$index]['LAST_LOGIN'] = ($rows[$index]['LAST_LOGIN'] != '') ? date($dateFormat,strtotime($rows[$index]['LAST_LOGIN'])) : $rows[$index]['LAST_LOGIN'];
-        $rows[$index]['USR_DUE_DATE'] = ($rows[$index]['USR_DUE_DATE'] != '') ? date($dateFormat,strtotime($rows[$index]['USR_DUE_DATE'])) : $rows[$index]['USR_DUE_DATE'];
       }
       echo '{users: '.G::json_encode($rows).', total_users: '.$totalRows.'}';
       break;

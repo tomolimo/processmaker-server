@@ -24,11 +24,11 @@ new Ext.KeyMap(document, [
 {
   key: Ext.EventObject.DELETE,
   fn: function(k,e){
-  iGrid = Ext.getCmp('infoGrid');
-  rowSelected = iGrid.getSelectionModel().getSelected();
-  if (rowSelected){
-    DeleteUserAction();
-  }
+    iGrid = Ext.getCmp('infoGrid');
+    rowSelected = iGrid.getSelectionModel().getSelected();
+    if (rowSelected){
+      DeleteUserAction();
+    }
   }
 }
 ]);
@@ -238,7 +238,7 @@ Ext.onReady(function(){
       {header: _('ID_STATUS'), dataIndex: 'USR_STATUS', width: 50, hidden: false, align: 'center', renderer: render_status},
       {header: _('ID_ROLE'), dataIndex: 'USR_ROLE', width: 180, hidden:false, align:'left'},
       {header: _('ID_DEPARTMENT'), dataIndex: 'DEP_TITLE', width: 150, hidden:true, align:'left'},
-      {header: _('ID_LAST_LOGIN'), dataIndex: 'LAST_LOGIN', width: 108, hidden:false, align:'center'},
+      {header: _('ID_LAST_LOGIN'), dataIndex: 'LAST_LOGIN', width: 108, hidden:false, align:'center', renderer: render_lastlogin},
       {header: _('ID_CASES'), dataIndex: 'TOTAL_CASES', width: 45, hidden:false, align:'right'},
       {header: _('ID_DUE_DATE'), dataIndex: 'USR_DUE_DATE', width: 108, hidden:false, align:'center', renderer: render_duedate}
     ]
@@ -399,7 +399,7 @@ photo_user = function(value){
 
 //Render Full Name
 full_name = function(v,x,s){
-  return parseFullName(v, s.data.USR_FIRSTNAME, s.data.USR_LASTNAME, fullNameFormat);
+  return _FNF(v, s.data.USR_FIRSTNAME, s.data.USR_LASTNAME);
 };
 
 //Render Status
@@ -414,9 +414,13 @@ render_status = function(v){
 //Render Due Date
 render_duedate = function(v,x,s){
   if (s.data.DUE_DATE_OK)
-  return v;  
+    return _DF(v);  
   else
-  return '<font color="red">' + v + '</font>';
+    return '<font color="red">' + _DF(v) + '</font>';
+};
+
+render_lastlogin = function(v){
+	return _DF(v);
 };
 
 //Load Grid By Default
@@ -449,13 +453,4 @@ UpdatePageConfig = function(pageSize){
   url: 'users_Ajax',
   params: {'function':'updatePageSize', size: pageSize}
   });
-};
-
-//Function Parse Full Name Format
-parseFullName = function(uN, fN, lN, f){
-  var aux = f;
-  aux = aux.replace('@userName',uN);
-  aux = aux.replace('@firstName',fN);
-  aux = aux.replace('@lastName',lN);
-  return aux;
 };

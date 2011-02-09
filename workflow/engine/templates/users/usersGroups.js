@@ -284,7 +284,8 @@ Ext.onReady(function(){
         {id: 'AUTH_SOURCE_UID'},
         {name : 'AUTH_SOURCE_UID'},
         {name : 'AUTH_SOURCE_NAME'},
-        {name : 'AUTH_SOURCE_PROVIDER'}
+        {name : 'AUTH_SOURCE_PROVIDER'},
+        {name : 'AUTH_SOURCE_SHOW'}
       ]
     }),
     autoLoad: true
@@ -306,7 +307,7 @@ Ext.onReady(function(){
         typeAhead: true,
         mode: 'local',
         store: comboAuthSourcesStore,
-        displayField: 'AUTH_SOURCE_NAME',
+        displayField: 'AUTH_SOURCE_SHOW',
         valueField:'AUTH_SOURCE_UID',
         allowBlank: false,
         submitValue: true,

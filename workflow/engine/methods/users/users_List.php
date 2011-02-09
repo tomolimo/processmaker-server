@@ -67,4 +67,8 @@ $oHeadPublisher->addExtJsScript('users/usersList', false);    //adding a javascr
 $oHeadPublisher->addContent('users/usersList'); //adding a html file  .html.
 $oHeadPublisher->assign('CONFIG', $Config);
 
+G::LoadClass('configuration');
+$c = new Configurations();
+$oHeadPublisher->assign('FORMATS',$c->getFormats());
+
 G::RenderPage('publish', 'extJs');
