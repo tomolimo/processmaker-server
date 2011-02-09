@@ -258,7 +258,7 @@ var installer=function()
 
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"Workflow Data Directory: ",className:"inst_td0"},{width:"30%"}),
+			new DOM('td',{innerHTML:"Workflow Data Directory (permissions: <b>writable</b>): ",className:"inst_td0"},{width:"30%"}),
 			new DOM('td',{className:"inst_td1"},{width:"30%"}).append(
 				this.workflowData = new input({label:this.options.path_data,properties:{onkeyup:this.submit},style:{width:"100%"},maxlength:200})
 			),

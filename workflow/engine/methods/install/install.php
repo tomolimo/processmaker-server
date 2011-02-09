@@ -84,8 +84,8 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
             {
                classInstaller.make({
                   server   :"installServer.php",
-                  path_data:"<?php echo defined('PATH_DATA')?PATH_DATA:'/opt/processmaker/shared';?>",
-                  path_compiled:"<?php echo defined('PATH_C')?PATH_C:'/opt/processmaker/compiled';?>",
+                  path_data:"<?php echo defined('PATH_DATA')?PATH_DATA:PATH_TRUNK.'shared';?>",
+                  path_compiled:"<?php echo defined('PATH_C')?PATH_C:PATH_TRUNK.'compiled';?>",
                   path_trunk:"<?php echo PATH_CORE;?>"
                });
             },
