@@ -60,6 +60,15 @@
   <DEFAULT_CALENDAR_JS type="javascript"><![CDATA[
 var invalidCalendarName = '';
 function submit1 () {
+if (getField('OLD_NAME').value==''){
+    invalidCalendarName = validateCalendarName('');
+  } else {
+    invalidCalendarName = validateCalendarName(getField('OLD_NAME').value);
+  }  
+  if(invalidCalendarName=='The calendar name already exists!'){
+    alert(invalidCalendarName);
+    return false;
+  }
   getField('CALENDAR_WORK_DAYS][0').disabled=false;
   getField('CALENDAR_WORK_DAYS][1').disabled=false;
   getField('CALENDAR_WORK_DAYS][2').disabled=false;
@@ -94,23 +103,10 @@ function submit2 () {
   } else {
     invalidCalendarName = validateCalendarName(getField('OLD_NAME').value);
   }
-  var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
-
-  var j=0;
-    for(var j =1; j<= rowsHoliday;j++){
-     var date1=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START').value;
-      var date2=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END').value;
-      var date11=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START');
-      var date22=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END');
-      var aux=100;
-      validatedate(date1,date2,date11,date22,aux);
-    }
-    alert(aux);
-    if(aux=='-1')
-      return true;
-    else
-      return false;
-
+  if(invalidCalendarName=='The calendar name already exists!'){
+    alert(invalidCalendarName);
+    return false;
+  }
 
   var startHourMessage= '';
   var endHourMessage='';
