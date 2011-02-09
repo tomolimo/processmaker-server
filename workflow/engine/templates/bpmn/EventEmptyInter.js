@@ -1,19 +1,25 @@
 bpmnEventEmptyInter=function(width,_30ab){
 VectorFigure.call(this);
-//Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
-else
-    this.setDimension(30,30);
 this.stroke=2;
 };
 bpmnEventEmptyInter.prototype=new VectorFigure;
 bpmnEventEmptyInter.prototype.type="bpmnEventEmptyInter";
 bpmnEventEmptyInter.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if ((this.getWidth() < 30 || this.getHeight() < 30) && this.limitFlag != true) {
-        this.setDimension(30, 30);
- }
+if(typeof workflow.sType == 'undefined')
+ workflow.sType = 1;
+  //Set the Task Limitation
+if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+{
+  this.originalWidth = 30;
+  this.originalHeight = 30;
+  this.orgXPos = this.getX();
+  this.orgYPos = this.getY();
+  this.orgFontSize =this.fontSize;
+}
+this.width  = this.originalWidth * workflow.sType;
+this.height = this.originalHeight  * workflow.sType;
+
 this.graphics.setStroke(this.stroke);
 var x_cir1 = 0;
 var y_cir1 = 0;

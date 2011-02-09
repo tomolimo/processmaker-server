@@ -1766,15 +1766,13 @@ MyWorkflow.prototype.zoom = function(sType)
 
    var lines=workflow.getLines();
    var size=lines.getSize();
-
    
-
    sType =sType/100;
-   workflow.zoomType = sType;
+   workflow.sType = sType;
    var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
-
+ 
 
    if(typeof fig.limitFlag == 'undefined' || fig.limitFlag == false)
    {
@@ -1813,13 +1811,17 @@ MyWorkflow.prototype.zoom = function(sType)
    if(fig.type == 'bpmnTask')
         {
             fig.fontSize = parseInt(fig.orgFontSize) * sType;
+            //fig.bpmnText.drawStringRect(fig.taskName, fig.padleft, fig.padtop, fig.rectWidth, fig.rectheight, 'center');
+            fig.bpmnText.paint();
         }
    else if(fig.type == 'bpmnAnnotation')
         {
             fig.fontSize = parseInt(fig.orgFontSize) * sType;
+            fig.bpmnText.paint();
         }
         fig.setPosition(xPos,yPos);
         fig.setDimension(width,height);
+        
    }
 }
 

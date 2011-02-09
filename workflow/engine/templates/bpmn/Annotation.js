@@ -1,24 +1,17 @@
-bpmnAnnotation = function (_30ab ) {
+bpmnAnnotation = function (oWorkflow) {
     VectorFigure.call(this);
    //Getting width and height from DB
-   if(typeof _30ab.anno_width != 'undefined' && typeof _30ab.anno_height != 'undefined')
-        this.setDimension(_30ab.anno_width, _30ab.anno_height);
+   if(typeof oWorkflow.anno_width != 'undefined' && typeof oWorkflow.anno_height != 'undefined')
+    {
+        this.width = oWorkflow.anno_width;
+        this.height = oWorkflow.anno_height;
+    }
    else
-        this.setDimension(110, 60);
-
-   //Setting width and height values as per the zoom ratio
-   if(typeof workflow.zoomAnnotationWidth != 'undefined' || typeof workflow.zoomAnnotationHeight != 'undefined')
-        this.setDimension(workflow.zoomAnnotationWidth, workflow.zoomAnnotationHeight);
-
-   //Setting width and height values as per the zoom ratio
-   if(typeof workflow.zoomType != 'undefined')
-   {
-       var zoomWidth = 110 * workflow.zoomType;
-       var zoomHeight = 60 * workflow.zoomType;
-       this.setDimension(zoomWidth, zoomHeight);
-   }
-
-   this.setAnnotationName(_30ab.annotationName); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+    {
+        this.width = 110;
+        this.height = 60;
+    }
+   this.setAnnotationName(oWorkflow.annotationName); //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnAnnotation.prototype = new VectorFigure;
@@ -55,15 +48,21 @@ bpmnAnnotation.prototype.coord_converter = function (bound_width, bound_height, 
 bpmnAnnotation.prototype.paint = function () {
     VectorFigure.prototype.paint.call(this);
 
-     //Set the Task Limitation
-    if((this.getWidth() > 200 || this.getHeight() > 100 ) && this.limitFlag != true)
-    {
-        this.setDimension(200, 100);
-    }
-    if((this.getWidth() < 110 || this.getHeight() < 60 ) && this.limitFlag != true)
-    {
-        this.setDimension(110, 60);
-    }
+     if(typeof workflow.sType == 'undefined')
+        workflow.sType = 1;
+  //Set the Task Limitation
+     if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+     {
+       this.originalWidth = 110;
+       this.originalHeight = 60;
+       this.orgXPos = this.getX();
+       this.orgYPos = this.getY();
+       this.orgFontSize =this.fontSize;
+     }
+
+    this.width  = this.originalWidth * workflow.sType;
+    this.height = this.originalHeight  * workflow.sType;
+
     this.graphics.setColor("#ffffff");
     this.graphics.fillRect(0,0, this.getWidth(), this.getHeight());
     this.graphics.setColor("#000000");
@@ -74,7 +73,7 @@ bpmnAnnotation.prototype.paint = function () {
   
     /* New object is created to implement changing of Text functionality
     */
-    this.bpmnText = new jsGraphics(this.id);
+    this.bpmnText = new jsGraphics(this.id) ;
     this.padleft = 0.10*this.getWidth();
     this.padtop = 0.18*this.getHeight();
     this.rectwidth = this.getWidth() - this.padleft;

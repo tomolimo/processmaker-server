@@ -11,6 +11,20 @@ bpmnGatewayExclusiveData.prototype=new VectorFigure;
 bpmnGatewayExclusiveData.prototype.type="bpmnGatewayExclusiveData";
 bpmnGatewayExclusiveData.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
+if(typeof workflow.sType == 'undefined')
+ workflow.sType = 1;
+  //Set the Task Limitation
+if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+{
+  this.originalWidth  = 40;
+  this.originalHeight = 40;
+  this.orgXPos = this.getX();
+  this.orgYPos = this.getY();
+  this.orgFontSize =this.fontSize;
+}
+this.width  = this.originalWidth * workflow.sType;
+this.height = this.originalHeight  * workflow.sType;
+
 var x=new Array(0,this.width/2,this.width,this.width/2);
 var y=new Array(this.height/2,this.height,this.height/2,0);
 var x2 = new Array();

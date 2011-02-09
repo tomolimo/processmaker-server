@@ -1,27 +1,27 @@
 bpmnEventEmptyEnd=function(){
 VectorFigure.call(this);
 //Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
-else
-    this.setDimension(30,30);
-
-//Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomType != 'undefined')
-{
-   var zoomWidth = 30 * workflow.zoomType;
-   var zoomHeight = 30 * workflow.zoomType;
-   this.setDimension(zoomWidth, zoomHeight);
-}
 this.stroke=3;
 };
 bpmnEventEmptyEnd.prototype=new VectorFigure;
 bpmnEventEmptyEnd.prototype.type="bpmnEventEmptyEnd";
 bpmnEventEmptyEnd.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if ((this.getWidth() < 30 || this.getHeight() < 30) && this.limitFlag != true) {
-        this.setDimension(30, 30);
- }
+if(typeof workflow.sType == 'undefined')
+ workflow.sType = 1;
+  //Set the Task Limitation
+if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+{
+  this.originalWidth = 30;
+  this.originalHeight = 30;
+  this.orgXPos = this.getX();
+  this.orgYPos = this.getY();
+  this.orgFontSize =this.fontSize;
+}
+
+this.width  = this.originalWidth * workflow.sType;
+this.height = this.originalHeight  * workflow.sType;
+
 var x=0;
 var y=0;
 this.graphics.setColor("#c0c0c0");
