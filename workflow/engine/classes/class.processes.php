@@ -2397,6 +2397,8 @@ class Processes {
 
     if ($contents != '') {
       $oData = unserialize ($contents);
+      if ($oData === false)
+        throw new Exception("Process file is not valid");
 
       foreach($oData->dynaforms as $key => $value)
         {
