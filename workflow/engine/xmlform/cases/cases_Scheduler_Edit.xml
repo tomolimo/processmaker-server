@@ -210,7 +210,9 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 <SCH_END_DATE_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
 <en>End Date</en>
 </SCH_END_DATE_CHK>
-<SCH_END_DATE type="date" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit"/>
+<SCH_END_DATE type="date" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+<en>End Date</en>
+</SCH_END_DATE>
 <SCH_REPEAT_TASK_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
 <en>Repeat Task</en>
 </SCH_REPEAT_TASK_CHK>
