@@ -3033,7 +3033,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
     $afterDate  = G::replaceDataField ( $this->afterDate, $owner->values );
-    $value1=$this->defaultValue;
+    $valueaux=$value;
+    $value=$this->defaultValue;
     if ($startDate != '') {
       if (! $this->verifyDateFormat ( $startDate ))
         $startDate = '';
@@ -3160,7 +3161,12 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
           $value =$auxtmp;
         }
 
-  
+   $value1=$value;
+        $value=$valueaux;
+        
+           if((($value==NULL))){          
+               $value=$value1;
+           }
 
         if ( $this->editable != "0") {
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'"/>'
