@@ -68,11 +68,6 @@ bpmnTask.prototype.paint = function () {
   this.width  = this.originalWidth * workflow.zoomfactor;
   this.height = this.originalHeight  * workflow.zoomfactor;
 
-  if(typeof this.fontSize == 'undefined' || this.fontSize == '')
-    this.fontSize = 11;
-  else if(this.fontSize < 11)
-    this.fontSize = 11;
-
   var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
   var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
   this.stroke = 2;
@@ -96,7 +91,7 @@ bpmnTask.prototype.paint = function () {
   */
   this.bpmnText = new jsGraphics(this.id);
 
-  var zoomRate = this.getWidth()/165 ;
+  var zoomRate = workflow.zoomfactor;
   var len = this.getWidth() / 18;
   if (len >= 6) {
     this.padleft = 0.05 * this.getWidth();
@@ -107,16 +102,20 @@ bpmnTask.prototype.paint = function () {
     this.padleft = 2; //0.06 * this.getWidth();
     this.padtop = 2; //0.09 * this.getHeight() -3;
     this.rectWidth = this.getWidth() - 2 * this.padleft;
-    this.fontSize = 0.8 * this.fontSize;
   }
 
   this.rectheight = this.getHeight() - this.padtop -3;
   if ( this.rectheight < 7 ) this.rectheight = 7;
 
-  this.bpmnText.setFont('verdana', +this.fontSize+'px', Font.PLAIN);
 
   if(typeof this.taskName == 'undefined')
     this.taskName = '';
+
+  //if (typeof this.fontSize == 'undefined' || this.fontSize == '')
+    this.fontSize = 11;
+  var fontSize = zoomRate * this.fontSize;
+
+  this.bpmnText.setFont('verdana', + fontSize+'px', Font.PLAIN);
 
   this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center');
 

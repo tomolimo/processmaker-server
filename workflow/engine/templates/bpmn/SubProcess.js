@@ -1,37 +1,37 @@
 bpmnSubProcess = function (_30ab) {
-    VectorFigure.call(this);
-    //Setting width and height values as per the zoom ratio
-    if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
-          this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
-    else
-        this.setDimension(165, 50);
-    this.subProcessName = _30ab.subProcessName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+  VectorFigure.call(this);
+  //Setting width and height values as per the zoom ratio
+  if(typeof workflow.zoomTaskWidth != 'undefined' || typeof workflow.zoomTaskHeight != 'undefined')
+    this.setDimension(workflow.zoomTaskWidth, workflow.zoomTaskHeight);
+  else
+    this.setDimension(165, 50);
+  this.subProcessName = _30ab.subProcessName; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
 };
 
 bpmnSubProcess.prototype = new VectorFigure;
 bpmnSubProcess.prototype.type = "bpmnSubProcess"
 bpmnSubProcess.prototype.setSubProcessName = function () {
-    this.subProcessName = 'Sub Process';
+  this.subProcessName = 'Sub Process';
 };
 
 bpmnSubProcess.prototype.coord_converter = function (bound_width, bound_height, text_length) {
-    //bound_width = this.workflow.currentSelection.width;
-    //bound_height = this.workflow.currentSelection.height;
-    input_width = text_length * 6
-    input_height = 10
+  //bound_width = this.workflow.currentSelection.width;
+  //bound_height = this.workflow.currentSelection.height;
+  input_width = text_length * 6
+  input_height = 10
 
-    temp_width = bound_width - input_width;
-    temp_width /= 2;
-    temp_x = temp_width;
+  temp_width = bound_width - input_width;
+  temp_width /= 2;
+  temp_x = temp_width;
 
-    temp_height = bound_height - 10;
-    temp_height /= 2;
-    temp_y = temp_height;
+  temp_height = bound_height - 10;
+  temp_height /= 2;
+  temp_y = temp_height;
 
-    var temp_coord = new Object();
-    temp_coord.temp_x = temp_x;
-    temp_coord.temp_y = temp_y;
-    return temp_coord;
+  var temp_coord = new Object();
+  temp_coord.temp_x = temp_x;
+  temp_coord.temp_y = temp_y;
+  return temp_coord;
 };
 
 //curWidth = this.getWidth();
@@ -43,93 +43,86 @@ bpmnSubProcess.prototype.paint = function () {
   //For Zooming
 
   if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
-   {
-     this.originalWidth = 165;
-     this.originalHeight = 40;
-     this.orgXPos = this.getX();
-     this.orgYPos = this.getY();
-     this.orgFontSize =this.fontSize;
-   }
+  {
+    this.originalWidth = 165;
+    this.originalHeight = 40;
+    this.orgXPos = this.getX();
+    this.orgYPos = this.getY();
+    this.orgFontSize =this.fontSize;
+  }
 
-  this.width  = this.originalWidth * workflow.zoomfactor;
-  this.height = this.originalHeight  * workflow.zoomfactor;
+  this.width  = this.originalWidth  * workflow.zoomfactor;
+  this.height = this.originalHeight * workflow.zoomfactor;
   
-    var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
-    var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
-    this.graphics.setStroke(this.stroke);
-    this.graphics.setColor("#c0c0c0");
-    this.graphics.fillPolygon(x, y);
-     for (var i = 0; i < x.length; i++) {
-        x[i] = x[i] - 3;
-        y[i] = y[i] - 3;
-    }
-    this.graphics.setColor("#ffffff");
-    this.graphics.fillPolygon(x, y);
-    this.graphics.setColor("#5164b5"); //Blue Color
-    this.graphics.drawPolygon(x, y);
+  var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
+  var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
+  this.graphics.setStroke(this.stroke);
+  this.graphics.setColor("#c0c0c0");
+  this.graphics.fillPolygon(x, y);
+  for (var i = 0; i < x.length; i++) {
+    x[i] = x[i] - 3;
+    y[i] = y[i] - 3;
+  }
+  this.graphics.setColor("#ffffff");
+  this.graphics.fillPolygon(x, y);
+  this.graphics.setColor("#5164b5"); //Blue Color
+  this.graphics.drawPolygon(x, y);
 
-
-    //Circle on right top corner
-    var x_cir = this.getWidth()/1.3;
-    var y_cir = this.getHeight()/8.75;
-
-    this.graphics.setColor("#ffffff");
-    this.graphics.fillEllipse(x_cir,y_cir,this.getHeight()/5,this.getHeight()/5);
-    this.graphics.setColor("#5891B7");
-    this.graphics.setStroke(2);
-    this.graphics.drawEllipse(x_cir,y_cir,this.getHeight()/5,this.getHeight()/5);
+  //Circle on right top corner
+  //var x_cir = this.getWidth()/1.3;
+  //var y_cir = this.getHeight()/8.75;
+  //
+  //this.graphics.setColor("#ffffff");
+  //this.graphics.fillEllipse(x_cir,y_cir,this.getHeight()/5,this.getHeight()/5);
+  //this.graphics.setColor("#5891B7");
+  //this.graphics.setStroke(2);
+  //this.graphics.drawEllipse(x_cir,y_cir,this.getHeight()/5,this.getHeight()/5);
     
-   
-    //Plus symbol on bottom
-    var x1=new Array(this.getWidth()/2.6,this.getWidth()/2.6,this.getWidth()/1.8,this.getWidth()/1.8);
-    var y1=new Array(this.getHeight()/1.45,this.getHeight() - 5,this.getHeight() - 5,this.getHeight()/1.45);
-    var x2 = new Array();
-    var y2 = new Array();
+  //Plus symbol on bottom
+  //Plus symbol on bottom
+  var zoomfactor = workflow.zoomfactor;
+  var xb = this.getWidth()/2 - 5*zoomfactor;
+  var yb = this.getHeight() - 5 - 11*zoomfactor;
+  var x1 = new Array(xb, xb                , xb + 11.5*zoomfactor, xb + 11.5*zoomfactor );
+  var y1 = new Array(yb, yb + 11*zoomfactor, yb + 11*zoomfactor, yb );
+  
+  this.graphics.setStroke(1);
+  this.graphics.setColor("#5891B7");
+  this.graphics.drawPolygon(x1,y1);
+  var x_cross = new Array(xb+ 5*zoomfactor, xb+ 6*zoomfactor, xb+ 6*zoomfactor, xb+ 9*zoomfactor, xb+ 9*zoomfactor, xb+ 6*zoomfactor, xb+ 6*zoomfactor, xb+ 5*zoomfactor, xb+ 5*zoomfactor, xb+ 2*zoomfactor, xb+ 2*zoomfactor, xb+ 5*zoomfactor );
+  var y_cross = new Array(yb+ 2*zoomfactor, yb+ 2*zoomfactor, yb+ 5*zoomfactor, yb+ 5*zoomfactor, yb+ 6*zoomfactor, yb+ 6*zoomfactor, yb+ 9*zoomfactor, yb+ 9*zoomfactor, yb+ 6*zoomfactor, yb+ 6*zoomfactor, yb+ 5*zoomfactor, yb+ 5*zoomfactor );
+  this.graphics.setColor( "#5891B7" );
+  this.graphics.fillPolygon(x_cross,y_cross);
+  this.graphics.paint();
 
-    for(var j=0;j<x1.length;j++){
-    x2[j]=x1[j]+4;
-    y2[j]=y1[j]+1;
-    }
-    
-    //this.graphics.fillPolygon(x2,y2);
-    this.graphics.setColor( "#FFFFFF" );
-    //this.graphics.fillPolygon(x1,y1);
-    this.graphics.setColor("#5891B7");
-    this.graphics.drawPolygon(x1,y1);
-    //this.graphics.setStroke(1);
-    //var x_cross=new Array(54,54,59,59,63,63,68,68,63,63,59,59);
-   // var y_cross=new Array(57,61,61,65,65,61,61,57,57,52,52,57);
-    var x_cross=new Array(this.getWidth()/2.4, this.getWidth()/2.4,this.getWidth()/2.2,this.getWidth()/2.2,this.getWidth()/2.06,this.getWidth()/2.06,this.getWidth()/1.91,this.getWidth()/1.91,this.getWidth()/2.06,this.getWidth()/2.06,this.getWidth()/2.2,this.getWidth()/2.2);
-    var y_cross=new Array(this.getHeight()/1.22,this.getHeight()/1.15,this.getHeight()/1.15,this.getHeight()/1.07,this.getHeight()/1.07,this.getHeight()/1.15,this.getHeight()/1.15,this.getHeight()/1.22,this.getHeight()/1.22,this.getHeight()/1.35,this.getHeight()/1.35,this.getHeight()/1.22);
-    this.graphics.setColor( "#5891B7" );
-    this.graphics.fillPolygon(x_cross,y_cross);
-    this.graphics.paint();
+  var bpmnText = new jsGraphics(this.id);
+  var padleft = 0.025*this.getWidth();
+  var padtop = 0.15*this.getHeight();
+  var rectwidth = this.getWidth() - 3*padleft;
+  var rectheight = this.getHeight() - 3*padtop;
 
-    var bpmnText = new jsGraphics(this.id);
-    var padleft = 0.025*this.getWidth();
-    var padtop = 0.36*this.getHeight();
-    var rectwidth = this.getWidth() - padleft;
-    var rectheight = this.getHeight() - 2*padtop;
-    //var rectheight = this.getHeight() - 2*padtop;
-    bpmnText.drawStringRect(this.subProcessName,padleft,padtop,rectwidth,rectheight,'center');
-   // tempcoord = this.coord_converter(this.getWidth(), this.getHeight(), this.taskName.length);
-  //  bpmnText.drawTextString(this.taskName, this.getWidth(), this.getHeight(), tempcoord.temp_x, tempcoord.temp_y);
-    bpmnText.paint();
-    
-    this.bpmnNewText = bpmnText;
 
-     if (this.input1 != null) {
-        this.input1.setPosition(0, this.height / 2);
-    }
-    if (this.output1 != null) {
-        this.output1.setPosition(this.width / 2, this.height);
-    }
-    if (this.input2 != null) {
-        this.input2.setPosition(this.width / 2, 0);
-    }
-    if (this.output2 != null) {
-        this.output2.setPosition(this.width, this.height / 2);
-    }
+  if(typeof this.fontSize == 'undefined' || this.fontSize == '')
+    this.fontSize = 11;
+  var fontSize = zoomfactor * this.fontSize;
+  bpmnText.setFont('verdana', +fontSize+'px', Font.PLAIN);
+  bpmnText.drawStringRect(this.subProcessName,padleft,padtop,rectwidth,rectheight,'center');
+  bpmnText.paint();
+  
+  this.bpmnNewText = bpmnText;
+
+   if (this.input1 != null) {
+      this.input1.setPosition(0, this.height / 2 -1);
+  }
+  if (this.output1 != null) {
+      this.output1.setPosition(this.width / 2, this.height);
+  }
+  if (this.input2 != null) {
+      this.input2.setPosition(this.width / 2, 0);
+  }
+  if (this.output2 != null) {
+      this.output2.setPosition(this.width, this.height / 2-1);
+  }
 
 };
 
