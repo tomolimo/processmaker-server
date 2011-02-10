@@ -81,15 +81,19 @@
               </td>
               </tr>
               <tr>
-              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font> {$SCH_START_DATE} </td>
-              <td class="FormFieldContent">{$form.SCH_START_DATE}
-                  <table id="endDateTable">
+              <td  colspan="2" align="center">
+                 <table id="endDateTable" border="0">
                       <tr>
-                          <td class="FormFieldContent" width="{$form_labelWidth}" align="right" valign="top">{$SCH_END_DATE} End Date</td>
-                        <td class="FormFieldContent">{$form.SCH_END_DATE}</td>
+                         <td colspan="2"><font color="red">*  </font>
+                         <label class="FormLabel" width="{$form_labelWidth}" align="right" valign="top">{$SCH_START_DATE}</label>
+                         <font class="FormFieldContent">{$form.SCH_START_DATE}</font>
+                         <label class="FormLabel" width="{$form_labelWidth}" align="right" valign="top">{$SCH_END_DATE}</label>
+                         <font class="FormFieldContent">{$form.SCH_END_DATE}</font>
+                         </td>
                     </tr>
                   </table>
               </td>
+              <td>&nbsp;</td>
               </tr>
               <tr>
               <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font> {$SCH_START_TIME} </td>
@@ -154,7 +158,7 @@
 														<td style="width: 20%">{$form.SCH_START_DAY}</td>
 														<td> {$SCH_START_DAY_OPT_1} {$form.SCH_START_DAY_OPT_1} <br/> 
 															{$SCH_START_DAY_OPT_2_WEEKS} {$SCH_START_DAY_OPT_2_DAYS_WEEK} 
-															{$form.SCH_START_DAY_OPT_2_WEEKS} {$form.SCH_START_DAY_OPT_2_DAYS_WEEK} 
+															{$form.SCH_START_DAY_OPT_2_WEEKS} {$form.SCH_START_DAY_OPT_2_DAYS_WEEK}  <br/> 
 														</td>
 													</tr>
 												</table>
