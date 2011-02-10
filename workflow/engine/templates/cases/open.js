@@ -221,23 +221,23 @@ Ext.onReady(function(){
     items:[navPanelWest, navPanelCenter],
     tbar:[{
       id: 'stepsMenu',
-      text: '&nbsp;&nbsp;Steps',
+      text: '&nbsp;&nbsp;'+_('ID_STEPS'),
       pressed: false,
       enableToggle:true,
       tooltip: {
-        title:'Preview Pane',
-        text:'Show or hide the Preview Pane'
+        title: _('ID_CASES_STEPS'),
+        text:_('ID_SHOW_HIDE_CASES_STEPS')
       },
       iconCls: 'ICON_STEPS',
       toggleHandler: togglePreview
     }, {
       id: 'informationMenu',
-      text: 'Information',
+      text: _('ID_INFORMATION'),
       menu: []//,
       //disabled: false
     }, {
       id: 'actionMenu',
-      text: 'Actions',
+      text: _('ID_ACTIONS'),
       menu: []
     }]
     //html:'sds'
@@ -547,7 +547,7 @@ Ext.onReady(function(){
       buttons : [
         {
           id: 'submitPauseCase',
-          text : 'Pause Case',
+          text : _('ID_PAUSE_CASE'),
           handler : Actions.pauseCase,
           disabled:false
         },{
