@@ -539,7 +539,7 @@ win.on('move', function() {
               workflow.boundaryEvent = false;
           }
 
-
+          workflow.task_width='';
           NewShape = eval("new "+data.name+"(workflow)");
           NewShape.x = e.xy[0];
           NewShape.y = e.xy[1];

@@ -37,8 +37,8 @@ MyWorkflow.prototype.subProcess= function(_6767)
  */
 MyWorkflow.prototype.setBoundary = function (oShape) {
   //Left Border
-  if (oShape.x < 75) {
-        oShape.x = 85;
+  if (oShape.x < 5) {
+        oShape.x = 10;
   }
   //Right Border
   if (oShape.x > 1300 - oShape.width) {
