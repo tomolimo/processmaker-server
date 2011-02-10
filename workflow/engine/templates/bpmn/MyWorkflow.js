@@ -1661,7 +1661,6 @@ MyWorkflow.prototype.showEventResult = function(btn){
                 Ext.Ajax.request({
                     url: "processes_Ajax.php"+ url,
                     success: function(response) {
-                        if(iVal == 0)
                            workflow.getCommandStack().execute(new CommandDelete(workflow.oConn));
                     },
                     failure: function(){
