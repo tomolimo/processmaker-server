@@ -3273,13 +3273,16 @@ ArrowConnectionDecorator.prototype=new ConnectionDecorator;
 ArrowConnectionDecorator.prototype.type="ArrowConnectionDecorator";
 ArrowConnectionDecorator.prototype.paint=function(g){
 if(this.backgroundColor!=null){
+var zoomfactor = 1;
+if(typeof workflow.sType != undefined && workflow.sType != '')
+zoomfactor = workflow.sType;
 g.setColor(this.backgroundColor);
-g.fillPolygon([1,10,10,1],[0,5,-5,0]);
+g.fillPolygon([1*zoomfactor,10*zoomfactor,10*zoomfactor,1*zoomfactor],[0,5*zoomfactor,-5*zoomfactor,0]);
 }
 g.setColor(this.color);
 g.setStroke(1);
-g.drawPolygon([1,10,10,1],[0,5,-5,0]);
-g.fillPolygon([1,10,10,1],[0,5,-5,0]);
+g.drawPolygon([1*zoomfactor,10*zoomfactor,10*zoomfactor,1*zoomfactor],[0,5*zoomfactor,-5*zoomfactor,0]);
+g.fillPolygon([1*zoomfactor,10*zoomfactor,10*zoomfactor,1*zoomfactor],[0,5*zoomfactor,-5*zoomfactor,0]);
 };
 CompartmentFigure=function(){
 Node.call(this);
