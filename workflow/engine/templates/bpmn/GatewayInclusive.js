@@ -5,8 +5,8 @@ bpmnGatewayInclusive.prototype=new VectorFigure;
 bpmnGatewayInclusive.prototype.type="bpmnGatewayInclusive";
 bpmnGatewayInclusive.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if(typeof workflow.sType == 'undefined')
- workflow.sType = 1;
+if(typeof workflow.zoomfactor == 'undefined')
+ workflow.zoomfactor = 1;
   //Set the Task Limitation
 if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
 {
@@ -16,8 +16,8 @@ if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
   this.orgYPos = this.getY();
   this.orgFontSize =this.fontSize;
 }
-this.width  = this.originalWidth * workflow.sType;
-this.height = this.originalHeight  * workflow.sType;
+this.width  = this.originalWidth * workflow.zoomfactor;
+this.height = this.originalHeight  * workflow.zoomfactor;
 //var x=new Array(15,50,15,-20);
 //var y=new Array(50,15,-20,15);
 var x=new Array(0,this.width/2,this.width,this.width/2);

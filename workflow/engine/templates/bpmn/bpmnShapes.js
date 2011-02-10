@@ -43,8 +43,8 @@ bpmnTask.prototype.coord_converter = function (bound_width, bound_height, text_l
 bpmnTask.prototype.paint = function () {
   VectorFigure.prototype.paint.call(this);
 
-  if(typeof workflow.sType == 'undefined')
-    workflow.sType = 1;
+  if(typeof workflow.zoomfactor == 'undefined')
+    workflow.zoomfactor = 1;
   //For Zooming
 
     //Set the Task Limitation
@@ -65,8 +65,8 @@ bpmnTask.prototype.paint = function () {
 //     this.orgFontSize =this.fontSize;
 //   }
 
-  this.width  = this.originalWidth * workflow.sType;
-  this.height = this.originalHeight  * workflow.sType;
+  this.width  = this.originalWidth * workflow.zoomfactor;
+  this.height = this.originalHeight  * workflow.zoomfactor;
 
   if(typeof this.fontSize == 'undefined' || this.fontSize == '')
     this.fontSize = 11;
@@ -631,7 +631,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
         for(var i=0; i<=len; i++){
             if(typeof ports.data[i] === 'object'){
                var port = ports.data[i];
-               port.setDimension(10*workflow.sType,10*workflow.sType);
+               port.setDimension(10*workflow.zoomfactor,10*workflow.zoomfactor);
             }
         }
 

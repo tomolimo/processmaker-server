@@ -11,8 +11,8 @@ bpmnGatewayExclusiveEvent.prototype=new VectorFigure;
 bpmnGatewayExclusiveEvent.prototype.type="bpmnGatewayExclusiveEvent";
 bpmnGatewayExclusiveEvent.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if(typeof workflow.sType == 'undefined')
- workflow.sType = 1;
+if(typeof workflow.zoomfactor == 'undefined')
+ workflow.zoomfactor = 1;
   //Set the Task Limitation
 if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
 {
@@ -22,8 +22,8 @@ if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
   this.orgYPos = this.getY();
   this.orgFontSize =this.fontSize;
 }
-this.width  = this.originalWidth * workflow.sType;
-this.height = this.originalHeight  * workflow.sType;
+this.width  = this.originalWidth * workflow.zoomfactor;
+this.height = this.originalHeight  * workflow.zoomfactor;
 
 var x=new Array(0,this.width/2,this.width,this.width/2);
 var y=new Array(this.height/2,this.height,this.height/2,0);

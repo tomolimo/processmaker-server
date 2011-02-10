@@ -6,8 +6,8 @@ bpmnEventEmptyInter.prototype=new VectorFigure;
 bpmnEventEmptyInter.prototype.type="bpmnEventEmptyInter";
 bpmnEventEmptyInter.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
-if(typeof workflow.sType == 'undefined')
- workflow.sType = 1;
+if(typeof workflow.zoomfactor == 'undefined')
+ workflow.zoomfactor = 1;
   //Set the Task Limitation
 if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
 {
@@ -17,8 +17,8 @@ if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
   this.orgYPos = this.getY();
   this.orgFontSize =this.fontSize;
 }
-this.width  = this.originalWidth * workflow.sType;
-this.height = this.originalHeight  * workflow.sType;
+this.width  = this.originalWidth * workflow.zoomfactor;
+this.height = this.originalHeight  * workflow.zoomfactor;
 
 this.graphics.setStroke(this.stroke);
 var x_cir1 = 0;

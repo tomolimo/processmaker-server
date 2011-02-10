@@ -48,8 +48,8 @@ bpmnAnnotation.prototype.coord_converter = function (bound_width, bound_height, 
 bpmnAnnotation.prototype.paint = function () {
     VectorFigure.prototype.paint.call(this);
 
-     if(typeof workflow.sType == 'undefined')
-        workflow.sType = 1;
+     if(typeof workflow.zoomfactor == 'undefined')
+        workflow.zoomfactor = 1;
   //Set the Task Limitation
      if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
      {
@@ -60,8 +60,8 @@ bpmnAnnotation.prototype.paint = function () {
        this.orgFontSize =this.fontSize;
      }
 
-    this.width  = this.originalWidth * workflow.sType;
-    this.height = this.originalHeight  * workflow.sType;
+    this.width  = this.originalWidth * workflow.zoomfactor;
+    this.height = this.originalHeight  * workflow.zoomfactor;
 
     this.graphics.setColor("#ffffff");
     this.graphics.fillRect(0,0, this.getWidth(), this.getHeight());
