@@ -69,13 +69,15 @@ bpmnAnnotation.prototype.paint = function () {
     this.graphics.drawLine(this.getWidth()/4,0,0,0);
     this.graphics.drawLine(0,0,0,this.getHeight());
     this.graphics.drawLine(0,this.getHeight(),this.getWidth()/4,this.getHeight());
+    this.graphics.setStroke(Stroke.DOTTED);
+    this.graphics.drawLine(0,this.getHeight()/2,-this.getWidth()/2,-this.getHeight()/4);
     this.graphics.paint();
   
     /* New object is created to implement changing of Text functionality
     */
     this.bpmnText = new jsGraphics(this.id) ;
-    this.padleft = 0.10*this.getWidth();
-    this.padtop = 0.18*this.getHeight();
+    this.padleft = 0.05*this.getWidth();
+    this.padtop = 0.13*this.getHeight() -1;
     this.rectwidth = this.getWidth() - this.padleft;
     this.rectheight = this.getHeight() - 2 * this.padtop;
 
@@ -122,7 +124,8 @@ this.input1.setName('input1');
 this.input1.setZOrder(-1);
 this.input1.setBackgroundColor(new Color(255, 255, 255));
 this.input1.setColor(new Color(255, 255, 255));
-this.addPort(this.input1,0,this.height/2);
+//this.addPort(this.input1,0,this.height/2);
+this.addPort(this.input1,-this.getWidth()/2,-this.getHeight()/4);
 };
 };
 
