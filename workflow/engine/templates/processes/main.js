@@ -42,6 +42,7 @@ Ext.onReady(function(){
         {name : 'PRO_STATUS'},
         {name : 'PRO_STATUS_LABEL'},
         {name : 'PRO_CREATE_DATE'},
+        {name : 'PRO_DEBUG'},
         {name : 'PRO_DEBUG_LABEL'},
         {name : 'PRO_CREATE_USER_LABEL'},
         {name : 'CASES_COUNT', type:'float'},
@@ -53,9 +54,7 @@ Ext.onReady(function(){
     })//,
     //sortInfo:{field: 'PRO_TITLE', direction: "ASC"}
     //groupField:'PRO_CATEGORY_LABEL'
-
   });
-  
   
   var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
@@ -68,11 +67,11 @@ Ext.onReady(function(){
       hiddenName : 'category',
       store : new Ext.data.Store( {
         proxy : new Ext.data.HttpProxy( {
-          url : 'mainAjax',
+          url : 'ajaxListener',
           method : 'POST'
         }),
         baseParams : {
-          request : 'categoriesList'
+          action : 'categoriesList'
         },
         reader : new Ext.data.JsonReader( {
           root : 'rows',
@@ -289,7 +288,7 @@ Ext.onReady(function(){
         handler: doSearch
       }
     ],
- // paging bar on the bottom
+    // paging bar on the bottom
     bbar: new Ext.PagingToolbar({
         pageSize: 15,
         store: store,
@@ -300,43 +299,86 @@ Ext.onReady(function(){
     }),
     listeners: {
       rowdblclick: editProcess,
-      rowclick: function(){
-        //var rowSelected = processesGrid.getSelectionModel().getSelected();
-        //alert(rowSelected.PRO_UID);
-        //Ext.getCmp('activator').setIcon();
-      },
       render: function(){
         this.loadMask = new Ext.LoadMask(this.body, {msg:'Loading...'});
-        //this.ownerCt.doLayout();
         processesGrid.getSelectionModel().on('rowselect', function(){
-        var rowSelected = processesGrid.getSelectionModel().getSelected();
-        //alert(rowSelected.data.PRO_STATUS);
-        var activator = Ext.getCmp('activator');
-        activator.setDisabled(false);
-        if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
-          activator.setIcon('/images/deactivate.png');
-          activator.setText(TRANSLATIONS.ID_DEACTIVATE);
-        } else {
-          activator.setIcon('/images/activate.png');
-          activator.setText(TRANSLATIONS.ID_ACTIVATE);
-        }
-         
+          var rowSelected = processesGrid.getSelectionModel().getSelected();
+          var activator = Ext.getCmp('activator');
+          activator.setDisabled(false);
+          if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
+            activator.setIcon('/images/deactivate.png');
+            activator.setText(TRANSLATIONS.ID_DEACTIVATE);
+          } else {
+            activator.setIcon('/images/activate.png');
+            activator.setText(TRANSLATIONS.ID_ACTIVATE);
+          }
         });
       }
-  }
-
+    }
   });
 
   processesGrid.store.load({params: {"function":"languagesList"}});
+  processesGrid.addListener('rowcontextmenu', onMessageContextMenu,this);
+  processesGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+    
+    var rowSelected = Ext.getCmp('processesGrid').getSelectionModel().getSelected();
+    var activator = Ext.getCmp('activator2');
+    var debug = Ext.getCmp('debug');
+    
+    if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
+      activator.setIconClass('icon-deactivate');
+      activator.setText(TRANSLATIONS.ID_DEACTIVATE);
+    } else {
+      activator.setIconClass('icon-activate');
+      activator.setText(TRANSLATIONS.ID_ACTIVATE);
+    }
 
-  //////////////////////store.load({params: {"function":"xml"}});
+    if( rowSelected.data.PRO_DEBUG == 1){
+      debug.setIconClass('icon-debug-disabled');
+      debug.setText(_('ID_DISABLE_DEBUG'));
+    } else {
+      debug.setIconClass('icon-debug');
+      debug.setText(_('ID_ENABLE_DEBUG'));
+    }
+  }, this);
+  processesGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
 
-  
-  //processesGrid.render('processes-panel');
-  
-  //processesGrid.render(document.body);
-  //fp.render('form-panel');
-
+  function onMessageContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    messageContextMenu.showAt([coords[0], coords[1]]);
+  }
+      
+  var messageContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editProcess
+      },{
+        text: _('ID_EDIT_BPMN'),
+        icon: '/images/pencil_beta.png',
+        handler: editNewProcess
+      }, {
+        id: 'activator2',
+        text: '',
+        icon: '',
+        handler: activeDeactive
+      }, {
+        id: 'debug',
+        text: '',
+        handler: enableDisableDebug
+      }, {
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: deleteProcess
+      }
+    ]
+  });
 
   var viewport = new Ext.Viewport({
     layout: 'border',
@@ -350,14 +392,12 @@ Ext.onReady(function(){
 
 function newProcess(){
   //  window.location = 'processes_New';
-
   var ProcessCategories = new Ext.form.ComboBox({
     fieldLabel : 'Category',
     hiddenName : 'PRO_CATEGORY',
     valueField : 'CATEGORY_UID',
     displayField : 'CATEGORY_NAME',
     triggerAction : 'all',
-//    emptyText : 'Select a category',
     selectOnFocus : true,
     editable : false,
     width: 180,
@@ -365,11 +405,11 @@ function newProcess(){
       
     store : new Ext.data.Store( {
       proxy : new Ext.data.HttpProxy( {
-        url : 'mainAjax',
+        url : 'ajaxListener',
         method : 'POST'
       }),
       baseParams : {
-        request : 'processCategories'
+        action : 'processCategories'
       },
       reader : new Ext.data.JsonReader( {
         root : 'rows',
@@ -378,14 +418,7 @@ function newProcess(){
         }, {
           name : 'CATEGORY_NAME'
         } ]
-      }),
-      listeners:{
-        load: function(){
-          //i = cmbUsernameFormats.store.findExact('id', default_format, 0);
-          //cmbUsernameFormats.setValue(cmbUsernameFormats.store.getAt(i).data.id);
-          //cmbUsernameFormats.setRawValue(cmbUsernameFormats.store.getAt(i).data.name);
-        }
-      }
+      })
     }),
     listeners:{
       afterrender:function(){
@@ -393,29 +426,6 @@ function newProcess(){
       }
     }
   });
-    
-  var fieldset = {
-    xtype : 'fieldset',
-    autoHeight  : true,
-    defaults    : { 
-      labelStyle : 'padding: 0px;',
-      style: 'font-weight: bold'
-    },
-    items       : [ {
-        id: 'PRO_TITLE',
-        fieldLabel: 'Title', 
-        xtype:'textfield',
-        vtype: 'processName',
-        width: 260
-      },  {
-        id: 'PRO_DESCRIPTION',
-        fieldLabel: 'Description',
-        xtype:'textarea',
-        width: 260 
-      },
-      ProcessCategories
-    ]
-  }
 
   var frm = new Ext.FormPanel( {
     id: 'newProcessForm',
@@ -456,7 +466,7 @@ function newProcess(){
   });
 
   var win = new Ext.Window({
-    title: 'Create Process',
+    title: _('ID_CREATE_PROCESS'),
     width: 450,
     height: 220,
     layout:'fit',
@@ -471,7 +481,7 @@ function newProcess(){
 function saveProcess()
 {
   Ext.getCmp('newProcessForm').getForm().submit( {
-    url : 'mainAjax?request=saveProcess',
+    url : 'ajaxListener?action=saveProcess',
     waitMsg : 'Creating Process...',
     timeout : 36000,
     success : function(obj, resp) {
@@ -531,16 +541,13 @@ editNewProcess = function(){
 }
 
 deleteProcess = function(){
-  //var rowSelected = processesGrid.getSelectionModel().getSelected();
   var rows = processesGrid.getSelectionModel().getSelections();
   if( rows.length > 0 ) {
-    //parent.dropProcess(rowSelected.data.PRO_UID);
-    
     isValid = true;
     errLog = Array();
+    
     //verify if the selected rows have not any started or delegated cases
     for(i=0; i<rows.length; i++){
-      //alert(rows[i].get('CASES_COUNT'));
       if( rows[i].get('CASES_COUNT') != 0 ){
         errLog.push(i);
         isValid = false;
@@ -592,7 +599,6 @@ deleteProcess = function(){
     } else {
       errMsg = '';
       for(i=0; i<errLog.length; i++){
-        //errMsg += 'You can\'t delete the process "'+rows[errLog[i]].get('PRO_TITLE')+'" because has '+rows[errLog[i]].get('CASES_COUNT')+' cases.<br/>';
         e = TRANSLATIONS.ID_PROCESS_CANT_DELETE;
         e = e.replace('{0}', rows[errLog[i]].get('PRO_TITLE'));
         e = e.replace('{1}', rows[errLog[i]].get('CASES_COUNT'));
@@ -605,7 +611,6 @@ deleteProcess = function(){
         icon: Ext.MessageBox.ERROR
       });
     }
-    
   } else {
     Ext.Msg.show({
       title:'',
@@ -632,7 +637,6 @@ browseLibrary = function(){
 }
 
 function activeDeactive(){
-  //var rowSelected = processesGrid.getSelectionModel().getSelected();
   var rows = processesGrid.getSelectionModel().getSelections();
   
   if( rows.length > 0 ) {
@@ -643,11 +647,9 @@ function activeDeactive(){
     }
 
     Ext.Ajax.request({
-      url : 'processes_ChangeStatus' ,
-      params : { UIDS : ids },
-      method: 'GET',
+      url : 'ajaxListener' ,
+      params : {action:'changeStatus', UIDS : ids },
       success: function ( result, request ) {
-        //Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
         store.reload();
         var activator = Ext.getCmp('activator');
         activator.setDisabled(true);
@@ -658,8 +660,6 @@ function activeDeactive(){
         Ext.MessageBox.alert('Failed', result.responseText);
       }
     });
-    
-    //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
   } else {
      Ext.Msg.show({
       title:'',
@@ -673,82 +673,39 @@ function activeDeactive(){
   }
 }
 
-capitalize = function(s){
-  s = s.toLowerCase();
-  return s.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
-};
-
-
-// Add the additional 'advanced' VTypes
-Ext.apply(Ext.form.VTypes, {
-    daterange : function(val, field) {
-        var date = field.parseDate(val);
-
-        if(!date){
-            return false;
-        }
-        if (field.startDateField) {
-            var start = Ext.getCmp(field.startDateField);
-            if (!start.maxValue || (date.getTime() != start.maxValue.getTime())) {
-                start.setMaxValue(date);
-                start.validate();
-            }
-        }
-        else if (field.endDateField) {
-            var end = Ext.getCmp(field.endDateField);
-            if (!end.minValue || (date.getTime() != end.minValue.getTime())) {
-                end.setMinValue(date);
-                end.validate();
-            }
-        }
-        /*
-         * Always return true since we're only using this vtype to set the
-         * min/max allowed values (these are tested for after the vtype test)
-         */
-        return true;
-    },
-
-    processName : function(val, field) {
-        //if (field.initialPassField) {
-        
-            Ext.Ajax.request({
-              url : 'mainAjax' ,
-              params : {request:'verifyProcessName', PRO_TITLE : val },
-              method: 'POST',
-              success: function ( result, request ) {
-                var data = Ext.util.JSON.decode(result.responseText); 
-                return data.success;
-              },
-              failure: function ( result, request) {
-                Ext.MessageBox.alert('Failed', result.responseText);
-              }
-            });
-            
-        //}
-        //return true;
-    },
-
-    processNameText : 'Process Name Already exists!'
-});
-
-
-function valProcess(){
-  var val = Ext.getCmp('PRO_TITLE').getValue();
+function enableDisableDebug()
+{
+  var rows = processesGrid.getSelectionModel().getSelections();
   
-  return Ext.Ajax.request({
-      url : 'mainAjax' ,
-      params : {request:'verifyProcessName', PRO_TITLE : val },
-      method: 'POST',
+  if( rows.length > 0 ) {
+    var ids = '';
+    for(i=0; i<rows.length; i++)
+      ids += (i != 0 ? ',': '') + rows[i].get('PRO_UID');
+
+    Ext.Ajax.request({
+      url : 'ajaxListener' ,
+      params : {action: 'changeDebugMode', UIDS: ids},
       success: function ( result, request ) {
-        var data = Ext.util.JSON.decode(result.responseText); 
-        //if( data.success )
-          return 'sssssssss';
-       // else
-         // return true;
+        store.reload();
+        var activator = Ext.getCmp('activator');
+        activator.setDisabled(true);
+        activator.setText('Status');
+        activator.setIcon('');
       },
       failure: function ( result, request) {
         Ext.MessageBox.alert('Failed', result.responseText);
       }
-  });
+    });
+  } else {
+    Ext.Msg.show({
+      title:'',
+      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      buttons: Ext.Msg.INFO,
+      fn: function(){},
+      animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
+    });
+  }
 
 }

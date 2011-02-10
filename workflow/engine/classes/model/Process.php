@@ -612,6 +612,7 @@ class Process extends BaseProcess {
       $process['PRO_CATEGORY_LABEL']    = trim($process['PRO_CATEGORY']) != ''? $process['CATEGORY_NAME']: G::LoadTranslation('ID_PROCESS_NO_CATEGORY');
       $process['PRO_TITLE']             = $proTitle;
       $process['PRO_DESCRIPTION']       = $proDescription;
+      $process['PRO_DEBUG']             = $process['PRO_DEBUG'];
       $process['PRO_DEBUG_LABEL']       = ($process['PRO_DEBUG']=="1")? G::LoadTranslation('ID_ON'): G::LoadTranslation('ID_OFF');
       $process['PRO_STATUS_LABEL']      = $process ['PRO_STATUS'] == 'ACTIVE'? G::LoadTranslation ('ID_ACTIVE'): G::LoadTranslation('ID_INACTIVE');
       $process['PRO_CREATE_USER_LABEL'] = $userOwner;
@@ -622,7 +623,7 @@ class Process extends BaseProcess {
       $process['CASES_COUNT']           = $casesCountTotal;
       
       unset( $process['PRO_CREATE_USER']);
-      unset( $process['PRO_DEBUG']);
+
       $aProcesses[] = $process;
       
     }

@@ -107,3 +107,19 @@ button.x-btn-text:focus,.x-combo-selected{
   -moz-outline-style:none;
   outline:none;
 }
+
+.icon-activate{
+  background-image: url("/images/activate.png");
+}
+
+.icon-deactivate{
+  background-image: url("/images/deactivate.png");
+}
+
+.icon-debug{
+  background-image: url("/images/debug.png");
+}
+
+.icon-debug-disabled{
+  background-image: url("/images/debug_disabled.png");
+}

@@ -73,6 +73,24 @@ class Processes {
 
     $oProcess->Update( $proFields );
   }
+  
+  /**
+  * change debug mode of any Process
+  * @param string $sProUid
+  * @return boolean
+  * @package workflow.engine.ProcessMaker
+  */
+  function changeDebugMode ( $sProUid = '') {
+    $oProcess = new Process();
+    $Fields = $oProcess->Load( $sProUid );
+    $proFields['PRO_UID'] = $sProUid;
+    if ( $Fields['PRO_DEBUG'] == '1' )
+      $proFields['PRO_DEBUG'] = '0';
+    else
+      $proFields['PRO_DEBUG'] = '1';
+
+    $oProcess->Update( $proFields );
+  }
 
  /**
   * changes in DB the parent GUID
