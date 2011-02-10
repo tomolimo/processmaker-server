@@ -14,11 +14,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var pro_uid = workflow.getUrlVars();
 
   var dynaFields = Ext.data.Record.create([
-    {name: 'DYN_UID', type: 'string'},
-    {name: 'DYN_TYPE', type: 'string'},
-    {name: 'DYN_TITLE', type: 'string'},
-    {name: 'DYN_DISCRIPTION',type: 'string'},
-    {name: 'ACTION', type: 'string'}
+    {name: 'DYN_UID'},
+    {name: 'DYN_TYPE'},
+    {name: 'DYN_TITLE'},
+    {name: 'DYN_DISCRIPTION'},
+    {name: 'ACTION'}
     ]);
 
   var editor = new Ext.ux.grid.RowEditor({
@@ -30,7 +30,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     iconCls: 'button_menu_ext ss_sprite ss_add',
     //iconCls: 'application_add',
     handler: function () {
-      dynaformDetails.getForm().reset();
+      //dynaformDetails.getForm().reset();
       formWindow.show();
     }
   });
@@ -177,7 +177,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             id: 'DYN_TITLE',
             header: _('ID_TITLE_FIELD'),
             dataIndex: 'DYN_TITLE',
-            //width: 280,
+            width: 280,
             editable: false,
             editor: new Ext.form.TextField({
             allowBlank: false
@@ -186,7 +186,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             id: 'ACTION',
             header: _('ID_TYPE'),
             dataIndex: 'ACTION',
-            width: 280,
+            //width: 280,
             editable: false,
             editor: new Ext.form.TextField({
             allowBlank: false
@@ -196,8 +196,15 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             sortable: false,
             renderer: function(val, meta, record)
                {
-                    return String.format("<input type='button' value='@@' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
-              }
+                    return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
+               }
+        },
+        {
+            sortable: false,
+            renderer: function(val, meta, record)
+               {
+                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton("+record+");>");
+               }
         }
        
 
@@ -269,7 +276,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         labelWidth: 100,
         buttonAlign: 'center',
         width     : 490,
-        monitorValid : true,
+        //monitorValid : true,
         autoHeight: true,
         items:
                 [{
@@ -396,8 +403,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                          {
                             xtype     : 'textfield',
                             fieldLabel: _('ID_TITLE'),
-                            name      : 'DYN_TITLE'
-                           // allowBlank: false
+                            name      : 'DYN_TITLE',
+                            allowBlank: false
                          },{
                             xtype     : 'textarea',
                             fieldLabel: _('ID_DESCRIPTION'),
@@ -425,7 +432,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                 }
             ], buttons: [{
             text: _('ID_SAVE'),
-            formBind    :true,
+            //formBind    :true,
             handler: function(){
                 var getForm   = dynaformDetails.getForm().getValues();
                 //var sDynaType = getForm.DYN_SOURCE;
@@ -433,7 +440,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     {
                         var sAction   = getForm.ACTION;
                         var sTitle    = getForm.DYN_TITLE[0];
-                       var sDesc     = getForm.DYN_DESCRIPTION[0];
+                        var sDesc     = getForm.DYN_DESCRIPTION[0];
                     }
                 else
                     {
@@ -451,7 +458,12 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         sTitle    = getForm.DYN_TITLE[1];
                         sDesc     = getForm.DYN_DESCRIPTION[1];
                     }
-                        Ext.Ajax.request({
+
+                    if(sTitle == '' || sAction == '')
+                          Ext.MessageBox.alert ('Error','Dynaform Title required.');
+                    else
+                        {
+                          Ext.Ajax.request({
                           url   : '../dynaforms/dynaforms_Save.php',
                           method: 'POST',
                           params:{
@@ -471,6 +483,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                               formWindow.hide()
                           }
                         });
+                        }
             }
     },{
             text: _('ID_CANCEL'),
@@ -2384,7 +2397,7 @@ var reportForm =new Ext.FormPanel({
       collapsible: false,
       maximizable: true,
       width:450,
-      height:380,
+      height:325,
       frame:false,
       monitorValid : true,
       plain: true,
@@ -2392,20 +2405,20 @@ var reportForm =new Ext.FormPanel({
       items:[{
                               xtype: 'textfield',
                               fieldLabel: 'Title',
-                              width: 150,
+                              width: 250,
                               name: 'REP_TAB_TITLE',
                                allowBlank: false
                           },{
 
                               xtype: 'textfield',
                               fieldLabel: 'Table Name',
-                              width: 150,
+                              width: 250,
                               name: 'REP_TAB_NAME',
                                allowBlank: false
                           },
                           {
                               xtype: 'combo',
-                              width:  150,
+                              width:  250,
                               mode: 'local',
                               editable:false,
                               fieldLabel: 'Type',
@@ -2448,7 +2461,8 @@ var reportForm =new Ext.FormPanel({
                           hidden: false,
                           items: [{
                                   xtype: 'multiselect',
-                                  width:  150,
+                                  width:  240,
+                                  height: 150,
                                   mode: 'local',
                                   style : 'margin-bottom:10px',
                                   editable:true,
@@ -2470,7 +2484,7 @@ var reportForm =new Ext.FormPanel({
                  align:'left',
                   items:[{
                                   xtype: 'combo',
-                                  width:  150,
+                                  width:  250,
                                   mode: 'local',
                                   editable:false,
                                   fieldLabel: 'Grid Fields',
@@ -2547,7 +2561,7 @@ var reportForm =new Ext.FormPanel({
                 });
                     }
             formWindow.hide();
-            //reportStore.reload();
+            reportStore.reload();
 
           }
         },{
@@ -2565,7 +2579,7 @@ var formWindow = new Ext.Window({
         maximizable: true,
         width: 400,
         //autoHeight: true,
-        height: 400,
+        height: 330,
         layout: 'fit',
         plain: true,
         buttonAlign: 'center',

@@ -299,8 +299,19 @@ if ( isset ($_REQUEST['action']) ) {
             }
             if($_POST['VAR_IN'] == '')
                 $in[$_POST['VAR_IN']] = '';
-            
-            $aTask=($_POST['TASKS']!=0)?$oTask->load($_POST['TASKS']):0;
+
+            //Getting first Tasks of selected process
+             $aNewCase = $oProcessMap->subProcess_TaskIni($_POST['PRO_UID']);
+             $i = 0;
+             foreach ($aNewCase as $aRow) {
+               if ($i > 0 && $aRow['pro_uid'] == $_POST['sProcessUID']) {
+                 $sTASKS = $aRow['uid'];
+                }
+               $i++;
+             }
+
+            //$aTask=($_POST['TASKS']!=0)?$oTask->load($_POST['TASKS']):0;
+            $aTask=($sTASKS!=0)?$oTask->load($sTASKS):0;
             //$aTask['PRO_UID']=0;
 
             if ( isset ( $_POST['SP_SYNCHRONOUS']) && $_POST['SP_SYNCHRONOUS'] == '' ) {
@@ -314,8 +325,8 @@ if ( isset ($_REQUEST['action']) ) {
             require_once 'classes/model/SubProcess.php';
             $oOP = new SubProcess();
             $aData = array('SP_UID'          	 => $_POST['SP_UID'],//G::generateUniqueID(),
-                           'PRO_UID'         	 => $_POST['PRO_UID'],
-                           'TAS_UID'         	 => $_POST['TASKS'],
+                           'PRO_UID'         	 => $aTask['PRO_UID'],
+                           'TAS_UID'         	 => $sTASKS,
                            'PRO_PARENT'      	 => $_POST['PRO_PARENT'],
                            'TAS_PARENT'		 => $_POST['TAS_PARENT'],
                            'SP_TYPE'   		 => 'SIMPLE',

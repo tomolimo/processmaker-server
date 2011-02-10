@@ -523,7 +523,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     if(r.data.OP_UID != "")
                     {
                           Ext.Ajax.request({
-                                  url   : '../processes/processes_DeleteObjectPermission.php?opUID='+OP_UID,
+                                  url   : '../processes/processes_DeleteObjectPermission.php?OP_UID='+opUID,
                                   method: 'GET',
                                   
                                   success: function(response) {
@@ -933,8 +933,11 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                xtype:'hidden',
                name:'OUTPUTS',
                id:'OUTPUTS'
-           }
-
+           },{
+               id : 'OP_UID',
+               xtype: 'hidden',
+               name : 'OP_UID'
+            }
 
        ],
        buttons: [{
@@ -949,10 +952,16 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 var Inputs          = getForm.INPUTS;
                 var Outputs         = getForm.OUTPUTS;
                 var Status          = getForm.OP_CASE_STATUS;
-                var Participation   = getForm.PARTICIPATED;
+                var Participation   = getForm.OP_PARTICIPATE;
+                if(Participation == 'Yes')
+                    Participation = 1;
+                else
+                    Participation = 0;
+                
                 var Type            = getForm.OP_OBJ_TYPE;
                 var Permission      = getForm.OP_ACTION;
-                if(TASK_TARGET == "")
+                var OP_UID          = getForm.OP_UID;
+                if(OP_UID == "")
                     {
                 Ext.Ajax.request({
                   url   : '../processes/processes_SaveObjectPermission.php',
@@ -981,11 +990,12 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
             }
             else
                 {
-                    Ext.Ajax.request({
-                  url   : '../processes/processes_SaveObjectPermission.php',
+                  Ext.Ajax.request({
+                  url   : '../processes/processes_SaveEditObjectPermission.php',
                   method: 'POST',
                   params:{
                       PRO_UID         :pro_uid,
+                      OP_UID          :OP_UID,
                       OP_OBJ_TYPE     :Type,
                       TAS_UID         :TargetTask,
                       OP_CASE_STATUS  :Status,

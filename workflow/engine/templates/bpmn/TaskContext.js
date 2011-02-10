@@ -396,12 +396,22 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                 defaults: {
                     width: 400
                 },
+                listeners: {
+                    tabchange: function(tabPanel,newTab){
+                            taskSteps.reload();
+                      }
+                },
                 items:[grid]
             },{
                 title:_('ID_CONDITION'),
                 layout:'fit',
                 defaults: {
                     width: 400
+                },
+                listeners: {
+                    tabchange: function(tabPanel,newTab){
+                            taskSteps.reload();
+                      }
                 },
                 items:[conditionGrid]
             },{
@@ -1402,7 +1412,7 @@ TaskContext.prototype.stepTriggers = function()
         saveText: 'Update'
     });
 
-
+    var root = new Ext.tree.AsyncTreeNode({text: 'treeRoot',id:'0'});
     var tree = new Ext.tree.TreePanel({
             //renderTo    : 'cases-grid',
             dataUrl     : 'get-triggers-tree.php?tid='+taskId,
@@ -1412,10 +1422,10 @@ TaskContext.prototype.stepTriggers = function()
             width       : 200,
             useArrows   : false,
             autoScroll  : true,
-            animate     : true,
-            root        : new Ext.tree.AsyncTreeNode({text: 'treeRoot',id:'0'})
+            animate     : true
          });
-
+    tree.setRootNode(root);
+    root.expand(true);
     //tree.render('tree');
     tree.on('click', function (node){
          if(node.isLeaf()){
@@ -1455,6 +1465,7 @@ TaskContext.prototype.stepTriggers = function()
     var addBtn = new Ext.Button({
         id: 'addBtn',
         text: 'Add',
+        iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             //var User = triggerGrid.getStore();
             var e1 = new triggersFields({
@@ -1485,6 +1496,7 @@ TaskContext.prototype.stepTriggers = function()
     var removeBtn = new Ext.Button({
         id: 'removeBtn',
         text: 'Remove',
+        iconCls: 'button_menu_ext ss_sprite ss_delete',
         handler: function (s) {
             triggerEditor.stopEditing();
             var s = triggerGrid.getSelectionModel().getSelections();
@@ -1687,6 +1699,9 @@ TaskContext.prototype.stepTriggers = function()
               },
               success: function(response) {
                   Ext.MessageBox.alert ('Status','Triggers has been assigned successfully.');
+                  tree.getLoader().dataUrl = 'get-triggers-tree.php?tid='+taskId;
+                  tree.getLoader().load(tree.root);
+                  tree.reload();
               }
             });
 
@@ -2529,10 +2544,14 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
             
             var sSPNAME      = getForm.SPROCESS_NAME;
             var sSync        = getForm.SP_SYNCHRONOUS;
-            if(sSync == 1)
+            if(sSync == 1 || sSync == 'Synchronous')
+                {
                     var varIn = Ext.util.JSON.encode(varIn1)+'|'+Ext.util.JSON.encode(varIn2);
+                    sSync = 1;
+                }
             else
                 {
+                    sSync = 0;
                     varIn = new Array();
                     varIn[0] = '';
                 }
@@ -2544,8 +2563,9 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
               params: {
                     action          : 'saveSubprocessDetails',
                     SP_UID          : spUID,
-                    TASKS           : tasks,  //problem
-                    PRO_UID         : sProcessUID,
+                    //TASKS           : tasks,  
+                    sProcessUID     : sProcessUID,
+                    PRO_UID         : pro_uid,
                     SPROCESS_NAME   : sSPNAME,
                     PRO_PARENT      : proParent,
                     TAS_PARENT	    : tasParent,
