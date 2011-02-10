@@ -266,7 +266,8 @@ bpmnTask.prototype.setWorkflow = function (_40c5) {
       eval('this.' + TaskPortName[i] + '.setZOrder(-1)'); //Set Z-Order of the port to -1. It will be below all the figure
       eval('this.' + TaskPortName[i] + '.setBackgroundColor(new Color(255, 255, 255))'); //Setting Background of the port to white
       eval('this.' + TaskPortName[i] + '.setColor(new Color(255, 255, 255))'); //Setting Border of the port to white
-      eval('this.addPort(this.' + TaskPortName[i] + ',' + TaskPositionX[i] + ', ' + TaskPositionY[i] + ')'); //Setting Position of the port
+      var oPort = eval('this.addPort(this.' + TaskPortName[i] + ',' + TaskPositionX[i] + ', ' + TaskPositionY[i] + ')'); //Setting Position of the port
+      var test = oPort;
     }
   }
 };
@@ -474,7 +475,7 @@ if(this.commandMove==null){
 return;
 }
 var currentSelection = workflow.currentSelection;
-if(currentSelection.id.length == 32){
+if(typeof currentSelection.id != 'undefined' && currentSelection.id.length == 32){
   if(currentSelection.type.match(/Task/)){
     currentSelection.actiontype = 'saveTaskCordinates';
     workflow.saveShape(currentSelection);
@@ -483,7 +484,7 @@ if(currentSelection.id.length == 32){
     currentSelection.actiontype = 'saveAnnotationCordinates';
     workflow.saveShape(currentSelection);
   }
-}
+ }
 }
 VectorFigure.prototype.addChild=function(_4078){
     _4078.setParent(this);
@@ -570,7 +571,6 @@ FlowMenu.prototype.setFigure = function (_3087) {
 
 }
 FlowMenu.prototype.onSelectionChanged = function (_39fb) {
-
     var newWorkflow = '';
     //If Right Clicked on the figure, Disabling Flow menu
     if (_39fb != null) {
@@ -582,9 +582,8 @@ FlowMenu.prototype.onSelectionChanged = function (_39fb) {
     else {
         newWorkflow = this.myworkflow;
     }
-
     var contextClicked = newWorkflow.contextClicked;
-/*Check wheather the figure selected is same as previous figure.
+    /*Check wheather the figure selected is same as previous figure.
     *If figure is different ,then remove the port from the previous selected figure.
     **/
     if (newWorkflow.currentSelection != null && typeof newWorkflow.preSelectedFigure != 'undefined') {
@@ -592,7 +591,6 @@ FlowMenu.prototype.onSelectionChanged = function (_39fb) {
             newWorkflow.disablePorts(newWorkflow.preSelectedFigure);
         }
     }
-
     if (_39fb == this.currentFigure && contextClicked == true) {
         return;
     }
@@ -600,8 +598,6 @@ FlowMenu.prototype.onSelectionChanged = function (_39fb) {
         this.myworkflow.removeFigure(this);
         this.added = false;
     }
-
-
     if (_39fb != null && this.added == false) {
         if (this.myworkflow.getEnableSmoothFigureHandling() == true) {
             this.setAlpha(0.01);
@@ -624,11 +620,21 @@ FlowMenu.prototype.setWorkflow = function (_39fc) {
     Figure.prototype.setWorkflow.call(this, _39fc);
 };
 
-
 FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
     if (_39fd != null) {
         //Get the workflow object of the selected Figure object, so that we can compare with the new selected figure to remove ports
         _39fd.workflow.preSelectedFigure = _39fd.workflow.currentSelection;
+        var countConn = 0;
+        //Get all the ports of the shapes and resize according to zoom
+        var ports = _39fd.workflow.currentSelection.getPorts();
+        var len =ports.data.length;
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object'){
+               var port = ports.data[i];
+               port.setDimension(10*workflow.sType,10*workflow.sType);
+            }
+        }
+
          //workflow.setBoundary(workflow.currentSelection);
 
         //Preventing Task from drawing outside canvas Code Ends here
@@ -772,13 +778,10 @@ bpmnTask.prototype.addShapes = function (oStore) {
     }
     workflow.subProcessName = 'Sub Process';
     var newShape = eval("new " + oStore.newShapeName + "(workflow)");
-
     workflow.addFigure(newShape, xOffset, yOffset);
-
     //Assigning values to newShape Object for Saving Task automatically (Async Ajax Call)
     newShape.x = xOffset;
     newShape.y = yOffset;
-
     var conn = new DecoratedConnection();
     if (newShape.type.match(/Gateway/)) {
         conn.setTarget(newShape.getPort("input2"));
