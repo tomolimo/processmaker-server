@@ -6,11 +6,12 @@
   <USER_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from user
   <en>User ID</en>
+  </USER_ID>
   <GROUP_ID type="dropdown" sqlConnection="dbarray">
    SELECT * from group
   <en>Group ID</en>
-  <ACTION type="hidden">
-</ACTION>
+  </GROUP_ID>
+  <ACTION type="hidden"></ACTION>
   <ACTIONB type="button" onclick="submitThisForm(this.form);">
     <en>RemoveUserToGroup</en>    
   </ACTIONB>
