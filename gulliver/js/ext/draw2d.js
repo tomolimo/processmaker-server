@@ -3274,8 +3274,8 @@ ArrowConnectionDecorator.prototype.type="ArrowConnectionDecorator";
 ArrowConnectionDecorator.prototype.paint=function(g){
 if(this.backgroundColor!=null){
 var zoomfactor = 1;
-if(typeof workflow.sType != undefined && workflow.sType != '')
-zoomfactor = workflow.sType;
+if(typeof workflow.zoomfactor != undefined && workflow.zoomfactor != '')
+zoomfactor = workflow.zoomfactor;
 g.setColor(this.backgroundColor);
 g.fillPolygon([1*zoomfactor,10*zoomfactor,10*zoomfactor,1*zoomfactor],[0,5*zoomfactor,-5*zoomfactor,0]);
 }
