@@ -349,7 +349,142 @@ Ext.onReady(function(){
 
 
 function newProcess(){
-  window.location = 'processes_New';
+  //  window.location = 'processes_New';
+
+  var ProcessCategories = new Ext.form.ComboBox({
+    fieldLabel : 'Category',
+    hiddenName : 'PRO_CATEGORY',
+    valueField : 'CATEGORY_UID',
+    displayField : 'CATEGORY_NAME',
+    triggerAction : 'all',
+//    emptyText : 'Select a category',
+    selectOnFocus : true,
+    editable : false,
+    width: 180,
+    allowBlank : true,
+      
+    store : new Ext.data.Store( {
+      proxy : new Ext.data.HttpProxy( {
+        url : 'mainAjax',
+        method : 'POST'
+      }),
+      baseParams : {
+        request : 'processCategories'
+      },
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'CATEGORY_UID'
+        }, {
+          name : 'CATEGORY_NAME'
+        } ]
+      }),
+      listeners:{
+        load: function(){
+          //i = cmbUsernameFormats.store.findExact('id', default_format, 0);
+          //cmbUsernameFormats.setValue(cmbUsernameFormats.store.getAt(i).data.id);
+          //cmbUsernameFormats.setRawValue(cmbUsernameFormats.store.getAt(i).data.name);
+        }
+      }
+    }),
+    listeners:{
+      afterrender:function(){
+        ProcessCategories.store.load();
+      }
+    }
+  });
+    
+  var fieldset = {
+    xtype : 'fieldset',
+    autoHeight  : true,
+    defaults    : { 
+      labelStyle : 'padding: 0px;',
+      style: 'font-weight: bold'
+    },
+    items       : [ {
+        id: 'PRO_TITLE',
+        fieldLabel: 'Title', 
+        xtype:'textfield',
+        vtype: 'processName',
+        width: 260
+      },  {
+        id: 'PRO_DESCRIPTION',
+        fieldLabel: 'Description',
+        xtype:'textarea',
+        width: 260 
+      },
+      ProcessCategories
+    ]
+  }
+
+  var frm = new Ext.FormPanel( {
+    id: 'newProcessForm',
+    labelAlign : 'right',
+    bodyStyle : 'padding:5px 5px 0',
+    width : 400,
+    items : [ {
+        id: 'PRO_TITLE',
+        fieldLabel: _('ID_TITLE'), 
+        xtype:'textfield',
+        width: 260
+      },  {
+        id: 'PRO_DESCRIPTION',
+        fieldLabel: _('ID_DESCRIPTION'),
+        xtype:'textarea',
+        width: 260 
+      },
+      ProcessCategories,
+      {
+        id: 'editor',
+        xtype: 'radiogroup',
+        fieldLabel: _('ID_OPEN_WITH'),
+        items: [  
+          {boxLabel: _('ID_CLASSIC_EDITOR'), name: 'editor', inputValue: 'classic', checked: true},
+          {boxLabel: _('ID_BPMN_EDITOR'), name: 'editor', inputValue: 'bpmn'}
+        ]
+      }
+    ],
+    buttons : [{
+      text : _('ID_CREATE'),
+      handler : saveProcess
+    },{
+      text : _('ID_CANCEL'),
+      handler : function() {
+        win.close();
+      }
+    }]   
+  });
+
+  var win = new Ext.Window({
+    title: 'Create Process',
+    width: 450,
+    height: 220,
+    layout:'fit',
+    autoScroll:true,
+    modal: true,
+    maximizable: false,
+    items: [frm]
+  });
+  win.show();
+}
+
+function saveProcess()
+{
+  Ext.getCmp('newProcessForm').getForm().submit( {
+    url : 'mainAjax?request=saveProcess',
+    waitMsg : 'Creating Process...',
+    timeout : 36000,
+    success : function(obj, resp) {
+      var editor  = Ext.getCmp('editor').getValue().getGroupValue();
+      if( editor == 'classic')
+        location.href = 'processes_Map?PRO_UID='+resp.result.PRO_UID;
+      else
+        location.href = '../bpmn/processmap?PRO_UID='+resp.result.PRO_UID;
+    },
+    failure: function(obj, result) {
+      Ext.Msg.alert( _('ID_ERROR'), resp.result.PRO_UID);
+    },
+  });
 }
 
 function doSearch(){
@@ -542,3 +677,78 @@ capitalize = function(s){
   s = s.toLowerCase();
   return s.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
 };
+
+
+// Add the additional 'advanced' VTypes
+Ext.apply(Ext.form.VTypes, {
+    daterange : function(val, field) {
+        var date = field.parseDate(val);
+
+        if(!date){
+            return false;
+        }
+        if (field.startDateField) {
+            var start = Ext.getCmp(field.startDateField);
+            if (!start.maxValue || (date.getTime() != start.maxValue.getTime())) {
+                start.setMaxValue(date);
+                start.validate();
+            }
+        }
+        else if (field.endDateField) {
+            var end = Ext.getCmp(field.endDateField);
+            if (!end.minValue || (date.getTime() != end.minValue.getTime())) {
+                end.setMinValue(date);
+                end.validate();
+            }
+        }
+        /*
+         * Always return true since we're only using this vtype to set the
+         * min/max allowed values (these are tested for after the vtype test)
+         */
+        return true;
+    },
+
+    processName : function(val, field) {
+        //if (field.initialPassField) {
+        
+            Ext.Ajax.request({
+              url : 'mainAjax' ,
+              params : {request:'verifyProcessName', PRO_TITLE : val },
+              method: 'POST',
+              success: function ( result, request ) {
+                var data = Ext.util.JSON.decode(result.responseText); 
+                return data.success;
+              },
+              failure: function ( result, request) {
+                Ext.MessageBox.alert('Failed', result.responseText);
+              }
+            });
+            
+        //}
+        //return true;
+    },
+
+    processNameText : 'Process Name Already exists!'
+});
+
+
+function valProcess(){
+  var val = Ext.getCmp('PRO_TITLE').getValue();
+  
+  return Ext.Ajax.request({
+      url : 'mainAjax' ,
+      params : {request:'verifyProcessName', PRO_TITLE : val },
+      method: 'POST',
+      success: function ( result, request ) {
+        var data = Ext.util.JSON.decode(result.responseText); 
+        //if( data.success )
+          return 'sssssssss';
+       // else
+         // return true;
+      },
+      failure: function ( result, request) {
+        Ext.MessageBox.alert('Failed', result.responseText);
+      }
+  });
+
+}

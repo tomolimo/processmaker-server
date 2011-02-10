@@ -458,6 +458,21 @@ class Process extends BaseProcess {
     $oPro = ProcessPeer::retrieveByPk( $ProUid );
     return (is_object ($oPro) && get_class ($oPro) == 'Process' );
   }
+  
+  public function existsByProTitle($PRO_TITLE)
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn('COUNT(*) AS PROCESS');
+    $oCriteria->add(ContentPeer::CON_CATEGORY, 'PRO_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,     SYS_LANG);
+    $oCriteria->add(ContentPeer::CON_VALUE,    $PRO_TITLE);
+    $oDataset = ContentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    
+    return $aRow['PROCESS'] ? true : false;
+  }
 
   //new functions
   function getAllProcessesCount(){

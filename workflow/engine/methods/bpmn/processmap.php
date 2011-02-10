@@ -3,12 +3,16 @@
   if( ! isset($_GET['PRO_UID']) )
     throw new Exception('The Process ID was not set!');
 
+  require_once 'classes/model/Process.php';
+  $process = ProcessPeer::retrieveByPK( $_GET['PRO_UID'] );
+  
+  if( get_class($process) != 'Process' ) {
+    throw new Exception("The Process with UID: {$_GET['PRO_UID']} doesn't exist!");
+  }
+  
   $processUID = $_GET['PRO_UID'];
   $_SESSION['PROCESS'] = $processUID;
   $_SESSION['PROCESSMAP'] = 'BPMN';
-  
-  require_once 'classes/model/Process.php';
-  $process = ProcessPeer::retrieveByPK( $processUID );
   
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->usingExtJs('ux/miframe');
@@ -17,7 +21,7 @@
   $oHeadPublisher->addExtJsScript('bpmn/MyWorkflow',true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/pmosExt', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/TaskContext', true );    //adding a javascript file .js
-  $oHeadPublisher->addExtJsScript('bpmn/ProcessMapContext', true );    //adding a javascript file .js
+  $oHeadPublisher->addExtJsScript('bpmn/ProcessMapContext', false );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/processmap', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/Annotation' );
   $oHeadPublisher->addExtJsScript('bpmn/FlowConnector');
