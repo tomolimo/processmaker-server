@@ -3023,7 +3023,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
     $afterDate  = G::replaceDataField ( $this->afterDate, $owner->values );
- $value1=$this->defaultValue;
+    $valueaux=$value;
+ $value=$this->defaultValue;
 
     if ($startDate != '') {
       if (! $this->verifyDateFormat ( $startDate ))
@@ -3104,14 +3105,14 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     if ( trim ($value) == '' or $value == NULL ) {
       $value = ''; //date ($tmp);
     } else {
-      switch(strtolower($value1)){
+      switch(strtolower($value)){
         case 'today':
        //   $value = date($tmp);
-              $value1=masktophp ($mask);
+              $value=masktophp ($mask);
         break;
         default:
           if(!$this->verifyDateFormat($value))
-            $value1='';
+            $value='';
         break;
       }
     }
@@ -3141,6 +3142,14 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         } else {
           $sizeend = $maskleng + 2;
         }
+        $value1=$value;
+        $value=$valueaux;
+        
+           if((($value==NULL))){          
+               $value=$value1;
+           }
+        
+       
         if ( $this->editable != "0") {
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
@@ -3164,7 +3173,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
              . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>'
              . '</a>';
     }
-
+ 
     return $html;
   }
 }
