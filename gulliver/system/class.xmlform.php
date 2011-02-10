@@ -3142,10 +3142,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         } else {
           $sizeend = $maskleng + 2;
         }
+ 
+        if($valueaux=='today'){
+          $valueaux=masktophp ($mask);
+        }
         $value1=$value;
         $value=$valueaux;
-        
-           if((($value==NULL))){          
+        if(($value==NULL)||($value=='')){          
                $value=$value1;
            }
         
