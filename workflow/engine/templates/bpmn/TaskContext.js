@@ -778,7 +778,8 @@ TaskContext.prototype.editTaskProperties= function()
                },{
                 xtype: 'checkbox',
                 fieldLabel: 'Starting Task',
-                name: 'TAS_START'
+                name: 'TAS_START',
+                 checked:workflow.checkStartingTask
               }]
             },{
               title:'Assignment Rules',
@@ -1221,7 +1222,12 @@ TaskContext.prototype.editTaskProperties= function()
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
-        //To load the values of the selecte radio button in Assignment Rules
+                         if(action.result.data.TAS_START== 0)
+                           workflow.checkStartingTask = false;
+                       else
+                           workflow.checkStartingTask = true;
+
+//To load the values of the selecte radio button in Assignment Rules
                        if(action.result.data.TAS_ASSIGN_TYPE=='BALANCED')
                            form.items.items[4].items[0].checked=true;
 
@@ -1263,6 +1269,8 @@ TaskContext.prototype.editTaskProperties= function()
                            form.items.items[13].checked=false;
                        else
                             form.items.items[13].checked=true;
+
+                     
        },
         failure:function(form, action) {
             Ext.MessageBox.alert('Message', 'Load failed');
@@ -1291,7 +1299,7 @@ TaskContext.prototype.editTaskProperties= function()
                 //var getstore = taskPropertiesTabs.getStore();
                 //var getData = getstore.data.items;
                 taskExtObj.saveTaskProperties();
-                 window.hide();
+                 //window.hide();
 
             }
         },{
@@ -1310,7 +1318,8 @@ TaskContext.prototype.saveTaskProperties= function()
 {
                  var saveTaskform = workflow.taskPropertiesTabs.getForm().getValues();
                  var taskId = workflow.currentSelection.id;
-                 var newTaskValues = new Array();
+                 var object_data = Ext.util.JSON.encode(saveTaskform);
+                /* var newTaskValues = new Array();
                  var oData = null;
                  for (var key in saveTaskform )
                     {
@@ -1336,7 +1345,7 @@ TaskContext.prototype.saveTaskProperties= function()
                                     oData = '"'+key+'":"'+saveTaskform[key]+'",' + '"TAS_UID":"'+taskId+'",';
                             }
                     }
-                 oData = '{'+oData.slice(0,oData.length-1)+'}';
+                 oData = '{'+oData.slice(0,oData.length-1)+'}';*/
 
                  Ext.Ajax.request({
                         url: '../tasks/tasks_Ajax.php' ,
@@ -1348,7 +1357,7 @@ TaskContext.prototype.saveTaskProperties= function()
                     },
                     params: {
                         functions:'saveTaskData',
-                        oData:oData
+                        oData:object_data
                     }
                  });
 }
@@ -1704,7 +1713,7 @@ TaskContext.prototype.stepTriggers = function()
         });
 
     var treeGrid = new Ext.FormPanel({
-        frame: true,
+        frame: false,
         monitorValid : true,
         labelAlign: 'left',
         width:  750,
@@ -2174,7 +2183,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         loadMask    : true,
         loadingText : 'Loading...',
         renderTo    : 'cases-grid',
-        frame       : true,
+        frame       : false,
         autoHeight  : true,
         autoScroll  : true,
         clicksToEdit: 1,
@@ -2228,7 +2237,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         loadMask    : true,
         loadingText : 'Loading...',
         renderTo    : 'cases-grid',
-        frame       : true,
+        frame       : false,
         autoHeight  : true,
         autoScroll  : true,
         clicksToEdit: 1,

@@ -165,14 +165,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   });
  //tablesFieldsStore.load();
 
-// Renderer function
-    function renderInstall(value, id, r)
-    {
-        //var id = Ext.id();
-        //createGridButton(1, this);
-              //return('&lt;div id="' + id + '"&gt;&lt;/div&gt;');
-              return ("<input type='button' value='UID' onclick=workflow.createGridButton(value);>")
-    }
+
 
 
   
@@ -203,12 +196,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             sortable: false,
             renderer: function(val, meta, record)
                {
-                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
-               }
+                    return String.format("<input type='button' value='@@' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
+              }
         }
+       
 
     ]
   });
+
 
   var addTableColumns = new Ext.grid.ColumnModel({
             columns: [
@@ -238,6 +233,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     }
                 ]
         });
+
+
+
 
  var dynaformGrid = new Ext.grid.GridPanel({
         store: taskDynaform,
@@ -529,7 +527,8 @@ ProcessOptions.prototype.dbConnection = function()
             {name: 'DBS_USERNAME',type: 'string'},
             {name: 'DBS_PASSWORD',type: 'string'},
             {name: 'DBS_PORT',type: 'string'},
-            {name: 'DBS_DESCRIPTION',type: 'string'}
+            {name: 'DBS_DESCRIPTION',type: 'string'},
+            {name: 'DBS_ENCODE', type:'string'}
         ]);
 
   var btnNew = new Ext.Button({
@@ -590,7 +589,7 @@ ProcessOptions.prototype.dbConnection = function()
                           },
 
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Step has been removed successfully.');
+                            Ext.MessageBox.alert ('Status','Database Connection has been removed successfully.');
                             //Secondly deleting from Grid
                             dbStore.remove(r);
                             //Reloading store after removing steps
@@ -623,6 +622,8 @@ ProcessOptions.prototype.dbConnection = function()
             })
           });
   dbStore.load();
+
+
 
   var dbGridColumn =  new Ext.grid.ColumnModel({
       columns: [
@@ -699,7 +700,7 @@ ProcessOptions.prototype.dbConnection = function()
       maximizable: true,
       //allowBlank:false,
       width:450,
-      frame:true,
+      frame:false,
       autoDestroy : true,
       monitorValid : true,
       plain: true,
@@ -761,48 +762,53 @@ ProcessOptions.prototype.dbConnection = function()
                                       forceSelection: true,
                                       //dataIndex : 'ENGINE',
                                       displayField:   'value',
-                                      valueField:     'value',
+                                      valueField:     'name',
                                       name: 'DBS_ENCODE',
                                       store: new Ext.data.JsonStore({
                                              fields : ['name', 'value'],
                                              data   :  [
-                                      {name:'big5',        value:'big5 - Big5 Traditional Chinese'},
-                                      {name:'dec8',        value:'dec8 - DEC West European'},
-                                      {name:'cp850',    value:'cp850 - DOS West European'},
-                                      {name:'hp8',        value: 'hp8 - HP West European'},
-                                      {name:'koi8r',    value:'koi8r - KOI8-R Relcom Russian'},
-                                      {name:'latin1',   value:'latin1 - cp1252 West European'},
-                                      {name:'latin2',   value:'latin2 - ISO 8859-2 Central European'},
-                                      {name:'swe7',        value:'swe7 - 7bit Swedish'},
-                                      {name:'ascii',    value:'ascii - US ASCII'},
-                                      {name:'ujis',        value:'ujis - EUC-JP Japanese'},
-                                      {name:'sjis',        value:'sjis - Shift-JIS Japanese'},
-                                      {name:'hebrew',  value: 'hebrew - ISO 8859-8 Hebrew'},
-                                      {name:'tis620',  value: 'tis620 - TIS620 Thai'},
-                                      {name:'euckr',   value: 'euckr - EUC-KR Korean'},
-                                      {name:'koi8u',   value: 'koi8u - KOI8-U Ukrainian'},
-                                      {name:'gb2312',  value: 'gb2312 - GB2312 Simplified Chinese'},
-                                      {name:'greek',   value: 'greek - ISO 8859-7 Greek'},
-                                      {name:'cp1250',  value: 'cp1250 - Windows Central European'},
-                                      {name:'gbk',        value: 'gbk - GBK Simplified Chinese'},
-                                      {name:'latin5',   value:'latin5 - ISO 8859-9 Turkish'},
                                       {name:'armscii8', value:'armscii8 - ARMSCII-8 Armenian'},
-                                      {name:'utf8',        value:'utf8 - UTF-8 Unicode'},
-                                      {name:'ucs2',        value:'ucs2 - UCS-2 Unicode'},
-                                      {name:'cp866',    value:'cp866 - DOS Russian'},
-                                      {name:'keybcs2', value: 'keybcs2 - DOS Kamenicky Czech-Slovak'},
-                                      {name:'macce',   value: 'macce - Mac Central European'},
-                                      {name:'macroman', value:'macroman - Mac West European'},
+                                      {name:'ascii',    value:'ascii - US ASCII'},
+                                      {name:'big5',        value:'big5 - Big5 Traditional Chinese'},
+                                      {name:'binary',  value: 'binary  - Binary pseudo charset'},
+                                      {name:'cp850',    value:'cp850 - DOS West European'},
                                       {name:'cp852',   value: 'cp852 - DOS Central European'},
-                                      {name:'latin7',  value: 'atin7 - ISO 8859-13 Baltic'},
+                                      {name:'cp866',    value:'cp866 - DOS Russian'},
+                                      {name:'cp932',   value: 'cp932] - SJIS for Windows Japanese'},
+                                      {name:'cp1250',  value: 'cp1250 - Windows Central European'},
                                       {name:'cp1251',  value: 'cp1251 - Windows Cyrillic'},
                                       {name:'cp1256',  value: 'cp1256  - Windows Arabic'},
                                       {name:'cp1257',  value: 'cp1257  - Windows Baltic'},
-                                      {name:'binary',  value: 'binary  - Binary pseudo charset'},
+                                      {name:'dec8',        value:'dec8 - DEC West European'},
+                                      {name:'eucjpms', value: 'eucjpms - UJIS for Windows Japanese'},
+                                      {name:'euckr',   value: 'euckr - EUC-KR Korean'},
+                                      {name:'gb2312',  value: 'gb2312 - GB2312 Simplified Chinese'},
+                                      {name:'gbk',        value: 'gbk - GBK Simplified Chinese'},
                                       {name:'geostd8', value: 'geostd8 - GEOSTD8 Georgian'},
-                                      {name:'cp932',   value: 'cp932] - SJIS for Windows Japanese'},
-                                      {name:'eucjpms', value: 'eucjpms - UJIS for Windows Japanese'}
-                                    ]})
+                                      {name:'greek',   value: 'greek - ISO 8859-7 Greek'},
+                                      {name:'hebrew',  value: 'hebrew - ISO 8859-8 Hebrew'},
+                                      {name:'hp8',        value: 'hp8 - HP West European'},
+                                      {name:'keybcs2', value: 'keybcs2 - DOS Kamenicky Czech-Slovak'},
+                                      {name:'koi8r',    value:'koi8r - KOI8-R Relcom Russian'},
+                                       {name:'koi8u',   value: 'koi8u - KOI8-U Ukrainian'},
+                                      {name:'latin1',   value:'latin1 - cp1252 West European'},
+                                      {name:'latin2',   value:'latin2 - ISO 8859-2 Central European'},
+                                      {name:'latin5',   value:'latin5 - ISO 8859-9 Turkish'},
+                                      {name:'latin7',  value: 'atin7 - ISO 8859-13 Baltic'},
+                                      {name:'macce',   value: 'macce - Mac Central European'},
+                                      {name:'macroman', value:'macroman - Mac West European'},
+                                      {name:'sjis',        value:'sjis - Shift-JIS Japanese'},
+                                      {name:'swe7',        value:'swe7 - 7bit Swedish'},
+                                      {name:'tis620',  value: 'tis620 - TIS620 Thai'},
+                                      {name:'ucs2',        value:'ucs2 - UCS-2 Unicode'},
+                                      {name:'ujis',        value:'ujis - EUC-JP Japanese'},
+                                      {name:'utf8',        value:'utf8 - UTF-8 Unicode'}
+                                    ]}),
+                                onSelect: function(record, index){
+                                dbconnForm.getForm().findField('DBS_ENCODE').setValue(record.data.value);
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                     this.collapse();
+                                    }
                              }]
           
                       },{
@@ -860,7 +866,12 @@ ProcessOptions.prototype.dbConnection = function()
                                                       {name:"WIN1252",     value:"WIN1252"},
                                                       {name:"WIN1256",     value:"WIN1256"},
                                                       {name:"WIN1258",     value:"WIN1258"}
-                                                   ]})
+                                                   ]}),
+                                               onSelect: function(record, index){
+                                dbconnForm.getForm().findField('DBS_ENCODE').setValue(record.data.value);
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                     this.collapse();
+                                    }
                                }]
                       },{
                          xtype: 'fieldset',
@@ -883,7 +894,12 @@ ProcessOptions.prototype.dbConnection = function()
                                          fields : ['name', 'value'],
                                   data   :  [
                                             {name:'utf8',    value: 'utf8'}
-                                  ]})
+                                  ]}),
+                              onSelect: function(record, index){
+                                dbconnForm.getForm().findField('DBS_ENCODE').setValue(record.data.value);
+                                this.setValue(record.data[this.valueField || this.displayField]);
+                                     this.collapse();
+                                    }
                                }]
                   
                       },{
@@ -925,7 +941,11 @@ ProcessOptions.prototype.dbConnection = function()
                         id : 'DBS_UID',
                         xtype: 'hidden',
                         name : 'DBS_UID'
-                      },{}], 
+                      },{
+                        id : 'DBS_ENCODE',
+                        xtype: 'hidden',
+                        name : 'DBS_ENCODE'
+                      }],
          buttons: [{text:'Test Connection',
                                    id: 'test',
                                     //formbind: true,
@@ -1000,7 +1020,7 @@ ProcessOptions.prototype.dbConnection = function()
                        url   : '../dbConnections/dbConnectionsAjax.php',
                        method: 'POST',
                        params:{
-                               DBS_uid  :dbConnUID,
+                               dbs_uid  :dbConnUID,
                                type     :Type,
                                server   :Server,
                                db_name  :DatabaseName,
@@ -1523,7 +1543,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
        buttonAlign : 'center'
     });
 
-  var inputDocColumns = new Ext.grid.ColumnModel({
+var inputDocColumns = new Ext.grid.ColumnModel({
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
@@ -1553,15 +1573,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     editor: new Ext.form.TextField({
                     //allowBlank: false
                     })
-                },
-                {
-                    sortable: false,
-                    renderer: function(val, meta, record)
-                       {
-                            return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.INP_DOC_UID);
-                       }
                 }
-
                 ]
         });
 
@@ -1800,20 +1812,21 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         monitorValid    :true,
         labelWidth      : 100,
         defaults        :{autoScroll:true},
-        width           : 500,
+        width           : 450,
 
         items           :[{
                     xtype       : 'fieldset',
                     layout      : 'form',
                     border      :true,
                     title       : 'Output Document Information',
-                    width       : 500,
+                    width       : 450,
                     collapsible : false,
                     labelAlign  : '',
                     items       :[{
                                     xtype       : 'textfield',
                                     fieldLabel  : 'Title',
                                     allowBlank  : false,
+                                    width       : 300,
                                     blankText   : 'Enter Title of Output Document',
                                     name        : 'OUT_DOC_TITLE'
                                 },{
@@ -1830,12 +1843,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                             fieldLabel  : 'Filename generated',
                                             name        : 'OUT_DOC_FILENAME',
                                             allowBlank  : false,
+                                            width       : 250,
                                             blankText   : 'Select Filename generated',
                                             anchor      : '100%'
                                          }]
                                 },{
                                     columnWidth:.4,
                                     layout: 'form',
+                                    width       : 200,
                                     border:false,
                                     items: [{
                                             xtype:'button',
@@ -1857,7 +1872,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                     fieldLabel      : 'Description',
                                     name            : 'OUT_DOC_DESCRIPTION',
                                     height          : 120,
-                                    width           : 280
+                                    width           : 300
                                 },{
                                     width           :150,
                                     xtype           :'combo',
@@ -1915,19 +1930,23 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 },{
                                                     xtype       : 'numberfield',
                                                     fieldLabel  : 'Left Margin',
-                                                    name        : 'OUT_DOC_LEFT_MARGIN'
+                                                    name        : 'OUT_DOC_LEFT_MARGIN',
+                                                    width       : 50
                                                 },{
                                                     xtype       : 'numberfield',
                                                     fieldLabel  : 'Right Margin',
-                                                    name        : 'OUT_DOC_RIGHT_MARGIN'
+                                                    name        : 'OUT_DOC_RIGHT_MARGIN',
+                                                    width       : 50
                                                 },{
                                                     xtype       : 'numberfield',
                                                     fieldLabel  : 'Top Margin',
-                                                    name        : 'OUT_DOC_TOP_MARGIN'
+                                                    name        : 'OUT_DOC_TOP_MARGIN',
+                                                    width       : 50
                                                 },{
                                                     xtype       : 'numberfield',
                                                     fieldLabel  : 'Bottom Margin',
-                                                    name        : 'OUT_DOC_BOTTOM_MARGIN'
+                                                    name        : 'OUT_DOC_BOTTOM_MARGIN',
+                                                    width       : 50
                                                 },{
                                                     width           :150,
                                                     xtype           :'combo',
@@ -1947,7 +1966,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                                                     {name : 'DOC',   value: 'DOC'},
                                                                     {name : 'PDF',   value: 'PDF'}]})
                 },{
-                    width           : 150,
+                    width           : 50,
                     xtype           :'combo',
                     mode            :'local',
                     editable        :false,
@@ -1975,7 +1994,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 //id          : 'DestPath',
                                 fieldLabel  : 'Destination Path',
                                 name        : 'OUT_DOC_DESTINATION_PATH',
-                                anchor      :'100%'
+                                anchor      :'100%',
+                                width       : 250
                         }]
                     },{
                         columnWidth     :.4,
@@ -2007,7 +2027,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         //id          :'tags',
                         fieldLabel  : 'Tags',
                         name        : 'OUT_DOC_TAGS',
-                        anchor      :'100%'
+                        anchor      :'100%',
+                        width       : 250
                         }]
                     },{
                         columnWidth :.4,
@@ -2154,9 +2175,9 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var newOPWindow = new Ext.Window({
         title       : _('ID_OUTPUT_DOCUMENTS'),
-        width       : 550,
+        width       : 500,
         defaults    :{autoScroll:true},
-        height      : 450,
+        height      : 420,
         minWidth    : 200,
         minHeight   : 150,
         layout      : 'fit',
@@ -2364,7 +2385,7 @@ var reportForm =new Ext.FormPanel({
       maximizable: true,
       width:450,
       height:380,
-      frame:true,
+      frame:false,
       monitorValid : true,
       plain: true,
       buttonAlign: 'center',
@@ -2559,3 +2580,4 @@ ProcessOptions.prototype.addTriggers= function()
   
 
 }
+

@@ -1850,3 +1850,129 @@ MyWorkflow.prototype.redrawAnnotationText = function(fig,sType)
  MyWorkflow.prototype.createUIDButton = function (value) {
          Ext.MessageBox.alert ('Info','UID: '+value);
     }
+
+MyWorkflow.prototype.ExtVariables = function(fieldName,rowData)
+{
+  var pro_uid = workflow.getUrlVars();
+  var varFields = Ext.data.Record.create([
+            {
+                name: 'variable',
+                type: 'string'
+            },
+            {
+                name: 'type',
+                type: 'string'
+            },
+            {
+                name: 'label',
+                type: 'string'
+            }
+       ]);
+  var varStore = '';
+  varStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : varFields,
+            proxy        : new Ext.data.HttpProxy({
+                   url   : 'proxyVariable?pid='+pro_uid+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
+            })
+          });
+  //varStore.load();
+
+  var varColumns = new Ext.grid.ColumnModel({
+            columns: [
+                new Ext.grid.RowNumberer(),
+                    {
+                        id: 'FLD_NAME',
+                        header: 'Variable',
+                        dataIndex: 'variable',
+                        width: 170,
+                        editable: false,
+                        sortable: true
+                    },{
+                        id: 'PRO_VARIABLE',
+                        header: 'Label',
+                        dataIndex: 'label',
+                        width: 150,
+                        sortable: true
+                    }
+                ]
+        });
+
+  var varForm = new Ext.FormPanel({
+        labelWidth: 100,
+        monitorValid : true,
+        width     : 400,
+        height    : 350,
+        renderer: function(val){return '<table border=1> <tr> <td> @@ </td> <td> Replace the value in quotes </td> </tr> </table>';},
+        items:
+            {
+                xtype:'tabpanel',
+                activeTab: 0,
+                defaults:{
+                    autoHeight:true
+                },
+                items:[{
+                        title:'All Variables',
+                        id   :'allVar',
+                        layout:'form',
+                        listeners: {
+                            activate: function(tabPanel){
+                                                        // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+                                                        var link = 'proxyVariable?pid='+pro_uid+'&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                        varStore.proxy.setUrl(link, true);
+                                                        varStore.load();
+                            }
+                        },
+                        items:[{
+                                xtype: 'grid',
+                                ds: varStore,
+                                cm: varColumns,
+                                width: 380,
+                                autoHeight: true,
+                                //plugins: [editor],
+                                //loadMask    : true,
+                                loadingText : 'Loading...',
+                                border: false,
+                                listeners: {
+                                 //rowdblclick: alert("ok"),
+                                 rowdblclick: function(){
+                                           var getObjectGridRow = workflow.gridObjectRowSelected;
+                                           var FieldSelected    = workflow.gridField;
+
+                                           //getting selected row of variables
+                                           var rowSelected      = this.getSelectionModel().getSelected();
+                                           var rowLabel         = rowSelected.data.variable;
+
+                                           //Assigned new object with condition
+                                           if(typeof rowData.colModel != 'undefined')
+                                               rowData.colModel.config[3].editor.setValue(rowLabel);
+                                           //Assigning / updating Condition for a row
+                                           else
+                                               rowData[0].set(fieldName,rowLabel);
+                                      }
+                                }
+                                 }]
+                }]
+            }
+});
+  var window = new Ext.Window({
+        title: 'Variables',
+        collapsible: false,
+        maximizable: false,
+        scrollable: true,
+        width: 400,
+        height: 350,
+        minWidth: 200,
+        minHeight: 150,
+        autoScroll: true,
+        layout: 'fit',
+        plain: true,
+        buttonAlign: 'center',
+        items: [varForm]
+  });
+    window.show();
+
+}

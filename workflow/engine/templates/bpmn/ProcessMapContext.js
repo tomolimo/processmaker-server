@@ -6,32 +6,33 @@ ProcessMapContext.prototype.type="ProcessMap";
 
 ProcessMapContext.prototype.editProcess= function()
 {
-        var editProcessData     = workflow.processEdit;
-        var processCategoryData = workflow.processCategory;
-        var debug               = editProcessData.PRO_DEBUG;
-        var pro_category        = editProcessData.PRO_CATEGORY;
-        var pro_category_label  = editProcessData.PRO_CATEGORY_LABEL;
-        var checkDebug = true;
-        if(debug  == '0')
-            checkDebug = false;
-
-            var processCalendar = new Array();
-            processCalendar[0]  = new Array();
-            processCalendar[1]  = new Array();
-
-            processCalendar[0].name  = 'None';
-            processCalendar[0].value = '';
-            processCalendar[1].name  = 'Default';
-            processCalendar[1].value = '00000000000000000000000000000001';
+         var pro_uid = workflow.getUrlVars();
+        //var editProcessData     = workflow.processEdit;
+       // var processCategoryData = workflow.processCategory;
+        //var debug               = editProcessData.PRO_DEBUG;
+       // var pro_category        = editProcessData.PRO_CATEGORY;
+        //var pro_category_label  = editProcessData.PRO_CATEGORY_LABEL;
+            //var checkdebug = true;
+      //if(debug  == '0')
+         // checkDebug = false;
+//
+//            var processCalendar = new Array();
+//            processCalendar[0]  = new Array();
+//            processCalendar[1]  = new Array();
+//
+//            processCalendar[0].name  = 'None';
+//            processCalendar[0].value = '';
+//            processCalendar[1].name  = 'Default';
+//            processCalendar[1].value = '00000000000000000000000000000001';
 
         //var processName = processInfo.title.label
         var editProcess = new Ext.FormPanel({
         labelWidth: 75, // label settings here cascade unless overridden
-        frame:true,
-        monitorValid : true,
-        width: 500,
+        frame:false,
+        buttonAlign: 'center',
+        //monitorValid : true,
+        width: 450,
         height: 400,
-        defaults: {width: 350},
         defaultType: 'textfield',
         items: [{
                 xtype:'fieldset',
@@ -43,88 +44,91 @@ ProcessMapContext.prototype.editProcess= function()
                 defaultType: 'textfield',
                 items: [{
                         fieldLabel: 'Title',
-                        name: 'title',
-                        value: editProcessData.PRO_TITLE,
+                        name: 'PRO_TITLE',
+                        width: 300,
+                        //value: editProcessData.PRO_TITLE,
                         allowBlank:false
                     },{
                         xtype: 'textarea',
                         fieldLabel: 'Description',
-                        name: 'description',
-                        value: editProcessData.PRO_DESCRIPTION,
+                        name: 'PRO_DESCRIPTION',
+                        //value: editProcessData.PRO_DESCRIPTION,
                         width: 300,
                         height : 150
 
                     },{
-                        width:          100,
+                        width: 300,
                         xtype:          'combo',
                         mode:           'local',
-                        value:          editProcessData.PRO_CALENDAR,
+                        //value:          editProcessData.PRO_CALENDAR,
                         forceSelection: true,
                         triggerAction:  'all',
                         editable:       false,
                         fieldLabel:     'Calendar',
-                        name:           'calendar',
+                        name:           'PRO_CALENDAR',
                         hiddenName:     'calendar',
                         displayField:   'name',
                         valueField:     'value',
                         store:          new Ext.data.JsonStore({
                                                 fields : ['name', 'value'],
-                                                data   : processCalendar
+                                                data   :  [
+                                            {name:'none',    value: 'none'},
+                                             {name:'default',    value: 'default'}
+                                  ]
                                             })
                     }, {
-                        width:          100,
+                        width:          300,
                         xtype:          'combo',
                         mode:           'local',
-                        value:          editProcessData.PRO_CATEGORY,
+                        //value:          editProcessData.PRO_CATEGORY,
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
                         fieldLabel:     'Category',
-                        name:           'category',
+                        name:           'PRO_CATEGORY',
                         hiddenName:     'category',
                          displayField:   'CATEGORY_NAME',
                         valueField:     'CATEGORY_UID',
                         store:          new Ext.data.JsonStore({
-                                                fields : ['CATEGORY_NAME', 'CATEGORY_UID'],
-                                                data   :processCategoryData
+                                                fields : ['CATEGORY_NAME', 'CATEGORY_UID']
+                                                //data   :processCategoryData
                                             })
                     },{
                         xtype: 'checkbox',
                         fieldLabel: 'Debug',
-                        name: 'debug',
-                        checked:checkDebug
+                        name: 'PRO_DEBUG',
+                        checked:workflow.checkdebug
                     }
                 ]
         }],buttons: [{
             text: 'Save',
             formBind    :true,
-            handler: function(){
+            handler: function(form, action){
                 //waitMsg: 'Saving...',       // Wait Message
-                  var fields          = editProcess.items.items;
-                  var pro_title       = fields[0].items.items[0].getValue();
-                  var pro_description = fields[0].items.items[1].getValue();
-                  var pro_calendar    = fields[0].items.items[2].getValue();
-                  var pro_category    = fields[0].items.items[3].getValue();
-                  var pro_debug       = fields[0].items.items[4].getValue();
-                  if(pro_debug == true)
-                     pro_debug = '1';
-                  else
-                     pro_debug = '0';
-
-                  var pro_uid = workflow.getUrlVars();
-
+                  //var fields          = editProcess.items.items;
+                  var getForm         = editProcess.getForm().getValues();
+                  var pro_title       = getForm.PRO_TITLE;
+                  var pro_description = getForm.PRO_DESCRIPTION;
+                  var pro_calendar    = getForm.PRO_CALENDAR;
+                  var pro_category    = getForm.PRO_CATEGORY;
+                  var pro_debug       = getForm.PRO_DEBUG;
+                  
+                 if(pro_debug == 'on')
+                     pro_debug = 1;
+                 else
+                    pro_debug = 0;
                   var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
                   Ext.Ajax.request({
                         url: "processes_Ajax.php"+ urlparams,
                         success: function(response) {
-                            workflow.main.items.items[2].setTitle(fields[0].items.items[0].getValue());
-                            window.hide();
-                        },
-                        failure: function(){
-                            Ext.Msg.alert ('Failure');
+                            Ext.MessageBox.alert ('Status','Process Information Saved Successfully.');
+                            //window.hide();
                         }
+                        
                     });
+                    window.hide();
              }
+
         },{
             text: 'Cancel',
             handler: function(){
@@ -133,16 +137,33 @@ ProcessMapContext.prototype.editProcess= function()
              }
         }]
     });
+console.log(workflow.checkdebug);
+     editProcess.form.load({
+        url:'proxyExtjs.php?pid='+pro_uid+'&action=process_Edit',
+        method:'GET',
+        waitMsg:'Loading',
+        success:function(form, action) {
+            if(action.result.data.PRO_DEBUG== 0)
+               workflow.checkdebug = false;
+           else
+               workflow.checkdebug = true;
+
+                           window.show();
+                      },
+        failure:function(form, action) {
+            Ext.MessageBox.alert('Message', 'Load failed');
+        }
+    });
 
     editProcess.render(document.body);
-    workflow.editProcessForm = editProcess;
+    //workflow.editProcessForm = editProcess;
 
      var window = new Ext.Window({
         title: 'Edit Process',
         collapsible: false,
         maximizable: false,
-        width: 500,
-        height: 400,
+        width: 480,
+        height: 380,
         minWidth: 300,
         minHeight: 200,
         layout: 'fit',
@@ -163,7 +184,7 @@ ProcessMapContext.prototype.exportProcess= function()
 
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
-  frame         : true,
+  frame         : false,
   monitorValid : true,
   title         : '',
   width         : 500,
@@ -336,7 +357,11 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'OP_GROUP_USER',type: 'string'},
             { name: 'OBJ_NAME',type: 'string'},
             { name: 'OP_ACTION',type: 'string'},
-            { name: 'USR_FULLNAME',type: 'string'}
+            { name: 'USR_FULLNAME',type: 'string'},
+            { name: 'DYNAFORM_NAME',type: 'string'},
+            { name: 'INPUT_NAME',type: 'string'},
+            { name: 'OUTPUT_NAME',type: 'string'}
+
 
         ]);
 
@@ -406,6 +431,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     },{
                         id: 'OBJECT',
                         header: 'Object',
+                        name:'OBJECT',
                         dataIndex: 'OBJECT',
                         width: 100,
                         sortable: true,
@@ -465,7 +491,14 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                form.findField('OP_PARTICIPATE').setValue('Yes');
                            else
                                form.findField('OP_PARTICIPATE').setValue('No');
-                        },
+
+                           if(action.result.data.OP_OBJ_TYPE == 'DYNAFORM')
+                               Ext.getCmp('dynaform').show();
+                           if(action.result.data.OP_OBJ_TYPE == 'INPUT')
+                               Ext.getCmp('inputdoc').show();
+                           if(action.result.data.OP_OBJ_TYPE == 'OUTPUT')
+                               Ext.getCmp('outputdoc').show();
+                       },
                         failure:function(form, action) {
                             Ext.MessageBox.alert('Message', 'Load failed');
                         }
@@ -509,8 +542,39 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         });
         
   var tb = new Ext.Toolbar({
-            items: [btnCreate,btnRemove,btnEdit]
-        });
+            items: [btnCreate,btnRemove,btnEdit,SearchText,btnSearch]
+      
+  });
+      
+  var SearchText = new Ext.TextField ({
+        id: 'searchTxt',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 150,
+        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER) {
+              doSearch();
+            }
+          }
+        }
+      });
+
+
+  var btnSearch = new Ext.Button({
+        text:'X',
+        ctCls:'pm_search_x_button',
+        handler: function(){
+          //store.setBaseParam( 'category', '<reset>');
+          //store.setBaseParam( 'processName', '');
+          //store.load({params:{start : 0 , limit : '' }});
+          Ext.getCmp('searchTxt').setValue('');
+          //comboCategory.setValue('');
+          //store.reload();
+        }
+      });
+       
 
   var PermissionGrid = new Ext.grid.GridPanel({
         store: PermissionStore,
@@ -613,7 +677,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
       width:360,
       //height: 30,
       monitorValid : true,
-      frame:true,
+      frame:false,
       plain: true,
       buttonAlign: 'center',
       items:[{
@@ -760,7 +824,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     autoload: true,
                     width:200,
                     store: dynaformStore,
-                    name: 'OBJ_NAME',
+                    name: 'DYNAFORM_NAME',
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
@@ -783,7 +847,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype: 'combo',
                     fieldLabel: 'Input Document',
                     //hiddenName:'UID',
-                    name: 'OBJ_NAME',
+                    name: 'INPUT_NAME',
                     width:200,
                     autoload: true,
                     store: inputDocStore,
@@ -812,7 +876,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     width:200,
                     autoload: true,
                     store: outputDocStore,
-                    name: 'OBJ_NAME',
+                    name: 'OUTPUT_NAME',
                     valueField:'LABEL',
                     displayField:'LABEL',
                     triggerAction: 'all',
@@ -1681,7 +1745,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
 
    var PropertiesForm = new Ext.FormPanel({
         labelWidth: 75, // label settings here cascade unless overridden
-        frame:true,
+        frame:false,
         monitorValid : true,
         width: 300,
         height: 300,
@@ -2015,13 +2079,18 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
           dataIndex : 'CTO_TYPE_OBJ',
           editable  : false
         },{
-          header    : 'Condition',
-          dataIndex : 'CTO_CONDITION',
-          name      : 'CTO_CONDITION',
-          editable: true,
-          editor: new Ext.form.TextField({
-            allowBlank: true
-          })
+            header : 'Condition',
+            dataindex: 'CTO_CONDITION',
+            name : 'CTO_CONDITION',
+            //xtype: 'textfield',
+            editable  : true
+        },{
+            sortable: false,
+            renderer: function(val, meta, record)
+               {
+                   var recordData = Ext.util.JSON.encode(record);
+                    return String.format("<input type='button' value='@@' onclick=workflow.ExtVariables('CTO_CONDITION','{0}');>",recordData);
+              }
         }],
       sm: new Ext.grid.RowSelectionModel({
         singleSelect: true,
@@ -2118,7 +2187,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       maximizable : false,
       width       : 550,
       defaults    :{ autoScroll:true },
-      height      : 450,
+      height      : 400,
       minWidth    : 200,
       minHeight   : 150,
       layout      : 'fit',
@@ -2192,7 +2261,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                 xtype:'tabpanel',
                 activeTab: 0,
                 defaults:{
-                    autoHeight:true,
+                    autoHeight:true
                 },
                 items:[{
                         title:'All Variables',

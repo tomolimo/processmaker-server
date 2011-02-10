@@ -218,13 +218,9 @@ switch($_GET['action'])
                array_shift($rows);
                break;
 
-            
-
-
-                    
-                
-
-    }
+      case 'process_Edit':
+  	  $rows = $oProcessMap->editProcessNew($_GET['pid']);
+     }
    //$result['totalCount'] = count($rows);
    //$result['data'] = $rows;
    //print json_encode( $result ) ;

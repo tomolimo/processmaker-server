@@ -167,11 +167,6 @@ if ( isset ($_REQUEST['action']) ) {
           $sOutput = $oJSON->encode($sOutput);
           echo $sOutput;
           break;
-      case 'process_Edit':
-  	  $sOutput = $oProcessMap->editProcessNew($oData->pro_uid);
-          $sOutput = $oJSON->encode($sOutput);
-          echo $sOutput;
-          break;
       case 'loadCategory':
   	  $sOutput = $oProcessMap->loadProcessCategory();
           $sOutput = $oJSON->encode($sOutput);
