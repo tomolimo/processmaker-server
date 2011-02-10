@@ -2,6 +2,7 @@ var oLeyendsPanel;
 
 var showInformation = function()
 {
+/* Modal windows setting
  if (!Cse.panels.step)
  {
    Cse=new cases();
@@ -18,6 +19,8 @@ var showInformation = function()
  }
  else
  {
+*/
+/*
    Cse.panels.step.events.remove[1]=function()
    {
     var r = new leimnud.module.rpc.xmlhttp({
@@ -26,9 +29,24 @@ var showInformation = function()
   });
   r.make();
    };
-   Cse.panels.step.elements.title.innerHTML = G_STRINGS.ID_INFORMATION;
-   Cse.panels.step.clearContent();
-   Cse.panels.step.loader.show();
+*/
+  if(Cse.panels.step)
+    Cse.panels.step.remove();
+  Cse.panels.step =new leimnud.module.panel();
+  Cse.panels.step.options={
+    title    :G_STRINGS.ID_INFORMATION,
+    size     :{w:260,h:450},
+    position :{x:0,y:30,left:true},
+    control  :{close:true,resize:true},fx:{modal:false},
+    statusBar:false,
+    fx       :{shadow:true,modal:false}
+   }
+  Cse.panels.step.make();
+  Cse.panels.step.loader.show();
+
+///--   Cse.panels.step.elements.title.innerHTML = G_STRINGS.ID_INFORMATION;
+///--   Cse.panels.step.clearContent();
+///--   Cse.panels.step.loader.show();
    var oRPC = new leimnud.module.rpc.xmlhttp({
      url:  "cases_Ajax",
      args: "action=information&showWindow=information"
@@ -40,10 +58,11 @@ var showInformation = function()
      scs.evalScript();
    }.extend(this);
    oRPC.make();
- }
+///-- }
 };
 var showActions = function()
 {
+/* Modal windows setting
   if (!Cse.panels.step)
   {
     Cse=new cases();
@@ -60,6 +79,8 @@ var showActions = function()
   }
   else
   {
+*/
+/*
    Cse.panels.step.events.remove[1]=function()
    {
     var r = new leimnud.module.rpc.xmlhttp({
@@ -68,9 +89,24 @@ var showActions = function()
   });
   r.make();
    };
-    Cse.panels.step.elements.title.innerHTML = G_STRINGS.ID_ACTIONS;
-    Cse.panels.step.clearContent();
+*/
+    if(Cse.panels.step)
+      Cse.panels.step.remove();
+    Cse.panels.step =new leimnud.module.panel();
+    Cse.panels.step.options={
+      title    : G_STRINGS.ID_ACTIONS,
+      size     :{w:260,h:450},
+      position :{x:0,y:30,left:true},
+      control  :{close:true,resize:true},fx:{modal:false},
+      statusBar:false,
+      fx       :{shadow:true,modal:false}
+    }
+    Cse.panels.step.make();
     Cse.panels.step.loader.show();
+
+///--    Cse.panels.step.elements.title.innerHTML = G_STRINGS.ID_ACTIONS;
+///--    Cse.panels.step.clearContent();
+///--    Cse.panels.step.loader.show();
     var oRPC = new leimnud.module.rpc.xmlhttp({
       url:  "cases_Ajax",
       args: "action=actions&showWindow=actions"
@@ -82,7 +118,7 @@ var showActions = function()
      scs.evalScript();
     }.extend(this);
     oRPC.make();
-  }
+///--  }
 };
 /*var showKT = function()
 {
