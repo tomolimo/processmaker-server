@@ -1406,6 +1406,7 @@ function showRow( element ){
     var row=getRow(element);
     requiredFields = [];
     sRequiredFields = document.getElementById('DynaformRequiredFields').value.replace(/%27/gi, '"');
+    sRequiredFields = document.getElementById('DynaformRequiredFields').value.replace(/%39/gi, "'");    
     
     fields = new String(sRequiredFields);
     fields = stripslashes(fields);
@@ -1603,6 +1604,10 @@ var validateForm = function(sRequiredFields) {
   
   if( typeof(sRequiredFields) != 'object' || sRequiredFields.indexOf("%27") > 0 ){
     sRequiredFields = sRequiredFields.replace(/%27/gi, '"');
+  }
+  
+  if( typeof(sRequiredFields) != 'object' || sRequiredFields.indexOf("%39") > 0 ){
+    sRequiredFields = sRequiredFields.replace(/%39/gi, "'");
   }
 
     aRequiredFields = eval(sRequiredFields);
