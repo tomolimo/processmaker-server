@@ -127,11 +127,16 @@
   <MESSAGE4 type="phpvariable"/>
   <MESSAGE5 type="phpvariable"/>
   <JS type="javascript" replacetags="1"><![CDATA[
-  if((getField('USR_REPORTS_TO').value=='')||(getField('USR_REPORTS_TO').value==NULL)){
+ 
+  if((getField('USR_REPORTS_TO').value=='')){
   hideRowById ('USR_REPORTS_TO');
+  }else{  
+  showRowById ('USR_REPORTS_TO');
   }
-  if((getField('USR_DEPARTMENT').value=='')||(getField('USR_DEPARTMENT').value==NULL)){
+  if((getField('USR_DEPARTMENT').value=='')){
   hideRowById ('USR_DEPARTMENT'); 
+  }else{  
+  showRowById ('USR_DEPARTMENT');
   }
 
   var sUsername;
