@@ -1075,7 +1075,25 @@ switch ($_POST ['action']) {
 		        
 				G::RenderPage ( 'publish', 'raw' );
 				break;
+//add removeUserFromGroup
+case "removeUserFromGroup" :
+				$sessionId = $frm ["SESSION_ID"];
+				$userId = $frm ["USER_ID"];
+				$groupId = $frm ["GROUP_ID"];
+				$params = array ('sessionId' => $sessionId, 'userId' => $userId, 'groupId' => $groupId );
+				$result = $client->__SoapCall ( 'removeUserFromGroup', array ($params ) );
+				$G_PUBLISH = new Publisher ( );
+				$fields ['status_code'] = $result->status_code;
+				$fields ['message'] = $result->message;
+				$fields ['time_stamp'] = $result->timestamp;
+		                if( $result->status_code == 9 ){
+				    $_SESSION ['WS_SESSION_ID'] = '';
+				}
 
+				$G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'setup/wsShowResult', null, $fields );
+				G::RenderPage ( 'publish', 'raw' );
+				break;
+//end add
 			case "RemoveDocument" :
 				$appDocUid = $frm ["APP_DOC_UID"];
 				$sessionId = $frm ["SESSION_ID"];
@@ -1164,6 +1182,11 @@ switch ($_POST ['action']) {
                                 }
 
 //                              G::pr ( $_SESSION );
+                           if(!isset($_POST['form']['INPUT_DOCUMENT'])){
+                               $_POST['form']['INPUT_DOCUMENT'] = '';
+                           }
+
+
                                 if (isset($_SESSION['_DBArray']['inputDocument'])){
                                     foreach($_SESSION['_DBArray']['inputDocument'] as $inputDocument){
                                         if ($inputDocument['guid']==$_POST['form']['INPUT_DOCUMENT']){
@@ -1172,6 +1195,9 @@ switch ($_POST ['action']) {
                                     }
                                 } else {
                                     $doc_uid  = "default";
+                                }
+                                if(!isset($_SESSION['_DBArray']['WS_TMP_CASE_UID'])){
+                               $_SESSION['_DBArray']['WS_TMP_CASE_UID'] = '';
                                 }
                                 $usr_uid  = $_SESSION['USER_LOGGED'];
                                 $app_uid  = $_SESSION['_DBArray']['WS_TMP_CASE_UID'];
@@ -1235,4 +1261,5 @@ switch ($_POST ['action']) {
 	$G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
 	G::RenderPage ( 'publish', 'raw' );
 }
+
 
