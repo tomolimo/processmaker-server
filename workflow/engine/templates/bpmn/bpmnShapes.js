@@ -766,6 +766,7 @@ bpmnTask.prototype.addShapes = function (oStore) {
         yOffset = workflow.currentSelection.getY() - 10.5; //Setting new offset value when newShape is not Task i.e aligning gateways
     }
     workflow.subProcessName = 'Sub Process';
+    workflow.annotationName = 'Annotation';
     var newShape = eval("new " + oStore.newShapeName + "(workflow)");
     workflow.addFigure(newShape, xOffset, yOffset);
     //Assigning values to newShape Object for Saving Task automatically (Async Ajax Call)

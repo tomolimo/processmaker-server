@@ -540,6 +540,7 @@ win.on('move', function() {
           }
 
           workflow.task_width='';
+          workflow.annotationName='';
           NewShape = eval("new "+data.name+"(workflow)");
           NewShape.x = e.xy[0];
           NewShape.y = e.xy[1];

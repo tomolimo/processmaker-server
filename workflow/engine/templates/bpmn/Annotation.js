@@ -1,13 +1,10 @@
 bpmnAnnotation = function (oWorkflow) {
     VectorFigure.call(this);
    //Getting width and height from DB
-   if(typeof oWorkflow.anno_width != 'undefined' && typeof oWorkflow.anno_height != 'undefined')
-    {
+   if(typeof oWorkflow.anno_width != 'undefined' && typeof oWorkflow.anno_height != 'undefined'){
         this.width = oWorkflow.anno_width;
         this.height = oWorkflow.anno_height;
-    }
-   else
-    {
+    }else{
         this.width = 110;
         this.height = 60;
     }
