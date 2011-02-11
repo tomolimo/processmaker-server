@@ -260,5 +260,50 @@ class Groupwf extends BaseGroupwf {
     $c->add(ContentPeer::CON_LANG,  SYS_LANG );          
     return $c;   
   }
+
+  function getAll($start=null, $limit=null, $search=null)
+  {
+    $totalCount = 0;
+    $criteria = new Criteria('workflow');
+    $criteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $criteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+    $criteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $criteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+    $criteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
+    $criteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+    $criteria->add(ContentPeer::CON_LANG,SYS_LANG);
+    $criteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+
+    if ( $search ){
+      $criteria->add(ContentPeer::CON_VALUE,'%'.$search.'%',Criteria::LIKE);
+    }
+
+    $c = clone $criteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $dataset = GroupwfPeer::doSelectRS($c);
+    $dataset->next();
+    $rowCount = $dataset->getRow();
+
+    if( is_array($rowCount) )
+      $totalCount = $rowCount[0];
+
+    if( $start )
+      $criteria->setOffset($start);
+    if( $limit )
+      $criteria->setLimit($limit);
+
+    $rs = GroupwfPeer::doSelectRS($criteria);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    $rows = Array();
+    while( $rs->next() )
+      $rows[] = $rs->getRow();
+
+    $result->data = $rows;
+    $result->totalCount = $totalCount;
+
+    return $result;
+  }
   
 } // Groupwf

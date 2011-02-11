@@ -243,6 +243,7 @@ public function userExists($UsrUid)
     throw $oException;
   }
   }
+  
   function getAvailableUsersCriteria($sGroupUID = '')
   {
     try {
@@ -258,6 +259,70 @@ public function userExists($UsrUid)
     catch (exception $oError) {
       throw ($oError);
     }
+  }
+
+
+  /**
+   * Get all Active users
+   * 
+   * @return array of all active users
+   */
+  function getAll($start=null, $limit=null, $search=null)
+  {
+    $totalCount = 0;
+    $criteria = new Criteria('workflow');
+    $criteria->addSelectColumn(UsersPeer::USR_UID);
+    $criteria->addSelectColumn(UsersPeer::USR_USERNAME);
+    $criteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $criteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $criteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $criteria->addAscendingOrderByColumn ( UsersPeer::USR_LASTNAME );
+
+    if( $search ) {
+      $criteria->add(
+        $criteria->getNewCriterion(
+          UsersPeer::USR_USERNAME,
+          "%$search%", Criteria::LIKE
+        )->addOr(
+          $criteria->getNewCriterion(
+            UsersPeer::USR_FIRSTNAME,
+            "%$search%", Criteria::LIKE
+          )
+        )->addOr(
+          $criteria->getNewCriterion(
+            UsersPeer::USR_LASTNAME,
+            "%$search%", Criteria::LIKE
+          )
+        )
+      );
+    }
+
+    $c = clone $criteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $dataset = UsersPeer::doSelectRS($c);
+    $dataset->next();
+    $rowCount = $dataset->getRow();
+
+    if( is_array($rowCount) )
+      $totalCount = $rowCount[0];
+    
+    if( $start )
+      $criteria->setOffset($start);
+    if( $limit )
+      $criteria->setLimit($limit);
+      
+    $rs = UsersPeer::doSelectRS($criteria);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    $rows = Array();
+    while( $rs->next() )
+      $rows[] = $rs->getRow();
+
+    $result->data = $rows;
+    $result->totalCount = $totalCount;
+
+    return $result;
   }
 } // Users
 

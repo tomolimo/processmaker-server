@@ -142,19 +142,21 @@ Ext.onReady ( function() {
     layout    : "border",
     autoScroll: true,
     height    : 1000,
-    width     : 1300,
+    width     : PMExt.getBrowser().screen.width,
     //items   : [west, north, center]
     items   : [north, center]
   });
   
 
-  var designaerToolbar = new Ext.Window({
-    id: 'designaerToolbar',
+  var designerToolbarHeight = 60;
+  var designerToolbarWidth  = 300;
+  var designerToolbar = new Ext.Window({
+    id: 'designerToolbar',
     //title: '<span style="font-size:10px; font-weight:bold; align:center;">&nbsp;&nbsp;</span>',
     headerAsText: true,
-    width: 320,
-    height:60,
-    x: 0,
+    width: designerToolbarWidth,
+    height: designerToolbarHeight,
+    x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
     y: 0,
     minimizable: false,
     maximizable: false,
@@ -181,89 +183,351 @@ Ext.onReady ( function() {
       <p id="x-shapes-milestone" title="Milestone" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
     </div>'
   });
-  designaerToolbar.on('minimize',function(w){
+  designerToolbar.on('minimize',function(w){
     //console.debug('minimizing...');
     if( w.collapsed )
-      designaerToolbar.expand();
+      designerToolbar.expand();
     else
-      designaerToolbar.collapse(); //collapse the window
+      designerToolbar.collapse(); //collapse the window
     
   });
   
-  designaerToolbar.show();
+  designerToolbar.show();
 
+  // custom variables
+  designerToolbar._posRelToView = designerToolbar.getPosition(true);
+  designerToolbar._scrollPosTimer = false;
+  designerToolbar._moveBlocker = false;
+  designerToolbar.show();
+  var divScroll = document.body;
 
-var win = Ext.getCmp('designaerToolbar');
-var divScroll = document.body;
-
-// custom variables
-win._posRelToView = win.getPosition(true);
-win._scrollPosTimer = false;
-win._moveBlocker = false;
-win.show();
-
-
-
-// save relative pos to view when moving (for scrolling event below)
-// also, manually do a constrain, else the win would be lost if moved outside the view
-win.on('move', function() {
+  // save relative pos to view when moving (for scrolling event below)
+  // also, manually do a constrain, else the win would be lost if moved outside the view
+  designerToolbar.on('move', function() {
     // lock function (because we move the window again inside)
-    if (win._moveBlocker) return;
-    win._moveBlocker = true;
+    if (designerToolbar._moveBlocker) return;
+    designerToolbar._moveBlocker = true;
 
-    var winPos = win.getPosition(true);
-    win._posRelToView = [winPos[0] - divScroll.scrollLeft, winPos[1] - divScroll.scrollTop];
+    var winPos = designerToolbar.getPosition(true);
+    designerToolbar._posRelToView = [winPos[0] - divScroll.scrollLeft, winPos[1] - divScroll.scrollTop];
 
     // manually do what constrain should do if it worked as assumed
     var layersize = [Ext.get(divScroll).getWidth(), Ext.get(divScroll).getHeight()];
-    var windowsize = [win.getSize().width, win.getSize().height];
+    var windowsize = [designerToolbar.getSize().width, designerToolbar.getSize().height];
     // assumed width of the scrollbar (true for windows 7) plus some padding to be sure
     var scrollSize = 17 + 5;
-    if (win._posRelToView[0] < 0) { // too far left
-        win.setPosition(divScroll.scrollLeft, winPos[1]);
-        win._posRelToView = [0, win._posRelToView[1]];
-    } else if (win._posRelToView[0] >= (layersize[0] - windowsize[0])) { // too far right
-        win.setPosition(((divScroll.scrollLeft + layersize[0]) - windowsize[0] - scrollSize), winPos[1]);
-        win._posRelToView = [(layersize[0] - windowsize[0] - scrollSize), win._posRelToView[1]];
+    if (designerToolbar._posRelToView[0] < 0) { // too far left
+        designerToolbar.setPosition(divScroll.scrollLeft, winPos[1]);
+        designerToolbar._posRelToView = [0, designerToolbar._posRelToView[1]];
+    } else if (designerToolbar._posRelToView[0] >= (layersize[0] - windowsize[0])) { // too far right
+        designerToolbar.setPosition(((divScroll.scrollLeft + layersize[0]) - windowsize[0] - scrollSize), winPos[1]);
+        designerToolbar._posRelToView = [(layersize[0] - windowsize[0] - scrollSize), designerToolbar._posRelToView[1]];
     }
 
-    winPos = win.getPosition(true); // update pos
-    if (win._posRelToView[1] < 0) { // too high up
-        win.setPosition(winPos[0], divScroll.scrollTop);
-        win._posRelToView = [win._posRelToView[0], 0];
-    } else if (win._posRelToView[1] >= layersize[1]) { // too low
-        win.setPosition(winPos[0], ((divScroll.scrollTop + layersize[1]) - windowsize[1] - scrollSize));
-        win._posRelToView = [win._posRelToView[0], (layersize[1] - windowsize[1] - scrollSize)];
+    winPos = designerToolbar.getPosition(true); // update pos
+    if (designerToolbar._posRelToView[1] < 0) { // too high up
+        designerToolbar.setPosition(winPos[0], divScroll.scrollTop);
+        designerToolbar._posRelToView = [designerToolbar._posRelToView[0], 0];
+    } else if (designerToolbar._posRelToView[1] >= layersize[1]) { // too low
+        designerToolbar.setPosition(winPos[0], ((divScroll.scrollTop + layersize[1]) - windowsize[1] - scrollSize));
+        designerToolbar._posRelToView = [designerToolbar._posRelToView[0], (layersize[1] - windowsize[1] - scrollSize)];
     }
 
     // release function
-    win._moveBlocker = false;
-});
-
-
-
-  Ext.fly(document).on("scroll", function(){
-    //console.log("body scrolled");
-    //alert(document.body.scrollTop);
-    
-    
-    //var _posRelToView = win.getPosition(true);
-
-    //alert(win.x +'   '+ win.y);
-    //win.setPosition(_posRelToView[0] + divScroll.scrollLeft, _posRelToView[1] + divScroll.scrollTop)
-
-
-
-    if (win._scrollPosTimer) {
-        clearTimeout(win._scrollPosTimer);
-    }
-    win._scrollPosTimer = setTimeout(function() {
-        win.setPosition(win._posRelToView[0] + divScroll.scrollLeft, win._posRelToView[1] + divScroll.scrollTop);
-    }, 100);
-    
+    designerToolbar._moveBlocker = false;
   });
 
-   
+  ////
+  usersPanelStart = 0;
+  usersPanelLimit = 11;
+  
+  var usersStore = new Ext.data.Store( {
+    autoLoad: true,
+    proxy : new Ext.data.HttpProxy({
+      url: '../processes/ajaxListener?action=getUsers&start='+usersPanelStart+'&limit='+usersPanelLimit
+    }),
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'USR_UID'},
+        {name : 'USER'},
+        {name : 'USR_USERNAME'},
+        {name : 'USR_FIRSTNAME'},
+        {name : 'USR_LASTNAME'}
+      ]
+    })
+  });
+  
+  var usersGrid = new Ext.grid.GridPanel({
+    id: 'usersGrid',
+    title : 'Users',
+    stateful : true,
+    stateId : 'usersGrid',
+    enableColumnResize: true,
+    enableHdMenu: true,
+    //frame:false,
+    //columnLines: true,
+    enableDragDrop: true,
+    viewConfig: {
+      forceFit:true
+    },
+
+    cm: new Ext.grid.ColumnModel({
+      defaults: {
+          width: 200,
+          sortable: true
+      },
+      columns: [
+        {header: 'USR_UID', id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+        {header: 'USER', dataIndex: 'USER', width: 300, renderer:function(v,p,r){
+          return v; //String.format("<font color='green'>{0}</font>", v);
+        }}
+      ]
+    }),
+    store: usersStore,
+    listeners: {
+      render: function(){
+        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+      }
+    },
+    tbar:[
+      //'->',
+      new Ext.form.TextField ({
+        id: 'usersSearchTxt',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 230,
+        emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER)
+              usersSearch();
+          }
+        }
+      }),{
+        text:'X',
+        ctCls:'pm_search_x_button',
+        handler: function(){
+          usersStore.setBaseParam( 'search', '');
+          usersStore.load({params:{start : 0 , limit :  usersPanelLimit}});
+          Ext.getCmp('usersSearchTxt').setValue('');
+        }
+      },{
+        text:TRANSLATIONS.ID_SEARCH,
+        handler: usersSearch
+      }
+    ],
+    bbar: [new Ext.PagingToolbar({
+      pageSize: usersPanelLimit,
+      store: usersStore,
+      displayInfo: true,
+      displayMsg: '{0} - {1} of {2}',
+      emptyMsg: ""
+    })]
+  });
+
+
+  var groupsStore = new Ext.data.Store( {
+    autoLoad: true,
+    proxy : new Ext.data.HttpProxy({
+      url: '../processes/ajaxListener?action=getGroups&start='+usersPanelStart+'&limit='+usersPanelLimit
+    }),
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'GRP_UID'},
+        {name : 'CON_VALUE'}
+      ]
+    })
+  });
+
+  var groupsGrid = new Ext.grid.GridPanel({
+    id: 'groupsGrid',
+    title : 'Groups',
+    stateful : true,
+    stateId : 'groupsGrid',
+    //enableColumnResize: true,
+    //enableHdMenu: true,
+    frame:false,
+    //columnLines: true,
+    height: 200,
+    enableDragDrop: true,
+    viewConfig: {
+      forceFit:true
+    },
+
+    cm: new Ext.grid.ColumnModel({
+      defaults: {
+          width: 200,
+          sortable: true
+      },
+      columns: [
+        {header: '', id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
+        {header: 'Group', dataIndex: 'CON_VALUE', width: 300, renderer:function(v,p,r){
+          return v; //String.format("<font color='green'>{0}</font>", v);
+        }}
+      ]
+    }),
+    store: groupsStore,
+    listeners: {
+      render: function(){
+        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+      }
+    },
+    tbar:[
+      //'->',
+      new Ext.form.TextField ({
+        id: 'groupsSearchTxt',
+        ctCls:'pm_search_text_field',
+        allowBlank: true,
+        width: 230,
+        emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
+        listeners: {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER)
+              groupsSearch();
+          }
+        }
+      }),{
+        text:'X',
+        ctCls:'pm_search_x_button',
+        handler: function(){
+          groupsStore.setBaseParam( 'search', '');
+          groupsStore.load({params:{start : 0 , limit :  usersPanelLimit}});
+          Ext.getCmp('groupsSearchTxt').setValue('');
+        }
+      },{
+        text:TRANSLATIONS.ID_SEARCH,
+        handler: groupsSearch
+      }
+    ],
+    bbar: [new Ext.PagingToolbar({
+      pageSize: usersPanelLimit,
+      store: groupsStore,
+      displayInfo: true,
+      displayMsg: '{0} - {1} of {2}',
+      emptyMsg: ""
+    })]
+  });
+  
+
+  var usersPanel = new Ext.Window({
+    id: 'usersPanel',
+    title: '<span style="font-size:10px; font-weight:bold; align:center;">&nbsp;Actors</span>',
+    headerAsText: true,
+    collapsed : true,
+    width: 302,
+    height:380,
+    x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
+    y: designerToolbarHeight + 2,
+    minimizable: true,
+    maximizable: false,
+    closable: false,
+    resizable: false,
+    floating: true,
+    frame:true,
+    shadow:false,
+    border:true,
+
+    shim: true,
+    plugin: new Ext.ux.WindowAlwaysOnTop,
+    //html: 'userslist'
+    items:[
+      new Ext.TabPanel({
+        border: true, // already wrapped so don't add another border
+        activeTab: 0, // second tab initially active
+        tabPosition: 'top',
+        //region:'north',
+        split: true,
+        height:350,
+        items: [
+          usersGrid,
+          groupsGrid
+        ]
+      })
+    ],
+    tools: [
+      {
+        id:'help',
+        qtip: 'Get Help',
+        handler: function(event, toolEl, panel){
+            // whatever
+        }
+      }
+    ]
+  });
+  
+  usersPanel.on('minimize',function(w){
+    if( w.collapsed )
+      usersPanel.expand();
+    else
+      usersPanel.collapse();
+  });
+
+  usersPanel.show();
+  usersPanel.collapse();
+  
+  
+  // custom variables
+  usersPanel._posRelToView = usersPanel.getPosition(true);
+  usersPanel._scrollPosTimer = false;
+  usersPanel._moveBlocker = false;
+  usersPanel.show();
+  var divScroll = document.body;
+
+  // save relative pos to view when moving (for scrolling event below)
+  // also, manually do a constrain, else the win would be lost if moved outside the view
+  usersPanel.on('move', function() {
+    // lock function (because we move the window again inside)
+    if (usersPanel._moveBlocker) return;
+    usersPanel._moveBlocker = true;
+
+    var winPos = usersPanel.getPosition(true);
+    usersPanel._posRelToView = [winPos[0] - divScroll.scrollLeft, winPos[1] - divScroll.scrollTop];
+
+    // manually do what constrain should do if it worked as assumed
+    var layersize = [Ext.get(divScroll).getWidth(), Ext.get(divScroll).getHeight()];
+    var windowsize = [usersPanel.getSize().width, usersPanel.getSize().height];
+    // assumed width of the scrollbar (true for windows 7) plus some padding to be sure
+    var scrollSize = 17 + 5;
+    if (usersPanel._posRelToView[0] < 0) { // too far left
+        usersPanel.setPosition(divScroll.scrollLeft, winPos[1]);
+        usersPanel._posRelToView = [0, usersPanel._posRelToView[1]];
+    } else if (usersPanel._posRelToView[0] >= (layersize[0] - windowsize[0])) { // too far right
+        usersPanel.setPosition(((divScroll.scrollLeft + layersize[0]) - windowsize[0] - scrollSize), winPos[1]);
+        usersPanel._posRelToView = [(layersize[0] - windowsize[0] - scrollSize), usersPanel._posRelToView[1]];
+    }
+
+    winPos = usersPanel.getPosition(true); // update pos
+    if (usersPanel._posRelToView[1] < 0) { // too high up
+        usersPanel.setPosition(winPos[0], divScroll.scrollTop);
+        usersPanel._posRelToView = [usersPanel._posRelToView[0], 0];
+    } else if (usersPanel._posRelToView[1] >= layersize[1]) { // too low
+        usersPanel.setPosition(winPos[0], ((divScroll.scrollTop + layersize[1]) - windowsize[1] - scrollSize));
+        usersPanel._posRelToView = [usersPanel._posRelToView[0], (layersize[1] - windowsize[1] - scrollSize)];
+    }
+
+    // release function
+    usersPanel._moveBlocker = false;
+  });
+
+  Ext.fly(document).on("scroll", function(){
+    if (designerToolbar._scrollPosTimer) {
+      clearTimeout(designerToolbar._scrollPosTimer);
+    }
+    designerToolbar._scrollPosTimer = setTimeout(function() {
+      designerToolbar.setPosition(designerToolbar._posRelToView[0] + divScroll.scrollLeft, designerToolbar._posRelToView[1] + divScroll.scrollTop);
+    }, 100);
+
+    if (usersPanel._scrollPosTimer) {
+      clearTimeout(usersPanel._scrollPosTimer);
+    }
+    usersPanel._scrollPosTimer = setTimeout(function() {
+      usersPanel.setPosition(usersPanel._posRelToView[0] + divScroll.scrollLeft, usersPanel._posRelToView[1] + divScroll.scrollTop);
+    }, 100);
+  });
 
   new Ext.ToolTip({
       target: 'x-shapes-task',
@@ -932,6 +1196,21 @@ win.on('move', function() {
           Ext.Msg.alert ('Process ID Undefined');
   }
 
+  function usersSearch()
+  {
+    var search = Ext.getCmp('usersSearchTxt').getValue();
+
+    Ext.getCmp('usersGrid').store.setBaseParam('search', search);
+    Ext.getCmp('usersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+  }
+
+  function groupsSearch()
+  {
+    var search = Ext.getCmp('groupsSearchTxt').getValue();
+
+    Ext.getCmp('groupsGrid').store.setBaseParam('search', search);
+    Ext.getCmp('groupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+  }
 
 });
 

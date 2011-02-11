@@ -489,12 +489,16 @@ class Configurations // extends Configuration
     return $dateTime;
   }
   
-  function getEnvSetting($key=null)
+  function getEnvSetting($key=null, $data=null)
   {
     $this->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
     
-    if( isset($key) ) {        
-      if( isset($this->aConfig[$key]) ) {        
+    if( isset($key) ) {
+      if( isset($this->aConfig[$key]) ) {
+        if( isset($data) && is_array($data) )
+          foreach($data as $k=>$v)
+            $this->aConfig[$key] = str_replace('@'.$k, $v, $this->aConfig[$key]);
+        
         return $this->aConfig[$key];
       } else
         return '';

@@ -29,8 +29,10 @@
   */
 
 $action = $_REQUEST['action'];
+unset($_REQUEST['action']);
+
 $ajax = new Ajax();
-$ajax->$action();
+$ajax->$action($_REQUEST);
 
 class Ajax
 {
@@ -143,6 +145,40 @@ class Ajax
         $oProcess->changeDebugMode($id);
     }
   }
+
+  function getUsers($params)
+  {
+    require_once 'classes/model/Users.php';
+    G::LoadClass('configuration');
+    
+    $search = isset($params['search']) ? $params['search']: null;
+    
+    $users = Users::getAll($params['start'], $params['limit'], $search);
+    $conf = new Configurations;
+    
+    
+    foreach($users->data as $i=>$user){
+      $users->data[$i]['USER'] = $conf->getEnvSetting(
+        'format',
+        Array(
+          'userName'=>$user['USR_USERNAME'],
+          'firstName'=>$user['USR_FIRSTNAME'],
+          'lastName'=>$user['USR_LASTNAME']
+        )
+      );
+    }
+    print G::json_encode($users);
+  }
+
+  function getGroups($params)
+  {
+    require_once 'classes/model/Groupwf.php';
+    $search = isset($params['search']) ? $params['search']: null;
+    $groups = Groupwf::getAll($params['start'], $params['limit'], $search);
+
+    print G::json_encode($groups);
+  }
+  
 }
 
 
