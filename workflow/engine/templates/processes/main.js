@@ -493,7 +493,7 @@ function saveProcess()
     },
     failure: function(obj, result) {
       Ext.Msg.alert( _('ID_ERROR'), resp.result.PRO_UID);
-    },
+    }
   });
 }
 
