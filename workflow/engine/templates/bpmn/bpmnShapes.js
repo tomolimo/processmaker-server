@@ -624,17 +624,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
         //Get the workflow object of the selected Figure object, so that we can compare with the new selected figure to remove ports
         _39fd.workflow.preSelectedFigure = _39fd.workflow.currentSelection;
         var countConn = 0;
-        //Get all the ports of the shapes and resize according to zoom
-        var ports = _39fd.workflow.currentSelection.getPorts();
-        var len =ports.data.length;
-        for(var i=0; i<=len; i++){
-            if(typeof ports.data[i] === 'object'){
-               var port = ports.data[i];
-               port.setDimension(10*workflow.zoomfactor,10*workflow.zoomfactor);
-            }
-        }
-
-         //workflow.setBoundary(workflow.currentSelection);
+        //workflow.setBoundary(workflow.currentSelection);
 
         //Preventing Task from drawing outside canvas Code Ends here
         if (_39fd.type == 'DecoratedConnection' || _39fd.workflow.contextClicked == true) {
