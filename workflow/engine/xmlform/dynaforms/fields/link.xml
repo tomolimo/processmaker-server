@@ -3,56 +3,61 @@
   <PME_A type="hidden"/>
   <PME_TYPE type="hidden"/>
   <PME_TITLE type="title" enableHTML="1">
-    <en>Properties</en>
+    <en><![CDATA[Properties]]></en>
+    <es><![CDATA[Propiedades]]></es>
   </PME_TITLE>
   <PME_XMLNODE_NAME type="text" size="42" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
-    <en>Field Name</en>
+    <en><![CDATA[Field Name]]></en>
+    <es><![CDATA[Nombre del campo]]></es>
   </PME_XMLNODE_NAME>
   <PME_XMLNODE_NAME_OLD type="hidden"/>
   <PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
     SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   </PME_VALIDATE_NAME>
-
   <PME_LABEL type="text" maxlength="255" size="42">
-    <en>Label</en>
+    <en><![CDATA[Label]]></en>
+    <es><![CDATA[Etiqueta]]></es>
   </PME_LABEL>
-
   <PME_SUBTITLE3 type="title" enableHTML="1">
-    <en>Behaviour</en>
+    <en><![CDATA[Behaviour]]></en>
+    <es><![CDATA[Comportamiento]]></es>
   </PME_SUBTITLE3>
-
   <PME_LINK type="text" maxlength="255" size="42" defaultvalue="">
-    <en>Link</en>
+    <en><![CDATA[Link]]></en>
+    <es><![CDATA[Enlace]]></es>
   </PME_LINK>
-
   <PME_TARGET_SEL type="dropdown" defaultValue="_blank">
-    <en>Target
-      <option name="_blank">Blank</option>
-      <option name="_self">Self</option>
-      <option name="_parent">Parent</option>
-      <option name="_top">Top</option>
-      <option name="">Framename</option>
-    </en>
+    <en><![CDATA[\n]]><option name="_blank"><![CDATA[Blank]]></option><option name="_self"><![CDATA[Self]]></option><option name="_parent"><![CDATA[Parent]]></option><option name="_top"><![CDATA[Top]]></option><option name=""><![CDATA[Framename]]></option></en>
+    <es><![CDATA[Objeto]]><option name="_blank"><![CDATA[Blanco]]></option><option name="_self"><![CDATA[A si mismo]]></option><option name="_parent"><![CDATA[Padres]]></option><option name="_top"><![CDATA[Arriba]]></option><option name=""><![CDATA[Framename]]></option></es>
   </PME_TARGET_SEL>
   <PME_TARGET type="text" size="22"/>
-
   <PME_VALUE type="text" maxlength="50" size="42" defaultvalue="">
-    <en>Value</en>
+    <en><![CDATA[Value]]></en>
+    <es><![CDATA[Valor]]></es>
   </PME_VALUE>
-
   <PME_HINT type="textarea" cols="40" rows="3">
-    <en>Hint</en>
+    <en><![CDATA[Hint]]></en>
+    <es><![CDATA[Sugerencia]]></es>
   </PME_HINT>
-
   <BTN_CANCEL type="button" onclick="cancel();">
-    <en>Cancel</en>
+    <en><![CDATA[Cancel]]></en>
+    <es><![CDATA[Cancelar]]></es>
   </BTN_CANCEL>
-
-  <PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
-    <en>Save</en>
+  <PME_ACCEPT type="button" onclick="erase(); fieldsSave( this.form );">
+    <en><![CDATA[Save]]></en>
+    <es><![CDATA[Guardar]]></es>
   </PME_ACCEPT>
-
   <PME_JS type="javascript"><![CDATA[
+ function erase (){
+    if(getField('PME_LINK').value=='http://www.processmaker.com'){
+      getField('PME_LINK').value='';
+      getField('PME_LINK').style.color="#000000";
+    }
+  }
+  if (!(getField('PME_XMLNODE_NAME').value)) {
+    getField('PME_LINK').value='http://www.processmaker.com';
+    getField('PME_LINK').style.color="#A4A4A4";
+  }
   var fieldForm="link";
   var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
   var savedFieldName=fieldName.value;
@@ -78,8 +83,40 @@
     }
   }
 
+  leimnud.event.add(getField('PME_LINK'), 'focus', function() {
+    if(getField('PME_LINK').value=='http://www.processmaker.com'){
+    getField('PME_LINK').value='';
+    getField('PME_LINK').style.color="#000000";
+    }
+  });
+  leimnud.event.add(getField('PME_LINK'), 'blur', function() {
+    var valor_form = new input(getField('PME_LINK'));
+    getField('PME_LINK').value=getField('PME_LINK').value.replace(/ /g, '');
+    if(getField('PME_LINK').value==''){
+      getField('PME_LINK').value='http://www.processmaker.com';
+      getField('PME_LINK').style.color="#A4A4A4";
+    } else {
+        var link = getField('PME_LINK').value.split('.');
+        if (link[0]=='www') {
+        getField('PME_LINK').value = ('http://'+getField('PME_LINK').value);
+        valor_form.passed();
+        }else{
+          var link1 = getField('PME_LINK').value.split(':');
+          if (link1[0]=='javascript') {
+            valor_form.passed();
+          }
+        }
+        var link2 = getField('PME_LINK').value.split('.');
+        if ((link2[0]=='http://www')&&(link2[1]!='')&&(link2[2])) {
+          valor_form.passed();
+        } else {
+            valor_form.failed();
+            alert('Invalid URL');
+          }        
+      }
+  });
 function cancel(){
-    currentPopupWindow.remove();
+  currentPopupWindow.remove();
 }
   ]]></PME_JS>
-</dynaForm>  
+</dynaForm>
