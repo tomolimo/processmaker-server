@@ -1,8 +1,4 @@
 <?php
-/**
- * BaseReportTablePeer.php
- * @package    workflow.classes.model.om
- */
 
 require_once 'propel/util/BasePeer.php';
 // The object class -- needed for instanceof checks in this class.

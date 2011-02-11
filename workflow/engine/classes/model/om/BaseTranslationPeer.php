@@ -1,8 +1,5 @@
 <?php
-/**
- * BaseTranslationPeer.php
- * @package    workflow.classes.model.om
- */
+
 require_once 'propel/util/BasePeer.php';
 // The object class -- needed for instanceof checks in this class.
 // actual class may be a subclass -- as returned by TranslationPeer::getOMClass()
@@ -27,7 +24,7 @@ abstract class BaseTranslationPeer {
 	const CLASS_DEFAULT = 'classes.model.Translation';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 4;
+	const NUM_COLUMNS = 5;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -45,6 +42,9 @@ abstract class BaseTranslationPeer {
 	/** the column name for the TRN_VALUE field */
 	const TRN_VALUE = 'TRANSLATION.TRN_VALUE';
 
+	/** the column name for the TRN_UPDATE_DATE field */
+	const TRN_UPDATE_DATE = 'TRANSLATION.TRN_UPDATE_DATE';
+
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
 
@@ -56,10 +56,10 @@ abstract class BaseTranslationPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('TrnCategory', 'TrnId', 'TrnLang', 'TrnValue', ),
-		BasePeer::TYPE_COLNAME => array (TranslationPeer::TRN_CATEGORY, TranslationPeer::TRN_ID, TranslationPeer::TRN_LANG, TranslationPeer::TRN_VALUE, ),
-		BasePeer::TYPE_FIELDNAME => array ('TRN_CATEGORY', 'TRN_ID', 'TRN_LANG', 'TRN_VALUE', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('TrnCategory', 'TrnId', 'TrnLang', 'TrnValue', 'TrnUpdateDate', ),
+		BasePeer::TYPE_COLNAME => array (TranslationPeer::TRN_CATEGORY, TranslationPeer::TRN_ID, TranslationPeer::TRN_LANG, TranslationPeer::TRN_VALUE, TranslationPeer::TRN_UPDATE_DATE, ),
+		BasePeer::TYPE_FIELDNAME => array ('TRN_CATEGORY', 'TRN_ID', 'TRN_LANG', 'TRN_VALUE', 'TRN_UPDATE_DATE', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
 	/**
@@ -69,10 +69,10 @@ abstract class BaseTranslationPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('TrnCategory' => 0, 'TrnId' => 1, 'TrnLang' => 2, 'TrnValue' => 3, ),
-		BasePeer::TYPE_COLNAME => array (TranslationPeer::TRN_CATEGORY => 0, TranslationPeer::TRN_ID => 1, TranslationPeer::TRN_LANG => 2, TranslationPeer::TRN_VALUE => 3, ),
-		BasePeer::TYPE_FIELDNAME => array ('TRN_CATEGORY' => 0, 'TRN_ID' => 1, 'TRN_LANG' => 2, 'TRN_VALUE' => 3, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('TrnCategory' => 0, 'TrnId' => 1, 'TrnLang' => 2, 'TrnValue' => 3, 'TrnUpdateDate' => 4, ),
+		BasePeer::TYPE_COLNAME => array (TranslationPeer::TRN_CATEGORY => 0, TranslationPeer::TRN_ID => 1, TranslationPeer::TRN_LANG => 2, TranslationPeer::TRN_VALUE => 3, TranslationPeer::TRN_UPDATE_DATE => 4, ),
+		BasePeer::TYPE_FIELDNAME => array ('TRN_CATEGORY' => 0, 'TRN_ID' => 1, 'TRN_LANG' => 2, 'TRN_VALUE' => 3, 'TRN_UPDATE_DATE' => 4, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
 	/**
@@ -180,6 +180,8 @@ abstract class BaseTranslationPeer {
 		$criteria->addSelectColumn(TranslationPeer::TRN_LANG);
 
 		$criteria->addSelectColumn(TranslationPeer::TRN_VALUE);
+
+		$criteria->addSelectColumn(TranslationPeer::TRN_UPDATE_DATE);
 
 	}
 

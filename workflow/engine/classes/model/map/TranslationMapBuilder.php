@@ -14,7 +14,7 @@ include_once 'creole/CreoleTypes.php';
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  *
- * @package    classes.model.map
+ * @package    workflow.classes.model.map
  */
 class TranslationMapBuilder {
 
@@ -71,6 +71,8 @@ class TranslationMapBuilder {
 		$tMap->addPrimaryKey('TRN_LANG', 'TrnLang', 'string', CreoleTypes::VARCHAR, true, 10);
 
 		$tMap->addColumn('TRN_VALUE', 'TrnValue', 'string', CreoleTypes::VARCHAR, true, 200);
+
+		$tMap->addColumn('TRN_UPDATE_DATE', 'TrnUpdateDate', 'int', CreoleTypes::DATE, false, null);
 
 		$tMap->addValidator('TRN_CATEGORY', 'maxLength', 'propel.validator.MaxLengthValidator', '100', 'Category can be no larger than 100 in size');
 

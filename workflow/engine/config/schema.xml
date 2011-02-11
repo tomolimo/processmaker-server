@@ -3695,6 +3695,15 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="TRN_UPDATE_DATE" type="DATE" required="false" >
+      <vendor type="mysql">
+        <parameter name="Field" value="TRN_UPDATE_DATE"/>
+        <parameter name="Type" value="date"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <validator column="TRN_CATEGORY">
       <rule name="maxLength" value="100" message="Category can be no larger than ${value} in size" />
       <rule name="required" message="Category is required." />

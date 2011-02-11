@@ -1,8 +1,4 @@
 <?php
-/**
- * BaseAppDelay.php
- * @package    workflow.classes.model.om
- */
 
 require_once 'propel/om/BaseObject.php';
 

@@ -62,6 +62,60 @@ class Translation extends BaseTranslation {
     return $oCriteria;
   }
 
+  function getAll($lang='en', $start=null, $limit=null, $search=null){
+    $totalCount = 0;
+    
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(TranslationPeer::TRN_ID);
+    $oCriteria->addSelectColumn(TranslationPeer::TRN_CATEGORY);
+    $oCriteria->addSelectColumn(TranslationPeer::TRN_LANG);
+    $oCriteria->addSelectColumn(TranslationPeer::TRN_VALUE);
+    $oCriteria->addSelectColumn(TranslationPeer::TRN_UPDATE_DATE);
+    $oCriteria->add(TranslationPeer::TRN_LANG, $lang);
+    $oCriteria->add(TranslationPeer::TRN_CATEGORY, 'LABEL');
+    //$oCriteria->addAscendingOrderByColumn ( 'TRN_CATEGORY' );
+    $oCriteria->addAscendingOrderByColumn ( 'TRN_ID' );
+
+
+    if( $search ) {
+      $oCriteria->add(
+        $oCriteria->getNewCriterion(
+          TranslationPeer::TRN_ID,
+          "%$search%", Criteria::LIKE
+        )->addOr($oCriteria->getNewCriterion(
+          TranslationPeer::TRN_VALUE,
+          "%$search%", Criteria::LIKE
+        ))
+      );
+    }
+    
+    $c = clone $oCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = TranslationPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      $totalCount = $aRow[0];
+      
+    if($start)
+      $oCriteria->setOffset($start);
+    if($limit) //&& !isset($seach) && !isset($search))
+      $oCriteria->setLimit($limit);
+    
+    $rs = TranslationPeer::doSelectRS($oCriteria);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rows = Array();
+    while( $rs->next() ) {
+      $rows[] = $rs->getRow();
+    }
+
+    $result->data = $rows;
+    $result->totalCount = $totalCount;
+    
+    return $result;
+  }
 
 
   /* Load strings from a Database .
@@ -137,6 +191,7 @@ class Translation extends BaseTranslation {
     $tr->setTrnId( $id );
     $tr->setTrnLang( $languageId);
     $tr->setTrnValue( $value );
+    $tr->setTrnUpdateDate( date('Y-m-d') );
 
     if ($tr->validate() ) {
       // we save it, since we get no validation errors, or do whatever else you like.

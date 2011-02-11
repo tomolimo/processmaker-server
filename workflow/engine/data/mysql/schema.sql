@@ -521,8 +521,8 @@ CREATE TABLE `SWIMLANES_ELEMENTS`
 	`SWI_TYPE` VARCHAR(20) default 'LINE' NOT NULL,
 	`SWI_X` INTEGER default 0 NOT NULL,
 	`SWI_Y` INTEGER default 0 NOT NULL,
-	`SWI_WIDTH` INTEGER default 165 NOT NULL,
-	`SWI_HEIGHT` INTEGER default 40 NOT NULL,
+	`SWI_WIDTH` INTEGER default 0 NOT NULL,
+	`SWI_HEIGHT` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`SWI_UID`)
 )Type=MyISAM ;
 #-----------------------------------------------------------------------------
@@ -569,8 +569,8 @@ CREATE TABLE `TASK`
 	`TAS_DERIVATION` VARCHAR(100) default 'NORMAL' NOT NULL,
 	`TAS_POSX` INTEGER default 0 NOT NULL,
 	`TAS_POSY` INTEGER default 0 NOT NULL,
-	`TAS_WIDTH` INTEGER default 165 NOT NULL,
-	`TAS_HEIGHT` INTEGER default 40 NOT NULL,
+	`TAS_WIDTH` INTEGER default 110 NOT NULL,
+	`TAS_HEIGHT` INTEGER default 60 NOT NULL,
 	`TAS_COLOR` VARCHAR(32) default '' NOT NULL,
 	`TAS_EVN_UID` VARCHAR(32) default '' NOT NULL,
 	`TAS_BOUNDARY` VARCHAR(32) default '' NOT NULL,
@@ -604,6 +604,7 @@ CREATE TABLE `TRANSLATION`
 	`TRN_ID` VARCHAR(100) default '' NOT NULL,
 	`TRN_LANG` VARCHAR(10) default 'en' NOT NULL,
 	`TRN_VALUE` VARCHAR(200) default '' NOT NULL,
+	`TRN_UPDATE_DATE` DATE,
 	PRIMARY KEY (`TRN_CATEGORY`,`TRN_ID`,`TRN_LANG`)
 )Type=MyISAM ;
 #-----------------------------------------------------------------------------
