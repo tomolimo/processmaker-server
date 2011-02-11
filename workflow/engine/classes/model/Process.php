@@ -655,6 +655,22 @@ class Process extends BaseProcess {
     }
     return $aProcesses;
   }
+  
+  function getAllProcessesByCategory(){
+  	$oCriteria = new Criteria('workflow');
+  	$oCriteria->addSelectColumn(ProcessPeer::PRO_CATEGORY);
+  	$oCriteria->addSelectColumn('COUNT(*) AS CNT'); 
+  	$oCriteria->addGroupByColumn(ProcessPeer::PRO_CATEGORY);
+  	$oDataSet = ProcessPeer::doSelectRS($oCriteria);
+  	$oDataSet->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  	$aProc = Array();
+  	while ($oDataSet->next()){
+  		$row = $oDataSet->getRow();
+  		$aProc[$row['PRO_CATEGORY']] = $row['CNT'];
+  	}
+  	return $aProc;
+  }
+  
 } // Process
 
 function ordProcessByProTitle($a, $b){
@@ -666,5 +682,7 @@ function ordProcessByProTitle($a, $b){
   } else {
     return 0; 
   }
+  
+  
    
 }
