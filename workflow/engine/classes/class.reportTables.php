@@ -590,8 +590,13 @@ class ReportTables
                     }
                     $sQuery .= "'" . (isset($aFields[$aField['sFieldName']]) ? mysql_real_escape_string($aFields[$aField['sFieldName']]) : '') . "',";
                   break;
-                  case 'date': 
-                    $sQuery .= "'" . (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') . "',";
+                  case 'date':
+                    $mysqlDate = (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') ;
+                    if ($mysqlDate!='') {
+                      $mysqlDate = str_replace('/', '-', $mysqlDate);
+                      $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
+                    }
+                    $sQuery .= "'" . $mysqlDate . "',";
                   break;
                 }
               }
@@ -618,7 +623,12 @@ class ReportTables
                     $sQuery .= ",'" . (isset($aFields[$aField['sFieldName']]) ? mysql_real_escape_string($aFields[$aField['sFieldName']]) : '') . "'";
                     break;
                   case 'date':
-                    $sQuery .= ",'" . (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') . "'";
+                    $mysqlDate = ( isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '' );
+                    if ($mysqlDate!='') {
+                      $mysqlDate = str_replace( '/', '-', $mysqlDate );
+                      $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
+                    }
+                    $sQuery .= ",'" . $mysqlDate  . "'";
                     break;
                 }
               }
