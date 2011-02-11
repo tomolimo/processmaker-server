@@ -4963,12 +4963,27 @@ class processMap {
         }
   }
 
+  //new functions
+  function getAllDynaformCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = DynaformPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
   * Return the dynaforms list array
   * @param string $sProcessUID
   * @return object
   */
-  function getExtDynaformsList($sProcessUID = '')
+  function getExtDynaformsList($start, $limit, $sProcessUID = '')
   {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria  = new Criteria ( 'workflow' );
@@ -4990,6 +5005,13 @@ class processMap {
     $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
     $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
     $oCriteria->add ( DynaformPeer::PRO_UID, $sProcessUID );
+
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
 
     $oDataset = DynaformPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
@@ -5015,12 +5037,27 @@ class processMap {
   }
 
 
+  //new functions
+  function getAllInputDocumentCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = InputDocumentPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
   * Return the Input Documents list array
   * @param string $sProcessUID
   * @return object
   */
-  function getExtInputDocumentsCriteria($sProcessUID = '')
+  function getExtInputDocumentsCriteria($start, $limit,$sProcessUID = '')
   {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria  = new Criteria ( 'workflow' );
@@ -5041,6 +5078,13 @@ class processMap {
     $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
     $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
     $oCriteria->add ( InputDocumentPeer::PRO_UID, $sProcessUID );
+
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
 
     $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
@@ -5066,12 +5110,27 @@ class processMap {
     return $inputDocArray;
   }
 
+  //new functions
+  function getAllOutputDocumentCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = OutputDocumentPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
   * Return the Output Documents list array
   * @param string $sProcessUID
   * @return object
   */
-  function getExtOutputDocumentsCriteria($sProcessUID = '')
+  function getExtOutputDocumentsCriteria($start, $limit,$sProcessUID = '')
   {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria  = new Criteria ( 'workflow' );
@@ -5093,6 +5152,13 @@ class processMap {
     $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
     $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
     $oCriteria->add ( OutputDocumentPeer::PRO_UID, $sProcessUID );
+
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
 
     $oDataset = OutputDocumentPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
@@ -5478,13 +5544,29 @@ class processMap {
     return $aAvailableProcessIODoc;
   }
 
+    //new functions
+  function getAllDbSourceCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = DbSourcePeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
+
  /**
    * listDBSConnection
    *
    * @param  string           $sProcessUID
    * @return array(aDBList)   $aDBList
    */
- function getExtCriteriaDBSList($sProcessUID)
+ function getExtCriteriaDBSList($start, $limit,$sProcessUID)
     {
        try
        {
@@ -5508,6 +5590,13 @@ class processMap {
         $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
         $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
         $oCriteria->add(DbSourcePeer::PRO_UID, $sProcessUID);
+
+        $this->tmpCriteria = clone $oCriteria;
+
+        if($start != '')
+          $oCriteria->setOffset($start);
+        if($limit != '')
+          $oCriteria->setLimit($limit);
 
         $oDataset = DbSourcePeer::doSelectRS ( $oCriteria );
         $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
@@ -5816,7 +5905,22 @@ class processMap {
     return $oCriteria;*/
   }
 
-    function getExtReportTables($sProcessUID = '') {
+    //new functions
+  function getAllReportTableCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = ReportTablePeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
+  function getExtReportTables($start, $limit,$sProcessUID = '') {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(ReportTablePeer::REP_TAB_UID);
@@ -5830,6 +5934,13 @@ class processMap {
     $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
     $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
     $oCriteria->add(ReportTablePeer::PRO_UID, $sProcessUID);
+
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
 
     $oDataset = ReportTablePeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);

@@ -30,6 +30,7 @@ ProcessMapContext.prototype.editProcess= function()
         labelWidth: 75, // label settings here cascade unless overridden
         frame:false,
         buttonAlign: 'center',
+        bodyStyle : 'padding:5px 0 0 5px;',
         //monitorValid : true,
         width: 450,
         height: 400,
@@ -72,8 +73,8 @@ ProcessMapContext.prototype.editProcess= function()
                         store:          new Ext.data.JsonStore({
                                                 fields : ['name', 'value'],
                                                 data   :  [
-                                            {name:'none',    value: 'none'},
-                                             {name:'default',    value: 'default'}
+                                            {name:'none',    value: ''},
+                                             {name:'default',    value: '00000000000000000000000000000001'}
                                   ]
                                             })
                     }, {
@@ -87,8 +88,9 @@ ProcessMapContext.prototype.editProcess= function()
                         fieldLabel:     'Category',
                         name:           'PRO_CATEGORY',
                         hiddenName:     'category',
-                         displayField:   'CATEGORY_NAME',
+                        displayField:   'CATEGORY_NAME',
                         valueField:     'CATEGORY_UID',
+                        value:          '--None--',
                         store:          new Ext.data.JsonStore({
                                                 fields : ['CATEGORY_NAME', 'CATEGORY_UID']
                                                 //data   :processCategoryData
@@ -117,16 +119,15 @@ ProcessMapContext.prototype.editProcess= function()
                      pro_debug = 1;
                  else
                     pro_debug = 0;
-                  var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
+                  var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'"}';
                   Ext.Ajax.request({
                         url: "processes_Ajax.php"+ urlparams,
                         success: function(response) {
                             Ext.MessageBox.alert ('Status','Process Information Saved Successfully.');
-                            //window.hide();
+                            window.hide();
                         }
                         
                     });
-                    window.hide();
              }
 
         },{
@@ -137,19 +138,18 @@ ProcessMapContext.prototype.editProcess= function()
              }
         }]
     });
-console.log(workflow.checkdebug);
-     editProcess.form.load({
+
+  editProcess.form.load({
         url:'proxyExtjs.php?pid='+pro_uid+'&action=process_Edit',
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
-            if(action.result.data.PRO_DEBUG== 0)
+           if(action.result.data.PRO_DEBUG== 0)
                workflow.checkdebug = false;
            else
                workflow.checkdebug = true;
-
-                           window.show();
-                      },
+           window.show();
+         },
         failure:function(form, action) {
             Ext.MessageBox.alert('Message', 'Load failed');
         }
@@ -181,12 +181,12 @@ ProcessMapContext.prototype.exportProcess= function()
   workflow.FILENAME_LINK = '';
   workflow.FILENAME_LINKXPDL = '';
 
-
   var exportProcessForm = new Ext.FormPanel({
   labelWidth    : 120, // label settings here cascade unless overridden
   frame         : false,
-  monitorValid : true,
-  title         : '',
+  monitorValid  : true,
+  //title         : 'Export Process',
+  bodyStyle     :'padding:10px 0 0 10px;',
   width         : 500,
   height        : 400,
   defaultType   : 'textfield',
@@ -542,39 +542,9 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         });
         
   var tb = new Ext.Toolbar({
-            items: [btnCreate,btnRemove,btnEdit,SearchText,btnSearch]
+            items: [btnCreate,btnRemove,btnEdit]
       
   });
-      
-  var SearchText = new Ext.TextField ({
-        id: 'searchTxt',
-        ctCls:'pm_search_text_field',
-        allowBlank: true,
-        width: 150,
-        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
-        listeners: {
-          specialkey: function(f,e){
-            if (e.getKey() == e.ENTER) {
-              doSearch();
-            }
-          }
-        }
-      });
-
-
-  var btnSearch = new Ext.Button({
-        text:'X',
-        ctCls:'pm_search_x_button',
-        handler: function(){
-          //store.setBaseParam( 'category', '<reset>');
-          //store.setBaseParam( 'processName', '');
-          //store.load({params:{start : 0 , limit : '' }});
-          Ext.getCmp('searchTxt').setValue('');
-          //comboCategory.setValue('');
-          //store.reload();
-        }
-      });
-       
 
   var PermissionGrid = new Ext.grid.GridPanel({
         store: PermissionStore,
@@ -606,7 +576,6 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         plain: true,
         buttonAlign: 'center',
         items: PermissionGrid
-
  });
 
  //Creating different stores required for fields in form
@@ -677,6 +646,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
       width:360,
       //height: 30,
       monitorValid : true,
+      bodyStyle : 'padding:10px 0 0 10px;',
       frame:false,
       plain: true,
       buttonAlign: 'center',
@@ -1025,8 +995,6 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
           }
         }]
   })
-
-
 
 var formWindow = new Ext.Window({
         title: 'New specific Permission',
@@ -1759,6 +1727,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         monitorValid : true,
         width: 300,
         height: 300,
+        bodyStyle : 'padding:10px 0 0 10px;',
         //defaults: {width: 350},
         defaultType: 'textfield',
                 items: [{
@@ -1886,8 +1855,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
 ProcessMapContext.prototype.caseTrackerObjects= function()
   {
     var ProcMapObj= new ProcessMapContext();
-    var pro_uid = workflow.getUrlVars();
-     //var taskId  = workflow.currentSelection.id;
+    var pro_uid   = workflow.getUrlVars();
 
     var ObjectFields = Ext.data.Record.create([
         {
@@ -1923,28 +1891,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             saveText: 'Update'
     });
 
-    var assignedStore = new Ext.data.JsonStore({
-      root          : 'data',
-      totalProperty : 'totalCount',
-      idProperty    : 'gridIndex',
-      remoteSort    : true,
-      fields        : ObjectFields,
-      proxy         : new Ext.data.HttpProxy({
-      url           : 'proxyExtjs?pid='+pro_uid+'&action=getAssignedCaseTrackerObjects'
-      })
-    });
-    assignedStore.load();
-
-    var availableStore = new Ext.data.JsonStore({
-      root            : 'data',
-      url             : 'proxyExtjs?tid='+pro_uid+'&action=getAvailableCaseTrackerObjects',
-      totalProperty   : 'totalCount',
-      idProperty      : 'gridIndex',
-      remoteSort      : false, //true,
-      autoLoad        : true,
-      fields          : ObjectFields
-    });
-
+    
     var btnAdd = new Ext.Button({
       id: 'btnAdd',
       text: 'Assign',
@@ -1956,7 +1903,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
            OBJECT_TYPE  :'',
            OBJECT_UID   : '',
            CTO_CONDITION: ''
-      });
+         });
 
          if(availableStore.data.items.length == 0)
             Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
@@ -2017,8 +1964,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       }
     });
 
-
-
     var btnObjectsCondition = new Ext.Button({
       id: 'btnCondition',
       text: 'Condition',
@@ -2031,8 +1976,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                 else
                     workflow.gridObjectRowSelected = rowSelected;
                 var rowData = ProcMapObj.ExtVariables();
-                console.log(rowData);
-
         }
    })
 
@@ -2040,7 +1983,30 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       items: [btnAdd, btnRemove,btnObjectsCondition]
     });
 
-        // create the Data Store of objects that are already assigned
+
+    var assignedStore = new Ext.data.JsonStore({
+      root          : 'data',
+      totalProperty : 'totalCount',
+      idProperty    : 'gridIndex',
+      remoteSort    : true,
+      fields        : ObjectFields,
+      proxy         : new Ext.data.HttpProxy({
+      url           : 'proxyExtjs?pid='+pro_uid+'&action=getAssignedCaseTrackerObjects'
+      })
+    });
+   assignedStore.load();
+
+    var availableStore = new Ext.data.JsonStore({
+      root            : 'data',
+      url             : 'proxyExtjs?pid='+pro_uid+'&action=getAvailableCaseTrackerObjects',
+      totalProperty   : 'totalCount',
+      idProperty      : 'gridIndex',
+      remoteSort      : false, //true,
+      fields          : ObjectFields
+    });
+    availableStore.load();
+
+    // create the Data Store of objects that are already assigned
     var Objectsgrid = new Ext.grid.GridPanel({
       store: assignedStore,
       id : 'mygrid',
@@ -2055,53 +2021,59 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       height   :400,
       layout: 'fit',
       plugins: [editor],
-      columns: [
-        new Ext.grid.RowNumberer(),
-          {
-          id: 'CTO_TITLE',
-          header: 'Title',
-          dataIndex: 'CTO_TITLE',
-          width: 100,
-          sortable: true,
-          editor: new Ext.form.ComboBox({
-            xtype: 'combo',
-            store:availableStore,
-            fieldLabel   : 'Title',
-            hiddenName   : 'number',
-            displayField : 'OBJECT_TITLE'  ,
-            valueField   : 'OBJECT_TITLE',
-            name         : 'OBJECT_TITLE',
-            triggerAction: 'all',
-            emptyText    : 'Select User or Group',
-            allowBlank   : false,
-            onSelect     : function(record, index){
-              var User = Objectsgrid.getStore();
-              var selectedrowIndex = '0';
-              User.data.items[selectedrowIndex].data.OBJECT_UID   = record.data.OBJECT_UID;
-              User.data.items[selectedrowIndex].data.OBJECT_TYPE  = record.data.OBJECT_TYPE;
-              User.data.items[selectedrowIndex].data.OBJECT_TITLE = record.data.OBJECT_TITLE;
-              this.setValue(record.data[this.valueField || this.displayField]);
-              this.collapse();
-            }
-          })
-        },{
-          header    : 'Type',
-          dataIndex : 'CTO_TYPE_OBJ',
-          editable  : false
-        },{
-            header : 'Condition',
-            dataindex: 'CTO_CONDITION',
-            name : 'CTO_CONDITION',
-            //xtype: 'textfield',
-            editable  : true
-        },{
-            sortable: false,
-            renderer: function(val, meta, record)
-               {
-                   var recordData = Ext.util.JSON.encode(record);
-                    return String.format("<input type='button' value='@@' onclick=workflow.ExtVariables('CTO_CONDITION','{0}');>",recordData);
-              }
-        }],
+      cm: new Ext.grid.ColumnModel({
+              defaults: {
+                  width: 200,
+                  sortable: true
+              },
+          columns: [
+            new Ext.grid.RowNumberer(),
+              {
+              id: 'CTO_TITLE',
+              header: 'Title',
+              dataIndex: 'CTO_TITLE',
+              width: 100,
+              sortable: true,
+              editor: new Ext.form.ComboBox({
+                xtype: 'combo',
+                store:availableStore,
+                fieldLabel   : 'Title',
+                hiddenName   : 'number',
+                displayField : 'OBJECT_TITLE'  ,
+                valueField   : 'OBJECT_TITLE',
+                name         : 'OBJECT_TITLE',
+                triggerAction: 'all',
+                emptyText    : 'Select User or Group',
+                allowBlank   : false,
+                onSelect     : function(record, index){
+                  var User = Objectsgrid.getStore();
+                  var selectedrowIndex = '0';
+                  User.data.items[selectedrowIndex].data.OBJECT_UID   = record.data.OBJECT_UID;
+                  User.data.items[selectedrowIndex].data.OBJECT_TYPE  = record.data.OBJECT_TYPE;
+                  User.data.items[selectedrowIndex].data.OBJECT_TITLE = record.data.OBJECT_TITLE;
+                  this.setValue(record.data[this.valueField || this.displayField]);
+                  this.collapse();
+                }
+              })
+            },{
+              header    : 'Type',
+              dataIndex : 'CTO_TYPE_OBJ',
+              editable  : false
+            },{
+                header : 'Condition',
+                dataindex: 'CTO_CONDITION',
+                name : 'CTO_CONDITION',
+                //xtype: 'textfield',
+                editable  : true
+            },{
+                sortable: false,
+                renderer: function(val, meta, record)
+                   {
+                       var recordData = Ext.util.JSON.encode(record);
+                        return String.format("<input type='button' value='@@' onclick=workflow.ExtVariables('CTO_CONDITION','{0}');>",recordData);
+                  }
+            }]
+      }),
       sm: new Ext.grid.RowSelectionModel({
         singleSelect: true,
         listeners: {
@@ -2187,10 +2159,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
     });
 
-   // assignedStore.reload();
-   // availableStore.reload();
-
-
     var gridObjectWindow = new Ext.Window({
       title       : 'Objects',
       collapsible : false,
@@ -2200,15 +2168,13 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       height      : 400,
       minWidth    : 200,
       minHeight   : 150,
-      layout      : 'fit',
+      //layout      : 'fit',
       plain       : true,
-      autoScroll  : true,
       items       : Objectsgrid,
       buttonAlign : 'center'
     });
   gridObjectWindow.show()
-
-  }
+}
 
 ProcessMapContext.prototype.ExtVariables = function()
 {
@@ -2264,6 +2230,7 @@ ProcessMapContext.prototype.ExtVariables = function()
         labelWidth: 100,
         monitorValid : true,
         width     : 400,
+        bodyStyle : 'padding:10px 0 0 10px;',
         height    : 350,
         renderer: function(val){return '<table border=1> <tr> <td> @@ </td> <td> Replace the value in quotes </td> </tr> </table>';},
         items:

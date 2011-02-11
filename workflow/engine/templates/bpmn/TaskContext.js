@@ -568,7 +568,7 @@ TaskContext.prototype.editUsers= function()
                  autoLoad        : true,
                  fields          : userFields
               });
-     //storeUsers.load();
+     storeUsers.load();
        // paging bar on the bottom
      var paging = new Ext.PagingToolbar({
             pageSize: 10,
@@ -607,7 +607,7 @@ TaskContext.prototype.editUsers= function()
                             xtype: 'combo',
                             fieldLabel: 'Users_groups',
                             hiddenName: 'number',
-                            //store        : storeUsers,
+                            store        : storeUsers,
                             displayField : 'LABEL'  ,
                             valueField   : 'LABEL',
                             name         : 'LABEL',
@@ -650,7 +650,7 @@ TaskContext.prototype.editUsers= function()
         tbar: tb
         });
 
-        taskUsers.load({params:{start:0, limit:10}});
+        taskUsers.load();
 
         editor.on({
           scope: this,
@@ -698,7 +698,7 @@ TaskContext.prototype.editUsers= function()
     var window = new Ext.Window({
         title: _('ID_USERS_GROUPS'),
         collapsible: false,
-        maximizable: true,
+        maximizable: false,
         width: 400,
         height: 350,
         minWidth: 200,
@@ -728,6 +728,7 @@ TaskContext.prototype.editTaskProperties= function()
         items: [{
             xtype:'tabpanel',
             activeTab: 0,
+            bodyStyle   : 'padding:5px 0 0 5px;',
             defaults:{
               labelWidth : 140,
               height : 300
@@ -2300,79 +2301,11 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         tbar: tbIn
      });
 
-
-
-    /* editorOut.on({
-          scope: this,
-          afteredit: function(roweditor, changes, record, rowIndex) {
-             var storeData = variableOutGrid.getStore();
-             var sSP_UID           =  spUID;
-             var sProcess_Parent   =  proParent;
-             var sSync             =  spSync;
-             var sTask_Parent      =  tasParent;
-             var sTasks            =  tasks;
-             var sVar_Out1         =  record.data.VAR_OUT1;
-             var sVar_Out2         =  record.data.VAR_OUT2;
-
-             Ext.Ajax.request({
-              url   : 'processes_Ajax.php',
-              method: 'POST',
-              params: {
-                    action          : 'saveSubProcessVariables',
-                    PRO_UID         : pro_uid,
-                    TASKS           : sTasks,
-                    SP_SYNCHRONOUS  : sSync,
-                    SP_UID          : sSP_UID,
-                    PRO_PARENT      : sProcess_Parent,
-                    TAS_PARENT      : sTask_Parent,
-                    VAR_OUT1        : sVar_Out1,
-                    VAR_OUT2        : sVar_Out2
-              },
-              success: function(response) {
-                  Ext.MessageBox.alert ('Status','Variable Out has been saved successfully.');
-              }
-            });
-
-          }
-        });
-
-        editorIn.on({
-          scope: this,
-          afteredit: function(roweditor, changes, record, rowIndex) {
-              var storeData = variableInGrid.getStore();
-             var sSP_UID           =  spUID;
-             var sProcess_Parent   =  proParent;
-             var sSync             =  spSync;
-             var sTask_Parent      =  tasParent;
-             var sTasks            =  tasks;
-             var sVar_In1          =  record.data.VAR_IN1;
-             var sVar_In2          =  record.data.VAR_IN2;
-
-             Ext.Ajax.request({
-              url   : 'processes_Ajax.php',
-              method: 'POST',
-              params: {
-                    action          : 'saveSubProcessVariables',
-                    TASKS           : sTasks,
-                    SP_SYNCHRONOUS  : sSync,
-                    SP_UID          : sSP_UID,
-                    PRO_PARENT      : sProcess_Parent,
-                    TAS_PARENT      : sTask_Parent,
-                    VAR_IN1         : sVar_In1,
-                    VAR_IN2         : sVar_In2
-              },
-              success: function(response) {
-                  Ext.MessageBox.alert ('Status','Variable In has been saved successfully.');
-              }
-            });
-
-          }
-        });*/
-
     var subProcessProperties = new Ext.FormPanel({
     labelWidth  : 110, // label settings here cascade unless overridden
     //frame:true,
-    width: 800,
+    width: 500,
+    bodyStyle: 'padding:5px 0 0 5px;',
     autoScroll: true,
     items: [
             {
@@ -2507,7 +2440,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     title: 'Properties ',
     collapsible: false,
     maximizable: false,
-    width: 900,
+    width: 800,
     height: 400,
     layout: 'fit',
     plain: true,
@@ -2576,13 +2509,12 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
               success: function(response) {
                   Ext.MessageBox.alert ('Status','Sub Process Properties has been saved successfully.');
                   window.close();
+                   workflow.currentSelection.bpmnNewText.clear();
+                   workflow.currentSelection.bpmnNewText.drawStringRect(sSPNAME,20,5,150,'center');
+                   workflow.currentSelection.bpmnNewText.paint();
+                   workflow.currentSelection.subProcessName = sSPNAME;
               }
             });
-
-            workflow.currentSelection.bpmnNewText.clear();
-            workflow.currentSelection.bpmnNewText.drawStringRect(sSPNAME,20,20,100,'left');
-            workflow.currentSelection.bpmnNewText.paint();
-            workflow.currentSelection.subProcessName = sSPNAME;
         }
     },{
         text: 'Cancel',

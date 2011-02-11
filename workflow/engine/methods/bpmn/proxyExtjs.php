@@ -21,10 +21,14 @@ if(isset($_GET['stepid']))
        $sType       = $aStepTypeId[1];
     }
 
+$start = isset($_POST['start'])? $_POST['start']: 0;
+$limit = isset($_POST['limit'])? $_POST['limit']: '';
+
 switch($_GET['action'])
     {
        case 'getDynaformList':
-                $rows = $oProcessMap->getExtDynaformsList($_GET['pid']);
+                $rows = $oProcessMap->getExtDynaformsList($start, $limit, $_GET['pid']);
+                $result['totalCount'] = $oProcessMap->getAllDynaformCount();
                 array_shift($rows);
                 break;
 
@@ -46,7 +50,8 @@ switch($_GET['action'])
                 break;
 
        case 'getInputDocumentList':
-                $rows = $oProcessMap->getExtInputDocumentsCriteria($_GET['pid']);
+                $rows = $oProcessMap->getExtInputDocumentsCriteria($start, $limit,$_GET['pid']);
+                $result['totalCount'] = $oProcessMap->getAllInputDocumentCount();
                 array_shift($rows);
                 break;
 
@@ -57,7 +62,8 @@ switch($_GET['action'])
                 break;
 
        case 'getOutputDocument':
-                $rows = $oProcessMap->getExtOutputDocumentsCriteria($_GET['pid']);
+                $rows = $oProcessMap->getExtOutputDocumentsCriteria($start, $limit,$_GET['pid']);
+                $result['totalCount'] = $oProcessMap->getAllOutputDocumentCount();
                 array_shift($rows);
                 break;
 
@@ -73,7 +79,8 @@ switch($_GET['action'])
                 break;
 
        case 'getReportTables':
-               $rows        = $oProcessMap->getExtReportTables($_GET['pid']);
+               $rows        = $oProcessMap->getExtReportTables($start, $limit,$_GET['pid']);
+               $result['totalCount'] = $oProcessMap->getAllReportTableCount();
                break;
 
       case 'editReportTables':
@@ -107,7 +114,8 @@ switch($_GET['action'])
               break;
 
        case 'getDatabaseConnectionList':
-                $rows = $oProcessMap->getExtCriteriaDBSList($_GET['pid']);
+                $rows = $oProcessMap->getExtCriteriaDBSList($start, $limit,$_GET['pid']);
+                $result['totalCount'] = $oProcessMap->getAllDbSourceCount();
                 break;
 
        case 'editDatabaseConnection':
@@ -142,7 +150,7 @@ switch($_GET['action'])
                 break;
 
        case 'getAvailableCaseTrackerObjects':
-                $rows = $oProcessMap->getAvailableExtCaseTrackerObjects($_GET['tid']);
+                $rows = $oProcessMap->getAvailableExtCaseTrackerObjects($_GET['pid']);
                 array_shift($rows);
                 break;
 
@@ -221,12 +229,12 @@ switch($_GET['action'])
       case 'process_Edit':
   	  $rows = $oProcessMap->editProcessNew($_GET['pid']);
      }
-   //$result['totalCount'] = count($rows);
-   //$result['data'] = $rows;
-   //print json_encode( $result ) ;
-    $tmpData = json_encode( $rows ) ;
+  
+   $result['data'] = $rows;
+   print json_encode( $result ) ;
+    /*$tmpData = json_encode( $rows ) ;
     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
 
     $result = $tmpData;
-    echo $result;
+    echo $result;*/
  ?>

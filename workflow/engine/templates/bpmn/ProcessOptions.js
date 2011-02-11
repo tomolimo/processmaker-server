@@ -124,8 +124,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
       url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
     })
   });
- taskDynaform.load({params:{start:0, limit:5}});
-
+ taskDynaform.load({params:{start:0, limit:10}});
+//taskDynaform.load();
  //Creating store for getting list of additional PM tables
  var additionalTablesFields = Ext.data.Record.create([
    {name: 'ADD_TAB_UID', type: 'string'},
@@ -165,12 +165,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   });
  //tablesFieldsStore.load();
 
-
-
-
-  
-
-  var dynaformColumns = new Ext.grid.ColumnModel({
+var dynaformColumns = new Ext.grid.ColumnModel({
+    defaults: {
+          width: 200,
+          sortable: true
+      },
     columns: [
     new Ext.grid.RowNumberer(),
         {
@@ -203,11 +202,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             sortable: false,
             renderer: function(val, meta, record)
                {
-                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton("+record+");>");
+                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
                }
         }
-       
-
     ]
   });
 
@@ -263,11 +260,12 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         stripeRows: true,
         tbar: tb,
         bbar: new Ext.PagingToolbar({
-            pageSize: 5,
+            pageSize: 10,
             store: taskDynaform,
             displayInfo: true,
             displayMsg: 'Displaying dynaforms {0} - {1} of {2}',
-            emptyMsg: "No users to display"
+            emptyMsg: "No users to display",
+            items:[]
         }),
         viewConfig: {forceFit: true}
    });
@@ -276,8 +274,10 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         labelWidth: 100,
         buttonAlign: 'center',
         width     : 490,
+        bodyStyle : 'padding:10px 0 0 10px;',
         //monitorValid : true,
         autoHeight: true,
+        autoScroll: true,
         items:
                 [{
                     xtype: 'fieldset',
@@ -372,7 +372,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     title: 'Dynaform Information',
                     width: 500,
                     items:[{
-                            width:          150,
+                            width:          350,
                             xtype:          'combo',
                             mode:           'local',
                             editable:       true,
@@ -404,7 +404,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             xtype     : 'textfield',
                             fieldLabel: _('ID_TITLE'),
                             name      : 'DYN_TITLE',
-                            allowBlank: false
+                            allowBlank: false,
+                            width     : 350
                          },{
                             xtype     : 'textarea',
                             fieldLabel: _('ID_DESCRIPTION'),
@@ -418,7 +419,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                             hidden: true,
                             store: tablesFieldsStore,
                             cm: addTableColumns,
-                            width: 550,
+                            width: 500,
                             //height: 300,
                             autoHeight: true,
                             clicksToEdit: 1,
@@ -634,7 +635,7 @@ ProcessOptions.prototype.dbConnection = function()
               url: 'proxyExtjs.php?pid='+pro_uid+'&action=getDatabaseConnectionList'
             })
           });
-  dbStore.load();
+  dbStore.load({params:{start : 0 , limit : 10 }});
 
 
 
@@ -704,6 +705,14 @@ ProcessOptions.prototype.dbConnection = function()
         cm: dbGridColumn,
         stripeRows: true,
         tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: dbStore,
+            displayInfo: true,
+            displayMsg: 'Displaying Database Connection {0} - {1} of {2}',
+            emptyMsg: "No DB Connection to display",
+            items:[]
+        }),
         viewConfig: {forceFit: true}
    });
 
@@ -712,16 +721,16 @@ ProcessOptions.prototype.dbConnection = function()
       collapsible: false,
       maximizable: true,
       //allowBlank:false,
-      width:450,
+      width:400,
       frame:false,
       autoDestroy : true,
       monitorValid : true,
       plain: true,
+      bodyStyle : 'padding:10px 0 0 10px;',
       buttonAlign: 'center',
-
-                      items:[{
+        items:[{
                         xtype: 'combo',
-                        width:  150,
+                        width:  200,
                         mode: 'local',
                         editable:       false,
                         fieldLabel: 'Engine',
@@ -761,12 +770,11 @@ ProcessOptions.prototype.dbConnection = function()
                       },{
                               xtype: 'fieldset',
                               id:    'encode',
-                              
                               border:false,
                               hidden: true,
                               items: [{
                                       xtype: 'combo',
-                                      width:  250,
+                                      width:  220,
                                       mode: 'local',
                                    //   hidden: true,
                                       editable:       false,
@@ -831,7 +839,7 @@ ProcessOptions.prototype.dbConnection = function()
                          hidden: true,
                          items:[{
                                   xtype: 'combo',
-                                   width:  150,
+                                   width:  220,
                                   mode: 'local',
                                  // hidden: true,
                                   editable:false,
@@ -893,7 +901,7 @@ ProcessOptions.prototype.dbConnection = function()
                          hidden: true,
                          items:[{
                                   xtype: 'combo',
-                                  width:  150,
+                                  width:  220,
                                   mode: 'local',
                                   editable:       false,
                                   fieldLabel: 'Encode',
@@ -919,27 +927,32 @@ ProcessOptions.prototype.dbConnection = function()
                          xtype: 'textfield',
                          fieldLabel: 'Server',
                          name: 'DBS_SERVER',
+                         width:  200,
                          allowBlank: false
                       },{
                          xtype: 'textfield',
                          fieldLabel: 'Database name',
                          name: 'DBS_DATABASE_NAME',
+                         width:  200,
                          allowBlank: false
                       },{
                         xtype: 'textfield',
                         fieldLabel: 'Username',
                         name: 'DBS_USERNAME',
+                        width:  200,
                         allowBlank: false
                       },{
                         xtype: 'textfield',
                         fieldLabel: 'Password',
                         inputType:'password',
+                        width:  200,
                         name: 'DBS_PASSWORD',
                         allowBlank: true
                       },{
                         xtype: 'textfield',
                         fieldLabel: 'Port',
                         name: 'DBS_PORT',
+                        width:  200,
                         id:'port',
                         //allowBlank: false,
                         editable:false
@@ -948,7 +961,7 @@ ProcessOptions.prototype.dbConnection = function()
                         fieldLabel: 'Description',
                         name: 'DBS_DESCRIPTION',
                         allowBlank: true,
-                        width: 200,
+                        width: 220,
                         height:100
                       },{
                         id : 'DBS_UID',
@@ -1006,12 +1019,10 @@ ProcessOptions.prototype.dbConnection = function()
                                                     success: function(response) {
                                                     Ext.MessageBox.alert ('Status','Connection Tested Successfully.');
                                                     }
-                                              });
-                                            }
-                                           }
-                                    
-                     },{
-
+                                    });
+                            }
+                        }
+        },{
         text: 'Save',
         formBind    :true,
         handler: function(){
@@ -1108,14 +1119,13 @@ var testConnWindow = new Ext.Window({
     title: 'Add new Database Source',
     collapsible: false,
     maximizable: true,
-    width: 450,
+    width: 400,
     //autoHeight: true,
     //height: 400,
     //layout: 'fit',
     plain: true,
     buttonAlign: 'center',
     items: dbconnForm
-   
   });
 
   var gridWindow = new Ext.Window({
@@ -1178,7 +1188,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
               url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
             })
           });
-  inputDocStore.load();
+  inputDocStore.load({params:{start : 0 , limit : 10 }});
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
@@ -1277,6 +1287,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
         height    : 380,
         monitorValid : true,
         autoHeight: true,
+        bodyStyle : 'padding:10px 0 0 10px;',
         items:[{
                     xtype: 'fieldset',
                     layout: 'form',
@@ -1610,6 +1621,14 @@ var inputDocColumns = new Ext.grid.ColumnModel({
         cm: inputDocColumns,
         stripeRows: true,
         tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: inputDocStore,
+            displayInfo: true,
+            displayMsg: 'Displaying Input Document {0} - {1} of {2}',
+            emptyMsg: "No Input Document to display",
+            items:[]
+        }),
         viewConfig: {forceFit: true}
    });
 
@@ -1683,7 +1702,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                            url: 'proxyExtjs?pid='+pro_uid+'&action=getOutputDocument'
                            })
   });
-  outputDocStore.load();
+  outputDocStore.load({params:{start : 0 , limit : 10 }});
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
@@ -1818,6 +1837,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         cm          : outputDocColumns,
         stripeRows  : true,
         tbar        : tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: outputDocStore,
+            displayInfo: true,
+            displayMsg: 'Displaying Output Document {0} - {1} of {2}',
+            emptyMsg: "No Output Document to display",
+            items:[]
+        }),
         viewConfig  : {forceFit: true}
    });
 
@@ -1826,7 +1853,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         labelWidth      : 100,
         defaults        :{autoScroll:true},
         width           : 450,
-
+        bodyStyle : 'padding:10px 0 0 10px;',
         items           :[{
                     xtype       : 'fieldset',
                     layout      : 'form',
@@ -2257,7 +2284,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                            url : 'proxyExtjs?pid='+pro_uid+'&action=getReportTables'
                            })
  });
-  reportStore.load();
+  reportStore.load({params:{start : 0 , limit : 10 }});
 
  var reportTableTypeStore = new Ext.data.JsonStore({
             root         : 'data',
@@ -2374,6 +2401,14 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         cm          : reportColumns,
         stripeRows: true,
         tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: reportStore,
+            displayInfo: true,
+            displayMsg: 'Displaying Report Tables {0} - {1} of {2}',
+            emptyMsg: "No Report Tables to display",
+            items:[]
+        }),
         viewConfig: {forceFit: true}
    });
 
@@ -2401,6 +2436,7 @@ var reportForm =new Ext.FormPanel({
       frame:false,
       monitorValid : true,
       plain: true,
+      bodyStyle : 'padding:10px 0 0 10px;',
       buttonAlign: 'center',
       items:[{
                               xtype: 'textfield',
@@ -2594,4 +2630,3 @@ ProcessOptions.prototype.addTriggers= function()
   
 
 }
-
