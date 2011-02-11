@@ -135,24 +135,19 @@ if ( isset ($_REQUEST['action']) ) {
           $sOutput = $oJSON->encode($oOutput);
           echo $sOutput;
           break;
-
     case 'assignProcessUser':
   	  $oProcessMap->assignProcessUser($oData->PRO_UID, $oData->USR_UID);
   	break;
     case 'removeProcessUser':
   	  $oProcessMap->removeProcessUser($oData->PU_UID);
   	break;
-
     case 'saveInterMessageEvent':
           $aData['TAS_UID'] = $oData->uid;
           $aData['TAS_SEND_LAST_EMAIL'] = strtoupper($oData->tas_send);
           $aData['TAS_DEF_MESSAGE'] = $oData->data;
-          if(isset($aData['TAS_SEND_LAST_EMAIL']) && $aData['TAS_SEND_LAST_EMAIL'] == 'FALSE')
-          {
+          if(isset($aData['TAS_SEND_LAST_EMAIL']) && $aData['TAS_SEND_LAST_EMAIL'] == 'FALSE'){
              $aData['TAS_DEF_MESSAGE'] = '';
-          }
-          else
-          {
+          }else{
              $aData['TAS_DEF_MESSAGE'] = str_replace('@amp@', '&', $aData['TAS_DEF_MESSAGE']);
           }
   	  $sOutput = $oTask->update($aData);
@@ -201,9 +196,7 @@ if ( isset ($_REQUEST['action']) ) {
           $aData['EVN_STATUS'] = 'ACTIVE';
           $aData['EVN_WHEN'] = '1';
           $aData['EVN_ACTION'] = '';
-
-          if(preg_match("/Inter/", $oData->tas_type))
-          {
+          if(preg_match("/Inter/", $oData->tas_type)){
             $aData['EVN_RELATED_TO'] = 'MULTIPLE';
             $aData['EVN_TAS_UID_FROM'] = $oData->tas_from;
             $aData['EVN_TAS_UID_TO'] = $oData->tas_to;
@@ -211,28 +204,23 @@ if ( isset ($_REQUEST['action']) ) {
             echo $sOutput;
           }
           //Code for Start Events only
-          if(preg_match("/Start/", $oData->tas_type))
-          {
+          if(preg_match("/Start/", $oData->tas_type)){
+               $oEvn_uid='';
                $aData['EVN_RELATED_TO'] = 'SINGLE';
-               $aTask['TAS_UID'] = $oData->tas_uid;
-               $oTaskData = $oTask->load($aTask['TAS_UID']);
-              if($oTaskData['TAS_EVN_UID'] == '')
-              {
-                 $sOutput =  $oEvent->create($aData);
+               $aData['TAS_UID'] = $oData->tas_uid;
+               $oTaskData = $oTask->load($aData['TAS_UID']);
+              if($oTaskData['TAS_EVN_UID'] == ''){
+                 $oEvn_uid =  $oEvent->create($aData);
+              }else{
+                 $aData['EVN_UID'] = $oTaskData['TAS_EVN_UID'];
+                 $oEvn_uid = $aData['EVN_UID'];
+                 $oEvent->update($aData);
               }
-              else
-              {
-                   $aData['EVN_UID'] = $oTaskData['TAS_EVN_UID'];
-                   $oEvn_uid = $aData['EVN_UID'];
-                   $oEvent->update($aData);
-              }
-
               $aTask['TAS_UID'] = $oData->tas_uid;
               $aTask['TAS_EVN_UID'] = $oEvn_uid;
               $aTask['TAS_START'] = 'TRUE';
               $oTask->update($aTask);
           }
-
           break;
           case 'deleteRoute':
               require_once 'classes/model/Route.php';
@@ -241,7 +229,6 @@ if ( isset ($_REQUEST['action']) ) {
               echo $sOutput;
               break;
           case 'deleteEvent':
-             
               $sOutput = $oEvent->remove($oData->uid);
               echo $sOutput;
               break;
@@ -276,24 +263,19 @@ if ( isset ($_REQUEST['action']) ) {
             $out = array();
             $in = array();
 
-            if(isset($_POST['VAR_OUT']) && $_POST['VAR_OUT'] != '')
-            {
+            if(isset($_POST['VAR_OUT']) && $_POST['VAR_OUT'] != ''){
                $varOut = explode('|',$_POST['VAR_OUT']);
                $aVarOut1 = json_decode($varOut[0]);
                $aVarOut2 = json_decode($varOut[1]);
-                for($i=1; $i<=count($aVarOut1); $i++)
-                {
+                for($i=1; $i<=count($aVarOut1); $i++){
                                 $out[$aVarOut1[$i-1]]= $aVarOut2[$i-1];
                 }
             }
-
-            if(isset($_POST['VAR_IN']) && $_POST['VAR_IN'] != '')
-            {
+            if(isset($_POST['VAR_IN']) && $_POST['VAR_IN'] != ''){
                $varIn = explode('|',$_POST['VAR_IN']);
                $aVarIn1 = json_decode($varIn[0]);
                $aVarIn2 = json_decode($varIn[1]);
-                for($i=1; $i<=count($aVarIn1); $i++)
-                {
+                for($i=1; $i<=count($aVarIn1); $i++){
                                 $in[$aVarIn1[$i-1]]= $aVarIn2[$i-1];
                 }
             }
@@ -343,7 +325,6 @@ if ( isset ($_REQUEST['action']) ) {
             //$cont = Content::addContent( 'SP_TITLE', '', $_POST['form']['SP_UID'], $lang, $_POST['form']['SPROCESS_NAME'] );
             $cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
             break;
-
             case'saveSubprocessDetails11':
                  //$aTask=($_POST['TASKS']!=0)?$oTask->load($_POST['TASKS']):0;
                  require_once 'classes/model/SubProcess.php';
@@ -361,7 +342,6 @@ if ( isset ($_REQUEST['action']) ) {
                 //$lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
                 //$cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
              break;
-
             case 'subprocessProperties':
                 require_once 'classes/model/Content.php';
                 $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
