@@ -3778,7 +3778,7 @@ class XmlForm
       }
       //var_dump($this->requiredFields);
       $oJSON = new Services_JSON ( );
-      $this->objectRequiredFields =  str_replace('"', "%27", $oJSON->encode ( $this->requiredFields ));
+      $this->objectRequiredFields =  str_replace('"', "%27", str_replace("'", "%39", $oJSON->encode ( $this->requiredFields )) );
 
       //Load the default values
       //$this->setDefaultValues();
