@@ -359,6 +359,23 @@ class Roles extends BaseRoles {
     	 return $aRoles;
     }
     
+    //Added by Enrique at Feb 10th, 2011
+    //Gets number of users by department
+    function getAllUsersByDepartment(){
+    	 $oCriteria = new Criteria('rbac');
+    	 $oCriteria->addSelectColumn(UsersPeer::DEP_UID);
+    	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    	 $oCriteria->addGroupByColumn(UsersPeer::DEP_UID);
+    	 $oDataset = UsersPeer::doSelectRS($oCriteria);
+    	 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    	 $aDepts = array();
+    	 while ($oDataset->next()){
+    	 	 $row = $oDataset->getRow();
+    	 	 $aDepts[$row['DEP_UID']] = $row['CNT'];
+    	 }
+    	 return $aDepts;
+    }
+    
     function getRoleUsers($ROL_UID, $filter='') {
         try {
             $criteria = new Criteria();

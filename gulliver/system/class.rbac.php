@@ -670,6 +670,19 @@ class RBAC
     return $this->rolesObj->getAllUsersByRole();
   }
   
+/**
+  * this function gets the number of users by department
+  *
+  *
+  * @access public
+  * @author: Enrique Ponce de Leon <enrique@colosa.com>
+  * 
+  * @return $this->rolesObj->getAllUsersByRole
+  */
+  function getAllUsersByDepartment(){
+    return $this->rolesObj->getAllUsersByDepartment();
+  }
+  
   /**
   * this function gets roles code
   *

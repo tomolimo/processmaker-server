@@ -48,6 +48,9 @@
   $template->assign( 'ADD_UNASSIGNEDUSER',  G::loadTranslation("ID_UNASSIGNED_USERS") );
   
   $htmlDpto = lookforchildren( '' , 0);
+  
+  print_r($htmlDpto);
+  die;
 
   $content = $template->getOutputContent();  
   print $content;
