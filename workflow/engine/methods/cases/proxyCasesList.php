@@ -294,6 +294,24 @@
   $sSql   = BasePeer::createSelectSql($Criteria, $params);
 //  var_dump($sSql);
   
+  // this is the optimal way or query to render the cases search list
+  // fixing the bug related to the wrong data displayed in the list
+  if ( $action == 'search' ) {
+    $oDatasetIndex = AppCacheViewPeer::doSelectRS( $Criteria );
+    $oDatasetIndex->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+    $oDatasetIndex->next();
+    // a list of MAX_DEL_INDEXES is required in order to validate the right row
+    while($aRow = $oDatasetIndex->getRow()){
+      $maxDelIndexList[] = $aRow['MAX_DEL_INDEX'];
+      $oDatasetIndex->next();
+    }
+    // adding the validation condition in order to get the right row using the group by sentence
+    $Criteria->add(AppCacheViewPeer::DEL_INDEX, $maxDelIndexList, Criteria::IN );
+    //
+    $params = array ( $maxDelIndexList );
+
+  }
+
   //execute the query
   $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
