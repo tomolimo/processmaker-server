@@ -254,28 +254,23 @@
     } else{
       $distinct = true;
     }
-    // needs a litle bit of analysis to understant whats going on
-    // first check if there is a PMTable defined within the list maybe this code will be deprecated
+    // first check if there is a PMTable defined within the list,
     // the issue that brokes the normal criteria query seems to be fixed
-//    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])){
-//      // then
-//      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
-//      $tableName = $oAdditionalTables->getAddTabName();
-//      $tableName = strtolower($tableName);
-//      $tableNameArray = explode('_',$tableName);
-//      foreach ($tableNameArray as $item){
-//        $newTableName[] = ucfirst($item);
-//      }
-//      $tableName = implode('',$newTableName);
-////
-//      if (!class_exists($tableName)){
-//        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
-//      }
-//      eval ("\$totalCount=".$tableName."Peer::doCount( \$CriteriaCount, \$distinct );");
-//
-//    } else {
-//      $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
-//    }
+    if (isset($oAppCache->confCasesList['PMTable']) && !empty($oAppCache->confCasesList['PMTable'])) {
+      // then
+      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($oAppCache->confCasesList['PMTable']);
+      $tableName = $oAdditionalTables->getAddTabName();
+      $tableName = strtolower($tableName);
+      $tableNameArray = explode('_',$tableName);
+      foreach ($tableNameArray as $item){
+        $newTableName[] = ucfirst($item);
+      }
+      $tableName = implode('',$newTableName);
+      // so the pm table class can be invoqued from the pm table model clases
+      if (!class_exists($tableName)){
+        require_once(PATH_DB.SYS_SYS.PATH_SEP."classes".PATH_SEP.$tableName.".php");
+      }
+    }
     $totalCount = AppCacheViewPeer::doCount( $CriteriaCount, $distinct );
 
   }
@@ -286,15 +281,31 @@
       $Criteria->addDescendingOrderByColumn( $sort );
     else
       $Criteria->addAscendingOrderByColumn( $sort );
-    }
+  }
 
 	//limit the results according the interface    
-	$Criteria->setLimit( $limit );
-	$Criteria->setOffset( $start );
-  $params = array();
-  $sSql   = BasePeer::createSelectSql($Criteria, $params);
-//  var_dump($sSql);
-  
+    $Criteria->setLimit( $limit );
+    $Criteria->setOffset( $start );
+
+
+  // this is the optimal way or query to render the cases search list
+  // fixing the bug related to the wrong data displayed in the list
+  if ( $action == 'search' ) {
+    $oDatasetIndex = AppCacheViewPeer::doSelectRS( $Criteria );
+    $oDatasetIndex->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+    $oDatasetIndex->next();
+    // a list of MAX_DEL_INDEXES is required in order to validate the right row
+    while($aRow = $oDatasetIndex->getRow()){
+      $maxDelIndexList[] = $aRow['MAX_DEL_INDEX'];
+      $oDatasetIndex->next();
+    }
+    // adding the validation condition in order to get the right row using the group by sentence
+    $Criteria->add(AppCacheViewPeer::DEL_INDEX, $maxDelIndexList, Criteria::IN );
+    //
+    $params = array ( $maxDelIndexList );
+
+  }
+
   //execute the query
   $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);

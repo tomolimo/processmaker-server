@@ -548,7 +548,7 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getSearchListCriteria () {
     $Criteria = $this->addPMFieldsToCriteria('sent');
-    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
+    $Criteria->addAsColumn( 'MAX_DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
     
     //$Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
