@@ -131,7 +131,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         })
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
-      taskSteps.load();
+      taskSteps.load({params:{start : 0 , limit : 10 }});
 
         // create the Data Store of all Steps that are not been assigned to a task i.e available steps
     var availableSteps = new Ext.data.JsonStore({
@@ -218,7 +218,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         //ddGroup     : 'firstGridDDGroup',
         clicksToEdit: 1,
         minHeight   :400,
-        height      :400,
+        height      :340,
         layout      : 'form',
         plugins     : [editor],
         columns     : [{
@@ -309,7 +309,15 @@ TaskContext.prototype.editTaskSteps = function(_3252){
             }),
             stripeRows: true,
             viewConfig: {forceFit: true},
-            tbar: tb
+            tbar: tb,
+            bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: taskSteps,
+            displayInfo: true,
+            displayMsg: 'Displaying Steps {0} - {1} of {2}',
+            emptyMsg: "No Steps to display",
+            items:[]
+            })
          });
 
       editor.on({
@@ -382,7 +390,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         labelWidth: 100,
         monitorValid : true,
         width     : 850,
-        height    : 500,
+        height    : 400,
         items:
             {
             xtype:'tabpanel',
@@ -433,7 +441,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         collapsible: false,
         maximizable: false,
         width: 750,
-        height: 380,
+        height: 400,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -569,14 +577,6 @@ TaskContext.prototype.editUsers= function()
                  fields          : userFields
               });
      storeUsers.load();
-       // paging bar on the bottom
-     var paging = new Ext.PagingToolbar({
-            pageSize: 10,
-            store: taskUsers,
-            displayInfo: true,
-            displayMsg: 'Displaying users {0} - {1} of {2}',
-            emptyMsg: "No users to display"
-        });
 
     var grid = new Ext.grid.GridPanel({
         store: taskUsers,
@@ -588,7 +588,7 @@ TaskContext.prototype.editUsers= function()
         autoHeight:false,
         clicksToEdit: 1,
         minHeight:400,
-        height   :300,
+        height   :320,
         layout: 'fit',
         plugins: [editor],
         cm: new Ext.grid.ColumnModel({
@@ -646,11 +646,18 @@ TaskContext.prototype.editUsers= function()
          
         stripeRows: true,
         viewConfig: {forceFit: true},
-        bbar:paging,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: taskUsers,
+            displayInfo: true,
+            displayMsg: 'Displaying Users {0} - {1} of {2}',
+            emptyMsg: "No Users to display",
+            items:[]
+        }),
         tbar: tb
         });
 
-        taskUsers.load();
+        taskUsers.load({params:{start : 0 , limit : 10 }});
 
         editor.on({
           scope: this,
@@ -1426,8 +1433,8 @@ TaskContext.prototype.stepTriggers = function()
             animate     : true
          });
     tree.setRootNode(root);
-    root.expand(true);
-    //tree.render('tree');
+    //root.expand(true);
+
     tree.on('click', function (node){
          if(node.isLeaf()){
              var sStepUID = node.attributes.id;
@@ -1548,14 +1555,7 @@ TaskContext.prototype.stepTriggers = function()
                 //var rowSelected = Objectsgrid;
                 //workflow.gridObject = Objectsgrid;
                 var rowData = ProcMapObj.ExtVariables();
-                console.log(rowData);
-                //var a = Ext.getCmp('btnCondition');
-                //alert (a);
-
-                //console.log(rowData);
             }
-
-
     });
 
     var toolBar = new Ext.Toolbar({
@@ -1573,7 +1573,7 @@ TaskContext.prototype.stepTriggers = function()
         fields          : triggersFields
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
-      //stepsTriggers.load();
+      stepsTriggers.load({params:{start : 0 , limit : 10 }});
 
      var availableTriggers = new Ext.data.JsonStore({
          root            : 'data',
@@ -1676,6 +1676,14 @@ TaskContext.prototype.stepTriggers = function()
             }),
         stripeRows: true,
         viewConfig: {forceFit: true},
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: stepsTriggers,
+            displayInfo: true,
+            displayMsg: 'Displaying Step Tiggers {0} - {1} of {2}',
+            emptyMsg: "No Step Tiggers to display",
+            items:[]
+        }),
         tbar: toolBar
         });
 
@@ -1791,7 +1799,7 @@ TaskContext.prototype.editUsersAdHoc= function()
             })
           });
           //taskUsers.setDefaultSort('LABEL', 'asc');
-          taskUsers.load();
+          taskUsers.load({params:{start : 0 , limit : 10 }});
 
          // create the Data Store of users that are not assigned to a task
          var storeUsers = new Ext.data.JsonStore({
@@ -1898,7 +1906,7 @@ TaskContext.prototype.editUsersAdHoc= function()
         autoHeight:false,
         clicksToEdit: 1,
         minHeight:400,
-        height   :400,
+        height   :330,
         layout: 'fit',
         plugins: [editor],
         columns: [
@@ -1950,6 +1958,14 @@ TaskContext.prototype.editUsersAdHoc= function()
             }),
         stripeRows: true,
         viewConfig: {forceFit: true},
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: taskUsers,
+            displayInfo: true,
+            displayMsg: 'Displaying Users {0} - {1} of {2}',
+            emptyMsg: "No Users to display",
+            items:[]
+        }),
         tbar: tb
         });
 
@@ -2022,7 +2038,7 @@ TaskContext.prototype.editUsersAdHoc= function()
         collapsible: false,
         maximizable: false,
         width: 400,
-        height: 350,
+        height: 370,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',

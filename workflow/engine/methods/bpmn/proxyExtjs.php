@@ -160,12 +160,14 @@ switch($_GET['action'])
                 break;
 
        case 'getAssignedSteps':
-                $rows = $oProcessMap->getExtStepsCriteria($_GET['tid']);
+                $rows = $oProcessMap->getExtStepsCriteria($start, $limit,$_GET['tid']);
+                $result['totalCount'] = $oProcessMap->getAllStepCount();
                 array_shift($rows);
                 break;
 
        case 'getAssignedUsersList':
-                $rows        = $oProcessMap->usersExtList($_GET['pid'], $_GET['tid']);
+                $rows        = $oProcessMap->usersExtList($start, $limit, $_GET['pid'], $_GET['tid']);
+                $result['totalCount'] = $oProcessMap->getAllTaskUserCount();
                 array_shift($rows);
                 break;
 
@@ -182,7 +184,8 @@ switch($_GET['action'])
                break;
 
        case 'getAssignedStepTriggers':
-               $rows        = $oProcessMap->getExtStepTriggersCriteria($sStep, $_GET['tid'], $sType);
+               $rows        = $oProcessMap->getExtStepTriggersCriteria($start, $limit,$sStep, $_GET['tid'], $sType);
+               $result['totalCount'] = $oProcessMap->getAllStepTriggerCount();
                break;
 
        case 'availableUsers':
@@ -191,7 +194,8 @@ switch($_GET['action'])
                break;
 
        case 'assignedUsers':
-               $rows        = $oProcessMap->getExtusersadhoc($_GET['pid'], $_GET['tid']);
+               $rows        = $oProcessMap->getExtusersadhoc($start, $limit,$_GET['pid'], $_GET['tid']);
+               $result['totalCount'] = $oProcessMap->getAllTaskUserCount();
                array_shift($rows);
                break;
 

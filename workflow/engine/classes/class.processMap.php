@@ -4467,13 +4467,14 @@ class processMap {
   }
 
 
+
   /*
   * Users assigned to Tasks
   * @param string $sProcessUID
   * @param string $sTaskUID
   * @return boolean
   */
-  function usersExtList($sProcessUID = '', $sTaskUID = '')
+  function usersExtList($start, $limit,$sProcessUID = '', $sTaskUID = '')
   {
     try {
       $oProcess = new Process ( );
@@ -4503,7 +4504,7 @@ class processMap {
       $oTask = new Task ( );
       $aTask = $oTask->load ( $sTaskUID );
 
-      $this->getExtTaskUsersCriteria ( $sTaskUID, $_SESSION ['iType'] );
+      $this->getExtTaskUsersCriteria ($start, $limit, $sTaskUID, $_SESSION ['iType'] );
       return $_SESSION ['_DBArray']['taskUsers'];
 
     } catch ( Exception $oError ) {
@@ -4511,7 +4512,23 @@ class processMap {
     }
   }
 
-  function getExtTaskUsersCriteria($sTaskUID = '', $iType = 1)
+
+     //new functions
+  function getAllTaskUserCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = TaskUserPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
+  function getExtTaskUsersCriteria($start, $limit,$sTaskUID = '', $iType = 1)
   {
     try {
       $aUsers     = array ();
@@ -4532,6 +4549,14 @@ class processMap {
       $oCriteria->add ( TaskUserPeer::TAS_UID, $sTaskUID );
       $oCriteria->add ( TaskUserPeer::TU_TYPE, $iType );
       $oCriteria->add ( TaskUserPeer::TU_RELATION, 2 );
+
+      $this->tmpCriteria = clone $oCriteria;
+
+      if($start != '')
+         $oCriteria->setOffset($start);
+      if($limit != '')
+         $oCriteria->setLimit($limit);
+      
       $oDataset = TaskUserPeer::doSelectRS ( $oCriteria );
       $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $oDataset->next ();
@@ -4790,12 +4815,27 @@ class processMap {
     }
   }
 
+     //new functions
+  function getAllStepCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = StepPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
   * Return the steps list criteria object
   * @param string $sTaskUID
   * @return array
   */
-  function getExtStepsCriteria($sTaskUID = '')
+  function getExtStepsCriteria($start, $limit, $sTaskUID = '')
   {
     try {
       //call plugin
@@ -4807,6 +4847,13 @@ class processMap {
       $oCriteria = new Criteria ( 'workflow' );
       $oCriteria->add ( StepPeer::TAS_UID, $sTaskUID );
       $oCriteria->addAscendingOrderByColumn ( StepPeer::STEP_POSITION );
+      $this->tmpCriteria = clone $oCriteria;
+
+      if($start != '')
+         $oCriteria->setOffset($start);
+      if($limit != '')
+         $oCriteria->setLimit($limit);
+
       $oDataset = StepPeer::doSelectRS ( $oCriteria );
       $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $oDataset->next ();
@@ -4870,12 +4917,27 @@ class processMap {
     }
   }
 
+      //new functions
+  function getAllStepTriggerCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = StepTriggerPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
   * Return the steps trigger criteria array
   * @param string $sTaskUID
   * @return array
   */
-  function getExtStepTriggersCriteria($sStepUID = '', $sTaskUID = '', $sType = '')
+  function getExtStepTriggersCriteria($start, $limit,$sStepUID = '', $sTaskUID = '', $sType = '')
   {
     //$_SESSION['TASK'] = $sTaskUID;
     $aBB        = array ();
@@ -4898,6 +4960,13 @@ class processMap {
     $oCriteria->add ( StepTriggerPeer::TAS_UID, $sTaskUID );
     $oCriteria->add ( StepTriggerPeer::ST_TYPE, $sType );
     $oCriteria->addAscendingOrderByColumn ( StepTriggerPeer::ST_POSITION );
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+       $oCriteria->setOffset($start);
+    if($limit != '')
+       $oCriteria->setLimit($limit);
+    
     $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
@@ -5005,7 +5074,6 @@ class processMap {
     $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
     $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
     $oCriteria->add ( DynaformPeer::PRO_UID, $sProcessUID );
-
     $this->tmpCriteria = clone $oCriteria;
 
     if($start != '')
@@ -6021,7 +6089,8 @@ class processMap {
     }
   }
 
-function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
+
+function getExtTaskUsersAdHocCriteria($start, $limit,$sTaskUID = '', $iType = 1) {
     try {
       $aUsers = array();
       $aUsers [] = array('LABEL' => 'char', 'TAS_UID' => 'char', 'USR_UID' => 'char', 'TU_TYPE' => 'integer', 'TU_RELATION' => 'integer');
@@ -6041,6 +6110,12 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
       $oCriteria->add(TaskUserPeer::TAS_UID, $sTaskUID);
       $oCriteria->add(TaskUserPeer::TU_TYPE, $iType);
       $oCriteria->add(TaskUserPeer::TU_RELATION, 2);
+      $this->tmpCriteria = clone $oCriteria;
+
+      if($start != '')
+          $oCriteria->setOffset($start);
+      if($limit != '')
+          $oCriteria->setLimit($limit);
       $oDataset = TaskUserPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
@@ -6168,7 +6243,7 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
   }
 
 
-  function getExtusersadhoc($sProcessUID = '', $sTaskUID = '') {
+  function getExtusersadhoc($start, $limit,$sProcessUID = '', $sTaskUID = '') {
     try {
       $oProcess = new Process ( );
       $aFields = $oProcess->load($sProcessUID);
@@ -6197,7 +6272,7 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
       $oTask = new Task ( );
       $aTask = $oTask->load($sTaskUID);
       //$assignedUsers = getExtTaskUsersCriteria($sTaskUID, $_SESSION ['iType']);
-     $this->getExtTaskUsersAdHocCriteria ( $sTaskUID, $_SESSION ['iType'] );
+     $this->getExtTaskUsersAdHocCriteria ($start, $limit, $sTaskUID, $_SESSION ['iType'] );
       return $_SESSION ['_DBArray']['taskUsers'];
 
     } catch ( Exception $oError ) {

@@ -122,10 +122,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         }),
     proxy        : new Ext.data.HttpProxy({
       url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
-    })
+    }),
+    sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
   });
  taskDynaform.load({params:{start:0, limit:10}});
-//taskDynaform.load();
+
  //Creating store for getting list of additional PM tables
  var additionalTablesFields = Ext.data.Record.create([
    {name: 'ADD_TAB_UID', type: 'string'},
@@ -698,9 +699,9 @@ ProcessOptions.prototype.dbConnection = function()
         frame: false,
         autoHeight:false,
         clicksToEdit: 1,
-        width:450,
+        width:480,
         minHeight:400,
-        height   :400,
+        height   :380,
         layout: 'fit',
         cm: dbGridColumn,
         stripeRows: true,
@@ -709,7 +710,7 @@ ProcessOptions.prototype.dbConnection = function()
             pageSize: 10,
             store: dbStore,
             displayInfo: true,
-            displayMsg: 'Displaying Database Connection {0} - {1} of {2}',
+            displayMsg: 'Displaying DB Connection {0} - {1} of {2}',
             emptyMsg: "No DB Connection to display",
             items:[]
         }),
@@ -1134,7 +1135,7 @@ var testConnWindow = new Ext.Window({
     maximizable: true,
     width: 480,
     //autoHeight: true,
-    height: 400,
+    height: 420,
     //layout: 'fit',
     plain: true,
     buttonAlign: 'center',
@@ -2395,7 +2396,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         frame       : false,
         autoHeight  :false,
         clicksToEdit: 1,
-        width       :400,
+        width       :420,
         height      :400,
         layout      : 'fit',
         cm          : reportColumns,
@@ -2416,7 +2417,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         title       : 'Report Tables',
         collapsible : false,
         maximizable : false,
-        width       : 400,
+        width       : 420,
         defaults    :{autoScroll:true},
         height      : 450,
         minWidth    : 200,
