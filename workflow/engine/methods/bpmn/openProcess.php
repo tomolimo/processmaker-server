@@ -87,6 +87,17 @@
      $countTasks = $countTasks + 1;
     }
    }
+   //for Events
+   foreach($oData->event as $id => $value)
+   {
+       if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] == '' && $value['EVN_TAS_UID_TO'] == ''){
+         $arrayEvents[$count]['0'] = $value['EVN_UID'];
+         $arrayEvents[$count]['1'] = $value['EVN_TYPE'];
+         $arrayEvents[$count]['2'] = $value['EVN_POSX'];
+         $arrayEvents[$count]['3'] = $value['EVN_POSY'];
+         $count                    = $count+ 1;
+       }
+   }
    $lanes              = $oProcess->createLanesNewPM($oData->lanes);
    $fields             = $oProcess->createTransitionsPM($oData->tasks,$oData->routes,$arrayEvents,$count,$arrayRoutes,$countRoutes);
    //$subProcess         = $oProcess->createSubProcessesPM($oData->subProcess);

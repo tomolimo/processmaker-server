@@ -358,7 +358,7 @@ class processMap {
         $oDataset->next();
       }
       $oPM->derivation = array('Sequential', 'Evaluate (manual)', 'Evaluate (auto)', 'Parallel (fork)', 'Parallel by evaluation (fork)', 'Parallel (sequential join)', 'Parallel (sequential main join)');
-      
+
       //Load extended task properties from plugin. By JHL Jan 18, 2011
       $oPluginRegistry =& PMPluginRegistry::getSingleton();
 	  $activePluginsForTaskProperties=$oPluginRegistry->getTaskExtendedProperties();
@@ -553,7 +553,7 @@ class processMap {
         $oGateway->remove($aRow ['GAT_UID']);
         $oDataset->next();
       }
-      
+
       //Delete the swimlanes elements of process
       $oCriteria = new Criteria('workflow');
       $oCriteria->add(SwimlanesElementsPeer::PRO_UID, $sProcessUID);
@@ -1317,10 +1317,10 @@ class processMap {
 		      $id=$taskPropertiesInfo->sNamespace."--".$taskPropertiesInfo->sName;
 		      if($id==$iForm){
 		      	$sFilename=$taskPropertiesInfo->sPage;
-		      	$sw_template=true;		      	
+		      	$sw_template=true;
 		      }
 	      }
-        	
+
           //$sFilename = 'tasks/tasks_Owner.xml';
           break;
       }
@@ -1353,7 +1353,7 @@ class processMap {
       }else{
       	$G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
       }
-      
+
       G::RenderPage('publish', 'raw');
       return true;
     } catch (Exception $oError) {
@@ -2129,8 +2129,8 @@ class processMap {
       $_SESSION['_DBArray'] = $_DBArray;
 
       $oCriteria = new Criteria('dbarray');
-      $oCriteria->setDBArrayTable('log_cases_scheduler');    
-     
+      $oCriteria->setDBArrayTable('log_cases_scheduler');
+
       $G_PUBLISH = new Publisher;
       $G_PUBLISH->ROWS_PER_PAGE = 10;
       $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_Scheduler_Log', $oCriteria);
@@ -2140,7 +2140,7 @@ class processMap {
       throw ($oError);
     }
   }
-  
+
   /*
    * Presents a small list of messages of the process
    * @param string $sProcessUID
@@ -2504,7 +2504,7 @@ class processMap {
    * @param  string    $sTaskUID    Default value empty
    * @param  string    $sNextTask   Default value empty
    * @param  string    $sType       Default value empty
-   * @param  boolean   $sDelete     
+   * @param  boolean   $sDelete
    * @return array     void
    */
   function saveNewPattern($sProcessUID = '', $sTaskUID = '', $sNextTask = '', $sType = '', $sDelete='') {
@@ -2567,9 +2567,9 @@ class processMap {
 
       $oGateway = new Gateway ( );
       $sGatewayUID = $oGateway->create($aFields);
-      
+
       return $sGatewayUID;
-      
+
     } catch (Exception $oError) {
       throw ($oError);
     }
@@ -3121,7 +3121,7 @@ class processMap {
         case 'ANY' :
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
-          break;       
+          break;
         case 'DYNAFORM' :
           $sObjectType = G::LoadTranslation('ID_DYNAFORM');
           if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
@@ -3243,7 +3243,7 @@ class processMap {
         case 'ANY' :
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
-          break;        
+          break;
         case 'DYNAFORM' :
           $sObjectType = G::LoadTranslation('ID_DYNAFORM');
           if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
@@ -4679,7 +4679,7 @@ class processMap {
     while ( $aRow = $oDataset->getRow () ) {
         $aAdditionalTables [] = array ('ADD_TAB_UID' => $aRow ['ADD_TAB_UID'], 'ADD_TAB_NAME' => $aRow ['ADD_TAB_NAME'], 'ADD_TAB_DESCRIPTION' => $aRow ['ADD_TAB_DESCRIPTION']);
         $oDataset->next ();
-      }     
+      }
     return $aAdditionalTables;
   }
 
@@ -5476,7 +5476,7 @@ class processMap {
         $oDataset->next ();
     }
     return $aAvailableProcessIODoc;
-  } 
+  }
 
  /**
    * listDBSConnection
@@ -5717,7 +5717,7 @@ class processMap {
     return $aObjects;
   }
 
- 
+
   /**
    * getAvailableCaseTrackerObjectsCriteria
    *
@@ -5841,7 +5841,7 @@ class processMap {
     return $aReportTable;
   }
 
-  
+
   function getExtAvailableUsersList($sTaskUID = '', $iType = 2) {
     try {
       $oTasks = new Tasks ( );
@@ -6031,10 +6031,10 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
     $aFields['TASK_SOURCE_NAME'] = Content::load ( 'TAS_TITLE', '', $aRows ['OP_TASK_SOURCE'] , $lang );
     $oUser = UsersPeer::retrieveByPK( $aRows ['USR_UID'] );
     $aFields ['USR_FULLNAME'] = $oUser->getUsrFirstname() . ' ' . $oUser->getUsrLastname() ;
-    
 
 
-    
+
+
     switch ($aRows ['OP_OBJ_TYPE']) {
       /* case 'ANY':
         $aFields['OP_OBJ_TYPE'] = '';
@@ -6052,7 +6052,7 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
         $aFields ['OBJ_NAME'] = Content::load ( 'OUT_DOC_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
         break;
     }
-    
+
     return $aFields;
   }
 
@@ -6093,6 +6093,48 @@ function getExtTaskUsersAdHocCriteria($sTaskUID = '', $iType = 1) {
       throw ($oError);
     }
   }
-}
+
+function saveExtddEvents($oData)
+{
+  $oTask = new Task();
+  $oEvent = new Event();
+  $oEvn_uid = '';
+  $aData['PRO_UID']    = $oData->uid;
+  $aData['EVN_TYPE']   = $oData->tas_type;
+  $aData['EVN_POSX']   = $oData->position->x;
+  $aData['EVN_POSY']   = $oData->position->y;
+  $aData['EVN_STATUS'] = 'ACTIVE';
+  $aData['EVN_WHEN']   = '1';
+  $aData['EVN_ACTION'] = '';
+
+  if(preg_match("/Inter/", $aData['EVN_TYPE'])){
+    $aData['EVN_RELATED_TO'] = 'MULTIPLE';
+  }
+  if(preg_match("/Start/", $aData['EVN_TYPE']) || preg_match("/Inter/", $aData['EVN_TYPE'])){
+    $aData['EVN_RELATED_TO'] = 'SINGLE';
+  }
+   if(isset($oData->tas_uid) && $oData->tas_uid != ''){
+     $aData['TAS_UID'] = $oData->tas_uid;
+     $oTaskData = $oTask->load($aData['TAS_UID']);
+     if($oTaskData['TAS_EVN_UID'] == ''){
+       $oEvn_uid =  $oEvent->create($aData);
+     }else{
+       $aData['EVN_UID'] = $oTaskData['TAS_EVN_UID'];
+       $oEvn_uid = $aData['EVN_UID'];
+       $oEvent->update($aData);
+     }
+     $aTask['TAS_UID']     = $oData->tas_uid;
+     $aTask['TAS_EVN_UID'] = $oEvn_uid;
+     $aTask['TAS_START']   = 'TRUE';
+     $oTask->update($aTask);
+    }else{
+     $oEvn_uid =  $oEvent->create($aData);
+    }
+   $oNewTask->uid = $oEvn_uid;
+   $oJSON = new Services_JSON ( );
+   return $oJSON->encode($oNewTask);
+ 
+ }
 
  
+}

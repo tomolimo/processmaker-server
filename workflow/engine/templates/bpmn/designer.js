@@ -538,28 +538,22 @@ win.on('move', function() {
           {
               workflow.boundaryEvent = false;
           }
-
           workflow.task_width='';
           workflow.annotationName='';
           NewShape = eval("new "+data.name+"(workflow)");
           NewShape.x = e.xy[0];
           NewShape.y = e.xy[1];
           NewShape.actiontype = 'addTask';
-
-          if(data.name == 'bpmnAnnotation')
-              {
-                  NewShape.actiontype = 'addText';
-                  workflow.saveShape(NewShape);      //Saving task when user drags and drops it
-              }
-          if(data.name == 'bpmnTask')
-              {
-                  NewShape.actiontype = 'addTask';
-                  workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
-                  // NewShape.taskName = workflow.taskName;
-              }
-
-
-
+          if(data.name == 'bpmnAnnotation'){
+            NewShape.actiontype = 'addText';
+            workflow.saveShape(NewShape);      //Saving task when user drags and drops it
+          }else if(data.name == 'bpmnTask'){
+            NewShape.actiontype = 'addTask';
+            workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
+          }else if(data.name.match(/Event/)){
+            NewShape.actiontype = 'addEvent';
+            workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
+          }
 
           var scrollLeft = workflow.getScrollLeft();
           var scrollTop  = workflow.getScrollTop();
@@ -574,51 +568,40 @@ win.on('move', function() {
       //var totaltask = shapes[0].length;                //shapes[0] is an array for all the tasks
       //var totalgateways = shapes[1].length;          //shapes[1] is an array for all the gateways
       //var totalevents = shapes[2].length;           //shapes[2] is an array for all the events
+      if(typeof shapes.routes != 'undefined' && shapes.routes != ''){
       var totalroutes  = shapes.routes.length;           //shapes[3] is an array for all the routes
-
-      for(var i=0;i<=totalroutes-1;i++)
-      {
+      for(var i=0;i<=totalroutes-1;i++){
           var sourceid = shapes.routes[i][1];      //getting source id for connection from Routes array
           var targetid = shapes.routes[i][2];      //getting target id for connection from Routes array
-
           //After creating all the shapes, check one by one shape id
-          for(var conn =0; conn < this.workflow.figures.data.length ; conn++)
-          {
-              if(typeof this.workflow.figures.data[conn] === 'object')
-              {
+          for(var conn =0; conn < this.workflow.figures.data.length ; conn++){
+              if(typeof this.workflow.figures.data[conn] === 'object'){
                   if(sourceid == this.workflow.figures.data[conn].id){
                       sourceObj = this.workflow.figures.data[conn];
                   }
               }
           }
-
-          for(var conn =0; conn < this.workflow.figures.data.length ; conn++)
-          {
-              if(typeof this.workflow.figures.data[conn] === 'object')
-              {
+          for(var conn =0; conn < this.workflow.figures.data.length ; conn++){
+              if(typeof this.workflow.figures.data[conn] === 'object'){
                   //If End Process or Evaluate
-                  if(targetid == '-1' || typeof shapes.routes[i][5] != 'undefined' && shapes.routes[i][5] == 'EVALUATE')
-                  {
+                  if(targetid == '-1' || typeof shapes.routes[i][5] != 'undefined' && shapes.routes[i][5] == 'EVALUATE'){
                       targetObj = eval("new bpmnEventEmptyEnd (this.workflow)");
                       this.workflow.addFigure(targetObj,sourceObj.x+67,sourceObj.y+60);
                       break;
-                  }
-                  else if(targetid == this.workflow.figures.data[conn].id ){
+                  }else if(targetid == this.workflow.figures.data[conn].id ){
                       targetObj = this.workflow.figures.data[conn];
                   }
               }
           }
-
-
           //Making Connections
           var connObj = new DecoratedConnection();
           connObj.setSource(sourceObj.output1);
           connObj.setTarget(targetObj.input2);
           connObj.id = shapes.routes[i][0];
           this.workflow.addFigure(connObj);
-
       }
-  }
+    }
+ }
 
 
 

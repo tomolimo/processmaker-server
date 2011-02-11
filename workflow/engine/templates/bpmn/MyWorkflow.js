@@ -1099,9 +1099,11 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             urlparams = '?action='+actiontype+'&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
             break;
         case 'addEvent':
-            var tas_uid = oNewShape.workflow.taskUid[0].value;
+            var tas_uid='';
+            if(typeof oNewShape.workflow != 'undefined' &&  oNewShape.workflow != null)
+                tas_uid = oNewShape.workflow.taskUid[0].value;
             var tas_type = oNewShape.type;
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","tas_type":"'+tas_type+'"}';
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","tas_type":"'+tas_type+'","position":'+pos+'}';
             break;
         case 'updateEvent':
             var evn_uid = oNewShape.id
@@ -1123,7 +1125,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                    {
                         this.workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
                         oNewShape.html.id = this.workflow.newTaskInfo.uid;
-                        oNewShape.id = this.workflow.newTaskInfo.uid;
+                        oNewShape.id      = this.workflow.newTaskInfo.uid;
                             if(oNewShape.type == 'bpmnTask' && oNewShape.boundaryEvent != true){
                                 oNewShape.taskName = this.workflow.newTaskInfo.label;
                                 workflow.redrawTaskText(oNewShape);

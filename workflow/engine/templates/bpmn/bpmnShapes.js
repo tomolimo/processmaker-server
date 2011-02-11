@@ -283,70 +283,55 @@ InputPort.prototype.onDrop = function (port) {
         _4070.setConnection(new DecoratedConnection());
         this.parentNode.workflow.getCommandStack().execute(_4070);
 
-        //Saving Start Event
-        var preObj   = new Array();
-        var bpmnType = this.workflow.currentSelection.type;
+       //Saving Start Event
+       var preObj   = new Array();
+       var bpmnType = this.workflow.currentSelection.type;
 
         //Routing from end event to task
-        if(bpmnType.match(/End/) && bpmnType.match(/Event/) && port.parentNode.type.match(/Task/))
-            {
-                preObj = this.workflow.currentSelection; //end event
-                var newObj = port.parentNode;  //task
-                newObj.conn = _4070.connection;
-                newObj.reverse = 1;           //setting reverse parameter if user is routing from down to up
-                this.workflow.saveRoute(preObj,newObj);
-            }
-
+       if(bpmnType.match(/End/) && bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)){
+         preObj = this.workflow.currentSelection; //end event
+         var newObj = port.parentNode;  //task
+         newObj.conn = _4070.connection;
+         newObj.reverse = 1;           //setting reverse parameter if user is routing from down to up
+         this.workflow.saveRoute(preObj,newObj);
+       }
        //Routing from task to start event
-       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Event/) && port.parentNode.type.match(/Start/))
-            {
-                preObj = this.workflow.currentSelection; //task
-                newObj = port.parentNode; //start event
-                //newObj.reverse = 1;       //setting reverse parameter if user is routing from down to up
-                var tas_uid = preObj.id;
-                this.workflow.saveEvents(newObj,tas_uid);
-            }
-
+      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Event/)){
+        preObj = this.workflow.currentSelection;  //task
+        newObj = port.parentNode;                 //start event
+        var tas_uid = preObj.id;
+        this.workflow.saveEvents(newObj,tas_uid);
+      }
       //Routing from task to task
-      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
-            {
-
-    preObj = this.workflow.currentSelection;
-                newObj = port.parentNode;
-                newObj.conn = _4070.connection;
-    newObj.sPortType =port.properties.name;
-    preObj.sPortType =this.properties.name;
-                this.workflow.saveRoute(newObj,preObj);
-            }
-
+      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
+        preObj = this.workflow.currentSelection;
+        newObj = port.parentNode;
+        newObj.conn = _4070.connection;
+        newObj.sPortType =port.properties.name;
+        preObj.sPortType =this.properties.name;
+        this.workflow.saveRoute(newObj,preObj);
+      }
       //Routing from task to gateway
-      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/))
-            {
-                 var shape = new Array();
-                 shape.type = '';
-                 preObj = this.workflow.currentSelection;
-                 newObj = port.parentNode;
-                 this.workflow.saveRoute(newObj,shape);
-            }
-
+      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){
+        var shape = new Array();
+        shape.type = '';
+        preObj = this.workflow.currentSelection;
+        newObj = port.parentNode;
+        this.workflow.saveRoute(newObj,shape);
+      }
       //Routing from task to Intermediate event
-      else if(port.parentNode.type.match(/Inter/) && port.parentNode.type.match(/Event/) && bpmnType.match(/Task/))
-            {
-                var taskFrom = workflow.getStartEventConn(this,'targetPort','OutputPort');
-                var taskTo =  workflow.getStartEventConn(this,'sourcePort','InputPort');
-
-                if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined')
-                  {
-                    preObj.type = 'Task';
-                    preObj.taskFrom = taskFrom[0].value;
-                    preObj.taskTo = taskTo[0].value;
-
-                    //save Event First
-                    tas_uid = port.parentNode.id;
-                    this.workflow.saveEvents(preObj,workflow.currentSelection);
-                  }
-            }
-
+      else if(port.parentNode.type.match(/Inter/) && port.parentNode.type.match(/Event/) && bpmnType.match(/Task/)){
+        var taskFrom = workflow.getStartEventConn(this,'targetPort','OutputPort');
+        var taskTo =  workflow.getStartEventConn(this,'sourcePort','InputPort');
+        if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined'){
+          preObj.type = 'Task';
+          preObj.taskFrom = taskFrom[0].value;
+          preObj.taskTo = taskTo[0].value;
+          //save Event First
+          tas_uid = port.parentNode.id;
+          this.workflow.saveEvents(preObj,workflow.currentSelection);
+        }
+      }
     }
 };
 
@@ -362,7 +347,6 @@ OutputPort.prototype.onDrop = function (port) {
     else if (conn < 2) //If One connection exist then Do not Allow to connect
     connect = false;
 
-
     if (this.parentNode.id == port.parentNode.id || connect == false) {
 
     } else {
@@ -376,53 +360,41 @@ OutputPort.prototype.onDrop = function (port) {
         //Saving Start Event
         var preObj = new Array();
         var bpmnType = this.workflow.currentSelection.type;
-        if(bpmnType.match(/Event/) && bpmnType.match(/Start/) && port.parentNode.type.match(/Task/))
-            {
-                var tas_uid = port.parentNode.id;
-                this.workflow.saveEvents(this.workflow.currentSelection,tas_uid);
-            }
-        else if(bpmnType.match(/Task/) && port.parentNode.type.match(/End/) && port.parentNode.type.match(/Event/))
-            {
-                preObj = this.workflow.currentSelection;
-                var newObj = port.parentNode;
-                newObj.conn = _4070.connection;
-                this.workflow.saveRoute(preObj,newObj);
-            }
-        else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/))
-            {
-                var taskFrom = workflow.getStartEventConn(this,'sourcePort','InputPort');
-                var taskTo =  workflow.getStartEventConn(this,'targetPort','OutputPort');
+       if(bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)){
 
-                if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined')
-                  {
-                    preObj.type = 'Task';
-                    preObj.taskFrom = taskFrom[0].value;
-                    preObj.taskTo = taskTo[0].value;
+          var tas_uid = port.parentNode.id;
+          this.workflow.saveEvents(this.workflow.currentSelection,tas_uid);
 
-                    //save Event First
-                    tas_uid = port.parentNode.id;
-                    this.workflow.saveEvents(workflow.currentSelection,preObj);
-                  }
-            }
-        else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/))
-            {
+       }else if(bpmnType.match(/Task/) && port.parentNode.type.match(/End/) && port.parentNode.type.match(/Event/)){
+          preObj = this.workflow.currentSelection;
+          var newObj = port.parentNode;
+          newObj.conn = _4070.connection;
+          this.workflow.saveRoute(preObj,newObj);
+       }/*else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
+          var taskFrom = workflow.getStartEventConn(this,'sourcePort','InputPort');
+          var taskTo =  workflow.getStartEventConn(this,'targetPort','OutputPort');
 
-    preObj = this.workflow.currentSelection;
-                newObj = port.parentNode;
-                newObj.conn = _4070.connection;
-    newObj.sPortType =port.properties.name;
-    preObj.sPortType =this.properties.name;
-                this.workflow.saveRoute(preObj,newObj);
-            }
-        //Routing from gateway to task
-        else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/))
-            {
-                 var shape = new Array();
-                 shape.type = '';
-                 preObj = this.workflow.currentSelection;
-                 this.workflow.saveRoute(preObj,shape);
-            }
-
+          if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined'){
+             preObj.type = 'Task';
+             preObj.taskFrom = taskFrom[0].value;
+             preObj.taskTo = taskTo[0].value;
+             //save Event First
+             tas_uid = port.parentNode.id;
+             this.workflow.saveEvents(workflow.currentSelection,preObj);
+          }
+       }*/else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
+           preObj = this.workflow.currentSelection;
+           newObj = port.parentNode;
+           newObj.conn = _4070.connection;
+           newObj.sPortType =port.properties.name;
+           preObj.sPortType =this.properties.name;
+           this.workflow.saveRoute(preObj,newObj);
+       }else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/)){ //Routing from gateway to task
+           var shape = new Array();
+           shape.type = '';
+           preObj = this.workflow.currentSelection;
+           this.workflow.saveRoute(preObj,shape);
+       }
     }
 };
 

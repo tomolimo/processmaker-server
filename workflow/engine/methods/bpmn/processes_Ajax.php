@@ -191,6 +191,9 @@ if ( isset ($_REQUEST['action']) ) {
               $oEvent->update($aData);
           break;
       case 'addEvent':
+          $sOutput = $oProcessMap->saveExtddEvents($oData);
+          echo $sOutput;
+          /*
           $aData['PRO_UID']  = $oData->uid;
           $aData['EVN_TYPE']  = $oData->tas_type;
           $aData['EVN_STATUS'] = 'ACTIVE';
@@ -220,7 +223,7 @@ if ( isset ($_REQUEST['action']) ) {
               $aTask['TAS_EVN_UID'] = $oEvn_uid;
               $aTask['TAS_START'] = 'TRUE';
               $oTask->update($aTask);
-          }
+          }*/
           break;
           case 'deleteRoute':
               require_once 'classes/model/Route.php';
