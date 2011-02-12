@@ -20,7 +20,7 @@ pmosExt.prototype.addExtJsWindow = function(items,width,height,title)
          buttonAlign: 'center',
          items: items,
          buttons: [{
-             text: 'Save',
+             text: _('ID_SAVE'),
              handler: function(){
 	                // when this button clicked, sumbit this form
                           items.getForm().submit({
@@ -31,13 +31,13 @@ pmosExt.prototype.addExtJsWindow = function(items,width,height,title)
 	                        //simpleForm.getForm().reset();
 	                    },
 	                    failure: function () {      // when saving data failed
-	                        Ext.MessageBox.alert ('Message','Authentication Failed');
+                                PMExt.notify( _('ID_STATUS') , _('ID_AUTHENTICATION_FAILED') );
 	                    }
 	                });
 //                           var test = webForm.getForm().submit({url:'../cases/cases_SchedulerValidateUser.php', submitEmptyText: false});
                         }
              },{
-             text: 'Cancel',
+             text: _('ID_CANCEL'),
              handler: function(){
 	                // when this button clicked,
                             window.close();
@@ -70,7 +70,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
     items: [
            {
              xtype:'fieldset',
-             title: 'WebEntry Link',
+             title: _('ID_WEBENTRY_LINK'),
              collapsible: false,
              autoHeight:true,
              buttonAlign : 'center',
@@ -94,7 +94,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             items: [{
                                     xtype: 'button',
                                     id: 'edit',
-                                    text: 'Edit',
+                                    text: _('ID_EDIT'),
                                     bodyStyle: 'padding-left:35px;',
                                    // width:50,
                                     handler: function(){
@@ -115,7 +115,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                                 xtype: 'button',
                                 id: 'cancel',
                                 //width:50,
-                                text: 'Cancel',
+                                text: _('ID_CANCEL'),
                                 handler: function(){
                                     var properties = _5678.workflow.webForm.items.items[1];
                                     var credential = _5678.workflow.webForm.items.items[2];
@@ -158,7 +158,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
            },
            {
              xtype:'fieldset',
-            title: 'Properties',
+            title: _('ID_PROPERTIES'),
             collapsible: false,
             autoHeight:true,
             defaults: {width: 210},
@@ -171,7 +171,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                 allowBlank:false,
                 triggerAction:  'all',
                 editable:       false,
-                fieldLabel:     'Initial Task',
+                fieldLabel:     _('ID_INITIAL_TASK'),
                 name:           'initTask',
                 hiddenName:     'initTask',
                 displayField:   'name',
@@ -188,7 +188,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                 allowBlank:false,
                 triggerAction:  'all',
                 editable:       false,
-                fieldLabel:     'Initial Dynaform',
+                fieldLabel:     _('ID_INITIAL_DYNAFORM'),
                 name:           'initDyna',
                 hiddenName:     'initDyna',
                 displayField:   'name',
@@ -205,7 +205,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                allowBlank:false,
                triggerAction:  'all',
                editable:       false,
-               fieldLabel:     'Methods',
+               fieldLabel:     _('ID_METHODS'),
                name:           'methods',
                hiddenName:     'methods',
                displayField:   'name',
@@ -244,7 +244,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                triggerAction:  'all',
                editable:       false,
                allowBlank:false,
-               fieldLabel:     'Input Document Access',
+               fieldLabel:     _('ID_INPUT_DOC_ACCESS'),
                name:           'inputDocAccess',
                hiddenName:     'inputDocAccess',
                displayField:   'name',
@@ -259,17 +259,17 @@ pmosExt.prototype.popWebEntry= function(_5678)
             }]
            },{
              xtype:'fieldset',
-             title: 'PHP & Web Service options',
+             title: _('ID_PHP_WEB_SERVICE'),
              collapsible: false,
              autoHeight:true,
              defaults: {width: 210},
              defaultType: 'textfield',
              items: [{
-                       fieldLabel: 'Web Service User',
+                       fieldLabel: _('ID_WEB_SERVICE_USER'),
                        name: 'webserviceUser',
                        allowBlank:true
                      },{
-                       fieldLabel: 'Web Service Password',
+                       fieldLabel: _('ID_WEB_SERVICE_PASSWORD'),
                        name: 'webservicePassword',
                        allowBlank:true,
                        inputType:'password'
@@ -285,7 +285,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
             //oPmosExt.addExtJsWindow(webForm,600,500,'Add New webentry');
 
              var webEntrywindow = new Ext.Window({
-             title: 'Start Message Event(Web Entry)',
+             title: _('ID_START_MESSAGE_EVENT_WEB_ENTRY'),
              collapsible: false,
              maximizable: false,
              width: 450,
@@ -299,7 +299,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
              items: webForm,
              scope:_5678,
              buttons: [{
-                 text: 'Test Configuration',
+                 text: _('ID_TEST_CONFIGURATION'),
                  handler: function(){
                             var propertiesfields = _5678.workflow.webForm.items.items[1].items.items;
                             var credentialFields = _5678.workflow.webForm.items.items[2].items.items;
@@ -324,12 +324,12 @@ pmosExt.prototype.popWebEntry= function(_5678)
                                     }
                              },
                             failure: function(){
-                                Ext.Msg.alert ('Failure');
-                            }
+                                PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                                }
                         });
                         }
                  },{
-                 text: 'Generate Web Entry Page',
+                 text: _('ID_GENERATE_WEB_ENTRY_PAGE'),
                  disabled:true,
                  handler: function(){
                             var webEntryLink     = _5678.workflow.webForm.items.items[0].items.items;
@@ -356,7 +356,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                                 Ext.Msg.alert(response.responseText);
                              },
                             failure: function(){
-                                Ext.Msg.alert ('Failure');
+                                PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
                             }
                         });
                         }
@@ -397,7 +397,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
         labelWidth: 120, // label settings here cascade unless overridden
         url:'cases_Scheduler_Save.php',
         frame:true,
-        title: 'General Information',
+        title: _('ID_GENERATE_INFO'),
         bodyStyle:'padding:5px 5px 0',
         width: 500,
         height: 400,
@@ -405,7 +405,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
         defaultType: 'textfield',
         items: [{
                 xtype:'fieldset',
-                title: 'Please insert a valid processmaker user name and password, in order to assign the case <br />to their respective owner',
+                title: 'ID_PROCESSMAKER_VALIDATION',
                 collapsible: false,
                 autoHeight:true,
                 buttonAlign : 'center',
@@ -413,12 +413,12 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                 defaultType: 'textfield',
                 items: [
                         {
-                            fieldLabel: 'Username',
+                            fieldLabel: _('ID_USERNAME'),
                             name: 'SCH_DEL_USER_NAME',
                             allowBlank:false,
                             blankText:'Enter username'
                         },{
-                            fieldLabel: 'Password',
+                            fieldLabel: _('ID_CACHE_PASSWORD'),
                             inputType:'password',
                             name: 'SCH_USER_PASSWORD',
                             allowBlank:false,
@@ -427,7 +427,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             xtype: 'button',
                             id: 'testUser',
                             width:75,
-                            text: 'Test User',
+                            text: _('ID_TEST_USER'),
                             arrowAlign: 'center',
                             scope:_5678,
                             align:'center',
@@ -439,8 +439,8 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             var username            = credentialFieldset.items.items[0].getValue();
                             var password            = credentialFieldset.items.items[1].getValue();
                             if(username == '' || password == ''){
-                                Ext.Msg.alert('Please enter valid credentials');
-                            }
+                                PMExt.notify( _('ID_ERROR') , _('ID_VALID_CREDENTIALS') );
+                                }
                             else
                             {
                                 Ext.Ajax.request({
@@ -459,7 +459,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                                         Ext.Msg.alert(result.message);
                                  },
                                     failure: function(){
-                                        Ext.Msg.alert ('Failure');
+                                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                                     }
                                 });
                            }
@@ -468,7 +468,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             xtype: 'button',
                             id: 'editUser',
                             width:75,
-                            text: 'Edit User',
+                            text: _('ID_EDIT_USER'),
                             arrowAlign: 'center',
                             scope:_5678,
                             align:'center',
@@ -484,43 +484,35 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             credentialFieldset.items.items[2].show(); //Show Test User
                             }
                         },{
-                            fieldLabel: 'Usr_uid',
                             name: 'SCH_DEL_USER_UID',
                             hidden:true
                         },{
-                            fieldLabel: 'pro_uid',
                             name: 'PRO_UID',
                             hidden:true
                         },{
-                            fieldLabel: 'SCH_DAYS_PERFORM_TASK',
                             name: 'SCH_DAYS_PERFORM_TASK',
                             hidden:true,
                             value:1
                         },{
-                            fieldLabel: 'TAS_UID',
                             name: 'TAS_UID',
                             hidden:true,
                             value:1
                         },{
-                            fieldLabel: 'SCH_WEEK_DAYS',
                             name: 'SCH_WEEK_DAYS',
                             hidden:true
                         },{
-                            fieldLabel: 'SCH_MONTHS',
                             name: 'SCH_MONTHS',
                             hidden:true
                         },{
-                            fieldLabel: 'EVN_UID',
                             name: 'EVN_UID',
                             hidden:true
                         },{
-                            fieldLabel: 'SCH_UID',
                             name: 'SCH_UID',
                             hidden:true
                         }]
                 },{
                     xtype:'fieldset',
-                    title: 'Properties',
+                    title: _('ID_PROPERTIES'),
                     collapsible: false,
                     autoHeight:true,
                     buttonAlign : 'center',
@@ -528,7 +520,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                     defaultType: 'textfield',
                     items: [
                         {
-                           fieldLabel: 'TASK',
+                           fieldLabel: _('ID_TASK'),
                            name: 'TAS_NAME',
                            value: taskName,
                            readOnly:true,
@@ -552,7 +544,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                                         data   :oTask
                                     })
                         }*/,{
-                            fieldLabel: 'Description',
+                            fieldLabel: _('ID_DESCRIPTION'),
                             allowBlank:false,
                             name: 'SCH_NAME'
                             //allowBlank:false
@@ -565,7 +557,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             allowBlank:false,
                             value: '--select--',
                             editable:       false,
-                            fieldLabel:     'Perform this Task',
+                            fieldLabel:     _('ID_PERFORM_TASK'),
                             name:           'SCH_OPTION',
                             displayField:   'name',
                             valueField:     'value',
@@ -588,7 +580,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                         }
               ]},{
                     xtype:'fieldset',
-                    title: 'Select the time and day you want this task to start.',
+                    title: _('ID_SELECT_DATE_TIME'),
                     collapsible: false,
                     autoHeight:true,
                     buttonAlign : 'center',
@@ -599,19 +591,19 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             xtype: 'datefield',
                             name:'SCH_START_DATE',
                             format: 'Y-m-d',
-                            fieldLabel: 'Start Date'
+                            fieldLabel: _('ID_START_DATE')
                         },{
                             xtype: 'datefield',
                             name:'SCH_END_DATE',
                             format: 'Y-m-d',
-                            fieldLabel: 'End Date'
+                            fieldLabel: _('ID_END_DATE')
                         },{
-                            fieldLabel: 'Execution Time',
+                            fieldLabel: _('ID_EXECUTION_TIME'),
                             name: 'SCH_START_TIME'
                             //allowBlank:false
                         },{
                             xtype: 'checkboxgroup',
-                            fieldLabel: 'Select the day(s) of the week below',
+                            fieldLabel: _('ID_SELECT_DAY_OF_WEEK'),
                             name:'SCH_WEEK_DAY',
                             hidden: true,
                             // Put all controls in a single column with width 100%
@@ -719,7 +711,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             value:1
                         },{
                             xtype: 'checkboxgroup',
-                            fieldLabel: 'of the month(s)',
+                            fieldLabel: _('ID_OF_THE_MONTH'),
                             name:'SCH_MONTH',
                             hidden:true,
                             // Put all controls in a single column with width 100%
@@ -801,7 +793,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
             timeFieldset.hide();
            // oPmosExt.addExtJsWindow(caseSchedularForm,600,550,'Add New Case scheduler');
            var window = new Ext.Window({
-             title: 'Start Timer Event (Case Scheduler)',
+             title: _('ID_START_TIME_EVENT'),
              collapsible: false,
              maximizable: false,
              width: 600,
@@ -814,7 +806,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
              buttonAlign: 'center',
              items: caseSchedularForm,
              buttons: [{
-                 text: 'Save',
+                 text: _('ID_SAVE'),
                  handler: function(){
                               //Set SCH_WEEK_DAYS field
                               var sch_week_days = timeFieldset.items.items[3].getValue();
@@ -837,15 +829,15 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                               caseSchedularForm.getForm().submit({
                                waitMsg: 'Saving...',        // Wait Message
                                 success: function () {      // When saving data success
-                                    Ext.MessageBox.alert ('Case Scheduler Saved Sucessfully');
-                                },
+                                    PMExt.notify( _('ID_STATUS') , _('ID_CASE_SCHEDULER_SAVED') );
+                                    },
                                 failure: function () {      // when saving data failed
-                                    Ext.MessageBox.alert ('Message','Authentication Failed');
-                                }
+                                    PMExt.notify( _('ID_STATUS') , _('ID_AUTHENTICATION_FAILED') );
+                                    }
                             });
                             }
                  },{
-                 text: 'Cancel',
+                 text: _('ID_CANCEL'),
                  handler: function(){
                             // when this button clicked,
                                 window.close();
@@ -943,7 +935,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
         items: [{
             xtype:'fieldset',
             checkboxToggle:true,
-            title: 'After routing notify the next assigned user(s).',
+            title: _('ID_AFTER_ROUTING_NOTIFY'),
             autoHeight:true,
             labelWidth: 5,
             defaults: {width: 400},
@@ -959,7 +951,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
         }]
         });
          var window = new Ext.Window({
-         title: 'Intermediate Message Events (Task Notifications)',
+         title: _('ID_INTERMEDIATE_MESSAGE_EVENTS'),
          collapsible: false,
          maximizable: false,
          width: 500,
@@ -972,7 +964,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
          buttonAlign: 'center',
          items: taskNotificationForm,
          buttons: [{
-             text: 'Save',
+             text: _('ID_SAVE'),
              handler: function(){
                             //waitMsg: 'Saving...',       // Wait Message
                                 var fields      = taskNotificationForm.items.items;
@@ -998,7 +990,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
                                 }
                         }
              },{
-             text: 'Cancel',
+             text: _('ID_CANCEL'),
              handler: function(){
                             window.close();
                         }
@@ -1017,24 +1009,29 @@ pmosExt.prototype.loadTask = function(_5678){
                         this.workflow.taskDetails = Ext.util.JSON.decode(response.responseText);
                     },
                     failure: function(){
-                        Ext.Msg.alert ('Failure');
+                       PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
                     }
                 });
         }
 
 }
-pmosExt.prototype.getTriggerList = function()
-{                
-  var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
-  Ext.Ajax.request({
-    url: "processes_Ajax.php"+ urlparams,
-    success: function(response) {
-      workflow.triggerList = Ext.util.JSON.decode(response.responseText);
-    },
-    failure: function(){
-      Ext.Msg.alert ('Failure');
-    }
-  });
+
+pmosExt.prototype.getTriggerList = function(_5678){
+        var pro_uid = _5678.workflow.getUrlVars();
+        if(typeof pro_uid != 'undefined')
+        {
+            var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
+            Ext.Ajax.request({
+                    url: "processes_Ajax.php"+ urlparams,
+                    success: function(response) {
+                        this.workflow.triggerList = Ext.util.JSON.decode(response.responseText);
+                    },
+                    failure: function(){
+                        PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                    }
+                });
+        }
+
 }
 pmosExt.prototype.toggleFields = function(field,bool){
 
@@ -1064,7 +1061,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
          items: [
                  {
                     xtype:'fieldset',
-                    title: 'Event Message',
+                    title: _('ID_EVENT_MESSAGE'),
                     collapsible: false,
                     autoHeight:true,
                     buttonAlign : 'center',
@@ -1073,7 +1070,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                     items:[
                              {
                                 width     : 200,
-                                fieldLabel: 'Description',
+                                fieldLabel: _('ID_DESCRIPTION'),
                                 name      : 'description',
                                 allowBlank: false
                              },{
@@ -1083,7 +1080,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                                 triggerAction:  'all',
                                 forceSelection: true,
                                 editable:       false,
-                                fieldLabel:     'Status',
+                                fieldLabel:     _('ID_STATUS'),
                                 name:           'status',
                                 displayField:   'name',
                                 valueField:     'value',
@@ -1098,7 +1095,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                         ]
               },{
                 xtype:'fieldset',
-                title: 'Behaviour',
+                title: _('ID_BEHAVIOUR'),
                 collapsible: false,
                 autoHeight:true,
                 buttonAlign : 'center',
@@ -1111,7 +1108,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
-                        fieldLabel:     'Type',
+                        fieldLabel:     _('ID_TYPE'),
                         name:           'type',
                         displayField:   'name',
                         valueField:     'value',
@@ -1129,7 +1126,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
-                        fieldLabel:     'The time starts with task',
+                        fieldLabel:     _('ID_TIME_START_WITH_TASK'),
                         name:           'type',
                         displayField:   'name',
                         valueField:     'value',
@@ -1138,12 +1135,12 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                                     data   :oTask
                                })
                     },{
-                        fieldLabel: 'Estimated Task duration',
+                        fieldLabel: _('ID_ESTIMATED_TASK_DURATION'),
                         width:          50,
                         name: 'estimatedTask',
                         allowBlank:false
                     },{
-                        fieldLabel: 'Execution time',
+                        fieldLabel: _('ID_EXECUTION_TIME'),
                         width:          50,
                         name: 'executionTime',
                         allowBlank:false
@@ -1154,7 +1151,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
-                        fieldLabel:     'Execution time Interval',
+                        fieldLabel:     _('ID_EXECUTION_TIME_INTERVAL'),
                         name:           'executionTimeInterval',
                         displayField:   'name',
                         valueField:     'value',
@@ -1173,7 +1170,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
     _5678.workflow.messageEventForm = messageEvent;
 
      var window = new Ext.Window({
-     title: 'End Message Event (Message Event)',
+     title: _('ID_END_MESSAGE_EVENT'),
      collapsible: false,
      maximizable: false,
      width: 500,
@@ -1186,7 +1183,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
      buttonAlign: 'center',
      items: messageEvent,
      buttons: [{
-         text: 'Continue',
+         text: _('ID_CONTINUE'),
          handler: function(){
                         //waitMsg: 'Saving...',       // Wait Message
                             var fields   = messageEvent.items.items;
@@ -1206,13 +1203,13 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                                             window.close();
                                         },
                                         failure: function(){
-                                            Ext.Msg.alert ('Failure');
+                                            PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
                                         }
                                     });
                             }
                     }
          },{
-         text: 'Cancel',
+         text: _('ID_CANCEL'),
          handler: function(){
                         window.close();
                     }
@@ -1238,7 +1235,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
         items: [
             {
             xtype:'fieldset',
-            title: 'Event Multiple',
+            title: _('ID_EVENT_MULTIPLE'),
             collapsible: false,
             autoHeight:true,
             buttonAlign : 'center',
@@ -1246,7 +1243,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
             defaultType: 'textfield',
             items:[
                     {
-                        fieldLabel: 'Description',
+                        fieldLabel: '_(ID_DESCRIPTION)',
                         blankText:'Enter Event Description',
                         name: 'EVN_DESCRIPTION',
                         allowBlank:false
@@ -1257,7 +1254,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                         triggerAction:  'all',
                         allowBlank:false,
                         editable:       false,
-                        fieldLabel:     'Status',
+                        fieldLabel:     _('ID_STATUS'),
                         name:           'EVN_STATUS',
                         displayField:   'name',
                         valueField:     'value',
@@ -1284,7 +1281,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                 ]
             },{
                 xtype:'fieldset',
-                title: 'Behaviour',
+                title: _('ID_BEHAVIOUR'),
                 collapsible: false,
                 autoHeight:true,
                 buttonAlign : 'center',
@@ -1337,7 +1334,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                             triggerAction:  'all',
                             allowBlank   :  false,
                             editable     :  false,
-                            fieldLabel   :  'Type',
+                            fieldLabel   :  _('ID_TYPE'),
                             name         :  'EVN_RELATED_TO',
                             displayField :  'name',
                             valueField   :  'value',
@@ -1370,7 +1367,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                             triggerAction:  'all',
                             allowBlank   :  false,
                             editable:       false,
-                            fieldLabel:     'The time starts with task',
+                            fieldLabel:     _('ID_TIME_START_WITH_TASK'),
                             name:           'EVN_TAS_UID_FROM',
                             displayField:   'name',
                             valueField:     'value',
@@ -1385,7 +1382,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                             triggerAction:  'all',
                             allowBlank   :  false,
                             editable:       false,
-                            fieldLabel:     'to',
+                            fieldLabel:     _('ID_TO'),
                             name:           'EVN_TAS_UID_TO',
                             displayField:   'name',
                             valueField:     'value',
@@ -1395,12 +1392,12 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                                })
                         },{
                             width:50,
-                            fieldLabel: 'Estimated Task duration in Days',
+                            fieldLabel: _('ID_ESTIMATED_TASK_DURATION_DAYS'),
                             name: 'EVN_TAS_ESTIMATED_DURATION',
                             allowBlank:false
                         },{
                             width:50,
-                            fieldLabel: 'Execution time in days',
+                            fieldLabel: _('ID_EXECUTION_TIME_DAYS'),
                             name: 'EVN_WHEN',
                             allowBlank:false
                         },{
@@ -1432,7 +1429,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                             triggerAction:  'all',
                             forceSelection: true,
                             editable:       false,
-                            fieldLabel:     'Execute Trigger',
+                            fieldLabel:     _('ID_EXECUTE_TRIGGER'),
                             name:           'TRI_UID',
                             displayField:   'TRI_TITLE',
                             valueField:     'TRI_UID',
@@ -1470,7 +1467,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
     oPmosExt.toggleFields(fieldsToToggle,false);
 
     var window = new Ext.Window({
-    title: 'Intermediate Timer Event (Multiple Event)',
+    title: _('ID_INTERMEDIATE_TIMER_EVENTS'),
     collapsible: false,
     maximizable: false,
     width: 500,
@@ -1483,12 +1480,12 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
     buttonAlign: 'center',
     items: multipleEvent,
     buttons: [{
-        text: 'Save',
+        text: _('ID_SAVE'),
         handler: function(){
                          oPmosExt.saveInterTimer();
                    }
         },{
-        text: 'Cancel',
+        text: _('ID_CANCEL'),
         handler: function(){
                        window.close();
                    }
@@ -1566,103 +1563,113 @@ pmosExt.prototype.saveInterTimer=function()
         Ext.MessageBox.alert (response.responseText);
         },
       failure: function () {      // when saving data failed
-        Ext.MessageBox.alert ('Message','Authentication Failed');
+        PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
       },
       params: {
         sData:sData
       }
     });
 }
-pmosExt.prototype.loadProcess=function()
-{    
-  var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
-  Ext.Ajax.request({
-  url: "processes_Ajax.php"+ urlparams,
-  success: function(response) {
-    workflow.processInfo = Ext.util.JSON.decode(response.responseText);
-    },
-      failure: function(){
-      Ext.Msg.alert ('Failure');
-    }
-  });
+
+pmosExt.prototype.loadProcess=function(_5678)
+{
+    var pro_uid = _5678.workflow.getUrlVars();
+       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    _5678.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
+                },
+                failure: function(){
+                     PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                }
+            });
 }
 pmosExt.prototype.loadDynaforms=function()
 {
-  var taskUid = workflow.taskUid;
-    if(typeof taskUid[0] != 'undefined'){
-      var urlparams = '?action=dynaforms&data={"uid":"'+ taskUid[0].value +'"}';
-          Ext.Ajax.request({
-          url: "processes_Ajax.php"+ urlparams,
-          success: function(response) {
-               workflow.dynaList = Ext.util.JSON.decode(response.responseText);
-    },
-      failure: function(){
-      Ext.Msg.alert ('Failure');
-    }
-   });
- }
+        var taskUid = _5678.workflow.taskUid;
+        if(typeof taskUid[0] != 'undefined')
+        {
+            var urlparams = '?action=dynaforms&data={"uid":"'+ taskUid[0].value +'"}';
+            Ext.Ajax.request({
+                    url: "processes_Ajax.php"+ urlparams,
+                    success: function(response) {
+                        _5678.workflow.dynaList = Ext.util.JSON.decode(response.responseText);
+                    },
+                    failure: function(){
+                         PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                    }
+                });
+        }
 }
 pmosExt.prototype.loadConnectedTask=function()
 {
-   var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
-   Ext.Ajax.request({
-   url: "processes_Ajax.php"+ urlparams,
-   success: function(response) {
-     workflow.processInfo = Ext.util.JSON.decode(response.responseText);
-   },
-     failure: function(){
-     Ext.Msg.alert ('Failure');
-   }
-  });
+       var pro_uid = _5678.workflow.getUrlVars();
+
+       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    _5678.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
+
+                },
+                failure: function(){
+                     PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                }
+            });
 }
 pmosExt.prototype.loadWebEntry=function()
 {
-   var evn_uid = workflow.currentSelection.id;
-   var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
-   Ext.Ajax.request({
-   url: "processes_Ajax.php"+ urlparams,
-   success: function(response) {
-     workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
-    },
-     failure: function(){
-     Ext.Msg.alert ('Failure');
-    }
-  });
+       var pro_uid = _5678.workflow.getUrlVars();
+       var evn_uid = _5678.workflow.currentSelection.id;
+       var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    _5678.workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
+                },
+                failure: function(){
+                    PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                }
+            });
 }
 pmosExt.prototype.loadEditProcess=function()
 {
-  var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
-  Ext.Ajax.request({
-  url: "processes_Ajax.php"+ urlparams,
-  success: function(response) {
-     workflow.processEdit = Ext.util.JSON.decode(response.responseText);
-   },
-    failure: function(){
-    Ext.Msg.alert ('Failure');
-   }
-  });
+       var pro_uid = _5678.workflow.getUrlVars();
+       var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    _5678.workflow.processEdit = Ext.util.JSON.decode(response.responseText);
+                },
+                failure: function(){
+                    PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                }
+            });
 }
 pmosExt.prototype.loadProcessCategory =function()
 {
-  var urlparams = '?action=loadCategory';
-  Ext.Ajax.request({
-  url: "processes_Ajax.php"+ urlparams,
-  success: function(response) {
-     workflow.processCategory = Ext.util.JSON.decode(response.responseText);
-   },
-     failure: function(){
-     Ext.Msg.alert ('Failure');
-   }
- });
+       var pro_uid = _5678.workflow.getUrlVars();
+       var urlparams = '?action=loadCategory';
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    _5678.workflow.processCategory = Ext.util.JSON.decode(response.responseText);
+                },
+                failure: function(){
+                     PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                }
+            });
 }
 pmosExt.prototype.saveEvent =function(urlparams)
 {
-  Ext.Ajax.request({
-  url: "processes_Ajax.php"+ urlparams,
-  success: function(response) {
-  },
-  failure: function(){
-    Ext.Msg.alert ('Failure');
-  }
- });
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+
+                },
+                failure: function(){
+                    PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                }
+            });
 }

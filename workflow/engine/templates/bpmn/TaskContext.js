@@ -43,12 +43,12 @@ TaskContext.prototype.editTaskSteps = function(_3252){
    ]);
 
     var editor = new Ext.ux.grid.RowEditor({
-        saveText: 'Update'
+        saveText: _('ID_UPDATE')
         });
 
     var btnAdd = new Ext.Button({
         id: 'btnAdd',
-        text: 'Assign',
+        text: _('ID_ASSIGN'),
         iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             var User = grid.getStore();
@@ -63,7 +63,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
             });
 
             if(availableSteps.data.items.length == 0)
-                 Ext.MessageBox.alert ('Status','No steps are available. All Steps have been already assigned.');
+                PMExt.notify( _('ID_STATUS') , _('ID_STEPS_UNAVAILABLE') );
             else
             {
                 editor.stopEditing();
@@ -77,7 +77,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
     var btnRemove = new Ext.Button({
         id: 'btnRemove',
-        text: 'Remove',
+        text: _('ID_REMOVE'),
         iconCls: 'button_menu_ext ss_sprite ss_pencil',
         handler: function (s) {
             editor.stopEditing();
@@ -101,7 +101,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                             STEP_POSITION   : stepPosition
                       },
                       success: function(response) {
-                        Ext.MessageBox.alert ('Status','Step has been removed successfully.');
+                          PMExt.notify( _('ID_STATUS') , _('ID_STEP_REMOVED') );
                         //Secondly deleting from Grid
                         taskSteps.remove(r);
                         //Reloading store after removing steps
@@ -147,7 +147,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 
     var btnStepsCondition = new Ext.Button({
         id: 'btnCondition',
-        text: 'Condition',
+        text: _('ID_CONDITION'),
         handler: function (s) {
                     workflow.taskUID         = taskId
                     workflow.variablesAction = 'grid';
@@ -339,8 +339,8 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                     sMode       : stepMode
               },
               success: function(response) {
-                  Ext.MessageBox.alert ('Status','Step has been assigned successfully.');
-              }
+                  PMExt.notify( _('ID_STATUS') , _('ID_STEP_ASSIGNED') );
+                  }
             });
             //availableSteps.reload();
             //Deleting previously assigned step on updating/replacing with new step.
@@ -481,14 +481,14 @@ TaskContext.prototype.editUsers= function()
             }
             ]);
     var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
 
        
     var btnAdd = new Ext.Button({
         id: 'btnAdd',
         text: _('ID_ASSIGN'),
-        iconCls: 'application_add',
+        iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             var User = grid.getStore();
             var e = new userFields({
@@ -499,7 +499,7 @@ TaskContext.prototype.editUsers= function()
             });
             //storeUsers.reload();
             if(storeUsers.data.items.length == 0)
-                 Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+                PMExt.notify( _('ID_STATUS') , _('ID_USERS_UNAVAILABLE') );
             else
             {
                 editor.stopEditing();
@@ -512,7 +512,7 @@ TaskContext.prototype.editUsers= function()
 
     var btnRemove = new Ext.Button({
         id: 'btnRemove',
-        text: _('ID_DE_ASSIGN'),
+        text: _('ID_REMOVE'),
         iconCls: 'application_delete',
         handler: function (s) {
             editor.stopEditing();
@@ -532,8 +532,8 @@ TaskContext.prototype.editUsers= function()
                         Ext.Ajax.request({
                         url   : 'processes_Ajax.php' +urlparams ,
                         success: function(response) {
-                          Ext.MessageBox.alert ('Status','User has been removed successfully.');
-                          //Secondly deleting from Grid
+                             PMExt.notify( _('ID_STATUS') , _('ID_USERS_REMOVED') );
+                         //Secondly deleting from Grid
                           taskUsers.remove(r);
 
                           //Reloading available user store
@@ -670,11 +670,11 @@ TaskContext.prototype.editUsers= function()
             Ext.Ajax.request({
                     url: 'processes_Ajax.php' +urlparams ,
                     success: function (response) {      // When saving data success
-                        Ext.MessageBox.alert ('Status','User has been successfully assigned');
-                    },
+                        PMExt.notify( _('ID_STATUS') , _('ID_USER_ASSIGNED') );
+                        },
                     failure: function () {      // when saving data failed
-                        Ext.MessageBox.alert ('Status','Failed saving User Assigned to Task');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_USER_SAVE_FAIL') );
+                        }
                  });
 
             //Updating the user incase if already assigned user has been replaced by other user
@@ -741,19 +741,19 @@ TaskContext.prototype.editTaskProperties= function()
             },
             items:[
                 {
-              title:'Definition',
+              title:_('ID_DEFINITION'),
               layout:'form',
               defaults: {
                 width: 230
               },
               defaultType: 'textfield',
               items: [{
-                fieldLabel: 'Title',
+                fieldLabel: _('ID_TITLE'),
                 name: 'TAS_TITLE',
                 width: 350
               },{
                 xtype: 'textarea',
-                fieldLabel: 'Description',
+                fieldLabel: _('ID_DESCRIPTION'),
                 name: 'TAS_DESCRIPTION',
                 allowBlank: true,
                 width: 350,
@@ -770,7 +770,7 @@ TaskContext.prototype.editTaskProperties= function()
                   items: [{
                     xtype: 'textfield',
                     labelWidth : 130,
-                    fieldLabel: 'Variable for Case priority',
+                    fieldLabel: _('ID_VARIABLES_CASE_PRIORITY'),
                     name: 'TAS_PRIORITY_VARIABLE',
                     anchor:'100%'                            
                   }]
@@ -794,12 +794,12 @@ TaskContext.prototype.editTaskProperties= function()
                 }]
                },{
                 xtype: 'checkbox',
-                fieldLabel: 'Starting Task',
+                fieldLabel: _('ID_START_TASK'),
                 name: 'TAS_START',
                  checked:workflow.checkStartingTask
               }]
             },{
-              title:'Assignment Rules',
+              title:_('ID_ASSIGNMENT_RULES'),
               layout     : 'form',
               defaults: {
                 width: 260
@@ -807,25 +807,25 @@ TaskContext.prototype.editTaskProperties= function()
               items: [{
                 xtype: 'radiogroup',
                 id:    'assignType',
-                fieldLabel: 'Cases to be Assigned by',
+                fieldLabel: _('ID_CASES_ASSIGNED_BY'),
                 itemCls: 'x-check-group-alt',
                 columns: 1,
                 items: [{
-                  boxLabel: 'Cyclic Assignment',
+                  boxLabel: _('ID_CYCLIC_ASSIGNMENT'),
                   id: 'BALANCED',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'BALANCED',
                   checked: false,
                   listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                 },{
-                  boxLabel: 'Manual Assignment',
+                  boxLabel: _('ID_MANUAL_ASSIGNMENT'),
                   id: 'MANUAL',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'MANUAL',
                   checked:false,
                   listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                 },{
-                  boxLabel: 'Value Based',
+                  boxLabel: _('ID_VALUE_BASED'),
                   id:'EVALUATE',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'EVALUATE',
@@ -840,21 +840,21 @@ TaskContext.prototype.editTaskProperties= function()
                     }
                   }
                 },{
-                  boxLabel: 'Reports to',
+                  boxLabel: _('ID_REPORTS_TO'),
                   id:'REPORT_TO',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'REPORT_TO',
                   checked:false,
                   listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                 },{
-                  boxLabel: 'Self Service',
+                  boxLabel: _('ID_SELF_SERVICE'),
                   id:'SELF_SERVICE',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'SELF_SERVICE',
                   checked:false,
                   listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
                 },{
-                  boxLabel: 'Static Partial Join for Multiple Instance',
+                  boxLabel: _('ID_STATIC_PARTIAL_JOIN_MULTIPLE_INSTANCES'),
                   id:'STATIC_MI',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'STATIC_MI',
@@ -869,7 +869,7 @@ TaskContext.prototype.editTaskProperties= function()
                     }
                   }
                 },{
-                  boxLabel: 'Cancelling Partial Join for Multiple Instance',
+                  boxLabel: _('ID_CANCEL_PARTIAL_JOIN_MULTIPLE_INSTANCE'),
                   id   : 'CANCEL_MI',
                   name : 'TAS_ASSIGN_TYPE',
                   inputValue: 'CANCEL_MI',
@@ -897,7 +897,7 @@ TaskContext.prototype.editTaskProperties= function()
                     border:false,
                     items: [{
                       xtype: 'textfield',
-                      fieldLabel: 'Variable for Value Based Assignment',
+                      fieldLabel: _('ID_VARIABLES_VALUE_ASSIGNMENT'),
                       name: 'TAS_ASSIGN_VARIABLE',
                       anchor:'100%'
                     }]
@@ -926,7 +926,7 @@ TaskContext.prototype.editTaskProperties= function()
                     border:false,
                     items: [{
                       xtype: 'textfield',
-                      fieldLabel: 'Variable for No of Instances',
+                      fieldLabel: _('ID_VARIABLES_NO_INSTANCES'),
                       name: 'TAS_MI_INSTANCE_VARIABLE',
                       anchor:'100%'
                     }]
@@ -954,7 +954,7 @@ TaskContext.prototype.editTaskProperties= function()
                       border:false,
                       items: [{
                         xtype: 'textfield',
-                        fieldLabel: 'Variable for No of Instances to complete',
+                        fieldLabel: _('ID_VARIABLES_INSTANCES_TO _COMPLETE'),
                         name: 'TAS_MI_COMPLETE_VARIABLE',
                         anchor:'100%'
                       }]
@@ -979,7 +979,7 @@ TaskContext.prototype.editTaskProperties= function()
               defaultType: 'textfield',
               items: [{
                 xtype: 'checkbox',
-                boxLabel: 'Allow user defined timing control',
+                boxLabel: _('ID_USER_DEFINED_TIMING_CONTROL'),
                 name: 'TAS_TRANSFER_FLY',
                 checked: 'TAS_TRANSFER_FLY',
                 labelWidth: 100,
@@ -1005,7 +1005,7 @@ TaskContext.prototype.editTaskProperties= function()
 
                 items:[{
                   xtype: 'textfield',
-                  fieldLabel: 'Task Duration',
+                  fieldLabel: _('ID_TASK_DURATION'),
                   name: 'TAS_DURATION',
                   width : 100,
                   allowBlank:false
@@ -1016,7 +1016,7 @@ TaskContext.prototype.editTaskProperties= function()
                   triggerAction:  'all',
                   forceSelection: true,
                   editable:       false,
-                  fieldLabel:     'Time Unit',
+                  fieldLabel:     _('ID_TIME_UNIT'),
                   name:           'TAS_TIMEUNIT',
                   hiddenName:     'TAS_TIMEUNIT',
                   displayField:   'name',
@@ -1040,7 +1040,7 @@ TaskContext.prototype.editTaskProperties= function()
                   triggerAction:  'all',
                   forceSelection: true,
                   editable:       false,
-                  fieldLabel:     'Count Days by',
+                  fieldLabel:     _('ID_COUNT_DAYS'),
                   name:           'TAS_TYPE_DAY',
                   hiddenName:     'TAS_TYPE_DAY',
                   displayField:   'name',
@@ -1068,7 +1068,7 @@ TaskContext.prototype.editTaskProperties= function()
                   forceSelection: true,
                   triggerAction:  'all',
                   editable:       false,
-                  fieldLabel:     'Calendar',
+                  fieldLabel:     _('ID_CALENDAR'),
                   name:           'TAS_CALENDAR',
                   hiddenName:     'TAS_CALENDAR',
                   displayField:   'name',
@@ -1090,7 +1090,7 @@ TaskContext.prototype.editTaskProperties= function()
                 }]
               }]
             },{
-              title:'Permission',
+              title:_('ID_PERMISSION'),
               layout:'form',
               defaults: {
                   width: 260
@@ -1100,13 +1100,13 @@ TaskContext.prototype.editTaskProperties= function()
               items: [{
                   xtype: 'checkbox',
                   id: 'ADHOC',
-                  fieldLabel: 'Allow arbitary transfer (Ad hoc)',
+                  fieldLabel: _('ID_ALLOW_ARBITARY_TRANSFER'),
                   inputValue:'ADHOC',
                   checked: false,
                   name: 'TAS_TYPE'
               }]
             },{
-              title:'Case Labels',
+              title:_('ID_CASE_LABELS'),
               layout:'form',
               defaults: {
                 width: 600
@@ -1124,7 +1124,7 @@ TaskContext.prototype.editTaskProperties= function()
                   border:false,
                   items: [{
                       xtype: 'textarea',
-                      fieldLabel: 'Case Title',
+                      fieldLabel: _('ID_CASE_TITLE'),
                       id: 'caseTitle',
                       name: 'TAS_DEF_TITLE',
                       height : 120,
@@ -1162,7 +1162,7 @@ TaskContext.prototype.editTaskProperties= function()
                       items: [{
                           xtype: 'textarea',
                           id: 'caseDescription',
-                          fieldLabel: 'Case Description',
+                          fieldLabel: _('ID_CASE_DESCRIPTION'),
                           name: 'TAS_DEF_DESCRIPTION',
                           height : 120,
                           anchor:'100%'
@@ -1189,13 +1189,13 @@ TaskContext.prototype.editTaskProperties= function()
                   }]
               }]
               },{
-              title:'Notification',
+              title:_('ID_NOTIFICATION'),
               layout:'form',
               defaultType: 'textfield',
               labelWidth: 170,
               items: [{
                 xtype: 'checkbox',
-                boxLabel: 'After routing notify the next assigned user(s).',
+                boxLabel: _('ID_NOTIFY_USERS_AFTER_ASSIGN'),
                 labelWidth: 100,
                 name:   'TAS_DEF_MESSAGE_CHECKBOX',
                 checked:   'TAS_DEF_MESSAGE_CHECKBOX',
@@ -1290,7 +1290,7 @@ TaskContext.prototype.editTaskProperties= function()
                      
        },
         failure:function(form, action) {
-            Ext.MessageBox.alert('Message', 'Load failed');
+           PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
         }
     });
 
@@ -1298,7 +1298,7 @@ TaskContext.prototype.editTaskProperties= function()
     workflow.taskPropertiesTabs = taskPropertiesTabs;
 
     var window = new Ext.Window({
-        title: 'Task:',
+        title: _('ID_TASK'),
         collapsible: false,
         maximizable: false,
         width: 600,
@@ -1310,7 +1310,7 @@ TaskContext.prototype.editTaskProperties= function()
         buttonAlign: 'center',
         items: taskPropertiesTabs,
         buttons: [{
-            text: 'Save',
+            text: _('ID_SAVE'),
             formBind    :true,
             handler: function(){
                 //var getstore = taskPropertiesTabs.getStore();
@@ -1320,7 +1320,7 @@ TaskContext.prototype.editTaskProperties= function()
 
             }
         },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 window.hide();
@@ -1367,11 +1367,11 @@ TaskContext.prototype.saveTaskProperties= function()
                  Ext.Ajax.request({
                         url: '../tasks/tasks_Ajax.php' ,
                     success: function (response) {      // When saving data success
-                        Ext.MessageBox.alert ('Status','Task properties has been saved successfully');
-                    },
+                        PMExt.notify( _('ID_STATUS') , _('ID_TASK_PROPERTIES_SAVE') );
+                        },
                     failure: function () {      // when saving data failed
-                        Ext.MessageBox.alert ('Status','Error in saving Task Properties');
-                    },
+                        PMExt.notify( _('ID_STATUS') , _('ID_ERROR_TASK_SAVE') );
+                        },
                     params: {
                         functions:'saveTaskData',
                         oData:object_data
@@ -1416,7 +1416,7 @@ TaskContext.prototype.stepTriggers = function()
         ]);
 
     var triggerEditor = new Ext.ux.grid.RowEditor({
-        saveText: 'Update'
+        saveText: _('ID_UPDATE')
     });
 
     var root = new Ext.tree.AsyncTreeNode({text: 'treeRoot',id:'0'});
@@ -1471,7 +1471,7 @@ TaskContext.prototype.stepTriggers = function()
 
     var addBtn = new Ext.Button({
         id: 'addBtn',
-        text: 'Add',
+        text: _('ID_ADD'),
         iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             //var User = triggerGrid.getStore();
@@ -1487,7 +1487,7 @@ TaskContext.prototype.stepTriggers = function()
             });
 
             if(availableTriggers.data.items.length == 0)
-                 Ext.MessageBox.alert ('Status','No triggers are available. All triggers have been already assigned.');
+                PMExt.notify( _('ID_STATUS') , _('ID_TRIGGERS_UNAVAILABLE') );
             else
             {
                 triggerEditor.stopEditing();
@@ -1502,7 +1502,7 @@ TaskContext.prototype.stepTriggers = function()
 
     var removeBtn = new Ext.Button({
         id: 'removeBtn',
-        text: 'Remove',
+        text: _('ID_REMOVE'),
         iconCls: 'button_menu_ext ss_sprite ss_delete',
         handler: function (s) {
             triggerEditor.stopEditing();
@@ -1523,9 +1523,8 @@ TaskContext.prototype.stepTriggers = function()
                     Ext.Ajax.request({
                       url   : '../steps/steps_Ajax.php' + urlparams,
                       success: function(response) {
-                        Ext.MessageBox.alert ('Status','Trigger has been removed successfully.');
-
-                        //Secondly deleting from Grid
+                          PMExt.notify( _('ID_STATUS') , _('ID_TRIGGER_REMOVE') );
+                       //Secondly deleting from Grid
                         stepsTriggers.remove(r);
 
                         availableTriggers.reload();
@@ -1541,7 +1540,7 @@ TaskContext.prototype.stepTriggers = function()
 
     var btnTriggerCondition = new Ext.Button({
       //id: 'btnCondition',
-      text: 'Condition',
+      text: _('ID_CONDITION'),
       handler: function (s) {
                 workflow.variablesAction = 'grid';
                 workflow.variable = '@@',
@@ -1615,7 +1614,7 @@ TaskContext.prototype.stepTriggers = function()
                 },
                 {
                     id: 'CON_VALUE',
-                    header: 'Triggers',
+                    header: _('ID_TRIGGERS'),
                     dataIndex: 'CON_VALUE',
                     //width: 200,
                     sortable: true,
@@ -1655,7 +1654,7 @@ TaskContext.prototype.stepTriggers = function()
                 },
                 {
                     //id: 'STEP_TITLE',
-                    header: 'Condition',
+                    header: _('ID_CONDITION'),
                     dataIndex: 'ST_CONDITION',
                     //width: 200,
                     editable: true,
@@ -1706,7 +1705,7 @@ TaskContext.prototype.stepTriggers = function()
                   ST_CONDITION : sCondition
               },
               success: function(response) {
-                  Ext.MessageBox.alert ('Status','Triggers has been assigned successfully.');
+                  PMExt.notify( _('ID_STATUS') , _('ID_TRIGGER_ASSIGN') );
                   tree.getLoader().dataUrl = 'get-triggers-tree.php?tid='+taskId;
                   tree.getLoader().load(tree.root);
                   tree.reload();
@@ -1750,7 +1749,7 @@ TaskContext.prototype.stepTriggers = function()
             columnWidth: 0.6,
             xtype: 'fieldset',
             //labelWidth: 120,
-            title:'Assign Triggers',
+            title:_('ID_ASSIGN_TRIGGERS'),
             defaults: {width: 140, border:false}, 
             autoHeight: true,
             border: false,
@@ -1785,7 +1784,7 @@ TaskContext.prototype.editUsersAdHoc= function()
             }
             ]);
     var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
     var taskUsers = new Ext.data.JsonStore({
             root         : 'data',
@@ -1814,8 +1813,8 @@ TaskContext.prototype.editUsersAdHoc= function()
 
         var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign',
-            iconCls: 'application_add',
+            text: _('ID_ASSIGN'),
+            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var User = grid.getStore();
                 var e = new userFields({
@@ -1829,7 +1828,7 @@ TaskContext.prototype.editUsersAdHoc= function()
 
                 //storeUsers.reload();
                 if(storeUsers.data.items.length == 0)
-                     Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+                    PMExt.notify( _('ID_STATUS') , _('ID_USERS_UNAVAILABLE') );
                 else
                 {
                     editor.stopEditing();
@@ -1846,8 +1845,8 @@ TaskContext.prototype.editUsersAdHoc= function()
 
         var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove',
-            iconCls: 'application_delete',
+            text: _('ID_REMOVE'),
+            iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
                 var s = grid.getSelectionModel().getSelections();
@@ -1875,7 +1874,7 @@ TaskContext.prototype.editUsersAdHoc= function()
 
                           },*/
                           success: function(response) {
-                              Ext.MessageBox.alert ('Status','User has been removed successfully.');
+                              PMExt.notify( _('ID_STATUS') , _('ID_USERS_REMOVED') );
                               //Secondly deleting from Grid
                               taskUsers.remove(r);
                               //Reloading available user store
@@ -1912,7 +1911,7 @@ TaskContext.prototype.editUsersAdHoc= function()
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'LABEL',
-                    header: 'Group or User',
+                    header: _('ID_GROUP_USER'),
                     dataIndex: 'LABEL',
                     width: 100,
                     sortable: true,
@@ -1984,7 +1983,7 @@ TaskContext.prototype.editUsersAdHoc= function()
                     url: '../users/users_Ajax.php',
                     METHOD:'post',
                     success: function (response) {      // When saving data success
-                        Ext.MessageBox.alert ('Status','User has been successfully assigned');
+                        PMExt.notify( _('ID_STATUS') , _('ID_USER_ASSIGNED') );
                     },
                     params:{
                         functions : 'assign',
@@ -1995,8 +1994,8 @@ TaskContext.prototype.editUsersAdHoc= function()
 
                     },
                     failure: function () {      // when saving data failed
-                        Ext.MessageBox.alert ('Status','Failed saving User Assigned to Task');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_USER_SAVE_FAIL') );
+                        }
                  });
 
             //Updating the user incase if already assigned user has been replaced by other user
@@ -2010,7 +2009,8 @@ TaskContext.prototype.editUsersAdHoc= function()
                       url   : '../users/users_Ajax.php',
                       method: 'POST',
                       success: function(response) {
-                          Ext.MessageBox.alert ('Status','User has been updated successfully.');
+                          PMExt.notify( _('ID_STATUS') , _('ID_USER_ASSIGNED') );
+                          //Ext.MessageBox.alert ('Status','User has been updated successfully.');
                       },
                       params:{
                         functions  : 'ofToAssign',
@@ -2033,7 +2033,7 @@ TaskContext.prototype.editUsersAdHoc= function()
         });
 
         var window = new Ext.Window({
-        title: 'Users and User Groups(Ad Hoc)',
+        title: _('ID_USER_GROUPS_ADHOC'),
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -2077,16 +2077,16 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
        ]);
 
     var editorOut = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
     var editorIn = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
 
     //Variable out grid configuration starts here
     var btnAddOut = new Ext.Button({
             id: 'btnAddOut',
-            text: 'Assign Variables Out',
+            text: _('ID_ASSIGN_VARIABLES_OUT'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var storeData = variableOutGrid.getStore();
@@ -2111,7 +2111,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
 
     var btnRemoveOut = new Ext.Button({
         id: 'btnRemoveOut',
-        text: 'Remove Variables Out',
+        text: _('ID_REMOVE_VARIABLES_OUT'),
         iconCls: 'button_menu_ext ss_sprite ss_delete',
         handler: function (s) {
             editorOut.stopEditing();
@@ -2130,7 +2130,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     //Variable out grid configuration starts here
   var btnAddIn = new Ext.Button({
         id: 'btnAddIn',
-        text: 'Assign Variables In',
+        text: 'ID_ASSIGN_VARIABLES_IN',
         iconCls: 'button_menu_ext ss_sprite ss_add',
         handler: function(){
             var e = new subProcessFields({
@@ -2151,7 +2151,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
 
     var btnRemoveIn = new Ext.Button({
         id: 'btnRemoveIn',
-        text: 'Remove Variables In',
+        text: 'ID_REMOVE_VARIABLES_IN',
         iconCls: 'button_menu_ext ss_sprite ss_delete',
         handler: function (s) {
             editorIn.stopEditing();
@@ -2223,7 +2223,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         columns     : [{
                         id       : 'VAR_OUT1',
                         name     : 'VAR_OUT1',
-                        header   : 'Origin',
+                        header   : _('ID_ORIGIN'),
                         dataIndex: 'VAR_OUT1',
                         width    : 200,
                         sortable : true,
@@ -2241,7 +2241,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         {
                         id        : 'VAR_OUT2',
                         name      : 'VAR_OUT2',
-                        header    : 'Target',
+                        header    : _('ID_TARGET'),
                         dataIndex : 'VAR_OUT2',
                         width     : 200,
                         sortable  : true,
@@ -2277,7 +2277,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         columns     : [{
                         id       : 'VAR_IN1',
                         name     : 'VAR_IN1',
-                        header   : 'Origin',
+                        header   : _('ID_ORIGIN'),
                         dataIndex: 'VAR_IN1',
                         width    : 200,
                         sortable : true,
@@ -2295,7 +2295,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         {
                         id        : 'VAR_IN2',
                         name      : 'VAR_IN2',
-                        header    : 'Target',
+                        header    : _('ID_TARGET'),
                         dataIndex : 'VAR_IN2',
                         width     : 200,
                         sortable  : true,
@@ -2325,7 +2325,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     items: [
             {
             xtype:'fieldset',
-            title: 'Sub-Process',
+            title: _('ID_SUBPROCESS'),
             collapsible: false,
             autoHeight:true,
             //width: 600,
@@ -2335,7 +2335,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                     id:    'subProcessName',
                     xtype: 'textfield',
                     width:  350,
-                    fieldLabel: 'SubProcess name',
+                    fieldLabel: _('ID_SUBPROCESS_NAME'),
                     name      : 'SPROCESS_NAME',
                     allowBlank: false
                    },
@@ -2346,7 +2346,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
-                        fieldLabel:     'Process',
+                        fieldLabel:     _('ID_PROCESS'),
                         name:           'PRO_TITLE',
                         emptyText    : 'Select Process',
                         displayField:   'PRO_TITLE',
@@ -2371,7 +2371,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
-                        fieldLabel:     'Type',
+                        fieldLabel:     _('ID_TYPE'),
                         name:           'SP_SYNCHRONOUS',
                         hiddenName:     'SP_SYNCHRONOUS',
                         displayField:   'name',
@@ -2399,7 +2399,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
             id   :'variableout',
             name :'VAR_OUT1',
             xtype:'fieldset',
-            title: 'Variables Out',
+            title: _('ID_VARIABLES_OUT'),
             collapsible: false,
             labelAlign: 'top',
              items:[variableOutGrid]
@@ -2408,7 +2408,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
             id   :'variablein',
             name :'VAR_IN1',
             xtype:'fieldset',
-            title: 'Variables In',
+            title: _('ID_VARIABLES_IN'),
             //hidden: true,
             collapsible: false,
             labelAlign: 'top',
@@ -2445,14 +2445,14 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
           form.findField('SPROCESS_NAME').setValue(processName);
         },
         failure:function(form, action) {
-            Ext.MessageBox.alert('Message', 'Load failed');
-        }
+            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+            }
      });
 
     //subProcessProperties.render(document.body);
 
     var window = new Ext.Window({
-    title: 'Properties ',
+    title: _('ID_PROPERTIES'),
     collapsible: false,
     maximizable: false,
     width: 800,
@@ -2462,7 +2462,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
     buttonAlign: 'center',
     items: subProcessProperties,
     buttons: [{
-        text: 'Save',
+        text: _('ID_SAVE'),
         handler: function(){
             var getForm      = subProcessProperties.getForm().getValues();
 
@@ -2522,7 +2522,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                     SP_SYNCHRONOUS  : sSync
                   },
               success: function(response) {
-                  Ext.MessageBox.alert ('Status','Sub Process Properties has been saved successfully.');
+                  PMExt.notify( _('ID_STATUS') , _('ID_SUBPROCESS_SAVE') );
                   window.close();
                    workflow.currentSelection.bpmnNewText.clear();
                    workflow.currentSelection.bpmnNewText.drawStringRect(sSPNAME,20,5,150,'center');
@@ -2532,7 +2532,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
             });
         }
     },{
-        text: 'Cancel',
+        text: _('ID_CANCEL'),
         handler: function(){
             // when this button clicked,
             window.close();

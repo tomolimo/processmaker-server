@@ -1,4 +1,4 @@
-new Ext.KeyMap(document, {
+/*new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
   fn: function(keycode, e) {
     e.stopEvent();      
@@ -10,7 +10,7 @@ new Ext.KeyMap(document, {
     document.location = document.location;
   }
 });
-
+*/
 
 var saveProcess;
 

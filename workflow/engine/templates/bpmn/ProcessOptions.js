@@ -84,7 +84,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                         },
                         success: function(response) {
                         	//PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE') );
-                          Ext.MessageBox.alert ('Status','Dynaform has been removed successfully.');
+                          PMExt.notify( _('ID_STATUS') , _('ID_DYNAFORM_REMOVED') );
                           //Secondly deleting from Grid
                           taskDynaform.remove(r);
                           //Reloading store after deleting dynaform
@@ -215,7 +215,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                 new Ext.grid.RowNumberer(),
                     {
                         id: 'FLD_NAME',
-                        header: 'Primary Key',
+                        header: _('ID_PRIMARY_KEY'),
                         dataIndex: 'FLD_NAME',
                         width: 200,
                         editable: false,
@@ -225,7 +225,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'PRO_VARIABLE',
-                        header: 'Variables',
+                        header: _('ID_VARIABLES'),
                         dataIndex: 'PRO_VARIABLE',
                         width: 200,
                         sortable: true,
@@ -284,7 +284,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                     xtype: 'fieldset',
                     layout: 'fit',
                     border:true,
-                    title: 'Please select the Dynaform Type',
+                    title: _('ID_SELECT_DYNAFORM'),
                     width: 500,
                     collapsible: false,
                     labelAlign: 'top',
@@ -292,19 +292,19 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                             xtype: 'radiogroup',
                             //id:    'dynaformType',
                             layout: 'fit',
-                            fieldLabel: 'Type',
+                            fieldLabel: _('ID_TYPE'),
                             itemCls: 'x-check-group-alt',
                             columns: 1,
                             items: [
                                 {
-                                    boxLabel: 'Blank Dynaform',
+                                    boxLabel: _('ID_BLANK_DYNAFORM'),
                                     name: 'DYN_SOURCE',
                                     inputValue: 'blankDyna',
                                     checked: true
                                 },
 
                                 {
-                                    boxLabel: 'PM Table Dynaform',
+                                    boxLabel: _('ID_PM_DYNAFORM'),
                                     name: 'DYN_SOURCE',
                                     inputValue: 'pmTableDyna'
                                 }],
@@ -329,7 +329,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                     id:    'blankDynaform',
                     border:true,
                     hidden: false,
-                    title: 'Dynaform Information',
+                    title: _('ID_DYNAFORM_INFORMATION'),
                     width: 500,
                     items:[{
                             xtype     : 'textfield',
@@ -379,7 +379,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                             editable:       true,
                             triggerAction:  'all',
                             forceSelection: true,
-                            fieldLabel:     'Create from a PM Table',
+                            fieldLabel:     _('ID_CREATE_PM_TABLE'),
                             emptyText    : 'Select Table',
                             displayField:   'ADD_TAB_NAME',
                             valueField:     'ADD_TAB_UID',
@@ -462,7 +462,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                     }
 
                     if(sTitle == '' || sAction == '')
-                          Ext.MessageBox.alert ('Error','Dynaform Title required.');
+                        PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
                     else
                         {
                           Ext.Ajax.request({
@@ -480,7 +480,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                               DYN_DESCRIPTION : sDesc
                           },
                           success: function(response) {
-                              Ext.MessageBox.alert ('Status','Dynaform has been created successfully.');
+                              PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
                               taskDynaform.reload();
                               formWindow.hide()
                           }
@@ -576,8 +576,8 @@ ProcessOptions.prototype.dbConnection = function()
                      // setTaskAssignType(form);
                     },
                     failure:function(form, action) {
-                        Ext.MessageBox.alert('Message', 'Load failed');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                        }
                 });
             }
   });
@@ -606,7 +606,7 @@ ProcessOptions.prototype.dbConnection = function()
                           },
 
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Database Connection has been removed successfully.');
+                            PMExt.notify (_('ID_STATUS'),_('DBS_REMOVE'));
                             //Secondly deleting from Grid
                             dbStore.remove(r);
                             //Reloading store after removing steps
@@ -647,7 +647,7 @@ ProcessOptions.prototype.dbConnection = function()
                 new Ext.grid.RowNumberer(),
                     {
                         id: 'DBS_TYPE',
-                        header: 'Type',
+                        header: _('ID_TYPE'),
                         dataIndex: 'DBS_TYPE',
                         //width: 100,
                         editable: false,
@@ -657,7 +657,7 @@ ProcessOptions.prototype.dbConnection = function()
                             })
                     },{
                         id: 'DBS_SERVER',
-                        header: 'Server',
+                        header: _('ID_SERVER'),
                         dataIndex: 'DBS_SERVER',
                         //width: 100,
                         sortable: true,
@@ -666,7 +666,7 @@ ProcessOptions.prototype.dbConnection = function()
                             })
                     },{
                         id: 'DBS_DATABASE_NAME',
-                        header: 'Database Name',
+                        header: _('ID_DATABASE_NAME'),
                         dataIndex: 'DBS_DATABASE_NAME',
                         width: 150,
                         sortable: true,
@@ -675,7 +675,7 @@ ProcessOptions.prototype.dbConnection = function()
                             })
                     },{
                         id: 'DBS_DESCRIPTION',
-                        header: 'Description',
+                        header: _('ID_DESCRIPTION'),
                         dataIndex: 'DBS_DESCRIPTION',
                         width: 100,
                         sortable: true,
@@ -736,7 +736,7 @@ ProcessOptions.prototype.dbConnection = function()
                         width:  200,
                         mode: 'local',
                         editable:       false,
-                        fieldLabel: 'Engine',
+                        fieldLabel: _('ID_ENGINE'),
                         triggerAction: 'all',
                         forceSelection: true,
                         name: 'DBS_TYPE',
@@ -781,7 +781,7 @@ ProcessOptions.prototype.dbConnection = function()
                                       mode: 'local',
                                    //   hidden: true,
                                       editable:       false,
-                                      fieldLabel: 'Encode',
+                                      fieldLabel: _('ID_ENCODE'),
                                       triggerAction: 'all',
                                       forceSelection: true,
                                       //dataIndex : 'ENGINE',
@@ -846,7 +846,7 @@ ProcessOptions.prototype.dbConnection = function()
                                   mode: 'local',
                                  // hidden: true,
                                   editable:false,
-                                  fieldLabel: 'Encode',
+                                  fieldLabel:_('ID_ENCODE'),
                                   triggerAction: 'all',
                                   forceSelection: true,
                                   //dataIndex : 'ENGINE',
@@ -907,7 +907,7 @@ ProcessOptions.prototype.dbConnection = function()
                                   width:  220,
                                   mode: 'local',
                                   editable:       false,
-                                  fieldLabel: 'Encode',
+                                  fieldLabel: _('ID_ENCODE'),
                                   triggerAction: 'all',
                                   forceSelection: true,
                                   //dataIndex : 'ENGINE',
@@ -928,32 +928,32 @@ ProcessOptions.prototype.dbConnection = function()
                   
                       },{
                          xtype: 'textfield',
-                         fieldLabel: 'Server',
+                         fieldLabel: _('ID_SERVER'),
                          name: 'DBS_SERVER',
                          width:  200,
                          allowBlank: false
                       },{
                          xtype: 'textfield',
-                         fieldLabel: 'Database name',
+                         fieldLabel: _('ID_DATABASE_NAME'),
                          name: 'DBS_DATABASE_NAME',
                          width:  200,
                          allowBlank: false
                       },{
                         xtype: 'textfield',
-                        fieldLabel: 'Username',
+                        fieldLabel: _('ID_USERNAME'),
                         name: 'DBS_USERNAME',
                         width:  200,
                         allowBlank: false
                       },{
                         xtype: 'textfield',
-                        fieldLabel: 'Password',
+                        fieldLabel: _('ID_CACHE_PASSWORD'),
                         inputType:'password',
                         width:  200,
                         name: 'DBS_PASSWORD',
                         allowBlank: true
                       },{
                         xtype: 'textfield',
-                        fieldLabel: 'Port',
+                        fieldLabel: _('ID_PORT'),
                         name: 'DBS_PORT',
                         width:  200,
                         id:'port',
@@ -961,7 +961,7 @@ ProcessOptions.prototype.dbConnection = function()
                         editable:false
                       },{
                         xtype: 'textarea',
-                        fieldLabel: 'Description',
+                        fieldLabel: _('ID_DESCRIPTION'),
                         name: 'DBS_DESCRIPTION',
                         allowBlank: true,
                         width: 220,
@@ -975,7 +975,7 @@ ProcessOptions.prototype.dbConnection = function()
                         xtype: 'hidden',
                         name : 'DBS_ENCODE'
                       }],
-         buttons: [{text:'Test Connection',
+         buttons: [{text:_('ID_TEST_CONNECTION'),
                                    id: 'test',
                                     //formbind: true,
                                     handler: function(){
@@ -1020,13 +1020,13 @@ ProcessOptions.prototype.dbConnection = function()
                                                            action   :'testConnection'
                                                           },
                                                     success: function(response) {
-                                                    Ext.MessageBox.alert ('Status','Connection Tested Successfully.');
+                                                    PMExt.notify( _('ID_STATUS') , _('ID_DBS_CONNECTION_TEST') );
                                                     }
                                     });
                             }
                         }
         },{
-        text: 'Save',
+        text: _('ID_SAVE'),
         formBind    :true,
         handler: function(){
             var getForm         = dbconnForm.getForm().getValues();
@@ -1060,7 +1060,7 @@ ProcessOptions.prototype.dbConnection = function()
                                action   :'saveConnection'
                               },
                         success: function(response) {
-                        Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
+                        PMExt.notify( _('ID_STATUS') , _('ID_DBS_CONNECTION_SAVE') );
                         }
                   });
                 }
@@ -1083,15 +1083,15 @@ ProcessOptions.prototype.dbConnection = function()
                               action   :'saveEditConnection'
                             },
                     success: function(response) {
-                    Ext.MessageBox.alert ('Status','Connection Edited Successfully.');
+                         PMExt.notify( _('ID_STATUS') , _('ID_DBS_CONNECTION_EDIT') );
                     }
-                });
+                    });
             }
            formWindow.hide();
            dbStore.reload();
         }
     },{
-        text: 'Cancel',
+        text: _('ID_CANCEL'),
         handler: function(){
             // when this button clicked,
             formWindow.hide();
@@ -1119,7 +1119,7 @@ var testConnWindow = new Ext.Window({
 });*/
 
   var formWindow = new Ext.Window({
-    title: 'Add new Database Source',
+    title: _('ID_DBS_SOURCE'),
     collapsible: false,
     maximizable: true,
     width: 400,
@@ -1132,7 +1132,7 @@ var testConnWindow = new Ext.Window({
   });
 
   var gridWindow = new Ext.Window({
-    title: 'Database Source List',
+    title: _('ID_DBS_LIST'),
     collapsible: false,
     maximizable: true,
     width: 480,
@@ -1178,7 +1178,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
             ]);
 
     var editor = new Ext.ux.grid.RowEditor({
-    saveText: 'Update'
+    saveText: _('ID_UPDATE')
     });
 
   var inputDocStore = new Ext.data.JsonStore({
@@ -1229,7 +1229,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                         INP_DOC_UID        : inputDocUID
                                   },
                                   success: function(response) {
-                                    Ext.MessageBox.alert ('Status','Input document has been removed successfully.');
+                                    PMExt.notify( _('ID_STATUS') , _('ID_INPUT_REMOVED') );
                                     //Secondly deleting from Grid
                                     inputDocStore.remove(r);
                                     //reloading store after deleting input document
@@ -1238,8 +1238,8 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 });
                              }
                              else
-                               Ext.MessageBox.alert ('Status','Input document assigned to a process supervisors cannot be deleted.');
-                          }
+                                  PMExt.notify( _('ID_STATUS') , _('ID_INPUT_WARNING') );
+                              }
                         });
                     }
                     else
@@ -1250,7 +1250,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New',
+            text: _('ID_NEW'),
            iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                newIOWindow.show();
@@ -1278,7 +1278,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                            Ext.getCmp("INP_DOC_UID").setValue(inputDocUID);
                         },
                         failure:function(form, action) {
-                            Ext.MessageBox.alert('Message', 'Load failed');
+                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                         }
                     });
             }
@@ -1295,14 +1295,14 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                     xtype: 'fieldset',
                     layout: 'form',
                     border:true,
-                    title: 'Input Document Information',
+                    title: _('ID_INPUT_INFO'),
                     width: 500,
                     //height:500,
                     collapsible: false,
                     labelAlign: '',
                     items:[{
                             xtype     : 'textfield',
-                            fieldLabel: 'Title',
+                            fieldLabel: _('ID_TITLE'),
                             width     : 200,
                             name      : 'INP_DOC_TITLE',
                             allowBlank: false
@@ -1311,7 +1311,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             xtype:          'combo',
                             mode:           'local',
                             editable:       false,
-                            fieldLabel:     'Type',
+                            fieldLabel:     _('ID_TYPE'),
                             triggerAction:  'all',
                             forceSelection: true,
                             name:           'INP_DOC_FORM_NEEDED',
@@ -1348,7 +1348,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 width:          150,
                                 mode:           'local',
                                 editable:       false,
-                                fieldLabel:     'Format',
+                                fieldLabel:     _('ID_FORMAT'),
                                 triggerAction:  'all',
                                 forceSelection: true,
                                 name:           'INP_DOC_ORIGINAL',
@@ -1366,7 +1366,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 }]
                         },{
                             xtype     : 'textarea',
-                            fieldLabel: 'Description',
+                            fieldLabel: _('ID_DESCRIPTION'),
                             name      : 'INP_DOC_DESCRIPTION',
                             height    : 120,
                             width     : 300
@@ -1375,7 +1375,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                             xtype:          'combo',
                             mode:           'local',
                             editable:       false,
-                            fieldLabel:     'Enable Versioning',
+                            fieldLabel:     _('ID_ENABLE_VERSIONING'),
                             triggerAction:  'all',
                             forceSelection: true,
                             name:           'INP_DOC_VERSIONING',
@@ -1399,7 +1399,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                 xtype       : 'textfield',
                                 width     : 200,
                                 //id          : 'DestPath',
-                                fieldLabel  : 'Destination Path',
+                                fieldLabel  : _('ID_DESTINATION_PATH'),
                                 name        : 'INP_DOC_DESTINATION_PATH',
                                 anchor      :'100%'
                         }]
@@ -1433,7 +1433,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                         xtype       : 'textfield',
                         width     : 200,
                         //id          :'tags',
-                        fieldLabel  : 'Tags',
+                        fieldLabel  : _('ID_TAGS'),
                         name        : 'INP_DOC_TAGS',
                         anchor      :'100%'
                         }]
@@ -1463,7 +1463,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                }]
         }],
         buttons: [{
-            text: 'Save',
+            text: _('ID_SAVE'),
             formBind    :true,
             handler: function(){
                 var getForm         = inputDocForm.getForm().getValues();
@@ -1524,15 +1524,15 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                   INP_DOC_DESTINATION_PATH      : sDestPath
                               },
                               success: function(response) {
-                                  Ext.MessageBox.alert ('Status','Input document has been created successfully.');
+                                  PMExt.notify( _('ID_STATUS') , _('ID_INPUT_CREATE') );
                                   newIOWindow.hide();
                                   inputDocStore.reload();
                               }
                             });
                         }
                         else
-                            Ext.MessageBox.alert ('Status','There is an Input Document with the same  name in  this process. It is not saving');
-                  }
+                             PMExt.notify( _('ID_STATUS') , _('ID_INPUT_NOT_SAVE') );
+                             }
                  })
                 }
                 else
@@ -1553,7 +1553,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                               INP_DOC_DESTINATION_PATH      : sDestPath
                           },
                           success: function(response) {
-                              Ext.MessageBox.alert ('Status','Input document has been updated successfully.');
+                               PMExt.notify( _('ID_STATUS') , _('ID_INPUT_UPDATE') );
                               newIOWindow.hide();
                               inputDocStore.reload();
                           }
@@ -1561,7 +1561,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 }
            }
         },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 newIOWindow.hide();
@@ -1575,7 +1575,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'INP_DOC_TITLE',
-                    header: 'Title',
+                    header: _('ID_TITLE'),
                     dataIndex: 'INP_DOC_TITLE',
                     width: 280,
                     editable: false,
@@ -1584,7 +1584,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
                     })
                 },{
                     id: 'INP_DOC_VERSIONING',
-                    header: 'Versioning',
+                    header: _('ID_VERSIONING'),
                     dataIndex: 'INP_DOC_VERSIONING',
                     width: 280,
                     editable: false,
@@ -1593,7 +1593,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
                     })
                 },{
                     id: 'INP_DOC_DESTINATION_PATH',
-                    header: 'Destination Path',
+                    header: _('ID_DESTINATION_PATH'),
                     dataIndex: 'INP_DOC_DESTINATION_PATH',
                     width: 280,
                     editable: false,
@@ -1637,7 +1637,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
 
 
   var gridWindow = new Ext.Window({
-        title: 'Input Document',
+        title: _('ID_REQUEST_DOCUMENTS'),
         width: 550,
         height: 420,
         minWidth: 200,
@@ -1649,7 +1649,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
  });
 
  var newIOWindow = new Ext.Window({
-        title: 'New Input Document',
+        title: _('ID_NEW_INPUTDOCS'),
         width: 550,
         height: 400,
         minWidth: 200,
@@ -1690,7 +1690,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
 
   var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
             });
 
 
@@ -1730,8 +1730,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                 OUT_DOC_UID        : outputDocUID
                           },
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Output document has been removed successfully.');
-
+                              PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_REMOVE') );
                             //Secondly deleting from Grid
                             outputDocStore.remove(r);
                             //reloading store after deleting output document
@@ -1746,7 +1745,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New',
+            text: _('ID_NEW'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
             outputDocForm.getForm().reset();
@@ -1771,7 +1770,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                       //  setTaskAssignType(form);
                     },
                     failure:function(form, action) {
-                        Ext.MessageBox.alert('Message', 'Load failed');
+                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                     }
                 });
             }
@@ -1798,7 +1797,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'OUT_DOC_TITLE',
-                    header: 'Title',
+                    header: _('ID_TITLE'),
                     dataIndex: 'OUT_DOC_TITLE',
                     width: 280,
                     editable: false,
@@ -1808,7 +1807,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                 },
                 {
                     id: 'OUT_DOC_TYPE',
-                    header: 'Type',
+                    header: _('ID_TYPE'),
                     dataIndex: 'OUT_DOC_TYPE',
                     editable: false,
                     editor: new Ext.form.TextField({
@@ -1861,13 +1860,13 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     xtype       : 'fieldset',
                     layout      : 'form',
                     border      :true,
-                    title       : 'Output Document Information',
+                    title       : _('ID_OUTPUT_INFO'),
                     width       : 450,
                     collapsible : false,
                     labelAlign  : '',
                     items       :[{
                                     xtype       : 'textfield',
-                                    fieldLabel  : 'Title',
+                                    fieldLabel  : _('ID_TITLE'),
                                     allowBlank  : false,
                                     width       : 300,
                                     blankText   : 'Enter Title of Output Document',
@@ -1883,7 +1882,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                         items: [{
                                             xtype       : 'textfield',
                                             //id          : 'filenameGenerated',
-                                            fieldLabel  : 'Filename generated',
+                                            fieldLabel  : _('ID_FILENAME_GENERATED'),
                                             name        : 'OUT_DOC_FILENAME',
                                             allowBlank  : false,
                                             width       : 250,
@@ -1912,7 +1911,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                  }]
                                 },{
                                     xtype           : 'textarea',
-                                    fieldLabel      : 'Description',
+                                    fieldLabel      : _('ID_DESCRIPTION'),
                                     name            : 'OUT_DOC_DESCRIPTION',
                                     height          : 120,
                                     width           : 300
@@ -1921,7 +1920,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                     xtype           :'combo',
                                     mode            :'local',
                                     editable        :false,
-                                    fieldLabel      :'Orientation',
+                                    fieldLabel      :_('ID_ORIENTATION'),
                                     triggerAction   :'all',
                                     forceSelection  : true,
                                     name            :'OUT_DOC_LANDSCAPE',
@@ -1938,7 +1937,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                     xtype           :'combo',
                                     mode            :'local',
                                     editable        :false,
-                                    fieldLabel      :'Media',
+                                    fieldLabel      :_('ID_MEDIA'),
                                     triggerAction   :'all',
                                     forceSelection  : true,
                                     name            :'OUT_DOC_MEDIA',
@@ -1972,22 +1971,22 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                                                        })
                                 },{
                                                     xtype       : 'numberfield',
-                                                    fieldLabel  : 'Left Margin',
+                                                    fieldLabel  : _('ID_LEFT_MARGIN'),
                                                     name        : 'OUT_DOC_LEFT_MARGIN',
                                                     width       : 50
                                                 },{
                                                     xtype       : 'numberfield',
-                                                    fieldLabel  : 'Right Margin',
+                                                    fieldLabel  : _('ID_RIGHT_MARGIN'),
                                                     name        : 'OUT_DOC_RIGHT_MARGIN',
                                                     width       : 50
                                                 },{
                                                     xtype       : 'numberfield',
-                                                    fieldLabel  : 'Top Margin',
+                                                    fieldLabel  : _('ID_TOP_MARGIN'),
                                                     name        : 'OUT_DOC_TOP_MARGIN',
                                                     width       : 50
                                                 },{
                                                     xtype       : 'numberfield',
-                                                    fieldLabel  : 'Bottom Margin',
+                                                    fieldLabel  : _('ID_BOTTOM_MARGIN'),
                                                     name        : 'OUT_DOC_BOTTOM_MARGIN',
                                                     width       : 50
                                                 },{
@@ -1995,7 +1994,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                                     xtype           :'combo',
                                                     mode            :'local',
                                                     editable        :false,
-                                                    fieldLabel      :'Output Document to Generate',
+                                                    fieldLabel      :_('ID_OUTPUT_GENERATE'),
                                                     triggerAction   :'all',
                                                     forceSelection  :true,
                                                     name            :'OUT_DOC_GENERATE',
@@ -2013,7 +2012,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     xtype           :'combo',
                     mode            :'local',
                     editable        :false,
-                    fieldLabel      :'Enable Versioning',
+                    fieldLabel      :_('ID_ENABLE_VERSIONING'),
                     triggerAction   :'all',
                     forceSelection  :true,
                     name            :'OUT_DOC_VERSIONING',
@@ -2035,7 +2034,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         items       : [{
                                 xtype       : 'textfield',
                                 //id          : 'DestPath',
-                                fieldLabel  : 'Destination Path',
+                                fieldLabel  : _('ID_DESTINATION_PATH'),
                                 name        : 'OUT_DOC_DESTINATION_PATH',
                                 anchor      :'100%',
                                 width       : 250
@@ -2068,7 +2067,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         items       : [{
                         xtype       : 'textfield',
                         //id          :'tags',
-                        fieldLabel  : 'Tags',
+                        fieldLabel  : _('ID_TAGS'),
                         name        : 'OUT_DOC_TAGS',
                         anchor      :'100%',
                         width       : 250
@@ -2099,7 +2098,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                  ]
                   }],
      buttons     : [{
-        text        : 'Save',
+        text        : _('ID_SAVE'),
         formBind    :true,
         handler     : function(){
                 var getForm       = outputDocForm.getForm().getValues();
@@ -2160,7 +2159,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                               PRO_UID                  : pro_uid
                           },
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Output document has been created successfully.');
+                              PMExt.notify( _('ID_STATUS') , _('OUTPUT_CREATE') );
                             outputDocStore.reload();
                             newOPWindow.hide();
                           }
@@ -2170,8 +2169,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
 
                   else
-                      Ext.MessageBox.alert ('Status','There is an Output Document with the same  name in  this process. It is not saving');
-                }
+                      PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_NOT_SAVE') );
+                      }
         });
                }
          else
@@ -2198,8 +2197,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                               PRO_UID                  : pro_uid
                           },
                           success: function(response) {
-                            Ext.MessageBox.alert ('Status','Output document has been updated successfully.');
-                            outputDocStore.reload();
+                              PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_UPDATE') );
+                              outputDocStore.reload();
                             newOPWindow.hide();
                           }
                       });
@@ -2207,7 +2206,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                }
         }
        },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 newOPWindow.hide();
@@ -2230,7 +2229,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
     });
 
  var gridWindow = new Ext.Window({
-        title       : 'Output Document',
+        title       : _('ID_OUTPUT_DOCUMENTS'),
         collapsible : false,
         maximizable : false,
         width       : 550,
@@ -2274,7 +2273,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
        ]);
 
  var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
         
  var reportStore = new Ext.data.JsonStore({
@@ -2306,7 +2305,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'REP_TAB_TITLE',
-                    header: 'Title',
+                    header: _('ID_TITLE'),
                     dataIndex: 'REP_TAB_TITLE',
                     width: 380,
                     editable: false,
@@ -2319,7 +2318,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'New',
+            text: _('ID_NEW'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                 formWindow.show();
@@ -2344,7 +2343,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                      // setTaskAssignType(form);
                     },
                     failure:function(form, action) {
-                        Ext.MessageBox.alert('Message', 'Load failed');
+                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                     }
                 });
             }
@@ -2371,7 +2370,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                                 REP_TAB_UID    : r.data.REP_TAB_UID
                           },
                           success: function(response) {
-                                Ext.MessageBox.alert ('Status','Report Table has been removed successfully.');
+                                PMExt.notify( _('ID_STATUS') , _('ID_REPORT_REMOVED') );
                                 //Secondly deleting from Grid
                                 reportGrid.remove(r);
                                 //Reloading store after deleting report table
@@ -2416,7 +2415,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
    });
 
   var gridWindow = new Ext.Window({
-        title       : 'Report Tables',
+        title       : _('ID_REPORT_TABLES'),
         collapsible : false,
         maximizable : false,
         width       : 420,
@@ -2443,14 +2442,14 @@ var reportForm =new Ext.FormPanel({
       buttonAlign: 'center',
       items:[{
                               xtype: 'textfield',
-                              fieldLabel: 'Title',
+                              fieldLabel: _('ID_TITLE'),
                               width: 250,
                               name: 'REP_TAB_TITLE',
                                allowBlank: false
                           },{
 
                               xtype: 'textfield',
-                              fieldLabel: 'Table Name',
+                              fieldLabel: _('ID_TABLE_NAME'),
                               width: 250,
                               name: 'REP_TAB_NAME',
                                allowBlank: false
@@ -2460,7 +2459,7 @@ var reportForm =new Ext.FormPanel({
                               width:  250,
                               mode: 'local',
                               editable:false,
-                              fieldLabel: 'Type',
+                              fieldLabel: _('ID_TYPE'),
                               triggerAction: 'all',
                               forceSelection: true,
                               name: 'REP_TAB_TYPE',
@@ -2505,7 +2504,7 @@ var reportForm =new Ext.FormPanel({
                                   mode: 'local',
                                   style : 'margin-bottom:10px',
                                   editable:true,
-                                  fieldLabel: 'Fields',
+                                  fieldLabel: _('ID_FIELDS'),
                                   triggerAction: 'all',
                                   allowblank: true,
                                   forceSelection: false,
@@ -2526,7 +2525,7 @@ var reportForm =new Ext.FormPanel({
                                   width:  200,
                                   mode: 'local',
                                   editable:false,
-                                  fieldLabel: 'Grid Fields',
+                                  fieldLabel: _('ID_GRID_FIELDS'),
                                   triggerAction: 'all',
                                   forceSelection: true,
                                   displayField:   'name',
@@ -2539,7 +2538,7 @@ var reportForm =new Ext.FormPanel({
                        }]
           }
       ], buttons: [{
-            text: 'Save',
+            text: _('ID_SAVE'),
             formBind    :true,
             handler: function(){
                 var getForm         = reportForm.getForm().getValues();
@@ -2571,8 +2570,8 @@ var reportForm =new Ext.FormPanel({
                       FIELDS          :Fields
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Report Table Saved Successfully.');
-                  }
+                       PMExt.notify( _('ID_STATUS') , _('ID_REPORT_SAVE') );
+                      }
                 });
                }
                     else
@@ -2593,8 +2592,8 @@ var reportForm =new Ext.FormPanel({
                       REP_TAB_CONNECTION: Connection
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Report Table Edited Successfully.');
-                  }
+                      PMExt.notify( _('ID_STATUS') , _('ID_REPORT_EDITED') );
+                     }
 
 
                 });
@@ -2604,7 +2603,7 @@ var reportForm =new Ext.FormPanel({
 
           }
         },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 formWindow.hide();
@@ -2613,7 +2612,7 @@ var reportForm =new Ext.FormPanel({
   })
 
 var formWindow = new Ext.Window({
-        title: 'New Report Table',
+        title: _('ID_NEW_REPORT_TABLE'),
         collapsible: false,
         maximizable: true,
         width: 400,

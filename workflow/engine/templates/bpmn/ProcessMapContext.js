@@ -44,14 +44,14 @@ ProcessMapContext.prototype.editProcess= function()
                 width: 450,
                 defaultType: 'textfield',
                 items: [{
-                        fieldLabel: 'Title',
+                        fieldLabel: _('ID_TITLE'),
                         name: 'PRO_TITLE',
                         width: 300,
                         //value: editProcessData.PRO_TITLE,
                         allowBlank:false
                     },{
                         xtype: 'textarea',
-                        fieldLabel: 'Description',
+                        fieldLabel: _('ID_DESCRIPTION'),
                         name: 'PRO_DESCRIPTION',
                         //value: editProcessData.PRO_DESCRIPTION,
                         width: 300,
@@ -65,7 +65,7 @@ ProcessMapContext.prototype.editProcess= function()
                         forceSelection: true,
                         triggerAction:  'all',
                         editable:       false,
-                        fieldLabel:     'Calendar',
+                        fieldLabel:     _('ID_CALENDAR'),
                         name:           'PRO_CALENDAR',
                         hiddenName:     'calendar',
                         displayField:   'name',
@@ -85,7 +85,7 @@ ProcessMapContext.prototype.editProcess= function()
                         triggerAction:  'all',
                         forceSelection: true,
                         editable:       false,
-                        fieldLabel:     'Category',
+                        fieldLabel:     _('ID_CATEGORY'),
                         name:           'PRO_CATEGORY',
                         hiddenName:     'category',
                         displayField:   'CATEGORY_NAME',
@@ -97,13 +97,13 @@ ProcessMapContext.prototype.editProcess= function()
                                             })
                     },{
                         xtype: 'checkbox',
-                        fieldLabel: 'Debug',
+                        fieldLabel: _('ID_PRO_DEBUG'),
                         name: 'PRO_DEBUG',
                         checked:workflow.checkdebug
                     }
                 ]
         }],buttons: [{
-            text: 'Save',
+            text: _('ID_SAVE'),
             formBind    :true,
             handler: function(form, action){
                 //waitMsg: 'Saving...',       // Wait Message
@@ -123,7 +123,7 @@ ProcessMapContext.prototype.editProcess= function()
                   Ext.Ajax.request({
                         url: "processes_Ajax.php"+ urlparams,
                         success: function(response) {
-                            Ext.MessageBox.alert ('Status','Process Information Saved Successfully.');
+                             PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_SAVE') );
                             window.hide();
                         }
                         
@@ -131,7 +131,7 @@ ProcessMapContext.prototype.editProcess= function()
              }
 
         },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 window.hide();
@@ -151,7 +151,7 @@ ProcessMapContext.prototype.editProcess= function()
            window.show();
          },
         failure:function(form, action) {
-            Ext.MessageBox.alert('Message', 'Load failed');
+            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
         }
     });
 
@@ -159,7 +159,7 @@ ProcessMapContext.prototype.editProcess= function()
     //workflow.editProcessForm = editProcess;
 
      var window = new Ext.Window({
-        title: 'Edit Process',
+        title: _('ID_EDIT_PROCESS'),
         collapsible: false,
         maximizable: false,
         width: 480,
@@ -203,22 +203,22 @@ ProcessMapContext.prototype.exportProcess= function()
              items: [
                       {
                         xtype       : 'textfield',
-                        fieldLabel  : 'Process Title',
+                        fieldLabel  : _('ID_PRO_TITLE'),
                         name        : 'PRO_TITLE',
                         readOnly  :true
                       },{
                         xtype       : 'textfield',
-                        fieldLabel  : 'Description',
+                        fieldLabel  : _('ID_DESCRIPTION'),
                         name        : 'PRO_DESCRIPTION',
                         readOnly  :true
                       },{
                         xtype       : 'textfield',
-                        fieldLabel  : 'Size in bytes',
+                        fieldLabel  : _('ID_SIZE_IN_BYTES'),
                         name        : 'SIZE',
                         readOnly  :true
                       },{
                         xtype       : 'textfield',
-                        fieldLabel  : 'File',
+                        fieldLabel  : _('ID_FILE'),
                         name        : 'FILENAME_LINK',
                         readOnly  :true
                       //},{
@@ -290,7 +290,7 @@ ProcessMapContext.prototype.exportProcess= function()
     }
   });
   var exportProcesswindow = new Ext.Window({
-    title      : 'Export Process',
+    title      : _('ID_EXPORT_PROCESS'),
     collapsible: false,
     maximizable: false,
     width      : 450,
@@ -319,17 +319,17 @@ ProcessMapContext.prototype.addTask= function()
 
 ProcessMapContext.prototype.horiLine= function()
 {
-  Ext.MessageBox.alert('Status','Horizontal Line');
+    PMExt.notify( _('ID_STATUS') , _('ID_HORIZONTAL_LINE') );
 }
 
 ProcessMapContext.prototype.vertiLine= function()
 {
-  Ext.MessageBox.alert('Status','Vertical Line');
+    PMExt.notify( _('ID_STATUS') , _('ID_VERTICAL_LINE') );
 }
 
 ProcessMapContext.prototype.delLines= function()
 {
-  Ext.MessageBox.alert('Status','Delete All Lines');
+    PMExt.notify( _('ID_STATUS') , _('ID_DELETE_LINES') );
 }
 
 ProcessMapContext.prototype.processPermission= function()
@@ -382,7 +382,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 new Ext.grid.RowNumberer(),
                     {
                         id: 'TASK_TARGET',
-                        header: 'Target Task',
+                        header: _('ID_TARGET_TASK'),
                         dataIndex: 'TASK_TARGET',
                         autoWidth: true,
                         editable: false,
@@ -393,7 +393,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'GROUP_USER',
-                        header: 'Group or Users',
+                        header: _('ID_GROUP_USER'),
                         dataIndex: 'GROUP_USER',
                         width: 150,
                         sortable: true,
@@ -402,7 +402,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'TASK_SOURCE',
-                        header: 'Origin Task',
+                        header: _('ID_ORIGIN_TASK'),
                         dataIndex: 'TASK_SOURCE',
                         width: 120,
                         sortable: true,
@@ -411,7 +411,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'PARTICIPATED',
-                        header: 'Participation',
+                        header: _('ID_PARTICIPATION'),
                         dataIndex: 'PARTICIPATED',
                         width: 120,
                         sortable: true,
@@ -420,7 +420,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'OBJECT_TYPE',
-                        header: 'Type',
+                        header: _('ID_TYPE'),
                         dataIndex: 'OBJECT_TYPE',
                         width: 100,
                         editable: false,
@@ -430,7 +430,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'OBJECT',
-                        header: 'Object',
+                        header: _('ID_OBJECT'),
                         name:'OBJECT',
                         dataIndex: 'OBJECT',
                         width: 100,
@@ -440,7 +440,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'ACTION',
-                        header: 'Permission',
+                        header: _('ID_PERMISSION'),
                         dataIndex: 'ACTION',
                         width: 120,
                         sortable: true,
@@ -449,7 +449,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                             })
                     },{
                         id: 'OP_CASE_STATUS',
-                        header: 'Status',
+                        header: _('ID_STATUS'),
                         dataIndex: 'OP_CASE_STATUS',
                         width: 120,
                         sortable: true,
@@ -460,13 +460,13 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 ]
      });
   var editor = new Ext.ux.grid.RowEditor({
-    saveText: 'Update'
+    saveText: _('ID_UPDATE')
     });
 
 
   var btnCreate = new Ext.Button({
             id: 'btnCreate',
-            text: 'New',
+            text: _('ID_NEW'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
                 formWindow.show();
@@ -475,7 +475,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
   });
   var btnEdit = new Ext.Button({
             id: 'btnEdit',
-            text: 'Edit',
+            text: _('ID_EDIT'),
             iconCls: 'button_menu_ext ss_sprite ss_pencil',
             handler: function (s) {
                 var selectedRow = PermissionGrid.getSelectionModel().getSelections();
@@ -508,7 +508,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Delete',
+            text: _('ID_DELETE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -573,7 +573,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
    });
 
  var gridWindow = new Ext.Window({
-        title: 'Process Permissions',
+        title: _('ID_PROCESS_PERMISSIONS'),
         collapsible: false,
         maximizable: true,
         width: 800,
@@ -662,7 +662,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype           :'combo',
                     mode            :'local',
                     editable        :false,
-                    fieldLabel      :'Status Case',
+                    fieldLabel      :_('ID_STATUS_CASE'),
                     triggerAction   :'all',
                     forceSelection  : true,
                     name            :'OP_CASE_STATUS',
@@ -679,7 +679,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                                                         {name : 'COMPLETED',   value: '4'}]})
                 },
                 new Ext.form.ComboBox({
-                    fieldLabel: 'Target Task',
+                    fieldLabel: _('ID_TARGET_TASK'),
                     //hiddenName:'popType',
                     //autoload: true,
                     name: 'TASK_TARGET_NAME',
@@ -699,7 +699,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     }),
 
                  new Ext.form.ComboBox({
-                    fieldLabel: 'Group or Users',
+                    fieldLabel: _('ID_GROUP_USERS'),
                     //hiddenName:'popType',
                     name: 'USR_FULLNAME',
                     //autoload: true,
@@ -718,7 +718,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     })
                 ,
                 new Ext.form.ComboBox({
-                    fieldLabel: 'Origin Task',
+                    fieldLabel: _('ID_ORIGIN_TASK'),
                     name    : 'TASK_SOURCE_NAME',
                     store: selectTaskStore,
                     valueField:'LABEL',
@@ -739,7 +739,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype           :'combo',
                     mode            :'local',
                     editable        :false,
-                    fieldLabel      :'Participation Required?',
+                    fieldLabel      :_('ID_PARTICIPATION_REQUIRED'),
                     triggerAction   :'all',
                     forceSelection  : true,
                     name            :'OP_PARTICIPATE',
@@ -756,7 +756,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype           :'combo',
                     mode            :'local',
                     editable        :false,
-                    fieldLabel      :'Type',
+                    fieldLabel      :_('ID_TYPE'),
                     triggerAction   :'all',
                     forceSelection  : true,
                     name            :'OP_OBJ_TYPE',
@@ -796,7 +796,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                border: false,
                items: [{
                     xtype: 'combo',
-                    fieldLabel: 'Dynaform',
+                    fieldLabel: _('ID_DYNAFORM'),
                     //hiddenName:'UID',
                     autoload: true,
                     width:200,
@@ -822,7 +822,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                border: false,
                items: [{
                     xtype: 'combo',
-                    fieldLabel: 'Input Document',
+                    fieldLabel: _('ID_INPUT_DOCUMENT'),
                     //hiddenName:'UID',
                     name: 'INPUT_NAME',
                     width:200,
@@ -848,7 +848,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                border: false,
                items: [{
                     xtype: 'combo',
-                    fieldLabel: 'Output Document',
+                    fieldLabel: _('ID_OUTPUT_DOCUMENT'),
                     //hiddenName:'popType',
                     width:200,
                     autoload: true,
@@ -874,7 +874,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     xtype           :'combo',
                     mode            :'local',
                     editable        :false,
-                    fieldLabel      :'Permission',
+                    fieldLabel      :_('ID_PERMISSION'),
                     triggerAction   :'all',
                     forceSelection  : true,
                     name            :'OP_ACTION',
@@ -918,7 +918,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
 
        ],
        buttons: [{
-            text: 'Create',
+            text: _('ID_CREATE'),
             formBind    :true,
             handler: function(){
                 var getForm         = PermissionForm.getForm().getValues();
@@ -957,7 +957,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                       OUTPUTS         :Outputs
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Process Permission created successfully.');
+                      PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_PERMISSIONS_CREATE') );
                       formWindow.hide();
                       PermissionStore.reload();
                       formWindow.hide();
@@ -985,7 +985,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                       OUTPUTS         :Outputs
                   },
                   success: function(response) {
-                      Ext.MessageBox.alert ('Status','Process Permission edited successfully.');
+                      PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_PERMISSIONS_EDIT') );
                       formWindow.hide();
                       PermissionStore.reload();
                       formWindow.hide();
@@ -995,7 +995,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                 }
           }
         },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 formWindow.hide();
@@ -1004,7 +1004,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
   })
 
 var formWindow = new Ext.Window({
-        title: 'New specific Permission',
+        title: _('ID_PERMISSION_NEW'),
         collapsible: false,
         maximizable: true,
         width: 400,
@@ -1032,12 +1032,12 @@ ProcessMapContext.prototype.processSupervisors= function()
             {name: 'USR_EMAIL',type: 'string'}
             ]);
   var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign',
+            text: _('ID_ASSIGN'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var User = grid.getStore();
@@ -1052,7 +1052,7 @@ ProcessMapContext.prototype.processSupervisors= function()
 
                 //storeUsers.reload();
                 if(availableProcessesUser.data.items.length == 0)
-                     Ext.MessageBox.alert ('Status','No supervisors are available. All supervisors have been already assigned.');
+                    PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_UNAVAILABLE') );
                 else
                 {
                     editor.stopEditing();
@@ -1066,7 +1066,7 @@ ProcessMapContext.prototype.processSupervisors= function()
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove',
+            text: _('ID_REMOVE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1085,7 +1085,7 @@ ProcessMapContext.prototype.processSupervisors= function()
                           url   : 'processes_Ajax.php'+urlparams,
                           method: 'GET',
                           success: function(response) {
-                              Ext.MessageBox.alert ('Status','Supervisor  has been removed successfully from Process.');
+                              PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_REMOVED') );
                               //Secondly deleting from Grid
                               processUser.remove(r);
                               //Reloading available user store
@@ -1147,7 +1147,7 @@ ProcessMapContext.prototype.processSupervisors= function()
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'USR_FIRSTNAME',
-                    header: 'First Name',
+                    header: _('ID_FIRST_NAME'),
                     dataIndex: 'USR_FIRSTNAME',
                     width: 200,
                     sortable: true,
@@ -1179,7 +1179,7 @@ ProcessMapContext.prototype.processSupervisors= function()
                               }
                         })
                 },{
-                    header: 'Last Name',
+                    header: _('ID_LAST_NAME'),
                     dataIndex: 'USR_LASTNAME',
                     width: 200,
                     editable: false,
@@ -1215,19 +1215,19 @@ ProcessMapContext.prototype.processSupervisors= function()
                     url: 'processes_Ajax.php'+urlparams,
                     method: 'GET',
                     success: function (response) {      // When saving data success
-                        Ext.MessageBox.alert ('Status','Supervisor has been successfully assigned to a Process');
+                        PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_ASSIGNED') );
                         processUser.reload();
                         availableProcessesUser.reload();
                     },
                     failure: function () {      // when saving data failed
-                        Ext.MessageBox.alert ('Status','Failed saving Supervisor Assigned to process');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_FAILED') );
+                        }
                  });
           }
         });
 
   var window = new Ext.Window({
-        title: 'Supervisor',
+        title: _('ID_SUPERVISOR'),
         collapsible: false,
         maximizable: false,
         width: 400,
@@ -1261,7 +1261,7 @@ ProcessMapContext.prototype.processDynaform= function()
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign',
+            text: _('ID_ASSIGN'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var User = grid.getStore();
@@ -1288,7 +1288,7 @@ ProcessMapContext.prototype.processDynaform= function()
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove',
+            text: _('ID_REMOVE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1315,7 +1315,7 @@ ProcessMapContext.prototype.processDynaform= function()
                               action             : 'removeSupervisorDynaform'
                           },
                           success: function(response) {
-                              Ext.MessageBox.alert ('Status','Dynaform  has been removed successfully from Process.');
+                              PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_REMOVE') );
                               //Secondly deleting from Grid
                               supervisorDynaforms.remove(r);
                               //Reloading available user store
@@ -1378,7 +1378,7 @@ ProcessMapContext.prototype.processDynaform= function()
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'DYN_TITLE',
-                    header: 'Title',
+                    header: _('ID_TITLE'),
                     dataIndex: 'DYN_TITLE',
                     width: 200,
                     sortable: true,
@@ -1440,19 +1440,19 @@ ProcessMapContext.prototype.processDynaform= function()
                         DYN_UID     : dynUID
                     },
                     success: function (response) {      // When saving data success
-                        Ext.MessageBox.alert ('Status','Dynaform has been successfully assigned to a Process');
+                        PMExt.notify( _('ID_STATUS') , _('ID_DYNAFORM_ASSIGN') );
                         supervisorDynaforms.reload();
                         availableSupervisorDynaforms.reload();
                     },
                     failure: function () {      // when saving data failed
-                        Ext.MessageBox.alert ('Status','Failed saving Dynaform Assigned to process');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_DYNAFORM_ASSIGN_FAILED') );
+                        }
                  });
           }
         });
 
         var window = new Ext.Window({
-        title: 'Dynaform',
+        title: _('ID_DYNAFORMS'),
         collapsible: false,
         maximizable: false,
         width: 440,
@@ -1481,12 +1481,12 @@ ProcessMapContext.prototype.processIODoc = function()
             {name: 'INP_DOC_UID',type: 'string'}
             ]);
   var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
         });
 
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
-            text: 'Assign',
+            text: _('ID_ASSIGN'),
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function(){
                 var User = grid.getStore();
@@ -1500,7 +1500,7 @@ ProcessMapContext.prototype.processIODoc = function()
 
                 //storeUsers.reload();
                 if(availableSupervisorInputDoc.data.items.length == 0)
-                     Ext.MessageBox.alert ('Status','No Input Document are available. All Input Document have been already assigned.');
+                    PMExt.notify( _('ID_STATUS') , _('ID_INPUT_UNAVAILABLE') );
                 else
                 {
                     editor.stopEditing();
@@ -1514,7 +1514,7 @@ ProcessMapContext.prototype.processIODoc = function()
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
-            text: 'Remove',
+            text: _('ID_REMOVE'),
             iconCls: 'button_menu_ext ss_sprite ss_delete',
             handler: function (s) {
                 editor.stopEditing();
@@ -1541,7 +1541,7 @@ ProcessMapContext.prototype.processIODoc = function()
                               action             : 'removeSupervisorInput'
                           },
                           success: function(response) {
-                              Ext.MessageBox.alert ('Status','Input Document  has been removed successfully from Process.');
+                              PMExt.notify( _('ID_STATUS') , _('ID_INPUT_REMOVE') );
                               //Secondly deleting from Grid
                               supervisorInputDoc.remove(r);
                               //Reloading available user store
@@ -1604,7 +1604,7 @@ ProcessMapContext.prototype.processIODoc = function()
                 new Ext.grid.RowNumberer(),
                 {
                     id: 'INP_DOC_TITLE',
-                    header: 'Title',
+                    header: _('ID_TITLE'),
                     dataIndex: 'INP_DOC_TITLE',
                     width: 200,
                     sortable: true,
@@ -1666,19 +1666,19 @@ ProcessMapContext.prototype.processIODoc = function()
                         INP_DOC_UID : inputDocUID
                     },
                     success: function (response) {      // When saving data success
-                        Ext.MessageBox.alert ('Status','Input Document has been successfully assigned to a Process');
+                        PMExt.notify( _('ID_STATUS') , _('ID_INPUT_ASSIGN') );
                         supervisorInputDoc.reload();
                         availableSupervisorInputDoc.reload();
                     },
                     failure: function () {      // when saving data failed
-                        Ext.MessageBox.alert ('Status','Failed saving Input Document Assigned to process');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_INPUT_FAILED') );
+                        }
                  });
           }
         });
 
   var window = new Ext.Window({
-        title: 'Input Documents',
+        title: _('ID_REQUEST_DOCUMENTS'),
         collapsible: false,
         maximizable: false,
         width: 430,
@@ -1709,7 +1709,7 @@ ProcessMapContext.prototype.processFileManager= function()
 	});
 
   var window = new Ext.Window({
-        title: 'Process File Manager',
+        title: _('ID_PROCESS_FILE_MANAGER'),
         collapsible: false,
         maximizable: false,
         width: 500,
@@ -1722,7 +1722,7 @@ ProcessMapContext.prototype.processFileManager= function()
         buttonAlign: 'center',
         items: AwesomeUploaderInstance,
         buttons: [{
-            text: 'Save',
+            text: _('ID_SAVE'),
             formBind    :true,
             handler: function(){
                 //waitMsg: 'Saving...',       // Wait Message
@@ -1746,12 +1746,12 @@ ProcessMapContext.prototype.processFileManager= function()
                         window.hide();
                     },
                     failure: function(){
-                        Ext.Msg.alert ('Failure');
-                    }
+                        PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                        }
                 });
              }
         },{
-            text: 'Cancel',
+            text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 window.hide();
@@ -1793,7 +1793,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                        triggerAction   :'all',
                        forceSelection  :true,
                        editable        :false,
-                       fieldLabel      :'Map Type',
+                       fieldLabel      :_('ID_MAP_TYPE'),
                        name            :'CT_MAP_TYPE',
                        displayField    :'name',
                        value           :'PROCESSMAP',
@@ -1829,16 +1829,16 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                    }]
                },{
                         xtype: 'checkbox',
-                        fieldLabel: 'Derivation History',
+                        fieldLabel: _('ID_DERIVATION_HISTORY'),
                         name: 'CT_DERIVATION_HISTORY'
                         //checked:checkDerivation
                 },{
                         xtype: 'checkbox',
-                        fieldLabel: 'Messages History',
+                        fieldLabel: _('ID_MESSAGES_HISTORY'),
                         name: 'CT_MESSAGE_HISTORY'
                        // checked:checkMessages
                }], buttons: [{
-                text: 'Save',
+                text: _('ID_SAVE'),
                 formBind    :true,
                 handler: function(){
                 var getForm             = PropertiesForm.getForm().getValues();
@@ -1866,12 +1866,12 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                           CT_MESSAGE_HISTORY    :MessageHistory
                        },
                        success: function(response) {
-                          Ext.MessageBox.alert ('Status','Connection Saved Successfully.');
-                                                                            }
+                           PMExt.notify( _('ID_STATUS') , _('ID_CASE_PROPERTIES_SAVE') );
+                          }
                    });
                 }
         },{
-           text: 'Cancel',
+           text: _('ID_CANCEL'),
            handler: function(){
            Propertieswindow.hide();
           }
@@ -1879,7 +1879,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
 
    });
    var Propertieswindow = new Ext.Window({
-        title: 'Case tracker',
+        title: _('ID_CASE_TRACKERS'),
         collapsible: false,
         maximizable: false,
         width: 300,
@@ -1932,13 +1932,13 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
         }
     ]);
     var editor = new Ext.ux.grid.RowEditor({
-            saveText: 'Update'
+            saveText: _('ID_UPDATE')
     });
 
     
     var btnAdd = new Ext.Button({
       id: 'btnAdd',
-      text: 'Assign',
+      text: _('ID_ASSIGN'),
       iconCls: 'button_menu_ext ss_sprite ss_add',
       handler: function(){
          var User = Objectsgrid.getStore();
@@ -1950,8 +1950,8 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
          });
 
          if(availableStore.data.items.length == 0)
-            Ext.MessageBox.alert ('Status','No Objects are available. All Objects have been already assigned.');
-         else
+             PMExt.notify( _('ID_STATUS') , _('ID_OBJECTS_UNAVAILABLE') );
+            else
             {
                 editor.stopEditing();
                 assignedStore.insert(0, e);
@@ -1964,7 +1964,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
     var btnRemove = new Ext.Button({
       id: 'btnRemove',
-      text: 'Remove',
+      text: _('ID_REMOVE'),
      iconCls: 'button_menu_ext ss_sprite ss_delete',
       handler: function (s) {
         editor.stopEditing();
@@ -1992,7 +1992,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                       },
 
               success: function(response) {
-                Ext.MessageBox.alert ('Status','Object has been removed successfully.');
+                  PMExt.notify( _('ID_STATUS') , _('ID_OBJECT_REMOVE') );
                 //Secondly deleting from Grid
                 assignedStore.remove(r);
                 //Reloading available user store
@@ -2008,7 +2008,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
     var btnObjectsCondition = new Ext.Button({
       id: 'btnCondition',
-      text: 'Condition',
+      text: _('ID_CONDITION'),
       handler: function (s) {
                 workflow.variablesAction = 'grid';
                 workflow.gridField       = 'CTO_CONDITION';
@@ -2071,14 +2071,14 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             new Ext.grid.RowNumberer(),
               {
               id: 'CTO_TITLE',
-              header: 'Title',
+              header: _('ID_TITLE'),
               dataIndex: 'CTO_TITLE',
               width: 100,
               sortable: true,
               editor: new Ext.form.ComboBox({
                 xtype: 'combo',
                 store:availableStore,
-                fieldLabel   : 'Title',
+                fieldLabel   : _('ID_TITLE'),
                 hiddenName   : 'number',
                 displayField : 'OBJECT_TITLE'  ,
                 valueField   : 'OBJECT_TITLE',
@@ -2097,11 +2097,11 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                 }
               })
             },{
-              header    : 'Type',
+              header    : _('ID_TYPE'),
               dataIndex : 'CTO_TYPE_OBJ',
               editable  : false
             },{
-                header : 'Condition',
+                header : _('ID_CONDITION'),
                 dataindex: 'CTO_CONDITION',
                 name : 'CTO_CONDITION',
                 editor: new Ext.form.TextField({
@@ -2168,14 +2168,14 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                             CTO_CONDITION   : condition
                         },
                       success: function (response){
-                        Ext.MessageBox.alert ('Status','Objects has been successfully assigned');
-                        availableStore.reload();
-                        assignedStore.reload();
+                          PMExt.notify( _('ID_STATUS') , _('ID_OBJECT_ASSIGNED') );
+                          availableStore.reload();
+                          assignedStore.reload();
                       }
                     })
             },
           failure: function () {      // when saving data failed
-            Ext.MessageBox.alert ('Status','Failed to assign Objects');
+              PMExt.notify( _('ID_STATUS') , _('ID_OBJECT_FAILED') );
             }
         })
         //Updating the user incase if already assigned user has been replaced by other user
@@ -2198,8 +2198,8 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                       STEP_POSITION   : obj_position
                       },
                       success: function(response) {
-                          Ext.MessageBox.alert ('Status','User has been updated successfully.');
-                      }
+                          PMExt.notify( _('ID_STATUS') , _('ID_OBJECT_UPDATE') );
+                          }
                     });
             }
              availableStore.reload();
@@ -2258,14 +2258,14 @@ ProcessMapContext.prototype.ExtVariables = function()
                 new Ext.grid.RowNumberer(),
                     {
                         id: 'FLD_NAME',
-                        header: 'Variable',
+                        header: _('ID_VARIABLES'),
                         dataIndex: 'variable',
                         width: 170,
                         editable: false,
                         sortable: true
                     },{
                         id: 'PRO_VARIABLE',
-                        header: 'Label',
+                        header: _('ID_LABEL'),
                         dataIndex: 'label',
                         width: 150,
                         sortable: true
@@ -2288,7 +2288,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                     autoHeight:true
                 },
                 items:[{
-                        title:'All Variables',
+                        title:_('ID_ALL_VARIABLES'),
                         id   :'allVar',
                         layout:'form',
                         listeners: {
@@ -2402,7 +2402,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                               }
                         }]
                 },{
-                title:'System',
+                title:_('ID_SYSTEM'),
                 id:'system',
                 layout:'form',
                 listeners:{
@@ -2475,7 +2475,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                               }
                 }]
                 },{
-                title:'Process',
+                title:_('ID_CASESLIST_APP_PRO_TITLE'),
                 id   :'process',
                 layout:'form',
                 listeners: {
@@ -2549,7 +2549,7 @@ ProcessMapContext.prototype.ExtVariables = function()
   });
 
   var window = new Ext.Window({
-        title: 'Steps Of',
+        title: _('ID_VARIABLES'),
         collapsible: false,
         maximizable: false,
         scrollable: true,
