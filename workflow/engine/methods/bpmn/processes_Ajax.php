@@ -77,6 +77,10 @@ if ( isset ($_REQUEST['action']) ) {
   	  $sOutput = $oProcessMap->deleteTask($oData->tas_uid);
           echo $sOutput;
   	break;
+    case 'addGateway':
+  	  $sOutput = $oProcessMap->addGateway($oData);
+          echo $sOutput;
+  	break;
      case 'deleteGateway':
   	  $sOutput = $oProcessMap->deleteGateway($oData->pro_uid, $oData->gat_uid);
           echo $sOutput;

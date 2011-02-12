@@ -1439,6 +1439,37 @@ class processMap {
     }
   }
 
+   /*
+   * Add a gateway
+   * @param string $sProcessUID
+   * @param string $sGatewayUID
+   * @return boolean
+   */
+
+  function addGateway($oData) {
+    try {
+          $oGateway = new Gateway ( );
+          $aData = array();
+          $aData['PRO_UID'] = $oData->pro_uid;
+          $aData['GAT_X']    = $oData->position->x;
+          $aData['GAT_Y']    = $oData->position->y;
+          $aData['GAT_TYPE'] = $oData->gat_type;
+          $sGat_uid          = $oData->gat_uid;
+          $oGatewayData = GatewayPeer::retrieveByPK($sGat_uid);
+          if (is_null($oGatewayData)) {
+            $sGat_uid =  $oGateway->create($aData);
+          }else{
+            $aData['GAT_UID'] = $sGat_uid;
+            $oGateway->update($aData);
+          }
+          $oEncode->uid = $sGat_uid;
+          $oJSON = new Services_JSON ( );
+          return $oJSON->encode($oEncode);
+    } catch (Exception $oError) {
+      throw ($oError);
+    }
+  }
+
   /*
    * Add a new guide
    * @param string $sProcessUID
@@ -6349,9 +6380,9 @@ function saveExtddEvents($oData)
         $oEvent->update($aData); 
       }
    }
-   $oNewTask->uid = $sEvn_uid;
+   $oEncode->uid = $sEvn_uid;
    $oJSON = new Services_JSON ( );
-   return $oJSON->encode($oNewTask);
+   return $oJSON->encode($oEncode);
  }
 
  

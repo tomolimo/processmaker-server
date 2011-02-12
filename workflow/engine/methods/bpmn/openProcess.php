@@ -102,6 +102,18 @@
    }
    $lanes              = $oProcess->createLanesNewPM($oData->lanes);
    $fields             = $oProcess->createTransitionsPM($oData->tasks,$oData->routes,$arrayEvents,$count,$arrayRoutes,$countRoutes);
+
+   //Get all the standalone Gateway
+   $countGateway = count($fields['GATEWAYS']);
+   foreach($oData->gateways as $id => $value)
+   {
+     if($value['GAT_NEXT_TASK'] == '' && $value['TAS_UID'] == ''){
+       $fields['GATEWAYS'][$countGateway]['0']   = $value['GAT_UID'];
+       $fields['GATEWAYS'][$countGateway]['1']   = $value['GAT_TYPE'];
+       $fields['GATEWAYS'][$countGateway]['2']   = $value['GAT_X'];
+       $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
+     }
+   }
    //$subProcess         = $oProcess->createSubProcessesPM($oData->subProcess);
    $arrayEvents        = $fields['EVENTS'];
    $arrayGateways      = $fields['GATEWAYS'];

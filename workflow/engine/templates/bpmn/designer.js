@@ -811,14 +811,22 @@ Ext.onReady ( function() {
           if(data.name == 'bpmnAnnotation'){
             NewShape.actiontype = 'addText';
             workflow.saveShape(NewShape);      //Saving task when user drags and drops it
-          }else if(data.name == 'bpmnTask'){
+          }
+          else if(data.name == 'bpmnTask'){
             NewShape.actiontype = 'addTask';
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
-          }else if(data.name.match(/Event/)){
+          }
+          else if(data.name.match(/Event/)){
             NewShape.actiontype = 'addEvent';
             NewShape.mode = 'ddEvent';
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
           }
+          else if(data.name.match(/Gateway/)){
+            NewShape.actiontype = 'addGateway';
+            NewShape.mode = 'ddGateway';
+            workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
+          }
+
           var scrollLeft = workflow.getScrollLeft();
           var scrollTop  = workflow.getScrollTop();
           workflow.addFigure(NewShape,e.xy[0]-xOffset+scrollLeft,e.xy[1]-yOffset+scrollTop);

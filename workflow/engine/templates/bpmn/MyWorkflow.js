@@ -389,34 +389,27 @@ MyWorkflow.prototype.toggleShapes=function(item)
         var x =item.scope.workflow.currentSelection.getX();  //Get x co-ordinate from figure
         var y =item.scope.workflow.currentSelection.getY();  //Get y co-ordinate from figure
         
-        if(item.type == 'bpmnEventBoundaryTimerInter')
-        {
+        if(item.type == 'bpmnEventBoundaryTimerInter'){
             workflow.currentSelection.boundaryEvent = true;
             workflow.taskName = oldWorkflow.taskName;
             var newShape = workflow.currentSelection;
             newShape.setDimension(newShape.getWidth(),newShape.getHeight());
-
         }
-        else if(item.type == 'bpmnSubProcess')
-            {
+        else if(item.type == 'bpmnSubProcess'){
                 workflow.subProcessName = 'Sub Process';
                 newShape = eval("new "+item.type+"(this.workflow)");
-            }
+        }
         else
             newShape = eval("new "+item.type+"(this.workflow)");
 
-        if(item.type != 'bpmnEventBoundaryTimerInter')
-        {
+        if(item.type != 'bpmnEventBoundaryTimerInter'){
             this.workflow.addFigure(newShape,x,y); //Add New Selected Shape First
             //Delete Old Shape
             item.scope.workflow.getCommandStack().execute(new CommandDelete(oldWorkflow));
             ToolGeneric.prototype.execute.call(item.scope);
-        
-
-        //to create all the new connections again
+           //to create all the new connections again
            var connObj;
-           for(i=0 ; i < countConn ; i++)
-             {
+           for(i=0 ; i < countConn ; i++){
                 if(sourcePortId[i] == shapeId)  //If shapeId is equal to sourceId the , replace the oldShape object by new shape Object
                   sourceNode[i] = newShape;
                 else
@@ -428,14 +421,12 @@ MyWorkflow.prototype.toggleShapes=function(item)
                   newShape.workflow.addFigure(connObj);
               }
         }
-        newShape.mode = 'ddEvent';
-         //Saving Asynchronously deleted shape and new created shape into DB
-         if(item.type.match(/Boundary/))
-         {
+        //Saving Asynchronously deleted shape and new created shape into DB
+        if(item.type.match(/Boundary/)){
             newShape.actiontype = 'updateTask';
             workflow.saveShape(newShape);
-         }
-         /*if(newShape.type.match(/Event/)  && newShape.type.match(/Inter/) && !item.type.match(/Boundary/))
+        }
+        /*if(newShape.type.match(/Event/)  && newShape.type.match(/Inter/) && !item.type.match(/Boundary/))
          {
               newShape.actiontype = 'updateEvent';
               //Set the Old Id to the Newly created Event
@@ -443,13 +434,43 @@ MyWorkflow.prototype.toggleShapes=function(item)
               newShape.id = oldWorkflow.id;
               newShape.workflow.saveShape(newShape);
          }*/
-         if(newShape.type.match(/Event/) && !item.type.match(/Boundary/))
-         {
-              newShape.actiontype = 'addEvent';
-              //Set the Old Id to the Newly created Event
-              newShape.html.id = oldWorkflow.id;
-              newShape.id = oldWorkflow.id;
-              newShape.workflow.saveShape(newShape);
+         if(newShape.type.match(/Event/) && !item.type.match(/Boundary/)){
+           newShape.mode = 'ddEvent';
+           newShape.actiontype = 'addEvent';
+           //Set the Old Id to the Newly created Event
+           newShape.html.id = oldWorkflow.id;
+           newShape.id = oldWorkflow.id;
+           newShape.workflow.saveShape(newShape);
+         }
+         if(newShape.type.match(/Gateway/)){
+           var ports = newShape.getPorts();
+           var len =ports.data.length;
+           var conn = new Array();
+           for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                    conn[i] = ports.data[i].getConnections();
+         }
+         var countConn = 0
+         //Get ALL the connections for the specified PORT
+         for(i = 0; i< conn.length ; i++){
+           if(typeof conn[i] != 'undefined')
+           for(var j = 0; j < conn[i].data.length ; j++){
+               if(typeof conn[i].data[j] != 'undefined'){
+                   countConn++;
+               }
+           }
+         }
+
+         if(countConn == 0){
+           newShape.mode = 'ddGateway';
+           newShape.actiontype = 'addGateway';
+           //Set the Old Id to the Newly created Gateway
+           newShape.html.id = oldWorkflow.id;
+           newShape.id = oldWorkflow.id;
+           newShape.workflow.saveShape(newShape);
+         }
+         else
+            newShape.mode = 'update';
          }
         /* if(newShape.type  == 'bpmnEventMessageStart' || newShape.type  == 'bpmnEventTimerStart')
          {
@@ -476,30 +497,27 @@ MyWorkflow.prototype.toggleShapes=function(item)
                     newShape.workflow.saveShape(newShape);
                  }
          }*/
-         else if(newShape.type.match(/Gateway/))
-             {
-                 var shape = new Array();
-                 shape.type = '';
-                 newShape.workflow.saveRoute(newShape,shape);
-             }
-
+         else if(newShape.type.match(/Gateway/)){
+           if(newShape.mode == 'update'){
+             var shape = new Array();
+             shape.type = '';
+             newShape.workflow.saveRoute(newShape,shape);
+           }
+         }
          //Swapping from Task to subprocess and vice -versa
-         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/))
-         {
-             newShape.actiontype = 'addSubProcess';
-             if(newShape.type == 'bpmnTask')
-                 newShape.actiontype = 'addTask';
-              newShape.workflow.saveShape(newShape);
+         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/)){
+           newShape.actiontype = 'addSubProcess';
+           if(newShape.type == 'bpmnTask')
+             newShape.actiontype = 'addTask';
+           newShape.workflow.saveShape(newShape);
          }
-         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !item.type.match(/Boundary/) )
-         {
-             this.actiontype = 'deleteTask';
-             this.noAlert    = true;
-             if(this.type == 'bpmnSubProcess')
-                 this.actiontype = 'deleteSubProcess';
-             newShape.workflow.deleteSilently(this);
+         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !item.type.match(/Boundary/) ){
+           this.actiontype = 'deleteTask';
+           this.noAlert    = true;
+           if(this.type == 'bpmnSubProcess')
+             this.actiontype = 'deleteSubProcess';
+           newShape.workflow.deleteSilently(this);
          }
-         
        }
     }
 }
@@ -1084,6 +1102,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
         case 'saveTextPosition':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
             break;
+        case 'saveGatewayPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
         case 'saveTaskCordinates':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
             break;
@@ -1123,9 +1144,13 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             var evn_type = oNewShape.type;
             urlparams = '?action='+actiontype+'&data={"evn_uid":"'+evn_uid +'","evn_type":"'+evn_type+'"}';
             break;
-        case 'saveGatewayPosition':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+       case 'addGateway':
+            var gat_uid = oNewShape.id
+            var gat_type = oNewShape.type;
+            var mode = oNewShape.mode;
+            urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+gat_uid +'","gat_type":"'+gat_type+'","position":'+pos+',"mode":"'+mode+'"}';
             break;
+        
     }
     //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
 
