@@ -6291,9 +6291,9 @@
     </column>
     <column name="TAS_UID" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
-        <parameter name="Field" value="PRO_UID"/>
+        <parameter name="Field" value="TAS_UID"/>
         <parameter name="Type" value="varchar(32)"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -6301,9 +6301,9 @@
     </column>
     <column name="GAT_NEXT_TASK" type="VARCHAR" size="32" required="true" default="">
       <vendor type="mysql">
-        <parameter name="Field" value="PRO_UID"/>
+        <parameter name="Field" value="GAT_NEXT_TASK"/>
         <parameter name="Type" value="varchar(32)"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
@@ -6311,7 +6311,7 @@
     </column>
     <column name="GAT_X" type="INTEGER" required="true" default="0">
       <vendor type="mysql">
-        <parameter name="Field" value="SWI_X"/>
+        <parameter name="Field" value="GAT_X"/>
         <parameter name="Type" value="int(11)"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
@@ -6321,11 +6321,21 @@
     </column>
     <column name="GAT_Y" type="INTEGER" required="true" default="0">
       <vendor type="mysql">
-        <parameter name="Field" value="SWI_Y"/>
+        <parameter name="Field" value="GAT_Y"/>
         <parameter name="Type" value="int(11)"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="GAT_TYPE" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="GAT_TYPE"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
         <parameter name="Extra" value=""/>
       </vendor>
     </column>

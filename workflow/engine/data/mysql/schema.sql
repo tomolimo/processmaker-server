@@ -1002,7 +1002,7 @@ CREATE TABLE `EVENT`
 	`EVN_STATUS` VARCHAR(16) default 'OPEN' NOT NULL,
 	`EVN_WHEN_OCCURS` VARCHAR(32) default 'SINGLE',
 	`EVN_RELATED_TO` VARCHAR(16) default 'SINGLE',
-	`TAS_UID` VARCHAR(32) default '',
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
 	`EVN_TAS_UID_FROM` VARCHAR(32) default '',
 	`EVN_TAS_UID_TO` VARCHAR(32) default '',
 	`EVN_TAS_ESTIMATED_DURATION` DOUBLE default 0,
@@ -1034,6 +1034,7 @@ CREATE TABLE `GATEWAY`
 	`GAT_NEXT_TASK` VARCHAR(32) default '' NOT NULL,
 	`GAT_X` INTEGER default 0 NOT NULL,
 	`GAT_Y` INTEGER default 0 NOT NULL,
+	`GAT_TYPE` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`GAT_UID`)
 )Type=MyISAM ;
 #-----------------------------------------------------------------------------
