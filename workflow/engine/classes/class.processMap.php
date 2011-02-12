@@ -4342,6 +4342,28 @@ class processMap {
     }
   }
 
+   /*
+  * Save the Event Position
+  * @param string $sSwimLaneUID
+  * @param integer $iX
+  * @param integer $iY
+  * @return integer
+  */
+  function saveEventPosition($sEventUID = '', $iX = 110, $iY = 60)
+  {
+    try {
+      $oEvents   = new Event( );
+      $aFields = $oEvents->load ( $sEventUID );
+
+      $aFields ['EVN_UID']   = $sEventUID;
+      $aFields ['EVN_POSX']  = $iX;
+      $aFields ['EVN_POSY']  = $iY;
+      return $oEvents->update ( $aFields );
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
+
    /** get all the Active process
    *
    * SELECT PROCESS.PRO_UID AS UID, CONTENT.CON_VALUE AS VALUE FROM PROCESS, CONTENT
@@ -6284,11 +6306,14 @@ function saveExtddEvents($oData)
 {
   $oTask = new Task();
   $oEvent = new Event();
-  $oEvn_uid = '';
+  $sEvn_uid = '';
+  $aData = array();
   $aData['PRO_UID']    = $oData->uid;
-  $aData['EVN_TYPE']   = $oData->tas_type;
+  $aData['EVN_TYPE']   = $oData->evn_type;
   $aData['EVN_POSX']   = $oData->position->x;
   $aData['EVN_POSY']   = $oData->position->y;
+  
+  $mode   = $oData->mode;
   $aData['EVN_STATUS'] = 'ACTIVE';
   $aData['EVN_WHEN']   = '1';
   $aData['EVN_ACTION'] = '';
@@ -6299,27 +6324,34 @@ function saveExtddEvents($oData)
   if(preg_match("/Start/", $aData['EVN_TYPE']) || preg_match("/Inter/", $aData['EVN_TYPE'])){
     $aData['EVN_RELATED_TO'] = 'SINGLE';
   }
-   if(isset($oData->tas_uid) && $oData->tas_uid != ''){
+   if($mode == 'updateTask'){
      $aData['TAS_UID'] = $oData->tas_uid;
      $oTaskData = $oTask->load($aData['TAS_UID']);
      if($oTaskData['TAS_EVN_UID'] == ''){
-       $oEvn_uid =  $oEvent->create($aData);
+       $sEvn_uid =  $oEvent->create($aData);
      }else{
        $aData['EVN_UID'] = $oTaskData['TAS_EVN_UID'];
-       $oEvn_uid = $aData['EVN_UID'];
+       $sEvn_uid = $aData['EVN_UID'];
        $oEvent->update($aData);
      }
      $aTask['TAS_UID']     = $oData->tas_uid;
-     $aTask['TAS_EVN_UID'] = $oEvn_uid;
+     $aTask['TAS_EVN_UID'] = $sEvn_uid;
      $aTask['TAS_START']   = 'TRUE';
      $oTask->update($aTask);
-    }else{
-     $oEvn_uid =  $oEvent->create($aData);
     }
-   $oNewTask->uid = $oEvn_uid;
+    else if($mode == 'ddEvent'){
+       $sEvn_uid   = $oData->evn_uid;
+       $oEventData = EventPeer::retrieveByPK($sEvn_uid);
+      if (is_null($oEventData)) {
+        $sEvn_uid =  $oEvent->create($aData);
+      }else{
+        $aData['EVN_UID'] = $sEvn_uid;
+        $oEvent->update($aData); 
+      }
+   }
+   $oNewTask->uid = $sEvn_uid;
    $oJSON = new Services_JSON ( );
    return $oJSON->encode($oNewTask);
- 
  }
 
  

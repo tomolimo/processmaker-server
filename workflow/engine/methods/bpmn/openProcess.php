@@ -76,6 +76,7 @@
         }
          $arrayEvents[$count]['2']      = $value['TAS_POSX']+68;
          $arrayEvents[$count]['3']      = $value['TAS_POSY']-50;
+         $arrayEvents[$count]['4']      = $value['TAS_UID'];
          $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
          $arrayRoutes[$countRoutes]['1']= $arrayEvents[$count]['0'];
          $arrayRoutes[$countRoutes]['2']= $value['TAS_UID'];
@@ -95,6 +96,7 @@
          $arrayEvents[$count]['1'] = $value['EVN_TYPE'];
          $arrayEvents[$count]['2'] = $value['EVN_POSX'];
          $arrayEvents[$count]['3'] = $value['EVN_POSY'];
+         $arrayEvents[$count]['4'] = $value['TAS_UID'];
          $count                    = $count+ 1;
        }
    }

@@ -428,22 +428,30 @@ MyWorkflow.prototype.toggleShapes=function(item)
                   newShape.workflow.addFigure(connObj);
               }
         }
-        
+        newShape.mode = 'ddEvent';
          //Saving Asynchronously deleted shape and new created shape into DB
          if(item.type.match(/Boundary/))
          {
             newShape.actiontype = 'updateTask';
             workflow.saveShape(newShape);
          }
-         if(newShape.type.match(/Event/)  && newShape.type.match(/Inter/) && !item.type.match(/Boundary/))
+         /*if(newShape.type.match(/Event/)  && newShape.type.match(/Inter/) && !item.type.match(/Boundary/))
          {
               newShape.actiontype = 'updateEvent';
               //Set the Old Id to the Newly created Event
               newShape.html.id = oldWorkflow.id;
               newShape.id = oldWorkflow.id;
               newShape.workflow.saveShape(newShape);
+         }*/
+         if(newShape.type.match(/Event/) && !item.type.match(/Boundary/))
+         {
+              newShape.actiontype = 'addEvent';
+              //Set the Old Id to the Newly created Event
+              newShape.html.id = oldWorkflow.id;
+              newShape.id = oldWorkflow.id;
+              newShape.workflow.saveShape(newShape);
          }
-         if(newShape.type  == 'bpmnEventMessageStart' || newShape.type  == 'bpmnEventTimerStart')
+        /* if(newShape.type  == 'bpmnEventMessageStart' || newShape.type  == 'bpmnEventTimerStart')
          {
              newShape.workflow.currentSelection = newShape;
              var task_details = workflow.getStartEventConn(newShape,'targetPort','OutputPort');
@@ -467,7 +475,7 @@ MyWorkflow.prototype.toggleShapes=function(item)
                     newShape.actiontype = 'saveStartEvent';
                     newShape.workflow.saveShape(newShape);
                  }
-         }
+         }*/
          else if(newShape.type.match(/Gateway/))
              {
                  var shape = new Array();
@@ -1070,6 +1078,12 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
         case 'saveTaskPosition':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
             break;
+        case 'saveEventPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+        break;
+        case 'saveTextPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
         case 'saveTaskCordinates':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
             break;
@@ -1088,9 +1102,6 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
         case 'updateText':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'"}';
             break;
-        case 'saveTextPosition':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
-            break;
         case 'saveStartEvent':
             //If we change Event to start from Message/Timer then Delete the record from Events Table
             this.deleteEvent(oNewShape);
@@ -1100,10 +1111,12 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             break;
         case 'addEvent':
             var tas_uid='';
-            if(typeof oNewShape.workflow != 'undefined' &&  oNewShape.workflow != null)
-                tas_uid = oNewShape.workflow.taskUid[0].value;
-            var tas_type = oNewShape.type;
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","tas_type":"'+tas_type+'","position":'+pos+'}';
+            //if(typeof oNewShape.workflow != 'undefined' &&  oNewShape.workflow != null)
+            //    tas_uid = oNewShape.workflow.taskUid[0].value;
+            var evn_type = oNewShape.type;
+            var mode = oNewShape.mode;
+            var evn_uid = oNewShape.id;
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+evn_type+'","position":'+pos+',"mode":"'+mode+'","evn_uid":"'+evn_uid+'"}';
             break;
         case 'updateEvent':
             var evn_uid = oNewShape.id

@@ -816,9 +816,9 @@ Ext.onReady ( function() {
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
           }else if(data.name.match(/Event/)){
             NewShape.actiontype = 'addEvent';
+            NewShape.mode = 'ddEvent';
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
           }
-
           var scrollLeft = workflow.getScrollLeft();
           var scrollTop  = workflow.getScrollTop();
           workflow.addFigure(NewShape,e.xy[0]-xOffset+scrollLeft,e.xy[1]-yOffset+scrollTop);
@@ -980,8 +980,19 @@ Ext.onReady ( function() {
               case 'events':
                       for(var k=0;k<shapes.events.length;k++){
                           var srceventtype = shapes.events[k][1];
-                          if(! srceventtype.match(/End/))
+                          var tas_uid = shapes.events[k][4];
+                          if(! srceventtype.match(/End/) && tas_uid != '')
                           {
+                              NewShape = eval("new "+srceventtype+"(workflow)");
+                              NewShape.x = shapes.events[k][2];
+                              NewShape.y = shapes.events[k][3];
+                              workflow.setBoundary(NewShape);
+                              workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+                              //Setting newshape id to the old shape id
+                              NewShape.html.id = shapes.events[k][0];
+                              NewShape.id = shapes.events[k][0];
+                          }
+                          else if(tas_uid == ''){
                               NewShape = eval("new "+srceventtype+"(workflow)");
                               NewShape.x = shapes.events[k][2];
                               NewShape.y = shapes.events[k][3];

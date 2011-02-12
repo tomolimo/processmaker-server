@@ -214,7 +214,8 @@ class Event extends BaseEvent {
           {
             $oEvent->setEvnRelatedTo( $aData['EVN_RELATED_TO'] );
             if ( $aData['EVN_RELATED_TO'] == 'SINGLE' ) {
-              $oEvent->setTasUid( $aData['TAS_UID'] );
+              if(isset($aData['TAS_UID']) && $aData['TAS_UID'] != '')
+                $oEvent->setTasUid( $aData['TAS_UID'] );
               $oEvent->setEvnTasUidTo( '');
               $oEvent->setEvnTasUidFrom( '' );
             }
@@ -224,6 +225,11 @@ class Event extends BaseEvent {
               $oEvent->setEvnTasUidFrom( $aData['EVN_TAS_UID_FROM'] );
             }
          }
+
+        if(isset($aData['EVN_POSX']))
+            $oEvent->setEvnPosx($aData['EVN_POSX']);
+        if(isset($aData['EVN_POSY']))
+            $oEvent->setEvnPosy($aData['EVN_POSY']);
 
         if(isset($aData['EVN_TAS_ESTIMATED_DURATION']))
             $oEvent->setEvnTasEstimatedDuration( $aData['EVN_TAS_ESTIMATED_DURATION'] );
@@ -249,7 +255,7 @@ class Event extends BaseEvent {
             $oEvent->setEvnAction( $aData['EVN_ACTION'] );
         //if ( isset ($aData['ENV_MAX_ATTEMPTS'] )) $oEvent->setEvnMaxAttempts( 3 );
 
-        if (isset($aData['EVN_ACTION_PARAMETERS'])) {
+        if (isset($aData['EVN_ACTION_PARAMETERS']) && $aData['EVN_ACTION_PARAMETERS'] != 0) {
 
           $oTP  = new TemplatePower(PATH_TPL . 'events' . PATH_SEP . 'sendMessage.tpl');
           $oTP->prepare();

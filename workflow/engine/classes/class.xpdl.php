@@ -3711,6 +3711,7 @@ class Xpdl extends processes
             if($idVal['TAS_UID']==$idTask){
               $coordinateX=$idVal['TAS_POSX'];
               $coordinateY=$idVal['TAS_POSY'];
+              $tas_uid    =$idVal['TAS_UID'];
               }
           }
           $positionX                     = $coordinateX+65;
@@ -3730,6 +3731,7 @@ class Xpdl extends processes
             if($idVal['TAS_UID']==$idTask){
               $coordinateX=$idVal['TAS_POSX'];
               $coordinateY=$idVal['TAS_POSY'];
+              $tas_uid    =$idVal['TAS_UID'];
               }
           }
           $positionX                     = $coordinateX + 120;
@@ -3747,6 +3749,7 @@ class Xpdl extends processes
         $events[$countEvents]['1'] = 'bpmnEventEmptyEnd';
         $events[$countEvents]['2'] = $positionX-25;
         $events[$countEvents]['3'] = $positionY+35;
+        $events[$countEvents]['4'] = $tas_uid;
         $countEvents               = $countEvents + 1;
         $end                       = 0;
         $endEvent                  = 0;
