@@ -46,7 +46,6 @@ pmosExt.prototype.addExtJsWindow = function(items,width,height,title)
          });
          window.show();
 }
-
 pmosExt.prototype.popWebEntry= function(_5678)
 {
     var oTask           = _5678.workflow.taskUid;
@@ -384,7 +383,6 @@ pmosExt.prototype.popWebEntry= function(_5678)
                   webEntryLink.hide();
                  }
 }
-
 pmosExt.prototype.popCaseSchedular= function(_5678){
         Ext.QuickTips.init();
         var oPmosExt = new pmosExt();
@@ -742,7 +740,6 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             ]
                         }]}
         ]
-
     });
           caseSchedularForm.render(document.body);
 
@@ -794,7 +791,6 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
             credentialFieldset.items.items[10].getEl().up('.x-form-item').setDisplayed(false);
             credentialFieldset.items.items[11].getEl().up('.x-form-item').setDisplayed(false);
             //Set pro_uid field
-            var pro_uid = _5678.workflow.getUrlVars();
             credentialFieldset.items.items[5].setValue(pro_uid);
             //Set pro_uid field
             credentialFieldset.items.items[7].setValue(task_uid);
@@ -860,8 +856,6 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
 
 
       }
-
-
 pmosExt.prototype.hideSchOptions = function(formObj,index)
 {
     var credentialFieldset = formObj.items.items[0];
@@ -1012,7 +1006,6 @@ pmosExt.prototype.popTaskNotification= function(_5678){
          });
          window.show();
 }
-
 pmosExt.prototype.loadTask = function(_5678){
         var taskUid = _5678.workflow.taskid;
         if(typeof taskUid != 'undefined')
@@ -1030,25 +1023,19 @@ pmosExt.prototype.loadTask = function(_5678){
         }
 
 }
-
-pmosExt.prototype.getTriggerList = function(_5678){
-        var pro_uid = _5678.workflow.getUrlVars();
-        if(typeof pro_uid != 'undefined')
-        {
-            var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
-            Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
-                    success: function(response) {
-                        this.workflow.triggerList = Ext.util.JSON.decode(response.responseText);
-                    },
-                    failure: function(){
-                        Ext.Msg.alert ('Failure');
-                    }
-                });
-        }
-
+pmosExt.prototype.getTriggerList = function()
+{                
+  var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
+  Ext.Ajax.request({
+    url: "processes_Ajax.php"+ urlparams,
+    success: function(response) {
+      workflow.triggerList = Ext.util.JSON.decode(response.responseText);
+    },
+    failure: function(){
+      Ext.Msg.alert ('Failure');
+    }
+  });
 }
-
 pmosExt.prototype.toggleFields = function(field,bool){
 
     for(var i=0;i<field.length;i++){
@@ -1064,7 +1051,6 @@ pmosExt.prototype.toggleFields = function(field,bool){
     }
      
 }
-
 pmosExt.prototype.popMessageEvent= function(_5678){
          var oTask = _5678.workflow.taskUid;
          var oPmosExt = new pmosExt();
@@ -1234,9 +1220,6 @@ pmosExt.prototype.popMessageEvent= function(_5678){
      });
      window.show();
 }
-
-
-
 pmosExt.prototype.popMultipleEvent= function(_5678){
         Ext.QuickTips.init();
         var oTaskFrom = _5678.workflow.taskUidFrom;
@@ -1511,10 +1494,8 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
                    }
         }]
     });
-    window.show();
-    
+    window.show();    
 }
-
 pmosExt.prototype.saveInterTimer=function()
 {
   var mulEventform = workflow.multipleEventForm.getForm().getValues();
@@ -1569,7 +1550,6 @@ pmosExt.prototype.saveInterTimer=function()
         sData = '"'+key+'":"'+newFormValues[key]+'",';
   }
   //sData = Ext.util.JSON.encode(newFormValues);
- 
   
   sData = '{'+sData.slice(0,sData.length-1)+'}';
 
@@ -1593,111 +1573,96 @@ pmosExt.prototype.saveInterTimer=function()
       }
     });
 }
-
-pmosExt.prototype.loadProcess=function(_5678)
-{
-    var pro_uid = _5678.workflow.getUrlVars();
-       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-                    _5678.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
+pmosExt.prototype.loadProcess=function()
+{    
+  var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+  Ext.Ajax.request({
+  url: "processes_Ajax.php"+ urlparams,
+  success: function(response) {
+    workflow.processInfo = Ext.util.JSON.decode(response.responseText);
+    },
+      failure: function(){
+      Ext.Msg.alert ('Failure');
+    }
+  });
 }
-
-pmosExt.prototype.loadDynaforms=function(_5678)
+pmosExt.prototype.loadDynaforms=function()
 {
-        var taskUid = _5678.workflow.taskUid;
-        if(typeof taskUid[0] != 'undefined')
-        {
-            var urlparams = '?action=dynaforms&data={"uid":"'+ taskUid[0].value +'"}';
-            Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
-                    success: function(response) {
-                        _5678.workflow.dynaList = Ext.util.JSON.decode(response.responseText);
-                    },
-                    failure: function(){
-                        Ext.Msg.alert ('Failure');
-                    }
-                });
-        }
+  var taskUid = workflow.taskUid;
+    if(typeof taskUid[0] != 'undefined'){
+      var urlparams = '?action=dynaforms&data={"uid":"'+ taskUid[0].value +'"}';
+          Ext.Ajax.request({
+          url: "processes_Ajax.php"+ urlparams,
+          success: function(response) {
+               workflow.dynaList = Ext.util.JSON.decode(response.responseText);
+    },
+      failure: function(){
+      Ext.Msg.alert ('Failure');
+    }
+   });
+ }
 }
-
-pmosExt.prototype.loadConnectedTask=function(_5678)
+pmosExt.prototype.loadConnectedTask=function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
-
-       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-                    _5678.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
-
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
+   var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+   Ext.Ajax.request({
+   url: "processes_Ajax.php"+ urlparams,
+   success: function(response) {
+     workflow.processInfo = Ext.util.JSON.decode(response.responseText);
+   },
+     failure: function(){
+     Ext.Msg.alert ('Failure');
+   }
+  });
 }
-
-pmosExt.prototype.loadWebEntry=function(_5678)
+pmosExt.prototype.loadWebEntry=function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
-       var evn_uid = _5678.workflow.currentSelection.id;
-       var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-                    _5678.workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
+   var evn_uid = workflow.currentSelection.id;
+   var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
+   Ext.Ajax.request({
+   url: "processes_Ajax.php"+ urlparams,
+   success: function(response) {
+     workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
+    },
+     failure: function(){
+     Ext.Msg.alert ('Failure');
+    }
+  });
 }
-
-pmosExt.prototype.loadEditProcess=function(_5678)
+pmosExt.prototype.loadEditProcess=function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
-       var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-                    _5678.workflow.processEdit = Ext.util.JSON.decode(response.responseText);
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
+  var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
+  Ext.Ajax.request({
+  url: "processes_Ajax.php"+ urlparams,
+  success: function(response) {
+     workflow.processEdit = Ext.util.JSON.decode(response.responseText);
+   },
+    failure: function(){
+    Ext.Msg.alert ('Failure');
+   }
+  });
 }
-pmosExt.prototype.loadProcessCategory =function(_5678)
+pmosExt.prototype.loadProcessCategory =function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
-       var urlparams = '?action=loadCategory';
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-                    _5678.workflow.processCategory = Ext.util.JSON.decode(response.responseText);
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
+  var urlparams = '?action=loadCategory';
+  Ext.Ajax.request({
+  url: "processes_Ajax.php"+ urlparams,
+  success: function(response) {
+     workflow.processCategory = Ext.util.JSON.decode(response.responseText);
+   },
+     failure: function(){
+     Ext.Msg.alert ('Failure');
+   }
+ });
 }
-
 pmosExt.prototype.saveEvent =function(urlparams)
 {
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
+  Ext.Ajax.request({
+  url: "processes_Ajax.php"+ urlparams,
+  success: function(response) {
+  },
+  failure: function(){
+    Ext.Msg.alert ('Failure');
+  }
+ });
 }

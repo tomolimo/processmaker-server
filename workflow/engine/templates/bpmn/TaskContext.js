@@ -453,7 +453,6 @@ TaskContext.prototype.editTaskSteps = function(_3252){
     window.show();
 }
 
-
 TaskContext.prototype.editUsers= function()
 {
     var taskExtObj = new TaskContext();
@@ -2038,7 +2037,7 @@ TaskContext.prototype.editUsersAdHoc= function()
         collapsible: false,
         maximizable: false,
         width: 400,
-        height: 370,
+        height: 360,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
