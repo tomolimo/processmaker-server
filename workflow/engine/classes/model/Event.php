@@ -104,7 +104,8 @@ class Event extends BaseEvent {
       if(isset($aData['EVN_RELATED_TO'])){
           $oEvent->setEvnRelatedTo( $aData['EVN_RELATED_TO'] );
           if ( $aData['EVN_RELATED_TO'] == 'SINGLE' ) {
-            $oEvent->setTasUid( $aData['TAS_UID'] );
+            if(isset($aData['TAS_UID']))
+              $oEvent->setTasUid( $aData['TAS_UID'] );
             $oEvent->setEvnTasUidTo( '');
             $oEvent->setEvnTasUidFrom( '' );
           }
@@ -114,6 +115,11 @@ class Event extends BaseEvent {
             $oEvent->setEvnTasUidFrom( $aData['EVN_TAS_UID_FROM'] );
           }
       }
+
+      if(isset($aData['EVN_POSX']))
+        $oEvent->setEvnPosx($aData['EVN_POSX']);
+      if(isset($aData['EVN_POSY']))
+        $oEvent->setEvnPosy($aData['EVN_POSY']);
 
       if(isset($aData['EVN_TYPE']))
         $oEvent->setEvnType( $aData['EVN_TYPE'] );
