@@ -441,7 +441,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         collapsible: false,
         maximizable: false,
         width: 750,
-        height: 400,
+        height: 365,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
