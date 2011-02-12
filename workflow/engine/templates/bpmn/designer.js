@@ -28,7 +28,7 @@ Ext.onReady ( function() {
     Ext.Ajax.request({
       url: 'openProcess.php?PRO_UID=' + pro_uid,
       success: function(response) {
-        shapesData =  createShapes(response.responseText,this);
+        shapesData =  createShapes(response.responseText);
         createConnection(shapesData);
       },
       failure: function(){
@@ -885,7 +885,7 @@ Ext.onReady ( function() {
       return pro_uid;
   }*/
 
-  function createShapes(stringData,_4562)
+  function createShapes(stringData)
   {
 
       var responsearray = stringData.split("|");
@@ -967,7 +967,7 @@ Ext.onReady ( function() {
                   for(var k=0;k<shapes.gateways.length;k++){
                       var srctype = shapes.gateways[k][1];
                       
-                      NewShape = eval("new "+srctype+"(_4562.workflow)");
+                      NewShape = eval("new "+srctype+"(workflow)");
                       NewShape.x = shapes.gateways[k][2];
                       NewShape.y = shapes.gateways[k][3];
                      // workflow.setBoundary(NewShape);
@@ -982,7 +982,7 @@ Ext.onReady ( function() {
                           var srceventtype = shapes.events[k][1];
                           if(! srceventtype.match(/End/))
                           {
-                              NewShape = eval("new "+srceventtype+"(_4562.workflow)");
+                              NewShape = eval("new "+srceventtype+"(workflow)");
                               NewShape.x = shapes.events[k][2];
                               NewShape.y = shapes.events[k][3];
                               workflow.setBoundary(NewShape);
@@ -998,7 +998,7 @@ Ext.onReady ( function() {
                       workflow.annotationName = shapes.annotations[k][1];
                       workflow.anno_width = shapes.annotations[k][4];
                       workflow.anno_height = shapes.annotations[k][5];
-                      NewShape = eval("new bpmnAnnotation(_4562.workflow)");
+                      NewShape = eval("new bpmnAnnotation(workflow)");
                       NewShape.x = shapes.annotations[k][2];
                       NewShape.y = shapes.annotations[k][3];
                       workflow.setBoundary(NewShape);
@@ -1011,7 +1011,7 @@ Ext.onReady ( function() {
           case 'subprocess':
               for(var k=0;k<shapes.subprocess.length;k++){
                   workflow.subProcessName = shapes.subprocess[k][1];
-                  NewShape = eval("new bpmnSubProcess(_4562.workflow)");
+                  NewShape = eval("new bpmnSubProcess(workflow)");
                   NewShape.x = shapes.subprocess[k][2];
                   NewShape.y = shapes.subprocess[k][3];
                   workflow.setBoundary(NewShape);
