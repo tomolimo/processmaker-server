@@ -440,7 +440,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         title: _('ID_STEPS_OF'),
         collapsible: false,
         maximizable: false,
-        width: 750,
+        width: 770,
         height: 365,
         minWidth: 200,
         minHeight: 150,
@@ -1426,7 +1426,7 @@ TaskContext.prototype.stepTriggers = function()
             border      : false,
             rootVisible : false,
             height      : 320,
-            width       : 200,
+            width       : 230,
             useArrows   : false,
             autoScroll  : true,
             animate     : true
@@ -1572,7 +1572,7 @@ TaskContext.prototype.stepTriggers = function()
         fields          : triggersFields
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
-      stepsTriggers.load({params:{start : 0 , limit : 10 }});
+      stepsTriggers.load({params:{start : 0 , limit : 5 }});
 
      var availableTriggers = new Ext.data.JsonStore({
          root            : 'data',
@@ -1599,7 +1599,7 @@ TaskContext.prototype.stepTriggers = function()
         clicksToEdit: 1,
         width       : 450,
         minHeight:400,
-        height   :400,
+        height   :320,
         layout: 'fit',
         plugins: [triggerEditor],
         columns: [
@@ -1676,7 +1676,7 @@ TaskContext.prototype.stepTriggers = function()
         stripeRows: true,
         viewConfig: {forceFit: true},
         bbar: new Ext.PagingToolbar({
-            pageSize: 10,
+            pageSize: 5,
             store: stepsTriggers,
             displayInfo: true,
             displayMsg: 'Displaying Step Tiggers {0} - {1} of {2}',

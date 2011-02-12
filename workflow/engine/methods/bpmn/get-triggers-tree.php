@@ -4,9 +4,11 @@ try
  {
    G::LoadClass('processMap');
    $oProcessMap = new processMap(new DBConnection);
+   $start = isset($_POST['start'])? $_POST['start']: 0;
+   $limit = isset($_POST['limit'])? $_POST['limit']: '';
    if ( isset($_GET['tid'] ) )
    {
-       $rows        = $oProcessMap->getExtStepsCriteria($_GET['tid']);         //Getting all assigned steps on a task
+       $rows        = $oProcessMap->getExtStepsCriteria($start, $limit, $_GET['tid']);         //Getting all assigned steps on a task
        array_shift($rows);
    }
 
@@ -119,52 +121,4 @@ try
                 'children' => $assignTaskChildren
   );
 
-/* $nodes = "[{
-    text: 'Step 1 - Triggers (0)',
-    cls:  'blank',
-    iconCls:  'blank',
-    children: [{
-        text: 'Before - Triggers (0)',
-        cls:  'blank',
-        iconCls:  'blank',
-        children: [{
-            text: 'Assign Before Trigger',
-            leaf: true,
-        }]
-    },{
-        text: 'After - Triggers (0)',
-        leaf: true,
-        cls:  'blank',
-        iconCls:  'blank',
-    }]
-},{
-    text: 'Step 2 - Triggers (0)',
-    
-    children: [{
-        text: 'Before - Triggers (0)',
-        leaf: true,
-        
-    },{
-        text: 'After - Triggers (0)',
-        leaf: true,
-        
-    }]
-},{
-    text: 'Assign Task - Triggers(0)',
-    
-    children: [{
-        text: 'Before Assigment - Triggers(0)',
-        leaf: true,
-        
-    },{
-        text: 'Before Derivation - Triggers(0)',
-        leaf: true,
-        
-    },{
-        text: 'After Derivation - Triggers(0)',
-        leaf: true,
-        
-    }]
-}]";*/
-//echo $nodes;
-echo json_encode($steps);
+  echo json_encode($steps);

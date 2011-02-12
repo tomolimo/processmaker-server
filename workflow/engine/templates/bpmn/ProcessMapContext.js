@@ -375,7 +375,7 @@ ProcessMapContext.prototype.processPermission= function()
             url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermission'
             })
           });
- PermissionStore.load();
+ PermissionStore.load({params:{start:0, limit:10}});
 
 var PermissionGridColumn =  new Ext.grid.ColumnModel({
       columns: [
@@ -551,7 +551,6 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         id : 'mygrid',
         loadMask: true,
         loadingText: 'Loading...',
-        //renderTo: 'cases-grid',
         frame: false,
         autoHeight:false,
         clicksToEdit: 1,
@@ -562,6 +561,14 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
         cm: PermissionGridColumn,
         stripeRows: true,
         tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: PermissionStore,
+            displayInfo: true,
+            displayMsg: 'Displaying Process Permission {0} - {1} of {2}',
+            emptyMsg: "No Process Permission to display",
+            items:[]
+        }),
         viewConfig: {forceFit: true}
    });
 
@@ -1105,15 +1112,15 @@ ProcessMapContext.prototype.processSupervisors= function()
             remoteSort   : true,
             fields       : processUserFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyProcessSupervisors?pid='+pro_uid+'&action=process_User'
+              url: 'proxyExtjs?pid='+pro_uid+'&action=process_Supervisors'
             })
           });
-  processUser.load();
+  processUser.load({params:{start:0, limit:10}});
 
   // create the Data Store of users that are not assigned to a process supervisor
   var availableProcessesUser = new Ext.data.JsonStore({
                  root            : 'data',
-                 url             : 'proxyProcessSupervisors?pid='+pro_uid+'&action=availableProcessesUser',
+                 url             : 'proxyExtjs?pid='+pro_uid+'&action=availableProcessesSupervisors',
                  totalProperty   : 'totalCount',
                  idProperty      : 'gridIndex',
                  remoteSort      : false, //true,
@@ -1184,6 +1191,14 @@ ProcessMapContext.prototype.processSupervisors= function()
                 ],
         stripeRows: true,
         viewConfig: {forceFit: true},
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: processUser,
+            displayInfo: true,
+            displayMsg: 'Displaying Process Supervisor {0} - {1} of {2}',
+            emptyMsg: "No Process Supervisor to display",
+            items:[]
+        }),
         tbar: tb
         });
 
@@ -1257,6 +1272,17 @@ ProcessMapContext.prototype.processDynaform= function()
                      STEP_TYPE_OBJ: '',
                      STEP_POSITION: ''
                 });
+
+                if(availableSupervisorDynaforms.data.items.length == 0)
+                 Ext.MessageBox.alert ('Status','No Dynaforms are available. All Dynaforms have been already assigned.');
+                else
+                {
+                    editor.stopEditing();
+                    supervisorDynaforms.insert(0, e);
+                    grid.getView().refresh();
+                    //grid.getSelectionModel().selectRow(0);
+                    editor.startEditing(0, 0);
+                }
             }
   });
 
@@ -1316,22 +1342,22 @@ ProcessMapContext.prototype.processDynaform= function()
             remoteSort   : true,
             fields       : supervisorDynaformsFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyProcessSupervisors?pid='+pro_uid+'&action=supervisorDynaforms'
+              url: 'proxyExtjs?pid='+pro_uid+'&action=supervisorDynaforms'
             })
           });
-  supervisorDynaforms.load();
+  supervisorDynaforms.load({params:{start : 0 , limit : 10 }});
 
   // create the Data Store of users that are not assigned to a process supervisor
   var availableSupervisorDynaforms = new Ext.data.JsonStore({
-                 root            : 'data',
-                 url             : 'proxyProcessSupervisors?pid='+pro_uid+'&action=availableSupervisorDynaforms',
-                 totalProperty   : 'totalCount',
-                 idProperty      : 'gridIndex',
-                 remoteSort      : false, //true,
-                 autoLoad        : true,
-                 fields          : supervisorDynaformsFields
-              });
-
+             root            : 'data',
+             url             : 'proxyExtjs?pid='+pro_uid+'&action=availableSupervisorDynaforms',
+             totalProperty   : 'totalCount',
+             idProperty      : 'gridIndex',
+             remoteSort      : false, //true,
+             autoLoad        : true,
+             fields          : supervisorDynaformsFields
+          });
+  availableSupervisorDynaforms.load();
 
   var grid = new Ext.grid.GridPanel({
         store: supervisorDynaforms,
@@ -1345,6 +1371,7 @@ ProcessMapContext.prototype.processDynaform= function()
         clicksToEdit: 1,
         minHeight:400,
         height   :400,
+        width   :435,
         layout: 'fit',
         plugins: [editor],
         columns: [
@@ -1384,7 +1411,15 @@ ProcessMapContext.prototype.processDynaform= function()
                 ],
         stripeRows: true,
         viewConfig: {forceFit: true},
-        tbar: tb
+        tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: supervisorDynaforms,
+            displayInfo: true,
+            displayMsg: 'Displaying Supervisor Dynaform {0} - {1} of {2}',
+            emptyMsg: "No Supervisor Dynaform to display",
+            items:[]
+            })
         });
 
         //availableSupervisorDynaforms.load();
@@ -1420,7 +1455,7 @@ ProcessMapContext.prototype.processDynaform= function()
         title: 'Dynaform',
         collapsible: false,
         maximizable: false,
-        width: 400,
+        width: 440,
         height: 350,
         minWidth: 200,
         minHeight: 150,
@@ -1536,7 +1571,7 @@ ProcessMapContext.prototype.processIODoc = function()
               url: 'proxyProcessSupervisors?pid='+pro_uid+'&action=supervisorInputDoc'
             })
           });
-  supervisorInputDoc.load();
+  supervisorInputDoc.load({params:{start : 0 , limit : 10 }});
 
   // create the Data Store of users that are not assigned to a process supervisor
   var availableSupervisorInputDoc = new Ext.data.JsonStore({
@@ -1548,7 +1583,7 @@ ProcessMapContext.prototype.processIODoc = function()
                  autoLoad        : true,
                  fields          : supervisorInputDocFields
               });
-
+  availableSupervisorInputDoc.load();
 
   var grid = new Ext.grid.GridPanel({
         store: supervisorInputDoc,
@@ -1562,6 +1597,7 @@ ProcessMapContext.prototype.processIODoc = function()
         clicksToEdit: 1,
         minHeight:400,
         height   :400,
+        width    :420,
         layout: 'fit',
         plugins: [editor],
         columns: [
@@ -1601,7 +1637,15 @@ ProcessMapContext.prototype.processIODoc = function()
                 ],
         stripeRows: true,
         viewConfig: {forceFit: true},
-        tbar: tb
+        tbar: tb,
+        bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: supervisorInputDoc,
+            displayInfo: true,
+            displayMsg: 'Displaying Supervisor Input Doc {0} - {1} of {2}',
+            emptyMsg: "No Supervisor Input Doc to display",
+            items:[]
+            })
         });
 
         //availableSupervisorInputDoc.load();
@@ -1637,7 +1681,7 @@ ProcessMapContext.prototype.processIODoc = function()
         title: 'Input Documents',
         collapsible: false,
         maximizable: false,
-        width: 400,
+        width: 430,
         height: 350,
         minWidth: 200,
         minHeight: 150,
@@ -1868,9 +1912,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             name: 'CTO_TYPE_OBJ',
             type: 'string'
         },{
-            name:'CTO_UID_OBJ',
-            type:'string'
-        },{
             name:'CTO_CONDITION',
             type:'string'
         },{
@@ -1884,6 +1925,9 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
             type:'string'
         },{
             name:'OBJECT_TYPE',
+            type:'string'
+        },{
+            name:'CTO_UID_OBJ',
             type:'string'
         }
     ]);
@@ -1906,7 +1950,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
          });
 
          if(availableStore.data.items.length == 0)
-            Ext.MessageBox.alert ('Status','No users are available. All users have been already assigned.');
+            Ext.MessageBox.alert ('Status','No Objects are available. All Objects have been already assigned.');
          else
             {
                 editor.stopEditing();
@@ -1915,9 +1959,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                 //grid.getSelectionModel().selectRow(0);
                 editor.startEditing(0, 0);
             }
-
       }
-
     });
 
     var btnRemove = new Ext.Button({
@@ -1977,12 +2019,11 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                     workflow.gridObjectRowSelected = rowSelected;
                 var rowData = ProcMapObj.ExtVariables();
         }
-   })
+    });
 
     var tb = new Ext.Toolbar({
       items: [btnAdd, btnRemove,btnObjectsCondition]
     });
-
 
     var assignedStore = new Ext.data.JsonStore({
       root          : 'data',
@@ -1994,7 +2035,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       url           : 'proxyExtjs?pid='+pro_uid+'&action=getAssignedCaseTrackerObjects'
       })
     });
-   assignedStore.load();
+   assignedStore.load({params:{start : 0 , limit : 10 }});
 
     var availableStore = new Ext.data.JsonStore({
       root            : 'data',
@@ -2018,7 +2059,7 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       autoHeight:false,
       clicksToEdit: 1,
       minHeight:400,
-      height   :400,
+      height   :350,
       layout: 'fit',
       plugins: [editor],
       cm: new Ext.grid.ColumnModel({
@@ -2063,16 +2104,17 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
                 header : 'Condition',
                 dataindex: 'CTO_CONDITION',
                 name : 'CTO_CONDITION',
-                //xtype: 'textfield',
-                editable  : true
-            },{
+                editor: new Ext.form.TextField({
+                    editable  : true
+                })
+            }/*,{
                 sortable: false,
                 renderer: function(val, meta, record)
                    {
-                       var recordData = Ext.util.JSON.encode(record);
-                        return String.format("<input type='button' value='@@' onclick=workflow.ExtVariables('CTO_CONDITION','{0}');>",recordData);
+                       //var recordData = Ext.util.JSON.encode(record);
+                       return String.format("<input type='button' value='@@' onclick=workflow.ExtVariables('{0}');>",record.data.CTO_UID);
                   }
-            }]
+            }*/]
       }),
       sm: new Ext.grid.RowSelectionModel({
         singleSelect: true,
@@ -2084,7 +2126,15 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       }),
       stripeRows: true,
       viewConfig: {forceFit: true},
-      tbar: tb
+      tbar: tb,
+      bbar: new Ext.PagingToolbar({
+            pageSize: 10,
+            store: assignedStore,
+            displayInfo: true,
+            displayMsg: 'Displaying Case Tracker Object {0} - {1} of {2}',
+            emptyMsg: "No Case Tracker Object to display",
+            items:[]
+            })
     });
 
     editor.on({
@@ -2095,7 +2145,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
         var objTitle        = record.data.OBJECT_TITLE;
         var cto_uid         = record.data.CTO_UID;
         var condition       = record.data.CTO_CONDITION;
-
 
         Ext.Ajax.request({
           url   : '../tracker/tracker_Ajax.php',
@@ -2156,7 +2205,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
              availableStore.reload();
              assignedStore.reload();
       }
-
     });
 
     var gridObjectWindow = new Ext.Window({
@@ -2165,15 +2213,14 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       maximizable : false,
       width       : 550,
       defaults    :{ autoScroll:true },
-      height      : 400,
+      height      : 380,
       minWidth    : 200,
       minHeight   : 150,
-      //layout      : 'fit',
       plain       : true,
       items       : Objectsgrid,
       buttonAlign : 'center'
     });
-  gridObjectWindow.show()
+    gridObjectWindow.show()
 }
 
 ProcessMapContext.prototype.ExtVariables = function()

@@ -278,7 +278,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
         bodyStyle : 'padding:10px 0 0 10px;',
         //monitorValid : true,
         autoHeight: true,
-        autoScroll: true,
+        defaults    :{autoScroll:true},
         items:
                 [{
                     xtype: 'fieldset',
@@ -334,7 +334,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                     items:[{
                             xtype     : 'textfield',
                             fieldLabel: _('ID_TITLE'),
-                            name      : 'DYN_TITLE',
+                            name      : 'DYN_TITLE1',
                             width     : 350,
                             allowBlank: false
                          },{
@@ -360,7 +360,7 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                          },{
                             xtype     : 'textarea',
                             fieldLabel: _('ID_DESCRIPTION'),
-                            name      : 'DYN_DESCRIPTION',
+                            name      : 'DYN_DESCRIPTION1',
                             height    : 120,
                             width     : 350
                          }
@@ -404,13 +404,13 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                          {
                             xtype     : 'textfield',
                             fieldLabel: _('ID_TITLE'),
-                            name      : 'DYN_TITLE',
+                            name      : 'DYN_TITLE2',
                             allowBlank: false,
                             width     : 350
                          },{
                             xtype     : 'textarea',
                             fieldLabel: _('ID_DESCRIPTION'),
-                            name      : 'DYN_DESCRIPTION',
+                            name      : 'DYN_DESCRIPTION2',
                             height    : 120,
                             width     : 350
                          },
@@ -441,8 +441,8 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                 if(getForm.DYN_SOURCE == 'blankDyna')
                     {
                         var sAction   = getForm.ACTION;
-                        var sTitle    = getForm.DYN_TITLE[0];
-                        var sDesc     = getForm.DYN_DESCRIPTION[0];
+                        var sTitle    = getForm.DYN_TITLE1;
+                        var sDesc     = getForm.DYN_DESCRIPTION1;
                     }
                 else
                     {
@@ -457,8 +457,8 @@ var dynaformColumns = new Ext.grid.ColumnModel({
                         }
                         var fieldname = Ext.util.JSON.encode(fName);
                         var variable = Ext.util.JSON.encode(pVar);
-                        sTitle    = getForm.DYN_TITLE[1];
-                        sDesc     = getForm.DYN_DESCRIPTION[1];
+                        sTitle    = getForm.DYN_TITLE2;
+                        sDesc     = getForm.DYN_DESCRIPTION2;
                     }
 
                     if(sTitle == '' || sAction == '')
@@ -517,6 +517,8 @@ var dynaformColumns = new Ext.grid.ColumnModel({
         collapsible: false,
         maximizable: true,
         width: 550,
+        height: 300,
+        defaults    :{autoScroll:true},
         //autoHeight: true,
         //height: 500,
         layout: 'fit',
@@ -666,7 +668,7 @@ ProcessOptions.prototype.dbConnection = function()
                         id: 'DBS_DATABASE_NAME',
                         header: 'Database Name',
                         dataIndex: 'DBS_DATABASE_NAME',
-                        //width: 100,
+                        width: 150,
                         sortable: true,
                         editor: new Ext.form.TextField({
                        // allowBlank: false
@@ -1901,7 +1903,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                                              handler: function (s) {
                                                 workflow.variablesAction = 'form';
                                                 workflow.fieldName         = 'OUT_DOC_FILENAME' ;
-                                                workflow.variable        = '@@',
+                                                workflow.variable        = '@#',
                                                 workflow.formSelected    = outputDocForm;
                                                 var rowData = ProcMapObj.ExtVariables();
                                                 console.log(rowData);
@@ -2521,7 +2523,7 @@ var reportForm =new Ext.FormPanel({
                  align:'left',
                   items:[{
                                   xtype: 'combo',
-                                  width:  250,
+                                  width:  200,
                                   mode: 'local',
                                   editable:false,
                                   fieldLabel: 'Grid Fields',
