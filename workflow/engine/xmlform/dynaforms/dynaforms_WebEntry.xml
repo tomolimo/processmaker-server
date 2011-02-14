@@ -98,11 +98,29 @@ leimnud.event.add(getField('WE_TYPE'), 'change', function() {
  
 var webEntry_validate = function(PRO_UID, TASKS, DYNAFORM) {
     //G.alert(PRO_UID);
-    //G.alert(getField('DYNAFORM').value);
+  //  G.alert(getField('WE_TYPE').value);
     //G.alert(getField('TASKS').value);
+ if(getField('WE_TYPE').value=='SINGLE'){
+  var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
 
-    var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
-    
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+       	    url   : '../processes/processes_Ajax',
+             async : true,
+             method: 'POST',
+             args  : "action=webEntry_validate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value, TASKS_NAME:tasksName }.toJSONString()
+       });
+       oRPC.callback = function(rpc){
+       //var scs=rpc.xmlhttp.responseText.extractScript();
+       //scs.evalScript();
+
+           getField('SEARCH').disabled = false;
+           //webEntry_generate(PRO_UID);
+
+       }.extend(this);
+       oRPC.make();
+ }else{
+var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
+
     var oRPC = new leimnud.module.rpc.xmlhttp({
        	    url   : '../processes/processes_Ajax',
              async : true,
@@ -120,7 +138,11 @@ var webEntry_validate = function(PRO_UID, TASKS, DYNAFORM) {
            msgBox(rpc.xmlhttp.responseText,"alert");
          }
        }.extend(this);
-       oRPC.make(); 
+       oRPC.make();
+
+
+}
+    
 }
 
 var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
@@ -224,3 +246,4 @@ hideRowById('WS_ROUNDROBIN');
 ]]></js>
 
 </dynaForm> 
+
