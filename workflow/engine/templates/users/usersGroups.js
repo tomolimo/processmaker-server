@@ -59,8 +59,8 @@ Ext.onReady(function(){
   });
 
   cancelEditMembersButton = new Ext.Action({
-    text: _('ID_FINISH_EDITION'),
-    iconCls: 'button_menu_ext ss_sprite ss_cancel',
+    text: _('ID_SAVE_CHANGES'),
+    //iconCls: 'button_menu_ext ss_sprite ss_cancel',
     handler: CancelEditMenbersAction,
     hidden: true
   });
