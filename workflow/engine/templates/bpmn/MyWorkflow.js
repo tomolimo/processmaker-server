@@ -1456,19 +1456,17 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
  */
 MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
 {
-    var pro_uid = this.getUrlVars();
     var task_uid      = new Array();
     var next_task_uid = new Array();
-
-    if(oEvent.type.match(/Start/) && oEvent.type.match(/Empty/))
+    if(oEvent.type.match(/Start/))
     {
         var tas_start = 'TRUE';
-        var urlparams = '?action=saveStartEvent&data={"tas_uid":"'+sTaskUID+'","tas_start":"'+tas_start+'"}';
+        var urlparams = '?action=saveEvents&data={"tas_uid":"'+sTaskUID+'","tas_start":"'+tas_start+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
     }
-    else if(oEvent.type.match(/Start/) && (oEvent.type.match(/Message/) || oEvent.type.match(/Timer/)) )
+    /*else if(oEvent.type.match(/Start/) && (oEvent.type.match(/Message/) || oEvent.type.match(/Timer/)) )
     {
-        urlparams = '?action=addEvent&data={"uid":"'+ pro_uid +'","tas_uid":"'+sTaskUID+'","tas_type":"'+oEvent.type+'"}';
-    }
+        urlparams = '?action=saveEvents&data={"uid":"'+ pro_uid +'","tas_uid":"'+sTaskUID+'","tas_type":"'+oEvent.type+'"}';
+    }*/
     else if(oEvent.type.match(/Inter/))
     {
         var ports = oEvent.getPorts();

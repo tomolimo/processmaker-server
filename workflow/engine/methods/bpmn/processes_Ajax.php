@@ -198,6 +198,10 @@ if ( isset ($_REQUEST['action']) ) {
           if (!is_null($oEvent))
               $oEvent->update($aData);
           break;
+       case 'saveEvents':
+          $sOutput = $oProcessMap->saveExtEvents($oData);
+          echo $sOutput;
+          break;
       case 'addEvent':
           $sOutput = $oProcessMap->saveExtddEvents($oData);
           echo $sOutput;

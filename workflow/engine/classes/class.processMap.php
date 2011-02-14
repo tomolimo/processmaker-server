@@ -6448,7 +6448,7 @@ function saveExtddEvents($oData)
   $aData['EVN_TYPE']   = $oData->evn_type;
   $aData['EVN_POSX']   = $oData->position->x;
   $aData['EVN_POSY']   = $oData->position->y;
-  
+
   $mode   = $oData->mode;
   $aData['EVN_STATUS'] = 'ACTIVE';
   $aData['EVN_WHEN']   = '1';
@@ -6460,22 +6460,7 @@ function saveExtddEvents($oData)
   if(preg_match("/Start/", $aData['EVN_TYPE']) || preg_match("/Inter/", $aData['EVN_TYPE'])){
     $aData['EVN_RELATED_TO'] = 'SINGLE';
   }
-   if($mode == 'updateTask'){
-     $aData['TAS_UID'] = $oData->tas_uid;
-     $oTaskData = $oTask->load($aData['TAS_UID']);
-     if($oTaskData['TAS_EVN_UID'] == ''){
-       $sEvn_uid =  $oEvent->create($aData);
-     }else{
-       $aData['EVN_UID'] = $oTaskData['TAS_EVN_UID'];
-       $sEvn_uid = $aData['EVN_UID'];
-       $oEvent->update($aData);
-     }
-     $aTask['TAS_UID']     = $oData->tas_uid;
-     $aTask['TAS_EVN_UID'] = $sEvn_uid;
-     $aTask['TAS_START']   = 'TRUE';
-     $oTask->update($aTask);
-    }
-    else if($mode == 'ddEvent'){
+  if($mode == 'ddEvent'){
        $sEvn_uid   = $oData->evn_uid;
        $oEventData = EventPeer::retrieveByPK($sEvn_uid);
       if (is_null($oEventData)) {
@@ -6490,5 +6475,28 @@ function saveExtddEvents($oData)
    return $oJSON->encode($oEncode);
  }
 
+
+function saveExtEvents($oData)
+{
+  $oTask = new Task();
+  $oEvent = new Event();
+  $sEvn_uid = '';
+  $sEvn_type = $oData->evn_type;
+  $aData = array();
+  if(preg_match("/Start/", $sEvn_type)){
+    $aDataTask['TAS_UID']     = $oData->tas_uid;
+    $aDataTask['TAS_START']   = $oData->tas_start;
+    $aDataTask['EVN_TYPE']    = $oData->evn_type;
+    $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
+    $oTask->update($aDataTask);
+
+    $aDataEvent['EVN_UID']        = $oData->evn_uid;
+    $aDataEvent['EVN_TAS_UID_TO'] = $oData->tas_uid;
+    $aDataEvent['EVN_TYPE']       = $oData->evn_type;
+    $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
+    $output = $oEvent->update($aDataEvent);
+    return $output;
+  }
+}
  
 }
