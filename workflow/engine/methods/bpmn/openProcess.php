@@ -112,6 +112,7 @@
        $fields['GATEWAYS'][$countGateway]['1']   = $value['GAT_TYPE'];
        $fields['GATEWAYS'][$countGateway]['2']   = $value['GAT_X'];
        $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
+       $countGateway+=1;
      }
    }
    //$subProcess         = $oProcess->createSubProcessesPM($oData->subProcess);
