@@ -440,7 +440,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         collapsible: false,
         maximizable: false,
         width: 770,
-        height: 365,
+        height: 380,
         minWidth: 200,
         minHeight: 150,
         layout: 'fit',
@@ -1333,6 +1333,7 @@ TaskContext.prototype.saveTaskProperties= function()
 {
                  var saveTaskform = workflow.taskPropertiesTabs.getForm().getValues();
                  var taskId = workflow.currentSelection.id;
+                 saveTaskform['TAS_UID'] = taskId;
                  var object_data = Ext.util.JSON.encode(saveTaskform);
                 /* var newTaskValues = new Array();
                  var oData = null;
@@ -1429,7 +1430,7 @@ TaskContext.prototype.stepTriggers = function()
             animate     : true
          });
     tree.setRootNode(root);
-    //root.expand(true);
+    root.expand(true);
 
     tree.on('click', function (node){
          if(node.isLeaf()){

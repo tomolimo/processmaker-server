@@ -443,7 +443,7 @@ MyWorkflow.prototype.toggleShapes=function(item)
            newShape.workflow.saveShape(newShape);
          }
          if(newShape.type.match(/Gateway/)){
-           var ports = newShape.getPorts();
+           /*var ports = newShape.getPorts();
            var len =ports.data.length;
            var conn = new Array();
            for(var i=0; i<=len; i++){
@@ -461,7 +461,7 @@ MyWorkflow.prototype.toggleShapes=function(item)
            }
          }
 
-         if(countConn == 0){
+         if(countConn == 0){*/
            newShape.mode = 'ddGateway';
            newShape.actiontype = 'addGateway';
            //Set the Old Id to the Newly created Gateway
@@ -469,9 +469,10 @@ MyWorkflow.prototype.toggleShapes=function(item)
            newShape.id = oldWorkflow.id;
            newShape.workflow.saveShape(newShape);
          }
+        /* }
          else
             newShape.mode = 'update';
-         }
+         }*/
         /* if(newShape.type  == 'bpmnEventMessageStart' || newShape.type  == 'bpmnEventTimerStart')
          {
              newShape.workflow.currentSelection = newShape;
@@ -496,14 +497,14 @@ MyWorkflow.prototype.toggleShapes=function(item)
                     newShape.actiontype = 'saveStartEvent';
                     newShape.workflow.saveShape(newShape);
                  }
-         }*/
+         }
          else if(newShape.type.match(/Gateway/)){
            if(newShape.mode == 'update'){
              var shape = new Array();
              shape.type = '';
              newShape.workflow.saveRoute(newShape,shape);
            }
-         }
+         }*/
          //Swapping from Task to subprocess and vice -versa
          if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/)){
            newShape.actiontype = 'addSubProcess';
@@ -1643,6 +1644,8 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
 
     var staskUid     = 	Ext.util.JSON.encode(task_uid);
     var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
+    var sGatUid      =  preObj.id;
+    var sGatType      =  preObj.type;
     if(staskUid != '')
         {
             Ext.Ajax.request({
@@ -1650,16 +1653,17 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                     success: function(response) {
                         if(response.responseText != 0){
                             if(typeof newObj.conn != 'undefined'){
-                                var resp = response.responseText.split("|");     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
-                                newObj.conn.html.id = resp[1];
-                                newObj.conn.id = resp[1];
+                                //var resp = response.responseText.split("|");     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
+                                var resp = response.responseText;     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
+                                newObj.conn.html.id = resp;
+                                newObj.conn.id = resp;
 
                                 //replacing old gateway UID with response UID
-                                if(! preObj.type.match(/Task/))
+                                /*if(! preObj.type.match(/Task/))
                                     {
                                         preObj.html.id = resp[0];
                                         preObj.id = resp[0];
-                                    }
+                                    }*/
                             }
                         }
                     },
@@ -1667,15 +1671,16 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                         Ext.Msg.alert ('Failure');
                     },
                     params: {
-                            action:'savePattern',
-                            PROCESS: pro_uid,
-                            TASK:staskUid,
-                            ROU_NEXT_TASK:sNextTaskUid,
-                            ROU_TYPE:rou_type,
-                            ROU_EVN_UID:rou_evn_uid,
+                            action        :'savePattern',
+                            PROCESS       : pro_uid,
+                            TASK          :staskUid,
+                            ROU_NEXT_TASK :sNextTaskUid,
+                            ROU_TYPE      :rou_type,
+                            ROU_EVN_UID   :rou_evn_uid,
                             PORT_NUMBER_IP:port_numberIP,
                             PORT_NUMBER_OP:port_numberOP,
-                            GAT_UID       : '',
+                            GAT_UID       : sGatUid,
+                            GAT_TYPE      : sGatType,
                             mode:'Ext'
                         }
                 });

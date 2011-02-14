@@ -36,8 +36,17 @@ if(isset($_POST['mode']) && $_POST['mode'] != '')
 if($aData['ROU_TYPE'] != 'SEQUENTIAL')
 {
     $oProcessMap = new processMap();
-    $sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
-    echo $sGatewayUID.'|';
+    //$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
+    $oGateway = new Gateway ( );
+    $aGatewayFields  = array();
+    $aGatewayFields['GAT_UID']  = $aData['GAT_UID'];
+    $aGatewayFields['TAS_UID']  = $aData['TASK'][0];
+    $aGatewayFields['GAT_NEXT_TASK']  = $aData['ROU_NEXT_TASK'][0];
+    $aGatewayFields['GAT_TYPE']  = $aData['GAT_TYPE'];
+    $oGateway->update($aGatewayFields);
+    die;
+    //$sGatewayUID   = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
+    //echo $sGatewayUID.'|';
 }
 else
     echo $aData['ROU_EVN_UID'].'|';   //sending route_event_uid in response
@@ -107,7 +116,7 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_CASE']         = $iKey;
 	  	    $aFields['ROU_TYPE']         = $aData['ROU_TYPE'];
 	  	    $aFields['ROU_CONDITION']    = $aRow['ROU_CONDITION'];
-	  	    $aFields['GAT_UID']          = $sGatewayUID;
+	  	    $aFields['GAT_UID']          = $aData['GAT_UID'];
 
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT']    = $aData['PORT_NUMBER_IP'];

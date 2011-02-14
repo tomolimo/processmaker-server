@@ -753,6 +753,8 @@ bpmnTask.prototype.addShapes = function (oStore) {
         conn.setTarget(newShape.getPort("input2"));
         conn.setSource(workflow.currentSelection.getPort("output1"));
         workflow.addFigure(conn);
+        //newShape.actiontype = 'addGateway';
+        //workflow.saveShape(newShape);
     }
     if (newShape.type.match(/Start/)) {
         conn.setTarget(newShape.getPort("output1"));
