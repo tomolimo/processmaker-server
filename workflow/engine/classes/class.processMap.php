@@ -3206,7 +3206,22 @@ class processMap {
     return $oCriteria;
   }
 
-  function getExtObjectsPermissions($sProcessUID) {
+     //new functions
+  function getAllObjectPermissionCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = ObjectPermissionPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
+  function getExtObjectsPermissions($start, $limit,$sProcessUID) {
     G::LoadClass('case');
     Cases::verifyTable ();
     $aObjectsPermissions = array();
@@ -3223,6 +3238,13 @@ class processMap {
     $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_ACTION);
     $oCriteria->addSelectColumn(ObjectPermissionPeer::OP_CASE_STATUS);
     $oCriteria->add(ObjectPermissionPeer::PRO_UID, $sProcessUID);
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+         $oCriteria->setOffset($start);
+    if($limit != '')
+          $oCriteria->setLimit($limit);
+
     $oDataset = ObjectPermissionPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
@@ -4990,7 +5012,7 @@ class processMap {
   * @param string $sTaskUID
   * @return array
   */
-  function getExtStepTriggersCriteria($start, $limit,$sStepUID = '', $sTaskUID = '', $sType = '')
+  function getExtStepTriggersCriteria($start, $limit, $sStepUID = '', $sTaskUID = '', $sType = '')
   {
     //$_SESSION['TASK'] = $sTaskUID;
     $aBB        = array ();
@@ -5411,13 +5433,28 @@ class processMap {
     }
   }
 
+     //new functions
+  function getAllProcessSupervisorsCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = ProcessUserPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /**
    * listProcessesUser for Extjs
    *
    * @param  string           $sProcessUID
    * @return array(aProcessUser) $aProcessUser
    */
-  function listExtProcessesUser($sProcessUID) {
+  function listExtProcessesSupervisors($start, $limit,$sProcessUID) {
 
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(ProcessUserPeer::PU_UID);
@@ -5429,7 +5466,12 @@ class processMap {
     $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
     $oCriteria->addJoin(ProcessUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
     $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
+    $this->tmpCriteria = clone $oCriteria;
 
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
     $oDataset = ProcessUserPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
@@ -5502,13 +5544,28 @@ class processMap {
     return $aAvailableUser;
   }
 
+       //new functions
+  function getAllSupervisorDynaformsCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = StepSupervisorPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
    * Return the supervisors dynaforms list array
    * @param string $sProcessUID
    * @return array
    */
 
-  function getExtSupervisorDynaformsList($sProcessUID = '') {
+  function getExtSupervisorDynaformsList($start, $limit,$sProcessUID = '') {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_UID);
@@ -5531,7 +5588,13 @@ class processMap {
     $oCriteria->add(StepSupervisorPeer::PRO_UID, $sProcessUID);
     $oCriteria->add(StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
     $oCriteria->addAscendingOrderByColumn(StepSupervisorPeer::STEP_POSITION);
+    $this->tmpCriteria = clone $oCriteria;
 
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
+    
     $oDataset = StepSupervisorPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
@@ -5585,13 +5648,28 @@ class processMap {
     return $aAvailableProcessDynaform;
   }
 
+       //new functions
+  function getAllSupervisorInputsCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = StepSupervisorPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
    * Return the supervisors input document list array
    * @param string $sProcessUID
    * @return array
    */
 
-  function getExtSupervisorInputsList($sProcessUID = '') {
+  function getExtSupervisorInputsList($start, $limit,$sProcessUID = '') {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(StepSupervisorPeer::STEP_UID);
@@ -5614,6 +5692,12 @@ class processMap {
     $oCriteria->add(StepSupervisorPeer::PRO_UID, $sProcessUID);
     $oCriteria->add(StepSupervisorPeer::STEP_TYPE_OBJ, 'INPUT_DOCUMENT');
     $oCriteria->addAscendingOrderByColumn(StepSupervisorPeer::STEP_POSITION);
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
     $oDataset = StepSupervisorPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
@@ -5873,6 +5957,20 @@ class processMap {
     return true;*/
   }
 
+         //new functions
+  function getAllCaseTrackerObjectCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = CaseTrackerObjectPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
 
   /**
    * getCaseTrackerObjectsCriteria
@@ -5880,12 +5978,18 @@ class processMap {
    * @param  string           $sProcessUID
    * @return object(Criteria) $oCriteria
    */
-  function getExtCaseTrackerObjectsCriteria($sProcessUID) {
+  function getExtCaseTrackerObjectsCriteria($start, $limit,$sProcessUID) {
     $aObjects = array();
     $aObjects [] = array('CTO_TITLE' => 'char', 'CTO_UID' => 'char', 'CTO_TYPE_OBJ' => 'char', 'CTO_UID_OBJ' => 'char', 'CTO_CONDITION' => 'char', 'CTO_POSITION' => 'integer');
     $oCriteria = new Criteria('workflow');
     $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
     $oCriteria->addAscendingOrderByColumn(CaseTrackerObjectPeer::CTO_POSITION);
+    $this->tmpCriteria = clone $oCriteria;
+
+    if($start != '')
+      $oCriteria->setOffset($start);
+    if($limit != '')
+      $oCriteria->setLimit($limit);
     $oDataset = CaseTrackerObjectPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
@@ -6232,7 +6336,7 @@ function getExtTaskUsersAdHocCriteria($start, $limit,$sTaskUID = '', $iType = 1)
    * @param  string    $sProcessUID
    * @return void
    */
-  function editExtObjectPermission($sOP_UID, $sProcessUID) {
+  function editExtObjectPermission($sProcessUID , $sOP_UID ) {
 
     $oCriteria = new Criteria ( );
     $oCriteria->add(ObjectPermissionPeer::OP_UID, $sOP_UID);
@@ -6269,9 +6373,10 @@ function getExtTaskUsersAdHocCriteria($start, $limit,$sTaskUID = '', $iType = 1)
     $aFields['TASK_TARGET_NAME'] = Content::load ( 'TAS_TITLE', '', $aRows ['TAS_UID'] , $lang );
     $aFields['TASK_SOURCE_NAME'] = Content::load ( 'TAS_TITLE', '', $aRows ['OP_TASK_SOURCE'] , $lang );
     $oUser = UsersPeer::retrieveByPK( $aRows ['USR_UID'] );
-    $aFields ['USR_FULLNAME'] = $oUser->getUsrFirstname() . ' ' . $oUser->getUsrLastname() ;
-
-
+    if (!is_null($oUser))
+        $aFields ['USR_FULLNAME'] = $oUser->getUsrFirstname() . ' ' . $oUser->getUsrLastname() ;
+    else
+        throw(new Exception( "The row '" . $aRows ['USR_UID'] . "' in table USER doesn't exist!" ));
 
 
     switch ($aRows ['OP_OBJ_TYPE']) {
@@ -6280,15 +6385,15 @@ function getExtTaskUsersAdHocCriteria($start, $limit,$sTaskUID = '', $iType = 1)
         break; */
       case 'DYNAFORM' :
         $aFields ['DYNAFORM'] = $aRows ['OP_OBJ_UID'];
-        $aFields ['OBJ_NAME'] = Content::load ( 'DYN_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
+        $aFields ['DYNAFORM_NAME'] = Content::load ( 'DYN_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
         break;
       case 'INPUT' :
         $aFields ['INPUT'] = $aRows ['OP_OBJ_UID'];
-        $aFields ['OBJ_NAME'] = Content::load ( 'INP_DOC_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
+        $aFields ['INPUT_NAME'] = Content::load ( 'INP_DOC_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
         break;
       case 'OUTPUT' :
         $aFields ['OUTPUT'] = $aRows ['OP_OBJ_UID'];
-        $aFields ['OBJ_NAME'] = Content::load ( 'OUT_DOC_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
+        $aFields ['OUTPUT_NAME'] = Content::load ( 'OUT_DOC_TITLE', '', $aRows ['OP_OBJ_UID'] , $lang );
         break;
     }
 
