@@ -369,7 +369,7 @@ function handleCallback(requestParams, node) {
 
 				if( selectedRows.length > 0 ) {
 					for( i=0; i < selectedRows.length;i++) {
-						selitems[i] = selectedRows[i].get('name');
+						selitems[i] = selectedRows[i].get('id');
 					}
 				}
 				dir = datastore.directory;
@@ -447,7 +447,7 @@ function handleCallback(requestParams, node) {
 
 		function statusBarMessage( msg, isLoading, success ) {
 			// console.log("Status Bar needed");
-			console.log(msg);
+			//console.log(msg);
 			var statusBar = Ext.getCmp('statusPanel');
 			if( !statusBar ) return;
 			// console.log("Status bar acceced: "+msg);

@@ -590,7 +590,12 @@ function moveAction(){
     copyMoveAction("move");
 }
 function copyMoveAction($type){
+    require_once ("classes/model/AppFolder.php");
+    $oPMFolder = new AppFolder ( );
+    
     $dir=$_REQUEST['dir'];
+    
+    $dirCompletePath=$oPMFolder->getFolderStructure($dir);
    $copyDialog["xtype"]="form";
    $copyDialog["id"]="simpleform";
    $copyDialog["labelWidth"]=125;
@@ -608,8 +613,17 @@ function copyMoveAction($type){
 	$itemField=array();
 	$itemField["xtype"]="textfield";
     $itemField["fieldLabel"]="Destination";
+    $itemField["name"]="new_dir_label";
+    $itemField["value"]=$dirCompletePath['PATH'];
+    $itemField["width"]=175;
+    $itemField["allowBlank"]=false;
+    $copyDialog["items"][]=$itemField;
+    
+    $itemField=array();
+	$itemField["xtype"]="hidden";
+    $itemField["fieldLabel"]="Destination";
     $itemField["name"]="new_dir";
-    $itemField["value"]="$dir/";
+    $itemField["value"]="$dirCompletePath";
     $itemField["width"]=175;
     $itemField["allowBlank"]=false;
     $copyDialog["items"][]=$itemField;
@@ -678,6 +692,23 @@ function copyMoveAction($type){
     $finalResponse=str_replace("URL_SCRIPT","../appFolder/appFolderAjax.php",$finalResponse);
     echo ($finalResponse);
 
+}
+
+function copyExecute(){
+    copyMoveExecute("copy");
+}
+
+function moveExecute(){
+    copyMoveExecute("move");
+    
+}
+
+function copyMoveExecute($type){
+    $res ['success'] = 'failure';
+    $res ['message'] = $type;
+    print_r($_REQUEST);
+    print G::json_encode ( $res);
+    die ();
 }
 
 function documentVersionHistory(){
