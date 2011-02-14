@@ -48,9 +48,9 @@ pmosExt.prototype.addExtJsWindow = function(items,width,height,title)
 }
 pmosExt.prototype.popWebEntry= function(_5678)
 {
-    var oTask           = _5678.workflow.taskUid;
-    var oDyna           = _5678.workflow.dynaList;
-    var webEntryDetails = _5678.workflow.webEntryList;
+    var oTask           = workflow.taskUid;
+    var oDyna           = workflow.dynaList;
+    var webEntryDetails = workflow.webEntryList;
     var webEntry = '';
     if(typeof webEntryDetails != 'undefined'){ //Web Entry Present
         if(webEntryDetails.length > 0 && webEntryDetails[0].W_LINK != '') //Web Entry Present
@@ -61,7 +61,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
     //url:'save-form.php',
     frame:true,
     title: '',
-    scope:_5678,
+    scope:workflow,
     bodyStyle:'padding:5px 5px 0',
     width: 500,
     height: 400,
@@ -98,12 +98,12 @@ pmosExt.prototype.popWebEntry= function(_5678)
                                     bodyStyle: 'padding-left:35px;',
                                    // width:50,
                                     handler: function(){
-                                        var properties = _5678.workflow.webForm.items.items[1];
-                                        var credential = _5678.workflow.webForm.items.items[2];
+                                        var properties = workflow.webForm.items.items[1];
+                                        var credential = workflow.webForm.items.items[2];
                                         properties.show();
                                         credential.show();
-                                        _5678.workflow.webEntrywindow.buttons[0].enable();
-                                        _5678.workflow.webEntrywindow.setHeight(450);
+                                        workflow.webEntrywindow.buttons[0].enable();
+                                        workflow.webEntrywindow.setHeight(450);
                                     }
                             }]
                         },{
@@ -117,12 +117,12 @@ pmosExt.prototype.popWebEntry= function(_5678)
                                 //width:50,
                                 text: _('ID_CANCEL'),
                                 handler: function(){
-                                    var properties = _5678.workflow.webForm.items.items[1];
-                                    var credential = _5678.workflow.webForm.items.items[2];
+                                    var properties = workflow.webForm.items.items[1];
+                                    var credential = workflow.webForm.items.items[2];
                                     properties.hide();
                                     credential.hide();
-                                    _5678.workflow.webEntrywindow.buttons[0].disable();
-                                    _5678.workflow.webEntrywindow.setHeight(200);
+                                    workflow.webEntrywindow.buttons[0].disable();
+                                    workflow.webEntrywindow.setHeight(200);
                                 }
                             }]
                         }]
@@ -210,7 +210,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                hiddenName:     'methods',
                displayField:   'name',
                valueField:     'value',
-               scope:_5678,
+               scope:workflow,
                store:          new Ext.data.JsonStore({
                fields : ['name', 'value'],
                data   : [
@@ -224,14 +224,14 @@ pmosExt.prototype.popWebEntry= function(_5678)
                    if(index == 1)
                    { //Select
                         fields[2].collapse();
-                        _5678.workflow.webEntrywindow.buttons[0].disable();
-                        _5678.workflow.webEntrywindow.buttons[1].enable();
+                        workflow.webEntrywindow.buttons[0].disable();
+                        workflow.webEntrywindow.buttons[1].enable();
                    }
                    else
                    {
                         fields[2].expand();
-                        _5678.workflow.webEntrywindow.buttons[0].enable();
-                        _5678.workflow.webEntrywindow.buttons[1].disable();
+                        workflow.webEntrywindow.buttons[0].enable();
+                        workflow.webEntrywindow.buttons[1].disable();
                    }
                    this.setValue(record.data[this.valueField || this.displayField]);
                    this.collapse();
@@ -279,7 +279,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
             });
 
             webForm.render(document.body);
-            _5678.workflow.webForm = webForm;
+            workflow.webForm = webForm;
             var fields = webForm.items.items;
             var oPmosExt = new pmosExt();
             //oPmosExt.addExtJsWindow(webForm,600,500,'Add New webentry');
@@ -297,12 +297,12 @@ pmosExt.prototype.popWebEntry= function(_5678)
              bodyStyle: 'padding:5px;',
              buttonAlign: 'center',
              items: webForm,
-             scope:_5678,
+             scope:workflow,
              buttons: [{
                  text: _('ID_TEST_CONFIGURATION'),
                  handler: function(){
-                            var propertiesfields = _5678.workflow.webForm.items.items[1].items.items;
-                            var credentialFields = _5678.workflow.webForm.items.items[2].items.items;
+                            var propertiesfields = workflow.webForm.items.items[1].items.items;
+                            var credentialFields = workflow.webForm.items.items[2].items.items;
                             var task_uid         = propertiesfields[0].getValue();
                             var dyna_uid         = propertiesfields[1].getValue();
                             var we_type          = propertiesfields[2].getValue();
@@ -331,9 +331,9 @@ pmosExt.prototype.popWebEntry= function(_5678)
                  text: _('ID_GENERATE_WEB_ENTRY_PAGE'),
                  disabled:true,
                  handler: function(){
-                            var webEntryLink     = _5678.workflow.webForm.items.items[0].items.items;
-                            var propertiesfields = _5678.workflow.webForm.items.items[1].items.items;
-                            var credentialFields = _5678.workflow.webForm.items.items[2].items.items;
+                            var webEntryLink     = workflow.webForm.items.items[0].items.items;
+                            var propertiesfields = workflow.webForm.items.items[1].items.items;
+                            var credentialFields = workflow.webForm.items.items[2].items.items;
                             var task_uid         = propertiesfields[0].getValue();
                             var dyna_uid         = propertiesfields[1].getValue();
                             var we_type          = propertiesfields[2].getValue();
@@ -347,9 +347,9 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             success: function(response) {
                                  webEntryLink[0].initialConfig.html = response.responseText;
                                // webEntryLink[0].setValue(response.responseText);
-                                _5678.workflow.webForm.items.items[0].show();
-                                _5678.workflow.webForm.items.items[1].hide();
-                                _5678.workflow.webForm.items.items[2].hide();
+                                workflow.webForm.items.items[0].show();
+                                workflow.webForm.items.items[1].hide();
+                                workflow.webForm.items.items[2].hide();
                                  this.workflow.webEntrywindow.buttons[1].disable();
                                 Ext.Msg.alert(response.responseText);
                              },
@@ -360,16 +360,16 @@ pmosExt.prototype.popWebEntry= function(_5678)
                         }
                  }]
              });
-             _5678.workflow.webEntrywindow = webEntrywindow;
+             workflow.webEntrywindow = webEntrywindow;
              webEntrywindow.show();
-             var webEntryDetails    = _5678.workflow.webEntryList;
-             var webEntryLink       = _5678.workflow.webForm.items.items[0];
-             var propertiesfields   = _5678.workflow.webForm.items.items[1];
-             var credentialFields   = _5678.workflow.webForm.items.items[2];
+             var webEntryDetails    = workflow.webEntryList;
+             var webEntryLink       = workflow.webForm.items.items[0];
+             var propertiesfields   = workflow.webForm.items.items[1];
+             var credentialFields   = workflow.webForm.items.items[2];
              if(typeof webEntryDetails != 'undefined')
              if(webEntryDetails.length > 0 && webEntryDetails[0].W_LINK != ''){ //Web Entry Present
                   // webEntryLink.items.items[0].setValue(webEntryDetails[0].W_LINK);
-                   _5678.workflow.webEntrywindow.setHeight(200);
+                   workflow.webEntrywindow.setHeight(200);
                    webEntryLink.show();
                    propertiesfields.hide();
                    credentialFields.hide();
@@ -385,7 +385,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
         Ext.QuickTips.init();
         var oPmosExt = new pmosExt();
          //Get the Task Data
-        var oTask = _5678.workflow.taskUid;
+        var oTask = workflow.taskUid;
         if(typeof oTask != 'undefined')
             {
                 taskName = oTask[0].name;
@@ -427,13 +427,13 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             width:75,
                             text: _('ID_TEST_USER'),
                             arrowAlign: 'center',
-                            scope:_5678,
+                            scope:workflow,
                             align:'center',
                             margins:'5 5 5 5',
                             handler: function(){
-                            var credentialFieldset  = _5678.workflow.caseSchedularForm.items.items[0];
-                            var propertiesFieldset  = _5678.workflow.caseSchedularForm.items.items[1];
-                            var timeFieldset        = _5678.workflow.caseSchedularForm.items.items[2];
+                            var credentialFieldset  = workflow.caseSchedularForm.items.items[0];
+                            var propertiesFieldset  = workflow.caseSchedularForm.items.items[1];
+                            var timeFieldset        = workflow.caseSchedularForm.items.items[2];
                             var username            = credentialFieldset.items.items[0].getValue();
                             var password            = credentialFieldset.items.items[1].getValue();
                             if(username == '' || password == ''){
@@ -473,9 +473,9 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                             hidden:true,
                             margins:'5 5 5 5',
                             handler: function(){
-                            var credentialFieldset = _5678.workflow.caseSchedularForm.items.items[0];
-                            var propertiesFieldset = _5678.workflow.caseSchedularForm.items.items[1];
-                            var timeFieldset       = _5678.workflow.caseSchedularForm.items.items[2];
+                            var credentialFieldset = workflow.caseSchedularForm.items.items[0];
+                            var propertiesFieldset = workflow.caseSchedularForm.items.items[1];
+                            var timeFieldset       = workflow.caseSchedularForm.items.items[2];
                             propertiesFieldset.hide();
                             timeFieldset.hide();
                             credentialFieldset.items.items[3].hide(); //Hide Edit User
@@ -737,7 +737,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
           var propertiesFieldset = caseSchedularForm.items.items[1];
           var timeFieldset = caseSchedularForm.items.items[2];
 
-          var evn_uid = _5678.workflow.currentSelection.id;
+          var evn_uid = workflow.currentSelection.id;
           //Loading Details into the form
           caseSchedularForm.form.load({
                 url:'proxyCaseSchLoad?eid='+evn_uid,
@@ -769,7 +769,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                 }
             });
 
-            _5678.workflow.caseSchedularForm = caseSchedularForm;
+            workflow.caseSchedularForm = caseSchedularForm;
             
             //hide Usr_uid and pro_uid labels field
             credentialFieldset.items.items[4].getEl().up('.x-form-item').setDisplayed(false);
@@ -785,7 +785,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
             //Set pro_uid field
             credentialFieldset.items.items[7].setValue(task_uid);
             //Set Event UID
-            credentialFieldset.items.items[10].setValue(_5678.workflow.currentSelection.id);
+            credentialFieldset.items.items[10].setValue(workflow.currentSelection.id);
 
             propertiesFieldset.hide();
             timeFieldset.hide();
@@ -910,8 +910,8 @@ pmosExt.prototype.hideSchOptions = function(formObj,index)
 pmosExt.prototype.popTaskNotification= function(_5678){
         var oPmosExt = new pmosExt();
          //Get the Task Data
-        var oTask = _5678.workflow.taskUid;
-        var oTaskData = _5678.workflow.taskDetails;
+        var oTask = workflow.taskUid;
+        var oTaskData = workflow.taskDetails;
         var toggle = true;
         var message = '';
         if(typeof oTaskData != 'undefined')
@@ -972,7 +972,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
                                 else
                                     tas_send = true;
                                 var data = fields[0].items.items[0].getValue();
-                                var taskUid = _5678.workflow.taskUid;
+                                var taskUid = workflow.taskUid;
                                 if(typeof taskUid[0] != 'undefined')
                                 {
                                  var urlparams = '?action=saveInterMessageEvent&data={"uid":"'+ taskUid[0].value +'","tas_send":"'+tas_send+'","data":"'+data+'"}';
@@ -997,7 +997,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
          window.show();
 }
 pmosExt.prototype.loadTask = function(_5678){
-        var taskUid = _5678.workflow.taskid;
+        var taskUid = workflow.taskid;
         if(typeof taskUid != 'undefined')
         {
             var urlparams = '?action=loadTask&data={"uid":"'+ taskUid.value +'"}';
@@ -1046,7 +1046,7 @@ pmosExt.prototype.toggleFields = function(field,bool){
      
 }
 pmosExt.prototype.popMessageEvent= function(_5678){
-         var oTask = _5678.workflow.taskUid;
+         var oTask = workflow.taskUid;
          var oPmosExt = new pmosExt();
          var messageEvent = new Ext.FormPanel({
          labelWidth: 150, // label settings here cascade unless overridden
@@ -1164,7 +1164,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
 
     });
     messageEvent.render(document.body);
-    _5678.workflow.messageEventForm = messageEvent;
+    workflow.messageEventForm = messageEvent;
 
      var window = new Ext.Window({
      title: _('ID_END_MESSAGE_EVENT'),
@@ -1190,7 +1190,7 @@ pmosExt.prototype.popMessageEvent= function(_5678){
                             else
                                 tas_send = true;
                             var data = fields[0].items.items[0].getValue();
-                            var taskUid = _5678.workflow.taskUid;
+                            var taskUid = workflow.taskUid;
                             if(typeof taskUid[0] != 'undefined')
                             {
                              var urlparams = '?action=saveInterMessageEvent&data={"uid":"'+ taskUid[0].value +'","tas_send":"'+tas_send+'","data":"'+data+'"}';
@@ -1216,9 +1216,9 @@ pmosExt.prototype.popMessageEvent= function(_5678){
 }
 pmosExt.prototype.popMultipleEvent= function(_5678){
         Ext.QuickTips.init();
-        var oTaskFrom = _5678.workflow.taskUidFrom;
-        var oTaskTo = _5678.workflow.taskUidTo;
-        var oTriggers = _5678.workflow.triggerList;
+        var oTaskFrom = workflow.taskUidFrom;
+        var oTaskTo = workflow.taskUidTo;
+        var oTriggers = workflow.triggerList;
         var oPmosExt = new pmosExt();
         var multipleEvent = new Ext.FormPanel({
         url:'eventsSave.php',
@@ -1440,7 +1440,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
     });
     multipleEvent.render(document.body);
 
-    _5678.workflow.multipleEventForm = multipleEvent;
+    workflow.multipleEventForm = multipleEvent;
      var evn_uid = workflow.currentSelection.id;
      multipleEvent.form.load({
       url:'proxyEventsLoad?startInterId='+evn_uid,
@@ -1574,7 +1574,7 @@ pmosExt.prototype.loadProcess=function(_5678)
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
-                    _5678.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
+                    workflow.processInfo = Ext.util.JSON.decode(response.responseText);
                 },
                 failure: function(){
                      PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1583,14 +1583,14 @@ pmosExt.prototype.loadProcess=function(_5678)
 }
 pmosExt.prototype.loadDynaforms=function()
 {
-        var taskUid = _5678.workflow.taskUid;
+        var taskUid = workflow.taskUid;
         if(typeof taskUid[0] != 'undefined')
         {
             var urlparams = '?action=dynaforms&data={"uid":"'+ taskUid[0].value +'"}';
             Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
-                        _5678.workflow.dynaList = Ext.util.JSON.decode(response.responseText);
+                        workflow.dynaList = Ext.util.JSON.decode(response.responseText);
                     },
                     failure: function(){
                          PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1604,7 +1604,7 @@ pmosExt.prototype.loadConnectedTask=function()
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
-                    _5678.workflow.processInfo = Ext.util.JSON.decode(response.responseText);
+                    workflow.processInfo = Ext.util.JSON.decode(response.responseText);
 
                 },
                 failure: function(){
@@ -1614,12 +1614,12 @@ pmosExt.prototype.loadConnectedTask=function()
 }
 pmosExt.prototype.loadWebEntry=function()
 {
-       var evn_uid = _5678.workflow.currentSelection.id;
+       var evn_uid = workflow.currentSelection.id;
        var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
-                    _5678.workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
+                    workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
                 },
                 failure: function(){
                     PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1632,7 +1632,7 @@ pmosExt.prototype.loadEditProcess=function()
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
-                    _5678.workflow.processEdit = Ext.util.JSON.decode(response.responseText);
+                    workflow.processEdit = Ext.util.JSON.decode(response.responseText);
                 },
                 failure: function(){
                     PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1645,7 +1645,7 @@ pmosExt.prototype.loadProcessCategory =function()
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
-                    _5678.workflow.processCategory = Ext.util.JSON.decode(response.responseText);
+                    workflow.processCategory = Ext.util.JSON.decode(response.responseText);
                 },
                 failure: function(){
                      PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
