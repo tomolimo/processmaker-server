@@ -292,7 +292,7 @@ var installer=function()
 		
 		var tr = this.table.insertRow(-1);
 		$(tr).append(
-			new DOM('td',{innerHTML:"<b>HeartBeat Configuration</b><br><i>Heartbeat is a anonymous statistics collector for ProcessMaker. It runs in the background and if you have internet enabled, it will periodically send anonymous information to ProcessMaker servers.<br />No sensitive or private information is collected.<br /><br /> The information collected will allow us to keep improving our software to offer everyone a better user experience</i>",className:"app_grid_title___gray title",colSpan:4})
+			new DOM('td',{innerHTML:"<b>HeartBeat Configuration</b><br><i>Heartbeat is an anonymous statistics collector for ProcessMaker. It runs in the background and if you have internet enabled, it will periodically send anonymous information to ProcessMaker servers.<br />No sensitive or private information is collected.<br /><br /> The information collected will allow us to keep improving our software to offer everyone a better user experience</i>",className:"app_grid_title___gray title",colSpan:4})
 		);
 		this.heartBeatTitle=tr;
 		
