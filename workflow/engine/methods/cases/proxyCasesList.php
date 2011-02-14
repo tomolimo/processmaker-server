@@ -27,6 +27,14 @@
   require_once ( "classes/model/AppDelay.php" );
   require_once ( "classes/model/Fields.php" );
 
+  $oCases = new Cases();
+  /** here we verify if there is a any case with a unpause on this day*/
+  if( $action === 'todo' or $action === 'draft' or $action === 'paused') {
+   $oCases->ThrowUnpauseDaemon(date('Y-m-d'));
+   //this function is used when you try to do  a pause of a case in derivate side
+   //$oCases->UnpauseRoutedCasesWithPauseFlagEnabled($_SESSION['USER_LOGGED']);   
+  }
+   
 	$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
   $oAppCache = new AppCacheView();
   
