@@ -62,16 +62,16 @@ PMExtJSCommon = function() {
   
   this.getBrowser = function()
   {
-    var browsersList = new Array("opera", "msie", "firefox", "opera", "safari");
+    var browsersList = new Array("opera", "msie", "firefox", "chrome", "safari");
     var browserMeta = navigator.userAgent.toLowerCase();
-    var name = 'Unknow';
+    var name = 'Unknown';
     var version = '';
     var screen = {
       width  : Ext.getBody().getViewSize().width, 
       height : Ext.getBody().getViewSize().height
     };
     
-    var so = Ext.isLinux ? 'Linux' : ( Ext.isWindows ? 'Windows' :  (Ext.isMac ? 'Mac OS' : 'Unknow') );
+    var so = Ext.isLinux ? 'Linux' : ( Ext.isWindows ? 'Windows' :  (Ext.isMac ? 'Mac OS' : 'Unknown') );
     
     for (var i = 0; i < browsersList.length; i++){
       if ((name == "") && (browserMeta.indexOf(browsersList[i]) != -1)){
@@ -114,7 +114,7 @@ Ext.msgBoxSlider = function(){
       m.setWidth(400 );
       m.position(null, 5000 );
       m.alignTo(document, 't-t');
-      Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("<?php echo _EXT_URL ?>/images/_accept.png")');
+      //Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("<?php echo _EXT_URL ?>/images/_accept.png")');
       Ext.get('x-box-mc-inner' ).setStyle('background-position', '5px 10px');
       Ext.get('x-box-mc-inner' ).setStyle('background-repeat', 'no-repeat');
       Ext.get('x-box-mc-inner' ).setStyle('padding-left', '35px');
@@ -140,49 +140,6 @@ function _(ID_LABEL)
   }
   return trn;
 }
-
-var getBrowserInf = function()
-{
-  var sBrowser = "";
-  var screen;
-  var aBrowFull = new Array("opera", "msie", "firefox", "opera", "safari");
-  var sInfo = navigator.userAgent.toLowerCase();
-  var sBrowser = "";
-  
-  var screen;
-  var wSize = [0, 0];
-  
-  if( typeof( window.innerWidth ) == 'number' ) {
-    //Non-IE
-    width = window.innerWidth;
-    height = window.innerHeight;
-  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-    //IE 6+ in 'standards compliant mode'
-    width = document.documentElement.clientWidth;
-    height = document.documentElement.clientHeight;
-  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-    //IE 4 compatible
-    width = document.body.clientWidth;
-    height = document.body.clientHeight;
-  } else {
-    width = document.getElementsByTagName('body')[0].clientWidth;
-    height = document.getElementsByTagName('body')[0].clientHeight;
-  }
-
-  
-  screen = {width:width, height:height};
-  //screen = { width: Ext.getBody().getViewSize().width, height:Ext.getBody().getViewSize().height};
-  
-  for (var i = 0; i < aBrowFull.length; i++){
-    if ((sBrowser == "") && (sInfo.indexOf(aBrowFull[i]) != -1)){
-      sBrowser = aBrowFull[i];
-      sVersion = String(parseFloat(sInfo.substr(sInfo.indexOf(aBrowFull[i]) + aBrowFull[i].length + 1)));
-      return {name:sBrowser, version:sVersion, screen: screen}
-    }
-  }
-  
-  return {name:'unknow', version:'', screen: screen}
-};
 
 /** 
  * Environment Formats function for full name
