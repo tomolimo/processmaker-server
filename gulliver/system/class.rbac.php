@@ -91,7 +91,7 @@ class RBAC
   function initRBAC () {
    if ( is_null($this->userObj ) ) {
      require_once ( "classes/model/RbacUsers.php" );
-     $this->userObj = new RbacUsers;
+     $this->userObj = new RbacUsers();
    }
 
    if ( is_null($this->systemObj ) ) {
@@ -857,6 +857,22 @@ class RBAC
   function getAllAuthSources() {
     return $this->authSourcesObj->getAllAuthSources();
   }
+  
+/**
+  * this function gets all authentication source
+  * Authentication Sources based at parameters 
+  *
+  * @access public
+  * @author Enrique Ponce de Leon <enrique@colosa.com>
+  * @param  int $start offset value to paging grid
+  * @param  int $limit limit value to paging grid
+  * @param  string $filter value to search or filter select
+  * @return $this->authSourcesObj->getAuthenticationSources()
+  */
+  
+  function getAuthenticationSources($start,$limit,$filter='') {
+    return $this->authSourcesObj->getAuthenticationSources($start,$limit,$filter);
+  }
 
   /**
   * this function gets all authentication source
@@ -909,6 +925,19 @@ class RBAC
   */
   function removeAuthSource($sUID) {
     $this->authSourcesObj->remove($sUID);
+  }
+  
+  /**
+  * this function gets all users by authentication source
+  *
+  * @access public
+
+  * @param  void
+  * @return $this->userObj->getAllUsersByAuthSource()
+  */
+  
+  function getAllUsersByAuthSource(){
+  	return $this->userObj->getAllUsersByAuthSource();
   }
 
   /**

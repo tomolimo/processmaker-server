@@ -30,7 +30,7 @@ try {
     die;
   }
 
-  switch ($_POST['action']) {
+  switch ($_REQUEST['action']) {
     case 'searchUsers':
       G::LoadThirdParty('pear/json','class.json');
       require_once 'classes/model/Users.php';
@@ -91,6 +91,63 @@ try {
       }
       G::RenderPage('publish', 'raw');
     break;
+    case 'authSourcesList':
+    	require_once PATH_RBAC.'model/AuthenticationSource.php';
+    	global $RBAC;
+    	G::LoadClass('configuration');
+      $co = new Configurations();
+      $config = $co->getConfiguration('authSourcesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+      $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+    	
+    	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+    	$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : $limit_size;
+    	$filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+    	
+    	$Criterias = $RBAC->getAuthenticationSources($start, $limit, $filter);
+    	
+    	$Dat = AuthenticationSourcePeer::doSelectRS($Criterias['COUNTER']);
+    	$Dat->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    	$Dat->next();
+    	$row = $Dat->getRow();
+    	$total_sources = $row['CNT'];
+    	
+    	$oDataset = AuthenticationSourcePeer::doSelectRS($Criterias['LIST']);
+    	$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    	
+    	global $RBAC;
+    	$auth = $RBAC->getAllUsersByAuthSource();
+    	
+    	$aSources = Array();
+    	while ($oDataset->next()){
+    		$aSources[] = $oDataset->getRow();
+    		$index = sizeof($aSources)-1;
+    		$aSources[$index]['CURRENT_USERS'] = isset($auth[$aSources[$index]['AUTH_SOURCE_UID']]) ? $auth[$aSources[$index]['AUTH_SOURCE_UID']] : 0;
+    	}
+    	echo '{sources: '.G::json_encode($aSources).', total_sources: '.$total_sources.'}';
+    	break;
+    case 'canDeleteAuthSource':
+    	//echo 'llego';
+    	//require_once PATH_RBAC.'model/RbacUsers.php';
+    	try{
+    	  $authUID = $_POST['auth_uid'];
+    	  global $RBAC;
+    	  $aAuth = $RBAC->getAllUsersByAuthSource();
+    	  $response = isset($aAuth[$authUID]) ? 'false' : 'true';
+    	  echo '{success: '.$response.'}';
+    	}catch(Exception $ex){
+    		echo '{success: false, error: '.$ex->getMessage().'}';
+    	}
+    	break;
+    case 'deleteAuthSource':
+    	try{
+    		global $RBAC;
+    		$RBAC->removeAuthSource($_POST['auth_uid']);
+    		echo '{success: true}';
+    	}catch(Exception $ex){
+    		echo '{success: false, error: '.$ex->getMessage().'}';
+    	}
+    	break;
+    	
   }
 }
 catch ( Exception  $e ) {

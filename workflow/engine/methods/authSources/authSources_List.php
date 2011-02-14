@@ -30,11 +30,22 @@ if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
 	die;
 }
 
+G::LoadClass('configuration');
+$c = new Configurations();
+$configPage = $c->getConfiguration('authSourcesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
 $G_MAIN_MENU            = 'processmaker';
 $G_SUB_MENU             = 'users';
 $G_ID_MENU_SELECTED     = 'USERS';
 $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
 $G_PUBLISH = new Publisher;
-$G_PUBLISH->AddContent('propeltable', 'paged-table', 'authSources/authSources_List', $RBAC->getAllAuthSources(), '', '');
-G::RenderPage('publish','blank');
+
+$oHeadPublisher =& headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('authSources/authSourcesList', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('authSources/authSourcesList'); //adding a html file  .html.
+$oHeadPublisher->assign('FORMATS',$c->getFormats());
+$oHeadPublisher->assign('CONFIG', $Config);
+G::RenderPage('publish', 'extJs');
+?>

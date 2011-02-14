@@ -209,5 +209,24 @@ class RbacUsers extends BaseRbacUsers {
     $this->setUsrUid($sUserUID);
     $this->delete();
   }
+  
+  //Added by Qennix at Feb 14th, 2011
+  //Gets an associative array with total users by authentication sources
+  function getAllUsersByAuthSource(){
+  	$oCriteria = new Criteria('rbac');
+  	$oCriteria->addSelectColumn(RbacUsersPeer::UID_AUTH_SOURCE);
+  	$oCriteria->addSelectColumn('COUNT(*) AS CNT');
+  	$oCriteria->add(RbacUsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
+  	$oCriteria->addGroupByColumn(RbacUsersPeer::UID_AUTH_SOURCE);
+  	$oDataset = RbacUsersPeer::doSelectRS($oCriteria);
+  	$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  	
+  	$aAuth = Array();
+  	while ($oDataset->next()){
+  		$row = $oDataset->getRow();
+  		$aAuth[$row['UID_AUTH_SOURCE']] = $row['CNT'];
+  	}
+  	return $aAuth;
+  }
 
 } // Users

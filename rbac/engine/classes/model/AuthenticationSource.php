@@ -136,4 +136,29 @@ class AuthenticationSource extends BaseAuthenticationSource {
       throw($oError);
     }
   }
+  
+  //Added By Enrique Ponce de Leon <enrique@colosa.com>
+  //Gets Criteria to fill grid of authentication source
+  function getAuthenticationSources($start,$limit,$filter=''){
+  	$oCriteria = new Criteria('rbac');
+  	$oCriteria->addSelectColumn('COUNT(*) AS CNT');
+  	$oCriteria->add(AuthenticationSourcePeer::AUTH_SOURCE_UID,'',Criteria::NOT_EQUAL);
+  	if ($filter!=''){
+  		$oCriteria->add(AuthenticationSourcePeer::AUTH_SOURCE_NAME,'%'.$filter.'%',Criteria::LIKE);
+  	}
+  	
+    $oCriteria2 = new Criteria('rbac');
+  	$oCriteria2->addSelectColumn('*');
+  	$oCriteria2->add(AuthenticationSourcePeer::AUTH_SOURCE_UID,'',Criteria::NOT_EQUAL);
+  	if ($filter!=''){
+  		$oCriteria2->add(AuthenticationSourcePeer::AUTH_SOURCE_NAME,'%'.$filter.'%',Criteria::LIKE);
+  	}
+  	$oCriteria2->setLimit($limit);
+  	$oCriteria2->setOffset($start);
+  	
+  	$result = array();
+  	$result['COUNTER'] = $oCriteria;
+  	$result['LIST'] = $oCriteria2;
+  	return $result;
+  }
 } // AuthenticationSource
