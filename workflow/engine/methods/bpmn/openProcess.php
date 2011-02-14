@@ -88,20 +88,41 @@
      $countTasks = $countTasks + 1;
     }
    }
-   //for Events
+   $lanes              = $oProcess->createLanesNewPM($oData->lanes);
+   $fields             = $oProcess->createTransitionsPM($oData->tasks,$oData->routes,$arrayEvents,$count,$arrayRoutes,$countRoutes);
+
+   //Get Standalone Events and routes
+   $countEvent = count($fields['EVENTS']);
+   $countRoutes = count($fields['TRANSITION']);
    foreach($oData->event as $id => $value)
    {
        if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] == '' && $value['EVN_TAS_UID_TO'] == ''){
-         $arrayEvents[$count]['0'] = $value['EVN_UID'];
-         $arrayEvents[$count]['1'] = $value['EVN_TYPE'];
-         $arrayEvents[$count]['2'] = $value['EVN_POSX'];
-         $arrayEvents[$count]['3'] = $value['EVN_POSY'];
-         $arrayEvents[$count]['4'] = $value['TAS_UID'];
-         $count                    = $count+ 1;
+         $fields['EVENTS'][$countEvent]['0'] = $value['EVN_UID'];
+         $fields['EVENTS'][$countEvent]['1'] = $value['EVN_TYPE'];
+         $fields['EVENTS'][$countEvent]['2'] = $value['EVN_POSX'];
+         $fields['EVENTS'][$countEvent]['3'] = $value['EVN_POSY'];
+         $fields['EVENTS'][$countEvent]['4'] = $value['TAS_UID'];
+         $countEvent               = $countEvent + 1;
+       }
+       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_TO'] != ''){  //Check for Intermediate Events
+         $evn_uid = $value['EVN_UID'];
+         $idTask = $value['EVN_TAS_UID_TO'];
+
+         $fields['EVENTS'][$countEvent]['0'] = $value['EVN_UID'];
+         $fields['EVENTS'][$countEvent]['1'] = $value['EVN_TYPE'];
+         $fields['EVENTS'][$countEvent]['2'] = $value['EVN_POSX'];
+         $fields['EVENTS'][$countEvent]['3'] = $value['EVN_POSY'];
+         $fields['EVENTS'][$countEvent]['4'] = $value['TAS_UID'];
+         $countEvent               = $countEvent + 1;
+
+         $fields['TRANSITION'][$countRoutes]['0']= G::generateUniqueID();
+         $fields['TRANSITION'][$countRoutes]['1']= $evn_uid;
+         $fields['TRANSITION'][$countRoutes]['2']= $idTask;
+         $fields['TRANSITION'][$countRoutes]['3']= '2';
+         $fields['TRANSITION'][$countRoutes]['4']= '1';
+         $countRoutes              = $countRoutes + 1;
        }
    }
-   $lanes              = $oProcess->createLanesNewPM($oData->lanes);
-   $fields             = $oProcess->createTransitionsPM($oData->tasks,$oData->routes,$arrayEvents,$count,$arrayRoutes,$countRoutes);
 
    //Get all the standalone Gateway
    $countGateway = count($fields['GATEWAYS']);
@@ -112,7 +133,7 @@
        $fields['GATEWAYS'][$countGateway]['1']   = $value['GAT_TYPE'];
        $fields['GATEWAYS'][$countGateway]['2']   = $value['GAT_X'];
        $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
-       $countGateway+=1;
+       $countGateway += 1;
      }
    }
    //$subProcess         = $oProcess->createSubProcessesPM($oData->subProcess);

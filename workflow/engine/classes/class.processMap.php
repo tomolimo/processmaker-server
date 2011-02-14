@@ -6457,7 +6457,7 @@ function saveExtddEvents($oData)
   if(preg_match("/Inter/", $aData['EVN_TYPE'])){
     $aData['EVN_RELATED_TO'] = 'MULTIPLE';
   }
-  if(preg_match("/Start/", $aData['EVN_TYPE']) || preg_match("/Inter/", $aData['EVN_TYPE'])){
+  if(preg_match("/Start/", $aData['EVN_TYPE'])){
     $aData['EVN_RELATED_TO'] = 'SINGLE';
   }
   if($mode == 'ddEvent'){
@@ -6482,7 +6482,14 @@ function saveExtEvents($oData)
   $oEvent = new Event();
   $sEvn_uid = '';
   $sEvn_type = $oData->evn_type;
-  $aData = array();
+  $output = 0;
+  $aDataEvent = array();
+  $aDataTask = array();
+  $aDataEvent['EVN_UID']  = $oData->evn_uid;
+  $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
+  $aDataEvent['EVN_TYPE']       = $oData->evn_type;
+  
+
   if(preg_match("/Start/", $sEvn_type)){
     $aDataTask['TAS_UID']     = $oData->tas_uid;
     $aDataTask['TAS_START']   = $oData->tas_start;
@@ -6490,13 +6497,15 @@ function saveExtEvents($oData)
     $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
     $oTask->update($aDataTask);
 
-    $aDataEvent['EVN_UID']        = $oData->evn_uid;
     $aDataEvent['EVN_TAS_UID_TO'] = $oData->tas_uid;
-    $aDataEvent['EVN_TYPE']       = $oData->evn_type;
-    $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
     $output = $oEvent->update($aDataEvent);
-    return $output;
   }
+  else if(preg_match("/Inter/", $sEvn_type)){
+    $aDataEvent['EVN_TAS_UID_FROM'] = $oData->tas_from;
+    $aDataEvent['EVN_TAS_UID_TO']   = $oData->tas_to;
+    $output = $oEvent->update($aDataEvent);
+  }
+    return $output;
 }
  
 }

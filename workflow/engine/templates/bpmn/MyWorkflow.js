@@ -1069,7 +1069,7 @@ MyWorkflow.prototype.savePosition= function(oShape)
     var width = oShape.width;
     var height = oShape.height;
     var cordinates = '{"x":'+width+',"y":'+height+'}';
-    var urlparams;
+    var urlparams = '';
     switch(actiontype)
     {
         case 'saveTaskPosition':
@@ -1091,15 +1091,17 @@ MyWorkflow.prototype.savePosition= function(oShape)
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
         break;
     }
-    Ext.Ajax.request({
-      url: "processes_Ajax.php"+ urlparams,
-      success: function(response) {
-        //Ext.Msg.alert (response.responseText);
-      },
-      failure: function(){
-      //Ext.Msg.alert ('Failure');
-      }
-    });
+    if(urlparams != ''){
+      Ext.Ajax.request({
+        url: "processes_Ajax.php"+ urlparams,
+        success: function(response) {
+          //Ext.Msg.alert (response.responseText);
+        },
+        failure: function(){
+         //Ext.Msg.alert ('Failure');
+        }
+      });
+    }
 }
 /**
  * Saving Shape Asychronously
@@ -1197,7 +1199,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                                   {
                                       var preSelectedFigure = this.workflow.preSelectedObj;
                                       if(preSelectedFigure.type.match(/Start/) && preSelectedFigure.type.match(/Event/))
-                                        this.workflow.saveEvents(preSelectedFigure,oNewShape);
+                                        this.workflow.saveEvents(preSelectedFigure,oNewShape.id);
 
                                       if(preSelectedFigure.type.match(/Task/))
                                          this.workflow.saveRoute(preSelectedFigure,oNewShape);
@@ -1459,20 +1461,16 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
 {
     var task_uid      = new Array();
     var next_task_uid = new Array();
+    var urlparams     = '';
     if(oEvent.type.match(/Start/))
     {
         var tas_start = 'TRUE';
-        var urlparams = '?action=saveEvents&data={"tas_uid":"'+sTaskUID+'","tas_start":"'+tas_start+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
+        urlparams = '?action=saveEvents&data={"tas_uid":"'+sTaskUID+'","tas_start":"'+tas_start+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
     }
-    /*else if(oEvent.type.match(/Start/) && (oEvent.type.match(/Message/) || oEvent.type.match(/Timer/)) )
-    {
-        urlparams = '?action=saveEvents&data={"uid":"'+ pro_uid +'","tas_uid":"'+sTaskUID+'","tas_type":"'+oEvent.type+'"}';
-    }*/
     else if(oEvent.type.match(/Inter/))
     {
         var ports = oEvent.getPorts();
         var len =ports.data.length;
-
         //Get all the connection of the shape
         var conn = new Array();
         var count1 = 0;
@@ -1481,33 +1479,27 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
             if(typeof ports.data[i] === 'object')
                 conn[i] = ports.data[i].getConnections();
         }
-
         //Get ALL the connections for the specified PORT
-        for(i = 0; i< conn.length ; i++)
-            {
-                if(typeof conn[i] != 'undefined')
-                for(var j = 0; j < conn[i].data.length ; j++)
-                   {
-                     if(typeof conn[i].data[j] != 'undefined')
-                        {
-                            if(conn[i].data[j].sourcePort.parentNode.type != oEvent.type){
-                                   // task_uid[count1] = new Array();
-                                    task_uid[count1] = conn[i].data[j].sourcePort.parentNode.id;
-                                    count1++;
-                            }
-                            if(conn[i].data[j].targetPort.parentNode.type != oEvent.type){
-                                   // task_uid[count2] = new Array();
-                                    next_task_uid[count2] = conn[i].data[j].targetPort.parentNode.id;
-                                    count2++;
-                            }
-
-                        }
-                    }
-    }
-
-    var staskUid     = 	Ext.util.JSON.encode(task_uid);
-    var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
-        urlparams = '?action=addEvent&data={"uid":"'+ pro_uid +'","tas_from":"'+staskUid+'","tas_to":"'+sNextTaskUid+'","tas_type":"'+oEvent.type+'"}';
+        for(i = 0; i< conn.length ; i++){
+          if(typeof conn[i] != 'undefined')
+            for(var j = 0; j < conn[i].data.length ; j++){
+              if(typeof conn[i].data[j] != 'undefined'){
+                if(conn[i].data[j].sourcePort.parentNode.type != oEvent.type){
+                  // task_uid[count1] = new Array();
+                   task_uid = conn[i].data[j].sourcePort.parentNode.id;
+                   count1++;
+                }
+                if(conn[i].data[j].targetPort.parentNode.type != oEvent.type){
+                  // task_uid[count2] = new Array();
+                  next_task_uid = conn[i].data[j].targetPort.parentNode.id;
+                  //count2++;
+                }
+             }
+          }
+        }
+    // var staskUid     = 	Ext.util.JSON.encode(task_uid);
+    // var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
+     urlparams = '?action=saveEvents&data={"tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
     }
 
     if(urlparams != ''){
