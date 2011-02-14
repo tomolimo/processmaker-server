@@ -1056,6 +1056,51 @@ MyWorkflow.prototype.getUrlVars = function()
     var pro_uid = vars["PRO_UID"];
     return pro_uid;
 }
+
+
+MyWorkflow.prototype.savePosition= function(oShape)
+{
+    var shapeId = oShape.id;
+    var actiontype = oShape.actiontype;
+    var xpos = oShape.x;
+    var ypos = oShape.y;
+    var pos = '{"x":'+xpos+',"y":'+ypos+'}';
+
+    var width = oShape.width;
+    var height = oShape.height;
+    var cordinates = '{"x":'+width+',"y":'+height+'}';
+    var urlparams;
+    switch(actiontype)
+    {
+        case 'saveTaskPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
+        case 'saveEventPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+        break;
+        case 'saveTextPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
+        case 'saveGatewayPosition':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
+            break;
+        case 'saveTaskCordinates':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
+            break;
+        case 'saveAnnotationCordinates':
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
+        break;
+    }
+    Ext.Ajax.request({
+      url: "processes_Ajax.php"+ urlparams,
+      success: function(response) {
+        //Ext.Msg.alert (response.responseText);
+      },
+      failure: function(){
+      //Ext.Msg.alert ('Failure');
+      }
+    });
+}
 /**
  * Saving Shape Asychronously
  * @Param  oNewShape Object
@@ -1064,8 +1109,6 @@ MyWorkflow.prototype.getUrlVars = function()
 MyWorkflow.prototype.saveShape= function(oNewShape)
 {
     //Initializing variables
-
-    //var pro_uid = this.getUrlVars();
     var shapeId = oNewShape.id;
     var actiontype = oNewShape.actiontype;
     var xpos = oNewShape.x;
@@ -1093,24 +1136,6 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
         case 'updateTask':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","boundary":"TIMER"}';
             break;
-        case 'saveTaskPosition':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
-            break;
-        case 'saveEventPosition':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
-        break;
-        case 'saveTextPosition':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
-            break;
-        case 'saveGatewayPosition':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+pos+'}';
-            break;
-        case 'saveTaskCordinates':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
-            break;
-        case 'saveAnnotationCordinates':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","position":'+cordinates+'}';
-        break;
         case 'updateTaskName':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'"}';
             break;

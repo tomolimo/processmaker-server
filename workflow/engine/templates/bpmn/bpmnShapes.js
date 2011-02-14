@@ -196,20 +196,20 @@ if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection 
     case 'bpmnTask':
     case 'bpmnSubProcess':
       currObj.actiontype = 'saveTaskPosition';
-      currObj.workflow.saveShape(currObj);
+      currObj.workflow.savePosition(currObj);
       break;
     case 'bpmnAnnotation':
       currObj.actiontype = 'saveTextPosition';
-      currObj.workflow.saveShape(currObj);
+      currObj.workflow.savePosition(currObj);
     break;
     default:
       if(currObj.type.match(/Gateway/)){
         currObj.actiontype = 'saveGatewayPosition';
-        currObj.workflow.saveShape(currObj);
+        currObj.workflow.savePosition(currObj);
       }
       else if(currObj.type.match(/Event/)){
         currObj.actiontype = 'saveEventPosition';
-        currObj.workflow.saveShape(currObj);
+        currObj.workflow.savePosition(currObj);
       }
     }
   }
@@ -453,11 +453,11 @@ var currentSelection = workflow.currentSelection;
 if(typeof currentSelection.id != 'undefined' && currentSelection.id.length == 32){
   if(currentSelection.type.match(/Task/)){
     currentSelection.actiontype = 'saveTaskCordinates';
-    workflow.saveShape(currentSelection);
+    workflow.savePosition(currentSelection);
   }
   else if(currentSelection.type.match(/Annotation/)){
     currentSelection.actiontype = 'saveAnnotationCordinates';
-    workflow.saveShape(currentSelection);
+    workflow.savePosition(currentSelection);
   }
  }
 }
