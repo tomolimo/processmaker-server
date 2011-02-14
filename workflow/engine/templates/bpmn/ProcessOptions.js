@@ -11,9 +11,7 @@ ProcessOptions.prototype.type="ProcessOptions";
 */
 ProcessOptions.prototype.addDynaform= function(_5625)
 {
-  var pro_uid = workflow.getUrlVars();
-
-  var dynaFields = Ext.data.Record.create([
+ var dynaFields = Ext.data.Record.create([
     {name: 'DYN_UID'},
     {name: 'DYN_TYPE'},
     {name: 'DYN_TITLE'},
@@ -30,7 +28,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     iconCls: 'button_menu_ext ss_sprite ss_add',
     //iconCls: 'application_add',
     handler: function () {
-      //dynaformDetails.getForm().reset();
+      dynaformDetails.getForm().reset();
       formWindow.show();
     }
   });
@@ -533,7 +531,6 @@ var dynaformColumns = new Ext.grid.ColumnModel({
 
 ProcessOptions.prototype.dbConnection = function()
 {
-  var pro_uid = workflow.getUrlVars();
   //Database store code starts here
 
   var dbConnFields = Ext.data.Record.create([
@@ -638,7 +635,7 @@ ProcessOptions.prototype.dbConnection = function()
               url: 'proxyExtjs.php?pid='+pro_uid+'&action=getDatabaseConnectionList'
             })
           });
-  dbStore.load({params:{start : 0 , limit : 10 }});
+  dbStore.load({params:{start : 0 , limit : 1 }});
 
 
 
@@ -709,7 +706,7 @@ ProcessOptions.prototype.dbConnection = function()
         stripeRows: true,
         tbar: tb,
         bbar: new Ext.PagingToolbar({
-            pageSize: 10,
+            pageSize: 1,
             store: dbStore,
             displayInfo: true,
             displayMsg: 'Displaying DB Connection {0} - {1} of {2}',
@@ -1150,9 +1147,7 @@ var testConnWindow = new Ext.Window({
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
   var ProcMapObj= new ProcessMapContext();
-  var pro_uid = workflow.getUrlVars();
-
-  var dynaFields = Ext.data.Record.create([
+ var dynaFields = Ext.data.Record.create([
             {
                 name: 'INP_DOC_UID',
                 type: 'string'
@@ -1666,8 +1661,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
 
 ProcessOptions.prototype.addOutputDoc= function(_5625)
 {
-  var pro_uid = workflow.getUrlVars();
-   var ProcMapObj= new ProcessMapContext();
+ var ProcMapObj= new ProcessMapContext();
 
   var dynaFields = Ext.data.Record.create([
             {
@@ -2247,8 +2241,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
 ProcessOptions.prototype.addReportTable= function(_5625)
 {
-  var pro_uid = workflow.getUrlVars();
-
   var reportFields = Ext.data.Record.create([
             {
                 name:'REP_TAB_UID',
@@ -2628,7 +2620,7 @@ var formWindow = new Ext.Window({
 
 ProcessOptions.prototype.addTriggers= function()
 {
-  var pro_uid = workflow.getUrlVars();
+  
   
 
 }

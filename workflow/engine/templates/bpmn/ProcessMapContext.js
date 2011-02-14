@@ -6,7 +6,7 @@ ProcessMapContext.prototype.type="ProcessMap";
 
 ProcessMapContext.prototype.editProcess= function()
 {
-         var pro_uid = workflow.getUrlVars();
+         
         //var editProcessData     = workflow.processEdit;
        // var processCategoryData = workflow.processCategory;
         //var debug               = editProcessData.PRO_DEBUG;
@@ -260,7 +260,6 @@ ProcessMapContext.prototype.exportProcess= function()
             });
 
   exportProcessForm.render(document.body);
-  var pro_uid = workflow.getUrlVars();
   workflow.exportProcessForm = exportProcessForm;
   exportProcessForm.form.load({
     url:'proxyProcesses_Export?pro_uid='+pro_uid,
@@ -334,7 +333,6 @@ ProcessMapContext.prototype.delLines= function()
 
 ProcessMapContext.prototype.processPermission= function()
 {
-  var pro_uid = workflow.getUrlVars();
   //Process Permission store code starts here
   var dbConnFields = Ext.data.Record.create([
             { name: 'OP_UID',type: 'string'},
@@ -1021,8 +1019,6 @@ var formWindow = new Ext.Window({
 
 ProcessMapContext.prototype.processSupervisors= function()
 {
-  var pro_uid = workflow.getUrlVars();
-
   var processUserFields = Ext.data.Record.create([
             {name: 'PU_UID',type: 'string'},
             {name: 'USR_UID',type: 'string'},
@@ -1245,8 +1241,6 @@ ProcessMapContext.prototype.processSupervisors= function()
 
 ProcessMapContext.prototype.processDynaform= function()
 {
-  var pro_uid = workflow.getUrlVars();
-
   var supervisorDynaformsFields = Ext.data.Record.create([
     {name: 'DYN_TITLE',type: 'string'},
     {name: 'STEP_UID',type: 'string'},
@@ -1470,8 +1464,6 @@ ProcessMapContext.prototype.processDynaform= function()
 
 ProcessMapContext.prototype.processIODoc = function()
 {
-  var pro_uid = workflow.getUrlVars();
-
   var supervisorInputDocFields = Ext.data.Record.create([
             {name: 'INP_DOC_TITLE',type: 'string'},
             {name: 'STEP_UID',type: 'string'},
@@ -1737,9 +1729,7 @@ ProcessMapContext.prototype.processFileManager= function()
                  else
                      pro_debug = '0';
 
-                  var pro_uid = _5678.scope.workflow.getUrlVars();
-
-                  var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
+                   var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
                   Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
@@ -1763,9 +1753,7 @@ ProcessMapContext.prototype.processFileManager= function()
 
 ProcessMapContext.prototype.caseTrackerProperties= function()
 {
-  var pro_uid = workflow.getUrlVars();
-
-   var PropertiesForm = new Ext.FormPanel({
+  var PropertiesForm = new Ext.FormPanel({
         labelWidth: 75, // label settings here cascade unless overridden
         frame:false,
         monitorValid : true,
@@ -1899,8 +1887,6 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
 ProcessMapContext.prototype.caseTrackerObjects= function()
   {
     var ProcMapObj= new ProcessMapContext();
-    var pro_uid   = workflow.getUrlVars();
-
     var ObjectFields = Ext.data.Record.create([
         {
             name: 'CTO_TITLE',
@@ -2225,7 +2211,6 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
 
 ProcessMapContext.prototype.ExtVariables = function()
 {
-  var pro_uid = workflow.getUrlVars();
   var varFields = Ext.data.Record.create([
             {
                 name: 'variable',

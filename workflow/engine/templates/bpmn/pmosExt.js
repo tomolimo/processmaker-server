@@ -310,7 +310,6 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             var tasName          = 'test';
                             var username         = credentialFields[0].getValue();
                             var password         = credentialFields[1].getValue();
-                            var pro_uid          = _5678.workflow.getUrlVars();
                             var args  = '?action=webEntry_validate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'", "TASKS_NAME":"'+tasName+'"}';
                             Ext.Ajax.request({
                             url: 'processes_Ajax.php'+ args,
@@ -342,7 +341,6 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             var tasName          = 'test';
                             var username         = credentialFields[0].getValue();
                             var password         = credentialFields[1].getValue();
-                            var pro_uid          = _5678.workflow.getUrlVars();
                             var args  = '?action=webEntry_generate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'"}';
                             Ext.Ajax.request({
                             url: 'processes_Ajax.php'+ args,
@@ -1017,7 +1015,6 @@ pmosExt.prototype.loadTask = function(_5678){
 }
 
 pmosExt.prototype.getTriggerList = function(_5678){
-        var pro_uid = _5678.workflow.getUrlVars();
         if(typeof pro_uid != 'undefined')
         {
             var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
@@ -1535,7 +1532,7 @@ pmosExt.prototype.saveInterTimer=function()
           newFormValues[key] = fieldSet2.items.items[0].value;
         break;
       case 'PRO_UID':
-          newFormValues[key] = workflow.getUrlVars();
+          newFormValues[key] = pro_uid;
         break;
       default:
           newFormValues[key] = mulEventform[key];
@@ -1573,8 +1570,7 @@ pmosExt.prototype.saveInterTimer=function()
 
 pmosExt.prototype.loadProcess=function(_5678)
 {
-    var pro_uid = _5678.workflow.getUrlVars();
-       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+    var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
@@ -1604,9 +1600,7 @@ pmosExt.prototype.loadDynaforms=function()
 }
 pmosExt.prototype.loadConnectedTask=function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
-
-       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
+      var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
@@ -1620,7 +1614,6 @@ pmosExt.prototype.loadConnectedTask=function()
 }
 pmosExt.prototype.loadWebEntry=function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
        var evn_uid = _5678.workflow.currentSelection.id;
        var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
         Ext.Ajax.request({
@@ -1635,8 +1628,7 @@ pmosExt.prototype.loadWebEntry=function()
 }
 pmosExt.prototype.loadEditProcess=function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
-       var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
+      var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
                 success: function(response) {
@@ -1649,7 +1641,6 @@ pmosExt.prototype.loadEditProcess=function()
 }
 pmosExt.prototype.loadProcessCategory =function()
 {
-       var pro_uid = _5678.workflow.getUrlVars();
        var urlparams = '?action=loadCategory';
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,

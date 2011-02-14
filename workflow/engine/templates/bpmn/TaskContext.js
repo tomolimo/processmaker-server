@@ -8,7 +8,6 @@ TaskContext.prototype.type="TaskContext";
 TaskContext.prototype.editTaskSteps = function(_3252){
     var taskExtObj = new TaskContext();
     var ProcMapObj= new ProcessMapContext();
-    var pro_uid = _3252.scope.workflow.getUrlVars();
     var taskId  = _3252.scope.workflow.currentSelection.id;
     
     var stepsFields = Ext.data.Record.create([
@@ -456,7 +455,6 @@ TaskContext.prototype.editTaskSteps = function(_3252){
 TaskContext.prototype.editUsers= function()
 {
     var taskExtObj = new TaskContext();
-    var pro_uid    = workflow.getUrlVars();
     var taskId     = workflow.currentSelection.id;
     var userFields = Ext.data.Record.create([
             {
@@ -1381,7 +1379,6 @@ TaskContext.prototype.saveTaskProperties= function()
 
 TaskContext.prototype.stepTriggers = function()
     {
-     var pro_uid = workflow.getUrlVars();
      var taskId  = workflow.currentSelection.id;
      var ProcMapObj= new ProcessMapContext();
      var triggersFields = Ext.data.Record.create([
@@ -1763,7 +1760,6 @@ TaskContext.prototype.stepTriggers = function()
 TaskContext.prototype.editUsersAdHoc= function()
 {
     var taskExtObj = new TaskContext();
-    var pro_uid = workflow.getUrlVars();
     var taskId  = workflow.currentSelection.id;
     var userFields = Ext.data.Record.create([
             {
@@ -2055,7 +2051,6 @@ TaskContext.prototype.editUsersAdHoc= function()
  */
 TaskContext.prototype.editSubProcessProperties= function(_3525)
 {
-        var pro_uid = workflow.getUrlVars();
         var taskId  = workflow.currentSelection.id;
         //Variables Out Grid
         var subProcessFields = Ext.data.Record.create([
