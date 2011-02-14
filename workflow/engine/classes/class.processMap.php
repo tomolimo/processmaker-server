@@ -2259,6 +2259,12 @@ class processMap {
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
       $aRow = $oDataset->getRow();
+      $params = array();
+//      $sql = BasePeer::createSelectSql($oCriteria, $params);
+//      echo $sProcessUID."-".$sTaskUID."-";
+//      echo $sql;
+//      var_dump($aRow);
+//      die();
       if (is_array($aRow)) {
         $aFields ['ROU_TYPE'] = $aRow ['ROU_TYPE'];
         $aFields ['ROU_TYPE_OLD'] = $aRow ['ROU_TYPE'];
@@ -2322,6 +2328,7 @@ class processMap {
               $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_UID'] [$aRow ['ROU_CASE']] = $aRow ['ROU_UID'];
               $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_NEXT_TASK'] [$aRow ['ROU_CASE']] = $aRow ['ROU_NEXT_TASK'];
               $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_CONDITION'] [$aRow ['ROU_CASE']] = $aRow ['ROU_CONDITION'];
+              $aFields ['GRID_PARALLEL_EVALUATION_TYPE'] ['ROU_OPTIONAL']  [$aRow ['ROU_CASE']] = $aRow ['ROU_OPTIONAL'];
               $oDataset->next();
             }
             $sXmlform = 'patterns_ParallelByEvaluation';
