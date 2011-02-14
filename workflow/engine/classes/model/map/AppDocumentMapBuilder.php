@@ -100,7 +100,7 @@ class AppDocumentMapBuilder {
 
 		$tMap->addValidator('APP_UID', 'required', 'propel.validator.RequiredValidator', '', 'Application UID is required.');
 
-		$tMap->addValidator('DEL_INDEX', 'minValue', 'propel.validator.MinValueValidator', '1', 'Delegation Index can be major than 0');
+		$tMap->addValidator('DEL_INDEX', 'minValue', 'propel.validator.MinValueValidator', '1', 'Delegation Index must be greater than 0');
 
 		$tMap->addValidator('DEL_INDEX', 'required', 'propel.validator.RequiredValidator', '', 'Delegation Index is required.');
 

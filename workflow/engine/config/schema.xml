@@ -621,7 +621,7 @@
       <rule name="required" message="Application UID is required." />
     </validator>
     <validator column="DEL_INDEX">
-      <rule name="minValue" value="1" message="Delegation Index can be major than 0" />
+      <rule name="minValue" value="1" message="Delegation Index must be greater than 0" />
       <rule name="required" message="Delegation Index is required." />
     </validator>
     <validator column="DOC_UID">
