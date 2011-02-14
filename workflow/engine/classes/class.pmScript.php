@@ -577,7 +577,7 @@ function handleErrors($errno, $errstr, $errfile, $errline)
  */
 function handleFatalErrors($buffer) 
 {
-  if (ereg('(error</b>:)(.+)(<br)', $buffer, $regs)) {
+  if (preg_match('/(error<\/b>:)(.+)(<br)/', $buffer, $regs)) {
     $err = preg_replace('/<.*?>/', '', $regs[2]);
     $aAux = explode(' in ', $err);
     $sCode = $_SESSION['_CODE_'];
