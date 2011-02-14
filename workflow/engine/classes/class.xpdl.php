@@ -3383,6 +3383,9 @@ class Xpdl extends processes
     $transitions       = '';
     $arrayGateways     = array();
     $countG            = 0;
+    $gatPosX           = 0;
+    $gatPosY           = 0;
+    
     foreach ($routes as $key => $row) {
       if($row['ROU_TYPE'] == 'SEC-JOIN'){
         $arraySecJoin[$position] = array();
