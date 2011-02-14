@@ -1127,7 +1127,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
     }
 
     //var urlparams = "action=addTask&data={"uid":"4708462724ca1d281210739068208635","position":{"x":707,"y":247}}";
-    var urlparams;
+    var urlparams = '';
     switch(actiontype)
     {
         case 'addTask':
@@ -1179,7 +1179,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
     }
     //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
 
-
+        if(urlparams != ''){
         Ext.Ajax.request({
             url: "processes_Ajax.php"+ urlparams,
             success: function(response) {
@@ -1221,6 +1221,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                 //Ext.Msg.alert ('Failure');
             }
             });
+        }
 }
 
 MyWorkflow.prototype.saveTask= function(actiontype,xpos,ypos)
