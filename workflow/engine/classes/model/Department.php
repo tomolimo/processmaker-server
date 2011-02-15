@@ -415,9 +415,9 @@ function getDepartments( $DepParent )  {
         $manager = $oDepartment->getDepManager();
         if ($manager != ''){
           $UserUID = $RBAC->load($manager);
-          $node['DEP_MANAGER_USERNAME'] = $UserUID['USR_USERNAME'];
-          $node['DEP_MANAGER_FIRSTNAME'] = $UserUID['USR_FIRSTNAME'];
-          $node['DEP_MANAGER_LASTNAME'] = $UserUID['USR_LASTNAME'];
+          $node['DEP_MANAGER_USERNAME'] = isset($UserUID['USR_USERNAME'])?$UserUID['USR_USERNAME']:'';
+          $node['DEP_MANAGER_FIRSTNAME'] = isset($UserUID['USR_FIRSTNAME'])?$UserUID['USR_FIRSTNAME']:'';
+          $node['DEP_MANAGER_LASTNAME'] = isset($UserUID['USR_LASTNAME'])?$UserUID['USR_FIRSTNAME']:'';
         }else{
           $node['DEP_MANAGER_USERNAME'] = '';	
           $node['DEP_MANAGER_FIRSTNAME'] = '';

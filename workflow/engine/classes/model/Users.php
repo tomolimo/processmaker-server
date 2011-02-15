@@ -97,6 +97,14 @@ public function userExists($UsrUid)
         throw(new Exception( "The row '" . $UsrUid . "' in table USER doesn't exist!" ));
       }
     }
+    catch (PropelException $e){  //capture invalid birthday date and replace by null
+    	$msg = $e->getMessage();
+    	if (strpos('Unable to parse value of [usr_birthday]', $msg) != -1) {
+    		$oRow->setUsrBirthday(null);
+    		$oRow->save();
+    		return $this->load($UsrUid);
+    	}
+    }
     catch (Exception $oError) {
       throw($oError);
     }

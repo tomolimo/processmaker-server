@@ -245,7 +245,6 @@ switch ($_POST['action'])
   case 'updateDepartment':
   	try{
   	  $dep_name = $_REQUEST['name'];
-  	  echo $dep_name;
   	  $dep_uid = $_REQUEST['uid'];
   	  $dep_manager = $_REQUEST['manager'];
   	  $dep_status = $_REQUEST['status'];
