@@ -4028,11 +4028,11 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="USR_BIRTHDAY" type="DATE" required="true" >
+    <column name="USR_BIRTHDAY" type="DATE" required="false" >
       <vendor type="mysql">
         <parameter name="Field" value="USR_BIRTHDAY"/>
         <parameter name="Type" value="date"/>
-        <parameter name="Null" value="NO"/>
+        <parameter name="Null" value="YES"/>
         <parameter name="Key" value=""/>
         <!-- <parameter name="Default" value="0000-00-00"/> -->
         <parameter name="Extra" value=""/>

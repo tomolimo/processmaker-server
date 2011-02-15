@@ -106,7 +106,7 @@ class UsersMapBuilder {
 
 		$tMap->addColumn('USR_RESUME', 'UsrResume', 'string', CreoleTypes::VARCHAR, true, 100);
 
-		$tMap->addColumn('USR_BIRTHDAY', 'UsrBirthday', 'int', CreoleTypes::DATE, true, null);
+		$tMap->addColumn('USR_BIRTHDAY', 'UsrBirthday', 'int', CreoleTypes::DATE, false, null);
 
 		$tMap->addColumn('USR_ROLE', 'UsrRole', 'string', CreoleTypes::VARCHAR, false, 32);
 
