@@ -16,7 +16,7 @@ new Ext.KeyMap(document, {
 });
 
 Ext.onReady ( function() {
-  var _BROWSER = getBrowserInf();
+  //var _BROWSER = getBrowserInf();
 
   workflow  = new MyWorkflow("paintarea");
   workflow.setEnableSmoothFigureHandling(false);

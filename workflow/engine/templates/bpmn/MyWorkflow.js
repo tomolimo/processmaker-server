@@ -1163,7 +1163,6 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             //if(typeof oNewShape.workflow != 'undefined' &&  oNewShape.workflow != null)
             //    tas_uid = oNewShape.workflow.taskUid[0].value;
             var evn_type = oNewShape.type;
-            var mode = oNewShape.mode;
             var evn_uid = oNewShape.id;
             urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+evn_type+'","position":'+pos+',"mode":"'+mode+'","evn_uid":"'+evn_uid+'"}';
             break;
@@ -1178,7 +1177,6 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             var mode = oNewShape.mode;
             urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+gat_uid +'","gat_type":"'+gat_type+'","position":'+pos+',"mode":"'+mode+'"}';
             break;
-        
     }
     //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
 
@@ -1187,37 +1185,35 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             url: "processes_Ajax.php"+ urlparams,
             success: function(response) {
                 //Ext.Msg.alert (response.responseText);
-                  if(response.responseText != 1 && response.responseText != "")
-                   {
-                        this.workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
-                        oNewShape.html.id = this.workflow.newTaskInfo.uid;
-                        oNewShape.id      = this.workflow.newTaskInfo.uid;
-                            if(oNewShape.type == 'bpmnTask' && oNewShape.boundaryEvent != true){
-                                oNewShape.taskName = this.workflow.newTaskInfo.label;
-                                workflow.redrawTaskText(oNewShape);
-                                //After Figure is added, Update Start Event connected to Task
-                                if(typeof this.workflow.preSelectedObj != 'undefined' )
-                                  {
-                                      var preSelectedFigure = this.workflow.preSelectedObj;
-                                      if(preSelectedFigure.type.match(/Start/) && preSelectedFigure.type.match(/Event/))
-                                        this.workflow.saveEvents(preSelectedFigure,oNewShape.id);
-
-                                      if(preSelectedFigure.type.match(/Task/))
-                                         this.workflow.saveRoute(preSelectedFigure,oNewShape);
-
-                                      if (preSelectedFigure.type.match(/Gateway/)) 
-                                         //preSelectedFigure.rou_type = 'SEQUENTIAL';
-                                        this.workflow.saveRoute(preSelectedFigure,oNewShape);
-                                      
-                                      if (preSelectedFigure.type.match(/Inter/)) {
-                                         //preSelectedFigure.rou_type = 'SEQUENTIAL';
-                                        this.workflow.saveEvents(preSelectedFigure,oNewShape);
-                                      }
-                                  }
-                            }
-                            else if(oNewShape.type == 'bpmnSubProcess'){
-                                oNewShape.subProcessName = this.workflow.newTaskInfo.label;
-                            }
+                  if(response.responseText != 1 && response.responseText != ""){
+                    this.workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
+                    oNewShape.html.id = this.workflow.newTaskInfo.uid;
+                    oNewShape.id      = this.workflow.newTaskInfo.uid;
+                    if(oNewShape.type == 'bpmnTask' && oNewShape.boundaryEvent != true){
+                      oNewShape.taskName = this.workflow.newTaskInfo.label;
+                      workflow.redrawTaskText(oNewShape);
+                      //After Figure is added, Update Start Event connected to Task
+                      if(typeof this.workflow.preSelectedObj != 'undefined' ){
+                        var preSelectedFigure = this.workflow.preSelectedObj;
+                        if(preSelectedFigure.type.match(/Start/) && preSelectedFigure.type.match(/Event/))
+                          this.workflow.saveEvents(preSelectedFigure,oNewShape.id);
+                        else if(preSelectedFigure.type.match(/Task/))
+                          this.workflow.saveRoute(preSelectedFigure,oNewShape);
+                        else if (preSelectedFigure.type.match(/Gateway/))
+                        //preSelectedFigure.rou_type = 'SEQUENTIAL';
+                          this.workflow.saveRoute(preSelectedFigure,oNewShape);
+                        else if (preSelectedFigure.type.match(/Inter/)) {
+                          //preSelectedFigure.rou_type = 'SEQUENTIAL';
+                          this.workflow.saveEvents(preSelectedFigure,oNewShape);
+                        }
+                      }
+                    }
+                    else if(oNewShape.type == 'bpmnSubProcess'){
+                      oNewShape.subProcessName = this.workflow.newTaskInfo.label;
+                    }
+                    else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Start/)){
+                      workflow.saveEvents(oNewShape);
+                    }
                }
             },
             failure: function(){

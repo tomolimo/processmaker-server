@@ -111,8 +111,10 @@ class Event extends BaseEvent {
           }
           else {
             $oEvent->setTasUid('');
-            $oEvent->setEvnTasUidTo( $aData['EVN_TAS_UID_TO'] );
-            $oEvent->setEvnTasUidFrom( $aData['EVN_TAS_UID_FROM'] );
+            if(isset($aData['EVN_TAS_UID_TO']))
+              $oEvent->setEvnTasUidTo( $aData['EVN_TAS_UID_TO'] );
+            if(isset($aData['EVN_TAS_UID_FROM']))
+              $oEvent->setEvnTasUidFrom( $aData['EVN_TAS_UID_FROM'] );
           }
       }
 

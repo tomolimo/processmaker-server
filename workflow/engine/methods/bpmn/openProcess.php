@@ -96,13 +96,31 @@
    $countRoutes = count($fields['TRANSITION']);
    foreach($oData->event as $id => $value)
    {
-       if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] == '' && $value['EVN_TAS_UID_TO'] == ''){
+       if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] != '' && $value['EVN_TAS_UID_TO'] != ''){  //Check for Intermediate Events
+         $evn_uid = $value['EVN_UID'];
+         $idTaskFrom = $value['EVN_TAS_UID_FROM'];
+         $idTaskTo = $value['EVN_TAS_UID_TO'];
+
          $fields['EVENTS'][$countEvent]['0'] = $value['EVN_UID'];
          $fields['EVENTS'][$countEvent]['1'] = $value['EVN_TYPE'];
          $fields['EVENTS'][$countEvent]['2'] = $value['EVN_POSX'];
          $fields['EVENTS'][$countEvent]['3'] = $value['EVN_POSY'];
          $fields['EVENTS'][$countEvent]['4'] = $value['TAS_UID'];
          $countEvent               = $countEvent + 1;
+
+         $fields['TRANSITION'][$countRoutes]['0']= G::generateUniqueID();
+         $fields['TRANSITION'][$countRoutes]['1']= $idTaskFrom;
+         $fields['TRANSITION'][$countRoutes]['2']= $evn_uid;
+         $fields['TRANSITION'][$countRoutes]['3']= '1';
+         $fields['TRANSITION'][$countRoutes]['4']= '2';
+         $countRoutes              = $countRoutes + 1;
+
+         $fields['TRANSITION'][$countRoutes]['0']= G::generateUniqueID();
+         $fields['TRANSITION'][$countRoutes]['1']= $evn_uid;
+         $fields['TRANSITION'][$countRoutes]['2']= $idTaskTo;
+         $fields['TRANSITION'][$countRoutes]['3']= '2';
+         $fields['TRANSITION'][$countRoutes]['4']= '1';
+         $countRoutes              = $countRoutes + 1;
        }
        else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_TO'] != ''){  //Check for Intermediate Events
          $evn_uid = $value['EVN_UID'];
@@ -122,7 +140,33 @@
          $fields['TRANSITION'][$countRoutes]['4']= '1';
          $countRoutes              = $countRoutes + 1;
        }
-   }
+       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] != ''){  //Check for Intermediate Events
+         $evn_uid = $value['EVN_UID'];
+         $idTask = $value['EVN_TAS_UID_FROM'];
+
+         $fields['EVENTS'][$countEvent]['0'] = $value['EVN_UID'];
+         $fields['EVENTS'][$countEvent]['1'] = $value['EVN_TYPE'];
+         $fields['EVENTS'][$countEvent]['2'] = $value['EVN_POSX'];
+         $fields['EVENTS'][$countEvent]['3'] = $value['EVN_POSY'];
+         $fields['EVENTS'][$countEvent]['4'] = $value['TAS_UID'];
+         $countEvent               = $countEvent + 1;
+
+         $fields['TRANSITION'][$countRoutes]['0']= G::generateUniqueID();
+         $fields['TRANSITION'][$countRoutes]['1']= $idTask;
+         $fields['TRANSITION'][$countRoutes]['2']= $evn_uid;
+         $fields['TRANSITION'][$countRoutes]['3']= '1';
+         $fields['TRANSITION'][$countRoutes]['4']= '2';
+         $countRoutes              = $countRoutes + 1;
+       }
+       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] == '' && $value['EVN_TAS_UID_TO'] == ''){
+         $fields['EVENTS'][$countEvent]['0'] = $value['EVN_UID'];
+         $fields['EVENTS'][$countEvent]['1'] = $value['EVN_TYPE'];
+         $fields['EVENTS'][$countEvent]['2'] = $value['EVN_POSX'];
+         $fields['EVENTS'][$countEvent]['3'] = $value['EVN_POSY'];
+         $fields['EVENTS'][$countEvent]['4'] = $value['TAS_UID'];
+         $countEvent               = $countEvent + 1;
+       }
+    }
 
    //Get all the standalone Gateway
    $countGateway = count($fields['GATEWAYS']);

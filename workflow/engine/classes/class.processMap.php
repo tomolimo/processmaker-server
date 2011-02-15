@@ -6456,7 +6456,6 @@ function saveExtddEvents($oData)
   $aData['EVN_POSX']   = $oData->position->x;
   $aData['EVN_POSY']   = $oData->position->y;
 
-  $mode   = $oData->mode;
   $aData['EVN_STATUS'] = 'ACTIVE';
   $aData['EVN_WHEN']   = '1';
   $aData['EVN_ACTION'] = '';
@@ -6467,18 +6466,16 @@ function saveExtddEvents($oData)
   if(preg_match("/Start/", $aData['EVN_TYPE'])){
     $aData['EVN_RELATED_TO'] = 'SINGLE';
   }
-  if($mode == 'ddEvent'){
-       $sEvn_uid   = $oData->evn_uid;
-       $oEventData = EventPeer::retrieveByPK($sEvn_uid);
-      if (is_null($oEventData)) {
-        $sEvn_uid =  $oEvent->create($aData);
-      }else{
-        $aData['EVN_UID'] = $sEvn_uid;
-        $oEvent->update($aData); 
-      }
-   }
-   $oEncode->uid = $sEvn_uid;
-   $oJSON = new Services_JSON ( );
+  $sEvn_uid   = $oData->evn_uid;
+  $oEventData = EventPeer::retrieveByPK($sEvn_uid);
+  if (is_null($oEventData)) {
+    $sEvn_uid =  $oEvent->create($aData);
+  }else{
+    $aData['EVN_UID'] = $sEvn_uid;
+    $oEvent->update($aData); 
+  }
+  $oEncode->uid = $sEvn_uid;
+  $oJSON = new Services_JSON ( );
    return $oJSON->encode($oEncode);
  }
 

@@ -308,33 +308,27 @@ InputPort.prototype.onDrop = function (port) {
       }
       //Routing from task to task
       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
-        preObj = this.workflow.currentSelection;
+        preObj = workflow.currentSelection;
         newObj = port.parentNode;
         newObj.conn = _4070.connection;
         newObj.sPortType =port.properties.name;
         preObj.sPortType =this.properties.name;
-        this.workflow.saveRoute(newObj,preObj);
+        workflow.saveRoute(newObj,preObj);
       }
       //Routing from task to gateway
       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){
         var shape = new Array();
         shape.type = '';
-        preObj = this.workflow.currentSelection;
+        preObj = workflow.currentSelection;
         newObj = port.parentNode;
-        this.workflow.saveRoute(newObj,shape);
+        workflow.saveRoute(newObj,shape);
       }
       //Routing from task to Intermediate event
       else if(port.parentNode.type.match(/Inter/) && port.parentNode.type.match(/Event/) && bpmnType.match(/Task/)){
-        var taskFrom = workflow.getStartEventConn(this,'targetPort','OutputPort');
-        var taskTo =  workflow.getStartEventConn(this,'sourcePort','InputPort');
-        if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined'){
-          preObj.type = 'Task';
-          preObj.taskFrom = taskFrom[0].value;
-          preObj.taskTo = taskTo[0].value;
-          //save Event First
-          tas_uid = port.parentNode.id;
-          this.workflow.saveEvents(preObj,workflow.currentSelection);
-        }
+        workflow.saveEvents(port.parentNode);
+      }
+      else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
+        workflow.saveEvents(workflow.currentSelection);
       }
     }
 };
@@ -374,19 +368,22 @@ OutputPort.prototype.onDrop = function (port) {
           var newObj = port.parentNode;
           newObj.conn = _4070.connection;
           this.workflow.saveRoute(preObj,newObj);
-       }/*else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
-          var taskFrom = workflow.getStartEventConn(this,'sourcePort','InputPort');
-          var taskTo =  workflow.getStartEventConn(this,'targetPort','OutputPort');
+       }else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
+          //var taskFrom = workflow.getStartEventConn(this,'sourcePort','InputPort');
+          //var taskTo =  workflow.getStartEventConn(this,'targetPort','OutputPort');
 
-          if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined'){
-             preObj.type = 'Task';
-             preObj.taskFrom = taskFrom[0].value;
-             preObj.taskTo = taskTo[0].value;
+          //if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined'){
+             //preObj.type = 'Task';
+             //preObj.taskFrom = taskFrom[0].value;
+             //preObj.taskTo = taskTo[0].value;
              //save Event First
-             tas_uid = port.parentNode.id;
-             this.workflow.saveEvents(workflow.currentSelection,preObj);
-          }
-       }*/else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
+           //  tas_uid = port.parentNode.id;
+             this.workflow.saveEvents(workflow.currentSelection);
+         // }
+       }else if(port.parentNode.type.match(/Event/) && port.parentNode.type.match(/Inter/) && bpmnType.match(/Task/)){
+          this.workflow.saveEvents(port.parentNode);
+       }
+       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
            preObj = this.workflow.currentSelection;
            newObj = port.parentNode;
            newObj.conn = _4070.connection;
@@ -432,14 +429,13 @@ this.command.setNewPorts(_410d,line.getTarget());
 //If Input Port /Output Port is connected to respective ports, then should not connected
 if(this.command.newSourcePort.type == this.command.newTargetPort.type)
     return;
-else
-    {
-        this.command.newTargetPort.parentNode.conn = this.command.con;
-  this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
-  this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
-        this.command.newTargetPort.parentNode.conn = this.command.con;
-        this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
-        this.getWorkflow().getCommandStack().execute(this.command);
+else{
+      this.command.newTargetPort.parentNode.conn = this.command.con;
+      this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
+      this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
+      this.command.newTargetPort.parentNode.conn = this.command.con;
+      this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
+      this.getWorkflow().getCommandStack().execute(this.command);
     }
 }
 this.command=null;
@@ -765,6 +761,9 @@ bpmnTask.prototype.addShapes = function (oStore) {
         conn.setTarget(newShape.getPort("input2"));
         conn.setSource(workflow.currentSelection.getPort("output1"));
         workflow.addFigure(conn);
+        newShape.conn = conn;
+        newShape.actiontype = 'addEvent';
+        workflow.saveShape(newShape);
     }
     if (newShape.type.match(/Task/)) {
         conn.setTarget(newShape.getPort("input2"));
