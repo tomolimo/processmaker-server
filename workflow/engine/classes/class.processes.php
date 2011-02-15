@@ -2123,7 +2123,7 @@ class Processes {
   */
   function serializeProcess ( $sProUid = '') {
     $oProcess = new Process( );
-    $oData->process           = $this->getProcessRow( $sProUid, true );
+    $oData->process           = $this->getProcessRow( $sProUid, false );
     $oData->tasks             = $this->getTaskRows( $sProUid );
     $oData->routes            = $this->getRouteRows( $sProUid );
     $oData->lanes             = $this->getLaneRows( $sProUid );
