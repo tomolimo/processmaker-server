@@ -1164,7 +1164,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             //    tas_uid = oNewShape.workflow.taskUid[0].value;
             var evn_type = oNewShape.type;
             var evn_uid = oNewShape.id;
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+evn_type+'","position":'+pos+',"mode":"'+mode+'","evn_uid":"'+evn_uid+'"}';
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+evn_type+'","position":'+pos+',"evn_uid":"'+evn_uid+'"}';
             break;
         case 'updateEvent':
             var evn_uid = oNewShape.id
