@@ -25,6 +25,11 @@ function getProcessList() {
   $calendar    = new Calendar ( );
   $oProcess = new Process ( );
   $oCase = new Cases ( );
+  
+  $start = 0;
+  $limit = '';
+  $proData = $oProcess->getAllProcesses($start, $limit);
+  
   $bCanStart = $oCase->canStartCase ( $_SESSION ['USER_LOGGED'] );
   if ($bCanStart) {
     $processListInitial = $oCase->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category' );

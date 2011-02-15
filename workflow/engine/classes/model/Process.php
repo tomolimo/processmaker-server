@@ -472,6 +472,22 @@ class Process extends BaseProcess {
       return 0;
   }
 
+   function lookingLanguageProcess( $ProUid , $getAllLang=false) {
+    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+        
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn(ContentPeer::CON_CATEGORY);
+    $c->addSelectColumn(ContentPeer::CON_VALUE);
+    $c->add(ContentPeer::CON_ID, $ProUid );
+    if(!$getAllLang) $c->add(ContentPeer::CON_LANG, $lang );
+    $rs = ProcessPeer::doSelectRS($c);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    return ($row);
+  }
+
   function getAllProcesses($start, $limit, $category=NULL, $processName=NULL)
   {
     require_once PATH_RBAC . "model/RbacUsers.php";
@@ -511,6 +527,11 @@ class Process extends BaseProcess {
     $uids=array();
     while( $oDataset->next() ) {
       $processes[] = $oDataset->getRow();
+      $auxData = $oDataset->getRow();
+      ////we are checking if it has the title in some language
+      if(!is_array($this->lookingLanguageProcess( $auxData['PRO_UID']))){
+       $this->load($auxData['PRO_UID']);
+      }
       $uids[] = $processes[sizeof($processes)-1]['PRO_UID'];
     }
 
