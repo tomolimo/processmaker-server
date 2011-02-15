@@ -323,6 +323,12 @@ InputPort.prototype.onDrop = function (port) {
         newObj = port.parentNode;
         workflow.saveRoute(newObj,shape);
       }
+      //Routing from gateway to task
+      else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/)){
+        preObj = this.workflow.currentSelection;
+        newObj = port.parentNode;
+        this.workflow.saveRoute(preObj,newObj);
+      }
       //Routing from task to Intermediate event
       else if(port.parentNode.type.match(/Inter/) && port.parentNode.type.match(/Event/) && bpmnType.match(/Task/)){
         workflow.saveEvents(port.parentNode);
@@ -395,6 +401,11 @@ OutputPort.prototype.onDrop = function (port) {
            shape.type = '';
            preObj = this.workflow.currentSelection;
            this.workflow.saveRoute(preObj,shape);
+       }
+       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){ //Routing from task to gateway
+           newObj = port.parentNode;
+           preObj = this.workflow.currentSelection;
+           this.workflow.saveRoute(newObj,preObj);
        }
     }
 };
@@ -749,8 +760,8 @@ bpmnTask.prototype.addShapes = function (oStore) {
         conn.setTarget(newShape.getPort("input2"));
         conn.setSource(workflow.currentSelection.getPort("output1"));
         workflow.addFigure(conn);
-        //newShape.actiontype = 'addGateway';
-        //workflow.saveShape(newShape);
+        newShape.actiontype = 'addGateway';
+        workflow.saveShape(newShape);
     }
     else if (newShape.type.match(/Start/)) {
         conn.setTarget(newShape.getPort("output1"));

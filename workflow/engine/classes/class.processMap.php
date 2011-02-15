@@ -1462,7 +1462,7 @@ class processMap {
     try {
           $oGateway = new Gateway ( );
           $aData = array();
-          $aData['PRO_UID'] = $oData->pro_uid;
+          $aData['PRO_UID']  = $oData->pro_uid;
           $aData['GAT_X']    = $oData->position->x;
           $aData['GAT_Y']    = $oData->position->y;
           $aData['GAT_TYPE'] = $oData->gat_type;
@@ -1472,6 +1472,8 @@ class processMap {
             $sGat_uid =  $oGateway->create($aData);
           }else{
             $aData['GAT_UID'] = $sGat_uid;
+            $aData['TAS_UID'] = $oData->tas_from;
+            $aData['GAT_NEXT_TASK'] = $oData->tas_to;
             $oGateway->update($aData);
           }
           $oEncode->uid = $sGat_uid;

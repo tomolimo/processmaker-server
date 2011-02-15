@@ -1174,8 +1174,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
        case 'addGateway':
             var gat_uid = oNewShape.id
             var gat_type = oNewShape.type;
-            var mode = oNewShape.mode;
-            urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+gat_uid +'","gat_type":"'+gat_type+'","position":'+pos+',"mode":"'+mode+'"}';
+            urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+gat_uid +'","gat_type":"'+gat_type+'","position":'+pos+'}';
             break;
     }
     //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
@@ -1217,6 +1216,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)){
                       workflow.saveEvents(oNewShape);
                     }
+                            else if(oNewShape.type.match(/Gateway/)){
+                                workflow.saveGateways(oNewShape);
+                            }
                }
             },
             failure: function(){
@@ -1451,6 +1453,77 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
 }
 
 /**
+ * save Gateway depending on the Shape Type
+ * @Param  oGateway     Object
+ * @Param  sTaskUID      string
+ * @Author Safan Maredia
+ */
+MyWorkflow.prototype.saveGateways = function(oGateway){
+    var task_uid      = new Array();
+    var next_task_uid = new Array();
+    var urlparams     = '';
+    var xpos = oGateway.x;
+    var ypos = oGateway.y;
+    var pos = '{"x":'+xpos+',"y":'+ypos+'}';
+
+    var ports = oGateway.getPorts();
+        var len =ports.data.length;
+        //Get all the connection of the shape
+        var conn = new Array();
+        var count1 = 0;
+        var count2 = 0;
+        for(var i=0; i<=len; i++){
+            if(typeof ports.data[i] === 'object')
+                conn[i] = ports.data[i].getConnections();
+        }
+        //Get ALL the connections for the specified PORT
+        for(i = 0; i< conn.length ; i++){
+          if(typeof conn[i] != 'undefined')
+            for(var j = 0; j < conn[i].data.length ; j++){
+              if(typeof conn[i].data[j] != 'undefined'){
+                if(conn[i].data[j].sourcePort.parentNode.type != oGateway.type){
+                  // task_uid[count1] = new Array();
+                   task_uid = conn[i].data[j].sourcePort.parentNode.id;
+                   count1++;
+                }
+                if(conn[i].data[j].targetPort.parentNode.type != oGateway.type){
+                  // task_uid[count2] = new Array();
+                  next_task_uid = conn[i].data[j].targetPort.parentNode.id;
+                  //count2++;
+                }
+             }
+          }
+        }
+    // var staskUid     = 	Ext.util.JSON.encode(task_uid);
+    // var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
+     urlparams = '?action=addGateway&data={"pro_uid":"'+ pro_uid +'","tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","gat_type":"'+oGateway.type+'","gat_uid":"'+oGateway.id+'","position":'+pos+'}';
+     if(urlparams != ''){
+        Ext.Ajax.request({
+                url: "processes_Ajax.php"+ urlparams,
+                success: function(response) {
+                    if(response.responseText != '')
+                      {
+                         // workflow.currentSelection.id = response.responseText;
+                        /*if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
+                           workflow.currentSelection.id = response.responseText;
+                           var newObj = workflow.currentSelection;
+                           var preObj = new Array();
+                           preObj.type = 'bpmnTask';
+                           preObj.id = task_uid[0];
+                           newObj.evn_uid = workflow.currentSelection.id;
+                           newObj.task_to = next_task_uid[0];
+                           this.workflow.saveRoute(preObj,newObj);
+                         }*/
+                      }
+                },
+                failure: function(){
+                    Ext.Msg.alert ('Failure');
+                }
+            });
+    }
+}
+
+/**
  * save Event depending on the Shape Type
  * @Param  oShape     Object
  * @Param  sPort      string
@@ -1644,8 +1717,8 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
     var staskUid     = 	Ext.util.JSON.encode(task_uid);
     var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
     var sGatUid      =  preObj.id;
-    var sGatType      =  preObj.type;
-    if(staskUid != '')
+    var sGatType     =  preObj.type;
+    if(task_uid.length > 0 && next_task_uid.length > 0)
         {
             Ext.Ajax.request({
                     url: "patterns_Ajax.php",
@@ -1684,6 +1757,8 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                         }
                 });
         }
+    else
+        workflow.saveGateways(preObj);
 }
 
 MyWorkflow.prototype.deleteRoute = function(oConn,iVal){

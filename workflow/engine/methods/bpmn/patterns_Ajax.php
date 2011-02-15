@@ -44,7 +44,6 @@ if($aData['ROU_TYPE'] != 'SEQUENTIAL')
     $aGatewayFields['GAT_NEXT_TASK']  = $aData['ROU_NEXT_TASK'][0];
     $aGatewayFields['GAT_TYPE']  = $aData['GAT_TYPE'];
     $oGateway->update($aGatewayFields);
-    die;
     //$sGatewayUID   = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
     //echo $sGatewayUID.'|';
 }
@@ -54,6 +53,7 @@ else
 G::LoadClass('tasks');
 $oTasks = new Tasks();
 $rou_id = 0;
+$aFields['GAT_UID']          = $aData['GAT_UID'];
 switch ($aData['action']) {
 	case 'savePattern':
 	  //if ($aData['ROU_TYPE'] != $aData['ROU_TYPE_OLD'])
