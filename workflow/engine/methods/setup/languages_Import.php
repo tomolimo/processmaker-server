@@ -51,9 +51,24 @@ try {
   G::LoadClass('languages');
   G::LoadClass('configuration');
   
+  $languageFile = $_FILES['form']['tmp_name']['LANGUAGE_FILENAME'];
+  $languageFilename = $_FILES['form']['name']['LANGUAGE_FILENAME'];
+
+  if (substr_compare($languageFilename, ".gz", -3, 3, true) == 0) {
+    $zp = gzopen($languageFile, "r");
+    $languageFile = tempnam(__FILE__, '');
+    $handle = fopen($languageFile, "w");
+    while (!gzeof($zp)) {
+      $data = gzread($zp, 1024);
+      fwrite($handle, $data);
+    }
+    gzclose($zp);
+    fclose($handle);
+  }
+
   $languages     = new languages();
   $configuration = new Configurations;
-  $importResults = $languages->importLanguage($_FILES['form']['tmp_name']['LANGUAGE_FILENAME']);
+  $importResults = $languages->importLanguage($languageFile);
 
   //G::SendTemporalMessage('IMPORT_LANGUAGE_SUCCESS', 'info', 'labels');
   //G::header('location: languages');
