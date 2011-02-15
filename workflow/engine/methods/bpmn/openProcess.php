@@ -57,7 +57,7 @@
        $arrayTasks[$countTasks]['4'] = $value['TAS_WIDTH'];
        $arrayTasks[$countTasks]['5'] = $value['TAS_HEIGHT'];
        $arrayTasks[$countTasks]['6'] = $value['TAS_BOUNDARY'];
-       if($value['TAS_START'] == 'TRUE'){
+      /* if($value['TAS_START'] == 'TRUE'){
          $arrayEvents[$count]['0']      = G::generateUniqueID();
          if($value['TAS_EVN_UID'] == '')
            {
@@ -84,7 +84,7 @@
          $arrayRoutes[$countRoutes]['4']= '2';
          $count                         = $count+ 1;
          $countRoutes                   = $countRoutes+ 1;
-     }
+     }*/
      $countTasks = $countTasks + 1;
     }
    }

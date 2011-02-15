@@ -463,6 +463,7 @@ class processMap {
       $oTrigger = new Triggers ( );
       $oRoute = new Route ( );
       $oGateway = new Gateway ( );
+      $oEvent   = new Event ( );
       $oSwimlaneElement = new SwimlanesElements ( );
       $oConfiguration = new Configuration ( );
       $oDbSource = new DbSource ( );
@@ -551,6 +552,17 @@ class processMap {
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
         $oGateway->remove($aRow ['GAT_UID']);
+        $oDataset->next();
+      }
+
+      //Delete the Event of process
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(EventPeer::PRO_UID, $sProcessUID);
+      $oDataset = EventPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while ($aRow = $oDataset->getRow()) {
+        $oEvent->remove($aRow ['EVN_UID']);
         $oDataset->next();
       }
 

@@ -752,12 +752,12 @@ bpmnTask.prototype.addShapes = function (oStore) {
         //newShape.actiontype = 'addGateway';
         //workflow.saveShape(newShape);
     }
-    if (newShape.type.match(/Start/)) {
+    else if (newShape.type.match(/Start/)) {
         conn.setTarget(newShape.getPort("output1"));
         conn.setSource(workflow.currentSelection.getPort("input2"));
         workflow.addFigure(conn);
     }
-    if (newShape.type.match(/Event/)) {
+    else if (newShape.type.match(/Event/)) {
         conn.setTarget(newShape.getPort("input2"));
         conn.setSource(workflow.currentSelection.getPort("output1"));
         workflow.addFigure(conn);
@@ -765,12 +765,12 @@ bpmnTask.prototype.addShapes = function (oStore) {
         newShape.actiontype = 'addEvent';
         workflow.saveShape(newShape);
     }
-    if (newShape.type.match(/Task/)) {
+    else if (newShape.type.match(/Task/)) {
         conn.setTarget(newShape.getPort("input2"));
         conn.setSource(workflow.currentSelection.getPort("output1"));
         workflow.addFigure(conn);
     }
-    if (newShape.type.match(/Annotation/)) {
+    else if (newShape.type.match(/Annotation/)) {
         conn.setTarget(newShape.getPort("input1"));
         conn.setSource(workflow.currentSelection.getPort("output2"));
         workflow.addFigure(conn);

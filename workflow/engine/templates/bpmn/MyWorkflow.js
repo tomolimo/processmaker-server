@@ -1214,6 +1214,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Start/)){
                       workflow.saveEvents(oNewShape);
                     }
+                    else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)){
+                      workflow.saveEvents(oNewShape);
+                    }
                }
             },
             failure: function(){
@@ -1506,16 +1509,16 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
                     if(response.responseText != '')
                       {
                          //Save Route
-                         if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
-                           workflow.currentSelection.id = response.responseText;
-                           var newObj = workflow.currentSelection;
-                           var preObj = new Array();
-                           preObj.type = 'bpmnTask';
-                           preObj.id = task_uid[0];
-                           newObj.evn_uid = workflow.currentSelection.id;
-                           newObj.task_to = next_task_uid[0];
-                           this.workflow.saveRoute(preObj,newObj);
-                         }
+//                         if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
+//                           workflow.currentSelection.id = response.responseText;
+//                           var newObj = workflow.currentSelection;
+//                           var preObj = new Array();
+//                           preObj.type = 'bpmnTask';
+//                           preObj.id = task_uid[0];
+//                           newObj.evn_uid = workflow.currentSelection.id;
+//                           newObj.task_to = next_task_uid[0];
+//                           this.workflow.saveRoute(preObj,newObj);
+//                         }
                       }
                 },
                 failure: function(){
@@ -1569,7 +1572,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
       }
       else if(preObj.type.match(/Task/) && newObj.type.match(/End/) && newObj.type.match(/Event/) || newObj.reverse == 1)
       {
-        this.deleteRoute(newObj.conn,1);
+        //this.deleteRoute(newObj.conn,1);
         if(newObj.reverse == 1)      //Reverse Routing
             task_uid[0]      = newObj.id;
         else
@@ -1818,6 +1821,7 @@ MyWorkflow.prototype.getDeleteCriteria = function()
 MyWorkflow.prototype.zoom = function(sType)
 {
    //workflow.zoomFactor = 1;
+   var loadMask = new Ext.LoadMask(document.body, {msg:'Zooming..'});
    var figures = workflow.getDocument().getFigures();
 
    var lines=workflow.getLines();
@@ -1828,73 +1832,59 @@ MyWorkflow.prototype.zoom = function(sType)
    var figSize = figures.getSize();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
- 
-
-   if(typeof fig.limitFlag == 'undefined' || fig.limitFlag == false)
-   {
+   loadMask.show();
+   if(typeof fig.limitFlag == 'undefined' || fig.limitFlag == false){
      fig.originalWidth = fig.getWidth();
      fig.originalHeight = fig.getHeight();
      fig.orgXPos = fig.getX();
      fig.orgYPos = fig.getY();
      fig.orgFontSize =fig.fontSize;
-
-     if(fig.boundaryEvent == true)
-        {
-          fig.orgx3Pos = fig.x3;
-          fig.orgy4Pos = fig.y4;
-          fig.orgy5Pos = fig.y5;
-        }
+     if(fig.boundaryEvent == true){
+       fig.orgx3Pos = fig.x3;
+       fig.orgy4Pos = fig.y4;
+       fig.orgy5Pos = fig.y5;
+     }
      fig.limitFlag = true;
    }
-
    //If zooming is 100% disable resizing of shapes again
-   if(sType == '1')
-       {
-            fig.limitFlag = false;
-       }
-       
+   if(sType == '1'){
+     fig.limitFlag = false;
+   }
    var width  = fig.originalWidth*sType;
    var height = fig.originalHeight*sType;
-   if(fig.boundaryEvent == true)
-        {
-          fig.x3 = fig.orgx3Pos *sType;
-          fig.y4 = fig.orgy4Pos *sType;
-          fig.y5 = fig.orgy5Pos *sType;
-        }
-
+   if(fig.boundaryEvent == true){
+     fig.x3 = fig.orgx3Pos *sType;
+     fig.y4 = fig.orgy4Pos *sType;
+     fig.y5 = fig.orgy5Pos *sType;
+   }
    var xPos =  fig.orgXPos * sType;
    var yPos =  fig.orgYPos * sType;
-   if(fig.type == 'bpmnTask')
-        {
-            fig.fontSize = parseInt(fig.orgFontSize) * sType;
-            //fig.bpmnText.drawStringRect(fig.taskName, fig.padleft, fig.padtop, fig.rectWidth, fig.rectheight, 'center');
-            fig.bpmnText.paint();
-        }
-   else if(fig.type == 'bpmnAnnotation')
-        {
-            fig.fontSize = parseInt(fig.orgFontSize) * sType;
-            fig.bpmnText.paint();
-        }
-        fig.setPosition(xPos,yPos);
-        fig.setDimension(width,height);
-        
+   if(fig.type == 'bpmnTask'){
+      fig.fontSize = parseInt(fig.orgFontSize) * sType;
+      //fig.bpmnText.drawStringRect(fig.taskName, fig.padleft, fig.padtop, fig.rectWidth, fig.rectheight, 'center');
+      fig.bpmnText.paint();
+    }
+    else if(fig.type == 'bpmnAnnotation'){
+      fig.fontSize = parseInt(fig.orgFontSize) * sType;
+      fig.bpmnText.paint();
+    }
+    fig.setPosition(xPos,yPos);
+    fig.setDimension(width,height);
    }
+   loadMask.hide();
 }
 
-MyWorkflow.prototype.redrawTaskText = function(fig)
-{
+MyWorkflow.prototype.redrawTaskText = function(fig){
   //Setting font minimum limit
   if(this.fontSize < 11)
-        this.fontSize = 11;
-   fig.paint();
+     this.fontSize = 11;
+  fig.paint();
 }
-
-MyWorkflow.prototype.redrawAnnotationText = function(fig,sType)
-{
+MyWorkflow.prototype.redrawAnnotationText = function(fig,sType){
   if(sType == 'in')
-      fig.fontSize = parseInt(fig.fontSize) + 4;
+    fig.fontSize = parseInt(fig.fontSize) + 4;
   else
-      fig.fontSize = parseInt(fig.fontSize) - 4;
+    fig.fontSize = parseInt(fig.fontSize) - 4;
 
   //Setting font minimum limit i.e. 11px
   if(fig.fontSize < 11)
