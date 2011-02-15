@@ -22,6 +22,9 @@ var G_Grid = function(oForm, sGridName) {
           this.aElements.push(new G_Text(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['
               + this.aFields[i].sFieldName));
           this.aElements[this.aElements.length - 1].validate = this.aFields[i].oProperties.validate;
+          if(this.aFields[i].oProperties.strTo) {
+            this.aElements[this.aElements.length - 1].strTo = this.aFields[i].oProperties.strTo;
+          }
           if (aFields[i].oProperties) {
             this.aElements[this.aElements.length - 1].mask = aFields[i].oProperties.mask;
           }
@@ -465,6 +468,9 @@ var G_Grid = function(oForm, sGridName) {
               case 'text':
                 this.aElements.push(new G_Text(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName));
                 this.aElements[this.aElements.length - 1].validate = this.aFields[i].oProperties.validate;
+                if(this.aFields[i].oProperties.strTo) {
+                  this.aElements[this.aElements.length - 1].strTo = this.aFields[i].oProperties.strTo;
+                }
               break;
               case 'currency':
                 this.aElements.push(new G_Currency(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['+ this.aFields[i].sFieldName));
@@ -836,6 +842,9 @@ var G_Grid = function(oForm, sGridName) {
               case 'text':
                 this.aElements.push(new G_Text(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName));
                 this.aElements[this.aElements.length - 1].validate = this.aFields[i].oProperties.validate;
+                if(this.aFields[i].oProperties.strTo) {
+                  this.aElements[this.aElements.length - 1].strTo = this.aFields[i].oProperties.strTo;
+                }
               break;
               case 'currency':
                 this.aElements.push(new G_Currency(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['+ this.aFields[i].sFieldName));
