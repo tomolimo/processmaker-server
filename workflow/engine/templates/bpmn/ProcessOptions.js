@@ -168,13 +168,20 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   });
  //tablesFieldsStore.load();
 
+  var expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template(
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {DYN_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{DYN_UID}');> </p>"
+    )
+  });
+
+
   var dynaformColumns = new Ext.grid.ColumnModel({
     defaults: {
       width: 90,
       sortable: true
     },
     columns: [
-      new Ext.grid.RowNumberer(),
+      expander,
       {
         header: _('ID_TITLE_FIELD'),
         dataIndex: 'DYN_TITLE',
@@ -200,14 +207,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         {
           return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
         }
-      },{
+      }/*,{
         sortable: false,
         width: 60,
         renderer: function(val, meta, record)
         {
           return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
         }
-      }
+      }*/
     ]
   });
 
@@ -241,9 +248,6 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     ]
   });
 
-
-
-
   var dynaformGrid = new Ext.grid.GridPanel({
     store: taskDynaform,
     id : 'mygrid',
@@ -259,6 +263,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     cm: dynaformColumns,
     stateful : true,
     stateId : 'grid',
+    plugins: expander,
     stripeRows: true,
     tbar: tb,
     bbar: new Ext.PagingToolbar({
@@ -345,15 +350,16 @@ ProcessOptions.prototype.addDynaform= function(_5625)
               fieldLabel:     _('ID_TYPE'),
               triggerAction:  'all',
               forceSelection: true,
-              name:           'ACTION',
+              //name:           'ACTION',
+              name:           'DYN_TYPE',
               displayField:   'name',
               valueField:     'value',
               value        : 'Normal',
               store:          new Ext.data.JsonStore({
                   fields : ['name', 'value'],
                   data   : [
-                      {name : _('ID_NORMAL'),   value: 'Normal'},
-                      {name : _('ID_GRID')  ,   value: 'Grid'},
+                      {name : _('ID_NORMAL'),   value: 'normal'},
+                      {name : _('ID_GRID')  ,   value: 'grid'},
                   ]
               })
            },{
@@ -439,9 +445,12 @@ ProcessOptions.prototype.addDynaform= function(_5625)
             //var sDynaType = getForm.DYN_SOURCE;
             if(getForm.DYN_SOURCE == 'blankDyna')
                 {
-                    var sAction   = getForm.ACTION;
+                    //var sAction   = getForm.ACTION;
                     var sTitle    = getForm.DYN_TITLE1;
                     var sDesc     = getForm.DYN_DESCRIPTION1;
+                    var sDynaformType     = getForm.DYN_TYPE;
+                    if(sDynaformType == 'normal')
+                        sDynaformType = 'xmlform';
                 }
             else
                 {
@@ -460,7 +469,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     sDesc     = getForm.DYN_DESCRIPTION2;
                 }
 
-                if(sTitle == '' || sAction == '')
+                if(sTitle == '')
                     PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
                 else
                     {
@@ -469,13 +478,13 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                       method: 'POST',
                       params:{
                           functions       : 'saveDynaform',
-                          ACTION          : sAction,
+                          ACTION          : 'normal',
                           FIELDS          : fieldname,
                           VARIABLES       : variable,
                           ADD_TABLE       : sAddTab,
                           PRO_UID         : pro_uid,
                           DYN_TITLE       : sTitle,
-                          DYN_TYPE        : 'xmlform',
+                          DYN_TYPE        : sDynaformType,
                           DYN_DESCRIPTION : sDesc
                       },
                       success: function(response) {
@@ -638,11 +647,16 @@ ProcessOptions.prototype.dbConnection = function()
           });
   dbStore.load({params:{start : 0 , limit : 10 }});
 
+  var expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template(
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {DBS_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{DBS_UID}');> </p>"
+    )
+  });
 
 
   var dbGridColumn =  new Ext.grid.ColumnModel({
       columns: [
-                new Ext.grid.RowNumberer(),
+               expander,
                     {
                         id: 'DBS_TYPE',
                         header: _('ID_TYPE'),
@@ -680,13 +694,13 @@ ProcessOptions.prototype.dbConnection = function()
                         editor: new Ext.form.TextField({
                             //allowBlank: false
                             })
-                    },{
+                    }/*,{
                             sortable: false,
                             renderer: function(val, meta, record)
                                {
                                     return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DBS_UID);
                                }
-                      }
+                      }*/
                 ]
      });
 
@@ -704,6 +718,7 @@ ProcessOptions.prototype.dbConnection = function()
         height   :380,
         layout: 'fit',
         cm: dbGridColumn,
+        plugins: expander,
         stripeRows: true,
         tbar: tb,
         bbar: new Ext.PagingToolbar({
@@ -1566,9 +1581,15 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
        buttonAlign : 'center'
     });
 
+ var expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template(
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {INP_DOC_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{INP_DOC_UID}');> </p>"
+    )
+  });
+
 var inputDocColumns = new Ext.grid.ColumnModel({
             columns: [
-                new Ext.grid.RowNumberer(),
+                expander,
                 {
                     id: 'INP_DOC_TITLE',
                     header: _('ID_TITLE'),
@@ -1617,6 +1638,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
         minHeight:400,
         height   :350,
         layout: 'fit',
+        plugins: expander,
         cm: inputDocColumns,
         stripeRows: true,
         tbar: tb,
@@ -1787,9 +1809,14 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             items: [btnAdd, btnRemove,btnEdit,btnProperties]
        });
 
+ var expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template(
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {OUT_DOC_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{OUT_DOC_UID}');> </p>"
+    )
+  });
   var outputDocColumns = new Ext.grid.ColumnModel({
             columns: [
-                new Ext.grid.RowNumberer(),
+                expander,
                 {
                     id: 'OUT_DOC_TITLE',
                     header: _('ID_TITLE'),
@@ -1808,13 +1835,13 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     editor: new Ext.form.TextField({
                     //allowBlank: false
                     })
-                },{
+                }/*,{
                     sortable: false,
                     renderer: function(val, meta, record)
                        {
                             return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.OUT_DOC_UID);
                        }
-                }
+                }*/
             ]
         });
 
@@ -1833,6 +1860,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         layout      : 'fit',
         cm          : outputDocColumns,
         stripeRows  : true,
+        plugins: expander,
         tbar        : tb,
         bbar: new Ext.PagingToolbar({
             pageSize: 10,
@@ -2252,10 +2280,6 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                 type: 'string'
             },
             {
-                name: 'REP_TAB_UID',
-                type: 'string'
-            },
-            {
                 name: 'FIELD_NAME',
                 type: 'string'
             },
@@ -2292,10 +2316,16 @@ ProcessOptions.prototype.addReportTable= function(_5625)
                            })
  });
   reportTableTypeStore.load();
-  
+
+ var expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template(
+        " <p><input type='button' value='UID' onclick=workflow.createUIDButton('{REP_TAB_UID}');> </p>"
+    )
+  });
+
   var reportColumns = new Ext.grid.ColumnModel({
             columns: [
-                new Ext.grid.RowNumberer(),
+                expander,
                 {
                     id: 'REP_TAB_TITLE',
                     header: _('ID_TITLE'),
@@ -2393,6 +2423,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         width       :420,
         height      :400,
         layout      : 'fit',
+        plugins: expander,
         cm          : reportColumns,
         stripeRows: true,
         tbar: tb,
