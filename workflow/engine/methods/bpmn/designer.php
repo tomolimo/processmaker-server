@@ -8,8 +8,6 @@
   $oHeadPublisher->addExtJsScript('bpmn/ProcessMapContext', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/designer', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/Annotation' );
-  $oHeadPublisher->addExtJsScript('bpmn/FlowConnector');
-  $oHeadPublisher->addExtJsScript('bpmn/GroupFigure');
   $oHeadPublisher->addExtJsScript('bpmn/bpmnShapes', true); //
   $oHeadPublisher->addExtJsScript('bpmn/LoopingSubProcess'); //
   $oHeadPublisher->addExtJsScript('bpmn/LoopingTask'); //
