@@ -690,9 +690,6 @@ Ext.onReady ( function() {
       this.workflow.contextX = e.xy[0];
       this.workflow.contextY = e.xy[1];
       var pmosExtObj = new pmosExt();
-      //Load all the process Data
-      pmosExtObj.loadEditProcess(this);
-      pmosExtObj.loadProcessCategory(this);
       this.contextCanvasMenu.showAt(e.getXY());
   }, this);
 
