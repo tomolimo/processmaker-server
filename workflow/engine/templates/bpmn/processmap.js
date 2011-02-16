@@ -264,7 +264,7 @@ Ext.onReady ( function() {
           ]
         })
       },{
-        text:'Edit Process',
+        text: _('ID_SWITCH_EDITOR'),
         iconCls: 'button_menu_ext ss_sprite ss_pencil',
         handler: function() {
           if(typeof pro_uid !== 'undefined') {

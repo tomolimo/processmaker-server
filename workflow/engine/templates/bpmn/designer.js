@@ -585,7 +585,6 @@ Ext.onReady ( function() {
       items: [{
           text: 'Edit Process',
           handler: ProcessMapObj.editProcess,
-          //icon: '/skins/ext/images/gray/shapes/more.gif',
           iconCls: 'button_menu_ext ss_sprite ss_page_white_edit',
           scope: this
       }, {

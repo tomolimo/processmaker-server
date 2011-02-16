@@ -693,24 +693,23 @@ MyWorkflow.prototype.AddEventInterContextMenu=function(_4093)
                             handler: MyWorkflow.prototype.toggleShapes
                         },
                         {
-                            text: 'Message :  Catch',
-                            type:'bpmnEventMessageRecInter',
-                            scope:_4093,
-                            handler: MyWorkflow.prototype.toggleShapes
-                        },
-                        {
                             text: 'Timer',
                             type:'bpmnEventTimerInter',
                             scope:_4093,
                             handler: MyWorkflow.prototype.toggleShapes
-                        },
+                        }
+                        /*
                         {
                             text: 'Intermediate Boundary Timer',
                             type:'bpmnEventBoundaryInter',
                             scope:_4093,
                             handler: MyWorkflow.prototype.toggleShapes
-                        }
-                        /*, {
+                        },{
+                            text: 'Message :  Catch',
+                            type:'bpmnEventMessageRecInter',
+                            scope:_4093,
+                            handler: MyWorkflow.prototype.toggleShapes
+                        }, {
                             text: 'Compensate',
                             type:'bpmnEventCompInter',
                             scope:_4093,
