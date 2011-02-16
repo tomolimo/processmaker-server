@@ -452,6 +452,7 @@ leimnud.event.add(window, 'load', function() {
     onChangeType(i);
     //onClickForeignKey(i);
   }
+  if (getObject('FIELDS')){
   getObject('FIELDS').onaddrow = function(iRow) {
     oAux = getGridField('FIELDS', iRow, 'FLD_NAME');
     leimnud.event.add(oAux, 'change', {method:changeToUpper,instance:oAux,event:true});
@@ -462,6 +463,7 @@ leimnud.event.add(window, 'load', function() {
     onChangeType(iRow);
     //onClickForeignKey(iRow);
   };
+  }
   
   
    leimnud.event.add(getField('ADD_TAB_CLASS_NAME'), 'click', function() {

@@ -259,29 +259,29 @@ public function loadByName($name) {
           foreach ($aFields as $aField) {
             switch ($aField['sType']) {
               case 'VARCHAR':
-                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
               break;
               case 'TEXT':
-                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
               break;
               case 'DATE':
-                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " ,"; // " DEFAULT '0000-00-00',";
+                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " ,"; // " DEFAULT '0000-00-00',";
               break;
               case 'INT':
-                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . ' ' . ($aField['bAI'] ? 'AUTO_INCREMENT' : "DEFAULT '0'") . ',';
+                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . ' ' . ($aField['bAI'] ? 'AUTO_INCREMENT' : "DEFAULT '0'") . ',';
                 if ($aField['bAI']) {
-                  if (!in_array('`' . $aField['sFieldName'] . '`', $aPKs)) {
-                    $aPKs[] = '`' . $aField['sFieldName'] . '`';
+                  if (!in_array('`' . strtoupper($aField['sFieldName']) . '`', $aPKs)) {
+                    $aPKs[] = '`' . strtoupper($aField['sFieldName']) . '`';
                   }
                 }
               break;
               case 'FLOAT':
-                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0',";
+                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0',";
               break;
             }
             if ($aField['bPrimaryKey'] == 1) {
-              if (!in_array('`' . $aField['sFieldName'] . '`', $aPKs)) {
-                $aPKs[] = '`' . $aField['sFieldName'] . '`';
+              if (!in_array('`' . strtoupper($aField['sFieldName']) . '`', $aPKs)) {
+                $aPKs[] = '`' . strtoupper($aField['sFieldName']) . '`';
               }
             }
           }
@@ -427,9 +427,9 @@ public function loadByName($name) {
                            'Default' => '');
           break;
           case 'DATE':
-            $aData = array('Type'    => 'DATE',
-                           'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => 'NULL'); // '0000-00-00');
+            $aData = array('Type'    => 'DATE', 'Null' => 'YES');
+                          // 'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+                          // 'Default' => 'NULL'); // '0000-00-00');
           break;
           case 'INT':
             $aData = array('Type'    => 'INT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
@@ -443,11 +443,13 @@ public function loadByName($name) {
                            'Default' => '0');
           break;
         }
-        $oDataBase->executeQuery($oDataBase->generateAddColumnSQL($sTableName, $aFieldToAdd['FLD_NAME'], $aData));
+        //echo $oDataBase->generateAddColumnSQL($sTableName, $aFieldToAdd['FLD_NAME'], $aData);
+        $oDataBase->executeQuery($oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData));
       }
       foreach ($aFieldsToDelete as $aFieldToDelete) {
-        $oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, $aFieldToDelete['FLD_NAME']));
+        $oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME'])));
       }
+      //die;
       $oDataBase->executeQuery($oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys));
       foreach ($aFieldsToAlter as $aFieldToAlter) {
         switch ($aFieldToAlter['FLD_TYPE']) {
@@ -462,9 +464,9 @@ public function loadByName($name) {
                            'Default' => '');
           break;
           case 'DATE':
-            $aData = array('Type'    => 'DATE',
-                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => 'NULL'); // '0000-00-00');
+            $aData = array('Type'    => 'DATE', 'Null' => 'YES');
+//                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
+//                           'Default' => 'NULL'); // '0000-00-00');
           break;
           case 'INT':
             $aData = array('Type'    => 'INT(' . (int)$aFieldToAlter['FLD_SIZE'] . ')',
@@ -478,7 +480,7 @@ public function loadByName($name) {
                            'Default' => '0');
           break;
         }
-        $oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, $aFieldToAlter['FLD_NAME'], $aData, $aFieldToAlter['FLD_NAME_OLD']));
+        $oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD'])));
       }
     }
     catch (Exception $oError) {
@@ -536,6 +538,7 @@ public function loadByName($name) {
       $aNotPKs  = array();
       $i        = 0;
       foreach($aFields as $iKey => $aField) {
+      	if ($aField['FLD_TYPE']=='DATE') $aField['FLD_NULL'] = '';
         $aColumn    = array('name'        => $aField['FLD_NAME'],
                             'phpName'     => $this->getPHPName($aField['FLD_NAME']),
                             'type'        => $aTypes[$aField['FLD_TYPE']],
@@ -992,8 +995,8 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
         case 'VARCHAR':
         case 'TEXT':
         case 'DATE':
-          if($aField['FLD_NULL']!=1)
-            eval('$oCriteria->add(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', \'(�_�_�)\', Criteria::NOT_EQUAL);');
+//          if($aField['FLD_NULL']!=1)
+//            eval('$oCriteria->add(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', \'(�_�_�)\', Criteria::NOT_EQUAL);');
         break;
         case 'INT';
         case 'FLOAT':
@@ -1001,6 +1004,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
         break;
       }
       //eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
+      //echo $oCriteria->toString();
       return $oCriteria;
     }
     catch (Exception $oError) {

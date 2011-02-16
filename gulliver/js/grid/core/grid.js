@@ -167,7 +167,10 @@ var G_Grid = function(oForm, sGridName) {
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 
               aObjects[0].setAttribute('id', newID);
-              //aObjects[0].setAttribute('value', '');
+              //Added by qennix
+              if (aObjects[0].type == 'text') aObjects[0].setAttribute('value', '');
+              if (aObjects[0].type == 'checkbox') aObjects[0].checked = false;
+              //End of Addition
               aObjects[0].name = newID;
               if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
                 aObjects[0].mergeAttributes(document.createElement("<INPUT id='" + newID + "' name='" + newID + "'/>"), false);              
