@@ -1300,13 +1300,9 @@ MyWorkflow.prototype.deleteSilently= function(oShape)
  */
 MyWorkflow.prototype.deleteShape= function(oShape)
 {
-    //Initializing variables
-
-    var pro_uid = this.getUrlVars();
     var shapeId = oShape.id;
     var actiontype = oShape.actiontype;
     var shapeName = '';
-
     switch(actiontype)
     {
        case 'deleteTask':
@@ -1324,19 +1320,27 @@ MyWorkflow.prototype.deleteShape= function(oShape)
            this.urlparameter = urlparams;
            shapeName = 'Annotation';
            break;
-       case 'saveStartEvent':
+       case 'deleteStartEvent':
            var task_detail = this.getStartEventConn(this.currentSelection,'targetPort','OutputPort');
+           var evn_uid = this.currentSelection.id;
            if(task_detail.length > 0){
                var tas_uid = task_detail[0].value;
                var tas_start = 'FALSE';
-               urlparams = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
-               this.urlparameter = urlparams;
-               shapeName = 'Start Event';
+               this.urlparameter = '?action=deleteStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'","evn_uid":"'+evn_uid+'"}';
            }
+           else
+               this.urlparameter = '?action=deleteEvent&data={"uid":"'+evn_uid+'"}';
+           shapeName = 'Start Event';
            break;
        case 'deleteEndEvent':
             shapeName = 'End Event';
-            oShape.workflow.getCommandStack().execute(new CommandDelete(oShape.workflow.getCurrentSelection()));
+            var evn_uid = this.currentSelection.id;
+            this.urlparameter = '?action=deleteEvent&data={"uid":"'+evn_uid+'"}';
+            break;
+       case 'deleteInterEvent':
+            shapeName = 'Intermediate Event';
+            var evn_uid = this.currentSelection.id;
+            this.urlparameter = '?action=deleteEvent&data={"uid":"'+evn_uid+'"}';
             break;
        case 'deleteGateway':
            shapeName = 'Gateway';
@@ -1344,36 +1348,66 @@ MyWorkflow.prototype.deleteShape= function(oShape)
            this.urlparameter = urlparams;
            break;
     }
-
-    //Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showResult);
-
-if(oShape.noAlert == null)
-    Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showResult);
-else
-    workflow.showResult('yes');
+if(typeof oShape.noAlert == 'undefined' || oShape.noAlert == null){
+  Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showAjaxDialog);
+}
+else{
+  Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showDialog);
+}
 }
 
-MyWorkflow.prototype.showResult = function(btn){
+MyWorkflow.prototype.showAjaxDialog = function(btn){
         //this.workflow.confirm = btn;
-        if(typeof workflow.urlparameter != 'undefined')
-        {
-           var url = workflow.urlparameter;
-           if(btn == 'yes')
-            {
-                Ext.Ajax.request({
-                        url: "processes_Ajax.php"+ url,
-                        success: function(response) {
-                                //Ext.Msg.alert (response.responseText);
-                        },
-                        failure: function(){
-                            Ext.Msg.alert ('Failure');
-                        }
-                        });
-                workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
-            }
-        }
-        //Ext.example.msg('Button Click', 'You clicked the {0} button', btn);
+        if(typeof workflow.urlparameter != 'undefined'){
+          var url = workflow.urlparameter;
+          if(btn == 'yes'){
+              //Check for End Event and delete from route table
+           if(workflow.currentSelection.type.match(/End/) && workflow.currentSelection.type.match(/Event/)){
+             var currentObj = workflow.currentSelection;
+             var ports = currentObj.getPorts();
+             var len =ports.data.length;
+             var conn = new Array();
+             for(var i=0; i<=len; i++){
+                if(typeof ports.data[i] === 'object')
+                   conn[i] = ports.data[i].getConnections();
+             }
+             for(i = 0; i< conn.length ; i++)
+             {
+                if(typeof conn[i] != 'undefined')
+                for(var j = 0; j < conn[i].data.length ; j++)
+                {
+                  if(typeof conn[i].data[j] != 'undefined'){
+                     if(conn[i].data[j].targetPort.parentNode.id == currentObj.id){
+                        route = conn[i].data[j];
+                     break;
+                   }
+                  }
+                }
+              }
+             if(typeof route != 'undefined'){
+               workflow.deleteRoute(route,1);
+             }
+           }
+           Ext.Ajax.request({
+              url: "processes_Ajax.php"+ url,
+                success: function(response) {
+                //Ext.Msg.alert (response.responseText);
+              },
+              failure: function(){
+                Ext.Msg.alert ('Failure');
+              }
+           });
+           workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
+         }
+      }
     };
+
+MyWorkflow.prototype.showDialog = function(btn){
+          if(btn == 'yes'){
+           workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
+         }
+    };
+
 
 /**
  * ExtJs Menu on right click on Event Shape
@@ -1765,28 +1799,23 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
 }
 
 MyWorkflow.prototype.deleteRoute = function(oConn,iVal){
-
      workflow.oConn = oConn;
      var sourceObjType = oConn.sourcePort.parentNode.type;
      var targetObjType = oConn.targetPort.parentNode.type;
      var rou_uid       = oConn.id;
-
      //Setting Condition for VALID ROUTE_UID present in Route Table
      //For start and gateway event, we dont have entry in ROUTE table
-     if(rou_uid != '' && !sourceObjType.match(/Gateway/) && !sourceObjType.match(/Start/) && !targetObjType.match(/Gateway/))
-         {
+     if(rou_uid != '' && !sourceObjType.match(/Gateway/) && !sourceObjType.match(/Start/) && !targetObjType.match(/Gateway/)){
             workflow.urlDeleteparameter = '?action=deleteRoute&data={"uid":"'+ rou_uid +'"}';
-         }
-
-        //Deleting route for Start event and also deleting start event
-        else if(sourceObjType.match(/Start/)){
+     }
+     //Deleting route for Start event and also deleting start event
+     else if(sourceObjType.match(/Start/)){
             var targetObj = oConn.targetPort.parentNode;  //Task
             var tas_uid   = targetObj.id;
             var tas_start = 'FALSE';
             workflow.urlDeleteparameter = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
-        }
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the Event',this.showEventResult);
-
+     }
+     Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the Event',this.showEventResult);
 }
 
 MyWorkflow.prototype.showEventResult = function(btn){
@@ -1833,62 +1862,33 @@ MyWorkflow.prototype.deleteEvent = function(eventObj){
 
 MyWorkflow.prototype.getDeleteCriteria = function()
 {
-   var shape = workflow.currentSelection.type;
-    switch (shape) {
-    case 'bpmnTask':
-        workflow.currentSelection.actiontype = 'deleteTask';
-        break;
-    case 'bpmnSubProcess':
-        workflow.currentSelection.actiontype = 'deleteSubProcess';
-        break;
-    case 'bpmnAnnotation':
-        workflow.currentSelection.actiontype = 'deleteText';
-        break;
-    case 'bpmnEventEmptyStart':
-        workflow.currentSelection.actiontype = 'saveStartEvent';
-        break;
-    case 'bpmnEventEmptyEnd':
-        //workflow.currentSelection.actiontype = 'deleteEndEvent';
-        var currentObj = workflow.currentSelection;
-        var ports = currentObj.getPorts();
-        var len =ports.data.length;
-    
-
-        //Get all the connection of the shape
-        var conn = new Array();
-        for(var i=0; i<=len; i++){
-            if(typeof ports.data[i] === 'object')
-                conn[i] = ports.data[i].getConnections();
-        }
-        //Get ALL the connections for the specified PORT
-        for(i = 0; i< conn.length ; i++)
-            {
-                if(typeof conn[i] != 'undefined')
-                for(var j = 0; j < conn[i].data.length ; j++)
-                   {
-                     if(typeof conn[i].data[j] != 'undefined')
-                        {
-                            if(conn[i].data[j].targetPort.parentNode.id == currentObj.id){
-                                    route = conn[i].data[j];
-                                    break;
-                            }
-                        }
-                    }
-             }
-        if(typeof route != 'undefined')
-            {
-                workflow.deleteRoute(route,1);
-            }
-        break;
-        case shape.match(/Gateway/):
-            workflow.currentSelection.actiontype = 'deleteGateway';
-            workflow.deleteShape(workflow.currentSelection);
-            break;
+  var shape = workflow.currentSelection.type;
+  var currentObj = workflow.currentSelection;
+  if(shape.match(/Task/)){
+    workflow.currentSelection.actiontype = 'deleteTask';
   }
-
+  else if(shape.match(/SubProcess/)){
+    workflow.currentSelection.actiontype = 'deleteSubProcess';
+  }
+  else if(shape.match(/Annotation/)){
+    workflow.currentSelection.actiontype = 'deleteText';
+  }
+  else if(shape.match(/Event/) && shape.match(/Start/)){
+    workflow.currentSelection.actiontype = 'deleteStartEvent';
+  }
+  else if(shape.match(/Event/) && shape.match(/End/)){
+    workflow.currentSelection.actiontype = 'deleteEndEvent';
+    
+  }
+  else if(shape.match(/Event/) && shape.match(/Inter/)){
+    workflow.currentSelection.actiontype = 'deleteInterEvent';
+  }
+  else if(shape.match(/Gateway/)){
+    workflow.currentSelection.actiontype = 'deleteGateway';
+    workflow.deleteShape(workflow.currentSelection);
+  }
   if(workflow.currentSelection.actiontype != '')
-        workflow.deleteShape(workflow.currentSelection);
-
+    workflow.deleteShape(workflow.currentSelection);
 }
 
 /**

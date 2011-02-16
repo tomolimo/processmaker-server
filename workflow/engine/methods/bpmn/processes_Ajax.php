@@ -191,6 +191,14 @@ if ( isset ($_REQUEST['action']) ) {
           $aData['TAS_EVN_UID']  = '';
           $oTask->update($aData);
           break;
+      case 'deleteStartEvent':
+          $aData['TAS_UID']  = $oData->tas_uid;
+          $aData['TAS_START']  = $oData->tas_start;
+          $aData['TAS_EVN_UID']  = '';
+          $oTask->update($aData);
+          if(isset($oData->evn_uid))
+            $oEvent->remove($oData->evn_uid);
+          break;
       case 'updateEvent':
           $aData['EVN_UID']  = $oData->evn_uid;
           $aData['EVN_TYPE']  = $oData->evn_type;

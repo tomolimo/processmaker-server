@@ -6569,7 +6569,6 @@ function saveExtEvents($oData)
   $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
   $aDataEvent['EVN_TYPE']       = $oData->evn_type;
   
-
   if(preg_match("/Start/", $sEvn_type)){
     $aDataTask['TAS_UID']     = $oData->tas_uid;
     $aDataTask['TAS_START']   = $oData->tas_start;

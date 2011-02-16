@@ -40,8 +40,7 @@
   $process        = $oProcess->createProcessPM($oData->process);
   foreach($oData->tasks as $id => $value)
    {
-     if($value['TAS_TYPE'] == 'SUBPROCESS')
-     {
+     if($value['TAS_TYPE'] == 'SUBPROCESS'){
        $arraySubProcess[$countSubProcess]['0'] = $value['TAS_UID'];
        $arraySubProcess[$countSubProcess]['1'] = $value['TAS_TITLE'];
        $arraySubProcess[$countSubProcess]['2'] = $value['TAS_POSX'];
@@ -57,7 +56,7 @@
        $arrayTasks[$countTasks]['4'] = $value['TAS_WIDTH'];
        $arrayTasks[$countTasks]['5'] = $value['TAS_HEIGHT'];
        $arrayTasks[$countTasks]['6'] = $value['TAS_BOUNDARY'];
-      /* if($value['TAS_START'] == 'TRUE'){
+       if($value['TAS_START'] == 'TRUE'){
          $arrayEvents[$count]['0']      = G::generateUniqueID();
          if($value['TAS_EVN_UID'] == '')
            {
@@ -84,7 +83,7 @@
          $arrayRoutes[$countRoutes]['4']= '2';
          $count                         = $count+ 1;
          $countRoutes                   = $countRoutes+ 1;
-     }*/
+     }
      $countTasks = $countTasks + 1;
     }
    }
@@ -122,7 +121,7 @@
          $fields['TRANSITION'][$countRoutes]['4']= '1';
          $countRoutes              = $countRoutes + 1;
        }
-       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_TO'] != ''){  //Check for Intermediate Events
+       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_TO'] != '' && ! preg_match("/Start/", $value['EVN_TYPE'])){  //Check for Intermediate Events
          $evn_uid = $value['EVN_UID'];
          $idTask = $value['EVN_TAS_UID_TO'];
 
