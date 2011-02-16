@@ -151,6 +151,60 @@ function ellipsis($text, $numb) {
   return $text;
 }
 
+  function lookinginforContentProcess($sproUid){
+    require_once 'classes/model/Content.php';
+    require_once 'classes/model/Task.php';
+    require_once 'classes/model/Content.php'; 
+    
+    $oContent = new Content(); 
+    ///we are looking for a pro title for this process $sproUid
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add( ContentPeer::CON_CATEGORY, 'PRO_TITLE');
+    $oCriteria->add( ContentPeer::CON_LANG, 'en');
+    $oCriteria->add( ContentPeer::CON_ID, $sproUid);
+    $oDataset = ContentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    if(!is_array($aRow)){
+    
+    $oC = new Criteria('workflow');
+    $oC->addSelectColumn(TaskPeer::TAS_UID);
+    $oC->add( TaskPeer::PRO_UID, $sproUid);
+    $oDataset1 = TaskPeer::doSelectRS($oC);
+    $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+      while($oDataset1->next()){
+        $aRow1 = $oDataset1->getRow();
+        
+        $oCriteria1 = new Criteria('workflow');
+        $oCriteria1->add( ContentPeer::CON_CATEGORY, 'TAS_TITLE');
+        $oCriteria1->add( ContentPeer::CON_LANG, SYS_LANG);
+        $oCriteria1->add( ContentPeer::CON_ID, $aRow1['TAS_UID']);
+        $oDataset2 = ContentPeer::doSelectRS($oCriteria1);
+        $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $oDataset2->next();
+        $aRow2 = $oDataset2->getRow();
+
+        Content::insertContent( 'TAS_TITLE', '', $aRow2['CON_ID'], 'en', $aRow2['CON_VALUE']  );
+      }
+    $oC2 = new Criteria('workflow');
+    $oC2->add( ContentPeer::CON_CATEGORY, 'PRO_TITLE');
+    $oC2->add( ContentPeer::CON_LANG, SYS_LANG);
+    $oC2->add( ContentPeer::CON_ID, $sproUid);
+    $oDataset3 = ContentPeer::doSelectRS($oC2);
+    $oDataset3->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset3->next();
+    $aRow3 = $oDataset3->getRow();
+   
+    Content::insertContent( 'PRO_TITLE', '', $aRow3['CON_ID'], 'en', $aRow3['CON_VALUE']  ); 
+   
+    }
+    return 1;
+
+  }
+
+
 function startCase() {
   G::LoadClass ( 'case' );
   
@@ -165,6 +219,9 @@ function startCase() {
   /* Process */
   try {
     $oCase = new Cases ( );
+    
+    lookinginforContentProcess($_POST['processId']);
+    
     $aData = $oCase->startCase ( $_REQUEST ['taskId'], $_SESSION ['USER_LOGGED'] );
     $_SESSION ['APPLICATION'] = $aData ['APPLICATION'];
     $_SESSION ['INDEX']   = $aData ['INDEX'];
