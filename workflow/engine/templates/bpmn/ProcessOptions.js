@@ -124,7 +124,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     }),
     proxy        : new Ext.data.HttpProxy({
       url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
-    }),
+    })
     //sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
   });
   taskDynaform.load({params:{start:0, limit:10}});
@@ -178,11 +178,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
       {
         header: _('ID_TITLE_FIELD'),
         dataIndex: 'DYN_TITLE',
-        width: 280,
+        width: 280
       },{
         header: _('ID_TYPE'),
         dataIndex: 'DYN_TYPE',
-        width: 90,
+        width: 90
       },{
         sortable: false,
         header: _('ID_TAS_EDIT'),
