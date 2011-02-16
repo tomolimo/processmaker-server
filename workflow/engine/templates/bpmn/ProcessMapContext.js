@@ -1649,63 +1649,6 @@ ProcessMapContext.prototype.processIODoc = function()
 }*/
 ProcessMapContext.prototype.processFileManager= function()
 {
-  var AwesomeUploaderInstance = new AwesomeUploader({
-		title:'Ext JS Super Uploader'
-		,renderTo:'paintarea'
-		,frame:true
-		,width:500
-		,height:300
-	});
-
-  var window = new Ext.Window({
-        title: _('ID_PROCESS_FILE_MANAGER'),
-        collapsible: false,
-        maximizable: false,
-        width: 500,
-        height: 400,
-        minWidth: 300,
-        minHeight: 200,
-        autoScroll: true,
-        layout: 'fit',
-        plain: true,
-        buttonAlign: 'center',
-        items: AwesomeUploaderInstance,
-        buttons: [{
-            text: _('ID_SAVE'),
-            formBind    :true,
-            handler: function(){
-                //waitMsg: 'Saving...',       // Wait Message
-                  var fields          = editProcess.items.items;
-                  var pro_title       = fields[0].items.items[0].getValue();
-                  var pro_description = fields[0].items.items[1].getValue();
-                  var pro_calendar    = fields[0].items.items[2].getValue();
-                  var pro_category    = fields[0].items.items[3].getValue();
-                  var pro_debug       = fields[0].items.items[4].getValue();
-                  if(pro_debug == true)
-                     pro_debug = '1';
-                 else
-                     pro_debug = '0';
-
-                   var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'",}';
-                  Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
-                    success: function(response) {
-                        window.hide();
-                    },
-                    failure: function(){
-                        PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
-                        }
-                });
-             }
-        },{
-            text: _('ID_CANCEL'),
-            handler: function(){
-                // when this button clicked,
-                window.hide();
-             }
-        }]
-    });
-    window.show();
 }
 
 ProcessMapContext.prototype.caseTrackerProperties= function()
