@@ -5129,6 +5129,7 @@ class processMap {
   }
 
   //new functions
+  //deprecated
   function getAllDynaformCount(){
     $c = $this->tmpCriteria;
     $c->clearSelectColumns();
@@ -5150,10 +5151,11 @@ class processMap {
   */
   function getExtDynaformsList($start, $limit, $sProcessUID = '')
   {
+  	//select the main fields for dynaform and the title and description from CONTENT Table
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria  = new Criteria ( 'workflow' );
     $oCriteria->addSelectColumn ( DynaformPeer::DYN_UID );
-    $oCriteria->addSelectColumn ( DynaformPeer::PRO_UID );
+    //$oCriteria->addSelectColumn ( DynaformPeer::PRO_UID );
     $oCriteria->addSelectColumn ( DynaformPeer::DYN_TYPE );
     $oCriteria->addAsColumn ( 'DYN_TITLE', 'C1.CON_VALUE' );
     $oCriteria->addAsColumn ( 'DYN_DESCRIPTION', 'C2.CON_VALUE' );
@@ -5170,10 +5172,11 @@ class processMap {
     $aConditions [] = array ('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
     $oCriteria->addJoinMC ( $aConditions, Criteria::LEFT_JOIN );
     $oCriteria->add ( DynaformPeer::PRO_UID, $sProcessUID );
-    $this->tmpCriteria = clone $oCriteria;
 
+    //if we have pagination, we use it and limit the query
     if($start != '')
       $oCriteria->setOffset($start);
+
     if($limit != '')
       $oCriteria->setLimit($limit);
 
@@ -5181,23 +5184,82 @@ class processMap {
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
     $dynaformArray = array ();
-    $dynaformArray [] = array ('d' => 'char' );
+    $gridLabel   = G::LoadTranslation( 'ID_GRID' );
+    $normalLabel = G::LoadTranslation( 'ID_NORMAL' );
+    
     while ( $aRow = $oDataset->getRow () ) {
+    	//this is a trick to copy the description and title from other language when the current language does not exist for this content row.
       if (($aRow ['DYN_TITLE'] == NULL)||($aRow ['DYN_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
-
         $aRow ['DYN_TITLE'] = Content::Load("DYN_TITLE","",$aRow ['DYN_UID'],SYS_LANG);
-
       }
-    if (($aRow ['DYN_DESCRIPTION'] == NULL)||($aRow ['DYN_DESCRIPTION'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
-
+      if (($aRow ['DYN_DESCRIPTION'] == NULL)||($aRow ['DYN_DESCRIPTION'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
         $aRow ['DYN_DESCRIPTION'] = Content::Load("DYN_DESCRIPTION","",$aRow ['DYN_UID'],SYS_LANG);
-
       }
+      
+      if ( $aRow['DYN_TYPE'] == 'grid' )    $aRow['DYN_TYPE'] = $gridLabel;
+      if ( $aRow['DYN_TYPE'] == 'xmlform' ) $aRow['DYN_TYPE'] = $normalLabel;
+      $aRow['TAS_EDIT'] = 0;
+      $aRow['TAS_VIEW'] = 0;
       $dynaformArray [] = $aRow;
       $oDataset->next ();
     }
+    $result = array();
+    
+    //Now count how many times the dynaform was used in different tasks in VIEW mode, 
+    $groupbyCriteria  = new Criteria ( 'workflow' );
+    $groupbyCriteria->clearSelectColumns();
+    $groupbyCriteria->addSelectColumn ( StepPeer::STEP_UID_OBJ );
+    $groupbyCriteria->addSelectColumn('COUNT(TAS_UID)');
+    $groupbyCriteria->add(StepPeer::PRO_UID, $sProcessUID );
+    $groupbyCriteria->add(StepPeer::STEP_TYPE_OBJ, 'DYNAFORM' );
+    $groupbyCriteria->add(StepPeer::STEP_MODE, 'VIEW');
+    $groupbyCriteria->addGroupByColumn(StepPeer::STEP_UID_OBJ);
+    $oDataset = DynaformPeer::doSelectRS ( $groupbyCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    while ( $aRow = $oDataset->getRow () ) {
+      foreach ( $dynaformArray as $key => $val ) {
+      	if ($val['DYN_UID'] == $aRow['STEP_UID_OBJ'] ) $dynaformArray[$key]['TAS_VIEW'] = $aRow['COUNT(TAS_UID)'] ;
+      }
+      $oDataset->next ();
+    }
 
-    return $dynaformArray;
+    //Now count how many times the dynaform was used in different tasks in EDIT mode, 
+    $groupbyCriteria  = new Criteria ( 'workflow' );
+    $groupbyCriteria->clearSelectColumns();
+    $groupbyCriteria->addSelectColumn ( StepPeer::STEP_UID_OBJ );
+    $groupbyCriteria->addSelectColumn('COUNT(TAS_UID)');
+    $groupbyCriteria->add(StepPeer::PRO_UID, $sProcessUID );
+    $groupbyCriteria->add(StepPeer::STEP_TYPE_OBJ, 'DYNAFORM' );
+    $groupbyCriteria->add(StepPeer::STEP_MODE, 'EDIT');
+    $groupbyCriteria->addGroupByColumn(StepPeer::STEP_UID_OBJ);
+    $oDataset = DynaformPeer::doSelectRS ( $groupbyCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $oDataset->next ();
+    while ( $aRow = $oDataset->getRow () ) {
+      foreach ( $dynaformArray as $key => $val ) {
+      	if ($val['DYN_UID'] == $aRow['STEP_UID_OBJ'] ) $dynaformArray[$key]['TAS_EDIT'] = $aRow['COUNT(TAS_UID)'] ;
+      }
+      $oDataset->next ();
+    }
+
+    //now query to get total dynaform for this process,
+    //$counCriteria is used to count how many dynaforms there are in this process
+    $countCriteria  = new Criteria ( 'workflow' );
+    $countCriteria->clearSelectColumns();
+    $countCriteria->addSelectColumn('COUNT(*)');
+    $countCriteria->add ( DynaformPeer::PRO_UID, $sProcessUID );
+    $oDataset = DynaformPeer::doSelectRS($countCriteria);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      $result['totalCount'] = $aRow[0];
+    else
+      $result['totalCount'] = 0;
+    $result['data'] = $dynaformArray;
+ 
+    return $result;
   }
 
 

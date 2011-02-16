@@ -15,7 +15,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     {name: 'DYN_UID'},
     {name: 'DYN_TYPE'},
     {name: 'DYN_TITLE'},
-    {name: 'DYN_DISCRIPTION'},
+    {name: 'DYN_DESCRIPTION'},
+    {name: 'TAS_EDIT'},
+    {name: 'TAS_VIEW'},
     {name: 'ACTION'}
     ]);
 
@@ -98,8 +100,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                 });
               }
               else
-                  PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE_JS') );
-                  //Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
+                PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE_JS') );
+                //Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
             }
           });
         }      
@@ -111,38 +113,40 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     items: [btnAdd, btnRemove]
   });
 
+  //taskDynaform? and groupingStore?
+  //var taskDynaform = new Ext.data.GroupingStore({
   var taskDynaform = new Ext.data.GroupingStore({
     idProperty   : 'gridIndex',
     reader : new Ext.data.JsonReader( {
-          totalProperty: 'totalCount',
-          root: 'data',
-          fields : dynaFields
-        }),
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : dynaFields
+    }),
     proxy        : new Ext.data.HttpProxy({
       url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
     }),
-    sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
+    //sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
   });
- taskDynaform.load({params:{start:0, limit:10}});
+  taskDynaform.load({params:{start:0, limit:10}});
 
- //Creating store for getting list of additional PM tables
- var additionalTablesFields = Ext.data.Record.create([
-   {name: 'ADD_TAB_UID', type: 'string'},
-   {name: 'ADD_TAB_NAME', type: 'string'},
-   {name: 'ADD_TAB_DESCRIPTION',type: 'string'}
-   ]);
+  //Creating store for getting list of additional PM tables
+  var additionalTablesFields = Ext.data.Record.create([
+    {name: 'ADD_TAB_UID', type: 'string'},
+    {name: 'ADD_TAB_NAME', type: 'string'},
+    {name: 'ADD_TAB_DESCRIPTION',type: 'string'}
+  ]);
 
- var additionalTables = new Ext.data.JsonStore({
-   root         : 'data',
-   totalProperty: 'totalCount',
-   idProperty   : 'gridIndex',
-   remoteSort   : true,
-   fields       : additionalTablesFields,
-   proxy: new Ext.data.HttpProxy({
-     url: 'proxyExtjs?action=getAdditionalTables'
-   })
- });
- additionalTables.load();
+  var additionalTables = new Ext.data.JsonStore({
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : additionalTablesFields,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs?action=getAdditionalTables'
+    })
+  });
+  additionalTables.load();
 
  //Creating store for getting list of Fields of additional PM tables
   var TablesFields = Ext.data.Record.create([
@@ -164,328 +168,324 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   });
  //tablesFieldsStore.load();
 
-var dynaformColumns = new Ext.grid.ColumnModel({
+  var dynaformColumns = new Ext.grid.ColumnModel({
     defaults: {
-          width: 200,
-          sortable: true
-      },
+      width: 90,
+      sortable: true
+    },
     columns: [
-    new Ext.grid.RowNumberer(),
+      new Ext.grid.RowNumberer(),
+      {
+        header: _('ID_TITLE_FIELD'),
+        dataIndex: 'DYN_TITLE',
+        width: 280,
+      },{
+        header: _('ID_TYPE'),
+        dataIndex: 'DYN_TYPE',
+        width: 90,
+      },{
+        sortable: false,
+        header: _('ID_TAS_EDIT'),
+        dataIndex: 'TAS_EDIT',
+        width: 110
+      },{
+        sortable: false,
+        header: _('ID_TAS_VIEW'),
+        dataIndex: 'TAS_VIEW',
+        width: 110
+      },{
+        sortable: false,
+        width: 50,
+        renderer: function(val, meta, record)
         {
-            id: 'DYN_TITLE',
-            header: _('ID_TITLE_FIELD'),
-            dataIndex: 'DYN_TITLE',
-            width: 280,
-            editable: false,
-            editor: new Ext.form.TextField({
-            allowBlank: false
-            })
-        },{
-            id: 'ACTION',
-            header: _('ID_TYPE'),
-            dataIndex: 'ACTION',
-            //width: 280,
-            editable: false,
-            editor: new Ext.form.TextField({
-            allowBlank: false
-            })
-        },
-        {
-            sortable: false,
-            renderer: function(val, meta, record)
-               {
-                    return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
-               }
-        },
-        {
-            sortable: false,
-            renderer: function(val, meta, record)
-               {
-                    return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
-               }
+          return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
         }
+      },{
+        sortable: false,
+        width: 60,
+        renderer: function(val, meta, record)
+        {
+          return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
+        }
+      }
     ]
   });
 
 
   var addTableColumns = new Ext.grid.ColumnModel({
-            columns: [
-                new Ext.grid.RowNumberer(),
-                    {
-                        id: 'FLD_NAME',
-                        header: _('ID_PRIMARY_KEY'),
-                        dataIndex: 'FLD_NAME',
-                        width: 200,
-                        editable: false,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                                allowBlank: false
-                            })
-                    },{
-                        id: 'PRO_VARIABLE',
-                        header: _('ID_VARIABLES'),
-                        dataIndex: 'PRO_VARIABLE',
-                        width: 200,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                                allowBlank: false
-                            })
-                    },{
-                        sortable: false,
-                        renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
-                    }
-                ]
-        });
+    columns: [
+      new Ext.grid.RowNumberer(),
+      {
+        id: 'FLD_NAME',
+        header: _('ID_PRIMARY_KEY'),
+        dataIndex: 'FLD_NAME',
+        width: 200,
+        editable: false,
+        sortable: true,
+        editor: new Ext.form.TextField({
+          allowBlank: false
+        })
+      },{
+        id: 'PRO_VARIABLE',
+        header: _('ID_VARIABLES'),
+        dataIndex: 'PRO_VARIABLE',
+        width: 200,
+        sortable: true,
+        editor: new Ext.form.TextField({
+          allowBlank: false
+        })
+      },{
+        sortable: false,
+        renderer: function(val){return '<input type="button" value="@@" id="'+val+'"/>';}
+      }
+    ]
+  });
 
 
 
 
- var dynaformGrid = new Ext.grid.GridPanel({
-        store: taskDynaform,
-        id : 'mygrid',
-        loadMask: true,
-        loadingText: 'Loading...',
-        //renderTo: 'cases-grid',
-        frame: false,
-        autoHeight:false,
-        clicksToEdit: 1,
-        minHeight:400,
-        height   :400,
-        width: '',
-        layout: 'fit',
-        cm: dynaformColumns,
-        stateful : true,
-        stateId : 'grid',
-        stripeRows: true,
-        tbar: tb,
-        bbar: new Ext.PagingToolbar({
-            pageSize: 10,
-            store: taskDynaform,
-            displayInfo: true,
-            displayMsg: 'Displaying dynaforms {0} - {1} of {2}',
-            emptyMsg: "No users to display",
-            items:[]
-        }),
-        viewConfig: {forceFit: true}
+  var dynaformGrid = new Ext.grid.GridPanel({
+    store: taskDynaform,
+    id : 'mygrid',
+    loadMask: true,
+    loadingText: 'Loading...',
+    //renderTo: 'cases-grid',
+    frame: false,
+    autoHeight:false,
+    minHeight:400,
+    height   :400,
+    width: '',
+    layout: 'fit',
+    cm: dynaformColumns,
+    stateful : true,
+    stateId : 'grid',
+    stripeRows: true,
+    tbar: tb,
+    bbar: new Ext.PagingToolbar({
+      pageSize: 10,
+      store: taskDynaform,
+      displayInfo: true,
+      displayMsg: 'Displaying dynaforms {0} - {1} of {2}',
+      emptyMsg: "No users to display",
+      items:[]
+    }),
+    viewConfig: {forceFit: true}
    });
 
- var dynaformDetails = new Ext.FormPanel({
-        labelWidth: 100,
-        buttonAlign: 'center',
-        width     : 490,
-        height     : 420,
-        bodyStyle : 'padding:10px 0 0 10px;',
-        //monitorValid : true,
-        autoHeight: true,
-        //defaults    :{autoScroll:true},
-        items:
-                [{
-                    xtype: 'fieldset',
-                    layout: 'fit',
-                    border:true,
-                    title: _('ID_SELECT_DYNAFORM'),
-                    width: 500,
-                    collapsible: false,
-                    labelAlign: 'top',
-                    items:[{
-                            xtype: 'radiogroup',
-                            //id:    'dynaformType',
-                            layout: 'fit',
-                            fieldLabel: _('ID_TYPE'),
-                            itemCls: 'x-check-group-alt',
-                            columns: 1,
-                            items: [
-                                {
-                                    boxLabel: _('ID_BLANK_DYNAFORM'),
-                                    name: 'DYN_SOURCE',
-                                    inputValue: 'blankDyna',
-                                    checked: true
-                                },
+  var dynaformDetails = new Ext.FormPanel({
+    labelWidth  : 100,
+    buttonAlign : 'center',
+    width       : 490,
+    height      : 420,
+    bodyStyle : 'padding:10px 0 0 10px;',
+    autoHeight: true,
+    items:
+      [{
+        xtype: 'fieldset',
+        layout: 'fit',
+        border:true,
+        title: _('ID_SELECT_DYNAFORM'),
+        width: 500,
+        collapsible: false,
+        labelAlign: 'top',
+        items:[{
+          xtype: 'radiogroup',
+          //id:    'dynaformType',
+          layout: 'fit',
+          fieldLabel: _('ID_TYPE'),
+          itemCls: 'x-check-group-alt',
+          columns: 1,
+          items: [
+            {
+              boxLabel: _('ID_BLANK_DYNAFORM'),
+              name: 'DYN_SOURCE',
+              inputValue: 'blankDyna',
+              checked: true
+            },
+            {
+              boxLabel: _('ID_PM_DYNAFORM'),
+              name: 'DYN_SOURCE',
+              inputValue: 'pmTableDyna'
+            }],
+          listeners: {
+          change: function(radiogroup, radio) {
+          if(radio.inputValue == 'blankDyna')
+          {
+            Ext.getCmp("blankDynaform").show();
+            Ext.getCmp("pmTableDynaform").hide();
+          }
+          else
+          {
+            Ext.getCmp("blankDynaform").hide();
+            Ext.getCmp("pmTableDynaform").show();
+          }
+        }
+      }
+      }]
+      },
+      {
+        xtype: 'fieldset',
+        id:    'blankDynaform',
+        border:true,
+        hidden: false,
+        title: _('ID_DYNAFORM_INFORMATION'),
+        width: 500,
+        items:[{
+              xtype     : 'textfield',
+              fieldLabel: _('ID_TITLE'),
+              name      : 'DYN_TITLE1',
+              width     : 350,
+              allowBlank: false
+           },{
+              width     : 350,
+              xtype:          'combo',
+              allowBlank: false,
+              mode:           'local',
+              editable:       false,
+              fieldLabel:     _('ID_TYPE'),
+              triggerAction:  'all',
+              forceSelection: true,
+              name:           'ACTION',
+              displayField:   'name',
+              valueField:     'value',
+              value        : 'Normal',
+              store:          new Ext.data.JsonStore({
+                  fields : ['name', 'value'],
+                  data   : [
+                      {name : _('ID_NORMAL'),   value: 'Normal'},
+                      {name : _('ID_GRID')  ,   value: 'Grid'},
+                  ]
+              })
+           },{
+              xtype     : 'textarea',
+              fieldLabel: _('ID_DESCRIPTION'),
+              name      : 'DYN_DESCRIPTION1',
+              height    : 120,
+              width     : 350
+           }
+         ]
+      },{
+          xtype: 'fieldset',
+          id:    'pmTableDynaform',
+          border:true,
+          hidden: true,
+          title: 'Dynaform Information',
+          width: 500,
+          items:[{
+                  width:          350,
+                  xtype:          'combo',
+                  mode:           'local',
+                  editable:       true,
+                  triggerAction:  'all',
+                  forceSelection: true,
+                  fieldLabel:     _('ID_CREATE_PM_TABLE'),
+                  emptyText    : 'Select Table',
+                  displayField:   'ADD_TAB_NAME',
+                  valueField:     'ADD_TAB_UID',
+                  value        : '---------------------------',
+                  store        : additionalTables,
+                  onSelect: function(record, index){
+                      var link = 'proxyExtjs?tabId='+record.data.ADD_TAB_UID+'&action=getPMTableDynaform';
+                      tablesFieldsStore.proxy.setUrl(link, true);
+                      tablesFieldsStore.load();
 
-                                {
-                                    boxLabel: _('ID_PM_DYNAFORM'),
-                                    name: 'DYN_SOURCE',
-                                    inputValue: 'pmTableDyna'
-                                }],
-                            listeners: {
-                            change: function(radiogroup, radio) {
-                            if(radio.inputValue == 'blankDyna')
-                                {
-                                    Ext.getCmp("blankDynaform").show();
-                                    Ext.getCmp("pmTableDynaform").hide();
-                                }
-                            else
-                                {
-                                    Ext.getCmp("blankDynaform").hide();
-                                    Ext.getCmp("pmTableDynaform").show();
-                                }
-                        }
-                         }
-                     }]
-                },
+                      Ext.getCmp("fieldsGrid").show();
+                      Ext.getCmp("pmTable").setValue(record.data.ADD_TAB_UID);
+
+                      this.setValue(record.data[this.valueField || this.displayField]);
+                      this.collapse();
+                   }
+               },{
+                  xtype:'hidden',//<--hidden field
+                  name:'ADD_TABLE',
+                  id  :'pmTable'
+               },
+               {
+                  xtype     : 'textfield',
+                  fieldLabel: _('ID_TITLE'),
+                  name      : 'DYN_TITLE2',
+                  allowBlank: false,
+                  width     : 350
+               },{
+                  xtype     : 'textarea',
+                  fieldLabel: _('ID_DESCRIPTION'),
+                  name      : 'DYN_DESCRIPTION2',
+                  height    : 120,
+                  width     : 350
+               },
+               {
+                  xtype: 'grid',
+                  id:'fieldsGrid',
+                  hidden: true,
+                  store: tablesFieldsStore,
+                  cm: addTableColumns,
+                  width: 500,
+                  //height: 300,
+                  autoHeight: true,
+                  clicksToEdit: 1,
+                  plugins: [editor],
+                  //loadMask    : true,
+                  loadingText : 'Loading...',
+                  border: false
+                  //renderTo : Ext.getBody()
+               }
+           ]
+      }
+        ], buttons: [{
+        text: _('ID_SAVE'),
+        //formBind    :true,
+        handler: function(){
+            var getForm   = dynaformDetails.getForm().getValues();
+            //var sDynaType = getForm.DYN_SOURCE;
+            if(getForm.DYN_SOURCE == 'blankDyna')
                 {
-                    xtype: 'fieldset',
-                    id:    'blankDynaform',
-                    border:true,
-                    hidden: false,
-                    title: _('ID_DYNAFORM_INFORMATION'),
-                    width: 500,
-                    items:[{
-                            xtype     : 'textfield',
-                            fieldLabel: _('ID_TITLE'),
-                            name      : 'DYN_TITLE1',
-                            width     : 350,
-                            allowBlank: false
-                         },{
-                            width     : 350,
-                            xtype:          'combo',
-                            allowBlank: false,
-                            mode:           'local',
-                            editable:       false,
-                            fieldLabel:     _('ID_TYPE'),
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            name:           'ACTION',
-                            displayField:   'name',
-                            valueField:     'value',
-                            value        : 'Normal',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'Normal',   value: 'Normal'},
-                                            {name : 'Grid',   value: 'Grid'},
-                                        ]
-                                    })
-                         },{
-                            xtype     : 'textarea',
-                            fieldLabel: _('ID_DESCRIPTION'),
-                            name      : 'DYN_DESCRIPTION1',
-                            height    : 120,
-                            width     : 350
-                         }
-                     ]
-                },{
-                    xtype: 'fieldset',
-                    id:    'pmTableDynaform',
-                    border:true,
-                    hidden: true,
-                    title: 'Dynaform Information',
-                    width: 500,
-                    items:[{
-                            width:          350,
-                            xtype:          'combo',
-                            mode:           'local',
-                            editable:       true,
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            fieldLabel:     _('ID_CREATE_PM_TABLE'),
-                            emptyText    : 'Select Table',
-                            displayField:   'ADD_TAB_NAME',
-                            valueField:     'ADD_TAB_UID',
-                            value        : '---------------------------',
-                            store        : additionalTables,
-                            onSelect: function(record, index){
-                                var link = 'proxyExtjs?tabId='+record.data.ADD_TAB_UID+'&action=getPMTableDynaform';
-                                tablesFieldsStore.proxy.setUrl(link, true);
-                                tablesFieldsStore.load();
-
-                                Ext.getCmp("fieldsGrid").show();
-                                Ext.getCmp("pmTable").setValue(record.data.ADD_TAB_UID);
-
-                                this.setValue(record.data[this.valueField || this.displayField]);
-                                this.collapse();
-                             }
-                         },{
-                            xtype:'hidden',//<--hidden field
-                            name:'ADD_TABLE',
-                            id  :'pmTable'
-                         },
-                         {
-                            xtype     : 'textfield',
-                            fieldLabel: _('ID_TITLE'),
-                            name      : 'DYN_TITLE2',
-                            allowBlank: false,
-                            width     : 350
-                         },{
-                            xtype     : 'textarea',
-                            fieldLabel: _('ID_DESCRIPTION'),
-                            name      : 'DYN_DESCRIPTION2',
-                            height    : 120,
-                            width     : 350
-                         },
-                         {
-                            xtype: 'grid',
-                            id:'fieldsGrid',
-                            hidden: true,
-                            store: tablesFieldsStore,
-                            cm: addTableColumns,
-                            width: 500,
-                            //height: 300,
-                            autoHeight: true,
-                            clicksToEdit: 1,
-                            plugins: [editor],
-                            //loadMask    : true,
-                            loadingText : 'Loading...',
-                            border: false
-                            //renderTo : Ext.getBody()
-                         }
-                     ]
+                    var sAction   = getForm.ACTION;
+                    var sTitle    = getForm.DYN_TITLE1;
+                    var sDesc     = getForm.DYN_DESCRIPTION1;
                 }
-            ], buttons: [{
-            text: _('ID_SAVE'),
-            //formBind    :true,
-            handler: function(){
-                var getForm   = dynaformDetails.getForm().getValues();
-                //var sDynaType = getForm.DYN_SOURCE;
-                if(getForm.DYN_SOURCE == 'blankDyna')
+            else
+                {
+                    var sAddTab     = getForm.ADD_TABLE;
+                    var aStoreFields  = tablesFieldsStore.data.items;
+                    var fName = new Array();
+                    var pVar = new Array();
+                    for(var i=0;i<aStoreFields.length;i++)
                     {
-                        var sAction   = getForm.ACTION;
-                        var sTitle    = getForm.DYN_TITLE1;
-                        var sDesc     = getForm.DYN_DESCRIPTION1;
+                        fName[i] = aStoreFields[i].data.FLD_NAME;
+                        pVar[i]  = aStoreFields[i].data.PRO_VARIABLE;
                     }
+                    var fieldname = Ext.util.JSON.encode(fName);
+                    var variable = Ext.util.JSON.encode(pVar);
+                    sTitle    = getForm.DYN_TITLE2;
+                    sDesc     = getForm.DYN_DESCRIPTION2;
+                }
+
+                if(sTitle == '' || sAction == '')
+                    PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
                 else
                     {
-                        var sAddTab     = getForm.ADD_TABLE;
-                        var aStoreFields  = tablesFieldsStore.data.items;
-                        var fName = new Array();
-                        var pVar = new Array();
-                        for(var i=0;i<aStoreFields.length;i++)
-                        {
-                            fName[i] = aStoreFields[i].data.FLD_NAME;
-                            pVar[i]  = aStoreFields[i].data.PRO_VARIABLE;
-                        }
-                        var fieldname = Ext.util.JSON.encode(fName);
-                        var variable = Ext.util.JSON.encode(pVar);
-                        sTitle    = getForm.DYN_TITLE2;
-                        sDesc     = getForm.DYN_DESCRIPTION2;
+                      Ext.Ajax.request({
+                      url   : '../dynaforms/dynaforms_Save.php',
+                      method: 'POST',
+                      params:{
+                          functions       : 'saveDynaform',
+                          ACTION          : sAction,
+                          FIELDS          : fieldname,
+                          VARIABLES       : variable,
+                          ADD_TABLE       : sAddTab,
+                          PRO_UID         : pro_uid,
+                          DYN_TITLE       : sTitle,
+                          DYN_TYPE        : 'xmlform',
+                          DYN_DESCRIPTION : sDesc
+                      },
+                      success: function(response) {
+                          PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
+                          taskDynaform.reload();
+                          formWindow.hide()
+                      }
+                    });
                     }
-
-                    if(sTitle == '' || sAction == '')
-                        PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
-                    else
-                        {
-                          Ext.Ajax.request({
-                          url   : '../dynaforms/dynaforms_Save.php',
-                          method: 'POST',
-                          params:{
-                              functions       : 'saveDynaform',
-                              ACTION          : sAction,
-                              FIELDS          : fieldname,
-                              VARIABLES       : variable,
-                              ADD_TABLE       : sAddTab,
-                              PRO_UID         : pro_uid,
-                              DYN_TITLE       : sTitle,
-                              DYN_TYPE        : 'xmlform',
-                              DYN_DESCRIPTION : sDesc
-                          },
-                          success: function(response) {
-                              PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
-                              taskDynaform.reload();
-                              formWindow.hide()
-                          }
-                        });
-                        }
-            }
+        }
     },{
             text: _('ID_CANCEL'),
             handler: function(){

@@ -46,9 +46,9 @@ if( $access != 1 ){
 }  
 $processUID = $_GET['PRO_UID'];
 
-if ( isset($_SESSION['PROCESSMAP']) && $_SESSION['PROCESSMAP'] == 'BPMN' ) {
-  header ( "Location: ../bpmn/processmap?PRO_UID=". $processUID );
-}
+//if ( isset($_SESSION['PROCESSMAP']) && $_SESSION['PROCESSMAP'] == 'BPMN' ) {
+//  header ( "Location: ../bpmn/processmap?PRO_UID=". $processUID );
+//}
 
 $_SESSION['PROCESS'] = $processUID;
 $_SESSION['PROCESSMAP'] = 'LEIMNUD';
