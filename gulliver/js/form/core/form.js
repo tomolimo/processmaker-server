@@ -364,17 +364,23 @@ function IsUnsignedInteger(YourNumber){
                    break;
                   case "Alpha": 
 								    if (keyCode==8) return true;
-								    patron =/[A-Za-z\s]/; 
+								    patron =/[A-Za-z\sáéíóúäëïöüñçÇÑÁÉÍÓÚÄËÏÖÜ]/; 
 								    te = String.fromCharCode(keyCode);
 								    return patron.test(te);
                   break;
+                  case "AlphaNum": 
+                    if (keyCode==8) return true;
+                    patron =/[A-Za-z0-9\sáéíóúäëïöüñçÇÑÁÉÍÓÚÄËÏÖÜ]/;
+                    te = String.fromCharCode(keyCode);
+                    return patron.test(te);
+                  break;
                   default:
-	                   var k=new leimnud.module.validator({
+	                  var k=new leimnud.module.validator({
 	                    valid :[me.validate],
 	                    key   :event,
 	                    lang  :(typeof(me.language)!=='undefined')?me.language:"en"
-	                   });
-	                   return k.result();
+	                  });
+	                  return k.result();
 	                  break;
             	  }
             }
