@@ -1722,7 +1722,6 @@ class G
    */   
   function SendTemporalMessage($msgID, $strType, $sType='LABEL', $time=null, $width=null, $customLabels= null)
   {
-      echo"Inside Send Temporal Message";
     if( isset($width) ){
       $_SESSION['G_MESSAGE_WIDTH'] = $width;
     }
