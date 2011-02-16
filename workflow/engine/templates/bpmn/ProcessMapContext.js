@@ -178,86 +178,54 @@ ProcessMapContext.prototype.editProcess= function()
 
 ProcessMapContext.prototype.exportProcess= function()
 {
-  workflow.FILENAME_LINK = '';
-  workflow.FILENAME_LINKXPDL = '';
-
   var exportProcessForm = new Ext.FormPanel({
-  labelWidth    : 120, // label settings here cascade unless overridden
-  frame         : false,
-  monitorValid  : true,
-  //title         : 'Export Process',
-  bodyStyle     :'padding:10px 0 0 10px;',
-  width         : 500,
-  height        : 400,
-  defaultType   : 'textfield',
-  buttonAlign   : 'center',
-  items: [
-           {
-             xtype      :'fieldset',
-             title      : 'Process Info',
-             collapsible: false,
-             autoHeight :true,
-             buttonAlign: 'center',
-             defaults   : {width: 210},
-             //defaultType: 'textfield',
-             items: [
-                      {
-                        xtype       : 'textfield',
-                        fieldLabel  : _('ID_PRO_TITLE'),
-                        name        : 'PRO_TITLE',
-                        readOnly  :true
-                      },{
-                        xtype       : 'textfield',
-                        fieldLabel  : _('ID_DESCRIPTION'),
-                        name        : 'PRO_DESCRIPTION',
-                        readOnly  :true
-                      },{
-                        xtype       : 'textfield',
-                        fieldLabel  : _('ID_SIZE_IN_BYTES'),
-                        name        : 'SIZE',
-                        readOnly  :true
-                      },{
-                        xtype       : 'textfield',
-                        fieldLabel  : _('ID_FILE'),
-                        name        : 'FILENAME_LINK',
-                        readOnly  :true
-                      //},{
-                       // xtype       : 'button',
-                       // fieldLabel  : 'File XPDL',
-                       // name        : 'FILENAME_LINKXPDL',
-                        //dataIndex   : 'FILENAME_LINKXPDL',
-                       // html        : '<a href="javascript: Ext.ux.classobj.method(' + Ext.util.JSON.encode(obj) + ')" ></a>'
-                        //readOnly  :true
-                      },{
-                        xtype: "panel",
-                        html: new Ext.XTemplate("<a href='#'>{value}").apply({
-                        value:'FILENAME_LINKXPDL'
-                        })
-                      },{
-                        xtype: 'box',
-                        autoEl: {
-                            tag: 'a',
-
-                            html: '3. Dom element created by a DomHelper and wrapped as Component',
-                            href: '#'
-            }},
-
-                      {
-                        xtype   : 'button',
-                        name    : 'FILENAME_LINK',
-                        html    : '<a href=\"http:\/\/www.google.at\">Link<\/a>',
-                        width   :100
-                      },{
-                         sortable: false,
-                            renderer: function()
-                            {
-                                return String.format("<a href=\"http:\/\/www.google.at\">x<\/a>");
-                            }
-                      }
-                  ]
-           }]
-
-            });
+    labelWidth    : 160, // label settings here cascade unless overridden
+    frame         : false,
+    bodyStyle     :'padding:10px 10px 10px 10px;',
+    width         : 420,
+    height        : 280,
+    defaultType   : 'textfield',
+    buttonAlign   : 'center',
+    items: [
+      {
+        xtype      : 'fieldset',
+        title      : 'Process Info',
+        collapsible: false,
+        autoHeight : true,
+        buttonAlign: 'center',
+        items: [
+          {
+            xtype       : 'displayfield',
+            fieldLabel  : _('ID_PRO_TITLE'),
+            name        : 'PRO_TITLE'
+          },{
+            xtype       : 'displayfield',
+            fieldLabel  : _('ID_DESCRIPTION'),
+            name        : 'PRO_DESCRIPTION'
+          },{
+            xtype       : 'displayfield',
+            fieldLabel  : _('ID_SIZE_IN_BYTES'),
+            name        : 'SIZE'
+          },{
+            xtype       : 'displayfield',
+            fieldLabel  : _('ID_PM_FILENAME'),
+            id          : 'PM_FILENAME',
+            name        : 'PM_FILENAME'
+          },{
+            xtype       : 'displayfield',
+            fieldLabel  : _('ID_XPDL_FILENAME'),
+            id          : 'XPDL_FILENAME',
+            name        : 'XPDL_FILENAME'
+          }
+        ]
+      }],
+    buttons: [{
+      text: _('ID_CANCEL'),
+        handler: function(){
+          exportProcesswindow.hide();
+        }
+    }]      
+  });
 
   exportProcessForm.render(document.body);
   workflow.exportProcessForm = exportProcessForm;
@@ -270,40 +238,30 @@ ProcessMapContext.prototype.exportProcess= function()
       var fieldSet = workflow.exportProcessForm.items.items[0];
       var fields = fieldSet.items.items;
 
-      var link = new Ext.form.TextField({
-          xtype   : 'button',
-          name    : 'FILENAME_LINK',
-          html    : '<a href=\"http:\/\/www.google.at\">Link<\/a>',
-          width   :100
-      });
-      workflow.exportProcessForm.add(link);
-     //this.add(form);
-     //this.doLayout();
-
-      fields[5].render = '<a href=\"http:\/\/www.google.com\">x<\/a>';
-      workflow.FILENAME_LINK = aData.FILENAME_LINK;
-      //workflow.FILENAME_LINKXPDL = aData.FILENAME_LINKXPDL;
+      Ext.getCmp('PM_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINK + "\">" + aData.FILENAME + "<\/a>");
+      Ext.getCmp('XPDL_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINKXPDL + "\">" + aData.FILENAMEXPDL + "<\/a>");
     },
     failure:function(form, action) {
     //  Ext.MessageBox.alert('Message', 'Load failed');
     }
   });
+
   var exportProcesswindow = new Ext.Window({
     title      : _('ID_EXPORT_PROCESS'),
     collapsible: false,
     maximizable: false,
-    width      : 450,
-    height     : 300,
-    minWidth   : 300,
-    minHeight  : 200,
+    sizeable   : false,
+    width      : 500,
+    height     : 250,
+    resizable  : false,
     layout     : 'fit',
     plain      : true,
-    autoScroll: true,
     buttonAlign: 'center',
     items      : exportProcessForm
   });
-   workflow.exportProcesswindow = exportProcesswindow;
-   exportProcesswindow.show();
+  
+  workflow.exportProcesswindow = exportProcesswindow;
+  exportProcesswindow.show();
 }
 
 ProcessMapContext.prototype.addTask= function()
