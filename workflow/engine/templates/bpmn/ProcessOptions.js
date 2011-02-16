@@ -636,7 +636,7 @@ ProcessOptions.prototype.dbConnection = function()
               url: 'proxyExtjs.php?pid='+pro_uid+'&action=getDatabaseConnectionList'
             })
           });
-  dbStore.load({params:{start : 0 , limit : 1 }});
+  dbStore.load({params:{start : 0 , limit : 10 }});
 
 
 
@@ -707,7 +707,7 @@ ProcessOptions.prototype.dbConnection = function()
         stripeRows: true,
         tbar: tb,
         bbar: new Ext.PagingToolbar({
-            pageSize: 1,
+            pageSize: 10,
             store: dbStore,
             displayInfo: true,
             displayMsg: 'Displaying DB Connection {0} - {1} of {2}',

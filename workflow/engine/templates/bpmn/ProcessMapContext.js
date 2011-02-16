@@ -209,12 +209,12 @@ ProcessMapContext.prototype.exportProcess= function()
           },{
             xtype       : 'displayfield',
             fieldLabel  : _('ID_PM_FILENAME'),
-            id          : 'PM_FILENAME',
+            //id          : 'PM_FILENAME',
             name        : 'PM_FILENAME'
           },{
             xtype       : 'displayfield',
             fieldLabel  : _('ID_XPDL_FILENAME'),
-            id          : 'XPDL_FILENAME',
+            //id          : 'XPDL_FILENAME',
             name        : 'XPDL_FILENAME'
           }
         ]
@@ -237,9 +237,8 @@ ProcessMapContext.prototype.exportProcess= function()
       var aData = action.result.data;
       var fieldSet = workflow.exportProcessForm.items.items[0];
       var fields = fieldSet.items.items;
-
-      Ext.getCmp('PM_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINK + "\">" + aData.FILENAME + "<\/a>");
-      Ext.getCmp('XPDL_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINKXPDL + "\">" + aData.FILENAMEXPDL + "<\/a>");
+      form.findField('PM_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINK + "\">" + aData.FILENAME + "<\/a>");
+      form.findField('XPDL_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINKXPDL + "\">" + aData.FILENAMEXPDL + "<\/a>");
     },
     failure:function(form, action) {
     //  Ext.MessageBox.alert('Message', 'Load failed');
