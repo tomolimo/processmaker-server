@@ -1,10 +1,10 @@
 <?php
 /**
  * cases_ShowOutputDocument.php
- *  
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -14,13 +14,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
  */
 /*
  * Created on 13-02-2008
@@ -31,7 +31,7 @@
   require_once ( "classes/model/AppDocumentPeer.php" );
 
   $oAppDocument = new AppDocument();
-  $oAppDocument->Fields = $oAppDocument->load($_GET['a'],(isset($_GET['v']) )? $_GET['v'] : NULL ); 
+  $oAppDocument->Fields = $oAppDocument->load($_GET['a'],isset($_GET['v']) ? $_GET['v'] : NULL );
 
   $sAppDocUid = $oAppDocument->getAppDocUid();
   $info = pathinfo( $oAppDocument->getAppDocFilename() );
@@ -47,7 +47,7 @@
   	}
   }
   $ver= (isset($_GET['v']) && $_GET['v']!='') ? '_'.$_GET['v'] : '';
-  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename'] .$ver. '.' . $ext ;
-  G::streamFile ( $realPath, true );
-
+  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext ;  G::streamFile ( $realPath, true );
+ // G::streamFile ( $realPath, true ,$info['basename'] .$ver. '.' . $ext );
+ G::streamFile ( $realPath, true);
 ?>
