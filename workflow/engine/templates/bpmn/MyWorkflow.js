@@ -1361,9 +1361,10 @@ MyWorkflow.prototype.showAjaxDialog = function(btn){
         if(typeof workflow.urlparameter != 'undefined'){
           var url = workflow.urlparameter;
           if(btn == 'yes'){
-              //Check for End Event and delete from route table
+           var currentObj = workflow.currentSelection;
+           
+           //Check for End Event and delete from route table
            if(workflow.currentSelection.type.match(/End/) && workflow.currentSelection.type.match(/Event/)){
-             var currentObj = workflow.currentSelection;
              var ports = currentObj.getPorts();
              var len =ports.data.length;
              var conn = new Array();
@@ -1391,13 +1392,13 @@ MyWorkflow.prototype.showAjaxDialog = function(btn){
            Ext.Ajax.request({
               url: "processes_Ajax.php"+ url,
                 success: function(response) {
-                //Ext.Msg.alert (response.responseText);
+                    workflow.getCommandStack().execute(new CommandDelete(currentObj));
               },
               failure: function(){
                 Ext.Msg.alert ('Failure');
               }
-           });
-           workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
+            });
+          
          }
       }
     };
@@ -1815,7 +1816,10 @@ MyWorkflow.prototype.deleteRoute = function(oConn,iVal){
             var tas_start = 'FALSE';
             workflow.urlDeleteparameter = '?action=saveStartEvent&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
      }
-     Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the Event',this.showEventResult);
+     if(iVal == 0)
+        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the Route',this.showEventResult);
+     else
+         this.showEventResult('yes');
 }
 
 MyWorkflow.prototype.showEventResult = function(btn){
