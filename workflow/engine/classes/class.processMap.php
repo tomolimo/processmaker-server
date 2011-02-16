@@ -1472,8 +1472,10 @@ class processMap {
             $sGat_uid =  $oGateway->create($aData);
           }else{
             $aData['GAT_UID'] = $sGat_uid;
-            $aData['TAS_UID'] = $oData->tas_from;
-            $aData['GAT_NEXT_TASK'] = $oData->tas_to;
+            if (isset($oData->tas_from))
+              $aData['TAS_UID'] = $oData->tas_from;
+            if (isset($oData->tas_to))
+              $aData['GAT_NEXT_TASK'] = $oData->tas_to;
             $oGateway->update($aData);
           }
           $oEncode->uid = $sGat_uid;
