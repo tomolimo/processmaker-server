@@ -1617,6 +1617,8 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
     var rou_evn_uid   = '';
     var port_numberIP   = '';
     var port_numberOP   = '';
+    var sGatUid   = '';
+    var sGatType   = '';
 
     if(typeof newObj.sPortType != 'undefined')
       {
@@ -1715,8 +1717,10 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
 
     var staskUid     = 	Ext.util.JSON.encode(task_uid);
     var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
-    var sGatUid      =  preObj.id;
-    var sGatType     =  preObj.type;
+    if(preObj.type.match(/Gateway/)){
+        sGatUid      =  preObj.id;
+        sGatType     =  preObj.type;
+    }
     if(task_uid.length > 0 && next_task_uid.length > 0)
         {
             Ext.Ajax.request({
