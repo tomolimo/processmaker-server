@@ -1,6 +1,8 @@
 MyWorkflow=function(id){
 Workflow.call(this,id);
 this.html.style.backgroundImage="url(/skins/ext/images/gray/shapes/grid_10.png)";
+this.setGridWidth(4,4);
+this.setSnapToGrid(true);
 };
 MyWorkflow.prototype=new Workflow;
 MyWorkflow.prototype.type="MyWorkflow";
