@@ -730,7 +730,7 @@ var showDynaforms = function() {
         oPanel2.loader.hide();
         var scs=rpc.xmlhttp.responseText.extractScript();
         oPanel2.addContent(rpc.xmlhttp.responseText);
-        scs.evalScript();
+        scs.evalScript();scs.evalScript();
     }.extend(this);
     oRPC.make();
   }
