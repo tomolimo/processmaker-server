@@ -310,6 +310,9 @@ class languages {
           $codes   = explode('-', $reference);
           foreach($codes as $i=>$code){
             $codes[$i] = trim($code);
+            if ( $codes[$i] == "''" ){
+              $codes[$i] = '';
+            }
           }
           $fieldName = trim($codes[1]);
           
