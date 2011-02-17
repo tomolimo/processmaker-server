@@ -735,19 +735,23 @@ bpmnTask.prototype.addShapes = function (oStore) {
     if (oStore.newShapeName == 'bpmnTask' && shape.match(/Event/)) {
         xOffset = workflow.currentSelection.getX() - 67; //Setting new offset value when currentselection is not Task i.e deriving task from events
     }
-    if (oStore.newShapeName == 'bpmnTask' && shape.match(/Gateway/)) {
+    else if (oStore.newShapeName == 'bpmnTask' && shape.match(/Gateway/)) {
         xOffset = workflow.currentSelection.getX() - 62; //Setting new offset value when currentselection is not Task i.e deriving task from gateways
     }
-    if (oStore.newShapeName.match(/Event/)) {
+    else if (oStore.newShapeName.match(/Gateway/) && shape.match(/Gateway/)) {
+        xOffset = workflow.currentSelection.getX(); //Setting new offset value when currentselection is not Task i.e deriving task from gateways
+    }
+    else if (oStore.newShapeName.match(/Event/)) {
         xOffset = workflow.currentSelection.getX() + 67; //Setting new offset value when newShape is not Task i.e aligning events
     }
-    if (oStore.newShapeName.match(/Gateway/)) {
-        xOffset = workflow.currentSelection.getX() + 62; //Setting new offset value when newShape is not Task i.e aligning gateways
+    else if (oStore.newShapeName.match(/Gateway/)) {
+        xOffset = workflow.currentSelection.getX() + 62; 
     }
-    if (oStore.newShapeName.match(/Annotation/)) {
-        xOffset = workflow.currentSelection.getX() + 250; //Setting new offset value when newShape is not Task i.e aligning gateways
-        yOffset = workflow.currentSelection.getY() - 10.5; //Setting new offset value when newShape is not Task i.e aligning gateways
+    else if (oStore.newShapeName.match(/Annotation/)) {
+        xOffset = workflow.currentSelection.getX() + 250; 
+        yOffset = workflow.currentSelection.getY() - 10.5; 
     }
+
     workflow.subProcessName = 'Sub Process';
     workflow.annotationName = 'Annotation';
     var newShape = eval("new " + oStore.newShapeName + "(workflow)");
@@ -830,6 +834,7 @@ ButtonGateway.prototype = new Button;
 ButtonGateway.prototype.type = "/skins/ext/images/gray/shapes/gateway-small";
 ButtonGateway.prototype.execute = function () {
     this.palette.newShapeName = 'bpmnGatewayExclusiveData';
+    workflow.preSelectedObj = workflow.currentSelection;
     bpmnTask.prototype.addShapes(this.palette);
 };
 
@@ -934,7 +939,7 @@ bpmnTaskDialog.prototype.createHTMLElement = function () {
 /*Double Click Event for opening the dialog Box*/
 bpmnTask.prototype.onDoubleClick = function () {
     var _409d = new bpmnTaskDialog(this);
-    this.workflow.showDialog(_409d, this.workflow.currentSelection.x, this.workflow.currentSelection.y);
+    workflow.showDialog(_409d, this.workflow.currentSelection.x, this.workflow.currentSelection.y);
 };
 
 bpmnTask.prototype.trim = function (str) {

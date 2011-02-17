@@ -799,7 +799,7 @@ Ext.onReady ( function() {
               workflow.boundaryEvent = false;
           }
           workflow.task_width='';
-          workflow.annotationName='';
+          workflow.annotationName='Annotation';
           NewShape = eval("new "+data.name+"(workflow)");
           NewShape.x = e.xy[0];
           NewShape.y = e.xy[1];

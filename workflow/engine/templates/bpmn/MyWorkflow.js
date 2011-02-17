@@ -1113,22 +1113,33 @@ MyWorkflow.prototype.savePosition= function(oShape)
 MyWorkflow.prototype.saveShape= function(oNewShape)
 {
     //Initializing variables
-    var shapeId = oNewShape.id;
+    var shapeId    = oNewShape.id;
+    var shapetype  = oNewShape.type;
     var actiontype = oNewShape.actiontype;
-    var xpos = oNewShape.x;
-    var ypos = oNewShape.y;
-    var pos = '{"x":'+xpos+',"y":'+ypos+'}';
-
-    var width = oNewShape.width;
-    var height = oNewShape.height;
+    var xpos       = oNewShape.x;
+    var ypos       = oNewShape.y;
+    var pos        = '{"x":'+xpos+',"y":'+ypos+'}';
+    var width      = oNewShape.width;
+    var height     = oNewShape.height;
     var cordinates = '{"x":'+width+',"y":'+height+'}';
 
-    if(oNewShape.type == 'bpmnTask'){
+    if(shapetype == 'bpmnTask'){
         var newlabel = oNewShape.taskName;
     }
-    if(oNewShape.type == 'bpmnAnnotation'){
+    if(shapetype == 'bpmnAnnotation'){
         newlabel = oNewShape.annotationName;
     }
+    //For Gateway to Event connection
+    connect = false;
+    if(typeof workflow.preSelectedObj != 'undefined' && workflow.preSelectedObj.type != 'undefined'){
+      if(workflow.preSelectedObj.type.match(/Gateway/))
+        connect = true;
+    }
+    else{
+      connect = false;
+      workflow.preSelectedObj = '';
+      workflow.preSelectedObj.type = '';
+   }
 
     //var urlparams = "action=addTask&data={"uid":"4708462724ca1d281210739068208635","position":{"x":707,"y":247}}";
     var urlparams = '';
@@ -1161,21 +1172,13 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             break;
         case 'addEvent':
             var tas_uid='';
-            //if(typeof oNewShape.workflow != 'undefined' &&  oNewShape.workflow != null)
-            //    tas_uid = oNewShape.workflow.taskUid[0].value;
-            var evn_type = oNewShape.type;
-            var evn_uid = oNewShape.id;
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+evn_type+'","position":'+pos+',"evn_uid":"'+evn_uid+'"}';
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+shapetype+'","position":'+pos+',"evn_uid":"'+shapeId+'"}';
             break;
         case 'updateEvent':
-            var evn_uid = oNewShape.id
-            var evn_type = oNewShape.type;
-            urlparams = '?action='+actiontype+'&data={"evn_uid":"'+evn_uid +'","evn_type":"'+evn_type+'"}';
+            urlparams = '?action='+actiontype+'&data={"evn_uid":"'+shapeId +'","evn_type":"'+shapetype+'"}';
             break;
        case 'addGateway':
-            var gat_uid = oNewShape.id
-            var gat_type = oNewShape.type;
-            urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+gat_uid +'","gat_type":"'+gat_type+'","position":'+pos+'}';
+            urlparams = '?action='+actiontype+'&data={"pro_uid":"'+ pro_uid +'","gat_uid":"'+ shapeId +'","gat_type":"'+ shapetype +'","position":'+ pos +'}';
             break;
     }
     //var urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
@@ -1217,9 +1220,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)){
                       workflow.saveEvents(oNewShape);
                     }
-                            else if(oNewShape.type.match(/Gateway/)){
-                                workflow.saveGateways(oNewShape);
-                            }
+                    else if(oNewShape.type.match(/Gateway/)){
+                      workflow.saveGateways(oNewShape);
+                    }
                }
             },
             failure: function(){
@@ -1495,9 +1498,10 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
  * @Author Safan Maredia
  */
 MyWorkflow.prototype.saveGateways = function(oGateway){
-    var task_uid      = new Array();
-    var next_task_uid = new Array();
-    var urlparams     = '';
+    var task_uid       = '';
+    var next_task_uid  = '';
+    var next_task_type = '';
+    var urlparams      = '';
     var xpos = oGateway.x;
     var ypos = oGateway.y;
     var pos = '{"x":'+xpos+',"y":'+ypos+'}';
@@ -1517,14 +1521,15 @@ MyWorkflow.prototype.saveGateways = function(oGateway){
           if(typeof conn[i] != 'undefined')
             for(var j = 0; j < conn[i].data.length ; j++){
               if(typeof conn[i].data[j] != 'undefined'){
-                if(conn[i].data[j].sourcePort.parentNode.type != oGateway.type){
+                if(conn[i].data[j].sourcePort.parentNode.id != oGateway.id){
                   // task_uid[count1] = new Array();
                    task_uid = conn[i].data[j].sourcePort.parentNode.id;
                    count1++;
                 }
-                if(conn[i].data[j].targetPort.parentNode.type != oGateway.type){
+                if(conn[i].data[j].targetPort.parentNode.id != oGateway.id){
                   // task_uid[count2] = new Array();
                   next_task_uid = conn[i].data[j].targetPort.parentNode.id;
+                  next_task_type = conn[i].data[j].targetPort.parentNode.type;
                   //count2++;
                 }
              }
@@ -1532,7 +1537,7 @@ MyWorkflow.prototype.saveGateways = function(oGateway){
         }
     // var staskUid     = 	Ext.util.JSON.encode(task_uid);
     // var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
-     urlparams = '?action=addGateway&data={"pro_uid":"'+ pro_uid +'","tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","gat_type":"'+oGateway.type+'","gat_uid":"'+oGateway.id+'","position":'+pos+'}';
+     urlparams = '?action=addGateway&data={"pro_uid":"'+ pro_uid +'","tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","gat_type":"'+oGateway.type+'","gat_uid":"'+oGateway.id+'","gat_next_type":"'+next_task_type+'","position":'+pos+'}';
      if(urlparams != ''){
         Ext.Ajax.request({
                 url: "processes_Ajax.php"+ urlparams,
