@@ -68,6 +68,10 @@ EOT
 );
 CLI::taskArg('backup-file', false);
 CLI::taskArg('workspace', true);
+CLI::taskOpt("overwrite", "If a workspace already exists, overwrite it.", "o", "overwrite");
+CLI::taskOpt("info", "Only shows information about a backup archive.", "i");
+CLI::taskOpt("workspace", "Select which workspace to restore if multiple workspaces are present in the archive.",
+             "w", "workspace");
 CLI::taskRun(run_workspace_restore);
 
 CLI::taskName('cacheview-repair');
@@ -357,19 +361,53 @@ function run_workspace_backup($args, $opts) {
       $workspaces[] = new workspaceTools($arg);
     }
   } else if (sizeof($args) > 0) {
-    $workspaces[] = new workspaceTools($args[0]);
+    $workspace = new workspaceTools($args[0]);
+    $workspaces[] = $workspace;
     if (sizeof($args) == 2)
       $filename = $args[1];
     else
-      $filename = $workspace->name . ".tar.gz";
+      $filename = "{$workspace->name}.tar";
+  } else {
+    throw new Exception("No workspace specified for backup");
   }
   foreach ($workspaces as $workspace)
-    $workspace->backup($filename);
+    if (!$workspace->workspaceExists())
+      throw new Exception("Workspace '{$workspace->name}' not found");
+  //If this is a relative path, put the file in the backups directory
+  if (strpos($filename, "/") === false && strpos($filename, '\\') === false)
+    $filename = PATH_DATA . "backups/$filename";
+  CLI::logging("Backing up to $filename\n");
+  $backup = workspaceTools::createBackup($filename);
+
+  foreach ($workspaces as $workspace)
+    $workspace->backup($backup);
+
+  CLI::logging("\n");
+  workspaceTools::printSysInfo();
+  foreach ($workspaces as $workspace) {
+    CLI::logging("\n");
+    $workspace->printMetadata(false);
+  }
+  
 }
 
 function run_workspace_restore($args, $opts) {
-  //$workspace = new workspaceTools($args[0]);
-  workspaceTools::restore($args[0], $args[1]);
+  $filename = $args[0];
+  if (strpos($filename, "/") === false && strpos($filename, '\\') === false) {
+    $filename = PATH_DATA . "backups/$filename";
+    if (substr_compare($filename, ".tar", -4, 4, true) != 0)
+      $filename .= ".tar";
+  }
+  $info = array_key_exists("info", $opts);
+  if ($info) {
+    workspaceTools::getBackupInfo($filename);
+  } else {
+    CLI::logging("Restoring from $filename\n");
+    $workspace = array_key_exists("workspace", $opts) ? $opts['workspace'] : NULL;
+    $overwrite = array_key_exists("overwrite", $opts);
+    $dstWorkspace = $args[1];
+    workspaceTools::restore($filename, $workspace, $dstWorkspace, $overwrite);
+  }
 }
 
 ?>

@@ -45,7 +45,7 @@ class CLI {
       'description' => NULL,
       'args' => array(),
       'function' => NULL,
-      'opt' => array('short' => '', 'long' => array())
+      'opt' => array('short' => '', 'long' => array(), 'descriptions' => array())
     );
   }
 
@@ -83,9 +83,16 @@ class CLI {
    * @param  string $short short options
    * @param  array  $long  long options
    */
-  public static function taskOpt($short, $long = array()) {
+  public static function taskOpt($name, $description, $short, $long = NULL) {
     assert(self::$currentTask !== NULL);
-    self::$tasks[self::$currentTask]["opt"] = array('short' => $short, 'long' => $long);
+    $opts = self::$tasks[self::$currentTask]["opt"];
+    if ($short)
+      $opts['short'] .= $short;
+    if ($long)
+      $opts['long'][] = $long;
+    $opts['descriptions'][$name] = array('short' => $short, 'long' => $long,
+      'description' => $description);
+    self::$tasks[self::$currentTask]["opt"] = $opts;
   }
 
   /**
@@ -104,10 +111,13 @@ class CLI {
    * @param  array $args if defined, the task name should be argument 0
    * @param  array $opts options as returned by getopt
    */
-  public static function help($args, $opts) {
+  public static function help($args, $opts = NULL) {
     global $argv;
     $scriptName = $argv[0];
-    $taskName = $args[0];
+    if (is_array($args))
+      $taskName = $args[0];
+    else
+      $taskName = $args;
 
     if (!$taskName) {
       echo "usage: $scriptName <task> [options] [args]\n";
@@ -142,9 +152,21 @@ Usage: $scriptName $taskName $valid_args
   $description
 
 EOT;
+      $valid_options = array();
+      foreach(self::$tasks[$taskName]['opt']['descriptions'] as $opt => $data) {
+        $optString = array();
+        if ($data['short'])
+          $optString[] = "-{$data['short']}";
+        if ($data['long'])
+          $optString[] = "--{$data['long']}";
+        $valid_options[] = "  " . join(", ", $optString) . "\n\t" . wordwrap($data['description'], 70, "\n\t");
+      }
+      $valid_options = join("\n", $valid_options);
       if ($valid_options) {
         $message .= <<< EOT
+
 Options:
+        
 $valid_options
 
 EOT;
@@ -185,9 +207,40 @@ EOT;
     G::LoadThirdParty('pear/Console', 'Getopt');
     $short = "h" . $taskData['opt']['short'];
     $long = array_merge(array("help"), $taskData['opt']['long']);
-    list($options, $arguments) = Console_GetOpt::getopt2($args, $short, $long);
+    $getopt = Console_GetOpt::getopt2($args, $short, $long);
+    if (!is_array($getopt)) {
+      echo self::error("Invalid options (" . $getopt->getMessage() . ")") . "\n\n";
+      self::help($taskName);
+      return;
+    }
+    list($options, $arguments) = $getopt;
+    foreach ($taskData['opt']['descriptions'] as $optName => $optDescription) {
+      $validOpts[$optDescription['short']] = $optName;
+      $validOpts[$optDescription['long']] = $optName;
+    }
+    $taskOpts = array();
     try {
-      call_user_func($taskData['function'], $arguments, $options);
+      foreach ($options as $opt) {
+        list($optName, $optArg) = $opt;
+        if ($optName === "h" || $optName === "--help") {
+          self::help($taskName);
+          return;
+        }
+        if (strpos($optName, '--') === 0)
+          $optName = substr($optName, 2);
+        if (!array_key_exists($optName, $validOpts))
+          throw new Exception("Invalid option: $optName");
+        if (array_key_exists($validOpts[$optName], $taskOpts))
+          throw new Exception("'$optName' specified more then once");
+        $taskOpts[$validOpts[$optName]] = $optArg;
+      }
+    } catch (Exception $e) {
+      echo self::error("Invalid options: " . $e->getMessage()) . "\n\n";
+      self::help($taskName);
+      return;
+    }
+    try {
+      call_user_func($taskData['function'], $arguments, $taskOpts);
     } catch (Exception $e) {
       echo self::error("\n  Error executing '$taskName':\n\n  {$e->getMessage()}\n") . "\n";
     }
