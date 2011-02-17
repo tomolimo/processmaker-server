@@ -107,7 +107,8 @@
   if ( !is_array($confCasesList) ) {
     	$rows = getDefaultFields( $action );
     	$result = genericJsonResponse( '', array(), $rows , 20, '' );
-      $conf->saveObject($result,'casesList',$action,'','','');
+        // is no longer required save a default configuration since the translation for columns must be available for each language.
+        //$conf->saveObject($result,'casesList',$action,'','','');
   }
 
   // add the process filter
