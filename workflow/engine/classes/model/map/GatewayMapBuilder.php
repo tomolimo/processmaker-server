@@ -78,6 +78,8 @@ class GatewayMapBuilder {
 
 		$tMap->addColumn('GAT_TYPE', 'GatType', 'string', CreoleTypes::VARCHAR, true, 32);
 
+		$tMap->addColumn('GAT_NEXT_TYPE', 'GatNextType', 'string', CreoleTypes::VARCHAR, true, 32);
+
 		$tMap->addValidator('GAT_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Gateway UID can be no larger than 32 in size');
 
 		$tMap->addValidator('GAT_UID', 'required', 'propel.validator.RequiredValidator', '', 'Gateway Element UID is required.');

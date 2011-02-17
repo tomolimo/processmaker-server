@@ -1035,6 +1035,7 @@ CREATE TABLE `GATEWAY`
 	`GAT_X` INTEGER default 0 NOT NULL,
 	`GAT_Y` INTEGER default 0 NOT NULL,
 	`GAT_TYPE` VARCHAR(32) default '' NOT NULL,
+	`GAT_NEXT_TYPE` VARCHAR(32) default '' NOT NULL,
 	PRIMARY KEY (`GAT_UID`)
 )Type=MyISAM ;
 #-----------------------------------------------------------------------------
