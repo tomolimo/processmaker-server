@@ -50,43 +50,60 @@ try {
     $sfunction =$_POST['functions'];
   
   switch($sfunction){
-  	case 'getRelationInfDoc': 
-  	$oStepSupervisor = new StepSupervisor();
-    $fields2=$oStepSupervisor->loadInfo($_POST['INP_DOC_UID']);
-    $result=false;
-    if(is_array($fields2)){
-    	$result=true;
-    }
-    
-    return print $result;
+     
+            case 'getRelationInfDoc':
+            try {
+                $oStepSupervisor = new StepSupervisor();
+                $fields2=$oStepSupervisor->loadInfo($_POST['INP_DOC_UID']);
+                $result->passed=true;
+                if(is_array($fields2)){
+                    $result->passed=false;
+                }
+                $result->success = true;
+                $result->msg = $result->passed ? '' : G::LoadTranslation('ID_INPUTDOCUMENT_TASK_RELATION_EXISTS');
+           }
+           catch (Exception $e) {
+              $result->success = false;
+              $result->passed  = false;
+              $result->msg = $e->getMessage();
+           }
+        print G::json_encode($result);
   	break;
   	case 'deleteInputDocument':
-    
-    $oStepSupervisor = new StepSupervisor();
-    $fields2=$oStepSupervisor->loadInfo($_POST['INP_DOC_UID']);
-    $oStepSupervisor->remove($fields2['STEP_UID']);
-    
-    $oPermission = new ObjectPermission();
-    $fields3=$oPermission->loadInfo($_POST['INP_DOC_UID']);
-    if(is_array($fields3)) 
-     $oPermission->remove($fields3['OP_UID']);
-    
-    $oInputDocument = new InputDocument();
-    $fields = $oInputDocument->load($_POST['INP_DOC_UID']);
-    
-    $oInputDocument->remove($_POST['INP_DOC_UID']);
-    
-    $oStep = new Step();
-    $oStep->removeStep('INPUT_DOCUMENT', $_POST['INP_DOC_UID']);
-    
-    $oOP = new ObjectPermission();
-    $oOP->removeByObject('INPUT', $_POST['INP_DOC_UID']);
-    
-    //refresh dbarray with the last change in inputDocument
-    $oMap = new processMap();
-    $oCriteria = $oMap->getInputDocumentsCriteria($fields['PRO_UID']);
-    break;
-  }
+        try {
+        $oStepSupervisor = new StepSupervisor();
+        $fields2=$oStepSupervisor->loadInfo($_POST['INP_DOC_UID']);
+        $oStepSupervisor->remove($fields2['STEP_UID']);
+
+        $oPermission = new ObjectPermission();
+        $fields3=$oPermission->loadInfo($_POST['INP_DOC_UID']);
+        if(is_array($fields3))
+         $oPermission->remove($fields3['OP_UID']);
+
+        $oInputDocument = new InputDocument();
+        $fields = $oInputDocument->load($_POST['INP_DOC_UID']);
+
+        $oInputDocument->remove($_POST['INP_DOC_UID']);
+
+        $oStep = new Step();
+        $oStep->removeStep('INPUT_DOCUMENT', $_POST['INP_DOC_UID']);
+
+        $oOP = new ObjectPermission();
+        $oOP->removeByObject('INPUT', $_POST['INP_DOC_UID']);
+
+        //refresh dbarray with the last change in inputDocument
+        $oMap = new processMap();
+        $oCriteria = $oMap->getInputDocumentsCriteria($fields['PRO_UID']);
+
+        $result->success = true;
+        $result->msg = G::LoadTranslation('ID_INPUTDOCUMENT_REMOVED');
+      } catch (Exception $e) {
+        $result->success = false;
+        $result->msg = $e->getMessage();
+      }
+      print G::json_encode($result);
+     break;
+}
 }
 catch (Exception $oException) {
 	die($oException->getMessage());

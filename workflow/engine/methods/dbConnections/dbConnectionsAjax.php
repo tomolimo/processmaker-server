@@ -181,14 +181,21 @@ switch ( $action ){
 		break;
 
 	case 'deleteDbConnection':
-
+            try{
 		$oDBSource = new DbSource();
 		$oContent = new Content();
 
 		$DBS_UID = $_POST['dbs_uid'];
-    $PRO_UID = $_SESSION['PROCESS'];
+                $PRO_UID = $_SESSION['PROCESS'];
 		$oDBSource->remove($DBS_UID, $PRO_UID);
 		$oContent->removeContent('DBS_DESCRIPTION', "", $DBS_UID);
+                $result->success = true;
+                $result->msg = G::LoadTranslation('ID_DBCONNECTION_REMOVED');
+              }catch (Exception $e) {
+                $result->success = false;
+                $result->msg = $e->getMessage();
+               }
+              print G::json_encode($result);
 		break;
 
 	case 'showTestConnection':

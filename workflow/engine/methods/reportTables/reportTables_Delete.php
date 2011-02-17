@@ -24,6 +24,14 @@
  */
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
 G::LoadClass('reportTables');
-$oReportTables = new ReportTables();
-$oReportTables->deleteReportTable($_POST['REP_TAB_UID']);
+try{
+    $oReportTables = new ReportTables();
+    $oReportTables->deleteReportTable($_POST['REP_TAB_UID']);
+    $result->success = true;
+    $result->msg = G::LoadTranslation('ID_REPORTTABLE_REMOVED');
+} catch (Exception $e) {
+    $result->success = false;
+    $result->msg = $e->getMessage();
+   }
+print G::json_encode($result);
 ?>

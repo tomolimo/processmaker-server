@@ -55,8 +55,13 @@ try {
   $oMap = new processMap();
   $oCriteria = $oMap->getOutputDocumentsCriteria($fields['PRO_UID'] );
   
+  $result->success = true;
+  $result->msg = G::LoadTranslation('ID_OUTPUTDOCUMENT_REMOVED');
 }
-catch (Exception $oException) {
-	die($oException->getMessage());
+catch (Exception $e) {
+        $result->success = false;
+        $result->msg = $e->getMessage();
+	//die($oException->getMessage());
 }
+print G::json_encode($result);
 ?>

@@ -229,21 +229,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         header: _('ID_TAS_VIEW'),
         dataIndex: 'TAS_VIEW',
         width: 110
-      }/*,{
-        sortable: false,
-        width: 50,
-        renderer: function(val, meta, record)
-        {
-          return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
-        }
-      },{
-        sortable: false,
-        width: 60,
-        renderer: function(val, meta, record)
-        {
-          return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.DYN_UID);
-        }
-      }*/
+      }
     ]
   });
 
@@ -629,6 +615,10 @@ ProcessOptions.prototype.dbConnection = function()
             {name: 'DBS_ENCODE', type:'string'}
         ]);
 
+  var editor = new Ext.ux.grid.RowEditor({
+            saveText: _('ID_UPDATE')
+        });
+
   var btnNew = new Ext.Button({
             id: 'btnNew',
             text: _('ID_NEW'),
@@ -636,78 +626,90 @@ ProcessOptions.prototype.dbConnection = function()
             handler: function () {
                 dbconnForm.getForm().reset();
                 formWindow.show();
-                
             }
   });
 
-  var btnEdit = new Ext.Button({
-            id: 'btnEdit',
-            text: _('ID_EDIT'),
-            iconCls: 'button_menu_ext ss_sprite ss_pencil',
-            handler: function (s) {
-                var selectedRow = dbGrid.getSelectionModel().getSelections();
-                var dbConnUID   = selectedRow[0].data.DBS_UID;
-                dbconnForm.form.load({
-                url:'proxyExtjs.php?pid='+pro_uid+'&dbs_uid='+dbConnUID+'&action=editDatabaseConnection',
-                    method:'GET',
-                    waitMsg:'Loading',
-                    success:function(form, action) {
-                        formWindow.show();
-                      //Ext.MessageBox.alert('Message', 'Loaded OK');
-                     // setTaskAssignType(form);
-                    },
-                    failure:function(form, action) {
-                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+  //edit report table Function
+  var editDBConn = function() {
+      editor.stopEditing();
+      var rowSelected  = Ext.getCmp('dbConnGrid').getSelectionModel().getSelections();
+      if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+      }
+      var dbConnUID = rowSelected[0].get('DBS_UID');
+      dbconnForm.form.load({
+                        url   :'proxyExtjs.php?pid='+pro_uid+'&dbs_uid='+dbConnUID+'&action=editDatabaseConnection',
+                        method: 'GET',
+                        waitMsg:'Loading',
+                        success:function(form, action) {
+                           //Ext.MessageBox.alert('Message', 'Loaded OK');
+                           formWindow.show();
+                           Ext.getCmp("DBS_UID").setValue(dbConnUID);
+                        },
+                        failure:function(form, action) {
+                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                         }
-                });
-            }
-  });
+                     });
+   }
 
-   var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: _('ID_DELETE'),
-            iconCls: 'button_menu_ext ss_sprite ss_delete',
-            handler: function (s) {
-                editor.stopEditing();
-                var s = dbGrid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
+   var removeDBConn = function(){
+    ids = Array();
 
-                    //First Deleting step from Database using Ajax
-                    var dbUID      = r.data.DBS_UID;
-                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.DBS_UID != "")
-                    {
-                        Ext.Ajax.request({
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('dbConnGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('DBS_UID');
+
+    ids = ids.join(',');
+
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_DBCONNECTION_CONFIRM'), function(){
+                      Ext.Ajax.request({
                           url   : '../dbConnections/dbConnectionsAjax.php',
                           method: 'POST',
                           params: {
-                                dbs_uid         : dbUID,
-                                action          :'deleteDbConnection'
+                             action        :'deleteDbConnection',
+                             dbs_uid   : ids
                           },
+                        success: function(response) {
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.msg);
 
-                          success: function(response) {
-                            PMExt.notify (_('ID_STATUS'),_('DBS_REMOVE'));
-                            //Secondly deleting from Grid
-                            dbStore.remove(r);
-                            //Reloading store after removing steps
+                            //Reloading store after deleting input document
                             dbStore.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.msg);
                           }
-                        });
-                    }
-                    else
-                       dbStore.remove(r);
-                }
-            }
-        });
+                        }
+                      });
+                    });
+    }
 
-        var tb = new Ext.Toolbar({
-            items: [btnNew,btnEdit, btnRemove]
-        });
+    //edit report table button
+  var btnEdit = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editDBConn
+  });
 
-  var editor = new Ext.ux.grid.RowEditor({
-            saveText: _('ID_UPDATE')
-        });
+  var btnRemove = new Ext.Button({
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: removeDBConn
+  });
+
+  var tb = new Ext.Toolbar({
+        items: [btnNew,btnEdit, btnRemove]
+    });
 
   var dbStore = new Ext.data.JsonStore({
             root         : 'data',
@@ -723,7 +725,7 @@ ProcessOptions.prototype.dbConnection = function()
 
   var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {DBS_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{DBS_UID}');> </p>"
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {DBS_DESCRIPTION} </p>"
     )
   });
 
@@ -780,7 +782,7 @@ ProcessOptions.prototype.dbConnection = function()
 
   var dbGrid = new Ext.grid.GridPanel({
         store: dbStore,
-        id : 'mygrid',
+        id : 'dbConnGrid',
         loadMask: true,
         loadingText: 'Loading...',
         //renderTo: 'cases-grid',
@@ -805,6 +807,48 @@ ProcessOptions.prototype.dbConnection = function()
         }),
         viewConfig: {forceFit: true}
    });
+
+   //connecting context menu  to grid
+  dbGrid.addListener('rowcontextmenu', ondbGridContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  dbGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  dbGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function ondbGridContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    dbGridContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var dbGridContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editDBConn
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: removeDBConn
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('dbConnGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.DBS_UID);
+        }
+      }
+    ]
+  });
+
 
   var dbconnForm =new Ext.FormPanel({
    //   title:"Add new Database Source",
@@ -843,17 +887,23 @@ ProcessOptions.prototype.dbConnection = function()
                         onSelect: function(record, index) {
                                  //Show-Hide Format Type Field
                                 if(record.data.value == 'MySql')
-                                        {Ext.getCmp("encode").show();
+                                        {
+                                         Ext.getCmp("encode").show();
                                          Ext.getCmp("postgre").hide();
-                                         Ext.getCmp("port").setValue('3306')}
+                                         dbconnForm.getForm().findField('DBS_PORT').setValue('3306');
+                                         }
                                 else if(record.data.value == 'PostGreSql')
-                                        {Ext.getCmp("postgre").show();
+                                        {
+                                         Ext.getCmp("postgre").show();
                                          Ext.getCmp("encode").hide();
-                                         Ext.getCmp("port").setValue('5432')}
+                                         dbconnForm.getForm().findField('DBS_PORT').setValue('5432');
+                                         }
                                 else
-                                        {Ext.getCmp("sqlserver").show();
+                                        {
+                                         Ext.getCmp("sqlserver").show();
                                          Ext.getCmp("postgre").hide();
-                                         Ext.getCmp("port").setValue('1433')}
+                                         dbconnForm.getForm().findField('DBS_PORT').setValue('1433');
+                                         }
                                          this.setValue(record.data[this.valueField || this.displayField]);
                                          this.collapse();
                         }
@@ -1043,7 +1093,7 @@ ProcessOptions.prototype.dbConnection = function()
                         fieldLabel: _('ID_PORT'),
                         name: 'DBS_PORT',
                         width:  200,
-                        id:'port',
+                        //id:'port',
                         //allowBlank: false,
                         editable:false
                       },{
@@ -1237,7 +1287,7 @@ var testConnWindow = new Ext.Window({
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
   var ProcMapObj= new ProcessMapContext();
- var dynaFields = Ext.data.Record.create([
+  var inpDocFields = Ext.data.Record.create([
             {
                 name: 'INP_DOC_UID',
                 type: 'string'
@@ -1266,96 +1316,28 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
     saveText: _('ID_UPDATE')
     });
 
-  var inputDocStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : dynaFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
-            })
-          });
-  inputDocStore.load({params:{start : 0 , limit : 10 }});
+    var btnAdd = new Ext.Button({
+        id: 'btnAdd',
+        text: _('ID_NEW'),
+       iconCls: 'button_menu_ext ss_sprite ss_add',
+        handler: function () {
+           newIOWindow.show();
+           inputDocForm.getForm().reset();
+        }
+    });
 
-  var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: _('ID_DELETE'),
-            iconCls: 'button_menu_ext ss_sprite ss_delete',
-            handler: function (s) {
-                editor.stopEditing();
-                var s = inputDocGrid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
-
-                    //First Deleting dynaform from Database using Ajax
-                    var inputDocUID      = r.data.INP_DOC_UID;
-
-                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.INP_DOC_UID != "")
-                    {
-                        Ext.Ajax.request({
-                          url   : '../inputdocs/inputdocs_Delete.php',
-                          method: 'POST',
-                          params: {
-                                functions          : 'getRelationInfDoc',
-                                INP_DOC_UID        : inputDocUID
-                          },
-                          success: function(response) {
-                            //First check whether selected input document is assigned to a process supervisor or not.
-                            //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
-                            if(response.responseText == "")
-                             {
-                                Ext.Ajax.request({
-                                  url   : '../inputdocs/inputdocs_Delete.php',
-                                  method: 'POST',
-                                  params: {
-                                        functions          : 'deleteInputDocument',
-                                        INP_DOC_UID        : inputDocUID
-                                  },
-                                  success: function(response) {
-                                    PMExt.notify( _('ID_STATUS') , _('ID_INPUT_REMOVED') );
-                                    //Secondly deleting from Grid
-                                    inputDocStore.remove(r);
-                                    //reloading store after deleting input document
-                                    inputDocStore.reload();
-                                  }
-                                });
-                             }
-                             else
-                                  PMExt.notify( _('ID_STATUS') , _('ID_INPUT_WARNING') );
-                              }
-                        });
-                    }
-                    else
-                        inputDocStore.remove(r);
-                }
-            }
-        });
-
-  var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: _('ID_NEW'),
-           iconCls: 'button_menu_ext ss_sprite ss_add',
-            handler: function () {
-               newIOWindow.show();
-               inputDocForm.getForm().reset();
-            }
-        });
- 
-
- var btnEdit = new Ext.Button({
-            id: 'btnEdit',
-            text: _('ID_EDIT'),
-            iconCls: 'button_menu_ext ss_sprite ss_pencil',
-            handler: function (s) {
-                var selectedRow = inputDocGrid.getSelectionModel().getSelections();
-                var inputDocUID   = selectedRow[0].data.INP_DOC_UID;
-
-                 //Loading Task Details into the form
-                  inputDocForm.form.load({
-                        url:'proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
-                        method:'GET',
+    //edit input document Function
+    var editInputDoc = function() {
+      editor.stopEditing();
+      var rowSelected  = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
+      if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+      }
+      var inputDocUID = rowSelected[0].get('INP_DOC_UID');
+      inputDocForm.form.load({
+                        url   :'proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
+                        method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
                            //Ext.MessageBox.alert('Message', 'Loaded OK');
@@ -1365,9 +1347,99 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                         failure:function(form, action) {
                             PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                         }
+                     });
+   }
+
+    var removeInputDoc = function(){
+    ids = Array();
+
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('INP_DOC_UID');
+
+    ids = ids.join(',');
+
+    //First check whether selected Dynaform is assigned to a task steps or not.
+    Ext.Ajax.request({
+      url   : '../inputdocs/inputdocs_Delete.php',
+      method: 'POST',
+      params: {
+        functions : 'getRelationInfDoc',
+         INP_DOC_UID   : ids
+      },
+      success: function(response) {
+        var result = Ext.util.JSON.decode(response.responseText);
+        if( result.success ) {
+          if( result.passed ) { //deleting the selected input document
+                    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_INPUTDOCUMENT_CONFIRM'), function(){
+                      Ext.Ajax.request({
+                        url   : '../inputdocs/inputdocs_Delete.php',
+                        method: 'POST',
+                        params: {
+                          functions      : 'deleteInputDocument',
+                          INP_DOC_UID        : ids
+                        },
+                        success: function(response) {
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.msg);
+
+                            //Reloading store after deleting input document
+                            inputDocStore.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.msg);
+                          }
+                        }
+                      });
                     });
-            }
-        });
+                  } else {
+                    PMExt.error(_('ID_VALIDATION_ERROR'), result.msg);
+                  }
+                } else {
+                  PMExt.error(_('ID_ERROR'), result.msg);
+                }
+              }
+            });
+  }
+
+   //edit input document button
+  var btnEdit = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editInputDoc
+  });
+
+  var btnRemove = new Ext.Button({
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: removeInputDoc
+  });
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove, btnEdit]
+            });
+
+  //inputDocStore? and groupingStore?
+  var inputDocStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : inpDocFields,
+            proxy: new Ext.data.HttpProxy({
+              url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
+            })
+          });
+  inputDocStore.load({params:{start : 0 , limit : 10 }});
 
   var inputDocForm = new Ext.FormPanel({
         labelWidth: 100,
@@ -1558,7 +1630,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                 var sOrig           = getForm.INP_DOC_ORIGINAL;
                 if(sOrig == "" || sOrig == "Original")
                     sOrig           = 'ORIGINAL';
-                
+
                 if(sOrig == 'Legal Copy')
                     sOrig           = 'COPYLEGAL';
 
@@ -1657,7 +1729,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 
  var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {INP_DOC_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{INP_DOC_UID}');> </p>"
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {INP_DOC_DESCRIPTION} </p>"
     )
   });
 
@@ -1696,13 +1768,9 @@ var inputDocColumns = new Ext.grid.ColumnModel({
         });
 
 
-  var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove, btnEdit]
-            });
-
   var inputDocGrid = new Ext.grid.GridPanel({
         store: inputDocStore,
-        id : 'mygrid',
+        id : 'inputdocGrid',
         loadMask: true,
         //loadingText: 'Loading...',
         //renderTo: 'cases-grid',
@@ -1727,6 +1795,46 @@ var inputDocColumns = new Ext.grid.ColumnModel({
         viewConfig: {forceFit: true}
    });
 
+   //connecting context menu  to grid
+  inputDocGrid.addListener('rowcontextmenu', onInputDocContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  inputDocGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  inputDocGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onInputDocContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    dynaformsContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var dynaformsContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editInputDoc
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: removeInputDoc
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('inputdocGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.INP_DOC_UID);
+        }
+      }
+    ]
+  });
 
   var gridWindow = new Ext.Window({
         title: _('ID_REQUEST_DOCUMENTS'),
@@ -1760,7 +1868,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 {
  var ProcMapObj= new ProcessMapContext();
 
-  var dynaFields = Ext.data.Record.create([
+ var outputDocFields = Ext.data.Record.create([
             {
                 name: 'OUT_DOC_UID',
                 type: 'string'
@@ -1784,56 +1892,6 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             saveText: _('ID_UPDATE')
             });
 
-
-
-  var outputDocStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : dynaFields,
-            proxy        : new Ext.data.HttpProxy({
-                           url: 'proxyExtjs?pid='+pro_uid+'&action=getOutputDocument'
-                           })
-  });
-  outputDocStore.load({params:{start : 0 , limit : 10 }});
-
-  var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: _('ID_DELETE'),
-            iconCls: 'button_menu_ext ss_sprite ss_delete',
-            handler: function (s) {
-                editor.stopEditing();
-                var s = outputDocGrid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
-
-                    //First Deleting dynaform from Database using Ajax
-                    var outputDocUID      = r.data.OUT_DOC_UID;
-
-                    //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.OUT_DOC_UID != "")
-                    {
-                        Ext.Ajax.request({
-                          url   : '../outputdocs/outputdocs_Delete.php',
-                          method: 'POST',
-                          params: {
-                                OUT_DOC_UID        : outputDocUID
-                          },
-                          success: function(response) {
-                              PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_REMOVE') );
-                            //Secondly deleting from Grid
-                            outputDocStore.remove(r);
-                            //reloading store after deleting output document
-                            outputDocStore.reload();
-                          }
-                        });
-                    }
-                }
-            }
-        });
-
-
   var btnAdd = new Ext.Button({
             id: 'btnAdd',
             text: _('ID_NEW'),
@@ -1844,51 +1902,119 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             }
         });
 
-  var btnEdit = new Ext.Button({
-            id: 'btnEdit',
-            text: _('ID_EDIT'),
-            iconCls: 'button_menu_ext ss_sprite ss_pencil',
-            handler: function (s) {
-                var s = outputDocGrid.getSelectionModel().getSelections();
-                var outputDocUID = s[0].data.OUT_DOC_UID;
-                outputDocForm.form.load({
-                    url:'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
-                    method:'GET',
-                    waitMsg:'Loading',
-                    success:function(form, action) {
-                        newOPWindow.show();
-                     //  Ext.MessageBox.alert('Message', 'Loaded OK');
-                      //  setTaskAssignType(form);
-                    },
-                    failure:function(form, action) {
-                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                    }
-                });
-            }
+  //edit output document Function
+  var editOutputDoc = function() {
+      editor.stopEditing();
+      var rowSelected  = Ext.getCmp('outputdocGrid').getSelectionModel().getSelections();
+      if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+      }
+      var outputDocUID = rowSelected[0].get('OUT_DOC_UID');
+      outputDocForm.form.load({
+                        url   :'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
+                        method: 'GET',
+                        waitMsg:'Loading',
+                        success:function(form, action) {
+                           //Ext.MessageBox.alert('Message', 'Loaded OK');
+                           newOPWindow.show();
+                           Ext.getCmp("OUT_DOC_UID").setValue(outputDocUID);
+                        },
+                        failure:function(form, action) {
+                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                        }
+                     });
+   }
 
-        });
+   var removeOutputDoc = function(){
+    ids = Array();
+
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('outputdocGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('OUT_DOC_UID');
+
+    ids = ids.join(',');
+
+    //deleting the selected input document
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_OUTPUTDOCUMENT_CONFIRM'), function(){
+                      Ext.Ajax.request({
+                        url   : '../outputdocs/outputdocs_Delete.php',
+                        method: 'POST',
+                        params: {
+                          OUT_DOC_UID        : ids
+                        },
+                        success: function(response) {
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.msg);
+
+                            //Reloading store after deleting input document
+                            outputDocStore.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.msg);
+                          }
+                        }
+                      });
+                    });
+  }
+
+  //properties output document
+  var propertiesOutputDoc = function(){
+
+  }
+  
+  //edit output document button
+  var btnEdit = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editOutputDoc
+  });
+
+  var btnRemove = new Ext.Button({
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: removeOutputDoc
+  });
 
   var btnProperties = new Ext.Button({
             id: 'btnProperties',
             text: _('ID_PROPERTIES'),
             iconCls: 'application_add',
-            handler: function (s) {
-                outputDocGrid.stopEditing();
-                var selectedRow = outputDocGrid.getSelectionModel().getSelections();
-                var outDocUID   = selectedRow.data[0].OUT_DOC_UID;
-            }
+            handler: propertiesOutputDoc
         });
 
   var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove,btnEdit,btnProperties]
-       });
+            items: [btnAdd, btnRemove, btnEdit, btnProperties]
+            });
+
+  var outputDocStore = new Ext.data.JsonStore({
+            root         : 'data',
+            totalProperty: 'totalCount',
+            idProperty   : 'gridIndex',
+            remoteSort   : true,
+            fields       : outputDocFields,
+            proxy        : new Ext.data.HttpProxy({
+                           url: 'proxyExtjs?pid='+pro_uid+'&action=getOutputDocument'
+                           })
+  });
+  outputDocStore.load({params:{start : 0 , limit : 10 }});
 
  var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {OUT_DOC_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{OUT_DOC_UID}');> </p>"
+        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {OUT_DOC_DESCRIPTION} </p>"
     )
   });
-  var outputDocColumns = new Ext.grid.ColumnModel({
+
+ var outputDocColumns = new Ext.grid.ColumnModel({
             columns: [
                 expander,
                 {
@@ -1909,20 +2035,13 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                     editor: new Ext.form.TextField({
                     //allowBlank: false
                     })
-                }/*,{
-                    sortable: false,
-                    renderer: function(val, meta, record)
-                       {
-                            return String.format("<input type='button' value='UID' onclick=workflow.createUIDButton('{0}');>",record.data.OUT_DOC_UID);
-                       }
-                }*/
+                }
             ]
         });
 
-
   var outputDocGrid = new Ext.grid.GridPanel({
         store       : outputDocStore,
-        id          : 'mygrid',
+        id          : 'outputdocGrid',
         loadMask    : true,
         loadingText : 'Loading...',
         //renderTo    : 'cases-grid',
@@ -2325,6 +2444,51 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         buttonAlign : 'center'
     });
 
+  //connecting context menu  to grid
+  outputDocGrid.addListener('rowcontextmenu', onOutputDocContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  outputDocGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  outputDocGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onOutputDocContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    outputdocContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var outputdocContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editOutputDoc
+      },{
+        text: _('ID_PROPERTIES'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: propertiesOutputDoc
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: removeOutputDoc
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('outputdocGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.OUT_DOC_UID);
+        }
+      }
+    ]
+  });
+
  var gridWindow = new Ext.Window({
         title       : _('ID_OUTPUT_DOCUMENTS'),
         collapsible : false,
@@ -2366,7 +2530,98 @@ ProcessOptions.prototype.addReportTable= function(_5625)
  var editor = new Ext.ux.grid.RowEditor({
             saveText: _('ID_UPDATE')
         });
-        
+ 
+ var btnAdd = new Ext.Button({
+            id: 'btnAdd',
+            text: _('ID_NEW'),
+            iconCls: 'button_menu_ext ss_sprite ss_add',
+            handler: function () {
+                formWindow.show();
+                reportForm.getForm().reset();
+            }
+  });
+  
+  //edit report table Function
+  var editReportTable = function() {
+      editor.stopEditing();
+      var rowSelected  = Ext.getCmp('reportTableGrid').getSelectionModel().getSelections();
+      if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+      }
+      var repTabUID = rowSelected[0].get('REP_TAB_UID');
+      reportForm.form.load({
+                        url   :'proxyExtjs.php?REP_TAB_UID=' +repTabUID+'&action=editReportTables',
+                        method: 'GET',
+                        waitMsg:'Loading',
+                        success:function(form, action) {
+                           //Ext.MessageBox.alert('Message', 'Loaded OK');
+                           formWindow.show();
+                           Ext.getCmp("REP_TAB_UID").setValue(repTabUID);
+                        },
+                        failure:function(form, action) {
+                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                        }
+                     });
+   }
+   
+   var removeReportTable = function(){
+    ids = Array();
+
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('reportTableGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('REP_TAB_UID');
+
+    ids = ids.join(',');
+
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_INPUTDOCUMENT_CONFIRM'), function(){
+                      Ext.Ajax.request({
+                          url   : '../reportTables/reportTables_Delete.php',
+                          method: 'POST',
+                          params: {
+                             REP_TAB_UID   : ids
+                          },
+                        success: function(response) {
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.msg);
+
+                            //Reloading store after deleting input document
+                            reportStore.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.msg);
+                          }
+                        }
+                      });
+                    });
+    }
+  
+  //edit report table button
+  var btnEdit = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editReportTable
+  });
+
+  var btnRemove = new Ext.Button({
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: removeReportTable
+  });
+
+  var tb = new Ext.Toolbar({
+            items: [btnAdd, btnRemove, btnEdit]
+            });
+
  var reportStore = new Ext.data.JsonStore({
             root         : 'data',
             totalProperty: 'totalCount',
@@ -2393,7 +2648,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
  var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        " <p><input type='button' value='UID' onclick=workflow.createUIDButton('{REP_TAB_UID}');> </p>"
+        " <p></p>"
     )
   });
 
@@ -2413,83 +2668,11 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             ]
   });
 
-  var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: _('ID_NEW'),
-            iconCls: 'button_menu_ext ss_sprite ss_add',
-            handler: function () {
-                formWindow.show();
-                reportForm.getForm().reset();
-            }
-  });
-
-   var btnEdit = new Ext.Button({
-            id: 'btnEdit',
-            text: _('ID_EDIT'),
-            iconCls: 'button_menu_ext ss_sprite ss_pencil',
-            handler: function (s) {
-                var s = reportGrid.getSelectionModel().getSelections();
-                var repTabUID = s[0].data.REP_TAB_UID;
-                reportForm.form.load({
-                url:'proxyExtjs.php?REP_TAB_UID='+repTabUID+'&action=editReportTables',
-                    method:'GET',
-                    waitMsg:'Loading',
-                    success:function(form, action) {
-                        formWindow.show();
-                      //Ext.MessageBox.alert('Message', 'Loaded OK');
-                     // setTaskAssignType(form);
-                    },
-                    failure:function(form, action) {
-                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                    }
-                });
-            }
-  });
-
-
-  var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: _('ID_DELETE'),
-            iconCls: 'button_menu_ext ss_sprite ss_delete',
-            handler: function () {
-                editor.stopEditing();
-                var s = reportGrid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
-
-                    //if REP_TAB_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.REP_TAB_UID != "")
-                    {
-                        Ext.Ajax.request({
-                          url   : '../reportTables/reportTables_Delete.php',
-                          method: 'POST',
-                          params: {
-                                REP_TAB_UID    : r.data.REP_TAB_UID
-                          },
-                          success: function(response) {
-                                PMExt.notify( _('ID_STATUS') , _('ID_REPORT_REMOVED') );
-                                //Secondly deleting from Grid
-                                reportGrid.remove(r);
-                                //Reloading store after deleting report table
-                                reportStore.reload();
-                              }
-                     });
-                    }
-                }
-            }
-  });
-
-
-  var tb = new Ext.Toolbar({
-            items: [btnAdd,btnRemove, btnEdit]
-        });
-       
-
   var reportGrid = new Ext.grid.GridPanel({
         store       : reportStore,
-        id          : 'mygrid',
+        id          : 'reportTableGrid',
         loadMask    : true,
-        //loadingText : 'Loading...',
+        loadingText : 'Loading...',
         //renderTo    : 'cases-grid',
         frame       : false,
         autoHeight  :false,
@@ -2511,6 +2694,47 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         }),
         viewConfig: {forceFit: true}
    });
+
+  //connecting context menu  to grid
+  reportGrid.addListener('rowcontextmenu', onreportTableContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  reportGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  reportGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onreportTableContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    reportTableContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var reportTableContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editReportTable
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: removeReportTable
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('reportTableGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.REP_TAB_UID);
+        }
+      }
+    ]
+  });
 
   var gridWindow = new Ext.Window({
         title       : _('ID_REPORT_TABLES'),
@@ -2726,12 +2950,68 @@ var formWindow = new Ext.Window({
 
 ProcessOptions.prototype.addTriggers= function()
 {
-     var triggerFields = Ext.data.Record.create([
+   var triggerFields = Ext.data.Record.create([
     {name: 'TRI_UID'},
     {name: 'TRI_TITLE'},
     {name: 'TRI_DESCRIPTION'},
     {name: 'TRI_WEBBOT'}
     ]);
+
+   var editor = new Ext.ux.grid.RowEditor({
+            saveText: _('ID_UPDATE')
+        });
+
+   var btnAdd = new Ext.Button({
+        id: 'btnAdd',
+        text: _('ID_NEW'),
+        iconCls: 'button_menu_ext ss_sprite ss_add',
+        handler: function () {
+         triggersForm.getForm().reset();
+         formWindow.show();
+        }
+      });
+
+  //edit report table Function
+   var editTriggers = function() {
+      editor.stopEditing();
+      var rowSelected  = Ext.getCmp('triggerGrid').getSelectionModel().getSelections();
+      if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+      }
+      var triggerUID = rowSelected[0].get('TRI_UID');
+      triggersForm.form.load({
+                    url   :'proxyExtjs.php?pid='+pro_uid+'&triggerUid='+triggerUID+'&action=editTriggers',
+                    method: 'GET',
+                    waitMsg:'Loading',
+                    success:function(form, action) {
+                       formWindow.show();
+                       //Ext.getCmp("TRI_UID").setValue(triggerUID);
+                    },
+                    failure:function(form, action) {
+                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                    }
+                 });
+    }
+
+  var removeTriggers = function(){
+
+  }
+
+  //edit triggers button
+  var btnEdit = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editTriggers
+  });
+
+  var btnRemove = new Ext.Button({
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: removeTriggers
+  });
 
    var triggerStore = new Ext.data.GroupingStore({
     idProperty   : 'gridIndex',
@@ -2743,46 +3023,12 @@ ProcessOptions.prototype.addTriggers= function()
     proxy        : new Ext.data.HttpProxy({
       url: 'proxyExtjs?pid='+pro_uid+'&action=getTriggersList'
     })
-    //sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
   });
   triggerStore.load({params:{start:0, limit:10}});
 
- var btnAdd = new Ext.Button({
-    id: 'btnEdit',
-    text: _('ID_NEW'),
-    iconCls: 'button_menu_ext ss_sprite ss_add',
-    handler: function () {
-     triggersForm.getForm().reset();
-     formWindow.show();
-    }
-  });
-
-   var btnEdit = new Ext.Button({
-            id: 'btnEdit',
-            text: _('ID_EDIT'),
-            iconCls: 'button_menu_ext ss_sprite ss_pencil',
-            handler: function (s) {
-                var selectedRow = triggersGrid.getSelectionModel().getSelections();
-                var triggerUID   = selectedRow[0].data.TRI_UID;
-                triggersForm.form.load({
-                url:'proxyExtjs.php?pid='+pro_uid+'&triggerUid='+triggerUID+'&action=editTriggers',
-                    method:'GET',
-                    waitMsg:'Loading',
-                    success:function(form, action) {
-                        formWindow.show();
-                      //Ext.MessageBox.alert('Message', 'Loaded OK');
-                     // setTaskAssignType(form);
-                    },
-                    failure:function(form, action) {
-                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                        }
-                });
-            }
-  });
-
    var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template("<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {TRI_DESCRIPTION}</p></p>")
-  });
+   });
 
   var triggersColumns = new Ext.grid.ColumnModel({
     defaults: {
@@ -2800,12 +3046,12 @@ ProcessOptions.prototype.addTriggers= function()
   });
 
  var tb = new Ext.Toolbar({
-    items: [btnAdd, btnEdit]
+    items: [btnAdd, btnEdit,btnRemove]
   });
 
   var triggersGrid = new Ext.grid.GridPanel({
     store: triggerStore,
-    id : 'dynaformGrid',
+    id : 'triggerGrid',
     loadMask: true,
     loadingText: 'Loading...',
     //renderTo: 'cases-grid',
@@ -2857,17 +3103,17 @@ ProcessOptions.prototype.addTriggers= function()
     id: 'messageContextMenu',
     items: [{
         text: _('ID_EDIT'),
-        iconCls: 'button_menu_ext ss_sprite  ss_pencil'
-       // handler: editDynaform
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editTriggers
       },{
         text: _('ID_DELETE'),
-        icon: '/images/delete.png'
-       // handler: removeDynaform
+        icon: '/images/delete.png',
+        handler: removeTriggers
       },{
         text: _('ID_UID'),
         handler: function(){
-          var rowSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelected();
-          workflow.createUIDButton(rowSelected.data.DYN_UID);
+          var rowSelected = Ext.getCmp('triggerGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.TRI_UID);
         }
       }
     ]
@@ -2876,8 +3122,8 @@ ProcessOptions.prototype.addTriggers= function()
 var triggersForm = new Ext.FormPanel({
     labelWidth  : 100,
     buttonAlign : 'center',
-    width       : 400,
-    height      : 320,
+    width       : 450,
+    height      : 350,
     bodyStyle : 'padding:10px 0 0 10px;',
     autoHeight: true,
     items:
@@ -2892,12 +3138,13 @@ var triggersForm = new Ext.FormPanel({
         labelAlign: 'top'
       },
       {
-        xtype: 'textfield',
+        xtype: 'textarea',
         border:true,
         name: 'TRI_DESCRIPTION',
         hidden: false,
         fieldLabel: _('ID_DESCRIPTION'),
-        width: 150
+        width: 200,
+        height: 100
       },{
                     layout      :'column',
                     border      :false,
@@ -2906,7 +3153,7 @@ var triggersForm = new Ext.FormPanel({
                         layout      : 'form',
                         border      :false,
                         items       : [{
-                                xtype       : 'textarea',
+                                xtype       : 'textfield',
                                 width     : 200,
                                 //id          : 'DestPath',
                                 //fieldLabel  : _('ID_DESTINATION_PATH'),
@@ -2962,8 +3209,7 @@ var triggersForm = new Ext.FormPanel({
                       success: function(response) {
                          // var result = Ext.util.JSON.decode(response.responseText);
                           PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
-
-                            triggerStore.reload();
+                          triggerStore.reload();
                           formWindow.hide();
                       }
                     });
