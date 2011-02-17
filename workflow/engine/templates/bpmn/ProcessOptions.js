@@ -10,8 +10,8 @@ ProcessOptions.prototype.type="ProcessOptions";
    * dynaforms available
 */
 ProcessOptions.prototype.addDynaform= function(_5625)
-{
- var dynaFields = Ext.data.Record.create([
+{ 
+  var dynaFields = Ext.data.Record.create([
     {name: 'DYN_UID'},
     {name: 'DYN_TYPE'},
     {name: 'DYN_TITLE'},
@@ -24,8 +24,9 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var editor = new Ext.ux.grid.RowEditor({
     saveText: 'Update'
   });
+
   var btnAdd = new Ext.Button({
-    id: 'btnAdd',
+    id: 'btnEdit',
     text: _('ID_NEW'),
     iconCls: 'button_menu_ext ss_sprite ss_add',
     //iconCls: 'application_add',
@@ -35,82 +36,113 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     }
   });
 
-  var btnRemove = new Ext.Button({
-    id: 'btnRemove',
-    text: _('ID_DELETE'),
-    iconCls: 'button_menu_ext ss_sprite ss_delete',
-    handler: function (s) {
-      editor.stopEditing();
-      var s = dynaformGrid.getSelectionModel().getSelections();
-      for(var i = 0, r; r = s[i]; i++){
-        //First Deleting dynaform from Database using Ajax
-        var dynUID      = r.data.DYN_UID;
-      
-        //if STEP_UID is properly defined (i.e. set to valid value) then only delete the row
-        //else its a BLANK ROW for which Ajax should not be called.
-        if( r.data.DYN_UID != "")
-        {
-          Ext.Ajax.request({
-            url   : '../dynaforms/dynaforms_Delete.php',
-            method: 'POST',
-            params: {
-              functions      : 'getDynaformAssign',
-              PRO_UID        : pro_uid,
-              DYN_UID        : dynUID
-            },
-            success: function(response) {
-              //First check whether selected Dynaform is assigned to a task steps or not.
-              //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
-              if(response.responseText == "")
-              {
-                Ext.Ajax.request({
-                  url   : '../dynaforms/dynaforms_Delete.php',
-                  method: 'POST',
-                  params: {
-                    functions      : 'getRelationInfDynaform',
-                    DYN_UID        : dynUID
-                  },
-                  success: function(response) {
-                    //Second check whether selected Dynaform is assigned to a processes supervisors or not.
-                    //If response.responseText == 1 i.e it is assigned, => it cannot be deleted
-                    if(response.responseText == "")
-                    {
+  //edit dynaform Function 
+  var editDynaform = function() {
+    var rowSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelected();
+
+    if( rowSelected )
+      location.href = '../dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID
+    else
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+  }
+
+  var removeDynaform = function() {
+    ids = Array();
+    
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('DYN_UID');
+
+    ids = ids.join(',');
+
+    //First check whether selected Dynaform is assigned to a task steps or not.
+    Ext.Ajax.request({
+      url   : '../dynaforms/dynaforms_Delete',
+      method: 'POST',
+      params: {
+        functions : 'getDynaformTaskRelations',
+        PRO_UID   : pro_uid,
+        DYN_UID   : ids
+      },
+      success: function(response) {
+        var result = Ext.util.JSON.decode(response.responseText);
+        if( result.success ) {
+          if( result.passed ) {
+            //Second check whether selected Dynaform is assigned to a processes supervisors or not.
+            Ext.Ajax.request({
+              url   : '../dynaforms/dynaforms_Delete.php',
+              method: 'POST',
+              params: {
+                functions      : 'getDynaformSupervisorRelations',
+                DYN_UID        : ids
+              },
+              success: function(response) {
+                var result = Ext.util.JSON.decode(response.responseText);
+                if( result.success ){
+                  if( result.passed ) { //deleting the selected dyanoforms
+                    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_DYNAFORM_CONFIRM'), function(){
                       Ext.Ajax.request({
                         url   : '../dynaforms/dynaforms_Delete.php',
                         method: 'POST',
                         params: {
-                          functions      : 'deleteDynaform',
-                          DYN_UID        : dynUID
+                          functions      : 'removeDynaform',
+                          DYN_UID        : ids
                         },
                         success: function(response) {
-                        	//PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE') );
-                          PMExt.notify( _('ID_STATUS') , _('ID_DYNAFORM_REMOVED') );
-                          //Secondly deleting from Grid
-                          taskDynaform.remove(r);
-                          //Reloading store after deleting dynaform
-                          taskDynaform.reload();
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.msg);
+
+                            //Reloading store after deleting dynaform
+                            taskDynaform.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.msg);
+                          }
                         }
                       });
-                    }
-                    else
-                      PMExt.warning(_('ID_STATUS'), _('ID_CONFIRM_CANCEL_CASE'));
-                  	PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE') );
-                     //  Ext.MessageBox.alert ('Status','Dynaform assigned to a process supervisors cannot be deleted.');
+                    });
+                  } else {
+                    PMExt.error(_('ID_VALIDATION_ERROR'), result.msg);
                   }
-                });
+                } else {
+                  PMExt.error(_('ID_ERROR'), result.msg);
+                }
               }
-              else
-                PMExt.notify( _('ID_TITLE_JS') , _('ID_TITLE_JS') );
-                //Ext.MessageBox.alert ('Status','Dynaform assigned to a task steps cannot be deleted.');
-            }
-          });
-        }      
+            });
+          } else {
+            PMExt.error(_('ID_VALIDATION_ERROR'), result.msg);
+          }
+        } else {
+          PMExt.error(_('ID_ERROR'), result.msg);
+        }
       }
-    }
+    });
+  }
+
+  //edit dynaform button
+  var btnEdit = new Ext.Button({
+    id: 'btnAdd',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editDynaform
+  });
+
+  var btnRemove = new Ext.Button({
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: removeDynaform
   });
 
   var tb = new Ext.Toolbar({
-    items: [btnAdd, btnRemove]
+    items: [btnAdd, btnEdit, btnRemove]
   });
 
   //taskDynaform? and groupingStore?
@@ -169,11 +201,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
  //tablesFieldsStore.load();
 
   var expander = new Ext.ux.grid.RowExpander({
-    tpl : new Ext.Template(
-        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {DYN_DESCRIPTION} </p><br><input type='button' value='UID' onclick=workflow.createUIDButton('{DYN_UID}');> </p>"
-    )
+    tpl : new Ext.Template("<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {DYN_DESCRIPTION}</p></p>")
   });
-
 
   var dynaformColumns = new Ext.grid.ColumnModel({
     defaults: {
@@ -200,14 +229,14 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         header: _('ID_TAS_VIEW'),
         dataIndex: 'TAS_VIEW',
         width: 110
-      },{
+      }/*,{
         sortable: false,
         width: 50,
         renderer: function(val, meta, record)
         {
           return String.format("<a href='../dynaforms/dynaforms_Editor?PRO_UID={0}&DYN_UID={1}' >Edit</a>",pro_uid,record.data.DYN_UID);
         }
-      }/*,{
+      },{
         sortable: false,
         width: 60,
         renderer: function(val, meta, record)
@@ -250,7 +279,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
   var dynaformGrid = new Ext.grid.GridPanel({
     store: taskDynaform,
-    id : 'mygrid',
+    id : 'dynaformGrid',
     loadMask: true,
     loadingText: 'Loading...',
     //renderTo: 'cases-grid',
@@ -275,7 +304,50 @@ ProcessOptions.prototype.addDynaform= function(_5625)
       items:[]
     }),
     viewConfig: {forceFit: true}
-   });
+  });
+
+  //connecting context menu  to grid
+  dynaformGrid.addListener('rowcontextmenu', onDynaformsContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  dynaformGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  dynaformGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onDynaformsContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    dynaformsContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var dynaformsContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editDynaform
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: removeDynaform
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.DYN_UID);
+        }
+      } 
+    ]
+  });
+
+  
 
   var dynaformDetails = new Ext.FormPanel({
     labelWidth  : 100,

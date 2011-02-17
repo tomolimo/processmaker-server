@@ -51,8 +51,8 @@ else
     return print $result;
    break;
    
-   case 'getDynaformAssign':
-   $oStep = new Step();
+  case 'getDynaformAssign':
+    $oStep = new Step();
     $aDependent=$oStep->loadInfoAssigDynaform($_POST['PRO_UID'],$_POST['DYN_UID']);
     $result=false;
     if(is_array($aDependent)){
@@ -83,5 +83,96 @@ else
    //in table case_tracker_object
    $oCTO = new CaseTrackerObject();                        
    $oCTO->removeByObject('DYNAFORM', $_POST['DYN_UID']);
+   break;
+
+  /** erik: new and improved methods */
+  case 'getDynaformSupervisorRelations':
+    try {
+      $oStepSupervisor = new StepSupervisor();
+      $DYN_UIDS = explode(',', $_POST['DYN_UID']);
+
+      $result->passed = true;
+      foreach($DYN_UIDS as $i=>$DYN_UID) {
+        $relationsList = $oStepSupervisor->loadInfo($DYN_UID);
+        if( is_array($relationsList) ) {
+          $result->passed = false;
+          break;
+        }
+      }
+      
+      $result->success = true;
+      $result->msg = $result->passed ? '' : G::LoadTranslation('ID_DYNAFORM_SUPERVISOR_RELATION_EXISTS');
+    } catch (Exception $e) {
+      $result->success = false;
+      $result->passed  = false;
+      $result->msg = $e->getMessage();
+    }
+
+    print G::json_encode($result);
+    break;
+
+    case 'getDynaformTaskRelations':
+    try {
+      $oStepSupervisor = new StepSupervisor();
+      $DYN_UIDS = explode(',', $_POST['DYN_UID']);
+      $results = Array();
+
+      $result->passed = true;
+      foreach($DYN_UIDS as $i=>$DYN_UID) {
+        $oStep = new Step();
+        $aDependent = $oStep->loadInfoAssigDynaform($_POST['PRO_UID'], $DYN_UID);
+        if( is_array($aDependent) ) {
+          $result->passed = false;
+          break;
+        }
+      }
+      
+      $result->success = true;
+      $result->msg = $result->passed ? '' : G::LoadTranslation('ID_DYNAFORM_TASK_RELATION_EXISTS');
+    } catch (Exception $e) {
+      $result->success = false;
+      $result->msg = $e->getMessage();
+    }
+
+    print G::json_encode($result);
+    break;
+
+  case 'removeDynaform':
+  try {
+    if ( ! isset($_POST['DYN_UID']) )
+      throw new Exception('DYN_UID was not set!');
+
+    $DYN_UIDS = explode(',', $_POST['DYN_UID']);
+
+    foreach($DYN_UIDS as $i=>$DYN_UID) {
+      $dynaform = new dynaform();
+      //in table dynaform
+      $dynaform->remove( $DYN_UID );
+
+      //in table Step
+      $oStep = new Step();
+      $oStep->removeStep('DYNAFORM', $DYN_UID);
+
+      //in table ObjectPermission
+      $oOP = new ObjectPermission();
+      $oOP->removeByObject('DYNAFORM', $DYN_UID);
+
+      //in table Step_supervisor
+      $oSS = new StepSupervisor();
+      $oSS->removeByObject('DYNAFORM', $DYN_UID);
+
+      //in table case_tracker_object
+      $oCTO = new CaseTrackerObject();
+      $oCTO->removeByObject('DYNAFORM', $DYN_UID);
+    }
+    
+    $result->success = true;
+    $result->msg = G::LoadTranslation('ID_DYNAFORM_REMOVED');
+  } catch (Exception $e) {
+    $result->success = false;
+    $result->msg = $e->getMessage();
+  }
+
+  print G::json_encode($result);
   break;
  }
