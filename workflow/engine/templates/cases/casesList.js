@@ -12,7 +12,7 @@ new Ext.KeyMap(document, {
         storeCases.reload();
       }
       else
-        Ext.Msg.alert(TRANSLATIONS.LABEL_REFRESH, TRANSLATIONS.MESSAGE_REFRESH);
+        Ext.Msg.alert(TRANSLATIONS.ID_REFRESH_LABEL, TRANSLATIONS.ID_REFRESH_MESSAGE);
   }
 });
 
@@ -33,7 +33,7 @@ function openCase(){
       var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
       
       Ext.Msg.show({
-        msg: TRANSLATIONS.LABEL_OPEN_CASE + ' ' + caseTitle,
+        msg: TRANSLATIONS.ID_OPEN_CASE + ' ' + caseTitle,
         width:300,
         wait:true,
         waitConfig: {interval:200}
@@ -329,7 +329,7 @@ Ext.onReady ( function() {
             });
 
   var btnCloseReassign = new Ext.Button ({
-    text: 'Close',
+    text: TRANSLATIONS.ID_CLOSE,
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       newPopUp.hide();
@@ -337,7 +337,8 @@ Ext.onReady ( function() {
   });
 
   var btnExecReassign = new Ext.Button ({
-    text: 'Reassign All',
+    text: TRANSLATIONS.ID_REASSIGN_ALL,
+    // text: 'Reassign All',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       
@@ -369,7 +370,8 @@ Ext.onReady ( function() {
   });
   
   var btnExecReassignSelected = new Ext.Button ({
-    text: 'Reassign',
+    text: TRANSLATIONS.ID_REASSIGN,
+    // text: 'Reassign',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       newPopUp.hide();
@@ -513,7 +515,7 @@ Ext.onReady ( function() {
   // creating the button for filters
   var btnRead = new Ext.Button ({
     id: 'read',
-    text: TRANSLATIONS.LABEL_OPT_READ,
+    text: TRANSLATIONS.ID_OPT_READ,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -522,7 +524,7 @@ Ext.onReady ( function() {
 
   var btnUnread = new Ext.Button ({
     id: 'unread',
-    text: TRANSLATIONS.LABEL_OPT_UNREAD,
+    text: TRANSLATIONS.ID_OPT_UNREAD,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -531,7 +533,7 @@ Ext.onReady ( function() {
 
   var btnAll = new Ext.Button ({
     id: 'all',
-    text: TRANSLATIONS.LABEL_OPT_ALL,
+    text: TRANSLATIONS.ID_OPT_ALL,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -541,7 +543,7 @@ Ext.onReady ( function() {
   var btnStarted = new Ext.Button ({
     id: 'started',
 //    text: 'started by me',
-    text: TRANSLATIONS.LABEL_OPT_STARTED,
+    text: TRANSLATIONS.ID_OPT_STARTED,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: true,
@@ -551,7 +553,7 @@ Ext.onReady ( function() {
   var btnCompleted = new Ext.Button ({
     id: 'completed',
 //    text: 'Completed by me',
-    text: TRANSLATIONS.LABEL_OPT_COMPLETED,
+    text: TRANSLATIONS.ID_OPT_COMPLETED,
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: true,
@@ -566,7 +568,7 @@ Ext.onReady ( function() {
     displayField  : 'APP_PRO_TITLE',
     valueField    : 'PRO_UID',
     forceSelection: false,
-    emptyText: TRANSLATIONS.LABEL_EMPTY_PROCESSES,
+    emptyText: TRANSLATIONS.ID_EMPTY_PROCESSES,
     selectOnFocus: true,
 
 
@@ -604,7 +606,7 @@ Ext.onReady ( function() {
     forceSelection: true,
     triggerAction: 'all',
     
-    emptyText: TRANSLATIONS.LABEL_EMPTY_USERS,
+    emptyText: TRANSLATIONS.ID_EMPTY_USERS,
     selectOnFocus: true,
     //getListParent: function() {
     //  return this.el.up('.x-menu');
@@ -635,24 +637,27 @@ Ext.onReady ( function() {
   });
 
   var btnSelectAll = new Ext.Button ({
-    text: TRANSLATIONS.LABEL_CHECK_ALL, // 'Check All',
-//    text: TRANSLATIONS.LABEL_SELECT_ALL,
+    text: TRANSLATIONS.CHECK_ALL,
+    // text: 'Check All',
+    // text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       grid.getSelectionModel().selectAll();
     }
   });
 
   var btnUnSelectAll = new Ext.Button ({
-    text: TRANSLATIONS.LABEL_UN_CHECK_ALL, // 'Un-Check All',
-//    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
+    text: TRANSLATIONS.UNCHECK_ALL,
+    // text: 'Un-Check All',
+    // text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
       grid.getSelectionModel().clearSelections();
     }
   });
 
   var btnReassign = new Ext.Button ({
-    text: TRANSLATIONS.LABEL_REASSIGN, // 'Reassign', 
-//    text: TRANSLATIONS.LABEL_UNSELECT_ALL,
+    text: TRANSLATIONS.ID_REASSIGN,
+    // text: 'Reassign',
+    // text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
         reassign();
     }
@@ -683,7 +688,7 @@ Ext.onReady ( function() {
     plain:true,
     items:[nav],
     buttons:[{
-      text:'submit',
+      text: TRANSLATIONS.ID_SUBMIT,
       handler:function(){
         Ext.Msg.alert('OK','save ?');
         Ext.Msg.prompt('Name','please enter your name: ',function(btn,text){
@@ -693,7 +698,7 @@ Ext.onReady ( function() {
         });
       }
     }, {
-      text:'close',
+      text: TRANSLATIONS.ID_CLOSE,
       handler:function() {
         reassignPopup.hide();
       }
@@ -741,7 +746,7 @@ Ext.onReady ( function() {
     valueField    : 'USR_UID',
     mode          : 'local',
     forceSelection: false,
-    emptyText: 'Select',
+    emptyText: TRANSLATIONS.ID_SELECT,
     selectOnFocus: true,
 
     typeAhead: true,
@@ -770,7 +775,7 @@ Ext.onReady ( function() {
     allowBlank: true,
     ctCls:'pm_search_text_field',
     width: 150,
-    emptyText: TRANSLATIONS.LABEL_EMPTY_SEARCH,
+    emptyText: TRANSLATIONS.ID_EMPTY_SEARCH,
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
@@ -781,7 +786,7 @@ Ext.onReady ( function() {
   });
 
   var btnSearch = new Ext.Button ({
-    text: TRANSLATIONS.LABEL_SEARCH,
+    text: TRANSLATIONS.ID_SEARCH,
     handler: doSearch
   });
 
@@ -821,7 +826,7 @@ Ext.onReady ( function() {
   };
 
   var btnJump = new Ext.Button ({
-    text: TRANSLATIONS.LABEL_OPT_JUMP,
+    text: TRANSLATIONS.ID_OPT_JUMP,
     handler: function(){
       var caseNumber = parseFloat(Ext.util.Format.trim(Ext.getCmp('textJump').getValue()));
       if (caseNumber){
@@ -978,7 +983,7 @@ Ext.onReady ( function() {
   var toolbarTodo = [
     {
       xtype: 'tbsplit',
-      text: TRANSLATIONS.LABEL_ACTIONS, // 'Actions',
+      text: TRANSLATIONS.ID_ACTIONS,
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
@@ -1048,7 +1053,7 @@ Ext.onReady ( function() {
   var toolbarDraft = [
     {
       xtype: 'tbsplit',
-      text: TRANSLATIONS.LABEL_ACTIONS, // 'Actions',
+      text: TRANSLATIONS.ID_ACTIONS,
       menu: menuItems,
       listeners: { menushow: enableDisableMenuOption }
     },
@@ -1204,8 +1209,8 @@ Ext.onReady ( function() {
       store: storeCases,
       displayInfo: true,
       //displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ' ,
-      displayMsg: TRANSLATIONS.LABEL_DISPLAY_ITEMS + ' &nbsp; ',
-      emptyMsg: TRANSLATIONS.LABEL_DISPLAY_EMPTY
+      displayMsg: TRANSLATIONS.ID_DISPLAY_ITEMS + ' &nbsp; ',
+      emptyMsg: TRANSLATIONS.ID_DISPLAY_EMPTY
     })
   });
 

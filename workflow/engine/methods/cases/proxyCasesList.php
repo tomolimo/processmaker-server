@@ -38,68 +38,68 @@
 
 // get the action based list
   switch ( $action ) {
-  	case 'draft' :
-         $Criteria      = $oAppCache->getDraftListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getDraftCountCriteria($userUid);
-         break;
-  	case 'sent' :
-         $Criteria      = $oAppCache->getSentListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getSentCountCriteria($userUid);
+    case 'draft' :
+      $Criteria      = $oAppCache->getDraftListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getDraftCountCriteria($userUid);
+     break;
+    case 'sent' :
+      $Criteria      = $oAppCache->getSentListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getSentCountCriteria($userUid);
 //         var_dump($Criteria);
-         break;
-  	case 'selfservice' :
-        case 'unassigned':
-         $Criteria      = $oAppCache->getUnassignedListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getUnassignedCountCriteria($userUid);
-         break;
-  	case 'paused' :
-         $Criteria      = $oAppCache->getPausedListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getPausedCountCriteria($userUid);
-         break;
-  	case 'completed' :
-         $Criteria      = $oAppCache->getCompletedListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getCompletedCountCriteria($userUid);
-         break;
-  	case 'cancelled' :
-         $Criteria      = $oAppCache->getCancelledListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getCancelledCountCriteria($userUid);
-         break;
+     break;
+    case 'selfservice' :
+    case 'unassigned':
+      $Criteria      = $oAppCache->getUnassignedListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getUnassignedCountCriteria($userUid);
+     break;
+    case 'paused' :
+      $Criteria      = $oAppCache->getPausedListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getPausedCountCriteria($userUid);
+     break;
+    case 'completed' :
+      $Criteria      = $oAppCache->getCompletedListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getCompletedCountCriteria($userUid);
+     break;
+    case 'cancelled' :
+      $Criteria      = $oAppCache->getCancelledListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getCancelledCountCriteria($userUid);
+     break;
     case 'search' :
-         $Criteria      = $oAppCache->getSearchListCriteria();
-         $CriteriaCount = $oAppCache->getSearchCountCriteria();
-         break;         
+      $Criteria      = $oAppCache->getSearchListCriteria();
+      $CriteriaCount = $oAppCache->getSearchCountCriteria();
+      break;
     case 'simple_search' :
-         $Criteria      = $oAppCache->getSimpleSearchListCriteria();
-         $CriteriaCount = $oAppCache->getSimpleSearchCountCriteria();
-         break;
+      $Criteria      = $oAppCache->getSimpleSearchListCriteria();
+      $CriteriaCount = $oAppCache->getSimpleSearchCountCriteria();
+      break;
     case 'to_revise' :
-         $Criteria      = $oAppCache->getToReviseListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getToReviseCountCriteria($userUid);
-         break;
+      $Criteria      = $oAppCache->getToReviseListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getToReviseCountCriteria($userUid);
+      break;
     case 'to_reassign' :
-         $Criteria      = $oAppCache->getToReassignListCriteria();
-         $CriteriaCount = $oAppCache->getToReassignCountCriteria();
-         break;
+      $Criteria      = $oAppCache->getToReassignListCriteria();
+      $CriteriaCount = $oAppCache->getToReassignCountCriteria();
+      break;
     case 'all' :
-         $Criteria      = $oAppCache->getAllCasesListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getAllCasesCountCriteria($userUid);
-         break;
+      $Criteria      = $oAppCache->getAllCasesListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getAllCasesCountCriteria($userUid);
+      break;
     // general criteria probably will be deprecated
     case 'gral' :
-         $Criteria      = $oAppCache->getGeneralListCriteria();
-         $CriteriaCount = $oAppCache->getGeneralCountCriteria();
-         break;
+      $Criteria      = $oAppCache->getGeneralListCriteria();
+      $CriteriaCount = $oAppCache->getGeneralCountCriteria();
+      break;
     case 'todo' :
     default:
-         $Criteria      = $oAppCache->getToDoListCriteria($userUid);
-         $CriteriaCount = $oAppCache->getToDoCountCriteria($userUid);
+      $Criteria      = $oAppCache->getToDoListCriteria($userUid);
+      $CriteriaCount = $oAppCache->getToDoCountCriteria($userUid);
     break;
   }
 
   if ( !is_array($confCasesList) ) {
     	$rows = getDefaultFields( $action );
     	$result = genericJsonResponse( '', array(), $rows , 20, '' );
-      $conf->saveObject($result,'casesList',$action,'','','');
+        //$conf->saveObject($result,'casesList',$action,'','','');
   }
 
   // add the process filter
@@ -151,21 +151,21 @@
   //add the filter 
   if ( $filter != '' ) {
   	switch ( $filter ) {
-  		case 'read' : 
-        $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
-        $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
+        case 'read' :
+          $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
+          $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
         break;
-  		case 'unread' : 
-        $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
-        $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
+  	case 'unread' : 
+          $Criteria->add      (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
+          $CriteriaCount->add (AppCacheViewPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
         break;
-  		case 'started' : 
-        $Criteria->add      (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
-        $CriteriaCount->add (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
+        case 'started' :
+          $Criteria->add      (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
+          $CriteriaCount->add (AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
         break;
-      case 'completed' : 
-        $Criteria->add      (AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
-        $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
+        case 'completed' :
+          $Criteria->add      (AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
+          $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
         break;
   	}
   }  
@@ -519,10 +519,8 @@
         $rows[] = $fields['APP_PRO_TITLE'];
         $rows[] = $fields['APP_TAS_TITLE'];
         $rows[] = $fields['APP_CURRENT_USER'];
-//        $rows[] = $fields['APP_DEL_PREVIOUS_USER'];
         $rows[] = $fields['APP_UPDATE_DATE'];
         $rows[] = $fields['APP_STATUS'];
-//        $rows[] = $fields['USR_UID'];
 
 
         break;
