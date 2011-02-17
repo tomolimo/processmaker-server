@@ -26,7 +26,7 @@ PMExtJSCommon = function() {
     Ext.MessageBox.show({
       title: title,
       msg: msg,
-      buttons: Ext.MessageBox.OK,
+      buttons: Ext.MessageBox.YESNO,
       animEl: 'mb9',
       fn: fn != undefined ? fn: function(){},
       icon: Ext.MessageBox.QUESTION

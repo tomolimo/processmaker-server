@@ -580,7 +580,7 @@ TaskContext.prototype.editUsers= function()
         id : 'mygrid',
         loadMask: true,
         loadingText: 'Loading...',
-        renderTo: 'cases-grid',
+        //renderTo: 'cases-grid',
         frame: false,
         autoHeight:false,
         clicksToEdit: 1,
@@ -695,7 +695,7 @@ TaskContext.prototype.editUsers= function()
 
     var panel = new Ext.Panel({
         id: 'panel',
-        renderTo: Ext.getBody(),
+        //renderTo: Ext.getBody(),
         items: [grid]
     });
 
@@ -721,6 +721,9 @@ TaskContext.prototype.editTaskProperties= function()
     var ProcMapObj = new ProcessMapContext();
     var taskExtObj = new TaskContext();
     var taskId  = workflow.currentSelection.id;
+    var oPmosExt = new pmosExt();
+    
+    var fieldsToToggle = new Array();
 
     var taskPropertiesTabs = new Ext.FormPanel({
         labelWidth  : 140,
@@ -813,75 +816,113 @@ TaskContext.prototype.editTaskProperties= function()
                   id: 'BALANCED',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'BALANCED',
-                  checked: false,
-                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
+                  checked: false
+//                  listeners: {
+//                      'check':{
+//                          fn: function(){
+//                              Ext.getCmp("staticMI").hide();
+//                              Ext.getCmp("cancelMI").hide();
+//                              Ext.getCmp("evaluate").hide();
+//                          }
+//                      }
+//                  }
                 },{
                   boxLabel: _('ID_MANUAL_ASSIGNMENT'),
                   id: 'MANUAL',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'MANUAL',
-                  checked:false,
-                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
+                  checked:false
+//                  listeners: {
+//                      'check':{
+//                          fn: function(){
+//                              Ext.getCmp("staticMI").hide();
+//                              Ext.getCmp("cancelMI").hide();
+//                              Ext.getCmp("evaluate").hide();
+//                          }
+//                      }
+//                  }
                 },{
                   boxLabel: _('ID_VALUE_BASED'),
-                  id:'EVALUATE',
+                  //id:'EVALUATE',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'EVALUATE',
-                  checked:false,
-                  listeners: {
-                    'check':{
-                      fn: function(){
-                        Ext.getCmp("evaluate").show();
-                        Ext.getCmp("staticMI").hide();
-                        Ext.getCmp("cancelMI").hide();
-                      }
-                    }
-                  }
+                  checked:false
+//                listeners: {
+//                    'check':{
+//                        fn: function(){
+                           
+                      
+//                                       var fields = workflow.taskPropertiesTabs.items.items[0].items.items[1].items.items;
+//                          var fieldsToToggle = new Array();
+//                          fieldsToToggle = [fields[1].items.items[0].items.items[0]];
+//                          oPmosExt.toggleFields(fieldsToToggle,true);
+//                      }
+//                    }
+//                  }
                 },{
                   boxLabel: _('ID_REPORTS_TO'),
                   id:'REPORT_TO',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'REPORT_TO',
-                  checked:false,
-                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
+                  checked:false
+//                  listeners: {
+//                      'check':{
+//                          fn: function(){
+//                              Ext.getCmp("staticMI").hide();
+//                              Ext.getCmp("cancelMI").hide();
+//                              Ext.getCmp("evaluate").hide();
+//                          }
+//                      }
+//                  }
                 },{
                   boxLabel: _('ID_SELF_SERVICE'),
                   id:'SELF_SERVICE',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'SELF_SERVICE',
-                  checked:false,
-                  listeners: {'check':{fn: function(){Ext.getCmp("staticMI").hide();Ext.getCmp("cancelMI").hide();Ext.getCmp("evaluate").hide();}}}
+                  checked:false
+//                  listeners: {
+//                      'check':
+//                          {fn: function(){
+//                              //fieldsToToggle = [fields[0],fields[1],fields[2],fields[3],fields[4],fields[5],fields[6],fields[7],fields[8]]
+//                              Ext.getCmp("staticMI").hide();
+//                              Ext.getCmp("cancelMI").hide();
+//                              Ext.getCmp("evaluate").hide();
+//                          }
+//                      }
+//                  }
                 },{
                   boxLabel: _('ID_STATIC_PARTIAL_JOIN_MULTIPLE_INSTANCES'),
                   id:'STATIC_MI',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'STATIC_MI',
-                  checked:false,
-                  listeners: {
-                    'check':{
-                      fn: function(){
-                        Ext.getCmp("staticMI").show();
-                        Ext.getCmp("cancelMI").show();
-                        Ext.getCmp("evaluate").hide();
-                      }
-                    }
-                  }
+                  checked:false
+//                  listeners: {
+//                    'check':{
+//                      fn: function(){
+//                        Ext.getCmp("staticMI").show();
+//                        Ext.getCmp("cancelMI").show();
+//                        Ext.getCmp("evaluate").hide();
+//                      }
+//                    }
+//                  }
                 },{
                   boxLabel: _('ID_CANCEL_PARTIAL_JOIN_MULTIPLE_INSTANCE'),
                   id   : 'CANCEL_MI',
                   name : 'TAS_ASSIGN_TYPE',
                   inputValue: 'CANCEL_MI',
-                  checked:false,
-                  listeners: {
-                    'check':{
-                      fn: function(){
-                        Ext.getCmp("staticMI").show();
-                        Ext.getCmp("cancelMI").show();
-                        Ext.getCmp("evaluate").hide();
-                      }
-                    }
-                  }
+                  checked:false
+//                  listeners: {
+//                    'check':{
+//                      fn: function(){
+//                        Ext.getCmp("staticMI").show();
+//                        Ext.getCmp("cancelMI").show();
+//                        Ext.getCmp("evaluate").hide();
+//                      }
+//                    }
+//                  }
                 }]
+
+
                 },{
                   xtype: 'fieldset',
                   layout:'column',
@@ -1230,6 +1271,9 @@ TaskContext.prototype.editTaskProperties= function()
             ]
         }]
     });
+
+    workflow.taskPropertiesTabs = taskPropertiesTabs;
+    
     
   //Loading Task Details into the form
   taskPropertiesTabs.form.load({
@@ -1237,7 +1281,8 @@ TaskContext.prototype.editTaskProperties= function()
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
-                         if(action.result.data.TAS_START== 0)
+          
+                if(action.result.data.TAS_START== 0)
                            workflow.checkStartingTask = false;
                        else
                            workflow.checkStartingTask = true;
@@ -1255,14 +1300,16 @@ TaskContext.prototype.editTaskProperties= function()
                        else if(action.result.data.TAS_ASSIGN_TYPE=='EVALUATE')
                             {
                                 form.items.items[4].items[2].checked=true;
-                                Ext.getCmp("evaluate").show();
+                                taskPropertiesTabs.getForm().findField('TAS_ASSIGN_VARIABLE').show();
                             }
 
                        else if(action.result.data.TAS_ASSIGN_TYPE=='REPORT_TO')
                            form.items.items[4].items[3].checked=true;
 
                        else  if(action.result.data.TAS_ASSIGN_TYPE=='SELF_SERVICE')
-                           form.items.items[4].items[4].checked=true;
+                           {form.items.items[4].items[4].checked=true;
+                           Ext.getCmp("staticMI").hide();
+                           Ext.getCmp("cancelMI").hide();}
 
                        else if(action.result.data.TAS_ASSIGN_TYPE=='STATIC_MI')
                             {
@@ -1284,6 +1331,10 @@ TaskContext.prototype.editTaskProperties= function()
                            form.items.items[13].checked=false;
                        else
                             form.items.items[13].checked=true;
+
+
+                         if(action.result.data.TAS_ASSIGN_TYPE == 'EVALUATE')
+              form.findField('TAS_ASSIGN_VARIABLE').show();
 
                      
        },
@@ -1589,7 +1640,7 @@ TaskContext.prototype.stepTriggers = function()
         //cm: cm,
         loadMask: true,
         loadingText: 'Loading...',
-        renderTo: 'cases-grid',
+        //renderTo: 'cases-grid',
         frame: false,
         autoHeight:false,
         hidden    :true,
@@ -1896,7 +1947,7 @@ TaskContext.prototype.editUsersAdHoc= function()
         //cm: cm,
         loadMask: true,
         loadingText: 'Loading...',
-        renderTo: 'cases-grid',
+        //renderTo: 'cases-grid',
         frame: false,
         autoHeight:false,
         clicksToEdit: 1,
@@ -2025,7 +2076,7 @@ TaskContext.prototype.editUsersAdHoc= function()
 
         var panel = new Ext.Panel({
             id: 'panel',
-            renderTo: Ext.getBody(),
+            //renderTo: Ext.getBody(),
             items: [grid]
         });
 
@@ -2173,7 +2224,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         remoteSort   : true,
         fields       : subProcessFields,
         proxy        : new Ext.data.HttpProxy({
-               url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
+               url   : 'proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
         })
       });
     variablesOutStore.load();
@@ -2186,7 +2237,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         remoteSort   : true,
         fields       : subProcessFields,
         proxy        : new Ext.data.HttpProxy({
-               url   : 'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=1'  //type=1 specifies Variables In (Synchronous)
+               url   : 'proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=1'  //type=1 specifies Variables In (Synchronous)
         })
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -2209,9 +2260,9 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         id          : 'mygrid',
         loadMask    : true,
         loadingText : 'Loading...',
-        renderTo    : 'cases-grid',
+        //renderTo    : 'cases-grid',
         frame       : false,
-        autoHeight  : true,
+        autoHeight  : false,
         autoScroll  : true,
         clicksToEdit: 1,
         layout      : 'form',
@@ -2263,9 +2314,9 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         id          : 'mygrid1',
         loadMask    : true,
         loadingText : 'Loading...',
-        renderTo    : 'cases-grid',
+        //renderTo    : 'cases-grid',
         frame       : false,
-        autoHeight  : true,
+        autoHeight  : false,
         autoScroll  : true,
         clicksToEdit: 1,
         layout      : 'form',
@@ -2414,7 +2465,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
 
     //Loading Task Details into the form
     subProcessProperties.form.load({
-        url:'proxySubProcessProperties?pid='+pro_uid+'&tid='+taskId+'&type=2',
+        url:'proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=2',
         method:'GET',
         waitMsg:'Loading....',
         success:function(form, action) {

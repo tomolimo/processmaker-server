@@ -333,8 +333,29 @@
          $result = $tmpData;
          echo $result;
          break;
-  }   
-  
+
+   case 'getTriggersList':
+  	 $rows = $oProcessMap->getExtTriggers($start, $limit, $_GET['pid']);
+         array_shift($rows);
+         $result['totalCount'] = count($rows);
+         $result['data'] = $rows;
+         print json_encode( $result ) ;
+         break;
+
+   case 'editTriggers':
+       require_once('classes/model/Triggers.php');
+
+        if (isset($_GET['TRI_UID']))
+        {
+                $oTrigger = new Triggers();
+                $rows = $oTrigger->load($_GET['TRI_UID']);
+        }
+        
+         $result['totalCount'] = count($rows);
+         $result['data'] = $rows;
+         print json_encode( $result ) ;
+         break;
+}
    //$result['data'] = $rows;
    //print json_encode( $result ) ;
     /*$tmpData = json_encode( $rows ) ;

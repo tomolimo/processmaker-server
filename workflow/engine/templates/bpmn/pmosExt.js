@@ -219,7 +219,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                         ]
                        }),
                onSelect: function(record, index){
-                   var fields = this.scope.workflow.webForm.items.items;
+                   var fields = workflow.webForm.items.items;
 
                    if(index == 1)
                    { //Select
@@ -315,11 +315,11 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             url: 'processes_Ajax.php'+ args,
                             success: function(response) {
                                 if(response.responseText == "1")
-                                    this.workflow.webEntrywindow.buttons[1].enable();
+                                    workflow.webEntrywindow.buttons[1].enable();
                                 else
                                     {
                                         Ext.Msg.alert (response.responseText);
-                                        this.workflow.webEntrywindow.buttons[1].disable();
+                                        workflow.webEntrywindow.buttons[1].disable();
                                     }
                              },
                             failure: function(){
@@ -350,7 +350,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
                                 workflow.webForm.items.items[0].show();
                                 workflow.webForm.items.items[1].hide();
                                 workflow.webForm.items.items[2].hide();
-                                 this.workflow.webEntrywindow.buttons[1].disable();
+                                workflow.webEntrywindow.buttons[1].disable();
                                 Ext.Msg.alert(response.responseText);
                              },
                             failure: function(){
@@ -636,7 +636,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                                         ]
                                     }),
                          onSelect: function(record, index){
-                              var timefieldset = this.scope.workflow.caseSchedularForm.items.items[2];
+                              var timefieldset = workflow.caseSchedularForm.items.items[2];
                               var fields = timefieldset.items.items;
                                     var fieldsToToggle = new Array();
                                     if(index == 0){ //Select
@@ -1004,7 +1004,7 @@ pmosExt.prototype.loadTask = function(_5678){
             Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
-                        this.workflow.taskDetails = Ext.util.JSON.decode(response.responseText);
+                        workflow.taskDetails = Ext.util.JSON.decode(response.responseText);
                     },
                     failure: function(){
                        PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1021,7 +1021,7 @@ pmosExt.prototype.getTriggerList = function(_5678){
             Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
-                        this.workflow.triggerList = Ext.util.JSON.decode(response.responseText);
+                        workflow.triggerList = Ext.util.JSON.decode(response.responseText);
                     },
                     failure: function(){
                         PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1040,7 +1040,7 @@ pmosExt.prototype.toggleFields = function(field,bool){
                 field[i].hide();
 
             //Hide-Show label
-            field[i].getEl().up('.x-form-item').setDisplayed(bool);
+            //field[i].getEl().up('.x-form-item').setDisplayed(bool);
         }
     }
      

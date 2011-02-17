@@ -523,6 +523,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     var sDynaformType     = getForm.DYN_TYPE;
                     if(sDynaformType == 'normal')
                         sDynaformType = 'xmlform';
+                    else
+                        sDynaformType = 'grid';
                 }
             else
                 {
@@ -2724,7 +2726,285 @@ var formWindow = new Ext.Window({
 
 ProcessOptions.prototype.addTriggers= function()
 {
-  
-  
+     var triggerFields = Ext.data.Record.create([
+    {name: 'TRI_UID'},
+    {name: 'TRI_TITLE'},
+    {name: 'TRI_DESCRIPTION'},
+    {name: 'TRI_WEBBOT'}
+    ]);
 
+   var triggerStore = new Ext.data.GroupingStore({
+    idProperty   : 'gridIndex',
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : triggerFields
+    }),
+    proxy        : new Ext.data.HttpProxy({
+      url: 'proxyExtjs?pid='+pro_uid+'&action=getTriggersList'
+    })
+    //sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
+  });
+  triggerStore.load({params:{start:0, limit:10}});
+
+ var btnAdd = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_NEW'),
+    iconCls: 'button_menu_ext ss_sprite ss_add',
+    handler: function () {
+     triggersForm.getForm().reset();
+     formWindow.show();
+    }
+  });
+
+   var btnEdit = new Ext.Button({
+            id: 'btnEdit',
+            text: _('ID_EDIT'),
+            iconCls: 'button_menu_ext ss_sprite ss_pencil',
+            handler: function (s) {
+                var selectedRow = triggersGrid.getSelectionModel().getSelections();
+                var triggerUID   = selectedRow[0].data.TRI_UID;
+                triggersForm.form.load({
+                url:'proxyExtjs.php?pid='+pro_uid+'&triggerUid='+triggerUID+'&action=editTriggers',
+                    method:'GET',
+                    waitMsg:'Loading',
+                    success:function(form, action) {
+                        formWindow.show();
+                      //Ext.MessageBox.alert('Message', 'Loaded OK');
+                     // setTaskAssignType(form);
+                    },
+                    failure:function(form, action) {
+                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                        }
+                });
+            }
+  });
+
+   var expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template("<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {TRI_DESCRIPTION}</p></p>")
+  });
+
+  var triggersColumns = new Ext.grid.ColumnModel({
+    defaults: {
+      width: 90,
+      sortable: true
+    },
+    columns: [
+      expander,
+      {
+        header: _('ID_TITLE_FIELD'),
+        dataIndex: 'TRI_TITLE',
+        width: 280
+      }
+    ]
+  });
+
+ var tb = new Ext.Toolbar({
+    items: [btnAdd, btnEdit]
+  });
+
+  var triggersGrid = new Ext.grid.GridPanel({
+    store: triggerStore,
+    id : 'dynaformGrid',
+    loadMask: true,
+    loadingText: 'Loading...',
+    //renderTo: 'cases-grid',
+    frame: false,
+    autoHeight:false,
+    minHeight:400,
+    height   :400,
+    width: '',
+    layout: 'fit',
+    cm: triggersColumns,
+    stateful : true,
+    stateId : 'grid',
+    plugins: expander,
+    stripeRows: true,
+    tbar: tb,
+    bbar: new Ext.PagingToolbar({
+      pageSize: 10,
+      store: triggerStore,
+      displayInfo: true,
+      displayMsg: 'Displaying dynaforms {0} - {1} of {2}',
+      emptyMsg: "No users to display",
+      items:[]
+    }),
+    viewConfig: {forceFit: true}
+  });
+
+  //connecting context menu  to grid
+  triggersGrid.addListener('rowcontextmenu', ontriggersContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  triggersGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  triggersGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function ontriggersContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    triggersContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var triggersContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil'
+       // handler: editDynaform
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png'
+       // handler: removeDynaform
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.DYN_UID);
+        }
+      }
+    ]
+  });
+
+var triggersForm = new Ext.FormPanel({
+    labelWidth  : 100,
+    buttonAlign : 'center',
+    width       : 400,
+    height      : 320,
+    bodyStyle : 'padding:10px 0 0 10px;',
+    autoHeight: true,
+    items:
+      [{
+        xtype: 'textfield',
+        layout: 'fit',
+        border:true,
+        name: 'TRI_TITLE',
+        fieldLabel: _('ID_TITLE'),
+        width: 150,
+        collapsible: false,
+        labelAlign: 'top'
+      },
+      {
+        xtype: 'textfield',
+        border:true,
+        name: 'TRI_DESCRIPTION',
+        hidden: false,
+        fieldLabel: _('ID_DESCRIPTION'),
+        width: 150
+      },{
+                    layout      :'column',
+                    border      :false,
+                    items       :[{
+                        //columnWidth :.6,
+                        layout      : 'form',
+                        border      :false,
+                        items       : [{
+                                xtype       : 'textarea',
+                                width     : 200,
+                                //id          : 'DestPath',
+                                //fieldLabel  : _('ID_DESTINATION_PATH'),
+                                name        : 'TRI_WEBBOT',
+                                anchor      :'100%'
+                        }]
+                    },{
+                        //columnWidth     :.4,
+                        layout          : 'form',
+                        border          :false,
+                        items           : [{
+                                xtype           :'button',
+                                title           : ' ',
+                                width:50,
+                                text            : '@@',
+                               name            : 'selectorigin',
+                                 handler: function (s) {
+                                                    workflow.variablesAction = 'form';
+                                                    workflow.fieldName         = 'TRI_WEBBOT' ;
+                                                    workflow.variable        = '@@',
+                                                    workflow.formSelected    = triggersForm;
+                                                    var rowData = ProcMapObj.ExtVariables();
+                                            }
+                            }]
+                    }]
+                }], buttons: [{
+        text: _('ID_SAVE'),
+        //formBind    :true,
+        handler: function(){
+            var getForm   = triggersForm.getForm().getValues();
+            var title = getForm.TRI_TITLE;
+            var triggerUid = getForm.TRI_UID;
+            var condition = getForm.TRI_WEBBOT;
+            var desc = getForm.TRI_DESCRIPTION;
+
+            if(title == '')
+                    PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
+                else
+                    {
+                      Ext.Ajax.request({
+                      url   : '../triggers/triggers_Save.php',
+                      method: 'POST',
+                      params:{
+                          //functions       : 'lookforNameTrigger',
+                          TRI_TITLE     : title,
+                          PRO_UID         : pro_uid,
+                          TRI_UID          :'',
+                          TRI_PARAM         :'',
+                          TRI_TYPE          :'SCRIPT',
+                          TRI_DESCRIPTION :desc,
+                          TRI_WEBBOT        :condition
+                            },
+                      success: function(response) {
+                         // var result = Ext.util.JSON.decode(response.responseText);
+                          PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
+
+                            triggerStore.reload();
+                          formWindow.hide();
+                      }
+                    });
+                    }
+        }
+    },{
+            text: _('ID_CANCEL'),
+            handler: function(){
+                // when this button clicked,
+                formWindow.hide();
+            }
+        }]
+
+    });
+
+    var formWindow = new Ext.Window({
+        title: _('ID_TRIGGERS'),
+        autoScroll: true,
+        collapsible: false,
+        maximizable: true,
+        width: 450,
+        //autoHeight: true,
+        height: 350,
+        layout: 'fit',
+        plain: true,
+        buttonAlign: 'center',
+        items: triggersForm
+    });
+    
+  var gridWindow = new Ext.Window({
+        title: _('ID_TRIGGERS'),
+        autoScroll: true,
+        collapsible: false,
+        maximizable: true,
+        width: 600,
+        //autoHeight: true,
+        height: 420,
+        layout: 'fit',
+        plain: true,
+        buttonAlign: 'center',
+        items: triggersGrid
+    });
+    gridWindow.show();
 }

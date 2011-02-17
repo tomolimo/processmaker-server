@@ -26,8 +26,13 @@
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
 require_once('classes/model/Triggers.php');
 require_once('classes/model/Content.php');
-  
-  if(isset($_POST['function']) && $_POST['function']=='lookforNameTrigger'){
+
+if( isset($_POST['function']) )
+    $sfunction = $_POST['function'];
+  else if( isset($_POST['functions']) )
+    $sfunction = $_POST['functions'];
+
+  if(isset($sfunction) && $sfunction=='lookforNameTrigger'){
 	  $snameTrigger=urldecode($_POST['NAMETRIGGER']);
 	  $sPRO_UID=urldecode($_POST['proUid']);
 	  
@@ -63,19 +68,23 @@ require_once('classes/model/Content.php');
    
    G::LoadClass('processMap');
    $oProcessMap = new processMap(new DBConnection);
+   if(isset ($_POST['form']))
+      $value = $_POST['form'];
+   else
+       $value = $_POST;
    
-   if ($_POST['form']['TRI_UID'] != '')
+  if ($value['TRI_UID'] != '')
    {
-   	$oTrigger->load($_POST['form']['TRI_UID']);
+   	$oTrigger->load($value['TRI_UID']);
    }
    else
    {
-   	$oTrigger->create($_POST['form']);
-   	$_POST['form']['TRI_UID']=$oTrigger->getTriUid();
+   	$oTrigger->create($value);
+   	$value['TRI_UID']=$oTrigger->getTriUid();
    }
    //print_r($_POST['form']);die;
-   $oTrigger->update($_POST['form']);
+   $oTrigger->update($value);
    
-   $oProcessMap->triggersList($_POST['form']['PRO_UID']);
+   $oProcessMap->triggersList($value['PRO_UID']);
   }
 ?>
