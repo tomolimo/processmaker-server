@@ -76,13 +76,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 	 */
 	protected $gat_type = '';
 
-
-	/**
-	 * The value for the gat_next_type field.
-	 * @var        string
-	 */
-	protected $gat_next_type = '';
-
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -172,17 +165,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 	{
 
 		return $this->gat_type;
-	}
-
-	/**
-	 * Get the [gat_next_type] column value.
-	 * 
-	 * @return     string
-	 */
-	public function getGatNextType()
-	{
-
-		return $this->gat_next_type;
 	}
 
 	/**
@@ -340,28 +322,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 	} // setGatType()
 
 	/**
-	 * Set the value of [gat_next_type] column.
-	 * 
-	 * @param      string $v new value
-	 * @return     void
-	 */
-	public function setGatNextType($v)
-	{
-
-		// Since the native PHP type for this column is string,
-		// we will cast the input to a string (if it is not).
-		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
-		}
-
-		if ($this->gat_next_type !== $v || $v === '') {
-			$this->gat_next_type = $v;
-			$this->modifiedColumns[] = GatewayPeer::GAT_NEXT_TYPE;
-		}
-
-	} // setGatNextType()
-
-	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -392,14 +352,12 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 
 			$this->gat_type = $rs->getString($startcol + 6);
 
-			$this->gat_next_type = $rs->getString($startcol + 7);
-
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 8; // 8 = GatewayPeer::NUM_COLUMNS - GatewayPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 7; // 7 = GatewayPeer::NUM_COLUMNS - GatewayPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Gateway object", $e);
@@ -623,9 +581,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 			case 6:
 				return $this->getGatType();
 				break;
-			case 7:
-				return $this->getGatNextType();
-				break;
 			default:
 				return null;
 				break;
@@ -653,7 +608,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 			$keys[4] => $this->getGatX(),
 			$keys[5] => $this->getGatY(),
 			$keys[6] => $this->getGatType(),
-			$keys[7] => $this->getGatNextType(),
 		);
 		return $result;
 	}
@@ -706,9 +660,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 			case 6:
 				$this->setGatType($value);
 				break;
-			case 7:
-				$this->setGatNextType($value);
-				break;
 		} // switch()
 	}
 
@@ -739,7 +690,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[4], $arr)) $this->setGatX($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setGatY($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setGatType($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setGatNextType($arr[$keys[7]]);
 	}
 
 	/**
@@ -758,7 +708,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(GatewayPeer::GAT_X)) $criteria->add(GatewayPeer::GAT_X, $this->gat_x);
 		if ($this->isColumnModified(GatewayPeer::GAT_Y)) $criteria->add(GatewayPeer::GAT_Y, $this->gat_y);
 		if ($this->isColumnModified(GatewayPeer::GAT_TYPE)) $criteria->add(GatewayPeer::GAT_TYPE, $this->gat_type);
-		if ($this->isColumnModified(GatewayPeer::GAT_NEXT_TYPE)) $criteria->add(GatewayPeer::GAT_NEXT_TYPE, $this->gat_next_type);
 
 		return $criteria;
 	}
@@ -824,8 +773,6 @@ abstract class BaseGateway extends BaseObject  implements Persistent {
 		$copyObj->setGatY($this->gat_y);
 
 		$copyObj->setGatType($this->gat_type);
-
-		$copyObj->setGatNextType($this->gat_next_type);
 
 
 		$copyObj->setNew(true);
