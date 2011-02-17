@@ -26,7 +26,7 @@ var store;
 var cmodel;
 var smodel;
 var infoGrid;
-var viewport
+var viewport;
 
 var cancelButton;
 var exportButton;
@@ -44,16 +44,15 @@ Ext.onReady(function(){
     });
     
 	exportButton = new Ext.Action({
-		text: TRANSLATIONS.ID_EXPORT,
+		text: _('ID_EXPORT'),
 		iconCls: 'silk-add',
 		icon: '/images/export.png',
 		handler: ExportPMTables
 	});
 	
 	cancelButton = new Ext.Action({
-		text: TRANSLATIONS.ID_CANCEL,
-		iconCls: 'silk-add',
-		icon: '/images/cases-selfservice.png',
+		text: _('ID_CANCEL'),
+		iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
 		handler: CancelExport
 	});
 	
@@ -91,9 +90,9 @@ Ext.onReady(function(){
             new Ext.grid.RowNumberer(),
             //smodel,
             {id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false},
-            {header: TRANSLATIONS.ID_NAME, dataIndex: 'ADD_TAB_NAME', width: 20, align:'left'},
-            {header: TRANSLATIONS.ID_DESCRIPTION, dataIndex: 'ADD_TAB_DESCRIPTION', width: 50, hidden:false, align:'left'},//,
-            {header: 'SCHEMA', dataIndex: 'CH_SCHEMA', hidden: false, width: 20, editor: action_edit, align: 'center'},            
+            {header: _('ID_NAME'), dataIndex: 'ADD_TAB_NAME', width: 20, align:'left'},
+            {header: _('ID_DESCRIPTION'), dataIndex: 'ADD_TAB_DESCRIPTION', width: 50, hidden:false, align:'left'},//,
+            {header: _('ID_SCHEMA'), dataIndex: 'CH_SCHEMA', hidden: false, width: 20, editor: action_edit, align: 'center'},            
             {header: 'DATA', dataIndex: 'CH_DATA', hidden: false, width: 20, editor: action_edit, align: 'center'}
         ]
     });
@@ -103,10 +102,9 @@ Ext.onReady(function(){
         cm: cmodel,
         width: 600,
         height: 300,
-        title: TRANSLATIONS.ID_ADDITIONAL_TABLES + ': ' +TRANSLATIONS.ID_TITLE_EXPORT_TOOL,
-        frame: true,
+        title: _('ID_ADDITIONAL_TABLES') + ': ' +_('ID_TITLE_EXPORT_TOOL'),
+        frame: false,
         clicksToEdit: 1,
-        iconCls:'icon-grid',
         id: 'infoGrid',
 
     	sm: new Ext.grid.RowSelectionModel({singleSelect: false}),
@@ -117,7 +115,7 @@ Ext.onReady(function(){
     	})
     });
 
-    infoGrid.store.load({params: {"function":"additionalTablesExport"}});
+    infoGrid.store.load();
     
     viewport = new Ext.Viewport({
     	layout: 'fit',
@@ -132,7 +130,7 @@ Ext.onReady(function(){
 //Cancels Export View
 CancelExport = function(){
 	location.href = 'additionalTablesList';
-}
+};
 
 //Export Schema/Data from PM Tables
 ExportPMTables = function(){
@@ -144,12 +142,12 @@ ExportPMTables = function(){
     for (var r=0; r<storeExport.getCount(); r++){
     	row = storeExport.getAt(r);
     	UIDs[r] = row.data['ADD_TAB_UID'];
-    	if (row.data['CH_SCHEMA']==TRANSLATIONS.ID_ACTION_EXPORT){
+    	if (row.data['CH_SCHEMA']==_('ID_ACTION_EXPORT')){
     		SCHs[r] = row.data['ADD_TAB_UID'];
     	}else{
     		SCHs[r] = 0;
     	}
-    	if (row.data['CH_DATA']==TRANSLATIONS.ID_ACTION_EXPORT){
+    	if (row.data['CH_DATA']==_('ID_ACTION_EXPORT')){
     		DATs[r] = row.data['ADD_TAB_UID'];
     	}else{
     		DATs[r] = 0;
@@ -161,7 +159,7 @@ ExportPMTables = function(){
     	   failure: DoNothing,
     	   params: { action: 'doExport',  tables: UIDs.join(','), schema: SCHs.join(','), data: DATs.join(',') }
     });
-}
+};
 
 //Response Export Handler
 SuccessExport = function(response, opts){
@@ -171,25 +169,25 @@ SuccessExport = function(response, opts){
 		resizable: false,
 	    html: response.responseText,
 	    autoscroll: false,
-		title: TRANSLATIONS.ID_TITLE_EXPORT_RESULT,
+		title: _('ID_TITLE_EXPORT_RESULT'),
 		closable: true,
 		buttons: [{
-			text: TRANSLATIONS.ID_CLOSE,
+			text: _('ID_CLOSE'),
 //			iconCls: 'silk-add',
 			handler: CloseExport
 		}]
 	});
 	w.show();
-} 
+}; 
 
 //Close Export Dialog
 CloseExport = function(){
 	w.close();
-}
+};
 
 
 //Do Nothing Function
-DoNothing = function(){}
+DoNothing = function(){};
 
 Ext.grid.dummyData = [['Export'],['Ignore']];
 

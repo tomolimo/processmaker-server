@@ -62,6 +62,28 @@ if(isset($_POST['action'])) {
     	$G_PUBLISH->AddContent('propeltable', 'additionalTables/paged-table', 'additionalTables/additionalTablesExportList', $oCriteria);
     	G::RenderPage('publish', 'raw');
     break;
+    case 'updatePageSize':
+      G::LoadClass('configuration');
+      $c = new Configurations();
+      $arr['pageSize'] = $_REQUEST['size'];
+      $arr['dateSave'] = date('Y-m-d H:i:s');
+      $config = Array();
+      $config[] = $arr;
+      $c->aConfig = $config;
+      $c->saveConfig('additionalTablesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+      echo '{success: true}';
+    break;
+    case 'updatePageSizeData':
+      G::LoadClass('configuration');
+      $c = new Configurations();
+      $arr['pageSize'] = $_REQUEST['size'];
+      $arr['dateSave'] = date('Y-m-d H:i:s');
+      $config = Array();
+      $config[] = $arr;
+      $c->aConfig = $config;
+      $c->saveConfig('additionalTablesData', 'pageSize','',$_SESSION['USER_LOGGED']);
+      echo '{success: true}';
+    break;
     
     case 'doExport':
     	# @Author: Erik Amaru Ortiz <aortiz.erik@gmail.com>

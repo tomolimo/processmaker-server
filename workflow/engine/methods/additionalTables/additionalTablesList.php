@@ -26,17 +26,18 @@ global $RBAC;
 $RBAC->requirePermissions('PM_SETUP_ADVANCE');
 $G_PUBLISH = new Publisher;
 
+G::LoadClass('configuration');
+$c = new Configurations();
+$configPage = $c->getConfiguration('additionalTablesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
 $oHeadPublisher =& headPublisher::getSingleton();
 
 //$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('additionalTables/additionalTablesList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('additionalTables/additionalTablesList'); //adding a html file  .html.
-
-$labels = G::getTranslations(Array('ID_EXPORT','ID_IMPORT','ID_EDIT','ID_DELETE', 'ID_DATA',
-  'ID_NEW_ADD_TABLE','ID_DESCRIPTION','ID_NAME','ID_CONFIRM','ID_ADDITIONAL_TABLES','ID_SELECT_FIRST_PM_TABLE_ROW',
-  'ID_CONFIRM_DELETE_PM_TABLE'));
-
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
+$oHeadPublisher->assign('FORMATS',$c->getFormats());
+$oHeadPublisher->assign('CONFIG', $Config);
 G::RenderPage('publish', 'extJs');
 
 /*global $RBAC;

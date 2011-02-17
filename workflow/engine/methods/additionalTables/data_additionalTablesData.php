@@ -24,16 +24,34 @@
  */
 
 require_once 'classes/model/AdditionalTables.php';
+
+G::LoadClass('configuration');
+$co = new Configurations();
+$config = $co->getConfiguration('additionalTablesData', 'pageSize','',$_SESSION['USER_LOGGED']);
+$limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+$start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+$limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
+
 $oAdditionalTables = new AdditionalTables();
 $oAdditionalTables->createXmlList($_GET['sUID']);
 
 $ocaux = $oAdditionalTables->getDataCriteria($_GET['sUID']);
+$rsc = AdditionalTablesPeer::doSelectRS($ocaux);
+$rsc->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+$total_rows = 0;
+while ($rsc->next()){
+	$total_rows++;
+}
 
-$rs = AdditionalTablesPeer::DoSelectRs ($ocaux);
+$ocaux1 = $oAdditionalTables->getDataCriteria($_GET['sUID']);
+$ocaux1->setLimit($limit);
+$ocaux1->setOffset($start);
+
+$rs = AdditionalTablesPeer::DoSelectRs ($ocaux1);
 $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
 
 $rows = Array();
 while($rs->next()){
 	$rows[] = $rs->getRow();
 }
-echo G::json_encode($rows);
+echo '{rows: '.G::json_encode($rows).', total_rows: '.$total_rows.'}';

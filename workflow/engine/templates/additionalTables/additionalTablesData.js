@@ -35,48 +35,50 @@ var viewport;
 var smodel;
 
 var FIELD_CM;
-var FIELD_DS
+var FIELD_DS;
 
 Ext.onReady(function(){
 	var xColumns = new Array();
 	var xFields = new Array();
 	
+	pageSize = parseInt(CONFIG.pageSize);
+	
 	newButton = new Ext.Action({
-		text: TRANSLATIONS.ID_ADD_ROW,
-		iconCls: 'silk-add',
-		icon: '/images/addc.png',
+		text: _('ID_ADD_ROW'),
+		iconCls: 'button_menu_ext ss_sprite ss_add',
 		handler: NewPMTableRow
 	});
 	
 	editButton = new Ext.Action({
-		text: TRANSLATIONS.ID_EDIT,
+		text: _('ID_EDIT'),
 		iconCls: 'button_menu_ext ss_sprite  ss_pencil',
-		//icon: '/images/addc.png',
 		handler: EditPMTableRow,
 		disabled: true
 	});
 
 	deleteButton = new Ext.Action({
-		text: TRANSLATIONS.ID_DELETE,
+		text: _('ID_DELETE'),
 		iconCls: 'button_menu_ext ss_sprite  ss_delete',
-		//icon: '/images/addc.png',
 		handler: DeletePMTableRow,
 		disabled: true
 	});
 
 	importButton = new Ext.Action({
-		text: TRANSLATIONS.ID_IMPORT,
+		text: _('ID_IMPORT'),
 		iconCls: 'silk-add',
 		icon: '/images/import.gif',
 		handler: ImportPMTableCSV
 	});
 	
 	backButton = new Ext.Action({
-		text: TRANSLATIONS.ID_BACK,
-		iconCls: 'silk-add',
-		icon: '/images/cases-selfservice.png',
+		text: _('ID_BACK'),
+		iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
 		handler: BackPMList
 	});
+	
+	contextMenu = new Ext.menu.Menu({
+    	items: [editButton, deleteButton]
+    });
 	
 	//This loop loads columns and fields to store and column model
 	for (var c=0; c<NAMES.length; c++){
@@ -121,7 +123,8 @@ Ext.onReady(function(){
 			url: 'data_additionalTablesData?sUID=' + TABLES.UID
 		}),
 		reader : new Ext.data.JsonReader( {
-			root: '',
+			root: 'rows',
+			totalProperty: 'total_rows',
 			fields : xFields
 		})
 	});	
@@ -134,6 +137,41 @@ Ext.onReady(function(){
 	      columns: xColumns
 	});
 	
+	storePageSize = new Ext.data.SimpleStore({
+        fields: ['size'],
+         data: [['20'],['30'],['40'],['50'],['100']],
+         autoLoad: true
+      });
+        
+      comboPageSize = new Ext.form.ComboBox({
+        typeAhead     : false,
+        mode          : 'local',
+        triggerAction : 'all',
+        store: storePageSize,
+        valueField: 'size',
+        displayField: 'size',
+        width: 50,
+        editable: false,
+        listeners:{
+          select: function(c,d,i){
+            UpdatePageConfig(d.data['size']);
+            bbarpaging.pageSize = parseInt(d.data['size']);
+            bbarpaging.moveFirst();
+          }
+        }
+      });
+        
+      comboPageSize.setValue(pageSize);
+	
+	bbarpaging = new Ext.PagingToolbar({
+        pageSize: pageSize,
+        store: store,
+        displayInfo: true,
+        displayMsg: _('ID_GRID_PAGE_DISPLAYING_ROWS_MESSAGE') + '&nbsp; &nbsp; ',
+        emptyMsg: _('ID_GRID_PAGE_NO_ROWS_MESSAGE'),
+        items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
+      });
+	
     
 	infoGrid = new Ext.grid.GridPanel({
 		region: 'center',
@@ -141,17 +179,12 @@ Ext.onReady(function(){
 		id: 'infoGrid',
 		height:100,
 		autoWidth : true,
-	//width: 350,
-	//autoHeight: true,
-		title : TRANSLATIONS.ID_ADDITIONAL_TABLES + " : " +TABLES.TABLE_NAME, // + " (" + xColumns.length + ")",
+		title : _('ID_PM_TABLE') + " : " +TABLES.TABLE_NAME,
 		stateful : true,
 		stateId : 'grid',
 		enableColumnResize: true,
 		enableHdMenu: true,
 		frame:false,
-		//plugins: expander,
-		//cls : 'grid_with_checkbox',
-		iconCls:'icon-grid',
 		columnLines: false,
 		viewConfig: {
 			forceFit:true
@@ -160,16 +193,31 @@ Ext.onReady(function(){
 		cm: cmodel,
 		sm: smodel,
 		tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
+		bbar: bbarpaging,
 		listeners: {
-			rowdblclick: EditPMTableRow
+			rowdblclick: EditPMTableRow,
+			render: function(){
+    			this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING_GRID')});
+    		}
 		},
 		view: new Ext.grid.GroupingView({
 			forceFit:true,
 			groupTextTpl: '{text}'
 		})
 	});
+	
+	infoGrid.on('rowcontextmenu', 
+    		function (grid, rowIndex, evt) {
+        		var sm = grid.getSelectionModel();
+        		sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+    		},
+    		this
+    );
+    
+    infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
+    infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
 
-	infoGrid.store.load({params: {"function":"additionalTablesData"}});
+	infoGrid.store.load();
 
 	viewport = new Ext.Viewport({
 		layout: 'fit',
@@ -179,6 +227,13 @@ Ext.onReady(function(){
 		        ]
 	});	
 });
+
+//Funtion Handles Context Menu Opening
+onMessageContextMenu = function (grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    contextMenu.showAt([coords[0], coords[1]]);
+};
 
 
 
@@ -191,41 +246,41 @@ capitalize = function(s){
 };
 
 //Do Nothing Function
-DoNothing = function(){}
+DoNothing = function(){};
 
 //Load New PM Table Row Forms
 NewPMTableRow = function(){
 	location.href = 'additionalTablesDataNew?sUID=' + TABLES.UID;
-}
+};
 
 //Load PM Table Edition Row Form
 EditPMTableRow = function(){
 	iGrid = Ext.getCmp('infoGrid');
 	rowsSelected = iGrid.getSelectionModel().getSelections();
    	location.href = 'additionalTablesDataEdit?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+RetrieveRowsID(rowsSelected);
-}
+};
 
 //Confirm PM Table Row Deletion Tasks
 DeletePMTableRow = function(){
 	iGrid = Ext.getCmp('infoGrid');
 	rowsSelected = iGrid.getSelectionModel().getSelections();
-	Ext.Msg.confirm(TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_CONFIRM_DELETE_ROW,
+	Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_ROW'),
 	        function(btn, text){
 	            if (btn=="yes"){
 	            	location.href = 'additionalTablesDataDelete?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+RetrieveRowsID(rowsSelected);
 	            }
 	});
-}
+};
 
 //Load Import PM Table From CSV Source
 ImportPMTableCSV = function(){
 	location.href = 'additionalTablesDataImportForm?sUID=' + TABLES.UID;
-}
+};
 
 //Load PM Table List
 BackPMList = function(){
 	location.href = 'additionalTablesList';
-}
+};
 
 //Gets UIDs from a array of rows
 RetrieveRowsID = function(rows){
@@ -234,4 +289,12 @@ RetrieveRowsID = function(rows){
 		arrAux[c] = rows[c].get(TABLES.PKF);
 	}
 	return arrAux.join(',');
-}
+};
+
+//Update Page Size Configuration
+UpdatePageConfig = function(pageSize){
+  Ext.Ajax.request({
+  url: 'additionalTablesAjax',
+  params: {action:'updatePageSizeData', size: pageSize}
+  });
+};

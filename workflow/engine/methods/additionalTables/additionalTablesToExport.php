@@ -29,18 +29,14 @@ $G_PUBLISH = new Publisher;
 
 $oHeadPublisher =& headPublisher::getSingleton();
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
+
 $oHeadPublisher->addExtJsScript('additionalTables/additionalTablesExport', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('additionalTables/additionalTablesExport'); //adding a html file  .html.
-
-$labels = G::getTranslations(Array('ID_EXPORT','ID_IMPORT','ID_EDIT','ID_DELETE', 'ID_DATA',
-  'ID_NEW_ADD_TABLE','ID_DESCRIPTION','ID_NAME','ID_CONFIRM','ID_ADDITIONAL_TABLES','ID_SELECT_FIRST_PM_TABLE_ROW',
-  'ID_CONFIRM_DELETE_PM_TABLE', 'ID_CANCEL','ID_CLOSE','ID_ACTION_EXPORT','ID_ACTION_IGNORE','ID_TITLE_EXPORT_RESULT','ID_TITLE_EXPORT_TOOL'));
 
 $toSend = Array();
 $toSend['UID_LIST'] = $_GET["sUID"];
 
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
+
 $oHeadPublisher->assign('EXPORT_TABLES', $toSend);
 G::RenderPage('publish', 'extJs');
 ?>

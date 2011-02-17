@@ -24,19 +24,50 @@
  */
 
 require_once 'classes/model/AdditionalTables.php';
+G::LoadClass('configuration');
+$co = new Configurations();
+$config = $co->getConfiguration('additionalTablesList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
+$limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+$start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+$limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
+$filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
 
 $oCriteria = new Criteria('workflow');
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
+if ($filter!=''){
+	$oCriteria->add(
+	  $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%'.$filter.'%',Criteria::LIKE)->addOr(
+	  $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_DESCRIPTION, '%'.$filter.'%',Criteria::LIKE)));
+}
+$total_tables = AdditionalTablesPeer::doCount($oCriteria);
+//$oDataset = AdditionalTablesPeer::doSelectRS ( $oCriteria );
+//$oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+//$oDataset->next();
+//$row = $oDataset->getRow();
+//$total_tables = $row['CNT'];
+
+$oCriteria->clear();
+$oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
+$oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
+$oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
 $oCriteria->add(AdditionalTablesPeer::ADD_TAB_UID, '', Criteria::NOT_EQUAL);
+if ($filter!=''){
+	$oCriteria->add(
+	  $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%'.$filter.'%',Criteria::LIKE)->addOr(
+	  $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_DESCRIPTION, '%'.$filter.'%',Criteria::LIKE)));
+}
+
+$oCriteria->setLimit($limit);
+$oCriteria->setOffset($start);
 
 $oDataset = AdditionalTablesPeer::doSelectRS ( $oCriteria );
 $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
 
 $addTables = Array();
 while( $oDataset->next() ) {
-    $addTables[] = $oDataset->getRow();
-      
+    $addTables[] = $oDataset->getRow(); 
 }
-echo G::json_encode($addTables);
+echo '{tables: '.G::json_encode($addTables).', total_tables: '.$total_tables.'}';
