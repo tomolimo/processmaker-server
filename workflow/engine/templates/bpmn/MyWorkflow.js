@@ -1135,6 +1135,15 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                           this.workflow.saveEvents(preSelectedFigure,oNewShape);
                         }
                       }
+                      
+                      /**
+                       * erik: Setting Drop targets from users & groups grids to assignment to tasks
+                       * for new tasks created recently
+                       */
+                      var dropEls = Ext.get('paintarea').query('.x-task');
+                      for(var i = 0; i < dropEls.length; i++)
+                        new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
+                      
                     }
                     else if(oNewShape.type == 'bpmnSubProcess'){
                       oNewShape.subProcessName = this.workflow.newTaskInfo.label;

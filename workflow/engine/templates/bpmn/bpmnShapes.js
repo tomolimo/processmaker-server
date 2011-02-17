@@ -15,6 +15,7 @@ bpmnTask = function (oWorkflow) {
    }
 
    this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
+   this.html.addClass('x-task');
 };
 
 bpmnTask.prototype = new VectorFigure;
@@ -90,6 +91,23 @@ bpmnTask.prototype.paint = function () {
   * New object is created to implement changing of Text functionality
   */
   this.bpmnText = new jsGraphics(this.id);
+  //erik: overridden the drawStringRect method
+  this.bpmnText.drawStringRect = function(txt, x, y, width, height, halign, cls)
+  {
+    var classBk = typeof(cls) != 'undefined' ? 'class="'+cls+'" ' : '';
+    this.htm += '<div '+classBk+' style="position:absolute;overflow:hidden;'+
+      'left:' + x + 'px;'+
+      'top:' + y + 'px;'+
+      'width:'+width +'px;'+
+      'height:'+height +'px;'+
+      'text-align:'+halign+';'+
+      'font-family:' +  this.ftFam + ';'+
+      'font-size:' + this.ftSz + ';'+
+      'line-height: 100%;'+
+      'color:' + this.color + ';' + this.ftSty + '">'+
+      '<span style="display:inline-block; vertical-align:middle">' +txt + '<\/span>'+
+      '<\/div>';
+  };
 
   var zoomRate = workflow.zoomfactor;
   var len = this.getWidth() / 18;
@@ -117,7 +135,7 @@ bpmnTask.prototype.paint = function () {
 
   this.bpmnText.setFont('verdana', + fontSize+'px', Font.PLAIN);
 
-  this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center');
+  this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center', 'x-task');
 
   /****************************       Drawing Timer Boundary event starts here           *******************************/
   this.boundaryTimer = new jsGraphics(this.id);
@@ -938,6 +956,14 @@ bpmnTaskDialog.prototype.createHTMLElement = function () {
 bpmnTask.prototype.onDoubleClick = function () {
     var _409d = new bpmnTaskDialog(this);
     workflow.showDialog(_409d, this.workflow.currentSelection.x, this.workflow.currentSelection.y);
+};
+
+/**
+ * erik: Setting task target to Drop user & group assignment
+ */
+bpmnTask.prototype.onMouseEnter = function () {
+  if( this.type == 'bpmnTask' && typeof(Ext.getCmp('usersPanel')) != 'undefined' )
+    Ext.getCmp('usersPanel')._targetTask = this.id;
 };
 
 bpmnTask.prototype.trim = function (str) {

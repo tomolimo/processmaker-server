@@ -1,28 +1,22 @@
-/*new Ext.KeyMap(document, {
+new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
   fn: function(keycode, e) {
-    e.stopEvent();      
     if (Ext.isIE)
       e.browserEvent.keyCode = 8;
-    e.stopEvent();
-    Ext.Msg.alert('Refresh', 'You clicked: F5');
-    location = "../bpmn/designer?PRO_UID=" + pro_uid;
-    document.location = document.location;
+  //e.stopEvent();
   }
 });
-*/
+
 
 var saveProcess;
+var usersPanel;
 
 Ext.onReady ( function() {
-
   workflow  = new MyWorkflow("paintarea");
   workflow.setEnableSmoothFigureHandling(false);
   workflow.scrollArea.width = 2000;
   //For Undo and Redo Options
   // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
-  //Getting process id from the URL using getUrlvars function
-  //var pro_uid = getUrlVars();
 
   if(typeof pro_uid !== 'undefined') {
     Ext.Ajax.request({
@@ -30,6 +24,15 @@ Ext.onReady ( function() {
       success: function(response) {
         shapesData =  createShapes(response.responseText);
         createConnection(shapesData);
+        
+        /**
+         * erik: Setting Drop targets from users & groups grids to assignment to tasks
+         * for all existing tasks
+         */
+        var dropEls = Ext.get('paintarea').query('.x-task');
+        for(var i = 0; i < dropEls.length; i++)
+          new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
+        
       },
       failure: function(){
         Ext.Msg.alert ('Failure');
@@ -53,23 +56,10 @@ Ext.onReady ( function() {
     autoScroll : true,
     collapsible :true,
     split       :true,
-    //collapseMode:'mini',
+    collapseMode:'mini',
     hideCollapseTool: false,
-
     items:{
-      html:'<div id="x-shapes">\n\
-        <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
-        <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
-        <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
-        <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
-        <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
-        <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
-        <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
-        <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
-        <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
-        <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
-        <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
-      </div>'
+      html:''
     }
   };
   
@@ -148,11 +138,49 @@ Ext.onReady ( function() {
   });
   
 
+  var toolbarPanel = new Ext.Panel({
+    layout:'table',
+    defaultType: 'button',
+    baseCls: 'x-plain',
+    cls: 'btn-panel',
+    //menu: undefined,
+    split: false,
+
+    layoutConfig: {
+        columns: 7
+    },
+    defaults: {
+      autoEl: {tag: 'h3', html: 's', style:"padding:15px 0 3px;"},
+      scale: 'large'
+    },
+
+    items : [{
+      icon: '/skins/ext/images/gray/shapes/pallete/task.png',
+      id:"x-shapes-task"
+    },{
+      icon: '/skins/ext/images/gray/shapes/pallete/startevent.png',
+      id:"x-shapes-startEvent"
+    },{
+      icon: '/skins/ext/images/gray/shapes/pallete/interevent.png',
+      id:"x-shapes-interEvent"
+    },{
+      icon: '/skins/ext/images/gray/shapes/pallete/endevent.png',
+      id:"x-shapes-endEvent"
+    },{
+      icon: '/skins/ext/images/gray/shapes/pallete/gateway.png',
+      id:"x-shapes-gateways"
+    },{
+      icon: '/skins/ext/images/gray/shapes/pallete/annotation.png',
+      id:"x-shapes-annotation"
+    }
+    ]
+  });
+  
   var designerToolbarHeight = 60;
-  var designerToolbarWidth  = 300;
+  var designerToolbarWidth  = 265;
   var designerToolbar = new Ext.Window({
     id: 'designerToolbar',
-    //title: '<span style="font-size:10px; font-weight:bold; align:center;">&nbsp;&nbsp;</span>',
+    //title: 'Toolbar',
     headerAsText: true,
     width: designerToolbarWidth,
     height: designerToolbarHeight,
@@ -169,7 +197,8 @@ Ext.onReady ( function() {
     
     shim: true,
     plugin: new Ext.ux.WindowAlwaysOnTop,
-    html: '<div id="x-shapes">\n\
+    items: [toolbarPanel]
+    /*html: '<div id="x-shapes">\n\
       <p id="x-shapes-task" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
       <p id="x-shapes-startEvent" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
       <p id="x-shapes-interEvent" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
@@ -181,7 +210,7 @@ Ext.onReady ( function() {
       <p id="x-shapes-pool" title="Pool" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
       <p id="x-shapes-lane" title="Lane" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
       <p id="x-shapes-milestone" title="Milestone" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
-    </div>'
+    </div>'*/
   });
   designerToolbar.on('minimize',function(w){
     //console.debug('minimizing...');
@@ -268,6 +297,7 @@ Ext.onReady ( function() {
     enableHdMenu: true,
     //frame:false,
     //columnLines: true,
+    ddGroup        : 'task-assignment',
     enableDragDrop: true,
     viewConfig: {
       forceFit:true
@@ -352,6 +382,7 @@ Ext.onReady ( function() {
     //enableHdMenu: true,
     frame:false,
     //columnLines: true,
+    ddGroup        : 'task-assignment',
     height: 200,
     enableDragDrop: true,
     viewConfig: {
@@ -413,26 +444,24 @@ Ext.onReady ( function() {
   });
   
 
-  var usersPanel = new Ext.Window({
+  usersPanel = new Ext.Window({
     id: 'usersPanel',
     title: '<span style="font-size:10px; font-weight:bold; align:center;">&nbsp;Actors</span>',
     headerAsText: true,
     collapsed : true,
     width: 302,
     height:380,
-    x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
-    y: designerToolbarHeight + 2,
-    minimizable: true,
+    //x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
+    //y: designerToolbarHeight + 2,
+    x: 0,
+    y: 0,
+    minimizable: false,
     maximizable: false,
     closable: false,
     resizable: false,
     floating: true,
-    frame:true,
     shadow:false,
-    border:true,
-
-    shim: true,
-    plugin: new Ext.ux.WindowAlwaysOnTop,
+    border:false,
     //html: 'userslist'
     items:[
       new Ext.TabPanel({
@@ -449,32 +478,57 @@ Ext.onReady ( function() {
       })
     ],
     tools: [
-      {
+      /*{
         id:'help',
         qtip: 'Get Help',
         handler: function(event, toolEl, panel){
             // whatever
+        }
+      },*/ {
+        id: 'toggle',
+        handler: function(w) {
+          if( Ext.getCmp('usersPanel').collapsed )
+            Ext.getCmp('usersPanel').expand();
+          else
+            Ext.getCmp('usersPanel').collapse();
+        }
+      },{
+        id: 'close',
+        handler: function() {
+          Ext.getCmp('usersPanel').hide()
         }
       }
     ]
   });
   
   usersPanel.on('minimize',function(w){
-    if( w.collapsed )
-      usersPanel.expand();
+    if( Ext.getCmp('usersPanel').collapsed )
+      Ext.getCmp('usersPanel').expand();
     else
-      usersPanel.collapse();
+      Ext.getCmp('usersPanel').collapse();
   });
-
-  usersPanel.show();
-  usersPanel.collapse();
-  
   
   // custom variables
-  usersPanel._posRelToView = usersPanel.getPosition(true);
-  usersPanel._scrollPosTimer = false;
-  usersPanel._moveBlocker = false;
-  usersPanel.show();
+  usersPanel._targetTask = null;
+  usersPanel._onDrop = function(ddSource, e, data) {
+    alert('tas_uid: ' + Ext.getCmp('usersPanel')._targetTask);
+
+    var records = ddSource.dragData.selections;
+    Ext.each(records, function(gridRow){
+      alert('usr_uid ->'+gridRow.data.USR_UID);
+    });
+
+  }
+  
+  usersPanel.on('beforeshow', function(e) {
+    usersPanel._posRelToView = usersPanel.getPosition(true);
+    usersPanel._scrollPosTimer = false;
+    usersPanel._moveBlocker = false;
+    usersPanel.setPosition(0, divScroll.scrollTop);
+  }, this);
+  
+
+  //usersPanel.show();
   var divScroll = document.body;
 
   // save relative pos to view when moving (for scrolling event below)
@@ -521,12 +575,14 @@ Ext.onReady ( function() {
       designerToolbar.setPosition(designerToolbar._posRelToView[0] + divScroll.scrollLeft, designerToolbar._posRelToView[1] + divScroll.scrollTop);
     }, 100);
 
-    if (usersPanel._scrollPosTimer) {
-      clearTimeout(usersPanel._scrollPosTimer);
+    if( usersPanel.isVisible() ) {
+      if (usersPanel._scrollPosTimer) {
+        clearTimeout(usersPanel._scrollPosTimer);
+      }
+      usersPanel._scrollPosTimer = setTimeout(function() {
+        usersPanel.setPosition(usersPanel._posRelToView[0] + divScroll.scrollLeft, usersPanel._posRelToView[1] + divScroll.scrollTop);
+      }, 100);
     }
-    usersPanel._scrollPosTimer = setTimeout(function() {
-      usersPanel.setPosition(usersPanel._posRelToView[0] + divScroll.scrollLeft, usersPanel._posRelToView[1] + divScroll.scrollTop);
-    }, 100);
   });
 
   new Ext.ToolTip({

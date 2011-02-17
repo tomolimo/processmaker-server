@@ -161,6 +161,8 @@ Ext.onReady ( function() {
       }, {
           text:'Save as'
       }, {
+        xtype: 'tbseparator'
+      }, {
         text:'Undo',
         iconCls: 'button_menu_ext ss_sprite ss_arrow_undo',
         handler: function() {
@@ -172,8 +174,53 @@ Ext.onReady ( function() {
         handler: function() {
           document.getElementById('designerFrame').contentWindow.workflow.getCommandStack().redo();
         }
-      }, {
+      },{
         xtype: 'tbsplit',
+        text:'Zoom',
+        iconCls: 'button_menu_ext ss_sprite ss_zoom_in',
+         menu: new Ext.menu.Menu({
+          items: [{
+              text    : '25%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('25');
+               }
+            },{
+              text    : '50%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('50');
+               }
+            },{
+              text    : '75%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('75');
+               }
+            },{
+              text    : '100%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('100');
+               }
+            },{
+              text    : '125%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('125');
+               }
+            },{
+              text    : '150%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('150');
+               }
+            },{
+              text    : '200%',
+               handler: function() {
+                   document.getElementById('designerFrame').contentWindow.workflow.zoom('200');
+               }
+            }
+          ]
+        })
+      }, {
+        xtype: 'tbseparator'
+      }, {
+        //xtype: 'tbsplit',
         iconCls: 'button_menu_ext ss_sprite ss_application',
         text: 'Process',
         menu: new Ext.menu.Menu({
@@ -221,49 +268,15 @@ Ext.onReady ( function() {
         })
 
       }, {
-        xtype: 'tbsplit',
-        text:'Zoom',
-        iconCls: 'button_menu_ext ss_sprite ss_zoom_in',
-         menu: new Ext.menu.Menu({
-          items: [{
-              text    : '25%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('25');
-               }
-            },{
-              text    : '50%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('50');
-               }
-            },{
-              text    : '75%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('75');
-               }
-            },{
-              text    : '100%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('100');
-               }
-            },{
-              text    : '125%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('125');
-               }
-            },{
-              text    : '150%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('150');
-               }
-            },{
-              text    : '200%',
-               handler: function() {
-                   document.getElementById('designerFrame').contentWindow.workflow.zoom('200');
-               }
-            }
-          ]
-        })
-      },{
+        text: 'Actors',
+        iconCls: 'ICON_USERS',
+        handler: function(){
+          document.getElementById('designerFrame').contentWindow.usersPanel.show()
+        }
+        
+      }, {
+        xtype: 'tbfill'
+      }, {
         text: _('ID_SWITCH_EDITOR'),
         iconCls: 'button_menu_ext ss_sprite ss_pencil',
         handler: function() {
