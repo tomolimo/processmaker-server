@@ -324,7 +324,7 @@ InputPort.prototype.onDrop = function (port) {
         workflow.saveRoute(newObj,shape);
       }
       //Routing from gateway to task
-      else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/)){
+      else if(bpmnType.match(/Gateway/) && (port.parentNode.type.match(/Gateway/) || port.parentNode.type.match(/Task/))){
         preObj = this.workflow.currentSelection;
         newObj = port.parentNode;
         this.workflow.saveRoute(preObj,newObj);
@@ -396,7 +396,7 @@ OutputPort.prototype.onDrop = function (port) {
            newObj.sPortType =port.properties.name;
            preObj.sPortType =this.properties.name;
            this.workflow.saveRoute(preObj,newObj);
-       }else if(bpmnType.match(/Gateway/) && port.parentNode.type.match(/Task/)){ //Routing from gateway to task
+       }else if(bpmnType.match(/Gateway/) && (port.parentNode.type.match(/Task/) || port.parentNode.type.match(/Gateway/))){ //Routing from gateway to task
            var shape = new Array();
            shape.type = '';
            preObj = this.workflow.currentSelection;
@@ -674,8 +674,6 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
                     _39fd.workflow.enablePorts(_39fd, ports);
                 }
                 else if (bpmnShape.match(/End/)) {
-                    this.addChild(this.actionAnnotation);
-                    this.actionAnnotation.setPosition(0, 0);
                     this.removechild(this.actionInterEvent);
                     this.removechild(this.actionEndEvent);
                     this.removechild(this.actionTask);
@@ -747,7 +745,7 @@ bpmnTask.prototype.addShapes = function (oStore) {
     else if (oStore.newShapeName.match(/Gateway/)) {
         xOffset = workflow.currentSelection.getX() + 62; 
     }
-    else if (oStore.newShapeName.match(/Annotation/)) {
+    else if (oStore.newShapeName.match(/Annotation/) ) {
         xOffset = workflow.currentSelection.getX() + 250; 
         yOffset = workflow.currentSelection.getY() - 10.5; 
     }

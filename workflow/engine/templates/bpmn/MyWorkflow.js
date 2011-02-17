@@ -356,12 +356,12 @@ MyWorkflow.prototype.toggleShapes=function(item)
         //Initializing Arrays and variables
         var connLength = conn.length;
         var sourceNode = new Array();
-        var targetNode= new Array();
-        var countConn = 0;
-        var sourcePortName= new Array();
-        var targetPortName= new Array();
-        var sourcePortId= new Array();
-        var targetPortId= new Array();
+        var targetNode = new Array();
+        var countConn  = 0;
+        var sourcePortName = new Array();
+        var targetPortName = new Array();
+        var sourcePortId   = new Array();
+        var targetPortId   = new Array();
 
         //Get the pre-selected id into new variable to compare in future code
         var shapeId = this.workflow.currentSelection.id;
@@ -416,7 +416,6 @@ MyWorkflow.prototype.toggleShapes=function(item)
                   sourceNode[i] = newShape;
                 else
                   targetNode[i] = newShape;
-
                   connObj = new DecoratedConnection();
                   connObj.setTarget(eval('targetNode[i].getPort(targetPortName[i])'));
                   connObj.setSource(eval('sourceNode[i].getPort(sourcePortName[i])'));
@@ -428,15 +427,7 @@ MyWorkflow.prototype.toggleShapes=function(item)
             newShape.actiontype = 'updateTask';
             workflow.saveShape(newShape);
         }
-        /*if(newShape.type.match(/Event/)  && newShape.type.match(/Inter/) && !item.type.match(/Boundary/))
-         {
-              newShape.actiontype = 'updateEvent';
-              //Set the Old Id to the Newly created Event
-              newShape.html.id = oldWorkflow.id;
-              newShape.id = oldWorkflow.id;
-              newShape.workflow.saveShape(newShape);
-         }*/
-         if(newShape.type.match(/Event/) && !item.type.match(/Boundary/)){
+        if(newShape.type.match(/Event/) && !item.type.match(/Boundary/)){
            newShape.mode = 'ddEvent';
            newShape.actiontype = 'addEvent';
            //Set the Old Id to the Newly created Event
@@ -445,25 +436,6 @@ MyWorkflow.prototype.toggleShapes=function(item)
            newShape.workflow.saveShape(newShape);
          }
          if(newShape.type.match(/Gateway/)){
-           /*var ports = newShape.getPorts();
-           var len =ports.data.length;
-           var conn = new Array();
-           for(var i=0; i<=len; i++){
-            if(typeof ports.data[i] === 'object')
-                    conn[i] = ports.data[i].getConnections();
-         }
-         var countConn = 0
-         //Get ALL the connections for the specified PORT
-         for(i = 0; i< conn.length ; i++){
-           if(typeof conn[i] != 'undefined')
-           for(var j = 0; j < conn[i].data.length ; j++){
-               if(typeof conn[i].data[j] != 'undefined'){
-                   countConn++;
-               }
-           }
-         }
-
-         if(countConn == 0){*/
            newShape.mode = 'ddGateway';
            newShape.actiontype = 'addGateway';
            //Set the Old Id to the Newly created Gateway
@@ -471,42 +443,6 @@ MyWorkflow.prototype.toggleShapes=function(item)
            newShape.id = oldWorkflow.id;
            newShape.workflow.saveShape(newShape);
          }
-        /* }
-         else
-            newShape.mode = 'update';
-         }*/
-        /* if(newShape.type  == 'bpmnEventMessageStart' || newShape.type  == 'bpmnEventTimerStart')
-         {
-             newShape.workflow.currentSelection = newShape;
-             var task_details = workflow.getStartEventConn(newShape,'targetPort','OutputPort');
-             if(task_details.length > 0 )
-                 {
-                    var task_uid = task_details[0].value;
-                    newShape.task_uid = task_uid;
-                    newShape.actiontype = 'addEvent';
-                    newShape.workflow.saveShape(newShape);
-                 }
-         }
-         else if(newShape.type  == 'bpmnEventEmptyStart')
-         {
-             workflow.deleteEvent(oldWorkflow);
-             newShape.workflow.currentSelection = newShape;
-             var task_details = workflow.getStartEventConn(newShape,'targetPort','OutputPort');
-             if(task_details.length > 0 )
-                 {
-                    var task_uid = task_details[0].value;
-                    newShape.task_uid = task_uid;
-                    newShape.actiontype = 'saveStartEvent';
-                    newShape.workflow.saveShape(newShape);
-                 }
-         }
-         else if(newShape.type.match(/Gateway/)){
-           if(newShape.mode == 'update'){
-             var shape = new Array();
-             shape.type = '';
-             newShape.workflow.saveRoute(newShape,shape);
-           }
-         }*/
          //Swapping from Task to subprocess and vice -versa
          if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/)){
            newShape.actiontype = 'addSubProcess';
@@ -1129,18 +1065,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
     if(shapetype == 'bpmnAnnotation'){
         newlabel = oNewShape.annotationName;
     }
-    //For Gateway to Event connection
-    connect = false;
-    if(typeof workflow.preSelectedObj != 'undefined' && workflow.preSelectedObj.type != 'undefined'){
-      if(workflow.preSelectedObj.type.match(/Gateway/))
-        connect = true;
-    }
-    else{
-      connect = false;
-      workflow.preSelectedObj = '';
-      workflow.preSelectedObj.type = '';
-   }
-
+    
     //var urlparams = "action=addTask&data={"uid":"4708462724ca1d281210739068208635","position":{"x":707,"y":247}}";
     var urlparams = '';
     switch(actiontype)
@@ -1267,7 +1192,6 @@ MyWorkflow.prototype.saveTask= function(actiontype,xpos,ypos)
 MyWorkflow.prototype.deleteSilently= function(oShape)
 {
     //Initializing variables
-
     var pro_uid = this.getUrlVars();
     var shapeId = oShape.id;
     var actiontype = oShape.actiontype;
@@ -1296,7 +1220,6 @@ MyWorkflow.prototype.deleteSilently= function(oShape)
                         }
                         });
    //workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
-
 }
 /**
  * Deleting Shape Asychronously
