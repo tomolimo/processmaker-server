@@ -1300,7 +1300,7 @@ TaskContext.prototype.editTaskProperties= function()
         collapsible: false,
         maximizable: false,
         width: 600,
-        height: 400,
+        height: 370,
         minWidth: 300,
         minHeight: 150,
         layout: 'fit',
