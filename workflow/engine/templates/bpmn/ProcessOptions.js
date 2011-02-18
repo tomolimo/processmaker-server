@@ -3209,8 +3209,6 @@ var triggersForm = new Ext.FormPanel({
                         items       : [{
                                 xtype       : 'textfield',
                                 width     : 200,
-                                //id          : 'DestPath',
-                                //fieldLabel  : _('ID_DESTINATION_PATH'),
                                 name        : 'TRI_WEBBOT',
                                 anchor      :'100%'
                         }]
@@ -3244,39 +3242,63 @@ var triggersForm = new Ext.FormPanel({
             var desc = getForm.TRI_DESCRIPTION;
 
             if(title == '')
-                    PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
-                else
+                    PMExt.notify( _('ID_ERROR') , _('ID_TRIGGER_TITLE_REQUIRED') );
+            else
                     {
-                      Ext.Ajax.request({
+                    //First check whether trigger name already exist or not
+                    Ext.Ajax.request({
                       url   : '../triggers/triggers_Save.php',
-                      method: 'POST',
-                      params:{
-                          //functions       : 'lookforNameTrigger',
-                          TRI_TITLE     : title,
-                          PRO_UID         : pro_uid,
-                          TRI_UID          :'',
-                          TRI_PARAM         :'',
-                          TRI_TYPE          :'SCRIPT',
-                          TRI_DESCRIPTION :desc,
-                          TRI_WEBBOT        :condition
-                            },
+                          method: 'POST',
+                          params: {
+                            functions     : 'lookforNameTrigger',
+                            proUid        : pro_uid,
+                            NAMETRIGGER   : title
+                          },
                       success: function(response) {
-                         // var result = Ext.util.JSON.decode(response.responseText);
-                          PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
-                          triggerStore.reload();
-                          formWindow.hide();
-                      }
-                    });
-                    }
-        }
-    },{
-            text: _('ID_CANCEL'),
-            handler: function(){
-                // when this button clicked,
-                formWindow.hide();
-            }
-        }]
+                        var result = response.responseText;
+                        if(result) {
+                                  //now save trigger
+                                  Ext.Ajax.request({
+                                  url   : '../triggers/triggers_Save.php',
+                                  method: 'POST',
+                                  params:{
+                                          //functions       : 'lookforNameTrigger',
+                                          TRI_TITLE     : title,
+                                          PRO_UID       : pro_uid,
+                                          TRI_UID       :'',
+                                          TRI_PARAM     :'',
+                                          TRI_TYPE      :'SCRIPT',
+                                          TRI_DESCRIPTION :desc,
+                                          TRI_WEBBOT    :condition,
+                                          mode          :'ext'
+                                  },
+                                   success: function(response) {
+                                          var result = Ext.util.JSON.decode(response.responseText);
+                                          if( result.success ){
+                                            PMExt.notify( _('ID_STATUS') , result.msg);
 
+                                            //Reloading store after saving triggers
+                                            triggerStore.reload();
+                                            formWindow.hide();
+                                          } else {
+                                            PMExt.error(_('ID_ERROR'), result.msg);
+                                          }
+                                        }
+                                      });
+                                  } else {
+                                    PMExt.error(_('ID_VALIDATION_ERROR'), 'There is a triggers with the same name in  this process.');
+                                  }
+                              }
+                            });
+                    }
+             }
+        },{
+                text: _('ID_CANCEL'),
+                handler: function(){
+                    // when this button clicked,
+                    formWindow.hide();
+                }
+            }]
     });
 
  var formWindow = new Ext.Window({

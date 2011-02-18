@@ -28,11 +28,11 @@ require_once('classes/model/Triggers.php');
 require_once('classes/model/Content.php');
 
 if( isset($_POST['function']) )
-    $sfunction = $_POST['function'];
-  else if( isset($_POST['functions']) )
-    $sfunction = $_POST['functions'];
+    $sfunction = $_POST['function'];    //for old processmap
+else if( isset($_POST['functions']) )
+    $sfunction = $_POST['functions'];   //for extjs
 
-  if(isset($sfunction) && $sfunction=='lookforNameTrigger'){
+if(isset($sfunction) && $sfunction=='lookforNameTrigger'){
 	  $snameTrigger=urldecode($_POST['NAMETRIGGER']);
 	  $sPRO_UID=urldecode($_POST['proUid']);
 	  
@@ -56,14 +56,14 @@ if( isset($_POST['function']) )
 	    $oDataset1->next();
 	    $aRow1 = $oDataset1->getRow();
 
-	    if($aRow1['TRIGGERS'])$flag=false;
+	    if($aRow1['TRIGGERS']) $flag=false;
      
       
     }
     print $flag;
 	  //print'krlos';return ;
-	} else {
-
+} else {
+   try {
    $oTrigger = new Triggers();
    
    G::LoadClass('processMap');
@@ -84,7 +84,16 @@ if( isset($_POST['function']) )
    }
    //print_r($_POST['form']);die;
    $oTrigger->update($value);
-   
-   $oProcessMap->triggersList($value['PRO_UID']);
-  }
+
+   if(!isset($_POST['mode']))
+        $oProcessMap->triggersList($value['PRO_UID']);
+
+   $result->success = true;
+   $result->msg = G::LoadTranslation('ID_TRIGGERS_SAVED');
+   } catch (Exception $e) {
+        $result->success = false;
+        $result->msg = $e->getMessage();
+   }
+   print G::json_encode($result);
+}
 ?>
