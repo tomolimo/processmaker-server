@@ -2,7 +2,7 @@ new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
   fn: function(keycode, e) {
   	//here (in the toolbar) we are disabling the ctrl-f5
-    e.stopEvent();      
+    e.stopEvent();
     //if (! e.ctrlKey) {
     //  if (Ext.isIE)
     //    e.browserEvent.keyCode = 8;
@@ -24,7 +24,7 @@ Ext.onReady ( function() {
   //For Undo and Redo Options
   // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
   //Getting process id from the URL using getUrlvars function
-  
+
 
   if(typeof pro_uid !== 'undefined') {
     Ext.Ajax.request({
@@ -39,7 +39,7 @@ Ext.onReady ( function() {
     });
   }
 
-  
+
 
   /**********************************************************************************
   *
@@ -74,7 +74,7 @@ Ext.onReady ( function() {
             </div>'
     }
   };
-  
+
   var east= {
     id         : 'eastPanel',
     title      : '',
@@ -101,7 +101,7 @@ Ext.onReady ( function() {
     animate: false,
     region	:	"north"
   };
-  
+
   var south= {
     xtype	:	"panel",
     initialSize: 120,
@@ -125,7 +125,7 @@ Ext.onReady ( function() {
         }]
     }
   };
-  
+
   var center= {
     region: 'center',
     width:100,
@@ -148,7 +148,7 @@ Ext.onReady ( function() {
     layout    : "border",
     autoScroll: true,
     height    : 1000,
-    width     : 1300,    
+    width     : 1300,
     items   : [north, center],
     tbar: [
       {
@@ -159,7 +159,8 @@ Ext.onReady ( function() {
           document.getElementById('designerFrame').contentWindow.saveProcess();
         }
       }, {
-          text:'Save as'
+          text:'Save as',
+          iconCls: 'button_menu_ext ss_sprite ss_disk_multiple'
       }, {
         xtype: 'tbseparator'
       }, {
@@ -177,7 +178,7 @@ Ext.onReady ( function() {
       },{
         xtype: 'tbsplit',
         text:'Zoom',
-        iconCls: 'button_menu_ext ss_sprite ss_zoom_in',
+        iconCls: 'button_menu_ext ss_sprite ss_zoom',
          menu: new Ext.menu.Menu({
           items: [{
               text    : '25%',
@@ -273,7 +274,7 @@ Ext.onReady ( function() {
         handler: function(){
           document.getElementById('designerFrame').contentWindow.usersPanel.show()
         }
-        
+
       }, {
         xtype: 'tbfill'
       }, {
@@ -288,12 +289,12 @@ Ext.onReady ( function() {
     ]
   });
 
-  
+
   var viewport = new Ext.Viewport({
     id:'viewPort1'
     ,layout:'border'
     ,border:false,
     items:[main]
   });
-  
+
 });
