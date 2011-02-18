@@ -1626,7 +1626,7 @@ div#toolbar
   -moz-box-shadow:0 1px 2px rgba(0,0,0,0.2);-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.2);
   background-color:#EEE;
   background-image: none;
-  color:#333;
+  /*color:#333;*/
   font-size:10px;
   font-weight:400;
   text-transform: capitalize;
@@ -1635,7 +1635,7 @@ div#toolbar
   text-decoration:none;
   line-height: 14px;
   font-family: Arial,serif;
-  cursor:pointer;
+  /*cursor:pointer;*/
   border:1px solid #aaa;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -1096px transparent;
 }
