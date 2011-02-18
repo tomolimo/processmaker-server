@@ -199,7 +199,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         break;
       default :
         $realPath = explode('?', $realPath);
-        $realPath[0] .= strpos($realPath[0], '.') === false ? '.php' : '';
+        $realPath[0] .= strpos(basename($realPath[0]), '.') === false ? '.php' : '';
         G::streamFile ( $realPath[0] );
         die;
       }
