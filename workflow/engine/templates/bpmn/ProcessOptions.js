@@ -2994,11 +2994,65 @@ ProcessOptions.prototype.addTriggers= function()
                  });
     }
 
-  var removeTriggers = function(){
+    var removeTriggers = function() {
+    ids = Array();
 
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('triggersGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('TRI_UID');
+
+    ids = ids.join(',');
+//First check whether selected Dynaform is assigned to a task steps or not.
+    Ext.Ajax.request({
+      url   : '../triggers/triggers_Ajax',
+      method: 'POST',
+      params: {
+        request   : 'verifyDependencies',
+        PRO_UID   : pro_uid,
+        TRI_UID   : ids
+      },
+      success: function(response) {
+                var result = Ext.util.JSON.decode(response.responseText);
+                if( result.success ){
+                  if( result.passed ) { //deleting the selected dyanoforms
+                    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_DYNAFORM_CONFIRM'), function(){
+                    Ext.Ajax.request({
+                        url   : '../processes/processes_Ajax.php',
+                        method: 'POST',
+                        params: {
+                          action      : 'deleteTriggers',
+                          TRI_UID     : ids
+                        },
+                        success: function(response) {
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.message);
+
+                            //Reloading store after deleting dynaform
+                            triggerStore.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.message);
+                          }
+                        }
+                      });
+                    });
+                  } else {
+                    PMExt.error(_('ID_VALIDATION_ERROR'), result.message);
+                  }
+                } else {
+                  PMExt.error(_('ID_ERROR'), result.message);
+                }
+              }
+    });
   }
-
-  //edit triggers button
+//edit triggers button
   var btnEdit = new Ext.Button({
     id: 'btnEdit',
     text: _('ID_EDIT'),
@@ -3051,7 +3105,7 @@ ProcessOptions.prototype.addTriggers= function()
 
   var triggersGrid = new Ext.grid.GridPanel({
     store: triggerStore,
-    id : 'triggerGrid',
+    id : 'triggersGrid',
     loadMask: true,
     loadingText: 'Loading...',
     //renderTo: 'cases-grid',
@@ -3225,7 +3279,7 @@ var triggersForm = new Ext.FormPanel({
 
     });
 
-    var formWindow = new Ext.Window({
+ var formWindow = new Ext.Window({
         title: _('ID_TRIGGERS'),
         autoScroll: true,
         collapsible: false,

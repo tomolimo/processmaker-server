@@ -44,8 +44,9 @@ switch($request){
       
       $oTrigger = new Triggers; 
       $oResult = $oTrigger->verifyDependecies($_POST['TRI_UID']);
-      
+      $oResult->passed = false;
       if($oResult->code == 0){
+        $oResult->passed = true;
         $oResult->message = G::LoadTranslation('ID_TRIGGERS_VALIDATION'); //"No Dependencies were found for this trigger in Events definitions\n";
       } else {
         $oResult->message = '';
@@ -63,6 +64,7 @@ switch($request){
           $oResult->message .= "\n";
         }
       }
+      $oResult->success = true;
       //print_r($oResult);
       print G::json_encode($oResult);
     break;

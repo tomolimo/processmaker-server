@@ -372,6 +372,27 @@ if ( isset ($_REQUEST['action']) ) {
                 $cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
             break;
 
+        case 'deleteTriggers':
+            try{
+            require_once('classes/model/Triggers.php');
+            foreach($TRI_UIDS as $i=>$TRI_UID) {
+                $oTrigger = new Triggers();
+                $triggerObj=$oTrigger->load($_POST['TRI_UID']);
+                $oTrigger->remove($_POST['TRI_UID']);
+                require_once('classes/model/StepTrigger.php');
+                $oStepTrigger = new StepTrigger();
+                $oStepTrigger->removeTrigger($_POST['TRI_UID']);
+                }
+                $result->success = true;
+                $result->message = G::LoadTranslation('ID_REPORTTABLE_REMOVED');
+                }
+                catch (Exception $e) {
+                    $result->success = false;
+                    $result->message = $e->getMessage();
+                   }
+                print G::json_encode($result);
+
+
       }
 }
 

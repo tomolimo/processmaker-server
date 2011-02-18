@@ -23,8 +23,9 @@
  * 
  */
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
-
+try{
 require_once('classes/model/Triggers.php');
+
 $oTrigger = new Triggers();
 $triggerObj=$oTrigger->load($_POST['TRI_UID']);
 
@@ -34,10 +35,14 @@ require_once('classes/model/StepTrigger.php');
 $oStepTrigger = new StepTrigger();
 $oStepTrigger->removeTrigger($_POST['TRI_UID']);
 
-G::LoadClass('processMap');
-$oProcessMap = new processMap(new DBConnection);
-//Update Trigger Array
-$oProcessMap->triggersList($triggerObj['PRO_UID']);
+$result->success = true;
+$result->msg = G::LoadTranslation('ID_REPORTTABLE_REMOVED');
 
+}
+catch (Exception $e) {
+    $result->success = false;
+    $result->msg = $e->getMessage();
+   }
+print G::json_encode($result);
 
 ?>
