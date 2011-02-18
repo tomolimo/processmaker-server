@@ -324,7 +324,7 @@
 					//END: If there is a Break Step registered from Plugin
 
 
-
+          $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
           require_once 'classes/model/AppFolder.php';
           require_once 'classes/model/AppDocument.php';
 
@@ -354,6 +354,7 @@
           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
           $oDataset->next();
           if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output
+            $lastDocVersion++;
             if ($aRow = $oDataset->getRow()) {
                 $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
                                  'APP_UID'             => $_SESSION['APPLICATION'],
