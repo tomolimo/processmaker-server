@@ -1655,7 +1655,7 @@ TaskContext.prototype.stepTriggers = function()
                 {
                     id: 'blank',
                     hidden : true,
-                    width:0,
+                    //width:0,
                     editable: true,
                     editor: new Ext.form.TextField({
                         allowBlank: true
@@ -1799,7 +1799,7 @@ TaskContext.prototype.stepTriggers = function()
             xtype: 'fieldset',
             //labelWidth: 120,
             title:_('ID_ASSIGN_TRIGGERS'),
-            defaults: {width: 140, border:false}, 
+            //defaults: {width: 140, border:false},
             autoHeight: true,
             border: false,
             items: [triggerGrid]
@@ -2262,7 +2262,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         loadingText : 'Loading...',
         //renderTo    : 'cases-grid',
         frame       : false,
-        autoHeight  : false,
+        autoHeight  : true,
         autoScroll  : true,
         clicksToEdit: 1,
         layout      : 'form',
@@ -2316,7 +2316,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         loadingText : 'Loading...',
         //renderTo    : 'cases-grid',
         frame       : false,
-        autoHeight  : false,
+        autoHeight  : true,
         autoScroll  : true,
         clicksToEdit: 1,
         layout      : 'form',

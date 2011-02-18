@@ -348,23 +348,7 @@ if ( isset ($_REQUEST['action']) ) {
             //$cont = Content::addContent( 'SP_TITLE', '', $_POST['form']['SP_UID'], $lang, $_POST['form']['SPROCESS_NAME'] );
             $cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
             break;
-            case'saveSubprocessDetails11':
-                 //$aTask=($_POST['TASKS']!=0)?$oTask->load($_POST['TASKS']):0;
-                 require_once 'classes/model/SubProcess.php';
-                 $oOP = new SubProcess();
-                 $aData = array(
-                           'SP_UID'         => $_POST['SP_UID'],
-                           'PRO_UID'        => $_POST['PRO_UID'],
-                           'PRO_PARENT'     => $_POST['PRO_PARENT'],
-                           'TAS_PARENT'     => $_POST['TAS_PARENT'],
-                           'SP_SYNCHRONOUS' => $_POST['SP_SYNCHRONOUS']
-                   );
-                 $oOP->update($aData);
-                 
-                //require_once 'classes/model/Content.php';
-                //$lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
-                //$cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
-             break;
+         
             case 'subprocessProperties':
                 require_once 'classes/model/Content.php';
                 $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
@@ -372,28 +356,28 @@ if ( isset ($_REQUEST['action']) ) {
                 $cont = Content::addContent( 'TAS_TITLE', '', $_POST['TAS_PARENT'], $lang, $_POST['SPROCESS_NAME'] );
             break;
 
-        case 'deleteTriggers':
+            case 'deleteTriggers':
             try{
-            require_once('classes/model/Triggers.php');
-            foreach($TRI_UIDS as $i=>$TRI_UID) {
-                $oTrigger = new Triggers();
-                $triggerObj=$oTrigger->load($_POST['TRI_UID']);
-                $oTrigger->remove($_POST['TRI_UID']);
+                require_once('classes/model/Triggers.php');
                 require_once('classes/model/StepTrigger.php');
-                $oStepTrigger = new StepTrigger();
-                $oStepTrigger->removeTrigger($_POST['TRI_UID']);
+                $TRI_UIDS = explode(',', $_POST['TRI_UID']);
+                foreach($TRI_UIDS as $i=>$TRI_UID) {
+                    $oTrigger = new Triggers();
+                    $triggerObj=$oTrigger->load($TRI_UID);
+                    $oTrigger->remove($TRI_UID);
+                    
+                    $oStepTrigger = new StepTrigger();
+                    $oStepTrigger->removeTrigger($TRI_UID);
                 }
                 $result->success = true;
-                $result->message = G::LoadTranslation('ID_REPORTTABLE_REMOVED');
+                $result->message = G::LoadTranslation('ID_TRIGGERS_REMOVED');
                 }
-                catch (Exception $e) {
+             catch (Exception $e) {
                     $result->success = false;
                     $result->message = $e->getMessage();
                    }
-                print G::json_encode($result);
-
-
-      }
+            print G::json_encode($result);
+            break;
+    }
 }
-
 ?>

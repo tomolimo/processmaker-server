@@ -309,7 +309,25 @@
          $result = $tmpData;
          echo $result;
          break;
-    
+
+    case 'getSubProcessProperties':
+        if($_GET['type'] == 2)    //Loading sub process details
+           {
+               $rows        = $oProcessMap->subProcessExtProperties($_GET['pid'], $_GET['tid'],'','0');
+               $tmpData = json_encode( $rows ) ;
+               $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+
+               $result = $tmpData;
+               print $result;
+           }
+           else
+           {
+               $rows        = $oProcessMap->subProcessExtProperties($_GET['pid'], $_GET['tid'],'',$_GET['type']);
+               $result['totalCount'] = count($rows);
+               $result['data'] = $rows;
+               print json_encode( $result ) ;
+           }
+        break;
     case 'getObjectPermission':
          $rows = $oProcessMap->getExtObjectsPermissions($start, $limit,$_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllObjectPermissionCount();
@@ -343,18 +361,18 @@
          break;
 
    case 'editTriggers':
-       require_once('classes/model/Triggers.php');
+        require_once('classes/model/Triggers.php');
 
         if (isset($_GET['TRI_UID']))
         {
                 $oTrigger = new Triggers();
                 $rows = $oTrigger->load($_GET['TRI_UID']);
         }
-        
-         $result['totalCount'] = count($rows);
-         $result['data'] = $rows;
-         print json_encode( $result ) ;
-         break;
+        $tmpData = json_encode( $rows ) ;
+        $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+        $result = $tmpData;
+        echo $result;
+       break;
 }
    //$result['data'] = $rows;
    //print json_encode( $result ) ;

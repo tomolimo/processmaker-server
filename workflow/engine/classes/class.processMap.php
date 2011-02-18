@@ -3172,7 +3172,7 @@ class processMap {
       }
       //Obtain object and type
       switch ($aRow ['OP_OBJ_TYPE']) {
-        case 'ANY' :
+        case 'ALL' :
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
           break;
@@ -3316,7 +3316,7 @@ class processMap {
       }
       //Obtain object and type
       switch ($aRow ['OP_OBJ_TYPE']) {
-        case 'ANY' :
+        case 'ALL' :
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
           break;
