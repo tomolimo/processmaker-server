@@ -58,14 +58,6 @@ bpmnTask.prototype.paint = function () {
         this.originalHeight = 40;
     }
 
-// if((typeof this.limitFlag == 'undefined' || this.limitFlag == false)){
-//     this.originalWidth = this.width;
-//     this.originalHeight = this.height;
-//     this.orgXPos = this.getX();
-//     this.orgYPos = this.getY();
-//     this.orgFontSize =this.fontSize;
-//   }
-
   this.width  = this.originalWidth * workflow.zoomfactor;
   this.height = this.originalHeight  * workflow.zoomfactor;
 
@@ -87,6 +79,7 @@ bpmnTask.prototype.paint = function () {
   this.graphics.paint();
   this.x_text = this.workflow.getAbsoluteX(); //Get x co-ordinate from figure
   this.y_text = this.workflow.getAbsoluteY(); //Get x co-ordinate from figure
+
   /* Created New Object of jsGraphics to draw String.
   * New object is created to implement changing of Text functionality
   */
@@ -137,7 +130,7 @@ bpmnTask.prototype.paint = function () {
 
   this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center', 'x-task');
 
-  /****************************       Drawing Timer Boundary event starts here           *******************************/
+  //***** Drawing Timer Boundary event starts here 
   this.boundaryTimer = new jsGraphics(this.id);
 
   var x_cir1=5;
@@ -182,7 +175,7 @@ bpmnTask.prototype.paint = function () {
   if(this.boundaryEvent == true) {
     this.boundaryTimer.paint();
   }
-  /****************************       Drawing Timer Boundary event ends here           *******************************/
+  //****************Drawing Timer Boundary event ends here ****************
 
   this.bpmnText.paint();
 
@@ -206,67 +199,69 @@ jsGraphics.prototype.drawTextString = function (txt, x, y, dx, dy) {
     this.htm += '<div style="position:absolute; display:table-cell; vertical-align:middle; height:' + y + '; width:' + x + ';' + 'margin-left:' + dx + 'px;' + 'margin-top:' + dy + 'px;' + 'font-family:' + this.ftFam + ';' + 'font-size:' + this.ftSz + ';' + 'color:' + this.color + ';' + this.ftSty + '">' + txt + '<\/div>';
 };
 
-Figure.prototype.onDragend=function(){
-if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection != null){
-  var currObj =workflow.currentSelection;
-  if(typeof currObj.id != 'undefined' && currObj.id.length == 32){
-  switch (currObj.type) {
-    case 'bpmnTask':
-    case 'bpmnSubProcess':
-      currObj.actiontype = 'saveTaskPosition';
-      currObj.workflow.savePosition(currObj);
-      break;
-    case 'bpmnAnnotation':
-      currObj.actiontype = 'saveTextPosition';
-      currObj.workflow.savePosition(currObj);
-    break;
-    default:
-      if(currObj.type.match(/Gateway/)){
-        currObj.actiontype = 'saveGatewayPosition';
-        currObj.workflow.savePosition(currObj);
-      }
-      else if(currObj.type.match(/Event/)){
-        currObj.actiontype = 'saveEventPosition';
-        currObj.workflow.savePosition(currObj);
+Figure.prototype.onDragend=function() {
+  if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection != null){
+    var currObj =workflow.currentSelection;
+    if(typeof currObj.id != 'undefined' && currObj.id.length == 32){
+      switch (currObj.type) {
+        case 'bpmnTask':
+        case 'bpmnSubProcess':
+          currObj.actiontype = 'saveTaskPosition';
+          currObj.workflow.savePosition(currObj);
+          break;
+        case 'bpmnAnnotation':
+          currObj.actiontype = 'saveTextPosition';
+          currObj.workflow.savePosition(currObj);
+          break;
+        default:
+          if(currObj.type.match(/Gateway/)){
+            currObj.actiontype = 'saveGatewayPosition';
+            currObj.workflow.savePosition(currObj);
+          }
+          else if(currObj.type.match(/Event/)) {
+            currObj.actiontype = 'saveEventPosition';
+            currObj.workflow.savePosition(currObj);
+          }
       }
     }
+    workflow.setBoundary(currObj);
   }
-  workflow.setBoundary(currObj);
-}
 
-if(this.getWorkflow().getEnableSmoothFigureHandling()==true){
-var _3dfe=this;
-var _3dff=function(){
-if(_3dfe.alpha<1){
-_3dfe.setAlpha(Math.min(1,_3dfe.alpha+0.05));
-}else{
-window.clearInterval(_3dfe.timer);
-_3dfe.timer=-1;
-}
-};
-if(_3dfe.timer>0){
-window.clearInterval(_3dfe.timer);
-}
-_3dfe.timer=window.setInterval(_3dff,20);
-}else{
-this.setAlpha(1);
-}
-this.command.setPosition(this.x,this.y);
-this.workflow.commandStack.execute(this.command);
-this.command=null;
-this.isMoving=false;
-this.workflow.hideSnapToHelperLines();
-this.fireMoveEvent();
-};
+  if(this.getWorkflow().getEnableSmoothFigureHandling()==true) {
+    var _3dfe=this;
+    var _3dff=function(){
+      if(_3dfe.alpha<1){
+        _3dfe.setAlpha(Math.min(1,_3dfe.alpha+0.05));
+      }
+      else {
+        window.clearInterval(_3dfe.timer);
+        _3dfe.timer=-1;
+      }
+    };
+    if(_3dfe.timer>0){
+      window.clearInterval(_3dfe.timer);
+    }
+    _3dfe.timer=window.setInterval(_3dff,20);
+    }
+    else{
+      this.setAlpha(1);
+    }
+    this.command.setPosition(this.x,this.y);
+    this.workflow.commandStack.execute(this.command);
+    this.command=null;
+    this.isMoving=false;
+    this.workflow.hideSnapToHelperLines();
+    this.fireMoveEvent();
+  };
 
-Figure.prototype.onKeyDown=function(_3e0e,ctrl){
-if(_3e0e==46&&this.isDeleteable()==true){
-workflow.getDeleteCriteria();
-//this.workflow.commandStack.execute(new CommandDelete(this));
-}
-if(ctrl){
-this.workflow.onKeyDown(_3e0e,ctrl);
-}
+  Figure.prototype.onKeyDown=function(_3e0e,ctrl){
+  if(_3e0e==46&&this.isDeleteable()==true){
+    workflow.getDeleteCriteria();
+    //this.workflow.commandStack.execute(new CommandDelete(this));
+  }
+  if(ctrl){
+    this.workflow.onKeyDown(_3e0e,ctrl);
+  }
 };
 
 bpmnTask.prototype.setWorkflow = function (_40c5) {
@@ -294,160 +289,165 @@ bpmnTask.prototype.setWorkflow = function (_40c5) {
 };
 
 InputPort.prototype.onDrop = function (port) {
-    if (port.getMaxFanOut && port.getMaxFanOut() <= port.getFanOut()) {
-        return;
+  if (port.getMaxFanOut && port.getMaxFanOut() <= port.getFanOut()) {
+    return;
+  }
+  if (this.parentNode.id == port.parentNode.id) {
+  } 
+  else {
+    var _4070 = new CommandConnect(this.parentNode.workflow, port, this);
+    if (_4070.source.type == _4070.target.type) {
+      return;
     }
-    if (this.parentNode.id == port.parentNode.id) {} else {
-        var _4070 = new CommandConnect(this.parentNode.workflow, port, this);
-        if (_4070.source.type == _4070.target.type) {
-            return;
-        }
-        _4070.setConnection(new DecoratedConnection());
-        this.parentNode.workflow.getCommandStack().execute(_4070);
+    _4070.setConnection(new DecoratedConnection());
+    this.parentNode.workflow.getCommandStack().execute(_4070);
 
-       //Saving Start Event
-       var preObj   = new Array();
-       var bpmnType = this.workflow.currentSelection.type;
+    //Saving Start Event
+    var preObj   = new Array();
+    var bpmnType = this.workflow.currentSelection.type;
 
-        //Routing from end event to task
-       if(bpmnType.match(/End/) && bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)){
-         preObj = this.workflow.currentSelection; //end event
-         var newObj = port.parentNode;  //task
-         newObj.conn = _4070.connection;
-         newObj.reverse = 1;           //setting reverse parameter if user is routing from down to up
-         this.workflow.saveRoute(preObj,newObj);
-       }
-       //Routing from task to start event
-      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Event/)){
-        preObj = this.workflow.currentSelection;  //task
-        newObj = port.parentNode;                 //start event
-        var tas_uid = preObj.id;
-        this.workflow.saveEvents(newObj,tas_uid);
-      }
-      //Routing from task to task
-      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
-        preObj = workflow.currentSelection;
-        newObj = port.parentNode;
-        newObj.conn = _4070.connection;
-        newObj.sPortType =port.properties.name;
-        preObj.sPortType =this.properties.name;
-        workflow.saveRoute(newObj,preObj);
-      }
-      //Routing from task to gateway
-      else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){
-        var shape = new Array();
-        shape.type = '';
-        preObj = workflow.currentSelection;
-        newObj = port.parentNode;
-        workflow.saveRoute(newObj,shape);
-      }
-      //Routing from gateway to task
-      else if(bpmnType.match(/Gateway/) && (port.parentNode.type.match(/Gateway/) || port.parentNode.type.match(/Task/))){
-        preObj = this.workflow.currentSelection;
-        newObj = port.parentNode;
-        this.workflow.saveRoute(preObj,newObj);
-      }
-      //Routing from task to Intermediate event
-      else if(port.parentNode.type.match(/Inter/) && port.parentNode.type.match(/Event/) && bpmnType.match(/Task/)){
-        workflow.saveEvents(port.parentNode);
-      }
-      else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
-        workflow.saveEvents(workflow.currentSelection);
-      }
+    //Routing from end event to task
+    if(bpmnType.match(/End/) && bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)) {
+      preObj = this.workflow.currentSelection; //end event
+      var newObj = port.parentNode;  //task
+      newObj.conn = _4070.connection;
+      newObj.reverse = 1;           //setting reverse parameter if user is routing from down to up
+      this.workflow.saveRoute(preObj,newObj);
     }
+    //Routing from task to start event
+    else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Event/)) {
+      preObj = this.workflow.currentSelection;  //task
+      newObj = port.parentNode;                 //start event
+      var tas_uid = preObj.id;
+      this.workflow.saveEvents(newObj,tas_uid);
+    }
+    //Routing from task to task
+    else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
+      preObj = workflow.currentSelection;
+      newObj = port.parentNode;
+      newObj.conn = _4070.connection;
+      newObj.sPortType =port.properties.name;
+      preObj.sPortType =this.properties.name;
+      workflow.saveRoute(newObj,preObj);
+    }
+    //Routing from task to gateway
+    else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){
+      var shape = new Array();
+      shape.type = '';
+      preObj = workflow.currentSelection;
+      newObj = port.parentNode;
+      workflow.saveRoute(newObj,shape);
+    }
+    //Routing from gateway to task
+    else if(bpmnType.match(/Gateway/) && (port.parentNode.type.match(/Gateway/) || port.parentNode.type.match(/Task/))){
+      preObj = this.workflow.currentSelection;
+      newObj = port.parentNode;
+      this.workflow.saveRoute(preObj,newObj);
+    }
+    //Routing from task to Intermediate event
+    else if(port.parentNode.type.match(/Inter/) && port.parentNode.type.match(/Event/) && bpmnType.match(/Task/)){
+      workflow.saveEvents(port.parentNode);
+    }
+    else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
+      workflow.saveEvents(workflow.currentSelection);
+    }
+  }
 };
 
 OutputPort.prototype.onDrop = function (port) {
-    if (this.getMaxFanOut() <= this.getFanOut()) {
-        return;
-    }
+  if (this.getMaxFanOut() <= this.getFanOut()) {
+    return;
+  }
 
-    var connect = true;
-    var conn = port.workflow.checkConnectionsExist(port, 'targetPort', 'OutputPort');
-    if (conn == 0) //If no connection Exist then Allow connect
+  var connect = true;
+  var conn = port.workflow.checkConnectionsExist(port, 'targetPort', 'OutputPort');
+  if (conn == 0) //If no connection Exist then Allow connect
     connect = true;
-    else if (conn < 2) //If One connection exist then Do not Allow to connect
-    connect = false;
+  else 
+  	if (conn < 2) //If One connection exist then Do not Allow to connect
+      connect = false;
 
-    if (this.parentNode.id == port.parentNode.id || connect == false) {
-
-    } else {
-        var _4070 = new CommandConnect(this.parentNode.workflow, this, port);
-        if (_4070.source.type == _4070.target.type) {
-            return;
-        }
-        _4070.setConnection(new DecoratedConnection());
-        this.parentNode.workflow.getCommandStack().execute(_4070);
-
-        //Saving Start Event
-        var preObj = new Array();
-        var bpmnType = this.workflow.currentSelection.type;
-       if(bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)){
-          var tas_uid = port.parentNode.id;
-          this.workflow.saveEvents(this.workflow.currentSelection,tas_uid);
-
-       }else if(bpmnType.match(/Task/) && port.parentNode.type.match(/End/) && port.parentNode.type.match(/Event/)){
-          preObj = this.workflow.currentSelection;
-          var newObj = port.parentNode;
-          newObj.conn = _4070.connection;
-          this.workflow.saveRoute(preObj,newObj);
-       }else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
-             this.workflow.saveEvents(workflow.currentSelection);
-       }else if(port.parentNode.type.match(/Event/) && port.parentNode.type.match(/Inter/) && bpmnType.match(/Task/)){
-          this.workflow.saveEvents(port.parentNode);
-       }
-       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
-           preObj = this.workflow.currentSelection;
-           newObj = port.parentNode;
-           newObj.conn = _4070.connection;
-           newObj.sPortType =port.properties.name;
-           preObj.sPortType =this.properties.name;
-           this.workflow.saveRoute(preObj,newObj);
-       }else if(bpmnType.match(/Gateway/) && (port.parentNode.type.match(/Task/) || port.parentNode.type.match(/Gateway/))){ //Routing from gateway to task
-           var shape = new Array();
-           shape.type = '';
-           preObj = this.workflow.currentSelection;
-           this.workflow.saveRoute(preObj,shape);
-       }
-       else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){ //Routing from task to gateway
-           newObj = port.parentNode;
-           preObj = this.workflow.currentSelection;
-           this.workflow.saveRoute(newObj,preObj);
-       }
+  if (this.parentNode.id == port.parentNode.id || connect == false) {
+  } 
+  else {
+    var _4070 = new CommandConnect(this.parentNode.workflow, this, port);
+    if (_4070.source.type == _4070.target.type) {
+      return;
     }
+    _4070.setConnection(new DecoratedConnection());
+    this.parentNode.workflow.getCommandStack().execute(_4070);
+
+    //Saving Start Event
+    var preObj = new Array();
+    var bpmnType = this.workflow.currentSelection.type;
+    if(bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)){
+      var tas_uid = port.parentNode.id;
+      this.workflow.saveEvents(this.workflow.currentSelection,tas_uid);
+    }
+    else if(bpmnType.match(/Task/) && port.parentNode.type.match(/End/) && port.parentNode.type.match(/Event/)){
+      preObj = this.workflow.currentSelection;
+      var newObj = port.parentNode;
+      newObj.conn = _4070.connection;
+      this.workflow.saveRoute(preObj,newObj);
+    }
+    else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
+      this.workflow.saveEvents(workflow.currentSelection);
+    }
+    else if(port.parentNode.type.match(/Event/) && port.parentNode.type.match(/Inter/) && bpmnType.match(/Task/)){
+      this.workflow.saveEvents(port.parentNode);
+    }
+    else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Task/)){
+      preObj = this.workflow.currentSelection;
+      newObj = port.parentNode;
+      newObj.conn = _4070.connection;
+      newObj.sPortType =port.properties.name;
+      preObj.sPortType =this.properties.name;
+      this.workflow.saveRoute(preObj,newObj);
+    }
+    else if(bpmnType.match(/Gateway/) && (port.parentNode.type.match(/Task/) || port.parentNode.type.match(/Gateway/))){ //Routing from gateway to task
+      var shape = new Array();
+      shape.type = '';
+      preObj = this.workflow.currentSelection;
+      this.workflow.saveRoute(preObj,shape);
+    }
+    else if(bpmnType.match(/Task/) && port.parentNode.type.match(/Gateway/)){ //Routing from task to gateway
+      newObj = port.parentNode;
+      preObj = this.workflow.currentSelection;
+      this.workflow.saveRoute(newObj,preObj);
+    }
+  }
 };
 
 LineEndResizeHandle.prototype.onDrop=function(_3f3e){
-var line=this.workflow.currentSelection;
-line.isMoving=false;
-if(line instanceof Connection){
-this.command.setNewPorts(line.getSource(),_3f3e);
-
-//If Input Port /Output Port is connected to respective ports, then should not connected
-if(this.command.newSourcePort.type == this.command.newTargetPort.type)
-    return;
-else
-    {
-        this.command.newTargetPort.parentNode.conn = this.command.con;
-  this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
-  this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
-        this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
-        this.getWorkflow().getCommandStack().execute(this.command);
+  var line=this.workflow.currentSelection;
+  line.isMoving=false;
+  if(line instanceof Connection){
+    this.command.setNewPorts(line.getSource(),_3f3e);
+    
+    //If Input Port /Output Port is connected to respective ports, then should not connected
+    if(this.command.newSourcePort.type == this.command.newTargetPort.type)
+      return;
+    else {
+      this.command.newTargetPort.parentNode.conn      = this.command.con;
+      this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
+      this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
+      this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
+      this.getWorkflow().getCommandStack().execute(this.command);
     }
-}
-this.command=null;
+  }
+  this.command=null;
 };
 
 LineStartResizeHandle.prototype.onDrop=function(_410d){
-var line=this.workflow.currentSelection;
-line.isMoving=false;
-if(line instanceof Connection){
-this.command.setNewPorts(_410d,line.getTarget());
-
-//If Input Port /Output Port is connected to respective ports, then should not connected
-if(this.command.newSourcePort.type == this.command.newTargetPort.type)
-    return;
-else{
+  var line=this.workflow.currentSelection;
+  line.isMoving=false;
+  if(line instanceof Connection){
+    this.command.setNewPorts(_410d,line.getTarget());  
+  
+    //If Input Port /Output Port is connected to respective ports, then should not connected
+    if(this.command.newSourcePort.type == this.command.newTargetPort.type)
+      return;
+    else{
       this.command.newTargetPort.parentNode.conn = this.command.con;
       this.command.newTargetPort.parentNode.sPortType = this.command.newTargetPort.properties.name;
       this.command.newSourcePort.parentNode.sPortType = this.command.newSourcePort.properties.name;
@@ -455,279 +455,278 @@ else{
       this.workflow.saveRoute(this.command.newSourcePort.parentNode,this.command.newTargetPort.parentNode);
       this.getWorkflow().getCommandStack().execute(this.command);
     }
-}
-this.command=null;
+  }
+  this.command=null;
 };
 
 ResizeHandle.prototype.onDragend=function(){
-if(this.commandMove==null){
-return;
-}
-var currentSelection = workflow.currentSelection;
-if(typeof currentSelection.id != 'undefined' && currentSelection.id.length == 32){
-  if(currentSelection.type.match(/Task/)){
-    currentSelection.actiontype = 'saveTaskCordinates';
-    workflow.savePosition(currentSelection);
+  if(this.commandMove==null){
+    return;
   }
-  else if(currentSelection.type.match(/Annotation/)){
-    currentSelection.actiontype = 'saveAnnotationCordinates';
-    workflow.savePosition(currentSelection);
+  var currentSelection = workflow.currentSelection;
+  if(typeof currentSelection.id != 'undefined' && currentSelection.id.length == 32){
+    if(currentSelection.type.match(/Task/)) {
+      currentSelection.actiontype = 'saveTaskCordinates';
+      workflow.savePosition(currentSelection);
+    }
+    else if(currentSelection.type.match(/Annotation/)){
+      currentSelection.actiontype = 'saveAnnotationCordinates';
+      workflow.savePosition(currentSelection);
+    }
   }
- }
 }
+
 VectorFigure.prototype.addChild=function(_4078){
-    _4078.setParent(this);
-//_4078.setZOrder(this.getZOrder()+1);
-//_4078.setParent(this);
-//_4078.parent.addChild(_4078);
-//this.children[_4078.id]=_4078;
-//this.scrollarea.appendChild(_4078.getHTMLElement());
+  _4078.setParent(this);
+  //_4078.setZOrder(this.getZOrder()+1);
+  //_4078.setParent(this);
+  //_4078.parent.addChild(_4078);
+  //this.children[_4078.id]=_4078;
+  //this.scrollarea.appendChild(_4078.getHTMLElement());
 };
 
 ////// Decorators to add an arrow to the flow line. To show the direction of flow  //////////////
 DecoratedConnection = function () {
-    Connection.call(this);
-    this.setTargetDecorator(new ArrowConnectionDecorator());
-    this.setRouter(new ManhattanConnectionRouter());
+  Connection.call(this);
+  this.setTargetDecorator(new ArrowConnectionDecorator());
+  this.setRouter(new ManhattanConnectionRouter());
 };
 DecoratedConnection.prototype = new Connection();
 DecoratedConnection.prototype.type = "DecoratedConnection";
 DecoratedConnection.prototype.getContextMenu = function () {
-    if (this.id != null) {
-        this.workflow.contextClicked = true;
-        this.workflow.connectionContextMenu(this);
-    }
+  if (this.id != null) {
+    this.workflow.contextClicked = true;
+    this.workflow.connectionContextMenu(this);
+  }
 };
 
 ////////--------------------------------------------------------------------------------------------///////
 FlowMenu = function (_39f9) {
-    this.actionAdd = new ButtonAdd(this);
-    this.actionTask = new ButtonTask(this);
-    this.actionInterEvent = new ButtonInterEvent(this);
-    this.actionEndEvent = new ButtonEndEvent(this);
-    this.actionGateway = new ButtonGateway(this);
-    this.actionFront = new ButtonMoveFront(this);
-    this.actionBack = new ButtonMoveBack(this);
-    this.actionDelete = new ButtonDelete(this);
-    this.actionAnnotation = new ButtonAnnotation(this);
-    ToolPalette.call(this);
-    this.setDimension(20, 80);
-    this.setBackgroundColor(new Color(220, 255, 255));
-    this.currentFigure = null;
-    this.myworkflow = _39f9;
-    this.added = false;
-    this.setDeleteable(false);
-    this.setCanDrag(false);
-    this.setResizeable(false);
-    this.setSelectable(false);
-    var zOrder = this.getZOrder();
-    this.setZOrder(4000);
-    this.setBackgroundColor(null);
-    this.setColor(null);
-    this.scrollarea.style.borderBottom = "0px";
-    this.actionAdd.setPosition(0, 0);
-    this.actionInterEvent.setPosition(20, 0);
-    this.actionGateway.setPosition(20, 20);
-    this.actionFront.setPosition(0, 18);
-    this.actionBack.setPosition(0, 36);
-    this.actionDelete.setPosition(0, 54);
+  this.actionAdd        = new ButtonAdd(this);
+  this.actionTask       = new ButtonTask(this);
+  this.actionInterEvent = new ButtonInterEvent(this);
+  this.actionEndEvent   = new ButtonEndEvent(this);
+  this.actionGateway    = new ButtonGateway(this);
+  this.actionFront      = new ButtonMoveFront(this);
+  this.actionBack       = new ButtonMoveBack(this);
+  this.actionDelete     = new ButtonDelete(this);
+  this.actionAnnotation = new ButtonAnnotation(this);
+  ToolPalette.call(this);
+  this.setDimension(20, 80);
+  this.setBackgroundColor(new Color(220, 255, 255));
+  this.currentFigure = null;
+  this.myworkflow = _39f9;
+  this.added = false;
+  this.setDeleteable(false);
+  this.setCanDrag(false);
+  this.setResizeable(false);
+  this.setSelectable(false);
+  var zOrder = this.getZOrder();
+  this.setZOrder(4000);
+  this.setBackgroundColor(null);
+  this.setColor(null);
+  this.scrollarea.style.borderBottom = "0px";
+  this.actionAdd.setPosition(0, 0);
+  this.actionInterEvent.setPosition(20, 0);
+  this.actionGateway.setPosition(20, 20);
+  this.actionFront.setPosition(0, 18);
+  this.actionBack.setPosition(0, 36);
+  this.actionDelete.setPosition(0, 54);
 };
 
 ToolPalette.prototype.removechild = function (_4079) {
-    if (_4079 != null) {
-        var parentNode = this.html;
-        if (parentNode != null) {
-            if (typeof parentNode.children != 'undefined') {
-                var len = parentNode.children[0].children.length;
-                for (var i = 0; i < len; i++) {
-                    var childNode = parentNode.children[0].children[i];
-                    if (childNode == _4079.html) {
-                        parentNode.children[0].removeChild(childNode);
-                    }
-                }
-            }
+  if (_4079 != null) {
+    var parentNode = this.html;
+    if (parentNode != null) {
+      if (typeof parentNode.children != 'undefined') {
+        var len = parentNode.children[0].children.length;
+        for (var i = 0; i < len; i++) {
+          var childNode = parentNode.children[0].children[i];
+          if (childNode == _4079.html) {
+            parentNode.children[0].removeChild(childNode);
+          }
         }
+      }
     }
+  }
 };
 FlowMenu.prototype = new ToolPalette;
 FlowMenu.prototype.setAlpha = function (_39fa) {
-    Figure.prototype.setAlpha.call(this, _39fa);
+  Figure.prototype.setAlpha.call(this, _39fa);
 };
 FlowMenu.prototype.hasTitleBar = function () {
-    return false;
+  return false;
 };
 FlowMenu.prototype.setFigure = function (_3087) {
-
 }
+
 FlowMenu.prototype.onSelectionChanged = function (_39fb) {
-    var newWorkflow = '';
-    //If Right Clicked on the figure, Disabling Flow menu
-    if (_39fb != null) {
-        newWorkflow = _39fb.workflow;
+  var newWorkflow = '';
+  //If Right Clicked on the figure, Disabling Flow menu
+  if (_39fb != null) {
+    newWorkflow = _39fb.workflow;
+  }
+  else if (this.workflow != null) {
+    newWorkflow = this.workflow;
+  }
+  else {
+    newWorkflow = this.myworkflow;
+  }
+  var contextClicked = newWorkflow.contextClicked;
+  //Check wheather the figure selected is same as previous figure.
+  //If figure is different ,then remove the port from the previous selected figure.
+  if (newWorkflow.currentSelection != null && typeof newWorkflow.preSelectedFigure != 'undefined') {
+    if (newWorkflow.currentSelection.id != newWorkflow.preSelectedFigure.id) {
+      newWorkflow.disablePorts(newWorkflow.preSelectedFigure);
     }
-    else if (this.workflow != null) {
-        newWorkflow = this.workflow;
+  }
+  if (_39fb == this.currentFigure && contextClicked == true) {
+    return;
+  }
+  if (this.added == true) {
+    this.myworkflow.removeFigure(this);
+    this.added = false;
+  }
+  if (_39fb != null && this.added == false) {
+    if (this.myworkflow.getEnableSmoothFigureHandling() == true) {
+      this.setAlpha(0.01);
     }
-    else {
-        newWorkflow = this.myworkflow;
-    }
-    var contextClicked = newWorkflow.contextClicked;
-    /*Check wheather the figure selected is same as previous figure.
-    *If figure is different ,then remove the port from the previous selected figure.
-    **/
-    if (newWorkflow.currentSelection != null && typeof newWorkflow.preSelectedFigure != 'undefined') {
-        if (newWorkflow.currentSelection.id != newWorkflow.preSelectedFigure.id) {
-            newWorkflow.disablePorts(newWorkflow.preSelectedFigure);
-        }
-    }
-    if (_39fb == this.currentFigure && contextClicked == true) {
-        return;
-    }
-    if (this.added == true) {
-        this.myworkflow.removeFigure(this);
-        this.added = false;
-    }
-    if (_39fb != null && this.added == false) {
-        if (this.myworkflow.getEnableSmoothFigureHandling() == true) {
-            this.setAlpha(0.01);
-        }
-        this.myworkflow.addFigure(this, 100, 100);
-        this.added = true;
-    }
-    if (this.currentFigure != null) {
-        this.currentFigure.detachMoveListener(this);
-    }
-    this.currentFigure = _39fb;
-    if (this.currentFigure != null) {
-        this.currentFigure.attachMoveListener(this);
-        this.onOtherFigureMoved(this.currentFigure);
-
-    }
-
+    this.myworkflow.addFigure(this, 100, 100);
+    this.added = true;
+  }
+  if (this.currentFigure != null) {
+    this.currentFigure.detachMoveListener(this);
+  }
+  this.currentFigure = _39fb;
+  if (this.currentFigure != null) {
+    this.currentFigure.attachMoveListener(this);
+    this.onOtherFigureMoved(this.currentFigure);
+  }
 };
+
 FlowMenu.prototype.setWorkflow = function (_39fc) {
-    Figure.prototype.setWorkflow.call(this, _39fc);
+  Figure.prototype.setWorkflow.call(this, _39fc);
 };
 
 FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
-    if (_39fd != null) {
-        //Get the workflow object of the selected Figure object, so that we can compare with the new selected figure to remove ports
-        _39fd.workflow.preSelectedFigure = _39fd.workflow.currentSelection;
-        var countConn = 0;
-        //workflow.setBoundary(workflow.currentSelection);
-
-        //Preventing Task from drawing outside canvas Code Ends here
-        if (_39fd.type == 'DecoratedConnection' || _39fd.workflow.contextClicked == true) {
-            this.removechild(this.actionAdd);
-            this.removechild(this.actionInterEvent);
-            this.removechild(this.actionGateway);
-            this.removechild(this.actionAnnotation);
-            this.removechild(this.actionTask);
-            this.removechild(this.actionEndEvent);
-            this.removechild(this.actionBack);
-            this.removechild(this.actionDelete);
-            this.removechild(this.actionFront);
-            _39fd.workflow.hideResizeHandles();
-        }
-        else {
-            var pos = _39fd.getPosition();
-            this.setPosition(pos.x + _39fd.getWidth() + 7, pos.y - 16);
-            if (_39fd.workflow != null) {
-                var bpmnShape = _39fd.workflow.currentSelection.type;
-                this.addChild(this.actionFront);
-                this.addChild(this.actionBack);
-                this.addChild(this.actionDelete);
-                var ports = '';
-                //Disable Resize for All Events and Gateway
-                if (bpmnShape.match(/Event/) || bpmnShape.match(/Gateway/) || bpmnShape.match(/bpmnDataobject/) || bpmnShape.match(/bpmnSubProcess/)) {
-                    _39fd.workflow.hideResizeHandles();
-                }
-                if (bpmnShape.match(/Task/) || bpmnShape.match(/SubProcess/)) {
-                    this.addChild(this.actionAdd);
-                    this.addChild(this.actionInterEvent);
-                    this.addChild(this.actionEndEvent);
-                    this.addChild(this.actionGateway);
-                    this.addChild(this.actionAnnotation);
-                    this.actionAnnotation.setPosition(20, 60);
-                    this.actionEndEvent.setPosition(20, 40)
-                    this.removechild(this.actionTask);
-                    ports = ['output1', 'input1', 'output2', 'input2'];
-                    //ports = ['output1', 'output2'];
+  if (_39fd != null) {
+    //Get the workflow object of the selected Figure object, so that we can compare with the new selected figure to remove ports
+    _39fd.workflow.preSelectedFigure = _39fd.workflow.currentSelection;
+    var countConn = 0;
+    //workflow.setBoundary(workflow.currentSelection);
+  
+    //Preventing Task from drawing outside canvas Code Ends here
+    if (_39fd.type == 'DecoratedConnection' || _39fd.workflow.contextClicked == true) {
+        this.removechild(this.actionAdd);
+        this.removechild(this.actionInterEvent);
+        this.removechild(this.actionGateway);
+        this.removechild(this.actionAnnotation);
+        this.removechild(this.actionTask);
+        this.removechild(this.actionEndEvent);
+        this.removechild(this.actionBack);
+        this.removechild(this.actionDelete);
+        this.removechild(this.actionFront);
+        _39fd.workflow.hideResizeHandles();
+    }
+    else {
+        var pos = _39fd.getPosition();
+        this.setPosition(pos.x + _39fd.getWidth() + 7, pos.y - 16);
+        if (_39fd.workflow != null) {
+            var bpmnShape = _39fd.workflow.currentSelection.type;
+            this.addChild(this.actionFront);
+            this.addChild(this.actionBack);
+            this.addChild(this.actionDelete);
+            var ports = '';
+            //Disable Resize for All Events and Gateway
+            if (bpmnShape.match(/Event/) || bpmnShape.match(/Gateway/) || bpmnShape.match(/bpmnDataobject/) || bpmnShape.match(/bpmnSubProcess/)) {
+                _39fd.workflow.hideResizeHandles();
+            }
+            if (bpmnShape.match(/Task/) || bpmnShape.match(/SubProcess/)) {
+                this.addChild(this.actionAdd);
+                this.addChild(this.actionInterEvent);
+                this.addChild(this.actionEndEvent);
+                this.addChild(this.actionGateway);
+                this.addChild(this.actionAnnotation);
+                this.actionAnnotation.setPosition(20, 60);
+                this.actionEndEvent.setPosition(20, 40)
+                this.removechild(this.actionTask);
+                ports = ['output1', 'input1', 'output2', 'input2'];
+                //ports = ['output1', 'output2'];
+                _39fd.workflow.enablePorts(_39fd, ports);
+            }
+            else if (bpmnShape.match(/Start/)) {
+                this.addChild(this.actionAdd);
+                this.addChild(this.actionAnnotation);
+                this.actionAnnotation.setPosition(20, 40);
+                this.addChild(this.actionInterEvent);
+                this.actionInterEvent.setPosition(20, 20)
+                this.addChild(this.actionGateway);
+                this.actionGateway.setPosition(20, 0)
+                this.removechild(this.actionEndEvent);
+                ports = ['output1', 'output2'];
+                _39fd.workflow.enablePorts(_39fd, ports);
+            }
+            else if (bpmnShape.match(/Inter/)) {
+                this.addChild(this.actionAdd);
+                this.addChild(this.actionAnnotation);
+                this.actionAnnotation.setPosition(20, 60);
+                this.addChild(this.actionInterEvent);
+                this.actionInterEvent.setPosition(20, 20)
+                this.addChild(this.actionGateway);
+                this.actionGateway.setPosition(20, 0);
+                this.addChild(this.actionEndEvent);
+                this.actionEndEvent.setPosition(20, 40);
+                ports = ['output1', 'input1', 'output2', 'input2'];
+                _39fd.workflow.enablePorts(_39fd, ports);
+            }
+            else if (bpmnShape.match(/End/)) {
+                this.removechild(this.actionInterEvent);
+                this.removechild(this.actionEndEvent);
+                this.removechild(this.actionTask);
+                this.removechild(this.actionGateway);
+                this.removechild(this.actionAdd);
+                ports = ['input1', 'input2'];
+                _39fd.workflow.enablePorts(_39fd, ports);
+            }
+            else if (bpmnShape.match(/Gateway/)) {
+                this.addChild(this.actionAdd);
+                this.addChild(this.actionAnnotation);
+                this.actionAnnotation.setPosition(20, 60);
+                this.addChild(this.actionInterEvent);
+                this.actionInterEvent.setPosition(20, 20)
+                this.addChild(this.actionGateway);
+                this.actionGateway.setPosition(20, 0);
+                this.addChild(this.actionEndEvent);
+                this.actionEndEvent.setPosition(20, 40);
+                ports = ['output1', 'input1', 'output2', 'input2'];
+                _39fd.workflow.enablePorts(_39fd, ports);
+            }
+            else if (bpmnShape.match(/Annotation/) || bpmnShape.match(/Dataobject/)) {
+                this.removechild(this.actionAdd);
+                this.removechild(this.actionInterEvent);
+                this.removechild(this.actionGateway);
+                this.removechild(this.actionEndEvent);
+                this.removechild(this.actionAnnotation);
+                this.removechild(this.actionEndEvent);
+                if (bpmnShape.match(/Annotation/)) {
+                    ports = ['input1'];
                     _39fd.workflow.enablePorts(_39fd, ports);
                 }
-                else if (bpmnShape.match(/Start/)) {
-                    this.addChild(this.actionAdd);
-                    this.addChild(this.actionAnnotation);
-                    this.actionAnnotation.setPosition(20, 40);
-                    this.addChild(this.actionInterEvent);
-                    this.actionInterEvent.setPosition(20, 20)
-                    this.addChild(this.actionGateway);
-                    this.actionGateway.setPosition(20, 0)
-                    this.removechild(this.actionEndEvent);
-                    ports = ['output1', 'output2'];
-                    _39fd.workflow.enablePorts(_39fd, ports);
-                }
-                else if (bpmnShape.match(/Inter/)) {
-                    this.addChild(this.actionAdd);
-                    this.addChild(this.actionAnnotation);
-                    this.actionAnnotation.setPosition(20, 60);
-                    this.addChild(this.actionInterEvent);
-                    this.actionInterEvent.setPosition(20, 20)
-                    this.addChild(this.actionGateway);
-                    this.actionGateway.setPosition(20, 0);
-                    this.addChild(this.actionEndEvent);
-                    this.actionEndEvent.setPosition(20, 40);
-                    ports = ['output1', 'input1', 'output2', 'input2'];
-                    _39fd.workflow.enablePorts(_39fd, ports);
-                }
-                else if (bpmnShape.match(/End/)) {
-                    this.removechild(this.actionInterEvent);
-                    this.removechild(this.actionEndEvent);
-                    this.removechild(this.actionTask);
-                    this.removechild(this.actionGateway);
-                    this.removechild(this.actionAdd);
-                    ports = ['input1', 'input2'];
-                    _39fd.workflow.enablePorts(_39fd, ports);
-                }
-                else if (bpmnShape.match(/Gateway/)) {
-                    this.addChild(this.actionAdd);
-                    this.addChild(this.actionAnnotation);
-                    this.actionAnnotation.setPosition(20, 60);
-                    this.addChild(this.actionInterEvent);
-                    this.actionInterEvent.setPosition(20, 20)
-                    this.addChild(this.actionGateway);
-                    this.actionGateway.setPosition(20, 0);
-                    this.addChild(this.actionEndEvent);
-                    this.actionEndEvent.setPosition(20, 40);
-                    ports = ['output1', 'input1', 'output2', 'input2'];
-                    _39fd.workflow.enablePorts(_39fd, ports);
-                }
-                else if (bpmnShape.match(/Annotation/) || bpmnShape.match(/Dataobject/)) {
-                    this.removechild(this.actionAdd);
-                    this.removechild(this.actionInterEvent);
-                    this.removechild(this.actionGateway);
-                    this.removechild(this.actionEndEvent);
-                    this.removechild(this.actionAnnotation);
-                    this.removechild(this.actionEndEvent);
-                    if (bpmnShape.match(/Annotation/)) {
-                        ports = ['input1'];
-                        _39fd.workflow.enablePorts(_39fd, ports);
-                    }
-                }
-                else if (bpmnShape.match(/Pool/)) {
-                    this.removechild(this.actionAdd);
-                    this.removechild(this.actionInterEvent);
-                    this.removechild(this.actionGateway);
-                    this.removechild(this.actionEndEvent);
-                    this.removechild(this.actionAnnotation);
-                    this.removechild(this.actionEndEvent);
-                    this.removechild(this.actionFront);
-                    this.removechild(this.actionBack);
-                    this.removechild(this.actionDelete);
-                }
+            }
+            else if (bpmnShape.match(/Pool/)) {
+                this.removechild(this.actionAdd);
+                this.removechild(this.actionInterEvent);
+                this.removechild(this.actionGateway);
+                this.removechild(this.actionEndEvent);
+                this.removechild(this.actionAnnotation);
+                this.removechild(this.actionEndEvent);
+                this.removechild(this.actionFront);
+                this.removechild(this.actionBack);
+                this.removechild(this.actionDelete);
             }
         }
     }
+  }
 };
 
 bpmnTask.prototype.addShapes = function (oStore) {
@@ -810,14 +809,14 @@ bpmnTask.prototype.addShapes = function (oStore) {
 }
 
 ButtonInterEvent = function (_30a8) {
-    Button.call(this, _30a8, 16, 16);
+  Button.call(this, _30a8, 16, 16);
 };
 ButtonInterEvent.prototype = new Button;
 ButtonInterEvent.prototype.type = "/skins/ext/images/gray/shapes/interevent";
 ButtonInterEvent.prototype.execute = function () {
-    var count = 0;
-    this.palette.newShapeName = 'bpmnEventEmptyInter';
-    bpmnTask.prototype.addShapes(this.palette);
+  var count = 0;
+  this.palette.newShapeName = 'bpmnEventEmptyInter';
+  bpmnTask.prototype.addShapes(this.palette);
 };
 
 ButtonEndEvent = function (_30a8) {
@@ -826,125 +825,124 @@ ButtonEndEvent = function (_30a8) {
 ButtonEndEvent.prototype = new Button;
 ButtonEndEvent.prototype.type = "/skins/ext/images/gray/shapes/endevent";
 ButtonEndEvent.prototype.execute = function () {
-    var count = 0;
-    this.palette.newShapeName = 'bpmnEventEmptyEnd';
-    bpmnTask.prototype.addShapes(this.palette);
+  var count = 0;
+  this.palette.newShapeName = 'bpmnEventEmptyEnd';
+  bpmnTask.prototype.addShapes(this.palette);
 };
 
-
 ButtonGateway = function (_30a8) {
-    Button.call(this, _30a8, 16, 16);
+  Button.call(this, _30a8, 16, 16);
 };
 ButtonGateway.prototype = new Button;
 ButtonGateway.prototype.type = "/skins/ext/images/gray/shapes/gateway-small";
 ButtonGateway.prototype.execute = function () {
-    this.palette.newShapeName = 'bpmnGatewayExclusiveData';
-    workflow.preSelectedObj = workflow.currentSelection;
-    bpmnTask.prototype.addShapes(this.palette);
+  this.palette.newShapeName = 'bpmnGatewayExclusiveData';
+  workflow.preSelectedObj = workflow.currentSelection;
+  bpmnTask.prototype.addShapes(this.palette);
 };
 
 ButtonAnnotation = function (_30a8) {
-    Button.call(this, _30a8, 16, 16);
+  Button.call(this, _30a8, 16, 16);
 };
 ButtonAnnotation.prototype = new Button;
 ButtonAnnotation.prototype.type = "/skins/ext/images/gray/shapes/annotation";
 ButtonAnnotation.prototype.execute = function () {
-    var count = 0;
-    this.palette.newShapeName = 'bpmnAnnotation';
-    this.palette.workflow.preSelectedObj = this.palette.workflow.currentSelection;
-    bpmnTask.prototype.addShapes(this.palette);
+  var count = 0;
+  this.palette.newShapeName = 'bpmnAnnotation';
+  this.palette.workflow.preSelectedObj = this.palette.workflow.currentSelection;
+  bpmnTask.prototype.addShapes(this.palette);
 };
 
 ButtonTask = function (_30a8) {
-    Button.call(this, _30a8, 16, 16);
+  Button.call(this, _30a8, 16, 16);
 };
 ButtonTask.prototype = new Button;
 ButtonTask.prototype.type = "/skins/ext/images/gray/shapes/Task";
 ButtonTask.prototype.execute = function () {
-    this.palette.newShapeName = 'bpmnTask';
-    bpmnTask.prototype.addShapes(this.palette);
+  this.palette.newShapeName = 'bpmnTask';
+  bpmnTask.prototype.addShapes(this.palette);
 };
 
 
 ButtonAdd = function (_30a8) {
-    Button.call(this, _30a8, 16, 16);
+  Button.call(this, _30a8, 16, 16);
 };
 ButtonAdd.prototype = new Button;
 ButtonAdd.prototype.type = "/skins/ext/images/gray/shapes/btn-add";
 ButtonAdd.prototype.execute = function () {
-    this.palette.newShapeName = 'bpmnTask';
-    this.palette.workflow.preSelectedObj = this.palette.workflow.currentSelection;
-    bpmnTask.prototype.addShapes(this.palette);
+  this.palette.newShapeName = 'bpmnTask';
+  this.palette.workflow.preSelectedObj = this.palette.workflow.currentSelection;
+  bpmnTask.prototype.addShapes(this.palette);
 };
 
 ButtonDelete = function (_30a9) {
-    Button.call(this, _30a9, 16, 16);
+  Button.call(this, _30a9, 16, 16);
 };
 ButtonDelete.prototype = new Button;
 ButtonDelete.prototype.type = "/skins/ext/images/gray/shapes/btn-del";
 ButtonDelete.prototype.execute = function () {
-    workflow.hideResizeHandles();
-    workflow.getDeleteCriteria();
+  workflow.hideResizeHandles();
+  workflow.getDeleteCriteria();
 };
 ButtonMoveFront = function (_3e22) {
-    Button.call(this, _3e22, 16, 16);
+  Button.call(this, _3e22, 16, 16);
 };
 ButtonMoveFront.prototype = new Button;
 ButtonMoveFront.prototype.type = "/skins/ext/images/gray/shapes/btn-movefrnt";
 ButtonMoveFront.prototype.execute = function () {
-    this.palette.workflow.moveFront(this.palette.workflow.getCurrentSelection());
-    ToolGeneric.prototype.execute.call(this);
+  this.palette.workflow.moveFront(this.palette.workflow.getCurrentSelection());
+  ToolGeneric.prototype.execute.call(this);
 };
 ButtonMoveBack = function (_4091) {
-    Button.call(this, _4091, 16, 16);
+  Button.call(this, _4091, 16, 16);
 };
 ButtonMoveBack.prototype = new Button;
 ButtonMoveBack.prototype.type = "/skins/ext/images/gray/shapes/btn-movebk";
 ButtonMoveBack.prototype.execute = function () {
-    this.palette.workflow.moveBack(this.palette.workflow.getCurrentSelection());
-    ToolGeneric.prototype.execute.call(this);
+  this.palette.workflow.moveBack(this.palette.workflow.getCurrentSelection());
+  ToolGeneric.prototype.execute.call(this);
 };
 
 bpmnTaskDialog = function (_2e5e) {
-    this.figure = _2e5e;
-    var title = 'Task Detail';
-    Dialog.call(this, title);
-    this.setDimension(400, 150); //Set the width and height of the Dialog box
+  this.figure = _2e5e;
+  var title = 'Task Detail';
+  Dialog.call(this, title);
+  this.setDimension(400, 150); //Set the width and height of the Dialog box
 }
 
 bpmnTaskDialog.prototype = new Dialog(this);
 bpmnTaskDialog.prototype.createHTMLElement = function () {
-    var item = Dialog.prototype.createHTMLElement.call(this);
-    var inputDiv = document.createElement("form");
-    inputDiv.style.position = "absolute";
-    inputDiv.style.left = "10px";
-    inputDiv.style.top = "30px";
-    inputDiv.style.width = "375px";
-    inputDiv.style.font = "normal 10px verdana";
-    item.appendChild(inputDiv);
-    this.label = document.createTextNode("Task Name");
-    inputDiv.appendChild(this.label);
-    this.input = document.createElement("textarea");
-    this.input.size = '1';
-    this.input.style.border = "1px solid gray";
-    this.input.style.font = "normal 10px verdana";
-    //this.input.type = "text";
-    this.input.cols = "50";
-    this.input.rows = "3";
-    this.input.maxLength = "100";
-    var value = bpmnTask.prototype.trim(workflow.currentSelection.taskName);
-    if (value) this.input.value = value;
-    else this.input.value = "";
-    this.input.style.width = "100%";
-    inputDiv.appendChild(this.input);
-    this.input.focus();
-    return item;
+  var item = Dialog.prototype.createHTMLElement.call(this);
+  var inputDiv = document.createElement("form");
+  inputDiv.style.position = "absolute";
+  inputDiv.style.left = "10px";
+  inputDiv.style.top = "30px";
+  inputDiv.style.width = "375px";
+  inputDiv.style.font = "normal 10px verdana";
+  item.appendChild(inputDiv);
+  this.label = document.createTextNode("Task Name");
+  inputDiv.appendChild(this.label);
+  this.input = document.createElement("textarea");
+  this.input.size = '1';
+  this.input.style.border = "1px solid gray";
+  this.input.style.font = "normal 10px verdana";
+  //this.input.type = "text";
+  this.input.cols = "50";
+  this.input.rows = "3";
+  this.input.maxLength = "100";
+  var value = bpmnTask.prototype.trim(workflow.currentSelection.taskName);
+  if (value) this.input.value = value;
+  else this.input.value = "";
+  this.input.style.width = "100%";
+  inputDiv.appendChild(this.input);
+  this.input.focus();
+  return item;
 };
 
-/*Double Click Event for opening the dialog Box*/
+//Double Click Event for opening the dialog Box
 bpmnTask.prototype.onDoubleClick = function () {
-    var _409d = new bpmnTaskDialog(this);
-    workflow.showDialog(_409d, this.workflow.currentSelection.x, this.workflow.currentSelection.y);
+  var _409d = new bpmnTaskDialog(this);
+  workflow.showDialog(_409d, this.workflow.currentSelection.x, this.workflow.currentSelection.y);
 };
 
 /**
@@ -956,8 +954,10 @@ bpmnTask.prototype.onMouseEnter = function () {
 };
 
 bpmnTask.prototype.trim = function (str) {
-    if (str != null) return str.replace(/^\s+|\s+$/g, '');
-    else return null;
+  if (str != null) 
+    return str.replace(/^\s+|\s+$/g, '');
+  else 
+  	return null;
 };
 
 /**
@@ -965,34 +965,34 @@ bpmnTask.prototype.trim = function (str) {
  * The string is first cleared and new string is painted.<br><br>
  **/
 bpmnTaskDialog.prototype.onOk = function () {
-    this.figure.bpmnText.clear();
-    //len = Math.ceil(this.input.value.length/16);
-    var len = this.workflow.currentSelection.width / 18;
-    if (len >= 6) {
-        // len = 1.5;
-        var padleft = 0.12 * this.workflow.currentSelection.width;
-        var padtop = 0.32 * this.workflow.currentSelection.height  - 3;
-        this.figure.rectWidth = this.workflow.currentSelection.width - 2 * padleft;
-    }
-    else {
-        padleft = 0.1 * this.workflow.currentSelection.width;
-        padtop = 0.09 * this.workflow.currentSelection.height  - 3;
-        this.figure.rectWidth = this.workflow.currentSelection.width - 2 * padleft;
-    }
+  this.figure.bpmnText.clear();
+  //len = Math.ceil(this.input.value.length/16);
+  var len = this.workflow.currentSelection.width / 18;
+  if (len >= 6) {
+      // len = 1.5;
+      var padleft = 0.12 * this.workflow.currentSelection.width;
+      var padtop = 0.32 * this.workflow.currentSelection.height  - 3;
+      this.figure.rectWidth = this.workflow.currentSelection.width - 2 * padleft;
+  }
+  else {
+      padleft = 0.1 * this.workflow.currentSelection.width;
+      padtop = 0.09 * this.workflow.currentSelection.height  - 3;
+      this.figure.rectWidth = this.workflow.currentSelection.width - 2 * padleft;
+  }
 
-    var rectheight = this.workflow.currentSelection.height - 2*padtop;
-    this.figure.bpmnText.setFont('verdana', +this.figure.fontSize+'px', Font.PLAIN);
-    this.figure.bpmnText.drawStringRect(this.input.value, padleft, padtop, this.figure.rectWidth, rectheight, 'center');
-    this.figure.bpmnText.paint();
-    this.workflow.currentSelection.taskName = this.input.value; //Set Updated Text value
-    //Saving task name (whenever updated) onAsynch AJAX call
-    this.figure.actiontype = 'updateTaskName';
-    this.workflow.saveShape(this.figure);
-    if (this.figure.rectWidth < 80) tempW = 110;
-    else tempW = this.figure.rectWidth + 35;
-    this.workflow.removeFigure(this);
+  var rectheight = this.workflow.currentSelection.height - 2*padtop;
+  this.figure.bpmnText.setFont('verdana', +this.figure.fontSize+'px', Font.PLAIN);
+  this.figure.bpmnText.drawStringRect(this.input.value, padleft, padtop, this.figure.rectWidth, rectheight, 'center');
+  this.figure.bpmnText.paint();
+  this.workflow.currentSelection.taskName = this.input.value; //Set Updated Text value
+  //Saving task name (whenever updated) onAsynch AJAX call
+  this.figure.actiontype = 'updateTaskName';
+  this.workflow.saveShape(this.figure);
+  if (this.figure.rectWidth < 80) tempW = 110;
+  else tempW = this.figure.rectWidth + 35;
+  this.workflow.removeFigure(this);
 };
 
 bpmnTask.prototype.getContextMenu = function () {
-    this.workflow.handleContextMenu(this);
+  this.workflow.handleContextMenu(this);
 };

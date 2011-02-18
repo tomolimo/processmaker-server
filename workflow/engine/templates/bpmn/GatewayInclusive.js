@@ -65,7 +65,7 @@ VectorFigure.prototype.setWorkflow.call(this,_40c5);
 if(_40c5!=null){
     var gatewayPortName = ['input1','input2','output1','output2'];
     var gatewayPortType = ['InputPort','InputPort','OutputPort','OutputPort'];
-    var gatewayPositionX= [0,this.width/2,this.height/2,this.width];
+    var gatewayPositionX= [20,this.width/2,this.height/2,this.width];
     var gatewayPositionY= [this.height/2,0,this.width,this.height/2];
 
     for(var i=0; i< gatewayPortName.length ; i++){
