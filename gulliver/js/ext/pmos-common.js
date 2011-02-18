@@ -235,6 +235,16 @@ function _DF(DATE_TIME, D_FORMAT){
 		if (DATE_TIME=='')
 		  return '';
 		else
-		  return '**' + DATE_TIME + '**';  
+		  return '**' + DATE_TIME + '**'; 
 	  }
 	}
+
+/* Override native objects Section */
+
+/**
+ * left and right delete the blank characteres (String prototype)
+ */
+String.prototype.trim = function() {
+  return this.replace(/^\s+|\s+get/g,"");
+  //return Ext.util.Format.trim(this);
+}
