@@ -1,104 +1,106 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dynaForm name="fields_Toolbar" version="1.0" type="toolbar" align="left" width="100%">
 
-<separator1 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<separator1 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
 
-<saveDyna type="toolButton" onclick="dynaformEditor.save()" file="images/dynamicForm/save.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>save</en>
+<saveDyna type="toolButton" onclick="dynaformEditor.save()" file="images/dynamicForm/save.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonStyle=""
+buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_disk" title="Save"></span>]]></en>
 </saveDyna>
 
-<separators type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<separators type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html"  buttonStyle=""/>
 
-<saveasDyna type="toolButton" onclick="dynaformEditor.save_as()" file="images/dynamicForm/save_as.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>save as</en>
+<saveasDyna type="toolButton" onclick="dynaformEditor.save_as()" file="images/dynamicForm/save_as.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;" buttonStyle=""
+buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_disk_multiple" title="Save as"></span>]]></en>
 </saveasDyna>
 
-<separator2 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
+<separator2 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html"  buttonStyle=""/>
 
 <!--.-->
 
-<text type="toolButton" onclick="fieldsAdd('text')" file="images/dynamicForm/text.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>text</en>
+<text type="toolButton" onclick="fieldsAdd('text')" file="images/dynamicForm/text.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;" buttonStyle="" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_textfield" title="Text field"></span>]]></en>
 </text>
-<currency type="toolButton" onclick="fieldsAdd('currency')" file="images/dynamicForm/currency.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>currency</en>
+<currency type="toolButton" onclick="fieldsAdd('currency')" file="images/dynamicForm/currency.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_textfield_currency" title="Currency"></span>]]></en>
 </currency>
-<percentage type="toolButton" onclick="fieldsAdd('percentage')" file="images/dynamicForm/percentage.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>percentage</en>
+<percentage type="toolButton" onclick="fieldsAdd('percentage')" file="images/dynamicForm/percentage.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;"  buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_textfield_percentage" title="Percentage"></span>]]></en>
 </percentage>
-<password type="toolButton" onclick="fieldsAdd('password')" file="images/dynamicForm/password.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>password</en>
+<password type="toolButton" onclick="fieldsAdd('password')" file="images/dynamicForm/password.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_textfield_key" title="Password"></span>]]></en>
 </password>
-<suggest type="toolButton" onclick="fieldsAdd('suggest')" file="images/dynamicForm/suggest.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="" buttonStyle="">
-  <en>Suggest</en>
+<suggest type="toolButton" onclick="fieldsAdd('suggest')" file="images/dynamicForm/suggest.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_help" title="Suggest"></span>]]></en>
 </suggest>
-<textarea type="toolButton" onclick="fieldsAdd('textarea')" file="images/dynamicForm/textarea.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>textarea</en>
+<textarea type="toolButton" onclick="fieldsAdd('textarea')" file="images/dynamicForm/textarea.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_textarea" title="TextArea"></span>]]></en>
 </textarea>
 <!--.-->
-<separator3 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<title type="toolButton" onclick="fieldsAdd('title')" file="images/dynamicForm/title.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>title</en>
+<separator3 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
+<title type="toolButton" onclick="fieldsAdd('title')" file="images/dynamicForm/title.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_title" title="Title"></span>]]></en>
 </title>
-<subtitle type="toolButton" onclick="fieldsAdd('subtitle')" file="images/dynamicForm/subtitle.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>subtitle</en>
+<subtitle type="toolButton" onclick="fieldsAdd('subtitle')" file="images/dynamicForm/subtitle.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_subtitle" title="Subtitle"></span>]]></en>
 </subtitle>
 <!--.-->
-<separator4 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<button type="toolButton" onclick="fieldsAdd('button')" file="images/dynamicForm/button.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>button</en>
+<separator4 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
+<button type="toolButton" onclick="fieldsAdd('button')" file="images/dynamicForm/button.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_button" title="Button"></span>]]></en>
 </button>
-<submit type="toolButton" onclick="fieldsAdd('submit')" file="images/dynamicForm/submit.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>submit</en>
+<submit type="toolButton" onclick="fieldsAdd('submit')" file="images/dynamicForm/submit.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_submit" title="Submit"></span>]]></en>
 </submit>
-<reset type="toolButton" onclick="fieldsAdd('reset')" file="images/dynamicForm/reset.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>reset</en>
+<reset type="toolButton" onclick="fieldsAdd('reset')" file="images/dynamicForm/reset.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_reset" title="Reset"></span>]]></en>
 </reset>
 <!--.-->
-<separator5 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<dropdown type="toolButton" onclick="fieldsAdd('dropdown')" file="images/dynamicForm/dropdown.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>dropdown</en>
+<separator5 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html"  buttonStyle=""/>
+<dropdown type="toolButton" onclick="fieldsAdd('dropdown')" file="images/dynamicForm/dropdown.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_dropdown" title="Dropdown"></span>]]></en>
 </dropdown>
-<yesno type="toolButton" onclick="fieldsAdd('yesno')" file="images/dynamicForm/yes_no.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>yesno</en>
+<yesno type="toolButton" onclick="fieldsAdd('yesno')" file="images/dynamicForm/yes_no.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_yesno" title="Yes/No"></span>]]></en>
 </yesno>
-<listbox type="toolButton" onclick="fieldsAdd('listbox')" file="images/dynamicForm/list_box.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>listbox</en>
+<listbox type="toolButton" onclick="fieldsAdd('listbox')" file="images/dynamicForm/list_box.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_listbox" title="Listbox"></span>]]></en>
 </listbox>
 <!--.-->
-<separator6 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<checkbox type="toolButton" onclick="fieldsAdd('checkbox')" file="images/dynamicForm/checkbox.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>checkbox</en>
+<separator6 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html"  buttonStyle=""/>
+<checkbox type="toolButton" onclick="fieldsAdd('checkbox')" file="images/dynamicForm/checkbox.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_check" title="Checkbox"></span>]]></en>
 </checkbox>
-<checkgroup type="toolButton" onclick="fieldsAdd('checkgroup')" file="images/dynamicForm/check_group.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;" buttonStyle="">
-  <en>checkgroup</en>
+<checkgroup type="toolButton" onclick="fieldsAdd('checkgroup')" file="images/dynamicForm/check_group.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_checkgroup" title="CheckGroup"></span>]]></en>
 </checkgroup>
-<radiogroup type="toolButton" onclick="fieldsAdd('radiogroup')" file="images/dynamicForm/radio_group.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>radiogroup</en>
+<radiogroup type="toolButton" onclick="fieldsAdd('radiogroup')" file="images/dynamicForm/radio_group.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_radiogroup" title="RadioGroup"></span>]]></en>
 </radiogroup>
 <!--.-->
-<separator7 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<date type="toolButton" onclick="fieldsAdd('date')" file="images/dynamicForm/date.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>date</en>
+<separator7 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
+<date type="toolButton" onclick="fieldsAdd('date')" file="images/dynamicForm/date.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_calendar" title="Date"></span>]]></en>
 </date>
-<hidden type="toolButton" onclick="fieldsAdd('hidden')" file="images/dynamicForm/hidden.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>hidden</en>
+<hidden type="toolButton" onclick="fieldsAdd('hidden')" file="images/dynamicForm/hidden.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_hidden" title="Hidden"></span>]]></en>
 </hidden>
-<link type="toolButton" onclick="fieldsAdd('link')" file="images/dynamicForm/link.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>link</en>
+<link type="toolButton" onclick="fieldsAdd('link')" file="images/dynamicForm/link.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:18px;width:18px;" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_link" title="Link"></span>]]></en>
 </link>
-<file type="toolButton" onclick="fieldsAdd('file')" file="images/dynamicForm/upload_files.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>file</en>
+<file type="toolButton" onclick="fieldsAdd('file')" file="images/dynamicForm/upload_files.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_upload" title="File"></span>]]></en>
 </file>
 <!--.-->
-<separator8 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<javascript type="toolButton" onclick="fieldsAdd('javascript')" file="images/dynamicForm/javascript.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>javascript</en>
+<separator8 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html"  buttonStyle=""/>
+<javascript type="toolButton" onclick="fieldsAdd('javascript')" file="images/dynamicForm/javascript.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_js" title="Javascript"></span>]]></en>
 </javascript>
 <!--.-->
-<separator9 type="toolButton" file="images/dynamicForm/separator.jpg" home="public_html" style="height:25px;" buttonStyle=""/>
-<grid type="toolButton" onclick="fieldsAdd('grid')" file="images/dynamicForm/grid.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" style="height:25px;width:25px;" buttonStyle="">
-  <en>grid</en>
+<separator9 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
+<grid type="toolButton" onclick="fieldsAdd('grid')" file="images/dynamicForm/grid.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
+	<en><![CDATA[<span class="ss_sprite button_toolbar ss_table" title="Grid"></span>]]></en>
 </grid>
 <!--.-->
 </dynaForm>

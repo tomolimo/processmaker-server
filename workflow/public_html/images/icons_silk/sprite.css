@@ -5,6 +5,9 @@
 form.formDefault .FormTitle,form.formDefault .FormSubTitle{
   background:#E0E7EF;
 }
+form.formDefault .FormSubTitle{
+
+}
 .pagedTableDefault .pagedTable .RowPointer
 {
 	background-color:#E0EAEF;
@@ -44,11 +47,24 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
   background-image:url( /images/icons_silk/sprites.png) !important;
   background-repeat:no-repeat;
   display:inline;
-  height:18px !important;
+  /*height:18px !important;*/
   overflow:hidden;
-  padding-left:24px
+  padding-left:22px
 }
-.button_menu_ext{padding-left:20px !important}
+.ss_sprite:hover,.ss_sprite:focus{
+  background-repeat:no-repeat !important;
+}
+
+
+.panel_headerBar___processmaker{
+	height:28px;
+}
+.pm_toolbar td{padding:0;margin:0}
+
+.panel_headerBar___processmaker{background:url("/skins/ext/images/gray/toolbar/bg.gif") #F0F0F0 !important}
+
+.button_menu_ext{padding-left:20px !important;height:18px !important;}
+.button_toolbar{padding-left:20px !important;height:18px !important;font-size:15px;cursor:pointer;margin:0 3px 1px 3px;}
 .ss_accept{background-position:0px 0 !important}
 .ss_add{background-position:0px -19px !important}
 .ss_anchor{background-position:0px -37px !important}
@@ -913,3 +929,20 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 .ss_zoom{background-position:0px -17947px !important}
 .ss_zoom_in{background-position:0px -17965px !important}
 .ss_zoom_out{background-position:0px -17983px !important}
+.ss_textfield_currency{background-position:0px -18001px !important}
+.ss_textfield_percentage{background-position:0px -18019px !important}
+.ss_js{background-position:0px -18037px !important}
+.ss_upload{background-position:0px -18055px !important}
+.ss_hidden{background-position:0px -18073px !important}
+.ss_radiogroup{background-position:0px -18091px !important}
+.ss_checkgroup{background-position:0px -18109px !important}
+.ss_check{background-position:0px -18127px !important}
+.ss_listbox{background-position:0px -18145px !important}
+.ss_yesno{background-position:0px -18163px !important}
+.ss_dropdown{background-position:0px -18181px !important}
+.ss_reset{background-position:0px -18199px !important}
+.ss_submit{background-position:0px -18217px !important}
+.ss_button{background-position:0px -18235px !important}
+.ss_textarea{background-position:0px -18253px !important}
+.ss_title{background-position:0px -18271px !important}
+.ss_subtitle{background-position:0px -18289px !important}

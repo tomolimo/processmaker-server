@@ -1631,7 +1631,7 @@ div#toolbar
   font-weight:400;
   text-transform: capitalize;
   margin:2px 0;
-  padding:3px 8px;
+  padding:2px 7px;
   text-decoration:none;
   line-height: 14px;
   font-family: Arial,serif;
@@ -1656,12 +1656,16 @@ div#toolbar
 	margin:0;
 }
 /*DISABLED*/
-.module_app_buttonDisabled___gray{
+.pagedTableDefault .pagedTable .RowLink a.module_app_buttonDisabled___gray,
+.module_app_buttonDisabled___gray
+{
 	border:1px solid #bbb;
 	background-position:0 -3240px;
 	color:#9f9f9f;
 	cursor:default;
 }
-.module_app_buttonDisabled___gray:hover{
+.pagedTableDefault .pagedTable .RowLink a.module_app_buttonDisabled___gray:hover,
+.module_app_buttonDisabled___gray:hover
+{
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }

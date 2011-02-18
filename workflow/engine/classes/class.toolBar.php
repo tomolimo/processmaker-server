@@ -140,6 +140,13 @@ class XmlForm_Field_toolButton extends XmlForm_Field
       case 'text':
         $html=$this->htmlentities($this->label, ENT_QUOTES,'utf-8');
         break;
+      case 'html':
+          $html='<span '.
+          ' onmouseover=\'backImage(this,"url('.htmlentities( $urlAlt, ENT_QUOTES, 'utf-8').') no-repeat")\' onmouseout=\'backImage(this,"")\'  style="width:25px;font-size:25px;line-height:25px;">'.
+						$this->label.'</span>';
+			
+        //$html=$this->label;
+        break;
       case 'image/text':
         $html='<img src="'.htmlentities( $url, ENT_QUOTES, 'utf-8').'"'.
         (($this->style)?' style="'.$this->style.'"':'').'/><br/>'.
@@ -151,10 +158,10 @@ class XmlForm_Field_toolButton extends XmlForm_Field
         (($this->style)?' style="'.$this->style.'"':'').'/>';
         break;
     }
-    return '<A class="toolButton" '.
+    return '<a class="toolButton" '.
     (($this->buttonStyle)?' style="'.$this->buttonStyle.'"':'').
     (($this->onclick)?' onclick="'. htmlentities($this->onclick, ENT_QUOTES,'utf-8').'"':'').
-    '>'.$html.'</A>';
+    '>'.$html.'</a>';
   }
 }
 ?>

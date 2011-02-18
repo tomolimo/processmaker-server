@@ -4,14 +4,18 @@
  <tr>
 {*  LEFT MENU  *}
   <td valign='top' class="pm__toolbar" width='{$form->width}'>
+	  <table>
+		  <tr>
 {php}$this->assign('cols', 0);{/php}
 {foreach from=$form->fields item=field index=abc}
+<td>
 {if ($field->type==='javascript')}
 {elseif ($field->type==='phpvariable')}
 {elseif ($field->type==='private')}
 {elseif ($field->type==='')}
 {else}
 {* elseif ($field->type==='link') || ($field->type==='menu') *}{$field->field}{/if}
+</td> 
 {/foreach}
 
 {php}
@@ -19,6 +23,8 @@
 $oPluginRegistry =& PMPluginRegistry::getSingleton();
 $oPluginRegistry->getToolbarOptions("NORMAL");
 {/php}
+</tr>
+</table>
   </td>
 </tr>
 </table>
