@@ -318,124 +318,35 @@
 
       switch ($_GET['ACTION'])
       {
-        case 'GENERATE':
+         case 'GENERATE':
 	        //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
 	        $oPluginRegistry =& PMPluginRegistry::getSingleton();
-	        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator        	
-	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED'],'DOC_UID'=>$_GET['UID'],'PRO_UID'=>$_SESSION['PROCESS']) );        	        	
-	        }         
+	        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator
+	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
+	        }
 					//END: If there is a Break Step registered from Plugin
-        
-          $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
-          if ( $sFilename == '' ) $sFilename='_';
-          $pathOutput = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP ;
-          G::mk_dir ( $pathOutput );
-          switch ( $aOD['OUT_DOC_TYPE'] ) {
-            case 'HTML' : 
-                $aProperties = array();                //maui
-                
-                if(!isset($aOD['OUT_DOC_MEDIA']))
-                	$aOD['OUT_DOC_MEDIA'] = 'Letter';
-                if(!isset($aOD['OUT_DOC_LEFT_MARGIN']))
-                	$aOD['OUT_DOC_LEFT_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_RIGHT_MARGIN']))
-                	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
-                	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
-                if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
-                	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
-                	
-                if(isset($aOD['OUT_DOC_VERSIONING']) && $aOD['OUT_DOC_VERSIONING']!=0){
-                 $oAppDocument= new AppDocument();          
-                 $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
-                 $lastDocVersion = $lastDocVersion +1;
-                 $lastDocVersion = '_'.$lastDocVersion;
-                }else {
-                	$lastDocVersion='';
-                }
 
-                $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
-                $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
-                $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
-                   $sFilename.$lastDocVersion, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
-                break;
-            case 'JRXML' :
-                //creating the xml with the application data;
-                $xmlData = "<dynaform>\n";
-                foreach ( $Fields['APP_DATA'] as $key => $val ) {
-                  $xmlData .= "  <$key>$val</$key>\n";
-                }
-                $xmlData .= "</dynaform>\n";
-                $iSize = file_put_contents ( $javaOutput .  'addressBook.xml' , $xmlData );
-              
-                G::LoadClass ('javaBridgePM');
-                $JBPM = new JavaBridgePM();
-                $JBPM->checkJavaExtension();
-              
-                $util = new Java("com.processmaker.util.pmutils");
-                $util->setInputPath( $javaInput );
-                $util->setOutputPath( $javaOutput );
-              
-                //$content = file_get_contents ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml' );
-                //$iSize = file_put_contents ( $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml', $content );
-                copy ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml', $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml' );
-              
-               $outputFile = $javaOutput . $sFilename . '.pdf' ;
-                print $util->jrxml2pdf( $aOD['OUT_DOC_UID'] . '.jrxml' , basename($outputFile) );
-              
-                //$content = file_get_contents ( $outputFile );
-                //$iSize = file_put_contents ( $pathOutput .  $sFilename . '.pdf' , $content );
-                copy ( $outputFile, $pathOutput .  $sFilename . '.pdf' );
-                //die;
-                break;
-              case 'ACROFORM' :
-                  //creating the xml with the application data;
-                  $xmlData = "<dynaform>\n";
-                  foreach ( $Fields['APP_DATA'] as $key => $val ) {
-                    $xmlData .= "  <$key>$val</$key>\n";
-                  }
-                  $xmlData .= "</dynaform>\n";
-                  //$iSize = file_put_contents ( $javaOutput .  'addressBook.xml' , $xmlData );
-                
-                  G::LoadClass ('javaBridgePM');
-                  $JBPM = new JavaBridgePM();
-                  $JBPM->checkJavaExtension();
-                
-                  $util = new Java("com.processmaker.util.pmutils");
-                  $util->setInputPath( $javaInput );
-                  $util->setOutputPath( $javaOutput );
-                
-                  copy ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.pdf', $javaInput .  $aOD['OUT_DOC_UID'] . '.pdf' );
-                  
-                  $outputFile = $javaOutput . $sFilename . '.pdf' ;
-                  print $util->writeVarsToAcroFields( $aOD['OUT_DOC_UID'] . '.pdf' , $xmlData );
-                
-                  copy ( $javaOutput. $aOD['OUT_DOC_UID'] . '.pdf', $pathOutput .  $sFilename . '.pdf' );
-                
-                break;
-              default :
-                throw ( new Exception ('invalid output document' ));
-          }
-          
+
+          $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
           require_once 'classes/model/AppFolder.php';
           require_once 'classes/model/AppDocument.php';
-          
-          //Get the Custom Folder ID (create if necessary)         
+
+          //Get the Custom Folder ID (create if necessary)
           $oFolder=new AppFolder();
           $folderId=$oFolder->createFromPath($aOD['OUT_DOC_DESTINATION_PATH']);
-          
+
           //Tags
           $fileTags=$oFolder->parseTags($aOD['OUT_DOC_TAGS']);
-          
+
           //Get last Document Version and apply versioning if is enabled
-          
-          $oAppDocument= new AppDocument();          
+
+          $oAppDocument= new AppDocument();
           $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
-          
+
           //if(($aOD['OUT_DOC_VERSIONING'])||($lastDocVersion==0)){
           //  $lastDocVersion++;
           //}
-          
+
           $oCriteria = new Criteria('workflow');
           $oCriteria->add(AppDocumentPeer::APP_UID,      $_SESSION['APPLICATION']);
           //$oCriteria->add(AppDocumentPeer::DEL_INDEX,    $_SESSION['INDEX']);
@@ -444,9 +355,10 @@
           $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
           $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
           $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-          $oDataset->next();          
-          if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output            
-            if ($aRow = $oDataset->getRow()) {                
+          $oDataset->next();
+          if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output
+            $lastDocVersion++;
+            if ($aRow = $oDataset->getRow()) {
                 $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
                                  'APP_UID'             => $_SESSION['APPLICATION'],
                                  'DEL_INDEX'           => $_SESSION['INDEX'],
@@ -458,12 +370,12 @@
                                  'APP_DOC_FILENAME'    => $sFilename,
                                  'FOLDER_UID'          => $folderId,
                                  'APP_DOC_TAGS'        => $fileTags);
-                $oAppDocument = new AppDocument();                  
-                $oAppDocument->create($aFields);                
+                $oAppDocument = new AppDocument();
+                $oAppDocument->create($aFields);
                 $sDocUID = $aRow['APP_DOC_UID'];
             }
           }else{//No versioning so Update a current Output or Create new if no exist
-            if ($aRow = $oDataset->getRow()) { //Update                
+            if ($aRow = $oDataset->getRow()) { //Update
                 $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
                                  'APP_UID'             => $_SESSION['APPLICATION'],
                                  'DEL_INDEX'           => $_SESSION['INDEX'],
@@ -478,7 +390,7 @@
                 $oAppDocument = new AppDocument();
                 $oAppDocument->update($aFields);
                 $sDocUID = $aRow['APP_DOC_UID'];
-             }else{ //create                
+             }else{ //create
                 if($lastDocVersion==0) $lastDocVersion++;
                 $aFields = array('APP_UID'             => $_SESSION['APPLICATION'],
                              'DEL_INDEX'           => $_SESSION['INDEX'],
@@ -492,9 +404,97 @@
                              'APP_DOC_TAGS'        => $fileTags);
                 $oAppDocument = new AppDocument();
                 $aFields['APP_DOC_UID']=$sDocUID = $oAppDocument->create($aFields);
-                
+
             }
           }
+
+          //$sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
+          //if ( $sFilename == '' ) $sFilename='_';
+
+          $sFilename = $aFields['APP_DOC_UID']. "_".$lastDocVersion;
+
+          $pathOutput = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP ;
+          G::mk_dir ( $pathOutput );
+          switch ( $aOD['OUT_DOC_TYPE'] ) {
+            case 'HTML' :
+
+                $aProperties = array();                //maui
+
+                if(!isset($aOD['OUT_DOC_MEDIA']))
+                	$aOD['OUT_DOC_MEDIA'] = 'Letter';
+                if(!isset($aOD['OUT_DOC_LEFT_MARGIN']))
+                	$aOD['OUT_DOC_LEFT_MARGIN'] = '15';
+                if(!isset($aOD['OUT_DOC_RIGHT_MARGIN']))
+                	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
+                if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
+                	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
+                if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
+                	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
+
+                $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
+                $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
+                $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
+                   //$sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
+                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
+                break;
+            case 'JRXML' :
+                //creating the xml with the application data;
+                $xmlData = "<dynaform>\n";
+                foreach ( $Fields['APP_DATA'] as $key => $val ) {
+                  $xmlData .= "  <$key>$val</$key>\n";
+                }
+                $xmlData .= "</dynaform>\n";
+                $iSize = file_put_contents ( $javaOutput .  'addressBook.xml' , $xmlData );
+
+                G::LoadClass ('javaBridgePM');
+                $JBPM = new JavaBridgePM();
+                $JBPM->checkJavaExtension();
+
+                $util = new Java("com.processmaker.util.pmutils");
+                $util->setInputPath( $javaInput );
+                $util->setOutputPath( $javaOutput );
+
+                //$content = file_get_contents ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml' );
+                //$iSize = file_put_contents ( $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml', $content );
+                copy ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml', $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml' );
+
+               $outputFile = $javaOutput . $sFilename . '.pdf' ;
+                print $util->jrxml2pdf( $aOD['OUT_DOC_UID'] . '.jrxml' , basename($outputFile) );
+
+                //$content = file_get_contents ( $outputFile );
+                //$iSize = file_put_contents ( $pathOutput .  $sFilename . '.pdf' , $content );
+                copy ( $outputFile, $pathOutput .  $sFilename . '.pdf' );
+                //die;
+                break;
+              case 'ACROFORM' :
+                  //creating the xml with the application data;
+                  $xmlData = "<dynaform>\n";
+                  foreach ( $Fields['APP_DATA'] as $key => $val ) {
+                    $xmlData .= "  <$key>$val</$key>\n";
+                  }
+                  $xmlData .= "</dynaform>\n";
+                  //$iSize = file_put_contents ( $javaOutput .  'addressBook.xml' , $xmlData );
+
+                  G::LoadClass ('javaBridgePM');
+                  $JBPM = new JavaBridgePM();
+                  $JBPM->checkJavaExtension();
+
+                  $util = new Java("com.processmaker.util.pmutils");
+                  $util->setInputPath( $javaInput );
+                  $util->setOutputPath( $javaOutput );
+
+                  copy ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.pdf', $javaInput .  $aOD['OUT_DOC_UID'] . '.pdf' );
+
+                  $outputFile = $javaOutput . $sFilename . '.pdf' ;
+                  print $util->writeVarsToAcroFields( $aOD['OUT_DOC_UID'] . '.pdf' , $xmlData );
+
+                  copy ( $javaOutput. $aOD['OUT_DOC_UID'] . '.pdf', $pathOutput .  $sFilename . '.pdf' );
+
+                break;
+              default :
+                throw ( new Exception ('invalid output document' ));
+          }
+
 
           //Execute after triggers - Start
           $Fields['APP_DATA'] = $oCase->ExecuteTriggers ( $_SESSION['TASK'], 'OUTPUT_DOCUMENT', $_GET['UID'], 'AFTER', $Fields['APP_DATA'] );
@@ -508,17 +508,17 @@
 
           //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
           $oPluginRegistry =& PMPluginRegistry::getSingleton();
-          if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {          	
-          	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );          	
-          	$aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;          	
-          	
+          if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
+          	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
+          	$aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
+
           	$oAppDocument1 = new AppDocument();
             $oAppDocument1->update($aFields);
-           
+
           	$sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
 
             $oData['APP_UID']   = $_SESSION['APPLICATION'];
-            $oData['ATTACHMENT_FOLDER'] = true;            
+            $oData['ATTACHMENT_FOLDER'] = true;
             switch($aOD['OUT_DOC_GENERATE']){
                 case "BOTH":
                     $documentData = new uploadDocumentData (
@@ -536,7 +536,7 @@
                     if($uploadReturn){//Only delete if the file was saved correctly
                     	unlink ( $pathOutput . $sFilename. '.pdf' );
                   	}
-                    
+
 
 
                     $documentData = new uploadDocumentData (

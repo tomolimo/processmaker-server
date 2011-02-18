@@ -46,8 +46,11 @@
   		$ext = $info['extension'];
   	}
   }
-  $ver= (isset($_GET['v']) && $_GET['v']!='') ? '_'.$_GET['v'] : '';
-  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename'] .$ver. '.' . $ext ;
-  G::streamFile ( $realPath, true );
+$ver= (isset($_GET['v']) && $_GET['v']!='') ? '_'.$_GET['v'] : '';
+//$var = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext;
+//if(file_exists(PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext)){
 
+  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext ;  G::streamFile ( $realPath, true );
+  G::streamFile ( $realPath, true ,$info['basename'] .$ver. '.' . $ext );
+ //G::streamFile ( $realPath, true);
 ?>
