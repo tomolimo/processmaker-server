@@ -73,7 +73,7 @@ try {
   $aDyn['DYN_UID']=(isset($_SESSION['DYN_UID_PRINT']) && $_SESSION['DYN_UID_PRINT']!='')?$_SESSION['DYN_UID_PRINT']:$aDyn['DYN_UID'];
   $G_PUBLISH->AddContent('smarty', 'cases/cases_PrintViewTitle', '', '', $array);
 	 
-	$G_PUBLISH->AddContent('dynaform', 'xmlform', $aDyn['PRO_UID']. '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '',  '');
+	$G_PUBLISH->AddContent('dynaform', 'xmlform', $aDyn['PRO_UID']. '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '',  'view');
 	G::RenderPage('publish', 'blank');
 	
 	
