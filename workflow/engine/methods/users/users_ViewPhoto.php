@@ -63,7 +63,7 @@ function DumpHeaders($filename)
         $isIE6 = 1;
     }
 
-    $aux = ereg_replace('[^-a-zA-Z0-9\.]', '_', $filename);
+    $aux = preg_replace('[^-a-zA-Z0-9\.]', '_', $filename);
     $aux = explode ('_', $aux);
     $downloadName = $aux[ count($aux)-1 ];
   //  $downloadName = $filename;
