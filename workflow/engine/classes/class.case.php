@@ -2833,6 +2833,48 @@ class Cases {
       $d->next();
     }
   }
+  
+  /*
+   * it Changes the date and APP_DISABLE_ACTION_USER to unpause cases
+   *
+   * @name UnpauseRoutedCasesWithPauseFlagEnabled
+   * @param string $usrLogged
+   * @return void
+   */
+   function UnpauseRoutedCasesWithPauseFlagEnabled($usrLogged) {
+    /*   
+    SELECT *  APP_DELAY_UID
+    FROM APP_DELAY 
+      left join APP_DELEGATION ON ( APP_DELAY.APP_UID = APP_DELEGATION.APP_UID AND APP_DELAY.APP_DEL_INDEX = APP_DELEGATION.DEL_INDEX )
+    WHERE APP_DELEGATION_USER = '00000000000000000000000000000001' and ( APP_DISABLE_ACTION_USER = '0' or isnull(APP_DISABLE_ACTION_USER) ) AND DEL_THREAD_STATUS = 'CLOSED'
+    APP_DISABLE_ACTION_USER = $usrLogged
+    APP_DISABLE_ACTION_DATE = NOW*/
+    
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn(AppDelayPeer::APP_DELAY_UID);
+    $c->add( $c->getNewCriterion(AppDelayPeer::APP_DELEGATION_USER, $usrLogged, Criteria::EQUAL)->addAnd($c->getNewCriterion(AppDelegationPeer::DEL_THREAD_STATUS, 'CLOSED', Criteria::EQUAL))->addAnd($c->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL)->addOr($c->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0)) ) );
+    $aConditions = array();
+    $aConditions[] = array(AppDelayPeer::APP_UID, AppDelegationPeer::APP_UID);
+    $aConditions[] = array(AppDelayPeer::APP_DEL_INDEX, AppDelegationPeer::DEL_INDEX);
+    $c->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $rs = AppDelayPeer::doSelectRS($c);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    while($rs->next()){
+      $row = $rs->getRow();
+      if(is_array($row)){
+        $con = Propel::getConnection('workflow');
+        $c1 = new Criteria('workflow');
+        $c1->add(AppDelayPeer::APP_DELAY_UID, $row['APP_DELAY_UID']);
+        // update set
+        $c2 = new Criteria('workflow');
+        $c2->add(AppDelayPeer::APP_DISABLE_ACTION_USER, $usrLogged);
+        $c2->add(AppDelayPeer::APP_DISABLE_ACTION_DATE, date('Y-m-d'));
+        BasePeer::doUpdate($c1, $c2,$con);
+      }
+    }
+    
+   }
 
   /*
    * Get the application UID by case number
