@@ -141,9 +141,9 @@ class XmlForm_Field_toolButton extends XmlForm_Field
         $html=$this->htmlentities($this->label, ENT_QUOTES,'utf-8');
         break;
       case 'html':
-          $html='<span '.
-          ' onmouseover=\'backImage(this,"url('.htmlentities( $urlAlt, ENT_QUOTES, 'utf-8').') no-repeat")\' onmouseout=\'backImage(this,"")\'  style="width:25px;font-size:25px;line-height:25px;">'.
-						$this->label.'</span>';
+          $html='<div '.
+          ' onmouseover=\'backImage(this,"url('.htmlentities( $urlAlt, ENT_QUOTES, 'utf-8').') no-repeat")\' onmouseout=\'backImage(this,"")\'  style="width:25px;height:25px;margin-bottom:3px">'.
+						$this->label.'</div>';
 			
         //$html=$this->label;
         break;

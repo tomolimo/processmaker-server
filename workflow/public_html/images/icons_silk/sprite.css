@@ -64,7 +64,7 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 .panel_headerBar___processmaker{background:url("/skins/ext/images/gray/toolbar/bg.gif") #F0F0F0 !important}
 
 .button_menu_ext{padding-left:20px !important;height:18px !important;}
-.button_toolbar{padding-left:20px !important;height:18px !important;font-size:15px;cursor:pointer;margin:0 3px 1px 3px;}
+.button_toolbar{padding-left:20px !important;height:18px !important;font-size:15px;cursor:pointer;margin:0 3px 1px 3px;line-height:25px}
 .ss_accept{background-position:0px 0 !important}
 .ss_add{background-position:0px -19px !important}
 .ss_anchor{background-position:0px -37px !important}
