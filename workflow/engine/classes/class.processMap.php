@@ -4790,6 +4790,7 @@ class processMap {
   */
   function getExtAdditionalTablesList($sTab_UID='')
   {
+    $aAdditionalTables = array();
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
@@ -6588,5 +6589,55 @@ function saveExtEvents($oData)
   }
     return $output;
 }
+
+
+  /*
+   * Return the triggers list criteria object
+   * @param string $sProcessUID
+   * @return object
+   */
+
+  function getExtTriggers($start, $limit, $sProcessUID = '') {
+    $sDelimiter = DBAdapter::getStringDelimiter ();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(TriggersPeer::TRI_UID);
+    $oCriteria->addSelectColumn(TriggersPeer::PRO_UID);
+    $oCriteria->addAsColumn('TRI_TITLE', 'C1.CON_VALUE');
+    $oCriteria->addAsColumn('TRI_DESCRIPTION', 'C2.CON_VALUE');
+    $oCriteria->addAlias('C1', 'CONTENT');
+    $oCriteria->addAlias('C2', 'CONTENT');
+    $aConditions = array();
+    $aConditions [] = array(TriggersPeer::TRI_UID, 'C1.CON_ID');
+    $aConditions [] = array('C1.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter);
+    $aConditions [] = array('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $aConditions = array();
+    $aConditions [] = array(TriggersPeer::TRI_UID, 'C2.CON_ID');
+    $aConditions [] = array('C2.CON_CATEGORY', $sDelimiter . 'TRI_TITLE' . $sDelimiter);
+    $aConditions [] = array('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(TriggersPeer::PRO_UID, $sProcessUID);
+    $oCriteria->addAscendingOrderByColumn('TRI_TITLE');
+
+
+    $oDataset = TriggersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $triggersArray = "";
+    $triggersArray [] = array('TRI_UID' => 'char', 'PRO_UID' => 'char', 'TRI_TITLE' => 'char', 'TRI_DESCRIPTION' => 'char');
+    while ($aRow = $oDataset->getRow()) {
+
+      if (($aRow ['TRI_TITLE'] == NULL) || ($aRow ['TRI_TITLE'] == "")) { // There is no transaltion for this Trigger name, try to get/regenerate the label
+        $triggerO = new Triggers ( );
+        $triggerObj = $triggerO->load($aRow ['TRI_UID']);
+        $aRow ['TRI_TITLE'] = $triggerObj ['TRI_TITLE'];
+        $aRow ['TRI_DESCRIPTION'] = $triggerObj ['TRI_DESCRIPTION'];
+      }
+      $triggersArray [] = $aRow;
+      $oDataset->next();
+    }
+    return $triggersArray;
+
+  }
  
 }
