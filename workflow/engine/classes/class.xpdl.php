@@ -3452,10 +3452,12 @@ class Xpdl extends processes
               if($idVal['TAS_UID']==$idTask){
                 $coordinateX=$idVal['TAS_POSX'];
                 $coordinateY=$idVal['TAS_POSY'];
-                }
+                $tas_width  =$idVal['TAS_WIDTH'];
+                $tas_height =$idVal['TAS_HEIGHT'];
+              }
             }
-            $positionX=$coordinateX+62;
-            $positionY=$coordinateY+55;
+            $positionX  = $coordinateX + $tas_width/1.5 + 19;
+            $positionY  = $coordinateY + $tas_height/2;
             if($idTask != $taskParallel){
               $taskParallel = $idTask;
               $routeParallel = $sGateUID;
@@ -3493,10 +3495,12 @@ class Xpdl extends processes
               if($idVal['TAS_UID']==$nextTask){
                 $coordinateX=$idVal['TAS_POSX'];
                 $coordinateY=$idVal['TAS_POSY'];
-                }
+                $tas_width  =$idVal['TAS_WIDTH'];
+                $tas_height =$idVal['TAS_HEIGHT'];
+              }
             }
-            $positionX=$coordinateX+60;
-            $positionY=$coordinateY-45;
+            $positionX  = $coordinateX + $tas_width/1.5 + 19;
+            $positionY  = $coordinateY + $tas_height/2;
             if($nextTask != $taskSecJoin){
               $taskSecJoin  = $nextTask;
               $routeSecJoin = $sGateUID;
@@ -3534,10 +3538,12 @@ class Xpdl extends processes
               if($idVal['TAS_UID']==$idTask){
                 $coordinateX=$idVal['TAS_POSX'];
                 $coordinateY=$idVal['TAS_POSY'];
-                }
+                $tas_width  =$idVal['TAS_WIDTH'];
+                $tas_height =$idVal['TAS_HEIGHT'];
+              }
             }
-            $positionX=$coordinateX+62;
-            $positionY=$coordinateY+55;
+            $positionX  = $coordinateX + $tas_width/1.5 + 19;
+            $positionY  = $coordinateY + $tas_height/2;
             if($idTask != $taskEvaluate){
               $taskEvaluate  = $idTask;
               $routeEvaluate = $sGateUID;
@@ -3582,10 +3588,12 @@ class Xpdl extends processes
               if($idVal['TAS_UID']==$idTask){
                 $coordinateX = $idVal['TAS_POSX'];
                 $coordinateY = $idVal['TAS_POSY'];
-                }
+                $tas_width  =$idVal['TAS_WIDTH'];
+                $tas_height =$idVal['TAS_HEIGHT'];
+              }
             }
-            $positionX=$coordinateX+62;
-            $positionY=$coordinateY+55;
+            $positionX  = $coordinateX + $tas_width/1.5 + 19;
+            $positionY  = $coordinateY + $tas_height/2;
             if($idTask != $taskParallelEv){
               $taskParallelEv  = $idTask;
               $routeParallelEv = $sGateUID;
@@ -3621,12 +3629,14 @@ class Xpdl extends processes
             $coordinateY=0;
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$idTask){
-                $coordinateX=$idVal['TAS_POSX'];
-                $coordinateY=$idVal['TAS_POSY'];
+                  $coordinateX=$idVal['TAS_POSX'];
+                  $coordinateY=$idVal['TAS_POSY'];
+                  $tas_width  =$idVal['TAS_WIDTH'];
+                  $tas_height =$idVal['TAS_HEIGHT'];
                 }
             }
-            $positionX=$coordinateX+60;
-            $positionY=$coordinateY+40;
+            $positionX  = $coordinateX + $tas_width/1.5 + 19;
+            $positionY  = $coordinateY + $tas_height/2;
             if($idTask != $taskSelect){
               $taskSelect  = $idTask;
               $routeSelect = $sGateUID;
@@ -3668,12 +3678,14 @@ class Xpdl extends processes
             $optional    = $val['ROU_OPTIONAL'];
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$nextTask){
-                $coordinateX=$idVal['TAS_POSX'];
-                $coordinateY=$idVal['TAS_POSY'];
+                 $coordinateX=$idVal['TAS_POSX'];
+                 $coordinateY=$idVal['TAS_POSY'];
+                 $tas_width  =$idVal['TAS_WIDTH'];
+                 $tas_height =$idVal['TAS_HEIGHT'];
                 }
             }
-            $positionX=$coordinateX+60;
-            $positionY=$coordinateY-45;
+            $positionX  = $coordinateX + $tas_width/1.5 + 19;
+            $positionY  = $coordinateY + $tas_height/2;
             if($nextTask != $taskDiscriminator){
               $taskDiscriminator  = $nextTask;
               $routeDiscriminator = $sGateUID;
@@ -3714,19 +3726,37 @@ class Xpdl extends processes
             if($idVal['TAS_UID']==$idTask){
               $coordinateX=$idVal['TAS_POSX'];
               $coordinateY=$idVal['TAS_POSY'];
+              $tas_width  =$idVal['TAS_WIDTH'];
+              $tas_height =$idVal['TAS_HEIGHT'];
               $tas_uid    =$idVal['TAS_UID'];
-              }
+            }
           }
-          $positionX                     = $coordinateX+65;
-          $positionY                     = $coordinateY+40;
-          //$arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
-          $arrayRoutes[$countRoutes]['0']= $idRoute;
-          $arrayRoutes[$countRoutes]['1']= $idTask;
-          $arrayRoutes[$countRoutes]['2']= $nextTask;
-          $arrayRoutes[$countRoutes]['3']= $toPort;
-          $arrayRoutes[$countRoutes]['4']= $fromPort;
-          $countRoutes                   = $countRoutes + 1;
+          $positionX  = $coordinateX + $tas_width/1.5 + 19;
+          $positionY  = $coordinateY + $tas_height/2;
+          $evn_uid = $val['ROU_EVN_UID'];
+          if($evn_uid != ''){
+            $oEvent = new Event();
+            $aEvent = $oEvent->load($evn_uid);
+
+            $events[$countEvents]['0'] = $evn_uid;
+            $events[$countEvents]['1'] = $aEvent['EVN_TYPE'];
+            $events[$countEvents]['2'] = $aEvent['EVN_POSX'];
+            $events[$countEvents]['3'] = $aEvent['EVN_POSY'];
+            $events[$countEvents]['4'] = $tas_uid;
+            $countEvents               = $countEvents + 1;
+
+            $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
+            $arrayRoutes[$countRoutes]['1']= $idTask;
+            $arrayRoutes[$countRoutes]['2']= $evn_uid;
+            $arrayRoutes[$countRoutes]['3']= $toPort;
+            $arrayRoutes[$countRoutes]['4']= $fromPort;
+            $arrayRoutes[$countRoutes]['5']= $typeRoute;
+            $countRoutes                   = $countRoutes + 1;
+            $end                       = 0;
+            $endEvent                  = 0;
+          }
         }
+        //For $typeRoute Evaluate Function
         else{
           $coordinateX=0;
           $coordinateY=0;
@@ -3734,11 +3764,13 @@ class Xpdl extends processes
             if($idVal['TAS_UID']==$idTask){
               $coordinateX=$idVal['TAS_POSX'];
               $coordinateY=$idVal['TAS_POSY'];
+              $tas_width  =$idVal['TAS_WIDTH'];
+              $tas_height =$idVal['TAS_HEIGHT'];
               $tas_uid    =$idVal['TAS_UID'];
               }
           }
-          $positionX                     = $coordinateX + 120;
-          $positionY                     = $coordinateY + 40;
+          $positionX  = $coordinateX  + $tas_width/1.5 + 19;
+          $positionY   = $coordinateY + $tas_height/2;
           $idTask                        = $routeEnd;
           $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
           $arrayRoutes[$countRoutes]['1']= $idTask;
@@ -3747,15 +3779,16 @@ class Xpdl extends processes
           $arrayRoutes[$countRoutes]['4']= $fromPort;
           $arrayRoutes[$countRoutes]['5']= $typeRoute;
           $countRoutes                   = $countRoutes + 1;
+        
+          $events[$countEvents]['0'] = $idRoute;
+          $events[$countEvents]['1'] = 'bpmnEventEmptyEnd';
+          $events[$countEvents]['2'] = $positionX-25;
+          $events[$countEvents]['3'] = $positionY+35;
+          $events[$countEvents]['4'] = $tas_uid;
+          $countEvents               = $countEvents + 1;
+          $end                       = 0;
+          $endEvent                  = 0;
         }
-        $events[$countEvents]['0'] = $idRoute;
-        $events[$countEvents]['1'] = 'bpmnEventEmptyEnd';
-        $events[$countEvents]['2'] = $positionX-25;
-        $events[$countEvents]['3'] = $positionY+35;
-        $events[$countEvents]['4'] = $tas_uid;
-        $countEvents               = $countEvents + 1;
-        $end                       = 0;
-        $endEvent                  = 0;
       }
       else{ 
         if ($typeRoute == "SEQUENTIAL"){
@@ -3769,17 +3802,19 @@ class Xpdl extends processes
             if($idVal['TAS_UID']==$idTask){
               $coordinateX=$idVal['TAS_POSX'];
               $coordinateY=$idVal['TAS_POSY'];
+              $tas_width  =$idVal['TAS_WIDTH'];
+              $tas_height =$idVal['TAS_HEIGHT'];
               }
             }
-            $positionX                     = $coordinateX + 65;
-            $positionY                     = $coordinateY + 40;
+            $positionX  = $coordinateX  + $tas_width/1.5 + 19;
+            $positionY   = $coordinateY + $tas_height/2;
             
             $oEvent = new Event();
             $aEvent = $oEvent->load($evn_uid);
             $events[$countEvents]['0'] = $evn_uid;
             $events[$countEvents]['1'] = $aEvent['EVN_TYPE'];
-            $events[$countEvents]['2'] = $positionX-25;
-            $events[$countEvents]['3'] = $positionY+35;
+            $events[$countEvents]['2'] = $aEvent['EVN_POSX'];
+            $events[$countEvents]['3'] = $aEvent['EVN_POSY'];
             $countEvents               = $countEvents + 1;
 
             $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();

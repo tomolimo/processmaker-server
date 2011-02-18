@@ -1154,6 +1154,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)){
                       workflow.saveEvents(oNewShape);
                     }
+                    else if(oNewShape.type.match(/End/) && oNewShape.type.match(/Event/)){
+                      workflow.saveRoute(workflow.currentSelection,oNewShape);
+                    }
                     else if(oNewShape.type.match(/Gateway/)){
                       workflow.saveGateways(oNewShape);
                     }
@@ -1583,8 +1586,6 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
  */
 MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
 {
-    var pro_uid = this.getUrlVars();
-    
     var task_uid      = new Array();
     var next_task_uid = new Array();
     var rou_type      ='';
@@ -1603,13 +1604,12 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
         port_numberIP        = sPortTypeIP.charAt(sPortType_lenIP-1);
         port_numberOP        = sPortTypeOP.charAt(sPortType_lenOP-1);
       }
-
      if(preObj.type.match(/Task/) && newObj.type.match(/Event/) && newObj.type.match(/Inter/))
       {
          task_uid[0]      = preObj.id;
          next_task_uid[0] = newObj.task_to;
          rou_type         = 'SEQUENTIAL';
-         rou_evn_uid      = newObj.evn_uid;
+         rou_evn_uid      = newObj.id;
       }
       //If both the Object are Task
       else if(preObj.type.match(/Task/) && newObj.type.match(/Task/))
@@ -1622,23 +1622,17 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
       {
         //this.deleteRoute(newObj.conn,1);
         if(newObj.reverse == 1)      //Reverse Routing
-            task_uid[0]      = newObj.id;
+            task_uid[0]  = newObj.id;
         else
-            task_uid[0]      = preObj.id;
+            task_uid[0]  = preObj.id;
+
         next_task_uid[0] = '-1';
+
         rou_type         = 'SEQUENTIAL';
+        rou_evn_uid      = newObj.id;
       }
-      /*else if(preObj.type.match(/Event/) && preObj.type.match(/End/) && newObj.type.match(/Task/))
-      {
-        this.deleteRoute(newObj.conn,1);
-        task_uid[0]      = newObj.id;
-        next_task_uid[0] = '-1';
-        rou_type         = 'SEQUENTIAL';
-      }*/
       else if(preObj.type.match(/Gateway/))
       {
-//         var task_uid = new Array();
-//         var next_task_uid = new Array();
          switch(preObj.type){
             case  'bpmnGatewayParallel':
                     rou_type ='PARALLEL';
@@ -1706,13 +1700,6 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                                 var resp = response.responseText;     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
                                 newObj.conn.html.id = resp;
                                 newObj.conn.id = resp;
-
-                                //replacing old gateway UID with response UID
-                                /*if(! preObj.type.match(/Task/))
-                                    {
-                                        preObj.html.id = resp[0];
-                                        preObj.id = resp[0];
-                                    }*/
                             }
                         }
                     },
@@ -1722,12 +1709,12 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
                     params: {
                             action        :'savePattern',
                             PROCESS       : pro_uid,
-                            TASK          :staskUid,
-                            ROU_NEXT_TASK :sNextTaskUid,
-                            ROU_TYPE      :rou_type,
-                            ROU_EVN_UID   :rou_evn_uid,
-                            PORT_NUMBER_IP:port_numberIP,
-                            PORT_NUMBER_OP:port_numberOP,
+                            TASK          : staskUid,
+                            ROU_NEXT_TASK : sNextTaskUid,
+                            ROU_TYPE      : rou_type,
+                            ROU_EVN_UID   : rou_evn_uid,
+                            PORT_NUMBER_IP: port_numberIP,
+                            PORT_NUMBER_OP: port_numberOP,
                             GAT_UID       : sGatUid,
                             GAT_TYPE      : sGatType,
                             mode:'Ext'

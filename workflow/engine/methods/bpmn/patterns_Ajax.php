@@ -38,6 +38,7 @@ if($aData['ROU_TYPE'] != 'SEQUENTIAL')
     $oProcessMap = new processMap();
     //$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
     $oGateway = new Gateway ( );
+    
     $aGatewayFields  = array();
     $aGatewayFields['GAT_UID']  = $aData['GAT_UID'];
     $aGatewayFields['TAS_UID']  = $aData['TASK'][0];
@@ -56,42 +57,38 @@ $rou_id = 0;
 $aFields['GAT_UID']          = $aData['GAT_UID'];
 switch ($aData['action']) {
 	case 'savePattern':
-	  //if ($aData['ROU_TYPE'] != $aData['ROU_TYPE_OLD'])
-	  //{
              foreach ($aData['TASK'] as $iKey => $aRow)
-	  	  {
-                        $oTasks->deleteAllRoutesOfTask($aData['PROCESS'], $aRow);
-                  }
-	  //}
+	     {
+               $oTasks->deleteAllRoutesOfTask($aData['PROCESS'], $aRow);
+             }
 	  require_once 'classes/model/Route.php';
+	  require_once 'classes/model/Event.php';
+          $oEvent = new Event ( );
 	  $oRoute = new Route();
 	  switch ($aData['ROU_TYPE']) {
 	  	case 'SEQUENTIAL':
                 case 'SEC-JOIN':
-        /*if ($aData['ROU_UID'] != '')
-        {
-	  	    $aFields['ROU_UID'] = $aData['ROU_UID'];
-	  	  }*/
 	  	  $aFields['PRO_UID']          = $aData['PROCESS'];
 	  	  $aFields['TAS_UID']          = $aData['TASK'][0];
 	  	  $aFields['ROU_NEXT_TASK']    = $aData['ROU_NEXT_TASK'][0];
 	  	  $aFields['ROU_TYPE']         = $aData['ROU_TYPE'];
-                  if(isset($aData['ROU_EVN_UID']))
+                  if(isset($aData['ROU_EVN_UID'])){
                     $aFields['ROU_EVN_UID']    = $aData['ROU_EVN_UID'];
+                    $aDataEvent = array();
+                    $aDataEvent['EVN_UID']          = $aData['ROU_EVN_UID'];
+                    $aDataEvent['EVN_TAS_UID_FROM'] = $aData['TASK'][0];
+                    $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
+                    $oEvent->update($aDataEvent);
+                  }
                   if(isset($aData['PORT_NUMBER_IP']))
                     $aFields['ROU_TO_PORT']    = $aData['PORT_NUMBER_IP'];
                   if(isset($aData['PORT_NUMBER_OP']))
                     $aFields['ROU_FROM_PORT']  = $aData['PORT_NUMBER_OP'];
-	  	  //$aFields['ROU_TO_LAST_USER'] = $aData['ROU_TO_LAST_USER'];
 	  	  $rou_id = $oRoute->create($aFields);
 	  	break;
 	  	case 'SELECT':
 	  	  foreach ($aData['GRID_SELECT_TYPE'] as $iKey => $aRow)
 	  	  {
-	  	  	/*if ($aRow['ROU_UID'] != '')
-          {
-	  	      $aFields['ROU_UID'] = $aRow['ROU_UID'];
-	  	    }*/
 	  	    $aFields['PRO_UID']          = $aData['PROCESS'];
 	  	    $aFields['TAS_UID']          = $aData['TASK'];
 	  	    $aFields['ROU_NEXT_TASK']    = $aRow;
@@ -101,8 +98,6 @@ switch ($aData['action']) {
                       $aFields['ROU_TO_PORT']      = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))
                       $aFields['ROU_FROM_PORT']    = $aData['PORT_NUMBER_OP'];
-	  	  //  $aFields['ROU_CONDITION']    = $aRow['ROU_CONDITION'];
-	  	    //$aFields['ROU_TO_LAST_USER'] = $aRow['ROU_TO_LAST_USER'];
 	  	    $rou_id = $oRoute->create($aFields);
 	  	    unset($aFields);
 	  	  }
@@ -130,10 +125,6 @@ switch ($aData['action']) {
 	  	case 'PARALLEL':
 	  	  foreach ($aData['ROU_NEXT_TASK'] as $iKey => $aRow)
 	  	  {
-	  	  	/*if ($aRow['ROU_UID'] != '')
-          {
-	  	      $aFields['ROU_UID'] = $aRow['ROU_UID'];
-	  	    }*/
 	  	    $aFields['PRO_UID']       = $aData['PROCESS'];
 	  	    $aFields['TAS_UID']       = $aData['TASK'][0];
 	  	    $aFields['ROU_NEXT_TASK'] = $aRow;
@@ -153,11 +144,6 @@ switch ($aData['action']) {
 	  	case 'PARALLEL-BY-EVALUATION':
 	  	  foreach ($aData['ROU_NEXT_TASK'] as $iKey => $aRow)
 	  	  {
-	  	  	/*if ($aRow['ROU_UID'] != '')
-          {
-	  	      $aFields['ROU_UID'] = $aRow['ROU_UID'];
-	  	    }*/
-
 	  	    $aFields['PRO_UID']       = $aData['PROCESS'];
 	  	    $aFields['TAS_UID']       = $aData['TASK'][0];
 	  	    $aFields['ROU_NEXT_TASK'] = $aRow;
@@ -169,8 +155,6 @@ switch ($aData['action']) {
                       $aFields['ROU_TO_PORT']  = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))
                       $aFields['ROU_FROM_PORT']= $aData['PORT_NUMBER_OP'];
-	  	 //   $aFields['ROU_CONDITION'] = $aRow['ROU_CONDITION'];
-                  //  $aFields['ROU_OPTIONAL'] =  $aRow['ROU_OPTIONAL'];
                     $rou_id = $oRoute->create($aFields);
 	  	    unset($aFields);
 	  	  }
@@ -189,14 +173,10 @@ switch ($aData['action']) {
                       $aFields['ROU_TO_PORT'] = $aData['PORT_NUMBER_IP'];
                     if(isset($aData['PORT_NUMBER_OP']))
                       $aFields['ROU_FROM_PORT'] = $aData['PORT_NUMBER_OP'];
-	  	   // $aFields['ROU_CONDITION'] = $aRow['ROU_CONDITION'];
-	  	   // $aFields['ROU_OPTIONAL'] =  $aRow['ROU_OPTIONAL'];
                     $routeData = $oTasks->getRouteByType($aData['PROCESS'], $aData['ROU_NEXT_TASK'][0], $aData['ROU_TYPE']);
                     foreach($routeData as $route)
                     {
                         $sFields['ROU_UID'] = $route['ROU_UID'];
-                      //  $sFields['ROU_CONDITION'] = $aRow['ROU_CONDITION'];
-                     //   $sFields['ROU_OPTIONAL'] =  $aRow['ROU_OPTIONAL'];
                         $rou_id = $oRoute->update($sFields);
                     }
 	  	    $rou_id =$oRoute->create($aFields);

@@ -139,7 +139,7 @@
          $fields['TRANSITION'][$countRoutes]['4']= '1';
          $countRoutes              = $countRoutes + 1;
        }
-       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] != ''){  //Check for Intermediate Events
+       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_FROM'] != '' && ! preg_match("/End/", $value['EVN_TYPE'])){  //Check for Intermediate Events
          $evn_uid = $value['EVN_UID'];
          $idTask = $value['EVN_TAS_UID_FROM'];
 
@@ -173,12 +173,28 @@
    
    foreach($oData->gateways as $id => $value)
    {
-     if($value['GAT_NEXT_TASK'] == '' && $value['TAS_UID'] == ''){
+      if($value['GAT_NEXT_TASK'] != '' && $value['TAS_UID'] != ''){
        $fields['GATEWAYS'][$countGateway]['0']   = $value['GAT_UID'];
        $fields['GATEWAYS'][$countGateway]['1']   = $value['GAT_TYPE'];
        $fields['GATEWAYS'][$countGateway]['2']   = $value['GAT_X'];
        $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
-       $countGateway += 1;
+       $fields['GATEWAYS'][$countGateway]['4']   = $value['TAS_UID'];
+       $fields['GATEWAYS'][$countGateway]['5']   = $value['TAS_UID'];
+       $countGateway+=1;
+       
+       $fields['TRANSITION'][$countTransitions]['0'] = G::generateUniqueID();
+       $fields['TRANSITION'][$countTransitions]['1'] = $value['TAS_UID'];
+       $fields['TRANSITION'][$countTransitions]['2'] = $value['GAT_UID'];
+       $fields['TRANSITION'][$countTransitions]['3'] = '1';
+       $fields['TRANSITION'][$countTransitions]['4'] = '2';
+       $countTransitions += 1;
+
+       $fields['TRANSITION'][$countTransitions]['0'] = G::generateUniqueID();
+       $fields['TRANSITION'][$countTransitions]['1'] = $value['GAT_UID'];
+       $fields['TRANSITION'][$countTransitions]['2'] = $value['GAT_NEXT_TASK'];
+       $fields['TRANSITION'][$countTransitions]['3'] = '2';
+       $fields['TRANSITION'][$countTransitions]['4'] = '1';
+       $countTransitions += 1;
      }
      //creating gateway and route from gateway to task i.e if target task is not NULL
      else if($value['GAT_NEXT_TASK'] != '' && $value['TAS_UID'] == ''){
@@ -188,7 +204,7 @@
        $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
        $fields['GATEWAYS'][$countGateway]['4']   = $value['TAS_UID'];
        $fields['GATEWAYS'][$countGateway]['5']   = $value['GAT_NEXT_TASK'];
-       
+
        $fields['TRANSITION'][$countTransitions]['0'] = G::generateUniqueID();
        $fields['TRANSITION'][$countTransitions]['1'] = $value['GAT_UID'];
        $fields['TRANSITION'][$countTransitions]['2'] = $value['GAT_NEXT_TASK'];
@@ -214,37 +230,12 @@
        $countGateway+=1;
        $countTransitions += 1;
      }
-     else if($value['GAT_NEXT_TASK'] != '' && $value['TAS_UID'] != ''){
+     else if($value['GAT_NEXT_TASK'] == '' && $value['TAS_UID'] == ''){
        $fields['GATEWAYS'][$countGateway]['0']   = $value['GAT_UID'];
        $fields['GATEWAYS'][$countGateway]['1']   = $value['GAT_TYPE'];
        $fields['GATEWAYS'][$countGateway]['2']   = $value['GAT_X'];
        $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
-       $fields['GATEWAYS'][$countGateway]['4']   = $value['TAS_UID'];
-       $fields['GATEWAYS'][$countGateway]['5']   = $value['TAS_UID'];
-       $countGateway+=1;
-
-       $fields['GATEWAYS'][$countGateway]['0']   = $value['GAT_UID'];
-       $fields['GATEWAYS'][$countGateway]['1']   = $value['GAT_TYPE'];
-       $fields['GATEWAYS'][$countGateway]['2']   = $value['GAT_X'];
-       $fields['GATEWAYS'][$countGateway]['3']   = $value['GAT_Y'];
-       $fields['GATEWAYS'][$countGateway]['4']   = $value['TAS_UID'];
-       $fields['GATEWAYS'][$countGateway]['5']   = $value['GAT_NEXT_TASK'];
-       $countGateway+=1;
-
-       $fields['TRANSITION'][$countTransitions]['0'] = G::generateUniqueID();
-       $fields['TRANSITION'][$countTransitions]['1'] = $value['TAS_UID'];
-       $fields['TRANSITION'][$countTransitions]['2'] = $value['GAT_UID'];
-       $fields['TRANSITION'][$countTransitions]['3'] = '1';
-       $fields['TRANSITION'][$countTransitions]['4'] = '2';
-       $countTransitions += 1;
-
-
-       $fields['TRANSITION'][$countTransitions]['0'] = G::generateUniqueID();
-       $fields['TRANSITION'][$countTransitions]['1'] = $value['GAT_UID'];
-       $fields['TRANSITION'][$countTransitions]['2'] = $value['GAT_NEXT_TASK'];
-       $fields['TRANSITION'][$countTransitions]['3'] = '2';
-       $fields['TRANSITION'][$countTransitions]['4'] = '1';
-       $countTransitions += 1;
+       $countGateway += 1;
      }
    }
    //$subProcess         = $oProcess->createSubProcessesPM($oData->subProcess);

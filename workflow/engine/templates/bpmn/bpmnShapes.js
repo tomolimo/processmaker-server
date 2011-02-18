@@ -383,7 +383,6 @@ OutputPort.prototype.onDrop = function (port) {
         var preObj = new Array();
         var bpmnType = this.workflow.currentSelection.type;
        if(bpmnType.match(/Event/) && port.parentNode.type.match(/Task/)){
-
           var tas_uid = port.parentNode.id;
           this.workflow.saveEvents(this.workflow.currentSelection,tas_uid);
 
@@ -393,17 +392,7 @@ OutputPort.prototype.onDrop = function (port) {
           newObj.conn = _4070.connection;
           this.workflow.saveRoute(preObj,newObj);
        }else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
-          //var taskFrom = workflow.getStartEventConn(this,'sourcePort','InputPort');
-          //var taskTo =  workflow.getStartEventConn(this,'targetPort','OutputPort');
-
-          //if(typeof taskFrom[0] != 'undefined' || typeof taskTo[0] != 'undefined'){
-             //preObj.type = 'Task';
-             //preObj.taskFrom = taskFrom[0].value;
-             //preObj.taskTo = taskTo[0].value;
-             //save Event First
-           //  tas_uid = port.parentNode.id;
              this.workflow.saveEvents(workflow.currentSelection);
-         // }
        }else if(port.parentNode.type.match(/Event/) && port.parentNode.type.match(/Inter/) && bpmnType.match(/Task/)){
           this.workflow.saveEvents(port.parentNode);
        }
@@ -809,11 +798,11 @@ bpmnTask.prototype.addShapes = function (oStore) {
         newShape.conn = conn;
         workflow.saveShape(newShape); //Saving Task automatically (Async Ajax Call)
     }
-    if (oStore.newShapeName.match(/Event/) && oStore.newShapeName.match(/End/)) {
+    /*if (oStore.newShapeName.match(/Event/) && oStore.newShapeName.match(/End/)) {
         newShape.conn = conn;
         workflow.saveRoute(workflow.currentSelection,newShape);
-    }
-    else if (oStore.newShapeName == 'bpmnTask') {
+    }*/
+    if (oStore.newShapeName == 'bpmnTask') {
         newShape.actiontype = 'addTask';
         newShape.conn = conn;
         workflow.saveShape(newShape); //Saving Task automatically (Async Ajax Call)

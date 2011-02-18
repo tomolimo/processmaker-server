@@ -907,12 +907,7 @@ Ext.onReady ( function() {
           }
           for(var conn =0; conn < this.workflow.figures.data.length ; conn++){
               if(typeof this.workflow.figures.data[conn] === 'object'){
-                  //If End Process or Evaluate
-                  if(targetid == '-1' || typeof shapes.routes[i][5] != 'undefined' && shapes.routes[i][5] == 'EVALUATE'){
-                      targetObj = eval("new bpmnEventEmptyEnd (this.workflow)");
-                      this.workflow.addFigure(targetObj,sourceObj.x+67,sourceObj.y+60);
-                      break;
-                  }else if(targetid == this.workflow.figures.data[conn].id ){
+                  if(targetid == this.workflow.figures.data[conn].id ){
                       targetObj = this.workflow.figures.data[conn];
                   }
               }
@@ -1041,7 +1036,7 @@ Ext.onReady ( function() {
                       for(var k=0;k<shapes.events.length;k++){
                           var srceventtype = shapes.events[k][1];
                           var tas_uid = shapes.events[k][4];
-                          if(! srceventtype.match(/End/) && tas_uid != '')
+                          if(tas_uid != '')
                           {
                               NewShape = eval("new "+srceventtype+"(workflow)");
                               NewShape.x = shapes.events[k][2];
