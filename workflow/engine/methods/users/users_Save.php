@@ -73,6 +73,9 @@ try {
   if (!isset($form['USR_LOCATION'])) {
     $form['USR_LOCATION'] = '';
   }
+  if (!isset($form['USR_AUTH_USER_DN'])) {
+    $form['USR_AUTH_USER_DN'] = '';
+  }
   if ($form['USR_UID'] == '') {
     $aData['USR_USERNAME']    = $form['USR_USERNAME'];
     $aData['USR_PASSWORD']    = $form['USR_PASSWORD'];
@@ -83,6 +86,7 @@ try {
     $aData['USR_CREATE_DATE'] = date('Y-m-d H:i:s');
     $aData['USR_UPDATE_DATE'] = date('Y-m-d H:i:s');
     $aData['USR_BIRTHDAY']    = date('Y-m-d');
+    $aData['USR_AUTH_USER_DN'] = $form['USR_AUTH_USER_DN'];
     //fixing bug in inactive user when the admin create a new user.
     $statusWF = $form['USR_STATUS'];
     $aData['USR_STATUS']      = $form['USR_STATUS'] == 'ACTIVE' ? 1 : 0;
@@ -100,6 +104,7 @@ try {
     $aData['USR_RESUME']      = $form['USR_RESUME'];
     $aData['USR_ROLE']        = $form['USR_ROLE'];
     $aData['USR_REPLACED_BY'] = $form['USR_REPLACED_BY'];
+    
 
     require_once 'classes/model/Users.php';
     $oUser = new Users();
@@ -230,6 +235,9 @@ try {
     
     if(isset($form['USR_REPLACED_BY'])){
       $aData['USR_REPLACED_BY'] = $form['USR_REPLACED_BY'];      
+    }
+    if(isset($form['USR_AUTH_USER_DN'])){
+      $aData['USR_AUTH_USER_DN'] = $form['USR_AUTH_USER_DN'];
     }
     
     require_once 'classes/model/Users.php';

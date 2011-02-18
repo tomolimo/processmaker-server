@@ -62,7 +62,7 @@ class Installer
   
   function setServerData($psServer, $psPort, $psUserName, $psPassword )
   {
-    $this->server   = $psServer;
+    $this->server   = $psServer.':'.$psPort;
     $this->port     = $psPort;
     $this->userName = $psUserName;
     $this->password = $psPassword;

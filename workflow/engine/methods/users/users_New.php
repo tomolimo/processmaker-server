@@ -91,7 +91,7 @@ try {
   $_SESSION['_DBArray'] = $_DBArray;
 /////////////////////////////
 
-  
+   //var_dump($aFields);
   $G_PUBLISH             = new Publisher;
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_New.xml', '', $aFields, 'users_Save');
   G::RenderPage('publish','blank');
