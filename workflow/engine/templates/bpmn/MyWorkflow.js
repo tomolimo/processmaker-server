@@ -374,8 +374,7 @@ MyWorkflow.prototype.toggleShapes=function(item)
             {
                 for(var j = 0; j < conn[i].data.length ; j++)
                    {
-                    if(typeof conn[i].data[j] != 'undefined')
-                        {
+                    if(typeof conn[i].data[j] != 'undefined') {
                             sourceNode[countConn] = conn[i].data[j].sourcePort.parentNode;
                             targetNode[countConn] = conn[i].data[j].targetPort.parentNode;
                             sourcePortName[countConn] = conn[i].data[j].sourcePort.properties.name;
@@ -391,20 +390,20 @@ MyWorkflow.prototype.toggleShapes=function(item)
         var x =item.scope.workflow.currentSelection.getX();  //Get x co-ordinate from figure
         var y =item.scope.workflow.currentSelection.getY();  //Get y co-ordinate from figure
         
-        if(item.type == 'bpmnEventBoundaryTimerInter'){
+        if(item.type == 'bpmnEventBoundaryTimerInter') {
             workflow.currentSelection.boundaryEvent = true;
             workflow.taskName = oldWorkflow.taskName;
             var newShape = workflow.currentSelection;
             newShape.setDimension(newShape.getWidth(),newShape.getHeight());
         }
-        else if(item.type == 'bpmnSubProcess'){
+        else if(item.type == 'bpmnSubProcess') {
                 workflow.subProcessName = 'Sub Process';
                 newShape = eval("new "+item.type+"(this.workflow)");
         }
         else
             newShape = eval("new "+item.type+"(this.workflow)");
 
-        if(item.type != 'bpmnEventBoundaryTimerInter'){
+        if(item.type != 'bpmnEventBoundaryTimerInter') {
             this.workflow.addFigure(newShape,x,y); //Add New Selected Shape First
             //Delete Old Shape
             item.scope.workflow.getCommandStack().execute(new CommandDelete(oldWorkflow));
@@ -423,11 +422,11 @@ MyWorkflow.prototype.toggleShapes=function(item)
               }
         }
         //Saving Asynchronously deleted shape and new created shape into DB
-        if(item.type.match(/Boundary/)){
+        if(item.type.match(/Boundary/)) {
             newShape.actiontype = 'updateTask';
             workflow.saveShape(newShape);
         }
-        if(newShape.type.match(/Event/) && !item.type.match(/Boundary/)){
+        if(newShape.type.match(/Event/) && !item.type.match(/Boundary/)) {
            newShape.mode = 'ddEvent';
            newShape.actiontype = 'addEvent';
            //Set the Old Id to the Newly created Event
@@ -435,7 +434,7 @@ MyWorkflow.prototype.toggleShapes=function(item)
            newShape.id = oldWorkflow.id;
            newShape.workflow.saveShape(newShape);
          }
-         if(newShape.type.match(/Gateway/)){
+         if(newShape.type.match(/Gateway/)) {
            newShape.mode = 'ddGateway';
            newShape.actiontype = 'addGateway';
            //Set the Old Id to the Newly created Gateway
@@ -444,13 +443,13 @@ MyWorkflow.prototype.toggleShapes=function(item)
            newShape.workflow.saveShape(newShape);
          }
          //Swapping from Task to subprocess and vice -versa
-         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/)){
+         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !item.type.match(/Boundary/)) {
            newShape.actiontype = 'addSubProcess';
            if(newShape.type == 'bpmnTask')
              newShape.actiontype = 'addTask';
            newShape.workflow.saveShape(newShape);
          }
-         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !item.type.match(/Boundary/) ){
+         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !item.type.match(/Boundary/)) {
            this.actiontype = 'deleteTask';
            this.noAlert    = true;
            if(this.type == 'bpmnSubProcess')
@@ -477,15 +476,13 @@ MyWorkflow.prototype.swapTaskSubprocess=function(itemObj)
             newShape = eval("new "+itemObj.type+"(this.workflow)");
 
          //Swapping from Task to subprocess and vice -versa
-         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !itemObj.type.match(/Boundary/))
-         {
+         if((newShape.type == 'bpmnSubProcess' || newShape.type == 'bpmnTask') && !itemObj.type.match(/Boundary/)) {
              newShape.actiontype = 'addSubProcess';
              if(newShape.type == 'bpmnTask')
                  newShape.actiontype = 'addTask';
               newShape.workflow.saveShape(newShape);
          }
-         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !itemObj.type.match(/Boundary/) )
-         {
+         if((this.type == 'bpmnTask' || this.type == 'bpmnSubProcess') && !itemObj.type.match(/Boundary/)) {
              this.actiontype = 'deleteTask';
              this.noAlert    = true;
              if(this.type == 'bpmnSubProcess')
@@ -525,8 +522,7 @@ MyWorkflow.prototype.checkConnectionsExist=function(port,portType,portTypeName)
                 if(typeof conn[i] != 'undefined')
                 for(var j = 0; j < conn[i].data.length ; j++)
                    {
-                     if(typeof conn[i].data[j] != 'undefined')
-                        {
+                     if(typeof conn[i].data[j] != 'undefined') {
                             portParentId[countConn] = eval('conn[i].data[j].'+portType+'.parentNode.id');
                             portName[countConn] = eval('conn[i].data[j].'+portType+'.properties.name');
                             countConn++;
@@ -770,16 +766,16 @@ MyWorkflow.prototype.disablePorts=function(oShape)
 {
   if(oShape.type != ''){
     var ports ='';
-    if(oShape.type.match(/Task/) || oShape.type.match(/Gateway/) || oShape.type.match(/Inter/) || oShape.type.match(/SubProcess/)){
+    if(oShape.type.match(/Task/) || oShape.type.match(/Gateway/) || oShape.type.match(/Inter/) || oShape.type.match(/SubProcess/)) {
       ports = ['output1','input1','output2','input2'];
     }
-    else if(oShape.type.match(/End/)){
+    else if(oShape.type.match(/End/)) {
       ports = ['input1','input2'];
     }
-    else if(oShape.type.match(/Start/)){
+    else if(oShape.type.match(/Start/)) {
       ports = ['output1','output2'];
     }
-    else if(oShape.type.match(/Annotation/)){
+    else if(oShape.type.match(/Annotation/)) {
       ports = ['input1'];
     }
     for(var i=0; i< ports.length ; i++){
@@ -800,7 +796,8 @@ MyWorkflow.prototype.enablePorts=function(oShape,aPort)
   /*Setting Background ,border and Z-order of the flow menu back to original when clicked
    *on the shape
   **/
-  for(var i=0; i< aPort.length ; i++){
+  for(var i=0; i< aPort.length ; i++)
+  {
     if(aPort[i].match(/input/))
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(245, 115, 115))');
     else
@@ -808,7 +805,7 @@ MyWorkflow.prototype.enablePorts=function(oShape,aPort)
 
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setColor(new Color(90, 150, 90))');
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setZOrder(50000)');
-     }
+  }
 }
 
 /**
@@ -822,14 +819,15 @@ MyWorkflow.prototype.disableFlowMenu =function(oShape,aPort)
   /*Setting Background ,border and Z-order of the flow menu back to original when clicked
    *on the shape
    */
-  for(var i=0; i< aPort.length ; i++){
+  for(var i=0; i< aPort.length ; i++)
+  {
     if(aPort[i].match(/input/))
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(245, 115, 115))');
     else
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(115, 115, 245))');
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setColor(new Color(90, 150, 90))');
         eval('oShape.workflow.currentSelection.'+aPort[i]+'.setZOrder(50000)');
-     }
+  }
 }
 
 /**
@@ -860,20 +858,20 @@ MyWorkflow.prototype.handleContextMenu=function(oShape)
    // pmosExtObj.loadDynaforms(oShape);
 
      if(oShape.type != ''){
-        if(oShape.type.match(/Task/)){
+        if(oShape.type.match(/Task/)) {
             oShape.workflow.taskid = new Array();
             oShape.workflow.taskid.value = oShape.id;
              pmosExtObj.loadTask(oShape);
             oShape.workflow.AddTaskContextMenu(oShape);
         }
-        else if(oShape.type.match(/Start/)){
+        else if(oShape.type.match(/Start/)) {
             oShape.workflow.taskUid = oShape.workflow.getStartEventConn(oShape,'targetPort','OutputPort');
             pmosExtObj.loadDynaforms(oShape);
             if(oShape.type.match(/Message/))
                 pmosExtObj.loadWebEntry(oShape);
             oShape.workflow.AddEventStartContextMenu(oShape);
         }
-        else if(oShape.type.match(/Inter/)){
+        else if(oShape.type.match(/Inter/)) {
             oShape.workflow.taskUidFrom = oShape.workflow.getStartEventConn(oShape,'sourcePort','InputPort');
             //oShape.workflow.taskid =  oShape.workflow.taskUid[0];
             oShape.workflow.taskUidTo = oShape.workflow.getStartEventConn(oShape,'targetPort','OutputPort');
@@ -882,14 +880,14 @@ MyWorkflow.prototype.handleContextMenu=function(oShape)
             pmosExtObj.getTriggerList(oShape);
             oShape.workflow.AddEventInterContextMenu(oShape);
         }
-        else if(oShape.type.match(/End/)){
+        else if(oShape.type.match(/End/)) {
             oShape.workflow.taskUid = oShape.workflow.getStartEventConn(oShape,'sourcePort','InputPort');
             oShape.workflow.AddEventEndContextMenu(oShape);
         }
-        else if(oShape.type.match(/Gateway/)){
+        else if(oShape.type.match(/Gateway/)) {
             oShape.workflow.AddGatewayContextMenu(oShape);
         }
-        else if(oShape.type.match(/SubProcess/)){
+        else if(oShape.type.match(/SubProcess/)) {
             oShape.workflow.AddSubProcessContextMenu(oShape);
         }
     }
@@ -920,43 +918,34 @@ MyWorkflow.prototype.getCommonConnections = function(oShape)
          //var temp1 = eval("this.workflow.commonPorts.data["+i+"].parentNode.output"+count+".getConnections()");
          var tester = oShape.workflow.commonPorts.data;
          var temp1 = eval("oShape.workflow.commonPorts.data["+j+"].getConnections()");
-            if(temp1.data[0]){
-                if(routes[j])
-                    {
-                       if(routes[j][1] != temp1.data[0].sourcePort.parentNode.id)
-                       {
-                           routes[j] = new Array(3);
-                           routes[j][0] = temp1.data[0].id;
-                           routes[j][1] = temp1.data[0].sourcePort.parentNode.id;
-                           routes[j][2] = temp1.data[0].targetPort.parentNode.id;
-                           routes[j][3] = temp1.data[0].targetPort.properties.name;
-                           routes[j][4] = temp1.data[0].sourcePort.properties.name;
-                       }
-                    }
-                 else
-                    {
-                        routes[j] = new Array(3);
-                        routes[j][0] = temp1.data[0].id;
-                        routes[j][1] = temp1.data[0].sourcePort.parentNode.id;
-                        routes[j][2] = temp1.data[0].targetPort.parentNode.id;
-                        routes[j][3] = temp1.data[0].targetPort.properties.name;
-                        routes[j][4] = temp1.data[0].sourcePort.properties.name;
-                     }
-             }
-	//j++;
-//            while(routes[j])
-//            {
-//                j++
-//            };
-//            j--;
+            if(temp1.data[0]) {
+              if(routes[j]) {
+                if(routes[j][1] != temp1.data[0].sourcePort.parentNode.id) {
+                  routes[j] = new Array(3);
+                  routes[j][0] = temp1.data[0].id;
+                  routes[j][1] = temp1.data[0].sourcePort.parentNode.id;
+                  routes[j][2] = temp1.data[0].targetPort.parentNode.id;
+                  routes[j][3] = temp1.data[0].targetPort.properties.name;
+                  routes[j][4] = temp1.data[0].sourcePort.properties.name;
+                }
+              }
+              else {
+                     routes[j] = new Array(3);
+                     routes[j][0] = temp1.data[0].id;
+                     routes[j][1] = temp1.data[0].sourcePort.parentNode.id;
+                     routes[j][2] = temp1.data[0].targetPort.parentNode.id;
+                     routes[j][3] = temp1.data[0].targetPort.properties.name;
+                     routes[j][4] = temp1.data[0].sourcePort.properties.name;
+              }
+            }
     }
     var j = 0;
     var serial = new Array();
     for(key in routes)
     {
-        if(typeof routes[key] === 'object'){
-        serial[j] = routes[key];
-        j++;
+        if(typeof routes[key] === 'object') {
+          serial[j] = routes[key];
+          j++;
         }
     }
     var routes = serial.getUniqueValues();
@@ -1148,16 +1137,16 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type == 'bpmnSubProcess'){
                       oNewShape.subProcessName = this.workflow.newTaskInfo.label;
                     }
-                    else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Start/)){
+                    else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Start/)) {
                       workflow.saveEvents(oNewShape);
                     }
-                    else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)){
+                    else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)) {
                       workflow.saveEvents(oNewShape);
                     }
-                    else if(oNewShape.type.match(/End/) && oNewShape.type.match(/Event/)){
+                    else if(oNewShape.type.match(/End/) && oNewShape.type.match(/Event/)) {
                       workflow.saveRoute(workflow.currentSelection,oNewShape);
                     }
-                    else if(oNewShape.type.match(/Gateway/)){
+                    else if(oNewShape.type.match(/Gateway/)) {
                       workflow.saveGateways(oNewShape);
                     }
                }
@@ -1171,31 +1160,27 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
 
 MyWorkflow.prototype.saveTask= function(actiontype,xpos,ypos)
 {
-    if(actiontype != '')
-        {
+    if(actiontype != '') {
             var pro_uid = this.getUrlVars();
             var actiontype = actiontype;
             var pos = '{"x":'+xpos+',"y":'+ypos+'}';
-            switch(actiontype)
-            {
+            switch(actiontype) {
                 case 'addTask':
                     urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
                     break;
-
             }
              Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
                     success: function(response) {
                         //Ext.Msg.alert (response.responseText);
-                          if(response.responseText != 1 && response.responseText != "")
-                           {
-                               workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
-                               workflow.taskName = this.workflow.newTaskInfo.label;
-                               workflow.task  = eval("new bpmnTask(workflow) ");
-                               workflow.addFigure(workflow.task, xpos, ypos);
-                               workflow.task.html.id = workflow.newTaskInfo.uid;
-                               workflow.task.id = workflow.newTaskInfo.uid;
-                           }
+                          if(response.responseText != 1 && response.responseText != "") {
+                            workflow.newTaskInfo = Ext.util.JSON.decode(response.responseText);
+                            workflow.taskName = this.workflow.newTaskInfo.label;
+                            workflow.task  = eval("new bpmnTask(workflow) ");
+                            workflow.addFigure(workflow.task, xpos, ypos);
+                            workflow.task.html.id = workflow.newTaskInfo.uid;
+                            workflow.task.id = workflow.newTaskInfo.uid;
+                          }
                        }
                     })
         }
@@ -1868,6 +1853,12 @@ MyWorkflow.prototype.zoom = function(sType)
    var xPos =  fig.orgXPos * sType;
    var yPos =  fig.orgYPos * sType;
    if(fig.type == 'bpmnTask'){
+       if (fig.getWidth() > 200 || this.getHeight() > 100) {
+            fig.limitFlag = false;
+       }
+       if (this.getWidth() < 165 || this.getHeight() < 40) {
+            fig.limitFlag = false;
+       }
       fig.fontSize = parseInt(fig.orgFontSize) * sType;
       //fig.bpmnText.drawStringRect(fig.taskName, fig.padleft, fig.padtop, fig.rectWidth, fig.rectheight, 'center');
       fig.bpmnText.paint();

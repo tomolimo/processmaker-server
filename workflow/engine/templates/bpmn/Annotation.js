@@ -66,8 +66,8 @@ bpmnAnnotation.prototype.paint = function () {
     this.graphics.drawLine(this.getWidth()/4,0,0,0);
     this.graphics.drawLine(0,0,0,this.getHeight());
     this.graphics.drawLine(0,this.getHeight(),this.getWidth()/4,this.getHeight());
-    this.graphics.setStroke(Stroke.DOTTED);
-    this.graphics.drawLine(0,this.getHeight()/2,-this.getWidth()/2,-this.getHeight()/4);
+    //this.graphics.setStroke(Stroke.DOTTED);
+    //this.graphics.drawLine(0,this.getHeight()/2,-this.getWidth()/2,-this.getHeight()/4);
     this.graphics.paint();
   
     /* New object is created to implement changing of Text functionality

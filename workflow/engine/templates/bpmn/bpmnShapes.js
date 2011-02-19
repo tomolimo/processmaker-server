@@ -6,12 +6,12 @@ bpmnTask = function (oWorkflow) {
    }
    //Getting width and height from DB
    if(typeof oWorkflow.task_width != 'undefined' && typeof oWorkflow.task_height != 'undefined' && oWorkflow.task_width != ''){
-        this.width =  oWorkflow.task_width;
-        this.height = oWorkflow.task_height
+        this.originalWidth =  oWorkflow.task_width;
+        this.originalHeight = oWorkflow.task_height
    }
    else{
-       this.width  =  165;
-       this.height = 40;
+       this.originalWidth  =  165;
+       this.originalHeight = 40;
    }
 
    this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
@@ -44,22 +44,39 @@ bpmnTask.prototype.coord_converter = function (bound_width, bound_height, text_l
 bpmnTask.prototype.paint = function () {
   VectorFigure.prototype.paint.call(this);
 
-  if(typeof workflow.zoomfactor == 'undefined')
+  if(typeof workflow.zoomfactor == 'undefined') {
+    this.originalWidth = 165;
+    this.originalHeight = 40;
     workflow.zoomfactor = 1;
+  }
+
+  if(workflow.zoomfactor == 1) {
+    if ((this.getWidth() > 200 || this.getHeight() > 100) && this.limitFlag != true) {
+        this.width  = this.originalWidth  = 200;
+        this.height = this.originalHeight = 100;
+    }
+    if ((this.getWidth() < 165 || this.getHeight() < 40) && this.limitFlag != true) {
+        this.width  =  this.originalWidth  = 165;
+        this.height = this.originalHeight = 40;
+    }
+  }
+  else{
+    this.width  = this.originalWidth   *  workflow.zoomfactor;
+    this.height = this.originalHeight  *  workflow.zoomfactor;
+  }
   //For Zooming
 
     //Set the Task Limitation
-    if ((this.getWidth() >= 200 || this.getHeight() >= 100 ) && this.limitFlag != true) {
+    /*if ((this.getWidth() >= 200 || this.getHeight() >= 100 ) && this.limitFlag != true) {
         this.originalWidth = 200;
         this.originalHeight = 100;
     }
     else if ((this.getWidth() <= 165 || this.getHeight() <= 40) && this.limitFlag != true) {
         this.originalWidth = 165;
         this.originalHeight = 40;
-    }
+    }*/
 
-  this.width  = this.originalWidth * workflow.zoomfactor;
-  this.height = this.originalHeight  * workflow.zoomfactor;
+  
 
   var x = new Array(6, this.getWidth() - 3, this.getWidth(), this.getWidth(), this.getWidth() - 3, 6, 3, 3, 6);
   var y = new Array(3, 3, 6, this.getHeight() - 3, this.getHeight(), this.getHeight(), this.getHeight() - 3, 6, 3);
@@ -682,6 +699,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
             else if (bpmnShape.match(/End/)) {
                 this.removechild(this.actionInterEvent);
                 this.removechild(this.actionEndEvent);
+                this.removechild(this.actionAnnotation);
                 this.removechild(this.actionTask);
                 this.removechild(this.actionGateway);
                 this.removechild(this.actionAdd);
@@ -703,6 +721,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
             }
             else if (bpmnShape.match(/Annotation/) || bpmnShape.match(/Dataobject/)) {
                 this.removechild(this.actionAdd);
+                this.removechild(this.actionAnnotation);
                 this.removechild(this.actionInterEvent);
                 this.removechild(this.actionGateway);
                 this.removechild(this.actionEndEvent);
@@ -792,6 +811,7 @@ bpmnTask.prototype.addShapes = function (oStore) {
     else if (newShape.type.match(/Annotation/)) {
         conn.setTarget(newShape.getPort("input1"));
         conn.setSource(workflow.currentSelection.getPort("output2"));
+        //conn.targetDecorator.setStroke(Stroke.DOTTED);
         workflow.addFigure(conn);
         newShape.actiontype = 'addText';
         newShape.conn = conn;
