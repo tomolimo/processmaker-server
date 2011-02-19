@@ -3450,10 +3450,10 @@ class Xpdl extends processes
             $coordinateY=0;
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$idTask){
-                $coordinateX=$idVal['TAS_POSX'];
-                $coordinateY=$idVal['TAS_POSY'];
+                $coordinateX=$idVal['TAS_POSX'] + 60;
+                $coordinateY=$idVal['TAS_POSY'] + 60;
                 $tas_width  =$idVal['TAS_WIDTH'];
-                $tas_height =$idVal['TAS_HEIGHT'];
+                $tas_height =$idVal['TAS_HEIGHT'] ;
               }
             }
             $positionX  = $coordinateX + $tas_width/1.5 + 19;
@@ -3463,8 +3463,8 @@ class Xpdl extends processes
               $routeParallel = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayParallel';
-              $arrayGateways[$countG]['2']   = $gatPosX;
-              $arrayGateways[$countG]['3']   = $gatPosY;
+              $arrayGateways[$countG]['2']   = $coordinateX;
+              $arrayGateways[$countG]['3']   = $coordinateY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $taskParallel;
@@ -3493,8 +3493,8 @@ class Xpdl extends processes
             $coordinateY=0;
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$nextTask){
-                $coordinateX=$idVal['TAS_POSX'];
-                $coordinateY=$idVal['TAS_POSY'];
+                $coordinateX=$idVal['TAS_POSX'] + 60;
+                $coordinateY=$idVal['TAS_POSY'] + 60;
                 $tas_width  =$idVal['TAS_WIDTH'];
                 $tas_height =$idVal['TAS_HEIGHT'];
               }
@@ -3506,8 +3506,8 @@ class Xpdl extends processes
               $routeSecJoin = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayParallel';
-              $arrayGateways[$countG]['2']   = $gatPosX;
-              $arrayGateways[$countG]['3']   = $gatPosY;
+              $arrayGateways[$countG]['2']   = $coordinateX;
+              $arrayGateways[$countG]['3']   = $coordinateY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $routeSecJoin;
@@ -3536,8 +3536,8 @@ class Xpdl extends processes
             $coordinateY=0;
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$idTask){
-                $coordinateX=$idVal['TAS_POSX'];
-                $coordinateY=$idVal['TAS_POSY'];
+                $coordinateX=$idVal['TAS_POSX'] + 60;
+                $coordinateY=$idVal['TAS_POSY'] + 60;
                 $tas_width  =$idVal['TAS_WIDTH'];
                 $tas_height =$idVal['TAS_HEIGHT'];
               }
@@ -3550,8 +3550,8 @@ class Xpdl extends processes
               if($nextTask != "-1"){
                 $arrayGateways[$countG]['0']   = $sGateUID;
                 $arrayGateways[$countG]['1']   = 'bpmnGatewayExclusiveData';
-                $arrayGateways[$countG]['2']   = $gatPosX;
-                $arrayGateways[$countG]['3']   = $gatPosY;
+                $arrayGateways[$countG]['2']   = $coordinateX;
+                $arrayGateways[$countG]['3']   = $coordinateY;
                 $countG                        = $countG + 1;
                 $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
                 $arrayRoutes[$countRoutes]['1']= $taskEvaluate;
@@ -3586,8 +3586,8 @@ class Xpdl extends processes
             $coordinateY=0;
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$idTask){
-                $coordinateX = $idVal['TAS_POSX'];
-                $coordinateY = $idVal['TAS_POSY'];
+                $coordinateX = $idVal['TAS_POSX'] + 60;
+                $coordinateY = $idVal['TAS_POSY'] + 60;
                 $tas_width  =$idVal['TAS_WIDTH'];
                 $tas_height =$idVal['TAS_HEIGHT'];
               }
@@ -3599,8 +3599,8 @@ class Xpdl extends processes
               $routeParallelEv = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayInclusive';
-              $arrayGateways[$countG]['2']   = $gatPosX;
-              $arrayGateways[$countG]['3']   = $gatPosY;
+              $arrayGateways[$countG]['2']   = $coordinateX;
+              $arrayGateways[$countG]['3']   = $coordinateY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $taskParallelEv;
@@ -3629,8 +3629,8 @@ class Xpdl extends processes
             $coordinateY=0;
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$idTask){
-                  $coordinateX=$idVal['TAS_POSX'];
-                  $coordinateY=$idVal['TAS_POSY'];
+                  $coordinateX=$idVal['TAS_POSX'] + 60;
+                  $coordinateY=$idVal['TAS_POSY'] + 60;
                   $tas_width  =$idVal['TAS_WIDTH'];
                   $tas_height =$idVal['TAS_HEIGHT'];
                 }
@@ -3642,8 +3642,8 @@ class Xpdl extends processes
               $routeSelect = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayExclusiveData';
-              $arrayGateways[$countG]['2']   = $gatPosX;
-              $arrayGateways[$countG]['3']   = $gatPosY;
+              $arrayGateways[$countG]['2']   = $coordinateX;
+              $arrayGateways[$countG]['3']   = $coordinateY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
               $arrayRoutes[$countRoutes]['1']= $taskSelect;
@@ -3678,8 +3678,8 @@ class Xpdl extends processes
             $optional    = $val['ROU_OPTIONAL'];
             foreach ($tasks as $taskVal => $idVal ){
               if($idVal['TAS_UID']==$nextTask){
-                 $coordinateX=$idVal['TAS_POSX'];
-                 $coordinateY=$idVal['TAS_POSY'];
+                 $coordinateX=$idVal['TAS_POSX'] + 60;
+                 $coordinateY=$idVal['TAS_POSY'] + 60;
                  $tas_width  =$idVal['TAS_WIDTH'];
                  $tas_height =$idVal['TAS_HEIGHT'];
                 }
@@ -3691,7 +3691,7 @@ class Xpdl extends processes
               $routeDiscriminator = $sGateUID;
               $arrayGateways[$countG]['0']   = $sGateUID;
               $arrayGateways[$countG]['1']   = 'bpmnGatewayComplex';
-              $arrayGateways[$countG]['2']   = $gatPosX;
+              $arrayGateways[$countG]['2']   = $coordinateX;
               $arrayGateways[$countG]['3']   = $gatPosY;
               $countG                        = $countG + 1;
               $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();

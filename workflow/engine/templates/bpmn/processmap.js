@@ -176,7 +176,7 @@ Ext.onReady ( function() {
           document.getElementById('designerFrame').contentWindow.workflow.getCommandStack().redo();
         }
       },{
-        xtype: 'tbsplit',
+        //xtype: 'tbsplit',
         text:'Zoom',
         iconCls: 'button_menu_ext ss_sprite ss_zoom',
          menu: new Ext.menu.Menu({

@@ -3034,7 +3034,7 @@ class Processes {
     $aRoutesUID = $this->createRouteRows($oData->routes);
     $this->createLaneRows($oData->lanes);
 
-    if(!isset($oData->gateways)){
+    /*if(!isset($oData->gateways)){
            //Adding gateway information while importing processes from older version
           //Making compatible with old export process
           $oRoutes = $oData->routes;
@@ -3046,7 +3046,7 @@ class Processes {
               if($routeType != 'SEQUENTIAL')
               {
                   $oProcessMap = new processMap();
-                  $sGatewayUID = $oProcessMap->saveNewGateway($oData->process['PRO_UID'], $sTaskUID, $sNextTask);
+                  $sGatewayUID = $oProcessMap->saveNewGateway($oData->process['PRO_UID'], $sTaskUID, $sNextTask, $routeType );
 
                   //Updating Route table (GAT_UID column) after inserting Gateway data into GATEWAY table
                   $aData  = array('ROU_UID'=>$routeUID,'GAT_UID'=>$sGatewayUID);
@@ -3055,7 +3055,8 @@ class Processes {
               }
          }
     }
-    else
+    else*/
+    if(isset($oData->gateways))
         $this->createGatewayRows($oData->gateways);
 
     $this->createDynaformRows($oData->dynaforms);

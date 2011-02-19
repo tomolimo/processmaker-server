@@ -2590,7 +2590,7 @@ class processMap {
       if($sType != 'SEQUENTIAL')
       {
           $oProcessMap = new processMap();
-          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID, $sNextTask);
+          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID, $sNextTask,$sType);
       }
 
       $aFields ['GAT_UID'] = (isset($sGatewayUID))?$sGatewayUID:'';
@@ -2606,10 +2606,11 @@ class processMap {
    *
    * @param  string    $sProcessUID Default value empty
    * @param  string    $sTaskUID    Default value empty
-   * @param  string    $sNextTask    Default value empty
+   * @param  string    $sNextTask   Default value empty
+   * @param  string    $sType       Default value empty (Route Type)
    * @return string    $sGatewayUID
    */
-  function saveNewGateway($sProcessUID = '', $sTaskUID = '', $sNextTask = '') {
+  function saveNewGateway($sProcessUID = '', $sTaskUID = '', $sNextTask = '', $sType = '') {
     try {
       $oTask = new Task();
       $aTaskDetails  = $oTask->load($sTaskUID);
@@ -2618,6 +2619,28 @@ class processMap {
       $aFields ['GAT_NEXT_TASK'] = $sNextTask;
       $aFields ['GAT_X'] = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
       $aFields ['GAT_Y'] = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
+
+      switch($sType)
+      {
+         case 'PARALLEL':
+            $aFields ['GAT_TYPE'] = 'bpmnGatewayParallel';
+         break;
+         case 'SEC-JOIN':
+            $aFields ['GAT_TYPE'] = 'bpmnGatewayParallel';
+         break;
+         case 'EVALUATE':
+            $aFields ['GAT_TYPE'] = 'bpmnGatewayExclusiveData';
+         break;
+         case 'PARALLEL-BY-EVALUATION':
+            $aFields ['GAT_TYPE'] = 'bpmnGatewayInclusive';
+         break;
+         case 'SELECT':
+            $aFields ['GAT_TYPE'] = 'bpmnGatewayExclusiveData';
+         break;
+         case 'DISCRIMINATOR':
+            $aFields ['GAT_TYPE'] = 'bpmnGatewayComplex';
+         break;
+     }
 
       $oGateway = new Gateway ( );
       $sGatewayUID = $oGateway->create($aFields);
