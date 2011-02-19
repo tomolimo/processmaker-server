@@ -21,24 +21,13 @@ $oHeadPublisher =& headPublisher::getSingleton();
 
 $loadingHTML ='
   <style>
-    #loading-mask{
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        height:100%;
-        background-color:white;
-    }
     #loading{
-        position:absolute;
         left:40%;
         top:37%;
         padding:2px;
         height:auto;
     }
-    #loading a {
-        color:#225588;
-    }
+    
     #loading .loading-indicator{
         background:white;
         color:#444;
@@ -53,7 +42,7 @@ $loadingHTML ='
     
   </style>
 
- <div id="loading-mask" style=""></div>
+ 
   <div id="loading">
     <div class="loading-indicator">
       <center>
