@@ -184,6 +184,9 @@ Ext.onReady(function() {
 					}, 
 					{
 							xtype: 'grid',
+							fieldLabel: ' ',
+							labelSeparator : '',
+							labelStyle: 'font-color:white;',
 						 
 							ds: processNumbers,
 							cm: new Ext.grid.ColumnModel([
@@ -197,7 +200,7 @@ Ext.onReady(function() {
 	,
 							
 							//autoExpandColumn: 'company',
-							//height: 350,
+							height: 45,
 							width: 355,
 							//title: TRANSLATIONS.ID_GENERAL_PROCESS_NUMBERS,  // 'General Process Numbers',
 							border: true,
@@ -227,28 +230,31 @@ Ext.onReady(function() {
 				xtype:'checkboxgroup',
 						fieldLabel: TRANSLATIONS.ID_WORKING_DAYS, // 'Working days',
 						name: 'calendarWorkDays',
-						// disabled: true,
+						disabled: true,
 						readOnly: true,
-						labelStyle: 'font-weight:bold;',
+						disabledClass:"",
+						labelStyle: 'font-weight:bold',
 						id:"calendarWorkDays",
 							columns: 7,
 								items: [
-										{boxLabel: TRANSLATIONS.ID_SUN, name: '0'},
-										{boxLabel: TRANSLATIONS.ID_MON, name: '1'},
-										{boxLabel: TRANSLATIONS.ID_TUE, name: '2'},
-										{boxLabel: TRANSLATIONS.ID_WEN, name: '3'},
-										{boxLabel: TRANSLATIONS.ID_THU, name: '4'},
-										{boxLabel: TRANSLATIONS.ID_FRI, name: '5'},
-										{boxLabel: TRANSLATIONS.ID_SAT, name: '6'}
+										{boxLabel: TRANSLATIONS.ID_SUN, name: '0',disabledClass:""},
+										{boxLabel: TRANSLATIONS.ID_MON, name: '1',disabledClass:""},
+										{boxLabel: TRANSLATIONS.ID_TUE, name: '2',disabledClass:""},
+										{boxLabel: TRANSLATIONS.ID_WEN, name: '3',disabledClass:""},
+										{boxLabel: TRANSLATIONS.ID_THU, name: '4',disabledClass:""},
+										{boxLabel: TRANSLATIONS.ID_FRI, name: '5',disabledClass:""},
+										{boxLabel: TRANSLATIONS.ID_SAT, name: '6',disabledClass:""}
 								]
 			 }, {
 				xtype:'checkbox',
 					fieldLabel: TRANSLATIONS.ID_DEBUG_MODE, // 'Debug Mode',
 					name: 'processDebug',
 					labelStyle: 'font-weight:bold;',
-					// disabled: true,
+					disabled: true,
 					readOnly: true,
-					id:"processDebug"
+					id:"processDebug",
+					disabledClass:""
+					
 		}]
 	}
   ],

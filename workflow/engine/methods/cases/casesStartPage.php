@@ -17,7 +17,54 @@ $oHeadPublisher =& headPublisher::getSingleton();
 //$oHeadPublisher->usingExtJs('ux/ColumnHeaderGroup');
 
 //G::pr($TRANSLATIONS_STARTCASE);
-print "<img src='/images/gears.gif' valign='absmiddle'>&nbsp;".G::LoadTranslation('ID_LOADING');
+//print "<br /><br /><br /><br /><center><img src='/images/gears.gif' valign='absmiddle' width='35'><br />".G::LoadTranslation('ID_LOADING')."</center>";
+
+$loadingHTML ='
+  <style>
+    #loading-mask{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        background-color:white;
+    }
+    #loading{
+        position:absolute;
+        left:40%;
+        top:37%;
+        padding:2px;
+        height:auto;
+    }
+    #loading a {
+        color:#225588;
+    }
+    #loading .loading-indicator{
+        background:white;
+        color:#444;
+        font:bold 13px tahoma,arial,helvetica;
+        padding:10px;
+        margin:0;
+        height:auto;
+    }
+    #loading-msg {
+        font: bold 11px arial,tahoma,sans-serif;
+    }
+    
+  </style>
+
+ <div id="loading-mask" style=""></div>
+  <div id="loading">
+    <div class="loading-indicator">
+      <center>
+        <img src="/images/gears.gif" valign="absmiddle" width="35"><br />
+        <span id="loading-msg">'.G::LoadTranslation('ID_LOADING').'</span><br />
+              </center>
+    </div>
+  </div>
+';
+print_r($loadingHTML);
+
 switch($page){
   case "startCase":
 
