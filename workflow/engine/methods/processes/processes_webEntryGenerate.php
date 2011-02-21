@@ -108,10 +108,18 @@ try {
       $template->prepare ();
       file_put_contents ( $fileName, $template->getOutputContent () );
     }
-    
+
+    require_once 'classes/model/Event.php';
+    $oEvent = new Event ( );
+    $aDataEvent = array();
+
+    $aDataEvent['EVN_UID']        = $oData->WE_EVN_UID;
+    $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
+    $aDataEvent['EVN_ACTION']     = $sDYNAFORM;
+    $output = $oEvent->update($aDataEvent);
     //Show link
     $link = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sPRO_UID . '/' . $dynTitle . '.php';
-    //print "\n<a href='$link' target='_new' > $link </a>";
+    print "\n<a href='$link' target='_new' > $link </a>";
   
 
   } else {

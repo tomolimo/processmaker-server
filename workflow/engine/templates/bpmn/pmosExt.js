@@ -289,7 +289,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
              collapsible: false,
              maximizable: false,
              width: 450,
-             height: 450,
+             height: 350,
              minWidth: 300,
              minHeight: 200,
              layout: 'fit',
@@ -334,14 +334,14 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             var webEntryLink     = workflow.webForm.items.items[0].items.items;
                             var propertiesfields = workflow.webForm.items.items[1].items.items;
                             var credentialFields = workflow.webForm.items.items[2].items.items;
+                            var evn_uid          = workflow.currentSelection.id;
                             var task_uid         = propertiesfields[0].getValue();
                             var dyna_uid         = propertiesfields[1].getValue();
                             var we_type          = propertiesfields[2].getValue();
                             var we_usr           = propertiesfields[3].getValue();
-                            var tasName          = 'test';
                             var username         = credentialFields[0].getValue();
                             var password         = credentialFields[1].getValue();
-                            var args  = '?action=webEntry_generate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'"}';
+                            var args  = '?action=webEntry_generate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'", "WE_EVN_UID":"'+evn_uid+'"}';
                             Ext.Ajax.request({
                             url: 'processes_Ajax.php'+ args,
                             success: function(response) {

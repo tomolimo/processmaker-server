@@ -4548,7 +4548,7 @@ class processMap {
       if (!is_null($oEvent)) {
       $oData = $oEvent->load($sEventUID);
 
-      if($oData['EVN_ACTION'] != '' && $oData['EVN_ACTION'] != 'WEB_ENTRY')
+      if($oData['EVN_ACTION'] != '' && $oData['EVN_ACTION'] == 'WEB_ENTRY')
       {
           require_once 'classes/model/Content.php';
           $oContent = new Content();
@@ -6566,7 +6566,7 @@ function saveExtddEvents($oData)
     $aData['EVN_RELATED_TO'] = 'MULTIPLE';
   }
   if(preg_match("/Start/", $aData['EVN_TYPE'])){
-    $aData['EVN_RELATED_TO'] = 'SINGLE';
+    $aData['EVN_RELATED_TO'] = 'MULTIPLE';
   }
   $sEvn_uid   = $oData->evn_uid;
   $oEventData = EventPeer::retrieveByPK($sEvn_uid);

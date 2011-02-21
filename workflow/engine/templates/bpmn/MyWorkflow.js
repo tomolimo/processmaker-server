@@ -1085,8 +1085,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             urlparams = '?action='+actiontype+'&data={"tas_uid":"'+tas_uid+'","tas_start":"'+tas_start+'"}';
             break;
         case 'addEvent':
-            var tas_uid='';
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","tas_uid":"'+tas_uid+'","evn_type":"'+shapetype+'","position":'+pos+',"evn_uid":"'+shapeId+'"}';
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","evn_type":"'+shapetype+'","position":'+pos+',"evn_uid":"'+shapeId+'"}';
             break;
         case 'updateEvent':
             urlparams = '?action='+actiontype+'&data={"evn_uid":"'+shapeId +'","evn_type":"'+shapetype+'"}';
