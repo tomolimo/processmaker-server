@@ -1845,6 +1845,8 @@ function removeValue(id){
     document.getElementById('form['+id+']').value = '';
   else if( document.getElementById(id) )
     document.getElementById(id).value = '';
+  
+  fireEvent(document.getElementById(id), 'change');
 }
 
 function datePicker4(obj, id, mask, startDate, endDate, showTIme){  
