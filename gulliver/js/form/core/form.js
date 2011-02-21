@@ -279,7 +279,10 @@ function G_DropDown( form, element, name )
     this.parent( form, element, name );
     this.setContent=function(content) {
         var dd=me.element;
-        while(dd.options.length>0) dd.remove(0);
+        for (var key in dd.options){
+          dd.options[key] = null;
+        }
+        //while(dd.options.length>0) dd.remove(0);
         for(var o=0;o<content.options.length;o++) {
             var optn = $dce("OPTION");
             optn.text = content.options[o].value;
@@ -909,17 +912,21 @@ function G()
             var dayAnalized ='';
             var mounthAnalized ='';
             var blocks={};
+        //    if (r0!='0') alert(r0);
             for(var r=0;r< r0 ;r++) {
+          //      alert('number1?');
                 var e=false;
                 var m=mask.substr(r,1);
                 __parseMask();
             }
             i=0;
             for(r=r0;r< mask.length;r++) {
+                //alert('number2?');
                 j++;
                 if (j>200) break;
                 e=num.substr(i,1);
                 e=(e==='')?false:e;
+                //alert (e);
                 m=mask.substr(r,1);
                 __parseMask();
             }
@@ -983,6 +990,7 @@ function G()
                     }
                 case 'y':
                 case '#':
+                    //alert('none');
                     if (e===false) {
                         out+='';
                         break;
@@ -1091,6 +1099,8 @@ function G()
         var result = [];
         num = new String(num);
         for(var r=0; r<subMasks.length; r++) {
+    //        alert (num);
+      //      alert (cursor);
             result[r]=__toMask(num, subMasks[r], cursor);
         }
         var betterResult=0;
@@ -2109,21 +2119,21 @@ function putmask(numb,mask,ans){
         switch(mask.charAt(j)){
             case '#':
                 if(cnumb.charAt(i)!='.') {
-                nnum+=cnumb.charAt(i).toString();
-                i++;
+                  nnum+=cnumb.charAt(i).toString();
+                  i++;
                 }
                 break;
       
             case '.':
-                nnum+=mask.charAt(j).toString();
-                i=cd+1;
-                cd=i +4;
+                  nnum+=mask.charAt(j).toString();
+                  i=cd+1;
+                  cd=i +4;
                 break
-      
+
             default:
                 //alert(mask.charAt(i));
-                nnum+=mask.charAt(j).toString();
-                break;
+              nnum+=mask.charAt(j).toString();
+            break;
         }
        
       j++;
