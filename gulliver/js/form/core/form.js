@@ -56,7 +56,6 @@ function G_Form ( element, id )
 
 function G_Field ( form, element, name )
 {
-    var dependentGridRow;
     var me=this;
     this.form=form;
     this.element=element;
@@ -159,7 +158,7 @@ function G_Field ( form, element, name )
                               oAux2.setValue(newcont[i].value);
                             }
                             // this line is also needed to trigger the onchange event to trigger the calculation of
-                            // sumatory or average funct5ions in text fields
+                            // sumatory or average functions in text fields
                             if (i == (newcont.length-1)){
                               if (oAux2.element.fireEvent) {
                                 oAux2.element.fireEvent("onchange");
@@ -278,17 +277,20 @@ function G_DropDown( form, element, name )
     this.parent = G_Field;
     this.parent( form, element, name );
     this.setContent=function(content) {
-        var dd=me.element;
-        while(dd.options.length>0) dd.remove(0);
-        for(var o=0;o<content.options.length;o++) {
-            var optn = $dce("OPTION");
-            optn.text = content.options[o].value;
-            optn.value = content.options[o].key;
-            dd.options[o]=optn;
-        }
+      var dd=me.element;
+      for (var key in dd.options){
+        dd.options[key] = null;
+      }
+      // the remove function is no longer reliable
+      // while(dd.options.length>0) dd.remove(0);
+      for(var o=0;o<content.options.length;o++) {
+        var optn = $dce("OPTION");
+        optn.text = content.options[o].value;
+        optn.value = content.options[o].key;
+        dd.options[o]=optn;
+      }
     }
     if (!element) return;
-    //alert("hello");
     leimnud.event.add(this.element,'change',this.updateDepententFields);
 }
 G_DropDown.prototype=new G_Field();
@@ -1596,10 +1598,12 @@ var validateGridForms = function(invalidFields){
 }
 
 /**
- * Note added by Gustavo Cruz gustavo-at-colosa.com
- * This function seems that validate via javascript
+ * 
+ * This function validates via javascript
  * the required fields in the Json array in the form tag of a dynaform
  * now the required fields in a grid have a "required" atribute set in 1
+ * @param String sRequiredFields
+ * 
  **/
 
 var validateForm = function(sRequiredFields) {
@@ -1780,7 +1784,7 @@ var validateForm = function(sRequiredFields) {
             sMessage += (j > 0)? ', ': '';
             sMessage += invalid_fields[j];
         }
-    
+        
         new leimnud.module.app.alert().make({
             label:G_STRINGS.ID_REQUIRED_FIELDS + ": <br/><br/>[ " + sMessage + " ]",
             width:450,
