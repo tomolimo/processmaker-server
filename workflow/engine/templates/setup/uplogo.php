@@ -101,6 +101,7 @@ try {
           </a></td></tr>";
       $template->assign ('SET_LOGO_PM' ,$restoreLogo);
   }*/
+
   if (sizeof($_POST)>0) {
     //G::SendTemporalMessage('ID_CHANGES_SAVED', 'info', 'labels');
     $formf = $_FILES['form'];
@@ -111,11 +112,19 @@ try {
     $aMessage1 = array();
     $fileName = trim(str_replace(' ','_', $namefile));
     G::uploadFile( $tpnfile, $dir . '/', 'tmp'.$fileName );
-    G::resizeImage($dir . '/tmp' . $fileName, 200, 80, $dir . '/' .$fileName);
+    $error = false;
+    try {
+      G::resizeImage($dir . '/tmp' . $fileName, 200, 80, $dir . '/' .$fileName);
+    } catch (Exception $e) {
+      $error = $e->getMessage();
+    }
     unlink ($dir . '/tmp' . $fileName);
-    header('location: uplogo.php');
+    if ($error === false)
+      header('location: uplogo.php');
+    else
+      G::SendTemporalMessage($error, 'error', 'string');
   }
-  $content = $template->getOutputContent();  
+  $content = $template->getOutputContent();
   print $content;
 }
 catch (Exception $e) {

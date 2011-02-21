@@ -69,12 +69,7 @@
       label:G_STRINGS.ID_APPLY_LOGO,
       action:function(){
       ajax_function('replacementLogo','replacementLogo','NAMELOGO='+encodeURIComponent(nameLogo),'GET') ;
-      //parent.window.location.href = 'main_init';
-      if(_BROWSER.name == 'msie' )
-        parent.parent.window.location.href = 'main?s=LOGO';
-      else 
-        parent.window.location.href = 'main_init';
-      history.go(0);
+      parent.parent.window.location = 'main?s=LOGO';
     }});
   
   }
@@ -89,7 +84,7 @@
       label:G_STRINGS.ID_REMOVE_LOGO,
       action:function(){
         ajax_function('logo_Delete','','NAMELOGO='+nameLogo,'GET') ;
-        history.go(0);
+        window.location = 'uplogo';
       }
     });
     return false;
@@ -102,7 +97,6 @@
    */
   var restoreLogo = function (optfiledb, usrUid){ 
     ajax_function('replacementLogo','restoreLogo','OPTFILEDB='+optfiledb+'&USRUID='+usrUid,'GET') ;
-    //parent.window.location.href = 'setup';
-    parent.window.location.href = 'main_init';
+    window.location = 'uplogo';
   }  
 </script>

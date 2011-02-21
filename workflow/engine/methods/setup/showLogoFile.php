@@ -52,11 +52,15 @@
 
 
   function showLogo($imagen){
-    $ext = substr($imagen, strrpos($imagen, '.') + 1); // extension
-	
-	  header('content-type: image/'.$ext);
-	  readfile($imagen);
-	  exit;
+    $info = @getimagesize($imagen);
+    $fp = fopen($imagen, "rb");
+    if ($info && $fp) {
+        header("Content-type: {$info['mime']}");
+        fpassthru($fp);
+        exit;
+    } else {
+        throw new Exception("Image format not valid");
+    }
   }
 
   function cpyMoreLogos($dir,$newDir){
