@@ -40,20 +40,20 @@ CLI::taskRun(run_upgrade);
 
 
 /**
- * A versoni of rm_dir which does not exits on error.
+ * A version of rm_dir which does not exits on error.
  *
  * @param  string $filename directory or file to remove
  * @param  bool $filesOnly either to remove the containing directory as well or not
  */
 function rm_dir($filename, $filesOnly = false) {
   if (is_file($filename)) {
-    @unlink($filename) or CLI::message(CLI::error("Could not remove file $filename")."\n");;
+    @unlink($filename) or CLI::logging(CLI::error("Could not remove file $filename")."\n");
   } else {
     foreach(glob("$filename/*") as $f) {
       rm_dir($f);
     }
     if (!$filesOnly)
-      @rmdir($filename) or CLI::message(CLI::error("Could not remove directory $filename")."\n");
+      @rmdir($filename) or CLI::logging(CLI::error("Could not remove directory $filename")."\n");
   }
 }
 
