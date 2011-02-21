@@ -167,9 +167,25 @@ var G_Grid = function(oForm, sGridName) {
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 
               aObjects[0].setAttribute('id', newID);
+              tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
+              var attributDefaultValue;
+              
+              if( tags.length >= 0 ){ //then it is not a datepicker
+                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                attributes = elementAttributesNS(aObjects[0], 'pm');
+                if(attributes.defaultvalue!= undefined  && attributes.defaultvalue!='')
+                 attributDefaultValue=attributes.defaultvalue;
+                else {
+                 attributDefaultValue='';
+                 if (aObjects[0].type != 'checkbox'){ 
+                 aObjects[0].setAttribute('value', '');
+                 }
+                }
+              } 
+              //we need to test it in other side (krlos)
               //Added by qennix
-              if (aObjects[0].type == 'text') aObjects[0].setAttribute('value', '');
-              if (aObjects[0].type == 'checkbox') aObjects[0].checked = false;
+              //if (aObjects[0].type == 'text') aObjects[0].setAttribute('value', '');
+              //if (aObjects[0].type == 'checkbox') aObjects[0].checked = false;
               //End of Addition
               aObjects[0].name = newID;
               if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
@@ -177,21 +193,6 @@ var G_Grid = function(oForm, sGridName) {
                var aux = oNewRow.getElementsByTagName('td')[i].innerHTML;                
               }
   
-              tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
-              var attributDefaultValue;
-              if( tags.length == 0 ){ //then it is not a datepicker
-                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                attributes = elementAttributesNS(aObjects[0], 'pm');
-                if(attributes.defaultvalue!= undefined)
-                 attributDefaultValue=attributes.defaultvalue;
-              } else {
-                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                attributes = elementAttributesNS(aObjects[0],'pm');
-                if(attributes.defaultvalue != undefined)
-                  attributDefaultValue=attributes.defaultvalue;
-                else
-                  attributDefaultValue='';
-              }
               if (aObjects[0].type != 'checkbox' ) {
                if(attributDefaultValue!='' && attributDefaultValue != undefined)
                 aObjects[0].value = attributDefaultValue;
