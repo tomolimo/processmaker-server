@@ -166,10 +166,65 @@ class Tasks
   */
   public function createRouteRows( $aRoutes ) 
   {
-  	$routeID = array();
+    $routeID      = array();
+    $taskParallel = '';
+    $taskSecJoin  = '';
+    $taskEvaluate = '';
+    $taskParallelEv = '';
+    $taskSelect   = '';
+    $taskDiscriminator   = '';
     foreach ( $aRoutes as $key => $row ) {
+      $sRouteType =   $row['ROU_TYPE'];
       $oRoute = new Route();
+      $oProcessMap = new processMap();
       //unset ($row['ROU_UID']);
+
+      //Saving Gateway into the GATEWAY table
+      $idTask    = $row['TAS_UID'];
+      $nextTask  = $row['ROU_NEXT_TASK'];
+      if($sRouteType != 'SEQUENTIAL'){
+          switch($sRouteType){
+          case 'PARALLEL':
+            if($idTask != $taskParallel){
+              $taskParallel = $idTask;
+
+              $sGatewayUID = $oProcessMap->saveNewGateway($row['PRO_UID'], $row['TAS_UID'], $row['ROU_NEXT_TASK']);
+            }
+            break;
+          case 'SEC-JOIN':
+            if($nextTask != $taskSecJoin){
+              $taskSecJoin = $nextTask;
+              $sGatewayUID = $oProcessMap->saveNewGateway($row['PRO_UID'], $row['TAS_UID'], $row['ROU_NEXT_TASK']);
+            }
+            break;
+          case 'EVALUATE':
+            if($idTask != $taskEvaluate){
+              $taskEvaluate = $idTask;
+              $sGatewayUID = $oProcessMap->saveNewGateway($row['PRO_UID'], $row['TAS_UID'], $row['ROU_NEXT_TASK']);
+            }
+            break;
+          case 'PARALLEL-BY-EVALUATION':
+            if($idTask != $taskParallelEv){
+              $taskParallelEv = $idTask;
+              $sGatewayUID = $oProcessMap->saveNewGateway($row['PRO_UID'], $row['TAS_UID'], $row['ROU_NEXT_TASK']);
+            }
+            break;
+          case 'SELECT':
+            if($idTask != $taskSelect){
+              $taskSelect = $idTask;
+              $sGatewayUID = $oProcessMap->saveNewGateway($row['PRO_UID'], $row['TAS_UID'], $row['ROU_NEXT_TASK']);
+            }
+            break;
+          case 'DISCRIMINATOR':
+            if($nextTask != $taskDiscriminator){
+              $taskDiscriminator = $nextTask;
+              $sGatewayUID = $oProcessMap->saveNewGateway($row['PRO_UID'], $row['TAS_UID'], $row['ROU_NEXT_TASK']);
+            }
+            break;
+      }
+      $row['GAT_UID'] = $sGatewayUID;
+      }
+      
       if($oRoute->routeExists($row['ROU_UID']))
           $oRoute->remove($row['ROU_UID']);
       $routeID[] = $oRoute->create($row);

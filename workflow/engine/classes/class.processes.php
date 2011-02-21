@@ -3056,8 +3056,8 @@ class Processes {
          }
     }
     else*/
-    if(isset($oData->gateways))
-        $this->createGatewayRows($oData->gateways);
+    /*if(isset($oData->gateways))
+        $this->createGatewayRows($oData->gateways);*/
 
     $this->createDynaformRows($oData->dynaforms);
     $this->createInputRows($oData->inputs);

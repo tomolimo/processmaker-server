@@ -129,10 +129,9 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         url   : 'proxyExtjs?tid='+taskId+'&action=getAssignedSteps'
         })
       });
-      //taskUsers.setDefaultSort('LABEL', 'asc');
-      taskSteps.load({params:{start : 0 , limit : 10 }});
+    taskSteps.load({params:{start : 0 , limit : 10 }});
 
-        // create the Data Store of all Steps that are not been assigned to a task i.e available steps
+    // create the Data Store of all Steps that are not been assigned to a task i.e available steps
     var availableSteps = new Ext.data.JsonStore({
          root            : 'data',
          url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAvailableSteps',
@@ -143,6 +142,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
          fields          : stepsFields
 
      });
+    availableSteps.load();
 
     var btnStepsCondition = new Ext.Button({
         id: 'btnCondition',
