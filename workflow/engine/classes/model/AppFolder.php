@@ -228,12 +228,12 @@ class AppFolder extends BaseAppFolder {
       $oApp = new Application ( );
       if (($oApp->exists ( $row ['APP_UID'] )) || ($row ['APP_UID'] == "00000000000000000000000000000000")) {
 
-        $completeInfo = array("APP_DOC_FILENAME" => $row ["APP_DOC_UID"],"APP_DOC_UID"=>$row ['APP_UID']);
+        //$completeInfo = array("APP_DOC_FILENAME" => $row ["APP_DOC_UID"],"APP_DOC_UID"=>$row ['APP_UID']);
         $completeInfo = $this->getCompleteDocumentInfo ( $row ['APP_UID'], $row ['APP_DOC_UID'], $row ['DOC_VERSION'], $row ['DOC_UID'], $row ['USR_UID'] );
 
         $oAppDocument = new AppDocument ( );
         $lastVersion = $oAppDocument->getLastAppDocVersion ( $row ['APP_DOC_UID'], $row ['APP_UID'] );
-        $filesResult [] = $completeInfo;
+        //$filesResult [] = $completeInfo;
         if ($completeInfo ['APP_DOC_STATUS'] != "DELETED") {
           if ((in_array ( $row ['APP_DOC_UID'], $completeInfo ['INPUT_DOCUMENTS'] )) || (in_array ( $row ['APP_DOC_UID'], $completeInfo ['OUTPUT_DOCUMENTS'] )) || (in_array ( $completeInfo ['USR_UID'], array ($_SESSION ['USER_LOGGED'], '-1' ) ))) {
             if (count ( $docIdFilter ) > 0) {

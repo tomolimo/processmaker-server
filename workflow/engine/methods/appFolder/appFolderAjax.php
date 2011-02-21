@@ -120,17 +120,38 @@ function expandNode(){
     if(isset($folderContent)){
         foreach ( $folderContent as $key => $obj ) {
             $tempTree ['text'] = $obj['APP_DOC_FILENAME'];
-            $tempTree ['id'] = $obj['APP_DOC_UID'];
+            $tempTree ['name'] = $obj['APP_DOC_FILENAME'];
+            $mimeInformation=getMime($obj['APP_DOC_FILENAME']);
+            $tempTree ['type'] = $mimeInformation['description'];
+            $tempTree ['icon'] = $mimeInformation['icon'];
+            
+            if(isset($obj['OUT_DOC_GENERATE'])){
+                if($obj['OUT_DOC_GENERATE']=="BOTH"){
+                    $arrayType=array("PDF","DOC");
+                }else{
+                    $arrayType=array($obj['OUT_DOC_GENERATE']);
+                }
+                
+                foreach ($arrayType as $keyType => $fileType){
+                    $tempTree ['text'.$fileType] = $obj['APP_DOC_FILENAME'].".".strtolower($fileType);
+                    $tempTree ['name'.$fileType] = $obj['APP_DOC_FILENAME'].".".strtolower($fileType);
+                    $mimeInformation=getMime($obj['APP_DOC_FILENAME'].".".strtolower($fileType));
+                    $tempTree ['type'.$fileType] = $mimeInformation['description'];
+                    $tempTree ['icon'.$fileType] = $mimeInformation['icon'];
+                }
+            }
+            
+            
+            $tempTree ['appdocid'] = $obj['APP_DOC_UID'];
+            $tempTree ['id'] = $obj['APP_DOC_UID_VERSION'];
 
             $tempTree ['cls'] = 'file';
             //$tempTree ['draggable'] = true;
             $tempTree ['leaf'] = true;
-            $tempTree ['name'] = $obj['APP_DOC_FILENAME'];
-            $mimeInformation=getMime($obj['APP_DOC_FILENAME']);
-            $tempTree ['type'] = $mimeInformation['description'];
+            
             $tempTree ['is_file'] = true;
             //if((isset($_POST['option']))&&($_POST['option']=="gridDocuments")){
-            $tempTree ['icon'] = $mimeInformation['icon'];
+            
             //}
 
             $tempTree ['docVersion'] = $obj['DOC_VERSION'];
@@ -163,11 +184,27 @@ function expandNode(){
 
             }
             $tempTree ['deletelabel'] = $obj['DELETE_LABEL'];
+            
+            if((isset($obj['DOWNLOAD_LABEL']))&&($obj['DOWNLOAD_LABEL']!="")){
+            $labelgen=strtoupper(str_replace(".","",$obj['DOWNLOAD_LABEL']));
+            $tempTree ['downloadLabel'.$labelgen] = $obj['DOWNLOAD_LABEL'];
+            $tempTree ['downloadLink'.$labelgen] = $obj['DOWNLOAD_LINK'];
+            }
             $tempTree ['downloadLabel'] = $obj['DOWNLOAD_LABEL'];
             $tempTree ['downloadLink'] = $obj['DOWNLOAD_LINK'];
+            
+            if((isset($obj['DOWNLOAD_LABEL1']))&&($obj['DOWNLOAD_LABEL1']!="")){
+            $labelgen=strtoupper(str_replace(".","",$obj['DOWNLOAD_LABEL1']));
+            $tempTree ['downloadLabel'.$labelgen] = $obj['DOWNLOAD_LABEL1'];
+            $tempTree ['downloadLink'.$labelgen] = $obj['DOWNLOAD_LINK1'];
+            }
             $tempTree ['downloadLabel1'] = $obj['DOWNLOAD_LABEL1'];
             $tempTree ['downloadLink1'] = $obj['DOWNLOAD_LINK1'];
+            
             $tempTree ['appDocUidVersion'] = $obj['APP_DOC_UID_VERSION'];
+            
+            $tempTree ['is_readable'] = true;
+            $tempTree ['is_file'] = true;
 
             //$tempTree ['optionType'] = "category";
             //$tempTree['allowDrop']=false;
@@ -180,7 +217,24 @@ function expandNode(){
              $tempTree ['expanded'] = true;
              }
              */
-            $processListTree [] = $tempTree;
+            if(isset($obj['OUT_DOC_GENERATE'])){
+                foreach ($arrayType as $keyType => $fileType){
+                    $tempTree ['text'] = $tempTree ['text'.$fileType];
+                    $tempTree ['name'] = $tempTree ['name'.$fileType];
+                    
+                    $tempTree ['type'] = $tempTree ['type'.$fileType];
+                    $tempTree ['icon'] = $tempTree ['icon'.$fileType];
+                    $tempTree ['appDocFileName'] = $tempTree ['name'.$fileType];
+                    
+                    $tempTree ['downloadLabel'] = $tempTree ['downloadLabel'.$fileType];
+                    $tempTree ['downloadLink'] = $tempTree ['downloadLink'.$fileType];
+                    
+                    $tempTree ['id']=$tempTree ['id']."_".$fileType;
+                    $processListTree [] = $tempTree;
+                }
+            }else{
+                $processListTree [] = $tempTree;
+            }
             $tempTree=array();
         }
     }

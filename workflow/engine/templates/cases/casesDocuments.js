@@ -1,3 +1,21 @@
+new Ext.KeyMap(document, {
+  key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+    	if (! e.ctrlKey) {
+        if (Ext.isIE) {
+            // IE6 doesn't allow cancellation of the F5 key, so trick it into
+            // thinking some other key was pressed (backspace in this case)
+            e.browserEvent.keyCode = 8;
+        }
+        e.stopEvent();
+        datastore.reload();
+        //Ext.getCmp('dirTree').getRootNode().reload();
+      }else{
+       // Ext.Msg.alert(TRANSLATIONS.ID_REFRESH_LABEL, TRANSLATIONS.ID_REFRESH_MESSAGE);
+      }
+  }
+});
+
 //Ext.BLANK_IMAGE_URL = 'resources/s.gif';
 
 Ext.chart.Chart.CHART_URL = '/images/charts.swf';
@@ -5,8 +23,8 @@ Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
 // The Quicktips are used for the toolbar and Tree mouseover tooltips!
 Ext.QuickTips.init();
 
-try{rc=new RegExp('^("(\\\\.|[^"\\\\\\n\\r])*?"|[,:{}\\[\\]0-9.\\-+Eaeflnr-u \\n\\r\\t])+?$')}
-catch(z){rc=/^(true|false|null|\[.*\]|\{.*\}|".*"|\d+|\d+\.\d+)$/}
+try{rc=new RegExp('^("(\\\\.|[^"\\\\\\n\\r])*?"|[,:{}\\[\\]0-9.\\-+Eaeflnr-u \\n\\r\\t])+?$');}
+catch(z){rc=/^(true|false|null|\[.*\]|\{.*\}|".*"|\d+|\d+\.\d+)$/;}
 
 var conn = new Ext.data.Connection();
 
@@ -298,7 +316,16 @@ function openActionDialog( caller, action ) {
 			Ext.Msg.confirm('dellink?', String.format("miscdelitems", num ), deleteFiles);
 			break;
 		case 'download':
-			document.location = '?option=com_extplorer&action=download&item='+ encodeURIComponent(ext_itemgrid.getSelectionModel().getSelected().get('name')) + '&dir=' + encodeURIComponent( datastore.directory );
+			fileName=ext_itemgrid.getSelectionModel().getSelected().get('name');
+			//alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
+			//alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLabel'));
+			
+			if(document.location = ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
+				messageText="Downloading file "+fileName;
+				statusBarMessage( messageText, false, true );
+			}else{
+				alert("sadasd");
+			}
 			break;
 	}
 }
@@ -571,7 +598,12 @@ datastore = new Ext.data.Store({
 		name : "proTitle"
 	}, {
 		name : "appDocVersionable"
+	},{
+		name : "downloadLink"
+	},{
+		name : "downloadLabel"
 	}
+	
 	])),
 
 	// turn on remote sorting
@@ -603,23 +635,34 @@ function renderType(value, p, record) {
 	}
 }
 function renderVersion(value, p, record) {
-	// addcc.png
-	// system-search.png
 	if(record.get("appDocVersionable")=="1"){
 		if(value>1){
-		return String.format(
-				'<a href="#">{1}</a>&nbsp;&nbsp;<a href="#"><img src="{0}" alt="* " align="absmiddle" width="12" border="0"/></a>',
-				"/images/addc.png", value);
+			//return String.format('<b>{0}</b>&nbsp;&nbsp;&nbsp;<a href="#"><img src="{1}" border="0" title="Upload New Version" valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>', value,'/images/documents/_up.png','Upload new Version');
+			return String.format('<b>{0}</b>', value);
 		}else{
-			return String.format(
-					'{1}&nbsp;&nbsp;<a href="#"><img src="{0}" alt="* " align="absmiddle" width="12" border="0"/></a>',
-					"/images/addc.png", value);
+			//return String.format('{0}&nbsp;&nbsp;&nbsp;<a href="#"><img src="{1}" border="0" title="Upload New Version" valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>', value,'/images/documents/_up.png','Upload new Version');
+			return String.format('{0}', value);
 		}
 	}else{
 	
-	return String.format(
-			'<b>-</b>',
-			value);
+	return String.format('<b>-</b>',value);
+	}
+}
+function renderVersionExpander(value, p, record) {
+	// addcc.png
+	// system-search.png
+	p.cellAttr = 'rowspan="2"';
+    //return '<div class="x-grid3-row-expander">&#160;</div>';
+	if(record.get("appDocVersionable")=="1"){
+		if(value>1){
+			return '<div class="x-grid3-row-expander">&#160;</div>';
+			//return String.format('<div class="x-grid3-row-expander">{0}</div>',	 value);
+		}else{
+			return '';
+		}
+	}else{
+	
+	return String.format('',value);
 	}
 }
 
@@ -657,6 +700,7 @@ var gridtb = new Ext.Toolbar(
 					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					disabled : true,
+					hidden: true,
 					handler : function() {
 						openActionDialog(this, 'search');
 					}
@@ -680,6 +724,7 @@ var gridtb = new Ext.Toolbar(
 					tooltip : 'Copy',
 					cls : 'x-btn-icon',
 					disabled : false,
+					hidden: true,
 					handler : function() {
 						openActionDialog(this, 'copyAction');
 					}
@@ -691,6 +736,7 @@ var gridtb = new Ext.Toolbar(
 					tooltip : 'Move',
 					cls : 'x-btn-icon',
 					disabled : false,
+					hidden: true,
 					handler : function() {
 						openActionDialog(this, 'moveAction');
 					}
@@ -702,6 +748,7 @@ var gridtb = new Ext.Toolbar(
 					tooltip : 'dellink',
 					cls : 'x-btn-icon',
 					disabled : true,
+					hidden: true,
 					handler : function() {
 						openActionDialog(this, 'delete');
 					}
@@ -713,6 +760,7 @@ var gridtb = new Ext.Toolbar(
 					tooltip : 'renamelink',
 					cls : 'x-btn-icon',
 					disabled : true,
+					hidden: true,
 					handler : function() {
 						openActionDialog(this, 'rename');
 					}
@@ -722,7 +770,7 @@ var gridtb = new Ext.Toolbar(
 					xtype : "tbbutton",
 					id : 'tb_download',
 					icon : '/images/documents/_down.png',
-					tooltip : 'downlink',
+					tooltip : 'Download',
 					cls : 'x-btn-icon',
 					disabled : true,
 					handler : function() {
@@ -816,10 +864,61 @@ var gridbb = new Ext.PagingToolbar({
 	}) ]
 });
 
+
+var getGrid = function( data, element) {
+	//var grid = Ext.getCmp('gridpanel');
+	
+	var grid = new Ext.grid.GridPanel({
+		store: datastore,
+		cm: cm,
+		stripeRows: true,
+		//autoExpandColumn: 'company',
+		autoHeight: true,
+		border: false,
+		width: '100%',
+		stateful: true,
+		stateId: 'grid',
+		header:false,
+		headerAsText:false,
+		hideHeaders:true,
+		plugins: expander
+	});
+
+	element && grid.render( element);
+	return grid;
+};
+
+var expander = new Ext.ux.grid.RowExpander({
+	tpl              : '<div class="ux-row-expander-box" style="border: 2px solid red;"></div>',
+	//header:'Version',
+/*    tpl : new Ext.Template(
+        '<p><b>Company:</b> {company}</p><br>',
+        '<p><b>Summary:</b> {desc}</p>'
+    ),*/
+    
+
+    //width : 50,
+	//align : 'center',
+    expandOnEnter: false,
+    expandOnDblClick: false,
+    fixed: false,
+    dataIndex: 'docVersion',
+	actAsTree        : true,
+	treeLeafProperty : 'is_leaf',
+	listeners        : {
+		expand : function( expander, record, body, rowIndex) {
+			data = new Array();
+			getGrid( data, Ext.get( this.grid.getView().getRow( rowIndex)).child( '.ux-row-expander-box'));
+			//alert( Ext.ComponentMgr.all.length);
+		}
+	},
+renderer : renderVersionExpander
+});
+
 // the column model has information about grid columns
 // dataIndex maps the column to the specific data field in
 // the data store
-var cm = new Ext.grid.ColumnModel([ {
+var cm = new Ext.grid.ColumnModel([{
 	id : 'gridcm', // id assigned so we can apply custom css (e.g.
 					// .x-grid-col-topic b { color:#333 })
 	header : "Name",
@@ -836,7 +935,7 @@ var cm = new Ext.grid.ColumnModel([ {
 	width : 50,
 	align : 'center',
 	renderer : renderVersion
-}, {
+},  /*expander,*/{
 	header : "Modified",
 	dataIndex : 'appDocCreateDate',
 	width : 65
@@ -1192,6 +1291,10 @@ function copymoveCtx(e) {
 	copymoveCtxMenu.showAt(e.rawEvent.getXY());
 }
 
+
+
+
+
 var documentsTab = {
 	id : 'documents',
 	// title : 'Documents',
@@ -1312,6 +1415,7 @@ var documentsTab = {
 									bbar : gridbb,
 									ddGroup : 'TreeDD',
 									enableDragDrop: true,
+									plugins: expander,
 									selModel : new Ext.grid.RowSelectionModel({
 										listeners : {
 											'rowselect' : {
