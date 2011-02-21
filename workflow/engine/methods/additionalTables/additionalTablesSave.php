@@ -130,6 +130,13 @@ if ($_POST['form']['ADD_TAB_UID'] == '') {
         die;
     }  
     
+    $arrFields = $_POST['form']['FIELDS'];
+    $newaFields = array();
+    foreach ($arrFields as $arrField){
+    	$arrField['FLD_NAME'] = strtoupper($arrField['FLD_NAME']);
+      $newaFields[] = 	$arrField;
+    }
+    
   $sAddTabUid = $oAdditionalTables->create(array('ADD_TAB_NAME'            => $_POST['form']['ADD_TAB_NAME'],
                                                  'ADD_TAB_CLASS_NAME'      => $_POST['form']['ADD_TAB_CLASS_NAME'],
                                                  'ADD_TAB_DESCRIPTION'     => $_POST['form']['ADD_TAB_DESCRIPTION'],
@@ -140,7 +147,7 @@ if ($_POST['form']['ADD_TAB_UID'] == '') {
                                                  'ADD_TAB_SDW_MAX_LENGTH'  => $_POST['form']['ADD_TAB_SDW_MAX_LENGTH'],
                                                  'ADD_TAB_SDW_AUTO_DELETE' => ($_POST['form']['ADD_TAB_SDW_AUTO_DELETE'] == 'on' ? 1 : 0),
                                                  'ADD_TAB_DYNAVARS' => $aDynavars,
-                                                 'ADD_TAB_PLG_UID'         => ''), $_POST['form']['FIELDS']);
+                                                 'ADD_TAB_PLG_UID'         => ''), $newaFields);
   $aFields   = array();
   /*$aFields[] = array('sType'       => 'INT',
                      'iSize'       => '11',
@@ -151,7 +158,7 @@ if ($_POST['form']['ADD_TAB_UID'] == '') {
   foreach ($_POST['form']['FIELDS'] as $iRow => $aRow) {
     $oFields->create(array('FLD_INDEX'             => $iRow,
                            'ADD_TAB_UID'           => $sAddTabUid,
-                           'FLD_NAME'              => $_POST['form']['FIELDS'][$iRow]['FLD_NAME'],
+                           'FLD_NAME'              => strtoupper($_POST['form']['FIELDS'][$iRow]['FLD_NAME']),
                            'FLD_DESCRIPTION'       => $_POST['form']['FIELDS'][$iRow]['FLD_DESCRIPTION'],
                            'FLD_TYPE'              => $_POST['form']['FIELDS'][$iRow]['FLD_TYPE'],
                            'FLD_SIZE'              => $_POST['form']['FIELDS'][$iRow]['FLD_SIZE'],
@@ -162,13 +169,13 @@ if ($_POST['form']['ADD_TAB_UID'] == '') {
                            'FLD_FOREIGN_KEY_TABLE' => $_POST['form']['FIELDS'][$iRow]['FLD_FOREIGN_KEY_TABLE']));
     $aFields[] = array('sType'       => $_POST['form']['FIELDS'][$iRow]['FLD_TYPE'],
                        'iSize'       => $_POST['form']['FIELDS'][$iRow]['FLD_SIZE'],
-                       'sFieldName'  => $_POST['form']['FIELDS'][$iRow]['FLD_NAME'],
+                       'sFieldName'  => strtoupper($_POST['form']['FIELDS'][$iRow]['FLD_NAME']),
                        'bNull'       => ($_POST['form']['FIELDS'][$iRow]['FLD_NULL'] == 'on' ? 1 : 0),
                        'bAI'         => ($_POST['form']['FIELDS'][$iRow]['FLD_AUTO_INCREMENT'] == 'on' ? 1 : 0),
                        'bPrimaryKey' => ($_POST['form']['FIELDS'][$iRow]['FLD_KEY'] == 'on' ? 1 : 0));
   }
   $oAdditionalTables->createTable($_POST['form']['ADD_TAB_NAME'], 'wf', $aFields);
-  $oAdditionalTables->createPropelClasses($_POST['form']['ADD_TAB_NAME'], $_POST['form']['ADD_TAB_CLASS_NAME'], $_POST['form']['FIELDS'], $sAddTabUid);
+  $oAdditionalTables->createPropelClasses($_POST['form']['ADD_TAB_NAME'], $_POST['form']['ADD_TAB_CLASS_NAME'], $newaFields, $sAddTabUid);
 }
 else {
   $aData = $oAdditionalTables->load($_POST['form']['ADD_TAB_UID'], true);
@@ -192,7 +199,7 @@ else {
     $sUID = $oFields->create(array('FLD_UID'               => $_POST['form']['FIELDS'][$iRow]['FLD_UID'],
                                    'ADD_TAB_UID'           => $_POST['form']['ADD_TAB_UID'],
                                    'FLD_INDEX'             => $iRow,
-                                   'FLD_NAME'              => $_POST['form']['FIELDS'][$iRow]['FLD_NAME'],
+                                   'FLD_NAME'              => strtoupper($_POST['form']['FIELDS'][$iRow]['FLD_NAME']),
                                    'FLD_DESCRIPTION'       => $_POST['form']['FIELDS'][$iRow]['FLD_DESCRIPTION'],
                                    'FLD_TYPE'              => $_POST['form']['FIELDS'][$iRow]['FLD_TYPE'],
                                    'FLD_SIZE'              => $_POST['form']['FIELDS'][$iRow]['FLD_SIZE'],

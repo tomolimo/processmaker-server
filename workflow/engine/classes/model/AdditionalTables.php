@@ -257,31 +257,32 @@ public function loadByName($name) {
           $sQuery = 'CREATE TABLE IF NOT EXISTS `' . $sTableName . '` (';
           $aPKs   = array();
           foreach ($aFields as $aField) {
+          	$aField['sFieldName'] = strtoupper($aField['sFieldName']);
             switch ($aField['sType']) {
               case 'VARCHAR':
-                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
               break;
               case 'TEXT':
-                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
               break;
               case 'DATE':
-                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " ,"; // " DEFAULT '0000-00-00',";
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " ,"; // " DEFAULT '0000-00-00',";
               break;
               case 'INT':
-                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . ' ' . ($aField['bAI'] ? 'AUTO_INCREMENT' : "DEFAULT '0'") . ',';
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . ' ' . ($aField['bAI'] ? 'AUTO_INCREMENT' : "DEFAULT '0'") . ',';
                 if ($aField['bAI']) {
-                  if (!in_array('`' . strtoupper($aField['sFieldName']) . '`', $aPKs)) {
-                    $aPKs[] = '`' . strtoupper($aField['sFieldName']) . '`';
+                  if (!in_array('`' . $aField['sFieldName'] . '`', $aPKs)) {
+                    $aPKs[] = '`' . $aField['sFieldName'] . '`';
                   }
                 }
               break;
               case 'FLOAT':
-                $sQuery .= '`' . strtoupper($aField['sFieldName']) . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0',";
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0',";
               break;
             }
             if ($aField['bPrimaryKey'] == 1) {
-              if (!in_array('`' . strtoupper($aField['sFieldName']) . '`', $aPKs)) {
-                $aPKs[] = '`' . strtoupper($aField['sFieldName']) . '`';
+              if (!in_array('`' . $aField['sFieldName'] . '`', $aPKs)) {
+                $aPKs[] = '`' . $aField['sFieldName'] . '`';
               }
             }
           }
@@ -369,6 +370,7 @@ public function loadByName($name) {
       $aFieldsToDelete = array();
       $aFieldsToAlter  = array();
       foreach ($aNewFields as $aNewField) {
+      	$aNewField['FLD_NAME'] = strtoupper($aNewField['FLD_NAME']);
         if (!isset($aOldFields[$aNewField['FLD_UID']])) {
           $aFieldsToAdd[] = $aNewField;
         }
@@ -379,6 +381,7 @@ public function loadByName($name) {
         }
       }
       foreach ($aOldFields as $aOldField) {
+      	$aOldField['FLD_NAME'] = strtoupper($aOldField['FLD_NAME']);
         if (!isset($aNewFields[$aOldField['FLD_UID']])) {
           $aFieldsToDelete[] = $aOldField;
         }
@@ -522,7 +525,7 @@ public function loadByName($name) {
       $aData['tableName']      = $sTableName;
       $aData['className']      = $sClassName;
       $aData['GUID']           = $sAddTabUid;
-      $aData['firstColumn']    = $aFields[1]['FLD_NAME'];
+      $aData['firstColumn']    = strtoupper($aFields[1]['FLD_NAME']);
       $aData['totalColumns']   = count($aFields);
       $aData['useIdGenerator'] = 'false';
       $oTP1  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'Table.tpl');
@@ -538,6 +541,7 @@ public function loadByName($name) {
       $aNotPKs  = array();
       $i        = 0;
       foreach($aFields as $iKey => $aField) {
+      	$aField['FLD_NAME'] = strtoupper($aField['FLD_NAME']); 
       	if ($aField['FLD_TYPE']=='DATE') $aField['FLD_NULL'] = '';
         $aColumn    = array('name'        => $aField['FLD_NAME'],
                             'phpName'     => $this->getPHPName($aField['FLD_NAME']),
