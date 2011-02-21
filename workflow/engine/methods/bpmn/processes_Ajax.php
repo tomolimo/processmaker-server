@@ -185,6 +185,7 @@ if ( isset ($_REQUEST['action']) ) {
           $sOutput = $oProcessMap->updateProcess($aData);
           echo $sOutput;
           break;
+      
       case 'saveStartEvent':
           $aData['TAS_UID']  = $oData->tas_uid;
           $aData['TAS_START']  = $oData->tas_start;
@@ -378,6 +379,20 @@ if ( isset ($_REQUEST['action']) ) {
                    }
             print G::json_encode($result);
             break;
+
+            case 'getOutputDocsTemplates':
+                  require_once 'classes/model/OutputDocument.php';
+                  $ooutputDocument = new OutputDocument();
+                  if (isset($_GET['OUT_DOC_UID'])) {
+                    $rows = $ooutputDocument->load($_GET['OUT_DOC_UID']);
+                    $tmpData = json_encode( $rows ) ;
+                     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+                     $result = $tmpData;
+                     echo $result;
+                     break;
+                    
+                  }
+          
     }
 }
 ?>

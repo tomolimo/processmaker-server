@@ -398,7 +398,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
         title: _('ID_GENERATE_INFO'),
         bodyStyle:'padding:5px 5px 0',
         width: 500,
-        height: 400,
+        height: 300,
         buttonAlign : 'center',
         defaultType: 'textfield',
         items: [{
@@ -444,8 +444,8 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                                 Ext.Ajax.request({
                                 url: '../cases/cases_SchedulerValidateUser.php?USERNAME=' + username+'&PASSWORD='+password,
                                     success: function(response) {
-                                        var result = Ext.util.JSON.decode(response.responseText);
-                                        if(result.status == 0)
+                                        var result = response.responseText;
+                                        if(result.length == 32)
                                         {
                                           credentialFieldset.items.items[4].setValue(response.responseText);
                                           propertiesFieldset.show();
@@ -454,7 +454,6 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                                           credentialFieldset.items.items[2].hide(); //Hide Test User
                                           credentialFieldset.items.items[3].show(); //Show Edit User
                                         }
-                                        Ext.Msg.alert(result.message);
                                  },
                                     failure: function(){
                                         PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
@@ -795,7 +794,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
              collapsible: false,
              maximizable: false,
              width: 600,
-             height: 640,
+             height: 450,
              minWidth: 300,
              minHeight: 200,
              layout: 'fit',
@@ -1040,7 +1039,7 @@ pmosExt.prototype.toggleFields = function(field,bool){
                 field[i].hide();
 
             //Hide-Show label
-            //field[i].getEl().up('.x-form-item').setDisplayed(bool);
+            field[i].getEl().up('.x-form-item').setDisplayed(bool);
         }
     }
      

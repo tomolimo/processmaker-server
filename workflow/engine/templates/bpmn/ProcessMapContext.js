@@ -5,160 +5,132 @@ ProcessMapContext.prototype=new Workflow;
 ProcessMapContext.prototype.type="ProcessMap";
 
 ProcessMapContext.prototype.editProcess= function()
-{
-         
-        //var editProcessData     = workflow.processEdit;
-       // var processCategoryData = workflow.processCategory;
-        //var debug               = editProcessData.PRO_DEBUG;
-       // var pro_category        = editProcessData.PRO_CATEGORY;
-        //var pro_category_label  = editProcessData.PRO_CATEGORY_LABEL;
-            //var checkdebug = true;
-      //if(debug  == '0')
-         // checkDebug = false;
-//
-//            var processCalendar = new Array();
-//            processCalendar[0]  = new Array();
-//            processCalendar[1]  = new Array();
-//
-//            processCalendar[0].name  = 'None';
-//            processCalendar[0].value = '';
-//            processCalendar[1].name  = 'Default';
-//            processCalendar[1].value = '00000000000000000000000000000001';
+   {
+      var editProcess = new Ext.FormPanel({
+        labelWidth  : 75, // label settings here cascade unless overridden
+        frame       :false,
+        buttonAlign : 'center',
+        bodyStyle   : 'padding:5px 0 0 5px;',
+        monitorValid: true,
+        width       : 450,
+        height      : 400,
+        defaultType : 'textfield',
+        items       : [{
+                        xtype       :'fieldset',
+                        title       : 'Process Information',
+                        collapsible : false,
+                        autoHeight  :true,
+                        buttonAlign : 'center',
+                        width       : 450,
+                        defaultType : 'textfield',
+                        items       : [{
+                                        fieldLabel  : _('ID_TITLE'),
+                                        name        : 'PRO_TITLE',
+                                        width       : 300,
+                                        allowBlank  : false
+                                    },{
+                                        xtype       : 'textarea',
+                                        fieldLabel  : _('ID_DESCRIPTION'),
+                                        name        : 'PRO_DESCRIPTION',
+                                        width       : 300,
+                                        height      : 150
 
-        //var processName = processInfo.title.label
-        var editProcess = new Ext.FormPanel({
-        labelWidth: 75, // label settings here cascade unless overridden
-        frame:false,
-        buttonAlign: 'center',
-        bodyStyle : 'padding:5px 0 0 5px;',
-        //monitorValid : true,
-        width: 450,
-        height: 400,
-        defaultType: 'textfield',
-        items: [{
-                xtype:'fieldset',
-                title: 'Process Information',
-                collapsible: false,
-                autoHeight:true,
-                buttonAlign : 'center',
-                width: 450,
-                defaultType: 'textfield',
-                items: [{
-                        fieldLabel: _('ID_TITLE'),
-                        name: 'PRO_TITLE',
-                        width: 300,
-                        //value: editProcessData.PRO_TITLE,
-                        allowBlank:false
-                    },{
-                        xtype: 'textarea',
-                        fieldLabel: _('ID_DESCRIPTION'),
-                        name: 'PRO_DESCRIPTION',
-                        //value: editProcessData.PRO_DESCRIPTION,
-                        width: 300,
-                        height : 150
-
-                    },{
-                        width: 300,
-                        xtype:          'combo',
-                        mode:           'local',
-                        //value:          editProcessData.PRO_CALENDAR,
-                        forceSelection: true,
-                        triggerAction:  'all',
-                        editable:       false,
-                        fieldLabel:     _('ID_CALENDAR'),
-                        name:           'PRO_CALENDAR',
-                        hiddenName:     'calendar',
-                        displayField:   'name',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                                                fields : ['name', 'value'],
-                                                data   :  [
-                                            {name:'none',    value: ''},
-                                             {name:'default',    value: '00000000000000000000000000000001'}
-                                  ]
-                                            })
-                    }, {
-                        width:          300,
-                        xtype:          'combo',
-                        mode:           'local',
-                        //value:          editProcessData.PRO_CATEGORY,
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     _('ID_CATEGORY'),
-                        name:           'PRO_CATEGORY',
-                        hiddenName:     'category',
-                        displayField:   'CATEGORY_NAME',
-                        valueField:     'CATEGORY_UID',
-                        value:          '--None--',
-                        store:          new Ext.data.JsonStore({
-                                                fields : ['CATEGORY_NAME', 'CATEGORY_UID']
-                                                //data   :processCategoryData
-                                            })
-                    },{
-                        xtype: 'checkbox',
-                        fieldLabel: _('ID_PRO_DEBUG'),
-                        name: 'PRO_DEBUG',
-                        checked:workflow.checkdebug
-                    }
-                ]
+                                    },{
+                                        width           : 300,
+                                        xtype           : 'combo',
+                                        mode            : 'local',
+                                        forceSelection  : true,
+                                        triggerAction   : 'all',
+                                        editable        : false,
+                                        fieldLabel      : _('ID_CALENDAR'),
+                                        name            : 'PRO_CALENDAR',
+                                        hiddenName      : 'calendar',
+                                        displayField    : 'name',
+                                        valueField      : 'value',
+                                        store           : new Ext.data.JsonStore({
+                                                                fields : ['name', 'value'],
+                                                                data   : [
+                                                                         {name:'none',    value: ''},
+                                                                         {name:'default',    value: '00000000000000000000000000000001'}
+                                                                         ]
+                                        })
+                                    },{
+                                        width           : 300,
+                                        xtype           : 'combo',
+                                        mode            : 'local',
+                                        triggerAction   : 'all',
+                                        forceSelection  : true,
+                                        editable        : false,
+                                        fieldLabel      : _('ID_CATEGORY'),
+                                        name            : 'PRO_CATEGORY',
+                                        hiddenName      : 'category',
+                                        displayField    : 'CATEGORY_NAME',
+                                        valueField      : 'CATEGORY_UID',
+                                        value           : '--None--',
+                                        store           :new Ext.data.JsonStore({
+                                                                    fields : ['CATEGORY_NAME', 'CATEGORY_UID']
+                                        })
+                                    },{
+                                        xtype       : 'checkbox',
+                                        fieldLabel  : _('ID_PRO_DEBUG'),
+                                        name        :'PRO_DEBUG',
+                                        checked     : workflow.checkdebug
+                                    }
+                        ]
         }],buttons: [{
-            text: _('ID_SAVE'),
-            formBind    :true,
-            handler: function(form, action){
-                //waitMsg: 'Saving...',       // Wait Message
-                  //var fields          = editProcess.items.items;
-                  var getForm         = editProcess.getForm().getValues();
-                  var pro_title       = getForm.PRO_TITLE;
-                  var pro_description = getForm.PRO_DESCRIPTION;
-                  var pro_calendar    = getForm.PRO_CALENDAR;
-                  var pro_category    = getForm.PRO_CATEGORY;
-                  var pro_debug       = getForm.PRO_DEBUG;
+                text : _('ID_SAVE'),
+                formBind : true,
+                handler : function(form, action){
+                              var getForm         = editProcess.getForm().getValues();
+                              var pro_title       = getForm.PRO_TITLE;
+                              var pro_description = getForm.PRO_DESCRIPTION;
+                              var pro_calendar    = getForm.PRO_CALENDAR;
+                              var pro_category    = getForm.PRO_CATEGORY;
+                              var pro_debug       = getForm.PRO_DEBUG;
                   
-                 if(pro_debug == 'on')
-                     pro_debug = 1;
-                 else
-                    pro_debug = 0;
-                  var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'"}';
-                  Ext.Ajax.request({
-                        url: "processes_Ajax.php"+ urlparams,
-                        success: function(response) {
-                             PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_SAVE') );
-                            window.hide();
-                        }
-                        
-                    });
-             }
+                              if(pro_debug == 'on')
+                                 pro_debug = 1;
+                              else
+                                 pro_debug = 0;
+                                 var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'"}';
+                                 Ext.Ajax.request({
+                                     url: "processes_Ajax.php"+ urlparams,
+                                     success: function(response) {
+                                         PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_SAVE') );
+                                         window.hide();
+                                     }
+
+                                 });
+                }
 
         },{
             text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
                 window.hide();
-             }
+            }
         }]
-    });
+      });
 
-  editProcess.form.load({
-        url:'proxyExtjs.php?pid='+pro_uid+'&action=process_Edit',
-        method:'GET',
-        waitMsg:'Loading',
-        success:function(form, action) {
-           if(action.result.data.PRO_DEBUG== 0)
-               workflow.checkdebug = false;
-           else
-               workflow.checkdebug = true;
-           window.show();
-         },
-        failure:function(form, action) {
-            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-        }
-    });
+      editProcess.form.load({
+            url:'proxyExtjs.php?pid='+pro_uid+'&action=process_Edit',
+            method:'GET',
+            waitMsg:'Loading',
+            success:function(form, action) {
+                    if(action.result.data.PRO_DEBUG== 0)
+                        workflow.checkdebug = false;
+                    else
+                        workflow.checkdebug = true;
+                        window.show();
+            },
+            failure:function(form, action) {
+                    PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+            }
+      });
 
-    editProcess.render(document.body);
-    //workflow.editProcessForm = editProcess;
-
-     var window = new Ext.Window({
+      editProcess.render(document.body);
+      
+      var window = new Ext.Window({
         title: _('ID_EDIT_PROCESS'),
         collapsible: false,
         maximizable: false,
@@ -172,13 +144,12 @@ ProcessMapContext.prototype.editProcess= function()
         buttonAlign: 'center',
         items: editProcess
         });
-    window.show();
-
-}
+      window.show();
+   }
 
 ProcessMapContext.prototype.exportProcess= function()
-{
-  var exportProcessForm = new Ext.FormPanel({
+  {
+   var exportProcessForm = new Ext.FormPanel({
     labelWidth    : 160, // label settings here cascade unless overridden
     frame         : false,
     bodyStyle     :'padding:10px 10px 10px 10px;',
@@ -187,111 +158,110 @@ ProcessMapContext.prototype.exportProcess= function()
     defaultType   : 'textfield',
     buttonAlign   : 'center',
     items: [
-      {
-        xtype      : 'fieldset',
-        title      : 'Process Info',
-        collapsible: false,
-        autoHeight : true,
-        buttonAlign: 'center',
-        items: [
-          {
-            xtype       : 'displayfield',
-            fieldLabel  : _('ID_PRO_TITLE'),
-            name        : 'PRO_TITLE'
-          },{
-            xtype       : 'displayfield',
-            fieldLabel  : _('ID_DESCRIPTION'),
-            name        : 'PRO_DESCRIPTION'
-          },{
-            xtype       : 'displayfield',
-            fieldLabel  : _('ID_SIZE_IN_BYTES'),
-            name        : 'SIZE'
-          },{
-            xtype       : 'displayfield',
-            fieldLabel  : _('ID_PM_FILENAME'),
-            //id          : 'PM_FILENAME',
-            name        : 'PM_FILENAME'
-          },{
-            xtype       : 'displayfield',
-            fieldLabel  : _('ID_XPDL_FILENAME'),
-            //id          : 'XPDL_FILENAME',
-            name        : 'XPDL_FILENAME'
-          }
-        ]
-      }],
+            {
+            xtype      : 'fieldset',
+            title      : 'Process Info',
+            collapsible: false,
+            autoHeight : true,
+            buttonAlign: 'center',
+            items:[
+                    {
+                    xtype       : 'displayfield',
+                    fieldLabel  : _('ID_PRO_TITLE'),
+                    name        : 'PRO_TITLE'
+                  },{
+                    xtype       : 'displayfield',
+                    fieldLabel  : _('ID_DESCRIPTION'),
+                    name        : 'PRO_DESCRIPTION'
+                  },{
+                    xtype       : 'displayfield',
+                    fieldLabel  : _('ID_SIZE_IN_BYTES'),
+                    name        : 'SIZE'
+                  },{
+                    xtype       : 'displayfield',
+                    fieldLabel  : _('ID_PM_FILENAME'),
+                    //id          : 'PM_FILENAME',
+                    name        : 'PM_FILENAME'
+                  },{
+                    xtype       : 'displayfield',
+                    fieldLabel  : _('ID_XPDL_FILENAME'),
+                    //id          : 'XPDL_FILENAME',
+                    name        : 'XPDL_FILENAME'
+                  }
+                ]
+    }],
     buttons: [{
-      text: _('ID_CANCEL'),
-        handler: function(){
-          exportProcesswindow.hide();
+    text: _('ID_CANCEL'),
+    handler: function(){
+            exportProcesswindow.hide();
+            }
+    }]
+});
+
+   exportProcessForm.render(document.body);
+   workflow.exportProcessForm = exportProcessForm;
+   exportProcessForm.form.load({
+        url:'proxyProcesses_Export?pro_uid='+pro_uid,
+        method:'GET',
+        waitMsg:'Loading',
+        success:function(form, action) {
+                  var aData = action.result.data;
+                  var fieldSet = workflow.exportProcessForm.items.items[0];
+                  var fields = fieldSet.items.items;
+                  form.findField('PM_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINK + "\">" + aData.FILENAME + "<\/a>");
+                  form.findField('XPDL_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINKXPDL + "\">" + aData.FILENAMEXPDL + "<\/a>");
+        },
+        failure:function(form, action) {
         }
-    }]      
-  });
+   });
 
-  exportProcessForm.render(document.body);
-  workflow.exportProcessForm = exportProcessForm;
-  exportProcessForm.form.load({
-    url:'proxyProcesses_Export?pro_uid='+pro_uid,
-    method:'GET',
-    waitMsg:'Loading',
-    success:function(form, action) {
-      var aData = action.result.data;
-      var fieldSet = workflow.exportProcessForm.items.items[0];
-      var fields = fieldSet.items.items;
-      form.findField('PM_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINK + "\">" + aData.FILENAME + "<\/a>");
-      form.findField('XPDL_FILENAME').setValue("<a href=\"" + aData.FILENAME_LINKXPDL + "\">" + aData.FILENAMEXPDL + "<\/a>");
-    },
-    failure:function(form, action) {
-    //  Ext.MessageBox.alert('Message', 'Load failed');
-    }
-  });
-
-  var exportProcesswindow = new Ext.Window({
-    title      : _('ID_EXPORT_PROCESS'),
-    collapsible: false,
-    maximizable: false,
-    sizeable   : false,
-    width      : 500,
-    height     : 250,
-    resizable  : false,
-    layout     : 'fit',
-    plain      : true,
-    buttonAlign: 'center',
-    items      : exportProcessForm
-  });
+   var exportProcesswindow = new Ext.Window({
+        title      : _('ID_EXPORT_PROCESS'),
+        collapsible: false,
+        maximizable: false,
+        sizeable   : false,
+        width      : 500,
+        height     : 250,
+        resizable  : false,
+        layout     : 'fit',
+        plain      : true,
+        buttonAlign: 'center',
+        items      : exportProcessForm
+        });
   
-  workflow.exportProcesswindow = exportProcesswindow;
-  exportProcesswindow.show();
+   workflow.exportProcesswindow = exportProcesswindow;
+   exportProcesswindow.show();
 }
 
 ProcessMapContext.prototype.addTask= function()
-{
-    var newShape = eval("new bpmnTask(workflow)");
-    var xPos = workflow.contextX;
-    var yPos = workflow.contextY;
-    workflow.addFigure(newShape, xPos, yPos);
-    newShape.actiontype = 'addTask';
-    workflow.saveShape(newShape);      //Saving Annotations when user drags and drops it
-}
+    {
+        var newShape = eval("new bpmnTask(workflow)");
+        var xPos = workflow.contextX;
+        var yPos = workflow.contextY;
+        workflow.addFigure(newShape, xPos, yPos);
+        newShape.actiontype = 'addTask';
+        workflow.saveShape(newShape);      //Saving Annotations when user drags and drops it
+    }
 
 ProcessMapContext.prototype.horiLine= function()
-{
-    PMExt.notify( _('ID_STATUS') , _('ID_HORIZONTAL_LINE') );
-}
+    {
+        PMExt.notify( _('ID_STATUS') , _('ID_HORIZONTAL_LINE') );
+    }
 
 ProcessMapContext.prototype.vertiLine= function()
-{
-    PMExt.notify( _('ID_STATUS') , _('ID_VERTICAL_LINE') );
-}
+    {
+        PMExt.notify( _('ID_STATUS') , _('ID_VERTICAL_LINE') );
+    }
 
 ProcessMapContext.prototype.delLines= function()
-{
-    PMExt.notify( _('ID_STATUS') , _('ID_DELETE_LINES') );
-}
+    {
+        PMExt.notify( _('ID_STATUS') , _('ID_DELETE_LINES') );
+    }
 
 ProcessMapContext.prototype.processPermission= function()
-{
+  {
   //Process Permission store code starts here
-  var dbConnFields = Ext.data.Record.create([
+    var dbConnFields = Ext.data.Record.create([
             { name: 'OP_UID',type: 'string'},
             { name: 'LABEL',type: 'string'},
             { name: 'TASK_TARGET',type: 'string'},
@@ -316,443 +286,334 @@ ProcessMapContext.prototype.processPermission= function()
             { name: 'DYNAFORM_NAME',type: 'string'},
             { name: 'INPUT_NAME',type: 'string'},
             { name: 'OUTPUT_NAME',type: 'string'}
+    ]);
 
+    //Creating different stores required for fields in form
+    var selectField = Ext.data.Record.create([
+                            { name: 'LABEL',type: 'string'},
+                            { name: 'UID',type: 'string'}
+    ]);
 
-        ]);
+    var editor = new Ext.ux.grid.RowEditor({
+        saveText: _('ID_UPDATE')
+        });
 
-  var PermissionStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : dbConnFields,
-            proxy: new Ext.data.HttpProxy({
-            url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermission'
-            })
-          });
- PermissionStore.load({params:{start:0, limit:10}});
-
-var PermissionGridColumn =  new Ext.grid.ColumnModel({
-      columns: [
-                new Ext.grid.RowNumberer(),
-                    {
-                        id: 'TASK_TARGET',
-                        header: _('ID_TARGET_TASK'),
-                        dataIndex: 'TASK_TARGET',
-                        autoWidth: true,
-                        editable: false,
-                        width:120,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'GROUP_USER',
-                        header: _('ID_GROUP_USER'),
-                        dataIndex: 'GROUP_USER',
-                        width: 150,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'TASK_SOURCE',
-                        header: _('ID_ORIGIN_TASK'),
-                        dataIndex: 'TASK_SOURCE',
-                        width: 120,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'PARTICIPATED',
-                        header: _('ID_PARTICIPATION'),
-                        dataIndex: 'PARTICIPATED',
-                        width: 120,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'OBJECT_TYPE',
-                        header: _('ID_TYPE'),
-                        dataIndex: 'OBJECT_TYPE',
-                        width: 100,
-                        editable: false,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'OBJECT',
-                        header: _('ID_OBJECT'),
-                        name:'OBJECT',
-                        dataIndex: 'OBJECT',
-                        width: 100,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'ACTION',
-                        header: _('ID_PERMISSION'),
-                        dataIndex: 'ACTION',
-                        width: 120,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    },{
-                        id: 'OP_CASE_STATUS',
-                        header: _('ID_STATUS'),
-                        dataIndex: 'OP_CASE_STATUS',
-                        width: 120,
-                        sortable: true,
-                        editor: new Ext.form.TextField({
-                            //allowBlank: false
-                            })
-                    }
-                ]
-     });
-  var editor = new Ext.ux.grid.RowEditor({
-    saveText: _('ID_UPDATE')
+    var btnCreate = new Ext.Button({
+        id: 'btnCreate',
+        text: _('ID_NEW'),
+        iconCls: 'button_menu_ext ss_sprite ss_add',
+        handler: function () {
+            PermissionForm.getForm().reset();
+            formWindow.show();
+            
+        }
     });
 
+    var editProPermission = function() {
+        editor.stopEditing();
+        var rowSelected  = Ext.getCmp('permissiongrid').getSelectionModel().getSelections();
+         if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+       }
+       var opUID = rowSelected[0].get('OP_UID');
+       PermissionForm.form.load({
+                url:'proxyExtjs.php?pid='+pro_uid+'&op_uid=' +opUID+'&action=editObjectPermission',
+                method:'GET',
+                waitMsg:'Loading',
+                success:function(form, action) {
+                   formWindow.show();
+                   if(action.result.data.OP_PARTICIPATE == 1)
+                       form.findField('OP_PARTICIPATE').setValue('Yes');
+                   else
+                       form.findField('OP_PARTICIPATE').setValue('No');
 
-  var btnCreate = new Ext.Button({
-            id: 'btnCreate',
-            text: _('ID_NEW'),
-            iconCls: 'button_menu_ext ss_sprite ss_add',
-            handler: function () {
-                formWindow.show();
-                PermissionForm.getForm().reset();
-            }
-  });
-  var btnEdit = new Ext.Button({
-            id: 'btnEdit',
-            text: _('ID_EDIT'),
-            iconCls: 'button_menu_ext ss_sprite ss_pencil',
-            handler: function (s) {
-                var selectedRow = PermissionGrid.getSelectionModel().getSelections();
-                var opUID   = selectedRow[0].data.OP_UID;
-                 //Loading Task Details into the form
-                  PermissionForm.form.load({
-                        url:'proxyExtjs.php?pid='+pro_uid+'&op_uid=' +opUID+'&action=editObjectPermission',
-                        method:'GET',
-                        waitMsg:'Loading',
-                        success:function(form, action) {
-                           formWindow.show();
-                           if(action.result.data.OP_PARTICIPATE == 1)
-                               form.findField('OP_PARTICIPATE').setValue('Yes');
-                           else
-                               form.findField('OP_PARTICIPATE').setValue('No');
+                   if(action.result.data.OP_OBJ_TYPE == 'DYNAFORM')
+                       Ext.getCmp('dynaform').show();
+                   if(action.result.data.OP_OBJ_TYPE == 'INPUT')
+                       Ext.getCmp('inputdoc').show();
+                   if(action.result.data.OP_OBJ_TYPE == 'OUTPUT')
+                       Ext.getCmp('outputdoc').show();
+                },
+                failure:function(form, action) {
+                    PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                }
+       });
+    }
 
-                           if(action.result.data.OP_OBJ_TYPE == 'DYNAFORM')
-                               Ext.getCmp('dynaform').show();
-                           if(action.result.data.OP_OBJ_TYPE == 'INPUT')
-                               Ext.getCmp('inputdoc').show();
-                           if(action.result.data.OP_OBJ_TYPE == 'OUTPUT')
-                               Ext.getCmp('outputdoc').show();
-                       },
-                        failure:function(form, action) {
-                            Ext.MessageBox.alert('Message', 'Load failed');
+    var deleteProPermission = function(){
+    ids = Array();
+
+    editor.stopEditing();
+    var rowsSelected = Ext.getCmp('permissiongrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++)
+      ids[i] = rowsSelected[i].get('OP_UID');
+
+    ids = ids.join(',');
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_INPUTDOCUMENT_CONFIRM'), function(){
+         Ext.Ajax.request({
+                        url   : '../processes/processes_DeleteObjectPermission.php?OP_UID='+ids,
+                                  method: 'GET',
+                        success: function(response) {
+                          var result = Ext.util.JSON.decode(response.responseText);
+                          if( result.success ){
+                            PMExt.notify( _('ID_STATUS') , result.msg);
+                            //Reloading store after deleting input document
+                            PermissionStore.reload();
+                          } else {
+                            PMExt.error(_('ID_ERROR'), result.msg);
+                          }
                         }
+                      });
                     });
-            }
-        });
+      }
+
+  var btnEdit = new Ext.Button({
+    id: 'btnEdit',
+    text: _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+    handler: editProPermission
+  });
 
   var btnRemove = new Ext.Button({
-            id: 'btnRemove',
-            text: _('ID_DELETE'),
-            iconCls: 'button_menu_ext ss_sprite ss_delete',
-            handler: function (s) {
-                editor.stopEditing();
-                var s = PermissionGrid.getSelectionModel().getSelections();
-                for(var i = 0, r; r = s[i]; i++){
-
-                    //First Deleting process permission from Database using Ajax
-                    var opUID      = r.data.OP_UID;
-
-                    //if OP_UID is properly defined (i.e. set to valid value) then only delete the row
-                    //else its a BLANK ROW for which Ajax should not be called.
-                    if(r.data.OP_UID != "")
-                    {
-                          Ext.Ajax.request({
-                                  url   : '../processes/processes_DeleteObjectPermission.php?OP_UID='+opUID,
-                                  method: 'GET',
-                                  
-                                  success: function(response) {
-                                    Ext.MessageBox.alert ('Status','Process Permission has been removed successfully.');
-                                    //Secondly deleting from Grid
-                                    PermissionStore.remove(r);
-                                    //reloading store after deleting input document
-                                    PermissionStore.reload();
-                                  }
-                                });
-                    }
-                    else
-                        PermissionStore.remove(r);
-                }
-            }
-        });
-        
-  var tb = new Ext.Toolbar({
-            items: [btnCreate,btnRemove,btnEdit]
-      
+    id: 'btnRemove',
+    text: _('ID_DELETE'),
+    iconCls: 'button_menu_ext ss_sprite ss_delete',
+    handler: deleteProPermission
   });
 
-  var PermissionGrid = new Ext.grid.GridPanel({
-        store: PermissionStore,
-        id : 'mygrid',
-        loadMask: true,
-        loadingText: 'Loading...',
-        frame: false,
-        autoHeight:false,
-        clicksToEdit: 1,
-        width:450,
-        minHeight:400,
-        height   :400,
-        layout: 'fit',
-        cm: PermissionGridColumn,
-        stripeRows: true,
-        tbar: tb,
-        bbar: new Ext.PagingToolbar({
-            pageSize: 10,
-            store: PermissionStore,
-            displayInfo: true,
-            displayMsg: 'Displaying Process Permission {0} - {1} of {2}',
-            emptyMsg: "No Process Permission to display",
-            items:[]
-        }),
-        viewConfig: {forceFit: true}
-   });
+  var tb = new Ext.Toolbar({
+    items: [btnCreate, btnRemove, btnEdit]
+  });
 
- var gridWindow = new Ext.Window({
-        title: _('ID_PROCESS_PERMISSIONS'),
-        collapsible: false,
-        maximizable: true,
-        width: 800,
-        autoScroll: true,
-        height: 380,
-        layout: 'fit',
-        plain: true,
-        buttonAlign: 'center',
-        items: PermissionGrid
- });
+  var PermissionStore = new Ext.data.JsonStore({
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : dbConnFields,
+    proxy        : new Ext.data.HttpProxy({
+                        url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermission'
+    })
+  });
+  PermissionStore.load({params:{start:0, limit:10}});
 
- //Creating different stores required for fields in form
- var selectField = Ext.data.Record.create([
-                        { name: 'LABEL',type: 'string'},
-                        { name: 'UID',type: 'string'}
-                    ]);
-
- var selectTaskStore = new Ext.data.JsonStore({
-                    root         : 'data',
-                    totalProperty: 'totalCount',
-                    idProperty   : 'gridIndex',
-                    remoteSort   : true,
-                    fields       : selectField,
-                    proxy: new Ext.data.HttpProxy({
-                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=tasks'
-                    })
-                  });
+  var selectTaskStore = new Ext.data.JsonStore({
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : selectField,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=tasks'
+    })
+  });
 
  var usersStore = new Ext.data.JsonStore({
-                    root         : 'data',
-                    totalProperty: 'totalCount',
-                    idProperty   : 'gridIndex',
-                    remoteSort   : true,
-                    fields       : selectField,
-                    proxy: new Ext.data.HttpProxy({
-                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=users'
-                    })
-                  });
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : selectField,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=users'
+    })
+  });
 
  var dynaformStore = new Ext.data.JsonStore({
-                    root         : 'data',
-                    totalProperty: 'totalCount',
-                    idProperty   : 'gridIndex',
-                    remoteSort   : true,
-                    fields       : selectField,
-                    proxy: new Ext.data.HttpProxy({
-                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=dynaform'
-                    })
-                  });
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : selectField,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=dynaform'
+    })
+  });
 
  var inputDocStore = new Ext.data.JsonStore({
-                    root         : 'data',
-                    totalProperty: 'totalCount',
-                    idProperty   : 'gridIndex',
-                    remoteSort   : true,
-                    fields       : selectField,
-                    proxy: new Ext.data.HttpProxy({
-                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=input'
-                    })
-                  });
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : selectField,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=input'
+    })
+  });
 
  var outputDocStore = new Ext.data.JsonStore({
-                    root         : 'data',
-                    totalProperty: 'totalCount',
-                    idProperty   : 'gridIndex',
-                    remoteSort   : true,
-                    fields       : selectField,
-                    proxy: new Ext.data.HttpProxy({
-                      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=output'
-                    })
-                  });
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : selectField,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=output'
+    })
+  });
 
- var PermissionForm =new Ext.FormPanel({
-   //   title:"Add new Database Source",
-      collapsible: false,
-      maximizable: true,
-      width:360,
-      //height: 30,
-      monitorValid : true,
-      bodyStyle : 'padding:10px 0 0 10px;',
-      frame:false,
-      plain: true,
-      buttonAlign: 'center',
-      items:[{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :_('ID_STATUS_CASE'),
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'OP_CASE_STATUS',
-                    displayField    :'name',
-                    value           :'ALL',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'ALL',   value: '0'},
-                                                        {name : 'DRAFT',   value: '1'},
-                                                        {name : 'TO DO',   value: '2'},
-                                                        {name : 'PAUSED',   value: '3'},
-                                                        {name : 'COMPLETED',   value: '4'}]})
-                },
-                new Ext.form.ComboBox({
-                    fieldLabel: _('ID_TARGET_TASK'),
-                    //hiddenName:'popType',
-                    //autoload: true,
-                    name: 'TASK_TARGET_NAME',
-                    store: selectTaskStore,
-                    valueField:'LABEL',
-                    displayField:'LABEL',
-                    triggerAction: 'all',
-                    emptyText:'Select Target Task',
-                    editable: true,
-                    onSelect: function(record,index)
-                    {
-                        //var taskUID = record.data.UID;
-                        Ext.getCmp("TASK_TARGET").setValue(record.data.UID);
-                       this.setValue(record.data[this.valueField || this.displayField]);
-                       this.collapse();
-                    }
-                    }),
-
-                 new Ext.form.ComboBox({
-                    fieldLabel: _('ID_GROUP_USERS'),
-                    //hiddenName:'popType',
-                    name: 'USR_FULLNAME',
-                    //autoload: true,
-                    store: usersStore,
-                    valueField:'LABEL',
-                    displayField:'LABEL',
-                    triggerAction: 'all',
-                    emptyText:'Select Group or Users',
-                    editable: true,
-                    onSelect: function(record,index)
-                    {
-                       Ext.getCmp("GROUP_USER").setValue(record.data.UID);
-                        this.setValue(record.data[this.valueField || this.displayField]);
-                        this.collapse();
-                    }
-                    })
-                ,
-                new Ext.form.ComboBox({
-                    fieldLabel: _('ID_ORIGIN_TASK'),
-                    name    : 'TASK_SOURCE_NAME',
-                    store: selectTaskStore,
-                    valueField:'LABEL',
-                    displayField:'LABEL',
-                    triggerAction: 'all',
-                    emptyText:'Select Source Task',
-                    editable: true,
-                    onSelect: function(record,index)
-                    {
-                        //var taskUID = record.data.UID;
-                        Ext.getCmp("TASK_SOURCE").setValue(record.data.UID);
-                        this.setValue(record.data[this.valueField || this.displayField]);
-                        this.collapse();
-                    }
-                    }),
+  var PermissionForm =new Ext.FormPanel({
+    collapsible: false,
+    maximizable: true,
+    width:360,
+    //height: 30,
+    monitorValid : true,
+    bodyStyle : 'padding:10px 0 0 10px;',
+    frame:false,
+    plain: true,
+    buttonAlign: 'center',
+    items:[{
+            width           :150,
+            xtype           :'combo',
+            mode            :'local',
+            editable        :false,
+            fieldLabel      :_('ID_STATUS_CASE'),
+            triggerAction   :'all',
+            forceSelection  : true,
+            name            :'OP_CASE_STATUS',
+            displayField    :'name',
+            value           :'ALL',
+            valueField      :'value',
+            store           :new Ext.data.JsonStore({
+                                                    fields : ['name', 'value'],
+                                                    data   : [
+                                                    {name : 'ALL',   value: '0'},
+                                                    {name : 'DRAFT',   value: '1'},
+                                                    {name : 'TO DO',   value: '2'},
+                                                    {name : 'PAUSED',   value: '3'},
+                                                    {name : 'COMPLETED',   value: '4'}]})
+            },
+            new Ext.form.ComboBox({
+                fieldLabel: _('ID_TARGET_TASK'),
+                name: 'TASK_TARGET_NAME',
+                store: selectTaskStore,
+                valueField:'LABEL',
+                displayField:'LABEL',
+                triggerAction: 'all',
+                emptyText:'Select Target Task',
+                editable: true,
+                onSelect: function(record,index)
                   {
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :_('ID_PARTICIPATION_REQUIRED'),
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'OP_PARTICIPATE',
-                    displayField    :'name',
-                    value           :'Yes',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'Yes',   value: '0'},
-                                                        {name : 'No',   value: '1'}]})
-              },{
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :_('ID_TYPE'),
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'OP_OBJ_TYPE',
-                    displayField    :'name',
-                    value           :'ALL',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                                                        fields : ['name', 'value'],
-                                                        data   : [
-                                                        {name : 'ALL',   value: '0'},
-                                                        {name : 'DYNAFORM',   value: '1'},
-                                                        {name : 'INPUT',   value: '2'},
-                                                        {name : 'OUTPUT',   value: '3'}]}),
-                    onSelect: function(record, index) {
+                   Ext.getCmp("TASK_TARGET").setValue(record.data.UID);
+                   this.setValue(record.data[this.valueField || this.displayField]);
+                   this.collapse();
+                  }
+            }),
+            new Ext.form.ComboBox({
+                fieldLabel: _('ID_GROUP_USERS'),
+                //hiddenName:'popType',
+                name: 'USR_FULLNAME',
+                //autoload: true,
+                store: usersStore,
+                valueField:'LABEL',
+                displayField:'LABEL',
+                triggerAction: 'all',
+                emptyText:'Select Group or Users',
+                editable: true,
+                onSelect: function(record,index)
+                {
+                   Ext.getCmp("GROUP_USER").setValue(record.data.UID);
+                    this.setValue(record.data[this.valueField || this.displayField]);
+                    this.collapse();
+                }
+            }),
+            new Ext.form.ComboBox({
+                fieldLabel: _('ID_ORIGIN_TASK'),
+                name    : 'TASK_SOURCE_NAME',
+                store: selectTaskStore,
+                valueField:'LABEL',
+                displayField:'LABEL',
+                triggerAction: 'all',
+                emptyText:'Select Source Task',
+                editable: true,
+                onSelect: function(record,index)
+                {
+                    //var taskUID = record.data.UID;
+                    Ext.getCmp("TASK_SOURCE").setValue(record.data.UID);
+                    this.setValue(record.data[this.valueField || this.displayField]);
+                    this.collapse();
+                }
+            }),
+            {
+            width           :150,
+            xtype           :'combo',
+            mode            :'local',
+            editable        :false,
+            fieldLabel      :_('ID_PARTICIPATION_REQUIRED'),
+            triggerAction   :'all',
+            forceSelection  : true,
+            name            :'OP_PARTICIPATE',
+            displayField    :'name',
+            value           :'Yes',
+            valueField      :'value',
+            store           :new Ext.data.JsonStore({
+                                                    fields : ['name', 'value'],
+                                                    data   : [
+                                                    {name : 'Yes',   value: '0'},
+                                                    {name : 'No',   value: '1'}]})
+            },{
+            width           :150,
+            xtype           :'combo',
+            mode            :'local',
+            editable        :false,
+            fieldLabel      :_('ID_TYPE'),
+            triggerAction   :'all',
+            forceSelection  : true,
+            name            :'OP_OBJ_TYPE',
+            displayField    :'name',
+            value           :'ALL',
+            valueField      :'value',
+            store           :new Ext.data.JsonStore({
+                                                    fields : ['name', 'value'],
+                                                    data   : [
+                                                    {name : 'ALL',   value: '0'},
+                                                    {name : 'DYNAFORM',   value: '1'},
+                                                    {name : 'INPUT',   value: '2'},
+                                                    {name : 'OUTPUT',   value: '3'}]}),
+            onSelect: function(record, index) {
                                  //Show-Hide Format Type Field
-                                                        if(record.data.value == '1')
-                                                                {Ext.getCmp("dynaform").show();
-                                                                 Ext.getCmp("inputdoc").hide();
-                                                                 Ext.getCmp("outputdoc").hide()}
-                                                        else if(record.data.value == '2')
-                                                                {Ext.getCmp("inputdoc").show();
-                                                                 Ext.getCmp("dynaform").hide();
-                                                                    Ext.getCmp("outputdoc").hide()}
-                                                        else
-                                                                {Ext.getCmp("outputdoc").show();
-                                                                 Ext.getCmp("inputdoc").hide();
-                                                                 Ext.getCmp("dynaform").hide()}
-                                                                 this.setValue(record.data[this.valueField || this.displayField]);
-                                                                 this.collapse();
-                                     }
-
-           },
-           {
-               xtype: 'fieldset',
-               id   : 'dynaform',
-               hidden: true,
-               border: false,
-               items: [{
+                                                if(record.data.value == '1')
+                                                        {
+                                                            Ext.getCmp("dynaform").show();
+                                                            Ext.getCmp("inputdoc").hide();
+                                                            Ext.getCmp("outputdoc").hide();
+                                                        }
+                                                else if(record.data.value == '2')
+                                                        {
+                                                            Ext.getCmp("inputdoc").show();
+                                                            Ext.getCmp("dynaform").hide();
+                                                            Ext.getCmp("outputdoc").hide();
+                                                        }
+                                                else if(record.data.value == '3')
+                                                        {
+                                                            Ext.getCmp("outputdoc").show();
+                                                            Ext.getCmp("inputdoc").hide();
+                                                            Ext.getCmp("dynaform").hide();
+                                                        }
+                                                else
+                                                    {
+                                                        Ext.getCmp("outputdoc").hide();
+                                                        Ext.getCmp("inputdoc").hide();
+                                                        Ext.getCmp("dynaform").hide();
+                                                    }
+                                                this.setValue(record.data[this.valueField || this.displayField]);
+                                                this.collapse();
+            }
+            },{
+            xtype: 'fieldset',
+            id   : 'dynaform',
+            hidden: true,
+            border: false,
+            items: [{
                     xtype: 'combo',
                     fieldLabel: _('ID_DYNAFORM'),
-                    //hiddenName:'UID',
                     autoload: true,
                     width:200,
                     store: dynaformStore,
@@ -763,22 +624,20 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     emptyText:'Select',
                     editable: true,
                     onSelect: function(record,index)
-                    {
-                        //var taskUID = record.data.UID;
+                        {
                         Ext.getCmp("DYNAFORMS").setValue(record.data.UID);
                         this.setValue(record.data[this.valueField || this.displayField]);
                         this.collapse();
                     }
-               }]
-           },{
-               xtype: 'fieldset',
-               id   : 'inputdoc',
-               hidden: true,
-               border: false,
-               items: [{
+            }]
+            },{
+            xtype: 'fieldset',
+            id   : 'inputdoc',
+            hidden: true,
+            border: false,
+            items: [{
                     xtype: 'combo',
                     fieldLabel: _('ID_INPUT_DOCUMENT'),
-                    //hiddenName:'UID',
                     name: 'INPUT_NAME',
                     width:200,
                     autoload: true,
@@ -789,14 +648,13 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     emptyText:'Select',
                     editable: true,
                     onSelect: function(record,index)
-                    {
-                        //var taskUID = record.data.UID;
+                      {
                         Ext.getCmp("INPUTS").setValue(record.data.UID);
                         this.setValue(record.data[this.valueField || this.displayField]);
                         this.collapse();
                     }
                }]
-           },{
+            },{
                xtype: 'fieldset',
                id   : 'outputdoc',
                hidden: true,
@@ -823,20 +681,19 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     }
 
                }]
-           },
-           {
-                    width           :150,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :_('ID_PERMISSION'),
-                    triggerAction   :'all',
-                    forceSelection  : true,
-                    name            :'OP_ACTION',
-                    displayField    :'name',
-                    value           :'VIEW',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
+           },{
+               width           :150,
+               xtype           :'combo',
+               mode            :'local',
+               editable        :false,
+               fieldLabel      :_('ID_PERMISSION'),
+               triggerAction   :'all',
+               forceSelection  : true,
+               name            :'OP_ACTION',
+               displayField    :'name',
+               value           :'VIEW',
+               valueField      :'value',
+               store           :new Ext.data.JsonStore({
                                                         fields : ['name', 'value'],
                                                         data   : [
                                                         {name : 'VIEW',   value: 'VIEW'},
@@ -869,13 +726,11 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                id : 'OP_UID',
                xtype: 'hidden',
                name : 'OP_UID'
-            }
-
-       ],
-       buttons: [{
-            text: _('ID_CREATE'),
-            formBind    :true,
-            handler: function(){
+           }],
+           buttons: [{
+             text: _('ID_CREATE'),
+             formBind    :true,
+             handler: function(){
                 var getForm         = PermissionForm.getForm().getValues();
                 var TargetTask      = getForm.TASK_TARGET;
                 var GroupUser       = getForm.GROUP_USER;
@@ -889,7 +744,7 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                     Participation = 1;
                 else
                     Participation = 0;
-                
+
                 var Type            = getForm.OP_OBJ_TYPE;
                 var Permission      = getForm.OP_ACTION;
                 var OP_UID          = getForm.OP_UID;
@@ -919,103 +774,254 @@ var PermissionGridColumn =  new Ext.grid.ColumnModel({
                       PermissionStore.reload();
                   }
                 });
-            }
-            else
-                {
-                  Ext.Ajax.request({
-                  url   : '../processes/processes_SaveEditObjectPermission.php',
-                  method: 'POST',
-                  params:{
-                      PRO_UID         :pro_uid,
-                      OP_UID          :OP_UID,
-                      OP_OBJ_TYPE     :Type,
-                      TAS_UID         :TargetTask,
-                      OP_CASE_STATUS  :Status,
-                      GROUP_USER      :GroupUser,
-                      OP_TASK_SOURCE  :OriginTask,
-                      OP_PARTICIPATE  :Participation,
-                      OP_ACTION       :Permission,
-                      DYNAFORMS       :Dynaforms,
-                      INPUTS          :Inputs,
-                      OUTPUTS         :Outputs
-                  },
-                  success: function(response) {
+           }
+                else
+                  {
+                    Ext.Ajax.request({
+                    url   : '../processes/processes_SaveEditObjectPermission.php',
+                    method: 'POST',
+                    params:{
+                          PRO_UID         :pro_uid,
+                          OP_UID          :OP_UID,
+                          OP_OBJ_TYPE     :Type,
+                          TAS_UID         :TargetTask,
+                          OP_CASE_STATUS  :Status,
+                          GROUP_USER      :GroupUser,
+                          OP_TASK_SOURCE  :OriginTask,
+                          OP_PARTICIPATE  :Participation,
+                          OP_ACTION       :Permission,
+                          DYNAFORMS       :Dynaforms,
+                          INPUTS          :Inputs,
+                          OUTPUTS         :Outputs
+                    },
+                    success: function(response) {
                       PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_PERMISSIONS_EDIT') );
                       formWindow.hide();
                       PermissionStore.reload();
                       formWindow.hide();
                       PermissionStore.reload();
-                  }
-                });
+                    }
+                   });
                 }
-          }
-        },{
+             }
+            },{
             text: _('ID_CANCEL'),
             handler: function(){
-                // when this button clicked,
                 formWindow.hide();
-          }
+            }
         }]
   })
 
-var formWindow = new Ext.Window({
-        title: _('ID_PERMISSION_NEW'),
-        collapsible: false,
-        maximizable: true,
-        width: 400,
-        autoScroll: true,
-        //autoHeight: true,
-        height: 320,
-        //layout: 'fit',
-        plain: true,
-        buttonAlign: 'center',
-        items: PermissionForm
+  var PermissionGridColumn =  new Ext.grid.ColumnModel({
+     columns: [
+              new Ext.grid.RowNumberer(),
+                {
+                id       : 'TASK_TARGET',
+                header   : _('ID_TARGET_TASK'),
+                dataIndex: 'TASK_TARGET',
+                autoWidth: true,
+                editable : false,
+                width    :120,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'GROUP_USER',
+                header   : _('ID_GROUP_USER'),
+                dataIndex: 'GROUP_USER',
+                width    : 150,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'TASK_SOURCE',
+                header   : _('ID_ORIGIN_TASK'),
+                dataIndex: 'TASK_SOURCE',
+                width    : 120,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'PARTICIPATED',
+                header   : _('ID_PARTICIPATION'),
+                dataIndex: 'PARTICIPATED',
+                width    : 120,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'OBJECT_TYPE',
+                header   : _('ID_TYPE'),
+                dataIndex: 'OBJECT_TYPE',
+                width    : 100,
+                editable : false,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'OBJECT',
+                header   : _('ID_OBJECT'),
+                name     :'OBJECT',
+                dataIndex: 'OBJECT',
+                width    : 100,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'ACTION',
+                header   : _('ID_PERMISSION'),
+                dataIndex: 'ACTION',
+                width    : 120,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              },{
+                id       : 'OP_CASE_STATUS',
+                header   : _('ID_STATUS'),
+                dataIndex: 'OP_CASE_STATUS',
+                width    : 120,
+                sortable : true,
+                editor   : new Ext.form.TextField({
+                })
+              }]
+  });
+  
+  var PermissionGrid = new Ext.grid.GridPanel({
+    store       : PermissionStore,
+    id          : 'permissiongrid',
+    loadMask    : true,
+    loadingText : 'Loading...',
+    frame       : false,
+    autoHeight  :false,
+    clicksToEdit: 1,
+    width       :450,
+    minHeight   :400,
+    height      :400,
+    layout      : 'fit',
+    cm          : PermissionGridColumn,
+    stripeRows  : true,
+    tbar        : tb,
+    bbar        : new Ext.PagingToolbar({
+                    pageSize    : 10,
+                    store       : PermissionStore,
+                    displayInfo : true,
+                    displayMsg  : 'Displaying Process Permission {0} - {1} of {2}',
+                    emptyMsg    : "No Process Permission to display",
+                    items       :[]
+    }),
+    viewConfig  : {forceFit: true}
+  });
+
+//connecting context menu  to grid
+  PermissionGrid.addListener('rowcontextmenu', onProcessPermissionMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  PermissionGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  PermissionGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onProcessPermissionMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    processPermisssionMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var processPermisssionMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_EDIT'),
+        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        handler: editProPermission
+      },{
+        text: _('ID_DELETE'),
+        icon: '/images/delete.png',
+        handler: deleteProPermission
+      },{
+        text: _('ID_UID'),
+        handler: function(){
+          var rowSelected = Ext.getCmp('permissiongrid').getSelectionModel().getSelected();
+          workflow.createUIDButton(rowSelected.data.OP_UID);
+        }
+      }
+    ]
+  });
+ var gridWindow = new Ext.Window({
+        title       : _('ID_PROCESS_PERMISSIONS'),
+        collapsible : false,
+        maximizable : true,
+        width       : 800,
+        autoScroll  : true,
+        height      : 380,
+        layout      : 'fit',
+        plain       : true,
+        buttonAlign : 'center',
+        items       : PermissionGrid
+ });
+
+ var formWindow = new Ext.Window({
+        title       : _('ID_PERMISSION_NEW'),
+        collapsible : false,
+        maximizable : true,
+        width       : 400,
+        autoScroll  : true,
+        height      : 320,
+        plain       : true,
+        buttonAlign : 'center',
+        items       : PermissionForm
        });
   gridWindow.show();
 }
 
 ProcessMapContext.prototype.processSupervisors= function()
-{
-  var processUserFields = Ext.data.Record.create([
-            {name: 'PU_UID',type: 'string'},
-            {name: 'USR_UID',type: 'string'},
-            {name: 'PU_TYPE',type: 'string'},
-            {name: 'USR_FIRSTNAME',type: 'string'},
-            {name: 'USR_LASTNAME',type: 'string'},
-            {name: 'USR_EMAIL',type: 'string'}
-            ]);
-  var editor = new Ext.ux.grid.RowEditor({
-            saveText: _('ID_UPDATE')
-        });
+  {
+   var processUserFields = Ext.data.Record.create([
+    {name: 'PU_UID',type: 'string'},
+    {name: 'USR_UID',type: 'string'},
+    {name: 'PU_TYPE',type: 'string'},
+    {name: 'USR_FIRSTNAME',type: 'string'},
+    {name: 'USR_LASTNAME',type: 'string'},
+    {name: 'USR_EMAIL',type: 'string'}
+   ]);
 
-  var btnAdd = new Ext.Button({
-            id: 'btnAdd',
-            text: _('ID_ASSIGN'),
-            iconCls: 'button_menu_ext ss_sprite ss_add',
-            handler: function(){
-                var User = grid.getStore();
-                var e = new processUserFields({
-                     PU_UID: '',
-                     USR_UID: '',
-                     PU_TYPE: '',
-                     //USR_FIRSTNAME: '',
-                     USR_LASTNAME: '',
-                     USR_EMAIL: ''
-                });
+   var editor = new Ext.ux.grid.RowEditor({
+       saveText: _('ID_UPDATE')
+   });
 
-                //storeUsers.reload();
-                if(availableProcessesUser.data.items.length == 0)
-                    PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_UNAVAILABLE') );
-                else
-                {
-                    editor.stopEditing();
-                    processUser.insert(0, e);
-                    grid.getView().refresh();
-                    //grid.getSelectionModel().selectRow(0);
-                    editor.startEditing(0, 0);
-                }
+   var btnAdd = new Ext.Button({
+        id: 'btnAdd',
+        text: _('ID_ASSIGN'),
+        iconCls: 'button_menu_ext ss_sprite ss_add',
+        handler: function(){
+            var User = grid.getStore();
+            var e = new processUserFields({
+                 PU_UID: '',
+                 USR_UID: '',
+                 PU_TYPE: '',
+                 //USR_FIRSTNAME: '',
+                 USR_LASTNAME: '',
+                 USR_EMAIL: ''
+            });
+
+            //storeUsers.reload();
+            if(availableProcessesUser.data.items.length == 0)
+                PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_UNAVAILABLE') );
+            else
+            {
+                editor.stopEditing();
+                processUser.insert(0, e);
+                grid.getView().refresh();
+                //grid.getSelectionModel().selectRow(0);
+                editor.startEditing(0, 0);
             }
-        });
+        }
+    });
 
   var btnRemove = new Ext.Button({
             id: 'btnRemove',
@@ -1718,13 +1724,13 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                },{
                         xtype: 'checkbox',
                         fieldLabel: _('ID_DERIVATION_HISTORY'),
-                        name: 'CT_DERIVATION_HISTORY'
-                        //checked:checkDerivation
+                        name: 'CT_DERIVATION_HISTORY',
+                        checked     : workflow.checkdebug
                 },{
                         xtype: 'checkbox',
                         fieldLabel: _('ID_MESSAGES_HISTORY'),
-                        name: 'CT_MESSAGE_HISTORY'
-                       // checked:checkMessages
+                        name: 'CT_MESSAGE_HISTORY',
+                       checked     : workflow.checkdebug
                }], buttons: [{
                 text: _('ID_SAVE'),
                 formBind    :true,
@@ -1735,14 +1741,14 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                 var DerivationHistory   = getForm.CT_DERIVATION_HISTORY;
                 var MessageHistory      = getForm.CT_MESSAGE_HISTORY;
                 if(DerivationHistory == 'on')
-                    DerivationHistory = '1';
+                    DerivationHistory = 1;
                 else
-                    DerivationHistory = '0';
+                    DerivationHistory = 0;
 
                 if(MessageHistory == 'on')
-                    MessageHistory = '1';
+                    MessageHistory = 1;
                 else
-                    MessageHistory = '0';
+                    MessageHistory = 0;
 
                    Ext.Ajax.request({
                        url   : '../tracker/tracker_Save.php',
@@ -1753,8 +1759,10 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
                           CT_DERIVATION_HISTORY :DerivationHistory,
                           CT_MESSAGE_HISTORY    :MessageHistory
                        },
+
                        success: function(response) {
                            PMExt.notify( _('ID_STATUS') , _('ID_CASE_PROPERTIES_SAVE') );
+                           Propertieswindow.hide();
                           }
                    });
                 }
@@ -1766,6 +1774,31 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
         }]
 
    });
+
+    PropertiesForm.form.load({
+            url:'proxyExtjs.php?pid='+pro_uid+'&action=getCaseTracker',
+            method:'GET',
+            waitMsg:'Loading',
+            success:function(form, action) {
+                    if(action.result.data.CT_DERIVATION_HISTORY == 0)
+                        workflow.checkdebug = false;
+                    else
+                        workflow.checkdebug = true;
+                        Propertieswindow.show();
+                    if(action.result.data.CT_MESSAGE_HISTORY == 0)
+                        workflow.checkdebug = false;
+                    else
+                        workflow.checkdebug = true;
+                        Propertieswindow.show();
+
+            },
+            failure:function(form, action) {
+                    PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+            }
+      });
+
+      PropertiesForm.render(document.body);
+
    var Propertieswindow = new Ext.Window({
         title: _('ID_CASE_TRACKERS'),
         collapsible: false,

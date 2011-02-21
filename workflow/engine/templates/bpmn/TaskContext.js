@@ -1287,7 +1287,7 @@ TaskContext.prototype.editTaskProperties= function()
                        else
                            workflow.checkStartingTask = true;
 
-//To load the values of the selecte radio button in Assignment Rules
+  //To load the values of the selecte radio button in Assignment Rules
                        if(action.result.data.TAS_ASSIGN_TYPE=='BALANCED')
                            form.items.items[4].items[0].checked=true;
 
@@ -1386,33 +1386,9 @@ TaskContext.prototype.saveTaskProperties= function()
                  var taskId = workflow.currentSelection.id;
                  saveTaskform['TAS_UID'] = taskId;
                  var object_data = Ext.util.JSON.encode(saveTaskform);
-                /* var newTaskValues = new Array();
-                 var oData = null;
-                 for (var key in saveTaskform )
-                    {
-                            newTaskValues[key] = new Array();
 
-                            if(saveTaskform[key] == 'on')
-                                {
-                                    if(key == 'TAS_TYPE')
-                                        saveTaskform[key] = 'ADHOC';
-                                    else
-                                        saveTaskform[key] = 'TRUE';
-                                }
-                            else if(saveTaskform[key] == 'off')
-                                saveTaskform[key] = 'FALSE';
 
-                            newTaskValues[key] = saveTaskform[key];        //Creating an array on all updated fields by user
 
-                            if(key != 'TAS_CALENDAR' && key != 'TAS_DEF_MESSAGE_CHECKBOX')
-                            {
-                                if(oData != null)
-                                    oData = oData + '"'+key+'":"'+saveTaskform[key]+'"'+',';
-                                else
-                                    oData = '"'+key+'":"'+saveTaskform[key]+'",' + '"TAS_UID":"'+taskId+'",';
-                            }
-                    }
-                 oData = '{'+oData.slice(0,oData.length-1)+'}';*/
 
                  Ext.Ajax.request({
                         url: '../tasks/tasks_Ajax.php' ,

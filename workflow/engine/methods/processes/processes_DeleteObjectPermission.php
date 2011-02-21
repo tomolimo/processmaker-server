@@ -43,12 +43,21 @@ if( $access != 1 ){
   	  die;
   	break;  	
   }
-}  
+}
+try{
 require_once 'classes/model/ObjectPermission.php';
 $oOP = new ObjectPermission();
 $oOP = ObjectPermissionPeer::retrieveByPK($_GET['OP_UID']);
 $sProcessUID = $oOP->getProUid();
 $oOP->delete();
+$result->success = true;
+$result->msg = G::LoadTranslation('ID_REPORTTABLE_REMOVED');
 G::LoadClass('processMap');
 $oProcessMap = new ProcessMap();
 $oProcessMap->getObjectsPermissionsCriteria($sProcessUID);
+}
+catch (Exception $e) {
+    $result->success = false;
+    $result->msg = $e->getMessage();
+   }
+print G::json_encode($result);

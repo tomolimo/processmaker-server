@@ -373,6 +373,77 @@
         $result = $tmpData;
         echo $result;
        break;
+
+   case 'getCaseTracker':
+  	 //$rows = $oProcessMap->caseTracker($_GET['pid']);
+         $oCaseTracker = new CaseTracker ( );
+         $rows = $oCaseTracker->load($_GET['pid']);
+         $tmpData = json_encode( $rows ) ;
+         $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+         $result = $tmpData;
+         echo $result;
+         break;
+
+     case 'getVariables':
+         $aFields = getDynaformsVars($_GET['pid']);
+         if(isset ($_GET['type']))
+
+         $aType = $_GET['type'];
+
+        else $aType='';
+
+        $rows[0] = Array (
+          'fieldname' => 'char',
+          'variable' => 'char',
+          'type' => 'type',
+          'label' => 'char'
+        );
+        foreach ( $aFields as $aField ) {
+          switch ($aType){
+              case "system":
+                if($aField['sType']=="system"){
+                    $rows[] = Array (
+                    'fieldname' => $_GET['sFieldName'],
+                    'variable' => $_GET['sSymbol'] . $aField['sName'],
+                    'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_GET['sFieldName'].'\',\''.$_GET['sSymbol'] . $aField['sName'].'\');">'.$_GET['sSymbol'] . $aField['sName'].'</a></div>',
+                    'type' => $aField['sType'],
+                    'label' => $aField['sLabel']
+                    );
+                }
+              break;
+              case "process":
+                if($aField['sType']!="system"){
+                    $rows[] = Array (
+                    'fieldname' => $_GET['sFieldName'],
+                    'variable' => $_GET['sSymbol'] . $aField['sName'],
+                    'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_GET['sFieldName'].'\',\''.$_GET['sSymbol'] . $aField['sName'].'\');">'.$_GET['sSymbol'] . $aField['sName'].'</a></div>',
+                    'type' => $aField['sType'],
+                    'label' => $aField['sLabel']
+                    );
+                }
+              break;
+              default:
+                $rows[] = Array (
+                'fieldname' => $_GET['sFieldName'],
+                'variable' => $_GET['sSymbol'] . $aField['sName'],
+                'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_GET['sFieldName'].'\',\''.$_GET['sSymbol'] . $aField['sName'].'\');">'.$_GET['sSymbol'] . $aField['sName'].'</a></div>',
+                'type' => $aField['sType'],
+                'label' => $aField['sLabel']
+                );
+              break;
+          }
+
+        }
+
+        array_shift($rows);
+        $result['totalCount'] = count($rows);
+        $result['data'] = $rows;
+        print json_encode($result);
+        break;
+
+    
+
+  	 
 }
    //$result['data'] = $rows;
    //print json_encode( $result ) ;

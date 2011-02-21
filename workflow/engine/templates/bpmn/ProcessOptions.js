@@ -1898,28 +1898,196 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         });
 
   //edit output document Function
-  var editOutputDoc = function() {
-      editor.stopEditing();
-      var rowSelected  = Ext.getCmp('outputdocGrid').getSelectionModel().getSelections();
-      if( rowSelected.length == 0 ) {
-           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
-           return false;
-      }
+  var editOutputDoc = function(){
+
+   var rowSelected  = Ext.getCmp('outputdocGrid').getSelectionModel().getSelections();
+              if( rowSelected.length == 0 ) {
+                   PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+                   return false;
+              }
       var outputDocUID = rowSelected[0].get('OUT_DOC_UID');
-      outputDocForm.form.load({
-                        url   :'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
-                        method: 'GET',
-                        waitMsg:'Loading',
-                        success:function(form, action) {
-                           //Ext.MessageBox.alert('Message', 'Loaded OK');
-                           newOPWindow.show();
-                           Ext.getCmp("OUT_DOC_UID").setValue(outputDocUID);
-                        },
-                        failure:function(form, action) {
-                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                        }
-                     });
-   }
+
+  
+
+  Ext.QuickTips.init();
+
+  // turn on validation errors beside the field globally
+  Ext.form.Field.prototype.msgTarget = 'side';
+
+  var bd = Ext.getBody();
+
+  var importOption = new Ext.Action({
+    text: _('ID_LOAD_FROM_FILE'),
+    iconCls: 'silk-add',
+    icon: '/images/import.gif',
+    handler: function(){
+      var w = new Ext.Window({
+        title: '',
+        width: 420,
+        height: 140,
+        modal: true,
+        autoScroll: false,
+        maximizable: false,
+        resizable: false,
+
+        items: [
+          new Ext.FormPanel({
+            /*renderTo: 'form-panel',*/
+            id:'uploader',
+            fileUpload: true,
+            width: 400,
+            frame: true,
+            title: _('ID_OUT_PUT_DOC_UPLOAD_TITLE'),
+            autoHeight: false,
+            bodyStyle: 'padding: 10px 10px 0 10px;',
+            labelWidth: 50,
+            defaults: {
+                anchor: '90%',
+                allowBlank: false,
+                msgTarget: 'side'
+            },
+            items: [{
+                xtype: 'fileuploadfield',
+                id: 'form-file',
+                emptyText: _('ID_SELECT_TEMPLATE_FILE'),
+                fieldLabel: _('ID_FILE'),
+                name: 'templateFile',
+                buttonText: '',
+                buttonCfg: {
+                    iconCls: 'upload-icon'
+                }
+            }],
+            buttons: [{
+                text: _('ID_UPLOAD'),
+                handler: function(){
+                  var uploader = Ext.getCmp('uploader');
+                  if(uploader.getForm().isValid()){
+                    uploader.getForm().submit({
+                      url: 'outputdocs_Ajax?action=setTemplateFile',
+                      waitMsg: _('ID_UPLOADING_FILE'),
+                      success: function(o, resp){
+                        w.close();
+
+                        Ext.Ajax.request({
+                          url: 'outputdocs_Ajax?action=getTemplateFile&r='+Math.random(),
+                          success: function(response){
+                            Ext.getCmp('OUT_DOC_TEMPLATE').setValue(response.responseText);
+                            if(Ext.getCmp('OUT_DOC_TEMPLATE').getValue(response.responseText)=='')
+                              Ext.Msg.alert(_('ID_ALERT_MESSAGE'), _('ID_INVALID_FILE'));
+                          },
+                          failure: function(){},
+                          params: {request: 'getRows'}
+                        });
+
+                      },
+                      failure: function(o, resp){
+                        w.close();
+                        //alert('ERROR "'+resp.result.msg+'"');
+                        Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
+                        Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
+                        Ext.MessageBox.ERROR});
+                        //setTimeout(function(){Ext.MessageBox.hide(); }, 2000);
+                      }
+                    });
+                  }
+                }
+            },{
+            text: _('ID_CANCEL'),
+            handler: function(){
+                // when this button clicked,
+                w.hide();
+            }
+        }]
+          })
+        ]
+      });
+      w.show();
+    }
+  });
+
+
+    var top = new Ext.FormPanel({
+        labelAlign: 'top',
+        frame:true,
+        title: '',
+        bodyStyle:'padding:5px 5px 0',
+        width: 790,
+        tbar:[importOption],
+        items: [
+        {
+            xtype:'htmleditor',
+            id:'OUT_DOC_TEMPLATE',
+            fieldLabel:'Output Document Template',
+            height:300,
+            anchor:'98%'
+        }],
+
+        buttons: [{
+          text: _('ID_SAVE'),
+          handler: function(){
+              editor.stopEditing();
+             Ext.Ajax.request({
+              url: '../outputdocs/outputdocs_Save.php',
+              method: 'POST',
+              params: {
+                OUT_DOC_UID: outputDocUID,
+                functions:'',
+                OUT_DOC_TEMPLATE:Ext.getCmp('OUT_DOC_TEMPLATE').getValue()
+              },
+              success: function(response){
+                Ext.Msg.show({
+                  title: '',
+                  msg: 'Saved Successfully',
+                  fn: function(){},
+                  animEl: 'elId',
+                  icon: Ext.MessageBox.INFO,
+                  buttons: Ext.MessageBox.OK
+                });
+              },
+              failure: function(){}
+              
+            });
+          }
+        },{
+            text: _('ID_CANCEL'),
+            handler: function(){
+                // when this button clicked,
+                window.hide();
+            }
+        }]
+    });
+
+    top.render(document.body);
+
+    var window = new Ext.Window({
+        title: _('ID_NEW_INPUTDOCS'),
+        width: 550,
+        height: 400,
+        minWidth: 200,
+        minHeight: 150,
+        autoScroll: true,
+        layout: 'fit',
+        plain: true,
+        items: top
+    });
+   window.show();
+
+   top.form.load({
+                    url   :'processes_Ajax.php?OUT_DOC_UID='+outputDocUID+'&action=getOutputDocsTemplates',
+                    method: 'GET',
+                    waitMsg:'Loading',
+                    success:function(form, action) {
+                       //Ext.MessageBox.alert('Message', 'Loaded OK');
+                       window.show();
+                       //OUT_DOC_TEMPLATE:Ext.getCmp('OUT_DOC_TEMPLATE').setValue()
+                    },
+                    failure:function(form, action) {
+                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                    }
+                 });
+
+   
+}
 
    var removeOutputDoc = function(){
     ids = Array();
@@ -1962,6 +2130,26 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   //properties output document
   var propertiesOutputDoc = function(){
+      editor.stopEditing();
+      var rowSelected  = Ext.getCmp('outputdocGrid').getSelectionModel().getSelections();
+      if( rowSelected.length == 0 ) {
+           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+           return false;
+      }
+      var outputDocUID = rowSelected[0].get('OUT_DOC_UID');
+      outputDocForm.form.load({
+                        url   :'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
+                        method: 'GET',
+                        waitMsg:'Loading',
+                        success:function(form, action) {
+                           //Ext.MessageBox.alert('Message', 'Loaded OK');
+                           newOPWindow.show();
+                           Ext.getCmp("OUT_DOC_UID").setValue(outputDocUID);
+                        },
+                        failure:function(form, action) {
+                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                        }
+                     });
 
   }
   

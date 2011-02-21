@@ -31,8 +31,8 @@
  */
 
 
-$sWS_USER = trim($_POST['USERNAME']);
-$sWS_PASS = trim($_POST['PASSWORD']);
+$sWS_USER = trim($_REQUEST['USERNAME']);
+$sWS_PASS = trim($_REQUEST['PASSWORD']);
 
 if (G::is_https ())
     $http = 'https://';
