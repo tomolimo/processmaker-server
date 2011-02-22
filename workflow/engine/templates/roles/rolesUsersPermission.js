@@ -70,51 +70,22 @@ Ext.onReady(function(){
 	  });
 
 	  cancelEditPermissionsButton = new Ext.Action({
-	    text: _('ID_SAVE_CHANGES'),
-	    //iconCls: 'button_menu_ext ss_sprite ss_cancel',
-	    handler: CancelEditPermissionsAction,
-	    hidden: true
+	    text: _('ID_CLOSE'),
+	    iconCls: 'button_menu_ext ss_sprite ss_cancel',
+	    handler: CancelEditPermissionsAction
 	  });
 	  
 	  editPermissionsUButton = new Ext.Action({
-		    text: _('ID_EDIT_USERS'),
+		    text: _('ID_ASSIGN_USERS'),
 		    iconCls: 'button_menu_ext ss_sprite  ss_user_add',
 		    handler: EditPermissionsActionU
 		  });
 
 		  cancelEditPermissionsUButton = new Ext.Action({
-		    text: _('ID_SAVE_CHANGES'),
-		    //iconCls: 'button_menu_ext ss_sprite ss_cancel',
-		    handler: CancelEditPermissionsActionU,
-		    hidden: true
+		    text: _('ID_CLOSE'),
+		    iconCls: 'button_menu_ext ss_sprite ss_cancel',
+		    handler: CancelEditPermissionsActionU
 		  });
-	
-	
-//	assignUButton = new Ext.Action({
-//    	text: _('ID_ASSIGN,
-//    	iconCls: 'button_menu_ext ss_sprite  ss_add',
-//    	handler: AssignUserAction,
-//    	disabled: true
-//    });
-	
-//	assignUAllButton = new Ext.Action({
-//    	text: _('ID_ASSIGN_ALL_USERS'),
-//    	iconCls: 'button_menu_ext ss_sprite  ss_add',
-//    	handler: AssignAllUsersAction
-//    });
-	
-//	removeUButton = new Ext.Action({
-//    	text: _('ID_REMOVE,
-//    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
-//    	handler: RemoveUserAction,
-//    	disabled: true
-//    });
-	
-//	removeUAllButton = new Ext.Action({
-//    	text: _('ID_REMOVE_ALL_USERS'),
-//    	iconCls: 'button_menu_ext ss_sprite  ss_delete',
-//    	handler: RemoveAllUsersAction
-//    });
 	
 	backButton = new Ext.Action({
 		text: _('ID_BACK'),
@@ -231,6 +202,7 @@ Ext.onReady(function(){
 	
   	availableGrid = new Ext.grid.GridPanel({
   		    layout			: 'fit',
+  		    title           : _('ID_AVAILABLE_PERMISSIONS'),
   		    region          : 'center',
         	ddGroup         : 'assignedGridDDGroup',
             store           : storeA,
@@ -250,7 +222,7 @@ Ext.onReady(function(){
         	frame			: false,
         	columnLines		: false,
         	viewConfig		: {forceFit:true},
-            tbar: [_('ID_AVAILABLE_PERMISSIONS'),{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
+            tbar: [cancelEditPermissionsButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
             //bbar: [{xtype: 'tbfill'}, assignAllButton],
             listeners: {rowdblclick: AssignPermissionAction},
             hidden: true
@@ -258,6 +230,7 @@ Ext.onReady(function(){
 
   	assignedGrid = new Ext.grid.GridPanel({
   		    layout			: 'fit',
+  		    title: _('ID_ASSIGNED_PERMISSIONS'),
   			ddGroup         : 'availableGridDDGroup',
             store           : storeP,
             cm          	: cmodelP,
@@ -276,7 +249,7 @@ Ext.onReady(function(){
         	frame			: false,
         	columnLines		: false,
         	viewConfig		: {forceFit:true},
-            tbar: [_('ID_ASSIGNED_PERMISSIONS'),{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
+            tbar: [editPermissionsButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
             //bbar: [{xtype: 'tbfill'},removeAllButton],
         	listeners: {rowdblclick: function(){
         	      (availableGrid.hidden)? DoNothing() :RemovePermissionAction();}} 
@@ -310,8 +283,8 @@ Ext.onReady(function(){
    		    defaults     : { flex : 1 }, //auto stretch
     		layoutConfig : { align : 'stretch' },
     		items        : [availableGrid,buttonsPanel,assignedGrid],
-    		viewConfig	 : {forceFit:true},
-    		bbar: [{xtype: 'tbfill'},editPermissionsButton, cancelEditPermissionsButton]
+    		viewConfig	 : {forceFit:true}
+    		//bbar: [{xtype: 'tbfill'},editPermissionsButton, cancelEditPermissionsButton]
 
     });
     
@@ -426,6 +399,7 @@ Ext.onReady(function(){
     
     availableUGrid = new Ext.grid.GridPanel({
 		    layout			: 'fit',
+		    title: _('ID_AVAILABLE_USERS'),
 		    region          : 'center',
     	ddGroup         : 'assignedUGridDDGroup',
         store           : storeX,
@@ -445,7 +419,7 @@ Ext.onReady(function(){
     	frame			: false,
     	columnLines		: false,
     	viewConfig		: {forceFit:true},
-        tbar: [_('ID_AVAILABLE_USERS'),{xtype: 'tbfill'},'-',searchTextU, clearTextButtonU],
+        tbar: [cancelEditPermissionsUButton,{xtype: 'tbfill'},'-',searchTextU, clearTextButtonU],
         //bbar: [{xtype: 'tbfill'}, assignUAllButton],
         listeners: {rowdblclick: AssignUserAction},
         hidden : true
@@ -453,6 +427,7 @@ Ext.onReady(function(){
     
     assignedUGrid = new Ext.grid.GridPanel({
 		    layout			: 'fit',
+		    title: _('ID_ASSIGNED_USERS'),
 			ddGroup         : 'availableUGridDDGroup',
         store           : storeU,
         cm          	: cmodelU,
@@ -471,7 +446,7 @@ Ext.onReady(function(){
     	frame			: false,
     	columnLines		: false,
     	viewConfig		: {forceFit:true},
-        tbar: [_('ID_ASSIGNED_USERS'),{xtype: 'tbfill'},'-',searchTextX, clearTextButtonX],
+        tbar: [editPermissionsUButton,{xtype: 'tbfill'},'-',searchTextX, clearTextButtonX],
         //bbar: [{xtype: 'tbfill'},removeUAllButton],
     	listeners: {rowdblclick: function(){
   	      (availableUGrid.hidden)? DoNothing() : RemoveUserAction();}} 
@@ -505,8 +480,8 @@ Ext.onReady(function(){
    		    defaults     : { flex : 1 }, //auto stretch
     		layoutConfig : { align : 'stretch' },
     		items        : [availableUGrid,buttonsUPanel,assignedUGrid],
-    		viewConfig	 : {forceFit:true},
-    		bbar: [{xtype: 'tbfill'},editPermissionsUButton, cancelEditPermissionsUButton]
+    		viewConfig	 : {forceFit:true}//,
+    		//bbar: [{xtype: 'tbfill'},editPermissionsUButton, cancelEditPermissionsUButton]
     });
     
     //NORTH PANEL WITH TITLE AND ROLE DETAILS
@@ -598,7 +573,7 @@ DDLoadUsers = function(){
                             	arrAux[r] = records[r].data['USR_UID'];
                             }
                             DeleteUsersRole(arrAux,RefreshUsers,FailureProcess);
-                            return true
+                            return true;
                     }
     });
 	
@@ -613,7 +588,7 @@ DDLoadUsers = function(){
                             	arrAux[r] = records[r].data['USR_UID'];
                             }
                             SaveUsersRole(arrAux,RefreshUsers,FailureProcess);
-                            return true
+                            return true;
                     }
      });
      sw_func_users = true;
@@ -856,8 +831,8 @@ GridByDefaultX = function(){
 EditPermissionsAction = function(){
   availableGrid.show();
   buttonsPanel.show();
-  editPermissionsButton.hide();
-  cancelEditPermissionsButton.show();
+  editPermissionsButton.disable();
+  //cancelEditPermissionsButton.show();
   PermissionsPanel.doLayout();
 };
 
@@ -865,8 +840,8 @@ EditPermissionsAction = function(){
 CancelEditPermissionsAction = function(){
   availableGrid.hide();
   buttonsPanel.hide();
-  editPermissionsButton.show();
-  cancelEditPermissionsButton.hide();
+  editPermissionsButton.enable();
+  //cancelEditPermissionsButton.hide();
   PermissionsPanel.doLayout();
 };
 
@@ -874,8 +849,8 @@ CancelEditPermissionsAction = function(){
 EditPermissionsActionU = function(){
   availableUGrid.show();
   buttonsUPanel.show();
-  editPermissionsUButton.hide();
-  cancelEditPermissionsUButton.show();
+  editPermissionsUButton.disable();
+  //cancelEditPermissionsUButton.show();
   UsersPanel.doLayout();
 };
 
@@ -883,7 +858,7 @@ EditPermissionsActionU = function(){
 CancelEditPermissionsActionU = function(){
   availableUGrid.hide();
   buttonsUPanel.hide();
-  editPermissionsUButton.show();
-  cancelEditPermissionsUButton.hide();
+  editPermissionsUButton.enable();
+  //cancelEditPermissionsUButton.hide();
   UsersPanel.doLayout();
 };

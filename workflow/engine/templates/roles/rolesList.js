@@ -293,7 +293,7 @@ Ext.onReady(function(){
     	enableColumnResize: true,
     	enableHdMenu: true,
     	frame:false,
-    	iconCls:'icon-grid',
+    	//iconCls:'icon-grid',
     	columnLines: false,
     	viewConfig: {
     		forceFit:true

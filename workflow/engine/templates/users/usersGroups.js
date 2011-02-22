@@ -53,16 +53,15 @@ Ext.onReady(function(){
   sw_user_summary = false;
 
   editMembersButton = new Ext.Action({
-    text: _('ID_EDIT_MEMBEROF'),
+    text: 'Assign Groups',
     iconCls: 'button_menu_ext ss_sprite  ss_user_add',
     handler: EditMembersAction
   });
 
   cancelEditMembersButton = new Ext.Action({
-    text: _('ID_SAVE_CHANGES'),
-    //iconCls: 'button_menu_ext ss_sprite ss_cancel',
-    handler: CancelEditMenbersAction,
-    hidden: true
+    text: _('ID_CLOSE'),
+    iconCls: 'button_menu_ext ss_sprite ss_cancel',
+    handler: CancelEditMenbersAction
   });
 
   backButton = new Ext.Action({
@@ -120,7 +119,7 @@ Ext.onReady(function(){
     },
     columns: [
       {id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
-      {header: _('ID_GROUP_NAME'), dataIndex: 'CON_VALUE', width: 60, align:'left'}
+      {header: _('ID_GROUP'), dataIndex: 'CON_VALUE', width: 60, align:'left'}
     ]
   });
 
@@ -192,6 +191,7 @@ Ext.onReady(function(){
 
   availableGrid = new Ext.grid.GridPanel({
     layout      : 'fit',
+    title       : _('ID_AVAILABLE_GROUPS'),
     region          : 'center',
     ddGroup         : 'assignedGridDDGroup',
     store           : storeA,
@@ -211,7 +211,7 @@ Ext.onReady(function(){
     frame      : false,
     columnLines    : false,
     viewConfig    : {forceFit:true},
-    tbar: [_('ID_AVAILABLE_GROUPS'),{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
+    tbar: [cancelEditMembersButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
     //bbar: [{xtype: 'tbfill'}, cancelEditMembersButton],
     listeners: {rowdblclick: AssignGroupsAction},
     hidden: true
@@ -219,6 +219,7 @@ Ext.onReady(function(){
 
   assignedGrid = new Ext.grid.GridPanel({
     layout      : 'fit',
+    title		: _('ID_ASSIGNED_GROUPS'),
     ddGroup         : 'availableGridDDGroup',
     store           : storeP,
     cm            : cmodelP,
@@ -237,8 +238,7 @@ Ext.onReady(function(){
     frame      : false,
     columnLines    : false,
     viewConfig    : {forceFit:true},
-    tbar: [_('ID_MEMBER_OF'),{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
-    //bbar: [{xtype: 'tbfill'},editMembersButton],
+    tbar: [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
     listeners: {rowdblclick: function(){
       (availableGrid.hidden)? DoNothing() : RemoveGroupsAction();
     }}
@@ -263,15 +263,14 @@ Ext.onReady(function(){
   });
 
   //GROUPS DRAG AND DROP PANEL
-  GroupsPanel = new Ext.Panel({
-    title     : _('ID_GROUPS'),
+  GroupsPanel = new Ext.Panel({ 
+    title     : _('ID_GROUPS'), 
     autoWidth   : true,
     layout       : 'hbox',
     defaults     : { flex : 1 }, //auto stretch
     layoutConfig : { align : 'stretch' },
-    items        : [availableGrid,buttonsPanel,assignedGrid],
-    viewConfig   : {forceFit:true},
-    bbar: [{xtype: 'tbfill'},editMembersButton, cancelEditMembersButton]
+    items        : [availableGrid,buttonsPanel, assignedGrid],
+    viewConfig   : {forceFit:true}
   });
 
   comboAuthSourcesStore = new Ext.data.GroupingStore({
@@ -490,7 +489,7 @@ BackToUsers = function(){
 //Loads Drag N Drop Functionality for Permissions
 DDLoadGroups = function(){
   //GROUPS DRAG N DROP AVAILABLE
-  var availableGridDropTargetEl =  availableGrid.getView().scroller.dom;
+  var availableGridDropTargetEl = availableGrid.getView().scroller.dom;
   var availableGridDropTarget = new Ext.dd.DropTarget(availableGridDropTargetEl, {
   ddGroup    : 'availableGridDDGroup',
   notifyDrop : function(ddSource, e, data){
@@ -686,19 +685,24 @@ GridByDefaultP = function(){
 
 //edit members action
 EditMembersAction = function(){
-  availableGrid.show();
-  buttonsPanel.show();
-  editMembersButton.hide();
-  cancelEditMembersButton.show();
-  GroupsPanel.doLayout();
+  //if (editMembersButton.pressed){
+	availableGrid.show();
+	buttonsPanel.show();
+	editMembersButton.disable();
+	GroupsPanel.doLayout();
+  //}else{
+  //  availableGrid.hide();
+  //  buttonsPanel.hide();
+  //  GroupsPanel.doLayout();
+  //}
 };
 
 //CancelEditMenbers Function
 CancelEditMenbersAction = function(){
   availableGrid.hide();
   buttonsPanel.hide();
-  editMembersButton.show();
-  cancelEditMembersButton.hide();
+  editMembersButton.enable();
+  //cancelEditMembersButton.hide();
   GroupsPanel.doLayout();
 };
 

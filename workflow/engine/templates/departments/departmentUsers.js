@@ -2,7 +2,6 @@
 * @author: Qennix
 * Feb 10th, 2011
 */
-
 //Keyboard Events
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
@@ -53,16 +52,16 @@ Ext.onReady(function(){
   sw_user_summary = false;
 
   editMembersButton = new Ext.Action({
-    text: _('ID_EDIT_USERS'),
-    iconCls: 'button_menu_ext ss_sprite  ss_user_add',
+    text: _('ID_ASSIGN_USERS'),
+    iconCls: 'button_menu_ext ss_sprite ss_user_add',
     handler: EditMembersAction
   });
 
   cancelEditMembersButton = new Ext.Action({
-    text: _('ID_SAVE_CHANGES'),
-    //iconCls: 'button_menu_ext ss_sprite ss_cancel',
-    handler: CancelEditMembersAction,
-    hidden: true
+    text: _('ID_CLOSE'),
+    iconCls: 'button_menu_ext ss_sprite ss_cancel',
+    handler: CancelEditMembersAction
+    //hidden: true
   });
 
   backButton = new Ext.Action({
@@ -194,6 +193,7 @@ Ext.onReady(function(){
 
   availableGrid = new Ext.grid.GridPanel({
     layout      : 'fit',
+    title : _('ID_AVAILABLE_USERS'),
     region          : 'center',
     ddGroup         : 'assignedGridDDGroup',
     store           : storeA,
@@ -213,7 +213,7 @@ Ext.onReady(function(){
     frame      : false,
     columnLines    : false,
     viewConfig    : {forceFit:true},
-    tbar: [_('ID_AVAILABLE_USERS'),{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
+    tbar: [cancelEditMembersButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
     //bbar: [{xtype: 'tbfill'}, cancelEditMembersButton],
     listeners: {rowdblclick: AssignGroupsAction},
     hidden: true
@@ -221,6 +221,7 @@ Ext.onReady(function(){
 
   assignedGrid = new Ext.grid.GridPanel({
     layout      : 'fit',
+    title       : _('ID_ASSIGNED_USERS'),
     ddGroup         : 'availableGridDDGroup',
     store           : storeP,
     cm            : cmodelP,
@@ -239,7 +240,7 @@ Ext.onReady(function(){
     frame      : false,
     columnLines    : false,
     viewConfig    : {forceFit:true},
-    tbar: [_('ID_ASSIGNED_USERS'),{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
+    tbar: [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
     //bbar: [{xtype: 'tbfill'},editMembersButton],
     listeners: {rowdblclick: function(){
       (availableGrid.hidden)? DoNothing() : RemoveGroupsAction();
@@ -274,7 +275,7 @@ Ext.onReady(function(){
     layoutConfig : { align : 'stretch' },
     items        : [availableGrid,buttonsPanel,assignedGrid],
     viewConfig   : {forceFit:true},
-    bbar: [{xtype: 'tbfill'},editMembersButton, cancelEditMembersButton]
+    bbar: [{xtype: 'tbfill'}]//,editMembersButton, cancelEditMembersButton]
   });
 
   //NORTH PANEL WITH TITLE AND ROLE DETAILS
@@ -458,8 +459,7 @@ GridByDefaultP = function(){
 EditMembersAction = function(){
   availableGrid.show();
   buttonsPanel.show();
-  editMembersButton.hide();
-  cancelEditMembersButton.show();
+  editMembersButton.disable();
   UsersPanel.doLayout();
 };
 
@@ -467,8 +467,7 @@ EditMembersAction = function(){
 CancelEditMembersAction = function(){
   availableGrid.hide();
   buttonsPanel.hide();
-  editMembersButton.show();
-  cancelEditMembersButton.hide();
+  editMembersButton.enable();
   UsersPanel.doLayout();
 };
 

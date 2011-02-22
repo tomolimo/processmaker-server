@@ -85,7 +85,7 @@ Ext.onReady(function(){
     });
     
     membersButton = new Ext.Action({
-    	text: _('ID_MEMBERS'),
+    	text: _('ID_USERS'),
     	iconCls: 'button_menu_ext ss_sprite ss_user_add',
     	handler: MembersAction,
     	disabled: true
@@ -226,7 +226,7 @@ Ext.onReady(function(){
             {id:'GRP_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
             {header: _('ID_GROUP_NAME'), dataIndex: 'CON_VALUE', width: 400, align:'left'},
             {header: _('ID_STATUS'), dataIndex: 'GRP_STATUS', width: 130, align:'center', renderer: render_status},
-            {header: _('ID_MEMBERS'), dataIndex: 'GRP_USERS', width: 100, align:'center'},
+            {header: _('ID_USERS'), dataIndex: 'GRP_USERS', width: 100, align:'center'},
             {header: _('ID_TASKS'), dataIndex: 'GRP_TASKS', width: 100, align:'center'}
             ]
     });
@@ -278,7 +278,7 @@ Ext.onReady(function(){
     	enableColumnResize: true,
     	enableHdMenu: true,
     	frame:false,
-    	iconCls:'icon-grid',
+    	//iconCls:'icon-grid',
     	columnLines: false,
     	viewConfig: {
     		forceFit:true
