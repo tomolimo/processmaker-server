@@ -41,7 +41,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     var rowSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelected();
 
     if( rowSelected )
-      location.href = '../dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID
+      location.href = '../dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID+'&bpmn=1'
     else
       PMExt.error('', _('ID_NO_SELECTION_WARNING'));
   }
@@ -408,7 +408,6 @@ ProcessOptions.prototype.addDynaform= function(_5625)
               fieldLabel:     _('ID_TYPE'),
               triggerAction:  'all',
               forceSelection: true,
-              //name:           'ACTION',
               name:           'DYN_TYPE',
               displayField:   'name',
               valueField:     'value',
@@ -501,16 +500,16 @@ ProcessOptions.prototype.addDynaform= function(_5625)
         handler: function(){
             var getForm   = dynaformDetails.getForm().getValues();
             //var sDynaType = getForm.DYN_SOURCE;
+            var sDynaformType     = getForm.DYN_TYPE;
+            if(sDynaformType == 'Normal' || sDynaformType == '')
+                   sDynaformType = 'xmlform';
+            else
+                    sDynaformType = 'grid';
+
             if(getForm.DYN_SOURCE == 'blankDyna')
                 {
-                    //var sAction   = getForm.ACTION;
                     var sTitle    = getForm.DYN_TITLE1;
                     var sDesc     = getForm.DYN_DESCRIPTION1;
-                    var sDynaformType     = getForm.DYN_TYPE;
-                    if(sDynaformType == 'normal')
-                        sDynaformType = 'xmlform';
-                    else
-                        sDynaformType = 'grid';
                 }
             else
                 {
@@ -529,31 +528,31 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                     sDesc     = getForm.DYN_DESCRIPTION2;
                 }
 
-                if(sTitle == '')
-                    PMExt.notify( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
-                else
-                    {
-                      Ext.Ajax.request({
-                      url   : '../dynaforms/dynaforms_Save.php',
-                      method: 'POST',
-                      params:{
-                          functions       : 'saveDynaform',
-                          ACTION          : 'normal',
-                          FIELDS          : fieldname,
-                          VARIABLES       : variable,
-                          ADD_TABLE       : sAddTab,
-                          PRO_UID         : pro_uid,
-                          DYN_TITLE       : sTitle,
-                          DYN_TYPE        : sDynaformType,
-                          DYN_DESCRIPTION : sDesc
-                      },
-                      success: function(response) {
-                          PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
-                          taskDynaform.reload();
-                          formWindow.hide()
-                      }
-                    });
-                    }
+            if(sTitle == '')
+                PMExt.error( _('ID_ERROR') , _('ID_DYNAFORM_TITLE_REQUIRED') );
+            else
+                {
+                  Ext.Ajax.request({
+                  url   : '../dynaforms/dynaforms_Save.php',
+                  method: 'POST',
+                  params:{
+                      functions       : 'saveDynaform',
+                      ACTION          : 'normal',
+                      FIELDS          : fieldname,
+                      VARIABLES       : variable,
+                      ADD_TABLE       : sAddTab,
+                      PRO_UID         : pro_uid,
+                      DYN_TITLE       : sTitle,
+                      DYN_TYPE        : sDynaformType,
+                      DYN_DESCRIPTION : sDesc
+                  },
+                  success: function(response) {
+                      PMExt.notify( _('ID_STATUS') , _('ID_DYANFORM_CREATED') );
+                      taskDynaform.reload();
+                      formWindow.hide()
+                  }
+                });
+                }
         }
     },{
             text: _('ID_CANCEL'),
@@ -3337,9 +3336,8 @@ ProcessOptions.prototype.addTriggers= function()
       pageSize: 10,
       store: triggerStore,
       displayInfo: true,
-      displayMsg: 'Displaying dynaforms {0} - {1} of {2}',
-      emptyMsg: "No users to display",
-      items:[]
+      displayMsg: 'Displaying Triggers {0} - {1} of {2}',
+      emptyMsg: "No Triggers to display"
     }),
     viewConfig: {forceFit: true}
   });

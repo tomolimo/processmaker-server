@@ -70,6 +70,13 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     $dynaform->create(array('PRO_UID'=>$PRO_UID));
   }
 
+  //creating SESSION for redirecting to new bpmn editor after closing Dynaform
+  if(isset($_GET['bpmn']) && $_GET['bpmn'] == '1')
+  {$_SESSION['dynaform_editor'] = 'bpmn';}
+  else if(!isset($_GET['bpmn']))
+  {$_SESSION['dynaform_editor'] = 'processmap';}
+
+
   $editor=new dynaformEditor($_POST);
   $editor->file=$dynaform->getDynFilename();
   $editor->home=PATH_DYNAFORM;
@@ -79,6 +86,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   $editor->dyn_type=$dynaform->getDynType();
   $editor->dyn_title=$dynaform->getDynTitle();
   $editor->dyn_description=$dynaform->getDynDescription();
+  $editor->dyn_editor=$_SESSION['dynaform_editor'];
   $editor->_setUseTemporalCopy(true);
   $editor->_render();
 

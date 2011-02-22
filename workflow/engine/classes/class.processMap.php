@@ -6619,17 +6619,35 @@ function saveExtEvents($oData)
 }
 
 
+      //new functions
+  function getAllTriggersCount(){
+    $c = $this->tmpCriteria;
+    $c->clearSelectColumns();
+    $c->addSelectColumn('COUNT(*)');
+    $oDataset = TriggersPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    if( is_array($aRow) )
+      return $aRow[0];
+    else
+      return 0;
+  }
+
   /*
    * Return the triggers list criteria object
    * @param string $sProcessUID
    * @return object
    */
 
-  function getExtTriggers($start, $limit, $sProcessUID = '') {
+  function getExtTriggersList($start, $limit, $sProcessUID = '') {
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(TriggersPeer::TRI_UID);
     $oCriteria->addSelectColumn(TriggersPeer::PRO_UID);
+    $oCriteria->add(TriggersPeer::PRO_UID, $sProcessUID);
+    $this->tmpCriteria = clone $oCriteria;
+
     $oCriteria->addAsColumn('TRI_TITLE', 'C1.CON_VALUE');
     $oCriteria->addAsColumn('TRI_DESCRIPTION', 'C2.CON_VALUE');
     $oCriteria->addAlias('C1', 'CONTENT');
@@ -6647,7 +6665,11 @@ function saveExtEvents($oData)
     $oCriteria->add(TriggersPeer::PRO_UID, $sProcessUID);
     $oCriteria->addAscendingOrderByColumn('TRI_TITLE');
 
-
+    if($start != '')
+         $oCriteria->setOffset($start);
+    if($limit != '')
+          $oCriteria->setLimit($limit);
+    
     $oDataset = TriggersPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();

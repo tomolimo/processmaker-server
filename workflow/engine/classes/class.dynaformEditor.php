@@ -155,6 +155,7 @@ class dynaformEditor extends WebResource
       'PRO_UID'      => $this->pro_uid,
       'DYNAFORM_NAME'=> $this->dyn_title,
       'FILE'         => $this->file,
+      'DYN_EDITOR'     => $this->dyn_editor,
     );
     $_SESSION['Current_Dynafom']['Parameters'] = $Parameters;
     $XmlEditor = array(
