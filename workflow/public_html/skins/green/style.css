@@ -322,7 +322,7 @@ span.XtreeMinus:hover
 TD.mainMenuBG {
 	background-image: url(/skins/ext/images/gray/toolbar/bg.gif);
 	background-repeat: repeat-x;
-	height: 25px;
+	/*height: 25px;*/
 	left: 46px;
 	top: 72px;
 	direction: ltr;
