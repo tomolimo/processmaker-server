@@ -225,6 +225,8 @@ Figure.prototype.onDragend=function() {
         case 'bpmnSubProcess':
           currObj.actiontype = 'saveTaskPosition';
           currObj.workflow.savePosition(currObj);
+          
+          
           break;
         case 'bpmnAnnotation':
           currObj.actiontype = 'saveTextPosition';
@@ -969,8 +971,9 @@ bpmnTask.prototype.onDoubleClick = function () {
  * erik: Setting task target to Drop user & group assignment
  */
 bpmnTask.prototype.onMouseEnter = function () {
-  if( this.type == 'bpmnTask' && typeof(Ext.getCmp('usersPanel')) != 'undefined' )
-    Ext.getCmp('usersPanel')._targetTask = this.id;
+  if( this.type == 'bpmnTask' && typeof Ext.getCmp('usersPanel') != 'undefined' ) {
+    Ext.getCmp('usersPanel')._targetTask = {id: this.id, name: this.taskName};
+  }
 };
 
 bpmnTask.prototype.trim = function (str) {

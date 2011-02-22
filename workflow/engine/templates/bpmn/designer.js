@@ -10,6 +10,7 @@ new Ext.KeyMap(document, {
 
 var saveProcess;
 var usersPanel;
+var _TAS_UID;
 
 Ext.onReady ( function() {
   workflow  = new MyWorkflow("paintarea");
@@ -131,8 +132,8 @@ Ext.onReady ( function() {
     region    : "center",
     layout    : "border",
     autoScroll: true,
-    height    : 1000,
-    width     : PMExt.getBrowser().screen.width,
+    height    : 1360,
+    width     : 1280, //PMExt.getBrowser().screen.width,
     //items   : [west, north, center]
     items   : [north, center]
   });
@@ -196,7 +197,6 @@ Ext.onReady ( function() {
     border:true,
     
     shim: true,
-    plugin: new Ext.ux.WindowAlwaysOnTop,
     items: [toolbarPanel]
     /*html: '<div id="x-shapes">\n\
       <p id="x-shapes-task" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
@@ -268,7 +268,7 @@ Ext.onReady ( function() {
 
   ////
   usersPanelStart = 0;
-  usersPanelLimit = 11;
+  usersPanelLimit = 10;
   
   var usersStore = new Ext.data.Store( {
     autoLoad: true,
@@ -289,30 +289,24 @@ Ext.onReady ( function() {
   });
   
   var usersGrid = new Ext.grid.GridPanel({
-    id: 'usersGrid',
-    title : 'Users',
+    id       : 'usersGrid',
+    title    : 'Users',
+    height   : 180,
     stateful : true,
-    stateId : 'usersGrid',
-    enableColumnResize: true,
-    enableHdMenu: true,
-    //frame:false,
-    //columnLines: true,
-    ddGroup        : 'task-assignment',
-    enableDragDrop: true,
-    viewConfig: {
-      forceFit:true
+    stateId  : 'usersGrid',
+    ddGroup  : 'task-assignment',
+    enableDragDrop : true,
+    viewConfig : {
+      forceFit : true
     },
-
-    cm: new Ext.grid.ColumnModel({
+    cm : new Ext.grid.ColumnModel({
       defaults: {
-          width: 200,
-          sortable: true
+        width: 200,
+        sortable: true
       },
-      columns: [
+      columns : [
         {header: 'USR_UID', id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-        {header: 'USER', dataIndex: 'USER', width: 300, renderer:function(v,p,r){
-          return v; //String.format("<font color='green'>{0}</font>", v);
-        }}
+        {header: 'User', dataIndex: 'USER', width: 300}
       ]
     }),
     store: usersStore,
@@ -322,23 +316,22 @@ Ext.onReady ( function() {
       }
     },
     tbar:[
-      //'->',
       new Ext.form.TextField ({
-        id: 'usersSearchTxt',
-        ctCls:'pm_search_text_field',
-        allowBlank: true,
-        width: 230,
-        emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
-        listeners: {
+        id    : 'usersSearchTxt',
+        ctCls :'pm_search_text_field',
+        width : 220,
+        allowBlank : true,
+        emptyText : _('ID_ENTER_SEARCH_TERM'),
+        listeners : {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER)
               usersSearch();
           }
         }
       }),{
-        text:'X',
-        ctCls:'pm_search_x_button',
-        handler: function(){
+        text    : 'X',
+        ctCls   : 'pm_search_x_button',
+        handler : function(){
           usersStore.setBaseParam( 'search', '');
           usersStore.load({params:{start : 0 , limit :  usersPanelLimit}});
           Ext.getCmp('usersSearchTxt').setValue('');
@@ -349,14 +342,13 @@ Ext.onReady ( function() {
       }
     ],
     bbar: [new Ext.PagingToolbar({
-      pageSize: usersPanelLimit,
-      store: usersStore,
+      pageSize   : usersPanelLimit,
+      store      : usersStore,
       displayInfo: true,
-      displayMsg: '{0} - {1} of {2}',
-      emptyMsg: ""
+      displayMsg : '{2} Users',
+      emptyMsg   : ''
     })]
   });
-
 
   var groupsStore = new Ext.data.Store( {
     autoLoad: true,
@@ -374,104 +366,91 @@ Ext.onReady ( function() {
   });
 
   var groupsGrid = new Ext.grid.GridPanel({
-    id: 'groupsGrid',
-    title : 'Groups',
+    id       : 'groupsGrid',
+    title    : 'Groups',
     stateful : true,
-    stateId : 'groupsGrid',
-    //enableColumnResize: true,
-    //enableHdMenu: true,
-    frame:false,
-    //columnLines: true,
-    ddGroup        : 'task-assignment',
-    height: 200,
-    enableDragDrop: true,
-    viewConfig: {
-      forceFit:true
+    stateId  : 'groupsGrid',
+    ddGroup  : 'task-assignment',
+    height   : 180,
+    enableDragDrop : true,
+    viewConfig : {
+      forceFit :true
     },
-
-    cm: new Ext.grid.ColumnModel({
-      defaults: {
-          width: 200,
-          sortable: true
+    cm : new Ext.grid.ColumnModel({
+      defaults : {
+        width    : 400,
+        sortable : true
       },
       columns: [
-        {header: '', id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
-        {header: 'Group', dataIndex: 'CON_VALUE', width: 300, renderer:function(v,p,r){
-          return v; //String.format("<font color='green'>{0}</font>", v);
-        }}
+        {id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
+        {header: 'Group', dataIndex: 'CON_VALUE'}
       ]
     }),
-    store: groupsStore,
-    listeners: {
-      render: function(){
+    store : groupsStore,
+    listeners : {
+      render : function(){
         this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
       }
     },
-    tbar:[
-      //'->',
+    tbar : [
       new Ext.form.TextField ({
-        id: 'groupsSearchTxt',
-        ctCls:'pm_search_text_field',
-        allowBlank: true,
-        width: 230,
-        emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
-        listeners: {
+        id    : 'groupsSearchTxt',
+        ctCls :'pm_search_text_field',
+        allowBlank : true,
+        width : 220,
+        emptyText : _('ID_ENTER_SEARCH_TERM'),
+        listeners : {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER)
               groupsSearch();
           }
         }
-      }),{
-        text:'X',
-        ctCls:'pm_search_x_button',
-        handler: function(){
+      }), {
+        text    :'X',
+        ctCls   :'pm_search_x_button',
+        handler : function(){
           groupsStore.setBaseParam( 'search', '');
           groupsStore.load({params:{start : 0 , limit :  usersPanelLimit}});
           Ext.getCmp('groupsSearchTxt').setValue('');
         }
-      },{
-        text:TRANSLATIONS.ID_SEARCH,
-        handler: groupsSearch
+      }, {
+        text    :TRANSLATIONS.ID_SEARCH,
+        handler : groupsSearch
       }
     ],
     bbar: [new Ext.PagingToolbar({
-      pageSize: usersPanelLimit,
-      store: groupsStore,
+      pageSize   : usersPanelLimit,
+      store      : groupsStore,
       displayInfo: true,
-      displayMsg: '{0} - {1} of {2}',
-      emptyMsg: ""
+      displayMsg : '{2} Groups',
+      emptyMsg   : 'No records found'
     })]
   });
   
 
   usersPanel = new Ext.Window({
-    id: 'usersPanel',
-    title: '<span style="font-size:10px; font-weight:bold; align:center;">&nbsp;Actors</span>',
-    headerAsText: true,
-    collapsed : true,
-    width: 302,
-    height:380,
+    id      : 'usersPanel',
+    title   : 'Actors',
+    width   : 302,
+    height  : 350,
     //x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
     //y: designerToolbarHeight + 2,
-    x: 0,
-    y: 0,
-    minimizable: false,
-    maximizable: false,
-    closable: false,
-    resizable: false,
-    floating: true,
-    shadow:false,
-    border:false,
-    //html: 'userslist'
+    minimizable : false,
+    maximizable : false,
+    closable    : false,
+    resizable   : false,
+    floating    : true,
+    shadow      : false,
+    border      : false,
     items:[
       new Ext.TabPanel({
+        id    : 'usersPanelTabs',
         border: true, // already wrapped so don't add another border
-        activeTab: 0, // second tab initially active
-        tabPosition: 'top',
-        //region:'north',
-        split: true,
-        height:350,
-        items: [
+        activeTab   : 0, // second tab initially active
+        tabPosition : 'top',
+        split  : true,
+        height : 318,
+        items  : [
           usersGrid,
           groupsGrid
         ]
@@ -501,24 +480,57 @@ Ext.onReady ( function() {
     ]
   });
   
-  usersPanel.on('minimize',function(w){
-    if( Ext.getCmp('usersPanel').collapsed )
-      Ext.getCmp('usersPanel').expand();
-    else
-      Ext.getCmp('usersPanel').collapse();
-  });
-  
   // custom variables
   usersPanel._targetTask = null;
+  
   usersPanel._onDrop = function(ddSource, e, data) {
-    alert('tas_uid: ' + Ext.getCmp('usersPanel')._targetTask);
-
+    _TAS_UID = Ext.getCmp('usersPanel')._targetTask.id;
+    if( typeof parent != 'undefined' ) {
+      parent._TAS_UID = _TAS_UID;
+    }
+    
+    var type = Ext.getCmp('usersPanelTabs').getActiveTab().id == 'usersGrid' ? 1 : 2;
     var records = ddSource.dragData.selections;
+    var uids = Array();
     Ext.each(records, function(gridRow){
-      alert('usr_uid ->'+gridRow.data.USR_UID);
+      if( type == 1 ) {//some users grid items were dropped       
+        //alert('usr_uid ->'+gridRow.data.USR_UID);
+        uids.push(gridRow.data.USR_UID);
+      } else { //some groups grid items were dropped
+        //alert('grp_uid ->'+gridRow.data.GRP_UID);
+        uids.push(gridRow.data.GRP_UID);
+      }
     });
 
+    uids = uids.join(',');
+
+    if( typeof parent != 'undefined' ) {
+      parent.Ext.getCmp('eastPanelCenter').setTitle(Ext.getCmp('usersPanel')._targetTask.name);
+    }
+    Ext.Ajax.request({
+      url: '../processes/ajaxListener',
+      success: function(response){
+        var result = Ext.util.JSON.decode(response.responseText);
+        if( result.success ) {
+          PMExt.notify('', 'Users & Groups assigned successfully!');
+          if( typeof parent != 'undefined' ) {
+            parent.Ext.getCmp('eastPanel').show();
+            parent.Ext.getCmp('usersTaskGrid').store.reload({params: {action:'getUsersTask', TAS_UID: _TAS_UID}});
+          }
+        } else {
+          PMExt.error(_('ID_ERROR'), result.msg)
+        }
+      },
+      failure: function(){},
+      params: {
+        action : 'assignUsersTask',
+        TAS_UID     : _TAS_UID,
+        TU_RELATION : type,
+        UIDS        : uids
+      }
+    });
   }
+
   
   usersPanel.on('beforeshow', function(e) {
     usersPanel._posRelToView = usersPanel.getPosition(true);
@@ -623,7 +635,7 @@ Ext.onReady ( function() {
   new Ext.ToolTip({
       target: 'x-shapes-annotation',
       title: 'Annotation',
-      anchor: 'left',
+      anchor: 'top',
       trackMouse: true,
       html: ''
   });
@@ -1265,28 +1277,24 @@ Ext.onReady ( function() {
 
   function usersSearch()
   {
-    var search = Ext.getCmp('usersSearchTxt').getValue();
-
+    var search = Ext.getCmp('usersSearchTxt').getValue().trim();
+    if( search == '' ) {
+      PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
+      return;
+    }
     Ext.getCmp('usersGrid').store.setBaseParam('search', search);
     Ext.getCmp('usersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
   }
 
   function groupsSearch()
   {
-    var search = Ext.getCmp('groupsSearchTxt').getValue();
-
+    var search = Ext.getCmp('groupsSearchTxt').getValue().trim();
+    if( search == '' ) {
+      PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
+      return;
+    }
     Ext.getCmp('groupsGrid').store.setBaseParam('search', search);
     Ext.getCmp('groupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
   }
 
 });
-
-Ext.ux.WindowAlwaysOnTop = function(){
-       this.init = function(win){
-            win.on('deactivate', function(){
-               var i=1;
-               this.manager.each(function(){i++});
-               this.setZIndex(this.manager.zseed + (i*10));
-            })
-       }
-}

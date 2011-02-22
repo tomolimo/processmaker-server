@@ -1,28 +1,20 @@
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
   fn: function(keycode, e) {
-  	//here (in the toolbar) we are disabling the ctrl-f5
-    e.stopEvent();
-    //if (! e.ctrlKey) {
-    //  if (Ext.isIE)
-    //    e.browserEvent.keyCode = 8;
-    //  e.stopEvent();
-      //Ext.Msg.alert('Refresh', 'You clicked: F5');
-      //document.location = document.location;
-    //}
-    //else
-      //Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+    //e.stopEvent();
   }
 });
 
+var _TAS_UID;
+
 Ext.onReady ( function() {
+  
   workflow  = new MyWorkflow("paintarea");
   workflow.setEnableSmoothFigureHandling(false);
   workflow.scrollArea.width = 2000;
   //For Undo and Redo Options
   // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
-  //Getting process id from the URL using getUrlvars function
-
+  
   if(typeof pro_uid !== 'undefined') {
     Ext.Ajax.request({
       url: 'openProcess.php?PRO_UID=' + pro_uid,
@@ -35,6 +27,7 @@ Ext.onReady ( function() {
       }
     });
   }
+
 
 
   /**********************************************************************************
@@ -51,44 +44,270 @@ Ext.onReady ( function() {
     autoScroll : true,
     collapsible :true,
     split       :true,
-    //collapseMode:'mini',
-    hideCollapseTool: false,
-
-    items:{
-      html:'<div id="x-shapes">\n\
-          <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
-          <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
-          <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
-          <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
-          <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
-          <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
-          <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
-          <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
-          <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
-          <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
-          <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
-        </div>'
-    }
-  };
-
-  var east= {
-    id         : 'eastPanel',
-    title      : '',
-    region     : 'east',
-    width      : 150,
-    border     : false,
-    autoScroll : true,
-    collapsible :true,
-    split       :true,
     collapseMode:'mini',
     hideCollapseTool: false,
 
     items:{
-      html:'east panel'
+      html:''
     }
   };
 
-  var north= {
+  var usersTaskStore = new Ext.data.GroupingStore( {
+    autoLoad: false,
+    url: '../processes/ajaxListener',
+    reader : new Ext.data.JsonReader({
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'USR_UID'},
+        {name : 'NAME'},
+        {name : 'TU_RELATION'}
+      ]
+    }),
+    baseParams: {
+      action: 'getUsersTask',
+      TAS_UID: '4619962094d5d499f746ca7075681567'
+    },
+    groupField: 'TU_RELATION'
+  });
+
+  var usersTaskGrid = new Ext.grid.GridPanel({
+    id       : 'usersTaskGrid',
+    title    : 'Users & Groups',
+    height   : 180,
+    stateful : true,
+    stateId  : 'usersTaskGrid',
+    sortable:false,
+    view: new Ext.grid.GroupingView({
+      forceFit:true,
+      groupTextTpl: '{[values.rs.length]} {[values.rs[0].data["TU_RELATION"] == 1 ? "Users" : "Groups"]}'
+      //groupTextTpl: '{text}'
+    }),
+    cm : new Ext.grid.ColumnModel({
+      defaults: {
+        width: 300,
+        sortable: true
+      },
+      columns : [
+        {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+        {header: 'Assigned', id:'TU_RELATION', dataIndex: 'TU_RELATION', hidden:true, hideable:false},
+        {header: 'Assigned', dataIndex: 'NAME', hideable:false}
+      ]
+    }),
+    store: usersTaskStore,
+    listeners: {
+      render: function(){
+        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+      }
+    }/*,
+    tbar:[
+      '->', {
+        text: _('ID_REMOVE'),
+        iconCls: 'button_menu_ext ss_sprite  ss_delete',
+        handler: removeUsersTask
+      }
+    ]*/,
+    bbar: [new Ext.PagingToolbar({
+      pageSize   : 10,
+      store      : usersTaskStore,
+      displayInfo: true,
+      displayMsg : '{2} Users',
+      emptyMsg   : ''
+    })]
+  });
+
+    //connecting context menu  to grid
+  usersTaskGrid.addListener('rowcontextmenu', onDynaformsContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  usersTaskGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  usersTaskGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onDynaformsContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    usersTaskGridContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var usersTaskGridContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_REMOVE'),
+        iconCls: 'button_menu_ext ss_sprite  ss_delete',
+        handler: removeUsersTask
+      }
+    ]
+  });
+
+  function removeUsersTask(){
+    
+    var usr_uid = Array();
+    var tu_relation = Array();
+    var rowsSelected = Ext.getCmp('usersTaskGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+    
+    for(i=0; i<rowsSelected.length; i++) {
+      usr_uid[i]     = rowsSelected[i].get('USR_UID');
+      tu_relation[i] = rowsSelected[i].get('TU_RELATION');
+    }
+    usr_uid = usr_uid.join(',');
+    tu_relation = tu_relation.join(',');
+    
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_DYNAFORM_CONFIRM'), function(){
+      Ext.Ajax.request({
+        url   : '../processes/ajaxListener',
+        method: 'POST',
+        params: {
+          action : 'removeUsersTask',
+          USR_UID: usr_uid,
+          TU_RELATION: tu_relation,
+          TAS_UID: _TAS_UID
+        },
+        success: function(response) {
+          var result = Ext.util.JSON.decode(response.responseText);
+          if( result.success ){
+            Ext.getCmp('usersTaskGrid').store.reload();
+          } else {
+            PMExt.error(_('ID_ERROR'), result.msg);
+          }
+        }
+      });
+    });
+  }
+ 
+  var eastPanelTree = new Ext.tree.TreePanel({
+    useArrows: true,
+    autoScroll: true,
+    animate: true,
+    //autoHeight: true,
+    //enableDD: true,
+    //containerScroll: true,
+    rootVisible : false,
+    border: true,
+    height: PMExt.getBrowser().screen.height * 0.25,
+    region: 'north',
+    split : true,
+    collapseMode:'mini',
+    // auto create TreeLoader
+    loader : new Ext.tree.TreeLoader({
+      preloadChildren : true,
+      dataUrl : '../processes/ajaxListener',
+      baseParams : {
+        action : 'getProcessDetail',
+        PRO_UID: pro_uid
+      }
+    }),
+    root: {
+      nodeType : 'async',
+      draggable : false,
+      id : 'root',
+      expanded : true
+    }
+  });
+  
+  var propertiesGrid = new Ext.grid.PropertyGrid({
+    id: 'propGrid',
+    title: 'Properties',
+    //width: 300,
+    autoHeight: true,
+    propertyNames: {
+      tested: 'QA',
+      borderWidth: 'Border Width'
+    },
+    viewConfig : {
+        forceFit: true,
+        scrollOffset: 2 // the grid will never have scrollbars
+    }
+  });
+
+  var propertyStore = new Ext.data.JsonStore({
+    autoLoad: true,  //autoload the data
+    url: 'ajaxListener?action=getProcessproperties',
+    root: 'props',
+    fields: ['First name', 'Last name', 'E-mail'],
+    listeners: {
+      load: {
+        fn: function(store, records, options){
+          // get the property grid component
+          var propGrid = Ext.getCmp('propGrid');
+          // make sure the property grid exists
+          if (propGrid) {
+              // populate the property grid with store data
+              propGrid.setSource(store.getAt(0).data);
+          }
+        }
+      }
+    }
+  });
+
+
+  propertiesGrid.setSource({
+      ttile: 'Properties Grid',
+      Description: false,
+      Calendar: true,
+      Category: false,
+      created: new Date(Date.parse('10/15/2006')),
+      tested: false,
+      version: 0.01,
+      borderWidth: 1
+  });
+
+
+  var east = new Ext.Panel({
+    id         : 'eastPanel',
+    title      : '',
+    region     : 'east',
+    width      : 280,
+    title      : '',
+    //autoScroll : true,
+    layout:'border',
+    collapsible :true,
+    split       :true,
+    //collapseMode:'mini',
+    //hideCollapseTool: false,
+    items:[
+      eastPanelTree
+      , {
+        id: 'eastPanelCenter',
+        xtype: 'panel',
+        title: 'Process: ',
+        region: 'center',
+        layout: 'fit',
+        items:[
+          new Ext.TabPanel({
+            id    : 'usersPanelTabs',
+            title : 'sdd',
+            border: true, // already wrapped so don't add another border
+            activeTab   : 0, // second tab initially active
+            tabPosition : 'top',
+            split  : true,
+            collapseMode:'mini',
+            //height : 318,
+            items  : [
+              propertiesGrid,
+              usersTaskGrid
+            ]
+          })
+        ]
+      }
+    ]
+  });
+  
+  /*items:[
+   */
+  var north = {
     xtype	:	"panel",
     initialSize: 60,
     split:false,
@@ -97,8 +316,8 @@ Ext.onReady ( function() {
     animate: false,
     region	:	"north"
   };
-
-  var south= {
+  
+  var south = {
     xtype	:	"panel",
     initialSize: 120,
     height: 100,
@@ -109,16 +328,16 @@ Ext.onReady ( function() {
     animate: true,
     region	:	"south",
     items: {
-      region: 'center',
-      xtype: 'tabpanel',
-      items: [{
-          title: 'Properties',
-          html: 'Properties'
-      },
-      {
-          title: 'Debug Console',
-          html: 'Debug Console'
-      }]
+        region: 'center',
+        xtype: 'tabpanel',
+        items: [{
+            title: 'Properties',
+            html: 'Properties'
+        },
+        {
+            title: 'Debug Console',
+            html: 'Debug Console'
+        }]
     }
   };
 
@@ -138,14 +357,15 @@ Ext.onReady ( function() {
 
   var processObj = new ProcessOptions();
 
+  
   var main = new Ext.Panel({
     renderTo  : "center1",
     region    : "center",
     layout    : "border",
     autoScroll: true,
     height    : 1000,
-    width     : 1300,
-    items   : [north, center],
+    width     : 1300,    
+    items   : [north, center, east],
     tbar: [
       {
         text: 'Save',
@@ -292,5 +512,7 @@ Ext.onReady ( function() {
     ,border:false,
     items:[main]
   });
-
+  Ext.getCmp('eastPanel').hide();
+  //Ext.getCmp('eastPanel').ownerCt.doLayout();
+  
 });

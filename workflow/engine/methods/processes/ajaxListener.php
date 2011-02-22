@@ -150,12 +150,10 @@ class Ajax
   {
     require_once 'classes/model/Users.php';
     G::LoadClass('configuration');
-    
-    $search = isset($params['search']) ? $params['search']: null;
-    
-    $users = Users::getAll($params['start'], $params['limit'], $search);
     $conf = new Configurations;
     
+    $search = isset($params['search']) ? $params['search']: null;    
+    $users = Users::getAll($params['start'], $params['limit'], $search);
     
     foreach($users->data as $i=>$user){
       $users->data[$i]['USER'] = $conf->getEnvSetting(
@@ -178,7 +176,125 @@ class Ajax
 
     print G::json_encode($groups);
   }
-  
+
+  function assignUsersTask($param)
+  {
+    try{
+      require_once 'classes/model/TaskUser.php';      
+      $oTaskUser = new TaskUser();
+      $UIDS = explode(',', $param['UIDS']);
+      $TU_TYPE = 1;
+
+      foreach( $UIDS as $UID ) {
+        if ($_POST['TU_RELATION'] == 1 )
+          $oTaskUser->create(array('TAS_UID' => $param['TAS_UID'], 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 1));
+        else
+          $oTaskUser->create(array('TAS_UID' => $param['TAS_UID'], 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 2));
+      }
+
+      $result->success = true;
+      $result->msg = '';
+    } catch(Exception $e){
+      $result->success = false;
+      $result->msg = $e->getMessage();
+    }
+
+    print G::json_encode($result);
+  }
+
+  function removeUsersTask($param)
+  {
+    try{
+      require_once 'classes/model/TaskUser.php';
+      $oTaskUser = new TaskUser();
+      $USR_UIDS = explode(',', $param['USR_UID']);
+      $TU_RELATIONS = explode(',', $param['TU_RELATION']);
+      $TU_TYPE = 1;
+
+      foreach($USR_UIDS as $i=>$USR_UID) {
+        if ($TU_RELATIONS[$i] == 1 ){
+          
+          $oTaskUser->remove($param['TAS_UID'], $USR_UID, $TU_TYPE, 1);
+          
+        } else {
+          $oTaskUser->remove($param['TAS_UID'], $USR_UID, $TU_TYPE, 2);
+        }
+      }
+
+      $result->success = true;
+      $result->msg = '';
+    } catch(Exception $e){
+      $result->success = false;
+      $result->msg = "{$TU_RELATIONS[$i]} -  {$param['TAS_UID']}, {$USR_UIDS[$i]}, $TU_TYPE, 1  --> " . $e->getMessage();
+    }
+
+    print G::json_encode($result);
+  }
+
+  function getUsersTask($param)
+  {
+    require_once 'classes/model/TaskUser.php';
+    G::LoadClass('configuration');
+    $usersTaskList = Array();
+    $task = new TaskUser;
+    $conf = new Configurations;
+    $TU_TYPE = 1;
+    
+    $usersTask = $task->getUsersTask($param['TAS_UID'], $TU_TYPE);
+    
+    foreach($usersTask->data as $userTask) {
+      $usersTaskListItem['TAS_UID'] = $userTask['TAS_UID'];
+      if( $userTask['TU_RELATION'] == 1 )
+        $usersTaskListItem['NAME'] = $conf->getEnvSetting(
+          'format',
+          Array(
+            'userName'=>$userTask['USR_USERNAME'],
+            'firstName'=>$userTask['USR_FIRSTNAME'],
+            'lastName'=>$userTask['USR_LASTNAME']
+          )
+        );
+      else
+        $usersTaskListItem['NAME'] = $userTask['GRP_TITLE'];
+
+      $usersTaskListItem['TU_RELATION'] = $userTask['TU_RELATION'];
+      $usersTaskListItem['USR_UID']     = $userTask['USR_UID'];
+
+      $usersTaskList[] = $usersTaskListItem;
+    }
+    
+    $result->data = $usersTaskList;
+    $result->totalCount = $usersTask->totalCount;
+
+    print G::json_encode($result);
+  }
+
+  function getProcessDetail($param){
+    require_once 'classes/model/Process.php';
+    
+    $PRO_UID = $param['PRO_UID'];
+
+    G::loadClass('tasks');
+    $tasks = new Tasks();
+    $process = ProcessPeer::retrieveByPk($PRO_UID);
+    
+    $tasksList = $tasks->getAllTasks($PRO_UID);
+
+    
+    $rootNode->id = $process->getProUid();
+    $rootNode->text = $process->getProTitle();
+    $rootNode->leaf = false;
+    $rootNode->expanded =true;
+    foreach($tasksList as $task) {
+      $node = new stdClass;
+      $node->id = $task['TAS_UID'];
+      $node->text = $task['TAS_TITLE'];
+      $node->leaf = true;
+      $rootNode->children[] = $node;
+    }
+
+    $treeDetail[] = $rootNode;
+    print G::json_encode($treeDetail);
+  }
 }
 
 
