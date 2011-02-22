@@ -712,7 +712,7 @@ class G
         die;
       }
       else   {
-        $text = "The Skin $file is not exist, please review the Skin Definition";
+        $text = "The Skin $file does not exist, please review the Skin Definition";
         throw ( new Exception ( $text)  );
       }
     }
