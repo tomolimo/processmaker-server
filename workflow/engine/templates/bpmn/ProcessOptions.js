@@ -2839,7 +2839,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
 
   var reportColumns = new Ext.grid.ColumnModel({
             columns: [
-                expander,
+                new Ext.grid.RowNumberer(),
                 {
                     id: 'REP_TAB_TITLE',
                     header: _('ID_TITLE'),
@@ -2874,8 +2874,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             store: reportStore,
             displayInfo: true,
             displayMsg: 'Displaying Report Tables {0} - {1} of {2}',
-            emptyMsg: "No Report Tables to display",
-            items:[]
+            emptyMsg: "No Report Tables to display"
         }),
         viewConfig: {forceFit: true}
    });
@@ -3084,7 +3083,7 @@ var reportForm =new Ext.FormPanel({
                     else
                          {
                 Ext.Ajax.request({
-                  url   : '../reportTables/reportTables_Edit.php',
+                  url   : '../reportTables/reportTables_Save.php',
                   method: 'POST',
                   params:{
                       PRO_UID         :pro_uid,
@@ -3093,10 +3092,8 @@ var reportForm =new Ext.FormPanel({
                       REP_TAB_NAME    :Name,
                       REP_TAB_TYPE    :Type ,
                       REP_TAB_GRID    :Grid,
-                      FIELDS          :Fields,
-                      //REP_VAR_NAME    : VariableName,
-                      //REP_VAR_TYPE    : VariableType,
-                      REP_TAB_CONNECTION: Connection
+                      FIELDS          :Fields
+                      //REP_TAB_CONNECTION: Connection
                   },
                   success: function(response) {
                       PMExt.notify( _('ID_STATUS') , _('ID_REPORT_EDITED') );

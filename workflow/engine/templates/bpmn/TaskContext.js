@@ -1236,7 +1236,7 @@ TaskContext.prototype.editTaskProperties= function()
                 xtype: 'checkbox',
                 boxLabel: _('ID_NOTIFY_USERS_AFTER_ASSIGN'),
                 labelWidth: 100,
-                name:   'TAS_DEF_MESSAGE_CHECKBOX',
+                name:   'SEND_EMAIL',
                 checked:   'TAS_DEF_MESSAGE_CHECKBOX',
                 listeners: {
                   /**Listeners for showing "TAS_DEF_MESSAGE" textarea field
@@ -1266,13 +1266,12 @@ TaskContext.prototype.editTaskProperties= function()
                   height : 180
                 }]
               }]
-              
             }
             ]
         }]
     });
 
-    workflow.taskPropertiesTabs = taskPropertiesTabs;
+  workflow.taskPropertiesTabs = taskPropertiesTabs;
     
     
   //Loading Task Details into the form
@@ -1384,11 +1383,39 @@ TaskContext.prototype.saveTaskProperties= function()
 {
                  var saveTaskform = workflow.taskPropertiesTabs.getForm().getValues();
                  var taskId = workflow.currentSelection.id;
+                 var tas_start = saveTaskform['TAS_START'];
+                 var tas_type = saveTaskform['TAS_TYPE'];
+                 var tas_transfer_fly = saveTaskform['TAS_TRANSFER_FLY'];
+                 var send_email = saveTaskform['SEND_EMAIL'];
                  saveTaskform['TAS_UID'] = taskId;
+
+                 //Checking checkbox fields
+                 if(typeof tas_start != 'undefined' && tas_start != ''){
+                     if(tas_start == 'on')
+                         saveTaskform['TAS_START'] = 'TRUE';
+                     else
+                         saveTaskform['TAS_START'] = 'FALSE';
+                 }
+                 if(typeof tas_transfer_fly != 'undefined' && tas_transfer_fly != ''){
+                     if(tas_transfer_fly == 'on')
+                         saveTaskform['TAS_TRANSFER_FLY'] = 'TRUE';
+                     else
+                         saveTaskform['TAS_TRANSFER_FLY'] = 'FALSE';
+                 }
+                 if(typeof send_email != 'undefined' && send_email != ''){
+                     if(send_email == 'on')
+                         saveTaskform['SEND_EMAIL'] = 'TRUE';
+                     else
+                         send_email['SEND_EMAIL'] = 'FALSE';
+                 }
+                 if(typeof tas_type != 'undefined' && tas_type != ''){
+                     if(tas_type == 'on')
+                         saveTaskform['TAS_TYPE'] = 'ADHOC';
+                     else
+                         saveTaskform['TAS_TYPE'] = 'NORMAL';
+                 }
+
                  var object_data = Ext.util.JSON.encode(saveTaskform);
-
-
-
 
                  Ext.Ajax.request({
                         url: '../tasks/tasks_Ajax.php' ,
@@ -1733,7 +1760,6 @@ TaskContext.prototype.stepTriggers = function()
                   PMExt.notify( _('ID_STATUS') , _('ID_TRIGGER_ASSIGN') );
                   tree.getLoader().dataUrl = 'get-triggers-tree.php?tid='+taskId;
                   tree.getLoader().load(tree.root);
-                  tree.reload();
               }
             });
 
