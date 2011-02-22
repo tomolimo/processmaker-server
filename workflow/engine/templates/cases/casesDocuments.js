@@ -709,7 +709,7 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_home',
-					icon : '/images/documents/_home.png',
+					iconCls: 'button_menu_ext ss_sprite ss_house',//icon : '/images/documents/_home.png',
 					// text : 'Root',
 					tooltip : 'Root Folder',
 					// cls : 'x-btn-text-icon',
@@ -721,7 +721,7 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_reload',
-					icon : '/images/documents/_reload.png',
+					iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',//icon : '/images/documents/_reload.png',
 					// text : 'Reload',
 					tooltip : 'Reload',
 					// cls : 'x-btn-text-icon',
@@ -747,7 +747,7 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_new',
-					icon : '/images/documents/_filenew.png',
+					iconCls: 'button_menu_ext ss_sprite ss_folder_add',//icon : '/images/documents/_filenew.png',
 					tooltip : 'New Folder',
 					cls : 'x-btn-icon',
 					disabled : false,
@@ -807,7 +807,7 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_download',
-					icon : '/images/documents/_down.png',
+					iconCls: 'button_menu_ext ss_sprite ss_page_white_put',//icon : '/images/documents/_down.png',
 					tooltip : 'Download',
 					cls : 'x-btn-icon',
 					disabled : true,
@@ -818,7 +818,7 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_upload',
-					icon : '/images/documents/_up.png',
+					iconCls: 'button_menu_ext ss_sprite ss_page_white_get',//icon : '/images/documents/_up.png',
 					tooltip : 'Upload',
 					cls : 'x-btn-icon',
 					disabled : false,
@@ -1130,7 +1130,7 @@ gridCtxMenu = new Ext.menu.Menu({
 
 	items : [ {
 		id : 'gc_rename',
-		icon : '/images/documents/_fonts.png',
+		iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',//icon : '/images/documents/_fonts.png',
 		text : 'renamelink',
 		handler : function() {
 			ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
@@ -1138,28 +1138,28 @@ gridCtxMenu = new Ext.menu.Menu({
 		}
 	}, {
 		id : 'gc_copy',
-		icon : '/images/documents/_editcopy.png',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',//icon : '/images/documents/_editcopy.png',
 		text : 'copylink',
 		handler : function() {
 			openActionDialog(this, 'copyAction');
 		}
 	}, {
 		id : 'gc_move',
-		icon : '/images/documents/_move.png',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_go',//icon : '/images/documents/_move.png',
 		text : 'movelink',
 		handler : function() {
 			openActionDialog(this, 'moveAction');
 		}
 	}, {
 		id : 'gc_delete',
-		icon : '/images/documents/_editdelete.png',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_delete',//icon : '/images/documents/_editdelete.png',
 		text : 'dellink',
 		handler : function() {
 			openActionDialog(this, 'delete');
 		}
 	}, '-', {
 		id : 'gc_download',
-		icon : '/images/documents/_down.png',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_put',//icon : '/images/documents/_down.png',
 		text : 'downlink',
 		handler : function() {
 			openActionDialog(this, 'download');
@@ -1168,7 +1168,7 @@ gridCtxMenu = new Ext.menu.Menu({
 
 	'-', {
 		id : 'cancel',
-		icon : '/images/documents/_cancel.png',
+		iconCls: 'button_menu_ext ss_sprite ss_cross',//icon : '/images/documents/_cancel.png',
 		text : 'btncancel',
 		handler : function() {
 			gridCtxMenu.hide();
@@ -1226,7 +1226,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 			items : [
 					{
 						id : 'dirCtxMenu_new',
-						icon : '/images/documents/_folder_new.png',
+						iconCls: 'button_menu_ext ss_sprite ss_folder_add',//icon : '/images/documents/_folder_new.png',
 						text : 'New',
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1235,7 +1235,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},
 					{
 						id : 'dirCtxMenu_rename',
-						icon : '/images/documents/_fonts.png',
+						iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',//icon : '/images/documents/_fonts.png',
 						text : 'Rename',
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1253,7 +1253,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},
 					{
 						id : 'dirCtxMenu_move',
-						icon : '/images/documents/_move.png',
+						iconCls: 'button_menu_ext ss_sprite ss_folder_go',//icon : '/images/documents/_move.png',
 						text : 'Move',
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1262,7 +1262,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},					
 					{
 						id : 'dirCtxMenu_remove',
-						icon : '/images/documents/_editdelete.png',
+						iconCls: 'button_menu_ext ss_sprite ss_folder_delete',//icon : '/images/documents/_editdelete.png',
 						text : 'Remove',
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1280,7 +1280,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 						}
 					}, '-', {
 						id : 'dirCtxMenu_reload',
-						icon : '/images/documents/_reload.png',
+						iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',//icon : '/images/documents/_reload.png',
 						text : 'Refresh',
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1288,7 +1288,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 						}
 					}, '-', {
 						id : 'dirCtxMenu_cancel',
-						icon : '/images/documents/_cancel.png',
+						iconCls: 'button_menu_ext ss_sprite ss_cross',//icon : '/images/documents/_cancel.png',
 						text : 'Cancel',
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1299,7 +1299,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 	id : 'copyCtx',
 	items : [ {
 		id : 'copymoveCtxMenu_copy',
-		icon : '/images/documents/_editcopy.png',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',//icon : '/images/documents/_editcopy.png',
 		text : 'copylink',
 		handler : function() {
 			copymoveCtxMenu.hide();
@@ -1307,7 +1307,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 		}
 	}, {
 		id : 'copymoveCtxMenu_move',
-		icon : '/images/documents/_move.png',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_go',//icon : '/images/documents/_move.png',
 		text : 'movelink',
 		handler : function() {
 			copymoveCtxMenu.hide();
@@ -1315,7 +1315,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 		}
 	}, '-', {
 		id : 'copymoveCtxMenu_cancel',
-		icon : '/images/documents/_cancel.png',
+		iconCls: 'button_menu_ext ss_sprite ss_cross',//icon : '/images/documents/_cancel.png',
 		text : 'btncancel',
 		handler : function() {
 			copymoveCtxMenu.hide();
