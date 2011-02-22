@@ -64,7 +64,7 @@ if (getField('OLD_NAME').value==''){
     invalidCalendarName = validateCalendarName('');
   } else {
     invalidCalendarName = validateCalendarName(getField('OLD_NAME').value);
-  }  
+  }
   if(invalidCalendarName=='The calendar name already exists!'){
     alert(invalidCalendarName);
     return false;
@@ -81,6 +81,7 @@ if (getField('OLD_NAME').value==''){
   var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
 
   var j=0;
+  aux2=0;
     for(var j =1; j<= rowsHoliday;j++){
       var date1=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START').value;
       var date2=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END').value;
@@ -88,13 +89,15 @@ if (getField('OLD_NAME').value==''){
       var date22=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END');
       var aux=100;
      aux1 = validatedate(date1,date2,date11,date22,aux);
+    if (aux1=='1')
+    aux2=1;
     }
-   
-    if(aux1=='-1')
-     validateForm(this.form);
-    else
-      return false;
 
+    if((aux1=='-1')&&(aux2=='0')){
+     validateForm(this.form);}
+    else{
+      return false;
+}
 }
 
 function submit2 () {
@@ -326,7 +329,7 @@ if (getField("HOLIDAY][1][CALENDAR_HOLIDAY_START").value==''){
       document.getElementById('hiddenb').style.display="none";
       document.getElementById('showb').style.display="";
     }
-    
+
   rowsCount=Number_Rows_Grid("BUSINESS_DAY", "CALENDAR_BUSINESS_DAY");
   for(i=1;i<=rowsCount;i++){
     timeValidatorWrap(i);
@@ -403,7 +406,7 @@ function validateForm(form){
         getField('CALENDAR_NAME').value=getField('CALENDAR_NAME').value.trim();
 	if(getField('CALENDAR_NAME').value==""){
    msg+=G_STRINGS.ID_REQUIRED_FIELDS + ": \n\n ";
-	 msg+="- "+ '@G::LoadTranslation(ID_NAME)' +" \n";	
+	 msg+="- "+ '@G::LoadTranslation(ID_NAME)' +" \n";
 	}
 	var flag=true;
 	var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
@@ -421,7 +424,7 @@ function validateForm(form){
 	 msg +="- "+G_STRINGS.ID_START_DATE+"\n";
 	}
 	if(msg!=""){
-    //msgBox(msg,"alert");	
+    //msgBox(msg,"alert");
 		alert(msg);
 		return false;
 	}
@@ -477,7 +480,7 @@ function validateCalendarName(name){
   var oRPC = new leimnud.module.rpc.xmlhttp({
     url   : 'calendarValidate',
     async : false,
-    args  : arguments     
+    args  : arguments
   });
   oRPC.make();
   validateMessage=oRPC.xmlhttp.responseText;
@@ -517,7 +520,7 @@ function validateHours(){
 }
 function validatedate(date1,date2,date11,date22,aux){
 dat1=date1.split("-");
-dat2=date2.split("-"); 
+dat2=date2.split("-");
 if(dat1[0]>dat2[0])
 {
 var aux = 1;
@@ -577,6 +580,5 @@ return aux;
 
 
 ]]>
-</DEFAULT_CALENDAR_JS> 
+</DEFAULT_CALENDAR_JS>
 </dynaForm>
-
