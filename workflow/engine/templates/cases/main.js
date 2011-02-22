@@ -535,10 +535,11 @@ function updateCasesView() {
 }
 
 function updateCasesTree() {
-  try{
+  var result;
+  var result1;
+  
     //treeMenuItems.root.reload();
     Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
-    document.getElementById('ext-gen35').focus();
     
     itemsTypes = Array('CASES_INBOX', 'CASES_DRAFT', 'CASES_CANCELLED', 'CASES_SENT', 'CASES_PAUSED', 'CASES_COMPLETED','CASES_SELFSERVICE');
     if(currentSelectedTreeMenuItem){
@@ -547,8 +548,10 @@ function updateCasesTree() {
     Ext.Ajax.request({
       url: 'casesMenuLoader?action=getAllCounters&r='+Math.random(),
       success: function(response){
-      	try{
-	        result = eval('('+response.responseText+')');
+      	
+	        result1 = response.responseText;
+	        result = Ext.util.JSON.decode(result1);
+	        
 	        for(i=0; i<result.length; i++){
 	        	if( document.getElementById('NOTIFIER_'+result[i].item ) ){
 		          oldValue = document.getElementById('NOTIFIER_'+result[i].item).innerHTML;
@@ -569,14 +572,12 @@ function updateCasesTree() {
 		        else continue;
 	        }
 	        Ext.getCmp('refreshNotifiers').setIcon('/images/refresh.gif');
-	      } catch (e){
-	      	//alert(""+e);
-	      }
+	      
       },
       failure: function(){},
       params: {'updateCasesTree': true}
     });
-  } catch(e){alert(' '+e)}
+  
 }
 
 //the timer function will be called after 2 minutes;
