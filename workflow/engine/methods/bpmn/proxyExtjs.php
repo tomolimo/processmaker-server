@@ -353,9 +353,9 @@
          break;
 
    case 'getTriggersList':
-  	 $rows = $oProcessMap->getExtTriggers($start, $limit, $_GET['pid']);
+  	 $rows = $oProcessMap->getExtTriggersList($start, $limit, $_GET['pid']);
+         $result['totalCount'] = $oProcessMap->getAllTriggersCount();
          array_shift($rows);
-         $result['totalCount'] = count($rows);
          $result['data'] = $rows;
          print json_encode( $result ) ;
          break;
