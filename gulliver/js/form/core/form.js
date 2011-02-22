@@ -278,11 +278,16 @@ function G_DropDown( form, element, name )
     this.parent( form, element, name );
     this.setContent=function(content) {
       var dd=me.element;
-      for (var key in dd.options){
-        dd.options[key] = null;
+      var browser = getBrowserClient();
+      if (browser.name=='msie'){
+        while(dd.options.length>1) dd.remove(0);
+      } else {
+        for (var key in dd.options){
+          dd.options[key] = null;
+        }
       }
       // the remove function is no longer reliable
-      // while(dd.options.length>0) dd.remove(0);
+      // while(dd.options.length>1) dd.remove(0);
       for(var o=0;o<content.options.length;o++) {
         var optn = $dce("OPTION");
         optn.text = content.options[o].value;
