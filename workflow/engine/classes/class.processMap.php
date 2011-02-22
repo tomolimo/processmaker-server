@@ -4548,7 +4548,7 @@ class processMap {
       if (!is_null($oEvent)) {
       $oData = $oEvent->load($sEventUID);
 
-      if($oData['EVN_ACTION'] != '' && $oData['EVN_ACTION'] == 'WEB_ENTRY')
+      if($oData['EVN_ACTION'] != '' && $oData['EVN_ACTION'] != 'WEB_ENTRY')
       {
           require_once 'classes/model/Content.php';
           $oContent = new Content();
@@ -4574,8 +4574,8 @@ class processMap {
           if (is_dir ( PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $sProcessUID )) {
             $dir = opendir ( PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $sProcessUID );
             $dynTitle = str_replace ( ' ', '_', str_replace ( '/', '_', $dynTitle ) );
-            $alink = $link . $dynTitle.'.php';
-            $arlink     = "<a href='" . $alink . "' target='blank'><font color='#9999CC'>" . $alink . "</font></a>";
+            $arlink = $link . $dynTitle.'.php';
+            //$arlink     = "<a href='" . $alink . "' target='blank'><font color='#9999CC'>" . $alink . "</font></a>";
           }
         }
       }
@@ -6596,7 +6596,8 @@ function saveExtEvents($oData)
   $aDataEvent['EVN_TYPE']       = $oData->evn_type;
   
   if(preg_match("/Start/", $sEvn_type)){
-    $aDataTask['TAS_UID']     = $oData->tas_uid;
+    if(isset($oData->tas_uid) && $oData->tas_uid != '')
+        $aDataTask['TAS_UID']     = $oData->tas_uid;
     $aDataTask['TAS_START']   = $oData->tas_start;
     $aDataTask['EVN_TYPE']    = $oData->evn_type;
     $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
