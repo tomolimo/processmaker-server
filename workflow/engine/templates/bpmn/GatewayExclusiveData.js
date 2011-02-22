@@ -1,6 +1,7 @@
 bpmnGatewayExclusiveData=function(width,_30ab){
   VectorFigure.call(this);
   this.stroke =2;
+  
   //Setting width and height values as per the zoom ratio
   if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
     this.setDimension(workflow.zoomWidth+10, workflow.zoomHeight+10);
@@ -54,7 +55,7 @@ bpmnGatewayExclusiveData.prototype.paint=function(){
   this.graphics.fillPolygon( x_cross, y_cross);
   this.graphics.paint();
   if (this.input1 != null) {
-    this.input1.setPosition(10, this.height / 2);
+    this.input1.setPosition(0, this.height / 2);
   }
   if (this.input2 != null) {
     this.input2.setPosition(this.width / 2, 0);
@@ -78,7 +79,7 @@ bpmnGatewayExclusiveData.prototype.setWorkflow=function(_40c5){
   	var h2 = this.height/2;
   	var w2 = this.width/2;
   	
-    var gatewayPortName = ['output1',   'output3',   'output2',   'input1',   'input2'   ];
+    var gatewayPortName = ['output1',   'output2',   'output3',   'input1',   'input2'   ];
     var gatewayPortType = ['OutputPort','OutputPort','OutputPort','InputPort','InputPort'];
     var gatewayPositionX= [w2,         this.width, 0 ,  0,  w2 ];
     var gatewayPositionY= [this.width, h2,         h2,  h2, 0  ];

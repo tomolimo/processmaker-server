@@ -767,7 +767,7 @@ MyWorkflow.prototype.disablePorts=function(oShape)
 {
   if(oShape.type != ''){
     var ports ='';
-    if(oShape.type.match(/bpmnGatewayExclusiveData/)) {
+    if(oShape.type.match(/Gateway/)) {
       ports = ['output1','input1','output2','input2', 'output3' ];
     }
     else if(oShape.type.match(/Task/) || oShape.type.match(/Gateway/) || oShape.type.match(/Inter/) || oShape.type.match(/SubProcess/)) {
@@ -802,13 +802,15 @@ MyWorkflow.prototype.enablePorts=function(oShape,aPort)
   **/
   for(var i=0; i< aPort.length ; i++)
   {
-    if(aPort[i].match(/input/))
-        eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(245, 115, 115))');
-    else
-        eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(115, 115, 245))');
-
-        eval('oShape.workflow.currentSelection.'+aPort[i]+'.setColor(new Color(90, 150, 90))');
-        eval('oShape.workflow.currentSelection.'+aPort[i]+'.setZOrder(50000)');
+    if(aPort[i].match(/input/)) {
+      eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(245, 115, 115))');
+      eval('oShape.workflow.currentSelection.'+aPort[i]+'.setZOrder(49000)');
+    }
+    else {
+      eval('oShape.workflow.currentSelection.'+aPort[i]+'.setBackgroundColor(new Color(115, 115, 245))');
+      eval('oShape.workflow.currentSelection.'+aPort[i]+'.setZOrder(50000)');
+    }
+    eval('oShape.workflow.currentSelection.'+aPort[i]+'.setColor(new Color(90, 150, 90))');
   }
 }
 
