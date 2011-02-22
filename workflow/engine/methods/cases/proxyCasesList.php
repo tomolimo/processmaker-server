@@ -19,7 +19,8 @@
 
   try {
 
-  G::LoadClass("BasePeer" );
+  G::LoadClass("BasePeer");
+  G::LoadClass("case");
   G::LoadClass ( 'configuration' );
   require_once ( "classes/model/AppCacheView.php" );
   require_once ( "classes/model/AppDelegation.php" );
