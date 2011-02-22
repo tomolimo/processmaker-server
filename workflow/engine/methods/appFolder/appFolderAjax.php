@@ -157,7 +157,7 @@ function expandNode(){
             $tempTree ['docVersion'] = $obj['DOC_VERSION'];
             $tempTree ['appUid'] = $obj['APP_UID'];
             $tempTree ['usrUid'] = $obj['USR_UID'];
-            $tempTree ['appDocType'] = $obj['APP_DOC_TYPE'];
+            $tempTree ['appDocType'] = ucfirst(strtolower($obj['APP_DOC_TYPE']));
             $tempTree ['appDocCreateDate'] = $obj['APP_DOC_CREATE_DATE'];
             $tempTree ['appDocPlugin'] = $obj['APP_DOC_PLUGIN'];
             $tempTree ['appDocTags'] = $obj['APP_DOC_TAGS'];
@@ -758,10 +758,9 @@ function moveExecute(){
 }
 
 function copyMoveExecute($type){
-    $res ['success'] = 'failure';
-    $res ['message'] = $type;
+    
     print_r($_REQUEST);
-    print G::json_encode ( $res);
+    uploadExternalDocument();
     die ();
 }
 
@@ -800,6 +799,7 @@ function uploadExternalDocument(){
     $response['success']=false;
     if(isset($_POST["confirm"]) && $_POST["confirm"]=="true") {
         //G::pr($_FILES);
+        if(isset($_FILES['uploadedFile'])){
         $uploadedInstances=count($_FILES['uploadedFile']['name']);
         $sw_error=false;
         $sw_error_exists=isset($_FILES['uploadedFile']['error']);
@@ -834,6 +834,14 @@ function uploadExternalDocument(){
             //The uplaoded files seems to be correct and ready to be uploaded. Add to the Queque
             $fileInfo=array("tempName"=>$tmp,"fileName"=>$items[$i]);
             $quequeUpload[]=$fileInfo;
+        }}elseif(isset($_POST['selitems'])){
+            $oAppDocument = new AppDocument();
+            foreach($_POST['selitems'] as $docId){
+                print "<b>$docId</b>";
+                $docInfo=$oAppDocument->load($docId);
+                G::pr($docInfo);
+            }
+            
         }
         //G::pr($quequeUpload);
 
@@ -1186,7 +1194,7 @@ function deletePMFolder(){
 function getMime($fileName){
     $fileName=basename($fileName);
     $fileNameA=explode(".",$fileName);
-    $return['description']=G::LoadTranslation("MIME_DES_DOCUMENT");
+    $return['description']=G::LoadTranslation("MIME_DES_FILE");
     $return['icon']="/images/documents/extension/document.png";
     if(count($fileNameA)>1){
         $extension=$fileNameA[count($fileNameA)-1];
