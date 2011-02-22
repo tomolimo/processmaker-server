@@ -767,11 +767,11 @@ MyWorkflow.prototype.disablePorts=function(oShape)
 {
   if(oShape.type != ''){
     var ports ='';
-    if(oShape.type.match(/Task/) || oShape.type.match(/Gateway/) || oShape.type.match(/Inter/) || oShape.type.match(/SubProcess/)) {
-      ports = ['output1','input1','output2','input2' ];
+    if(oShape.type.match(/bpmnGatewayExclusiveData/)) {
+      ports = ['output1','input1','output2','input2', 'output3' ];
     }
-    else if(oShape.type.match(/bpmnGatewayExclusiveData/)) {
-      ports = ['output1','input1','output2','input2', 'input3' ];
+    else if(oShape.type.match(/Task/) || oShape.type.match(/Gateway/) || oShape.type.match(/Inter/) || oShape.type.match(/SubProcess/)) {
+      ports = ['output1','input1','output2','input2' ];
     }
     else if(oShape.type.match(/End/)) {
       ports = ['input1','input2'];
