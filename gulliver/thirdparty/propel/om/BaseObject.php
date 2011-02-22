@@ -181,7 +181,7 @@ abstract class BaseObject {
 	 */
 	protected function log($msg, $priority = Propel::LOG_INFO)
 	{
-		return Propel::log(is_object($this) && get_class($this) . ': ' . $msg, $priority);
+		return Propel::log((is_object($this) ? get_class($this) : 'NULL') . ': ' . $msg, $priority);
 	}
 
 }

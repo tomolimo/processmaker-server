@@ -64,7 +64,7 @@ class DefaultPlatform implements Platform {
 	 */
 	public function getDatabaseType()
 	{
-		$clazz = is_object($this) && get_class($this);
+		$clazz = is_object($this) ? get_class($this) : 'NULL';
 		$pos = strpos($clazz, 'Platform');
 		return strtolower(substr($clazz,0,$pos));
 	}
