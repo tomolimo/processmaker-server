@@ -183,9 +183,40 @@ Ext.onReady(function() {
           });
         }
       }]      
-    } 
+    }
+
+    fieldsetSession = {
+      xtype : 'fieldset',
+      title : TRANSLATIONS.ID_CACHE_SUBTITLE_SETUP_SESSION, // 'Deleting the sessions',
+      collapsible : false,
+      autoHeight  : true,
+      defaults    : { width : 100 },
+      defaultType : 'textfield',
+      buttons : [{
+        text : TRANSLATIONS.ID_CACHE_BTN_SETUP_SESSION, // 'Setup sessions',
+        handler : function() {
+          Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
+          Ext.Ajax.request({
+            url: 'deleteSessions',
+            success: function(response) {
+              Ext.MessageBox.hide();
+              Ext.Msg.alert ( '', response.responseText );
+            },
+            failure : function(response) {
+              Ext.Msg.hide();
+              Ext.Msg.alert ( 'Error', response.responseText );
+            },
+            // params: { request: 'recreate-root', lang: 'en', host: Ext.getCmp('txtHost').getValue(), user: Ext.getCmp('txtUser').getValue(), password: Ext.getCmp('txtPasswd').getValue() },
+            // timeout : 1000
+            // 30 mins
+            timeout : 1000*60*30 //30 mins
+          });
+        }
+      }]
+    }
     fsf.add(fieldset);
     fsf.add(fieldsetRoot);
+    fsf.add(fieldsetSession);
     fsf.render(document.getElementById('main-panel'));
 
     //set the current language
