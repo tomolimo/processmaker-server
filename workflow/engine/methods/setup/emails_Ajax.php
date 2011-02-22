@@ -64,7 +64,10 @@ switch ($request) {
 
     define("SUCCESSFUL", 'SUCCESSFUL');
     define("FAILED", 'FAILED');
+    $tld = preg_match("([^//]*$)", $_POST['srv'], $regs);
+    $srv1 = $regs[1];
     $srv  = $_POST['srv'];
+G::pr('$srv='.$srv.' $tld='.$tld);
 
     $port  = ($_POST['port'] == 'default')? 25: $_POST['port'];
     $user  = $_POST['account'];
