@@ -278,6 +278,9 @@ switch ($_POST['action'])
   case 'assignedUsers':
   	$filter = isset($_POST['textFilter']) ? $_POST['textFilter'] : '';
   	$dep_uid = $_REQUEST['dUID'];
+  	$oDept = new Department();
+  	$oDept->Load($dep_uid);
+  	$manager = $oDept->getDepManager();
   	$oCriteria = new Criteria('workflow');
   	$oCriteria->addSelectColumn(UsersPeer::USR_UID);
   	$oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
@@ -296,6 +299,8 @@ switch ($_POST['action'])
   	$aUsers = array();
   	while ($oDataset->next()){
   		$aUsers[] = $oDataset->getRow();
+  		$index = sizeof($aUsers)-1;
+  	  $aUsers[$index]['USR_SUPERVISOR'] = ($manager == $aUsers[$index]['USR_UID'])? true : false;
   	}
   	echo '{users:'.G::json_encode($aUsers).'}';
   	break;
@@ -355,5 +360,15 @@ $oCriteria->add(UsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
   			$dep->updateDepartmentManager($DEP_UID);
   		}
   	}
+  	break;
+ case 'updateSupervisor':
+ 	  $dep_manager = $_POST['USR_UID'];
+ 	  $dep_uid = $_POST['DEP_UID'];
+ 	  $editDepartment['DEP_UID'] = $dep_uid;
+ 	  $editDepartment['DEP_MANAGER'] = $dep_manager;
+  	$oDept = new Department();
+  	$oDept->update($editDepartment);
+  	$oDept->updateDepartmentManager($dep_uid);
+  	echo '{success: true}';
   	break;
 }

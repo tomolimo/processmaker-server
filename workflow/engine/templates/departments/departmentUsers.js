@@ -63,26 +63,23 @@ Ext.onReady(function(){
     handler: CancelEditMembersAction
     //hidden: true
   });
+  
+  supervisorButton = new Ext.Action({
+    text: _('ID_SET_SUPERVISOR'),
+    iconCls: 'button_menu_ext ss_sprite ss_user_edit',
+    handler: UpdateSupervisor,
+    disabled: true
+  });
 
   backButton = new Ext.Action({
     text : _('ID_BACK'),
     iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
     handler: BackToUsers
   });
-
-//  saveChangesButton = new Ext.Action({
-//    text: _('ID_SAVE_CHANGES'),
-//    //iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
-//    handler: SaveChangesAuthForm,
-//    disabled: true
-//  });
-
-//  discardChangesButton = new Ext.Action({
-//    text: _('ID_DISCARD_CHANGES'),
-//    //iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
-//    handler: LoadAuthForm,
-//    disabled: true
-//  });
+  
+  contextMenu = new Ext.menu.Menu({
+  	items: [supervisorButton]
+  });
 
   storeP = new Ext.data.GroupingStore( {
     proxy : new Ext.data.HttpProxy({
@@ -94,7 +91,8 @@ Ext.onReady(function(){
         {name : 'USR_UID'},
         {name : 'USR_USERNAME'},
         {name : 'USR_FIRSTNAME'},
-        {name : 'USR_LASTNAME'}
+        {name : 'USR_LASTNAME'},
+        {name : 'USR_SUPERVISOR'}
       ]
     })
   });
@@ -125,6 +123,28 @@ Ext.onReady(function(){
     ]
   });
 
+  smodelP = new Ext.grid.RowSelectionModel({
+    selectSingle: false,
+    listeners:{
+      selectionchange: function(sm){
+        switch(sm.getCount()){
+          case 0: Ext.getCmp('removeButton').disable();
+                  supervisorButton.disable();
+                  break;
+          case 1: Ext.getCmp('removeButton').enable();
+                  if (availableGrid.hidden)
+                    supervisorButton.enable();
+                  else
+                	supervisorButton.disable();  
+                  break;
+          default: Ext.getCmp('removeButton').enable();
+                   supervisorButton.disable();
+                   break;
+        }
+      }
+    }
+  });
+
   smodelA = new Ext.grid.RowSelectionModel({
     selectSingle: false,
     listeners:{
@@ -132,18 +152,6 @@ Ext.onReady(function(){
         switch(sm.getCount()){
           case 0: Ext.getCmp('assignButton').disable(); break;
           default: Ext.getCmp('assignButton').enable(); break;
-        }
-      }
-    }
-  });
-
-  smodelP = new Ext.grid.RowSelectionModel({
-    selectSingle: false,
-    listeners:{
-      selectionchange: function(sm){
-        switch(sm.getCount()){
-          case 0: Ext.getCmp('removeButton').disable(); break;
-          default: Ext.getCmp('removeButton').enable(); break;
         }
       }
     }
@@ -240,12 +248,24 @@ Ext.onReady(function(){
     frame      : false,
     columnLines    : false,
     viewConfig    : {forceFit:true},
-    tbar: [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
+    tbar: [editMembersButton,'-',supervisorButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
     //bbar: [{xtype: 'tbfill'},editMembersButton],
     listeners: {rowdblclick: function(){
-      (availableGrid.hidden)? DoNothing() : RemoveGroupsAction();
-    }}
+         (availableGrid.hidden)? DoNothing() : RemoveGroupsAction();
+       }
+    }
   });
+  
+  assignedGrid.on('rowcontextmenu', 
+  		function (grid, rowIndex, evt) {
+      		var sm = grid.getSelectionModel();
+      		sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  		},
+  		this
+  );
+  
+  assignedGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
+  assignedGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
 
   buttonsPanel = new Ext.Panel({
     width      : 40,
@@ -297,6 +317,13 @@ Ext.onReady(function(){
   DDLoadUsers();
 
 });
+
+//Funtion Handles Context Menu Opening
+onMessageContextMenu = function (grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    contextMenu.showAt([coords[0], coords[1]]);
+};
 
 //Do Nothing Function
 DoNothing = function(){};
@@ -460,6 +487,7 @@ EditMembersAction = function(){
   availableGrid.show();
   buttonsPanel.show();
   editMembersButton.disable();
+  supervisorButton.disable();
   UsersPanel.doLayout();
 };
 
@@ -468,10 +496,36 @@ CancelEditMembersAction = function(){
   availableGrid.hide();
   buttonsPanel.hide();
   editMembersButton.enable();
+  rowsSelected = assignedGrid.getSelectionModel().getSelections();
+  if (rowsSelected.length == 1)
+    supervisorButton.enable();
+  else
+	supervisorButton.disable();
   UsersPanel.doLayout();
 };
 
 //Render Full User Name
 show_user = function(v,i,s){
-	return _FNF(v,s.data.USR_FIRSTNAME, s.data.USR_LASTNAME);
+	var sName = _FNF(v,s.data.USR_FIRSTNAME, s.data.USR_LASTNAME);
+	if (s.data.USR_SUPERVISOR) sName = sName + '&nbsp;<font color="green">[' + _('ID_SUPERVISOR') + ']</font>';
+	return sName;
+};
+
+//Update Department Supervisor
+UpdateSupervisor = function(){
+	rowsSelected = assignedGrid.getSelectionModel().getSelections();
+	viewport.getEl().mask(_('ID_PROCESSING'));
+	Ext.Ajax.request({
+		url: 'departments_Ajax',
+		params: {action: 'updateSupervisor', USR_UID: rowsSelected[0].get('USR_UID'), DEP_UID: DEPARTMENT.DEP_UID},
+		success: function(r,o){
+			viewport.getEl().unmask();
+			supervisorButton.disable();
+			DoSearchP();
+			PMExt.notify(_('ID_DEPARTMENTS'),_('ID_SET_SUPERVISOR_SUCCESS'));
+		},
+		failure: function (r,o){
+			viewport.getEl().unmask();
+		}
+	});
 };
