@@ -155,22 +155,22 @@ Ext.onReady ( function() {
     },
 
     items : [{
-      icon: '/skins/ext/images/gray/shapes/pallete/task.png',
+      iconCls: 'button_large_ext ss_sprite ss_bpmn_task',//icon: '/skins/ext/images/gray/shapes/pallete/task.png',
       id:"x-shapes-task"
     },{
-      icon: '/skins/ext/images/gray/shapes/pallete/startevent.png',
+      iconCls: 'button_large_ext ss_sprite ss_bpmn_startevent',//icon: '/skins/ext/images/gray/shapes/pallete/startevent.png',
       id:"x-shapes-startEvent"
     },{
-      icon: '/skins/ext/images/gray/shapes/pallete/interevent.png',
+      iconCls: 'button_large_ext ss_sprite ss_bpmn_interevent',//icon: '/skins/ext/images/gray/shapes/pallete/interevent.png',
       id:"x-shapes-interEvent"
     },{
-      icon: '/skins/ext/images/gray/shapes/pallete/endevent.png',
+      iconCls: 'button_large_ext ss_sprite ss_bpmn_endevent',//icon: '/skins/ext/images/gray/shapes/pallete/endevent.png',
       id:"x-shapes-endEvent"
     },{
-      icon: '/skins/ext/images/gray/shapes/pallete/gateway.png',
+      iconCls: 'button_large_ext ss_sprite ss_bpmn_gateway',//icon: '/skins/ext/images/gray/shapes/pallete/gateway.png',
       id:"x-shapes-gateways"
     },{
-      icon: '/skins/ext/images/gray/shapes/pallete/annotation.png',
+      iconCls: 'button_large_ext ss_sprite ss_bpmn_annotation',//icon: '/skins/ext/images/gray/shapes/pallete/annotation.png',
       id:"x-shapes-annotation"
     }
     ]

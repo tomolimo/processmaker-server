@@ -64,6 +64,7 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 .panel_headerBar___processmaker{background:url("/skins/ext/images/gray/toolbar/bg.gif") #F0F0F0 !important}
 
 .button_menu_ext{padding-left:20px !important;height:18px !important;}
+.button_large_ext{padding-left:20px !important;height:32px !important;}
 .button_toolbar{padding-left:20px !important;height:18px !important;font-size:15px;cursor:pointer;margin:0 3px 1px 3px;line-height:25px}
 .ss_accept{background-position:0px 0 !important}
 .ss_add{background-position:0px -19px !important}
@@ -946,3 +947,10 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 .ss_textarea{background-position:0px -18253px !important}
 .ss_title{background-position:0px -18271px !important}
 .ss_subtitle{background-position:0px -18289px !important}
+
+.ss_bpmn_task{background-position:0px -18310px !important}
+.ss_bpmn_startevent{background-position:0px -18342px !important}
+.ss_bpmn_interevent{background-position:0px -18374px !important}
+.ss_bpmn_endevent{background-position:0px -18406px !important}
+.ss_bpmn_gateway{background-position:0px -18438px !important}
+.ss_bpmn_annotation{background-position:0px -18470px !important}
