@@ -267,23 +267,23 @@ class headPublisher {
     $head = '';
     $head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
-    $head .= "  <script type='text/javascript' src='/js/ext/ux/ux-all.js'></script>\n";
-    
+//    $head .= "  <script type='text/javascript' src='/js/ext/ux/ux-all.js'></script>\n";
+/*    
     if (isset ( $this->extJsLibrary ) && is_array ( $this->extJsLibrary )) {
       foreach ( $this->extJsLibrary as $file ) {
         $head .= "  <script type='text/javascript' src='/js/ext/" . $file . ".js'></script>\n";
       }
     }
-    
+ */   
     $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
 /*
     $head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+    $head .= "  <script type='text/javascript' src='/js/ext/pmos-common.js'></script>\n";
 */
     $head .= "  <script type='text/javascript' src='/gulliver/loader?t=js-translations&locale=".SYS_LANG."'></script>\n";
-    $head .= "  <script type='text/javascript' src='/js/ext/pmos-common.js'></script>\n";
     
     if (! isset ( $this->extJsSkin ) || $this->extJsSkin == '') {
       $this->extJsSkin = 'xtheme-gray';

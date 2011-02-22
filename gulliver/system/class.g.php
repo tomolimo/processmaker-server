@@ -1055,13 +1055,17 @@ class G
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/mootools.js' ) );
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/moocanvas.js' ) );
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/draw2d.js' ) );
-/*            
-    $head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
-    $head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
-    $head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
-    $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
-    */
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/pmos-common.js' ) );            
             break;
+          case 'ext-all.js' :
+            $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ext-all.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/ux-all.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.statusbar/ext-statusbar.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
+            break;
+
           case 'maborak.js' :
             $oHeadPublisher =& headPublisher::getSingleton();
             foreach ( $oHeadPublisher->maborakFiles as $fileJS ) {
