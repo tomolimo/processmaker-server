@@ -26,7 +26,6 @@
 
 if(isset($_POST['form']['NW_TITLE']))
 {
-/*--
 	$action = (isset($_POST['form']['ACTION']))?trim($_POST['form']['ACTION']):'test';
 	G::LoadClass('Installer');
 	G::LoadClass('json');
@@ -61,88 +60,11 @@ if(isset($_POST['form']['NW_TITLE']))
 	$result['result']['action']=$action;
 	//print_r($inst);
 	$json	= new Services_JSON();
---*/
-	/*$ec;
-	$ec->created=($new)?true:false;
-	$ec->name=$name;
-	$ec->message=($new)?"Workspace created":"Workspace already exists or Name invalid";*/
-//--	echo $json->encode($result);
-
-/*--------------------------------------------------------------------------------------------------*/
-	$action = (isset($_POST['form']['ACTION']))?trim($_POST['form']['ACTION']):'test';
-
-	if(isset($_POST['form']['DB_ENGINE'])) {
-		switch($_POST['form']['DB_ENGINE']) {
-			case 'mysql' :
-								G::LoadClass('Installer');
-								break;
-			case 'mssql' :
-								G::LoadClass('Installer_mssql');
-								break;
-		  default      :
-								G::LoadClass('Installer');
-								break;
-		}
-  } else 
-  		G::LoadClass('Installer');
-  
-	G::LoadClass('json');
-	$name	= trim($_POST['form']['NW_TITLE']);
-	$inst	= new Installer();
-
-	$isset	= $inst->isset_site($name);
-  
-	if(isset($_POST['form']['DB_ENGINE']) ) {
-		switch($_POST['form']['DB_ENGINE']) {
-			case 'mysql' :
-								break;
-			case 'mssql' :
-			          $sServer    = (isset($_POST['form']['DB_SERVER']))?trim($_POST['form']['DB_SERVER']):'';
-			          $sPort      = (isset($_POST['form']['DB_PORT']))?trim($_POST['form']['DB_PORT']):'';
-			          $sUserName  = (isset($_POST['form']['DB_USERNAME']))?trim($_POST['form']['DB_USERNAME']):'';
-			          $sPassword  = (isset($_POST['form']['DB_PASSWORD']))?trim($_POST['form']['DB_PASSWORD']):''; 
-								$inst->setServerData($sServer, $sPort, $sUserName, $sPassword );
-								break;
-		  default      :
-								break;
-		}
-  } 
-
-	$new	= ((!$isset))?true:false;
-	$user	= (isset($_POST['form']['NW_USERNAME']))?trim($_POST['form']['NW_USERNAME']):'admin';
-	$pass	= (isset($_POST['form']['NW_PASSWORD']))?$_POST['form']['NW_PASSWORD']:'admin';
-	$pass1	= (isset($_POST['form']['NW_PASSWORD2']))?$_POST['form']['NW_PASSWORD2']:'admin';
-
-	$ao_db_drop	= (isset($_POST['form']['AO_DB_DROP']))?true:false;
-
-	$ao_db_wf	= (isset($_POST['form']['AO_DB_WF']))?$_POST['form']['AO_DB_WF']:false;
-	$ao_db_rb	= (isset($_POST['form']['AO_DB_RB']))?$_POST['form']['AO_DB_RB']:false;
-	$ao_db_rp	= (isset($_POST['form']['AO_DB_RP']))?$_POST['form']['AO_DB_RP']:false;
-
-	$result = $inst->create_site(Array(
-		'isset'=>true,
-		'name' =>$name,
-		'admin'=>Array('username'=>$user,'password'=>$pass),
-		'advanced'=>Array(
-			'ao_db_drop'=>$ao_db_drop,
-			'ao_db_wf'=>$ao_db_wf,
-			'ao_db_rb'=>$ao_db_rb,
-			'ao_db_rp'=>$ao_db_rp
-		)
-	),($action==='create')?true:false);
-	
-	$result['result']['admin']['password']=($pass===$pass1)?true:false;
-	$result['result']['action']=$action;
-	//print_r($inst);
-	$json	= new Services_JSON();
 	/*$ec;
 	$ec->created=($new)?true:false;
 	$ec->name=$name;
 	$ec->message=($new)?"Workspace created":"Workspace already exists or Name invalid";*/
 	echo $json->encode($result);
-
-
-/*--------------------------------------------------------------------------------------------------*/
 }
 else
 {
@@ -162,28 +84,11 @@ else
     break;
   }
 	$G_PUBLISH = new Publisher;
-  //--	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', '/sys/en/green/install/newSite');
-  // Define another database
-	if(isset($_GET['DB']) ) {
-		$aFields['DB_ENGINE'] = $_GET['DB'];
-		switch($_GET['DB']) {
-			case 'mysql' :
-								$aFields['DB_PORT'] = '3306';
-								break;
-			case 'mssql' :
-								$aFields['DB_PORT'] = '1433';
-								break;
-		  default      :
-								$aFields['DB_PORT'] = '3306';
-								break;
-		}
-		$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSiteAdd', '', $aFields, '/sys/en/green/install/newSite');
-	} else
-		$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', '/sys/en/green/install/newSite');
+	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', '/sys/en/green/install/newSite');
 	
 	if( isset($_GET['type']) )
 	  G::RenderPage( "publishBlank", "blank");
-	else 
+	else
 	  G::RenderPage( "publish" );
 	
 	
