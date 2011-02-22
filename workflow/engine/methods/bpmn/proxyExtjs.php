@@ -110,7 +110,7 @@
     case 'editReportTables':
          require_once 'classes/model/ReportTable.php';
          $oReportTable = new ReportTable();
-         $rows = $oReportTable->load($_GET['REP_TAB_UID']);
+         $rows = $oReportTable->load($_GET['REP_TAB_UID'],$_GET['pid']);
          $tmpData = json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     

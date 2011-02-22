@@ -747,7 +747,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
              collapsible: false,
              maximizable: false,
              width: 600,
-             height: 450,
+             height: 400,
              minWidth: 300,
              minHeight: 200,
              layout: 'fit',

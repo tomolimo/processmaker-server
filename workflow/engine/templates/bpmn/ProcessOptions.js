@@ -375,7 +375,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
           if(radio.inputValue == 'blankDyna')
           {
             Ext.getCmp("blankDynaform").show();
-            Ext.getCmp("pmTableDynaform").hide();
+            var f = form.findField('yourField');
+           f.container.up('div.x-form-item').hide();
           }
           else
           {
@@ -1962,16 +1963,16 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                   var uploader = Ext.getCmp('uploader');
                   if(uploader.getForm().isValid()){
                     uploader.getForm().submit({
-                      url: 'outputdocs_Ajax?action=setTemplateFile',
+                      url: '../outputdocs/outputdocs_Ajax?action=setTemplateFile',
                       waitMsg: _('ID_UPLOADING_FILE'),
                       success: function(o, resp){
                         w.close();
 
                         Ext.Ajax.request({
-                          url: 'outputdocs_Ajax?action=getTemplateFile&r='+Math.random(),
+                          url: '../outputdocs/outputdocs_Ajax?action=getTemplateFile&r='+Math.random(),
                           success: function(response){
-                            Ext.getCmp('OUT_DOC_TEMPLATE').setValue(response.responseText);
-                            if(Ext.getCmp('OUT_DOC_TEMPLATE').getValue(response.responseText)=='')
+                            top.getForm().findField('OUT_DOC_TEMPLATE').setValue(response.responseText);
+                            if(top.getForm().findFields('OUT_DOC_TEMPLATE').getValue(response.responseText)=='')
                               Ext.Msg.alert(_('ID_ALERT_MESSAGE'), _('ID_INVALID_FILE'));
                           },
                           failure: function(){},
@@ -2015,7 +2016,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         items: [
         {
             xtype:'htmleditor',
-            id:'OUT_DOC_TEMPLATE',
+            //id:'OUT_DOC_TEMPLATE',
+            name:'OUT_DOC_TEMPLATE',
             fieldLabel:'Output Document Template',
             height:300,
             anchor:'98%'
@@ -2031,13 +2033,16 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
               params: {
                 OUT_DOC_UID: outputDocUID,
                 functions:'',
-                OUT_DOC_TEMPLATE:Ext.getCmp('OUT_DOC_TEMPLATE').getValue()
+                OUT_DOC_TEMPLATE:top.getForm().findField('OUT_DOC_TEMPLATE').getValue()
+
               },
               success: function(response){
                 Ext.Msg.show({
                   title: '',
                   msg: 'Saved Successfully',
-                  fn: function(){},
+                  fn: function(){
+                      window.hide();
+                                },
                   animEl: 'elId',
                   icon: Ext.MessageBox.INFO,
                   buttons: Ext.MessageBox.OK
@@ -2060,8 +2065,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
     var window = new Ext.Window({
         title: _('ID_NEW_INPUTDOCS'),
-        width: 550,
-        height: 400,
+        width: 650,
+        height: 450,
         minWidth: 200,
         minHeight: 150,
         autoScroll: true,
@@ -2170,7 +2175,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var btnProperties = new Ext.Button({
             id: 'btnProperties',
             text: _('ID_PROPERTIES'),
-            iconCls: 'application_add',
+            iiconCls: 'button_menu_ext ss_sprite  ss_application_edit',
             handler: propertiesOutputDoc
         });
 
@@ -2655,7 +2660,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         handler: editOutputDoc
       },{
         text: _('ID_PROPERTIES'),
-        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
         handler: propertiesOutputDoc
       },{
         text: _('ID_DELETE'),
@@ -2733,7 +2738,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
       }
       var repTabUID = rowSelected[0].get('REP_TAB_UID');
       reportForm.form.load({
-                        url   :'proxyExtjs.php?REP_TAB_UID=' +repTabUID+'&action=editReportTables',
+                        url   :'proxyExtjs.php?pid='+pro_uid+'&REP_TAB_UID=' +repTabUID+'&action=editReportTables',
                         method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
@@ -3057,7 +3062,7 @@ var reportForm =new Ext.FormPanel({
                 var Grid            = getForm.REP_TAB_GRID;
                 var Fields          = getForm.FIELDS;
 
-            if(typeof tableUID=='undefined')
+            if(tableUID=='')
                {
                 Ext.Ajax.request({
                   url   : '../reportTables/reportTables_Save.php',
@@ -3274,7 +3279,7 @@ ProcessOptions.prototype.addTriggers= function()
   var btnProperties = new Ext.Button({
     id: 'btnProperty',
     text: _('ID_Properties'),
-    //iconCls: 'button_menu_ext ss_sprite ss_delete',
+    iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
      handler: editProperties
   });
 
@@ -3371,7 +3376,7 @@ ProcessOptions.prototype.addTriggers= function()
         handler: editTriggers
       },{
         text: _('ID_PROPERTIES'),
-        //iconCls: 'button_menu_ext ss_sprite  ss_pencil',
+        iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
         handler: editProperties
       },{
         text: _('ID_DELETE'),
@@ -3390,8 +3395,8 @@ ProcessOptions.prototype.addTriggers= function()
 var triggersForm = new Ext.FormPanel({
     labelWidth  : 100,
     buttonAlign : 'center',
-    width       : 400,
-    height      : 350,
+    width       : 300,
+    height      : 300,
     bodyStyle : 'padding:10px 0 0 10px;',
     autoHeight: true,
     items:
@@ -3414,40 +3419,7 @@ var triggersForm = new Ext.FormPanel({
         fieldLabel: _('ID_DESCRIPTION'),
         width: 300,
         height: 120
-      },{
-                    layout      :'column',
-                    border      :false,
-                    items       :[{
-                        //columnWidth :.6,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                                xtype       : 'textarea',
-                                width     : 300,
-                                height    : 180,
-                                name        : 'TRI_WEBBOT',
-                                anchor      :'100%'
-                        }]
-                    },{
-                        //columnWidth     :.4,
-                        layout          : 'form',
-                        border          :false,
-                        items           : [{
-                                xtype           :'button',
-                                title           : ' ',
-                                width:50,
-                                text            : '@@',
-                               name            : 'selectorigin',
-                                 handler: function (s) {
-                                                    workflow.variablesAction = 'form';
-                                                    workflow.fieldName         = 'TRI_WEBBOT' ;
-                                                    workflow.variable        = '@@',
-                                                    workflow.formSelected    = triggersForm;
-                                                    var rowData = ProcMapObj.ExtVariables();
-                                            }
-                            }]
-                    }]
-                }],
+      }],
      buttons: [{
         text: _('ID_SAVE'),
         //formBind    :true,
@@ -3536,7 +3508,7 @@ var triggersForm = new Ext.FormPanel({
                         border      :false,
                         items       : [{
                                 xtype       : 'textarea',
-                                width     : 380,
+                                width     : 420,
                                 height    : 320,
                                 name        : 'TRI_WEBBOT',
                                 anchor      :'100%'
@@ -3705,10 +3677,10 @@ var triggersForm = new Ext.FormPanel({
  }); 
 
  var editTriggerFormWindow = new Ext.Window({
-        title: _('ID_TRIGGERS'),
+        title:  _('ID_EDIT_TRIGGERS'),
         autoScroll: true,
         collapsible: false,
-        width: 520,
+        width: 612,
         //autoHeight: true,
         height: 400,
         layout: 'fit',
@@ -3736,9 +3708,9 @@ var triggersForm = new Ext.FormPanel({
         autoScroll: true,
         collapsible: false,
         maximizable: true,
-        width: 510,
+        width: 450,
         //autoHeight: true,
-        height: 420,
+        height: 300,
         layout: 'fit',
         plain: true,
         buttonAlign: 'center',

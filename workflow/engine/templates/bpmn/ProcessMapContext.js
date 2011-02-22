@@ -84,8 +84,8 @@ ProcessMapContext.prototype.editProcess= function()
                               var getForm         = editProcess.getForm().getValues();
                               var pro_title       = getForm.PRO_TITLE;
                               var pro_description = getForm.PRO_DESCRIPTION;
-                              var pro_calendar    = getForm.PRO_CALENDAR;
-                              var pro_category    = getForm.PRO_CATEGORY;
+                              var pro_calendar    = getForm.calendar;
+                              var pro_category    = getForm.category;
                               var pro_debug       = getForm.PRO_DEBUG;
                   
                               if(pro_debug == 'on')
