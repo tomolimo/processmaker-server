@@ -169,72 +169,31 @@ class Installer
 
       if($this->options['advanced']['ao_db_drop']===true) {
         /* Drop databases  */
-        $q  = "DROP DATABASE IF EXISTS ".$wf;
-        $ac = @mysql_query($q,$this->connection_database);
-        $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-        $q  = "DROP DATABASE IF EXISTS ".$rb;
-        $ac = @mysql_query($q,$this->connection_database);
-        $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-        $q  = "DROP DATABASE IF EXISTS ".$rp;
-        $ac = @mysql_query($q,$this->connection_database);
-        $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
+        $this->run_query("DROP DATABASE IF EXISTS ".$wf, "Drop database $wf");
+        $this->run_query("DROP DATABASE IF EXISTS ".$rb, "Drop database $rb");
+        $this->run_query("DROP DATABASE IF EXISTS ".$rp, "Drop database $rp");
       }
 
-      $q  = "CREATE DATABASE IF NOT EXISTS ".$wf." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-      $ac = @mysql_query($q,$this->connection_database);
-      $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-      $q  = "CREATE DATABASE IF NOT EXISTS ".$rb." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-      $ac = @mysql_query($q,$this->connection_database);
-      $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-      /* report DB begin */
-
-      $q  = "CREATE DATABASE IF NOT EXISTS ".$rp." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-      $ac = @mysql_query($q,$this->connection_database);
-      $this->log($q.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-      /* report DB end */
+      $this->run_query("CREATE DATABASE IF NOT EXISTS ".$wf." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci",
+        "Create database $wf");
+      $this->run_query("CREATE DATABASE IF NOT EXISTS ".$rb." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci",
+        "Create database $rb");
+      $this->run_query("CREATE DATABASE IF NOT EXISTS ".$rp." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci",
+        "Create database $rp");
 
       if($this->cc_status==1) {
-        if($islocal) {
-          $priv_wf = "GRANT ALL PRIVILEGES ON `".$wf."`.* TO ".$wf."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-        }
-        else {
-          $priv_wf = "GRANT ALL PRIVILEGES ON `".$wf."`.* TO ".$wf."@'%' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-        }
-        $ac = @mysql_query($priv_wf,$this->connection_database);
-        $this->log($priv_wf.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-
-        if($islocal) {
-          $priv_rb = "GRANT ALL PRIVILEGES ON `".$rb."`.* TO ".$rb."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-        }
-        else {
-          $priv_rb = "GRANT ALL PRIVILEGES ON `".$rb."`.* TO ".$rb."@'%' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-        }
-        $ac = @mysql_query($priv_rb,$this->connection_database);
-        $this->log($priv_rb.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-        /* report DB begin */
-
-        if($islocal) {
-          $priv_rp = "GRANT ALL PRIVILEGES ON `".$rp."`.* TO ".$rp."@'localhost' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-        }
-        else {
-          $priv_rp = "GRANT ALL PRIVILEGES ON `".$rp."`.* TO ".$rp."@'%' IDENTIFIED BY '".$this->options['password']."' WITH GRANT OPTION";
-        }
-        $ac = @mysql_query($priv_rp,$this->connection_database);
-        $this->log($priv_rp.": => ".((!$ac)?mysql_error():"OK")."\n");
-
-        /* report DB end */
+        $host = ($islocal) ? "localhost" : "%";
+        $this->run_query("GRANT ALL PRIVILEGES ON `$wf`.* TO $wf@'$host' IDENTIFIED BY '{$this->options['password']}' WITH GRANT OPTION",
+          "Grant privileges for user $wf on database $wf");
+        $this->run_query("GRANT ALL PRIVILEGES ON `$rb`.* TO $rb@'$host' IDENTIFIED BY '{$this->options['password']}' WITH GRANT OPTION",
+          "Grant privileges for user $rb on database $rb");
+        $this->run_query("GRANT ALL PRIVILEGES ON `$rp`.* TO $rp@'$host' IDENTIFIED BY '{$this->options['password']}' WITH GRANT OPTION",
+          "Grant privileges for user $rp on database $rp");
       }
 
       /* Dump schema workflow && data  */
 
-      $this->log("Importing database schema\n");
+      $this->log("Importing database schema:\n");
       $myPortA = explode(":",$this->options['database']['hostname']);
       if(count($myPortA)<2) {
         $myPortA[1]="3306";
@@ -245,18 +204,18 @@ class Installer
       mysql_select_db($wf,$this->connection_database);
       $pws = PATH_WORKFLOW_MYSQL_DATA.$schema;
       $qws = $this->query_sql_file(PATH_WORKFLOW_MYSQL_DATA.$schema,$this->connection_database);
-      $this->log($qws);
+      $this->log($qws, isset($qws['errors']));
       $qwv = $this->query_sql_file(PATH_WORKFLOW_MYSQL_DATA.$values,$this->connection_database);
-      $this->log($qwv);
+      $this->log($qwv, isset($qwv['errors']));
 
 
       /* Dump schema rbac && data  */
       $pws = PATH_RBAC_MYSQL_DATA.$schema;
       mysql_select_db($rb,$this->connection_database);
       $qrs = $this->query_sql_file(PATH_RBAC_MYSQL_DATA.$schema,$this->connection_database);
-      $this->log($qrs);
+      $this->log($qrs, isset($qrs['errors']));
       $qrv = $this->query_sql_file(PATH_RBAC_MYSQL_DATA.$values,$this->connection_database);
-      $this->log($qrv);
+      $this->log($qrv, isset($qrv['errors']));
 
       $path_site  = $this->options['path_data']."/sites/".$this->options['name']."/";
       $db_file    = $path_site."db.php";
@@ -284,9 +243,9 @@ class Installer
                  "define ('DB_REPORT_PASS', '". (($this->cc_status==1)?$this->options['password']:$this->options['database']['password']) . "' );\n" .
                  "?>";
       $fp =  @fopen($db_file, "w");
-      $this->log("Creating: ".$db_file."  => ".((!$fp)?$fp:"OK")."\n");
+      $this->log("Create: ".$db_file."  => ".((!$fp)?$fp:"OK")."\n", $fp === FALSE);
       $ff =  @fputs( $fp, $db_text, strlen($db_text));
-      $this->log("Write: ".$db_file."  => ".((!$ff)?$ff:"OK")."\n");
+      $this->log("Write: ".$db_file."  => ".((!$ff)?$ff:"OK")."\n", $ff === FALSE);
 
       fclose( $fp );
       $this->set_admin();
@@ -302,14 +261,26 @@ class Installer
   public function set_admin()
   {
     mysql_select_db($this->wf_site_name,$this->connection_database);
-    $q  = 'UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1';
-    $ac = @mysql_query($q,$this->connection_database);
-    $this->log("Set workflow USERNAME:PASSWORD => ".((!$ac)?mysql_error():"OK")."\n");
+    $this->run_query('UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
+      "Add 'admin' user in ProcessMaker (wf)");
 
     mysql_select_db($this->rbac_site_name,$this->connection_database);
-    $q  = 'UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1';
-    $ac = @mysql_query($q,$this->connection_database);
-    $this->log("Set rbac USERNAME:PASSWORD => ".((!$ac)?mysql_error():"OK")."\n");
+    $this->run_query('UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
+      "Add 'admin' user in ProcessMaker (rb)");
+  }
+
+  /**
+   * Run a mysql query on the current database and take care of logging and
+   * error handling.
+   *
+   * @param string $query SQL command
+   * @param string $description Description to log instead of $query
+   */
+  private function run_query($query, $description = NULL) {
+    $result = @mysql_query($query, $this->connection_database);
+    $error = ($result) ? false : mysql_error();
+    $this->log(($description ? $description : $query) . " => " . (($error) ? $error : "OK") . "\n",
+      $error);
   }
 
   /**
@@ -323,7 +294,6 @@ class Installer
   {
     $report = array(
       'SQL_FILE' => $file,
-      'errors'   => array(),
       'queries'   => 0
     );
     
@@ -342,6 +312,8 @@ class Installer
       /* Make sure we have a query to execute, then execute it */
       if (trim($qr) != "") {
           if(!@mysql_query($qr, $connection)) {
+              if (!array_key_exists('errors', $report))
+                $report['errors'] = array();
               $report['errors'][] = "Error in query ".$i.": ".mysql_error();
           } else {
               $report['queries'] += 1;
@@ -570,9 +542,11 @@ class Installer
    * @param   string $text
    * @return  void
    */  
-  public function log($text)
+  public function log($text, $failed = NULL)
   {
     array_push($this->report,$text);
+    if ($failed)
+      throw new Exception($text);
   }
 }
 ?>

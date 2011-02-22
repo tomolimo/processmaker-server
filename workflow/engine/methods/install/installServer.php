@@ -200,7 +200,9 @@ else if($action==="install")
  	*5.1 Install processes
  	*5.2 Install plugins
 	* */
-	
+
+  require_once 'Log.php';
+
 	$sp		= "/";
 	$dir_data	= $dataClient->path_data;
 	//$dir_compiled	= $dataClient->path_compiled;
@@ -212,6 +214,15 @@ else if($action==="install")
 	@mkdir($dir_data."sites",0777,true);
 	@mkdir($dir_compiled,0777,true);
 
+  $logFile = "{$dir_data}install.log";
+  $display = Log::singleton('display', '', 'INSTALLER', array('lineFormat' => "%{message}"));
+  $file = Log::singleton('file', $logFile, 'INSTALLER');
+
+  global $logger;
+  $logger = Log::singleton('composite');
+  $logger->addChild($display);
+  $logger->addChild($file);
+
 	$create_db	="create-db.sql";
 	$schema		="schema.sql";
 
@@ -222,42 +233,61 @@ else if($action==="install")
 	$siteName="workflow";
 	$p1 = (isset($dataClient->ao_admin_pass1))?$dataClient->ao_admin_pass1:'admin';
 	$p2 = (isset($dataClient->ao_admin_pass2))?$dataClient->ao_admin_pass2:'admin';
-	$s = $inst->create_site(Array(
-		'name'	  =>'workflow',
-		'path_data'=>$dataClient->path_data,
-		'path_compiled'=>$dataClient->path_compiled,
-		'admin'=>Array('username'=>(isset($dataClient->ao_admin))?$dataClient->ao_admin:'admin','password'=>$p1),
-		'advanced'=>Array(
-			'ao_db'=>(isset($dataClient->ao_db) && $dataClient->ao_db===2)?false:true,
-			'ao_db_drop'=>(isset($dataClient->ao_db_drop) && $dataClient->ao_db_drop===true)?true:false,
-			'ao_db_wf'=>(isset($dataClient->ao_db_wf))?$dataClient->ao_db_wf:'wf_'.$siteName,
-			'ao_db_rb'=>(isset($dataClient->ao_db_rb))?$dataClient->ao_db_rb:'rb_'.$siteName,
-			'ao_db_rp'=>(isset($dataClient->ao_db_rp))?$dataClient->ao_db_rp:'rp_'.$siteName
-		),
-		'database'=>Array(
-			'hostname'=>$dataClient->mysqlH,
-			'username'=>$dataClient->mysqlU,
-			'password'=>$dataClient->mysqlP
-		)
-	),true);
+
+  try {
+    $s = $inst->create_site(Array(
+      'name'	  =>'workflow',
+      'path_data'=>$dataClient->path_data,
+      'path_compiled'=>$dataClient->path_compiled,
+      'admin'=>Array('username'=>(isset($dataClient->ao_admin))?$dataClient->ao_admin:'admin','password'=>$p1),
+      'advanced'=>Array(
+        'ao_db'=>(isset($dataClient->ao_db) && $dataClient->ao_db===2)?false:true,
+        'ao_db_drop'=>(isset($dataClient->ao_db_drop) && $dataClient->ao_db_drop===true)?true:false,
+        'ao_db_wf'=>(isset($dataClient->ao_db_wf))?$dataClient->ao_db_wf:'wf_'.$siteName,
+        'ao_db_rb'=>(isset($dataClient->ao_db_rb))?$dataClient->ao_db_rb:'rb_'.$siteName,
+        'ao_db_rp'=>(isset($dataClient->ao_db_rp))?$dataClient->ao_db_rp:'rp_'.$siteName
+      ),
+      'database'=>Array(
+        'hostname'=>$dataClient->mysqlH,
+        'username'=>$dataClient->mysqlU,
+        'password'=>$dataClient->mysqlP
+      )
+    ),true);
+    $installError = (!$s['created']);
+  } catch (Exception $e) {
+    $installError = ($e->getMessage() ? $e->getMessage() : true);
+  }
+
+  if ($installError)
+    header('HTTP', true, 500);
 
 	/* Status is used in the Windows installer, do not change this */
-	print_r("Status: ".($s['created'] ? 'SUCCESS':'FAILED')."\n\n");
-	print_r("Installation arguments:\n");
-	print_r($dataClient);
-	print_r("\n");
-	if (!$s['created']) {
+	print_r("Status: ".(($installError) ? 'FAILED':'SUCCESS')."\n\n");
+
+  $file->log("Status: ".(($installError) ? 'FAILED':'SUCCESS'));
+  $display->log("This log is also avaliable in $logFile");
+
+  $installArgs = (array)$dataClient;
+  $hiddenFields = array('mysqlP', 'ao_admin_pass1', 'ao_admin_pass2');
+  foreach ($installArgs as $arg => $param)
+    if (in_array($arg, $hiddenFields))
+      $installArgs[$arg] = "********";
+  
+  $logger->log("Installation arguments\n" . neat_r(array($installArgs)));
+
+	if ($installError !== false && isset($s) && !$s['created']) {
 		/* On a failed install, $inst->report is blank because the
 		 * installation didnt occured at all. So we use the test report
 		 * instead.
 		 */
-		print_r("Installation report:\n");
-		print_r($s['result']);
+		$logger->log("Installation report\n" . neat_r(array($s['result'])));
 		die();
 	}
 
-	print_r("Installation report:\n");
-	print_r($inst->report);
+	$logger->log("Installation report\n" . neat_r(array($inst->report)));
+
+  if ($installError)
+    die();
 	
 	$sh=md5(filemtime(PATH_GULLIVER."/class.g.php"));
 	$h=G::encrypt($dataClient->mysqlH.$sh.$dataClient->mysqlU.$sh.$dataClient->mysqlP.$sh.$inst->cc_status,$sh);
@@ -273,23 +303,68 @@ else if($action==="install")
 
 	/* Update languages */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/tools/updateTranslation");
-	print_r("Update language      => ".((!$update)?$update:"OK")."\n");
+	$logger->log("Update language      => ".((!$update)?$update:"OK"));
 	
 	/* Heartbeat Enable/Disable */
 	if(!isset($dataClient->heartbeatEnabled)) $dataClient->heartbeatEnabled=true;
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/heartbeatStatus?status=".$dataClient->heartbeatEnabled);
-	print_r("Heartbeat Status     => ".str_replace("<br>","\n",$update)."\n");
+	$logger->log("Heartbeat Status     => ".str_replace("<br>","\n",$update));
 	
 	/* Autoinstall Process */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/autoinstallProcesses");
 	if (trim(str_replace("<br>","",$update)) == "")
 		$update = "Nothing to do.";
-	print_r("Process AutoInstall  => ".str_replace("<br>","\n",$update)."\n");
+	$logger->log("Process AutoInstall  => ".str_replace("<br>","\n",$update));
 	
 	/* Autoinstall Plugins */
 	$update = file_get_contents("http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/sysworkflow/en/green/install/autoinstallPlugins");
 	if (trim(str_replace("<br>","",$update)) == "")
 		$update = "Nothing to do.";
-	print_r("Plugin AutoInstall   => ".str_replace("<br>","\n",$update)."\n");
+	$logger->log("Plugin AutoInstall   => ".str_replace("<br>","\n",$update));
+}
+
+/*
+    neat_r works like print_r but with much less visual clutter.
+    By Jake Lodwick. Copy freely.
+*/
+function neat_r($arr, $return = false) {
+    $out = array();
+    $oldtab = "    ";
+    $newtab = "  ";
+
+    $lines = explode("\n", print_r($arr, true));
+
+    foreach ($lines as $line) {
+
+        //remove numeric indexes like "[0] =>" unless the value is an array
+        //if (substr($line, -5) != "Array") {
+        $line = preg_replace("/^(\s*)\[[0-9]+\] => /", "$1", $line, 1);
+        //}
+
+        //garbage symbols
+        foreach (array(
+            "Array"        => "",
+            "["            => "",
+            "]"            => "",
+            //" =>"        => ":",
+        ) as $old => $new) {
+            $out = str_replace($old, $new, $out);
+        }
+
+        //garbage lines
+        if (in_array(trim($line), array("Array", "(", ")", ""))) continue;
+
+        //indents
+        $indent = "";
+        $indents = floor((substr_count($line, $oldtab) - 1) / 2);
+        if ($indents > 0) { for ($i = 0; $i < $indents; $i++) { $indent .= $newtab; } }
+
+        $out[] = $indent . trim($line);
+    }
+
+    $out = implode("\n", $out);
+    if ($return == true) return $out;
+
+    return $out;
 }
 ?>

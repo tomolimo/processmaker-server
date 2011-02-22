@@ -578,26 +578,20 @@ var installer=function()
 			this.table = document.createElement("table");
 			this.table.className="inst_table";
 
+      var success = (rpc.xmlhttp.status == 200);
+
 			var tr = this.table.insertRow(-1);
 			var tdtitle = tr.insertCell(0);
-			tdtitle.innerHTML="Directories";
+			tdtitle.innerHTML="Status";
 			tdtitle.className="app_grid_title___gray title";
 
 			var tr = this.table.insertRow(-1);
 			var td0 = tr.insertCell(0);
-			td0.innerHTML="SUCCESS";
-			td0.className="tdOk";
-
-			var tr = this.table.insertRow(-1);
-			var tdtitle = tr.insertCell(0);
-			tdtitle.innerHTML="New Workspace";
-			tdtitle.className="app_grid_title___gray title";
-
-			var tr = this.table.insertRow(-1);
-			var td0 = tr.insertCell(0);
-			td0.innerHTML="SUCCESS";
-			td0.className="tdOk";
+			td0.innerHTML=(success) ? "Success" : "Failed (Check log below)";
+			td0.className=(success) ? "tdOk" : "tdFailed";
 			this.options.target.appendChild(this.table);
+
+      if (success) {
 
 			var tr = this.table.insertRow(-1);
 			var tdS = tr.insertCell(0);
@@ -617,6 +611,8 @@ var installer=function()
 			this.buttonFun(this.options.buttong);
 			tdS.appendChild(document.createElement("br"));
 			tdS.appendChild(document.createElement("br"));
+      
+      }
 
 			var tr = this.table.insertRow(-1);
 			var tdtitle = tr.insertCell(0);
