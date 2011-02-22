@@ -90,8 +90,6 @@ class replacementLogo {
     $oCriteria = new Criteria ( 'workflow' );
     $oCriteria->addSelectColumn ( ConfigurationPeer::CFG_VALUE );
     $oCriteria->add ( ConfigurationPeer::CFG_UID, 'USER_LOGO_REPLACEMENT' );
-    $oCriteria->add ( ConfigurationPeer::USR_UID, $usrUid );    
-    $oCriteria->add ( ConfigurationPeer::USR_UID, $usrUid );
     $oDataset = ConfigurationPeer::doSelectRS ( $oCriteria );
     $oDataset->next ();
     $aRow = $oDataset->getRow ();

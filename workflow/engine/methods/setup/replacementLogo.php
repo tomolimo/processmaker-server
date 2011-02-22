@@ -51,7 +51,7 @@ try {//ini_set('display_errors','1');
    	  );
    	  	
    	  $oConf->aConfig = $aConf;
-   	  $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '',$_SESSION['USER_LOGGED']);
+   	  $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '','');
    	  
    	  G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
    	  //header('location: uplogo.php');
@@ -67,7 +67,7 @@ try {//ini_set('display_errors','1');
    	  );
    	  	
    	  $oConf->aConfig = $aConf;
-   	  $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '',$_SESSION['USER_LOGGED']);
+   	  $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '','');
    	  
    	  
    	  G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
