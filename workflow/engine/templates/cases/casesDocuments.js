@@ -28,6 +28,44 @@ catch(z){rc=/^(true|false|null|\[.*\]|\{.*\}|".*"|\d+|\d+\.\d+)$/;}
 
 var conn = new Ext.data.Connection();
 
+streamFilefromPM=function(fileStream) {
+	Ext.Ajax.request({
+        url:fileStream,
+        params: {request:true},
+        success: function(response) {        	
+            results = Ext.decode(response.responseText);            
+           if(results.success=='success'){
+        	   messageText="Downloading file "+results.message;
+				statusBarMessage( messageText, true, true );
+            try {
+                Ext.destroy(Ext.get('downloadIframe'));
+            }
+            catch(e) {}
+            Ext.DomHelper.append(document.body, {
+                tag: 'iframe',
+                id:'downloadIframe',
+                frameBorder: 0,
+                width: 0,
+                height: 0,
+                css: 'display:none;visibility:hidden;height:0px;',
+                src: fileStream
+            });
+        }else{
+        	
+        	msgbox = Ext.Msg.alert('Error', results.message);
+			msgbox.setIcon( Ext.MessageBox.ERROR );
+        }
+        },
+        failure: function() {
+            if (results.message) {
+                Ext.Msg.alert('Infomation',results.message);
+            }
+            
+        }
+    });
+};
+
+
 function chDir( directory, loadGridOnly ) {
 	// console.info("**** Changing Directory: "+directory+" --
 	// "+loadGridOnly);
@@ -319,13 +357,13 @@ function openActionDialog( caller, action ) {
 			fileName=ext_itemgrid.getSelectionModel().getSelected().get('name');
 			//alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
 			//alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLabel'));
-			
-			if(document.location = ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
+			streamFilefromPM(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
+			/*if(document.location = ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
 				messageText="Downloading file "+fileName;
 				statusBarMessage( messageText, false, true );
 			}else{
 				alert("sadasd");
-			}
+			}*/
 			break;
 	}
 }
@@ -486,11 +524,11 @@ function handleCallback(requestParams, node) {
 			}
 			if( success ) {
 				statusBar.setStatus({
-				    text: 'success: ' + msg,
+				    text: 'Success: ' + msg,
 				    iconCls: 'success',
 				    clear: true
 				});
-				Ext.msgBoxSlider.msg('success', msg );
+				Ext.msgBoxSlider.msg('Success', msg );
 			} else {
 				statusBar.setStatus({
 				    text: 'error: ' + msg,

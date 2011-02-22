@@ -28,28 +28,62 @@
  * @author David Callizaya <davidsantos@colosa.com>
  */
 
-  require_once ( "classes/model/AppDocumentPeer.php" );
+require_once ( "classes/model/AppDocumentPeer.php" );
 
-  $oAppDocument = new AppDocument();
-  $oAppDocument->Fields = $oAppDocument->load($_GET['a'],(isset($_GET['v']) )? $_GET['v'] : NULL );
+$oAppDocument = new AppDocument();
+$oAppDocument->Fields = $oAppDocument->load($_GET['a'],(isset($_GET['v']) )? $_GET['v'] : NULL );
 
-  $sAppDocUid = $oAppDocument->getAppDocUid();
-  $info = pathinfo( $oAppDocument->getAppDocFilename() );
-  if (!isset($_GET['ext'])) {
+$sAppDocUid = $oAppDocument->getAppDocUid();
+$info = pathinfo( $oAppDocument->getAppDocFilename() );
+if (!isset($_GET['ext'])) {
     $ext = $info['extension'];
-  }
-  else {
-  	if ($_GET['ext'] != '') {
-  		$ext = $_GET['ext'];
-  	}
-  	else {
-  		$ext = $info['extension'];
-  	}
-  }
+}
+else {
+    if ($_GET['ext'] != '') {
+        $ext = $_GET['ext'];
+    }
+    else {
+        $ext = $info['extension'];
+    }
+}
 $ver= (isset($_GET['v']) && $_GET['v']!='') ? '_'.$_GET['v'] : '';
-//$var = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext;
 
-  $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext ;  G::streamFile ( $realPath, true );
-  G::streamFile ( $realPath, true ,$info['basename'] .$ver. '.' . $ext );
- //G::streamFile ( $realPath, true);
+
+$realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext ;
+$realPath1 = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename'] .$ver. '.' . $ext ;
+$realPath2 = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename']. '.' . $ext ;
+$sw_file_exists=false;
+if(file_exists($realPath)){
+    $sw_file_exists=true;
+}elseif(file_exists($realPath1)){
+    $sw_file_exists=true;
+    $realPath=$realPath1;
+}elseif(file_exists($realPath2)){
+    $sw_file_exists=true;
+    $realPath=$realPath2;
+}
+
+if(!$sw_file_exists){
+    $error_message="'".$info['basename'] .$ver. '.' . $ext."' ".G::LoadTranslation('ID_ERROR_STREAMING_FILE');
+    if((isset($_POST['request']))&&($_POST['request']==true)){
+        $res ['success'] = 'failure';
+        $res ['message'] = $error_message;
+        print G::json_encode ( $res );
+    }else{
+        G::SendMessageText($error_message, "ERROR");
+        $backUrlObj=explode("sys".SYS_SYS,$_SERVER['HTTP_REFERER']);
+        G::header("location: "."/sys".SYS_SYS.$backUrlObj[1]);
+        die;
+    }
+
+}else{
+    if((isset($_POST['request']))&&($_POST['request']==true)){
+        $res ['success'] = 'success';
+        $res ['message'] = $info['basename'] .$ver. '.' . $ext;
+        print G::json_encode ( $res );
+    }else{
+        G::streamFile ( $realPath, true ,$info['basename'] .$ver. '.' . $ext );
+    }
+}
+//G::streamFile ( $realPath, true);
 ?>
