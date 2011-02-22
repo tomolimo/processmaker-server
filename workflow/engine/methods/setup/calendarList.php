@@ -34,15 +34,18 @@ $G_SUB_MENU = 'setup';
 $G_ID_MENU_SELECTED = 'SETUP';
 $G_ID_SUB_MENU_SELECTED = 'CALENDAR';
 
-$dbc = new DBConnection ( );
-$G_PUBLISH = new Publisher ( );
+$G_PUBLISH = new Publisher;
 
-G::LoadClass ( "calendar" );
-$Calendar = new Calendar ( );
-$Criteria = $Calendar->getCalendarList ();//List all calendars (ACTIVE and INACTIVE)
+G::LoadClass('configuration');
+$c = new Configurations();
+$configPage = $c->getConfiguration('calendarList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-$G_PUBLISH->AddContent ( 'propeltable', 'paged-table', 'setup/calendarList', $Criteria, array (), '' );
+$oHeadPublisher =& headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('setup/calendarList', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('setup/calendarList'); //adding a html file  .html.
+$oHeadPublisher->assign('CONFIG', $Config);
 
-G::RenderPage ( 'publishBlank','blank' );
+G::RenderPage('publish', 'extJs');
 
 ?>

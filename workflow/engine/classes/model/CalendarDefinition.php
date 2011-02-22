@@ -61,6 +61,40 @@ class CalendarDefinition extends BaseCalendarDefinition {
       return $return;
     }
   }
+  //Added by qennix
+  //Gets criteria for listing
+  function getCalendarCriterias($filter, $start, $limit){
+  	$Criteria = new Criteria ( 'workflow' );
+    $Criteria->clearSelectColumns ();
+    $Criteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UID );
+    if ($filter !=''){
+    	$Criteria->add(
+    	  $Criteria->getNewCriterion(CalendarDefinitionPeer::CALENDAR_NAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+    	  $Criteria->getNewCriterion(CalendarDefinitionPeer::CALENDAR_DESCRIPTION,'%'.$filter.'%',Criteria::LIKE)));
+    }
+    $Criteria->add(CalendarDefinitionPeer::CALENDAR_STATUS,'DELETED',Criteria::NOT_EQUAL);
+    
+    $oCriteria = new Criteria ( 'workflow' );
+    $oCriteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UID );
+    $oCriteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_NAME );
+    $oCriteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_CREATE_DATE );
+    $oCriteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_UPDATE_DATE );
+    $oCriteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_DESCRIPTION );
+    $oCriteria->addSelectColumn ( CalendarDefinitionPeer::CALENDAR_STATUS );
+    if ($filter !=''){
+    	$oCriteria->add(
+    	  $oCriteria->getNewCriterion(CalendarDefinitionPeer::CALENDAR_NAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+    	  $oCriteria->getNewCriterion(CalendarDefinitionPeer::CALENDAR_DESCRIPTION,'%'.$filter.'%',Criteria::LIKE)));
+    }
+    $oCriteria->add(CalendarDefinitionPeer::CALENDAR_STATUS,'DELETED',Criteria::NOT_EQUAL);
+    $oCriteria->setLimit($limit);
+    $oCriteria->setOffset($start);
+    
+    $criterias = array();
+    $criterias['COUNTER'] = $Criteria;
+    $criterias['LIST'] = $oCriteria;
+    return $criterias;
+  }
   function getCalendarInfo($CalendarUid) {
     //if exists the row in the database propel will update it, otherwise will insert.
     $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
@@ -342,4 +376,21 @@ class CalendarDefinition extends BaseCalendarDefinition {
     }
 
   }
+  //Added by Qennix
+  //Counts all users,task,process by calendar
+  function getAllCounterByCalendar($type){
+  	 $oCriteria = new Criteria('workflow');
+  	 $oCriteria->addSelectColumn(CalendarAssignmentsPeer::CALENDAR_UID);
+  	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+  	 $oCriteria->addGroupByColumn(CalendarAssignmentsPeer::CALENDAR_UID);
+  	 $oCriteria->add(CalendarAssignmentsPeer::OBJECT_TYPE,$type);
+  	 $oDataset = CalendarAssignmentsPeer::doSelectRS($oCriteria);
+  	 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  	 $aCounter = Array();
+  	 while($oDataset->next()){
+  	 	 $row = $oDataset->getRow();
+  	 	 $aCounter[$row['CALENDAR_UID']] = $row['CNT'];
+  	 }
+  	 return $aCounter;
+  } 
 } // CalendarDefinition
