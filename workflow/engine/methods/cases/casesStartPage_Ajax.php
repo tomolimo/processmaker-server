@@ -233,6 +233,9 @@ function startCase() {
         
     $oCase = new Cases ( );
     $aNextStep = $oCase->getNextStep ( $_SESSION ['PROCESS'], $_SESSION ['APPLICATION'], $_SESSION ['INDEX'], $_SESSION ['STEP_POSITION'] );
+
+    $aNextStep['PAGE'] = 'open?APP_UID='.$aData ['APPLICATION'].'&DEL_INDEX='.$aData ['INDEX'].'&action=draft';
+    
     $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
     $aData ['openCase'] = $aNextStep;
     
