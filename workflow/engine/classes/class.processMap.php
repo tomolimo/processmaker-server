@@ -6596,13 +6596,13 @@ function saveExtEvents($oData)
   $aDataEvent['EVN_TYPE']       = $oData->evn_type;
   
   if(preg_match("/Start/", $sEvn_type)){
-    if(isset($oData->tas_uid) && $oData->tas_uid != '')
-        $aDataTask['TAS_UID']     = $oData->tas_uid;
-    $aDataTask['TAS_START']   = $oData->tas_start;
-    $aDataTask['EVN_TYPE']    = $oData->evn_type;
-    $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
-    $oTask->update($aDataTask);
-
+    if(isset($oData->tas_uid) && $oData->tas_uid != 'undefined') {
+      $aDataTask['TAS_UID']     = $oData->tas_uid;
+      $aDataTask['TAS_START']   = $oData->tas_start;
+      $aDataTask['EVN_TYPE']    = $oData->evn_type;
+      $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
+      $oTask->update($aDataTask);
+    }
     $aDataEvent['EVN_TAS_UID_TO'] = $oData->tas_uid;
     $output = $oEvent->update($aDataEvent);
   }
