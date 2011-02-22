@@ -4576,12 +4576,16 @@ class processMap {
             $dynTitle = str_replace ( ' ', '_', str_replace ( '/', '_', $dynTitle ) );
             $arlink = $link . $dynTitle.'.php';
             //$arlink     = "<a href='" . $alink . "' target='blank'><font color='#9999CC'>" . $alink . "</font></a>";
+
           }
         }
       }
      $row []     = array ('W_LINK' => $arlink);
      $oJSON = new Services_JSON ( );
-     return $oJSON->encode ($row);
+     $tmpData = $oJSON->encode( $row ) ;
+     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+     $result = $tmpData;
+     echo $result;
     } catch ( Exception $oError ) {
       throw ($oError);
     }
@@ -6609,7 +6613,7 @@ function saveExtEvents($oData)
   else if(preg_match("/Inter/", $sEvn_type)){
     $aDataEvent['EVN_TAS_UID_FROM'] = $oData->tas_from;
     $aDataEvent['EVN_TAS_UID_TO']   = $oData->tas_to;
-    $output = $oEvent->update($aDataEvent);
+    $output = $oEvent->update($aDawtaEvent);
   }
     return $output;
 }

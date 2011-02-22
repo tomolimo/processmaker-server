@@ -716,10 +716,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
                 this.actionGateway.setPosition(20, 0);
                 this.addChild(this.actionEndEvent);
                 this.actionEndEvent.setPosition(20, 40);
-//                if(bpmnShape.match(/bpmnGatewayExclusiveData/))
-                  ports = ['output1', 'input1', 'output2', 'input2','output3'];
-//                else
-//                  ports = ['output1', 'input1', 'output2', 'input2'];  
+                ports = ['output1', 'input1', 'output2', 'input2','output3'];
                 _39fd.workflow.enablePorts(_39fd, ports);
             }
             else if (bpmnShape.match(/Annotation/) || bpmnShape.match(/Dataobject/)) {

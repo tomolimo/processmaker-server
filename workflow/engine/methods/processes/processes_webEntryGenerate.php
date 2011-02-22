@@ -119,7 +119,8 @@ try {
     $output = $oEvent->update($aDataEvent);
     //Show link
     $link = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sPRO_UID . '/' . $dynTitle . '.php';
-    print "\n<a href='$link' target='_new' > $link </a>";
+    print $link;
+    //print "\n<a href='$link' target='_new' > $link </a>";
   
 
   } else {

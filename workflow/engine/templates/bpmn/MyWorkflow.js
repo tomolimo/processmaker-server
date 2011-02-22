@@ -782,7 +782,7 @@ MyWorkflow.prototype.disablePorts=function(oShape)
     else if(oShape.type.match(/Annotation/)) {
       ports = ['input1'];
     }
-    for(var i=0; i< ports.length ; i++){
+    for(var i=0; i< ports.length ; i++) {
       eval('oShape.'+ports[i]+'.setZOrder(-1)');
       eval('oShape.'+ports[i]+'.setBackgroundColor(new Color(255, 255, 255))');
       eval('oShape.'+ports[i]+'.setColor(new Color(255, 255, 255))');
@@ -873,8 +873,8 @@ MyWorkflow.prototype.handleContextMenu=function(oShape)
         else if(oShape.type.match(/Start/)) {
             oShape.workflow.taskUid = oShape.workflow.getStartEventConn(oShape,'targetPort','OutputPort');
             pmosExtObj.loadDynaforms(oShape);
-            if(oShape.type.match(/Message/))
-                pmosExtObj.loadWebEntry(oShape);
+            //if(oShape.type.match(/Message/))
+            //pmosExtObj.loadWebEntry(oShape);
             oShape.workflow.AddEventStartContextMenu(oShape);
         }
         else if(oShape.type.match(/Inter/)) {

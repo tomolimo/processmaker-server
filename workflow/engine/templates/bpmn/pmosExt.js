@@ -50,54 +50,43 @@ pmosExt.prototype.popWebEntry= function(_5678)
 {
     var oTask           = workflow.taskUid;
     var oDyna           = workflow.dynaList;
-    var webEntryDetails = workflow.webEntryList;
-    var webEntry = '';
-    if(typeof webEntryDetails != 'undefined'){ //Web Entry Present
-        if(webEntryDetails.length > 0 && webEntryDetails[0].W_LINK != '') //Web Entry Present
-            webEntry = webEntryDetails[0].W_LINK;
-    }
     var webForm = new Ext.FormPanel({
-    labelWidth: 120, // label settings here cascade unless overridden
-    //url:'save-form.php',
-    frame:true,
-    title: '',
-    scope:workflow,
-    bodyStyle:'padding:5px 5px 0',
-    width: 500,
-    height: 400,
-    defaultType: 'textfield',
-    buttonAlign : 'center',
-    items: [
+      labelWidth    : 120, // label settings here cascade unless overridden
+      frame         : true,
+      title         : '',
+      bodyStyle     : 'padding:5px 5px 0',
+      width         : 500,
+      height        : 400,
+      defaultType   : 'textfield',
+      buttonAlign   : 'center',
+      items: [
            {
-             xtype:'fieldset',
-             title: _('ID_WEBENTRY_LINK'),
+             xtype      :'fieldset',
+             title      : _('ID_WEBENTRY_LINK'),
              collapsible: false,
-             autoHeight:true,
-             buttonAlign : 'center',
-             defaults: {width: 210},
-             //defaultType: 'textfield',
+             autoHeight :true,
+             buttonAlign: 'center',
+             defaults   : {width: 210},
              items: [
                     {
-                        html: webEntry,
-                        xtype: "panel",
-                        width:400
+                        xtype       : 'displayfield',
+                        fieldLabel  : 'Link',
+                        name        : 'WEB_LINK'
                     },{
-                        xtype: 'fieldset',
-                        layout:'column',
-                        border:false,
-                        align:'center',
-                        //width: 700,
+                        xtype   : 'fieldset',
+                        layout  :'column',
+                        border  :false,
+                        align   :'center',
                         items:[{
                             columnWidth:.3,
                             layout: 'form',
                             border:false,
-                            items: [{
-                                    xtype: 'button',
-                                    id: 'edit',
-                                    text: _('ID_EDIT'),
+                            items : [{
+                                    xtype    : 'button',
+                                    id       : 'edit',
+                                    text     : _('ID_EDIT'),
                                     bodyStyle: 'padding-left:35px;',
-                                   // width:50,
-                                    handler: function(){
+                                    handler  : function(){
                                         var properties = workflow.webForm.items.items[1];
                                         var credential = workflow.webForm.items.items[2];
                                         properties.show();
@@ -108,278 +97,242 @@ pmosExt.prototype.popWebEntry= function(_5678)
                             }]
                         },{
                             columnWidth:.3,
-                            layout: 'form',
-                            border:false,
-                            //bodyStyle: 'padding:35px;',
+                            layout     : 'form',
+                            border     : false,
                             items: [{
-                                xtype: 'button',
-                                id: 'cancel',
-                                //width:50,
-                                text: _('ID_CANCEL'),
+                                xtype  : 'button',
+                                id     : 'cancel',
+                                text   : _('ID_CANCEL'),
                                 handler: function(){
                                     var properties = workflow.webForm.items.items[1];
                                     var credential = workflow.webForm.items.items[2];
                                     properties.hide();
                                     credential.hide();
                                     workflow.webEntrywindow.buttons[0].disable();
-                                    workflow.webEntrywindow.setHeight(200);
+                                    workflow.webEntrywindow.setHeight(225);
                                 }
                             }]
                         }]
                         }
-                    /*{
-                        xtype: 'button',
-                        id: 'edit',
-                        text: 'Edit',
-                        width:50,
-                        handler: function(){
-                            var properties = _5678.workflow.webForm.items.items[1];
-                            var credential = _5678.workflow.webForm.items.items[2];
-                            properties.show();
-                            credential.show();
-                            _5678.workflow.webEntrywindow.buttons[0].enable();
-                            _5678.workflow.webEntrywindow.setHeight(450);
-                        }
-                     },{
-                        xtype: 'button',
-                        id: 'cancel',
-                        width:50,
-                        text: 'Cancel',
-                        handler: function(){
-                            var properties = _5678.workflow.webForm.items.items[1];
-                            var credential = _5678.workflow.webForm.items.items[2];
-                            properties.hide();
-                            credential.hide();
-                            _5678.workflow.webEntrywindow.buttons[0].disable();
-                            _5678.workflow.webEntrywindow.setHeight(200);
-                        }*/
-                    // }
                  ]
            },
            {
-             xtype:'fieldset',
-            title: _('ID_PROPERTIES'),
-            collapsible: false,
-            autoHeight:true,
-            defaults: {width: 210},
-            defaultType: 'textfield',
+            xtype       :'fieldset',
+            title       : _('ID_PROPERTIES'),
+            collapsible : false,
+            autoHeight  :true,
+            defaults    : {width: 210},
+            defaultType : 'textfield',
             items: [{
-                width:          200,
-                xtype:          'combo',
-                mode:           'local',
-                forceSelection: true,
-                allowBlank:false,
-                triggerAction:  'all',
-                editable:       false,
-                fieldLabel:     _('ID_INITIAL_TASK'),
-                name:           'initTask',
-                hiddenName:     'initTask',
-                displayField:   'name',
-                valueField:     'value',
-                store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   :oTask
+                width          : 200,
+                xtype          : 'combo',
+                mode           : 'local',
+                forceSelection : true,
+                allowBlank     : false,
+                triggerAction  : 'all',
+                fieldLabel     : _('ID_INITIAL_TASK'),
+                name           : 'initTask',
+                hiddenName     : 'initTask',
+                displayField   : 'name',
+                valueField     : 'value',
+                store          : new Ext.data.JsonStore({
+                                 fields : ['name', 'value'],
+                                 data   :oTask
                                })
             },{
-                width:          200,
-                xtype:          'combo',
-                mode:           'local',
-                forceSelection: true,
-                allowBlank:false,
-                triggerAction:  'all',
-                editable:       false,
-                fieldLabel:     _('ID_INITIAL_DYNAFORM'),
-                name:           'initDyna',
-                hiddenName:     'initDyna',
-                displayField:   'name',
-                valueField:     'value',
-                store:          new Ext.data.JsonStore({
+                width           : 200,
+                xtype           : 'combo',
+                mode            : 'local',
+                forceSelection  : true,
+                allowBlank      : false,
+                triggerAction   : 'all',
+                fieldLabel      : _('ID_INITIAL_DYNAFORM'),
+                name            : 'initDyna',
+                hiddenName      : 'initDyna',
+                displayField    : 'name',
+                valueField      : 'value',
+                store           : new Ext.data.JsonStore({
                                     fields : ['name', 'value'],
                                     data   :oDyna
                                })
             },{
-               width:          200,
-               xtype:          'combo',
-               mode:           'local',
-               forceSelection: true,
-               allowBlank:false,
-               triggerAction:  'all',
-               editable:       false,
-               fieldLabel:     _('ID_METHODS'),
-               name:           'methods',
-               hiddenName:     'methods',
-               displayField:   'name',
-               valueField:     'value',
-               scope:workflow,
-               store:          new Ext.data.JsonStore({
-               fields : ['name', 'value'],
-               data   : [
-                            {name : 'PHP Pages with Web Services',   value: 'WS'},
-                            {name : 'Single HTML',   value: 'SINGLE'},
-                        ]
-                       }),
+               width            : 200,
+               xtype            : 'combo',
+               mode             : 'local',
+               forceSelection   : true,
+               allowBlank       : false,
+               triggerAction    : 'all',
+               editable         : false,
+               fieldLabel       : _('ID_METHODS'),
+               name             : 'methods',
+               hiddenName       : 'methods',
+               displayField     : 'name',
+               valueField       : 'value',
+               scope            : workflow,
+               store            : new Ext.data.JsonStore({
+               fields           : ['name', 'value'],
+               data             : [
+                                    {name : 'PHP Pages with Web Services',   value: 'WS'},
+                                    {name : 'Single HTML',   value: 'SINGLE'},
+                                  ]
+                                }),
                onSelect: function(record, index){
                    var fields = workflow.webForm.items.items;
-
-                   if(index == 1)
-                   { //Select
+                   if(index == 1) { //Select
                         fields[2].collapse();
                         workflow.webEntrywindow.buttons[0].disable();
                         workflow.webEntrywindow.buttons[1].enable();
                    }
-                   else
-                   {
-                        fields[2].expand();
-                        workflow.webEntrywindow.buttons[0].enable();
-                        workflow.webEntrywindow.buttons[1].disable();
+                   else {
+                          fields[2].expand();
+                          workflow.webEntrywindow.buttons[0].enable();
+                          workflow.webEntrywindow.buttons[1].disable();
                    }
                    this.setValue(record.data[this.valueField || this.displayField]);
                    this.collapse();
                }
             }, {
-               width:          200,
-               xtype:          'combo',
-               mode:           'local',
-               forceSelection: true,
-               triggerAction:  'all',
-               editable:       false,
-               allowBlank:false,
-               fieldLabel:     _('ID_INPUT_DOC_ACCESS'),
-               name:           'inputDocAccess',
-               hiddenName:     'inputDocAccess',
-               displayField:   'name',
-               valueField:     'value',
-               store:          new Ext.data.JsonStore({
-                            fields : ['name', 'value'],
-                            data   : [
+               width            : 200,
+               xtype            : 'combo',
+               mode             : 'local',
+               forceSelection   : true,
+               triggerAction    : 'all',
+               editable         : false,
+               allowBlank       : false,
+               fieldLabel       : _('ID_INPUT_DOC_ACCESS'),
+               name             : 'inputDocAccess',
+               hiddenName       : 'inputDocAccess',
+               displayField     : 'name',
+               valueField       : 'value',
+               store            : new Ext.data.JsonStore({
+                                  fields : ['name', 'value'],
+                                  data   : [
                                         {name : 'No Restriction',   value: '1'},
                                         {name : 'Restricted to Process Permission',   value: '2'},
                                      ]
-                                })
-            }]
+                                  })
+                }]
            },{
-             xtype:'fieldset',
-             title: _('ID_PHP_WEB_SERVICE'),
-             collapsible: false,
-             autoHeight:true,
-             defaults: {width: 210},
-             defaultType: 'textfield',
+             xtype          :'fieldset',
+             title          : _('ID_PHP_WEB_SERVICE'),
+             collapsible    : false,
+             autoHeight     :true,
+             defaults       : {width: 210},
+             defaultType    : 'textfield',
              items: [{
-                       fieldLabel: _('ID_WEB_SERVICE_USER'),
-                       name: 'webserviceUser',
-                       allowBlank:true
+                       fieldLabel   : _('ID_WEB_SERVICE_USER'),
+                       name         : 'webserviceUser',
+                       allowBlank   :true
                      },{
-                       fieldLabel: _('ID_WEB_SERVICE_PASSWORD'),
-                       name: 'webservicePassword',
-                       allowBlank:true,
-                       inputType:'password'
+                       fieldLabel   : _('ID_WEB_SERVICE_PASSWORD'),
+                       name         : 'webservicePassword',
+                       allowBlank   :true,
+                       inputType    :'password'
                      }]
-             }]
-
+                 }]
             });
 
             webForm.render(document.body);
             workflow.webForm = webForm;
-            var fields = webForm.items.items;
-            var oPmosExt = new pmosExt();
-            //oPmosExt.addExtJsWindow(webForm,600,500,'Add New webentry');
 
-             var webEntrywindow = new Ext.Window({
-             title: _('ID_START_MESSAGE_EVENT_WEB_ENTRY'),
-             collapsible: false,
-             maximizable: false,
-             width: 450,
-             height: 350,
-             minWidth: 300,
-             minHeight: 200,
-             layout: 'fit',
-             plain: true,
-             bodyStyle: 'padding:5px;',
-             buttonAlign: 'center',
-             items: webForm,
-             scope:workflow,
-             buttons: [{
-                 text: _('ID_TEST_CONFIGURATION'),
-                 handler: function(){
-                            var propertiesfields = workflow.webForm.items.items[1].items.items;
-                            var credentialFields = workflow.webForm.items.items[2].items.items;
-                            var task_uid         = propertiesfields[0].getValue();
-                            var dyna_uid         = propertiesfields[1].getValue();
-                            var we_type          = propertiesfields[2].getValue();
-                            var we_usr           = propertiesfields[3].getValue();
-                            var tasName          = 'test';
-                            var username         = credentialFields[0].getValue();
-                            var password         = credentialFields[1].getValue();
-                            var args  = '?action=webEntry_validate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'", "TASKS_NAME":"'+tasName+'"}';
-                            Ext.Ajax.request({
-                            url: 'processes_Ajax.php'+ args,
-                            success: function(response) {
-                                if(response.responseText == "1")
-                                    workflow.webEntrywindow.buttons[1].enable();
-                                else
-                                    {
-                                        Ext.Msg.alert (response.responseText);
-                                        workflow.webEntrywindow.buttons[1].disable();
+             webEntrywindow = new Ext.Window({
+             title          : _('ID_START_MESSAGE_EVENT_WEB_ENTRY'),
+             collapsible    : false,
+             maximizable    : false,
+             width          : 450,
+             height         : 375,
+             minWidth       : 300,
+             minHeight      : 200,
+             layout         : 'fit',
+             plain          : true,
+             bodyStyle      : 'padding:5px;',
+             buttonAlign    : 'center',
+             items          : webForm,
+             scope          : workflow,
+             buttons        : [{
+                                text: _('ID_TEST_CONFIGURATION'),
+                                handler: function(){
+                                  var propertiesfields = workflow.webForm.items.items[1].items.items;
+                                  var credentialFields = workflow.webForm.items.items[2].items.items;
+                                  var task_uid         = propertiesfields[0].getValue();
+                                  var dyna_uid         = propertiesfields[1].getValue();
+                                  var we_type          = propertiesfields[2].getValue();
+                                  var we_usr           = propertiesfields[3].getValue();
+                                  var tasName          = 'test';
+                                  var username         = credentialFields[0].getValue();
+                                  var password         = credentialFields[1].getValue();
+                                  var args  = '?action=webEntry_validate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'", "TASKS_NAME":"'+tasName+'"}';
+                                  Ext.Ajax.request({
+                                    url: 'processes_Ajax.php'+ args,
+                                      success: function(response) {
+                                        if(response.responseText == "1")
+                                          workflow.webEntrywindow.buttons[1].enable();
+                                        else
+                                            {
+                                               Ext.Msg.alert (response.responseText);
+                                               workflow.webEntrywindow.buttons[1].disable();
+                                        }
+                                     },
+                                    failure: function(){
+                                      PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
                                     }
-                             },
-                            failure: function(){
-                                PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
-                                }
-                        });
-                        }
-                 },{
-                 text: _('ID_GENERATE_WEB_ENTRY_PAGE'),
-                 disabled:true,
-                 handler: function(){
-                            var webEntryLink     = workflow.webForm.items.items[0].items.items;
-                            var propertiesfields = workflow.webForm.items.items[1].items.items;
-                            var credentialFields = workflow.webForm.items.items[2].items.items;
-                            var evn_uid          = workflow.currentSelection.id;
-                            var task_uid         = propertiesfields[0].getValue();
-                            var dyna_uid         = propertiesfields[1].getValue();
-                            var we_type          = propertiesfields[2].getValue();
-                            var we_usr           = propertiesfields[3].getValue();
-                            var username         = credentialFields[0].getValue();
-                            var password         = credentialFields[1].getValue();
-                            var args  = '?action=webEntry_generate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'", "WE_EVN_UID":"'+evn_uid+'"}';
-                            Ext.Ajax.request({
-                            url: 'processes_Ajax.php'+ args,
-                            success: function(response) {
-                                 webEntryLink[0].initialConfig.html = response.responseText;
-                               // webEntryLink[0].setValue(response.responseText);
-                                workflow.webForm.items.items[0].show();
-                                workflow.webForm.items.items[1].hide();
-                                workflow.webForm.items.items[2].hide();
-                                workflow.webEntrywindow.buttons[1].disable();
-                                Ext.Msg.alert(response.responseText);
-                             },
-                            failure: function(){
-                                PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
-                            }
-                        });
-                        }
-                 }]
+                                });
+                              }
+                           },{
+                                 text: _('ID_GENERATE_WEB_ENTRY_PAGE'),
+                                 disabled:true,
+                                 handler: function(){
+                                            var webEntryLink     = workflow.webForm.items.items[0].items.items;
+                                            var propertiesfields = workflow.webForm.items.items[1].items.items;
+                                            var credentialFields = workflow.webForm.items.items[2].items.items;
+                                            var evn_uid          = workflow.currentSelection.id;
+                                            var task_uid         = propertiesfields[0].getValue();
+                                            var dyna_uid         = propertiesfields[1].getValue();
+                                            var we_type          = propertiesfields[2].getValue();
+                                            var we_usr           = propertiesfields[3].getValue();
+                                            var username         = credentialFields[0].getValue();
+                                            var password         = credentialFields[1].getValue();
+                                            var args  = '?action=webEntry_generate&data={"PRO_UID":"'+pro_uid +'", "TASKS":"'+task_uid+'", "DYNAFORM":"'+dyna_uid+'", "WE_TYPE":"'+we_type+'", "WS_USER":"'+username+'", "WS_PASS":"'+password+'", "WS_ROUNDROBIN":"", "WE_USR":"'+we_usr+'", "WE_EVN_UID":"'+evn_uid+'"}';
+                                            Ext.Ajax.request({
+                                            url: 'processes_Ajax.php'+ args,
+                                            success: function(response) {
+                                                 webEntryLink = response.responseText;
+                                                 webForm.getForm().findField('WEB_LINK').setValue("<a href=\"" + webEntryLink + "\">" + webEntryLink + "<\/a>");
+                                               // webEntryLink[0].setValue(response.responseText);
+                                                workflow.webForm.items.items[0].show();
+                                                workflow.webForm.items.items[1].hide();
+                                                workflow.webForm.items.items[2].hide();
+                                                workflow.webEntrywindow.buttons[1].disable();
+                                             },
+                                            failure: function(){
+                                                PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+                                            }
+                                        });
+                                        }
+                                 }]
              });
-             workflow.webEntrywindow = webEntrywindow;
-             webEntrywindow.show();
-             var webEntryDetails    = workflow.webEntryList;
-             var webEntryLink       = workflow.webForm.items.items[0];
-             var propertiesfields   = workflow.webForm.items.items[1];
-             var credentialFields   = workflow.webForm.items.items[2];
-             if(typeof webEntryDetails != 'undefined')
-             if(webEntryDetails.length > 0 && webEntryDetails[0].W_LINK != ''){ //Web Entry Present
-                  // webEntryLink.items.items[0].setValue(webEntryDetails[0].W_LINK);
-                   workflow.webEntrywindow.setHeight(200);
-                   webEntryLink.show();
-                   propertiesfields.hide();
-                   credentialFields.hide();
-             }
-             else
-                 {
-                  propertiesfields.show();
-                  credentialFields.show();
-                  webEntryLink.hide();
-                 }
+            workflow.webEntrywindow = webEntrywindow;
+            webEntrywindow.show();
+
+            var evn_uid = workflow.currentSelection.id;
+            var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
+            webForm.form.load({
+              url: "processes_Ajax.php"+ urlparams,
+              method:'GET',
+              waitMsg:'Loading',
+              success:function(form, action) {
+                webEntryList = Ext.util.JSON.decode(action.response.responseText);
+                form.findField('WEB_LINK').setValue("<a href=\"" + webEntryList.data[0].W_LINK + "\">" + webEntryList.data[0].W_LINK + "<\/a>");
+                var propertiesfields   = form.items.items[1];
+                var credentialFields   = form.items.items[2];
+                webEntrywindow.setHeight(210);
+                webEntrywindow.show();
+              },
+              failure:function(form, action) {
+                PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+              }
+            });
+  
 }
 pmosExt.prototype.popCaseSchedular= function(_5678){
         Ext.QuickTips.init();
