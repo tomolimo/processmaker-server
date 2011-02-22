@@ -81,6 +81,7 @@ if (getField('OLD_NAME').value==''){
   var rowsHoliday=Number_Rows_Grid("HOLIDAY", "CALENDAR_HOLIDAY_START");
 
   var j=0;
+  aux2=0;
     for(var j =1; j<= rowsHoliday;j++){
       var date1=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_START').value;
       var date2=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END').value;
@@ -88,13 +89,15 @@ if (getField('OLD_NAME').value==''){
       var date22=getField('HOLIDAY]['+j+'][CALENDAR_HOLIDAY_END');
       var aux=100;
      aux1 = validatedate(date1,date2,date11,date22,aux);
+    if (aux1=='1')
+    aux2=1;
     }
    
-    if(aux1=='-1')
-     validateForm(this.form);
-    else
+    if((aux1=='-1')&&(aux2=='0')){
+     validateForm(this.form);}
+    else{ 
       return false;
-
+}
 }
 
 function submit2 () {

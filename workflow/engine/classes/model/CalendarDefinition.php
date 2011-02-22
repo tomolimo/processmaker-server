@@ -100,9 +100,8 @@ class CalendarDefinition extends BaseCalendarDefinition {
 
     $CalendarHolidaysObj = new CalendarHolidays ( );
     $CalendarHolidays = $CalendarHolidaysObj->getCalendarHolidays ( $CalendarUid );
-    $fields ['HOLIDAY'] = $CalendarHolidays;
-    
-    $fields=$this->validateCalendarInfo($fields, $defaultCalendar);
+    $fields ['HOLIDAY'] = $CalendarHolidays;   
+   // $fields=$this->validateCalendarInfo($fields, $defaultCalendar); //********************
 
     return $fields;
 
