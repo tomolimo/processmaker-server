@@ -4637,7 +4637,17 @@ class processMap {
     }
   }
 
+  function caseNewSchedulerList($sSchUID)
+  {
+    try {
+       $oCaseScheduler = new CaseScheduler();
+       $aRows = $oCaseScheduler->load($sSchUID);
+       return $aRows;
 
+    } catch ( Exception $oError ) {
+      throw ($oError);
+    }
+  }
      //new functions
   function getAllTaskUserCount(){
     $c = $this->tmpCriteria;

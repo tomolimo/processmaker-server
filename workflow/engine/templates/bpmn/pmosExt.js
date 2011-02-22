@@ -345,349 +345,323 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                 task_uid = oTask[0].value;
             }
         var caseSchedularForm = new Ext.FormPanel({
-        labelWidth: 120, // label settings here cascade unless overridden
-        url:'cases_Scheduler_Save.php',
-        frame:true,
-        title: _('ID_GENERATE_INFO'),
-        bodyStyle:'padding:5px 5px 0',
-        width: 500,
-        height: 300,
+        labelWidth  : 120, // label settings here cascade unless overridden
+        url         :'cases_Scheduler_Save.php',
+        frame       :true,
+        title       : _('ID_GENERATE_INFO'),
+        bodyStyle   :'padding:5px 5px 0',
+        width       : 500,
+        height      : 300,
         buttonAlign : 'center',
-        defaultType: 'textfield',
-        items: [{
-                xtype:'fieldset',
-                title: 'ID_PROCESSMAKER_VALIDATION',
-                collapsible: false,
-                autoHeight:true,
-                buttonAlign : 'center',
-                defaults: {width: 210},
-                defaultType: 'textfield',
-                items: [
-                        {
-                            fieldLabel: _('ID_USERNAME'),
-                            name: 'SCH_DEL_USER_NAME',
-                            allowBlank:false,
-                            blankText:'Enter username'
+        defaultType : 'textfield',
+        items       : [{
+                        xtype       :'fieldset',
+                        title       : 'ID_PROCESSMAKER_VALIDATION',
+                        collapsible : false,
+                        autoHeight  :true,
+                        buttonAlign : 'center',
+                        defaults    : {width: 210},
+                        defaultType : 'textfield',
+                        items       : [{
+                                          fieldLabel    : _('ID_USERNAME'),
+                                          name          : 'SCH_DEL_USER_NAME',
+                                          allowBlank    : false,
+                                          blankText     : 'Enter username'
+                                     },{
+                                          fieldLabel    : _('ID_CACHE_PASSWORD'),
+                                          inputType     : 'password',
+                                          name          : 'SCH_USER_PASSWORD',
+                                          allowBlank    : false,
+                                          blankText     : 'Enter Password'
+                                     },{
+                                            xtype       : 'button',
+                                            id          : 'testUser',
+                                            width       : 75,
+                                            text        : _('ID_TEST_USER'),
+                                            arrowAlign  : 'center',
+                                            align       : 'center',
+                                            margins     :'5 5 5 5',
+                                            handler     : function() {
+                                              var credentialFieldset  = workflow.caseSchedularForm.items.items[0];
+                                              var propertiesFieldset  = workflow.caseSchedularForm.items.items[1];
+                                              var timeFieldset        = workflow.caseSchedularForm.items.items[2];
+                                              var username            = credentialFieldset.items.items[0].getValue();
+                                              var password            = credentialFieldset.items.items[1].getValue();
+                                              if(username == '' || password == '') {
+                                                  PMExt.notify( _('ID_ERROR') , _('ID_VALID_CREDENTIALS') );
+                                              }
+                                              else {
+                                                Ext.Ajax.request({
+                                                url: '../cases/cases_SchedulerValidateUser.php?USERNAME=' + username+'&PASSWORD='+password,
+                                                    success: function(response) {
+                                                        var result = response.responseText;
+                                                        if(result.length == 32) {
+                                                          credentialFieldset.items.items[4].setValue(response.responseText);
+                                                          propertiesFieldset.show();
+                                                          timeFieldset.show();
+                                                          timeFieldset.collapse();
+                                                          credentialFieldset.items.items[2].hide(); //Hide Test User
+                                                          credentialFieldset.items.items[3].show(); //Show Edit User
+                                                        }
+                                                    },
+                                                    failure: function(){
+                                                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                                                    }
+                                                });
+                                             }
+                                            }
+                                        },{
+                                            xtype       : 'button',
+                                            id          : 'editUser',
+                                            width       : 75,
+                                            text        : _('ID_EDIT_USER'),
+                                            arrowAlign  : 'center',
+                                            scope       :_5678,
+                                            align       : 'center',
+                                            hidden      : true,
+                                            margins     : '5 5 5 5',
+                                            handler: function(){
+                                              var credentialFieldset = workflow.caseSchedularForm.items.items[0];
+                                              var propertiesFieldset = workflow.caseSchedularForm.items.items[1];
+                                              var timeFieldset       = workflow.caseSchedularForm.items.items[2];
+                                              propertiesFieldset.hide();
+                                              timeFieldset.hide();
+                                              credentialFieldset.items.items[3].hide(); //Hide Edit User
+                                              credentialFieldset.items.items[2].show(); //Show Test User
+                                            }
+                                        },{
+                                            name    : 'SCH_DEL_USER_UID',
+                                            hidden  : true
+                                        },{
+                                            name    : 'PRO_UID',
+                                            hidden  : true
+                                        },{
+                                            name    : 'SCH_DAYS_PERFORM_TASK',
+                                            hidden  : true,
+                                            value   : 1
+                                        },{
+                                            name    : 'TAS_UID',
+                                            hidden  : true,
+                                            value   : 1
+                                        },{
+                                            name    : 'SCH_WEEK_DAYS',
+                                            hidden  : true
+                                        },{
+                                            name    : 'SCH_MONTHS',
+                                            hidden  : true
+                                        },{
+                                            name    : 'EVN_UID',
+                                            hidden  : true
+                                        },{
+                                            name    : 'SCH_UID',
+                                            hidden  : true
+                                        }]
                         },{
-                            fieldLabel: _('ID_CACHE_PASSWORD'),
-                            inputType:'password',
-                            name: 'SCH_USER_PASSWORD',
-                            allowBlank:false,
-                            blankText:'Enter Password'
-                        },{
-                            xtype: 'button',
-                            id: 'testUser',
-                            width:75,
-                            text: _('ID_TEST_USER'),
-                            arrowAlign: 'center',
-                            scope:workflow,
-                            align:'center',
-                            margins:'5 5 5 5',
-                            handler: function(){
-                            var credentialFieldset  = workflow.caseSchedularForm.items.items[0];
-                            var propertiesFieldset  = workflow.caseSchedularForm.items.items[1];
-                            var timeFieldset        = workflow.caseSchedularForm.items.items[2];
-                            var username            = credentialFieldset.items.items[0].getValue();
-                            var password            = credentialFieldset.items.items[1].getValue();
-                            if(username == '' || password == ''){
-                                PMExt.notify( _('ID_ERROR') , _('ID_VALID_CREDENTIALS') );
-                                }
-                            else
-                            {
-                                Ext.Ajax.request({
-                                url: '../cases/cases_SchedulerValidateUser.php?USERNAME=' + username+'&PASSWORD='+password,
-                                    success: function(response) {
-                                        var result = response.responseText;
-                                        if(result.length == 32)
-                                        {
-                                          credentialFieldset.items.items[4].setValue(response.responseText);
-                                          propertiesFieldset.show();
-                                          timeFieldset.show();
-                                          timeFieldset.collapse();
-                                          credentialFieldset.items.items[2].hide(); //Hide Test User
-                                          credentialFieldset.items.items[3].show(); //Show Edit User
+                            xtype       :'fieldset',
+                            title       : _('ID_PROPERTIES'),
+                            collapsible : false,
+                            autoHeight  :true,
+                            buttonAlign : 'center',
+                            defaults    : {width: 210},
+                            defaultType : 'textfield',
+                            items: [
+                                {
+                                    fieldLabel   : _('ID_TASK'),
+                                    name         : 'TAS_NAME',
+                                    value        : taskName,
+                                    readOnly     : true,
+                                    allowBlank   : false
+                                },{
+                                    fieldLabel   : _('ID_DESCRIPTION'),
+                                    allowBlank   : false,
+                                    name         : 'SCH_NAME'
+                                },{
+                                    width           : 120,
+                                    xtype           : 'combo',
+                                    mode            : 'local',
+                                    triggerAction   : 'all',
+                                    forceSelection  : true,
+                                    allowBlank      : false,
+                                    value           : '--select--',
+                                    editable        : false,
+                                    fieldLabel      : _('ID_PERFORM_TASK'),
+                                    name            : 'SCH_OPTION',
+                                    displayField    : 'name',
+                                    valueField      : 'value',
+                                    scope           : _5678,
+                                    store           : new Ext.data.JsonStore({
+                                                        fields : ['name', 'value'],
+                                                        data   :[
+                                                            {name : '--select--',   value: '0',selected: true},
+                                                            {name : 'Daily',        value: '1'},
+                                                            {name : 'Weekly',       value: '2'},
+                                                            {name : 'Monthly',      value: '3'},
+                                                            {name : 'One time only',value: '4'}
+                                                ]
+                                            }),
+                                    onSelect: function(record, index){
+                                            var timeFieldset       = workflow.caseSchedularForm.items.items[2];
+                                            timeFieldset.expand();
+                                            oPmosExt.hideSchOptions(caseSchedularForm,index);
+                                            this.setValue(record.data[this.valueField || this.displayField]);
+                                            this.collapse();
                                         }
-                                 },
-                                    failure: function(){
-                                        PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                                    }
-                                });
-                           }
-                            }
-                        },{
-                            xtype: 'button',
-                            id: 'editUser',
-                            width:75,
-                            text: _('ID_EDIT_USER'),
-                            arrowAlign: 'center',
-                            scope:_5678,
-                            align:'center',
-                            hidden:true,
-                            margins:'5 5 5 5',
-                            handler: function(){
-                            var credentialFieldset = workflow.caseSchedularForm.items.items[0];
-                            var propertiesFieldset = workflow.caseSchedularForm.items.items[1];
-                            var timeFieldset       = workflow.caseSchedularForm.items.items[2];
-                            propertiesFieldset.hide();
-                            timeFieldset.hide();
-                            credentialFieldset.items.items[3].hide(); //Hide Edit User
-                            credentialFieldset.items.items[2].show(); //Show Test User
-                            }
-                        },{
-                            name: 'SCH_DEL_USER_UID',
-                            hidden:true
-                        },{
-                            name: 'PRO_UID',
-                            hidden:true
-                        },{
-                            name: 'SCH_DAYS_PERFORM_TASK',
-                            hidden:true,
-                            value:1
-                        },{
-                            name: 'TAS_UID',
-                            hidden:true,
-                            value:1
-                        },{
-                            name: 'SCH_WEEK_DAYS',
-                            hidden:true
-                        },{
-                            name: 'SCH_MONTHS',
-                            hidden:true
-                        },{
-                            name: 'EVN_UID',
-                            hidden:true
-                        },{
-                            name: 'SCH_UID',
-                            hidden:true
-                        }]
-                },{
-                    xtype:'fieldset',
-                    title: _('ID_PROPERTIES'),
-                    collapsible: false,
-                    autoHeight:true,
-                    buttonAlign : 'center',
-                    defaults: {width: 210},
-                    defaultType: 'textfield',
-                    items: [
-                        {
-                           fieldLabel: _('ID_TASK'),
-                           name: 'TAS_NAME',
-                           value: taskName,
-                           readOnly:true,
-                           allowBlank:false
-                        }
-                        /*{
-                            width:          160,
-                            xtype:          'combo',
-                            mode:           'local',
-                            forceSelection: true,
-                            triggerAction:  'all',
-                            editable:       false,
-                            allowBlank:false,
-                            fieldLabel:     'Task',
-                            name:           'TAS_UID',
-                            hiddenName:     'task',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   :oTask
-                                    })
-                        }*/,{
-                            fieldLabel: _('ID_DESCRIPTION'),
-                            allowBlank:false,
-                            name: 'SCH_NAME'
-                            //allowBlank:false
-                        },{
-                            width:          120,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            allowBlank:false,
-                            value: '--select--',
-                            editable:       false,
-                            fieldLabel:     _('ID_PERFORM_TASK'),
-                            name:           'SCH_OPTION',
-                            displayField:   'name',
-                            valueField:     'value',
-                            scope:_5678,
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   :[
-                                            {name : '--select--',   value: '0',selected: true},
-                                            {name : 'Daily',   value: '1'},
-                                            {name : 'Weekly',  value: '2'},
-                                            {name : 'Monthly', value: '3'},
-                                            {name : 'One time only', value: '4'}
-                                        ]
-                                    }),
-                            onSelect: function(record, index){
-                                    oPmosExt.hideSchOptions(caseSchedularForm,index);
-                                    this.setValue(record.data[this.valueField || this.displayField]);
-                                    this.collapse();
                                 }
-                        }
-              ]},{
-                    xtype:'fieldset',
-                    title: _('ID_SELECT_DATE_TIME'),
-                    collapsible: false,
-                    autoHeight:true,
-                    buttonAlign : 'center',
-                    defaults: {width: 210},
-                    defaultType: 'textfield',
-                    items: [
-                        {
-                            xtype: 'datefield',
-                            name:'SCH_START_DATE',
-                            format: 'Y-m-d',
-                            fieldLabel: _('ID_START_DATE')
-                        },{
-                            xtype: 'datefield',
-                            name:'SCH_END_DATE',
-                            format: 'Y-m-d',
-                            fieldLabel: _('ID_END_DATE')
-                        },{
-                            fieldLabel: _('ID_EXECUTION_TIME'),
-                            name: 'SCH_START_TIME'
-                            //allowBlank:false
-                        },{
-                            xtype: 'checkboxgroup',
-                            fieldLabel: _('ID_SELECT_DAY_OF_WEEK'),
-                            name:'SCH_WEEK_DAY',
-                            hidden: true,
-                            // Put all controls in a single column with width 100%
-                            columns: 2,
-                            items: [
-                                    {boxLabel: 'Monday', name: '1', checked: true},
-                                    {boxLabel: 'Tuesday', name: '2'},
-                                    {boxLabel: 'Wednesday', name: '3'},
-                                    {boxLabel: 'Thursday', name: '4'},
-                                    {boxLabel: 'Friday', name: '5'},
-                                    {boxLabel: 'Saturday', name: '6'},
-                                    {boxLabel: 'Sunday', name: '7'}
-                            ]
-                        },{
-                            width:          100,
-                            labelWidth:     0,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            hidden:         true,
-                            editable:       false,
-                            scope:_5678,
-                            name:           'SCH_START_DAY',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'Day of Month',   value: '1'},
-                                            {name : 'The Day',   value: '2'},
-                                        ]
-                                    }),
-                         onSelect: function(record, index){
-                              var timefieldset = workflow.caseSchedularForm.items.items[2];
-                              var fields = timefieldset.items.items;
-                                    var fieldsToToggle = new Array();
-                                    if(index == 0){ //Select
-                                       fieldsToToggle = [fields[5],fields[6]];
-                                       oPmosExt.toggleFields(fieldsToToggle,false);
+                              ]},{
+                                    xtype       : 'fieldset',
+                                    title       : _('ID_SELECT_DATE_TIME'),
+                                    collapsible : false,
+                                    autoHeight  : true,
+                                    buttonAlign : 'center',
+                                    defaults    : {width: 210},
+                                    defaultType : 'textfield',
+                                    items: [
+                                        {
+                                            xtype       : 'datefield',
+                                            name        : 'SCH_START_DATE',
+                                            format      : 'Y-m-d',
+                                            fieldLabel  : _('ID_START_DATE')
+                                        },{
+                                            xtype       : 'datefield',
+                                            name        :'SCH_END_DATE',
+                                            format      : 'Y-m-d',
+                                            fieldLabel  : _('ID_END_DATE')
+                                        },{
+                                            fieldLabel  : _('ID_EXECUTION_TIME'),
+                                            name        : 'SCH_START_TIME'
+                                        },{
+                                            xtype       : 'checkboxgroup',
+                                            fieldLabel  : _('ID_SELECT_DAY_OF_WEEK'),
+                                            name        : 'SCH_WEEK_DAY',
+                                            hidden      : true,
+                                            columns     : 2,
+                                            items       : [
+                                                            {boxLabel: 'Monday',    name: '1', checked: true},
+                                                            {boxLabel: 'Tuesday',   name: '2'},
+                                                            {boxLabel: 'Wednesday', name: '3'},
+                                                            {boxLabel: 'Thursday',  name: '4'},
+                                                            {boxLabel: 'Friday',    name: '5'},
+                                                            {boxLabel: 'Saturday',  name: '6'},
+                                                            {boxLabel: 'Sunday',    name: '7'}
+                                                          ]
+                                        },{
+                                            width           : 100,
+                                            labelWidth      : 0,
+                                            xtype           : 'combo',
+                                            mode            : 'local',
+                                            triggerAction   : 'all',
+                                            forceSelection  : true,
+                                            hidden          : true,
+                                            editable        : false,
+                                            name            : 'SCH_START_DAY',
+                                            displayField    : 'name',
+                                            valueField      : 'value',
+                                            store           : new Ext.data.JsonStore({
+                                                                fields : ['name', 'value'],
+                                                                data   : [
+                                                                    {name : 'Day of Month',   value: '1'},
+                                                                    {name : 'The Day',        value: '2'},
+                                                                ]
+                                                    }),
+                                         onSelect: function(record, index){
+                                              var timefieldset = workflow.caseSchedularForm.items.items[2];
+                                              var fields = timefieldset.items.items;
+                                                    var fieldsToToggle = new Array();
+                                                    if(index == 0) { //Select
+                                                       fieldsToToggle = [fields[5],fields[6]];
+                                                       oPmosExt.toggleFields(fieldsToToggle,false);
 
-                                       fieldsToToggle = [fields[7]];
-                                       oPmosExt.toggleFields(fieldsToToggle,true);
-                                    }
-                                    else
-                                    {
-                                       fieldsToToggle = [fields[5],fields[6]];
-                                       oPmosExt.toggleFields(fieldsToToggle,true);
+                                                       fieldsToToggle = [fields[7]];
+                                                       oPmosExt.toggleFields(fieldsToToggle,true);
+                                                    }
+                                                    else {
+                                                       fieldsToToggle = [fields[5],fields[6]];
+                                                       oPmosExt.toggleFields(fieldsToToggle,true);
 
-                                       fieldsToToggle = [fields[7]];
-                                       oPmosExt.toggleFields(fieldsToToggle,false);
-                                    }
-                                   this.setValue(record.data[this.valueField || this.displayField]);
-                                   this.collapse();
-                         }
-                        },{
-                            width:          100,
-                            labelWidth:     0,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            hidden:         true,
-                            editable:       false,
-                            name:           'SCH_START_DAY_OPT_2_WEEKS',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'First',   value: '1'},
-                                            {name : 'Second',   value: '2'},
-                                            {name : 'Third',   value: '3'},
-                                            {name : 'Fourth',   value: '4'},
-                                            {name : 'Last',   value: '5'},
-                                        ]
-                                    })
-                        },{
-                            width:          100,
-                            labelWidth:     0,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            hidden:         true,
-                            editable:       false,
-                            name:           'SCH_START_DAY_OPT_2_DAYS_WEEK',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'Monday',   value: '1'},
-                                            {name : 'Tuesday',   value: '2'},
-                                            {name : 'Wednesday',   value: '3'},
-                                            {name : 'Thursday',   value: '4'},
-                                            {name : 'Friday',   value: '5'},
-                                            {name : 'Saturday',   value: '6'},
-                                            {name : 'Sunday',   value: '7'},
-                                        ]
-                                    })
-                        },{
-                            name: 'SCH_START_DAY_OPT_1',
-                            hidden:         true,
-                            value:1
-                        },{
-                            xtype: 'checkboxgroup',
-                            fieldLabel: _('ID_OF_THE_MONTH'),
-                            name:'SCH_MONTH',
-                            hidden:true,
-                            // Put all controls in a single column with width 100%
-                            columns: 3,
-                            items: [
-                                    {boxLabel : 'Jan',   name: '1'},
-                                    {boxLabel : 'Feb',   name: '2'},
-                                    {boxLabel : 'Mar',   name: '3'},
-                                    {boxLabel : 'Apr',   name: '4'},
-                                    {boxLabel : 'May',   name: '5'},
-                                    {boxLabel : 'Jun',   name: '6'},
-                                    {boxLabel : 'Jul',   name: '7'},
-                                    {boxLabel : 'Aug',   name: '8'},
-                                    {boxLabel : 'Sep',   name: '9'},
-                                    {boxLabel : 'Oct',   name: '10'},
-                                    {boxLabel : 'Nov',   name: '11'},
-                                    {boxLabel : 'Dec',   name: '12'},
-                            ]
-                        }]}
+                                                       fieldsToToggle = [fields[7]];
+                                                       oPmosExt.toggleFields(fieldsToToggle,false);
+                                                    }
+                                                   this.setValue(record.data[this.valueField || this.displayField]);
+                                                   this.collapse();
+                                         }
+                                        },{
+                                            width           : 100,
+                                            labelWidth      : 0,
+                                            xtype           : 'combo',
+                                            mode            : 'local',
+                                            triggerAction   : 'all',
+                                            forceSelection  : true,
+                                            hidden          : true,
+                                            editable        : false,
+                                            name            : 'SCH_START_DAY_OPT_2_WEEKS',
+                                            displayField    : 'name',
+                                            valueField      : 'value',
+                                            store           : new Ext.data.JsonStore({
+                                                     fields : ['name', 'value'],
+                                                     data   : [
+                                                            {name : 'First',    value: '1'},
+                                                            {name : 'Second',   value: '2'},
+                                                            {name : 'Third',    value: '3'},
+                                                            {name : 'Fourth',   value: '4'},
+                                                            {name : 'Last',     value: '5'},
+                                                        ]
+                                                    })
+                                        },{
+                                            width         : 100,
+                                            labelWidth    : 0,
+                                            xtype         : 'combo',
+                                            mode          : 'local',
+                                            triggerAction : 'all',
+                                            forceSelection: true,
+                                            hidden        : true,
+                                            editable      : false,
+                                            name          : 'SCH_START_DAY_OPT_2_DAYS_WEEK',
+                                            displayField  : 'name',
+                                            valueField    : 'value',
+                                            store         : new Ext.data.JsonStore({
+                                                            fields : ['name', 'value'],
+                                                            data   : [
+                                                                {name : 'Monday',     value: '1'},
+                                                                {name : 'Tuesday',    value: '2'},
+                                                                {name : 'Wednesday',  value: '3'},
+                                                                {name : 'Thursday',   value: '4'},
+                                                                {name : 'Friday',     value: '5'},
+                                                                {name : 'Saturday',   value: '6'},
+                                                                {name : 'Sunday',     value: '7'},
+                                                            ]
+                                                    })
+                                        },{
+                                            name    : 'SCH_START_DAY_OPT_1',
+                                            hidden  : true,
+                                            value   : 1
+                                        },{
+                                            xtype     : 'checkboxgroup',
+                                            fieldLabel: _('ID_OF_THE_MONTH'),
+                                            name      : 'SCH_MONTH',
+                                            hidden:true,
+                                            // Put all controls in a single column with width 100%
+                                            columns: 3,
+                                            items: [
+                                                    {boxLabel : 'Jan',   name: '1'},
+                                                    {boxLabel : 'Feb',   name: '2'},
+                                                    {boxLabel : 'Mar',   name: '3'},
+                                                    {boxLabel : 'Apr',   name: '4'},
+                                                    {boxLabel : 'May',   name: '5'},
+                                                    {boxLabel : 'Jun',   name: '6'},
+                                                    {boxLabel : 'Jul',   name: '7'},
+                                                    {boxLabel : 'Aug',   name: '8'},
+                                                    {boxLabel : 'Sep',   name: '9'},
+                                                    {boxLabel : 'Oct',   name: '10'},
+                                                    {boxLabel : 'Nov',   name: '11'},
+                                                    {boxLabel : 'Dec',   name: '12'},
+                                            ]
+                                        }]}
         ]
     });
           caseSchedularForm.render(document.body);
-
           var credentialFieldset = caseSchedularForm.items.items[0];
           var propertiesFieldset = caseSchedularForm.items.items[1];
-          var timeFieldset = caseSchedularForm.items.items[2];
+          var timeFieldset       = caseSchedularForm.items.items[2];
 
           var evn_uid = workflow.currentSelection.id;
           //Loading Details into the form
@@ -698,9 +672,31 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                 success:function(form,action) {
                   propertiesFieldset.show();
                   timeFieldset.show();
-                  timeFieldset.collapse();
+                  timeFieldset.expand();
                   credentialFieldset.items.items[2].hide(); //Hide Test User
                   credentialFieldset.items.items[3].show(); //Show Edit User
+                  var schedularDetails = Ext.util.JSON.decode(action.response.responseText);
+                  var schedularData = schedularDetails.data;
+
+                  var aSchDay = new Array();
+                  aSchDay = schedularData.SCH_START_DAY.substr(0,schedularData.SCH_START_DAY.length-1).split("|");
+                  for(var i=0;i < aSchDay.length;i++)
+                      {
+                          if(i == 1)
+                            timeFieldset.items.items[5].setValue(aSchDay[i]);
+                          else if(i == 2)
+                            timeFieldset.items.items[6].setValue(aSchDay[i]);
+                          else if(i == 3)
+                            timeFieldset.items.items[8].setValue(aSchDay[i]);
+                      }
+
+                  var aSchWeek = new Array();
+                  aSchWeek = schedularData.SCH_WEEK_DAYS.substr(0,schedularData.SCH_WEEK_DAYS.length-1).split("|");
+                  for(var i=0;i<aSchWeek.length;i++)
+                      {
+                          var index1 = aSchWeek[i];
+                         // timeFieldset.items.items[7].items.items[index1].checked = true;
+                      }
 
                   var index = propertiesFieldset.items.items[2].value;
                   timeFieldset.expand();
@@ -717,7 +713,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                   oPmosExt.hideSchOptions(caseSchedularForm,index);
                 },
                 failure:function(form, action) {
-                  //  Ext.MessageBox.alert('Message', 'Load failed');
+                  //PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
                 }
             });
 
@@ -743,56 +739,53 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
             timeFieldset.hide();
            // oPmosExt.addExtJsWindow(caseSchedularForm,600,550,'Add New Case scheduler');
            var window = new Ext.Window({
-             title: _('ID_START_TIME_EVENT'),
-             collapsible: false,
-             maximizable: false,
-             width: 600,
-             height: 400,
-             minWidth: 300,
-             minHeight: 200,
-             layout: 'fit',
-             plain: true,
-             bodyStyle: 'padding:5px;',
-             buttonAlign: 'center',
-             items: caseSchedularForm,
-             buttons: [{
-                 text: _('ID_SAVE'),
-                 handler: function(){
-                              //Set SCH_WEEK_DAYS field
-                              var sch_week_days = timeFieldset.items.items[3].getValue();
-
-                              var sch_week_day = new Array();
-                              for(i=0;i< sch_week_days.length;i++)
-                                  {
-                                      sch_week_day[i] = sch_week_days[i].name;
-                                  }
-                              credentialFieldset.items.items[8].setValue(sch_week_day);
-
-                              var sch_months = timeFieldset.items.items[8].getValue();
-                              var sch_month = new Array();
-                              for(i=0;i< sch_months.length;i++)
-                                  {
-                                      sch_month[i] = sch_months[i].name;
-                                  }
-                              credentialFieldset.items.items[9].setValue(sch_month);
-
-                              caseSchedularForm.getForm().submit({
-                               waitMsg: 'Saving...',        // Wait Message
-                                success: function () {      // When saving data success
-                                    PMExt.notify( _('ID_STATUS') , _('ID_CASE_SCHEDULER_SAVED') );
-                                    },
-                                failure: function () {      // when saving data failed
-                                    PMExt.notify( _('ID_STATUS') , _('ID_AUTHENTICATION_FAILED') );
+             title          : _('ID_START_TIME_EVENT'),
+             collapsible    : false,
+             maximizable    : false,
+             width          : 500,
+             height         : 500,
+             minWidth       : 300,
+             minHeight      : 200,
+             autoScroll     : true,
+             layout         : 'fit',
+             plain          : true,
+             bodyStyle      : 'padding:5px;',
+             buttonAlign    : 'center',
+             items          : caseSchedularForm,
+             buttons        : [{
+                                 text: _('ID_SAVE'),
+                                 handler: function(){
+                                   //Set SCH_WEEK_DAYS field
+                                   var sch_week_days = timeFieldset.items.items[3].getValue();
+                                   var sch_week_day = new Array();
+                                   for(i=0;i< sch_week_days.length;i++)
+                                   {
+                                     sch_week_day[i] = sch_week_days[i].name;
+                                   }
+                                   credentialFieldset.items.items[8].setValue(sch_week_day);
+                                   var sch_months = timeFieldset.items.items[8].getValue();
+                                   var sch_month = new Array();
+                                   for(i=0;i< sch_months.length;i++)
+                                   {
+                                     sch_month[i] = sch_months[i].name;
+                                   }
+                                   credentialFieldset.items.items[9].setValue(sch_month);
+                                   caseSchedularForm.getForm().submit({
+                                               waitMsg: 'Saving...',        // Wait Message
+                                                success: function () {      // When saving data success
+                                                  PMExt.notify( _('ID_STATUS') , _('ID_CASE_SCHEDULER_SAVED') );
+                                                },
+                                                failure: function () {      // when saving data failed
+                                                  PMExt.notify( _('ID_STATUS') , _('ID_AUTHENTICATION_FAILED') );
+                                                }
+                                            });
                                     }
-                            });
-                            }
-                 },{
-                 text: _('ID_CANCEL'),
-                 handler: function(){
-                            // when this button clicked,
-                                window.close();
-                            }
-                 }]
+                                 },{
+                                 text: _('ID_CANCEL'),
+                                 handler: function(){
+                                                window.close();
+                                            }
+                                 }]
              });
              window.show();
 
@@ -1401,7 +1394,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
       success:function(form,action) {
         },
         failure:function(form, action) {
-          //  Ext.MessageBox.alert('Message', 'Load failed');
+          PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
         }
       });
 
