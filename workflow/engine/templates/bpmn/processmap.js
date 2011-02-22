@@ -16,15 +16,12 @@ new Ext.KeyMap(document, {
 });
 
 Ext.onReady ( function() {
-  //var _BROWSER = getBrowserInf();
-
   workflow  = new MyWorkflow("paintarea");
   workflow.setEnableSmoothFigureHandling(false);
   workflow.scrollArea.width = 2000;
   //For Undo and Redo Options
   // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
   //Getting process id from the URL using getUrlvars function
-
 
   if(typeof pro_uid !== 'undefined') {
     Ext.Ajax.request({
@@ -38,7 +35,6 @@ Ext.onReady ( function() {
       }
     });
   }
-
 
 
   /**********************************************************************************
@@ -60,18 +56,18 @@ Ext.onReady ( function() {
 
     items:{
       html:'<div id="x-shapes">\n\
-              <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
-              <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
-              <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
-              <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
-              <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
-              <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
-              <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
-              <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
-              <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
-              <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
-              <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
-            </div>'
+          <p id="x-shapes-task" title="Task" ><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
+          <p id="x-shapes-startEvent" title="Start"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
+          <p id="x-shapes-interEvent" title="Intermediate Event"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
+          <p id="x-shapes-endEvent" title="End Event"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
+          <p id="x-shapes-gateways" title="Gateway"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/></p>\n\
+          <p id="x-shapes-annotation" title="Annotation"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
+          <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
+          <p id="x-shapes-dataobject" title="Data Object"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
+          <p id="x-shapes-pool" title="Pool"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
+          <p id="x-shapes-lane" title="Lane"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
+          <p id="x-shapes-milestone" title="Milestone"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
+        </div>'
     }
   };
 
@@ -113,16 +109,16 @@ Ext.onReady ( function() {
     animate: true,
     region	:	"south",
     items: {
-        region: 'center',
-        xtype: 'tabpanel',
-        items: [{
-            title: 'Properties',
-            html: 'Properties'
-        },
-        {
-            title: 'Debug Console',
-            html: 'Debug Console'
-        }]
+      region: 'center',
+      xtype: 'tabpanel',
+      items: [{
+          title: 'Properties',
+          html: 'Properties'
+      },
+      {
+          title: 'Debug Console',
+          html: 'Debug Console'
+      }]
     }
   };
 

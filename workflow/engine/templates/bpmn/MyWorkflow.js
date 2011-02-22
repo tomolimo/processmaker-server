@@ -1,8 +1,9 @@
 MyWorkflow=function(id){
-Workflow.call(this,id);
-this.html.style.backgroundImage="url(/skins/ext/images/gray/shapes/grid_10.png)";
-this.setGridWidth(4,4);
-this.setSnapToGrid(true);
+  Workflow.call(this,id);
+  this.html.style.backgroundImage="url(/skins/ext/images/gray/shapes/grid_10.png)";
+  //enable the snapToGrid 
+  this.setGridWidth(2,2);
+  this.setSnapToGrid(true);
 };
 MyWorkflow.prototype=new Workflow;
 MyWorkflow.prototype.type="MyWorkflow";
@@ -12,7 +13,7 @@ MyWorkflow.prototype.type="MyWorkflow";
  * @Author Girish Joshi
  */
 commandListener=function(){
-CommandStackEventListener.call(this);
+  CommandStackEventListener.call(this);
 };
 commandListener.prototype=new CommandStackEventListener;
 commandListener.prototype.type="commandListener";
@@ -23,10 +24,10 @@ commandListener.prototype.type="commandListener";
  */
 MyWorkflow.prototype.subProcess= function(_6767)
 {
-   _6767.subProcessName = 'Sub Process' ;
-   var subProcess  = eval("new bpmnSubProcess(_6767) ");
-   var xPos = this.workflow.contextX;
-   var yPos = this.workflow.contextY;
+  _6767.subProcessName = 'Sub Process' ;
+  var subProcess  = eval("new bpmnSubProcess(_6767) ");
+  var xPos = this.workflow.contextX;
+  var yPos = this.workflow.contextY;
   _6767.scope.workflow.addFigure(subProcess, xPos, yPos);
   subProcess.actiontype = 'addSubProcess';
   this.workflow.saveShape(subProcess);
@@ -40,7 +41,7 @@ MyWorkflow.prototype.subProcess= function(_6767)
 MyWorkflow.prototype.setBoundary = function (oShape) {
   //Left Border
   if (oShape.x < 5) {
-        oShape.x = 10;
+    oShape.x = 10;
   }
   //Right Border
   if (oShape.x > 1300 - oShape.width) {
@@ -52,8 +53,8 @@ MyWorkflow.prototype.setBoundary = function (oShape) {
   }
   //Bottom Border
   if (oShape.y > 1000 - oShape.height) {
-       workflow.main.setHeight(oShape.y+75);
-   }
+    workflow.main.setHeight(oShape.y+75);
+  }
 }
 
 /**
@@ -65,66 +66,66 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
 {
   var taskExtObj = new TaskContext();
   if (oShape.id != null) {
-        this.canvasTask = Ext.get(oShape.id);
-        this.contextTaskmenu = new Ext.menu.Menu({
-            items: [{
-                text: 'Steps',
-                iconCls: 'button_menu_ext ss_sprite ss_shape_move_forwards',
-                handler: taskExtObj.editTaskSteps,
-                scope: oShape
+    this.canvasTask = Ext.get(oShape.id);
+    this.contextTaskmenu = new Ext.menu.Menu({
+        items: [{
+            text: 'Steps',
+            iconCls: 'button_menu_ext ss_sprite ss_shape_move_forwards',
+            handler: taskExtObj.editTaskSteps,
+            scope: oShape
+        },
+        {
+            text: 'Users & Users Group',
+            iconCls: 'button_menu_ext ss_sprite ss_group',
+            handler: taskExtObj.editUsers,
+            scope: oShape
+        },
+        {
+            text: 'Users & Users Groups (ad-hoc)',
+            iconCls: 'button_menu_ext ss_sprite ss_group',
+            handler: taskExtObj.editUsersAdHoc,
+            scope: oShape
+        },
+        {
+            text: 'Transform To',
+            iconCls: 'button_menu_ext ss_sprite ss_page_refresh',
+            menu: {        // <-- submenu by nested config object
+                items: [
+                    // stick any markup in a menu
+                    {
+                        text: 'Sub Process',
+                        iconCls: 'button_menu_ext ss_sprite ss_layout_link',
+                        type:'bpmnSubProcess',
+                        scope:oShape,
+                        handler: MyWorkflow.prototype.toggleShapes
+                    }
+                ]
             },
-            {
-                text: 'Users & Users Group',
-                iconCls: 'button_menu_ext ss_sprite ss_group',
-                handler: taskExtObj.editUsers,
-                scope: oShape
+            scope: this
+        },
+        {
+            text: 'Attach Event',
+            iconCls: 'button_menu_ext ss_sprite ss_link',
+            menu: {        // <-- submenu by nested config object
+                items: [
+                    // stick any markup in a menu
+                    {
+                        text: 'Timer Boundary Event',
+                        iconCls: 'button_menu_ext ss_sprite ss_clock',
+                        type:'bpmnEventBoundaryTimerInter',
+                        scope:oShape,
+                        handler: MyWorkflow.prototype.toggleShapes
+                    }
+                ]
             },
-            {
-                text: 'Users & Users Groups (ad-hoc)',
-                iconCls: 'button_menu_ext ss_sprite ss_group',
-                handler: taskExtObj.editUsersAdHoc,
-                scope: oShape
-            },
-            {
-                text: 'Transform To',
-                iconCls: 'button_menu_ext ss_sprite ss_page_refresh',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                        {
-                            text: 'Sub Process',
-                            iconCls: 'button_menu_ext ss_sprite ss_layout_link',
-                            type:'bpmnSubProcess',
-                            scope:oShape,
-                            handler: MyWorkflow.prototype.toggleShapes
-                        }
-                    ]
-                },
-                scope: this
-            },
-            {
-                text: 'Attach Event',
-                iconCls: 'button_menu_ext ss_sprite ss_link',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                        {
-                            text: 'Timer Boundary Event',
-                            iconCls: 'button_menu_ext ss_sprite ss_clock',
-                            type:'bpmnEventBoundaryTimerInter',
-                            scope:oShape,
-                            handler: MyWorkflow.prototype.toggleShapes
-                        }
-                    ]
-                },
-                scope: this
-            },
-            {
-                text: 'Properties',
-                handler: taskExtObj.editTaskProperties,
-                scope: oShape
-            }]
-        });
+            scope: this
+        },
+        {
+            text: 'Properties',
+            handler: taskExtObj.editTaskProperties,
+            scope: oShape
+        }]
+    });
     }
 
     this.canvasTask.on('contextmenu', function (e) {
@@ -169,10 +170,10 @@ MyWorkflow.prototype.connectionContextMenu=function(oShape)
         }]
     });
 
-this.canvasEvent.on('contextmenu', function(e) {
+  this.canvasEvent.on('contextmenu', function(e) {
     e.stopEvent();
     this.contextEventmenu.showAt(e.getXY());
-}, this);
+  }, this);
 }
 
 /**
@@ -182,25 +183,25 @@ this.canvasEvent.on('contextmenu', function(e) {
  */
 MyWorkflow.prototype.toggleConnection=function(oShape)
 {
-    this.currentSelection.workflow.contextClicked = false;
-    switch (oShape.text) {
-            case 'NULL Router':
-                this.currentSelection.setRouter(null);
-            break;
-            case 'Manhatten Router':
-                this.currentSelection.setRouter(new ManhattanConnectionRouter());
-            break;
-            case 'Bezier Router':
-                this.currentSelection.setRouter(new BezierConnectionRouter());
-            break;
-            case 'Fan Router':
-                this.currentSelection.setRouter(new FanConnectionRouter());
-            break;
-            case 'Delete Router':
-                this.currentSelection.workflow.getCommandStack().execute(new CommandDelete(this.currentSelection.workflow.getCurrentSelection()));
-                ToolGeneric.prototype.execute.call(this);
-            break;
-      }
+  this.currentSelection.workflow.contextClicked = false;
+  switch (oShape.text) {
+    case 'NULL Router':
+        this.currentSelection.setRouter(null);
+    break;
+    case 'Manhatten Router':
+        this.currentSelection.setRouter(new ManhattanConnectionRouter());
+    break;
+    case 'Bezier Router':
+        this.currentSelection.setRouter(new BezierConnectionRouter());
+    break;
+    case 'Fan Router':
+        this.currentSelection.setRouter(new FanConnectionRouter());
+    break;
+    case 'Delete Router':
+        this.currentSelection.workflow.getCommandStack().execute(new CommandDelete(this.currentSelection.workflow.getCurrentSelection()));
+        ToolGeneric.prototype.execute.call(this);
+    break;
+  }
 }
 
 /**
@@ -210,22 +211,22 @@ MyWorkflow.prototype.toggleConnection=function(oShape)
  */
 MyWorkflow.prototype.AddGatewayPorts = function(_40c5)
 {
-        var TaskPortName = ['inputPort1','inputPort2','outputPort1','outputPort2'];
-        var TaskPortType = ['InputPort','InputPort','OutputPort','OutputPort'];
-        var TaskPositionX= [0,_40c5.width/2,_40c5.width,_40c5.width/2];
-        var TaskPositionY= [_40c5.height/2,0,_40c5.height/2,_40c5.height];
+  var TaskPortName = ['inputPort1','inputPort2','outputPort1','outputPort2','outputPort3'];
+  var TaskPortType = ['InputPort','InputPort','OutputPort','OutputPort','OutputPort'];
+  var TaskPositionX= [0,_40c5.width/2,_40c5.width,_40c5.width/2, 0];
+  var TaskPositionY= [_40c5.height/2,0,_40c5.height/2,_40c5.Height, _40c5.height/2 + 10];
 
-        for(var i=0; i< TaskPortName.length ; i++){
-            eval('_40c5.'+TaskPortName[i]+' = new '+TaskPortType[i]+'()');                               //Create New Port
-            eval('_40c5.'+TaskPortName[i]+'.setWorkflow(_40c5)');                                        //Add port to the workflow
-            eval('_40c5.'+TaskPortName[i]+'.setName("'+TaskPortName[i]+'")');                            //Set PortName
-            eval('_40c5.'+TaskPortName[i]+'.setZOrder(-1)');                                             //Set Z-Order of the port to -1. It will be below all the figure
-            eval('_40c5.'+TaskPortName[i]+'.setBackgroundColor(new Color(255, 255, 255))');              //Setting Background of the port to white
-            eval('_40c5.'+TaskPortName[i]+'.setColor(new Color(255, 255, 255))');                        //Setting Border of the port to white
-            this.workflow = _40c5.workflow;
-            this.workflow.currentSelection  =_40c5;
-            eval('_40c5.addPort(_40c5.'+TaskPortName[i]+','+TaskPositionX[i]+', '+TaskPositionY[i]+')');  //Setting Position of the port
-        }
+  for(var i=0; i< TaskPortName.length ; i++){
+    eval('_40c5.'+TaskPortName[i]+' = new '+TaskPortType[i]+'()');                               //Create New Port
+    eval('_40c5.'+TaskPortName[i]+'.setWorkflow(_40c5)');                                        //Add port to the workflow
+    eval('_40c5.'+TaskPortName[i]+'.setName("'+TaskPortName[i]+'")');                            //Set PortName
+    eval('_40c5.'+TaskPortName[i]+'.setZOrder(-1)');                                             //Set Z-Order of the port to -1. It will be below all the figure
+    eval('_40c5.'+TaskPortName[i]+'.setBackgroundColor(new Color(255, 255, 255))');              //Setting Background of the port to white
+    eval('_40c5.'+TaskPortName[i]+'.setColor(new Color(255, 255, 255))');                        //Setting Border of the port to white
+    this.workflow = _40c5.workflow;
+    this.workflow.currentSelection  =_40c5;
+    eval('_40c5.addPort(_40c5.'+TaskPortName[i]+','+TaskPositionX[i]+', '+TaskPositionY[i]+')');  //Setting Position of the port
+  }
 }
 /**
  * ExtJs Form on right Click of Gateways
@@ -767,7 +768,10 @@ MyWorkflow.prototype.disablePorts=function(oShape)
   if(oShape.type != ''){
     var ports ='';
     if(oShape.type.match(/Task/) || oShape.type.match(/Gateway/) || oShape.type.match(/Inter/) || oShape.type.match(/SubProcess/)) {
-      ports = ['output1','input1','output2','input2'];
+      ports = ['output1','input1','output2','input2' ];
+    }
+    else if(oShape.type.match(/bpmnGatewayExclusiveData/)) {
+      ports = ['output1','input1','output2','input2', 'input3' ];
     }
     else if(oShape.type.match(/End/)) {
       ports = ['input1','input2'];

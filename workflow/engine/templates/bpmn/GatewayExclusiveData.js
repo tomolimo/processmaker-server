@@ -54,7 +54,7 @@ bpmnGatewayExclusiveData.prototype.paint=function(){
   this.graphics.fillPolygon( x_cross, y_cross);
   this.graphics.paint();
   if (this.input1 != null) {
-    this.input1.setPosition(0, this.height / 2);
+    this.input1.setPosition(10, this.height / 2);
   }
   if (this.input2 != null) {
     this.input2.setPosition(this.width / 2, 0);
@@ -64,6 +64,9 @@ bpmnGatewayExclusiveData.prototype.paint=function(){
   }
   if (this.output2 != null) {
     this.output2.setPosition(this.width, this.height / 2);
+  }
+  if (this.output3 != null) {
+    this.output3.setPosition(0, this.height / 2 );
   }
 
 };
@@ -75,10 +78,10 @@ bpmnGatewayExclusiveData.prototype.setWorkflow=function(_40c5){
   	var h2 = this.height/2;
   	var w2 = this.width/2;
   	
-    var gatewayPortName = ['input1',   'input2',   'output1',   'output2',   'output3'   ];
-    var gatewayPortType = ['InputPort','InputPort','OutputPort','OutputPort','OutputPort'];
-    var gatewayPositionX= [0,  w2, h2,         this.width, 0  ];
-    var gatewayPositionY= [h2, 0,  this.width, h2,         h2+10 ];
+    var gatewayPortName = ['output1',   'output3',   'output2',   'input1',   'input2'   ];
+    var gatewayPortType = ['OutputPort','OutputPort','OutputPort','InputPort','InputPort'];
+    var gatewayPositionX= [w2,         this.width, 0 ,  0,  w2 ];
+    var gatewayPositionY= [this.width, h2,         h2,  h2, 0  ];
 
     for(var i=0; i< gatewayPortName.length ; i++){
       eval('this.'+gatewayPortName[i]+' = new '+gatewayPortType[i]+'()'); 
