@@ -1265,6 +1265,7 @@ function G()
         alertPanel.command(alertPanel.loader.hide);
     }
 }
+
 var G = new G();
 
 
@@ -1801,6 +1802,7 @@ var validateForm = function(sRequiredFields) {
     }
 };
 
+
 var getObject = function(sObject) {
     var i;
     var oAux = null;
@@ -1852,6 +1854,7 @@ var saveForm = function(oObject) {
   }
 };
 
+
 /**
  * @function validateUrl
  * @author  gustavo cruz gustavo[at]colosa[dot]com
@@ -1861,8 +1864,8 @@ var saveForm = function(oObject) {
  **/
 
 var validateURL = function (url){
-    var regexp = /https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?/;
-    if (regexp.test(url)){
+    //var regexp = /https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?/;
+    if (regexp.test('https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?')){
          return true;
      }
      else
@@ -1870,6 +1873,8 @@ var validateURL = function (url){
          return false;
      }
 }
+
+
 
 /**
  * @function saveAndRedirectForm
@@ -1947,40 +1952,6 @@ function verifyFieldName1(){
     return valid;
 }
 
-/*
-function sumElem(s,ans,fs){
-  var sm=0;
-     for(var j=0;j<fs.length;j++){
-      sm+=parseInt(getField(fs[i]).value)
-     }
-    ans.value=sm;
-}
- 
-
- 
-function typeOperation(cade){
- var operators=['+','-','*','/'];
- var sw=1;
- var i=0;
-
- while(i < operators.length && sw==1){
-  for(var j=0; j< cade.length; j++){
-      if(cade.charAt(j)==operators[i]){
-        aOp=operators[i];sw=0;
-      }
-    }
-  i++;
-  //alert(operators.indexOf(cade.charAt(i),0));
-  }
-  return aOp;
-}
-function iniAcum(sym){
- if(sym=='+' || sym=='-')
-  return 0;
- else return 1;
-  
-}
-*/
 
 var objectsWithFormula = Array();
 

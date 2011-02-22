@@ -982,6 +982,8 @@ class G
    */
   function streamFile( $file, $download = false, $downloadFileName = '' )
   {
+    require_once (PATH_THIRDPARTY . 'jsmin/jsmin.php');
+
     $typearray = explode ( '.', $file );
     $typefile  = $typearray[ count($typearray) -1 ];
     $filename  = $file;
@@ -1047,24 +1049,41 @@ class G
         $jsName = $paths[ count ($paths) -1 ];
         $output = '';
         switch ( $jsName ) {
+          case 'draw2d.js' :
+            $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/wz_jsgraphics.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/mootools.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/moocanvas.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/draw2d.js' ) );
+/*            
+    $head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
+    $head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
+    $head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
+    $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+    */
+            break;
           case 'maborak.js' :
             $oHeadPublisher =& headPublisher::getSingleton();
             foreach ( $oHeadPublisher->maborakFiles as $fileJS ) {
+              //$output .= JSMin::minify ( file_get_contents ( $fileJS ) );
               $output .= G::trimSourceCodeFile ($fileJS );
             }
             break;
           case 'maborak.loader.js':
             $oHeadPublisher =& headPublisher::getSingleton();
             foreach ( $oHeadPublisher->maborakLoaderFiles as $fileJS ) {
-              $output .= G::trimSourceCodeFile ($fileJS );
+              $output .= JSMin::minify ( file_get_contents ( $fileJS ) );
+              //$output .= G::trimSourceCodeFile ($fileJS );
             }
             break;
           default :
-            $output = G::trimSourceCodeFile ($filename );
+            $output = JSMin::minify ( file_get_contents ( $filename ) );
+            //$output = G::trimSourceCodeFile ($filename );
         }
         print $output;
         break;
       case 'css' :
+        //$output = JSMin::minify ( file_get_contents ( $filename) );
         print G::trimSourceCodeFile ($filename );
         break;
       default :

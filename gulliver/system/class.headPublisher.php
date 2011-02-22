@@ -275,10 +275,13 @@ class headPublisher {
       }
     }
     
+    $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+/*
     $head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+*/
     $head .= "  <script type='text/javascript' src='/gulliver/loader?t=js-translations&locale=".SYS_LANG."'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/pmos-common.js'></script>\n";
     
