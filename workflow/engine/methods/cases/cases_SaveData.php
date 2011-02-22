@@ -163,7 +163,7 @@ if (isset ( $_FILES ['form'] )) {
 			    $oInputDocument = new InputDocument();
           $aID = $oInputDocument->load($_POST ['INPUTS'] [$sFieldName]);
 			    
-			     //Get the Custom Folder ID (create if necessary)         
+			     //Get the Custom Folder ID (create if necessary)
           $oFolder=new AppFolder();
           $folderId=$oFolder->createFromPath($aID['INP_DOC_DESTINATION_PATH']);
           
@@ -171,29 +171,29 @@ if (isset ( $_FILES ['form'] )) {
           $fileTags=$oFolder->parseTags($aID['INP_DOC_TAGS']);
 			    
 				$aFields = array (
-				    'APP_UID' => $_SESSION ['APPLICATION'], 
-				    'DEL_INDEX' => $_SESSION ['INDEX'], 
-				    'USR_UID' => $_SESSION ['USER_LOGGED'], 
-				    'DOC_UID' => $_POST ['INPUTS'] [$sFieldName], 
-				    'APP_DOC_TYPE' => 'INPUT', 
-				    'APP_DOC_CREATE_DATE' => date ( 'Y-m-d H:i:s' ), 
-				    'APP_DOC_COMMENT' => '', 
-				    'APP_DOC_TITLE' => '', 
+				    'APP_UID' => $_SESSION ['APPLICATION'],
+				    'DEL_INDEX' => $_SESSION ['INDEX'],
+				    'USR_UID' => $_SESSION ['USER_LOGGED'],
+				    'DOC_UID' => $_POST ['INPUTS'] [$sFieldName],
+				    'APP_DOC_TYPE' => 'INPUT',
+				    'APP_DOC_CREATE_DATE' => date ( 'Y-m-d H:i:s' ),
+				    'APP_DOC_COMMENT' => '',
+				    'APP_DOC_TITLE' => '',
 				    'APP_DOC_FILENAME' => $_FILES ['form'] ['name'] [$sFieldName],
 				    'FOLDER_UID'          => $folderId,
-            'APP_DOC_TAGS'        => $fileTags 
+            'APP_DOC_TAGS'        => $fileTags
 			    );
 			} else {
 				$aFields = array (
-				    'APP_UID' => $_SESSION ['APPLICATION'], 
-				    'DEL_INDEX' => $_SESSION ['INDEX'], 
-				    'USR_UID' => $_SESSION ['USER_LOGGED'], 
-				    'DOC_UID' => - 1, 
-				    'APP_DOC_TYPE' => 'ATTACHED', 
-				    'APP_DOC_CREATE_DATE' => date ( 'Y-m-d H:i:s' ), 
-				    'APP_DOC_COMMENT' => '', 
-				    'APP_DOC_TITLE' => '', 
-				    'APP_DOC_FILENAME' => $_FILES ['form'] ['name'] [$sFieldName] 
+				    'APP_UID' => $_SESSION ['APPLICATION'],
+				    'DEL_INDEX' => $_SESSION ['INDEX'],
+				    'USR_UID' => $_SESSION ['USER_LOGGED'],
+				    'DOC_UID' => - 1,
+				    'APP_DOC_TYPE' => 'ATTACHED',
+				    'APP_DOC_CREATE_DATE' => date ( 'Y-m-d H:i:s' ),
+				    'APP_DOC_COMMENT' => '',
+				    'APP_DOC_TITLE' => '',
+				    'APP_DOC_FILENAME' => $_FILES ['form'] ['name'] [$sFieldName]
 				);
 			}
 			
@@ -209,8 +209,10 @@ if (isset ( $_FILES ['form'] )) {
 			$oPluginRegistry = & PMPluginRegistry::getSingleton ();
 			if ($oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ( 'uploadDocumentData' )) {
 				$documentData = new uploadDocumentData ( $_SESSION ['APPLICATION'], $_SESSION ['USER_LOGGED'], $sPathName . $sFileName, $aFields ['APP_DOC_FILENAME'], $sAppDocUid );
-				$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT, $documentData );
-				unlink ( $sPathName . $sFileName );
+			    $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT, $documentData );
+				if($uploadReturn){
+				    unlink ( $sPathName . $sFileName );
+				}
 			}
 		}
 	}
