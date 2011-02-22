@@ -667,7 +667,7 @@ function renderFileName(value, p, record) {
 }
 function renderType(value, p, record) {	
 	if(record.get('appDocType')!=""){
-		return String.format('{1} - <i>{0}</i>', value,record.get('appDocType'));
+		return String.format('{1}, {0}', value,record.get('appDocType'));
 	}else{
 		return String.format('<i>{0}</i>', value);
 	}
