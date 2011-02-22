@@ -226,7 +226,8 @@ function sendTestMail() {
     'app_msg_bcc'      => '',
     'app_msg_attach'   => '',
     'app_msg_template' => '',
-    'app_msg_status'   => 'pending'
+    'app_msg_status'   => 'pending',
+    'app_msg_attach'=>'' // Added By Ankit
   ));
 
   $oSpool->sendMail();

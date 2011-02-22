@@ -76,6 +76,7 @@ class insert
       $spool->setappMsgAttach($db_spool['app_msg_attach']);
       $spool->setAppMsgTemplate($db_spool['app_msg_template']);
       $spool->setAppMsgStatus($db_spool['app_msg_status']);
+      $spool->setAppMsgSendDate(date('Y-m-d H:i:s')); // Add by Ankit
 
       if(!$spool->validate()) {
         $errors       = $spool->getValidationFailures();
