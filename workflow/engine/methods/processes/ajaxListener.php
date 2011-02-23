@@ -1,6 +1,6 @@
 <?php
 /**
- * cases/ajaxListener.php Ajax Listener for Cases rpc requests
+ * processes/ajaxListener.php Ajax Listener for Cases rpc requests
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -294,6 +294,101 @@ class Ajax
 
     $treeDetail[] = $rootNode;
     print G::json_encode($treeDetail);
+  }
+
+  function getProperties($param)
+  {
+    switch ($param['type']) {
+      case 'process':
+        require_once 'classes/model/ProcessCategory.php';
+        require_once 'classes/model/CalendarDefinition.php';
+        
+        G::LoadClass('processMap');
+        $oProcessMap = new processMap(new DBConnection);
+        $process = $oProcessMap->editProcessNew($param['UID']);
+        //print_R($process);
+
+        $category = ProcessCategoryPeer::retrieveByPk($process['PRO_CATEGORY']);
+        $categoryName = is_object($category) ? $category->getCategoryName(): '';
+        $calendar = CalendarDefinitionPeer::retrieveByPk($process['PRO_CALENDAR']);
+        $calendarName = is_object($calendar) ? $calendar->getCalendarName(): '';
+        $properties['Title']       = $process['PRO_TITLE'];
+        $properties['Description'] = $process['PRO_DESCRIPTION'];
+        $properties['Calendar']    = $calendarName;
+        $properties['Category']    = $categoryName;
+        $properties['Debug']       = $process['PRO_DEBUG'];
+        
+        $result->sucess = true;
+        $result->prop = $properties;
+      break;
+
+      case 'task':
+      break;
+    }
+
+    print G::json_encode($result);
+  }
+
+  function saveProperties($param)
+  {
+    require_once 'classes/model/ProcessCategory.php';
+    require_once 'classes/model/CalendarDefinition.php';
+    
+    switch ($param['type']) {
+      case 'process':
+        $process['PRO_UID'] = $param['UID'];
+        switch ($param['property']) {
+          case 'Title':       $fieldName = 'PRO_TITLE'; break;
+          case 'Description': $fieldName = 'PRO_DESCRIPTION'; break;
+          case 'Debug':       $fieldName = 'PRO_DEBUG'; break;
+          case 'Category':
+            $fieldName = 'PRO_CATEGORY';
+            $category = ProcessCategory::loadByCategoryName($param['value']);
+            $param['value'] = $category[0]['CATEGORY_NAME'];
+            break;
+          case 'Calendar':
+            $fieldName = 'PRO_CALENDAR';
+            break;
+        }
+        $process[$fieldName] = $param['value'];
+
+        G::LoadClass('processMap');
+        $oProcessMap = new ProcessMap();
+        $oProcessMap->updateProcess($process);
+
+        $result->sucess = true;
+      break;
+
+      case 'task':
+      break;
+    }
+
+    print G::json_encode($result);
+  }
+
+  function getCategoriesList()
+  {
+    require_once "classes/model/ProcessCategory.php";
+
+    $processCategory = new ProcessCategory;
+    $defaultOption = Array();
+    $defaultOption[] = Array('CATEGORY_UID'=>'', 'CATEGORY_NAME'=>'');
+    
+    $response->rows = array_merge($defaultOption, $processCategory->getAll('array'));
+    
+    echo G::json_encode($response);
+  }
+
+  function getCaledarList()
+  {
+    G::LoadClass('calendar');
+    $calendar = new CalendarDefinition();
+    $calendarObj = $calendar->getCalendarList(true, true);
+    $calendarObj['array'][0] = Array('CALENDAR_UID'=>'', 'CALENDAR_NAME'=>'');
+    
+    $response->rows = $calendarObj['array'];
+
+    echo G::json_encode($response);
   }
 }
 

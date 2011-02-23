@@ -268,7 +268,7 @@ Ext.onReady ( function() {
 
   ////
   usersPanelStart = 0;
-  usersPanelLimit = 10;
+  usersPanelLimit = 1000;
   
   var usersStore = new Ext.data.Store( {
     autoLoad: true,
@@ -296,8 +296,9 @@ Ext.onReady ( function() {
     stateId  : 'usersGrid',
     ddGroup  : 'task-assignment',
     enableDragDrop : true,
+    width: 150,
     viewConfig : {
-      forceFit : true
+      forceFit : false
     },
     cm : new Ext.grid.ColumnModel({
       defaults: {
@@ -306,7 +307,9 @@ Ext.onReady ( function() {
       },
       columns : [
         {header: 'USR_UID', id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-        {header: 'User', dataIndex: 'USER', width: 300}
+        {header: 'User', dataIndex: 'USER', width: 249, renderer:function(v,p,r){
+          return _FNF(r.data.USR_USERNAME, r.data.USR_FIRSTNAME, r.data.USR_LASTNAME);
+        }}
       ]
     }),
     store: usersStore,
@@ -319,7 +322,7 @@ Ext.onReady ( function() {
       new Ext.form.TextField ({
         id    : 'usersSearchTxt',
         ctCls :'pm_search_text_field',
-        width : 220,
+        width : 200,
         allowBlank : true,
         emptyText : _('ID_ENTER_SEARCH_TERM'),
         listeners : {
@@ -340,14 +343,14 @@ Ext.onReady ( function() {
         text:TRANSLATIONS.ID_SEARCH,
         handler: usersSearch
       }
-    ],
+    ]/*,
     bbar: [new Ext.PagingToolbar({
       pageSize   : usersPanelLimit,
       store      : usersStore,
       displayInfo: true,
       displayMsg : '{2} Users',
       emptyMsg   : ''
-    })]
+    })]*/
   });
 
   var groupsStore = new Ext.data.Store( {
@@ -372,9 +375,10 @@ Ext.onReady ( function() {
     stateId  : 'groupsGrid',
     ddGroup  : 'task-assignment',
     height   : 180,
+    width: 150,
     enableDragDrop : true,
     viewConfig : {
-      forceFit :true
+      forceFit :false
     },
     cm : new Ext.grid.ColumnModel({
       defaults : {
@@ -383,7 +387,7 @@ Ext.onReady ( function() {
       },
       columns: [
         {id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
-        {header: 'Group', dataIndex: 'CON_VALUE'}
+        {header: 'Group', dataIndex: 'CON_VALUE', width: 249}
       ]
     }),
     store : groupsStore,
@@ -397,7 +401,7 @@ Ext.onReady ( function() {
         id    : 'groupsSearchTxt',
         ctCls :'pm_search_text_field',
         allowBlank : true,
-        width : 220,
+        width : 200,
         emptyText : _('ID_ENTER_SEARCH_TERM'),
         listeners : {
           specialkey: function(f,e){
@@ -417,22 +421,22 @@ Ext.onReady ( function() {
         text    :TRANSLATIONS.ID_SEARCH,
         handler : groupsSearch
       }
-    ],
+    ]/*,
     bbar: [new Ext.PagingToolbar({
       pageSize   : usersPanelLimit,
       store      : groupsStore,
       displayInfo: true,
       displayMsg : '{2} Groups',
       emptyMsg   : 'No records found'
-    })]
+    })]*/
   });
   
 
   usersPanel = new Ext.Window({
     id      : 'usersPanel',
     title   : 'Actors',
-    width   : 302,
-    height  : 350,
+    width   : 280,
+    height  : 370,
     //x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
     //y: designerToolbarHeight + 2,
     minimizable : false,
@@ -440,8 +444,8 @@ Ext.onReady ( function() {
     closable    : false,
     resizable   : false,
     floating    : true,
-    shadow      : false,
-    border      : false,
+    shadow      : true,
+    border      : true,
     items:[
       new Ext.TabPanel({
         id    : 'usersPanelTabs',
@@ -450,6 +454,7 @@ Ext.onReady ( function() {
         tabPosition : 'top',
         split  : true,
         height : 318,
+        width  : 268,
         items  : [
           usersGrid,
           groupsGrid
@@ -515,6 +520,8 @@ Ext.onReady ( function() {
           PMExt.notify('', 'Users & Groups assigned successfully!');
           if( typeof parent != 'undefined' ) {
             parent.Ext.getCmp('eastPanel').show();
+            parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);
+            
             parent.Ext.getCmp('usersTaskGrid').store.reload({params: {action:'getUsersTask', TAS_UID: _TAS_UID}});
           }
         } else {

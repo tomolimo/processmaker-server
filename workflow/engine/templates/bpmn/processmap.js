@@ -6,6 +6,7 @@ new Ext.KeyMap(document, {
 });
 
 var _TAS_UID;
+var erik;
 
 Ext.onReady ( function() {
   
@@ -165,7 +166,7 @@ Ext.onReady ( function() {
     usr_uid = usr_uid.join(',');
     tu_relation = tu_relation.join(',');
     
-    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_DYNAFORM_CONFIRM'), function(){
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_REMOVE_USERS_CONFIRM'), function(){
       Ext.Ajax.request({
         url   : '../processes/ajaxListener',
         method: 'POST',
@@ -217,6 +218,108 @@ Ext.onReady ( function() {
     }
   });
   
+  var ActiveProperty = new Ext.form.Checkbox({
+    name        : 'active',
+    fieldLabel : 'Active',
+    checked    : true,
+    inputValue : '1'
+  });
+
+  /*var comboCategory = new Ext.form.ComboBox({
+    fieldLabel : 'Category',
+    hiddenName : 'category',
+    store : new Ext.data.Store( {
+      proxy : new Ext.data.HttpProxy( {
+        url : '../processes/ajaxListener',
+        method : 'POST'
+      }),
+      baseParams : {
+        action : 'categoriesList'
+      },
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'CATEGORY_UID'
+        }, {
+          name : 'CATEGORY_NAME'
+        } ]
+      })
+    }),
+    valueField : 'CATEGORY_UID',
+    displayField : 'CATEGORY_NAME',
+    triggerAction : 'all',
+    emptyText : TRANSLATIONS.ID_SELECT,
+    selectOnFocus : true,
+    editable : true,
+    width: 180,
+    allowBlank : true,
+    autocomplete: true,
+    typeAhead: true,
+    allowBlankText : ' ',
+    listeners:{
+      scope: this,
+      'select': function() {
+      }}
+  })*/
+
+  var comboCategory = new Ext.form.ComboBox({
+    fieldLabel    : 'Category',
+    name        : 'category',
+    allowBlank     : true,
+    store        : new Ext.data.Store( {
+      autoLoad: true,  //autoload the data
+      proxy : new Ext.data.HttpProxy( {
+        url : '../processes/ajaxListener',
+        method : 'POST'
+      }),
+      baseParams : {
+        action : 'getCategoriesList'
+      },
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'CATEGORY_UID'
+        }, {
+          name : 'CATEGORY_NAME'
+        } ]
+      })
+    }),
+    valueField : 'CATEGORY_NAME',
+    displayField : 'CATEGORY_NAME',
+    typeAhead    : true,
+    mode        : 'local',
+    triggerAction    : 'all',
+    editable: true,
+    forceSelection: true
+  });
+
+  var comboCalendar = new Ext.form.ComboBox({
+    fieldLabel    : 'Calendar',
+    name        : 'calendar',
+    allowBlank     : true,
+    store        : new Ext.data.Store( {
+      autoLoad: true,  //autoload the data
+      proxy : new Ext.data.HttpProxy({ url: '../processes/ajaxListener'}),
+      baseParams : {action: 'getCaledarList'},
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ {
+          name : 'CALENDAR_UID'
+        }, {
+          name : 'CALENDAR_NAME'
+        } ]
+      })
+    }),
+    valueField : 'CALENDAR_NAME',
+    displayField : 'CALENDAR_NAME',
+    typeAhead    : true,
+    mode        : 'local',
+    triggerAction    : 'all',
+    editable: true,
+    forceSelection: true
+  });
+
+  
   var propertiesGrid = new Ext.grid.PropertyGrid({
     id: 'propGrid',
     title: 'Properties',
@@ -229,14 +332,49 @@ Ext.onReady ( function() {
     viewConfig : {
         forceFit: true,
         scrollOffset: 2 // the grid will never have scrollbars
+    },
+    customEditors: {
+      //'Category': new Ext.grid.GridEditor(comboCategory),
+      'Debug' : new Ext.grid.GridEditor(ActiveProperty),
+      'Category' : new Ext.grid.GridEditor(comboCategory),
+      'Calendar' : new Ext.grid.GridEditor(comboCalendar)
     }
+
   });
 
+  propertiesGrid.on('afteredit', function afterEdit(r) {
+
+    Ext.Ajax.request({
+      url: '../processes/ajaxListener',
+      params: {
+        action : 'saveProperties',
+        UID: pro_uid,
+        type: 'process',
+        property: r.record.data.name,
+        value: r.value
+      },
+      success: function(response) {
+        //
+      },
+      failure: function(){
+        Ext.Msg.alert ('Failure');
+      }
+    });
+    
+    r.record.commit();
+  }, this );
+  
+
   var propertyStore = new Ext.data.JsonStore({
+    id: 'propertyStore',
     autoLoad: true,  //autoload the data
-    url: 'ajaxListener?action=getProcessproperties',
-    root: 'props',
-    fields: ['First name', 'Last name', 'E-mail'],
+    url: '../processes/ajaxListener',
+    root: 'prop',
+    fields: ['title', 'description'],
+    store: new Ext.grid.PropertyStore({
+      sortable: false,
+      defaultSortable: false
+    }),
     listeners: {
       load: {
         fn: function(store, records, options){
@@ -244,16 +382,23 @@ Ext.onReady ( function() {
           var propGrid = Ext.getCmp('propGrid');
           // make sure the property grid exists
           if (propGrid) {
-              // populate the property grid with store data
-              propGrid.setSource(store.getAt(0).data);
+            // populate the property grid with store data
+            //propGrid.getColumnModel().getColumnById('name').sortable = false;
+            propGrid.store.sort('name','DESC');
+            propGrid.setSource(store.reader.jsonData.prop);
           }
         }
       }
-    }
+    },
+    baseParams: {
+      action : 'getProperties',
+      UID    : pro_uid,
+      type   : 'process'
+    },
   });
 
 
-  propertiesGrid.setSource({
+  /*propertiesGrid.setSource({
       ttile: 'Properties Grid',
       Description: false,
       Calendar: true,
@@ -262,7 +407,7 @@ Ext.onReady ( function() {
       tested: false,
       version: 0.01,
       borderWidth: 1
-  });
+  });*/
 
 
   var east = new Ext.Panel({
@@ -498,8 +643,8 @@ Ext.onReady ( function() {
         iconCls: 'button_menu_ext ss_sprite ss_pencil',
         handler: function() {
           if(typeof pro_uid !== 'undefined') {
-        	  location.href = '../processes/processes_Map?PRO_UID=' +pro_uid+ '&rand=' +Math.random()
-        	}
+            location.href = '../processes/processes_Map?PRO_UID=' +pro_uid+ '&rand=' +Math.random()
+          }
         }
       }
     ]
@@ -512,7 +657,7 @@ Ext.onReady ( function() {
     ,border:false,
     items:[main]
   });
-  Ext.getCmp('eastPanel').hide();
+  //Ext.getCmp('eastPanel').hide();
   //Ext.getCmp('eastPanel').ownerCt.doLayout();
   
 });
