@@ -50,7 +50,7 @@
 </AUTH_SOURCE_PASSWORD>
 
 <AUTH_SOURCE_IDENTIFIER_FOR_USER type="text" size="20" maxlength="20" required="1" defaultValue="uid">
-  <en>Identifier for a imported user</en>
+  <en>Identifier for an imported user</en>
 </AUTH_SOURCE_IDENTIFIER_FOR_USER>
 
 <AUTH_SOURCE_OBJECT_CLASSES type="textarea" cols="50" rows="5" required="1" defaultValue="*">
