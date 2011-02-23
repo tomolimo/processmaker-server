@@ -453,7 +453,7 @@ Ext.onReady ( function() {
         activeTab   : 0, // second tab initially active
         tabPosition : 'top',
         split  : true,
-        height : 318,
+        height : 340,
         width  : 268,
         items  : [
           usersGrid,
