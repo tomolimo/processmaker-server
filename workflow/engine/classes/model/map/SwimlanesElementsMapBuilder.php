@@ -78,6 +78,8 @@ class SwimlanesElementsMapBuilder {
 
 		$tMap->addColumn('SWI_HEIGHT', 'SwiHeight', 'int', CreoleTypes::INTEGER, true, null);
 
+		$tMap->addColumn('SWI_NEXT_UID', 'SwiNextUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
 		$tMap->addValidator('SWI_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Swimlane Element UID can be no larger than 32 in size');
 
 		$tMap->addValidator('SWI_UID', 'required', 'propel.validator.RequiredValidator', '', 'Swimlane Element UID is required.');

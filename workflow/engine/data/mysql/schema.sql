@@ -523,6 +523,7 @@ CREATE TABLE `SWIMLANES_ELEMENTS`
 	`SWI_Y` INTEGER default 0 NOT NULL,
 	`SWI_WIDTH` INTEGER default 0 NOT NULL,
 	`SWI_HEIGHT` INTEGER default 0 NOT NULL,
+	`SWI_NEXT_UID` VARCHAR(32) default '',
 	PRIMARY KEY (`SWI_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------

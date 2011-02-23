@@ -3064,6 +3064,16 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
+    <column name="SWI_NEXT_UID" type="VARCHAR" size="32" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="SWI_NEXT_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
     <validator column="SWI_UID">
       <rule name="maxLength" value="32" message="Swimlane Element UID can be no larger than ${value} in size" />
       <rule name="required" message="Swimlane Element UID is required." />
