@@ -193,7 +193,7 @@ class Installer
 
       /* Dump schema workflow && data  */
 
-      $this->log("Importing database schema:\n");
+      $this->log("Import database schema:\n");
       $myPortA = explode(":",$this->options['database']['hostname']);
       if(count($myPortA)<2) {
         $myPortA[1]="3306";
@@ -216,6 +216,19 @@ class Installer
       $this->log($qrs, isset($qrs['errors']));
       $qrv = $this->query_sql_file(PATH_RBAC_MYSQL_DATA.$values,$this->connection_database);
       $this->log($qrv, isset($qrv['errors']));
+
+      mysql_select_db($wf,$this->connection_database);
+      
+      require_once("propel/Propel.php");
+      require_once('classes/model/AppCacheView.php');
+      
+      $appCache = new AppCacheView();
+      $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup/setupSchemas/' );
+      $triggers = $appCache->getTriggers("en");
+      $this->log("Create 'cases list cache' triggers");
+      foreach ($triggers as $triggerName => $trigger) {
+        $this->run_query($trigger, "-> Trigger $triggerName");
+      }
 
       $path_site  = $this->options['path_data']."/sites/".$this->options['name']."/";
       $db_file    = $path_site."db.php";

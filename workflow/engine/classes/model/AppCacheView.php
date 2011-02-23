@@ -1162,6 +1162,28 @@ class AppCacheView extends BaseAppCacheView {
     return 'exists';
   }
 
+  /**
+   * Retrieve the SQL code to create the APP_CACHE_VIEW triggers.
+   *
+   * @return array each value is a SQL statement to create a trigger.
+   */
+  function getTriggers($lang){
+    $triggerFiles = array(
+      'triggerApplicationDelete.sql',
+      'triggerApplicationUpdate.sql',
+      'triggerAppDelegationUpdate.sql',
+      'triggerAppDelegationInsert.sql');
+    $triggers = array();
+    foreach ($triggerFiles as $triggerFile) {
+      $trigger = file_get_contents("{$this->pathToAppCacheFiles}/$triggerFile");
+      if ($trigger === false)
+        throw new Exception("Could not read trigger contents in $triggerFile");
+      $trigger = str_replace('{lang}', $lang, $trigger);
+      $triggers[$triggerFile] = $trigger;
+    }
+    return $triggers;
+  }
+
   function getFormatedUser($sFormat, $aCaseUser, $userIndex){
     require_once('classes/model/Users.php');
     $oUser = new Users();
