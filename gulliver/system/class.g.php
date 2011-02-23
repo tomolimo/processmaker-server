@@ -991,8 +991,6 @@ class G
     
     //trick to generate the translation.language.js file , merging two files and then minified the content.
     if ( strtolower ($typefile ) == 'js' && $namearray[ count($namearray) -1 ] == 'translation' ) {
-      G::sendHeaders ( $filename , 'text/javascript', $download, $downloadFileName );
-
       header('Content-Type: text/javascript');
 
       //if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
