@@ -986,7 +986,21 @@ class G
 
     $typearray = explode ( '.', $file );
     $typefile  = $typearray[ count($typearray) -1 ];
+    $namearray = explode ( '/', $typearray[0] );
     $filename  = $file;
+    
+    //trick to generate the translation.language.js file , merging two files and then minified the content.
+    if ( strtolower ($typefile ) == 'js' && $namearray[ count($namearray) -1 ] == 'translation' ) {
+      G::sendHeaders ( $filename , 'text/javascript', $download, $downloadFileName );
+      $output = '';
+      $locale = $typearray[1]; //here we have the language , for example translation.en.js
+      G::LoadTranslationObject($locale);
+      global $translation;
+      $output .= JSMin::minify ( 'var TRANSLATIONS = ' . G::json_encode($translation) . ';' );
+      print $output;
+      return;
+    }
+
     if ( file_exists ( $filename ) ) {
       switch ( strtolower ($typefile ) ) {
         case 'swf' :
@@ -1061,8 +1075,10 @@ class G
             $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ext-all.js' ) );
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/ux-all.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/miframe.js' ) );
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js' ) );
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.statusbar/ext-statusbar.js' ) );
+            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
             $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
             break;
 
@@ -1203,7 +1219,10 @@ class G
 
       header('Pragma: cache');
 
-      $mtime = filemtime($filename);
+      if ( file_exists($filename) )
+        $mtime = filemtime($filename);
+      else
+        $mtime = date('U');
       $gmt_mtime = gmdate("D, d M Y H:i:s", $mtime ) . " GMT";
       header('ETag: "' . md5 ($mtime . $filename ) . '"' );
       header("Last-Modified: " . $gmt_mtime );
