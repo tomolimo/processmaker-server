@@ -992,6 +992,35 @@ class G
     //trick to generate the translation.language.js file , merging two files and then minified the content.
     if ( strtolower ($typefile ) == 'js' && $namearray[ count($namearray) -1 ] == 'translation' ) {
       G::sendHeaders ( $filename , 'text/javascript', $download, $downloadFileName );
+
+      header('Content-Type: text/javascript');
+
+      //if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
+      $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+      if ( file_exists($filename) )
+        $mtime = filemtime($filename);
+      else
+        $mtime = date('U');
+      $gmt_mtime = gmdate("D, d M Y H:i:s", $mtime ) . " GMT";
+      header('Pragma: cache');
+      header('ETag: "' . md5 ($mtime . $filename ) . '"' );
+      header("Last-Modified: " . $gmt_mtime );
+      header('Cache-Control: public');
+      header("Expires: " . gmdate("D, d M Y H:i:s", time () + 30*60*60*24 ) . " GMT"); //1 month
+      if( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ) {
+        if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
+          header('HTTP/1.1 304 Not Modified');
+          exit();
+        }
+      }
+
+      if ( isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+        if ( str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5( $mtime . $filename))  {
+          header("HTTP/1.1 304 Not Modified");
+          exit();
+        }
+      }
+      
       $output = '';
       $locale = $typearray[1]; //here we have the language , for example translation.en.js
       G::LoadTranslationObject($locale);
