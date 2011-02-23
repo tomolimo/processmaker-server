@@ -72,7 +72,7 @@ switch ($aData['action']) {
 	  	  $aFields['TAS_UID']          = $aData['TASK'][0];
 	  	  $aFields['ROU_NEXT_TASK']    = $aData['ROU_NEXT_TASK'][0];
 	  	  $aFields['ROU_TYPE']         = $aData['ROU_TYPE'];
-                  if(isset($aData['ROU_EVN_UID'])){
+                  if(isset($aData['ROU_EVN_UID']) && $aData['ROU_EVN_UID'] != ''){
                     $aFields['ROU_EVN_UID']    = $aData['ROU_EVN_UID'];
                     $aDataEvent = array();
                     $aDataEvent['EVN_UID']          = $aData['ROU_EVN_UID'];

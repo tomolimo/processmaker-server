@@ -105,7 +105,7 @@ if ( isset ($_REQUEST['action']) ) {
   	  $sOutput = $oProcessMap->deleteSubProcess($oData->pro_uid, $oData->tas_uid);
   	break;
         case 'addText':
-  	  $sOutput = $oProcessMap->addText($oData->uid, $oData->label, $oData->position->x, $oData->position->y);
+  	  $sOutput = $oProcessMap->addText($oData->uid, $oData->label, $oData->position->x, $oData->position->y,$oData->task_uid);
           echo $sOutput;
   	break;
         case 'updateText':

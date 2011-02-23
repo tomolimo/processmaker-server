@@ -90,6 +90,7 @@
    $lanes              = $oProcess->createLanesNewPM($oData->lanes);
    $fields             = $oProcess->createTransitionsPM($oData->tasks,$oData->routes,$arrayEvents,$count,$arrayRoutes,$countRoutes);
 
+
    //Get Standalone Events and routes
    $countEvent = count($fields['EVENTS']);
    $countRoutes = count($fields['TRANSITION']);
@@ -121,7 +122,7 @@
          $fields['TRANSITION'][$countRoutes]['4']= '1';
          $countRoutes              = $countRoutes + 1;
        }
-       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_TO'] != '' && ! preg_match("/Start/", $value['EVN_TYPE'])){  //Check for Intermediate Events
+       else if($value['TAS_UID'] == '' && $value['EVN_TAS_UID_TO'] != '' && ! preg_match("/Start/", $value['EVN_TYPE'])){
          $evn_uid = $value['EVN_UID'];
          $idTask = $value['EVN_TAS_UID_TO'];
 
@@ -238,6 +239,20 @@
        $countGateway += 1;
      }
    }
+
+   //Create Annotation route
+   foreach($oData->lanes as $id => $value)
+   {
+       if($value['SWI_NEXT_UID'] != '') {
+         $fields['TRANSITION'][$countTransitions]['0'] = G::generateUniqueID();
+         $fields['TRANSITION'][$countTransitions]['1'] = $value['SWI_NEXT_UID'];
+         $fields['TRANSITION'][$countTransitions]['2'] = $value['SWI_UID'];
+         $fields['TRANSITION'][$countTransitions]['3'] = '1';
+         $fields['TRANSITION'][$countTransitions]['4'] = '2';
+         $countTransitions += 1;
+       }
+   }
+
    //$subProcess         = $oProcess->createSubProcessesPM($oData->subProcess);
    $arrayEvents        = $fields['EVENTS'];
    $arrayGateways      = $fields['GATEWAYS'];
