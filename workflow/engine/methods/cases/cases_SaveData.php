@@ -211,6 +211,9 @@ if (isset ( $_FILES ['form'] )) {
 				$documentData = new uploadDocumentData ( $_SESSION ['APPLICATION'], $_SESSION ['USER_LOGGED'], $sPathName . $sFileName, $aFields ['APP_DOC_FILENAME'], $sAppDocUid );
 				$uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT, $documentData );
 				if($uploadReturn){
+				    $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
+                  	$oAppDocument1 = new AppDocument();
+                    $oAppDocument1->update($aFields);
 				    unlink ( $sPathName . $sFileName );
 				}
 			}

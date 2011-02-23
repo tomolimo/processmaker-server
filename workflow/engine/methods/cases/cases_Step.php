@@ -507,10 +507,7 @@
           $oPluginRegistry =& PMPluginRegistry::getSingleton();
           if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
           	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
-          	$aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
-
-          	$oAppDocument1 = new AppDocument();
-            $oAppDocument1->update($aFields);
+          	
 
           	$sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
 
@@ -531,6 +528,9 @@
                     $documentData->bUseOutputFolder = true;
                     $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
                     if($uploadReturn){//Only delete if the file was saved correctly
+                        $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
+                      	$oAppDocument1 = new AppDocument();
+                        $oAppDocument1->update($aFields);
                     	unlink ( $pathOutput . $sFilename. '.pdf' );
                   	}
 

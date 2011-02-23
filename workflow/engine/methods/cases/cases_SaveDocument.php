@@ -25,8 +25,8 @@
   try {
     
     //First review if there is no error with the uploaded document
-    if ((isset($_FILES['form']))&&($_FILES['form']['error']['APP_DOC_FILENAME'] != 0)) {        
-        $code=$_FILES['form']['error']['APP_DOC_FILENAME'];        
+    if ((isset($_FILES['form']))&&($_FILES['form']['error']['APP_DOC_FILENAME'] != 0)) {
+        $code=$_FILES['form']['error']['APP_DOC_FILENAME'];
         switch ($code) {
             case UPLOAD_ERR_INI_SIZE:
                 $message = G::LoadTranslation('ID_UPLOAD_ERR_INI_SIZE');
@@ -52,8 +52,8 @@
 
             default:
                 $message = G::LoadTranslation('ID_UPLOAD_ERR_UNKNOWN');
-                break; 
-        }   
+                break;
+        }
         G::SendMessageText($message, "ERROR");
 				$backUrlObj=explode("sys".SYS_SYS,$_SERVER['HTTP_REFERER']);
 				G::header("location: "."/sys".SYS_SYS.$backUrlObj[1]);
@@ -62,7 +62,7 @@
     
         
     $docUid=$_POST['form']['DOC_UID'];
-    $appDocUid=$_POST['form']['APP_DOC_UID'];    
+    $appDocUid=$_POST['form']['APP_DOC_UID'];
     $docVersion=$_POST['form']['docVersion'];
     $actionType=$_POST['form']['actionType'];
     
@@ -121,7 +121,7 @@
     $oAppDocument = new AppDocument();
     
     
-      //Get the Custom Folder ID (create if necessary)         
+      //Get the Custom Folder ID (create if necessary)
       $oFolder=new AppFolder();
       $folderId=$oFolder->createFromPath($aID['INP_DOC_DESTINATION_PATH']);
       
@@ -129,7 +129,7 @@
       $fileTags=$oFolder->parseTags($aID['INP_DOC_TAGS']);
     
     switch($actionType){
-        case "R": //replace        
+        case "R": //replace
             $aFields = array('APP_DOC_UID'     => $appDocUid,
                        'APP_UID'     => $_SESSION['APPLICATION'],
                        'DOC_VERSION'     => $docVersion,
@@ -166,7 +166,7 @@
 
             $oAppDocument->create($aFields);
         break;
-        default: //New           
+        default: //New
             $aFields = array('APP_UID'     => $_SESSION['APPLICATION'],
                      'DEL_INDEX'           => $_SESSION['INDEX'],
                      'USR_UID'             => $_SESSION['USER_LOGGED'],
@@ -191,10 +191,10 @@
     $ext = (isset($info['extension']) ? $info['extension'] : '');
 
     //save the file
-    if (!empty($_FILES['form'])) {        
+    if (!empty($_FILES['form'])) {
     	if ($_FILES['form']['error']['APP_DOC_FILENAME'] == 0) {
         $sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
-        $sFileName = $sAppDocUid . "_".$iDocVersion. '.' . $ext;        
+        $sFileName = $sAppDocUid . "_".$iDocVersion. '.' . $ext;
         G::uploadFile($_FILES['form']['tmp_name']['APP_DOC_FILENAME'], $sPathName, $sFileName );
 
         //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
@@ -208,11 +208,14 @@
                             $sPathName . $sFileName,
                             $aFields['APP_DOC_FILENAME'],
                             $sAppDocUid,
-                            $iDocVersion 
+                            $iDocVersion
                             );
 
   	      $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
   	      if($uploadReturn){
+            $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
+          	$oAppDocument1 = new AppDocument();
+            $oAppDocument1->update($aFields);
   	      	unlink ( $sPathName . $sFileName );
   	      }
         }
