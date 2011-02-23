@@ -196,9 +196,10 @@ TaskContext.prototype.editTaskSteps = function(_3252){
                             header: _('ID_CONDITION'),
                             dataIndex: 'STEP_CONDITION',
                             width: 250,
-                            editable: true,
+                            //editable: true,
                             editor: new Ext.form.TextField({
-                            })
+                                    editable  : true
+                                })
                             }
                            ]
                         });
@@ -365,21 +366,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
           }
         });
 
-       // Setup Drop Targets
-      // This will make sure we only drop to the  view scroller element
-   /* var firstGridDropTargetEl =  grid.getView().scroller.dom;
-    var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
-                ddGroup    : 'firstGridDDGroup',
-                notifyDrop : function(ddSource, e, data){
-                                     var records =  ddSource.dragData.selections;
-                                     Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                                     grid.store.add(records);
-                                     grid.store.commitChanges();
-                                     //firstGrid.store.sort('gridIndex', 'ASC');
-                                     return true
-                                   }
-      });
-      firstGridDropTarget.addToGroup('firstGridDDGroup');*/
+
 
     //Getting triggers data using stepTriggers function
     var treeGrid = taskExtObj.stepTriggers(_3252);
@@ -786,7 +773,7 @@ TaskContext.prototype.editTaskProperties= function()
                     name: 'selectorigin',
                     handler: function (s) {
                       workflow.variablesAction = 'form';
-                      workflow.fieldId         = 'priorityVariable' ;
+                      workflow.fieldName         = 'TAS_PRIORITY_VARIABLE' ;
                       workflow.formSelected    = taskPropertiesTabs;
                       var rowData = ProcMapObj.ExtVariables();
                       console.log(rowData);
@@ -807,13 +794,13 @@ TaskContext.prototype.editTaskProperties= function()
               },
               items: [{
                 xtype: 'radiogroup',
-                id:    'assignType',
+                //id:    'assignType',
                 fieldLabel: _('ID_CASES_ASSIGNED_BY'),
                 itemCls: 'x-check-group-alt',
                 columns: 1,
                 items: [{
                   boxLabel: _('ID_CYCLIC_ASSIGNMENT'),
-                  id: 'BALANCED',
+                  //id: 'BALANCED',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'BALANCED',
                   checked: false
@@ -828,7 +815,7 @@ TaskContext.prototype.editTaskProperties= function()
 //                  }
                 },{
                   boxLabel: _('ID_MANUAL_ASSIGNMENT'),
-                  id: 'MANUAL',
+                 // id: 'MANUAL',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'MANUAL',
                   checked:false
@@ -861,7 +848,7 @@ TaskContext.prototype.editTaskProperties= function()
 //                  }
                 },{
                   boxLabel: _('ID_REPORTS_TO'),
-                  id:'REPORT_TO',
+                  //id:'REPORT_TO',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'REPORT_TO',
                   checked:false
@@ -876,7 +863,7 @@ TaskContext.prototype.editTaskProperties= function()
 //                  }
                 },{
                   boxLabel: _('ID_SELF_SERVICE'),
-                  id:'SELF_SERVICE',
+                  //id:'SELF_SERVICE',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'SELF_SERVICE',
                   checked:false
@@ -892,7 +879,7 @@ TaskContext.prototype.editTaskProperties= function()
 //                  }
                 },{
                   boxLabel: _('ID_STATIC_PARTIAL_JOIN_MULTIPLE_INSTANCES'),
-                  id:'STATIC_MI',
+                  //id:'STATIC_MI',
                   name: 'TAS_ASSIGN_TYPE',
                   inputValue: 'STATIC_MI',
                   checked:false
@@ -907,7 +894,7 @@ TaskContext.prototype.editTaskProperties= function()
 //                  }
                 },{
                   boxLabel: _('ID_CANCEL_PARTIAL_JOIN_MULTIPLE_INSTANCE'),
-                  id   : 'CANCEL_MI',
+                  //id   : 'CANCEL_MI',
                   name : 'TAS_ASSIGN_TYPE',
                   inputValue: 'CANCEL_MI',
                   checked:false
@@ -1138,7 +1125,7 @@ TaskContext.prototype.editTaskProperties= function()
               labelWidth: 200,
               items: [{
                   xtype: 'checkbox',
-                  id: 'ADHOC',
+                  //id: 'ADHOC',
                   fieldLabel: _('ID_ALLOW_ARBITARY_TRANSFER'),
                   inputValue:'ADHOC',
                   checked: false,
@@ -1164,7 +1151,7 @@ TaskContext.prototype.editTaskProperties= function()
                   items: [{
                       xtype: 'textarea',
                       fieldLabel: _('ID_CASE_TITLE'),
-                      id: 'caseTitle',
+                      //id: 'caseTitle',
                       name: 'TAS_DEF_TITLE',
                       height : 120,
                       //value: _5625.scope.workflow.taskDetails.TAS_ASSIGN_VARIABLE
@@ -1182,7 +1169,7 @@ TaskContext.prototype.editTaskProperties= function()
                         handler: function (s) {
                                 workflow.variablesAction = 'form';
                                 workflow.variable        = '@%23',
-                                workflow.fieldId         = 'caseTitle' ;
+                                workflow.fieldName         = 'TAS_DEF_TITLE' ;
                                 workflow.formSelected    = taskPropertiesTabs;
                                 var rowData = ProcMapObj.ExtVariables();
                                 console.log(rowData);
@@ -1200,7 +1187,7 @@ TaskContext.prototype.editTaskProperties= function()
                       border:false,
                       items: [{
                           xtype: 'textarea',
-                          id: 'caseDescription',
+                          //id: 'caseDescription',
                           fieldLabel: _('ID_CASE_DESCRIPTION'),
                           name: 'TAS_DEF_DESCRIPTION',
                           height : 120,
@@ -1219,7 +1206,7 @@ TaskContext.prototype.editTaskProperties= function()
                           handler: function (s) {
                             workflow.variablesAction = 'form';
                             workflow.variable = '@%23',
-                            workflow.fieldId= 'caseDescription' ;
+                            workflow.fieldName= 'TAS_DEF_DESCRIPTION' ;
                             workflow.formSelected = taskPropertiesTabs;
                             var rowData = ProcMapObj.ExtVariables();
                             console.log(rowData);
@@ -1280,11 +1267,11 @@ TaskContext.prototype.editTaskProperties= function()
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
-          
-                if(action.result.data.TAS_START== 0)
-                           workflow.checkStartingTask = false;
+                alert(action.result.data.TAS_START);
+                if(action.result.data.TAS_START== true)
+                           workflow.checkStartingTask = 'on';
                        else
-                           workflow.checkStartingTask = true;
+                           workflow.checkStartingTask = 'off';
 
   //To load the values of the selecte radio button in Assignment Rules
                        if(action.result.data.TAS_ASSIGN_TYPE=='BALANCED')
@@ -1293,8 +1280,8 @@ TaskContext.prototype.editTaskProperties= function()
                        else  if(action.result.data.TAS_ASSIGN_TYPE=='MANUAL')
                         {
                             form.items.items[4].items[1].checked=true;
-                            Ext.getCmp(ID).setValue(true);
-                            Ext.getCmp('BALANCED').setValue(true);
+                            //Ext.getCmp(ID).setValue(true);
+                            //taskPropertiesTabs.getForm().findField('TAS_ASSIGN_TYPE').setValue(true);
                         }
                        else if(action.result.data.TAS_ASSIGN_TYPE=='EVALUATE')
                             {
@@ -1333,8 +1320,9 @@ TaskContext.prototype.editTaskProperties= function()
 
 
                          if(action.result.data.TAS_ASSIGN_TYPE == 'EVALUATE')
-              form.findField('TAS_ASSIGN_VARIABLE').show();
+                            form.findField('TAS_ASSIGN_VARIABLE').show();
 
+                        
                      
        },
         failure:function(form, action) {
@@ -1388,14 +1376,20 @@ TaskContext.prototype.saveTaskProperties= function()
                  var tas_transfer_fly = saveTaskform['TAS_TRANSFER_FLY'];
                  var send_email = saveTaskform['SEND_EMAIL'];
                  saveTaskform['TAS_UID'] = taskId;
+                 alert(tas_start);
 
                  //Checking checkbox fields
-                 if(typeof tas_start != 'undefined' && tas_start != ''){
-                     if(tas_start == 'on')
-                         saveTaskform['TAS_START'] = 'TRUE';
-                     else
-                         saveTaskform['TAS_START'] = 'FALSE';
-                 }
+//                 if(typeof tas_start != 'undefined' && tas_start != ''){
+//                     if(tas_start == 'on')
+//                         saveTaskform['TAS_START'] = 'TRUE';
+//                     else
+//                         saveTaskform['TAS_START'] = 'FALSE';
+//                 }
+
+                    if(tas_start == 'on')
+                                 tas_start = true;
+                              else if(typeof tas_start == 'undefined')
+                                 tas_start = false;
                  if(typeof tas_transfer_fly != 'undefined' && tas_transfer_fly != ''){
                      if(tas_transfer_fly == 'on')
                          saveTaskform['TAS_TRANSFER_FLY'] = 'TRUE';
