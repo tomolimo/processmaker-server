@@ -1,4 +1,4 @@
-<?php 
+<?php
  /**
  * class.xpdl.php
  * @package workflow.engine.classes
@@ -35,20 +35,20 @@ require_once 'classes/model/Event.php';
  * @package workflow.engine.classes
  */
 class Xpdl extends processes
-{  
-  
+{
+
  /**
   * This function creates a new Process, defined in the object $oData
-  * @param array $aData 
+  * @param array $aData
   * @param array $tasks
   * @param string $pmFilename
   * @return void
   */
-  function createProcessFromDataXpdl ($oData,$tasks) 
+  function createProcessFromDataXpdl ($oData,$tasks)
   { $this->removeProcessRows ($oData->process['PRO_UID'] );
     $uid  = $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
-    $newTasks=$this->verifyTasks($uid,$tasks); 
+    $newTasks=$this->verifyTasks($uid,$tasks);
     $this->createRouteRowsXpdl($uid,$oData->routes,$newTasks);
     $this->createLaneRows($oData->lanes);
     $this->createDynaformRows($oData->dynaforms);
@@ -71,7 +71,7 @@ class Xpdl extends processes
     $this->createEventRows(isset($oData->event) ? $oData->event : array());
     $this->createCaseSchedulerRows(isset($oData->caseScheduler) ? $oData->caseScheduler : array());
  }
- 
+
  /**
   * this function creates a new Process, defined in the object $oData
   * @param string $sProUid
@@ -83,7 +83,7 @@ class Xpdl extends processes
     $this->removeProcessRows ($oData->process['PRO_UID'] );
     $uid  = $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
-    $newTasks=$this->verifyTasks($uid,$tasks); 
+    $newTasks=$this->verifyTasks($uid,$tasks);
     $this->createRouteRowsXpdl($uid,$oData->routes,$newTasks);
     $this->createLaneRows ($oData->lanes );
     $this->createDynaformRows ($oData->dynaforms );
@@ -105,20 +105,20 @@ class Xpdl extends processes
     $this->createFieldCondition($oData->fieldCondition, $oData->dynaforms);
     $this->createEventRows( $oData->event);
     $this->createCaseSchedulerRows( $oData->caseScheduler );
-    
+
  }
  /**
   * this function creates a new Process, defined in the object $oData
   * @param string $sProUid
   * @return boolean
   */
-  function createProcessFromDataPmxml ($oData ) 
+  function createProcessFromDataPmxml ($oData )
   {
     $this->removeProcessRows ($oData->process['PRO_UID'] );
     $this->createProcessRow($oData->process);
     $this->createDynaformRows($oData->dynaforms);
   }
- 
+
  /**
   * This function update the dynaforms
   * @param string $sProUid
@@ -135,18 +135,18 @@ class Xpdl extends processes
 //   }
 //   $this->createDynaformRows ($oData->dynaforms );
 // }
- 
+
  /**
   * This function create the subProcess from data
   * @param  array $oData
   * @param  array $tasks
-  * @return void 
+  * @return void
   */
-  function createSubProcessFromDataXpdl ($oData,$tasks) 
+  function createSubProcessFromDataXpdl ($oData,$tasks)
   { $this->removeProcessRows ($oData->process['PRO_UID'] );
     $uid = $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
-    $newTasks = $this->verifyTasks($uid,$tasks); 
+    $newTasks = $this->verifyTasks($uid,$tasks);
     $this->createRouteRowsXpdl($uid,$oData->routes,$newTasks);
     $this->createLaneRows($oData->lanes);
     $this->createDynaformRows($oData->dynaforms);
@@ -169,16 +169,16 @@ class Xpdl extends processes
     $this->createEventRows(isset($oData->event) ? $oData->event : array());
     $this->createCaseSchedulerRows(isset($oData->caseScheduler) ? $oData->caseScheduler : array());
   }
- 
+
  /**
   * This function verify the tasks of a process that was created with the tasks they were sent to the process
   * @param  string $oProUid
   * @param  array $fieldsTasks
-  * @return array 
+  * @return array
   */
   function verifyTasks($sProUid,$fieldsTasks)
-  {  
-    $process = new Process( ); 
+  {
+    $process = new Process( );
     $oData->tasks = $this->getTaskRows($sProUid);
     $findTask= 0;
     $findNext= 0;
@@ -196,7 +196,7 @@ class Xpdl extends processes
     }
     return $fieldsTasks;
   }
- 
+
  /**
   * This function creates the rows of the process
   * @param string $sProUid
@@ -205,8 +205,8 @@ class Xpdl extends processes
   * @return void
   */
   function createRouteRowsXpdl($sProUid,$routes,$fieldsTasks)
-  { 
-    $process = new Process( ); 
+  {
+    $process = new Process( );
     $oData->tasks = $this->getTaskRows($sProUid);
     foreach ($routes as $taskRoute => $idRoute){
       $findTask = 0;
@@ -233,9 +233,9 @@ class Xpdl extends processes
          $routes[$taskRoute]['ROU_NEXT_TASK']=$id;
       }
     }
-    $this->createRouteRows($routes); 
+    $this->createRouteRows($routes);
   }
-  
+
  /**
   * Create Sub Process rows from an array, removing those subprocesses with
   * the same UID.
@@ -244,7 +244,7 @@ class Xpdl extends processes
   */
   function createSubProcessRowsXpdl ($sProUid,$SubProcess,$tasks )
   {
-    $process = new Process(); 
+    $process = new Process();
     $oData->tasks = $this->getTaskRows($sProUid);
     foreach ( $SubProcess as $key => $row ) {
       $findTask = 0;
@@ -265,7 +265,7 @@ class Xpdl extends processes
     }
     return;
   }
-  
+
  /**
   * this function find the id of the task
   * @param string $idTask
@@ -280,16 +280,16 @@ class Xpdl extends processes
       }
     }
   }
-  
+
  /**
-  * This function create the file .xpdl from a process 
+  * This function create the file .xpdl from a process
   * @param string $sProUid
   * @return void
   */
-  function xmdlProcess ( $sProUid = '') 
+  function xmdlProcess ( $sProUid = '')
   {
     $oProcess = new Process();
-    $oData->process           = $this->getProcessRow( $sProUid, false); 
+    $oData->process           = $this->getProcessRow( $sProUid, false);
     $oData->tasks             = $this->getTaskRows( $sProUid );
     $oData->routes            = $this->getRouteRows( $sProUid );
     $oData->lanes             = $this->getLaneRows( $sProUid );
@@ -372,9 +372,9 @@ class Xpdl extends processes
       }
     }
     $data = $this->createPool($process,$coordinateMaximumX + 60,$coordinateMaximumY +60);
-    fwrite ($xml, '<?xml version="1.0" encoding="utf-8"?>'); 
+    fwrite ($xml, '<?xml version="1.0" encoding="utf-8"?>');
     fwrite ($xml, $data);
-    $artifacts   = '<Artifacts>'; 
+    $artifacts   = '<Artifacts>';
     $artifacts  .= $this->createArtifacts($lanes,'0');
     $dataProcess ='
    <WorkflowProcesses>';
@@ -425,13 +425,13 @@ class Xpdl extends processes
     $result['FILENAME_LINKXPDL']= $filenameLink;
     return $result;
   }
-  
+
  /**
   * This function create the pool from the process
   * @param  array $process
   * @param  string $coordinateMaximumX
   * @param  string $coordinateMaximumY
-  * @return string 
+  * @return string
   */
   function createPool ($process,$coordinateMaximumX,$coordinateMaximumY)
   {
@@ -471,12 +471,12 @@ class Xpdl extends processes
   ';
     return $data;
   }
-  
+
  /**
   * This function generated the Artifacts of a file. XPDL
   * @param  array $lanes
   * @param  string $id
-  * @return string 
+  * @return string
   */
   function createArtifacts($lanes,$id)
   {
@@ -514,15 +514,15 @@ class Xpdl extends processes
     }
     return $artifacts;
   }
-  
+
  /**
-  * This function creates SubProcesses  
+  * This function creates SubProcesses
   * @param  array $tasks
   * @param  array $subProcess
-  * @return array 
+  * @return array
   */
   function createSubProcessesXpdl($subProcess,$tasks)
-  { 
+  {
     $activitySets = '';
     $dataCreated  = '';
     $artifacts    = '';
@@ -573,11 +573,11 @@ class Xpdl extends processes
     $fields['ARTIFACTS'] = $artifacts;
     return $fields;
   }
-  
+
  /**
-  * This function creates activities from the tasks 
+  * This function creates activities from the tasks
   * @param  array $tasks
-  * @return array 
+  * @return array
   */
   function createActivitiesXpdl($tasks,$events,$scheduler)
   {
@@ -604,7 +604,7 @@ class Xpdl extends processes
         if($val['TAS_TYPE']== 'SUBPROCESS'){
           $implementation = '
          <BlockActivity ActivitySetId="'.$val['TAS_UID'].'" />';
-        } 
+        }
         if(isset($val['TAS_DESCRIPTION'])){
           $description = $val['TAS_DESCRIPTION'];
         }
@@ -667,13 +667,13 @@ class Xpdl extends processes
         }
       }
     }
-    
+
     $aux = $events;
     foreach ($events as $key => $row) {
       $aux[$key]= $row['TAS_UID'];
     }
     if(sizeof($events)> 0){
-      array_multisort($aux,SORT_ASC,$events); 
+      array_multisort($aux,SORT_ASC,$events);
       unset($aux);
     }
     $findTask   = 0;
@@ -709,7 +709,7 @@ class Xpdl extends processes
             $port                    = $arrayTasks[$id]['PORT'];
            }
         }
-        
+
         $description      = $val['EVN_DESCRIPTION'];
         $arrayTo          = $val['EVN_ACTION_PARAMETERS'];
         foreach($arrayTo as $idTo => $valueTo){
@@ -751,7 +751,7 @@ class Xpdl extends processes
             <IntermediateEvent Trigger="Message" Implementation="Other">
               <TriggerResultMessage CatchThrow="THROW">
               <Message Id="'.$idEvent.'" From="admin" To="'.$to.'" Name="'.$description.'">
-              </Message>  
+              </Message>
               </TriggerResultMessage>
             </IntermediateEvent>
           </Event>
@@ -775,7 +775,7 @@ class Xpdl extends processes
           </ConnectorGraphicsInfos>
         </Transition>';
         if($findTask == 0){
-          $idTasks['ID']      = $idTask; 
+          $idTasks['ID']      = $idTask;
           $idTasks['X']       = $coordinateX;
           $idTasks['Y']       = $coordinateY;
           $idTasks['FIRSTX']  = $coordinateX;
@@ -784,7 +784,7 @@ class Xpdl extends processes
           $idTasks['YM']      = $coordinateYM;
           $idTasks['PORT']    = $port;
           $arrayTasks[]  = $idTasks;
-        }       
+        }
       }
     }
     $idTasks    = array();
@@ -848,7 +848,7 @@ class Xpdl extends processes
           </ConnectorGraphicsInfos>
         </Transition>';
         if($findTask == 0){
-          $idTasks['ID']      = $idTask; 
+          $idTasks['ID']      = $idTask;
           $idTasks['X']       = $coordinateX;
           $idTasks['Y']       = $coordinateY;
           $idTasks['FIRSTX']  = $coordinateX;
@@ -909,7 +909,7 @@ class Xpdl extends processes
           </ConnectorGraphicsInfos>
         </Transition>';
          if($findTask == 0){
-          $idTasks['ID']      = $idTask; 
+          $idTasks['ID']      = $idTask;
           $idTasks['X']       = $coordinateX;
           $idTasks['Y']       = $coordinateY;
           $idTasks['FIRSTX']  = $coordinateX;
@@ -924,12 +924,12 @@ class Xpdl extends processes
     $data['TASK_HIDDEN']= $taskHidden;
     return $data;
   }
-  
+
  /**
-  * This function creates transitions 
+  * This function creates transitions
   * @param  array $routes
   * @param  array $tasks
-  * @return array 
+  * @return array
   */
   function createTransitionsXpdl($routes,$tasks,$taskHidden)
   {
@@ -969,7 +969,7 @@ class Xpdl extends processes
       $aux[$key]= $row['ROU_NEXT_TASK'];
     }
     if(sizeof($arraySecJoin)> 0){
-      array_multisort($aux,SORT_ASC,$arraySecJoin); 
+      array_multisort($aux,SORT_ASC,$arraySecJoin);
       unset($aux);
     }
     foreach ($routes as $key => $row) {
@@ -977,7 +977,7 @@ class Xpdl extends processes
       $case[$key]   = $row['ROU_CASE'];
     }
     if(sizeof($routes)> 0){
-      array_multisort($uid, SORT_ASC, $case, SORT_ASC, $routes); 
+      array_multisort($uid, SORT_ASC, $case, SORT_ASC, $routes);
     }
     $routes = array_merge($routes,$arraySecJoin);
     $routesTasks     = $routes;
@@ -1195,7 +1195,7 @@ class Xpdl extends processes
         </Transition>';
               }
             }
-            else{ 
+            else{
               if($nextTask !="-1"){
                 $transitions.='
         <Transition Id="'.G::generateUniqueID().'" From="'.$routeEvaluate.'" To="'.$nextTask.'" Name="">
@@ -1358,7 +1358,7 @@ class Xpdl extends processes
           <Description />
           <ExtendedAttributes />
           <ConnectorGraphicsInfos>
-            <ConnectorGraphicsInfo ToolId="Processmaker" BorderColor="0" FromPort="2" ToPort="1"> 
+            <ConnectorGraphicsInfo ToolId="Processmaker" BorderColor="0" FromPort="2" ToPort="1">
             </ConnectorGraphicsInfo>
           </ConnectorGraphicsInfos>
         </Transition>';
@@ -1507,7 +1507,7 @@ class Xpdl extends processes
           $end      = 0;
           $endEvent = 0;
         }
-        else{ 
+        else{
           if ($typeRoute == "SEQUENTIAL"){
           $transitions.='
         <Transition Id="'.$idRoute.'" From="'.$idTask.'" To="'.$nextTask.'" Name="">
@@ -1551,7 +1551,7 @@ class Xpdl extends processes
             <IntermediateEvent Trigger="Message" Implementation="Other">
               <TriggerResultMessage CatchThrow="THROW">
               <Message Id="'.$idEvent.'" From="'.$userFrom.'" To="'.$userTo.'" Name="'.$description.'">
-              </Message>  
+              </Message>
               </TriggerResultMessage>
             </IntermediateEvent>
           </Event>
@@ -1585,13 +1585,13 @@ class Xpdl extends processes
     $data['TRANSITION'] = $transitions;
     return $data;
   }
-  
+
  /**
   * Get the process Data from a filename .XPDL
   * @param  array $pmFilename
   * @return void
   */
-  function getProcessDataXpdl ( $pmFilename  ) 
+  function getProcessDataXpdl ( $pmFilename  )
   {
     if (! file_exists($pmFilename) )
       throw ( new Exception ( 'Unable to read uploaded file, please check permissions. '));
@@ -1631,8 +1631,8 @@ class Xpdl extends processes
         if($content != array()){
           $output  = $content->nodeValue;
         }
-        if(strpos($name,'Pools')!== false){ 
-          while ($content) { 
+        if(strpos($name,'Pools')!== false){
+          while ($content) {
             if ($content->nodeType == XML_ELEMENT_NODE) {
               $nameChild    = $content->nodeName;
               $contentChild = $content->firstChild;
@@ -1648,8 +1648,8 @@ class Xpdl extends processes
             $content = $content->nextSibling;
           }
         }
-        if(strpos($name,'Artifacts')!== false){ 
-          while ($content) { 
+        if(strpos($name,'Artifacts')!== false){
+          while ($content) {
             if ($content->nodeType == XML_ELEMENT_NODE) {
               $nameChild    = $content->nodeName;
               $contentChild = $content->firstChild;
@@ -1676,7 +1676,7 @@ class Xpdl extends processes
           }
         }
         if(strpos($name,'WorkflowProcesses')!== false){
-          while ($content) { 
+          while ($content) {
             if ($content->nodeType == XML_ELEMENT_NODE) {
               $nameChild    = $content->nodeName;
               $contentChild = $content->firstChild;
@@ -1705,7 +1705,7 @@ class Xpdl extends processes
                         $arrayScheduler = $activities['SCHEDULER'];
                         $arrayMessages  = $activities['MESSAGES'];
                       }
-                      
+
                       if(strpos($nameNode,'Transitions')!== false){
                         $transitions      = $this->createTransitions($contentNode,$oData->tasks,$arrayRoutes,$endArray,$startArray,$idProcess,$arrayScheduler,$arrayMessages);
                         $oData->routes    = $transitions['ROUTES'];
@@ -1727,7 +1727,7 @@ class Xpdl extends processes
         }
       }
       $node = $node->nextSibling;
-    } 
+    }
     $oData->lanes = array();
     $numberLanes = 0;
     foreach($arrayLanes as $key => $value) {
@@ -1779,19 +1779,19 @@ class Xpdl extends processes
     $oData->fieldCondition    = array();
     $oData->event             = $this->createEventMessages($arrayMessages,$idProcess);
     $oData->triggers            = array();
-    $oData->caseScheduler     = $this->createScheduler($arrayScheduler,$idProcess);    
+    $oData->caseScheduler     = $this->createScheduler($arrayScheduler,$idProcess);
     $oData->dynaformFiles     = array();
     $numberTransitions=sizeof($routeTransitions);
     if($numberTransitions > 0){
       $routesArray   = $this->createGateways($routeTransitions,$endArray,$oData->routes,$numberRoutes,$idProcess,$taskHidden);
       $oData->routes = $routesArray;
     }
-    
+
     //print_r($oData);die;
     //print_r($arrayMessages);die;
     return $oData;
   }
-  
+
  /**
   * This function sort a array
   * @param  array $fields
@@ -1804,14 +1804,14 @@ class Xpdl extends processes
       $aux[$key]  = $row['FROM'];
     }
     array_multisort($aux,SORT_ASC,$fields);
-    return $fields; 
+    return $fields;
   }
-  
+
  /**
   * This functions verify the routes and removes the routes that are repeated
   * @param  array $routeTransitions
   * @param  array $endArray
-  * @return array 
+  * @return array
   */
   function verifyRoutes ($routeTransitions,$endArray,$taskHidden)
   { $findFirst   = 0;
@@ -1819,7 +1819,7 @@ class Xpdl extends processes
     $taskTo      = '';
     $taskFrom    = '';
     $routeArrayT = $routeTransitions;
-    $findHidden  = 0;    
+    $findHidden  = 0;
     foreach ($routeTransitions as $valRoute => $value){
       $findHidden = 0;
       if($value['ROUTE'] == $firstRoute){
@@ -1955,11 +1955,11 @@ class Xpdl extends processes
     }
     return $routeArrayT2;
   }
-   
+
  /**
-  * this function creates an array for the process that will be created according to the data given in an array 
+  * this function creates an array for the process that will be created according to the data given in an array
   * @param  array $fields
-  * @return array $process 
+  * @return array $process
   */
   function createProcess($fields)
   { $process = array();
@@ -1990,12 +1990,12 @@ class Xpdl extends processes
     $process['PRO_DESCRIPTION']   = $fields['DESCRIPTION'];
     return $process;
   }
-  
+
  /**
-  * this function creates an array for the subProcess that will be created,according to the data given in an array 
+  * this function creates an array for the subProcess that will be created,according to the data given in an array
   * @param  array $contentNode
   * @param  array $arrayLanes
-  * @return array 
+  * @return array
   */
   function createSubProcesses($contentNode,$arrayLanes)
   { $activities       = array();
@@ -2038,7 +2038,7 @@ class Xpdl extends processes
           $activities[$number]['ID_PROCESS']= $idSetActivity ;
           while ($contentChild){
             if ($contentChild->nodeType == XML_ELEMENT_NODE){
-              
+
               $nameChild    = $contentChild->nodeName;
               $contentFirst = $contentChild->firstChild;
               if(strpos($nameChild,'Activities')!== false){
@@ -2050,7 +2050,7 @@ class Xpdl extends processes
                 $arrayScheduler    = $arrayActivities['SCHEDULER'];
                 $arrayMessages     = $arrayActivities['MESSAGES'];
               }
-              
+
               if(strpos($nameChild,'Transitions')!== false){
                 $transitions        = $this->createTransitions($contentFirst,$subProcess->tasks,$arrayRoutes,$endArray,$startArray,$idSetActivity,$arrayScheduler,$arrayMessages);
                 $subProcess->routes = $transitions['ROUTES'];
@@ -2062,7 +2062,7 @@ class Xpdl extends processes
             }
             $contentChild = $contentChild->nextSibling;
           }
-          
+
           $values = $subProcess;
           if($isSubProcess == 1){
             $arraySubProcesses[$numberSub]['ID_PROCESS']=$idSetActivity ;
@@ -2092,7 +2092,7 @@ class Xpdl extends processes
           $subProcess->reportTablesVars  = array();
           $subProcess->stepSupervisor    = array();
           $subProcess->objectPermissions = array();
-          $subProcess->subProcess        = array();          
+          $subProcess->subProcess        = array();
           $subProcess->caseTracker       = array();
           $subProcess->caseTrackerObject = array();
           $subProcess->stage             = array();
@@ -2104,14 +2104,14 @@ class Xpdl extends processes
           if($numberTransitions > 0){
             $routesArray = $this->createGateways($routeTransitions,$endArray,$subProcess->routes,$numberRoutes,$idProcess,'');
             $subProcess->routes    = $routesArray;
-          }                   
+          }
           $numberSubProcess = 0;
           foreach($subProcess->tasks as $key => $value) {
             if($value['TAS_TYPE'] === 'SUBPROCESS'){
               $fields['TASK_PARENT']   = $value['TAS_UID'];
               $idSubProcess            = $value['TAS_UID'];
               $newTasks = $this->getTaskRows($idSubProcess);
-              
+
               $findTask = 0;
               foreach ($newTasks as $keyLane => $val ) {
                 if($val['TAS_START']==='TRUE' and $findTask == 0){
@@ -2130,13 +2130,13 @@ class Xpdl extends processes
       }
       $contentNode = $contentNode->nextSibling;
     }
-    $arrayActivities['SUBPROCESSES'] = $arraySubProcesses;    
+    $arrayActivities['SUBPROCESSES'] = $arraySubProcesses;
     $arrayActivities['SUB_PROCESS'] = $activities;
     return $arrayActivities;
   }
-  
+
  /**
-  * This function creates an array for the task that will be created according to the data given in an array 
+  * This function creates an array for the task that will be created according to the data given in an array
   * @param  array $fields
   * @return array $task
   */
@@ -2234,12 +2234,12 @@ class Xpdl extends processes
     return $task;
   }
 /**
-  * This function creates an array for the route that will be created according to the data given in an array 
+  * This function creates an array for the route that will be created according to the data given in an array
   * @param  array $fields
-  * @return array $route 
+  * @return array $route
   */
   function createRoute($fields)
-  { 
+  {
     $route = array();
     $route['ROU_UID']          = $fields['ROU_UID'];
     $route['ROU_PARENT']       =  0;
@@ -2256,14 +2256,14 @@ class Xpdl extends processes
     $route['ROU_TARGETANCHOR'] =  0;
     return $route;
   }
-  
+
  /**
-  * This function creates an array for the subProcess that will be created according to the data given in an array 
+  * This function creates an array for the subProcess that will be created according to the data given in an array
   * @param  array $fields
-  * @return array $route 
+  * @return array $route
   */
   function createSubProcess($fields)
-  { 
+  {
     $subProcess = array();
     $subProcess['SP_UID']              = $fields['TAS_UID'];
     $subProcess['PRO_UID']             = $fields['TASK_PARENT'];
@@ -2279,18 +2279,18 @@ class Xpdl extends processes
     $subProcess['SP_GRID_IN']          = '';
     return $subProcess;
   }
-  
+
  /**
-  * This function creates an array for the routes that are not sequential that will be created according to the data given in an array 
+  * This function creates an array for the routes that are not sequential that will be created according to the data given in an array
   * @param  array $routeTransitions
   * @param  array $endArray
   * @param  array $dataRoutes
   * @param  array $numberRoutes
   * @param  string $idProcess
-  * @return array $dataRoutes 
+  * @return array $dataRoutes
   */
   function createGateways($routeTransitions,$endArray,$dataRoutes,$numberRoutes,$idProcess,$taskHidden)
-  {  
+  {
     $valueCase                = '';
     $value                    = 1;
     $valueC                   = 1;
@@ -2313,7 +2313,7 @@ class Xpdl extends processes
       $dataRoutes[$numberRoutes]['ROU_PARENT'] =  0;
       $dataRoutes[$numberRoutes]['PRO_UID']    =  $idProcess;
       $dataRoutes[$numberRoutes]['TAS_UID']    =  $value['FROM'];
-      
+
       if($isEventEnd == 0){
         $dataRoutes[$numberRoutes]['ROU_NEXT_TASK'] = $value['TO'];
       }
@@ -2349,14 +2349,14 @@ class Xpdl extends processes
     }
     return $dataRoutes;
   }
-  
+
   /**
-  * This function creates an array for the lane that will be created according to the data given in an array 
+  * This function creates an array for the lane that will be created according to the data given in an array
   * @param  array $lanes
   * @return array $lane
   */
   function createLanesPM($array,$idProcess)
-  { 
+  {
     $arrayLanes = array();
     $field      = array();
     foreach ($array as $key=> $value){
@@ -2371,9 +2371,9 @@ class Xpdl extends processes
     }
     return $arrayLanes;
   }
-  
+
 /**
-  * This function creates an array for the lane that will be created according to the data given in an array 
+  * This function creates an array for the lane that will be created according to the data given in an array
   * @param  array $lanes
   * @return array $lane
   */
@@ -2390,14 +2390,14 @@ class Xpdl extends processes
     $lane['SWI_HEIGHT']= $lanes['HEIGHT'];
     return $lane;
   }
-  
+
   /**
-  * This function creates an array for the lane that will be created according to the data given in an array 
+  * This function creates an array for the lane that will be created according to the data given in an array
   * @param  array $lanes
   * @return array $lane
   */
   function createLanesNewPM($array)
-  { 
+  {
     $arrayLanes = array();
     $field      = array();
     foreach ($array as $key=> $value){
@@ -2409,12 +2409,13 @@ class Xpdl extends processes
         $field['3']  = $value['SWI_Y'];
         $field['4']  = $value['SWI_WIDTH'];
         $field['5']  = $value['SWI_HEIGHT'];
+        $field['6']  = $value['SWI_NEXT_UID'];
         $arrayLanes[]= $field;
       }
     }
     return $arrayLanes;
   }
-  
+
  /**
   * This function creates activities according the content of the node
   * @param  object $contentNode
@@ -2423,7 +2424,7 @@ class Xpdl extends processes
   * @return array $result
   */
   function createActivities($contentNode,$idProcess,$activitySet)
-  { 
+  {
     $result         = array();
     $numberTasks    = 0;
     $posRoutes      = 0;
@@ -2521,7 +2522,7 @@ class Xpdl extends processes
   * @return array $result
   */
   function createEventMessages($fields,$idProcess)
-  {  
+  {
     $result = array();
     $event  = array();
     $example       = new Derivation();
@@ -2550,14 +2551,14 @@ class Xpdl extends processes
     }
     return $result;
   }
-  
+
   /**
   * This function creates the scheduler
   * @param  array $fields
   * @return array $result
   */
   function createScheduler($fields,$idProcess)
-  {  
+  {
     $result = array();
     $example       = new Derivation();
     foreach($fields as $key => $value){
@@ -2584,13 +2585,13 @@ class Xpdl extends processes
   * @return array $result
   */
   function calculateTimeScheduler($time)
-  {  
+  {
     $result = array();
     $result = split(' ',$time);
     //print_r($result);
     return $result;
   }
-    
+
    /**
   * This function creates the array scheduler
   * @param  string $time
@@ -2598,7 +2599,7 @@ class Xpdl extends processes
   * @return array $result
   */
    function createArrayScheduler($fields,$idProcess)
-  {  
+  {
     $result['SCH_UID']               = $fields['ID'];
     $result['SCH_DEL_USER_NAME']     = '';
     $result['SCH_DEL_USER_PASS']     = '';
@@ -2617,15 +2618,15 @@ class Xpdl extends processes
     $result['SCH_DAYS_PERFORM_TASK'] = '';
     $result['SCH_EVERY_DAYS']        = '0';
     $result['SCH_WEEK_DAYS']         = '0|0|0|0|0|0|0';
-    $result['SCH_START_DAY']         = '';  
+    $result['SCH_START_DAY']         = '';
     $result['SCH_MONTHS']            = '0|0|0|0|0|0|0|0|0|0|0|0';
     $result['SCH_END_DATE']          = $fields['TIME'];
-    $result['SCH_REPEAT_EVERY']      = ''; 
+    $result['SCH_REPEAT_EVERY']      = '';
     $result['SCH_REPEAT_UNTIL']      = '';
     $result['SCH_REPEAT_STOP_IF_RUNNING'] = '';
     return $result;
   }
-  
+
  /**
   * This function creates transitions according the content of the node
   * @param  object $contentNode
@@ -2636,9 +2637,9 @@ class Xpdl extends processes
   * @param  string $idProcess
   * @return array $result
   */
-  
+
   function createTransitions($contentNode,$dataTasks,$arrayRoutes,$endArray,$startArray,$idProcess,$schedulerArray,$messages)
-  { 
+  {
     $numberRoutes     = 0;
     $posT             = 0;
     $output           = '';
@@ -2753,7 +2754,7 @@ class Xpdl extends processes
                 $findRoute  = 1;
               }
               else{
-                
+
                 $contendHidden = $contentTransition;
                 $fieldsXY                                 = $this->findCoordinatesTransition($to,$arrayRoutes);
                 $hidden['ID_TASK']                        = G::generateUniqueID();
@@ -2803,11 +2804,11 @@ class Xpdl extends processes
             }
           }
           if($sequencial == 1){
-            while ($contentTransition) { 
+            while ($contentTransition) {
               $nameCondition    = $contentTransition->nodeName;
               $contentCondition = $contentTransition->firstChild;
               if(strpos($nameCondition,'Condition')!== false){
-                while ($contentCondition) { 
+                while ($contentCondition) {
                   $nameExpression    = $contentCondition->nodeName;
                   $contentCondition1 = '';
                   if(strpos($nameExpression,'Expression')!== false){
@@ -2885,10 +2886,10 @@ class Xpdl extends processes
 /**
   * this function creates a array according to the data given in a node
   * @param  object $contentNode
-  * @return array 
+  * @return array
   */
   function createActivity($contentNode)
-  { 
+  {
     $coordinates   = array();
     $event         = '';
     $typeRoute     = '';
@@ -2901,7 +2902,7 @@ class Xpdl extends processes
     $time          = '';
     $typeTime      = '';
     $isMessage     = 0;
-    while ($contentNode) { 
+    while ($contentNode) {
       if ($contentNode->nodeType == XML_ELEMENT_NODE) {
         $nameChild    = $contentNode->nodeName;
         $contentChild = $contentNode->firstChild;
@@ -2916,7 +2917,7 @@ class Xpdl extends processes
           $idSubProcess = trim(str_replace('-','',$contentNode->getAttribute('ActivitySetId')));
         }
         if(strpos($nameChild,'Event')!== false){
-          while ($contentChild) { 
+          while ($contentChild) {
             if ($contentChild->nodeType == XML_ELEMENT_NODE) {
               $nameInfo    = $contentChild->nodeName;
               $contentInfo = $contentChild->firstChild;
@@ -2940,7 +2941,7 @@ class Xpdl extends processes
           }
           if($trigger != 'None'){
             if($trigger == 'Timer'){
-              while ($contentInfo) { 
+              while ($contentInfo) {
                 $nameTrigger    = $contentInfo->nodeName;
                 $contentTrigger = $contentInfo->firstChild;
                 if(strpos($nameTrigger,'TriggerTimer')!== false){
@@ -2957,7 +2958,7 @@ class Xpdl extends processes
             if($trigger == 'Message'){
               $typeMessage = '';
               $isMessage   = 1;
-              while ($contentInfo) { 
+              while ($contentInfo) {
                 $nameTrigger    = $contentInfo->nodeName;
                 $contentTrigger = $contentInfo->firstChild;
                 if(strpos($nameTrigger,'TriggerResultMessage')!== false){
@@ -2968,7 +2969,7 @@ class Xpdl extends processes
             }
           }
         }
-        
+
         if(strpos($nameChild,'Route')!== false){
           $typePM        = '';
           $typeRoute     = $contentNode->getAttribute('GatewayType');
@@ -3027,20 +3028,20 @@ class Xpdl extends processes
       $contentNode = $contentNode->nextSibling;
     }
     return $coordinates;
-  } 
-  
+  }
+
  /**
   * This function return the type and the condition of a discriminator
   * @param  object $contentNode
-  * @return array 
-  */  
+  * @return array
+  */
   function createExtended($contentNode)
-  { 
+  {
     $result = array();
     $result['TYPE']= '';
     $result['CONDITION'] = '';
     $contentExtended = $contentNode;
-    while ($contentExtended) { 
+    while ($contentExtended) {
       if ($contentExtended->nodeType == XML_ELEMENT_NODE) {
         $nameChildExtended    = $contentExtended->nodeName;
         $contentChildExtended = $contentExtended->firstChild;
@@ -3058,21 +3059,21 @@ class Xpdl extends processes
     }
     return $result;
   }
-  
+
 /**
   * This function find the coordinates of a object
   * @param object $contentNode
-  * @return array 
+  * @return array
   */
   function findCoordinates($contentNode)
-  { 
+  {
     $coordinates = array();
-    while ($contentNode) { 
+    while ($contentNode) {
       if ($contentNode->nodeType == XML_ELEMENT_NODE) {
         $nameChild    = $contentNode->nodeName;
         $contentChild = $contentNode->firstChild;
         if(strpos($nameChild,'NodeGraphicsInfos')!== false){
-          while ($contentChild) { 
+          while ($contentChild) {
             if ($contentChild->nodeType == XML_ELEMENT_NODE) {
               $nameInfo    = $contentChild->nodeName;
               $contentInfo = $contentChild->firstChild;
@@ -3081,7 +3082,7 @@ class Xpdl extends processes
                 $coordinates['Width']       = $contentChild->getAttribute('Width');
                 $coordinates['BorderColor'] = $contentChild->getAttribute('BorderColor');
                 $coordinates['FillColor']   = $contentChild->getAttribute('FillColor');
-                while ($contentInfo) { 
+                while ($contentInfo) {
                   $nameCoordinate    = $contentInfo->nodeName;
                   $contentCoordinate = $contentInfo->firstChild;
 
@@ -3091,7 +3092,7 @@ class Xpdl extends processes
                   }
                   $contentInfo = $contentInfo->nextSibling;
                 }
-                
+
               }
             }
             $contentChild = $contentChild->nextSibling;
@@ -3102,15 +3103,15 @@ class Xpdl extends processes
     }
     return $coordinates;
   }
-  
+
 /**
   * This function find the coordinates of a object
   * @param string $idRoute
   * @param array $aRoutes
-  * @return array 
+  * @return array
   */
   function findCoordinatesTransition($idRoute,$aRoutes)
-  { 
+  {
     $coordinates = array();
     $size        = sizeof($aRoutes);
     $count       = 0;
@@ -3125,7 +3126,7 @@ class Xpdl extends processes
     }
     return $coordinates;
   }
-  
+
  /**
   * This function create the array Routes
   * @param array $dataTasks
@@ -3133,10 +3134,10 @@ class Xpdl extends processes
   * @param array $aEvents
   * @param array $aGateways
   * @param string $idProcess
-  * @return array 
+  * @return array
   */
   function createArrayRoutes($dataTasks,$arrayRoutes,$aEvents,$aGateways,$aEnd,$idProcess)
-  { 
+  {
     $numberRoutes     = 0;
     $posT             = 0;
     $routeTransitions = array();
@@ -3168,7 +3169,7 @@ class Xpdl extends processes
             $valueRoute = $value['0'];
             $typeRoute  = $value['1'];
             $positionX  = $value['2'];
-            $positionY  = $value['3']; 
+            $positionY  = $value['3'];
             $sequencial = 1;
             $findRoute  = 1;
           }
@@ -3202,11 +3203,11 @@ class Xpdl extends processes
             $valueRoute = $value['0'];
             $typeRoute  = $value['1'];
             $positionX  = $value['2'];
-            $positionY  = $value['3']; 
+            $positionY  = $value['3'];
             $sequencial = 1;
             $findRoute  = 1;
           }
-          else{ 
+          else{
             $hidden['ID_TASK']                        = G::generateUniqueID();
             $hidden['ID_PROCESS']                     = $idProcess;
             $hidden['TAS_TITLE']                      = '';
@@ -3327,12 +3328,12 @@ class Xpdl extends processes
     $result['HIDDEN']     = $taskHidden;
     return $result;
   }
-  
+
  /**
   * This function convert the array events in a array with the events end
   * @param object $aEvents
   * @param string $idProcess
-  * @return array 
+  * @return array
   */
   function convertArrayEnd($aEvents,$idProcess)
   {
@@ -3349,7 +3350,7 @@ class Xpdl extends processes
     }
     return $endArray;
   }
-  
+
  /**
   * This function create transitions from the array transitions for the new processmap
   * @param array $task
@@ -3358,7 +3359,7 @@ class Xpdl extends processes
   * @param array $countEvents
   * @param array $arrayRoutes
   * @param array $countRoutes
-  * @return array 
+  * @return array
   */
   function createTransitionsPM($tasks,$routes,$events,$countEvents,$arrayRoutes,$countRoutes)
   {
@@ -3385,7 +3386,7 @@ class Xpdl extends processes
     $countG            = 0;
     $gatPosX           = 0;
     $gatPosY           = 0;
-    
+
     foreach ($routes as $key => $row) {
       if($row['ROU_TYPE'] == 'SEC-JOIN'){
         $arraySecJoin[$position] = array();
@@ -3399,7 +3400,7 @@ class Xpdl extends processes
       $aux[$key]= $row['ROU_NEXT_TASK'];
     }
     if(sizeof($arraySecJoin) > 0){
-      array_multisort($aux,SORT_ASC,$arraySecJoin); 
+      array_multisort($aux,SORT_ASC,$arraySecJoin);
       unset($aux);
     }
     foreach ($routes as $key => $row) {
@@ -3407,7 +3408,7 @@ class Xpdl extends processes
       $case[$key]   = $row['ROU_CASE'];
     }
     if(sizeof($routes) > 0){
-      array_multisort($uid, SORT_ASC, $case, SORT_ASC, $routes); 
+      array_multisort($uid, SORT_ASC, $case, SORT_ASC, $routes);
     }
     $routes = array_merge($routes,$arraySecJoin);
     foreach ($routes as $key => $val ) {
@@ -3442,7 +3443,7 @@ class Xpdl extends processes
       //if route is of SEQUENTIAL type,assign route id to GAT_UID
       if($sGateUID == '')
           $sGateUID = $idRoute;
-      
+
       if ($typeRoute != "SEQUENTIAL" ){
         switch($typeRoute){
           case 'PARALLEL':
@@ -3456,8 +3457,8 @@ class Xpdl extends processes
                 $tas_height =$idVal['TAS_HEIGHT'] ;
               }
             }
-            $positionX  = $coordinateX + $tas_width/1.5 + 19;
-            $positionY  = $coordinateY + $tas_height/2;
+            $positionX=$coordinateX+62;
+            $positionY=$coordinateY+55;
             if($idTask != $taskParallel){
               $taskParallel = $idTask;
               $routeParallel = $sGateUID;
@@ -3499,8 +3500,8 @@ class Xpdl extends processes
                 $tas_height =$idVal['TAS_HEIGHT'];
               }
             }
-            $positionX  = $coordinateX + $tas_width/1.5 + 19;
-            $positionY  = $coordinateY + $tas_height/2;
+            $positionX=$coordinateX+60;
+            $positionY=$coordinateY-45;
             if($nextTask != $taskSecJoin){
               $taskSecJoin  = $nextTask;
               $routeSecJoin = $sGateUID;
@@ -3542,8 +3543,8 @@ class Xpdl extends processes
                 $tas_height =$idVal['TAS_HEIGHT'];
               }
             }
-            $positionX  = $coordinateX + $tas_width/1.5 + 19;
-            $positionY  = $coordinateY + $tas_height/2;
+            $positionX=$coordinateX+62;
+            $positionY=$coordinateY+55;
             if($idTask != $taskEvaluate){
               $taskEvaluate  = $idTask;
               $routeEvaluate = $sGateUID;
@@ -3567,7 +3568,7 @@ class Xpdl extends processes
                 $countRoutes                   = $countRoutes + 1;
               }
             }
-            else{ 
+            else{
               if($nextTask !="-1"){
                 $arrayRoutes[$countRoutes]['0']= G::generateUniqueID();
                 $arrayRoutes[$countRoutes]['1']= $routeEvaluate;
@@ -3592,8 +3593,8 @@ class Xpdl extends processes
                 $tas_height =$idVal['TAS_HEIGHT'];
               }
             }
-            $positionX  = $coordinateX + $tas_width/1.5 + 19;
-            $positionY  = $coordinateY + $tas_height/2;
+            $positionX=$coordinateX+62;
+            $positionY=$coordinateY+55;
             if($idTask != $taskParallelEv){
               $taskParallelEv  = $idTask;
               $routeParallelEv = $sGateUID;
@@ -3635,8 +3636,8 @@ class Xpdl extends processes
                   $tas_height =$idVal['TAS_HEIGHT'];
                 }
             }
-            $positionX  = $coordinateX + $tas_width/1.5 + 19;
-            $positionY  = $coordinateY + $tas_height/2;
+            $positionX=$coordinateX+60;
+            $positionY=$coordinateY+40;
             if($idTask != $taskSelect){
               $taskSelect  = $idTask;
               $routeSelect = $sGateUID;
@@ -3684,8 +3685,8 @@ class Xpdl extends processes
                  $tas_height =$idVal['TAS_HEIGHT'];
                 }
             }
-            $positionX  = $coordinateX + $tas_width/1.5 + 19;
-            $positionY  = $coordinateY + $tas_height/2;
+            $positionX=$coordinateX+60;
+            $positionY=$coordinateY-45;
             if($nextTask != $taskDiscriminator){
               $taskDiscriminator  = $nextTask;
               $routeDiscriminator = $sGateUID;
@@ -3731,8 +3732,8 @@ class Xpdl extends processes
               $tas_uid    =$idVal['TAS_UID'];
             }
           }
-          $positionX  = $coordinateX + $tas_width/1.5 + 19;
-          $positionY  = $coordinateY + $tas_height/2;
+           $positionX                     = $coordinateX + 92;
+           $positionY                     = $coordinateY + 40;
           $evn_uid = $val['ROU_EVN_UID'];
           if($evn_uid != ''){
             $oEvent = new Event();
@@ -3740,8 +3741,8 @@ class Xpdl extends processes
 
             $events[$countEvents]['0'] = $evn_uid;
             $events[$countEvents]['1'] = $aEvent['EVN_TYPE'];
-            $events[$countEvents]['2'] = $aEvent['EVN_POSX'];
-            $events[$countEvents]['3'] = $aEvent['EVN_POSY'];
+            $events[$countEvents]['2'] = $positionX-25;
+            $events[$countEvents]['3'] = $positionY+35;
             $events[$countEvents]['4'] = $tas_uid;
             $countEvents               = $countEvents + 1;
 
@@ -3779,7 +3780,7 @@ class Xpdl extends processes
           $arrayRoutes[$countRoutes]['4']= $fromPort;
           $arrayRoutes[$countRoutes]['5']= $typeRoute;
           $countRoutes                   = $countRoutes + 1;
-        
+
           $events[$countEvents]['0'] = $idRoute;
           $events[$countEvents]['1'] = 'bpmnEventEmptyEnd';
           $events[$countEvents]['2'] = $positionX-25;
@@ -3790,7 +3791,7 @@ class Xpdl extends processes
           $endEvent                  = 0;
         }
       }
-      else{ 
+      else{
         if ($typeRoute == "SEQUENTIAL"){
           //Will Check for Intermediate Timer
           $evn_uid = $val['ROU_EVN_UID'];
@@ -3808,7 +3809,7 @@ class Xpdl extends processes
             }
             $positionX  = $coordinateX  + $tas_width/1.5 + 19;
             $positionY   = $coordinateY + $tas_height/2;
-            
+
             $oEvent = new Event();
             $aEvent = $oEvent->load($evn_uid);
             $events[$countEvents]['0'] = $evn_uid;
@@ -3848,11 +3849,11 @@ class Xpdl extends processes
     $data['EVENTS']     = $events;
     return $data;
   }
-  
+
  /**
   * This function Removes duplicate values from an array bi-dimensional
   * @param  array $array
-  * @return array 
+  * @return array
   */
   function super_unique($array)
   {
@@ -3864,14 +3865,14 @@ class Xpdl extends processes
     }
     return $result;
   }
-  
+
   /**
   * This function create a array for open the process in the new processmap
   * @param  array $array
-  * @return array 
+  * @return array
   */
   function createProcessPM($array)
-  { 
+  {
     $result = array();
     $result['0'] = $array['PRO_UID'];
     $result['1'] = $array['PRO_TITLE'];
@@ -3879,16 +3880,16 @@ class Xpdl extends processes
     return $result;
   }
    /**
-  * This function creates an array for the lane that will be created according to the data given in an array 
+  * This function creates an array for the lane that will be created according to the data given in an array
   * @param  array $lanes
   * @return array $lane
   */
   function createSubProcessesPM($array)
-  { 
+  {
     $arrayLanes = array();
     $field      = array();
     foreach ($array as $key=> $value){
-     
+
       $field['0'] = $value['SWI_UID'];
       $field['1'] = $value['SWI_TEXT'];
       $field['2'] = $value['SWI_X'];
@@ -3898,14 +3899,14 @@ class Xpdl extends processes
     }
     return $arrayLanes;
   }
-  
+
   /**
-  * This function creates an array for the lane that will be created according to the data given in an array 
+  * This function creates an array for the lane that will be created according to the data given in an array
   * @param  array $lanes
   * @return array $lane
   */
   function saveWebEntry($array)
-  { 
+  {
     $file             = new DOMDocument();
     foreach($array as $key => $value){
       $link = $value->W_LINK;
@@ -3916,5 +3917,5 @@ class Xpdl extends processes
       $name  = $value->W_FILENAME;
     }
   }
-  
+
 }

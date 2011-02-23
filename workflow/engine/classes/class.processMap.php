@@ -1585,12 +1585,12 @@ class processMap {
    * @return string
    */
 
-  function addText($sProcessUID = '', $sLabel = '', $iX = 0, $iY = 0) {
+  function addText($sProcessUID = '', $sLabel = '', $iX = 0, $iY = 0 , $sNext_uid = '') {
     try {
       $oProcess = new Process ( );
       $aFields = $oProcess->load($sProcessUID);
       $oSL = new SwimlanesElements ( );
-      $oNewText->uid = $oSL->create(array('PRO_UID' => $sProcessUID, 'SWI_TYPE' => 'TEXT', 'SWI_TEXT' => $sLabel, 'SWI_X' => $iX, 'SWI_Y' => $iY));
+      $oNewText->uid = $oSL->create(array('PRO_UID' => $sProcessUID, 'SWI_TYPE' => 'TEXT', 'SWI_TEXT' => $sLabel, 'SWI_X' => $iX, 'SWI_Y' => $iY,'SWI_NEXT_UID' => $sNext_uid));
       $oJSON = new Services_JSON ( );
       return $oJSON->encode($oNewText);
     } catch (Exception $oError) {

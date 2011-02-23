@@ -871,23 +871,21 @@ MyWorkflow.prototype.handleContextMenu=function(oShape)
             oShape.workflow.AddTaskContextMenu(oShape);
         }
         else if(oShape.type.match(/Start/)) {
-            oShape.workflow.taskUid = oShape.workflow.getStartEventConn(oShape,'targetPort','OutputPort');
+            oShape.workflow.taskUid = workflow.getStartEventConn(oShape,'targetPort','OutputPort');
             pmosExtObj.loadDynaforms(oShape);
-            //if(oShape.type.match(/Message/))
-            //pmosExtObj.loadWebEntry(oShape);
             oShape.workflow.AddEventStartContextMenu(oShape);
         }
         else if(oShape.type.match(/Inter/)) {
-            oShape.workflow.taskUidFrom = oShape.workflow.getStartEventConn(oShape,'sourcePort','InputPort');
+            oShape.workflow.taskUidFrom = workflow.getStartEventConn(oShape,'sourcePort','InputPort');
             //oShape.workflow.taskid =  oShape.workflow.taskUid[0];
-            oShape.workflow.taskUidTo = oShape.workflow.getStartEventConn(oShape,'targetPort','OutputPort');
+            oShape.workflow.taskUidTo = workflow.getStartEventConn(oShape,'targetPort','OutputPort');
             oShape.workflow.taskid =  oShape.workflow.taskUidFrom[0];
             pmosExtObj.loadTask(oShape);
             pmosExtObj.getTriggerList(oShape);
             oShape.workflow.AddEventInterContextMenu(oShape);
         }
         else if(oShape.type.match(/End/)) {
-            oShape.workflow.taskUid = oShape.workflow.getStartEventConn(oShape,'sourcePort','InputPort');
+            oShape.workflow.taskUid = workflow.getStartEventConn(oShape,'sourcePort','InputPort');
             oShape.workflow.AddEventEndContextMenu(oShape);
         }
         else if(oShape.type.match(/Gateway/)) {
@@ -1078,7 +1076,11 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
             break;
         case 'addText':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","label":"'+newlabel+'","position":'+pos+'}';
+            var next_uid = '';
+            var taskUidFrom = workflow.getStartEventConn(oNewShape,'sourcePort','OutputPort');
+            if(taskUidFrom.length > 0)
+                next_uid = taskUidFrom[0].value;
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","label":"'+newlabel+'","task_uid":"'+ next_uid +'","position":'+pos+'}';
             break;
         case 'updateText':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'"}';
@@ -1379,8 +1381,10 @@ MyWorkflow.prototype.editEventProperties = function(oShape)
  */
 MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
 {
+       var aStartTask= new Array();
      //Get all the ports of the shapes
-        var ports = oShape.workflow.currentSelection.getPorts();
+        if(workflow.currentSelection != null && typeof workflow.currentSelection != 'undefined') {
+        var ports = workflow.currentSelection.getPorts();
         var len =ports.data.length;
 
         //Get all the connection of the shape
@@ -1392,7 +1396,7 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
         }
         //Initializing Arrays and variables
         var countConn = 0;
-        var aStartTask= new Array();
+        
         var type;
         //Get ALL the connections for the specified PORT
         for(i = 0; i< conn.length ; i++)
@@ -1413,7 +1417,8 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
                         }
                     }
             }
-            return aStartTask;
+        }
+        return aStartTask;
 }
 
 /**
@@ -1684,8 +1689,8 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
             Ext.Ajax.request({
                     url: "patterns_Ajax.php",
                     success: function(response) {
-                        if(response.responseText != 0){
-                            if(typeof newObj.conn != 'undefined'){
+                        if(response.responseText != 0) {
+                            if(typeof newObj.conn != 'undefined') {
                                 //var resp = response.responseText.split("|");     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
                                 var resp = response.responseText;     //resp[0] => gateway UID OR event_UID , resp[1] => route UID
                                 newObj.conn.html.id = resp;

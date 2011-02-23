@@ -580,7 +580,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
 
                                                        fieldsToToggle = [fields[7]];
                                                        oPmosExt.toggleFields(fieldsToToggle,false);
-                                                    }
+                                                   }
                                                    this.setValue(record.data[this.valueField || this.displayField]);
                                                    this.collapse();
                                          }
@@ -692,13 +692,14 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
 
                   var aSchWeek = new Array();
                   aSchWeek = schedularData.SCH_WEEK_DAYS.substr(0,schedularData.SCH_WEEK_DAYS.length-1).split("|");
-                  for(var i=0;i<aSchWeek.length;i++)
+                  for(var i=0;i <aSchWeek.length; i++)
                       {
                           var index1 = aSchWeek[i];
-                         // timeFieldset.items.items[7].items.items[index1].checked = true;
+                          
                       }
-
+                  timeFieldset.items.items[6].setValue(0,1,2,3);
                   var index = propertiesFieldset.items.items[2].value;
+
                   timeFieldset.expand();
                   var sch_month = credentialFieldset.items.items[9].getValue();
                   var aSchMonth = new Array();
@@ -765,7 +766,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                                    credentialFieldset.items.items[8].setValue(sch_week_day);
                                    var sch_months = timeFieldset.items.items[8].getValue();
                                    var sch_month = new Array();
-                                   for(i=0;i< sch_months.length;i++)
+                                   for(var i=0;i< sch_months.length;i++)
                                    {
                                      sch_month[i] = sch_months[i].name;
                                    }

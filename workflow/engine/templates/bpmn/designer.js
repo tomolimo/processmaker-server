@@ -927,8 +927,16 @@ Ext.onReady ( function() {
           }
           //Making Connections
           var connObj = new DecoratedConnection();
-          connObj.setSource(sourceObj.output1);
-          connObj.setTarget(targetObj.input2);
+          
+          if(targetObj.type == 'bpmnAnnotation') {
+            connObj.setSource(sourceObj.output2);
+            connObj.setTarget(targetObj.input1);
+          }
+          else {
+            connObj.setSource(sourceObj.output1);
+            connObj.setTarget(targetObj.input2);
+          }
+
           connObj.id = shapes.routes[i][0];
           this.workflow.addFigure(connObj);
       }

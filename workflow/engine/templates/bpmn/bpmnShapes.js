@@ -810,7 +810,6 @@ bpmnTask.prototype.addShapes = function (oStore) {
     else if (newShape.type.match(/Annotation/)) {
         conn.setTarget(newShape.getPort("input1"));
         conn.setSource(workflow.currentSelection.getPort("output2"));
-        //conn.targetDecorator.setStroke(Stroke.DOTTED);
         workflow.addFigure(conn);
         newShape.actiontype = 'addText';
         newShape.conn = conn;
