@@ -167,34 +167,29 @@ var G_Grid = function(oForm, sGridName) {
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 
               aObjects[0].setAttribute('id', newID);
-              tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
-              var attributDefaultValue;
-              
-              if( tags.length >= 0 ){ //then it is not a datepicker
-                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                attributes = elementAttributesNS(aObjects[0], 'pm');
-                if(attributes.defaultvalue!= undefined  && attributes.defaultvalue!='')
-                 attributDefaultValue=attributes.defaultvalue;
-                else {
-                 attributDefaultValue='';
-                 if (aObjects[0].type != 'checkbox'){ 
-                 aObjects[0].setAttribute('value', '');
-                 }
-                }
-              } 
-              //we need to test it in other side (krlos)
-              //Added by qennix
-              //if (aObjects[0].type == 'text') aObjects[0].setAttribute('value', '');
-              //if (aObjects[0].type == 'checkbox') aObjects[0].checked = false;
-              //End of Addition
               aObjects[0].name = newID;
               if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
-                aObjects[0].mergeAttributes(document.createElement("<INPUT id='" + newID + "' name='" + newID + "'/>"), false);              
-               var aux = oNewRow.getElementsByTagName('td')[i].innerHTML;                
+                aObjects[0].mergeAttributes(document.createElement("<INPUT name='" + newID + "'/>"), false);
               }
   
-              if (aObjects[0].type != 'checkbox' ) {
-               if(attributDefaultValue!='' && attributDefaultValue != undefined)
+              tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
+              var attributDefaultValue;
+              if( tags.length == 0 ){ //then it is not a datepicker
+                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                attributes = elementAttributesNS(aObjects[0], 'pm');
+                if(attributes.defaultvalue!= undefined)
+                 attributDefaultValue=attributes.defaultvalue;
+              } else {                
+                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                attributes = elementAttributesNS(aObjects[0],'pm');
+                if(attributes.defaultvalue != undefined)
+                  attributDefaultValue=attributes.defaultvalue;
+                else
+                  attributDefaultValue='';
+              }
+
+              if (aObjects[0].type != 'checkbox') {
+                if(attributDefaultValue!='' && attributDefaultValue!=undefined)
                 aObjects[0].value = attributDefaultValue;
                else
                 aObjects[0].value = '';
@@ -285,10 +280,8 @@ var G_Grid = function(oForm, sGridName) {
                 }
               }
             }
-             if (/*@cc_on!@*/0) {
-                 oNewRow.getElementsByTagName('td')[i].innerHTML = aux;
-             } 
-           //alert(oNewRow.getElementsByTagName('td')[i].innerHTML);
+            
+            //alert(oNewRow.getElementsByTagName('td')[i].innerHTML);
             break;
           case 'select':
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('select');
