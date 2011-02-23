@@ -389,8 +389,10 @@ class workspaceTools {
    * @param   bool $checkOnly only check if the upgrade is needed if true
    * @param  string $lang not currently used
    */
-  public function upgradeCacheView($checkOnly = false, $lang = "en") {
+  public function upgradeCacheView() {
     $this->initPropel(true);
+
+    $lang = "en";
 
     require_once('classes/model/AppCacheView.php');
 
@@ -406,21 +408,19 @@ class workspaceTools {
 
     $userGrants = $appCache->checkGrantsForUser( false );
 
-    $currentUser        = $res['user'];
-    $currentUserIsSuper = $res['super'];
+    $currentUser        = $userGrants['user'];
+    $currentUserIsSuper = $userGrants['super'];
 
     //if user does not have the SUPER privilege we need to use the root user and grant the SUPER priv. to normal user.
-    if (!$currentUserIsSuper && !$checkOnly) {
-      $res = $appCache->checkGrantsForUser( true );
-      $res = $appCache->setSuperForUser( $currentUser );
+    if (!$currentUserIsSuper) {
+      $appCache->checkGrantsForUser( true );
+      $appCache->setSuperForUser( $currentUser );
       $currentUserIsSuper = true;
     }
 
     CLI::logging("Creating table");
     //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.
-    if (!$checkOnly) {
-      $res = $appCache->checkAppCacheView();
-    }
+    $res = $appCache->checkAppCacheView();
 
     CLI::logging(", triggers");
     //now check if we have the triggers installed
@@ -430,13 +430,10 @@ class workspaceTools {
     $triggers[] = $appCache->triggerApplicationUpdate($lang, $checkOnly);
     $triggers[] = $appCache->triggerApplicationDelete($lang, $checkOnly);
 
-    if (!$checkOnly) {
-      CLI::logging(", filling cache view");
-      //build using the method in AppCacheView Class
-      $res = $appCache->fillAppCacheView($lang);
-      CLI::logging(".");
-    }
-    CLI::logging("\n");
+    CLI::logging(", filling cache view");
+    //build using the method in AppCacheView Class
+    $res = $appCache->fillAppCacheView($lang);
+    CLI::logging(".\n");
     //set status in config table
     $confParams = Array(
       'LANG' => $lang,
