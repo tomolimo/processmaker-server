@@ -40,6 +40,8 @@ try {
     $pwd = trim($frm['USR_PASSWORD']);
   }
   $uid = $RBAC->VerifyLogin($usr , $pwd);
+  //cleaning session files older than 72 hours
+  $RBAC->cleanSessionFiles(72);
   $sPwd = 'currentPwd';
   switch ($uid) {
     //The user does not exist
