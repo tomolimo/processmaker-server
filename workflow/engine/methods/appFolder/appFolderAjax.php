@@ -430,7 +430,7 @@ function uploadDocument(){
                                     datastore.reload();
                                     panel.destroy();
                                     Ext.getCmp('dialog').destroy();
-                                    statusBarMessage('upload_completed', false );
+                                    statusBarMessage('upload_completed', false, true );
                                 }";
      
     // Uploader Params
@@ -495,7 +495,7 @@ function uploadDocument(){
     $buttonA["text"]="btnsave";
     $buttonA["handler"]="function_standardupload_btnsave";
     $functionsToReplace["function_standardupload_btnsave"]=' function() {
-                statusBarMessage( "upload_processing", true );
+                statusBarMessage( "upload_processing", true, true );
                 form = Ext.getCmp("uploadform").getForm();
                 
                 //Ext.getCmp("uploadform").getForm().submit();
@@ -576,7 +576,7 @@ function uploadDocument(){
     $buttonA["text"]="btnsave";
     $buttonA["handler"]="function_transfer_btnsave";
     $functionsToReplace["function_transfer_btnsave"]='function() {
-                statusBarMessage( "transfer_processing", true );
+                statusBarMessage( "transfer_processing", true, true );
                 transfer = Ext.getCmp("transferform").getForm();
                 transfer.submit({
                     //reset: true,
@@ -695,7 +695,7 @@ function copyMoveAction($type){
     $itemButton["handler"]="copyDialogCreateButtonFunction";
     $functionsToReplace["copyDialogCreateButtonFunction"]="function() {
     		form =  Ext.getCmp('simpleform').getForm();
-			statusBarMessage( 'Please wait...', true );
+			statusBarMessage( 'Please wait...', true, true );
 		    var requestParams = getRequestParams();
 		    requestParams.confirm = 'true';
 		    requestParams.action  = '".$type."Execute';
@@ -1020,6 +1020,8 @@ function uploadExternalDocument(){
 }
 
 function newFolder(){
+    require_once ("classes/model/AppFolder.php");
+    $oPMFolder = new AppFolder ( );
     //G::pr($_POST);
     if($_POST ['dir']=="") $_POST ['dir']="/";
     $folderStructure = $oPMFolder->getFolderStructure ( $_POST ['dir'] );
@@ -1097,7 +1099,7 @@ function newFolder(){
     $formNewFolder["buttons"][]= $button;
 
     $handlerCreate='function() {
-                statusBarMessage( "Please wait...", true );
+                statusBarMessage( "Please wait...", true,true );
                 Ext.getCmp("simpleform").getForm().submit({
                     //reset: true,
                     reset: false,
@@ -1145,6 +1147,8 @@ function newFolder(){
 }
 
 function appFolderSave(){
+    require_once ("classes/model/AppFolder.php");
+    $oPMFolder = new AppFolder ( );
     $form = $_POST['form'];
     $FolderUid = $form['FOLDER_UID'];
     $FolderParentUid = $form['FOLDER_PARENT_UID'];
