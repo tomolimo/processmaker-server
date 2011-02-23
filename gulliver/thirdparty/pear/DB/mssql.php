@@ -83,14 +83,14 @@ class DB_mssql extends DB_common
         }
         $this->dsn = $dsninfo;
         $dbhost = $dsninfo['hostspec'] ? $dsninfo['hostspec'] : 'localhost';
-        $dbhost .= $dsninfo['port'] ? ',' . $dsninfo['port'] : '';
+        //$dbhost .= $dsninfo['port'] ? ',' . $dsninfo['port'] : '';
 
+        $dbhost .= $dsninfo['port'] ? ':' . $dsninfo['port'] : '';
         $connect_function = $persistent ? 'mssql_pconnect' : 'mssql_connect';
 
         if ($dbhost && $dsninfo['username'] && $dsninfo['password']) {
-            $conn = @$connect_function($dbhost, $dsninfo['username'],
-                                       $dsninfo['password']);
-        } elseif ($dbhost && $dsninfo['username']) {
+            $conn = @$connect_function($dbhost, $dsninfo['username'], $dsninfo['password']);
+        }elseif ($dbhost && $dsninfo['username']){
             $conn = @$connect_function($dbhost, $dsninfo['username']);
         } else {
             $conn = @$connect_function($dbhost);
