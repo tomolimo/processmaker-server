@@ -367,6 +367,12 @@ InputPort.prototype.onDrop = function (port) {
     else if(port.parentNode.type.match(/Task/) && bpmnType.match(/Inter/) && bpmnType.match(/Event/)){
       workflow.saveEvents(workflow.currentSelection);
     }
+    else if(bpmnType.match(/Annotation/)) { //Routing from task to Annotation
+      newObj = port.parentNode;
+      preObj = this.workflow.currentSelection;
+      newObj.actiontype = 'updateText';
+      this.workflow.saveShape(newObj);
+    }
   }
 };
 
@@ -430,6 +436,12 @@ OutputPort.prototype.onDrop = function (port) {
       newObj = port.parentNode;
       preObj = this.workflow.currentSelection;
       this.workflow.saveRoute(newObj,preObj);
+    }
+    else if(port.parentNode.type.match(/Annotation/)){ //Routing from task to Annotation
+      newObj = port.parentNode;
+      preObj = this.workflow.currentSelection;
+      newObj.actiontype = 'updateText';
+      this.workflow.saveShape(newObj);
     }
   }
 };

@@ -1605,11 +1605,11 @@ class processMap {
    * @return integer
    */
 
-  function updateText($sSEUID = '', $sLabel = '') {
+  function updateText($sSEUID = '', $sLabel = '' , $sNext_uid = '') {
     try {
       $oSL = new SwimlanesElements ( );
       $aFields = $oSL->load($sSEUID);
-      return $oSL->update(array('SWI_UID' => $sSEUID, 'SWI_TEXT' => $sLabel));
+      return $oSL->update(array('SWI_UID' => $sSEUID, 'SWI_TEXT' => $sLabel,'SWI_NEXT_UID' => $sNext_uid));
     } catch (Exception $oError) {
       throw ($oError);
     }

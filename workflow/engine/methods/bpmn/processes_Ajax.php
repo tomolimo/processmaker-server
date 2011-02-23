@@ -109,7 +109,7 @@ if ( isset ($_REQUEST['action']) ) {
           echo $sOutput;
   	break;
         case 'updateText':
-          $sOutput = $oProcessMap->updateText($oData->uid, $oData->label);
+          $sOutput = $oProcessMap->updateText($oData->uid, $oData->label, $oData->next_uid);
         echo $sOutput;
         break;
         case 'saveTextPosition':

@@ -1083,7 +1083,12 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","label":"'+newlabel+'","task_uid":"'+ next_uid +'","position":'+pos+'}';
             break;
         case 'updateText':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'"}';
+            var next_uid = '';
+            var taskUidFrom = workflow.getStartEventConn(oNewShape,'sourcePort','OutputPort');
+            if(taskUidFrom.length > 0)
+                next_uid = taskUidFrom[0].value;
+            
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","label":"'+newlabel+'","next_uid":"'+ next_uid +'"}';
             break;
         case 'saveStartEvent':
             //If we change Event to start from Message/Timer then Delete the record from Events Table
