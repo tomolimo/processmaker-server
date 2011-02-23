@@ -212,9 +212,6 @@ bpmnTask.prototype.paint = function () {
 
 };
 
-jsGraphics.prototype.drawTextString = function (txt, x, y, dx, dy) {
-    this.htm += '<div style="position:absolute; display:table-cell; vertical-align:middle; height:' + y + '; width:' + x + ';' + 'margin-left:' + dx + 'px;' + 'margin-top:' + dy + 'px;' + 'font-family:' + this.ftFam + ';' + 'font-size:' + this.ftSz + ';' + 'color:' + this.color + ';' + this.ftSty + '">' + txt + '<\/div>';
-};
 
 Figure.prototype.onDragend=function() {
   if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection != null){
