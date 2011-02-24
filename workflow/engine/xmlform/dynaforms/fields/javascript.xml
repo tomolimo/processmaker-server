@@ -2,6 +2,7 @@
 <dynaForm name="javascript" type="xmlform" width="100%" enableTemplate="1">
 <PME_A type="hidden"/>
 <PME_TYPE type="hidden"/>
+<A type="hidden" showInTable="0"/>
 <PME_TITLE type="title" enableHTML="1">
   <en>Properties</en>
 </PME_TITLE>
@@ -21,7 +22,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Cancel</en>
 </BTN_CANCEL>
 
-<PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
+<PME_ACCEPT type="button" onclick="saveJavascript(); fieldsSave( this.form );">
   <en>Save</en>
 </PME_ACCEPT>
 
@@ -38,5 +39,22 @@ leimnud.event.add(fieldName, 'change', {method:dynaformVerifyFieldName, instance
 function cancel(){
     currentPopupWindow.remove();
 }
+
+var jsEditorPrompt = CodeMirror.fromTextArea('form[PME_CODE]', {
+  height: "200px",
+  width: "440px",
+  parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+  stylesheet: ["css/jscolors.css"],
+  path: "js/",
+  lineNumbers: true,
+  continuousScanning: 500
+});
+
+function saveJavascript()
+{
+  jsEditorPrompt.setCode(jsEditorPrompt.getCode());
+  jsEditorPrompt.save();
+}
+
 ]]></PME_JS>
 </dynaForm>  

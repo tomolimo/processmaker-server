@@ -59,6 +59,13 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     $_POST['form']['PME_SAVELABEL'] = 0;
   }
 
+  if (isset($_POST['form']['PME_SAVELABEL'])){
+    $pmeCode = $_POST['form']['PME_CODE'];
+    $pmeCode = str_replace("'", "''", $pmeCode);
+    $pmeCode = str_replace('"', '""', $pmeCode);
+    $_POST['form']['PME_CODE'] = $pmeCode;
+  }
+
   $file = G::decrypt( $_POST['form']['PME_A'] , URL_KEY );
   define('DB_XMLDB_HOST', PATH_DYNAFORM  . $file . '.xml' );
   define('DB_XMLDB_USER','');

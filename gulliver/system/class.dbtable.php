@@ -263,12 +263,12 @@ class DBTable
         $iskey = in_array( $field, $this->table_keys ) && strtoupper(substr(trim($val),0,7) ) == "NEXTVAL";
 
       $dbcType = isset ( $this->_dbc->type ) ? $this->_dbc->type : $DBEngine;
+      // Commented by new format of textarea
       if( ! $iskey )
-        $val = "'" . G::sqlEscape( $val , $dbcType ) . "'";
-      $strValues .= " $val ,";
-
+        $val = "'" . $val . "'";
+      ///--  $val = "'" . G::sqlEscape( $val , $dbcType ) . "'";
+      $strValues .=  $val .", ";
     }
-
     $strFields = substr( $strFields , 0, strlen($strFields)-1 );
     $strValues = substr( $strValues , 0, strlen($strValues)-1 );
 

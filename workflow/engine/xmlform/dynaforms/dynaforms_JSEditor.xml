@@ -33,14 +33,16 @@ resizeJSEditor();
 var JSCodePress=false;
 function startJSCodePress()
 {
+/*
   var code=getField("JS").value;
   getField("JS").className="codepress javascript linenumbers-on";
   JSCodePress=new CodePress(getField("JS"));
   getField("JS").parentNode.insertBefore(JSCodePress,getField("JS"));
   JSCodePress.edit(code,'javascript');
+*/
   getField("JS_LIST").onchange=function(){
-  	dynaformEditor.changeJavascriptCode();
-	};
+    dynaformEditor.changeJavascriptCode();
+  };
 }
 </PME_RESIZE_JS>
 
