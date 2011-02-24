@@ -1,7 +1,5 @@
 bpmnEventEmptyStart=function(){
 VectorFigure.call(this);
-this.width  = 30;
-this.height = 30;
 };
 bpmnEventEmptyStart.prototype=new VectorFigure;
 bpmnEventEmptyStart.prototype.type="bpmnEventEmptyStart";

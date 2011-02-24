@@ -1241,7 +1241,7 @@ class processMap {
    * @return string
    */
 
-  function addTask($sProcessUID = '', $iX = 0, $iY = 0) {
+  function addTask($sProcessUID = '', $iX = 0, $iY = 0,$iWidth = 165, $iHeight = 40) {
     try {
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('TAS_UID');
@@ -1279,7 +1279,7 @@ class processMap {
       }
       $oTask = new Task ( );
       $oNewTask->label = G::LoadTranslation('ID_TASK') . ' ' . $iTaskNumber;
-      $oNewTask->uid = $oTask->create(array('PRO_UID' => $sProcessUID, 'TAS_TITLE' => $oNewTask->label, 'TAS_POSX' => $iX, 'TAS_POSY' => $iY));
+      $oNewTask->uid = $oTask->create(array('PRO_UID' => $sProcessUID, 'TAS_TITLE' => $oNewTask->label, 'TAS_POSX' => $iX, 'TAS_POSY' => $iY, 'TAS_WIDTH' => $iWidth, 'TAS_HEIGHT' => $iHeight));
       $oNewTask->statusIcons = array();
       $oNewTask->statusIcons[] = array('label' => '', 'icon' => '/images/alert.gif', 'message' => '', 'url' => '');
       $oJSON = new Services_JSON ( );
@@ -6610,7 +6610,7 @@ function saveExtEvents($oData)
   $aDataEvent['EVN_TYPE']       = $oData->evn_type;
   
   if(preg_match("/Start/", $sEvn_type)){
-    if(isset($oData->tas_uid) && $oData->tas_uid != 'undefined') {
+    if(isset($oData->tas_uid) && $oData->tas_uid != '') {
       $aDataTask['TAS_UID']     = $oData->tas_uid;
       $aDataTask['TAS_START']   = $oData->tas_start;
       $aDataTask['EVN_TYPE']    = $oData->evn_type;

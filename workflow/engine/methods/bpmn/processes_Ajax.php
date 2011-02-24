@@ -50,7 +50,7 @@ if ( isset ($_REQUEST['action']) ) {
           echo $sOutput;
           break;
       case 'addTask':
-  	  $sOutput = $oProcessMap->addTask($oData->uid, $oData->position->x, $oData->position->y);
+  	  $sOutput = $oProcessMap->addTask($oData->uid, $oData->position->x, $oData->position->y,$oData->cordinate->x,$oData->cordinate->y);
           echo $sOutput;
           break;
       case 'saveTaskPosition':

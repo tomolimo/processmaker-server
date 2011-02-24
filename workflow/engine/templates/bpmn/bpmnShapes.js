@@ -5,12 +5,16 @@ bpmnTask = function (oWorkflow) {
       this.boundaryEvent = oWorkflow.boundaryEvent;
    }
    //Getting width and height from DB
-   if(typeof oWorkflow.task_width != 'undefined' && typeof oWorkflow.task_height != 'undefined' && oWorkflow.task_width != ''){
-        this.originalWidth =  oWorkflow.task_width;
-        this.originalHeight = oWorkflow.task_height
+   if(typeof oWorkflow.task_width != 'undefined' && typeof oWorkflow.task_height != 'undefined' && oWorkflow.task_width != '') {
+        this.width  =  oWorkflow.task_width;
+        this.height = oWorkflow.task_height;
+        this.originalWidth  = oWorkflow.task_width;
+        this.originalHeight = oWorkflow.task_height;
    }
-   else{
-       this.originalWidth  =  165;
+   else {
+       this.width  =  165;
+       this.height  = 40;
+       this.originalWidth = 165;
        this.originalHeight = 40;
    }
 
@@ -51,16 +55,20 @@ bpmnTask.prototype.paint = function () {
   }
 
   if(workflow.zoomfactor == 1) {
-    if ((this.getWidth() > 200 || this.getHeight() > 100) && this.limitFlag != true) {
-        this.width  = this.originalWidth  = 200;
-        this.height = this.originalHeight = 100;
+    if ((this.getWidth() > 200 || this.getHeight() > 100) && this.limitFlag == false) {
+        this.originalWidth  = 200;
+        this.originalHeight = 100;
+        this.width  = 200;
+        this.height = 100;
     }
-    if ((this.getWidth() < 165 || this.getHeight() < 40) && this.limitFlag != true) {
-        this.width  =  this.originalWidth  = 165;
-        this.height = this.originalHeight = 40;
+    if ((this.getWidth() < 165 || this.getHeight() < 40) && this.limitFlag == false) {
+        this.originalWidth  = 165;
+        this.originalHeight = 40;
+        this.width  = 165;
+        this.height = 40;
     }
   }
-  else{
+  else {
     this.width  = this.originalWidth   *  workflow.zoomfactor;
     this.height = this.originalHeight  *  workflow.zoomfactor;
   }

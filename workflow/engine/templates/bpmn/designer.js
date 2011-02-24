@@ -876,8 +876,7 @@ Ext.onReady ( function() {
       {
           var xOffset    = workflow.getAbsoluteX();
           var yOffset    = workflow.getAbsoluteY();
-          if(data.name == 'bpmnTask')
-          {
+          if(data.name == 'bpmnTask') {
               workflow.boundaryEvent = false;
           }
           workflow.task_width='';
@@ -885,17 +884,15 @@ Ext.onReady ( function() {
           NewShape = eval("new "+data.name+"(workflow)");
           NewShape.x = e.xy[0];
           NewShape.y = e.xy[1];
-          NewShape.limitFlag == false;
-          NewShape.actiontype = 'addTask';
-          if(data.name == 'bpmnAnnotation'){
+          if(data.name == 'bpmnAnnotation') {
             NewShape.actiontype = 'addText';
             workflow.saveShape(NewShape);      //Saving task when user drags and drops it
           }
-          else if(data.name == 'bpmnTask'){
+          else if(data.name == 'bpmnTask') {
             NewShape.actiontype = 'addTask';
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
           }
-          else if(data.name.match(/Event/)){
+          else if(data.name.match(/Event/)) {
             NewShape.actiontype = 'addEvent';
             NewShape.mode = 'ddEvent';
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it

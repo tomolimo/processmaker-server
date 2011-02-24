@@ -1069,7 +1069,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
     switch(actiontype)
     {
         case 'addTask':
-            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+'}';
+            urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","position":'+pos+',"cordinate":'+cordinates+'}';
             break;
         case 'updateTask':
             urlparams = '?action='+actiontype+'&data={"uid":"'+ shapeId +'","boundary":"TIMER"}';
@@ -1161,7 +1161,8 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                       workflow.saveEvents(oNewShape);
                     }
                     else if(oNewShape.type.match(/End/) && oNewShape.type.match(/Event/)) {
-                      workflow.saveRoute(workflow.currentSelection,oNewShape);
+                      if(workflow.currentSelection != null && workflow.currentSelection != '') //will check for standalone event
+                        workflow.saveRoute(workflow.currentSelection,oNewShape);
                     }
                     else if(oNewShape.type.match(/Gateway/)) {
                       workflow.saveGateways(oNewShape);
@@ -1516,6 +1517,8 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
     var task_uid      = new Array();
     var next_task_uid = new Array();
     var urlparams     = '';
+    if(typeof sTaskUID == 'undefined')  //Will be undefined for standalone events
+      sTaskUID = '';
     if(oEvent.type.match(/Start/))
     {
         var tas_start = 'TRUE';
@@ -1553,6 +1556,11 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
         }
     // var staskUid     = 	Ext.util.JSON.encode(task_uid);
     // var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
+    if(typeof task_uid == 'undefined')
+      task_uid = '';
+    if(typeof next_task_uid == 'undefined')
+      next_task_uid = '';
+  
      urlparams = '?action=saveEvents&data={"tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
     }
 
@@ -1846,7 +1854,9 @@ MyWorkflow.prototype.zoom = function(sType)
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    loadMask.show();
-   if(typeof fig.limitFlag == 'undefined' || fig.limitFlag == false){
+   if(typeof fig.limitFlag == 'undefined')
+       fig.limitFlag = true;
+   if(fig.limitFlag == false){
      fig.originalWidth = fig.getWidth();
      fig.originalHeight = fig.getHeight();
      fig.orgXPos = fig.getX();
@@ -1861,29 +1871,30 @@ MyWorkflow.prototype.zoom = function(sType)
    }
    //If zooming is 100% disable resizing of shapes again
    if(sType == '1'){
-     fig.limitFlag = false;
+     fig.limitFlag = true;
    }
    var width  = fig.originalWidth*sType;
    var height = fig.originalHeight*sType;
-   if(fig.boundaryEvent == true){
+   if(fig.boundaryEvent == true) {
      fig.x3 = fig.orgx3Pos *sType;
      fig.y4 = fig.orgy4Pos *sType;
      fig.y5 = fig.orgy5Pos *sType;
    }
-   var xPos =  fig.orgXPos * sType;
-   var yPos =  fig.orgYPos * sType;
-   if(fig.type == 'bpmnTask'){
-       if (fig.getWidth() > 200 || this.getHeight() > 100) {
-            fig.limitFlag = false;
-       }
-       if (this.getWidth() < 165 || this.getHeight() < 40) {
-            fig.limitFlag = false;
-       }
+
+   if(sType == '1.5' || sType == '2') {
+     var xPos =  fig.orgXPos * sType * 0.5;
+     var yPos =  fig.orgYPos * sType * 0.5;
+   }
+   else {
+     var xPos =  fig.orgXPos * sType;
+     var yPos =  fig.orgYPos * sType;
+   }
+   if(fig.type == 'bpmnTask') {
       fig.fontSize = parseInt(fig.orgFontSize) * sType;
       //fig.bpmnText.drawStringRect(fig.taskName, fig.padleft, fig.padtop, fig.rectWidth, fig.rectheight, 'center');
       fig.bpmnText.paint();
     }
-    else if(fig.type == 'bpmnAnnotation'){
+    else if(fig.type == 'bpmnAnnotation') {
       fig.fontSize = parseInt(fig.orgFontSize) * sType;
       fig.bpmnText.paint();
     }
@@ -1897,6 +1908,7 @@ MyWorkflow.prototype.redrawTaskText = function(fig){
   //Setting font minimum limit
   if(this.fontSize < 11)
      this.fontSize = 11;
+ this.limitFlag = true;
   fig.paint();
 }
 MyWorkflow.prototype.redrawAnnotationText = function(fig,sType){
