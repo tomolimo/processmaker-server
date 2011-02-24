@@ -2277,20 +2277,20 @@
     <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
     <column name="APP_STATUS" type="VARCHAR" size="32" required="true" default=""/>
     <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
-    <column name="PREVIOUS_USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
     <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
     <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
     <column name="DEL_TASK_DUE_DATE" type="TIMESTAMP" required="false"/>
     <column name="DEL_FINISH_DATE" type="TIMESTAMP" required="false"/>
-    <column name="DEL_THREAD_STATUS" type="VARCHAR" size="32" required="true" default="OPEN"/>
-    <column name="APP_THREAD_STATUS" type="VARCHAR" size="32" required="true" default="OPEN"/>
+    <column name="DEL_THREAD_STATUS" type="VARCHAR" size="32" default="OPEN"/>
+    <column name="APP_THREAD_STATUS" type="VARCHAR" size="32" default="OPEN"/>
     <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
     <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
     <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
-    <column name="APP_CURRENT_USER" type="VARCHAR" size="128" required="true" default=""/>
-    <column name="APP_DEL_PREVIOUS_USER" type="VARCHAR" size="128" required="true" default=""/>
+    <column name="APP_CURRENT_USER" type="VARCHAR" size="128" default=""/>
+    <column name="APP_DEL_PREVIOUS_USER" type="VARCHAR" size="128" default=""/>
     <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
     <column name="DEL_DURATION" type="DOUBLE" default="0"/>
     <column name="DEL_QUEUE_DURATION" type="DOUBLE" default="0"/>

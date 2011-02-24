@@ -74,7 +74,7 @@ class AppCacheViewMapBuilder {
 
 		$tMap->addColumn('USR_UID', 'UsrUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
-		$tMap->addColumn('PREVIOUS_USR_UID', 'PreviousUsrUid', 'string', CreoleTypes::VARCHAR, true, 32);
+		$tMap->addColumn('PREVIOUS_USR_UID', 'PreviousUsrUid', 'string', CreoleTypes::VARCHAR, false, 32);
 
 		$tMap->addColumn('TAS_UID', 'TasUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -88,9 +88,9 @@ class AppCacheViewMapBuilder {
 
 		$tMap->addColumn('DEL_FINISH_DATE', 'DelFinishDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
-		$tMap->addColumn('DEL_THREAD_STATUS', 'DelThreadStatus', 'string', CreoleTypes::VARCHAR, true, 32);
+		$tMap->addColumn('DEL_THREAD_STATUS', 'DelThreadStatus', 'string', CreoleTypes::VARCHAR, false, 32);
 
-		$tMap->addColumn('APP_THREAD_STATUS', 'AppThreadStatus', 'string', CreoleTypes::VARCHAR, true, 32);
+		$tMap->addColumn('APP_THREAD_STATUS', 'AppThreadStatus', 'string', CreoleTypes::VARCHAR, false, 32);
 
 		$tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::VARCHAR, true, 255);
 
@@ -98,9 +98,9 @@ class AppCacheViewMapBuilder {
 
 		$tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::VARCHAR, true, 255);
 
-		$tMap->addColumn('APP_CURRENT_USER', 'AppCurrentUser', 'string', CreoleTypes::VARCHAR, true, 128);
+		$tMap->addColumn('APP_CURRENT_USER', 'AppCurrentUser', 'string', CreoleTypes::VARCHAR, false, 128);
 
-		$tMap->addColumn('APP_DEL_PREVIOUS_USER', 'AppDelPreviousUser', 'string', CreoleTypes::VARCHAR, true, 128);
+		$tMap->addColumn('APP_DEL_PREVIOUS_USER', 'AppDelPreviousUser', 'string', CreoleTypes::VARCHAR, false, 128);
 
 		$tMap->addColumn('DEL_PRIORITY', 'DelPriority', 'string', CreoleTypes::VARCHAR, true, 32);
 
