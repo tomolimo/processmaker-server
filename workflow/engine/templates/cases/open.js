@@ -38,7 +38,7 @@ Ext.onReady(function(){
     //getting the case Information availables options
     Ext.Ajax.request({
       url : 'ajaxListener' , 
-      params : { action : 'getInformationOptions' },
+      params : {action : 'getInformationOptions'},
       success: function ( result, request ) { 
         var data = Ext.util.JSON.decode(result.responseText); 
         var informationMenu = Ext.getCmp('informationMenu');
@@ -60,7 +60,7 @@ Ext.onReady(function(){
     //getting the case action availables options
     Ext.Ajax.request({
       url : 'ajaxListener' , 
-      params : { action : 'getActionOptions' },
+      params : {action : 'getActionOptions'},
       success: function ( result, request ) { 
         var data = Ext.util.JSON.decode(result.responseText); 
         var actionMenu = Ext.getCmp('actionMenu');
@@ -160,6 +160,8 @@ Ext.onReady(function(){
     alert('loaded');
   }
 
+  var screenWidth = (PMExt.getBrowser().screen.width-140).toString() + 'px';
+
   var navPanelCenter = {
     id: 'navPanelCenter',
     region: 'center',
@@ -182,8 +184,8 @@ Ext.onReady(function(){
           frameConfig:{name:'openCaseFrame', id:'openCaseFrame'},
           defaultSrc : uri,
           loadMask:{msg:'Loading...'},
-          bodyStyle:{height: (PMExt.getBrowser().screen.height-55) + 'px', overflow:'scroll'},
-          width:'1024px'
+          bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
+          width:screenWidth
           
           }/*{
             xtype:"panel",
@@ -266,7 +268,7 @@ Ext.onReady(function(){
   {
     Ext.Ajax.request({
       url : 'ajaxListener' , 
-      params : { action : 'getProcessInformation' },
+      params : {action : 'getProcessInformation'},
       success: function ( result, request ) { 
         var data = Ext.util.JSON.decode(result.responseText); 
     
@@ -323,7 +325,7 @@ Ext.onReady(function(){
   {
     Ext.Ajax.request({
       url : 'ajaxListener' , 
-      params : { action : 'getTaskInformation' },
+      params : {action : 'getTaskInformation'},
       success: function ( result, request ) { 
         var data = Ext.util.JSON.decode(result.responseText); 
     
@@ -407,7 +409,7 @@ Ext.onReady(function(){
     PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_CANCEL_CASE'), function(){
       Ext.Ajax.request({
         url : 'ajaxListener' , 
-        params : { action : 'cancelCase' },
+        params : {action : 'cancelCase'},
         success: function ( result, request ) {
           parent.notify('', 'The case ' + parent._CASE_TITLE + ' was cancelled!');
           location.href = 'casesListExtJs';
@@ -504,7 +506,7 @@ Ext.onReady(function(){
       PMExt.confirm(_('ID_CONFIRM'), _('ID_REASSIGN_CONFIRM'), function(){
         Ext.Ajax.request({
           url : 'ajaxListener' , 
-          params : { action : 'reassignCase', USR_UID: rowSelected.data.USR_UID},
+          params : {action : 'reassignCase', USR_UID: rowSelected.data.USR_UID},
           success: function ( result, request ) {
             var data = Ext.util.JSON.decode(result.responseText); 
             if( data.status == 0 ) {
@@ -616,7 +618,7 @@ Ext.onReady(function(){
       
       Ext.Ajax.request({
         url : 'ajaxListener' ,
-        params : { action : 'unpauseCase' },
+        params : {action : 'unpauseCase'},
         success: function ( result, request ) {
           loadMask.hide();
           var data = Ext.util.JSON.decode(result.responseText); 
@@ -641,7 +643,7 @@ Ext.onReady(function(){
       loadMask.show();
       Ext.Ajax.request({
         url : 'ajaxListener' ,
-        params : { action : 'deleteCase' },
+        params : {action : 'deleteCase'},
         success: function ( result, request ) {
           loadMask.hide();
           var data = Ext.util.JSON.decode(result.responseText); 
@@ -666,7 +668,7 @@ Ext.onReady(function(){
       loadMask.show();
       Ext.Ajax.request({
         url : 'ajaxListener' ,
-        params : { action : 'reactivateCase' },
+        params : {action : 'reactivateCase'},
         success: function ( result, request ) {
           loadMask.hide();
           var data = Ext.util.JSON.decode(result.responseText); 
