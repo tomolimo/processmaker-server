@@ -108,11 +108,9 @@ Ext.onReady(function(){
     var detailPanel = Ext.getCmp('debug-details-panel');
     debugVarTpl.overwrite(detailPanel.body, r.data);
     detailPanel.setTitle(r.data.name);
-    //alert(r.data.name+' '+r.data.value);
-
-    //
+    
     if(r.data.value == '<object>' || r.data.value == '<array>' ){
-      deatachAction.setDisabled(false);
+      Ext.getCmp('deatachAction').setDisabled(false);
       Ext.Ajax.request({
         url: 'debug_vars?r='+Math.random(),
         success: function(response){
@@ -158,7 +156,7 @@ Ext.onReady(function(){
 
      
     } else
-      deatachAction.setDisabled(true);
+      Ext.getCmp('deatachAction').setDisabled(true);
 
   });
   
@@ -362,10 +360,9 @@ Ext.onReady(function(){
       width: 700,
       height: 450,
       title: TRANSLATIONS.ID_TRIGGERS,
-      iconCls: 'icon-grid',
-      tbar: [
+      /*tbar: [
         {text: TRANSLATIONS.ID_OPEN_IN_POPUP, handler: triggerWindow}
-      ],
+      ],*/
       sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
       viewConfig: {
         forceFit: true
@@ -379,6 +376,7 @@ Ext.onReady(function(){
   
   debugTriggers.getSelectionModel().on('rowselect', function(sm, rowIdx, r) {
     var detailPanel = Ext.getCmp('debug-details-panel');
+    detailPanel.setTitle(r.data.name);
     debugTriggersDetailTpl.overwrite(detailPanel.body, r.data);
   });
   
@@ -406,57 +404,10 @@ Ext.onReady(function(){
   };
 
 
-  var deatachAction = new Ext.Action({
-    text: TRANSLATIONS.ID_DEATACH,
-    handler: function(){
-      var store1a = new Ext.data.ArrayStore({fields: result.headers});
-      store1a.loadData(result.rows);
-      
-      for(i=0; i<result.columns.length; i++){
-        result.columns[i].editor = new Ext.form.TextField({allowBlank: false, readOnly:true})
-      }
-      
-      var myGridPanel = new Ext.grid.EditorGridPanel({
-        region:'center',
-        store: store1a,
-        autoHeight: true,
-        autoWidth: true,
-        border : false,
-        columns: result.columns,
-        stripeRows : true,
-        layout: 'fit',
-        viewConfig:{forceFit:true, scrollOffset:0},
-        clicksToEdit: 1
-      });
-      
-      var w = new Ext.Window({
-        title: '',
-        width: 600,
-        height: 250,
-        layout:'fit',
-        autoScroll:true,
-        modal: true,
-        
-        maximizable: true,
-        items: [
-          
-              myGridPanel
-            
-        ]
-        });
-      w.show();
-
-    }
-  });
-
-  deatachAction.setDisabled(true);
-
-
   debugPanel = new Ext.Panel({
     id:'debugPanel',
     title: '',
     region: 'east',
-    /*renderTo: 'tree',*/
     layout: 'border',
     width: 300,
     height: 500,
@@ -468,35 +419,81 @@ Ext.onReady(function(){
     margins: '0 0 0 5',
     items: [
       new Ext.TabPanel({
+        id: 'debugPanelTabs',
         border: true, // already wrapped so don't add another border
         activeTab: 0, // second tab initially active
         tabPosition: 'top',
-        region:'north',
+        region:'center',
         split: true,
-        height:detailsdebugVariablesHeight,
+        //height:detailsdebugVariablesHeight,
         items: [
           debugVariables,
           debugTriggers
         ]
       }),
       {
-        region: 'center',
+        region: 'south',
         layout: 'fit',
-        title: '',
+        title: '&nbsp;',
         id: 'debug-details-panel',
         autoScroll: true,
         collapsible: false,
         split: true,
         margins: '0 2 2 2',
         cmargins: '2 2 2 2',
-        height: detailsMenuTreePanelHeight,
+        //height: detailsMenuTreePanelHeight,
+        height: 50,
         html: detailsText,
         tbar:[
-          deatachAction
+          '->',
+          {
+            id: 'deatachAction',
+            text: _('ID_OPEN_IN_A_NEW_WINDOW'),
+            iconCls: 'ss_sprite ss_application_form',
+            handler: function(){
+              if( Ext.getCmp('debugPanelTabs').getActiveTab().id == 'debugVariables' ){
+                var store1a = new Ext.data.ArrayStore({fields: result.headers});
+                store1a.loadData(result.rows);
+
+                for(i=0; i<result.columns.length; i++){
+                  result.columns[i].editor = new Ext.form.TextField({allowBlank: true, readOnly:true})
+                }
+
+                var myGridPanel = new Ext.grid.EditorGridPanel({
+                  region:'center',
+                  store: store1a,
+                  autoHeight: true,
+                  autoWidth: true,
+                  border : false,
+                  columns: result.columns,
+                  stripeRows : true,
+                  layout: 'fit',
+                  viewConfig:{forceFit:true, scrollOffset:0},
+                  clicksToEdit: 1
+                });
+
+                var w = new Ext.Window({
+                  title: '',
+                  width: 600,
+                  height: 250,
+                  layout:'fit',
+                  autoScroll:true,
+                  modal: true,
+
+                  maximizable: true,
+                  items: [myGridPanel]
+                });
+                w.show();
+              } else {
+                triggerWindow();
+              }
+            }
+          }
         ]
     }]  
   });
-  
+
+  //deatachAction.setDisabled(true);
   
   var viewport = new Ext.Viewport({
     layout: 'border',

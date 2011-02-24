@@ -1,12 +1,14 @@
 <script>
-try{
-  var debugPanel = parent.Ext.getCmp('debugPanel');
+if( typeof parent != 'undefined' ){
+  if( typeof parent.parent != 'undefined' ){
+    var debugPanel = parent.parent.Ext.getCmp('debugPanel');
 
-  debugPanel.show();
-  debugPanel.ownerCt.doLayout();
-  debugPanel.expand();
+    debugPanel.show();
+    debugPanel.ownerCt.doLayout();
+    debugPanel.expand();
 
-  parent.propStore.load();
-  parent.triggerStore.load();
-} catch(e){}
+    parent.parent.propStore.load();
+    parent.parent.triggerStore.load();
+  }
+}
 </script>
