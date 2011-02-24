@@ -1654,9 +1654,8 @@ documentsTab ]
 	// routine to hide the debug panel if it is open
 	if (parent.PANEL_EAST_OPEN) {
 		parent.PANEL_EAST_OPEN = false;
-		var debugPanel = parent.Ext.getCmp('debugPanel');
-		debugPanel.hide();
-		debugPanel.ownerCt.doLayout();
+		parent.Ext.getCmp('debugPanel').hide();
+		parent.Ext.getCmp('debugPanel').ownerCt.doLayout();
 	}
 
 });
