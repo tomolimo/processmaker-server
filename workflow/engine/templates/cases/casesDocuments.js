@@ -79,7 +79,15 @@ function chDir( directory, loadGridOnly ) {
 	if( directory == '' || conn && !conn.isLoading()) {
 		datastore.load({params:{start:0, limit:150, dir: directory, node: directory, option:'gridDocuments', action:'expandNode', sendWhat: datastore.sendWhat }});
 	}
-
+	
+	if(directory=="NA"){ //Disable create new folder under NA
+		tb = ext_itemgrid.getTopToolbar();
+		tb.items.get('tb_new').disable();
+	}
+/*	
+	tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable'
+			: 'disable']();
+*/
     if( !loadGridOnly ) {
 		expandTreeToDir( null, directory );
 	}
