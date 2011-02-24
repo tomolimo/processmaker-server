@@ -9,15 +9,13 @@ this.stroke=2;
 if(typeof workflow.zoomfactor == 'undefined')
   workflow.zoomfactor = 1;
   //Set the Task Limitation
-  if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
-  {
+  if(typeof this.limitFlag == 'undefined' || this.limitFlag == false) {
     this.originalWidth = 30;
     this.originalHeight = 30;
     this.orgXPos = this.getX();
     this.orgYPos = this.getY();
     this.orgFontSize =this.fontSize;
   }
-
   this.width  = this.originalWidth * workflow.zoomfactor;
   this.height = this.originalHeight  * workflow.zoomfactor;
 

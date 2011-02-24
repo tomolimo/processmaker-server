@@ -1854,11 +1854,7 @@ MyWorkflow.prototype.zoom = function(sType)
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    loadMask.show();
-   if(typeof fig.limitFlag == 'undefined')
-       fig.limitFlag = true;
-   if(fig.limitFlag == false){
-     fig.originalWidth = fig.getWidth();
-     fig.originalHeight = fig.getHeight();
+   if(typeof fig.limitFlag == 'undefined'){
      fig.orgXPos = fig.getX();
      fig.orgYPos = fig.getY();
      fig.orgFontSize =fig.fontSize;
@@ -1869,6 +1865,14 @@ MyWorkflow.prototype.zoom = function(sType)
      }
      fig.limitFlag = true;
    }
+
+   if(fig.limitFlag == false){
+     fig.originalWidth = fig.getWidth();
+     fig.originalHeight = fig.getHeight();
+     fig.limitFlag = true;
+   }
+   
+   
    //If zooming is 100% disable resizing of shapes again
    if(sType == '1'){
      fig.limitFlag = true;
@@ -1880,15 +1884,10 @@ MyWorkflow.prototype.zoom = function(sType)
      fig.y4 = fig.orgy4Pos *sType;
      fig.y5 = fig.orgy5Pos *sType;
    }
-
-   if(sType == '1.5' || sType == '2') {
-     var xPos =  fig.orgXPos * sType * 0.5;
-     var yPos =  fig.orgYPos * sType * 0.5;
-   }
-   else {
-     var xPos =  fig.orgXPos * sType;
-     var yPos =  fig.orgYPos * sType;
-   }
+   
+   var xPos =  fig.orgXPos * sType;
+   var yPos =  fig.orgYPos * sType;
+   
    if(fig.type == 'bpmnTask') {
       fig.fontSize = parseInt(fig.orgFontSize) * sType;
       //fig.bpmnText.drawStringRect(fig.taskName, fig.padleft, fig.padtop, fig.rectWidth, fig.rectheight, 'center');
