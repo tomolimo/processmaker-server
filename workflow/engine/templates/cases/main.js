@@ -1,15 +1,8 @@
 var PANEL_EAST_OPEN = false;
 var timerMinutes = 2*60*1000;  //every 2 minutes, this should be customized also,
-
 var currentSelectedTreeMenuItem = null;
 var centerPanel;
-
 var menuTree;
-
-var winSize = parent.getClientWindowSize(); 
-
-var detailsMenuTreePanelHeight  = winSize.height - 420;
-var detailsdebugVariablesHeight = winSize.height - 200;
 
 var debugVarTpl = new Ext.Template('<span style="font-size:11">{value}</span>');
 debugVarTpl.compile();
@@ -375,6 +368,7 @@ Ext.onReady(function(){
   });
   
   debugTriggers.getSelectionModel().on('rowselect', function(sm, rowIdx, r) {
+    Ext.getCmp('deatachAction').setDisabled(false);
     var detailPanel = Ext.getCmp('debug-details-panel');
     detailPanel.setTitle(r.data.name);
     debugTriggersDetailTpl.overwrite(detailPanel.body, r.data);
@@ -406,7 +400,7 @@ Ext.onReady(function(){
 
   debugPanel = new Ext.Panel({
     id:'debugPanel',
-    title: '',
+    title: _('ID_DEBUG_PANEL_TITLE'),
     region: 'east',
     layout: 'border',
     width: 300,
@@ -429,7 +423,13 @@ Ext.onReady(function(){
         items: [
           debugVariables,
           debugTriggers
-        ]
+        ], 
+        listeners: {
+          beforetabchange: function(){
+            Ext.getCmp('deatachAction').setDisabled(true);
+            Ext.getCmp('debug-details-panel').html = '';
+          }
+        }
       }),
       {
         region: 'south',
@@ -448,6 +448,7 @@ Ext.onReady(function(){
           '->',
           {
             id: 'deatachAction',
+            disabled: true,
             text: _('ID_OPEN_IN_A_NEW_WINDOW'),
             iconCls: 'ss_sprite ss_application_form',
             handler: function(){
@@ -492,8 +493,6 @@ Ext.onReady(function(){
         ]
     }]  
   });
-
-  //deatachAction.setDisabled(true);
   
   var viewport = new Ext.Viewport({
     layout: 'border',

@@ -282,12 +282,16 @@ Ext.onReady(function() {
 
 	viewport.doLayout();
 
-	// routine to hide the debug panel if it is open
-	if (parent.PANEL_EAST_OPEN) {
-		parent.PANEL_EAST_OPEN = false;
-		var debugPanel = parent.Ext.getCmp('debugPanel');
-		debugPanel.hide();
-		debugPanel.ownerCt.doLayout();
-	}
+  //routine to hide the debug panel if it is open
+  if( typeof parent != 'undefined' ){
+    if( typeof parent.parent != 'undefined' ){
+      if( parent.parent.PANEL_EAST_OPEN ){
+        parent.parent.PANEL_EAST_OPEN = false;
+        var debugPanel = parent.parent.Ext.getCmp('debugPanel');
+        debugPanel.hide();
+        debugPanel.ownerCt.doLayout();
+      }
+    }
+  }
 
 });
