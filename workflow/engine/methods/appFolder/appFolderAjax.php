@@ -402,7 +402,7 @@ function uploadDocument(){
     $uploadDocumentComponent["xtype"]= "tabpanel";
     $uploadDocumentComponent["stateId"]= "upload_tabpanel";
     $uploadDocumentComponent["activeTab"]= "uploadform";
-    $uploadDocumentComponent["dialogtitle"]= "actupload";
+    $uploadDocumentComponent["dialogtitle"]= G::LoadTranslation('ID_UPLOAD');
     $uploadDocumentComponent["stateful"]= true;
 
     $uploadDocumentComponent["stateEvents"]= array("tabchange");
@@ -459,7 +459,7 @@ function uploadDocument(){
     $itemA["fileUpload"]=true;
     $itemA["labelWidth"]="125";
     $itemA["url"]="URL_SCRIPT";
-    $itemA["title"]="standardupload";
+    $itemA["title"]=G::LoadTranslation('ID_UPLOAD');
     //$itemA["tooltip"]="Max File Size <strong>". ((get_max_file_size() / 1024) / 1024)." MB</strong><br />Max Post Size<strong>". ((get_max_upload_limit() / 1024) / 1024)." MB</strong><br />";
     $itemA["frame"]=true;
     $itemA["items"]=array();
@@ -484,7 +484,7 @@ function uploadDocument(){
     $itemB=array();
 
     $itemB["xtype"]="checkbox";
-    $itemB["fieldLabel"]="overwrite_files";
+    $itemB["fieldLabel"]="Overwrite";//G::LoadTranslation('ID_OVERWRITE');
     $itemB["name"]="overwrite_files";
     $itemB["checked"]=true;
     $itemA["items"][]=$itemB;
@@ -492,10 +492,10 @@ function uploadDocument(){
     $itemA["buttons"]=array();
 
     $buttonA=array();
-    $buttonA["text"]="btnsave";
+    $buttonA["text"]=G::LoadTranslation('ID_SAVE');
     $buttonA["handler"]="function_standardupload_btnsave";
     $functionsToReplace["function_standardupload_btnsave"]=' function() {
-                statusBarMessage( "upload_processing", true, true );
+                statusBarMessage( "'.G::LoadTranslation('ID_UPLOADING_FILE').'", true, true );
                 form = Ext.getCmp("uploadform").getForm();
                 
                 //Ext.getCmp("uploadform").getForm().submit();
@@ -534,7 +534,7 @@ function uploadDocument(){
 
     $buttonA=array();
 
-    $buttonA["text"]= "btncancel";
+    $buttonA["text"]= G::LoadTranslation('ID_CANCEL');
     $buttonA["handler"]="function_standardupload_btncancel";
     $functionsToReplace["function_standardupload_btncancel"]=' function() { Ext.getCmp("dialog").destroy(); }';
     $itemA["buttons"][]=$buttonA;

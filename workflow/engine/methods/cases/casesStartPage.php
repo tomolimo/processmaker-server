@@ -1,11 +1,11 @@
 <?php
 unset($_SESSION['__currentTabDashboard']);
 if(isset($_GET['action'])){
-  $_SESSION['__currentTabDashboard']=$_GET['action'];
+    $_SESSION['__currentTabDashboard']=$_GET['action'];
 }
 $page="";
 if(isset($_GET['action'])){
-  $page=$_GET['action'];
+    $page=$_GET['action'];
 }
 
 $oHeadPublisher =& headPublisher::getSingleton();
@@ -55,9 +55,9 @@ $loadingHTML ='
 print_r($loadingHTML);
 
 switch($page){
-  case "startCase":
+    case "startCase":
 
-    $labels = G::getTranslations(Array(
+        $labels = G::getTranslations(Array(
         'ID_FIND_A_PROCESS',
 				'ID_PROCESS_INFORMATION', 'ID_PROCESS', 'ID_TASK', 'ID_DESCRIPTION', 'ID_CATEGORY',
         'ID_GENERAL_PROCESS_NUMBERS', 'ID_INBOX', 'ID_DRAFT', 'ID_COMPLETED', 'ID_CANCELLED', 'ID_TOTAL_CASES',
@@ -73,15 +73,15 @@ switch($page){
 
         $oHeadPublisher->addContent( 'cases/casesStartCase'); //adding a html file  .html.
         break;
-  case "documents":
-    $labels = G::getTranslations(Array(
-        'ID_FIND_A_PROCESS',
-                'ID_PROCESS_INFORMATION', 'ID_PROCESS', 'ID_TASK', 'ID_DESCRIPTION', 'ID_CATEGORY',
-        'ID_GENERAL_PROCESS_NUMBERS', 'ID_INBOX', 'ID_DRAFT', 'ID_COMPLETED', 'ID_CANCELLED', 'ID_TOTAL_CASES',
-        'ID_CALENDAR', 'ID_CALENDAR_DESCRIPTION', 'ID_WORKING_DAYS', 'ID_DEBUG_MODE',
-        'ID_SUN', 'ID_MON', 'ID_TUE', 'ID_WEN', 'ID_THU', 'ID_FRI', 'ID_SAT',
-        'ID_TITLE_START_CASE', 'ID_STARTING_NEW_CASE', 'ID_ERROR_CREATING_NEW_CASE',
-        'ID_ERROR', 'ID_UNABLE_START_CASE'
+    case "documents":
+        $labels = G::getTranslations(Array(
+        'ID_DOWNLOAD', 'ID_DOWNLOADING_FILE', 'ID_LOADING', 'ID_NO_ITEMS_SELECTED', 'ID_SERVER_COMMUNICATION_ERROR', 'ID_DELETE',
+        'ID_DELETE_SELECTED_ITEMS', 'ID_ROOT_FOLDER', 'ID_RELOAD', 'ID_SEARCH', 'ID_NEW_FOLDER', 'ID_COPY',
+        'ID_MOVE', 'ID_DELETE', 'ID_RENAME', 'ID_DOWNLOAD',
+        'ID_UPLOAD', 'ID_SHOW_DIRS', 'ID_FILTER_CURRENT_VIEW', 'ID_DISPLAY_EMPTY', 'ID_PAGE', 'ID_FIRST', 'ID_LAST',
+        'ID_NEXT', 'ID_PREVIOUS', 'ID_DONE',
+        'ID_NAME', 'ID_VERSION', 'ID_MODIFIED', 'ID_OWNER', 'ID_TYPE', 'ID_PROCESS', 'ID_CASE', 'ID_SIZE', 'ID_PERMISSIONS', 'ID_CONFIRM',
+        'ID_DIRECTORY'
         ));
         $oHeadPublisher->assign('TRANSLATIONS', $labels);
 
@@ -91,15 +91,15 @@ switch($page){
         $oHeadPublisher->addExtJsScript('cases/casesDocuments', false);    //adding a javascript file .js
         $oHeadPublisher->addContent( 'cases/casesDocuments'); //adding a html file  .html.
         break;
-  default:
+    default:
 
-    $oHeadPublisher->usingExtJs('ux.treefilterx/Ext.ux.tree.TreeFilterX');
+        $oHeadPublisher->usingExtJs('ux.treefilterx/Ext.ux.tree.TreeFilterX');
 
-    $oHeadPublisher->usingExtJs('ux.locationbar/Ext.ux.LocationBar');
-    $oHeadPublisher->usingExtJs('ux.statusbar/ext-statusbar');
-    $oHeadPublisher->addExtJsScript('cases/casesStartPage', false);    //adding a javascript file .js
-    $oHeadPublisher->addContent( 'cases/casesStartPage'); //adding a html file  .html.
-    break;
+        $oHeadPublisher->usingExtJs('ux.locationbar/Ext.ux.LocationBar');
+        $oHeadPublisher->usingExtJs('ux.statusbar/ext-statusbar');
+        $oHeadPublisher->addExtJsScript('cases/casesStartPage', false);    //adding a javascript file .js
+        $oHeadPublisher->addContent( 'cases/casesStartPage'); //adding a html file  .html.
+        break;
 
 }
 

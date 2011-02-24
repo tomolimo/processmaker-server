@@ -9,14 +9,15 @@ new Ext.KeyMap(document, {
         }
         e.stopEvent();
         datastore.reload();
-        //Ext.getCmp('dirTree').getRootNode().reload();
+        // Ext.getCmp('dirTree').getRootNode().reload();
       }else{
-       // Ext.Msg.alert(TRANSLATIONS.ID_REFRESH_LABEL, TRANSLATIONS.ID_REFRESH_MESSAGE);
+       // Ext.Msg.alert(TRANSLATIONS.ID_REFRESH_LABEL,
+		// TRANSLATIONS.ID_REFRESH_MESSAGE);
       }
   }
 });
 
-//Ext.BLANK_IMAGE_URL = 'resources/s.gif';
+// Ext.BLANK_IMAGE_URL = 'resources/s.gif';
 
 Ext.chart.Chart.CHART_URL = '/images/charts.swf';
 Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
@@ -35,7 +36,7 @@ streamFilefromPM=function(fileStream) {
         success: function(response) {        	
             results = Ext.decode(response.responseText);            
            if(results.success=='success'){
-        	   messageText="Downloading file "+results.message;
+        	   messageText=TRANSLATIONS.ID_DOWNLOADING_FILE+" "+results.message;
 				statusBarMessage( messageText, true, true );
             try {
                 Ext.destroy(Ext.get('downloadIframe'));
@@ -81,15 +82,15 @@ function chDir( directory, loadGridOnly ) {
 	}
 	
 	tb = ext_itemgrid.getTopToolbar();
-	if(directory=="NA"){ //Disable create new folder under NA		
+	if(directory=="NA"){ // Disable create new folder under NA
 		tb.items.get('tb_new').disable();
 	}else{
 		tb.items.get('tb_new').enable();
 	}
-/*	
-	tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable'
-			: 'disable']();
-*/
+/*
+ * tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable' :
+ * 'disable']();
+ */
     if( !loadGridOnly ) {
 		expandTreeToDir( null, directory );
 	}
@@ -165,7 +166,7 @@ function showLoadingIndicator( el, replaceContent ) {
 	// console.info("showLoadingIndicator");
 	if( !el ) return;
 	var loadingimg = '/images/documents/_indicator.gif';
-	var imgtag = '<' + 'img src="'+ loadingimg + '" alt="Loading..." border="0" name="Loading" align="absmiddle" />';
+	var imgtag = '<' + 'img src="'+ loadingimg + '" alt="'+TRANSLATIONS.ID_LOADING+'" border="0" name="'+TRANSLATIONS.ID_LOADING+'" align="absmiddle" />';
 
 	if( replaceContent ) {
 		el.innerHTML = imgtag;
@@ -208,7 +209,7 @@ function openActionDialog( caller, action ) {
 	}
 	var dontNeedSelection = { newFolder:1, uploadDocument:1, search:1 };
 	if( dontNeedSelection[action] == null  && selectedRows.length < 1 ) {
-		Ext.Msg.alert( 'error','No items Selected');
+		Ext.Msg.alert( 'Error',TRANSLATIONS.ID_NO_ITEMS_SELECTED);
 		return false;
 	}
 
@@ -252,7 +253,7 @@ function openActionDialog( caller, action ) {
 								scripts: true,
 								callback: function(oElement, bSuccess, oResponse) {
 											if( !bSuccess ) {
-												msgbox = Ext.Msg.alert( "Ajax communication failure!");
+												msgbox = Ext.Msg.alert( TRANSLATIONS.ID_SERVER_COMMUNICATION_ERROR);
 												msgbox.setIcon( Ext.MessageBox.ERROR );
 											}
 											if( oResponse && oResponse.responseText ) {
@@ -361,19 +362,19 @@ function openActionDialog( caller, action ) {
 
 		case 'delete':
 			var num = selectedRows.length;
-			Ext.Msg.confirm('dellink?', String.format("miscdelitems", num ), deleteFiles);
+			Ext.Msg.confirm(TRANSLATIONS.ID_DELETE, String.format(TRANSLATIONS.ID_DELETE_SELECTED_ITEMS, num ), deleteFiles);
 			break;
 		case 'download':
 			fileName=ext_itemgrid.getSelectionModel().getSelected().get('name');
-			//alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
-			//alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLabel'));
+			// alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
+			// alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLabel'));
 			streamFilefromPM(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
-			/*if(document.location = ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
-				messageText="Downloading file "+fileName;
-				statusBarMessage( messageText, false, true );
-			}else{
-				alert("sadasd");
-			}*/
+			/*
+			 * if(document.location =
+			 * ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
+			 * messageText="Downloading file "+fileName; statusBarMessage(
+			 * messageText, false, true ); }else{ alert("sadasd"); }
+			 */
 			break;
 	}
 }
@@ -522,7 +523,7 @@ function handleCallback(requestParams, node) {
 
 		function statusBarMessage( msg, isLoading, success ) {
 			// console.log("Status Bar needed");
-			//console.log(msg);
+			// console.log(msg);
 			var statusBar = Ext.getCmp('statusPanel');
 			if( !statusBar ) return;
 			// console.log("Status bar acceced: "+msg);
@@ -534,18 +535,18 @@ function handleCallback(requestParams, node) {
 			}
 			if( success ) {
 				statusBar.setStatus({
-				    text: 'Success: ' + msg,
+				    text: '' + msg,
 				    iconCls: 'success',
 				    clear: true
 				});
-				Ext.msgBoxSlider.msg('Success', msg );
+				Ext.msgBoxSlider.msg('', msg );
 			} else {
 				statusBar.setStatus({
-				    text: 'error: ' + msg,
+				    text: 'Error: ' + msg,
 				    iconCls: 'error',
 				    clear: true
 				});
-				Ext.msgBoxSlider.msg('error', msg );
+				Ext.msgBoxSlider.msg('Error', msg );
 				
 			}
 			
@@ -685,10 +686,16 @@ function renderType(value, p, record) {
 function renderVersion(value, p, record) {
 	if(record.get("appDocVersionable")=="1"){
 		if(value>1){
-			//return String.format('<b>{0}</b>&nbsp;&nbsp;&nbsp;<a href="#"><img src="{1}" border="0" title="Upload New Version" valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>', value,'/images/documents/_up.png','Upload new Version');
+			// return String.format('<b>{0}</b>&nbsp;&nbsp;&nbsp;<a
+			// href="#"><img src="{1}" border="0" title="Upload New Version"
+			// valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>',
+			// value,'/images/documents/_up.png','Upload new Version');
 			return String.format('<b>{0}</b>', value);
 		}else{
-			//return String.format('{0}&nbsp;&nbsp;&nbsp;<a href="#"><img src="{1}" border="0" title="Upload New Version" valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>', value,'/images/documents/_up.png','Upload new Version');
+			// return String.format('{0}&nbsp;&nbsp;&nbsp;<a href="#"><img
+			// src="{1}" border="0" title="Upload New Version"
+			// valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>',
+			// value,'/images/documents/_up.png','Upload new Version');
 			return String.format('{0}', value);
 		}
 	}else{
@@ -700,11 +707,12 @@ function renderVersionExpander(value, p, record) {
 	// addcc.png
 	// system-search.png
 	p.cellAttr = 'rowspan="2"';
-    //return '<div class="x-grid3-row-expander">&#160;</div>';
+    // return '<div class="x-grid3-row-expander">&#160;</div>';
 	if(record.get("appDocVersionable")=="1"){
 		if(value>1){
 			return '<div class="x-grid3-row-expander">&#160;</div>';
-			//return String.format('<div class="x-grid3-row-expander">{0}</div>',	 value);
+			// return String.format('<div
+			// class="x-grid3-row-expander">{0}</div>', value);
 		}else{
 			return '';
 		}
@@ -719,9 +727,10 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_home',
-					iconCls: 'button_menu_ext ss_sprite ss_house',//icon : '/images/documents/_home.png',
+					iconCls: 'button_menu_ext ss_sprite ss_house',// icon :
+																	// '/images/documents/_home.png',
 					// text : 'Root',
-					tooltip : 'Root Folder',
+					tooltip : TRANSLATIONS.ID_ROOT_FOLDER,
 					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					handler : function() {
@@ -731,9 +740,11 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_reload',
-					iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',//icon : '/images/documents/_reload.png',
+					iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',// icon
+																			// :
+																			// '/images/documents/_reload.png',
 					// text : 'Reload',
-					tooltip : 'Reload',
+					tooltip : TRANSLATIONS.ID_RELOAD,
 					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					handler : loadDir
@@ -744,7 +755,7 @@ var gridtb = new Ext.Toolbar(
 					id : 'tb_search',
 					icon : '/images/documents/_filefind.png',
 					// text : 'Search',
-					tooltip : 'Search',
+					tooltip : TRANSLATIONS.ID_SEARCH,
 					// cls : 'x-btn-text-icon',
 					cls : 'x-btn-icon',
 					disabled : true,
@@ -757,8 +768,10 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_new',
-					iconCls: 'button_menu_ext ss_sprite ss_folder_add',//icon : '/images/documents/_filenew.png',
-					tooltip : 'New Folder',
+					iconCls: 'button_menu_ext ss_sprite ss_folder_add',// icon
+																		// :
+																		// '/images/documents/_filenew.png',
+					tooltip : TRANSLATIONS.ID_NEW_FOLDER,
 					cls : 'x-btn-icon',
 					disabled : false,
 					handler : function() {
@@ -768,8 +781,10 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_copy',
-					icon : '/images/documents/_editcopy.png',
-					tooltip : 'Copy',
+					iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
+						// '/images/documents/_editcopy.png',
+
+					tooltip : TRANSLATIONS.ID_COPY,
 					cls : 'x-btn-icon',
 					disabled : false,
 					hidden: true,
@@ -780,8 +795,9 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_move',
-					icon : '/images/documents/_move.png',
-					tooltip : 'Move',
+					iconCls: 'button_menu_ext ss_sprite ss_page_white_go',// icon :
+					// '/images/documents/_move.png',
+					tooltip : TRANSLATIONS.ID_MOVE,
 					cls : 'x-btn-icon',
 					disabled : false,
 					hidden: true,
@@ -792,8 +808,10 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_delete',
-					icon : '/images/documents/_editdelete.png',
-					tooltip : 'dellink',
+					iconCls: 'button_menu_ext ss_sprite ss_folder_delete',// icon
+					// :
+					// '/images/documents/_editdelete.png',
+					tooltip : TRANSLATIONS.ID_DELETE,
 					cls : 'x-btn-icon',
 					disabled : true,
 					hidden: true,
@@ -804,8 +822,9 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_rename',
-					icon : '/images/documents/_fonts.png',
-					tooltip : 'renamelink',
+					iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
+					// '/images/documents/_fonts.png',
+					tooltip : TRANSLATIONS.ID_RENAME,
 					cls : 'x-btn-icon',
 					disabled : true,
 					hidden: true,
@@ -817,8 +836,10 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_download',
-					iconCls: 'button_menu_ext ss_sprite ss_page_white_put',//icon : '/images/documents/_down.png',
-					tooltip : 'Download',
+					iconCls: 'button_menu_ext ss_sprite ss_page_white_put',// icon
+																			// :
+																			// '/images/documents/_down.png',
+					tooltip : TRANSLATIONS.ID_DOWNLOAD,
 					cls : 'x-btn-icon',
 					disabled : true,
 					handler : function() {
@@ -828,8 +849,10 @@ var gridtb = new Ext.Toolbar(
 				{
 					xtype : "tbbutton",
 					id : 'tb_upload',
-					iconCls: 'button_menu_ext ss_sprite ss_page_white_get',//icon : '/images/documents/_up.png',
-					tooltip : 'Upload',
+					iconCls: 'button_menu_ext ss_sprite ss_page_white_get',// icon
+																			// :
+																			// '/images/documents/_up.png',
+					tooltip : TRANSLATIONS.ID_UPLOAD,
 					cls : 'x-btn-icon',
 					disabled : false,
 					handler : function() {
@@ -848,7 +871,7 @@ var gridtb = new Ext.Toolbar(
 				},
 				'-',				
 				new Ext.Toolbar.Button({
-					text : 'Show Dirs',
+					text : TRANSLATIONS.ID_SHOW_DIRS,
 					enableToggle : true,
 					pressed : true,
 					handler : function(btn, e) {
@@ -864,8 +887,8 @@ var gridtb = new Ext.Toolbar(
 					name : "filterValue",
 					id : "filterField",
 					enableKeyEvents : true,
-					title : "Filter current view",
-					emptyText : 'Filter current view',
+					title : TRANSLATIONS.ID_FILTER_CURRENT_VIEW,
+					emptyText : TRANSLATIONS.ID_FILTER_CURRENT_VIEW,
 					listeners : {
 						"keypress" : {
 							fn : function(textfield, e) {
@@ -898,29 +921,29 @@ var gridbb = new Ext.PagingToolbar({
 	pageSize : 25 ,
 	displayInfo : true,
 	// displayMsg : '% % %',
-	emptyMsg : 'No items to display',
-	beforePageText : 'Page',
+	emptyMsg : TRANSLATIONS.ID_DISPLAY_EMPTY,
+	beforePageText : TRANSLATIONS.ID_PAGE,
 	// afterPageText : 'of %',
-	firstText : 'First',
-	lastText : 'Last',
-	nextText : 'Next',
-	prevText : 'Previous',
-	refreshText : 'Reload',
+	firstText : TRANSLATIONS.ID_FIRST,
+	lastText : TRANSLATIONS.ID_LAST,
+	nextText : TRANSLATIONS.ID_NEXT,
+	prevText : TRANSLATIONS.ID_PREVIOUS,
+	refreshText : TRANSLATIONS.ID_RELOAD,
 	items : [ '-', ' ', ' ', ' ', ' ', ' ', new Ext.ux.StatusBar({
-		defaultText : 'Done',
+		defaultText : TRANSLATIONS.ID_DONE,
 		id : 'statusPanel'
 	}) ]
 });
 
 
 var getGrid = function( data, element) {
-	//var grid = Ext.getCmp('gridpanel');
+	// var grid = Ext.getCmp('gridpanel');
 	
 	var grid = new Ext.grid.GridPanel({
 		store: datastore,
 		cm: cm,
 		stripeRows: true,
-		//autoExpandColumn: 'company',
+		// autoExpandColumn: 'company',
 		autoHeight: true,
 		border: false,
 		width: '100%',
@@ -938,15 +961,15 @@ var getGrid = function( data, element) {
 
 var expander = new Ext.ux.grid.RowExpander({
 	tpl              : '<div class="ux-row-expander-box" style="border: 2px solid red;"></div>',
-	//header:'Version',
-/*    tpl : new Ext.Template(
-        '<p><b>Company:</b> {company}</p><br>',
-        '<p><b>Summary:</b> {desc}</p>'
-    ),*/
+	// header:'Version',
+/*
+ * tpl : new Ext.Template( '<p><b>Company:</b> {company}</p><br>', '<p><b>Summary:</b>
+ * {desc}</p>' ),
+ */
     
 
-    //width : 50,
-	//align : 'center',
+    // width : 50,
+	// align : 'center',
     expandOnEnter: false,
     expandOnDblClick: false,
     fixed: false,
@@ -957,7 +980,7 @@ var expander = new Ext.ux.grid.RowExpander({
 		expand : function( expander, record, body, rowIndex) {
 			data = new Array();
 			getGrid( data, Ext.get( this.grid.getView().getRow( rowIndex)).child( '.ux-row-expander-box'));
-			//alert( Ext.ComponentMgr.all.length);
+			// alert( Ext.ComponentMgr.all.length);
 		}
 	},
 renderer : renderVersionExpander
@@ -969,7 +992,7 @@ renderer : renderVersionExpander
 var cm = new Ext.grid.ColumnModel([{
 	id : 'gridcm', // id assigned so we can apply custom css (e.g.
 					// .x-grid-col-topic b { color:#333 })
-	header : "Name",
+	header : TRANSLATIONS.ID_NAME,
 	dataIndex : 'name',
 	width : 200,
 	renderer : renderFileName,
@@ -978,17 +1001,17 @@ var cm = new Ext.grid.ColumnModel([{
 	}),
 	css : 'white-space:normal;'
 }, {
-	header : "Version",
+	header : TRANSLATIONS.ID_VERSION,
 	dataIndex : 'docVersion',
 	width : 50,
 	align : 'center',
 	renderer : renderVersion
-},  /*expander,*/{
-	header : "Modified",
+},  /* expander, */{
+	header : TRANSLATIONS.ID_MODIFIED,
 	dataIndex : 'appDocCreateDate',
 	width : 65
 }, {
-	header : "Owner",
+	header : TRANSLATIONS.ID_OWNER,
 	dataIndex : 'owner',
 	width : 100
 	// sortable : false
@@ -1000,36 +1023,35 @@ var cm = new Ext.grid.ColumnModel([{
 	// align : 'right'
 	// renderer : renderType
 }, {
-	header : "Type",
+	header : TRANSLATIONS.ID_TYPE,
 	dataIndex : 'type',
 	width : 100,
 	// align : 'right',
 	renderer : renderType
 }, {
-	header : "Process",
+	header : TRANSLATIONS.ID_PROCESS,
 	dataIndex : 'proTitle',
 	width : 150// ,
 	// align : 'right'
 	// renderer : renderType
 }, {
-	header : "Case",
+	header : TRANSLATIONS.ID_CASE,
 	dataIndex : 'appLabel',
 	width : 150// ,
 	// align : 'right'
 	// renderer : renderType
 },{
-	header : "Size",
+	header : TRANSLATIONS.ID_SIZE,
 	dataIndex : 'size',
 	width : 50,
 	hidden:true
 }, {
-	header : "Permissions",
+	header : TRANSLATIONS.ID_PERMISSIONS,
 	dataIndex : 'perms',
 	width : 100,
 	hidden:true
 }, {
 	dataIndex : 'is_deletable',
-	header : "is_deletable",
 	hidden : true,
 	hideable : false
 }, {
@@ -1140,37 +1162,42 @@ gridCtxMenu = new Ext.menu.Menu({
 
 	items : [ {
 		id : 'gc_rename',
-		iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',//icon : '/images/documents/_fonts.png',
-		text : 'renamelink',
+		iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
+																	// '/images/documents/_fonts.png',
+		text : TRANSLATIONS.ID_RENAME,
 		handler : function() {
 			ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
 			gsm.clickedRow = null;
 		}
 	}, {
 		id : 'gc_copy',
-		iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',//icon : '/images/documents/_editcopy.png',
-		text : 'copylink',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
+																// '/images/documents/_editcopy.png',
+		text : TRANSLATIONS.ID_COPY,
 		handler : function() {
 			openActionDialog(this, 'copyAction');
 		}
 	}, {
 		id : 'gc_move',
-		iconCls: 'button_menu_ext ss_sprite ss_page_white_go',//icon : '/images/documents/_move.png',
-		text : 'movelink',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_go',// icon :
+																// '/images/documents/_move.png',
+		text : TRANSLATIONS.ID_MOVE,
 		handler : function() {
 			openActionDialog(this, 'moveAction');
 		}
 	}, {
 		id : 'gc_delete',
-		iconCls: 'button_menu_ext ss_sprite ss_page_white_delete',//icon : '/images/documents/_editdelete.png',
-		text : 'dellink',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_delete',// icon :
+																	// '/images/documents/_editdelete.png',
+		text : TRANSLATIONS.ID_DELETE,
 		handler : function() {
 			openActionDialog(this, 'delete');
 		}
 	}, '-', {
 		id : 'gc_download',
-		iconCls: 'button_menu_ext ss_sprite ss_page_white_put',//icon : '/images/documents/_down.png',
-		text : 'downlink',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_put',// icon :
+																// '/images/documents/_down.png',
+		text : TRANSLATIONS.ID_DOWNLOAD,
 		handler : function() {
 			openActionDialog(this, 'download');
 		}
@@ -1178,8 +1205,9 @@ gridCtxMenu = new Ext.menu.Menu({
 
 	'-', {
 		id : 'cancel',
-		iconCls: 'button_menu_ext ss_sprite ss_cross',//icon : '/images/documents/_cancel.png',
-		text : 'btncancel',
+		iconCls: 'button_menu_ext ss_sprite ss_cross',// icon :
+														// '/images/documents/_cancel.png',
+		text : TRANSLATIONS.ID_CANCEL,
 		handler : function() {
 			gridCtxMenu.hide();
 		}
@@ -1236,8 +1264,10 @@ var dirCtxMenu = new Ext.menu.Menu(
 			items : [
 					{
 						id : 'dirCtxMenu_new',
-						iconCls: 'button_menu_ext ss_sprite ss_folder_add',//icon : '/images/documents/_folder_new.png',
-						text : 'New',
+						iconCls: 'button_menu_ext ss_sprite ss_folder_add',// icon
+																			// :
+																			// '/images/documents/_folder_new.png',
+						text : TRANSLATIONS.ID_NEW_FOLDER,
 						handler : function() {
 							dirCtxMenu.hide();
 							openActionDialog(this, 'newFolder');
@@ -1245,8 +1275,10 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},
 					{
 						id : 'dirCtxMenu_rename',
-						iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',//icon : '/images/documents/_fonts.png',
-						text : 'Rename',
+						iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon
+																					// :
+																					// '/images/documents/_fonts.png',
+						text : TRANSLATIONS.ID_RENAME,
 						handler : function() {
 							dirCtxMenu.hide();
 							openActionDialog(this, 'rename');
@@ -1254,8 +1286,10 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},
 					{
 						id : 'dirCtxMenu_copy',
-						icon : '/images/documents/_editcopy.png',
-						text : 'Copy',
+						iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
+						// '/images/documents/_editcopy.png',
+
+						text : TRANSLATIONS.ID_COPY,
 						handler : function() {
 							dirCtxMenu.hide();
 							openActionDialog(this, 'copyAction');
@@ -1263,8 +1297,10 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},
 					{
 						id : 'dirCtxMenu_move',
-						iconCls: 'button_menu_ext ss_sprite ss_folder_go',//icon : '/images/documents/_move.png',
-						text : 'Move',
+						iconCls: 'button_menu_ext ss_sprite ss_folder_go',// icon
+																			// :
+																			// '/images/documents/_move.png',
+						text : TRANSLATIONS.ID_MOVE,
 						handler : function() {
 							dirCtxMenu.hide();
 							openActionDialog(this, 'moveAction');
@@ -1272,17 +1308,20 @@ var dirCtxMenu = new Ext.menu.Menu(
 					},					
 					{
 						id : 'dirCtxMenu_remove',
-						iconCls: 'button_menu_ext ss_sprite ss_folder_delete',//icon : '/images/documents/_editdelete.png',
-						text : 'Remove',
+						iconCls: 'button_menu_ext ss_sprite ss_folder_delete',// icon
+																				// :
+																				// '/images/documents/_editdelete.png',
+						
+						text : TRANSLATIONS.ID_DELETE,
 						handler : function() {
 							dirCtxMenu.hide();
 							var num = 1;
 							Ext.Msg
 									.confirm(
-											'Confirm',
+											TRANSLATIONS.ID_CONFIRM,
 											String
 													.format(
-															"Delete?",
+															TRANSLATIONS.ID_DELETE_SELECTED_ITEMS,
 															num),
 											function(btn) {
 												deleteDir(btn, dirCtxMenu.node);
@@ -1290,16 +1329,20 @@ var dirCtxMenu = new Ext.menu.Menu(
 						}
 					}, '-', {
 						id : 'dirCtxMenu_reload',
-						iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',//icon : '/images/documents/_reload.png',
-						text : 'Refresh',
+						iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',// icon
+																				// :
+																				// '/images/documents/_reload.png',
+						text : TRANSLATIONS.ID_REFRESH_LABEL,
 						handler : function() {
 							dirCtxMenu.hide();
 							dirCtxMenu.node.reload();
 						}
 					}, '-', {
 						id : 'dirCtxMenu_cancel',
-						iconCls: 'button_menu_ext ss_sprite ss_cross',//icon : '/images/documents/_cancel.png',
-						text : 'Cancel',
+						iconCls: 'button_menu_ext ss_sprite ss_cross',// icon
+																		// :
+																		// '/images/documents/_cancel.png',
+						text : TRANSLATIONS.ID_CANCEL,
 						handler : function() {
 							dirCtxMenu.hide();
 						}
@@ -1309,24 +1352,27 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 	id : 'copyCtx',
 	items : [ {
 		id : 'copymoveCtxMenu_copy',
-		iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',//icon : '/images/documents/_editcopy.png',
-		text : 'copylink',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
+																// '/images/documents/_editcopy.png',
+		text : TRANSLATIONS.ID_COPY,
 		handler : function() {
 			copymoveCtxMenu.hide();
 			copymove('copyExecute');
 		}
 	}, {
 		id : 'copymoveCtxMenu_move',
-		iconCls: 'button_menu_ext ss_sprite ss_page_white_go',//icon : '/images/documents/_move.png',
-		text : 'movelink',
+		iconCls: 'button_menu_ext ss_sprite ss_page_white_go',// icon :
+																// '/images/documents/_move.png',
+		text : TRANSLATIONS.ID_MOVE,
 		handler : function() {
 			copymoveCtxMenu.hide();
 			copymove('moveExecute');
 		}
 	}, '-', {
 		id : 'copymoveCtxMenu_cancel',
-		iconCls: 'button_menu_ext ss_sprite ss_cross',//icon : '/images/documents/_cancel.png',
-		text : 'btncancel',
+		iconCls: 'button_menu_ext ss_sprite ss_cross',// icon :
+														// '/images/documents/_cancel.png',
+		text : TRANSLATIONS.ID_CANCEL,
 		handler : function() {
 			copymoveCtxMenu.hide();
 		}
@@ -1357,7 +1403,7 @@ var documentsTab = {
 				xtype : "treepanel",
 				id : "dirTree",
 				region : "west",
-				title : 'Directory<img src="/images/refresh.gif" hspace="20" style="cursor:pointer;" title="reload" onclick="Ext.getCmp(\'dirTree\').getRootNode().reload();" alt="Reload" align="middle" />',
+				title : TRANSLATIONS.ID_DIRECTORY+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/refresh.gif" hspace="20" style="cursor:pointer;" title="reload" onclick="Ext.getCmp(\'dirTree\').getRootNode().reload();" alt="Reload" align="middle" />',
 				closable : false,
 				collapsible: true,
 				collapseMode: 'mini',
