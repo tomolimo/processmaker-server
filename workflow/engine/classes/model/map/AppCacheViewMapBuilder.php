@@ -110,11 +110,11 @@ class AppCacheViewMapBuilder {
 
 		$tMap->addColumn('DEL_DELAY_DURATION', 'DelDelayDuration', 'double', CreoleTypes::DOUBLE, false, null);
 
-		$tMap->addColumn('DEL_STARTED', 'DelStarted', 'int', CreoleTypes::TINYINT, false, null);
+		$tMap->addColumn('DEL_STARTED', 'DelStarted', 'int', CreoleTypes::TINYINT, true, null);
 
-		$tMap->addColumn('DEL_FINISHED', 'DelFinished', 'int', CreoleTypes::TINYINT, false, null);
+		$tMap->addColumn('DEL_FINISHED', 'DelFinished', 'int', CreoleTypes::TINYINT, true, null);
 
-		$tMap->addColumn('DEL_DELAYED', 'DelDelayed', 'int', CreoleTypes::TINYINT, false, null);
+		$tMap->addColumn('DEL_DELAYED', 'DelDelayed', 'int', CreoleTypes::TINYINT, true, null);
 
 		$tMap->addColumn('APP_CREATE_DATE', 'AppCreateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
 

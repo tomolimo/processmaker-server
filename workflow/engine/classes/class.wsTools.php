@@ -470,7 +470,8 @@ class workspaceTools {
    */
   public function upgradeDatabase($checkOnly = false) {
     $systemSchema = System::getSystemSchema();
-    return $this->upgradeSchema($systemSchema);
+    $this->upgradeSchema($systemSchema);
+    return true;
   }
 
 

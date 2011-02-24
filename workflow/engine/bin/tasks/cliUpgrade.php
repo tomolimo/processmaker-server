@@ -93,6 +93,7 @@ function run_upgrade($command, $args) {
   $workspaces = get_workspaces_from_args($args);
   $count = count($workspaces);
   $first = true;
+  $errors = false;
   foreach ($workspaces as $index => $workspace) {
     try {
       CLI::logging("Upgrading workspaces ($index/$count): " . CLI::info($workspace->name) . "\n");
@@ -101,9 +102,15 @@ function run_upgrade($command, $args) {
       $first = false;
     } catch (Exception $e) {
       CLI::logging("Errors upgrading workspace " . CLI::info($workspace->name) . ": " . CLI::error($e->getMessage()) . "\n");
+      $errors = true;
     }
   }
-  CLI::logging("Upgrade successful\n");
+  if ($errors) {
+    CLI::logging("Upgrade finished but there were errors upgrading workspaces.\n");
+    CLI::logging(CLI::error("Please check the log above to correct any issues.")."\n");
+  } else {
+    CLI::logging("Upgrade successful\n");
+  }
 }
 
 ?>

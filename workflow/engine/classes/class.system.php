@@ -689,7 +689,20 @@ class System {
   * @return $sContent
   */
   public static function getSchema($sSchemaFile) {
-    $dbAdapter = "mysql";
+    /* This is the MySQL mapping that Propel uses (from MysqlPlatform.php) */
+    $mysqlTypes = array(
+      'NUMERIC' => "DECIMAL",
+      'LONGVARCHAR' => "MEDIUMTEXT",
+      'TIMESTAMP' => "DATETIME",
+      'BU_TIMESTAMP' => "DATETIME",
+      'BINARY' => "BLOB",
+      'VARBINARY' => "MEDIUMBLOB",
+      'LONGVARBINARY' => "LONGBLOB",
+      'BLOB' => "LONGBLOB",
+      'CLOB' => "LONGTEXT",
+      /* This is not from Propel, but is required to get INT right */
+      'INTEGER' => "INT");
+
     $aSchema = array();
     $oXml = new DomDocument();
     $oXml->load($sSchemaFile);
@@ -701,24 +714,42 @@ class System {
       $aColumns = $oTable->getElementsByTagName('column');
       foreach ($aColumns as $oColumn) {
         $sColumName = $oColumn->getAttribute('name');
-        $aSchema[$sTableName][$sColumName] = array();
-        $aVendors = $oColumn->getElementsByTagName('vendor');
-        foreach ($aVendors as $oVendor) {
-          if ($oVendor->getAttribute('type') == $dbAdapter) {
-            break;
-          }
-        }
-        $aParameters = $oColumn->getElementsByTagName('parameter');
-        foreach ($aParameters as $oParameter) {
-          $parameterName = ucwords($oParameter->getAttribute('name'));
-          if ( $parameterName == 'Key' && strtoupper($oParameter->getAttribute('value')) == 'PRI' ) {
-          	$aPrimaryKeys[] = $oColumn->getAttribute('name');
-          }
 
-        	if ( in_array ( $parameterName, array('Field','Type','Null','Default') ) ) {
-            $aSchema[$sTableName][$sColumName][$parameterName] = $oParameter->getAttribute('value');
-          }
-        }
+        /* Get the field type. Propel uses VARCHAR if nothing else is specified */
+        $type = $oColumn->hasAttribute('type') ? strtoupper($oColumn->getAttribute('type')) : "VARCHAR";
+        
+        /* Convert type to MySQL type according to Propel */
+        if (array_key_exists($type, $mysqlTypes))
+          $type = $mysqlTypes[$type];
+
+        $size = $oColumn->hasAttribute('size') ? $oColumn->getAttribute('size') : NULL;
+        /* Add default sizes from MySQL */
+        if ($type == "TINYINT" && !$size)
+          $size = "4";
+        if ($type == "INT" && !$size)
+          $size = "11";
+
+        if ($size)
+          $type = "$type($size)";
+        
+        $required = $oColumn->hasAttribute('required') ? $oColumn->getAttribute('required') : NULL;
+        /* Convert $required to a bool */
+        $required = (in_array (strtolower ($required), array('1', 'true')));
+
+        $default = $oColumn->hasAttribute('default') ? $oColumn->getAttribute('default') : NULL;
+
+        $primaryKey = $oColumn->hasAttribute('primaryKey') ? $oColumn->getAttribute('primaryKey') : NULL;
+        /* Convert $primaryKey to a bool */
+        $primaryKey = (in_array (strtolower ($primaryKey), array('1', 'true')));
+        if ($primaryKey)
+          $aPrimaryKeys[] = $sColumName;
+        
+        $aSchema[$sTableName][$sColumName] = array(
+            'Field' => $sColumName,
+            'Type' => $type,
+            'Null' => $required ? "NO" : "YES",
+            'Default' => $default
+        );
       }
 
       if ( is_array($aPrimaryKeys) && count($aPrimaryKeys) > 0 ) {
@@ -808,14 +839,16 @@ class System {
                 $changeDefaultAttr = false;
 
               //#1067 - Invalid default value for int field
-              if ( substr($newField['Type'], 0, 3 ) && isset($newField['Default']) && $newField['Default']== '' )
+              if ( substr($newField['Type'], 0, 3 ) == "int" && isset($newField['Default']) && $newField['Default']== '' )
                 $changeDefaultAttr = false;
 
               //if any difference exists, then insert the difference in aChanges
-              if ( $newField['Field']   != $oldField['Field'] ||
-                   $newField['Type']    != $oldField['Type'] ||
-                   $newField['Null']    != $oldField['Null'] ||
+              if ( strcasecmp($newField['Field'], $oldField['Field']) !== 0 ||
+                   strcasecmp($newField['Type'], $oldField['Type']) !== 0 ||
+                   strcasecmp($newField['Null'], $oldField['Null']) !== 0 ||
                    $changeDefaultAttr ) {
+                var_dump("Found in DB: ", $aOldSchema[$sTableName][$sColumName]);
+                var_dump("Should be:   ", $aNewSchema[$sTableName][$sColumName]);
                 if (!isset($aChanges['tablesToAlter'][$sTableName])) {
                   $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
                 }
