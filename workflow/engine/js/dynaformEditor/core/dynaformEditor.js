@@ -276,7 +276,8 @@ var dynaformEditor={
 			case "htmlcode":this.refresh_htmlcode();break;
 			case "xmlcode":this.refresh_xmlcode();break;
 			case "fieldslist":this.refreshFieldsList();break;
-			case "javascripts":this.refreshJavascripts();break;
+			case "javascripts":this.changeJavascriptCode();
+                         this.refreshJavascripts();break;
 			case "properties":this.refreshProperties();break;
 		}
 	},
