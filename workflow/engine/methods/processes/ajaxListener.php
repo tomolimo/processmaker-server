@@ -282,7 +282,7 @@ class Ajax
     
     $rootNode->id = $process->getProUid();
     $rootNode->text = $process->getProTitle();
-    $rootNode->leaf = false;
+    $rootNode->leaf = count($tasksList) > 0 ? false : true;
     $rootNode->expanded =true;
     foreach($tasksList as $task) {
       $node = new stdClass;
