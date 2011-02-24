@@ -37,13 +37,14 @@ if($aData['ROU_TYPE'] != 'SEQUENTIAL')
 {
     $oProcessMap = new processMap();
     //$sGatewayUID = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
+    require_once 'classes/model/Gateway.php';
     $oGateway = new Gateway ( );
     
     $aGatewayFields  = array();
     $aGatewayFields['GAT_UID']  = $aData['GAT_UID'];
     $aGatewayFields['TAS_UID']  = $aData['TASK'][0];
     $aGatewayFields['GAT_NEXT_TASK']  = $aData['ROU_NEXT_TASK'][0];
-    $aGatewayFields['GAT_TYPE']  = $aData['GAT_TYPE'];
+    $aGatewayFields['GAT_TYPE']  = '';
     $oGateway->update($aGatewayFields);
     //$sGatewayUID   = $oProcessMap->saveNewGateway($aData['PROCESS'], $aData['TASK'][0], $aData['ROU_NEXT_TASK'][0]);
     //echo $sGatewayUID.'|';

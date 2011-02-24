@@ -2590,7 +2590,7 @@ class processMap {
       if($sType != 'SEQUENTIAL')
       {
           $oProcessMap = new processMap();
-          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID, $sNextTask,$sType);
+          $sGatewayUID = $oProcessMap->saveNewGateway($sProcessUID, $sTaskUID, $sNextTask);
       }
 
       $aFields ['GAT_UID'] = (isset($sGatewayUID))?$sGatewayUID:'';
@@ -2643,6 +2643,7 @@ class processMap {
      }
 
       $oGateway = new Gateway ( );
+
       $sGatewayUID = $oGateway->create($aFields);
 
       return $sGatewayUID;
@@ -5485,7 +5486,6 @@ class processMap {
       $oCriteria = new Criteria ( 'workflow' );
       $del       = DBAdapter::getStringDelimiter ();
       $oCriteria->add ( SubProcessPeer::PRO_PARENT, $sProcessUID );
-      $oCriteria->add ( SubProcessPeer::PRO_PARENT, $sProcessUID );
       $oCriteria->add ( SubProcessPeer::TAS_PARENT, $sTaskUID );
 
       $oCriteria->addAsColumn ( 'CON_VALUE', 'C1.CON_VALUE', 'CON_TITLE' );
@@ -5521,11 +5521,11 @@ class processMap {
           $SP_VARIABLES_OUT = unserialize ( $aRow ['SP_VARIABLES_OUT'] );
           if (is_array ( $SP_VARIABLES_OUT )) {
             $i = 0;
-            $aRow1 = array();
+            //$aRow1 = array();
             foreach ( $SP_VARIABLES_OUT as $indice => $valor ) {
-              $aRow1   [$i]             =  $aRow;
-              $aRow1   [$i]['VAR_OUT1'] =  $indice;
-              $aRow1   [$i]['VAR_OUT2'] =  $valor;
+              //$aRow1   [$i]             =  $aRow;
+              $aRow   [$i]['VAR_OUT1'] =  $indice;
+              $aRow   [$i]['VAR_OUT2'] =  $valor;
               //$aRow1   [$i]['PROCESSES'] =  $_DBArray ['TheProcesses'];
               $i ++;
             }
@@ -5548,7 +5548,7 @@ class processMap {
       }
       $aRow ['INDEX'] = $sIndex;
       //print '<hr>';print_r($aRow);
-      return $aRow1;
+      return $aRow;
       //return $aSubProcess;
 
     } catch ( Exception $oError ) {
