@@ -620,7 +620,6 @@ Ext.onReady ( function() {
                 processObj.addReportTable();
               }
             },
-*/
             {
               text: 'Database Connection',
               iconCls: 'button_menu_ext ss_sprite ss_database_connect',
@@ -628,6 +627,7 @@ Ext.onReady ( function() {
                 processObj.dbConnection();
               }
             }
+*/
           ]
         })
 
