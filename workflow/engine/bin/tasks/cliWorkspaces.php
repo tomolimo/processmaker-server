@@ -177,7 +177,7 @@ function run_workspace_upgrade($args, $opts) {
       $workspace->upgrade($first);
       $first = false;
     } catch (Exception $e) {
-      echo "Errors upgrading workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
+      echo "Errors upgrading workspace " . CLI::info($workspace->name) . ": " . CLI::error($e->getMessage()) . "\n";
     }
   }
 }
@@ -191,7 +191,7 @@ function run_translation_upgrade($args, $opts) {
       $workspace->upgradeTranslation($first);
       $first = false;
     } catch (Exception $e) {
-      echo "Errors upgrading translation of workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
+      echo "Errors upgrading translation of workspace " . CLI::info($workspace->name) . ": " . CLI::error($e->getMessage()) . "\n";
     }
   }
 }
@@ -203,7 +203,7 @@ function run_cacheview_upgrade($args, $opts) {
       echo "Upgrading cache view for " . pakeColor::colorize($workspace->name, "INFO") . "\n";
       $workspace->upgradeCacheView();
     } catch (Exception $e) {
-      echo "Errors upgrading translation of workspace " . info($workspace->name) . ": " . error($e->getMessage()) . "\n";
+      echo "Errors upgrading translation of workspace " . CLI::info($workspace->name) . ": " . CLI::error($e->getMessage()) . "\n";
     }
   }
 }
@@ -212,10 +212,10 @@ function run_plugins_database_upgrade($args, $opts) {
   $workspaces = get_workspaces_from_args($args);
   foreach ($workspaces as $workspace) {
     try {
-      CLI::logging("Upgrading plugins database for " . info($workspace->name) . "\n");
+      CLI::logging("Upgrading plugins database for " . CLI::info($workspace->name) . "\n");
       $workspace->upgradePluginsDatabase();
     } catch (Exception $e) {
-      CLI::logging("Errors upgrading plugins database: " . error($e->getMessage()));
+      CLI::logging("Errors upgrading plugins database: " . CLI::error($e->getMessage()));
     }
   }
 }
