@@ -288,11 +288,29 @@ class languages {
         if ( ! isset($POFile->translatorComments[0]) || ! isset($POFile->translatorComments[1]) || ! isset($POFile->references[0]) ) {
           throw new Exception('The .po file has not valid directives for Processmaker!');
         }
-        
-        $identifier = $POFile->translatorComments[0];
-        $context    = $POFile->translatorComments[1];
-        $reference  = $POFile->references[0];
-        
+
+         foreach($POFile->translatorComments as $a=>$aux){   
+          $aux = trim($aux);
+          if ( $aux == 'TRANSLATION')
+            $identifier = $aux;
+          else {
+            $var = explode('/',$aux);
+            if ($var[0]=='LABEL')
+              $context = $aux;
+            if ($var[0]=='JAVASCRIPT')
+              $context = $aux;
+          }
+          if (preg_match('/^([a-zA-Z_-]+)\/([a-zA-Z_-]+\.xml\?)/', $aux, $match)) 
+            $identifier = $aux;
+          else{
+            if (preg_match('/^([a-zA-Z_-]+)\/([a-zA-Z_-]+\.xml$)/', $aux, $match)) 
+            $context = $aux;            
+          }
+        }
+        //$identifier = $POFile->translatorComments[0];
+        //$context    = $POFile->translatorComments[1];
+        $reference  = $POFile->references[0]; 
+ 
         if( $identifier == 'TRANSLATION') {
           if ($updateDB) {
             list($category, $id) = explode('/', $context);
