@@ -562,6 +562,11 @@ class Process extends BaseProcess {
     $uids=array();
     while( $oDataset->next() ) {
       $processes[] = $oDataset->getRow();
+      $auxData = $oDataset->getRow();
+      ////we are checking if it has the title in some language
+      if(!is_array($this->lookingLanguageProcess( $auxData['PRO_UID']))){
+       $this->load($auxData['PRO_UID']);
+      }
       $uids[] = $processes[sizeof($processes)-1]['PRO_UID'];
     }
 
