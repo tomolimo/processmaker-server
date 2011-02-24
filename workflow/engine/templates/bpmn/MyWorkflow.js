@@ -68,7 +68,9 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
   if (oShape.id != null) {
     this.canvasTask = Ext.get(oShape.id);
     this.contextTaskmenu = new Ext.menu.Menu({
-        items: [{
+        items: [
+/*
+        {
             text: 'Steps',
             iconCls: 'button_menu_ext ss_sprite ss_shape_move_forwards',
             handler: taskExtObj.editTaskSteps,
@@ -86,6 +88,7 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
             handler: taskExtObj.editUsersAdHoc,
             scope: oShape
         },
+*/
         {
             text: 'Transform To',
             iconCls: 'button_menu_ext ss_sprite ss_page_refresh',
@@ -257,7 +260,8 @@ MyWorkflow.prototype.AddGatewayContextMenu=function(_4092)
                             type:'bpmnGatewayParallel',
                             scope:_4092,
                             handler: MyWorkflow.prototype.toggleShapes
-                        }, {
+                        }
+/*                        , {
                             text: 'Complex Gateway',
                             type:'bpmnGatewayComplex',
                             scope:_4092,
@@ -268,6 +272,7 @@ MyWorkflow.prototype.AddGatewayContextMenu=function(_4092)
                             scope:_4092,
                             handler: MyWorkflow.prototype.toggleShapes
                         }
+*/
                     ]
                 },
             scope: this
