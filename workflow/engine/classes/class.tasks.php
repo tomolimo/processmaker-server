@@ -28,6 +28,7 @@ require_once 'classes/model/Groupwf.php';
 require_once 'classes/model/ObjectPermission.php';
 require_once 'classes/model/Process.php';
 require_once 'classes/model/Route.php';
+require_once 'classes/model/Event.php';
 require_once 'classes/model/Step.php';
 require_once 'classes/model/StepTrigger.php';
 require_once 'classes/model/Task.php';
@@ -167,6 +168,7 @@ class Tasks
   public function createRouteRows( $aRoutes ) 
   {
     $routeID      = array();
+    $aField       = array();
     $taskParallel = '';
     $taskSecJoin  = '';
     $taskEvaluate = '';
@@ -177,11 +179,16 @@ class Tasks
       $sRouteType =   $row['ROU_TYPE'];
       $oRoute = new Route();
       $oProcessMap = new processMap();
+      $oTask = new Task();
+      $oEvent = new Event();
       //unset ($row['ROU_UID']);
 
       //Saving Gateway into the GATEWAY table
       $idTask    = $row['TAS_UID'];
       $nextTask  = $row['ROU_NEXT_TASK'];
+      if($nextTask == "-1"){
+        $end=1;
+      }
       if($sRouteType != 'SEQUENTIAL'){
           switch($sRouteType){
           case 'PARALLEL':
@@ -224,12 +231,40 @@ class Tasks
       }
       $row['GAT_UID'] = $sGatewayUID;
       }
-      
+
       if($oRoute->routeExists($row['ROU_UID']))
           $oRoute->remove($row['ROU_UID']);
-      $routeID[] = $oRoute->create($row);
+
+      $routeID = $oRoute->create($row);
+
+      //saving end event while import old processes
+      if($end==1){
+        if($sRouteType == "SEQUENTIAL"){
+           $aTaskDetails  = $oTask->load($idTask);
+           $positionX   = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
+           $positionY   = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
+           
+           $aData['PRO_UID']    = $row['PRO_UID'];
+           $aData['EVN_TYPE']   = 'bpmnEventEmptyEnd';
+           $aData['EVN_POSX']   = $positionX;
+           $aData['EVN_POSY']   = $positionY;
+           $aData['EVN_TAS_UID_FROM']   = $idTask;
+           $aData['EVN_STATUS'] = 'ACTIVE';
+           $aData['EVN_RELATED_TO'] = 'MULTIPLE';
+           $aData['EVN_WHEN']   = '1';
+           $aData['EVN_ACTION'] = '';
+           $sEvn_uid =  $oEvent->create($aData);
+
+           $aField['ROU_UID']     = $routeID;
+           $aField['ROU_EVN_UID'] = $sEvn_uid;
+           $oRoute->update($aField);
+           $end = 0;
+        }
+
+      }
+
     }
-    return $routeID;
+    return;
   }
 
  /**
