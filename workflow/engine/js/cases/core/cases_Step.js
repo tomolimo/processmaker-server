@@ -916,42 +916,21 @@ var resendMessage = function(APP_UID, APP_MSG_UID)
 
 
 function showdebug(){
-  try{
-    if( !parent.PANEL_EAST_OPEN ){
-      parent.PANEL_EAST_OPEN = true;
-      var w = parent.Ext.getCmp('debugPanel');
-      
-      /**show*/
-      w.show();
-      w.ownerCt.doLayout();
-      w.expand();     
-      
-      parent.propStore.load();
-      parent.triggerStore.load();
-      
+  if( typeof parent != 'undefined' ){
+    if( typeof parent.parent != 'undefined' ){
+      if( ! parent.parent.PANEL_EAST_OPEN ) {
+        parent.parent.PANEL_EAST_OPEN = true;
+        var debugPanel = parent.parent.Ext.getCmp('debugPanel');
+
+        debugPanel.show();
+        debugPanel.ownerCt.doLayout();
+        debugPanel.expand();
+
+        parent.parent.propStore.load();
+        parent.parent.triggerStore.load();
+      }
     }
-  } catch(e){
-    alert("Error: "+e)
   }
-  return;
-    
-  var oRPC = new leimnud.module.rpc.xmlhttp({
-    url : 'cases_Ajax',
-    args: 'action=showdebug'
-  });
-  parent.document.getElementById('paneEastNorthContent').innerHTML  = '<center><img src="/images/ajax-loader.gif" border="0"></center>';
-  parent.document.getElementById('paneEastCenterContent').innerHTML = '<center><img src="/images/ajax-loader.gif" border="0"></center>';;
-  parent.document.getElementById('paneEastSouthContent').innerHTML  = '<center><img src="/images/ajax-loader.gif" border="0"></center>';;
-  oRPC.callback = function(rpc){
-    var scs=rpc.xmlhttp.responseText.extractScript();
-    htmlResp = rpc.xmlhttp.responseText;
-    Sections = htmlResp.split('<!---->');
-    parent.document.getElementById('paneEastNorthContent').innerHTML = Sections[0];
-    parent.document.getElementById('paneEastCenterContent').innerHTML = Sections[1];
-    parent.document.getElementById('paneEastSouthContent').innerHTML = Sections[2];
-    scs.evalScript();        
-  }.extend(this);
-  oRPC.make();
 }
 
 var uploadInputDocument = function(docID,appDocId,docVersion,actionType){   
