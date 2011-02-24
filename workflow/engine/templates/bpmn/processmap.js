@@ -394,7 +394,7 @@ Ext.onReady ( function() {
       action : 'getProperties',
       UID    : pro_uid,
       type   : 'process'
-    },
+    }
   });
 
 
