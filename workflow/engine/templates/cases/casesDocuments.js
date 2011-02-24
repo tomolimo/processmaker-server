@@ -80,9 +80,11 @@ function chDir( directory, loadGridOnly ) {
 		datastore.load({params:{start:0, limit:150, dir: directory, node: directory, option:'gridDocuments', action:'expandNode', sendWhat: datastore.sendWhat }});
 	}
 	
-	if(directory=="NA"){ //Disable create new folder under NA
-		tb = ext_itemgrid.getTopToolbar();
+	tb = ext_itemgrid.getTopToolbar();
+	if(directory=="NA"){ //Disable create new folder under NA		
 		tb.items.get('tb_new').disable();
+	}else{
+		tb.items.get('tb_new').enable();
 	}
 /*	
 	tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable'
