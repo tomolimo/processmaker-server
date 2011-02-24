@@ -78,6 +78,8 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
       else
       {
           $aData = $_POST;                    //For Extjs (Since we are not using form in ExtJS)
+          $aFields = array();
+          $aVariables = array();
           if(isset($aData['FIELDS']))
            {
               $aFields = json_decode($_POST['FIELDS']);
