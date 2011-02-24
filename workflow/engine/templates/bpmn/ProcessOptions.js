@@ -1,6 +1,12 @@
 ProcessOptions=function(id){
-  Workflow.call(this,id);
+  //Workflow.call(this,id);
 };
+
+/**
+ * WARNING  Don't use Workflow, or workflow object because this is being called out of workflow environment
+ * it is out the iframe that is containing designer.js and all theirs objects
+ */
+
 ProcessOptions.prototype=new Workflow;
 ProcessOptions.prototype.type="ProcessOptions";
 

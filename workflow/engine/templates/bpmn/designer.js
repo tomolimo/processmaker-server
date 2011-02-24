@@ -1,23 +1,25 @@
-new Ext.KeyMap(document, {
-  key: Ext.EventObject.F5,
-  fn: function(keycode, e) {
-    if (Ext.isIE)
-      e.browserEvent.keyCode = 8;
-  //e.stopEvent();
-  }
-});
-
 
 var saveProcess;
 var usersPanel;
 var _TAS_UID;
+var processObj;
+var ProcessMapObj;
 
 Ext.onReady ( function() {
+  new Ext.KeyMap(document, {
+    key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+      if (Ext.isIE)
+        e.browserEvent.keyCode = 8;
+    //e.stopEvent();
+    }
+  });
+
+  processObj = new ProcessOptions();
+  ProcessMapObj = new ProcessMapContext();
   workflow  = new MyWorkflow("paintarea");
   workflow.setEnableSmoothFigureHandling(false);
   workflow.scrollArea.width = 2000;
-  //For Undo and Redo Options
-  // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
 
   if(typeof pro_uid !== 'undefined') {
     Ext.Ajax.request({
@@ -41,12 +43,8 @@ Ext.onReady ( function() {
     });
   }
 
-  
-
   /**********************************************************************************
-  *
   * Do the Ext (Yahoo UI) Stuff
-  *
   **********************************************************************************/
   var west= {
     id         : 'palette',
@@ -124,8 +122,6 @@ Ext.onReady ( function() {
     fitToFrame:true,
     region	:	"center"
   };
-
-  var processObj = new ProcessOptions();
 
   var main = new Ext.Panel({
     renderTo  : "center1",
@@ -653,9 +649,7 @@ Ext.onReady ( function() {
   //items[3]=>'center region'
   var centerRegionId = Ext.getCmp('centerRegion').body.id;
   canvas = Ext.get(centerRegionId);
-
-  //Context Menu of ProcessMap
-  ProcessMapObj = new ProcessMapContext();
+  
   contextCanvasMenu = new Ext.menu.Menu({
       items: [
 /*      {

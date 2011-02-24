@@ -19,10 +19,9 @@
   
   //$oHeadPublisher->setExtSkin( 'xtheme-gray');
   $oHeadPublisher->addExtJsScript('bpmn/processmap', true );    //adding a javascript file .js
-  $oHeadPublisher->addExtJsScript('bpmn/ProcessOptions',true);
 
   $oHeadPublisher->addContent( 'bpmn/processmap'); //adding a html file  .html.
-    
+  
 
   $oHeadPublisher->assign('pro_title', $process->getProTitle());
   $oHeadPublisher->assign('pro_uid', $process->getProUid());

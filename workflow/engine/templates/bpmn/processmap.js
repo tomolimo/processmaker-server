@@ -1,41 +1,18 @@
-new Ext.KeyMap(document, {
-  key: Ext.EventObject.F5,
-  fn: function(keycode, e) {
-    //e.stopEvent();
-  }
-});
-
 var _TAS_UID;
-var erik;
+//var processObj;
+//var ProcessMapObj;
 
 Ext.onReady ( function() {
-  
-  workflow  = new MyWorkflow("paintarea");
-  workflow.setEnableSmoothFigureHandling(false);
-  workflow.scrollArea.width = 2000;
-  //For Undo and Redo Options
-  // workflow.getCommandStack().addCommandStackEventListener(new commandListener());
-  
-  if(typeof pro_uid !== 'undefined') {
-    Ext.Ajax.request({
-      url: 'openProcess.php?PRO_UID=' + pro_uid,
-      success: function(response) {
-        //shapesData =  createShapes(response.responseText,this);
-        //createConnection(shapesData);
-      },
-      failure: function(){
-        Ext.Msg.alert ('Failure');
-      }
-    });
-  }
+  new Ext.KeyMap(document, {
+    key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+      //e.stopEvent();
+    }
+  });
 
+  //processObj = new ProcessOptions();
+  //ProcessMapObj = new ProcessMapContext();
 
-
-  /**********************************************************************************
-  *
-  * Do the Ext (Yahoo UI) Stuff
-  *
-  **********************************************************************************/
   var west= {
     id         : 'palette',
     title      : 'Palette',
@@ -82,7 +59,6 @@ Ext.onReady ( function() {
     view: new Ext.grid.GroupingView({
       forceFit:true,
       groupTextTpl: '{[values.rs.length]} {[values.rs[0].data["TU_RELATION"] == 1 ? "Users" : "Groups"]}'
-      //groupTextTpl: '{text}'
     }),
     cm : new Ext.grid.ColumnModel({
       defaults: {
@@ -131,6 +107,11 @@ Ext.onReady ( function() {
   usersTaskGrid.on('contextmenu', function (evt) {
       evt.preventDefault();
   }, this);
+
+  usersTaskGrid.on('keypress', function (e) {
+    alert(e.getKey());
+  }, this);
+  
 
   function onDynaformsContextMenu(grid, rowIndex, e) {
     e.stopEvent();
@@ -339,11 +320,9 @@ Ext.onReady ( function() {
       'Category' : new Ext.grid.GridEditor(comboCategory),
       'Calendar' : new Ext.grid.GridEditor(comboCalendar)
     }
-
   });
 
   propertiesGrid.on('afteredit', function afterEdit(r) {
-
     Ext.Ajax.request({
       url: '../processes/ajaxListener',
       params: {
@@ -500,9 +479,6 @@ Ext.onReady ( function() {
     width:'1024px'
   };
 
-  var processObj = new ProcessOptions();
-
-  
   var main = new Ext.Panel({
     renderTo  : "center1",
     region    : "center",
