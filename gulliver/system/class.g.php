@@ -1124,7 +1124,8 @@ class G
             }
             break;
           default :
-            $output = JSMin::minify ( file_get_contents ( $filename ) );
+            $output = file_get_contents ( $filename ) ;
+            //$output = JSMin::minify ( file_get_contents ( $filename ) );
             //$output = G::trimSourceCodeFile ($filename );
         }
         print $output;
