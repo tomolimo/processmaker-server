@@ -273,8 +273,8 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 }
 
 /*REFRESHER*/
+
 #ext-gen38.x-tree-root-ct .x-tree-node-ct b{
-  /*background:#FFFADF;*/
 }
 #refreshNotifiers.x-btn{
 }
@@ -290,9 +290,15 @@ Pone en mayúsuclas el texto que se encuentra en el toolbar de arriba
 #ext-gen35.x-panel-tbar-noheader .x-toolbar-layout-ct{
   width:28px !important;
 }
+#ext-gen35.x-panel-tbar-noheader .x-toolbar-left .x-toolbar-cell.x-locationbar-location{
+  display:none;
+  /*borra el espacio de la izquierda*/
+}
+/*
+antes funcionaba.
 #ext-gen35.x-panel-tbar-noheader .x-toolbar-left{
   display:none;
-}
+}*/
 #ext-gen35.x-panel-tbar-noheader .x-toolbar-right{
   text-align: left !important;
 }
