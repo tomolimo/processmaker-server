@@ -1,10 +1,9 @@
 <?php
-
 /**
- * cases_Scheduler_Log.php
+ * casesSchedulerLog_Ajax.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2010 Colosa Inc.23
+ * Copyright (C) 2004 - 2008 Colosa Inc.23
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,23 +22,23 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-if (($RBAC_Response=$RBAC->userCanAccess("PM_LOGIN"))!=1) return $RBAC_Response;
+//if (($RBAC_Response=$RBAC->userCanAccess("PM_USERS"))!=1) return $RBAC_Response;
+G::LoadInclude('ajax');
+$_POST['action'] = get_ajax_value('action');
 
-$G_PUBLISH = new Publisher;
-G::LoadClass('configuration');
-$c = new Configurations();
-$configPage = $c->getConfiguration('casesSchedulerLogList', 'pageSize','',$_SESSION['USER_LOGGED']);
-$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
-
-$oHeadPublisher =& headPublisher::getSingleton();
-
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
-$oHeadPublisher->addExtJsScript('cases/casesSchedulerLog', false);    //adding a javascript file .js
-$oHeadPublisher->addContent('cases/casesSchedulerLog'); //adding a html file  .html.
-
-$oHeadPublisher->assign('CONFIG', $Config);
-
-
-G::RenderPage('publish', 'extJs');
-
+switch ($_POST['action'])
+{
+  case 'updatePageSize':
+    G::LoadClass('configuration');
+    $c = new Configurations();
+    $arr['pageSize'] = $_REQUEST['size'];
+    $arr['dateSave'] = date('Y-m-d H:i:s');
+    $config = Array();
+    $config[] = $arr;
+    $c->aConfig = $config;
+    $c->saveConfig('casesSchedulerLogList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    echo '{success: true}';
+    break;
+break;
+}
 ?>

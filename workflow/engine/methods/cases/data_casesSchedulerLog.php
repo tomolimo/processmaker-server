@@ -25,10 +25,14 @@
 
 require_once 'classes/model/LogCasesSchedulerPeer.php';
 require_once 'classes/model/LogCasesScheduler.php';
+G::LoadClass('configuration');
+
+$co = new Configurations();
+$config = $co->getConfiguration('casesSchedulerLogList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
 
 $start = isset($_REQUEST['start'])? $_REQUEST['start'] : 0;
-$limit = isset($_REQUEST['limit'])? $_REQUEST['limit'] : 20; 
-
+$limit = isset($_REQUEST['limit'])? $_REQUEST['limit'] : $limit_size; 
 $filter = (isset($_POST['textFilter'])) ? $_POST['textFilter'] : '';
 
 $oCriteria = new Criteria('workflow');
