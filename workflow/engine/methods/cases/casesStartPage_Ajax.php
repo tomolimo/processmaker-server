@@ -25,6 +25,12 @@ function getProcessList() {
   $calendar    = new Calendar ( );
   $oProcess = new Process ( );
   $oCase = new Cases ( );
+  
+  //Get ProcessStatistics Info
+  $start = 0;
+  $limit = '';
+  $proData = $oProcess->getAllProcesses($start, $limit);
+  
   $bCanStart = $oCase->canStartCase ( $_SESSION ['USER_LOGGED'] );
   if ($bCanStart) {
     $processListInitial = $oCase->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category' );
@@ -47,12 +53,7 @@ function getProcessList() {
       $node = $_REQUEST ['node'];
     }
     
-    //Get ProcessStatistics Info
-  $start = 0;
-$limit = '';
-
-
-    $proData = $oProcess->getAllProcesses($start, $limit);
+  
     foreach($proData as $key => $proInfo){
       $proData[$proInfo['PRO_UID']]=$proInfo;
     }

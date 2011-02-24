@@ -473,6 +473,22 @@ class Process extends BaseProcess {
     
     return $aRow['PROCESS'] ? true : false;
   }
+  
+  function lookingLanguageProcess( $ProUid , $getAllLang=false) {
+    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+        
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn(ContentPeer::CON_CATEGORY);
+    $c->addSelectColumn(ContentPeer::CON_VALUE);
+    $c->add(ContentPeer::CON_ID, $ProUid );
+    if(!$getAllLang) $c->add(ContentPeer::CON_LANG, $lang );
+    $rs = ProcessPeer::doSelectRS($c);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    return ($row);
+  }
 
   //new functions
   function getAllProcessesCount(){
