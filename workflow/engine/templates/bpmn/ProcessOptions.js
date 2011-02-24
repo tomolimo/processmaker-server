@@ -1269,7 +1269,7 @@ var testConnWindow = new Ext.Window({
     maximizable: true,
     width: 480,
     //autoHeight: true,
-    height: 420,
+    height: 350,
     //layout: 'fit',
     plain: true,
     buttonAlign: 'center',
@@ -2684,9 +2684,9 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         maximizable : false,
         width       : 550,
         defaults    :{autoScroll:true},
-        height      : 370,
+        height      : 350,
         minWidth    : 200,
-        minHeight   : 370,
+        minHeight   : 350,
         layout      : 'fit',
         plain       : true,
         items       : outputDocGrid,
@@ -2928,9 +2928,9 @@ ProcessOptions.prototype.addReportTable= function(_5625)
         maximizable : false,
         width       : 420,
         defaults    :{autoScroll:true},
-        height      : 450,
+        height      : 350,
         minWidth    : 200,
-        minHeight   : 150,
+        minHeight   : 350,
         layout      : 'fit',
         plain       : true,
         items       : reportGrid,
@@ -3147,14 +3147,15 @@ ProcessOptions.prototype.addTriggers= function()
         });
 
    var btnAdd = new Ext.Button({
-        id: 'btnAdd',
-        text: _('ID_NEW'),
-        iconCls: 'button_menu_ext ss_sprite ss_add',
-        handler: function () {
-         triggersForm.getForm().reset();
-         formWindow.show();
-        }
-      });
+     id: 'btnAdd',
+     text: _('ID_NEW'),
+     iconCls: 'button_menu_ext ss_sprite ss_add',
+     handler: function () {
+       triggersForm.getForm().reset();
+       triggersForm.getForm().items.items[0].focus('',200); 
+       formWindow.show();
+     }
+   });
 
   //edit report table Function
    var editTriggers = function() {
@@ -3395,8 +3396,8 @@ var triggersForm = new Ext.FormPanel({
     labelWidth  : 100,
     buttonAlign : 'center',
     width       : 300,
-    height      : 300,
-    bodyStyle : 'padding:10px 0 0 10px;',
+    height      : 220,
+    bodyStyle : 'padding:8px 0 0 8px;',
     autoHeight: true,
     items:
       [{
@@ -3492,49 +3493,48 @@ var triggersForm = new Ext.FormPanel({
 
  var editTriggerForm = new Ext.FormPanel({
     buttonAlign: 'center',
-    labelWidth  : 10,
+    labelWidth  : 2,
     layout      : 'fit',
-    width       : 450,
+    width       : 540,
     height      : 350,
-    //autoHeight: true,
     items:
-            [{
-                    layout      :'column',
-                    border      :false,
-                    items       :[{
-                        //columnWidth :.6,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                                xtype       : 'textarea',
-                                width     : 420,
-                                height    : 320,
-                                name        : 'TRI_WEBBOT',
-                                anchor      :'100%'
-                        }]
-                    },{
-                        //columnWidth     :.4,
-                        layout          : 'form',
-                        border          :false,
-                        items           : [{
-                                xtype   :'button',
-                                title   : ' ',
-                                width   :50,
-                                text    : '@@',
-                                name    : 'selectorigin',
-                                 handler: function (s) {
-                                                    workflow.variablesAction = 'form';
-                                                    workflow.fieldName         = 'TRI_WEBBOT' ;
-                                                    workflow.variable        = '@@',
-                                                    workflow.formSelected    = triggersForm;
-                                                    var rowData = ProcMapObj.ExtVariables();
-                                            }
-                            }]
-                    }]
-           },{
-               xtype: 'hidden',
-               name: 'TRI_UID'
-           }],
+      [{
+        layout      :'column',
+        border      :false,
+        items       :[{
+            //columnWidth :.6,
+            layout      : 'form',
+            border      :false,
+            items       : [{
+                    xtype       : 'textarea',
+                    width     : 420,
+                    height    : 320,
+                    name        : 'TRI_WEBBOT',
+                    anchor      :'100%'
+            }]
+        },{
+          //columnWidth     :.4,
+          layout          : 'form',
+          border          :false,
+          items           : [{
+            xtype   :'button',
+            title   : ' ',
+            width   : 50,
+            text    : '@@',
+            name    : 'selectorigin',
+            handler: function (s) {
+              workflow.variablesAction = 'form';
+              workflow.fieldName         = 'TRI_WEBBOT' ;
+              workflow.variable        = '@@',
+              workflow.formSelected    = triggersForm;
+              var rowData = ProcMapObj.ExtVariables();
+            }
+          }]
+        }]
+      },{
+        xtype: 'hidden',
+        name: 'TRI_UID'
+      }],
     buttons: [{
         text: _('ID_SAVE'),
         //formBind    :true,
@@ -3675,30 +3675,30 @@ var triggersForm = new Ext.FormPanel({
       }]
  }); 
 
- var editTriggerFormWindow = new Ext.Window({
-        title:  _('ID_EDIT_TRIGGERS'),
-        autoScroll: true,
-        collapsible: false,
-        width: 612,
-        //autoHeight: true,
-        height: 400,
-        layout: 'fit',
-        plain: true,
-        buttonAlign: 'center',
-        items: editTriggerForm
-    });
+  var editTriggerFormWindow = new Ext.Window({
+    title:  _('ID_EDIT_TRIGGERS'),
+    autoScroll: true,
+    collapsible: false,
+    width: 600,
+    //autoHeight: true,
+    height: 400,
+    layout: 'fit',
+    plain: true,
+    buttonAlign: 'center',
+    items: editTriggerForm
+  });
 
- var editPropertiesFormWindow = new Ext.Window({
-        title: _('ID_EDIT_TRIGGERS'),
-        autoScroll: true,
-        collapsible: false,
-        width: 450,
-        //autoHeight: true,
-        height: 280,
-        layout: 'fit',
-        plain: true,
-        buttonAlign: 'center',
-        items: editPropertiesForm
+  var editPropertiesFormWindow = new Ext.Window({
+    title: _('ID_EDIT_TRIGGERS'),
+    autoScroll: true,
+    collapsible: false,
+    width: 450,
+    //autoHeight: true,
+    height: 280,
+    layout: 'fit',
+    plain: true,
+    buttonAlign: 'center',
+    items: editPropertiesForm
     });
 
 
@@ -3709,7 +3709,7 @@ var triggersForm = new Ext.FormPanel({
         maximizable: true,
         width: 450,
         //autoHeight: true,
-        height: 300,
+        height: 240,
         layout: 'fit',
         plain: true,
         buttonAlign: 'center',
@@ -3723,7 +3723,7 @@ var triggersForm = new Ext.FormPanel({
         maximizable: true,
         width: 600,
         //autoHeight: true,
-        height: 420,
+        height: 350,
         layout: 'fit',
         plain: true,
         buttonAlign: 'center',
