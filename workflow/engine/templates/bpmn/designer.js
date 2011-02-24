@@ -913,13 +913,12 @@ Ext.onReady ( function() {
       }
   }
 
-
   function createConnection(shapes)
   {
       //var totaltask = shapes[0].length;                //shapes[0] is an array for all the tasks
       //var totalgateways = shapes[1].length;          //shapes[1] is an array for all the gateways
       //var totalevents = shapes[2].length;           //shapes[2] is an array for all the events
-      if(typeof shapes.routes != 'undefined' && shapes.routes != ''){
+      if(typeof shapes.routes != 'undefined' && shapes.routes != '') {
       var totalroutes  = shapes.routes.length;           //shapes[3] is an array for all the routes
       for(var i=0;i<=totalroutes-1;i++){
           var sourceid = shapes.routes[i][1];      //getting source id for connection from Routes array
@@ -939,14 +938,14 @@ Ext.onReady ( function() {
                   }
               }
           }
-          //Making Connections
-          var connObj = new DecoratedConnection();
-          
+          //Making Connections          
           if(targetObj.type == 'bpmnAnnotation') {
+            var connObj = new DottedConnection();
             connObj.setSource(sourceObj.output2);
             connObj.setTarget(targetObj.input1);
           }
           else {
+            var connObj = new DecoratedConnection();
             connObj.setSource(sourceObj.output1);
             connObj.setTarget(targetObj.input2);
           }
