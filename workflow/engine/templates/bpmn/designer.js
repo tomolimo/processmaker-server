@@ -692,7 +692,9 @@ Ext.onReady ( function() {
           text: 'Delete All Lines',
           handler: ProcessMapObj.delLines,
           scope: this
-      }, */{
+      }, */
+/*      
+      {
           text: 'Process Permission',
           iconCls: 'button_menu_ext ss_sprite ss_application_key',
           handler: ProcessMapObj.processPermission,
@@ -759,7 +761,9 @@ Ext.onReady ( function() {
                       }
                   ]
               }
-      }]
+      }
+*/
+      ]
   });
 
   canvas.on('contextmenu', function(e) {

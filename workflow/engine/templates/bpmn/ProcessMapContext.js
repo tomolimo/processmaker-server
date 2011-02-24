@@ -150,17 +150,18 @@ ProcessMapContext.prototype.editProcess= function()
 ProcessMapContext.prototype.exportProcess= function()
   {
    var exportProcessForm = new Ext.FormPanel({
-    labelWidth    : 160, // label settings here cascade unless overridden
+    labelWidth    : 160, 
     frame         : false,
-    bodyStyle     :'padding:10px 10px 10px 10px;',
-    width         : 420,
-    height        : 280,
+    height        : 200,
     defaultType   : 'textfield',
+    defaults      : {width: 180},
     buttonAlign   : 'center',
     items: [
             {
             xtype      : 'fieldset',
+            bodyStyle     :'padding:10px 10px 10px 10px;',
             title      : 'Process Info',
+            width      : 370,
             collapsible: false,
             autoHeight : true,
             buttonAlign: 'center',
@@ -173,10 +174,12 @@ ProcessMapContext.prototype.exportProcess= function()
                     xtype       : 'displayfield',
                     fieldLabel  : _('ID_DESCRIPTION'),
                     name        : 'PRO_DESCRIPTION'
+/*
                   },{
                     xtype       : 'displayfield',
                     fieldLabel  : _('ID_SIZE_IN_BYTES'),
                     name        : 'SIZE'
+*/                    
                   },{
                     xtype       : 'displayfield',
                     fieldLabel  : _('ID_PM_FILENAME'),
@@ -220,8 +223,8 @@ ProcessMapContext.prototype.exportProcess= function()
         collapsible: false,
         maximizable: false,
         sizeable   : false,
-        width      : 500,
-        height     : 250,
+        width      : 400,
+        height     : 210,
         resizable  : false,
         layout     : 'fit',
         plain      : true,
