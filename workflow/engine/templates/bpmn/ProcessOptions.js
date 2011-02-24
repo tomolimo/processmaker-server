@@ -32,7 +32,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     //iconCls: 'application_add',
     handler: function () {
       dynaformDetails.getForm().reset();
-      dynaformDetails.getForm().items.items[0].focus('',20); 
+      dynaformDetails.getForm().items.items[0].focus('',200); 
       dynaformDetails.getForm().items.items[1].setValue('normal'); 
       formWindow.show();
     }
@@ -1283,74 +1283,76 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
 {
   var ProcMapObj= new ProcessMapContext();
   var inpDocFields = Ext.data.Record.create([
-            {
-                name: 'INP_DOC_UID',
-                type: 'string'
-            },
-            {
-                name: 'PRO_UID',
-                type: 'string'
-            },
-            {
-                name: 'INP_DOC_TITLE',
-                type: 'string'
-            },
-            {
-                name: 'INP_DOC_DESCRIPTION',
-                type: 'string'
-            },{
-                name: 'INP_DOC_VERSIONING',
-                type: 'string'
-            },{
-                name: 'INP_DOC_DESTINATION_PATH',
-                type: 'string'
-            }
-            ]);
+    {
+        name: 'INP_DOC_UID',
+        type: 'string'
+    },
+    {
+        name: 'PRO_UID',
+        type: 'string'
+    },
+    {
+        name: 'INP_DOC_TITLE',
+        type: 'string'
+    },
+    {
+        name: 'INP_DOC_DESCRIPTION',
+        type: 'string'
+    },{
+        name: 'INP_DOC_VERSIONING',
+        type: 'string'
+    },{
+        name: 'INP_DOC_DESTINATION_PATH',
+        type: 'string'
+    }
+  ]);
 
-    var editor = new Ext.ux.grid.RowEditor({
+  var editor = new Ext.ux.grid.RowEditor({
     saveText: _('ID_UPDATE')
-    });
+  });
 
-    var btnAdd = new Ext.Button({
-        id: 'btnAdd',
-        text: _('ID_NEW'),
-       iconCls: 'button_menu_ext ss_sprite ss_add',
-        handler: function () {
-           newIOWindow.show();
-           inputDocForm.getForm().reset();
-        }
-    });
+  var btnAdd = new Ext.Button({
+    id   : 'btnAdd',
+    text : _('ID_NEW'),
+    iconCls: 'button_menu_ext ss_sprite ss_add',
+    handler: function () {
+      newIOWindow.show();
+      inputDocForm.getForm().reset();
+      inputDocForm.getForm().items.items[2].hide();
+      inputDocForm.getForm().items.items[2].getEl().up('.x-form-item').setDisplayed(false); // show label            
+      inputDocForm.getForm().items.items[0].focus('',200); 
+    }
+  });
 
-    //edit input document Function
-    var editInputDoc = function() {
-      editor.stopEditing();
-      var rowSelected  = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
-      if( rowSelected.length == 0 ) {
-           PMExt.error('', _('ID_NO_SELECTION_WARNING'));
-           return false;
+  //edit input document Function
+  var editInputDoc = function() {
+    editor.stopEditing();
+    var rowSelected  = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
+    if( rowSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+    var inputDocUID = rowSelected[0].get('INP_DOC_UID');
+    inputDocForm.form.load({
+      url     : 'proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
+      method  : 'GET',
+      waitMsg : 'Loading',
+      success : function(form, action) {
+         newIOWindow.show();
+         Ext.getCmp("INP_DOC_UID").setValue(inputDocUID);
+      },
+      failure:function(form, action) {
+          PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
       }
-      var inputDocUID = rowSelected[0].get('INP_DOC_UID');
-      inputDocForm.form.load({
-                        url   :'proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
-                        method: 'GET',
-                        waitMsg:'Loading',
-                        success:function(form, action) {
-                           //Ext.MessageBox.alert('Message', 'Loaded OK');
-                           newIOWindow.show();
-                           Ext.getCmp("INP_DOC_UID").setValue(inputDocUID);
-                        },
-                        failure:function(form, action) {
-                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                        }
-                     });
-   }
+    });
+  }
 
-    var removeInputDoc = function(){
+  var removeInputDoc = function(){
     ids = Array();
-
+    
     editor.stopEditing();
     var rowsSelected = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
-
+    
     if( rowsSelected.length == 0 ) {
       PMExt.error('', _('ID_NO_SELECTION_WARNING'));
       return false;
@@ -1367,41 +1369,43 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
       method: 'POST',
       params: {
         functions : 'getRelationInfDoc',
-         INP_DOC_UID   : ids
+        INP_DOC_UID   : ids
       },
       success: function(response) {
         var result = Ext.util.JSON.decode(response.responseText);
         if( result.success ) {
           if( result.passed ) { //deleting the selected input document
-                    PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_INPUTDOCUMENT_CONFIRM'), function(){
-                      Ext.Ajax.request({
-                        url   : '../inputdocs/inputdocs_Delete.php',
-                        method: 'POST',
-                        params: {
-                          functions      : 'deleteInputDocument',
-                          INP_DOC_UID        : ids
-                        },
-                        success: function(response) {
-                          var result = Ext.util.JSON.decode(response.responseText);
-                          if( result.success ){
-                            PMExt.notify( _('ID_STATUS') , result.msg);
+            PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_INPUTDOCUMENT_CONFIRM'), function(){
+              Ext.Ajax.request({
+                url   : '../inputdocs/inputdocs_Delete.php',
+                method: 'POST',
+                params: {
+                  functions      : 'deleteInputDocument',
+                  INP_DOC_UID        : ids
+                },
+                success: function(response) {
+                  var result = Ext.util.JSON.decode(response.responseText);
+                  if( result.success ){
+                    PMExt.notify( _('ID_STATUS') , result.msg);
 
-                            //Reloading store after deleting input document
-                            inputDocStore.reload();
-                          } else {
-                            PMExt.error(_('ID_ERROR'), result.msg);
-                          }
-                        }
-                      });
-                    });
+                    //Reloading store after deleting input document
+                    inputDocStore.reload();
                   } else {
-                    PMExt.error(_('ID_VALIDATION_ERROR'), result.msg);
+                    PMExt.error(_('ID_ERROR'), result.msg);
                   }
-                } else {
-                  PMExt.error(_('ID_ERROR'), result.msg);
                 }
-              }
+              });
             });
+          } 
+          else {
+            PMExt.error(_('ID_VALIDATION_ERROR'), result.msg);
+            }
+        } 
+        else {
+          PMExt.error(_('ID_ERROR'), result.msg);
+        }
+      }
+    });
   }
 
    //edit input document button
@@ -1420,276 +1424,252 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
   });
 
   var tb = new Ext.Toolbar({
-            items: [btnAdd, btnRemove, btnEdit]
-            });
+    items: [btnAdd, btnRemove, btnEdit]
+  });
 
   //inputDocStore? and groupingStore?
   var inputDocStore = new Ext.data.JsonStore({
-            root         : 'data',
-            totalProperty: 'totalCount',
-            idProperty   : 'gridIndex',
-            remoteSort   : true,
-            fields       : inpDocFields,
-            proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
-            })
-          });
+    root         : 'data',
+    totalProperty: 'totalCount',
+    idProperty   : 'gridIndex',
+    remoteSort   : true,
+    fields       : inpDocFields,
+    proxy: new Ext.data.HttpProxy({
+      url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
+    })
+  });
   inputDocStore.load({params:{start : 0 , limit : 10 }});
 
   var inputDocForm = new Ext.FormPanel({
-        labelWidth: 100,
-        width     : 500,
-        height    : 380,
-        monitorValid : true,
-        autoHeight: true,
-        bodyStyle : 'padding:10px 0 0 10px;',
-        items:[{
-                    xtype: 'fieldset',
-                    layout: 'form',
-                    border:true,
-                    title: _('ID_INPUT_INFO'),
-                    width: 500,
-                    //height:500,
-                    collapsible: false,
-                    labelAlign: '',
-                    items:[{
-                            xtype     : 'textfield',
-                            fieldLabel: _('ID_TITLE'),
-                            width     : 200,
-                            name      : 'INP_DOC_TITLE',
-                            allowBlank: false
-                         },{
-                            width     : 200,
-                            xtype:          'combo',
-                            mode:           'local',
-                            editable:       false,
-                            fieldLabel:     _('ID_TYPE'),
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            name:           'INP_DOC_FORM_NEEDED',
-                            displayField:   'name',
-                            value       :   'Digital',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'Digital',   value: 'VIRTUAL'},
-                                            {name : 'Printed',   value: 'REAL'},
-                                            {name : 'Digital/Printed',   value: 'VREAL'}]}),
+    labelWidth: 100,
+    width     : 500,
+    height    : 380,
+    monitorValid : true,
+    autoHeight: true,
+    bodyStyle : 'padding:10px 0 0 10px;',
+    items:[{
+      xtype  : 'fieldset',
+      layout : 'form',
+      border : true,
+      title  : _('ID_INPUT_INFO'),
+      width  : 500,
+      labelWidth : 150,
+      collapsible : false,
+      labelAlign  : '',
+      items : [{
+        xtype     : 'textfield',
+        fieldLabel: _('ID_TITLE'),
+        width     : 300,
+        name      : 'INP_DOC_TITLE',
+        allowBlank: false
+      },{
+        width     : 300,
+        xtype         : 'combo',
+        mode          : 'local',
+        editable      : false,
+        fieldLabel    : _('ID_TYPE'),
+        triggerAction : 'all',
+        forceSelection: true,
+        name          : 'INP_DOC_FORM_NEEDED',
+        displayField  : 'name',
+        value         : 'Digital',
+        valueField    : 'value',
+        store         : new Ext.data.JsonStore({
+          fields : ['name', 'value'],
+          data   : [
+            {name : 'Digital',   value: 'VIRTUAL'},
+            {name : 'Printed',   value: 'REAL'},
+            {name : 'Digital/Printed',   value: 'VREAL'}]}
+        ),
 
-                           onSelect: function(record, index) {
-                                //Show-Hide Format Type Field
-                                if(record.data.value != 'VIRTUAL')
-                                        Ext.getCmp("formType").show();
-                                else
-                                        Ext.getCmp("formType").hide();
+        onSelect: function(record, index) {
+          //Show-Hide Format Type Field
+          this.collapse();
+          if(record.data.value != 'VIRTUAL') {
+            Ext.getCmp("formType").show();
+            Ext.getCmp("formType").getEl().up('.x-form-item').setDisplayed(true); // show label            
+          }
+          else {
+          	Ext.getCmp("formType").hide();
+            Ext.getCmp("formType").getEl().up('.x-form-item').setDisplayed(false); // hide label            
+          }
 
-                                this.setValue(record.data[this.valueField || this.displayField]);
-                                this.collapse();
-                             }
-                         },{
-                            xtype: 'fieldset',
-                            layout: 'form',
-                            id:'formType',
-                            border: false,
-                            width     : 300,
-                            hidden:true,
-                            labelAlign: '',
-                            items:[{
-                                xtype:          'combo',
-                                width:          150,
-                                mode:           'local',
-                                editable:       false,
-                                fieldLabel:     _('ID_FORMAT'),
-                                triggerAction:  'all',
-                                forceSelection: true,
-                                name:           'INP_DOC_ORIGINAL',
-                                displayField:   'name',
-                                //emptyText    : 'Select Format',
-                                valueField:     'value',
-                                value        : 'ORIGINAL',
-                                store:          new Ext.data.JsonStore({
-                                            fields : ['name', 'value'],
-                                            data   : [
-                                                {name : 'Original',   value: 'ORIGINAL'},
-                                                {name : 'Legal Copy',   value: 'COPYLEGAL'},
-                                                {name : 'Copy',   value: 'COPY'}
-                                                ]})
-                                }]
-                        },{
-                            xtype     : 'textarea',
-                            fieldLabel: _('ID_DESCRIPTION'),
-                            name      : 'INP_DOC_DESCRIPTION',
-                            height    : 120,
-                            width     : 300
-                         },{
-                            width     : 200,
-                            xtype:          'combo',
-                            mode:           'local',
-                            editable:       false,
-                            fieldLabel:     _('ID_ENABLE_VERSIONING'),
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            name:           'INP_DOC_VERSIONING',
-                            displayField:   'name',
-                            valueField:     'value',
-                            value         : 'No',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'No',   value: ''},
-                                            {name : 'Yes',   value: '1'},
-                                            ]})
-                         },{
-                    layout      :'column',
+          this.setValue(record.data[this.valueField || this.displayField]);
+        }
+      },{
+        //xtype     : 'fieldset',
+        //layout    : 'form',
+        //id        : 'formType',
+        //border    : false,
+        //width     : 470,
+        //hidden    :true,
+        //labelAlign: '',
+        //items:[{
+          xtype          : 'combo',
+          id             : 'formType',
+          width          : 150,
+          mode           : 'local',
+          editable       : false,
+          hidden         : true,
+          fieldLabel     : _('ID_FORMAT'),
+          triggerAction  : 'all',
+          forceSelection : true,
+          name           : 'INP_DOC_ORIGINAL',
+          displayField   : 'name',
+          valueField     : 'value',
+          value          : 'ORIGINAL',
+          store          : new Ext.data.JsonStore({
+            fields : ['name', 'value'],
+              data   : [
+                {name : 'Original',   value: 'ORIGINAL'},
+                {name : 'Legal Copy',   value: 'COPYLEGAL'},
+                {name : 'Copy',   value: 'COPY'}
+                ]}
+          )
+        //}]
+      },{
+        xtype     : 'textarea',
+        fieldLabel: _('ID_DESCRIPTION'),
+        name      : 'INP_DOC_DESCRIPTION',
+        height    : 120,
+        width     : 300
+      },{
+        width     : 150,
+        xtype:          'combo',
+        mode:           'local',
+        editable:       false,
+        fieldLabel:     _('ID_ENABLE_VERSIONING'),
+        triggerAction:  'all',
+        forceSelection: true,
+        name:           'INP_DOC_VERSIONING',
+        displayField:   'name',
+        valueField:     'value',
+        value         : 'No',
+        store:          new Ext.data.JsonStore({
+        fields : ['name', 'value'],
+        data   : [
+          {name : 'No',   value: ''},
+          {name : 'Yes',   value: '1'},
+        ]})
+      },{
+      layout      :'column',
+      border      :false,
+      items       :[{
+        layout      : 'form',
+        border      :false,
+        items       : [{
+          xtype       : 'textfield',
+          width     : 250,
+          fieldLabel  : _('ID_DESTINATION_PATH'),
+          name        : 'INP_DOC_DESTINATION_PATH',
+          anchor      :'100%'
+        }]
+      },{
+          //columnWidth     :.4,
+          layout          : 'form',
+          border          :false,
+          items           : [{
+                  xtype           :'button',
+                  title           : ' ',
+                  width :50,
+                  text            : '@@',
+                 name            : 'selectorigin',
+                   handler: function (s) {
+                                      workflow.variablesAction = 'form';
+                                      workflow.fieldName         = 'INP_DOC_DESTINATION_PATH' ;
+                                      workflow.variable        = '@@',
+                                      workflow.formSelected    = inputDocForm;
+                                      var rowData = ProcMapObj.ExtVariables();
+                              }
+              }]
+      }]
+            },{
+                layout      :'column',
+                border      :false,
+                items       :[{
+                    //columnWidth :.6,
+                    layout      : 'form',
                     border      :false,
-                    items       :[{
-                        //columnWidth :.6,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                                xtype       : 'textfield',
-                                width     : 200,
-                                //id          : 'DestPath',
-                                fieldLabel  : _('ID_DESTINATION_PATH'),
-                                name        : 'INP_DOC_DESTINATION_PATH',
-                                anchor      :'100%'
-                        }]
-                    },{
-                        //columnWidth     :.4,
-                        layout          : 'form',
-                        border          :false,
-                        items           : [{
-                                xtype           :'button',
-                                title           : ' ',
-                                width:50,
-                                text            : '@@',
-                               name            : 'selectorigin',
-                                 handler: function (s) {
-                                                    workflow.variablesAction = 'form';
-                                                    workflow.fieldName         = 'INP_DOC_DESTINATION_PATH' ;
-                                                    workflow.variable        = '@@',
-                                                    workflow.formSelected    = inputDocForm;
-                                                    var rowData = ProcMapObj.ExtVariables();
-                                            }
-                            }]
+                    items       : [{
+                    xtype       : 'textfield',
+                    width     : 250,
+                    //id          :'tags',
+                    fieldLabel  : _('ID_TAGS'),
+                    name        : 'INP_DOC_TAGS',
+                    anchor      :'100%'
                     }]
                 },{
-                    layout      :'column',
+                    //columnWidth :.4,
+                    layout      : 'form',
                     border      :false,
-                    items       :[{
-                        //columnWidth :.6,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                        xtype       : 'textfield',
-                        width     : 200,
-                        //id          :'tags',
-                        fieldLabel  : _('ID_TAGS'),
-                        name        : 'INP_DOC_TAGS',
-                        anchor      :'100%'
-                        }]
-                    },{
-                        columnWidth :.4,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                                xtype       :'button',
-                                title       : ' ',
-                                width:50,
-                                text        : '@@',
-                                name        : 'selectorigin',
-                                handler: function (s) {
-                                                workflow.variablesAction = 'form';
-                                                workflow.fieldName         = 'INP_DOC_TAGS' ;
-                                                workflow.variable        = '@@',
-                                                workflow.formSelected    = inputDocForm;
-                                                var rowData = ProcMapObj.ExtVariables();
-                                   }
-                              }]
-                        }]
-                     },{
-                      id : 'INP_DOC_UID',
-                      xtype: 'hidden',
-                      name : 'INP_DOC_UID'
-               }]
-        }],
-        buttons: [{
-            text: _('ID_SAVE'),
-            formBind    :true,
-            handler: function(){
-                var getForm         = inputDocForm.getForm().getValues();
-                var sDocUID        = getForm.INP_DOC_UID;
-                var sDocTitle        = getForm.INP_DOC_TITLE;
-                var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
-                var sOrig           = getForm.INP_DOC_ORIGINAL;
-                if(sOrig == "" || sOrig == "Original")
-                    sOrig           = 'ORIGINAL';
+                    items       : [{
+                            xtype       :'button',
+                            title       : ' ',
+                            width:50,
+                            text        : '@@',
+                            name        : 'selectorigin',
+                            handler: function (s) {
+                                            workflow.variablesAction = 'form';
+                                            workflow.fieldName         = 'INP_DOC_TAGS' ;
+                                            workflow.variable        = '@@',
+                                            workflow.formSelected    = inputDocForm;
+                                            var rowData = ProcMapObj.ExtVariables();
+                               }
+                          }]
+                    }]
+                 },{
+                  id : 'INP_DOC_UID',
+                  xtype: 'hidden',
+                  name : 'INP_DOC_UID'
+           }]
+    }],
+    buttons: [{
+        text: _('ID_SAVE'),
+        formBind    :true,
+        handler: function(){
+            var getForm         = inputDocForm.getForm().getValues();
+            var sDocUID        = getForm.INP_DOC_UID;
+            var sDocTitle        = getForm.INP_DOC_TITLE;
+            var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
+            var sOrig           = getForm.INP_DOC_ORIGINAL;
+            if(sOrig == "" || sOrig == "Original")
+                sOrig           = 'ORIGINAL';
 
-                if(sOrig == 'Legal Copy')
-                    sOrig           = 'COPYLEGAL';
+            if(sOrig == 'Legal Copy')
+                sOrig           = 'COPYLEGAL';
 
-                if(sFormNeeded == 'Digital')
-                     sFormNeeded     = 'VIRTUAL';
-                else if(sFormNeeded == 'Printed')
-                    sFormNeeded     = 'REAL';
-                else
-                    sFormNeeded     = 'VREAL';
+            if(sFormNeeded == 'Digital')
+                 sFormNeeded     = 'VIRTUAL';
+            else if(sFormNeeded == 'Printed')
+                sFormNeeded     = 'REAL';
+            else
+                sFormNeeded     = 'VREAL';
 
 
-                var sDesc = getForm.INP_DOC_DESCRIPTION;
-                var sVers           = getForm.INP_DOC_VERSIONING;
-                if(sVers == 'Yes')
-                    sVers = '1';
-                else
-                    sVers = '';
+            var sDesc = getForm.INP_DOC_DESCRIPTION;
+            var sVers           = getForm.INP_DOC_VERSIONING;
+            if(sVers == 'Yes')
+                sVers = '1';
+            else
+                sVers = '';
 
-                var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
-                var sTags           = getForm.INP_DOC_TAGS;
+            var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
+            var sTags           = getForm.INP_DOC_TAGS;
 
-               if(sDocUID == "")
-               {
-                    Ext.Ajax.request({
-                      url   : '../inputdocs/inputdocs_Save.php',
-                      method: 'POST',
-                      params:{
-                          functions                : 'lookForNameInput',
-                          NAMEINPUT                : sDocTitle,
-                          proUid                   : pro_uid
-                      },
-                      success: function(response) {
-                        if(response.responseText == "1")
-                        {
-                           Ext.Ajax.request({
-                              url   : '../inputdocs/inputdocs_Save.php',
-                              method: 'POST',
-                              params:{
-                                  functions                     : '',
-                                  INP_DOC_TITLE                 : sDocTitle,
-                                  INP_DOC_UID                   : sDocUID,
-                                  PRO_UID                       : pro_uid,
-                                  INP_DOC_FORM_NEEDED           : sFormNeeded,
-                                  INP_DOC_ORIGINAL              : sOrig,
-                                  INP_DOC_VERSIONING            : sVers,
-                                  INP_DOC_TAGS                  : sTags,
-                                  INP_DOC_DESCRIPTION           : sDesc,
-                                  INP_DOC_DESTINATION_PATH      : sDestPath
-                              },
-                              success: function(response) {
-                                  PMExt.notify( _('ID_STATUS') , _('ID_INPUT_CREATE') );
-                                  newIOWindow.hide();
-                                  inputDocStore.reload();
-                              }
-                            });
-                        }
-                        else
-                             PMExt.notify( _('ID_STATUS') , _('ID_INPUT_NOT_SAVE') );
-                             }
-                 })
-                }
-                else
-                {
-                    Ext.Ajax.request({
+           if(sDocUID == "")
+           {
+                Ext.Ajax.request({
+                  url   : '../inputdocs/inputdocs_Save.php',
+                  method: 'POST',
+                  params:{
+                      functions                : 'lookForNameInput',
+                      NAMEINPUT                : sDocTitle,
+                      proUid                   : pro_uid
+                  },
+                  success: function(response) {
+                    if(response.responseText == "1")
+                    {
+                       Ext.Ajax.request({
                           url   : '../inputdocs/inputdocs_Save.php',
                           method: 'POST',
                           params:{
@@ -1705,20 +1685,49 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                               INP_DOC_DESTINATION_PATH      : sDestPath
                           },
                           success: function(response) {
-                               PMExt.notify( _('ID_STATUS') , _('ID_INPUT_UPDATE') );
+                              PMExt.notify( _('ID_STATUS') , _('ID_INPUT_CREATE') );
                               newIOWindow.hide();
                               inputDocStore.reload();
                           }
                         });
-                }
-           }
-        },{
-            text: _('ID_CANCEL'),
-            handler: function(){
-                // when this button clicked,
-                newIOWindow.hide();
+                    }
+                    else
+                         PMExt.notify( _('ID_STATUS') , _('ID_INPUT_NOT_SAVE') );
+                         }
+             })
             }
-        }],
+            else
+            {
+                Ext.Ajax.request({
+                      url   : '../inputdocs/inputdocs_Save.php',
+                      method: 'POST',
+                      params:{
+                          functions                     : '',
+                          INP_DOC_TITLE                 : sDocTitle,
+                          INP_DOC_UID                   : sDocUID,
+                          PRO_UID                       : pro_uid,
+                          INP_DOC_FORM_NEEDED           : sFormNeeded,
+                          INP_DOC_ORIGINAL              : sOrig,
+                          INP_DOC_VERSIONING            : sVers,
+                          INP_DOC_TAGS                  : sTags,
+                          INP_DOC_DESCRIPTION           : sDesc,
+                          INP_DOC_DESTINATION_PATH      : sDestPath
+                      },
+                      success: function(response) {
+                           PMExt.notify( _('ID_STATUS') , _('ID_INPUT_UPDATE') );
+                          newIOWindow.hide();
+                          inputDocStore.reload();
+                      }
+                    });
+            }
+       }
+    },{
+        text: _('ID_CANCEL'),
+        handler: function(){
+            // when this button clicked,
+            newIOWindow.hide();
+        }
+    }],
        buttonAlign : 'center'
     });
 
@@ -1729,65 +1738,65 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
   });
 
 var inputDocColumns = new Ext.grid.ColumnModel({
-            columns: [
-                expander,
-                {
-                    id: 'INP_DOC_TITLE',
-                    header: _('ID_TITLE'),
-                    dataIndex: 'INP_DOC_TITLE',
-                    width: 280,
-                    editable: false,
-                    editor: new Ext.form.TextField({
-                    //allowBlank: false
-                    })
-                },{
-                    id: 'INP_DOC_VERSIONING',
-                    header: _('ID_VERSIONING'),
-                    dataIndex: 'INP_DOC_VERSIONING',
-                    width: 280,
-                    editable: false,
-                    editor: new Ext.form.TextField({
-                    //allowBlank: false
-                    })
-                },{
-                    id: 'INP_DOC_DESTINATION_PATH',
-                    header: _('ID_DESTINATION_PATH'),
-                    dataIndex: 'INP_DOC_DESTINATION_PATH',
-                    width: 280,
-                    editable: false,
-                    editor: new Ext.form.TextField({
-                    //allowBlank: false
-                    })
-                }
-                ]
-        });
+  columns: [
+    expander,
+    {
+        id: 'INP_DOC_TITLE',
+        header: _('ID_TITLE'),
+        dataIndex: 'INP_DOC_TITLE',
+        width: 280,
+        editable: false,
+        editor: new Ext.form.TextField({
+        //allowBlank: false
+        })
+    },{
+        id: 'INP_DOC_VERSIONING',
+        header: _('ID_VERSIONING'),
+        dataIndex: 'INP_DOC_VERSIONING',
+        width: 280,
+        editable: false,
+        editor: new Ext.form.TextField({
+        //allowBlank: false
+        })
+    },{
+        id: 'INP_DOC_DESTINATION_PATH',
+        header: _('ID_DESTINATION_PATH'),
+        dataIndex: 'INP_DOC_DESTINATION_PATH',
+        width: 280,
+        editable: false,
+        editor: new Ext.form.TextField({
+        //allowBlank: false
+        })
+    }
+    ]
+  });
 
 
   var inputDocGrid = new Ext.grid.GridPanel({
+    store: inputDocStore,
+    id : 'inputdocGrid',
+    loadMask: true,
+    //loadingText: 'Loading...',
+    //renderTo: 'cases-grid',
+    frame: false,
+    autoHeight:false,
+    clicksToEdit: 1,
+    minHeight:350,
+    height   :350,
+    layout: 'fit',
+    plugins: expander,
+    cm: inputDocColumns,
+    stripeRows: true,
+    tbar: tb,
+    bbar: new Ext.PagingToolbar({
+        pageSize: 10,
         store: inputDocStore,
-        id : 'inputdocGrid',
-        loadMask: true,
-        //loadingText: 'Loading...',
-        //renderTo: 'cases-grid',
-        frame: false,
-        autoHeight:false,
-        clicksToEdit: 1,
-        minHeight:400,
-        height   :350,
-        layout: 'fit',
-        plugins: expander,
-        cm: inputDocColumns,
-        stripeRows: true,
-        tbar: tb,
-        bbar: new Ext.PagingToolbar({
-            pageSize: 10,
-            store: inputDocStore,
-            displayInfo: true,
-            displayMsg: 'Displaying Input Document {0} - {1} of {2}',
-            emptyMsg: "No Input Document to display",
-            items:[]
-        }),
-        viewConfig: {forceFit: true}
+        displayInfo: true,
+        displayMsg: 'Displaying Input Document {0} - {1} of {2}',
+        emptyMsg: "No Input Document to display",
+        items:[]
+    }),
+    viewConfig: {forceFit: true}
    });
 
    //connecting context menu  to grid
@@ -1832,29 +1841,29 @@ var inputDocColumns = new Ext.grid.ColumnModel({
   });
 
   var gridWindow = new Ext.Window({
-        title: _('ID_REQUEST_DOCUMENTS'),
-        width: 550,
-        height: 420,
-        minWidth: 200,
-        minHeight: 150,
-        layout: 'fit',
-        plain: true,
-        items: inputDocGrid,
-        autoScroll: true
+    title: _('ID_REQUEST_DOCUMENTS'),
+    width: 550,
+    height: 350,
+    minWidth: 200,
+    minHeight: 350,
+    layout: 'fit',
+    plain: true,
+    items: inputDocGrid,
+    autoScroll: true
  });
 
  var newIOWindow = new Ext.Window({
-        title: _('ID_NEW_INPUTDOCS'),
-        width: 550,
-        height: 400,
-        minWidth: 200,
-        minHeight: 150,
-        autoScroll: true,
-        layout: 'fit',
-        plain: true,
-        items: inputDocForm
-    });
-   gridWindow.show();
+   title: _('ID_NEW_INPUTDOCS'),
+   width: 550,
+   height: 410,
+   minWidth: 200,
+   minHeight: 405,
+   autoScroll: true,
+   layout: 'fit',
+   plain: true,
+   items: inputDocForm
+  });
+  gridWindow.show();
 }
 
 
@@ -1893,6 +1902,11 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             iconCls: 'button_menu_ext ss_sprite ss_add',
             handler: function () {
             outputDocForm.getForm().reset();
+            outputDocForm.getForm().items.items[3].setValue('Portrait'); 
+            //outputDocForm.getForm().items.items[4].setValue('Letter'); 
+            outputDocForm.getForm().items.items[9].setValue('BOTH'); 
+            outputDocForm.getForm().items.items[10].setValue(0); 
+            outputDocForm.getForm().items.items[0].focus('',500); 
             newOPWindow.show();
             }
         });
@@ -2064,15 +2078,15 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
     top.render(document.body);
 
     var window = new Ext.Window({
-        title: _('ID_NEW_INPUTDOCS'),
-        width: 650,
-        height: 450,
-        minWidth: 200,
-        minHeight: 150,
-        autoScroll: true,
-        layout: 'fit',
-        plain: true,
-        items: top
+      title: _('ID_NEW_INPUTDOCS'),
+      width: 650,
+      height: 450,
+      minWidth: 200,
+      minHeight: 450,
+      autoScroll: true,
+      layout: 'fit',
+      plain: true,
+      items: top
     });
    window.show();
 
@@ -2142,18 +2156,18 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
       }
       var outputDocUID = rowSelected[0].get('OUT_DOC_UID');
       outputDocForm.form.load({
-                        url   :'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
-                        method: 'GET',
-                        waitMsg:'Loading',
-                        success:function(form, action) {
-                           //Ext.MessageBox.alert('Message', 'Loaded OK');
-                           newOPWindow.show();
-                           Ext.getCmp("OUT_DOC_UID").setValue(outputDocUID);
-                        },
-                        failure:function(form, action) {
-                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-                        }
-                     });
+         url   :'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
+         method: 'GET',
+         waitMsg:'Loading',
+         success:function(form, action) {
+            //Ext.MessageBox.alert('Message', 'Loaded OK');
+            newOPWindow.show();
+            Ext.getCmp("OUT_DOC_UID").setValue(outputDocUID);
+         },
+         failure:function(form, action) {
+             PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+         }
+      });
 
   }
   
@@ -2254,361 +2268,349 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
    });
 
   var outputDocForm = new Ext.FormPanel({
-        monitorValid    :true,
-        labelWidth      : 100,
-        defaults        :{autoScroll:true},
-        width           : 450,
-        bodyStyle : 'padding:10px 0 0 10px;',
-        items           :[{
-                    xtype       : 'fieldset',
+    monitorValid    :true,
+    labelWidth      : 140,
+    defaults        : {width : 300, autoScroll:true},
+    width           : 300,
+    bodyStyle : 'padding:8px 0 0 8px;',
+    items : [
+      {
+        xtype       : 'textfield',
+        fieldLabel  : _('ID_TITLE'),
+        allowBlank  : false,
+        blankText   : 'Enter Title of Output Document',
+        name        : 'OUT_DOC_TITLE'
+      },{
+        width       : 450,
+        layout:'column',
+        border:false,
+        items:[{
+          columnWidth:.8,
+          layout : 'form',
+          width  : 300,
+          border:false,
+          items: [{
+            xtype       : 'textfield',
+            fieldLabel  : _('ID_FILENAME_GENERATED'),
+            name        : 'OUT_DOC_FILENAME',
+            allowBlank  : false,
+            blankText   : 'Select Filename generated',
+            anchor      : '100%'
+          }]
+        },{
+          columnWidth:.2,
+          layout: 'form',
+          border:false,
+          items: [{
+            xtype:'button',
+            title: ' ',
+            text: '@@',
+            name: 'selectorigin',
+            handler: function (s) {
+              workflow.variablesAction = 'form';
+              workflow.fieldName         = 'OUT_DOC_FILENAME' ;
+              workflow.variable        = '@#',
+              workflow.formSelected    = outputDocForm;
+              var rowData = ProcMapObj.ExtVariables();
+              console.log(rowData);
+            }
+          }]
+        }]
+        },{
+          xtype           : 'textarea',
+          fieldLabel      : _('ID_DESCRIPTION'),
+          name            : 'OUT_DOC_DESCRIPTION',
+          height          : 50,
+          width           : 300
+        },{
+          width           :150,
+          xtype           :'combo',
+         mode            :'local',
+          editable        :false,
+          fieldLabel      :_('ID_ORIENTATION'),
+          triggerAction   :'all',
+          forceSelection  : true,
+          name            :'OUT_DOC_LANDSCAPE',
+          displayField    :'name',
+          value           :'Portrait',
+          valueField      :'value',
+          store           :new Ext.data.JsonStore({
+            fields : ['name', 'value'],
+            data   : [
+            {name : 'Portrait',   value: '0'},
+            {name : 'Landscape',   value: '1'}]})
+        },{
+          width           :150,
+          xtype           :'combo',
+          mode            :'local',
+          editable        :false,
+          fieldLabel      :_('ID_MEDIA'),
+          forceSelection  : true,
+          name            :'OUT_DOC_MEDIA',
+          displayField    :'name',
+          value           :'Letter',
+          valueField      :'value',
+          store           : new Ext.data.JsonStore({
+            fields : ['name', 'value'],
+            data   : [
+              {name : 'Letter',   value: 'Letter'},
+              {name : 'Legal',   value: 'Legal'},
+              {name : 'Executive',   value: 'Executive'},
+              {name : 'B5',   value: 'B5'},
+              {name : 'Folio',   value: 'Folio'},
+              {name : 'A0Oversize',   value: 'A0Oversize'},
+              {name : 'A0',   value: 'A0'},
+              {name : 'A1',   value: 'A1'},
+              {name : 'A2',   value: 'A2'},
+              {name : 'A3',   value: 'A3'},
+              {name : 'A4',   value: 'A4'},
+              {name : 'A5',   value: 'A5'},
+              {name : 'A6',   value: 'A6'},
+              {name : 'A7',   value: 'A7'},
+              {name : 'A8',   value: 'A8'},
+              {name : 'A9',   value: 'A9'},
+              {name : 'A10',   value: 'A10'},
+              {name : 'Screenshot640',   value: 'Screenshot640'},
+              {name : 'Screenshot800',   value: 'Screenshot800'},
+              {name : 'Screenshot1024',   value: 'Screenshot1024'}
+            ]
+          })
+        },{
+            xtype       : 'numberfield',
+            fieldLabel  : _('ID_LEFT_MARGIN'),
+            name        : 'OUT_DOC_LEFT_MARGIN',
+            width       : 50
+        },{
+            xtype       : 'numberfield',
+            fieldLabel  : _('ID_RIGHT_MARGIN'),
+            name        : 'OUT_DOC_RIGHT_MARGIN',
+            width       : 50
+        },{
+            xtype       : 'numberfield',
+            fieldLabel  : _('ID_TOP_MARGIN'),
+            name        : 'OUT_DOC_TOP_MARGIN',
+            width       : 50
+        },{
+            xtype       : 'numberfield',
+            fieldLabel  : _('ID_BOTTOM_MARGIN'),
+            name        : 'OUT_DOC_BOTTOM_MARGIN',
+            width       : 50
+        },{
+            width           :150,
+            xtype           :'combo',
+            mode            :'local',
+            editable        :false,
+            fieldLabel      :_('ID_OUTPUT_GENERATE'),
+            triggerAction   :'all',
+            forceSelection  :true,
+            name            :'OUT_DOC_GENERATE',
+            displayField    :'name',
+            value           :'Doc',
+            valueField      :'value',
+            store           :new Ext.data.JsonStore({
+            fields          :['name', 'value'],
+            data            :[
+              {name : 'BOTH',   value: 'BOTH'},
+              {name : 'DOC',   value: 'DOC'},
+              {name : 'PDF',   value: 'PDF'}]})
+            },{
+                width           : 50,
+                xtype           :'combo',
+                mode            :'local',
+                editable        :false,
+                fieldLabel      :_('ID_ENABLE_VERSIONING'),
+                triggerAction   :'all',
+                forceSelection  :true,
+                name            :'OUT_DOC_VERSIONING',
+                displayField    :'name',
+                value           :'NO',
+                valueField      :'value',
+                store           :new Ext.data.JsonStore({
+                fields          : ['name', 'value'],
+                data            : [
+                                {name : 'NO',   value: '0'},
+                                {name : 'YES',   value: '1'}]})
+            },{
+                layout      :'column',
+                width       : 450,
+                border      :false,
+                items       :[{
+                    columnWidth :.8,
                     layout      : 'form',
-                    border      :true,
-                    title       : _('ID_OUTPUT_INFO'),
-                    width       : 450,
-                    collapsible : false,
-                    labelAlign  : '',
-                    items       :[{
-                                    xtype       : 'textfield',
-                                    fieldLabel  : _('ID_TITLE'),
-                                    allowBlank  : false,
-                                    width       : 300,
-                                    blankText   : 'Enter Title of Output Document',
-                                    name        : 'OUT_DOC_TITLE'
-                                },{
-                                    //xtype: 'fieldset',
-                                    layout:'column',
-                                    border:false,
-                                    items:[{
-                                        columnWidth:.6,
-                                        layout: 'form',
-                                        border:false,
-                                        items: [{
-                                            xtype       : 'textfield',
-                                            //id          : 'filenameGenerated',
-                                            fieldLabel  : _('ID_FILENAME_GENERATED'),
-                                            name        : 'OUT_DOC_FILENAME',
-                                            allowBlank  : false,
-                                            width       : 250,
-                                            blankText   : 'Select Filename generated',
-                                            anchor      : '100%'
-                                         }]
-                                },{
-                                    columnWidth:.4,
-                                    layout: 'form',
-                                    width       : 200,
-                                    border:false,
-                                    items: [{
-                                            xtype:'button',
-                                            title: ' ',
-                                            text: '@@',
-                                            name: 'selectorigin',
-                                             handler: function (s) {
-                                                workflow.variablesAction = 'form';
-                                                workflow.fieldName         = 'OUT_DOC_FILENAME' ;
-                                                workflow.variable        = '@#',
-                                                workflow.formSelected    = outputDocForm;
-                                                var rowData = ProcMapObj.ExtVariables();
-                                                console.log(rowData);
-                                        }
-                                    }]
-                                 }]
-                                },{
-                                    xtype           : 'textarea',
-                                    fieldLabel      : _('ID_DESCRIPTION'),
-                                    name            : 'OUT_DOC_DESCRIPTION',
-                                    height          : 120,
-                                    width           : 300
-                                },{
-                                    width           :150,
-                                    xtype           :'combo',
-                                    mode            :'local',
-                                    editable        :false,
-                                    fieldLabel      :_('ID_ORIENTATION'),
-                                    triggerAction   :'all',
-                                    forceSelection  : true,
-                                    name            :'OUT_DOC_LANDSCAPE',
-                                    displayField    :'name',
-                                    value           :'Portrait',
-                                    valueField      :'value',
-                                    store           :new Ext.data.JsonStore({
-                                                                        fields : ['name', 'value'],
-                                                                        data   : [
-                                                                        {name : 'Portrait',   value: '0'},
-                                                                        {name : 'Landscape',   value: '1'}]})
-                                },{
-                                    width           :150,
-                                    xtype           :'combo',
-                                    mode            :'local',
-                                    editable        :false,
-                                    fieldLabel      :_('ID_MEDIA'),
-                                    triggerAction   :'all',
-                                    forceSelection  : true,
-                                    name            :'OUT_DOC_MEDIA',
-                                    displayField    :'name',
-                                    value           :'Letter',
-                                    valueField      :'value',
-                                    store           :new Ext.data.JsonStore({
-                                                                            fields : ['name', 'value'],
-                                                                            data   : [
-                                                                            {name : 'Letter',   value: 'Letter'},
-                                                                            {name : 'Legal',   value: 'Legal'},
-                                                                            {name : 'Executive',   value: 'Executive'},
-                                                                            {name : 'B5',   value: 'B5'},
-                                                                            {name : 'Folio',   value: 'Folio'},
-                                                                            {name : 'A0Oversize',   value: 'A0Oversize'},
-                                                                            {name : 'A0',   value: 'A0'},
-                                                                            {name : 'A1',   value: 'A1'},
-                                                                            {name : 'A2',   value: 'A2'},
-                                                                            {name : 'A3',   value: 'A3'},
-                                                                            {name : 'A4',   value: 'A4'},
-                                                                            {name : 'A5',   value: 'A5'},
-                                                                            {name : 'A6',   value: 'A6'},
-                                                                            {name : 'A7',   value: 'A7'},
-                                                                            {name : 'A8',   value: 'A8'},
-                                                                            {name : 'A9',   value: 'A9'},
-                                                                            {name : 'A10',   value: 'A10'},
-                                                                            {name : 'Screenshot640',   value: 'Screenshot640'},
-                                                                            {name : 'Screenshot800',   value: 'Screenshot800'},
-                                                                            {name : 'Screenshot1024',   value: 'Screenshot1024'}
-                                                                           ]
-                                                                       })
-                                },{
-                                                    xtype       : 'numberfield',
-                                                    fieldLabel  : _('ID_LEFT_MARGIN'),
-                                                    name        : 'OUT_DOC_LEFT_MARGIN',
-                                                    width       : 50
-                                                },{
-                                                    xtype       : 'numberfield',
-                                                    fieldLabel  : _('ID_RIGHT_MARGIN'),
-                                                    name        : 'OUT_DOC_RIGHT_MARGIN',
-                                                    width       : 50
-                                                },{
-                                                    xtype       : 'numberfield',
-                                                    fieldLabel  : _('ID_TOP_MARGIN'),
-                                                    name        : 'OUT_DOC_TOP_MARGIN',
-                                                    width       : 50
-                                                },{
-                                                    xtype       : 'numberfield',
-                                                    fieldLabel  : _('ID_BOTTOM_MARGIN'),
-                                                    name        : 'OUT_DOC_BOTTOM_MARGIN',
-                                                    width       : 50
-                                                },{
-                                                    width           :150,
-                                                    xtype           :'combo',
-                                                    mode            :'local',
-                                                    editable        :false,
-                                                    fieldLabel      :_('ID_OUTPUT_GENERATE'),
-                                                    triggerAction   :'all',
-                                                    forceSelection  :true,
-                                                    name            :'OUT_DOC_GENERATE',
-                                                    displayField    :'name',
-                                                    value           :'Doc',
-                                                    valueField      :'value',
-                                                    store           :new Ext.data.JsonStore({
-                                                    fields          :['name', 'value'],
-                                                    data            :[
-                                                                    {name : 'BOTH',   value: 'BOTH'},
-                                                                    {name : 'DOC',   value: 'DOC'},
-                                                                    {name : 'PDF',   value: 'PDF'}]})
-                },{
-                    width           : 50,
-                    xtype           :'combo',
-                    mode            :'local',
-                    editable        :false,
-                    fieldLabel      :_('ID_ENABLE_VERSIONING'),
-                    triggerAction   :'all',
-                    forceSelection  :true,
-                    name            :'OUT_DOC_VERSIONING',
-                    displayField    :'name',
-                    value           :'NO',
-                    valueField      :'value',
-                    store           :new Ext.data.JsonStore({
-                    fields          : ['name', 'value'],
-                    data            : [
-                                    {name : 'NO',   value: '0'},
-                                    {name : 'YES',   value: '1'}]})
-                },{
-                    layout      :'column',
                     border      :false,
-                    items       :[{
-                        columnWidth :.6,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                                xtype       : 'textfield',
-                                //id          : 'DestPath',
-                                fieldLabel  : _('ID_DESTINATION_PATH'),
-                                name        : 'OUT_DOC_DESTINATION_PATH',
-                                anchor      :'100%',
-                                width       : 250
-                        }]
-                    },{
-                        columnWidth     :.4,
-                        layout          : 'form',
-                        border          :false,
-                        items           : [{
-                                xtype           :'button',
-                                title           : ' ',
-                                text            : '@@',
-                                name            : 'selectorigin',
-                                 handler: function (s) {
-                                                    workflow.variablesAction = 'form';
-                                                    workflow.fieldName         = 'OUT_DOC_DESTINATION_PATH' ;
-                                                    workflow.variable        = '@@',
-                                                    workflow.formSelected    = outputDocForm;
-                                                    var rowData = ProcMapObj.ExtVariables();
-                                            }
-                            }]
+                    items       : [{
+                      xtype       : 'textfield',
+                      fieldLabel  : _('ID_DESTINATION_PATH'),
+                      name        : 'OUT_DOC_DESTINATION_PATH',
+                      anchor      :'100%',
+                      width       : 300
                     }]
                 },{
-                    layout      :'column',
-                    border      :false,
-                    items       :[{
-                        columnWidth :.6,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                        xtype       : 'textfield',
-                        //id          :'tags',
-                        fieldLabel  : _('ID_TAGS'),
-                        name        : 'OUT_DOC_TAGS',
-                        anchor      :'100%',
-                        width       : 250
-                        }]
-                    },{
-                        columnWidth :.4,
-                        layout      : 'form',
-                        border      :false,
-                        items       : [{
-                                xtype       :'button',
-                                title       : ' ',
-                                text        : '@@',
-                                name        : 'selectorigin',
-                                handler: function (s) {
-                                                workflow.variablesAction = 'form';
-                                                workflow.fieldName         = 'OUT_DOC_TAGS' ;
-                                                workflow.variable        = '@@',
-                                                workflow.formSelected    = outputDocForm;
-                                                var rowData = ProcMapObj.ExtVariables();
-                                   }
-                              }]
-                        }]
-                     },{
-                      id : 'OUT_DOC_UID',
-                      xtype: 'hidden',
-                      name : 'OUT_DOC_UID'
-                  }
-                 ]
-                  }],
-     buttons     : [{
-        text        : _('ID_SAVE'),
-        formBind    :true,
-        handler     : function(){
-                var getForm       = outputDocForm.getForm().getValues();
-                var sDocUID       = getForm.OUT_DOC_UID;
-                var sDocTitle     = getForm.OUT_DOC_TITLE;
-                var sFilename     = getForm.OUT_DOC_FILENAME;
-                var sDesc         = getForm.OUT_DOC_DESCRIPTION;
-                var sLandscape    = getForm.OUT_DOC_LANDSCAPE;
-                if(getForm.OUT_DOC_LANDSCAPE == 'Portrait')
-                        sLandscape=0;
-                if(getForm.OUT_DOC_LANDSCAPE == 'Landscape')
-                        sLandscape=1;
-                var sMedia        = getForm.OUT_DOC_MEDIA;
-                var sLeftMargin   = getForm.OUT_DOC_LEFT_MARGIN;
-                var sRightMargin  = getForm.OUT_DOC_RIGHT_MARGIN;
-                var sTopMargin    = getForm.OUT_DOC_TOP_MARGIN;
-                var sBottomMargin = getForm.OUT_DOC_BOTTOM_MARGIN;
-                var sGenerated    = getForm.OUT_DOC_GENERATE;
-                var sVersioning   = getForm.OUT_DOC_VERSIONING;
-                if(getForm.OUT_DOC_VERSIONING == 'NO')
-                        sVersioning=0;
-                if(getForm.OUT_DOC_VERSIONING == 'YES')
-                        sVersioning=1;
-                var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
-                var sTags         = getForm.OUT_DOC_TAGS;
-            if(sDocUID == "")
-               {
-              Ext.Ajax.request({
-                  url   : '../outputdocs/outputdocs_Save.php',
-                  method: 'POST',
-                  params:{
-                      functions                : 'lookForNameOutput',
-                      NAMEOUTPUT               : sDocTitle,
-                      proUid                   : pro_uid
-                  },
-                  success: function(response) {
-                    if(response.responseText == "1")
-                    {
-                      Ext.Ajax.request({
-                          url   : '../outputdocs/outputdocs_Save.php',
-                          method: 'POST',
-                          params:{
-                              functions                : '',
-                              OUT_DOC_UID              : sDocUID,
-                              OUT_DOC_TITLE            : sDocTitle,
-                              OUT_DOC_FILENAME         : sFilename,
-                              OUT_DOC_DESCRIPTION      : sDesc,
-                              OUT_DOC_LANDSCAPE        : sLandscape,
-                              OUT_DOC_MEDIA            : sMedia,
-                              OUT_DOC_LEFT_MARGIN      : sLeftMargin,
-                              OUT_DOC_RIGHT_MARGIN     : sRightMargin,
-                              OUT_DOC_TOP_MARGIN       : sTopMargin,
-                              OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
-                              OUT_DOC_GENERATE         : sGenerated,
-                              OUT_DOC_VERSIONING       : sVersioning,
-                              OUT_DOC_DESTINATION_PATH : sDestPath,
-                              OUT_DOC_TAGS             : sTags,
-                              PRO_UID                  : pro_uid
-                          },
-                          success: function(response) {
-                              PMExt.notify( _('ID_STATUS') , _('OUTPUT_CREATE') );
-                            outputDocStore.reload();
-                            newOPWindow.hide();
-                          }
-                      });
-
-                  }
-
-
-                  else
-                      PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_NOT_SAVE') );
+                    columnWidth     :.2,
+                    layout          : 'form',
+                    border          :false,
+                    items           : [{
+                      xtype           : 'button',
+                      title           : ' ',
+                      text            : '@@',
+                      name            : 'selectorigin',
+                      handler: function (s) {
+                        workflow.variablesAction = 'form';
+                        workflow.fieldName         = 'OUT_DOC_DESTINATION_PATH' ;
+                        workflow.variable        = '@@',
+                        workflow.formSelected    = outputDocForm;
+                        var rowData = ProcMapObj.ExtVariables();
                       }
-        });
-               }
-         else
-               {
-             Ext.Ajax.request({
-                          url   : '../outputdocs/outputdocs_Save.php',
-                          method: 'POST',
-                          params:{
-                              functions                : '',
-                              OUT_DOC_UID              : sDocUID,
-                              OUT_DOC_TITLE            : sDocTitle,
-                              OUT_DOC_FILENAME         : sFilename,
-                              OUT_DOC_DESCRIPTION      : sDesc,
-                              OUT_DOC_LANDSCAPE        : sLandscape,
-                              OUT_DOC_MEDIA            : sMedia,
-                              OUT_DOC_LEFT_MARGIN      : sLeftMargin,
-                              OUT_DOC_RIGHT_MARGIN     : sRightMargin,
-                              OUT_DOC_TOP_MARGIN       : sTopMargin,
-                              OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
-                              OUT_DOC_GENERATE         : sGenerated,
-                              OUT_DOC_VERSIONING       : sVersioning,
-                              OUT_DOC_DESTINATION_PATH : sDestPath,
-                              OUT_DOC_TAGS             : sTags,
-                              PRO_UID                  : pro_uid
-                          },
-                          success: function(response) {
-                              PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_UPDATE') );
-                              outputDocStore.reload();
-                            newOPWindow.hide();
-                          }
-                      });
+                    }]
+                }]
+            },{
+                layout      :'column',
+                width       : 450,
+                border      :false,
+                items       :[{
+                    columnWidth :.8,
+                    layout      : 'form',
+                    border      :false,
+                    items       : [{
+                    xtype       : 'textfield',
+                    fieldLabel  : _('ID_TAGS'),
+                    name        : 'OUT_DOC_TAGS',
+                    anchor      :'100%',
+                    width       : 300
+                    }]
+                },{
+                    columnWidth :.2,
+                    layout      : 'form',
+                    border      :false,
+                    items       : [{
+                      xtype       :'button',
+                      title       : ' ',
+                      text        : '@@',
+                      name        : 'selectorigin',
+                      handler: function (s) {
+                        workflow.variablesAction = 'form';
+                        workflow.fieldName         = 'OUT_DOC_TAGS' ;
+                        workflow.variable        = '@@',
+                        workflow.formSelected    = outputDocForm;
+                        var rowData = ProcMapObj.ExtVariables();
+                      }
+                    }]
+                }]
+              },{
+                id : 'OUT_DOC_UID',
+                xtype: 'hidden',
+                name : 'OUT_DOC_UID'
+              }
+    ],
+    buttons     : [{
+      text        : _('ID_SAVE'),
+      formBind    :true,
+      handler     : function(){
+              var getForm       = outputDocForm.getForm().getValues();
+              var sDocUID       = getForm.OUT_DOC_UID;
+              var sDocTitle     = getForm.OUT_DOC_TITLE;
+              var sFilename     = getForm.OUT_DOC_FILENAME;
+              var sDesc         = getForm.OUT_DOC_DESCRIPTION;
+              var sLandscape    = getForm.OUT_DOC_LANDSCAPE;
+              if(getForm.OUT_DOC_LANDSCAPE == 'Portrait')
+                sLandscape=0;
+              if(getForm.OUT_DOC_LANDSCAPE == 'Landscape')
+                sLandscape=1;
+              var sMedia        = getForm.OUT_DOC_MEDIA;
+              var sLeftMargin   = getForm.OUT_DOC_LEFT_MARGIN;
+              var sRightMargin  = getForm.OUT_DOC_RIGHT_MARGIN;
+              var sTopMargin    = getForm.OUT_DOC_TOP_MARGIN;
+              var sBottomMargin = getForm.OUT_DOC_BOTTOM_MARGIN;
+              var sGenerated    = getForm.OUT_DOC_GENERATE;
+              var sVersioning   = getForm.OUT_DOC_VERSIONING;
+              if(getForm.OUT_DOC_VERSIONING == 'NO')
+                sVersioning=0;
+              if(getForm.OUT_DOC_VERSIONING == 'YES')
+                sVersioning=1;
+              var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
+              var sTags         = getForm.OUT_DOC_TAGS;
+          if(sDocUID == "")
+             {
+            Ext.Ajax.request({
+                url   : '../outputdocs/outputdocs_Save.php',
+                method: 'POST',
+                params:{
+                    functions                : 'lookForNameOutput',
+                    NAMEOUTPUT               : sDocTitle,
+                    proUid                   : pro_uid
+                },
+                success: function(response) {
+                  if(response.responseText == "1")
+                  {
+                    Ext.Ajax.request({
+                        url   : '../outputdocs/outputdocs_Save.php',
+                        method: 'POST',
+                        params:{
+                            functions                : '',
+                            OUT_DOC_UID              : sDocUID,
+                            OUT_DOC_TITLE            : sDocTitle,
+                            OUT_DOC_FILENAME         : sFilename,
+                            OUT_DOC_DESCRIPTION      : sDesc,
+                            OUT_DOC_LANDSCAPE        : sLandscape,
+                            OUT_DOC_MEDIA            : sMedia,
+                            OUT_DOC_LEFT_MARGIN      : sLeftMargin,
+                            OUT_DOC_RIGHT_MARGIN     : sRightMargin,
+                            OUT_DOC_TOP_MARGIN       : sTopMargin,
+                            OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
+                            OUT_DOC_GENERATE         : sGenerated,
+                            OUT_DOC_VERSIONING       : sVersioning,
+                            OUT_DOC_DESTINATION_PATH : sDestPath,
+                            OUT_DOC_TAGS             : sTags,
+                            PRO_UID                  : pro_uid
+                        },
+                        success: function(response) {
+                            PMExt.notify( _('ID_STATUS') , _('OUTPUT_CREATE') );
+                          outputDocStore.reload();
+                          newOPWindow.hide();
+                        }
+                    });
 
-               }
-        }
-       },{
+                }
+
+
+                else
+                    PMExt.error( _('ID_ERROR') , _('ID_OUTPUT_NOT_SAVE') );
+                    }
+      });
+             }
+       else
+             {
+           Ext.Ajax.request({
+                        url   : '../outputdocs/outputdocs_Save.php',
+                        method: 'POST',
+                        params:{
+                            functions                : '',
+                            OUT_DOC_UID              : sDocUID,
+                            OUT_DOC_TITLE            : sDocTitle,
+                            OUT_DOC_FILENAME         : sFilename,
+                            OUT_DOC_DESCRIPTION      : sDesc,
+                            OUT_DOC_LANDSCAPE        : sLandscape,
+                            OUT_DOC_MEDIA            : sMedia,
+                            OUT_DOC_LEFT_MARGIN      : sLeftMargin,
+                            OUT_DOC_RIGHT_MARGIN     : sRightMargin,
+                            OUT_DOC_TOP_MARGIN       : sTopMargin,
+                            OUT_DOC_BOTTOM_MARGIN    : sBottomMargin,
+                            OUT_DOC_GENERATE         : sGenerated,
+                            OUT_DOC_VERSIONING       : sVersioning,
+                            OUT_DOC_DESTINATION_PATH : sDestPath,
+                            OUT_DOC_TAGS             : sTags,
+                            PRO_UID                  : pro_uid
+                        },
+                        success: function(response) {
+                            PMExt.notify( _('ID_STATUS') , _('ID_OUTPUT_UPDATE') );
+                            outputDocStore.reload();
+                          newOPWindow.hide();
+                        }
+                    });
+
+             }
+      }
+    },{
             text: _('ID_CANCEL'),
             handler: function(){
                 // when this button clicked,
@@ -2620,11 +2622,11 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
 
   var newOPWindow = new Ext.Window({
         title       : _('ID_OUTPUT_DOCUMENTS'),
-        width       : 500,
+        width       : 520,
         defaults    :{autoScroll:true},
-        height      : 420,
+        height      : 470,
         minWidth    : 200,
-        minHeight   : 150,
+        minHeight   : 350,
         layout      : 'fit',
         plain       : true,
         items       : outputDocForm,
@@ -2682,9 +2684,9 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         maximizable : false,
         width       : 550,
         defaults    :{autoScroll:true},
-        height      : 420,
+        height      : 370,
         minWidth    : 200,
-        minHeight   : 150,
+        minHeight   : 370,
         layout      : 'fit',
         plain       : true,
         items       : outputDocGrid,
