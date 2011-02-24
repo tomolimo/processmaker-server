@@ -657,12 +657,15 @@ Ext.onReady ( function() {
   //Context Menu of ProcessMap
   ProcessMapObj = new ProcessMapContext();
   contextCanvasMenu = new Ext.menu.Menu({
-      items: [{
+      items: [
+/*      {
           text: 'Edit Process',
           handler: ProcessMapObj.editProcess,
           iconCls: 'button_menu_ext ss_sprite ss_page_white_edit',
           scope: this
-      }, {
+      }, 
+*/
+      {
           text: 'Export Process',
           handler: ProcessMapObj.exportProcess,
           iconCls: 'button_menu_ext ss_sprite ss_script_go',
