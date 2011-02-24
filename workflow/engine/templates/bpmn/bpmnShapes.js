@@ -224,14 +224,14 @@ bpmnTask.prototype.paint = function () {
 Figure.prototype.onDragend=function() {
   if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection != null){
     var currObj =workflow.currentSelection;
+    currObj.orgXPos  = currObj.getX();
+    currObj.orgYPos  = currObj.getY();
     if(typeof currObj.id != 'undefined' && currObj.id.length == 32){
       switch (currObj.type) {
         case 'bpmnTask':
         case 'bpmnSubProcess':
           currObj.actiontype = 'saveTaskPosition';
           currObj.workflow.savePosition(currObj);
-          
-          
           break;
         case 'bpmnAnnotation':
           currObj.actiontype = 'saveTextPosition';
