@@ -847,8 +847,6 @@ class System {
                    strcasecmp($newField['Type'], $oldField['Type']) !== 0 ||
                    strcasecmp($newField['Null'], $oldField['Null']) !== 0 ||
                    $changeDefaultAttr ) {
-                var_dump("Found in DB: ", $aOldSchema[$sTableName][$sColumName]);
-                var_dump("Should be:   ", $aNewSchema[$sTableName][$sColumName]);
                 if (!isset($aChanges['tablesToAlter'][$sTableName])) {
                   $aChanges['tablesToAlter'][$sTableName] = array('DROP' => array(), 'ADD' => array(), 'CHANGE' => array());
                 }
