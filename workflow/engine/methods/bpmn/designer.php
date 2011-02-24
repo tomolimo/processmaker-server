@@ -2,6 +2,7 @@
   	
   $oHeadPublisher =& headPublisher::getSingleton();
   //$oHeadPublisher->setExtSkin( 'xtheme-gray');
+/*  
   $oHeadPublisher->addExtJsScript('bpmn/MyWorkflow',true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/pmosExt', true );    //adding a javascript file .js
   $oHeadPublisher->addExtJsScript('bpmn/TaskContext', true );    //adding a javascript file .js
@@ -52,7 +53,7 @@
   $oHeadPublisher->addExtJsScript('bpmn/GridPanel');
   $oHeadPublisher->addExtJsScript('bpmn/SubProcess' );
   $oHeadPublisher->addExtJsScript('bpmn/ProcessOptions',true);
-
+*/
   $oHeadPublisher->addContent( 'bpmn/designer'); //adding a html file  .html.
   $oHeadPublisher->assign('pro_uid', (isset($_GET['PRO_UID']) ? $_GET['PRO_UID']: ''));
   G::RenderPage('publish', 'extJs');

@@ -23,13 +23,16 @@
   $oHeadPublisher->addExtJsScript('bpmn/TaskContext', true ); 
   $oHeadPublisher->addExtJsScript('bpmn/ProcessMapContext', false );
   $oHeadPublisher->addExtJsScript('bpmn/processmap', true );    
-  $oHeadPublisher->addExtJsScript('bpmn/Annotation' );
+  $oHeadPublisher->addExtJsScript('bpmn/designer', true ); 
+  $oHeadPublisher->addExtJsScript('bpmn/Annotation', true );
   $oHeadPublisher->addExtJsScript('bpmn/bpmnShapes', true); 
   //$oHeadPublisher->addExtJsScript('bpmn/LoopingSubProcess');
   //$oHeadPublisher->addExtJsScript('bpmn/LoopingTask'); //
   //$oHeadPublisher->addExtJsScript('bpmn/Dataobject'); //
-  //$oHeadPublisher->addExtJsScript('bpmn/Pool',true);
-  //$oHeadPublisher->addExtJsScript('bpmn/Lane');
+  $oHeadPublisher->addExtJsScript('bpmn/Pool',true);
+  $oHeadPublisher->addExtJsScript('bpmn/Lane');
+
+
     
   $oHeadPublisher->addExtJsScript('bpmn/EventEmptyStart');
   $oHeadPublisher->addExtJsScript('bpmn/EventMessageStart');
