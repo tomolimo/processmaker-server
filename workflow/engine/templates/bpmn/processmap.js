@@ -612,6 +612,7 @@ Ext.onReady ( function() {
                 processObj.addTriggers();
               }
             },
+/*
             {
               text: 'Report Table',
               iconCls: 'button_menu_ext ss_sprite ss_table',
@@ -619,6 +620,7 @@ Ext.onReady ( function() {
                 processObj.addReportTable();
               }
             },
+*/
             {
               text: 'Database Connection',
               iconCls: 'button_menu_ext ss_sprite ss_database_connect',

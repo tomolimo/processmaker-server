@@ -2694,7 +2694,8 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
      });
  gridWindow.show();
 }
-
+ 
+/* 
 ProcessOptions.prototype.addReportTable= function(_5625)
 {
   var reportFields = Ext.data.Record.create([
@@ -3131,6 +3132,7 @@ var formWindow = new Ext.Window({
     });
    //gridWindow.show();
 }
+*/
 
 ProcessOptions.prototype.addTriggers= function()
 {
