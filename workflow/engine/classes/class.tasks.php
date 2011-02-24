@@ -415,7 +415,11 @@ class Tasks
       $oGateway = new Gateway();
       if($oGateway->gatewayExists ($row['GAT_UID']))
           $oGateway->remove($row['GAT_UID']);
-      $res = $oGateway->createRow($row);
+
+      if($row['TAS_UID'] != '' && $row['GAT_NEXT_TASK'] != '')
+          continue;
+      else
+          $res = $oGateway->createRow($row);
     }
     return;
   }

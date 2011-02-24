@@ -1379,35 +1379,33 @@ TaskContext.prototype.saveTaskProperties= function()
                  alert(tas_start);
 
                  //Checking checkbox fields
-//                 if(typeof tas_start != 'undefined' && tas_start != ''){
-//                     if(tas_start == 'on')
-//                         saveTaskform['TAS_START'] = 'TRUE';
-//                     else
-//                         saveTaskform['TAS_START'] = 'FALSE';
-//                 }
+                 if(typeof tas_start != 'undefined' && tas_start != ''){
+                     if(tas_start == 'on')
+                         saveTaskform['TAS_START'] = 'TRUE';
+                 }
+                 else
+                         saveTaskform['TAS_START'] = 'FALSE';
 
-                    if(tas_start == 'on')
-                                 tas_start = true;
-                              else if(typeof tas_start == 'undefined')
-                                 tas_start = false;
                  if(typeof tas_transfer_fly != 'undefined' && tas_transfer_fly != ''){
                      if(tas_transfer_fly == 'on')
                          saveTaskform['TAS_TRANSFER_FLY'] = 'TRUE';
-                     else
-                         saveTaskform['TAS_TRANSFER_FLY'] = 'FALSE';
                  }
+                 else
+                         saveTaskform['TAS_TRANSFER_FLY'] = 'FALSE';
+
                  if(typeof send_email != 'undefined' && send_email != ''){
                      if(send_email == 'on')
                          saveTaskform['SEND_EMAIL'] = 'TRUE';
-                     else
-                         send_email['SEND_EMAIL'] = 'FALSE';
                  }
+                 else
+                         saveTaskform['SEND_EMAIL'] = 'FALSE';
+
                  if(typeof tas_type != 'undefined' && tas_type != ''){
                      if(tas_type == 'on')
                          saveTaskform['TAS_TYPE'] = 'ADHOC';
-                     else
-                         saveTaskform['TAS_TYPE'] = 'NORMAL';
                  }
+                 else
+                         saveTaskform['TAS_TYPE'] = 'NORMAL';
 
                  var object_data = Ext.util.JSON.encode(saveTaskform);
 
