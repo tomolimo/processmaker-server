@@ -16,13 +16,9 @@
   
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->usingExtJs('ux/miframe');
-  
-  //$oHeadPublisher->setExtSkin( 'xtheme-gray');
-  $oHeadPublisher->addExtJsScript('bpmn/processmap', true );    //adding a javascript file .js
-
-  $oHeadPublisher->addContent( 'bpmn/processmap'); //adding a html file  .html.
-  
-
+  $oHeadPublisher->addExtJsScript('bpmn/ProcessOptions', true);
+  $oHeadPublisher->addExtJsScript('bpmn/processmap', true);
+  $oHeadPublisher->addContent( 'bpmn/processmap');
   $oHeadPublisher->assign('pro_title', $process->getProTitle());
   $oHeadPublisher->assign('pro_uid', $process->getProUid());
   G::RenderPage('publish', 'extJs');

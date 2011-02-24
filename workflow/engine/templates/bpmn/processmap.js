@@ -1,5 +1,5 @@
 var _TAS_UID;
-//var processObj;
+var processObj;
 //var ProcessMapObj;
 
 Ext.onReady ( function() {
@@ -10,7 +10,7 @@ Ext.onReady ( function() {
     }
   });
 
-  //processObj = new ProcessOptions();
+  processObj = new ProcessOptions();
   //ProcessMapObj = new ProcessMapContext();
 
   var west= {

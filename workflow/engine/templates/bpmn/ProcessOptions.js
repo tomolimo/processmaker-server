@@ -1,15 +1,11 @@
-ProcessOptions=function(id){
+var workflow = {};
+
+var ProcessOptions = function(id){
   //Workflow.call(this,id);
 };
 
-/**
- * WARNING  Don't use Workflow, or workflow object because this is being called out of workflow environment
- * it is out the iframe that is containing designer.js and all theirs objects
- */
-
-ProcessOptions.prototype=new Workflow;
-ProcessOptions.prototype.type="ProcessOptions";
-
+//ProcessOptions.prototype=new Workflow;
+//ProcessOptions.prototype.type="ProcessOptions";
 
 /**
    * 'addDynaform' function that will allow adding new dynaforms and showing list of
@@ -1225,7 +1221,7 @@ ProcessOptions.prototype.dbConnection = function()
 
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
-  var ProcMapObj= new ProcessMapContext();
+  
   var inpDocFields = Ext.data.Record.create([
     {
         name: 'INP_DOC_UID',
@@ -1523,7 +1519,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                       workflow.fieldName         = 'INP_DOC_DESTINATION_PATH' ;
                                       workflow.variable        = '@@',
                                       workflow.formSelected    = inputDocForm;
-                                      var rowData = ProcMapObj.ExtVariables();
+                                      var rowData = PMVariables();
                               }
               }]
       }]
@@ -1557,7 +1553,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                                             workflow.fieldName         = 'INP_DOC_TAGS' ;
                                             workflow.variable        = '@@',
                                             workflow.formSelected    = inputDocForm;
-                                            var rowData = ProcMapObj.ExtVariables();
+                                            var rowData = PMVariables();
                                }
                           }]
                     }]
@@ -1814,7 +1810,7 @@ var inputDocColumns = new Ext.grid.ColumnModel({
 
 ProcessOptions.prototype.addOutputDoc= function(_5625)
 {
- var ProcMapObj= new ProcessMapContext();
+ 
 
  var outputDocFields = Ext.data.Record.create([
             {
@@ -2255,7 +2251,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
               workflow.fieldName         = 'OUT_DOC_FILENAME' ;
               workflow.variable        = '@#',
               workflow.formSelected    = outputDocForm;
-              var rowData = ProcMapObj.ExtVariables();
+              var rowData = PMVariables();
               console.log(rowData);
             }
           }]
@@ -2403,7 +2399,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         workflow.fieldName         = 'OUT_DOC_DESTINATION_PATH' ;
                         workflow.variable        = '@@',
                         workflow.formSelected    = outputDocForm;
-                        var rowData = ProcMapObj.ExtVariables();
+                        var rowData = PMVariables();
                       }
                     }]
                 }]
@@ -2436,7 +2432,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                         workflow.fieldName         = 'OUT_DOC_TAGS' ;
                         workflow.variable        = '@@',
                         workflow.formSelected    = outputDocForm;
-                        var rowData = ProcMapObj.ExtVariables();
+                        var rowData = PMVariables();
                       }
                     }]
                 }]
@@ -3078,9 +3074,10 @@ var formWindow = new Ext.Window({
 }
 */
 
-ProcessOptions.prototype.addTriggers= function()
+
+ProcessOptions.prototype.addTriggers = function()
 {
-   var ProcMapObj= new ProcessMapContext();
+   
    var triggerFields = Ext.data.Record.create([
     {name: 'TRI_UID'},
     {name: 'TRI_TITLE'},
@@ -3473,7 +3470,7 @@ var triggersForm = new Ext.FormPanel({
               workflow.fieldName         = 'TRI_WEBBOT' ;
               workflow.variable        = '@@',
               workflow.formSelected    = triggersForm;
-              var rowData = ProcMapObj.ExtVariables();
+              var rowData = PMVariables();
             }
           }]
         }]
@@ -3676,4 +3673,325 @@ var triggersForm = new Ext.FormPanel({
         items: triggersGrid
     });
     gridWindow.show();
+}
+
+
+///*** from ProcessMapContext ***///
+var PMVariables = function() {
+  var varFields = Ext.data.Record.create( [ {
+    name : 'variable',
+    type : 'string'
+  }, {
+    name : 'type',
+    type : 'string'
+  }, {
+    name : 'label',
+    type : 'string'
+  } ]);
+  var varStore = '';
+  varStore = new Ext.data.JsonStore( {
+    root : 'data',
+    totalProperty : 'totalCount',
+    idProperty : 'gridIndex',
+    remoteSort : true,
+    fields : varFields,
+    proxy : new Ext.data.HttpProxy( {
+      url : 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
+    })
+  });
+  //varStore.load();
+
+  var varColumns = new Ext.grid.ColumnModel( {
+    columns : [ new Ext.grid.RowNumberer(), {
+      id : 'FLD_NAME',
+      header : _('ID_VARIABLES'),
+      dataIndex : 'variable',
+      width : 170,
+      editable : false,
+      sortable : true
+    }, {
+      id : 'PRO_VARIABLE',
+      header : _('ID_LABEL'),
+      dataIndex : 'label',
+      width : 150,
+      sortable : true
+    } ]
+  });
+
+  var varForm = new Ext.FormPanel( {
+    labelWidth : 100,
+    monitorValid : true,
+    width : 400,
+    bodyStyle : 'padding:10px 0 0 10px;',
+    height : 350,
+    renderer : function(val) {
+      return '<table border=1> <tr> <td> @@ </td> <td> Replace the value in quotes </td> </tr> </table>';
+    },
+    items : {
+      xtype : 'tabpanel',
+      activeTab : 0,
+      defaults : {
+        autoHeight : true
+      },
+      items : [ {
+        title : _('ID_ALL_VARIABLES'),
+        id : 'allVar',
+        layout : 'form',
+        listeners : {
+          activate : function(tabPanel) {
+            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+        var link = 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+        varStore.proxy.setUrl(link, true);
+        varStore.load();
+      }
+    },
+    items : [ {
+      xtype : 'grid',
+      ds : varStore,
+      cm : varColumns,
+      width : 380,
+      autoHeight : true,
+      //plugins: [editor],
+      //loadMask    : true,
+      loadingText : 'Loading...',
+      border : false,
+      listeners : {
+        //rowdblclick: alert("ok"),
+      rowdblclick : function() {
+        var objectSelected = workflow.variablesAction;
+        switch (objectSelected) {
+        case 'grid':
+          var getObjectGridRow = workflow.gridObjectRowSelected;
+          var FieldSelected = workflow.gridField;
+          //getting selected row of variables
+          var rowSelected = this.getSelectionModel().getSelected();
+          var rowLabel = rowSelected.data.variable;
+    
+          //Assigned new object with condition
+          if (typeof getObjectGridRow.colModel != 'undefined')
+            getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
+          //Assigning / updating Condition for a row
+          else
+            getObjectGridRow[0].set(FieldSelected, rowLabel);
+    
+          if (FieldSelected == 'CTO_CONDITION') {
+            Ext.Ajax.request( {
+              url : '../tracker/tracker_ConditionsSave.php',
+              method : 'POST',
+              params : {
+                PRO_UID : pro_uid,
+                CTO_UID : getObjectGridRow[0].data.CTO_UID,
+                CTO_CONDITION : getObjectGridRow[0].data.CTO_CONDITION
+              },
+              success : function(response) {
+                Ext.MessageBox.alert('Status', 'Objects has been edited successfully ');
+              }
+            })
+          } else if (FieldSelected == 'STEP_CONDITION') {
+            Ext.Ajax.request( {
+              url : '../steps/conditions_Save.php',
+              method : 'POST',
+              params : {
+                PRO_UID : pro_uid,
+                STEP_UID : getObjectGridRow[0].data.STEP_UID,
+                STEP_CONDITION : getObjectGridRow[0].data.STEP_CONDITION
+              },
+              success : function(response) {
+                Ext.MessageBox.alert('Status', 'Objects has been edited successfully ');
+              }
+            })
+          } else if (FieldSelected == 'ST_CONDITION') {
+            Ext.Ajax.request( {
+              url : '../steps/steps_Ajax.php',
+              method : 'POST',
+              params : {
+                action : 'saveTriggerCondition',
+                PRO_UID : pro_uid,
+                STEP_UID : getObjectGridRow[0].data.STEP_UID,
+                ST_CONDITION : getObjectGridRow[0].data.STEP_CONDITION,
+                TAS_UID : taskId,
+                TRI_UID : getObjectGridRow[0].data.TRI_UID,
+                ST_TYPE : getObjectGridRow[0].data.ST_TYPE
+    
+              },
+              success : function(response) {
+                Ext.MessageBox.alert('Status', 'Objects has been edited successfully ');
+              }
+            })
+          }
+    
+          window.hide();
+    
+          break;
+        case 'form':
+          FormSelected = workflow.formSelected;
+          rowSelected = this.getSelectionModel().getSelected();
+          FieldSelected = workflow.fieldName;
+          rowLabel = rowSelected.data.variable;
+          var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
+          window.hide();
+          break;
+    
+        }
+    
+      }
+    }
+    } ]
+      }, {
+        title : _('ID_SYSTEM'),
+        id : 'system',
+        layout : 'form',
+        listeners : {
+          activate : function(tabPanel) {
+            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+        var link = 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+        varStore.proxy.setUrl(link, true);
+        varStore.load();
+      }
+    },
+    items : [ {
+      xtype : 'grid',
+      ds : varStore,
+      cm : varColumns,
+      width : 380,
+      autoHeight : true,
+      //plugins: [editor],
+      //loadMask    : true,
+      loadingText : 'Loading...',
+      border : false,
+      listeners : {
+        //rowdblclick: alert("ok"),
+      rowdblclick : function() {
+        var objectSelected = workflow.variablesAction;
+        switch (objectSelected) {
+        case 'grid':
+          var getObjectGridRow = workflow.gridObjectRowSelected;
+          var FieldSelected = workflow.gridField;
+          //getting selected row of variables
+          var rowSelected = this.getSelectionModel().getSelected();
+          var rowLabel = rowSelected.data.variable;
+          //Assigned new object with condition
+          if (typeof getObjectGridRow.colModel != 'undefined')
+            getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
+          //Assigning / updating Condition for a row
+          else
+            getObjectGridRow[0].set(FieldSelected, rowLabel);
+          if (CTO_UID != '') {
+            Ext.Ajax.request( {
+              url : '../tracker/tracker_ConditionsSave.php',
+              method : 'POST',
+              params : {
+                PRO_UID : pro_uid,
+                CTO_UID : getObjectGridRow[0].data.CTO_UID,
+                CTO_CONDITION : getObjectGridRow[0].data.CTO_CONDITION
+              },
+              success : function(response) {
+                Ext.MessageBox.alert('Status', 'Objects has been edited successfully ');
+              }
+            })
+            window.hide();
+          }
+    
+          break;
+        case 'form':
+          FormSelected = workflow.formSelected;
+          rowSelected = this.getSelectionModel().getSelected();
+          FieldSelected = workflow.fieldName;
+          rowLabel = rowSelected.data.variable;
+          var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
+          window.hide();
+          break;
+    
+        }
+    
+      }
+    }
+    } ]
+      }, {
+        title : _('ID_CASESLIST_APP_PRO_TITLE'),
+        id : 'process',
+        layout : 'form',
+        listeners : {
+          activate : function(tabPanel) {
+            // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
+        var link = 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+        varStore.proxy.setUrl(link, true);
+        varStore.load();
+      }
+    },
+    items : [ {
+      xtype : 'grid',
+      ds : varStore,
+      cm : varColumns,
+      width : 380,
+      autoHeight : true,
+      //plugins: [editor],
+      //loadMask    : true,
+      loadingText : 'Loading...',
+      border : false,
+      listeners : {
+        //rowdblclick: alert("ok"),
+        rowdblclick : function() {
+          var objectSelected = workflow.variablesAction;
+          switch (objectSelected) {
+          case 'grid':
+            var getObjectGridRow = workflow.gridObjectRowSelected;
+            var FieldSelected = workflow.gridField;
+            //getting selected row of variables
+            var rowSelected = this.getSelectionModel().getSelected();
+            var rowLabel = rowSelected.data.variable;
+            //Assigned new object with condition
+            if (typeof getObjectGridRow.colModel != 'undefined')
+              getObjectGridRow.colModel.config[3].editor.setValue(rowLabel);
+            //Assigning / updating Condition for a row
+            else
+              getObjectGridRow[0].set(FieldSelected, rowLabel);
+            Ext.Ajax.request( {
+              url : '../tracker/tracker_ConditionsSave.php',
+              method : 'POST',
+              params : {
+                PRO_UID : pro_uid,
+                CTO_UID : getObjectGridRow[0].data.CTO_UID,
+                CTO_CONDITION : getObjectGridRow[0].data.CTO_CONDITION
+              },
+              success : function(response) {
+                Ext.MessageBox.alert('Status', 'Objects has been edited successfully ');
+              }
+            })
+            window.hide();
+            break;
+          case 'form':
+            FormSelected = workflow.formSelected;
+            rowSelected = this.getSelectionModel().getSelected();
+            FieldSelected = workflow.fieldName;
+            rowLabel = rowSelected.data.variable;
+            var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
+            window.hide();
+            break;
+      
+          }
+      
+        }
+      }
+      } ]
+      } ]
+    }
+  });
+
+  var window = new Ext.Window( {
+    title : _('ID_VARIABLES'),
+    collapsible : false,
+    maximizable : false,
+    scrollable : true,
+    width : 400,
+    height : 350,
+    minWidth : 200,
+    minHeight : 150,
+    autoScroll : true,
+    layout : 'fit',
+    plain : true,
+    buttonAlign : 'center',
+    items : [ varForm ]
+  });
+  window.show();
 }
