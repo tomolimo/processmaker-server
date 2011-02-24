@@ -1036,9 +1036,20 @@ Ext.onReady ( function() {
                       if(k != 0)
                           workflow.taskNo++;
 
-                      workflow.taskName = shapes.tasks[k][1];
-                      workflow.task_width = shapes.tasks[k][4];
-                      workflow.task_height = shapes.tasks[k][5];
+                      workflow.taskName    = shapes.tasks[k][1];
+                      //workaround for Old Processmap widht and height
+                      if(shapes.tasks[k][4] == 110) {
+                        workflow.task_width  = 165;  
+                      }
+                      else {
+                        workflow.task_width  = shapes.tasks[k][4];    
+                      }
+                      if(shapes.tasks[k][5] == 60) {
+                        workflow.task_height = 40;
+                      }
+                      else {
+                        workflow.task_height = shapes.tasks[k][5];
+                      }
                       NewShape = eval("new bpmnTask(workflow)");
                       NewShape.x = shapes.tasks[k][2];
                       NewShape.y = shapes.tasks[k][3];

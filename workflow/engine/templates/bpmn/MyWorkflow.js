@@ -1154,12 +1154,12 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type == 'bpmnSubProcess'){
                       oNewShape.subProcessName = this.workflow.newTaskInfo.label;
                     }
-                    else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Start/)) {
+                    /*else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Start/)) {
                       workflow.saveEvents(oNewShape);
                     }
                     else if(oNewShape.type.match(/Start/) && oNewShape.type.match(/Event/)) {
                       workflow.saveEvents(oNewShape);
-                    }
+                    }*/
                     else if(oNewShape.type.match(/End/) && oNewShape.type.match(/Event/)) {
                       if(workflow.currentSelection != null && workflow.currentSelection != '') //will check for standalone event
                         workflow.saveRoute(workflow.currentSelection,oNewShape);
@@ -1851,9 +1851,9 @@ MyWorkflow.prototype.zoom = function(sType)
    sType =sType/100;
    workflow.zoomfactor = sType;
    var figSize = figures.getSize();
+   loadMask.show();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
-   loadMask.show();
    if(typeof fig.limitFlag == 'undefined'){
      fig.orgXPos = fig.getX();
      fig.orgYPos = fig.getY();
@@ -1865,7 +1865,6 @@ MyWorkflow.prototype.zoom = function(sType)
      }
      fig.limitFlag = true;
    }
-
    if(fig.limitFlag == false){
      fig.originalWidth = fig.getWidth();
      fig.originalHeight = fig.getHeight();
@@ -1873,10 +1872,6 @@ MyWorkflow.prototype.zoom = function(sType)
    }
    
    
-   //If zooming is 100% disable resizing of shapes again
-   if(sType == '1'){
-     fig.limitFlag = true;
-   }
    var width  = fig.originalWidth*sType;
    var height = fig.originalHeight*sType;
    if(fig.boundaryEvent == true) {
@@ -1899,6 +1894,18 @@ MyWorkflow.prototype.zoom = function(sType)
     }
     fig.setPosition(xPos,yPos);
     fig.setDimension(width,height);
+   }
+
+   //If zooming is 100% disable resizing of shapes again
+   if(sType == '1'){
+     fig.orgXPos = fig.getX();
+     fig.orgYPos = fig.getY();
+     fig.orgFontSize =fig.fontSize;
+     if(fig.boundaryEvent == true){
+       fig.orgx3Pos = fig.x3;
+       fig.orgy4Pos = fig.y4;
+       fig.orgy5Pos = fig.y5;
+     }
    }
    loadMask.hide();
 }

@@ -6616,9 +6616,10 @@ function saveExtEvents($oData)
       $aDataTask['EVN_TYPE']    = $oData->evn_type;
       $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
       $oTask->update($aDataTask);
+    
+      $aDataEvent['EVN_TAS_UID_TO'] = $oData->tas_uid;
+      $output = $oEvent->update($aDataEvent);
     }
-    $aDataEvent['EVN_TAS_UID_TO'] = $oData->tas_uid;
-    $output = $oEvent->update($aDataEvent);
   }
   else if(preg_match("/Inter/", $sEvn_type)){
     $aDataEvent['EVN_TAS_UID_FROM'] = $oData->tas_from;
