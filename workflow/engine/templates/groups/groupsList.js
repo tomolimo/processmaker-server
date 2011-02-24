@@ -59,6 +59,7 @@ var searchButton;
 var searchText;
 var contextMenu;
 var pageSize;
+var w;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
@@ -200,7 +201,7 @@ Ext.onReady(function(){
                      {text: _('ID_CANCEL'), handler: CloseWindow}
                      ]
   });
-
+  
   store = new Ext.data.GroupingStore( {
     proxy : new Ext.data.HttpProxy({
       url: 'groups_Ajax?action=groupsList'
@@ -337,6 +338,7 @@ NewGroupWindow = function(){
     title: _('ID_CREATE_GROUP_TITLE'),
     closable: false,
     modal: true,
+    id: 'w',
     items: [newForm]
   });
   w.show();
@@ -355,7 +357,7 @@ DoSearch = function(){
 
 //Close Popup Window
 CloseWindow = function(){
-  w.hide();
+  Ext.getCmp('w').hide();
 };
 
 //Check Group Name Availability
@@ -379,6 +381,7 @@ CheckGroupName = function(grp_name, function_success, function_failure){
 //Save Group Button
 SaveNewGroupAction = function(){
   var group = newForm.getForm().findField('name').getValue();
+  group = group.trim();
   if (group != '') CheckGroupName(group, SaveNewGroup, DuplicateGroupName);
 };
 
@@ -391,7 +394,7 @@ DuplicateGroupName = function(){
 SaveNewGroup = function(){
   newForm.getForm().submit({
     success: function(f,a){
-      w.hide(); //Hide popup widow
+      CloseWindow(); //Hide popup widow
       newForm.getForm().reset(); //Set empty form to next use
       searchText.reset();
       infoGrid.store.load(); //Reload store grid
@@ -421,6 +424,7 @@ EditGroupWindow = function(){
     title: _('ID_EDIT_GROUP_TITLE'),
     closable: false,
     modal: true,
+    id: 'w',
     items: [editForm]
   });
   w.show();
@@ -429,6 +433,7 @@ EditGroupWindow = function(){
 //Save Edit Group Button
 SaveEditGroupAction = function(){
   var group = editForm.getForm().findField('name').getValue();
+  group = group.trim();
   rowSelected = infoGrid.getSelectionModel().getSelected();
   if (group != ''){
     if (rowSelected.data.CON_VALUE.toUpperCase() == group.toUpperCase()){
@@ -443,7 +448,7 @@ SaveEditGroupAction = function(){
 SaveEditGroup = function(){
   editForm.getForm().submit({
     success: function(f,a){
-      w.hide(); //Hide popup widow
+      CloseWindow(); //Hide popup widow
       DoSearch(); //Reload store grid
       editButton.disable();  //Disable Edit Button
       deleteButton.disable(); //Disable Delete Button

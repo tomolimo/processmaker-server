@@ -99,7 +99,7 @@ if(isset($_REQUEST['action'])) {
     case 'saveNewCategory':
     	try{
     	  require_once 'classes/model/ProcessCategory.php';
-    	  $catName = $_REQUEST['category'];
+    	  $catName = trim($_REQUEST['category']);
     	  $pcat = new ProcessCategory();
     	  $pcat->setNew(true);
     	  $pcat->setCategoryUid(G::GenerateUniqueID());
@@ -129,7 +129,7 @@ if(isset($_REQUEST['action'])) {
     	try{
     	  require_once 'classes/model/ProcessCategory.php';
     	  $catUID = $_REQUEST['cat_uid'];
-    	  $catName = $_REQUEST['category'];
+    	  $catName = trim($_REQUEST['category']);
     	  $pcat = new ProcessCategory();
     	  $pcat->setNew(false);
     	  $pcat->setCategoryUid($catUID);

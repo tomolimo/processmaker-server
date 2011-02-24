@@ -168,7 +168,7 @@ switch ($_POST['action'])
     G::LoadClass('groups');
     $newGroup['GRP_UID'] = '';
     $newGroup['GRP_STATUS'] = G::toUpper($_POST['status']);
-    $newGroup['GRP_TITLE'] = $_POST['name'];
+    $newGroup['GRP_TITLE'] = trim($_POST['name']);
     unset($newGroup['GRP_UID']);
     $group = new Groupwf();
     $group->create($newGroup);
@@ -178,7 +178,7 @@ switch ($_POST['action'])
     G::LoadClass('groups');
     $editGroup['GRP_UID'] = $_POST['grp_uid'];
     $editGroup['GRP_STATUS'] = G::toUpper($_POST['status']);
-    $editGroup['GRP_TITLE'] = $_POST['name'];
+    $editGroup['GRP_TITLE'] = trim($_POST['name']);
     $group = new Groupwf();
     $group->update($editGroup);
     echo '{success: true}';

@@ -356,6 +356,8 @@ NewRoleWindow = function(){
 	w = new Ext.Window({
 		title: _('ID_CREATE_ROLE_TITLE'),
 		autoHeight: true,
+		id: 'w',
+		modal: true,
 		width: 420,
 		items: [newForm]
 	});
@@ -364,48 +366,93 @@ NewRoleWindow = function(){
 
 //Close Popup Window
 CloseWindow = function(){
-	w.hide();
+	Ext.getCmp('w').hide();
 };
 
 //Save New Role
 SaveNewRole = function(){
-	newForm.getForm().submit({
-		success: function(f,a){
-			w.hide(); //Hide popup widow
-			newForm.getForm().reset(); //Set empty form to next use
-			searchText.reset();
-			infoGrid.store.load(); //Reload store grid
-			PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_NEW'));
-		},
-		failure: function(f,a){
-			switch(a.failureType){
-			case Ext.form.Action.CLIENT_INVALID:
-				//Ext.Msg.alert('New Role Form','Invalid Data');
-				break;
-			}
-		}
-	});
+  rol_code = newForm.getForm().findField('code').getValue();
+  rol_code.trim();
+  if (rol_code == '') return;
+  viewport.getEl().mask(_('ID_PROCESSING'));
+  Ext.Ajax.request({
+    url: 'roles_Ajax',
+    params: {request: 'checkRoleCode', ROL_CODE: rol_code},
+    success: function(r,o){
+      viewport.getEl().unmask();
+      resp = Ext.util.JSON.decode(r.responseText);
+      if (resp.success){
+        viewport.getEl().mask(_('ID_PROCESSING'));
+        newForm.getForm().submit({
+          success: function(f,a){
+            viewport.getEl().unmask();
+            CloseWindow(); //Hide popup widow
+            newForm.getForm().reset(); //Set empty form to next use
+            searchText.reset();
+            infoGrid.store.load(); //Reload store grid
+            PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_NEW'));
+          },
+          failure: function(f,a){
+            viewport.getEl().unmask();
+            switch(a.failureType){
+            case Ext.form.Action.CLIENT_INVALID:
+              //Ext.Msg.alert('New Role Form','Invalid Data');
+              break;
+            }
+          }
+        });  
+      }else{
+         PMExt.error(_('ID_ROLES'),_('ID_ROLE_EXISTS'));        
+      }
+    },
+    failure: function(r,o){
+      viewport.getEl().unmask();
+    }
+  });
+	
 };
 
 //Update Selected Role
 UpdateRole = function(){
-	editForm.getForm().submit({
-		success: function(f,a){
-			w.hide(); //Hide popup widow
-			DoSearch(); //Reload store grid
-			editButton.disable();  //Disable Edit Button
-			deleteButton.disable(); //Disable Delete Button
-			PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_UPDATE'));
-		},
-		failure: function(f,a){
-			switch(a.failureType){
-			case Ext.form.Action.CLIENT_INVALID:
-				//Ext.Msg.alert('New Role Form','Invalid Data');
-				break;
-			}
-			
-		}
-	});
+  rol_code = editForm.getForm().findField('code').getValue();
+  rol_code.trim();
+  if (rol_code == '') return;
+  viewport.getEl().mask(_('ID_PROCESSING'));
+  Ext.Ajax.request({
+    url: 'roles_Ajax',
+    params: {request: 'checkRoleCode', ROL_CODE: rol_code},
+    success: function(r,o){
+      viewport.getEl().unmask();
+      resp = Ext.util.JSON.decode(r.responseText);
+      if (resp.success){
+        viewport.getEl().mask(_('ID_PROCESSING'));
+        editForm.getForm().submit({
+          success: function(f,a){
+            viewport.getEl().unmask();
+            CloseWindow(); //Hide popup widow
+            DoSearch(); //Reload store grid
+            editButton.disable();  //Disable Edit Button
+            deleteButton.disable(); //Disable Delete Button
+            PMExt.notify(_('ID_ROLES'),_('ID_ROLES_SUCCESS_UPDATE'));
+          },
+          failure: function(f,a){
+            viewport.getEl().unmask();
+            switch(a.failureType){
+              case Ext.form.Action.CLIENT_INVALID:
+                //Ext.Msg.alert('New Role Form','Invalid Data');
+                break;
+            }
+
+          }
+        });
+      }else{
+        PMExt.error(_('ID_ROLES'),_('ID_ROLE_EXISTS'));
+      }
+    },
+    failure: function(r,o) {
+      viewport.getEl().unmask();
+    }
+  });
 };
 
 //Edit Selected Role
@@ -421,6 +468,8 @@ EditRole = function(){
 			editForm.getForm().findField('status').setValue(rowSelected.data.ROL_STATUS);
 			w = new Ext.Window({
 				autoHeight: true,
+				id: 'w',
+				modal: true,
 				width: 420,
 				title: _('ID_EDIT_ROLE_TITLE'),
 				items: [editForm]
