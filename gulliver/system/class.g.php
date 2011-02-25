@@ -983,14 +983,12 @@ class G
   function streamFile( $file, $download = false, $downloadFileName = '' )
   {
     require_once (PATH_THIRDPARTY . 'jsmin/jsmin.php');
-
-    $typearray = explode ( '.', $file );
+    $typearray = explode ( '.', basename( $file) );
     $typefile  = $typearray[ count($typearray) -1 ];
-    $namearray = explode ( '/', $typearray[0] );
     $filename  = $file;
     
     //trick to generate the translation.language.js file , merging two files and then minified the content.
-    if ( strtolower ($typefile ) == 'js' && $namearray[ count($namearray) -1 ] == 'translation' ) {
+    if ( strtolower ($typefile ) == 'js' && $typearray[0] == 'translation' ) {
       header('Content-Type: text/javascript');
 
       //if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.

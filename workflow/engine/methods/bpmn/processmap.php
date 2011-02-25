@@ -15,7 +15,7 @@
   $_SESSION['PROCESSMAP'] = 'BPMN';
   
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->usingExtJs('ux/miframe');
+  //$oHeadPublisher->usingExtJs('ux/miframe');
   $oHeadPublisher->addExtJsScript('bpmn/ProcessOptions', true);
   $oHeadPublisher->addExtJsScript('bpmn/processmap', true);
   $oHeadPublisher->addContent( 'bpmn/processmap');

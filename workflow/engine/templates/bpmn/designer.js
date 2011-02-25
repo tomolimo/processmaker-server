@@ -858,8 +858,9 @@ Ext.onReady ( function() {
   });
 
   //Creating Pool
-  var oPool = new bpmnPool(workflow);
+  //var oPool = new bpmnPool(workflow);
   //workflow.addFigure(oPool,100,70);
+  
   if(workflow.taskNo == '')
       workflow.taskNo= 0; //Initializing Count for the bpmnTask
   var count = 0;

@@ -1392,44 +1392,45 @@ MyWorkflow.prototype.editEventProperties = function(oShape)
  */
 MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
 {
-       var aStartTask= new Array();
-     //Get all the ports of the shapes
-        if(workflow.currentSelection != null && typeof workflow.currentSelection != 'undefined') {
-        var ports = workflow.currentSelection.getPorts();
-        var len =ports.data.length;
+  var aStartTask= new Array();
 
-        //Get all the connection of the shape
-        var conn = new Array();
-        for(var i=0; i<=len; i++){
-            if(typeof ports.data[i] === 'object')
-                if(ports.data[i].type == sPortType)
-                    conn[i] = ports.data[i].getConnections();
+  //Get all the ports of the shapes
+  if( workflow.currentSelection != null && typeof workflow.currentSelection != 'undefined') {
+    var ports = workflow.currentSelection.getPorts();
+    var len   = ports.data.length;
+    
+    //Get all the connection of the shape
+    var conn = new Array();
+    for(var i=0; i<=len; i++){
+      if(typeof ports.data[i] === 'object')
+        if(ports.data[i].type == sPortType)
+          conn[i] = ports.data[i].getConnections();
+    }
+    //Initializing Arrays and variables
+    var countConn = 0;
+    
+    var type;
+    //Get ALL the connections for the specified PORT
+    for(i = 0; i< conn.length ; i++)
+    {
+      if(typeof conn[i] != 'undefined')
+      for(var j = 0; j < conn[i].data.length ; j++)
+      {
+        if(typeof conn[i].data[j] != 'undefined')
+        {
+          type = eval('conn[i].data[j].'+sPort+'.parentNode.type')
+          if(type == 'bpmnTask')
+          {
+            aStartTask[countConn] = new Array();
+            aStartTask[countConn].value = eval('conn[i].data[j].'+sPort+'.parentNode.id');
+            aStartTask[countConn].name  = eval('conn[i].data[j].'+sPort+'.parentNode.taskName');
+            countConn++;
+          }
         }
-        //Initializing Arrays and variables
-        var countConn = 0;
-        
-        var type;
-        //Get ALL the connections for the specified PORT
-        for(i = 0; i< conn.length ; i++)
-            {
-                if(typeof conn[i] != 'undefined')
-                for(var j = 0; j < conn[i].data.length ; j++)
-                   {
-                     if(typeof conn[i].data[j] != 'undefined')
-                        {
-                            type = eval('conn[i].data[j].'+sPort+'.parentNode.type')
-                            if(type == 'bpmnTask')
-                            {
-                                aStartTask[countConn] = new Array();
-                                aStartTask[countConn].value = eval('conn[i].data[j].'+sPort+'.parentNode.id');
-                                aStartTask[countConn].name = eval('conn[i].data[j].'+sPort+'.parentNode.taskName');
-                                countConn++;
-                            }
-                        }
-                    }
-            }
-        }
-        return aStartTask;
+      }
+    }
+  }
+  return aStartTask;
 }
 
 /**
