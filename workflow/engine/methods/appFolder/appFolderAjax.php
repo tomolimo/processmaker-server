@@ -178,9 +178,13 @@ function expandNode(){
             }
 
             if(isset($obj['USR_LASTNAME'])&&isset($obj['USR_LASTNAME'])){
-                $tempTree ['owner'] = sprintf("%s %s (%s)",$obj['USR_LASTNAME'],$obj['USR_FIRSTNAME'],$obj['USR_USERNAME']);
+                $tempTree ['owner'] = $obj['USR_USERNAME'];
+                $tempTree ['owner_firstname'] = $obj['USR_FIRSTNAME'];
+                $tempTree ['owner_lastname'] = $obj['USR_LASTNAME'];
             }else{
-                $tempTree ['owner'] = sprintf("%s",$obj['USR_USERNAME']);
+                $tempTree ['owner'] = $obj['USR_USERNAME'];
+                $tempTree ['owner_firstname'] = "";
+                $tempTree ['owner_lastname'] = "";
 
             }
             $tempTree ['deletelabel'] = $obj['DELETE_LABEL'];

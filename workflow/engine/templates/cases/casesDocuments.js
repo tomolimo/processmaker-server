@@ -618,6 +618,10 @@ datastore = new Ext.data.Store({
 	}, {
 		name : "owner"
 	}, {
+		name : "owner_firstname"
+	}, {
+		name : "owner_lastname"
+	}, {
 		name : "is_deletable"
 	}, {
 		name : "is_file"
@@ -690,12 +694,14 @@ function renderVersion(value, p, record) {
 			// href="#"><img src="{1}" border="0" title="Upload New Version"
 			// valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>',
 			// value,'/images/documents/_up.png','Upload new Version');
+			//return String.format('<b>{0}</b><table cellspacing="0" class="x-btn x-btn-icon" id="tb_upload"><tbody class="x-btn-small x-btn-icon-small-left"><tr><td class="x-btn-tl"><i>&nbsp;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-ml"><i>&nbsp;</i></td><td class="x-btn-mc"><em unselectable="on" class=""><button type="button" id="ext-gen100" class=" x-btn-text button_menu_ext ss_sprite ss_page_white_get">&nbsp;</button></em></td><td class="x-btn-mr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-bl"><i>&nbsp;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&nbsp;</i></td></tr></tbody></table>', value);
 			return String.format('<b>{0}</b>', value);
 		}else{
 			// return String.format('{0}&nbsp;&nbsp;&nbsp;<a href="#"><img
 			// src="{1}" border="0" title="Upload New Version"
 			// valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>',
 			// value,'/images/documents/_up.png','Upload new Version');
+			//return String.format('{0}<table cellspacing="0" class="x-btn x-btn-icon" id="tb_upload"><tbody class="x-btn-small x-btn-icon-small-left"><tr><td class="x-btn-tl"><i>&nbsp;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-ml"><i>&nbsp;</i></td><td class="x-btn-mc"><em unselectable="on" class=""><button type="button" id="ext-gen100" class=" x-btn-text button_menu_ext ss_sprite ss_page_white_get">&nbsp;</button></em></td><td class="x-btn-mr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-bl"><i>&nbsp;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&nbsp;</i></td></tr></tbody></table>', value);
 			return String.format('{0}', value);
 		}
 	}else{
@@ -721,6 +727,14 @@ function renderVersionExpander(value, p, record) {
 	return String.format('',value);
 	}
 }
+//Render Full Name
+renderFullName = function(value, p, record){
+  return _FNF(value, record.get('owner_firstname'), record.get('owner_lastname'));
+};
+
+renderModifiedDate = function(value, p, record){
+	return _DF(value);
+};
 
 var gridtb = new Ext.Toolbar(
 		[
@@ -1009,11 +1023,13 @@ var cm = new Ext.grid.ColumnModel([{
 },  /* expander, */{
 	header : TRANSLATIONS.ID_MODIFIED,
 	dataIndex : 'appDocCreateDate',
-	width : 65
+	width : 65,
+	renderer: renderModifiedDate
 }, {
 	header : TRANSLATIONS.ID_OWNER,
 	dataIndex : 'owner',
-	width : 100
+	width : 100,
+	renderer: renderFullName
 	// sortable : false
 }, {
 	header : "PM Type",
@@ -1645,6 +1661,8 @@ var documentsTab = {
 						// console.trace();
 						ext_itemgrid.un('celldblclick', ext_itemgrid.onCellDblClick);
 						// console.log("celldoublde click removed");
+						
+						
 						dirTree = Ext.getCmp("dirTree");
 						// console.log("dirtree created");
 						

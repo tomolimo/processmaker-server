@@ -74,16 +74,17 @@ switch($page){
         $oHeadPublisher->addContent( 'cases/casesStartCase'); //adding a html file  .html.
         break;
     case "documents":
-        $labels = G::getTranslations(Array(
-        'ID_DOWNLOAD', 'ID_DOWNLOADING_FILE', 'ID_LOADING', 'ID_NO_ITEMS_SELECTED', 'ID_SERVER_COMMUNICATION_ERROR', 'ID_DELETE',
-        'ID_DELETE_SELECTED_ITEMS', 'ID_ROOT_FOLDER', 'ID_RELOAD', 'ID_SEARCH', 'ID_NEW_FOLDER', 'ID_COPY',
-        'ID_MOVE', 'ID_DELETE', 'ID_RENAME', 'ID_DOWNLOAD',
-        'ID_UPLOAD', 'ID_SHOW_DIRS', 'ID_FILTER_CURRENT_VIEW', 'ID_DISPLAY_EMPTY', 'ID_PAGE', 'ID_FIRST', 'ID_LAST',
-        'ID_NEXT', 'ID_PREVIOUS', 'ID_DONE',
-        'ID_NAME', 'ID_VERSION', 'ID_MODIFIED', 'ID_OWNER', 'ID_TYPE', 'ID_PROCESS', 'ID_CASE', 'ID_SIZE', 'ID_PERMISSIONS', 'ID_CONFIRM',
-        'ID_DIRECTORY'
-        ));
-        $oHeadPublisher->assign('TRANSLATIONS', $labels);
+        
+        G::LoadClass('configuration');
+        $c = new Configurations();
+        $configPage = $c->getConfiguration('documentsModule', 'pageSize','',$_SESSION['USER_LOGGED']);
+        $configEnv = $c->getConfiguration('ENVIRONMENT_SETTINGS', '');
+        $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+        //$Config['fullNameFormat'] = isset($configEnv['format']) ? $configEnv['format'] : '@userName';
+        //$Config['dateFormat'] = isset($configEnv['dateFormat']) ? $configEnv['dateFormat'] : 'Y-m-d';
+        $oHeadPublisher->assign('CONFIG', $Config);
+        $oHeadPublisher->assign('FORMATS',$c->getFormats());
+        
 
         $oHeadPublisher->usingExtJs('ux.locationbar/Ext.ux.LocationBar');
         $oHeadPublisher->usingExtJs('ux.statusbar/ext-statusbar');
