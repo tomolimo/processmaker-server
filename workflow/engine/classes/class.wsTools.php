@@ -255,8 +255,8 @@ class workspaceTools {
 
     $userGrants = $appCache->checkGrantsForUser( false );
 
-    $currentUser        = $res['user'];
-    $currentUserIsSuper = $res['super'];
+    $currentUser        = $userGrants['user'];
+    $currentUserIsSuper = $userGrants['super'];
 
     //if user does not have the SUPER privilege we need to use the root user and grant the SUPER priv. to normal user.
     if (!$currentUserIsSuper && !$checkOnly) {
