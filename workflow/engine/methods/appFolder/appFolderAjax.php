@@ -503,8 +503,8 @@ function uploadDocument(){
                 form = Ext.getCmp("uploadform").getForm();
                 
                 //Ext.getCmp("uploadform").getForm().submit();
-                console.log(form);
-                console.log(form.url);
+                //console.log(form);
+                //console.log(form.url);
                 Ext.getCmp("uploadform").getForm().submit({
                     //reset: true,
                     reset: false,

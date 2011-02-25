@@ -84,8 +84,11 @@ function chDir( directory, loadGridOnly ) {
 	tb = ext_itemgrid.getTopToolbar();
 	if(directory=="NA"){ // Disable create new folder under NA
 		tb.items.get('tb_new').disable();
+		tb.items.get('tb_upload').disable();
+		
 	}else{
 		tb.items.get('tb_new').enable();
+		tb.items.get('tb_upload').enable();
 	}
 /*
  * tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable' :
@@ -1118,7 +1121,7 @@ function handleRowClick(sm, rowIndex) {
 	} else if (selections.length == 1) {
 		tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable'
 				: 'disable']();
-		tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'enable'
+		tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'disable'
 				: 'disable']();
 		tb.items.get('tb_download')[selections[0].get('is_readable')
 				&& selections[0].get('is_file') ? 'enable' : 'disable']();
@@ -1165,7 +1168,7 @@ function rowContextMenu(grid, rowIndex, e, f) {
 	} else if (selections.length == 1) {
 		gridCtxMenu.items.get('gc_delete')[selections[0].get('is_deletable') ? 'enable'
 				: 'disable']();
-		gridCtxMenu.items.get('gc_rename')[selections[0].get('is_deletable') ? 'enable'
+		gridCtxMenu.items.get('gc_rename')[selections[0].get('is_deletable') ? 'disable'
 				: 'disable']();
 		gridCtxMenu.items.get('gc_download')[selections[0].get('is_readable')
 				&& selections[0].get('is_file') ? 'enable' : 'disable']();
@@ -1179,7 +1182,7 @@ gridCtxMenu = new Ext.menu.Menu({
 	items : [ {
 		id : 'gc_rename',
 		iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
-																	// '/images/documents/_fonts.png',
+		hidden : true,															// '/images/documents/_fonts.png',
 		text : TRANSLATIONS.ID_RENAME,
 		handler : function() {
 			ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
@@ -1237,9 +1240,17 @@ function dirContext(node, e) {
 	// Unselect all files in the grid
 	ext_itemgrid.getSelectionModel().clearSelections();
 
-	dirCtxMenu.items.get('dirCtxMenu_rename')[node.attributes.is_deletable ? 'enable'
+	dirCtxMenu.items.get('dirCtxMenu_rename')[node.attributes.is_deletable ? 'disable'
 			: 'disable']();
 	dirCtxMenu.items.get('dirCtxMenu_remove')[node.attributes.is_deletable ? 'enable'
+			: 'disable']();
+	dirCtxMenu.items.get('dirCtxMenu_new')[node.attributes.id!='NA' ? 'enable'
+			: 'disable']();
+	dirCtxMenu.items.get('dirCtxMenu_copy')[node.attributes.id!='NA' ? 'enable'
+			: 'disable']();
+	dirCtxMenu.items.get('dirCtxMenu_move')[node.attributes.id!='NA' ? 'enable'
+			: 'disable']();
+	dirCtxMenu.items.get('dirCtxMenu_remove')[node.attributes.id!='NA' ? 'enable'
 			: 'disable']();
 	
 	dirCtxMenu.node = node;
@@ -1293,7 +1304,7 @@ var dirCtxMenu = new Ext.menu.Menu(
 						id : 'dirCtxMenu_rename',
 						iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon
 																					// :
-																					// '/images/documents/_fonts.png',
+						hidden: true,															// '/images/documents/_fonts.png',
 						text : TRANSLATIONS.ID_RENAME,
 						handler : function() {
 							dirCtxMenu.hide();
@@ -1417,9 +1428,9 @@ var documentsTab = {
 	items : [
 			{
 				xtype : "treepanel",
-				id : "dirTree",
+				id : "dirTreePanel",
 				region : "west",
-				title : TRANSLATIONS.ID_DIRECTORY+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/refresh.gif" hspace="20" style="cursor:pointer;" title="reload" onclick="Ext.getCmp(\'dirTree\').getRootNode().reload();" alt="Reload" align="middle" />',
+				title : TRANSLATIONS.ID_DIRECTORY+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/refresh.gif" hspace="20" style="cursor:pointer;" title="reload" onclick="Ext.getCmp(\'dirTreePanel\').getRootNode().reload();" alt="Reload" align="middle" />',
 				closable : false,
 				collapsible: true,
 				collapseMode: 'mini',
@@ -1495,7 +1506,7 @@ var documentsTab = {
 							xtype : "locationbar",
 							id : "locationbarcmp",
 							height : 28,
-							tree : Ext.getCmp("dirTree")
+							tree : Ext.getCmp("dirTreePanel")
 						},
 						{
 							// region : "center",
@@ -1650,20 +1661,21 @@ var documentsTab = {
 						 * if(typeof(sw_afterlayout)!="undefined"){
 						 * //console.log("starting locatiobar");
 						 * Ext.getCmp("locationbarcmp").tree =
-						 * Ext.getCmp("dirTree");
+						 * Ext.getCmp("dirTreePanel");
 						 * Ext.getCmp("locationbarcmp").initComponent();
 						 * //console.log("location abr started"); return; }
 						 */	
 						// console.log(typeof(sw_afterlayout));
 						sw_afterlayout=true;
+						
 						ext_itemgrid = Ext.getCmp("gridpanel");
+						
 						// console.log("variable ext_itemgrid created");
 						// console.trace();
 						ext_itemgrid.un('celldblclick', ext_itemgrid.onCellDblClick);
 						// console.log("celldoublde click removed");
 						
-						
-						dirTree = Ext.getCmp("dirTree");
+						dirTree = Ext.getCmp("dirTreePanel");
 						// console.log("dirtree created");
 						
 						/*
@@ -1693,7 +1705,7 @@ var documentsTab = {
 						// console.log("before the first chdir");
 						chDir('');
 						// console.log("starting locatiobar first time");
-						Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTree");
+						Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTreePanel");
 						Ext.getCmp("locationbarcmp").initComponent();
 						// console.log("location abr started first time");
 						
