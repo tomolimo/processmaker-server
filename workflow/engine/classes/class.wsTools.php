@@ -630,7 +630,10 @@ class workspaceTools {
     }
   }
 
-  public static function printInfo($fields) {
+  public function printInfo($fields = NULL) {
+    if (!$fields)
+      $fields = $this->getMetadata ();
+
     $wfDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_USER'] . ':' . $fields['DB_PASS'] . '@' . $fields['DB_HOST'] . '/' . $fields['DB_NAME'];
     $rbDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_RBAC_USER'] . ':' . $fields['DB_RBAC_PASS'] . '@' . $fields['DB_RBAC_HOST'] . '/' . $fields['DB_RBAC_NAME'];
     $rpDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_REPORT_USER'] . ':' . $fields['DB_REPORT_PASS'] . '@' . $fields['DB_REPORT_HOST'] . '/' . $fields['DB_REPORT_NAME'];
@@ -657,11 +660,11 @@ class workspaceTools {
    */
   public function printMetadata($printSysInfo = true, $fields = NULL) {
     if ($printSysInfo) {
-      workspaceTools::printInfo ();
+      workspaceTools::printSysInfo ();
       CLI::logging("\n");
     }
 
-    workspaceTools::printMetadata($this->getMetadata());
+    workspaceTools::printInfo($this->getMetadata());
   }
 
   /**
