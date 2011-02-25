@@ -131,6 +131,11 @@
   background-image:url(/images/icons_silk/sprites.png) !important;
   background-position:0 -8497px !important;
 }
+.ICON_CONSOLIDATED_CASES{
+  /*ss_consolidated_cases*/
+  background-image:url(/images/icons_silk/sprites.png) !important;
+  background-position:0 -18500px !important
+}
 
 .ICON_CASES_DELETE {
   background-image:url(/images/delete-16x16.gif) !important;
