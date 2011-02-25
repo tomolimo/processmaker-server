@@ -147,7 +147,7 @@ Ext.onReady ( function() {
     usr_uid = usr_uid.join(',');
     tu_relation = tu_relation.join(',');
     
-    PMExt.confirm(_('ID_CONFIRM'), _('ID_REMOVE_USERS_CONFIRM'), function(){
+    //PMExt.confirm(_('ID_CONFIRM'), _('ID_REMOVE_USERS_CONFIRM'), function(){
       Ext.Ajax.request({
         url   : '../processes/ajaxListener',
         method: 'POST',
@@ -166,7 +166,7 @@ Ext.onReady ( function() {
           }
         }
       });
-    });
+    //});
   }
  
   var eastPanelTree = new Ext.tree.TreePanel({
@@ -201,6 +201,14 @@ Ext.onReady ( function() {
   
   // tree east panel selection change
   eastPanelTree.getSelectionModel().on('selectionchange', function(tree, node){
+    if( node.attributes.type == 'task') {
+      _TAS_UID = node.attributes.id;
+      Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
+      Ext.getCmp('usersTaskGrid').store.reload({params: {action:'getUsersTask', TAS_UID: _TAS_UID}});
+    } else {
+      Ext.getCmp('usersPanelTabs').setActiveTab(0);
+      Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = 'none';
+    }
     propertyStore.reload({params: {
       action : 'getProperties',
       UID    : node.attributes.id,
@@ -405,8 +413,6 @@ Ext.onReady ( function() {
     ]
   });
   
-  /*items:[
-   */
   var north = {
     xtype	:	"panel",
     initialSize: 60,
@@ -611,6 +617,7 @@ Ext.onReady ( function() {
     ,border:false,
     items:[main]
   });
+  Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = 'none';
   //Ext.getCmp('eastPanel').hide();
   //Ext.getCmp('eastPanel').ownerCt.doLayout();
   
