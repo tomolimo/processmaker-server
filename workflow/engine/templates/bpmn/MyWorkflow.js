@@ -1167,6 +1167,10 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                     else if(oNewShape.type.match(/Gateway/)) {
                       workflow.saveGateways(oNewShape);
                     }
+                    else if(oNewShape.type.match(/Inter/) && oNewShape.type.match(/Event/)) {
+                      preSelectedFigure = this.workflow.preSelectedFigure;
+                      workflow.saveEvents(oNewShape,preSelectedFigure.id);
+                    }
                }
             },
             failure: function(){
@@ -1295,7 +1299,7 @@ if(typeof oShape.noAlert == 'undefined' || oShape.noAlert == null){
   Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showAjaxDialog);
 }
 else{
-  Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showDialog);
+  Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the '+ shapeName,this.showDeleteDialog);
 }
 }
 
@@ -1346,7 +1350,7 @@ MyWorkflow.prototype.showAjaxDialog = function(btn){
       }
     };
 
-MyWorkflow.prototype.showDialog = function(btn){
+MyWorkflow.prototype.showDeleteDialog = function(btn){
           if(btn == 'yes'){
            workflow.getCommandStack().execute(new CommandDelete(workflow.getCurrentSelection()));
          }
@@ -1572,16 +1576,16 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
                     if(response.responseText != '')
                       {
                          //Save Route
-//                         if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
-//                           workflow.currentSelection.id = response.responseText;
-//                           var newObj = workflow.currentSelection;
-//                           var preObj = new Array();
-//                           preObj.type = 'bpmnTask';
-//                           preObj.id = task_uid[0];
-//                           newObj.evn_uid = workflow.currentSelection.id;
-//                           newObj.task_to = next_task_uid[0];
-//                           this.workflow.saveRoute(preObj,newObj);
-//                         }
+                         if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
+                           workflow.currentSelection.id = response.responseText;
+                           var newObj = workflow.currentSelection;
+                           var preObj = new Array();
+                           preObj.type = 'bpmnTask';
+                           preObj.id = task_uid[0];
+                           newObj.evn_uid = workflow.currentSelection.id;
+                           newObj.task_to = next_task_uid[0];
+                           this.workflow.saveRoute(preObj,newObj);
+                         }
                       }
                 },
                 failure: function(){
@@ -1623,7 +1627,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
          task_uid[0]      = preObj.id;
          next_task_uid[0] = newObj.task_to;
          rou_type         = 'SEQUENTIAL';
-         rou_evn_uid      = newObj.id;
+         rou_evn_uid      = newObj.id;        
       }
       //If both the Object are Task
       else if(preObj.type.match(/Task/) && newObj.type.match(/Task/))
