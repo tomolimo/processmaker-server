@@ -1118,7 +1118,6 @@ INPUT {
 /*	Theme leimnud.module.app.button	BEGIN */
 .module_app_button___gray, .module_app_buttonjs___gray
 {
-	font:normal 8pt Tahoma,sans-serif;
 	border:1px solid #afafaf;
 	margin-left:2px;
 	cursor:pointer;
@@ -1642,7 +1641,9 @@ div#toolbar
   /*cursor:pointer;*/
 }
 /*HOVER*/
-.pagedTableDefault .pagedTable .RowLink a:hover,.module_app_button___gray:hover,.button_pm:hover,.module_app_buttonHover___gray{
+.pagedTableDefault .pagedTable .RowLink a:hover,.module_app_button___gray:hover,.button_pm:hover,.module_app_buttonHover___gray,
+.module_app_buttonjs___gray.module_app_buttonHover___gray
+{
   background-color:#AAA;
   border:1px solid #666;
   background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -2168px transparent;
