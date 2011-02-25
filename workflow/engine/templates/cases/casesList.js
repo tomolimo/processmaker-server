@@ -43,7 +43,8 @@ function openCase(){
         case 'to_revise':
           params += 'APP_UID=' + appUid;
           params += '&DEL_INDEX=' + delIndex;
-          requestFile = '../cases/cases_OpenToRevise';
+          params += '&to_revise=true';
+          requestFile = 'open';
           break;
         case 'sent': // = participated
           params += 'APP_UID=' + appUid;

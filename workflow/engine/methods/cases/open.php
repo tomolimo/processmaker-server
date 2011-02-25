@@ -35,12 +35,25 @@
   $uri = '';
   foreach($_GET as $k=>$v)
     $uri .= ($uri == '')? "$k=$v": "&$k=$v";
-    
+
   G::LoadClass("configuration");
   G::LoadClass("case");
   $conf = new Configurations;
-  
-  $oHeadPublisher->assign('uri', 'cases_Open?' . $uri);
+
+  if (!isset($_GET['to_revise'])){
+    $script = 'cases_Open?';
+  } else {
+    $script = 'cases_OpenToRevise?';
+    $delIndex = $_GET['DEL_INDEX'];
+    $appUid   = $_GET['APP_UID'];
+    $oHeadPublisher->assign( 'treeToReviseTitle',   G::loadtranslation('ID_STEP_LIST')); //translations
+//  $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
+    $casesPanelUrl = 'casesToReviseTreeContent?APP_UID='.$appUid.'&DEL_INDEX='.$delIndex;
+    $oHeadPublisher->assign( 'casesPanelUrl',   $casesPanelUrl); //translations
+    echo "<div id='toReviseTree'></div>";
+  }
+
+  $oHeadPublisher->assign('uri', $script . $uri);
   $oHeadPublisher->assign('_ENV_CURRENT_DATE', $conf->getSystemDate(date('Y-m-d')));
   G::RenderPage('publish', 'extJs');
 

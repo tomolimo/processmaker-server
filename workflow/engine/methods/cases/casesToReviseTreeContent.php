@@ -62,7 +62,7 @@ $treeArray = array();
       $DYN_UID = $dynaformF['DYN_UID'];
       $PRO_UID = $step['PRO_UID'];
       $href = "cases_StepToRevise?type=DYNAFORM&ex=$i&PRO_UID=$PRO_UID&DYN_UID=$DYN_UID&APP_UID=$APP_UID&position=".$step['STEP_POSITION']."&DEL_INDEX=$DEL_INDEX";
-      $extTreeDynaforms->add(new TreeNode($DYN_UID,$TITLE,"datasource",true,false,$href,"_parent"));
+      $extTreeDynaforms->add(new TreeNode($DYN_UID,$TITLE,"datasource",true,false,$href,"openCaseFrame"));
       $i++;
     }
   echo $extTreeDynaforms->toJson();
@@ -85,7 +85,7 @@ $treeArray = array();
     $INP_DOC_UID = $IDF['INP_DOC_UID'];
     $PRO_UID = $step['PRO_UID'];
     $href = "cases_StepToReviseInputs?type=INPUT_DOCUMENT&ex=$i&PRO_UID=$PRO_UID&INP_DOC_UID=$INP_DOC_UID&APP_UID=$APP_UID&position=".$step['STEP_POSITION']."&DEL_INDEX=$DEL_INDEX";
-    $extTreeInputDocs->add(new TreeNode($INP_DOC_UID,$TITLE,"datasource",true,false,$href,"_parent"));
+    $extTreeInputDocs->add(new TreeNode($INP_DOC_UID,$TITLE,"datasource",true,false,$href,"openCaseFrame"));
     $i++;
   }
   echo $extTreeInputDocs->toJson();
@@ -95,7 +95,7 @@ $treeArray = array();
   $APP_UID    = $_GET['APP_UID'];
   $DEL_INDEX  = $_GET['DEL_INDEX'];
   $outputHref = "cases_StepToReviseOutputs?ex=$i&PRO_UID=$PRO_UID&DEL_INDEX=$DEL_INDEX&APP_UID=$APP_UID";
-  $ouputItem  = new TreeNode ("node-output-documents",G::loadtranslation('ID_OUTPUT_DOCUMENTS'),"",true,false,$outputHref,"_parent");
+  $ouputItem  = new TreeNode ("node-output-documents",G::loadtranslation('ID_OUTPUT_DOCUMENTS'),"",true,false,$outputHref,"openCaseFrame");
   echo $ouputItem->toJson();
   echo "]";
 

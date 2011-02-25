@@ -18,16 +18,67 @@ var showCaseNavigatorPanel;
 var hideCaseNavigatorPanel;
 var informationMenu;
 var caseMenuOpen = false;
+var toReviseTreeOpen = false;
 var menuSelectedTitle = Array();
 
 var _ENV_CURRENT_DATE;
 
 
 Ext.onReady(function(){
+
+
   Ext.QuickTips.init();
 
+
   showCaseNavigatorPanel = function(steps, information, action) {
-    
+    if(steps==false&&action==false){
+      var treeToRevise = new Ext.tree.TreePanel({
+        title: treeToReviseTitle,
+        width: 250,
+        height: 250,
+        userArrows: true,
+        animate: true,
+        autoScroll: true,
+        rootVisible: false,
+    //    dataUrl: 'casesToReviseTreeContent?APP_UID=4425000044ce3eda54f6d41019986116&DEL_INDEX=3',
+        dataUrl: casesPanelUrl,
+        root: {
+            nodeType : 'async',
+            text     : 'To Revise',
+            id       : 'node-root'
+        },
+        listeners: {
+            render: function() {
+    //            this.getRootNode().expand();
+                this.expandAll();
+    //            this.getNodeById('node-dynaforms').expand();
+    //            this.getNodeById('node-input-documents').expand();
+            }
+        }
+      });
+      if(typeof(win)=='undefined'){
+        var win = new Ext.Window({
+          id:'toReviseWindow',
+          width:220,
+          height:300,
+          el:'toReviseTree',
+          collapsible: true,
+          plain: true,
+          x:100,
+          y:100,
+          closeAction:'hide',
+          items: [treeToRevise]
+        });
+      }
+
+      if (!toReviseTreeOpen){
+        win.show(this);
+        toReviseTreeOpen = true;
+      }
+
+    }
+
+
     if( caseMenuOpen ) 
       return false;
     else
