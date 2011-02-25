@@ -142,7 +142,7 @@ CREATE TABLE ".$this->quoteIdentifier($table->getName())."
 			}
 		}
 
-		$script .= "Type=$mysqlTableType ";
+		$script .= "ENGINE=$mysqlTableType ";
 //		print_r ($vendorSpecific);
 		if($vendorSpecific['Collation'] ) {
 //			$script .= " DEFAULT CHARSET='". $platform->escapeText( $vendorSpecific['Collation'] )."'";
