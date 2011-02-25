@@ -392,5 +392,24 @@ class CalendarDefinition extends BaseCalendarDefinition {
   	 	 $aCounter[$row['CALENDAR_UID']] = $row['CNT'];
   	 }
   	 return $aCounter;
-  } 
+  }
+
+  function loadByCalendarName($calendarName)
+  {
+    $Criteria = new Criteria('workflow');
+    $Criteria->addSelectColumn(CalendarDefinitionPeer::CALENDAR_UID);
+    $Criteria->addSelectColumn(CalendarDefinitionPeer::CALENDAR_NAME);
+    $Criteria->addSelectColumn(CalendarDefinitionPeer::CALENDAR_CREATE_DATE);
+    $Criteria->addSelectColumn(CalendarDefinitionPeer::CALENDAR_UPDATE_DATE);
+    $Criteria->addSelectColumn(CalendarDefinitionPeer::CALENDAR_DESCRIPTION);
+    $Criteria->addSelectColumn(CalendarDefinitionPeer::CALENDAR_STATUS);
+    $Criteria->add(calendarDefinitionPeer::CALENDAR_NAME, $calendarName, CRITERIA::EQUAL);
+    $oDataset = calendarDefinitionPeer::doSelectRS ($Criteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+
+    return $oDataset->getRow();
+  }
 } // CalendarDefinition
+
+
