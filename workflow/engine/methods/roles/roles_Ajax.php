@@ -312,9 +312,13 @@ switch ($REQUEST) {
     break;
   case 'checkRoleCode':
     $rol_code = $_POST['ROL_CODE'];
+    $rol_uid = isset($_POST['ROL_UID'])? $_POST['ROL_UID']: '';
     $oCriteria = new Criteria('rbac');
     $oCriteria->addSelectColumn(RolesPeer::ROL_UID);
     $oCriteria->add(RolesPeer::ROL_CODE, $rol_code);
+    if ($rol_uid !=''){
+      $oCriteria->add(RolesPeer::ROL_UID, $rol_uid, Criteria::NOT_EQUAL);
+    }
     $oDataset = RolesPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     if ($oDataset->next()){
