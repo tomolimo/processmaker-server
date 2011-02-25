@@ -540,6 +540,240 @@ DecoratedConnection.prototype.getContextMenu = function () {
   }
 };
 
+
+//dotted connection and its router
+DottedConnectionRouter=function(_354a){
+if(!_354a){
+this.cheapRouter=new ManhattanConnectionRouter();
+}else{
+this.cheapRouter=null;
+}
+this.iteration=4;
+};
+DottedConnectionRouter.prototype=new ConnectionRouter;
+DottedConnectionRouter.prototype.type="DottedConnectionRouter";
+DottedConnectionRouter.prototype.drawBezier=function(_354b,_354c,t,iter){
+  var n=_354b.length-1;
+  var q=new Array();
+  var _3551=n+1;
+  for(var i=0;i<_3551;i++){
+    q[i]=new Array();
+    q[i][0]=_354b[i];
+  }
+  for(var j=1;j<=n;j++){
+    for(var i=0;i<=(n-j);i++){
+      q[i][j]=new Point((1-t)*q[i][j-1].x+t*q[i+1][j-1].x,(1-t)*q[i][j-1].y+t*q[i+1][j-1].y);
+    }
+  }
+  var c1=new Array();
+  var c2=new Array();
+  for(var i=0;i<n+1;i++){
+    c1[i]=q[0][i];
+    c2[i]=q[i][n-i];
+  }
+  if(iter>=0){
+    this.drawBezier(c1,_354c,t,--iter);
+    this.drawBezier(c2,_354c,t,--iter);
+  }
+  else{
+    for(var i=0;i<n;i++){
+      _354c.push(q[i][n-i]);
+    }
+  }
+};
+DottedConnectionRouter.prototype.route=function(conn){
+  if(this.cheapRouter!=null&&(conn.getSource().getParent().isMoving==true||conn.getTarget().getParent().isMoving==true)){
+    this.cheapRouter.route(conn);
+    return;
+  }
+  var arrayPoints=new Array();
+  var fromPt=conn.getStartPoint();
+  var toPt  =conn.getEndPoint();
+  this._route(arrayPoints, conn, toPt, this.getEndDirection(conn), fromPt, this.getStartDirection(conn) );
+  var _355a=new Array();
+  this.drawBezier(arrayPoints,_355a,0.5,this.iteration);
+  conn.addPoint(fromPt);
+  for(var i=0;i<_355a.length;i++){
+    conn.addPoint(_355a[i]);
+  }
+  conn.addPoint(toPt);
+};
+DottedConnectionRouter.prototype._route=function(_355c,conn,_355e,_355f,toPt,toDir){
+  var TOL=0.1;
+  var _3563=0.01;
+  var _3564=90;
+  var UP=0;
+  var RIGHT=1;
+  var DOWN=2;
+  var LEFT=3;
+  var xDiff=_355e.x-toPt.x;
+  var yDiff=_355e.y-toPt.y;
+  var point;
+  var dir;
+  if(((xDiff*xDiff)<(_3563))&&((yDiff*yDiff)<(_3563))){
+    _355c.push(new Point(toPt.x,toPt.y));
+    return;
+  }
+  if(_355f==LEFT){
+    if((xDiff>0)&&((yDiff*yDiff)<TOL)&&(toDir==RIGHT)){
+    point=toPt;
+    dir=toDir;
+    }else{
+    if(xDiff<0){
+    point=new Point(_355e.x-_3564,_355e.y);
+    }else{
+    if(((yDiff>0)&&(toDir==DOWN))||((yDiff<0)&&(toDir==UP))){
+    point=new Point(toPt.x,_355e.y);
+    }else{
+    if(_355f==toDir){
+    var pos=Math.min(_355e.x,toPt.x)-_3564;
+    point=new Point(pos,_355e.y);
+    }else{
+    point=new Point(_355e.x-(xDiff/2),_355e.y);
+    }
+    }
+    }
+    if(yDiff>0){
+    dir=UP;
+    }else{
+    dir=DOWN;
+    }
+    }
+  }
+  else{
+  if(_355f==RIGHT){
+  if((xDiff<0)&&((yDiff*yDiff)<TOL)&&(toDir==LEFT)){
+  point=toPt;
+  dir=toDir;
+  }else{
+  if(xDiff>0){
+  point=new Point(_355e.x+_3564,_355e.y);
+  }else{
+  if(((yDiff>0)&&(toDir==DOWN))||((yDiff<0)&&(toDir==UP))){
+  point=new Point(toPt.x,_355e.y);
+  }else{
+  if(_355f==toDir){
+  var pos=Math.max(_355e.x,toPt.x)+_3564;
+  point=new Point(pos,_355e.y);
+  }else{
+  point=new Point(_355e.x-(xDiff/2),_355e.y);
+  }
+  }
+  }
+  if(yDiff>0){
+  dir=UP;
+  }else{
+  dir=DOWN;
+  }
+  }
+  }else{
+    if(_355f==DOWN){
+    if(((xDiff*xDiff)<TOL)&&(yDiff<0)&&(toDir==UP)){
+      point=toPt;
+      dir=toDir;
+    }
+    else {
+      if(yDiff>0){
+        point=new Point(_355e.x,_355e.y+_3564);
+      }
+      else {
+        if(((xDiff>0)&&(toDir==RIGHT))||((xDiff<0)&&(toDir==LEFT))){
+          point=new Point(_355e.x,toPt.y);
+        }
+        else{
+          if(_355f==toDir){
+            var pos=Math.max(_355e.y,toPt.y)+_3564;
+            point=new Point(_355e.x,pos);
+          }
+          else{
+            point=new Point(_355e.x,_355e.y-(yDiff/2));
+          }
+        }
+      }
+      if(xDiff>0){
+        dir=LEFT;
+      }
+      else{
+        dir=RIGHT;
+      }
+    }
+    }
+    else {
+      if(_355f==UP){
+        if(((xDiff*xDiff)<TOL)&&(yDiff>0)&&(toDir==DOWN)){
+          point=toPt;
+          dir=toDir;
+        }
+        else{
+          if(yDiff<0){
+            point=new Point(_355e.x,_355e.y-_3564);
+          }
+          else{
+            if(((xDiff>0)&&(toDir==RIGHT))||((xDiff<0)&&(toDir==LEFT))){
+              point=new Point(_355e.x,toPt.y);
+            }
+            else{
+              if(_355f==toDir){
+                var pos=Math.min(_355e.y,toPt.y)-_3564;
+                point=new Point(_355e.x,pos);
+              }
+              else{
+                point=new Point(_355e.x,_355e.y-(yDiff/2));
+              }
+            }
+          }
+          if(xDiff>0){
+            dir=LEFT;
+          }
+          else{
+            dir=RIGHT;
+          }
+        }
+      }
+    }
+    }
+  }
+  this._route(_355c,conn,point,dir,toPt,toDir);
+  _355c.push(_355e);
+};
+
+DottedConnection = function () {
+  Connection.call(this);   
+  this.setColor(new Color(0,0,80));
+  this.setRouter(new DottedConnectionRouter());
+  this.setRouter(new FanConnectionRouter());
+};
+DottedConnection.prototype = new Connection();
+DottedConnection.prototype.type = "DottedConnection";
+DottedConnection.prototype.addPoint=function(p){
+  p=new Point(parseInt(p.x),parseInt(p.y));
+  var bgColor = new Color(255,255,255);
+  var fgColor = new Color(0,0,128);
+  if(this.oldPoint!=null){
+    //this.graphics.setColor(new Color(250,250,250));
+    this.graphics.setColor(bgColor.getHTMLStyle());
+    this.graphics.setStroke( 2);
+    this.graphics.drawLine(this.oldPoint.x,this.oldPoint.y,p.x,p.y);
+    this.graphics.setColor(fgColor.getHTMLStyle());
+    this.graphics.setStroke( Stroke.DOTTED );
+    this.graphics.drawLine(this.oldPoint.x,this.oldPoint.y,p.x,p.y);
+    //this.graphics.drawLine(p.x,p.y,p.x,p.y);
+    var line=new Object();
+    line.start=this.oldPoint;
+    line.end=p;
+    this.lineSegments.add(line);
+  }
+  this.oldPoint=new Object();
+  this.oldPoint.x=p.x;
+  this.oldPoint.y=p.y;
+};
+DottedConnection.prototype.getContextMenu = function () {
+  if (this.id != null) {
+    this.workflow.contextClicked = true;
+    this.workflow.connectionContextMenu(this);
+  }
+};
+
 ////////--------------------------------------------------------------------------------------------///////
 FlowMenu = function (_39f9) {
   this.actionAdd        = new ButtonAdd(this);
@@ -656,7 +890,7 @@ FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
     //workflow.setBoundary(workflow.currentSelection);
   
     //Preventing Task from drawing outside canvas Code Ends here
-    if (_39fd.type == 'DecoratedConnection' || _39fd.workflow.contextClicked == true) {
+    if (_39fd.type == 'DecoratedConnection' || _39fd.type == 'DottedConnection' || _39fd.workflow.contextClicked == true) {
         this.removechild(this.actionAdd);
         this.removechild(this.actionInterEvent);
         this.removechild(this.actionGateway);

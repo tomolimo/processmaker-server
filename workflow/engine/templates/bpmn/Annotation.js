@@ -44,85 +44,75 @@ ArrowLine.prototype.paint=function(){
   this.graphics.drawPolyLine(rotX,rotY);
   this.graphics.paint();
 };
-
+/*
 DottedConnection=function(){
-  ArrowLine.call(this);
-  this.sourcePort=null;
-  this.targetPort=null;
-  this.lineSegments=[];
-  this.setColor(new Color(0,0,115));
-  this.setLineWidth(1);
+ArrowLine.call(this);
+this.sourcePort=null;
+this.targetPort=null;
+this.lineSegments=[];
+this.setColor(new Color(0,0,115));
+this.setLineWidth(1);
 };
-
-DottedConnection.prototype=new ConnectionDecorator();
+DottedConnection.prototype=new ArrowLine();
 DottedConnection.prototype.type="DottedConnection";
 DottedConnection.prototype.disconnect=function(){
-  if(this.sourcePort!==null){
-    this.sourcePort.detachMoveListener(this);
-  }
-  if(this.targetPort!==null){
-    this.targetPort.detachMoveListener(this);
-  }
+if(this.sourcePort!==null){
+this.sourcePort.detachMoveListener(this);
+}
+if(this.targetPort!==null){
+this.targetPort.detachMoveListener(this);
+}
 };
-
 DottedConnection.prototype.reconnect=function(){
-  if(this.sourcePort!==null){
-    this.sourcePort.attachMoveListener(this);
-  }
-  if(this.targetPort!==null){
-    this.targetPort.attachMoveListener(this);
-  }
+if(this.sourcePort!==null){
+this.sourcePort.attachMoveListener(this);
+}
+if(this.targetPort!==null){
+this.targetPort.attachMoveListener(this);
+}
 };
-
 DottedConnection.prototype.isConnector=function(){
-  return true;
+return true;
 };
-
 DottedConnection.prototype.isResizeable=function(){
-  return false;
+return false;
 };
-
 DottedConnection.prototype.setSource=function(port){
-  if(this.sourcePort!==null){
-    this.sourcePort.detachMoveListener(this);
-  }
-  this.sourcePort=port;
-  if(this.sourcePort===null){
-    return;
-  }
-  this.sourcePort.attachMoveListener(this);
-  this.setStartPoint(port.getAbsoluteX(),port.getAbsoluteY());
+if(this.sourcePort!==null){
+this.sourcePort.detachMoveListener(this);
+}
+this.sourcePort=port;
+if(this.sourcePort===null){
+return;
+}
+this.sourcePort.attachMoveListener(this);
+this.setStartPoint(port.getAbsoluteX(),port.getAbsoluteY());
 };
-
 DottedConnection.prototype.getSource=function(){
-  return this.sourcePort;
+return this.sourcePort;
 };
-
 DottedConnection.prototype.setTarget=function(port){
-  if(this.targetPort!==null){
-    this.targetPort.detachMoveListener(this);
-  }
-  this.targetPort=port;
-  if(this.targetPort===null){
-    return;
-  }
-  this.targetPort.attachMoveListener(this);
-  this.setEndPoint(port.getAbsoluteX(),port.getAbsoluteY());
+if(this.targetPort!==null){
+this.targetPort.detachMoveListener(this);
+}
+this.targetPort=port;
+if(this.targetPort===null){
+return;
+}
+this.targetPort.attachMoveListener(this);
+this.setEndPoint(port.getAbsoluteX(),port.getAbsoluteY());
 };
-
 DottedConnection.prototype.getTarget=function(){
-  return this.targetPort;
+return this.targetPort;
 };
-
 DottedConnection.prototype.onOtherFigureMoved=function(_3824){
-  if(_3824==this.sourcePort){
-    this.setStartPoint(this.sourcePort.getAbsoluteX(),this.sourcePort.getAbsoluteY());
-  }
-  else{
-    this.setEndPoint(this.targetPort.getAbsoluteX(),this.targetPort.getAbsoluteY());
-  }
+if(_3824==this.sourcePort){
+this.setStartPoint(this.sourcePort.getAbsoluteX(),this.sourcePort.getAbsoluteY());
+}else{
+this.setEndPoint(this.targetPort.getAbsoluteX(),this.targetPort.getAbsoluteY());
+}
 };
-
+*/
 
 
 bpmnAnnotation = function (oWorkflow) {
@@ -147,6 +137,27 @@ bpmnAnnotation.prototype.setAnnotationName = function (name) {
   else
     this.annotationName = 'Annotation 1';
 };
+
+bpmnAnnotation.prototype.coord_converter = function (bound_width, bound_height, text_length) {
+  //bound_width = this.workflow.currentSelection.width;
+  //bound_height = this.workflow.currentSelection.height;
+  input_width = text_length * 6
+  input_height = 10
+
+  temp_width = bound_width - input_width;
+  temp_width /= 2;
+  temp_x = temp_width;
+
+  temp_height = bound_height - 10;
+  temp_height /= 2;
+  temp_y = temp_height;
+
+  var temp_coord = new Object();
+  temp_coord.temp_x = temp_x;
+  temp_coord.temp_y = temp_y;
+  return temp_coord;
+};
+
 
 
 bpmnAnnotation.prototype.paint = function () {
@@ -290,6 +301,7 @@ bpmnAnnotation.prototype.onDoubleClick = function () {
   }
   else
     this.figure.rectWidth = 150;
+  //tempcoord = this.workflow.currentSelection.coord_converter(this.workflow.currentSelection.width, this.workflow.currentSelection.height, this.input.value.length)
   this.figure.bpmnText.drawStringAnno(this.input.value,20,20,this.figure.rectWidth,'left');
   // this.figure.bpmnNewText.drawTextString(this.input.value, this.workflow.currentSelection.width, this.workflow.currentSelection.height, tempcoord.temp_x, tempcoord.temp_y);
   this.figure.bpmnText.paint();

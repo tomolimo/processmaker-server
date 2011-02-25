@@ -145,33 +145,29 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
  */
 MyWorkflow.prototype.connectionContextMenu=function(oShape)
 {
-    this.canvasEvent = Ext.get(oShape.id);
-    this.contextEventmenu = new Ext.menu.Menu({
-        items: [{
-            text: 'NULL Router',
-            scope: this,
-            handler: MyWorkflow.prototype.toggleConnection
-        }, {
-            text: 'Manhatten Router',
-            scope: this,
-            handler: MyWorkflow.prototype.toggleConnection
-        }, {
-            text: 'Bezier Router',
-            scope: this,
-            handler: MyWorkflow.prototype.toggleConnection
-        }, {
-            text: 'Fan Router',
-            scope: this,
-            handler: MyWorkflow.prototype.toggleConnection
-        }, {
-            text: 'Delete Router',
-            scope: this,
-            handler:function()
-            {
-                MyWorkflow.prototype.deleteRoute(oShape.workflow.currentSelection,0)
-            }
-        }]
-    });
+  this.canvasEvent = Ext.get(oShape.id);
+  this.contextEventmenu = new Ext.menu.Menu({
+    items: [{
+      text: 'Manhatten Router',
+      scope: this,
+      handler: MyWorkflow.prototype.toggleConnection
+    }, {
+      text: 'Bezier Router',
+      scope: this,
+      handler: MyWorkflow.prototype.toggleConnection
+    }, {
+      text: 'Fan Router',
+      scope: this,
+      handler: MyWorkflow.prototype.toggleConnection
+    }, {
+      text: 'Delete Router',
+      scope: this,
+      handler:function()
+      {
+          MyWorkflow.prototype.deleteRoute(oShape.workflow.currentSelection,0)
+      }
+    }]
+  });
 
   this.canvasEvent.on('contextmenu', function(e) {
     e.stopEvent();
