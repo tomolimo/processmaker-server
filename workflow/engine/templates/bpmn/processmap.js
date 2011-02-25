@@ -178,7 +178,7 @@ Ext.onReady ( function() {
     //containerScroll: true,
     rootVisible : false,
     border: true,
-    height: PMExt.getBrowser().screen.height * 0.25,
+    height: PMExt.getBrowser().screen.height * 0.3,
     region: 'north',
     split : true,
     collapseMode:'mini',
