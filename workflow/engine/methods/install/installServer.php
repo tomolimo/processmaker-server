@@ -201,40 +201,44 @@ else if($action==="install")
  	*5.2 Install plugins
 	* */
 
-  require_once 'Log.php';
 
-	$sp		= "/";
-	$dir_data	= $dataClient->path_data;
-	//$dir_compiled	= $dataClient->path_compiled;
-
-	$dir_data	= (substr($dir_data,-1)==$sp)?$dir_data:$dir_data."/";
-	$dir_compiled	= $dir_data . "compiled/"; //(substr($dir_compiled,-1)==$sp)?$dir_compiled:$dir_compiled."/";
-	global $isWindows;
-
-	@mkdir($dir_data."sites",0777,true);
-	@mkdir($dir_compiled,0777,true);
-
-  $logFile = "{$dir_data}install.log";
-  $display = Log::singleton('display', '', 'INSTALLER', array('lineFormat' => "%{message}"));
-  $file = Log::singleton('file', $logFile, 'INSTALLER');
-
-  global $logger;
-  $logger = Log::singleton('composite');
-  $logger->addChild($display);
-  $logger->addChild($file);
-
-	$create_db	="create-db.sql";
-	$schema		="schema.sql";
-
-	G::LoadClass('Installer');
-
-	/* Create default workspace called workflow */
-	$inst = new Installer();
-	$siteName="workflow";
-	$p1 = (isset($dataClient->ao_admin_pass1))?$dataClient->ao_admin_pass1:'admin';
-	$p2 = (isset($dataClient->ao_admin_pass2))?$dataClient->ao_admin_pass2:'admin';
+  $report = NULL;
 
   try {
+
+    require_once 'Log.php';
+
+    $sp		= "/";
+    $dir_data	= $dataClient->path_data;
+
+    $dir_data	= (substr($dir_data,-1)==$sp)?$dir_data:$dir_data."/";
+    $dir_compiled	= $dir_data . "compiled/";
+    $dir_log = "{$dir_data}logs/";
+    global $isWindows;
+
+    @mkdir($dir_data."sites",0777,true);
+    @mkdir($dir_compiled,0777,true);
+    @mkdir($dir_log, 0777, true);
+
+    $logFilename = "{$dir_log}install.log";
+    $displayLog = Log::singleton('display', '', 'INSTALLER', array('lineFormat' => "%{message}"));
+    $fileLog = Log::singleton('file', $logFilename, 'INSTALLER');
+
+    global $logger;
+    $logger = Log::singleton('composite');
+    $logger->addChild($displayLog);
+
+    $create_db	="create-db.sql";
+    $schema		="schema.sql";
+
+    G::LoadClass('Installer');
+
+    /* Create default workspace called workflow */
+    $inst = new Installer();
+    $siteName="workflow";
+    $p1 = (isset($dataClient->ao_admin_pass1))?$dataClient->ao_admin_pass1:'admin';
+    $p2 = (isset($dataClient->ao_admin_pass2))?$dataClient->ao_admin_pass2:'admin';
+
     $s = $inst->create_site(Array(
       'name'	  =>'workflow',
       'path_data'=>$dataClient->path_data,
@@ -253,6 +257,14 @@ else if($action==="install")
         'password'=>$dataClient->mysqlP
       )
     ),true);
+    if ($s['created'])
+      $report = $inst->report;
+    else
+      /* On a failed install, $inst->report is blank because the
+		   * installation didnt occured at all. So we use the test report
+		   * instead.
+		   */
+      $report = $s['result'];
     $installError = (!$s['created']);
   } catch (Exception $e) {
     $installError = ($e->getMessage() ? $e->getMessage() : true);
@@ -264,8 +276,20 @@ else if($action==="install")
 	/* Status is used in the Windows installer, do not change this */
 	print_r("Status: ".(($installError) ? 'FAILED':'SUCCESS')."\n\n");
 
-  $file->log("Status: ".(($installError) ? 'FAILED':'SUCCESS'));
-  $display->log("This log is also avaliable in $logFile");
+  /* Try to open the file log, if it fails, set it to NULL, so we don't try to
+   * write to it again afterwards. If it succeeds, add to the logger.
+   * Only open the log after writing status, otherwise a warning can be issued
+   * which will affect the Windows installer.
+   */
+  if (!$fileLog->open()) {
+    $fileLog = NULL;
+    $displayLog->log("Failed to create file log in $logFilename");
+  } else {
+    $logger->addChild($fileLog);
+    $fileLog->log(" ** Starting installation ** ");
+    $fileLog->log("Status: ".(($installError) ? 'FAILED':'SUCCESS'));
+    $displayLog->log("This log is also avaliable in $logFilename");
+  }
 
   $installArgs = (array)$dataClient;
   $hiddenFields = array('mysqlP', 'ao_admin_pass1', 'ao_admin_pass2');
@@ -275,19 +299,15 @@ else if($action==="install")
   
   $logger->log("Installation arguments\n" . neat_r(array($installArgs)));
 
-	if ($installError !== false && isset($s) && !$s['created']) {
-		/* On a failed install, $inst->report is blank because the
-		 * installation didnt occured at all. So we use the test report
-		 * instead.
-		 */
-		$logger->log("Installation report\n" . neat_r(array($s['result'])));
-		die();
-	}
+  if (isset($report))
+    $logger->log("Installation report\n" . neat_r(array($report)));
+  else
+    $logger->log("** No installation report **");
 
-	$logger->log("Installation report\n" . neat_r(array($inst->report)));
-
-  if ($installError)
+  if ($installError) {
+    $logger->log("Installation ending with errors");
     die();
+  }
 	
 	$sh=md5(filemtime(PATH_GULLIVER."/class.g.php"));
 	$h=G::encrypt($dataClient->mysqlH.$sh.$dataClient->mysqlU.$sh.$dataClient->mysqlP.$sh.$inst->cc_status,$sh);
@@ -321,6 +341,8 @@ else if($action==="install")
 	if (trim(str_replace("<br>","",$update)) == "")
 		$update = "Nothing to do.";
 	$logger->log("Plugin AutoInstall   => ".str_replace("<br>","\n",$update));
+
+  $logger->log("Installation finished successfuly");
 }
 
 /*
