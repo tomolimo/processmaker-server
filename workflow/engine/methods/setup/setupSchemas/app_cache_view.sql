@@ -34,5 +34,5 @@ CREATE TABLE `APP_CACHE_VIEW`
 	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
 	KEY `indexAppNumber`(`APP_NUMBER`),
 	KEY `indexAppUser`(`USR_UID`, `APP_STATUS`)
-)Type=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Application cache view';
+)ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Application cache view';
 	
