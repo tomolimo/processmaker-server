@@ -31,6 +31,7 @@ Ext.onReady(function(){
 
 
   showCaseNavigatorPanel = function(steps, information, action) {
+
     if(steps==false&&action==false){
       var treeToRevise = new Ext.tree.TreePanel({
         title: treeToReviseTitle,
@@ -40,7 +41,6 @@ Ext.onReady(function(){
         animate: true,
         autoScroll: true,
         rootVisible: false,
-    //    dataUrl: 'casesToReviseTreeContent?APP_UID=4425000044ce3eda54f6d41019986116&DEL_INDEX=3',
         dataUrl: casesPanelUrl,
         root: {
             nodeType : 'async',
@@ -49,15 +49,13 @@ Ext.onReady(function(){
         },
         listeners: {
             render: function() {
-    //            this.getRootNode().expand();
                 this.expandAll();
-    //            this.getNodeById('node-dynaforms').expand();
-    //            this.getNodeById('node-input-documents').expand();
             }
         }
       });
-      if(typeof(win)=='undefined'){
-        var win = new Ext.Window({
+
+      if(typeof(winTree)=='undefined'){
+        var winTree = new Ext.Window({
           id:'toReviseWindow',
           width:220,
           height:300,
@@ -72,7 +70,7 @@ Ext.onReady(function(){
       }
 
       if (!toReviseTreeOpen){
-        win.show(this);
+        winTree.show(this);
         toReviseTreeOpen = true;
       }
 
@@ -320,13 +318,13 @@ Ext.onReady(function(){
     Ext.Ajax.request({
       url : 'ajaxListener' , 
       params : {action : 'getProcessInformation'},
-      success: function ( result, request ) { 
-        var data = Ext.util.JSON.decode(result.responseText); 
-    
+      success: function ( result, request ) {
+        var data = Ext.util.JSON.decode(result.responseText);
+
         fieldset = {
           xtype : 'fieldset',
           autoHeight  : true,
-          defaults    : { 
+          defaults    : {
             width : 170, 
             xtype:'label',
             labelStyle : 'padding: 0px;',
@@ -337,10 +335,10 @@ Ext.onReady(function(){
             {fieldLabel: 'Description', text: data.PRO_DESCRIPTION},
             {fieldLabel: 'Category', text: data.PRO_CATEGORY_LABEL},
             {fieldLabel: 'Author', text: data.PRO_AUTHOR},
-            {fieldLabel: 'Create date', text: data.PRO_CREATE_DATE},
+            {fieldLabel: 'Create date', text: data.PRO_CREATE_DATE}
           ]
         }
-    
+
         var frm = new Ext.FormPanel( {
           labelAlign : 'right',
           bodyStyle : 'padding:5px 5px 0',
@@ -351,9 +349,9 @@ Ext.onReady(function(){
             handler : function() {
               win.close();
             }
-          }]   
+          }]
         });
-    
+
         var win = new Ext.Window({
           title: '',
           width: 450,
@@ -395,7 +393,7 @@ Ext.onReady(function(){
             {fieldLabel: 'Init Date', text: data.INIT_DATE},
             {fieldLabel: 'Due Date', text: data.DUE_DATE},
             {fieldLabel: 'Finish Date', text: data.FINISH},
-            {fieldLabel: 'Duration', text: data.DURATION},
+            {fieldLabel: 'Duration', text: data.DURATION}
           ]
         }
     
