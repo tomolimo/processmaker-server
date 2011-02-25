@@ -30,7 +30,7 @@
 
   $oHeadPublisher =& headPublisher::getSingleton(); 
   $oHeadPublisher->usingExtJs('ux/miframe');
-  $oHeadPublisher->addExtJsScript('cases/open', true);
+  $oHeadPublisher->addExtJsScript('cases/open', false);
   //
   $uri = '';
   foreach($_GET as $k=>$v)
