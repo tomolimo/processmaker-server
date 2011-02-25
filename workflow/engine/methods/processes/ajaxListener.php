@@ -335,7 +335,7 @@ class Ajax
         $properties['Title'] = $taskData['TAS_TITLE'];
         $properties['Description'] = $taskData['TAS_DESCRIPTION'];
         $properties['Variable for case priority'] = $taskData['TAS_PRIORITY_VARIABLE'];
-        $properties['Stating Task'] = $taskData['TAS_START'] == '1' ? true: false;
+        $properties['Starting Task'] = $taskData['TAS_START'] == 'TRUE' ? true: false;
        
         $result->sucess = true;
         $result->prop = $properties;
@@ -348,39 +348,69 @@ class Ajax
 
   function saveProperties($param)
   {
-    require_once 'classes/model/ProcessCategory.php';
-    require_once 'classes/model/CalendarDefinition.php';
-    
-    switch ($param['type']) {
-      case 'process':
-        $process['PRO_UID'] = $param['UID'];
-        switch ($param['property']) {
-          case 'Title':       $fieldName = 'PRO_TITLE'; break;
-          case 'Description': $fieldName = 'PRO_DESCRIPTION'; break;
-          case 'Debug':       
-            $fieldName = 'PRO_DEBUG';
-            $param['value'] = $param['value'] == 'true' ? '1' : '0';  
-            break;
-          case 'Category':
-            $fieldName = 'PRO_CATEGORY';
-            $category = ProcessCategory::loadByCategoryName($param['value']);
-            $param['value'] = $category[0]['CATEGORY_NAME'];
-            break;
-          case 'Calendar':
-            $fieldName = 'PRO_CALENDAR';
-            break;
-        }
-        $process[$fieldName] = $param['value'];
+    try{
+      $result->sucess = true;
+      $result->msg = '';
+      
+      switch ($param['type']) {
+        case 'process':
+          require_once 'classes/model/ProcessCategory.php';
+          require_once 'classes/model/CalendarDefinition.php';
+          G::LoadClass('processMap');
+          $oProcessMap = new ProcessMap();
+          $process['PRO_UID'] = $param['UID'];
+          
+          switch ($param['property']) {
+            case 'Title':       $fieldName = 'PRO_TITLE'; break;
+            case 'Description': $fieldName = 'PRO_DESCRIPTION'; break;
+            case 'Debug':
+              $fieldName = 'PRO_DEBUG';
+              $param['value'] = $param['value'] == 'true' ? '1' : '0';
+              break;
+            case 'Category':
+              $fieldName = 'PRO_CATEGORY';
+              $category = ProcessCategory::loadByCategoryName($param['value']);
+              $param['value'] = $category[0]['CATEGORY_UID'];
+              break;
+            case 'Calendar':
+              $fieldName = 'PRO_CALENDAR';
+              $calendar = CalendarDefinition::loadByCalendarName($param['value']);
 
-        G::LoadClass('processMap');
-        $oProcessMap = new ProcessMap();
-        $oProcessMap->updateProcess($process);
+              G::LoadClass("calendar");
+              $calendarObj = new Calendar();
+              $calendarObj->assignCalendarTo($process['PRO_UID'], $calendar['CALENDAR_UID'], 'PROCESS');
+              break;
+          }
 
-        $result->sucess = true;
-      break;
+          if( $fieldName != 'PRO_CALENDAR' ) {
+            $process[$fieldName] = $param['value'];
+            $oProcessMap->updateProcess($process);
+          }
+        break;
 
-      case 'task':
-      break;
+        case 'task':
+          require_once 'classes/model/Task.php';
+          $oTask = new Task();
+          $task['TAS_UID'] = $param['UID'];
+          
+          switch ($param['property']) {
+            case 'Title':       $fieldName = 'TAS_TITLE'; break;
+            case 'Description': $fieldName = 'TAS_DESCRIPTION'; break;
+            case 'Variable for case priority': $fieldName = 'TAS_PRIORITY_VARIABLE'; break;
+            case 'Starting Task':
+              $fieldName = 'TAS_START';
+              $param['value'] = strtoupper($param['value']);
+            break;
+          }
+          $task[$fieldName] = $param['value'];
+          print_r($task);
+          $oTask->update($task);
+        
+        break;
+      }
+    } catch (Exception $e) {
+      $result->sucess = false;
+      $result->msg = $e->getMessage();
     }
 
     print G::json_encode($result);

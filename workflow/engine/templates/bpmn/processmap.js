@@ -68,7 +68,9 @@ Ext.onReady ( function() {
       columns : [
         {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
         {header: 'Assigned', id:'TU_RELATION', dataIndex: 'TU_RELATION', hidden:true, hideable:false},
-        {header: 'Assigned', dataIndex: 'NAME', hideable:false}
+        {header: 'User', dataIndex: 'USER', width: 249, renderer:function(v,p,r){
+          return _FNF(r.data.USR_USERNAME, r.data.USR_FIRSTNAME, r.data.USR_LASTNAME);
+        }}
       ]
     }),
     store: usersTaskStore,
@@ -170,19 +172,16 @@ Ext.onReady ( function() {
   }
  
   var eastPanelTree = new Ext.tree.TreePanel({
+    id: 'eastPanelTree',
     useArrows: false,
     autoScroll: true,
     animate: true,
-    //autoHeight: true,
-    //enableDD: true,
-    //containerScroll: true,
     rootVisible : false,
     border: true,
     height: PMExt.getBrowser().screen.height * 0.3,
     region: 'north',
     split : true,
     collapseMode:'mini',
-    // auto create TreeLoader
     loader : new Ext.tree.TreeLoader({
       preloadChildren : true,
       dataUrl : '../processes/ajaxListener',
@@ -327,12 +326,14 @@ Ext.onReady ( function() {
   });
 
   propertiesGrid.on('afteredit', function afterEdit(r) {
+    var node = Ext.getCmp('eastPanelTree').getSelectionModel().getSelectedNode();
+    
     Ext.Ajax.request({
       url: '../processes/ajaxListener',
       params: {
         action : 'saveProperties',
-        UID: pro_uid,
-        type: 'process',
+        UID: node.attributes.id,
+        type: node.attributes.type,
         property: r.record.data.name,
         value: r.value
       },
