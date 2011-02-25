@@ -230,6 +230,10 @@ switch ($_POST['action'])
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     
     $rows = Array();
+    unset($first);
+    $first['USR_UID'] = '';
+    $first['USR_VALUE'] = G::LoadTranslation('ID_NO_MANAGER_SELECTED');
+    $rows[] = $first;
     
     $conf = new Configurations();
     

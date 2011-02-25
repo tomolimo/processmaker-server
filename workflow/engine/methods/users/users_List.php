@@ -57,18 +57,12 @@ $G_PUBLISH = new Publisher;
 G::LoadClass('configuration');
 $c = new Configurations();
 $configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
-$configEnv = $c->getConfiguration('ENVIRONMENT_SETTINGS', '');
 $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
-$Config['fullNameFormat'] = isset($configEnv['format']) ? $configEnv['format'] : '@userName';
-$Config['dateFormat'] = isset($configEnv['dateFormat']) ? $configEnv['dateFormat'] : 'Y/m/d';
 
 $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('users/usersList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('users/usersList'); //adding a html file  .html.
 $oHeadPublisher->assign('CONFIG', $Config);
-
-G::LoadClass('configuration');
-$c = new Configurations();
 $oHeadPublisher->assign('FORMATS',$c->getFormats());
 
 G::RenderPage('publish', 'extJs');
