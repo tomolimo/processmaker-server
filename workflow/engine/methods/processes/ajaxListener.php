@@ -282,6 +282,7 @@ class Ajax
     
     $rootNode->id = $process->getProUid();
     $rootNode->type = 'process';
+    $rootNode->typeLabel = G::LoadTranslation('ID_PROCESS');
     $rootNode->text = $process->getProTitle();
     $rootNode->leaf = count($tasksList) > 0 ? false : true;
     $rootNode->iconCls = 'ss_sprite ss_application';
@@ -290,6 +291,7 @@ class Ajax
       $node = new stdClass;
       $node->id = $task['TAS_UID'];
       $node->type = 'task';
+      $node->typeLabel = G::LoadTranslation('ID_TASK');
       $node->text = $task['TAS_TITLE'];
       $node->iconCls = 'ss_sprite ss_layout';
       $node->leaf = true;
@@ -355,7 +357,10 @@ class Ajax
         switch ($param['property']) {
           case 'Title':       $fieldName = 'PRO_TITLE'; break;
           case 'Description': $fieldName = 'PRO_DESCRIPTION'; break;
-          case 'Debug':       $fieldName = 'PRO_DEBUG'; break;
+          case 'Debug':       
+            $fieldName = 'PRO_DEBUG';
+            $param['value'] = $param['value'] == 'true' ? '1' : '0';  
+            break;
           case 'Category':
             $fieldName = 'PRO_CATEGORY';
             $category = ProcessCategory::loadByCategoryName($param['value']);
@@ -391,7 +396,7 @@ class Ajax
     
     $response->rows = array_merge($defaultOption, $processCategory->getAll('array'));
     
-    echo G::json_encode($response);
+    print G::json_encode($response);
   }
 
   function getCaledarList()
@@ -403,8 +408,20 @@ class Ajax
     
     $response->rows = $calendarObj['array'];
 
-    echo G::json_encode($response);
+    print G::json_encode($response);
   }
+  
+  function getPMVariables($param)
+  {
+    G::LoadClass('processMap');
+    $oProcessMap = new processMap(new DBConnection);
+    $response->rows = getDynaformsVars($param['PRO_UID']);
+    foreach($response->rows as $i=>$var){
+      $response->rows[$i]['sName'] = "@@{$var['sName']}";
+    }
+    print G::json_encode($response);
+  }
+  
 }
 
 

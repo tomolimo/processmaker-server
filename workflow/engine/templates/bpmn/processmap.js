@@ -206,7 +206,7 @@ Ext.onReady ( function() {
       UID    : node.attributes.id,
       type   : node.attributes.type
     }});
-    
+    Ext.getCmp('eastPanelCenter').setTitle(node.attributes.typeLabel+': '+node.attributes.text);
     //propertiesGrid.store.sort('name','DESC');
     propertiesGrid.setSource(propertyStore.reader.jsonData.prop);
     
@@ -224,7 +224,7 @@ Ext.onReady ( function() {
     name        : 'category',
     allowBlank     : true,
     store        : new Ext.data.Store( {
-      autoLoad: true,  //autoload the data
+      //autoLoad: true,  //autoload the data
       proxy : new Ext.data.HttpProxy( {
         url : '../processes/ajaxListener',
         method : 'POST'
@@ -234,20 +234,20 @@ Ext.onReady ( function() {
       },
       reader : new Ext.data.JsonReader( {
         root : 'rows',
-        fields : [ {
-          name : 'CATEGORY_UID'
-        }, {
-          name : 'CATEGORY_NAME'
-        } ]
+        fields : [
+          {name : 'CATEGORY_UID'},
+          {name : 'CATEGORY_NAME'}
+        ]
       })
     }),
     valueField : 'CATEGORY_NAME',
     displayField : 'CATEGORY_NAME',
     typeAhead    : true,
-    mode        : 'local',
+    //mode         : 'local',
     triggerAction    : 'all',
     editable: true,
-    forceSelection: true
+    forceSelection: true,
+    selectOnFocus  : true
   });
 
   var comboCalendar = new Ext.form.ComboBox({
@@ -255,23 +255,47 @@ Ext.onReady ( function() {
     name        : 'calendar',
     allowBlank     : true,
     store        : new Ext.data.Store( {
-      autoLoad: true,  //autoload the data
+      //autoLoad: true,  //autoload the data
       proxy : new Ext.data.HttpProxy({ url: '../processes/ajaxListener'}),
       baseParams : {action: 'getCaledarList'},
       reader : new Ext.data.JsonReader( {
         root : 'rows',
-        fields : [ {
-          name : 'CALENDAR_UID'
-        }, {
-          name : 'CALENDAR_NAME'
-        } ]
+        fields : [
+          {name : 'CALENDAR_UID'},
+          {name : 'CALENDAR_NAME'}
+        ]
       })
     }),
     valueField : 'CALENDAR_NAME',
     displayField : 'CALENDAR_NAME',
     typeAhead    : true,
-    mode        : 'local',
+    //mode        : 'local',
     triggerAction    : 'all',
+    editable: true,
+    forceSelection: true
+  });
+  
+  var comboPMVariables = new Ext.form.ComboBox({
+    fieldLabel    : 'Calendar',
+    name        : 'calendar',
+    allowBlank     : true,
+    store        : new Ext.data.Store( {
+      //autoLoad: false,  //autoload the data
+      proxy : new Ext.data.HttpProxy({ url: '../processes/ajaxListener'}),
+      baseParams : {action: 'getPMVariables', PRO_UID: pro_uid},
+      reader : new Ext.data.JsonReader( {
+        root : 'rows',
+        fields : [ 
+          {name : 'sName'}, 
+          {name : 'sName'} 
+        ]
+      })
+    }),
+    valueField : 'sName',
+    displayField : 'sName',
+    typeAhead    : true,
+    //mode        : 'local',
+    triggerAction: 'all',
     editable: true,
     forceSelection: true
   });
@@ -280,12 +304,8 @@ Ext.onReady ( function() {
   var propertiesGrid = new Ext.grid.PropertyGrid({
     id: 'propGrid',
     title: 'Properties',
-    //width: 300,
+    loadMask : {msg:"Loading..."},
     autoHeight: true,
-    propertyNames: {
-      tested: 'QA',
-      borderWidth: 'Border Width'
-    },
     viewConfig : {
         forceFit: true,
         scrollOffset: 2 // the grid will never have scrollbars
@@ -293,7 +313,8 @@ Ext.onReady ( function() {
     customEditors: {
       //'Debug' : new Ext.grid.GridEditor(ActiveProperty),
       'Category' : new Ext.grid.GridEditor(comboCategory),
-      'Calendar' : new Ext.grid.GridEditor(comboCalendar)
+      'Calendar' : new Ext.grid.GridEditor(comboCalendar),
+      'Variable for case priority' : new Ext.grid.GridEditor(comboPMVariables)
     }
   });
 
@@ -357,11 +378,11 @@ Ext.onReady ( function() {
     //collapseMode:'mini',
     //hideCollapseTool: false,
     items:[
-      eastPanelTree
-      , {
+      eastPanelTree, 
+      {
         id: 'eastPanelCenter',
         xtype: 'panel',
-        title: 'Process: ',
+        title: _('ID_PROCESS')+': '+pro_title,
         region: 'center',
         layout: 'fit',
         items:[
