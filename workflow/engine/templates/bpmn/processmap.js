@@ -330,18 +330,31 @@ Ext.onReady ( function() {
 
   propertiesGrid.on('afteredit', function afterEdit(r) {
     var node = Ext.getCmp('eastPanelTree').getSelectionModel().getSelectedNode();
+    var UID;
+    var type;
     
+    if( node ) {
+      UID = node.attributes.id;
+      type = node.attributes.type;
+    } else {
+      UID = pro_uid;
+      type = 'process';
+    } 
     Ext.Ajax.request({
       url: '../processes/ajaxListener',
       params: {
         action : 'saveProperties',
-        UID: node.attributes.id,
-        type: node.attributes.type,
+        UID: UID,
+        type: type,
         property: r.record.data.name,
         value: r.value
       },
       success: function(response) {
-        //
+        if( type == 'process' && r.record.data.name == 'Title') {
+          pro_title = r.value;
+          Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title);
+          Ext.getCmp('eastPanelTree').getNodeById(UID).setText(pro_title);
+        }
       },
       failure: function(){
         Ext.Msg.alert ('Failure');
@@ -453,10 +466,11 @@ Ext.onReady ( function() {
 
   var center= {
     region: 'center',
+    id: 'centerPanel',
     width:100,
     height:2000,
     xtype	:	"iframepanel",
-    title   : "BPMN Processmap - " + pro_title,
+    title   : _('ID_PROCESSMAP_TITLE') + ' - ' + pro_title,
 
     frameConfig:{name:'designerFrame', id:'designerFrame'},
     defaultSrc : 'designer?PRO_UID=' + pro_uid,
