@@ -244,16 +244,11 @@ class Ajax
     
     foreach($usersTask->data as $userTask) {
       $usersTaskListItem['TAS_UID'] = $userTask['TAS_UID'];
-      if( $userTask['TU_RELATION'] == 1 )
-        $usersTaskListItem['NAME'] = $conf->getEnvSetting(
-          'format',
-          Array(
-            'userName'=>$userTask['USR_USERNAME'],
-            'firstName'=>$userTask['USR_FIRSTNAME'],
-            'lastName'=>$userTask['USR_LASTNAME']
-          )
-        );
-      else
+      if( $userTask['TU_RELATION'] == 1 ) {
+        $usersTaskListItem['USR_USERNAME'] = $userTask['USR_USERNAME'];
+        $usersTaskListItem['USR_FIRSTNAME'] = $userTask['USR_FIRSTNAME'];
+        $usersTaskListItem['USR_LASTNAME'] = $userTask['USR_LASTNAME'];
+      } else
         $usersTaskListItem['NAME'] = $userTask['GRP_TITLE'];
 
       $usersTaskListItem['TU_RELATION'] = $userTask['TU_RELATION'];

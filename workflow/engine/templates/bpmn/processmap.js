@@ -38,6 +38,9 @@ Ext.onReady ( function() {
       root: 'data',
       fields : [
         {name : 'USR_UID'},
+        {name : 'USR_USERNAME'},
+        {name : 'USR_FIRSTNAME'},
+        {name : 'USR_LASTNAME'},
         {name : 'NAME'},
         {name : 'TU_RELATION'}
       ]
