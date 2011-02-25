@@ -1,3 +1,5 @@
+var win;
+
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
@@ -18,6 +20,26 @@ Ext.onReady(function(){
       ]
     })
   });
+
+  var comboCategory = new Ext.form.ComboBox({
+    fieldLabel    : 'Category',
+    name        : 'category',
+    allowBlank     : true,
+    store : new Ext.data.ArrayStore({
+        fields: ['CATEGORY_UID', 'CATEGORY_NAME'],
+        data : []
+    }),
+
+    valueField : 'CATEGORY_NAME',
+    displayField : 'CATEGORY_NAME',
+    typeAhead    : true,
+    //mode         : 'local',
+    triggerAction    : 'all',
+    editable: true,
+    forceSelection: true,
+    selectOnFocus  : true
+  });
+  
     
   var grid = new Ext.grid.GridPanel( {
     id: 'grid',
@@ -36,6 +58,7 @@ Ext.onReady(function(){
     viewConfig: {
       forceFit:true
     },
+    clicksToEdit: 1,
 
     cm: new Ext.grid.ColumnModel({
       defaults: {
@@ -43,7 +66,9 @@ Ext.onReady(function(){
           sortable: true
       },
       columns: [
-        {header: 'ID', id:'TRN_ID', dataIndex: 'TRN_ID', hidden:false, hideable:true, width: 350},
+        {header: 'ID', id:'TRN_ID', dataIndex: 'TRN_ID', hidden:false, hideable:true, width: 350,
+          editor: new Ext.form.TextField({allowBlank: true, readOnly:true})
+        } ,
         {header: 'Value', dataIndex: 'TRN_VALUE', width: 300, renderer:function(v,p,r){
           var label = v.length > 20 ? v.substring(0, 20) + '...' : v;
           return String.format("<font color='green'>{0}</font>", label);
@@ -95,7 +120,7 @@ Ext.onReady(function(){
         ]
     }),
     listeners: {
-      rowdblclick: edit,
+      rowdblclick: function(){},
       render: function(){
         this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
         this.ownerCt.doLayout();
@@ -106,6 +131,7 @@ Ext.onReady(function(){
   grid.getSelectionModel().on('rowselect', function(){
     var rowSelected = grid.getSelectionModel().getSelected();
     Ext.getCmp('editValue').setValue(rowSelected.data.TRN_VALUE);
+    Ext.getCmp('label1').setValue(rowSelected.data.TRN_ID);
 
   });
 
@@ -133,7 +159,7 @@ Ext.onReady(function(){
     region: 'south',
     layout: 'fit',
     //width: 200,
-    height: 100,
+    height: 120,
     minSize: 100,
     maxSize: 400,
     split: true,
@@ -145,9 +171,15 @@ Ext.onReady(function(){
         xtype:'textarea'
       }
     ],
+    tbar:[ new Ext.form.TextField ({
+      id: 'label1',
+      allowBlank: true,
+      width: 600,
+      readOnly: true
+    })],
     bbar: [{
       text: 'Save',
-      icon: '',
+      iconCls: 'ss_sprite ss_disk',
       handler: saveEdit
     }],
   });
@@ -189,13 +221,13 @@ function newLabel()
         id: 'id',
         fieldLabel: 'ID', 
         xtype:'textfield',
-        width: 300
+        width: 350  
       },  {
         id: 'label',
         fieldLabel: 'Label',
         xtype:'textarea',
-        width: 300,
-        height: 100
+        width: 350,
+        height: 50
       }
     ],
     buttons : [{
@@ -209,11 +241,11 @@ function newLabel()
     }]   
   });
 
-  var win = new Ext.Window({
-    id: 'winNew',
+  win = new Ext.Window({
+    //id: 'winNew',
     title: _('ID_NEW'),
-    width: 450,
-    height: 200,
+    width: 490,
+    height: 150,
     layout:'fit',
     autoScroll:true,
     modal: true,
@@ -243,7 +275,7 @@ function saveNew()
     success : function(obj, resp) {
       Ext.getCmp('grid').store.reload();
       PMExt.notify('SAVE', resp.result.msg);
-      Ext.getCmp('winNew').hide();
+      win.hide();
     },
     failure: function(obj, resp) {
       Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
@@ -325,13 +357,14 @@ function rebuild()
       Ext.MessageBox.hide();
       result = Ext.util.JSON.decode(response.responseText);
       if(result.success){
-        PMExt.notify('REBUILD SUCCESS', '');
+        
         var text = 'Cache file: ' + result.cacheFile + '<br/>';
         //text += 'JS Cache file: ' + result.cacheFileJS + '<br/>';
         text += 'Rows: ' + result.rows + '<br/>';
         //text += 'JS ROws: ' + result.rowsJS + '<br/>';
         
-        PMExt.info('Result', text);
+        //PMExt.info('Result', text);
+        PMExt.notify('REBUILD SUCCESS', text);
       } else
         PMExt.error('Error', result.msg);
     }

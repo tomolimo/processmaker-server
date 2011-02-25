@@ -513,7 +513,11 @@ Ext.onReady ( function() {
       success: function(response){
         var result = Ext.util.JSON.decode(response.responseText);
         if( result.success ) {
-          PMExt.notify('', 'Users & Groups assigned successfully!');
+          if( typeof parent != 'undefined' )
+            parent.PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
+          else
+            PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
+          
           if( typeof parent != 'undefined' ) {
             parent.Ext.getCmp('eastPanel').show();
             parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);

@@ -180,7 +180,8 @@ class Ajax
   function assignUsersTask($param)
   {
     try{
-      require_once 'classes/model/TaskUser.php';      
+      require_once 'classes/model/TaskUser.php';
+      require_once 'classes/model/Task.php';
       $oTaskUser = new TaskUser();
       $UIDS = explode(',', $param['UIDS']);
       $TU_TYPE = 1;
@@ -191,9 +192,13 @@ class Ajax
         else
           $oTaskUser->create(array('TAS_UID' => $param['TAS_UID'], 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 2));
       }
+      $task = TaskPeer::retrieveByPk($param['TAS_UID']);
 
       $result->success = true;
-      $result->msg = '';
+      if( count($UIDS) > 1 )
+        $result->msg = __('ID_ACTORS_ASSIGNED_SUCESSFULLY', SYS_LANG, Array(count($UIDS), $task->getTasTitle()));
+      else
+        $result->msg = __('ID_ACTOR_ASSIGNED_SUCESSFULLY', SYS_LANG, Array('tas_title'=>$task->getTasTitle()));
     } catch(Exception $e){
       $result->success = false;
       $result->msg = $e->getMessage();
@@ -225,7 +230,7 @@ class Ajax
       $result->msg = '';
     } catch(Exception $e){
       $result->success = false;
-      $result->msg = "{$TU_RELATIONS[$i]} -  {$param['TAS_UID']}, {$USR_UIDS[$i]}, $TU_TYPE, 1  --> " . $e->getMessage();
+      $result->msg = $e->getMessage();
     }
 
     print G::json_encode($result);

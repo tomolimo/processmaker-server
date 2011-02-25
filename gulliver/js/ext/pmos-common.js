@@ -108,12 +108,14 @@ Ext.msgBoxSlider = function(){
       if( ! msgCt ) {
           msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);
       }
-      msgCt.alignTo(document, 't-t');
+      //msgCt.alignTo(document, 'br-br');
+      msgCt.alignTo(document, "br-br", [ -20, -20]);
+      
       var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
       var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
       m.setWidth(400 );
       m.position(null, 5000 );
-      m.alignTo(document, 't-t');
+      m.alignTo(document, 'br-br');
       //Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("<?php echo _EXT_URL ?>/images/_accept.png")');
       Ext.get('x-box-mc-inner' ).setStyle('background-position', '5px 10px');
       Ext.get('x-box-mc-inner' ).setStyle('background-repeat', 'no-repeat');
@@ -122,6 +124,30 @@ Ext.msgBoxSlider = function(){
     }
   };
 }();
+
+/*Ext.msgBoxSlider = function() {
+  var msgCt;
+
+  function createBox(t, s){
+    return ['<div class="msg">',
+    '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
+    '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t,
+    '</h3>', s, '</div></div></div>',
+    '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
+    '</div>'].join('');
+  }
+    return {
+      msg : function(title, format){
+        if(!msgCt){
+          msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);
+        }
+        msgCt.alignTo(document, 'bl-bl', [10, -90]);
+        var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
+        var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
+        m.slideIn('b').pause(1).ghost("b", {remove:true});
+      }
+    };
+}();*/
 
 /** 
  * Translator function for internationalization

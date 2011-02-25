@@ -54,7 +54,7 @@ Ext.onReady ( function() {
 
   var usersTaskGrid = new Ext.grid.GridPanel({
     id       : 'usersTaskGrid',
-    title    : 'Users & Groups',
+    title    : _('ID_ACTORS'),
     height   : 180,
     stateful : true,
     stateId  : 'usersTaskGrid',
@@ -594,7 +594,7 @@ Ext.onReady ( function() {
         })
 
       }, {
-        text: 'Actors',
+        text: _('ID_ACTORS'),
         iconCls: 'ICON_USERS',
         handler: function(){
           document.getElementById('designerFrame').contentWindow.usersPanel.show()
