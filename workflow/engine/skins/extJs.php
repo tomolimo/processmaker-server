@@ -42,7 +42,8 @@
     $body   = $oHeadPublisher->getExtJsScripts();
     
     $templateFile = 'extJsInitLoad.html';
-  } else {
+  } 
+  else {
     $header = $oHeadPublisher->includeExtJs();
     $styles = '';
     $body   = $oHeadPublisher->renderExtJs();

@@ -297,8 +297,9 @@ class headPublisher {
   }
   
   function getExtJsStylesheets(){
-    
-    $script = "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
+    $script = "  <link rel='stylesheet' type='text/css' href='/css/classic.css' />\n";
+/*
+    $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin.".css' />\n";
     
     // <!-- DEPRECATED, this will be removed in a future - the three next lines
@@ -310,7 +311,7 @@ class headPublisher {
     //new interactive css decorator
     $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/loader?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/images/icons_silk/sprite.css' />\n";
-    
+*/    
     // Load external/plugin css
     // NOTE is necesary to move this to decorator server      
     $oPluginRegistry = & PMPluginRegistry::getSingleton ();
