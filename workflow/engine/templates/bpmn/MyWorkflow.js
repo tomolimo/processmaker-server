@@ -1789,8 +1789,7 @@ MyWorkflow.prototype.showEventResult = function(btn){
 MyWorkflow.prototype.deleteEvent = function(eventObj){
 
      var event_uid = eventObj.id;
-     if(event_uid != '')
-        {
+     if(event_uid != '') {
             var urlparams = '?action=deleteEvent&data={"uid":"'+ event_uid +'"}';
             Ext.Ajax.request({
                     url: "processes_Ajax.php"+ urlparams,
@@ -1800,7 +1799,7 @@ MyWorkflow.prototype.deleteEvent = function(eventObj){
                         Ext.Msg.alert ('Failure');
                     }
                 });
-        }
+     }
 }
 
 MyWorkflow.prototype.getDeleteCriteria = function()
@@ -1821,7 +1820,6 @@ MyWorkflow.prototype.getDeleteCriteria = function()
   }
   else if(shape.match(/Event/) && shape.match(/End/)){
     workflow.currentSelection.actiontype = 'deleteEndEvent';
-    
   }
   else if(shape.match(/Event/) && shape.match(/Inter/)){
     workflow.currentSelection.actiontype = 'deleteInterEvent';
@@ -1855,8 +1853,10 @@ MyWorkflow.prototype.zoom = function(sType)
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    if(typeof fig.limitFlag == 'undefined'){
-     fig.orgXPos = fig.getX();
-     fig.orgYPos = fig.getY();
+     if(typeof fig.orgXPos == 'undefined') {
+       fig.orgXPos = fig.getX();
+       fig.orgYPos = fig.getY();
+     }
      fig.orgFontSize =fig.fontSize;
      if(fig.boundaryEvent == true){
        fig.orgx3Pos = fig.x3;
@@ -1870,7 +1870,6 @@ MyWorkflow.prototype.zoom = function(sType)
      fig.originalHeight = fig.getHeight();
      fig.limitFlag = true;
    }
-   
    
    var width  = fig.originalWidth*sType;
    var height = fig.originalHeight*sType;

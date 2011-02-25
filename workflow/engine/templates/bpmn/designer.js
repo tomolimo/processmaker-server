@@ -870,11 +870,18 @@ Ext.onReady ( function() {
       {
           var xOffset    = workflow.getAbsoluteX();
           var yOffset    = workflow.getAbsoluteY();
+          var scrollLeft = workflow.getScrollLeft();
+          var scrollTop  = workflow.getScrollTop();
           if(data.name == 'bpmnTask') {
               workflow.boundaryEvent = false;
           }
+          if(typeof workflow.zoomfactor == 'undefined') {
+              workflow.zoomfactor = 1;
+          }
           workflow.task_width='';
           workflow.annotationName='Annotation';
+          workflow.orgXPos = eval(e.xy[0]/workflow.zoomfactor);
+          workflow.orgYPos = eval(e.xy[1]/workflow.zoomfactor);
           NewShape = eval("new "+data.name+"(workflow)");
           NewShape.x = e.xy[0];
           NewShape.y = e.xy[1];
@@ -896,9 +903,6 @@ Ext.onReady ( function() {
             NewShape.mode = 'ddGateway';
             workflow.saveShape(NewShape);      //Saving Annotations when user drags and drops it
           }
-
-          var scrollLeft = workflow.getScrollLeft();
-          var scrollTop  = workflow.getScrollTop();
           workflow.addFigure(NewShape,e.xy[0]-xOffset+scrollLeft,e.xy[1]-yOffset+scrollTop);
           return true;
       }
@@ -1015,8 +1019,6 @@ Ext.onReady ( function() {
       //Create all shapes
       for(var j=0;j< shapeType.length;j++)
       {
-          //  _4562.workflow.taskNo=0;
-          
           switch(shapeType[j])
           {
               case 'tasks':
@@ -1044,6 +1046,8 @@ Ext.onReady ( function() {
                       else {
                         workflow.task_height = shapes.tasks[k][5];
                       }
+                      workflow.orgXPos = shapes.tasks[k][2];
+                      workflow.orgYPos = shapes.tasks[k][3];
                       NewShape = eval("new bpmnTask(workflow)");
                       NewShape.x = shapes.tasks[k][2];
                       NewShape.y = shapes.tasks[k][3];
@@ -1069,11 +1073,10 @@ Ext.onReady ( function() {
                   }
                   break;
               case 'events':
-                      for(var k=0;k<shapes.events.length;k++){
+                      for(var k=0;k<shapes.events.length;k++) {
                           var srceventtype = shapes.events[k][1];
                           var tas_uid = shapes.events[k][4];
-                          if(tas_uid != '')
-                          {
+                          if(tas_uid != '') {
                               NewShape = eval("new "+srceventtype+"(workflow)");
                               NewShape.x = shapes.events[k][2];
                               NewShape.y = shapes.events[k][3];
@@ -1083,7 +1086,7 @@ Ext.onReady ( function() {
                               NewShape.html.id = shapes.events[k][0];
                               NewShape.id = shapes.events[k][0];
                           }
-                          else if(tas_uid == ''){
+                          else if(tas_uid == '') {
                               NewShape = eval("new "+srceventtype+"(workflow)");
                               NewShape.x = shapes.events[k][2];
                               NewShape.y = shapes.events[k][3];

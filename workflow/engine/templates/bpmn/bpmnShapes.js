@@ -18,6 +18,9 @@ bpmnTask = function (oWorkflow) {
        this.originalHeight = 40;
    }
 
+   this.orgXPos = oWorkflow.orgXPos;
+   this.orgYPos = oWorkflow.orgYPos;
+   
    this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
    this.html.addClass('x-task');
 };
@@ -223,9 +226,10 @@ bpmnTask.prototype.paint = function () {
 
 Figure.prototype.onDragend=function() {
   if(typeof workflow.currentSelection != 'undefined' && workflow.currentSelection != null){
-    var currObj =workflow.currentSelection;
-    currObj.orgXPos  = currObj.getX();
-    currObj.orgYPos  = currObj.getY();
+    var currObj = workflow.currentSelection;
+    currObj.orgXPos  = eval(currObj.getX()/workflow.zoomfactor);
+    currObj.orgYPos  = eval(currObj.getY()/workflow.zoomfactor);
+    //setPosition();
     if(typeof currObj.id != 'undefined' && currObj.id.length == 32){
       switch (currObj.type) {
         case 'bpmnTask':
