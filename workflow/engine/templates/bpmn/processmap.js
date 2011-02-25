@@ -170,7 +170,7 @@ Ext.onReady ( function() {
   }
  
   var eastPanelTree = new Ext.tree.TreePanel({
-    useArrows: true,
+    useArrows: false,
     autoScroll: true,
     animate: true,
     //autoHeight: true,
@@ -199,49 +199,25 @@ Ext.onReady ( function() {
     }
   });
   
+  // tree east panel selection change
+  eastPanelTree.getSelectionModel().on('selectionchange', function(tree, node){
+    propertyStore.reload({params: {
+      action : 'getProperties',
+      UID    : node.attributes.id,
+      type   : node.attributes.type
+    }});
+    
+    //propertiesGrid.store.sort('name','DESC');
+    propertiesGrid.setSource(propertyStore.reader.jsonData.prop);
+    
+  })
+
   var ActiveProperty = new Ext.form.Checkbox({
     name        : 'active',
     fieldLabel : 'Active',
     checked    : true,
     inputValue : '1'
   });
-
-  /*var comboCategory = new Ext.form.ComboBox({
-    fieldLabel : 'Category',
-    hiddenName : 'category',
-    store : new Ext.data.Store( {
-      proxy : new Ext.data.HttpProxy( {
-        url : '../processes/ajaxListener',
-        method : 'POST'
-      }),
-      baseParams : {
-        action : 'categoriesList'
-      },
-      reader : new Ext.data.JsonReader( {
-        root : 'rows',
-        fields : [ {
-          name : 'CATEGORY_UID'
-        }, {
-          name : 'CATEGORY_NAME'
-        } ]
-      })
-    }),
-    valueField : 'CATEGORY_UID',
-    displayField : 'CATEGORY_NAME',
-    triggerAction : 'all',
-    emptyText : TRANSLATIONS.ID_SELECT,
-    selectOnFocus : true,
-    editable : true,
-    width: 180,
-    allowBlank : true,
-    autocomplete: true,
-    typeAhead: true,
-    allowBlankText : ' ',
-    listeners:{
-      scope: this,
-      'select': function() {
-      }}
-  })*/
 
   var comboCategory = new Ext.form.ComboBox({
     fieldLabel    : 'Category',
@@ -315,8 +291,7 @@ Ext.onReady ( function() {
         scrollOffset: 2 // the grid will never have scrollbars
     },
     customEditors: {
-      //'Category': new Ext.grid.GridEditor(comboCategory),
-      'Debug' : new Ext.grid.GridEditor(ActiveProperty),
+      //'Debug' : new Ext.grid.GridEditor(ActiveProperty),
       'Category' : new Ext.grid.GridEditor(comboCategory),
       'Calendar' : new Ext.grid.GridEditor(comboCalendar)
     }
@@ -357,15 +332,8 @@ Ext.onReady ( function() {
     listeners: {
       load: {
         fn: function(store, records, options){
-          // get the property grid component
-          var propGrid = Ext.getCmp('propGrid');
-          // make sure the property grid exists
-          if (propGrid) {
-            // populate the property grid with store data
-            //propGrid.getColumnModel().getColumnById('name').sortable = false;
-            propGrid.store.sort('name','DESC');
-            propGrid.setSource(store.reader.jsonData.prop);
-          }
+          //propertiesGrid.store.sort('name','DESC');
+          propertiesGrid.setSource(store.reader.jsonData.prop);
         }
       }
     },
@@ -375,19 +343,6 @@ Ext.onReady ( function() {
       type   : 'process'
     }
   });
-
-
-  /*propertiesGrid.setSource({
-      ttile: 'Properties Grid',
-      Description: false,
-      Calendar: true,
-      Category: false,
-      created: new Date(Date.parse('10/15/2006')),
-      tested: false,
-      version: 0.01,
-      borderWidth: 1
-  });*/
-
 
   var east = new Ext.Panel({
     id         : 'eastPanel',

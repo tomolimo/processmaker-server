@@ -281,13 +281,17 @@ class Ajax
 
     
     $rootNode->id = $process->getProUid();
+    $rootNode->type = 'process';
     $rootNode->text = $process->getProTitle();
     $rootNode->leaf = count($tasksList) > 0 ? false : true;
+    $rootNode->iconCls = 'ss_sprite ss_application';
     $rootNode->expanded =true;
     foreach($tasksList as $task) {
       $node = new stdClass;
       $node->id = $task['TAS_UID'];
+      $node->type = 'task';
       $node->text = $task['TAS_TITLE'];
+      $node->iconCls = 'ss_sprite ss_layout';
       $node->leaf = true;
       $rootNode->children[] = $node;
     }
@@ -306,23 +310,34 @@ class Ajax
         G::LoadClass('processMap');
         $oProcessMap = new processMap(new DBConnection);
         $process = $oProcessMap->editProcessNew($param['UID']);
-        //print_R($process);
-
         $category = ProcessCategoryPeer::retrieveByPk($process['PRO_CATEGORY']);
         $categoryName = is_object($category) ? $category->getCategoryName(): '';
         $calendar = CalendarDefinitionPeer::retrieveByPk($process['PRO_CALENDAR']);
         $calendarName = is_object($calendar) ? $calendar->getCalendarName(): '';
+        
         $properties['Title']       = $process['PRO_TITLE'];
         $properties['Description'] = $process['PRO_DESCRIPTION'];
         $properties['Calendar']    = $calendarName;
         $properties['Category']    = $categoryName;
-        $properties['Debug']       = $process['PRO_DEBUG'];
+        $properties['Debug']       = $process['PRO_DEBUG'] == '1' ? true: false;
         
         $result->sucess = true;
         $result->prop = $properties;
       break;
 
       case 'task':
+        require_once 'classes/model/Task.php';
+        $task = new Task();
+        $taskData = $task->load($param['UID']);
+        
+        $properties['Title'] = $taskData['TAS_TITLE'];
+        $properties['Description'] = $taskData['TAS_DESCRIPTION'];
+        $properties['Variable for case priority'] = $taskData['TAS_PRIORITY_VARIABLE'];
+        $properties['Stating Task'] = $taskData['TAS_START'] == '1' ? true: false;
+       
+        $result->sucess = true;
+        $result->prop = $properties;
+        
       break;
     }
 
