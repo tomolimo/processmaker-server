@@ -22,16 +22,16 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-  session_start();
-  if( ! isset($_GET['p']) )
-    if ( isset ( $_SESSION['phpFileNotFound'] ) )
-      $uri = $_SESSION['phpFileNotFound'];
-    else
-      $uri = 'undefined';
-  else
-    $uri = $_GET['p'];
+ session_start();
+ 
+ if ( isset ( $_SESSION['phpFileNotFound'] ) )
+   $uri = $_SESSION['phpFileNotFound'];
+ else if ( isset ( $_GET['l'] ) )
+   $uri = $_GET['l'];
+ else
+   $uri = 'undefined';
   
-  $referer =  isset ( $_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+ $referer =  isset ( $_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SESSION['phpLastFileFound'];
   
  $ERROR_TEXT = "404 Not Found ";
  $ERROR_DESCRIPTION = "

@@ -63,6 +63,7 @@
   define( 'PATH_WORKFLOW_MSSQL_DATA',  PATH_CORE . 'data' . PATH_SEP.'mssql'.PATH_SEP);
   define( 'PATH_RBAC_MSSQL_DATA',  PATH_RBAC_CORE . 'data' . PATH_SEP.'mssql'.PATH_SEP);
 
+  define( 'PATH_CONTROLLERS',  PATH_CORE . 'controllers' . PATH_SEP );
 
 //************ include Gulliver Class **************
   require_once( PATH_GULLIVER . PATH_SEP . 'class.g.php');

@@ -1165,7 +1165,7 @@ class G
       }
       
       $_SESSION['phpFileNotFound'] = $file;
-      G::header("location: /errors/error404.php?p=$filename");
+      G::header("location: /errors/error404.php?l=".$_SERVER['REQUEST_URI']);
     }
 
     switch ( strtolower($typefile ) ) {

@@ -237,6 +237,9 @@ $startingTime =  array_sum(explode(' ',microtime()));
   G::LoadSystem("xmlMenu");
   G::LoadSystem('dvEditor');
   G::LoadSystem('table');
+  G::LoadSystem('controller');
+  G::LoadSystem('httpProxyController');
+  G::LoadSystem('pmException');
   //G::LoadSystem('pagedTable');
 
 //************** Installer, redirect to install if we don't have a valid shared data folder ***************/
@@ -434,10 +437,11 @@ $startingTime =  array_sum(explode(' ',microtime()));
   }
 
   //the index.php file, this new feature will allow automatically redirects to valid php file inside any methods folder
+  /* DEPRECATED
   if ( SYS_TARGET == '' ) {
     $phpFile = str_replace ( '.php', 'index.php', $phpFile );
     $phpFile = include ( $phpFile );
-  }
+  }*/
   $bWE = false;
   if ( substr(SYS_COLLECTION , 0,8) === 'gulliver' ) {
     $phpFile = PATH_GULLIVER_HOME . 'methods/' . substr( SYS_COLLECTION , 8) . SYS_TARGET.'.php';
@@ -463,16 +467,30 @@ $startingTime =  array_sum(explode(' ',microtime()));
       $bWE = true;
       //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
     }
-    if ( ! file_exists( $phpFile ) ) {
-        $_SESSION['phpFileNotFound'] = $phpFile;
+    
+    //erik: verify if it is a Controller Class or httpProxyController Class
+    $isControllerCall = false;
+    
+    if( is_file(PATH_CONTROLLERS . SYS_COLLECTION . '.php') ) {
+      require_once PATH_CONTROLLERS . SYS_COLLECTION . '.php';
+      $controllerClass  = SYS_COLLECTION;
+      //if the method name is empty set default to index method
+      $controllerAction = SYS_TARGET != '' ? SYS_TARGET : 'index';
+      //if the method exists
+      if( is_callable(Array($controllerClass, $controllerAction)) ) {
+        $isControllerCall = true;
+      }
+    }
+    
+    if ( ! $isControllerCall && ! file_exists( $phpFile ) ) {
+        $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         print $phpFile;
         header ("location: /errors/error404.php");
         die;
     }
   }
-//G::pr($_SESSION);
-//G::dump($avoidChangedWorkspaceValidation);die;  
-//redirect to login, if user changed the workspace in the URL
+  
+  //redirect to login, if user changed the workspace in the URL
   if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
     G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', "error");
@@ -536,7 +554,20 @@ $startingTime =  array_sum(explode(' ',microtime()));
         }
       }
     }
-    require_once( $phpFile );
+    $_SESSION['phpLastFileFound'] = $_SERVER['REQUEST_URI'];
+    
+    /***
+     * New feature for Gulliver framework to support Controllers & HttpProxyController classes handling 
+     * 
+     * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
+     */
+    if( $isControllerCall ) { //Instance the Controller object and call the request method
+      $controller = new $controllerClass();
+      $controller->setHttpRequestData($_REQUEST);
+      $controller->call($controllerAction);
+    } else
+      require_once( $phpFile );
+        
     if ( defined('SKIP_HEADERS') ) {
       header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
       header('Cache-Control: public');
