@@ -380,7 +380,9 @@ InputPort.prototype.onDrop = function (port) {
       workflow.saveEvents(workflow.currentSelection);
     }
     else if(bpmnType.match(/Annotation/)) { //Routing from task to Annotation
+      _4070.setConnection(new DottedConnection());
       newObj = port.parentNode;
+      newObj.conn = _4070.connection;
       preObj = this.workflow.currentSelection;
       newObj.actiontype = 'updateText';
       this.workflow.saveShape(newObj);
@@ -450,7 +452,9 @@ OutputPort.prototype.onDrop = function (port) {
       this.workflow.saveRoute(newObj,preObj);
     }
     else if(port.parentNode.type.match(/Annotation/)){ //Routing from task to Annotation
+      _4070.setConnection(new DottedConnection());
       newObj = port.parentNode;
+      newObj.conn = _4070.connection;
       preObj = this.workflow.currentSelection;
       newObj.actiontype = 'updateText';
       this.workflow.saveShape(newObj);
@@ -1039,7 +1043,12 @@ bpmnTask.prototype.addShapes = function (oStore) {
     //Assigning values to newShape Object for Saving Task automatically (Async Ajax Call)
     newShape.x = xOffset;
     newShape.y = yOffset;
-    var conn = new DecoratedConnection();
+
+    if(shape.match(/Annotation/) || oStore.newShapeName.match(/Annotation/))
+        var conn = new DottedConnection();
+    else
+            conn = new DecoratedConnection();
+    
     if (newShape.type.match(/Gateway/)) {
         conn.setTarget(newShape.getPort("input2"));
         conn.setSource(workflow.currentSelection.getPort("output1"));

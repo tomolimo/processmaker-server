@@ -470,7 +470,7 @@ Ext.onReady ( function() {
     width:100,
     height:2000,
     xtype	:	"iframepanel",
-    title   : _('ID_PROCESSMAP_TITLE') + ' - ' + pro_title,
+    title   : _('ID_PROCESSMAP_TITLE') + ' - ' + pro_title+ ' (100%)',
 
     frameConfig:{name:'designerFrame', id:'designerFrame'},
     defaultSrc : 'designer?PRO_UID=' + pro_uid,
@@ -520,36 +520,43 @@ Ext.onReady ( function() {
           items: [{
               text    : '25%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (25%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('25');
                }
             },{
               text    : '50%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (50%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('50');
                }
             },{
               text    : '75%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (75%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('75');
                }
             },{
               text    : '100%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (100%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('100');
                }
             },{
               text    : '125%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (125%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('125');
                }
             },{
               text    : '150%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (150%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('150');
                }
             },{
               text    : '200%',
                handler: function() {
+                   Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title + ' (200%)' );
                    document.getElementById('designerFrame').contentWindow.workflow.zoom('200');
                }
             }

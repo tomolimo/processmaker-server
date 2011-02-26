@@ -1846,11 +1846,11 @@ MyWorkflow.prototype.zoom = function(sType)
 
    var lines=workflow.getLines();
    var size=lines.getSize();
-   
+  
    sType =sType/100;
    workflow.zoomfactor = sType;
    var figSize = figures.getSize();
-   loadMask.show();
+  // loadMask.show();
    for(f = 0;f<figures.getSize();f++){
    var fig = figures.get(f);
    if(typeof fig.limitFlag == 'undefined'){
@@ -1907,7 +1907,7 @@ MyWorkflow.prototype.zoom = function(sType)
        fig.orgy5Pos = fig.y5;
      }
    }
-   loadMask.hide();
+  // loadMask.hide();
 }
 
 MyWorkflow.prototype.redrawTaskText = function(fig){

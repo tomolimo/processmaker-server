@@ -44,7 +44,7 @@ ArrowLine.prototype.paint=function(){
   this.graphics.drawPolyLine(rotX,rotY);
   this.graphics.paint();
 };
-/*
+
 DottedConnection=function(){
 ArrowLine.call(this);
 this.sourcePort=null;
@@ -112,7 +112,7 @@ this.setStartPoint(this.sourcePort.getAbsoluteX(),this.sourcePort.getAbsoluteY()
 this.setEndPoint(this.targetPort.getAbsoluteX(),this.targetPort.getAbsoluteY());
 }
 };
-*/
+
 
 
 bpmnAnnotation = function (oWorkflow) {
