@@ -519,10 +519,10 @@ Ext.onReady ( function() {
             PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
           
           if( typeof parent != 'undefined' ) {
+            var tu_type = '';
             parent.Ext.getCmp('eastPanel').show();
             parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);
-            
-            parent.Ext.getCmp('usersTaskGrid').store.reload({params: {action:'getUsersTask', TAS_UID: _TAS_UID}});
+            parent.Ext.getCmp('usersTaskGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: tu_type}});
           }
         } else {
           PMExt.error(_('ID_ERROR'), result.msg)

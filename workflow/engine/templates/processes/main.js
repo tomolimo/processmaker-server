@@ -67,14 +67,10 @@ Ext.onReady(function(){
       hiddenName : 'category',
       store : new Ext.data.Store( {
         proxy : new Ext.data.HttpProxy( {
-          url : 'ajaxListener',
+          url : '../processProxy/categoriesList',
           method : 'POST'
         }),
-        baseParams : {
-          action : 'categoriesList'
-        },
         reader : new Ext.data.JsonReader( {
-          root : 'rows',
           fields : [ {
             name : 'CATEGORY_UID'
           }, {

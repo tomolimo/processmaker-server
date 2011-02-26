@@ -48,6 +48,7 @@ class ProcessCategory extends BaseProcessCategory {
 
     $c->add(ProcessCategoryPeer::CATEGORY_NAME, $sCategoryName);
     $dataset = ProcessCategoryPeer::doSelectRS($c);
+    $dataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $dataset->next();
     $aRow = $dataset->getRow();
     return $aRow;

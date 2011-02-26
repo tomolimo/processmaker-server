@@ -1,17 +1,15 @@
 var _TAS_UID;
 var processObj;
-//var ProcessMapObj;
 
 Ext.onReady ( function() {
   new Ext.KeyMap(document, {
     key: Ext.EventObject.F5,
     fn: function(keycode, e) {
-      //e.stopEvent();
+      e.stopEvent();
     }
   });
 
   processObj = new ProcessOptions();
-  //ProcessMapObj = new ProcessMapContext();
 
   var west= {
     id         : 'palette',
@@ -32,7 +30,7 @@ Ext.onReady ( function() {
 
   var usersTaskStore = new Ext.data.GroupingStore( {
     autoLoad: false,
-    url: '../processes/ajaxListener',
+    url: '../processProxy/getActorsTask',
     reader : new Ext.data.JsonReader({
       totalProperty: 'totalCount',
       root: 'data',
@@ -45,10 +43,7 @@ Ext.onReady ( function() {
         {name : 'TU_RELATION'}
       ]
     }),
-    baseParams: {
-      action: 'getUsersTask',
-      TAS_UID: '4619962094d5d499f746ca7075681567'
-    },
+    baseParams: {tas_uid: '', tu_type: ''},
     groupField: 'TU_RELATION'
   });
 
@@ -187,9 +182,8 @@ Ext.onReady ( function() {
     collapseMode:'mini',
     loader : new Ext.tree.TreeLoader({
       preloadChildren : true,
-      dataUrl : '../processes/ajaxListener',
+      dataUrl : '../processProxy/getProcessDetail',
       baseParams : {
-        action : 'getProcessDetail',
         PRO_UID: pro_uid
       }
     }),
@@ -205,8 +199,10 @@ Ext.onReady ( function() {
   eastPanelTree.getSelectionModel().on('selectionchange', function(tree, node){
     if( node.attributes.type == 'task') {
       _TAS_UID = node.attributes.id;
+      tu_type = '';
+      
       Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
-      Ext.getCmp('usersTaskGrid').store.reload({params: {action:'getUsersTask', TAS_UID: _TAS_UID}});
+      Ext.getCmp('usersTaskGrid').store.reload({params: {tas_uid: _TAS_UID, tu_type: tu_type}});
     } else {
       Ext.getCmp('usersPanelTabs').setActiveTab(0);
       Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = 'none';
@@ -236,14 +232,14 @@ Ext.onReady ( function() {
     store        : new Ext.data.Store( {
       //autoLoad: true,  //autoload the data
       proxy : new Ext.data.HttpProxy( {
-        url : '../processes/ajaxListener',
+        url : '../processProxy/getCategoriesList',
         method : 'POST'
       }),
       baseParams : {
         action : 'getCategoriesList'
       },
       reader : new Ext.data.JsonReader( {
-        root : 'rows',
+        //root : 'rows',
         fields : [
           {name : 'CATEGORY_UID'},
           {name : 'CATEGORY_NAME'}
@@ -341,9 +337,8 @@ Ext.onReady ( function() {
       type = 'process';
     } 
     Ext.Ajax.request({
-      url: '../processes/ajaxListener',
+      url: '../processProxy/saveProperties',
       params: {
-        action : 'saveProperties',
         UID: UID,
         type: type,
         property: r.record.data.name,
@@ -368,7 +363,7 @@ Ext.onReady ( function() {
   var propertyStore = new Ext.data.JsonStore({
     id: 'propertyStore',
     autoLoad: true,  //autoload the data
-    url: '../processes/ajaxListener',
+    url: '../processProxy/getProperties',
     root: 'prop',
     fields: ['title', 'description'],
     store: new Ext.grid.PropertyStore({
@@ -384,7 +379,6 @@ Ext.onReady ( function() {
       }
     },
     baseParams: {
-      action : 'getProperties',
       UID    : pro_uid,
       type   : 'process'
     }
