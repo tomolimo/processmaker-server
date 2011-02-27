@@ -149,13 +149,14 @@ Ext.onReady ( function() {
     
     //PMExt.confirm(_('ID_CONFIRM'), _('ID_REMOVE_USERS_CONFIRM'), function(){
       Ext.Ajax.request({
-        url   : '../processes/ajaxListener',
+        url   : '../processProxy/removeActorsTask',
         method: 'POST',
         params: {
           action : 'removeUsersTask',
           USR_UID: usr_uid,
           TU_RELATION: tu_relation,
-          TAS_UID: _TAS_UID
+          TAS_UID: _TAS_UID,
+          TU_TYPE: 1
         },
         success: function(response) {
           var result = Ext.util.JSON.decode(response.responseText);
@@ -262,8 +263,8 @@ Ext.onReady ( function() {
     allowBlank     : true,
     store        : new Ext.data.Store( {
       //autoLoad: true,  //autoload the data
-      proxy : new Ext.data.HttpProxy({ url: '../processes/ajaxListener'}),
-      baseParams : {action: 'getCaledarList'},
+      proxy : new Ext.data.HttpProxy({ url: '../processProxy/getCaledarList'}),
+      //baseParams : {action: 'getCaledarList'},
       reader : new Ext.data.JsonReader( {
         root : 'rows',
         fields : [
@@ -287,8 +288,8 @@ Ext.onReady ( function() {
     allowBlank     : true,
     store        : new Ext.data.Store( {
       //autoLoad: false,  //autoload the data
-      proxy : new Ext.data.HttpProxy({ url: '../processes/ajaxListener'}),
-      baseParams : {action: 'getPMVariables', PRO_UID: pro_uid},
+      proxy : new Ext.data.HttpProxy({ url: '../processProxy/getPMVariables'}),
+      baseParams : {PRO_UID: pro_uid},
       reader : new Ext.data.JsonReader( {
         root : 'rows',
         fields : [ 

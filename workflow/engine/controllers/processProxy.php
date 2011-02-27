@@ -116,94 +116,82 @@ class ProcessProxy extends HttpProxyController
     }
   }
 
+  /**
+   * Get users list
+   * 
+   * @param $params httpdata object
+   */
   function getUsers($params)
   {
     require_once 'classes/model/Users.php';
-    G::LoadClass('configuration');
-    $conf = new Configurations;
-    
-    $search = isset($params['search']) ? $params['search']: null;    
-    $users = Users::getAll($params['start'], $params['limit'], $search);
-    
-    foreach($users->data as $i=>$user){
-      $users->data[$i]['USER'] = $conf->getEnvSetting(
-        'format',
-        Array(
-          'userName'=>$user['USR_USERNAME'],
-          'firstName'=>$user['USR_FIRSTNAME'],
-          'lastName'=>$user['USR_LASTNAME']
-        )
-      );
-    }
-    print G::json_encode($users);
+    $search = isset($params->search) ? $params->search: null;    
+    return Users::getAll($params->start, $params->limit, $search);
   }
 
+  /**
+   * Get groups list
+   * 
+   * @param $params httpdata object
+   */
   function getGroups($params)
   {
     require_once 'classes/model/Groupwf.php';
     $search = isset($params['search']) ? $params['search']: null;
-    $groups = Groupwf::getAll($params['start'], $params['limit'], $search);
-
-    print G::json_encode($groups);
+    return Groupwf::getAll($params['start'], $params['limit'], $search);
   }
 
-  function assignUsersTask($param)
+  /**
+   * Assign actors to task
+   * 
+   * @param unknown_type $param
+   */
+  function assignActorsTask($param)
   {
-    try{
-      require_once 'classes/model/TaskUser.php';
-      require_once 'classes/model/Task.php';
-      $oTaskUser = new TaskUser();
-      $UIDS = explode(',', $param['UIDS']);
-      $TU_TYPE = 1;
+    require_once 'classes/model/TaskUser.php';
+    require_once 'classes/model/Task.php';
+    $oTaskUser = new TaskUser();
+    $UIDS = explode(',', $param->UIDS);
+    $TU_TYPE = $param->TU_TYPE;
+    $TAS_UID = $param->TAS_UID;
 
-      foreach( $UIDS as $UID ) {
-        if ($_POST['TU_RELATION'] == 1 )
-          $oTaskUser->create(array('TAS_UID' => $param['TAS_UID'], 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 1));
-        else
-          $oTaskUser->create(array('TAS_UID' => $param['TAS_UID'], 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 2));
-      }
-      $task = TaskPeer::retrieveByPk($param['TAS_UID']);
-
-      $result->success = true;
-      if( count($UIDS) > 1 )
-        $result->msg = __('ID_ACTORS_ASSIGNED_SUCESSFULLY', SYS_LANG, Array(count($UIDS), $task->getTasTitle()));
+    foreach( $UIDS as $UID ) {
+      if ($param->TU_RELATION == '1' )
+        $oTaskUser->create(array('TAS_UID' => $TAS_UID, 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 1));
       else
-        $result->msg = __('ID_ACTOR_ASSIGNED_SUCESSFULLY', SYS_LANG, Array('tas_title'=>$task->getTasTitle()));
-    } catch(Exception $e){
-      $result->success = false;
-      $result->msg = $e->getMessage();
+        $oTaskUser->create(array('TAS_UID' => $TAS_UID, 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 2));
     }
+    $task = TaskPeer::retrieveByPk($TAS_UID);
 
-    print G::json_encode($result);
+    $this->success = true;
+    if( count($UIDS) > 1 )
+      $this->msg = __('ID_ACTORS_ASSIGNED_SUCESSFULLY', SYS_LANG, Array(count($UIDS), $task->getTasTitle()));
+    else
+      $this->msg = __('ID_ACTOR_ASSIGNED_SUCESSFULLY', SYS_LANG, Array('tas_title'=>$task->getTasTitle()));
   }
 
-  function removeUsersTask($param)
+  /**
+   * Remove Actors from Task
+   * 
+   * @param $param
+   */
+  function removeActorsTask($param)
   {
-    try{
-      require_once 'classes/model/TaskUser.php';
-      $oTaskUser = new TaskUser();
-      $USR_UIDS = explode(',', $param['USR_UID']);
-      $TU_RELATIONS = explode(',', $param['TU_RELATION']);
-      $TU_TYPE = 1;
+    require_once 'classes/model/TaskUser.php';
+    $oTaskUser = new TaskUser();
+    $USR_UIDS = explode(',', $param->USR_UID);
+    $TU_RELATIONS = explode(',', $param->TU_RELATION);
+    $TU_TYPE = $param->TU_TYPE;
 
-      foreach($USR_UIDS as $i=>$USR_UID) {
-        if ($TU_RELATIONS[$i] == 1 ){
-          
-          $oTaskUser->remove($param['TAS_UID'], $USR_UID, $TU_TYPE, 1);
-          
-        } else {
-          $oTaskUser->remove($param['TAS_UID'], $USR_UID, $TU_TYPE, 2);
-        }
+    foreach($USR_UIDS as $i=>$USR_UID) {
+      if ($TU_RELATIONS[$i] == 1 ){
+        $oTaskUser->remove($param->TAS_UID, $USR_UID, $TU_TYPE, 1);
+      } else {
+        $oTaskUser->remove($param->TAS_UID, $USR_UID, $TU_TYPE, 2);
       }
-
-      $result->success = true;
-      $result->msg = '';
-    } catch(Exception $e){
-      $result->success = false;
-      $result->msg = $e->getMessage();
     }
 
-    print G::json_encode($result);
+    $this->success = true;
+    $this->msg = '';
   }
 
   
@@ -392,6 +380,9 @@ class ProcessProxy extends HttpProxyController
     $this->sucess = true;
   }
 
+  /**
+   * get calendar list 
+   */
   function getCaledarList()
   {
     G::LoadClass('calendar');
@@ -399,20 +390,23 @@ class ProcessProxy extends HttpProxyController
     $calendarObj = $calendar->getCalendarList(true, true);
     $calendarObj['array'][0] = Array('CALENDAR_UID'=>'', 'CALENDAR_NAME'=>'');
     
-    $response->rows = $calendarObj['array'];
-
-    print G::json_encode($response);
+    $this->rows = $calendarObj['array'];
   }
   
+  /**
+   * Get PM Variables
+   * 
+   * @param $param{PRO_UID}
+   */
   function getPMVariables($param)
   {
     G::LoadClass('processMap');
     $oProcessMap = new processMap(new DBConnection);
-    $response->rows = getDynaformsVars($param['PRO_UID']);
-    foreach($response->rows as $i=>$var){
-      $response->rows[$i]['sName'] = "@@{$var['sName']}";
+    $rows = getDynaformsVars($param->PRO_UID);
+    foreach($rows as $i=>$var){
+      $rows[$i]['sName'] = "@@{$var['sName']}";
     }
-    print G::json_encode($response);
+    $this->rows = $rows;
   }
   
 }

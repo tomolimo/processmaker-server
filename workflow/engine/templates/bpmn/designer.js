@@ -267,9 +267,9 @@ Ext.onReady ( function() {
   usersPanelLimit = 1000;
   
   var usersStore = new Ext.data.Store( {
-    autoLoad: true,
+    autoLoad: false,
     proxy : new Ext.data.HttpProxy({
-      url: '../processes/ajaxListener?action=getUsers&start='+usersPanelStart+'&limit='+usersPanelLimit
+      url: '../processProxy/getUsers?start='+usersPanelStart+'&limit='+usersPanelLimit
     }),
     reader : new Ext.data.JsonReader( {
       totalProperty: 'totalCount',
@@ -350,9 +350,9 @@ Ext.onReady ( function() {
   });
 
   var groupsStore = new Ext.data.Store( {
-    autoLoad: true,
+    autoLoad: false,
     proxy : new Ext.data.HttpProxy({
-      url: '../processes/ajaxListener?action=getGroups&start='+usersPanelStart+'&limit='+usersPanelLimit
+      url: '../processProxy/getGroups?start='+usersPanelStart+'&limit='+usersPanelLimit
     }),
     reader : new Ext.data.JsonReader( {
       totalProperty: 'totalCount',
@@ -509,7 +509,7 @@ Ext.onReady ( function() {
       parent.Ext.getCmp('eastPanelCenter').setTitle(Ext.getCmp('usersPanel')._targetTask.name);
     }
     Ext.Ajax.request({
-      url: '../processes/ajaxListener',
+      url: '../processProxy/assignActorsTask',
       success: function(response){
         var result = Ext.util.JSON.decode(response.responseText);
         if( result.success ) {
@@ -521,6 +521,7 @@ Ext.onReady ( function() {
           if( typeof parent != 'undefined' ) {
             var tu_type = '';
             parent.Ext.getCmp('eastPanel').show();
+            parent.Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
             parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);
             parent.Ext.getCmp('usersTaskGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: tu_type}});
           }
@@ -530,9 +531,9 @@ Ext.onReady ( function() {
       },
       failure: function(){},
       params: {
-        action : 'assignUsersTask',
         TAS_UID     : _TAS_UID,
         TU_RELATION : type,
+        TU_TYPE     : 1,
         UIDS        : uids
       }
     });
@@ -546,6 +547,10 @@ Ext.onReady ( function() {
     usersPanel.setPosition(0, divScroll.scrollTop);
   }, this);
   
+  usersPanel.on('afterrender', function(e) {
+    Ext.getCmp('usersGrid').store.load();
+    Ext.getCmp('groupsGrid').store.load();
+  }, this);
 
   //usersPanel.show();
   var divScroll = document.body;
