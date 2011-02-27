@@ -203,13 +203,9 @@ class ProcessProxy extends HttpProxyController
   function getActorsTask($httpData)
   {
     require_once 'classes/model/TaskUser.php';
-    G::LoadClass('configuration');
     $usersTaskList = Array();
-    $task = new TaskUser;
-    $conf = new Configurations;
-    $TU_TYPE = 1;
-    
-    $usersTask = $task->getUsersTask($httpData->tas_uid, $TU_TYPE);
+    $task = new TaskUser();
+    $usersTask = $task->getUsersTask($httpData->tas_uid, $httpData->tu_type);
     
     foreach($usersTask->data as $userTask) {
       $usersTaskListItem['TAS_UID'] = $userTask['TAS_UID'];

@@ -2,6 +2,7 @@
 var saveProcess;
 var usersPanel;
 var _TAS_UID;
+var _TU_TYPE;
 var processObj;
 var ProcessMapObj;
 
@@ -266,7 +267,7 @@ Ext.onReady ( function() {
   usersPanelStart = 0;
   usersPanelLimit = 1000;
   
-  var usersStore = new Ext.data.Store( {
+  var usersStore = new Ext.data.Store({
     autoLoad: false,
     proxy : new Ext.data.HttpProxy({
       url: '../processProxy/getUsers?start='+usersPanelStart+'&limit='+usersPanelLimit
@@ -457,6 +458,21 @@ Ext.onReady ( function() {
         ]
       })
     ],
+    tbar:[
+     {
+      text: 'AD HOC',
+      icon:'/images/cases-folders.png',
+      id: 'adHocPress',
+      enableToggle: true,
+      toggleHandler: function(item, pressed){
+        ///alert(item.id);
+      },
+      allowDepress: true,
+      pressed: false,
+      handler: function(){
+        //alert(Ext.getCmp('adHocPress').pressed);
+      }
+    }],
     tools: [
       /*{
         id:'help',
@@ -485,20 +501,20 @@ Ext.onReady ( function() {
   usersPanel._targetTask = null;
   
   usersPanel._onDrop = function(ddSource, e, data) {
+    var type = Ext.getCmp('usersPanelTabs').getActiveTab().id == 'usersGrid' ? 1 : 2;
+    var records = ddSource.dragData.selections;
+    var uids = Array();
     _TAS_UID = Ext.getCmp('usersPanel')._targetTask.id;
+    _TU_TYPE = Ext.getCmp('adHocPress').pressed ? 2 : 1;
+    
     if( typeof parent != 'undefined' ) {
       parent._TAS_UID = _TAS_UID;
     }
     
-    var type = Ext.getCmp('usersPanelTabs').getActiveTab().id == 'usersGrid' ? 1 : 2;
-    var records = ddSource.dragData.selections;
-    var uids = Array();
     Ext.each(records, function(gridRow){
       if( type == 1 ) {//some users grid items were dropped       
-        //alert('usr_uid ->'+gridRow.data.USR_UID);
         uids.push(gridRow.data.USR_UID);
       } else { //some groups grid items were dropped
-        //alert('grp_uid ->'+gridRow.data.GRP_UID);
         uids.push(gridRow.data.GRP_UID);
       }
     });
@@ -519,11 +535,16 @@ Ext.onReady ( function() {
             PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
           
           if( typeof parent != 'undefined' ) {
-            var tu_type = '';
             parent.Ext.getCmp('eastPanel').show();
             parent.Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
-            parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);
-            parent.Ext.getCmp('usersTaskGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: tu_type}});
+            parent.Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = '';
+            if( _TU_TYPE == 1 ) {
+              parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);
+              parent.Ext.getCmp('usersTaskGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: 1}});
+            } else {
+              parent.Ext.getCmp('usersPanelTabs').setActiveTab(2);
+              parent.Ext.getCmp('usersTaskAdHocGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: 2}});
+            }
           }
         } else {
           PMExt.error(_('ID_ERROR'), result.msg)
@@ -532,8 +553,8 @@ Ext.onReady ( function() {
       failure: function(){},
       params: {
         TAS_UID     : _TAS_UID,
+        TU_TYPE     : _TU_TYPE,
         TU_RELATION : type,
-        TU_TYPE     : 1,
         UIDS        : uids
       }
     });

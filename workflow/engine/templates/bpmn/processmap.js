@@ -1,5 +1,7 @@
 var _TAS_UID;
+var updateActorsGrids;
 var processObj;
+
 
 Ext.onReady ( function() {
   new Ext.KeyMap(document, {
@@ -107,10 +109,72 @@ Ext.onReady ( function() {
   usersTaskGrid.on('contextmenu', function (evt) {
       evt.preventDefault();
   }, this);
+  
+  //AD HOC
+  var usersTaskAdHocStore = new Ext.data.GroupingStore( {
+    autoLoad: false,
+    url: '../processProxy/getActorsTask',
+    reader : new Ext.data.JsonReader({
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'USR_UID'},
+        {name : 'USR_USERNAME'},
+        {name : 'USR_FIRSTNAME'},
+        {name : 'USR_LASTNAME'},
+        {name : 'NAME'},
+        {name : 'TU_RELATION'}
+      ]
+    }),
+    baseParams: {tas_uid: '', tu_type: ''},
+    groupField: 'TU_RELATION'
+  });
 
-  usersTaskGrid.on('keypress', function (e) {
-    alert(e.getKey());
-  }, this);
+  var usersTaskAdHocGrid = new Ext.grid.GridPanel({
+    id       : 'usersTaskAdHocGrid',
+    title    : _('ID_AD_HOC_ACTORS'),
+    height   : 180,
+    stateful : true,
+    stateId  : 'usersTaskAdHocGrid',
+    sortable:false,
+    view: new Ext.grid.GroupingView({
+      forceFit:true,
+      groupTextTpl: '{[values.rs.length]} {[values.rs[0].data["TU_RELATION"] == 1 ? "Users" : "Groups"]}'
+    }),
+    cm : new Ext.grid.ColumnModel({
+      defaults: {
+        width: 300,
+        sortable: true
+      },
+      columns : [
+        {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+        {header: 'Assigned', id:'TU_RELATION', dataIndex: 'TU_RELATION', hidden:true, hideable:false},
+        {header: 'User', dataIndex: 'USER', width: 249, renderer:function(v,p,r){
+          return _FNF(r.data.USR_USERNAME, r.data.USR_FIRSTNAME, r.data.USR_LASTNAME);
+        }}
+      ]
+    }),
+    store: usersTaskAdHocStore,
+    listeners: {
+      render: function(){
+        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+      }
+    }/*,
+    tbar:[
+      '->', {
+        text: _('ID_REMOVE'),
+        iconCls: 'button_menu_ext ss_sprite  ss_delete',
+        handler: removeUsersTask
+      }
+    ]*/,
+    bbar: [new Ext.PagingToolbar({
+      pageSize   : 10,
+      store      : usersTaskStore,
+      displayInfo: true,
+      displayMsg : '{2} Users',
+      emptyMsg   : ''
+    })]
+  });
   
 
   function onDynaformsContextMenu(grid, rowIndex, e) {
@@ -128,6 +192,10 @@ Ext.onReady ( function() {
       }
     ]
   });
+  
+  updateActorsGrids = function(){
+    
+  }
 
   function removeUsersTask(){
     
@@ -200,13 +268,15 @@ Ext.onReady ( function() {
   eastPanelTree.getSelectionModel().on('selectionchange', function(tree, node){
     if( node.attributes.type == 'task') {
       _TAS_UID = node.attributes.id;
-      tu_type = '';
       
       Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
-      Ext.getCmp('usersTaskGrid').store.reload({params: {tas_uid: _TAS_UID, tu_type: tu_type}});
+      Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = '';
+      Ext.getCmp('usersTaskGrid').store.reload({params: {tas_uid: _TAS_UID, tu_type: 1}});
+      Ext.getCmp('usersTaskAdHocGrid').store.reload({params: {tas_uid: _TAS_UID, tu_type: 2}});
     } else {
       Ext.getCmp('usersPanelTabs').setActiveTab(0);
       Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = 'none';
+      Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = 'none';
     }
     propertyStore.reload({params: {
       action : 'getProperties',
@@ -417,7 +487,8 @@ Ext.onReady ( function() {
             //height : 318,
             items  : [
               propertiesGrid,
-              usersTaskGrid
+              usersTaskGrid,
+              usersTaskAdHocGrid
             ]
           })
         ]
@@ -638,7 +709,9 @@ Ext.onReady ( function() {
     items:[main]
   });
   Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = 'none';
+  Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = 'none';
   //Ext.getCmp('eastPanel').hide();
   //Ext.getCmp('eastPanel').ownerCt.doLayout();
   
 });
+
