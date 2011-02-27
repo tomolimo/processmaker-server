@@ -400,27 +400,20 @@ function newProcess(){
     allowBlank : true,
       
     store : new Ext.data.Store( {
+      autoLoad: true,  //autoload the data
       proxy : new Ext.data.HttpProxy( {
-        url : 'ajaxListener',
+        url : '../processProxy/getCategoriesList',
         method : 'POST'
       }),
-      baseParams : {
-        action : 'processCategories'
-      },
+      
       reader : new Ext.data.JsonReader( {
-        root : 'rows',
         fields : [ {
           name : 'CATEGORY_UID'
         }, {
           name : 'CATEGORY_NAME'
         } ]
       })
-    }),
-    listeners:{
-      afterrender:function(){
-        ProcessCategories.store.load();
-      }
-    }
+    })
   });
 
   var frm = new Ext.FormPanel( {
@@ -477,8 +470,8 @@ function newProcess(){
 function saveProcess()
 {
   Ext.getCmp('newProcessForm').getForm().submit( {
-    url : 'ajaxListener?action=saveProcess',
-    waitMsg : 'Creating Process...',
+    url : '../processProxy/saveProcess',
+    waitMsg : _('ID_SAVING_PROCESS'),
     timeout : 36000,
     success : function(obj, resp) {
       var editor  = Ext.getCmp('editor').getValue().getGroupValue();
@@ -487,8 +480,8 @@ function saveProcess()
       else
         location.href = '../bpmn/processmap?PRO_UID='+resp.result.PRO_UID;
     },
-    failure: function(obj, result) {
-      Ext.Msg.alert( _('ID_ERROR'), resp.result.PRO_UID);
+    failure: function(obj, resp) {
+      //Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
     }
   });
 }
@@ -643,8 +636,8 @@ function activeDeactive(){
     }
 
     Ext.Ajax.request({
-      url : 'ajaxListener' ,
-      params : {action:'changeStatus', UIDS : ids },
+      url : '../processProxy/changeStatus',
+      params : { UIDS : ids },
       success: function ( result, request ) {
         store.reload();
         var activator = Ext.getCmp('activator');
@@ -679,8 +672,8 @@ function enableDisableDebug()
       ids += (i != 0 ? ',': '') + rows[i].get('PRO_UID');
 
     Ext.Ajax.request({
-      url : 'ajaxListener' ,
-      params : {action: 'changeDebugMode', UIDS: ids},
+      url : '../processProxy/changeDebugMode' ,
+      params : {UIDS: ids},
       success: function ( result, request ) {
         store.reload();
         var activator = Ext.getCmp('activator');
