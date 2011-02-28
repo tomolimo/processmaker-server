@@ -63,6 +63,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     $pmeCode = $_POST['form']['PME_CODE'];
     $pmeCode = str_replace("'", "''", $pmeCode);
     $pmeCode = str_replace('"', '""', $pmeCode);
+    $pmeCode = preg_replace("/\)\s*\n/", ") //\n", $pmeCode);
     $_POST['form']['PME_CODE'] = $pmeCode;
   }
 
