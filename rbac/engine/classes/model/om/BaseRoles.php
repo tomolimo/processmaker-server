@@ -60,14 +60,14 @@ abstract class BaseRoles extends BaseObject  implements Persistent {
 	 * The value for the rol_create_date field.
 	 * @var        int
 	 */
-	protected $rol_create_date = 943934400;
+	protected $rol_create_date;
 
 
 	/**
 	 * The value for the rol_update_date field.
 	 * @var        int
 	 */
-	protected $rol_update_date = 943934400;
+	protected $rol_update_date;
 
 
 	/**
@@ -312,7 +312,7 @@ abstract class BaseRoles extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->rol_create_date !== $ts || $ts === 943934400) {
+		if ($this->rol_create_date !== $ts) {
 			$this->rol_create_date = $ts;
 			$this->modifiedColumns[] = RolesPeer::ROL_CREATE_DATE;
 		}
@@ -336,7 +336,7 @@ abstract class BaseRoles extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->rol_update_date !== $ts || $ts === 943934400) {
+		if ($this->rol_update_date !== $ts) {
 			$this->rol_update_date = $ts;
 			$this->modifiedColumns[] = RolesPeer::ROL_UPDATE_DATE;
 		}

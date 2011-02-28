@@ -72,9 +72,9 @@ class RolesMapBuilder {
 
 		$tMap->addColumn('ROL_CODE', 'RolCode', 'string', CreoleTypes::VARCHAR, true, 32);
 
-		$tMap->addColumn('ROL_CREATE_DATE', 'RolCreateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('ROL_CREATE_DATE', 'RolCreateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
-		$tMap->addColumn('ROL_UPDATE_DATE', 'RolUpdateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('ROL_UPDATE_DATE', 'RolUpdateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
 		$tMap->addColumn('ROL_STATUS', 'RolStatus', 'int', CreoleTypes::INTEGER, true, null);
 

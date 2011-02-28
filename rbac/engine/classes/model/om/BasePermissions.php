@@ -46,14 +46,14 @@ abstract class BasePermissions extends BaseObject  implements Persistent {
 	 * The value for the per_create_date field.
 	 * @var        int
 	 */
-	protected $per_create_date = 943934400;
+	protected $per_create_date;
 
 
 	/**
 	 * The value for the per_update_date field.
 	 * @var        int
 	 */
-	protected $per_update_date = 943934400;
+	protected $per_update_date;
 
 
 	/**
@@ -250,7 +250,7 @@ abstract class BasePermissions extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->per_create_date !== $ts || $ts === 943934400) {
+		if ($this->per_create_date !== $ts) {
 			$this->per_create_date = $ts;
 			$this->modifiedColumns[] = PermissionsPeer::PER_CREATE_DATE;
 		}
@@ -274,7 +274,7 @@ abstract class BasePermissions extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->per_update_date !== $ts || $ts === 943934400) {
+		if ($this->per_update_date !== $ts) {
 			$this->per_update_date = $ts;
 			$this->modifiedColumns[] = PermissionsPeer::PER_UPDATE_DATE;
 		}

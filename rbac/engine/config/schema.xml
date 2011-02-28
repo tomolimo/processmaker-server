@@ -23,8 +23,8 @@
     </vendor>
     <column name="PER_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
     <column name="PER_CODE" type="VARCHAR" size="32" required="true" default="" />
-    <column name="PER_CREATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
-    <column name="PER_UPDATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
+    <column name="PER_CREATE_DATE" type="TIMESTAMP" />
+    <column name="PER_UPDATE_DATE" type="TIMESTAMP" />
     <column name="PER_STATUS" type="INTEGER" required="true" default="1" />
     <column name="PER_SYSTEM" type="VARCHAR" size="32" required="true" default="00000000000000000000000000000002" />
   </table>
@@ -53,8 +53,8 @@
     <column name="ROL_PARENT" type="VARCHAR" size="32" required="true" default="" />
     <column name="ROL_SYSTEM" type="VARCHAR" size="32" required="true" default="" />
     <column name="ROL_CODE" type="VARCHAR" size="32" required="true" default="" />
-    <column name="ROL_CREATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
-    <column name="ROL_UPDATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
+    <column name="ROL_CREATE_DATE" type="TIMESTAMP" />
+    <column name="ROL_UPDATE_DATE" type="TIMESTAMP" />
     <column name="ROL_STATUS" type="INTEGER" required="true" default="1" />
   </table>
   <table name="ROLES_PERMISSIONS">
@@ -104,8 +104,8 @@
     </vendor>
     <column name="SYS_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
     <column name="SYS_CODE" type="VARCHAR" size="32" required="true" default="" />
-    <column name="SYS_CREATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
-    <column name="SYS_UPDATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
+    <column name="SYS_CREATE_DATE" type="TIMESTAMP" />
+    <column name="SYS_UPDATE_DATE" type="TIMESTAMP" />
     <column name="SYS_STATUS" type="INTEGER" required="true" default="0" />
   </table>
   <table name="RBAC_USERS">
@@ -135,9 +135,9 @@
     <column name="USR_FIRSTNAME" type="VARCHAR" size="50" required="true" default="" />
     <column name="USR_LASTNAME" type="VARCHAR" size="50" required="true" default="" />
     <column name="USR_EMAIL" type="VARCHAR" size="100" required="true" default="" />
-    <column name="USR_DUE_DATE" type="DATE" required="true" default="0000-00-00" />
-    <column name="USR_CREATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
-    <column name="USR_UPDATE_DATE" type="TIMESTAMP" required="true" default="0000-00-00 00:00:00" />
+    <column name="USR_DUE_DATE" type="DATE" required="true" />
+    <column name="USR_CREATE_DATE" type="TIMESTAMP" />
+    <column name="USR_UPDATE_DATE" type="TIMESTAMP" />
     <column name="USR_STATUS" type="INTEGER" required="true" default="1" />
     <column name="USR_AUTH_TYPE" type="VARCHAR" size="32" required="true" default="" />
     <column name="UID_AUTH_SOURCE" type="VARCHAR" size="32" required="true" default="" />

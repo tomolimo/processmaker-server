@@ -68,9 +68,9 @@ class PermissionsMapBuilder {
 
 		$tMap->addColumn('PER_CODE', 'PerCode', 'string', CreoleTypes::VARCHAR, true, 32);
 
-		$tMap->addColumn('PER_CREATE_DATE', 'PerCreateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('PER_CREATE_DATE', 'PerCreateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
-		$tMap->addColumn('PER_UPDATE_DATE', 'PerUpdateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('PER_UPDATE_DATE', 'PerUpdateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
 		$tMap->addColumn('PER_STATUS', 'PerStatus', 'int', CreoleTypes::INTEGER, true, null);
 

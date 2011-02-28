@@ -74,21 +74,21 @@ abstract class BaseRbacUsers extends BaseObject  implements Persistent {
 	 * The value for the usr_due_date field.
 	 * @var        int
 	 */
-	protected $usr_due_date = 943934400;
+	protected $usr_due_date;
 
 
 	/**
 	 * The value for the usr_create_date field.
 	 * @var        int
 	 */
-	protected $usr_create_date = 943934400;
+	protected $usr_create_date;
 
 
 	/**
 	 * The value for the usr_update_date field.
 	 * @var        int
 	 */
-	protected $usr_update_date = 943934400;
+	protected $usr_update_date;
 
 
 	/**
@@ -502,7 +502,7 @@ abstract class BaseRbacUsers extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->usr_due_date !== $ts || $ts === 943934400) {
+		if ($this->usr_due_date !== $ts) {
 			$this->usr_due_date = $ts;
 			$this->modifiedColumns[] = RbacUsersPeer::USR_DUE_DATE;
 		}
@@ -526,7 +526,7 @@ abstract class BaseRbacUsers extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->usr_create_date !== $ts || $ts === 943934400) {
+		if ($this->usr_create_date !== $ts) {
 			$this->usr_create_date = $ts;
 			$this->modifiedColumns[] = RbacUsersPeer::USR_CREATE_DATE;
 		}
@@ -550,7 +550,7 @@ abstract class BaseRbacUsers extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->usr_update_date !== $ts || $ts === 943934400) {
+		if ($this->usr_update_date !== $ts) {
 			$this->usr_update_date = $ts;
 			$this->modifiedColumns[] = RbacUsersPeer::USR_UPDATE_DATE;
 		}

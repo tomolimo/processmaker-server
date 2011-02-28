@@ -68,9 +68,9 @@ class SystemsMapBuilder {
 
 		$tMap->addColumn('SYS_CODE', 'SysCode', 'string', CreoleTypes::VARCHAR, true, 32);
 
-		$tMap->addColumn('SYS_CREATE_DATE', 'SysCreateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('SYS_CREATE_DATE', 'SysCreateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
-		$tMap->addColumn('SYS_UPDATE_DATE', 'SysUpdateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('SYS_UPDATE_DATE', 'SysUpdateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
 		$tMap->addColumn('SYS_STATUS', 'SysStatus', 'int', CreoleTypes::INTEGER, true, null);
 

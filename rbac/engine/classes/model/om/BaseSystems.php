@@ -46,14 +46,14 @@ abstract class BaseSystems extends BaseObject  implements Persistent {
 	 * The value for the sys_create_date field.
 	 * @var        int
 	 */
-	protected $sys_create_date = 943934400;
+	protected $sys_create_date;
 
 
 	/**
 	 * The value for the sys_update_date field.
 	 * @var        int
 	 */
-	protected $sys_update_date = 943934400;
+	protected $sys_update_date;
 
 
 	/**
@@ -232,7 +232,7 @@ abstract class BaseSystems extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->sys_create_date !== $ts || $ts === 943934400) {
+		if ($this->sys_create_date !== $ts) {
 			$this->sys_create_date = $ts;
 			$this->modifiedColumns[] = SystemsPeer::SYS_CREATE_DATE;
 		}
@@ -256,7 +256,7 @@ abstract class BaseSystems extends BaseObject  implements Persistent {
 		} else {
 			$ts = $v;
 		}
-		if ($this->sys_update_date !== $ts || $ts === 943934400) {
+		if ($this->sys_update_date !== $ts) {
 			$this->sys_update_date = $ts;
 			$this->modifiedColumns[] = SystemsPeer::SYS_UPDATE_DATE;
 		}

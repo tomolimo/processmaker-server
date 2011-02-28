@@ -78,9 +78,9 @@ class RbacUsersMapBuilder {
 
 		$tMap->addColumn('USR_DUE_DATE', 'UsrDueDate', 'int', CreoleTypes::DATE, true, null);
 
-		$tMap->addColumn('USR_CREATE_DATE', 'UsrCreateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('USR_CREATE_DATE', 'UsrCreateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
-		$tMap->addColumn('USR_UPDATE_DATE', 'UsrUpdateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
+		$tMap->addColumn('USR_UPDATE_DATE', 'UsrUpdateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
 		$tMap->addColumn('USR_STATUS', 'UsrStatus', 'int', CreoleTypes::INTEGER, true, null);
 
