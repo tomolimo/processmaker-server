@@ -501,11 +501,11 @@ Ext.onReady ( function() {
         }
       },
       failure: function(){
-        Ext.Msg.alert ('Failure');
+        //Ext.Msg.alert ('Failure');
       }
     });
     
-    r.record.commit();
+    //r.record.commit();
   }, this );
   
 
@@ -741,9 +741,9 @@ Ext.onReady ( function() {
               handler : function() {
                 processObj.addTriggers();
               }
-            },
+            }
 /*
-            {
+            ,{
               text: 'Report Table',
               iconCls: 'button_menu_ext ss_sprite ss_table',
               handler : function() {

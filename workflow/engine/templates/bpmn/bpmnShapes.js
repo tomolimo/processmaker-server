@@ -22,7 +22,8 @@ bpmnTask = function (oWorkflow) {
    this.orgYPos = oWorkflow.orgYPos;
    
    this.taskName = ''; //It will set the Default Task Name with appropriate count While dragging a task on the canvas
-   this.html.addClass('x-task');
+   if( ! Ext.isIE )
+     this.html.addClass('x-task');
 };
 
 bpmnTask.prototype = new VectorFigure;

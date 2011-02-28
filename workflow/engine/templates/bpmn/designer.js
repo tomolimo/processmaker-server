@@ -704,7 +704,7 @@ Ext.onReady ( function() {
           handler: workflow.subProcess,
           iconCls: 'button_menu_ext ss_sprite ss_layout_link',
           scope: this
-      },/* {
+      }/*, {
           text: 'Horizontal Line',
           handler: ProcessMapObj.horiLine,
           scope: this
