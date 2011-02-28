@@ -3221,7 +3221,7 @@ ProcessOptions.prototype.addTriggers = function()
 
   var btnProperties = new Ext.Button({
     id: 'btnProperty',
-    text: _('ID_Properties'),
+    text: _('ID_PROPERTIES'),
     iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
      handler: editProperties
   });

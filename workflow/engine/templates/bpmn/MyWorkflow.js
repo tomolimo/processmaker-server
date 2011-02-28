@@ -122,12 +122,15 @@ MyWorkflow.prototype.AddTaskContextMenu= function(oShape)
                 ]
             },
             scope: this
-        },
+        }
+/*        ,
         {
             text: 'Properties',
             handler: taskExtObj.editTaskProperties,
             scope: oShape
-        }]
+        }
+*/
+        ]
     });
     }
 
