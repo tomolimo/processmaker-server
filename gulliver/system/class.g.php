@@ -1002,7 +1002,8 @@ class G
       header('ETag: "' . md5 ($mtime . $filename ) . '"' );
       header("Last-Modified: " . $gmt_mtime );
       header('Cache-Control: public');
-      header("Expires: " . gmdate("D, d M Y H:i:s", time () + 30*60*60*24 ) . " GMT"); //1 month
+      //header("Expires: " . gmdate("D, d M Y H:i:s", time () + 30*60*60*24 ) . " GMT"); //1 month
+      header("Expires: " . gmdate("D, d M Y H:i:s", time () + 60*60*24 ) . " GMT"); //1 day - tempor
       if( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ) {
           if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
               header('HTTP/1.1 304 Not Modified');
