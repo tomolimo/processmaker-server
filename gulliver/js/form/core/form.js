@@ -369,13 +369,13 @@ function IsUnsignedInteger(YourNumber){
                       return false;
                       }
                    break;
-                  case "Alpha": 
+                  case "Alpha":
 								    if (keyCode==8) return true;
 								    patron =/[A-Za-z\sáéíóúäëïöüñçÇÑÁÉÍÓÚÄËÏÖÜ]/; 
 								    te = String.fromCharCode(keyCode);
 								    return patron.test(te);
                   break;
-                  case "AlphaNum": 
+                  case "AlphaNum":
                     if (keyCode==8) return true;
                     patron =/[A-Za-z0-9\sáéíóúäëïöüñçÇÑÁÉÍÓÚÄËÏÖÜ]/;
                     te = String.fromCharCode(keyCode);
@@ -445,11 +445,20 @@ function replaceAll( text, busca, reemplaza ){
   return text;
 }
 
+function isNumberMask (mask){
+  for ( var key in mask){
+    if (mask[key]!='#'&&mask[key]!=','&&mask[key]!='.'&&typeof(mask[key])=='string'){
+      return false;
+    }
+  }
+  return true;
+}
+
     this.putFormatNumber =function (evt) { 
     if((typeof(evt)==="undefined" || evt===0) && me.mask!='' ){ 
       var numberSet=me.element.value.split('.');
 //      if(numberSet.length >=2)return;
-      
+
       maskD = me.mask.split(';');
       maskL = (maskD.length >1)?maskD[1]:maskD[0];  
       maskWithoutC =replaceAll(maskL,",",""); 
@@ -509,26 +518,35 @@ function replaceAll( text, busca, reemplaza ){
         ///////// end the slice code ... complete with zeros
         return;
       */
-        if(cd < maskpartInt.length && cd >= 4 && cd !=3){
-          var newnamber='';
-          var cc=1;
-          while (onlynumber >0){
-           lastdigito = onlynumber % 10;         
-           if (cc%3==0 && cd != cc){
-             newnamber = ','+lastdigito.toString() + newnamber;
-           } else {
-             newnamber = lastdigito.toString() + newnamber;
-           }
-          onlynumber =parseInt(onlynumber / 10);               
-          cc++;
-          }
-          if(maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length) =="%")
-           me.element.value = newnamber+' '+maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length); 
-          else
-           me.element.value = newnamber;
-        } else {
+        if (isNumberMask(maskpartInt)){
+          if(cd < maskpartInt.length && cd >= 4 && cd !=3){
+            var newNumber='';
+            var cc=1;
+            //alert (onlynumber);
+            while (onlynumber > 0){
+             lastdigito = onlynumber % 10;
+             if (cc%3==0 && cd != cc){
+               newNumber = ','+lastdigito.toString() + newNumber;
+             } else {
+               newNumber = lastdigito.toString() + newNumber;
+             }
+            onlynumber =parseInt(onlynumber / 10);
+            cc++;
+            }
             if(maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length) =="%")
-             me.element.value =  onlynumber +' '+maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length); 
+              me.element.value = newNumber+' '+maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length);
+            else
+              me.element.value = newNumber;
+          } else {
+              if(maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length) =="%")
+                var spaceString;
+                if (me.element.value.substr( (me.element.value.length -1) ,me.element.value.length) == '%' ){
+                  spaceString ='';
+                } else {
+                  spaceString =' ';
+                }
+                me.element.value =  onlynumber + spaceString + maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length);
+          }
         }
       }
     }
@@ -728,7 +746,7 @@ function replaceAll( text, busca, reemplaza ){
           oSel.setEndPoint('EndToStart', document.selection.createRange() ); 
           field.selectionStart = oSel.text.length; 
       } 
-      return { selectionStart: field.selectionStart, selectionEnd: field.selectionEnd }; 
+      return {selectionStart: field.selectionStart, selectionEnd: field.selectionEnd}; 
     }  
 
     
