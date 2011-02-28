@@ -156,17 +156,24 @@ class ProcessProxy extends HttpProxyController
 
     foreach( $UIDS as $UID ) {
       if ($param->TU_RELATION == '1' )
-        $oTaskUser->create(array('TAS_UID' => $TAS_UID, 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 1));
+        $res[] = $oTaskUser->create(array('TAS_UID' => $TAS_UID, 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 1));
       else
-        $oTaskUser->create(array('TAS_UID' => $TAS_UID, 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 2));
+        $res[] = $oTaskUser->create(array('TAS_UID' => $TAS_UID, 'USR_UID' => $UID, 'TU_TYPE' => $TU_TYPE, 'TU_RELATION' => 2));
     }
     $task = TaskPeer::retrieveByPk($TAS_UID);
 
     $this->success = true;
-    if( count($UIDS) > 1 )
-      $this->msg = __('ID_ACTORS_ASSIGNED_SUCESSFULLY', SYS_LANG, Array(count($UIDS), $task->getTasTitle()));
-    else
-      $this->msg = __('ID_ACTOR_ASSIGNED_SUCESSFULLY', SYS_LANG, Array('tas_title'=>$task->getTasTitle()));
+    if( ! in_array('-1', $res) ) {
+      if( count($UIDS) == 1 )
+        $this->msg = __('ID_ACTOR_ASSIGNED_SUCESSFULLY', SYS_LANG, Array('tas_title'=>$task->getTasTitle()));
+      else
+        $this->msg = __('ID_ACTORS_ASSIGNED_SUCESSFULLY', SYS_LANG, Array(count($UIDS), $task->getTasTitle()));
+    } else {
+      if( count($UIDS) == 1 )
+        $this->msg = __('ID_ACTOR_ALREADY_ASSIGNED', SYS_LANG, Array( $task->getTasTitle()));
+      else
+        $this->msg = __('ID_SOME_ACTORS_ALREADY_ASSIGNED', SYS_LANG, Array( $task->getTasTitle()));
+    }
   }
 
   /**

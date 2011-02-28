@@ -49,19 +49,10 @@ class TaskUser extends BaseTaskUser {
   {
     $oConnection = Propel::getConnection(TaskUserPeer::DATABASE_NAME);
     try {
-      //delete old TaskUserPeer Rows, because is not safe insert previous verify old rows.
-      $criteria = new Criteria('workflow');
-      $criteria->add(TaskUserPeer::TAS_UID,  $aData['TAS_UID'] );
-      $criteria->add(TaskUserPeer::USR_UID,  $aData['USR_UID']  );
-      $criteria->add(TaskUserPeer::TU_TYPE,  $aData['TU_TYPE']  );
-      $criteria->add(TaskUserPeer::TU_RELATION,  $aData['TU_RELATION']  );
-      $objects = TaskUserPeer::doSelect($criteria, $oConnection);
-      $oConnection->begin();
-      foreach($objects as $row) {
-        $this->remove($row->getTasUid(), $row->getUsrUid(), $row->getTuType(), $row->getTuRelation() );
-      }
-      $oConnection->commit();
-            
+      $taskUser = TaskUserPeer::retrieveByPK($aData['TAS_UID'], $aData['USR_UID'], $aData['TU_TYPE'], $aData['TU_RELATION']); 
+
+      if( is_object($taskUser) )
+        return -1;
       
       $oTaskUser = new TaskUser();
       $oTaskUser->fromArray($aData, BasePeer::TYPE_FIELDNAME);
