@@ -327,7 +327,12 @@ InputPort.prototype.onDrop = function (port) {
     if (_4070.source.type == _4070.target.type) {
       return;
     }
-    _4070.setConnection(new DecoratedConnection());
+
+    if(this.workflow.currentSelection.type.match(/Annotation/))    //Setting connection to Dotted for Annotation
+        _4070.setConnection(new DottedConnection());
+    else
+        _4070.setConnection(new DecoratedConnection());
+
     this.parentNode.workflow.getCommandStack().execute(_4070);
 
     //Saving Start Event
@@ -380,9 +385,7 @@ InputPort.prototype.onDrop = function (port) {
       workflow.saveEvents(workflow.currentSelection);
     }
     else if(bpmnType.match(/Annotation/)) { //Routing from task to Annotation
-      _4070.setConnection(new DottedConnection());
       newObj = port.parentNode;
-      newObj.conn = _4070.connection;
       preObj = this.workflow.currentSelection;
       newObj.actiontype = 'updateText';
       this.workflow.saveShape(newObj);
@@ -410,7 +413,12 @@ OutputPort.prototype.onDrop = function (port) {
     if (_4070.source.type == _4070.target.type) {
       return;
     }
-    _4070.setConnection(new DecoratedConnection());
+
+    if(port.parentNode.type.match(/Annotation/))            //Setting connection to Dotted for Annotation
+        _4070.setConnection(new DottedConnection());
+    else
+        _4070.setConnection(new DecoratedConnection());
+
     this.parentNode.workflow.getCommandStack().execute(_4070);
 
     //Saving Start Event
@@ -452,9 +460,7 @@ OutputPort.prototype.onDrop = function (port) {
       this.workflow.saveRoute(newObj,preObj);
     }
     else if(port.parentNode.type.match(/Annotation/)){ //Routing from task to Annotation
-      _4070.setConnection(new DottedConnection());
       newObj = port.parentNode;
-      newObj.conn = _4070.connection;
       preObj = this.workflow.currentSelection;
       newObj.actiontype = 'updateText';
       this.workflow.saveShape(newObj);
