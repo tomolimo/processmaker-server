@@ -115,7 +115,6 @@ Ext.onReady ( function() {
   };
 
   var center= {
-    id: 'centerRegion',
     width:100,
     height:2000,
     xtype	:	"panel",
@@ -125,6 +124,7 @@ Ext.onReady ( function() {
   };
 
   var main = new Ext.Panel({
+    id: 'centerRegion',
     renderTo  : "center1",
     region    : "center",
     layout    : "border",
