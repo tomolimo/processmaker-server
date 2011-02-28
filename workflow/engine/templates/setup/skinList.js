@@ -60,7 +60,7 @@ var searchText;
 var contextMenu;
 var pageSize;
 
-var cal_default = '00000000000000000000000000000001';
+var classicSkin = '00000000000000000000000000000001';
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
@@ -70,6 +70,7 @@ Ext.onReady(function(){
     newButton = new Ext.Action({
     	text: _('ID_NEW'),
     	iconCls: 'button_menu_ext ss_sprite  ss_add',
+    	disabled: true,
     	handler: NewCalendarAction
     });
     
@@ -77,6 +78,7 @@ Ext.onReady(function(){
     	text: _('ID_EDIT'),
     	iconCls: 'button_menu_ext ss_sprite  ss_pencil',
     	handler: EditCalendarAction,
+    	hidden: true,
     	disabled: true	
     });
     
@@ -84,6 +86,7 @@ Ext.onReady(function(){
     	text: _('ID_DELETE'),
     	iconCls: 'button_menu_ext ss_sprite  ss_delete',
     	handler: DeleteButtonAction,
+    	hidden: true,
     	disabled: true
     });
     
@@ -91,6 +94,7 @@ Ext.onReady(function(){
     	text: _('ID_COPY'),
     	iconCls: 'button_menu_ext ss_sprite ss_calendar_add',
     	handler: CopyButtonAction,
+    	hidden: true,
     	disabled: true
     });
     
@@ -112,7 +116,7 @@ Ext.onReady(function(){
     });
     
     contextMenu = new Ext.menu.Menu({
-    	items: [editButton, deleteButton,'-',exportButton]
+    	items: [exportButton]
     });
     
     searchText = new Ext.form.TextField ({
@@ -145,15 +149,12 @@ Ext.onReady(function(){
     	singleSelect: true,
     	listeners:{
     		rowselect: function(sm){
-    			editButton.enable();
-    			rowSelected = infoGrid.getSelectionModel().getSelected();
-    			(rowSelected.data.CALENDAR_UID == cal_default) ? deleteButton.disable() : deleteButton.enable();
-    			copyButton.enable();
+    			//exportButton.enable();
+    			exportButton.disable();
+    			rowSelected = infoGrid.getSelectionModel().getSelected();    			
     		},
     		rowdeselect: function(sm){
-    			editButton.disable();
-    			deleteButton.disable();
-    			copyButton.disable();
+    			exportButton.disable();
     		}
     	}
     });
@@ -163,16 +164,16 @@ Ext.onReady(function(){
             url: 'skin_Ajax?action=skinList'
           }),
     	reader : new Ext.data.JsonReader( {
-    		root: 'cals',
-    		totalProperty: 'total_cals',
+    		root: 'skins',
+    		totalProperty: 'total_skins',
     		fields : [
-    		    {name : 'CALENDAR_UID'},
-    		    {name : 'CALENDAR_NAME'},
-    		    {name : 'CALENDAR_DESCRIPTION'},
-    		    {name : 'CALENDAR_STATUS'},
-    		    {name : 'TOTAL_USERS', type: 'int'},
-    		    {name : 'TOTAL_PROCESS', type: 'int'},
-    		    {name : 'TOTAL_TASKS', type: 'int'}
+    		    {name : 'SKIN_ID'},
+    		    {name : 'SKIN_NAME'},
+    		    {name : 'SKIN_DESCRIPTION'},
+    		    {name : 'SKIN_AUTHOR'},
+    		    {name : 'SKIN_CREATEDATE', type: 'date'},
+    		    {name : 'SKIN_MODIFIEDDATE', type: 'date'},
+    		    {name : 'SKIN_STATUS'}
     		    ]
     	})
     });
@@ -183,13 +184,13 @@ Ext.onReady(function(){
             sortable: true
         },
         columns: [
-            {id:'CALENDAR_UID', dataIndex: 'CALENDAR_UID', hidden:true, hideable:false},
-            {header: _('ID_NAME'), dataIndex: 'CALENDAR_NAME', width: 200, align:'left'},
-            {header: _('ID_DESCRIPTION'), dataIndex: 'CALENDAR_DESCRIPTION', width: 200, align:'left'},
-            {header: _('ID_STATUS'), dataIndex: 'CALENDAR_STATUS', width: 130, align:'center', renderer: render_status},
-            {header: _('ID_USERS'), dataIndex: 'TOTAL_USERS', width: 69, align:'center'},
-            {header: _('ID_PROCESSES'), dataIndex: 'TOTAL_PROCESS', width: 69, align:'center'},
-            {header: _('ID_TASKS'), dataIndex: 'TOTAL_TASKS', width: 69, align:'center'}
+            {id:'SKIN_UID', dataIndex: 'SKIN_UID', hidden:true, hideable:false},
+            {header: _('ID_NAME'), dataIndex: 'SKIN_NAME', width: 100, align:'left'},
+            {header: _('ID_DESCRIPTION'), dataIndex: 'SKIN_DESCRIPTION', width: 200, align:'left'},            
+            {header: _('ID_OWNER'), dataIndex: 'SKIN_AUTHOR', width: 69, align:'center'},
+            {header: _('ID_CREATE'), dataIndex: 'SKIN_CREATEDATE', width: 69, align:'center'},
+            {header: _('ID_UPDATE_DATE'), dataIndex: 'SKIN_MODIFIEDDATE', width: 69, align:'center'},
+            //{header: _('ID_STATUS'), dataIndex: 'SKIN_STATUS', width: 130, align:'center', renderer: render_status},
             ]
     });
     
@@ -224,8 +225,8 @@ Ext.onReady(function(){
         store: store,
         displayInfo: true,
         displayMsg: _('ID_GRID_PAGE_DISPLAYING_CALENDAR_MESSAGE') + '&nbsp; &nbsp; ',
-        emptyMsg: _('ID_GRID_PAGE_NO_CALENDAR_MESSAGE'),
-        items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
+        emptyMsg: _('ID_GRID_PAGE_NO_CALENDAR_MESSAGE')//,
+        //items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
       });
     
     
@@ -249,7 +250,7 @@ Ext.onReady(function(){
     	store: store,
     	cm: cmodel,
     	sm: smodel,
-    	tbar: [newButton, '-', editButton, deleteButton,'-',copyButton,importButton,exportButton, {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
+    	tbar: [newButton, '-', importButton,exportButton, {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
     	bbar: bbarpaging,
     	listeners: {
     		rowdblclick: EditCalendarAction

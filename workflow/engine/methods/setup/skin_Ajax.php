@@ -30,15 +30,23 @@ function updatePageSize(){
     echo '{success: true}';
 }
 function skinList(){
+    //Get Skin Config files
     $skinListArray=array();
-    $customSkins=glob(PATH_CUSTOM_SKINS."*");
-    foreach($customSkins as $skin){
-        if(is_dir($skin)){
-            $res['CALENDAR_UID']=$skin;
-            $res['CALENDAR_NAME']=basename($skin);
-            
-            $skinListArray['cals'][]=$res;
-        }
+    $customSkins=glob(PATH_CUSTOM_SKINS."*/config.xml");
+    $configurationFile    =    G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
+    array_unshift($customSkins,$configurationFile);
+    
+    //Read and parse each Configuration File
+    foreach($customSkins as $key => $configInformation){
+      $xmlConfiguration = file_get_contents ( $configInformation );
+      $xmlConfigurationObj=G::xmlParser($xmlConfiguration);
+      $skinInformationArray=$skinFilesArray=$xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['information']['__CONTENT__'];
+      
+      $res=array();
+      foreach($skinInformationArray as $keyInfo => $infoValue){
+          $res['SKIN_'.strtoupper($keyInfo)]=$infoValue['__VALUE__'];
+      }
+      $skinListArray['skins'][]=$res;
     }
     print_r(G::json_encode($skinListArray));
 }
