@@ -109,6 +109,22 @@ Ext.onReady ( function() {
   usersTaskGrid.on('contextmenu', function (evt) {
       evt.preventDefault();
   }, this);
+
+  function onDynaformsContextMenu(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    usersTaskGridContextMenu.showAt([coords[0], coords[1]]);
+  }
+
+  var usersTaskGridContextMenu = new Ext.menu.Menu({
+    id: 'messageContextMenu',
+    items: [{
+        text: _('ID_REMOVE'),
+        iconCls: 'button_menu_ext ss_sprite  ss_delete',
+        handler: removeUsersTask
+      }
+    ]
+  });
   
   //AD HOC
   var usersTaskAdHocStore = new Ext.data.GroupingStore( {
@@ -177,21 +193,37 @@ Ext.onReady ( function() {
   });
   
 
-  function onDynaformsContextMenu(grid, rowIndex, e) {
+    //connecting context menu  to grid
+  usersTaskAdHocGrid.addListener('rowcontextmenu', onUsersTaskAdHocGridContextMenu,this);
+
+  //by default the right click is not selecting the grid row over the mouse
+  //we need to set this four lines
+  usersTaskAdHocGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
+    var sm = grid.getSelectionModel();
+    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+  }, this);
+
+  //prevent default
+  usersTaskGrid.on('contextmenu', function (evt) {
+      evt.preventDefault();
+  }, this);
+
+  function onUsersTaskAdHocGridContextMenu(grid, rowIndex, e) {
     e.stopEvent();
     var coords = e.getXY();
-    usersTaskGridContextMenu.showAt([coords[0], coords[1]]);
+    usersTaskAdHocGridContextMenu.showAt([coords[0], coords[1]]);
   }
 
-  var usersTaskGridContextMenu = new Ext.menu.Menu({
-    id: 'messageContextMenu',
+  var usersTaskAdHocGridContextMenu = new Ext.menu.Menu({
+    id: 'messagAdHocGrideContextMenu',
     items: [{
         text: _('ID_REMOVE'),
         iconCls: 'button_menu_ext ss_sprite  ss_delete',
-        handler: removeUsersTask
+        handler: removeUsersAdHocTask
       }
     ]
   });
+  
   
   updateActorsGrids = function(){
     
@@ -230,6 +262,48 @@ Ext.onReady ( function() {
           var result = Ext.util.JSON.decode(response.responseText);
           if( result.success ){
             Ext.getCmp('usersTaskGrid').store.reload();
+          } else {
+            PMExt.error(_('ID_ERROR'), result.msg);
+          }
+        }
+      });
+    //});
+  }
+
+  
+  function removeUsersAdHocTask(){
+
+    var usr_uid = Array();
+    var tu_relation = Array();
+    var rowsSelected = Ext.getCmp('usersTaskAdHocGrid').getSelectionModel().getSelections();
+
+    if( rowsSelected.length == 0 ) {
+      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
+      return false;
+    }
+
+    for(i=0; i<rowsSelected.length; i++) {
+      usr_uid[i]     = rowsSelected[i].get('USR_UID');
+      tu_relation[i] = rowsSelected[i].get('TU_RELATION');
+    }
+    usr_uid = usr_uid.join(',');
+    tu_relation = tu_relation.join(',');
+
+    //PMExt.confirm(_('ID_CONFIRM'), _('ID_REMOVE_USERS_CONFIRM'), function(){
+      Ext.Ajax.request({
+        url   : '../processProxy/removeActorsTask',
+        method: 'POST',
+        params: {
+          action : 'removeUsersTask',
+          USR_UID: usr_uid,
+          TU_RELATION: tu_relation,
+          TAS_UID: _TAS_UID,
+          TU_TYPE: 2
+        },
+        success: function(response) {
+          var result = Ext.util.JSON.decode(response.responseText);
+          if( result.success ){
+            Ext.getCmp('usersTaskAdHocGrid').store.reload();
           } else {
             PMExt.error(_('ID_ERROR'), result.msg);
           }
@@ -420,6 +494,10 @@ Ext.onReady ( function() {
           pro_title = r.value;
           Ext.getCmp('centerPanel').setTitle(_('ID_PROCESSMAP_TITLE') + ' - ' + pro_title);
           Ext.getCmp('eastPanelTree').getNodeById(UID).setText(pro_title);
+        } else if( type == 'task' && r.record.data.name == 'Title') {
+          Ext.getCmp('eastPanelTree').getNodeById(UID).setText(r.value);
+          //here we need to find and update the task title into task figure on designer
+          
         }
       },
       failure: function(){

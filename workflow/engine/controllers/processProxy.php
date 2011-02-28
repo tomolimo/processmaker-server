@@ -124,7 +124,7 @@ class ProcessProxy extends HttpProxyController
   function getUsers($params)
   {
     require_once 'classes/model/Users.php';
-    $search = isset($params->search) ? $params->search: null;    
+    $search = isset($params->search) ? $params->search: null;
     return Users::getAll($params->start, $params->limit, $search);
   }
 
@@ -136,8 +136,8 @@ class ProcessProxy extends HttpProxyController
   function getGroups($params)
   {
     require_once 'classes/model/Groupwf.php';
-    $search = isset($params['search']) ? $params['search']: null;
-    return Groupwf::getAll($params['start'], $params['limit'], $search);
+    $search = isset($params->search) ? $params->search: null;
+    return Groupwf::getAll($params->start, $params->limit, $search);
   }
 
   /**
