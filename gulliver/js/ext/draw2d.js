@@ -351,11 +351,12 @@ oThis.element.style.left=_327f.x+"px";
 oThis.element.style.top=_327f.y+"px";
 var divscroll  = document.body;
 var scrollTop  = divscroll.scrollTop;
+var scrollLeft  = divscroll.scrollLeft;
 var _3280=oThis.node.workflow.getScrollLeft();
 var _3281=oThis.node.workflow.getScrollTop();
 var _3282=oThis.node.workflow.getAbsoluteX();
 var _3283=oThis.node.workflow.getAbsoluteY();
-var _3284=oThis.getDropTarget(_327e.clientX+_3280-_3282,_327e.clientY+scrollTop-_3283);
+var _3284=oThis.getDropTarget(_327e.clientX+scrollLeft-_3282,_327e.clientY+scrollTop-_3283);
 var _3285=oThis.getCompartment(_327e.clientX+_3280-_3282,_327e.clientY+scrollTop-_3283);
 if(Drag.currentTarget!=null&&_3284!=Drag.currentTarget){
 var _3286=new DragDropEvent();
