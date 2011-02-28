@@ -57,7 +57,6 @@ pmosExt.prototype.popWebEntry= function(_5678)
     hidden: true,
     handler: function(){
       webForm.hide();
-      //editForm.reset();
       editForm.getForm().findField('pro_uid').setValue(pro_uid);
       editForm.getForm().findField('evn_uid').setValue(evn_uid);
       editForm.getForm().findField('dynaform').setValue('');
@@ -72,7 +71,6 @@ pmosExt.prototype.popWebEntry= function(_5678)
     hidden: true,
     handler: function(){
       webForm.hide();
-      //editForm.reset();
       editForm.title = _('ID_EDIT_WEB_ENTRY');
       editForm.getForm().findField('pro_uid').setValue(pro_uid);
       editForm.getForm().findField('evn_uid').setValue(evn_uid);
@@ -104,9 +102,9 @@ pmosExt.prototype.popWebEntry= function(_5678)
                 editButton.hide();
                 deleteButton.hide();
                 webForm.getForm().findField('link').setValue(_('ID_NOT_DEFINED'));
-                webForm.getForm().findField('task').setValue(_('ID_NOT_DEFINED');
-                webForm.getForm().findField('dynaform').setValue(_('ID_NOT_DEFINED');
-                webForm.getForm().findField('user').setValue(_('ID_NOT_DEFINED');
+                webForm.getForm().findField('task').setValue(_('ID_NOT_DEFINED'));
+                webForm.getForm().findField('dynaform').setValue(_('ID_NOT_DEFINED'));
+                webForm.getForm().findField('user').setValue(_('ID_NOT_DEFINED'));
                 goToWebEntry.disable();
                 webForm.show();
                 editForm.hide();
@@ -312,10 +310,10 @@ pmosExt.prototype.popWebEntry= function(_5678)
           newButton.show();
           editButton.hide();
           deleteButton.hide();
-          webForm.getForm().findField('link').setValue(_('ID_NOT_DEFINED');
-          webForm.getForm().findField('task').setValue(_('ID_NOT_DEFINED');
-          webForm.getForm().findField('dynaform').setValue(_('ID_NOT_DEFINED');
-          webForm.getForm().findField('user').setValue(_('ID_NOT_DEFINED');
+          webForm.getForm().findField('link').setValue(_('ID_NOT_DEFINED'));
+          webForm.getForm().findField('task').setValue(_('ID_NOT_DEFINED'));
+          webForm.getForm().findField('dynaform').setValue(_('ID_NOT_DEFINED'));
+          webForm.getForm().findField('user').setValue(_('ID_NOT_DEFINED'));
           goToWebEntry.disable();
           webForm.show();
         }
