@@ -131,7 +131,7 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_NEXT_TASK'] = $aRow;
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
-                    $aFields['GAT_UID']       = $sGatewayUID;
+                    $aFields['GAT_UID']       = $aData['GAT_UID'];;
                     
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT'] = $aData['PORT_NUMBER_IP'];
@@ -150,7 +150,7 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_NEXT_TASK'] = $aRow;
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
-                    $aFields['GAT_UID']       = $sGatewayUID;
+                    $aFields['GAT_UID']       = $aData['GAT_UID'];;
                     
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT']  = $aData['PORT_NUMBER_IP'];
@@ -168,7 +168,7 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_NEXT_TASK'] = $aData['ROU_NEXT_TASK'][0];
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
-                    $aFields['GAT_UID']       = $sGatewayUID;
+                    $aFields['GAT_UID']       = $aData['GAT_UID'];;
 
                     if(isset($aData['PORT_NUMBER_IP']))
                       $aFields['ROU_TO_PORT'] = $aData['PORT_NUMBER_IP'];
