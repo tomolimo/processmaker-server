@@ -1104,11 +1104,6 @@ class G
           }
       }
       return $output;
-
-
-
-
-
   }
 
   /**
