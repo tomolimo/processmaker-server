@@ -213,7 +213,7 @@ else if($action==="install")
 
     $dir_data	= (substr($dir_data,-1)==$sp)?$dir_data:$dir_data."/";
     $dir_compiled	= $dir_data . "compiled/";
-    $dir_log = "{$dir_data}logs/";
+    $dir_log = "{$dir_data}log/";
     global $isWindows;
 
     @mkdir($dir_data."sites",0777,true);
