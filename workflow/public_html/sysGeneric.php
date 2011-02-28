@@ -1,8 +1,8 @@
 <?php
-//sysGeneric, this file is used initialize main variables and redirect to each and all pages 
+//sysGeneric, this file is used initialize main variables and redirect to each and all pages
 $startingTime =  array_sum(explode(' ',microtime()));
 
-//*** ini setting, enable display_error On to caught even fatal errors 
+//*** ini setting, enable display_error On to caught even fatal errors
   ini_set('display_errors','On');
   ini_set('error_reporting', E_ALL  );
   ini_set('short_open_tag', 'on');
@@ -12,11 +12,11 @@ $startingTime =  array_sum(explode(' ',microtime()));
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG', 0 ); 
+  define ('DEBUG_SQL_LOG', 0 );
   define ('DEBUG_TIME_LOG', 0 );
   define ('DEBUG_CALENDAR_LOG', 0 );
 
-//*** process the $_POST with magic_quotes enabled 
+//*** process the $_POST with magic_quotes enabled
   function strip_slashes(&$vVar) {
     if (is_array($vVar)) {
       foreach($vVar as $sKey => $vValue) {
@@ -42,7 +42,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   	$serverAddr = $_SERVER['SERVER_ADDR'];
   	global $startingTime;
   	$endTime =  array_sum(explode(' ',microtime()));
-  	$time = $endTime - $startingTime;  	
+  	$time = $endTime - $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
     fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
@@ -80,7 +80,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   //to do: make different environments.  sys
   //G::setErrorHandler ( );
   //G::setFatalErrorHandler ( );
-  define ('ERROR_SHOW_SOURCE_CODE', true);  // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE 
+  define ('ERROR_SHOW_SOURCE_CODE', true);  // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE
   //define ( 'ERROR_LOG_NOTICE_ERROR', true );  //enable ERROR_LOG_NOTICE_ERROR to log Notices messages in default apache log
 
 //  ***** create headPublisher singleton *****************
@@ -144,6 +144,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
 
   $virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
   $virtualURITable['/(*)'] = PATH_HTML;
+  
+  
 
 //****** verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page *****
   if ( G::virtualURI($_SERVER['REQUEST_URI'], $virtualURITable , $realPath )) {
@@ -178,6 +180,40 @@ $startingTime =  array_sum(explode(' ',microtime()));
       }
       die;
     }
+    
+    
+    
+    $requestUriArray=explode("/",$_SERVER['REQUEST_URI']);
+    
+    
+  if((isset($requestUriArray[1]))&&($requestUriArray[1]=='skin')) {
+      /*
+       * By JHL Feb 28, 11
+       * This will allow to public images of Custom Skins
+       */
+      $pathsQuery="";
+      //Get the query side
+      /*
+       * This way we remove garbage
+       */
+      $forQuery=explode("?",$realPath);
+      if(isset($forQuery[1])) {
+        $pathsQuery=$forQuery[1];
+      }
+
+      //Get that path in array
+      $paths = explode ( PATH_SEP, $forQuery[0] );
+      
+      $fileToBeStreamed=str_replace("/skin/",PATH_CUSTOM_SKINS,$_SERVER['REQUEST_URI']);
+      
+      if ( file_exists ( $fileToBeStreamed ) ) {
+          G::streamFile ( $fileToBeStreamed );
+      }
+      die;
+    }
+    
+    
+    
     switch ( $realPath  ) {
       case 'sysUnnamed' :
         require_once('sysUnnamed.php'); die;
@@ -410,7 +446,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
   $avoidChangedWorkspaceValidation = false;
   
-  //Load custom Classes and Model from Plugins. 
+  //Load custom Classes and Model from Plugins.
   G::LoadAllPluginModelClasses();
   
 //*********jump to php file in methods directory *************
@@ -424,7 +460,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   else
     $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . PATH_SEP . SYS_TARGET.'.php';
 
-  //services is a special folder, 
+  //services is a special folder,
   if ( SYS_COLLECTION == 'services' ) {
     $avoidChangedWorkspaceValidation = true;
     $targetPlugin = explode( '/', SYS_TARGET );
@@ -525,7 +561,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       and  SYS_TARGET != 'autoinstallProcesses'
       and  SYS_TARGET != 'autoinstallPlugins'
       and  SYS_TARGET != 'heartbeatStatus'
-      and  SYS_TARGET != 'showLogoFile'        
+      and  SYS_TARGET != 'showLogoFile'
       and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
       and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'dynaforms_checkDependentFields' and SYS_TARGET != 'cases_ShowDocument') {
         $bRedirect = true;
@@ -557,8 +593,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
     $_SESSION['phpLastFileFound'] = $_SERVER['REQUEST_URI'];
     
     /***
-     * New feature for Gulliver framework to support Controllers & HttpProxyController classes handling 
-     * 
+     * New feature for Gulliver framework to support Controllers & HttpProxyController classes handling
+     *
      * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
      */
     if( $isControllerCall ) { //Instance the Controller object and call the request method
