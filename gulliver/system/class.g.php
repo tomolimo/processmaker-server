@@ -985,8 +985,6 @@ class G
    * @author Fernando Ontiveros Lira <fernando@colosa.com>
    * @access public
    * @param  string $file
-   * @param  boolean $download
-   * @param  string $downloadFileName
    * @return string
    */
   function streamCSSBigFile( $filename )
@@ -1096,6 +1094,7 @@ class G
       //G::pr($skinFilesArray);
       foreach($skinFilesArray as $keyFile => $cssFileInfo){
           //G::pr($cssFileInfo);
+          //TODO: Also review browser versions for restrictions
           $enabledBrowsers=explode(",",$cssFileInfo['__ATTRIBUTES__']['enabledBrowsers']);
           $disabledBrowsers=explode(",",$cssFileInfo['__ATTRIBUTES__']['disabledBrowsers']);
 

@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skinConfiguration>
 	<information>
-		<name></name>
-		<author></author>
-		<version></version></information>
+		<id></id>
+		<name>Classic</name>
+		<author>ProcessMaker Team</author>
+		<version>1.0</version>
+		<createDate>2011-02-27</createDate>		
+		<modifiedDate>2011-02-28</modifiedDate>
+	</information>
 	<cssFiles>
-
 		<skin>
 			<cssFile file="style.css" enabledBrowsers="ALL"
 				disabledBrowsers=""></cssFile>
-			<cssFile file="sprite_ie.css"
-				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite_ie7.css"
+				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
-				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
 		</skin>
 		<blank>
 			<cssFile file="style.css" enabledBrowsers="ALL"
 				disabledBrowsers=""></cssFile>
-			<cssFile file="sprite_ie.css"
-				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite_ie7.css"
+				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
-				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
 		</blank>
 		<raw>
 		</raw>
 		<submenu>
 			<cssFile file="style.css" enabledBrowsers="ALL"
 				disabledBrowsers=""></cssFile>
-			<cssFile file="sprite_ie.css"
-				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite_ie7.css"
+				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
-				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
 		</submenu>
 		<tracker>
 			<cssFile file="style.css" enabledBrowsers="ALL"
 				disabledBrowsers=""></cssFile>
-			<cssFile file="sprite_ie.css"
-				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite_ie7.css"
+				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
-				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
 		</tracker>
 		<extjs>
 			<cssFile file="xtheme-gray.css" enabledBrowsers="ALL"
 				disabledBrowsers=""></cssFile>
 				<cssFile file="pmos-xtheme-gray.css" enabledBrowsers="ALL"
 				disabledBrowsers=""></cssFile>				
-			<cssFile file="sprite_ie.css"
-				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite_ie7.css"
+				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
-				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
 		</extjs>
-
-
 	</cssFiles>
 </skinConfiguration>
