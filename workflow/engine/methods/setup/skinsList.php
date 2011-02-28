@@ -22,6 +22,33 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
+if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1){
+  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+  //G::header('location: ../login/login');
+  die;
+}
+
+$G_MAIN_MENU = 'processmaker';
+$G_SUB_MENU = 'setup';
+$G_ID_MENU_SELECTED = 'SETUP';
+$G_ID_SUB_MENU_SELECTED = 'CALENDAR';
+
+$G_PUBLISH = new Publisher;
+
+G::LoadClass('configuration');
+$c = new Configurations();
+$configPage = $c->getConfiguration('skinList', 'pageSize','',$_SESSION['USER_LOGGED']);
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
+$oHeadPublisher =& headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('setup/skinList', false);    //adding a javascript file .js
+$oHeadPublisher->addContent('setup/skinList'); //adding a html file  .html.
+$oHeadPublisher->assign('CONFIG', $Config);
+
+G::RenderPage('publish', 'extJs');
+die;
+
 global $RBAC;
 $access = $RBAC->userCanAccess('PM_SETUP');
 if( $access != 1 ){
@@ -41,9 +68,9 @@ if( $access != 1 ){
       G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
       G::header('location: ../login/login');
       die;
-    break;    
+    break;
   }
-}  
+}
   // lets display the items
   $items[] = array ( 'id' => 'char', 'title' => 'char', 'type' => 'char', 'creator' => 'char' ,
                    'modifiedBy' => 'char', 'filename' => 'char', 'size' => 'char', 'mime' => 'char');
@@ -52,6 +79,7 @@ if( $access != 1 ){
   $aFiles = array ();
   if ($handle = opendir( PATH_SKINS  )) {
     while ( false !== ($file = readdir($handle))) {
+        G::pr($file);
       $filename = substr ( $file,0, strrpos($file, '.'));
 
       // list of no complete skins
@@ -88,14 +116,14 @@ if( $access != 1 ){
       
       $linkPackValue = G::LoadTranslation('ID_EXPORT') ;
       $link = 'skinsExport?id=' . $key ;
-      $items[] = array ( 
-                 'id'            => count($items), 
-                 'name'          => $key, 
+      $items[] = array (
+                 'id'            => count($items),
+                 'name'          => $key,
                  'filename'      => $key,
                  'description'   => $description,
                  'version'       => $version,
                  'url'           => $link,
-                 'linkPackValue' => $linkPackValue 
+                 'linkPackValue' => $linkPackValue
                  );
     }
     $folders['items'] = $items;

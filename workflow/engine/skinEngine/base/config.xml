@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skinConfiguration>
+	<information>
+		<name></name>
+		<author></author>
+		<version></version></information>
+	<cssFiles>
+
+		<skin>
+			<cssFile file="style.css" enabledBrowsers="ALL"
+				disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie.css"
+				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css"
+				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+		</skin>
+		<blank>
+			<cssFile file="style.css" enabledBrowsers="ALL"
+				disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie.css"
+				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css"
+				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+		</blank>
+		<raw>
+		</raw>
+		<submenu>
+			<cssFile file="style.css" enabledBrowsers="ALL"
+				disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie.css"
+				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css"
+				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+		</submenu>
+		<tracker>
+			<cssFile file="style.css" enabledBrowsers="ALL"
+				disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie.css"
+				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css"
+				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+		</tracker>
+		<extjs>
+			<cssFile file="xtheme-gray.css" enabledBrowsers="ALL"
+				disabledBrowsers=""></cssFile>
+				<cssFile file="pmos-xtheme-gray.css" enabledBrowsers="ALL"
+				disabledBrowsers=""></cssFile>				
+			<cssFile file="sprite_ie.css"
+				enabledBrowsers="ie" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css"
+				enabledBrowsers="ALL" disabledBrowsers="ie"></cssFile>
+		</extjs>
+
+
+	</cssFiles>
+</skinConfiguration>

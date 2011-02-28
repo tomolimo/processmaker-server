@@ -1,10 +1,10 @@
 <?php
 /**
  * paths.php
- *  
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -14,13 +14,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
  */
 
 //***************** System Directories & Paths **************************
@@ -36,13 +36,14 @@
   define( 'PATH_THIRDPARTY',    PATH_GULLIVER_HOME . 'thirdparty' . PATH_SEP );
 
   define( 'PATH_RBAC',          PATH_RBAC_HOME .     'engine'  . PATH_SEP . 'classes' . PATH_SEP );  //to enable rbac version 2
-  define( 'PATH_RBAC_CORE',     PATH_RBAC_HOME .     'engine'  . PATH_SEP );  
+  define( 'PATH_RBAC_CORE',     PATH_RBAC_HOME .     'engine'  . PATH_SEP );
 
   define( 'PATH_HTML',          PATH_HOME .          'public_html' . PATH_SEP );
 
 //***************** PM Paths CORE **************************
   define( 'PATH_CORE',        PATH_HOME . 'engine'       . PATH_SEP );
   define( 'PATH_SKINS',       PATH_CORE . 'skins'        . PATH_SEP );
+  define( 'PATH_SKIN_ENGINE', PATH_CORE . 'skinEngine'   . PATH_SEP );
   define( 'PATH_METHODS',     PATH_CORE . 'methods'      . PATH_SEP );
   define( 'PATH_XMLFORM',     PATH_CORE . 'xmlform'      . PATH_SEP );
   define( 'PATH_PLUGINS',     PATH_CORE . 'plugins'      . PATH_SEP  );
@@ -80,6 +81,8 @@
     require_once ( FILE_PATHS_INSTALLED );
     
     define( 'PATH_LANGUAGECONT', PATH_DATA . "META-INF" . PATH_SEP );
+    
+    define( 'PATH_CUSTOM_SKINS',PATH_DATA . 'skins'   . PATH_SEP );
 
     // TODO: This path defines where to save temporal data, similar to $_SESSION.
     define( 'PATH_TEMPORAL', PATH_C . 'dynEditor/');

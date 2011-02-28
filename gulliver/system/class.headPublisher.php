@@ -1,7 +1,7 @@
 <?php
 /**
  * class.headPublisher.php
- * @package gulliver.system 
+ * @package gulliver.system
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
@@ -62,7 +62,7 @@ class headPublisher {
     files :""
   });';
   var $headerScript = '
-  try{  
+  try{
     leimnud.exec(leimnud.fix.memoryLeak);
     if(leimnud.browser.isIphone){
       leimnud.iphone.make();
@@ -251,7 +251,7 @@ class headPublisher {
   
   /**
    * Function includeExtJs
-   * with this function we are using the ExtJs library, this library is not compatible with 
+   * with this function we are using the ExtJs library, this library is not compatible with
    * previous libraries, for that reason oHeadPublisher will clear previous libraries like maborak
    * we need to check if we need the language file
    * this function returns the header needed to render a page using ExtJs
@@ -266,13 +266,13 @@ class headPublisher {
     $head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
 //    $head .= "  <script type='text/javascript' src='/js/ext/ux/ux-all.js'></script>\n";
-/*    
+/*
     if (isset ( $this->extJsLibrary ) && is_array ( $this->extJsLibrary )) {
       foreach ( $this->extJsLibrary as $file ) {
         $head .= "  <script type='text/javascript' src='/js/ext/" . $file . ".js'></script>\n";
       }
     }
- */   
+ */
     $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
 
     //$head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
@@ -289,15 +289,15 @@ class headPublisher {
       //$this->extJsSkin = 'gtheme';
     }
     
-    $head .= $this->getExtJsStylesheets();
+    //$head .= $this->getExtJsStylesheets();
     $head .= $this->getExtJsScripts();
     $head .= $this->getExtJsVariablesScript();
       
     return $head;
   }
   
-  function getExtJsStylesheets(){
-    $script = "  <link rel='stylesheet' type='text/css' href='/css/classic.css' />\n";
+  function getExtJsStylesheets($skinName){
+    $script = "  <link rel='stylesheet' type='text/css' href='/css/$skinName.css' />\n";
 /*
     $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin.".css' />\n";
@@ -311,14 +311,14 @@ class headPublisher {
     //new interactive css decorator
     $script .= "  <link rel='stylesheet' type='text/css' href='/gulliver/loader?t=extjs-cssExtended&s=".$this->extJsSkin."' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/images/icons_silk/sprite.css' />\n";
-*/    
+*/
     // Load external/plugin css
-    // NOTE is necesary to move this to decorator server      
-    $oPluginRegistry = & PMPluginRegistry::getSingleton ();
-    $registeredCss=$oPluginRegistry->getRegisteredCss();
-    foreach($registeredCss as $cssFile){
-      $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n"; 
-    }
+    // NOTE is necesary to move this to decorator server
+    //$oPluginRegistry = & PMPluginRegistry::getSingleton ();
+    //$registeredCss=$oPluginRegistry->getRegisteredCss();
+    //foreach($registeredCss as $cssFile){
+    //  $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n";
+    //}
     
     return $script;
   }
@@ -376,7 +376,7 @@ class headPublisher {
   
   /**
    * Function setExtSkin
-   * with this function we are using the ExtJs library, this library is not compatible with 
+   * with this function we are using the ExtJs library, this library is not compatible with
    * previous libraries, for that reason oHeadPublisher will clear previous libraries like maborak
    * we need to check if we need the language file
    *
@@ -431,7 +431,7 @@ class headPublisher {
       $cacheName = str_replace ( '/', '_', $filename );
       $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $cacheName . '.js';
       file_put_contents ( $cacheFilename, file_get_contents ( $jsFilename ) );
-    } 
+    }
     else {
       $cacheName = md5 ( $mtime . $jsFilename );
       $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $cacheName . '.js';
@@ -500,7 +500,7 @@ class headPublisher {
     if (isset ( $this->extJsContent ) && is_array ( $this->extJsContent )) {
       foreach ( $this->extJsContent as $key => $file ) {
         $sPath = PATH_TPL;
-        //if the template  file doesn't exists, then try with the plugins folders    	
+        //if the template  file doesn't exists, then try with the plugins folders
         if (! is_file ( $sPath . $file . ".html" )) {
           $aux = explode ( PATH_SEP, $file );
           //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment
