@@ -314,10 +314,12 @@ class headPublisher {
 */
     // Load external/plugin css
     // NOTE is necesary to move this to decorator server
+    if(class_exists('PMPluginRegistry')){
     $oPluginRegistry = & PMPluginRegistry::getSingleton ();
     $registeredCss=$oPluginRegistry->getRegisteredCss();
     foreach($registeredCss as $cssFile){
       $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n";
+    }
     }
     
     return $script;
