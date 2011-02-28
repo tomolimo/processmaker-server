@@ -167,9 +167,11 @@ var G_Grid = function(oForm, sGridName) {
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 
               aObjects[0].setAttribute('id', newID);
+              aObjects[0].setAttribute('value', '');
               aObjects[0].name = newID;
               if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
-                aObjects[0].mergeAttributes(document.createElement("<INPUT name='" + newID + "'/>"), false);
+                aObjects[0].mergeAttributes(document.createElement("<INPUT id='" + newID + "' name='" + newID + "'/>"), false);              
+               var aux = oNewRow.getElementsByTagName('td')[i].innerHTML;                
               }
   
               tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
@@ -237,6 +239,10 @@ var G_Grid = function(oForm, sGridName) {
                 datePickerTrigger.appendChild(datePickerTriggerImg);
                 oNewRow.getElementsByTagName('td')[i].appendChild(datePickerTrigger);
                 datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
+              }else {
+              if (/*@cc_on!@*/0) {
+                   oNewRow.getElementsByTagName('td')[i].innerHTML = aux;
+               } 
               }
             }
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('span');
@@ -280,8 +286,6 @@ var G_Grid = function(oForm, sGridName) {
                 }
               }
             }
-            
-            //alert(oNewRow.getElementsByTagName('td')[i].innerHTML);
             break;
           case 'select':
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('select');
