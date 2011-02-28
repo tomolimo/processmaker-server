@@ -2802,7 +2802,6 @@ class processMap {
       G::LoadClass('ArrayPeer');
       $oCriteria = new Criteria('dbarray');
       $oCriteria->setDBArrayTable('reports');
-
       //if ($TaskFields['TAS_ASSIGN_TYPE'] == 'BALANCED') {
       //$G_PUBLISH->AddContent('xmlform', 'xmlform', 'dynaforms/dynaforms_WebEntry', '', array('PRO_UID' => $sProcessUID, 'LANG' => SYS_LANG));
       $G_PUBLISH->AddContent('propeltable', 'paged-table', 'dynaforms/dynaforms_WebEntryList', $oCriteria, array('PRO_UID' => $sProcessUID, 'LANG' => SYS_LANG));
@@ -2836,6 +2835,24 @@ class processMap {
       throw ($oError);
     }
   }
+  
+/**
+   * webEntryByTask
+   *
+   * @param   string     $sProcessUID
+   * @return  boolean    true
+   * throw   Exception  $oError
+   */
+//  function webEntryByTask($sProcessUID, $sEventUID) {
+//    $event = new Event();
+//    $event->load($sEventUID);
+//    $task_uid = $event->getEvnTasUidTo();
+//    $tasks = new Tasks();
+//    $tasks->get
+//    $link = $sProcessUID.'/'.str_replace ( ' ', '_', str_replace ( '/', '_',$task_uid));
+//    
+//    return $link;
+//  }
 
   /*
    * Return the supervisors dynaforms list criteria object
@@ -4548,12 +4565,28 @@ class processMap {
       $oEvent = EventPeer::retrieveByPK($sEventUID);
       if (!is_null($oEvent)) {
       $oData = $oEvent->load($sEventUID);
+      $dynTitle = '';
+      $dynUid = '';
+      $task_name = '';
+      $usr_uid_evn = $oEvent->getEvnConditions();
 
       if($oData['EVN_ACTION'] != '' && $oData['EVN_ACTION'] != 'WEB_ENTRY')
       {
           require_once 'classes/model/Content.php';
+          require_once 'classes/model/Task.php';
+          require_once 'classes/model/Dynaform.php';
           $oContent = new Content();
           $dynTitle = $oContent->load('DYN_TITLE', '', $oData['EVN_ACTION'], 'en');
+          $task_uid = $oEvent->getEvnTasUidTo();
+          
+          $dyn = new Dynaform();
+          $dyn->load($oData['EVN_ACTION']);
+                   
+          $dynUid = $dyn->getDynUid();
+          
+          $task = new Task();
+          $task->load($task_uid);
+          $task_name = $task->getTasTitle();          
 
           if (G::is_https ())
             $http = 'https://';
@@ -4581,7 +4614,7 @@ class processMap {
           }
         }
       }
-     $row []     = array ('W_LINK' => $arlink);
+     $row []     = array ('W_LINK' => $arlink,'DYN_TITLE'=>$dynTitle,'TAS_TITLE'=>$task_name, 'USR_UID'=>$usr_uid_evn, 'DYN_UID'=>$dynUid);
      $oJSON = new Services_JSON ( );
      $tmpData = $oJSON->encode( $row ) ;
      $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes

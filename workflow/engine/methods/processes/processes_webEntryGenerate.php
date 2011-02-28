@@ -23,6 +23,7 @@ try {
   
   $oTask = new Task ( );
   $TaskFields = $oTask->load ( $sTASKS );
+  $WE_EVN_UID = $oTask->getStartingEvent($sTASKS);
   if ($TaskFields['TAS_ASSIGN_TYPE'] != 'BALANCED') {
     throw (new Exception ( "The task '" . $TaskFields['TAS_TITLE'] . "' doesn't have a valid assignment type. The task needs to have a 'Cyclical Assignment'." ));
   }
@@ -113,9 +114,10 @@ try {
     $oEvent = new Event ( );
     $aDataEvent = array();
 
-    $aDataEvent['EVN_UID']        = $oData->WE_EVN_UID;
+    $aDataEvent['EVN_UID']        = $WE_EVN_UID; //$oData->WE_EVN_UID;
     $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
     $aDataEvent['EVN_ACTION']     = $sDYNAFORM;
+    $aDataEvent['EVN_CONDITIONS'] = $sWS_USER;
     $output = $oEvent->update($aDataEvent);
     //Show link
     $link = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sPRO_UID . '/' . $dynTitle . '.php';

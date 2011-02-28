@@ -582,4 +582,23 @@ public function kgetassigType($pro_uid, $tas){
     
 		return $aFields;
   }
+  
+  //Added by qennix
+  //Gets Starting Event of current task
+  function getStartingEvent(){
+    require_once 'classes/model/Event.php';
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(EventPeer::EVN_UID);
+    $oCriteria->add(EventPeer::EVN_TAS_UID_TO,$this->tas_uid);
+    $oCriteria->add(EventPeer::EVN_TYPE,'bpmnEventMessageStart');
+    $oDataset = EventPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    if ($oDataset->next()){
+      $row = $oDataset->getRow();
+      $event_uid = $row['EVN_UID']; 
+    }else{
+      $event_uid = '';
+    }
+    return $event_uid;
+  }
 } // Task
