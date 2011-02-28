@@ -2129,7 +2129,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var btnProperties = new Ext.Button({
             id: 'btnProperties',
             text: _('ID_PROPERTIES'),
-            iiconCls: 'button_menu_ext ss_sprite  ss_application_edit',
+            iconCls: 'button_menu_ext ss_sprite ss_application_edit',
             handler: propertiesOutputDoc
         });
 
@@ -2602,7 +2602,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
         handler: editOutputDoc
       },{
         text: _('ID_PROPERTIES'),
-        iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
+        iconCls: 'button_menu_ext ss_sprite ss_application_edit',
         handler: propertiesOutputDoc
       },{
         text: _('ID_DELETE'),
@@ -3222,7 +3222,7 @@ ProcessOptions.prototype.addTriggers = function()
   var btnProperties = new Ext.Button({
     id: 'btnProperty',
     text: _('ID_PROPERTIES'),
-    iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
+    iconCls: 'button_menu_ext ss_sprite ss_application_edit',
      handler: editProperties
   });
 
@@ -3319,7 +3319,7 @@ ProcessOptions.prototype.addTriggers = function()
         handler: editTriggers
       },{
         text: _('ID_PROPERTIES'),
-        iconCls: 'button_menu_ext ss_sprite  ss_application_edit',
+        iconCls: 'button_menu_ext ss_sprite ss_application_edit',
         handler: editProperties
       },{
         text: _('ID_DELETE'),

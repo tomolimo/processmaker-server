@@ -632,6 +632,7 @@ Ext.onReady ( function() {
     width     : 1300,    
     items   : [north, center, east],
     tbar: [
+/*
       {
         text: 'Save',
         cls: 'x-btn-text-icon',
@@ -644,7 +645,9 @@ Ext.onReady ( function() {
           iconCls: 'button_menu_ext ss_sprite ss_disk_multiple'
       }, {
         xtype: 'tbseparator'
-      }, {
+      }, 
+*/
+      {
         text:'Undo',
         iconCls: 'button_menu_ext ss_sprite ss_arrow_undo',
         handler: function() {
