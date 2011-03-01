@@ -17,8 +17,8 @@
     
   $oHeadPublisher->addExtJsScript('bpmn/EventEmptyStart');
   $oHeadPublisher->addExtJsScript('bpmn/EventMessageStart');
+  $oHeadPublisher->addExtJsScript('bpmn/EventTimerStart');
   //$oHeadPublisher->addExtJsScript('bpmn/EventRuleStart');
-  //$oHeadPublisher->addExtJsScript('bpmn/EventTimerStart');
   //$oHeadPublisher->addExtJsScript('bpmn/EventSignalStart');
   //$oHeadPublisher->addExtJsScript('bpmn/EventMulStart');
   //$oHeadPublisher->addExtJsScript('bpmn/EventLinkStart');

@@ -29,19 +29,6 @@ this.graphics.fillEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 this.graphics.setColor("#adae5e");
 this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 
-/*
-//drawing clock's minutes lines
-this.graphics.setColor("#adae5e");
-//this.graphics.drawEllipse(x_cir3,y_cir3,this.getWidth()-20,this.getHeight()-20);
-this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/1.3,this.getHeight()/2);
-this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/2,this.getHeight()/4.5);
-*/
-
-
-//var x_cir3=10;
-//var y_cir3=10;
-//this.graphics.setColor( "#f9faf2" );
-//this.graphics.fillEllipse(x_cir3,y_cir3,this.getWidth()-20,this.getHeight()-20);
 this.graphics.setColor("#adae5e");
 //this.graphics.drawEllipse(x_cir3,y_cir3,this.getWidth()-20,this.getHeight()-20);
 this.graphics.drawLine(this.getWidth()/2.2,this.getHeight()/2,this.getWidth()/1.6,this.getHeight()/2);  //horizontal line

@@ -584,7 +584,7 @@ MyWorkflow.prototype.AddEventStartContextMenu=function(oShape)
                             type:'bpmnEventRuleStart',
                             scope:oShape,
                             handler: MyWorkflow.prototype.toggleShapes
-                        }, {
+                        }/*, {
                             text: 'Signal',
                             type:'bpmnEventSignalStart',
                             scope:oShape,

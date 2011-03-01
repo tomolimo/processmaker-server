@@ -1,50 +1,73 @@
 bpmnEventTimerStart=function(){
-VectorFigure.call(this);
-//Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
-else
-    this.setDimension(30,30);
-this.stroke = 2;
+  VectorFigure.call(this);
 };
+
 bpmnEventTimerStart.prototype=new VectorFigure;
 bpmnEventTimerStart.prototype.type="bpmnEventTimerStart";
 bpmnEventTimerStart.prototype.paint=function(){
-VectorFigure.prototype.paint.call(this);
-var x_cir1=0;
-var y_cir1=0;
+  VectorFigure.prototype.paint.call(this);
+  if(typeof workflow.zoomfactor == 'undefined')
+    workflow.zoomfactor = 1;
 
-this.graphics.setColor("#c0c0c0");
-this.graphics.fillEllipse(x_cir1+5,y_cir1+5,this.getWidth(),this.getHeight());
-this.graphics.setStroke(this.stroke);
-this.graphics.setColor( "#e4f7df" );
-this.graphics.fillEllipse(x_cir1,y_cir1,this.getWidth(),this.getHeight());
-this.graphics.setColor("#4aa533");
-this.graphics.drawEllipse(x_cir1,y_cir1,this.getWidth(),this.getHeight());
-var x_cir2=5;
-var y_cir2=5;
-this.graphics.setColor( "#e4f7df" );
-this.graphics.fillEllipse(x_cir2,y_cir2,this.getWidth()-10,this.getHeight()-10);
-this.graphics.setColor("#4aa533");
-this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-10,this.getHeight()-10);
-this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/1.3,this.getHeight()/2);   //horizontal line
-this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/2,this.getHeight()/4.5);    //vertical line
-this.graphics.paint();
+  //Set the Limitation
+  if(typeof this.limitFlag == 'undefined' || this.limitFlag == false) {
+    this.originalWidth = 30;
+    this.originalHeight = 30;
+    this.orgXPos = this.getX();
+    this.orgYPos = this.getY();
+    this.orgFontSize =this.fontSize;
+  }
+  this.width  = this.originalWidth  * workflow.zoomfactor;
+  this.height = this.originalHeight * workflow.zoomfactor;
+  
+  var x_cir = 0;
+  var y_cir = 0;
+  
+  //draw the circle  
+  this.graphics.setColor("#d0d0d0");
+  this.graphics.fillEllipse(x_cir+2,y_cir+2,this.getWidth(),this.getHeight());
+  this.graphics.setColor( "#F6FFDA" );
+  this.graphics.fillEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+  this.graphics.setStroke(2);
+  this.graphics.setColor("#97C759");
+  this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+  this.graphics.setStroke(1);
+  this.graphics.setColor("#98C951");
+  this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
 
-/*Code Added to Dynamically shift Ports on resizing of shapes
- **/
-if(this.input1!=null){
-this.input1.setPosition(0,this.height/2);
-}
-if(this.output1!=null){
-this.output1.setPosition(this.width/2,this.height);
-}
-if(this.input2!=null){
-this.input2.setPosition(this.width/2,0);
-}
-if(this.output2!=null){
-this.output2.setPosition(this.width,this.height/2);
-}
+  //draw the clock
+  var cw = this.getWidth();
+  var ch = this.getHeight();
+  this.graphics.setColor("#98C951");
+  this.graphics.drawEllipse(cw*0.15, ch*0.15, ch*0.7, ch*0.7 );
+
+  var x = new Array( cw*0.60, cw*0.50, cw*0.75, 0.5);
+  var y = new Array( ch*0.31, ch*0.50, ch*0.50, 0.5);
+  this.graphics.setColor("#4aa533");
+  //this.graphics.drawPolygon(x,y);
+  this.graphics.drawLine( cw*0.60, ch*0.31, cw*0.50, ch*0.50);   
+  this.graphics.drawLine( cw*0.75, ch*0.50, cw*0.50, ch*0.50);   
+
+
+  //this.graphics.setColor("#4aa533");
+  //this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-10,this.getHeight()-10);
+  //this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/1.3,this.getHeight()/2);   //horizontal line
+  //this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/2,this.getHeight()/4.5);    //vertical line
+  this.graphics.paint();
+
+  //Code Added to Dynamically shift Ports on resizing of shapes/
+  if(this.input1!=null){
+    this.input1.setPosition(0,this.height/2);
+  }
+  if(this.output1!=null){
+    this.output1.setPosition(this.width/2,this.height);
+  }
+  if(this.input2!=null){
+    this.input2.setPosition(this.width/2,0);
+  }
+  if(this.output2!=null){
+    this.output2.setPosition(this.width,this.height/2);
+  }
 };
 
 bpmnEventTimerStart.prototype.setWorkflow=function(_40c5){

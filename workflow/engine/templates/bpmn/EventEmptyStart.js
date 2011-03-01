@@ -1,14 +1,15 @@
 bpmnEventEmptyStart=function(){
-VectorFigure.call(this);
+  VectorFigure.call(this);
 };
+
 bpmnEventEmptyStart.prototype=new VectorFigure;
 bpmnEventEmptyStart.prototype.type="bpmnEventEmptyStart";
-bpmnEventEmptyStart.prototype.paint=function(){
-VectorFigure.prototype.paint.call(this);
-this.stroke=2;
-if(typeof workflow.zoomfactor == 'undefined')
-  workflow.zoomfactor = 1;
-  //Set the Task Limitation
+bpmnEventEmptyStart.prototype.paint=function() {
+  VectorFigure.prototype.paint.call(this);
+  if(typeof workflow.zoomfactor == 'undefined')
+    workflow.zoomfactor = 1;
+
+  //Set the Limitation
   if(typeof this.limitFlag == 'undefined' || this.limitFlag == false) {
     this.originalWidth = 30;
     this.originalHeight = 30;
@@ -16,30 +17,34 @@ if(typeof workflow.zoomfactor == 'undefined')
     this.orgYPos = this.getY();
     this.orgFontSize =this.fontSize;
   }
-  this.width  = this.originalWidth * workflow.zoomfactor;
-  this.height = this.originalHeight  * workflow.zoomfactor;
-
-var x_cir = 0;
-var y_cir = 0;
-
-this.graphics.setColor("#c0c0c0");
-this.graphics.fillEllipse(x_cir+4,y_cir+4,this.getWidth(),this.getHeight());
-this.graphics.setStroke(this.stroke);
-this.graphics.setColor( "#e4f7df" );
-this.graphics.fillEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
-this.graphics.setColor("#4aa533");
-this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
-this.graphics.paint();
-
+  this.width  = this.originalWidth  * workflow.zoomfactor;
+  this.height = this.originalHeight * workflow.zoomfactor;
   
-/*Code Added to Dynamically shift Ports on resizing of shapes
- **/
-if(this.output1!=null){
-this.output1.setPosition(this.width/2,this.height);
-}
-if(this.output2!=null){
-this.output2.setPosition(this.width,this.height/2);
-}
+  var x_cir = 0;
+  var y_cir = 0;
+
+  //draw the circle  
+  this.graphics.setColor("#d0d0d0");
+  this.graphics.fillEllipse(x_cir+2,y_cir+2,this.getWidth(),this.getHeight());
+  this.graphics.setColor( "#F6FFDA" );
+  this.graphics.fillEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+  this.graphics.setStroke(2);
+  this.graphics.setColor("#97C759");
+  this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+  this.graphics.setStroke(1);
+  this.graphics.setColor("#98C951");
+  this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+
+  this.graphics.paint();
+  
+    
+  //Code Added to Dynamically shift Ports on resizing of shapes
+  if(this.output1!=null) {
+    this.output1.setPosition(this.width/2,this.height);
+  }
+  if(this.output2!=null){
+    this.output2.setPosition(this.width,this.height/2);
+  }
 };
 
 bpmnEventEmptyStart.prototype.setWorkflow=function(_40c5){
