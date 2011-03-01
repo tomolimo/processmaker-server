@@ -478,7 +478,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
     $phpFile = str_replace ( '.php', 'index.php', $phpFile );
     $phpFile = include ( $phpFile );
   }*/
-  $bWE = false;
+  $bWE = false; 
+  $isControllerCall = false; 
   if ( substr(SYS_COLLECTION , 0,8) === 'gulliver' ) {
     $phpFile = PATH_GULLIVER_HOME . 'methods/' . substr( SYS_COLLECTION , 8) . SYS_TARGET.'.php';
   }
@@ -505,8 +506,6 @@ $startingTime =  array_sum(explode(' ',microtime()));
     }
     
     //erik: verify if it is a Controller Class or httpProxyController Class
-    $isControllerCall = false;
-    
     if( is_file(PATH_CONTROLLERS . SYS_COLLECTION . '.php') ) {
       require_once PATH_CONTROLLERS . SYS_COLLECTION . '.php';
       $controllerClass  = SYS_COLLECTION;
