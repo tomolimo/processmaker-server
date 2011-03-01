@@ -203,8 +203,8 @@ class AppCacheView extends BaseAppCacheView {
    */
   function getSentListCriteria ($userUid) {
     $Criteria = $this->addPMFieldsToCriteria('sent');
-    $Criteria->addAsColumn( 'DEL_INDEX', 'MAX(' . AppDelegationPeer::DEL_INDEX . ')' );
-    $Criteria->addJoin ( AppCacheViewPeer::APP_UID , AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
+    //$Criteria->addAsColumn( 'MAX_DEL_INDEX', 'MAX(' . AppDelegationPeer::DEL_INDEX . ')' );
+    //$Criteria->addJoin ( AppCacheViewPeer::APP_UID , AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
     
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
