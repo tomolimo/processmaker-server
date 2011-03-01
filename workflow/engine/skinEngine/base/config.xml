@@ -17,6 +17,10 @@
 				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
 				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+			<cssFile file="xmlcolors.css"
+				enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="jscolors.css"
+				enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
 		</skin>
 		<blank>
 			<cssFile file="style.css" enabledBrowsers="ALL"
@@ -53,6 +57,10 @@
 				enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
 			<cssFile file="sprite.css"
 				enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+			<cssFile file="xmlcolors.css"
+				enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="jscolors.css"
+				enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
 		</extjs>
 	</cssFiles>
 </skinConfiguration>
