@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-02-14 16:14:05\n"
+"PO-Revision-Date: 2011-03-01 08:31:49\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -424,13 +424,13 @@ msgstr "Members"
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_GROUP
 #: LABEL/ID_MSG_CONFIRM_DELETE_GROUP
-msgid "Do you want to delete this group ?"
-msgstr "Do you want to delete this group ?"
+msgid "Draft"
+msgstr "Draft"
 
 # TRANSLATION
 # APP_STATUS/DRAFT
 #: APP_STATUS/DRAFT
-msgid "Draft"
+msgid "[APP_STATUS/DRAFT] Draft"
 msgstr "Draft"
 
 # TRANSLATION
@@ -496,13 +496,13 @@ msgstr "Generate"
 # TRANSLATION
 # LABEL/ID_CONFIRM_DELETE_ELEMENT
 #: LABEL/ID_CONFIRM_DELETE_ELEMENT
-msgid "Do you want to delete this element?"
-msgstr "Do you want to delete this element?"
+msgid "Approval of consolidated tasks"
+msgstr "Approval of consolidated tasks"
 
 # TRANSLATION
 # DASHBOARD/7
 #: DASHBOARD/7
-msgid "Approval of consolidated tasks"
+msgid "[DASHBOARD/7] Approval of consolidated tasks"
 msgstr "Approval of consolidated tasks"
 
 # TRANSLATION
@@ -520,8 +520,8 @@ msgstr "Output Documents"
 # TRANSLATION
 # LABEL/DRAFT
 #: LABEL/DRAFT
-msgid "[LABEL/DRAFT] Draft"
-msgstr "Draft"
+msgid "High"
+msgstr "High"
 
 # TRANSLATION
 # DEL_PRIORITY/0
@@ -538,7 +538,7 @@ msgstr "Medium"
 # TRANSLATION
 # DEL_PRIORITY/2
 #: DEL_PRIORITY/2
-msgid "High"
+msgid "[DEL_PRIORITY/2] High"
 msgstr "High"
 
 # TRANSLATION
@@ -5668,80 +5668,80 @@ msgstr "Cases Lists Settings"
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_1
 #: LABEL/ID_DATE_FORMAT_1
-msgid "Y-m-d H:i:s .... (2010-11-17 10:25:07)"
-msgstr "Y-m-d H:i:s .... (2010-11-17 10:25:07)"
+msgid "Y-m-d H:i:s"
+msgstr "Y-m-d H:i:s"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_2
 #: LABEL/ID_DATE_FORMAT_2
-msgid "d/m/Y .... (17/11/2010)"
-msgstr "d/m/Y .... (17/11/2010)"
+msgid "d/m/Y"
+msgstr "d/m/Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_3
 #: LABEL/ID_DATE_FORMAT_3
-msgid "m/d/Y .... (11/17/2010)"
-msgstr "m/d/Y .... (11/17/2010)"
+msgid "m/d/Y"
+msgstr "m/d/Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_4
 #: LABEL/ID_DATE_FORMAT_4
-msgid "Y/d/m .... (2010/17/11)"
-msgstr "Y/d/m .... (2010/17/11)"
+msgid "Y/d/m"
+msgstr "Y/d/m"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_5
 #: LABEL/ID_DATE_FORMAT_5
-msgid "Y/m/d .... (2010/11/17)"
-msgstr "Y/m/d .... (2010/11/17)"
+msgid "Y/m/d"
+msgstr "Y/m/d"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_6
 #: LABEL/ID_DATE_FORMAT_6
-msgid "F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
-msgstr "F j, Y, g:i a ....(November 17, 2010,  10:45 am)"
+msgid "F j, Y, g:i a"
+msgstr "F j, Y, g:i a"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_7
 #: LABEL/ID_DATE_FORMAT_7
-msgid "m.d.y .... (11.17.10)"
-msgstr "m.d.y .... (11.17.10)"
+msgid "m.d.y"
+msgstr "m.d.y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_8
 #: LABEL/ID_DATE_FORMAT_8
-msgid "j, n, Y .... (17,11,2010)"
-msgstr "j, n, Y .... (17,11,2010)"
+msgid "j, n, Y"
+msgstr "j, n, Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_9
 #: LABEL/ID_DATE_FORMAT_9
-msgid "D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
-msgstr "D M j G:i:s T Y .... (Thu Nov 17 10:48:18  BOT 2010)"
+msgid "D M j G:i:s T Y"
+msgstr "D M j G:i:s T Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_10
 #: LABEL/ID_DATE_FORMAT_10
-msgid "D d M, Y .... (Thu 17 Nov, 2010)"
-msgstr "D d M, Y .... (Thu 17 Nov, 2010)"
+msgid "D d M, Y"
+msgstr "D d M, Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_11
 #: LABEL/ID_DATE_FORMAT_11
-msgid "D M, Y .... (Thu Nov, 2010)"
-msgstr "D M, Y .... (Thu Nov, 2010)"
+msgid "D M, Y"
+msgstr "D M, Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_12
 #: LABEL/ID_DATE_FORMAT_12
-msgid "d M, Y .... (17 Nov, 2010)"
-msgstr "d M, Y .... (17 Nov, 2010)"
+msgid "d M, Y"
+msgstr "d M, Y"
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_13
 #: LABEL/ID_DATE_FORMAT_13
-msgid "d m, Y .... (17 11, 2010)"
-msgstr "d m, Y .... (17 11, 2010)"
+msgid "d m, Y"
+msgstr "d m, Y"
 
 # TRANSLATION
 # LABEL/ID_STEP_LIST
@@ -5752,44 +5752,44 @@ msgstr "Step List"
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_1
 #: LABEL/ID_USERNAME_FORMAT_1
-msgid "@firstName @lastName .... (John Cooper)"
-msgstr "@firstName @lastName .... (John Cooper)"
+msgid "@firstName @lastName"
+msgstr "@firstName @lastName"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_2
 #: LABEL/ID_USERNAME_FORMAT_2
-msgid "@firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
-msgstr "@firstName @lastName (@userName) ....  (John Cooper (JohnLCooper))"
+msgid "@firstName @lastName (@userName)"
+msgstr "@firstName @lastName (@userName)"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_3
 #: LABEL/ID_USERNAME_FORMAT_3
-msgid "@userName .... (JohnLCooper)"
-msgstr "@userName .... (JohnLCooper)"
+msgid "@userName"
+msgstr "@userName"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_4
 #: LABEL/ID_USERNAME_FORMAT_4
-msgid "@userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
-msgstr "@userName (@firstName @lastName) ....  (JohnLCooper (John Cooper))"
+msgid "@userName (@firstName @lastName)"
+msgstr "@userName (@firstName @lastName)"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_5
 #: LABEL/ID_USERNAME_FORMAT_5
-msgid "@lastName @firstName .... (Cooper John)"
-msgstr "@lastName @firstName .... (Cooper John)"
+msgid "@lastName @firstName"
+msgstr "@lastName @firstName"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_6
 #: LABEL/ID_USERNAME_FORMAT_6
-msgid "@lastName, @firstName .... (Cooper, John)"
-msgstr "@lastName, @firstName .... (Cooper, John)"
+msgid "@lastName, @firstName"
+msgstr "@lastName, @firstName"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_FORMAT_7
 #: LABEL/ID_USERNAME_FORMAT_7
-msgid "@lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
-msgstr "@lastName, @firstName (@userName) ....  (Cooper, John (JohnLCooper))"
+msgid "@lastName, @firstName (@userName)"
+msgstr "@lastName, @firstName (@userName)"
 
 # TRANSLATION
 # JAVASCRIPT/USERS_DELETE_WITH_HISTORY
@@ -7400,6 +7400,30 @@ msgid "Group or Users"
 msgstr "Group or Users"
 
 # TRANSLATION
+# LABEL/ID_DOWNLOADING_FILE
+#: LABEL/ID_DOWNLOADING_FILE
+msgid "Downloading file"
+msgstr "Downloading file"
+
+# TRANSLATION
+# LABEL/ID_OPEN_IN_A_NEW_WINDOW
+#: LABEL/ID_OPEN_IN_A_NEW_WINDOW
+msgid "Open in a new window"
+msgstr "Open in a new window"
+
+# TRANSLATION
+# LABEL/ID_CASE_LIST
+#: LABEL/ID_CASE_LIST
+msgid "Case List"
+msgstr "Case List"
+
+# TRANSLATION
+# LABEL/ID_SAMPLES
+#: LABEL/ID_SAMPLES
+msgid "Samples"
+msgstr "Samples"
+
+# TRANSLATION
 # LABEL/ID_PROCESSNAME_ALREADY_EXISTS
 #: LABEL/ID_PROCESSNAME_ALREADY_EXISTS
 msgid "The Process Name already exists!"
@@ -8563,6 +8587,696 @@ msgstr "Execute Trigger"
 msgid "Intermediate Timer Event (Multiple Event)"
 msgstr "Intermediate Timer Event (Multiple Event)"
 
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE
+msgid "Displaying PM Tables {0} - {1} of {2}"
+msgstr "Displaying PM Tables {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_NO_PMTABLES_MESSAGE
+#: LABEL/ID_GRID_PAGE_NO_PMTABLES_MESSAGE
+msgid "No PM Tables to display"
+msgstr "No PM Tables to display"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_ROWS_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_ROWS_MESSAGE
+msgid "Displaying rows {0} - {1} of {2}"
+msgstr "Displaying rows {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_NO_ROWS_MESSAGE
+#: LABEL/ID_GRID_PAGE_NO_ROWS_MESSAGE
+msgid "No rows to display"
+msgstr "No rows to display"
+
+# TRANSLATION
+# LABEL/ID_SCHEMA
+#: LABEL/ID_SCHEMA
+msgid "SCHEMA"
+msgstr "SCHEMA"
+
+# TRANSLATION
+# JAVASCRIPT/ID_DELETE_TABLE_COLLECTION
+#: JAVASCRIPT/ID_DELETE_TABLE_COLLECTION
+msgid "Do you want to delete this table?"
+msgstr "Do you want to delete this table?"
+
+# TRANSLATION
+# LABEL/ID_CALENDARS
+#: LABEL/ID_CALENDARS
+msgid "Calendars"
+msgstr "Calendars"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_CALENDAR_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_CALENDAR_MESSAGE
+msgid "Displaying calendars {0} - {1} of {2}"
+msgstr "Displaying calendars {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_NO_CALENDAR_MESSAGE
+#: LABEL/ID_GRID_PAGE_NO_CALENDAR_MESSAGE
+msgid "No calendars to display"
+msgstr "No calendars to display"
+
+# TRANSLATION
+# LABEL/MIME_DES_EXE
+#: LABEL/MIME_DES_EXE
+msgid "Executable File"
+msgstr "Executable File"
+
+# TRANSLATION
+# LABEL/MIME_DES_DIR
+#: LABEL/MIME_DES_DIR
+msgid "Directory"
+msgstr "Directory"
+
+# TRANSLATION
+# LABEL/MIME_DES_FILE
+#: LABEL/MIME_DES_FILE
+msgid "[LABEL/MIME_DES_FILE] File"
+msgstr "File"
+
+# TRANSLATION
+# LABEL/MIME_DES_SYMLINK
+#: LABEL/MIME_DES_SYMLINK
+msgid "Symbolic Link"
+msgstr "Symbolic Link"
+
+# TRANSLATION
+# LABEL/MIME_DES_TEXT
+#: LABEL/MIME_DES_TEXT
+msgid "Text File"
+msgstr "Text File"
+
+# TRANSLATION
+# LABEL/MIME_DES_TXT
+#: LABEL/MIME_DES_TXT
+msgid "[LABEL/MIME_DES_TXT] Text File"
+msgstr "Text File"
+
+# TRANSLATION
+# LABEL/MIME_DES_PHP
+#: LABEL/MIME_DES_PHP
+msgid "PHP Script"
+msgstr "PHP Script"
+
+# TRANSLATION
+# LABEL/MIME_DES_SQL
+#: LABEL/MIME_DES_SQL
+msgid "SQL File"
+msgstr "SQL File"
+
+# TRANSLATION
+# LABEL/MIME_DES_PERL
+#: LABEL/MIME_DES_PERL
+msgid "PERL Script"
+msgstr "PERL Script"
+
+# TRANSLATION
+# LABEL/MIME_DES_HTML
+#: LABEL/MIME_DES_HTML
+msgid "HTML Page"
+msgstr "HTML Page"
+
+# TRANSLATION
+# LABEL/MIME_DES_JS
+#: LABEL/MIME_DES_JS
+msgid "Javascript File"
+msgstr "Javascript File"
+
+# TRANSLATION
+# LABEL/MIME_DES_CSS
+#: LABEL/MIME_DES_CSS
+msgid "CSS File"
+msgstr "CSS File"
+
+# TRANSLATION
+# LABEL/MIME_DES_CGI
+#: LABEL/MIME_DES_CGI
+msgid "CGI Script"
+msgstr "CGI Script"
+
+# TRANSLATION
+# LABEL/MIME_DES_CPPS
+#: LABEL/MIME_DES_CPPS
+msgid "C++ Source File"
+msgstr "C++ Source File"
+
+# TRANSLATION
+# LABEL/MIME_DES_CPPH
+#: LABEL/MIME_DES_CPPH
+msgid "C++ Header File"
+msgstr "C++ Header File"
+
+# TRANSLATION
+# LABEL/MIME_DES_JAVAS
+#: LABEL/MIME_DES_JAVAS
+msgid "Java Source File"
+msgstr "Java Source File"
+
+# TRANSLATION
+# LABEL/MIME_DES_JAVAC
+#: LABEL/MIME_DES_JAVAC
+msgid "Java Class File"
+msgstr "Java Class File"
+
+# TRANSLATION
+# LABEL/MIME_DES_PAS
+#: LABEL/MIME_DES_PAS
+msgid "Pascal File"
+msgstr "Pascal File"
+
+# TRANSLATION
+# LABEL/MIME_DES_GIF
+#: LABEL/MIME_DES_GIF
+msgid "GIF Picture"
+msgstr "GIF Picture"
+
+# TRANSLATION
+# LABEL/MIME_DES_JPG
+#: LABEL/MIME_DES_JPG
+msgid "JPG Picture"
+msgstr "JPG Picture"
+
+# TRANSLATION
+# LABEL/MIME_DES_BMP
+#: LABEL/MIME_DES_BMP
+msgid "BMP Picture"
+msgstr "BMP Picture"
+
+# TRANSLATION
+# LABEL/MIME_DES_PNG
+#: LABEL/MIME_DES_PNG
+msgid "PNG Picture"
+msgstr "PNG Picture"
+
+# TRANSLATION
+# LABEL/MIME_DES_ZIP
+#: LABEL/MIME_DES_ZIP
+msgid "ZIP Archive"
+msgstr "ZIP Archive"
+
+# TRANSLATION
+# LABEL/MIME_DES_TAR
+#: LABEL/MIME_DES_TAR
+msgid "TAR Archive"
+msgstr "TAR Archive"
+
+# TRANSLATION
+# LABEL/MIME_DES_GZIP
+#: LABEL/MIME_DES_GZIP
+msgid "GZIP Archive"
+msgstr "GZIP Archive"
+
+# TRANSLATION
+# LABEL/MIME_DES_BZIP2
+#: LABEL/MIME_DES_BZIP2
+msgid "BZIP2 Archive"
+msgstr "BZIP2 Archive"
+
+# TRANSLATION
+# LABEL/MIME_DES_RAR
+#: LABEL/MIME_DES_RAR
+msgid "RAR Archive"
+msgstr "RAR Archive"
+
+# TRANSLATION
+# LABEL/MIME_DES_MP3
+#: LABEL/MIME_DES_MP3
+msgid "MP3 Audio File"
+msgstr "MP3 Audio File"
+
+# TRANSLATION
+# LABEL/MIME_DES_WAV
+#: LABEL/MIME_DES_WAV
+msgid "WAV Audio File"
+msgstr "WAV Audio File"
+
+# TRANSLATION
+# LABEL/MIME_DES_MIDI
+#: LABEL/MIME_DES_MIDI
+msgid "MIDI Audio File"
+msgstr "MIDI Audio File"
+
+# TRANSLATION
+# LABEL/MIME_DES_REAL
+#: LABEL/MIME_DES_REAL
+msgid "RealAudio File"
+msgstr "RealAudio File"
+
+# TRANSLATION
+# LABEL/MIME_DES_MPG
+#: LABEL/MIME_DES_MPG
+msgid "MPG Video File"
+msgstr "MPG Video File"
+
+# TRANSLATION
+# LABEL/MIME_DES_MOV
+#: LABEL/MIME_DES_MOV
+msgid "Movie File"
+msgstr "Movie File"
+
+# TRANSLATION
+# LABEL/MIME_DES_AVI
+#: LABEL/MIME_DES_AVI
+msgid "AVI Video File"
+msgstr "AVI Video File"
+
+# TRANSLATION
+# LABEL/MIME_DES_FLASH
+#: LABEL/MIME_DES_FLASH
+msgid "Flash Movie File"
+msgstr "Flash Movie File"
+
+# TRANSLATION
+# LABEL/MIME_DES_WORD
+#: LABEL/MIME_DES_WORD
+msgid "Word Document"
+msgstr "Word Document"
+
+# TRANSLATION
+# LABEL/MIME_DES_EXCEL
+#: LABEL/MIME_DES_EXCEL
+msgid "Excel Document"
+msgstr "Excel Document"
+
+# TRANSLATION
+# LABEL/MIME_DES_PDF
+#: LABEL/MIME_DES_PDF
+msgid "PDF File"
+msgstr "PDF File"
+
+# TRANSLATION
+# LABEL/MIME_DES_DOC
+#: LABEL/MIME_DES_DOC
+msgid "[LABEL/MIME_DES_DOC] Word Document"
+msgstr "Word Document"
+
+# TRANSLATION
+# LABEL/MIME_DES_XLS
+#: LABEL/MIME_DES_XLS
+msgid "[LABEL/MIME_DES_XLS] Excel Document"
+msgstr "Excel Document"
+
+# TRANSLATION
+# LABEL/MIME_DES_RTF
+#: LABEL/MIME_DES_RTF
+msgid "Rich Text File"
+msgstr "Rich Text File"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_CALENDAR
+#: LABEL/ID_CONFIRM_DELETE_CALENDAR
+msgid "Do you want to delete selected calendar?"
+msgstr "Do you want to delete selected calendar?"
+
+# TRANSLATION
+# LABEL/ID_CALENDAR_SUCCESS_DELETE
+#: LABEL/ID_CALENDAR_SUCCESS_DELETE
+msgid "Calendar has been deleted correctly."
+msgstr "Calendar has been deleted correctly."
+
+# TRANSLATION
+# LABEL/ID_MSG_CANNOT_DELETE_CALENDAR
+#: LABEL/ID_MSG_CANNOT_DELETE_CALENDAR
+msgid "Calendar cannot be deleted while has assignations."
+msgstr "Calendar cannot be deleted while has assignations."
+
+# TRANSLATION
+# LABEL/ID_REMOVED_SESSION_FILES
+#: LABEL/ID_REMOVED_SESSION_FILES
+msgid "Older session files has been removed"
+msgstr "Older session files has been removed"
+
+# TRANSLATION
+# LABEL/ID_NO_OLDER_SESSION_FILES
+#: LABEL/ID_NO_OLDER_SESSION_FILES
+msgid "There are no older session files"
+msgstr "There are no older session files"
+
+# TRANSLATION
+# LABEL/ID_CACHE_BTN_SETUP_SESSION
+#: LABEL/ID_CACHE_BTN_SETUP_SESSION
+msgid "Delete older session files"
+msgstr "Delete older session files"
+
+# TRANSLATION
+# LABEL/ID_CACHE_SUBTITLE_SETUP_SESSION
+#: LABEL/ID_CACHE_SUBTITLE_SETUP_SESSION
+msgid "Session Maintenance"
+msgstr "Session Maintenance"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_USERS
+#: LABEL/ID_ASSIGN_USERS
+msgid "Assign Users"
+msgstr "Assign Users"
+
+# TRANSLATION
+# LABEL/ID_SET_SUPERVISOR
+#: LABEL/ID_SET_SUPERVISOR
+msgid "Set Supervisor"
+msgstr "Set Supervisor"
+
+# TRANSLATION
+# LABEL/ID_SET_SUPERVISOR_SUCCESS
+#: LABEL/ID_SET_SUPERVISOR_SUCCESS
+msgid "Supervisor assigned correctly"
+msgstr "Supervisor assigned correctly"
+
+# TRANSLATION
+# LABEL/ID_ROLE_EXISTS
+#: LABEL/ID_ROLE_EXISTS
+msgid "Role Code already exists."
+msgstr "Role Code already exists."
+
+# TRANSLATION
+# LABEL/ID_DEBUG_PANEL_TITLE
+#: LABEL/ID_DEBUG_PANEL_TITLE
+msgid "ProcessMaker Debugger"
+msgstr "ProcessMaker Debugger"
+
+# TRANSLATION
+# LABEL/ID_SWITCH_EDITOR
+#: LABEL/ID_SWITCH_EDITOR
+msgid "Switch Editor"
+msgstr "Switch Editor"
+
+# TRANSLATION
+# LABEL/ID_NORMAL
+#: LABEL/ID_NORMAL
+msgid "Normal"
+msgstr "Normal"
+
+# TRANSLATION
+# LABEL/ID_GRID
+#: LABEL/ID_GRID
+msgid "Grid"
+msgstr "Grid"
+
+# TRANSLATION
+# LABEL/ID_TAS_EDIT
+#: LABEL/ID_TAS_EDIT
+msgid "Tasks (Edit mode)"
+msgstr "Tasks (Edit mode)"
+
+# TRANSLATION
+# LABEL/ID_TAS_VIEW
+#: LABEL/ID_TAS_VIEW
+msgid "Tasks (View mode)"
+msgstr "Tasks (View mode)"
+
+# TRANSLATION
+# LABEL/ID_PM_FILENAME
+#: LABEL/ID_PM_FILENAME
+msgid "Download PM File:"
+msgstr "Download PM File:"
+
+# TRANSLATION
+# LABEL/ID_XPDL_FILENAME
+#: LABEL/ID_XPDL_FILENAME
+msgid "Download XPDL File:"
+msgstr "Download XPDL File:"
+
+# TRANSLATION
+# LABEL/ID_NO_ITEMS_SELECTED
+#: LABEL/ID_NO_ITEMS_SELECTED
+msgid "No items Selected"
+msgstr "No items Selected"
+
+# TRANSLATION
+# LABEL/ID_SERVER_COMMUNICATION_ERROR
+#: LABEL/ID_SERVER_COMMUNICATION_ERROR
+msgid "Failed to connect to the server"
+msgstr "Failed to connect to the server"
+
+# TRANSLATION
+# LABEL/ID_DELETE_SELECTED_ITEMS
+#: LABEL/ID_DELETE_SELECTED_ITEMS
+msgid "Do you want to deleted selected({0}) items?"
+msgstr "Do you want to deleted selected({0}) items?"
+
+# TRANSLATION
+# LABEL/ID_ROOT_FOLDER
+#: LABEL/ID_ROOT_FOLDER
+msgid "Root Folder"
+msgstr "Root Folder"
+
+# TRANSLATION
+# LABEL/ID_RELOAD
+#: LABEL/ID_RELOAD
+msgid "Reload"
+msgstr "Reload"
+
+# TRANSLATION
+# LABEL/ID_MOVE
+#: LABEL/ID_MOVE
+msgid "Move"
+msgstr "Move"
+
+# TRANSLATION
+# LABEL/ID_RENAME
+#: LABEL/ID_RENAME
+msgid "Rename"
+msgstr "Rename"
+
+# TRANSLATION
+# LABEL/ID_SHOW_DIRS
+#: LABEL/ID_SHOW_DIRS
+msgid "Show Dirs"
+msgstr "Show Dirs"
+
+# TRANSLATION
+# LABEL/ID_FILTER_CURRENT_VIEW
+#: LABEL/ID_FILTER_CURRENT_VIEW
+msgid "Filter current view"
+msgstr "Filter current view"
+
+# TRANSLATION
+# LABEL/ID_FIRST
+#: LABEL/ID_FIRST
+msgid "First"
+msgstr "First"
+
+# TRANSLATION
+# LABEL/ID_LAST
+#: LABEL/ID_LAST
+msgid "Last"
+msgstr "Last"
+
+# TRANSLATION
+# LABEL/ID_NEXT
+#: LABEL/ID_NEXT
+msgid "Next"
+msgstr "Next"
+
+# TRANSLATION
+# LABEL/ID_PREVIOUS
+#: LABEL/ID_PREVIOUS
+msgid "Previous"
+msgstr "Previous"
+
+# TRANSLATION
+# LABEL/ID_DONE
+#: LABEL/ID_DONE
+msgid "Done"
+msgstr "Done"
+
+# TRANSLATION
+# LABEL/ID_MODIFIED
+#: LABEL/ID_MODIFIED
+msgid "Modified"
+msgstr "Modified"
+
+# TRANSLATION
+# LABEL/ID_OWNER
+#: LABEL/ID_OWNER
+msgid "Owner"
+msgstr "Owner"
+
+# TRANSLATION
+# LABEL/ID_SIZE
+#: LABEL/ID_SIZE
+msgid "Size"
+msgstr "Size"
+
+# TRANSLATION
+# LABEL/ID_DIRECTORY
+#: LABEL/ID_DIRECTORY
+msgid "[LABEL/ID_DIRECTORY] Directory"
+msgstr "Directory"
+
+# TRANSLATION
+# LABEL/ID_NO_MANAGER_SELECTED
+#: LABEL/ID_NO_MANAGER_SELECTED
+msgid "No Manager Selected"
+msgstr "No Manager Selected"
+
+# TRANSLATION
+# LABEL/ID_EXPAND_ALL
+#: LABEL/ID_EXPAND_ALL
+msgid "Expand All"
+msgstr "Expand All"
+
+# TRANSLATION
+# LABEL/ID_COLLAPSE_ALL
+#: LABEL/ID_COLLAPSE_ALL
+msgid "Collapse All"
+msgstr "Collapse All"
+
+# TRANSLATION
+# LABEL/ID_FILENAME_GENERATED
+#: LABEL/ID_FILENAME_GENERATED
+msgid "Filename generated   t"
+msgstr "Filename generated   t"
+
+# TRANSLATION
+# LABEL/ID_ACTORS_ASSIGNED_SUCESSFULLY
+#: LABEL/ID_ACTORS_ASSIGNED_SUCESSFULLY
+msgid "{0} Actors assign to task <b>\"{1}\"</b> successfully!"
+msgstr "{0} Actors assign to task <b>\"{1}\"</b> successfully!"
+
+# TRANSLATION
+# LABEL/ID_ACTOR_ASSIGNED_SUCESSFULLY
+#: LABEL/ID_ACTOR_ASSIGNED_SUCESSFULLY
+msgid "The actor was assigned to task <b>\"{tas_title}\"</b> successfully!"
+msgstr "The actor was assigned to task <b>\"{tas_title}\"</b> successfully!"
+
+# TRANSLATION
+# LABEL/ID_RESPONSABILITIES_ASSIGNMENT
+#: LABEL/ID_RESPONSABILITIES_ASSIGNMENT
+msgid "Assignment of responsibilities"
+msgstr "Assignment of responsibilities"
+
+# TRANSLATION
+# LABEL/ID_ACTORS
+#: LABEL/ID_ACTORS
+msgid "Actors"
+msgstr "Actors"
+
+# TRANSLATION
+# LABEL/ID_PROCESSMAP_TITLE
+#: LABEL/ID_PROCESSMAP_TITLE
+msgid "ProcessMaker BPMN Designer"
+msgstr "ProcessMaker BPMN Designer"
+
+# TRANSLATION
+# LABEL/ID_AD_HOC_ACTORS
+#: LABEL/ID_AD_HOC_ACTORS
+msgid "Ad Hoc Actors"
+msgstr "Ad Hoc Actors"
+
+# TRANSLATION
+# LABEL/ID_ACTOR_ALREADY_ASSIGNED
+#: LABEL/ID_ACTOR_ALREADY_ASSIGNED
+msgid "The actor is already assigned to task <b>{0}</b>"
+msgstr "The actor is already assigned to task <b>{0}</b>"
+
+# TRANSLATION
+# LABEL/ID_SOME_ACTORS_ALREADY_ASSIGNED
+#: LABEL/ID_SOME_ACTORS_ALREADY_ASSIGNED
+msgid "Some actor(s) is/are already assigned to task <b>{0}</b>"
+msgstr "Some actor(s) is/are already assigned to task <b>{0}</b>"
+
+# TRANSLATION
+# LABEL/ID_TRIGGERS_SAVED
+#: LABEL/ID_TRIGGERS_SAVED
+msgid "Trigger saved"
+msgstr "Trigger saved"
+
+# TRANSLATION
+# LABEL/ID_PLUGINS
+#: LABEL/ID_PLUGINS
+msgid "Plugins"
+msgstr "Plugins"
+
+# TRANSLATION
+# LABEL/ID_UID
+#: LABEL/ID_UID
+msgid "UID"
+msgstr "UID"
+
+# TRANSLATION
+# LABEL/ID_CREATE_PROCESS
+#: LABEL/ID_CREATE_PROCESS
+msgid "Create Process"
+msgstr "Create Process"
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_LINK
+#: LABEL/ID_WEB_ENTRY_LINK
+msgid "Web Entry Link"
+msgstr "Web Entry Link"
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_SUMMARY
+#: LABEL/ID_WEB_ENTRY_SUMMARY
+msgid "Web Entry Summary"
+msgstr "Web Entry Summary"
+
+# TRANSLATION
+# LABEL/ID_CREDENTIAL_ERROR
+#: LABEL/ID_CREDENTIAL_ERROR
+msgid "Credentials Error"
+msgstr "Credentials Error"
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY
+#: LABEL/ID_WEB_ENTRY
+msgid "[LABEL/ID_WEB_ENTRY] Web Entry"
+msgstr "Web Entry"
+
+# TRANSLATION
+# LABEL/ID_TEST_WEB_ENTRY
+#: LABEL/ID_TEST_WEB_ENTRY
+msgid "Test Web Entry"
+msgstr "Test Web Entry"
+
+# TRANSLATION
+# LABEL/ID_NEW_WEB_ENTRY
+#: LABEL/ID_NEW_WEB_ENTRY
+msgid "New Web Entry"
+msgstr "New Web Entry"
+
+# TRANSLATION
+# LABEL/ID_EDIT_WEB_ENTRY
+#: LABEL/ID_EDIT_WEB_ENTRY
+msgid "Edit Web Entry"
+msgstr "Edit Web Entry"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_WEB_ENTRY
+#: LABEL/ID_CONFIRM_DELETE_WEB_ENTRY
+msgid "Do you want to delete current web entry?"
+msgstr "Do you want to delete current web entry?"
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_SUCCESS_DELETE
+#: LABEL/ID_WEB_ENTRY_SUCCESS_DELETE
+msgid "Web Entry deleted correctly"
+msgstr "Web Entry deleted correctly"
+
+# TRANSLATION
+# LABEL/ID_PASSWORD
+#: LABEL/ID_PASSWORD
+msgid "[LABEL/ID_PASSWORD] Password"
+msgstr "Password"
+
+# TRANSLATION
+# LABEL/ID_NOT_DEFINED
+#: LABEL/ID_NOT_DEFINED
+msgid "Not defined"
+msgstr "Not defined"
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_SUCCESS_NEW
+#: LABEL/ID_WEB_ENTRY_SUCCESS_NEW
+msgid "Web Entry has been created correctly."
+msgstr "Web Entry has been created correctly."
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -8776,7 +9490,7 @@ msgstr "FLOAT"
 # additionalTables/additionalTablesFields.xml?FLD_SIZE
 # additionalTables/additionalTablesFields.xml
 #: text - FLD_SIZE
-msgid "Size"
+msgid "[additionalTables/additionalTablesFields.xml?FLD_SIZE]Size"
 msgstr "Size"
 
 # additionalTables/additionalTablesFields.xml?FLD_NULL
@@ -9220,7 +9934,7 @@ msgstr ""
 # appFolder/appFolderDocumentListHeader.xml?BTN_SUBMIT
 # appFolder/appFolderDocumentListHeader.xml
 #: submit - BTN_SUBMIT
-msgid "Move"
+msgid "[appFolder/appFolderDocumentListHeader.xml?BTN_SUBMIT]Move"
 msgstr "Move"
 
 # appFolder/appFolderDocumentListHistory.xml?APP_DOC_FILENAME
@@ -9616,8 +10330,8 @@ msgstr "Password"
 # authSources/ldapEdit.xml?AUTH_SOURCE_IDENTIFIER_FOR_USER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_IDENTIFIER_FOR_USER
-msgid "Identifier for a imported user"
-msgstr "Identifier for a imported user"
+msgid "Identifier for an imported user"
+msgstr "Identifier for an imported user"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_OBJECT_CLASSES
 # authSources/ldapEdit.xml
@@ -14428,7 +15142,7 @@ msgstr "Delete"
 # dbConnections/dbConnections_Edit.xml?DBS_UID
 # dbConnections/dbConnections_Edit.xml
 #: text - DBS_UID
-msgid "UID"
+msgid "[dbConnections/dbConnections_Edit.xml?DBS_UID]UID"
 msgstr "UID"
 
 # dbConnections/dbConnections_Edit.xml?DBS_TYPE
@@ -16198,218 +16912,218 @@ msgstr "Apply Filter"
 # dynaforms/fields_Toolbar.xml?saveDyna
 # dynaforms/fields_Toolbar.xml
 #: toolButton - saveDyna
-msgid "[dynaforms/fields_Toolbar.xml?saveDyna]save"
-msgstr "save"
+msgid "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
 
 # dynaforms/fields_Toolbar.xml?saveasDyna
 # dynaforms/fields_Toolbar.xml
 #: toolButton - saveasDyna
-msgid "save as"
-msgstr "save as"
+msgid "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
 
 # dynaforms/fields_Toolbar.xml?text
 # dynaforms/fields_Toolbar.xml
 #: toolButton - text
-msgid "[dynaforms/fields_Toolbar.xml?text]text"
-msgstr "text"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
 
 # dynaforms/fields_Toolbar.xml?currency
 # dynaforms/fields_Toolbar.xml
 #: toolButton - currency
-msgid "[dynaforms/fields_Toolbar.xml?currency]currency"
-msgstr "currency"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
 
 # dynaforms/fields_Toolbar.xml?percentage
 # dynaforms/fields_Toolbar.xml
 #: toolButton - percentage
-msgid "[dynaforms/fields_Toolbar.xml?percentage]percentage"
-msgstr "percentage"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
 
 # dynaforms/fields_Toolbar.xml?password
 # dynaforms/fields_Toolbar.xml
 #: toolButton - password
-msgid "[dynaforms/fields_Toolbar.xml?password]password"
-msgstr "password"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield_key\" title=\"Password\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_key\" title=\"Password\"></div>"
 
 # dynaforms/fields_Toolbar.xml?suggest
 # dynaforms/fields_Toolbar.xml
 #: toolButton - suggest
-msgid "Suggest"
-msgstr "Suggest"
+msgid "<div class=\"ss_sprite button_toolbar ss_help\" title=\"Suggest\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_help\" title=\"Suggest\"></div>"
 
 # dynaforms/fields_Toolbar.xml?textarea
 # dynaforms/fields_Toolbar.xml
 #: toolButton - textarea
-msgid "[dynaforms/fields_Toolbar.xml?textarea]textarea"
-msgstr "textarea"
+msgid "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
 
 # dynaforms/fields_Toolbar.xml?title
 # dynaforms/fields_Toolbar.xml
 #: toolButton - title
-msgid "[dynaforms/fields_Toolbar.xml?title]title"
-msgstr "title"
+msgid "<div class=\"ss_sprite button_toolbar ss_title\" title=\"Title\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_title\" title=\"Title\"></div>"
 
 # dynaforms/fields_Toolbar.xml?subtitle
 # dynaforms/fields_Toolbar.xml
 #: toolButton - subtitle
-msgid "[dynaforms/fields_Toolbar.xml?subtitle]subtitle"
-msgstr "subtitle"
+msgid "<div class=\"ss_sprite button_toolbar ss_subtitle\" title=\"Subtitle\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_subtitle\" title=\"Subtitle\"></div>"
 
 # dynaforms/fields_Toolbar.xml?button
 # dynaforms/fields_Toolbar.xml
 #: toolButton - button
-msgid "[dynaforms/fields_Toolbar.xml?button]button"
-msgstr "button"
+msgid "<div class=\"ss_sprite button_toolbar ss_button\" title=\"Button\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_button\" title=\"Button\"></div>"
 
 # dynaforms/fields_Toolbar.xml?submit
 # dynaforms/fields_Toolbar.xml
 #: toolButton - submit
-msgid "[dynaforms/fields_Toolbar.xml?submit]submit"
-msgstr "submit"
+msgid "<div class=\"ss_sprite button_toolbar ss_submit\" title=\"Submit\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_submit\" title=\"Submit\"></div>"
 
 # dynaforms/fields_Toolbar.xml?reset
 # dynaforms/fields_Toolbar.xml
 #: toolButton - reset
-msgid "[dynaforms/fields_Toolbar.xml?reset]reset"
-msgstr "reset"
+msgid "<div class=\"ss_sprite button_toolbar ss_reset\" title=\"Reset\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_reset\" title=\"Reset\"></div>"
 
 # dynaforms/fields_Toolbar.xml?dropdown
 # dynaforms/fields_Toolbar.xml
 #: toolButton - dropdown
-msgid "[dynaforms/fields_Toolbar.xml?dropdown]dropdown"
-msgstr "dropdown"
+msgid "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
 
 # dynaforms/fields_Toolbar.xml?yesno
 # dynaforms/fields_Toolbar.xml
 #: toolButton - yesno
-msgid "[dynaforms/fields_Toolbar.xml?yesno]yesno"
-msgstr "yesno"
+msgid "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
 
 # dynaforms/fields_Toolbar.xml?listbox
 # dynaforms/fields_Toolbar.xml
 #: toolButton - listbox
-msgid "[dynaforms/fields_Toolbar.xml?listbox]listbox"
-msgstr "listbox"
+msgid "<div class=\"ss_sprite button_toolbar ss_listbox\" title=\"Listbox\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_listbox\" title=\"Listbox\"></div>"
 
 # dynaforms/fields_Toolbar.xml?checkbox
 # dynaforms/fields_Toolbar.xml
 #: toolButton - checkbox
-msgid "[dynaforms/fields_Toolbar.xml?checkbox]checkbox"
-msgstr "checkbox"
+msgid "<div class=\"ss_sprite button_toolbar ss_check\" title=\"Checkbox\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_check\" title=\"Checkbox\"></div>"
 
 # dynaforms/fields_Toolbar.xml?checkgroup
 # dynaforms/fields_Toolbar.xml
 #: toolButton - checkgroup
-msgid "[dynaforms/fields_Toolbar.xml?checkgroup]checkgroup"
-msgstr "checkgroup"
+msgid "<div class=\"ss_sprite button_toolbar ss_checkgroup\" title=\"CheckGroup\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_checkgroup\" title=\"CheckGroup\"></div>"
 
 # dynaforms/fields_Toolbar.xml?radiogroup
 # dynaforms/fields_Toolbar.xml
 #: toolButton - radiogroup
-msgid "[dynaforms/fields_Toolbar.xml?radiogroup]radiogroup"
-msgstr "radiogroup"
+msgid "<div class=\"ss_sprite button_toolbar ss_radiogroup\" title=\"RadioGroup\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_radiogroup\" title=\"RadioGroup\"></div>"
 
 # dynaforms/fields_Toolbar.xml?date
 # dynaforms/fields_Toolbar.xml
 #: toolButton - date
-msgid "date"
-msgstr "date"
+msgid "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
 
 # dynaforms/fields_Toolbar.xml?hidden
 # dynaforms/fields_Toolbar.xml
 #: toolButton - hidden
-msgid "[dynaforms/fields_Toolbar.xml?hidden]hidden"
-msgstr "hidden"
+msgid "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
 
 # dynaforms/fields_Toolbar.xml?link
 # dynaforms/fields_Toolbar.xml
 #: toolButton - link
-msgid "[dynaforms/fields_Toolbar.xml?link]link"
-msgstr "link"
+msgid "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
 
 # dynaforms/fields_Toolbar.xml?file
 # dynaforms/fields_Toolbar.xml
 #: toolButton - file
-msgid "[dynaforms/fields_Toolbar.xml?file]file"
-msgstr "file"
+msgid "<div class=\"ss_sprite button_toolbar ss_upload\" title=\"File\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_upload\" title=\"File\"></div>"
 
 # dynaforms/fields_Toolbar.xml?javascript
 # dynaforms/fields_Toolbar.xml
 #: toolButton - javascript
-msgid "[dynaforms/fields_Toolbar.xml?javascript]javascript"
-msgstr "javascript"
+msgid "<div class=\"ss_sprite button_toolbar ss_js\" title=\"Javascript\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_js\" title=\"Javascript\"></div>"
 
 # dynaforms/fields_Toolbar.xml?grid
 # dynaforms/fields_Toolbar.xml
 #: toolButton - grid
-msgid "[dynaforms/fields_Toolbar.xml?grid]grid"
-msgstr "grid"
+msgid "<div class=\"ss_sprite button_toolbar ss_table\" title=\"Grid\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_table\" title=\"Grid\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?saveDyna
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - saveDyna
-msgid "[dynaforms/fields_ToolbarGrid.xml?saveDyna]save"
-msgstr "save"
+msgid "[dynaforms/fields_ToolbarGrid.xml?saveDyna]<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?saveasDyna
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - saveasDyna
-msgid "[dynaforms/fields_ToolbarGrid.xml?saveasDyna]save as"
-msgstr "save as"
+msgid "[dynaforms/fields_ToolbarGrid.xml?saveasDyna]<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?text
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - text
-msgid "[dynaforms/fields_ToolbarGrid.xml?text]text"
-msgstr "text"
+msgid "[dynaforms/fields_ToolbarGrid.xml?text]<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?currency
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - currency
-msgid "[dynaforms/fields_ToolbarGrid.xml?currency]currency"
-msgstr "currency"
+msgid "[dynaforms/fields_ToolbarGrid.xml?currency]<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?percentage
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - percentage
-msgid "[dynaforms/fields_ToolbarGrid.xml?percentage]percentage"
-msgstr "percentage"
+msgid "[dynaforms/fields_ToolbarGrid.xml?percentage]<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?textarea
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - textarea
-msgid "[dynaforms/fields_ToolbarGrid.xml?textarea]textarea"
-msgstr "textarea"
+msgid "[dynaforms/fields_ToolbarGrid.xml?textarea]<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?dropdown
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - dropdown
-msgid "[dynaforms/fields_ToolbarGrid.xml?dropdown]dropdown"
-msgstr "dropdown"
+msgid "[dynaforms/fields_ToolbarGrid.xml?dropdown]<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?yesno
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - yesno
-msgid "[dynaforms/fields_ToolbarGrid.xml?yesno]yesno"
-msgstr "yesno"
+msgid "[dynaforms/fields_ToolbarGrid.xml?yesno]<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?date
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - date
-msgid "[dynaforms/fields_ToolbarGrid.xml?date]date"
-msgstr "date"
+msgid "[dynaforms/fields_ToolbarGrid.xml?date]<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?hidden
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - hidden
-msgid "[dynaforms/fields_ToolbarGrid.xml?hidden]hidden"
-msgstr "hidden"
+msgid "[dynaforms/fields_ToolbarGrid.xml?hidden]<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?link
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - link
-msgid "[dynaforms/fields_ToolbarGrid.xml?link]link"
-msgstr "link"
+msgid "[dynaforms/fields_ToolbarGrid.xml?link]<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
 
 # events/appEventsList.xml?TAS_TITLE
 # events/appEventsList.xml
@@ -21278,6 +21992,18 @@ msgstr "Create"
 #: link - MNU_ADD
 msgid "[roles/roles_Options.xml?MNU_ADD]New"
 msgstr "New"
+
+# services/serviceMessage.xml?Title
+# services/serviceMessage.xml
+#: title - Title
+msgid "[services/serviceMessage.xml?Title]Information"
+msgstr "Information"
+
+# services/serviceMessage.xml?Subtitle
+# services/serviceMessage.xml
+#: subtitle - Subtitle
+msgid "The access for the service is currently unavailable from the processmaker web interface."
+msgstr "The access for the service is currently unavailable from the processmaker web interface."
 
 # setup/calendarEdit.xml?DEFINITION_TITLE
 # setup/calendarEdit.xml
@@ -28710,7 +29436,7 @@ msgstr "Field Name"
 # dynaforms/fields/grid.xml?PME_XMLGRID
 # dynaforms/fields/grid.xml
 #: dropdown - PME_XMLGRID
-msgid "Grid"
+msgid "[dynaforms/fields/grid.xml?PME_XMLGRID]Grid"
 msgstr "Grid"
 
 # dynaforms/fields/grid.xml?PME_ADDROW
