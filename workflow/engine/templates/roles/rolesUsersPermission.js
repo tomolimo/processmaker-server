@@ -266,9 +266,9 @@ Ext.onReady(function(){
         defaults:{margins:'0 0 35 0'},
         items:[
                {xtype:'button',text: '>', handler: AssignPermissionAction, id: 'assignButton', disabled: true},
-               {xtype:'button',text: '<', handler: RemovePermissionAction, id: 'removeButton', disabled: true},
+               {xtype:'button',text: '&lt;', handler: RemovePermissionAction, id: 'removeButton', disabled: true},
                {xtype:'button',text: '>>', handler: AssignAllPermissionsAction, id: 'assignButtonAll', disabled: false},
-               {xtype:'button',text: '<<', handler: RemoveAllPermissionsAction, id: 'removeButtonAll', disabled: (ROLES.ROL_UID==pm_admin) ? true : false}
+               {xtype:'button',text: '&lt;&lt;', handler: RemoveAllPermissionsAction, id: 'removeButtonAll', disabled: (ROLES.ROL_UID==pm_admin) ? true : false}
                ],
         hidden : true
     });
@@ -463,9 +463,9 @@ Ext.onReady(function(){
         defaults:{margins:'0 0 35 0'},
         items:[
                {xtype:'button',text: '>', handler: AssignUserAction, id: 'assignUButton', disabled: true},
-               {xtype:'button',text: '<', handler: RemoveUserAction, id: 'removeUButton', disabled: true},
+               {xtype:'button',text: '&lt;', handler: RemoveUserAction, id: 'removeUButton', disabled: true},
                {xtype:'button',text: '>>', handler: AssignAllUsersAction, id: 'assignUButtonAll', disabled: false},
-               {xtype:'button',text: '<<', handler: RemoveAllUsersAction, id: 'removeUButtonAll', disabled: false}
+               {xtype:'button',text: '&lt;&lt;', handler: RemoveAllUsersAction, id: 'removeUButtonAll', disabled: false}
                ],
         hidden: true
     });

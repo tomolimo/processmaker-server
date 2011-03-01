@@ -255,9 +255,9 @@ Ext.onReady(function(){
     defaults:{margins:'0 0 35 0'},
     items:[
       {xtype:'button',text: '> ', handler: AssignGroupsAction, id: 'assignButton', disabled: true},
-      {xtype:'button',text: ' <', handler: RemoveGroupsAction, id: 'removeButton', disabled: true},
+      {xtype:'button',text: '&lt;', handler: RemoveGroupsAction, id: 'removeButton', disabled: true},
       {xtype:'button',text: '>>', handler: AssignAllGroupsAction, id: 'assignButtonAll', disabled: false},
-      {xtype:'button',text: '<<', handler: RemoveAllGroupsAction, id: 'removeButtonAll', disabled: false}
+      {xtype:'button',text: '&lt;&lt;', handler: RemoveAllGroupsAction, id: 'removeButtonAll', disabled: false}
     ],
     hidden: true
   });

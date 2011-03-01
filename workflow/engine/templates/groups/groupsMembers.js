@@ -241,9 +241,9 @@ Ext.onReady(function(){
         defaults:{margins:'0 0 35 0'},
         items:[
                {xtype:'button',text: '>', handler: AssignUsersAction, id: 'assignButton', disabled: true},
-               {xtype:'button',text: '<', handler: RemoveUsersAction, id: 'removeButton', disabled: true},
+               {xtype:'button',text: '&lt;', handler: RemoveUsersAction, id: 'removeButton', disabled: true},
                {xtype:'button',text: '>>', handler: AssignAllUsersAction, id: 'assignButtonAll', disabled: false},
-               {xtype:'button',text: '<<', handler: RemoveAllUsersAction, id: 'removeButtonAll', disabled: false}
+               {xtype:'button',text: '&lt;&lt;', handler: RemoveAllUsersAction, id: 'removeButtonAll', disabled: false}
                ],
        hidden: true
     });
