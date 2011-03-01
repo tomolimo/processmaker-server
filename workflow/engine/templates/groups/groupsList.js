@@ -332,6 +332,8 @@ DoNothing = function(){};
 
 //Open New Group Form
 NewGroupWindow = function(){
+  newForm.getForm().reset();
+  newForm.getForm().items.items[0].focus('',500);
   w = new Ext.Window({
     autoHeight: true,
     width: 400,

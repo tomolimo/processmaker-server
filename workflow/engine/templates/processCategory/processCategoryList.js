@@ -298,6 +298,8 @@ DoNothing = function(){};
 
 //Open New Category Form
 NewCategoryWindow = function(){
+  newForm.getForm().reset();
+  newForm.getForm().items.items[0].focus('',500);
   w = new Ext.Window({
     title: _('ID_NEW_CATEGORY'),
     autoHeight: true,

@@ -354,6 +354,8 @@ DoNothing = function(){};
 
 //Open New Role Form
 NewRoleWindow = function(){
+  newForm.getForm().reset();
+  newForm.getForm().items.items[0].focus('',500);
   w = new Ext.Window({
     title: _('ID_CREATE_ROLE_TITLE'),
     autoHeight: true,

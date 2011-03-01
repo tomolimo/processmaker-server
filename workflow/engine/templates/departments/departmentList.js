@@ -241,7 +241,10 @@ DoNothing = function(){};
 
 //Call New Department at Root
 NewRootDepartment = function(){
+  newForm.getForm().reset();
   newForm.getForm().findField('parent').setValue('');
+  newForm.getForm().items.items[1].focus('',500);
+  //newForm.getForm().items.items[1].setValue('');
   w = new Ext.Window({
     title: _('ID_NEW_DEPARTMENT'),
     autoHeight: true,
@@ -257,7 +260,9 @@ NewRootDepartment = function(){
 //Call New Sub Department at Parent
 NewSubDepartment = function(){
   var dep_node = Ext.getCmp('treePanel').getSelectionModel().getSelectedNode();
+  newForm.getForm().reset();
   newForm.getForm().findField('parent').setValue(dep_node.attributes.DEP_UID);
+  newForm.getForm().items.items[1].focus('',500);
   w = new Ext.Window({
     title: _('ID_NEW_SUB_DEPARTMENT'),
     autoHeight: true,

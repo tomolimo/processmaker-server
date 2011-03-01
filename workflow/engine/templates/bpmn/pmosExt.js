@@ -57,9 +57,11 @@ pmosExt.prototype.popWebEntry= function(_5678)
     hidden: true,
     handler: function(){
       webForm.hide();
+      editForm.getForm().reset();
       editForm.getForm().findField('pro_uid').setValue(pro_uid);
       editForm.getForm().findField('evn_uid').setValue(evn_uid);
       editForm.getForm().findField('dynaform').setValue('');
+      editForm.getForm().items.items[3].focus('',500);
       editForm.show();
       newButton.disable();
     }
