@@ -1025,6 +1025,8 @@ class G
       if(isset($filenameParts[1])){
           $skinVariant=strtolower($filenameParts[1]);
       }
+      if($skinName == "jscolors") $skinName  = "classic";
+      if($skinName == "xmlcolors") $skinName = "classic";
       if($skinName=="classic"){
           $configurationFile    =    G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
       }else{
