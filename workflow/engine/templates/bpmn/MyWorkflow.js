@@ -190,7 +190,7 @@ MyWorkflow.prototype.connectionContextMenu=function(oShape)
 MyWorkflow.prototype.toggleConnection=function(oShape)
 {
   this.currentSelection.workflow.contextClicked = false;
-  switch ( strtolower(oShape.text)) {
+  switch ( oShape.text) {
     case 'NULL Router':
         this.currentSelection.setRouter(null);
     break;
@@ -1523,81 +1523,84 @@ MyWorkflow.prototype.saveGateways = function(oGateway){
  */
 MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
 {
-    var task_uid      = new Array();
-    var next_task_uid = new Array();
-    var urlparams     = '';
-    if(typeof sTaskUID == 'undefined')  //Will be undefined for standalone events
-      sTaskUID = '';
-    if(oEvent.type.match(/Start/))
-    {
-        var tas_start = 'TRUE';
-        urlparams = '?action=saveEvents&data={"tas_uid":"'+sTaskUID+'","tas_start":"'+tas_start+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
+  var task_uid      = new Array();
+  var next_task_uid = new Array();
+  var urlparams     = '';
+
+  if(typeof sTaskUID == 'undefined')  //Will be undefined for standalone events
+    sTaskUID = '';
+  if(oEvent.type.match(/Start/))
+  {
+    var tas_start = 'TRUE';
+    urlparams = '?action=saveEvents&data={"tas_uid":"'+sTaskUID+'","tas_start":"'+tas_start+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
+  }
+  else if(oEvent.type.match(/Inter/))
+  {
+    var ports = oEvent.getPorts();
+    var len =ports.data.length;
+
+    //Get all the connection of the shape
+    var conn = new Array();
+    var count1 = 0;
+    var count2 = 0;
+    for(var i=0; i<=len; i++) {
+      if(typeof ports.data[i] === 'object')
+        conn[i] = ports.data[i].getConnections();
     }
-    else if(oEvent.type.match(/Inter/))
-    {
-        var ports = oEvent.getPorts();
-        var len =ports.data.length;
-        //Get all the connection of the shape
-        var conn = new Array();
-        var count1 = 0;
-        var count2 = 0;
-        for(var i=0; i<=len; i++){
-            if(typeof ports.data[i] === 'object')
-                conn[i] = ports.data[i].getConnections();
-        }
-        //Get ALL the connections for the specified PORT
-        for(i = 0; i< conn.length ; i++){
-          if(typeof conn[i] != 'undefined')
-            for(var j = 0; j < conn[i].data.length ; j++){
-              if(typeof conn[i].data[j] != 'undefined'){
-                if(conn[i].data[j].sourcePort.parentNode.type != oEvent.type){
-                  // task_uid[count1] = new Array();
-                   task_uid = conn[i].data[j].sourcePort.parentNode.id;
-                   count1++;
-                }
-                if(conn[i].data[j].targetPort.parentNode.type != oEvent.type){
-                  // task_uid[count2] = new Array();
-                  next_task_uid = conn[i].data[j].targetPort.parentNode.id;
-                  //count2++;
-                }
-             }
+    
+    //Get ALL the connections for the specified PORT
+    for(i = 0; i< conn.length ; i++){
+      if(typeof conn[i] != 'undefined')
+        for(var j = 0; j < conn[i].data.length ; j++) {
+          if(typeof conn[i].data[j] != 'undefined'){
+            if(conn[i].data[j].sourcePort.parentNode.type != oEvent.type){
+              // task_uid[count1] = new Array();
+               task_uid = conn[i].data[j].sourcePort.parentNode.id;
+               count1++;
+            }
+            if(conn[i].data[j].targetPort.parentNode.type != oEvent.type){
+              // task_uid[count2] = new Array();
+              next_task_uid = conn[i].data[j].targetPort.parentNode.id;
+              //count2++;
+            }
           }
         }
+    }
     // var staskUid     = 	Ext.util.JSON.encode(task_uid);
     // var sNextTaskUid = 	Ext.util.JSON.encode(next_task_uid);
     if(typeof task_uid == 'undefined')
       task_uid = '';
     if(typeof next_task_uid == 'undefined')
       next_task_uid = '';
+    
+    urlparams = '?action=saveEvents&data={"tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
+  }
   
-     urlparams = '?action=saveEvents&data={"tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","evn_type":"'+oEvent.type+'","evn_uid":"'+oEvent.id+'"}';
-    }
-
-    if(urlparams != ''){
-        Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
-                success: function(response) {
-                    if(response.responseText != '')
-                      {
-                         //Save Route
-                         if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
-                           workflow.currentSelection.id = response.responseText;
-                           var newObj = workflow.currentSelection;
-                           var preObj = new Array();
-                           preObj.type = 'bpmnTask';
-                           preObj.id = task_uid[0];
-                           newObj.evn_uid = workflow.currentSelection.id;
-                           newObj.task_to = next_task_uid[0];
-                           this.workflow.saveRoute(preObj,newObj);
-                         }
-                      }
-                },
-                failure: function(){
-                    Ext.Msg.alert ('Failure');
-                }
-            });
-    }
-
+  if(urlparams != '') {
+    Ext.Ajax.request({
+      url: "processes_Ajax.php"+ urlparams,
+      success: function(response) {
+        if(response.responseText != '')
+        {
+          //Save Route
+          //disabled by Fernando, because the workflow.currentSelection arrives null and throwing an error in javascript
+//          if(workflow.currentSelection.type.match(/Inter/) && workflow.currentSelection.type.match(/Event/)){
+//            workflow.currentSelection.id = response.responseText;
+//            var newObj = workflow.currentSelection;
+//            var preObj = new Array();
+//            preObj.type = 'bpmnTask';
+//            preObj.id = task_uid[0];
+//            newObj.evn_uid = workflow.currentSelection.id;
+//            newObj.task_to = next_task_uid[0];
+//            this.workflow.saveRoute(preObj,newObj);
+//          }
+        }
+      },
+      failure: function(){
+          Ext.Msg.alert ('Failure');
+      }
+    });
+  }
 }
 
 /**

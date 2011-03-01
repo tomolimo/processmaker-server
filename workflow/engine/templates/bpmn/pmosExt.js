@@ -846,7 +846,8 @@ pmosExt.prototype.hideSchOptions = function(formObj,index)
         this.toggleFields(fieldsToToggle,false);
     }
 
-}
+}                  
+
 pmosExt.prototype.popTaskNotification= function(_5678){
         var oPmosExt = new pmosExt();
          //Get the Task Data
@@ -863,244 +864,246 @@ pmosExt.prototype.popTaskNotification= function(_5678){
                     }
                 
             }
-        var taskNotificationForm = new Ext.FormPanel({
-        labelWidth: 120, // label settings here cascade unless overridden
-        frame:true,
-        bodyStyle:'padding:5px 5px 0',
-        buttonAlign : 'center',
-        defaultType: 'textfield',
-        
-        items: [{
-            xtype:'fieldset',
-            checkboxToggle:true,
-            title: _('ID_AFTER_ROUTING_NOTIFY'),
-            autoHeight:true,
-            labelWidth: 5,
-            defaults: {width: 400},
-            defaultType: 'textfield',
-            collapsed: toggle,
-            items :[{
-                    xtype: 'textarea',
-                    name: 'description',
-                    value:message,
-                    height : 250
-                }
-            ]
-        }]
-        });
-         var window = new Ext.Window({
+       var taskNotificationForm = new Ext.FormPanel({
+         labelWidth: 120, // label settings here cascade unless overridden
+         frame:true,
+         bodyStyle:'padding:5px 5px 5px 5px',
+         buttonAlign : 'center',
+         defaultType: 'textfield',
+       
+         items: [{
+           xtype:'fieldset',
+           checkboxToggle:true,
+           title: _('ID_AFTER_ROUTING_NOTIFY'),
+           autoHeight:true,
+           width : 460,
+           labelWidth: 5,
+           defaults: {width: 425},
+           defaultType: 'textfield',
+           collapsed: toggle,
+           items :[{
+             xtype: 'textarea',
+             name: 'description',
+             value:message,
+             height : 250
+           }]
+         }]
+       });
+       
+       var window = new Ext.Window({
          title: _('ID_INTERMEDIATE_MESSAGE_EVENTS'),
          collapsible: false,
          maximizable: false,
          width: 500,
-         height: 400,
-         minWidth: 300,
-         minHeight: 200,
+         height: 380,
+         minWidth: 490,
+         minHeight: 370,
          layout: 'fit',
          plain: true,
          bodyStyle: 'padding:5px;',
          buttonAlign: 'center',
          items: taskNotificationForm,
          buttons: [{
-             text: _('ID_SAVE'),
-             handler: function(){
-                            //waitMsg: 'Saving...',       // Wait Message
-                                var fields      = taskNotificationForm.items.items;
-                                var tas_send    = fields[0].collapsed;
-                                if(tas_send == true)
-                                    tas_send = false;
-                                else
-                                    tas_send = true;
-                                var data = fields[0].items.items[0].getValue();
-                                var taskUid = workflow.taskUid;
-                                if(typeof taskUid[0] != 'undefined')
-                                {
-                                 var urlparams = '?action=saveInterMessageEvent&data={"uid":"'+ taskUid[0].value +'","tas_send":"'+tas_send+'","data":"'+data+'"}';
-                                    Ext.Ajax.request({
-                                            url: "processes_Ajax.php"+ urlparams,
-                                            success: function(response) {
-                                                window.close();
-                                            },
-                                            failure: function(){
-                                                Ext.Msg.alert ('Failure');
-                                            }
-                                        });
-                                }
-                        }
-             },{
-             text: _('ID_CANCEL'),
-             handler: function(){
-                            window.close();
-                        }
-             }]
-         });
-         window.show();
-}
-pmosExt.prototype.loadTask = function(_5678){
-        var taskUid = workflow.taskid;
-        if(typeof taskUid != 'undefined')
-        {
-            var urlparams = '?action=loadTask&data={"uid":"'+ taskUid.value +'"}';
-            Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
-                    success: function(response) {
-                        workflow.taskDetails = Ext.util.JSON.decode(response.responseText);
-                    },
-                    failure: function(){
-                       PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
-                    }
-                });
+           text: _('ID_SAVE'),
+           handler: function(){
+             //waitMsg: 'Saving...',       // Wait Message
+             var fields      = taskNotificationForm.items.items;
+             var tas_send    = fields[0].collapsed;
+             if(tas_send == true)
+               tas_send = false;
+             else
+               tas_send = true;
+             var data = fields[0].items.items[0].getValue();
+             var taskUid = _5678.workflow.taskid;
+             if( typeof taskUid != 'undefined' && typeof taskUid.value != 'undefined')
+             {
+               var urlparams = '?action=saveInterMessageEvent&data={"uid":"'+ taskUid.value +'","tas_send":"'+tas_send+'","data":"'+data+'"}';
+               Ext.Ajax.request({
+                 url: "processes_Ajax.php"+ urlparams,
+                 success: function(response) {
+                   window.close();
+                 },
+                 failure: function(){
+                   Ext.Msg.alert ('Failure');
+                 }
+               });
+             }
+             else
+             	 window.close(); //catching an error, because the taskUid was null, and was showing a fatal error in Javascript.
+           }
+         },{
+           text: _('ID_CANCEL'),
+           handler: function(){
+           window.close();
+         }
+         }]
+       });
+     window.show();
+  }
+  
+  pmosExt.prototype.loadTask = function(_5678){
+    var taskUid = workflow.taskid;
+    if(typeof taskUid != 'undefined')
+    {
+      var urlparams = '?action=loadTask&data={"uid":"'+ taskUid.value +'"}';
+      Ext.Ajax.request({
+        url: "processes_Ajax.php"+ urlparams,
+        success: function(response) {
+            workflow.taskDetails = Ext.util.JSON.decode(response.responseText);
+        },
+        failure: function(){
+           PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
         }
-
-}
-
-pmosExt.prototype.getTriggerList = function(_5678){
-        if(typeof pro_uid != 'undefined')
-        {
-            var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
-            Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
-                    success: function(response) {
-                        workflow.triggerList = Ext.util.JSON.decode(response.responseText);
-                    },
-                    failure: function(){
-                        PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
-                    }
-                });
-        }
-
-}
-pmosExt.prototype.toggleFields = function(field,bool){
-
-    for(var i=0;i<field.length;i++){
-        if(typeof field[i] != 'undefined'){
-            if(bool)
-                field[i].show();
-            else
-                field[i].hide();
-
-            //Hide-Show label
-            field[i].getEl().up('.x-form-item').setDisplayed(bool);
-        }
+      });
     }
-     
-}
-pmosExt.prototype.popMessageEvent= function(_5678){
-         var oTask = workflow.taskUid;
-         var oPmosExt = new pmosExt();
-         var messageEvent = new Ext.FormPanel({
-         labelWidth: 150, // label settings here cascade unless overridden
-         frame:true,
-         bodyStyle:'padding:5px 5px 0',
-         width: 500,
-         height: 400,
+  }
+
+  pmosExt.prototype.getTriggerList = function(_5678){
+    if(typeof pro_uid != 'undefined')
+    {
+      var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
+      Ext.Ajax.request({
+        url: "processes_Ajax.php"+ urlparams,
+        success: function(response) {
+          workflow.triggerList = Ext.util.JSON.decode(response.responseText);
+        },
+        failure: function(){
+          PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
+        }
+      });
+    }
+  }
+
+  pmosExt.prototype.toggleFields = function(field,bool){
+    for(var i=0;i<field.length;i++){
+      if(typeof field[i] != 'undefined'){
+        if(bool)
+          field[i].show();
+        else
+          field[i].hide();
+      
+        //Hide-Show label
+        field[i].getEl().up('.x-form-item').setDisplayed(bool);
+      }
+    }
+  }
+
+  pmosExt.prototype.popMessageEvent= function(_5678){
+    var oTask = workflow.taskUid;
+    var oPmosExt = new pmosExt();
+    var messageEvent = new Ext.FormPanel({
+    labelWidth: 150, // label settings here cascade unless overridden
+    frame:true,
+    bodyStyle:'padding:5px 5px 0',
+    width: 500,
+    height: 400,
+    defaultType: 'textfield',
+    items: [
+      {
+         xtype:'fieldset',
+         title: _('ID_EVENT_MESSAGE'),
+         collapsible: false,
+         autoHeight:true,
+         buttonAlign : 'center',
+         defaults: {width: 210},
          defaultType: 'textfield',
-         items: [
-                 {
-                    xtype:'fieldset',
-                    title: _('ID_EVENT_MESSAGE'),
-                    collapsible: false,
-                    autoHeight:true,
-                    buttonAlign : 'center',
-                    defaults: {width: 210},
-                    defaultType: 'textfield',
-                    items:[
-                             {
-                                width     : 200,
-                                fieldLabel: _('ID_DESCRIPTION'),
-                                name      : 'description',
-                                allowBlank: false
-                             },{
-                                width:          100,
-                                xtype:          'combo',
-                                mode:           'local',
-                                triggerAction:  'all',
-                                forceSelection: true,
-                                editable:       false,
-                                fieldLabel:     _('ID_STATUS'),
-                                name:           'status',
-                                displayField:   'name',
-                                valueField:     'value',
-                                store:          new Ext.data.JsonStore({
-                                            fields : ['name', 'value'],
-                                            data   : [
-                                                {name : 'Active',   value: 'Active'},
-                                                {name : 'InActive',   value: 'InActive'},
-                                            ]
-                                        })
-                            }
-                        ]
-              },{
-                xtype:'fieldset',
-                title: _('ID_BEHAVIOUR'),
-                collapsible: false,
-                autoHeight:true,
-                buttonAlign : 'center',
-                defaults: {width: 210},
-                defaultType: 'textfield',
-                items:[{
-                        width:          100,
-                        xtype:          'combo',
-                        mode:           'local',
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     _('ID_TYPE'),
-                        name:           'type',
-                        displayField:   'name',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   : [
-                                        {name : 'Single Task',   value: 'Single Task'},
-                                        {name : 'Multiple Task',   value: 'Multiple Task'},
-                                    ]
-                                })
-                      },{
-                        width:          150,
-                        xtype:          'combo',
-                        mode:           'local',
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     _('ID_TIME_START_WITH_TASK'),
-                        name:           'type',
-                        displayField:   'name',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   :oTask
-                               })
-                    },{
-                        fieldLabel: _('ID_ESTIMATED_TASK_DURATION'),
-                        width:          50,
-                        name: 'estimatedTask',
-                        allowBlank:false
-                    },{
-                        fieldLabel: _('ID_EXECUTION_TIME'),
-                        width:          50,
-                        name: 'executionTime',
-                        allowBlank:false
-                    },{
-                        width:          150,
-                        xtype:          'combo',
-                        mode:           'local',
-                        triggerAction:  'all',
-                        forceSelection: true,
-                        editable:       false,
-                        fieldLabel:     _('ID_EXECUTION_TIME_INTERVAL'),
-                        name:           'executionTimeInterval',
-                        displayField:   'name',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   : [
-                                        {name : 'After Interval Ends',   value: 'After Interval Ends'},
-                                        {name : 'After Interval Starts',   value: 'After Interval Starts'},
-                                    ]
-                                })
-                    }]
-        }]
+         items:[
+                  {
+                     width     : 200,
+                     fieldLabel: _('ID_DESCRIPTION'),
+                     name      : 'description',
+                     allowBlank: false
+                  },{
+                     width:          100,
+                     xtype:          'combo',
+                     mode:           'local',
+                     triggerAction:  'all',
+                     forceSelection: true,
+                     editable:       false,
+                     fieldLabel:     _('ID_STATUS'),
+                     name:           'status',
+                     displayField:   'name',
+                     valueField:     'value',
+                     store:          new Ext.data.JsonStore({
+                                 fields : ['name', 'value'],
+                                 data   : [
+                                     {name : 'Active',   value: 'Active'},
+                                     {name : 'InActive',   value: 'InActive'},
+                                 ]
+                             })
+                 }
+             ]
+         },{
+           xtype:'fieldset',
+           title: _('ID_BEHAVIOUR'),
+           collapsible: false,
+           autoHeight:true,
+           buttonAlign : 'center',
+           defaults: {width: 210},
+           defaultType: 'textfield',
+           items:[{
+                   width:          100,
+                   xtype:          'combo',
+                   mode:           'local',
+                   triggerAction:  'all',
+                   forceSelection: true,
+                   editable:       false,
+                   fieldLabel:     _('ID_TYPE'),
+                   name:           'type',
+                   displayField:   'name',
+                   valueField:     'value',
+                   store:          new Ext.data.JsonStore({
+                               fields : ['name', 'value'],
+                               data   : [
+                                   {name : 'Single Task',   value: 'Single Task'},
+                                   {name : 'Multiple Task',   value: 'Multiple Task'},
+                               ]
+                           })
+                 },{
+                   width:          150,
+                   xtype:          'combo',
+                   mode:           'local',
+                   triggerAction:  'all',
+                   forceSelection: true,
+                   editable:       false,
+                   fieldLabel:     _('ID_TIME_START_WITH_TASK'),
+                   name:           'type',
+                   displayField:   'name',
+                   valueField:     'value',
+                   store:          new Ext.data.JsonStore({
+                               fields : ['name', 'value'],
+                               data   :oTask
+                          })
+               },{
+                   fieldLabel: _('ID_ESTIMATED_TASK_DURATION'),
+                   width:          50,
+                   name: 'estimatedTask',
+                   allowBlank:false
+               },{
+                   fieldLabel: _('ID_EXECUTION_TIME'),
+                   width:          50,
+                   name: 'executionTime',
+                   allowBlank:false
+               },{
+                   width:          150,
+                   xtype:          'combo',
+                   mode:           'local',
+                   triggerAction:  'all',
+                   forceSelection: true,
+                   editable:       false,
+                   fieldLabel:     _('ID_EXECUTION_TIME_INTERVAL'),
+                   name:           'executionTimeInterval',
+                   displayField:   'name',
+                   valueField:     'value',
+                   store:          new Ext.data.JsonStore({
+                               fields : ['name', 'value'],
+                               data   : [
+                                   {name : 'After Interval Ends',   value: 'After Interval Ends'},
+                                   {name : 'After Interval Starts',   value: 'After Interval Starts'},
+                               ]
+                           })
+               }]
+    }]
 
     });
     messageEvent.render(document.body);
@@ -1154,239 +1157,158 @@ pmosExt.prototype.popMessageEvent= function(_5678){
      });
      window.show();
 }
-pmosExt.prototype.popMultipleEvent= function(_5678){
-        Ext.QuickTips.init();
-        var oTaskFrom = workflow.taskUidFrom;
-        var oTaskTo = workflow.taskUidTo;
-        var oTriggers = workflow.triggerList;
-        var oPmosExt = new pmosExt();
-        var multipleEvent = new Ext.FormPanel({
-        url:'eventsSave.php',
-        labelWidth: 150, // label settings here cascade unless overridden
-        frame:true,
-        bodyStyle:'padding:5px 5px 0',
-        width: 500,
-        height: 400,
-        scope:_5678,
-        defaultType: 'textfield',
-        items: [
-            {
-            xtype:'fieldset',
-            title: _('ID_EVENT_MULTIPLE'),
-            collapsible: false,
-            autoHeight:true,
-            buttonAlign : 'center',
-            defaults: {width: 210},
-            defaultType: 'textfield',
-            items:[
-                    {
-                        fieldLabel: '_(ID_DESCRIPTION)',
-                        blankText:'Enter Event Description',
-                        name: 'EVN_DESCRIPTION',
-                        allowBlank:false
-                    },{
-                        width:          100,
-                        xtype:          'combo',
-                        mode:           'local',
-                        triggerAction:  'all',
-                        allowBlank:false,
-                        editable:       false,
-                        fieldLabel:     _('ID_STATUS'),
-                        name:           'EVN_STATUS',
-                        displayField:   'name',
-                        valueField:     'value',
-                        store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   : [
-                                        {name : 'Active',   value: 'ACTIVE'},
-                                        {name : 'InActive',   value: 'INACTIVE'},
-                                    ]
-                                })
-                    },{
-                        fieldLabel: 'EVN_UID',
-                        name: 'EVN_UID',
-                        hidden:true
-                    },{
-                        fieldLabel: 'PRO_UID',
-                        name: 'PRO_UID',
-                        hidden:true
-                    },{
-                        fieldLabel: 'EVN_TYPE',
-                        name: 'EVN_TYPE',
-                        hidden:true
-                    }
-                ]
-            },{
-                xtype:'fieldset',
-                title: _('ID_BEHAVIOUR'),
-                collapsible: false,
-                autoHeight:true,
-                buttonAlign : 'center',
-                defaults: {width: 210},
-                defaultType: 'textfield',
-                items:[
-                      /* {
-                            width        :  100,
-                            xtype        :  'combo',
-                            mode         :  'local',
-                            triggerAction:  'all',
-                            allowBlank   :  false,
-                            editable     :  false,
-                            fieldLabel   :  'Type',
-                            name         :  'EVN_RELATED_TO',
-                            displayField :  'name',
-                            valueField   :  'value',
-                            store        :  new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'Single Task',   value: 'SINGLE'},
-                                            {name : 'Multiple Task',   value: 'MULTIPLE'},
-                                        ]
-                                   }),
-                           onSelect: function(record, index){
-                                   var fields = workflow.multipleEventForm.items.items[1];
-                                   var fields = fields.items.items;
-                                   if(index == 0)
-                                   {
-                                     var fieldsToToggle = [fields[1]];
-                                     oPmosExt.toggleFields(fieldsToToggle,true);
-                                     fieldsToToggle = [fields[2],fields[3]];
-                                     oPmosExt.toggleFields(fieldsToToggle,false);
-                                   }
-                                   else
-                                   {
-                                     var fieldsToToggle = [fields[1]];
-                                     oPmosExt.toggleFields(fieldsToToggle,false);
-                                     fieldsToToggle = [fields[2],fields[3]];
-                                     oPmosExt.toggleFields(fieldsToToggle,true);
-                                   }
-                                   this.setValue(record.data[this.valueField || this.displayField]);
-                                   this.collapse();
-                            }
-                    }*/
-                       {
-                            width        :  100,
-                            xtype        :  'combo',
-                            mode         :  'local',
-                            triggerAction:  'all',
-                            allowBlank   :  false,
-                            editable     :  false,
-                            fieldLabel   :  _('ID_TYPE'),
-                            name         :  'EVN_RELATED_TO',
-                            displayField :  'name',
-                            valueField   :  'value',
-                            store        :  new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'Multiple Task',   value: 'MULTIPLE'},
-                                        ]
-                                   })
-                    },
-                   /* {
-                            width:          150,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            allowBlank   :  true,
-                            editable:       false,
-                            fieldLabel:     'The time starts with task',
-                            name:           'TAS_UID',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   :oTask
-                               })
-                        }*/{
-                            width:          150,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            allowBlank   :  false,
-                            editable:       false,
-                            fieldLabel:     _('ID_TIME_START_WITH_TASK'),
-                            name:           'EVN_TAS_UID_FROM',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   :oTaskFrom
-                               })
-                        },{
-                            width:          150,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            allowBlank   :  false,
-                            editable:       false,
-                            fieldLabel:     _('ID_TO'),
-                            name:           'EVN_TAS_UID_TO',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                    fields : ['name', 'value'],
-                                    data   :oTaskTo
-                               })
-                        },{
-                            width:50,
-                            fieldLabel: _('ID_ESTIMATED_TASK_DURATION_DAYS'),
-                            name: 'EVN_TAS_ESTIMATED_DURATION',
-                            allowBlank:false
-                        },{
-                            width:50,
-                            fieldLabel: _('ID_EXECUTION_TIME_DAYS'),
-                            name: 'EVN_WHEN',
-                            allowBlank:false
-                        },{
-                            width:          150,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            allowBlank   :  false,
-                            editable:       false,
-                            fieldLabel:     '',
-                            name:           'EVN_WHEN_OCCURS',
-                            displayField:   'name',
-                            valueField:     'value',
-                            store:          new Ext.data.JsonStore({
-                                        fields : ['name', 'value'],
-                                        data   : [
-                                            {name : 'After Interval Ends',   value: 'AFTER_TIME'},
-                                            {name : 'After Interval Starts',   value: 'TASK_STARTED'},
-                                        ]
-                                    })
-                        },{
-                            name  :  'EVN_ACTION',
-                            value :  'EXECUTE_TRIGGER',
-                            hidden:  true
-                        },{
-                            width:          120,
-                            xtype:          'combo',
-                            mode:           'local',
-                            triggerAction:  'all',
-                            forceSelection: true,
-                            editable:       false,
-                            fieldLabel:     _('ID_EXECUTE_TRIGGER'),
-                            name:           'TRI_UID',
-                            displayField:   'TRI_TITLE',
-                            valueField:     'TRI_UID',
-                            store:          new Ext.data.JsonStore({
-                                    fields : ['TRI_TITLE', 'TRI_UID'],
-                                    data   :oTriggers
-                               })
-                        }]
-                }]
 
+  pmosExt.prototype.popMultipleEvent= function(_5678){
+    Ext.QuickTips.init();
+    var oTaskFrom = workflow.taskUidFrom;
+    var oTaskTo   = workflow.taskUidTo;
+    var oTriggers = workflow.triggerList;
+    var oPmosExt  = new pmosExt();
+    
+    var multipleEvent = new Ext.FormPanel({
+      url:'eventsSave.php',
+      labelWidth: 160, 
+      frame:true,
+      bodyStyle:'padding:5px 5px 5px 5px',
+      width : 490,
+      height: 380,
+      scope : _5678,
+      defaultType: 'textfield',
+      items: [
+        {
+          xtype:'fieldset',
+          title: _('ID_BEHAVIOUR'),
+          buttonAlign : 'center',
+          width  : 470,
+          defaults: {width: 220},
+          defaultType: 'textfield',
+          items:[
+            {
+              fieldLabel: _('ID_DESCRIPTION'),
+              blankText:'Enter Event Description',
+              name: 'EVN_DESCRIPTION',
+              allowBlank:false
+            },{
+              width:          100,
+              xtype:          'combo',
+              mode:           'local',
+              triggerAction:  'all',
+              allowBlank:false,
+              editable:       false,
+              fieldLabel:     _('ID_STATUS'),
+              name:           'EVN_STATUS',
+              displayField:   'name',
+              valueField:     'value',
+              store:          new Ext.data.JsonStore({
+                fields : ['name', 'value'],
+                data   : [{name : 'Active',   value: 'ACTIVE'},{name : 'InActive',   value: 'INACTIVE'} ] 
+              })
+            },{
+              fieldLabel: 'EVN_UID',
+              name: 'EVN_UID',
+              hidden:true
+            },{
+              fieldLabel: 'PRO_UID',
+              name: 'PRO_UID',
+              hidden:true
+            },{
+              fieldLabel: 'EVN_TYPE',
+              name: 'EVN_TYPE',
+              hidden:true
+            },
+/*
+            {
+              width:          150,
+              xtype:          'combo',
+              mode:           'local',
+              triggerAction:  'all',
+              allowBlank   :  false,
+              editable:       false,
+              fieldLabel:     _('ID_TIME_START_WITH_TASK'),
+              name:           'EVN_TAS_UID_FROM',
+              displayField:   'name',
+              valueField:     'value',
+              store:          new Ext.data.JsonStore({
+                fields : ['name', 'value'],
+                data   :oTaskFrom
+              })
+            },{
+              width:          150,
+              xtype:          'combo',
+              mode:           'local',
+              triggerAction:  'all',
+              allowBlank   :  false,
+              editable:       false,
+              fieldLabel:     _('ID_TO'),
+              name:           'EVN_TAS_UID_TO',
+              displayField:   'name',
+              valueField:     'value',
+              store:          new Ext.data.JsonStore({
+                fields : ['name', 'value'],
+                data   :oTaskTo
+              })
+            },
+*/
+            {
+              width:50,
+              fieldLabel: _('ID_ESTIMATED_TASK_DURATION_DAYS'),
+              name: 'EVN_TAS_ESTIMATED_DURATION',
+              allowBlank:false
+            },{
+              width:50,
+              fieldLabel: _('ID_EXECUTION_TIME_DAYS'),
+              name: 'EVN_WHEN',
+              allowBlank:false
+            },{
+              width:          150,
+              fieldLabel: _('ID_WHEN_OCCURS'),
+              xtype:          'combo',
+              mode:           'local',
+              triggerAction:  'all',
+              allowBlank   :  false,
+              editable:       false,
+              fieldLabel:     '',
+              name:           'EVN_WHEN_OCCURS',
+              displayField:   'name',
+              valueField:     'value',
+              store:          new Ext.data.JsonStore({
+                fields : ['name', 'value'],
+                data   : [
+                  {name : 'After Interval Ends',   value: 'AFTER_TIME'},
+                  {name : 'After Interval Starts',   value: 'TASK_STARTED'},
+                ]
+              })
+            },{
+                name  :  'EVN_ACTION',
+                value :  'EXECUTE_TRIGGER',
+                hidden:  true
+            },{
+                width:          120,
+                xtype:          'combo',
+                mode:           'local',
+                triggerAction:  'all',
+                forceSelection: true,
+                editable:       false,
+                fieldLabel:     _('ID_EXECUTE_TRIGGER'),
+                name:           'TRI_UID',
+                displayField:   'TRI_TITLE',
+                valueField:     'TRI_UID',
+                store:          new Ext.data.JsonStore({
+                  fields : ['TRI_TITLE', 'TRI_UID'],
+                  data   :oTriggers
+                })
+            }]
+          }]
     });
     multipleEvent.render(document.body);
 
     workflow.multipleEventForm = multipleEvent;
-     var evn_uid = workflow.currentSelection.id;
-     multipleEvent.form.load({
-      url:'proxyEventsLoad?startInterId='+evn_uid,
-      method:'GET',
-      waitMsg:'Loading',
-      success:function(form,action) {
+      var evn_uid = workflow.currentSelection.id;
+      multipleEvent.form.load({
+        url:'proxyEventsLoad?startInterId='+evn_uid,
+        method:'GET',
+        waitMsg:'Loading',
+        success:function(form,action) {
         },
         failure:function(form, action) {
           PMExt.notify( _('ID_STATUS') , _('ID_FAILURE') );
@@ -1396,11 +1318,11 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
 
     // Hide/Show Fields
     var eventTitle = multipleEvent.items.items[0];
-    var eventDesc = multipleEvent.items.items[1];
+    //var eventDesc = multipleEvent.items.items[1];
 
     var titleFields = eventTitle.items.items;
-    var descFields = eventDesc.items.items;
-    var fieldsToToggle = [titleFields[2],titleFields[3],titleFields[4],descFields[6]];
+    //var descFields = eventDesc.items.items;
+    var fieldsToToggle = [titleFields[2],titleFields[3],titleFields[4]];
     oPmosExt.toggleFields(fieldsToToggle,false);
 
     var window = new Ext.Window({
@@ -1408,7 +1330,7 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
     collapsible: false,
     maximizable: false,
     width: 500,
-    height: 450,
+    height: 360,
     minWidth: 300,
     minHeight: 200,
     layout: 'fit',
@@ -1416,17 +1338,18 @@ pmosExt.prototype.popMultipleEvent= function(_5678){
     bodyStyle: 'padding:5px;',
     buttonAlign: 'center',
     items: multipleEvent,
-    buttons: [{
+    buttons: [
+      {
         text: _('ID_SAVE'),
         handler: function(){
-                         oPmosExt.saveInterTimer();
-                   }
-        },{
+          oPmosExt.saveInterTimer();
+        }
+      },{
         text: _('ID_CANCEL'),
         handler: function(){
-                       window.close();
-                   }
-        }]
+          window.close();
+        }
+      }]
     });
     window.show();    
 }
@@ -1434,36 +1357,36 @@ pmosExt.prototype.saveInterTimer=function()
 {
   var mulEventform = workflow.multipleEventForm.getForm().getValues();
   var fieldSet1 = workflow.multipleEventForm.items.items[0];
-  var fieldSet2 = workflow.multipleEventForm.items.items[1];
+  //var fieldSet2 = workflow.multipleEventForm.items.items[1];
   var eventId = workflow.currentSelection.id;
   var newFormValues = new Array();
   newFormValues = new Array();
   var sData = null;
   for (var key in mulEventform )
   {
-      newFormValues[key] = new Array();
+    newFormValues[key] = new Array();
     switch(key){
-      case 'EVN_TAS_UID_FROM':
-          if(typeof fieldSet2.items.items[2].value != 'undefined')
-            newFormValues[key]= fieldSet2.items.items[1].value;
-           else
-            newFormValues[key] = '';
-        break;
-      case 'EVN_TAS_UID_TO':
-          if(typeof fieldSet2.items.items[3].value != 'undefined')
-            newFormValues[key]= fieldSet2.items.items[2].value;
-           else
-            newFormValues[key]= '';
-        break;
+      //case 'EVN_TAS_UID_FROM':
+      //    if(typeof fieldSet2.items.items[2].value != 'undefined')
+      //      newFormValues[key]= fieldSet2.items.items[1].value;
+      //     else
+      //      newFormValues[key] = '';
+      //  break;
+      //case 'EVN_TAS_UID_TO':
+      //    if(typeof fieldSet2.items.items[3].value != 'undefined')
+      //      newFormValues[key]= fieldSet2.items.items[2].value;
+      //     else
+      //      newFormValues[key]= '';
+      //  break;
       case 'EVN_STATUS':
           newFormValues[key] = fieldSet1.items.items[1].value;
         break;
       case 'EVN_WHEN_OCCURS':
-          newFormValues[key] = fieldSet2.items.items[5].value;
+          newFormValues[key] = fieldSet1.items.items[7].value;
         break;
         case 'TRI_UID':
-          if(typeof fieldSet2.items.items[7].value != 'undefined')
-            newFormValues[key] = fieldSet2.items.items[7].value;
+          if(typeof fieldSet1.items.items[8].value != 'undefined')
+            newFormValues[key] = fieldSet1.items.items[8].value;
         break;
       case 'EVN_TYPE':
           newFormValues[key] = workflow.currentSelection.type;
@@ -1490,6 +1413,7 @@ pmosExt.prototype.saveInterTimer=function()
   Ext.Ajax.request({
     url: 'eventsSave.php' ,
       success: function (response) {      // When saving data success
+      	// :P  we are not saving nothing at all
           /*_39fd.workflow = workflow;
           var preObj = workflow.getStartEventConn(_39fd,'sourcePort','InputPort');
             //_39fd.workflow.taskid =  _39fd.workflow.taskUid[0];
