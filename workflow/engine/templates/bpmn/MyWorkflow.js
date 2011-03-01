@@ -151,19 +151,23 @@ MyWorkflow.prototype.connectionContextMenu=function(oShape)
   this.canvasEvent = Ext.get(oShape.id);
   this.contextEventmenu = new Ext.menu.Menu({
     items: [{
-      text: 'Manhatten Router',
+      text: 'Straight Line',
+      iconCls: 'button_menu_ext ss_sprite ss_bullet_white ',
       scope: this,
       handler: MyWorkflow.prototype.toggleConnection
     }, {
-      text: 'Bezier Router',
+      text: 'Curvy Line', 
       scope: this,
+      iconCls: 'button_menu_ext ss_sprite ss_vector',
       handler: MyWorkflow.prototype.toggleConnection
     }, {
-      text: 'Fan Router',
+      text: 'Angled Line',
       scope: this,
+      iconCls: 'button_menu_ext ss_sprite ss_bullet_white ',
       handler: MyWorkflow.prototype.toggleConnection
     }, {
-      text: 'Delete Router',
+      text: 'Delete Line',
+      iconCls: 'button_menu_ext ss_sprite ss_delete',
       scope: this,
       handler:function()
       {
@@ -186,20 +190,21 @@ MyWorkflow.prototype.connectionContextMenu=function(oShape)
 MyWorkflow.prototype.toggleConnection=function(oShape)
 {
   this.currentSelection.workflow.contextClicked = false;
-  switch (oShape.text) {
+  switch ( strtolower(oShape.text)) {
     case 'NULL Router':
         this.currentSelection.setRouter(null);
     break;
-    case 'Manhatten Router':
+ 
+    case 'angled line':
         this.currentSelection.setRouter(new ManhattanConnectionRouter());
     break;
-    case 'Bezier Router':
+    case 'curvy line':
         this.currentSelection.setRouter(new BezierConnectionRouter());
     break;
-    case 'Fan Router':
+    case 'straight line':
         this.currentSelection.setRouter(new FanConnectionRouter());
     break;
-    case 'Delete Router':
+    case 'delete line':
         this.currentSelection.workflow.getCommandStack().execute(new CommandDelete(this.currentSelection.workflow.getCurrentSelection()));
         ToolGeneric.prototype.execute.call(this);
     break;

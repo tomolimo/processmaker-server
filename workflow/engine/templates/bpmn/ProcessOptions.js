@@ -3223,7 +3223,7 @@ ProcessOptions.prototype.addTriggers = function()
     id: 'btnProperty',
     text: _('ID_PROPERTIES'),
     iconCls: 'button_menu_ext ss_sprite ss_application_edit',
-     handler: editProperties
+    handler: editProperties
   });
 
    var triggerStore = new Ext.data.GroupingStore({
