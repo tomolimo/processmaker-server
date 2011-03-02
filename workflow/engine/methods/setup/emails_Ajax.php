@@ -64,10 +64,11 @@ switch ($request) {
 
     define("SUCCESSFUL", 'SUCCESSFUL');
     define("FAILED", 'FAILED');
-    $tld = preg_match("([^//]*$)", $_POST['srv'], $regs);
-    $srv1 = $regs[1];
-    $srv  = $_POST['srv'];
-G::pr('$srv='.$srv.' $tld='.$tld);
+    $varaux = preg_match("([^//]*$)", $_POST['srv'], $regs);
+    if($regs)
+    	$srv = $regs[0];      
+    else
+      $srv  = $_POST['srv'];
 
     $port  = ($_POST['port'] == 'default')? 25: $_POST['port'];
     $user  = $_POST['account'];
@@ -79,7 +80,7 @@ G::pr('$srv='.$srv.' $tld='.$tld);
 
     $Server = new NET($srv);
     $oSMTP = new ESMTP;
-
+ 
     switch ($step) {
       case 1:
         if ($Server->getErrno() == 0) {
@@ -118,7 +119,7 @@ G::pr('$srv='.$srv.' $tld='.$tld);
       #try login to host
 
       case 4:
-        if($auth_required == 'yes'){
+        if($auth_required == 'yes'){ 
           if($port == 0){
             $resp = $oSMTP->Connect($srv);
           } else {
