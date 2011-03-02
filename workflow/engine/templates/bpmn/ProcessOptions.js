@@ -8,9 +8,9 @@ var ProcessOptions = function(id){
 //ProcessOptions.prototype.type="ProcessOptions";
 
 /**
-   * 'addDynaform' function that will allow adding new dynaforms and showing list of
-   * dynaforms available
-*/
+ * 'addDynaform' function that will allow adding new dynaforms and showing list of
+ * dynaforms available
+ */
 ProcessOptions.prototype.addDynaform= function(_5625)
 { 
   var dynaFields = Ext.data.Record.create([
@@ -422,8 +422,8 @@ ProcessOptions.prototype.addDynaform= function(_5625)
               store          : new Ext.data.JsonStore({
                 fields : ['value', 'name'],
                 data   : [
-                  {value: 'normal', name : _('ID_NORMAL') },
-                  {value: 'grid',   name : _('ID_GRID')   },
+                  {value: 'normal', name : _('ID_NORMAL')},
+                  {value: 'grid',   name : _('ID_GRID')},
                 ]
               })
            },{
@@ -1378,7 +1378,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
       url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
     })
   });
-  inputDocStore.load({params:{start : 0 , limit : 10 }});
+  inputDocStore.load({params:{start : 0 , limit : 10}});
 
   var inputDocForm = new Ext.FormPanel({
     labelWidth: 100,
@@ -3109,16 +3109,16 @@ ProcessOptions.prototype.addTriggers = function()
                return false;
           }
           var triggerUID = rowSelected[0].get('TRI_UID');
-          editTriggerForm.form.load({
+          editTriggerForm.getForm().load({
                         url   :'proxyExtjs.php?pid='+pro_uid+'&TRI_UID='+triggerUID+'&action=editTriggers',
                         method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
+                           Ext.getCmp('TRI_WEBBOT').setValue(action.result.data.TRI_WEBBOT);
                            editTriggerFormWindow.show();
-                           //Ext.getCmp("TRI_UID").setValue(triggerUID);
                         },
                         failure:function(form, action) {
-                            PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
+                           PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
                         }
                      });
     }
@@ -3431,14 +3431,14 @@ var triggersForm = new Ext.FormPanel({
                     // when this button clicked,
                     formWindow.hide();
                 }
-            }]
+        }]
     });
 
- var editTriggerForm = new Ext.FormPanel({
-    buttonAlign: 'center',
+  var editTriggerForm = new Ext.FormPanel({
+    buttonAlign : 'center',
     labelWidth  : 2,
     layout      : 'fit',
-    width       : 540,
+    width       : 570,
     height      : 350,
     items:
       [{
@@ -3447,13 +3447,15 @@ var triggersForm = new Ext.FormPanel({
         items       :[{
             //columnWidth :.6,
             layout      : 'form',
-            border      :false,
+            border      : false,
             items       : [{
-                    xtype       : 'textarea',
-                    width     : 420,
-                    height    : 320,
-                    name        : 'TRI_WEBBOT',
-                    anchor      :'100%'
+//                xtype       : 'textarea',
+                xtype       : 'codepress',
+                language    : 'generic',
+                id          : 'TRI_WEBBOT',
+                width       : 420,
+                height      : 310,
+                name        : 'TRI_WEBBOT'
             }]
         },{
           //columnWidth     :.4,
@@ -3467,9 +3469,9 @@ var triggersForm = new Ext.FormPanel({
             name    : 'selectorigin',
             handler: function (s) {
               workflow.variablesAction = 'form';
-              workflow.fieldName         = 'TRI_WEBBOT' ;
+              workflow.fieldName       = 'TRI_WEBBOT' ;
               workflow.variable        = '@@',
-              workflow.formSelected    = triggersForm;
+              workflow.formSelected    = editTriggerForm;
               var rowData = PMVariables();
             }
           }]
@@ -3484,7 +3486,8 @@ var triggersForm = new Ext.FormPanel({
         handler: function(){
             var getForm   = editTriggerForm.getForm().getValues();
             var triggerUid = getForm.TRI_UID;
-            var condition = getForm.TRI_WEBBOT;
+//            var condition = getForm.TRI_WEBBOT;
+            var condition = Ext.getCmp('TRI_WEBBOT').getCode();
             var desc = getForm.TRI_DESCRIPTION;
             Ext.Ajax.request({
                               url   : '../triggers/triggers_Save.php',
@@ -3828,7 +3831,12 @@ var PMVariables = function() {
           rowSelected = this.getSelectionModel().getSelected();
           FieldSelected = workflow.fieldName;
           rowLabel = rowSelected.data.variable;
-          var value = FormSelected.getForm().findField(FieldSelected).setValue(rowLabel);
+          var prevContent = FormSelected.getForm().findField(FieldSelected).getValue();
+          var newContent  = prevContent + ' ' + rowLabel;
+          var value = FormSelected.getForm().findField(FieldSelected).setValue(newContent);
+//          if (FormSelected.getForm().findField(FieldSelected).code){
+//            FormSelected.getForm().findField(FieldSelected).code=value;
+//          }
           window.hide();
           break;
     
