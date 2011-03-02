@@ -48,7 +48,9 @@ else {
 }
 $ver= (isset($_GET['v']) && $_GET['v']!='') ? '_'.$_GET['v'] : '';
 
-
+if(!$ver)   //This code is in the case the outputdocument won't be versioned
+  $ver='_1';
+  
 $realPath = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $sAppDocUid .$ver. '.' . $ext ;
 $realPath1 = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename'] .$ver. '.' . $ext ;
 $realPath2 = PATH_DOCUMENT . $oAppDocument->Fields['APP_UID'] . '/outdocs/' . $info['basename']. '.' . $ext ;
@@ -62,7 +64,6 @@ if(file_exists($realPath)){
     $sw_file_exists=true;
     $realPath=$realPath2;
 }
-
 if(!$sw_file_exists){
     $error_message="'".$info['basename'] .$ver. '.' . $ext."' ".G::LoadTranslation('ID_ERROR_STREAMING_FILE');
     if((isset($_POST['request']))&&($_POST['request']==true)){
