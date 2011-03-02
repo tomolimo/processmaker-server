@@ -152,8 +152,11 @@ switch ($request) {
     define("SUCCESSFUL", 'SUCCESSFUL');
     define("FAILED", 'FAILED');
   //$host = 'smtp.bizmail.yahoo.com';
-    $tld = preg_match("([^//]*$)", $_POST['srv'], $regs);
-    $srv1 = $regs[1];
+   $varaux = preg_match("([^//]*$)", $_POST['srv'], $regs);
+    if($regs)
+    	$srv = $regs[0];      
+    else
+      $srv  = $_POST['srv'];
     $srv = $_POST['srv'];
     $port = ($_POST['port'] == 'default')? 25: $_POST['port'];
     $user = $_POST['account'];
