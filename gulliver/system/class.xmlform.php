@@ -2619,6 +2619,8 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
       $html = '';
       foreach ( $this->options as $optionName => $option ) {
         $html .= '<input class="FormCheck" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'checkbox\' value="' . $optionName . '"' . (in_array ( $optionName, $value ) ? 'checked' : '') . ' disabled><span class="FormCheck">' . $option . '</span></input><br>';
+        if(in_array ( $optionName, $value ))
+         $html .= '<input  id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'hidden\' value="' . $optionName .'"</input>';
       }
       return $html;
     } else {
@@ -3133,34 +3135,34 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       $onchange = '';
     
     #the validations field was moved to javascript routines ;)
-    if ($this->mode == 'edit') {
-      if( $startDate=='1969-12-31' ) {
-        $startDate='';
-        $endDate='';
-      }
-       $maskleng=strlen($mask);
-       $hour   = '%H';$min   = '%M';$sec   = '%S';
-       $sizehour = strpos($mask, $hour);
-       $sizemin = strpos($mask, $hour);
-       $sizesec = strpos($mask, $hour);
+   
+    if( $startDate=='1969-12-31' ) {
+      $startDate='';
+      $endDate='';
+    }
+    $maskleng=strlen($mask);
+    $hour   = '%H';$min   = '%M';$sec   = '%S';
+    $sizehour = strpos($mask, $hour);
+    $sizemin = strpos($mask, $hour);
+    $sizesec = strpos($mask, $hour);
 
-       $Time = 'false';
-        if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
-          $sizeend = $maskleng + 2;
-          $Time = 'true';
-        } else {
-          $sizeend = $maskleng + 2;
-        }
- 
-        if($valueaux=='today'){
-          $valueaux=masktophp ($mask);
-        }
-        $value1=$value;
-        $value=$valueaux;
-        if(($value==NULL)||($value=='')){          
-               $value=$value1;
-           }
-        
+    $Time = 'false';
+    if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
+     $sizeend = $maskleng + 2;
+     $Time = 'true';
+    } else {
+     $sizeend = $maskleng + 2;
+    }
+    if($valueaux=='today'){
+     $valueaux=masktophp ($mask);
+    }
+    $value1=$value;
+    $value=$valueaux;
+    if(($value==NULL)||($value=='')){          
+     $value=$value1;
+    }
+   
+    if ($this->mode == 'edit') {
        
         if ( $this->editable != "0") {
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'"/>'
@@ -3177,8 +3179,10 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
 
     } else {
-      $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
-    }
+      //$html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
+      
+        $html =  '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" ' . (isset ( $this->maxLength ) ? ' maxlength="' . $this->maxLength . '"' : '') . ' value=\'' . htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" />' . htmlentities ( $value, ENT_COMPAT, 'utf-8' );
+   }
 
     if($this->hint){
       $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
