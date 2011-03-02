@@ -1,3 +1,8 @@
+/**
+ * BPMN Designer v1.1
+ * @date Feb 2th, 2011
+ * @author Erik A. O. <erik@colosa.com>
+ */
 
 var saveProcess;
 var usersPanel;
@@ -6,680 +11,199 @@ var _TU_TYPE;
 var processObj;
 var ProcessMapObj;
 
-Ext.onReady ( function() {
-  new Ext.KeyMap(document, {
-    key: Ext.EventObject.F5,
-    fn: function(keycode, e) {
-      if (Ext.isIE)
-        e.browserEvent.keyCode = 8;
-    //e.stopEvent();
-    }
-  });
-
-  processObj = new ProcessOptions();
-  ProcessMapObj = new ProcessMapContext();
-  workflow  = new MyWorkflow("paintarea");
-  workflow.setEnableSmoothFigureHandling(false);
-  workflow.scrollArea.width = 2000;
-
-  if(typeof pro_uid !== 'undefined') {
-    Ext.Ajax.request({
-      url: 'openProcess.php?PRO_UID=' + pro_uid,
-      success: function(response) {
-        shapesData =  createShapes(response.responseText);
-        createConnection(shapesData);
-        
-        /**
-         * erik: Setting Drop targets from users & groups grids to assignment to tasks
-         * for all existing tasks
-         */
-        var dropEls = Ext.get('paintarea').query('.x-task');
-        for(var i = 0; i < dropEls.length; i++)
-          new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
-        
-      },
-      failure: function(){
-        Ext.Msg.alert ('Failure');
-      }
-    });
-  }
-
-  /**********************************************************************************
-  * Do the Ext (Yahoo UI) Stuff
-  **********************************************************************************/
-  var west= {
-    id         : 'palette',
-    title      : 'Palette',
-    region     : 'west',
-    width      : 65,
-    border     : false,
-    autoScroll : true,
-    collapsible :true,
-    split       :true,
-    collapseMode:'mini',
-    hideCollapseTool: false,
-    items:{
-      html:''
-    }
-  };
-  
-  var east= {
-    id         : 'eastPanel',
-    title      : '',
-    region     : 'east',
-    width      : 150,
-    border     : false,
-    autoScroll : true,
-    collapsible :true,
-    split       :true,
-    collapseMode:'mini',
-    hideCollapseTool: false,
-
-    items:{
-      html:'east panel'
-    }
-  };
-
-  var north= {
-    xtype	:	"panel",
-    initialSize: 60,
-    split:false,
-    titlebar: false,
-    collapsible: false,
-    animate: false,
-    region	:	"north"
-  };
-  
-  var south= {
-    xtype	:	"panel",
-    initialSize: 120,
-    height: 100,
-    split:true,
-    titlebar: false,
-    collapsible: true,
-    autoScroll:true,
-    animate: true,
-    region	:	"south",
-    items: {
-      region: 'center',
-      xtype: 'tabpanel',
-      items: [{
-        title: 'Properties',
-        html: 'Properties'
-      },
-      {
-        title: 'Debug Console',
-        html: 'Debug Console'
-      }]
-    }
-  };
-
-  var center= {
-    width:100,
-    height:2000,
-    xtype	:	"panel",
-    //autoScroll:true,
-    fitToFrame:true,
-    region	:	"center"
-  };
-
-  var main = new Ext.Panel({
-    id: 'centerRegion',
-    renderTo  : "center1",
-    region    : "center",
-    layout    : "border",
-    autoScroll: true,
-    height    : 1360,
-    width     : 1280, //PMExt.getBrowser().screen.width,
-    //items   : [west, north, center]
-    items   : [north, center]
-  });
-  
-
-  var toolbarPanel = new Ext.Panel({
-    layout:'table',
-    defaultType: 'button',
-    baseCls: 'x-plain',
-    cls: 'btn-panel',
-    //menu: undefined,
-    split: false,
-
-    layoutConfig: {
-        columns: 7
-    },
-    defaults: {
-      autoEl: {tag: 'h3', html: 's', style:"padding:15px 0 3px;"},
-      scale: 'large'
-    },
-
-    items : [{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_task',//icon: '/skins/ext/images/gray/shapes/pallete/task.png',
-      id:"x-shapes-task"
-    },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_startevent',//icon: '/skins/ext/images/gray/shapes/pallete/startevent.png',
-      id:"x-shapes-startEvent"
-    },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_interevent',//icon: '/skins/ext/images/gray/shapes/pallete/interevent.png',
-      id:"x-shapes-interEvent"
-    },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_endevent',//icon: '/skins/ext/images/gray/shapes/pallete/endevent.png',
-      id:"x-shapes-endEvent"
-    },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_gateway',//icon: '/skins/ext/images/gray/shapes/pallete/gateway.png',
-      id:"x-shapes-gateways"
-    },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_annotation',//icon: '/skins/ext/images/gray/shapes/pallete/annotation.png',
-      id:"x-shapes-annotation"
-    }
-    ]
-  });
-  
-  var designerToolbarHeight = 60;
-  var designerToolbarWidth  = 265;
-  var designerToolbar = new Ext.Window({
-    id: 'designerToolbar',
-    //title: 'Toolbar',
-    headerAsText: true,
-    width: designerToolbarWidth,
-    height: designerToolbarHeight,
-    x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
-    y: 0,
-    minimizable: false,
-    maximizable: false,
-    closable: false,
-    resizable: false,
-    floating: true,
-    frame:true,
-    shadow:false,
-    border:true,
+Ext.onReady(function(){
+    //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
     
-    shim: true,
-    items: [toolbarPanel]
-    /*html: '<div id="x-shapes">\n\
-      <p id="x-shapes-task" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/task.png"/></p>\n\
-      <p id="x-shapes-startEvent" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/startevent.png"/></p>\n\
-      <p id="x-shapes-interEvent" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/interevent.png"/></p>\n\
-      <p id="x-shapes-endEvent" title="" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/endevent.png"/></p>\n\
-      <p id="x-shapes-gateways" title="" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/gateway.png"/><br/></p>\n\
-      <p id="x-shapes-annotation" title="" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/annotation.png"/></p>\n\
-      <!--<p id="x-shapes-group" title="Group"><img src= "/skins/ext/images/gray/shapes/pallete/group.png"/></p>\n\
-      <p id="x-shapes-dataobject" title="Data Object" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/dataobject.png"/></p>\n\
-      <p id="x-shapes-pool" title="Pool" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/pool.png"/></p>\n\
-      <p id="x-shapes-lane" title="Lane" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/lane.png"/></p>\n\
-      <p id="x-shapes-milestone" title="Milestone" class="toolbar-item"><img src= "/skins/ext/images/gray/shapes/pallete/milestone.png"/></p>-->\n\
-    </div>'*/
-  });
-  designerToolbar.on('minimize',function(w){
-    //console.debug('minimizing...');
-    if( w.collapsed )
-      designerToolbar.expand();
-    else
-      designerToolbar.collapse(); //collapse the window
-    
-  });
-  
-  designerToolbar.show();
+    var northPanel = new Ext.Toolbar({
+        region: 'north',
+        height: 32, // give north and south regions a height
+        items: northPanelItems
+    })
 
-  // custom variables
-  designerToolbar._posRelToView = designerToolbar.getPosition(true);
-  designerToolbar._scrollPosTimer = false;
-  designerToolbar._moveBlocker = false;
-  designerToolbar.show();
-  var divScroll = document.body;
-
-  // save relative pos to view when moving (for scrolling event below)
-  // also, manually do a constrain, else the win would be lost if moved outside the view
-  designerToolbar.on('move', function() {
-    // lock function (because we move the window again inside)
-    if (designerToolbar._moveBlocker) return;
-    designerToolbar._moveBlocker = true;
-
-    var winPos = designerToolbar.getPosition(true);
-    designerToolbar._posRelToView = [winPos[0] - divScroll.scrollLeft, winPos[1] - divScroll.scrollTop];
-
-    // manually do what constrain should do if it worked as assumed
-    var layersize = [Ext.get(divScroll).getWidth(), Ext.get(divScroll).getHeight()];
-    var windowsize = [designerToolbar.getSize().width, designerToolbar.getSize().height];
-    // assumed width of the scrollbar (true for windows 7) plus some padding to be sure
-    var scrollSize = 17 + 5;
-    if (designerToolbar._posRelToView[0] < 0) { // too far left
-        designerToolbar.setPosition(divScroll.scrollLeft, winPos[1]);
-        designerToolbar._posRelToView = [0, designerToolbar._posRelToView[1]];
-    } else if (designerToolbar._posRelToView[0] >= (layersize[0] - windowsize[0])) { // too far right
-        designerToolbar.setPosition(((divScroll.scrollLeft + layersize[0]) - windowsize[0] - scrollSize), winPos[1]);
-        designerToolbar._posRelToView = [(layersize[0] - windowsize[0] - scrollSize), designerToolbar._posRelToView[1]];
+    var southPanel = {
+        // lazily created panel (xtype:'panel' is default)
+        region: 'south',
+        contentEl: 'south',
+        split: true,
+        height: 100,
+        minSize: 100,
+        maxSize: 200,
+        collapsible: true,
+        title: 'South',
+        margins: '0 0 0 0'
     }
 
-    winPos = designerToolbar.getPosition(true); // update pos
-    if (designerToolbar._posRelToView[1] < 0) { // too high up
-        designerToolbar.setPosition(winPos[0], divScroll.scrollTop);
-        designerToolbar._posRelToView = [designerToolbar._posRelToView[0], 0];
-    } else if (designerToolbar._posRelToView[1] >= layersize[1]) { // too low
-        designerToolbar.setPosition(winPos[0], ((divScroll.scrollTop + layersize[1]) - windowsize[1] - scrollSize));
-        designerToolbar._posRelToView = [designerToolbar._posRelToView[0], (layersize[1] - windowsize[1] - scrollSize)];
-    }
-
-    // release function
-    designerToolbar._moveBlocker = false;
-  });
-
-  ////
-  usersPanelStart = 0;
-  usersPanelLimit = 1000;
-  
-  var usersStore = new Ext.data.Store({
-    autoLoad: false,
-    proxy : new Ext.data.HttpProxy({
-      url: '../processProxy/getUsers?start='+usersPanelStart+'&limit='+usersPanelLimit
-    }),
-    reader : new Ext.data.JsonReader( {
-      totalProperty: 'totalCount',
-      root: 'data',
-      fields : [
-        {name : 'USR_UID'},
-        {name : 'USER'},
-        {name : 'USR_USERNAME'},
-        {name : 'USR_FIRSTNAME'},
-        {name : 'USR_LASTNAME'}
-      ]
-    })
-  });
-  
-  var usersGrid = new Ext.grid.GridPanel({
-    id       : 'usersGrid',
-    title    : 'Users',
-    height   : 180,
-    stateful : true,
-    stateId  : 'usersGrid',
-    ddGroup  : 'task-assignment',
-    enableDragDrop : true,
-    width: 150,
-    viewConfig : {
-      forceFit : false
-    },
-    cm : new Ext.grid.ColumnModel({
-      defaults: {
-        width: 200,
-        sortable: true
-      },
-      columns : [
-        {header: 'USR_UID', id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-        {header: 'User', dataIndex: 'USER', width: 249, renderer:function(v,p,r){
-          return _FNF(r.data.USR_USERNAME, r.data.USR_FIRSTNAME, r.data.USR_LASTNAME);
-        }}
-      ]
-    }),
-    store: usersStore,
-    listeners: {
-      render: function(){
-        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
-      }
-    },
-    tbar:[
-      new Ext.form.TextField ({
-        id    : 'usersSearchTxt',
-        ctCls :'pm_search_text_field',
-        width : 200,
-        allowBlank : true,
-        emptyText : _('ID_ENTER_SEARCH_TERM'),
-        listeners : {
-          specialkey: function(f,e){
-            if (e.getKey() == e.ENTER)
-              usersSearch();
+    var eastPanel = {
+        region: 'east',
+        title: '&nbsp;',
+        collapsible: true,
+        split: true,
+        width: 225, // give east and west regions a width
+        minSize: 175,
+        maxSize: 400,
+        margins: '0 5 0 0',
+        layout:'border', // specify layout manager for items
+        items:            // this TabPanel is wrapped by another Panel so the title will be applied
+        [
+          eastPanelTree,
+          {
+            id: 'eastPanelCenter',
+            xtype: 'panel',
+            title: _('ID_PROCESS')+': '+pro_title,
+            region: 'center',
+            layout: 'fit',
+            items:[
+              new Ext.TabPanel({
+                id    : 'usersPanelTabs',
+                title : 'sdd',
+                border: true, // already wrapped so don't add another border
+                activeTab   : 0, // second tab initially active
+                tabPosition : 'top',
+                split  : true,
+                collapseMode:'mini',
+                //height : 318,
+                items  : [
+                  propertiesGrid,
+                  usersTaskGrid,
+                  usersTaskAdHocGrid
+                ]
+              })
+            ]
           }
-        }
-      }),{
-        text    : 'X',
-        ctCls   : 'pm_search_x_button',
-        handler : function(){
-          usersStore.setBaseParam( 'search', '');
-          usersStore.load({params:{start : 0 , limit :  usersPanelLimit}});
-          Ext.getCmp('usersSearchTxt').setValue('');
-        }
-      },{
-        text:TRANSLATIONS.ID_SEARCH,
-        handler: usersSearch
-      }
-    ]/*,
-    bbar: [new Ext.PagingToolbar({
-      pageSize   : usersPanelLimit,
-      store      : usersStore,
-      displayInfo: true,
-      displayMsg : '{2} Users',
-      emptyMsg   : ''
-    })]*/
-  });
-
-  var groupsStore = new Ext.data.Store( {
-    autoLoad: false,
-    proxy : new Ext.data.HttpProxy({
-      url: '../processProxy/getGroups?start='+usersPanelStart+'&limit='+usersPanelLimit
-    }),
-    reader : new Ext.data.JsonReader( {
-      totalProperty: 'totalCount',
-      root: 'data',
-      fields : [
-        {name : 'GRP_UID'},
-        {name : 'CON_VALUE'}
-      ]
-    })
-  });
-
-  var groupsGrid = new Ext.grid.GridPanel({
-    id       : 'groupsGrid',
-    title    : 'Groups',
-    stateful : true,
-    stateId  : 'groupsGrid',
-    ddGroup  : 'task-assignment',
-    height   : 180,
-    width: 150,
-    enableDragDrop : true,
-    viewConfig : {
-      forceFit :false
-    },
-    cm : new Ext.grid.ColumnModel({
-      defaults : {
-        width    : 400,
-        sortable : true
-      },
-      columns: [
-        {id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
-        {header: 'Group', dataIndex: 'CON_VALUE', width: 249}
-      ]
-    }),
-    store : groupsStore,
-    listeners : {
-      render : function(){
-        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
-      }
-    },
-    tbar : [
-      new Ext.form.TextField ({
-        id    : 'groupsSearchTxt',
-        ctCls :'pm_search_text_field',
-        allowBlank : true,
-        width : 200,
-        emptyText : _('ID_ENTER_SEARCH_TERM'),
-        listeners : {
-          specialkey: function(f,e){
-            if (e.getKey() == e.ENTER)
-              groupsSearch();
-          }
-        }
-      }), {
-        text    :'X',
-        ctCls   :'pm_search_x_button',
-        handler : function(){
-          groupsStore.setBaseParam( 'search', '');
-          groupsStore.load({params:{start : 0 , limit :  usersPanelLimit}});
-          Ext.getCmp('groupsSearchTxt').setValue('');
-        }
-      }, {
-        text    :TRANSLATIONS.ID_SEARCH,
-        handler : groupsSearch
-      }
-    ]/*,
-    bbar: [new Ext.PagingToolbar({
-      pageSize   : usersPanelLimit,
-      store      : groupsStore,
-      displayInfo: true,
-      displayMsg : '{2} Groups',
-      emptyMsg   : 'No records found'
-    })]*/
-  });
-  
-
-  usersPanel = new Ext.Window({
-    id      : 'usersPanel',
-    title   : 'Actors',
-    width   : 280,
-    height  : 370,
-    //x: (PMExt.getBrowser().screen.width - designerToolbarWidth) - 5,
-    //y: designerToolbarHeight + 2,
-    minimizable : false,
-    maximizable : false,
-    closable    : false,
-    resizable   : false,
-    floating    : true,
-    shadow      : true,
-    border      : true,
-    items:[
-      new Ext.TabPanel({
-        id    : 'usersPanelTabs',
-        border: true, // already wrapped so don't add another border
-        activeTab   : 0, // second tab initially active
-        tabPosition : 'top',
-        split  : true,
-        height : 340,
-        width  : 268,
-        items  : [
-          usersGrid,
-          groupsGrid
         ]
-      })
-    ],
-    tbar:[
-     {
-      text: 'AD HOC',
-      icon:'/images/cases-folders.png',
-      id: 'adHocPress',
-      enableToggle: true,
-      toggleHandler: function(item, pressed){
-        ///alert(item.id);
-      },
-      allowDepress: true,
-      pressed: false,
-      handler: function(){
-        //alert(Ext.getCmp('adHocPress').pressed);
-      }
-    }],
-    tools: [
-      /*{
-        id:'help',
-        qtip: 'Get Help',
-        handler: function(event, toolEl, panel){
-            // whatever
-        }
-      },*/ {
-        id: 'toggle',
-        handler: function(w) {
-          if( Ext.getCmp('usersPanel').collapsed )
-            Ext.getCmp('usersPanel').expand();
-          else
-            Ext.getCmp('usersPanel').collapse();
-        }
-      },{
-        id: 'close',
-        handler: function() {
-          Ext.getCmp('usersPanel').hide()
-        }
-      }
-    ]
-  });
-  
-  // custom variables
-  usersPanel._targetTask = null;
-  
-  usersPanel._onDrop = function(ddSource, e, data) {
-    var type = Ext.getCmp('usersPanelTabs').getActiveTab().id == 'usersGrid' ? 1 : 2;
-    var records = ddSource.dragData.selections;
-    var uids = Array();
-    _TAS_UID = Ext.getCmp('usersPanel')._targetTask.id;
-    _TU_TYPE = Ext.getCmp('adHocPress').pressed ? 2 : 1;
-    
-    if( typeof parent != 'undefined' ) {
-      parent._TAS_UID = _TAS_UID;
     }
-    
-    Ext.each(records, function(gridRow){
-      if( type == 1 ) {//some users grid items were dropped       
-        uids.push(gridRow.data.USR_UID);
-      } else { //some groups grid items were dropped
-        uids.push(gridRow.data.GRP_UID);
-      }
+
+    var westPanel = {
+        region: 'west',
+        id: 'west-panel', // see Ext.getCmp() below
+        title: '',
+        split: true,
+        width: 88,
+        minSize: 20,
+        maxSize: 400,
+        collapsible: true,
+        margins: '0 0 0 5',
+        layout: {
+            type: 'accordion',
+            animate: true
+        },
+        items: [
+          toolbarPanel,
+          actorsPanel
+        ]
+    }
+
+    var centerPanel = new Ext.Panel({      
+        //title: '',
+        region: 'center', // a center region is ALWAYS required for border layout
+        id: 'designerPanel',
+        contentEl: 'center1',
+        autoScroll: true,
+        tbar: northPanelItems
+    })
+
+    var viewport = new Ext.Viewport({
+        layout: 'border',
+        items:[
+            /*new Ext.Toolbar({
+              region: 'north',
+              height: 25, // give north and south regions a height
+              items: mainMenu
+            }),*/
+            new Ext.TabPanel({
+              id: 'mainTabPanel',
+              region: 'center',
+              deferredRender: false,
+              activeTab: 0,     // first tab initially active
+              items: [
+                {
+                  title:'BPMN Designer',
+                  id: 'designerTab',
+                  layout: 'border',
+                  items:[
+                    // create instance immediately
+                    //northPanel,
+                    //southPanel,
+                    eastPanel,
+                    westPanel,
+                    // in this instance the TabPanel is not wrapped by another panel
+                    // since no title is needed, this Panel is added directly
+                    // as a Container
+                    centerPanel
+                  ],
+                  _setDesignerTitle: function(title) {
+                    Ext.getCmp('designerTab').setTitle('<b>'+_('ID_PROCESSMAP_TITLE')+': </b> ' + title);
+                  }
+                }
+              ],
+              _addTab: function(option) {
+                alert(option);
+              },
+              _addTabFrame: tabFrame = function(name, title,  url) {
+                tabId = 'pm-tab-'+name ;
+                //var uri = 'ajaxListener?action=' + name;
+                var TabPanel = Ext.getCmp('mainTabPanel');
+                var tab = TabPanel.getItem(tabId);
+
+                if( tab ) {
+                  TabPanel.setActiveTab(tabId);
+                } else {
+                  TabPanel.add({
+                    xtype:'iframepanel',
+                    id: tabId,
+                    title: title,
+                    frameConfig:{name: name + 'Frame', id: name + 'Frame'},
+                    defaultSrc : url,
+                    loadMask:{msg:'Loading...'},
+                    bodyStyle:{height:'600px'},
+                    width:'1024px',
+                    closable:true,
+                    autoScroll: true
+                  }).show();
+
+                  TabPanel.doLayout();
+                }
+              }
+            })
+        ]
     });
 
-    uids = uids.join(',');
+    Ext.getCmp('designerTab')._setDesignerTitle(pro_title);
 
-    if( typeof parent != 'undefined' ) {
-      parent.Ext.getCmp('eastPanelCenter').setTitle(Ext.getCmp('usersPanel')._targetTask.name);
-    }
-    Ext.Ajax.request({
-      url: '../processProxy/assignActorsTask',
-      success: function(response){
-        var result = Ext.util.JSON.decode(response.responseText);
-        if( result.success ) {
-          if( typeof parent != 'undefined' )
-            parent.PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
-          else
-            PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
-          
-          if( typeof parent != 'undefined' ) {
-            parent.Ext.getCmp('eastPanel').show();
-            parent.Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
-            parent.Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = '';
-            if( _TU_TYPE == 1 ) {
-              parent.Ext.getCmp('usersPanelTabs').setActiveTab(1);
-              parent.Ext.getCmp('usersTaskGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: 1}});
-            } else {
-              parent.Ext.getCmp('usersPanelTabs').setActiveTab(2);
-              parent.Ext.getCmp('usersTaskAdHocGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: 2}});
-            }
-          }
-        } else {
-          PMExt.error(_('ID_ERROR'), result.msg)
+    processObj = new ProcessOptions();
+    ProcessMapObj = new ProcessMapContext();
+    workflow  = new MyWorkflow("paintarea");
+    workflow.setEnableSmoothFigureHandling(false);
+    //workflow.scrollArea.width = 2000;
+
+    if(typeof pro_uid !== 'undefined') {
+      Ext.Ajax.request({
+        url: 'bpmnProxy/openProcess?PRO_UID=' + pro_uid,
+        success: function(response) {
+          shapesData =  createShapes(response.responseText);
+          createConnection(shapesData);
+
+          /**
+           * erik: Setting Drop targets from users & groups grids to assignment to tasks
+           * for all existing tasks
+           */
+          //var dropEls = Ext.get('paintarea').query('.x-task');
+          //for(var i = 0; i < dropEls.length; i++)
+            //new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
+
+        },
+        failure: function(){
+          Ext.Msg.alert ('Failure');
         }
-      },
-      failure: function(){},
-      params: {
-        TAS_UID     : _TAS_UID,
-        TU_TYPE     : _TU_TYPE,
-        TU_RELATION : type,
-        UIDS        : uids
-      }
-    });
-  }
-
-  
-  usersPanel.on('beforeshow', function(e) {
-    usersPanel._posRelToView = usersPanel.getPosition(true);
-    usersPanel._scrollPosTimer = false;
-    usersPanel._moveBlocker = false;
-    usersPanel.setPosition(0, divScroll.scrollTop);
-  }, this);
-  
-  usersPanel.on('afterrender', function(e) {
-    Ext.getCmp('usersGrid').store.load();
-    Ext.getCmp('groupsGrid').store.load();
-  }, this);
-
-  //usersPanel.show();
-  var divScroll = document.body;
-
-  // save relative pos to view when moving (for scrolling event below)
-  // also, manually do a constrain, else the win would be lost if moved outside the view
-  usersPanel.on('move', function() {
-    // lock function (because we move the window again inside)
-    if (usersPanel._moveBlocker) return;
-    usersPanel._moveBlocker = true;
-
-    var winPos = usersPanel.getPosition(true);
-    usersPanel._posRelToView = [winPos[0] - divScroll.scrollLeft, winPos[1] - divScroll.scrollTop];
-
-    // manually do what constrain should do if it worked as assumed
-    var layersize = [Ext.get(divScroll).getWidth(), Ext.get(divScroll).getHeight()];
-    var windowsize = [usersPanel.getSize().width, usersPanel.getSize().height];
-    // assumed width of the scrollbar (true for windows 7) plus some padding to be sure
-    var scrollSize = 17 + 5;
-    if (usersPanel._posRelToView[0] < 0) { // too far left
-        usersPanel.setPosition(divScroll.scrollLeft, winPos[1]);
-        usersPanel._posRelToView = [0, usersPanel._posRelToView[1]];
-    } else if (usersPanel._posRelToView[0] >= (layersize[0] - windowsize[0])) { // too far right
-        usersPanel.setPosition(((divScroll.scrollLeft + layersize[0]) - windowsize[0] - scrollSize), winPos[1]);
-        usersPanel._posRelToView = [(layersize[0] - windowsize[0] - scrollSize), usersPanel._posRelToView[1]];
+      });
     }
-
-    winPos = usersPanel.getPosition(true); // update pos
-    if (usersPanel._posRelToView[1] < 0) { // too high up
-        usersPanel.setPosition(winPos[0], divScroll.scrollTop);
-        usersPanel._posRelToView = [usersPanel._posRelToView[0], 0];
-    } else if (usersPanel._posRelToView[1] >= layersize[1]) { // too low
-        usersPanel.setPosition(winPos[0], ((divScroll.scrollTop + layersize[1]) - windowsize[1] - scrollSize));
-        usersPanel._posRelToView = [usersPanel._posRelToView[0], (layersize[1] - windowsize[1] - scrollSize)];
-    }
-
-    // release function
-    usersPanel._moveBlocker = false;
-  });
-
-  Ext.fly(document).on("scroll", function(){
-    if (designerToolbar._scrollPosTimer) {
-      clearTimeout(designerToolbar._scrollPosTimer);
-    }
-    designerToolbar._scrollPosTimer = setTimeout(function() {
-      designerToolbar.setPosition(designerToolbar._posRelToView[0] + divScroll.scrollLeft, designerToolbar._posRelToView[1] + divScroll.scrollTop);
-    }, 100);
-
-    if( usersPanel.isVisible() ) {
-      if (usersPanel._scrollPosTimer) {
-        clearTimeout(usersPanel._scrollPosTimer);
-      }
-      usersPanel._scrollPosTimer = setTimeout(function() {
-        usersPanel.setPosition(usersPanel._posRelToView[0] + divScroll.scrollLeft, usersPanel._posRelToView[1] + divScroll.scrollTop);
-      }, 100);
-    }
-  });
-
-  new Ext.ToolTip({
-      target: 'x-shapes-task',
-      title: 'Task',
-      trackMouse: true,
-      anchor: 'top',
-      html: ''
-  });
-  new Ext.ToolTip({
-      target: 'x-shapes-startEvent',
-      title: '  Start Event',
-      trackMouse: true,
-      anchor: 'top',
-      html: ''
-  });
-  new Ext.ToolTip({
-      target: 'x-shapes-interEvent',
-      title: 'Intermediate Event',
-      trackMouse: true,
-      anchor: 'top',
-      html: ''
-  });
-  new Ext.ToolTip({
-      target: 'x-shapes-endEvent',
-      title: 'End Event',
-      trackMouse: true,
-      anchor: 'top',
-      html: ''
-  });
-  new Ext.ToolTip({
-      target: 'x-shapes-gateways',
-      title: 'Gateway',
-      trackMouse: true,
-      anchor: 'top',
-      html: ''
-  });
-  new Ext.ToolTip({
-      target: 'x-shapes-annotation',
-      title: 'Annotation',
-      anchor: 'top',
-      trackMouse: true,
-      html: ''
-  });
+    
 
 
-  //Get main into workflow object
-  workflow.main = main;
-  //items[3]=>'center region'
-  var centerRegionId = Ext.getCmp('centerRegion').body.id;
-  canvas = Ext.get(centerRegionId);
-  
+    //Get main into workflow object
+  workflow.main = Ext.getCmp('centerRegion');
+  canvas = Ext.get('paintarea');
+
   contextCanvasMenu = new Ext.menu.Menu({
       items: [
 /*      {
@@ -687,7 +211,7 @@ Ext.onReady ( function() {
           handler: ProcessMapObj.editProcess,
           iconCls: 'button_menu_ext ss_sprite ss_page_white_edit',
           scope: this
-      }, 
+      },
 */
       {
           text: 'Export Process',
@@ -717,7 +241,7 @@ Ext.onReady ( function() {
           handler: ProcessMapObj.delLines,
           scope: this
       }, */
-/*      
+/*
       {
           text: 'Process Permission',
           iconCls: 'button_menu_ext ss_sprite ss_application_key',
@@ -798,14 +322,14 @@ Ext.onReady ( function() {
       this.contextCanvasMenu.showAt(e.getXY());
   }, this);
 
-  canvas.on('click', function(e) {
+  /*canvas.on('click', function(e) {
       e.stopEvent();
       this.workflow.contextClicked = false;
       if(this.workflow.currentSelection != null)
           this.workflow.disablePorts(this.workflow.currentSelection);
       //Removes Flow menu
       this.workflow.setCurrentSelection(null);
-  }, this);
+  }, this);*/
 
   var simpleToolbar = new Ext.Toolbar('toolbar');
   simpleToolbar.addButton({
@@ -827,12 +351,57 @@ Ext.onReady ( function() {
 
   var menu = new FlowMenu(workflow);
   workflow.addSelectionListener(menu);
-  workflow.scrollArea = document.getElementById(centerRegionId).parentNode;
+  workflow.scrollArea = document.getElementById("center1").parentNode;
+
+  /**
+   * Setting tooltips ti tollbar items
+   */
+  new Ext.ToolTip({
+      target: 'x-shapes-task',
+      title: 'Task',
+      trackMouse: true,
+      anchor: 'top',
+      html: ''
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-startEvent',
+      title: '  Start Event',
+      trackMouse: true,
+      anchor: 'top',
+      html: ''
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-interEvent',
+      title: 'Intermediate Event',
+      trackMouse: true,
+      anchor: 'top',
+      html: ''
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-endEvent',
+      title: 'End Event',
+      trackMouse: true,
+      anchor: 'top',
+      html: ''
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-gateways',
+      title: 'Gateway',
+      trackMouse: true,
+      anchor: 'top',
+      html: ''
+  });
+  new Ext.ToolTip({
+      target: 'x-shapes-annotation',
+      title: 'Annotation',
+      anchor: 'top',
+      trackMouse: true,
+      html: ''
+  });
   
-  
-  
-  
-  
+  /**
+   * setting drag sources for Toolbar items
+   */
   var dragsource=new Ext.dd.DragSource("x-shapes-task", {
       ddGroup:'TreeDD',
       dragData:{
@@ -863,6 +432,14 @@ Ext.onReady ( function() {
           name: "bpmnGatewayExclusiveData"
       }
   });
+
+  var dragsource=new Ext.dd.DragSource("x-shapes-annotation", {
+      ddGroup:'TreeDD',
+      dragData:{
+          name: "bpmnAnnotation"
+      }
+  });
+  
   /*var dragsource=new Ext.dd.DragSource("x-shapes-dataobject", {
       ddGroup:'TreeDD',
       dragData:{
@@ -875,22 +452,18 @@ Ext.onReady ( function() {
           name: "bpmnPool"
       }
   });*/
-  var dragsource=new Ext.dd.DragSource("x-shapes-annotation", {
-      ddGroup:'TreeDD',
-      dragData:{
-          name: "bpmnAnnotation"
-      }
-  });
+  
 
 
-  var droptarget=new Ext.dd.DropTarget(centerRegionId,{
+
+  var droptarget=new Ext.dd.DropTarget('paintarea',{
       ddGroup:'TreeDD'
   });
 
   //Creating Pool
   //var oPool = new bpmnPool(workflow);
   //workflow.addFigure(oPool,100,70);
-  
+
   if(workflow.taskNo == '')
       workflow.taskNo= 0; //Initializing Count for the bpmnTask
   var count = 0;
@@ -964,7 +537,7 @@ Ext.onReady ( function() {
                   }
               }
           }
-          //Making Connections          
+          //Making Connections
           if(targetObj.type == 'bpmnAnnotation') {
             var connObj = new DottedConnection();
             connObj.setSource(sourceObj.output2);
@@ -982,185 +555,121 @@ Ext.onReady ( function() {
     }
  }
 
-
-
-
-  /*function getUrlVars()
-  {
-      var vars = [], hash;
-      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-
-      for(var i = 0; i < hashes.length; i++)
-      {
-          hash = hashes[i].split('=');
-          vars.push(hash[0]);
-          vars[hash[0]] = hash[1];
-      }
-      var pro_uid = vars["PRO_UID"];
-      return pro_uid;
-  }*/
-
   function createShapes(stringData)
   {
-
-      var responsearray = stringData.split("|");
-      var jsonstring = new Array();
-      var shapes = new Array();
-      //var param = new Array();
-      var shapeType = new Array();
-
-      for(var i=0; i<=responsearray.length-1;i++)
-      {
-          jsonstring[i] = responsearray[i].split(":");
-          var param = jsonstring[i][0].replace(" ","");
-          shapeType[i] = param;
-          switch(param)
-          {
-              case 'tasks':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-              case 'gateways':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-              case 'events':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-              case 'annotations':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-              case 'process':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-              case 'subprocess':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-              case 'routes':
-                  shapes[param] = new Array();
-                  shapes[param] = Ext.util.JSON.decode(jsonstring[i][1]);
-                  break;
-          }
-      }
+    
+      var shapes =  Ext.util.JSON.decode(stringData); //stringData.split("|");
       workflow.taskNo = 0;
       //Create all shapes
-      for(var j=0;j< shapeType.length;j++)
-      {
-          switch(shapeType[j])
-          {
-              case 'tasks':
-                  for(var k=0;k<shapes.tasks.length;k++){
-                      var task_boundary = shapes.tasks[k][6];
-                      if(task_boundary != null && task_boundary == 'TIMER' && task_boundary != '')
-                          workflow.boundaryEvent = true;
-                      else
-                          workflow.boundaryEvent = false;
 
-                      if(k != 0)
-                          workflow.taskNo++;
+      //case 'tasks':
+      for(var k=0;k<shapes.tasks.length;k++){
+          var task_boundary = shapes.tasks[k][6];
+          if(task_boundary != null && task_boundary == 'TIMER' && task_boundary != '')
+              workflow.boundaryEvent = true;
+          else
+              workflow.boundaryEvent = false;
 
-                      workflow.taskName    = shapes.tasks[k][1];
-                      //workaround for Old Processmap widht and height
-                      if(shapes.tasks[k][4] == 110) {
-                        workflow.task_width  = 165;  
-                      }
-                      else {
-                        workflow.task_width  = shapes.tasks[k][4];    
-                      }
-                      if(shapes.tasks[k][5] == 60) {
-                        workflow.task_height = 40;
-                      }
-                      else {
-                        workflow.task_height = shapes.tasks[k][5];
-                      }
-                      workflow.orgXPos = shapes.tasks[k][2];
-                      workflow.orgYPos = shapes.tasks[k][3];
-                      NewShape = eval("new bpmnTask(workflow)");
-                      NewShape.x = shapes.tasks[k][2];
-                      NewShape.y = shapes.tasks[k][3];
-                      NewShape.taskName = shapes.tasks[k][1];
-                      workflow.setBoundary(NewShape);
-                      workflow.addFigure(NewShape, NewShape.x, NewShape.y);
-                      NewShape.html.id = shapes.tasks[k][0];
-                      NewShape.id = shapes.tasks[k][0];
-                  }
-                  break;
-              case 'gateways':
-                  for(var k=0;k<shapes.gateways.length;k++){
-                      var srctype = shapes.gateways[k][1];
-                      
-                      NewShape = eval("new "+srctype+"(workflow)");
-                      NewShape.x = shapes.gateways[k][2];
-                      NewShape.y = shapes.gateways[k][3];
-                     // workflow.setBoundary(NewShape);
-                      workflow.addFigure(NewShape, NewShape.x, NewShape.y);
-                      //Setting newshape id to the old shape id
-                      NewShape.html.id = shapes.gateways[k][0];
-                      NewShape.id = shapes.gateways[k][0];
-                  }
-                  break;
-              case 'events':
-                      for(var k=0;k<shapes.events.length;k++) {
-                          var srceventtype = shapes.events[k][1];
-                          var tas_uid = shapes.events[k][4];
-                          if(tas_uid != '') {
-                              NewShape = eval("new "+srceventtype+"(workflow)");
-                              NewShape.x = shapes.events[k][2];
-                              NewShape.y = shapes.events[k][3];
-                              workflow.setBoundary(NewShape);
-                              workflow.addFigure(NewShape, NewShape.x, NewShape.y);
-                              //Setting newshape id to the old shape id
-                              NewShape.html.id = shapes.events[k][0];
-                              NewShape.id = shapes.events[k][0];
-                          }
-                          else if(tas_uid == '') {
-                              NewShape = eval("new "+srceventtype+"(workflow)");
-                              NewShape.x = shapes.events[k][2];
-                              NewShape.y = shapes.events[k][3];
-                              workflow.setBoundary(NewShape);
-                              workflow.addFigure(NewShape, NewShape.x, NewShape.y);
-                              //Setting newshape id to the old shape id
-                              NewShape.html.id = shapes.events[k][0];
-                              NewShape.id = shapes.events[k][0];
-                          }
-                  }
-                  break;
-              case 'annotations':
-                  for(var k=0;k<shapes.annotations.length;k++){
-                      workflow.annotationName = shapes.annotations[k][1];
-                      workflow.anno_width = shapes.annotations[k][4];
-                      workflow.anno_height = shapes.annotations[k][5];
-                      NewShape = eval("new bpmnAnnotation(workflow)");
-                      NewShape.x = shapes.annotations[k][2];
-                      NewShape.y = shapes.annotations[k][3];
-                      workflow.setBoundary(NewShape);
-                      workflow.addFigure(NewShape, NewShape.x, NewShape.y);
-                      //Setting newshape id to the old shape id
-                      NewShape.html.id = shapes.annotations[k][0];
-                      NewShape.id = shapes.annotations[k][0];
-                  }
-                  break;
-          case 'subprocess':
-              for(var k=0;k<shapes.subprocess.length;k++){
-                  workflow.subProcessName = shapes.subprocess[k][1];
-                  NewShape = eval("new bpmnSubProcess(workflow)");
-                  NewShape.x = shapes.subprocess[k][2];
-                  NewShape.y = shapes.subprocess[k][3];
-                  workflow.setBoundary(NewShape);
-                  workflow.addFigure(NewShape, NewShape.x, NewShape.y);
-                  //Setting newshape id to the old shape id
-                  NewShape.html.id = shapes.subprocess[k][0];
-                  NewShape.id = shapes.subprocess[k][0];
-              }
-              break;
+          if(k != 0)
+              workflow.taskNo++;
+
+          workflow.taskName    = shapes.tasks[k][1];
+          //workaround for Old Processmap widht and height
+          if(shapes.tasks[k][4] == 110) {
+            workflow.task_width  = 165;
+          }
+          else {
+            workflow.task_width  = shapes.tasks[k][4];
+          }
+          if(shapes.tasks[k][5] == 60) {
+            workflow.task_height = 40;
+          }
+          else {
+            workflow.task_height = shapes.tasks[k][5];
+          }
+          workflow.orgXPos = shapes.tasks[k][2];
+          workflow.orgYPos = shapes.tasks[k][3];
+          NewShape = eval("new bpmnTask(workflow)");
+          NewShape.x = shapes.tasks[k][2];
+          NewShape.y = shapes.tasks[k][3];
+          NewShape.taskName = shapes.tasks[k][1];
+          workflow.setBoundary(NewShape);
+          workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+          NewShape.html.id = shapes.tasks[k][0];
+          NewShape.id = shapes.tasks[k][0];
+      }
+
+      //case 'gateways':
+      for(var k=0;k<shapes.gateways.length;k++){
+          var srctype = shapes.gateways[k][1];
+
+          NewShape = eval("new "+srctype+"(workflow)");
+          NewShape.x = shapes.gateways[k][2];
+          NewShape.y = shapes.gateways[k][3];
+         // workflow.setBoundary(NewShape);
+          workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+          //Setting newshape id to the old shape id
+          NewShape.html.id = shapes.gateways[k][0];
+          NewShape.id = shapes.gateways[k][0];
+      }
+
+      //case 'events':
+      for(var k=0;k<shapes.events.length;k++) {
+          var srceventtype = shapes.events[k][1];
+          var tas_uid = shapes.events[k][4];
+          if(tas_uid != '') {
+              NewShape = eval("new "+srceventtype+"(workflow)");
+              NewShape.x = shapes.events[k][2];
+              NewShape.y = shapes.events[k][3];
+              workflow.setBoundary(NewShape);
+              workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+              //Setting newshape id to the old shape id
+              NewShape.html.id = shapes.events[k][0];
+              NewShape.id = shapes.events[k][0];
+          }
+          else if(tas_uid == '') {
+              NewShape = eval("new "+srceventtype+"(workflow)");
+              NewShape.x = shapes.events[k][2];
+              NewShape.y = shapes.events[k][3];
+              workflow.setBoundary(NewShape);
+              workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+              //Setting newshape id to the old shape id
+              NewShape.html.id = shapes.events[k][0];
+              NewShape.id = shapes.events[k][0];
           }
       }
+
+      //case 'annotations':
+      for(var k=0;k<shapes.annotations.length;k++){
+          workflow.annotationName = shapes.annotations[k][1];
+          workflow.anno_width = shapes.annotations[k][4];
+          workflow.anno_height = shapes.annotations[k][5];
+          NewShape = eval("new bpmnAnnotation(workflow)");
+          NewShape.x = shapes.annotations[k][2];
+          NewShape.y = shapes.annotations[k][3];
+          workflow.setBoundary(NewShape);
+          workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+          //Setting newshape id to the old shape id
+          NewShape.html.id = shapes.annotations[k][0];
+          NewShape.id = shapes.annotations[k][0];
+      }
+
+      //case 'subprocess':
+      for(var k=0;k<shapes.subprocess.length;k++){
+          workflow.subProcessName = shapes.subprocess[k][1];
+          NewShape = eval("new bpmnSubProcess(workflow)");
+          NewShape.x = shapes.subprocess[k][2];
+          NewShape.y = shapes.subprocess[k][3];
+          workflow.setBoundary(NewShape);
+          workflow.addFigure(NewShape, NewShape.x, NewShape.y);
+          //Setting newshape id to the old shape id
+          NewShape.html.id = shapes.subprocess[k][0];
+          NewShape.id = shapes.subprocess[k][0];
+      }
+      
       if(typeof(workflow.taskNo) != 'undefined' && workflow.taskNo != 0)
           workflow.taskNo++;
+      
       return shapes;
   }
 
@@ -1290,26 +799,26 @@ Ext.onReady ( function() {
       var oldroutes    = [['2081943344c5bdbb38a7ae9016052982','2081943344c5bdbb38a7ae9016052622','4043621294c5bda0d9625f4067933182'],['4031913164c5bdbb5329a05024607071','4043621294c5bda0d9625f4067933182','6934720824c5be48364b533001453464'],['8851314534c5a6777ee2c96009360450','6934720824c5be48364b533001453464','4131425644c5bda073ed062050942935'],['6934720824c5be48364b533001453464','6934720824c5be48364b533001453464','6367816924c6cbc57f36c36034634744'],['7298598774c5bd9fa3ed1c8035004509','4131425644c5bda073ed062050942935','5585460614c5bdbb8629170012669821'],['8565089054c5be1e6efeca5077280809','6367816924c6cbc57f36c36034634744','8565089054c5be1e6efeca5077280809']];
 
       var allRoutes = routes
-      var aTasks        =  	Ext.util.JSON.encode(tasks);
-      var aGateways     = 	Ext.util.JSON.encode(gateways);
-      var aEvents       = 	Ext.util.JSON.encode(events);
-      var aAnnotations  = 	Ext.util.JSON.encode(annotations);
-      var aRoutes       = 	Ext.util.JSON.encode(routes);
+      var aTasks        =   Ext.util.JSON.encode(tasks);
+      var aGateways     =   Ext.util.JSON.encode(gateways);
+      var aEvents       =   Ext.util.JSON.encode(events);
+      var aAnnotations  =   Ext.util.JSON.encode(annotations);
+      var aRoutes       =   Ext.util.JSON.encode(routes);
       var aSubProcess   = Ext.util.JSON.encode(subprocess);
 
       //var pro_uid = getUrlVars();
       var loadMask = new Ext.LoadMask(document.body, {msg:'Saving..'});
       loadMask.show();
-    
+
       if(typeof pro_uid != 'undefined')
       {
           Ext.Ajax.request({
-              url: 'saveProcess.php',
+              url: '../bpmn/saveProcess.php',
               method: 'POST',
               success: function(response) {
                 var result = Ext.util.JSON.decode(response.responseText);
                 loadMask.hide();
-                
+
                 if( result.success ) {
                   PMExt.notify(_('ID_PROCESS_SAVE'), result.msg);
                 } else {
@@ -1331,27 +840,5 @@ Ext.onReady ( function() {
       else
           Ext.Msg.alert ('Process ID Undefined');
   }
-
-  function usersSearch()
-  {
-    var search = Ext.getCmp('usersSearchTxt').getValue().trim();
-    if( search == '' ) {
-      PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
-      return;
-    }
-    Ext.getCmp('usersGrid').store.setBaseParam('search', search);
-    Ext.getCmp('usersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
-  }
-
-  function groupsSearch()
-  {
-    var search = Ext.getCmp('groupsSearchTxt').getValue().trim();
-    if( search == '' ) {
-      PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
-      return;
-    }
-    Ext.getCmp('groupsGrid').store.setBaseParam('search', search);
-    Ext.getCmp('groupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
-  }
-
+  
 });

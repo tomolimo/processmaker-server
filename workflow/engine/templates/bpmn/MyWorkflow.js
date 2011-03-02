@@ -1033,7 +1033,7 @@ MyWorkflow.prototype.savePosition= function(oShape)
     }
     if(urlparams != ''){
       Ext.Ajax.request({
-        url: "processes_Ajax.php"+ urlparams,
+        url: "processes/processes_Ajax.php"+ urlparams,
         success: function(response) {
           //Ext.Msg.alert (response.responseText);
         },
@@ -1120,7 +1120,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
 
         if(urlparams != ''){
         Ext.Ajax.request({
-            url: "processes_Ajax.php"+ urlparams,
+            url: "processes/processes_Ajax.php"+ urlparams,
             success: function(response) {
                 //Ext.Msg.alert (response.responseText);
                   if(response.responseText != 1 && response.responseText != ""){
@@ -1150,9 +1150,9 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
                        * erik: Setting Drop targets from users & groups grids to assignment to tasks
                        * for new tasks created recently
                        */
-                      var dropEls = Ext.get('paintarea').query('.x-task');
-                      for(var i = 0; i < dropEls.length; i++)
-                        new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
+                      //var dropEls = Ext.get('paintarea').query('.x-task');
+                      //for(var i = 0; i < dropEls.length; i++)
+                        //new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
                       
                     }
                     else if(oNewShape.type == 'bpmnSubProcess'){
@@ -1196,7 +1196,7 @@ MyWorkflow.prototype.saveTask= function(actiontype,xpos,ypos)
                     break;
             }
              Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
+                    url: "processes/processes_Ajax.php"+ urlparams,
                     success: function(response) {
                         //Ext.Msg.alert (response.responseText);
                           if(response.responseText != 1 && response.responseText != "") {
@@ -1234,7 +1234,7 @@ MyWorkflow.prototype.deleteSilently= function(oShape)
     }
 
     Ext.Ajax.request({
-                        url: "processes_Ajax.php"+ urlparams,
+                        url: "processes/processes_Ajax.php"+ urlparams,
                         success: function(response) {
                                 //Ext.Msg.alert (response.responseText);
                         },
@@ -1341,7 +1341,7 @@ MyWorkflow.prototype.showAjaxDialog = function(btn){
              }
            }
            Ext.Ajax.request({
-              url: "processes_Ajax.php"+ url,
+              url: "processes/processes_Ajax.php"+ url,
                 success: function(response) {
                     workflow.getCommandStack().execute(new CommandDelete(currentObj));
               },
@@ -1490,7 +1490,7 @@ MyWorkflow.prototype.saveGateways = function(oGateway){
      urlparams = '?action=addGateway&data={"pro_uid":"'+ pro_uid +'","tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","gat_type":"'+oGateway.type+'","gat_uid":"'+oGateway.id+'","gat_next_type":"'+next_task_type+'","position":'+pos+'}';
      if(urlparams != ''){
         Ext.Ajax.request({
-                url: "processes_Ajax.php"+ urlparams,
+                url: "processes/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     if(response.responseText != '')
                       {
@@ -1578,7 +1578,7 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
   
   if(urlparams != '') {
     Ext.Ajax.request({
-      url: "processes_Ajax.php"+ urlparams,
+      url: "processes/processes_Ajax.php"+ urlparams,
       success: function(response) {
         if(response.responseText != '')
         {
@@ -1717,7 +1717,7 @@ MyWorkflow.prototype.saveRoute =    function(preObj,newObj)
     if(task_uid.length > 0 && next_task_uid.length > 0)
         {
             Ext.Ajax.request({
-                    url: "patterns_Ajax.php",
+                    url: "bpmn/patterns_Ajax.php",
                     success: function(response) {
                         if(response.responseText != 0) {
                             if(typeof newObj.conn != 'undefined') {
@@ -1781,7 +1781,7 @@ MyWorkflow.prototype.showEventResult = function(btn){
            if(btn == 'yes')
             {
                 Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ url,
+                    url: "processes/processes_Ajax.php"+ url,
                     success: function(response) {
                            workflow.getCommandStack().execute(new CommandDelete(workflow.oConn));
                     },
@@ -1804,7 +1804,7 @@ MyWorkflow.prototype.deleteEvent = function(eventObj){
      if(event_uid != '') {
             var urlparams = '?action=deleteEvent&data={"uid":"'+ event_uid +'"}';
             Ext.Ajax.request({
-                    url: "processes_Ajax.php"+ urlparams,
+                    url: "processes/processes_Ajax.php"+ urlparams,
                     success: function(response) {
                     },
                     failure: function(){

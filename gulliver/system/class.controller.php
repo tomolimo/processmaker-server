@@ -19,6 +19,8 @@ class Controller
     private $__request__;
     
     private $headPublisher;
+
+    public $ExtVar = Array();
     
     public function __construct()
     {
@@ -111,5 +113,21 @@ class Controller
                 $this->__request__->$var['key'] = $var['value'];   
         } else 
             $this->__request__ = $data;
+    }
+
+    public function includeExtJS($srcFile, $debug=false)
+    {
+      $this->headPublisher->addExtJsScript($srcFile,true );
+      
+    }
+
+    public function setView($file)
+    {
+      $this->headPublisher->addContent($file,true );
+    }
+
+    public function setJSVar($name, $value)
+    {
+      $this->headPublisher->assign($name, $value);
     }
 }

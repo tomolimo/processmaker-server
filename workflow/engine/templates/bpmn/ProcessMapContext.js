@@ -94,7 +94,7 @@ ProcessMapContext.prototype.editProcess= function()
                                  pro_debug = 0;
                                  var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'"}';
                                  Ext.Ajax.request({
-                                     url: "processes_Ajax.php"+ urlparams,
+                                     url: "processes/processes_Ajax.php"+ urlparams,
                                      success: function(response) {
                                          PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_SAVE') );
                                          window.hide();
@@ -113,7 +113,7 @@ ProcessMapContext.prototype.editProcess= function()
       });
 
       editProcess.form.load({
-            url:'proxyExtjs.php?pid='+pro_uid+'&action=process_Edit',
+            url:'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=process_Edit',
             method:'GET',
             waitMsg:'Loading',
             success:function(form, action) {
@@ -321,7 +321,7 @@ ProcessMapContext.prototype.processPermission= function()
        }
        var opUID = rowSelected[0].get('OP_UID');
        PermissionForm.form.load({
-                url:'proxyExtjs.php?pid='+pro_uid+'&op_uid=' +opUID+'&action=editObjectPermission',
+                url:'bpmn/proxyExtjs.php?pid='+pro_uid+'&op_uid=' +opUID+'&action=editObjectPermission',
                 method:'GET',
                 waitMsg:'Loading',
                 success:function(form, action) {
@@ -402,7 +402,7 @@ ProcessMapContext.prototype.processPermission= function()
     remoteSort   : true,
     fields       : dbConnFields,
     proxy        : new Ext.data.HttpProxy({
-                        url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermission'
+                        url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermission'
     })
   });
   PermissionStore.load({params:{start:0, limit:10}});
@@ -414,7 +414,7 @@ ProcessMapContext.prototype.processPermission= function()
     remoteSort   : true,
     fields       : selectField,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=tasks'
+      url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=tasks'
     })
   });
 
@@ -425,7 +425,7 @@ ProcessMapContext.prototype.processPermission= function()
     remoteSort   : true,
     fields       : selectField,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=users'
+      url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=users'
     })
   });
 
@@ -436,7 +436,7 @@ ProcessMapContext.prototype.processPermission= function()
     remoteSort   : true,
     fields       : selectField,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=dynaform'
+      url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=dynaform'
     })
   });
 
@@ -447,7 +447,7 @@ ProcessMapContext.prototype.processPermission= function()
     remoteSort   : true,
     fields       : selectField,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=input'
+      url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=input'
     })
   });
 
@@ -458,7 +458,7 @@ ProcessMapContext.prototype.processPermission= function()
     remoteSort   : true,
     fields       : selectField,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=output'
+      url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getObjectPermissionType&objectType=output'
     })
   });
 
@@ -1044,7 +1044,7 @@ ProcessMapContext.prototype.processSupervisors= function()
                      if(r.data.PU_UID != "")
                      {
                         Ext.Ajax.request({
-                          url   : 'processes_Ajax.php'+urlparams,
+                          url   : 'processes/processes_Ajax.php'+urlparams,
                           method: 'GET',
                           success: function(response) {
                               PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_REMOVED') );
@@ -1074,7 +1074,7 @@ ProcessMapContext.prototype.processSupervisors= function()
             remoteSort   : true,
             fields       : processUserFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&action=process_Supervisors'
+              url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=process_Supervisors'
             })
           });
   processUser.load({params:{start:0, limit:10}});
@@ -1082,7 +1082,7 @@ ProcessMapContext.prototype.processSupervisors= function()
   // create the Data Store of users that are not assigned to a process supervisor
   var availableProcessesUser = new Ext.data.JsonStore({
                  root            : 'data',
-                 url             : 'proxyExtjs?pid='+pro_uid+'&action=availableProcessesSupervisors',
+                 url             : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=availableProcessesSupervisors',
                  totalProperty   : 'totalCount',
                  idProperty      : 'gridIndex',
                  remoteSort      : false, //true,
@@ -1174,7 +1174,7 @@ ProcessMapContext.prototype.processSupervisors= function()
             var urlparams   = '?action=assignProcessUser&data={"PRO_UID":"'+pro_uid+'","USR_UID":"'+userID+'"}';
 
             Ext.Ajax.request({
-                    url: 'processes_Ajax.php'+urlparams,
+                    url: 'processes/processes_Ajax.php'+urlparams,
                     method: 'GET',
                     success: function (response) {      // When saving data success
                         PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_ASSIGNED') );
@@ -1302,7 +1302,7 @@ ProcessMapContext.prototype.processDynaform= function()
             remoteSort   : true,
             fields       : supervisorDynaformsFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&action=supervisorDynaforms'
+              url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=supervisorDynaforms'
             })
           });
   supervisorDynaforms.load({params:{start : 0 , limit : 10 }});
@@ -1310,7 +1310,7 @@ ProcessMapContext.prototype.processDynaform= function()
   // create the Data Store of users that are not assigned to a process supervisor
   var availableSupervisorDynaforms = new Ext.data.JsonStore({
              root            : 'data',
-             url             : 'proxyExtjs?pid='+pro_uid+'&action=availableSupervisorDynaforms',
+             url             : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=availableSupervisorDynaforms',
              totalProperty   : 'totalCount',
              idProperty      : 'gridIndex',
              remoteSort      : false, //true,
@@ -1526,7 +1526,7 @@ ProcessMapContext.prototype.processIODoc = function()
             remoteSort   : true,
             fields       : supervisorInputDocFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&action=supervisorInputDoc'
+              url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=supervisorInputDoc'
             })
           });
   supervisorInputDoc.load({params:{start : 0 , limit : 10 }});
@@ -1534,7 +1534,7 @@ ProcessMapContext.prototype.processIODoc = function()
   // create the Data Store of users that are not assigned to a process supervisor
   var availableSupervisorInputDoc = new Ext.data.JsonStore({
                  root            : 'data',
-                 url             : 'proxyExtjs?pid='+pro_uid+'&action=availableSupervisorInputDoc',
+                 url             : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=availableSupervisorInputDoc',
                  totalProperty   : 'totalCount',
                  idProperty      : 'gridIndex',
                  remoteSort      : false, //true,
@@ -1779,7 +1779,7 @@ ProcessMapContext.prototype.caseTrackerProperties= function()
    });
 
     PropertiesForm.form.load({
-            url:'proxyExtjs.php?pid='+pro_uid+'&action=getCaseTracker',
+            url:'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getCaseTracker',
             method:'GET',
             waitMsg:'Loading',
             success:function(form, action) {
@@ -1954,14 +1954,14 @@ ProcessMapContext.prototype.caseTrackerObjects= function()
       remoteSort    : true,
       fields        : ObjectFields,
       proxy         : new Ext.data.HttpProxy({
-      url           : 'proxyExtjs?pid='+pro_uid+'&action=getAssignedCaseTrackerObjects'
+      url           : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getAssignedCaseTrackerObjects'
       })
     });
    assignedStore.load({params:{start : 0 , limit : 10 }});
 
     var availableStore = new Ext.data.JsonStore({
       root            : 'data',
-      url             : 'proxyExtjs?pid='+pro_uid+'&action=getAvailableCaseTrackerObjects',
+      url             : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getAvailableCaseTrackerObjects',
       totalProperty   : 'totalCount',
       idProperty      : 'gridIndex',
       remoteSort      : false, //true,
@@ -2169,7 +2169,7 @@ ProcessMapContext.prototype.ExtVariables = function()
             remoteSort   : true,
             fields       : varFields,
             proxy        : new Ext.data.HttpProxy({
-                   url   : 'proxyExtjs?pid='+pro_uid+'&action=getVariables&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
+                   url   : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getVariables&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
             })
           });
   //varStore.load();
@@ -2215,7 +2215,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                         listeners: {
                             activate: function(tabPanel){
                                                         // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                                        var link = 'proxyExtjs?pid='+pro_uid+'&action=getVariables&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                        var link = 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getVariables&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
                                                         varStore.proxy.setUrl(link, true);
                                                         varStore.load();
                             }
@@ -2329,7 +2329,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                 listeners:{
                     activate: function(tabPanel){
                                                 // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                                var link = 'proxyExtjs?pid='+pro_uid+'&action=getVariables&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                var link = 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getVariables&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
                                                 varStore.proxy.setUrl(link, true);
                                                 varStore.load();
                     }
@@ -2402,7 +2402,7 @@ ProcessMapContext.prototype.ExtVariables = function()
                 listeners: {
                     activate: function(tabPanel){
                                                 // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                                var link = 'proxyExtjs?pid='+pro_uid+'&action=getVariables&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+                                                var link = 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getVariables&type='+tabPanel.id+'&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
                                                 varStore.proxy.setUrl(link, true);
                                                 varStore.load();
                     }

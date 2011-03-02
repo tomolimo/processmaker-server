@@ -48,4 +48,4 @@ if (ReportTables::tableExist()) {
 $G_TMP_MENU->AddIdRawOption('DB_CONNECTIONS', '', G::LoadTranslation('ID_DB_CONNECTIONS'),"",'showDbConnectionsList(Pm.options.uid); return false;','','ss_sprite ss_database_connect');
 $G_TMP_MENU->AddIdRawOption('CASE_SCHEDULER', '', G::LoadTranslation('ID_CASE_SCHEDULER'), "", 'showCaseSchedulerList(Pm.options.uid); return false;','','ss_sprite ss_calendar_view_day');
 
-$G_TMP_MENU->AddIdRawOption('EDIT_BPMN', '', G::LoadTranslation('ID_SWITCH_EDITOR'), "", 'showNewProcessMap(Pm.options.uid); return false;','','ss_sprite ss_pencil');
+$G_TMP_MENU->AddIdRawOption('EDIT_BPMN', '', G::LoadTranslation('ID_SWITCH_EDITOR'), "", 'showNewProcessMap(Pm.options.uid); return false;','','ss_sprite ss_arrow_switch');

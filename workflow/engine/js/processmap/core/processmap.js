@@ -2609,7 +2609,7 @@ function showCaseSchedulerList(PRO_UID)
 
 function showNewProcessMap(PRO_UID)
 {
-	window.location = "../bpmn/processmap?PRO_UID="+PRO_UID;
+	window.location = "../bpmnDesigner?id="+PRO_UID;
 }
 
 function showLogCaseSchedulerList(PRO_UID)

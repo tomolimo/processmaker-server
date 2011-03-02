@@ -44,9 +44,11 @@ ProcessOptions.prototype.addDynaform= function(_5625)
   var editDynaform = function() {
     var rowSelected = Ext.getCmp('dynaformGrid').getSelectionModel().getSelected();
 
-    if( rowSelected )
-      location.href = '../dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID+'&bpmn=1'
-    else
+    if( rowSelected ) {
+      //location.href = '../dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID+'&bpmn=1'
+      var url = 'dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID+'&bpmn=1';
+      Ext.getCmp('mainTabPanel')._addTabFrame(rowSelected.data.DYN_UID, rowSelected.data.DYN_TITLE, url);
+    } else
       PMExt.error('', _('ID_NO_SELECTION_WARNING'));
   }
 
@@ -159,7 +161,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
       fields : dynaFields
     }),
     proxy        : new Ext.data.HttpProxy({
-      url: 'proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
+      url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getDynaformList'
     })
     //sortInfo:{field: 'DYN_TITLE', direction: "ASC"}
   });
@@ -179,7 +181,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     remoteSort   : true,
     fields       : additionalTablesFields,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs?action=getAdditionalTables'
+      url: 'bpmn/proxyExtjs?action=getAdditionalTables'
     })
   });
   additionalTables.load();
@@ -298,6 +300,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 
   //connecting context menu  to grid
   dynaformGrid.addListener('rowcontextmenu', onDynaformsContextMenu,this);
+  dynaformGrid.addListener('rowdblclick', editDynaform,this);
 
   //by default the right click is not selecting the grid row over the mouse
   //we need to set this four lines
@@ -456,7 +459,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
 //                  value        : '---------------------------',
 //                  store        : additionalTables,
 //                  onSelect: function(record, index){
-//                      var link = 'proxyExtjs?tabId='+record.data.ADD_TAB_UID+'&action=getPMTableDynaform';
+//                      var link = 'bpmn/proxyExtjs?tabId='+record.data.ADD_TAB_UID+'&action=getPMTableDynaform';
 //                      tablesFieldsStore.proxy.setUrl(link, true);
 //                      tablesFieldsStore.load();
 //
@@ -539,7 +542,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
           else
           {
             Ext.Ajax.request({
-              url   : '../dynaforms/dynaforms_Save.php',
+              url   : 'dynaforms/dynaforms_Save.php',
               method: 'POST',
               params:{
                   functions       : 'saveDynaform',
@@ -641,7 +644,7 @@ ProcessOptions.prototype.dbConnection = function()
       }
       var dbConnUID = rowSelected[0].get('DBS_UID');
       dbconnForm.form.load({
-                        url   :'proxyExtjs.php?pid='+pro_uid+'&dbs_uid='+dbConnUID+'&action=editDatabaseConnection',
+                        url   :'bpmn/proxyExtjs.php?pid='+pro_uid+'&dbs_uid='+dbConnUID+'&action=editDatabaseConnection',
                         method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
@@ -722,7 +725,7 @@ ProcessOptions.prototype.dbConnection = function()
             remoteSort   : true,
             fields       : dbConnFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs.php?pid='+pro_uid+'&action=getDatabaseConnectionList'
+              url: 'bpmn/proxyExtjs.php?pid='+pro_uid+'&action=getDatabaseConnectionList'
             })
           });
   dbStore.load({params:{start : 0 , limit : 10 }});
@@ -1274,7 +1277,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
     }
     var inputDocUID = rowSelected[0].get('INP_DOC_UID');
     inputDocForm.form.load({
-      url     : 'proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
+      url     : 'bpmn/proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
       method  : 'GET',
       waitMsg : 'Loading',
       success : function(form, action) {
@@ -1375,7 +1378,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
     remoteSort   : true,
     fields       : inpDocFields,
     proxy: new Ext.data.HttpProxy({
-      url: 'proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
+      url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
     })
   });
   inputDocStore.load({params:{start : 0 , limit : 10}});
@@ -2031,7 +2034,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
    window.show();
 
    top.form.load({
-                    url   :'processes_Ajax.php?OUT_DOC_UID='+outputDocUID+'&action=getOutputDocsTemplates',
+                    url   :'processes/processes_Ajax.php?OUT_DOC_UID='+outputDocUID+'&action=getOutputDocsTemplates',
                     method: 'GET',
                     waitMsg:'Loading',
                     success:function(form, action) {
@@ -2096,7 +2099,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
       }
       var outputDocUID = rowSelected[0].get('OUT_DOC_UID');
       outputDocForm.form.load({
-         url   :'proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
+         url   :'bpmn/proxyExtjs.php?tid='+outputDocUID+'&action=editOutputDocument',
          method: 'GET',
          waitMsg:'Loading',
          success:function(form, action) {
@@ -2144,7 +2147,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
             remoteSort   : true,
             fields       : outputDocFields,
             proxy        : new Ext.data.HttpProxy({
-                           url: 'proxyExtjs?pid='+pro_uid+'&action=getOutputDocument'
+                           url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getOutputDocument'
                            })
   });
   outputDocStore.load({params:{start : 0 , limit : 10 }});
@@ -2681,7 +2684,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
       }
       var repTabUID = rowSelected[0].get('REP_TAB_UID');
       reportForm.form.load({
-                        url   :'proxyExtjs.php?pid='+pro_uid+'&REP_TAB_UID=' +repTabUID+'&action=editReportTables',
+                        url   :'bpmn/proxyExtjs.php?pid='+pro_uid+'&REP_TAB_UID=' +repTabUID+'&action=editReportTables',
                         method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
@@ -2757,7 +2760,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             remoteSort   : true,
             fields       : reportFields,
             proxy        : new Ext.data.HttpProxy({
-                           url : 'proxyExtjs?pid='+pro_uid+'&action=getReportTables'
+                           url : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getReportTables'
                            })
  });
   reportStore.load({params:{start : 0 , limit : 10 }});
@@ -2769,7 +2772,7 @@ ProcessOptions.prototype.addReportTable= function(_5625)
             remoteSort   : true,
             fields       : reportFields,
             proxy        : new Ext.data.HttpProxy({
-                           url : 'proxyExtjs?pid='+pro_uid+'&type=NORMAL&action=getReportTableType'
+                           url : 'bpmn/proxyExtjs?pid='+pro_uid+'&type=NORMAL&action=getReportTableType'
                            })
  });
   reportTableTypeStore.load();
@@ -2933,7 +2936,7 @@ var reportForm =new Ext.FormPanel({
                                                 Ext.getCmp("gridfields").show();
                                                 Ext.getCmp("fields").hide();
                                              }
-                                        var link = 'proxyExtjs?pid='+pro_uid+'&type='+record.data.value+'&action=getReportTableType';
+                                        var link = 'bpmn/proxyExtjs?pid='+pro_uid+'&type='+record.data.value+'&action=getReportTableType';
                                         reportTableTypeStore.proxy.setUrl(link, true);
                                         reportTableTypeStore.load();
 
@@ -3110,7 +3113,7 @@ ProcessOptions.prototype.addTriggers = function()
           }
           var triggerUID = rowSelected[0].get('TRI_UID');
           editTriggerForm.getForm().load({
-                        url   :'proxyExtjs.php?pid='+pro_uid+'&TRI_UID='+triggerUID+'&action=editTriggers',
+                        url   :'bpmn/proxyExtjs.php?pid='+pro_uid+'&TRI_UID='+triggerUID+'&action=editTriggers',
                         method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
@@ -3133,7 +3136,7 @@ ProcessOptions.prototype.addTriggers = function()
           var triggerUID = rowSelected[0].get('TRI_UID');
           //editPropertiesFormWindow.show();
           editPropertiesForm.form.load({
-                        url   :'proxyExtjs.php?pid='+pro_uid+'&TRI_UID='+triggerUID+'&action=editTriggers',
+                        url   :'bpmn/proxyExtjs.php?pid='+pro_uid+'&TRI_UID='+triggerUID+'&action=editTriggers',
                         method: 'GET',
                         waitMsg:'Loading',
                         success:function(form, action) {
@@ -3176,7 +3179,7 @@ ProcessOptions.prototype.addTriggers = function()
                   if( result.passed ) { //deleting the selected triggers
                     PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_TRIGGER_CONFIRM'), function(){
                     Ext.Ajax.request({
-                        url   : 'processes_Ajax.php',
+                        url   : 'processes/processes_Ajax.php',
                         method: 'POST',
                         params: {
                           action      : 'deleteTriggers',
@@ -3234,7 +3237,7 @@ ProcessOptions.prototype.addTriggers = function()
       fields : triggerFields
     }),
     proxy        : new Ext.data.HttpProxy({
-      url: 'proxyExtjs?pid='+pro_uid+'&action=getTriggersList'
+      url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getTriggersList'
     })
   });
   triggerStore.load({params:{start:0, limit:10}});
@@ -3699,7 +3702,7 @@ var PMVariables = function() {
     remoteSort : true,
     fields : varFields,
     proxy : new Ext.data.HttpProxy( {
-      url : 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
+      url : 'bpmn/proxyExtjs?pid=' + pro_uid + '&action=getVariables&sFieldName=form[CTO_CONDITION]&sSymbol=@@'
     })
   });
   //varStore.load();
@@ -3743,7 +3746,7 @@ var PMVariables = function() {
         listeners : {
           activate : function(tabPanel) {
             // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-        var link = 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+        var link = 'bpmn/proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
         varStore.proxy.setUrl(link, true);
         varStore.load();
       }
@@ -3852,7 +3855,7 @@ var PMVariables = function() {
         listeners : {
           activate : function(tabPanel) {
             // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-        var link = 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+        var link = 'bpmn/proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
         varStore.proxy.setUrl(link, true);
         varStore.load();
       }
@@ -3922,7 +3925,7 @@ var PMVariables = function() {
         listeners : {
           activate : function(tabPanel) {
             // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-        var link = 'proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
+        var link = 'bpmn/proxyExtjs?pid=' + pro_uid + '&action=getVariables&type=' + tabPanel.id + '&sFieldName=form[CTO_CONDITION]&sSymbol=@@';
         varStore.proxy.setUrl(link, true);
         varStore.load();
       }

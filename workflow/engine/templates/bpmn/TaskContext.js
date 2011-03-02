@@ -126,7 +126,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
         remoteSort   : true,
         fields       : stepsFields,
         proxy        : new Ext.data.HttpProxy({
-        url   : 'proxyExtjs?tid='+taskId+'&action=getAssignedSteps'
+        url   : 'bpmn/proxyExtjs?tid='+taskId+'&action=getAssignedSteps'
         })
       });
     taskSteps.load({params:{start : 0 , limit : 10 }});
@@ -134,7 +134,7 @@ TaskContext.prototype.editTaskSteps = function(_3252){
     // create the Data Store of all Steps that are not been assigned to a task i.e available steps
     var availableSteps = new Ext.data.JsonStore({
          root            : 'data',
-         url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAvailableSteps',
+         url             : 'bpmn/proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAvailableSteps',
          totalProperty   : 'totalCount',
          idProperty      : 'gridIndex',
          remoteSort      : false,
@@ -515,7 +515,7 @@ TaskContext.prototype.editUsers= function()
                  if(r.data.USR_UID != "")
                      {
                         Ext.Ajax.request({
-                        url   : 'processes_Ajax.php' +urlparams ,
+                        url   : 'processes/processes_Ajax.php' +urlparams ,
                         success: function(response) {
                              PMExt.notify( _('ID_STATUS') , _('ID_USERS_REMOVED') );
                          //Secondly deleting from Grid
@@ -544,7 +544,7 @@ TaskContext.prototype.editUsers= function()
             remoteSort   : true,
             fields       : userFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAssignedUsersList'
+              url: 'bpmn/proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=getAssignedUsersList'
             })
           });
    taskUsers.setDefaultSort('LABEL', 'asc');
@@ -553,7 +553,7 @@ TaskContext.prototype.editUsers= function()
    // create the Data Store of users that are not assigned to a task
     var storeUsers = new Ext.data.JsonStore({
                  root            : 'data',
-                 url             : 'proxyExtjs?tid='+taskId+'&action=getAvailableUsersList',
+                 url             : 'bpmn/proxyExtjs?tid='+taskId+'&action=getAvailableUsersList',
                  totalProperty   : 'totalCount',
                  idProperty      : 'gridIndex',
                  remoteSort      : false, //true,
@@ -653,7 +653,7 @@ TaskContext.prototype.editUsers= function()
             var urlparams   = '?action=assign&data={"TAS_UID":"'+taskId+'","USR_UID":"'+userId+'","TU_TYPE":"'+tu_Type+'","TU_RELATION":"'+tu_Relation+'"}';
 
             Ext.Ajax.request({
-                    url: 'processes_Ajax.php' +urlparams ,
+                    url: 'processes/processes_Ajax.php' +urlparams ,
                     success: function (response) {      // When saving data success
                         PMExt.notify( _('ID_STATUS') , _('ID_USER_ASSIGNED') );
                         },
@@ -670,7 +670,7 @@ TaskContext.prototype.editUsers= function()
                 var user_TUtype     = record.json.TU_TYPE;
                 urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
                 Ext.Ajax.request({
-                      url   : 'processes_Ajax.php' +urlparams ,
+                      url   : 'processes/processes_Ajax.php' +urlparams ,
                       success: function(response) {
                           //Ext.MessageBox.alert ('Status','User has been updated successfully.');
                       }
@@ -1263,7 +1263,7 @@ TaskContext.prototype.editTaskProperties= function()
     
   //Loading Task Details into the form
   taskPropertiesTabs.form.load({
-        url:'proxyExtjs.php?tid='+taskId+'&action=getTaskPropertiesList',
+        url:'bpmn/proxyExtjs.php?tid='+taskId+'&action=getTaskPropertiesList',
         method:'GET',
         waitMsg:'Loading',
         success:function(form, action) {
@@ -1487,7 +1487,7 @@ TaskContext.prototype.stepTriggers = function()
                 beforeload: {
                         fn: function (store, options) {
                                 // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                var link = 'proxyExtjs?tid='+taskId+'&stepid='+sStepUID+'&action=getAssignedStepTriggers';
+                                var link = 'bpmn/proxyExtjs?tid='+taskId+'&stepid='+sStepUID+'&action=getAssignedStepTriggers';
                                 store.proxy.setUrl(link, true);
                         }
                 }
@@ -1497,7 +1497,7 @@ TaskContext.prototype.stepTriggers = function()
                 beforeload: {
                         fn: function (store, options) {
                                 // use {@link Ext.data.HttpProxy#setUrl setUrl} to change the URL for *just* this request.
-                                var link = 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&stepid='+sStepUID+'&action=getAvailableStepTriggers';
+                                var link = 'bpmn/proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&stepid='+sStepUID+'&action=getAvailableStepTriggers';
                                 store.proxy.setUrl(link, true);
                         }
                 }
@@ -1608,7 +1608,7 @@ TaskContext.prototype.stepTriggers = function()
     // create the Data Store of users that are already assigned to a task
     var stepsTriggers = new Ext.data.JsonStore({
         root            : 'data',
-        url             : 'proxyExtjs?tid='+taskId+'&action=',//+'&stepid='+workflow.selectedStepUID,
+        url             : 'bpmn/proxyExtjs?tid='+taskId+'&action=',//+'&stepid='+workflow.selectedStepUID,
         totalProperty   : 'totalCount',
         idProperty      : 'gridIndex',
         remoteSort      : true,
@@ -1619,7 +1619,7 @@ TaskContext.prototype.stepTriggers = function()
 
      var availableTriggers = new Ext.data.JsonStore({
          root            : 'data',
-         url             : 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=',//+'&stepid='+workflow.selectedStepUID,
+         url             : 'bpmn/proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=',//+'&stepid='+workflow.selectedStepUID,
          totalProperty   : 'totalCount',
          idProperty      : 'gridIndex',
          remoteSort      : false, //true,
@@ -1835,7 +1835,7 @@ TaskContext.prototype.editUsersAdHoc= function()
             remoteSort   : true,
             fields       : userFields,
             proxy: new Ext.data.HttpProxy({
-              url: 'proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=assignedUsers'
+              url: 'bpmn/proxyExtjs?pid='+pro_uid+'&tid='+taskId+'&action=assignedUsers'
             })
           });
           //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -1844,7 +1844,7 @@ TaskContext.prototype.editUsersAdHoc= function()
          // create the Data Store of users that are not assigned to a task
          var storeUsers = new Ext.data.JsonStore({
                  root            : 'data',
-                 url             : 'proxyExtjs?tid='+taskId+'&action=availableUsers',
+                 url             : 'bpmn/proxyExtjs?tid='+taskId+'&action=availableUsers',
                  totalProperty   : 'totalCount',
                  idProperty      : 'gridIndex',
                  remoteSort      : false, //true,
@@ -1905,7 +1905,7 @@ TaskContext.prototype.editUsersAdHoc= function()
                      if(r.data.USR_UID != "")
                      {
                         Ext.Ajax.request({
-                          url   : 'processes_Ajax.php' +urlparams ,
+                          url   : 'processes/processes_Ajax.php' +urlparams ,
                           /*method: 'POST',
                           params: {
                                 functions       : 'ofToAssign',
@@ -2218,7 +2218,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         remoteSort   : true,
         fields       : subProcessFields,
         proxy        : new Ext.data.HttpProxy({
-               url   : 'proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
+               url   : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=0' //type=0 specifies Variables Out (Asynchronous)
         })
       });
     variablesOutStore.load();
@@ -2231,7 +2231,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
         remoteSort   : true,
         fields       : subProcessFields,
         proxy        : new Ext.data.HttpProxy({
-               url   : 'proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=1'  //type=1 specifies Variables In (Synchronous)
+               url   : 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=1'  //type=1 specifies Variables In (Synchronous)
         })
       });
       //taskUsers.setDefaultSort('LABEL', 'asc');
@@ -2459,7 +2459,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
 
     //Loading Task Details into the form
     subProcessProperties.form.load({
-        url:'proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=2',
+        url:'bpmn/proxyExtjs?pid='+pro_uid+'&action=getSubProcessProperties&tid='+taskId+'&type=2',
         method:'GET',
         waitMsg:'Loading....',
         success:function(form, action) {
@@ -2547,7 +2547,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                 
             
            Ext.Ajax.request({
-              url   : 'processes_Ajax.php',
+              url   : 'processes/processes_Ajax.php',
               method: 'POST',
               params: {
                     action          : 'saveSubprocessDetails',

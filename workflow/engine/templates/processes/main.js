@@ -515,7 +515,7 @@ editProcess = function(){
 editNewProcess = function(){
   var rowSelected = processesGrid.getSelectionModel().getSelected();
   if( rowSelected ) {
-    location.href = '../bpmn/processmap?PRO_UID='+rowSelected.data.PRO_UID+'&rand='+Math.random()
+    location.href = '../bpmnDesigner?id='+rowSelected.data.PRO_UID
   } else {
      Ext.Msg.show({
       title:'',

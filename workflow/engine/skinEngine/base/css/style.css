@@ -3111,7 +3111,7 @@ ul#pm_submenu a{
 }
 ul#pm_submenu a img{
   float:left;
-  max-height: 18px;sudo 
+  max-height: 18px; 
 }
 ul#pm_submenu li.SelectedSubMenu,ul#pm_submenu li:hover{
   background-color: #CCC;

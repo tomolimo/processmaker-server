@@ -38,15 +38,15 @@ try {
   	break;
   }*/
   $oJSON   = new Services_JSON();
-  if ( isset ($_POST['data']) ) {
-	  $oData   = $oJSON->decode(stripslashes($_POST['data']));
+  if ( isset ($_REQUEST['data']) ) {
+	  $oData   = $oJSON->decode(stripslashes($_REQUEST['data']));
 	  $sOutput = '';
   }
 
   G::LoadClass('processMap');
   $oProcessMap = new processMap(new DBConnection);
 
-  switch($_POST['action'])
+  switch($_REQUEST['action'])
   {
   	case 'load':
   	  if ($oData->ct) {
@@ -81,10 +81,10 @@ try {
   	  include(PATH_METHODS . 'processes/processes_webEntryValidate.php');
   	break;
   	case 'webEntry_delete':
-  	  $form=$_POST;
+  	  $form=$_REQUEST;
   	  unlink(PATH_DATA ."sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP. $form['PRO_UID']. PATH_SEP.$form['FILENAME']);
   	  unlink(PATH_DATA ."sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP. $form['PRO_UID']. PATH_SEP .str_replace(".php","Post",$form['FILENAME']).".php");
-  	  $oProcessMap->webEntry($_POST['PRO_UID']);
+  	  $oProcessMap->webEntry($_REQUEST['PRO_UID']);
   	break;
   	
   	case 'webEntry_new':
@@ -194,13 +194,13 @@ try {
   	  $oProcessMap->triggersList($oData->pro_uid);
   	break;
   	case 'case_scheduler':
-          if(isset($_POST['PRO_UID'])){
-            $oProcessMap->caseSchedulerList($_POST['PRO_UID']);
+          if(isset($_REQUEST['PRO_UID'])){
+            $oProcessMap->caseSchedulerList($_REQUEST['PRO_UID']);
           }
   	break;
   	case 'log_case_scheduler':
-          if(isset($_POST['PRO_UID'])){
-            $oProcessMap->logCaseSchedulerList($_POST['PRO_UID']);
+          if(isset($_REQUEST['PRO_UID'])){
+            $oProcessMap->logCaseSchedulerList($_REQUEST['PRO_UID']);
           }
   	break;
   	case 'messages':
@@ -305,7 +305,7 @@ try {
   	  $oProcessMap->processFilesManager($oData->pro_uid);
   	break;
   	case 'exploreDirectory':
-      $objData = json_decode($_POST['data']); 
+      $objData = json_decode($_REQUEST['data']);
       $_SESSION['PFMDirectory'] = $objData->{'main_directory'};
       $oProcessMap->exploreDirectory($oData->pro_uid, $oData->main_directory, $oData->directory);
   	break;
@@ -421,30 +421,30 @@ try {
     break;
 
     case 'editFile':
-    	//echo $_POST['filename'];
+    	//echo $_REQUEST['filename'];
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();
-      ///-- $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+      ///-- $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
       $sDir = "";
       if(isset($_SESSION['PFMDirectory']))
         $sDir = $_SESSION['PFMDirectory'];
 
       switch($sDir){
-        case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+        case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
-        case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+        case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
-        default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+        default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
       }
 	  	$fcontent = file_get_contents($sDirectory);
-			$extion=explode(".",$_POST['filename']);
+			$extion=explode(".",$_REQUEST['filename']);
       
 	  	//if($extion[count($extion)-1]=='html' || $extion[count($extion)-1]=='txt'){
 	  	$aData = Array(
-	  		'pro_uid'=>$_POST['pro_uid'],
+	  		'pro_uid'=>$_REQUEST['pro_uid'],
 	  		'fcontent'=>$fcontent,
-	  		'filename'=>$_POST['filename'],
+	  		'filename'=>$_REQUEST['filename'],
 	  	);
 	  	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_FileEdit', '', $aData);
 	  	G::RenderPage('publish', 'raw');
@@ -458,18 +458,18 @@ try {
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();
       $sDir = "";
-      if(isset($_POST['MAIN_DIRECTORY']))
-        $sDir = $_POST['MAIN_DIRECTORY'];
+      if(isset($_REQUEST['MAIN_DIRECTORY']))
+        $sDir = $_REQUEST['MAIN_DIRECTORY'];
       switch($sDir){
-        case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+        case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
-        case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+        case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
-        default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+        default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
       }
 	  	$fp = fopen($sDirectory, 'w');
-	  	$content = stripslashes($_POST['fcontent']);
+	  	$content = stripslashes($_REQUEST['fcontent']);
 	  	$content = str_replace("@amp@", "&", $content);
 	  	fwrite($fp, $content);
 	  	fclose($fp);
@@ -482,10 +482,10 @@ try {
 	case 'saveFile':
     	global $G_PUBLISH;
 	  	$G_PUBLISH = new Publisher();
-	  	$sDirectory = PATH_DATA_MAILTEMPLATES . $_POST['pro_uid'] . PATH_SEP . $_POST['filename'];
+	  	$sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
 
 	  	$fp = fopen($sDirectory, 'w');
-	  	$content = stripslashes($_POST['fcontent']);
+	  	$content = stripslashes($_REQUEST['fcontent']);
 	  	$content = str_replace("@amp@", "&", $content);
 	  	fwrite($fp, $content);
 	  	fclose($fp);
