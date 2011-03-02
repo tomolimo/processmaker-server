@@ -7,6 +7,9 @@
   <script type="text/javascript" src="{siteUrl}/jsform/gulliver/dynaforms_Options.js"></script>
 
   <script type="text/javascript" src="{siteUrl}/jsform/{dynFileName}.js"></script>
+ <!-- START BLOCK : grid_uids -->
+  <script type="text/javascript" src="{siteUrl}/jsform/{gridFileName}.js"></script>
+ <!-- END BLOCK : grid_uids --> 
   <script type="text/javascript">
     var leimnud = new maborak();
     leimnud.make();

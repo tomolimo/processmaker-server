@@ -138,7 +138,11 @@ try {
     $pluginTpl = PATH_CORE . 'templates' . PATH_SEP . 'processes' . PATH_SEP . 'webentry.tpl';
     $template = new TemplatePower ( $pluginTpl );
     $template->prepare ();
-    
+    require_once 'classes/model/Step.php';
+    $oStep = new Step();
+    $sUidGrids = $oStep->lookingforUidGrids($sPRO_UID,$sDYNAFORM);
+
+
     $template->assign ( 'siteUrl', $http . $_SERVER['HTTP_HOST'] );
     $template->assign ( 'sysSys', SYS_SYS );
     $template->assign ( 'sysLang', SYS_LANG );
@@ -150,6 +154,14 @@ try {
     $template->assign ( 'formId', $G_FORM->id );
     $template->assign ( 'scriptCode', $scriptCode );
     
+    if(sizeof($sUidGrids)>0){
+      foreach($sUidGrids as $k => $v){
+      	$template->newBlock( 'grid_uids' );
+        $template->assign ( 'siteUrl', $http . $_SERVER['HTTP_HOST'] );
+        $template->assign ( 'gridFileName', $sPRO_UID . '/' . $v );
+      }
+    }
+    
     print_r ( '<textarea cols="70" rows="20">' . htmlentities ( str_replace ( '</body>', '</form></body>', str_replace ( '</form>', '', $template->getOutputContent () ) ) ) . '</textarea>' );
   }
 
@@ -159,3 +171,5 @@ try {
   $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
   G::RenderPage ( 'publish', 'raw' );
 }
+
+
