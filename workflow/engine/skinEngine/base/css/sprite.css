@@ -1,39 +1,7 @@
 /*
 * Blue is the new Green
 */
-/*
-form.formDefault .FormTitle,form.formDefault .FormSubTitle{
-  background:#E0E7EF;
-}
-form.formDefault .FormSubTitle{
 
-}
-.pagedTableDefault .pagedTable .RowPointer
-{
-	background-color:#E0EAEF;
-}
-.x-grid3-row.x-grid3-row-over{
-  background: #E0EAEF;
-}
-.x-grid3-row.x-grid3-row-selected{
-  background-color:#F6E095;
-}
-#pm_main_table .mainMenuBG{
-  background-image:none;
-  background-color:#347898;
-  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(74,149,184)),color-stop(0.97, rgb(46,112,143)));
-  background-image: -moz-linear-gradient(center bottom,rgb(74,149,184) 0%,rgb(46,112,143) 97%);
-}
-ul#pm_menu li.SelectedMenu,ul#pm_menu li:hover{
-  background-image:none;
-  background-color: #eee;
-  background-image: -webkit-gradient ( linear, left bottom, left top, color-stop(0.39, rgb(245,245,245)), color-stop(0.83, rgb(227,227,227))  );
-  background-image:  -moz-linear-gradient( center bottom, rgb(245,245,245) 39%, rgb(227,227,227) 83%  );
-}
-ul#pm_menu li.SelectedMenu a,ul#pm_menu li:hover a{
-  color:#333;
-}
-*/
 /*Edicion de botones copiar de default.css (Final)*/
 
 input:-moz-focus-inner{border:0;}
@@ -954,5 +922,12 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 .ss_bpmn_endevent{background-position:0 -18406px !important}
 .ss_bpmn_gateway{background-position:0 -18438px !important}
 .ss_bpmn_annotation{background-position:0 -18470px !important}
+
+.ss_bpmn_task-18x18{background-position:1px -18517px !important}
+.ss_bpmn_startevent-18x18{background-position:1px -18536px !important}
+.ss_bpmn_interevent-18x18{background-position:1px -18554px !important}
+.ss_bpmn_endevent-18x18{background-position:1px -18572px !important}
+.ss_bpmn_gateway-18x18{background-position:1px -18590px !important}
+.ss_bpmn_annotation-18x18{background-position:1px -18608px !important}
 
 .ss_consolidated_cases{background-position:0 -18500px !important}
