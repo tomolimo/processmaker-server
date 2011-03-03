@@ -1,4 +1,4 @@
-<?php
+<?php  
 /**
  * pluginsList.php
  *
@@ -28,7 +28,7 @@ if($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVAN
   //G::header('location: ../login/login');
   die;
 }
-
+ 
 $G_MAIN_MENU = 'processmaker';
 $G_SUB_MENU = 'setup';
 $G_ID_MENU_SELECTED = 'SETUP';
@@ -45,6 +45,8 @@ $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('setup/skinList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('setup/skinList'); //adding a html file  .html.
 $oHeadPublisher->assign('CONFIG', $Config);
+
+$oHeadPublisher->assign('FORMATS',$c->getFormats());
 
 G::RenderPage('publish', 'extJs');
 die;
@@ -135,7 +137,7 @@ if( $access != 1 ){
   G::LoadClass( 'ArrayPeer');
   $c = new Criteria ('dbarray');
   $c->setDBArrayTable('plugins');
-    //$c->addAscendingOrderByColumn ('id');
+    $c->addAscendingOrderByColumn ('id');
 
   $G_MAIN_MENU            = 'processmaker';
   $G_ID_MENU_SELECTED     = 'SETUP';
@@ -145,5 +147,6 @@ if( $access != 1 ){
   $G_PUBLISH = new Publisher;
 
   $G_PUBLISH->AddContent( 'propeltable', 'paged-table', 'setup/skinsList', $c );
+
   G::RenderPage('publishBlank', 'blank');
 
