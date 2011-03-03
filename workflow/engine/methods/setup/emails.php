@@ -72,7 +72,7 @@ $trn = G::getTranslations(Array('ID_SUCESS', 'ID_FAIL', ''));
 
 $G_PUBLISH = new Publisher;
 $oHeadPublisher = headPublisher::getSingleton();
-$oHeadPublisher->addScriptCode('var TRANSLATIONS='.json_encode($trn).';');
+$oHeadPublisher->addScriptCode('var TRANSLATIONS='.G::json_encode($trn).';');
 $oHeadPublisher->addScriptFile('/jscore/setup/emails.js');
 
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'setup/emails', '', $aFields, 'emails_Save');
