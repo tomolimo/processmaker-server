@@ -187,7 +187,7 @@ Ext.onReady(function() {
 							fieldLabel: ' ',
 							labelSeparator : '',
 							labelStyle: 'font-color:white;',
-						 
+					//		height: 15,
 							ds: processNumbers,
 							cm: new Ext.grid.ColumnModel([
 																						{id:'inbox',header: TRANSLATIONS.ID_INBOX, width:70, sortable: false, locked:true, dataIndex: 'CASES_COUNT_TO_DO'},
@@ -200,7 +200,7 @@ Ext.onReady(function() {
 	,
 							
 							//autoExpandColumn: 'company',
-							height: 45,
+							height: 49,
 							width: 355,
 							//title: TRANSLATIONS.ID_GENERAL_PROCESS_NUMBERS,  // 'General Process Numbers',
 							border: true,
@@ -310,14 +310,14 @@ Ext.onReady(function() {
 				}
 			}, ' ', ' ', {
 				iconCls : 'icon-expand-all',
-				tooltip : 'Expand All',
+				tooltip :  _('ID_EXPAND_ALL'), //'Expand All', 
 				handler : function() {
 					Ext.getCmp("startCaseTreePanel").root.expand(true);
 				},
 				scope : this
 			}, '-', {
 				iconCls : 'icon-collapse-all',
-				tooltip : 'Collapse All',
+				tooltip : _('ID_COLLAPSE_ALL'), //'Collapse All',
 				handler : function() {
 					Ext.getCmp("startCaseTreePanel").root.collapse(true);
 				},
