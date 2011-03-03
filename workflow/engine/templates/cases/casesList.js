@@ -125,7 +125,7 @@ function pauseCase(date){
 
   Ext.Msg.confirm(
     TRANSLATIONS.ID_CONFIRM,
-    TRANSLATIONS.ID_PAUSE_CASE_TO_DATE +' '+date.format('M j, Y'),
+    TRANSLATIONS.ID_PAUSE_CASE_TO_DATE +' '+date.format('M j, Y')+'?',
     function(btn, text){
       if ( btn == 'yes' ) {
         Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
