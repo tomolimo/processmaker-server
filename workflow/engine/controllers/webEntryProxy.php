@@ -2,7 +2,7 @@
 class webEntryProxy extends HttpProxyController
 {
   //Delete Web Entry
-  function deleteWebEntry($params){
+  function delete($params){
     require_once 'classes/model/Event.php';
     $pro_uid = $params->PRO_UID;
     $filename = $params->FILE_NAME;
@@ -108,7 +108,7 @@ class webEntryProxy extends HttpProxyController
     $this->msg = $message;
   }
   //Save New WebEntry
-  function saveWebEntry($params){
+  function save($params){
     require_once 'classes/model/Event.php';
     global $G_FORM;
     $sPRO_UID = $params->pro_uid;
@@ -234,5 +234,14 @@ class webEntryProxy extends HttpProxyController
     $this->TAS_TITLE = $tas_title;
     $this->DYN_TITLE = $dynTitle;
     $this->USR_UID = $sWS_USER;
+  }
+  
+  function load($params){
+    G::LoadClass('processMap');
+    $oProcessMap = new processMap(new DBConnection);
+    $PRO_UID = $params->PRO_UID;
+    $EVN_UID = $params->EVN_UID;
+    $sOutput = $oProcessMap->listNewWebEntry($PRO_UID,$EVN_UID);
+    return $sOutput;
   }
 } //End webEntryProxy

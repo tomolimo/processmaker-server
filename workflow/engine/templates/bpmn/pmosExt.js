@@ -50,7 +50,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
 {
   var oTask           = workflow.taskUid;
   var oDyna           = workflow.dynaList;
-
+  
   var newButton = new Ext.Action({
     text: _('ID_NEW_WEB_ENTRY'),
     iconCls: 'button_menu_ext ss_sprite ss_add',
@@ -58,6 +58,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
     handler: function(){
       webForm.hide();
       editForm.getForm().reset();
+      Ext.getCmp('frameEdit').setTitle = _('ID_NEW_WEB_ENTRY');
       editForm.getForm().findField('pro_uid').setValue(pro_uid);
       editForm.getForm().findField('evn_uid').setValue(evn_uid);
       editForm.getForm().findField('dynaform').setValue('');
@@ -66,25 +67,26 @@ pmosExt.prototype.popWebEntry= function(_5678)
       newButton.disable();
     }
   });
-
+  
   var editButton = new Ext.Action({
     text: _('ID_EDIT'),
     iconCls: 'button_menu_ext ss_sprite ss_pencil',
     hidden: true,
     handler: function(){
       webForm.hide();
-      editForm.title = _('ID_EDIT_WEB_ENTRY');
+      editForm.getForm().reset();
+      Ext.getCmp('frameEdit').setTitle = _('ID_EDIT_WEB_ENTRY');
       editForm.getForm().findField('pro_uid').setValue(pro_uid);
       editForm.getForm().findField('evn_uid').setValue(evn_uid);
-      editForm.getForm().findField('dynaform').setValue(webEntryList.data[0].DYN_TITLE);
-      editForm.getForm().findField('username').setValue(webEntryList.data[0].USR_UID);
-      editForm.getForm().findField('initDyna').setValue(webEntryList.data[0].DYN_UID);
+      editForm.getForm().findField('dynaform').setValue(webEntryList.data.DYN_TITLE);
+      editForm.getForm().findField('username').setValue(webEntryList.data.USR_UID);
+      editForm.getForm().findField('initDyna').setValue(webEntryList.data.DYN_UID);
       editForm.show();
       editButton.disable();
       deleteButton.disable();
     }
   });
-
+  
   var deleteButton = new Ext.Action({
     text: _('ID_DELETE'),
     iconCls: 'button_menu_ext ss_sprite  ss_delete',
@@ -94,7 +96,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
         if (btn=='yes'){
           var file_name = webForm.getForm().findField('dynaform').getValue();
           Ext.Ajax.request({
-            url: '../webEntryProxy/deleteWebEntry',
+            url: 'webEntryProxy/delete',
             params: {PRO_UID: pro_uid, EVN_UID: evn_uid, FILE_NAME: file_name},
             success: function (r,o){
               response = Ext.util.JSON.decode(r.responseText);
@@ -122,7 +124,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
       });
     }
   });
-
+  
   var goToWebEntry = new Ext.Action({
     text: _('ID_TEST_WEB_ENTRY'),
     disabled: true,
@@ -131,7 +133,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
       window.open(url,'','');
     }
   });
-
+  
   var saveButton = new Ext.Action({
     text: _('ID_SAVE'),
     disabled: false,
@@ -140,32 +142,32 @@ pmosExt.prototype.popWebEntry= function(_5678)
       var pass = editForm.getForm().findField('password').getValue();
       
       Ext.Ajax.request({
-        url: '../webEntryProxy/checkCredentials',
+        url: 'webEntryProxy/checkCredentials',
         params: {PRO_UID: pro_uid, EVN_UID: evn_uid, WS_USER: user, WS_PASS: pass},
         success: function(r,o){
           var resp = Ext.util.JSON.decode(r.responseText);
           if (resp.success){
             editForm.getForm().submit({
               success: function(f,a){
-                 var rs = Ext.util.JSON.decode(a.response.responseText);
-                 if (rs.success){
-                   newButton.hide();
-                   editButton.show();
-                   deleteButton.show();
-                   webForm.getForm().findField('link').setValue(rs.W_LINK);
-                   webForm.getForm().findField('task').setValue(rs.TAS_TITLE);
-                   webForm.getForm().findField('dynaform').setValue(rs.DYN_TITLE);
-                   webForm.getForm().findField('user').setValue(rs.USR_UID);
-                   goToWebEntry.enable();
-                   webForm.show();
-                   editForm.hide();
-                   newButton.enable();
-                   editButton.enable();
-                   deleteButton.enable();
-                   PMExt.notify(_('ID_WEB_ENTRY'),rs.msg);
-                 }else{
-                   PMExt.error(_('ID_WEB_ENTRY'),rs.msg);
-                 }
+                var rs = Ext.util.JSON.decode(a.response.responseText);
+                if (rs.success){
+                  newButton.hide();
+                  editButton.show();
+                  deleteButton.show();
+                  webForm.getForm().findField('link').setValue(rs.W_LINK);
+                  webForm.getForm().findField('task').setValue(rs.TAS_TITLE);
+                  webForm.getForm().findField('dynaform').setValue(rs.DYN_TITLE);
+                  webForm.getForm().findField('user').setValue(rs.USR_UID);
+                  goToWebEntry.enable();
+                  webForm.show();
+                  editForm.hide();
+                  newButton.enable();
+                  editButton.enable();
+                  deleteButton.enable();
+                  PMExt.notify(_('ID_WEB_ENTRY'),rs.msg);
+                }else{
+                  PMExt.error(_('ID_WEB_ENTRY'),rs.msg);
+                }
               },
               failure: function(f,r){
                 PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
@@ -181,7 +183,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
       });
     }
   });
-
+  
   var cancelButton = new Ext.Action({
     text: _('ID_CANCEL'),
     disabled: false,
@@ -195,8 +197,8 @@ pmosExt.prototype.popWebEntry= function(_5678)
   });
   
   var webEntryList;
-
-
+  
+  
   var webForm = new Ext.FormPanel({
     labelWidth    : 120, // label settings here cascade unless overridden
     frame         : true,
@@ -223,7 +225,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
             buttons: [goToWebEntry]
   , hidden: true
   });
-
+  
   var editForm = new Ext.FormPanel({
     labelWidth    : 120, // label settings here cascade unless overridden
     frame         : true,
@@ -231,7 +233,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
     autoHeight    : true,
     defaultType   : 'textfield',
     buttonAlign   : 'center',
-    url           : '../webEntryProxy/saveWebEntry',
+    url           : 'webEntryProxy/save',
     items: [
             {xtype: 'hidden', name: 'pro_uid', hidden: true},
             {xtype: 'hidden', name: 'evn_uid', hidden: true},
@@ -241,6 +243,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
               title      : _('ID_NEW_WEB_ENTRY'),
               collapsible: false,
               autoHeight :true,
+              id : 'frameEdit',
               buttonAlign: 'center',
               defaults   : {width: 210},
               items: [
@@ -252,14 +255,14 @@ pmosExt.prototype.popWebEntry= function(_5678)
                         allowBlank     : false,
                         triggerAction  : 'all',
                         fieldLabel      : _('ID_INITIAL_DYNAFORM'),
-                      name            : 'initDyna',
-                      hiddenName      : 'initDyna',
-                      displayField    : 'name',
-                      valueField      : 'value',
-                      store           : new Ext.data.JsonStore({
-                                          fields : ['name', 'value'],
-                                          data   :oDyna
-                                     })
+                        name            : 'initDyna',
+                        hiddenName      : 'initDyna',
+                        displayField    : 'name',
+                        valueField      : 'value',
+                        store           : new Ext.data.JsonStore({
+                          fields : ['name', 'value'],
+                          data   :oDyna
+                        })
                       },
                       {xtype: 'textfield', fieldLabel: _('ID_USER'), name: 'username', width: 200, allowBlank: false},
                       {xtype: 'textfield', fieldLabel: _('ID_PASSWORD'), name: 'password', width: 200, inputType: 'password', allowBlank: false}
@@ -269,16 +272,12 @@ pmosExt.prototype.popWebEntry= function(_5678)
             hidden: true,
             buttons: [saveButton, cancelButton]
   });
-
-
+  
+  
   var webEntryWindow = new Ext.Window({
     title:_('ID_START_MESSAGE_EVENT_WEB_ENTRY'),
-    //autoScroll: true,
     collapsible: false,
-    //maximizable: true,
     width: 600,
-    //bodyStyle : 'padding:8px 0 0 8px;',
-    //autoHeight: true,
     autoHeight: true,
     layout: 'fit',
     plain: true,
@@ -289,23 +288,23 @@ pmosExt.prototype.popWebEntry= function(_5678)
     tbar: [newButton, editButton, deleteButton]
   });
   workflow.webEntryWindow = webEntryWindow;
-
-
+  
+  
   var evn_uid = workflow.currentSelection.id;
   Ext.Ajax.request({
-    url: 'bpmn/processes_Ajax.php',
-    params:{action:'webEntry', data: '{"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}'},
+    url: 'webEntryProxy/load',
+    params:{PRO_UID: pro_uid, EVN_UID: evn_uid},
     success: function(r,o){
       webEntryList = Ext.util.JSON.decode(r.responseText);
       if (webEntryList.success){
-        if (webEntryList.data[0].W_LINK !=''){
+        if (webEntryList.data.W_LINK !=''){
           newButton.hide();
           editButton.show();
           deleteButton.show();
-          webForm.getForm().findField('link').setValue(webEntryList.data[0].W_LINK);
-          webForm.getForm().findField('task').setValue(webEntryList.data[0].TAS_TITLE);
-          webForm.getForm().findField('dynaform').setValue(webEntryList.data[0].DYN_TITLE);
-          webForm.getForm().findField('user').setValue(webEntryList.data[0].USR_UID);
+          webForm.getForm().findField('link').setValue(webEntryList.data.W_LINK);
+          webForm.getForm().findField('task').setValue(webEntryList.data.TAS_TITLE);
+          webForm.getForm().findField('dynaform').setValue(webEntryList.data.DYN_TITLE);
+          webForm.getForm().findField('user').setValue(webEntryList.data.USR_UID);
           goToWebEntry.enable();
           webForm.show();
         }else{
@@ -327,7 +326,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
       PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
     }
   });
-
+  
   webEntryWindow.show();
 }
 pmosExt.prototype.popCaseSchedular= function(_5678){
@@ -1483,7 +1482,7 @@ pmosExt.prototype.loadWebEntry=function()
        var evn_uid = workflow.currentSelection.id;
        var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
         Ext.Ajax.request({
-                url: "bpmn/processes_Ajax.php"+ urlparams,
+                url: "processes/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
                 },
