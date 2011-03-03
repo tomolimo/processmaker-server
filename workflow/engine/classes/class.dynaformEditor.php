@@ -195,7 +195,7 @@ class dynaformEditor extends WebResource
       'ID_FIELD_DYNAFORM_DROPDOWN', 'ID_FIELD_DYNAFORM_YESNO', 'ID_FIELD_DYNAFORM_LISTBOX', 'ID_FIELD_DYNAFORM_CHECKBOX', 'ID_FIELD_DYNAFORM_CHECKGROUP', 'ID_FIELD_DYNAFORM_RADIOGROUP',
       'DATE_LABEL', 'ID_FIELD_DYNAFORM_HIDDEN', 'ID_FIELD_DYNAFORM_LINK', 'ID_FIELD_DYNAFORM_LINK', 'ID_FIELD_DYNAFORM_FILE', 'ID_FIELD_DYNAFORM_JAVASCRIPT', 'ID_FIELD_DYNAFORM_GRID',
       'ID_INDEX' ));
-      $oHeadPublisher->addScriptCode("var TRANSLATIONS = " . json_encode($labesTrans).";");
+      $oHeadPublisher->addScriptCode("var TRANSLATIONS = " . G::json_encode($labesTrans).";");
       $oHeadPublisher->setTitle(G::LoadTranslation('ID_DYNAFORM_EDITOR'). ' - ' . $Properties['DYN_TITLE']);
       $G_PUBLISH->AddContent('blank');
       $this->panelConf['title']=$this->title;
