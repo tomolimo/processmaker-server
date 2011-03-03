@@ -478,7 +478,7 @@ function saveProcess()
       if( editor == 'classic')
         location.href = 'processes_Map?PRO_UID='+resp.result.PRO_UID;
       else
-        location.href = '../bpmn/processmap?PRO_UID='+resp.result.PRO_UID;
+        location.href = '../bpmnDesigner?id='+resp.result.PRO_UID;
     },
     failure: function(obj, resp) {
       //Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
