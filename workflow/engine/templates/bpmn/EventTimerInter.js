@@ -1,16 +1,27 @@
 bpmnEventTimerInter=function(){
 VectorFigure.call(this);
-//Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
-else
-    this.setDimension(30,30);
-this.stroke = 2;
+this.stroke = 1;
 };
 bpmnEventTimerInter.prototype=new VectorFigure;
 bpmnEventTimerInter.prototype.type="bpmnEventTimerInter";
 bpmnEventTimerInter.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
+
+if(typeof workflow.zoomfactor == 'undefined')
+ workflow.zoomfactor = 1;
+  //Set the Task Limitation
+if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+{
+  this.originalWidth = 30;
+  this.originalHeight = 30;
+  this.orgXPos = this.getX();
+  this.orgYPos = this.getY();
+  this.orgFontSize =this.fontSize;
+}
+
+this.width  = this.originalWidth * workflow.zoomfactor;
+this.height = this.originalHeight  * workflow.zoomfactor;
+
 var x_cir1=0;
 var y_cir1=0;
 
@@ -22,6 +33,7 @@ this.graphics.setColor( "#f9faf2" );
 this.graphics.fillEllipse(x_cir1,y_cir1,this.getWidth(),this.getHeight());
 this.graphics.setColor("#adae5e");
 this.graphics.drawEllipse(x_cir1,y_cir1,this.getWidth(),this.getHeight());
+this.graphics.setStroke(this.stroke);
 var x_cir2=3;
 var y_cir2=3;
 this.graphics.setColor( "#f9faf2" );

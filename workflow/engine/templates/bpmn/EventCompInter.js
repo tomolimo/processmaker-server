@@ -1,16 +1,27 @@
 bpmnEventCompInter=function(){
 VectorFigure.call(this);
-//Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
-else
-    this.setDimension(30,30);
-this.stroke=2
+this.stroke=1
 };
 bpmnEventCompInter.prototype=new VectorFigure;
 bpmnEventCompInter.prototype.type="bpmnEventCompInter";
 bpmnEventCompInter.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
+
+if(typeof workflow.zoomfactor == 'undefined')
+ workflow.zoomfactor = 1;
+  //Set the Task Limitation
+if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+{
+  this.originalWidth = 30;
+  this.originalHeight = 30;
+  this.orgXPos = this.getX();
+  this.orgYPos = this.getY();
+  this.orgFontSize =this.fontSize;
+}
+
+this.width  = this.originalWidth * workflow.zoomfactor;
+this.height = this.originalHeight  * workflow.zoomfactor;
+
 this.graphics.setStroke(this.stroke);
 var x_cir =0;
 var y_cir =0;
@@ -29,8 +40,12 @@ this.graphics.setColor("#adae5e");
 this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 //var x_arrow=new Array(6,19,19,32,32,19,19);
 //var y_arrow=new Array(22,33,22,33,11,22,11);
-var x_arrow=new Array(this.getWidth()/7.5,this.getWidth()/2.36,this.getWidth()/2.36,this.getWidth()/1.4,this.getWidth()/1.42,this.getWidth()/2.36,this.getWidth()/2.36);
-var y_arrow=new Array(this.getHeight()/2,this.getHeight()/1.36,this.getHeight()/2,this.getHeight()/1.36,this.getHeight()/4,this.getHeight()/2,this.getHeight()/4);
+var cw = this.getWidth();
+var ch = this.getHeight();
+var x_arrow=new Array(cw*0.13,cw*0.42,cw*0.42,cw*0.71,cw*0.7,cw*0.42,cw*0.42);
+var y_arrow=new Array(ch*0.5,ch*0.73,ch*0.5,ch*0.73,ch*0.25,ch*0.5,ch*0.25);
+//var x_arrow=new Array(cw/7.5,cw/2.36,cw/2.36,cw/1.4,cw/1.42,cw/2.36,cw/2.36);
+//var y_arrow=new Array(ch/2,ch/1.36,ch/2,ch/1.36,ch/4,ch/2,ch/4);
 this.graphics.setColor( "#adae5e" );
 this.graphics.fillPolygon(x_arrow,y_arrow);
 this.graphics.setColor("#adae5e");

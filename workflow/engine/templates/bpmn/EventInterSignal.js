@@ -1,16 +1,27 @@
 bpmnEventInterSignal=function(){
 VectorFigure.call(this);
-//Setting width and height values as per the zoom ratio
-if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-      this.setDimension(workflow.zoomWidth, workflow.zoomHeight);
-else
-    this.setDimension(30,30);
-this.stroke=2;
+this.stroke=1;
 };
 bpmnEventInterSignal.prototype=new VectorFigure;
 bpmnEventInterSignal.prototype.type="bpmnEventInterSignal";
 bpmnEventInterSignal.prototype.paint=function(){
 VectorFigure.prototype.paint.call(this);
+
+if(typeof workflow.zoomfactor == 'undefined')
+ workflow.zoomfactor = 1;
+  //Set the Task Limitation
+if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
+{
+  this.originalWidth = 30;
+  this.originalHeight = 30;
+  this.orgXPos = this.getX();
+  this.orgYPos = this.getY();
+  this.orgFontSize =this.fontSize;
+}
+
+this.width  = this.originalWidth * workflow.zoomfactor;
+this.height = this.originalHeight  * workflow.zoomfactor;
+
 this.graphics.setStroke(this.stroke);
 var x_cir = 0;
 var y_cir = 0;
@@ -31,8 +42,12 @@ this.graphics.setColor("#adae5e");
 this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-10,this.getHeight()-10);
 //var x=new Array(12,32,22);
 //var y=new Array(32,32,9);
-var x=new Array(this.getWidth()/3.75,this.getWidth()/1.4,this.getWidth()/2.04);
-var y=new Array(this.getHeight()/1.4,this.getHeight()/1.4,this.getHeight()/5);
+var cw = this.getWidth();
+var ch = this.getHeight();
+var x=new Array(cw*0.26,cw*0.71,cw*0.49);
+var y=new Array(ch*0.71,ch*0.71,ch*0.2);
+//var x=new Array(this.getWidth()/3.75,this.getWidth()/1.4,this.getWidth()/2.04);
+//var y=new Array(this.getHeight()/1.4,this.getHeight()/1.4,this.getHeight()/5);
 this.graphics.setColor("#adae5e");
 this.graphics.fillPolygon(x,y);
 this.graphics.setColor("#adae5e");

@@ -1,12 +1,6 @@
 bpmnGatewayExclusiveData=function(width,_30ab){
   VectorFigure.call(this);
-  this.stroke =2;
-  
-  //Setting width and height values as per the zoom ratio
-  if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-    this.setDimension(workflow.zoomWidth+10, workflow.zoomHeight+10);
-  else
-    this.setDimension(40,40);
+  this.stroke =1;
 };
 
 bpmnGatewayExclusiveData.prototype=new VectorFigure;
@@ -30,8 +24,12 @@ bpmnGatewayExclusiveData.prototype.paint=function(){
   this.width  = this.originalWidth  * workflow.zoomfactor;
   this.height = this.originalHeight * workflow.zoomfactor;
   
-  var x = new Array(0,            this.width/2, this.width,    this.width/2);
-  var y = new Array(this.height/2,this.height,  this.height/2, 0);
+  var cw = this.getWidth();
+  var ch = this.getHeight();
+  var x=new Array(0,cw*0.5,cw,cw*0.5);
+  var y=new Array(ch*0.5,ch,ch*0.5,0);
+  //var x=new Array(0,this.width/2,this.width,this.width/2);
+  //var y=new Array(this.height/2,this.height,this.height/2,0);
   var x2 = new Array();
   var y2 = new Array();
   
@@ -42,16 +40,16 @@ bpmnGatewayExclusiveData.prototype.paint=function(){
   this.graphics.setStroke(this.stroke);
   this.graphics.setColor( "#c0c0c0" );
   this.graphics.fillPolygon(x2,y2);
-  this.graphics.setColor( "#fdf3e0" );
+  this.graphics.setColor( "#ffffe5" );
   this.graphics.fillPolygon(x,y);
-  this.graphics.setColor("#a27628");
+  this.graphics.setColor("#c8c865");
   this.graphics.drawPolygon(x,y);
   this.graphics.setStroke(1);
   //var x_cross=new Array(20,30,40,45,35,45,40,30,20,15,25,15);
   //var y_cross=new Array(45,35,45,40,30,20,15,25,15,20,30,40);
   var x_cross=new Array(this.getWidth()/3   ,this.getWidth()/2,   this.getWidth()/1.5, this.getWidth()/1.3,  this.getWidth()/1.7,this.getWidth()/1.3,this.getWidth()/1.5,this.getWidth()/2,this.getWidth()/3,this.getWidth()/4,this.getWidth()/2.4,this.getWidth()/4);
   var y_cross=new Array(this.getHeight()/1.3,this.getHeight()/1.7,this.getHeight()/1.3,this.getHeight()/1.5, this.getHeight()/2,this.getHeight()/3,this.getHeight()/4,this.getHeight()/2.4,this.getHeight()/4,this.getHeight()/3,this.getHeight()/2,this.getHeight()/1.5);
-  this.graphics.setColor( "#a27628" );
+  this.graphics.setColor( "#c8c865" );
   this.graphics.fillPolygon( x_cross, y_cross);
   this.graphics.paint();
   if (this.input1 != null) {

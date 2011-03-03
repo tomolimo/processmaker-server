@@ -1,12 +1,6 @@
 bpmnGatewayComplex=function(width,_30ab){
   VectorFigure.call(this);
-  this.stroke =2;
-  
-  //Setting width and height values as per the zoom ratio
-  if(typeof workflow.zoomWidth != 'undefined' || typeof workflow.zoomHeight != 'undefined')
-    this.setDimension(workflow.zoomWidth+10, workflow.zoomHeight+10);
-  else
-    this.setDimension(40,40);
+  this.stroke =1;
 };
 
 bpmnGatewayComplex.prototype=new VectorFigure;
@@ -29,8 +23,12 @@ bpmnGatewayComplex.prototype.paint=function(){
   this.width  = this.originalWidth  * workflow.zoomfactor;
   this.height = this.originalHeight * workflow.zoomfactor;
 
-  var x=new Array(0,this.width/2,this.width,this.width/2);
-  var y=new Array(this.height/2,this.height,this.height/2,0);
+  var cw = this.getWidth();
+  var ch = this.getHeight();
+  var x=new Array(0,cw*0.5,cw,cw*0.5);
+  var y=new Array(ch*0.5,cw,cw*0.5,0);
+  //var x=new Array(0,this.width/2,this.width,this.width/2);
+  //var y=new Array(this.height/2,this.height,this.height/2,0);
 
   var x2 = new Array();
   var y2 = new Array();
@@ -43,9 +41,9 @@ bpmnGatewayComplex.prototype.paint=function(){
   this.graphics.setColor( "#c0c0c0" );
   this.graphics.fillPolygon(x2,y2);
   this.graphics.setStroke(this.stroke);
-  this.graphics.setColor( "#fdf3e0" );
+  this.graphics.setColor( "#ffffe5" );
   this.graphics.fillPolygon(x,y);
-  this.graphics.setColor("#a27628");
+  this.graphics.setColor("#c8c865");
   this.graphics.drawPolygon(x,y);
 
   this.graphics.setStroke(4);

@@ -1,6 +1,6 @@
 bpmnEventEmptyInter=function(width,_30ab){
 VectorFigure.call(this);
-this.stroke=2;
+this.stroke=1;
 };
 bpmnEventEmptyInter.prototype=new VectorFigure;
 bpmnEventEmptyInter.prototype.type="bpmnEventEmptyInter";
@@ -27,19 +27,19 @@ var y_cir1 = 0;
 this.graphics.setColor("#c0c0c0");
 this.graphics.fillEllipse(x_cir1+3,y_cir1+3,this.getWidth(),this.getHeight());
 
-this.graphics.setColor( "#f9faf2" );
+this.graphics.setColor( "#f6f4e0" );
 this.graphics.fillEllipse(x_cir1,y_cir1,this.getWidth(),this.getHeight());
 
 this.graphics.setColor("#adae5e");
 this.graphics.drawEllipse(x_cir1,y_cir1,this.getWidth(),this.getHeight());
-
+this.graphics.setStroke(this.stroke);
 var x_cir2=3;
 var y_cir2=3;
 
-this.graphics.setColor( "#f9faf2" );
+this.graphics.setColor( "#f6f4e0" );
 this.graphics.fillEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 
-this.graphics.setColor("#adae5e");
+this.graphics.setColor("#A8A469");
 this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 
 this.graphics.paint();

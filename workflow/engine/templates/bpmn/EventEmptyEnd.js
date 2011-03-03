@@ -1,7 +1,6 @@
 bpmnEventEmptyEnd=function(){
 VectorFigure.call(this);
-//Setting width and height values as per the zoom ratio
-this.stroke=3;
+this.stroke=2;
 };
 bpmnEventEmptyEnd.prototype=new VectorFigure;
 bpmnEventEmptyEnd.prototype.type="bpmnEventEmptyEnd";
@@ -27,9 +26,9 @@ var y=0;
 this.graphics.setColor("#c0c0c0");
 this.graphics.fillEllipse(x+5,y+5,this.getWidth(),this.getHeight());
 this.graphics.setStroke(this.stroke);
-this.graphics.setColor( "#f7f1e5" );
+this.graphics.setColor( "#f5d4d4" );
 this.graphics.fillEllipse(x,y,this.getWidth(),this.getHeight());
-this.graphics.setColor("#c46508");
+this.graphics.setColor("#a23838");
 this.graphics.drawEllipse(x,y,this.getWidth(),this.getHeight());
 this.graphics.paint();
 
