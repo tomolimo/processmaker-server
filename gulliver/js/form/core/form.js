@@ -542,10 +542,11 @@ function isNumberMask (mask){
                 var spaceString;
                 if (me.element.value.substr( (me.element.value.length -1) ,me.element.value.length) == '%' ){
                   spaceString ='';
+                  me.element.value =  onlynumber + spaceString + maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length);
                 } else {
                   spaceString =' ';
+                  me.element.value =  onlynumber;
                 }
-                me.element.value =  onlynumber + spaceString + maskWithoutPto.substr( (maskWithoutPto.length -1) ,maskWithoutPto.length);
           }
         }
       }
