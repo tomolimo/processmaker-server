@@ -2034,7 +2034,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
    window.show();
 
    top.form.load({
-                    url   :'processes/processes_Ajax.php?OUT_DOC_UID='+outputDocUID+'&action=getOutputDocsTemplates',
+                    url   :'bpmn/processes_Ajax.php?OUT_DOC_UID='+outputDocUID+'&action=getOutputDocsTemplates',
                     method: 'GET',
                     waitMsg:'Loading',
                     success:function(form, action) {
@@ -3179,7 +3179,7 @@ ProcessOptions.prototype.addTriggers = function()
                   if( result.passed ) { //deleting the selected triggers
                     PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_TRIGGER_CONFIRM'), function(){
                     Ext.Ajax.request({
-                        url   : 'processes/processes_Ajax.php',
+                        url   : 'bpmn/processes_Ajax.php',
                         method: 'POST',
                         params: {
                           action      : 'deleteTriggers',

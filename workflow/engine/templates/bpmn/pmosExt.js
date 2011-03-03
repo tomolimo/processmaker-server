@@ -293,7 +293,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
 
   var evn_uid = workflow.currentSelection.id;
   Ext.Ajax.request({
-    url: 'processes/processes_Ajax.php',
+    url: 'bpmn/processes_Ajax.php',
     params:{action:'webEntry', data: '{"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}'},
     success: function(r,o){
       webEntryList = Ext.util.JSON.decode(r.responseText);
@@ -921,7 +921,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
              {
                var urlparams = '?action=saveInterMessageEvent&data={"uid":"'+ taskUid.value +'","tas_send":"'+tas_send+'","data":"'+data+'"}';
                Ext.Ajax.request({
-                 url: "processes/processes_Ajax.php"+ urlparams,
+                 url: "bpmn/processes_Ajax.php"+ urlparams,
                  success: function(response) {
                    window.close();
                  },
@@ -949,7 +949,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
     {
       var urlparams = '?action=loadTask&data={"uid":"'+ taskUid.value +'"}';
       Ext.Ajax.request({
-        url: "processes/processes_Ajax.php"+ urlparams,
+        url: "bpmn/processes_Ajax.php"+ urlparams,
         success: function(response) {
             workflow.taskDetails = Ext.util.JSON.decode(response.responseText);
         },
@@ -965,7 +965,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
     {
       var urlparams = '?action=triggersList&data={"pro_uid":"'+ pro_uid +'"}';
       Ext.Ajax.request({
-        url: "processes/processes_Ajax.php"+ urlparams,
+        url: "bpmn/processes_Ajax.php"+ urlparams,
         success: function(response) {
           workflow.triggerList = Ext.util.JSON.decode(response.responseText);
         },
@@ -1140,7 +1140,7 @@ pmosExt.prototype.popTaskNotification= function(_5678){
                             {
                              var urlparams = '?action=saveInterMessageEvent&data={"uid":"'+ taskUid[0].value +'","tas_send":"'+tas_send+'","data":"'+data+'"}';
                                 Ext.Ajax.request({
-                                        url: "processes/processes_Ajax.php"+ urlparams,
+                                        url: "bpmn/processes_Ajax.php"+ urlparams,
                                         success: function(response) {
                                             window.close();
                                         },
@@ -1438,7 +1438,7 @@ pmosExt.prototype.loadProcess=function(_5678)
 {
     var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     workflow.processInfo = Ext.util.JSON.decode(response.responseText);
                 },
@@ -1454,7 +1454,7 @@ pmosExt.prototype.loadDynaforms=function()
         {
             var urlparams = '?action=dynaforms&data={"uid":"'+ taskUid[0].value +'"}';
             Ext.Ajax.request({
-                    url: "processes/processes_Ajax.php"+ urlparams,
+                    url: "bpmn/processes_Ajax.php"+ urlparams,
                     success: function(response) {
                         workflow.dynaList = Ext.util.JSON.decode(response.responseText);
                     },
@@ -1468,7 +1468,7 @@ pmosExt.prototype.loadConnectedTask=function()
 {
       var urlparams = '?action=load&data={"uid":"'+ pro_uid +'"}';
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     workflow.processInfo = Ext.util.JSON.decode(response.responseText);
 
@@ -1483,7 +1483,7 @@ pmosExt.prototype.loadWebEntry=function()
        var evn_uid = workflow.currentSelection.id;
        var urlparams = '?action=webEntry&data={"uid":"'+ pro_uid +'","evn_uid":"'+evn_uid+'"}';
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     workflow.webEntryList = Ext.util.JSON.decode(response.responseText);
                 },
@@ -1496,7 +1496,7 @@ pmosExt.prototype.loadEditProcess=function()
 {
       var urlparams = '?action=process_Edit&data={"pro_uid":"'+ pro_uid +'"}';
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     workflow.processEdit = Ext.util.JSON.decode(response.responseText);
                 },
@@ -1509,7 +1509,7 @@ pmosExt.prototype.loadProcessCategory =function()
 {
        var urlparams = '?action=loadCategory';
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     workflow.processCategory = Ext.util.JSON.decode(response.responseText);
                 },
@@ -1521,7 +1521,7 @@ pmosExt.prototype.loadProcessCategory =function()
 pmosExt.prototype.saveEvent =function(urlparams)
 {
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
 
                 },

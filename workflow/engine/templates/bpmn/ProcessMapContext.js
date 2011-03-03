@@ -94,7 +94,7 @@ ProcessMapContext.prototype.editProcess= function()
                                  pro_debug = 0;
                                  var urlparams = '?action=saveProcess&data={"PRO_UID":"'+ pro_uid +'","PRO_CALENDAR":"'+ pro_calendar +'","PRO_CATEGORY":"'+ pro_category +'","PRO_DEBUG":"'+ pro_debug +'","PRO_DESCRIPTION":"'+ pro_description +'","PRO_TITLE":"'+ pro_title +'"}';
                                  Ext.Ajax.request({
-                                     url: "processes/processes_Ajax.php"+ urlparams,
+                                     url: "bpmn/processes_Ajax.php"+ urlparams,
                                      success: function(response) {
                                          PMExt.notify( _('ID_STATUS') , _('ID_PROCESS_SAVE') );
                                          window.hide();
@@ -1044,7 +1044,7 @@ ProcessMapContext.prototype.processSupervisors= function()
                      if(r.data.PU_UID != "")
                      {
                         Ext.Ajax.request({
-                          url   : 'processes/processes_Ajax.php'+urlparams,
+                          url   : 'bpmn/processes_Ajax.php'+urlparams,
                           method: 'GET',
                           success: function(response) {
                               PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_REMOVED') );
@@ -1174,7 +1174,7 @@ ProcessMapContext.prototype.processSupervisors= function()
             var urlparams   = '?action=assignProcessUser&data={"PRO_UID":"'+pro_uid+'","USR_UID":"'+userID+'"}';
 
             Ext.Ajax.request({
-                    url: 'processes/processes_Ajax.php'+urlparams,
+                    url: 'bpmn/processes_Ajax.php'+urlparams,
                     method: 'GET',
                     success: function (response) {      // When saving data success
                         PMExt.notify( _('ID_STATUS') , _('ID_SUPERVISOR_ASSIGNED') );

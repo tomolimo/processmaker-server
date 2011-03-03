@@ -515,7 +515,7 @@ TaskContext.prototype.editUsers= function()
                  if(r.data.USR_UID != "")
                      {
                         Ext.Ajax.request({
-                        url   : 'processes/processes_Ajax.php' +urlparams ,
+                        url   : 'bpmn/processes_Ajax.php' +urlparams ,
                         success: function(response) {
                              PMExt.notify( _('ID_STATUS') , _('ID_USERS_REMOVED') );
                          //Secondly deleting from Grid
@@ -653,7 +653,7 @@ TaskContext.prototype.editUsers= function()
             var urlparams   = '?action=assign&data={"TAS_UID":"'+taskId+'","USR_UID":"'+userId+'","TU_TYPE":"'+tu_Type+'","TU_RELATION":"'+tu_Relation+'"}';
 
             Ext.Ajax.request({
-                    url: 'processes/processes_Ajax.php' +urlparams ,
+                    url: 'bpmn/processes_Ajax.php' +urlparams ,
                     success: function (response) {      // When saving data success
                         PMExt.notify( _('ID_STATUS') , _('ID_USER_ASSIGNED') );
                         },
@@ -670,7 +670,7 @@ TaskContext.prototype.editUsers= function()
                 var user_TUtype     = record.json.TU_TYPE;
                 urlparams           = '?action=ofToAssign&data={"TAS_UID":"'+taskId+'","TU_RELATION":"'+user_TURel+'","USR_UID":"'+userUID+'","TU_TYPE":"'+user_TUtype+'"}';
                 Ext.Ajax.request({
-                      url   : 'processes/processes_Ajax.php' +urlparams ,
+                      url   : 'bpmn/processes_Ajax.php' +urlparams ,
                       success: function(response) {
                           //Ext.MessageBox.alert ('Status','User has been updated successfully.');
                       }
@@ -1905,7 +1905,7 @@ TaskContext.prototype.editUsersAdHoc= function()
                      if(r.data.USR_UID != "")
                      {
                         Ext.Ajax.request({
-                          url   : 'processes/processes_Ajax.php' +urlparams ,
+                          url   : 'bpmn/processes_Ajax.php' +urlparams ,
                           /*method: 'POST',
                           params: {
                                 functions       : 'ofToAssign',
@@ -2547,7 +2547,7 @@ TaskContext.prototype.editSubProcessProperties= function(_3525)
                 
             
            Ext.Ajax.request({
-              url   : 'processes/processes_Ajax.php',
+              url   : 'bpmn/processes_Ajax.php',
               method: 'POST',
               params: {
                     action          : 'saveSubprocessDetails',

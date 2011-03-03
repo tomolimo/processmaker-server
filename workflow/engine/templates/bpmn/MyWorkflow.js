@@ -1033,7 +1033,7 @@ MyWorkflow.prototype.savePosition= function(oShape)
     }
     if(urlparams != ''){
       Ext.Ajax.request({
-        url: "processes/processes_Ajax.php"+ urlparams,
+        url: "bpmn/processes_Ajax.php"+ urlparams,
         success: function(response) {
           //Ext.Msg.alert (response.responseText);
         },
@@ -1120,7 +1120,7 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
 
         if(urlparams != ''){
         Ext.Ajax.request({
-            url: "processes/processes_Ajax.php"+ urlparams,
+            url: "bpmn/processes_Ajax.php"+ urlparams,
             success: function(response) {
                 //Ext.Msg.alert (response.responseText);
                   if(response.responseText != 1 && response.responseText != ""){
@@ -1196,7 +1196,7 @@ MyWorkflow.prototype.saveTask= function(actiontype,xpos,ypos)
                     break;
             }
              Ext.Ajax.request({
-                    url: "processes/processes_Ajax.php"+ urlparams,
+                    url: "bpmn/processes_Ajax.php"+ urlparams,
                     success: function(response) {
                         //Ext.Msg.alert (response.responseText);
                           if(response.responseText != 1 && response.responseText != "") {
@@ -1234,7 +1234,7 @@ MyWorkflow.prototype.deleteSilently= function(oShape)
     }
 
     Ext.Ajax.request({
-                        url: "processes/processes_Ajax.php"+ urlparams,
+                        url: "bpmn/processes_Ajax.php"+ urlparams,
                         success: function(response) {
                                 //Ext.Msg.alert (response.responseText);
                         },
@@ -1341,7 +1341,7 @@ MyWorkflow.prototype.showAjaxDialog = function(btn){
              }
            }
            Ext.Ajax.request({
-              url: "processes/processes_Ajax.php"+ url,
+              url: "bpmn/processes_Ajax.php"+ url,
                 success: function(response) {
                     workflow.getCommandStack().execute(new CommandDelete(currentObj));
               },
@@ -1490,7 +1490,7 @@ MyWorkflow.prototype.saveGateways = function(oGateway){
      urlparams = '?action=addGateway&data={"pro_uid":"'+ pro_uid +'","tas_from":"'+task_uid+'","tas_to":"'+next_task_uid+'","gat_type":"'+oGateway.type+'","gat_uid":"'+oGateway.id+'","gat_next_type":"'+next_task_type+'","position":'+pos+'}';
      if(urlparams != ''){
         Ext.Ajax.request({
-                url: "processes/processes_Ajax.php"+ urlparams,
+                url: "bpmn/processes_Ajax.php"+ urlparams,
                 success: function(response) {
                     if(response.responseText != '')
                       {
@@ -1578,7 +1578,7 @@ MyWorkflow.prototype.saveEvents = function(oEvent,sTaskUID)
   
   if(urlparams != '') {
     Ext.Ajax.request({
-      url: "processes/processes_Ajax.php"+ urlparams,
+      url: "bpmn/processes_Ajax.php"+ urlparams,
       success: function(response) {
         if(response.responseText != '')
         {
@@ -1781,7 +1781,7 @@ MyWorkflow.prototype.showEventResult = function(btn){
            if(btn == 'yes')
             {
                 Ext.Ajax.request({
-                    url: "processes/processes_Ajax.php"+ url,
+                    url: "bpmn/processes_Ajax.php"+ url,
                     success: function(response) {
                            workflow.getCommandStack().execute(new CommandDelete(workflow.oConn));
                     },
@@ -1804,7 +1804,7 @@ MyWorkflow.prototype.deleteEvent = function(eventObj){
      if(event_uid != '') {
             var urlparams = '?action=deleteEvent&data={"uid":"'+ event_uid +'"}';
             Ext.Ajax.request({
-                    url: "processes/processes_Ajax.php"+ urlparams,
+                    url: "bpmn/processes_Ajax.php"+ urlparams,
                     success: function(response) {
                     },
                     failure: function(){
