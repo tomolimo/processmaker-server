@@ -208,6 +208,8 @@ try {
   }
  	//$aData['SCH_END_DATE'] = "2020-12-30";
   $oCaseScheduler->create($aData);
+  $sch_uid = $oCaseScheduler->getSchUid();
+  
   if((isset($_POST['form']['CASE_SH_PLUGIN_UID']))&&($_POST['form']['CASE_SH_PLUGIN_UID']!="")){
     $params=explode("--",$_REQUEST ['form']['CASE_SH_PLUGIN_UID']);
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
@@ -226,6 +228,23 @@ try {
       $oPluginRegistry->executeMethod( $caseSchedulerPluginDetail->sNamespace, $caseSchedulerPluginDetail->sActionSave, $oData );
     }
   }
+  
+  //Added by Qennix
+  //Update Start Time Event in BPMN
+  require_once 'classes/model/Event.php';
+  require_once 'classes/model/Task.php';
+  
+  $oTask = new Task();
+  $oTask->load($_POST['form']['TAS_UID']);
+  echo '1';
+  $evn_uid = $oTask->getStartingEvent();
+  echo '2'.$evn_uid;
+  $event = new Event();
+  $editEvent = array();
+  $editEvent['EVN_UID'] = $evn_uid;
+  $editEvent['EVN_ACTION'] = $sch_uid;
+  $event->update($editEvent);
+  //End Adding
 
   G::header('location: cases_Scheduler_List?PRO_UID='.$_POST['form']['PRO_UID']);
 

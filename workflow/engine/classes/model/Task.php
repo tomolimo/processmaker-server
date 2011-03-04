@@ -590,7 +590,7 @@ public function kgetassigType($pro_uid, $tas){
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(EventPeer::EVN_UID);
     $oCriteria->add(EventPeer::EVN_TAS_UID_TO,$this->tas_uid);
-    $oCriteria->add(EventPeer::EVN_TYPE,'bpmnEventMessageStart');
+    //$oCriteria->add(EventPeer::EVN_TYPE,'bpmnEventMessageStart');
     $oDataset = EventPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     if ($oDataset->next()){

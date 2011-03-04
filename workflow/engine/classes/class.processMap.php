@@ -4614,12 +4614,15 @@ class processMap {
           }
         }
       }
-     $row []     = array ('W_LINK' => $arlink,'DYN_TITLE'=>$dynTitle,'TAS_TITLE'=>$task_name, 'USR_UID'=>$usr_uid_evn, 'DYN_UID'=>$dynUid);
-     $oJSON = new Services_JSON ( );
-     $tmpData = $oJSON->encode( $row ) ;
-     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
-     $result = $tmpData;
-     echo $result;
+     $row    = array ('W_LINK' => $arlink,'DYN_TITLE'=>$dynTitle,'TAS_TITLE'=>$task_name, 'USR_UID'=>$usr_uid_evn, 'DYN_UID'=>$dynUid);
+//     $oJSON = new Services_JSON ( );
+//     $tmpData = $oJSON->encode( $row ) ;
+//     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
+//     $result = $tmpData;
+     $result = array();
+     $result['success'] = true;
+     $result['data'] = $row;
+     return $result;
     } catch ( Exception $oError ) {
       throw ($oError);
     }
