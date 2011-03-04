@@ -1,14 +1,12 @@
 <html>
 <head>
-<title>Ajax upload demo</title>
-<link rel="stylesheet" type="text/css" href="/skins/green/style.css"/>
 <style>
 	li {list-style-type: none;margin: 2;	padding: 0;	}
 	body{
 		background:#fff;
 	}
 	#uxfiles{
-		font-size:10px;border-width: 1px;  border-style: solid; border-color: #000; 
+		font-size:10px;border-width: 1px;  border-style: solid; border-color: #000;
 		padding:2px;
 		padding-left:4px;
 		padding-right:4px;
@@ -29,11 +27,11 @@ $(document).ready(function(){
 	var button = $('#button1'), interval;
 	new AjaxUpload(button,{
 		action: 'processes_doUpload', // I disabled uploads in this example for security reasons
-		//action: 'upload.htm', 
+		//action: 'upload.htm',
 		name: 'form',
 		onSubmit : function(file, ext){
 			
-            if(cClient.browser != 'msie'){  
+            if(cClient.browser != 'msie'){
                 $("#uxmsg").html('Uploading...');
                 $("#uxmsg").fadeIn(2000);
                 //this.disable();
@@ -50,9 +48,9 @@ $(document).ready(function(){
 				
                     var text = button.text();
 				    if (text.length < 13){
-					    button.text(text + '.');					
+					    button.text(text + '.');
 				    } else {
-					    button.text('Uploading');				
+					    button.text('Uploading');
 				    }
                 
 			    }, 200);
@@ -83,7 +81,7 @@ $(document).ready(function(){
                 $('#button1').attr('disabled',false);
                 //alert(document.getElementById('button1').id);
 			    //parent.xReaload();
-			    //setTimeout('xclear()', 4000); 
+			    //setTimeout('xclear()', 4000);
 		}
 	});
 
