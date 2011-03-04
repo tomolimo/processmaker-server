@@ -1,7 +1,3 @@
-/*
-* Blue is the new Green
-*/
-
 /*Edicion de botones copiar de default.css (Final)*/
 
 input:-moz-focus-inner{border:0;}
@@ -11,6 +7,7 @@ button:-moz-focus-inner{border:0;}
 /*
 Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 */
+
 .ss_sprite{
   background-image:url( /images/icons_silk/sprites.png) !important;
   background-repeat:no-repeat;
@@ -29,7 +26,7 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 }
 .pm_toolbar td{padding:0;margin:0}
 
-.panel_headerBar___processmaker{background:url("/skins/ext/images/gray/toolbar/bg.gif") #F0F0F0 !important}
+.panel_headerBar___processmaker{background:url("/images/ext/gray/toolbar/bg.gif") #F0F0F0 !important}
 
 .button_menu_ext{padding-left:20px !important;height:18px !important;}
 .button_large_ext{padding-left:20px !important;height:32px !important;}

@@ -24,7 +24,7 @@ img {
 }
 .Footer .image
 {
-	/*background-image: url(/skins/green/images/bf.jpg);
+	/*background-image: url(/images/classic/bf.jpg);
 	background-repeat: repeat-x;
 	height:10px;*/
 
@@ -56,7 +56,7 @@ img {
 .temporalMessageERROR
 {
 	-moz-border-radius:6px;	/* Rounded edges in Firefox */
-	background-image: url(/skins/green/images/error.gif);
+	background-image: url(/images/classic/error.gif);
 	color	:#ffffff;
 	border-style:solid;
 	border-width:1px;
@@ -71,7 +71,7 @@ img {
 .temporalMessageWARNING
 {
 	-moz-border-radius:6px;	/* Rounded edges in Firefox */
-	background-image: url(/skins/green/images/warning.png);
+	background-image: url(/images/classic/warning.png);
 	color	:#555555;
 	border-style:solid;
 	border-width:1px;
@@ -86,7 +86,7 @@ img {
 .temporalMessageINFO
 {
 	-moz-border-radius:6px;	/* Rounded edges in Firefox */
-	background-image: url(/skins/green/images/message.png);
+	background-image: url(/images/classic/message.png);
 	color	:#000000;
 	border-style:solid;
 	border-width:1px;
@@ -330,7 +330,7 @@ TD.mainMenuBG {
 }
 
 TD.mainMenu {
-	background-image: url(/skins/green/images/bm.jpg);
+	background-image: url(/images/classic/bm.jpg);
 	background-repeat: repeat-x;
 	height: 25px;
 	left: 46px;
@@ -355,7 +355,7 @@ A.mainMenu:hover {
 }
 
 TD.SelectedMenu{
-	background-image: url(/skins/green/images/bsms.jpg);
+	background-image: url(/images/classic/bsms.jpg);
 	background-repeat: repeat-x;
 	top: 72px;
 	height: 26px;
@@ -384,7 +384,7 @@ A.SelectedMenu {
 
 
 TD.subMenu {
-	background-image: url('/skins/green/images/bsm.jpg');
+	background-image: url('/images/classic/bsm.jpg');
 	background-repeat: repeat-x;
 	height: 25px;
 }
@@ -463,14 +463,14 @@ A.selectedSubMenu:hover {
 {
 	left:0px;
 	top:0px;
-	background-image:url(/skins/green/images/ftl.png);
+	background-image:url(/images/classic/ftl.png);
 	background-color:transparent;
 }
 .boxTop div.c, .boxTopBlue div.c
 {
 	top:0px;
 	right:0px;
-	background-image:url(/skins/green/images/ftr.png);
+	background-image:url(/images/classic/ftr.png);
 	background-color:transparent;
 }
 .boxTop div.b, .boxTopBlue div.b
@@ -485,12 +485,12 @@ A.selectedSubMenu:hover {
 /* Box Top Model Blue BEGIN */
 .boxTopBlue div.c
 {
-	background-image:url(/skins/green/images/ftr.blue.gif);
+	background-image:url(/images/classic/ftr.blue.gif);
 	background-color:transparent;
 }
 .boxTopBlue div.a
 {
-	background-image:url(/skins/green/images/ftl.blue.gif);
+	background-image:url(/images/classic/ftl.blue.gif);
 	background-color:transparent;
 }
 .boxTopBlue div.b
@@ -520,14 +520,14 @@ A.selectedSubMenu:hover {
 {
 	left:0px;
 	top:0px;
-	background-image:url(/skins/green/images/fbl.png);
+	background-image:url(/images/classic/fbl.png);
 	background-color:transparent;
 }
 .boxBottom div.c, .boxBottomBlue div.c
 {
 	top:0px;
 	right:0px;
-	background-image:url(/skins/green/images/fbr.png);
+	background-image:url(/images/classic/fbr.png);
 	background-color:transparent;
 }
 .boxBottom div.b, .boxBottomBlue div.b
@@ -535,18 +535,18 @@ A.selectedSubMenu:hover {
 	width:100%;
 	height:16px;
 	border-bottom:1px solid #DADADA;
-	background: transparent url(/skins/green/images/fbc.png) repeat-x;
+	background: transparent url(/images/classic/fbc.png) repeat-x;
 }
 /* Box Bottom Model END */
 /* Box Bottom Model Blue BEGIN */
 .boxBottomBlue div.c
 {
-	background-image:url(/skins/green/images/fbr.blue.png);
+	background-image:url(/images/classic/fbr.blue.png);
 	background-color:transparent;
 }
 .boxBottomBlue div.a
 {
-	background-image:url(/skins/green/images/fbl.blue.png);
+	background-image:url(/images/classic/fbl.blue.png);
 	background-color:transparent;
 }
 .boxBottomBlue div.b
@@ -554,7 +554,7 @@ A.selectedSubMenu:hover {
 	width:100%;
 	height:16px;
 	border-bottom:1px solid #DADADA;
-	background: transparent url(/skins/green/images/fbc.blue.png) repeat-x;
+	background: transparent url(/images/classic/fbc.blue.png) repeat-x;
 }
 .boxContentBlue
 {
@@ -596,21 +596,21 @@ a.linkInBlue:hover
 {
 	left:0px;
 	top:0px;
-	background-image:url(/skins/green/images/ftlL.png);
+	background-image:url(/images/classic/ftlL.png);
 	background-color:transparent;
 }
 .boxTopPanel div.c
 {
 	top:0px;
 	right:0px;
-	background-image:url(/skins/green/images/ftrL.png);
+	background-image:url(/images/classic/ftrL.png);
 	background-color:transparent;
 }
 .boxTopPanel div.b
 {
 	width:100%;
 	height:16px;
-	background: transparent url(/skins/green/images/ftc.png) repeat-x;
+	background: transparent url(/images/classic/ftc.png) repeat-x;
 }
 
 /* BoxPanel Bottom Model END */
@@ -651,7 +651,7 @@ form.formDefault .content
 form.formDefault input.FormField
 {
 	border: 1px solid #CCC;
-	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	background: #FFFFFF url(/images/classic/input_back.gif) repeat-x;
 	color:#333333;
 	font:normal 11px Arial,Helvetica,sans-serif;
 }
@@ -682,7 +682,7 @@ form.formDefault .FormFieldContent
 form.formDefault textarea.FormTextArea
 {
 	border: 1px solid #CCC;
-	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	background: #FFFFFF url(/images/classic/input_back.gif) repeat-x;
 	color:#333333;
 	font:normal 11px Arial,Helvetica,sans-serif;
 	overflow:auto;
@@ -690,7 +690,7 @@ form.formDefault textarea.FormTextArea
 form.formDefault textarea.FormTextPM
 {
 	border: 1px solid #CCC;
-	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	background: #FFFFFF url(/images/classic/input_back.gif) repeat-x;
 	color:#333;
 	font:normal 12 Courier New, monospace ;
 	overflow:auto;
@@ -1227,7 +1227,7 @@ div.treeParent .content .treeNode a.selected
 }
 div.treeParent div.treeParent .boxTop div.a
 {
-	background-image:url(/skins/green/images/ftl.blue.gif);
+	background-image:url(/images/classic/ftl.blue.gif);
 }
 div.treeParent div.treeParent .boxTop div.b
 {
@@ -1236,19 +1236,19 @@ div.treeParent div.treeParent .boxTop div.b
 }
 div.treeParent div.treeParent .boxTop div.c
 {
-	background-image:url(/skins/green/images/ftr.blue.gif);
+	background-image:url(/images/classic/ftr.blue.gif);
 }
 div.treeParent div.treeParent .boxBottom div.a
 {
-	background-image:url(/skins/green/images/fbl.blue.png);
+	background-image:url(/images/classic/fbl.blue.png);
 }
 div.treeParent div.treeParent .boxBottom div.b
 {
-	background-image:url(/skins/green/images/fbc.blue.png);
+	background-image:url(/images/classic/fbc.blue.png);
 }
 div.treeParent div.treeParent .boxBottom div.c
 {
-	background-image:url(/skins/green/images/fbr.blue.png);
+	background-image:url(/images/classic/fbr.blue.png);
 }*/
 
 
