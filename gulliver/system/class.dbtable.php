@@ -263,7 +263,7 @@ class DBTable
         $iskey = in_array( $field, $this->table_keys ) && strtoupper(substr(trim($val),0,7) ) == "NEXTVAL";
 
       $dbcType = isset ( $this->_dbc->type ) ? $this->_dbc->type : $DBEngine;
-      // Commented by new format of textarea
+      // Commented by new format of textarea in javascript
       if( ! $iskey )
         $val = "'" . $val . "'";
       ///--  $val = "'" . G::sqlEscape( $val , $dbcType ) . "'";
@@ -303,7 +303,9 @@ class DBTable
       $iskey = false;
       $iskey = in_array( $field, $this->table_keys );
         if( $iskey == false ) {
-          $stQry .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine ) . "', ";
+          $stQry .= $field . "='" . $val . "', ";
+          // Commented by new format of textarea in javascript
+          ///-- $stQry .= $field . "='" . G::sqlEscape ( $val, isset( $this->_dbc->type) ? $this->_dbc->type : $DBEngine ) . "', ";
         }
         else {
           if( $stWhere == "" ) {
