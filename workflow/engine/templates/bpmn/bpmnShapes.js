@@ -1241,8 +1241,8 @@ bpmnTask.prototype.onDoubleClick = function () {
  * erik: Setting task target to Drop user & group assignment
  */
 bpmnTask.prototype.onMouseEnter = function () {
-  if( this.type == 'bpmnTask' && typeof Ext.getCmp('usersPanel') != 'undefined' ) {
-    Ext.getCmp('usersPanel')._targetTask = {id: this.id, name: this.taskName};
+  if( this.type == 'bpmnTask' ) {
+    _targetTask = {id: this.id, name: this.taskName};
   }
 };
 

@@ -13,10 +13,11 @@ var ProcessMapObj;
 
 Ext.onReady(function(){
     //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+    //Ext.BLANK_IMAGE_URL = '/images/s.gif';
     
     var northPanel = new Ext.Toolbar({
         region: 'north',
-        height: 32, // give north and south regions a height
+        height: 25, // give north and south regions a height
         items: northPanelItems
     })
 
@@ -34,6 +35,7 @@ Ext.onReady(function(){
     }
 
     var eastPanel = {
+        id: 'eastPanel',
         region: 'east',
         title: '&nbsp;',
         collapsible: true,
@@ -41,7 +43,7 @@ Ext.onReady(function(){
         width: 225, // give east and west regions a width
         minSize: 175,
         maxSize: 400,
-        margins: '0 5 0 0',
+        margins: '0 3 0 0',
         layout:'border', // specify layout manager for items
         items:            // this TabPanel is wrapped by another Panel so the title will be applied
         [
@@ -55,7 +57,7 @@ Ext.onReady(function(){
             items:[
               new Ext.TabPanel({
                 id    : 'usersPanelTabs',
-                title : 'sdd',
+                title : '',
                 border: true, // already wrapped so don't add another border
                 activeTab   : 0, // second tab initially active
                 tabPosition : 'top',
@@ -72,21 +74,19 @@ Ext.onReady(function(){
           }
         ]
     }
-
     var westPanel = {
         region: 'west',
         id: 'west-panel', // see Ext.getCmp() below
-        title: '',
-        split: true,
-        width: 88,
+        title: '&nbsp;',
+        split: false,
+        width: 37,
         minSize: 20,
         maxSize: 400,
         collapsible: true,
-        margins: '0 0 0 5',
-        layout: {
-            type: 'accordion',
-            animate: true
-        },
+        layout: 'table',
+        layoutConfig: {columns:1},
+        defaults: {frame:true},
+        margins: '0 3 3 0',
         items: [
           toolbarPanel,
           actorsPanel
@@ -169,6 +169,17 @@ Ext.onReady(function(){
     });
 
     Ext.getCmp('designerTab')._setDesignerTitle(pro_title);
+    Ext.fly(document).on("scroll", function(){
+      if( usersPanel.isVisible() ) {
+        if (usersPanel._scrollPosTimer) {
+          clearTimeout(usersPanel._scrollPosTimer);
+        }
+        usersPanel._scrollPosTimer = setTimeout(function() {
+          usersPanel.setPosition(usersPanel._posRelToView[0] + divScroll.scrollLeft, usersPanel._posRelToView[1] + divScroll.scrollTop);
+        }, 100);
+      }
+    });
+  
 
     processObj = new ProcessOptions();
     ProcessMapObj = new ProcessMapContext();
@@ -187,9 +198,9 @@ Ext.onReady(function(){
            * erik: Setting Drop targets from users & groups grids to assignment to tasks
            * for all existing tasks
            */
-          //var dropEls = Ext.get('paintarea').query('.x-task');
-          //for(var i = 0; i < dropEls.length; i++)
-            //new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : Ext.getCmp('usersPanel')._onDrop});
+          var dropEls = Ext.get('paintarea').query('.x-task');
+          for(var i = 0; i < dropEls.length; i++)
+            new Ext.dd.DropTarget(dropEls[i], {ddGroup:'task-assignment', notifyDrop  : _onDropActors});
 
         },
         failure: function(){
@@ -200,8 +211,9 @@ Ext.onReady(function(){
     
 
 
-    //Get main into workflow object
+  //Get main into workflow object
   workflow.main = Ext.getCmp('centerRegion');
+  //workflow.setSnapToGeometry(false);
   canvas = Ext.get('paintarea');
 
   contextCanvasMenu = new Ext.menu.Menu({
@@ -353,6 +365,19 @@ Ext.onReady(function(){
   workflow.addSelectionListener(menu);
   workflow.scrollArea = document.getElementById("center1").parentNode;
 
+  Ext.get('x-shapes-task').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-shapes-startEvent').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-shapes-interEvent').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-shapes-endEvent').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-shapes-gateways').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-shapes-annotation').child('.x-btn-mc').setStyle('text-align', 'left');
+  
+  Ext.get('x-pm-users').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-pm-groups').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-pm-users-adhoc').child('.x-btn-mc').setStyle('text-align', 'left');
+  Ext.get('x-pm-groups-adhoc').child('.x-btn-mc').setStyle('text-align', 'left');
+  
+
   /**
    * Setting tooltips ti tollbar items
    */
@@ -360,44 +385,74 @@ Ext.onReady(function(){
       target: 'x-shapes-task',
       title: 'Task',
       trackMouse: true,
-      anchor: 'top',
+      anchor: 'right',
       html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-startEvent',
-      title: '  Start Event',
+      title: 'Event',
       trackMouse: true,
-      anchor: 'top',
-      html: ''
+      anchor: 'right',
+      html: 'Start'
   });
   new Ext.ToolTip({
       target: 'x-shapes-interEvent',
-      title: 'Intermediate Event',
+      title: 'Event',
       trackMouse: true,
-      anchor: 'top',
-      html: ''
+      anchor: 'right',
+      html: 'Intermediate'
   });
   new Ext.ToolTip({
       target: 'x-shapes-endEvent',
-      title: 'End Event',
+      title: 'Event',
       trackMouse: true,
-      anchor: 'top',
-      html: ''
+      anchor: 'right',
+      html: 'End'
   });
   new Ext.ToolTip({
       target: 'x-shapes-gateways',
       title: 'Gateway',
       trackMouse: true,
-      anchor: 'top',
+      anchor: 'right',
       html: ''
   });
   new Ext.ToolTip({
       target: 'x-shapes-annotation',
       title: 'Annotation',
-      anchor: 'top',
+      anchor: 'right',
       trackMouse: true,
       html: ''
   });
+
+  new Ext.ToolTip({
+      target: 'x-pm-users',
+      title: 'Actors',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Users'
+  });
+  new Ext.ToolTip({
+      target: 'x-pm-groups',
+      title: 'Actors',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Groups'
+  });
+  new Ext.ToolTip({
+      target: 'x-pm-users-adhoc',
+      title: 'Actors',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Ad Hoc Users'
+  });
+  new Ext.ToolTip({
+      target: 'x-pm-groups-adhoc',
+      title: 'Actors',
+      anchor: 'right',
+      trackMouse: true,
+      html: 'Ad Hoc Groups'
+  });
+  
   
   /**
    * setting drag sources for Toolbar items

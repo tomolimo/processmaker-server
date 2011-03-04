@@ -123,3 +123,8 @@ button.x-btn-text:focus,.x-combo-selected{
 .icon-debug-disabled{
   background-image: url("/images/debug_disabled.png");
 }
+
+.icon-geometry{
+  background-image: url("/images/ToolUseGeometry.png");
+}
+

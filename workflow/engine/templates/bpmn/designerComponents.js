@@ -23,52 +23,120 @@ var usersTaskAdHocGrid;
 var onUsersTaskAdHocGridContextMenu;
 var usersTaskAdHocGridContextMenu;
 var mainMenu;
+var tbar1;
+
+var divScroll;
+var usersPanelStart = 0;
+var  usersPanelLimit = 1000;
+var usersStore;
+var usersGrid;
+var groupsStore;
+var groupsGrid;
+
+var usersActorsWin;
+var groupsActorsWin;
+var adhocUsersActorsWin;
+var adHocGroupsActorsWin;
+
+var _onDropActors;
+var _targetTask;
+var o;
 
 Ext.onReady(function(){
-  
+  divScroll = document.body;
+    
 toolbarPanel = {
-  title: 'Toolbar',
-  border: false,
-  //iconCls: 'nav',
-  layout:'table',
+  title: '&nbsp;',
+  border: true,
+  xtype:'buttongroup',
   defaultType: 'button',
-  cls: 'btn-panel',
-  layoutConfig: {
-    columns: 2
-  },
+  cls: 'btn-panel-pmtoolbar',
+  columns: 1,
   defaults: {
-    autoEl: {tag: 'h3', style:"padding:15px 0 3px;"},
-    scale: 'large'
+    scale: 'small'
   },
 
   items : [{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_task',//icon: '/skins/ext/images/gray/shapes/pallete/task.png',
-      id:"x-shapes-task"
+      iconCls: 'button_small_ext ss_sprite ss_bpmn_task-18x18',
+      id:"x-shapes-task",
+      text: ' ', 
+      width: 22
     },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_startevent',//icon: '/skins/ext/images/gray/shapes/pallete/startevent.png',
-      id:"x-shapes-startEvent"
+      iconCls: 'button_small_ext ss_sprite ss_bpmn_startevent-18x18',
+      id:"x-shapes-startEvent",
+      text: ' ', 
+      width: 22
     },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_interevent',//icon: '/skins/ext/images/gray/shapes/pallete/interevent.png',
-      id:"x-shapes-interEvent"
+      iconCls: 'button_small_ext ss_sprite ss_bpmn_interevent-18x18',
+      id:"x-shapes-interEvent",
+      text: ' ', 
+      width: 22
     },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_endevent',//icon: '/skins/ext/images/gray/shapes/pallete/endevent.png',
-      id:"x-shapes-endEvent"
+      iconCls: 'button_small_ext ss_sprite ss_bpmn_endevent-18x18',
+      id:"x-shapes-endEvent",
+      text: ' ', 
+      width: 22
     },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_gateway',//icon: '/skins/ext/images/gray/shapes/pallete/gateway.png',
-      id:"x-shapes-gateways"
+      iconCls: 'ss_sprite ss_bpmn_gateway-18x18',
+      id:"x-shapes-gateways",
+      text: ' ', 
+      width: 22
     },{
-      iconCls: 'button_large_ext ss_sprite ss_bpmn_annotation',//icon: '/skins/ext/images/gray/shapes/pallete/annotation.png',
-      id:"x-shapes-annotation"
+      iconCls: 'ss_sprite ss_bpmn_annotation-18x18',
+      id:"x-shapes-annotation",
+      text: ' ', 
+      width: 22
     }
   ]
 };
 
+
 actorsPanel = {
-  title: 'Actors',
-  html: '',
-  iconCls: 'ICON_USERS',
-  border: false
-}
+  title: '&nbsp;',//_('ID_ACTORS'),
+  border: true,
+  xtype:'buttongroup',
+  defaultType: 'button',
+  cls: 'btn-panel-pmtoolbar',
+  columns: 1,
+  defaults: {
+    scale: 'small'
+  },
+  items : [
+    {
+      iconCls: 'ICON_USERS',
+      id:"x-pm-users",
+      text: ' ', 
+      width: 22,
+      handler: function(){
+        usersActorsWin.show();
+      }
+    },{
+      iconCls: 'ICON_GROUPS',
+      id:"x-pm-groups",
+      text: ' ', 
+      width: 22,
+      handler: function(){
+        groupsActorsWin.show();
+      }
+    },{
+      iconCls: 'icon-users-adhoc',
+      id:"x-pm-users-adhoc",
+      text: ' ', 
+      width: 22,
+      handler: function(){
+        
+      }
+    },{
+      iconCls: 'icon-groups-adhoc',
+      id:"x-pm-groups-adhoc",
+      text: ' ', 
+      width: 22,
+      handler: function(){
+        
+      }
+    }
+  ]
+};
         
 
 northPanelItems = [
@@ -91,15 +159,23 @@ northPanelItems = [
     text:'Edit',
     //iconCls: '',
     menu: new Ext.menu.Menu({
-      items: [{
-        text: _('ID_SWITCH_EDITOR'),
-        iconCls: 'ss_sprite ss_arrow_switch',
-        handler: function() {
-          if(typeof pro_uid !== 'undefined') {
-            location.href = 'processes/processes_Map?PRO_UID=' +pro_uid+ '&rand=' +Math.random()
+      items: [
+        {
+          text: _('ID_SWITCH_EDITOR'),
+          iconCls: 'ss_sprite ss_arrow_switch',
+          handler: function() {
+            if(typeof pro_uid !== 'undefined') {
+              location.href = 'processes/processes_Map?PRO_UID=' +pro_uid+ '&rand=' +Math.random()
+            }
+          }
+        }, {
+          text: _('ID_SNAP_GEOMETRY'),
+          checked: false, // when checked has a boolean value, it is assumed to be a CheckItem
+          checkHandler: function(item, checked){
+            workflow.setSnapToGeometry(checked);
           }
         }
-      }]
+      ]
     })
   },
   {
@@ -150,7 +226,7 @@ northPanelItems = [
     })
   
   }, 
-  '->',
+  '-',
   {
     text:'Undo',
     iconCls: 'button_menu_ext ss_sprite ss_arrow_undo',
@@ -528,25 +604,23 @@ usersTaskStore = new Ext.data.GroupingStore( {
   });
 
     //connecting context menu  to grid
-  usersTaskGrid.addListener('rowcontextmenu', onDynaformsContextMenu,this);
+  usersTaskGrid.addListener('rowcontextmenu', function(grid, rowIndex, e){
+    e.stopEvent();
+    var coords = e.getXY();
+    usersTaskGridContextMenu.showAt([coords[0], coords[1]]);
+  });
 
   //by default the right click is not selecting the grid row over the mouse
   //we need to set this four lines
   usersTaskGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
     var sm = grid.getSelectionModel();
     sm.selectRow(rowIndex, sm.isSelected(rowIndex));
-  }, this);
+  });
 
   //prevent default
   usersTaskGrid.on('contextmenu', function (evt) {
       evt.preventDefault();
-  }, this);
-
-  onDynaformsContextMenu = function(grid, rowIndex, e) {
-    e.stopEvent();
-    var coords = e.getXY();
-    usersTaskGridContextMenu.showAt([coords[0], coords[1]]);
-  }
+  });
 
   usersTaskGridContextMenu = new Ext.menu.Menu({
     id: 'messageContextMenu',
@@ -659,11 +733,258 @@ usersTaskStore = new Ext.data.GroupingStore( {
     ]
   });
 
+  /*** for actors ***/
+  var usersStore = new Ext.data.Store({
+    autoLoad: true,
+    proxy : new Ext.data.HttpProxy({
+      url: 'processProxy/getUsers?start='+usersPanelStart+'&limit='+usersPanelLimit
+    }),
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'USR_UID'},
+        {name : 'USER'},
+        {name : 'USR_USERNAME'},
+        {name : 'USR_FIRSTNAME'},
+        {name : 'USR_LASTNAME'}
+      ]
+    })
+  });
+
+  usersGrid = new Ext.grid.GridPanel({
+    id       : 'usersGrid',
+
+    height   : 180,
+    stateful : true,
+    stateId  : 'usersGrid',
+    ddGroup  : 'task-assignment',
+    enableDragDrop : true,
+    width: 150,
+    viewConfig : {
+      //forceFit : false
+    },
+    cm : new Ext.grid.ColumnModel({
+      defaults: {
+        width: 200,
+        sortable: true
+      },
+      columns : [
+        {header: 'USR_UID', id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+        {header: 'User', dataIndex: 'USER', width: 249, renderer:function(v,p,r){
+          return _FNF(r.data.USR_USERNAME, r.data.USR_FIRSTNAME, r.data.USR_LASTNAME);
+        }}
+      ]
+    }),
+    store: usersStore,
+    listeners: {
+      render: function(){
+        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+      }
+    },
+    tbar : [
+      new Ext.form.TextField ({
+        id    : 'usersSearchTxt',
+        ctCls :'pm_search_text_field',
+        allowBlank : true,
+        width : 170,
+        emptyText : _('ID_ENTER_SEARCH_TERM'),
+        listeners : {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER)
+              usersSearch();
+          }
+        }
+      }), {
+        text    :'X',
+        ctCls   :'pm_search_x_button',
+        handler : function(){
+          usersStore.setBaseParam( 'search', '');
+          usersStore.load({params:{start : 0 , limit :  usersPanelLimit}});
+          Ext.getCmp('usersSearchTxt').setValue('');
+        }
+      }, {
+        text    :TRANSLATIONS.ID_SEARCH,
+        handler : usersSearch
+      }
+    ]
+    /*,
+    bbar: [new Ext.PagingToolbar({
+      pageSize   : usersPanelLimit,
+      store      : usersStore,
+      displayInfo: true,
+      displayMsg : '{2} Users',
+      emptyMsg   : ''
+    })]*/
+  });
+  
+  groupsStore = new Ext.data.Store( {
+    autoLoad: true,
+    proxy : new Ext.data.HttpProxy({
+      url: 'processProxy/getGroups?start='+usersPanelStart+'&limit='+usersPanelLimit
+    }),
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'GRP_UID'},
+        {name : 'CON_VALUE'}
+      ]
+    })
+  });
+
+  groupsGrid = new Ext.grid.GridPanel({
+    id       : 'groupsGrid',
+    stateful : true,
+    stateId  : 'groupsGrid',
+    ddGroup  : 'task-assignment',
+    height   : 180,
+    width: 150,
+    enableDragDrop : true,
+    viewConfig : {
+      forceFit :false
+    },
+    cm : new Ext.grid.ColumnModel({
+      defaults : {
+        width    : 250,
+        sortable : true
+      },
+      columns: [
+        {id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
+        {header: 'Group', dataIndex: 'CON_VALUE', width: 249}
+      ]
+    }),
+    store : groupsStore,
+    listeners : {
+      render : function(){
+        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+      }
+    },
+    tbar : [
+      new Ext.form.TextField ({
+        id    : 'groupsSearchTxt',
+        ctCls :'pm_search_text_field',
+        allowBlank : true,
+        width : 170,
+        emptyText : _('ID_ENTER_SEARCH_TERM'),
+        listeners : {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER)
+              groupsSearch();
+          }
+        }
+      }), {
+        text    :'X',
+        ctCls   :'pm_search_x_button',
+        handler : function(){
+          groupsStore.setBaseParam( 'search', '');
+          groupsStore.load({params:{start : 0 , limit :  usersPanelLimit}});
+          Ext.getCmp('groupsSearchTxt').setValue('');
+        }
+      }, {
+        text    :TRANSLATIONS.ID_SEARCH,
+        handler : groupsSearch
+      }
+    ]/*,
+    bbar: [new Ext.PagingToolbar({
+      pageSize   : usersPanelLimit,
+      store      : groupsStore,
+      displayInfo: true,
+      displayMsg : '{2} Groups',
+      emptyMsg   : 'No records found'
+    })]*/
+  });
+  
+  _onDropActors = function(ddSource, e, data) {
+    
+    var records = ddSource.dragData.selections;
+    var uids = Array();
+    _TAS_UID = _targetTask.id;
+    _TU_TYPE = 1;
+    
+    Ext.each(records, function(gridRow){
+      if( data.grid.id == 'usersGrid' ) {//some users grid items were dropped    
+        _RELATION = 1;   
+        uids.push(gridRow.data.USR_UID);
+      } else { //some groups grid items were dropped
+        _RELATION = 2;
+        uids.push(gridRow.data.GRP_UID);
+      }
+    });
+
+    uids = uids.join(',');
+
+    
+    Ext.getCmp('eastPanelCenter').setTitle(_('ID_TASK')+': '+_targetTask.name);
+    
+    Ext.Ajax.request({
+      url: 'processProxy/assignActorsTask',
+      success: function(response){
+        var result = Ext.util.JSON.decode(response.responseText);
+        if( result.success ) {
+            PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
+          
+
+            Ext.getCmp('eastPanel').show();
+            Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
+            Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = '';
+            Ext.getCmp('eastPanelTree').getNodeById(_TAS_UID).select();
+            if( _TU_TYPE == 1 ) {
+              Ext.getCmp('usersPanelTabs').setActiveTab(1);
+              Ext.getCmp('usersTaskGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: 1}});
+            } else {
+              Ext.getCmp('usersPanelTabs').setActiveTab(2);
+              Ext.getCmp('usersTaskAdHocGrid').store.reload({params:{tas_uid: _TAS_UID, tu_type: 2}});
+            }
+          
+        } else {
+          PMExt.error(_('ID_ERROR'), result.msg);
+        }
+      },
+      failure: function(){},
+      params: {
+        TAS_UID     : _TAS_UID,
+        TU_TYPE     : _TU_TYPE,
+        TU_RELATION : _RELATION,
+        UIDS        : uids
+      }
+    });
+  }
 
 
-
+   //last
+   usersActorsWin = new Ext.Window({
+      title: 'ACTORS - Users',
+      layout:'fit',
+      width:260, x:45, y:55,
+      height:PMExt.getBrowser().screen.height/2 - 20,
+      closeAction:'hide',
+      plain: true,
+      plugins: [ new Ext.ux.WindowCascade() ],
+      offset: 50,
+      items: [usersGrid]
+    });
+    
+    groupsActorsWin = new Ext.Window({
+      title: 'ACTORS - Groups',
+      layout:'fit',
+      width:260,
+      height:PMExt.getBrowser().screen.height/2 - 20,
+      closeAction:'hide',
+      plain: true,
+      plugins: [ new Ext.ux.WindowCascade() ],
+      offset: 50,
+      items: [groupsGrid]
+    });
 
 })
+
+
+
+//var groupsActorsWin;
+//var adhocUsersActorsWin;
+//var adHocGroupsActorsWin;
+
 //end onReady()
 
 
@@ -750,24 +1071,56 @@ function removeUsersAdHocTask(){
   //});
 }
 
-  function usersSearch()
-  {
-    var search = Ext.getCmp('usersSearchTxt').getValue().trim();
-    if( search == '' ) {
-      PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
-      return;
-    }
-    Ext.getCmp('usersGrid').store.setBaseParam('search', search);
-    Ext.getCmp('usersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
-  }
 
-  function groupsSearch()
-  {
-    var search = Ext.getCmp('groupsSearchTxt').getValue().trim();
-    if( search == '' ) {
-      PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
-      return;
-    }
-    Ext.getCmp('groupsGrid').store.setBaseParam('search', search);
-    Ext.getCmp('groupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+
+function usersSearch()
+{
+  var search = Ext.getCmp('usersSearchTxt').getValue().trim();
+  if( search == '' ) {
+    PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
+    return;
   }
+  Ext.getCmp('usersGrid').store.setBaseParam('search', search);
+  Ext.getCmp('usersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+}
+
+function groupsSearch()
+{
+  var search = Ext.getCmp('groupsSearchTxt').getValue().trim();
+  if( search == '' ) {
+    PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
+    return;
+  }
+  Ext.getCmp('groupsGrid').store.setBaseParam('search', search);
+  Ext.getCmp('groupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+}
+
+
+Ext.namespace('Ext.ux.plugins');
+Ext.ux.WindowCascade = Ext.extend(Object, {
+    constructor: function(offset) {
+    	this.offset = offset;
+    },
+
+    init: function(client) {
+    	client.beforeShow = Ext.Window.prototype.beforeShow.createInterceptor(this.beforeShow);
+    },
+
+    beforeShow: function() {
+    	if ((this.x == undefined) && (this.y == undefined)) {
+    	    var prev;
+    	    this.manager.each(function(w) {
+    	        if (w == this) {
+    	            if (prev) {
+    	            	var o = this.offset || 20;
+    	                var p = prev.getPosition();
+    	                this.x = p[0] + o;
+    	                this.y = p[1] + o;
+    	            }
+    	            return false;
+    	        }
+    	        if (w.isVisible()) prev = w;
+    	    }, this);
+    	}
+    }
+});
