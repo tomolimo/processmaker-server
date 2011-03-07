@@ -389,7 +389,8 @@ InputPort.prototype.onDrop = function (port) {
       newObj = port.parentNode;
       preObj = this.workflow.currentSelection;
       newObj.actiontype = 'updateText';
-      this.workflow.saveShape(newObj);
+      preObj.actiontype = 'updateText';
+      this.workflow.saveShape(preObj);
     }
   }
 };
@@ -1104,7 +1105,7 @@ ButtonInterEvent = function (_30a8) {
   Button.call(this, _30a8, 16, 16);
 };
 ButtonInterEvent.prototype = new Button;
-ButtonInterEvent.prototype.type = "/skins/ext/images/gray/shapes/interevent";
+ButtonInterEvent.prototype.type = "/images/ext/gray/shapes/interevent";
 ButtonInterEvent.prototype.execute = function () {
   var count = 0;
   this.palette.newShapeName = 'bpmnEventEmptyInter';
@@ -1115,7 +1116,7 @@ ButtonEndEvent = function (_30a8) {
     Button.call(this, _30a8, 16, 16);
 };
 ButtonEndEvent.prototype = new Button;
-ButtonEndEvent.prototype.type = "/skins/ext/images/gray/shapes/endevent";
+ButtonEndEvent.prototype.type = "/images/ext/gray/shapes/endevent";
 ButtonEndEvent.prototype.execute = function () {
   var count = 0;
   this.palette.newShapeName = 'bpmnEventEmptyEnd';
@@ -1126,7 +1127,7 @@ ButtonGateway = function (_30a8) {
   Button.call(this, _30a8, 16, 16);
 };
 ButtonGateway.prototype = new Button;
-ButtonGateway.prototype.type = "/skins/ext/images/gray/shapes/gateway-small";
+ButtonGateway.prototype.type = "/images/ext/gray/shapes/gateway-small";
 ButtonGateway.prototype.execute = function () {
   this.palette.newShapeName = 'bpmnGatewayExclusiveData';
   workflow.preSelectedObj = workflow.currentSelection;
@@ -1137,7 +1138,7 @@ ButtonAnnotation = function (_30a8) {
   Button.call(this, _30a8, 16, 16);
 };
 ButtonAnnotation.prototype = new Button;
-ButtonAnnotation.prototype.type = "/skins/ext/images/gray/shapes/annotation";
+ButtonAnnotation.prototype.type = "/images/ext/gray/shapes/annotation";
 ButtonAnnotation.prototype.execute = function () {
   var count = 0;
   this.palette.newShapeName = 'bpmnAnnotation';
@@ -1149,7 +1150,7 @@ ButtonTask = function (_30a8) {
   Button.call(this, _30a8, 16, 16);
 };
 ButtonTask.prototype = new Button;
-ButtonTask.prototype.type = "/skins/ext/images/gray/shapes/Task";
+ButtonTask.prototype.type = "/images/ext/gray/shapes/Task";
 ButtonTask.prototype.execute = function () {
   this.palette.newShapeName = 'bpmnTask';
   bpmnTask.prototype.addShapes(this.palette);
@@ -1160,7 +1161,7 @@ ButtonAdd = function (_30a8) {
   Button.call(this, _30a8, 16, 16);
 };
 ButtonAdd.prototype = new Button;
-ButtonAdd.prototype.type = "/skins/ext/images/gray/shapes/btn-add";
+ButtonAdd.prototype.type = "/images/ext/gray/shapes/btn-add";
 ButtonAdd.prototype.execute = function () {
   this.palette.newShapeName = 'bpmnTask';
   this.palette.workflow.preSelectedObj = this.palette.workflow.currentSelection;
@@ -1171,7 +1172,7 @@ ButtonDelete = function (_30a9) {
   Button.call(this, _30a9, 16, 16);
 };
 ButtonDelete.prototype = new Button;
-ButtonDelete.prototype.type = "/skins/ext/images/gray/shapes/btn-del";
+ButtonDelete.prototype.type = "/images/ext/gray/shapes/btn-del";
 ButtonDelete.prototype.execute = function () {
   workflow.hideResizeHandles();
   workflow.getDeleteCriteria();
@@ -1180,7 +1181,7 @@ ButtonMoveFront = function (_3e22) {
   Button.call(this, _3e22, 16, 16);
 };
 ButtonMoveFront.prototype = new Button;
-ButtonMoveFront.prototype.type = "/skins/ext/images/gray/shapes/btn-movefrnt";
+ButtonMoveFront.prototype.type = "/images/ext/gray/shapes/btn-movefrnt";
 ButtonMoveFront.prototype.execute = function () {
   this.palette.workflow.moveFront(this.palette.workflow.getCurrentSelection());
   ToolGeneric.prototype.execute.call(this);
@@ -1189,7 +1190,7 @@ ButtonMoveBack = function (_4091) {
   Button.call(this, _4091, 16, 16);
 };
 ButtonMoveBack.prototype = new Button;
-ButtonMoveBack.prototype.type = "/skins/ext/images/gray/shapes/btn-movebk";
+ButtonMoveBack.prototype.type = "/images/ext/gray/shapes/btn-movebk";
 ButtonMoveBack.prototype.execute = function () {
   this.palette.workflow.moveBack(this.palette.workflow.getCurrentSelection());
   ToolGeneric.prototype.execute.call(this);

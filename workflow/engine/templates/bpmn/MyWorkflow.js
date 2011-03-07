@@ -1092,8 +1092,11 @@ MyWorkflow.prototype.saveShape= function(oNewShape)
             urlparams = '?action='+actiontype+'&data={"uid":"'+ pro_uid +'","label":"'+newlabel+'","task_uid":"'+ next_uid +'","position":'+pos+'}';
             break;
         case 'updateText':
-            var next_uid = '';
-            var taskUidFrom = workflow.getStartEventConn(oNewShape,'sourcePort','OutputPort');
+            next_uid = '';
+            if(workflow.currentSelection.type == 'bpmnTask')
+                taskUidFrom = workflow.getStartEventConn(oNewShape,'sourcePort','OutputPort');
+            else
+                taskUidFrom = workflow.getStartEventConn(oNewShape,'sourcePort','InputPort');
             if(taskUidFrom.length > 0)
                 next_uid = taskUidFrom[0].value;
             
@@ -1405,6 +1408,7 @@ MyWorkflow.prototype.getStartEventConn = function(oShape,sPort,sPortType)
   //Get all the ports of the shapes
   if( workflow.currentSelection != null && typeof workflow.currentSelection != 'undefined') {
     var ports = workflow.currentSelection.getPorts();
+    //var ports = oShape.getPorts();
     var len   = ports.data.length;
     
     //Get all the connection of the shape
