@@ -400,7 +400,7 @@ INPUT {
 	height:23px;
 	overflow:hidden;
 	background-color:white;
-	background-image:url("/skins/ext/images/gray/window/top-bottom.png");
+	background-image:url("/images/ext/gray/window/top-bottom.png");
 	background-repeat:repeat-x;
 	background-position:0px -1px;
 	border-bottom:0px solid #DBE0E5;
@@ -427,7 +427,7 @@ INPUT {
 	border:0px solid red;
 	z-index:2;
 	cursor:pointer;
-  background:url("/skins/ext/images/gray/panel/tool-sprites.gif") 0 0 no-repeat;
+  background:url("/images/ext/gray/panel/tool-sprites.gif") 0 0 no-repeat;
 }
 .panel_roll___processmaker{
 	position:absolute;
@@ -1551,7 +1551,7 @@ div#toolbar
     height:25px;
 }
 .toolbar_wrapper{
-    background-image:url(http://static.ak.fbcdn.net/images/presence/bar_bg_bw.gif);
+    background-image:url(/images/bar_bg_bw.gif);
     background-position:0 -1px;
     border:1px solid #B5B5B5;
     height:30px;
@@ -1636,7 +1636,7 @@ div#toolbar
   font-family: Arial,serif;
   border:1px solid #aaa;
   # border:2px;
-  background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -1096px transparent;
+  background:url("/images/ext/gray/button/btn.gif") repeat-x scroll 0 -1096px transparent;
 }
 .pagedTableDefault .pagedTable .RowLink a{
 	color:#333;
@@ -1648,12 +1648,12 @@ div#toolbar
 {
   background-color:#AAA;
   border:1px solid #666;
-  background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -2168px transparent;
+  background:url("/images/ext/gray/button/btn.gif") repeat-x scroll 0 -2168px transparent;
 }
 /*FOCUS*/
 .pagedTableDefault .pagedTable .RowLink a:focus,.module_app_button___gray:focus,.button_pm:focus{
   border:1px solid #45626F;
-  background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
+  background:url("/images/ext/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
 /*NO BUTTON*/
 .pagedTableDefault .pagedTable .RowLink a:empty{
@@ -1672,5 +1672,5 @@ div#toolbar
 .pagedTableDefault .pagedTable .RowLink a.module_app_buttonDisabled___gray:hover,
 .module_app_buttonDisabled___gray:hover
 {
-  background:url("/skins/ext/images/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
+  background:url("/images/ext/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
