@@ -188,6 +188,9 @@ Ext.onReady(function(){
     workflow  = new MyWorkflow("paintarea");
     workflow.setEnableSmoothFigureHandling(false);
     //workflow.scrollArea.width = 2000;
+    var listener = new SelectionListener1(workflow);
+    workflow.addSelectionListener(listener);
+
 
     if(typeof pro_uid !== 'undefined') {
       Ext.Ajax.request({
@@ -899,3 +902,24 @@ Ext.onReady(function(){
   }
   
 });
+
+//erik: selection Listener
+SelectionListener1 = function(_43b1){
+  this.workflow = _43b1;
+  this.lastSelectedItem = null;
+};
+
+SelectionListener1.prototype.type = "SelectionListener1";
+SelectionListener1.prototype.onSelectionChanged = function(_43b2) {
+  if (this.lastSelectedItem !== this.workflow.currentSelection.id ) {
+    if( this.workflow.currentSelection.type == 'bpmnTask' || this.workflow.currentSelection.type == 'bpmnSubProcess' ) {
+      this.lastSelectedItem = this.workflow.currentSelection.id;
+      console.log('selecting task: '+this.workflow.currentSelection.taskName);
+      //erik: to set selected the respective node on eastTreePanel
+      var currEatTreeNode = Ext.getCmp('eastPanelTree').getNodeById(this.workflow.currentSelection.id);
+      if( typeof currEatTreeNode != 'undefined' )
+        currEatTreeNode.select();
+    }
+  }
+};
+

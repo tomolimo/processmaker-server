@@ -497,7 +497,11 @@ propertiesGrid.on('afteredit', function afterEdit(r) {
       } else if( type == 'task' && r.record.data.name == 'Title') {
         Ext.getCmp('eastPanelTree').getNodeById(UID).setText(r.value);
         //here we need to find and update the task title into task figure on designer
-
+        //if the current selection is the same node editing the title property
+        
+        if( workflow.currentSelection.id == UID ) { 
+          workflow.currentSelection.taskName = r.value;
+        }
       }
     },
     failure: function(){
@@ -923,7 +927,6 @@ usersTaskStore = new Ext.data.GroupingStore( {
         if( result.success ) {
             PMExt.notify(_('ID_RESPONSABILITIES_ASSIGNMENT'), result.msg);
           
-
             Ext.getCmp('eastPanel').show();
             Ext.getCmp('usersPanelTabs').getTabEl('usersTaskGrid').style.display = '';
             Ext.getCmp('usersPanelTabs').getTabEl('usersTaskAdHocGrid').style.display = '';
