@@ -132,6 +132,7 @@ Ext.onReady(function(){
                     centerPanel
                   ],
                   _setDesignerTitle: function(title) {
+                    title = title.length > 20 ? title.substring(0, 20) + '...' : title;
                     Ext.getCmp('designerTab').setTitle('<b>'+_('ID_PROCESSMAP_TITLE')+': </b> ' + title);
                   }
                 }

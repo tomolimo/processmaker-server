@@ -40,7 +40,6 @@ var adHocGroupsActorsWin;
 
 var _onDropActors;
 var _targetTask;
-var o;
 
 Ext.onReady(function(){
   divScroll = document.body;
@@ -977,15 +976,8 @@ usersTaskStore = new Ext.data.GroupingStore( {
       items: [groupsGrid]
     });
 
-})
-
-
-
-//var groupsActorsWin;
-//var adhocUsersActorsWin;
-//var adHocGroupsActorsWin;
-
-//end onReady()
+});
+//end onReady
 
 
 function removeUsersTask(){
