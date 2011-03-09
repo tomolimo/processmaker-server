@@ -47,9 +47,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
     if( rowSelected ) {
       //location.href = '../dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID+'&bpmn=1'
       var url = 'dynaforms/dynaforms_Editor?PRO_UID='+pro_uid+'&DYN_UID='+rowSelected.data.DYN_UID+'&bpmn=1';
-      var title = rowSelected.data.DYN_TITLE;
-      title = title.length > 20 ? title.substring(0, 20) + '...' : title;
-      Ext.getCmp('mainTabPanel')._addTabFrame(rowSelected.data.DYN_UID, title, url);
+      Ext.getCmp('mainTabPanel')._addTabFrame(rowSelected.data.DYN_UID, rowSelected.data.DYN_TITLE, url);
     } else
       PMExt.error('', _('ID_NO_SELECTION_WARNING'));
   }

@@ -141,6 +141,7 @@ Ext.onReady(function(){
                 alert(option);
               },
               _addTabFrame: tabFrame = function(name, title,  url) {
+                title = title.length > 20 ? title.substring(0, 20) + '...' : title;
                 tabId = 'pm-tab-'+name ;
                 //var uri = 'ajaxListener?action=' + name;
                 var TabPanel = Ext.getCmp('mainTabPanel');
