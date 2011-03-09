@@ -167,7 +167,7 @@ var G_Grid = function(oForm, sGridName) {
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
 
               aObjects[0].setAttribute('id', newID);
-              aObjects[0].setAttribute('value', '');
+              //aObjects[0].setAttribute('value', '');
               aObjects[0].name = newID;
               if (/*@cc_on!@*/0) { // Internet Explorer test (needs to be modified for IE8)
                 aObjects[0].mergeAttributes(document.createElement("<INPUT id='" + newID + "' name='" + newID + "'/>"), false);              
@@ -176,18 +176,13 @@ var G_Grid = function(oForm, sGridName) {
   
               tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
               var attributDefaultValue;
-              if( tags.length == 0 ){ //then it is not a datepicker
+              if( tags.length >= 0 ){ //then it is not a datepicker
                 scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
                 attributes = elementAttributesNS(aObjects[0], 'pm');
-                if(attributes.defaultvalue!= undefined)
+                if(attributes.defaultvalue != undefined && attributes.defaultvalue != '')
                  attributDefaultValue=attributes.defaultvalue;
-              } else {                
-                scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                attributes = elementAttributesNS(aObjects[0],'pm');
-                if(attributes.defaultvalue != undefined)
-                  attributDefaultValue=attributes.defaultvalue;
-                else
-                  attributDefaultValue='';
+                else 
+                 attributDefaultValue='';
               }
 
               if (aObjects[0].type != 'checkbox') {
