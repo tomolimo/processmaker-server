@@ -945,43 +945,13 @@ class AppCacheView extends BaseAppCacheView {
       $rs1->next();
     }
     
-    $needCreateTable = $found == false;
-    
-    //if exists the APP_CACHE_VIEW Table, we need to check if it has the correct number of fields, if not recreate the table
-    $tableRecreated = false;
-    if ( $found ) {
-      $sql="SHOW FIELDS FROM  APP_CACHE_VIEW";  
-      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
-      $rs1->next();
-      $fields = array();     
-      while ( is_array($row = $rs1->getRow() ) ) {
-        $fields[] = $row[0];
-        $rs1->next();
-      }
-      if ( count($fields) != 31 ) {
-      	$needCreateTable = true;
-      }
-    }  
-    
-    if ( $needCreateTable ) {
-      $stmt->executeQuery( "DROP TABLE IF EXISTS `APP_CACHE_VIEW`; ");
-  
-      $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view.sql';
-      if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file app_cache_view.sql doesn't exists ") );
-      $sql = file_get_contents ( $filenameSql );
-      $stmt->executeQuery($sql);
-      $tableRecreated = true;
-      $found = true;
-    }
-    
     //now count how many records there are ..
     $count = '-';
     if ( $found ) {
       $oCriteria = new Criteria('workflow');  
       $count = AppCacheViewPeer::doCount($oCriteria);        
     }
-    return array( 'found' => $found, 'recreated' => $tableRecreated, 'count' => $count );
+    return array( 'found' => $found, 'count' => $count );
 
   }
 
@@ -1005,7 +975,7 @@ class AppCacheView extends BaseAppCacheView {
       $val = str_replace('{lang}', $lang, $val);      
       $stmt->executeQuery($val);
     }
-    
+
     $sql = "select count(*) as CANT from APP_CACHE_VIEW ";  
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
     $rs1->next();

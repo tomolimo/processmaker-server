@@ -83,8 +83,6 @@
       //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.      
       $res = $appCache->checkAppCacheView();
       $result->info[] = array ('name' => 'Table APP_CACHE_VIEW',           'value'=> $res['found']);
-      if ( $res['recreated'] ) 
-        $result->info[] = array ('name' => 'Table APP_CACHE_VIEW recreated', 'value'=> $res['recreated']);
         
       $result->info[] = array ('name' => 'Rows in APP_CACHE_VIEW',       'value'=> $res['count']);
       
