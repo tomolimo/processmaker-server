@@ -229,7 +229,7 @@ pmosExt.prototype.popWebEntry= function(_5678)
   var editForm = new Ext.FormPanel({
     labelWidth    : 120, // label settings here cascade unless overridden
     frame         : true,
-    width         : 585,
+    autoWidth     : true,
     autoHeight    : true,
     defaultType   : 'textfield',
     buttonAlign   : 'center',
@@ -341,6 +341,8 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
     task_uid = oTask[0].value;
   }
   var evn_uid = workflow.currentSelection.id;
+  var case_SCH_UID;
+  var caseSchedulerData;
   
   var newButton = new Ext.Action({
     text: _('ID_NEW_CASE_SCHEDULER'),
@@ -362,7 +364,97 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
   var editButton = new Ext.Action({
     text: _('ID_EDIT'),
     iconCls: 'button_menu_ext ss_sprite ss_pencil',
-    hidden: true
+    hidden: true,
+    handler: function(){
+      var sSCH_UID;
+      if (typeof caseSchedulerData != 'undefined')
+        sSCH_UID = caseSchedulerData.SCH_UID;
+      else
+        sSCH_UID = case_SCH_UID;
+      Ext.Ajax.request({
+        url: 'caseSchedulerProxy/loadCS',
+        params: {SCH_UID: sSCH_UID},
+        success: function(r,o){
+          var res = Ext.decode(r.responseText);
+          if (res.success){
+            editForm.getForm().reset();
+            oPmosExt.hideSchOptions(performFields,(res.data.SCH_OPTION-1));
+            Ext.getCmp('fTask').setText(taskName);
+            editForm.getForm().findField('pro_uid').setValue(pro_uid);
+            editForm.getForm().findField('evn_uid').setValue(evn_uid);
+            editForm.getForm().findField('tas_uid').setValue(task_uid);
+            editForm.getForm().findField('sch_uid').setValue(res.data.SCH_UID);
+            editForm.getForm().findField('fUser').setValue(res.data.SCH_DEL_USER_NAME);
+            editForm.getForm().findField('fDescription').setValue(res.data.SCH_NAME);
+            editForm.getForm().findField('fType').setValue(res.data.SCH_OPTION);
+            editForm.getForm().findField('SCH_START_DATE').setValue(res.data.START_DATE);
+            editForm.getForm().findField('SCH_END_DATE').setValue(res.data.END_DATE);
+            editForm.getForm().findField('SCH_START_TIME').setValue(res.data.EXEC_TIME);
+            for (var i=0; i<7; i++){
+              var name = editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].getName();
+              switch(name){
+                case 'W1': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W1); break;
+                case 'W2': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W2); break;
+                case 'W3': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W3); break;
+                case 'W4': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W4); break;
+                case 'W5': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W5); break;
+                case 'W6': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W6); break;
+                case 'W7': editForm.getForm().findField('SCH_WEEK_DAY').items.items[i].setValue(res.data.W7); break;
+              }  
+            }
+            editForm.getForm().findField('SCH_START_DAY').setValue(res.data.TYPE_CMB);
+            editForm.getForm().findField('SCH_START_DAY_OPT_1').setValue(res.data.EACH_DAY);
+            editForm.getForm().findField('SCH_START_DAY_OPT_2_WEEKS').setValue(res.data.CMB_1);
+            editForm.getForm().findField('SCH_START_DAY_OPT_2_DAYS_WEEK').setValue(res.data.CMB_2);
+            if (res.data.TYPE_CMB === 1){
+              editForm.getForm().findField('SCH_START_DAY_OPT_1').show();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_WEEKS').hide();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_DAYS_WEEK').hide();
+              editForm.getForm().findField('SCH_START_DAY_OPT_1').enable();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_WEEKS').disable();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_DAYS_WEEK').disable();
+            }
+            if (res.data.TYPE_CMB == 2){
+              editForm.getForm().findField('SCH_START_DAY_OPT_1').disable();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_WEEKS').enable();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_DAYS_WEEK').enable();
+              editForm.getForm().findField('SCH_START_DAY_OPT_1').hide();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_WEEKS').show();
+              editForm.getForm().findField('SCH_START_DAY_OPT_2_DAYS_WEEK').show();
+            }
+            for (i=0; i<12; i++){
+              var name = editForm.getForm().findField('SCH_MONTH').items.items[i].getName();
+              switch(name){
+                case 'M1': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M1); break;
+                case 'M2': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M2); break;
+                case 'M3': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M3); break;
+                case 'M4': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M4); break;
+                case 'M5': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M5); break;
+                case 'M6': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M6); break;
+                case 'M7': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M7); break;
+                case 'M8': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M8); break;
+                case 'M9': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M9); break;
+                case 'M10': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M10); break;
+                case 'M11': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M11); break;
+                case 'M12': editForm.getForm().findField('SCH_MONTH').items.items[i].setValue(res.data.M12); break;
+              }  
+            }
+            
+            
+            editForm.show();
+            summaryForm.hide();
+            editButton.disable();
+            deleteButton.disable();
+            changeButton.disable();
+          }else{
+            PMEXt.error(_('ID_CASE_SCHEDULER'), res.msg);
+          }
+        },
+        failure: function(r,o){
+          PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED'));
+        }
+      });
+    }
   });
   
   var changeButton = new Ext.Action({
@@ -370,9 +462,14 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
     iconCls: 'button_menu_ext ss_sprite ss_arrow_switch',
     hidden: true,
     handler: function(){
+      var sSCH_UID;
+      if (typeof caseSchedulerData != 'undefined')
+        sSCH_UID = caseSchedulerData.SCH_UID;
+      else
+        sSCH_UID = case_SCH_UID;
       Ext.Ajax.request({
         url: 'caseSchedulerProxy/changeStatus',
-        params: {SCH_UID: caseSchedulerData.SCH_UID},
+        params: {SCH_UID: sSCH_UID},
         success: function(r,o){
           var respuesta = Ext.decode(r.responseText);
           if (respuesta.success){
@@ -397,9 +494,14 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
       Ext.Msg.confirm(_('ID_CONFIRM'),_('ID_CONFIRM_DELETE_CASE_SCHEDULER'),
           function(btn, text){
         if (btn=='yes'){
+          var sSCH_UID;
+          if (typeof caseSchedulerData != 'undefined')
+            sSCH_UID = caseSchedulerData.SCH_UID;
+          else
+            sSCH_UID = case_SCH_UID;
           Ext.Ajax.request({
             url: 'caseSchedulerProxy/delete',
-            params: {SCH_UID: caseSchedulerData.SCH_UID, EVN_UID: evn_uid},
+            params: {SCH_UID: sSCH_UID, EVN_UID: evn_uid},
             success: function(r,o){
               var rs = Ext.decode(r.responseText);
               if (rs.success){
@@ -438,12 +540,12 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
         PMExt.warning(_('ID_ERROR'), _('ID_USER_CREDENTIALS_REQUIRED'));
         return;
       }
-      //viewport.getEl().mask(_('ID_PROCESSING'));
+      //Ext.getCmp('paintarea').getEl().mask(_('ID_PROCESSING'));
       Ext.Ajax.request({
         url: 'caseSchedulerProxy/checkCredentials',
         params: {PRO_UID: pro_uid, EVN_UID: evn_uid, WS_USER: user, WS_PASS: pass},
         success: function (r,o){
-          //viewport.getEl().unmask();
+          //Ext.getCmp('paintarea').getEl().unmask();
           var resp = Ext.util.JSON.decode(r.responseText);
           if (resp.success){
             editForm.getForm().findField('usr_uid').setValue(resp.msg);
@@ -458,7 +560,10 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
                   Ext.getCmp('status').setText('ACTIVE');
                   Ext.getCmp('next').setText(res.NEXT);
                   Ext.getCmp('last').setText('');
-                  caseSchedulerData.SCH_UID = res.SCH_UID;
+                  if (typeof caseSchedulerData != 'undefined')
+                    caseSchedulerData.SCH_UID = res.SCH_UID;
+                  else
+                    case_SCH_UID = res.SCH_UID;
                   summaryForm.show();
                   newButton.enable();
                   editButton.enable();
@@ -482,7 +587,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
           }
         },
         failure: function (r,o){
-          //viewport.getEl().unmask();
+          //Ext.getCmp('paintarea').getEl().unmask();
           PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED'));
         }
       });
@@ -503,7 +608,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
     }
   });
   
-  var caseSchedulerData;
+  
   
   
   var summaryForm = new Ext.FormPanel({
@@ -576,6 +681,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
             {xtype: 'hidden', name: 'evn_uid'},
             {xtype: 'hidden', name: 'tas_uid'},
             {xtype: 'hidden', name: 'usr_uid'},
+            {xtype: 'hidden', name: 'sch_uid'},
             {name: 'SCH_DAYS_PERFORM_TASK', hidden: true, value: 1},
             {name: 'SCH_WEEK_DAYS', hidden: true},
             {name: 'SCH_MONTHS', hidden: true}
@@ -752,7 +858,7 @@ pmosExt.prototype.popCaseSchedular= function(_5678){
     width          : 600,
     modal          : true,
     items: [summaryForm, editForm],
-    tbar: [newButton/*, editButton*/, deleteButton, changeButton]
+    tbar: [newButton, editButton, deleteButton, changeButton]
   });
   
   workflow.caseSchedulerWindow = caseSchedulerWindow;

@@ -421,8 +421,16 @@ function checkCredentials($params){
     }
     //$aData['SCH_END_DATE'] = "2020-12-30";
     //g::pr($aData);
-    $oCaseScheduler->create($aData);
-    $sch_uid = $oCaseScheduler->getSchUid();
+    $sch_uid = $params->sch_uid;
+    if ($sch_uid !=''){
+      $aData['SCH_UID'] = $sch_uid;
+      $oCaseScheduler->Update($aData);
+      $sw_update = true;
+    }else{
+      $oCaseScheduler->create($aData);
+      $sch_uid = $oCaseScheduler->getSchUid();
+      $sw_update = false;
+    }
 
     if((isset($_POST['form']['CASE_SH_PLUGIN_UID']))&&($_POST['form']['CASE_SH_PLUGIN_UID']!="")){
       $params=explode("--",$_REQUEST ['form']['CASE_SH_PLUGIN_UID']);
@@ -467,7 +475,95 @@ function checkCredentials($params){
     $this->NEXT = $sch->getSchTimeNextRun();
     $this->DESCRIPTION = $sch->getSchName();
     $this->TAS_NAME = $tas_name;
-    $this->msg = G::LoadTranslation('ID_SCHEDULER_SUCCESS_NEW');
+    if ($sw_update)
+      $this->msg = G::LoadTranslation('ID_SCHEDULER_SUCCESS_UPDATE');
+    else
+      $this->msg = G::LoadTranslation('ID_SCHEDULER_SUCCESS_NEW');
+  }
+  
+  function loadCS($params){
+    require_once 'classes/model/CaseScheduler.php';
+	$SCH_UID = $params->SCH_UID;
+    $oCaseScheduler = new CaseScheduler();
+    $data = $oCaseScheduler->load($SCH_UID);
+    $start_date = $data['SCH_START_DATE'];
+    $start_date = date('Y-m-d', strtotime($start_date));
+    $data['START_DATE'] = $start_date;
+    $end_date = $data['SCH_END_DATE'];
+    if ($end_date != ''){
+      $end_date = date('Y-m-d',strtotime($end_date));
+    }
+    $data['END_DATE'] = $end_date;
+    $exec_time = $data['SCH_START_TIME'];
+    $exec_time = date('H:i',strtotime($exec_time));
+    $data['EXEC_TIME'] = $exec_time;
+    
+    $weeks = $data['SCH_WEEK_DAYS'];
+    $week = explode('|', $weeks);
+    $w1 = $w2 = $w3 = $w4 = $w5 = $w6 = $w7 = false;
+    foreach($week as $w){
+      switch($w){
+        case 1: $w1 = true; break;
+        case 2: $w2 = true; break;
+        case 3: $w3 = true; break;
+        case 4: $w4 = true; break;
+        case 5: $w5 = true; break;
+        case 6: $w6 = true; break;
+        case 7: $w7 = true; break;
+      }
+    }
+    $data['W1'] = $w1;
+    $data['W2'] = $w2;
+    $data['W3'] = $w3;
+    $data['W4'] = $w4;
+    $data['W5'] = $w5;
+    $data['W6'] = $w6;
+    $data['W7'] = $w7;
+    
+    $years = $data['SCH_MONTHS'];
+    $year = explode('|',$years);
+    $m1 = $m2 = $m3 = $m4 = $m5 = $m6 = $m7 = $m8 = $m9 = $m10 = $m11 = $m12 = false;
+    foreach ($year as $month){
+      switch($month){
+        case 1: $m1   = true; break;
+        case 2: $m2   = true; break;
+        case 3: $m3   = true; break;
+        case 4: $m4   = true; break;
+        case 5: $m5   = true; break;
+        case 6: $m6   = true; break;
+        case 7: $m7   = true; break;
+        case 8: $m8   = true; break;
+        case 9: $m9   = true; break;
+        case 10: $m10 = true; break;
+        case 11: $m11 = true; break;
+        case 12: $m12 = true; break;
+      }
+    }
+    
+    $data['M1'] = $m1;
+    $data['M2'] = $m2;
+    $data['M3'] = $m3;
+    $data['M4'] = $m4;
+    $data['M5'] = $m5;
+    $data['M6'] = $m6;
+    $data['M7'] = $m7;
+    $data['M8'] = $m8;
+    $data['M9'] = $m9;
+    $data['M10'] = $m10;
+    $data['M11'] = $m11;
+    $data['M12'] = $m12;
+    
+    $start_options = $data['SCH_START_DAY'];
+    $options = explode('|', $start_options);
+    $data['TYPE_CMB'] = $options[0];
+    if ($options[0]==1){
+      $data['EACH_DAY'] = $options[1];
+    }else{
+      $data['CMB_1'] = $options[1];
+      $data['CMB_2'] = $options[2];
+    }
+    $this->success = true;
+    $this->data = $data;
   }
 
 } //End caseSchedulerProxy
