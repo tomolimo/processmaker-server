@@ -774,11 +774,11 @@ antes funcionaba.
 	background-position:0 -8335px !important;
 }
 
-/*icons add alvaro*/
 .ICON_USERS{
 	/*ss_user*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -17173px !important;
+  height:11px;
 }
 
 .ICON_ROLES{
@@ -791,6 +791,7 @@ antes funcionaba.
 	/*ss_group*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -8173px !important;
+  height:11px;
 }
 
 .ICON_DEPARTAMENTS{

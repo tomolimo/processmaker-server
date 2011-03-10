@@ -16,22 +16,23 @@ var propertiesGrid;
 var propertyStore;
 var usersTaskStore;
 var usersTaskGrid;
-var onDynaformsContextMenu;
 var usersTaskGridContextMenu;
 var usersTaskAdHocStore;
 var usersTaskAdHocGrid;
-var onUsersTaskAdHocGridContextMenu;
 var usersTaskAdHocGridContextMenu;
 var mainMenu;
 var tbar1;
 
-var divScroll;
 var usersPanelStart = 0;
-var  usersPanelLimit = 1000;
+var usersPanelLimit = 1000;
 var usersStore;
 var usersGrid;
 var groupsStore;
 var groupsGrid;
+var adHocUsersStore;
+var adHocUsersGrid;
+var adHocGroupsStore;
+var adHocGroupsGrid;
 
 var usersActorsWin;
 var groupsActorsWin;
@@ -118,20 +119,20 @@ actorsPanel = {
         groupsActorsWin.show();
       }
     },{
-      iconCls: 'icon-users-adhoc',
+      iconCls: 'ss_sprite ss_user_suit',
       id:"x-pm-users-adhoc",
       text: ' ', 
       width: 22,
       handler: function(){
-        
+        adHocUsersActorsWin.show();
       }
     },{
-      iconCls: 'icon-groups-adhoc',
+      iconCls: 'ss_sprite ss_group_suit',
       id:"x-pm-groups-adhoc",
       text: ' ', 
       width: 22,
       handler: function(){
-        
+        adHocGroupsActorsWin.show();
       }
     }
   ]
@@ -614,7 +615,6 @@ usersTaskStore = new Ext.data.GroupingStore( {
   });
 
   //by default the right click is not selecting the grid row over the mouse
-  //we need to set this four lines
   usersTaskGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
     var sm = grid.getSelectionModel();
     sm.selectRow(rowIndex, sm.isSelected(rowIndex));
@@ -706,7 +706,11 @@ usersTaskStore = new Ext.data.GroupingStore( {
 
 
     //connecting context menu  to grid
-  usersTaskAdHocGrid.addListener('rowcontextmenu', onUsersTaskAdHocGridContextMenu,this);
+  usersTaskAdHocGrid.addListener('rowcontextmenu', function(grid, rowIndex, e) {
+    e.stopEvent();
+    var coords = e.getXY();
+    usersTaskAdHocGridContextMenu.showAt([coords[0], coords[1]]);
+  },this);
 
   //by default the right click is not selecting the grid row over the mouse
   //we need to set this four lines
@@ -720,12 +724,6 @@ usersTaskStore = new Ext.data.GroupingStore( {
       evt.preventDefault();
   }, this);
 
-  onUsersTaskAdHocGridContextMenu = function(grid, rowIndex, e) {
-    e.stopEvent();
-    var coords = e.getXY();
-    usersTaskAdHocGridContextMenu.showAt([coords[0], coords[1]]);
-  }
-
   usersTaskAdHocGridContextMenu = new Ext.menu.Menu({
     id: 'messagAdHocGrideContextMenu',
     items: [{
@@ -737,8 +735,8 @@ usersTaskStore = new Ext.data.GroupingStore( {
   });
 
   /*** for actors ***/
-  var usersStore = new Ext.data.Store({
-    autoLoad: true,
+  usersStore = new Ext.data.Store({
+    autoLoad: false,
     proxy : new Ext.data.HttpProxy({
       url: 'processProxy/getUsers?start='+usersPanelStart+'&limit='+usersPanelLimit
     }),
@@ -752,21 +750,20 @@ usersTaskStore = new Ext.data.GroupingStore( {
         {name : 'USR_FIRSTNAME'},
         {name : 'USR_LASTNAME'}
       ]
-    })
+    }),
+    listeners: {
+      load: function(){
+        usersActorsWin.setTitle(_('ID_USERS_ACTORS') + ' (' +usersStore.reader.jsonData.totalCount+ ')');
+      }
+    }
   });
 
   usersGrid = new Ext.grid.GridPanel({
     id       : 'usersGrid',
-
     height   : 180,
-    stateful : true,
-    stateId  : 'usersGrid',
     ddGroup  : 'task-assignment',
     enableDragDrop : true,
     width: 150,
-    viewConfig : {
-      //forceFit : false
-    },
     cm : new Ext.grid.ColumnModel({
       defaults: {
         width: 200,
@@ -780,11 +777,7 @@ usersTaskStore = new Ext.data.GroupingStore( {
       ]
     }),
     store: usersStore,
-    listeners: {
-      render: function(){
-        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
-      }
-    },
+    loadMask: {msg:_('ID_LOADING')},
     tbar : [
       new Ext.form.TextField ({
         id    : 'usersSearchTxt',
@@ -820,9 +813,88 @@ usersTaskStore = new Ext.data.GroupingStore( {
       emptyMsg   : ''
     })]*/
   });
+	
+	adHocUsersStore = new Ext.data.Store({
+    autoLoad: false,
+    proxy : new Ext.data.HttpProxy({
+      url: 'processProxy/getUsers?start='+usersPanelStart+'&limit='+usersPanelLimit
+    }),
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'USR_UID'},
+        {name : 'USER'},
+        {name : 'USR_USERNAME'},
+        {name : 'USR_FIRSTNAME'},
+        {name : 'USR_LASTNAME'}
+      ]
+    }),
+    listeners: {
+      load: function(){
+        adHocUsersActorsWin.setTitle(_('ID_ADHOC_USERS_ACTORS') + ' (' +adHocUsersStore.reader.jsonData.totalCount+ ')');
+      }
+    }
+  });
+
+  adHocUsersGrid = new Ext.grid.GridPanel({
+    id       : 'adHocUsersGrid',
+    height   : 180,
+    ddGroup  : 'task-assignment',
+    enableDragDrop : true,
+    width: 150,
+    cm : new Ext.grid.ColumnModel({
+      defaults: {
+        width: 200,
+        sortable: true
+      },
+      columns : [
+        {header: 'USR_UID', id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+        {header: 'User', dataIndex: 'USER', width: 249, renderer:function(v,p,r){
+          return _FNF(r.data.USR_USERNAME, r.data.USR_FIRSTNAME, r.data.USR_LASTNAME);
+        }}
+      ]
+    }),
+    store: adHocUsersStore,
+    loadMask: {msg:_('ID_LOADING')},
+    tbar : [
+      new Ext.form.TextField ({
+        id    : 'adHocUsersSearchTxt',
+        ctCls :'pm_search_text_field',
+        allowBlank : true,
+        width : 170,
+        emptyText : _('ID_ENTER_SEARCH_TERM'),
+        listeners : {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER)
+              adHocUsersSearch();
+          }
+        }
+      }), {
+        text    :'X',
+        ctCls   :'pm_search_x_button',
+        handler : function(){
+          adHocUsersStore.setBaseParam( 'search', '');
+          adHocUsersStore.load({params:{start : 0 , limit :  usersPanelLimit}});
+          Ext.getCmp('adHocUsersSearchTxt').setValue('');
+        }
+      }, {
+        text    :TRANSLATIONS.ID_SEARCH,
+        handler : adHocUsersSearch
+      }
+    ]
+    /*,
+    bbar: [new Ext.PagingToolbar({
+      pageSize   : usersPanelLimit,
+      store      : usersStore,
+      displayInfo: true,
+      displayMsg : '{2} Users',
+      emptyMsg   : ''
+    })]*/
+  });
   
   groupsStore = new Ext.data.Store( {
-    autoLoad: true,
+    autoLoad: false,
     proxy : new Ext.data.HttpProxy({
       url: 'processProxy/getGroups?start='+usersPanelStart+'&limit='+usersPanelLimit
     }),
@@ -833,20 +905,20 @@ usersTaskStore = new Ext.data.GroupingStore( {
         {name : 'GRP_UID'},
         {name : 'CON_VALUE'}
       ]
-    })
+    }),
+    listeners: {
+      load: function(){
+        groupsActorsWin.setTitle(_('ID_GROUPS_ACTORS') + ' (' +groupsStore.reader.jsonData.totalCount+ ')');
+      }
+    }
   });
 
   groupsGrid = new Ext.grid.GridPanel({
     id       : 'groupsGrid',
-    stateful : true,
-    stateId  : 'groupsGrid',
     ddGroup  : 'task-assignment',
     height   : 180,
-    width: 150,
+    width    : 150,
     enableDragDrop : true,
-    viewConfig : {
-      forceFit :false
-    },
     cm : new Ext.grid.ColumnModel({
       defaults : {
         width    : 250,
@@ -858,11 +930,7 @@ usersTaskStore = new Ext.data.GroupingStore( {
       ]
     }),
     store : groupsStore,
-    listeners : {
-      render : function(){
-        this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
-      }
-    },
+    loadMask: {msg:_('ID_LOADING')},
     tbar : [
       new Ext.form.TextField ({
         id    : 'groupsSearchTxt',
@@ -897,16 +965,94 @@ usersTaskStore = new Ext.data.GroupingStore( {
       emptyMsg   : 'No records found'
     })]*/
   });
+	
+	adHocGroupsStore = new Ext.data.Store( {
+    autoLoad: false,
+    proxy : new Ext.data.HttpProxy({
+      url: 'processProxy/getGroups?start='+usersPanelStart+'&limit='+usersPanelLimit
+    }),
+    reader : new Ext.data.JsonReader( {
+      totalProperty: 'totalCount',
+      root: 'data',
+      fields : [
+        {name : 'GRP_UID'},
+        {name : 'CON_VALUE'}
+      ]
+    }),
+    listeners: {
+      load: function(){
+        adHocGroupsActorsWin.setTitle(_('ID_ADHOC_GROUPS_ACTORS') + ' (' +adHocGroupsStore.reader.jsonData.totalCount+ ')');
+      }
+    }
+  });
+
+  adHocGroupsGrid = new Ext.grid.GridPanel({
+    id       : 'adHocGroupsGrid',
+    ddGroup  : 'task-assignment',
+    height   : 180,
+    width    : 150,
+    enableDragDrop : true,
+    cm : new Ext.grid.ColumnModel({
+      defaults : {
+        width    : 250,
+        sortable : true
+      },
+      columns: [
+        {id:'GRP_UID', dataIndex: 'GRP_UID', hidden:true, hideable:false},
+        {header: 'Group', dataIndex: 'CON_VALUE', width: 249}
+      ]
+    }),
+    store : adHocGroupsStore,
+    loadMask: {msg:_('ID_LOADING')},
+    tbar : [
+      new Ext.form.TextField ({
+        id    : 'adHocGroupsSearchTxt',
+        ctCls :'pm_search_text_field',
+        allowBlank : true,
+        width : 170,
+        emptyText : _('ID_ENTER_SEARCH_TERM'),
+        listeners : {
+          specialkey: function(f,e){
+            if (e.getKey() == e.ENTER)
+              adHocGroupsSearch();
+          }
+        }
+      }), {
+        text    :'X',
+        ctCls   :'pm_search_x_button',
+        handler : function(){
+          adHocGroupsStore.setBaseParam( 'search', '');
+          adHocGroupsStore.load({params:{start : 0 , limit :  usersPanelLimit}});
+          Ext.getCmp('adHocGroupsSearchTxt').setValue('');
+        }
+      }, {
+        text    :TRANSLATIONS.ID_SEARCH,
+        handler : adHocGroupsSearch
+      }
+    ]/*,
+    bbar: [new Ext.PagingToolbar({
+      pageSize   : usersPanelLimit,
+      store      : groupsStore,
+      displayInfo: true,
+      displayMsg : '{2} Groups',
+      emptyMsg   : 'No records found'
+    })]*/
+  });
   
   _onDropActors = function(ddSource, e, data) {
     
     var records = ddSource.dragData.selections;
     var uids = Array();
     _TAS_UID = _targetTask.id;
-    _TU_TYPE = 1;
+    
+    if( data.grid.id == 'usersGrid' || data.grid.id == 'groupsGrid') {
+      _TU_TYPE = 1;   
+    } else { //some groups grid items were dropped
+      _TU_TYPE = 2;
+    }      
     
     Ext.each(records, function(gridRow){
-      if( data.grid.id == 'usersGrid' ) {//some users grid items were dropped    
+      if( data.grid.id == 'usersGrid' || data.grid.id == 'adHocUsersGrid') {//some users grid items were dropped    
         _RELATION = 1;   
         uids.push(gridRow.data.USR_UID);
       } else { //some groups grid items were dropped
@@ -956,27 +1102,75 @@ usersTaskStore = new Ext.data.GroupingStore( {
 
    //last
    usersActorsWin = new Ext.Window({
-      title: 'ACTORS - Users',
       layout:'fit',
+      padding: '0 10 0 0',
+      iconCls: 'ICON_USERS',
       width:260, x:45, y:55,
       height:PMExt.getBrowser().screen.height/2 - 20,
       closeAction:'hide',
       plain: true,
       plugins: [ new Ext.ux.WindowCascade() ],
       offset: 50,
-      items: [usersGrid]
+      items: [usersGrid],
+      listeners:{
+        beforerender:function(){
+          usersGrid.store.load();
+        }
+      }
     });
-    
-    groupsActorsWin = new Ext.Window({
-      title: 'ACTORS - Groups',
+	 
+	  adHocUsersActorsWin = new Ext.Window({
       layout:'fit',
+      padding: '0 10 0 0',
+      iconCls: 'ss_sprite ss_user_suit',
       width:260,
       height:PMExt.getBrowser().screen.height/2 - 20,
       closeAction:'hide',
       plain: true,
       plugins: [ new Ext.ux.WindowCascade() ],
       offset: 50,
-      items: [groupsGrid]
+      items: [adHocUsersGrid],
+      listeners:{
+        beforerender:function(){
+          adHocUsersGrid.store.load();
+        }
+      }
+    });
+    
+    groupsActorsWin = new Ext.Window({
+      layout:'fit',
+      padding: '0 10 0 0',
+      iconCls: 'ICON_GROUPS',
+      width:260,
+      height:PMExt.getBrowser().screen.height/2 - 20,
+      closeAction:'hide',
+      plain: true,
+      plugins: [ new Ext.ux.WindowCascade() ],
+      offset: 50,
+      items: [groupsGrid],
+      listeners:{
+        beforerender:function(){
+          groupsGrid.store.load();
+        }
+      }
+    });
+		
+		adHocGroupsActorsWin = new Ext.Window({
+      layout:'fit',
+      padding: '0 10 0 0',
+      iconCls: 'ss_sprite ss_group_suit',
+      width:260,
+      height:PMExt.getBrowser().screen.height/2 - 20,
+      closeAction:'hide',
+      plain: true,
+      plugins: [ new Ext.ux.WindowCascade() ],
+      offset: 50,
+      items: [adHocGroupsGrid],
+      listeners:{
+        beforerender:function(){
+          adHocGroupsGrid.store.load();
+        }
+      }
     });
 
 });
@@ -1071,10 +1265,6 @@ function removeUsersAdHocTask(){
 function usersSearch()
 {
   var search = Ext.getCmp('usersSearchTxt').getValue().trim();
-  if( search == '' ) {
-    PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
-    return;
-  }
   Ext.getCmp('usersGrid').store.setBaseParam('search', search);
   Ext.getCmp('usersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
 }
@@ -1082,12 +1272,22 @@ function usersSearch()
 function groupsSearch()
 {
   var search = Ext.getCmp('groupsSearchTxt').getValue().trim();
-  if( search == '' ) {
-    PMExt.info(_('ID_INFO'), _('ID_ENTER_SEARCH_TERM'));
-    return;
-  }
   Ext.getCmp('groupsGrid').store.setBaseParam('search', search);
   Ext.getCmp('groupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+}
+
+function adHocUsersSearch()
+{
+  var search = Ext.getCmp('adHocUsersSearchTxt').getValue().trim();
+  Ext.getCmp('adHocUsersGrid').store.setBaseParam('search', search);
+  Ext.getCmp('adHocUsersGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
+}
+
+function adHocGroupsSearch()
+{
+  var search = Ext.getCmp('adHocGroupsSearchTxt').getValue().trim();
+  Ext.getCmp('adHocGroupsGrid').store.setBaseParam('search', search);
+  Ext.getCmp('adHocGroupsGrid').store.load({params:{search: search, start : 0 , limit : usersPanelLimit }});
 }
 
 
