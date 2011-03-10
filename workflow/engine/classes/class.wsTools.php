@@ -418,11 +418,11 @@ class workspaceTools {
       $currentUserIsSuper = true;
     }
 
-    CLI::logging("Creating table");
+    CLI::logging("-> Creating table\n");
     //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.
     $res = $appCache->checkAppCacheView();
 
-    CLI::logging(", triggers");
+    CLI::logging("-> Creating triggers\n");
     //now check if we have the triggers installed
     $triggers = array();
     $triggers[] = $appCache->triggerAppDelegationInsert($lang, $checkOnly);
@@ -430,10 +430,9 @@ class workspaceTools {
     $triggers[] = $appCache->triggerApplicationUpdate($lang, $checkOnly);
     $triggers[] = $appCache->triggerApplicationDelete($lang, $checkOnly);
 
-    CLI::logging(", filling cache view");
+    CLI::logging("-> Filling cache view\n");
     //build using the method in AppCacheView Class
     $res = $appCache->fillAppCacheView($lang);
-    CLI::logging(".\n");
     //set status in config table
     $confParams = Array(
       'LANG' => $lang,
@@ -497,10 +496,12 @@ class workspaceTools {
                 count($changes['tablesWithNewIndex']) > 0 ||
                 count($changes['tablesToAlterIndex']) > 0);
     if ($checkOnly || (!$changed)) {
-      if ($changed)
+      if ($changed) {
         return $changes;
-      else
+      } else {
+        CLI::logging("-> Nothing to change\n");
         return $changed;
+      }
     }
 
     $oDataBase = $this->getDatabase();
@@ -508,7 +509,8 @@ class workspaceTools {
 
     $oDataBase->logQuery ( count ($changes ) );
 
-    CLI::logging( "" . count($changes['tablesToAdd']) . " tables to add");
+    if (!empty($changes['tablesToAdd']))
+      CLI::logging( "-> " . count($changes['tablesToAdd']) . " tables to add\n");
     foreach ($changes['tablesToAdd'] as $sTable => $aColumns) {
       $oDataBase->executeQuery($oDataBase->generateCreateTableSQL($sTable, $aColumns));
       if (isset($changes['tablesToAdd'][$sTable]['INDEXES'])) {
@@ -518,7 +520,8 @@ class workspaceTools {
       }
     }
 
-    CLI::logging(", " . count($changes['tablesToAlter']) . " tables to alter");
+    if (!empty($changes['tablesToAlter']))
+      CLI::logging("-> " . count($changes['tablesToAlter']) . " tables to alter\n");
     foreach ($changes['tablesToAlter'] as $sTable => $aActions) {
       foreach ($aActions as $sAction => $aAction) {
         foreach ($aAction as $sColumn => $vData) {
@@ -537,21 +540,22 @@ class workspaceTools {
       }
     }
 
-    CLI::logging(", " . count($changes['tablesWithNewIndex']) . " indexes to add");
+    if (!empty($changes['tablesWithNewIndex']))
+      CLI::logging("-> " . count($changes['tablesWithNewIndex']) . " indexes to add\n");
     foreach ($changes['tablesWithNewIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
 
-    CLI::logging(", " . count($changes['tablesWithNewIndex']) . " indexes to alter");
+    if (!empty($changes['tablesToAlterIndex']))
+      CLI::logging("-> " . count($changes['tablesToAlterIndex']) . " indexes to alter\n");
     foreach ($changes['tablesToAlterIndex'] as $sTable => $aIndexes) {
       foreach ($aIndexes as $sIndexName => $aIndexFields ) {
         $oDataBase->executeQuery($oDataBase->generateDropKeySQL($sTable, $sIndexName ));
         $oDataBase->executeQuery($oDataBase->generateAddKeysSQL($sTable, $sIndexName, $aIndexFields ));
       }
     }
-    CLI::logging("\n");
     $this->closeDatabase();
     return true;
   }
@@ -658,7 +662,7 @@ class workspaceTools {
    *
    * @param   bool $printSysInfo include sys info as well or not
    */
-  public function printMetadata($printSysInfo = true, $fields = NULL) {
+  public function printMetadata($printSysInfo = true) {
     if ($printSysInfo) {
       workspaceTools::printSysInfo ();
       CLI::logging("\n");
