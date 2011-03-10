@@ -706,5 +706,17 @@ class database extends database_base {
     $sql = "";
     return $sql;
   }
-  
+
+  /**
+   * Determining the existence of a table
+   */
+  function tableExists ($table, $db) { 
+    $sql = "SELECT * FROM sysobjects WHERE name='" . $table . "' AND type='u'";
+    $bExists  = true;
+    $oConnection = mssql_connect(DB_HOST, DB_USER, DB_PASS);
+    mssql_select_db(DB_NAME);
+    $oDataset = mssql_query($sql) || ($bExists = false);
+    return $bExists;
+  }  
+
 }

@@ -155,13 +155,22 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     if( $type == 'suggest' && isset($Fields['PME_SQLCONNECTION']) && $Fields['PME_SQLCONNECTION']!='') {
       //define the dbArray with the table fields
       //g::pr($Fields);
-      $con = Propel::getConnection($Fields['PME_SQLCONNECTION']); 
-      $rs = $con->executeQuery("SHOW COLUMNS FROM USERS");
-		  $result = Array();
-			$i=0;
-			while ($rs->next()) {
-			  $result[$i++] = $rs->getRow();
-			}
+      $tableExists  = true;
+      $sDataBase = 'database_' . strtolower(DB_ADAPTER);
+      if(G::LoadSystemExist($sDataBase)){
+        G::LoadSystem($sDataBase);
+        $oDataBase = new database();
+        $tableExists   = $oDataBase->tableExists('USERS', $Fields['PME_SQLCONNECTION']);
+      } 
+      if($tableExists) {
+        $con = Propel::getConnection($Fields['PME_SQLCONNECTION']); 
+        $rs = $con->executeQuery("SHOW COLUMNS FROM USERS");
+	  	  $result = Array();
+		  	$i=0;
+			  while ($rs->next()) {
+			    $result[$i++] = $rs->getRow();
+  			}
+      }
       //g::pr($result);
     }
 
