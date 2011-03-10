@@ -911,6 +911,7 @@ SelectionListener1 = function(_43b1){
 
 SelectionListener1.prototype.type = "SelectionListener1";
 SelectionListener1.prototype.onSelectionChanged = function(_43b2) {
+	if( this.workflow.currentSelection )
   if (this.lastSelectedItem !== this.workflow.currentSelection.id ) {
     if( this.workflow.currentSelection.type == 'bpmnTask' || this.workflow.currentSelection.type == 'bpmnSubProcess' ) {
       this.lastSelectedItem = this.workflow.currentSelection.id;
