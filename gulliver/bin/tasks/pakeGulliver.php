@@ -1857,6 +1857,7 @@ function lookup($target) {
 }
 
 function run_workspace_backup($task, $args) {
+  throw new Exception("Gulliver backup is no longer supported, use processmaker command-line instead.");
   try {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', E_ERROR);
