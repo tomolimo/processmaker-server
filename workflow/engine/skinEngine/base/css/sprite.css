@@ -9,7 +9,7 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 */
 
 .ss_sprite{
-  background-image:url( /images/icons_silk/sprites.png) !important;
+  background-image:url( /images/icons_silk/sprites_edit.png) !important;
   background-repeat:no-repeat;
   display:inline;
   /*height:18px !important;*/
@@ -928,3 +928,4 @@ Sprite modificado de http://ajaxbestiary.com/Labs/SilkSprite/
 .ss_bpmn_annotation-18x18{background-position:1px -18608px !important}
 
 .ss_consolidated_cases{background-position:0 -18500px !important}
+.ss_group_suit{background-position:0 -18626px !important}
