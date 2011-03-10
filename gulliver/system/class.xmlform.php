@@ -258,7 +258,6 @@ class XmlForm_Field {
       return 1;
     if ($this->sql === '')
       return 1;
-
     if (! $this->sqlConnection)
       $this->sqlConnection = 'workflow';
 
@@ -995,6 +994,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
   {
 
     //echo $this->sqlConnection;
+    if (! $this->sqlConnection)
+      $this->sqlConnection = 'workflow';
 
     //NOTE: string functions must be in G class
     if ($this->strTo === 'UPPER')

@@ -714,4 +714,17 @@ class database extends database_base {
     return $sql;
   }
   
+  /**
+   * Determining the existence of a table
+   */
+  function tableExists ($table, $db) { 
+    $tables = mysql_list_tables ($db); 
+    while (list ($temp) = @mysql_fetch_array ($tables)) {
+        if ($temp == $table) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+  }
+  
 }

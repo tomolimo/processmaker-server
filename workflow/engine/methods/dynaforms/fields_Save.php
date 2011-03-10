@@ -59,7 +59,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     $_POST['form']['PME_SAVELABEL'] = 0;
   }
 
-  if (isset($_POST['form']['PME_SAVELABEL'])){
+  if (isset($_POST['form']['PME_SAVELABEL']) && isset($_POST['form']['PME_CODE'])){
     $pmeCode = $_POST['form']['PME_CODE'];
     $pmeCode = str_replace("'", "''", $pmeCode);
     $pmeCode = str_replace('"', '""', $pmeCode);
