@@ -38,7 +38,7 @@ $CalendarUid = str_replace ( '"', '', isset ( $_GET ['id'] ) ? $_GET ['id'] : G:
 G::LoadClass ( 'calendar' );
 $calendarObj = new calendar ( );
 if ((isset ( $_GET ['id'] )) && ($_GET ['id'] != "")) {
-	$fields = $calendarObj->getCalendarInfo ( $CalendarUid );
+	$fields = $calendarObj->getCalendarInfoE ( $CalendarUid );
         $fields ['OLD_NAME'] = $fields['CALENDAR_NAME'];
 }
 
