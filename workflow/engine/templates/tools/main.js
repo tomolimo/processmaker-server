@@ -1,4 +1,4 @@
-var win;
+var newLabelWin;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
@@ -85,7 +85,11 @@ Ext.onReady(function(){
       {
         text:_('ID_ADD'),
         iconCls: 'button_menu_ext ss_sprite ss_add',
-        handler: newLabel
+        handler: function(){
+          Ext.getCmp('id').setValue('');
+          Ext.getCmp('label').setValue('');
+          newLabelWin.show();
+        }
       },{
         text:_('ID_REMOVE'),
         iconCls: 'button_menu_ext ss_sprite  ss_delete',
@@ -210,50 +214,45 @@ var edit = function(){
   });
 }
 
-function newLabel()
-{
-  var frm = new Ext.FormPanel( {
-    id: 'formNew',
-    labelAlign : 'right',
-    labelWidth : 100,
-    width : 400,
-    items : [ {
-        id: 'id',
-        fieldLabel: 'ID', 
-        xtype:'textfield',
-        width: 350  
-      },  {
-        id: 'label',
-        fieldLabel: 'Label',
-        xtype:'textarea',
-        width: 350,
-        height: 50
-      }
-    ],
-    buttons : [{
-      text : _('ID_SAVE'),
-      handler : saveNew
-    },{
-      text : _('ID_CANCEL'),
-      handler : function() {
-        win.close();
-      }
-    }]   
-  });
+var frm = new Ext.FormPanel( {
+  id: 'formNew',
+  labelAlign : 'right',
+  labelWidth : 100,
+  width : 400,
+  items : [ {
+      id: 'id',
+      fieldLabel: 'ID', 
+      xtype:'textfield',
+      width: 350  
+    },  {
+      id: 'label',
+      fieldLabel: 'Label',
+      xtype:'textarea',
+      width: 350,
+      height: 50
+    }
+  ],
+  buttons : [{
+    text : _('ID_SAVE'),
+    handler : saveNew
+  },{
+    text : _('ID_CANCEL'),
+    handler : function() {
+      newLabelWin.hide();
+    }
+  }]   
+});
 
-  win = new Ext.Window({
-    //id: 'winNew',
-    title: _('ID_NEW'),
-    width: 490,
-    height: 150,
-    layout:'fit',
-    autoScroll:true,
-    modal: true,
-    maximizable: false,
-    items: [frm]
-  });
-  win.show();
-}
+newLabelWin = new Ext.Window({
+  title: 'New Translation',
+  layout:'fit',
+  title: _('ID_NEW'),
+  width: 490,
+  height: 150,
+  closeAction:'hide',
+  plain: true,
+  items: [frm]
+});
 
 function doSearch(){
   var filter = Ext.getCmp('searchTxt').getValue();
@@ -275,7 +274,7 @@ function saveNew()
     success : function(obj, resp) {
       Ext.getCmp('grid').store.reload();
       PMExt.notify('SAVE', resp.result.msg);
-      win.hide();
+      newLabelWin.hide();
     },
     failure: function(obj, resp) {
       Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
