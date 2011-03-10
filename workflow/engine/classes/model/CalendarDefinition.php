@@ -97,11 +97,59 @@ class CalendarDefinition extends BaseCalendarDefinition {
     $CalendarHolidays = $CalendarHolidaysObj->getCalendarHolidays ( $CalendarUid );
     $fields ['HOLIDAY'] = $CalendarHolidays;
     
+    $fields=$this->validateCalendarInfo($fields, $defaultCalendar);
+
+    return $fields;
+
+  }
+  //start edit
+function getCalendarInfoE($CalendarUid) {
+    //if exists the row in the database propel will update it, otherwise will insert.
+    $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+    
+    $defaultCalendar ['CALENDAR_UID'] = "00000000000000000000000000000001";
+      $defaultCalendar ['CALENDAR_NAME'] = "Default";
+      $defaultCalendar ['CALENDAR_CREATE_DATE'] = date ( "Y-m-d" );
+      $defaultCalendar ['CALENDAR_UPDATE_DATE'] = date ( "Y-m-d" );
+      $defaultCalendar ['CALENDAR_DESCRIPTION'] = "Default";
+      $defaultCalendar ['CALENDAR_STATUS'] = "ACTIVE";
+      $defaultCalendar ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
+      $defaultCalendar ['CALENDAR_WORK_DAYS'] = explode ( "|", "1|2|3|4|5" );
+      $defaultCalendar ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_DAY'] = 7;
+      $defaultCalendar ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_START'] = "09:00";
+      $defaultCalendar ['BUSINESS_DAY'] [1] ['CALENDAR_BUSINESS_END'] = "17:00";
+      $defaultCalendar ['HOLIDAY'] = array ();
+
+    if ((is_object ( $tr ) && get_class ( $tr ) == 'CalendarDefinition')) {
+      $fields ['CALENDAR_UID'] = $tr->getCalendarUid ();
+      $fields ['CALENDAR_NAME'] = $tr->getCalendarName ();
+      $fields ['CALENDAR_CREATE_DATE'] = $tr->getCalendarCreateDate ();
+      $fields ['CALENDAR_UPDATE_DATE'] = $tr->getCalendarUpdateDate ();
+      $fields ['CALENDAR_DESCRIPTION'] = $tr->getCalendarDescription ();
+      $fields ['CALENDAR_STATUS'] = $tr->getCalendarStatus ();
+      $fields ['CALENDAR_WORK_DAYS'] = $tr->getCalendarWorkDays ();
+      $fields ['CALENDAR_WORK_DAYS_A'] = explode ( "|", $tr->getCalendarWorkDays () );
+    } else {
+      $fields=$defaultCalendar;
+      $this->saveCalendarInfo ( $fields );
+      $fields ['CALENDAR_WORK_DAYS'] = "1|2|3|4|5";
+      $fields ['CALENDAR_WORK_DAYS_A'] = explode ( "|", "1|2|3|4|5" );
+      $tr = CalendarDefinitionPeer::retrieveByPK ( $CalendarUid );
+    }
+    $CalendarBusinessHoursObj = new CalendarBusinessHours ( );
+    $CalendarBusinessHours = $CalendarBusinessHoursObj->getCalendarBusinessHours ( $CalendarUid );
+    $fields ['BUSINESS_DAY'] = $CalendarBusinessHours;
+
+    $CalendarHolidaysObj = new CalendarHolidays ( );
+    $CalendarHolidays = $CalendarHolidaysObj->getCalendarHolidays ( $CalendarUid );
+    $fields ['HOLIDAY'] = $CalendarHolidays;
+    
     //$fields=$this->validateCalendarInfo($fields, $defaultCalendar);
 
     return $fields;
 
   }
+  //end edit
   function validateCalendarInfo($fields,$defaultCalendar){
     try {
       //Validate if Working days are Correct
