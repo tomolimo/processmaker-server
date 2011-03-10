@@ -71,7 +71,7 @@ CLI::taskArg('workspace', true);
 CLI::taskOpt("overwrite", "If a workspace already exists, overwrite it.", "o", "overwrite");
 CLI::taskOpt("info", "Only shows information about a backup archive.", "i");
 CLI::taskOpt("workspace", "Select which workspace to restore if multiple workspaces are present in the archive.",
-             "w", "workspace");
+             "w:", "workspace=");
 CLI::taskRun(run_workspace_restore);
 
 CLI::taskName('cacheview-repair');

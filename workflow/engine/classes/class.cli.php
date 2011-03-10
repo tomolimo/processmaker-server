@@ -215,8 +215,10 @@ EOT;
     }
     list($options, $arguments) = $getopt;
     foreach ($taskData['opt']['descriptions'] as $optName => $optDescription) {
-      $validOpts[$optDescription['short']] = $optName;
-      $validOpts[$optDescription['long']] = $optName;
+      $short = str_replace(":", "", $optDescription['short']);
+      $long = str_replace("=", "", $optDescription['long']);
+      $validOpts[$short] = $optName;
+      $validOpts[$long] = $optName;
     }
     $taskOpts = array();
     try {
@@ -229,7 +231,7 @@ EOT;
         if (strpos($optName, '--') === 0)
           $optName = substr($optName, 2);
         if (!array_key_exists($optName, $validOpts))
-          throw new Exception("Invalid option: $optName");
+          throw new Exception("option not found: $optName");
         if (array_key_exists($validOpts[$optName], $taskOpts))
           throw new Exception("'$optName' specified more then once");
         $taskOpts[$validOpts[$optName]] = $optArg;
@@ -253,6 +255,15 @@ EOT;
    */
   public static function info($message) {
     return pakeColor::colorize($message, "INFO");
+  }
+
+  /**
+   * Returns a warning colorized version of the message.
+   *
+   * @param  string $message the message to colorize
+   */
+  public static function warning($message) {
+    return pakeColor::colorize($message, "COMMENT");
   }
 
   /**

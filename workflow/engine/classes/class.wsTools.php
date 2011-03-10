@@ -145,7 +145,6 @@ class workspaceTools {
     $this->resetDBNames = $resetDBNames;
     $this->resetDBDiff = array();
 
-    CLI::logging("Resetting db info\n");
     if (!$this->workspaceExists())
       throw new Exception("Could not find db.php in the workspace");
     $sDbFile = file_get_contents($this->dbPath);
@@ -891,6 +890,19 @@ class workspaceTools {
     }
   }
 
+  static public function dirPerms($filename, $owner, $group, $perms) {
+    $chown = chown($filename, $owner);
+    $chgrp = chgrp($filename, $group);
+    $chmod = chmod($filename, $perms);
+    if ($chgrp === false || $chmod === false || $chown === false)
+      CLI::logging (CLI::error ("Failed to set permissions for $filename") . "\n");
+    if (is_dir($filename)) {
+      foreach (glob($filename . "/*") as $item) {
+        workspaceTools::dirPerms($item, $owner, $group, $perms);
+      }
+    }
+  }
+
   /**
    * restore an archive into a workspace
    *
@@ -926,7 +938,7 @@ class workspaceTools {
     }
     if (count($metaFiles) > 1 && (!isset($srcWorkspace)))
       throw new Exception("Multiple workspaces in backup but no workspace specified to restore");
-    if (isset($srcWorkspace) && !in_array("$srcWorkspace.meta", $metaFiles))
+    if (isset($srcWorkspace) && !in_array("$srcWorkspace.meta", array_map(basename, $metaFiles)))
       throw new Exception("Workspace $srcWorkspace not found in backup");
     foreach ($metaFiles as $metaFile) {
       $metadata = G::json_decode(file_get_contents($metaFile));
@@ -941,15 +953,15 @@ class workspaceTools {
         $createWorkspace = false;
       }
       if (isset($srcWorkspace) && strcmp($metadata->WORKSPACE_NAME, $srcWorkspace) != 0) {
-        CLI::logging("Workspace $backupWorkspace found, but not restoring.\n");
+        CLI::logging(CLI::warning("> Workspace $backupWorkspace found, but not restoring.") . "\n");
         continue;
       } else {
-        CLI::logging("Restoring $backupWorkspace to $workspaceName\n");
+        CLI::logging("> Restoring " . CLI::info($backupWorkspace) . " to " . CLI::info($workspaceName) . "\n");
       }
       $workspace = new workspaceTools($workspaceName);
       if ($workspace->workspaceExists())
         if ($overwrite)
-          CLI::logging("Workspace $workspaceName already exists, overwriting!\n");
+          CLI::logging(CLI::warning("> Workspace $workspaceName already exists, overwriting!") . "\n");
         else
           throw new Exception("Destination workspace already exists (use -o to overwrite)");
 
@@ -957,16 +969,24 @@ class workspaceTools {
         G::rm_dir($workspace->path);
 
       foreach ($metadata->directories as $dir) {
-        CLI::logging("Restoring directory '$dir'\n");
+        CLI::logging("+> Restoring directory '$dir'\n");
 
         if (!rename("$tempDirectory/$dir", $workspace->path)) {
           throw new Exception("There was an error copying the backup files ($tempDirectory/$dir) to the workspace directory {$workspace->path}.");
         }
+
       }
+
+      CLI::logging("> Changing file permissions\n");
+      $shared_stat = stat(PATH_DATA);
+      if ($shared_stat !== false)
+        workspaceTools::dirPerms($workspace->path, $shared_stat['uid'], $shared_stat['gid'], $shared_stat['mode']);
+      else
+        CLI::logging(CLI::error ("Could not get the shared folder permissions, not changing workspace permissions") . "\n");
 
       list($dbHost, $dbUser, $dbPass) = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
 
-      CLI::logging("Connecting to system database in '$dbHost'\n");
+      CLI::logging("> Connecting to system database in '$dbHost'\n");
       $link = mysql_connect($dbHost, $dbUser, $dbPass);
       if (!$link)
         throw new Exception('Could not connect to system database: ' . mysql_error());
@@ -975,7 +995,7 @@ class workspaceTools {
       
       foreach ($metadata->databases as $db) {
         $dbName = $newDBNames[$db->name];
-        CLI::logging("Restoring database {$db->name} to $dbName\n");
+        CLI::logging("+> Restoring database {$db->name} to $dbName\n");
         $workspace->executeSQLScript($dbName, "$tempDirectory/{$db->name}.sql");
         $workspace->createDBUser($dbName, $db->pass, "localhost", $dbName);
         $workspace->createDBUser($dbName, $db->pass, "%", $dbName);
@@ -984,8 +1004,12 @@ class workspaceTools {
       mysql_close($link);
 
     }
-    
+
+    CLI::logging("Removing temporary files\n");
+
     G::rm_dir($tempDirectory);
+
+    CLI::logging(CLI::info("Done restoring") . "\n");
   }
 
 }
