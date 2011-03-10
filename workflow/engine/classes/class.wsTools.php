@@ -702,11 +702,15 @@ class workspaceTools {
    */
   private function addToBackup($backup, $filename, $pathRoot, $archiveRoot = "") {
     if (is_file($filename)) {
+      CLI::logging("-> $filename\n");
       $backup->addModify($filename, $archiveRoot, $pathRoot);
     } else {
-      foreach (glob($filename . "/*") as $item) {
-        $this->addToBackup($backup, $item, $pathRoot, $archiveRoot);
-      }
+      CLI::logging(" + $filename\n");
+      $backup->addModify($filename, $archiveRoot, $pathRoot);
+      //foreach (glob($filename . "/*") as $item) {
+      //  $this->addToBackup($backup, $item, $pathRoot, $archiveRoot);
+      //}
+
     }
   }
 
@@ -826,6 +830,7 @@ class workspaceTools {
    * @param   string $database the database to execute this script into
    */
   private function executeSQLScript($database, $filename) {
+    mysql_query("CREATE DATABASE IF NOT EXISTS " . mysql_real_escape_string($database));
     mysql_select_db($database);
     $script = file_get_contents($filename);
     $lines = explode("\n", $script);
@@ -908,26 +913,28 @@ class workspaceTools {
     //Search for metafiles in the new standard (the old standard would contain
     //txt files).
     $metaFiles = glob($tempDirectory . "/*.meta");
-    print_r($metaFiles);
     if (empty($metaFiles)) {
       $metaFiles = glob($tempDirectory . "/*.txt");
       if (!empty($metaFiles))
         return workspaceTools::restoreLegacy($tempDirectory);
       else
         throw new Exception("No metadata found in backup");
+    } else {
+      CLI::logging("Found " . count($metaFiles) . " workspaces in backup:\n");
+      foreach ($metaFiles as $metafile)
+        CLI::logging("-> " . basename($metafile) . "\n");
     }
-    if (isset($srcWorkspace) && count($metaFiles) > 0)
+    if (count($metaFiles) > 1 && (!isset($srcWorkspace)))
       throw new Exception("Multiple workspaces in backup but no workspace specified to restore");
     if (isset($srcWorkspace) && !in_array("$srcWorkspace.meta", $metaFiles))
       throw new Exception("Workspace $srcWorkspace not found in backup");
     foreach ($metaFiles as $metaFile) {
       $metadata = G::json_decode(file_get_contents($metaFile));
-      print_r($metadata);
       if ($metadata->version != 1)
         throw new Exception("Backup version {$metadata->version} not supported");
       $backupWorkspace = $metadata->WORKSPACE_NAME;
-      if (isset($srcWorkspace)) {
-        $workspaceName = $srcWorkspace;
+      if (isset($dstWorkspace)) {
+        $workspaceName = $dstWorkspace;
         $createWorkspace = true;
       } else {
         $workspaceName = $metadata->WORKSPACE_NAME;
@@ -944,7 +951,7 @@ class workspaceTools {
         if ($overwrite)
           CLI::logging("Workspace $workspaceName already exists, overwriting!\n");
         else
-          throw new Exception("Destination workspace already exists and not overwriting");
+          throw new Exception("Destination workspace already exists (use -o to overwrite)");
 
       if (file_exists($workspace->path))
         G::rm_dir($workspace->path);
@@ -959,7 +966,7 @@ class workspaceTools {
 
       list($dbHost, $dbUser, $dbPass) = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
 
-      CLI::logging("Connecting to system database in $dbHost\n");
+      CLI::logging("Connecting to system database in '$dbHost'\n");
       $link = mysql_connect($dbHost, $dbUser, $dbPass);
       if (!$link)
         throw new Exception('Could not connect to system database: ' . mysql_error());
