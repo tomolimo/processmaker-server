@@ -1224,592 +1224,494 @@ ProcessOptions.prototype.dbConnection = function()
 
 ProcessOptions.prototype.addInputDoc= function(_5625)
 {
+  var gridWidow; 
+  var inputDocGrid;
+  var inputDocStore;
+  var expander;
+  var inputDocColumns;
+  var render_version;
+  var newButton;
+  var editButton;
+  var deleteButton;
+  var saveButton;
+  var cancelButton;
+  var smodel;
+  var bbarpaging;
+  var idocsContextMenu;
+  var newIDocWindow;
+  var inputDocForm;
   
-  var inpDocFields = Ext.data.Record.create([
-    {
-        name: 'INP_DOC_UID',
-        type: 'string'
-    },
-    {
-        name: 'PRO_UID',
-        type: 'string'
-    },
-    {
-        name: 'INP_DOC_TITLE',
-        type: 'string'
-    },
-    {
-        name: 'INP_DOC_DESCRIPTION',
-        type: 'string'
-    },{
-        name: 'INP_DOC_VERSIONING',
-        type: 'string'
-    },{
-        name: 'INP_DOC_DESTINATION_PATH',
-        type: 'string'
+  //Renderer for Versioning Field
+  render_version = function(value){
+    var out = '';
+    switch(value){
+      case '0': out = 'No'; break;
+      case '1': out = 'Yes'; break;
     }
-  ]);
-
-  var editor = new Ext.ux.grid.RowEditor({
-    saveText: _('ID_UPDATE')
-  });
-
-  var btnAdd = new Ext.Button({
-    id   : 'btnAdd',
+    return out;
+  }
+  
+  
+  
+  newButton = new Ext.Action({
     text : _('ID_NEW'),
     iconCls: 'button_menu_ext ss_sprite ss_add',
-    handler: function () {
-      newIOWindow.show();
+    handler: function(){
       inputDocForm.getForm().reset();
-      inputDocForm.getForm().items.items[2].hide();
-      inputDocForm.getForm().items.items[2].getEl().up('.x-form-item').setDisplayed(false); // show label            
-      inputDocForm.getForm().items.items[0].focus('',200); 
+      Ext.getCmp('idoc_FORM_NEEDED').setValue('VIRTUAL');
+      Ext.getCmp('idoc_VERSIONING').setValue('0');
+      inputDocForm.getForm().findField('INP_DOC_TAGS').setValue('INPUT');
+      inputDocForm.getForm().findField('PRO_UID').setValue(pro_uid);
+      newIDocWindow.setTitle(_('ID_NEW_INPUTDOCS'));
+      newIDocWindow.show();
     }
   });
-
-  //edit input document Function
-  var editInputDoc = function() {
-    editor.stopEditing();
-    var rowSelected  = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
-    if( rowSelected.length == 0 ) {
-      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
-      return false;
-    }
-    var inputDocUID = rowSelected[0].get('INP_DOC_UID');
-    inputDocForm.form.load({
-      url     : 'bpmn/proxyExtjs.php?INP_DOC_UID=' +inputDocUID+'&action=editInputDocument',
-      method  : 'GET',
-      waitMsg : 'Loading',
-      success : function(form, action) {
-         newIOWindow.show();
-         Ext.getCmp("INP_DOC_UID").setValue(inputDocUID);
-      },
-      failure:function(form, action) {
-          PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED') );
-      }
-    });
-  }
-
-  var removeInputDoc = function(){
-    ids = Array();
-    
-    editor.stopEditing();
-    var rowsSelected = Ext.getCmp('inputdocGrid').getSelectionModel().getSelections();
-    
-    if( rowsSelected.length == 0 ) {
-      PMExt.error('', _('ID_NO_SELECTION_WARNING'));
-      return false;
-    }
-
-    for(i=0; i<rowsSelected.length; i++)
-      ids[i] = rowsSelected[i].get('INP_DOC_UID');
-
-    ids = ids.join(',');
-
-    //First check whether selected Dynaform is assigned to a task steps or not.
-    Ext.Ajax.request({
-      url   : '../inputdocs/inputdocs_Delete.php',
-      method: 'POST',
-      params: {
-        functions : 'getRelationInfDoc',
-        INP_DOC_UID   : ids
-      },
-      success: function(response) {
-        var result = Ext.util.JSON.decode(response.responseText);
-        if( result.success ) {
-          if( result.passed ) { //deleting the selected input document
-            PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_INPUTDOCUMENT_CONFIRM'), function(){
-              Ext.Ajax.request({
-                url   : '../inputdocs/inputdocs_Delete.php',
-                method: 'POST',
-                params: {
-                  functions      : 'deleteInputDocument',
-                  INP_DOC_UID        : ids
-                },
-                success: function(response) {
-                  var result = Ext.util.JSON.decode(response.responseText);
-                  if( result.success ){
-                    PMExt.notify( _('ID_STATUS') , result.msg);
-
-                    //Reloading store after deleting input document
-                    inputDocStore.reload();
-                  } else {
-                    PMExt.error(_('ID_ERROR'), result.msg);
-                  }
-                }
-              });
-            });
-          } 
-          else {
-            PMExt.error(_('ID_VALIDATION_ERROR'), result.msg);
+  
+  editButton = new Ext.Action({
+    text : _('ID_EDIT'),
+    iconCls: 'button_menu_ext ss_sprite ss_pencil',
+    disabled: true,
+    handler: function(){
+      Ext.getCmp('designerTab').getEl().mask(_('ID_PROCESSING'));
+      rowselected = inputDocGrid.getSelectionModel().getSelected();
+      Ext.Ajax.request({
+        url: 'processOptionsProxy/loadInputDoc',
+        params: {IDOC_UID: rowselected.data.INP_DOC_UID},
+        success: function(r,o){
+          Ext.getCmp('designerTab').getEl().unmask();
+          var res = Ext.decode(r.responseText);
+          if (res.success){
+            inputDocForm.getForm().reset();
+            Ext.getCmp('idoc_FORM_NEEDED').setValue(res.data.INP_DOC_FORM_NEEDED);
+            if (res.data.INP_DOC_FORM_NEEDED != 'VIRTUAL'){
+              Ext.getCmp('formType').setValue(res.data.INP_DOC_ORIGINAL);
+              Ext.getCmp("formType").enable();
             }
-        } 
-        else {
-          PMExt.error(_('ID_ERROR'), result.msg);
+            Ext.getCmp('idoc_VERSIONING').setValue(res.data.INP_DOC_VERSIONING);
+            inputDocForm.getForm().findField('INP_DOC_TITLE').setValue(res.data.INP_DOC_TITLE);
+            inputDocForm.getForm().findField('INP_DOC_DESCRIPTION').setValue(res.data.INP_DOC_DESCRIPTION);
+            inputDocForm.getForm().findField('INP_DOC_DESTINATION_PATH').setValue(res.data.INP_DOC_DESTINATION_PATH);
+            inputDocForm.getForm().findField('INP_DOC_TAGS').setValue(res.data.INP_DOC_TAGS);
+            inputDocForm.getForm().findField('INP_DOC_UID').setValue(res.data.INP_DOC_UID);
+            inputDocForm.getForm().findField('PRO_UID').setValue(pro_uid);
+            newIDocWindow.setTitle(_('ID_EDIT_INPUTDOCS'));
+            newIDocWindow.show();
+          }else{
+            PMExt.notify(_('ID_REQUEST_DOCUMENTS'),res.msg);
+          }
+        },
+        failure: function(r,o){
+          Ext.getCmp('designerTab').getEl().unmask();
+          PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED'));
         }
-      }
-    });
-  }
-
-   //edit input document button
-  var btnEdit = new Ext.Button({
-    id: 'btnEdit',
-    text: _('ID_EDIT'),
-    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
-    handler: editInputDoc
+      });
+    }
   });
-
-  var btnRemove = new Ext.Button({
-    id: 'btnRemove',
-    text: _('ID_DELETE'),
+  
+  deleteButton = new Ext.Action({
+    text : _('ID_DELETE'),
     iconCls: 'button_menu_ext ss_sprite ss_delete',
-    handler: removeInputDoc
+    disabled: true,
+    handler : function(){
+      Ext.getCmp('designerTab').getEl().mask(_('ID_PROCESSING'));
+      rowselected = inputDocGrid.getSelectionModel().getSelected();
+      Ext.Ajax.request({
+        url: 'processOptionsProxy/canDeleteInputDoc',
+        params: {PRO_UID: pro_uid, IDOC_UID: rowselected.data.INP_DOC_UID},
+        success: function(r,o){
+          Ext.getCmp('designerTab').getEl().unmask();
+          var res = Ext.decode(r.responseText);
+          if (res.success){
+            Ext.Msg.confirm(_('ID_CONFIRM'),_('ID_CONFIRM_DELETE_INPUT_DOC'), function(btn, text){
+              if (btn=='yes'){
+                Ext.getCmp('designerTab').getEl().mask(_('ID_PROCESSING'));
+                Ext.Ajax.request({
+                  url: 'processOptionsProxy/deleteInputDoc',
+                  params: {PRO_UID: pro_uid, IDOC_UID: rowselected.data.INP_DOC_UID},
+                  success: function(r,o){
+                    Ext.getCmp('designerTab').getEl().unmask();
+                    var resp = Ext.decode(r.responseText);
+                    if (resp.success){
+                      editButton.disable();
+                      deleteButton.disable();
+                      inputDocGrid.store.load();
+                      PMExt.notify(_('ID_REQUEST_DOCUMENTS'),resp.msg);
+                    }else{
+                      PMExt.error(_('ID_ERROR'), resp.msg);
+                    }
+                  },
+                  failure: function(r,o){
+                    Ext.getCmp('designerTab').getEl().unmask();
+                    PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED'));
+                  }
+                  
+                });
+              }
+            });
+          }else{
+            PMExt.warning(_('ID_REQUEST_DOCUMENTS'),_('ID_MSG_CANNOT_DELETE_INPUT_DOC'));
+          }
+        },
+        failure: function(r,o){
+          Ext.getCmp('designerTab').getEl().unmask();
+          PMExt.notify( _('ID_STATUS') , _('ID_LOAD_FAILED'));
+        }
+      });
+    }
   });
-
-  var tb = new Ext.Toolbar({
-    items: [btnAdd, btnRemove, btnEdit]
+  
+  saveButton = new Ext.Action({
+    text : _('ID_SAVE'),
+    disabled: false,
+    handler: function(){
+      Ext.getCmp('designerTab').getEl().mask(_('ID_PROCESSING'));
+      inputDocForm.getForm().submit({
+        success: function(f,a){
+          Ext.getCmp('designerTab').getEl().unmask();
+          var resp = Ext.decode(a.response.responseText);
+          if (resp.success){
+            editButton.disable();
+            deleteButton.disable();
+            inputDocGrid.store.load();
+            Ext.getCmp('frmNewInputDoc').hide();
+            PMExt.notify(_('ID_REQUEST_DOCUMENTS'),resp.msg);
+          }else{
+            PMExt.notify( _('ID_ERROR') , resp.msg);
+          }
+        },
+        failure: function(f,a){
+          Ext.getCmp('designerTab').getEl().unmask();
+          PMExt.notify( _('ID_REQUEST_DOCUMENTS') , _('ID_SOME_FIELDS_REQUIRED'));
+        }
+      });
+    }
   });
-
-  //inputDocStore? and groupingStore?
-  var inputDocStore = new Ext.data.JsonStore({
-    root         : 'data',
-    totalProperty: 'totalCount',
-    idProperty   : 'gridIndex',
-    remoteSort   : true,
-    fields       : inpDocFields,
-    proxy: new Ext.data.HttpProxy({
-      url: 'bpmn/proxyExtjs?pid='+pro_uid+'&action=getInputDocumentList'
-    })
+  
+  cancelButton = new Ext.Action({
+    text : _('ID_CANCEL'),
+    disabled: false,
+    handler: function(){
+      Ext.getCmp('frmNewInputDoc').hide();
+    }
   });
-  inputDocStore.load({params:{start : 0 , limit : 10}});
-
-  var inputDocForm = new Ext.FormPanel({
+  
+  inputDocForm = new Ext.FormPanel({
     labelWidth: 100,
-    width     : 500,
+    autoWidth : true,
     height    : 380,
     monitorValid : true,
     autoHeight: true,
-    bodyStyle : 'padding:10px 0 0 10px;',
-    items:[{
+    buttonAlign: 'center',
+    url: 'processOptionsProxy/saveInputDoc',
+    items: [{
       xtype  : 'fieldset',
       layout : 'form',
       border : true,
       title  : _('ID_INPUT_INFO'),
-      width  : 500,
+      autoWidth  : true,
       labelWidth : 150,
       collapsible : false,
       labelAlign  : '',
-      items : [{
-        xtype     : 'textfield',
-        fieldLabel: _('ID_TITLE'),
-        width     : 300,
-        name      : 'INP_DOC_TITLE',
-        allowBlank: false
-      },{
-        width     : 300,
-        xtype         : 'combo',
-        mode          : 'local',
-        editable      : false,
-        fieldLabel    : _('ID_TYPE'),
-        triggerAction : 'all',
-        forceSelection: true,
-        name          : 'INP_DOC_FORM_NEEDED',
-        displayField  : 'name',
-        value         : 'Digital',
-        valueField    : 'value',
-        store         : new Ext.data.JsonStore({
-          fields : ['name', 'value'],
-          data   : [
-            {name : 'Digital',   value: 'VIRTUAL'},
-            {name : 'Printed',   value: 'REAL'},
-            {name : 'Digital/Printed',   value: 'VREAL'}]}
-        ),
-
-        onSelect: function(record, index) {
-          //Show-Hide Format Type Field
-          this.collapse();
-          if(record.data.value != 'VIRTUAL') {
-            Ext.getCmp("formType").show();
-            Ext.getCmp("formType").getEl().up('.x-form-item').setDisplayed(true); // show label            
-          }
-          else {
-          	Ext.getCmp("formType").hide();
-            Ext.getCmp("formType").getEl().up('.x-form-item').setDisplayed(false); // hide label            
-          }
-
-          this.setValue(record.data[this.valueField || this.displayField]);
-        }
-      },{
-        //xtype     : 'fieldset',
-        //layout    : 'form',
-        //id        : 'formType',
-        //border    : false,
-        //width     : 470,
-        //hidden    :true,
-        //labelAlign: '',
-        //items:[{
-          xtype          : 'combo',
-          id             : 'formType',
-          width          : 150,
-          mode           : 'local',
-          editable       : false,
-          hidden         : true,
-          fieldLabel     : _('ID_FORMAT'),
-          triggerAction  : 'all',
-          forceSelection : true,
-          name           : 'INP_DOC_ORIGINAL',
-          displayField   : 'name',
-          valueField     : 'value',
-          value          : 'ORIGINAL',
-          store          : new Ext.data.JsonStore({
-            fields : ['name', 'value'],
-              data   : [
-                {name : 'Original',   value: 'ORIGINAL'},
-                {name : 'Legal Copy',   value: 'COPYLEGAL'},
-                {name : 'Copy',   value: 'COPY'}
-                ]}
-          )
-        //}]
-      },{
-        xtype     : 'textarea',
-        fieldLabel: _('ID_DESCRIPTION'),
-        name      : 'INP_DOC_DESCRIPTION',
-        height    : 120,
-        width     : 300
-      },{
-        width     : 150,
-        xtype:          'combo',
-        mode:           'local',
-        editable:       false,
-        fieldLabel:     _('ID_ENABLE_VERSIONING'),
-        triggerAction:  'all',
-        forceSelection: true,
-        name:           'INP_DOC_VERSIONING',
-        displayField:   'name',
-        valueField:     'value',
-        value         : 'No',
-        store:          new Ext.data.JsonStore({
-        fields : ['name', 'value'],
-        data   : [
-          {name : 'No',   value: ''},
-          {name : 'Yes',   value: '1'},
-        ]})
-      },{
-      layout      :'column',
-      border      :false,
-      items       :[{
-        layout      : 'form',
-        border      :false,
-        items       : [{
-          xtype       : 'textfield',
-          width     : 250,
-          fieldLabel  : _('ID_DESTINATION_PATH'),
-          name        : 'INP_DOC_DESTINATION_PATH',
-          anchor      :'100%'
-        }]
-      },{
-          //columnWidth     :.4,
-          layout          : 'form',
-          border          :false,
-          items           : [{
-                  xtype           :'button',
-                  title           : ' ',
-                  width :50,
-                  text            : '@@',
-                 name            : 'selectorigin',
-                   handler: function (s) {
-                                      workflow.variablesAction = 'form';
-                                      workflow.fieldName         = 'INP_DOC_DESTINATION_PATH' ;
-                                      workflow.variable        = '@@',
-                                      workflow.formSelected    = inputDocForm;
-                                      var rowData = PMVariables();
-                              }
-              }]
-      }]
-            },{
-                layout      :'column',
-                border      :false,
-                items       :[{
-                    //columnWidth :.6,
-                    layout      : 'form',
-                    border      :false,
-                    items       : [{
-                    xtype       : 'textfield',
-                    width     : 250,
-                    //id          :'tags',
-                    fieldLabel  : _('ID_TAGS'),
-                    name        : 'INP_DOC_TAGS',
-                    anchor      :'100%'
-                    }]
-                },{
-                    //columnWidth :.4,
-                    layout      : 'form',
-                    border      :false,
-                    items       : [{
-                            xtype       :'button',
-                            title       : ' ',
-                            width:50,
-                            text        : '@@',
-                            name        : 'selectorigin',
-                            handler: function (s) {
-                                            workflow.variablesAction = 'form';
-                                            workflow.fieldName         = 'INP_DOC_TAGS' ;
-                                            workflow.variable        = '@@',
-                                            workflow.formSelected    = inputDocForm;
-                                            var rowData = PMVariables();
-                               }
-                          }]
-                    }]
+      plain: false,
+      items : [
+               {xtype: 'textfield', fieldLabel: _('ID_TITLE'),width: 300,name: 'INP_DOC_TITLE', allowBlank: false},
+               {
+                 width: 300,
+                 xtype: 'combo',
+                 mode: 'local',
+                 editable: false,
+                 fieldLabel: _('ID_TYPE'),
+                 triggerAction: 'all',
+                 name: 'INP_DOC_FORM_NEEDED',
+                 displayField: 'name',
+                 valueField    : 'value',
+                 id: 'idoc_FORM_NEEDED',
+                 autoSelect: true,
+                 allowBlank: false,
+                 submitValue : false,
+                 hiddenName: 'INP_DOC_FORM_NEEDED',
+                 store: new Ext.data.JsonStore({
+                   fields : ['name', 'value'],
+                   data   : [
+                             {name : 'Digital',   value: 'VIRTUAL'},
+                             {name : 'Printed',   value: 'REAL'},
+                             {name : 'Digital/Printed',   value: 'VREAL'}
+                             ]
+                 }),
+                 onSelect: function(record, index) {
+                   if(record.data.value != 'VIRTUAL') {
+                     Ext.getCmp("formType").enable();
+                   }
+                   else {
+                     Ext.getCmp("formType").disable();
+                   }
+                   this.collapse();
+                   this.setValue(record.data[this.valueField || this.displayField]);
+                 }
+               },
+               {
+                 xtype          : 'combo',
+                 id             : 'formType',
+                 width          : 150,
+                 mode           : 'local',
+                 editable       : false,
+                 hiddenName     : 'INP_DOC_ORIGINAL',
+                 disabled       : true,
+                 submitValue : false,
+                 fieldLabel     : _('ID_FORMAT'),
+                 triggerAction  : 'all',
+                 forceSelection : true,
+                 displayField   : 'name',
+                 valueField     : 'value',
+                 allowBlank     : false,
+                 value          : 'ORIGINAL',
+                 store          : new Ext.data.JsonStore({
+                   fields : ['name', 'value'],
+                   data   : [
+                             {name : 'Original',   value: 'ORIGINAL'},
+                             {name : 'Legal Copy',   value: 'COPYLEGAL'},
+                             {name : 'Copy',   value: 'COPY'}
+                             ]}
+                 )
+               },
+               {xtype: 'textarea', fieldLabel: _('ID_DESCRIPTION'), name: 'INP_DOC_DESCRIPTION', height: 120, width: 300},
+               {
+                 width     : 150,
+                 xtype:          'combo',
+                 mode:           'local',
+                 editable:       false,
+                 fieldLabel:     _('ID_ENABLE_VERSIONING'),
+                 triggerAction:  'all',
+                 forceSelection: true,
+                 hiddenName: 'INP_DOC_VERSIONING',
+                 id: 'idoc_VERSIONING',
+                 submitValue: false,
+                 displayField:   'name',
+                 valueField:     'value',
+                 value         : '0',
+                 allowBlank: false,
+                 store:          new Ext.data.JsonStore({
+                   fields : ['name', 'value'],
+                   data   : [
+                             {name : 'No',   value: '0'},
+                             {name : 'Yes',   value: '1'},
+                             ]})
+               },
+               {
+                 layout      :'column',
+                 border      :false,
+                 items       :[{
+                   layout      : 'form',
+                   border      :false,
+                   items       : [{
+                     xtype       : 'textfield',
+                     width     : 250,
+                     fieldLabel  : _('ID_DESTINATION_PATH'),
+                     name        : 'INP_DOC_DESTINATION_PATH',
+                     anchor      :'100%'
+                   }]
                  },{
-                  id : 'INP_DOC_UID',
-                  xtype: 'hidden',
-                  name : 'INP_DOC_UID'
-           }]
+                   //columnWidth     :.4,
+                   layout          : 'form',
+                   border          :false,
+                   items           : [{
+                     xtype           :'button',
+                     title           : ' ',
+                     width :50,
+                     text            : '@@',
+                     name            : 'selectorigin',
+                     handler: function (s) {
+                       workflow.variablesAction = 'form';
+                       workflow.fieldName         = 'INP_DOC_DESTINATION_PATH' ;
+                       workflow.variable        = '@@',
+                       workflow.formSelected    = inputDocForm;
+                       var rowData = PMVariables();
+                     }
+                   }]
+                 }]
+               },{
+                 layout      :'column',
+                 border      :false,
+                 items       :[{
+                   //columnWidth :.6,
+                   layout      : 'form',
+                   border      :false,
+                   items       : [{
+                     xtype       : 'textfield',
+                     width     : 250,
+                     //id          :'tags',
+                     fieldLabel  : _('ID_TAGS'),
+                     name        : 'INP_DOC_TAGS',
+                     anchor      :'100%' 
+                   }]
+                 },{
+                   //columnWidth :.4,
+                   layout      : 'form',
+                   border      :false,
+                   items       : [{
+                     xtype       :'button',
+                     title       : ' ',
+                     width:50,
+                     text        : '@@',
+                     name        : 'selectorigin',
+                     handler: function (s) {
+                       workflow.variablesAction = 'form';
+                       workflow.fieldName         = 'INP_DOC_TAGS' ;
+                       workflow.variable        = '@@',
+                       workflow.formSelected    = inputDocForm;
+                       var rowData = PMVariables();
+                     }
+                   }]
+                 }]
+               },
+               {id : 'INP_DOC_UID', xtype: 'hidden', name : 'INP_DOC_UID'},
+               {id : 'PRO_UID', xtype: 'hidden', name : 'PRO_UID'}
+             ]
     }],
-    buttons: [{
-        text: _('ID_SAVE'),
-        formBind    :true,
-        handler: function(){
-            var getForm         = inputDocForm.getForm().getValues();
-            var sDocUID        = getForm.INP_DOC_UID;
-            var sDocTitle        = getForm.INP_DOC_TITLE;
-            var sFormNeeded     = getForm.INP_DOC_FORM_NEEDED;
-            var sOrig           = getForm.INP_DOC_ORIGINAL;
-            if(sOrig == "" || sOrig == "Original")
-                sOrig           = 'ORIGINAL';
-
-            if(sOrig == 'Legal Copy')
-                sOrig           = 'COPYLEGAL';
-
-            if(sFormNeeded == 'Digital')
-                 sFormNeeded     = 'VIRTUAL';
-            else if(sFormNeeded == 'Printed')
-                sFormNeeded     = 'REAL';
-            else
-                sFormNeeded     = 'VREAL';
-
-
-            var sDesc = getForm.INP_DOC_DESCRIPTION;
-            var sVers           = getForm.INP_DOC_VERSIONING;
-            if(sVers == 'Yes')
-                sVers = '1';
-            else
-                sVers = '';
-
-            var sDestPath       = getForm.INP_DOC_DESTINATION_PATH;
-            var sTags           = getForm.INP_DOC_TAGS;
-
-           if(sDocUID == "")
-           {
-                Ext.Ajax.request({
-                  url   : '../inputdocs/inputdocs_Save.php',
-                  method: 'POST',
-                  params:{
-                      functions                : 'lookForNameInput',
-                      NAMEINPUT                : sDocTitle,
-                      proUid                   : pro_uid
-                  },
-                  success: function(response) {
-                    if(response.responseText == "1")
-                    {
-                       Ext.Ajax.request({
-                          url   : '../inputdocs/inputdocs_Save.php',
-                          method: 'POST',
-                          params:{
-                              functions                     : '',
-                              INP_DOC_TITLE                 : sDocTitle,
-                              INP_DOC_UID                   : sDocUID,
-                              PRO_UID                       : pro_uid,
-                              INP_DOC_FORM_NEEDED           : sFormNeeded,
-                              INP_DOC_ORIGINAL              : sOrig,
-                              INP_DOC_VERSIONING            : sVers,
-                              INP_DOC_TAGS                  : sTags,
-                              INP_DOC_DESCRIPTION           : sDesc,
-                              INP_DOC_DESTINATION_PATH      : sDestPath
-                          },
-                          success: function(response) {
-                              PMExt.notify( _('ID_STATUS') , _('ID_INPUT_CREATE') );
-                              newIOWindow.hide();
-                              inputDocStore.reload();
-                          }
-                        });
-                    }
-                    else
-                         PMExt.notify( _('ID_STATUS') , _('ID_INPUT_NOT_SAVE') );
-                         }
-             })
-            }
-            else
-            {
-                Ext.Ajax.request({
-                      url   : '../inputdocs/inputdocs_Save.php',
-                      method: 'POST',
-                      params:{
-                          functions                     : '',
-                          INP_DOC_TITLE                 : sDocTitle,
-                          INP_DOC_UID                   : sDocUID,
-                          PRO_UID                       : pro_uid,
-                          INP_DOC_FORM_NEEDED           : sFormNeeded,
-                          INP_DOC_ORIGINAL              : sOrig,
-                          INP_DOC_VERSIONING            : sVers,
-                          INP_DOC_TAGS                  : sTags,
-                          INP_DOC_DESCRIPTION           : sDesc,
-                          INP_DOC_DESTINATION_PATH      : sDestPath
-                      },
-                      success: function(response) {
-                           PMExt.notify( _('ID_STATUS') , _('ID_INPUT_UPDATE') );
-                          newIOWindow.hide();
-                          inputDocStore.reload();
-                      }
-                    });
-            }
-       }
-    },{
-        text: _('ID_CANCEL'),
-        handler: function(){
-            // when this button clicked,
-            newIOWindow.hide();
-        }
-    }],
-       buttonAlign : 'center'
-    });
-
- var expander = new Ext.ux.grid.RowExpander({
-    tpl : new Ext.Template(
-        "<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {INP_DOC_DESCRIPTION} </p>"
-    )
+    buttons: [saveButton, cancelButton]
   });
-
-var inputDocColumns = new Ext.grid.ColumnModel({
-  columns: [
-    expander,
-    {
-        id: 'INP_DOC_TITLE',
-        header: _('ID_TITLE'),
-        dataIndex: 'INP_DOC_TITLE',
-        width: 280,
-        editable: false,
-        editor: new Ext.form.TextField({
-        //allowBlank: false
-        })
-    },{
-        id: 'INP_DOC_VERSIONING',
-        header: _('ID_VERSIONING'),
-        dataIndex: 'INP_DOC_VERSIONING',
-        width: 280,
-        editable: false,
-        editor: new Ext.form.TextField({
-        //allowBlank: false
-        })
-    },{
-        id: 'INP_DOC_DESTINATION_PATH',
-        header: _('ID_DESTINATION_PATH'),
-        dataIndex: 'INP_DOC_DESTINATION_PATH',
-        width: 280,
-        editable: false,
-        editor: new Ext.form.TextField({
-        //allowBlank: false
-        })
+  
+  
+  smodel = new Ext.grid.RowSelectionModel({
+    singleSelect: true,
+    listeners:{
+      rowselect: function(sm){
+        editButton.enable();
+        deleteButton.enable();
+      },
+      rowdeselect: function(sm){
+        editButton.disable();
+        deleteButton.disable();
+      }
     }
-    ]
   });
-
-
-  var inputDocGrid = new Ext.grid.GridPanel({
+  
+  idocsContextMenu = new Ext.menu.Menu({
+    items: [editButton, deleteButton]
+  });
+  
+  
+  inputDocStore = new Ext.data.GroupingStore( {
+    proxy : new Ext.data.HttpProxy({
+      url: 'processOptionsProxy/loadInputDocuments?PRO_UID='+pro_uid
+      //params: {PRO_UID: pro_uid}
+    }),
+    reader : new Ext.data.JsonReader( {
+      root: 'idocs',
+      totalProperty: 'total_idocs',
+      fields : [
+                {name: 'INP_DOC_UID', type: 'string'},
+                {name: 'PRO_UID',type: 'string'},
+                {name: 'INP_DOC_TITLE', type: 'string'},
+                {name: 'INP_DOC_DESCRIPTION', type: 'string'},
+                {name: 'INP_DOC_VERSIONING',type: 'string'},
+                {name: 'INP_DOC_DESTINATION_PATH',type: 'string'},
+                {name: 'INP_DOC_TASKS', type: 'int'}
+                ]
+    })
+  });
+  
+  bbarpaging = new Ext.PagingToolbar({
+    pageSize: 10,
     store: inputDocStore,
-    id : 'inputdocGrid',
+    displayInfo: true,
+    displayMsg: _('ID_GRID_PAGE_DISPLAYING_ROLES_MESSAGE') + '&nbsp; &nbsp; ',
+    emptyMsg: _('ID_GRID_PAGE_NO_ROLES_MESSAGE'),
+    items: []
+  });
+  
+  expander = new Ext.ux.grid.RowExpander({
+    tpl : new Ext.Template("<p><b>"+TRANSLATIONS.ID_DESCRIPTION+":</b> {INP_DOC_DESCRIPTION} </p>")
+  });
+  
+  inputDocColumns = new Ext.grid.ColumnModel({
+    defaults: {
+      editable: false,
+      sortable: true
+    },
+    columns: [
+              expander,
+              {id: 'INP_DOC_UID', dataIndex: 'INP_DOC_UID', hidden:true, hideable:false},
+              {header: _('ID_TITLE'), dataIndex: 'INP_DOC_TITLE', width: 350},
+              {header: _('ID_VERSIONING'), dataIndex: 'INP_DOC_VERSIONING', width: 100, renderer: render_version},
+              {header: _('ID_DESTINATION_PATH'), dataIndex: 'INP_DOC_DESTINATION_PATH', width: 150},
+              {header: _('ID_TASK'), dataIndex: 'INP_DOC_TASKS', width: 100, align: 'center'}
+              ]
+  });
+  
+  inputDocGrid = new Ext.grid.GridPanel({
+    store: inputDocStore,
+    cm: inputDocColumns,
+    sm: smodel,
+    id: 'inputdocGrid',
     loadMask: true,
-    //loadingText: 'Loading...',
-    //renderTo: 'cases-grid',
     frame: false,
-    autoHeight:false,
+    autoWidth: true,
     clicksToEdit: 1,
-    minHeight:350,
-    height   :350,
+    height:100,
     layout: 'fit',
     plugins: expander,
-    cm: inputDocColumns,
     stripeRows: true,
-    tbar: tb,
-    bbar: new Ext.PagingToolbar({
-        pageSize: 10,
-        store: inputDocStore,
-        displayInfo: true,
-        displayMsg: 'Displaying Input Document {0} - {1} of {2}',
-        emptyMsg: "No Input Document to display",
-        items:[]
-    }),
-    viewConfig: {forceFit: true}
-   });
-
-   //connecting context menu  to grid
+    tbar: [newButton, '-', editButton, deleteButton],
+    bbar: bbarpaging,
+    viewConfig: {forceFit: true},
+    view: new Ext.grid.GroupingView({
+      forceFit:true,
+      groupTextTpl: '{text}'
+    })
+  });
+  
+  //connecting context menu to grid
   inputDocGrid.addListener('rowcontextmenu', onInputDocContextMenu,this);
-
+  
   //by default the right click is not selecting the grid row over the mouse
   //we need to set this four lines
   inputDocGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
     var sm = grid.getSelectionModel();
     sm.selectRow(rowIndex, sm.isSelected(rowIndex));
   }, this);
-
+  
   //prevent default
   inputDocGrid.on('contextmenu', function (evt) {
-      evt.preventDefault();
+    evt.preventDefault();
   }, this);
-
+  
   function onInputDocContextMenu(grid, rowIndex, e) {
     e.stopEvent();
     var coords = e.getXY();
-    dynaformsContextMenu.showAt([coords[0], coords[1]]);
+    idocsContextMenu.showAt([coords[0], coords[1]]);
   }
-
-  var dynaformsContextMenu = new Ext.menu.Menu({
-    id: 'messageContextMenu',
-    items: [{
-        text: _('ID_EDIT'),
-        iconCls: 'button_menu_ext ss_sprite  ss_pencil',
-        handler: editInputDoc
-      },{
-        text: _('ID_DELETE'),
-        icon: '/images/delete.png',
-        handler: removeInputDoc
-      },{
-        text: _('ID_UID'),
-        handler: function(){
-          var rowSelected = Ext.getCmp('inputdocGrid').getSelectionModel().getSelected();
-          workflow.createUIDButton(rowSelected.data.INP_DOC_UID);
-        }
-      }
-    ]
-  });
-
-  var gridWindow = new Ext.Window({
+  
+  inputDocGrid.store.load();
+  
+  gridWindow = new Ext.Window({
     title: _('ID_REQUEST_DOCUMENTS'),
-    width: 550,
+    width: 600,
     height: 350,
     minWidth: 200,
     minHeight: 350,
     layout: 'fit',
     plain: true,
     items: inputDocGrid,
-    autoScroll: true
- });
-
- var newIOWindow = new Ext.Window({
-   title: _('ID_NEW_INPUTDOCS'),
-   width: 550,
-   height: 410,
-   minWidth: 200,
-   minHeight: 405,
-   autoScroll: true,
-   layout: 'fit',
-   plain: true,
-   items: inputDocForm
+    autoScroll: true, 
+    modal: true
   });
+  
+  newIDocWindow = new Ext.Window({
+    title: _('ID_NEW_INPUTDOCS'),
+    width: 550,
+    id: 'frmNewInputDoc',
+    autoHeight: true,
+    autoScroll: true,
+    closable: false,
+    layout: 'fit',
+    plain: true,
+    modal: true,
+    items: inputDocForm
+  });
+  
   gridWindow.show();
 }
-
-
 
 ProcessOptions.prototype.addOutputDoc= function(_5625)
 {

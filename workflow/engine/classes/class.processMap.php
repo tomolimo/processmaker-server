@@ -5362,10 +5362,13 @@ class processMap {
   */
   function getExtInputDocumentsCriteria($start, $limit,$sProcessUID = '')
   {
+    $aTasks = $this->getAllInputDocsByTask($sProcessUID);
     $sDelimiter = DBAdapter::getStringDelimiter ();
     $oCriteria  = new Criteria ( 'workflow' );
     $oCriteria->addSelectColumn ( InputDocumentPeer::INP_DOC_UID );
     $oCriteria->addSelectColumn ( InputDocumentPeer::PRO_UID );
+    $oCriteria->addSelectColumn ( InputDocumentPeer::INP_DOC_VERSIONING );
+    $oCriteria->addSelectColumn ( InputDocumentPeer::INP_DOC_DESTINATION_PATH );
     $oCriteria->addAsColumn ( 'INP_DOC_TITLE', 'C1.CON_VALUE' );
     $oCriteria->addAsColumn ( 'INP_DOC_DESCRIPTION', 'C2.CON_VALUE' );
     $oCriteria->addAlias ( 'C1', 'CONTENT' );
@@ -5401,6 +5404,7 @@ class processMap {
         $aRow ['INP_DOC_TITLE']       = $inputDocumentObj ['INP_DOC_TITLE'];
         $aRow ['INP_DOC_DESCRIPTION'] = $inputDocumentObj ['INP_DOC_DESCRIPTION'];
       }
+      $aRow['INP_DOC_TASKS'] = isset($aTasks[$aRow ['INP_DOC_UID']]) ? $aTasks[$aRow ['INP_DOC_UID']] :0;
       $inputDocArray [] = $aRow;
       $oDataset->next ();
     }
@@ -6735,6 +6739,24 @@ function saveExtEvents($oData)
     }
     return $triggersArray;
 
+  }
+  
+  function getAllInputDocsByTask($sPRO_UID){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(StepPeer::STEP_UID_OBJ);
+    $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    $oCriteria->addGroupByColumn(StepPeer::STEP_UID_OBJ);
+    $oCriteria->add(StepPeer::STEP_TYPE_OBJ,'INPUT_DOCUMENT');
+    $oCriteria->add(StepPeer::PRO_UID, $sPRO_UID);
+    $oDataset = StepPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+    $aIDocs = array();
+    while ($oDataset->next()){
+      $row = $oDataset->getRow();
+      $aIDocs[$row['STEP_UID_OBJ']] = $row['CNT'];
+    }
+    return $aIDocs;
   }
  
 }
