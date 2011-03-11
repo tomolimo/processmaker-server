@@ -1085,23 +1085,199 @@ function PMFUserList() #its test was successfull
 function PMFGenerateOutputDocument($outputID) {
 
   $oCase = new Cases();
-  $oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
+  $oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], '', 'cases_List');
 
   $oOutputDocument = new OutputDocument();
   $aOD = $oOutputDocument->load($outputID);
-
   $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
-
+  
   $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
+  require_once 'classes/model/AppFolder.php';
+  require_once 'classes/model/AppDocument.php';
 
-  if ( $sFilename == '' ) $sFilename='_';
+  //Get the Custom Folder ID (create if necessary)
+  $oFolder=new AppFolder();
+  //$aOD['OUT_DOC_DESTINATION_PATH'] = ($aOD['OUT_DOC_DESTINATION_PATH']=='')?PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP:$aOD['OUT_DOC_DESTINATION_PATH'];
+  $folderId=$oFolder->createFromPath($aOD['OUT_DOC_DESTINATION_PATH']);
+  //Tags
+  $fileTags=$oFolder->parseTags($aOD['OUT_DOC_TAGS']);
 
-  $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
-  if ( $sFilename == '' ) $sFilename='_';
-  $pathOutput = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP ;
+  //Get last Document Version and apply versioning if is enabled
+
+  $oAppDocument= new AppDocument();
+  $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
+
+  $oCriteria = new Criteria('workflow');
+  $oCriteria->add(AppDocumentPeer::APP_UID,      $_SESSION['APPLICATION']);
+  //$oCriteria->add(AppDocumentPeer::DEL_INDEX,    $_SESSION['INDEX']);
+  $oCriteria->add(AppDocumentPeer::DOC_UID,      $_GET['UID']);
+  $oCriteria->add(AppDocumentPeer::DOC_VERSION,      $lastDocVersion);
+  $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
+  $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
+  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+  $oDataset->next();
+  if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output
+  $lastDocVersion++;
+  if ($aRow = $oDataset->getRow()) {
+      $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
+                       'APP_UID'             => $_SESSION['APPLICATION'],
+                       'DEL_INDEX'           => $_SESSION['INDEX'],
+                       'DOC_UID'             => $outputID,
+                       'DOC_VERSION'         => $lastDocVersion+1,
+                       'USR_UID'             => $_SESSION['USER_LOGGED'],
+                       'APP_DOC_TYPE'        => 'OUTPUT',
+                       'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                       'APP_DOC_FILENAME'    => $sFilename,
+                       'FOLDER_UID'          => $folderId,
+                       'APP_DOC_TAGS'        => $fileTags);
+      $oAppDocument = new AppDocument();
+      $oAppDocument->create($aFields);
+      $sDocUID = $aRow['APP_DOC_UID'];
+  }
+  }else{//No versioning so Update a current Output or Create new if no exist
+  if ($aRow = $oDataset->getRow()) { //Update
+      $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
+                       'APP_UID'             => $_SESSION['APPLICATION'],
+                       'DEL_INDEX'           => $_SESSION['INDEX'],
+                       'DOC_UID'             => $outputID,
+                       'DOC_VERSION'         => $lastDocVersion,
+                       'USR_UID'             => $_SESSION['USER_LOGGED'],
+                       'APP_DOC_TYPE'        => 'OUTPUT',
+                       'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                       'APP_DOC_FILENAME'    => $sFilename,
+                       'FOLDER_UID'          => $folderId,
+                       'APP_DOC_TAGS'        => $fileTags);
+      $oAppDocument = new AppDocument();
+      $oAppDocument->update($aFields);
+      $sDocUID = $aRow['APP_DOC_UID'];
+   }else{ 
+   //we are creating the appdocument row
+   //create
+      if($lastDocVersion==0) $lastDocVersion++;
+      $aFields = array('APP_UID'             => $_SESSION['APPLICATION'],
+                   'DEL_INDEX'           => $_SESSION['INDEX'],
+                   'DOC_UID'             => $outputID,
+                   'DOC_VERSION'         => $lastDocVersion,
+                   'USR_UID'             => $_SESSION['USER_LOGGED'],
+                   'APP_DOC_TYPE'        => 'OUTPUT',
+                   'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                   'APP_DOC_FILENAME'    => $sFilename,
+                   'FOLDER_UID'          => $folderId,
+                   'APP_DOC_TAGS'        => $fileTags);
+      $oAppDocument = new AppDocument();
+      $aFields['APP_DOC_UID']=$sDocUID = $oAppDocument->create($aFields);
+  }
+  }
+  $sFilename = $aFields['APP_DOC_UID']. "_".$lastDocVersion;
+
+  $pathOutput = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP ;//G::pr($sFilename);die;
   G::mk_dir ( $pathOutput );
 
-  $oOutputDocument->generate( $outputID, $Fields['APP_DATA'], $pathOutput, $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'] );
+      $aProperties = array();                
+
+      if(!isset($aOD['OUT_DOC_MEDIA']))
+      	$aOD['OUT_DOC_MEDIA'] = 'Letter';
+      if(!isset($aOD['OUT_DOC_LEFT_MARGIN']))
+      	$aOD['OUT_DOC_LEFT_MARGIN'] = '15';
+      if(!isset($aOD['OUT_DOC_RIGHT_MARGIN']))
+      	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
+      if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
+      	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
+      if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
+      	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
+
+      $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
+      $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
+      $oOutputDocument->generate( $outputID, $Fields['APP_DATA'], $pathOutput, $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
+
+  //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
+  $oPluginRegistry =& PMPluginRegistry::getSingleton();
+  if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
+    $triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
+    $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
+
+    $oAppDocument1 = new AppDocument();
+    $oAppDocument1->update($aFields);
+
+    $sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
+
+    $oData['APP_UID']   = $_SESSION['APPLICATION'];
+    $oData['ATTACHMENT_FOLDER'] = true;
+    switch($aOD['OUT_DOC_GENERATE']){
+    case "BOTH":
+      $documentData = new uploadDocumentData (
+                    $_SESSION['APPLICATION'],
+                    $_SESSION['USER_LOGGED'],
+                    $pathOutput . $sFilename . '.pdf',
+                    $sFilename. '.pdf',
+                    $sDocUID,
+                    $oAppDocument->getDocVersion()
+                    );
+
+      $documentData->sFileType = "PDF";
+      $documentData->bUseOutputFolder = true;
+      $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
+      if($uploadReturn){//Only delete if the file was saved correctly
+      	unlink ( $pathOutput . $sFilename. '.pdf' );
+	    }
+
+
+
+      $documentData = new uploadDocumentData (
+                    $_SESSION['APPLICATION'],
+                    $_SESSION['USER_LOGGED'],
+                    $pathOutput . $sFilename . '.doc',
+                    $sFilename. '.doc',
+                    $sDocUID,
+                    $oAppDocument->getDocVersion()
+                    );
+
+      $documentData->sFileType = "DOC";
+      $documentData->bUseOutputFolder = true;
+      $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
+      if($uploadReturn){//Only delete if the file was saved correctly
+      	unlink ( $pathOutput . $sFilename. '.doc' );
+      }
+
+    break;
+    case "PDF":
+      $documentData = new uploadDocumentData (
+                    $_SESSION['APPLICATION'],
+                    $_SESSION['USER_LOGGED'],
+                    $pathOutput . $sFilename . '.pdf',
+                    $sFilename. '.pdf',
+                    $sDocUID,
+                    $oAppDocument->getDocVersion()
+                    );
+
+
+      $documentData->sFileType = "PDF";
+      $documentData->bUseOutputFolder = true;
+      $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
+      if($uploadReturn){//Only delete if the file was saved correctly
+      	unlink ( $pathOutput . $sFilename. '.pdf' );
+      }
+    break;
+    case "DOC":
+      $documentData = new uploadDocumentData (
+                    $_SESSION['APPLICATION'],
+                    $_SESSION['USER_LOGGED'],
+                    $pathOutput . $sFilename . '.doc',
+                    $sFilename. '.doc',
+                    $sDocUID,
+                    $oAppDocument->getDocVersion()
+                    );
+
+      $documentData->sFileType = "DOC";
+      $documentData->bUseOutputFolder = true;
+      $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
+      if($uploadReturn){//Only delete if the file was saved correctly
+      	unlink ( $pathOutput . $sFilename. '.doc' );
+      }
+    break;
+    }
+
+  }
 
 } 
 /**
