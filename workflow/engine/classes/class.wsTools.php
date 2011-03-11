@@ -897,7 +897,9 @@ class workspaceTools {
     if ($chgrp === false || $chmod === false || $chown === false)
       CLI::logging (CLI::error ("Failed to set permissions for $filename") . "\n");
     if (is_dir($filename)) {
-      foreach (glob($filename . "/*") as $item) {
+      foreach (array_merge(glob($filename . "/*"), glob($filename . "/.*")) as $item) {
+        if (basename($item) == "." || basename($item) == "..")
+          continue;
         workspaceTools::dirPerms($item, $owner, $group, $perms);
       }
     }
