@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-03-01 08:31:49\n"
+"PO-Revision-Date: 2011-03-11 17:37:49\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -298,14 +298,14 @@ msgstr "The  confirm Password fields must be the same!"
 # TRANSLATION
 # LABEL/ID_NEW_INPUTDOCS
 #: LABEL/ID_NEW_INPUTDOCS
-msgid "New input document"
-msgstr "New input document"
+msgid "New Input Document"
+msgstr "New Input Document"
 
 # TRANSLATION
 # LABEL/ID_EDIT_INPUTDOCS
 #: LABEL/ID_EDIT_INPUTDOCS
-msgid "Edit input document"
-msgstr "Edit input document"
+msgid "Edit Input Document"
+msgstr "Edit Input Document"
 
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_DOCUMENT
@@ -4384,8 +4384,8 @@ msgstr "Case Scheduler Log"
 # TRANSLATION
 # LABEL/ID_CASE_SCHEDULER
 #: LABEL/ID_CASE_SCHEDULER
-msgid "Cases Scheduler"
-msgstr "Cases Scheduler"
+msgid "Case Scheduler"
+msgstr "Case Scheduler"
 
 # TRANSLATION
 # LABEL/ID_NEW_CASE
@@ -5530,8 +5530,8 @@ msgstr "Are you sure you want to cancel this case?"
 # TRANSLATION
 # LABEL/ID_PAUSE_CASE_TO_DATE
 #: LABEL/ID_PAUSE_CASE_TO_DATE
-msgid "Do you want to pause the case to date:"
-msgstr "Do you want to pause the case to date:"
+msgid "Do you want to pause the case until"
+msgstr "Do you want to pause the case until"
 
 # TRANSLATION
 # LABEL/ID_DELETING_ELEMENTS
@@ -7862,6 +7862,12 @@ msgid "Status Case"
 msgstr "Status Case"
 
 # TRANSLATION
+# LABEL/ID_SNAP_GEOMETRY
+#: LABEL/ID_SNAP_GEOMETRY
+msgid "Snap Geometry"
+msgstr "Snap Geometry"
+
+# TRANSLATION
 # LABEL/ID_PARTICIPATION_REQUIRED
 #: LABEL/ID_PARTICIPATION_REQUIRED
 msgid "Participation Required?"
@@ -9160,8 +9166,8 @@ msgstr "Actors"
 # TRANSLATION
 # LABEL/ID_PROCESSMAP_TITLE
 #: LABEL/ID_PROCESSMAP_TITLE
-msgid "ProcessMaker BPMN Designer"
-msgstr "ProcessMaker BPMN Designer"
+msgid "BPMN Designer"
+msgstr "BPMN Designer"
 
 # TRANSLATION
 # LABEL/ID_AD_HOC_ACTORS
@@ -9276,6 +9282,150 @@ msgstr "Not defined"
 #: LABEL/ID_WEB_ENTRY_SUCCESS_NEW
 msgid "Web Entry has been created correctly."
 msgstr "Web Entry has been created correctly."
+
+# TRANSLATION
+# LABEL/ID_REMOVE_ALL_BUTTON_FACE
+#: LABEL/ID_REMOVE_ALL_BUTTON_FACE
+msgid "<<"
+msgstr "<<"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_DATE
+#: LABEL/ID_UPDATE_DATE
+msgid "Update"
+msgstr "Update"
+
+# TRANSLATION
+# LABEL/ID_NEW_CASE_SCHEDULER
+#: LABEL/ID_NEW_CASE_SCHEDULER
+msgid "New Case Scheduler"
+msgstr "New Case Scheduler"
+
+# TRANSLATION
+# LABEL/ID_CHANGE_STATUS
+#: LABEL/ID_CHANGE_STATUS
+msgid "Change Status"
+msgstr "Change Status"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_CASE_SCHEDULER
+#: LABEL/ID_CONFIRM_DELETE_CASE_SCHEDULER
+msgid "Do you want to delete current Case Scheduler?"
+msgstr "Do you want to delete current Case Scheduler?"
+
+# TRANSLATION
+# LABEL/ID_USER_CREDENTIALS_REQUIRED
+#: LABEL/ID_USER_CREDENTIALS_REQUIRED
+msgid "User credentials are required."
+msgstr "User credentials are required."
+
+# TRANSLATION
+# LABEL/ID_LAST_RUN_TIME
+#: LABEL/ID_LAST_RUN_TIME
+msgid "Last Run Time"
+msgstr "Last Run Time"
+
+# TRANSLATION
+# LABEL/ID_TIME_NEXT_RUN
+#: LABEL/ID_TIME_NEXT_RUN
+msgid "Time Next Run"
+msgstr "Time Next Run"
+
+# TRANSLATION
+# LABEL/ID_SCHEDULER_SUCCESS_DELETE
+#: LABEL/ID_SCHEDULER_SUCCESS_DELETE
+msgid "Case Scheduler has been deleted correctly."
+msgstr "Case Scheduler has been deleted correctly."
+
+# TRANSLATION
+# LABEL/ID_SCHEDULER_SUCCESS_CHANGE_STATUS
+#: LABEL/ID_SCHEDULER_SUCCESS_CHANGE_STATUS
+msgid "Case Scheduler status has been changed correctly."
+msgstr "Case Scheduler status has been changed correctly."
+
+# TRANSLATION
+# LABEL/ID_SCHEDULER_SUCCESS_NEW
+#: LABEL/ID_SCHEDULER_SUCCESS_NEW
+msgid "Case Scheduler has been created correctly."
+msgstr "Case Scheduler has been created correctly."
+
+# TRANSLATION
+# LABEL/ID_SCHEDULER_SUCCESS_UPDATE
+#: LABEL/ID_SCHEDULER_SUCCESS_UPDATE
+msgid "Case Scheduler has been updated correctly."
+msgstr "Case Scheduler has been updated correctly."
+
+# TRANSLATION
+# LABEL/ID_CASE_SCHEDULER_SUMMARY
+#: LABEL/ID_CASE_SCHEDULER_SUMMARY
+msgid "Case Scheduler Summary"
+msgstr "Case Scheduler Summary"
+
+# TRANSLATION
+# LABEL/ID_USERS_ACTORS
+#: LABEL/ID_USERS_ACTORS
+msgid "Users Actors"
+msgstr "Users Actors"
+
+# TRANSLATION
+# LABEL/ID_ADHOC_USERS_ACTORS
+#: LABEL/ID_ADHOC_USERS_ACTORS
+msgid "Ad hoc Users Actors"
+msgstr "Ad hoc Users Actors"
+
+# TRANSLATION
+# LABEL/ID_GROUPS_ACTORS
+#: LABEL/ID_GROUPS_ACTORS
+msgid "Groups Actors"
+msgstr "Groups Actors"
+
+# TRANSLATION
+# LABEL/ID_ADHOC_GROUPS_ACTORS
+#: LABEL/ID_ADHOC_GROUPS_ACTORS
+msgid "Ad Hoc Groups Actors"
+msgstr "Ad Hoc Groups Actors"
+
+# TRANSLATION
+# LABEL/ID_EXIST_DYNAFORM
+#: LABEL/ID_EXIST_DYNAFORM
+msgid "There is a Dynaform with the same name in   this process. It is not saving"
+msgstr "There is a Dynaform with the same name in   this process. It is not saving"
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_SUCCESS_NEW
+#: LABEL/ID_INPUT_DOC_SUCCESS_NEW
+msgid "Input Document has been created correctly."
+msgstr "Input Document has been created correctly."
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_SUCCESS_UPDATE
+#: LABEL/ID_INPUT_DOC_SUCCESS_UPDATE
+msgid "Input Document has been updated correctly."
+msgstr "Input Document has been updated correctly."
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_SUCCESS_DELETE
+#: LABEL/ID_INPUT_DOC_SUCCESS_DELETE
+msgid "Input Document has been deleted correctly."
+msgstr "Input Document has been deleted correctly."
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_INPUT_DOC
+#: LABEL/ID_CONFIRM_DELETE_INPUT_DOC
+msgid "Do you want to delete selected Input Document?"
+msgstr "Do you want to delete selected Input Document?"
+
+# TRANSLATION
+# LABEL/ID_MSG_CANNOT_DELETE_INPUT_DOC
+#: LABEL/ID_MSG_CANNOT_DELETE_INPUT_DOC
+msgid "Input Document cannot be deleted while has assigned tasks."
+msgstr "Input Document cannot be deleted while has assigned tasks."
+
+# TRANSLATION
+# LABEL/ID_SOME_FIELDS_REQUIRED
+#: LABEL/ID_SOME_FIELDS_REQUIRED
+msgid "Some Fields are required."
+msgstr "Some Fields are required."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -13140,7 +13290,7 @@ msgstr "Start a case based on following registered Plugin."
 # cases/cases_Scheduler_Edit.xml?UPDATE
 # cases/cases_Scheduler_Edit.xml
 #: submit - UPDATE
-msgid "Update"
+msgid "[cases/cases_Scheduler_Edit.xml?UPDATE]Update"
 msgstr "Update"
 
 # cases/cases_Scheduler_List.xml?SCH_NAME
