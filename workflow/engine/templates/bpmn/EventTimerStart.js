@@ -28,12 +28,12 @@ bpmnEventTimerStart.prototype.paint=function(){
   this.graphics.fillEllipse(x_cir+2,y_cir+2,this.getWidth(),this.getHeight());
   this.graphics.setColor( "#F6FFDA" );
   this.graphics.fillEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
-  this.graphics.setStroke(2);
+  this.graphics.setStroke(1);
   this.graphics.setColor("#97C759");
   this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
   this.graphics.setStroke(1);
   this.graphics.setColor("#98C951");
-  this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+  //this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
 
   //draw the clock
   var cw = this.getWidth();
@@ -45,8 +45,25 @@ bpmnEventTimerStart.prototype.paint=function(){
   var y = new Array( ch*0.31, ch*0.50, ch*0.50, 0.5);
   this.graphics.setColor("#4aa533");
   //this.graphics.drawPolygon(x,y);
-  this.graphics.drawLine( cw*0.60, ch*0.31, cw*0.50, ch*0.50);   
-  this.graphics.drawLine( cw*0.75, ch*0.50, cw*0.50, ch*0.50);   
+  this.graphics.drawLine( cw*0.56, ch*0.5, cw*0.43, ch*0.5);   //horizontal
+  this.graphics.drawLine( cw*0.6, ch*0.3, cw*0.43, ch*0.5);
+
+  this.graphics.drawLine(cw*0.73,ch*0.26,cw*0.66,ch*0.30);  //10th min line
+  this.graphics.drawLine(cw*0.66,ch*0.50,cw*0.80,ch*0.50);  //15th min line
+  this.graphics.drawLine(cw*0.60,ch*0.66,cw*0.73,ch*0.73);  //25th min line
+  this.graphics.drawLine(cw*0.50,ch*0.83,cw*0.50,ch*0.70);  //30th min line
+  this.graphics.drawLine(cw*0.23,ch*0.70,cw*0.36,ch*0.63);  //40th min line
+  this.graphics.drawLine(cw*0.16,ch*0.50,cw*0.30,ch*0.50);  //45th min line
+  this.graphics.drawLine(cw*0.26,ch*0.26,cw*0.36,ch*0.36);  //50th min line
+  this.graphics.drawLine(cw*0.50,ch*0.16,cw*0.50,ch*0.26);  //60th min line
+//  this.graphics.drawLine(22,8,20,10);  //10th min line
+//  this.graphics.drawLine(20,15,24,15);  //15th min line
+//  this.graphics.drawLine(18,20,22,22);  //25th min line
+//  this.graphics.drawLine(15,25,15,21);  //30th min line
+//  this.graphics.drawLine(7,21,11,19);  //40th min line
+//  this.graphics.drawLine(5,15,10,15);  //45th min line
+//  this.graphics.drawLine(6,8,10,10);  //50th min line
+//  this.graphics.drawLine(15,5,15,8);  //60th min line
 
 
   //this.graphics.setColor("#4aa533");

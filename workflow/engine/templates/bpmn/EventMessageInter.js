@@ -41,7 +41,9 @@ this.graphics.setColor( "#f9faf2" );
 this.graphics.fillEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 
 this.graphics.setColor("#adae5e");
-this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
+var cw = this.getWidth();
+var ch = this.getHeight();
+this.graphics.drawEllipse(cw*0.15, ch*0.15, ch*0.7, ch*0.7);
 //var x=new Array(12,12,32,32,22,12,32);
 //var y=new Array(14,31,31,14,23,14,14);
 /*var x=new Array(this.getWidth()/3.75,this.getWidth()/3.75,this.getWidth()/1.28,this.getWidth()/1.28,this.getWidth()/2,this.getWidth()/3.75,this.getWidth()/3.75);

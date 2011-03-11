@@ -28,12 +28,13 @@ bpmnEventEmptyStart.prototype.paint=function() {
   this.graphics.fillEllipse(x_cir+2,y_cir+2,this.getWidth(),this.getHeight());
   this.graphics.setColor( "#F6FFDA" );
   this.graphics.fillEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
-  this.graphics.setStroke(2);
+  this.graphics.setStroke(1);
   this.graphics.setColor("#97C759");
   this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
   this.graphics.setStroke(1);
   this.graphics.setColor("#98C951");
   this.graphics.drawEllipse(x_cir,y_cir,this.getWidth(),this.getHeight());
+
 
   this.graphics.paint();
   

@@ -22,6 +22,9 @@ if(typeof this.limitFlag == 'undefined' || this.limitFlag == false)
 this.width  = this.originalWidth * workflow.zoomfactor;
 this.height = this.originalHeight  * workflow.zoomfactor;
 
+var cw = this.getWidth();
+var ch = this.getHeight();
+
 var x_cir1=0;
 var y_cir1=0;
 
@@ -39,15 +42,27 @@ var y_cir2=3;
 this.graphics.setColor( "#f9faf2" );
 this.graphics.fillEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
 this.graphics.setColor("#adae5e");
-this.graphics.drawEllipse(x_cir2,y_cir2,this.getWidth()-6,this.getHeight()-6);
+this.graphics.drawEllipse(cw*0.15, ch*0.15, ch*0.7, ch*0.7);
 //var x_cir3=10;
 //var y_cir3=10;
 //this.graphics.setColor( "#f9faf2" );
 //this.graphics.fillEllipse(x_cir3,y_cir3,this.getWidth()-20,this.getHeight()-20);
 this.graphics.setColor("#adae5e");
 //this.graphics.drawEllipse(x_cir3,y_cir3,this.getWidth()-20,this.getHeight()-20);
-this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/1.3,this.getHeight()/2);
-this.graphics.drawLine(this.getWidth()/2,this.getHeight()/2,this.getWidth()/2,this.getHeight()/4.5);
+
+//this.graphics.drawLine(cw*0.5,ch*0.5,cw*0.77,ch*0.5);
+//this.graphics.drawLine(cw*0.5,ch*0.5,cw*0.5,ch*0.22);
+this.graphics.drawLine( cw*0.56, ch*0.5, cw*0.43, ch*0.5);   //horizontal
+this.graphics.drawLine( cw*0.6, ch*0.3, cw*0.43, ch*0.5);
+
+this.graphics.drawLine(cw*0.73,ch*0.26,cw*0.66,ch*0.30);  //10th min line
+this.graphics.drawLine(cw*0.66,ch*0.50,cw*0.80,ch*0.50);  //15th min line
+this.graphics.drawLine(cw*0.60,ch*0.66,cw*0.73,ch*0.73);  //25th min line
+this.graphics.drawLine(cw*0.50,ch*0.83,cw*0.50,ch*0.70);  //30th min line
+this.graphics.drawLine(cw*0.23,ch*0.70,cw*0.36,ch*0.63);  //40th min line
+this.graphics.drawLine(cw*0.16,ch*0.50,cw*0.30,ch*0.50);  //45th min line
+this.graphics.drawLine(cw*0.26,ch*0.26,cw*0.36,ch*0.36);  //50th min line
+this.graphics.drawLine(cw*0.50,ch*0.16,cw*0.50,ch*0.26);  //60th min line
 this.graphics.paint();
 
 /*Code Added to Dynamically shift Ports on resizing of shapes

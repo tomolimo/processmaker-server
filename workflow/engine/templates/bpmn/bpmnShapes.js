@@ -207,7 +207,7 @@ bpmnTask.prototype.paint = function () {
   //****************Drawing Timer Boundary event ends here ****************
 
   this.bpmnText.paint();
-
+  
   //Code Added to Dynamically shift Ports on resizing of shapes
   if (this.input1 != null) {
     this.input1.setPosition(0, this.height / 2 -1);
@@ -895,7 +895,7 @@ FlowMenu.prototype.setWorkflow = function (_39fc) {
 };
 
 FlowMenu.prototype.onOtherFigureMoved = function (_39fd) {
-  if (_39fd != null) {
+   if (_39fd != null) {
     //Get the workflow object of the selected Figure object, so that we can compare with the new selected figure to remove ports
     _39fd.workflow.preSelectedFigure = _39fd.workflow.currentSelection;
     var countConn = 0;

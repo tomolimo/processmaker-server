@@ -156,7 +156,7 @@ MyWorkflow.prototype.connectionContextMenu=function(oShape)
       scope: this,
       handler: MyWorkflow.prototype.toggleConnection
     }, {
-      text: 'Curvy Line', 
+      text: 'Curvy Line',
       scope: this,
       iconCls: 'button_menu_ext ss_sprite ss_vector',
       handler: MyWorkflow.prototype.toggleConnection
@@ -190,21 +190,20 @@ MyWorkflow.prototype.connectionContextMenu=function(oShape)
 MyWorkflow.prototype.toggleConnection=function(oShape)
 {
   this.currentSelection.workflow.contextClicked = false;
-  switch ( oShape.text) {
+  switch (oShape.text) {
     case 'NULL Router':
         this.currentSelection.setRouter(null);
     break;
- 
-    case 'angled line':
+    case 'Angled Line':
         this.currentSelection.setRouter(new ManhattanConnectionRouter());
     break;
-    case 'curvy line':
+    case 'Curvy Line':
         this.currentSelection.setRouter(new BezierConnectionRouter());
     break;
-    case 'straight line':
+    case 'Straight Line':
         this.currentSelection.setRouter(new FanConnectionRouter());
     break;
-    case 'delete line':
+    case 'Delete Line':
         this.currentSelection.workflow.getCommandStack().execute(new CommandDelete(this.currentSelection.workflow.getCurrentSelection()));
         ToolGeneric.prototype.execute.call(this);
     break;
