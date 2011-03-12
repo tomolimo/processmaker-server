@@ -872,7 +872,13 @@ class AppCacheView extends BaseAppCacheView {
   function getMySQLVersion() {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
-    $sql = "select version()  ";
+    $connection = $con->getDSN();
+    $sqlType = $connection['phptype'];
+    if($sqlType == 'mssql')
+        $sql = "SELECT SERVERPROPERTY('productversion')"; // Added by Ankit for mssql.}
+    else
+        $sql = "select version()";
+    
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
     $rs1->next();
     $row = $rs1->getRow();
@@ -888,20 +894,26 @@ class AppCacheView extends BaseAppCacheView {
         $con = Propel::getConnection("workflow");
 
       $stmt = $con->createStatement();
-      $sql = "select CURRENT_USER(), USER() ";
+      $connection = $con->getDSN();
+      $sqlType = $connection['phptype'];
+      if($sqlType == 'mssql')
+            $sql = "SELECT SYSTEM_USER, USER"; // Added by Ankit for mssql
+      else
+            $sql = "select CURRENT_USER(), USER() ";
+      
       $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
       $rs1->next();
       $row = $rs1->getRow();
       $mysqlUser    = str_replace('@', "'@'", $row[0] );
       
-      $super = false;
-      $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' "; 
-      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
-      $rs1->next();
-      $row = $rs1->getRow();
-      if ( is_array($row = $rs1->getRow() ) ) {
+//      $super = false;
+//      $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' ";
+//      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+//      $rs1->next();
+//      $row = $rs1->getRow();
+//      if ( is_array($row = $rs1->getRow() ) ) {
       	$super = true;
-    	}
+    	//}
       
       return array( 'user' => $mysqlUser, 'super' => $super );
     }
@@ -932,9 +944,16 @@ class AppCacheView extends BaseAppCacheView {
   function checkAppCacheView () {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
-    
+    $connection = $con->getDSN();
+    $sqlType = $connection['phptype'];
     //check if table APP_CACHE_VIEW exists
-    $sql="SHOW TABLES"; 
+    if($sqlType == 'mssql'){
+        //$sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';"; //Added by Ankit for mssql
+        $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
+    }
+    else
+        $sql="SHOW TABLES";
+
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
     $rs1->next();
     $found = false;     
@@ -943,6 +962,47 @@ class AppCacheView extends BaseAppCacheView {
         $found = true;
       }
       $rs1->next();
+    }
+    
+
+    $needCreateTable = $found == false;
+    
+    //if exists the APP_CACHE_VIEW Table, we need to check if it has the correct number of fields, if not recreate the table
+    $tableRecreated = false;
+    if ( $found ) {
+      if($sqlType == 'mssql')
+          $sql = "SELECT * FROM INFORMATION_SCHEMA.Columns WHERE TABLE_NAME = 'APP_CACHE_VIEW'"; //Added by Ankit for mssql
+      else
+          $sql="SHOW FIELDS FROM  APP_CACHE_VIEW";
+      
+      $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+      $rs1->next();
+      $fields = array();     
+      while ( is_array($row = $rs1->getRow() ) ) {
+        $fields[] = $row[0];
+        $rs1->next();
+      }
+      if ( count($fields) != 31 ) {
+      	$needCreateTable = true;
+      }
+    }  
+    
+    if ( $needCreateTable ) {
+      if($sqlType == 'mssql'){
+          $stmt->executeQuery( "IF EXISTS(SELECT 1 FROM sys.objects WHERE OBJECT_ID = OBJECT_ID(N'APP_CACHE_VIEW') AND type = (N'U'))
+          DROP TABLE APP_CACHE_VIEW");//Added by Ankit for msssql
+          $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view_mssql.sql';
+      }
+      else{
+          $stmt->executeQuery( "DROP TABLE IF EXISTS `APP_CACHE_VIEW`; ");
+          $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view.sql';}
+      
+      if ( !file_exists ( $filenameSql ) )
+        throw ( new Exception ( "file app_cache_view_mssql.sql doesn't exists ") );
+      $sql = file_get_contents ( $filenameSql );
+      $stmt->executeQuery($sql);
+      $tableRecreated = true;
+      $found = true;
     }
     
     //now count how many records there are ..
@@ -976,7 +1036,7 @@ class AppCacheView extends BaseAppCacheView {
       $stmt->executeQuery($val);
     }
 
-    $sql = "select count(*) as CANT from APP_CACHE_VIEW ";  
+    $sql = "select count(*) as CANT from APP_CACHE_VIEW";  
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
     $rs1->next();
     $row1 = $rs1->getRow();
@@ -994,14 +1054,30 @@ class AppCacheView extends BaseAppCacheView {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
-    $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
+    $connection = $con->getDSN();
+    $sqlType = $connection['phptype'];
+    //check if table APP_CACHE_VIEW exists
+    if($sqlType == 'mssql'){
+            $rs = $stmt->executeQuery("select tablename = object_name(parent_obj),* from sysobjects
+            where type = 'tr'", ResultSet::FETCHMODE_ASSOC);}
+    else{
+            $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
+        }
     $rs->next();
     $row = $rs->getRow();
     $found = false;
     while ( is_array ( $row ) ) {
-      if ( strtolower($row['Trigger'] == 'APP_DELEGATION_INSERT') && strtoupper($row['Table']) == 'APP_DELEGATION' ) {
-        $found = true;
+        if($sqlType=='mssql')
+        {
+            if ( strtolower($row['name'] == 'APP_DELEGATION_INSERT') && strtoupper($row['tablename']) == 'APP_DELEGATION' ) {
+            $found = true;
+        }
       }
+        else{
+              if ( strtolower($row['Trigger'] == 'APP_DELEGATION_INSERT') && strtoupper($row['Table']) == 'APP_DELEGATION' ) {
+                $found = true;
+              }
+        }
       $rs->next();
       $row = $rs->getRow();
     }
@@ -1010,9 +1086,23 @@ class AppCacheView extends BaseAppCacheView {
       $found = false;
     }
     if ( ! $found ) {
-      $filenameSql = $this->pathToAppCacheFiles . 'triggerAppDelegationInsert.sql';
+        if($sqlType == 'mssql')
+        {
+            $filenameSql = $this->pathToAppCacheFiles . 'triggerAppDelegationInsert_mssql.sql';
+        }
+        else{
+            $filenameSql = $this->pathToAppCacheFiles . 'triggerAppDelegationInsert.sql';
+        }
       if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationInsert.sql doesn't exists ") );
+        {
+            if($sqlType == 'mssql')
+               {
+                    throw ( new Exception ( "file triggerAppDelegationInsert_mssql.sql doesn't exists ") );
+               }
+            else{
+                throw ( new Exception ( "file triggerAppDelegationInsert.sql doesn't exists ") );
+            }
+        }
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
@@ -1030,14 +1120,30 @@ class AppCacheView extends BaseAppCacheView {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
-    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $connection = $con->getDSN();
+    $sqlType = $connection['phptype'];
+    //check if table APP_CACHE_VIEW exists
+    if($sqlType == 'mssql'){
+            $rs = $stmt->executeQuery("select tablename = object_name(parent_obj),* from sysobjects
+            where type = 'tr'", ResultSet::FETCHMODE_ASSOC);}
+    else{
+            $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
+        }
     $rs->next();
     $row = $rs->getRow();
     $found = false;
     while ( is_array ( $row ) ) {
-      if ( strtolower($row['Trigger'] == 'APP_DELEGATION_UPDATE') && strtoupper($row['Table']) == 'APP_DELEGATION' ) {
-        $found = true;
+      if($sqlType=='mssql')
+        {
+            if ( strtolower($row['name'] == 'APP_DELEGATION_UPDATE') && strtoupper($row['tablename']) == 'APP_DELEGATION' ) {
+            $found = true;
+        }
       }
+        else{
+              if ( strtolower($row['Trigger'] == 'APP_DELEGATION_UPDATE') && strtoupper($row['Table']) == 'APP_DELEGATION' ) {
+                $found = true;
+              }
+        }
       $rs->next();
       $row = $rs->getRow();
     }
@@ -1048,9 +1154,21 @@ class AppCacheView extends BaseAppCacheView {
     }
 
     if ( ! $found ) {
-      $filenameSql = $this->pathToAppCacheFiles . '/triggerAppDelegationUpdate.sql';
+      if($sqlType == 'mssql')
+        {
+            $filenameSql = $this->pathToAppCacheFiles . '/triggerAppDelegationUpdate_mssql.sql';
+        }
+      else{
+            $filenameSql = $this->pathToAppCacheFiles . '/triggerAppDelegationUpdate.sql';
+      }
       if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+        if($sqlType == 'mssql')
+           {
+                throw ( new Exception ( "file triggerAppDelegationUpdate_mssql.sql doesn't exists ") );
+           }
+       else{
+                throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+       }
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
@@ -1067,14 +1185,31 @@ class AppCacheView extends BaseAppCacheView {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
-    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $connection = $con->getDSN();
+    $sqlType = $connection['phptype'];
+    //check if table APP_CACHE_VIEW exists
+    if($sqlType == 'mssql'){
+            $rs = $stmt->executeQuery("select tablename = object_name(parent_obj),* from sysobjects
+            where type = 'tr'", ResultSet::FETCHMODE_ASSOC);}
+    else{
+            $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
+        }
     $rs->next();
     $row = $rs->getRow();
     $found = false;
     while ( is_array ( $row ) ) {
-      if ( strtolower($row['Trigger'] == 'APPLICATION_UPDATE') && strtoupper($row['Table']) == 'APPLICATION' ) {
-        $found = true;
+      if($sqlType=='mssql')
+        {
+            if ( strtolower($row['name'] == 'APPLICATION_UPDATE') && strtoupper($row['tablename']) == 'APPLICATION' ) {
+            $found = true;
+        }
       }
+        else{
+              if ( strtolower($row['Trigger'] == 'APPLICATION_UPDATE') && strtoupper($row['Table']) == 'APPLICATION' ) {
+                $found = true;
+              }
+        }
+
       $rs->next();
       $row = $rs->getRow();
     }
@@ -1084,9 +1219,16 @@ class AppCacheView extends BaseAppCacheView {
     }
 
     if ( ! $found ) {
-      $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate.sql';
-      if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+        if($sqlType=='mssql'){
+            $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate_mssql.sql';
+            if ( !file_exists ( $filenameSql ) )
+                throw ( new Exception ( "file triggerAppDelegationUpdate_mssql.sql doesn't exists ") );
+        }
+        else{
+            $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate.sql';
+            if ( !file_exists ( $filenameSql ) )
+                throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+        }
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
@@ -1103,14 +1245,31 @@ class AppCacheView extends BaseAppCacheView {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
 
-    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $connection = $con->getDSN();
+    $sqlType = $connection['phptype'];
+    //check if table APP_CACHE_VIEW exists
+    if($sqlType == 'mssql'){
+            $rs = $stmt->executeQuery("select tablename = object_name(parent_obj),* from sysobjects
+            where type = 'tr'", ResultSet::FETCHMODE_ASSOC);}
+    else{
+            $rs = $stmt->executeQuery('Show TRIGGERS', ResultSet::FETCHMODE_ASSOC);
+        }
     $rs->next();
     $row = $rs->getRow();
     $found = false;
     while ( is_array ( $row ) ) {
-      if ( strtolower($row['Trigger'] == 'APPLICATION_DELETE') && strtoupper($row['Table']) == 'APPLICATION' ) {
-        $found = true;
+        if($sqlType=='mssql')
+        {
+            if ( strtolower($row['name'] == 'APPLICATION_DELETE') && strtoupper($row['tablename']) == 'APPLICATION' ) {
+            $found = true;
+        }
       }
+        else{
+              if ( strtolower($row['Trigger'] == 'APPLICATION_DELETE') && strtoupper($row['Table']) == 'APPLICATION' ) {
+                $found = true;
+              }
+        }
+
       $rs->next();
       $row = $rs->getRow();
     }
@@ -1121,9 +1280,16 @@ class AppCacheView extends BaseAppCacheView {
     }
 
     if ( ! $found ) {
+        if($sqlType=='mssql'){
+            $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationDelete_mssql.sql';
+            if ( !file_exists ( $filenameSql ) )
+                throw ( new Exception ( "file triggerApplicationDelete_mssql.sql doesn't exists ") );
+        }
+    else{
       $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationDelete.sql';
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationDelete.sql doesn't exists ") );
+    }
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
@@ -1202,4 +1368,4 @@ class AppCacheView extends BaseAppCacheView {
 	return $aRows;
   }
   
-} // AppCacheView
+  }// AppCacheView
