@@ -17,10 +17,16 @@ var currentPagedTable = @#PAGED_TABLE_ID;
   function inputdocsEdit( uid ) {// alert('@G::encryptlink(@#inputdocsEdit)?INP_DOC_UID='+ uid);
 		popupWindow('@G::LoadTranslation(ID_EDIT_INPUTDOCS)', '@G::encryptlink(@#inputdocsEdit)?INP_DOC_UID='+ uid , 500, 410);
   }
+  function validate_form(){
+    var sw = true;
+    sw = sw && (getField('INP_DOC_TITLE').value!='');
+    return sw;
+  }
   function inputdocsSave( form ) { 
   var nameInput = getField('INP_DOC_TITLE').value;
   var proUid = getField('PRO_UID').value;
   if(getField('INP_DOC_UID').value==''){
+      if (validate_form()){
 	  reqName=ajax_function(form.action,'lookForNameInput','NAMEINPUT='+encodeURIComponent(nameInput)+'&proUid='+encodeURIComponent(proUid),'POST') ;
 	  if(reqName){
 	    ajax_post( form.action, form, 'POST' );
@@ -29,10 +35,17 @@ var currentPagedTable = @#PAGED_TABLE_ID;
 	   }else{
 	   alert(G_STRINGS.ID_EXIST_INPUTDOCUMENT);return false;
 	   }
+	   }else{
+	     alert('@G::LoadTranslation(ID_INPUT_DOC_TITLE_REQUIRED)'); return false;
+	   }
     }else{
+      if (validate_form()){
       ajax_post( form.action, form, 'POST' );
 	    currentPopupWindow.remove();
 	    @#PAGED_TABLE_ID.refresh();
+	  }else{
+	    alert('@G::LoadTranslation(ID_INPUT_DOC_TITLE_REQUIRED)'); return false;
+	  }
     }
   }
   function inputdocsDelete( uid ) {
