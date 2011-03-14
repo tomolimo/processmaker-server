@@ -371,13 +371,13 @@ function IsUnsignedInteger(YourNumber){
                    break;
                   case "Alpha":
 								    if (keyCode==8) return true;
-								    patron =/[A-Za-z\sáéíóúäëïöüñçÇÑÁÉÍÓÚÄËÏÖÜ]/; 
+								    patron =/[A-Za-z\sÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼Ã±Ã§Ã‡Ã‘Ã�Ã‰Ã�Ã“ÃšÃ„Ã‹Ã�Ã–Ãœ]/; 
 								    te = String.fromCharCode(keyCode);
 								    return patron.test(te);
                   break;
                   case "AlphaNum":
                     if (keyCode==8) return true;
-                    patron =/[A-Za-z0-9\sáéíóúäëïöüñçÇÑÁÉÍÓÚÄËÏÖÜ]/;
+                    patron =/[A-Za-z0-9\sÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼Ã±Ã§Ã‡Ã‘Ã�Ã‰Ã�Ã“ÃšÃ„Ã‹Ã�Ã–Ãœ]/;
                     te = String.fromCharCode(keyCode);
                     return patron.test(te);
                   break;
@@ -805,7 +805,7 @@ function isNumberMask (mask){
     
         if(this.validate=="Email")
         {
-            var pat=/^[\w\_\-\.çñ]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+            var pat=/^[\w\_\-\.Ã§Ã±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
             if(!pat.test(this.element.value))
             {
                 this.element.className=this.element.className.split(" ")[0]+" FormFieldInvalid";
@@ -838,7 +838,7 @@ function isNumberMask (mask){
     /*    leimnud.event.add(this.element,'blur',function() {
       if (this.validate == 'Email') {
     //if (!this.element.value.match("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\$")) {
-    var pat=/^[\w\_\.çñ]{2,255}@[\w]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+    var pat=/^[\w\_\.Ã§Ã±]{2,255}@[\w]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
     if(!pat.test(this.element.value)){
   //  if (!this.element.value.match("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2-3})\$")) {
           new leimnud.module.app.alert().make({
@@ -1809,11 +1809,13 @@ var validateForm = function(sRequiredFields) {
             sMessage += invalid_fields[j];
         }
         
-        new leimnud.module.app.alert().make({
+       /* new leimnud.module.app.alert().make({
             label:G_STRINGS.ID_REQUIRED_FIELDS + ": <br/><br/>[ " + sMessage + " ]",
             width:450,
             height:140 + (parseInt(invalid_fields.length/10)*10)
-        });
+        });*/
+       
+        alert(G_STRINGS.ID_REQUIRED_FIELDS + ": \n \n [ " + sMessage + " ]");
         return false;
     }
     else {
