@@ -155,10 +155,10 @@ bpmnTask.prototype.paint = function () {
     this.fontSize = 11;
   var fontSize = zoomRate * this.fontSize;
 
-  this.bpmnText.setFont('verdana', + fontSize+'px', Font.PLAIN);
+  this.graphics.setFont('verdana', + fontSize+'px', Font.PLAIN);
 
-  this.bpmnText.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center', 'x-task');
-
+  this.graphics.drawStringRect(this.taskName, this.padleft, this.padtop, this.rectWidth, this.rectheight, 'center', 'x-task');
+  this.graphics.paint();
   //***** Drawing Timer Boundary event starts here 
   this.boundaryTimer = new jsGraphics(this.id);
 
@@ -172,41 +172,41 @@ bpmnTask.prototype.paint = function () {
   var ybt = this.y4 - 13*zoomRate; //y-base boundaryTimer
   var dbt = 30*zoomRate;           //diameter boundaryTimer
   var ycbt = ybt + 11*zoomRate;    //y-center boundaryTimer
-  this.boundaryTimer.setColor("#c0c0c0");
-  this.boundaryTimer.fillEllipse(xbt+2, ybt+2, dbt, dbt);
-  this.boundaryTimer.setStroke(this.stroke);
-  this.boundaryTimer.setColor( "#f9faf2" );
-  this.boundaryTimer.fillEllipse(xbt, ybt, dbt, dbt);
-  this.boundaryTimer.setColor("#adae5e");
-  this.boundaryTimer.drawEllipse(xbt,ybt, dbt, dbt);
+  this.graphics.setColor("#c0c0c0");
+  this.graphics.fillEllipse(xbt+2, ybt+2, dbt, dbt);
+  this.graphics.setStroke(this.stroke-1);
+  this.graphics.setColor( "#f9faf2" );
+  this.graphics.fillEllipse(xbt, ybt, dbt, dbt);
+  this.graphics.setColor("#adae5e");
+  this.graphics.drawEllipse(xbt,ybt, dbt, dbt);
 
   var x_cir2=8;
   var y_cir2=48;
   //this.boundaryTimer.setColor( "#f9faf2" );
   //this.boundaryTimer.fillEllipse(xbt, ybt-9*zoomRate,(30-6)*zoomRate,(30-6)*zoomRate);
-  this.boundaryTimer.setColor("#adae5e");
-  this.boundaryTimer.drawEllipse(xbt+(3*zoomRate), ybt+3*zoomRate,(24.4)*zoomRate,(24.4)*zoomRate);
+  this.graphics.setColor("#adae5e");
+  this.graphics.drawEllipse(xbt+(3*zoomRate), ybt+3*zoomRate,(24.4)*zoomRate,(24.4)*zoomRate);
 
-  this.boundaryTimer.setColor("#adae5e");
-  this.boundaryTimer.drawLine(dbt*0.45 +xbt, dbt*0.45+this.y5-10*zoomRate, dbt/1.6+xbt, dbt/2  +this.y5-10*zoomRate);  //horizontal line
-  this.boundaryTimer.drawLine(dbt*0.45 +xbt, dbt*0.45+this.y5-10*zoomRate, dbt/2.2+xbt, dbt/3.7+this.y5-10*zoomRate);  //vertical line
+  this.graphics.setColor("#adae5e");
+  this.graphics.drawLine(dbt*0.45 +xbt, dbt*0.45+this.y5-10*zoomRate, dbt/1.6+xbt, dbt/2  +this.y5-10*zoomRate);  //horizontal line
+  this.graphics.drawLine(dbt*0.45 +xbt, dbt*0.45+this.y5-10*zoomRate, dbt/2.2+xbt, dbt/3.7+this.y5-10*zoomRate);  //vertical line
 
-  this.boundaryTimer.setStroke(this.stroke-1);
-  this.boundaryTimer.drawLine(xbt +24*zoomRate,ycbt  -3*zoomRate, xbt+20*zoomRate, ycbt            );  //10th min line
-  this.boundaryTimer.drawLine(xbt +21*zoomRate,ycbt  +4*zoomRate, xbt+25*zoomRate, ycbt +4*zoomRate);  //15th min line
-  this.boundaryTimer.drawLine(xbt +24*zoomRate,ycbt +11*zoomRate, xbt+19*zoomRate, ycbt +9*zoomRate);  //25th min line
-  this.boundaryTimer.drawLine(xbt +15*zoomRate,ycbt +11*zoomRate, xbt+15*zoomRate, ycbt+14*zoomRate);  //30th min line
-  this.boundaryTimer.drawLine(xbt +8 *zoomRate,ycbt +11*zoomRate, xbt+12*zoomRate, ycbt +8*zoomRate);  //40th min line
-  this.boundaryTimer.drawLine(xbt +5 *zoomRate,ycbt  +4*zoomRate, xbt+8 *zoomRate, ycbt +4*zoomRate);  //45th min line
-  this.boundaryTimer.drawLine(xbt +8 *zoomRate,ycbt  -4*zoomRate, xbt+11*zoomRate, ycbt -1*zoomRate);  //50th min line
-  this.boundaryTimer.drawLine(xbt+15 *zoomRate,ycbt  -7*zoomRate, xbt+15*zoomRate, ycbt -4*zoomRate);  //60th min line
+  this.graphics.setStroke(this.stroke-1);
+  this.graphics.drawLine(xbt +24*zoomRate,ycbt  -3*zoomRate, xbt+20*zoomRate, ycbt            );  //10th min line
+  this.graphics.drawLine(xbt +21*zoomRate,ycbt  +4*zoomRate, xbt+25*zoomRate, ycbt +4*zoomRate);  //15th min line
+  this.graphics.drawLine(xbt +24*zoomRate,ycbt +11*zoomRate, xbt+19*zoomRate, ycbt +9*zoomRate);  //25th min line
+  this.graphics.drawLine(xbt +15*zoomRate,ycbt +11*zoomRate, xbt+15*zoomRate, ycbt+14*zoomRate);  //30th min line
+  this.graphics.drawLine(xbt +8 *zoomRate,ycbt +11*zoomRate, xbt+12*zoomRate, ycbt +8*zoomRate);  //40th min line
+  this.graphics.drawLine(xbt +5 *zoomRate,ycbt  +4*zoomRate, xbt+8 *zoomRate, ycbt +4*zoomRate);  //45th min line
+  this.graphics.drawLine(xbt +8 *zoomRate,ycbt  -4*zoomRate, xbt+11*zoomRate, ycbt -1*zoomRate);  //50th min line
+  this.graphics.drawLine(xbt+15 *zoomRate,ycbt  -7*zoomRate, xbt+15*zoomRate, ycbt -4*zoomRate);  //60th min line
 
   if(this.boundaryEvent == true) {
-    this.boundaryTimer.paint();
+    this.graphics.paint();
   }
   //****************Drawing Timer Boundary event ends here ****************
 
-  this.bpmnText.paint();
+  //this.bpmnText.paint();
   
   //Code Added to Dynamically shift Ports on resizing of shapes
   if (this.input1 != null) {

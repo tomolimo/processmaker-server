@@ -892,17 +892,20 @@ interior_extrema. */
 /* drawStringRect() added by Rick Blommers.
 Allows to specify the size of the text rectangle and to align the
 text both horizontally (e.g. right) and vertically within that rectangle */
-	this.drawStringRect = function(txt, x, y, width, halign)
+	this.drawStringRect = function(txt, x, y, width,height, halign, cls)
 	{
-		this.htm += '<div style="position:absolute;overflow:hidden;'+
+                var classBk = typeof(cls) != 'undefined' ? 'class="'+cls+'" ' : '';
+		this.htm += '<div '+classBk+' style="position:absolute;overflow:hidden;'+
 			'left:' + x + 'px;'+
 			'top:' + y + 'px;'+
 			'width:'+width +'px;'+
+                        'height:'+height +'px;'+
 			'text-align:'+halign+';'+
 			'font-family:' +  this.ftFam + ';'+
 			'font-size:' + this.ftSz + ';'+
-			'color:' + this.color + ';' + this.ftSty + '">'+
-			txt +
+			'line-height: 100%;'+
+                         'color:#000000;' + this.ftSty + '">'+
+                         '<span style="display:inline-block; vertical-align:middle">' +txt + '<\/span>'+
 			'<\/div>';
 	};
 
