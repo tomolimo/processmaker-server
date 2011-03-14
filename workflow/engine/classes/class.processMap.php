@@ -617,7 +617,7 @@ class processMap {
          * i recommend that a more general solution must be achieved to resolve
          * this issue in every model class, to prevent future problems.
          * */
-        $oDbSource->remove($aRow ['DBS_UID']);
+        $oDbSource->remove($aRow ['DBS_UID'], $sProcessUID);
         $oDataset->next();
       }
       //Delete the supervisors
