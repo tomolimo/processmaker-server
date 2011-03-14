@@ -49,7 +49,7 @@ var verifyProcessInformation = function(oForm)
 	oAux = oForm.elements['form[PRO_TITLE]'];
 	if (oAux.value == '')
 	{
-		alert("@#MESSAGE1");
+		alert('@G::LoadTranslation(ID_PROCESS_TITLE_REQUIRED)');
 		oAux.focus();
 		bContinue = false;
 	}
