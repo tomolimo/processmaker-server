@@ -453,6 +453,9 @@ function replaceAll( text, busca, reemplaza ){
       
       maskD = me.mask.split(';');
       maskL = (maskD.length >1)?maskD[1]:maskD[0];  
+      if (maskL.search(",")==-1){
+      return false;
+      }
       maskWithoutC =replaceAll(maskL,",",""); 
       //maskWithoutC =replaceAll(maskWithoutC,".","");
       //maskWithoutC  =replaceAll(maskWithoutC,"#","");
