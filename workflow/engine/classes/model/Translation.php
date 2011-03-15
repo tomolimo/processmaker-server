@@ -152,6 +152,9 @@ class Translation extends BaseTranslation {
       
       if( ! is_dir(dirname($cacheFile)) ) 
         G::mk_dir(dirname($cacheFile));
+        
+      if( ! is_dir(dirname($cacheFileJS)) ) 
+        G::mk_dir(dirname($cacheFileJS));
 
       $f = fopen( $cacheFile , 'w+');
       fwrite( $f , "<?php\n" );
