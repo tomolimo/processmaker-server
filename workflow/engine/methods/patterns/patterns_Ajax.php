@@ -120,8 +120,10 @@ switch ($aData['action']) {
 	  	    $aFields['ROU_CASE']      = $iKey;
 	  	    $aFields['ROU_TYPE']      = $aData['ROU_TYPE'];
 	  	    $aFields['ROU_CONDITION'] = $aRow['ROU_CONDITION'];
-                    $aFields['ROU_OPTIONAL'] =  $aRow['ROU_OPTIONAL'];
-                    $rou_id = $oRoute->create($aFields);
+          if(isset($aRow['ROU_OPTIONAL']) && trim($aRow['ROU_OPTIONAL'])!=''
+						  && ($aRow['ROU_OPTIONAL']==='TRUE' || $aRow['ROU_OPTIONAL']==='FALSE'))
+            $aFields['ROU_OPTIONAL'] =  $aRow['ROU_OPTIONAL'];
+          $rou_id = $oRoute->create($aFields);
 	  	    unset($aFields);
 	  	  }
 	  	break;
