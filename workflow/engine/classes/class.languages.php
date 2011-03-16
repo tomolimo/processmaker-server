@@ -316,14 +316,17 @@ class languages {
             $countItemsSuccess++;
         } else if( $updateXml ){
           $xmlForm = $context;
-          $codes   = explode('-', $reference);
-          foreach($codes as $i=>$code){
+          //$codes   = explode('-', $reference);
+          /*foreach($codes as $i=>$code){
             $codes[$i] = trim($code);
             if ( $codes[$i] == "''" ){
               $codes[$i] = '';
             }
           }
-          $fieldName = trim($codes[1]);
+          $fieldName = trim($codes[1]);*/
+          
+          //erik: expresion to prevent and hable correctly dropdown values like -1, -2 etc.
+          preg_match('/^([\w_]+)\s-\s([\w_]+)\s*-*\s*([\w\W]*)$/', $reference, $match);
           
           if( ! file_exists(PATH_XMLFORM . $xmlForm) ) {
             continue;
@@ -331,11 +334,19 @@ class languages {
           
           G::LoadSystem('dynaformhandler');
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
+          $fieldName = $match[2];
+          if( !isset($match[2]) ){
+          	print_r($reference);
+          	print_r($match);
+          	die;
+          }
+          	
+          $codes = explode('-', $reference);
           
           if( sizeof($codes) == 2 ) { //is a normal node
             $dynaform->addChilds($fieldName, Array($LOCALE=>$rowTranslation['msgstr']));
-          } else if( sizeof($codes) == 3 ) { //is a node child for a language node
-            $name = trim($codes[2]);
+          } else if( sizeof($codes) > 2 ) { //is a node child for a language node
+          	$name = $match[3] == "''" ? '' : $match[3];
             $childNode = Array(
               Array('name'=>'option', 'value'=>$rowTranslation['msgstr'], 'attributes'=>Array('name'=>$name))
             );

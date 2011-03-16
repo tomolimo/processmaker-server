@@ -173,7 +173,7 @@ foreach ($aXMLForms as $xmlFormPath) {
 
   //get all fields of each xmlform
   foreach ($dynaNodes as $oNode) {
-  
+    
     $sNodeName = $oNode->nodeName;
     //$arrayNode = $dynaForm->getArray($oNode, Array('type', $_BASE_LANG, $_BASE_LANG)); 
     $arrayNode = $dynaForm->getArray($oNode);
@@ -190,6 +190,11 @@ foreach ($aXMLForms as $xmlFormPath) {
       $langNode = $arrayNode[$_BASE_LANG][0];
       $originNodeText = getTextValue($langNode);
     }
+    
+    /*if( strpos($xmlFormPath, 'patterns/patterns_GridParallelByEvaluationType.xml') !== false){
+      g::pr($arrayNode);
+      g::dump(getTextValue($langNode));
+    }*/
    
     // Getting the Base Target Text
     if( isset($arrayNode[$_TARGET_LANG]) ) {
@@ -214,12 +219,18 @@ foreach ($aXMLForms as $xmlFormPath) {
     
     // if the nodeName already exists in the po file, we need to create other msgid
     if( isset($aMsgids[$msgid]) )
-      $msgid = '[' . $xmlFormFile . '?' . $nodeName . ']' . $originNodeText;
+      $msgid = '[' . $xmlFormFile . '?' . $nodeName . '] ' . $originNodeText;
     
     $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName);
     $poFile->addTranslatorComment($xmlFormFile);
     $poFile->addReference($nodeType . ' - ' . $nodeName);
     $poFile->addTranslation($msgid, stripslashes($targetNodeText));
+    
+    /*if( strpos($xmlFormPath, 'patterns/patterns_GridParallelByEvaluationType.xml') !== false){
+      echo 'msgstr: ' .$msgid, stripslashes($targetNodeText);
+      echo '<br>';
+    }*/
+    
     
     $aMsgids[$msgid] = true;
     
