@@ -3119,9 +3119,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
      * By Erik A. O. <erik@colosa.com>
      * @package gulliver.system
      */
-    if($mask == 'yyyy-mm-dd')
-      $mask = '%Y-%m-%d';
-
+       
     if( strpos($mask, '%') === false ) {
       if( strpos($mask, '-') !== false ) { // case '-' saparator
         $maskparts = explode('-', $mask);
@@ -3129,6 +3127,14 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         foreach($maskparts as $part) {
           if($mask != '')
             $mask .= '-';
+          if($part=='yyyy')
+          $part='Y';
+          if($part=='dd')
+          $part='d';
+          if($part=='mm')
+          $part='m';
+          if($part=='yy') 
+          $part='y';
           $mask .= '%'.$part;
         }
       }
@@ -3139,9 +3145,37 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         foreach($maskparts as $part) {
           if($mask != '')
             $mask .= '/';
+          if($part=='yyyy')
+          $part='Y';
+          if($part=='dd')
+          $part='d';
+          if($part=='mm')
+          $part='m';
+          if($part=='yy')
+          $part='y';
           $mask .= '%'.$part;
         }
       }
+      
+    if( strpos($mask, '.') !== false ) { // case '.' saparator
+        $maskparts = explode('.', $mask);
+        $mask = '';
+        foreach($maskparts as $part) {
+          if($mask != '')
+            $mask .= '.';
+          if($part=='yyyy')
+          $part='Y';
+          if($part=='dd')
+          $part='d';
+          if($part=='mm')
+          $part='m';
+          if($part=='yy')
+          $part='y';
+          $mask .= '%'.$part;
+        }
+      }
+      
+      
     }
     /** - end - Backward compatibility **/
     $tmp = str_replace("%", "", $mask);
@@ -3196,14 +3230,14 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                $value=$value1;
            }
         
-       
+      
         if ( $this->editable != "0") {
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
                 . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
-        } else {
+        } else {   
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
