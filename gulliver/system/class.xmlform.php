@@ -2397,9 +2397,14 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
   {
     $result = array ();
     $r      = 1;
+<<<<<<< HEAD
     if(! isset($owner->modeGrid)) $owner->modeGrid = '';
     $this->modeGridDrop = $owner->modeGrid;
     
+=======
+    if(isset($owner->modeGrid))
+      $this->modeGridDrop = $owner->modeGrid;
+>>>>>>> 63d86b9... Adjustment to establish mode the Grids Tables, and elements (validation)
     $this->mode = $this->modeForGrid;
     foreach ( $values as $v ) {
       $result [] = $this->render ( $v, $owner, '[' . $owner->name . '][' . $r . ']', $onlyValue, $r, $therow );
