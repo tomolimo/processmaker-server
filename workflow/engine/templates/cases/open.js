@@ -1,18 +1,3 @@
-/*new Ext.KeyMap(document, {
-  key: Ext.EventObject.F5,
-  fn: function(keycode, e) {
-    if (! e.ctrlKey) {
-      if (Ext.isIE) {
-        e.browserEvent.keyCode = 8;
-      }
-      e.stopEvent();
-      updateCasesTree();
-    } 
-    else 
-      Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
-  }
-});*/
-
 var Actions = {};
 var showCaseNavigatorPanel;
 var hideCaseNavigatorPanel;
@@ -20,16 +5,11 @@ var informationMenu;
 var caseMenuOpen = false;
 var toReviseTreeOpen = false;
 var menuSelectedTitle = Array();
-
 var _ENV_CURRENT_DATE;
 
 
 Ext.onReady(function(){
-
-
   Ext.QuickTips.init();
-
-
   showCaseNavigatorPanel = function(steps, information, action) {
 
     if(steps==false&&action==false){
@@ -81,8 +61,6 @@ Ext.onReady(function(){
       return false;
     else
       caseMenuOpen = true;
-
-    //alert(steps+' '+information+' '+action);
     
     //getting the case Information availables options
     Ext.Ajax.request({
@@ -155,13 +133,11 @@ Ext.onReady(function(){
   function togglePreview(btn, pressed){
     var preview = Ext.getCmp('navPanelWest');
     preview[pressed ? 'show' : 'hide']();
-    //preview.ownerCt.doLayout();
     Ext.getCmp('navPanel').ownerCt.doLayout();
   }
   
   var casesStepTree = new Ext.tree.TreePanel({
     id: 'casesStepTree',
-    //title: 'Reporting Project',
     autoWidth: true,
     userArrows: true,
     animate: true,
@@ -191,16 +167,11 @@ Ext.onReady(function(){
     id: 'navPanelWest',
     region: 'west',
     xtype:'panel',
-    //deferredRender: false,
-    //contentEl:'casesSubFrame'
-     //layout: 'border',
     width: 250,
     height: 500,
-    //minSize: 175,
     maxSize: 400,
     split: true,
     collapsible: false,
-//    collapseMode: 'mini',
     margins: '0 0 0 0',
     items:[casesStepTree]
   }
@@ -215,9 +186,6 @@ Ext.onReady(function(){
     id: 'navPanelCenter',
     region: 'center',
     xtype:'panel',
-    //html:'addd'
-    //deferredRender: true
-    //contentEl:'openCaseFrame'
     items:[{
         xtype:"tabpanel",
         id: 'caseTabPanel',
@@ -229,7 +197,7 @@ Ext.onReady(function(){
         //defaults: Ext.apply({}, Ext.isGecko? {style:{position:'absolute'},hideMode:'visibility'}:false),
         
         items:[{
-          title: _('ID_CASE') +' ' + parent._CASE_TITLE,
+          title: _('ID_CASE') +' ' + _APP_NUM,
           frameConfig:{name:'openCaseFrame', id:'openCaseFrame'},
           defaultSrc : uri,
           loadMask:{msg:'Loading...'},
@@ -264,11 +232,7 @@ Ext.onReady(function(){
   var navPanel = {
     id: 'navPanel',
     region: 'center',
-    //xtype:'border',
-    //deferredRender: false,
-    //contentEl:'casesSubFrame'
     layout: 'border',
- 
     items:[navPanelWest, navPanelCenter],
     tbar:[{
       id: 'stepsMenu',
@@ -284,14 +248,12 @@ Ext.onReady(function(){
     }, {
       id: 'informationMenu',
       text: _('ID_INFORMATION'),
-      menu: []//,
-      //disabled: false
+      menu: []
     }, {
       id: 'actionMenu',
       text: _('ID_ACTIONS'),
       menu: []
-    }]
-    //html:'sds'
+    }]    
   }
   
   var viewport = new Ext.Viewport({

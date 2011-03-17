@@ -38,6 +38,12 @@
 
   G::LoadClass("configuration");
   G::LoadClass("case");
+  $oCase = new Cases();
+  $appNum = '';
+  if( isset($_GET['APP_UID']) && isset($_GET['DEL_INDEX'])) {
+    $case = $oCase->loadCase($_GET['APP_UID'], $_GET['DEL_INDEX']);
+    $appNum = $case['APP_TITLE'];
+  }
   $conf = new Configurations;
 
   if (!isset($_GET['to_revise'])){
@@ -54,6 +60,7 @@
   }
 
   $oHeadPublisher->assign('uri', $script . $uri);
+  $oHeadPublisher->assign('_APP_NUM', $appNum);
   $oHeadPublisher->assign('_ENV_CURRENT_DATE', $conf->getSystemDate(date('Y-m-d')));
   G::RenderPage('publish', 'extJs');
 
