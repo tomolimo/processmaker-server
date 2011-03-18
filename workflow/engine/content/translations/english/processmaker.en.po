@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.8\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-03-18 15:23:41\n"
+"PO-Revision-Date: 2011-03-18 19:46:22\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -424,13 +424,13 @@ msgstr "Members"
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_GROUP
 #: LABEL/ID_MSG_CONFIRM_DELETE_GROUP
-msgid "Draft"
-msgstr "Draft"
+msgid "Do you want to delete selected group?"
+msgstr "Do you want to delete selected group?"
 
 # TRANSLATION
 # APP_STATUS/DRAFT
 #: APP_STATUS/DRAFT
-msgid "[APP_STATUS/DRAFT] Draft"
+msgid "Draft"
 msgstr "Draft"
 
 # TRANSLATION
@@ -6508,8 +6508,8 @@ msgstr "You cannot modify this role."
 # TRANSLATION
 # LABEL/ID_ROLES_SUCCESS_DELETE
 #: LABEL/ID_ROLES_SUCCESS_DELETE
-msgid "You role has been deleted correctly."
-msgstr "You role has been deleted correctly."
+msgid "Your role has been deleted correctly."
+msgstr "Your role has been deleted correctly."
 
 # TRANSLATION
 # LABEL/MSG_PO_FILE_INVALID_LANGUAJE
@@ -9444,6 +9444,18 @@ msgstr "Process Title is required."
 #: LABEL/ID_SAVING_PROCESS
 msgid "Saving process"
 msgstr "Saving process"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE
+msgid "Displaying skins {0} - {1} of {2}"
+msgstr "Displaying skins {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_NO_SKIN_MESSAGE
+#: LABEL/ID_GRID_PAGE_NO_SKIN_MESSAGE
+msgid "No skins to display"
+msgstr "No skins to display"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
