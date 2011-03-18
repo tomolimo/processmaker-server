@@ -337,6 +337,13 @@ function IsUnsignedInteger(YourNumber){
         if (window.event) event=window.event;
         var keyCode= window.event ? event.keyCode : event.which ;
         me.mask = typeof(me.mask)==='undefined'?'':me.mask;
+        if(me.mask=='yyyy-mm-dd'){        	  
+        	attributes.mask=attributes.mask.replace('%d','dd');	 
+        	attributes.mask=attributes.mask.replace('%m','mm');
+        	attributes.mask=attributes.mask.replace('%y','yy');
+        	attributes.mask=attributes.mask.replace('%Y','yyyy');	        	       	     
+        	me.mask=attributes.mask;   
+        } 
         if (me.mask !=='' ) {
             if ((keyCode < 48 || keyCode > 57) && (keyCode != 8 && keyCode != 0 && keyCode != 46)) return false;
             if((keyCode===118 || keyCode===86) && event.ctrlKey) return false;
