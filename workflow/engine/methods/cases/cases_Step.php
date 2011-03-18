@@ -324,7 +324,7 @@
 					//END: If there is a Break Step registered from Plugin
 
 
-          $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
+          $sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
           require_once 'classes/model/AppFolder.php';
           require_once 'classes/model/AppDocument.php';
 
