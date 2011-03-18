@@ -229,25 +229,25 @@ try {
     }
   }
   
-  //Added by Qennix
-  //Update Start Time Event in BPMN
-  
-  
-  if (isset($_POST['form']['TAS_UID'])){
-  require_once 'classes/model/Event.php';
-  require_once 'classes/model/Task.php';
-  
-  
-  $oTask = new Task();
-  $oTask->load($_POST['form']['TAS_UID']);
-  $evn_uid = $oTask->getStartingEvent();
-  $event = new Event();
-  $editEvent = array();
-  $editEvent['EVN_UID'] = $evn_uid;
-  $editEvent['EVN_ACTION'] = $sch_uid;
-  $event->update($editEvent);
-  //End Adding
-  }
+//  //Added by Qennix
+//  //Update Start Time Event in BPMN
+//  
+//  echo $_POST['form']['TAS_UID']."<<----";
+//  if (isset($_POST['form']['TAS_UID'])){
+//  require_once 'classes/model/Event.php';
+//  require_once 'classes/model/Task.php';
+//  echo $_POST['form']['TAS_UID']."<<----";
+//  
+//  $oTask = new Task();
+//  $oTask->load($_POST['form']['TAS_UID']);
+//  $evn_uid = $oTask->getStartingEvent();
+//  $event = new Event();
+//  $editEvent = array();
+//  $editEvent['EVN_UID'] = $evn_uid;
+//  $editEvent['EVN_ACTION'] = $sch_uid;
+//  $event->update($editEvent);
+//  //End Adding
+//  }
 
   G::header('location: cases_Scheduler_List?PRO_UID='.$_POST['form']['PRO_UID']);
 
