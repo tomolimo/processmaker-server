@@ -55,9 +55,9 @@ class Ajax
     G::LoadClass('pmScript');
     G::LoadClass('case');
 
-    $PRO_UID = $_SESSION['PROCESS'];
-    $TAS_UID = $_SESSION['TASK'];
-    $APP_UID = $_SESSION['APPLICATION'];
+    $PRO_UID = isset($_SESSION['PROCESS'])?$_SESSION['PROCESS']:'';
+    $TAS_UID = isset($_SESSION['TASK'])?$_SESSION['TASK']:'';
+    $APP_UID = isset($_SESSION['APPLICATION'])?$_SESSION['APPLICATION']:'';
     $tree = Array();
     $case = new Cases;
     $step = new Step;
