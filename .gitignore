@@ -1,4 +1,7 @@
+.gitignore
 nbproject
 workflow/engine/config/paths_installed.php
 *~
-
+workflow/engine/js/labels/
+workflow/public_html/files/
+.nfs*
