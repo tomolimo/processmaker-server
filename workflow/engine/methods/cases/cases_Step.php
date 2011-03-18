@@ -162,7 +162,7 @@
   }
   #end trigger debug session.......
 
-  $oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
+  //$oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
 
   //Save data - Start
   $oCase->updateCase ( $_SESSION['APPLICATION'], $Fields );

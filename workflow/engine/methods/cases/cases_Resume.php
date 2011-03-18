@@ -78,6 +78,7 @@
 
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
+    
   $oHeadPublisher->addScriptCode('
   var Cse = {};
   Cse.panels = {};

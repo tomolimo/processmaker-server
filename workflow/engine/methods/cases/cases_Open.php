@@ -92,6 +92,38 @@ try {
         require_once (PATH_METHODS . 'cases' . PATH_SEP . 'cases_Resume.php');
         exit;
       }
+      
+      /**
+       * these routine is to verify if the case was acceded from advaced search list
+       */
+      if( $_action == 'search' ) {
+        //verify if the case is with teh current user
+        $c = new Criteria('workflow');
+        $c->add(AppDelegationPeer::APP_UID, $sAppUid);
+        $c->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
+        $oDataset = AppDelegationPeer::doSelectRs($c);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $oDataset->next();
+        $aData = $oDataset->getRow();
+    
+
+        if ( $aData['USR_UID'] != $_SESSION['USER_LOGGED']  &&
+             $aData['USR_UID'] != ""  //distinct "" for selfservice 
+        ) { 
+        //so we show just the resume
+            $_SESSION['alreadyDerivated'] = true;
+            //the case is paused show only the resume
+            $_SESSION['APPLICATION']   = $sAppUid;
+            $_SESSION['INDEX']         = $iDelIndex;
+            $_SESSION['PROCESS']       = $aFields['PRO_UID'];
+            $_SESSION['TASK']          = -1;
+            $_SESSION['STEP_POSITION'] = 0;
+
+            require_once (PATH_METHODS . 'cases' . PATH_SEP . 'cases_Resume.php');
+            exit;
+        }
+      }
+      
 
       //proceed and try to open the case
       $oAppDelegation = new AppDelegation();
