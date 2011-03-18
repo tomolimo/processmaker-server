@@ -83,7 +83,12 @@
   
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, $actions)");
+
+  if( isset($_SESSION['alreadyDerivated']) && $_SESSION['alreadyDerivated'] == true )
+    $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, true)");
+  else
+    $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, $actions)");
+    
   $oHeadPublisher->addScriptCode('
   var Cse = {};
   Cse.panels = {};
