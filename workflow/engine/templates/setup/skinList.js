@@ -224,8 +224,8 @@ Ext.onReady(function(){
     pageSize: pageSize,
     store: store,
     displayInfo: true,
-    displayMsg: _('ID_GRID_PAGE_DISPLAYING_CALENDAR_MESSAGE') + '&nbsp; &nbsp; ',
-    emptyMsg: _('ID_GRID_PAGE_NO_CALENDAR_MESSAGE')//,
+    displayMsg: _('ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE') + '&nbsp; &nbsp; ',
+    emptyMsg: _('ID_GRID_PAGE_NO_SKIN_MESSAGE')//,
     //items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
   });
   

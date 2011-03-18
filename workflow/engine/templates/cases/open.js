@@ -12,7 +12,7 @@ Ext.onReady(function(){
   Ext.QuickTips.init();
   showCaseNavigatorPanel = function(steps, information, action) {
 
-    if(steps==false&&action==false){
+    if(steps==false&&action==false&&typeof(treeToReviseTitle)!='undefined'){
       var treeToRevise = new Ext.tree.TreePanel({
         title: treeToReviseTitle,
         width: 250,

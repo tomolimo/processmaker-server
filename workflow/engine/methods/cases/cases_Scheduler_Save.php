@@ -231,20 +231,23 @@ try {
   
   //Added by Qennix
   //Update Start Time Event in BPMN
+  
+  
+  if (isset($_POST['form']['TAS_UID'])){
   require_once 'classes/model/Event.php';
   require_once 'classes/model/Task.php';
   
+  
   $oTask = new Task();
   $oTask->load($_POST['form']['TAS_UID']);
-  echo '1';
   $evn_uid = $oTask->getStartingEvent();
-  echo '2'.$evn_uid;
   $event = new Event();
   $editEvent = array();
   $editEvent['EVN_UID'] = $evn_uid;
   $editEvent['EVN_ACTION'] = $sch_uid;
   $event->update($editEvent);
   //End Adding
+  }
 
   G::header('location: cases_Scheduler_List?PRO_UID='.$_POST['form']['PRO_UID']);
 
