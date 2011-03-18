@@ -915,7 +915,7 @@ SelectionListener1.prototype.onSelectionChanged = function(_43b2) {
   if (this.lastSelectedItem !== this.workflow.currentSelection.id ) {
     if( this.workflow.currentSelection.type == 'bpmnTask' || this.workflow.currentSelection.type == 'bpmnSubProcess' ) {
       this.lastSelectedItem = this.workflow.currentSelection.id;
-      console.log('selecting task: '+this.workflow.currentSelection.taskName);
+      //console.log('selecting task: '+this.workflow.currentSelection.taskName);
       //erik: to set selected the respective node on eastTreePanel
       var currEatTreeNode = Ext.getCmp('eastPanelTree').getNodeById(this.workflow.currentSelection.id);
       if( typeof currEatTreeNode != 'undefined' )

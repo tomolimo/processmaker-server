@@ -57,192 +57,12 @@ class languages {
   
   /*
   * Import a language file
+  * 
+  * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail>
   * @param string $sLanguageFile
   * @param string $bXml
   * @return void 
   */
-  public function importLanguage2($sLanguageFile, $bXml = true)
-  {
-    try {
-      $this->log ( $sLanguageFile );
-      $oFile = fopen($sLanguageFile, 'r');
-      $bFind = false;
-      while (!$bFind && ($sLine = fgets($oFile))) {
-        if (strpos($sLine, '"X-Poedit-Language:') !== false) {
-          $aAux = explode(':', $sLine);
-          $sAux = trim(str_replace('\n"', '', $aAux[1]));
-        }
-        if (strpos($sLine, '#') !== false) {
-          $bFind = true;
-        }
-      }
-      $oCriteria = new Criteria('workflow');
-      $oCriteria->addSelectColumn(LanguagePeer::LAN_ID);
-      $oCriteria->add(LanguagePeer::LAN_NAME, $sAux, Criteria::LIKE);
-      $oDataset = LanguagePeer::doSelectRS($oCriteria);
-      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset->next();
-      if ($aRow = $oDataset->getRow()) {
-        $sLanguageID = $aRow['LAN_ID'];
-      }
-      else {
-        throw new Exception(G::loadTranslation('MSG_PO_FILE_INVALID_LANGUAJE'));
-      }
-      if (!$bFind) {
-        throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-      }
-      $oTranslation = new Translation();
-      $sAux = '';
-      while ($sLine = fgets($oFile)) {
-        if (strpos($sLine, '.xml') === false) {
-          $aAux = explode('/', str_replace('# ', '', $sLine));
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          $oTranslation->addTranslation($aAux[0], trim(str_replace(chr(10), '', $aAux[1])), $sLanguageID, substr(trim(str_replace(chr(10), '', $sLine)), 8, -1));
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          $sLine = fgets($oFile);
-        }
-        else {
-          $sXmlForm = trim(str_replace('# ', '', $sLine));
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          $aAux       = explode(' - ', $sLine);
-          $sFieldName = trim(str_replace(chr(10), '', $aAux[1]));
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          if (file_exists(PATH_XMLFORM . $sXmlForm) && $bXml) {
-            if ($sAux == '') {
-              $sAux        = $sXmlForm;
-              $oConnection = new DBConnection(PATH_XMLFORM . $sXmlForm, '', '', '', 'myxml');
-              $oSession    = new DBSession($oConnection);
-            }
-            if ($sAux == $sXmlForm) {
-              if (count($aAux) == 2) {
-                $oDataset = $oSession->Execute('SELECT * FROM dynaForm WHERE XMLNODE_NAME = "' . $sFieldName . '"');
-                if ($oDataset->count() > 0) {
-                  $oDataset2 = $oSession->Execute('SELECT * FROM dynaForm.' . $sFieldName . ' WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                  if ($oDataset2->count() == 0) {
-                    $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME) VALUES ("' . $sLanguageID . '")');
-                  }
-                  $oSession->Execute('UPDATE dynaForm.' . $sFieldName . ' SET XMLNODE_VALUE = "' . str_replace("'", "\'", str_replace('"', '""', stripslashes(substr(trim(str_replace(chr(10), '', $sLine)), 8, -1)))) . '" WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                }
-                else {
-                  $oSession->Execute('INSERT INTO dynaForm (XMLNODE_NAME, XMLNODE_VALUE) VALUES ("' . $sFieldName . '", "")');
-                  $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME, XMLNODE_VALUE) VALUES ("' . $sLanguageID . '", "' . str_replace("'", "\'", str_replace('"', '""', stripslashes(substr(trim(str_replace(chr(10), '', $sLine)), 8, -1)))) . '")');
-                }
-                $bDelete = true;
-              }
-              if (count($aAux) == 3) {
-                if ($bDelete) {
-                  $oDataset = $oSession->Execute('SELECT * FROM dynaForm WHERE XMLNODE_NAME = "' . $sFieldName . '"');
-                  if ($oDataset->count() > 0) {
-                    $oDataset2 = $oSession->Execute('SELECT * FROM dynaForm.' . $sFieldName . ' WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                    if ($oDataset2->count() == 0) {
-                      $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME) VALUES ("' . $sLanguageID . '")');
-                    }
-                    $oDataset = $oSession->Execute('SELECT * FROM dynaForm.' . $sFieldName . ' WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                    if ($oDataset->count() > 0) {
-                      $oSession->Execute('DELETE FROM dynaForm.' . $sFieldName . '.' . $sLanguageID . ' WHERE 1');
-                    }
-                    else {
-                      $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME, XMLNODE_VALUE) VALUES ("' . $sLanguageID . '", "")');
-                    }
-                  }
-                  $bDelete = false;
-                }
-                $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . '.' . $sLanguageID . ' (XMLNODE_NAME,XMLNODE_VALUE,name) VALUES ("option","' . str_replace("'", "\'", str_replace('"', '""', stripslashes(substr(trim(str_replace(chr(10), '', $sLine)), 8, -1)))) . '","' . trim(str_replace(chr(10), '', $aAux[2])) . '")');
-              }
-            }
-            else {
-              $oConnection = new DBConnection(PATH_XMLFORM . $sXmlForm, '', '', '', 'myxml');
-              $oSession = new DBSession($oConnection);
-              if (count($aAux) == 2) {
-                $oDataset = $oSession->Execute('SELECT * FROM dynaForm WHERE XMLNODE_NAME = "' . $sFieldName . '"');
-                if ($oDataset->count() > 0) {
-                  $oDataset2 = $oSession->Execute('SELECT * FROM dynaForm.' . $sFieldName . ' WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                  if ($oDataset2->count() == 0) {
-                    $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME) VALUES ("' . $sLanguageID . '")');
-                  }
-                  $oSession->Execute('UPDATE dynaForm.' . $sFieldName . ' SET XMLNODE_VALUE = "' . str_replace("'", "\'", str_replace('"', '""', stripslashes(substr(trim(str_replace(chr(10), '', $sLine)), 8, -1)))) . '" WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                }
-                else {
-                  $oSession->Execute('INSERT INTO dynaForm (XMLNODE_NAME, XMLNODE_VALUE) VALUES ("' . $sFieldName . '", "")');
-                  $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME, XMLNODE_VALUE) VALUES ("' . $sLanguageID . '", "' . str_replace("'", "\'", str_replace('"', '""', stripslashes(substr(trim(str_replace(chr(10), '', $sLine)), 8, -1)))) . '")');
-                }
-                $bDelete = true;
-              }
-              if (count($aAux) == 3) {
-                if ($bDelete) {
-                  $oDataset = $oSession->Execute('SELECT * FROM dynaForm WHERE XMLNODE_NAME = "' . $sFieldName . '"');
-                  if ($oDataset->count() > 0) {
-                    $oDataset2 = $oSession->Execute('SELECT * FROM dynaForm.' . $sFieldName . ' WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                    if ($oDataset2->count() == 0) {
-                      $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME) VALUES ("' . $sLanguageID . '")');
-                    }
-                    $oDataset = $oSession->Execute('SELECT * FROM dynaForm.' . $sFieldName . ' WHERE XMLNODE_NAME = "' . $sLanguageID . '"');
-                    if ($oDataset->count() > 0) {
-                      $oSession->Execute('DELETE FROM dynaForm.' . $sFieldName . '.' . $sLanguageID . ' WHERE 1');
-                    }
-                    else {
-                      $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . ' (XMLNODE_NAME, XMLNODE_VALUE) VALUES ("' . $sLanguageID . '", "")');
-                    }
-                  }
-                  $bDelete = false;
-                }
-                $oSession->Execute('INSERT INTO dynaForm.' . $sFieldName . '.' . $sLanguageID . ' (XMLNODE_NAME,XMLNODE_VALUE,name) VALUES ("option","' . str_replace("'", "\'", str_replace('"', '""', stripslashes(substr(trim(str_replace(chr(10), '', $sLine)), 8, -1)))) . '","' . trim(str_replace(chr(10), '', $aAux[2])) . '")');
-              }
-              $sAux = $sXmlForm;
-            }
-          }
-          if (!($sLine = fgets($oFile))) {
-            throw new Exception(G::loadTranslation('MSG_PO_FILE_BAD_FORMAT'));
-          }
-          $sLine = fgets($oFile);
-        }
-      }
-      fclose($oFile);
-      
-      $oLanguage = new Language();
-      $oLanguage->update(array('LAN_ID' => $sLanguageID, 'LAN_ENABLED' => '1'));
-      if ($bXml) {
-        Translation::generateFileTranslation($sLanguageID);
-      }
-      $this->log ( "checking and updating CONTENT");
-      $oCriteria = new Criteria('workflow');
-      $oCriteria->addSelectColumn(ContentPeer::CON_CATEGORY);
-      $oCriteria->addSelectColumn(ContentPeer::CON_ID);
-      $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
-      $oCriteria->add(ContentPeer::CON_LANG, 'en');
-      $oCriteria->add(ContentPeer::CON_VALUE, '', Criteria::NOT_EQUAL );
-      $oDataset = ContentPeer::doSelectRS($oCriteria);
-      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset->next();
-      $oContent = new Content();
-      while ($aRow = $oDataset->getRow()) {
-        $oContent->load($aRow['CON_CATEGORY'], '', $aRow['CON_ID'], $sLanguageID);
-        $oDataset->next();
-      }
-    }
-    catch (Exception $oError) {
-      throw($oError);
-    }
-  }
-
-
   public function importLanguage($sLanguageFile, $updateXml = true, $updateDB = true)
   {
     try {
@@ -307,8 +127,7 @@ class languages {
             $context = $aux;            
           }
         }
-        //$identifier = $POFile->translatorComments[0];
-        //$context    = $POFile->translatorComments[1];
+        
         $reference  = $POFile->references[0]; 
  
         if( $identifier == 'TRANSLATION') {
@@ -325,15 +144,6 @@ class languages {
           }
         } else if( $updateXml ){
           $xmlForm = $context;
-          //$codes   = explode('-', $reference);
-          /*foreach($codes as $i=>$code){
-            $codes[$i] = trim($code);
-            if ( $codes[$i] == "''" ){
-              $codes[$i] = '';
-            }
-          }
-          $fieldName = trim($codes[1]);*/
-          
           //erik: expresion to prevent and hable correctly dropdown values like -1, -2 etc.
           preg_match('/^([\w_]+)\s-\s([\w_]+)\s*-*\s*([\w\W]*)$/', $reference, $match);
           
@@ -344,12 +154,7 @@ class languages {
           G::LoadSystem('dynaformhandler');
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
           $fieldName = $match[2];
-          if( !isset($match[2]) ){
-          	print_r($reference);
-          	print_r($match);
-          	die;
-          }
-          	
+
           $codes = explode('-', $reference);
           
           if( sizeof($codes) == 2 ) { //is a normal node
