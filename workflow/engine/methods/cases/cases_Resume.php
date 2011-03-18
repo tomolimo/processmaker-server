@@ -78,14 +78,14 @@
   }
   
   $actions = 'false';
-  if( $_GET['action'] == 'paused' || $_GET['action'] == 'search')
+  if( $_GET['action'] == 'paused')
     $actions = 'true';
   
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
 
   if( isset($_SESSION['alreadyDerivated']) && $_SESSION['alreadyDerivated'] == true )
-    $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, true)");
+    $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, false)");
   else
     $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, $actions)");
     
