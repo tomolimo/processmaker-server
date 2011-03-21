@@ -43,11 +43,11 @@ SELECT IC_UID, IC_NAME FROM ISO_COUNTRY ORDER BY IC_NAME
   </USR_COUNTRY>
   <USR_CITY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_LOCATION" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
 SELECT IS_UID, IS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = "@#USR_COUNTRY" ORDER BY IS_NAME
-  <en>State or Region</en>
+  <en>State or Region <option name="">N/D</option></en>
   </USR_CITY>
   <USR_LOCATION type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
 SELECT IL_UID, IL_NAME FROM ISO_LOCATION WHERE IC_UID = "@#USR_COUNTRY" AND IS_UID = "@#USR_CITY" AND IS_UID NOT IN ("") ORDER BY IL_NAME
-  <en>Location</en>
+  <en>Location<option name="">N/D</option></en>
   </USR_LOCATION>
   <USR_PHONE type="text" size="15" maxlength="16" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
     <en>Phone</en>
