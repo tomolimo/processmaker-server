@@ -181,6 +181,7 @@
     else
     {
       document.forms[0].elements['form[SUBMIT]'].disabled = false;
+      document.forms[0].elements['form[USR_EMAIL]'].focus();
     }
   };
 
