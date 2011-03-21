@@ -474,22 +474,6 @@ class Process extends BaseProcess {
     return $aRow['PROCESS'] ? true : false;
   }
   
-  function lookingLanguageProcess( $ProUid , $getAllLang=false) {
-    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
-        
-    $c = new Criteria();
-    $c->clearSelectColumns();
-    $c->addSelectColumn(ContentPeer::CON_CATEGORY);
-    $c->addSelectColumn(ContentPeer::CON_VALUE);
-    $c->add(ContentPeer::CON_ID, $ProUid );
-    if(!$getAllLang) $c->add(ContentPeer::CON_LANG, $lang );
-    $rs = ProcessPeer::doSelectRS($c);
-    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $rs->next();
-    $row = $rs->getRow();
-    return ($row);
-  }
-
   //new functions
   function getAllProcessesCount(){
     $c = $this->tmpCriteria;
@@ -535,6 +519,7 @@ class Process extends BaseProcess {
     $oCriteria->addSelectColumn(ProcessCategoryPeer::CATEGORY_UID  );
     $oCriteria->addSelectColumn(ProcessCategoryPeer::CATEGORY_NAME  );
     
+    $oCriteria->add(ProcessPeer::PRO_UID, '', Criteria::NOT_EQUAL);
     $oCriteria->add(ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL);
     
     if( isset($category) )
@@ -562,11 +547,6 @@ class Process extends BaseProcess {
     $uids=array();
     while( $oDataset->next() ) {
       $processes[] = $oDataset->getRow();
-      $auxData = $oDataset->getRow();
-      ////we are checking if it has the title in some language
-      if(!is_array($this->lookingLanguageProcess( $auxData['PRO_UID']))){
-       $this->load($auxData['PRO_UID']);
-      }
       $uids[] = $processes[sizeof($processes)-1]['PRO_UID'];
     }
 
@@ -584,6 +564,11 @@ class Process extends BaseProcess {
 
     while( $dt->next() ) {
       $row = $dt->getRow();
+      // verify if the title is already set on the current language
+      if ( $row['CON_CATEGORY'] == 'PRO_TITLE' && trim($row['CON_VALUE']) == '') {
+      	// if not, then load the record to generate content for current language
+        $row = $this->load($row['CON_ID']);
+      } 
       $processesDetails[ $row['CON_ID']] [$row['CON_CATEGORY']] = $row['CON_VALUE'];
     }
 
@@ -707,3 +692,4 @@ function ordProcessByProTitle($a, $b){
   
    
 }
+
