@@ -565,9 +565,10 @@ class Process extends BaseProcess {
     while( $dt->next() ) {
       $row = $dt->getRow();
       // verify if the title is already set on the current language
-      if ( $row['CON_CATEGORY'] == 'PRO_TITLE' && trim($row['CON_VALUE']) == '') {
+      if ( ($row['CON_CATEGORY'] == 'PRO_TITLE'  || $row['CON_CATEGORY'] == 'PRO_DESCRIPTION') && trim($row['CON_VALUE']) == '') {
       	// if not, then load the record to generate content for current language
-        $row = $this->load($row['CON_ID']);
+        $proData = $this->load($row['CON_ID']);
+        $row['CON_VALUE'] = $row['CON_CATEGORY'] == 'PRO_TITLE' ? $proData['PRO_TITLE'] : $proData['PRO_DESCRIPTION']; 
       } 
       $processesDetails[ $row['CON_ID']] [$row['CON_CATEGORY']] = $row['CON_VALUE'];
     }
