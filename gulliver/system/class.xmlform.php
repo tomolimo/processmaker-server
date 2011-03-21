@@ -3230,15 +3230,20 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                $value=$value1;
            }
         
-      
+       if ($this->required){
+            $isRequired = '1';
+        } else {
+            $isRequired = '0';
+        }
+        
         if ( $this->editable != "0") {
-          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'"/>'
+          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'" required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
                 . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
         } else {   
-          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly"/>'
+          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
                 . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
