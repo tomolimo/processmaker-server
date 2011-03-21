@@ -398,7 +398,7 @@ function newProcess(){
     editable : false,
     width: 180,
     allowBlank : true,
-      
+    value: '',
     store : new Ext.data.Store( {
       autoLoad: true,  //autoload the data
       proxy : new Ext.data.HttpProxy( {
@@ -415,6 +415,10 @@ function newProcess(){
       })
     })
   });
+  ProcessCategories.store.on('load',function(store) {
+    ProcessCategories.setValue(store.getAt(0).get('CATEGORY_UID'));
+  });
+
 
   var frm = new Ext.FormPanel( {
     id: 'newProcessForm',
@@ -425,7 +429,8 @@ function newProcess(){
         id: 'PRO_TITLE',
         fieldLabel: _('ID_TITLE'), 
         xtype:'textfield',
-        width: 260
+        width: 260,
+        allowBlank: false
       },  {
         id: 'PRO_DESCRIPTION',
         fieldLabel: _('ID_DESCRIPTION'),
