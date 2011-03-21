@@ -238,7 +238,7 @@ class Tasks
       $routeID = $oRoute->create($row);
 
       //saving end event while import old processes
-      if($end==1){
+      if(isset($end) && $end==1){
         if($sRouteType == "SEQUENTIAL"){
            $aTaskDetails  = $oTask->load($idTask);
            $positionX   = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;

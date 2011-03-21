@@ -48,6 +48,7 @@
   $sProUid = $oData->process['PRO_UID'];
 
   $oData->process['PRO_UID_OLD']=$sProUid;
+  if ( !isset( $oData->tasks) ) $oData->tasks = array();
   $tasks =  $oData->tasks;
   // code added by gustavo cruz gustavo-at-colosa-dot-com
   // evaluate actions or import options
