@@ -3254,13 +3254,58 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       //$html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
       ///-- $html =  '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" ' . (isset ( $this->maxLength ) ? ' maxlength="' . $this->maxLength . '"' : '') . ' value=\'' . htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" />' . htmlentities ( $value, ENT_COMPAT, 'utf-8' );
 
-      $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
+      $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$valueaux</span>";
     }
+    //
+    
 
+//print($_SERVER['HTTP_USER_AGENT']);
+ 
+
+    //
+    
+   // $navegador = get_browser(); 
+ //  print($navegador);
     if($this->hint){
+    	function browsername($user_agent) {  
+      $browsers = array(  
+           'Opera' => 'Opera',  
+           'Mozilla Firefox'=> '(Firebird)|(Firefox)',  
+           'Galeon' => 'Galeon',  
+           'Mozilla'=>'Gecko',  
+           'MyIE'=>'MyIE',  
+           'Lynx' => 'Lynx',  
+           'Netscape' => '(Mozilla/4\.75)|(Netscape6)|(Mozilla/4\.08)|(Mozilla/4\.5)|(Mozilla/4\.6)|(Mozilla/4\.79)',  
+           'Konqueror'=>'Konqueror',  
+           'Internet Explorer 7' => '(MSIE 7\.[0-9]+)',  
+           'Internet Explorer 6' => '(MSIE 6\.[0-9]+)',  
+           'Internet Explorer 5' => '(MSIE 5\.[0-9]+)',  
+           'Internet Explorer 4' => '(MSIE 4\.[0-9]+)', 
+           'Internet Explorer 8' => '(MSIE 8\.[0-9]+)',            
+ );  
+ foreach($browsers as $browser=>$pattern){  
+        if (eregi($pattern, $user_agent))  
+        return $browser;  
+     }  
+ return 'Unknow';  
+ }  
+ 
+    	
+    	
+    	if(browsername($_SERVER['HTTP_USER_AGENT'])=='Mozilla Firefox'){
+      $len = strlen($valueaux);
+    	$len = $len - 10;
       $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
-             . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-17px;top:0px;"/>'
+             . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-"'.$len.'"px;top:0px;"/>'
              . '</a>';
+      } 
+      if((browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 8')||(browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 7')){
+      $len = strlen($valueaux);
+      $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
+             . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:"'.$len.'"px;top:0px;"/>'
+             . '</a>';
+      } 
+      
     }
  
     return $html;
