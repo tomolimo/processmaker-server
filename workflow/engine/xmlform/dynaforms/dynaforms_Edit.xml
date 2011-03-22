@@ -37,7 +37,7 @@
 </CONTINUE>
 
 <SAVE_DYNAFORM type="button" onclick="dynaformSave( this.form, false );">
-  <en>Save</en>
+  <en>Save</en> 
 </SAVE_DYNAFORM>
 
 <SAVE_OPEN type="button" onclick="dynaformSave( this.form, true );">
