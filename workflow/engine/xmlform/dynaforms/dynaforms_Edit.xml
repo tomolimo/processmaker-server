@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm
   name="dynaforms_Edit"
   type="xmlform"
@@ -50,6 +50,7 @@
 
 <JS type="javascript">
 <![CDATA[
+ 
 getField('DYN_TITLE').form.onsubmit = function() {return false;};
 
   checkDynaformSource();
@@ -77,6 +78,11 @@ getField('DYN_TITLE').form.onsubmit = function() {return false;};
         hideRow('DYN_TYPE');
     }*/
   }
+leimnud.event.add(getField('DYN_TITLE'), 'blur', function() 
+{  
+String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g, ""); };
+document.getElementById('form[DYN_TITLE]').value = document.getElementById('form[DYN_TITLE]').value.trim();
+});
 
   leimnud.event.add(document.getElementById('form[ADD_TABLE]'), 'change', setPMTableDynaformTitle);
   function setPMTableDynaformTitle(){
