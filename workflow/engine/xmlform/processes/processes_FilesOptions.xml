@@ -21,9 +21,21 @@
 var CURRENT_PRO_UID = @QPRO_UID;
 var CURRENT_MAIN_DIRECTORY;
 var CURRENT_CURRENT_DIRECTORY;
-
+var oUploadFilesPanel;
 var oUploadFilesPanel;
 var uploadFilesScreen = function(PRO_UID, MAIN_DIRECTORY, CURRENT_DIRECTORY) {
+
+  var swNavigator;
+  if(navigator.appName=='Microsoft Internet Explorer'){
+   swNavigator='ie'
+   wd=350;
+   hg=200;
+  } else {
+   swNavigator='wknormal';
+   wd=400;
+   hg=90;
+  }
+
 	CURRENT_MAIN_DIRECTORY = MAIN_DIRECTORY;
 	CURRENT_CURRENT_DIRECTORY = CURRENT_DIRECTORY;
 	
@@ -34,7 +46,7 @@ var uploadFilesScreen = function(PRO_UID, MAIN_DIRECTORY, CURRENT_DIRECTORY) {
   	oUploadFilesPanel = new leimnud.module.panel();
 	oUploadFilesPanel.options={
 		limit	   : true,
-		size	   : {w:400,h:90},
+		size	   : {w:wd,h:hg},
 		position : {x:Pm.tmp.processFilesManagerPanel.options.position.x,y:Pm.tmp.processFilesManagerPanel.options.position.y-90,center:false},
 		title	   : '',
 		control	 : {close:true,resize:false},fx:{modal:true},
@@ -45,7 +57,7 @@ var uploadFilesScreen = function(PRO_UID, MAIN_DIRECTORY, CURRENT_DIRECTORY) {
 	oIFrame.style.border = '0';
 	oIFrame.style.width  = '100%';
 	oIFrame.style.height = '100%';
-	oIFrame.src          = 'processes_UploadFilesForm?PRO_UID=' + PRO_UID + '&MAIN_DIRECTORY=' + MAIN_DIRECTORY + '&CURRENT_DIRECTORY=' + CURRENT_DIRECTORY;
+	oIFrame.src          = 'processes_UploadFilesForm?PRO_UID=' + PRO_UID + '&MAIN_DIRECTORY=' + MAIN_DIRECTORY + '&CURRENT_DIRECTORY=' + CURRENT_DIRECTORY+'&NAVIGATOR='+swNavigator;
 	oUploadFilesPanel.addContent(oIFrame);
 };
 
