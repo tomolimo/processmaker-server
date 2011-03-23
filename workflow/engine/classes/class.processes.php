@@ -526,62 +526,118 @@ class Processes {
     $sProUid = $oData->process['PRO_UID'];
     $oData->process['PRO_UID'] = $sNewProUid;
 
-    foreach ($oData->tasks as $key => $val ) {
-      $oData->tasks[$key]['PRO_UID'] = $sNewProUid;
+    if ( isset($oData->tasks ) && is_array($oData->tasks) ) {
+      foreach ($oData->tasks as $key => $val ) {
+        $oData->tasks[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->routes as $key => $val ) {
-      $oData->routes[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->routes ) && is_array($oData->routes) ) {
+      foreach ($oData->routes as $key => $val ) {
+        $oData->routes[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->lanes as $key => $val ) {
-      $oData->lanes[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->lanes ) && is_array($oData->lanes) ) {
+      foreach ($oData->lanes as $key => $val ) {
+        $oData->lanes[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->inputs as $key => $val ) {
-      $oData->inputs[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->inputs ) && is_array($oData->inputs) ) {
+      foreach ($oData->inputs as $key => $val ) {
+        $oData->inputs[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->outputs as $key => $val ) {
-      $oData->outputs[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->outputs ) && is_array($oData->outputs) ) {
+      foreach ($oData->outputs as $key => $val ) {
+        $oData->outputs[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->steps as $key => $val ) {
-      $oData->steps[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->steps ) && is_array($oData->steps) ) {
+      foreach ($oData->steps as $key => $val ) {
+        $oData->steps[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->dynaforms as $key => $val ) {
-      $oData->dynaforms[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->dynaforms ) && is_array($oData->dynaforms) ) {
+      foreach ($oData->dynaforms as $key => $val ) {
+        $oData->dynaforms[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->triggers as $key => $val ) {
-      $oData->triggers[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->triggers ) && is_array($oData->triggers) ) {
+      foreach ($oData->triggers as $key => $val ) {
+        $oData->triggers[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->reportTables as $key => $val ) {
-    $oData->reportTables[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->reportTables ) && is_array($oData->reportTables) ) {
+      foreach ($oData->reportTables as $key => $val ) {
+      $oData->reportTables[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->reportTablesVars as $key => $val ) {
-    $oData->reportTablesVars[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->reportTablesVars ) && is_array($oData->reportTablesVars) ) {
+      foreach ($oData->reportTablesVars as $key => $val ) {
+      $oData->reportTablesVars[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->dbconnections as $key => $val ) {
-      $oData->dbconnections[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->dbconnections ) && is_array($oData->dbconnections) ) {
+      foreach ($oData->dbconnections as $key => $val ) {
+        $oData->dbconnections[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->stepSupervisor as $key => $val ) {
-    $oData->stepSupervisor[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->stepSupervisor ) && is_array($oData->stepSupervisor) ) {
+      foreach ($oData->stepSupervisor as $key => $val ) {
+      $oData->stepSupervisor[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->objectPermissions as $key => $val ) {
-    $oData->objectPermissions[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->objectPermissions ) && is_array($oData->objectPermissions) ) {
+      foreach ($oData->objectPermissions as $key => $val ) {
+      $oData->objectPermissions[$key]['PRO_UID'] = $sNewProUid;
+      } 
     }
-    foreach ($oData->caseTracker as $key => $val ) {
-    $oData->caseTracker[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->caseTracker ) && is_array($oData->caseTracker) ) {
+      foreach ($oData->caseTracker as $key => $val ) {
+      $oData->caseTracker[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->caseTrackerObject as $key => $val ) {
-    $oData->caseTrackerObject[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->caseTrackerObject ) && is_array($oData->caseTrackerObject) ) {
+      foreach ($oData->caseTrackerObject as $key => $val ) {
+      $oData->caseTrackerObject[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->stage as $key => $val ) {
-    $oData->stage[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->stage ) && is_array($oData->stage) ) {
+      foreach ($oData->stage as $key => $val ) {
+      $oData->stage[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->subProcess as $key => $val ) {
-    $oData->subProcess[$key]['PRO_PARENT'] = $sNewProUid;
+    
+    if ( isset($oData->subProcess ) && is_array($oData->subProcess) ) {
+      foreach ($oData->subProcess as $key => $val ) {
+      $oData->subProcess[$key]['PRO_PARENT'] = $sNewProUid;
+      }
     }
-    foreach ($oData->event as $key => $val ) {
-    $oData->event[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->event ) && is_array($oData->event) ) {
+      foreach ($oData->event as $key => $val ) {
+      $oData->event[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
-    foreach ($oData->caseScheduler as $key => $val){
-    $oData->caseScheduler[$key]['PRO_UID'] = $sNewProUid;
+    
+    if ( isset($oData->caseScheduler ) && is_array($oData->caseScheduler) ) {
+      foreach ($oData->caseScheduler as $key => $val){
+      $oData->caseScheduler[$key]['PRO_UID'] = $sNewProUid;
+      }
     }
     return true;
   }
@@ -610,45 +666,64 @@ class Processes {
       $map[ $val['TAS_UID'] ] = $newGuid;
       $oData->tasks[$key]['TAS_UID'] = $newGuid;
     }
-    foreach ( $oData->routes as $key => $val ) {
-      $newGuid = $map[ $val['TAS_UID'] ];
-      $oData->routes[$key]['TAS_UID'] = $newGuid;
-      if ( strlen ( $val['ROU_NEXT_TASK'] ) > 0 && $val['ROU_NEXT_TASK'] >0 ) {
-        $newGuid = $map[ $val['ROU_NEXT_TASK'] ];
-        $oData->routes[$key]['ROU_NEXT_TASK'] = $newGuid;
-      }
-    }
-    foreach ( $oData->steps as $key => $val ) {
-      $newGuid = $map[ $val['TAS_UID'] ];
-      $oData->steps[$key]['TAS_UID'] = $newGuid;
-    }
-    foreach ( $oData->steptriggers as $key => $val ) {
-      $newGuid = $map[ $val['TAS_UID'] ];
-      $oData->steptriggers[$key]['TAS_UID'] = $newGuid;
-    }
-    foreach ( $oData->taskusers as $key => $val ) {
-      $newGuid = $map[ $val['TAS_UID'] ];
-      $oData->taskusers[$key]['TAS_UID'] = $newGuid;
-    }
-    foreach ( $oData->subProcess as $key => $val ) {
-      $newGuid = $map[ $val['TAS_PARENT'] ];
-      $oData->subProcess[$key]['TAS_PARENT'] = $newGuid;
-      if (isset($map[ $val['TAS_UID'] ])) {
+    if ( isset($oData->routes ) && is_array($oData->routes) ) {
+      foreach ( $oData->routes as $key => $val ) {
         $newGuid = $map[ $val['TAS_UID'] ];
-        $oData->subProcess[$key]['TAS_UID'] = $newGuid;
-      }
-    }
-    foreach ( $oData->objectPermissions as $key => $val ) {
-      if (isset($map[ $val['TAS_UID'] ])) {
-        $newGuid = $map[ $val['TAS_UID'] ];
-        $oData->objectPermissions[$key]['TAS_UID'] = $newGuid;
+        $oData->routes[$key]['TAS_UID'] = $newGuid;
+        if ( strlen ( $val['ROU_NEXT_TASK'] ) > 0 && $val['ROU_NEXT_TASK'] >0 ) {
+          $newGuid = $map[ $val['ROU_NEXT_TASK'] ];
+          $oData->routes[$key]['ROU_NEXT_TASK'] = $newGuid;
+        }
       }
     }
 
-    foreach ( $oData->caseScheduler as $key => $val ) {
-      if (isset($map[ $val['TAS_UID'] ])) {
+    if ( isset($oData->steps) && is_array($oData->steps) ) {
+      foreach ( $oData->steps as $key => $val ) {
         $newGuid = $map[ $val['TAS_UID'] ];
-        $oData->caseScheduler[$key]['TAS_UID'] = $newGuid;
+        $oData->steps[$key]['TAS_UID'] = $newGuid;
+      }
+    }
+    
+    if ( isset($oData->steptriggers ) && is_array($oData->steptriggers) ) {
+      foreach ( $oData->steptriggers as $key => $val ) {
+        $newGuid = $map[ $val['TAS_UID'] ];
+        $oData->steptriggers[$key]['TAS_UID'] = $newGuid;
+      }
+    }
+
+    if ( isset($oData->taskusers ) && is_array($oData->taskusers) ) {
+      foreach ( $oData->taskusers as $key => $val ) {
+        $newGuid = $map[ $val['TAS_UID'] ];
+        $oData->taskusers[$key]['TAS_UID'] = $newGuid;
+      }
+    }
+
+    if ( isset($oData->subProcess ) && is_array($oData->subProcess) ) {
+      foreach ( $oData->subProcess as $key => $val ) {
+        $newGuid = $map[ $val['TAS_PARENT'] ];
+        $oData->subProcess[$key]['TAS_PARENT'] = $newGuid;
+        if (isset($map[ $val['TAS_UID'] ])) {
+          $newGuid = $map[ $val['TAS_UID'] ];
+          $oData->subProcess[$key]['TAS_UID'] = $newGuid;
+        }
+      }
+    }
+
+    if ( isset($oData->objectPermissions ) && is_array($oData->objectPermissions) ) {
+      foreach ( $oData->objectPermissions as $key => $val ) {
+        if (isset($map[ $val['TAS_UID'] ])) {
+          $newGuid = $map[ $val['TAS_UID'] ];
+          $oData->objectPermissions[$key]['TAS_UID'] = $newGuid;
+        }
+      }
+    }
+    
+    if ( isset($oData->caseScheduler ) && is_array($oData->caseScheduler) ) {
+      foreach ( $oData->caseScheduler as $key => $val ) {
+        if (isset($map[ $val['TAS_UID'] ])) {
+          $newGuid = $map[ $val['TAS_UID'] ];
+          $oData->caseScheduler[$key]['TAS_UID'] = $newGuid;
+        }
       }
     }
     
@@ -1446,10 +1521,12 @@ class Processes {
   */
   function renewAllRouteGuid ( &$oData ) {
     $map = array ();
-    foreach ( $oData->routes as $key => $val ) {
-      $newGuid = $this->getUnusedRouteGUID();
-      $map[ $val['ROU_UID'] ] = $newGuid;
-      $oData->routes[$key]['ROU_UID'] = $newGuid;
+    if ( isset($oData->routes ) && is_array($oData->routes) ) {
+      foreach ( $oData->routes as $key => $val ) {
+        $newGuid = $this->getUnusedRouteGUID();
+        $map[ $val['ROU_UID'] ] = $newGuid;
+        $oData->routes[$key]['ROU_UID'] = $newGuid;
+      }
     }
   }
 

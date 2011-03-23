@@ -70,7 +70,7 @@ class Process extends BaseProcess {
   public function setProTitle($v)
   {
     if ( $this->getProUid() == '' ) {
-      throw ( new Exception( "Error in setProTitle, the PRO_UID can't be blank") );
+      throw ( new Exception( "Error in setProTitle, the PRO_UID can't be blank" . print_r (debug_backtrace(), 1) ) );
     }
     // Since the native PHP type for this column is string,
     // we will cast the input to a string (if it is not).
@@ -376,7 +376,7 @@ class Process extends BaseProcess {
   public function createRow($aData)
   {
     $con = Propel::getConnection( ProcessPeer::DATABASE_NAME );
-    $con->begin();
+    //$con->begin(); //does not allow dual BEGIN
     $this->setProUid          ( $aData['PRO_UID'] );
     $this->setProParent       ( $aData['PRO_PARENT'] );
     $this->setProTime         ( $aData['PRO_TIME'] );
@@ -399,11 +399,10 @@ class Process extends BaseProcess {
     $this->setProTitleX       ( $aData['PRO_TITLE_X'] );
     $this->setProTitleY       ( $aData['PRO_TITLE_Y'] );
     if ( $this->validate() ) {
-			///-- Does not allow dual Begin
-      ///-- $con->begin();
+			$con->begin();
       $res = $this->save();
 
-      if (isset ( $aData['PRO_TITLE'] ) )
+      if (isset ( $aData['PRO_TITLE'] ) && trim ($aData['PRO_TITLE']) != '' )
         $this->setProTitle (  $aData['PRO_TITLE'] );
       else
         $this->setProTitle (  'Default Process Title' );

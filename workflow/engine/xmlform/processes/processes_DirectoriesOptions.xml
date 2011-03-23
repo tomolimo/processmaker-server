@@ -36,6 +36,25 @@ var goToDirectory = function(PRO_UID, sMainDirectory, sDirectory) {
   oRPC.make();
 };
 
+var goToDirectoryforie = function(PRO_UID, sMainDirectory, sDirectory) {
+  Pm.tmp.processFilesManagerPanel.clearContent();
+  Pm.tmp.processFilesManagerPanel.loader.show();
+  var oRPC = new leimnud.module.rpc.xmlhttp({
+  	url : 'processes_Ajax',
+  	args: 'action=exploreDirectory&data=' + {pro_uid:PRO_UID,main_directory:sMainDirectory,directory:sDirectory}.toJSONString()
+  });
+  oRPC.callback = function(rpc){
+  	Pm.tmp.processFilesManagerPanel.loader.hide();
+  	var scs = rpc.xmlhttp.responseText.extractScript();
+  	Pm.tmp.processFilesManagerPanel.addContent(rpc.xmlhttp.responseText);
+  	scs.evalScript();
+  	if (typeof(oUploadFilesPanel) !== 'undefined') {
+  	  oUploadFilesPanel.remove();
+  	}
+  }.extend(this);
+  oRPC.make();
+};
+
 var downloadFile = function(PRO_UID, sMainDirectory, sDirectory, sFile) {
   /*var oRPC = new leimnud.module.rpc.xmlhttp({
   	url : 'processes_Ajax',

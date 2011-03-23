@@ -103,7 +103,10 @@
 		   @#PAGED_TABLE_ID.refresh();
    }
   }
-
+  //with this function, we are removing the spaces after and before of a string 
+  String.prototype.trim = function() { 
+  return this.replace(/^\s+|\s+$/g, ""); 
+  };
   //for trigger no wizard
  function triggerSave1(form)
   {
@@ -112,10 +115,10 @@
     var triUid = getField('TRI_UID').value;
   } 
    if(triUid==''){  
-   var triTitle =getField('TRI_TITLE').value;   
+   var triTitle =getField('TRI_TITLE').value.trim();   
    if(triTitle==''){
      alert(G_STRINGS.ID_REQUIRED_NAME_TRIGGERS);return false;
-   }   
+   } 
    reqName=ajax_function("../triggers/triggers_Save",'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+(getField('PRO_UID').value),'POST') ;
    if(!reqName){
      alert(G_STRINGS.ID_EXIST_TRIGGERS);return false;

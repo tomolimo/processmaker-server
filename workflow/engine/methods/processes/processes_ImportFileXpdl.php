@@ -92,6 +92,7 @@
     die;
   }
   // end added code
+  if ( !isset( $oData->tasks) ) $oData->tasks = array();
   $tasks =  $oData->tasks;
   $oProcess->createProcessFromDataXpdl ($oData,$tasks);
   G::header('Location: processes_Map?PRO_UID=' . $sProUid);

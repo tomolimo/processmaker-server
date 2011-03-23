@@ -155,7 +155,7 @@
       $o->key=$k;
       // TODO: review the condition to make the differentiation to dependent dropdowns in a grid function.
       // this way of validation is if you have a dependent field in text fields
-      $o->value= ($type =='text')? $k:$v;
+      $o->value= ($type =='text'  || $type =='textarea')? $k:$v;
       $result[]=$o;
     }
     return $result;

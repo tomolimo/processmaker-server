@@ -44,11 +44,15 @@ class Xpdl extends processes
   * @param string $pmFilename
   * @return void
   */
-  function createProcessFromDataXpdl ($oData,$tasks)
-  { $this->removeProcessRows ($oData->process['PRO_UID'] );
+  function createProcessFromDataXpdl ($oData,$tasks)   { 
+  	if ( !isset($oData->process['PRO_UID']) || trim($oData->process['PRO_UID']) == '' ) 
+  	  $oData->process['PRO_UID'] = G::generateUniqueID() ;
+
+  	$this->removeProcessRows ($oData->process['PRO_UID'] );
     $uid  = $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
     $newTasks=$this->verifyTasks($uid,$tasks);
+    if ( !isset($oData->routes) ) $oData->routes = array();
     $this->createRouteRowsXpdl($uid,$oData->routes,$newTasks);
     $this->createLaneRows($oData->lanes);
     $this->createDynaformRows($oData->dynaforms);
@@ -1602,7 +1606,7 @@ class Xpdl extends processes
     $nameProcess      = '';
     $sw               = 0;
     $file             = new DOMDocument();
-    $file->load($pmFilename);
+    @$file->load($pmFilename, LIBXML_DTDLOAD);
     $root             = $file->documentElement;
     $node             = $root->firstChild;
     $numberTasks      = 0;
@@ -1751,7 +1755,7 @@ class Xpdl extends processes
     $oData->subProcess        = array();
     $numberSubProcess         = 0;
     $arraySubProcess          = $subProcesses;
-    $numberSubProcess         = sizeof($arraySubProcesses);
+    $numberSubProcess         = isset($arraySubProcesses) && is_array($arraySubProcesses) ? sizeof($arraySubProcesses) : 0;
     $numberCount              = 0;
     foreach($subProcesses as $key => $value) {
       foreach($oData->tasks as $keyTask => $valueTask) {

@@ -320,7 +320,7 @@ span.XtreeMinus:hover
 /* Menues */
 
 TD.mainMenuBG {
-	background-image: url(/skins/ext/images/gray/toolbar/bg.gif);
+	background-image: url(/images/ext/gray/toolbar/bg.gif);
 	background-repeat: repeat-x;
 	/*height: 25px;*/
 	left: 46px;
@@ -895,7 +895,7 @@ font-weight:bold;
 	overflow:hidden;
 	text-align: center;
 	background-color:#F2F2F2;
-	background-image:url("/skins/ext/images/gray/grid/grid3-hrow2.gif");
+	background-image:url("/images/ext/gray/grid/grid3-hrow2.gif");
 	background-position: bottom;
 
 }
