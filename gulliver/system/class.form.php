@@ -418,7 +418,7 @@ class Form extends XmlForm
               }
             }
           }
-          else{
+        /*  else{
             if ($v->type == 'checkbox') {
               $values[$k]=$v->falseValue;
             }
@@ -427,7 +427,7 @@ class Form extends XmlForm
                 $values[$k] = null;
               }
             }
-          }
+          }*/
         }
         else {
           if (isset($_FILES['form']['name'][$k])) {

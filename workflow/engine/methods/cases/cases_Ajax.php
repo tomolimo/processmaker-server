@@ -546,6 +546,7 @@ switch($_POST['action']) {
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
 		$_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
+		if(!isset($_SESSION['CURRENT_DYN_UID'])) $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID'];
 		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
 		G::RenderPage('publish', 'raw');
 		break;
