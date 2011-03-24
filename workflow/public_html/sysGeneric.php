@@ -4,7 +4,10 @@ $startingTime =  array_sum(explode(' ',microtime()));
 
 //*** ini setting, enable display_error On to caught even fatal errors
   ini_set('display_errors','On');
-  ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
+  if (defined('E_DEPRECATED'))
+    ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
+  else
+    ini_set('error_reporting', E_ALL);
   ini_set('short_open_tag', 'on');
   ini_set('asp_tags', 'on');
   ini_set('memory_limit', '80M');
