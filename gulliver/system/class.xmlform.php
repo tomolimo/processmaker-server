@@ -4332,20 +4332,21 @@ class XmlForm_Field_Image extends XmlForm_Field
     .' alt ="'.htmlentities($value,ENT_QUOTES,'utf-8').'"/>';
   }
 }
-
-  // function mask to php
+  //mask function to php
   function masktophp ($mask){
     $tmp = str_replace("%", "", $mask);
-  if(preg_match('/b/',$tmp)) {
-         $tmp2 = str_replace("b", "M", $tmp);
-       $value=date($tmp2);
-       return $value;
+    if(preg_match('/b/',$tmp)) {
+      $tmp = str_replace("b", "M", $tmp);
     }
-     if(preg_match('/B/',$tmp)) {
-         $tmp2 = str_replace("B", "F", $tmp);
-       $value=date($tmp2);
-       return $value;
+    if(preg_match('/B/',$tmp)) {
+      $tmp = str_replace("B", "F", $tmp);
     }
-  $value = date($tmp);
-  return $value;
+    if(preg_match('/M/',$tmp)) {
+      $tmp = str_replace("M", "i", $tmp);
+    }
+    if(preg_match('/S/',$tmp)) {
+      $tmp = str_replace("S", "s", $tmp);
+    }
+    $value = date($tmp);
+    return $value;
   }
