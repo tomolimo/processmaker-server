@@ -332,11 +332,12 @@ function IsUnsignedInteger(YourNumber){
  return (Template.test(YourNumber)) ? 1 : 0 //Compara "YourNumber" con el formato "Template" y si coincidevuelve verdadero si no devuelve falso
 }
     this.validateKey=function(event) {
+    	attributes = elementAttributesNS(element, 'pm');
         if(me.element.readOnly)  return true;
         me.prev = me.element.value;
         if (window.event) event=window.event;
         var keyCode= window.event ? event.keyCode : event.which ;
-        me.mask = typeof(me.mask)==='undefined'?'':me.mask;
+        me.mask = typeof(me.mask)==='undefined'?'':me.mask;       
         if(me.mask=='yyyy-mm-dd'){        	  
         	attributes.mask=attributes.mask.replace('%d','dd');	 
         	attributes.mask=attributes.mask.replace('%m','mm');
