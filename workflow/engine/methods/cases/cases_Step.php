@@ -961,7 +961,7 @@
       break;
 
     }
-  //Add content content step - End
+    //Add content content step - End
   }
   catch ( Exception $e ) {
     G::SendTemporalMessage($e->getMessage(), 'error', 'string', 3, 100);
@@ -976,63 +976,6 @@
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('$sStatus');");
-  $oHeadPublisher->addScriptCode('
-    var showSteps = function()
-    {
-/* Modal windows setting
-      if (!Cse.panels.step)
-      {
-        Cse=new cases();
-        Cse.options = {
-          target     : "cases_target",
-          dataServer : "cases_Ajax?TYPE=' . (isset($_GET['TYPE']) ? $_GET['TYPE'] : '') . '&UID=' . (isset($_GET['UID']) ? $_GET['UID'] : '') . '&POSITION=' . (isset($_GET['POSITION']) ? $_GET['POSITION'] : '') . '&ACTION=' . (isset($_GET['ACTION']) ? $_GET['ACTION'] : '') . '&DOC=' . (isset($_GET['DOC']) ? $_GET['DOC'] : '') . '",
-          action     : "steps",
-          title      : G_STRINGS.ID_PROCESSMAP_STEPS,
-          lang       : "' . SYS_LANG . '",
-          theme      : "processmaker",
-          images_dir :leimnud.path_root + "cases/core/images/"
-        }
-        Cse.make();
-      }
-      else
-      {
-*/
-        if(Cse.panels.step)
-          Cse.panels.step.remove();
-        Cse.panels.step =new leimnud.module.panel();
-        Cse.panels.step.options={
-          title: "Steps",
-          size     :{w:260,h:450},
-          position :{x:0,y:30,left:true},
-          control  :{close:true,resize:true},fx:{modal:false},
-          statusBar:false,
-          fx       :{shadow:true,modal:false}
-        }
-        Cse.panels.step.make();
-        Cse.panels.step.loader.show();
-
-///--        Cse.panels.step.elements.title.innerHTML = "Steps";
-///--        Cse.panels.step.clearContent();
-///--        Cse.panels.step.loader.show();
-        var oRPC = new leimnud.module.rpc.xmlhttp({
-          url:  "cases_Ajax?TYPE=' . (isset($_GET['TYPE']) ? $_GET['TYPE'] : '') . '&UID=' . (isset($_GET['UID']) ? $_GET['UID'] : '') . '&POSITION=' . (isset($_GET['POSITION']) ? $_GET['POSITION'] : '') . '&ACTION=' . (isset($_GET['ACTION']) ? $_GET['ACTION'] : '') . '&DOC=' . (isset($_GET['DOC']) ? $_GET['DOC'] : '') . '",
-          args: "action=steps&showWindow=steps"
-        });
-        oRPC.callback = function(rpc){
-          Cse.panels.step.loader.hide();
-          var scs=rpc.xmlhttp.responseText.extractScript();
-          Cse.panels.step.addContent(rpc.xmlhttp.responseText);
-          scs.evalScript();
-        }.extend(this);
-        oRPC.make();
-///--      }
-    };
-  ');
-
-  if( defined('SYS_SKIN') )
-    $skin = SYS_SKIN;
-  else
-    $skin = "green";
 
   G::RenderPage('publish', 'blank');
 

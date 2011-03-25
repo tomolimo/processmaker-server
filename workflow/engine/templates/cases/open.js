@@ -7,7 +7,6 @@ var toReviseTreeOpen = false;
 var menuSelectedTitle = Array();
 var _ENV_CURRENT_DATE;
 
-
 Ext.onReady(function(){
   Ext.QuickTips.init();
   
@@ -56,14 +55,12 @@ Ext.onReady(function(){
       }
     }
 
-
     if( caseMenuOpen )
       return false;
     else
       caseMenuOpen = true;
     
     //get the menu 
-      
     Ext.Ajax.request({
       url : 'ajaxListener', 
       params : {action : 'getCaseMenu', app_status:app_status},
@@ -109,67 +106,7 @@ Ext.onReady(function(){
         Ext.MessageBox.alert('Failed', result.responseText); 
       }
     });
-    
-    return;
-      
-    
-    //getting the case Information availables options
-    Ext.Ajax.request({
-      url : 'ajaxListener' , 
-      params : {action : 'getInformationOptions'},
-      success: function ( result, request ) { 
-        var data = Ext.util.JSON.decode(result.responseText); 
-        var informationMenu = Ext.getCmp('informationMenu');
-        //tb = Ext.getCmp('navPanelNorth').getTopToolbar();
-        informationMenu.menu.removeAll();
-        for(i=0; i<data.length; i++) {
-          informationMenu.menu.add({
-            text: data[i].text,
-            handler: data[i].fn != '' ? Actions[data[i].fn] : function(){}
-          });
-          menuSelectedTitle[data[i].fn] = data[i].text;
-        }
-      },
-      failure: function ( result, request) { 
-        Ext.MessageBox.alert('Failed', result.responseText); 
-      }
-    });
-
-    //getting the case action availables options
-    Ext.Ajax.request({
-      url : 'ajaxListener' , 
-      params : {action : 'getActionOptions'},
-      success: function ( result, request ) { 
-        var data = Ext.util.JSON.decode(result.responseText); 
-        var actionMenu = Ext.getCmp('actionMenu');
-        
-        actionMenu.menu.removeAll();
-        for(i=0; i<data.length; i++) {
-          actionMenu.menu.add({
-              text: data[i].text,
-            handler: data[i].fn != '' ? Actions[data[i].fn] : function(){}
-          });
-          menuSelectedTitle[data[i].fn] = data[i].text;
-        }
-      },
-      failure: function ( result, request) { 
-        Ext.MessageBox.alert('Failed', result.responseText); 
-      }
-    });
-
-    Ext.getCmp('casesStepTree').root.reload();
-    
-    if( steps)
-      Ext.getCmp('stepsMenu').show();
-    
-    if( information )
-      Ext.getCmp('informationMenu').show();
-    
-    if( action )
-      Ext.getCmp('actionMenu').show();
-    
   }
-  
   
   hideCaseNavigatorPanel = function(){
     Ext.getCmp('stepsMenu').pressed = false;
@@ -179,7 +116,6 @@ Ext.onReady(function(){
     Ext.getCmp('navPanelWest').ownerCt.doLayout(); 
     
   }
-
  
   function togglePreview(btn, pressed){
     var preview = Ext.getCmp('navPanelWest');
@@ -255,28 +191,16 @@ Ext.onReady(function(){
           bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
           width:screenWidth
           
-          }/*{
-            xtype:"panel",
-            title: parent.CASE_TITLE,
-            items:[new Ext.ux.IFrameComponent({ id: 'openCaseFrame', url: uri }) ],
-            loadMask:{msg:'Loading Quote...'}
-          }*/
+          }
         ],
         listeners: {
-          /*tabchange: function(tp,newTab){
-             um = newTab.getUpdater();
-             if(um) um.abort();
-             //return false;
-             
-          }*/
           render : function(panel){
-         Ext.each([this.el, this[this.collapseEl]] , 
-          function( elm ) {
-            elm.setVisibilityMode(Ext.Element.VISIBILITY).originalDisplay ='visible';
+            Ext.each([this.el, this[this.collapseEl]] , 
+            function( elm ) {
+              elm.setVisibilityMode(Ext.Element.VISIBILITY).originalDisplay ='visible';
             });
           }
         }
-
     }]
   };
 
@@ -775,13 +699,6 @@ Ext.onReady(function(){
   }
   
   
-});
-
-
-Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
-  onRender : function(ct, position){
-    this.el = ct.createChild({tag: 'iframe', id: this.id, name: this.id, frameBorder: 0, src: this.url,  width:'100%', height:"768"});
-  }
 });
 
 
