@@ -28,22 +28,21 @@ global $sStatus;
 if ((($sStatus == 'DRAFT') || ($sStatus == 'TO_DO')) && ($_SESSION['TASK'] != -1)) {
   if (isset($_SESSION['bNoShowSteps'])) {
     unset($_SESSION['bNoShowSteps']);
-  }
-  else {
+  } else {
     $G_TMP_MENU->AddIdOption('STEPS' , G::LoadTranslation('ID_STEPS')      , 'javascript:showSteps();'      , 'absolute');
     $G_TMP_MENU->AddIdOption('INFO'  , G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
   }
   $G_TMP_MENU->AddIdOption('ACTIONS' , G::LoadTranslation('ID_ACTIONS')    , 'javascript:showActions();'    , 'absolute');
-}
-else {
+} else {
   $G_TMP_MENU->AddIdOption('INFO'  , G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
 }
-require_once 'classes/model/Process.php';
-$oProcess = new Process();
-$aProcess = $oProcess->Load($_SESSION['PROCESS']);
 
-/*if( isset($_SESSION['TRIGGER_DEBUG']['ISSET']) && !isset($_GET['breakpoint']) && $aProcess['PRO_DEBUG']){
-    $G_TMP_MENU->AddIdOption('DEBUG'  , G::LoadTranslation('ID_DEBUG'), 'javascript:showdebug();', 'absolute');
-}*/
 
-?>
+
+
+
+
+
+
+
+

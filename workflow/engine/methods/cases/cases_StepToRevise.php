@@ -57,50 +57,50 @@
 
 
    /* Prepare page before to show */
-    $oTemplatePower = new TemplatePower(PATH_TPL . 'cases/cases_Step.html');
-    $oTemplatePower->prepare();
-    $G_PUBLISH = new Publisher;
+  $oTemplatePower = new TemplatePower(PATH_TPL . 'cases/cases_Step.html');
+  $oTemplatePower->prepare();
+  $G_PUBLISH = new Publisher;
+  $oCase = new Cases();
+  $Fields = $oCase->loadCase($_SESSION['APPLICATION']);
 
-$oHeadPublisher =& headPublisher::getSingleton();
-$oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, false);");
-// DEPRECATED this script call is marked for removal since almost all the interface is extJS based
-$oHeadPublisher->addScriptCode('
-	  var Cse = {};
-	  Cse.panels = {};
-	  var leimnud = new maborak();
-	  leimnud.make();
-	  leimnud.Package.Load("rpc,drag,drop,panel,app,validator,fx,dom,abbr",{Instance:leimnud,Type:"module"});
-	  leimnud.Package.Load("json",{Type:"file"});
-	  leimnud.Package.Load("cases",{Type:"file",Absolute:true,Path:"/jscore/cases/core/cases.js"});
-	  leimnud.Package.Load("cases_Step",{Type:"file",Absolute:true,Path:"/jscore/cases/core/cases_Step.js"});
-	  leimnud.Package.Load("processmap",{Type:"file",Absolute:true,Path:"/jscore/processmap/core/processmap.js"});
-	  leimnud.exec(leimnud.fix.memoryLeak);
-	  leimnud.event.add(window,"load",function(){
-		  '.(isset($_SESSION['showCasesWindow'])?'try{'.$_SESSION['showCasesWindow'].'}catch(e){}':'').'
+  $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}');");
+  // DEPRECATED this script call is marked for removal since almost all the interface is extJS based
+  $oHeadPublisher->addScriptCode('
+    var Cse = {};
+    Cse.panels = {};
+    var leimnud = new maborak();
+    leimnud.make();
+    leimnud.Package.Load("rpc,drag,drop,panel,app,validator,fx,dom,abbr",{Instance:leimnud,Type:"module"});
+    leimnud.Package.Load("json",{Type:"file"});
+    leimnud.Package.Load("cases",{Type:"file",Absolute:true,Path:"/jscore/cases/core/cases.js"});
+    leimnud.Package.Load("cases_Step",{Type:"file",Absolute:true,Path:"/jscore/cases/core/cases_Step.js"});
+    leimnud.Package.Load("processmap",{Type:"file",Absolute:true,Path:"/jscore/processmap/core/processmap.js"});
+    leimnud.exec(leimnud.fix.memoryLeak);
+    leimnud.event.add(window,"load",function(){
+      '.(isset($_SESSION['showCasesWindow'])?'try{'.$_SESSION['showCasesWindow'].'}catch(e){}':'').'
     });
-	  ');
-// DEPRECATED this script call is marked for removal
-$G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
+  ');
+  // DEPRECATED this script call is marked for removal
+  $G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
 
   if(!isset($_GET['type'])) $_GET['type'] = 'DYNAFORM';
 	if(!isset($_GET['position'])) $_GET['position'] = 1;
 
 	$_SESSION['STEP_POSITION'] = (int)$_GET['position'];
-	$oCase = new Cases();
-	$Fields = $oCase->loadCase($_SESSION['APPLICATION']);
-  
-
+	
 	//Obtain previous and next step - Start
   if(isset($_GET['type'])) 
     $sType = $_GET['type'];
   else 
     $sType = '';
+    
 	try {
 	    $aNextStep = $oCase->getNextSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $sType);
 	    $aPreviousStep = $oCase->getPreviousSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $sType);
 	}
 	catch (exception $e) {
-
+    G::SendTemporalMessage($e->getMessage(), 'error', 'string');
 	}
 
 	if (!$aPreviousStep) {

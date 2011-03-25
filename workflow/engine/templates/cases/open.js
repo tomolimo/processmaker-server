@@ -10,9 +10,10 @@ var _ENV_CURRENT_DATE;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
-  showCaseNavigatorPanel = function(steps, information, action) {
-
-    if(steps==false&&action==false&&typeof(treeToReviseTitle)!='undefined'){
+  
+  showCaseNavigatorPanel = function(app_status) {
+    
+    if (typeof(treeToReviseTitle) != 'undefined'){
       var treeToRevise = new Ext.tree.TreePanel({
         title: treeToReviseTitle,
         width: 250,
@@ -53,14 +54,64 @@ Ext.onReady(function(){
         winTree.show(this);
         toReviseTreeOpen = true;
       }
-
     }
 
 
-    if( caseMenuOpen ) 
+    if( caseMenuOpen )
       return false;
     else
       caseMenuOpen = true;
+    
+    //get the menu 
+      
+    Ext.Ajax.request({
+      url : 'ajaxListener', 
+      params : {action : 'getCaseMenu', app_status:app_status},
+      success: function ( result, request ) { 
+        var data = Ext.util.JSON.decode(result.responseText); 
+        for(i=0; i<data.length; i++) {
+          switch(data[i].id) {
+            case 'STEPS':
+              Ext.getCmp('casesStepTree').root.reload();
+              Ext.getCmp('stepsMenu').show();
+              break;
+              
+            case 'INFO':
+              //filling information menu
+              var informationMenu = Ext.getCmp('informationMenu');
+              informationMenu.menu.removeAll();
+              for(j=0; j<data[i].options.length; j++) {
+                informationMenu.menu.add({
+                  text: data[i].options[j].text,
+                  handler: data[i].options[j].fn != '' ? Actions[data[i].options[j].fn] : function(){}
+                });
+                menuSelectedTitle[data[i].options[j].fn] = data[i].options[j].text;
+              }
+              informationMenu.show();
+              break; 
+              
+            case 'ACTIONS':
+              var actionMenu = Ext.getCmp('actionMenu');
+              actionMenu.menu.removeAll();
+              for(j=0; j<data[i].options.length; j++) {
+                actionMenu.menu.add({
+                  text: data[i].options[j].text,
+                  handler: data[i].options[j].fn != '' ? Actions[data[i].options[j].fn] : function(){}
+                });
+                menuSelectedTitle[data[i].options[j].fn] = data[i].options[j].text;
+              }
+              actionMenu.show();
+              break;
+          }
+        }
+      },
+      failure: function ( result, request) { 
+        Ext.MessageBox.alert('Failed', result.responseText); 
+      }
+    });
+    
+    return;
+      
     
     //getting the case Information availables options
     Ext.Ajax.request({

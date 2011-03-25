@@ -975,7 +975,7 @@
 
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(true, true, true);");
+  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('$sStatus');");
   $oHeadPublisher->addScriptCode('
     var showSteps = function()
     {

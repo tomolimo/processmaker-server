@@ -37,11 +37,50 @@ require_once 'classes/model/Task.php';
 G::LoadClass('case');
 
 $action = $_REQUEST['action'];
+unset($_REQUEST['action']);
 $ajax = new Ajax();
-$ajax->$action();
+$ajax->$action($_REQUEST);
 
 class Ajax
 {
+  function getCaseMenu($params)
+  {
+  
+    G::LoadClass("configuration");
+    G::LoadClass("case");
+    global $G_TMP_MENU;
+    global $sStatus;
+    $sStatus = $params['app_status'];
+    $oCase = new Cases();
+    $conf = new Configurations;
+    $oMenu = new Menu();
+    $oMenu->load('caseOptions');
+    
+    $menuOptions = Array();
+    foreach( $oMenu->Options as $i => $action ) {
+      $option = Array(
+        'id'     => $oMenu->Id[$i],
+        'label'  => $oMenu->Labels[$i],
+        'action' => ($action!='STEPS' && $action!='ACTIONS' && $action!='INFO') ? $action : ''
+      );
+      
+      switch($option['id']) {
+        case 'STEPS':
+          $option['options'] = Array();
+          break;
+        case 'ACTIONS':
+          $option['options'] = $this->getActionOptions();
+          break;
+        case 'INFO':
+          $option['options'] = $this->getInformationOptions();
+          break;
+      }
+      $menuOptions[] = $option;
+    }
+    
+    echo G::json_encode($menuOptions);
+  }
+
   
   function steps()
   {
@@ -180,8 +219,7 @@ class Ajax
     $node->url    = "../cases/cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN";
     $tree[] = $node;
 
-    print(G::json_encode($tree));
-
+    echo G::json_encode($tree);
   }
 
   function getInformationOptions()
@@ -196,7 +234,7 @@ class Ajax
     $options[] = Array('text' => G::LoadTranslation('ID_UPLOADED_DOCUMENTS'), 'fn'=>'uploadedDocuments');
     $options[] = Array('text' => G::LoadTranslation('ID_GENERATED_DOCUMENTS'), 'fn'=>'generatedDocuments');
 
-    print(G::json_encode($options));
+    return $options;
   }
 
   function getActionOptions()
@@ -261,7 +299,7 @@ class Ajax
         $options[] = Array('text'=>G::LoadTranslation('ID_ADHOC_ASSIGNMENT'), 'fn'=>'');
       }
     }
-    print(G::json_encode($options));
+    return $options;
   }
 
   function processMap()

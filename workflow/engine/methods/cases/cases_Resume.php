@@ -84,10 +84,7 @@
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
 
-  if( isset($_SESSION['alreadyDerivated']) && $_SESSION['alreadyDerivated'] == true )
-    $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, false)");
-  else
-    $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel(false, true, $actions)");
+  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}')");
     
   $oHeadPublisher->addScriptCode('
   var Cse = {};

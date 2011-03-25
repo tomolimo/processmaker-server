@@ -28,23 +28,25 @@
   * @date Jan 3th, 2010
   */
 
-  $oHeadPublisher =& headPublisher::getSingleton(); 
-  $oHeadPublisher->usingExtJs('ux/miframe');
-  $oHeadPublisher->addExtJsScript('cases/open', false);
-  //
-  $uri = '';
-  foreach($_GET as $k=>$v)
-    $uri .= ($uri == '')? "$k=$v": "&$k=$v";
-
   G::LoadClass("configuration");
   G::LoadClass("case");
   $oCase = new Cases();
+  $conf = new Configurations;
+  
+  $oHeadPublisher =& headPublisher::getSingleton(); 
+  $oHeadPublisher->usingExtJs('ux/miframe');
+  $oHeadPublisher->addExtJsScript('cases/open', true);
+  
+  $uri = '';
+  foreach($_GET as $k=>$v) {
+    $uri .= ($uri == '')? "$k=$v": "&$k=$v";
+  }
+  
   $appNum = '';
   if( isset($_GET['APP_UID']) && isset($_GET['DEL_INDEX'])) {
     $case = $oCase->loadCase($_GET['APP_UID'], $_GET['DEL_INDEX']);
     $appNum = $case['APP_TITLE'];
   }
-  $conf = new Configurations;
 
   if (!isset($_GET['to_revise'])){
     $script = 'cases_Open?';
@@ -52,8 +54,7 @@
     $script = 'cases_OpenToRevise?';
     $delIndex = $_GET['DEL_INDEX'];
     $appUid   = $_GET['APP_UID'];
-    $oHeadPublisher->assign( 'treeToReviseTitle',   G::loadtranslation('ID_STEP_LIST')); //translations
-//  $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
+    $oHeadPublisher->assign( 'treeToReviseTitle',   G::loadtranslation('ID_STEP_LIST'));
     $casesPanelUrl = 'casesToReviseTreeContent?APP_UID='.$appUid.'&DEL_INDEX='.$delIndex;
     $oHeadPublisher->assign( 'casesPanelUrl',   $casesPanelUrl); //translations
     echo "<div id='toReviseTree'></div>";

@@ -230,6 +230,8 @@ function redirect(href){
 }
 
 Ext.onReady ( function() {
+  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+  
   var ids = '';
   var filterProcess = '';
   var filterUser    = '';
