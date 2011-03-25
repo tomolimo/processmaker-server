@@ -538,7 +538,6 @@ function updateCasesTree() {
   
   //treeMenuItems.root.reload();
   Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
-  document.getElementById('ext-gen35').focus();
 
   itemsTypes = Array('CASES_INBOX', 'CASES_DRAFT', 'CASES_CANCELLED', 'CASES_SENT', 'CASES_PAUSED', 'CASES_COMPLETED','CASES_SELFSERVICE');
   if(currentSelectedTreeMenuItem){
