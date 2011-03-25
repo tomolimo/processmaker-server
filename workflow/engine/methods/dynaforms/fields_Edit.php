@@ -161,7 +161,10 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
       if(G::LoadSystemExist($sDataBase)){
         G::LoadSystem($sDataBase);
         $oDataBase = new database();
-        $tableExists   = $oDataBase->tableExists('USERS', $Fields['PME_SQLCONNECTION']);
+        $dataBase = $Fields['PME_SQLCONNECTION'];
+        if($Fields['PME_SQLCONNECTION']=='workflow')
+          $dataBase = DB_NAME;
+        $tableExists   = $oDataBase->tableExists('USERS', $dataBase);
       } 
       if($tableExists) {
         $con = Propel::getConnection($Fields['PME_SQLCONNECTION']);

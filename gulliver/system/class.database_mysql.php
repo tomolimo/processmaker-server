@@ -717,14 +717,29 @@ class database extends database_base {
   /**
    * Determining the existence of a table
    */
-  function tableExists ($table, $db) { 
-    $tables = mysql_list_tables ($db); 
-    while (list ($temp) = @mysql_fetch_array ($tables)) {
-        if ($temp == $table) {
-            return TRUE;
-        }
-    }
-    return FALSE;
+  function tableExists($tableName, $database)
+  {
+     @mysql_select_db($database);
+     $tables = array();
+     $tablesResult = mysql_query("SHOW TABLES FROM $database;");
+     while ($row = @mysql_fetch_row($tablesResult)) $tables[] = $row[0];
+     if(in_array($tableName, $tables)) {
+       return TRUE;
+     }
+     return FALSE;
   }
-  
+
+/*
+ *   Determining the existence of a table (Depricated)
+ */
+//  function tableExists ($table, $db) {
+//    $tables = mysql_list_tables ($db);
+//    while (list ($temp) = @mysql_fetch_array ($tables)) {
+//        if ($temp == $table) {
+//            return TRUE;
+//        }
+//    }
+//    return FALSE;
+//  }
+
 }
