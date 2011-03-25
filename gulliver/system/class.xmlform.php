@@ -1267,9 +1267,11 @@ class XmlForm_Field_Password extends XmlForm_Field {
         return $html;
       }
     } elseif ($this->mode === 'view') {
-      return $this->htmlentities ( str_repeat ( '*', 10 ), ENT_COMPAT, 'utf-8' );
+        $html=  '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="hidden" autocomplete="'.$this->autocomplete.'" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' readOnly="readOnly"/>';
+        $html.= $this->htmlentities ( str_repeat ( '*', 10 ), ENT_COMPAT, 'utf-8' );
+        return $html; 
     } else {
-      return $this->htmlentities ( str_repeat ( '*', 10 ), ENT_COMPAT, 'utf-8' );
+       return $this->htmlentities ( str_repeat ( '*', 10 ), ENT_COMPAT, 'utf-8' );
     }
   }
 }
@@ -2473,6 +2475,12 @@ class XmlForm_Field_Listbox extends XmlForm_Field
         $html .= '<option value="' . $optionName . '" ' . ((in_array ( $optionName, $value )) ? 'selected' : '') . '>' . $option . '</option>';
       }
       $html .= '</select>';
+      foreach ( $this->option as $optionName => $option ) {
+        $html .= '<input type="hidden"  id="form[' . $this->name . ']" name="form[' . $this->name . '][]" value="'.((in_array ( $optionName, $value )) ? $optionName : '').'">';
+      }
+      foreach ( $this->sqlOption as $optionName => $option ) {
+        $html .= '<input type="hidden"  id="form[' . $this->name . ']" name="form[' . $this->name . '][]" value="'.((in_array ( $optionName, $value )) ? $optionName : '').'">';
+      }
       return $html;
     } else {
       return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
@@ -2558,7 +2566,10 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
       $html = '';
       foreach ( $this->options as $optionName => $option ) {
         $html .= '<input class="module_app_input___gray" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . ']" type=\'radio\' value="' . $optionName . '" ' . (($optionName == $value) ? 'checked' : '') . ' disabled><span class="FormCheck">' . $option . '</span></input><br>';
+       if($optionName == $value)
+         $html .= '<input type="hidden"  id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . ']" value="' . (($optionName == $value) ? $optionName : '') . '">';
       }
+
       return $html;
     } else {
       return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
@@ -2651,6 +2662,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
       $html = '';
       foreach ( $this->options as $optionName => $option ) {
         $html .= '<input class="FormCheck" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'checkbox\' value="' . $optionName . '"' . (in_array ( $optionName, $value ) ? 'checked' : '') . ' disabled><span class="FormCheck">' . $option . '</span></input><br>';
+        $html .= '<input type="hidden"  id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]"  value="'.((in_array ( $optionName, $value )) ? $optionName : '').'">';
       }
       return $html;
     } else {
@@ -3255,6 +3267,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       ///-- $html =  '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" ' . (isset ( $this->maxLength ) ? ' maxlength="' . $this->maxLength . '"' : '') . ' value=\'' . htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" />' . htmlentities ( $value, ENT_COMPAT, 'utf-8' );
 
       $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$valueaux</span>";
+      $html .= '<input type="hidden" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'"  '.$onchange.' class="module_app_input___gray" value="'.$value.'"/>';
     }
     //
     
