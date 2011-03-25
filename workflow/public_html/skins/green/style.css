@@ -19,7 +19,8 @@ img {
 {
 	font		:normal 8pt sans-serif,Tahoma,MiscFixed;
 	color		:#000;
-	height		:150px;
+	height		:0px;
+        padding-top     :100px;	
 	text-align	:center;
 }
 .Footer .image
