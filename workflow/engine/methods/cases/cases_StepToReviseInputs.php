@@ -61,6 +61,7 @@ $G_ID_SUB_MENU_SELECTED = 'CASES_TO_REVISE';
   $oTemplatePower->prepare();
   $G_PUBLISH = new Publisher;
 $oHeadPublisher =& headPublisher::getSingleton();
+//  Check if these code needs to be removed since the interface ar now moving to ExtJS
 $oHeadPublisher->addScriptCode('
   var Cse = {};
   Cse.panels = {};
@@ -76,6 +77,7 @@ $oHeadPublisher->addScriptCode('
 	  '.(isset($_SESSION['showCasesWindow'])?'try{'.$_SESSION['showCasesWindow'].'}catch(e){}':'').'
 });
   ');
+//  Check if these code needs to be removed since the interface ar now moving to ExtJS
   $G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
 
 if(!isset($_GET['position'])) $_GET['position'] = 1;
@@ -144,6 +146,7 @@ G::RenderPage('publish', 'blank');
 
 <script>
 /*------------------------------ To Revise Routines ---------------------------*/
+//Deprecated Section since the interface are now movig to ExtJS
 function setSelect()
 {
 	var ex=<?=$_GET['ex']?>;
@@ -194,6 +197,8 @@ function toRevisePanel(APP_UID,DEL_INDEX)
   	}.extend(this);
 	oRPC.make();
 }
+//Deprecated Section since the interface are now movig to ExtJS
+//Remove this Jscript code
+//toRevisePanel('<?=$_GET['APP_UID']?>','<?=$_GET['DEL_INDEX']?>');
 
-toRevisePanel('<?=$_GET['APP_UID']?>','<?=$_GET['DEL_INDEX']?>');
 </script>
