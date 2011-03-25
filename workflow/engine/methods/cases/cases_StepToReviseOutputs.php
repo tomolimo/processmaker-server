@@ -52,6 +52,7 @@ $oTemplatePower = new TemplatePower(PATH_TPL . 'cases/cases_Step.html');
 $oTemplatePower->prepare();
 $G_PUBLISH = new Publisher;
 $oHeadPublisher =& headPublisher::getSingleton();
+// check if the code for the addScriptCode is necessary since the interface is now based in ExtJs
 $oHeadPublisher->addScriptCode('
 var Cse = {};
 Cse.panels = {};
@@ -76,6 +77,7 @@ if(!isset($_GET['ex'])) $_GET['ex']=0;
 ?>
 <script type="text/javascript">
 /*------------------------------ To Revise Routines ---------------------------*/
+//Deprecated Section since the interface are now movig to ExtJS
 function setSelect()
 {
 	var ex=<?=$_GET['ex']?>;
@@ -94,6 +96,7 @@ function setSelect()
 		return 0;
 	}
 }
+//Deprecated Section since the interface are now movig to ExtJS
 function toRevisePanel(APP_UID,DEL_INDEX)
 {
 	oPanel = new leimnud.module.panel();
@@ -126,5 +129,5 @@ function toRevisePanel(APP_UID,DEL_INDEX)
 	oRPC.make();
 }
 
-toRevisePanel('<?=$_GET['APP_UID']?>','<?=$_GET['DEL_INDEX']?>');
+//toRevisePanel('<?=$_GET['APP_UID']?>','<?=$_GET['DEL_INDEX']?>');
 </script>
