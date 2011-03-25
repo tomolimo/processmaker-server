@@ -142,14 +142,18 @@ class Ajax
           $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=EDIT";
           break;
 
-        case 'OUTPUT_DOCUMENT':
+        case 'OUTPUT_DOCUMENT':      
           $oDocument = OutputDocumentPeer::retrieveByPK($caseStep->getStepUidObj());
           $outputDoc = $appDocument->getObject($_SESSION['APPLICATION'], $_SESSION['INDEX'], $caseStep->getStepUidObj(), 'OUTPUT');
 
           $node->text    = $oDocument->getOutDocTitle();
           $node->iconCls = 'ss_sprite ss_application_put';
           $node->leaf    = true;
-          $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=VIEW&DOC={$outputDoc['APP_DOC_UID']}";
+          if($outputDoc['APP_DOC_UID'])
+            $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=VIEW&DOC={$outputDoc['APP_DOC_UID']}"; 
+          else
+            $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=GENERATE";         
+          
           break;
 
         case 'INPUT_DOCUMENT':
