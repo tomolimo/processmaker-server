@@ -85,7 +85,7 @@ VALUES (
   NEW.PRO_UID,
   substring(NEW.DEL_DELEGATE_DATE,1,10),
   substring(NEW.DEL_INIT_DATE,    1,10),
-  substring(NEW.DEL_TASK_DUE_DATE,1,10),
+  substring(NEW.DEL_TASK_DUE_DATE,1,19),
   substring(NEW.DEL_FINISH_DATE,  1,10),
   NEW.DEL_THREAD_STATUS,
   @APP_THREAD_STATUS,
