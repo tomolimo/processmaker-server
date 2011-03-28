@@ -451,8 +451,9 @@ var installer=function()
 				this.options.button0.disabled=false;
 				this.options.button1.disabled=true;
 				this.disabled(false);
-				this.compiled.focus();
-
+        try {
+          this.compiled.focus();
+        } catch(err) {}
 				this.ed_advanced_options({sta:((this.select_ao_db.selected().value==2)?'enabled':'disabled'),act:'usr'});
 				this.ed_advanced_options({sta:((this.select_ao_pm.selected().value==2)?'enabled':'disabled'),act:'pm'});
 			}
@@ -514,7 +515,9 @@ var installer=function()
 		this.compiled[(dis===true)?'disable':'enable']();
 		if(this.compiled.disabled===false)
 		{
-			this.compiled.focus();
+      try {
+        this.compiled.focus();
+      } catch(err) {}
 		}
 		this.options.button0.disabled=dis;
 		this.buttonFun(this.options.button0);
