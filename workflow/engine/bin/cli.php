@@ -61,6 +61,13 @@
   // register tasks
   //TODO: include plugins
   $directories = array(PATH_HOME . 'engine/bin/tasks');
+  $pluginsDirectories = glob(PATH_PLUGINS . "*");
+  foreach ($pluginsDirectories as $dir) {
+    if (!is_dir($dir))
+      continue;
+    if (is_dir("$dir/bin/tasks"))
+      $directories[] = "$dir/bin/tasks";
+  }
 
   foreach ($directories as $dir) {
     foreach (glob("$dir/*.php") as $filename) {

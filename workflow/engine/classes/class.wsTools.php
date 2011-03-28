@@ -200,7 +200,7 @@ class workspaceTools {
    * @param   bool $root wheter to also initialize a root connection
    * @return  the Propel connection
    */
-  private function initPropel($root = false) {
+  public function initPropel($root = false) {
     if (($this->initPropel && !$root) || ($this->initPropelRoot && $root))
       return;
     $wfDetails = $this->getDBCredentials("wf");
