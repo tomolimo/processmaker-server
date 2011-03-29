@@ -216,6 +216,9 @@ function startCase() {
   if (isset ( $_SESSION ['TASK'] ))           unset ( $_SESSION ['TASK'] );
   if (isset ( $_SESSION ['INDEX'] ))          unset ( $_SESSION ['INDEX'] );
   if (isset ( $_SESSION ['STEP_POSITION'] ))  unset ( $_SESSION ['STEP_POSITION'] );
+  if (isset ( $_SESSION ['START_NEW_CASE'] ))  unset ( $_SESSION ['START_NEW_CASE'] );
+
+  //echo 'Start new case<br />';
 
   /* Process */
   try {
@@ -224,6 +227,7 @@ function startCase() {
     lookinginforContentProcess($_POST['processId']);
     
     $aData = $oCase->startCase ( $_REQUEST ['taskId'], $_SESSION ['USER_LOGGED'] );
+    
     $_SESSION ['APPLICATION'] = $aData ['APPLICATION'];
     $_SESSION ['INDEX']   = $aData ['INDEX'];
     $_SESSION ['PROCESS'] = $aData ['PROCESS'];
@@ -239,6 +243,8 @@ function startCase() {
     
     $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
     $aData ['openCase'] = $aNextStep;
+    
+    $aData ['NewDynaform'] = true; //Sets New Dynaform value
     
     $aData ['status'] = 'success';
     print (G::json_encode ( $aData )) ;

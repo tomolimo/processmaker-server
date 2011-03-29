@@ -3,7 +3,7 @@
 
 <FLD_UID type="text" size="1" style="display:none;"/>
 
-<FLD_NAME type="text" size="15" maxlength="64" validate="Field">
+<FLD_NAME type="text" size="15" maxlength="64" validate="Field" strto="UPPER">
   <en>Field Name</en>
 </FLD_NAME>
 
