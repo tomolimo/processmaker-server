@@ -15,12 +15,6 @@ var G_Grid = function(oForm, sGridName){
   
   this.allDependentFields = ''; //Stores all dependent fields
   
-  this.alertMe = function (txt){
-    new leimnud.module.app.alert().make( {
-      label : txt
-    });
-  };
-  
   this.getObjectName = function(Name){
     var arr = Name.split('][');
     var aux = arr.pop();
@@ -382,7 +376,6 @@ var G_Grid = function(oForm, sGridName){
       }
     }
     //Fires OnAddRow Event
-    //FIXME: This feature does not work in IE
     if (this.onaddrow) {
       this.onaddrow(currentRow);
     }
@@ -544,7 +537,6 @@ var G_Grid = function(oForm, sGridName){
           }
         }
         //Fires OnAddRow Event
-        //FIXME: This feature does not work in IE
         if (this.ondeleterow) {
           this.ondeleterow();
         }
@@ -851,12 +843,12 @@ var G_Grid = function(oForm, sGridName){
             break;
           default:
             if (( oCell2.innerHTML.indexOf('changeValues')==111 || oCell2.innerHTML.indexOf('changeValues')==115 ) ) {
-              alert('erik2');
+              //alert('erik2');
               break;
             }
           if (oCell2.innerHTML.toLowerCase().indexOf('deletegridrow') == -1) {
             oCell1.innerHTML = oCell2.innerHTML;
-            alert('erik');
+            //alert('erik');
           }
           break;
         }

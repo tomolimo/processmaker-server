@@ -1401,7 +1401,6 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
     }
     
     if (isNewDynaform($owner)==1){
-        echo 'Nuevo';
         $values = array();
         $values[] = $this->defaultValue;
     }
