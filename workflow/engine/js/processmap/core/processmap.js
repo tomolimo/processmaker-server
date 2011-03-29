@@ -2337,9 +2337,14 @@ processmap.prototype={
     /* Panel editor */
 
     this.panels.editor=new leimnud.module.panel();
+    oClientWinSize = getClientWindowSize();
+    var heightPanel = this.options.size.h;
+    if(heightPanel <= oClientWinSize.height ) heightPanel = heightPanel + 800;
+
     this.panels.editor.options={
       limit:true,
-      size:{w:this.options.size.w,h:this.options.size.h},
+//      size:{w:this.options.size.w,h:this.options.size.h},
+      size:{w:this.options.size.w,h:heightPanel},
       position:{x:200,y:0,centerX:true},
       title:"",
       titleBar:false,

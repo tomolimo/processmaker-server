@@ -3247,6 +3247,10 @@ class processMap {
             $sObject = G::LoadTranslation('ID_ALL');
           }
           break;
+        default :
+          $sObjectType = G::LoadTranslation('ID_ALL');
+          $sObject = G::LoadTranslation('ID_ALL');
+          break;
       }
       //Participated
       if ($aRow ['OP_PARTICIPATE'] == 0) {
