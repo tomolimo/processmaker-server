@@ -2334,10 +2334,10 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
     // added end
     if (! $onlyValue) {
       if ($this->mode === 'edit') {
-        $html = '<select '.$readOnlyField.' required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
+        $html = '<select '.$readOnlyField.' pm:required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
       } elseif ($this->mode === 'view') {
         $html = $this->htmlentities ( isset ( $this->options [$value] ) ? $this->options [$value] : '', ENT_COMPAT, 'utf-8' );
-        $html .= '<select '.$readOnlyField.' required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" style="display:none" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
+        $html .= '<select '.$readOnlyField.' pm:required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" style="display:none" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
       }
       foreach ( $this->option as $optionName => $option ) {
         // if change the type with the settype function then compare "0" == "" so both can be diferentiated
@@ -2370,7 +2370,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
 //add by alvaro
          if($this->readonly){
            $readOnlyField = "";
-           $html1 = '<select '.$readOnlyField.' required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
+           $html1 = '<select '.$readOnlyField.' pm:required="'.$isRequired.'" class="module_app_input___gray" id="form' . $rowId . '[' . $this->name . ']" name="form' . $rowId . '[' . $this->name . ']" ' . (($this->style) ? 'style="' . $this->style . '"' : '') . '>';
            foreach ( $this->option as $optionName => $option ) {
              // if change the type with the settype function then compare "0" == "" so both can be diferentiated
              settype($optionName,'string');
@@ -3249,13 +3249,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
         
         if ( $this->editable != "0") {
-          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'" required="' . $isRequired . '"/>'
+          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'" pm:required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
                 . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
         } else {   
-          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" required="' . $isRequired . '"/>'
+          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" pm:required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
                 . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
@@ -3307,18 +3307,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     	
     	if(browsername($_SERVER['HTTP_USER_AGENT'])=='Mozilla Firefox'){
       $len = strlen($valueaux);
-    	$len = $len - 10;
-      $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
-             . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:-"'.$len.'"px;top:0px;"/>'
-             . '</a>';
-      } 
-      if((browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 8')||(browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 7')){
-      $len = strlen($valueaux);
+    	$len = $len - 10;   
+      } else if((browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 8')||(browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 7')){
+      $len = strlen($valueaux);      
+      }else  $len = strlen($valueaux);
       $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
              . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:"'.$len.'"px;top:0px;"/>'
-             . '</a>';
-      } 
-      
+             . '</a>'; 
     }
  
     return $html;
