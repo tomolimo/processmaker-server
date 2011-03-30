@@ -559,8 +559,11 @@ class dynaFormHandler
   {
     $array = false;
     $array['__nodeName__'] = $node->nodeName;
-    if ($node->hasAttributes()){
-      if( isset($attributes) ){
+    $text = simplexml_import_dom($node);
+    $array['__nodeText__'] = trim((string) $text);
+    
+    if ($node->hasAttributes()) {
+      if( isset($attributes) ) {
         foreach ($attributes as $attr) {
           if( $node->hasAttribute($attr) )
             $array[$attr] = $node->getAttribute($attr);
@@ -577,10 +580,15 @@ class dynaFormHandler
         $return;
       else {
         foreach ($node->childNodes as $childNode) {
-          if ($childNode->nodeType != XML_TEXT_NODE && $childNode->nodeType != XML_CDATA_SECTION_NODE)
+          $childNode->normalize();
+          //if ($childNode->nodeType == XML_TEXT_NODE || $childNode->nodeType == XML_CDATA_SECTION_NODE) {
+          if ($childNode->nodeType == XML_ELEMENT_NODE) {
             $array[$childNode->nodeName][] = $this->getArray($childNode);
-          else
-            $array[$childNode->nodeName] = $childNode->nodeValue;
+          } else if ($childNode->nodeType == XML_TEXT_NODE || $childNode->nodeType == XML_CDATA_SECTION_NODE) {
+            //$array[$childNode->nodeName] = $childNode->textContent;
+            $text = simplexml_import_dom($childNode->parentNode);
+            $array['__nodeText__'] = trim((string) $text);
+          }
         }
       }
     }

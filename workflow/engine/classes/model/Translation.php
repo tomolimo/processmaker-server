@@ -133,7 +133,7 @@ class Translation extends BaseTranslation {
       $msg = '';
       $validationFailuresArray = $tr->getValidationFailures();
       foreach($validationFailuresArray as $objValidationFailure) {
-        $msg .= $objValidationFailure->getMessage() . "<br/>";
+        $msg .= $objValidationFailure->getMessage() . "\n";
       }
       return array ( 'codError' => -100, 'rowsAffected' => 0, 'message' => $msg );
     }
