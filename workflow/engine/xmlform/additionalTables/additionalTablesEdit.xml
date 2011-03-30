@@ -65,10 +65,6 @@
 
 <JS type="javascript">
 <![CDATA[
-var changeToUpper = function() {
-  this.value = this.value.toUpperCase();
-};
-
 var onChangeType = function(iRow, bEmpty) {
   var iRow = iRow | this.name.split('][')[1];
   var oAux;
@@ -76,95 +72,25 @@ var onChangeType = function(iRow, bEmpty) {
     case 'VARCHAR':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.readOnly = '';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      if (bEmpty) {
-        oAux.checked = false;
-        oAux.disabled = false;
-      }
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      if (!getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY').checked) {
-        oAux.disabled = true;
-        oAux.value = '';
-      }*/
-    break;
+      break;
     case 'TEXT':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.value = '';
       oAux.readOnly = 'readOnly';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      if (bEmpty) {
-        oAux.checked = false;
-        oAux.disabled = true;
-      }
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
-    break;
+      break;
     case 'DATE':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.value = '';
       oAux.readOnly = 'readOnly';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
-    break;
+      break;
     case 'INT':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.readOnly = '';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      if (bEmpty) {
-        oAux.checked  = false;
-        oAux.disabled = false;
-      }
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      if (bEmpty) {
-        oAux.checked = false;
-        oAux.disabled = false;
-      }
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      if (bEmpty) {
-        oAux.disabled = true;
-        oAux.value = '';
-      }*/
-    break;
+      break;
     case 'FLOAT':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.readOnly = '';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
-    break;
-  }
-};
-
-var onClickForeignKey = function(iRow) {
-  var iRow = iRow | this.name.split('][')[1];
-  var oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-  if (getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY').checked) {
-    oAux.disabled = false;
-    oAux.value = '';
-  }
-  else {
-    oAux.disabled = true;
-    oAux.value = '';
+      break;
   }
 };
 
@@ -176,53 +102,53 @@ var verifyData = function(oForm) {
     var fieldsTmp = [];    
     var words = '';
     var aReservedWords = new Array('ADD','ALL','ALTER','ANALYZE','AND','AS','ASC','ASENSITIVE','BEFORE',
-                                   'BETWEEN','BIGINT','BINARY','BLOB','BOTH','BY','CALL','CASCADE','CASE',
-                                   'CHANGE','CHAR','CHARACTER','CHECK','COLLATE','COLUMN','CONDITION',
-                                   'CONSTRAINT','CONTINUE','CONVERT','CREATE','CROSS','CURRENT_DATE',
-                                   'CURRENT_TIME','CURRENT_TIMESTAMP','CURRENT_USER','CURSOR','DATABASE',
-                                   'DATABASES','DAY_HOUR','DAY_MICROSECOND','DAY_MINUTE','DAY_SECOND','DEC',
-                                   'DECIMAL','DECLARE','DEFAULT','DELAYED','DELETE','DESC','DESCRIBE',
-                                   'DETERMINISTIC','DISTINCT','DISTINCTROW','DIV','DOUBLE','DROP','DUAL',
-                                   'EACH','ELSE','ELSEIF','ENCLOSED','ESCAPED','EXISTS','EXIT','EXPLAIN',
-                                   'FALSE','FETCH','FLOAT','FLOAT4','FLOAT8','FOR','FORCE','FOREIGN','FROM',
-                                   'FULLTEXT','GRANT','GROUP','HAVING','HIGH_PRIORITY','HOUR_MICROSECOND',
-                                   'HOUR_MINUTE','HOUR_SECOND','IF','IGNORE','IN','INDEX','INFILE','INNER',
-                                   'INOUT','INSENSITIVE','INSERT','INT','INT1','INT2','INT3','INT4','INT8',
-                                   'INTEGER','INTERVAL','INTO','IS','ITERATE','JOIN','KEY','KEYS','KILL',
-                                   'LEADING','LEAVE','LEFT','LIKE','LIMIT','LINES','LOAD','LOCALTIME',
-                                   'LOCALTIMESTAMP','LOCK','LONG','LONGBLOB','LONGTEXT','LOOP','LOW_PRIORITY',
-                                   'MATCH','MEDIUMBLOB','MEDIUMINT','MEDIUMTEXT','MIDDLEINT','MINUTE_MICROSECOND',
-                                   'MINUTE_SECOND','MOD','MODIFIES','NATURAL','NOT','NO_WRITE_TO_BINLOG','NULL',
-                                   'NUMERIC','ON','OPTIMIZE','OPTION','OPTIONALLY','OR','ORDER','OUT','OUTER',
-                                   'OUTFILE','PRECISION','PRIMARY','PROCEDURE','PURGE','READ','READS','REAL',
-                                   'REFERENCES','REGEXP','RELEASE','RENAME','REPEAT','REPLACE','REQUIRE',
-                                   'RESTRICT','RETURN','REVOKE','RIGHT','RLIKE','SCHEMA','SCHEMAS','SECOND_MICROSECOND',
-                                   'SELECT','SENSITIVE','SEPARATOR','SET','SHOW','SMALLINT','SONAME','SPATIAL',
-                                   'SPECIFIC','SQL','SQLEXCEPTION','SQLSTATE','SQLWARNING','SQL_BIG_RESULT',
-                                   'SQL_CALC_FOUND_ROWS','SQL_SMALL_RESULT','SSL','STARTING','STRAIGHT_JOIN',
-                                   'TABLE','TERMINATED','THEN','TINYBLOB','TINYINT','TINYTEXT','TO','TRAILING',
-                                   'TRIGGER','TRUE','UNDO','UNION','UNIQUE','UNLOCK','UNSIGNED','UPDATE','USAGE',
-                                   'USE','USING','UTC_DATE','UTC_TIME','UTC_TIMESTAMP','VALUES','VARBINARY',
-                                   'VARCHAR','VARCHARACTER','VARYING','WHEN','WHERE','WHILE','WITH','WRITE',
-                                   'XOR','YEAR_MONTH','ZEROFILL','ASENSITIVE','CALL','CONDITION','CONTINUE',
-                                   'CURSOR','DECLARE','DETERMINISTIC','EACH','ELSEIF','EXIT','FETCH','INOUT',
-                                   'INSENSITIVE','ITERATE','LEAVE','LOOP','MODIFIES','OUT','READS','RELEASE',
-                                   'REPEAT','RETURN','SCHEMA','SCHEMAS','SENSITIVE','SPECIFIC','SQL',
-                                   'SQLEXCEPTION','SQLSTATE','SQLWARNING','TRIGGER','UNDO','WHILE');
+        'BETWEEN','BIGINT','BINARY','BLOB','BOTH','BY','CALL','CASCADE','CASE',
+        'CHANGE','CHAR','CHARACTER','CHECK','COLLATE','COLUMN','CONDITION',
+        'CONSTRAINT','CONTINUE','CONVERT','CREATE','CROSS','CURRENT_DATE',
+        'CURRENT_TIME','CURRENT_TIMESTAMP','CURRENT_USER','CURSOR','DATABASE',
+        'DATABASES','DAY_HOUR','DAY_MICROSECOND','DAY_MINUTE','DAY_SECOND','DEC',
+        'DECIMAL','DECLARE','DEFAULT','DELAYED','DELETE','DESC','DESCRIBE',
+        'DETERMINISTIC','DISTINCT','DISTINCTROW','DIV','DOUBLE','DROP','DUAL',
+        'EACH','ELSE','ELSEIF','ENCLOSED','ESCAPED','EXISTS','EXIT','EXPLAIN',
+        'FALSE','FETCH','FLOAT','FLOAT4','FLOAT8','FOR','FORCE','FOREIGN','FROM',
+        'FULLTEXT','GRANT','GROUP','HAVING','HIGH_PRIORITY','HOUR_MICROSECOND',
+        'HOUR_MINUTE','HOUR_SECOND','IF','IGNORE','IN','INDEX','INFILE','INNER',
+        'INOUT','INSENSITIVE','INSERT','INT','INT1','INT2','INT3','INT4','INT8',
+        'INTEGER','INTERVAL','INTO','IS','ITERATE','JOIN','KEY','KEYS','KILL',
+        'LEADING','LEAVE','LEFT','LIKE','LIMIT','LINES','LOAD','LOCALTIME',
+        'LOCALTIMESTAMP','LOCK','LONG','LONGBLOB','LONGTEXT','LOOP','LOW_PRIORITY',
+        'MATCH','MEDIUMBLOB','MEDIUMINT','MEDIUMTEXT','MIDDLEINT','MINUTE_MICROSECOND',
+        'MINUTE_SECOND','MOD','MODIFIES','NATURAL','NOT','NO_WRITE_TO_BINLOG','NULL',
+        'NUMERIC','ON','OPTIMIZE','OPTION','OPTIONALLY','OR','ORDER','OUT','OUTER',
+        'OUTFILE','PRECISION','PRIMARY','PROCEDURE','PURGE','READ','READS','REAL',
+        'REFERENCES','REGEXP','RELEASE','RENAME','REPEAT','REPLACE','REQUIRE',
+        'RESTRICT','RETURN','REVOKE','RIGHT','RLIKE','SCHEMA','SCHEMAS','SECOND_MICROSECOND',
+        'SELECT','SENSITIVE','SEPARATOR','SET','SHOW','SMALLINT','SONAME','SPATIAL',
+        'SPECIFIC','SQL','SQLEXCEPTION','SQLSTATE','SQLWARNING','SQL_BIG_RESULT',
+        'SQL_CALC_FOUND_ROWS','SQL_SMALL_RESULT','SSL','STARTING','STRAIGHT_JOIN',
+        'TABLE','TERMINATED','THEN','TINYBLOB','TINYINT','TINYTEXT','TO','TRAILING',
+        'TRIGGER','TRUE','UNDO','UNION','UNIQUE','UNLOCK','UNSIGNED','UPDATE','USAGE',
+        'USE','USING','UTC_DATE','UTC_TIME','UTC_TIMESTAMP','VALUES','VARBINARY',
+        'VARCHAR','VARCHARACTER','VARYING','WHEN','WHERE','WHILE','WITH','WRITE',
+        'XOR','YEAR_MONTH','ZEROFILL','ASENSITIVE','CALL','CONDITION','CONTINUE',
+        'CURSOR','DECLARE','DETERMINISTIC','EACH','ELSEIF','EXIT','FETCH','INOUT',
+        'INSENSITIVE','ITERATE','LEAVE','LOOP','MODIFIES','OUT','READS','RELEASE',
+        'REPEAT','RETURN','SCHEMA','SCHEMAS','SENSITIVE','SPECIFIC','SQL',
+        'SQLEXCEPTION','SQLSTATE','SQLWARNING','TRIGGER','UNDO','WHILE');
     for (var i = 1; i <= iRows; i++) {
       for(var j = 0; j < aReservedWords.length; j++ ) {
         if(getGridField('FIELDS', i, 'FLD_NAME').value == aReservedWords[j]) {
           words = words +" "+getGridField('FIELDS', i, 'FLD_NAME').value;
         }
-     }
-   }
-   if (words != ''){
-     new leimnud.module.app.alert().make({
+      }
+    }
+    if (words != ''){
+      new leimnud.module.app.alert().make({
         label:G_STRINGS.ID_FIELDS_RESERVED_WORDS + ' ' + words
-     });
-     words='';
-     bContinue = false;
-   }
+      });
+      words='';
+      bContinue = false;
+    }
     for (var i = 1; i <= iRows; i++) {
       if (getGridField('FIELDS', i, 'FLD_NAME').value == '') {
         bContinue = false;
@@ -235,56 +161,48 @@ var verifyData = function(oForm) {
               bContinue = false;
               iMessage  = 2;
             }
-          break;
+            break;
           case 'TEXT':
             if (getGridField('FIELDS', i, 'FLD_KEY').checked ) {
               bContinue = false;
               iMessage  = 4;
             }
-          break;
+            break;
           case 'DATE':
-          break;
+            break;
           case 'INT':
             if (getGridField('FIELDS', i, 'FLD_SIZE').value == '') {
               bContinue = false;
               iMessage  = 2;
             }
-          break;
+            break;
           case 'FLOAT':
             if (getGridField('FIELDS', i, 'FLD_SIZE').value == '') {
               bContinue = false;
               iMessage  = 2;
             }
-          break;
+            break;
         }
       }
-      /*if (bContinue) {
-        if (getGridField('FIELDS', i, 'FLD_FOREIGN_KEY').checked) {
-          if (getGridField('FIELDS', i, 'FLD_FOREIGN_KEY_TABLE').value == '') {
-            bContinue = false;
-            iMessage  = 3;
-          }
-        }
-      }*/
       // Check duplicate fields 
       if(bContinue) {
         if(!(getGridField('FIELDS', i, 'FLD_NAME').value in fieldsTmp)) {
-            fieldsTmp[getGridField('FIELDS', i, 'FLD_NAME').value]++; 
+          fieldsTmp[getGridField('FIELDS', i, 'FLD_NAME').value]++; 
         } else {
-            bContinue = false;
-            iMessage  = 5;
-            sDuplicate = getGridField('FIELDS', i, 'FLD_NAME').value;
+          bContinue = false;
+          iMessage  = 5;
+          sDuplicate = getGridField('FIELDS', i, 'FLD_NAME').value;
         }
       }
       if(bContinue){
-      	 var sFldName = getGridField('FIELDS', i, 'FLD_NAME').value;
-      	 var sFirstCharFldName = sFldName.charAt(0);
-      	 pattern =/[A-Za-z_]/; 
- 	     if(pattern.test(sFirstCharFldName) == false) {
-            bContinue = false;
-            iMessage  = 6;
-            sInvalidField = getGridField('FIELDS', i, 'FLD_NAME').value;
-	     }
+        var sFldName = getGridField('FIELDS', i, 'FLD_NAME').value;
+        var sFirstCharFldName = sFldName.charAt(0);
+        pattern =/[A-Za-z_]/; 
+        if(pattern.test(sFirstCharFldName) == false) {
+          bContinue = false;
+          iMessage  = 6;
+          sInvalidField = getGridField('FIELDS', i, 'FLD_NAME').value;
+        }
       }
     }
     var bContinueKey = false; 
@@ -309,32 +227,32 @@ var verifyData = function(oForm) {
             new leimnud.module.app.alert().make({
               label:"@G::LoadTranslation(ID_FIELD_NAME_REQUIRED)"
             });
-          break;
+            break;
           case 2:
             new leimnud.module.app.alert().make({
               label:"@G::LoadTranslation(ID_FIELD_SIZE_REQUIRED)"
             });
-          break;
+            break;
           case 3:
             new leimnud.module.app.alert().make({
               label:G_STRINGS.ID_FIELD_FOREIGN_TABLE
             });
-          break;
+            break;
           case 4:
             new leimnud.module.app.alert().make({
               label:"@G::LoadTranslation(ID_FIELD_CANNOT_BE_PRIMARY_KEY)"
             });
-          break;
+            break;
           case 5:
             new leimnud.module.app.alert().make({
               label:"@G::LoadTranslation(ID_FIELD_DUPLICATE)" +  " " + sDuplicate
             });
-          break;
+            break;
           case 6:
             new leimnud.module.app.alert().make({
               label:"@G::LoadTranslation(ID_FIELD_INVALID)" +  " " + sInvalidField
             });
-          break;
+            break;
         }
       }
       else {
@@ -348,22 +266,21 @@ var verifyData = function(oForm) {
 
 var changeValues = function(iRow, sType) {
   iRow = parseInt(iRow);
-
   switch (sType) {
     case 'UP':
       if (iRow == 1) {
         return;
       }
       var iOtherRow = iRow - 1;
-    break;
+      break;
     case 'DOWN':
       if (iRow == Number_Rows_Grid('FIELDS', 'FLD_UID')) {
         return;
       }
       var iOtherRow = iRow + 1;
-    break;
+      break;
   }
-
+  
   var FLD_UID         = getGridField('FIELDS', iOtherRow, 'FLD_UID').value;
   var FLD_NAME        = getGridField('FIELDS', iOtherRow, 'FLD_NAME').value;
   var FLD_DESCRIPTION = getGridField('FIELDS', iOtherRow, 'FLD_DESCRIPTION').value;
@@ -382,11 +299,11 @@ var changeValues = function(iRow, sType) {
   getGridField('FIELDS', iOtherRow, 'FLD_SIZE').value        = getGridField('FIELDS', iRow, 'FLD_SIZE').value;
   getGridField('FIELDS', iOtherRow, 'FLD_NULL').checked      = getGridField('FIELDS', iRow, 'FLD_NULL').checked;
   getGridField('FIELDS', iOtherRow, 'FLD_KEY').checked       = getGridField('FIELDS', iRow, 'FLD_KEY').checked;
-
+  
   getGridField('FIELDS', iOtherRow, 'FLD_NULL_HDN').value    = getGridField('FIELDS', iRow, 'FLD_NULL_HDN').value;
   getGridField('FIELDS', iOtherRow, 'FLD_KEY_HDN').value     = getGridField('FIELDS', iRow, 'FLD_KEY_HDN').value;
   
-
+  
   getGridField('FIELDS', iRow, 'FLD_UID').value         = FLD_UID;
   getGridField('FIELDS', iRow, 'FLD_NAME').value        = FLD_NAME;
   getGridField('FIELDS', iRow, 'FLD_DESCRIPTION').value = FLD_DESCRIPTION;
@@ -394,49 +311,39 @@ var changeValues = function(iRow, sType) {
   getGridField('FIELDS', iRow, 'FLD_SIZE').value        = FLD_SIZE;
   getGridField('FIELDS', iRow, 'FLD_NULL').checked      = FLD_NULL;
   getGridField('FIELDS', iRow, 'FLD_KEY').checked       = FLD_KEY;
-
+  
   getGridField('FIELDS', iRow, 'FLD_NULL_HDN').value    = FLD_NULL_HDN;
   getGridField('FIELDS', iRow, 'FLD_KEY_HDN').value     = FLD_KEY_HDN;
-
-
+  
+  
   onChangeType(iRow, false);
   onChangeType(iOtherRow, false);
 };
 
-var dynaformOnload = function() {
+function LoadPMTable() {
   //Adding events for the grid fields
   var iRows = Number_Rows_Grid('FIELDS', 'FLD_UID');
   var oAux;
   for (var i = 1; i <= iRows; i++) {
-    oAux = getGridField('FIELDS', i, 'FLD_NAME');
-    leimnud.event.add(oAux, 'change', {method:changeToUpper,instance:oAux,event:true});
     oAux = getGridField('FIELDS', i, 'FLD_TYPE');
     leimnud.event.add(oAux, 'change', {method:onChangeType,instance:oAux,event:true});
-    //oAux = getGridField('FIELDS', i, 'FLD_FOREIGN_KEY');
-    //leimnud.event.add(oAux, 'click', {method:onClickForeignKey,instance:oAux,event:true});
     onChangeType(i, false);
-    //onClickForeignKey(i, false);
   }
   getObject('FIELDS').onaddrow = function(iRow) {
-    oAux = getGridField('FIELDS', iRow, 'FLD_NAME');
-    leimnud.event.add(oAux, 'change', {method:changeToUpper,instance:oAux,event:true});
     oAux = getGridField('FIELDS', iRow, 'FLD_TYPE');
     leimnud.event.add(oAux, 'change', {method:onChangeType,instance:oAux,event:true});
-    //oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-    //leimnud.event.add(oAux, 'click', {method:onClickForeignKey,instance:oAux,event:true});
     onChangeType(iRow, true);
-    //onClickForeignKey(iRow, true);
-
     document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[10].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[10].innerHTML.replace('[1]', '[' + iRow + ']');
     document.getElementById('FIELDS').rows[iRow].getElementsByTagName('td')[11].innerHTML = document.getElementById('FIELDS').rows[1].getElementsByTagName('td')[11].innerHTML.replace('[1]', '[' + iRow + ']');
-    
   };
-  //
 };
 
 function cancel(){
-    window.location = 'additionalTablesList';
+  window.location = 'additionalTablesList';
 }
+
+dynaformOnload = LoadPMTable;
+
 ]]>
 
 </JS>

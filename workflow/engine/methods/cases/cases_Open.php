@@ -42,6 +42,9 @@ if( $RBAC->userCanAccess('PM_CASES') != 1 ) {
 require_once 'classes/model/AppDelay.php';
 G::LoadClass('case');
 
+//Clean NEW_CASE session variable if case isn't new.
+if ($_GET['new']!='yes') $_SESSION['NEW_CASE'] = '';
+
 $oCase = new Cases();
 
 //cleaning the case session data

@@ -46,6 +46,15 @@
   if( isset($_GET['APP_UID']) && isset($_GET['DEL_INDEX'])) {
     $case = $oCase->loadCase($_GET['APP_UID'], $_GET['DEL_INDEX']);
     $appNum = $case['APP_TITLE'];
+    
+    //Sets NEW_CASE session variable when we're starting a new case
+    if (isset($_GET['new'])){
+      if ($_GET['new']=='yes'){
+        $_SESSION['NEW_CASE'] = 'New';
+      }else{
+        $_SESSION['NEW_CASE'] = '';
+      }
+    }
   }
 
   if (!isset($_GET['to_revise'])){

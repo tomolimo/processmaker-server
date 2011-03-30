@@ -700,6 +700,10 @@ class Derivation
               }
               $oSubApplication = new SubApplication();
               $oSubApplication->create($aSubApplication);
+              //Update the AppDelegation to execute the update trigger
+              $AppDelegation = AppDelegationPeer::retrieveByPK($aNewCase['APPLICATION'], $aNewCase['INDEX']);
+              $AppDelegation->setDelInitDate("+1 second");
+              $AppDelegation->save();
               //If not is SYNCHRONOUS derivate one more time
               if ($aSP['SP_SYNCHRONOUS'] == 0) {
                 $this->case->setDelInitDate($currentDelegation['APP_UID'], $iNewDelIndex);
