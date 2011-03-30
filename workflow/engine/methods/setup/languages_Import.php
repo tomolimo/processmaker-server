@@ -75,7 +75,13 @@ try {
   
   $result->msg = G::LoadTranslation('IMPORT_LANGUAGE_SUCCESS') . "\n";
   $result->msg .= "PO File num. records: " . $importResults->recordsCount . "\n";
-  $result->msg .= "Records registered successfully : " . $importResults->recordsCountSuccess . "\n";
+  $result->msg .= "Success Records: " . $importResults->recordsCountSuccess . "\n";
+  $result->msg .= "Failed Records: " . ($importResults->recordsCount-$importResults->recordsCountSuccess) . "\n";
+  
+  if( $importResults->errMsg != '' ){
+    $result->msg .= "Errors registered: \n" . $importResults->errMsg . "\n";
+  }
+  
   //$result->msg = htmlentities($result->msg);
   $result->success = true;
   
