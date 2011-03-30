@@ -395,7 +395,7 @@
     $caseColumns[] = array( 'header' => 'PreUsrUid',                          'dataIndex' => 'PREVIOUS_USR_UID',  'width' => 50, 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_PROCESS'),     'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_TASK'),        'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' => G::LoadTranslation('ID_SENT_BY'),     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
+    //$caseColumns[] = array( 'header' => G::LoadTranslation('ID_SENT_BY'),     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_CURRENT_USER'),'dataIndex' => 'APP_CURRENT_USER',  'width' => 120 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_LAST_MODIFY'), 'dataIndex' => 'APP_UPDATE_DATE',   'width' => 80 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_STATUS'),      'dataIndex' => 'APP_STATUS',        'width' => 50 );
@@ -430,7 +430,7 @@
     $caseColumns[] = array( 'header' => 'PreUsrUid',                             'dataIndex' => 'PREVIOUS_USR_UID',  'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_TASK'),           'dataIndex' => 'APP_TAS_TITLE',     'width' => 120 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_PROCESS'),        'dataIndex' => 'APP_PRO_TITLE',     'width' => 120 );
-    $caseColumns[] = array( 'header' => G::LoadTranslation('ID_SENT_BY'),        'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
+    //$caseColumns[] = array( 'header' => G::LoadTranslation('ID_SENT_BY'),        'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_CURRENT_USER'),   'dataIndex' => 'APP_CURRENT_USER',  'width' => 120 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_LAST_MODIFY'),    'dataIndex' => 'APP_UPDATE_DATE',   'width' => 80 );
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_DELEGATION_DATE'),'dataIndex' => 'DEL_DELEGATE_DATE', 'width' => 80 );

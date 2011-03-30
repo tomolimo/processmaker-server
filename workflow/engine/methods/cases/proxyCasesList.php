@@ -328,14 +328,14 @@
     if( isset($aRow['DEL_PRIORITY']) ){
       $aRow['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}");
     }
-
+    
     /* For participated cases, we want the last step in the case, not only
      * the last step this user participated. To do that we get every case
      * information again for the last step. (This could be solved by a subquery,
      * but Propel might not support it and subqueries can be slower for larger
      * datasets).
      */
-    if ($action == 'sent') {
+    if ($action == 'sent' || $action == 'search') {
       $maxCriteria = new Criteria('workflow');
       $maxCriteria->add(AppCacheViewPeer::APP_UID, $aRow['APP_UID'], Criteria::EQUAL);
       $maxCriteria->addDescendingOrderByColumn(AppCacheViewPeer::DEL_INDEX);
@@ -353,6 +353,9 @@
       
       $maxDataset->close();
     }
+    
+    if (!isset($aRow['APP_CURRENT_USER']))
+      $aRow['APP_CURRENT_USER'] = "[Unassigned]";
     
     $rows[] = $aRow;
     $oDataset->next();
