@@ -4446,13 +4446,16 @@ class XmlForm_Field_Image extends XmlForm_Field
     return $value;
   }
 
-  
   /**
    * Returns if the current dynaform is new or reopened
    * @author Enrique Ponce de Leon <enrique@colosa.com> 
    * @package gulliver.system
    */
   function isNewDynaform($owner){
-    $sw = ($_SESSION['NEW_CASE']=='New')? '1' : '0';
+    if (isset($_SESSION['NEW_CASE'])){
+      $sw = ($_SESSION['NEW_CASE']=='New')? '1' : '0';
+    }else{
+      $sw = '0';
+    }
     return $sw;
   }
