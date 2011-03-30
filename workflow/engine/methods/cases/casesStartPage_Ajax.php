@@ -59,7 +59,7 @@ function getProcessList() {
     }
     
     $processListTree = array ();
-    if ($node == 'root') {
+    if (1) {
       foreach ( $processList as $key => $processInfo ) {
         $tempTree ['text'] = $key;
         $tempTree ['id'] = $key;
@@ -77,7 +77,7 @@ function getProcessList() {
         $tempTreeChildren=array();
       foreach ( $processList [$key] as $keyChild => $processInfoChild ) {
         //print_r($processInfo);
-        $tempTreeChild ['text'] = ellipsis ( $keyChild, 50 );
+        $tempTreeChild ['text'] = $keyChild; //ellipsis ( $keyChild, 50 );
         //$tempTree['text']=$key;
         $tempTreeChild ['id'] = $keyChild;
         $tempTreeChild ['draggable'] = true;
@@ -107,7 +107,7 @@ function getProcessList() {
     } else {
       foreach ( $processList [$node] as $key => $processInfo ) {
         //print_r($processInfo);
-        $tempTree ['text'] = ellipsis ( $key, 50 );
+        $tempTree ['text'] = $key; //ellipsis ( $key, 50 );
         //$tempTree['text']=$key;
         $tempTree ['id'] = $key;
         $tempTree ['draggable'] = true;

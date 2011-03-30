@@ -52,7 +52,7 @@ $loadingHTML ='
     </div>
   </div>
 ';
-print_r($loadingHTML);
+//print_r($loadingHTML);
 
 switch($page){
     case "startCase":
@@ -69,7 +69,7 @@ switch($page){
         $oHeadPublisher->assign('TRANSLATIONS', $labels);
 
         $oHeadPublisher->usingExtJs('ux.treefilterx/Ext.ux.tree.TreeFilterX');
-        $oHeadPublisher->addExtJsScript('cases/casesStartCase', false);    //adding a javascript file .js
+        $oHeadPublisher->addExtJsScript('cases/casesStartCase', true);    //adding a javascript file .js
 
         $oHeadPublisher->addContent( 'cases/casesStartCase'); //adding a html file  .html.
         break;
