@@ -300,10 +300,8 @@
   $Criteria->setLimit( $limit );
   $Criteria->setOffset( $start );
 
-  $params = array();
-  $sSql   = BasePeer::createSelectSql($Criteria, $params);
-//  var_dump($sSql);
-  
+
+  /*
   // this is the optimal way or query to render the cases search list
   // fixing the bug related to the wrong data displayed in the list
   if ( $action == 'search' ) {
@@ -321,6 +319,7 @@
     $params = array ( $maxDelIndexList );
 
   }
+  */
 
   //execute the query
   $oDataset = AppCacheViewPeer::doSelectRS($Criteria);
@@ -349,7 +348,7 @@
      * but Propel might not support it and subqueries can be slower for larger
      * datasets).
      */
-    if ($action == 'sent') {
+    if ($action == 'sent' || $action == 'search') {
       $maxCriteria = new Criteria('workflow');
       $maxCriteria->add(AppCacheViewPeer::APP_UID, $aRow['APP_UID'], Criteria::EQUAL);
       $maxCriteria->addDescendingOrderByColumn(AppCacheViewPeer::DEL_INDEX);
@@ -367,6 +366,9 @@
       
       $maxDataset->close();
     }
+    
+    if (!isset($aRow['APP_CURRENT_USER']))
+      $aRow['APP_CURRENT_USER'] = "[Unassigned]";
     
     $rows[] = $aRow;
     $oDataset->next();
