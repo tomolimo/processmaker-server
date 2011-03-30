@@ -2811,7 +2811,7 @@ class Processes {
           }
         }
 
-        if ( $sIdentifier == 'PUBLIC' ) {
+        if ( trim($sIdentifier) == 'PUBLIC' ) {
           $sIdentifier = 1;
           while ( !feof ( $fp ) && is_numeric( $sIdentifier )  ) {
             $sIdentifier = fread ( $fp, 9);      //reading the size of $filename
