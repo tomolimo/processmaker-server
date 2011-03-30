@@ -35,8 +35,15 @@ G::LoadSystem('i18n_po');
 //$timer = new Benchmark_Timer();
 //$timer->start();
 
-//creating the .po file
+if (!defined('PM_VERSION')) {
+  if (file_exists ( PATH_METHODS . 'login/version-pmos.php')) {
+    include (PATH_METHODS . 'login/version-pmos.php');
+  } else {
+    define('PM_VERSION', 'Development Version');
+  }
+}
 
+//creating the .po file
 if( ! isset($_GET['LOCALE']) )
   throw new Exception('Language Target ID was not set!');
   
@@ -72,7 +79,7 @@ if( ! isset($langRecord['LAN_NAME']) )
 $sLanguage = $langRecord['LAN_NAME'];
 
 //setting headers
-$poFile->addHeader('Project-Id-Version'        , '1.8');
+$poFile->addHeader('Project-Id-Version'        , 'ProcessMaker ' . PM_VERSION);
 $poFile->addHeader('POT-Creation-Date'         , '');
 $poFile->addHeader('PO-Revision-Date'          , date('Y-m-d H:i:s'));
 $poFile->addHeader('Last-Translator'           , '');
@@ -154,8 +161,8 @@ $aXMLForms        = glob(PATH_XMLFORM . '*/*.xml');
 $aXMLForms2       = glob(PATH_XMLFORM . '*/*/*.xml');
 $aXMLForms = array_merge($aXMLForms, $aXMLForms2);
 
-$aEnglishLabel    = array();
-$aOptions         = array();
+$aEnglishLabel = array();
+$aOptions      = array();
 $nodesNames    = Array();
 
 G::loadSystem('dynaformhandler');
@@ -163,10 +170,7 @@ G::loadSystem('dynaformhandler');
 foreach ($aXMLForms as $xmlFormPath) {
   $xmlFormFile = str_replace( chr(92), '/', $xmlFormPath);
   $xmlFormFile = str_replace( PATH_XMLFORM, '', $xmlFormPath);
-  //$oForm = new Form( $sXmlForm, '', 'en');
-  //echo $xmlFormPath;
-  //echo '<br>';
-  //echo '<br>';
+  
   $dynaForm = new dynaFormHandler($xmlFormPath);
   
   $dynaNodes = $dynaForm->getFields();
@@ -182,19 +186,13 @@ foreach ($aXMLForms as $xmlFormPath) {
       continue; //just continue with the next node
     }
     
-    
     // Getting the Base Origin Text
     if( ! is_array($arrayNode[$_BASE_LANG]) )
       $originNodeText = trim($arrayNode[$_BASE_LANG]);
     else {
       $langNode = $arrayNode[$_BASE_LANG][0];
-      $originNodeText = getTextValue($langNode);
+      $originNodeText = $langNode['__nodeText__'];
     }
-    
-    /*if( strpos($xmlFormPath, 'patterns/patterns_GridParallelByEvaluationType.xml') !== false){
-      g::pr($arrayNode);
-      g::dump(getTextValue($langNode));
-    }*/
    
     // Getting the Base Target Text
     if( isset($arrayNode[$_TARGET_LANG]) ) {
@@ -202,7 +200,7 @@ foreach ($aXMLForms as $xmlFormPath) {
         $targetNodeText = trim($arrayNode[$_TARGET_LANG]);
       else {
         $langNode = $arrayNode[$_TARGET_LANG][0];
-        $targetNodeText = getTextValue($langNode);
+        $targetNodeText = $langNode['__nodeText__'];
       }
     } else {
       $targetNodeText = $originNodeText;
@@ -210,11 +208,7 @@ foreach ($aXMLForms as $xmlFormPath) {
     
     $nodeName = $arrayNode['__nodeName__'];
     $nodeType = $arrayNode['type'];
-    /*echo 'NODENAME:'. $nodeName . '<br>';
-    echo 'ORIGIN text:'. $originNodeText.'<br>';
-    echo 'TARGET text:'. $targetNodeText.'<br>';
-    echo 'NODE TYPE'. $arrayNode['type'].'<br>';
-    */
+   
     $msgid = $originNodeText;
     
     // if the nodeName already exists in the po file, we need to create other msgid
@@ -224,13 +218,7 @@ foreach ($aXMLForms as $xmlFormPath) {
     $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName);
     $poFile->addTranslatorComment($xmlFormFile);
     $poFile->addReference($nodeType . ' - ' . $nodeName);
-    $poFile->addTranslation($msgid, stripslashes($targetNodeText));
-    
-    /*if( strpos($xmlFormPath, 'patterns/patterns_GridParallelByEvaluationType.xml') !== false){
-      echo 'msgstr: ' .$msgid, stripslashes($targetNodeText);
-      echo '<br>';
-    }*/
-    
+    $poFile->addTranslation(stripslashes($msgid), stripslashes($targetNodeText));
     
     $aMsgids[$msgid] = true;
     
@@ -250,12 +238,12 @@ foreach ($aXMLForms as $xmlFormPath) {
           $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName . '-'. $originOptionNode);
           $poFile->addTranslatorComment($xmlFormFile);
           $poFile->addReference($nodeType . ' - ' . $nodeName . ' - ' . $originOptionNode);
-          $poFile->addTranslation($msgid, stripslashes($originOptionNode));
+          $poFile->addTranslation(stripslashes($msgid), stripslashes($originOptionNode));
         }
       } else {
         foreach( $originOptionNode as $optionNode ) {
           $optionName = $optionNode['name'];
-          $originOptionValue = getTextValue($optionNode);
+          $originOptionValue = $optionNode['__nodeText__'];
           
           if( $targetOptionExists ){
 
@@ -266,17 +254,8 @@ foreach ($aXMLForms as $xmlFormPath) {
           } else {
             $targetOptionValue = $originOptionValue;
           }
-            
-          //$targetOptionValue = ($targetOptionValue != '') ? $targetOptionValue : "''"; 
-          //$optionName = ($optionName != '') ? $optionName : "''";
           
-          $msgid = '[' . $xmlFormFile . '?' . $nodeName  . '-' . $optionName . ']';
-          /*g::dump($xmlFormFile . '?' . $nodeName . '-'. $originOptionValue);
-          g::dump($xmlFormFile);
-          g::dump($nodeType . ' - ' . $nodeName . ' - ' . $originOptionValue);
-          g::dump($msgid);
-          g::dump($targetOptionValue);*/
-          
+          $msgid = '[' . $xmlFormFile . '?' . $nodeName  . '-' . $optionName . ']';          
           $poFile->addTranslatorComment($xmlFormFile . '?' . $nodeName . '-'. $optionName);
           $poFile->addTranslatorComment($xmlFormFile);
           $poFile->addReference($nodeType . ' - ' . $nodeName . ' - ' . $optionName);
@@ -287,9 +266,7 @@ foreach ($aXMLForms as $xmlFormPath) {
 	} //end foreach
 	
 }
-//die;
-//g::pr($aEnglishLabel); die;
-/*******************/
+
 //
 //$timer->setMarker('end xml files processed');
 //$profiling = $timer->getProfiling();
@@ -300,17 +277,10 @@ foreach ($aXMLForms as $xmlFormPath) {
 
 G::streamFile($sPOFile, true);
 
-function getTextValue($arrayNode){
-  return isset($arrayNode['#text']) ? $arrayNode['#text']: (isset($arrayNode['#cdata-section']) ? $arrayNode['#cdata-section']: '');
-}
-
 function getMatchDropdownOptionValue($name, $options){
   foreach($options as $option){
-    //echo $name .'=='. $option['name'];
-    //echo '----------------------------<br>';
     if($name == $option['name']){
-      //echo '[[[[['.getTextValue($option).']]]]]';
-      return getTextValue($option);
+      return $option['__nodeText__'];
     }
   }
   return false;

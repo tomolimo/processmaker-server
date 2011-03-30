@@ -101,12 +101,14 @@ class languages {
       $oTranslation = new Translation();
       $countItems = 0;
       $countItemsSuccess = 0;
+      $errorMsg = '';
       
       while( $rowTranslation = $POFile->getTranslation() ) {
+
         $countItems++;
         
         if ( ! isset($POFile->translatorComments[0]) || ! isset($POFile->translatorComments[1]) || ! isset($POFile->references[0]) ) {
-          throw new Exception('The .po file has not valid directives for Processmaker!');
+          throw new Exception('The .po file doesn\'t have valid directives for Processmaker!');
         }
 
          foreach($POFile->translatorComments as $a=>$aux){   
@@ -120,16 +122,17 @@ class languages {
             if ($var[0]=='JAVASCRIPT')
               $context = $aux;
           }
-          if (preg_match('/^([a-zA-Z_-]+)\/([a-zA-Z_-]+\.xml\?)/', $aux, $match)) 
+          if (preg_match('/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml\?)/', $aux, $match)) 
             $identifier = $aux;
           else{
-            if (preg_match('/^([a-zA-Z_-]+)\/([a-zA-Z_-]+\.xml$)/', $aux, $match)) 
+            if (preg_match('/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml$)/', $aux, $match)) 
             $context = $aux;            
           }
         }
         
         $reference  = $POFile->references[0]; 
  
+        // it is a Sql insert on TRANSLATIONS TAble
         if( $identifier == 'TRANSLATION') {
           if ($updateDB) {
             list($category, $id) = explode('/', $context);
@@ -139,17 +142,28 @@ class languages {
               $LOCALE,
               trim(str_replace(chr(10), '', stripslashes($rowTranslation['msgstr'])))
             );
-            if( $result['codError'] == 0 )
+            if( $result['codError'] == 0 ) {
               $countItemsSuccess++;
+            } else {
+              $errorMsg .= $id .': ' . $result['message'] . "\n";
+            }
           }
-        } else if( $updateXml ){
+        } 
+        // is a Xml update 
+        else if( $updateXml ) {
+      
           $xmlForm = $context;
           //erik: expresion to prevent and hable correctly dropdown values like -1, -2 etc.
           preg_match('/^([\w_]+)\s-\s([\w_]+)\s*-*\s*([\w\W]*)$/', $reference, $match);
           
+          
+         
           if( ! file_exists(PATH_XMLFORM . $xmlForm) ) {
+            echo 'file doesn\'t exist: ' . PATH_XMLFORM . $xmlForm;
             continue;
           }
+          
+          
           
           G::LoadSystem('dynaformhandler');
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
@@ -158,7 +172,7 @@ class languages {
           $codes = explode('-', $reference);
           
           if( sizeof($codes) == 2 ) { //is a normal node
-            $dynaform->addChilds($fieldName, Array($LOCALE=>$rowTranslation['msgstr']));
+            $dynaform->addChilds($fieldName, Array($LOCALE=>stripslashes($rowTranslation['msgstr'])));
           } else if( sizeof($codes) > 2 ) { //is a node child for a language node
           	$name = $match[3] == "''" ? '' : $match[3];
             $childNode = Array(
@@ -189,6 +203,7 @@ class languages {
       $results->recordsCountSuccess = $countItemsSuccess;
       $results->lang                = $languageID;
       $results->headers             = $POHeaders;
+      $results->errMsg              = $errorMsg;
       
       return $results;
     }
