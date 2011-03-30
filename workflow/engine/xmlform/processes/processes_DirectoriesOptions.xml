@@ -56,12 +56,20 @@ var goToDirectoryforie = function(PRO_UID, sMainDirectory, sDirectory) {
 };
 
 var downloadFile = function(PRO_UID, sMainDirectory, sDirectory, sFile) {
+//fixed: added a file extension and name of file when is a javascript file by krlos
+sFilename = sFile;
+sFilextension = '';
+if((sFile.search(".js"))>1){
+  sFilextension='javascript';
+  sFilename = sFile.substr(0, (sFile.length -3) )
+}
+//end add
   /*var oRPC = new leimnud.module.rpc.xmlhttp({
   	url : 'processes_Ajax',
   	args: 'action=downloadFile&data=' + {pro_uid:PRO_UID,main_directory:sMainDirectory,directory:sDirectory,file:sFile}.toJSONString()
   });
   oRPC.make();*/
-  window.open('processes_GetFile?PRO_UID=' + PRO_UID + '&MAIN_DIRECTORY=' + sMainDirectory + '&CURRENT_DIRECTORY=' + sDirectory + '&FILE=' + sFile, 'processFile', '');//'width=0,height=0,left=0,top=0'
+  window.open('processes_GetFile?PRO_UID=' + PRO_UID + '&MAIN_DIRECTORY=' + sMainDirectory + '&CURRENT_DIRECTORY=' + sDirectory + '&FILE=' + sFilename + '&sFilextension=' + sFilextension, 'processFile', '');//'width=0,height=0,left=0,top=0'
 };
 
 var deleteFile = function(PRO_UID, sMainDirectory, sDirectory, sFile) {
