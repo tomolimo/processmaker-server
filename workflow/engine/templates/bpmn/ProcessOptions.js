@@ -426,7 +426,7 @@ ProcessOptions.prototype.addDynaform= function(_5625)
                 fields : ['value', 'name'],
                 data   : [
                   {value: 'normal', name : _('ID_NORMAL')},
-                  {value: 'grid',   name : _('ID_GRID')},
+                  {value: 'grid',   name : _('ID_GRID')}
                 ]
               })
            },{
@@ -1494,7 +1494,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
                    fields : ['name', 'value'],
                    data   : [
                              {name : 'No',   value: '0'},
-                             {name : 'Yes',   value: '1'},
+                             {name : 'Yes',   value: '1'}
                              ]})
                },
                {
