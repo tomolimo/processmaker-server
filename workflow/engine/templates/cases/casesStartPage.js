@@ -633,50 +633,50 @@ Ext.onReady(function() {
 
 
                 items: [{
+                    xtype:'textarea',
                     fieldLabel: TRANSLATIONS.ID_PROCESS, // 'Process',
                     name: 'processName',
-                    allowBlank:false,
                     value: '',
-                    disabled: true,
-                    //readonly:true,
+                    readOnly: true,
                     id:"processName"
+                    //,style: 'font-weight:bold;'
                 },{
+                    xtype:'textarea',
                     fieldLabel: TRANSLATIONS.ID_TASK, // 'Task',
                     name: 'taskName',
-                    allowBlank:false,
+                    readOnly: true,
                     value: '',
-                    disabled: true,
                     id:"taskName"
                 },{
                 	xtype:'textarea',
                     fieldLabel: TRANSLATIONS.ID_DESCRIPTION, // 'Description',
                     name: 'processDescription',
+                    readOnly: true,
                     value: '',
-                    disabled: true,
                     id:"processDescription"
                 },{
                     fieldLabel: TRANSLATIONS.ID_CATEGORY, // 'Category',
                     name: 'processCategory',
                     value: '',
-                    disabled: true,
+                    readOnly: true,
                     id:"processCategory"
                 }, {
                     fieldLabel: TRANSLATIONS.ID_CALENDAR, // 'Calendar',
                     name: 'calendarName',            
-                    disabled: true,
+                    readOnly: true,
                     id:"calendarName"
               },{
               	xtype:'textarea',
                 fieldLabel: TRANSLATIONS.ID_CALENDAR_DESCRIPTION,  // 'Calendar Description',
                 name: 'calendarDescription',
                 value: '',
-                disabled: true,
+                readOnly: true,
                 id:"calendarDescription"
             },{
             	xtype:'checkboxgroup',
                   fieldLabel: TRANSLATIONS.ID_WORKING_DAYS, // 'Working days',
                   name: 'calendarWorkDays',
-                  disabled: true,
+                  readOnly: true,
                   id:"calendarWorkDays",
                 	  columns: 7,
                 	    items: [
@@ -693,7 +693,7 @@ Ext.onReady(function() {
             	xtype:'checkbox',
                 fieldLabel: TRANSLATIONS.ID_DEBUG_MODE, // 'Debug Mode',
                 name: 'debugMode',        
-                disabled: true,
+                readOnly: true,
                 id:"debugMode"
           }]
               }
