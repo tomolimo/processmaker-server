@@ -563,13 +563,7 @@ class Process extends BaseProcess {
 
     while( $dt->next() ) {
       $row = $dt->getRow();
-      // verify if the title is already set on the current language
-      if ( ($row['CON_CATEGORY'] == 'PRO_TITLE'  || $row['CON_CATEGORY'] == 'PRO_DESCRIPTION') && trim($row['CON_VALUE']) == '') {
-      	// if not, then load the record to generate content for current language
-        $proData = $this->load($row['CON_ID']);
-        $row['CON_VALUE'] = $row['CON_CATEGORY'] == 'PRO_TITLE' ? $proData['PRO_TITLE'] : $proData['PRO_DESCRIPTION']; 
-      } 
-      $processesDetails[ $row['CON_ID']] [$row['CON_CATEGORY']] = $row['CON_VALUE'];
+      $processesDetails[$row['CON_ID']] [$row['CON_CATEGORY']] = $row['CON_VALUE'];
     }
 
     G::loadClass('configuration');
@@ -579,6 +573,14 @@ class Process extends BaseProcess {
     foreach( $processes as $process ) {
       $proTitle       = isset($processesDetails[$process['PRO_UID']]) && isset($processesDetails[$process['PRO_UID']]['PRO_TITLE'])       ? $processesDetails[$process['PRO_UID']]['PRO_TITLE']      : '';
       $proDescription = isset($processesDetails[$process['PRO_UID']]) && isset($processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION']) ? $processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION']: '';
+
+      // verify if the title is already set on the current language
+      if ( trim($proTitle) == '') {
+        // if not, then load the record to generate content for current language
+        $proData = $this->load($process['PRO_UID']);
+        $proTitle = $proData['PRO_TITLE'];
+        $proDescription = $proData['PRO_DESCRIPTION'];
+      }
       
       //filtering by $processName
       if( isset($processName) && $processName != '' && stripos($proTitle, $processName) === false){
