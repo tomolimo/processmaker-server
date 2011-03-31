@@ -311,6 +311,7 @@ var newCaseTree = {
   id : 'processTree',
   style : {
     height : '100%',
+    width :  '100%',
     overflow : 'auto'
   },
   useArrows : true,
@@ -588,7 +589,7 @@ Ext.onReady(function() {
       minTabWidth : 135,
       tabWidth : 135,
       plugins : new Ext.ux.TabCloseMenu(),
-      enableTabScroll : true,
+      //enableTabScroll : true,
       activeTab : 0,
       items : [
         ///-- startCaseTab
@@ -603,8 +604,8 @@ Ext.onReady(function() {
                 id : 'img-chooser-view',
                 region : 'center',
                 style : {
-                    width : '50%'
-                  	
+                    width : '100%',
+                  	overflow: 'auto'
                   },
                 // autoScroll: true,
                 items : [ newCaseTree ]
