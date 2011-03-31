@@ -281,6 +281,70 @@ class PMPluginRegistry {
     return 0;
   }
 
+  function installPluginArchive($filename, $pluginInstall = NULL) {
+    G::LoadThirdParty( 'pear/Archive','Tar');
+    $tar = new Archive_Tar ($filename);
+  
+    $files = $tar->listContent();
+    
+    $plugins = array();
+    foreach ($files as $f) {
+      if (preg_match("/^([\w\.]*).ini$/", $f['filename'], $matches)) {
+        $plugins[] = $matches[1];
+      }
+    }
+    
+    if (count($plugins) > 1)
+      throw new Exception("Multiple plugins in one archive are not supported currently");
+
+    if (!in_array($pluginInstall, $plugins))
+      throw new Exception("Plugin $pluginInstall not found in archive");
+
+    $pluginName = $plugins[0];
+    $pluginFile = "$pluginName.php";
+    $oldPluginStatus = $this->getStatusPlugin($pluginFile);
+    
+    if ($pluginStatus != 0) {
+      $oldDetails = $this->getPluginDetails($pluginFile);
+      $oldVersion = $oldDetails->iVersion;
+    } else {
+      $oldDetails = NULL;
+      $oldVersion = NULL;
+    }
+
+    $pluginIni = $tar->extractInString("$pluginName.ini");
+    $pluginConfig = parse_ini_string($pluginIni);
+    
+    /*if (!empty($oClass->aDependences)) {
+      foreach ($oClass->aDependences as $aDependence) {
+        if (file_exists(PATH_PLUGINS . $aDependence['sClassName'] . '.php')) {
+          require_once PATH_PLUGINS . $aDependence['sClassName'] . '.php';
+          if (!$oPluginRegistry->getPluginDetails($aDependence['sClassName'] . '.php')) {
+            throw new Exception('This plugin needs "' . $aDependence['sClassName'] . '" plugin');
+          }
+        }
+        else {
+          throw new Exception('This plugin needs "' . $aDependence['sClassName'] . '" plugin');
+        }
+      }
+    }
+    unset($oClass);
+    if ($fVersionOld > $fVersionNew) {
+      throw new Exception('A recent version of this plugin was already installed.');
+    }*/
+    $res = $tar->extract ( PATH_PLUGINS );
+
+    if (!file_exists(PATH_PLUGINS . $pluginFile))
+      throw ( new Exception( "File '$pluginFile' doesn't exists ") );
+
+    require_once ( PATH_PLUGINS . $pluginFile );
+    $details = $oPluginRegistry->getPluginDetails( $pluginFile );
+
+    $oPluginRegistry->installPlugin( $details->sNamespace);
+    $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
+    $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+  }
+  
   /**
    * install the plugin
    *
