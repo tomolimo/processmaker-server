@@ -280,6 +280,7 @@ Ext.onReady(function(){
           labelAlign : 'right',
           bodyStyle : 'padding:5px 5px 0',
           width : 400,
+          autoScroll:true,
           items : [fieldset],
           buttons : [{
             text : 'OK',
@@ -338,6 +339,7 @@ Ext.onReady(function(){
           labelAlign : 'right',
           bodyStyle : 'padding:5px 5px 0',
           width : 400,
+          autoScroll:true,
           items : [fieldset],
           buttons : [{
             text : 'OK',
