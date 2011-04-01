@@ -151,12 +151,12 @@ Ext.onReady(function(){
         var setup = Ext.getCmp('setup');
         activator.setDisabled(false);
         
-        if( rowSelected.data.status == 1 ){
+        if( rowSelected.data.status == 1 ){  
           activator.setIcon('/images/deactivate.png');
-          activator.setText('Deactivate');
+          activator.setText('Disable');//activator.setText(TRANSLATIONS.ID_DISABLE);//activator.setText('Deactivate');
         } else {
           activator.setIcon('/images/activate.png');
-          activator.setText('Activate');
+         activator.setText('Enable');//activator.setText(TRANSLATIONS.ID_ENABLE); //activator.setText('Activate');
         }
         //alert(rowSelected.data.setup);
         if( rowSelected.data.setup == 1 ){
