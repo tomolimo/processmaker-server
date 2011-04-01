@@ -1630,12 +1630,10 @@ div#toolbar
   text-transform: capitalize;
   margin:2px 0;
   padding:2px 7px;
-  # padding:0 7px;
   text-decoration:none;
   line-height: 14px;
   font-family: Arial,serif;
   border:1px solid #aaa;
-  # border:2px;
   background:url("/images/ext/gray/button/btn.gif") repeat-x scroll 0 -1096px transparent;
 }
 .pagedTableDefault .pagedTable .RowLink a{
