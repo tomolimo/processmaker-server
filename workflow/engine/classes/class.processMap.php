@@ -2850,7 +2850,7 @@ class processMap {
 //    $tasks = new Tasks();
 //    $tasks->get
 //    $link = $sProcessUID.'/'.str_replace ( ' ', '_', str_replace ( '/', '_',$task_uid));
-//    
+//
 //    return $link;
 //  }
 
@@ -3217,6 +3217,22 @@ class processMap {
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
           break;
+        case 'ANY' ://For backward compatibility (some process with ANY instead of ALL
+          $sObjectType = G::LoadTranslation('ID_ALL');
+          $sObject = G::LoadTranslation('ID_ALL');
+          break;
+        /* case 'ANY_DYNAFORM':
+          $sObjectType = G::LoadTranslation('ID_ANY_DYNAFORM');
+          $sObject     = G::LoadTranslation('ID_ALL');
+          break;
+          case 'ANY_INPUT':
+          $sObjectType = G::LoadTranslation('ID_ANY_INPUT');
+          $sObject     = G::LoadTranslation('ID_ALL');
+          break;
+          case 'ANY_OUTPUT':
+          $sObjectType = G::LoadTranslation('ID_ANY_OUTPUT');
+          $sObject     = G::LoadTranslation('ID_ALL');
+          break; */
         case 'DYNAFORM' :
           $sObjectType = G::LoadTranslation('ID_DYNAFORM');
           if (($aRow ['OP_OBJ_UID'] != '') && ($aRow ['OP_OBJ_UID'] != '0')) {
@@ -4167,7 +4183,11 @@ class processMap {
    * @param   string    $sTaskUID
    * @param   string    $sIndex
    * @return  void
+<<<<<<< HEAD
    * throw   Exception $oError
+=======
+   * @throw   Exception $oError
+>>>>>>> 4cdf80a... BUG 6639 When importing a process it is displaying an error
    */
   function subProcess_Properties($sProcessUID = '', $sTaskUID = '', $sIndex = '') {
     try { //echo "$sProcessUID = '', $sTaskUID = '', $sIndex = ''";
@@ -4590,7 +4610,7 @@ class processMap {
           
           $task = new Task();
           $task->load($task_uid);
-          $task_name = $task->getTasTitle();          
+          $task_name = $task->getTasTitle();
 
           if (G::is_https ())
             $http = 'https://';
@@ -5286,7 +5306,7 @@ class processMap {
     }
     $result = array();
     
-    //Now count how many times the dynaform was used in different tasks in VIEW mode, 
+    //Now count how many times the dynaform was used in different tasks in VIEW mode,
     $groupbyCriteria  = new Criteria ( 'workflow' );
     $groupbyCriteria->clearSelectColumns();
     $groupbyCriteria->addSelectColumn ( StepPeer::STEP_UID_OBJ );
@@ -5305,7 +5325,7 @@ class processMap {
       $oDataset->next ();
     }
 
-    //Now count how many times the dynaform was used in different tasks in EDIT mode, 
+    //Now count how many times the dynaform was used in different tasks in EDIT mode,
     $groupbyCriteria  = new Criteria ( 'workflow' );
     $groupbyCriteria->clearSelectColumns();
     $groupbyCriteria->addSelectColumn ( StepPeer::STEP_UID_OBJ );
@@ -6632,7 +6652,7 @@ function saveExtddEvents($oData)
     $sEvn_uid =  $oEvent->create($aData);
   }else{
     $aData['EVN_UID'] = $sEvn_uid;
-    $oEvent->update($aData); 
+    $oEvent->update($aData);
   }
   $oEncode->uid = $sEvn_uid;
   $oJSON = new Services_JSON ( );

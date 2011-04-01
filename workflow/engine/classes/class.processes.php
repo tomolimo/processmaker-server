@@ -756,8 +756,10 @@ class Processes {
     }
     foreach ( $oData->objectPermissions as $key => $val ) {
       if ( $val['OP_OBJ_TYPE'] == 'DYNAFORM' ) {
-        $newGuid = $map[ $val['OP_OBJ_UID'] ];
-        $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+        if(isset($map[ $val['OP_OBJ_UID'] ])){
+            $newGuid = $map[ $val['OP_OBJ_UID'] ];
+            $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+        }
       }
     }
     foreach ( $oData->stepSupervisor as $key => $val ) {
@@ -1338,8 +1340,10 @@ class Processes {
     }
     foreach ( $oData->objectPermissions as $key => $val ) {
       if ( $val['OP_OBJ_TYPE'] == 'INPUT_DOCUMENT' ) {
-        $newGuid = $map[ $val['OP_OBJ_UID'] ];
-        $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+          if(isset($map[ $val['OP_OBJ_UID'] ])){
+            $newGuid = $map[ $val['OP_OBJ_UID'] ];
+            $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+          }
       }
     }
     foreach ( $oData->stepSupervisor as $key => $val ) {
