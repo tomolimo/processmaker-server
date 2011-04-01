@@ -1296,7 +1296,7 @@ class processMap {
 		      $id=$taskPropertiesInfo->sNamespace."--".$taskPropertiesInfo->sName;
 		      if($id==$iForm){
 		      	$sFilename=$taskPropertiesInfo->sPage;
-		      	$sw_template=true;		      	
+		      	$sw_template=true;
 		      }
 	      }
         	
@@ -3028,6 +3028,10 @@ class processMap {
           $sObjectType = G::LoadTranslation('ID_ALL');
           $sObject = G::LoadTranslation('ID_ALL');
           break;
+        case 'ALL' ://For backward compatibility (some process with ALL instead of ANY
+          $sObjectType = G::LoadTranslation('ID_ALL');
+          $sObject = G::LoadTranslation('ID_ALL');
+          break;
         /* case 'ANY_DYNAFORM':
           $sObjectType = G::LoadTranslation('ID_ANY_DYNAFORM');
           $sObject     = G::LoadTranslation('ID_ALL');
@@ -3445,7 +3449,7 @@ class processMap {
    * getAvailableCaseTrackerObjectsCriteria
    *
    * @param  string             $sProcessUID Default value empty
-   * @return object(Criteria)   $oCriteria 
+   * @return object(Criteria)   $oCriteria
    */
   function getAvailableCaseTrackerObjectsCriteria($sProcessUID = '') {
     $oCriteria = $this->getCaseTrackerObjectsCriteria($sProcessUID);
@@ -3544,7 +3548,7 @@ class processMap {
    * @param  string    $sProcessUID
    * @param  string    $sObjType
    * @param  string    $sObjUID
-   * @return void     
+   * @return void
    */
   function assignCaseTrackerObject($sProcessUID, $sObjType, $sObjUID) {
     $oCriteria = new Criteria('workflow');
@@ -3560,7 +3564,7 @@ class processMap {
    * @param  string    $sCTOUID
    * @param  string    $sProcessUID
    * @param  integer   $iPosition
-   * @return void     
+   * @return void
    */
   function removeCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
     $oCaseTrackerObject = new CaseTrackerObject ( );
@@ -3574,7 +3578,7 @@ class processMap {
    * @param  string    $sCTOUID
    * @param  string    $sProcessUID
    * @param  integer   $iPosition
-   * @return void     
+   * @return void
    */
   function upCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
     if ($iPosition > 1) {
@@ -3599,7 +3603,7 @@ class processMap {
    * @param  string    $sCTOUID
    * @param  string    $sProcessUID
    * @param  integer   $iPosition
-   * @return void     
+   * @return void
    */
   function downCaseTrackerObject($sCTOUID, $sProcessUID, $iPosition) {
     $oCriteria = new Criteria('workflow');
@@ -3628,7 +3632,7 @@ class processMap {
    * processFilesManager
    *
    * @param  string    $sProcessUID
-   * @return void     
+   * @return void
    */
   function processFilesManager($sProcessUID) {
     $aDirectories = array();
@@ -3654,7 +3658,7 @@ class processMap {
    * @param  string    $sProcessUID
    * @param  string    $sMainDirectory
    * @param  string    $sCurrentDirectory
-   * @return void     
+   * @return void
    */
   function exploreDirectory($sProcessUID, $sMainDirectory, $sCurrentDirectory) {
     switch ($sMainDirectory) {
@@ -3721,7 +3725,7 @@ class processMap {
    * @param  string    $sMainDirectory
    * @param  string    $sCurrentDirectory
    * @param  string    $sFile
-   * @return void     
+   * @return void
    */
   function deleteFile($sProcessUID, $sMainDirectory, $sCurrentDirectory, $sFile) {
     switch ($sMainDirectory) {
@@ -3747,7 +3751,7 @@ class processMap {
    * @param  string    $sMainDirectory
    * @param  string    $sCurrentDirectory
    * @param  string    $sDirToDelete
-   * @return void     
+   * @return void
    */
   function deleteDirectory($sProcessUID, $sMainDirectory, $sCurrentDirectory, $sDirToDelete) {
     switch ($sMainDirectory) {
@@ -3847,8 +3851,8 @@ class processMap {
    * @param   string    $sProcessUID
    * @param   string    $sTaskUID
    * @param   string    $sIndex
-   * @return  void     
-   * @throw   Exception $oError 
+   * @return  void
+   * @throw   Exception $oError
    */
   function subProcess_Properties($sProcessUID = '', $sTaskUID = '', $sIndex = '') {
     try { //echo "$sProcessUID = '', $sTaskUID = '', $sIndex = ''";
