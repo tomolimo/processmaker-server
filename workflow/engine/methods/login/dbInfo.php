@@ -41,7 +41,12 @@ if (! defined ( 'PM_VERSION' )) {
     include (PATH_METHODS . 'login/version-pmos.php');
   }
   else {
-    define ( 'PM_VERSION', 'Development Version' );
+  	$cmd = sprintf	("cd %s && git status | grep 'On branch' | awk '{print $3 $4} ' && git log --decorate | grep '(tag:' | head -1  | awk '{print $3$4} ' ", PATH_TRUNK);
+  	if ( exec ( $cmd , $target) ) {  		
+      define ( 'PM_VERSION', implode(' ', $target) );
+  	}
+  	else 
+      define ( 'PM_VERSION', 'Development Version' );
   }
 }
 
