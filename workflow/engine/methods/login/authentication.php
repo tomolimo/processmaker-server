@@ -59,10 +59,10 @@ try {
       $user = new Users;
       $aUser = $user->loadByUsernameInArray($usr);
       switch($aUser['USR_STATUS']){
-        case 'VACATION': 
+        case 'VACATION':
           G::SendTemporalMessage ('ID_USER_ONVACATION', "warning");
           break;
-        CASE 'INACTIVE': 
+        CASE 'INACTIVE':
           G::SendTemporalMessage ('ID_USER_INACTIVE', "warning");
           break;
       }
@@ -119,7 +119,7 @@ try {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     if ( $oPluginRegistry->existsTrigger ( PM_LOGIN ) ) {
             $lSession="";
-            $loginInfo = new loginInfo ($usr, $pwd, $lSession  );          
+            $loginInfo = new loginInfo ($usr, $pwd, $lSession  );
             $oPluginRegistry->executeTriggers ( PM_LOGIN , $loginInfo );
     }
 
@@ -128,8 +128,8 @@ try {
   $aUser = $RBAC->userObj->load($_SESSION['USER_LOGGED']);
   $RBAC->loadUserRolePermission($RBAC->sSystem, $_SESSION['USER_LOGGED']);
   //$rol = $RBAC->rolesObj->load($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_UID']);
-  $_SESSION['USR_FULLNAME'] = $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME']; 
-  //$_SESSION['USR_ROLENAME'] = $rol['ROL_NAME']; 
+  $_SESSION['USR_FULLNAME'] = $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'];
+  //$_SESSION['USR_ROLENAME'] = $rol['ROL_NAME'];
   
   unset($_SESSION['FAILED_LOGINS']);
 
@@ -190,7 +190,7 @@ try {
   $cput = serialize($_CSERVER);
   if( !is_file(PATH_DATA_SITE . PATH_SEP . '.server_info') ){
     file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
-  } 
+  }
   else {
     $c = file_get_contents(PATH_DATA_SITE . PATH_SEP . '.server_info');
     if(md5($c) != md5($cput)){
@@ -242,7 +242,7 @@ try {
   }
   else {
     $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
-  }  
+  }
   
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->extJsInit = true;
