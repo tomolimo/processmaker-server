@@ -43,6 +43,11 @@ if (! defined ( 'PM_VERSION' )) {
   else {
   	$cmd = sprintf	("cd %s && git status | grep 'On branch' | awk '{print $3 $4} ' && git log --decorate | grep '(tag:' | head -1  | awk '{print $3$4} ' ", PATH_TRUNK);
   	if ( exec ( $cmd , $target) ) {  		
+    	$cmd = sprintf	("cd %s && git log --decorate | grep '(tag:' | head -1  | awk '{print $2} ' ", PATH_TRUNK);
+    	$commit = exec ( $cmd , $dummyTarget);
+    	$cmd = sprintf	("echo ' +' && cd %s && git log %s.. --oneline | wc -l && echo ' commits.'", PATH_TRUNK, $commit );
+    	exec ( $cmd , $target) ;
+    	//$target[] = "+ 343 commits";
       define ( 'PM_VERSION', implode(' ', $target) );
   	}
   	else 
