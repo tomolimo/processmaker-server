@@ -2,7 +2,7 @@
 /**
  * Configuration.php
  * @package    workflow.engine.classes.model
- * 
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
  *
@@ -141,6 +141,6 @@ class Configuration extends BaseConfiguration {
   public function exists($CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid)
   {
     $oRow = ConfigurationPeer::retrieveByPK( $CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid );
-    return (is_object($oRow) &&  get_class ($oRow) == 'Configuration');
+    return (( get_class ($oRow) == 'Configuration' )&&(!is_null($oRow)));
   }
 } // Configuration
