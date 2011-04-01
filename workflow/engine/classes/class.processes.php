@@ -968,7 +968,7 @@ class Processes {
         $aEvent[] = $oEvent->load($aRow['EVN_UID']);
         $oDataset->next();
       }
-      return $aEvent; 
+      return $aEvent;
     }
     catch (Exception $oError) {
       throw($oError);
@@ -994,7 +994,7 @@ class Processes {
         $aCaseScheduler[] = $oCaseScheduler->load($aRow['SCH_UID']);
         $oDataset->next();
       }
-      return $aCaseScheduler; 
+      return $aCaseScheduler;
     }
     catch (Exception $oError) {
       throw($oError);
@@ -1215,7 +1215,7 @@ class Processes {
   }
 
  /**
-  * Create Field Conditions from an array of Field Conditions and Dynaforms, 
+  * Create Field Conditions from an array of Field Conditions and Dynaforms,
   * removing those Objects with the same UID, and recreaiting the records
   * from the arrays data.
   * @param  $aFieldCondition array.
@@ -1259,7 +1259,7 @@ class Processes {
   function createCaseSchedulerRows ($CaseScheduler ) {
     foreach ( $CaseScheduler as $key => $row ) {
       $oCaseScheduler = new CaseScheduler();
-      if($oCaseScheduler->Exists($row['SCH_UID'])) 
+      if($oCaseScheduler->Exists($row['SCH_UID']))
           $oCaseScheduler->remove($row['SCH_UID']);
           
       $res = $oCaseScheduler->create($row);
@@ -1491,7 +1491,7 @@ class Processes {
   */
   function renewAllDBSourceGuid ( &$oData ) {
     $map = array ();
-    $aSqlConnections = array(); 
+    $aSqlConnections = array();
     foreach ( $oData->dbconnections as $key => $val ) {
       $newGuid = $val['DBS_UID']; ///--  $this->getUnusedDBSourceGUID();
       $map[ $val['DBS_UID'] ] = $newGuid;
@@ -1577,8 +1577,13 @@ class Processes {
       $oData->reportTables[$key]['REP_TAB_UID'] = $newGuid;
     }
     foreach ( $oData->reportTablesVars as $key => $val ) {
-      $newGuid = $map[ $val['REP_TAB_UID'] ];
-      $oData->reportTablesVars[$key]['REP_TAB_UID'] = $newGuid;
+        if(isset($map[ $val['REP_TAB_UID'] ])){
+            /*TODO: Why this can be not defined?? The scenario was when
+             * imported an existing process but as a new one
+             */
+          $newGuid = $map[ $val['REP_TAB_UID'] ];
+          $oData->reportTablesVars[$key]['REP_TAB_UID'] = $newGuid;
+        }
     }
   }
 
@@ -1608,7 +1613,7 @@ class Processes {
       $map[ $val['FCD_UID'] ] = $newGuid;
       $oData->fieldCondition[$key]['FCD_UID'] = $newGuid;
     }
-  } 
+  }
 
  /**
   * Renew the GUID's for all the Events Objects
@@ -2146,7 +2151,7 @@ class Processes {
       if( $oContent->Exists($ConCategory, $ConParent, $ConId, $ConLang) ) {
         $oContent->removeContent($ConCategory, $ConParent, $ConId);
       }
-      $oContent->addContent($ConCategory, $ConParent, $ConId, $ConLang);
+      $oContent->addContent($ConCategory, $ConParent, $ConId, $ConLang,"");
     }
   } #@!neyek
 
@@ -2268,7 +2273,7 @@ class Processes {
     //krumo ($oData);die;
     //$oJSON = new Services_JSON();
     //krumo ( $oJSON->encode($oData) );
-    //return $oJSON->encode($oData); 
+    //return $oJSON->encode($oData);
     return serialize($oData);
   }
 
@@ -3415,7 +3420,7 @@ class ObjectCellection{
     }
 
   /**
-   * get the collection of ObjectDocument 
+   * get the collection of ObjectDocument
    * @param $name name object document
    * @param $type type object document
    * @param $data data object document

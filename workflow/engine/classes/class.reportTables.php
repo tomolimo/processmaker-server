@@ -33,7 +33,7 @@ G::LoadClass('case');
  * @copyright 2007 COLOSA
  */
 
-class ReportTables 
+class ReportTables
 {
   private $aDef = array('mysql' => array('number' => 'DOUBLE',
                                          'char'   => 'VARCHAR(255)',
@@ -53,12 +53,12 @@ class ReportTables
   
   /**
    * Function deleteAllReportVars
-   * This function delete all reports 
+   * This function delete all reports
    * @access public
    * @param string $$sRepTabUid
    * @return void
    */
-  public function deleteAllReportVars($sRepTabUid = '') 
+  public function deleteAllReportVars($sRepTabUid = '')
   {
     try {
       $oCriteria = new Criteria('workflow');
@@ -78,7 +78,7 @@ class ReportTables
    * @param string $sConnection Conexion
    * @return void
    */
-  public function dropTable($sTableName, $sConnection = 'report') 
+  public function dropTable($sTableName, $sConnection = 'report')
   {
     $sTableName = $this->sPrefix . $sTableName;
     //we have to do the propel connection
@@ -107,12 +107,12 @@ class ReportTables
    * @access public
    * @param string $sTableName Table name
    * @param string $sConnection Connection name
-   * @param string $sType 
-   * @param array $aFields 
+   * @param string $sType
+   * @param array $aFields
    * @param string $bDefaultFields
    * @return void
    */
-  public function createTable($sTableName, $sConnection = 'report', $sType = 'NORMAL', $aFields = array(), $bDefaultFields = true) 
+  public function createTable($sTableName, $sConnection = 'report', $sType = 'NORMAL', $aFields = array(), $bDefaultFields = true)
   {
     $sTableName = $this->sPrefix . $sTableName;
     //we have to do the propel connection
@@ -199,13 +199,13 @@ class ReportTables
    * @access public
    * @param string $sTableName Table name
    * @param string $sConnection Connection name
-   * @param string $sType 
-   * @param array $aFields 
+   * @param string $sType
+   * @param array $aFields
    * @param string $sProcessUid
    * @param string $sGrid
    * @return void
    */
-  public function populateTable($sTableName, $sConnection = 'report', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '') 
+  public function populateTable($sTableName, $sConnection = 'report', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '')
   {
     $sTableName = $this->sPrefix . $sTableName;
     //we have to do the propel connection
@@ -391,13 +391,16 @@ class ReportTables
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
       $aVars = array();
+      $aImportedVars = array();//This array will help to control if the variable already exist
       while ($aRow = $oDataset->getRow()) {
-        if ($bWhitType) {
-          $aVars[] = array('sFieldName' => $aRow['REP_VAR_NAME'], 'sType' => $aRow['REP_VAR_TYPE']);
-        }
-        else {
-          $aVars[] = $aRow['REP_VAR_NAME'];
-        }
+            if ($bWhitType) {
+                if(in_array($aRow['REP_VAR_NAME'],$aImportedVars)){
+ 			            $aImportedVars[]=$aRow['REP_VAR_NAME'];
+	                $aVars[] = array('sFieldName' => $aRow['REP_VAR_NAME'], 'sType' => $aRow['REP_VAR_TYPE']);
+                }
+            }else {
+              $aVars[] = $aRow['REP_VAR_NAME'];
+            }
         $oDataset->next();
       }
       return $aVars;
@@ -432,7 +435,7 @@ class ReportTables
   
   /**
    * Function getSplitDate
-   * This function gets the split date 
+   * This function gets the split date
    * @access public
    * @param date $date
    * @param string $mask
@@ -446,13 +449,13 @@ class ReportTables
       switch($item){
         case 'Y':
           switch($i){
-            case 0: 
+            case 0:
               $d1 = substr($date, 0, 4);
               break;
-            case 1: 
+            case 1:
               $d1 = substr($date, 3, 4);
               break;
-            case 2: 
+            case 2:
               $d1 = substr($date, 6, 4);
               break;
           }
@@ -460,40 +463,40 @@ class ReportTables
         break;
         case 'y':
           switch($i){
-            case 0: 
+            case 0:
               $d1 = substr($date, 0, 2);
               break;
-            case 1: 
+            case 1:
               $d1 = substr($date, 3, 2);
               break;
-            case 2: 
+            case 2:
               $d1 = substr($date, 6, 2);
               break;
           }
           break;
         case 'm':
           switch($i){
-            case 0: 
-              $d2 = substr($date, 0, 2); 
+            case 0:
+              $d2 = substr($date, 0, 2);
               break;
-            case 1: 
-              $d2 = ($sw1)? substr($date, 5, 2): substr($date, 3, 2); 
+            case 1:
+              $d2 = ($sw1)? substr($date, 5, 2): substr($date, 3, 2);
               break;
-            case 2: 
-              $d2 = ($sw1)? substr($date, 8, 2): substr($date, 5, 2); 
+            case 2:
+              $d2 = ($sw1)? substr($date, 8, 2): substr($date, 5, 2);
               break;
           }
           break;
         case 'd':
           switch($i){
-            case 0: 
-              $d3 = substr($date, 0, 2); 
+            case 0:
+              $d3 = substr($date, 0, 2);
               break;
-            case 1: 
-              $d3 = ($sw1)? substr($date, 5, 2): substr($date, 3, 2); 
+            case 1:
+              $d3 = ($sw1)? substr($date, 5, 2): substr($date, 3, 2);
               break;
-            case 2: 
-              $d3 = ($sw1)? substr($date, 8, 2): substr($date, 5, 2); 
+            case 2:
+              $d3 = ($sw1)? substr($date, 8, 2): substr($date, 5, 2);
               break;
           }
           break;
@@ -513,7 +516,7 @@ class ReportTables
   function getFormatDate($sDate, $sMask)
   {
   //print $sDate." *** ". $sMask."<BR>";
-    $dateTime = explode(" ",$sDate); //To accept the Hour part    
+    $dateTime = explode(" ",$sDate); //To accept the Hour part
     $aDate = explode ( '-', str_replace("/", "-", $dateTime[0]) );
     $bResult = true;
     foreach($aDate as $sDate){
@@ -549,9 +552,9 @@ class ReportTables
    * @param string $aFields
    * @return void
    */
-  public function updateTables($sProcessUid, $sApplicationUid, $iApplicationNumber, $aFields) 
+  public function updateTables($sProcessUid, $sApplicationUid, $iApplicationNumber, $aFields)
   {
-  try { 
+  try {
     //get all Active Report Tables
     $oCriteria = new Criteria('workflow');
     $oCriteria->add(ReportTablePeer::PRO_UID, $sProcessUid);
@@ -638,7 +641,7 @@ class ReportTables
           }
           else {
             //remove old rows from database
-            $sqlDelete = 'DELETE FROM `' . $aRow['REP_TAB_NAME'] . "` WHERE APP_UID = '" . $sApplicationUid . "'"; 
+            $sqlDelete = 'DELETE FROM `' . $aRow['REP_TAB_NAME'] . "` WHERE APP_UID = '" . $sApplicationUid . "'";
             $rsDelete  = $stmt->executeQuery( $sqlDelete );
 
             $aAux = explode('-', $aRow['REP_TAB_GRID']);
@@ -668,7 +671,7 @@ class ReportTables
                   }
                 }
                 $sQuery .= ')';
-                $rs =$stmt->executeQuery( $sQuery );                  
+                $rs =$stmt->executeQuery( $sQuery );
               }
             }
           }
@@ -812,7 +815,7 @@ class ReportTables
   {
     $repTabConnection = trim( strtoupper( $TabConnectionk ) );
     $PropelDatabase = 'rp';
-    if ( $repTabConnection == '' || $repTabConnection == 'REPORT' ) 
+    if ( $repTabConnection == '' || $repTabConnection == 'REPORT' )
       $PropelDatabase = 'rp';
     if ( $repTabConnection == 'RBAC' )
       $PropelDatabase = 'rbac';
