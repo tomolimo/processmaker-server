@@ -91,7 +91,7 @@ class workspaceTools {
     );
   }
 
-  private function initPropel($root = false) {
+  public function initPropel($root = false) {
     if (($this->initPropel && !$root) || ($this->initPropelRoot && $root))
       return;
     $wfDetails = $this->getDBCredentials("wf");

@@ -1,9 +1,10 @@
 <?php
 /**
- * commands.php
+ * cli.php
+ * @package workflow-engine-bin
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2010 Colosa Inc.
+ * Copyright (C) 2011 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,16 +22,8 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
+ * @author Alexandre Rosenfeld <alexandre@colosa.com>
  */
-
-register_shutdown_function('shutdownFunction');
-function shutDownFunction() {
-    $error = error_get_last();
-    if ($error['type'] == 1) {
-        //print_r($error);
-        debug_print_backtrace();
-    }
-} 
 
   /* Windows supports both / and \ as path separators, so use the Unix separator
    * for maximum compatibility.
@@ -54,16 +47,32 @@ function shutDownFunction() {
 
   /* Hide notice, otherwise we get a lot of messages */
   error_reporting(E_ALL ^ E_NOTICE);
+  ini_set('display_errors', 1);
 
-  // register tasks
-  $dir = PATH_HOME . 'engine/bin/tasks';
-  $tasks = pakeFinder::type('file')->name( 'cli*.php' )->in($dir);
-
-  foreach ($tasks as $task) {
-    include_once($task);
+  // trap -V before pake
+  if (in_array('-v', $argv) || in_array('-V', $argv) || in_array('--version', $argv))
+  {
+    printf("ProcessMaker version %s\n", pakeColor::colorize(trim(file_get_contents( PATH_GULLIVER . 'VERSION')), 'INFO'));
+    exit(0);
   }
+  // register tasks
 
   // run task
+  $directories = array(PATH_HOME . 'engine/bin/tasks');
+  $pluginsDirectories = glob(PATH_PLUGINS . "*");
+  foreach ($pluginsDirectories as $dir) {
+    if (!is_dir($dir))
+      continue;
+    if (is_dir("$dir/bin/tasks"))
+      $directories[] = "$dir/bin/tasks";
+  }
+
+  foreach ($directories as $dir) {
+    foreach (glob("$dir/*.php") as $filename) {
+      include_once($filename);
+    }
+  }
+
   pakeApp::get_instance()->run(null, null, false);
 
   exit(0);
