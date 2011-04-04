@@ -1,4 +1,7 @@
 nbproject
 workflow/engine/config/paths_installed.php
 *~
+workflow/engine/content/languages/translation.en
+workflow/engine/content/languages/translations.environments
+workflow/engine/js/labels/
 
