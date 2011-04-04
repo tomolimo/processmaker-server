@@ -514,10 +514,16 @@ Ext.onReady(function(){
   
   Actions.setUnpauseCaseDate = function()
   {
+    curDate = _ENV_CURRENT_DATE.split('-');
+    filterDate = curDate[0]+'-'+curDate[1]+'-';
+    nDay = '' + (parseInt(curDate[2])+1);
+    nDay = nDay.length == 1 ? '0' + nDay : nday;
+    filterDate += nDay;
+    
     var fieldset = {
       xtype : 'fieldset',
       autoHeight  : true,
-      defaults    : { 
+      defaults    : {
         width : 170,
         xtype:'label',
         labelStyle : 'padding: 0px;',
@@ -527,11 +533,12 @@ Ext.onReady(function(){
         {fieldLabel: 'Case', text: parent._CASE_TITLE}, 
         {fieldLabel: 'Pause Date', text: _ENV_CURRENT_DATE},
         new Ext.form.DateField({
-          id: 'unpauseDate',
+          id: 	'unpauseDate',
           format: 'Y-m-d',
           fieldLabel: 'Unpause Date',
           name: 'unpauseDate',
-          allowBlank:false
+          allowBlank: false,
+          minValue: new Date(filterDate)
         })
       ],
       buttons : [
@@ -704,5 +711,26 @@ Ext.onReady(function(){
 });
 
 
+/*Date.prototype.dateFormat = function(format) {
+    var result = "";
+    for (var i = 0; i < format.length; ++i) {
+        result += this.dateToString(format.charAt(i));
+    }
+    return result;
+}
 
-
+Date.prototype.dateToString = function(character) {
+    switch (character) {
+    case "Y":
+        return this.getFullYear();
+    
+    case "d":
+        return this.getDate();
+        
+    case "m":
+        return this.getMonth();
+    // snip a bunch of lines
+    default:
+        return character;
+    }
+}*/
