@@ -23,7 +23,20 @@ if( isset($request) ){
       try{
         $sData = base64_decode(str_rot13($_GET['hash']));
         list($SQL, $DB_UID) = explode('@', $sData);
+        //fixed: improving the statement sql by krlos
+        $sSql=substr($SQL, 6, strlen($SQL));
+        $pattern = "/\bfrom\b/i";
+        $replacement = 'FROM';
+        $sSql = preg_replace($pattern, $replacement, $sSql);
+        $aSql = explode("FROM", $sSql);
+        
+        $afieldSql = explode(",",$aSql[0]);  
 
+        if(count($afieldSql)>1)
+          $SQL .= "where $afieldSql[1] like '". $_GET['input']."%'";
+        else
+          $SQL .= "where $afieldSql[0] like '". $_GET['input']."%'";
+        //add fixed
         $aRows = Array();
         try {
             $con = Propel::getConnection($DB_UID);
