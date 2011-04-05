@@ -94,6 +94,7 @@ var G_Grid = function(oForm, sGridName){
   ///////////////////////////////////////////////////////////////////////
   
   this.setDependents = function(iRow, me, theDependentFields, sw) {
+    //alert('Row:' + iRow + ' me: ' + me.name + ' DP: ' + theDependentFields);
     var i;
     var dependentFields = theDependentFields || '';
     dependentFields = dependentFields.split(',');
@@ -158,6 +159,29 @@ var G_Grid = function(oForm, sGridName){
   
   ////////////////////////////////////////////////////////////////////////
   
+  this.cloneInput = function(oNewObject){
+    var newField;
+    var txt = oNewObject.parentNode.innerHTML;
+    var xClass = 'module_app_input___gray';
+    txt = txt.replace('INPUT','');
+    txt = txt.replace('<','');
+    txt = txt.replace('/>','');
+    txt = txt.replace('>','');
+    aTxt = txt.split(' ');
+
+    newField = document.createElement('<INPUT id="' + oNewObject.id + '" name="' + oNewObject.id + '" class=' + xClass + ' >');
+    
+    for (var a=0; a < aTxt.length; a++){
+      if (aTxt[a].indexOf('=')>0){
+        aVals = aTxt[a].split('=');
+        if (aVals[0] != 'id' && aVals[0] != 'name' && aVals[0] != 'class'){
+          newField.setAttribute(aVals[0], aVals[1].replace('"','').replace('"',''));
+        }
+      }
+    }
+    return newField;
+  };
+  
   this.addGridRow = function() {
     var i, aObjects, aDatePicker;
     var defaultValue = '';
@@ -186,11 +210,11 @@ var G_Grid = function(oForm, sGridName){
           break;
         default:
           eNodeName = aCells[i].innerHTML.substring(aCells[i].innerHTML.indexOf('<')+1, aCells[i].innerHTML.indexOf(' '));
-        eNodeName = eNodeName.toLowerCase();
-        switch(eNodeName){
-          case 'input':
-            aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
-            if (aObjects){
+          eNodeName = eNodeName.toLowerCase();
+          switch(eNodeName){
+            case 'input':
+              aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
+              if (aObjects){
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
               aObjects[0].id = newID;
               aObjects[0].name = newID;
@@ -226,8 +250,18 @@ var G_Grid = function(oForm, sGridName){
                     oNewRow.getElementsByTagName('td')[i].appendChild(a2);
                     //Load DatePicker Trigger
                     datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
+                    aObjects[0].value = defaultValue;
+                  }else{
+                    if (_BROWSER.name == 'msie'){ //Clone new input element if browser is IE
+                      oNewOBJ = this.cloneInput(aObjects[0]);
+                      oNewOBJ.value = defaultValue;
+                      parentGG = aObjects[0].parentNode;
+                      parentGG.removeChild(aObjects[0]);
+                      parentGG.appendChild(oNewOBJ);
+                    }else{
+                      aObjects[0].value = defaultValue;
+                    }
                   }
-                  aObjects[0].value = defaultValue;
                   break;
                 case 'checkbox': //CHECKBOX
                   aObjects[0].checked = false;
@@ -604,7 +638,7 @@ var G_Grid = function(oForm, sGridName){
       if (aAux[2] == nnName[2] && j <= (this.oGrid.rows.length-2)){
         oAux=this.getElementByName(j, nnName[2]);
         if(oAux!=null){
-          fTotal += parseFloat(G.cleanMask(oAux.value() || 0, oAux.mask).result.replace(/,/g, ''));
+          fTotal += parseFloat(G.getValue(oAux.value()));
         }
         j++;
       }
@@ -632,7 +666,7 @@ var G_Grid = function(oForm, sGridName){
     fTotal = 0;
     aAux[2] = aAux[2].replace(']', '');
     while (oAux = this.getElementByName(i, aAux[2])) {
-      fTotal += parseFloat(G.cleanMask(oAux.value() || 0, oAux.mask).result.replace(/,/g, ''));
+      fTotal += parseFloat(G.getValue(oAux.value()));
       sMask = oAux.mask;
       i++;
     }

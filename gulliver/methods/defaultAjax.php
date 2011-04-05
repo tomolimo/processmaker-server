@@ -52,12 +52,10 @@
         }
       }
     }
-
   $G_FORM=new form( $xmlFile , $sPath );
   $G_FORM->id=urlDecode($_POST['form']);
   //$G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
   $newValues=($json->decode(urlDecode(stripslashes($_POST['fields']))));
-
   if (isset($_POST['grid'])) {
     $_POST['row'] = (int)$_POST['row'];
     $aAux = array();
@@ -84,6 +82,7 @@
   	//Search dependent fields
   	foreach($newValues[$r] as $k => $v) {
   	  if (!is_array($v)) {
+  	      //echo 'NoASrray';
   		  $myDependentFields = subDependencies( $k , $G_FORM , $aux );
   		  $_SESSION[$G_FORM->id][$k] = $v;
   	  }
@@ -97,6 +96,7 @@
   		//$_SESSION[$G_FORM->id][$k] = $v;
   	}
   }
+  //g::pr($myDependentFields);
 
   $G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
 
@@ -195,9 +195,9 @@
         if ($myDependentFields[$r]=="") unset($myDependentFields[$r]);
       }
       $mD = $myDependentFields;
-      foreach( $mD as $ki) {
-        $myDependentFields = array_merge( $myDependentFields , subDependencies( $ki , $G_FORM , $aux, $grid) );
-      }
+//      foreach( $mD as $ki) {
+//        $myDependentFields = array_merge( $myDependentFields , subDependencies( $ki , $G_FORM , $aux, $grid) );
+//      }
     }
     return $myDependentFields;
   }

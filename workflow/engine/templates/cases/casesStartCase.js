@@ -321,11 +321,7 @@ function openCaseA(n){
 					var res = Ext.util.JSON.decode(response.responseText);
 					
 					if (res.openCase) {
-					  if (res.NewDynaform){
-					    window.location = res.openCase.PAGE + '&new=yes';
-					  }else{
 						  window.location = res.openCase.PAGE;
-					  }
 					} else {
 						Ext.Msg.show({
 							title : TRANSLATIONS.ID_ERROR_CREATING_NEW_CASE, // 'Error creating a new Case',

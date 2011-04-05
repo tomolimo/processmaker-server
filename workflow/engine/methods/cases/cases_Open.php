@@ -42,9 +42,6 @@ if( $RBAC->userCanAccess('PM_CASES') != 1 ) {
 require_once 'classes/model/AppDelay.php';
 G::LoadClass('case');
 
-//Clean NEW_CASE session variable if case isn't new.
-if ($_GET['new']!='yes') $_SESSION['NEW_CASE'] = '';
-
 $oCase = new Cases();
 
 //cleaning the case session data
@@ -79,6 +76,8 @@ try {
 
   //loading application data
   $aFields = $oCase->loadCase($sAppUid, $iDelIndex);
+//  g::pr($aFields);
+//  die;
 
   switch($aFields['APP_STATUS']){
     case 'DRAFT':
@@ -168,8 +167,8 @@ try {
         unset($_SESSION['bNoShowSteps']);
         $aNextStep = $oCase->getNextStep($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION']);
         $sPage = $aNextStep['PAGE'];
-
         G::header('location: ' . $sPage);
+        
 
       } else {
         //when the case have another user or current user doesnt have rights to this selfservice,
