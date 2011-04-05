@@ -120,17 +120,19 @@ class Derivation
         //2. if next case is an special case
         if ( (int)$aDerivation['ROU_NEXT_TASK'] < 0) {
           $aDerivation['NEXT_TASK']['TAS_UID']               = (int)$aDerivation['ROU_NEXT_TASK'];
-          $aDerivation['NEXT_TASK']['TAS_ASSIGN_TYPE']       = '';
+          $aDerivation['NEXT_TASK']['TAS_ASSIGN_TYPE']       = 'nobody';
           $aDerivation['NEXT_TASK']['TAS_PRIORITY_VARIABLE'] = '';
           $aDerivation['NEXT_TASK']['TAS_DEF_PROC_CODE']     = '';
           $aDerivation['NEXT_TASK']['TAS_PARENT']            = '';
+          $aDerivation['NEXT_TASK']['TAS_TRANSFER_FLY']            = '';
+          
           switch ($aDerivation['ROU_NEXT_TASK']) {
             case -1: $aDerivation['NEXT_TASK']['TAS_TITLE'] = G::LoadTranslation('ID_END_OF_PROCESS');
                      break;
             case -2: $aDerivation['NEXT_TASK']['TAS_TITLE'] = G::LoadTranslation('ID_TAREA_COLGANTE');
                      break;
           }
-          $aDerivation['NEXT_TASK']['USR_UID']     = 'asdf';
+          $aDerivation['NEXT_TASK']['USR_UID']     = '';
         }
         else {
           //3. load the task information of normal NEXT_TASK
