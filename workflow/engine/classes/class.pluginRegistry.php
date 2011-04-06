@@ -125,6 +125,14 @@ class PMPluginRegistry {
     self::$instance = $instance;
   }
 
+  /**
+   * Save the current instance to the plugin singleton
+   *
+   */
+  function save() {
+    file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $this->serializeInstance() );
+  }
+
   //delete this function, it was here, only for test and debug purposes
   function showArrays () {
   krumo ( $this->_aPluginDetails);
@@ -194,7 +202,7 @@ class PMPluginRegistry {
       if ( $sNamespace == $namespace ) {
         $this->registerFolder($sNamespace, $sNamespace, $detail->sPluginFolder ); //register the default directory, later we can have more
         $this->_aPluginDetails[$sNamespace]->enabled = true;
-        $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+        $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
         $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
         if (method_exists($oPlugin, 'enable')) {
           $oPlugin->enable();
@@ -213,7 +221,7 @@ class PMPluginRegistry {
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
       if ( $sNamespace == $namespace ) {
         unset ($this->_aPluginDetails[$sNamespace]);
-        $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+        $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
         $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
         if (method_exists($oPlugin, 'disable')) {
           $oPlugin->disable();
@@ -345,6 +353,24 @@ class PMPluginRegistry {
     $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
   }
   
+  function uninstallPlugin($sNamespace) {
+    $this->enablePlugin($sNamespace);
+    $this->disablePlugin($sNamespace);
+    $this->save();
+
+    foreach ($this->_aPluginDetails as $namespace=>$detail) {
+      if ( $sNamespace == $namespace ) {
+        $pluginDir = PATH_PLUGINS . $detail->sPluginFolder;
+        var_dump($pluginDir);
+        var_dump($detail->sFilename);
+        if (isset($detail->sPluginFolder) && !empty($detail->sPluginFolder) && file_exists($plugin_dir))
+          G::rm_dir($plugin_dir);
+        if (isset($detail->sFilename) && !empty($detail->sFilename) && file_exists($detail->sFilename))
+          unlink(PATH_PLUGINS . $detail->sFilename);
+      }
+    }
+  }
+
   /**
    * install the plugin
    *
@@ -354,7 +380,7 @@ class PMPluginRegistry {
   try {
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
       if ( $sNamespace == $namespace ) {
-      $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+      $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
       $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
       $oPlugin->install();
       }
@@ -825,7 +851,7 @@ class PMPluginRegistry {
           $sFilename = PATH_PLUGINS . $aux[ count($aux) -1];
           if (! file_exists($sFilename) ) continue;
           require_once( $sFilename);
-          $oPlugin =& new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+          $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
           $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
 
           $iPlugins++;
