@@ -134,6 +134,14 @@ class PMPluginRegistry {
     self::$instance = $instance;
   }
 
+  /**
+   * Save the current instance to the plugin singleton
+   *
+   */
+  function save() {
+    file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $this->serializeInstance() );
+  }
+
   //delete this function, it was here, only for test and debug purposes
   function showArrays () {
     krumo ( $this->_aPluginDetails);
@@ -370,6 +378,24 @@ class PMPluginRegistry {
     $oPluginRegistry->installPlugin( $details->sNamespace);
     $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
     $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+  }
+  
+  function uninstallPlugin($sNamespace) {
+    $this->enablePlugin($sNamespace);
+    $this->disablePlugin($sNamespace);
+    $this->save();
+
+    foreach ($this->_aPluginDetails as $namespace=>$detail) {
+      if ( $sNamespace == $namespace ) {
+        $pluginDir = PATH_PLUGINS . $detail->sPluginFolder;
+        var_dump($pluginDir);
+        var_dump($detail->sFilename);
+        if (isset($detail->sPluginFolder) && !empty($detail->sPluginFolder) && file_exists($plugin_dir))
+          G::rm_dir($plugin_dir);
+        if (isset($detail->sFilename) && !empty($detail->sFilename) && file_exists($detail->sFilename))
+          unlink(PATH_PLUGINS . $detail->sFilename);
+      }
+    }
   }
   
   /**
