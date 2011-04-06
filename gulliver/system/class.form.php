@@ -312,7 +312,9 @@ class Form extends XmlForm
                     $i=0;
                     // the variable fieldIsSet checks if a dropdown label has been saved so the values cannot be rewritted again.
                     $fieldIsSet = false;
-                    foreach($item as $kk => $vv){//print_r($this->fields[$k]->fields[$kk]->type);print'<hr>';
+                    foreach($item as $kk => $vv){
+                    	G::pr($item);die;
+                    	//print_r($this->fields[$k]->fields[$kk]->type);print'<hr>'; die;
                     //we need to know which fields are dropdowns
                       if($this->fields[$k]->fields[$kk]->type == 'dropdown'){
                         if(($this->fields[$k]->fields[$kk]->saveLabel)==1){
