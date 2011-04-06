@@ -80,72 +80,24 @@ var onChangeType = function(iRow) {
     case 'VARCHAR':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.readOnly = '';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = false;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
     break;
     case 'TEXT':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.value = '';
       oAux.readOnly = 'readOnly';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
     break;
     case 'DATE':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.value = '';
       oAux.readOnly = 'readOnly';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
     break;
     case 'INT':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.readOnly = '';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = false;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = false;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
     break;
     case 'FLOAT':
       oAux = getGridField('FIELDS', iRow, 'FLD_SIZE');
       oAux.readOnly = '';
-      /*oAux = getGridField('FIELDS', iRow, 'FLD_AUTO_INCREMENT');
-      oAux.checked  = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY');
-      oAux.checked = false;
-      oAux.disabled = true;
-      oAux = getGridField('FIELDS', iRow, 'FLD_FOREIGN_KEY_TABLE');
-      oAux.disabled = true;
-      oAux.value = '';*/
     break;
   }
 };
@@ -162,6 +114,7 @@ var onClickForeignKey = function(iRow) {
     oAux.value = '';
   }
 };
+
  var aReservedWords = new Array('ADD','ALL','ALTER','ANALYZE','AND','AS','ASC','ASENSITIVE','BEFORE',
                                    'BETWEEN','BIGINT','BINARY','BLOB','BOTH','BY','CALL','CASCADE','CASE',
                                    'CHANGE','CHAR','CHARACTER','CHECK','COLLATE','COLUMN','CONDITION',
@@ -338,7 +291,8 @@ var verifyData = function(oForm) {
   }
 };
 
-leimnud.event.add(window, 'load', function() {
+//leimnud.event.add(window, 'load', function() {
+function PMTableChange(){
   //Adding ajax validations
   leimnud.event.add(getField('ADD_TAB_NAME'), 'change', function() {
     getField('ADD_TAB_NAME').value = getField('ADD_TAB_NAME').value.toUpperCase();
@@ -397,15 +351,16 @@ leimnud.event.add(window, 'load', function() {
     // Reserved words
     var sTableName = getField('ADD_TAB_NAME').value.toUpperCase();
     
-	for(var i = 0; i < aReservedWords.length; i++ ) {
-		if(sTableName == aReservedWords[i]) {
+  for(var i = 0; i < aReservedWords.length; i++ ) {
+    if(sTableName == aReservedWords[i]) {
             new leimnud.module.app.alert().make({
               label:G_STRINGS.ID_TABLE_RESERVED_WORDS + ' ' + sTableName
             });
             oSaveButton.disabled = true;
         }
-	}
+  }
   });
+  
   leimnud.event.add(getField('ADD_TAB_CLASS_NAME'), 'change', function() {
     var sClassNameOld = getField('ADD_TAB_CLASS_NAME_OLD').value;
     var oSaveButton   = getField('btnSave');
@@ -457,17 +412,14 @@ leimnud.event.add(window, 'load', function() {
     //onClickForeignKey(iRow);
   };
   
-  
-   leimnud.event.add(getField('ADD_TAB_CLASS_NAME'), 'click', function() {
-   		//alert('sss');
-   
-  });
- 
-});
+
+};
 
 function cancel(){
     window.location = 'additionalTablesList';
 }
+
+dynaformOnload = PMTableChange;
 
 ]]>
 </JS>
