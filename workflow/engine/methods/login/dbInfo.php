@@ -36,24 +36,7 @@ function lookup( $target ) {
   return ($msg);
 }
 
-if (! defined ( 'PM_VERSION' )) {
-  if (file_exists ( PATH_METHODS . 'login/version-pmos.php' )) {
-    include (PATH_METHODS . 'login/version-pmos.php');
-  }
-  else {
-  	$cmd = sprintf	("cd %s && git status | grep 'On branch' | awk '{print $3 $4} ' && git log --decorate | grep '(tag:' | head -1  | awk '{print $3$4} ' ", PATH_TRUNK);
-  	if ( exec ( $cmd , $target) ) {  		
-    	$cmd = sprintf	("cd %s && git log --decorate | grep '(tag:' | head -1  | awk '{print $2} ' ", PATH_TRUNK);
-    	$commit = exec ( $cmd , $dummyTarget);
-    	$cmd = sprintf	("echo ' +' && cd %s && git log %s.. --oneline | wc -l && echo ' commits.'", PATH_TRUNK, $commit );
-    	exec ( $cmd , $target) ;
-    	//$target[] = "+ 343 commits";
-      define ( 'PM_VERSION', implode(' ', $target) );
-  	}
-  	else 
-      define ( 'PM_VERSION', 'Development Version' );
-  }
-}
+G::LoadClass("system");
 
 if (getenv ( 'HTTP_CLIENT_IP' )) {
   $ip = getenv ( 'HTTP_CLIENT_IP' );
@@ -118,7 +101,7 @@ $eeT="";
     $eeT=" - Enterprise Edition";
   }
 $Fields ['PHP'] = phpversion ();
-$Fields ['FLUID'] = PM_VERSION.$eeT;
+$Fields ['FLUID'] = System::getVersion() . $eeT;
 $Fields ['IP'] = lookup ( $ip );
 $Fields ['ENVIRONMENT'] = defined ( "SYS_SYS" ) ? SYS_SYS : "Not defined";
 $Fields ['SERVER_SOFTWARE'] = getenv ( 'SERVER_SOFTWARE' );
