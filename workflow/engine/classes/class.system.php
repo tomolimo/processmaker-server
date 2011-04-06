@@ -82,6 +82,25 @@ class System {
     return $aWorkspaces;
   }
 
+  public static function getVersion() {
+    if (! defined ( 'PM_VERSION' )) {
+      if (file_exists ( PATH_METHODS . 'login/version-pmos.php' )) {
+        include (PATH_METHODS . 'login/version-pmos.php');
+      }
+      else {
+        $cmd = sprintf	("cd %s && git status | grep 'On branch' | awk '{print \"Branch: \" $4} '", PATH_TRUNK);
+        if ( exec ( $cmd , $target) ) {  		
+          $cmd = sprintf	("cd %s && git describe ", PATH_TRUNK);
+          $commit = exec ( $cmd , $target);
+          define ( 'PM_VERSION', implode(' ', $target) );
+        }
+        else 
+          define ( 'PM_VERSION', 'Development Version' );
+      }
+    }
+    return PM_VERSION;
+  }
+
   /** 
   * Get system information
   *
