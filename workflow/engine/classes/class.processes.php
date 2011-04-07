@@ -717,7 +717,17 @@ class Processes {
         }
       }
     }
-    
+
+    // New process bpmn
+    if ( isset($oData->event ) && is_array($oData->event) ) {
+      foreach ( $oData->event as $key => $val ) {
+        if (isset($map[ $val['EVN_TAS_UID_FROM'] ])) {
+          $newGuid = $map[ $val['EVN_TAS_UID_FROM'] ];
+          $oData->event[$key]['EVN_TAS_UID_FROM'] = $newGuid;
+        }
+      }
+    }
+
     if ( isset($oData->caseScheduler ) && is_array($oData->caseScheduler) ) {
       foreach ( $oData->caseScheduler as $key => $val ) {
         if (isset($map[ $val['TAS_UID'] ])) {
@@ -2889,7 +2899,7 @@ class Processes {
         $oDataset->next();
       }
 
-    //Delete the dynaforms of process
+      //Delete the dynaforms of process
     $oCriteria = new Criteria('workflow');
     $oCriteria->add(DynaformPeer::PRO_UID, $sProUid);
     $oDataset = DynaformPeer::doSelectRS($oCriteria);
@@ -3087,6 +3097,11 @@ class Processes {
       if($oEvent->Exists ($aRow['EVN_UID']))
           $oEvent->remove($aRow['EVN_UID']);
       $oDataset->next();
+      if($oEvent->existsByTaskUidFrom($aRow['TAS_UID'])) {
+        $aRowEvent = $oEvent->getRowByTaskUidFrom($aRow['TAS_UID']);
+        $oEvent->remove($aRowEvent['EVN_UID']);
+      }
+      $oDataset->next();
     }
 
     //Delete the CaseScheduler of process
@@ -3117,6 +3132,9 @@ class Processes {
     $this->removeProcessRows ($oData->process['PRO_UID'] );
     $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
+
+    $this->createEventRows(isset($oData->event) ? $oData->event : array());
+
     $aRoutesUID = $this->createRouteRows($oData->routes);
     $this->createLaneRows($oData->lanes);
 
@@ -3164,9 +3182,12 @@ class Processes {
     $this->createStageRows(isset($oData->stage) ? $oData->stage : array());
 
     $this->createFieldCondition(isset($oData->fieldCondition) ? $oData->fieldCondition : array(), $oData->dynaforms);
-    $this->createEventRows(isset($oData->event) ? $oData->event : array());
+
+//    Create before to createRouteRows for avoid duplicates
+//    $this->createEventRows(isset($oData->event) ? $oData->event : array());
+
     $this->createCaseSchedulerRows(isset($oData->caseScheduler) ? $oData->caseScheduler : array());
-    
+
     //and finally create the files, dynaforms (xml and html), emailTemplates and Public files
     $this->createFiles($oData, $pmFilename);
  }

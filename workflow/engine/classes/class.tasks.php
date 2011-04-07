@@ -239,28 +239,29 @@ class Tasks
 
       //saving end event while import old processes
       if(isset($end) && $end==1){
-        if($sRouteType == "SEQUENTIAL"){
-           $aTaskDetails  = $oTask->load($idTask);
-           $positionX   = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
-           $positionY   = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
-           
-           $aData['PRO_UID']    = $row['PRO_UID'];
-           $aData['EVN_TYPE']   = 'bpmnEventEmptyEnd';
-           $aData['EVN_POSX']   = $positionX;
-           $aData['EVN_POSY']   = $positionY;
-           $aData['EVN_TAS_UID_FROM']   = $idTask;
-           $aData['EVN_STATUS'] = 'ACTIVE';
-           $aData['EVN_RELATED_TO'] = 'MULTIPLE';
-           $aData['EVN_WHEN']   = '1';
-           $aData['EVN_ACTION'] = '';
-           $sEvn_uid =  $oEvent->create($aData);
+        if(! $oEvent->existsByTaskUidFrom($idTask)) {
+          if($sRouteType == "SEQUENTIAL"){
+             $aTaskDetails  = $oTask->load($idTask);
+             $positionX   = $aTaskDetails['TAS_POSX'] + $aTaskDetails['TAS_WIDTH']/2;
+             $positionY   = $aTaskDetails['TAS_POSY'] + $aTaskDetails['TAS_HEIGHT'] + 10;
 
-           $aField['ROU_UID']     = $routeID;
-           $aField['ROU_EVN_UID'] = $sEvn_uid;
-           $oRoute->update($aField);
-           $end = 0;
+             $aData['PRO_UID']    = $row['PRO_UID'];
+             $aData['EVN_TYPE']   = 'bpmnEventEmptyEnd';
+             $aData['EVN_POSX']   = $positionX;
+             $aData['EVN_POSY']   = $positionY;
+             $aData['EVN_TAS_UID_FROM']   = $idTask;
+             $aData['EVN_STATUS'] = 'ACTIVE';
+             $aData['EVN_RELATED_TO'] = 'MULTIPLE';
+             $aData['EVN_WHEN']   = '1';
+             $aData['EVN_ACTION'] = '';
+             $sEvn_uid =  $oEvent->create($aData);
+
+             $aField['ROU_UID']     = $routeID;
+             $aField['ROU_EVN_UID'] = $sEvn_uid;
+             $oRoute->update($aField);
+             $end = 0;
+          }
         }
-
       }
 
     }

@@ -150,6 +150,8 @@ class Event extends BaseEvent {
       //start the transaction
       $oConnection->begin();
 
+      if($aData['EVN_TYPE']==='bpmnEventEmptyEnd')
+        unset($aData['TRI_UID']);
       if(isset($aData['TRI_UID']))
       {
           $oTrigger = new Triggers();
@@ -803,5 +805,33 @@ class Event extends BaseEvent {
       throw($oError);
     }
   }
+
+  public function existsByTaskUidFrom( $TAS_UID_FROM )
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn('COUNT(*) AS COUNT_EVENTS');
+    $oCriteria->add(EventPeer::EVN_TAS_UID_FROM, $TAS_UID_FROM);
+
+    $oDataset = EventPeer::doSelectRs($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    return ($aRow['COUNT_EVENTS'] != 0) ? true : false;
+  }
+
+  public function getRowByTaskUidFrom( $TAS_UID_FROM )
+  {
+    $oCriteria = new Criteria('workflow');
+
+    $oCriteria->add(EventPeer::EVN_TAS_UID_FROM, $TAS_UID_FROM);
+    $oDataset = EventPeer::doSelectRs($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    return $aRow;
+  }
+
+
 } // Event
 ?>
