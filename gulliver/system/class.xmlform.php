@@ -2139,7 +2139,7 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
       } else {
         $res = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly=$this->readOnly $disabled/>";
       }
-      if($this->hint){
+      if($this->hint){ 
              $res .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
              <image src="/images/help4.gif" width="15" height="15" border="0"/>
              </a>';
