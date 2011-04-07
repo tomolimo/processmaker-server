@@ -1090,8 +1090,8 @@ function PMFGenerateOutputDocument($outputID) {
   $oOutputDocument = new OutputDocument();
   $aOD = $oOutputDocument->load($outputID);
   $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
-  
-  $sFilename = ereg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
+  $_GET['UID']=($aOD['OUT_DOC_VERSIONING'])?$_GET['UID']:$aOD['OUT_DOC_UID'];
+  $sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
   require_once 'classes/model/AppFolder.php';
   require_once 'classes/model/AppDocument.php';
 
