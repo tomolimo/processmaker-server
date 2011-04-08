@@ -171,7 +171,7 @@ Ext.onReady(function(){
 
   var navPanelCenter = {
     id: 'navPanelCenter',
-    region: 'center',
+    region: 'center', layout:'fit',forceLayout: true,
     xtype:'panel',
     items:[{
         xtype:"tabpanel",
@@ -698,9 +698,10 @@ Ext.onReady(function(){
         frameConfig:{name: name + 'Frame', id: name + 'Frame'},
         defaultSrc : uri,
         loadMask:{msg:'Loading...'},
-        bodyStyle:{height:'600px'},
-        width:'1024px',
-        closable:true
+        autoWidth: true,
+        closable:true,
+        autoScroll: true,
+        bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
       }).show();
       
       TabPanel.doLayout();
