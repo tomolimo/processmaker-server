@@ -293,7 +293,8 @@ var G_Grid = function(oForm, sGridName){
                   aObjects[0].value = defaultValue;
                   break;
                 case 'hidden': //HIDDEN
-                  aObjects[0].value = defaultValue;
+                  if ((attributes.gridtype != 'yesno' && attributes.gridtype != 'dropdown') || typeof attributes.gridtype == 'undefined')
+                    aObjects[0].value = defaultValue;
                   break;
               }
             }
@@ -392,6 +393,12 @@ var G_Grid = function(oForm, sGridName){
                 }
                 //TODO: Implement Default Value and Dependent Fields Trigger for grid dropdowns
               }
+            }
+            aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
+            if (aObjects.length > 0){
+              newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
+              aObjects[0].id = newID;
+              aObjects[0].name = newID;
             }
             aObjects = null;
             break;
