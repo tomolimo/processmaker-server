@@ -310,6 +310,7 @@ Ext.onReady(function(){
         valueField:'AUTH_SOURCE_UID',
         allowBlank: false,
         submitValue: true,
+        width: 350,
         //hiddenValue: 'AUTH_SOURCE_UID',
         triggerAction: 'all',
         emptyText: _('ID_SELECT_AUTH_SOURCE'),
@@ -329,7 +330,7 @@ Ext.onReady(function(){
         xtype: 'textfield',
         fieldLabel: _('ID_AUTHENTICATION_DN'),
         name: 'auth_dn',
-        width: 350,
+        width: 380,
         allowBlank: true,
         enableKeyEvents: true,
         listeners: {keyup: function(f,e){ ReportChanges(); }}

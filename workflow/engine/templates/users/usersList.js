@@ -52,8 +52,11 @@ var user_admin = '00000000000000000000000000000001';
 var pageSize;
 var fullNameFormat;
 var dateFormat;
+var comboAuthSources;
+var storeAuthSources;
 
 Ext.onReady(function(){
+  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   Ext.QuickTips.init();
   
   fullNameFormat = CONFIG.fullNameFormat;
@@ -122,7 +125,7 @@ Ext.onReady(function(){
     id: 'searchTxt',
     ctCls:'pm_search_text_field',
     allowBlank: true,
-    width: 150,
+    width: 100,
     emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
     listeners: {
       specialkey: function(f,e){
@@ -184,7 +187,8 @@ Ext.onReady(function(){
       {name : 'LAST_LOGIN'},
       {name : 'USR_STATUS'},
       {name : 'TOTAL_CASES'},
-      {name : 'DUE_DATE_OK'}
+      {name : 'DUE_DATE_OK'},
+      {name : 'USR_AUTH_SOURCE'}
       ]
     })
   });
@@ -215,6 +219,38 @@ Ext.onReady(function(){
     
   comboPageSize.setValue(pageSize);
   
+  storeAuthSources = new Ext.data.GroupingStore({
+    autoLoad: true,
+    proxy : new Ext.data.HttpProxy({
+      url: 'users_Ajax?function=authSources&cmb=yes'
+    }),
+    reader : new Ext.data.JsonReader( {
+      root: 'sources',
+      fields: [
+        {name: 'AUTH_SOURCE_UID'},
+        {name: 'AUTH_SOURCE_SHOW'}
+      ]
+    })
+  });
+  
+  comboAuthSources = new Ext.form.ComboBox({
+    mode: 'local',
+    triggerAction: 'all',
+    store: storeAuthSources,
+    valueField: 'AUTH_SOURCE_UID',
+    displayField: 'AUTH_SOURCE_SHOW',
+    //emptyText: 'All',
+    width: 160,
+    editable: false,
+    value: _('ID_ALL'),
+    listeners:{
+      select: function(c,d,i){
+        store.setBaseParam('auths',d.data['AUTH_SOURCE_UID']);
+        UpdateAuthSource(d.data['AUTH_SOURCE_UID']);
+      }
+    }
+  });
+  
   bbarpaging = new Ext.PagingToolbar({
     pageSize: pageSize,
      store: store,
@@ -231,7 +267,7 @@ Ext.onReady(function(){
     },
     columns: [
       {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-      {header: '', dataIndex: 'USR_UID', width: 30, align:'center', sortable: false, renderer: photo_user},
+      //{header: '', dataIndex: 'USR_UID', width: 30, align:'center', sortable: false, renderer: photo_user},
       {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME', width: 90, hidden:false, align:'left'},
       {header: _('ID_FULL_NAME'), dataIndex: 'USR_USERNAME', width: 175, align:'left', renderer: full_name},
       {header: _('ID_EMAIL'), dataIndex: 'USR_EMAIL', width: 120, hidden: true, align: 'left'},
@@ -239,6 +275,7 @@ Ext.onReady(function(){
       {header: _('ID_ROLE'), dataIndex: 'USR_ROLE', width: 180, hidden:false, align:'left'},
       {header: _('ID_DEPARTMENT'), dataIndex: 'DEP_TITLE', width: 150, hidden:true, align:'left'},
       {header: _('ID_LAST_LOGIN'), dataIndex: 'LAST_LOGIN', width: 108, hidden:false, align:'center', renderer: render_lastlogin},
+      {header: _('ID_AUTHENTICATION_SOURCE'), dataIndex: 'USR_AUTH_SOURCE', width: 108, hidden: true, align: 'left'},
       {header: _('ID_CASES'), dataIndex: 'TOTAL_CASES', width: 45, hidden:false, align:'right'},
       {header: _('ID_DUE_DATE'), dataIndex: 'USR_DUE_DATE', width: 108, hidden:false, align:'center', renderer: render_duedate}
     ]
@@ -263,7 +300,7 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    tbar: [newButton, '-',summaryButton,'-', editButton, deleteButton,'-',groupsButton,'-',authenticationButton,  {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
+    tbar: [newButton, '-',summaryButton,'-', editButton, deleteButton,/*'-',groupsButton,'-',authenticationButton,*/  {xtype: 'tbfill'},_('ID_AUTH_SOURCES')+': ',comboAuthSources,'-', searchText,clearTextButton,searchButton],
     bbar: bbarpaging,
     listeners: {
       rowdblclick: SummaryTabOpen
@@ -391,10 +428,10 @@ AuthUserPage = function(value){
   }
 };
 
-//Renderer Active/Inactive Role
-photo_user = function(value){
-  return '<img border="0" src="users_ViewPhotoGrid?h=' + Math.random() +'&pUID=' + value + '" width="20" />';
-};
+////Renderer Active/Inactive Role
+//photo_user = function(value){
+//  return '<img border="0" src="users_ViewPhotoGrid?h=' + Math.random() +'&pUID=' + value + '" width="20" />';
+//};
 
 //Render Full Name
 full_name = function(v,x,s){
@@ -452,4 +489,10 @@ UpdatePageConfig = function(pageSize){
   url: 'users_Ajax',
   params: {'function':'updatePageSize', size: pageSize}
   });
+};
+
+//Update Authentication Source Filter
+UpdateAuthSource = function(index){
+  searchText.reset();
+  infoGrid.store.load({params: {auths: index}});
 };

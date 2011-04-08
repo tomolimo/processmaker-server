@@ -161,4 +161,23 @@ class AuthenticationSource extends BaseAuthenticationSource {
   	$result['LIST'] = $oCriteria2;
   	return $result;
   }
+  
+  function getAllAuthSourcesByUser(){
+    $oCriteria = new Criteria('rbac');
+    $oCriteria->addSelectColumn(RbacUsersPeer::USR_UID);
+    $oCriteria->addSelectColumn(AuthenticationSourcePeer::AUTH_SOURCE_NAME);
+    $oCriteria->addSelectColumn(AuthenticationSourcePeer::AUTH_SOURCE_PROVIDER);
+    $oCriteria->addJoin(RbacUsersPeer::UID_AUTH_SOURCE, AuthenticationSourcePeer::AUTH_SOURCE_UID, Criteria::INNER_JOIN);
+    
+    $oDataset = RbacUsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+    $aAuth = array();
+    while($oDataset->next()){
+      $row = $oDataset->getRow();
+      $aAuth[$row['USR_UID']] = $row['AUTH_SOURCE_NAME'].' ('.$row['AUTH_SOURCE_PROVIDER'].')';
+    }
+    return $aAuth;
+  }
+  
 } // AuthenticationSource

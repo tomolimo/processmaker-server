@@ -237,12 +237,20 @@ try {
       $criteria = $RBAC->getAllAuthSources();
       $objects  = AuthenticationSourcePeer::doSelectRS($criteria);
       $objects->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $arr = Array();
+      if (isset($_REQUEST['cmb'])){
+        if ($_REQUEST['cmb'] == 'yes'){
+          $started = Array();
+          $started['AUTH_SOURCE_UID'] = '';
+          $started['AUTH_SOURCE_SHOW'] = G::LoadTranslation('ID_ALL');
+          $arr[] = $started;
+        }
+      }
       $started = Array();
       $started['AUTH_SOURCE_UID'] = '00000000000000000000000000000000';
       //$started['AUTH_SOURCE_NAME'] = 'ProcessMaker';
       //$started['AUTH_SOURCE_TYPE'] = 'MYSQL';
       $started['AUTH_SOURCE_SHOW'] = 'ProcessMaker (MYSQL)';
-      $arr = Array();
       $arr[] = $started;
       while ($objects->next()){
       	$row = $objects->getRow();
@@ -306,6 +314,7 @@ try {
       require_once 'classes/model/LoginLog.php';
       require_once 'classes/model/Department.php';
       require_once 'classes/model/AppCacheView.php';
+      global $RBAC;
       G::LoadClass('configuration');
       $co = new Configurations();
       $config = $co->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
@@ -313,20 +322,29 @@ try {
       $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
       $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
       $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+      $auths = isset($_REQUEST['auths']) ? $_REQUEST['auths'] : '';
+      $aUsers = Array();
+      if ($auths != ''){
+        $aUsers = $RBAC->getListUsersByAuthSource($auths);
+      }
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('COUNT(*) AS CNT');
-      if ($filter != ''){ 
+      if ($filter != ''){
         $cc = $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-          $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-          $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)));
+        $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+        $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)));
         $oCriteria->add($cc);
       }
       $oCriteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);
-      $oDataset = UsersPeer::DoSelectRs ($oCriteria);
-      $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
-      $oDataset->next();
-      $row = $oDataset->getRow();
-      $totalRows = $row['CNT'];
+      if ($auths != ''){
+        $totalRows = sizeof($aUsers);
+      }else{
+        $oDataset = UsersPeer::DoSelectRs ($oCriteria);
+        $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+        $oDataset->next();
+        $row = $oDataset->getRow();
+        $totalRows = $row['CNT'];
+      }
       $oCriteria->clearSelectColumns();
       $oCriteria->addSelectColumn(UsersPeer::USR_UID);
       $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
@@ -342,25 +360,37 @@ try {
       $oCriteria->addAsColumn('TOTAL_CASES', 0);
       $oCriteria->addAsColumn('DUE_DATE_OK', 1);
       $sep = "'";
-      $oCriteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);      
-      if ($filter != ''){ 
+      $oCriteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);
+      if ($filter != ''){
         $cc = $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-          $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-          $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)));
+        $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
+        $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)));
         $oCriteria->add($cc);
       }
+      $sw_add = false;
+      for ($i=0; $i < sizeof($aUsers); $i++){
+        if ($i>0){
+          $tmpL = $tmpL->addOr($oCriteria->getNewCriterion(UsersPeer::USR_UID, $aUsers[$i],Criteria::EQUAL));
+        }else{
+          $uList = $oCriteria->getNewCriterion(UsersPeer::USR_UID, $aUsers[$i],Criteria::EQUAL);
+          $tmpL = $uList; 
+          $sw_add = true;
+        }
+      }
+      if ($sw_add) $oCriteria->add($uList);
       $oCriteria->setOffset($start);
       $oCriteria->setLimit($limit);
       $oDataset = UsersPeer::DoSelectRs ($oCriteria);
       $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
-      
+
       $Login = new LoginLog();
       $aLogin = $Login->getLastLoginAllUsers();
       $Cases = new AppCacheView();
       $aCases = $Cases->getTotalCasesByAllUsers();
       $Department = new Department();
       $aDepart = $Department->getAllDepartmentsByUser();
-      
+      $aAuthSources = $RBAC->getAllAuthSourcesByUser();
+
       $rows = Array();
       while($oDataset->next()){
         $rows[] = $oDataset->getRow();
@@ -369,6 +399,7 @@ try {
         $rows[$index]['LAST_LOGIN'] = isset($aLogin[$rows[$index]['USR_UID']]) ?  $aLogin[$rows[$index]['USR_UID']] : '';
         $rows[$index]['TOTAL_CASES'] = isset($aCases[$rows[$index]['USR_UID']]) ? $aCases[$rows[$index]['USR_UID']] : 0;
         $rows[$index]['DEP_TITLE'] = isset($aDepart[$rows[$index]['USR_UID']]) ? $aDepart[$rows[$index]['USR_UID']] : '';
+        $rows[$index]['USR_AUTH_SOURCE'] = isset($aAuthSources[$rows[$index]['USR_UID']]) ? $aAuthSources[$rows[$index]['USR_UID']] : 'ProcessMaker (MYSQL)';
       }
       echo '{users: '.G::json_encode($rows).', total_users: '.$totalRows.'}';
       break;

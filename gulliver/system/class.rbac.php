@@ -860,6 +860,20 @@ class RBAC
   
 /**
   * this function gets all authentication source
+  * Authentication Sources By User
+  *
+  * @access public
+  * @author Enrique Ponce de Leon <enrique@colosa.com>
+  * @param  void
+  * @return $this->authSourcesObj->getAllAuthSources()
+  */
+  
+  function getAllAuthSourcesByUser() {
+    return $this->authSourcesObj->getAllAuthSourcesByUser();
+  }
+  
+/**
+  * this function gets all authentication source
   * Authentication Sources based at parameters 
   *
   * @access public
@@ -938,6 +952,19 @@ class RBAC
   
   function getAllUsersByAuthSource(){
   	return $this->userObj->getAllUsersByAuthSource();
+  }
+  
+  /**
+  * this function gets all users by authentication source
+  *
+  * @access public
+
+  * @param  void
+  * @return $this->userObj->getAllUsersByAuthSource()
+  */
+  
+  function getListUsersByAuthSource($aSource){
+  	return $this->userObj->getListUsersByAuthSource($aSource);
   }
 
   /**

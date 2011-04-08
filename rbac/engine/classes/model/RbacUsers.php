@@ -228,5 +228,28 @@ class RbacUsers extends BaseRbacUsers {
   	}
   	return $aAuth;
   }
+  
+  //Returns all users with auth_source
+  function getListUsersByAuthSource($auth_source){
+    $oCriteria = new Criteria('rbac');
+    $oCriteria->addSelectColumn(RbacUsersPeer::USR_UID);
+    
+    if ($auth_source=='00000000000000000000000000000000'){
+      $oCriteria->add(
+        $oCriteria->getNewCriterion(RbacUsersPeer::UID_AUTH_SOURCE,$auth_source, Criteria::EQUAL)->addOr(
+        $oCriteria->getNewCriterion(RbacUsersPeer::UID_AUTH_SOURCE,'', Criteria::EQUAL)
+      ));
+    }else{
+      $oCriteria->add(RbacUsersPeer::UID_AUTH_SOURCE, $auth_source, Criteria::EQUAL);
+    }
+    $oDataset = RbacUsersPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $aUsers = array();
+    while($oDataset->next()){
+      $row = $oDataset->getRow();
+      $aUsers[] = $row['USR_UID'];
+    }
+    return $aUsers;
+  }
 
 } // Users
