@@ -443,7 +443,9 @@ class Installer
   public function check_db($dbName)
   {
     if(!$this->connection_database) {
-      return Array('status' => false, 'message' => mysql_error());
+      //erik: new verification if the mysql extension is enabled
+      $error = class_exists('mysql_error') ? mysql_error() : 'Mysql Module for PHP is not enabled!';
+      return Array('status' => false, 'message' => $error);
     }
     else  {
       if(!mysql_select_db($dbName,$this->connection_database) && $this->cc_status!=1) {
@@ -482,11 +484,11 @@ class Installer
         'connection' => false,
         'grant'      => 0,
         'version'    => false,
-        'message'    => "php-mysql is Not Installed",
+        'message'    => "ERROR: Mysql Module for PHP is not enabled, try install <b>php-mysql</b> package.",
         'ao'=>Array(
           'ao_db_wf' => false,
           'ao_db_rb' => false,
-          'ao_db_rp' => false
+          'ao_db_rp' => false 
         )
       );
     }
