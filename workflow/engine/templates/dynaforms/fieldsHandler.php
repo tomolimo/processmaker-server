@@ -81,16 +81,17 @@
 		<div style="width:700px">
 		<div class="ui-widget-header ui-corner-all" style="height:17px">
 			<table border="0" width="100%" cellpadding="0" cellspacing="0">
-			  <td width="2%"><div style="font-size:9px; color:#fff;" align="center">&nbsp;<b><?php echo G::loadTranslation('ID_VISIBLE')?></b></div></td>
-			  <td width="5%"><div style="font-size:12px;color:#fff; font-weight:bold" align="center">&nbsp;<?php echo G::loadTranslation('ID_TYPE')?></div></td>
-			  <td width="35%"><div style="font-size:12px;color:#fff; font-weight:bold" align="center">&nbsp;<?php echo G::loadTranslation('ID_NAME')?></div></td>
-			  <td width="3"><div style="font-size:12px;color:#fff; font-weight:bold" align="center">&nbsp;<?php echo G::loadTranslation('ID_LABEL')?></div></td>
+			  <td width="7%"><div style="font-size:9px; color:#fff;" align="left">&nbsp;<b><?php echo G::loadTranslation('ID_VISIBLE')?></b></div></td>
+			  <td width="11%"><div style="font-size:12px;color:#fff; font-weight:bold" align="left">&nbsp;<?php echo G::loadTranslation('ID_TYPE')?></div></td>
+			  <td width="28%"><div style="font-size:12px;color:#fff; font-weight:bold" align="left">&nbsp;<?php echo G::loadTranslation('ID_NAME')?></div></td>
+			  <td width="6"><div style="font-size:12px;color:#fff; font-weight:bold" align="left">&nbsp;<?php echo G::loadTranslation('ID_LABEL')?></div></td>
 			</table>
 		</div>
 		</div>
-		<div id="dynafields">
-		  <ul id="sortable">
-			<?foreach($elements as $node_name=>$node){
+		
+		<div id="dynafields"> 
+		  <ul id="sortable" style="margin:0; padding:0;">
+			<? foreach($elements as $node_name=>$node){
 				    if( isset($hidden_fields_list) ){
 					   $checked = !(in_array($node_name, $hidden_fields_list))? 'checked="checked"': '';
 					} else {
