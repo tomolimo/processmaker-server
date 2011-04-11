@@ -64,6 +64,11 @@ Ext.onReady(function(){
                         Ext.Ajax.request({
                           url: 'outputdocs_Ajax?action=getTemplateFile&r='+Math.random(),
                           success: function(response){
+                            txtParse = response.responseText;
+                            if ((txtParse.indexOf('@>')>0)||(txtParse.indexOf('@&gt;')>0)){
+                              txtParse = txtParse.replace('@<','@&lt;');
+                              response.responseText = txtParse;
+                            }
                             Ext.getCmp('OUT_DOC_TEMPLATE').setValue(response.responseText);
                             if(Ext.getCmp('OUT_DOC_TEMPLATE').getValue(response.responseText)=='')
                               Ext.Msg.alert(_('ID_ALERT_MESSAGE'), _('ID_INVALID_FILE'));
@@ -109,7 +114,39 @@ Ext.onReady(function(){
             id:'OUT_DOC_TEMPLATE',
             fieldLabel:'Output Document Template',
             height:300,
-            anchor:'98%'
+            anchor:'98%',
+            listeners: {
+              editmodechange: function(he,b){
+                txtParse = he.getRawValue();
+                if (!b){
+                  if ((txtParse.indexOf('@>')>0)||(txtParse.indexOf('@&gt;')>0)){
+                    txtParse = txtParse.replace('@<','@&lt;');
+                    he.setValue(txtParse);
+                  }
+                }
+              },
+              beforepush: function(he, h){
+                txtParse = h;
+                if ((txtParse.indexOf('@>')>0)||(txtParse.indexOf('@&gt;')>0)){
+                  if (txtParse.indexOf('@<')>0){
+                    txtParse = txtParse.replace('@<','@&lt;');
+                    he.setValue(txtParse);
+                  }
+                  //return false;
+                }
+              }//,
+//              beforesync: function(he, h){
+//                alert(h);
+//                txtParse = h;
+//                if ((txtParse.indexOf('@>')>0)||(txtParse.indexOf('@&gt;')>0)){
+//                  if (txtParse.indexOf('@<')>0){
+//                    txtParse = txtParse.replace('@<','@&lt;');
+//                    he.setValue(txtParse);
+//                  }
+//                  //return false;
+//                }
+//              }
+            }
         }],
 
         buttons: [{
