@@ -29,7 +29,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 
   <en>Max. Length</en>
 </PME_MAXLENGTH>
-<PME_VALIDATE type="dropdown" defaultvalue="Any">
+<PME_VALIDATE type="dropdown" defaultvalue="Real">
   <en>Validate<option name="Int">Integer </option><option name="Real">Real Number</option></en>
 </PME_VALIDATE>
 <PME_MASK type="text" maxlength="50" size="30" defaultvalue="###.## %">
@@ -103,11 +103,15 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 <PME_JS type="javascript"><![CDATA[
 	var fieldForm="percentage";
 	var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
+	var fieldVal=getField("PME_VALIDATE",fieldForm);
+    var fieldMask=getField("PME_MASK",fieldForm);
 	var savedFieldName=fieldName.value;
 	var pme_validating;
 	fieldName.focus();
 	fieldName.select();
 	leimnud.event.add(fieldName, 'change', {method:dynaformVerifyFieldName, instance:fieldName, event:true});
+	leimnud.event.add(fieldVal, 'change', {method:checkVal, instance:fieldVal, event:true});
+    leimnud.event.add(fieldMask, 'change', {method:checkVal, instance:fieldMask, event:true});
 	
 	var dyntype="@#PME_DYN_TYPE";
 	
@@ -119,6 +123,19 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 	
 function cancel(){
     currentPopupWindow.remove();
+}
+
+function checkVal(){
+  if (fieldVal.value === 'Int'){
+    aux = fieldMask.value;
+    aux = aux.replace('.000','');
+    aux = aux.replace('.00','');
+    aux = aux.replace('.0','');
+    aux = aux.replace('.##','');
+    aux = aux.replace('.#','');
+    aux = aux.replace('.','');
+    fieldMask.value = aux;
+  }
 }
 	
 ]]></PME_JS>
