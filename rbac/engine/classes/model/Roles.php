@@ -365,6 +365,7 @@ class Roles extends BaseRoles {
     	 $oCriteria = new Criteria('rbac');
     	 $oCriteria->addSelectColumn(UsersPeer::DEP_UID);
     	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    	 $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
     	 $oCriteria->addGroupByColumn(UsersPeer::DEP_UID);
     	 $oDataset = UsersPeer::doSelectRS($oCriteria);
     	 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
