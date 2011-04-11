@@ -225,9 +225,14 @@
 <en>Save</en>
 </SAVE>
 
+<BTNCANCEL type="button"  onClick="javascript:backToList();">
+<en>Cancel</en>
+</BTNCANCEL>
+
 <SHOW_HIDE_JS type="javascript"><![CDATA[ 
 hideAll();
 hideProperties();
+
 
 
 function $_GET(q,s) {
@@ -502,6 +507,11 @@ function case_userSchedulerValidate(username, password) {
 
     oRPC.callback = function(rpc){
        //msgBox(rpc.xmlhttp.responseText,"alert");
+       sresponse = rpc.xmlhttp.responseText;
+       if(sresponse == "User does not have access to the system"){
+         msgBox(rpc.xmlhttp.responseText,"alert");
+         return false;
+       }
        getField('SCH_USER_UID').value = rpc.xmlhttp.responseText;
        user_uid = rpc.xmlhttp.responseText;
        //alert(user_uid);
