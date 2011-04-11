@@ -149,9 +149,10 @@ class Event extends BaseEvent {
 
       //start the transaction
       $oConnection->begin();
-
-      if($aData['EVN_TYPE']==='bpmnEventEmptyEnd')
-        unset($aData['TRI_UID']);
+      if (isset($aData['EVN_TYPE'])){
+        if($aData['EVN_TYPE']==='bpmnEventEmptyEnd')
+          unset($aData['TRI_UID']);
+      }
       if(isset($aData['TRI_UID']))
       {
           $oTrigger = new Triggers();

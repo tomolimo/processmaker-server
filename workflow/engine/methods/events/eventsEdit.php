@@ -43,6 +43,12 @@ else {
 }
 
 
+if (!isset($_SESSION['PROCESS'])){
+  if (isset($aFields['PRO_UID'])){
+    $_SESSION['PROCESS'] = $aFields['PRO_UID'];
+  }
+}
+
 $oTasks   = new Tasks();
 $aAux1    = $oTasks->getAllTasks($aFields['PRO_UID']);
 $aTasks   = array();
