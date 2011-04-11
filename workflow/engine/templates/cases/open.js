@@ -701,7 +701,7 @@ Ext.onReady(function(){
         autoWidth: true,
         closable:true,
         autoScroll: true,
-        bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
+        bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'}
       }).show();
       
       TabPanel.doLayout();
