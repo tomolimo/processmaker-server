@@ -113,7 +113,7 @@ Ext.onReady(function() {
       // autoHeight : true,
       split : true,
       style : {
-        width : '40%'
+        width : '450'
       },
       // minWidth : 150,
       // frame: true,
