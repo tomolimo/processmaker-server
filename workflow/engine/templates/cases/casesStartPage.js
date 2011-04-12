@@ -926,7 +926,7 @@ Ext.extend(
         }
         Ext.getCmp('process-detail-panel').getForm().setValues({
         	processName : otherAttributes.PRO_TITLE,
-        	taskName : selectedNode.attributes.text,
+        	taskName : otherAttributes.PRO_TAS_TITLE,
         	calendarName : otherAttributes.CALENDAR_NAME,
         	calendarDescription : otherAttributes.CALENDAR_DESCRIPTION,
         	processCalendar:otherAttributes.CALENDAR_NAME+" "+otherAttributes.CALENDAR_DESCRIPTION,
