@@ -348,6 +348,8 @@ class Roles extends BaseRoles {
     	 $oCriteria = new Criteria('rbac');
     	 $oCriteria->addSelectColumn(UsersRolesPeer::ROL_UID);
     	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    	 $oCriteria->addJoin(RbacUsersPeer::USR_UID,UsersRolesPeer::USR_UID,Criteria::INNER_JOIN);
+    	 $oCriteria->add(RbacUsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
     	 $oCriteria->addGroupByColumn(UsersRolesPeer::ROL_UID);
     	 $oDataset = UsersRolesPeer::doSelectRS($oCriteria);
     	 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
