@@ -172,6 +172,7 @@ class AuthenticationSource extends BaseAuthenticationSource {
     $oCriteria->addSelectColumn(RbacUsersPeer::USR_UID);
     $oCriteria->addSelectColumn(AuthenticationSourcePeer::AUTH_SOURCE_NAME);
     $oCriteria->addSelectColumn(AuthenticationSourcePeer::AUTH_SOURCE_PROVIDER);
+    $oCriteria->add(RbacUsersPeer::USR_STATUS,0,Criteria::NOT_EQUAL);
     $oCriteria->addJoin(RbacUsersPeer::UID_AUTH_SOURCE, AuthenticationSourcePeer::AUTH_SOURCE_UID, Criteria::INNER_JOIN);
     
     $oDataset = RbacUsersPeer::doSelectRS($oCriteria);

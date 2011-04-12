@@ -206,9 +206,10 @@ switch ($_POST['action'])
     $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
     $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
     $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+    $oCriteria->addSelectColumn(UsersPeer::USR_STATUS);
     $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
     $oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
-    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
     $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
     if ($filter != ''){
       $oCriteria->add(
@@ -233,7 +234,7 @@ switch ($_POST['action'])
     $oCriteria->addSelectColumn(UsersPeer::USR_UID);
     $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
     $oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
-    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
     $oDataset = UsersPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
@@ -248,7 +249,8 @@ switch ($_POST['action'])
     $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
     $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
     $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
-    $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+    $oCriteria->addSelectColumn(UsersPeer::USR_STATUS);
+    $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
     $oCriteria->add(UsersPeer::USR_UID, $uUIDs, Criteria::NOT_IN);
     $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
     if ($filter != ''){

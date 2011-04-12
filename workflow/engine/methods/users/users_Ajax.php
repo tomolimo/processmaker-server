@@ -367,17 +367,20 @@ try {
         $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)));
         $oCriteria->add($cc);
       }
-      $sw_add = false;
-      for ($i=0; $i < sizeof($aUsers); $i++){
-        if ($i>0){
-          $tmpL = $tmpL->addOr($oCriteria->getNewCriterion(UsersPeer::USR_UID, $aUsers[$i],Criteria::EQUAL));
-        }else{
-          $uList = $oCriteria->getNewCriterion(UsersPeer::USR_UID, $aUsers[$i],Criteria::EQUAL);
-          $tmpL = $uList; 
-          $sw_add = true;
-        }
+//      $sw_add = false;
+//      for ($i=0; $i < sizeof($aUsers); $i++){
+//        if ($i>0){
+//          $tmpL = $tmpL->addOr($oCriteria->getNewCriterion(UsersPeer::USR_UID, $aUsers[$i],Criteria::EQUAL));
+//        }else{
+//          $uList = $oCriteria->getNewCriterion(UsersPeer::USR_UID, $aUsers[$i],Criteria::EQUAL);
+//          $tmpL = $uList; 
+//          $sw_add = true;
+//        }
+//      }
+//      if ($sw_add) $oCriteria->add($uList);
+      if (sizeof($aUsers) > 0){
+        $oCriteria->add(UsersPeer::USR_UID, $aUsers, Criteria::IN);
       }
-      if ($sw_add) $oCriteria->add($uList);
       $oCriteria->setOffset($start);
       $oCriteria->setLimit($limit);
       $oDataset = UsersPeer::DoSelectRs ($oCriteria);

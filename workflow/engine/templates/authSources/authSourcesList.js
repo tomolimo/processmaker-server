@@ -180,7 +180,7 @@ Ext.onReady(function(){
             {header: _('ID_SERVER_NAME'), dataIndex: 'AUTH_SOURCE_SERVER_NAME', width: 180, hidden: false, align: 'center'},
             {header: _('ID_PORT'), dataIndex: 'AUTH_SOURCE_PORT', width: 60, hidden: false, align: 'center'},
             {header: _('ID_ENABLED_TLS'), dataIndex: 'AUTH_SOURCE_ENABLED_TLS', width: 90, hidden: false, align: 'center', renderer: show_enabled},
-            {header: _('ID_CURRENT_USERS'), dataIndex: 'CURRENT_USERS', width: 90, hidden: false, align: 'center'}
+            {header: _('ID_ACTIVE_USERS'), dataIndex: 'CURRENT_USERS', width: 90, hidden: false, align: 'center'}
         ]
     });
     

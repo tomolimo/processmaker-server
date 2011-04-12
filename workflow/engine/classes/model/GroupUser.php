@@ -104,6 +104,8 @@ class GroupUser extends BaseGroupUser {
   	$oCriteria = new Criteria('workflow');
   	$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
   	$oCriteria->addSelectColumn('COUNT(*) AS CNT');
+  	$oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::INNER_JOIN);
+  	$oCriteria->add(UsersPeer::USR_STATUS,'CLOSED', Criteria::NOT_EQUAL);
   	$oCriteria->addGroupByColumn(GroupUserPeer::GRP_UID);
   	$oDataset = GroupUserPeer::doSelectRS($oCriteria);
   	$oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);

@@ -242,9 +242,9 @@ Ext.onReady(function(){
               {header: _('ID_CODE'), dataIndex: 'ROL_CODE', width: 220, align:'left'},
               {header: _('ID_NAME'), dataIndex: 'ROL_NAME', width: 180, hidden:false, align:'left'},
               {header: _('ID_STATUS'), dataIndex: 'ROL_STATUS', width: 80, hidden: false, align: 'center', renderer: status_role},
-              {header: _('ID_USERS'), dataIndex: 'TOTAL_USERS', width: 50, hidden: false, align: 'center'},
-              {header: _('ID_PRO_CREATE_DATE'), dataIndex: 'ROL_CREATE_DATE', width: 100, hidden:false, align:'center', renderer: render_date},
-              {header: _('ID_LAN_UPDATE_DATE'), dataIndex: 'ROL_UPDATE_DATE', width: 100, hidden:false, align:'center', renderer: render_date}
+              {header: _('ID_ACTIVE_USERS'), dataIndex: 'TOTAL_USERS', width: 80, hidden: false, align: 'center'},
+              {header: _('ID_PRO_CREATE_DATE'), dataIndex: 'ROL_CREATE_DATE', width: 90, hidden:false, align:'center', renderer: render_date},
+              {header: _('ID_LAN_UPDATE_DATE'), dataIndex: 'ROL_UPDATE_DATE', width: 90, hidden:false, align:'center', renderer: render_date}
               ]
   });
 

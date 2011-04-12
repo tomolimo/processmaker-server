@@ -71,7 +71,8 @@ Ext.onReady(function(){
     		    {name : 'USR_USERNAME'},
     		    {name : 'USR_FIRSTNAME'},
     		    {name : 'USR_LASTNAME'},
-    		    {name : 'USR_EMAIL'}
+    		    {name : 'USR_EMAIL'},
+    		    {name : 'USR_STATUS'}
     		]
     	})
     });
@@ -129,7 +130,8 @@ Ext.onReady(function(){
     		    {name : 'USR_USERNAME'},
     		    {name : 'USR_FIRSTNAME'},
     		    {name : 'USR_LASTNAME'},
-    		    {name : 'USR_EMAIL'}
+    		    {name : 'USR_EMAIL'},
+    		    {name : 'USR_STATUS'}
     		    ]
     	})
     });
@@ -142,8 +144,9 @@ Ext.onReady(function(){
         columns: [
             {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
             {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME', width: 140, align:'left'},
-            {header: _('ID_FIRST_NAME'), dataIndex: 'USR_FIRSTNAME', width: 200, align:'left'},
-            {header: _('ID_LAST_NAME'), dataIndex: 'USR_LASTNAME', width: 200, align:'left'}
+            {header: _('ID_FIRST_NAME'), dataIndex: 'USR_FIRSTNAME', width: 180, align:'left'},
+            {header: _('ID_LAST_NAME'), dataIndex: 'USR_LASTNAME', width: 180, align:'left'},
+            {header: _('ID_STATUS'), dataIndex: 'USR_STATUS', width: 100, align:'center', renderer: render_status}
             
             
         ]
@@ -444,4 +447,13 @@ CancelEditMembersAction = function(){
   buttonsPanel.hide();
   editMembersButton.enable();
   MembersPanel.doLayout();
+};
+
+//Render Status
+render_status = function(v){
+  switch(v){
+  case 'ACTIVE': return '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
+  case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
+  case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
+  }
 };

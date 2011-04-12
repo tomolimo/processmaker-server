@@ -349,7 +349,7 @@ class Roles extends BaseRoles {
     	 $oCriteria->addSelectColumn(UsersRolesPeer::ROL_UID);
     	 $oCriteria->addSelectColumn('COUNT(*) AS CNT');
     	 $oCriteria->addJoin(RbacUsersPeer::USR_UID,UsersRolesPeer::USR_UID,Criteria::INNER_JOIN);
-    	 $oCriteria->add(RbacUsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
+    	 $oCriteria->add(RbacUsersPeer::USR_STATUS,0,Criteria::NOT_EQUAL);
     	 $oCriteria->addGroupByColumn(UsersRolesPeer::ROL_UID);
     	 $oDataset = UsersRolesPeer::doSelectRS($oCriteria);
     	 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -396,7 +396,7 @@ class Roles extends BaseRoles {
             $criteria->add(RolesPeer::ROL_UID, "", Criteria::NOT_EQUAL);
             $criteria->add(RolesPeer::ROL_UID, $ROL_UID);
             
-            $criteria->add(RbacUsersPeer::USR_STATUS, 1, Criteria::EQUAL);
+            $criteria->add(RbacUsersPeer::USR_STATUS, 0, Criteria::NOT_EQUAL);
             
             $criteria->addJoin(RolesPeer::ROL_UID, UsersRolesPeer::ROL_UID);
             $criteria->addJoin(UsersRolesPeer::USR_UID, RbacUsersPeer::USR_UID);

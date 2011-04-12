@@ -290,6 +290,9 @@ switch ($_POST['action'])
   	$oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
   	$oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
   	$oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+  	$oCriteria->addSelectColumn(UsersPeer::USR_STATUS);
+  	$oCriteria->add(UsersPeer::DEP_UID,'');
+    $oCriteria->add(UsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
   	if ($filter!=''){
   		$oCriteria->add(
   		  $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%',Criteria::LIKE)->addOr(
@@ -316,8 +319,9 @@ switch ($_POST['action'])
   	$oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
   	$oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
   	$oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
+  	$oCriteria->addSelectColumn(UsersPeer::USR_STATUS);
   	$oCriteria->add(UsersPeer::DEP_UID,'');
-$oCriteria->add(UsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
+    $oCriteria->add(UsersPeer::USR_STATUS,'CLOSED',Criteria::NOT_EQUAL);
 
     if ($filter!=''){
   		$oCriteria->add(

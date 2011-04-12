@@ -242,6 +242,7 @@ class RbacUsers extends BaseRbacUsers {
     }else{
       $oCriteria->add(RbacUsersPeer::UID_AUTH_SOURCE, $auth_source, Criteria::EQUAL);
     }
+    $oCriteria->add(RbacUsersPeer::USR_STATUS,0,Criteria::NOT_EQUAL);
     $oDataset = RbacUsersPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $aUsers = array();
