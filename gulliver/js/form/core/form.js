@@ -1124,7 +1124,7 @@ function G()
       eNum = iNum.split('');
       for (e=0; e < eMask.length; e++){
         switch(eMask[e]){
-          case '#': case '0':
+          case '#': case '0': case 'd': case 'm': case 'y': case 'Y': 
             if (eNum.length > 0){
               key = eNum.shift();
               _out += key;
