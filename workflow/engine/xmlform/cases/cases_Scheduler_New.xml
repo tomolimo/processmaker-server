@@ -508,10 +508,17 @@ function case_userSchedulerValidate(username, password) {
     oRPC.callback = function(rpc){
        //msgBox(rpc.xmlhttp.responseText,"alert");
        sresponse = rpc.xmlhttp.responseText;
-       if(sresponse == "User does not have access to the system"){
+
+       switch(sresponse){
+       case "User does not have access to the system":
+       case "Wrong password":
+       case "User inactive!":
          msgBox(rpc.xmlhttp.responseText,"alert");
+         getField('BTNCANCEL').focus();
          return false;
-       }
+         break
+        }
+
        getField('SCH_USER_UID').value = rpc.xmlhttp.responseText;
        user_uid = rpc.xmlhttp.responseText;
        //alert(user_uid);
