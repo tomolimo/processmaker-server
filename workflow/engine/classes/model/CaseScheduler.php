@@ -529,7 +529,7 @@ class CaseScheduler extends BaseCaseScheduler {
         }
       } else if ($sActualDataHour == $dActualSysHour && $sActualDataMinutes <= $dActualSysMinutes) {
 
-        $_PORT = ($_SERVER ['SERVER_PORT'] != '80') ? ':' . $_SERVER ['SERVER_PORT'] : '';
+        $_PORT = (isset($_SERVER ['SERVER_PORT']) && $_SERVER ['SERVER_PORT'] != '80') ? ':' . $_SERVER ['SERVER_PORT'] : '';
 
         //$defaultEndpoint = 'http://' . $_SERVER ['SERVER_NAME'] . ':' . $_PORT . '/sys' . SYS_SYS . '/en/green/services/wsdl2';
         $defaultEndpoint = 'http://' . SERVER_NAME . $_PORT . '/sys' . SYS_SYS . '/en/green/services/wsdl2';
