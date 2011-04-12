@@ -303,13 +303,18 @@ function G_DropDown( form, element, name )
 }
 G_DropDown.prototype=new G_Field();
 
-function G_Text( form, element, name )
+function G_Text( form, element, name, type )
 {
   var me=this;
+  var mType = 'text';
   this.parent = G_Field;
   this.parent( form, element, name );
   if (element) {
     this.prev = element.value;
+  }
+  if (type){
+    //alert('Type: ' + type);
+    mType = type;
   }
   this.validate = 'Any';
   this.mask='';
@@ -458,7 +463,11 @@ function G_Text( form, element, name )
       startPos++;
       
       var newValue2;
-      newValue2 = G.toMask(newValue, me.mask, startPos);
+      if (mType !== 'text'){
+        newValue2 = G.toMask(newValue, me.mask, startPos);
+      }else{
+        newValue2 = G.toMask(newValue, me.mask, startPos, 'normal');
+      }
       me.element.value = newValue2.result;
       me.setSelectionRange(newValue2.cursor, newValue2.cursor);
       
@@ -782,7 +791,7 @@ function G_Percentage( form, element, name )
 {
   var me=this;
   this.parent = G_Text;
-  this.parent( form, element, name );
+  this.parent( form, element, name, 'percentage');
   this.validate = 'Int';
   this.mask= '###.##';
 }
@@ -792,7 +801,7 @@ function G_Currency( form, element, name )
 {
   var me=this;
   this.parent = G_Text;
-  this.parent( form, element, name );
+  this.parent( form, element, name, 'currency');
   this.validate = 'Int';
   this.mask= '_###,###,###,###,###;###,###,###,###,###.00';
 }
@@ -1102,22 +1111,46 @@ function G()
   }
   
   //Apply a mask to a number
-  function _ApplyMask(num, mask, cursor){
-    var __DECIMAL_SEP = '.';
-    var osize = num.length;
-    num = _checkNumber(num, mask);
-    num =  _getOnlyNumbers(num,__DECIMAL_SEP);
-    if (num.length == 0) return {result: '', cursor: 0};
-    var iNum = invertir(num);
-    var iMask = invertir(mask);
-    if (iMask.indexOf('0'+__DECIMAL_SEP)> 0){ //Mask has .0 and will applied complete
-      aMask = iMask;
-      iNum = _getOnlyNumbers(iNum,'*');
-      aNum = iNum;
-      eMask = aMask.split('');
-      eNum = aNum.split('');
-      _cout = '';
+  function _ApplyMask(num, mask, cursor, dir){
+    if (dir){
+      var osize = num.length;
+      _out = '';
+      num = _checkNumber(num, mask);
+      num =  _getOnlyNumbers(num,'');
+      if (num.length == 0) return {result: '', cursor: 0};
+      iNum = num;
+      iMask = mask;
+      eMask = iMask.split('');
+      eNum = iNum.split('');
       for (e=0; e < eMask.length; e++){
+        switch(eMask[e]){
+          case '#': case '0':
+            if (eNum.length > 0){
+              key = eNum.shift();
+              _out += key;
+            }
+            break;
+          default:
+            _out += eMask[e];
+            break;
+        }
+      }
+    }else{
+      var __DECIMAL_SEP = '.';
+      var osize = num.length;
+      num = _checkNumber(num, mask);
+      num =  _getOnlyNumbers(num,__DECIMAL_SEP);
+      if (num.length == 0) return {result: '', cursor: 0};
+      var iNum = invertir(num);
+      var iMask = invertir(mask);
+      if (iMask.indexOf('0'+__DECIMAL_SEP)> 0){ //Mask has .0 and will applied complete
+        aMask = iMask;
+        iNum = _getOnlyNumbers(iNum,'*');
+        aNum = iNum;
+        eMask = aMask.split('');
+        eNum = aNum.split('');
+        _cout = '';
+        for (e=0; e < eMask.length; e++){
           switch(eMask[e]){
             case '#': case '0': case 'd': case 'm': case 'y':
               if (eNum.length > 0){
@@ -1136,86 +1169,87 @@ function G()
               break;
             default:
               _cout += eMask[e];
-              break;
+            break;
           }
-      }
-      _out = _cout;
-    }else{
-      sw_d = false;
-      aMask = iMask.split(__DECIMAL_SEP);
-      aNum = iNum.split(__DECIMAL_SEP);
-      if (aMask.length==1){
+        }
+        _out = _cout;
+      }else{
+        sw_d = false;
+        aMask = iMask.split(__DECIMAL_SEP);
+        aNum = iNum.split(__DECIMAL_SEP);
+        if (aMask.length==1){
           dMask = '';
           cMask = aMask[0];
-      }else{
+        }else{
           dMask = aMask[0];
           cMask = aMask[1];
-      }
-      if (aNum.length == 1){
+        }
+        if (aNum.length == 1){
           dNum = '';
           cNum = aNum[0];
-      }else{
+        }else{
           sw_d = true;
           dNum = aNum[0];
           cNum = aNum[1];
-      }
-      _dout = '';
-      
-      pMask = dMask.split('');
-      pNum = dNum.split('');
-      for (p=0; p < pMask.length; p++){
-         switch(pMask[p]){
-           case '#': case '0':
-             if (pNum.length > 0){
-               key = pNum.shift();
-               _dout += key;
-             }
-             break;
-           case ',': case '.':
-             if (pMask[p] != __DECIMAL_SEP){
-               if (pNum.length > 0){
-                 _dout += pMask[p];
-               }
-             }else{
-               
-             }
-             break;
-           default:
-             _dout += pMask[p];
-             break;
-         }
-      }
-      _cout = '';
-      sw_c = false;
-      pMask = cMask.split('');
-      pNum = cNum.split('');
-      for (p=0; p < pMask.length; p++){
-        switch(pMask[p]){
-          case '#': case '0': case 'd': case 'm': case 'y':
-            if (pNum.length > 0){
-              key = pNum.shift();
-              _cout += key;
-              sw_c = true;
-            }
+        }
+        _dout = '';
+        
+        pMask = dMask.split('');
+        pNum = dNum.split('');
+        for (p=0; p < pMask.length; p++){
+          switch(pMask[p]){
+            case '#': case '0':
+              if (pNum.length > 0){
+                key = pNum.shift();
+                _dout += key;
+              }
+              break;
+            case ',': case '.':
+              if (pMask[p] != __DECIMAL_SEP){
+                if (pNum.length > 0){
+                  _dout += pMask[p];
+                }
+              }else{
+                
+              }
+              break;
+            default:
+              _dout += pMask[p];
             break;
-          case ',': case '.':
-             if (pMask[p] != __DECIMAL_SEP){
-               if (pNum.length > 0){
-                 _cout += pMask[p];
-               }
-             }
-             break;
-          default:
-            _cout += pMask[p];
+          }
+        }
+        _cout = '';
+        sw_c = false;
+        pMask = cMask.split('');
+        pNum = cNum.split('');
+        for (p=0; p < pMask.length; p++){
+          switch(pMask[p]){
+            case '#': case '0': case 'd': case 'm': case 'y':
+              if (pNum.length > 0){
+                key = pNum.shift();
+                _cout += key;
+                sw_c = true;
+              }
+              break;
+            case ',': case '.':
+              if (pMask[p] != __DECIMAL_SEP){
+                if (pNum.length > 0){
+                  _cout += pMask[p];
+                }
+              }
+              break;
+            default:
+              _cout += pMask[p];
+          }
+        }
+        if (sw_c && sw_d){
+          _out = _dout + __DECIMAL_SEP + _cout;
+        }else{
+          _out = _dout + _cout;
         }
       }
-      if (sw_c && sw_d){
-        _out = _dout + __DECIMAL_SEP + _cout;
-      }else{
-        _out = _dout + _cout;
-      }
+      _out = invertir(_out);
     }
-    _out = invertir(_out);
     if (_out.length > osize){
       cursor = cursor + (_out.length - osize);
     }
@@ -1226,7 +1260,7 @@ function G()
   }
   
   //Manage Multiple Mask and Integer/Real Number restrictions
-  this.toMask = function(num, mask, cursor){
+  this.toMask = function(num, mask, cursor, direction){
     if (mask==='') return {
       'result': new String(num),
       'cursor': cursor
@@ -1235,7 +1269,7 @@ function G()
     var result = [];
     var subMasks=mask.split(';');
     for(var r=0; r<subMasks.length; r++) {
-      result[r]=_ApplyMask(num, subMasks[r], cursor);
+      result[r]=_ApplyMask(num, subMasks[r], cursor, direction);
     }
     var betterResult=0;
     for(r=1; r<subMasks.length; r++) {
