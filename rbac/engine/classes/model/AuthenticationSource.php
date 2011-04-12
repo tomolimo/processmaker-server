@@ -33,6 +33,11 @@ class AuthenticationSource extends BaseAuthenticationSource {
   	  $oAuthenticationSource = AuthenticationSourcePeer::retrieveByPK($sUID);
   	  if (!is_null($oAuthenticationSource)) {
   	    $aFields = $oAuthenticationSource->toArray(BasePeer::TYPE_FIELDNAME);
+  	    //fixing the problem where the BaseDN has spaces.  we are removing the spaces.
+  	    $baseDn = explode(',', $aFields['AUTH_SOURCE_BASE_DN']);
+  	    foreach ($baseDn as $key => $val ) $baseDn[$key] = trim($val);
+  	    $aFields['AUTH_SOURCE_BASE_DN'] = implode (',', $baseDn);
+
         $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
         $aFields['AUTH_SOURCE_DATA'] = ($aFields['AUTH_SOURCE_DATA'] != '' ? unserialize($aFields['AUTH_SOURCE_DATA']) : array());
   	    return $aFields;

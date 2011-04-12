@@ -22,48 +22,56 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-global $RBAC;
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
-  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	G::header('location: ../login/login');
-	die;
-}
 
-if (!isset($_GET['sUID'])) {
-  G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
-	G::header('location: authSources_List');
-	die;
-}
-
-if ($_GET['sUID'] == '') {
-  G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
-	G::header('location: authSources_List');
-	die;
-}
-
-$G_MAIN_MENU            = 'processmaker';
-$G_SUB_MENU             = 'users';
-$G_ID_MENU_SELECTED     = 'USERS';
-$G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
-
-$aFields = $RBAC->getAuthSource($_GET['sUID']);
-if (is_array($aFields['AUTH_SOURCE_DATA'])) {
-  foreach($aFields['AUTH_SOURCE_DATA'] as $sField => $sValue) {
-    $aFields[$sField] = $sValue;
+  global $RBAC;
+  if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+  	G::header('location: ../login/login');
+  	die;
   }
-}
-unset($aFields['AUTH_SOURCE_DATA']);
-
-$G_PUBLISH = new Publisher();
-if ($aFields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $aFields, '../authSources/authSources_Save');
-}
-else {
-  if (file_exists(PATH_XMLFORM . 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $aFields, '../authSources/authSources_Save');
+  
+  if (!isset($_GET['sUID'])) {
+    G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
+  	G::header('location: authSources_List');
+  	die;
+  }
+  
+  if ($_GET['sUID'] == '') {
+    G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
+  	G::header('location: authSources_List');
+  	die;
+  }
+  
+  $G_MAIN_MENU            = 'processmaker';
+  $G_SUB_MENU             = 'users';
+  $G_ID_MENU_SELECTED     = 'USERS';
+  $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
+  
+  $aFields = $RBAC->getAuthSource($_GET['sUID']);
+  if (is_array($aFields['AUTH_SOURCE_DATA'])) {
+    foreach($aFields['AUTH_SOURCE_DATA'] as $sField => $sValue) {
+      $aFields[$sField] = $sValue;
+    }
+  }
+  unset($aFields['AUTH_SOURCE_DATA']);
+  
+ //fixing a problem with dropdown with int values, 
+ //the problem : the value was integer, but the dropdown was expecting a string value, and they returns always the first item of dropdown
+ if ( isset($aFields['AUTH_SOURCE_ENABLED_TLS']))  
+   $aFields['AUTH_SOURCE_ENABLED_TLS'] = sprintf('%d', $aFields['AUTH_SOURCE_ENABLED_TLS'] );
+ if ( isset($aFields['AUTH_ANONYMOUS']))  
+   $aFields['AUTH_ANONYMOUS'] = sprintf('%d', $aFields['AUTH_ANONYMOUS'] );
+   
+  $G_PUBLISH = new Publisher();
+  if ($aFields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $aFields, '../authSources/authSources_Save');
   }
   else {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+    if (file_exists(PATH_XMLFORM . 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $aFields, '../authSources/authSources_Save');
+    }
+    else {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+    }
   }
-}
-G::RenderPage('publish','blank');
+  G::RenderPage('publish','blank');

@@ -3,7 +3,7 @@
  * authSources_Save.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2008 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,44 +22,46 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-global $RBAC;
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
-  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	G::header('location: ../login/login');
-	die;
-}
 
-unset($_POST['form']['btnSave']);
+  global $RBAC;
+  if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+	  G::header('location: ../login/login');
+	  die;
+  }
 
-$aCommonFields = array('AUTH_SOURCE_UID',
-                       'AUTH_SOURCE_NAME',
-                       'AUTH_SOURCE_PROVIDER',
-                       'AUTH_SOURCE_SERVER_NAME',
-                       'AUTH_SOURCE_PORT',
-                       'AUTH_SOURCE_ENABLED_TLS',
-                       'AUTH_ANONYMOUS',
-                       'AUTH_SOURCE_SEARCH_USER',
-                       'AUTH_SOURCE_PASSWORD',
-                       'AUTH_SOURCE_VERSION',
-                       'AUTH_SOURCE_BASE_DN',
-                       'AUTH_SOURCE_OBJECT_CLASSES',
-                       'AUTH_SOURCE_ATTRIBUTES');
-$aFields = $aData = array();
-foreach ($_POST['form'] as $sField => $sValue) {
-  if (in_array($sField, $aCommonFields)) {
-    $aFields[$sField] = $sValue;
+  unset($_POST['form']['btnSave']);
+
+  $aCommonFields = array('AUTH_SOURCE_UID',
+                         'AUTH_SOURCE_NAME',
+                         'AUTH_SOURCE_PROVIDER',
+                         'AUTH_SOURCE_SERVER_NAME',
+                         'AUTH_SOURCE_PORT',
+                         'AUTH_SOURCE_ENABLED_TLS',
+                         'AUTH_ANONYMOUS',
+                         'AUTH_SOURCE_SEARCH_USER',
+                         'AUTH_SOURCE_PASSWORD',
+                         'AUTH_SOURCE_VERSION',
+                         'AUTH_SOURCE_BASE_DN',
+                         'AUTH_SOURCE_OBJECT_CLASSES',
+                         'AUTH_SOURCE_ATTRIBUTES');
+
+  $aFields = $aData = array();
+  foreach ($_POST['form'] as $sField => $sValue) {
+    if (in_array($sField, $aCommonFields)) {
+      $aFields[$sField] = $sValue;
+    }
+    else {
+      $aData[$sField] = $sValue;
+    }
+  }
+  $aFields['AUTH_SOURCE_DATA'] = $aData;
+
+  if ($aFields['AUTH_SOURCE_UID'] == '') {
+    $RBAC->createAuthSource($aFields);
   }
   else {
-    $aData[$sField] = $sValue;
+    $RBAC->updateAuthSource($aFields);
   }
-}
-$aFields['AUTH_SOURCE_DATA'] = $aData;
-
-if ($aFields['AUTH_SOURCE_UID'] == '') {
-  $RBAC->createAuthSource($aFields);
-}
-else {
-  $RBAC->updateAuthSource($aFields);
-}
-
-G::header('location: authSources_List');
+ 
+  G::header('location: authSources_List');
