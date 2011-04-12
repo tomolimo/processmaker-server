@@ -23,6 +23,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+G::LoadClass('dynaformEditor');
+
 if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Response;
 
   //G::genericForceLogin( 'WF_MYINFO' , 'login/noViewPage', $urlLogin = 'login/login' );
@@ -59,12 +61,18 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     $_POST['form']['PME_SAVELABEL'] = 0;
   }
 
-  if (isset($_POST['form']['PME_SAVELABEL']) && isset($_POST['form']['PME_CODE'])){
-    $pmeCode = $_POST['form']['PME_CODE'];
-    $pmeCode = str_replace("'", "''", $pmeCode);
-    $pmeCode = str_replace('"', '""', $pmeCode);
-    $pmeCode = preg_replace("/\)\s*\n/", ") //\n", $pmeCode);
-    $_POST['form']['PME_CODE'] = $pmeCode;
+  if (isset($_POST['form']['PME_SAVELABEL']) 
+      && isset($_POST['form']['PME_CODE'])
+      && $_POST['form']['PME_TYPE'] === 'javascript'){
+    $sType     = $_POST['form']['PME_TYPE'];
+    $A         = $_POST['form']['PME_A'];
+    $fieldName = $_POST['form']['PME_XMLNODE_NAME'];
+    $pmeCode   = $_POST['form']['PME_CODE'];
+    $_POST['form']['PME_CODE'] = '';
+//    $pmeCode = str_replace("'", "''", $pmeCode);
+//    $pmeCode = str_replace('"', '""', $pmeCode);
+//    $pmeCode = preg_replace("/\)\s*\n/", ") //\n", $pmeCode);
+//    $_POST['form']['PME_CODE'] = $pmeCode;
   }
 
   $file = G::decrypt( $_POST['form']['PME_A'] , URL_KEY );
@@ -204,4 +212,11 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
 	global $_DBArray;
   $_DBArray['fields']   = $aFields;
   $_SESSION['_DBArray'] = $_DBArray;
+
+  // Additions to javascript
+  if($sType === 'javascript'){
+    $sCode     = $pmeCode;
+    $editor = new dynaformEditorAjax($_POST);
+    $editor->set_javascript($A, $fieldName, $sCode);
+  }
 ?>
