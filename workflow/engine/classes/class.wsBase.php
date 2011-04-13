@@ -1931,7 +1931,8 @@ class wsBase
       $result->status_code        = 0;
       $result->message            = 'Sucessful';
       $result->timestamp          = date ( 'Y-m-d H:i:s');
-      $result->version            = PM_VERSION;
+      G::LoadClass("system");
+      $result->version            = System::getVersion();
       $result->operatingSystem    = $redhat;
       $result->webServer          = getenv('SERVER_SOFTWARE');
       $result->serverName         = getenv('SERVER_NAME');

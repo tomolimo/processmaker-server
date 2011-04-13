@@ -35,13 +35,7 @@ G::LoadSystem('i18n_po');
 //$timer = new Benchmark_Timer();
 //$timer->start();
 
-if (!defined('PM_VERSION')) {
-  if (file_exists ( PATH_METHODS . 'login/version-pmos.php')) {
-    include (PATH_METHODS . 'login/version-pmos.php');
-  } else {
-    define('PM_VERSION', 'Development Version');
-  }
-}
+G::LoadClass("system");
 
 //creating the .po file
 if( ! isset($_GET['LOCALE']) )
@@ -79,7 +73,7 @@ if( ! isset($langRecord['LAN_NAME']) )
 $sLanguage = $langRecord['LAN_NAME'];
 
 //setting headers
-$poFile->addHeader('Project-Id-Version'        , 'ProcessMaker ' . PM_VERSION);
+$poFile->addHeader('Project-Id-Version'        , 'ProcessMaker ' . System::getVersion());
 $poFile->addHeader('POT-Creation-Date'         , '');
 $poFile->addHeader('PO-Revision-Date'          , date('Y-m-d H:i:s'));
 $poFile->addHeader('Last-Translator'           , '');

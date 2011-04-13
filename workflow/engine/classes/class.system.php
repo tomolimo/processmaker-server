@@ -82,24 +82,44 @@ class System {
     }
     return $aWorkspaces;
   }
-
+  
+  /**
+   * Get the ProcessMaker version. If version-pmos.php is not found, try to 
+   * retrieve the version from git.
+   *
+   * @author Alexandre Rosenfeld <alexandre@colosa.com>
+   * @return string system 
+   */
   public static function getVersion() {
     if (! defined ( 'PM_VERSION' )) {
       if (file_exists ( PATH_METHODS . 'login/version-pmos.php' )) {
         include (PATH_METHODS . 'login/version-pmos.php');
-      }
-      else {
-        $cmd = sprintf	("cd %s && git status | grep 'On branch' | awk '{print \"Branch: \" $4} '", PATH_TRUNK);
-        if ( exec ( $cmd , $target) ) {  		
-          $cmd = sprintf	("cd %s && git describe ", PATH_TRUNK);
-          $commit = exec ( $cmd , $target);
-          define ( 'PM_VERSION', implode(' ', $target) );
-        }
-        else 
-          define ( 'PM_VERSION', 'Development Version' );
+      } else {
+        $version = self::getVersionFromGit();
+        if ($version === false)
+          $version = 'Development Version';
+        define ( 'PM_VERSION', $version );
       }
     }
     return PM_VERSION;
+  }
+  
+  /**
+   * Get the branch and tag information from a git repository.
+   *
+   * @author Alexandre Rosenfeld <alexandre@colosa.com>
+   * @return string branch and tag information
+   */
+  public static function getVersionFromGit($dir = NULL) {
+    if ($dir == NULL)
+      $dir = PATH_TRUNK;
+    if (!file_exists("$dir/.git"))
+      return false;
+    if (exec("cd $dir && git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/^* \(.*\)$/(Branch \\1)/'", $target)) {
+      exec("cd $dir && git describe", $target);
+      return implode(' ', $target);
+    }
+    return false;
   }
 
   /** 
@@ -109,12 +129,6 @@ class System {
   * @return array with system information
   */ 
   public static function getSysInfo() {
-    if( file_exists(PATH_METHODS . 'login/version-pmos.php') ) {
-      require_once (PATH_METHODS . 'login/version-pmos.php');
-    } else {
-      define('PM_VERSION', 'Development Version');
-    }
-
     $ipe = explode(" ", $_SERVER['SSH_CONNECTION']);
 
     if( getenv('HTTP_CLIENT_IP') ) {
@@ -157,7 +171,7 @@ class System {
     $Fields = array();
     $Fields['SYSTEM'] = $distro;
     $Fields['PHP'] = phpversion();
-    $Fields['PM_VERSION'] = PM_VERSION;
+    $Fields['PM_VERSION'] = self::getVersion();
     $Fields['SERVER_ADDR'] = $ipe[2]; //lookup($ipe[2]);
     $Fields['IP'] = $ipe[0]; //lookup($ipe[0]);
 
@@ -328,14 +342,7 @@ class System {
     }
    }
    
-   //now getting the current version of PM
-   if( file_exists(PATH_METHODS . 'login/version-pmos.php') ) {
-     include (PATH_METHODS . 'login/version-pmos.php');
-   } else {
-     define('PM_VERSION', '1.6-0-development');
-   }
-   
-   $pmVersion = explode('-', PM_VERSION);
+   $pmVersion = explode('-', self::getVersion());
    array_shift($pmVersion);
    $patchVersion = explode('-', $this->sRevision);
    

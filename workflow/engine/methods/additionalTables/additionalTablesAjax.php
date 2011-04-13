@@ -97,13 +97,11 @@ if(isset($_POST['action'])) {
   	G::LoadCLass('net');
   	$net = new NET(G::getIpAddress());
   	
-  	if( !defined("PM_VERSION")){
-  		define('PM_VERSION', 'development');
-  	}
-  	
+      G::LoadClass("system");
+  
       $META = " \n-----== ProcessMaker Open Source Private Tables ==-----\n".
       		" @Ver: 1.0 Oct-2009\n".
-      		" @Processmaker version: ".PM_VERSION."\n".
+      		" @Processmaker version: ".System::getVersion()."\n".
       		" -------------------------------------------------------\n".
       		" @Export Date: ".date("l jS \of F Y h:i:s A")."\n".
       		" @Server address: ".getenv('SERVER_NAME')." (".getenv('SERVER_ADDR').")\n".
@@ -237,9 +235,7 @@ if(isset($_POST['function'])) {
    
       G::LoadCLass('net');
       $net = new NET(G::getIpAddress());
-      if( !defined("PM_VERSION")){
-        define('PM_VERSION', 'development');
-      }
+      G::LoadClass("system");
       $EXPORT_TRACEBACK = Array();
       foreach ($tables as $uid) {
         $aTable = new additionalTables();

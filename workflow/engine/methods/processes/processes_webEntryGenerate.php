@@ -11,11 +11,7 @@ $sWE_USR = $oData->WE_USR;
 
 $withWS = $sWE_TYPE == 'WS';
 
-if (file_exists ( PATH_METHODS . 'login/version-pmos.php' )) {
-  include_once (PATH_METHODS . 'login/version-pmos.php');
-} else {
-  define ( 'PM_VERSION', 'Dev.' );
-}
+G::LoadClass("system");
 
 try {
   $pathProcess = PATH_DATA_SITE . 'public' . PATH_SEP . $sPRO_UID . PATH_SEP;
@@ -87,7 +83,7 @@ try {
     $template->assign ( 'dynaform', $dynTitle );
     $template->assign ( 'timestamp', date ( 'l jS \of F Y h:i:s A' ) );
     $template->assign ( 'ws', SYS_SYS );
-    $template->assign ( 'version', PM_VERSION );
+    $template->assign ( 'version', System::getVersion() );
     
     $fileName = $pathProcess . $dynTitle . 'Post.php';
     file_put_contents ( $fileName, $template->getOutputContent () );

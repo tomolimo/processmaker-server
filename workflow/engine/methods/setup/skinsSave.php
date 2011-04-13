@@ -54,14 +54,7 @@ switch ($RBAC->userCanAccess('PM_SETUP'))
   break;
 }
 
-  //get the current process
-  if (file_exists(PATH_METHODS . 'login/version-pmos.php'))
-  {
-    include('version-pmos.php');
-  }
-  else {
-    define('PM_VERSION', '1.8.320');
-  } 
+  G::LoadClass("system");
 
   $id   = strip_tags ( str_replace ( ' ', '_', trim ($_POST['form']['NAME']) ) );
   $desc = $_POST['form']['DESCRIPTION'];

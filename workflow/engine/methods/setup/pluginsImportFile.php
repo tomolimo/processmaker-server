@@ -89,11 +89,9 @@ try {
       $oClass->iPMVersion = 0;
     }
     if ($oClass->iPMVersion > 0) {
-      if (!defined('PM_VERSION')) {
-        define('PM_VERSION', 0);
-      }
-      if (PM_VERSION > 0) {
-        if ($oClass->iPMVersion > PM_VERSION) {
+      G::LoadClass("system");
+      if (System::getVersion() > 0) {
+        if ($oClass->iPMVersion > System::getVersion()) {
           //throw new Exception('This plugin needs version ' . $oClass->iPMVersion . ' or higher of ProcessMaker');
         }
       }

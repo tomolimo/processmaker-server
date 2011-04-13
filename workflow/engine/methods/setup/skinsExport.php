@@ -117,14 +117,7 @@ switch ($RBAC->userCanAccess('PM_SETUP'))
   break;
 }
 
-  //get the current process
-  if (file_exists(PATH_METHODS . 'login/version-pmos.php'))
-  {
-    include(PATH_METHODS . 'login/version-pmos.php');
-  }
-  else {
-    define('PM_VERSION', '1.2.2740');
-  } 
+  G::LoadClass("system");
 
   $id = $_GET['id'];
   
@@ -156,7 +149,7 @@ switch ($RBAC->userCanAccess('PM_SETUP'))
   $fields['className']   = $id;
   $fields['version']     = $oConf->version;
   $fields['description'] = $oConf->description;
-  $fields['PMversion']   = PM_VERSION;
+  $fields['PMversion']   = System::getVersion();
   savePluginFile ( 'skinPluginMainClass' , $pathHome . $id . '.php', $fields );
 
   savePluginFile ( 'skinPluginClass' , $pathBase . 'class.' . $id . '.php', $fields );

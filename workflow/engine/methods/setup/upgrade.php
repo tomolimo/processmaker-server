@@ -63,16 +63,9 @@ if( $access != 1 ){
   $G_ID_MENU_SELECTED     = 'SETUP';
   $G_ID_SUB_MENU_SELECTED = 'UPGRADE';
   
-  if ( !defined ( 'PM_VERSION' ) ) {
-    if (file_exists(PATH_METHODS . 'login/version-pmos.php')) {
-      include(PATH_METHODS . 'login/version-pmos.php');
-    }
-    else {
-      define('PM_VERSION', 'Development Version');
-    }
-  }
+  G::LoadClass("system");
   
-  $Fields['PM_VERSION']    = PM_VERSION;
+  $Fields['PM_VERSION']    = System::getVersion();
   $Fields['MAX_FILE_SIZE'] = $uploadMaxSize .  " (" . $UPLOAD_MAX_SIZE . ") ";
   
   $G_PUBLISH = new Publisher;

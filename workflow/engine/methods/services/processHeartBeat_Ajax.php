@@ -75,13 +75,7 @@ function file_get_conditional_contents($szURL){
 function buildData(){
 G::LoadClass ( 'serverConfiguration' );
 $oServerConf = & serverConf::getSingleton ();  
-  if (! defined ( 'PM_VERSION' )) {
-      if (file_exists ( PATH_METHODS . 'login/version-pmos.php' )) {
-        require_once (PATH_METHODS . 'login/version-pmos.php');
-      } else {
-        define ( 'PM_VERSION', 'Development Version' );
-      }
-    }
+    G::LoadClass("system");
 
     $os = '';
     if (file_exists ( '/etc/redhat-release' )) {
@@ -106,7 +100,7 @@ $oServerConf = & serverConf::getSingleton ();
     $params ['os'] = $os;
     $params ['webserver'] = getenv ( 'SERVER_SOFTWARE' );
     $params ['php'] = phpversion ();
-    $params ['pmVersion'] = PM_VERSION;
+    $params ['pmVersion'] = System::getVersion();
     if(class_exists('pmLicenseManager')){
       $params ['pmProduct'] = 'PMEE';
     }else{
