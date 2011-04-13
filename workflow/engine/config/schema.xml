@@ -3565,10 +3565,10 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="TRN_VALUE" type="VARCHAR" size="200" required="true" default="">
+    <column name="TRN_VALUE" type="LONGVARCHAR" required="true" default="">
       <vendor type="mysql">
         <parameter name="Field" value="TRN_VALUE"/>
-        <parameter name="Type" value="varchar(200)"/>
+        <parameter name="Type" value="mediumtext"/>
         <parameter name="Null" value="NO"/>
         <parameter name="Key" value=""/>
         <parameter name="Default" value=""/>
