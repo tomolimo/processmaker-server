@@ -1,90 +1,67 @@
-//Ext.BLANK_IMAGE_URL = 'resources/s.gif';
-
 Ext.chart.Chart.CHART_URL = '/images/charts.swf';
 Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
-// The Quicktips are used for the toolbar and Tree mouseover tooltips!
-Ext.QuickTips.init();
 
 var conn = new Ext.data.Connection();
 
-function getOtherDashboards(dashboardTabPanels) {
-	conn.request({
-		url : 'casesStartPage_Ajax.php',
-		method : 'POST',
-		params : {
-			"action" : 'getRegisteredDashboards'
-		},
-		success : function(responseObject) {
-			var response = Ext.util.JSON.decode(responseObject.responseText);
-			for ( var i = 0; i < response.length; i++) {
-				tabInfo = response[i];
-				if (tabInfo.sName) {
-					dashboardTabPanels.add({
-						title : tabInfo.sName,
-						id : tabInfo.sNamespace + "-" + tabInfo.sName,
-						iconCls : tabInfo.sIcon,// 'ICON_CASES_START_PAGE',
-						autoLoad : {
-							url : tabInfo.sPage,
-							scripts : true
-						}
-					// disabled:true,
-					});
-				}
-			}
-			getDefaultDashboard(dashboardTabPanels);
-		},
-		failure : function() {
-			// grid.getGridEl().unmask(true);
-			getDefaultDashboard(dashboardTabPanels);
-			Ext.Msg.alert('Status', 'Unable to get Dashboards');
-		}
-	});
-}
+//function getDefaultDashboard(dashboardTabPanels) {
+//  var defaultDashboard = "mainDashboard";
+//  dashboardTabPanels.setActiveTab(defaultDashboard);
+//  Ext.getCmp("dashboardTabPanels").getEl().mask("Please wait, retrieving data...", "ext-el-mask-msg x-mask-loading");
+//
+//  conn.request({
+//    url : 'casesStartPage_Ajax.php',
+//    method : 'POST',
+//    params : {action: 'getDefaultDashboard'},
+//    success : function(responseObject) {
+//      var responseData = Ext.decode(responseObject.responseText);
+//      if (responseData.defaultTab) {
+//        defaultDashboard = responseData.defaultTab;
+//      }
+//      if (dashboardTabPanels.getItem(defaultDashboard)) {
+//        dashboardTabPanels.setActiveTab(defaultDashboard);
+//      }
+//      Ext.getCmp("dashboardTabPanels").getEl().unmask();
+//    },
+//    failure : function() {
+//      Ext.getCmp("dashboardTabPanels").getEl().unmask();
+//    }
+//  });
+//  return defaultDashboard;
+//}
+//
+//function getOtherDashboards(dashboardTabPanels) {
+//	connA.request({
+//		url : 'casesStartPage_Ajax.php',
+//		method : 'POST',
+//		params : {action : 'getRegisteredDashboards'},
+//		success : function(responseObject) {
+//		  var i, tabInfo;
+//			var response = Ext.util.JSON.decode(responseObject.responseText);
+//			for (i = 0; i < response.length; i++) {
+//				tabInfo = response[i];
+//				if (tabInfo.sName) {
+//					dashboardTabPanels.add({
+//						title : tabInfo.sName,
+//						id : tabInfo.sNamespace + "-" + tabInfo.sName,
+//						iconCls : tabInfo.sIcon,// 'ICON_CASES_START_PAGE',
+//						autoLoad : {
+//							url : tabInfo.sPage,
+//							scripts : true
+//						}
+//					});
+//				}
+//			}
+//			getDefaultDashboard(dashboardTabPanels);
+//		},
+//		failure : function() {
+//			// grid.getGridEl().unmask(true);
+//			getDefaultDashboard(dashboardTabPanels);
+//			Ext.Msg.alert('Status', 'Unable to get Dashboards');
+//		}
+//	});
+//}
 
-function getDefaultDashboard(dashboardTabPanels) {
-	defaultDashboard = "mainDashboard";
-	dashboardTabPanels.setActiveTab(defaultDashboard);
-	Ext.getCmp("dashboardTabPanels").getEl()
-			.mask("Please wait, retrieving data...",
-					"ext-el-mask-msg x-mask-loading");
-
-	var parameters = {
-		action : 'getDefaultDashboard'
-	};
-	conn.request({
-		url : 'casesStartPage_Ajax.php',
-		method : 'POST',
-		params : {
-			"action" : 'getDefaultDashboard'
-		},
-		success : function(responseObject) {
-			// showHistoryDialog(responseObject.responseText);
-			// grid.getGridEl().unmask(true);
-			// Ext.Msg.alert('Status', responseObject.responseText);
-			var responseData = Ext.decode(responseObject.responseText);
-			// console.log(responseData);
-			// console.log(responseData.defaultTab);
-			if (responseData.defaultTab) {
-				defaultDashboard = responseData.defaultTab;
-			}
-			if (dashboardTabPanels.getItem(defaultDashboard)) {
-				dashboardTabPanels.setActiveTab(defaultDashboard);
-			}
-			Ext.getCmp("dashboardTabPanels").getEl().unmask();
-
-		},
-		failure : function() {
-			Ext.getCmp("dashboardTabPanels").getEl().unmask();
-			// grid.getGridEl().unmask(true);
-			// Ext.Msg.alert('Status', 'Unable to get list of Process');
-		}
-	});
-
-	// Get User Dashbaord Default if allowed
-	return defaultDashboard;
-}
-
-Docs = {};
+var Docs = {};
 var MainPanel = function() {
 	MainPanel.superclass.constructor.call(this, {
 		id : 'doc-body',
@@ -100,115 +77,86 @@ var MainPanel = function() {
 };
 
 // console.info("Main Panel - End");
-Ext
-		.extend(
-				MainPanel,
-				Ext.TabPanel,
-				{
-					initEvents : function() {
-						MainPanel.superclass.initEvents.call(this);
-						 //this.body.on('click', this.onClick, this);
-					},
-
-					onClick : function(e, target, elementselected) {
-						return;
-						if (target = e.getTarget('a:not(.exi)', 3)) {
-							var cls = Ext.fly(target).getAttributeNS('ext',
-									'cls');
-							e.stopEvent();
-							if (cls) {
-								var member = Ext.fly(target).getAttributeNS(
-										'ext', 'member');
-								this.loadClass(target.href, cls, member);
-							} else if (target.className == 'inner-link') {
-								this.getActiveTab().scrollToSection(
-										target.href.split('#')[1]);
-							} else {
-								window.open(target.href);
-							}
-						} else if (target = e.getTarget('.micon', 2)) {
-							e.stopEvent();
-							var tr = Ext.fly(target.parentNode);
-							if (tr.hasClass('expandable')) {
-								tr.toggleClass('expanded');
-							}
-						}
-					},
-										/*
-					 * startNewCase:function(){ alert("asdasdasd"); },
-					 */
-					loadOtherDashboards : function() {
-						// console.info("Getting other Dashboards");
-						dashboardTabPanels = this;
-						// console.log(dashboardTabPanels);
-						conn.request({
-							url : 'casesStartPage_Ajax.php',
-							method : 'POST',
-							params : {
-								"action" : 'getRegisteredDashboards'
-							},
-							success : function(responseObject) {
-								
-								
-								var response = Ext.util.JSON
-										.decode(responseObject.responseText);
-								for (var i in response) {
-									tabInfo = response[i];
-									if (tabInfo.sName) {
-										dashboardTabPanels.add({
-											title : tabInfo.sName,
-											id : tabInfo.sNamespace + "-"
-													+ tabInfo.sName,
-											iconCls : tabInfo.sIcon,// 'ICON_CASES_START_PAGE',
-											autoLoad : {
-												url : tabInfo.sPage,
-												scripts : true
-											}
-										// disabled:true,
-										});
-									}
+Ext.extend(
+  MainPanel,
+	Ext.TabPanel,
+	{
+    initEvents : function(){
+			MainPanel.superclass.initEvents.call(this);
+		},
+		onClick: function(e, target, elementselected){
+			return;
+			if (target = e.getTarget('a:not(.exi)', 3)) {
+				var cls = Ext.fly(target).getAttributeNS('ext','cls');
+				e.stopEvent();
+				if (cls) {
+					var member = Ext.fly(target).getAttributeNS('ext','member');
+					this.loadClass(target.href, cls, member);
+			  } else if (target.className == 'inner-link'){
+					this.getActiveTab().scrollToSection(target.href.split('#')[1]);
+				} else {
+					window.open(target.href);
+				}
+			} else if (target = e.getTarget('.micon', 2)){
+				e.stopEvent();
+				var tr = Ext.fly(target.parentNode);
+				if (tr.hasClass('expandable')) {
+					tr.toggleClass('expanded');
+				}
+			}
+		},
+    activateDefaultTab : function() {
+      var page = window.location.href.split('?')[1];
+      if (page) {
+        var ps = Ext.urlDecode(page);
+        if (ps.action) {
+          defaultDashboard = ps.action;
+          if (this.getItem(defaultDashboard)) {
+            this.setActiveTab(defaultDashboard);
+          }
+        }
+      }
+    },
+		loadOtherDashboards : function(){
+			dashboardTabPanels = this;
+			conn.request({
+				url : 'casesStartPage_Ajax.php',
+				method : 'POST',
+				params : {action : 'getRegisteredDashboards'},
+				success : function(responseObject) {
+					var response = Ext.util.JSON.decode(responseObject.responseText);
+					var i, tabInfo;
+					for (i=0;i < response.length; i++){
+						tabInfo = response[i];
+						if (tabInfo.sName) {
+							dashboardTabPanels.add({
+								title : tabInfo.sName,
+								id : tabInfo.sNamespace + "-"	+ tabInfo.sName,
+								iconCls : tabInfo.sIcon,// 'ICON_CASES_START_PAGE',
+								autoLoad: {
+								  url: tabInfo.sPage,
+								  scripts: false
 								}
-								// getDefaultDashboard(dashboardTabPanels);
-								dashboardTabPanels.activateDefaultTab();
-							},
-							failure : function() {
-								// grid.getGridEl().unmask(true);
-								// getDefaultDashboard(dashboardTabPanels);
-								dashboardTabPanels.activateDefaultTab();
-								Ext.Msg.alert('Status',
-										'Unable to get Dashboards');
-							}
-						});
-					},
-					activateDefaultTab : function() {
-						// api.expandPath('/root/apidocs');
-						// allow for link in
-						var page = window.location.href.split('?')[1];
-						// console.info("page : "+page);
-						if (page) {
-							var ps = Ext.urlDecode(page);
-							// console.log(ps.action);
-							if (ps.action) {
-								defaultDashboard = ps.action;
-								if (this.getItem(defaultDashboard)) {
-									// console.info("Setting the new default
-									// dashboard:
-									// "+defaultDashboard);
-									this.setActiveTab(defaultDashboard);
-								}
-
-							}
-							// var cls = ps['class'];
-							// mainPanel.loadClass('output/' + cls + '.html',
-							// cls, ps.member);
+						  });
 						}
 					}
-
-				});
+					dashboardTabPanels.activateDefaultTab();
+				},
+				failure : function() {
+					dashboardTabPanels.activateDefaultTab();
+					Ext.Msg.alert('Status', 'Unable to get Dashboards');
+				}
+			});
+		}
+	}
+);
 
 var mainPanel = new MainPanel();
 
 Ext.onReady(function() {
+  //The Quicktips are used for the toolbar and Tree mouseover tooltips!
+  Ext.QuickTips.init();
+
 	var Cookies = {};
 	Cookies.set = function(name, value) {
 		var argv = arguments;
@@ -259,8 +207,6 @@ Ext.onReady(function() {
 		return unescape(document.cookie.substring(offset, endstr));
 	};
 
-	
-
 	mainPanel.on('tabchange', function(tp, tab) {
 		if (tab.getUpdater) {
 			var thisObj = tab.getUpdater();
@@ -272,13 +218,10 @@ Ext.onReady(function() {
 
 	var viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [
-		mainPanel ]
+		items : [mainPanel]
 	});
 
 	mainPanel.loadOtherDashboards();
-
-	// console.info("viewport -end");
 
 	viewport.doLayout();
 
@@ -290,5 +233,4 @@ Ext.onReady(function() {
       parent.Ext.getCmp('debugPanel').ownerCt.doLayout();
     }
   }
-
 });

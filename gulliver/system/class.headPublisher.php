@@ -542,4 +542,17 @@ class headPublisher {
     }
     return $sJson;
   }
+    
+  /**
+   * Function disableHeaderScripts
+   * this function sets disableHeaderScripts to true
+   * to avoid print scripts into the header
+   *
+   * @author Enrique Ponce de Leom <enrique@colosa.com>
+   * @access public
+   * @return string
+   */
+  function disableHeaderScripts(){
+    $this->disableHeaderScripts = true;
+  }
 }
