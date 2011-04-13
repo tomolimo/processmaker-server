@@ -18,7 +18,7 @@ class UsersProperties extends BaseUsersProperties {
   function UserPropertyExists($sUserUID) {
     try {
       $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
-      if (get_class($oUserProperty) == 'UsersProperties') {
+      if (UsersPropertiesPeer::retrieveByPk($sUserUID)) {
         return true;
       }
       else {

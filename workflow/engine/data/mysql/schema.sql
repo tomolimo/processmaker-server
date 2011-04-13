@@ -592,6 +592,7 @@ CREATE TABLE `TRANSLATION`
 	`TRN_ID` VARCHAR(100) default '' NOT NULL,
 	`TRN_LANG` VARCHAR(10) default 'en' NOT NULL,
 	`TRN_VALUE` VARCHAR(200) default '' NOT NULL,
+	`TRN_UPDATE_DATE` DATE,
 	PRIMARY KEY (`TRN_CATEGORY`,`TRN_ID`,`TRN_LANG`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------

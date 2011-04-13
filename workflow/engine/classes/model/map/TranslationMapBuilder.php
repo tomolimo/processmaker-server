@@ -72,6 +72,8 @@ class TranslationMapBuilder {
 
 		$tMap->addColumn('TRN_VALUE', 'TrnValue', 'string', CreoleTypes::VARCHAR, true, 200);
 
+		$tMap->addColumn('TRN_UPDATE_DATE', 'TrnUpdateDate', 'int', CreoleTypes::DATE, false, null);
+
 		$tMap->addValidator('TRN_CATEGORY', 'maxLength', 'propel.validator.MaxLengthValidator', '100', 'Category can be no larger than 100 in size');
 
 		$tMap->addValidator('TRN_CATEGORY', 'required', 'propel.validator.RequiredValidator', '', 'Category is required.');

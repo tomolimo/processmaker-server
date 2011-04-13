@@ -55,6 +55,13 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 	 */
 	protected $trn_value = '';
 
+
+	/**
+	 * The value for the trn_update_date field.
+	 * @var        int
+	 */
+	protected $trn_update_date;
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -111,6 +118,37 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 	{
 
 		return $this->trn_value;
+	}
+
+	/**
+	 * Get the [optionally formatted] [trn_update_date] column value.
+	 * 
+	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
+	 *							If format is NULL, then the integer unix timestamp will be returned.
+	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
+	 * @throws     PropelException - if unable to convert the date/time to timestamp.
+	 */
+	public function getTrnUpdateDate($format = 'Y-m-d')
+	{
+
+		if ($this->trn_update_date === null || $this->trn_update_date === '') {
+			return null;
+		} elseif (!is_int($this->trn_update_date)) {
+			// a non-timestamp value was set externally, so we convert it
+			$ts = strtotime($this->trn_update_date);
+			if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
+				throw new PropelException("Unable to parse value of [trn_update_date] as date/time value: " . var_export($this->trn_update_date, true));
+			}
+		} else {
+			$ts = $this->trn_update_date;
+		}
+		if ($format === null) {
+			return $ts;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $ts);
+		} else {
+			return date($format, $ts);
+		}
 	}
 
 	/**
@@ -202,6 +240,30 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 	} // setTrnValue()
 
 	/**
+	 * Set the value of [trn_update_date] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setTrnUpdateDate($v)
+	{
+
+		if ($v !== null && !is_int($v)) {
+			$ts = strtotime($v);
+			if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
+				throw new PropelException("Unable to parse date/time value for [trn_update_date] from input: " . var_export($v, true));
+			}
+		} else {
+			$ts = $v;
+		}
+		if ($this->trn_update_date !== $ts) {
+			$this->trn_update_date = $ts;
+			$this->modifiedColumns[] = TranslationPeer::TRN_UPDATE_DATE;
+		}
+
+	} // setTrnUpdateDate()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -226,12 +288,14 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 
 			$this->trn_value = $rs->getString($startcol + 3);
 
+			$this->trn_update_date = $rs->getDate($startcol + 4, null);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 4; // 4 = TranslationPeer::NUM_COLUMNS - TranslationPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 5; // 5 = TranslationPeer::NUM_COLUMNS - TranslationPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Translation object", $e);
@@ -446,6 +510,9 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 			case 3:
 				return $this->getTrnValue();
 				break;
+			case 4:
+				return $this->getTrnUpdateDate();
+				break;
 			default:
 				return null;
 				break;
@@ -470,6 +537,7 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 			$keys[1] => $this->getTrnId(),
 			$keys[2] => $this->getTrnLang(),
 			$keys[3] => $this->getTrnValue(),
+			$keys[4] => $this->getTrnUpdateDate(),
 		);
 		return $result;
 	}
@@ -513,6 +581,9 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 			case 3:
 				$this->setTrnValue($value);
 				break;
+			case 4:
+				$this->setTrnUpdateDate($value);
+				break;
 		} // switch()
 	}
 
@@ -540,6 +611,7 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[1], $arr)) $this->setTrnId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setTrnLang($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setTrnValue($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setTrnUpdateDate($arr[$keys[4]]);
 	}
 
 	/**
@@ -555,6 +627,7 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(TranslationPeer::TRN_ID)) $criteria->add(TranslationPeer::TRN_ID, $this->trn_id);
 		if ($this->isColumnModified(TranslationPeer::TRN_LANG)) $criteria->add(TranslationPeer::TRN_LANG, $this->trn_lang);
 		if ($this->isColumnModified(TranslationPeer::TRN_VALUE)) $criteria->add(TranslationPeer::TRN_VALUE, $this->trn_value);
+		if ($this->isColumnModified(TranslationPeer::TRN_UPDATE_DATE)) $criteria->add(TranslationPeer::TRN_UPDATE_DATE, $this->trn_update_date);
 
 		return $criteria;
 	}
@@ -627,6 +700,8 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 	{
 
 		$copyObj->setTrnValue($this->trn_value);
+
+		$copyObj->setTrnUpdateDate($this->trn_update_date);
 
 
 		$copyObj->setNew(true);
