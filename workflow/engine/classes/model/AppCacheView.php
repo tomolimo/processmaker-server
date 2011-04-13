@@ -1086,7 +1086,7 @@ class AppCacheView extends BaseAppCacheView {
     if ( ! $found ) {
       $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate.sql';
       if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
+        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exist ") );
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);
@@ -1123,7 +1123,7 @@ class AppCacheView extends BaseAppCacheView {
     if ( ! $found ) {
       $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationDelete.sql';
       if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationDelete.sql doesn't exists ") );
+        throw ( new Exception ( "file triggerAppDelegationDelete.sql doesn't exist") );
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);      
       $stmt->executeQuery($sql);

@@ -52,7 +52,7 @@ try {
   $uid = $oCase->verifyCaseTracker($case, $pin);
 	//print_r($uid); die;
 	switch ($uid) {
-		//The case not exists
+		//The case doesn't exist
 	  case -1:
 	    G::SendTemporalMessage ('ID_CASE_NOT_EXISTS', "error");
 	    break;

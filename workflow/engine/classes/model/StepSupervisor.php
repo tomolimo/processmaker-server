@@ -120,7 +120,7 @@ class StepSupervisor extends BaseStepSupervisor {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

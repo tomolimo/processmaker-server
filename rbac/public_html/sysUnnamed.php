@@ -12,7 +12,7 @@
 
   if ( !is_file( "/shared/workflow_data/sites/".$webAddress."/db.php") ) {
  	  $server = getenv ( "SERVER_NAME");
- 	  //redirect to https in case the workspace it doesn't exists
+ 	  //redirect to https in case the workspace it doesn't exist
     if (( $server == 'www.processmaker.com' )||( $server == 'processmaker.com' ))
 	  	$COMPLETE_URI = "https://www.processmaker.com";
 	  else

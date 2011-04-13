@@ -27,7 +27,7 @@ class ShadowTable extends BaseShadowTable {
         return $aFields;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -80,7 +80,7 @@ class ShadowTable extends BaseShadowTable {
         return $iResult;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

@@ -457,7 +457,7 @@ class dates {
  * Returns an array with all the dates of $this->skip['List'] with its
  * year changed to $iYear.
  * Warning: Don't know what to do if change a 29-02-2004 to 29-02-2005
- *          the last one does not exists.
+ *          the last one doesn't exist.
  * @param List $iYear
  * @return array 
  */
@@ -475,7 +475,7 @@ class dates {
  * Returns an array with all the dates of $this->skip['List'] with its  
  * year changed to $iYear.
  * Warning: Don't know what to do if change a 29-02-2004 to 29-02-2005 
- *          the last one does not exists.                              
+ *          the last one doesn't exist.                              
  * @param array $iYear 
  * @param date $iDate
  * @return array 

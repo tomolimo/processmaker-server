@@ -83,7 +83,7 @@ class AppDocument extends BaseAppDocument {
         return $aFields;
       }
       else {
-        throw(new Exception('Error loading Document '.$sAppDocUid.'/'.$iVersion.'. This row doesn\'t exists!'));
+        throw(new Exception('Error loading Document '.$sAppDocUid.'/'.$iVersion.'. This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -280,7 +280,7 @@ class AppDocument extends BaseAppDocument {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -332,7 +332,7 @@ class AppDocument extends BaseAppDocument {
 
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

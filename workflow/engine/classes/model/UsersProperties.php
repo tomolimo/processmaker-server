@@ -41,7 +41,7 @@ class UsersProperties extends BaseUsersProperties {
         return $aFields;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {
@@ -97,7 +97,7 @@ class UsersProperties extends BaseUsersProperties {
         }
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

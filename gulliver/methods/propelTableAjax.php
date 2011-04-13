@@ -38,7 +38,7 @@
     if (isset($ntable->filterForm_Id) && ($ntable->filterForm_Id!=='')) {
       
       $sPath = PATH_XMLFORM;      
-       //if the xmlform file doesn't exists, then try with the plugins folders
+       //if the xmlform file doesn't exist, then try with the plugins folders
       if ( !is_file ( $sPath . G::getUIDName( $ntable->filterForm_Id ) ) ) {
         $aux = explode ( PATH_SEP, G::getUIDName( $ntable->filterForm_Id ) );
         //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment

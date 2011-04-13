@@ -147,7 +147,7 @@ class dynaformEditor extends WebResource
   {
     global $G_PUBLISH;
     $script='';
-    /* Start Block: Load (Create if not exists) the xmlform */
+    /* Start Block: Load (Create if doesn't exist) the xmlform */
     $Parameters = array(
       'SYS_LANG'     => SYS_LANG,
       'URL'          => G::encrypt( $this->file , URL_KEY ),
@@ -291,7 +291,7 @@ class dynaformEditor extends WebResource
       self::_setTmpData(array('useTmpCopy'=>true));
         if (!file_exists(PATH_DYNAFORM  . $file . '.xml'))
           $this->_createDefaultXmlForm(PATH_DYNAFORM  . $file . '.xml');
-          //Creates a copy if it does not exists, else, use the old copy
+          //Creates a copy if it doesn't exist, else, use the old copy
           if (!file_exists(PATH_DYNAFORM  . $this->file . '.xml'))
             self::_copyFile(PATH_DYNAFORM  . $file . '.xml',PATH_DYNAFORM  . $this->file . '.xml');
             if (!file_exists(PATH_DYNAFORM  . $this->file . '.html')
@@ -453,7 +453,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
   /**
    * Get the html code
    * Loads the stored HTML or the default Template if
-   * it does not exists.
+   * it doesn't exist.
    * @param object $A
    * @return code html
    */
@@ -477,7 +477,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     /**/
     /*
     * Loads the stored HTML or the default Template if
-    * it does not exists.
+    * it doesn't exist.
     */
       $filename = substr($form->fileName , 0, -3) .
       ( $form->type==='xmlform' ? '' : '.' . $form->type  ) . 'html';

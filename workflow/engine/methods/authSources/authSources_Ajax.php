@@ -86,7 +86,7 @@ try {
           $G_PUBLISH->AddContent('propeltable', 'paged-table', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'SearchResults', $oCriteria);
         }
         else {
-          $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $aFields['AUTH_SOURCE_PROVIDER'] . 'SearchResults.xml' . ' not exists.'));
+          $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $aFields['AUTH_SOURCE_PROVIDER'] . 'SearchResults.xml' . ' doesn\'t exist.'));
         }
       }
       G::RenderPage('publish', 'raw');

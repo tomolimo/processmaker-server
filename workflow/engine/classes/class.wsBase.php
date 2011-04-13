@@ -97,7 +97,7 @@ class wsBase
     try {
       $uid  = $RBAC->VerifyLogin( $userid , $password);
       switch ($uid) {
-        case -1: //The user not exists
+        case -1: //The user doesn't exist
         $wsResponse = new wsResponse (3, G::loadTranslation ('ID_USER_NOT_REGISTERED'));
         break;
 
@@ -2051,7 +2051,7 @@ class wsBase
         }
       }
 
-      //finally, creating the process if the process does not exists
+      //finally, creating the process if the process doesn't exist
       if ( ! $oProcess->processExists ( $processId ) ) {
         $oProcess->createProcessFromData ($oData, $localPath . $newfilename );
       }

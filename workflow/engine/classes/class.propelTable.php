@@ -609,7 +609,7 @@ class propelTable
         $this->tdClass='';
         //Start Master Detail: This enable the MasterDEtail view. By JHL November 2008
         if(count($this->masterdetail)>0){
-          //TODO: Validate if there is a Field that not exists
+          //TODO: Validate if there is a Field that doesn't exist
           //TODO: Style
           //TODO: Improve Collapse function....
           foreach($this->masterdetail as $keyMasterDetail => $fieldMasterDetail){

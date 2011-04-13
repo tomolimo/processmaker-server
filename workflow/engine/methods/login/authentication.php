@@ -44,7 +44,7 @@ try {
   $RBAC->cleanSessionFiles(72);
   $sPwd = 'currentPwd';
   switch ($uid) {
-    //The user does not exist
+    //The user does doesn't exist
     case -1:
       G::SendTemporalMessage ('ID_USER_NOT_REGISTERED', "warning");
       break;

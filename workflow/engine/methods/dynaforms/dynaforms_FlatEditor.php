@@ -56,7 +56,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   //Hardcode: Sample of xmlform.
     $file = $PRO_UID . '/' . 'myInfo';
 
-  /* Start Comment: If file doesn't exists, it is created */
+  /* Start Comment: If file doesn't exist, it is created */
   if (!file_exists( PATH_DYNAFORM  . $file . '.xml' )) {
     $newDoc = new Xml_Document();
     $newDoc->addChildNode( 

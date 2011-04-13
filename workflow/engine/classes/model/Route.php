@@ -127,7 +127,7 @@ class Route extends BaseRoute {
         }
       }
       else {
-        throw(new Exception( "The row " . $aData['ROU_UID'] . " doesn't exists!" ));
+        throw(new Exception( "The row " . $aData['ROU_UID'] . " doesn't exist!" ));
       }
     }
     catch (Exception $oError) {
@@ -154,7 +154,7 @@ class Route extends BaseRoute {
         return $iResult;
       }
       else {
-        throw(new Exception('This row doesn\'t exists!'));
+        throw(new Exception('This row doesn\'t exist!'));
       }
     }
     catch (Exception $oError) {

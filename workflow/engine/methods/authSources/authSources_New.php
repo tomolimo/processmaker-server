@@ -45,7 +45,7 @@ else {
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $aFields, '../authSources/authSources_Save');
   }
   else {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' doesn\'t exist.'));
   }
 }
 G::RenderPage('publish','blank');

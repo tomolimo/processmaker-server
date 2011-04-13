@@ -87,7 +87,7 @@ try {
     
     $fileName = $pathProcess . $dynTitle . 'Post.php';
     file_put_contents ( $fileName, $template->getOutputContent () );
-    //creating the third file, only if this wsClient.php file doesn't exists.
+    //creating the third file, only if this wsClient.php file doesn't exist.
     $fileName = $pathProcess . 'wsClient.php';
     $pluginTpl = PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . 'ws' . PATH_SEP . 'wsClient.php';
     

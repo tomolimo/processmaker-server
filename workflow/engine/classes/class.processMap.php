@@ -438,7 +438,7 @@ class processMap {
         G::RenderPage('publish', 'raw');
         return true;
       } else {
-        throw (new Exception('This row doesn\'t exists!'));
+        throw (new Exception('This row doesn\'t exist!'));
       }
     } catch (Exception $oError) {
       throw ($oError);
@@ -4403,7 +4403,7 @@ class processMap {
 
         return $aFields;
       } else {
-        throw (new Exception ( 'This row doesn\'t exists!' ));
+        throw (new Exception ( 'This row doesn\'t exist!' ));
       }
     } catch ( Exception $oError ) {
       throw ($oError);

@@ -101,7 +101,7 @@ class Content extends BaseContent {
   * @param string $ConId 
   * @param string $destConLang
   * @return string
-  * if the row doesn't exists, it will be created automatically, even the default 'en' language
+  * if the row doesn't exist, it will be created automatically, even the default 'en' language
   */
   function autoLoadSave($ConCategory, $ConParent, $ConId, $destConLang) {
     //search in 'en' language, the default language

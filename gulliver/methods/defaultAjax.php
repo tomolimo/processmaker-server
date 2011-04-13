@@ -41,7 +41,7 @@
   $xmlFile = G::getUIDName(urlDecode($_POST['form']));
   $sPath = XMLFORM_AJAX_PATH;
 
-  //if the xmlform file doesn't exists, then try with the plugins folders
+  //if the xmlform file doesn't exist, then try with the plugins folders
   if ( !is_file ( XMLFORM_AJAX_PATH . $xmlFile ) ) {
      $aux = explode ( PATH_SEP, $xmlFile );
       //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment

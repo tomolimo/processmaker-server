@@ -822,7 +822,7 @@ class Processes {
   }
 
  /**
-  * Update a Process register in DB, if the process doesn't exists with the same
+  * Update a Process register in DB, if the process doesn't exist with the same
   * uid of the $row['PRO_UID'] parameter the function creates a new one based
   * on the $row parameter data.
   * @param  $row array parameter with the process data
