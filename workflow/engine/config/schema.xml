@@ -1287,7 +1287,7 @@
     <column name="TRN_CATEGORY" type="VARCHAR" size="100" required="true" primaryKey="true" default=""/>
     <column name="TRN_ID" type="VARCHAR" size="100" required="true" primaryKey="true" default=""/>
     <column name="TRN_LANG" type="VARCHAR" size="10" required="true" primaryKey="true" default="en"/>
-    <column name="TRN_VALUE" type="VARCHAR" size="200" required="true" default=""/>
+    <column name="TRN_VALUE" type="LONGVARCHAR" required="true" default=""/>
     <column name="TRN_UPDATE_DATE" type="DATE" required="false"/>
     <validator column="TRN_CATEGORY">
       <rule name="maxLength" value="100" message="Category can be no larger than ${value} in size"/>

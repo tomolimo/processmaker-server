@@ -70,7 +70,7 @@ class TranslationMapBuilder {
 
 		$tMap->addPrimaryKey('TRN_LANG', 'TrnLang', 'string', CreoleTypes::VARCHAR, true, 10);
 
-		$tMap->addColumn('TRN_VALUE', 'TrnValue', 'string', CreoleTypes::VARCHAR, true, 200);
+		$tMap->addColumn('TRN_VALUE', 'TrnValue', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
 		$tMap->addColumn('TRN_UPDATE_DATE', 'TrnUpdateDate', 'int', CreoleTypes::DATE, false, null);
 
