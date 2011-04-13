@@ -38,10 +38,12 @@ $ajax->$action($_REQUEST);
 class Ajax
 {
   function getList($params)
-  {
+  {  
     $search = isset($params['search']) ? $params['search'] : null;
-    
-    $result = Translation::getAll('en', $params['start'], $params['limit'], $search);
+    $params['dateFrom'] = str_replace('T00:00:00','',$params['dateFrom']);
+    $params['dateTo'] = str_replace('T00:00:00','',$params['dateTo']);
+    $result = Translation::getAll('en', $params['start'], $params['limit'], $search, $params['dateFrom'], $params['dateTo']);
+    //$result = Translation::getAll('en', $params['start'], $params['limit'], $search);
     
     /*foreach($result->data as $i=>$row){
       $result->data[$i]['TRN_VALUE'] = substr($row['TRN_VALUE'], 0, 15) . '...';

@@ -90,7 +90,7 @@ Ext.onReady(function(){
           Ext.getCmp('label').setValue('');
           newLabelWin.show();
         }
-      },{
+      },{ 
         text:_('ID_REMOVE'),
         iconCls: 'button_menu_ext ss_sprite  ss_delete',
         handler: removeLabel
@@ -98,7 +98,30 @@ Ext.onReady(function(){
         text: '&nbsp;Rebuild',
         icon: '/images/trigger.gif',
         handler: rebuild
-      },'->',
+      },
+      //{
+      //  text: '&nbsp;Export',
+      //  icon: '/images/export.png',
+      //  handler: rebuild
+     // },
+      '  ','  ','  ','  '
+      , 'From',
+      dateFrom,
+      ' ',
+      ' To ',//TRANSLATIONS.ID_TO,
+      dateTo,
+      new Ext.Button ({
+        text: TRANSLATIONS.ID_FILTER_BY_DELEGATED_DATE,
+        handler: function(){
+          store.setBaseParam('dateFrom', dateFrom.getValue());
+          store.setBaseParam('dateTo', dateTo.getValue());
+          store.load({params:{start : 0 , limit : 20}});
+          //store.load({params:{ start : 0 , limit : pageSize }});
+        }
+      })
+
+
+,'->',
       new Ext.form.TextField ({
         id: 'searchTxt',
         ctCls:'pm_search_text_field',
@@ -148,8 +171,7 @@ Ext.onReady(function(){
     single: true
   });
 
-
-        
+      
   centerPanel = new Ext.Panel({
     layout: 'fit',
     region: 'center', // a center region is ALWAYS required for border layout
@@ -213,6 +235,21 @@ var edit = function(){
     }
   });
 }
+//
+var dateFrom = new Ext.form.DateField({
+    id:'dateFrom',
+    format: 'Y-m-d',
+    width: 120,
+    value: ''
+  });
+
+  var dateTo = new Ext.form.DateField({
+    id:'dateTo',
+    format: 'Y-m-d',
+    width: 120,
+    value: ''
+  });
+//
 
 var frm = new Ext.FormPanel( {
   id: 'formNew',

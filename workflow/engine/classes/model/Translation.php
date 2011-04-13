@@ -62,7 +62,7 @@ class Translation extends BaseTranslation {
     return $oCriteria;
   }
 
-  function getAll($lang='en', $start=null, $limit=null, $search=null){
+  function getAll($lang='en', $start=null, $limit=null, $search=null, $dateFrom=null, $dateTo=null){
     $totalCount = 0;
     
     $oCriteria = new Criteria('workflow');
@@ -88,7 +88,19 @@ class Translation extends BaseTranslation {
         ))
       );
     }
-    
+   // for date filter
+    if( ($dateFrom)&&($dateTo) ) {      
+      $oCriteria->add(
+        $oCriteria->getNewCriterion(
+          TranslationPeer::TRN_UPDATE_DATE,
+          "$dateFrom", Criteria::GREATER_EQUAL//LESS_EQUAL
+        )->addAnd($oCriteria->getNewCriterion(
+          TranslationPeer::TRN_UPDATE_DATE,
+          "$dateTo", Criteria::LESS_EQUAL//GREATER_EQUAL
+        ))       
+      );      
+    }    
+   // end filter
     $c = clone $oCriteria;
     $c->clearSelectColumns();
     $c->addSelectColumn('COUNT(*)');
