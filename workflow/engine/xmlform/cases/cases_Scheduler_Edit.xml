@@ -123,7 +123,7 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 </SCH_EVERY_DAYS>
 
 <SCH_WEEK_DAYS type="checkgroup" required="0" mode="edit" options="Array" COLS="2" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
-<en>Select the day(s) of the week below 
+<en>Select the day(s) of the week 
 		<option name="1">Monday</option>
 		<option name="2">Tuesday</option>
 		<option name="3">Wednesday</option>

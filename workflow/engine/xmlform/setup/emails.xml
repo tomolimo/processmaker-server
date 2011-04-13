@@ -23,7 +23,7 @@
 </MESS_PORT>
 
 <MESS_RAUTH type="checkbox" value="1">
-  <en>Require authentification</en>
+  <en>Require authentication</en>
 </MESS_RAUTH>
 
 <MESS_ACCOUNT type="text" size="35" maxlength="50" validate="Email">
