@@ -1928,7 +1928,7 @@ class XmlForm_Field_YesNo extends XmlForm_Field
       $value = $this->getPMTableValue($owner);
     }
     if ($value == '') $value = '0';    
-    if ($this->renderMode = '') $this->renderMode = $this->mode;
+    if ($this->renderMode == '') $this->renderMode = $this->mode;
     $html = '';
     if ($this->renderMode == 'edit'){ //EDIT MODE
       $readOnlyText = ($this->readonly == 1 || $this->readonly == '1') ? 'disabled' : '';
