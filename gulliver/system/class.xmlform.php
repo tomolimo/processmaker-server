@@ -1,7 +1,7 @@
 <?php
 /**
  * class.xmlform.php
- * @package gulliver.system
+ * @package gulliver.system 
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
@@ -68,7 +68,7 @@ class XmlForm_Field {
   var $pmconnection     = '';
   var $pmfield          = '';
 
-  // For mode cases Grid
+  // For mode cases Grid 
   var $modeGrid         = '';
   var $modeForGrid      = '';
   /**
@@ -682,7 +682,7 @@ class XmlForm_Field {
       $req = ($this->required)? '1':'0';
     }else{
       $req = '0';
-    }
+    }  
     $idv = 'pm:required="'.$req.'"';
     if ($show){
       return $idv;
@@ -1130,7 +1130,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
         return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' readOnly="readOnly" style="' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" onkeypress="' . htmlentities ( $onkeypress, ENT_COMPAT, 'utf-8' ) . '"/>';
       } else {
 //        $str = '<textarea '.$storeEntry.' class="module_app_input___gray" style="height:16px" rows=1 cols="'.$this->size.'" id="form[' . $this->name . ']" name="form[' . $this->name . ']" >'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'</textarea>';
-        $str = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . ']" name="form[' . $this->name . ']" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" />';
+        $str = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . ']" name="form[' . $this->name . ']" >'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'</input>';
         if($this->hint){
           $str .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;"><image src="/images/help4.gif" width="15" height="15" border="0"/></a>';
         }
@@ -1376,7 +1376,7 @@ class XmlForm_Field_Password extends XmlForm_Field {
     } elseif ($this->mode === 'view') {
         $html=  '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="hidden" autocomplete="'.$this->autocomplete.'" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' readOnly="readOnly"/>';
         $html.= $this->htmlentities ( str_repeat ( '*', 10 ), ENT_COMPAT, 'utf-8' );
-        return $html;
+        return $html; 
     } else {
        return $this->htmlentities ( str_repeat ( '*', 10 ), ENT_COMPAT, 'utf-8' );
     }
@@ -1927,7 +1927,7 @@ class XmlForm_Field_YesNo extends XmlForm_Field
     if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
     }
-    if ($value == '') $value = '0';
+    if ($value == '') $value = '0';    
     if ($this->renderMode == '') $this->renderMode = $this->mode;
     $html = '';
     if ($this->renderMode == 'edit'){ //EDIT MODE
@@ -2084,10 +2084,7 @@ class XmlForm_Field_Link extends XmlForm_Field {
     $value   = G::replaceDataField ( $this->value, $owner->values );
     $label   = G::replaceDataField ( $this->label, $owner->values );
     $aLabel  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
-    if(isset($aLabel) && strlen($aLabel)>0)
-      return '<a class="tableOption" href=\'' . $link . '\'' . (($this->onclick) ? ' onclick="' . $onclick . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $aLabel . '</a>';
-    else
-      return '';
+    return '<a class="tableOption" href=\'' . $link . '\'' . (($this->onclick) ? ' onclick="' . $onclick . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $aLabel . '</a>';
   }
 }
 
@@ -2261,7 +2258,7 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
       } else {
         $res = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly=$this->readOnly $disabled/>";
       }
-      if($this->hint){
+      if($this->hint){ 
              $res .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
              <image src="/images/help4.gif" width="15" height="15" border="0"/>
              </a>';
@@ -2269,10 +2266,10 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
 
       //      $res = "<input id='form[" . $this->name . "]' value='" . $this->name . "' name='form[" .$this->name . "]' type='checkbox' $checked $readOnly >" . $this->label ;
       return $res;
-    } elseif ($this->mode === 'view') {
-      if ($this->labelOnRight) {
+    } elseif ($this->mode === 'view') { 
+      if ($this->labelOnRight) { 
         $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled><span class='FormCheck'>" . $this->label . '</span></input>';
-      } else {
+      } else {       	      
       $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}'. 'disabled'/>";
       }
       if($this->hint){
@@ -2529,7 +2526,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
    */
   function render($value = NULL, $owner = NULL, $rowId = '', $onlyValue = false, $row = -1, $therow = -1)
   {
-    //Returns value from a PMTable when it is exists.
+    //Returns value from a PMTable when it is exists. 
     if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
     }
@@ -2592,7 +2589,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
           }
           if ($firstValue == '') {
             $firstValue = $optValue;
-            $firstName = $optName;
+            $firstName = $optName; 
           }
         }
         foreach ($this->sqlOption as $optValue => $optName ){
@@ -2603,13 +2600,13 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
           }
           if ($firstValue == '') {
             $firstValue = $optValue;
-            $firstName = $optName;
+            $firstName = $optName; 
           }
         }
         if ($html == '' && $firstValue != '' && $findValue == ''){
           $html = $this->htmlentities($firstName,ENT_COMPAT, 'utf-8');
           $findValue = $firstValue;
-        }
+        } 
         $html .= '<input type="hidden" ';
         $html .= 'id="form' . $rowId . '[' . $this->name . ']" ';
         $html .= 'name="form' . $rowId . '[' . $this->name . ']" ';
@@ -2759,7 +2756,6 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
   var $sqlConnection = 0;
   var $sql           = '';
   var $sqlOption     = array ();
-  var $viewAlign     = 'vertical';
   var $hint;
   var $linkType;
 
@@ -2806,11 +2802,8 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
           }
 
         }
-        
-        if($this->viewAlign == 'horizontal')
-          $html .='&nbsp;';
-        else   
-          $html .='<br>';
+
+        $html .='<br>';
 
       }
       return $html;
@@ -3217,9 +3210,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
   public $editable;
   var $hint;
   var $onchange;
-  var $renderMode = '';
-  
-  /*
+  /**
    * Verify the format of a date
    * @param <Date> $date
    * @return <Boolean> true/false
@@ -3286,7 +3277,6 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
    */
   function render($value = NULL, $owner = NULL)
   {
-  	$this->renderMode = $this->mode;
     if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
     }
@@ -3309,9 +3299,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
   {
     $result = array ();
     $r      = 1;
-/*    if( ! isset($owner->modeGrid)) $owner->modeGrid = '';
-    $this->mode = $this->modeForGrid;*/
-    if ($owner->mode != 'view') $this->renderMode = $this->modeForGrid;
+    if( ! isset($owner->modeGrid)) $owner->modeGrid = '';
+    $this->mode = $this->modeForGrid;
     foreach ( $values as $v ) {
       $v = G::replaceDataField ( $v, $owner->values );
       if (! $onlyValue) {
@@ -3415,7 +3404,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
           $part='d';
           if($part=='mm')
           $part='m';
-          if($part=='yy')
+          if($part=='yy') 
           $part='y';
           $mask .= '%'.$part;
         }
@@ -3484,7 +3473,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     
     #the validations field was moved to javascript routines ;)
     
-    if ($this->renderMode == 'edit') {
+    if ($this->mode == 'edit') {
       if( $startDate=='1969-12-31' ) {
         $startDate='';
         $endDate='';
@@ -3508,7 +3497,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
         $value1=$value;
         $value=$valueaux;
-        if(($value==NULL)||($value=='')){
+        if(($value==NULL)||($value=='')){          
                $value=$value1;
            }
         
@@ -3524,7 +3513,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
                 . '<a id="'.$pID.'[btn]"><img src="/images/pmdateicon.png" border="0" width="12" height="12" style="position:relative;left:-17px;top:0px;"/></a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
-        } else {
+        } else {   
           $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" pm:required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;"/> '
                 . '<img src="/images/icons_silk/calendar_x_button.png" style="position:relative;left:-17px;top:5px;"/></a>'
@@ -3547,44 +3536,43 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
     //
     
-   // $navegador = get_browser();
+   // $navegador = get_browser(); 
  //  print($navegador);
     if($this->hint){
-        if (!function_exists ( "browsername" )){
-    	function browsername($user_agent) {
-      $browsers = array(
-           'Opera' => 'Opera',
-           'Mozilla Firefox'=> '(Firebird)|(Firefox)',
-           'Galeon' => 'Galeon',
-           'Mozilla'=>'Gecko',
-           'MyIE'=>'MyIE',
-           'Lynx' => 'Lynx',
-           'Netscape' => '(Mozilla/4\.75)|(Netscape6)|(Mozilla/4\.08)|(Mozilla/4\.5)|(Mozilla/4\.6)|(Mozilla/4\.79)',
-           'Konqueror'=>'Konqueror',
-           'Internet Explorer 7' => '(MSIE 7\.[0-9]+)',
-           'Internet Explorer 6' => '(MSIE 6\.[0-9]+)',
-           'Internet Explorer 5' => '(MSIE 5\.[0-9]+)',
-           'Internet Explorer 4' => '(MSIE 4\.[0-9]+)',
-           'Internet Explorer 8' => '(MSIE 8\.[0-9]+)',
- );
- foreach($browsers as $browser=>$pattern){
-        if (eregi($pattern, $user_agent))
-        return $browser;
-     }
- return 'Unknow';
- }
-        }
+    	function browsername($user_agent) {  
+      $browsers = array(  
+           'Opera' => 'Opera',  
+           'Mozilla Firefox'=> '(Firebird)|(Firefox)',  
+           'Galeon' => 'Galeon',  
+           'Mozilla'=>'Gecko',  
+           'MyIE'=>'MyIE',  
+           'Lynx' => 'Lynx',  
+           'Netscape' => '(Mozilla/4\.75)|(Netscape6)|(Mozilla/4\.08)|(Mozilla/4\.5)|(Mozilla/4\.6)|(Mozilla/4\.79)',  
+           'Konqueror'=>'Konqueror',  
+           'Internet Explorer 7' => '(MSIE 7\.[0-9]+)',  
+           'Internet Explorer 6' => '(MSIE 6\.[0-9]+)',  
+           'Internet Explorer 5' => '(MSIE 5\.[0-9]+)',  
+           'Internet Explorer 4' => '(MSIE 4\.[0-9]+)', 
+           'Internet Explorer 8' => '(MSIE 8\.[0-9]+)',            
+ );  
+ foreach($browsers as $browser=>$pattern){  
+        if (eregi($pattern, $user_agent))  
+        return $browser;  
+     }  
+ return 'Unknow';  
+ }  
+ 
     	
     	
     	if(browsername($_SERVER['HTTP_USER_AGENT'])=='Mozilla Firefox'){
       $len = strlen($valueaux);
-    	$len = $len - 10;
+    	$len = $len - 10;   
       } else if((browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 8')||(browsername($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 7')){
-      $len = strlen($valueaux);
+      $len = strlen($valueaux);      
       }else  $len = strlen($valueaux);
       $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">'
              . '<image src="/images/help5.gif" width="15" height="15" border="0" style="position:relative;left:"'.$len.'"px;top:0px;"/>'
-             . '</a>';
+             . '</a>'; 
     }
  
     return $html;
@@ -4179,7 +4167,7 @@ class XmlForm
           // the fields or xml nodes with a required attribute are put in an array that is passed to the view file
           if ($xmlNode [$k]->attributes ['required'] == 1)
             $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ) );
-        }
+        } 
 
       }
 
