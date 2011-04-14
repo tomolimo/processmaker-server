@@ -157,7 +157,7 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
   }
   else
   {  if(odynaform.value=='')
-  		{  alert('This process has any assigned dynaform');
+  		{  alert('This process does not have an assigned dynaform'); 
   		}
   		else
   		{  sw=1;
