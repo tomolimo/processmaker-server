@@ -871,22 +871,34 @@ font-weight:bold;
 .pagedTableDefault .pagedTable .pagedTableHeader
 {
 	border-bottom:0px solid #DFDFDF;
-	background-color:#E0E9EF;
 	background-color:#6F7F75;
 	color:#5B5B5B;
 	font-weight:bold;
-	background-image:url(/js/maborak/core/images/silverBackgroundTableTitle.jpg);
 	background-repeat:repeat-x;
 	height:26px;
 	padding:0px;
 	overflow:hidden;
+	background-color:#F2F2F2;
+	background-image:url("/images/ext/gray/grid/grid3-hrow2.gif");
+	background-position: bottom;
+	vertical-align:middle;
 }
+.pagedTableDefault .pagedTable .pagedTableHeader img{
+	float:left;
+	margin-top:2px;
+}
+
 .pagedTableDefault .pagedTable .pagedTableHeader a
 {
 	text-decoration:none;
-	color:#5B5B5B;
 	padding-left:5px;
 	font:normal 8pt Tahoma, sans-serif,MiscFixed;
+	font-size:11px;
+	font-weight: bold;
+	color:#666;
+	text-shadow:#fff 0px 1px 1px;
+	text-align: left;
+	display:block;
 }
 .pagedTableDefault .pagedTable .pagedTableHeader a:hover
 {
@@ -920,9 +932,16 @@ font-weight:bold;
 /*Fin Adicion Rube*/
 .pagedTableDefault .pagedTable .RowLink
 {
-	background-color:#6F7F75;
+	/*background-color:#6F7F75;*/
 	text-align	:center;
 }
+.pagedTable tr{
+	padding:3px 0;
+}
+.pagedTableDefault .pagedTable .RowLink a{
+	display:block;
+}
+
 A.firstPage {
 	background-image: url('/images/firstPage.gif');
 	background-repeat: no-repeat;
