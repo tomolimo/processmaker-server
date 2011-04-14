@@ -118,10 +118,7 @@ Ext.onReady(function(){
           store.load({params:{start : 0 , limit : 20}});
           //store.load({params:{ start : 0 , limit : pageSize }});
         }
-      })
-
-
-,'->',
+      }),'->',
       new Ext.form.TextField ({
         id: 'searchTxt',
         ctCls:'pm_search_text_field',
@@ -207,7 +204,7 @@ Ext.onReady(function(){
       text: 'Save',
       iconCls: 'ss_sprite ss_disk',
       handler: saveEdit
-    }],
+    }]
   });
   
   var viewport = new Ext.Viewport({
@@ -315,7 +312,7 @@ function saveNew()
     },
     failure: function(obj, resp) {
       Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
-    },
+    }
   });
 }
 
