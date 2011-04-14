@@ -348,8 +348,9 @@ _b.AutoSuggest.prototype.createList = function(arr)
 		a.name = i+1;
 		a.onclick = function () { pointer.setHighlightedValue(); return false; };
 		a.onmouseover = function () { 
-                     pointer.setHighlight(this.name); 
-                     pointer.setHighlightedValue2();
+                     pointer.setHighlight(this.name);
+                     // Commented by Bug 6672
+                     //pointer.setHighlightedValue2();
                      
                 };
 		
