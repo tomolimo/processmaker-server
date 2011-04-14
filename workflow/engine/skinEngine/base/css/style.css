@@ -894,10 +894,15 @@ font-weight:bold;
 	height:26px;
 	padding:0px;
 	overflow:hidden;
-	text-align: center;
 	background-color:#F2F2F2;
 	background-image:url("/images/ext/gray/grid/grid3-hrow2.gif");
 	background-position: bottom;
+	vertical-align:middle;
+}
+.pagedTableDefault .pagedTable .pagedTableHeader img{
+	float:left;
+	margin-top:2px;
+}
 
 }
 .pagedTableDefault .pagedTable .pagedTableHeader a
