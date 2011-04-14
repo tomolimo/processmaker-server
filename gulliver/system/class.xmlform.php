@@ -3210,7 +3210,9 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
   public $editable;
   var $hint;
   var $onchange;
-  /**
+  var $renderMode = '';
+  
+  /*
    * Verify the format of a date
    * @param <Date> $date
    * @return <Boolean> true/false
@@ -3277,6 +3279,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
    */
   function render($value = NULL, $owner = NULL)
   {
+  	$this->renderMode = $this->mode;
     if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
     }
@@ -3299,8 +3302,9 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
   {
     $result = array ();
     $r      = 1;
-    if( ! isset($owner->modeGrid)) $owner->modeGrid = '';
-    $this->mode = $this->modeForGrid;
+/*    if( ! isset($owner->modeGrid)) $owner->modeGrid = '';
+    $this->mode = $this->modeForGrid;*/
+    if ($owner->mode != 'view') $this->renderMode = $this->modeForGrid;
     foreach ( $values as $v ) {
       $v = G::replaceDataField ( $v, $owner->values );
       if (! $onlyValue) {
@@ -3473,7 +3477,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     
     #the validations field was moved to javascript routines ;)
     
-    if ($this->mode == 'edit') {
+    if ($this->renderMode == 'edit') {
       if( $startDate=='1969-12-31' ) {
         $startDate='';
         $endDate='';
