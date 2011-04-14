@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-  try {
+  //try {
     
     //First review if there is no error with the uploaded document
     if ((isset($_FILES['form']))&&($_FILES['form']['error']['APP_DOC_FILENAME'] != 0)) {
@@ -152,7 +152,6 @@
         
             $aFields = array('APP_DOC_UID'     => $appDocUid,
                        'APP_UID'     => $_SESSION['APPLICATION'],
-        
                      'DEL_INDEX'           => $_SESSION['INDEX'],
                      'USR_UID'             => $_SESSION['USER_LOGGED'],
                      'DOC_UID'             => $docUid,
@@ -167,7 +166,8 @@
             $oAppDocument->create($aFields);
         break;
         default: //New
-            $aFields = array('APP_UID'     => $_SESSION['APPLICATION'],
+            $aFields = array(
+            					'APP_UID'     => $_SESSION['APPLICATION'],
                      'DEL_INDEX'           => $_SESSION['INDEX'],
                      'USR_UID'             => $_SESSION['USER_LOGGED'],
                      'DOC_UID'             => $docUid,
@@ -200,7 +200,7 @@
         //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
     	  $oPluginRegistry =& PMPluginRegistry::getSingleton();
         if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
-           
+           $triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
           $oData['APP_UID']	  = $_SESSION['APPLICATION'];
           $documentData = new uploadDocumentData (
                             $_SESSION['APPLICATION'],
@@ -214,8 +214,15 @@
   	      $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
   	      if($uploadReturn){
             $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
-          	$oAppDocument1 = new AppDocument();
-            $oAppDocument1->update($aFields);
+            if(!isset($aFields['APP_DOC_UID'])){
+                $aFields['APP_DOC_UID']=$sAppDocUid;
+            }
+  	        if(!isset($aFields['DOC_VERSION'])){
+                $aFields['DOC_VERSION']=$iDocVersion;
+            }
+          	//$oAppDocument1 = new AppDocument();
+          	//G::pr($aFields);die;
+            $oAppDocument->update($aFields);
   	      	unlink ( $sPathName . $sFileName );
   	      }
         }
@@ -280,11 +287,11 @@
 		}
 	}
 	$_SESSION['BREAKSTEP']['NEXT_STEP'] = $aNextStep;
-
+/*
   } catch ( Exception $e ) {
-    /* Render Error page */
+    
       $aMessage['MESSAGE'] = $e->getMessage();
       $G_PUBLISH          = new Publisher;
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
       G::RenderPage( 'publish' );
-  }
+  }*/

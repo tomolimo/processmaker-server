@@ -610,7 +610,6 @@
 			      $listing=$oPluginRegistry->executeTriggers(PM_CASE_DOCUMENT_LIST, $folderData);
 			    }
 
-
           require_once 'classes/model/OutputDocument.php';
           $oOutputDocument = new OutputDocument();
           $aGields = $oOutputDocument->load($aFields['DOC_UID']);

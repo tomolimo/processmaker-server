@@ -466,33 +466,33 @@ class AppDocument extends BaseAppDocument {
 
   public function isEmptyInContent ( $content, $field, $lang )  {
     if ( isset ( $content[$field][ $lang ] ) ) {
-    	if ( trim( $content[$field][ $lang ] ) != '' ) 
+    	if ( trim( $content[$field][ $lang ] ) != '' )
     	  return false;
     };
     return true;
-  } 
+  }
 
   public function updateInsertContent ( $content, $field, $value )  {
     if ( isset ( $content[$field][ 'en' ] ) ) {
-    	//update 
+    	//update
       $con = ContentPeer::retrieveByPK ( $field, $this->getDocVersion(), $this->getAppDocUid(), 'en' );
       $con->setConValue ( $value );
       if ($con->validate ()) {
-        $res = $con->save ();      
-      }	
+        $res = $con->save ();
+      }
     }
     else {//insert
       $con = new Content ( );
-      $con->setConCategory ( $field );    	
+      $con->setConCategory ( $field );
       $con->setConParent ($this->getDocVersion() );
       $con->setConId ( $this->getAppDocUid() );
       $con->setConLang ( 'en' );
       $con->setConValue ( $value );
       if ($con->validate ()) {
-        $res = $con->save ();      
-      }	
+        $res = $con->save ();
+      }
     }
-  } 
+  }
 
   public function normalizeContent( $content, $field , $lang ) {
     $value = '';
@@ -502,7 +502,7 @@ class AppDocument extends BaseAppDocument {
     	$value = $content [ $field  ][ $lang ];
       if ( $lang != 'en' ) {
       	$this->updateInsertContent ( $content, $field , $value );
-      }    
+      }
     }
     else {
       //if the lang row is empty, and 'en' row is not empty return 'en' value
@@ -514,13 +514,13 @@ class AppDocument extends BaseAppDocument {
       if ( $this->isEmptyInContent ( $content, $field , 'en' ) ) {
       	if ( isset($content[$field]) && is_array ($content[$field] ) ) {
       	  foreach ( $content [ $field  ] as $lan => $val ) {
-      	  	if ( trim ( $val ) != '' ) { 
+      	  	if ( trim ( $val ) != '' ) {
       	  		$value = $val;
       	  		if ( $lan != 'en' ) {
-                $this->updateInsertContent ( $content, $field , $value );      			
+                $this->updateInsertContent ( $content, $field , $value );
                 continue;
               }
-      	    }	
+      	    }
           }
         }
         else {
@@ -529,7 +529,7 @@ class AppDocument extends BaseAppDocument {
       }
     }
     return $value;
-  }      
+  }
 
   /**
    * Get the [app_description] , [app_title] column values.
@@ -543,12 +543,12 @@ class AppDocument extends BaseAppDocument {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     $c = new Criteria();
     $c->clearSelectColumns();
-    $c->addSelectColumn( ContentPeer::CON_CATEGORY );    
-    $c->addSelectColumn( ContentPeer::CON_PARENT );    
-    $c->addSelectColumn( ContentPeer::CON_LANG );    
+    $c->addSelectColumn( ContentPeer::CON_CATEGORY );
+    $c->addSelectColumn( ContentPeer::CON_PARENT );
+    $c->addSelectColumn( ContentPeer::CON_LANG );
     $c->addSelectColumn( ContentPeer::CON_VALUE );
     $c->add( ContentPeer::CON_ID,  $this->getAppDocUid() );
-    $c->add( ContentPeer::CON_PARENT,  $this->getDocVersion() );    
+    $c->add( ContentPeer::CON_PARENT,  $this->getDocVersion() );
     $c->addAscendingOrderByColumn('CON_CATEGORY');
     $c->addAscendingOrderByColumn('CON_LANG');
     $rs = ContentPeer::doSelectRS( $c );
