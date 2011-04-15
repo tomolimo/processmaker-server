@@ -394,7 +394,7 @@ class ReportTables
       $aImportedVars = array();//This array will help to control if the variable already exist
       while ($aRow = $oDataset->getRow()) {
             if ($bWhitType) {
-                if(in_array($aRow['REP_VAR_NAME'],$aImportedVars)){
+                if (!in_array($aRow['REP_VAR_NAME'], $aImportedVars)) {
  			            $aImportedVars[]=$aRow['REP_VAR_NAME'];
 	                $aVars[] = array('sFieldName' => $aRow['REP_VAR_NAME'], 'sType' => $aRow['REP_VAR_TYPE']);
                 }
