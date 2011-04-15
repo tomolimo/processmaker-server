@@ -1457,7 +1457,7 @@ var processmap=function(){
           {image:"/images/delete.png",text:G_STRINGS.ID_PROCESSMAP_DELETE_TASK,launch:this.parent.closure({instance:this,method:function(index){
             var data = this.data.db.task[index];
             new this.parent.module.app.confirm().make({
-              label:G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK+data.label,
+              label:G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK+" "+ data.label,
               action:function()
               {
                 data.object.drag.flush();
@@ -1472,7 +1472,7 @@ var processmap=function(){
               }.extend(this)
             });
             return;
-            if(confirm(G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK+data.label))
+            if(confirm(G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK+" "+ data.label))
             {
               data.object.drag.flush();
               this.dropables.derivation.unregister(data.object.dropIndex);

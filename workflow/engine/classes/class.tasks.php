@@ -378,6 +378,10 @@ class Tasks
       ObjectPermissionPeer::doDelete($oCriteria);
       //Delete task
       $oTask->remove($sTaskUID);
+      //Delete cases schedulers added by krlos
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->add(CaseSchedulerPeer::TAS_UID, $sTaskUID);
+      CaseSchedulerPeer::doDelete($oCriteria);
     }
     catch (Exception $oError) {
       throw($oError);
