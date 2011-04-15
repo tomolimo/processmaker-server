@@ -1031,22 +1031,25 @@ class RBAC
 
 private function getAllFiles($directory, $recursive = true ) {
     $result = array();
-    $handle =  opendir($directory);
-    while ($datei = readdir($handle))
+    if (is_dir($directory))
     {
-        if (($datei != '.') && ($datei != '..'))
-        {
-            $file = $directory.$datei;
-            if (is_dir($file)) {
-                if ($recursive) {
-                    $result = array_merge($result, getAllFiles($file.'/'));
-                }
-            } else {
-                $result[] = $file;
-            }
-        }
+      $handle =  opendir($directory);
+      while ($datei = readdir($handle))
+      {
+          if (($datei != '.') && ($datei != '..'))
+          {
+              $file = $directory.$datei;
+              if (is_dir($file)) {
+                  if ($recursive) {
+                      $result = array_merge($result, getAllFiles($file.'/'));
+                  }
+              } else {
+                  $result[] = $file;
+              }
+          }
+      }
+      closedir($handle);
     }
-    closedir($handle);
     return $result;
 }
 
