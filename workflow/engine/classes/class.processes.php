@@ -3132,8 +3132,8 @@ class Processes {
     $this->removeProcessRows ($oData->process['PRO_UID'] );
     $this->createProcessRow($oData->process);
     $this->createTaskRows($oData->tasks);
-
-    $this->createEventRows(isset($oData->event) ? $oData->event : array());
+    //it was commented becuase it seems to be working fine
+    //$this->createEventRows(isset($oData->event) ? $oData->event : array());
 
     $aRoutesUID = $this->createRouteRows($oData->routes);
     $this->createLaneRows($oData->lanes);
@@ -3184,7 +3184,7 @@ class Processes {
     $this->createFieldCondition(isset($oData->fieldCondition) ? $oData->fieldCondition : array(), $oData->dynaforms);
 
 //    Create before to createRouteRows for avoid duplicates
-//    $this->createEventRows(isset($oData->event) ? $oData->event : array());
+    $this->createEventRows(isset($oData->event) ? $oData->event : array());
 
     $this->createCaseSchedulerRows(isset($oData->caseScheduler) ? $oData->caseScheduler : array());
 
