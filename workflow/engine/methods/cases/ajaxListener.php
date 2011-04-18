@@ -183,7 +183,8 @@ class Ajax
                   $stepTitle = $obj->getExternalStepTitle( $caseStep->getStepUidObj(), $TAS_UID, $caseStep->getStepPosition());
                 }
                 if (method_exists($obj, 'getExternalStepAction')) {
-                  $externalStepActions = $obj->getExternalStepAction( $aRow->getStepUidObj(), $aRow->getStepPosition());
+                  $externalStepActions = $obj->getExternalStepAction( $caseStep->getStepUidObj(), 
+$caseStep->getStepPosition());
                 }
               }
               break;
@@ -200,7 +201,7 @@ class Ajax
               $childNode->text    = $label;
               $childNode->iconCls = 'ICON_EXTERNAL_STEP';
               $childNode->leaf    = true;
-              $childNode->url    = "../cases/cases_Step?TYPE=$stepTypeObj&UID=stepUidObj&POSITION=$stepPosition&ACTION=$action";
+              $childNode->url    = "../cases/cases_Step?TYPE=$stepTypeObj&UID=$stepUidObj&POSITION=$stepPosition&ACTION=$action";
 
               $node->children[] = $childNode;
             }
