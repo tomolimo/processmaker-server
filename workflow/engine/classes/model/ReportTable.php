@@ -93,7 +93,8 @@ class ReportTable extends BaseReportTable {
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '$RepTabUid' in table ReportTable doesn't exist!" ));
+        //throw( new Exception( "The row '$RepTabUid' in table ReportTable doesn't exist!" ));
+        return array();
       }
     }
     catch (Exception $oError) {

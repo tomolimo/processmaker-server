@@ -91,9 +91,9 @@ class ReportTables
           $rs = $stmt->executeQuery( 'DROP TABLE IF EXISTS `' . $sTableName . '`');
           break;
         case 'mssql':
-          $rs = $stmt->executeQuery( "IF OBJECT_ID (N'" . $sTableName . "', N'U') IS NOT NULL 
+          $rs = $stmt->executeQuery( "IF OBJECT_ID (N'" . $sTableName . "', N'U') IS NOT NULL
 																		  DROP TABLE [" . $sTableName . "]");
-          break; 
+          break;
       }
     }
     catch (Exception $oError) {
@@ -184,7 +184,7 @@ class ReportTables
           }
           
           $rs = $stmt->executeQuery( $sQuery );
-        break;			
+        break;
 			
       }
     }
@@ -331,7 +331,7 @@ class ReportTables
                   }
                 }
                 $sQuery .= ')';
-                $rs = $stmt->executeQuery( $sQuery );  
+                $rs = $stmt->executeQuery( $sQuery );
               }
               else {
                 if (isset($aData[$sGrid])) {
@@ -366,7 +366,7 @@ class ReportTables
               }
               $oDataset->next();
             }
-          break;          
+          break;
 				
       }
     }
@@ -422,11 +422,13 @@ class ReportTables
     try {
       $oReportTable = new ReportTable();
       $aFields = $oReportTable->load($sRepTabUid);
-      $this->dropTable($aFields['REP_TAB_NAME'], $aFields['REP_TAB_CONNECTION']);
-      $oCriteria = new Criteria('workflow');
-      $oCriteria->add(ReportVarPeer::REP_TAB_UID, $sRepTabUid);
-      $oDataset = ReportVarPeer::doDelete($oCriteria);
-      $oReportTable->remove($sRepTabUid);
+      if(!(empty($aFields))){
+        $this->dropTable($aFields['REP_TAB_NAME'], $aFields['REP_TAB_CONNECTION']);
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->add(ReportVarPeer::REP_TAB_UID, $sRepTabUid);
+        $oDataset = ReportVarPeer::doDelete($oCriteria);
+        $oReportTable->remove($sRepTabUid);
+      }
     }
     catch (Exception $oError) {
       throw($oError);
@@ -764,7 +766,7 @@ class ReportTables
                     }
                   }
                   $sQuery .= ')';
-                  $rs =$stmt->executeQuery( $sQuery );                  
+                  $rs =$stmt->executeQuery( $sQuery );
                 }
               }
             }
@@ -800,7 +802,7 @@ class ReportTables
       G::LoadSystem($sDataBase);
       $oDataBase = new database();
       $bExists   = $oDataBase->reportTableExist();
-    } 
+    }
     return $bExists;
   }
   

@@ -73,7 +73,7 @@
  }
 
   // if there are duplicated groups render the group importing options
-  if($groupsDuplicated>0){
+  if((isset($groupsDuplicated))&&($groupsDuplicated>0)){
     $Fields['PRO_FILENAME']  = $filename;
     $Fields['PRO_PATH']  = $path;
     $Fields['IMPORT_OPTION']  = $option;
