@@ -190,6 +190,7 @@ class PMPluginRegistry {
       if ( $sFilename == baseName ( $row->sFilename ) )
         return $row;
     }
+    return NULL;
   }
 
   /**
@@ -207,8 +208,10 @@ class PMPluginRegistry {
         if (method_exists($oPlugin, 'enable')) {
           $oPlugin->enable();
         }
+        return true;
       }
     }
+    throw new Exception("Unable to enable plugin '$sNamespace' (plugin not found)");
   }
 
   /**
@@ -218,6 +221,7 @@ class PMPluginRegistry {
    */
   function disablePlugin($sNamespace )
   {
+    $found = false;
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
       if ( $sNamespace == $namespace ) {
         unset ($this->_aPluginDetails[$sNamespace]);
@@ -226,8 +230,12 @@ class PMPluginRegistry {
         if (method_exists($oPlugin, 'disable')) {
           $oPlugin->disable();
         }
+        $found = true;
       }
     }
+
+    if (!$found)
+      throw new Exception("Unable to disable plugin '$sNamespace' (plugin not found)");
 
     foreach ( $this->_aMenus as $key=>$detail ) {
        if ( $detail->sNamespace == $sNamespace )
@@ -289,7 +297,13 @@ class PMPluginRegistry {
     return 0;
   }
 
-  function installPluginArchive($filename, $pluginInstall = NULL) {
+  /**
+   * Install a plugin archive. If pluginName is specified, the archive will
+   * only be installed if it contains this plugin.
+   *
+   * @return bool true if enabled, false otherwise
+   */
+  function installPluginArchive($filename, $pluginName = NULL) {
     G::LoadThirdParty( 'pear/Archive','Tar');
     $tar = new Archive_Tar ($filename);
   
@@ -305,8 +319,8 @@ class PMPluginRegistry {
     if (count($plugins) > 1)
       throw new Exception("Multiple plugins in one archive are not supported currently");
 
-    if (!in_array($pluginInstall, $plugins))
-      throw new Exception("Plugin $pluginInstall not found in archive");
+    if (isset($pluginName) && !in_array($pluginName, $plugins))
+      throw new Exception("Plugin '$pluginName' not found in archive");
 
     $pluginName = $plugins[0];
     $pluginFile = "$pluginName.php";
@@ -346,11 +360,14 @@ class PMPluginRegistry {
       throw ( new Exception( "File '$pluginFile' doesn't exists ") );
 
     require_once ( PATH_PLUGINS . $pluginFile );
-    $details = $oPluginRegistry->getPluginDetails( $pluginFile );
+    $details = $this->getPluginDetails( $pluginFile );
 
-    $oPluginRegistry->installPlugin( $details->sNamespace);
-    $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
-    $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+    $this->installPlugin($details->sNamespace);
+    $this->setupPlugins();
+
+    $this->enablePlugin($details->sNamespace);
+
+    $this->save();
   }
   
   function uninstallPlugin($sNamespace) {
