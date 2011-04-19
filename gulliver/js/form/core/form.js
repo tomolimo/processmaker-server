@@ -734,7 +734,8 @@ function G_Text( form, element, name, type )
       }
     } 
   };
-    
+  
+  if(this.element) {
   this.element.onblur = function(event)
   {
     var evt = event || window.event;
@@ -771,7 +772,8 @@ function G_Text( form, element, name, type )
       }
     }
   }.extend(this);
-  
+  }
+
   if (!element) return;
   if (!window.event){
     this.element.onkeypress = this.validateKey;
