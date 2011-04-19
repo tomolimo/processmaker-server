@@ -98,7 +98,7 @@
 						$checked = 'checked="checked"';
 					}
 				?>
-			<li id="<?=$node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
+			<li style="list-style:none;" id="<?=$node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
 				<table class="dynalist" border="0" width="100%" cellpadding="0" cellspacing="0" id="fieldshandler_items_table">
 				<tr>
 					<td width="15px">
