@@ -1433,11 +1433,13 @@ class wsBase
             $bExecute = true;
             if ($aTrigger['ST_CONDITION'] !== '') {
               $oPMScript->setScript($aTrigger['ST_CONDITION']);
-              $bExecute = $oPMScript->evaluate();
+              $bExecute = $oPMScript->evaluate();              
             }
             if ($bExecute) {
               $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
               $oPMScript->execute();
+              $varTriggers .= "<br/><b>-= Before Assignment =-</b><br/>" . nl2br(htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES)) . "<br/>";
+              
               
               //$appFields = $oCase->loadCase( $caseId );
               $appFields['APP_DATA'] = $oPMScript->aFields;
@@ -1472,10 +1474,12 @@ class wsBase
           if ($aTrigger['ST_CONDITION'] !== '') {
             $oPMScript->setScript($aTrigger['ST_CONDITION']);
             $bExecute = $oPMScript->evaluate();
+            
           }
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
+            $varTriggers .= "<br/><b>-= Before Derivation =-</b><br/>" . nl2br(htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES)) . "<br/>";
             
             //$appFields = $oCase->loadCase( $caseId );
             $appFields['APP_DATA'] = $oPMScript->aFields;
@@ -1577,8 +1581,7 @@ class wsBase
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
-            
-            //$varTriggers .= "<br/><b>-= After Derivation =-</b><br/>" . htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES) . "<br/>";
+            $varTriggers .= "<br/><b>-= After Derivation =-</b><br/>" . nl2br(htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES)) . "<br/>";
              
             //$appFields = $oCase->loadCase( $caseId );
             $appFields['APP_DATA'] = $oPMScript->aFields;
@@ -1602,9 +1605,12 @@ class wsBase
       
       $oProcess = new Process();
       $oProcessFieds = $oProcess->Load($appFields['PRO_UID']);
-      
-      $result = new wsResponse (0, $varResponse);
-      
+      //here dubug mode in web entry
+      if(isset($oProcessFieds['PRO_DEBUG']) && $oProcessFieds['PRO_DEBUG']){
+        $result = new wsResponse (0, $varResponse."<br><br><table width='100%' cellpadding='0' cellspacing='0'><tr><td class='FormTitle'>Debug Messages</td></tr></table>".$varTriggers);
+      }else{
+        $result = new wsResponse (0, $varResponse." --- ".$oProcessFieds['PRO_DUBUG']);
+      }
       
       $res = $result->getPayloadArray ();
 
