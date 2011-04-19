@@ -81,8 +81,10 @@ leimnud.Package.Public({
 					return this.input;
 				}.extend(this);
 				this.input.passed=function()
-				{
-					this.input.className="module_app_inputPassed___gray "+((this.input.className.split(' ')[1]) || '');
+				{       if ('\v'=='v')  //verify if is internet explorer
+                                          this.input.className="module_app_inputPassed_ie___gray "+((this.input.className.split(' ')[1]) || '');
+                                        else
+					  this.input.className="module_app_inputPassed___gray "+((this.input.className.split(' ')[1]) || '');
 					return this.input;
 				}.extend(this);
 				this.input.normal=function()
@@ -91,8 +93,10 @@ leimnud.Package.Public({
 					return this.input;
 				}.extend(this);
 				this.input.failed=function()
-				{
-					this.input.className="module_app_inputFailed___gray "+((this.input.className.split(' ')[1]) || '');
+				{       if ('\v'=='v')  //verify if is internet explorer
+                                          this.input.className="module_app_inputFailed_ie___gray "+((this.input.className.split(' ')[1]) || '');
+					else
+                                          this.input.className="module_app_inputFailed___gray "+((this.input.className.split(' ')[1]) || '');
 					return this.input;
 				}.extend(this);
 //				this.parent.event.add(this.input,"mouseover",this.mouseover);

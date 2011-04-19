@@ -1176,6 +1176,14 @@ INPUT {
 	color	:#000000;
 	font	:normal 8pt sans-serif;
 }
+.module_app_inputFailed_ie___gray
+{   
+        filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=-1, OffY=-1,color=red) progid:DXImageTransform.Microsoft.dropshadow(OffX=1, OffY=1,color=red);
+}
+.module_app_inputPassed_ie___gray
+{
+        filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=-1, OffY=-1,color=green) progid:DXImageTransform.Microsoft.dropshadow(OffX=1, OffY=1,color=green);
+}
 .module_app_inputDisabled___gray
 {
 	background-color:#f0f0f0;
@@ -1185,7 +1193,9 @@ INPUT {
 /*	Theme leimnud.module.app.input	END */
 .module_app_select___gray
 {
-	font:normal 8pt Tahoma,Sans-serif,MiscFixed;
+	font:normal 8pt Tahoma,Sans-serif,MiscFi
+    border-top-style: double;
+xed;
 	width:100%;
 }
 
