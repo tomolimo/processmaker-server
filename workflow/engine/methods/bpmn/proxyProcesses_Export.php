@@ -51,7 +51,7 @@ $Fields['FILENAME_LINKXPDL'] = $xpdlFields['FILENAME_LINKXPDL'];
 $Fields['FILENAME_LINK']     = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/processes/' . $Fields['FILENAME_LINK'];
 $Fields['FILENAME_LINKXPDL'] = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/processes/' . $Fields['FILENAME_LINKXPDL'];
 
-$result = json_encode( $Fields );
+$result = G::json_encode( $Fields );
 $result = str_replace("\\/","/",'{success:true,data:'.$result.'}'); // unescape the slashes
 echo $result;
 

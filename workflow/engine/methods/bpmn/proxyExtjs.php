@@ -26,7 +26,7 @@
   switch( $_GET['action'] ) {
     case 'getDynaformList' :
          $result = $oProcessMap->getExtDynaformsList($start, $limit, $_GET['pid']);
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getPMTableDynaform':
@@ -42,14 +42,14 @@
          }
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAdditionalTables':
          $rows = $oProcessMap->getExtAdditionalTablesList();
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getInputDocumentList':
@@ -57,14 +57,14 @@
          $result['totalCount'] = $oProcessMap->getAllInputDocumentCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'editInputDocument':
          require_once 'classes/model/InputDocument.php';
          $oInputDocument = new InputDocument();
          $rows = $oInputDocument->load($_GET['INP_DOC_UID']);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -76,13 +76,13 @@
          $result['totalCount'] = $oProcessMap->getAllOutputDocumentCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'editObjectPermission':
          $rows = $oProcessMap->editExtObjectPermission($_GET['pid'],$_GET['op_uid']);
          //array_shift($rows);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -93,7 +93,7 @@
          require_once 'classes/model/OutputDocument.php';
          $oOutputDocument = new OutputDocument();
          $rows = $oOutputDocument->load($_GET['tid']);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -104,14 +104,14 @@
          $rows        = $oProcessMap->getExtReportTables($start, $limit,$_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllReportTableCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'editReportTables':
          require_once 'classes/model/ReportTable.php';
          $oReportTable = new ReportTable();
          $rows = $oReportTable->load($_GET['REP_TAB_UID'],$_GET['pid']);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -142,21 +142,21 @@
          }
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getDatabaseConnectionList':
          $rows = $oProcessMap->getExtCriteriaDBSList($start, $limit,$_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllDbSourceCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'editDatabaseConnection':
          require_once 'classes/model/DbSource.php';
          $o = new DbSource();
          $rows = $o->load($_GET['dbs_uid'],$_GET['pid']);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -167,39 +167,39 @@
          $rows = $oProcessMap->listExtProcessesSupervisors($start, $limit, $_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllProcessSupervisorsCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
              
     case 'availableProcessesSupervisors':
          $rows = $oProcessMap->listExtNoProcessesUser($_GET['pid']);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'supervisorDynaforms':
          $rows = $oProcessMap->getExtSupervisorDynaformsList($start, $limit,$_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllSupervisorDynaformsCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     case 'availableSupervisorDynaforms':
          $rows = $oProcessMap->getExtAvailableSupervisorDynaformsList($_GET['pid']);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     case 'supervisorInputDoc':
          $rows = $oProcessMap->getExtSupervisorInputsList($start, $limit,$_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllSupervisorInputsCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     case 'availableSupervisorInputDoc':
          $rows = $oProcessMap->getExtAvailableSupervisorInputsList($_GET['pid']);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAssignedCaseTrackerObjects':
@@ -207,7 +207,7 @@
          $result['totalCount'] = $oProcessMap->getAllCaseTrackerObjectCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAvailableCaseTrackerObjects':
@@ -215,7 +215,7 @@
          array_shift($rows);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAvailableSteps':
@@ -223,7 +223,7 @@
          array_shift($rows);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAssignedSteps':
@@ -231,7 +231,7 @@
          $result['totalCount'] = $oProcessMap->getAllStepCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAssignedUsersList':
@@ -239,14 +239,14 @@
          $result['totalCount'] = $oProcessMap->getAllTaskUserCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAvailableUsersList':
          $rows = $oProcessMap->getAvailableExtUsersCriteria($_GET['tid']);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAvailableStepTriggers':
@@ -257,14 +257,14 @@
          $rows        = $oProcessMap->getExtAvailableStepTriggersCriteria($_GET['pid'], $sStep, $_GET['tid'], $sType);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getAssignedStepTriggers':
          $rows        = $oProcessMap->getExtStepTriggersCriteria($start, $limit, $sStep, $_GET['tid'], $sType);
          $result['totalCount'] = $oProcessMap->getAllStepTriggerCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'availableUsers':
@@ -272,7 +272,7 @@
          array_shift($rows);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'assignedUsers':
@@ -280,7 +280,7 @@
          $result['totalCount'] = $oProcessMap->getAllTaskUserCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getTaskPropertiesList':
@@ -303,7 +303,7 @@
              else if($key == 'TAS_TYPE' && $value == 'ADHOC')
                     $rows[$key] = true;
          }
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -314,7 +314,7 @@
         if($_GET['type'] == 2)    //Loading sub process details
            {
                $rows        = $oProcessMap->subProcessExtProperties($_GET['pid'], $_GET['tid'],'','0');
-               $tmpData = json_encode( $rows ) ;
+               $tmpData = G::json_encode( $rows ) ;
                $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
 
                $result = $tmpData;
@@ -325,14 +325,14 @@
                $rows        = $oProcessMap->subProcessExtProperties($_GET['pid'], $_GET['tid'],'',$_GET['type']);
                $result['totalCount'] = count($rows);
                $result['data'] = $rows;
-               print json_encode( $result ) ;
+               print G::json_encode( $result ) ;
            }
         break;
     case 'getObjectPermission':
          $rows = $oProcessMap->getExtObjectsPermissions($start, $limit,$_GET['pid']);
          $result['totalCount'] = $oProcessMap->getAllObjectPermissionCount();
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'getObjectPermissionType':
@@ -340,12 +340,12 @@
          array_shift($rows);
          $result['totalCount'] = count($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
     
     case 'process_Edit':
          $rows = $oProcessMap->editProcessNew($_GET['pid']);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     
          $result = $tmpData;
@@ -357,7 +357,7 @@
          $result['totalCount'] = $oProcessMap->getAllTriggersCount();
          array_shift($rows);
          $result['data'] = $rows;
-         print json_encode( $result ) ;
+         print G::json_encode( $result ) ;
          break;
 
    case 'editTriggers':
@@ -368,7 +368,7 @@
                 $oTrigger = new Triggers();
                 $rows = $oTrigger->load($_GET['TRI_UID']);
         }
-        $tmpData = json_encode( $rows ) ;
+        $tmpData = G::json_encode( $rows ) ;
         $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
         $result = $tmpData;
         echo $result;
@@ -378,7 +378,7 @@
   	 //$rows = $oProcessMap->caseTracker($_GET['pid']);
          $oCaseTracker = new CaseTracker ( );
          $rows = $oCaseTracker->load($_GET['pid']);
-         $tmpData = json_encode( $rows ) ;
+         $tmpData = G::json_encode( $rows ) ;
          $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
          $result = $tmpData;
          echo $result;
@@ -438,7 +438,7 @@
         array_shift($rows);
         $result['totalCount'] = count($rows);
         $result['data'] = $rows;
-        print json_encode($result);
+        print G::json_encode($result);
         break;
 
     
@@ -446,8 +446,8 @@
   	 
 }
    //$result['data'] = $rows;
-   //print json_encode( $result ) ;
-    /*$tmpData = json_encode( $rows ) ;
+   //print G::json_encode( $result ) ;
+    /*$tmpData = G::json_encode( $rows ) ;
     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
     $result = $tmpData;
     echo $result;*/

@@ -36,10 +36,10 @@ try
 
     $result['totalCount'] = count($rows);
     $result['data'] = $rows;
-    print json_encode( $result ) ;
+    print G::json_encode( $result ) ;
 
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }
 ?>

@@ -10,7 +10,7 @@ try
      $oEvent = new Event();
      $aRows = $oEvent->load($_GET['startInterId']);
      //$sch_uid = $oData['EVN_ACTION'];
-     $result = json_encode( $aRows );
+     $result = G::json_encode( $aRows );
      $result = str_replace("\\/","/",'{success:true,data:'.$result.'}'); // unescape the slashes
      /*else
      {
@@ -18,10 +18,10 @@ try
      }*/
      echo $result;
    }
-   //print json_encode( $result ) ;
+   //print G::json_encode( $result ) ;
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }
 
 ?>

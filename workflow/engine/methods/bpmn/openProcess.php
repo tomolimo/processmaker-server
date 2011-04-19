@@ -261,12 +261,12 @@
    $result['ROUTES']   = $arrayRoutes;
    $result['EVENTS']   = $arrayEvents;
    $result['GATEWAYS'] = $arrayGateways;
-   $aTasks      = json_encode($arrayTasks);
-   $aSubProcess = json_encode($arraySubProcess);
-   $aRoutes     = json_encode($arrayRoutes);
-   $aEvents     = json_encode($arrayEvents);
-   $aGateways   = json_encode($arrayGateways);
-   $aProcess    = json_encode($process);
-   $aLanes      = json_encode($lanes);
+   $aTasks      = G::json_encode($arrayTasks);
+   $aSubProcess = G::json_encode($arraySubProcess);
+   $aRoutes     = G::json_encode($arrayRoutes);
+   $aEvents     = G::json_encode($arrayEvents);
+   $aGateways   = G::json_encode($arrayGateways);
+   $aProcess    = G::json_encode($process);
+   $aLanes      = G::json_encode($lanes);
    echo "tasks:$aTasks|gateways:$aGateways|events:$aEvents|annotations:$aLanes|process:$aProcess|subprocess:$aSubProcess|routes:$aRoutes";
 ?>

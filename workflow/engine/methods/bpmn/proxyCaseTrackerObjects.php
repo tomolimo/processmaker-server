@@ -14,5 +14,5 @@ if  (isset($_GET['tid'] ))
 array_shift($rows);
 $result['totalCount'] = count($rows);
 $result['data'] = $rows;
-print json_encode($result);
+print G::json_encode($result);
 ?>

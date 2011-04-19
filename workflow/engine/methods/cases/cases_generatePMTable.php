@@ -8,7 +8,7 @@ require_once ( "classes/model/AdditionalTables.php" );
 require_once ( "classes/model/Fields.php" );
 // passing the parameters
 $pmTableName   = (isset($_POST['tableName'])) ? $_POST['tableName'] : 'contenders';
-$pmTableFields = (isset($_POST['tableFields'])) ? json_decode($_POST['tableFields']) : array();
+$pmTableFields = (isset($_POST['tableFields'])) ? G::json_decode($_POST['tableFields']) : array();
 
 // default parameters
 //$pmTableName   = 'Sender';

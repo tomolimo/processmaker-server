@@ -289,16 +289,16 @@ if ( isset ($_REQUEST['action']) ) {
 
             if(isset($_POST['VAR_OUT']) && $_POST['VAR_OUT'] != ''){
                $varOut = explode('|',$_POST['VAR_OUT']);
-               $aVarOut1 = json_decode($varOut[0]);
-               $aVarOut2 = json_decode($varOut[1]);
+               $aVarOut1 = G::json_decode($varOut[0]);
+               $aVarOut2 = G::json_decode($varOut[1]);
                 for($i=1; $i<=count($aVarOut1); $i++){
                                 $out[$aVarOut1[$i-1]]= $aVarOut2[$i-1];
                 }
             }
             if(isset($_POST['VAR_IN']) && $_POST['VAR_IN'] != ''){
                $varIn = explode('|',$_POST['VAR_IN']);
-               $aVarIn1 = json_decode($varIn[0]);
-               $aVarIn2 = json_decode($varIn[1]);
+               $aVarIn1 = G::json_decode($varIn[0]);
+               $aVarIn2 = G::json_decode($varIn[1]);
                 for($i=1; $i<=count($aVarIn1); $i++){
                                 $in[$aVarIn1[$i-1]]= $aVarIn2[$i-1];
                 }
@@ -385,7 +385,7 @@ if ( isset ($_REQUEST['action']) ) {
                   $ooutputDocument = new OutputDocument();
                   if (isset($_GET['OUT_DOC_UID'])) {
                     $rows = $ooutputDocument->load($_GET['OUT_DOC_UID']);
-                    $tmpData = json_encode( $rows ) ;
+                    $tmpData = G::json_encode( $rows ) ;
                      $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
                      $result = $tmpData;
                      echo $result;

@@ -56,5 +56,5 @@ foreach ( $aFields as $aField ) {
 array_shift($aRows);
 $result['totalCount'] = count($aRows);
 $result['data'] = $aRows;
-print json_encode($result);
+print G::json_encode($result);
 ?>

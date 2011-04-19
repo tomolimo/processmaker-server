@@ -12,7 +12,7 @@ try
 
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }
 
   $steps = array();
@@ -167,4 +167,4 @@ try
     }]
 }]";*/
 //echo $nodes;
-echo json_encode($steps);
+echo G::json_encode($steps);

@@ -20,7 +20,7 @@ if (isset($_GET['tid']))
        $rows = $oOutputDocument->load($_GET['tid']);
    }
    
-   $tmpData = json_encode( $rows ) ;
+   $tmpData = G::json_encode( $rows ) ;
     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
 
     $result = $tmpData;
@@ -28,9 +28,9 @@ if (isset($_GET['tid']))
 
  /*   $result['totalCount'] = count($rows);
     $result['data'] = $rows;
-    print json_encode( $result) ;*/
+    print G::json_encode( $result) ;*/
  
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }

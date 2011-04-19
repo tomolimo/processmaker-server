@@ -174,6 +174,6 @@ Notes:
 /* Handles the error output. This error message will be sent to the uploadSuccess event handler.  The event handler
 will have to check for any error messages and react as needed. */
 function HandleError($message) {
-	die('{success:false,error:'.json_encode($message).'}');
+	die('{success:false,error:'.G::json_encode($message).'}');
 }
 ?>

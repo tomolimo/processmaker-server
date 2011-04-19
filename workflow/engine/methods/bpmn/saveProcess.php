@@ -40,7 +40,7 @@ try{
         $result['status_code'] = $idProcess;
         $result['message']     = "the process don't exists";
         $result['timestamp']   = date('Y-m-d H:i:s');
-        echo json_encode($result);
+        echo G::json_encode($result);
         die;
       }
   }
@@ -49,15 +49,15 @@ try{
     $result['status_code'] = 1;
     $result['message']     = "you don't send the process uid";
     $result['timestamp']   = date('Y-m-d H:i:s');
-    echo json_encode($result);
+    echo G::json_encode($result);
     die;
   }
-  $aTasks                 = json_decode ( $_POST['tasks'] );
-  $aRoutes                = json_decode ( $_POST['routes'] );
-  $aEvents                = json_decode ( $_POST['events'] );
-  $aGateways              = json_decode ( $_POST['gateways'] );
-  $aAnnotations           = json_decode ( $_POST['annotations'] );
-  $aSubprocess            = json_decode ( $_POST['subprocess'] );
+  $aTasks                 = G::json_decode ( $_POST['tasks'] );
+  $aRoutes                = G::json_decode ( $_POST['routes'] );
+  $aEvents                = G::json_decode ( $_POST['events'] );
+  $aGateways              = G::json_decode ( $_POST['gateways'] );
+  $aAnnotations           = G::json_decode ( $_POST['annotations'] );
+  $aSubprocess            = G::json_decode ( $_POST['subprocess'] );
   $fields                 = $oProcess->serializeProcess($idProcess);
   $oData                  = unserialize($fields);
   $aRoutes                = $oProcess->super_unique($aRoutes);

@@ -14,5 +14,5 @@ if ( isset($_GET['pid'] )&& isset($_GET['action']) )
 }
 $result['totalCount'] = count($rows);
 $result['data'] = $rows;
-print json_encode($result);
+print G::json_encode($result);
 ?>

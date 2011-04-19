@@ -47,7 +47,7 @@ try
            }
 
 
-           $result = json_encode( $rows ) ;
+           $result = G::json_encode( $rows ) ;
            $result = str_replace("\\/","/",'{success:true,data:'.$result.'}'); // unescape the slashes
        }
        else
@@ -57,11 +57,11 @@ try
        echo $result;
    }
    
-   //print json_encode( $result ) ;
+   //print G::json_encode( $result ) ;
 
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }
 
 ?>

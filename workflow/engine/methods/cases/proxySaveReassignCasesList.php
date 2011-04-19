@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
- $aData = json_decode($_POST['data']);
+ $aData = G::json_decode($_POST['data']);
  $appSelectedUids = array ();
  $items = explode(",",$_POST['APP_UIDS']);
  foreach ($items as $item) {

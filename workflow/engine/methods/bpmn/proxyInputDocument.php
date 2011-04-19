@@ -16,8 +16,8 @@ try
    }
 //    $result['totalCount'] = count($rows);
 //    $result['data'] = $rows;
-//    print json_encode( $result) ;
-   $tmpData = json_encode( $rows ) ;
+//    print G::json_encode( $result) ;
+   $tmpData = G::json_encode( $rows ) ;
    $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
 
    $result = $tmpData;
@@ -26,5 +26,5 @@ try
  
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }

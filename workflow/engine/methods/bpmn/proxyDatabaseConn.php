@@ -15,13 +15,13 @@ try
 	$rows = $o->load($_GET['tid']);
     }
     
-    $tmpData = json_encode( $rows ) ;
+    $tmpData = G::json_encode( $rows ) ;
     $tmpData = str_replace("\\/","/",'{success:true,data:'.$tmpData.'}'); // unescape the slashes
 
     $result = $tmpData;
     echo $result;
  }
   catch ( Exception $e ) {
-  	print json_encode ( $e->getMessage() );
+  	print G::json_encode ( $e->getMessage() );
   }
 ?>

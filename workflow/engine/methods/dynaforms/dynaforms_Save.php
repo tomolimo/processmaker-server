@@ -82,8 +82,8 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
           $aVariables = array();
           if(isset($aData['FIELDS']))
            {
-              $aFields = json_decode($_POST['FIELDS']);
-              $aVariables = json_decode($_POST['VARIABLES']);
+              $aFields = G::json_decode($_POST['FIELDS']);
+              $aVariables = G::json_decode($_POST['VARIABLES']);
            }
            $aData['FIELDS'] = array();
            for($i=0;$i<count($aFields);$i++){
