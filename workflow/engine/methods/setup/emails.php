@@ -59,6 +59,8 @@ else {
   }
 }
 
+$aFields['SMTPSecure'] = $aFields['SMTPSecure'] == ''? 'none' : $aFields['SMTPSecure'];
+
 $rows[] = array ( 'uid' => 'char', 'name' => 'char', 'age' => 'integer', 'balance' => 'float' );
 $rows[] = array ( 'uid' => 'PHPMAILER', 'name' => 'SMTP (PHPMailer)' );
 // ending OpenMail support

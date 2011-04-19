@@ -19,7 +19,7 @@
 </MESS_SERVER>
 
 <MESS_PORT type="text" size="5" maxlength="5" validate="Int">
-  <en>Port</en>
+  <en>Port (default 25)</en>
 </MESS_PORT>
 
 <MESS_RAUTH type="checkbox" value="1">
@@ -41,6 +41,14 @@
 <MESS_TEST_MAIL_TO type="text" size="35" maxlength="100" required="true">
   <en>Mail to</en>
 </MESS_TEST_MAIL_TO>
+
+<SMTPSecure type="radiogroup" required="0" mode="edit" options="Array" viewAlign ="horizontal" defaultValue="none">
+  <en>Use Secure Connection  
+    <option name="none">No</option>
+    <option name="tls">TLS</option>
+    <option name="ssl">SSL</option>
+  </en>
+</SMTPSecure>
 
 <MESS_BACKGROUND type="checkbox" value="1">
   <en>Run in the background</en>
@@ -96,6 +104,7 @@
             hideRowById('MESS_ACCOUNT');
             hideRowById('MESS_PASSWORD');
             hideRowById('SAVE_CHANGES2');
+            hideRowById('SMTPSecure');
             showRowById('TEST');
             showRowById('MESS_TEST_MAIL');
             if ( getField('MESS_TEST_MAIL').checked )
@@ -108,13 +117,12 @@
           
           case 'PHPMAILER':
             hideRowById('SAVE_CHANGES2');
-          
-          case 'OPENMAIL':
             showRowById('MESS_SERVER');
             showRowById('MESS_PORT');
             showRowById('MESS_ACCOUNT');
             showRowById('MESS_PASSWORD');
             showRowById('TEST');
+            showRowById('SMTPSecure');
             showRowById('MESS_RAUTH');
             showRowById('MESS_TEST_MAIL');
             
@@ -148,6 +156,7 @@
         hideRowById('MESS_SEND_MAX');
         hideRowById('MESS_TRY_SEND_INMEDIATLY');
         hideRowById('TEST');
+        hideRowById('SMTPSecure');
         hideRowById('MESS_RAUTH');
         hideRowById('MESS_TEST_MAIL');
         hideRowById('MESS_TEST_MAIL_TO');

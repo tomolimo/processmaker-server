@@ -2756,6 +2756,7 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
   var $sqlConnection = 0;
   var $sql           = '';
   var $sqlOption     = array ();
+  var $viewAlign     = 'vertical';
   var $hint;
   var $linkType;
 
@@ -2802,8 +2803,11 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
           }
 
         }
-
-        $html .='<br>';
+        
+        if($this->viewAlign == 'horizontal')
+          $html .='&nbsp;';
+        else   
+          $html .='<br>';
 
       }
       return $html;

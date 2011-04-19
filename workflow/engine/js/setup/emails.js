@@ -81,6 +81,14 @@ function testConnection() {
 	params += '&auth_required='+ (getField('MESS_RAUTH').checked ? 'yes' : 'no');
 	params += '&send_test_mail='+ (getField('MESS_TEST_MAIL').checked ? 'yes' : 'no');
 	params += '&mail_to=' + $('form[MESS_TEST_MAIL_TO]').value;
+	
+	if(getField('SMTPSecure][ssl').checked) {
+	  params +='&SMTPSecure=ssl';
+	} else if(getField('SMTPSecure][tls').checked) {
+	  params +='&SMTPSecure=tls';
+	} else {
+	  params +='&SMTPSecure='; 
+	}
 
 	oPanel = new leimnud.module.panel();
 	oPanel.options = {
@@ -108,7 +116,7 @@ function testConnection() {
 	oRPC.callback = function(rpc) {
 		oPanel.loader.hide();
 		oPanel.addContent(rpc.xmlhttp.responseText);
-		testSMTPHost(1); // execution de init test
+		testSMTPHost(1, params); // execution de init test
 	}.extend(this);
 	oRPC.make();
 };
@@ -152,19 +160,11 @@ function testConnectionMail() {
 };
 
 var resultset = true;
-function testSMTPHost(step) {
+function testSMTPHost(step, params) {
 	$("test_" + step).style.display = "block";
-
-	var requestfile = PROCESS_REQUEST_FILE;
 	
-	var params = 'request=testConnection&step=' + step;
-	params += '&srv=' + getField('MESS_SERVER').value.trim();
-	params += '&port='+ ((getField('MESS_PORT').value.trim() != '') ? getField('MESS_PORT').value : 'default');
-	params += '&account=' + getField('MESS_ACCOUNT').value;
-	params += '&passwd=' + getField('MESS_PASSWORD').value;
-	params += '&auth_required='+ (getField('MESS_RAUTH').checked ? 'yes' : 'no');
-	params += '&send_test_mail='+ (getField('MESS_TEST_MAIL').checked ? 'yes' : 'no');
-	params += '&mail_to=' + $('form[MESS_TEST_MAIL_TO]').value;
+	var requestfile = PROCESS_REQUEST_FILE;
+	var uri = 'request=testConnection&step=' + step +'&'+ params;
 
 	var ajax = AJAX();
 	ajax.open("POST", requestfile, true);
@@ -193,7 +193,7 @@ function testSMTPHost(step) {
 					}
 				}
 				step += 1;
-				testSMTPHost(step);
+				testSMTPHost(step, params);
 			} catch (e) {
 				if (resultset) {
 					$('form[SAVE_CHANGES]').disabled = false;
@@ -207,7 +207,7 @@ function testSMTPHost(step) {
 			$('status_' + step).innerHTML = "<img src='/images/ajax-loader.gif' width=12 height=12 border=0><br/>";
 		}
 	}
-	ajax.send(params);
+	ajax.send(uri);
 }
 
 function cancelTestConnection() {
@@ -256,6 +256,7 @@ function initSet() {
 		hideRowById('MESS_TEST_MAIL');
 		hideRowById('MESS_TEST_MAIL_TO');
 		hideRowById('TEST');
+		hideRowById('SMTPSecure');
 		hideRowById('SAVE_CHANGES');
 		$('form[SAVE_CHANGES]').disabled = false;
 	} else {

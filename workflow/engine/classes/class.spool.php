@@ -129,9 +129,7 @@ class spoolRun {
    * @return none
    */
   public function create($aData) {
-    G::LoadClass('insert');
-    $oInsert = new insert();
-    $sUID = $oInsert->db_insert($aData);
+    $sUID = $this->db_insert($aData);
     
     $aData['app_msg_date'] = isset($aData['app_msg_date']) ? $aData['app_msg_date'] : '';
     
@@ -274,11 +272,14 @@ class spoolRun {
           $this->fileData['envelope_to'][] = "$val";
         }
       }
-    } else {
+    } else if($text != '') {
       $this->fileData['envelope_to'][] = "$text";
+    } else {
+      $this->fileData['envelope_to'] = Array();
     }
-    //for cc add by alvaro
-     if( false !== (strpos($textcc, ',')) ) {
+    
+    //CC
+    if( false !== (strpos($textcc, ',')) ) {
       $holdcc = explode(',', $textcc);
 
       foreach( $holdcc as $valcc ) {
@@ -286,11 +287,14 @@ class spoolRun {
           $this->fileData['envelope_cc'][] = "$valcc";
         }
       }
-    } else {
+    } else if($textcc != '') {
       $this->fileData['envelope_cc'][] = "$textcc";
+    } else {
+      $this->fileData['envelope_cc'] = Array();
     }
-    //forbcc add by alvaro
-     if( false !== (strpos($textbcc, ',')) ) {
+    
+    //BCC
+    if( false !== (strpos($textbcc, ',')) ) {
       $holdbcc = explode(',', $textbcc);
 
       foreach( $holdbcc as $valbcc ) {
@@ -298,8 +302,10 @@ class spoolRun {
           $this->fileData['envelope_bcc'][] = "$valbcc";
         }
       }
-    } else {
+    } else if($textbcc != '') {
       $this->fileData['envelope_bcc'][] = "$textbcc";
+    } else { 
+      $this->fileData['envelope_bcc'] = Array();
     }
 
 
@@ -349,9 +355,18 @@ class spoolRun {
           break;
         case 'PHPMAILER':
           G::LoadThirdParty('phpmailer', 'class.phpmailer');
-          $oPHPMailer = new PHPMailer();
+          $oPHPMailer = new PHPMailer(true);
           $oPHPMailer->Mailer = 'smtp';
           $oPHPMailer->SMTPAuth = (isset($this->config['SMTPAuth']) ? $this->config['SMTPAuth'] : '');
+          
+          
+          /**
+           * Posible Options for SMTPSecure are: "", "ssl" or "tls"
+           */
+          if (preg_match('/^(ssl|tls)$/', $this->config['SMTPSecure'])) {
+            $oPHPMailer->SMTPSecure = $this->config['SMTPSecure'];
+          }
+          
           $oPHPMailer->Host = $this->config['MESS_SERVER'];
           $oPHPMailer->Port = $this->config['MESS_PORT'];
           $oPHPMailer->Username = $this->config['MESS_ACCOUNT'];
@@ -373,8 +388,9 @@ class spoolRun {
               $oPHPMailer->AddAddress($sEmail);
             }
           }
-          //add cc add by alvaro
-           foreach( $this->fileData['envelope_cc'] as $sEmail ) {
+          
+          //CC
+          foreach( $this->fileData['envelope_cc'] as $sEmail ) {
             $evalMail = strpos($sEmail, '<');
 
             if( strpos($sEmail, '<') !== false ) {
@@ -386,8 +402,9 @@ class spoolRun {
               $oPHPMailer->AddCC($sEmail);
             }
           }
-           //add bcc add by alvaro
-           foreach( $this->fileData['envelope_bcc'] as $sEmail ) {
+          
+          //BCC
+          foreach( $this->fileData['envelope_bcc'] as $sEmail ) {
             $evalMail = strpos($sEmail, '<');
 
             if( strpos($sEmail, '<') !== false ) {
@@ -491,5 +508,49 @@ class spoolRun {
     }
     return false;
   }
+  
+  /**
+    * db_insert
+    *
+    * @param  array  $db_spool
+    * @return string $sUID;
+    */
+    public function db_insert($db_spool)
+    {
+      $sUID  = G::generateUniqueID();
+      $spool = new AppMessage();
+      $spool->setAppMsgUid($sUID);
+      $spool->setMsgUid($db_spool['msg_uid']);
+      $spool->setAppUid($db_spool['app_uid']);
+      $spool->setDelIndex($db_spool['del_index']);
+      $spool->setAppMsgType($db_spool['app_msg_type']);
+      $spool->setAppMsgSubject($db_spool['app_msg_subject']);
+      $spool->setAppMsgFrom($db_spool['app_msg_from']);
+      $spool->setAppMsgTo($db_spool['app_msg_to']);
+      $spool->setAppMsgBody($db_spool['app_msg_body']);
+      $spool->setAppMsgDate(date('Y-m-d H:i:s'));
+      $spool->setAppMsgCc($db_spool['app_msg_cc']);
+      $spool->setAppMsgBcc($db_spool['app_msg_bcc']);
+      $spool->setappMsgAttach($db_spool['app_msg_attach']);
+      $spool->setAppMsgTemplate($db_spool['app_msg_template']);
+      $spool->setAppMsgStatus($db_spool['app_msg_status']);
+      $spool->setAppMsgSendDate(date('Y-m-d H:i:s')); // Add by Ankit
+
+      if(!$spool->validate()) {
+        $errors       = $spool->getValidationFailures();
+        $this->status = 'error';
+
+        foreach($errors as $key => $value) {
+          echo "Validation error - " . $value->getMessage($key) . "\n";
+        }
+      }
+      else {
+              //echo "Saving - validation ok\n";
+        $this->status = 'success';
+              $spool->save();
+      }
+      return $sUID;
+
+    }
 }
 ?>

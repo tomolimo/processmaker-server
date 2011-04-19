@@ -4146,11 +4146,13 @@ class Cases {
               $sTo = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
               $oSpool = new spoolRun();
               $oSpool->setConfig(array('MESS_ENGINE' => $aConfiguration['MESS_ENGINE'],
-                  'MESS_SERVER' => $aConfiguration['MESS_SERVER'],
-                  'MESS_PORT' => $aConfiguration['MESS_PORT'],
-                  'MESS_ACCOUNT' => $aConfiguration['MESS_ACCOUNT'],
+                  'MESS_SERVER'   => $aConfiguration['MESS_SERVER'],
+                  'MESS_PORT'     => $aConfiguration['MESS_PORT'],
+                  'MESS_ACCOUNT'  => $aConfiguration['MESS_ACCOUNT'],
                   'MESS_PASSWORD' => $aConfiguration['MESS_PASSWORD'],
-                  'SMTPAuth' => $aConfiguration['MESS_RAUTH'] == '1' ? true : false));
+                  'SMTPAuth'      => $aConfiguration['MESS_RAUTH'] == '1' ? true : false,
+                  'SMTPSecure'    => isset($aConfiguration['SMTPSecure']) ? $aConfiguration['SMTPSecure'] : ''
+              ));
               $oSpool->create(array('msg_uid' => '',
                   'app_uid' => $sApplicationUID,
                   'del_index' => $iDelegation,
@@ -4163,7 +4165,8 @@ class Cases {
                   'app_msg_bcc' => '',
                   'app_msg_attach' => '',
                   'app_msg_template' => '',
-                  'app_msg_status' => 'pending'));
+                  'app_msg_status' => 'pending'
+              ));
               if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
                 $oSpool->sendMail();
               }

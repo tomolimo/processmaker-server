@@ -35,12 +35,15 @@ $aFields['MESS_PASSWORD']            = $_POST['form']['MESS_PASSWORD'];
 $aFields['MESS_BACKGROUND']          = isset($_POST['form']['MESS_BACKGROUND']) ? $_POST['form']['MESS_BACKGROUND'] : '';
 $aFields['MESS_EXECUTE_EVERY']       = $_POST['form']['MESS_EXECUTE_EVERY'];
 $aFields['MESS_SEND_MAX']            = $_POST['form']['MESS_SEND_MAX'];
+$aFields['SMTPSecure']               = $_POST['form']['SMTPSecure'];
 $aFields['MESS_TRY_SEND_INMEDIATLY'] = isset($_POST['form']['MESS_TRY_SEND_INMEDIATLY']) ? $_POST['form']['MESS_TRY_SEND_INMEDIATLY'] : '';
-$oConfiguration->update(array('CFG_UID'   => 'Emails',
-                              'OBJ_UID'   => '',
-                              'CFG_VALUE' => serialize($aFields),
-                              'PRO_UID'   => '',
-                              'USR_UID'   => '',
-                              'APP_UID'   => ''));
-G::SendMessageText(G::LoadTranslation('ID_CHANGES_SAVED'), 'info');
+$oConfiguration->update(array(
+  'CFG_UID'   => 'Emails',
+  'OBJ_UID'   => '',
+  'CFG_VALUE' => serialize($aFields),
+  'PRO_UID'   => '',
+  'USR_UID'   => '',
+  'APP_UID'   => '')
+);
+G::SendTemporalMessage('ID_CHANGES_SAVED', 'TMP-INFO', 'label', 4, '100%');
 G::header('location: emails');
