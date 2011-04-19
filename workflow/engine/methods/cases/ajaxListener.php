@@ -115,6 +115,7 @@ class Ajax
 
     $pmScript = new PMScript();
     $pmScript->setFields($caseData['APP_DATA']);
+    $externalStepCount = 0;
 
     foreach ($caseSteps as $caseStep) {
 
@@ -190,7 +191,7 @@ $caseStep->getStepPosition());
               break;
             }
           }
-
+		  $node->id      = md5($stepTitle.rand());
           $node->text    = $stepTitle;
           $node->leaf    = false;
           $node->url    = "";
@@ -198,10 +199,12 @@ $caseStep->getStepPosition());
 
           if( isset($externalStepActions) ) {
             foreach ( $externalStepActions as $action => $label ) {
+              $childNode = new stdClass;
+              $childNode->id      = md5($externalStepCount++);
               $childNode->text    = $label;
               $childNode->iconCls = 'ICON_EXTERNAL_STEP';
-              $childNode->leaf    = true;
-              $childNode->url    = "../cases/cases_Step?TYPE=$stepTypeObj&UID=$stepUidObj&POSITION=$stepPosition&ACTION=$action";
+              $childNode->leaf    = true; 
+              $childNode->url     = "../cases/cases_Step?TYPE=$stepTypeObj&UID=$stepUidObj&POSITION=$stepPosition&ACTION=$action";
 
               $node->children[] = $childNode;
             }
