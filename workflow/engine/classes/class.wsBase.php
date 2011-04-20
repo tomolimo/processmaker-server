@@ -1453,6 +1453,7 @@ class wsBase
       $aTriggers = $oCase->loadTriggers($appdel['TAS_UID'], 'ASSIGN_TASK', -2, 'BEFORE' );
       if (count($aTriggers) > 0) {
         $oPMScript = new PMScript();
+        $varTriggers .= "<b>-= Before Derivation =-</b><br/>";
         foreach ($aTriggers as $aTrigger) {
           //$appFields = $oCase->loadCase( $caseId );
           //$appFields['APP_DATA']['APPLICATION'] = $caseId;
@@ -1475,12 +1476,11 @@ class wsBase
             $oPMScript->setScript($aTrigger['ST_CONDITION']);
             $bExecute = $oPMScript->evaluate();
             
-          }
+          } 
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
-            $varTriggers .= "<br/><b>-= Before Derivation =-</b><br/>" . nl2br(htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES)) . "<br/>";
-            
+            $varTriggers .= "&nbsp;- ".nl2br(htmlentities($this->getNameTrigger($aTrigger['TRI_UID']), ENT_QUOTES)) . "<br/>";
             //$appFields = $oCase->loadCase( $caseId );
             $appFields['APP_DATA'] = $oPMScript->aFields;
             //$appFields['APP_DATA']['APPLICATION'] = $caseId;
@@ -1571,7 +1571,7 @@ class wsBase
         #####################################################################################################
         
         $oPMScript->setFields( $appFields['APP_DATA'] );
-        
+        $varTriggers .= "<b>-= After Derivation =-</b><br/>";
         foreach ($aTriggers as $aTrigger) {
           $bExecute = true;
           if ($aTrigger['ST_CONDITION'] !== '') {
@@ -1581,8 +1581,7 @@ class wsBase
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
-            $varTriggers .= "<br/><b>-= After Derivation =-</b><br/>" . nl2br(htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES)) . "<br/>";
-             
+            $varTriggers .= "&nbsp;- ".nl2br(htmlentities($this->getNameTrigger($aTrigger['TRI_UID']), ENT_QUOTES)) . "<br/>";
             //$appFields = $oCase->loadCase( $caseId );
             $appFields['APP_DATA'] = $oPMScript->aFields;
             //$appFields['APP_DATA']['APPLICATION'] = $caseId;
@@ -1607,7 +1606,7 @@ class wsBase
       $oProcessFieds = $oProcess->Load($appFields['PRO_UID']);
       //here dubug mode in web entry
       if(isset($oProcessFieds['PRO_DEBUG']) && $oProcessFieds['PRO_DEBUG']){
-        $result = new wsResponse (0, $varResponse."<br><br><table width='100%' cellpadding='0' cellspacing='0'><tr><td class='FormTitle'>Debug Messages</td></tr></table>".$varTriggers);
+        $result = new wsResponse (0, $varResponse."<br><br><table width='100%' cellpadding='0' cellspacing='0'><tr><td class='FormTitle'>".G::LoadTranslation('ID_DEBUG_MESSAGE')."</td></tr></table>".$varTriggers);
       }else{
         $result = new wsResponse (0, $varResponse." --- ".$oProcessFieds['PRO_DUBUG']);
       }
@@ -2081,6 +2080,22 @@ class wsBase
       $result = new wsResponse (100, $e->getMessage());
       return $result;
     }
+  }
+  /*
+  * this function gets the name of a trigger
+  * @param string uidTri : it is the uid of trigger
+  * @return: it returns a string
+  */ 
+  public function getNameTrigger($uidTri){ 
+  
+    $c = new Criteria('workflow');
+    $c->addSelectColumn(ContentPeer::CON_VALUE);
+    $c->add(ContentPeer::CON_ID, $uidTri);
+    $c->add(ContentPeer::CON_CATEGORY, 'TRI_TITLE');
+    $oDataset = ContentPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    return $aRow[0];
   }
 
   
