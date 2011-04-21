@@ -1480,7 +1480,8 @@ class wsBase
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
-            $varTriggers .= "&nbsp;- ".nl2br(htmlentities($this->getNameTrigger($aTrigger['TRI_UID']), ENT_QUOTES)) . "<br/>";
+            $oTrigger = TriggersPeer::retrieveByPk($aTrigger['TRI_UID']);
+            $varTriggers .= "&nbsp;- ".nl2br(htmlentities($oTrigger->getTriTitle(), ENT_QUOTES)) . "<br/>";
             //$appFields = $oCase->loadCase( $caseId );
             $appFields['APP_DATA'] = $oPMScript->aFields;
             //$appFields['APP_DATA']['APPLICATION'] = $caseId;
@@ -1581,7 +1582,8 @@ class wsBase
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
-            $varTriggers .= "&nbsp;- ".nl2br(htmlentities($this->getNameTrigger($aTrigger['TRI_UID']), ENT_QUOTES)) . "<br/>";
+            $oTrigger = TriggersPeer::retrieveByPk($aTrigger['TRI_UID']);
+            $varTriggers .= "&nbsp;- ".nl2br(htmlentities($oTrigger->getTriTitle(), ENT_QUOTES)) . "<br/>";
             //$appFields = $oCase->loadCase( $caseId );
             $appFields['APP_DATA'] = $oPMScript->aFields;
             //$appFields['APP_DATA']['APPLICATION'] = $caseId;
@@ -2081,23 +2083,5 @@ class wsBase
       return $result;
     }
   }
-  /*
-  * this function gets the name of a trigger
-  * @param string uidTri : it is the uid of trigger
-  * @return: it returns a string
-  */ 
-  public function getNameTrigger($uidTri){ 
-  
-    $c = new Criteria('workflow');
-    $c->addSelectColumn(ContentPeer::CON_VALUE);
-    $c->add(ContentPeer::CON_ID, $uidTri);
-    $c->add(ContentPeer::CON_CATEGORY, 'TRI_TITLE');
-    $oDataset = ContentPeer::doSelectRS($c);
-    $oDataset->next();
-    $aRow = $oDataset->getRow();
-    return $aRow[0];
-  }
-
-  
 
 }
