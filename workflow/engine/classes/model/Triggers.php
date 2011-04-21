@@ -278,7 +278,9 @@ class Triggers extends BaseTriggers {
     $oCriteria = new Criteria();
     $oCriteria->addSelectColumn(EventPeer::EVN_UID);
     $oCriteria->addSelectColumn(EventPeer::TRI_UID);
+    $oCriteria->add(EventPeer::EVN_ACTION, '', Criteria::NOT_EQUAL);
     $oCriteria->add(EventPeer::TRI_UID, $TRI_UID);
+    
     
     $oDataset = EventPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
