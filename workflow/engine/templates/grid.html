@@ -14,7 +14,7 @@
 {if ($form->addRow) }
    <table class='Record'>
      <tr><td></td>
-      <td><img id="form[{$form->name}][bullet]" src="/images/bulletButton.gif" />&nbsp;<a class="GridLink" href="#" value="Insert" onclick="form_{$form->owner->id}.getElementByName('{$form->name}').addGridRow();return false;">{$form->NewLabel}</a></td>
+      <td><img id="form[{$form->name}][bullet]" src="/images/bulletButton.gif" />&nbsp;<a id="form[{$form->name}][addLink]" class="GridLink" href="#" value="Insert" onclick="form_{$form->owner->id}.getElementByName('{$form->name}').addGridRow();return false;">{$form->NewLabel}</a></td>
      </tr>
    </table>
 {/if}

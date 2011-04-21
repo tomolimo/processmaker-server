@@ -448,7 +448,8 @@ var G_Grid = function(oForm, sGridName){
   };
   
   ///////////////////////////////////////////////////////////////////////////////////////////////
-  this.deleteGridRow = function(sRow) {
+  this.deleteGridRow = function(sRow, bWithoutConfirm){
+    if (typeof bWithoutConfirm == 'undefined') bWithoutConfirm = false;
     var i, iRow, iRowAux, oAux, ooAux;
     if (this.oGrid.rows.length == 3) {
       new leimnud.module.app.alert().make( {
@@ -456,159 +457,166 @@ var G_Grid = function(oForm, sGridName){
       });
       return false;
     }
-    new leimnud.module.app.confirm().make( {
-      label : G_STRINGS.ID_MSG_DELETE_GRID_ITEM,
-      action : function() {
-        //this.aElements = [];
-        sRow = sRow.replace('[', '');
-        sRow = sRow.replace(']', '');
-        iRow = Number(sRow);
-        
-        /*
-         * delete the respective session row grid variables from
-         * Dynaform - by Nyeke <erik@colosa.com
-         */
-        
-        deleteRowOnDynaform(this, iRow);
-        
-        iRowAux = iRow + 1;
-        while (iRowAux <= (this.oGrid.rows.length - 2)) {
-          for (i = 1; i < this.oGrid.rows[iRowAux - 1].cells.length; i++) {
-            var oCell1 = this.oGrid.rows[iRowAux - 1].cells[i];
-            var oCell2 = this.oGrid.rows[iRowAux].cells[i];
-            switch (oCell1.innerHTML.replace(/^\s+|\s+$/g, '').substr(0, 6).toLowerCase()) {
-              case '<input':
-                aObjects1 = oCell1.getElementsByTagName('input');
-                aObjects2 = oCell2.getElementsByTagName('input');
-                if (aObjects1 && aObjects2) {
-                  if(aObjects1[0].type=='checkbox'){
-                    aObjects1[0].checked = aObjects2[0].checked;
-                  }
-                  aObjects1[0].value = aObjects2[0].value;
-                  
-                  /* if(oCell1.innerHTML.indexOf('<div id=')!=-1)
-                oCell1.innerHTML = oCell2.innerHTML;*/
-                }
-                
-                aObjects = oCell1.getElementsByTagName('div');
-                
-                if (aObjects.length > 0) {
-                  
-                  if (aObjects[0]) {
-                    aObjects[0].id = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
-                    aObjects[0].name = aObjects[0].id.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]');
-                    if (aObjects[0].onclick) {
-                      sAux = new String(aObjects[0].onclick);
-                      eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
-                    }
-                  }
-                  aObjects = oCell1.getElementsByTagName('a');
-                  if (aObjects) {
-                    if (aObjects[0]) {
-                      if (aObjects[0].onclick) {
-                        sAux = new String(aObjects[0].onclick);
-                        eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (this.oGrid.rows.length - 2) + '\]') + ';');
-                      }
-                    }
-                  }
-                }
-                
-                break;
-              case '<selec':
-                aObjects1 = oCell1.getElementsByTagName('select');
-                aObjects2 = oCell2.getElementsByTagName('select');
-                if (aObjects1 && aObjects2) {
-                  var vValue = aObjects2[0].value;
-                  /*
-                   * for (var j = (aObjects1[0].options.length-1);
-                   * j >= 0; j--) { aObjects1[0].options[j] =
-                   * null; }
-                   */
-                  aObjects1[0].options.length = 0;
-                  for ( var j = 0; j < aObjects2[0].options.length; j++) {
-                    var optn = $dce("OPTION");
-                    optn.text = aObjects2[0].options[j].text;
-                    optn.value = aObjects2[0].options[j].value;
-                    aObjects1[0].options[j] = optn;
-                  }
-                  aObjects1[0].value = vValue;
-                }
-                break;
-              case '<texta':
-                aObjects1 = oCell1.getElementsByTagName('textarea');
-                aObjects2 = oCell2.getElementsByTagName('textarea');
-                if (aObjects1 && aObjects2) {
-                  aObjects1[0].value = aObjects2[0].value;
-                }
-                break;
-              default:
-                if (( oCell2.innerHTML.indexOf('changeValues')==111 || oCell2.innerHTML.indexOf('changeValues')==115 ) ) {
-                  break;
-                }
-              if (oCell2.innerHTML.toLowerCase().indexOf('deletegridrow') == -1) {
-                oCell1.innerHTML = oCell2.innerHTML;
+    if (bWithoutConfirm){
+      this.deleteRowWC(this,sRow).extend(this);
+    }else{
+      new leimnud.module.app.confirm().make( {
+        label : G_STRINGS.ID_MSG_DELETE_GRID_ITEM,
+        action : function() {
+          this.deleteRowWC(this,sRow);
+        }.extend(this)
+      });
+    }
+  };
+  
+  this.deleteRowWC = function(oObj, aRow){
+    sRow = new String(aRow);
+    sRow = sRow.replace('[', '');
+    sRow = sRow.replace(']', '');
+    iRow = Number(sRow);
+    
+    /*
+     * delete the respective session row grid variables from
+     * Dynaform - by Nyeke <erik@colosa.com
+     */
+    
+    deleteRowOnDynaform(oObj, iRow);
+    
+    iRowAux = iRow + 1;
+    while (iRowAux <= (oObj.oGrid.rows.length - 2)) {
+      for (i = 1; i < oObj.oGrid.rows[iRowAux - 1].cells.length; i++) {
+        var oCell1 = oObj.oGrid.rows[iRowAux - 1].cells[i];
+        var oCell2 = oObj.oGrid.rows[iRowAux].cells[i];
+        switch (oCell1.innerHTML.replace(/^\s+|\s+$/g, '').substr(0, 6).toLowerCase()){
+          case '<input':
+            aObjects1 = oCell1.getElementsByTagName('input');
+            aObjects2 = oCell2.getElementsByTagName('input');
+            if (aObjects1 && aObjects2) {
+              if(aObjects1[0].type=='checkbox'){
+                aObjects1[0].checked = aObjects2[0].checked;
               }
+              aObjects1[0].value = aObjects2[0].value;
+              
+              /* if(oCell1.innerHTML.indexOf('<div id=')!=-1)
+            oCell1.innerHTML = oCell2.innerHTML;*/
+            }
+            
+            aObjects = oCell1.getElementsByTagName('div');
+            
+            if (aObjects.length > 0) {
+              
+              if (aObjects[0]) {
+                aObjects[0].id = aObjects[0].id.replace(/\[1\]/g, '\[' + (oObj.oGrid.rows.length - 2) + '\]');
+                aObjects[0].name = aObjects[0].id.replace(/\[1\]/g, '\[' + (oObj.oGrid.rows.length - 2) + '\]');
+                if (aObjects[0].onclick) {
+                  sAux = new String(aObjects[0].onclick);
+                  eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (oObj.oGrid.rows.length - 2) + '\]') + ';');
+                }
+              }
+              aObjects = oCell1.getElementsByTagName('a');
+              if (aObjects) {
+                if (aObjects[0]) {
+                  if (aObjects[0].onclick) {
+                    sAux = new String(aObjects[0].onclick);
+                    eval('aObjects[0].onclick = ' + sAux.replace(/\[1\]/g, '\[' + (oObj.oGrid.rows.length - 2) + '\]') + ';');
+                  }
+                }
+              }
+            }
+            
+            break;
+          case '<selec':
+            aObjects1 = oCell1.getElementsByTagName('select');
+            aObjects2 = oCell2.getElementsByTagName('select');
+            if (aObjects1 && aObjects2) {
+              var vValue = aObjects2[0].value;
+              /*
+               * for (var j = (aObjects1[0].options.length-1);
+               * j >= 0; j--) { aObjects1[0].options[j] =
+               * null; }
+               */
+              aObjects1[0].options.length = 0;
+              for ( var j = 0; j < aObjects2[0].options.length; j++) {
+                var optn = $dce("OPTION");
+                optn.text = aObjects2[0].options[j].text;
+                optn.value = aObjects2[0].options[j].value;
+                aObjects1[0].options[j] = optn;
+              }
+              aObjects1[0].value = vValue;
+            }
+            break;
+          case '<texta':
+            aObjects1 = oCell1.getElementsByTagName('textarea');
+            aObjects2 = oCell2.getElementsByTagName('textarea');
+            if (aObjects1 && aObjects2) {
+              aObjects1[0].value = aObjects2[0].value;
+            }
+            break;
+          default:
+            if (( oCell2.innerHTML.indexOf('changeValues')==111 || oCell2.innerHTML.indexOf('changeValues')==115 ) ) {
               break;
             }
+          if (oCell2.innerHTML.toLowerCase().indexOf('deletegridrow') == -1) {
+            oCell1.innerHTML = oCell2.innerHTML;
           }
-          iRowAux++;
+          break;
         }
-        this.oGrid.deleteRow(this.oGrid.rows.length - 2);
-        if (this.sAJAXPage != '') {
-        }
-        /* this slice of code was comented because it could be the problem to do that sum function is working wrong
-        if (this.aFields.length > 0) {
-          this.unsetFields();
-        }*/
-        //this slice of code was added to fill the grid after to delete some row
-        this.aElements = [];
-        for (var k=1;k<= this.oGrid.rows.length-2;k++){
-          for (var i = 0; i < this.aFields.length; i++) {
-            var j = k;
-            switch (this.aFields[i].sType) {
-              case 'text':
-                this.aElements.push(new G_Text(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName));
-                this.aElements[this.aElements.length - 1].validate = this.aFields[i].oProperties.validate;
-                if(this.aFields[i].oProperties.strTo) {
-                  this.aElements[this.aElements.length - 1].strTo = this.aFields[i].oProperties.strTo;
-                }
-                break;
-              case 'currency':
-                this.aElements.push(new G_Currency(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['+ this.aFields[i].sFieldName));
-                break;
-              case 'percentage':
-                this.aElements.push(new G_Percentage(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j+ '][' + this.aFields[i].sFieldName));
-                break;
-              case 'dropdown':
-                this.aElements.push(new G_DropDown(oForm, document.getElementById('form[' + this.sGridName + '][' + j + '][' + this.aFields[i].sFieldName + ']'), this.sGridName + '][' + j + ']['+ this.aFields[i].sFieldName));
-                break;
+      }
+      iRowAux++;
+    }
+    this.oGrid.deleteRow(oObj.oGrid.rows.length - 2);
+    if (this.sAJAXPage != '') {
+    }
+    /* this slice of code was comented because it could be the problem to do that sum function is working wrong
+    if (this.aFields.length > 0) {
+      this.unsetFields();
+    }*/
+    //this slice of code was added to fill the grid after to delete some row
+    this.aElements = [];
+    for (var k=1;k<= oObj.oGrid.rows.length-2;k++){
+      for (var i = 0; i < oObj.aFields.length; i++) {
+        var j = k;
+        switch (oObj.aFields[i].sType) {
+          case 'text':
+            oObj.aElements.push(new G_Text(oForm, document.getElementById('form[' + oObj.sGridName + '][' + j + '][' + oObj.aFields[i].sFieldName + ']'), oObj.sGridName + '][' + j + '][' + oObj.aFields[i].sFieldName));
+            oObj.aElements[oObj.aElements.length - 1].validate = oObj.aFields[i].oProperties.validate;
+            if(oObj.aFields[i].oProperties.strTo) {
+              oObj.aElements[oObj.aElements.length - 1].strTo = oObj.aFields[i].oProperties.strTo;
             }
-            j++;
+            break;
+          case 'currency':
+            oObj.aElements.push(new G_Currency(oForm, document.getElementById('form[' + oObj.sGridName + '][' + j + '][' + oObj.aFields[i].sFieldName + ']'), oObj.sGridName + '][' + j + ']['+ oObj.aFields[i].sFieldName));
+            break;
+          case 'percentage':
+            oObj.aElements.push(new G_Percentage(oForm, document.getElementById('form[' + oObj.sGridName + '][' + j + '][' + oObj.aFields[i].sFieldName + ']'), oObj.sGridName + '][' + j+ '][' + oObj.aFields[i].sFieldName));
+            break;
+          case 'dropdown':
+            oObj.aElements.push(new G_DropDown(oForm, document.getElementById('form[' + oObj.sGridName + '][' + j + '][' + oObj.aFields[i].sFieldName + ']'), oObj.sGridName + '][' + j + ']['+ oObj.aFields[i].sFieldName));
+            break;
+        }
+        j++;
+      }
+    }
+    
+    if (oObj.aFunctions.length > 0) {
+      for (i = 0; i < oObj.aFunctions.length; i++) {
+        oAux = document.getElementById('form[' + oObj.sGridName + '][1][' + oObj.aFunctions[i].sFieldName + ']');
+        if (oAux) {
+          switch (oObj.aFunctions[i].sFunction) {
+            case 'sum':
+              oObj.sum(false, oAux);
+              break;
+            case 'avg':
+              oObj.avg(false, oAux);
+              break;
           }
         }
-        
-        if (this.aFunctions.length > 0) {
-          for (i = 0; i < this.aFunctions.length; i++) {
-            oAux = document.getElementById('form[' + this.sGridName + '][1][' + this.aFunctions[i].sFieldName + ']');
-            if (oAux) {
-              switch (this.aFunctions[i].sFunction) {
-                case 'sum':
-                  this.sum(false, oAux);
-                  break;
-                case 'avg':
-                  this.avg(false, oAux);
-                  break;
-              }
-            }
-          }
-        }
-        //Fires OnAddRow Event
-        if (this.ondeleterow) {
-          this.ondeleterow();
-        }
-        
-      }.extend(this)
-    });
+      }
+    }
+    //Fires OnAddRow Event
+    if (oObj.ondeleterow) {
+      oObj.ondeleterow(iRow);
+    }
   };
   
   ///////////////////////////////////////////////////////////////////////////////////
