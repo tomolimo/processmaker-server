@@ -46,11 +46,11 @@
 <PME_READONLY type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
   <en>Read Only</en>
 </PME_READONLY>
-<PME_DEPENDENTFIELDS type="listbox" defaultvalue="" sqlconnection="XMLDB"><![CDATA[
+<PME_DEPENDENTFIELDS type="listbox" defaultvalue="" sqlconnection="XMLDB" width="362"><![CDATA[
 select XMLNODE_NAME, XMLNODE_NAME AS NAME FROM dynaForm WHERE	XMLNODE_NAME <> @@PME_XMLNODE_NAME AND XMLNODE_NAME <> ""	AND ( TYPE="text" or TYPE="textarea" or TYPE="dropdown" or TYPE="listbox" or TYPE="hidden" )
   ]]><en>Dependent Fields<option name="">(none)</option></en>
 </PME_DEPENDENTFIELDS>
-<PME_DEFAULTVALUE type="text" maxlength="" size="30" defaultvalue="">
+<PME_DEFAULTVALUE type="text" maxlength="" size="49" defaultvalue="">
   <en>Default Value</en>
 </PME_DEFAULTVALUE>
 <PME_HINT type="textarea" cols="47" rows="3">
