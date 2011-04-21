@@ -2557,7 +2557,7 @@ class Processes {
    *        array exist and wich are those, that is the result $sFilteredGroups array.
    */
   function checkExistingGroups( $sGroupList ){
-
+      $aGroupwf  = array();
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
       $oCriteria->addSelectColumn(ContentPeer::CON_ID);

@@ -1313,7 +1313,7 @@ $output = $outputHeader.$output;
         print G::trimSourceCodeFile ($filename );
         break;
       default :
-        readfile($filename);
+        @readfile($filename);
     }
   }
 
