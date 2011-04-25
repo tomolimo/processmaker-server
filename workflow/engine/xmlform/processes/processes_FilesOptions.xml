@@ -97,6 +97,7 @@ if( typofile[typofile.length-1].toLowerCase() != 'txt' && typofile[typofile.leng
 
 function saveFile(pro_uid, fileName){
 	fc = getField('fcontent').value;
+	fc = escape(fc);
 	fc = fc.replace(/&amp;/g, "@amp@");
 	fc = fc.replace(/\+/g, '%2B');
 	var oRPC = new leimnud.module.rpc.xmlhttp({
