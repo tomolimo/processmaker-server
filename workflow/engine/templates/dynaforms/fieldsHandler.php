@@ -187,7 +187,7 @@
 	
 	function __ActionDelete(uid, ftype){
 		new window.parent.leimnud.module.app.confirm().make({
-			label:"Do you want to remove this "+ftype+" field, are you sure?",
+      label: '<?php echo G::LoadTranslation('ID_FIELD_HANDLER_ACTION_DELETE');?>' + ' ' + ftype + "?",
 			action:function(){
 				$.ajax({
 				   type: "POST",
