@@ -320,39 +320,30 @@ class Form extends XmlForm
                             // also we need to know if the $values array has dropdown labels added
                             if(!$fieldIsSet) {
                               $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
-                              $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                              $fieldIsSet = true;
+                              if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
+                                $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
+                                $fieldIsSet = true;
+                              }else{
+                                $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
+                                $con = Propel::getConnection('workflow');
+                                $stmt = $con->prepareStatement($query);
+                                $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                                while ($rs->next()){
+                                  // from the query executed we only need certain elements
+                                  $row = $rs->getRow();
+                                  $rowId      = $row['0'];
+                                  $rowContent = $row['1'];
+                                  if ($vv==$rowId){
+                                    $values[$k][$j][$kk. '_label'] = $rowContent;
+                                    $fieldIsSet = true;
+                                    break;
+                                  }
+                                }
+                              }
                             } else {
                               // if a dropdown label been set there is no need to load the default values.
                               if(isset($this->fields[$k]->fields[$kk]->options[$vv]))
                                $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                            }
-                            $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
-                            //$query = $this->fields[$k]->fields[$kk]->sql;
-                            // added in order to save the label of dropdowns with data from a sql query
-                            if (trim($this->fields[$k]->fields[$kk]->options[$vv])==''){
-                              // a better approach could be use instead the method
-                              // $dropdown->executeSQL($owner, $row);
-                              // that is part of the dropdown class
-                              $con = Propel::getConnection('workflow');
-                              $stmt = $con->prepareStatement($query);
-                              $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-                              while ($rs->next()){
-                                // from the query executed we only need certain elements
-                                $row = $rs->getRow();
-                                $rowId      = $row['0'];
-                                $rowContent = $row['1'];
-                                // we need only the first element and this is a one element array
-                                foreach ($newValues[$k][$j] as $newValue){
-                                  $valueId = $vv;
-                                  break;
-                                }
-
-                                if ($valueId==$rowId){
-                                  $values[$k][$j][$kk. '_label'] = $rowContent;
-                                  break;
-                                }
-                              }
                             }
                           }
                         }else{
@@ -390,18 +381,10 @@ class Form extends XmlForm
             }
             if ($v->type == 'dropdown') {
               if ($v->saveLabel == 1) {
-              	if(isset($v->option[$newValues[$k]]))
-                $values[$k . '_label'] = $v->option[$newValues[$k]];
-                //* Fixed when the dropdowns has a sql statement
-                //* By krlos <carlos /a/ colosa.com>
-                //* Aug 3rd, 2010 
-                // added in order to save the label of dropdowns with data from a sql query
-                $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
-                //if the value is empty there is a sql query
-                if (!(isset($v->option[$newValues[$k]])) && trim($v->option[$newValues[$k]])==''){
-                  // a better approach could be use instead the method
-                  // $dropdown->executeSQL($owner, $row);
-                  // that is part of the dropdown class
+              	if(isset($v->option[$newValues[$k]])){
+                  $values[$k . '_label'] = $v->option[$newValues[$k]];
+              	}else{
+                  $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
                   $con = Propel::getConnection('workflow');
                   $stmt = $con->prepareStatement($query);
                   $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
