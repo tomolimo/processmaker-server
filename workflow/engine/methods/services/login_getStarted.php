@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * login_getStarted.php
  *

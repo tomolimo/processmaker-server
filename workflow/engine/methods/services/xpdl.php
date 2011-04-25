@@ -1,4 +1,4 @@
-<?
+<?php
 function addNodox($obj, $padre, $indice, $contenido='', $atributos)
 { 
   if(is_object($padre))

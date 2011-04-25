@@ -122,7 +122,7 @@
       $aFields=array("_FILENAME_"=>basename( $filename ) );
       $value = G::replaceDataField( $value , $aFields );
       $aOrigin = file( $filename);
-      //It suposse that allway start with <? or <?php
+      //It suposse that allway start with <?. or <?php
       $line=$aOrigin[0];
       $nl=(strlen($line)>=2)&&(substr($line,-2,2)=="\r\n")?
         "\r\n":
@@ -154,7 +154,7 @@
     function add_permission($filename,$value)
     {
       $aOrigin = file( $filename);
-      //It suposse that allway start with <? or <?php
+      //It suposse that allway start with <?. or <?php
       $aSource[0]=$aOrigin[0];
       $line=$aOrigin[0];
       $nl=(strlen($line)>=2)&&(substr($line,-2,2)=="\r\n")?

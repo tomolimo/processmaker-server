@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * testAuthenticationUser.php
  *  

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * upgrade_SystemAjax.php
  *

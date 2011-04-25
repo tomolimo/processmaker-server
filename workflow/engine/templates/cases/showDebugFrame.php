@@ -161,28 +161,28 @@ function Only1br($string) {
   <table width='100%' cellspacing='0' cellpadding='0' border='1' style='border:0px;'>
     <tr>
       <td width='410px' class='treeNode' style='border:0px;background-color:transparent;'>
-        <font color='#0B58B6'><?=$triggers_onfly?></font><br/>
-        <?if( sizeof($triggers_name) > 0 ) {?>
+        <font color='#0B58B6'><?php= $triggers_onfly?></font><br/>
+        <?php if( sizeof($triggers_name) > 0 ) {?>
         <table class="pmdebugger" width="100%">
           <tr>
             <td width="5" class="pmdebuggerHeader">#</td><td class="pmdebuggerHeader">Name</td><td class="pmdebuggerHeader">&nbsp;</td>
           </tr>
-            <?foreach($triggers_name as $k=>$trigger) {?>
+            <?php foreach($triggers_name as $k=>$trigger) {?>
           <tr>
-            <td>&nbsp;<?=($k+1)?>&nbsp;</td>
+            <td>&nbsp;<?php =($k+1)?>&nbsp;</td>
             <td>
-              &nbsp;<?=$trigger?>
-              <div id='trigger_<?=$k?>' class='ui-accordion-header ui-helper-reset ui-state-active ui-corner-all data_view'><?=$triggers_code[$k]?></div>
+              &nbsp;<?php= $trigger?>
+              <div id='trigger_<?php= $k?>' class='ui-accordion-header ui-helper-reset ui-state-active ui-corner-all data_view'><?php=$triggers_code[$k]?></div>
             </td>
             <td valign="top" width="5">
-              <a href='#' onclick="toggle('trigger_<?=$k?>'); return false;">
-                <img id='img_trigger_<?=$k?>' src='/images/pin-up-on.gif' border='0'>
+              <a href='#' onclick="toggle('trigger_<?php=$k?>'); return false;">
+                <img id='img_trigger_<?php=$k?>' src='/images/pin-up-on.gif' border='0'>
               </a>
             </td>
           </tr>
-              <?}?>
+              <?php } ?>
         </table>
-          <?}?>
+          <?php } ?>
       </td>
     </tr>
   </table>
@@ -199,49 +199,49 @@ function Only1br($string) {
     <tr>
         <?php if( is_array($aVariable) ) {?>
       <td valign="top"><font color="blue">&nbsp;<?=$sName?></font></td>
-          <?} else {?>
-      <td>&nbsp;<?=$sName?></td>
-          <?}?>
+          <?php } else {?>
+      <td>&nbsp;<?php =$sName?></td>
+          <?php }?>
       <td><?php echo expandVarView($aVariable, $sName)?></td>
     </tr>
-      <?}?>
+      <?php }?>
   </table>
 </div>
 
 <!---->
-<?if( count($DEBUG_POST) > 0 ) {?>
+<?php if( count($DEBUG_POST) > 0 ) {?>
 <div class="ui-widget-header ui-corner-all" width="50%" align="center">Errors</div>
 <div id="debugger_errors" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-all" align="left">
 
-    <?  for($i=0; $i<count($DEBUG_POST); $i++) {
+    <?php  for($i=0; $i<count($DEBUG_POST); $i++) {
       if(isset($DEBUG_POST[$i]['ERROR']) and $DEBUG_POST[$i]['ERROR'] != '') {?>
   <span class='treeNode'>
     <font color='red'>Error </font>
-    <font color='#0B58B6'><?=str_replace('<br />', '',$DEBUG_POST[$i]['ERROR'])?></font>
+    <font color='#0B58B6'><?php=str_replace('<br />', '',$DEBUG_POST[$i]['ERROR'])?></font>
   </span><br/>
-        <?}
+        <?php}
     }
     for($i=0; $i<count($DEBUG_POST); $i++) { ?>
-      <?if(isset($DEBUG_POST[$i]['FATAL']) and $DEBUG_POST[$i]['FATAL'] != '') { ?>
+      <?php if(isset($DEBUG_POST[$i]['FATAL']) and $DEBUG_POST[$i]['FATAL'] != '') { ?>
   <span class='treeNode'>
     <font color='red'>Fatal error </font>
-    <font color='#0B58B6'> <?=str_replace('<br />', '',$DEBUG_POST[$i]['FATAL'])?></font>
+    <font color='#0B58B6'> <?php=str_replace('<br />', '',$DEBUG_POST[$i]['FATAL'])?></font>
   </span><br/>
-        <?}
+        <?php }
     }
   } else { ?>
   <div class="ui-widget-header ui-corner-all" width="50%" align="center">No errors reported</div>
-    <?}?>
+    <?php}?>
 </div>
 
 <!---->
 
-<?if(isset($_POST['NextStep'])) {?>
-<input type="button" value="Continue" class="module_app_button___gray" onclick="javascript:location.href='<?=$_POST['NextStep']?>'">
-  <?}?>
+<?php if(isset($_POST['NextStep'])) {?>
+<input type="button" value="Continue" class="module_app_button___gray" onclick="javascript:location.href='<?php= $_POST['NextStep']?>'">
+  <?php}?>
 
 
-<?
+<?php
 
 function expandVarView($a, $name) {
   if( is_array($a) ) {

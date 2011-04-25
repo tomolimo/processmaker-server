@@ -91,25 +91,25 @@
 		
 		<div id="dynafields"> 
 		  <ul id="sortable" style="margin:0; padding:0;">
-			<? foreach($elements as $node_name=>$node){
+			<?php foreach($elements as $node_name=>$node){
 				    if( isset($hidden_fields_list) ){
 					   $checked = !(in_array($node_name, $hidden_fields_list))? 'checked="checked"': '';
 					} else {
 						$checked = 'checked="checked"';
 					}
 				?>
-			<li style="list-style:none;" id="<?=$node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
+			<li style="list-style:none;" id="<?php=$node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
 				<table class="dynalist" border="0" width="100%" cellpadding="0" cellspacing="0" id="fieldshandler_items_table">
 				<tr>
 					<td width="15px">
 						<?php if($node['__ATTRIBUTES__']['type'] != 'javascript' && $dynaformType != 'grid') {?>
-						<input id="chk@<?=$node_name?>" type="checkbox" onclick="fieldsHandlerSaveHidden()" <?php echo $checked?> />
+						<input id="chk@<?php=$node_name?>" type="checkbox" onclick="fieldsHandlerSaveHidden()" <?php echo $checked?> />
 						<?php } else {?>
 						&nbsp;
 						<?php }?>
 					</td>
 					<td width="10px" class="directionSide1">
-					<?$type = $node['__ATTRIBUTES__']['type'];
+					<?php $type = $node['__ATTRIBUTES__']['type'];
 					switch($type){
 						case 'yesno':       	$type = 'yes_no';       		break;
 						case 'listbox':    		$type = 'list_box';     		break;
@@ -118,10 +118,10 @@
 						case 'file':        		$type = 'upload_files'; 	break;
 					}?>
                     <?php if ( is_file(PATH_HTML.'images'.PATH_SEP.'dynamicForm'.PATH_SEP."$type.gif") ){?>
-					<img src="/images/dynamicForm/<?=$type?>.gif"/>
-                    <?} else {?>
+					<img src="/images/dynamicForm/<?php= $type?>.gif"/>
+                    <?php } else {?>
                     <img src="/images/unknown_icon.gif" border="0" width="20" height="16"/>
-                    <?}?>
+                    <?php }?>
 					</td>
 					<td width="80px"  class="directionSide1">
                         &nbsp;<?php echo "({$node['__ATTRIBUTES__']['type']})";?>
@@ -146,20 +146,20 @@
                         <?php if( in_array($node['__ATTRIBUTES__']['type'], $_POST['fieldsList']) ){ ?>
 						<!-- <div class="tool"><img src="/images/options.png" width="12" height="12" border="0"/> </div>-->
 						<div class="jq-checkpointSubhead" style="display:block">
-							<a title="<?php echo G::loadTranslation('ID_EDIT_FIELD')?>" href="#" onclick="__ActionEdit('<?=$node_name?>'); return false;"><img src="/images/e_Edit.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
-							<a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?=$node_name?>', '<?=$node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
+							<a title="<?php echo G::loadTranslation('ID_EDIT_FIELD')?>" href="#" onclick="__ActionEdit('<?php= $node_name?>'); return false;"><img src="/images/e_Edit.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
+							<a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?php= $node_name?>', '<?php= $node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
 						</div>
-                        <?} else {?>
+                        <?php } else {?>
                             <div class="tool"><img src="/images/options.png" width="12" height="12" border="0"/> </div>
                             <div class="jq-checkpointSubhead" style="display:none">
-                                <a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?=$node_name?>', '<?=$node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
+                                <a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?php= $node_name?>', '<?php= $node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
                             </div>
-                        <?}?>
+                        <?php }?>
 					</td>
 				</tr>
 				</table>	
 			</li>
-			<?}?>
+			<?php }?>
 		  </ul>
 		</div>
 	 </center>
