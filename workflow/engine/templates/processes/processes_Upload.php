@@ -109,7 +109,7 @@ var xclear = function(){
 				<li id="e" class="e">
 					<div class="wrapper">
 						<table><tr>
-						<td><input type="button" id="button1" class="button" value="Upload"/></td>
+						<td><input type="button" id="button1" class="button" value="Browse"/></td>
 						<td><div id="uxfiles">&nbsp;<span id="uxmsg" style="display:none">Select your file</span></div> </td>
 						</tr></table>
 					</div>

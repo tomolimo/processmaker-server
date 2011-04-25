@@ -32,8 +32,8 @@ var uploadFilesScreen = function(PRO_UID, MAIN_DIRECTORY, CURRENT_DIRECTORY) {
    hg=200;
   } else {
    swNavigator='wknormal';
-   wd=400;
-   hg=90;
+   wd=420;
+   hg=100;
   }
 
 	CURRENT_MAIN_DIRECTORY = MAIN_DIRECTORY;
