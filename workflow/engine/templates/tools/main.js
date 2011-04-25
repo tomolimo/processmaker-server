@@ -21,6 +21,11 @@ Ext.onReady(function(){
     })
   });
 
+          store.setBaseParam('dateFrom', dateFrom.getValue());
+          store.setBaseParam('dateTo', dateTo.getValue());
+          store.load({params:{start : 0 , limit : 20}});
+          //store.load({params:{ start : 0 , limit : pageSize }});
+
   var comboCategory = new Ext.form.ComboBox({
     fieldLabel    : 'Category',
     name        : 'category',
