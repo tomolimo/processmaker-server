@@ -87,8 +87,14 @@ var saveDataTaskTemporal = function(iForm)
       break;
       case 7:
       case '7':
-        oTaskData.SEND_EMAIL      = (getField('SEND_EMAIL').checked ? 'TRUE' : 'FALSE');
-        oTaskData.TAS_DEF_MESSAGE = getField('TAS_DEF_MESSAGE').value;
+        if(typeof getField('SEND_EMAIL') != 'undefined' )
+          oTaskData.SEND_EMAIL      = getField('SEND_EMAIL').checked ? 'TRUE' : 'FALSE';
+        else
+          oTaskData.SEND_EMAIL      = 'FALSE';
+        oTaskData.TAS_DEF_MESSAGE = getField('TAS_DEF_MESSAGE').value.replace(re, "@amp@");
+        oTaskData.TAS_DEF_SUBJECT_MESSAGE  = getField('TAS_DEF_SUBJECT_MESSAGE').value.replace(re, "@amp@");
+        oTaskData.TAS_DEF_MESSAGE_TYPE     = getField('TAS_DEF_MESSAGE_TYPE').value;
+        oTaskData.TAS_DEF_MESSAGE_TEMPLATE = getField('TAS_DEF_MESSAGE_TEMPLATE').value;
       break;
     }
   }
@@ -112,8 +118,7 @@ var saveTaskData = function(oForm, iForm, iType)
 	  alert(G_STRINGS.ID_REQ_TITLE );
 	  return false;
 	}
-  if(oTaskData.TAS_DEF_MESSAGE)
-   oTaskData.TAS_DEF_MESSAGE=oTaskData.TAS_DEF_MESSAGE.replace(re,"@amp@");
+
   var sParameters = 'function=saveTaskData';
   var oRPC = new leimnud.module.rpc.xmlhttp({
     url   : '../tasks/tasks_Ajax',

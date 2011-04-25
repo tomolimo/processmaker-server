@@ -1,110 +1,159 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="tasks_Notifications" width="99%" mode="edit" enableTemplate="0" border="0" height="305px">
+<dynaForm name="tasks_Notifications" width="99%" labelWidth="160" mode="edit" enableTemplate="1" border="0" height="305px">
 
-<PRO_UID type="private"/>
+  <PRO_UID type="private"/>
+  <TAS_UID type="hidden"/>
+  <TAS_SEND_LAST_EMAIL type="hidden"/>
+  <INDEX type="hidden"/>
+  <IFORM type="hidden"/>
+  
+  <SEND_EMAIL type="checkbox" value="TRUE" group="1">
+    <en>After routing notify the next assigned user(s).</en>
+  </SEND_EMAIL>
+  
+  <TAS_DEF_SUBJECT_MESSAGE type="text" size="50">
+    <en>Subject</en>
+  </TAS_DEF_SUBJECT_MESSAGE>
 
-<TAS_UID type="hidden"/>
+  <TAS_DEF_MESSAGE_TYPE type="dropdown" defaultValue="text">
+    <en>Content Type
+      <option name="text">Plain Text</option>
+      <option name="template">HTML Template</option>
+    </en>
+  </TAS_DEF_MESSAGE_TYPE>
 
-<INDEX type="hidden"/>
+  <TAS_DEF_MESSAGE type="textareapm" cols="50" rows="10" group="1" showVars="1" process="@#PRO_UID" symbol="@#">
+    <en>Message</en>
+  </TAS_DEF_MESSAGE>
 
-<IFORM type="hidden"/>
+  <TAS_DEF_MESSAGE_TEMPLATE type="dropdown" sqlconnection="dbarray">
+  SELECT FILE,NAME FROM _TEMPLATES1
+  <en>Template<option name="">- None -</option></en>
+  </TAS_DEF_MESSAGE_TEMPLATE>
 
-<SEND_EMAIL type="checkbox" value="TRUE" group="1">
-  <en>After routing notify the next assigned user(s).</en>
-</SEND_EMAIL>
-
-<TAS_DEF_MESSAGE type="textareapm" cols="45" rows="6" group="1" showVars="1" process="@#PRO_UID" symbol="@#">
-  <en>Message</en>
-</TAS_DEF_MESSAGE>
-
-<JS type="javascript"><![CDATA[
-
-/* Recovery data */
-if (aTaskFlag[6])
-{
-  getField('SEND_EMAIL').checked    = (oTaskData.SEND_EMAIL == 'TRUE' ? true : false);
-  getField('TAS_DEF_MESSAGE').value = oTaskData.TAS_DEF_MESSAGE;
-}
-else
-{
-  saveDataTaskTemporal(7);
-  aTaskFlag[6] = true;
-}
-
-leimnud.event.add(document.getElementById('form[SEND_EMAIL]'), 'click', function() {
-  var oAux = document.getElementById('form[TAS_DEF_MESSAGE]');
-  if (!document.getElementById('form[SEND_EMAIL]').checked)
+  <JS type="javascript"><![CDATA[
+  
+  /* Recovery data */
+  if (aTaskFlag[6])
   {
-    document.getElementById('form[TAS_DEF_MESSAGE]').value = '';
-    hideRowById('TAS_DEF_MESSAGE');
+    getField('SEND_EMAIL').checked    = (oTaskData.SEND_EMAIL == 'TRUE' ? true : false);
+    getField('TAS_DEF_MESSAGE').value = oTaskData.TAS_DEF_MESSAGE;
   }
   else
   {
-     showRowById('TAS_DEF_MESSAGE');
+    saveDataTaskTemporal(7);
+    aTaskFlag[6] = true;
   }
-});
-if (document.getElementById('form[TAS_DEF_MESSAGE]').value != '')
-{
-  document.getElementById('form[SEND_EMAIL]').checked = true;
-  showRowById('TAS_DEF_MESSAGE');
-}
-else
-{
-  hideRowById('TAS_DEF_MESSAGE');
-}
 
-var _oVarsPanel_;
-var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
-	_oVarsPanel_ = new leimnud.module.panel();
-	_oVarsPanel_.options = {
-    limit    : true,
-    size     : {w:400,h:600},
-    position : {x:0,y:0,center:true},
-    title    : '',
-    theme    : 'processmaker',
-    statusBar: false,
-    control  : {drag:false,resize:true,close:true},
-    fx       : {opacity:true,rolled:false,modal:true}
-  };
-  _oVarsPanel_.make();
-  _oVarsPanel_.events = {
-    remove:function() {
-      delete _oVarsPanel_;
-    }.extend(this)
-  };
-  _oVarsPanel_.loader.show();
-  oRPC = new leimnud.module.rpc.xmlhttp({
-    url   : sAjaxServer,
-    method: 'POST',
-    args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sType=2'
+  if (@@TAS_SEND_LAST_EMAIL == 'TRUE')
+  {
+    getField('SEND_EMAIL').checked = true;
+    showRowById('TAS_DEF_MESSAGE_TYPE');
+    showRowById('TAS_DEF_MESSAGE');
+    showRowById('TAS_DEF_SUBJECT_MESSAGE');
+    showRowById('TAS_DEF_MESSAGE_TEMPLATE');
+
+    if (getField('TAS_DEF_MESSAGE_TYPE').value == 'text') {
+      hideRowById('TAS_DEF_MESSAGE_TEMPLATE');
+    } else {
+      hideRowById('TAS_DEF_MESSAGE');
+    }
+
+  } else {
+    hideRowById('TAS_DEF_MESSAGE');
+    hideRowById('TAS_DEF_MESSAGE_TYPE');
+    hideRowById('TAS_DEF_SUBJECT_MESSAGE');
+    hideRowById('TAS_DEF_MESSAGE_TEMPLATE');
+  }
+
+  leimnud.event.add(getField('SEND_EMAIL'), 'click', function() {
+    var oAux = document.getElementById('form[TAS_DEF_MESSAGE]');
+    if (!document.getElementById('form[SEND_EMAIL]').checked)
+    {
+      hideRowById('TAS_DEF_SUBJECT_MESSAGE');
+      hideRowById('TAS_DEF_MESSAGE');
+      hideRowById('TAS_DEF_MESSAGE_TEMPLATE');
+      hideRowById('TAS_DEF_MESSAGE_TYPE');
+    }
+    else
+    {
+      showRowById('TAS_DEF_SUBJECT_MESSAGE');
+      if (getField('TAS_DEF_MESSAGE_TYPE').value == 'template'){
+        hideRowById('TAS_DEF_MESSAGE');
+        showRowById('TAS_DEF_MESSAGE_TEMPLATE');
+      } else {
+        showRowById('TAS_DEF_MESSAGE');
+        hideRowById('TAS_DEF_MESSAGE_TEMPLATE');
+      }
+      showRowById('TAS_DEF_MESSAGE_TYPE');
+    }
   });
-  oRPC.callback = function(oRPC) {
-    _oVarsPanel_.loader.hide();
-    var scs = oRPC.xmlhttp.responseText.extractScript();
-    _oVarsPanel_.addContent(oRPC.xmlhttp.responseText);
-    scs.evalScript();
-  }.extend(this);
-  oRPC.make();
-};
+  
+  leimnud.event.add(getField('TAS_DEF_MESSAGE_TYPE'), 'change', function() {
+    if (this.value == 'text') {
+      showRowById('TAS_DEF_MESSAGE');
+      hideRowById('TAS_DEF_MESSAGE_TEMPLATE');
+    } else {
+      showRowById('TAS_DEF_MESSAGE_TEMPLATE');
+      hideRowById('TAS_DEF_MESSAGE');
+    }
+  });
 
-var insertFormVar = function(sFieldName, sValue) {
-	oAux = document.getElementById(sFieldName);
-	if (oAux.setSelectionRange) {
-		var rangeStart = oAux.selectionStart;
-    var rangeEnd   = oAux.selectionEnd;
-    var tempStr1   = oAux.value.substring(0,rangeStart);
-    var tempStr2   = oAux.value.substring(rangeEnd);
-    oAux.value     = tempStr1 + sValue + tempStr2;
-	}
-	else {
-	  if (document.selection) {
-	    oAux.focus();
-      document.selection.createRange().text = sValue;
-	  }
-	}
-	_oVarsPanel_.remove();
-};
+  var _oVarsPanel_;
+  var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
+    if( sProcess == '') {
+      sProcess = @@PRO_UID;
+    }
+  	_oVarsPanel_ = new leimnud.module.panel();
+  	_oVarsPanel_.options = {
+      limit    : true,
+      size     : {w:400,h:600},
+      position : {x:0,y:0,center:true},
+      title    : '',
+      theme    : 'processmaker',
+      statusBar: false,
+      control  : {drag:false,resize:true,close:true},
+      fx       : {opacity:true,rolled:false,modal:true}
+    };
+    _oVarsPanel_.make();
+    _oVarsPanel_.events = {
+      remove:function() {
+        delete _oVarsPanel_;
+      }.extend(this)
+    };
+    _oVarsPanel_.loader.show();
+    oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : sAjaxServer,
+      method: 'POST',
+      args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sType=2'
+    });
+    oRPC.callback = function(oRPC) {
+      _oVarsPanel_.loader.hide();
+      var scs = oRPC.xmlhttp.responseText.extractScript();
+      _oVarsPanel_.addContent(oRPC.xmlhttp.responseText);
+      scs.evalScript();
+    }.extend(this);
+    oRPC.make();
+  };
 
-]]></JS>
+  var insertFormVar = function(sFieldName, sValue) {
+  	oAux = document.getElementById(sFieldName);
+  	if (oAux.setSelectionRange) {
+  		var rangeStart = oAux.selectionStart;
+      var rangeEnd   = oAux.selectionEnd;
+      var tempStr1   = oAux.value.substring(0,rangeStart);
+      var tempStr2   = oAux.value.substring(rangeEnd);
+      oAux.value     = tempStr1 + sValue + tempStr2;
+  	}
+  	else {
+  	  if (document.selection) {
+  	    oAux.focus();
+        document.selection.createRange().text = sValue;
+  	  }
+  	}
+  	_oVarsPanel_.remove();
+  };
+
+  ]]></JS>
 
 </dynaForm>  

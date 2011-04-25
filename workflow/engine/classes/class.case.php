@@ -4136,8 +4136,35 @@ class Cases {
               }
             }
           }
-          $sSubject = G::LoadTranslation('ID_MESSAGE_SUBJECT_DERIVATION');
-          $sBody = G::replaceDataField($aTaskInfo['TAS_DEF_MESSAGE'], $aFields);
+          
+          if (isset($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE']) && $aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'] != '') {
+            $sSubject = G::replaceDataField($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'], $aFields);
+          } else {
+            $sSubject = G::LoadTranslation('ID_MESSAGE_SUBJECT_DERIVATION');
+          }
+
+          //erik: new behaviour for messages
+          G::loadClass('configuration');
+          $oConf = new Configurations;
+          $oConf->loadConfig($x, 'TAS_EXTRA_PROPERTIES', $aTaskInfo['TAS_UID'], '', '');
+          $conf = $oConf->aConfig;
+          
+          if( isset($conf['TAS_DEF_MESSAGE_TYPE']) && isset($conf['TAS_DEF_MESSAGE_TEMPLATE']) 
+            && $conf['TAS_DEF_MESSAGE_TYPE'] == 'template' && $conf['TAS_DEF_MESSAGE_TEMPLATE'] != '') {
+
+            $pathEmail = PATH_DATA_SITE . 'mailTemplates' . PATH_SEP . $aTaskInfo['PRO_UID'] . PATH_SEP;
+            $fileTemplate = $pathEmail . $conf['TAS_DEF_MESSAGE_TEMPLATE'];
+
+            if ( ! file_exists ( $fileTemplate ) ) {
+              throw new Exception("Template file '$fileTemplate' does not exist.");
+            }
+            
+            $sBody = G::replaceDataField(file_get_contents($fileTemplate), $aFields);
+          } else {
+            $sBody = nl2br(G::replaceDataField($aTaskInfo['TAS_DEF_MESSAGE'], $aFields));
+          }
+            
+
           G::LoadClass('spool');
           $oUser = new Users();
           foreach ($aTasks as $aTask) {

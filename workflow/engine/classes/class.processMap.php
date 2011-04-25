@@ -1342,6 +1342,35 @@ class processMap {
       $aFields ['IFORM'] = $iForm;
       $aFields ['LANG'] = SYS_LANG;
 
+      if($iForm == 7) {
+        $aTemplates   = array();
+          $aTemplates[] = 'dummy';
+          $sDirectory = PATH_DATA_MAILTEMPLATES . $aFields['PRO_UID'] . PATH_SEP;
+          G::verifyPath($sDirectory, true);
+          if (!file_exists($sDirectory . 'alert_message.html')) {
+            @copy(PATH_TPL . 'mails' . PATH_SEP . 'alert_message.html', $sDirectory . 'alert_message.html');
+          }
+          $oDirectory   = dir($sDirectory);
+          while ($sObject = $oDirectory->read()) {
+            if (($sObject !== '.') && ($sObject !== '..') && ($sObject !== 'alert_message.html')) {
+              $aTemplates[] = array('FILE' => $sObject, 'NAME' => $sObject);
+            }
+          }
+          global $_DBArray;
+          $_DBArray['_TEMPLATES1'] = $aTemplates;
+          $_SESSION ['_DBArray'] = $_DBArray;
+
+          // Additional configuration
+          G::loadClass('configuration');
+          $oConf = new Configurations;
+          $oConf->loadConfig($x, 'TAS_EXTRA_PROPERTIES', $aFields['TAS_UID'], '', '');
+          $conf = $oConf->aConfig;
+          if( isset($conf['TAS_DEF_MESSAGE_TYPE']) && isset($conf['TAS_DEF_MESSAGE_TYPE'])) {
+            $aFields['TAS_DEF_MESSAGE_TYPE'] = $conf['TAS_DEF_MESSAGE_TYPE'];
+            $aFields['TAS_DEF_MESSAGE_TEMPLATE'] = $conf['TAS_DEF_MESSAGE_TEMPLATE'];
+          }
+      }
+
       if ($iForm == 3) { //Load Calendar Information
         $calendar = new Calendar ( );
         $calendarObj = $calendar->getCalendarList(true, true);
@@ -1365,7 +1394,7 @@ class processMap {
       }else{
       	$G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
       }
-
+      
       G::RenderPage('publish', 'raw');
       return true;
     } catch (Exception $oError) {

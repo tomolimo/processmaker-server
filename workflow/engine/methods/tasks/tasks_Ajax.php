@@ -23,70 +23,65 @@
  *
  */
 try {
-	global $RBAC;
-	switch ($RBAC->userCanAccess('PM_FACTORY')) {
-		case -2:
-			G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-			G::header('location: ../login/login');
-			die;
-			break;
-		case -1:
-			G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-			G::header('location: ../login/login');
-			die;
-			break;
-	}
-	$oJSON = new Services_JSON();
+  global $RBAC;
+  switch ($RBAC->userCanAccess('PM_FACTORY')) {
+    case -2:
+	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+      break;
+    case -1:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+      G::header('location: ../login/login');
+      die;
+      break;
+  }
 
+  $oJSON = new Services_JSON();
+  $aData = get_object_vars($oJSON->decode($_POST['oData']));
+  if(isset($_POST['function']))
+    $sAction = $_POST['function'];
+  else
+    $sAction = $_POST['functions'];
 
-	$aData = get_object_vars($oJSON->decode($_POST['oData']));
+  switch ($sAction) {
+    case 'saveTaskData':
+      require_once 'classes/model/Task.php';
+      $oTask = new Task();
+      
+      /**
+       * routine to replace @amp@ by &
+       * that why the char "&" can't be passed by XmlHttpRequest directly
+       * @autor erik <erik@colosa.com>
+       */
+      foreach($aData as $k=>$v) {
+        $aData[$k] = str_replace('@amp@', '&', $v);
+      }
+        
+      if (isset($aData['SEND_EMAIL'])) {
+        $aData['TAS_SEND_LAST_EMAIL'] = $aData['SEND_EMAIL'] == 'TRUE' ? 'TRUE' : 'FALSE';
+      } else {
+        $aData['TAS_SEND_LAST_EMAIL'] = 'FALSE';
+      }
+      
+      // Additional configuration
+      if (isset($aData['TAS_DEF_MESSAGE_TYPE']) && isset($aData['TAS_DEF_MESSAGE_TEMPLATE'])) {
+      	G::loadClass('configuration');
+		$oConf = new Configurations;
+        $oConf->aConfig = Array(
+          'TAS_DEF_MESSAGE_TYPE' => $aData['TAS_DEF_MESSAGE_TYPE'],
+          'TAS_DEF_MESSAGE_TEMPLATE'=> $aData['TAS_DEF_MESSAGE_TEMPLATE']
+        );
+        $oConf->saveConfig('TAS_EXTRA_PROPERTIES', $aData['TAS_UID'], '', '');
+        unset($aData['TAS_DEF_MESSAGE_TYPE']);
+        unset($aData['TAS_DEF_MESSAGE_TEMPLATE']);
+      }
 
-        if(isset($_POST['function']))
-            $sAction = $_POST['function'];
-        else
-            $sAction = $_POST['functions'];
-	switch ($sAction) {
-		case 'saveTaskData':
-			require_once 'classes/model/Task.php';
-			$oTask = new Task();
-			
-			/*
-			 * Fixed: October 22th, 2009
-			 * 
-			 * NOTE By Neyek <erik@colosa.com>
-			 * This replacing is because the ampersand characters were replaced with JS routines for @amp@
-			 * this solve the problem when the task labels have a character & that cause that the url passed by POST or GET broke
-			 * 
-			 * Involved lines: 52 to 58	
-			 */ 
-			
-			if( isset($aData['TAS_TITLE']) ){
-				$aData['TAS_TITLE'] = str_replace('@amp@', '&', $aData['TAS_TITLE']);	
-			}
-			
-			if( isset($aData['TAS_DESCRIPTION']) ){
-				$aData['TAS_DESCRIPTION'] = str_replace('@amp@', '&', $aData['TAS_DESCRIPTION']);
-			}
-				
-			if (isset($aData['SEND_EMAIL'])) {
-				if( $aData['SEND_EMAIL'] == 'TRUE' ) {
-					$aData['TAS_SEND_LAST_EMAIL'] = 'TRUE';
-				} else {
-					$aData['TAS_SEND_LAST_EMAIL'] = 'FALSE';
-				}
-			}
-			else {
-				$aData['TAS_SEND_LAST_EMAIL'] = 'FALSE';
-			}
-			//added by krlos		
-  		if( isset($aData['TAS_DEF_MESSAGE']) ){
-				$aData['TAS_DEF_MESSAGE'] = str_replace('@amp@', '&', $aData['TAS_DEF_MESSAGE']);	
-			}
-			$oTask->update($aData);
-			break;
-	}
+      $oTask->update($aData);
+      break;
+  }
 }
 catch (Exception $oException) {
-	die($oException->getMessage());
+  die($oException->getMessage());
 }
 ?>

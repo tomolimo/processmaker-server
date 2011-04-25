@@ -248,6 +248,7 @@ class Task extends BaseTask {
     $this->tas_def_message = Content::load ( 'TAS_DEF_MESSAGE', '', $this->getTasUid(), $lang );
     return $this->tas_def_message;
   }
+
   /**
    * Set the tas_def_message column value.
    *
@@ -264,6 +265,50 @@ class Task extends BaseTask {
     if ($this->tas_def_message !== $v || $v==="") {
       $this->tas_def_message = $v;
       $res = Content::addContent( 'TAS_DEF_MESSAGE', '', $this->getTasUid(), $lang, $this->tas_def_message );
+      return $res;
+    }
+    return 0;
+  }
+
+   /**
+   * This value goes in the content table
+   * @var        string
+   */
+  protected $tas_def_subject_message = '';
+
+  /**
+   * Get the tas_def_message column value.
+   * @return     string
+   */
+  public function getTasDefSubjectMessage()
+  {
+    if ( $this->getTasUid() == "" ) {
+      throw ( new Exception( "Error in getTasDefSubjectMessage, the getTasUid() can't be blank") );
+    }
+    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+    $this->tas_def_subject_message = Content::load ( 'TAS_DEF_SUBJECT_MESSAGE', '', $this->getTasUid(), $lang );
+    return $this->tas_def_subject_message;
+  }
+
+
+  /**
+   * Set the tas_def_subject_message column value.
+   *
+   * @param      string $v new value
+   * @return     void
+   */
+  public function setTasDefSubjectMessage($v)
+  {
+    if ( $this->getTasUid() == "" ) {
+      throw ( new Exception( "Error in setTasDefSubjectMessage, the getTasUid() can't be blank") );
+    }
+    $v = isset($v)? ((string)$v) : '';
+    $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+    
+    if ($this->tas_def_subject_message !== $v || $v==="") {
+      $this->tas_def_subject_message = $v;
+      $res = Content::addContent( 'TAS_DEF_SUBJECT_MESSAGE', '', $this->getTasUid(), $lang, $this->tas_def_subject_message ); 
+    
       return $res;
     }
     return 0;
@@ -325,6 +370,7 @@ class Task extends BaseTask {
         $this->setTasDefDescription("");
         $this->setTasDefProcCode("");
         $this->setTasDefMessage("");
+        $this->setTasDefSubjectMessage("");
         $this->save();
         $con->commit();
         return $sTaskUID;
@@ -384,36 +430,49 @@ public function kgetassigType($pro_uid, $tas){
 
         while (is_array($row)) {
           switch ( $row['CON_CATEGORY'] ) {
-            case 'TAS_TITLE' : $aFields['TAS_TITLE'] = $row['CON_VALUE'];
-                      $this->tas_title = $row['CON_VALUE'];
-                      if ( $row['CON_VALUE'] !== '' )
-                        $this->setTasTitle($aFields['TAS_TITLE']);
-                      break;
-            case 'TAS_DESCRIPTION' : $aFields['TAS_DESCRIPTION'] = $row['CON_VALUE'];
-                      $this->tas_description = $row['CON_VALUE'];
-                      if ( $row['CON_VALUE'] !== '' )
-                        $this->setTasDescription($aFields['TAS_DESCRIPTION']);
-                      break;
-            case 'TAS_DEF_TITLE' : $aFields['TAS_DEF_TITLE'] = $row['CON_VALUE'];
-                      $this->tas_def_title = $row['CON_VALUE'];
-                      if ( $row['CON_VALUE'] !== '' )
-                        $this->setTasDefTitle($aFields['TAS_DEF_TITLE']);
-                      break;
-            case 'TAS_DEF_DESCRIPTION' : $aFields['TAS_DEF_DESCRIPTION'] = $row['CON_VALUE'];
-                      $this->tas_def_description = $row['CON_VALUE'];
-                      if ( $row['CON_VALUE'] !== '' )
-                        $this->setTasDefDescription($aFields['TAS_DEF_DESCRIPTION']);
-                      break;
-            case 'TAS_DEF_PROC_CODE' : $aFields['TAS_DEF_PROC_CODE'] = $row['CON_VALUE'];
-                      $this->tas_def_proc_code = $row['CON_VALUE'];
-                      if ( $row['CON_VALUE'] !== '' )
-                        $this->setTasDefProcCode($aFields['TAS_DEF_PROC_CODE']);
-                      break;
-            case 'TAS_DEF_MESSAGE' : $aFields['TAS_DEF_MESSAGE'] = $row['CON_VALUE'];
-                      $this->tas_def_message = $row['CON_VALUE'];
-                      if ( $row['CON_VALUE'] !== '' )
-                        $this->setTasDefMessage($aFields["TAS_DEF_MESSAGE"]);
-                      break;
+            case 'TAS_TITLE' : 
+              $aFields['TAS_TITLE'] = $row['CON_VALUE'];
+              $this->tas_title = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasTitle($aFields['TAS_TITLE']);
+              break;
+
+            case 'TAS_DESCRIPTION' : 
+              $aFields['TAS_DESCRIPTION'] = $row['CON_VALUE'];
+              $this->tas_description = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasDescription($aFields['TAS_DESCRIPTION']);
+              break;
+            case 'TAS_DEF_TITLE' : 
+              $aFields['TAS_DEF_TITLE'] = $row['CON_VALUE'];
+              $this->tas_def_title = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasDefTitle($aFields['TAS_DEF_TITLE']);
+              break;
+            case 'TAS_DEF_DESCRIPTION' : 
+              $aFields['TAS_DEF_DESCRIPTION'] = $row['CON_VALUE'];
+              $this->tas_def_description = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasDefDescription($aFields['TAS_DEF_DESCRIPTION']);
+              break;
+            case 'TAS_DEF_PROC_CODE' : 
+              $aFields['TAS_DEF_PROC_CODE'] = $row['CON_VALUE'];
+              $this->tas_def_proc_code = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasDefProcCode($aFields['TAS_DEF_PROC_CODE']);
+              break;
+            case 'TAS_DEF_MESSAGE' : 
+              $aFields['TAS_DEF_MESSAGE'] = $row['CON_VALUE'];
+              $this->tas_def_message = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasDefMessage($aFields["TAS_DEF_MESSAGE"]);
+              break;
+            case 'TAS_DEF_SUBJECT_MESSAGE' : 
+              $aFields['TAS_DEF_SUBJECT_MESSAGE'] = $row['CON_VALUE'];
+              $this->tas_def_subject_message = $row['CON_VALUE'];
+              if ( $row['CON_VALUE'] !== '' )
+                $this->setTasDefSubjectMessage($aFields["TAS_DEF_SUBJECT_MESSAGE"]);
+              break;
           }
           $rs->next();
           $row = $rs->getRow();
@@ -444,7 +503,8 @@ public function kgetassigType($pro_uid, $tas){
         if (array_key_exists("TAS_DEF_TITLE", $fields)) $contentResult+=$this->setTasDefTitle($fields["TAS_DEF_TITLE"]);
         if (array_key_exists("TAS_DEF_DESCRIPTION", $fields)) $contentResult+=$this->setTasDefDescription($fields["TAS_DEF_DESCRIPTION"]);
         if (array_key_exists("TAS_DEF_PROC_CODE", $fields)) $contentResult+=$this->setTasDefProcCode($fields["TAS_DEF_PROC_CODE"]);
-        if (array_key_exists("TAS_DEF_MESSAGE", $fields)) $contentResult+=$this->setTasDefMessage($fields["TAS_DEF_MESSAGE"]);
+        if (array_key_exists("TAS_DEF_MESSAGE", $fields)) $contentResult+=$this->setTasDefMessage(trim($fields["TAS_DEF_MESSAGE"]));        
+        if (array_key_exists("TAS_DEF_SUBJECT_MESSAGE", $fields)) $contentResult+=$this->setTasDefSubjectMessage(trim($fields["TAS_DEF_SUBJECT_MESSAGE"]));
         if (array_key_exists("TAS_CALENDAR", $fields)) $contentResult+=$this->setTasCalendar($fields['TAS_UID'],$fields["TAS_CALENDAR"]);
         $result=$this->save();
         $result=($result==0)?($contentResult>0?1:0):$result;
