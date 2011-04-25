@@ -25,6 +25,11 @@
 //  if (($RBAC_Response = $RBAC->userCanAccess("PM_CASES"))!=1) return $RBAC_Response;
 
 	$ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
+	//it was added to show the logo into management plugin add by krlos
+  if(isset($_GET['wsName']) && $_GET['wsName']!=''){
+    $ainfoSite[1] = $_GET['wsName'];
+  }
+  //end add
 	$dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
 	$imagen = $dir .PATH_SEP.G::decrypt($_GET['id'],'imagen');
 
