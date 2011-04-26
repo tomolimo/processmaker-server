@@ -101,7 +101,7 @@ body {
 
 </div>
 <div class="modal" id="light">
-  <div class="header"><?php=G::LoadTranslation('ID_LOADING')?></div>
+  <div class="header"><?php echo G::LoadTranslation('ID_LOADING')?></div>
   <div class="body">
     <img src="/images/activity.gif" />
   </div>

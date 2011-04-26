@@ -98,12 +98,12 @@
 						$checked = 'checked="checked"';
 					}
 				?>
-			<li style="list-style:none;" id="<?php=$node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
+			<li style="list-style:none;" id="<?php echo $node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
 				<table class="dynalist" border="0" width="100%" cellpadding="0" cellspacing="0" id="fieldshandler_items_table">
 				<tr>
 					<td width="15px">
 						<?php if($node['__ATTRIBUTES__']['type'] != 'javascript' && $dynaformType != 'grid') {?>
-						<input id="chk@<?php=$node_name?>" type="checkbox" onclick="fieldsHandlerSaveHidden()" <?php echo $checked?> />
+						<input id="chk@<?php echo $node_name?>" type="checkbox" onclick="fieldsHandlerSaveHidden()" <?php echo $checked?> />
 						<?php } else {?>
 						&nbsp;
 						<?php }?>
@@ -118,8 +118,8 @@
 						case 'file':        		$type = 'upload_files'; 	break;
 					}?>
                     <?php if ( is_file(PATH_HTML.'images'.PATH_SEP.'dynamicForm'.PATH_SEP."$type.gif") ){?>
-					<img src="/images/dynamicForm/<?php= $type?>.gif"/>
-                    <?php } else {?>
+					<img src="/images/dynamicForm/<?php echo $type?>.gif"/>
+                     <?php } else {?>
                     <img src="/images/unknown_icon.gif" border="0" width="20" height="16"/>
                     <?php }?>
 					</td>
@@ -146,13 +146,13 @@
                         <?php if( in_array($node['__ATTRIBUTES__']['type'], $_POST['fieldsList']) ){ ?>
 						<!-- <div class="tool"><img src="/images/options.png" width="12" height="12" border="0"/> </div>-->
 						<div class="jq-checkpointSubhead" style="display:block">
-							<a title="<?php echo G::loadTranslation('ID_EDIT_FIELD')?>" href="#" onclick="__ActionEdit('<?php= $node_name?>'); return false;"><img src="/images/e_Edit.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
-							<a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?php= $node_name?>', '<?php= $node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
+							<a title="<?php echo G::loadTranslation('ID_EDIT_FIELD')?>" href="#" onclick="__ActionEdit('<?php echo $node_name?>'); return false;"><img src="/images/e_Edit.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
+							<a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?php echo $node_name?>', '<?php echo $node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
 						</div>
                         <?php } else {?>
                             <div class="tool"><img src="/images/options.png" width="12" height="12" border="0"/> </div>
                             <div class="jq-checkpointSubhead" style="display:none">
-                                <a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?php= $node_name?>', '<?php= $node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
+                                <a title="<?php echo G::loadTranslation('ID_REMOVE_FIELD')?>" href="#" onclick="__ActionDelete('<?php echo $node_name?>', '<?php echo $node['__ATTRIBUTES__']['type'];?>');return false;"><img src="/images/e_Delete.png" width="15" height="15" border="0" onmouseout="backImage(this,'')" onmouseover="backImage(this,'url(/images/dynamicForm/hover.gif) no-repeat')"/></a>
                             </div>
                         <?php }?>
 					</td>
