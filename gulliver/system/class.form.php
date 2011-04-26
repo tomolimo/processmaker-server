@@ -385,7 +385,8 @@ class Form extends XmlForm
                   $values[$k . '_label'] = $v->option[$newValues[$k]];
               	}else{
                   $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
-                  $con = Propel::getConnection('workflow');
+                  //we do the query to the external connection and we've got the label
+                  $con = Propel::getConnection($this->fields[$k]->sqlConnection);
                   $stmt = $con->prepareStatement($query);
                   $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
                   while ($rs->next()){
