@@ -98,7 +98,7 @@
 						$checked = 'checked="checked"';
 					}
 				?>
-			<li style="list-style:none;" id="<?php echo $node_name?>" class="ui-state-default" onmouseover="setClass(this, 'current_selected_item')" onmouseout="setClass(this, 'ui-state-default')">
+			<li style="list-style:none;" id="<?php echo $node_name?>" class="ui-state-default" onmouseover="setClass(this, 'ui-state-hover')" onmouseout="setClass(this, 'ui-state-default')">
 				<table class="dynalist" border="0" width="100%" cellpadding="0" cellspacing="0" id="fieldshandler_items_table">
 				<tr>
 					<td width="15px">
@@ -123,10 +123,10 @@
                     <img src="/images/unknown_icon.gif" border="0" width="20" height="16"/>
                     <?php }?>
 					</td>
-					<td width="80px"  style="font-size:13px;">
+					<td width="80px"  style="font-size:10px;">
                         &nbsp;<?php echo "({$node['__ATTRIBUTES__']['type']})";?>
                     </td>
-                    <td width="200px"  style="font-size:13px;"> 
+                    <td width="200px"  style="font-size:12px;"> 
                         &nbsp;<?php echo "$node_name";?>
                     </td>      
 					<td><p style="font-size:12px; color:#1C3166; font-weight:bold">
