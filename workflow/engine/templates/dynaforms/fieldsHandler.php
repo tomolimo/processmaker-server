@@ -108,7 +108,7 @@
 						&nbsp;
 						<?php }?>
 					</td>
-					<td width="10px" class="directionSide1">
+					<td width="10px" >
 					<?php $type = $node['__ATTRIBUTES__']['type'];
 					switch($type){
 						case 'yesno':       	$type = 'yes_no';       		break;
@@ -123,13 +123,13 @@
                     <img src="/images/unknown_icon.gif" border="0" width="20" height="16"/>
                     <?php }?>
 					</td>
-					<td width="80px"  class="directionSide1">
+					<td width="80px"  style="font-size:13px;">
                         &nbsp;<?php echo "({$node['__ATTRIBUTES__']['type']})";?>
                     </td>
-                    <td width="200px"  class="directionSide1">
+                    <td width="200px"  style="font-size:13px;"> 
                         &nbsp;<?php echo "$node_name";?>
                     </td>      
-					<td><p style="font-size:13px; color:#1C3166; font-weight:bold">
+					<td><p style="font-size:12px; color:#1C3166; font-weight:bold">
 					<?php if( isset($node['__CONTENT__'][SYS_LANG]['__VALUE__']) ){
 						  if( strlen($node['__CONTENT__'][SYS_LANG]['__VALUE__']) > 30 ){
 						  	$label = substr(trim(strip_tags(G::stripCDATA($node['__CONTENT__'][SYS_LANG]['__VALUE__']))), 0, 30 ) . '...';
