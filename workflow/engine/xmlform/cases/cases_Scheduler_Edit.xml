@@ -8,7 +8,7 @@
 <en>General Information</en>
 </GENERAL_INF>
 <PROPERTIES_INF type="subtitle" enablehtml="1">
-<en>Please insert a valid processmaker user name and password.</en>
+<en>Enter the username and password for the user who will be assigned to the initial task in the case(s).</en>
 </PROPERTIES_INF>
 <SCH_UID type="hidden" >
 <en></en>
@@ -82,7 +82,7 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]>
 </SCH_OPTION_VIEW>
 
 <SELECT_TIME_DAY type="subtitle" enablehtml="1">
-<en>Select the time and day you want this task to start.</en>
+<en>Select the date and time for case(s) to be initiated.</en>
 </SELECT_TIME_DAY>
 
 <SCH_START_TIME type="text" maxlength="5" validate="Any" mask="##:##" required="1" readonly="0" size="5"  mode="edit" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">

@@ -9,7 +9,7 @@
 </GENERAL_INF>
 
 <PROPERTIES_INF type="subtitle" enablehtml="1">
-<en>Please insert a valid processmaker user name and password, in order to assign the case to their respective owner</en>
+<en>Enter the username and password for the user who will be assigned to the initial task in the case(s).</en>
 </PROPERTIES_INF>
 
 <SCH_UID type="hidden" >
@@ -60,7 +60,7 @@
 </SCH_OPTION>
 
 <SELECT_TIME_DAY type="subtitle" enablehtml="1">
-<en>Select the time and day you want this task to start.</en>
+<en>Select the date and time for case(s) to be initiated.</en>
 </SELECT_TIME_DAY>
 
 <SCH_START_TIME type="text" maxlength="5" validate="Any" mask="##:##" required="1" readonly="0" size="5" mode="edit" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">
