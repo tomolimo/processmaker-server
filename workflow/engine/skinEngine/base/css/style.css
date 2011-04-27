@@ -878,7 +878,10 @@ font-weight:bold;
 }
 .pagedTableDefault .pagedTable a
 {
-	color:#000;
+	color:#666666;
+	text-decoration: none;
+	padding-left: 5px;
+	font: bold 11px Tahoma,sans-serif, MiscFixed;
 }
 .pagedTableDefault .pagedTable a:hover
 {
