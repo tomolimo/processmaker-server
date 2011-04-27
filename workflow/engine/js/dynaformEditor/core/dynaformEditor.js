@@ -25,6 +25,7 @@ var dynaformEditor={
 		mainPanel.elements.headerBar.appendChild(this.toolbar);
 		mainPanel.events.remove = function(){
 		}
+    this.changeToJavascripts();
 		this.refresh_preview();
 	},
 	_review:function()
@@ -194,8 +195,8 @@ var dynaformEditor={
 		this.currentView="xmlcode";
     if( ! xmlEditor ) {
       clientWinSize = getClientWindowSize();
-      
-      xmlEditor = CodeMirror.fromTextArea('form[XML]', {
+
+        xmlEditor = CodeMirror.fromTextArea('form[XML]', {
         height: (clientWinSize.height - 120) + "px",
         width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
         parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js",
@@ -294,7 +295,9 @@ var dynaformEditor={
 			case "xmlcode":this.refresh_xmlcode();break;
 			case "fieldslist":this.refreshFieldsList();break;
 			case "javascripts": this.changeJavascriptCode();
-                          this.refreshJavascripts();break;
+                          this.changeToJavascripts();
+                          // this.refreshJavascripts();
+                          break;
 			case "properties":this.refreshProperties();break;
 		}
 	},
@@ -409,7 +412,8 @@ var dynaformEditor={
 	{
 		//if (JSCodePress)
     if( jsEditor ) {
-      jsEditor.setCode(newCode);
+      if(typeof jsEditor.setCode == 'function')
+        jsEditor.setCode(newCode);
 		}
 		else
 		{
