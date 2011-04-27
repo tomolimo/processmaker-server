@@ -1,8 +1,14 @@
 msgid ""
 msgstr ""
+<<<<<<< HEAD
 "Project-Id-Version: ProcessMaker Development Version\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2011-04-12 15:28:54\n"
+=======
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.19-13-ge80ff75\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2011-04-27 12:19:29\n"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -2494,8 +2500,8 @@ msgstr "Do you want to delete this object?"
 # TRANSLATION
 # LABEL/ID_CASE_NOT_EXISTS
 #: LABEL/ID_CASE_NOT_EXISTS
-msgid "The case not exist"
-msgstr "The case not exist"
+msgid "The case does not exist"
+msgstr "The case does not exist"
 
 # TRANSLATION
 # LABEL/ID_PIN_INVALID
@@ -3952,8 +3958,8 @@ msgstr "The mail to is required, or uncheck the  send a test mail"
 # TRANSLATION
 # JAVASCRIPT/ID_PASSWORD_REQUIRED
 #: JAVASCRIPT/ID_PASSWORD_REQUIRED
-msgid "The password is required, or uncheck the  option Require Authentification"
-msgstr "The password is required, or uncheck the  option Require Authentification"
+msgid "The password is required, or uncheck the  option Require Authentication"
+msgstr "The password is required, or uncheck the  option Require Authentication"
 
 # TRANSLATION
 # JAVASCRIPT/ID_SERVER_REQUIRED
@@ -4732,8 +4738,8 @@ msgstr "Saving Environment Settings"
 # TRANSLATION
 # LABEL/ID_ENVIRONMENT_SETTINGS_MSG_1
 #: LABEL/ID_ENVIRONMENT_SETTINGS_MSG_1
-msgid "You should to select a format from the list."
-msgstr "You should to select a format from the list."
+msgid "You should select a format from the list."
+msgstr "You should select a format from the list."
 
 # TRANSLATION
 # LABEL/ID_ENVIRONMENT_SETTINGS
@@ -5164,8 +5170,8 @@ msgstr "Open in a popup"
 # TRANSLATION
 # LABEL/ID_DEATACH
 #: LABEL/ID_DEATACH
-msgid "Deatach"
-msgstr "Deatach"
+msgid "Detach"
+msgstr "Detach"
 
 # TRANSLATION
 # LABEL/ID_PRO_USER
@@ -5368,8 +5374,8 @@ msgstr "Datasource Name"
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_DB_EXISTS
 #: LABEL/PENTAHO_LABEL_DB_EXISTS
-msgid "Datasource already exist"
-msgstr "Datasource already exist"
+msgid "Datasource already exists"
+msgstr "Datasource already exists"
 
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_DB_SUCCESS
@@ -5422,8 +5428,8 @@ msgstr "Pentaho Server (URL)"
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_SHOW_JNDI_INFORMATION
 #: LABEL/PENTAHO_LABEL_SHOW_JNDI_INFORMATION
-msgid "Show Jndi Info"
-msgstr "Show Jndi Info"
+msgid "Show JNDI Info"
+msgstr "Show JNDI Info"
 
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_SYNC
@@ -5482,8 +5488,8 @@ msgstr "User created successfully"
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_USER_EXIST
 #: LABEL/PENTAHO_LABEL_USER_EXIST
-msgid "User already exist"
-msgstr "User already exist"
+msgid "User already exists"
+msgstr "User already exists"
 
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_USER_NAME
@@ -7406,6 +7412,12 @@ msgid "Downloading file"
 msgstr "Downloading file"
 
 # TRANSLATION
+# LABEL/IMPORT_PROCESS_OVERWRITING
+#: LABEL/IMPORT_PROCESS_OVERWRITING
+msgid "Update the current process, overwriting all tasks and steps"
+msgstr "Update the current process, overwriting all tasks and steps"
+
+# TRANSLATION
 # LABEL/ID_OPEN_IN_A_NEW_WINDOW
 #: LABEL/ID_OPEN_IN_A_NEW_WINDOW
 msgid "Open in a new window"
@@ -9136,8 +9148,8 @@ msgstr "Collapse All"
 # TRANSLATION
 # LABEL/ID_FILENAME_GENERATED
 #: LABEL/ID_FILENAME_GENERATED
-msgid "Filename generated   t"
-msgstr "Filename generated   t"
+msgid "Filename generated"
+msgstr "Filename generated"
 
 # TRANSLATION
 # LABEL/ID_ACTORS_ASSIGNED_SUCESSFULLY
@@ -9505,6 +9517,75 @@ msgstr "NO"
 msgid "Active Users"
 msgstr "Active Users"
 
+<<<<<<< HEAD
+=======
+# TRANSLATION
+# LABEL/IMPORT_PROCESS_DISABLE
+#: LABEL/IMPORT_PROCESS_DISABLE
+msgid "Disable the current process and create a new version of the process"
+msgstr "Disable the current process and create a new version of the process"
+
+# TRANSLATION
+# LABEL/IMPORT_PROCESS_NEW
+#: LABEL/IMPORT_PROCESS_NEW
+msgid "Create a completely new process without changing the current process"
+msgstr "Create a completely new process without changing the current process"
+
+# TRANSLATION
+# LABEL/ID_SELECT_PROCESS_FILE
+#: LABEL/ID_SELECT_PROCESS_FILE
+msgid "Select a process file"
+msgstr "Select a process file"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_PROCESS
+#: LABEL/ID_IMPORT_PROCESS
+msgid "Import Process"
+msgstr "Import Process"
+
+# TRANSLATION
+# LABEL/ID_UPLOADING_PROCESS_FILE
+#: LABEL/ID_UPLOADING_PROCESS_FILE
+msgid "Uploading the process file..."
+msgstr "Uploading the process file..."
+
+# TRANSLATION
+# LABEL/ID_IMPORT_ALREADY_EXISTS
+#: LABEL/ID_IMPORT_ALREADY_EXISTS
+msgid "The process you are trying to import already exists. Please select one of the following options to continue:"
+msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
+
+# TRANSLATION
+# LABEL/ID_DEBUG_MESSAGE
+#: LABEL/ID_DEBUG_MESSAGE
+msgid "Debug Messages"
+msgstr "Debug Messages"
+
+# TRANSLATION
+# LABEL/ID_FIELD_HANDLER_ACTION_DELETE
+#: LABEL/ID_FIELD_HANDLER_ACTION_DELETE
+msgid "Are you sure that you want to remove this"
+msgstr "Are you sure that you want to remove this"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_EXIST_SOME_GROUP
+#: LABEL/ID_PROCESS_EXIST_SOME_GROUP
+msgid "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue"
+msgstr "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_GROUP_RENAME
+#: LABEL/ID_PROCESS_GROUP_RENAME
+msgid "Rename the imported groups"
+msgstr "Rename the imported groups"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_GROUP_MERGE_PREEXISTENT
+#: LABEL/ID_PROCESS_GROUP_MERGE_PREEXISTENT
+msgid "Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)"
+msgstr "Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)"
+
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -9969,9 +10050,15 @@ msgstr "File size"
 
 # additionalTables/doExport.xml?META
 # additionalTables/doExport.xml
+<<<<<<< HEAD
 #: caption - META
 msgid "Sumary"
 msgstr "Sumary"
+=======
+#: textarea - META
+msgid "[additionalTables/doExport.xml?META] Summary"
+msgstr "Summary"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # appFolder/appFolder.xml?title1
 # appFolder/appFolder.xml
@@ -9982,32 +10069,32 @@ msgstr "AppFolder form"
 # appFolder/appFolder.xml?FOLDER_UID
 # appFolder/appFolder.xml
 #: text - FOLDER_UID
-msgid "Er Uid"
-msgstr "Er Uid"
+msgid "Folder Uid"
+msgstr "Folder Uid"
 
 # appFolder/appFolder.xml?FOLDER_PARENT_UID
 # appFolder/appFolder.xml
 #: text - FOLDER_PARENT_UID
-msgid "Er Parent Uid"
-msgstr "Er Parent Uid"
+msgid "Folder Parent Uid"
+msgstr "Folder Parent Uid"
 
 # appFolder/appFolder.xml?FOLDER_NAME
 # appFolder/appFolder.xml
 #: textarea - FOLDER_NAME
-msgid "Er Name"
-msgstr "Er Name"
+msgid "Folder Name"
+msgstr "Folder Name"
 
 # appFolder/appFolder.xml?FOLDER_CREATE_DATE
 # appFolder/appFolder.xml
 #: date - FOLDER_CREATE_DATE
-msgid "Er Create Date"
-msgstr "Er Create Date"
+msgid "Folder Create Date"
+msgstr "Folder Create Date"
 
 # appFolder/appFolder.xml?FOLDER_UPDATE_DATE
 # appFolder/appFolder.xml
 #: date - FOLDER_UPDATE_DATE
-msgid "Er Update Date"
-msgstr "Er Update Date"
+msgid "Folder Update Date"
+msgstr "Folder Update Date"
 
 # appFolder/appFolder.xml?BTN_SUBMIT
 # appFolder/appFolder.xml
@@ -10024,7 +10111,7 @@ msgstr "Delete AppFolder"
 # appFolder/appFolderDelete.xml?LABEL_FOLDER_UID
 # appFolder/appFolderDelete.xml
 #: caption - LABEL_FOLDER_UID
-msgid "[appFolder/appFolderDelete.xml?LABEL_FOLDER_UID] Er Uid"
+msgid "Er Uid"
 msgstr "Er Uid"
 
 # appFolder/appFolderDelete.xml?BTN_SUBMIT
@@ -10300,7 +10387,7 @@ msgstr "Path"
 # appFolder/appFolderEdit.xml?FOLDER_NAME
 # appFolder/appFolderEdit.xml
 #: text - FOLDER_NAME
-msgid "Folder Name"
+msgid "[appFolder/appFolderEdit.xml?FOLDER_NAME] Folder Name"
 msgstr "Folder Name"
 
 # appFolder/appFolderEdit.xml?BTN_CANCEL
@@ -10318,19 +10405,19 @@ msgstr "Save"
 # appFolder/appFolderList.xml?FOLDER_PARENT_UID
 # appFolder/appFolderList.xml
 #: text - FOLDER_PARENT_UID
-msgid "[appFolder/appFolderList.xml?FOLDER_PARENT_UID] Er Parent Uid"
+msgid "Er Parent Uid"
 msgstr "Er Parent Uid"
 
 # appFolder/appFolderList.xml?FOLDER_CREATE_DATE
 # appFolder/appFolderList.xml
 #: text - FOLDER_CREATE_DATE
-msgid "[appFolder/appFolderList.xml?FOLDER_CREATE_DATE] Er Create Date"
+msgid "Er Create Date"
 msgstr "Er Create Date"
 
 # appFolder/appFolderList.xml?FOLDER_UPDATE_DATE
 # appFolder/appFolderList.xml
 #: text - FOLDER_UPDATE_DATE
-msgid "[appFolder/appFolderList.xml?FOLDER_UPDATE_DATE] Er Update Date"
+msgid "Er Update Date"
 msgstr "Er Update Date"
 
 # appFolder/appFolderList.xml?LINK
@@ -13048,8 +13135,13 @@ msgstr "Every"
 # cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS
 # cases/cases_Scheduler_Edit.xml
 #: checkgroup - SCH_WEEK_DAYS
+<<<<<<< HEAD
 msgid "[cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS] Select the day(s) of the week below"
 msgstr "Select the day(s) of the week below"
+=======
+msgid "Select the day(s) of the week"
+msgstr "Select the day(s) of the week"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS-1
 # cases/cases_Scheduler_Edit.xml
@@ -15694,6 +15786,7 @@ msgstr "Options Mask"
 # dynaforms/datemask.xml?option1
 # dynaforms/datemask.xml
 #: subtitle - option1
+<<<<<<< HEAD
 msgid "%a — abbreviated weekday name\n"
 "<br> %A — full weekday name\n"
 "<br> %b — abbreviated month name\n"
@@ -15747,6 +15840,61 @@ msgstr "%a — abbreviated weekday name\n"
 "<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
 "<br> %y — year without the century (range 00 to 99)\n"
 "<br> %Y — year with the century\n"
+=======
+msgid "%a — abbreviated weekday namen\n"
+"<br> %A — full weekday namen\n"
+"<br> %b — abbreviated month namen\n"
+"<br> %B — full month namen\n"
+"<br> %C — the century numbern\n"
+"<br> %d — the day of the month (range 01 to 31)n\n"
+"<br> %e — the day of the month (range 1 to 31)n\n"
+"<br> %H — hour, range 00 to 23 (24h format)n\n"
+"<br> %I — hour, range 01 to 12 (12h format)n\n"
+"<br> %j — day of the year (range 001 to 366)n\n"
+"<br> %k — hour, range 0 to 23 (24h format)n\n"
+"<br> %l — hour, range 1 to 12 (12h format)n\n"
+"<br> %m — month, range 01 to 12n\n"
+"<br> %o — month, range 1 to 12n\n"
+"<br> %M — minute, range 00 to 59n\n"
+"<br> %n — a newline charactern\n"
+"<br> %p — PM or AMn\n"
+"<br> %P — pm or amn\n"
+"<br> %s — UNIX time (number of seconds since 1970-01-01)n\n"
+"<br> %S — seconds, range 00 to 59n\n"
+"<br> %t — a tab charactern\n"
+"<br> %W — week numbern\n"
+"<br> %u — the day of the week (range 1 to 7, 1 = MON)n\n"
+"<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
+"<br> %y — year without the century (range 00 to 99)n\n"
+"<br> %Y — year with the centuryn\n"
+"<br> %% — a literal '%' character"
+msgstr "%a — abbreviated weekday namen\n"
+"<br> %A — full weekday namen\n"
+"<br> %b — abbreviated month namen\n"
+"<br> %B — full month namen\n"
+"<br> %C — the century numbern\n"
+"<br> %d — the day of the month (range 01 to 31)n\n"
+"<br> %e — the day of the month (range 1 to 31)n\n"
+"<br> %H — hour, range 00 to 23 (24h format)n\n"
+"<br> %I — hour, range 01 to 12 (12h format)n\n"
+"<br> %j — day of the year (range 001 to 366)n\n"
+"<br> %k — hour, range 0 to 23 (24h format)n\n"
+"<br> %l — hour, range 1 to 12 (12h format)n\n"
+"<br> %m — month, range 01 to 12n\n"
+"<br> %o — month, range 1 to 12n\n"
+"<br> %M — minute, range 00 to 59n\n"
+"<br> %n — a newline charactern\n"
+"<br> %p — PM or AMn\n"
+"<br> %P — pm or amn\n"
+"<br> %s — UNIX time (number of seconds since 1970-01-01)n\n"
+"<br> %S — seconds, range 00 to 59n\n"
+"<br> %t — a tab charactern\n"
+"<br> %W — week numbern\n"
+"<br> %u — the day of the week (range 1 to 7, 1 = MON)n\n"
+"<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
+"<br> %y — year without the century (range 00 to 99)n\n"
+"<br> %Y — year with the centuryn\n"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 "<br> %% — a literal '%' character"
 
 # dynaforms/dynaform_Fields.xml?XMLNODE_NAME
@@ -16504,6 +16652,15 @@ msgstr "Width"
 #: dropdown - MODE
 msgid "[dynaforms/dynaforms_Properties.xml?MODE] Mode"
 msgstr "Mode"
+<<<<<<< HEAD
+=======
+
+# dynaforms/dynaforms_Properties.xml?MODE-
+# dynaforms/dynaforms_Properties.xml
+#: dropdown - MODE -
+msgid "[dynaforms/dynaforms_Properties.xml?MODE-]"
+msgstr "Determined by Fields"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # dynaforms/dynaforms_Properties.xml?MODE-edit
 # dynaforms/dynaforms_Properties.xml
@@ -19076,7 +19233,7 @@ msgstr "Title"
 # outputdocs/outputdocs_New.xml?OUT_DOC_FILENAME
 # outputdocs/outputdocs_New.xml
 #: textpm - OUT_DOC_FILENAME
-msgid "Filename generated"
+msgid "[outputdocs/outputdocs_New.xml?OUT_DOC_FILENAME] Filename generated"
 msgstr "Filename generated"
 
 # outputdocs/outputdocs_New.xml?OUT_DOC_DESCRIPTION
@@ -19523,6 +19680,39 @@ msgstr "Cancel"
 msgid "[patterns/patterns_Evaluate.xml?SAVE] Save"
 msgstr "Save"
 
+<<<<<<< HEAD
+=======
+# patterns/patterns_GridDiscriminator.xml?ROU_NEXT_TASK
+# patterns/patterns_GridDiscriminator.xml
+#: dropdown - ROU_NEXT_TASK
+msgid "[patterns/patterns_GridDiscriminator.xml?ROU_NEXT_TASK] Next Task"
+msgstr "Next Task"
+
+# patterns/patterns_GridDiscriminator.xml?ROU_CONDITION
+# patterns/patterns_GridDiscriminator.xml
+#: text - ROU_CONDITION
+msgid "No of Task to be Discriminated"
+msgstr "No of Task to be Discriminated"
+
+# patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL
+# patterns/patterns_GridDiscriminator.xml
+#: dropdown - ROU_OPTIONAL
+msgid "Type of Discriminator"
+msgstr "Type of Discriminator"
+
+# patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-FALSE
+# patterns/patterns_GridDiscriminator.xml
+#: dropdown - ROU_OPTIONAL - FALSE
+msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-FALSE]"
+msgstr "Structured"
+
+# patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-TRUE
+# patterns/patterns_GridDiscriminator.xml
+#: dropdown - ROU_OPTIONAL - TRUE
+msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-TRUE]"
+msgstr "Cancelling"
+
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 # patterns/patterns_GridEvaluateType.xml?ROU_NEXT_TASK
 # patterns/patterns_GridEvaluateType.xml
 #: dropdown - ROU_NEXT_TASK
@@ -20318,7 +20508,7 @@ msgstr "Upload"
 # processes/processes_Import.xml?TITLE1
 # processes/processes_Import.xml
 #: title - TITLE1
-msgid "Import Process"
+msgid "[processes/processes_Import.xml?TITLE1] Import Process"
 msgstr "Import Process"
 
 # processes/processes_Import.xml?PROCESS_FILENAME
@@ -20348,7 +20538,7 @@ msgstr "<div align=\"center\">Importing Existing Process</div>"
 # processes/processes_ImportExisting.xml?TITLE1
 # processes/processes_ImportExisting.xml
 #: subtitle - TITLE1
-msgid "The process you are trying to import already exists. Please select one of the following options to continue:"
+msgid "[processes/processes_ImportExisting.xml?TITLE1] The process you are trying to import already exists. Please select one of the following options to continue:"
 msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
 
 # processes/processes_ImportExisting.xml?IMPORT_OPTION
@@ -22250,14 +22440,14 @@ msgstr "Server"
 # setup/emails.xml?MESS_PORT
 # setup/emails.xml
 #: text - MESS_PORT
-msgid "[setup/emails.xml?MESS_PORT] Port"
-msgstr "Port"
+msgid "Port (default 25)"
+msgstr "Port (default 25)"
 
 # setup/emails.xml?MESS_RAUTH
 # setup/emails.xml
 #: checkbox - MESS_RAUTH
-msgid "Require authentification"
-msgstr "Require authentification"
+msgid "Require authentication"
+msgstr "Require authentication"
 
 # setup/emails.xml?MESS_ACCOUNT
 # setup/emails.xml
@@ -22282,6 +22472,30 @@ msgstr "Send a test mail"
 #: text - MESS_TEST_MAIL_TO
 msgid "Mail to"
 msgstr "Mail to"
+
+# setup/emails.xml?SMTPSecure
+# setup/emails.xml
+#: radiogroup - SMTPSecure
+msgid "Use Secure Connection"
+msgstr "Use Secure Connection"
+
+# setup/emails.xml?SMTPSecure-none
+# setup/emails.xml
+#: radiogroup - SMTPSecure - none
+msgid "[setup/emails.xml?SMTPSecure-none]"
+msgstr "No"
+
+# setup/emails.xml?SMTPSecure-tls
+# setup/emails.xml
+#: radiogroup - SMTPSecure - tls
+msgid "[setup/emails.xml?SMTPSecure-tls]"
+msgstr "TLS"
+
+# setup/emails.xml?SMTPSecure-ssl
+# setup/emails.xml
+#: radiogroup - SMTPSecure - ssl
+msgid "[setup/emails.xml?SMTPSecure-ssl]"
+msgstr "SSL"
 
 # setup/emails.xml?MESS_BACKGROUND
 # setup/emails.xml
@@ -25403,11 +25617,47 @@ msgstr "Case Description"
 msgid "[tasks/tasks_Notifications.xml?SEND_EMAIL] After routing notify the next assigned user(s)."
 msgstr "After routing notify the next assigned user(s)."
 
+# tasks/tasks_Notifications.xml?TAS_DEF_SUBJECT_MESSAGE
+# tasks/tasks_Notifications.xml
+#: text - TAS_DEF_SUBJECT_MESSAGE
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_SUBJECT_MESSAGE] Subject"
+msgstr "Subject"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TYPE
+msgid "Content Type"
+msgstr "Content Type"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-text
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TYPE - text
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-text]"
+msgstr "Plain Text"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-template
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TYPE - template
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-template]"
+msgstr "HTML Template"
+
 # tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE
 # tasks/tasks_Notifications.xml
 #: textareapm - TAS_DEF_MESSAGE
 msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE] Message"
 msgstr "Message"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TEMPLATE
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE] Template"
+msgstr "Template"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE-
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TEMPLATE -
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE-]"
+msgstr "- None -"
 
 # tasks/tasks_Owner.xml?TAS_OWNER_APP
 # tasks/tasks_Owner.xml
@@ -27359,11 +27609,23 @@ msgstr ""
 msgid "[users/users_Edit.xml?USR_CITY] State or Region"
 msgstr "State or Region"
 
+# users/users_Edit.xml?USR_CITY-
+# users/users_Edit.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_Edit.xml?USR_CITY-]"
+msgstr "N/D"
+
 # users/users_Edit.xml?USR_LOCATION
 # users/users_Edit.xml
 #: dropdown - USR_LOCATION
 msgid "[users/users_Edit.xml?USR_LOCATION] Location"
 msgstr "Location"
+
+# users/users_Edit.xml?USR_LOCATION-
+# users/users_Edit.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_Edit.xml?USR_LOCATION-]"
+msgstr "N/D"
 
 # users/users_Edit.xml?USR_PHONE
 # users/users_Edit.xml
@@ -27743,11 +28005,23 @@ msgstr ""
 msgid "[users/users_EditRT.xml?USR_CITY] State or Region"
 msgstr "State or Region"
 
+# users/users_EditRT.xml?USR_CITY-
+# users/users_EditRT.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_EditRT.xml?USR_CITY-]"
+msgstr "N/D"
+
 # users/users_EditRT.xml?USR_LOCATION
 # users/users_EditRT.xml
 #: dropdown - USR_LOCATION
 msgid "[users/users_EditRT.xml?USR_LOCATION] Location"
 msgstr "Location"
+
+# users/users_EditRT.xml?USR_LOCATION-
+# users/users_EditRT.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_EditRT.xml?USR_LOCATION-]"
+msgstr "N/D"
 
 # users/users_EditRT.xml?USR_PHONE
 # users/users_EditRT.xml
@@ -27995,11 +28269,23 @@ msgstr ""
 msgid "[users/users_New.xml?USR_CITY] State or Region"
 msgstr "State or Region"
 
+# users/users_New.xml?USR_CITY-
+# users/users_New.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_New.xml?USR_CITY-]"
+msgstr "N/D"
+
 # users/users_New.xml?USR_LOCATION
 # users/users_New.xml
 #: dropdown - USR_LOCATION
 msgid "[users/users_New.xml?USR_LOCATION] Location"
 msgstr "Location"
+
+# users/users_New.xml?USR_LOCATION-
+# users/users_New.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_New.xml?USR_LOCATION-]"
+msgstr "N/D"
 
 # users/users_New.xml?USR_PHONE
 # users/users_New.xml
@@ -28976,8 +29262,8 @@ msgstr "Relative Start and End Dates"
 # dynaforms/fields/date.xml?PMED_AFTERBEFORE_DESC
 # dynaforms/fields/date.xml
 #: subtitle - PMED_AFTERBEFORE_DESC
-msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
-msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
 
 # dynaforms/fields/date.xml?PME_BEFOREDATE
 # dynaforms/fields/date.xml
@@ -29480,8 +29766,13 @@ msgstr "Link"
 # dynaforms/fields/link.xml?PME_TARGET_SEL
 # dynaforms/fields/link.xml
 #: dropdown - PME_TARGET_SEL
+<<<<<<< HEAD
 msgid "[dynaforms/fields/link.xml?PME_TARGET_SEL] Target"
 msgstr "Target"
+=======
+msgid "n"
+msgstr "n"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # dynaforms/fields/link.xml?PME_TARGET_SEL-_blank
 # dynaforms/fields/link.xml
@@ -30284,8 +30575,13 @@ msgstr "Show no results message"
 # dynaforms/fields/suggest.xml?PME_SAVELABEL
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_SAVELABEL
+<<<<<<< HEAD
 msgid "Save on dynaform"
 msgstr "Save on dynaform"
+=======
+msgid "Save selected option as"
+msgstr "Save selected option as"
+>>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # dynaforms/fields/suggest.xml?PME_SAVELABEL-0
 # dynaforms/fields/suggest.xml
