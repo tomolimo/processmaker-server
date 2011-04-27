@@ -1,14 +1,8 @@
 msgid ""
 msgstr ""
-<<<<<<< HEAD
-"Project-Id-Version: ProcessMaker Development Version\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-04-12 15:28:54\n"
-=======
 "Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.19-13-ge80ff75\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2011-04-27 12:19:29\n"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -9517,8 +9511,6 @@ msgstr "NO"
 msgid "Active Users"
 msgstr "Active Users"
 
-<<<<<<< HEAD
-=======
 # TRANSLATION
 # LABEL/IMPORT_PROCESS_DISABLE
 #: LABEL/IMPORT_PROCESS_DISABLE
@@ -9585,7 +9577,6 @@ msgstr "Rename the imported groups"
 msgid "Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)"
 msgstr "Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)"
 
->>>>>>> a2fa2f7... BUG 0000 updated English language
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -10030,12 +10021,6 @@ msgstr "Import"
 msgid "[additionalTables/additionalTablesToImport.xml?BTN_CANCEL] Cancel"
 msgstr "Cancel"
 
-# additionalTables/doExport.xml?TITLE
-# additionalTables/doExport.xml
-#: title - TITLE
-msgid "Processmaker Tables export"
-msgstr "Processmaker Tables export"
-
 # additionalTables/doExport.xml?FILENAME_LABEL
 # additionalTables/doExport.xml
 #: link - FILENAME_LABEL
@@ -10050,15 +10035,9 @@ msgstr "File size"
 
 # additionalTables/doExport.xml?META
 # additionalTables/doExport.xml
-<<<<<<< HEAD
-#: caption - META
-msgid "Sumary"
-msgstr "Sumary"
-=======
 #: textarea - META
 msgid "[additionalTables/doExport.xml?META] Summary"
 msgstr "Summary"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # appFolder/appFolder.xml?title1
 # appFolder/appFolder.xml
@@ -10651,8 +10630,8 @@ msgstr "Password"
 # authSources/ldapEdit.xml?AUTH_SOURCE_IDENTIFIER_FOR_USER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_IDENTIFIER_FOR_USER
-msgid "Identifier for a imported user"
-msgstr "Identifier for a imported user"
+msgid "Identifier for an imported user"
+msgstr "Identifier for an imported user"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_OBJECT_CLASSES
 # authSources/ldapEdit.xml
@@ -13135,13 +13114,8 @@ msgstr "Every"
 # cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS
 # cases/cases_Scheduler_Edit.xml
 #: checkgroup - SCH_WEEK_DAYS
-<<<<<<< HEAD
-msgid "[cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS] Select the day(s) of the week below"
-msgstr "Select the day(s) of the week below"
-=======
 msgid "Select the day(s) of the week"
 msgstr "Select the day(s) of the week"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS-1
 # cases/cases_Scheduler_Edit.xml
@@ -13200,8 +13174,8 @@ msgstr "Monthly"
 # cases/cases_Scheduler_Edit.xml?SCH_START_DAY
 # cases/cases_Scheduler_Edit.xml
 #: radiogroup - SCH_START_DAY
-msgid "Day"
-msgstr "Day"
+msgid "[cases/cases_Scheduler_Edit.xml?SCH_START_DAY] "
+msgstr ""
 
 # cases/cases_Scheduler_Edit.xml?SCH_START_DAY-1
 # cases/cases_Scheduler_Edit.xml
@@ -13407,6 +13381,12 @@ msgstr "Advanced Options"
 msgid "[cases/cases_Scheduler_Edit.xml?SCH_END_DATE_CHK] End Date"
 msgstr "End Date"
 
+# cases/cases_Scheduler_Edit.xml?SCH_END_DATE
+# cases/cases_Scheduler_Edit.xml
+#: date - SCH_END_DATE
+msgid "[cases/cases_Scheduler_Edit.xml?SCH_END_DATE] End Date"
+msgstr "End Date"
+
 # cases/cases_Scheduler_Edit.xml?SCH_REPEAT_TASK_CHK
 # cases/cases_Scheduler_Edit.xml
 #: checkbox - SCH_REPEAT_TASK_CHK
@@ -13592,12 +13572,6 @@ msgstr "Created Case Status"
 #: text - WS_ROUTE_CASE_STATUS
 msgid "[cases/cases_Scheduler_Log_Detail.xml?WS_ROUTE_CASE_STATUS] Routed Case Status"
 msgstr "Routed Case Status"
-
-# cases/cases_Scheduler_Log_Detail.xml?VIEW
-# cases/cases_Scheduler_Log_Detail.xml
-#: link - VIEW
-msgid "Back to List"
-msgstr "Back to List"
 
 # cases/cases_Scheduler_New.xml?GENERAL_INF
 # cases/cases_Scheduler_New.xml
@@ -15786,61 +15760,6 @@ msgstr "Options Mask"
 # dynaforms/datemask.xml?option1
 # dynaforms/datemask.xml
 #: subtitle - option1
-<<<<<<< HEAD
-msgid "%a — abbreviated weekday name\n"
-"<br> %A — full weekday name\n"
-"<br> %b — abbreviated month name\n"
-"<br> %B — full month name\n"
-"<br> %C — the century number\n"
-"<br> %d — the day of the month (range 01 to 31)\n"
-"<br> %e — the day of the month (range 1 to 31)\n"
-"<br> %H — hour, range 00 to 23 (24h format)\n"
-"<br> %I — hour, range 01 to 12 (12h format)\n"
-"<br> %j — day of the year (range 001 to 366)\n"
-"<br> %k — hour, range 0 to 23 (24h format)\n"
-"<br> %l — hour, range 1 to 12 (12h format)\n"
-"<br> %m — month, range 01 to 12\n"
-"<br> %o — month, range 1 to 12\n"
-"<br> %M — minute, range 00 to 59\n"
-"<br> %n — a newline character\n"
-"<br> %p — PM or AM\n"
-"<br> %P — pm or am\n"
-"<br> %s — UNIX time (number of seconds since 1970-01-01)\n"
-"<br> %S — seconds, range 00 to 59\n"
-"<br> %t — a tab character\n"
-"<br> %W — week number\n"
-"<br> %u — the day of the week (range 1 to 7, 1 = MON)\n"
-"<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
-"<br> %y — year without the century (range 00 to 99)\n"
-"<br> %Y — year with the century\n"
-"<br> %% — a literal '%' character"
-msgstr "%a — abbreviated weekday name\n"
-"<br> %A — full weekday name\n"
-"<br> %b — abbreviated month name\n"
-"<br> %B — full month name\n"
-"<br> %C — the century number\n"
-"<br> %d — the day of the month (range 01 to 31)\n"
-"<br> %e — the day of the month (range 1 to 31)\n"
-"<br> %H — hour, range 00 to 23 (24h format)\n"
-"<br> %I — hour, range 01 to 12 (12h format)\n"
-"<br> %j — day of the year (range 001 to 366)\n"
-"<br> %k — hour, range 0 to 23 (24h format)\n"
-"<br> %l — hour, range 1 to 12 (12h format)\n"
-"<br> %m — month, range 01 to 12\n"
-"<br> %o — month, range 1 to 12\n"
-"<br> %M — minute, range 00 to 59\n"
-"<br> %n — a newline character\n"
-"<br> %p — PM or AM\n"
-"<br> %P — pm or am\n"
-"<br> %s — UNIX time (number of seconds since 1970-01-01)\n"
-"<br> %S — seconds, range 00 to 59\n"
-"<br> %t — a tab character\n"
-"<br> %W — week number\n"
-"<br> %u — the day of the week (range 1 to 7, 1 = MON)\n"
-"<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
-"<br> %y — year without the century (range 00 to 99)\n"
-"<br> %Y — year with the century\n"
-=======
 msgid "%a — abbreviated weekday namen\n"
 "<br> %A — full weekday namen\n"
 "<br> %b — abbreviated month namen\n"
@@ -15894,7 +15813,6 @@ msgstr "%a — abbreviated weekday namen\n"
 "<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
 "<br> %y — year without the century (range 00 to 99)n\n"
 "<br> %Y — year with the centuryn\n"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 "<br> %% — a literal '%' character"
 
 # dynaforms/dynaform_Fields.xml?XMLNODE_NAME
@@ -16652,27 +16570,24 @@ msgstr "Width"
 #: dropdown - MODE
 msgid "[dynaforms/dynaforms_Properties.xml?MODE] Mode"
 msgstr "Mode"
-<<<<<<< HEAD
-=======
 
 # dynaforms/dynaforms_Properties.xml?MODE-
 # dynaforms/dynaforms_Properties.xml
 #: dropdown - MODE -
 msgid "[dynaforms/dynaforms_Properties.xml?MODE-]"
 msgstr "Determined by Fields"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # dynaforms/dynaforms_Properties.xml?MODE-edit
 # dynaforms/dynaforms_Properties.xml
 #: dropdown - MODE - edit
 msgid "[dynaforms/dynaforms_Properties.xml?MODE-edit]"
-msgstr "Edit"
+msgstr "All Edit"
 
 # dynaforms/dynaforms_Properties.xml?MODE-view
 # dynaforms/dynaforms_Properties.xml
 #: dropdown - MODE - view
 msgid "[dynaforms/dynaforms_Properties.xml?MODE-view]"
-msgstr "View"
+msgstr "All View"
 
 # dynaforms/dynaforms_Properties.xml?NEXTSTEPSAVE
 # dynaforms/dynaforms_Properties.xml
@@ -17271,218 +17186,218 @@ msgstr "Apply Filter"
 # dynaforms/fields_Toolbar.xml?saveDyna
 # dynaforms/fields_Toolbar.xml
 #: toolButton - saveDyna
-msgid "[dynaforms/fields_Toolbar.xml?saveDyna] save"
-msgstr "save"
+msgid "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
 
 # dynaforms/fields_Toolbar.xml?saveasDyna
 # dynaforms/fields_Toolbar.xml
 #: toolButton - saveasDyna
-msgid "save as"
-msgstr "save as"
+msgid "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
 
 # dynaforms/fields_Toolbar.xml?text
 # dynaforms/fields_Toolbar.xml
 #: toolButton - text
-msgid "[dynaforms/fields_Toolbar.xml?text] text"
-msgstr "text"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
 
 # dynaforms/fields_Toolbar.xml?currency
 # dynaforms/fields_Toolbar.xml
 #: toolButton - currency
-msgid "[dynaforms/fields_Toolbar.xml?currency] currency"
-msgstr "currency"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
 
 # dynaforms/fields_Toolbar.xml?percentage
 # dynaforms/fields_Toolbar.xml
 #: toolButton - percentage
-msgid "[dynaforms/fields_Toolbar.xml?percentage] percentage"
-msgstr "percentage"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
 
 # dynaforms/fields_Toolbar.xml?password
 # dynaforms/fields_Toolbar.xml
 #: toolButton - password
-msgid "[dynaforms/fields_Toolbar.xml?password] password"
-msgstr "password"
+msgid "<div class=\"ss_sprite button_toolbar ss_textfield_key\" title=\"Password\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_key\" title=\"Password\"></div>"
 
 # dynaforms/fields_Toolbar.xml?suggest
 # dynaforms/fields_Toolbar.xml
 #: toolButton - suggest
-msgid "Suggest"
-msgstr "Suggest"
+msgid "<div class=\"ss_sprite button_toolbar ss_help\" title=\"Suggest\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_help\" title=\"Suggest\"></div>"
 
 # dynaforms/fields_Toolbar.xml?textarea
 # dynaforms/fields_Toolbar.xml
 #: toolButton - textarea
-msgid "[dynaforms/fields_Toolbar.xml?textarea] textarea"
-msgstr "textarea"
+msgid "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
 
 # dynaforms/fields_Toolbar.xml?title
 # dynaforms/fields_Toolbar.xml
 #: toolButton - title
-msgid "[dynaforms/fields_Toolbar.xml?title] title"
-msgstr "title"
+msgid "<div class=\"ss_sprite button_toolbar ss_title\" title=\"Title\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_title\" title=\"Title\"></div>"
 
 # dynaforms/fields_Toolbar.xml?subtitle
 # dynaforms/fields_Toolbar.xml
 #: toolButton - subtitle
-msgid "[dynaforms/fields_Toolbar.xml?subtitle] subtitle"
-msgstr "subtitle"
+msgid "<div class=\"ss_sprite button_toolbar ss_subtitle\" title=\"Subtitle\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_subtitle\" title=\"Subtitle\"></div>"
 
 # dynaforms/fields_Toolbar.xml?button
 # dynaforms/fields_Toolbar.xml
 #: toolButton - button
-msgid "[dynaforms/fields_Toolbar.xml?button] button"
-msgstr "button"
+msgid "<div class=\"ss_sprite button_toolbar ss_button\" title=\"Button\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_button\" title=\"Button\"></div>"
 
 # dynaforms/fields_Toolbar.xml?submit
 # dynaforms/fields_Toolbar.xml
 #: toolButton - submit
-msgid "[dynaforms/fields_Toolbar.xml?submit] submit"
-msgstr "submit"
+msgid "<div class=\"ss_sprite button_toolbar ss_submit\" title=\"Submit\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_submit\" title=\"Submit\"></div>"
 
 # dynaforms/fields_Toolbar.xml?reset
 # dynaforms/fields_Toolbar.xml
 #: toolButton - reset
-msgid "[dynaforms/fields_Toolbar.xml?reset] reset"
-msgstr "reset"
+msgid "<div class=\"ss_sprite button_toolbar ss_reset\" title=\"Reset\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_reset\" title=\"Reset\"></div>"
 
 # dynaforms/fields_Toolbar.xml?dropdown
 # dynaforms/fields_Toolbar.xml
 #: toolButton - dropdown
-msgid "[dynaforms/fields_Toolbar.xml?dropdown] dropdown"
-msgstr "dropdown"
+msgid "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
 
 # dynaforms/fields_Toolbar.xml?yesno
 # dynaforms/fields_Toolbar.xml
 #: toolButton - yesno
-msgid "[dynaforms/fields_Toolbar.xml?yesno] yesno"
-msgstr "yesno"
+msgid "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
 
 # dynaforms/fields_Toolbar.xml?listbox
 # dynaforms/fields_Toolbar.xml
 #: toolButton - listbox
-msgid "[dynaforms/fields_Toolbar.xml?listbox] listbox"
-msgstr "listbox"
+msgid "<div class=\"ss_sprite button_toolbar ss_listbox\" title=\"Listbox\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_listbox\" title=\"Listbox\"></div>"
 
 # dynaforms/fields_Toolbar.xml?checkbox
 # dynaforms/fields_Toolbar.xml
 #: toolButton - checkbox
-msgid "[dynaforms/fields_Toolbar.xml?checkbox] checkbox"
-msgstr "checkbox"
+msgid "<div class=\"ss_sprite button_toolbar ss_check\" title=\"Checkbox\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_check\" title=\"Checkbox\"></div>"
 
 # dynaforms/fields_Toolbar.xml?checkgroup
 # dynaforms/fields_Toolbar.xml
 #: toolButton - checkgroup
-msgid "[dynaforms/fields_Toolbar.xml?checkgroup] checkgroup"
-msgstr "checkgroup"
+msgid "<div class=\"ss_sprite button_toolbar ss_checkgroup\" title=\"CheckGroup\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_checkgroup\" title=\"CheckGroup\"></div>"
 
 # dynaforms/fields_Toolbar.xml?radiogroup
 # dynaforms/fields_Toolbar.xml
 #: toolButton - radiogroup
-msgid "[dynaforms/fields_Toolbar.xml?radiogroup] radiogroup"
-msgstr "radiogroup"
+msgid "<div class=\"ss_sprite button_toolbar ss_radiogroup\" title=\"RadioGroup\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_radiogroup\" title=\"RadioGroup\"></div>"
 
 # dynaforms/fields_Toolbar.xml?date
 # dynaforms/fields_Toolbar.xml
 #: toolButton - date
-msgid "date"
-msgstr "date"
+msgid "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
 
 # dynaforms/fields_Toolbar.xml?hidden
 # dynaforms/fields_Toolbar.xml
 #: toolButton - hidden
-msgid "[dynaforms/fields_Toolbar.xml?hidden] hidden"
-msgstr "hidden"
+msgid "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
 
 # dynaforms/fields_Toolbar.xml?link
 # dynaforms/fields_Toolbar.xml
 #: toolButton - link
-msgid "[dynaforms/fields_Toolbar.xml?link] link"
-msgstr "link"
+msgid "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
 
 # dynaforms/fields_Toolbar.xml?file
 # dynaforms/fields_Toolbar.xml
 #: toolButton - file
-msgid "[dynaforms/fields_Toolbar.xml?file] file"
-msgstr "file"
+msgid "<div class=\"ss_sprite button_toolbar ss_upload\" title=\"File\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_upload\" title=\"File\"></div>"
 
 # dynaforms/fields_Toolbar.xml?javascript
 # dynaforms/fields_Toolbar.xml
 #: toolButton - javascript
-msgid "[dynaforms/fields_Toolbar.xml?javascript] javascript"
-msgstr "javascript"
+msgid "<div class=\"ss_sprite button_toolbar ss_js\" title=\"Javascript\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_js\" title=\"Javascript\"></div>"
 
 # dynaforms/fields_Toolbar.xml?grid
 # dynaforms/fields_Toolbar.xml
 #: toolButton - grid
-msgid "[dynaforms/fields_Toolbar.xml?grid] grid"
-msgstr "grid"
+msgid "<div class=\"ss_sprite button_toolbar ss_table\" title=\"Grid\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_table\" title=\"Grid\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?saveDyna
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - saveDyna
-msgid "[dynaforms/fields_ToolbarGrid.xml?saveDyna] save"
-msgstr "save"
+msgid "[dynaforms/fields_ToolbarGrid.xml?saveDyna] <div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?saveasDyna
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - saveasDyna
-msgid "[dynaforms/fields_ToolbarGrid.xml?saveasDyna] save as"
-msgstr "save as"
+msgid "[dynaforms/fields_ToolbarGrid.xml?saveasDyna] <div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?text
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - text
-msgid "[dynaforms/fields_ToolbarGrid.xml?text] text"
-msgstr "text"
+msgid "[dynaforms/fields_ToolbarGrid.xml?text] <div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?currency
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - currency
-msgid "[dynaforms/fields_ToolbarGrid.xml?currency] currency"
-msgstr "currency"
+msgid "[dynaforms/fields_ToolbarGrid.xml?currency] <div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?percentage
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - percentage
-msgid "[dynaforms/fields_ToolbarGrid.xml?percentage] percentage"
-msgstr "percentage"
+msgid "[dynaforms/fields_ToolbarGrid.xml?percentage] <div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?textarea
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - textarea
-msgid "[dynaforms/fields_ToolbarGrid.xml?textarea] textarea"
-msgstr "textarea"
+msgid "[dynaforms/fields_ToolbarGrid.xml?textarea] <div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?dropdown
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - dropdown
-msgid "[dynaforms/fields_ToolbarGrid.xml?dropdown] dropdown"
-msgstr "dropdown"
+msgid "[dynaforms/fields_ToolbarGrid.xml?dropdown] <div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?yesno
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - yesno
-msgid "[dynaforms/fields_ToolbarGrid.xml?yesno] yesno"
-msgstr "yesno"
+msgid "[dynaforms/fields_ToolbarGrid.xml?yesno] <div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?date
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - date
-msgid "[dynaforms/fields_ToolbarGrid.xml?date] date"
-msgstr "date"
+msgid "[dynaforms/fields_ToolbarGrid.xml?date] <div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?hidden
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - hidden
-msgid "[dynaforms/fields_ToolbarGrid.xml?hidden] hidden"
-msgstr "hidden"
+msgid "[dynaforms/fields_ToolbarGrid.xml?hidden] <div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
 
 # dynaforms/fields_ToolbarGrid.xml?link
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - link
-msgid "[dynaforms/fields_ToolbarGrid.xml?link] link"
-msgstr "link"
+msgid "[dynaforms/fields_ToolbarGrid.xml?link] <div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
+msgstr "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
 
 # events/appEventsList.xml?TAS_TITLE
 # events/appEventsList.xml
@@ -18792,6 +18707,114 @@ msgstr "Re-type Password:"
 msgid "[login/newSite.xml?NW_SUB] Test"
 msgstr "Test"
 
+# login/newSiteAdd.xml?NEW_WORKSPACE
+# login/newSiteAdd.xml
+#: title - NEW_WORKSPACE
+msgid "[login/newSiteAdd.xml?NEW_WORKSPACE] New Workspace"
+msgstr "New Workspace"
+
+# login/newSiteAdd.xml?NW_TITLE
+# login/newSiteAdd.xml
+#: text - NW_TITLE
+msgid "[login/newSiteAdd.xml?NW_TITLE] Name"
+msgstr "Name"
+
+# login/newSiteAdd.xml?DB
+# login/newSiteAdd.xml
+#: subtitle - DB
+msgid "[login/newSiteAdd.xml?DB] Database Options"
+msgstr "Database Options"
+
+# login/newSiteAdd.xml?AO_DB_WF
+# login/newSiteAdd.xml
+#: text - AO_DB_WF
+msgid "[login/newSiteAdd.xml?AO_DB_WF] Workflow Database:"
+msgstr "Workflow Database:"
+
+# login/newSiteAdd.xml?AO_DB_RB
+# login/newSiteAdd.xml
+#: text - AO_DB_RB
+msgid "[login/newSiteAdd.xml?AO_DB_RB] Rbac Database:"
+msgstr "Rbac Database:"
+
+# login/newSiteAdd.xml?AO_DB_RP
+# login/newSiteAdd.xml
+#: text - AO_DB_RP
+msgid "[login/newSiteAdd.xml?AO_DB_RP] Report Database:"
+msgstr "Report Database:"
+
+# login/newSiteAdd.xml?AO_DB_DROP
+# login/newSiteAdd.xml
+#: checkbox - AO_DB_DROP
+msgid "[login/newSiteAdd.xml?AO_DB_DROP] Drop database if exists"
+msgstr "Drop database if exists"
+
+# login/newSiteAdd.xml?WS
+# login/newSiteAdd.xml
+#: subtitle - WS
+msgid "[login/newSiteAdd.xml?WS] Workspace Administrator"
+msgstr "Workspace Administrator"
+
+# login/newSiteAdd.xml?NW_USERNAME
+# login/newSiteAdd.xml
+#: text - NW_USERNAME
+msgid "[login/newSiteAdd.xml?NW_USERNAME] Username:"
+msgstr "Username:"
+
+# login/newSiteAdd.xml?NW_PASSWORD
+# login/newSiteAdd.xml
+#: password - NW_PASSWORD
+msgid "Password (admin):"
+msgstr "Password (admin):"
+
+# login/newSiteAdd.xml?NW_PASSWORD2
+# login/newSiteAdd.xml
+#: password - NW_PASSWORD2
+msgid "[login/newSiteAdd.xml?NW_PASSWORD2] Re-type Password:"
+msgstr "Re-type Password:"
+
+# login/newSiteAdd.xml?DBS
+# login/newSiteAdd.xml
+#: subtitle - DBS
+msgid "Define Database"
+msgstr "Define Database"
+
+# login/newSiteAdd.xml?DB_ENGINE
+# login/newSiteAdd.xml
+#: text - DB_ENGINE
+msgid "Engine:"
+msgstr "Engine:"
+
+# login/newSiteAdd.xml?DB_SERVER
+# login/newSiteAdd.xml
+#: text - DB_SERVER
+msgid "Server:"
+msgstr "Server:"
+
+# login/newSiteAdd.xml?DB_PORT
+# login/newSiteAdd.xml
+#: text - DB_PORT
+msgid "Port:"
+msgstr "Port:"
+
+# login/newSiteAdd.xml?DB_USERNAME
+# login/newSiteAdd.xml
+#: text - DB_USERNAME
+msgid "[login/newSiteAdd.xml?DB_USERNAME] Username:"
+msgstr "Username:"
+
+# login/newSiteAdd.xml?DB_PASSWORD
+# login/newSiteAdd.xml
+#: password - DB_PASSWORD
+msgid "Password:"
+msgstr "Password:"
+
+# login/newSiteAdd.xml?NW_SUB
+# login/newSiteAdd.xml
+#: submit - NW_SUB
+msgid "[login/newSiteAdd.xml?NW_SUB] Test"
+msgstr "Test"
+
 # login/noViewPage.xml?title
 # login/noViewPage.xml
 #: title - title
@@ -19662,6 +19685,24 @@ msgstr "Last executant of the task"
 msgid "[patterns/patterns_Current.xml?SAVE] Save"
 msgstr "Save"
 
+# patterns/patterns_Discriminator.xml?TITLE
+# patterns/patterns_Discriminator.xml
+#: title - TITLE
+msgid "Discriminator"
+msgstr "Discriminator"
+
+# patterns/patterns_Discriminator.xml?BTN_CANCEL
+# patterns/patterns_Discriminator.xml
+#: button - BTN_CANCEL
+msgid "[patterns/patterns_Discriminator.xml?BTN_CANCEL] Cancel"
+msgstr "Cancel"
+
+# patterns/patterns_Discriminator.xml?SAVE
+# patterns/patterns_Discriminator.xml
+#: button - SAVE
+msgid "[patterns/patterns_Discriminator.xml?SAVE] Save"
+msgstr "Save"
+
 # patterns/patterns_Evaluate.xml?TITLE
 # patterns/patterns_Evaluate.xml
 #: title - TITLE
@@ -19680,8 +19721,6 @@ msgstr "Cancel"
 msgid "[patterns/patterns_Evaluate.xml?SAVE] Save"
 msgstr "Save"
 
-<<<<<<< HEAD
-=======
 # patterns/patterns_GridDiscriminator.xml?ROU_NEXT_TASK
 # patterns/patterns_GridDiscriminator.xml
 #: dropdown - ROU_NEXT_TASK
@@ -19712,7 +19751,6 @@ msgstr "Structured"
 msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-TRUE]"
 msgstr "Cancelling"
 
->>>>>>> a2fa2f7... BUG 0000 updated English language
 # patterns/patterns_GridEvaluateType.xml?ROU_NEXT_TASK
 # patterns/patterns_GridEvaluateType.xml
 #: dropdown - ROU_NEXT_TASK
@@ -20439,6 +20477,12 @@ msgstr "Size in bytes"
 msgid "[processes/processes_Export.xml?FILENAME_LABEL] File"
 msgstr "File"
 
+# processes/processes_Export.xml?FILENAME_LABEL1
+# processes/processes_Export.xml
+#: link - FILENAME_LABEL1
+msgid "File xpdl"
+msgstr "File xpdl"
+
 # processes/processes_FileEdit.xml?TITLE
 # processes/processes_FileEdit.xml
 #: title - TITLE
@@ -20577,6 +20621,54 @@ msgstr "Save"
 msgid "[processes/processes_ImportExisting.xml?BTN_CANCEL] Cancel"
 msgstr "Cancel"
 
+# processes/processes_ImportExistingXpdl.xml?title
+# processes/processes_ImportExistingXpdl.xml
+#: title - title
+msgid "[processes/processes_ImportExistingXpdl.xml?title] <div align=\"center\">Importing Existing Process</div>"
+msgstr "<div align=\"center\">Importing Existing Process</div>"
+
+# processes/processes_ImportExistingXpdl.xml?TITLE1
+# processes/processes_ImportExistingXpdl.xml
+#: subtitle - TITLE1
+msgid "[processes/processes_ImportExistingXpdl.xml?TITLE1] The process you are trying to import already exists. Please select one of the following options to continue:"
+msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
+
+# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION
+# processes/processes_ImportExistingXpdl.xml
+#: radiogroup - IMPORT_OPTION
+msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION] "
+msgstr ""
+
+# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-1
+# processes/processes_ImportExistingXpdl.xml
+#: radiogroup - IMPORT_OPTION - 1
+msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-1]"
+msgstr "Update the current process, overwriting all tasks and steps"
+
+# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-2
+# processes/processes_ImportExistingXpdl.xml
+#: radiogroup - IMPORT_OPTION - 2
+msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-2]"
+msgstr "Disable the current process and create a new version of the process"
+
+# processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-3
+# processes/processes_ImportExistingXpdl.xml
+#: radiogroup - IMPORT_OPTION - 3
+msgid "[processes/processes_ImportExistingXpdl.xml?IMPORT_OPTION-3]"
+msgstr "Create a completely new process without changing the current process"
+
+# processes/processes_ImportExistingXpdl.xml?SUBMIT
+# processes/processes_ImportExistingXpdl.xml
+#: submit - SUBMIT
+msgid "[processes/processes_ImportExistingXpdl.xml?SUBMIT] Save"
+msgstr "Save"
+
+# processes/processes_ImportExistingXpdl.xml?BTN_CANCEL
+# processes/processes_ImportExistingXpdl.xml
+#: button - BTN_CANCEL
+msgid "[processes/processes_ImportExistingXpdl.xml?BTN_CANCEL] Cancel"
+msgstr "Cancel"
+
 # processes/processes_ImportSucessful.xml?title
 # processes/processes_ImportSucessful.xml
 #: title - title
@@ -20624,6 +20716,30 @@ msgstr ""
 #: submit - SUBMIT
 msgid "[processes/processes_ImportSucessful.xml?SUBMIT] Continue"
 msgstr "Continue"
+
+# processes/processes_ImportXpdl.xml?TITLE1
+# processes/processes_ImportXpdl.xml
+#: title - TITLE1
+msgid "[processes/processes_ImportXpdl.xml?TITLE1] Import Process"
+msgstr "Import Process"
+
+# processes/processes_ImportXpdl.xml?PROCESS_FILENAME
+# processes/processes_ImportXpdl.xml
+#: file - PROCESS_FILENAME
+msgid "[processes/processes_ImportXpdl.xml?PROCESS_FILENAME] File"
+msgstr "File"
+
+# processes/processes_ImportXpdl.xml?SAVE
+# processes/processes_ImportXpdl.xml
+#: button - SAVE
+msgid "[processes/processes_ImportXpdl.xml?SAVE] Import"
+msgstr "Import"
+
+# processes/processes_ImportXpdl.xml?BTN_CANCEL
+# processes/processes_ImportXpdl.xml
+#: button - BTN_CANCEL
+msgid "[processes/processes_ImportXpdl.xml?BTN_CANCEL] Cancel"
+msgstr "Cancel"
 
 # processes/processes_List.xml?PRO_CATEGORY_LABEL
 # processes/processes_List.xml
@@ -22119,6 +22235,18 @@ msgstr "Create"
 msgid "[roles/roles_Options.xml?MNU_ADD] New"
 msgstr "New"
 
+# services/serviceMessage.xml?Title
+# services/serviceMessage.xml
+#: title - Title
+msgid "[services/serviceMessage.xml?Title] Information"
+msgstr "Information"
+
+# services/serviceMessage.xml?Subtitle
+# services/serviceMessage.xml
+#: subtitle - Subtitle
+msgid "The access for the service is currently unavailable from the processmaker web interface."
+msgstr "The access for the service is currently unavailable from the processmaker web interface."
+
 # setup/calendarEdit.xml?DEFINITION_TITLE
 # setup/calendarEdit.xml
 #: title - DEFINITION_TITLE
@@ -22242,7 +22370,7 @@ msgstr ""
 # setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY
 # setup/calendarEdit_BusinessHours.xml
 #: dropdown - CALENDAR_BUSINESS_DAY
-msgid "[setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY] Day"
+msgid "Day"
 msgstr "Day"
 
 # setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY-7
@@ -25569,11 +25697,35 @@ msgstr "Reports to"
 msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-SELF_SERVICE]"
 msgstr "Self Service"
 
+# tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-STATIC_MI
+# tasks/tasks_AssignmentRules.xml
+#: radiogroup - TAS_ASSIGN_TYPE - STATIC_MI
+msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-STATIC_MI]"
+msgstr "Static Partial Join for Multiple Instances"
+
+# tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-CANCEL_MI
+# tasks/tasks_AssignmentRules.xml
+#: radiogroup - TAS_ASSIGN_TYPE - CANCEL_MI
+msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-CANCEL_MI]"
+msgstr "Cancelling Partial Join for Multiple Instances"
+
 # tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_VARIABLE
 # tasks/tasks_AssignmentRules.xml
 #: textpm - TAS_ASSIGN_VARIABLE
 msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_VARIABLE] Variable for Value Based Assignment"
 msgstr "Variable for Value Based Assignment"
+
+# tasks/tasks_AssignmentRules.xml?TAS_MI_INSTANCE_VARIABLE
+# tasks/tasks_AssignmentRules.xml
+#: textpm - TAS_MI_INSTANCE_VARIABLE
+msgid "[tasks/tasks_AssignmentRules.xml?TAS_MI_INSTANCE_VARIABLE] Variable for No of Instances"
+msgstr "Variable for No of Instances"
+
+# tasks/tasks_AssignmentRules.xml?TAS_MI_COMPLETE_VARIABLE
+# tasks/tasks_AssignmentRules.xml
+#: textpm - TAS_MI_COMPLETE_VARIABLE
+msgid "[tasks/tasks_AssignmentRules.xml?TAS_MI_COMPLETE_VARIABLE] Variable for No of Instances to complete"
+msgstr "Variable for No of Instances to complete"
 
 # tasks/tasks_Definition.xml?TAS_TITLE
 # tasks/tasks_Definition.xml
@@ -25742,6 +25894,12 @@ msgstr "Exceptions Handling"
 #: checkbox - TAS_TYPE
 msgid "Allow arbitrary transfer (Ad hoc)"
 msgstr "Allow arbitrary transfer (Ad hoc)"
+
+# tasks/tasks_TimingControl.xml?TAS_TRANSFER_FLY
+# tasks/tasks_TimingControl.xml
+#: checkbox - TAS_TRANSFER_FLY
+msgid "[tasks/tasks_TimingControl.xml?TAS_TRANSFER_FLY] Allow user defined timing control"
+msgstr "Allow user defined timing control"
 
 # tasks/tasks_TimingControl.xml?TAS_DURATION
 # tasks/tasks_TimingControl.xml
@@ -29766,13 +29924,8 @@ msgstr "Link"
 # dynaforms/fields/link.xml?PME_TARGET_SEL
 # dynaforms/fields/link.xml
 #: dropdown - PME_TARGET_SEL
-<<<<<<< HEAD
-msgid "[dynaforms/fields/link.xml?PME_TARGET_SEL] Target"
-msgstr "Target"
-=======
 msgid "n"
 msgstr "n"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # dynaforms/fields/link.xml?PME_TARGET_SEL-_blank
 # dynaforms/fields/link.xml
@@ -30575,25 +30728,20 @@ msgstr "Show no results message"
 # dynaforms/fields/suggest.xml?PME_SAVELABEL
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_SAVELABEL
-<<<<<<< HEAD
-msgid "Save on dynaform"
-msgstr "Save on dynaform"
-=======
 msgid "Save selected option as"
 msgstr "Save selected option as"
->>>>>>> a2fa2f7... BUG 0000 updated English language
 
 # dynaforms/fields/suggest.xml?PME_SAVELABEL-0
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_SAVELABEL - 0
 msgid "[dynaforms/fields/suggest.xml?PME_SAVELABEL-0]"
-msgstr "Id"
+msgstr "Value"
 
 # dynaforms/fields/suggest.xml?PME_SAVELABEL-1
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_SAVELABEL - 1
 msgid "[dynaforms/fields/suggest.xml?PME_SAVELABEL-1]"
-msgstr "Value"
+msgstr "Label"
 
 # dynaforms/fields/suggest.xml?PME_STORE_NEW_ENTRY
 # dynaforms/fields/suggest.xml
