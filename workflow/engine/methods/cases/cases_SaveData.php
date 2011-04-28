@@ -57,12 +57,12 @@ if ($_SESSION ['TRIGGER_DEBUG'] ['NUM_TRIGGERS'] != 0) {
 	$_SESSION ['TRIGGER_DEBUG'] ['TRIGGERS_NAMES'] = $oCase->getTriggerNames ( $triggers );
 	$_SESSION ['TRIGGER_DEBUG'] ['TRIGGERS_VALUES'] = $triggers;
 }
-/*
+
 if ($_SESSION ['TRIGGER_DEBUG'] ['NUM_TRIGGERS'] != 0) {
 	//Execute after triggers - Start
 	$Fields ['APP_DATA'] = $oCase->ExecuteTriggers ( $_SESSION ['TASK'], 'DYNAFORM', $_GET ['UID'], 'AFTER', $Fields ['APP_DATA'] );
 	//Execute after triggers - End
-}*/
+}
 
 //save data in PM Tables if necessary
 $newValues = array ();
@@ -216,12 +216,7 @@ if (isset ( $_FILES ['form'] )) {
 			}
 		}
 	}
-}
-if ($_SESSION ['TRIGGER_DEBUG'] ['NUM_TRIGGERS'] != 0) {
-	//Execute after triggers - Start
-	$Fields ['APP_DATA'] = $oCase->ExecuteTriggers ( $_SESSION ['TASK'], 'DYNAFORM', $_GET ['UID'], 'AFTER', $Fields ['APP_DATA'] );
-	//Execute after triggers - End
-}
+}sion
 //go to the next step
 $aNextStep = $oCase->getNextStep ( $_SESSION ['PROCESS'], $_SESSION ['APPLICATION'], $_SESSION ['INDEX'], $_SESSION ['STEP_POSITION'] );
 if (isset ( $_GET ['_REFRESH_'] )) {
