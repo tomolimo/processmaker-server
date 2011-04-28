@@ -561,7 +561,7 @@ class Installer
   {
     array_push($this->report,$text);
     if ($failed)
-      throw new Exception($text);
+      throw new Exception(is_string($text) ? $text : var_export($text, true));
   }
 }
 ?>

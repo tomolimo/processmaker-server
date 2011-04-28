@@ -302,7 +302,10 @@ else if($action==="install")
   if (isset($report))
     $logger->log("Installation report\n" . neat_r(array($report)));
   else
-    $logger->log("** No installation report **");
+    $logger->log("** Installation crashed **");
+
+  if (is_string($installError))
+    $logger->log("Error message: $installError");
 
   if ($installError) {
     $logger->log("Installation ending with errors");
