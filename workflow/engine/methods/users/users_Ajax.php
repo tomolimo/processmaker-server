@@ -380,6 +380,8 @@ try {
 //      if ($sw_add) $oCriteria->add($uList);
       if (sizeof($aUsers) > 0){
         $oCriteria->add(UsersPeer::USR_UID, $aUsers, Criteria::IN);
+      }else if ($totalRows==0 && $auths != ''){
+        $oCriteria->add(UsersPeer::USR_UID,'',Criteria::IN);
       }
       $oCriteria->setOffset($start);
       $oCriteria->setLimit($limit);
