@@ -26,6 +26,7 @@
 
 require_once 'classes/model/om/BaseGroupUser.php';
 require_once 'classes/model/Content.php';
+require_once 'classes/model/Users.php';
 
 /**
  * Skeleton subclass for representing a row from the 'GROUP_USER' table.
