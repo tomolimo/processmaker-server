@@ -740,6 +740,8 @@ class Column extends XMLElement {
 		$dflt = "";
 		if ($this->getDefaultValue() !== null) {
 			$dflt .= "default ";
+			if ($this->getType() == "LONGVARCHAR")
+				throw new Exception("ERROR: Text cannot have default value (column: '{$this->name}', type: '{$this->getType()}', default: '{$this->getDefaultValue()}')");
 			if (PropelTypes::isTextType($this->getType())) {
 				$dflt .= '\'' . $this->getPlatform()->escapeText($this->getDefaultValue()) . '\'';
 			} elseif ($this->getType() == PropelTypes::BOOLEAN) {
