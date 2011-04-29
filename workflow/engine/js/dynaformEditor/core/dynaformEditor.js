@@ -25,8 +25,9 @@ var dynaformEditor={
 		mainPanel.elements.headerBar.appendChild(this.toolbar);
 		mainPanel.events.remove = function(){
 		}
-    this.changeToJavascripts();
 		this.refresh_preview();
+    this.changeToJavascripts();
+    this.changeToPreview();
 	},
 	_review:function()
 	{
