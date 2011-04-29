@@ -50,11 +50,16 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
    var grid,winGrill, leimnud = new maborak();
    var inWIN = false;
    leimnud.make();
-   leimnud.Package.Load("validator,app,rpc,fx,drag,drop,panel,grid,dom,abbr",{Instance:leimnud,Type:"module"});
+   leimnud.Package.Load("dom,validator,app,rpc,fx,drag,drop,panel,grid,abbr",{Instance:leimnud,Type:"module"});
    leimnud.Package.Load("json",{Type:"file"});
    leimnud.exec(leimnud.fix.memoryLeak);
    var inst;
-   leimnud.event.add(window,'load',function(){
+   leimnud.event.add(window,'load',function(){myload();});
+   var myload = function() {
+      if (typeof(DOM) === 'undefined') {
+        setTimeout("myload();", 1000);
+        return;
+      }
       inst = new leimnud.module.panel();
       inst.options={
          size:{w:document.body.offsetWidth-50,h:825},
@@ -100,7 +105,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
          ]
       };
       inst.make();
-   });
+   };
    </script>
    <style>
    input{
