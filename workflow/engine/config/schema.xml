@@ -3565,7 +3565,7 @@
         <parameter name="Extra" value=""/>
       </vendor>
     </column>
-    <column name="TRN_VALUE" type="LONGVARCHAR" required="true" default="">
+    <column name="TRN_VALUE" type="LONGVARCHAR" required="true" >
       <vendor type="mysql">
         <parameter name="Field" value="TRN_VALUE"/>
         <parameter name="Type" value="mediumtext"/>
