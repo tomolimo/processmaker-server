@@ -1130,7 +1130,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
         return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' readOnly="readOnly" style="' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" onkeypress="' . htmlentities ( $onkeypress, ENT_COMPAT, 'utf-8' ) . '"/>';
       } else {
 //        $str = '<textarea '.$storeEntry.' class="module_app_input___gray" style="height:16px" rows=1 cols="'.$this->size.'" id="form[' . $this->name . ']" name="form[' . $this->name . ']" >'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'</textarea>';
-        $str = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . ']" name="form[' . $this->name . ']" >'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'</input>';
+        $str = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . ']" name="form[' . $this->name . ']" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" />';
         if($this->hint){
           $str .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;"><image src="/images/help4.gif" width="15" height="15" border="0"/></a>';
         }

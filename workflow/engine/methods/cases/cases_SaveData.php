@@ -216,7 +216,7 @@ if (isset ( $_FILES ['form'] )) {
 			}
 		}
 	}
-}sion
+}
 //go to the next step
 $aNextStep = $oCase->getNextStep ( $_SESSION ['PROCESS'], $_SESSION ['APPLICATION'], $_SESSION ['INDEX'], $_SESSION ['STEP_POSITION'] );
 if (isset ( $_GET ['_REFRESH_'] )) {
