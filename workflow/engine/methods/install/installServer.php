@@ -241,7 +241,7 @@ else if($action==="install")
       'password'=>$dataClient->mysqlP
   )
   ),true);
-
+  print '<pre>';
   /* Status is used in the Windows installer, do not change this */
   print_r("Status: ".($s['created'] ? 'SUCCESS':'FAILED')."\n\n");
   print_r("Installation arguments:\n");
@@ -256,7 +256,7 @@ else if($action==="install")
     print_r($s['result']);
     die();
   }
-
+  
   print_r("Installation report:\n");
   print_r($inst->report);
 
