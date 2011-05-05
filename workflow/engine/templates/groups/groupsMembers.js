@@ -5,19 +5,19 @@
 
 //Keyboard Events
 new Ext.KeyMap(document, {
-	 key: Ext.EventObject.F5,
+   key: Ext.EventObject.F5,
      fn: function(keycode, e) {
-    	if (! e.ctrlKey) {
-    		if (Ext.isIE) {
+      if (! e.ctrlKey) {
+        if (Ext.isIE) {
             // IE6 doesn't allow cancellation of the F5 key, so trick it into
             // thinking some other key was pressed (backspace in this case)
-    			e.browserEvent.keyCode = 8;
-    		}
-    		e.stopEvent();
-    		document.location = document.location;
-    	}else{
-    		Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
-    	}
+          e.browserEvent.keyCode = 8;
+        }
+        e.stopEvent();
+        document.location = document.location;
+      }else{
+        Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+      }
     }
 });
 
@@ -41,43 +41,43 @@ var backButton;
 
 
 Ext.onReady(function(){
-	
-	editMembersButton = new Ext.Action({
-	    text: _('ID_ASSIGN_USERS'),
-	    iconCls: 'button_menu_ext ss_sprite  ss_user_add',
-	    handler: EditMembersAction
-	  });
+  
+  editMembersButton = new Ext.Action({
+      text: _('ID_ASSIGN_USERS'),
+      iconCls: 'button_menu_ext ss_sprite  ss_user_add',
+      handler: EditMembersAction
+    });
 
-	cancelEditMembersButton = new Ext.Action({
-	    text: _('ID_CLOSE'),
-	    iconCls: 'button_menu_ext ss_sprite ss_cancel',
-	    handler: CancelEditMembersAction
-	  });
-	
-	backButton = new Ext.Action({
-		text: _('ID_BACK'),
-		iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
-		handler: BackToGroups
-	});
-	
-	storeP = new Ext.data.GroupingStore( {
+  cancelEditMembersButton = new Ext.Action({
+      text: _('ID_CLOSE'),
+      iconCls: 'button_menu_ext ss_sprite ss_cancel',
+      handler: CancelEditMembersAction
+    });
+  
+  backButton = new Ext.Action({
+    text: _('ID_BACK'),
+    iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
+    handler: BackToGroups
+  });
+  
+  storeP = new Ext.data.GroupingStore( {
         proxy : new Ext.data.HttpProxy({
             url: 'groups_Ajax?action=assignedMembers&gUID=' + GROUPS.GRP_UID
           }),
-    	reader : new Ext.data.JsonReader( {
-    		root: 'members',
-    		fields : [
-    		    {name : 'USR_UID'},
-    		    {name : 'USR_USERNAME'},
-    		    {name : 'USR_FIRSTNAME'},
-    		    {name : 'USR_LASTNAME'},
-    		    {name : 'USR_EMAIL'},
-    		    {name : 'USR_STATUS'}
-    		]
-    	})
+      reader : new Ext.data.JsonReader( {
+        root: 'members',
+        fields : [
+            {name : 'USR_UID'},
+            {name : 'USR_USERNAME'},
+            {name : 'USR_FIRSTNAME'},
+            {name : 'USR_LASTNAME'},
+            {name : 'USR_EMAIL'},
+            {name : 'USR_STATUS'}
+        ]
+      })
     });
-	
-	searchTextA = new Ext.form.TextField ({
+  
+  searchTextA = new Ext.form.TextField ({
         id: 'searchTextA',
         ctCls:'pm_search_text_field',
         allowBlank: true,
@@ -86,19 +86,19 @@ Ext.onReady(function(){
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
-            	DoSearchA();
+              DoSearchA();
             }
           }
         }
     });
-	
-	clearTextButtonA = new Ext.Action({
-    	text: 'X',
-    	ctCls:'pm_search_x_button',
-    	handler: GridByDefaultA
+  
+  clearTextButtonA = new Ext.Action({
+      text: 'X',
+      ctCls:'pm_search_x_button',
+      handler: GridByDefaultA
     });
-	
-	searchTextP = new Ext.form.TextField ({
+  
+  searchTextP = new Ext.form.TextField ({
         id: 'searchTextP',
         ctCls:'pm_search_text_field',
         allowBlank: true,
@@ -107,36 +107,36 @@ Ext.onReady(function(){
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
-            	DoSearchP();
+              DoSearchP();
             }
           }
         }
     });
-	
-	clearTextButtonP = new Ext.Action({
-    	text: 'X',
-    	ctCls:'pm_search_x_button',
-    	handler: GridByDefaultP
+  
+  clearTextButtonP = new Ext.Action({
+      text: 'X',
+      ctCls:'pm_search_x_button',
+      handler: GridByDefaultP
     });
-	
-	storeA = new Ext.data.GroupingStore( {
+  
+  storeA = new Ext.data.GroupingStore( {
         proxy : new Ext.data.HttpProxy({
             url: 'groups_Ajax?action=availableMembers&gUID=' + GROUPS.GRP_UID
           }),
-    	reader : new Ext.data.JsonReader( {
-    		root: 'members',
-    		fields : [
-    		    {name : 'USR_UID'},
-    		    {name : 'USR_USERNAME'},
-    		    {name : 'USR_FIRSTNAME'},
-    		    {name : 'USR_LASTNAME'},
-    		    {name : 'USR_EMAIL'},
-    		    {name : 'USR_STATUS'}
-    		    ]
-    	})
+      reader : new Ext.data.JsonReader( {
+        root: 'members',
+        fields : [
+            {name : 'USR_UID'},
+            {name : 'USR_USERNAME'},
+            {name : 'USR_FIRSTNAME'},
+            {name : 'USR_LASTNAME'},
+            {name : 'USR_EMAIL'},
+            {name : 'USR_STATUS'}
+            ]
+      })
     });
-	
-	cmodelP = new Ext.grid.ColumnModel({
+  
+  cmodelP = new Ext.grid.ColumnModel({
         defaults: {
             width: 50,
             sortable: true
@@ -151,91 +151,94 @@ Ext.onReady(function(){
             
         ]
     });
-	
-	smodelA = new Ext.grid.RowSelectionModel({
-		selectSingle: false,
-		listeners:{
-			selectionchange: function(sm){
-    			switch(sm.getCount()){
-    			case 0: Ext.getCmp('assignButton').disable(); break;
-    			default: Ext.getCmp('assignButton').enable(); break;	
-    			}
-    		}
-		}
-	});
-	
-	smodelP = new Ext.grid.RowSelectionModel({
-		selectSingle: false,
-		listeners:{
-			selectionchange: function(sm){
-    			switch(sm.getCount()){
-    			case 0: Ext.getCmp('removeButton').disable(); break;
-    			default: Ext.getCmp('removeButton').enable(); break;	
-    			}
-    		}
-		}
-	});
-	
-  	availableGrid = new Ext.grid.GridPanel({
-  		    layout			: 'fit',
-  		    title           : _('ID_AVAILABLE_USERS'),
-  		    region          : 'center',
-        	ddGroup         : 'assignedGridDDGroup',
-            store           : storeA,
-            cm          	: cmodelP,
-            sm				: smodelA,
-            enableDragDrop  : true,
-            stripeRows      : true,
-            autoExpandColumn: 'USR_USERNAME',
-            iconCls			: 'icon-grid',
-            id				: 'availableGrid',
-        	height			: 100,
-        	autoWidth 		: true,
-        	stateful 		: true,
-        	stateId 		: 'grid',
-        	enableColumnResize : true,
-        	enableHdMenu	: true,
-        	frame			: false,
-        	columnLines		: false,
-        	viewConfig		: {forceFit:true},
-            tbar: [cancelEditMembersButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
-            //bbar: [{xtype: 'tbfill'}, assignAllButton],
-            listeners: {rowdblclick: AssignUsersAction},
-            hidden: true
-    });
+  
+  smodelA = new Ext.grid.RowSelectionModel({
+    selectSingle: false,
+    listeners:{
+      selectionchange: function(sm){
+          switch(sm.getCount()){
+          case 0: Ext.getCmp('assignButton').disable(); break;
+          default: Ext.getCmp('assignButton').enable(); break;  
+          }
+        }
+    }
+  });
+  
+  smodelP = new Ext.grid.RowSelectionModel({
+    selectSingle: false,
+    listeners:{
+      selectionchange: function(sm){
+          switch(sm.getCount()){
+          case 0: Ext.getCmp('removeButton').disable(); break;
+          default: Ext.getCmp('removeButton').enable(); break;  
+          }
+        }
+    }
+  });
+  
+  availableGrid = new Ext.grid.GridPanel({
+    layout      : 'fit',
+    title           : _('ID_AVAILABLE_USERS'),
+    region          : 'center',
+    ddGroup         : 'assignedGridDDGroup',
+    store           : storeA,
+    cm            : cmodelP,
+    sm        : smodelA,
+    enableDragDrop  : true,
+    stripeRows      : true,
+    autoExpandColumn: 'USR_USERNAME',
+    iconCls      : 'icon-grid',
+    id        : 'availableGrid',
+    height      : 100,
+    autoWidth     : true,
+    stateful     : true,
+    stateId     : 'grid',
+    enableColumnResize : true,
+    enableHdMenu  : true,
+    frame      : false,
+    columnLines    : false,
+    viewConfig: {
+      forceFit:true,
+      cls:"x-grid-empty",
+      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
+    },
+    tbar: [cancelEditMembersButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
+    //bbar: [{xtype: 'tbfill'}, assignAllButton],
+    listeners: {rowdblclick: AssignUsersAction},
+    hidden: true
+  });
 
-  	assignedGrid = new Ext.grid.GridPanel({
-  		    layout			: 'fit',
-  		    title           : _('ID_ASSIGNED_USERS'),
-  			ddGroup         : 'availableGridDDGroup',
-            store           : storeP,
-            cm          	: cmodelP,
-            sm				: smodelP,
-            enableDragDrop  : true,
-            stripeRows      : true,
-            autoExpandColumn: 'USR_USERNAME',
-            iconCls			: 'icon-grid',
-            id				: 'assignedGrid',
-        	height			: 100,
-        	autoWidth 		: true,
-        	stateful 		: true,
-        	stateId 		: 'grid',
-        	enableColumnResize : true,
-        	enableHdMenu	: true,
-        	frame			: false,
-        	columnLines		: false,
-        	viewConfig		: {forceFit:true},
-            tbar: [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
-            //bbar: [{xtype: 'tbfill'},removeAllButton],
-        	listeners: {rowdblclick: function(){
-        		(availableGrid.hidden)? DoNothing() : RemoveUsersAction();
-        		}
-        	}
-    });
-  	
-  	buttonsPanel = new Ext.Panel({
-	    width	 	 : 40,
-		layout       : {
+  assignedGrid = new Ext.grid.GridPanel({
+    layout      : 'fit',
+    title           : _('ID_ASSIGNED_USERS'),
+    ddGroup         : 'availableGridDDGroup',
+    store           : storeP,
+    cm            : cmodelP,
+    sm        : smodelP,
+    enableDragDrop  : true,
+    stripeRows      : true,
+    autoExpandColumn: 'USR_USERNAME',
+    iconCls      : 'icon-grid',
+    id        : 'assignedGrid',
+    height      : 100,
+    autoWidth     : true,
+    stateful     : true,
+    stateId     : 'grid',
+    enableColumnResize : true,
+    enableHdMenu  : true,
+    frame      : false,
+    columnLines    : false,
+    viewConfig    : {forceFit:true},
+    tbar: [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
+    //bbar: [{xtype: 'tbfill'},removeAllButton],
+    listeners: {rowdblclick: function(){
+      (availableGrid.hidden)? DoNothing() : RemoveUsersAction();
+    }}
+  });
+    
+    buttonsPanel = new Ext.Panel({
+      width      : 40,
+    layout       : {
             type:'vbox',
             padding:'0',
             pack:'center',
@@ -250,27 +253,27 @@ Ext.onReady(function(){
                ],
        hidden: true
     });
-  	
-  	RefreshMembers();
+    
+    RefreshMembers();
 
-  	//MEMBERS DRAG AND DROP PANEL
+    //MEMBERS DRAG AND DROP PANEL
     MembersPanel = new Ext.Panel({
-    	    region		 : 'center',
-    		autoWidth	 : true,
-    		layout       : 'hbox',
-   		    defaults     : { flex : 1 }, //auto stretch
-    		layoutConfig : { align : 'stretch' },
-    		items        : [availableGrid,buttonsPanel,assignedGrid],
-    		viewConfig	 : {forceFit:true},
-    		tbar: ['<b>'+_('ID_GROUP') + ' : ' + GROUPS.GRP_TITLE+'</b>' ,{xtype: 'tbfill'},backButton]
-    		//bbar: [{xtype: 'tbfill'},editMembersButton, cancelEditMembersButton]
+          region     : 'center',
+        autoWidth   : true,
+        layout       : 'hbox',
+           defaults     : { flex : 1 }, //auto stretch
+        layoutConfig : { align : 'stretch' },
+        items        : [availableGrid,buttonsPanel,assignedGrid],
+        viewConfig   : {forceFit:true},
+        tbar: ['<b>'+_('ID_GROUP') + ' : ' + GROUPS.GRP_TITLE+'</b>' ,{xtype: 'tbfill'},backButton]
+        //bbar: [{xtype: 'tbfill'},editMembersButton, cancelEditMembersButton]
 
     });
    
     //LOAD ALL PANELS
     viewport = new Ext.Viewport({
-    	layout: 'fit',
-    	items: [MembersPanel]
+      layout: 'fit',
+      items: [MembersPanel]
     });
     
     DDLoadUsers();  //Load DND functionality
@@ -282,26 +285,26 @@ DoNothing = function(){};
 
 //Return to Groups Main Page
 BackToGroups = function(){
-	location.href = 'groups';
+  location.href = 'groups';
 };
 
 //Loads Drag N Drop Functionality for Users
 DDLoadUsers = function(){
-	//MEMBERS DRAG N DROP AVAILABLE
-	var availableGridDropTargetEl =  availableGrid.getView().scroller.dom;
+  //MEMBERS DRAG N DROP AVAILABLE
+  var availableGridDropTargetEl =  availableGrid.getView().scroller.dom;
     var availableGridDropTarget = new Ext.dd.DropTarget(availableGridDropTargetEl, {
                     ddGroup    : 'availableGridDDGroup',
                     notifyDrop : function(ddSource, e, data){
                             var records =  ddSource.dragData.selections;
                             var arrAux = new Array();
                             for (var r=0; r < records.length; r++){
-                            	arrAux[r] = records[r].data['USR_UID'];
+                              arrAux[r] = records[r].data['USR_UID'];
                             }
                             DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
                             return true;
                     }
     });
-	
+  
     //MEMBERS DRAG N DROP ASSIGNED
     var assignedGridDropTargetEl = assignedGrid.getView().scroller.dom;
     var assignedGridDropTarget = new Ext.dd.DropTarget(assignedGridDropTargetEl, {
@@ -310,7 +313,7 @@ DDLoadUsers = function(){
                             var records =  ddSource.dragData.selections;
                             var arrAux = new Array();
                             for (var r=0; r < records.length; r++){
-                            	arrAux[r] = records[r].data['USR_UID'];
+                              arrAux[r] = records[r].data['USR_UID'];
                             }
                             SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
                             return true;
@@ -320,117 +323,117 @@ DDLoadUsers = function(){
 
 //REFRESH GROUPS GRIDS
 RefreshMembers = function(){
-	DoSearchA();
-	DoSearchP();
+  DoSearchA();
+  DoSearchP();
 };
 
 //FAILURE AJAX FUNCTION
 FailureProcess = function(){
-	Ext.Msg.alert(_('ID_GROUPS'), _('ID_MSG_AJAX_FAILURE'));
+  Ext.Msg.alert(_('ID_GROUPS'), _('ID_MSG_AJAX_FAILURE'));
 };
 
 //ASSIGN GROUPS TO A USER
 SaveGroupsUser = function(arr_usr, function_success, function_failure){
-	var sw_response;
-	viewport.getEl().mask(_('ID_PROCESSING'));
-	Ext.Ajax.request({
-		url: 'groups_Ajax',
-		params: {action: 'assignUsersToGroupsMultiple', GRP_UID: GROUPS.GRP_UID, USR_UID: arr_usr.join(',')},
-		success: function(){
-					function_success();
-					viewport.getEl().unmask();
-				  },
-		failure: function(){
-					function_failure();
-					viewport.getEl().unmask();
-		}
-	});
+  var sw_response;
+  viewport.getEl().mask(_('ID_PROCESSING'));
+  Ext.Ajax.request({
+    url: 'groups_Ajax',
+    params: {action: 'assignUsersToGroupsMultiple', GRP_UID: GROUPS.GRP_UID, USR_UID: arr_usr.join(',')},
+    success: function(){
+          function_success();
+          viewport.getEl().unmask();
+          },
+    failure: function(){
+          function_failure();
+          viewport.getEl().unmask();
+    }
+  });
 };
 
 //REMOVE USERS FROM A GROUP
 DeleteGroupsUser = function(arr_usr, function_success, function_failure){
-	var sw_response;
-	viewport.getEl().mask(_('ID_PROCESSING'));
-	Ext.Ajax.request({
-		url: 'groups_Ajax',
-		params: {action: 'deleteUsersToGroupsMultiple', GRP_UID: GROUPS.GRP_UID, USR_UID: arr_usr.join(',')},
-		success: function(){
-			        function_success();
-					viewport.getEl().unmask();			        
-		},
-		failure: function(){
-					function_failure();
-					viewport.getEl().unmask();
-		}
-	});
+  var sw_response;
+  viewport.getEl().mask(_('ID_PROCESSING'));
+  Ext.Ajax.request({
+    url: 'groups_Ajax',
+    params: {action: 'deleteUsersToGroupsMultiple', GRP_UID: GROUPS.GRP_UID, USR_UID: arr_usr.join(',')},
+    success: function(){
+              function_success();
+          viewport.getEl().unmask();              
+    },
+    failure: function(){
+          function_failure();
+          viewport.getEl().unmask();
+    }
+  });
 };
 
 //AssignButton Functionality
 AssignUsersAction = function(){
-	rowsSelected = availableGrid.getSelectionModel().getSelections();
-	var arrAux = new Array();
-	for(var a=0; a < rowsSelected.length; a++){
-		arrAux[a] = rowsSelected[a].get('USR_UID');
-	}
-	SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
+  rowsSelected = availableGrid.getSelectionModel().getSelections();
+  var arrAux = new Array();
+  for(var a=0; a < rowsSelected.length; a++){
+    arrAux[a] = rowsSelected[a].get('USR_UID');
+  }
+  SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
 };
 
 //RemoveButton Functionality
 RemoveUsersAction = function(){
-	rowsSelected = assignedGrid.getSelectionModel().getSelections();
-	var arrAux = new Array();
-	for(var a=0; a < rowsSelected.length; a++){
-		arrAux[a] = rowsSelected[a].get('USR_UID');
-	}
-	DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
+  rowsSelected = assignedGrid.getSelectionModel().getSelections();
+  var arrAux = new Array();
+  for(var a=0; a < rowsSelected.length; a++){
+    arrAux[a] = rowsSelected[a].get('USR_UID');
+  }
+  DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
 };
 
 //AssignALLButton Functionality
 AssignAllUsersAction = function(){
-	var allRows = availableGrid.getStore();
-	var arrAux = new Array();
-	if (allRows.getCount()>0){
-		for (var r=0; r < allRows.getCount(); r++){
-			row = allRows.getAt(r);
-			arrAux[r] = row.data['USR_UID'];
-		}
-		SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
-	}
+  var allRows = availableGrid.getStore();
+  var arrAux = new Array();
+  if (allRows.getCount()>0){
+    for (var r=0; r < allRows.getCount(); r++){
+      row = allRows.getAt(r);
+      arrAux[r] = row.data['USR_UID'];
+    }
+    SaveGroupsUser(arrAux,RefreshMembers,FailureProcess);
+  }
 };
 
 //RevomeALLButton Functionality
 RemoveAllUsersAction = function(){
-	var allRows = assignedGrid.getStore();
-	var arrAux = new Array();
-	if (allRows.getCount()>0){
-		for (var r=0; r < allRows.getCount(); r++){
-			row = allRows.getAt(r);
-			arrAux[r] = row.data['USR_UID'];
-		}
-		DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
-	}
+  var allRows = assignedGrid.getStore();
+  var arrAux = new Array();
+  if (allRows.getCount()>0){
+    for (var r=0; r < allRows.getCount(); r++){
+      row = allRows.getAt(r);
+      arrAux[r] = row.data['USR_UID'];
+    }
+    DeleteGroupsUser(arrAux,RefreshMembers,FailureProcess);
+  }
 };
 
 //Function DoSearch Available
 DoSearchA = function(){
-	availableGrid.store.load({params: {textFilter: searchTextA.getValue()}});
+  availableGrid.store.load({params: {textFilter: searchTextA.getValue()}});
 };
 
 //Function DoSearch Assigned
 DoSearchP = function(){
-	assignedGrid.store.load({params: {textFilter: searchTextP.getValue()}});
+  assignedGrid.store.load({params: {textFilter: searchTextP.getValue()}});
 };
 
 //Load Grid By Default Available Members
 GridByDefaultA = function(){
-	searchTextA.reset();
-	availableGrid.store.load();
+  searchTextA.reset();
+  availableGrid.store.load();
 };
 
 //Load Grid By Default Assigned Members
 GridByDefaultP = function(){
-	searchTextP.reset();
-	assignedGrid.store.load();
+  searchTextP.reset();
+  assignedGrid.store.load();
 };
 
 //edit members action

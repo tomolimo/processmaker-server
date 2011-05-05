@@ -804,3 +804,13 @@ antes funcionaba.
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -8929px !important;
 }
+.x-grid-empty{
+    text-align: center; 
+    position: absolute; 
+    top: 40%; 
+    left: 40%; 
+    font-size: 15px; 
+    color:black filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);  
+    opacity: .55;  
+    -moz-opacity: .55;
+}

@@ -164,7 +164,9 @@ Ext.onReady(function(){
         groupTextTpl: '{text}'
     }),*/
     viewConfig: {
-      forceFit:true
+      forceFit:true,
+      cls:"x-grid-empty",
+      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
     },
     cm: new Ext.grid.ColumnModel({
       defaults: {
@@ -191,10 +193,8 @@ Ext.onReady(function(){
         {header: TRANSLATIONS.ID_TOTAL_CASES, dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'},
         {header: TRANSLATIONS.ID_PRO_DEBUG, dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'}
       ]
-    }),
-
+    }),                  
     store: store,
-
     tbar:[
       {
         text:TRANSLATIONS.ID_NEW,

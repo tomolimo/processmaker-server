@@ -1195,7 +1195,9 @@ Ext.onReady ( function() {
     //autoHeight: true,
     layout: 'fit',
     viewConfig: {
-      forceFit:true
+     forceFit:true,
+        cls:"x-grid-empty",
+        emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
     },
     listeners: {
       rowdblclick: openCase,
