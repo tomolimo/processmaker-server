@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.8\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.21-4-g13296e5\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-03-18 19:46:22\n"
+"PO-Revision-Date: 2011-05-05 16:16:16\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -424,13 +424,13 @@ msgstr "Members"
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_GROUP
 #: LABEL/ID_MSG_CONFIRM_DELETE_GROUP
-msgid "Do you want to delete selected group?"
-msgstr "Do you want to delete selected group?"
+msgid "Draft"
+msgstr "Draft"
 
 # TRANSLATION
 # APP_STATUS/DRAFT
 #: APP_STATUS/DRAFT
-msgid "Draft"
+msgid "[APP_STATUS/DRAFT] Draft"
 msgstr "Draft"
 
 # TRANSLATION
@@ -2494,8 +2494,8 @@ msgstr "Do you want to delete this object?"
 # TRANSLATION
 # LABEL/ID_CASE_NOT_EXISTS
 #: LABEL/ID_CASE_NOT_EXISTS
-msgid "The case not exist"
-msgstr "The case not exist"
+msgid "The case does not exist"
+msgstr "The case does not exist"
 
 # TRANSLATION
 # LABEL/ID_PIN_INVALID
@@ -3952,8 +3952,8 @@ msgstr "The mail to is required, or uncheck the  send a test mail"
 # TRANSLATION
 # JAVASCRIPT/ID_PASSWORD_REQUIRED
 #: JAVASCRIPT/ID_PASSWORD_REQUIRED
-msgid "The password is required, or uncheck the  option Require Authentification"
-msgstr "The password is required, or uncheck the  option Require Authentification"
+msgid "The password is required, or uncheck the  option Require Authentication"
+msgstr "The password is required, or uncheck the  option Require Authentication"
 
 # TRANSLATION
 # JAVASCRIPT/ID_SERVER_REQUIRED
@@ -4732,8 +4732,8 @@ msgstr "Saving Environment Settings"
 # TRANSLATION
 # LABEL/ID_ENVIRONMENT_SETTINGS_MSG_1
 #: LABEL/ID_ENVIRONMENT_SETTINGS_MSG_1
-msgid "You should to select a format from the list."
-msgstr "You should to select a format from the list."
+msgid "You should select a format from the list."
+msgstr "You should select a format from the list."
 
 # TRANSLATION
 # LABEL/ID_ENVIRONMENT_SETTINGS
@@ -5164,8 +5164,8 @@ msgstr "Open in a popup"
 # TRANSLATION
 # LABEL/ID_DEATACH
 #: LABEL/ID_DEATACH
-msgid "Deatach"
-msgstr "Deatach"
+msgid "Detach"
+msgstr "Detach"
 
 # TRANSLATION
 # LABEL/ID_PRO_USER
@@ -5368,8 +5368,8 @@ msgstr "Datasource Name"
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_DB_EXISTS
 #: LABEL/PENTAHO_LABEL_DB_EXISTS
-msgid "Datasource already exist"
-msgstr "Datasource already exist"
+msgid "Datasource already exists"
+msgstr "Datasource already exists"
 
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_DB_SUCCESS
@@ -5422,8 +5422,8 @@ msgstr "Pentaho Server (URL)"
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_SHOW_JNDI_INFORMATION
 #: LABEL/PENTAHO_LABEL_SHOW_JNDI_INFORMATION
-msgid "Show Jndi Info"
-msgstr "Show Jndi Info"
+msgid "Show JNDI Info"
+msgstr "Show JNDI Info"
 
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_SYNC
@@ -5482,8 +5482,8 @@ msgstr "User created successfully"
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_USER_EXIST
 #: LABEL/PENTAHO_LABEL_USER_EXIST
-msgid "User already exist"
-msgstr "User already exist"
+msgid "User already exists"
+msgstr "User already exists"
 
 # TRANSLATION
 # LABEL/PENTAHO_LABEL_USER_NAME
@@ -7406,6 +7406,12 @@ msgid "Downloading file"
 msgstr "Downloading file"
 
 # TRANSLATION
+# LABEL/IMPORT_PROCESS_OVERWRITING
+#: LABEL/IMPORT_PROCESS_OVERWRITING
+msgid "Update the current process, overwriting all tasks and steps"
+msgstr "Update the current process, overwriting all tasks and steps"
+
+# TRANSLATION
 # LABEL/ID_OPEN_IN_A_NEW_WINDOW
 #: LABEL/ID_OPEN_IN_A_NEW_WINDOW
 msgid "Open in a new window"
@@ -8452,8 +8458,8 @@ msgstr "Test User"
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_VALIDATION
 #: LABEL/ID_PROCESSMAKER_VALIDATION
-msgid "Please insert a valid processmaker user name and password, in order to assign the case to their respective owner."
-msgstr "Please insert a valid processmaker user name and password, in order to assign the case to their respective owner."
+msgid "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
 
 # TRANSLATION
 # LABEL/ID_VALID_CREDENTIALS
@@ -9136,8 +9142,8 @@ msgstr "Collapse All"
 # TRANSLATION
 # LABEL/ID_FILENAME_GENERATED
 #: LABEL/ID_FILENAME_GENERATED
-msgid "Filename generated   t"
-msgstr "Filename generated   t"
+msgid "Filename generated"
+msgstr "Filename generated"
 
 # TRANSLATION
 # LABEL/ID_ACTORS_ASSIGNED_SUCESSFULLY
@@ -9456,6 +9462,174 @@ msgstr "Displaying skins {0} - {1} of {2}"
 #: LABEL/ID_GRID_PAGE_NO_SKIN_MESSAGE
 msgid "No skins to display"
 msgstr "No skins to display"
+
+# TRANSLATION
+# LABEL/ID_REASSIGN_ALL_CASES_BY_TASK
+#: LABEL/ID_REASSIGN_ALL_CASES_BY_TASK
+msgid "Reassign All Cases by Task"
+msgstr "Reassign All Cases by Task"
+
+# TRANSLATION
+# LABEL/ID_CASES_TO_REASSIGN_TASK_LIST
+#: LABEL/ID_CASES_TO_REASSIGN_TASK_LIST
+msgid "Cases to reassign - Task List"
+msgstr "Cases to reassign - Task List"
+
+# TRANSLATION
+# LABEL/ID_USER_LIST
+#: LABEL/ID_USER_LIST
+msgid "User List"
+msgstr "User List"
+
+# TRANSLATION
+# LABEL/ID_ENABLE
+#: LABEL/ID_ENABLE
+msgid "Enable"
+msgstr "Enable"
+
+# TRANSLATION
+# LABEL/ID_DISABLE
+#: LABEL/ID_DISABLE
+msgid "Disable"
+msgstr "Disable"
+
+# TRANSLATION
+# LABEL/ID_YES_VALUE
+#: LABEL/ID_YES_VALUE
+msgid "YES"
+msgstr "YES"
+
+# TRANSLATION
+# LABEL/ID_NO_VALUE
+#: LABEL/ID_NO_VALUE
+msgid "NO"
+msgstr "NO"
+
+# TRANSLATION
+# LABEL/ID_ACTIVE_USERS
+#: LABEL/ID_ACTIVE_USERS
+msgid "Active Users"
+msgstr "Active Users"
+
+# TRANSLATION
+# LABEL/IMPORT_PROCESS_DISABLE
+#: LABEL/IMPORT_PROCESS_DISABLE
+msgid "Disable the current process and create a new version of the process"
+msgstr "Disable the current process and create a new version of the process"
+
+# TRANSLATION
+# LABEL/IMPORT_PROCESS_NEW
+#: LABEL/IMPORT_PROCESS_NEW
+msgid "Create a completely new process without changing the current process"
+msgstr "Create a completely new process without changing the current process"
+
+# TRANSLATION
+# LABEL/ID_SELECT_PROCESS_FILE
+#: LABEL/ID_SELECT_PROCESS_FILE
+msgid "Select a process file"
+msgstr "Select a process file"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_PROCESS
+#: LABEL/ID_IMPORT_PROCESS
+msgid "Import process"
+msgstr "Import process"
+
+# TRANSLATION
+# LABEL/ID_UPLOADING_PROCESS_FILE
+#: LABEL/ID_UPLOADING_PROCESS_FILE
+msgid "Uploading the process file..."
+msgstr "Uploading the process file..."
+
+# TRANSLATION
+# LABEL/ID_IMPORT_ALREADY_EXISTS
+#: LABEL/ID_IMPORT_ALREADY_EXISTS
+msgid "The process you are trying to import already exists. Please select one of the following options to continue:"
+msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
+
+# TRANSLATION
+# LABEL/ID_DEBUG_MESSAGE
+#: LABEL/ID_DEBUG_MESSAGE
+msgid "Debug Messages"
+msgstr "Debug Messages"
+
+# TRANSLATION
+# LABEL/ID_FIELD_HANDLER_ACTION_DELETE
+#: LABEL/ID_FIELD_HANDLER_ACTION_DELETE
+msgid "Are you sure that you want to remove this"
+msgstr "Are you sure that you want to remove this"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_EXIST_SOME_GROUP
+#: LABEL/ID_PROCESS_EXIST_SOME_GROUP
+msgid "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue"
+msgstr "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_GROUP_RENAME
+#: LABEL/ID_PROCESS_GROUP_RENAME
+msgid "Rename the imported groups"
+msgstr "Rename the imported groups"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_GROUP_MERGE_PREEXISTENT
+#: LABEL/ID_PROCESS_GROUP_MERGE_PREEXISTENT
+msgid "Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)"
+msgstr "Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)"
+
+# TRANSLATION
+# LABEL/ID_FILE_UPLOAD_INCORRECT_EXTENSION
+#: LABEL/ID_FILE_UPLOAD_INCORRECT_EXTENSION
+msgid "The file has an incorrect extension. Please check the file and upload again."
+msgstr "The file has an incorrect extension. Please check the file and upload again."
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR
+#: LABEL/ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR
+msgid "Error message when you upload the file, please contact your administrator."
+msgstr "Error message when you upload the file, please contact your administrator."
+
+# TRANSLATION
+# LABEL/ID_DELEGATE_USER
+#: LABEL/ID_DELEGATE_USER
+msgid "Delegated User"
+msgstr "Delegated User"
+
+# TRANSLATION
+# LABEL/ID_TASK_TRANSFER
+#: LABEL/ID_TASK_TRANSFER
+msgid "Task Transfer Date"
+msgstr "Task Transfer Date"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_ACTION
+#: LABEL/ID_ENABLE_ACTION
+msgid "Enable Action"
+msgstr "Enable Action"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_ACTION
+#: LABEL/ID_DISABLE_ACTION
+msgid "Disable Action"
+msgstr "Disable Action"
+
+# TRANSLATION
+# LABEL/ID_DERIVATED
+#: LABEL/ID_DERIVATED
+msgid "Derivated"
+msgstr "Derivated"
+
+# TRANSLATION
+# LABEL/ID_IN_PROGRESS
+#: LABEL/ID_IN_PROGRESS
+msgid "In Progress"
+msgstr "In Progress"
+
+# TRANSLATION
+# LABEL/ID_REASSIGNED
+#: LABEL/ID_REASSIGNED
+msgid "Reassigned"
+msgstr "Reassigned"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -9916,8 +10090,8 @@ msgstr "File size"
 # additionalTables/doExport.xml?META
 # additionalTables/doExport.xml
 #: textarea - META
-msgid "Sumary"
-msgstr "Sumary"
+msgid "[additionalTables/doExport.xml?META] Summary"
+msgstr "Summary"
 
 # appFolder/appFolder.xml?title1
 # appFolder/appFolder.xml
@@ -9928,32 +10102,32 @@ msgstr "AppFolder form"
 # appFolder/appFolder.xml?FOLDER_UID
 # appFolder/appFolder.xml
 #: text - FOLDER_UID
-msgid "Er Uid"
-msgstr "Er Uid"
+msgid "Folder Uid"
+msgstr "Folder Uid"
 
 # appFolder/appFolder.xml?FOLDER_PARENT_UID
 # appFolder/appFolder.xml
 #: text - FOLDER_PARENT_UID
-msgid "Er Parent Uid"
-msgstr "Er Parent Uid"
+msgid "Folder Parent Uid"
+msgstr "Folder Parent Uid"
 
 # appFolder/appFolder.xml?FOLDER_NAME
 # appFolder/appFolder.xml
 #: textarea - FOLDER_NAME
-msgid "Er Name"
-msgstr "Er Name"
+msgid "Folder Name"
+msgstr "Folder Name"
 
 # appFolder/appFolder.xml?FOLDER_CREATE_DATE
 # appFolder/appFolder.xml
 #: date - FOLDER_CREATE_DATE
-msgid "Er Create Date"
-msgstr "Er Create Date"
+msgid "Folder Create Date"
+msgstr "Folder Create Date"
 
 # appFolder/appFolder.xml?FOLDER_UPDATE_DATE
 # appFolder/appFolder.xml
 #: date - FOLDER_UPDATE_DATE
-msgid "Er Update Date"
-msgstr "Er Update Date"
+msgid "Folder Update Date"
+msgstr "Folder Update Date"
 
 # appFolder/appFolder.xml?BTN_SUBMIT
 # appFolder/appFolder.xml
@@ -9970,7 +10144,7 @@ msgstr "Delete AppFolder"
 # appFolder/appFolderDelete.xml?LABEL_FOLDER_UID
 # appFolder/appFolderDelete.xml
 #: caption - LABEL_FOLDER_UID
-msgid "[appFolder/appFolderDelete.xml?LABEL_FOLDER_UID] Er Uid"
+msgid "Er Uid"
 msgstr "Er Uid"
 
 # appFolder/appFolderDelete.xml?BTN_SUBMIT
@@ -10246,7 +10420,7 @@ msgstr "Path"
 # appFolder/appFolderEdit.xml?FOLDER_NAME
 # appFolder/appFolderEdit.xml
 #: text - FOLDER_NAME
-msgid "Folder Name"
+msgid "[appFolder/appFolderEdit.xml?FOLDER_NAME] Folder Name"
 msgstr "Folder Name"
 
 # appFolder/appFolderEdit.xml?BTN_CANCEL
@@ -10264,19 +10438,19 @@ msgstr "Save"
 # appFolder/appFolderList.xml?FOLDER_PARENT_UID
 # appFolder/appFolderList.xml
 #: text - FOLDER_PARENT_UID
-msgid "[appFolder/appFolderList.xml?FOLDER_PARENT_UID] Er Parent Uid"
+msgid "Er Parent Uid"
 msgstr "Er Parent Uid"
 
 # appFolder/appFolderList.xml?FOLDER_CREATE_DATE
 # appFolder/appFolderList.xml
 #: text - FOLDER_CREATE_DATE
-msgid "[appFolder/appFolderList.xml?FOLDER_CREATE_DATE] Er Create Date"
+msgid "Er Create Date"
 msgstr "Er Create Date"
 
 # appFolder/appFolderList.xml?FOLDER_UPDATE_DATE
 # appFolder/appFolderList.xml
 #: text - FOLDER_UPDATE_DATE
-msgid "[appFolder/appFolderList.xml?FOLDER_UPDATE_DATE] Er Update Date"
+msgid "Er Update Date"
 msgstr "Er Update Date"
 
 # appFolder/appFolderList.xml?LINK
@@ -12160,10 +12334,8 @@ msgstr "Last Modify"
 # cases/cases_ListToRevise.xml?DEL_PRIORITY
 # cases/cases_ListToRevise.xml
 #: dropdown - DEL_PRIORITY
-msgid "\n"
-"  "
-msgstr "\n"
-"  "
+msgid "[cases/cases_ListToRevise.xml?DEL_PRIORITY] Priority"
+msgstr "Priority"
 
 # cases/cases_ListToRevise.xml?DEL_PRIORITY-1
 # cases/cases_ListToRevise.xml
@@ -12204,10 +12376,8 @@ msgstr "Start Date"
 # cases/cases_ListToRevise.xml?APP_STATUS
 # cases/cases_ListToRevise.xml
 #: dropdown - APP_STATUS
-msgid "[cases/cases_ListToRevise.xml?APP_STATUS] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[cases/cases_ListToRevise.xml?APP_STATUS] Status"
+msgstr "Status"
 
 # cases/cases_ListToRevise.xml?APP_STATUS-DRAFT
 # cases/cases_ListToRevise.xml
@@ -12554,10 +12724,8 @@ msgstr "Start"
 # cases/cases_Options.xml?PROCESS_FILTER
 # cases/cases_Options.xml
 #: dropdown - PROCESS_FILTER
-msgid "\n"
-"    "
-msgstr "\n"
-"    "
+msgid "[cases/cases_Options.xml?PROCESS_FILTER] Process"
+msgstr "Process"
 
 # cases/cases_Options.xml?PROCESS_FILTER-0
 # cases/cases_Options.xml
@@ -12568,10 +12736,8 @@ msgstr "All"
 # cases/cases_OptionsSent.xml?PROCESS_FILTER
 # cases/cases_OptionsSent.xml
 #: dropdown - PROCESS_FILTER
-msgid "[cases/cases_OptionsSent.xml?PROCESS_FILTER] \n"
-"    "
-msgstr "\n"
-"    "
+msgid "[cases/cases_OptionsSent.xml?PROCESS_FILTER] Process"
+msgstr "Process"
 
 # cases/cases_OptionsSent.xml?PROCESS_FILTER-0
 # cases/cases_OptionsSent.xml
@@ -12582,10 +12748,8 @@ msgstr "All"
 # cases/cases_OptionsSent.xml?APP_STATUS_FILTER
 # cases/cases_OptionsSent.xml
 #: dropdown - APP_STATUS_FILTER
-msgid "[cases/cases_OptionsSent.xml?APP_STATUS_FILTER] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[cases/cases_OptionsSent.xml?APP_STATUS_FILTER] Status"
+msgstr "Status"
 
 # cases/cases_OptionsSent.xml?APP_STATUS_FILTER-ALL
 # cases/cases_OptionsSent.xml
@@ -12638,10 +12802,8 @@ msgstr "All"
 # cases/cases_OptionsToDo.xml?PROCESS_FILTER
 # cases/cases_OptionsToDo.xml
 #: dropdown - PROCESS_FILTER
-msgid "[cases/cases_OptionsToDo.xml?PROCESS_FILTER] \n"
-"    "
-msgstr "\n"
-"    "
+msgid "[cases/cases_OptionsToDo.xml?PROCESS_FILTER] Process"
+msgstr "Process"
 
 # cases/cases_OptionsToDo.xml?PROCESS_FILTER-0
 # cases/cases_OptionsToDo.xml
@@ -12767,7 +12929,7 @@ msgstr ""
 # cases/cases_ReassignBy.xml
 #: dropdown - REASSIGN_USER -
 msgid "[cases/cases_ReassignBy.xml?REASSIGN_USER-]"
-msgstr " - Select - "
+msgstr "- Select -"
 
 # cases/cases_ReassignShowInfo.xml?TITLE
 # cases/cases_ReassignShowInfo.xml
@@ -12797,7 +12959,7 @@ msgstr "User"
 # cases/cases_ReassignUsers.xml
 #: dropdown - REASSIGN_USER -
 msgid "[cases/cases_ReassignUsers.xml?REASSIGN_USER-]"
-msgstr " - Select - "
+msgstr "- Select -"
 
 # cases/cases_Resume.xml?TITLE1
 # cases/cases_Resume.xml
@@ -12904,8 +13066,8 @@ msgstr "General Information"
 # cases/cases_Scheduler_Edit.xml?PROPERTIES_INF
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - PROPERTIES_INF
-msgid "Please insert a valid processmaker user name and password."
-msgstr "Please insert a valid processmaker user name and password."
+msgid "[cases/cases_Scheduler_Edit.xml?PROPERTIES_INF] Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
 
 # cases/cases_Scheduler_Edit.xml?SCH_USER_NAME
 # cases/cases_Scheduler_Edit.xml
@@ -12934,8 +13096,8 @@ msgstr "Edit User"
 # cases/cases_Scheduler_Edit.xml?PERFORM_TASK
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - PERFORM_TASK
-msgid "Properties "
-msgstr "Properties "
+msgid "[cases/cases_Scheduler_Edit.xml?PERFORM_TASK] Properties"
+msgstr "Properties"
 
 # cases/cases_Scheduler_Edit.xml?SCH_NAME
 # cases/cases_Scheduler_Edit.xml
@@ -12946,14 +13108,14 @@ msgstr "Description"
 # cases/cases_Scheduler_Edit.xml?PRO_UID
 # cases/cases_Scheduler_Edit.xml
 #: dropdown - PRO_UID
-msgid "Process "
-msgstr "Process "
+msgid "[cases/cases_Scheduler_Edit.xml?PRO_UID] Process"
+msgstr "Process"
 
 # cases/cases_Scheduler_Edit.xml?TAS_UID
 # cases/cases_Scheduler_Edit.xml
 #: dropdown - TAS_UID
-msgid "Task "
-msgstr "Task "
+msgid "[cases/cases_Scheduler_Edit.xml?TAS_UID] Task"
+msgstr "Task"
 
 # cases/cases_Scheduler_Edit.xml?SCH_OPTION_VIEW
 # cases/cases_Scheduler_Edit.xml
@@ -12964,8 +13126,8 @@ msgstr "Perform this task"
 # cases/cases_Scheduler_Edit.xml?SELECT_TIME_DAY
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - SELECT_TIME_DAY
-msgid "Select the time and day you want this task to start."
-msgstr "Select the time and day you want this task to start."
+msgid "Select the date and time for case(s) to be initiated."
+msgstr "Select the date and time for case(s) to be initiated."
 
 # cases/cases_Scheduler_Edit.xml?SCH_START_TIME
 # cases/cases_Scheduler_Edit.xml
@@ -12988,14 +13150,14 @@ msgstr "Start date"
 # cases/cases_Scheduler_Edit.xml?SELECT_1
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - SELECT_1
-msgid " Daily"
-msgstr " Daily"
+msgid "Daily"
+msgstr "Daily"
 
 # cases/cases_Scheduler_Edit.xml?SELECT_2
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - SELECT_2
-msgid " Weekly"
-msgstr " Weekly"
+msgid "Weekly"
+msgstr "Weekly"
 
 # cases/cases_Scheduler_Edit.xml?SCH_EVERY_DAYS
 # cases/cases_Scheduler_Edit.xml
@@ -13006,8 +13168,8 @@ msgstr "Every"
 # cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS
 # cases/cases_Scheduler_Edit.xml
 #: checkgroup - SCH_WEEK_DAYS
-msgid " "
-msgstr " "
+msgid "Select the day(s) of the week"
+msgstr "Select the day(s) of the week"
 
 # cases/cases_Scheduler_Edit.xml?SCH_WEEK_DAYS-1
 # cases/cases_Scheduler_Edit.xml
@@ -13060,8 +13222,8 @@ msgstr "Sunday"
 # cases/cases_Scheduler_Edit.xml?SELECT_3
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - SELECT_3
-msgid " Monthly"
-msgstr " Monthly"
+msgid "Monthly"
+msgstr "Monthly"
 
 # cases/cases_Scheduler_Edit.xml?SCH_START_DAY
 # cases/cases_Scheduler_Edit.xml
@@ -13174,10 +13336,8 @@ msgstr "Sunday"
 # cases/cases_Scheduler_Edit.xml?SCH_MONTHS
 # cases/cases_Scheduler_Edit.xml
 #: checkgroup - SCH_MONTHS
-msgid "\n"
-""
-msgstr "\n"
-""
+msgid "Of the month(s)"
+msgstr "Of the month(s)"
 
 # cases/cases_Scheduler_Edit.xml?SCH_MONTHS-1
 # cases/cases_Scheduler_Edit.xml
@@ -13476,8 +13636,8 @@ msgstr "General Information"
 # cases/cases_Scheduler_New.xml?PROPERTIES_INF
 # cases/cases_Scheduler_New.xml
 #: subtitle - PROPERTIES_INF
-msgid "Please insert a valid processmaker user name and password, in order to assign the case to their respective owner"
-msgstr "Please insert a valid processmaker user name and password, in order to assign the case to their respective owner"
+msgid "[cases/cases_Scheduler_New.xml?PROPERTIES_INF] Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
 
 # cases/cases_Scheduler_New.xml?SCH_USER_NAME
 # cases/cases_Scheduler_New.xml
@@ -13506,14 +13666,14 @@ msgstr "Edit User"
 # cases/cases_Scheduler_New.xml?PERFORM_TASK
 # cases/cases_Scheduler_New.xml
 #: subtitle - PERFORM_TASK
-msgid "[cases/cases_Scheduler_New.xml?PERFORM_TASK] Properties "
-msgstr "Properties "
+msgid "[cases/cases_Scheduler_New.xml?PERFORM_TASK] Properties"
+msgstr "Properties"
 
 # cases/cases_Scheduler_New.xml?TAS_UID
 # cases/cases_Scheduler_New.xml
 #: dropdown - TAS_UID
-msgid "[cases/cases_Scheduler_New.xml?TAS_UID] Task "
-msgstr "Task "
+msgid "[cases/cases_Scheduler_New.xml?TAS_UID] Task"
+msgstr "Task"
 
 # cases/cases_Scheduler_New.xml?SCH_NAME
 # cases/cases_Scheduler_New.xml
@@ -13524,10 +13684,8 @@ msgstr "Description"
 # cases/cases_Scheduler_New.xml?SCH_OPTION
 # cases/cases_Scheduler_New.xml
 #: dropdown - SCH_OPTION
-msgid "[cases/cases_Scheduler_New.xml?SCH_OPTION] \n"
-""
-msgstr "\n"
-""
+msgid "[cases/cases_Scheduler_New.xml?SCH_OPTION] Perform this task"
+msgstr "Perform this task"
 
 # cases/cases_Scheduler_New.xml?SCH_OPTION-0
 # cases/cases_Scheduler_New.xml
@@ -13562,8 +13720,8 @@ msgstr "One time only"
 # cases/cases_Scheduler_New.xml?SELECT_TIME_DAY
 # cases/cases_Scheduler_New.xml
 #: subtitle - SELECT_TIME_DAY
-msgid "[cases/cases_Scheduler_New.xml?SELECT_TIME_DAY] Select the time and day you want this task to start."
-msgstr "Select the time and day you want this task to start."
+msgid "[cases/cases_Scheduler_New.xml?SELECT_TIME_DAY] Select the date and time for case(s) to be initiated."
+msgstr "Select the date and time for case(s) to be initiated."
 
 # cases/cases_Scheduler_New.xml?SCH_START_TIME
 # cases/cases_Scheduler_New.xml
@@ -13586,14 +13744,14 @@ msgstr "Start date"
 # cases/cases_Scheduler_New.xml?SELECT_1
 # cases/cases_Scheduler_New.xml
 #: subtitle - SELECT_1
-msgid "[cases/cases_Scheduler_New.xml?SELECT_1]  Daily"
-msgstr " Daily"
+msgid "[cases/cases_Scheduler_New.xml?SELECT_1] Daily"
+msgstr "Daily"
 
 # cases/cases_Scheduler_New.xml?SELECT_2
 # cases/cases_Scheduler_New.xml
 #: subtitle - SELECT_2
-msgid "[cases/cases_Scheduler_New.xml?SELECT_2]  Weekly"
-msgstr " Weekly"
+msgid "[cases/cases_Scheduler_New.xml?SELECT_2] Weekly"
+msgstr "Weekly"
 
 # cases/cases_Scheduler_New.xml?SCH_EVERY_DAYS
 # cases/cases_Scheduler_New.xml
@@ -13604,8 +13762,8 @@ msgstr "Every"
 # cases/cases_Scheduler_New.xml?SCH_WEEK_DAYS
 # cases/cases_Scheduler_New.xml
 #: checkgroup - SCH_WEEK_DAYS
-msgid "[cases/cases_Scheduler_New.xml?SCH_WEEK_DAYS]  "
-msgstr " "
+msgid "[cases/cases_Scheduler_New.xml?SCH_WEEK_DAYS] Select the day(s) of the week below"
+msgstr "Select the day(s) of the week below"
 
 # cases/cases_Scheduler_New.xml?SCH_WEEK_DAYS-1
 # cases/cases_Scheduler_New.xml
@@ -13658,8 +13816,8 @@ msgstr "Sunday"
 # cases/cases_Scheduler_New.xml?SELECT_3
 # cases/cases_Scheduler_New.xml
 #: subtitle - SELECT_3
-msgid "[cases/cases_Scheduler_New.xml?SELECT_3]  Monthly"
-msgstr " Monthly"
+msgid "[cases/cases_Scheduler_New.xml?SELECT_3] Monthly"
+msgstr "Monthly"
 
 # cases/cases_Scheduler_New.xml?SCH_START_DAY
 # cases/cases_Scheduler_New.xml
@@ -13677,7 +13835,7 @@ msgstr "Day of month"
 # cases/cases_Scheduler_New.xml
 #: radiogroup - SCH_START_DAY - 2
 msgid "[cases/cases_Scheduler_New.xml?SCH_START_DAY-2]"
-msgstr "The day "
+msgstr "The day"
 
 # cases/cases_Scheduler_New.xml?SCH_START_DAY_OPT_1
 # cases/cases_Scheduler_New.xml
@@ -13772,10 +13930,8 @@ msgstr "Sunday"
 # cases/cases_Scheduler_New.xml?SCH_MONTHS
 # cases/cases_Scheduler_New.xml
 #: checkgroup - SCH_MONTHS
-msgid "[cases/cases_Scheduler_New.xml?SCH_MONTHS] \n"
-""
-msgstr "\n"
-""
+msgid "[cases/cases_Scheduler_New.xml?SCH_MONTHS] Of the month(s)"
+msgstr "Of the month(s)"
 
 # cases/cases_Scheduler_New.xml?SCH_MONTHS-1
 # cases/cases_Scheduler_New.xml
@@ -13908,6 +14064,12 @@ msgstr "Start a case based on following registered Plugin."
 #: submit - SAVE
 msgid "[cases/cases_Scheduler_New.xml?SAVE] Save"
 msgstr "Save"
+
+# cases/cases_Scheduler_New.xml?BTNCANCEL
+# cases/cases_Scheduler_New.xml
+#: button - BTNCANCEL
+msgid "[cases/cases_Scheduler_New.xml?BTNCANCEL] Cancel"
+msgstr "Cancel"
 
 # cases/cases_Scheduler_NewOptions.xml?MNU
 # cases/cases_Scheduler_NewOptions.xml
@@ -14122,8 +14284,8 @@ msgstr "DRAFT"
 # cases/cases_ToReassignByUserList2.xml?USERS
 # cases/cases_ToReassignByUserList2.xml
 #: dropdownpt - USERS
-msgid "Reassign to "
-msgstr "Reassign to "
+msgid "Reassign to"
+msgstr "Reassign to"
 
 # cases/cases_ToReviseInputdocsList.xml?TITLE
 # cases/cases_ToReviseInputdocsList.xml
@@ -14170,13 +14332,13 @@ msgstr "Task"
 # cases/cases_TransferHistory.xml?USR_NAME
 # cases/cases_TransferHistory.xml
 #: text - USR_NAME
-msgid "Delegated User"
+msgid "[cases/cases_TransferHistory.xml?USR_NAME] Delegated User"
 msgstr "Delegated User"
 
 # cases/cases_TransferHistory.xml?DEL_DELEGATE_DATE
 # cases/cases_TransferHistory.xml
 #: date - DEL_DELEGATE_DATE
-msgid "Task Transfer Date"
+msgid "[cases/cases_TransferHistory.xml?DEL_DELEGATE_DATE] Task Transfer Date"
 msgstr "Task Transfer Date"
 
 # cases/cases_TransferHistory.xml?DEL_INIT_DATE
@@ -14230,13 +14392,13 @@ msgstr "Reassigned"
 # cases/cases_TransferHistory.xml?APP_ENABLE_ACTION_DATE
 # cases/cases_TransferHistory.xml
 #: text - APP_ENABLE_ACTION_DATE
-msgid "Enable Action"
+msgid "[cases/cases_TransferHistory.xml?APP_ENABLE_ACTION_DATE] Enable Action"
 msgstr "Enable Action"
 
 # cases/cases_TransferHistory.xml?APP_DISABLE_ACTION_DATE
 # cases/cases_TransferHistory.xml
 #: text - APP_DISABLE_ACTION_DATE
-msgid "Disable Action"
+msgid "[cases/cases_TransferHistory.xml?APP_DISABLE_ACTION_DATE] Disable Action"
 msgstr "Disable Action"
 
 # cases/cases_UnpauseDateInput.xml?title1
@@ -15532,10 +15694,8 @@ msgstr "Name"
 # departments/departments_Edit.xml?DEP_STATUS
 # departments/departments_Edit.xml
 #: dropdown - DEP_STATUS
-msgid "[departments/departments_Edit.xml?DEP_STATUS] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[departments/departments_Edit.xml?DEP_STATUS] Status"
+msgstr "Status"
 
 # departments/departments_Edit.xml?DEP_STATUS-ACTIVE
 # departments/departments_Edit.xml
@@ -15552,10 +15712,8 @@ msgstr "Inactive"
 # departments/departments_Edit.xml?DEP_MANAGER
 # departments/departments_Edit.xml
 #: dropdown - DEP_MANAGER
-msgid "[departments/departments_Edit.xml?DEP_MANAGER] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "Manager/Supervisor"
+msgstr "Manager/Supervisor"
 
 # departments/departments_Edit.xml?button
 # departments/departments_Edit.xml
@@ -15596,14 +15754,14 @@ msgstr "Assign user"
 # departments/departments_SubNew.xml?title
 # departments/departments_SubNew.xml
 #: title - title
-msgid "Department Information "
-msgstr "Department Information "
+msgid "[departments/departments_SubNew.xml?title] Department Information"
+msgstr "Department Information"
 
 # departments/departments_SubNew.xml?DEP_PARENT_NAME
 # departments/departments_SubNew.xml
 #: text - DEP_PARENT_NAME
-msgid "Parent Department "
-msgstr "Parent Department "
+msgid "Parent Department"
+msgstr "Parent Department"
 
 # departments/departments_SubNew.xml?DEP_TITLE
 # departments/departments_SubNew.xml
@@ -15656,7 +15814,7 @@ msgstr "Options Mask"
 # dynaforms/datemask.xml?option1
 # dynaforms/datemask.xml
 #: subtitle - option1
-msgid " %a — abbreviated weekday name\n"
+msgid "%a — abbreviated weekday name\n"
 "<br> %A — full weekday name\n"
 "<br> %b — abbreviated month name\n"
 "<br> %B — full month name\n"
@@ -15683,7 +15841,7 @@ msgid " %a — abbreviated weekday name\n"
 "<br> %y — year without the century (range 00 to 99)\n"
 "<br> %Y — year with the century\n"
 "<br> %% — a literal '%' character"
-msgstr " %a — abbreviated weekday name\n"
+msgstr "%a — abbreviated weekday name\n"
 "<br> %A — full weekday name\n"
 "<br> %b — abbreviated month name\n"
 "<br> %B — full month name\n"
@@ -15870,8 +16028,8 @@ msgstr "Apply Filter"
 # dynaforms/dynaforms_AssignVariables.xml?SAVE_FROM_PMTABLE
 # dynaforms/dynaforms_AssignVariables.xml
 #: button - SAVE_FROM_PMTABLE
-msgid "Save "
-msgstr "Save "
+msgid "[dynaforms/dynaforms_AssignVariables.xml?SAVE_FROM_PMTABLE] Save"
+msgstr "Save"
 
 # dynaforms/dynaforms_AssignVariables.xml?SAVE_AND_OPEN_FROM_PMTABLE
 # dynaforms/dynaforms_AssignVariables.xml
@@ -15912,10 +16070,8 @@ msgstr "Please select the Dynaform Type"
 # dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE
 # dynaforms/dynaforms_ChoseType.xml
 #: radiogroup - DYN_SOURCE
-msgid "[dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE] Type"
+msgstr "Type"
 
 # dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE-normal
 # dynaforms/dynaforms_ChoseType.xml
@@ -15927,7 +16083,7 @@ msgstr "Blank Dynaform"
 # dynaforms/dynaforms_ChoseType.xml
 #: radiogroup - DYN_SOURCE - pmtable
 msgid "[dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE-pmtable]"
-msgstr " PM Table Dynaform"
+msgstr "PM Table Dynaform"
 
 # dynaforms/dynaforms_ChoseType.xml?BTN_CANCEL
 # dynaforms/dynaforms_ChoseType.xml
@@ -16268,10 +16424,8 @@ msgstr "Title"
 # dynaforms/dynaforms_Edit.xml?DYN_TYPE
 # dynaforms/dynaforms_Edit.xml
 #: dropdown - DYN_TYPE
-msgid "[dynaforms/dynaforms_Edit.xml?DYN_TYPE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[dynaforms/dynaforms_Edit.xml?DYN_TYPE] Type"
+msgstr "Type"
 
 # dynaforms/dynaforms_Edit.xml?DYN_TYPE-xmlform
 # dynaforms/dynaforms_Edit.xml
@@ -16318,7 +16472,7 @@ msgstr "Cancel"
 # dynaforms/dynaforms_Editor.xml?title
 # dynaforms/dynaforms_Editor.xml
 #: title - title
-msgid "<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"background-color:transparent\">    <tr>      <td  class=\'FormTitle\'>Preview</td>      <td align=\"right\"></td>    </tr>  </table>"
+msgid "<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"background-color:transparent\">    <tr>      <td  class='FormTitle'>Preview</td>      <td align=\"right\"></td>    </tr>  </table>"
 msgstr "<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"background-color:transparent\">    <tr>      <td  class='FormTitle'>Preview</td>      <td align=\"right\"></td>    </tr>  </table>"
 
 # dynaforms/dynaforms_HtmlEditor.xml?HTML
@@ -16432,10 +16586,8 @@ msgstr "Dynaform"
 # dynaforms/dynaforms_Properties.xml?DYN_TYPE
 # dynaforms/dynaforms_Properties.xml
 #: dropdown - DYN_TYPE
-msgid "[dynaforms/dynaforms_Properties.xml?DYN_TYPE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[dynaforms/dynaforms_Properties.xml?DYN_TYPE] Type"
+msgstr "Type"
 
 # dynaforms/dynaforms_Properties.xml?DYN_TYPE-xmlform
 # dynaforms/dynaforms_Properties.xml
@@ -16470,10 +16622,8 @@ msgstr "Width"
 # dynaforms/dynaforms_Properties.xml?MODE
 # dynaforms/dynaforms_Properties.xml
 #: dropdown - MODE
-msgid "[dynaforms/dynaforms_Properties.xml?MODE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[dynaforms/dynaforms_Properties.xml?MODE] Mode"
+msgstr "Mode"
 
 # dynaforms/dynaforms_Properties.xml?MODE-
 # dynaforms/dynaforms_Properties.xml
@@ -16496,10 +16646,8 @@ msgstr "All View"
 # dynaforms/dynaforms_Properties.xml?NEXTSTEPSAVE
 # dynaforms/dynaforms_Properties.xml
 #: dropdown - NEXTSTEPSAVE
-msgid "[dynaforms/dynaforms_Properties.xml?NEXTSTEPSAVE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "Next Step Link"
+msgstr "Next Step Link"
 
 # dynaforms/dynaforms_Properties.xml?NEXTSTEPSAVE-
 # dynaforms/dynaforms_Properties.xml
@@ -16655,7 +16803,7 @@ msgstr "PHP pages with Web Services"
 # dynaforms/dynaforms_WebEntry.xml
 #: dropdown - WE_TYPE - SINGLE
 msgid "[dynaforms/dynaforms_WebEntry.xml?WE_TYPE-SINGLE]"
-msgstr "Single HTML "
+msgstr "Single HTML"
 
 # dynaforms/dynaforms_WebEntry.xml?WE_USR
 # dynaforms/dynaforms_WebEntry.xml
@@ -17332,10 +17480,8 @@ msgstr "Event Description"
 # events/appEventsList.xml?EVN_ACTION
 # events/appEventsList.xml
 #: dropdown - EVN_ACTION
-msgid "[events/appEventsList.xml?EVN_ACTION] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "Event type"
+msgstr "Event type"
 
 # events/appEventsList.xml?EVN_ACTION-SEND_MESSAGE
 # events/appEventsList.xml
@@ -17382,10 +17528,8 @@ msgstr "Event Description"
 # events/appEventsListCompleted.xml?EVN_ACTION
 # events/appEventsListCompleted.xml
 #: dropdown - EVN_ACTION
-msgid "[events/appEventsListCompleted.xml?EVN_ACTION] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[events/appEventsListCompleted.xml?EVN_ACTION] Event type"
+msgstr "Event type"
 
 # events/appEventsListCompleted.xml?EVN_ACTION-SEND_MESSAGE
 # events/appEventsListCompleted.xml
@@ -17540,10 +17684,8 @@ msgstr "Condition"
 # events/eventsEdit.xml?EVN_ACTION
 # events/eventsEdit.xml
 #: dropdown - EVN_ACTION
-msgid "[events/eventsEdit.xml?EVN_ACTION] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "Execute trigger"
+msgstr "Execute trigger"
 
 # events/eventsEdit.xml?EVN_ACTION-SEND_MESSAGE
 # events/eventsEdit.xml
@@ -17566,10 +17708,8 @@ msgstr "Multiple"
 # events/eventsEdit.xml?TRI_UID
 # events/eventsEdit.xml
 #: dropdown - TRI_UID
-msgid "[events/eventsEdit.xml?TRI_UID] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[events/eventsEdit.xml?TRI_UID] "
+msgstr ""
 
 # events/eventsEdit.xml?TITLE3
 # events/eventsEdit.xml
@@ -17790,10 +17930,8 @@ msgstr "Condition"
 # events/eventsNew.xml?EVN_ACTION
 # events/eventsNew.xml
 #: dropdown - EVN_ACTION
-msgid "[events/eventsNew.xml?EVN_ACTION] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[events/eventsNew.xml?EVN_ACTION] Execute trigger"
+msgstr "Execute trigger"
 
 # events/eventsNew.xml?EVN_ACTION-SEND_MESSAGE
 # events/eventsNew.xml
@@ -18608,8 +18746,8 @@ msgstr "Username:"
 # login/newSite.xml?NW_PASSWORD
 # login/newSite.xml
 #: password - NW_PASSWORD
-msgid " (Max. length 20):"
-msgstr " (Max. length 20):"
+msgid "Password (admin) <br> (Max. length 20):"
+msgstr "Password (admin) <br> (Max. length 20):"
 
 # login/newSite.xml?NW_PASSWORD2
 # login/newSite.xml
@@ -18734,7 +18872,7 @@ msgstr "Test"
 # login/noViewPage.xml?title
 # login/noViewPage.xml
 #: title - title
-msgid "You don\'t have permission"
+msgid "You don't have permission"
 msgstr "You don't have permission"
 
 # login/noViewPage.xml?subtitle1
@@ -19172,7 +19310,7 @@ msgstr "Title"
 # outputdocs/outputdocs_New.xml?OUT_DOC_FILENAME
 # outputdocs/outputdocs_New.xml
 #: textpm - OUT_DOC_FILENAME
-msgid "Filename generated"
+msgid "[outputdocs/outputdocs_New.xml?OUT_DOC_FILENAME] Filename generated"
 msgstr "Filename generated"
 
 # outputdocs/outputdocs_New.xml?OUT_DOC_DESCRIPTION
@@ -19304,10 +19442,8 @@ msgstr "YES"
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_MEDIA
 # outputdocs/outputdocs_Properties.xml
 #: dropdown - OUT_DOC_MEDIA
-msgid " \n"
-"  "
-msgstr " \n"
-"  "
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_MEDIA] Media"
+msgstr "Media"
 
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_MEDIA-Letter
 # outputdocs/outputdocs_Properties.xml
@@ -19523,7 +19659,7 @@ msgstr "Type"
 # patterns/patterns_Current.xml
 #: dropdown - ROU_TYPE -
 msgid "[patterns/patterns_Current.xml?ROU_TYPE-]"
-msgstr "- Select - "
+msgstr "- Select -"
 
 # patterns/patterns_Current.xml?ROU_TYPE-SEQUENTIAL
 # patterns/patterns_Current.xml
@@ -19654,10 +19790,8 @@ msgstr "No of Task to be Discriminated"
 # patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL
 # patterns/patterns_GridDiscriminator.xml
 #: dropdown - ROU_OPTIONAL
-msgid "[patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL] \n"
-""
-msgstr "\n"
-""
+msgid "Type of Discriminator"
+msgstr "Type of Discriminator"
 
 # patterns/patterns_GridDiscriminator.xml?ROU_OPTIONAL-FALSE
 # patterns/patterns_GridDiscriminator.xml
@@ -19692,10 +19826,8 @@ msgstr "Condition"
 # patterns/patterns_GridParallelByEvaluationType.xml?ROU_NEXT_TASK
 # patterns/patterns_GridParallelByEvaluationType.xml
 #: dropdown - ROU_NEXT_TASK
-msgid "[patterns/patterns_GridParallelByEvaluationType.xml?ROU_NEXT_TASK] \n"
-"    "
-msgstr "\n"
-"    "
+msgid "[patterns/patterns_GridParallelByEvaluationType.xml?ROU_NEXT_TASK] Next Task"
+msgstr "Next Task"
 
 # patterns/patterns_GridParallelByEvaluationType.xml?ROU_NEXT_TASK--1
 # patterns/patterns_GridParallelByEvaluationType.xml
@@ -19850,34 +19982,26 @@ msgstr "ProcessCategory form"
 # processCategory/processCategory.xml?CATEGORY_UID
 # processCategory/processCategory.xml
 #: text - CATEGORY_UID
-msgid "Gory Uid\n"
-"  "
-msgstr "Gory Uid\n"
-"  "
+msgid "Gory Uid"
+msgstr "Gory Uid"
 
 # processCategory/processCategory.xml?CATEGORY_PARENT
 # processCategory/processCategory.xml
 #: text - CATEGORY_PARENT
-msgid "Gory Parent\n"
-"  "
-msgstr "Gory Parent\n"
-"  "
+msgid "Gory Parent"
+msgstr "Gory Parent"
 
 # processCategory/processCategory.xml?CATEGORY_NAME
 # processCategory/processCategory.xml
 #: text - CATEGORY_NAME
-msgid "Gory Name\n"
-"  "
-msgstr "Gory Name\n"
-"  "
+msgid "Gory Name"
+msgstr "Gory Name"
 
 # processCategory/processCategory.xml?CATEGORY_ICON
 # processCategory/processCategory.xml
 #: text - CATEGORY_ICON
-msgid "Gory Icon\n"
-"  "
-msgstr "Gory Icon\n"
-"  "
+msgid "Gory Icon"
+msgstr "Gory Icon"
 
 # processCategory/processCategory.xml?BTN_SUBMIT
 # processCategory/processCategory.xml
@@ -19918,10 +20042,8 @@ msgstr "Process Category form"
 # processCategory/processCategoryEdit.xml?CATEGORY_NAME
 # processCategory/processCategoryEdit.xml
 #: text - CATEGORY_NAME
-msgid "Category Name\n"
-"  "
-msgstr "Category Name\n"
-"  "
+msgid "[processCategory/processCategoryEdit.xml?CATEGORY_NAME] Category Name"
+msgstr "Category Name"
 
 # processCategory/processCategoryEdit.xml?BTN_SUBMIT
 # processCategory/processCategoryEdit.xml
@@ -19950,10 +20072,8 @@ msgstr "Process Category form"
 # processCategory/processCategoryNew.xml?CATEGORY_NAME
 # processCategory/processCategoryNew.xml
 #: text - CATEGORY_NAME
-msgid "[processCategory/processCategoryNew.xml?CATEGORY_NAME] Category Name\n"
-"  "
-msgstr "Category Name\n"
-"  "
+msgid "[processCategory/processCategoryNew.xml?CATEGORY_NAME] Category Name"
+msgstr "Category Name"
 
 # processCategory/processCategoryNew.xml?BTN_SUBMIT
 # processCategory/processCategoryNew.xml
@@ -20030,10 +20150,8 @@ msgstr "Author"
 # processes/objectpmView.xml?privacy
 # processes/objectpmView.xml
 #: dropdown - privacy
-msgid "[processes/objectpmView.xml?privacy] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "Privacy"
+msgstr "Privacy"
 
 # processes/objectpmView.xml?privacy-FREE
 # processes/objectpmView.xml
@@ -20104,8 +20222,8 @@ msgstr "Assign"
 # processes/processes_DeleteCases.xml?title1
 # processes/processes_DeleteCases.xml
 #: title - title1
-msgid " Process: @#PRO_TITLE"
-msgstr " Process: @#PRO_TITLE"
+msgid "Process: @#PRO_TITLE"
+msgstr "Process: @#PRO_TITLE"
 
 # processes/processes_DeleteCases.xml?MESSAGE
 # processes/processes_DeleteCases.xml
@@ -20146,8 +20264,8 @@ msgstr ""
 # processes/processes_Edit.xml?TITLE1
 # processes/processes_Edit.xml
 #: title - TITLE1
-msgid "Process Information "
-msgstr "Process Information "
+msgid "[processes/processes_Edit.xml?TITLE1] Process Information"
+msgstr "Process Information"
 
 # processes/processes_Edit.xml?PRO_TITLE
 # processes/processes_Edit.xml
@@ -20212,10 +20330,8 @@ msgstr "Edit Specific Permission"
 # processes/processes_EditObjectPermission.xml?OP_CASE_STATUS
 # processes/processes_EditObjectPermission.xml
 #: dropdown - OP_CASE_STATUS
-msgid "[processes/processes_EditObjectPermission.xml?OP_CASE_STATUS] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[processes/processes_EditObjectPermission.xml?OP_CASE_STATUS] Status Case"
+msgstr "Status Case"
 
 # processes/processes_EditObjectPermission.xml?OP_CASE_STATUS-ALL
 # processes/processes_EditObjectPermission.xml
@@ -20520,7 +20636,7 @@ msgstr "<div align=\"center\">Importing Existing Process</div>"
 # processes/processes_ImportExisting.xml?TITLE1
 # processes/processes_ImportExisting.xml
 #: subtitle - TITLE1
-msgid "The process you are trying to import already exists. Please select one of the following options to continue:"
+msgid "[processes/processes_ImportExisting.xml?TITLE1] The process you are trying to import already exists. Please select one of the following options to continue:"
 msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
 
 # processes/processes_ImportExisting.xml?IMPORT_OPTION
@@ -20790,10 +20906,8 @@ msgstr "New Specific Permission"
 # processes/processes_NewObjectPermission.xml?OP_CASE_STATUS
 # processes/processes_NewObjectPermission.xml
 #: dropdown - OP_CASE_STATUS
-msgid "[processes/processes_NewObjectPermission.xml?OP_CASE_STATUS] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[processes/processes_NewObjectPermission.xml?OP_CASE_STATUS] Status Case"
+msgstr "Status Case"
 
 # processes/processes_NewObjectPermission.xml?OP_CASE_STATUS-ALL
 # processes/processes_NewObjectPermission.xml
@@ -20828,10 +20942,8 @@ msgstr "COMPLETED"
 # processes/processes_NewObjectPermission.xml?TAS_UID
 # processes/processes_NewObjectPermission.xml
 #: dropdown - TAS_UID
-msgid "[processes/processes_NewObjectPermission.xml?TAS_UID] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[processes/processes_NewObjectPermission.xml?TAS_UID] Target Task"
+msgstr "Target Task"
 
 # processes/processes_NewObjectPermission.xml?TAS_UID-
 # processes/processes_NewObjectPermission.xml
@@ -20866,10 +20978,8 @@ msgstr "Participation required?"
 # processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE
 # processes/processes_NewObjectPermission.xml
 #: dropdown - OP_OBJ_TYPE
-msgid "[processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE] Type"
+msgstr "Type"
 
 # processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE-ANY
 # processes/processes_NewObjectPermission.xml
@@ -20898,10 +21008,8 @@ msgstr "Output Document"
 # processes/processes_NewObjectPermission.xml?ALL
 # processes/processes_NewObjectPermission.xml
 #: dropdown - ALL
-msgid "[processes/processes_NewObjectPermission.xml?ALL] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[processes/processes_NewObjectPermission.xml?ALL] Object"
+msgstr "Object"
 
 # processes/processes_NewObjectPermission.xml?ALL-
 # processes/processes_NewObjectPermission.xml
@@ -22388,14 +22496,14 @@ msgstr "Name"
 # setup/calendarEdit_Holidays.xml?CALENDAR_HOLIDAY_START
 # setup/calendarEdit_Holidays.xml
 #: date - CALENDAR_HOLIDAY_START
-msgid "Start Date (Recurrent \"Y-m-d\") "
-msgstr "Start Date (Recurrent \"Y-m-d\") "
+msgid "Start Date (Recurrent \"Y-m-d\")"
+msgstr "Start Date (Recurrent \"Y-m-d\")"
 
 # setup/calendarEdit_Holidays.xml?CALENDAR_HOLIDAY_END
 # setup/calendarEdit_Holidays.xml
 #: date - CALENDAR_HOLIDAY_END
-msgid "End Date (Recurrent \"Y-m-d\") "
-msgstr "End Date (Recurrent \"Y-m-d\") "
+msgid "End Date (Recurrent \"Y-m-d\")"
+msgstr "End Date (Recurrent \"Y-m-d\")"
 
 # setup/calendarList.xml?CALENDAR_NAME
 # setup/calendarList.xml
@@ -22514,14 +22622,14 @@ msgstr "Server"
 # setup/emails.xml?MESS_PORT
 # setup/emails.xml
 #: text - MESS_PORT
-msgid "[setup/emails.xml?MESS_PORT] Port"
-msgstr "Port"
+msgid "Port (default 25)"
+msgstr "Port (default 25)"
 
 # setup/emails.xml?MESS_RAUTH
 # setup/emails.xml
 #: checkbox - MESS_RAUTH
-msgid "Require authentification"
-msgstr "Require authentification"
+msgid "Require authentication"
+msgstr "Require authentication"
 
 # setup/emails.xml?MESS_ACCOUNT
 # setup/emails.xml
@@ -22546,6 +22654,30 @@ msgstr "Send a test mail"
 #: text - MESS_TEST_MAIL_TO
 msgid "Mail to"
 msgstr "Mail to"
+
+# setup/emails.xml?SMTPSecure
+# setup/emails.xml
+#: radiogroup - SMTPSecure
+msgid "Use Secure Connection"
+msgstr "Use Secure Connection"
+
+# setup/emails.xml?SMTPSecure-none
+# setup/emails.xml
+#: radiogroup - SMTPSecure - none
+msgid "[setup/emails.xml?SMTPSecure-none]"
+msgstr "No"
+
+# setup/emails.xml?SMTPSecure-tls
+# setup/emails.xml
+#: radiogroup - SMTPSecure - tls
+msgid "[setup/emails.xml?SMTPSecure-tls]"
+msgstr "TLS"
+
+# setup/emails.xml?SMTPSecure-ssl
+# setup/emails.xml
+#: radiogroup - SMTPSecure - ssl
+msgid "[setup/emails.xml?SMTPSecure-ssl]"
+msgstr "SSL"
 
 # setup/emails.xml?MESS_BACKGROUND
 # setup/emails.xml
@@ -22988,10 +23120,8 @@ msgstr "Processmaker Heartbeat"
 # setup/processHeartBeatConfig.xml?HB_OPTION
 # setup/processHeartBeatConfig.xml
 #: dropdown - HB_OPTION
-msgid "\n"
-"\t"
-msgstr "\n"
-"\t"
+msgid "Enable Heartbeat"
+msgstr "Enable Heartbeat"
 
 # setup/processHeartBeatConfig.xml?HB_OPTION-0
 # setup/processHeartBeatConfig.xml
@@ -23026,7 +23156,7 @@ msgstr "Error"
 # setup/showMessage.xml?MESSAGE
 # setup/showMessage.xml
 #: caption - MESSAGE
-msgid "you can\'t delete it is in use."
+msgid "you can't delete it is in use."
 msgstr "you can't delete it is in use."
 
 # setup/skinsList.xml?id
@@ -25693,11 +25823,47 @@ msgstr "Case Description"
 msgid "[tasks/tasks_Notifications.xml?SEND_EMAIL] After routing notify the next assigned user(s)."
 msgstr "After routing notify the next assigned user(s)."
 
+# tasks/tasks_Notifications.xml?TAS_DEF_SUBJECT_MESSAGE
+# tasks/tasks_Notifications.xml
+#: text - TAS_DEF_SUBJECT_MESSAGE
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_SUBJECT_MESSAGE] Subject"
+msgstr "Subject"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TYPE
+msgid "Content Type"
+msgstr "Content Type"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-text
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TYPE - text
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-text]"
+msgstr "Plain Text"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-template
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TYPE - template
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TYPE-template]"
+msgstr "HTML Template"
+
 # tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE
 # tasks/tasks_Notifications.xml
 #: textareapm - TAS_DEF_MESSAGE
 msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE] Message"
 msgstr "Message"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TEMPLATE
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE] Template"
+msgstr "Template"
+
+# tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE-
+# tasks/tasks_Notifications.xml
+#: dropdown - TAS_DEF_MESSAGE_TEMPLATE -
+msgid "[tasks/tasks_Notifications.xml?TAS_DEF_MESSAGE_TEMPLATE-]"
+msgstr "- None -"
 
 # tasks/tasks_Owner.xml?TAS_OWNER_APP
 # tasks/tasks_Owner.xml
@@ -26038,8 +26204,8 @@ msgstr "Save"
 # tracker/tracker_Configuration.xml?CT_MAP_TYPE
 # tracker/tracker_Configuration.xml
 #: dropdown - CT_MAP_TYPE
-msgid "Map type "
-msgstr "Map type "
+msgid "Map type"
+msgstr "Map type"
 
 # tracker/tracker_Configuration.xml?CT_MAP_TYPE-NONE
 # tracker/tracker_Configuration.xml
@@ -27655,11 +27821,23 @@ msgstr ""
 msgid "[users/users_Edit.xml?USR_CITY] State or Region"
 msgstr "State or Region"
 
+# users/users_Edit.xml?USR_CITY-
+# users/users_Edit.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_Edit.xml?USR_CITY-]"
+msgstr "N/D"
+
 # users/users_Edit.xml?USR_LOCATION
 # users/users_Edit.xml
 #: dropdown - USR_LOCATION
 msgid "[users/users_Edit.xml?USR_LOCATION] Location"
 msgstr "Location"
+
+# users/users_Edit.xml?USR_LOCATION-
+# users/users_Edit.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_Edit.xml?USR_LOCATION-]"
+msgstr "N/D"
 
 # users/users_Edit.xml?USR_PHONE
 # users/users_Edit.xml
@@ -28039,11 +28217,23 @@ msgstr ""
 msgid "[users/users_EditRT.xml?USR_CITY] State or Region"
 msgstr "State or Region"
 
+# users/users_EditRT.xml?USR_CITY-
+# users/users_EditRT.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_EditRT.xml?USR_CITY-]"
+msgstr "N/D"
+
 # users/users_EditRT.xml?USR_LOCATION
 # users/users_EditRT.xml
 #: dropdown - USR_LOCATION
 msgid "[users/users_EditRT.xml?USR_LOCATION] Location"
 msgstr "Location"
+
+# users/users_EditRT.xml?USR_LOCATION-
+# users/users_EditRT.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_EditRT.xml?USR_LOCATION-]"
+msgstr "N/D"
 
 # users/users_EditRT.xml?USR_PHONE
 # users/users_EditRT.xml
@@ -28090,10 +28280,8 @@ msgstr "Expiration Date"
 # users/users_EditRT.xml?USR_CALENDAR
 # users/users_EditRT.xml
 #: dropdown - USR_CALENDAR
-msgid "[users/users_EditRT.xml?USR_CALENDAR] \n"
-"    "
-msgstr "\n"
-"    "
+msgid "[users/users_EditRT.xml?USR_CALENDAR] Calendar"
+msgstr "Calendar"
 
 # users/users_EditRT.xml?USR_CALENDAR-
 # users/users_EditRT.xml
@@ -28104,10 +28292,8 @@ msgstr "- None -"
 # users/users_EditRT.xml?USR_STATUS
 # users/users_EditRT.xml
 #: dropdown - USR_STATUS
-msgid "[users/users_EditRT.xml?USR_STATUS] \n"
-"    "
-msgstr "\n"
-"    "
+msgid "[users/users_EditRT.xml?USR_STATUS] Status"
+msgstr "Status"
 
 # users/users_EditRT.xml?USR_STATUS-ACTIVE
 # users/users_EditRT.xml
@@ -28142,14 +28328,14 @@ msgstr "Change Password"
 # users/users_EditRT.xml?USR_NEW_PASS
 # users/users_EditRT.xml
 #: password - USR_NEW_PASS
-msgid "New Password "
-msgstr "New Password "
+msgid "[users/users_EditRT.xml?USR_NEW_PASS] New Password"
+msgstr "New Password"
 
 # users/users_EditRT.xml?USR_CNF_PASS
 # users/users_EditRT.xml
 #: password - USR_CNF_PASS
-msgid "Confirm Password "
-msgstr "Confirm Password "
+msgid "[users/users_EditRT.xml?USR_CNF_PASS] Confirm Password"
+msgstr "Confirm Password"
 
 # users/users_EditRT.xml?SUBMIT
 # users/users_EditRT.xml
@@ -28295,11 +28481,23 @@ msgstr ""
 msgid "[users/users_New.xml?USR_CITY] State or Region"
 msgstr "State or Region"
 
+# users/users_New.xml?USR_CITY-
+# users/users_New.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_New.xml?USR_CITY-]"
+msgstr "N/D"
+
 # users/users_New.xml?USR_LOCATION
 # users/users_New.xml
 #: dropdown - USR_LOCATION
 msgid "[users/users_New.xml?USR_LOCATION] Location"
 msgstr "Location"
+
+# users/users_New.xml?USR_LOCATION-
+# users/users_New.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_New.xml?USR_LOCATION-]"
+msgstr "N/D"
 
 # users/users_New.xml?USR_PHONE
 # users/users_New.xml
@@ -28346,10 +28544,8 @@ msgstr "Expiration Date"
 # users/users_New.xml?USR_CALENDAR
 # users/users_New.xml
 #: dropdown - USR_CALENDAR
-msgid "[users/users_New.xml?USR_CALENDAR] \n"
-""
-msgstr "\n"
-""
+msgid "[users/users_New.xml?USR_CALENDAR] Calendar"
+msgstr "Calendar"
 
 # users/users_New.xml?USR_CALENDAR-
 # users/users_New.xml
@@ -28360,10 +28556,8 @@ msgstr "- None -"
 # users/users_New.xml?USR_STATUS
 # users/users_New.xml
 #: dropdown - USR_STATUS
-msgid "[users/users_New.xml?USR_STATUS] \n"
-"    "
-msgstr "\n"
-"    "
+msgid "[users/users_New.xml?USR_STATUS] Status"
+msgstr "Status"
 
 # users/users_New.xml?USR_STATUS-ACTIVE
 # users/users_New.xml
@@ -28398,14 +28592,14 @@ msgstr "Change Password"
 # users/users_New.xml?USR_NEW_PASS
 # users/users_New.xml
 #: password - USR_NEW_PASS
-msgid "[users/users_New.xml?USR_NEW_PASS] New Password "
-msgstr "New Password "
+msgid "[users/users_New.xml?USR_NEW_PASS] New Password"
+msgstr "New Password"
 
 # users/users_New.xml?USR_CNF_PASS
 # users/users_New.xml
 #: password - USR_CNF_PASS
-msgid "[users/users_New.xml?USR_CNF_PASS] Confirm Password "
-msgstr "Confirm Password "
+msgid "[users/users_New.xml?USR_CNF_PASS] Confirm Password"
+msgstr "Confirm Password"
 
 # users/users_New.xml?SUBMIT
 # users/users_New.xml
@@ -28446,7 +28640,7 @@ msgstr "No. of cases"
 # users/users_ReassignCases.xml?USERS
 # users/users_ReassignCases.xml
 #: text - USERS
-msgid "Reassign to"
+msgid "[users/users_ReassignCases.xml?USERS] Reassign to"
 msgstr "Reassign to"
 
 # users/users_ReassignSelectSubType.xml?TITLE1
@@ -29004,8 +29198,8 @@ msgstr "Data"
 # dynaforms/fields/checkgroup.xml?PME_SQLCONNECTION
 # dynaforms/fields/checkgroup.xml
 #: dropdown - PME_SQLCONNECTION
-msgid "[dynaforms/fields/checkgroup.xml?PME_SQLCONNECTION]  "
-msgstr " "
+msgid "Sql Connection"
+msgstr "Sql Connection"
 
 # dynaforms/fields/checkgroup.xml?PME_SQLCONNECTION-
 # dynaforms/fields/checkgroup.xml
@@ -29190,7 +29384,7 @@ msgstr "Data"
 # dynaforms/fields/currency.xml?PME_SQLCONNECTION
 # dynaforms/fields/currency.xml
 #: dropdown - PME_SQLCONNECTION
-msgid "Sql Connection"
+msgid "[dynaforms/fields/currency.xml?PME_SQLCONNECTION] Sql Connection"
 msgstr "Sql Connection"
 
 # dynaforms/fields/currency.xml?PME_SQLCONNECTION-
@@ -29238,10 +29432,8 @@ msgstr "Label"
 # dynaforms/fields/date.xml?PME_RELATIVEDATE
 # dynaforms/fields/date.xml
 #: dropdown - PME_RELATIVEDATE
-msgid "\n"
-"   "
-msgstr "\n"
-"   "
+msgid "Type of date range"
+msgstr "Type of date range"
 
 # dynaforms/fields/date.xml?PME_RELATIVEDATE-1
 # dynaforms/fields/date.xml
@@ -29786,7 +29978,7 @@ msgstr "Link"
 # dynaforms/fields/link.xml?PME_TARGET_SEL
 # dynaforms/fields/link.xml
 #: dropdown - PME_TARGET_SEL
-msgid "\n"
+msgid "n"
 msgstr "n"
 
 # dynaforms/fields/link.xml?PME_TARGET_SEL-_blank
@@ -30087,7 +30279,7 @@ msgstr "Validate"
 # dynaforms/fields/percentage.xml
 #: dropdown - PME_VALIDATE - Int
 msgid "[dynaforms/fields/percentage.xml?PME_VALIDATE-Int]"
-msgstr "Integer "
+msgstr "Integer"
 
 # dynaforms/fields/percentage.xml?PME_VALIDATE-Real
 # dynaforms/fields/percentage.xml
@@ -30536,10 +30728,8 @@ msgstr "Size"
 # dynaforms/fields/suggest.xml?PME_MODE
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_MODE
-msgid "[dynaforms/fields/suggest.xml?PME_MODE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[dynaforms/fields/suggest.xml?PME_MODE] Mode"
+msgstr "Mode"
 
 # dynaforms/fields/suggest.xml?PME_MODE-edit
 # dynaforms/fields/suggest.xml
@@ -30562,8 +30752,8 @@ msgstr "Autosuggest behaviour"
 # dynaforms/fields/suggest.xml?PME_SQLCONNECTION
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_SQLCONNECTION
-msgid "Sql Connection "
-msgstr "Sql Connection "
+msgid "[dynaforms/fields/suggest.xml?PME_SQLCONNECTION] Sql Connection"
+msgstr "Sql Connection"
 
 # dynaforms/fields/suggest.xml?PME_SQLCONNECTION-
 # dynaforms/fields/suggest.xml
@@ -30592,10 +30782,8 @@ msgstr "Show no results message"
 # dynaforms/fields/suggest.xml?PME_SAVELABEL
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_SAVELABEL
-msgid "[dynaforms/fields/suggest.xml?PME_SAVELABEL] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "Save selected option as"
+msgstr "Save selected option as"
 
 # dynaforms/fields/suggest.xml?PME_SAVELABEL-0
 # dynaforms/fields/suggest.xml
@@ -30630,10 +30818,8 @@ msgstr "Primary Key"
 # dynaforms/fields/suggest.xml?PME_PRIMARY_KEY_TYPE
 # dynaforms/fields/suggest.xml
 #: dropdown - PME_PRIMARY_KEY_TYPE
-msgid "[dynaforms/fields/suggest.xml?PME_PRIMARY_KEY_TYPE] \n"
-"  "
-msgstr "\n"
-"  "
+msgid "[dynaforms/fields/suggest.xml?PME_PRIMARY_KEY_TYPE] Type"
+msgstr "Type"
 
 # dynaforms/fields/suggest.xml?PME_PRIMARY_KEY_TYPE-0
 # dynaforms/fields/suggest.xml
