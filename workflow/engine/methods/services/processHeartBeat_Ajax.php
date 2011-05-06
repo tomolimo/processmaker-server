@@ -36,6 +36,10 @@ function validateConnectivity($url){
 }
 function file_get_conditional_contents($szURL){
     
+    // if curl module is not installed 
+    if (!function_exists('curl_init')) {
+      return false;
+    }
     
     $pCurl = curl_init ();
     curl_setopt ( $pCurl, CURLOPT_URL, $szURL );
