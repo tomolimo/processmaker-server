@@ -304,7 +304,7 @@ $caseStep->getStepPosition());
       $oTask = new Task();
       $aTask = $oTask->load($_SESSION['TASK']);
       if ($aTask['TAS_TYPE'] == 'ADHOC') {
-        $options[] = Array('text'=>G::LoadTranslation('ID_ADHOC_ASSIGNMENT'), 'fn'=>'');
+        $options[] = Array('text'=>G::LoadTranslation('ID_ADHOC_ASSIGNMENT'), 'fn'=>'adhocAssignmentUsers');
       }
     }
     return $options;
