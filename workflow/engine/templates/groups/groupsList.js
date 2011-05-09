@@ -224,6 +224,12 @@ Ext.onReady(function(){
       width: 50,
       sortable: true
     },
+    viewConfig: {
+     // forceFit:true,
+      cls:"x-grid-empty",
+      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
+    }
+    ,
     columns: [
               {id:'GRP_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
               {header: _('ID_GROUP_NAME'), dataIndex: 'CON_VALUE', width: 400, align:'left'},
@@ -295,7 +301,9 @@ Ext.onReady(function(){
     },
     view: new Ext.grid.GroupingView({
       forceFit:true,
-      groupTextTpl: '{text}'
+      groupTextTpl: '{text}',
+      cls:"x-grid-empty",
+      emptyText: _('ID_NO_RECORDS_FOUND')
     })
   });
 

@@ -249,7 +249,9 @@ Ext.onReady(function(){
       },
       view: new Ext.grid.GroupingView({
         forceFit:true,
-        groupTextTpl: '{text}'
+        groupTextTpl: '{text}',
+        cls:"x-grid-empty",
+        emptyText: _('ID_NO_RECORDS_FOUND')
       })
     });
     
