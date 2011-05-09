@@ -22,6 +22,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+require_once "classes/model/Language.php";
+
 global $RBAC;
 $access = $RBAC->userCanAccess('PM_SETUP_ADVANCE');
 
@@ -48,7 +50,6 @@ try {
   
   $sMaxExecutionTime = ini_get('max_execution_time');
   ini_set('max_execution_time', '0');
-  G::LoadClass('languages');
   G::LoadClass('configuration');
   
   $languageFile = $_FILES['form']['tmp_name']['LANGUAGE_FILENAME'];
@@ -66,12 +67,9 @@ try {
     fclose($handle);
   }
 
-  $languages     = new languages();
+  $language     = new Language();
   $configuration = new Configurations;
-  $importResults = $languages->importLanguage($languageFile);
-
-  //G::SendTemporalMessage('IMPORT_LANGUAGE_SUCCESS', 'info', 'labels');
-  //G::header('location: languages');
+  $importResults = $language->import($languageFile);
   
   $result->msg = G::LoadTranslation('IMPORT_LANGUAGE_SUCCESS') . "\n";
   $result->msg .= "PO File num. records: " . $importResults->recordsCount . "\n";
