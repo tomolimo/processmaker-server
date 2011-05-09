@@ -126,26 +126,6 @@ class Language extends BaseLanguage {
     $oDataset->next();
     return $oDataset->getRow();
   }
-
-
-  /*
-  * Log 
-  * @param text $text
-  * @return void
-  */
-  function log ( $text ) 
-  {
-    $logDir = PATH_DATA . 'log';
-    if (!file_exists($logDir))
-      if (!mkdir($logDir))
-        return;
-    $logFile = "$logDir/query.log";
-    $fp      = fopen ( $logFile, 'a+' );
-    if ($fp !== false) {
-      fwrite ( $fp, date("Y-m-d H:i:s") . " " . $text  . "\n" );
-      fclose ( $fp );
-    }
-  }
   
   /*
   * Import a language file
@@ -285,7 +265,6 @@ class Language extends BaseLanguage {
       $trn->generateFileTranslation($LOCALE);
       $trn->addTranslationEnvironment($LOCALE, $POHeaders, $countItemsSuccess);
       
-      $this->log( "checking and updating CONTENT");
       $content = new Content();
       $content->regenerateContent($languageID);
       

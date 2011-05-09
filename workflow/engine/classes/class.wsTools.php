@@ -271,9 +271,8 @@ class workspaceTools {
    */
   public function upgradeTranslation($first = true) {
     $this->initPropel(true);
-    G::LoadClass('languages');
+    require('classes/model/Language.php');
     G::LoadThirdParty('pear/json', 'class.json');
-    $languages = new languages();
     foreach (System::listPoFiles() as $poFile) {
       $poName = basename($poFile);
       $names = explode(".", basename($poFile));
@@ -281,10 +280,10 @@ class workspaceTools {
       $langid = array_pop($names);
       if (strcasecmp($langid, "en") == 0) {
         CLI::logging("Updating database translations with $poName\n");
-        $languages->importLanguage($poFile, false, true);
+        Language::import($poFile, false, true);
       } else if ($first) {
         CLI::logging("Updating XML form translations with $poName\n");
-        $languages->importLanguage($poFile, true, false);
+        Language::import($poFile, true, false);
       }
     }
   }
