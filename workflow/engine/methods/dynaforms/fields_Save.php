@@ -116,6 +116,15 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
         $_POST['form']['PME_DELETEROW'] = '0';
       }
     }
+    if ($type==='dropdown' || $type==='listbox' ) {
+      if(isset($_POST['form']['PME_OPTIONS'][1])){
+        if($_POST['form']['PME_OPTIONS']['1']['NAME'] === "" &&
+           $_POST['form']['PME_OPTIONS']['1']['LABEL'] === ""){
+             unset($_POST['form']['PME_OPTIONS']);
+           }
+      }
+    }
+
   }
   foreach($_POST['form'] as $key => $value){
     if (substr($key,0,4)==='PME_')
@@ -214,7 +223,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   $_SESSION['_DBArray'] = $_DBArray;
 
   // Additions to javascript
-  if($sType === 'javascript'){
+  if(isset($sType) && $sType === 'javascript'){
     $sCode     = $pmeCode;
     $editor = new dynaformEditorAjax($_POST);
     $editor->set_javascript($A, $fieldName, $sCode);

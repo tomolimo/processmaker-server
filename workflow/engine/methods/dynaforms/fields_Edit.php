@@ -138,7 +138,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     if (isset($form->fields[$fields->Fields['XMLNODE_NAME']]->code)) $Fields['PME_CODE'] = $form->fields[$fields->Fields['XMLNODE_NAME']]->code;
     $options=isset($form->fields[$fields->Fields['XMLNODE_NAME']]->option)?
       $form->fields[$fields->Fields['XMLNODE_NAME']]->option:array();
-    if (!is_array($options)) $options =array();
+    if (!is_array($options) || count($options)==0) $options =array('' => '');
     $Fields['PME_OPTIONS'] = array(
       'NAME' => array_keys($options),
       'LABEL' => array_values($options)
