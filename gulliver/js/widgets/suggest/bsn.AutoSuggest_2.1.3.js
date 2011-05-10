@@ -391,7 +391,7 @@ _b.AutoSuggest.prototype.createList = function(arr)
 	div.style.left 		= pos.x + "px";
 	div.style.top 		= ( pos.y + this.fld.offsetHeight + this.oP.offsety ) + "px";
 	div.style.width 	= this.fld.offsetWidth + "px";
-
+  div.style.height  = 250;
 	// set mouseover functions for div
 	// when mouse pointer leaves div, set a timeout to remove the list after an interval
 	// when mouse enters div, kill the timeout so the list won't be removed
