@@ -184,8 +184,9 @@ class headPublisher {
     }
     if ($this->disableHeaderScripts)
       return '';
-      
+    $this->addScriptFile ( "/js/widgets/js-calendar/unicode-letter.js" );      
     $this->addScriptFile ( "/js/widgets/js-calendar/lang/" . SYS_LANG . ".js" );
+
     
     $head = '';
     $head .= '<TITLE>' . $this->title . "</TITLE>\n";
