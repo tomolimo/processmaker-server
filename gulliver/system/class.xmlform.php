@@ -3314,6 +3314,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         } else {
           $id   = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
           $html = $this->__draw_widget ( $id, $v, $owner );
+          $html = '<div style="white-space:nowrap;">' . $html . '</div>';
         }
       } else {
         $html = $v;
