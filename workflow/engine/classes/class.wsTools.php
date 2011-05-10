@@ -387,7 +387,7 @@ class workspaceTools {
    * @param   bool $checkOnly only check if the upgrade is needed if true
    * @param  string $lang not currently used
    */
-  public function upgradeCacheView() {
+  public function upgradeCacheView($fill = true) {
     $this->initPropel(true);
 
     $lang = "en";
@@ -428,14 +428,16 @@ class workspaceTools {
     $triggers[] = $appCache->triggerApplicationUpdate($lang, $checkOnly);
     $triggers[] = $appCache->triggerApplicationDelete($lang, $checkOnly);
 
-    CLI::logging("-> Filling cache view\n");
-    //build using the method in AppCacheView Class
-    $res = $appCache->fillAppCacheView($lang);
-    //set status in config table
-    $confParams = Array(
-      'LANG' => $lang,
-      'STATUS'=> 'active'
-    );        
+    if ($fill) {
+      CLI::logging("-> Filling cache view\n");
+      //build using the method in AppCacheView Class
+      $res = $appCache->fillAppCacheView($lang);
+      //set status in config table
+      $confParams = Array(
+        'LANG' => $lang,
+        'STATUS'=> 'active'
+      );
+    }
     $oConf->aConfig = $confParams;
     $oConf->saveConfig('APP_CACHE_VIEW_ENGINE', '', '', '');
 
@@ -890,9 +892,9 @@ class workspaceTools {
   }
 
   static public function dirPerms($filename, $owner, $group, $perms) {
-    $chown = chown($filename, $owner);
-    $chgrp = chgrp($filename, $group);
-    $chmod = chmod($filename, $perms);
+    $chown = @chown($filename, $owner);
+    $chgrp = @chgrp($filename, $group);
+    $chmod = @chmod($filename, $perms);
     if ($chgrp === false || $chmod === false || $chown === false)
       CLI::logging (CLI::error ("Failed to set permissions for $filename") . "\n");
     if (is_dir($filename)) {
@@ -1001,6 +1003,8 @@ class workspaceTools {
         $workspace->createDBUser($dbName, $db->pass, "localhost", $dbName);
         $workspace->createDBUser($dbName, $db->pass, "%", $dbName);
       }
+      
+      $workspace->upgradeCacheView(false);
 
       mysql_close($link);
 
