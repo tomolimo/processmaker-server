@@ -33,7 +33,7 @@
 </WE_USR>
 
 <subtitle2 type="subtitle">
-  <en><![CDATA[PHP & Web Service options]]></en>
+  <en><![CDATA[User]]></en>
 </subtitle2>
 <WS_USER type="text" defaultvalue="" mode="edit" options="Array">
   <en>Web Service User</en>
