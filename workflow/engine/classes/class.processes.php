@@ -3321,6 +3321,9 @@ class Processes {
       throw ( new Exception ("File $newfilename not opened") );
     }
 
+    if (!function_exists('curl_init')){
+      throw ( new Exception (G::LoadTranslation('ID_CURLFUN_ISUNDEFINED')) );die();
+    }
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_FILE, $out);
