@@ -739,7 +739,7 @@ Ext.onReady(function(){
 			  columns: [
 				    { id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
 				    { header : "First Name", dataIndex : 'USR_FIRSTNAME', sortable : true, width: 130, align:'center'},
-				    { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center', }		      
+				    { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }		      
 				  ]
 			});
 
