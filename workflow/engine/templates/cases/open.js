@@ -712,111 +712,109 @@ Ext.onReady(function(){
 
 	/*-----added by krlos------------*/
   Actions.adhocAssignmentUsers = function()
-	{
-	  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-		Ext.QuickTips.init();
-		store = new Ext.data.GroupingStore( {
-		  proxy : new Ext.data.HttpProxy({
-		    url: '../adhocUserProxy/adhocAssignUsersk'//,
-				//method: 'POST'		    
-		  }),
-
-		  reader : new Ext.data.JsonReader( {
-		    root: 'data',
-		    fields : [
-		      {name : 'USR_UID'},
-		      {name : 'USR_FIRSTNAME'},
-		      {name : 'USR_LASTNAME'}
-		    ]
-		  }) 
-		});
+  {
+    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+    Ext.QuickTips.init();
+    store = new Ext.data.GroupingStore( {
+    proxy : new Ext.data.HttpProxy({
+      url   : '../adhocUserProxy/adhocAssignUsersk'
+     }),
+    reader : new Ext.data.JsonReader( {
+     root: 'data',
+     fields : [
+      {name : 'USR_UID'},
+      {name : 'USR_FIRSTNAME'},
+      {name : 'USR_LASTNAME'}
+      ]
+    })
+    });
 		
-		 cmk = new Ext.grid.ColumnModel({
-			  defaults: {
-			width: 40,
-			sortable: true
-			  },    
-			  columns: [
-				    { id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-				    { header : "First Name", dataIndex : 'USR_FIRSTNAME', sortable : true, width: 130, align:'center'},
-				    { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }		      
-				  ]
-			});
+    cmk = new Ext.grid.ColumnModel({
+     defaults: {
+      width: 40,
+      sortable: true
+      },    
+     columns: [
+      { id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+      { header : "First Name", dataIndex : 'USR_FIRSTNAME', sortable : true, width: 130, align:'center'},
+      { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }		      
+     ]
+    });
 
-		 pbark = new Ext.PagingToolbar({
-		    pageSize: 8,
-		    store: store,
-		    displayInfo: true,
-		    displayMsg: 'Displaying Users {0} - {1} of {2}',
-		    emptyMsg: "",
-        items:[]
-		});
+    pbark = new Ext.PagingToolbar({
+     pageSize: 8,
+     store: store,
+     displayInfo: true,
+     displayMsg: 'Displaying Users {0} - {1} of {2}',
+     emptyMsg: "",
+     items:[]
+    });
 
 		var adHocUserGrid = new Ext.grid.GridPanel( {
-		    region: 'center',
-		    layout: 'fit',
-		    id: 'adHocUserGrid',
-		    height:210,
-		    //autoWidth : true,
-		    width:'',
-		    title : '',
-		    stateful : true,
-		    stateId : 'grid',
-		    enableColumnResize: true,
-		    enableHdMenu: true,
-		    frame:false,          
-		    columnLines: true,      
-		     viewConfig: {
-			  forceFit:true
-			},
-		  cm: cmk,
-			store: store,
-			tbar:[{text:_('ID_ASSIGN'), iconCls: 'silk-add', icon: '/images/cases-selfservice.png', handler: assignAdHocUser}	],
-		  bbar: '',
-			listeners:{
-			  rowdblclick: assignAdHocUser
-			}
-		});
-	 
-		var w = new Ext.Window({
-		    	title: _('ID_ADHOC_ASSIGNMENT'),
-		      width: 500,
-		      height: 240,       
-		      resizable: false,
-		items: [ adHocUserGrid ],
-		id: 'w'
-		});    
+     region: 'center',
+     layout: 'fit',
+     id: 'adHocUserGrid',
+     height:210,
+     //autoWidth : true,
+     width:'',
+     title : '',
+     stateful : true,
+     stateId : 'grid',
+     enableColumnResize: true,
+     enableHdMenu: true,
+     frame:false,          
+     columnLines: true,      
+     viewConfig: {
+      forceFit:true
+     },
+     cm: cmk,
+     store: store,
+     tbar:[{text:_('ID_ASSIGN'), iconCls: 'silk-add', icon: '/images/cases-selfservice.png', handler: assignAdHocUser}	],
+     bbar: '',
+     listeners:{
+      rowdblclick: assignAdHocUser
+     }
+    });
+
+    var w = new Ext.Window({
+     title: _('ID_ADHOC_ASSIGNMENT'),
+     width: 500,
+     height: 240,       
+     resizable: false,
+     items: [ adHocUserGrid ],
+     id: 'w'
+    });    
     adHocUserGrid.store.load();
 		w.show();
 
-		function assignAdHocUser(){
-		 rowSelected = adHocUserGrid.getSelectionModel().getSelected();
-			PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_ADHOCUSER_CASE'), function(){
-		    var loadMask = new Ext.LoadMask(document.body, {msg:'Assignment case...'});
-		    loadMask.show();
-		    Ext.Ajax.request({
-		      url : '../adhocUserProxy/reassignCase' ,
-				  method: 'POST',
-		      params : {USR_UID: rowSelected.data.USR_UID, THETYPE: 'ADHOC'},
-		      success: function ( result, request ) {
-		        loadMask.hide();
-		        var data = Ext.util.JSON.decode(result.responseText);
-		        if( data.success ) {
-							CloseWindow();		          
-		          location.href = 'casesListExtJs';
-		        } else {
-		          PMExt.error(_('ID_ERROR'), data.msg);
-		        }
-		      },
-		      failure: function ( result, request) {
-		        Ext.MessageBox.alert('Failed', result.responseText);
-		      }
-		    });
-		   });
-		}   
+    function assignAdHocUser(){
+     rowSelected = adHocUserGrid.getSelectionModel().getSelected();
+     PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_ADHOCUSER_CASE'), function(){
+      var loadMask = new Ext.LoadMask(document.body, {msg:'Assignment case...'});
+      loadMask.show();
+      Ext.Ajax.request({
+       url : '../adhocUserProxy/reassignCase' ,
+       method: 'POST',
+       params : {USR_UID: rowSelected.data.USR_UID, THETYPE: 'ADHOC'},
+       success: function ( result, request ) {
+        loadMask.hide();
+        var data = Ext.util.JSON.decode(result.responseText);
+        if( data.success ) {
+         CloseWindow();		          
+         location.href = 'casesListExtJs';
+        } else {
+         PMExt.error(_('ID_ERROR'), data.msg);
+        }
+       },
+       failure: function ( result, request) {
+        Ext.MessageBox.alert('Failed', result.responseText);
+       }
+      });
+     });
+    }   
   }
-	CloseWindow = function(){
-  Ext.getCmp('w').hide();
+  CloseWindow = function(){
+   Ext.getCmp('w').hide();
   };
 	/*-----added by krlos end------------*/
 /*Date.prototype.dateFormat = function(format) {
