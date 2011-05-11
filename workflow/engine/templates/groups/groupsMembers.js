@@ -438,6 +438,7 @@ GridByDefaultP = function(){
 
 //edit members action
 EditMembersAction = function(){
+  assignedGrid.setWidth(Ext.getBody().getWidth(true));
   availableGrid.show();
   buttonsPanel.show();
   editMembersButton.disable();
