@@ -451,6 +451,7 @@ CancelEditMembersAction = function(){
   buttonsPanel.hide();
   editMembersButton.enable();
   MembersPanel.doLayout();
+  assignedGrid.setWidth(Ext.getBody().getWidth(true));
 };
 
 //Render Status
