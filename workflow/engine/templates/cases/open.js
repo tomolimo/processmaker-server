@@ -517,7 +517,7 @@ Ext.onReady(function(){
     curDate = _ENV_CURRENT_DATE.split('-');
     filterDate = curDate[0]+'-'+curDate[1]+'-';
     nDay = '' + (parseInt(curDate[2])+1);
-    nDay = nDay.length == 1 ? '0' + nDay : nday;
+    nDay = nDay.length == 1 ? '0' + nDay : nDay;
     filterDate += nDay;
     
     var fieldset = {
