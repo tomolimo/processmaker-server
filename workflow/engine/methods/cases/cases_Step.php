@@ -963,9 +963,9 @@
     //Add content content step - End
   }
   catch ( Exception $e ) {
-    G::SendTemporalMessage($e->getMessage(), 'error', 'string', 3, 100);
+    G::SendTemporalMessage(G::LoadTranslation('ID_PROCESS_DEF_PROBLEM'), 'error', 'string', 3, 100);
     $aMessage = array();
-    $aMessage['MESSAGE'] = G::LoadTranslation('ID_PROCESS_DEF_PROBLEM').'<br/>'.G::LoadTranslation('ID_CONTACT_ADMIN');
+    $aMessage['MESSAGE'] = $e->getMessage();
     $G_PUBLISH          = new Publisher;
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
     G::RenderPage( 'publish', 'blank' );

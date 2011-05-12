@@ -321,6 +321,7 @@ class Derivation
     else {
       $oCriteria = new Criteria();
       $oCriteria->add(UsersPeer::USR_UID, $aUsers);
+      var_dump(UsersPeer::doCount($oCriteria));
       if (UsersPeer::doCount($oCriteria) < 1) {
         return null;
       }
@@ -417,23 +418,17 @@ class Derivation
            $userFields['USR_LASTNAME']  = '';
            $userFields['USR_EMAIL']     = '';
 
-           //look for USR_REPORTS_TO to this user
+           //get the report_to user & its full info
            $useruid = $this->getDenpendentUser($tasInfo['USER_UID']);
-           if ( isset ( $useruid ) ) {
-             if ($useruid != '') {
-               $value = $useruid;
-               $userFields = $this->getUsersFullNameFromArray ($value);
-               if (is_null($userFields)) {
-                 //throw ( new Exception("The current user does not have a valid Reports To user.  Please contact administrator.") ) ;
-               }
-             }
-             else {
-               //throw ( new Exception("The current user does not have a valid Reports To user.  Please contact administrator.") ) ;
-             }
+           
+           if (isset($useruid) && $useruid != '') {
+             $userFields = $this->getUsersFullNameFromArray($useruid);
            }
-           else
-              $userFields = "ERROR";
-             //throw ( new Exception("The current user does not have a valid Reports To user.  Please contact administrator.") ) ;
+           
+           // if there is no report_to user info, throw an exception indicating this
+           if (!isset($userFields) || $userFields['USR_UID'] == '') {
+             throw ( new Exception("The current user does not have a valid Reports To user.  Please contact administrator.") ) ;
+           }
            break;
 
       case 'SELF_SERVICE' :
