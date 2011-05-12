@@ -299,128 +299,103 @@ class Form extends XmlForm
   {
     //$values = $this->values;
     $values = array();
-    foreach($this->fields as $k => $v){
+    foreach($this->fields as $k => $v){ //Buque 1
+      //echo $v->type.'<br>';
       if (($v->type != 'submit')) {
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
-            if ( is_array($newValues[$k]) ) {
-              if (($v->type == 'checkgroup') || ($v->type == 'listbox')) {
+            switch($v->type){
+              case 'checkgroup': case 'listbox':
                 $values[$k] = implode('|', $newValues[$k]);
-              } else {
+                break;
+              case 'dropdown':
+                if ($v->saveLabel == 1) {
+                  if(isset($v->options[$newValues[$k]])){
+                    $values[$k . '_label'] = $v->options[$newValues[$k]];
+                  }else{
+                    $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
+                    //we do the query to the external connection and we've got the label
+                    $con = Propel::getConnection($this->fields[$k]->sqlConnection);
+                    $stmt = $con->prepareStatement($query);
+                    $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                    while ($rs->next()){
+                      $row = $rs->getRow();
+                      $rowId      = $row['0'];
+                      $rowContent = $row['1'];
+                      if ($newValues[$k]==$rowId){
+                        $values[$k . '_label'] = $rowContent;
+                        break;
+                      }
+                    }
+                  }
+                }
+                break;
+              case 'grid':
                 foreach( $newValues[$k] as $j => $item ) {
                   if(is_array($item)){
                     $i=0;
-                    // the variable fieldIsSet checks if a dropdown label has been saved so the values cannot be rewritted again.
-                    $fieldIsSet = false;
+                    $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
                     foreach($item as $kk => $vv){
                       //we need to know which fields are dropdowns
                       if($this->fields[$k]->fields[$kk]->type == 'dropdown'){
                         if(($this->fields[$k]->fields[$kk]->saveLabel)==1){
+
                           if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
-                            // also we need to know if the $values array has dropdown labels added
-                            if(!$fieldIsSet) {
-                              $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
-                              if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
-                                $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                                $fieldIsSet = true;
-                              }else{
-                                $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
-                                $con = Propel::getConnection('workflow');
-                                $stmt = $con->prepareStatement($query);
-                                $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-                                while ($rs->next()){
-                                  // from the query executed we only need certain elements
-                                  $row = $rs->getRow();
-                                  $rowId      = $row['0'];
-                                  $rowContent = $row['1'];
-                                  if ($vv==$rowId){
-                                    $values[$k][$j][$kk. '_label'] = $rowContent;
-                                    $fieldIsSet = true;
-                                    break;
-                                  }
+                            if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
+                              $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
+                            }else{
+                              $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
+                              $con = Propel::getConnection('workflow');
+                              $stmt = $con->prepareStatement($query);
+                              $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                              while ($rs->next()){
+                                // from the query executed we only need certain elements
+                                $row = $rs->getRow();
+                                $rowId      = $row['0'];
+                                $rowContent = $row['1'];
+                                if ($vv==$rowId){
+                                  $values[$k][$j][$kk. '_label'] = $rowContent;
+                                  break;
                                 }
                               }
-                            } else {
-                              // if a dropdown label been set there is no need to load the default values.
-                              if(isset($this->fields[$k]->fields[$kk]->options[$vv]))
-                               $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
                             }
                           }
-                        }else{
+                        }/*else{
                           if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
                             // if there is a dropdown but with a savelabel set to 0 this checks if a previous dropdown has been setted
                             // so if its true then the $values cannot be rewritted
-                            if (!$fieldIsSet){
-                              $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );//print_r($values[$k][$j]);print'<hr>';
-                            }
+                            //$values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );//print_r($values[$k][$j]);print'<hr>';
                           }
-                        }
-                      } else {
-                        if (!$fieldIsSet){
-                          // if there are no dropdowns previously setted and the evaluated field is not a dropdown
-                          // only then rewritte the $values
-                          $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
-                        }
-                      }
+                        }*/
+                      }/* else {
+                        // if there are no dropdowns previously setted and the evaluated field is not a dropdown
+                        // only then rewritte the $values
+                        //$values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
+                      }*/
                       $i++;
                     }
-                  }else{
+                  }/*else{
                     if ($this->fields[$k]->validateValue($newValues[$k][$j], $this ))
-                      $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );//print_r($values[$k][$j]);print'<hr>';
-                  }
+                    $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );//print_r($values[$k][$j]);print'<hr>';
+                  }*/
                 }
-                if ((sizeof($values[$k])===1) && ($v->type!=='grid') && ($this->type!=='grid')){
-                  $values[$k] = $values[$k][0];
-                }
-                if (sizeof($values[$k])===0) 
-                  $values[$k] = '';
-              }
-            } else {
-              if ($this->fields[$k]->validateValue($newValues[$k], $this ))
+                break;
+              default:
+                if ($this->fields[$k]->validateValue($newValues[$k], $this ))
                 $values[$k] = $this->fields[$k]->maskValue( $newValues[$k], $this );
+
             }
-            if ($v->type == 'dropdown') {
-              if ($v->saveLabel == 1) {
-              	if(isset($v->option[$newValues[$k]])){
-                  $values[$k . '_label'] = $v->option[$newValues[$k]];
-              	}else{
-                  $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
-                  //we do the query to the external connection and we've got the label
-                  $con = Propel::getConnection($this->fields[$k]->sqlConnection);
-                  $stmt = $con->prepareStatement($query);
-                  $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-                  while ($rs->next()){
-                    $row = $rs->getRow();
-                    $rowId      = $row['0'];
-                    $rowContent = $row['1'];
-                    if ($newValues[$k]==$rowId){
-                      $values[$k . '_label'] = $rowContent;
-                      break;
-                    }
-                  }
-                }
-              }
-            }
+
           }
-        /*  else{
-            if ($v->type == 'checkbox') {
-              $values[$k]=$v->falseValue;
-            }
-            else {
-              if ($v->type != 'javascript' && $v->type !='title') {
-                $values[$k] = null;
-              }
-            }
-          }*/
         }
         else {
           if (isset($_FILES['form']['name'][$k])) {
             $values[$k] = $_FILES['form']['name'][$k];
           }
-          /** 
+          /**
            * FIXED for multiple inputs documents related to file type field
            * By Erik Amaru Ortiz <erik@colosa.com>
-           * Nov 24th, 2009 
+           * Nov 24th, 2009
            */
           if ( isset($v->input) && $v->input != ''){
             $_POST['INPUTS'][$k] = $v->input;
@@ -429,11 +404,12 @@ class Form extends XmlForm
         }
       }
     }
+
     foreach ($newValues as $k => $v) {
       if (strpos($k, 'SYS_GRID_AGGREGATE_') !== false) {
         $values[$k] = $v;
       }
-    }//die;
+    }
     return $values;
   }
   
