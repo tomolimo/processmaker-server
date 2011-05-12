@@ -40,7 +40,7 @@ $aTasks[] = array('TAS_UID'   => 'char', 'TAS_TITLE' => 'char');
 
 //g::pr($aAux1);die;
 foreach ($aAux1 as $aAux2) {
-  if ($aAux2['TAS_TYPE'] != 'SUBPROCESS' && $aAux2['TAS_START'] != 'TRUE') {
+  if ($aAux2['TAS_TYPE'] != 'SUBPROCESS') {
     $aTasks[] = array('TAS_UID'   => $aAux2['TAS_UID'], 'TAS_TITLE' => $aAux2['TAS_TITLE']);
   }
 }
