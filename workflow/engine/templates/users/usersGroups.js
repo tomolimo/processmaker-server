@@ -730,9 +730,9 @@ LoadSummary = function(){
       Ext.getCmp('lname').setText(user.userdata.USR_LASTNAME);
       Ext.getCmp('uname').setText(user.userdata.USR_USERNAME);
       Ext.getCmp('email').setText(user.userdata.USR_EMAIL);
-      Ext.getCmp('country').setText(user.userdata.USR_COUNTRY);
-      Ext.getCmp('state').setText(user.userdata.USR_CITY);
-      Ext.getCmp('location').setText(user.userdata.USR_LOCATION);
+      Ext.getCmp('country').setText(user.userdata.USR_COUNTRY_NAME);
+      Ext.getCmp('state').setText(user.userdata.USR_CITY_NAME);
+      Ext.getCmp('location').setText(user.userdata.USR_LOCATION_NAME);
       Ext.getCmp('role').setText(user.userdata.USR_ROLE);
       Ext.getCmp('address').setText(user.userdata.USR_ADDRESS);
       Ext.getCmp('phone').setText(user.userdata.USR_PHONE);
@@ -741,6 +741,7 @@ LoadSummary = function(){
       Ext.getCmp('status').setText(user.userdata.USR_STATUS);
       Ext.getCmp('replaced').setText(user.misc.REPLACED_NAME);
       Ext.getCmp('department').setText(user.misc.DEP_TITLE);
+      Ext.getCmp('position').setText(user.userdata.USR_POSITION);
 
       Ext.getCmp('inbox').setText(user.cases.to_do);
       Ext.getCmp('draft').setText(user.cases.draft);

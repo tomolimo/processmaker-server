@@ -56,7 +56,7 @@ $G_PUBLISH = new Publisher;
 G::LoadClass('configuration');
 $c = new Configurations();
 $configEnv = $c->getConfiguration('ENVIRONMENT_SETTINGS', '');
-$Config['fullNameFormat'] = isset($configEnv['format']) ? $configEnv['format'] : '@userName';
+$Config['fullNameFormat'] = isset($configEnv['format']) ? $configEnv['format'] : '@firstName @lastName (@userName)';
 
 require_once 'classes/model/Users.php';
 $oCriteria = new Criteria();

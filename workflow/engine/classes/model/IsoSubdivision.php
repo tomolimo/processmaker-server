@@ -39,5 +39,28 @@ require_once 'classes/model/om/BaseIsoSubdivision.php';
  * @package    workflow.engine.classes.model
  */
 class IsoSubdivision extends BaseIsoSubdivision {
+  function findById($IC_UID, $IS_UID){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(IsoSubdivisionPeer::IC_UID);
+    $oCriteria->addSelectColumn(IsoSubdivisionPeer::IS_UID);
+    $oCriteria->addSelectColumn(IsoSubdivisionPeer::IS_NAME);
+    $oCriteria->add(IsoSubdivisionPeer::IC_UID, $IC_UID);
+    $oCriteria->add(IsoSubdivisionPeer::IS_UID, $IS_UID);
+    $oDataset = IsoSubdivisionPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    return $oDataset->getRow();
+  }
 
+  function findByIcName($IS_NAME){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(IsoSubdivisionPeer::IC_UID);
+    $oCriteria->addSelectColumn(IsoSubdivisionPeer::IS_UID);
+    $oCriteria->addSelectColumn(IsoSubdivisionPeer::IS_NAME);
+    $oCriteria->add(IsoSubdivisionPeer::IS_NAME, $IS_UID);
+    $oDataset = IsoSubdivisionPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    return $oDataset->getRow();
+  }
 } // IsoSubdivision

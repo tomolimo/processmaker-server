@@ -425,7 +425,8 @@ try {
        require_once 'classes/model/AppCacheView.php';
        G::LoadClass('configuration');
        $oUser = new Users();
-       $data = $oUser->load($_REQUEST['USR_UID']);
+       // $data = $oUser->load($_REQUEST['USR_UID']);
+       $data = $oUser->loadDetailed($_REQUEST['USR_UID']);
        $oAppCache = new AppCacheView();
        $aTypes = Array();
       $aTypes['to_do']       = 'CASES_INBOX';

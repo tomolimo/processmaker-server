@@ -39,7 +39,35 @@ require_once 'classes/model/om/BaseIsoLocation.php';
  * @package    workflow.engine.classes.model
  */
 class IsoLocation extends BaseIsoLocation {
-    
+
+  function findById($IC_UID, $IS_UID, $IL_UID){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(IsoLocationPeer::IC_UID);
+    $oCriteria->addSelectColumn(IsoLocationPeer::IS_UID);
+    $oCriteria->addSelectColumn(IsoLocationPeer::IL_UID);
+    $oCriteria->addSelectColumn(IsoLocationPeer::IL_NAME);
+    $oCriteria->add(IsoLocationPeer::IC_UID, $IC_UID);
+    $oCriteria->add(IsoLocationPeer::IS_UID, $IS_UID);
+    $oCriteria->add(IsoLocationPeer::IL_UID, $IL_UID);
+    $oDataset = IsoLocationPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    return $oDataset->getRow();
+  }
+
+  function findByIcName($IL_NAME){
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(IsoLocationPeer::IC_UID);
+    $oCriteria->addSelectColumn(IsoLocationPeer::IS_UID);
+    $oCriteria->addSelectColumn(IsoLocationPeer::IL_UID);
+    $oCriteria->addSelectColumn(IsoLocationPeer::IL_NAME);
+    $oCriteria->add(IsoLocationPeer::IL_NAME, $IL_NAME);
+    $oDataset = IsoLocationPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    return $oDataset->getRow();
+  }
+
     function getAllRowsLike($word)
     {
         try {   
