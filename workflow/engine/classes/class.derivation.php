@@ -321,7 +321,7 @@ class Derivation
     else {
       $oCriteria = new Criteria();
       $oCriteria->add(UsersPeer::USR_UID, $aUsers);
-      var_dump(UsersPeer::doCount($oCriteria));
+      
       if (UsersPeer::doCount($oCriteria) < 1) {
         return null;
       }
