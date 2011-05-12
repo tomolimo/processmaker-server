@@ -44,12 +44,12 @@ else {
 
 
 $oTasks   = new Tasks();
-$aAux1    = $oTasks->getAllTasks($aFields['PRO_UID']);
+$aAux1    = $oTasks->getAllTaskstoEvents($aFields['PRO_UID']);
 $aTasks   = array();
 $aTasks[] = array('TAS_UID'   => 'char',
       	          'TAS_TITLE' => 'char');
 foreach ($aAux1 as $aAux2) {
-  if ($aAux2['TAS_TYPE'] != 'SUBPROCESS' && $aAux2['TAS_START'] != 'TRUE') {
+  if ($aAux2['TAS_TYPE'] != 'SUBPROCESS') {
     $aTasks[] = array('TAS_UID'   => $aAux2['TAS_UID'], 'TAS_TITLE' => $aAux2['TAS_TITLE']);
   }
 }
