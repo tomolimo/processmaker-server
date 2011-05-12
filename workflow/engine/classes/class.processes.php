@@ -3322,7 +3322,9 @@ class Processes {
     }
 
     if (!function_exists('curl_init')){
-      throw ( new Exception (G::LoadTranslation('ID_CURLFUN_ISUNDEFINED')) );die();
+      G::SendTemporalMessage ('ID_CURLFUN_ISUNDEFINED', "warning",'LABEL','','100%','');
+      G::header('location: ../processes/processes_Library');
+      die();
     }
     $ch = curl_init();
 
