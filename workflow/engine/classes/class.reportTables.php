@@ -141,7 +141,7 @@ class ReportTables
                 $sQuery .= '`' . $aField['sFieldName'] . '` ' . $this->aDef['mysql'][$aField['sType']] . " ,";
                 break;
               case 'date':
-                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $this->aDef['mysql'][$aField['sType']] . " NOT NULL DEFAULT '0000-00-00 00:00:00',";
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $this->aDef['mysql'][$aField['sType']] . " NULL,";
                 break;
             }
           }
@@ -251,7 +251,8 @@ class ReportTables
                     $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? mysql_real_escape_string($aData[$aField['sFieldName']]) : '') . "'";
                     break;
                   case 'date':
-                    $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? $aData[$aField['sFieldName']] : '') . "'";
+                    $value = (isset($aData[$aField['sFieldName']]) && trim($aData[$aField['sFieldName']])) != '' ? "'" . $aData[$aField['sFieldName']] . "'" : 'NULL';
+                    $sQuery .= "," . $value;
                     break;
                 }
               }
@@ -280,7 +281,8 @@ class ReportTables
                         $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
                         break;
                       case 'date':
-                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? $aGridRow[$aField['sFieldName']] : '') . "'";
+                        $value = (isset($aGridRow[$aField['sFieldName']]) && trim($aGridRow[$aField['sFieldName']])) != '' ? "'" . $aGridRow[$aField['sFieldName']] . "'" : 'NULL';
+                        $sQuery .= "," . $value;
                         break;
                     }
                   }
