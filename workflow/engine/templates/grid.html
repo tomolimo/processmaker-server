@@ -35,7 +35,7 @@
       <td class='GridLabel'> {$smarty.section.row.index+1} </td>
 {/literal}
 {foreach from=$form->fields item=field}
-      <td style="">{$field->field}</td>
+      <td style="white-space:nowrap;">{$field->field}</td>
 {/foreach}
 {if $form->deleteRow == '1' }
       <td align="center"><A class="GridLink" href="#" onclick="form_{$form->owner->id}.getElementByName('{$form->name}').deleteGridRow('[{literal}{$smarty.section.row.index+1}{/literal}]');return false;">{$form->DeleteLabel}</A>&nbsp;</td>
