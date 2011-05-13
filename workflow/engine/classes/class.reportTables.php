@@ -603,7 +603,8 @@ class ReportTables
                       $mysqlDate = str_replace('/', '-', $mysqlDate);
                       $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
                     }
-                    $sQuery .= "'" . $mysqlDate . "',";
+                    $value = trim($mysqlDate) != '' ? "'".$mysqlDate."'" : 'NULL'; 
+                    $sQuery .= $value . ",";
                   break;
                 }
               }
@@ -635,7 +636,8 @@ class ReportTables
                       $mysqlDate = str_replace( '/', '-', $mysqlDate );
                       $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
                     }
-                    $sQuery .= ",'" . $mysqlDate  . "'";
+                    $value = trim($mysqlDate) != '' ? "'".$mysqlDate."'" : 'NULL'; 
+                    $sQuery .= "," . $value;
                     break;
                 }
               }
