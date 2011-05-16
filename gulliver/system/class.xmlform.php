@@ -3547,7 +3547,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
    // $navegador = get_browser();
  //  print($navegador);
     if($this->hint){
-      if(!(function_exists('brosername'))){
+      if(!(function_exists('browsername'))){
     	function browsername($user_agent) {
       $browsers = array(
            'Opera' => 'Opera',
