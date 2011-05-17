@@ -297,10 +297,9 @@ class Form extends XmlForm
    */
   function validateArray($newValues)
   {
-    //$values = $this->values;
     $values = array();
-    foreach($this->fields as $k => $v){ //Buque 1
-      //echo $v->type.'<br>';
+    foreach($this->fields as $k => $v) {
+      
       if (($v->type != 'submit')) {
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
@@ -309,6 +308,8 @@ class Form extends XmlForm
                 $values[$k] = implode('|', $newValues[$k]);
                 break;
               case 'dropdown':
+                $values[$k] = $newValues[$k];
+                
                 if ($v->saveLabel == 1) {
                   if(isset($v->options[$newValues[$k]])){
                     $values[$k . '_label'] = $v->options[$newValues[$k]];
@@ -336,14 +337,17 @@ class Form extends XmlForm
                     $i=0;
                     $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
                     foreach($item as $kk => $vv){
+                      
                       //we need to know which fields are dropdowns
-                      if($this->fields[$k]->fields[$kk]->type == 'dropdown'){
-                        if(($this->fields[$k]->fields[$kk]->saveLabel)==1){
-
+                      if($this->fields[$k]->fields[$kk]->type == 'dropdown') {
+                        $values[$k][$j] = $newValues[$k][$j];
+                        
+                        if(($this->fields[$k]->fields[$kk]->saveLabel) == 1) {
                           if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
                             if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
-                              $values[$k][$j][$kk. '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                            }else{
+                              $values[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
+                              $newValues[$k][$j][$kk . '_label'] = $values[$k][$j][$kk . '_label'];
+                            } else {
                               $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
                               $con = Propel::getConnection('workflow');
                               $stmt = $con->prepareStatement($query);
@@ -360,24 +364,17 @@ class Form extends XmlForm
                               }
                             }
                           }
-                        }/*else{
-                          if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
-                            // if there is a dropdown but with a savelabel set to 0 this checks if a previous dropdown has been setted
-                            // so if its true then the $values cannot be rewritted
-                            //$values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );//print_r($values[$k][$j]);print'<hr>';
-                          }
-                        }*/
-                      }/* else {
+                        }
+                      } else {
                         // if there are no dropdowns previously setted and the evaluated field is not a dropdown
                         // only then rewritte the $values
-                        //$values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
-                      }*/
+                        $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
+                      }
                       $i++;
                     }
-                  }/*else{
-                    if ($this->fields[$k]->validateValue($newValues[$k][$j], $this ))
-                    $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );//print_r($values[$k][$j]);print'<hr>';
-                  }*/
+                  } else {
+                    $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
+                  }
                 }
                 break;
               default:
@@ -405,6 +402,7 @@ class Form extends XmlForm
       }
     }
 
+    
     foreach ($newValues as $k => $v) {
       if (strpos($k, 'SYS_GRID_AGGREGATE_') !== false) {
         $values[$k] = $v;
