@@ -1267,24 +1267,62 @@ $output = $outputHeader.$output;
         $paths  = explode ( '/', $filename);
         $jsName = $paths[ count ($paths) -1 ];
         $output = '';
+        $cachePath = PATH_C . 'ExtJs' . PATH_SEP;
+        $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
         switch ( $jsName ) {
           case 'draw2d.js' :
-            $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/wz_jsgraphics.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/mootools.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/moocanvas.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/draw2d.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/pmos-common.js' ) );
+            $checksum = G::getCheckSum(array(
+              $pathJs . 'ext/wz_jsgraphics.js',
+              $pathJs . 'ext/mootools.js',
+              $pathJs . 'ext/moocanvas.js',
+              $pathJs . 'ext/pmos-common.js'
+            ));
+            
+            $cf = $cachePath . "ext-draw2d-cache.$checksum.js"; 
+            $cfStored = G::getCacheFileNameByPattern($cachePath, 'ext-draw2d-cache.*.js');
+            //error_log("draw2d.js ".$checksum ."==". $cfStored['checksum']);
+            if(is_file($cfStored['filename']) && $checksum == $cfStored['checksum']) {
+              $output = file_get_contents($cf);
+            } else {
+              if (is_file($cfStored['filename']))
+                @unlink($cfStored['filename']);
+              
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/wz_jsgraphics.js' ) );
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/mootools.js' ) );
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/moocanvas.js' ) );
+              $output .= file_get_contents ($pathJs . 'ext/draw2d.js'); //already minified
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/pmos-common.js' ) );
+              file_put_contents($cf, $output);
+              //error_log("draw2d.js writting ".$cf);
+            }
             break;
           case 'ext-all.js' :
-            $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ext-all.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/ux-all.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/miframe.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.statusbar/ext-statusbar.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
-            $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
+            $checksum = G::getCheckSum(array(
+              $pathJs . 'ext/ux/miframe.js',
+              $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js',
+              $pathJs . 'ext/ux.statusbar/ext-statusbar.js',
+              $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js'
+            ));
+            
+            $cfStored = G::getCacheFileNameByPattern($cachePath, 'ext-all-cache.*.js');
+            $cf = PATH_C . 'ExtJs' . PATH_SEP . "ext-all-cache.$checksum.js";
+            //error_log("drawext-all.js ".$checksum ."==". $cfStored['checksum']. '  '.$cfStored['filename']);
+            if(is_file($cfStored['filename']) && $checksum == $cfStored['checksum']) {
+              $output = file_get_contents($cf);
+            } else {
+              if (is_file($cfStored['filename']))
+                @unlink($cfStored['filename']);
+              
+              $output .= file_get_contents ( $pathJs . 'ext/ext-all.js' ); //already minified
+              $output .= file_get_contents ( $pathJs . 'ext/ux/ux-all.js' ); //already minified
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/miframe.js' ) );
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js' ) );
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.statusbar/ext-statusbar.js' ) );
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
+              
+              file_put_contents($cf, $output);
+              //error_log("draw2d.js writting ".$cf);
+            }
             break;
 
           case 'maborak.js' :
@@ -4410,6 +4448,39 @@ function getDirectorySize($path,$maxmtime=0)
   return $total;
 }
 
+  /**
+   * Get checksum from multiple files
+   * @author erik amaru ortiz <erik@colosa.com> 
+   */
+  function getCacheFileNameByPattern($path, $pattern) 
+  {
+    if ($file = glob($path . $pattern))
+      preg_match('/[a-f0-9]{32}/', $file[0], $match);
+    else 
+      $file[0] = '';
+    return array('filename'=>$file[0], 'checksum'=>(isset($match[0])? $match[0]: ''));
+  }
+
+
+  /**
+   * Get checksum from multiple files
+   * @author erik amaru ortiz <erik@colosa.com> 
+   */
+  function getCheckSum($files) 
+  { 
+    if (!is_array($files)) {
+      $tmp = $files;
+      $files = array();
+      $files[0] = $tmp;
+    }
+    
+    $checkSum = '';
+    foreach ($files as $file) {
+      if (is_file($file))
+        $checkSum .= md5_file($file);
+    }
+    return md5($checkSum);
+  }
 };
 
 /**
