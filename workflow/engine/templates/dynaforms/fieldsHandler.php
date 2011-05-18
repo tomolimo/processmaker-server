@@ -78,7 +78,7 @@
 	</td>
 	<td valign="top"><center>
 	
-		<div style="width:700px">
+		<div style="width:100%">
 		<div class="ui-widget-header ui-corner-all" style="height:17px">
 			<table border="0" width="100%" cellpadding="0" cellspacing="0">
 			  <td width="7%"><div style="font-size:9px; color:#fff;" align="left">&nbsp;<b><?php echo G::loadTranslation('ID_VISIBLE')?></b></div></td>
@@ -99,7 +99,7 @@
 					}
 				?>
 			<li style="list-style:none;" id="<?php echo $node_name?>" class="ui-state-default" onmouseover="setClass(this, 'ui-state-hover')" onmouseout="setClass(this, 'ui-state-default')">
-				<table class="dynalist" border="0" width="100%" cellpadding="0" cellspacing="0" id="fieldshandler_items_table">
+				<table class="dynalist" border="0" width="700px" cellpadding="0" cellspacing="0" id="fieldshandler_items_table">
 				<tr>
 					<td width="15px">
 						<?php if($node['__ATTRIBUTES__']['type'] != 'javascript' && $dynaformType != 'grid') {?>
