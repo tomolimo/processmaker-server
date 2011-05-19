@@ -304,8 +304,14 @@ class Form extends XmlForm
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
             switch($v->type){
-              case 'checkgroup': case 'listbox':
-                $values[$k] = implode('|', $newValues[$k]);
+              case 'checkgroup': 
+              case 'listbox':
+                if (count($newValues[$k]) > 1) {
+                  $values[$k] = implode('|', $newValues[$k]);
+                  $newValues[$k] = $values[$k];
+                } else {
+                  $values[$k] = $newValues[$k][0];
+                }
                 break;
               case 'dropdown':
                 $values[$k] = $newValues[$k];
@@ -459,6 +465,8 @@ class Form extends XmlForm
         }
       }
     }
+    g::dump($rFields);
+    g::dump($values);
     foreach($rFields as $field){
       #we verify if the requiered field is in array values,. t
       if (array_key_exists($field, $values)) {
