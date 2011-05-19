@@ -465,8 +465,7 @@ class Form extends XmlForm
         }
       }
     }
-    g::dump($rFields);
-    g::dump($values);
+
     foreach($rFields as $field){
       #we verify if the requiered field is in array values,. t
       if (array_key_exists($field, $values)) {
