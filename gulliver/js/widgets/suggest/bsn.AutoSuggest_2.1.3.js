@@ -471,7 +471,12 @@ _b.AutoSuggest.prototype.setHighlightedValue = function ()
 {
 	if (this.iHigh)
 	{
-		this.sInp = this.fld.value = this.aSug[ this.iHigh-1 ].value;
+		/**
+		 * @autor Erik Amaru Ortiz <erik@colosa.com>
+		 * This fix when a item on suggestion list have html wntities sent by json like &amp; 
+		 */
+		this.sInp = this.fld.value = html_entity_decode(this.aSug[ this.iHigh-1 ].value);;
+		//
 		
 		// move cursor to end of input (safari)
 		//
@@ -493,7 +498,7 @@ _b.AutoSuggest.prototype.setHighlightedValue2 = function ()
 {
 	if (this.iHigh)
 	{
-		this.sInp = this.fld.value = this.aSug[ this.iHigh-1 ].value;
+		this.sInp = this.fld.value = html_entity_decode(this.aSug[ this.iHigh-1 ].value);
 		
 		// move cursor to end of input (safari)
 		//
@@ -773,3 +778,23 @@ function storeEntry(o, cnn, table, pk, pkt, fld){
     } );
   }
 }
+
+function html_entity_decode( string, quote_style ) {  
+    var histogram = {}, symbol = '', tmp_str = '', entity = '';  
+    tmp_str = string.toString();  
+      
+    if (false === (histogram = get_html_translation_table('HTML_ENTITIES', quote_style))) {  
+        return false;  
+    }  
+  
+    // &amp; must be the last character when decoding!  
+    delete(histogram['&']);  
+    histogram['&'] = '&amp;';  
+  
+    for (symbol in histogram) {  
+        entity = histogram[symbol];  
+        tmp_str = tmp_str.split(entity).join(symbol);  
+    }  
+      
+    return tmp_str;
+} 

@@ -1153,7 +1153,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
         $setValue = ($this->savelabel == '1')? 'obj.value': 'obj.id';
 
-        $sOptions .= 'callback: function(obj){getField(\''.$this->name.'\').value='.$setValue.';'.$sCallBack.'; return false;}';
+        $sOptions .= 'callback: function(obj){'.$sCallBack.'; return false;}';
 
         $str .= '<script type="text/javascript">';
         $str .= 'var as_json = new bsn.AutoSuggest(\'form[' . $this->name . ']\', {'.$sOptions.'});';

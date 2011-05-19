@@ -127,9 +127,9 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   </en>
 </PME_PRIMARY_KEY_TYPE>
 
-<!--<PME_CALLBACK type="textarea" cols="40" rows="2">
-  <en>Javascript routine callback</en>
-</PME_CALLBACK>-->
+<PME_CALLBACK type="textarea" cols="40" rows="2">
+  <en>Javascript callback to execute by a selection</en>
+</PME_CALLBACK>
 
 <BTN_CANCEL type="button" onclick="cancel();">
   <en>Cancel</en>
