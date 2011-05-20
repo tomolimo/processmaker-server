@@ -174,7 +174,6 @@ var G_Grid = function(oForm, sGridName){
     if ((aux4.indexOf ('display:none') > 0) || (aux4.indexOf('display: none')>0)){
       sw_display = true;
     }
- 
     pTxt = txt.split('="');
     for (v=1; v < pTxt.length; v++){
       aux = pTxt[v];
@@ -235,11 +234,11 @@ var G_Grid = function(oForm, sGridName){
           break;
         default:
           eNodeName = aCells[i].innerHTML.substring(aCells[i].innerHTML.indexOf('<')+1, aCells[i].innerHTML.indexOf(' '));
-          eNodeName = eNodeName.toLowerCase();
-          switch(eNodeName){
-            case 'input':
-              aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
-              if (aObjects){
+        eNodeName = eNodeName.toLowerCase();
+        switch(eNodeName){
+          case 'input':
+            aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
+            if (aObjects){
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
               aObjects[0].id = newID;
               aObjects[0].name = newID;
@@ -249,53 +248,61 @@ var G_Grid = function(oForm, sGridName){
               }else{
                 defaultValue = '';
               }
-              switch(aObjects[0].type){
-                case 'text': //TEXTBOX, CURRENCY, PERCENTAGE, DATEPICKER
-                  tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
-                  if (tags.length == 2){ //DATEPICKER
-                    //Copy Images
-                    img1 = tags[0].innerHTML;
-                    img2 = tags[1].innerHTML;
-                    //Create new trigger name
-                    var datePickerTriggerId = tags[1].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
-                    //Remove 'a' tag for date picker trigger 
-                    oNewRow.getElementsByTagName('td')[i].removeChild(tags[1]);
-                    //Capture Script and remove
-                    scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                    oNewRow.getElementsByTagName('td')[i].removeChild(scriptTags[0]);
-                    //Create 'a' to remove Date
-                    if (tags[0].onclick){
-                      var onclickevn = new String(tags[0].onclick);
-                      eval('tags[0].onclick = ' + onclickevn.replace(/\[1\]/g, '\[' + currentRow + '\]') + ';');
-                    }
-                    //Create new 'a' to trigger DatePicker
-                    var a2 = document.createElement('a');
-                    a2.id = datePickerTriggerId;
-                    a2.innerHTML = img2;
-                    oNewRow.getElementsByTagName('td')[i].appendChild(a2);
-                    //Load DatePicker Trigger
-                    datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
-                    aObjects[0].value = defaultValue;
-                  }else{
-                    if (_BROWSER.name == 'msie'){ //Clone new input element if browser is IE
-                      oNewOBJ = this.cloneInput(aObjects[0]);
-                      oNewOBJ.value = defaultValue;
-                      parentGG = aObjects[0].parentNode;
-                      parentGG.removeChild(aObjects[0]);
-                      parentGG.appendChild(oNewOBJ);
+              for(n=0; n < aObjects.length; n++){
+                switch(aObjects[n].type){
+                  case 'text': //TEXTBOX, CURRENCY, PERCENTAGE, DATEPICKER
+                    tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
+                    if (tags.length == 2){ //DATEPICKER
+                      //Copy Images
+                      img1 = tags[0].innerHTML;
+                      img2 = tags[1].innerHTML;
+                      //Create new trigger name
+                      var datePickerTriggerId = tags[1].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
+                      //Remove 'a' tag for date picker trigger 
+                      oNewRow.getElementsByTagName('td')[i].removeChild(tags[1]);
+                      //Capture Script and remove
+                      scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                      oNewRow.getElementsByTagName('td')[i].removeChild(scriptTags[0]);
+                      //Create 'a' to remove Date
+                      if (tags[0].onclick){
+                        var onclickevn = new String(tags[0].onclick);
+                        eval('tags[0].onclick = ' + onclickevn.replace(/\[1\]/g, '\[' + currentRow + '\]') + ';');
+                      }
+                      //Create new 'a' to trigger DatePicker
+                      var a2 = document.createElement('a');
+                      a2.id = datePickerTriggerId;
+                      a2.innerHTML = img2;
+                      oNewRow.getElementsByTagName('td')[i].appendChild(a2);
+                      //Load DatePicker Trigger
+                      datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
+                      aObjects[n].value = defaultValue;
                     }else{
-                      aObjects[0].value = defaultValue;
+                      if (_BROWSER.name == 'msie' && aObjects.length==1){ //Clone new input element if browser is IE
+                        oNewOBJ = this.cloneInput(aObjects[n]);
+                        oNewOBJ.value = defaultValue;
+                        parentGG = aObjects[n].parentNode;
+                        parentGG.removeChild(aObjects[n]);
+                        parentGG.appendChild(oNewOBJ);
+                      }else{
+                        aObjects[n].value = defaultValue;
+                      }
                     }
-                  }
-                  break;
-                case 'checkbox': //CHECKBOX
-                  aObjects[0].checked = false;
-                  aObjects[0].value = defaultValue;
-                  break;
-                case 'hidden': //HIDDEN
-                  if ((attributes.gridtype != 'yesno' && attributes.gridtype != 'dropdown') || typeof attributes.gridtype == 'undefined')
-                    aObjects[0].value = defaultValue;
-                  break;
+                    break;
+                  case 'checkbox': //CHECKBOX
+                    aObjects[n].checked = false;
+                    aObjects[n].value = defaultValue;
+                    break;
+                  case 'hidden': //HIDDEN
+                    if ((attributes.gridtype != 'yesno' && attributes.gridtype != 'dropdown') || typeof attributes.gridtype == 'undefined')
+                      aObjects[n].value = defaultValue;
+                    break;
+                  case 'button':
+                    if (aObjects[n].onclick){
+                        var onclickevn = new String(aObjects[n].onclick);
+                        eval('aObjects[n].onclick = ' + onclickevn.replace(/\[1\]/g, '\[' + currentRow + '\]') + ';');
+                    }
+                    break;
+                }
               }
             }
             aObjects = null;
