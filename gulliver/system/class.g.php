@@ -1267,10 +1267,10 @@ $output = $outputHeader.$output;
         $paths  = explode ( '/', $filename);
         $jsName = $paths[ count ($paths) -1 ];
         $output = '';
-        $cachePath = PATH_C . 'ExtJs' . PATH_SEP;
         $pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
         switch ( $jsName ) {
           case 'draw2d.js' :
+            $cachePath = PATH_C . 'ExtJs' . PATH_SEP;
             $checksum = G::getCheckSum(array(
               $pathJs . 'ext/wz_jsgraphics.js',
               $pathJs . 'ext/mootools.js',
@@ -1297,6 +1297,7 @@ $output = $outputHeader.$output;
             }
             break;
           case 'ext-all.js' :
+            $cachePath = PATH_C . 'ExtJs' . PATH_SEP;
             $checksum = G::getCheckSum(array(
               $pathJs . 'ext/ux/miframe.js',
               $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js',
@@ -1306,7 +1307,6 @@ $output = $outputHeader.$output;
             
             $cfStored = G::getCacheFileNameByPattern($cachePath, 'ext-all-cache.*.js');
             $cf = PATH_C . 'ExtJs' . PATH_SEP . "ext-all-cache.$checksum.js";
-            //error_log("drawext-all.js ".$checksum ."==". $cfStored['checksum']. '  '.$cfStored['filename']);
             if(is_file($cfStored['filename']) && $checksum == $cfStored['checksum']) {
               $output = file_get_contents($cf);
             } else {
@@ -1321,7 +1321,6 @@ $output = $outputHeader.$output;
               $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
               
               file_put_contents($cf, $output);
-              //error_log("draw2d.js writting ".$cf);
             }
             break;
 
