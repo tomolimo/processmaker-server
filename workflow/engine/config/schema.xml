@@ -17,7 +17,7 @@
       <parameter name="Update_time" value="2007-12-09 14:08:22"/>
       <parameter name="Check_time" value=""/>
       <parameter name="Collation" value="utf8_general_ci"/>
-      <parameter name="Checksum" value=""/>
+      <parameter name="Checksum" value=""/> 
       <parameter name="Create_options" value=""/>
       <parameter name="Comment" value="The application"/>
     </vendor>

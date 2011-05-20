@@ -42,8 +42,8 @@ class MssqlPlatform extends DefaultPlatform {
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::INTEGER, "INT"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::BOOLEAN, "INT"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::DOUBLE, "FLOAT"));
-		$this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, "NTEXT"));
-		$this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, "NTEXT"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARCHAR, "NVARCHAR(MAX)"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::CLOB, "NVARCHAR(MAX)"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::DATE, "CHAR(19)"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::BU_DATE, "CHAR(19)"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::TIME, "CHAR(19)"));
@@ -53,7 +53,7 @@ class MssqlPlatform extends DefaultPlatform {
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::VARBINARY, "IMAGE"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::LONGVARBINARY, "IMAGE"));
 		$this->setSchemaDomainMapping(new Domain(PropelTypes::BLOB, "IMAGE"));
-		$this->setSchemaDomainMapping(new Domain(PropelTypes::VARCHAR, "NVARCHAR"));
+		$this->setSchemaDomainMapping(new Domain(PropelTypes::VARCHAR,  "VARCHAR"));
 	}
 
 /*

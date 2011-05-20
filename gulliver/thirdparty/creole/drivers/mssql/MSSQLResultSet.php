@@ -120,17 +120,17 @@ class MSSQLResultSet extends ResultSetCommon implements ResultSet {
                 return false;
              }          
         }
-        else {
-        	if (is_array($this->fields)) {
-        		foreach ($this->fields as $sKey => $sValue) {
-        			if (function_exists('mb_detect_encoding')) {
-        				if (strtoupper(mb_detect_encoding($sValue)) == 'UTF-8') {
-        					$this->fields[$sKey] = utf8_encode($sValue);
-        				}
-        			}
-        		}
-        	}
-        }
+        //else {
+        //	if (is_array($this->fields)) {
+        //		foreach ($this->fields as $sKey => $sValue) {
+        //			if (function_exists('mb_detect_encoding')) {
+        //				if (strtoupper(mb_detect_encoding($sValue)) == 'UTF-8') {
+        //					$this->fields[$sKey] = utf8_encode($sValue);
+        //				}
+        //			}
+        //		}
+        //	}
+        //}
         
         if ($this->fetchmode === ResultSet::FETCHMODE_ASSOC && $this->lowerAssocCase) {
             $this->fields = array_change_key_case($this->fields, CASE_LOWER);
