@@ -480,7 +480,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
                 $oPluginRegistry = &PMPluginRegistry::getSingleton();
                 if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect,SYS_SYS)) ){
                     $sCompanyLogo = $oPluginRegistry->getCompanyLogo($sFotoSelect);
-                    $sCompanyLogo= "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".G::encrypt($sCompanyLogo,"imagen");
+                    $sCompanyLogo= "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".G::encrypt(base64_decode($sCompanyLogo),"imagen");
                 }
                 else {
                     $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
