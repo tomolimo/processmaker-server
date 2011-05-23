@@ -15,9 +15,12 @@ $startingTime =  array_sum(explode(' ',microtime()));
   ini_set("default_charset", "UTF-8");
   ini_set("soap.wsdl_cache_enabled", "0");
   
-  define ('DEBUG_SQL_LOG', 0 );
-  define ('DEBUG_TIME_LOG', 0 );
-  define ('DEBUG_CALENDAR_LOG', 0 );
+  if (file_exists(dirname(__FILE__) . '/env.php'))
+    include dirname(__FILE__) . '/env.php';
+  
+  if (!defined('DEBUG_SQL_LOG'))      define ('DEBUG_SQL_LOG', 0 );
+  if (!defined('DEBUG_TIME_LOG'))     define ('DEBUG_TIME_LOG', 0 );
+  if (!defined('DEBUG_CALENDAR_LOG')) define ('DEBUG_CALENDAR_LOG', 0 );
 
 //*** process the $_POST with magic_quotes enabled
   function strip_slashes(&$vVar) {
