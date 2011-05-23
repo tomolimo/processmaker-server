@@ -4604,14 +4604,14 @@ class XmlForm_Field_Image extends XmlForm_Field
   //mask function to php
   function masktophp ($mask){
     $tmp = str_replace("%", "", $mask);
+    if(preg_match('/M/',$tmp)) {
+      $tmp = str_replace("M", "i", $tmp);
+    }
     if(preg_match('/b/',$tmp)) {
       $tmp = str_replace("b", "M", $tmp);
     }
     if(preg_match('/B/',$tmp)) {
       $tmp = str_replace("B", "F", $tmp);
-    }
-    if(preg_match('/M/',$tmp)) {
-      $tmp = str_replace("M", "i", $tmp);
     }
     if(preg_match('/S/',$tmp)) {
       $tmp = str_replace("S", "s", $tmp);
