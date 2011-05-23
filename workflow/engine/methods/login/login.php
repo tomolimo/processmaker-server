@@ -78,7 +78,7 @@
   //end log
 
   //start new session
-  session_destroy ();
+  @session_destroy ();
   session_start ();
   session_regenerate_id ();
   
