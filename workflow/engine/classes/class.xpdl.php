@@ -540,7 +540,7 @@ class Xpdl extends processes
         }
         $activitySets.='
         <ActivitySet Id="'.$idTask.'" Name="'.$nameTask.'">';
-        if($row['PRO_UID'] != ''){
+        if($row['PRO_UID'] != '' && $row['PRO_UID'] != 0){
           $dataSubProcess= $this->serializeProcess($row['PRO_UID']);
           $data          = unserialize ($dataSubProcess);
           $tasks         = $data->tasks;
