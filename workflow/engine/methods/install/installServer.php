@@ -288,7 +288,7 @@ else if($action==="install")
     $logger->addChild($fileLog);
     $fileLog->log(" ** Starting installation ** ");
     $fileLog->log("Status: ".(($installError) ? 'FAILED':'SUCCESS'));
-    $displayLog->log("This log is also avaliable in $logFilename");
+    $displayLog->log("This log is also available in $logFilename");
   }
 
   $installArgs = (array)$dataClient;
