@@ -33,9 +33,9 @@ if( isset($request) ){
         $afieldSql = explode(",",$aSql[0]);  
 
         if(count($afieldSql)>1)
-          $SQL .= "where $afieldSql[1] like '". $_GET['input']."%'";
+          $SQL .= " where $afieldSql[1] like '". $_GET['input']."%'";
         else
-          $SQL .= "where $afieldSql[0] like '". $_GET['input']."%'";
+          $SQL .= " where $afieldSql[0] like '". $_GET['input']."%'";
         //add fixed
         $aRows = Array();
         try {
