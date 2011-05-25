@@ -47,7 +47,7 @@ try {//ini_set('display_errors','1');
    	  $oConf = new Configurations;
    	  $aConf = Array(
    	  	'WORKSPACE_LOGO_NAME' => SYS_SYS,
-   	  	'DEFAULT_LOGO_NAME'   =>  base64_encode($snameLogo)
+   	  	'DEFAULT_LOGO_NAME'   => $snameLogo
    	  );
    	  	
    	  $oConf->aConfig = $aConf;
