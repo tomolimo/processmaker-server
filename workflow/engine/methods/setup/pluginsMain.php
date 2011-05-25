@@ -33,7 +33,7 @@ $oHeadPublisher =& headPublisher::getSingleton();
     'ID_STATUS', 'ID_ACTIVATE', 'ID_DEACTIVATE',
     'ID_SELECT', 'ID_NO_SELECTION_WARNING', 'ID_MSG_REMOVE_PLUGIN',
     'ID_TITLE', 'ID_VERSION', 'ID_STATUS', 'ID_TITLE', 'ID_VERSION', 'ID_DESCRIPTION', 
-    'ID_STATUS', 'ID_PLUGIN_CANT_DELETE'
+    'ID_STATUS', 'ID_PLUGIN_CANT_DELETE', 'ID_XPDL_IMPORT'
   ));
   $oHeadPublisher->assign('TRANSLATIONS', $translations);
   G::RenderPage('publish', 'extJs');

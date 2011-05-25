@@ -233,7 +233,7 @@ Ext.onReady(function(){
         icon: '/images/import.gif',
         handler:importProcess
       },{
-        text:'Import XPDL',
+        text:TRANSLATIONS.ID_XPDL_IMPORT,
         iconCls: 'silk-add',
         icon: '/images/import.gif',
         handler:importXPDLProcess
