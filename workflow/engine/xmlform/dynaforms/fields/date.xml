@@ -54,10 +54,10 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 
 
 <PME_SUBTITLE3x type="subtitle" enableHTML="1">
-  <en><![CDATA[<b>Mask: </b>%Y=Year, %y=year (the two last digits at year), %m=Month, %d=Day]]></en>
+  <en><![CDATA[<b>Mask: </b>%Y=Year, %m=Month, %d=Day]]></en>
 </PME_SUBTITLE3x>
-<PME_SUBTITLE3xl type="link" enableHTML="1" onclick="masks(); return false;">
-  <en><![CDATA[+Masks]]></en>
+<PME_SUBTITLE3xl type="link" enableHTML="1" onclick="masks(event); return false;">
+  <en><![CDATA[Masks List]]></en>
 </PME_SUBTITLE3xl>
 <PME_MASK type="text" maxlength="50" size="30" defaultvalue="%Y-%m-%d">
   <en>Mask</en>
@@ -115,9 +115,27 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_ACCEPT>
 
 <PME_JS type="javascript"><![CDATA[
-function masks(){
-  popupWindow('Masks List' , '../dynaforms/datemask' , 400 , 370 );
+function masks(e){
+  oPanel = new leimnud.module.panel();
+  oPanel.options = {
+    size        : {w:400, h:370},
+    position    : {x:e.clientX, y:e.clientY-300, center:false},
+    title       : 'Masks List',
+    statusBar   : false,
+    control     : {resize:false,roll:false,drag:true},
+    fx          : {modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:true}
+  };
+  oPanel.make();
+  
+  var oRPC = new leimnud.module.rpc.xmlhttp({url : '../dynaforms/datemask'});
+  oRPC.callback = function(rpc) {
+    oPanel.addContent(rpc.xmlhttp.responseText);
+  }.extend(this);
+  oRPC.make();
+  
+  return false;
 }
+
 hideRowById('PME_READONLY');
 showRowById('PME_EDITABLE');
 hideRowById('PME_SHOWTIME');
