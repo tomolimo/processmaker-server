@@ -271,7 +271,7 @@ class workspaceTools {
    */
   public function upgradeTranslation($first = true) {
     $this->initPropel(true);
-    require('classes/model/Language.php');
+    require_once('classes/model/Language.php');
     G::LoadThirdParty('pear/json', 'class.json');
     foreach (System::listPoFiles() as $poFile) {
       $poName = basename($poFile);
