@@ -294,7 +294,7 @@ class Content extends BaseContent {
       while ( is_array ( $row ) ) {
         $content = ContentPeer::retrieveByPK( $row['CON_CATEGORY'], '', $row['CON_ID'], $lanId);
 
-        if( get_class($content) == 'Content' )
+        if( $content !== null )
           $content->delete();
         
         $result->next ();
