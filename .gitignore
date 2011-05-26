@@ -1,4 +1,3 @@
-.gitignore
 nbproject
 workflow/engine/config/paths_installed.php
 gulliver/thirdparty/html2ps_pdf/cache

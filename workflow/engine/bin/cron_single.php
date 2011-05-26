@@ -243,24 +243,29 @@ function executePlugins(){
   global $sFilter;
   if($sFilter!='' &&  strpos($sFilter, 'plugins') === false) return false;
 
-   $pathCronPlugins = PATH_CORE.'bin'.PATH_SEP.'plugins'.PATH_SEP;
-   if ($handle = opendir( $pathCronPlugins )) {
-       while ( false !== ($file = readdir($handle))) {
-	 if ( strpos($file, '.php',1) && is_file($pathCronPlugins . $file) ) {
+  $pathCronPlugins = PATH_CORE.'bin'.PATH_SEP.'plugins'.PATH_SEP;
+  
+  //erik: verify if the plugin dir exists
+  if (!is_dir($pathCronPlugins)) {
+    return false;
+  }
+  
+  if ($handle = opendir( $pathCronPlugins )) {
+    while ( false !== ($file = readdir($handle))) {
+      if ( strpos($file, '.php',1) && is_file($pathCronPlugins . $file) ) {
+        $filename  = str_replace('.php' , '', $file) ;
+        $className = $filename . 'ClassCron';
 
-            $filename  = str_replace('.php' , '', $file) ;
-            $className = $filename . 'ClassCron';
-
-            include_once ( $pathCronPlugins . $file );  //$filename. ".php"
-            $oPlugin = new $className();
-            if (method_exists($oPlugin, 'executeCron')) {
- 	      $oPlugin->executeCron();
-              setExecutionMessage("Executing Pentaho Reports Plugin");
-              setExecutionResultMessage('DONE');
- 	    }
-         }
-       }
-   }
+        include_once ( $pathCronPlugins . $file );  //$filename. ".php"
+        $oPlugin = new $className();
+        if (method_exists($oPlugin, 'executeCron')) {
+          $oPlugin->executeCron();
+          setExecutionMessage("Executing Pentaho Reports Plugin");
+          setExecutionResultMessage('DONE');
+        }
+      }
+    }
+  }
 }
 function calculateDuration() {
   global $sFilter;
