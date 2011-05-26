@@ -108,6 +108,9 @@ class MSSQLResultSet extends ResultSetCommon implements ResultSet {
             $this->afterLast();
             return false;
         }
+        if ($this->result === true ) {
+        	return false;
+        }
         
         $this->fields = mssql_fetch_array($this->result, $this->fetchmode);        
                 
