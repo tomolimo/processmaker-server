@@ -117,10 +117,12 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     $oDBConn = new DbConnections (); 
     $aDefaultConnections = array (
         array('DBS_UID'  => '',         'DBS_NAME' => ''),
+        array('DBS_UID'  => 'dbarray',  'DBS_NAME' => 'dbarray'),
         array('DBS_UID'  => 'workflow', 'DBS_NAME' => 'Workflow'),
         array('DBS_UID'  => 'rbac',     'DBS_NAME' => 'RBAC'),
         array('DBS_UID'  => 'rp',       'DBS_NAME' => 'REPORT')
     );
+
     $aDBConn = $oDBConn->getConnectionsProUid($proUid);
     $aDbConnections = array_merge($aDefaultConnections, $aDBConn );
     $_DBArray ['DB_CONNECTIONS'] = $aDbConnections;
