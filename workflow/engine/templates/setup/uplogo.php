@@ -90,7 +90,23 @@ try {
       closedir($handle);
     }
   }
-
+  function changeNamelogo($snameLogo){
+    $snameLogo = ereg_replace("[áàâãª]","a",$snameLogo);
+		$snameLogo = ereg_replace("[ÁÀÂÃ]","A",$snameLogo);
+		$snameLogo = ereg_replace("[ÍÌÎ]","I",$snameLogo);
+		$snameLogo = ereg_replace("[íìî]","i",$snameLogo);
+		$snameLogo = ereg_replace("[éèê]","e",$snameLogo);
+		$snameLogo = ereg_replace("[ÉÈÊ]","E",$snameLogo);
+		$snameLogo = ereg_replace("[óòôõº]","o",$snameLogo);
+		$snameLogo = ereg_replace("[ÓÒÔÕ]","O",$snameLogo);
+		$snameLogo = ereg_replace("[úùû]","u",$snameLogo);
+		$snameLogo = ereg_replace("[ÚÙÛ]","U",$snameLogo);
+		$snameLogo = str_replace("ç","c",$snameLogo);
+		$snameLogo = str_replace("Ç","C",$snameLogo);
+		$snameLogo = str_replace("[ñ]","n",$snameLogo);
+		$snameLogo = str_replace("[Ñ]","N",$snameLogo);
+   return ($snameLogo);
+  }
   // if we have at least one image we show the restore image 
   /*if($i>0) {
       $template->gotoBlock( "_ROOT" );
@@ -111,6 +127,7 @@ try {
     $tpnfile   = $formf['tmp_name']['LOGO_FILENAME'];
     $aMessage1 = array();
     $fileName = trim(str_replace(' ','_', $namefile));
+    $fileName = changeNamelogo($fileName);
     G::uploadFile( $tpnfile, $dir . '/', 'tmp'.$fileName );
     $error = false;
     try {
