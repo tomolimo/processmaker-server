@@ -50,7 +50,7 @@ if (!isset($_SESSION['PROCESS'])){
 }
 
 $oTasks   = new Tasks();
-$aAux1    = $oTasks->getAllTaskstoEvents($aFields['PRO_UID']);
+$aAux1    = $oTasks->getAllTasks($aFields['PRO_UID']);
 $aTasks   = array();
 $aTasks[] = array('TAS_UID'   => 'char',
       	          'TAS_TITLE' => 'char');
