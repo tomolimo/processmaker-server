@@ -228,14 +228,10 @@ class Language extends BaseLanguage {
           //erik: expresion to prevent and hable correctly dropdown values like -1, -2 etc.
           preg_match('/^([\w_]+)\s-\s([\w_]+)\s*-*\s*([\w\W]*)$/', $reference, $match);
           
-          
-         
           if( ! file_exists(PATH_XMLFORM . $xmlForm) ) {
-            echo 'file doesn\'t exist: ' . PATH_XMLFORM . $xmlForm;
+            $errorMsg .= 'file doesn\'t exist: ' . PATH_XMLFORM . $xmlForm . "\n";
             continue;
           }
-          
-          
           
           G::LoadSystem('dynaformhandler');
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
