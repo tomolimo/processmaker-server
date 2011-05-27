@@ -99,6 +99,7 @@ class XmlForm_Field_toolButton extends XmlForm_Field
   var $buttonStyle = '';
     /*$hoverMethod : back | switch*/
   var $hoverMethod='back';
+  var $class;
   
  /**
   * Prints the components of the toolBar
@@ -157,6 +158,10 @@ class XmlForm_Field_toolButton extends XmlForm_Field
         '<br/><img src="'.htmlentities( $url, ENT_QUOTES, 'utf-8').'"'.
         (($this->style)?' style="'.$this->style.'"':'').'/>';
         break;
+      case 'class':
+        $html='<div onmouseover=\'backImage(this,"url(/images/dynamicForm/hover.gif) no-repeat")\' onmouseout=\'backImage(this,"")\'  style="width:25px;height:25px;margin-bottom:3px">
+                 <div class="'.$this->class.'" title="'.strip_tags($this->label).'"/>
+               </div>';
     }
     return '<a class="toolButton" '.
     (($this->buttonStyle)?' style="'.$this->buttonStyle.'"':'').

@@ -184,9 +184,20 @@ class headPublisher {
     }
     if ($this->disableHeaderScripts)
       return '';
-    $this->addScriptFile ( "/js/widgets/js-calendar/unicode-letter.js" );      
-    $this->addScriptFile ( "/js/widgets/js-calendar/lang/" . SYS_LANG . ".js" );
 
+    // available js-calendar languages array 
+    $availableJsCalendarLang = array('ca', 'cn', 'cz', 'de', 'en', 'es', 'fr', 'it', 'jp', 'nl', 'pl', 'pt', 'ro', 'ru', 'sv');
+    
+    // get the system language without locale
+    $sysLang = explode('-', SYS_LANG);
+    $sysLang = $sysLang[0];
+    
+    // verify if the requested lang by the system is supported by js-calendar library, if not set english by default
+    $sysLang = in_array($sysLang, $availableJsCalendarLang) ? $sysLang : 'en'; 
+    
+    $this->addScriptFile ( "/js/widgets/js-calendar/unicode-letter.js" );
+    $this->addScriptFile ( "/js/widgets/js-calendar/lang/".$sysLang.".js" );
+    $this->addScriptFile ( "/js/widgets/js-calendar/lang/en.js" );
     
     $head = '';
     $head .= '<TITLE>' . $this->title . "</TITLE>\n";

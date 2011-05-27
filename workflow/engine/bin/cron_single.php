@@ -260,7 +260,7 @@ function executePlugins(){
         $oPlugin = new $className();
         if (method_exists($oPlugin, 'executeCron')) {
           $oPlugin->executeCron();
-          setExecutionMessage("Executing Pentaho Reports Plugin");
+          setExecutionMessage("Executing Plugins");
           setExecutionResultMessage('DONE');
         }
       }
