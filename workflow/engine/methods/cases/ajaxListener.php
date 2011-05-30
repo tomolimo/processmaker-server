@@ -61,7 +61,7 @@ class Ajax
       $option = Array(
         'id'     => $oMenu->Id[$i],
         'label'  => $oMenu->Labels[$i],
-        'action' => ($action!='STEPS' && $action!='ACTIONS' && $action!='INFO') ? $action : ''
+        'action' => $action       
       );
       
       switch($option['id']) {

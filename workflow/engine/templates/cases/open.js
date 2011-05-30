@@ -99,6 +99,22 @@ Ext.onReady(function(){
               }
               actionMenu.show();
               break;
+            
+            // custom menus from plugins or others
+            default:
+              var navPanel = Ext.getCmp('navPanel');
+              var tb = navPanel.getTopToolbar();
+
+              var menu = new Ext.Action({
+                id: data[i].id,
+                text: data[i].label,
+                handler: function(){
+                  eval(this._action);
+                },
+                _action: data[i].action.replace('javascript:', '').replace(';', '')                
+              });
+              
+              tb.add(menu);
           }
         }
       },
@@ -514,7 +530,7 @@ Ext.onReady(function(){
   
   Actions.setUnpauseCaseDate = function()
   {
-    curDate = _ENV_CURRENT_DATE.split('-');
+    curDate = _ENV_CURRENT_DATE_NO_FORMAT.split('-');
     filterDate = curDate[0]+'-'+curDate[1]+'-';
     nDay = '' + (parseInt(curDate[2])+1);
     nDay = nDay.length == 1 ? '0' + nDay : nDay;

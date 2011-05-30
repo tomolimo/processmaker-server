@@ -63,6 +63,8 @@
   $oHeadPublisher->assign('uri', $script . $uri);
   $oHeadPublisher->assign('_APP_NUM', $appNum);
   $oHeadPublisher->assign('_ENV_CURRENT_DATE', $conf->getSystemDate(date('Y-m-d')));
+  $oHeadPublisher->assign('_ENV_CURRENT_DATE_NO_FORMAT', date('Y-m-d'));
+
   G::RenderPage('publish', 'extJs');
 
 
