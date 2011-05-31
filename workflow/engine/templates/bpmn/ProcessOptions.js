@@ -1396,7 +1396,7 @@ ProcessOptions.prototype.addInputDoc= function(_5625)
   });
   
   inputDocForm = new Ext.FormPanel({
-    labelWidth: 100,
+    labelWidth: 10,
     autoWidth : true,
     height    : 380,
     monitorValid : true,
@@ -1887,7 +1887,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
           handler: function(){
               editor.stopEditing();
              Ext.Ajax.request({
-              url: '../outputdocs/outputdocs_Save.php',
+              url: 'outputdocs/outputdocs_Save.php',
               method: 'POST',
               params: {
                 OUT_DOC_UID: outputDocUID,
@@ -1971,7 +1971,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
     //deleting the selected input document
     PMExt.confirm(_('ID_CONFIRM'), _('ID_DELETE_OUTPUTDOCUMENT_CONFIRM'), function(){
                       Ext.Ajax.request({
-                        url   : '../outputdocs/outputdocs_Delete.php',
+                        url   : 'outputdocs/outputdocs_Delete.php',
                         method: 'POST',
                         params: {
                           OUT_DOC_UID        : ids
@@ -2375,9 +2375,9 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
               var sDestPath     = getForm.OUT_DOC_DESTINATION_PATH;
               var sTags         = getForm.OUT_DOC_TAGS;
           if(sDocUID == "")
-             {
+          {
             Ext.Ajax.request({
-                url   : '../outputdocs/outputdocs_Save.php',
+                url   : 'outputdocs/outputdocs_Save.php',
                 method: 'POST',
                 params:{
                     functions                : 'lookForNameOutput',
@@ -2388,7 +2388,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
                   if(response.responseText == "1")
                   {
                     Ext.Ajax.request({
-                        url   : '../outputdocs/outputdocs_Save.php',
+                        url   : 'outputdocs/outputdocs_Save.php',
                         method: 'POST',
                         params:{
                             functions                : '',
@@ -2426,7 +2426,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
        else
              {
            Ext.Ajax.request({
-                        url   : '../outputdocs/outputdocs_Save.php',
+                        url   : 'outputdocs/outputdocs_Save.php',
                         method: 'POST',
                         params:{
                             functions                : '',
@@ -2468,6 +2468,7 @@ ProcessOptions.prototype.addOutputDoc= function(_5625)
   var newOPWindow = new Ext.Window({
         title       : _('ID_OUTPUT_DOCUMENTS'),
         width       : 520,
+        closable    : false,
         defaults    :{autoScroll:true},
         height      : 470,
         minWidth    : 200,
