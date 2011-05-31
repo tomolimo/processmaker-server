@@ -303,7 +303,7 @@ class Form extends XmlForm
       if (($v->type != 'submit')) {
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
-            echo $v->type."<br>";
+            
             switch($v->type){
               case 'radiogroup':
                 $values[$k] = $newValues[$k];
