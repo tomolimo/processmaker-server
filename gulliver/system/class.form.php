@@ -303,40 +303,62 @@ class Form extends XmlForm
       if (($v->type != 'submit')) {
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
+            echo $v->type."<br>";
             switch($v->type){
-              case 'checkgroup': 
-              case 'listbox':
-                if (count($newValues[$k]) > 1) {
-                  $values[$k] = implode('|', $newValues[$k]);
-                  $newValues[$k] = $values[$k];
-                } else {
-                  $values[$k] = $newValues[$k][0];
-                }
-                break;
-              case 'dropdown':
+              case 'radiogroup':
                 $values[$k] = $newValues[$k];
-                
-                if ($v->saveLabel == 1) {
-                  if(isset($v->options[$newValues[$k]])){
-                    $values[$k . '_label'] = $v->options[$newValues[$k]];
-                  }else{
+                $values["{$k}_label"] = $newValues["{$k}_label"] = $v->options[$newValues[$k]];
+                break;
+
+              case 'checkgroup':
+              case 'listbox':
+                $values[$k] = '';
+                foreach ($newValues[$k] as $i => $value) {
+                  $values[$k] .= ($i != 0 ? '|': '') . $value;
+                  
+                  if (isset($v->options[$value])){
+                    $values["{$k}_label"] .= ($i != 0 ? '|': '') . $v->options[$value];
+                  } else {
                     $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
                     //we do the query to the external connection and we've got the label
                     $con = Propel::getConnection($this->fields[$k]->sqlConnection);
                     $stmt = $con->prepareStatement($query);
                     $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-                    while ($rs->next()){
-                      $row = $rs->getRow();
-                      $rowId      = $row['0'];
-                      $rowContent = $row['1'];
-                      if ($newValues[$k]==$rowId){
-                        $values[$k . '_label'] = $rowContent;
+                    
+                    while ($rs->next()) {
+                      list($rowId, $rowContent) = $rs->getRow();
+
+                      if ($value == $rowId){
+                        $values["{$k}_label"] .= ($i != 0 ? '|': '') . $rowContent;
                         break;
                       }
                     }
                   }
                 }
+                $newValues[$k] = $values["{$k}_label"];
                 break;
+
+              case 'dropdown':
+                $values[$k] = $newValues[$k];
+                
+                if (isset($v->options[$newValues[$k]])){
+                  $values["{$k}_label"] = $newValues["{$k}_label"] = $v->options[$newValues[$k]];
+                } else {
+                  $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
+                  //we do the query to the external connection and we've got the label
+                  $con = Propel::getConnection($this->fields[$k]->sqlConnection);
+                  $stmt = $con->prepareStatement($query);
+                  $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                  while ($rs->next()) {
+                    list($rowId, $rowContent) = $rs->getRow();
+                    if ($newValues[$k]==$rowId){
+                      $values["{$k}_label"] = $rowContent;
+                      break;
+                    }
+                  }
+                }
+                break;
+
               case 'grid':
                 foreach( $newValues[$k] as $j => $item ) {
                   if(is_array($item)){
@@ -348,25 +370,21 @@ class Form extends XmlForm
                       if($this->fields[$k]->fields[$kk]->type == 'dropdown') {
                         $values[$k][$j] = $newValues[$k][$j];
                         
-                        if(($this->fields[$k]->fields[$kk]->saveLabel) == 1) {
-                          if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
-                            if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
-                              $values[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                              $newValues[$k][$j][$kk . '_label'] = $values[$k][$j][$kk . '_label'];
-                            } else {
-                              $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
-                              $con = Propel::getConnection('workflow');
-                              $stmt = $con->prepareStatement($query);
-                              $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-                              while ($rs->next()){
-                                // from the query executed we only need certain elements
-                                $row = $rs->getRow();
-                                $rowId      = $row['0'];
-                                $rowContent = $row['1'];
-                                if ($vv==$rowId){
-                                  $values[$k][$j][$kk. '_label'] = $rowContent;
-                                  break;
-                                }
+                        if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
+                          if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
+                            $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
+                          } else {
+                            $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
+                            $con = Propel::getConnection('workflow');
+                            $stmt = $con->prepareStatement($query);
+                            $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                            while ($rs->next()){
+                              // from the query executed we only need certain elements
+                              list($rowId, $rowContent) = $rs->getRow();
+                              
+                              if ($vv==$rowId){
+                                $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk. '_label'] = $rowContent;
+                                break;
                               }
                             }
                           }
@@ -383,6 +401,7 @@ class Form extends XmlForm
                   }
                 }
                 break;
+              
               default:
                 if ($this->fields[$k]->validateValue($newValues[$k], $this ))
                 $values[$k] = $this->fields[$k]->maskValue( $newValues[$k], $this );
@@ -408,7 +427,6 @@ class Form extends XmlForm
       }
     }
 
-    
     foreach ($newValues as $k => $v) {
       if (strpos($k, 'SYS_GRID_AGGREGATE_') !== false) {
         $values[$k] = $v;

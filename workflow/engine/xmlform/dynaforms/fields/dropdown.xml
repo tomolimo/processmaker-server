@@ -35,9 +35,9 @@ select XMLNODE_NAME, XMLNODE_NAME AS NAME FROM dynaForm WHERE XMLNODE_NAME <> @@
 <PME_DEFAULTVALUE type="text" maxlength="50" size="49" defaultvalue="">
   <en>Default Value</en>
 </PME_DEFAULTVALUE>
-<PME_SAVELABEL type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
+<!--<PME_SAVELABEL type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
   <en>Save label of selected value in variable</en>
-</PME_SAVELABEL>
+</PME_SAVELABEL>-->
 
 <PME_HINT type="textarea" cols="47" rows="3">
   <en>Hint</en>
