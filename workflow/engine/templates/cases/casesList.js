@@ -564,16 +564,22 @@ Ext.onReady ( function() {
   });
 
   // ComboBox creation processValues
+  var resultTpl = new Ext.XTemplate(
+      '<tpl for="."><div class="x-combo-list-item" style="white-space:normal !important;">',
+          '<span> {APP_PRO_TITLE}</span>',
+      '</div></tpl>'
+  );
+    
   var comboProcess = new Ext.form.ComboBox({
-    width         : 180,
-    boxMaxWidth   : 180,
+    width         : 200,
+    boxMaxWidth   : 200,
     editable      : true,
     displayField  : 'APP_PRO_TITLE',
     valueField    : 'PRO_UID',
     forceSelection: false,
     emptyText: TRANSLATIONS.ID_EMPTY_PROCESSES,
     selectOnFocus: true,
-
+    tpl: resultTpl,
 
     typeAhead: true,
     mode: 'local',
