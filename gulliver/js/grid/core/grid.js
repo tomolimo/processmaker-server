@@ -324,16 +324,31 @@ var G_Grid = function(oForm, sGridName){
             aObjects = null;
             break;
           case 'select': //DROPDOWN 
+            var oNewSelect;
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('select');
             if (aObjects){
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
               aObjects[0].id = newID;
               aObjects[0].name = newID;
+              
+              oNewSelect = document.createElement(aObjects[0].tagName);
+              oNewSelect.id = newID;
+              oNewSelect.name = newID;
+              oNewSelect.setAttribute('class','module_app_input___gray');
+              
+              aAttributes = aObjects[0].attributes;
+              for (a=0; a < aAttributes.length; a++){
+                if (aAttributes[a].name.indexOf('pm:') != -1){
+                  oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
+                }
+              }
+              
               attributes = elementAttributesNS(aObjects[0], 'pm');
+              var MyAtt = attributes;
               if (attributes.defaultvalue != '' && typeof attributes.defaultvalue != 'undefined'){
                 defaultValue = attributes.defaultvalue;
                 //Set '' for Default Value when dropdown has dependent fields.
-                if (attributes.dependent == '1') defaultValue = '';
+                //if (attributes.dependent == '1') defaultValue = '';
               }else{
                 defaultValue = '';
               }
@@ -361,12 +376,14 @@ var G_Grid = function(oForm, sGridName){
                     oAux.options.add(oOption);
                   }
                 }
-                aObjects[0].innerHTML = ''; //Delete options
+                oNewSelect.innerHTML = ''; //Delete options
+                //aObjects[0].innerHTML = ''; //Delete options
                 for (var r =0; r < oAux.options.length; r++){
                   var xOption = document.createElement('OPTION');
                   xOption.value = oAux.options[r].value;
                   xOption.text = oAux.options[r].text;
-                  aObjects[0].options.add(xOption);
+                  //aObjects[0].options.add(xOption);
+                  oNewSelect.options.add(xOption);
                 }
               }else{
                 //Set Default Value if it's not a Dependent Field
@@ -381,7 +398,8 @@ var G_Grid = function(oForm, sGridName){
                     }
                     oAux.options.add(oOption);
                   }
-                  aObjects[0].innerHTML = ''; //Delete options
+                  //aObjects[0].innerHTML = ''; //Delete options
+                  oNewSelect.innerHTML = ''; //Delete options
                   for (var r =0; r < oAux.options.length; r++){
                     var xOption = document.createElement('OPTION');
                     xOption.value = oAux.options[r].value;
@@ -395,11 +413,15 @@ var G_Grid = function(oForm, sGridName){
                         xOption.setAttribute('selected','selected');
                       }
                     }
-                    aObjects[0].options.add(xOption);
+                    //aObjects[0].options.add(xOption);
+                    oNewSelect.options.add(xOption);
                   }
                 }
                 //TODO: Implement Default Value and Dependent Fields Trigger for grid dropdowns
               }
+              parentSelect = aObjects[0].parentNode;
+              parentSelect.removeChild(aObjects[0]);
+              parentSelect.appendChild(oNewSelect);
             }
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
             if (aObjects.length > 0){
@@ -445,6 +467,23 @@ var G_Grid = function(oForm, sGridName){
               this.avg(false, oAux);
               break;
           }
+        }
+      }
+    }
+    //Fire Update Dependent Fields for any item with dependentfields and not included in dependencie
+    var xIsDependentOf = [];
+    var exist = false;
+    for (i=0; i < this.aFields.length; i++){
+      oAux = this.getElementByName(currentRow, this.aFields[i].sFieldName);
+      if (oAux.dependentFields.length > 0){
+        exist = false;
+        for (m=0; m < xIsDependentOf.length; m++)
+          if (xIsDependentOf[m] == oAux.name) exist = true;
+        for (j=0; j < oAux.dependentFields.length; j++){
+          xIsDependentOf.push(oAux.dependentFields[j].name);
+        }
+        if (!exist){
+          oAux.updateDepententFields();
         }
       }
     }

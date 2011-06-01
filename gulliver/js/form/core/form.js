@@ -99,9 +99,10 @@ function G_Field ( form, element, name )
   };
   
   this.updateDepententFields=function(event) {
+    
     var tempValue;
     if (me.dependentFields.length===0) return true;
-    var fields=[],i,grid='',row=0;
+    var fields=[],Fields = [],i,grid='',row=0;
     for(i in me.dependentFields) {
       if (me.dependentFields[i].dependentOf) {
         for (var j = 0; j < me.dependentFields[i].dependentOf.length; j++) {
@@ -110,11 +111,34 @@ function G_Field ( form, element, name )
             var aAux  = oAux.name.split('][');
             grid      = aAux[0];
             row       = aAux[1];
-            eval("var oAux2 = {" + aAux[2] + ":'" + oAux.value() + "'}");
-            fields = fields.concat(oAux2);
+            fieldName = aAux[2];
+            if (Fields.length > 0){
+              aux = Fields;
+              aux.push('?');
+              if (aux.join('*').indexOf(fieldName + '*') == -1){
+                Fields.push(fieldName);
+                eval("var oAux2 = {" + fieldName + ":'" + oAux.value() + "'}");  
+                fields = fields.concat(oAux2);
+              }
+            }else{
+              Fields.push(fieldName);
+              eval("var oAux2 = {" + fieldName + ":'" + oAux.value() + "'}");  
+              fields = fields.concat(oAux2);
+            }
           }
           else {
-            fields = fields.concat(me.dependentFields[i].dependentOf);
+            aux = Fields;
+            aux.push('?');
+            oAux = me.dependentFields[i].dependentOf[0];
+            if (Fields.length > 0){
+              if (aux.join('*').indexOf(oAux.name + '*') == -1){
+                Fields.push(oAux.name);
+                fields = fields.concat(me.dependentFields[i].dependentOf);
+              }
+            }else{
+              Fields.push(oAux.name);
+              fields = fields.concat(me.dependentFields[i].dependentOf);  
+            }
           }
         }
       }
@@ -133,43 +157,40 @@ function G_Field ( form, element, name )
       var newcont;
       eval('newcont=' + response + ';');
       if (grid == '') {
-        //alert('1');
         for(var i=0;i<newcont.length;i++) {
+          //alert(newcont[i].name + '-' +  newcont[i].value);
           var j=me.form.getElementIdByName(newcont[i].name);
           me.form.aElements[j].setValue(newcont[i].value);
           me.form.aElements[j].setContent(newcont[i].content);
-          if (me.form.aElements[j].element.fireEvent) {
+          me.form.aElements[j].updateDepententFields();
+          /*if (me.form.aElements[j].element.fireEvent) {
             me.form.aElements[j].element.fireEvent("onchange");
-            //alert ("fireEvent");
           } else {
-            //alert ("initEvent");
             var evObj = document.createEvent('HTMLEvents');
             evObj.initEvent( 'change', true, true );
             me.form.aElements[j].element.dispatchEvent(evObj);
-          }
+          }*/
         }
       }
       else {
-        //alert('2: ' + newcont.length);
         for(var i=0;i<newcont.length;i++) {
           var oAux = me.form.getElementByName(grid);
           if (oAux) {
             var oAux2 = oAux.getElementByName(row, newcont[i].name);
             if (oAux2) {
+              oAux2.setValue(newcont[i].value);
               oAux2.setContent(newcont[i].content);
-              if (newcont[i].content.type == 'dropdown') {
-                oAux2.setValue(newcont[i].value);
-              }
+              oAux2.updateDepententFields();
               // this line is also needed to trigger the onchange event to trigger the calculation of
               // sumatory or average functions in text fields
               //if (i == (newcont.length-1)){
-                if (oAux2.element.fireEvent) {
+              /*  if (oAux2.element.fireEvent) {
                   oAux2.element.fireEvent("onchange");
                 } else {
                   var evObj = document.createEvent('HTMLEvents');
                   evObj.initEvent( 'change', true, true );
                   oAux2.element.dispatchEvent(evObj);
-                }
+                }*/
               //}
             }
           }
@@ -181,6 +202,8 @@ function G_Field ( form, element, name )
     // this checks the dependent fields that doesn't have assigned a value
     // but their master yes and their dependence must be fulfilled within one
     // onchange event
+    
+    /*
     if (grid!='')
     {
       var checkCallServer;
@@ -200,9 +223,9 @@ function G_Field ( form, element, name )
       var oAuxJs;
       for ( index in dependentList ){
         field = 'form[grid]['+ row +']['+dependentList[index]+']';
-        //          alert(field);
+                  
         oAuxJs = document.getElementById(field);
-        //          alert (oAuxJs.value);
+        
         if ( oAuxJs!=null ){
           if (oAuxJs.value!="") {
             if ( oAuxJs.fireEvent ) {
@@ -215,7 +238,7 @@ function G_Field ( form, element, name )
           }
         }
       }
-    }
+    }*/
     return true;
   };
   this.setValue = function(newValue) {
@@ -427,13 +450,13 @@ function G_Text( form, element, name, type )
             break;
           case "Alpha":
             if (keyCode==8) return true;
-            patron =/[A-Za-z\sÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼Ã±Ã§Ã‡Ã‘Ã�Ã‰Ã�Ã“ÃšÃ„Ã‹Ã�Ã–Ãœ]/; 
+            patron =/[A-Za-z\s����������������������������������������������������������������������������������������������������������]/; 
             te = String.fromCharCode(keyCode);
             return patron.test(te);
             break;
           case "AlphaNum":
             if (keyCode==8) return true;
-            patron =/[A-Za-z0-9\sÃ¡Ã©Ã­Ã³ÃºÃ¤Ã«Ã¯Ã¶Ã¼Ã±Ã§Ã‡Ã‘Ã�Ã‰Ã�Ã“ÃšÃ„Ã‹Ã�Ã–Ãœ]/;
+            patron =/[A-Za-z0-9\s����������������������������������������������������������������������������������������������������������]/;
             te = String.fromCharCode(keyCode);
             return patron.test(te);
             break;
@@ -744,7 +767,7 @@ function G_Text( form, element, name, type )
         
     if(this.validate=="Email")
     {
-      var pat=/^[\w\_\-\.Ã§Ã±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+      var pat=/^[\w\_\-\.��������]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
       if(!pat.test(this.element.value))
       {
         this.element.className=this.element.className.split(" ")[0]+" FormFieldInvalid";

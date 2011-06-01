@@ -56,6 +56,7 @@
   $G_FORM->id=urlDecode($_POST['form']);
   //$G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
   $newValues=($json->decode(urlDecode(stripslashes($_POST['fields']))));
+  $newValues = array_unique($newValues);
   if (isset($_POST['grid'])) {
     $_POST['row'] = (int)$_POST['row'];
     $aAux = array();
@@ -71,7 +72,6 @@
       unset($newValues[$sKey]->$aKeys[0]);
     }
   }
-
   //Resolve dependencies
   //Returns an array ($dependentFields) with the names of the fields
   //that depends of fields passed through AJAX ($_GET/$_POST)
@@ -82,7 +82,6 @@
   	//Search dependent fields
   	foreach($newValues[$r] as $k => $v) {
   	  if (!is_array($v)) {
-  	      //echo 'NoASrray';
   		  $myDependentFields = subDependencies( $k , $G_FORM , $aux );
   		  $_SESSION[$G_FORM->id][$k] = $v;
   	  }
@@ -96,8 +95,6 @@
   		//$_SESSION[$G_FORM->id][$k] = $v;
   	}
   }
-  //g::pr($myDependentFields);
-
   $G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
 
   $dependentFields=array_unique($dependentFields);
@@ -105,7 +102,6 @@
   //Parse and update the new content
   $template = PATH_CORE . 'templates/xmlform.html';
   $newContent=$G_FORM->getFields($template, (isset($_POST['row']) ? $_POST['row'] : -1));
-
   //Returns the dependentFields's content
   $sendContent=array();
   $r=0;
@@ -176,10 +172,10 @@
       for( $r=0 ; $r < sizeof($myDependentFields) ; $r++ ) {
         if ($myDependentFields[$r]=="") unset($myDependentFields[$r]);
       }
-      $mD = $myDependentFields;
-      foreach( $mD as $ki) {
-        $myDependentFields = array_merge( $myDependentFields , subDependencies( $ki , $G_FORM , $aux ) );
-      }
+ //     $mD = $myDependentFields;
+ //     foreach( $mD as $ki) {
+ //       $myDependentFields = array_merge( $myDependentFields , subDependencies( $ki , $G_FORM , $aux ) );
+ //     }
     }
     else {
       if (!array_key_exists( $k , $G_FORM->fields[$grid]->fields )) return array();
@@ -194,7 +190,7 @@
       for( $r=0 ; $r < sizeof($myDependentFields) ; $r++ ) {
         if ($myDependentFields[$r]=="") unset($myDependentFields[$r]);
       }
-      $mD = $myDependentFields;
+//      $mD = $myDependentFields;
 //      foreach( $mD as $ki) {
 //        $myDependentFields = array_merge( $myDependentFields , subDependencies( $ki , $G_FORM , $aux, $grid) );
 //      }

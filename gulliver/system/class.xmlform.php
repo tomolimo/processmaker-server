@@ -198,6 +198,7 @@ class XmlForm_Field {
    */
   private function executePropel(&$owner, $row = -1)
   {
+    //g::pr($row);
     if (! isset ( $owner->values [$this->name] )) {
       if ($row > - 1) {
         $owner->values [$this->name] = array ();
@@ -206,18 +207,35 @@ class XmlForm_Field {
       }
     }
     if (! is_array ( $owner->values [$this->name] )) {
+      //echo '1';
       $query = G::replaceDataField ( $this->sql, $owner->values );
     } else {
       $aAux = array ();
       foreach ( $owner->values as $key => $data ) {
         if (is_array ( $data )) {
-          $aAux [$key] = isset ( $data [$row] ) ? $data [$row] : '';
+          //echo '3:'.$key.' ';
+          if (isset ( $data [$row] )){
+            $qValue = $data [$row];
+          }else{
+            if (isset($owner->fields[$key]->selectedValue)){
+              $qValue = $owner->fields[$key]->selectedValue;
+            }else{
+              $qValue = '';
+            }
+          }
+          $aAux [$key] = $qValue;
+          //$aAux [$key] = isset ( $data [$row] ) ? $data [$row] : '';
         } else {
+          //echo '4'.$key.' ';
           $aAux [$key] = $data;
         }
       }
+      
+      //echo '2';
+      //g::pr($aAux);
       $query = G::replaceDataField ( $this->sql, $aAux );
     }
+    //echo $query;
 
     $result = array ();
     if ($this->sqlConnection == 'dbarray') {
@@ -2516,6 +2534,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
   var $saveLabel       = 0;
   var $modeGridDrop    = '';
   var $renderMode      = '';
+  var $selectedValue   = '';
   function validateValue($value, &$owner)
   {
     /*$this->executeSQL( $owner );
@@ -2533,12 +2552,15 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
    */
   function render($value = NULL, $owner = NULL, $rowId = '', $onlyValue = false, $row = -1, $therow = -1)
   {
+    //g::pr($owner->fields);
+    //echo $row.' - '.$therow;
     //Returns value from a PMTable when it is exists. 
     if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
     }
     //Recalculate SQL options if $therow is not defined or the row id equal
-    if ($therow == - 1) {
+    if ($therow == -1) {
+      //echo 'Entro:'.$this->dependentFields;
       $this->executeSQL ( $owner, $row );
     } else {
       if ($row == $therow) {
@@ -2584,6 +2606,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
           $html .= 'name="form' . $rowId . '[' . $this->name . ']" ';
           $html .= 'value="'.(($findValue != '') ? $findValue : $firstValue).'" />';
         }
+        $this->selectedValue = ($findValue != '') ? $findValue : $firstValue;
       }else{ //VIEW MODE
         $findValue = '';
         $firstValue = '';
@@ -3025,11 +3048,11 @@ class XmlForm_Field_Grid extends XmlForm_Field
     foreach ( $arrayKeys as $key ){
       if (isset($this->fields[$key]->defaultValue)){
         $emptyValue = $this->fields[$key]->defaultValue;
-        if (isset($this->fields[$key]->dependentFields)){
+/**        if (isset($this->fields[$key]->dependentFields)){
           if ($this->fields[$key]->dependentFields != ''){
             $emptyValue = '';
           }
-        }
+        }*/
       }else{
         $emptyValue = '';
       }
@@ -3064,10 +3087,25 @@ class XmlForm_Field_Grid extends XmlForm_Field
     if (! isset ( $values ) || ! is_array ( $values ) || sizeof ( $values ) == 0) {
       $values = array_keys ( $this->fields );
     }
-    
+    if ($therow != -1){
+      //Check if values arrary is complete to can flip.
+      $xValues = array();
+      $aRow = $values[$therow];
+      for ($c=1; $c <= $therow; $c++){
+        if ($c == $therow){
+          $xValues[$therow] = $aRow;
+        }else{
+          foreach ($aRow as $key=>$value){
+            $xValues[$c][$key] = '';  
+          }
+        }
+      }
+      $values = $xValues;
+    }
     $aValuekeys = array_keys ( $values );
     if (count ( $aValuekeys ) > 0 && ( int ) $aValuekeys [0] == 1)
       $values = $this->flipValues ( $values );
+    //if ($therow == 1)g::pr($values);
     $this->rows = count ( reset ( $values ) );
     if (isset ( $owner->values )) {
       foreach ( $owner->values as $key => $value ) {
@@ -4408,7 +4446,8 @@ class xmlformTemplate extends Smarty
       if (! is_array ( $value )) {
         if ($form->type == 'grid') {
           $aAux = array ();
-          for($i = 0; $i < count ( $form->owner->values [$form->name] ); $i ++) {
+          $index = ($therow >count ( $form->owner->values [$form->name] ))? $therow : count($form->owner->values [$form->name] );
+          for($i = 0; $i < $index; $i ++) {
             $aAux [] = '';
           }
           $result ['form'] [$k] = $form->fields [$k]->renderGrid ( $aAux, $form );
@@ -4416,10 +4455,9 @@ class xmlformTemplate extends Smarty
           $result ['form'] [$k] = $form->fields [$k]->render ( $value, $form );
         }
       } else {
-        if (isset ( $form->owner )) {
+        /*if (isset ( $form->owner )) {
 
           if (count ( $value ) < count ( $form->owner->values [$form->name] )) {
-            
             $i = count ( $value );
             $j = count ( $form->owner->values [$form->name] );
 
@@ -4427,11 +4465,9 @@ class xmlformTemplate extends Smarty
               $value [] = '';
             }
           }
-        }
-        
+        }*/
 
         if ($v->type == 'grid') {
-                   
           $result ['form'] [$k] = $form->fields [$k]->renderGrid ( $value, $form, $therow );
         } else {
           if ($v->type == 'dropdown') {
