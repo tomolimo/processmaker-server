@@ -4047,6 +4047,8 @@ class Cases {
     
     $oCriteria->addAscendingOrderByColumn(StepPeer::STEP_POSITION);
     $oCriteria->setDistinct();
+
+    
     $oDataset = DynaformPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
@@ -4066,13 +4068,31 @@ class Cases {
       $aFields['TAS_UID'] = $sTasKUID;
       $aInputDocuments[] = $aFields;
       $oDataset->next();
-    }
+    }    
+    
+    $distinctArray = $aInputDocuments;
+    $distinctArrayBase = $aInputDocuments;
+    $distinctOriginal = array();
+    foreach($distinctArray as $distinctArrayKey=>$distinctArrayValue) {    
+      $distinctOriginalPush = 1;
+        foreach($distinctOriginal as $distinctOriginalKey=>$distinctOriginalValue) {
+          if($distinctArrayValue == $distinctOriginalValue){
+            $distinctOriginalPush=0;
+          }
+        }
+        if($distinctOriginalPush==1){
+          $distinctOriginal[] = $distinctArrayValue;
+        }
+    }    
+    $aInputDocuments = $distinctOriginal; 
+
     global $_DBArray;
     $_DBArray['Dynaforms'] = $aInputDocuments;
     $_SESSION['_DBArray'] = $_DBArray;
     G::LoadClass('ArrayPeer');
     $oCriteria = new Criteria('dbarray');
     $oCriteria->setDBArrayTable('Dynaforms');
+    $oCriteria->setDistinct();
     //$oCriteria->addAscendingOrderByColumn(AppDocumentPeer::APP_DOC_CREATE_DATE);
     return $oCriteria;
   }
