@@ -1,7 +1,7 @@
 <?php
 /**
  * class.database_base.php
- * @package gulliver.system 
+ * @package gulliver.system
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
@@ -90,20 +90,20 @@ class Form extends XmlForm
   function Form($filename, $home='', $language = '', $forceParse = false, $visual_frontend=null)
   {
     $this->visual_frontend = $visual_frontend;
-    if ($language=== '') 
+    if ($language=== '')
       $language = defined('SYS_LANG')? SYS_LANG : 'en';
-    if ($home=== '') 
+    if ($home=== '')
       $home = defined('PATH_XMLFORM')? PATH_XMLFORM :
       (defined('PATH_DYNAFORM')? PATH_DYNAFORM: '');
     //to do: obtain the error code in case the xml parsing has errors: DONE
     //Load and parse the xml file
-    if ( substr($filename, -4) !== '.xml' ) 
+    if ( substr($filename, -4) !== '.xml' )
       $filename = $filename . '.xml';
     $this->home=$home;
     $res = parent::parseFile( $filename , $language, $forceParse );
-    if ($res==1) 
+    if ($res==1)
       trigger_error('Faild to parse file ' . $filename . '.', E_USER_ERROR );
-    if ($res==2) 
+    if ($res==2)
       trigger_error('Faild to create cache file "' . $xmlform->parsedFile . '".', E_USER_ERROR );
     $this->setDefaultValues();
     //to do: review if you can use the same form twice. in order to use once or not.
@@ -133,7 +133,7 @@ class Form extends XmlForm
       throw(new Exception('Template "'.basename($template).'" doesn`t exist.'));
     }
     $o = new xmlformTemplate($this, $template);
-    if (is_array(reset($this->values))) 
+    if (is_array(reset($this->values)))
       $this->rows=count(reset($this->values));
     if ($this->enableTemplate) {
       $filename = substr($this->fileName , 0, -3) .
@@ -174,7 +174,7 @@ class Form extends XmlForm
     $o = new xmlformTemplate($this, $template);
     $values = $this->values;
     $aValuekeys=array_keys($values);
-    if (isset($aValuekeys[0]) && ((int)$aValuekeys[0]==1)) 
+    if (isset($aValuekeys[0]) && ((int)$aValuekeys[0]==1))
       $values=XmlForm_Field_Grid::flipValues($values);
     //TODO: Review when $values of a grid has only one row it is converted as a $values for a list (when template="grid" at addContent())
     if (is_array(reset($values))) {
@@ -217,9 +217,9 @@ class Form extends XmlForm
             if ($this->fields[$k]->validateValue($newValues[$k][$j], $this ))
               $this->values[$k][$j] = $newValues[$k][$j];
           }
-          if ((sizeof($this->values[$k])===1) && ($v->type!=='grid') && isset($this->values[$k][0]) ) 
+          if ((sizeof($this->values[$k])===1) && ($v->type!=='grid') && isset($this->values[$k][0]) )
             $this->values[$k] = $this->values[$k][0];
-          if (sizeof($this->values[$k])===0) 
+          if (sizeof($this->values[$k])===0)
             $this->values[$k] = '';
         } else {
           if ($this->fields[$k]->validateValue($newValues[$k], $this ))
@@ -242,19 +242,19 @@ class Form extends XmlForm
       $nWidth = stripos($this->width, '%');
       if($nWidth > 0) {
         $sStrFind = $this->width;
-        $result = substr($sStrFind, 0, strpos($sStrFind, '%'));   
+        $result = substr($sStrFind, 0, strpos($sStrFind, '%'));
         $nWidth = (int)(($nMaxPorcent/100)*$result);
       } else {
-        $nWidth = (int)$this->width; 
+        $nWidth = (int)$this->width;
         $nMaxPorcent = $nWidth;
       }
       $nLabelWidth = stripos($this->labelWidth, '%');
       if($nLabelWidth > 0) {
         $sStrFind = $this->labelWidth;
-        $result = substr($sStrFind, 0, strpos($sStrFind, '%'));   
+        $result = substr($sStrFind, 0, strpos($sStrFind, '%'));
         $nLabelWidth = (int)(($nWidth/100)*$result);
       } else {
-        $nLabelWidth = (int)$this->labelWidth; 
+        $nLabelWidth = (int)$this->labelWidth;
       }
         // krumo($nWidth,$nLabelWidth);
       if(($nWidth  - $nLabelWidth) > 0)
@@ -321,7 +321,7 @@ class Form extends XmlForm
                   } else {
                     $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
                     //we do the query to the external connection and we've got the label
-                    $con = Propel::getConnection($this->fields[$k]->sqlConnection);
+                    $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
                     $stmt = $con->prepareStatement($query);
                     $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
                     
@@ -442,7 +442,7 @@ class Form extends XmlForm
    * @param boolean $bWhitSystemVars
    * @return array
    */
-  function getVars($bWhitSystemVars = true) 
+  function getVars($bWhitSystemVars = true)
   {
     $aFields = array();
     if ($bWhitSystemVars) {
@@ -467,7 +467,7 @@ class Form extends XmlForm
    * @author Erik Amaru Ortiz <erik@colosa.com>
    * @access public
    * @param array $values
-   * @param array $aNoRequiredByJS 
+   * @param array $aNoRequiredByJS
    * @return array/false
    */
   function validateRequiredFields($values, $aNoRequiredByJS = array())
