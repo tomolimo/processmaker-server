@@ -40,6 +40,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
   define ('DEBUG_SQL_LOG', $config['debug_sql'] );
   define ('DEBUG_TIME_LOG', $config['debug_time'] );
   define ('DEBUG_CALENDAR_LOG', $config['debug_calendar'] );
+  
+  define ('TIME_ZONE', $config['time_zone']);
 
 //*** process the $_POST with magic_quotes enabled
   function strip_slashes(&$vVar) {

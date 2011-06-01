@@ -9,7 +9,9 @@
 <SYSTEM type="caption">
   <en>Operating System</en>
 <es>Sistema operativo</es></SYSTEM>
-
+<TIME_ZONE type="caption">
+  <en>Time zone</en>
+</TIME_ZONE>
 <SERVER_SOFTWARE type="caption">
   <en>Web Server</en>
 <es>Servidor Web</es></SERVER_SOFTWARE>

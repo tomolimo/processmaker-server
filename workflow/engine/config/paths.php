@@ -117,10 +117,7 @@
   define ( 'PO_SYSTEM_VERSION',  'PM 4.0.1');
 
 ///************TimeZone Set***************//
-  if(!defined('TIME_ZONE')) {
-    define('TIME_ZONE', 'America/La_Paz');
-  }
-  if (function_exists('date_default_timezone_set')) {
+  if (defined('TIME_ZONE') && function_exists('date_default_timezone_set')) {
     date_default_timezone_set(TIME_ZONE);
   }
 

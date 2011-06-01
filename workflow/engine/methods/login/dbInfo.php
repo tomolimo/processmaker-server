@@ -111,6 +111,7 @@ $Fields ['SERVER_PORT'] = getenv ( 'SERVER_PORT' );
 $Fields ['REMOTE_HOST'] = getenv ( 'REMOTE_HOST' );
 $Fields ['SERVER_ADDR'] = getenv ( 'SERVER_ADDR' );
 $Fields ['HTTP_USER_AGENT'] = getenv ( 'HTTP_USER_AGENT' );
+$Fields ['TIME_ZONE'] = (defined('TIME_ZONE')) ? TIME_ZONE : "Unknown";
 
 if (! defined ( 'SKIP_RENDER_SYSTEM_INFORMATION' )) {
   $G_PUBLISH = new Publisher ( );
