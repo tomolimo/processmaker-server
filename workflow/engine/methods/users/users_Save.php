@@ -135,7 +135,7 @@ try {
         $aData['USR_PASSWORD'] = $form['USR_PASSWORD'];
         require_once 'classes/model/UsersProperties.php';
         $oUserProperty = new UsersProperties();
-        $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($form['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array($form['USR_PASSWORD']))));
+        $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($form['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($form['USR_PASSWORD'])))));
         
         $RBAC->loadUserRolePermission( 'PROCESSMAKER', $_SESSION['USER_LOGGED'] );
          if( $RBAC->aUserInfo[ 'PROCESSMAKER' ]['ROLE']['ROL_CODE']=='PROCESSMAKER_ADMIN'){

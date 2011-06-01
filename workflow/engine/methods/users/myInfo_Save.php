@@ -67,7 +67,7 @@ try {ini_set('display_errors','1');
 	    $aData['USR_PASSWORD'] = $_POST['form']['USR_PASSWORD'];
 	    require_once 'classes/model/UsersProperties.php';
       $oUserProperty = new UsersProperties();
-      $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_POST['form']['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array($_POST['form']['USR_NEW_PASS']))));
+      $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_POST['form']['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($_POST['form']['USR_NEW_PASS'])))));
       $aErrors       = $oUserProperty->validatePassword($_POST['form']['USR_NEW_PASS'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME']);
       if (count($aErrors) > 0) {
         $sDescription = G::LoadTranslation('ID_POLICY_ALERT').':<br /><br />';
