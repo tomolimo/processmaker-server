@@ -159,9 +159,11 @@ class XmlForm_Field_toolButton extends XmlForm_Field
         (($this->style)?' style="'.$this->style.'"':'').'/>';
         break;
       case 'class':
-        $html='<div onmouseover=\'backImage(this,"url(/images/dynamicForm/hover.gif) no-repeat")\' onmouseout=\'backImage(this,"")\'  style="width:25px;height:25px;margin-bottom:3px">
-                 <div class="'.$this->class.'" title="'.strip_tags($this->label).'"/>
-               </div>';
+        $html='<a href="#" onclick="'. $this->onclick.'" onmouseover="backImage(this, \'url(/images/dynamicForm/hover.gif) no-repeat\')" onmouseout="backImage(this, \'\')"  style="width:25px;height:25px;margin-bottom:3px">
+                 <div class="'.$this->class.'" title="'.strip_tags($this->label).'" style="width:25px;height:25px;margin-bottom:3px"></div>
+               </a>';
+        return $html;
+               
     }
     return '<a class="toolButton" '.
     (($this->buttonStyle)?' style="'.$this->buttonStyle.'"':'').
