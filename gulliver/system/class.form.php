@@ -346,7 +346,7 @@ class Form extends XmlForm
                 } else {
                   $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
                   //we do the query to the external connection and we've got the label
-                  $con = Propel::getConnection($this->fields[$k]->sqlConnection);
+                  $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");
                   $stmt = $con->prepareStatement($query);
                   $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
                   while ($rs->next()) {
@@ -375,7 +375,7 @@ class Form extends XmlForm
                             $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
                           } else {
                             $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
-                            $con = Propel::getConnection('workflow');
+                            $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");
                             $stmt = $con->prepareStatement($query);
                             $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
                             while ($rs->next()){
