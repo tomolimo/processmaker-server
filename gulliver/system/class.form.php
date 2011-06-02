@@ -312,30 +312,40 @@ class Form extends XmlForm
 
               case 'checkgroup':
               case 'listbox':
-                $values[$k] = '';
-                foreach ($newValues[$k] as $i => $value) {
-                  $values[$k] .= ($i != 0 ? '|': '') . $value;
-                  
-                  if (isset($v->options[$value])){
-                    $values["{$k}_label"] .= ($i != 0 ? '|': '') . $v->options[$value];
-                  } else {
-                    $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
-                    //we do the query to the external connection and we've got the label
-                    $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
-                    $stmt = $con->prepareStatement($query);
-                    $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                if ( is_array($newValues[$k]) ) {
+                  $values[$k] = '';
+                  foreach ($newValues[$k] as $i => $value) {
+                    //if $value is empty continue with the next loop, because this is a not selected/checked item
+                    if (trim($value) == '') {
+                      continue;
+                    }
                     
-                    while ($rs->next()) {
-                      list($rowId, $rowContent) = $rs->getRow();
+                    $values[$k] .= ($i != 0 ? '|': '') . $value;
+                    
+                    if (isset($v->options[$value])){
+                      $values["{$k}_label"] .= ($i != 0 ? '|': '') . $v->options[$value];
+                    } else {
+                      $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
+                      //we do the query to the external connection and we've got the label
+                      $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
+                      $stmt = $con->prepareStatement($query);
+                      $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+                      
+                      while ($rs->next()) {
+                        list($rowId, $rowContent) = $rs->getRow();
 
-                      if ($value == $rowId){
-                        $values["{$k}_label"] .= ($i != 0 ? '|': '') . $rowContent;
-                        break;
+                        if ($value == $rowId){
+                          $values["{$k}_label"] .= ($i != 0 ? '|': '') . $rowContent;
+                          break;
+                        }
                       }
                     }
                   }
+                  $newValues[$k] = $values["{$k}_label"];
+                } else {
+                  $values[$k] = $newValues[$k];
+                  $values["{$k}_label"] = $newValues["{$k}_label"];
                 }
-                $newValues[$k] = $values["{$k}_label"];
                 break;
 
               case 'dropdown':
