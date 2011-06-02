@@ -3972,7 +3972,7 @@ class Cases {
         }
         $aFields['POSITION'] = $_SESSION['STEP_POSITION'];
         $aFields['CONFIRM'] = G::LoadTranslation('ID_CONFIRM_DELETE_ELEMENT');
-        if (in_array($aRow['APP_DOC_UID'], $aDelete['OUTPUT_DOCUMENTS'])) {
+        if (in_array($aRow['APP_DOC_UID'], $aObjectPermissions['OUTPUT_DOCUMENTS'])) {
           $aFields['ID_DELETE'] = G::LoadTranslation('ID_DELETE');
         }
 
