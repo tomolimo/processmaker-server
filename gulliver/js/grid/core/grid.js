@@ -416,6 +416,15 @@ var G_Grid = function(oForm, sGridName){
                     //aObjects[0].options.add(xOption);
                     oNewSelect.options.add(xOption);
                   }
+                }else{
+                  //Copy all options
+                  var oAux = document.createElement(aObjects[0].tagName);
+                  for ( var j = 0; j < aObjects[0].options.length; j++) {
+                    var oOption = document.createElement('OPTION');
+                    oOption.value = aObjects[0].options[j].value;
+                    oOption.text = aObjects[0].options[j].text;
+                    oNewSelect.options.add(oOption);
+                  }
                 }
                 //TODO: Implement Default Value and Dependent Fields Trigger for grid dropdowns
               }
@@ -475,17 +484,20 @@ var G_Grid = function(oForm, sGridName){
     var exist = false;
     for (i=0; i < this.aFields.length; i++){
       oAux = this.getElementByName(currentRow, this.aFields[i].sFieldName);
-      if (oAux.dependentFields.length > 0){
-        exist = false;
-        for (m=0; m < xIsDependentOf.length; m++)
-          if (xIsDependentOf[m] == oAux.name) exist = true;
-        for (j=0; j < oAux.dependentFields.length; j++){
-          xIsDependentOf.push(oAux.dependentFields[j].name);
+      if (typeof oAux !== 'undefined' && oAux != null)
+        if (typeof oAux.dependentFields !== 'undefined'){
+          if (oAux.dependentFields.length > 0){
+            exist = false;
+            for (m=0; m < xIsDependentOf.length; m++)
+              if (xIsDependentOf[m] == oAux.name) exist = true;
+            for (j=0; j < oAux.dependentFields.length; j++){
+              xIsDependentOf.push(oAux.dependentFields[j].name);
+            }
+            if (!exist){
+              oAux.updateDepententFields();
+            }
+          }
         }
-        if (!exist){
-          oAux.updateDepententFields();
-        }
-      }
     }
     //Fires OnAddRow Event
     if (this.onaddrow) {

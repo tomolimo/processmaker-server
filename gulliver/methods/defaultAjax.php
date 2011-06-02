@@ -56,7 +56,7 @@
   $G_FORM->id=urlDecode($_POST['form']);
   //$G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
   $newValues=($json->decode(urlDecode(stripslashes($_POST['fields']))));
-  $newValues = array_unique($newValues);
+  
   if (isset($_POST['grid'])) {
     $_POST['row'] = (int)$_POST['row'];
     $aAux = array();
