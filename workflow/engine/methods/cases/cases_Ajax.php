@@ -623,7 +623,7 @@ switch($_POST['action']) {
 	case 'deleteGeneratedDocument':
 		require_once 'classes/model/AppDocument.php';
 		$oAppDocument = new AppDocument();
-		//$oAppDocument->remove($_POST['DOC']);
+		$oAppDocument->remove($_POST['DOC']);
 		$oCase = new Cases();
 		$oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
 		break;
