@@ -395,7 +395,7 @@ function run_workspace_restore($args, $opts) {
   $filename = $args[0];
   if (strpos($filename, "/") === false && strpos($filename, '\\') === false) {
     $filename = PATH_DATA . "backups/$filename";
-    if (substr_compare($filename, ".tar", -4, 4, true) != 0)
+    if (!file_exists($filename) && substr_compare($filename, ".tar", -4, 4, true) != 0)
       $filename .= ".tar";
   }
   $info = array_key_exists("info", $opts);
