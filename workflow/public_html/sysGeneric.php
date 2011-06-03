@@ -588,6 +588,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
       and  SYS_TARGET != 'autoinstallPlugins'
       and  SYS_TARGET != 'heartbeatStatus'
       and  SYS_TARGET != 'showLogoFile'
+      and  SYS_TARGET != 'forgotPassword'
+      and  SYS_TARGET != 'retrivePassword'
       and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
       and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'dynaforms_checkDependentFields' and SYS_TARGET != 'cases_ShowDocument') {
         $bRedirect = true;
