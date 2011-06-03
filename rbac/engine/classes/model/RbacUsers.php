@@ -120,6 +120,28 @@ class RbacUsers extends BaseRbacUsers {
       throw($oError);
     }
   }
+	
+	function getByUsername($sUsername)
+  {
+    //invalid user
+    if ( $sUsername == '' ) return 0;
+    $con = Propel::getConnection(RbacUsersPeer::DATABASE_NAME);
+    try {
+      $c = new Criteria( 'rbac' );
+      $c->add ( RbacUsersPeer::USR_USERNAME, $sUsername );
+      $rs = RbacUsersPeer::doSelect( $c );
+      
+			if ( is_array($rs) && isset( $rs[0] ) && is_object($rs[0]) && get_class ( $rs[0] ) == 'RbacUsers' ) {
+        $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
+        return $aFields;
+      } else {
+				return false;
+			}
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
 
   function verifyUserId($sUserId)
   {

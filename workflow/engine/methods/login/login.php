@@ -147,5 +147,15 @@
   }
   else
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 0; ');
-
+    
+  G::loadClass('configuration');
+  $oConf = new Configurations;
+  $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+  print_r($oConf->aConfig);
+  
+  $flagForgotPassword = isset($oConf->aConfig['login_enableForgotPassword'])? $oConf->aConfig['login_enableForgotPassword']: false;
+  if ($flagForgotPassword)
+    $oHeadPublisher->addScriptCode( 'var flagForgotPassword = 1; ');
+  else
+    $oHeadPublisher->addScriptCode( 'var flagForgotPassword = 0; ');
   G::RenderPage ( "publish" );

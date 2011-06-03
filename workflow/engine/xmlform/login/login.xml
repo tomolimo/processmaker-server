@@ -19,6 +19,10 @@
     <en>Login</en>
   </BSUBMIT>
   
+  <FORGOT_PASWORD_LINK type="link" value="I forgot my password" link="forgotPassword" onclick="" colAlign="right" colWidth="135"/>
+  
+
+
   <JS type="javascript"><![CDATA[
 var panel;
 
@@ -123,5 +127,12 @@ try{
 } 
 catch(e){}
 
+// enable/disable forgot password link
+if(flagForgotPassword == 0 )
+  hideRowById('FORGOT_PASWORD_LINK');
+
+
 ]]></JS>
+
+
 </dynaForm>
