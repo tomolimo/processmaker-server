@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.21-4-g13296e5\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.29.rc4-5-g2d187cd\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-05-05 16:16:16\n"
+"PO-Revision-Date: 2011-06-03 19:13:55\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -428,12 +428,6 @@ msgid "Draft"
 msgstr "Draft"
 
 # TRANSLATION
-# APP_STATUS/DRAFT
-#: APP_STATUS/DRAFT
-msgid "[APP_STATUS/DRAFT] Draft"
-msgstr "Draft"
-
-# TRANSLATION
 # LABEL/ID_INCORRECT_EMAIL
 #: LABEL/ID_INCORRECT_EMAIL
 msgid "Your E-mail address is not valid."
@@ -500,12 +494,6 @@ msgid "Approval of consolidated tasks"
 msgstr "Approval of consolidated tasks"
 
 # TRANSLATION
-# DASHBOARD/7
-#: DASHBOARD/7
-msgid "[DASHBOARD/7] Approval of consolidated tasks"
-msgstr "Approval of consolidated tasks"
-
-# TRANSLATION
 # JAVASCRIPT/ID_PROCESSMAP_TRIGGERS
 #: JAVASCRIPT/ID_PROCESSMAP_TRIGGERS
 msgid "Triggers"
@@ -521,24 +509,6 @@ msgstr "Output Documents"
 # LABEL/DRAFT
 #: LABEL/DRAFT
 msgid "High"
-msgstr "High"
-
-# TRANSLATION
-# DEL_PRIORITY/0
-#: DEL_PRIORITY/0
-msgid "Low"
-msgstr "Low"
-
-# TRANSLATION
-# DEL_PRIORITY/1
-#: DEL_PRIORITY/1
-msgid "Medium"
-msgstr "Medium"
-
-# TRANSLATION
-# DEL_PRIORITY/2
-#: DEL_PRIORITY/2
-msgid "[DEL_PRIORITY/2] High"
 msgstr "High"
 
 # TRANSLATION
@@ -718,8 +688,8 @@ msgstr "Edit process"
 # TRANSLATION
 # JAVASCRIPT/curriculum
 #: JAVASCRIPT/curriculum
-msgid "Resume"
-msgstr "Resume"
+msgid "Résumé"
+msgstr "Résumé"
 
 # TRANSLATION
 # JAVASCRIPT/ID_OPEN_SEARCH
@@ -4924,8 +4894,8 @@ msgstr "selected field"
 # TRANSLATION
 # LABEL/ID_AVAILABLE_FIELDS
 #: LABEL/ID_AVAILABLE_FIELDS
-msgid "Available Fields"
-msgstr "Available Fields"
+msgid "AVAILABLE FIELDS"
+msgstr "AVAILABLE FIELDS"
 
 # TRANSLATION
 # LABEL/ID_CASES_LIST_FIELDS
@@ -9298,8 +9268,8 @@ msgstr "<<"
 # TRANSLATION
 # LABEL/ID_UPDATE_DATE
 #: LABEL/ID_UPDATE_DATE
-msgid "Update"
-msgstr "Update"
+msgid "[LABEL/ID_UPDATE_DATE] Update Date"
+msgstr "Update Date"
 
 # TRANSLATION
 # LABEL/ID_NEW_CASE_SCHEDULER
@@ -9630,6 +9600,396 @@ msgstr "In Progress"
 #: LABEL/ID_REASSIGNED
 msgid "Reassigned"
 msgstr "Reassigned"
+
+# TRANSLATION
+# JAVASCRIPT/ID_CONFIRM_ADHOCUSER_CASE
+#: JAVASCRIPT/ID_CONFIRM_ADHOCUSER_CASE
+msgid "Are you sure you want to do it?"
+msgstr "Are you sure you want to do it?"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_ADHOCUSER_CASE
+#: LABEL/ID_CONFIRM_ADHOCUSER_CASE
+msgid "[LABEL/ID_CONFIRM_ADHOCUSER_CASE] Are you sure you want to do it?"
+msgstr "Are you sure you want to do it?"
+
+# TRANSLATION
+# LABEL/ID_PM_ENV_HOME_SETTINGS_TITLE
+#: LABEL/ID_PM_ENV_HOME_SETTINGS_TITLE
+msgid "Home Settings"
+msgstr "Home Settings"
+
+# TRANSLATION
+# LABEL/ID_HOME_LISTS_DATE_FORMAT
+#: LABEL/ID_HOME_LISTS_DATE_FORMAT
+msgid "Date format on Lists"
+msgstr "Date format on Lists"
+
+# TRANSLATION
+# LABEL/ID_HOME_LISTS_ROWS_PER_PAGE
+#: LABEL/ID_HOME_LISTS_ROWS_PER_PAGE
+msgid "Rows per page on Lists"
+msgstr "Rows per page on Lists"
+
+# TRANSLATION
+# LABEL/ID_HOME_COLLAPSE_RIGHT_PANEL
+#: LABEL/ID_HOME_COLLAPSE_RIGHT_PANEL
+msgid "Collapse right panel when a Case is open"
+msgstr "Collapse right panel when a Case is open"
+
+# TRANSLATION
+# LABEL/ID_HOME_SETTINGS
+#: LABEL/ID_HOME_SETTINGS
+msgid "[LABEL/ID_HOME_SETTINGS] Home Settings"
+msgstr "Home Settings"
+
+# TRANSLATION
+# LABEL/ID_ENVIRONMENT
+#: LABEL/ID_ENVIRONMENT
+msgid "[LABEL/ID_ENVIRONMENT] Environment"
+msgstr "Environment"
+
+# TRANSLATION
+# LABEL/ID_CURLFUN_ISUNDEFINED
+#: LABEL/ID_CURLFUN_ISUNDEFINED
+msgid "The process was not downloaded, because the curl     extension for php is not installed"
+msgstr "The process was not downloaded, because the curl     extension for php is not installed"
+
+# TRANSLATION
+# LABEL/ID_RATING
+#: LABEL/ID_RATING
+msgid "Rating"
+msgstr "Rating"
+
+# TRANSLATION
+# LABEL/ID_SUBSCRIPTIONS
+#: LABEL/ID_SUBSCRIPTIONS
+msgid "Subscriptions"
+msgstr "Subscriptions"
+
+# TRANSLATION
+# LABEL/ID_AUTHOR
+#: LABEL/ID_AUTHOR
+msgid "Author"
+msgstr "Author"
+
+# TRANSLATION
+# LABEL/ID_PRIVACY
+#: LABEL/ID_PRIVACY
+msgid "Privacy"
+msgstr "Privacy"
+
+# TRANSLATION
+# LABEL/ID_CREATE_DATE
+#: LABEL/ID_CREATE_DATE
+msgid "[LABEL/ID_CREATE_DATE] Create Date"
+msgstr "Create Date"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_STEPS
+#: LABEL/ID_INSTALL_STEPS
+msgid "Install Steps"
+msgstr "Install Steps"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_DETAILS
+#: LABEL/ID_PROCESS_DETAILS
+msgid "Process Details"
+msgstr "Process Details"
+
+# TRANSLATION
+# LABEL/ID_LOGIN_LIBRARY
+#: LABEL/ID_LOGIN_LIBRARY
+msgid "Login into ProcessMaker Library"
+msgstr "Login into ProcessMaker Library"
+
+# TRANSLATION
+# LABEL/ID_CREATE_NEW_ACCOUNT
+#: LABEL/ID_CREATE_NEW_ACCOUNT
+msgid "Create a New Account"
+msgstr "Create a New Account"
+
+# TRANSLATION
+# LABEL/ID_INCORRECT_USERNAME_PASSWORD
+#: LABEL/ID_INCORRECT_USERNAME_PASSWORD
+msgid "[LABEL/ID_INCORRECT_USERNAME_PASSWORD] Incorrect username or password"
+msgstr "Incorrect username or password"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_OR_WORKSPACE
+#: LABEL/ID_USERNAME_OR_WORKSPACE
+msgid "Username (or Live Workspace)"
+msgstr "Username (or Live Workspace)"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_UID
+#: LABEL/ID_PROCESS_UID
+msgid "Process Uid"
+msgstr "Process Uid"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_MESSAGE
+#: LABEL/ID_INSTALL_MESSAGE
+msgid "Please follow these instructions to complete installation"
+msgstr "Please follow these instructions to complete installation"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_SUCESSFULLY_IMPORTED
+#: LABEL/ID_PROCESS_SUCESSFULLY_IMPORTED
+msgid "Process sucessfully imported"
+msgstr "Process sucessfully imported"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_HEART_BEAT
+#: LABEL/ID_ENABLE_HEART_BEAT
+msgid "Contribute to the ProcessMaker project enabling heart beat anonymous usage data"
+msgstr "Contribute to the ProcessMaker project enabling heart beat anonymous usage data"
+
+# TRANSLATION
+# LABEL/ID_READ_ONLINE_DOCUMENTATION
+#: LABEL/ID_READ_ONLINE_DOCUMENTATION
+msgid "Read Online Documentation"
+msgstr "Read Online Documentation"
+
+# TRANSLATION
+# LABEL/ID_ARE_YOU_SURE_RESEND
+#: LABEL/ID_ARE_YOU_SURE_RESEND
+msgid "Are you sure that you want to resend this message"
+msgstr "Are you sure that you want to resend this message"
+
+# TRANSLATION
+# LABEL/ID_PROCESSMAKER
+#: LABEL/ID_PROCESSMAKER
+msgid "ProcessMaker"
+msgstr "ProcessMaker"
+
+# TRANSLATION
+# LABEL/ID_MAIL_SENT_SUCCESSFULLY
+#: LABEL/ID_MAIL_SENT_SUCCESSFULLY
+msgid "Your message has been sent successfully"
+msgstr "Your message has been sent successfully"
+
+# TRANSLATION
+# LABEL/ID_HEART_BEAT_DETAILS_1
+#: LABEL/ID_HEART_BEAT_DETAILS_1
+msgid "The usage statistics will help the development team to better understand user requirements and prioritize improvements in future releases."
+msgstr "The usage statistics will help the development team to better understand user requirements and prioritize improvements in future releases."
+
+# TRANSLATION
+# LABEL/ID_HEART_BEAT_DETAILS_2
+#: LABEL/ID_HEART_BEAT_DETAILS_2
+msgid "We cannot and will not reverse-engineer that collected data to find specific details concerning your projects."
+msgstr "We cannot and will not reverse-engineer that collected data to find specific details concerning your projects."
+
+# TRANSLATION
+# LABEL/ID_SEE
+#: LABEL/ID_SEE
+msgid "See"
+msgstr "See"
+
+# TRANSLATION
+# LABEL/ID_MORE_INFORMATION
+#: LABEL/ID_MORE_INFORMATION
+msgid "more information"
+msgstr "more information"
+
+# TRANSLATION
+# LABEL/ID_CLEAR
+#: LABEL/ID_CLEAR
+msgid "Clear"
+msgstr "Clear"
+
+# TRANSLATION
+# LABEL/ID_JAVASCRIPT_CACHE
+#: LABEL/ID_JAVASCRIPT_CACHE
+msgid "Javascript cache"
+msgstr "Javascript cache"
+
+# TRANSLATION
+# LABEL/ID_FORMS_METADATA_CACHE
+#: LABEL/ID_FORMS_METADATA_CACHE
+msgid "Forms metadata cache"
+msgstr "Forms metadata cache"
+
+# TRANSLATION
+# LABEL/ID_FORMS_HTML_CACHE
+#: LABEL/ID_FORMS_HTML_CACHE
+msgid "Forms Html templates cache"
+msgstr "Forms Html templates cache"
+
+# TRANSLATION
+# LABEL/ID_SUBJECT
+#: LABEL/ID_SUBJECT
+msgid "Subject"
+msgstr "Subject"
+
+# TRANSLATION
+# LABEL/ID_FROM
+#: LABEL/ID_FROM
+msgid "From"
+msgstr "From"
+
+# TRANSLATION
+# LABEL/ID_HEART_BEAT_ENABLED
+#: LABEL/ID_HEART_BEAT_ENABLED
+msgid "Heart beat has been enabled"
+msgstr "Heart beat has been enabled"
+
+# TRANSLATION
+# LABEL/ID_HEART_BEAT_DISABLED
+#: LABEL/ID_HEART_BEAT_DISABLED
+msgid "Heart beat has been disabled"
+msgstr "Heart beat has been disabled"
+
+# TRANSLATION
+# LABEL/ID_HAS_BEEN_DELETED
+#: LABEL/ID_HAS_BEEN_DELETED
+msgid "Has been deleted"
+msgstr "Has been deleted"
+
+# TRANSLATION
+# LABEL/ID_XPDL_IMPORT
+#: LABEL/ID_XPDL_IMPORT
+msgid "Import XPDL"
+msgstr "Import XPDL"
+
+# TRANSLATION
+# LABEL/ID_FILENAME
+#: LABEL/ID_FILENAME
+msgid "Filename"
+msgstr "Filename"
+
+# TRANSLATION
+# LABEL/ID_COMMENTS
+#: LABEL/ID_COMMENTS
+msgid "Comments"
+msgstr "Comments"
+
+# TRANSLATION
+# LABEL/ID_CREATED_BY
+#: LABEL/ID_CREATED_BY
+msgid "Created By"
+msgstr "Created By"
+
+# TRANSLATION
+# LABEL/ID_REPORT_TABLE_TITLE
+#: LABEL/ID_REPORT_TABLE_TITLE
+msgid "[LABEL/ID_REPORT_TABLE_TITLE] Title"
+msgstr "Title"
+
+# TRANSLATION
+# LABEL/ID_REPORT_TABLE
+#: LABEL/ID_REPORT_TABLE
+msgid "Report Table"
+msgstr "Report Table"
+
+# TRANSLATION
+# LABEL/ID_ASSIGNED_FIEDS
+#: LABEL/ID_ASSIGNED_FIEDS
+msgid "ASSIGNED FIELDS"
+msgstr "ASSIGNED FIELDS"
+
+# TRANSLATION
+# LABEL/ID_SAVE_AND_CONTINUE
+#: LABEL/ID_SAVE_AND_CONTINUE
+msgid "Save and Continue"
+msgstr "Save and Continue"
+
+# TRANSLATION
+# LABEL/ID_NO_SELECTED_FIELDS
+#: LABEL/ID_NO_SELECTED_FIELDS
+msgid "No selected fields"
+msgstr "No selected fields"
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_FIELD
+#: LABEL/ID_DYNAFORM_FIELD
+msgid "Dynaform Field"
+msgstr "Dynaform Field"
+
+# TRANSLATION
+# LABEL/ID_COMPLETE_VARCHAR
+#: LABEL/ID_COMPLETE_VARCHAR
+msgid "Complete the Varchar field size"
+msgstr "Complete the Varchar field size"
+
+# TRANSLATION
+# LABEL/ID_DELETE_REPORT_TABLE
+#: LABEL/ID_DELETE_REPORT_TABLE
+msgid "Do you want to delete the selected report tables?"
+msgstr "Do you want to delete the selected report tables?"
+
+# TRANSLATION
+# LABEL/ID_DELETE_ALL_REPORT_TABLE
+#: LABEL/ID_DELETE_ALL_REPORT_TABLE
+msgid "Do you want to delete all report tables?"
+msgstr "Do you want to delete all report tables?"
+
+# TRANSLATION
+# LABEL/ID_DELETE_FIELDS
+#: LABEL/ID_DELETE_FIELDS
+msgid "Do you want to delete the selected fields?"
+msgstr "Do you want to delete the selected fields?"
+
+# TRANSLATION
+# LABEL/ID_DELETE_ALL_FIELDS
+#: LABEL/ID_DELETE_ALL_FIELDS
+msgid "Do you want to delete all fields?"
+msgstr "Do you want to delete all fields?"
+
+# TRANSLATION
+# LABEL/ID_LOGIN_SETTINGS
+#: LABEL/ID_LOGIN_SETTINGS
+msgid "Login Settings"
+msgstr "Login Settings"
+
+# TRANSLATION
+# LABEL/ID_YOUR_USERMANE_IS
+#: LABEL/ID_YOUR_USERMANE_IS
+msgid "Your username is"
+msgstr "Your username is"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_FORGOT_PASSWORD
+#: LABEL/ID_ENABLE_FORGOT_PASSWORD
+msgid "Forgot password was enabled"
+msgstr "Forgot password was enabled"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_FORGOT_PASSWORD
+#: LABEL/ID_DISABLE_FORGOT_PASSWORD
+msgid "Forgot password was disabled"
+msgstr "Forgot password was disabled"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_REGISTER
+#: LABEL/ID_USER_NOT_REGISTER
+msgid "the user is not register"
+msgstr "the user is not register"
+
+# TRANSLATION
+# LABEL/ID_THANKS_USE_SERVICES
+#: LABEL/ID_THANKS_USE_SERVICES
+msgid "Thanks for using the ProcessMaker services"
+msgstr "Thanks for using the ProcessMaker services"
+
+# TRANSLATION
+# LABEL/ID_RESET_PASSWORD
+#: LABEL/ID_RESET_PASSWORD
+msgid "Reset password"
+msgstr "Reset password"
+
+# TRANSLATION
+# LABEL/ID_YOUR_PASSWORD_IS
+#: LABEL/ID_YOUR_PASSWORD_IS
+msgid "Your password is"
+msgstr "Your password is"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_FOTGOT_PASSWORD
+#: LABEL/ID_ENABLE_FOTGOT_PASSWORD
+msgid "Enable Forgot password"
+msgstr "Enable Forgot password"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -10774,13 +11134,13 @@ msgstr "Title"
 # cases/cases_AllInputdocsList.xml?TITLE
 # cases/cases_AllInputdocsList.xml
 #: text - TITLE
-msgid "Filename"
+msgid "[cases/cases_AllInputdocsList.xml?TITLE] Filename"
 msgstr "Filename"
 
 # cases/cases_AllInputdocsList.xml?APP_DOC_COMMENT
 # cases/cases_AllInputdocsList.xml
 #: text - APP_DOC_COMMENT
-msgid "Comments"
+msgid "[cases/cases_AllInputdocsList.xml?APP_DOC_COMMENT] Comments"
 msgstr "Comments"
 
 # cases/cases_AllInputdocsList.xml?TYPE
@@ -10816,7 +11176,7 @@ msgstr "Origin Task"
 # cases/cases_AllInputdocsList.xml?CREATED_BY
 # cases/cases_AllInputdocsList.xml
 #: text - CREATED_BY
-msgid "Created By"
+msgid "[cases/cases_AllInputdocsList.xml?CREATED_BY] Created By"
 msgstr "Created By"
 
 # cases/cases_AllInputdocsList.xml?CREATE_DATE
@@ -12616,13 +12976,13 @@ msgstr "Date"
 # cases/cases_Messages.xml?APP_MSG_SUBJECT
 # cases/cases_Messages.xml
 #: text - APP_MSG_SUBJECT
-msgid "Subject"
+msgid "[cases/cases_Messages.xml?APP_MSG_SUBJECT] Subject"
 msgstr "Subject"
 
 # cases/cases_Messages.xml?APP_MSG_FROM
 # cases/cases_Messages.xml
 #: text - APP_MSG_FROM
-msgid "From"
+msgid "[cases/cases_Messages.xml?APP_MSG_FROM] From"
 msgstr "From"
 
 # cases/cases_Messages.xml?APP_MSG_TO
@@ -12862,7 +13222,7 @@ msgstr "Description"
 # cases/cases_ProcessInformation.xml?PRO_AUTHOR
 # cases/cases_ProcessInformation.xml
 #: text - PRO_AUTHOR
-msgid "Author"
+msgid "[cases/cases_ProcessInformation.xml?PRO_AUTHOR] Author"
 msgstr "Author"
 
 # cases/cases_ProcessInformation.xml?PRO_CREATE_DATE
@@ -13480,7 +13840,7 @@ msgstr "Start a case based on following registered Plugin."
 # cases/cases_Scheduler_Edit.xml?UPDATE
 # cases/cases_Scheduler_Edit.xml
 #: submit - UPDATE
-msgid "[cases/cases_Scheduler_Edit.xml?UPDATE] Update"
+msgid "Update"
 msgstr "Update"
 
 # cases/cases_Scheduler_List.xml?SCH_NAME
@@ -16826,8 +17186,8 @@ msgstr "Restricted to process permissions"
 # dynaforms/dynaforms_WebEntry.xml?subtitle2
 # dynaforms/dynaforms_WebEntry.xml
 #: subtitle - subtitle2
-msgid "[dynaforms/dynaforms_WebEntry.xml?subtitle2] PHP & Web Service options"
-msgstr "PHP & Web Service options"
+msgid "[dynaforms/dynaforms_WebEntry.xml?subtitle2] User"
+msgstr "User"
 
 # dynaforms/dynaforms_WebEntry.xml?WS_USER
 # dynaforms/dynaforms_WebEntry.xml
@@ -17240,218 +17600,218 @@ msgstr "Apply Filter"
 # dynaforms/fields_Toolbar.xml?saveDyna
 # dynaforms/fields_Toolbar.xml
 #: toolButton - saveDyna
-msgid "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?saveDyna] Save"
+msgstr "Save"
 
 # dynaforms/fields_Toolbar.xml?saveasDyna
 # dynaforms/fields_Toolbar.xml
 #: toolButton - saveasDyna
-msgid "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
+msgid "Save as"
+msgstr "Save as"
 
 # dynaforms/fields_Toolbar.xml?text
 # dynaforms/fields_Toolbar.xml
 #: toolButton - text
-msgid "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
+msgid "Text field"
+msgstr "Text field"
 
 # dynaforms/fields_Toolbar.xml?currency
 # dynaforms/fields_Toolbar.xml
 #: toolButton - currency
-msgid "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
+msgid "Currency"
+msgstr "Currency"
 
 # dynaforms/fields_Toolbar.xml?percentage
 # dynaforms/fields_Toolbar.xml
 #: toolButton - percentage
-msgid "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
+msgid "Percentage"
+msgstr "Percentage"
 
 # dynaforms/fields_Toolbar.xml?password
 # dynaforms/fields_Toolbar.xml
 #: toolButton - password
-msgid "<div class=\"ss_sprite button_toolbar ss_textfield_key\" title=\"Password\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_key\" title=\"Password\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?password] Password"
+msgstr "Password"
 
 # dynaforms/fields_Toolbar.xml?suggest
 # dynaforms/fields_Toolbar.xml
 #: toolButton - suggest
-msgid "<div class=\"ss_sprite button_toolbar ss_help\" title=\"Suggest\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_help\" title=\"Suggest\"></div>"
+msgid "Suggest"
+msgstr "Suggest"
 
 # dynaforms/fields_Toolbar.xml?textarea
 # dynaforms/fields_Toolbar.xml
 #: toolButton - textarea
-msgid "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
+msgid "TextArea"
+msgstr "TextArea"
 
 # dynaforms/fields_Toolbar.xml?title
 # dynaforms/fields_Toolbar.xml
 #: toolButton - title
-msgid "<div class=\"ss_sprite button_toolbar ss_title\" title=\"Title\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_title\" title=\"Title\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?title] Title"
+msgstr "Title"
 
 # dynaforms/fields_Toolbar.xml?subtitle
 # dynaforms/fields_Toolbar.xml
 #: toolButton - subtitle
-msgid "<div class=\"ss_sprite button_toolbar ss_subtitle\" title=\"Subtitle\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_subtitle\" title=\"Subtitle\"></div>"
+msgid "Subtitle"
+msgstr "Subtitle"
 
 # dynaforms/fields_Toolbar.xml?button
 # dynaforms/fields_Toolbar.xml
 #: toolButton - button
-msgid "<div class=\"ss_sprite button_toolbar ss_button\" title=\"Button\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_button\" title=\"Button\"></div>"
+msgid "Button"
+msgstr "Button"
 
 # dynaforms/fields_Toolbar.xml?submit
 # dynaforms/fields_Toolbar.xml
 #: toolButton - submit
-msgid "<div class=\"ss_sprite button_toolbar ss_submit\" title=\"Submit\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_submit\" title=\"Submit\"></div>"
+msgid "Submit"
+msgstr "Submit"
 
 # dynaforms/fields_Toolbar.xml?reset
 # dynaforms/fields_Toolbar.xml
 #: toolButton - reset
-msgid "<div class=\"ss_sprite button_toolbar ss_reset\" title=\"Reset\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_reset\" title=\"Reset\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?reset] Reset"
+msgstr "Reset"
 
 # dynaforms/fields_Toolbar.xml?dropdown
 # dynaforms/fields_Toolbar.xml
 #: toolButton - dropdown
-msgid "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
+msgid "Dropdown"
+msgstr "Dropdown"
 
 # dynaforms/fields_Toolbar.xml?yesno
 # dynaforms/fields_Toolbar.xml
 #: toolButton - yesno
-msgid "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
+msgid "Yes/No"
+msgstr "Yes/No"
 
 # dynaforms/fields_Toolbar.xml?listbox
 # dynaforms/fields_Toolbar.xml
 #: toolButton - listbox
-msgid "<div class=\"ss_sprite button_toolbar ss_listbox\" title=\"Listbox\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_listbox\" title=\"Listbox\"></div>"
+msgid "Listbox"
+msgstr "Listbox"
 
 # dynaforms/fields_Toolbar.xml?checkbox
 # dynaforms/fields_Toolbar.xml
 #: toolButton - checkbox
-msgid "<div class=\"ss_sprite button_toolbar ss_check\" title=\"Checkbox\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_check\" title=\"Checkbox\"></div>"
+msgid "Checkbox"
+msgstr "Checkbox"
 
 # dynaforms/fields_Toolbar.xml?checkgroup
 # dynaforms/fields_Toolbar.xml
 #: toolButton - checkgroup
-msgid "<div class=\"ss_sprite button_toolbar ss_checkgroup\" title=\"CheckGroup\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_checkgroup\" title=\"CheckGroup\"></div>"
+msgid "CheckGroup"
+msgstr "CheckGroup"
 
 # dynaforms/fields_Toolbar.xml?radiogroup
 # dynaforms/fields_Toolbar.xml
 #: toolButton - radiogroup
-msgid "<div class=\"ss_sprite button_toolbar ss_radiogroup\" title=\"RadioGroup\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_radiogroup\" title=\"RadioGroup\"></div>"
+msgid "RadioGroup"
+msgstr "RadioGroup"
 
 # dynaforms/fields_Toolbar.xml?date
 # dynaforms/fields_Toolbar.xml
 #: toolButton - date
-msgid "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?date] Date"
+msgstr "Date"
 
 # dynaforms/fields_Toolbar.xml?hidden
 # dynaforms/fields_Toolbar.xml
 #: toolButton - hidden
-msgid "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
+msgid "Hidden"
+msgstr "Hidden"
 
 # dynaforms/fields_Toolbar.xml?link
 # dynaforms/fields_Toolbar.xml
 #: toolButton - link
-msgid "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
+msgid "Link"
+msgstr "Link"
 
 # dynaforms/fields_Toolbar.xml?file
 # dynaforms/fields_Toolbar.xml
 #: toolButton - file
-msgid "<div class=\"ss_sprite button_toolbar ss_upload\" title=\"File\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_upload\" title=\"File\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?file] File"
+msgstr "File"
 
 # dynaforms/fields_Toolbar.xml?javascript
 # dynaforms/fields_Toolbar.xml
 #: toolButton - javascript
-msgid "<div class=\"ss_sprite button_toolbar ss_js\" title=\"Javascript\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_js\" title=\"Javascript\"></div>"
+msgid "Javascript"
+msgstr "Javascript"
 
 # dynaforms/fields_Toolbar.xml?grid
 # dynaforms/fields_Toolbar.xml
 #: toolButton - grid
-msgid "<div class=\"ss_sprite button_toolbar ss_table\" title=\"Grid\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_table\" title=\"Grid\"></div>"
+msgid "[dynaforms/fields_Toolbar.xml?grid] Grid"
+msgstr "Grid"
 
 # dynaforms/fields_ToolbarGrid.xml?saveDyna
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - saveDyna
-msgid "[dynaforms/fields_ToolbarGrid.xml?saveDyna] <div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_disk\" title=\"Save\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?saveDyna] Save"
+msgstr "Save"
 
 # dynaforms/fields_ToolbarGrid.xml?saveasDyna
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - saveasDyna
-msgid "[dynaforms/fields_ToolbarGrid.xml?saveasDyna] <div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_disk_multiple\" title=\"Save as\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?saveasDyna] Save as"
+msgstr "Save as"
 
 # dynaforms/fields_ToolbarGrid.xml?text
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - text
-msgid "[dynaforms/fields_ToolbarGrid.xml?text] <div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield\" title=\"Text field\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?text] Text field"
+msgstr "Text field"
 
 # dynaforms/fields_ToolbarGrid.xml?currency
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - currency
-msgid "[dynaforms/fields_ToolbarGrid.xml?currency] <div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_currency\" title=\"Currency\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?currency] Currency"
+msgstr "Currency"
 
 # dynaforms/fields_ToolbarGrid.xml?percentage
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - percentage
-msgid "[dynaforms/fields_ToolbarGrid.xml?percentage] <div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textfield_percentage\" title=\"Percentage\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?percentage] Percentage"
+msgstr "Percentage"
 
 # dynaforms/fields_ToolbarGrid.xml?textarea
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - textarea
-msgid "[dynaforms/fields_ToolbarGrid.xml?textarea] <div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_textarea\" title=\"TextArea\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?textarea] TextArea"
+msgstr "TextArea"
 
 # dynaforms/fields_ToolbarGrid.xml?dropdown
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - dropdown
-msgid "[dynaforms/fields_ToolbarGrid.xml?dropdown] <div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_dropdown\" title=\"Dropdown\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?dropdown] Dropdown"
+msgstr "Dropdown"
 
 # dynaforms/fields_ToolbarGrid.xml?yesno
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - yesno
-msgid "[dynaforms/fields_ToolbarGrid.xml?yesno] <div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_yesno\" title=\"Yes/No\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?yesno] Yes/No"
+msgstr "Yes/No"
 
 # dynaforms/fields_ToolbarGrid.xml?date
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - date
-msgid "[dynaforms/fields_ToolbarGrid.xml?date] <div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_calendar\" title=\"Date\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?date] Date"
+msgstr "Date"
 
 # dynaforms/fields_ToolbarGrid.xml?hidden
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - hidden
-msgid "[dynaforms/fields_ToolbarGrid.xml?hidden] <div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_hidden\" title=\"Hidden\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?hidden] Hidden"
+msgstr "Hidden"
 
 # dynaforms/fields_ToolbarGrid.xml?link
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - link
-msgid "[dynaforms/fields_ToolbarGrid.xml?link] <div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
-msgstr "<div class=\"ss_sprite button_toolbar ss_link\" title=\"Link\"></div>"
+msgid "[dynaforms/fields_ToolbarGrid.xml?link] Link"
+msgstr "Link"
 
 # events/appEventsList.xml?TAS_TITLE
 # events/appEventsList.xml
@@ -18590,7 +18950,7 @@ msgstr "System Information"
 # login/dbInfo.xml?FLUID
 # login/dbInfo.xml
 #: caption - FLUID
-msgid "ProcessMaker"
+msgid "[login/dbInfo.xml?FLUID] ProcessMaker"
 msgstr "ProcessMaker"
 
 # login/dbInfo.xml?SYSTEM
@@ -18598,6 +18958,12 @@ msgstr "ProcessMaker"
 #: caption - SYSTEM
 msgid "Operating System"
 msgstr "Operating System"
+
+# login/dbInfo.xml?TIME_ZONE
+# login/dbInfo.xml
+#: caption - TIME_ZONE
+msgid "Time zone"
+msgstr "Time zone"
 
 # login/dbInfo.xml?SERVER_SOFTWARE
 # login/dbInfo.xml
@@ -18659,6 +19025,30 @@ msgstr "User's Browser"
 msgid "User's Ip Address"
 msgstr "User's Ip Address"
 
+# login/forgotPassword.xml?TITLE
+# login/forgotPassword.xml
+#: title - TITLE
+msgid "I forgot my password"
+msgstr "I forgot my password"
+
+# login/forgotPassword.xml?USR_USERNAME
+# login/forgotPassword.xml
+#: text - USR_USERNAME
+msgid "[login/forgotPassword.xml?USR_USERNAME] User"
+msgstr "User"
+
+# login/forgotPassword.xml?USR_EMAIL
+# login/forgotPassword.xml
+#: text - USR_EMAIL
+msgid "[login/forgotPassword.xml?USR_EMAIL] Email"
+msgstr "Email"
+
+# login/forgotPassword.xml?BSUBMIT
+# login/forgotPassword.xml
+#: submit - BSUBMIT
+msgid "Send Request"
+msgstr "Send Request"
+
 # login/login.xml?TITLE
 # login/login.xml
 #: title - TITLE
@@ -18688,6 +19078,12 @@ msgstr "Language"
 #: submit - BSUBMIT
 msgid "[login/login.xml?BSUBMIT] Login"
 msgstr "Login"
+
+# login/login.xml?FORGOT_PASWORD_LINK
+# login/login.xml
+#: link - FORGOT_PASWORD_LINK
+msgid "Forgot Password"
+msgstr "Forgot Password"
 
 # login/newSite.xml?NEW_WORKSPACE
 # login/newSite.xml
@@ -20126,7 +20522,7 @@ msgstr "Category"
 # processes/objectpmView.xml?rating
 # processes/objectpmView.xml
 #: text - rating
-msgid "Rating"
+msgid "[processes/objectpmView.xml?rating] Rating"
 msgstr "Rating"
 
 # processes/objectpmView.xml?downloads
@@ -20138,7 +20534,7 @@ msgstr "Downloads"
 # processes/objectpmView.xml?subscriptions
 # processes/objectpmView.xml
 #: text - subscriptions
-msgid "Subscriptions"
+msgid "[processes/objectpmView.xml?subscriptions] Subscriptions"
 msgstr "Subscriptions"
 
 # processes/objectpmView.xml?username
@@ -20150,7 +20546,7 @@ msgstr "Author"
 # processes/objectpmView.xml?privacy
 # processes/objectpmView.xml
 #: dropdown - privacy
-msgid "Privacy"
+msgid "[processes/objectpmView.xml?privacy] Privacy"
 msgstr "Privacy"
 
 # processes/objectpmView.xml?privacy-FREE
@@ -20198,7 +20594,7 @@ msgstr "Description"
 # processes/objectpmView.xml?subinstallSteps
 # processes/objectpmView.xml
 #: subtitle - subinstallSteps
-msgid "Install Steps"
+msgid "[processes/objectpmView.xml?subinstallSteps] Install Steps"
 msgstr "Install Steps"
 
 # processes/objectpmView.xml?installSteps
@@ -20726,7 +21122,7 @@ msgstr "Cancel"
 # processes/processes_ImportSucessful.xml?title
 # processes/processes_ImportSucessful.xml
 #: title - title
-msgid "Process sucessfully imported"
+msgid "[processes/processes_ImportSucessful.xml?title] Process sucessfully imported"
 msgstr "Process sucessfully imported"
 
 # processes/processes_ImportSucessful.xml?pro_title
@@ -20750,13 +21146,13 @@ msgstr "Category"
 # processes/processes_ImportSucessful.xml?PRO_UID
 # processes/processes_ImportSucessful.xml
 #: caption - PRO_UID
-msgid "Process Uid"
+msgid "[processes/processes_ImportSucessful.xml?PRO_UID] Process Uid"
 msgstr "Process Uid"
 
 # processes/processes_ImportSucessful.xml?TITLE1
 # processes/processes_ImportSucessful.xml
 #: subtitle - TITLE1
-msgid "Please follow these instructions to complete installation"
+msgid "[processes/processes_ImportSucessful.xml?TITLE1] Please follow these instructions to complete installation"
 msgstr "Please follow these instructions to complete installation"
 
 # processes/processes_ImportSucessful.xml?installSteps
@@ -21506,13 +21902,13 @@ msgstr "Last Name"
 # processes/registerPML.xml?TITLE
 # processes/registerPML.xml
 #: title - TITLE
-msgid "Login into ProcessMaker Library"
+msgid "[processes/registerPML.xml?TITLE] Login into ProcessMaker Library"
 msgstr "Login into ProcessMaker Library"
 
 # processes/registerPML.xml?PML_USER
 # processes/registerPML.xml
 #: text - PML_USER
-msgid "Username (or Live Workspace)"
+msgid "[processes/registerPML.xml?PML_USER] Username (or Live Workspace)"
 msgstr "Username (or Live Workspace)"
 
 # processes/registerPML.xml?PML_PASSWORD
@@ -23144,7 +23540,7 @@ msgstr "save"
 # setup/processHeartBeatConfig.xml?HB_LINKINFO
 # setup/processHeartBeatConfig.xml
 #: link - HB_LINKINFO
-msgid "Read Online Documentation"
+msgid "[setup/processHeartBeatConfig.xml?HB_LINKINFO] Read Online Documentation"
 msgstr "Read Online Documentation"
 
 # setup/showMessage.xml?TITLE
@@ -26918,7 +27314,7 @@ msgstr "Photo"
 # users/myInfo.xml?USR_RESUME
 # users/myInfo.xml
 #: file - USR_RESUME
-msgid "[users/myInfo.xml?USR_RESUME] Resume"
+msgid "Resume"
 msgstr "Resume"
 
 # users/myInfo.xml?TITLE9689
@@ -28154,8 +28550,8 @@ msgstr "Photo"
 # users/users_EditRT.xml?USR_RESUME
 # users/users_EditRT.xml
 #: file - USR_RESUME
-msgid "[users/users_EditRT.xml?USR_RESUME] Resume"
-msgstr "Resume"
+msgid "[users/users_EditRT.xml?USR_RESUME] Résumé"
+msgstr "Résumé"
 
 # users/users_EditRT.xml?TITLE1
 # users/users_EditRT.xml
@@ -28418,8 +28814,8 @@ msgstr "Photo"
 # users/users_New.xml?USR_RESUME
 # users/users_New.xml
 #: file - USR_RESUME
-msgid "[users/users_New.xml?USR_RESUME] Resume"
-msgstr "Resume"
+msgid "[users/users_New.xml?USR_RESUME] Résumé"
+msgstr "Résumé"
 
 # users/users_New.xml?TITLE1
 # users/users_New.xml
@@ -29258,7 +29654,7 @@ msgstr "Max. Length"
 # dynaforms/fields/currency.xml?PME_CURRENCY
 # dynaforms/fields/currency.xml
 #: text - PME_CURRENCY
-msgid "Currency"
+msgid "[dynaforms/fields/currency.xml?PME_CURRENCY] Currency"
 msgstr "Currency"
 
 # dynaforms/fields/currency.xml?PME_VALIDATE
@@ -29492,14 +29888,14 @@ msgstr "End Relative Date"
 # dynaforms/fields/date.xml?PME_SUBTITLE3x
 # dynaforms/fields/date.xml
 #: subtitle - PME_SUBTITLE3x
-msgid "<b>Mask: </b>%Y=Year, %y=year (the two last digits at year), %m=Month, %d=Day"
-msgstr "<b>Mask: </b>%Y=Year, %y=year (the two last digits at year), %m=Month, %d=Day"
+msgid "<b>Mask: </b>%Y=Year, %m=Month, %d=Day"
+msgstr "<b>Mask: </b>%Y=Year, %m=Month, %d=Day"
 
 # dynaforms/fields/date.xml?PME_SUBTITLE3xl
 # dynaforms/fields/date.xml
 #: link - PME_SUBTITLE3xl
-msgid "+Masks"
-msgstr "+Masks"
+msgid "Masks List"
+msgstr "Masks List"
 
 # dynaforms/fields/date.xml?PME_MASK
 # dynaforms/fields/date.xml
@@ -29668,12 +30064,6 @@ msgstr "(none)"
 #: text - PME_DEFAULTVALUE
 msgid "[dynaforms/fields/dropdown.xml?PME_DEFAULTVALUE] Default Value"
 msgstr "Default Value"
-
-# dynaforms/fields/dropdown.xml?PME_SAVELABEL
-# dynaforms/fields/dropdown.xml
-#: checkbox - PME_SAVELABEL
-msgid "Save label of selected value in variable"
-msgstr "Save label of selected value in variable"
 
 # dynaforms/fields/dropdown.xml?PME_HINT
 # dynaforms/fields/dropdown.xml
@@ -29972,7 +30362,7 @@ msgstr "Behaviour"
 # dynaforms/fields/link.xml?PME_LINK
 # dynaforms/fields/link.xml
 #: text - PME_LINK
-msgid "Link"
+msgid "[dynaforms/fields/link.xml?PME_LINK] Link"
 msgstr "Link"
 
 # dynaforms/fields/link.xml?PME_TARGET_SEL
@@ -30838,6 +31228,12 @@ msgstr "Integer"
 #: dropdown - PME_PRIMARY_KEY_TYPE - varchar
 msgid "[dynaforms/fields/suggest.xml?PME_PRIMARY_KEY_TYPE-varchar]"
 msgstr "Varchar"
+
+# dynaforms/fields/suggest.xml?PME_CALLBACK
+# dynaforms/fields/suggest.xml
+#: textarea - PME_CALLBACK
+msgid "Javascript callback to execute by a selection"
+msgstr "Javascript callback to execute by a selection"
 
 # dynaforms/fields/suggest.xml?BTN_CANCEL
 # dynaforms/fields/suggest.xml
