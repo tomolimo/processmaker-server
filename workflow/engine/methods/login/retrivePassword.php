@@ -12,8 +12,13 @@ $user = new Users();
 $userData = $rbacUser->getByUsername($data['USR_USERNAME']);
 
 if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']) {
-
   $aSetup = getEmailConfiguration();
+  if (count($aSetup) == 0 || !isset($aSetup['MESS_ENGINE'])) {
+    G::SendTemporalMessage ('ID_EMAIL_ENGINE_IS_NOT_ENABLED', "warning");
+    G::header('location: forgotPassword');
+    die;
+  }
+  
   $newPass = G::generate_password();
   
   $aData['USR_UID']      = $userData['USR_UID'];
@@ -82,12 +87,9 @@ if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']
   G::header  ("location: login.html");  
   G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
 } else {
-  $msg = G::LoadTranslation('ID_USER') . ' ' . $data['USR_USERNAME'] . ' '. G::LoadTranslation('ID_USER_NOT_REGISTERED');
-  G::SendTemporalMessage ($msg, "warning");
-  $G_PUBLISH = new Publisher ();
-  $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPassword', '','', SYS_URI . 'login/authentication.php' );
-  G::RenderPage ( "publish" );
-
+  $msg = G::LoadTranslation('ID_USER') . ' ' . $data['USR_USERNAME'] . ' '. G::LoadTranslation('ID_IS_NOT_REGISTERED');
+  G::SendTemporalMessage ($msg, "warning", 'string');
+  G::header('location: forgotPassword');
 }
 
 
