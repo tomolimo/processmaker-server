@@ -2,47 +2,6 @@
 //sysGeneric, this file is used initialize main variables and redirect to each and all pages
 $startingTime =  array_sum(explode(' ',microtime()));
 
-  /* Default configuration values (do not change these, use env.ini) */
-  $default_config = array(
-    'debug' => 0,
-    'debug_sql' => 0,
-    'debug_time' => 0,
-    'debug_calendar' => 0,
-    'wsdl_cache' => 1,
-    'memory_limit' => '100M',
-    'time_zone' => 'America/La_Paz'
-  );
-  
-  /* Read the env.ini */
-  $env_file = realpath(dirname(__FILE__) . "/../engine/config/env.ini");
-  if ($env_file !== false && file_exists($env_file)) {
-    $config = array_merge($default_config, parse_ini_file($env_file, false));
-  } else {
-    $config = $default_config;
-  }
-
-  if ($config['debug']) {
-    $config['debug_sql'] = 1;
-  }
-
-//*** Do not change any of these settings directly, use env.ini instead
-  ini_set('display_errors','On');
-
-  ini_set('short_open_tag', 'on');
-  ini_set('asp_tags', 'on');
-  ini_set('register_globals', 'off');
-  ini_set('default_charset', "UTF-8");
-  $e_all = defined('E_DEPRECATED') ? E_ALL ^ E_DEPRECATED : E_ALL;
-  ini_set('error_reporting', ($config['debug'] ? $e_all : $e_all ^ E_NOTICE) );
-  ini_set('memory_limit', $config['memory_limit']);
-  ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
-  
-  define ('DEBUG_SQL_LOG', $config['debug_sql'] );
-  define ('DEBUG_TIME_LOG', $config['debug_time'] );
-  define ('DEBUG_CALENDAR_LOG', $config['debug_calendar'] );
-  
-  define ('TIME_ZONE', $config['time_zone']);
-
 //*** process the $_POST with magic_quotes enabled
   function strip_slashes(&$vVar) {
     if (is_array($vVar)) {
