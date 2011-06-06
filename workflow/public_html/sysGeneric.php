@@ -609,11 +609,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         }
         if ($bRedirect) {
           if (empty($_POST)) {
-            //if(SYS_TARGET != 'forgotPassword')
               header('location: ' . SYS_URI . 'login/login?u=' . urlencode($_SERVER['REQUEST_URI']));
-            //else 
-              //header('location: ' . SYS_URI . 'login/forgotPassword');
-            
           }
           else {
             header('location: ' . SYS_URI . 'login/login');

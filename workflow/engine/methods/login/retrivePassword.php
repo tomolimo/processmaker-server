@@ -1,25 +1,31 @@
 <?php
-$data=$_POST['form'];
+$data = $_POST['form'];
 global $RBAC;
 require_once PATH_RBAC."model/RbacUsers.php";
-$oUser = new RbacUsers();
-$aFields=$oUser->getByUsername($data['USR_USERNAME']);
-if($aFields['USR_EMAIL']==$data['USR_EMAIL'])
-{
-  require_once ( "classes/class.pmFunctions.php" );
+require_once ( "classes/class.pmFunctions.php" );
+require_once 'classes/model/Users.php';
+G::LoadClass("system");
+
+$rbacUser = new RbacUsers();
+$user = new Users();
+
+$userData = $rbacUser->getByUsername($data['USR_USERNAME']);
+
+if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']) {
+
   $aSetup = getEmailConfiguration();
-  // generate a new password
-  $newPass=G::generate_password();
-  require_once 'classes/model/Users.php';
-  $oUser = new Users();  
-  $aData['USR_UID']      = $aFields['USR_UID'];
+  $newPass = G::generate_password();
+  
+  $aData['USR_UID']      = $userData['USR_UID'];
   $aData['USR_PASSWORD'] = md5($newPass);
-  $RBAC->updateUser($aData,'PROCESSMAKER_ADMIN');
-  G::LoadClass("system");
+  
+  $rbacUser->update($aData);
+  $user->update($aData);
+  
   $sFrom    = ($aSetup['MESS_ACCOUNT'] != '' ? $aSetup['MESS_ACCOUNT'] . ' ' : '') . '<' . $aSetup['MESS_ACCOUNT'] . '>';
   $sSubject = G::LoadTranslation('ID_RESET_PASSWORD').' - ProcessMaker' ;
-  $msg = '<h3>'.G::LoadTranslation('ID_THANKS_USE_SERVICES').'.</h3>';  
-  $msg .='<p>'.G::LoadTranslation('ID_YOUR_USERMANE_IS').' :  <strong>'.$aFields['USR_USERNAME'].'</strong></p>';
+  $msg = '<h3>ProcessMaker Forgot password Service</h3>';
+  $msg .='<p>'.G::LoadTranslation('ID_YOUR_USERMANE_IS').' :  <strong>'.$userData['USR_USERNAME'].'</strong></p>';
   $msg .='<p>'.G::LoadTranslation('ID_YOUR_PASSWORD_IS').' :  <strong>'.$newPass.'</strong></p>';
   switch ($aSetup['MESS_ENGINE']) {
     case 'MAIL':
@@ -74,11 +80,9 @@ if($aFields['USR_EMAIL']==$data['USR_EMAIL'])
 
   $oSpool->sendMail();
   G::header  ("location: login.html");  
-}
-
-else
-{
-  $msg=G::LoadTranslation('ID_USER_NOT_REGISTER');
+  G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
+} else {
+  $msg = G::LoadTranslation('ID_USER') . ' ' . $data['USR_USERNAME'] . ' '. G::LoadTranslation('ID_USER_NOT_REGISTERED');
   G::SendTemporalMessage ($msg, "warning");
   $G_PUBLISH = new Publisher ();
   $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPassword', '','', SYS_URI . 'login/authentication.php' );

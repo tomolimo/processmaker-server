@@ -44,17 +44,7 @@ switch($request){
         );
       }
     }    
-     if($_GET['menu'] == 'settings' ){
-      $items[] = Array(
-        'id'    => 'login',
-        'url'  => 'loginSettings',
-        'text' => 'Login',
-        'loaded' => true,
-        'leaf'   => true,
-        'cls'    => 'pm-tree-node',
-        'iconCls'=> 'ICON_'
-      );
-    }
+
     if( isset($_SESSION['DEV_FLAG']) && $_SESSION['DEV_FLAG'] && $_GET['menu'] == 'settings' ){
       $items[] = Array(
         'id'    => 'translations',

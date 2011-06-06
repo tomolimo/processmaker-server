@@ -755,6 +755,13 @@ antes funcionaba.
 	background-position:0 -14833px !important;
 }
 
+.ICON_LOGIN{
+	/*ss_key*/
+	background-image:url( /images/icons_silk/sprites.png) !important;
+	background-position:0 -8929px !important;
+}
+
+
 /* Language Support module styles*/
 .upload-icon {
 	background: url('/images/cases-documents.png') no-repeat 0 0 !important;
