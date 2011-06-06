@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.29.rc4-5-g2d187cd\n"
+"Project-Id-Version: ProcessMaker (Branch master) 2.0.8-278-g48ab235\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-06-03 19:13:55\n"
+"PO-Revision-Date: 2011-06-06 10:57:23\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -9586,8 +9586,8 @@ msgstr "Disable Action"
 # TRANSLATION
 # LABEL/ID_DERIVATED
 #: LABEL/ID_DERIVATED
-msgid "Derivated"
-msgstr "Derivated"
+msgid "Routed"
+msgstr "Routed"
 
 # TRANSLATION
 # LABEL/ID_IN_PROGRESS
@@ -9990,6 +9990,24 @@ msgstr "Your password is"
 #: LABEL/ID_ENABLE_FOTGOT_PASSWORD
 msgid "Enable Forgot password"
 msgstr "Enable Forgot password"
+
+# TRANSLATION
+# LABEL/ID_NEW_PASSWORD_SENT
+#: LABEL/ID_NEW_PASSWORD_SENT
+msgid "Your new password was sent to your email account!"
+msgstr "Your new password was sent to your email account!"
+
+# TRANSLATION
+# LABEL/ID_IS_NOT_REGISTERED
+#: LABEL/ID_IS_NOT_REGISTERED
+msgid "is not registered!"
+msgstr "is not registered!"
+
+# TRANSLATION
+# LABEL/ID_EMAIL_ENGINE_IS_NOT_ENABLED
+#: LABEL/ID_EMAIL_ENGINE_IS_NOT_ENABLED
+msgid "The \"Email Notifications\" is not enabled, please contact to your System Administrator."
+msgstr "The \"Email Notifications\" is not enabled, please contact to your System Administrator."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
