@@ -255,7 +255,7 @@ Ext.onReady(function(){
 
   Ext.getCmp('stepsMenu').hide();
   Ext.getCmp('informationMenu').hide();
-  Ext.getCmp('actionMenu').hide();
+  //Ext.getCmp('actionMenu').hide();
     
   hideCaseNavigatorPanel();
 
