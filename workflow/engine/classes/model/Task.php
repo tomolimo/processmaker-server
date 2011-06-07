@@ -537,6 +537,7 @@ public function kgetassigType($pro_uid, $tas){
         Content::removeContent('TAS_DEF_DESCRIPTION', '', $oTask->getTasUid());
         Content::removeContent('TAS_DEF_PROC_CODE', '', $oTask->getTasUid());
         Content::removeContent('TAS_DEF_MESSAGE', '', $oTask->getTasUid());
+        Content::removeContent('TAS_DEF_SUBJECT_MESSAGE', '', $oTask->getTasUid());
         $iResult = $oTask->delete();
         $oConnection->commit();
         return $iResult;
@@ -595,6 +596,7 @@ public function kgetassigType($pro_uid, $tas){
         $this->setTasDefDescription((isset($aData['TAS_DEF_DESCRIPTION']) ? $aData['TAS_DEF_DESCRIPTION']: ''));
         $this->setTasDefProcCode((isset($aData['TAS_DEF_DESCRIPTION']) ? $aData['TAS_DEF_DESCRIPTION']: ''));
         $this->setTasDefMessage((isset($aData['TAS_DEF_MESSAGE']) ? $aData['TAS_DEF_MESSAGE']: ''));
+        $this->setTasDefSubjectMessage((isset($aData['TAS_DEF_SUBJECT_MESSAGE']) ? $aData['TAS_DEF_SUBJECT_MESSAGE']: ''));
         $this->save();
         $con->commit();
         return;
