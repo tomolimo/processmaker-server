@@ -4165,15 +4165,25 @@ class XmlForm
           $field->language = $this->language;
           $this->fields [$field->name] = $field;
         }
+        
+         //echo var_dump($xmlNode [$k]->attributes["validate"]);
 
         if (isset ( $xmlNode [$k]->attributes ['required'] )) {
           // the fields or xml nodes with a required attribute are put in an array that is passed to the view file
           $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
           
-          if ($xmlNode [$k]->attributes ['required'] == 1 && $isEditMode && $this->mode != 'view')
-            $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ) );
-        }
+          if ($xmlNode [$k]->attributes ['required'] == 1 && $isEditMode && $this->mode != 'view') {
+            $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => trim ( $field->validate ),'required' => trim ( $field->required ) );          
+          }
+          else {
+            $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
+              if ($xmlNode [$k]->attributes ['validate'] == "Email" && $isEditMode && $this->mode != 'view') {
+                $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => trim ( $field->validate ),'required' => trim ( $field->required ) );
+              }
+          }
+          
 
+        }        
       }
 
       $oJSON = new Services_JSON ( );

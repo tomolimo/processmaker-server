@@ -770,7 +770,13 @@ function G_Text( form, element, name, type )
       var pat=/^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
       if(!pat.test(this.element.value))
       {
-        this.element.className=this.element.className.split(" ")[0]+" FormFieldInvalid";
+        if(this.required=="0"&&this.element.value=="") {
+          this.element.className=this.element.className.split(" ")[0]+" FormFieldContent";        
+        }
+        else {        
+          this.element.className=this.element.className.split(" ")[0]+" FormFieldInvalid";        
+        }
+
       }
       else
       {
@@ -1887,16 +1893,42 @@ var validateForm = function(sRequiredFields) {
             invalid_fields.push(aRequiredFields[i].label);
             vtext1.failed();
           } else {
-            vtext1.passed();
+            vtext1.passedsed();
           }
           break;
         case 'text':
+        
           var vtext = new input(getField(aRequiredFields[i].name));
+          
           if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext.failed();
+            if(aRequiredFields[i].validate=="Email"&&aRequiredFields[i].required=='0'){
+              vtext.normal();
+              return true;
+            }
+            else {
+              invalid_fields.push(aRequiredFields[i].label);
+              vtext.failed();                        
+            }
+
           } else {
-            vtext.passed();
+          
+            if(aRequiredFields[i].validate=="Email") {
+              var email = getField(aRequiredFields[i].name);              
+              //var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+              var filter = /^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+                  if (!filter.test(email.value)&&email.value!="") {                  
+                    invalid_fields.push(aRequiredFields[i].label);                                        
+                    vtext.failed();
+                    email.focus();                                        
+                  }
+                  else {
+                    vtext.passed();                  
+                  }
+            }
+            else {
+              vtext.passed();            
+            }
+
           }
           break;
           

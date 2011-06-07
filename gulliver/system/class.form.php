@@ -163,7 +163,7 @@ class Form extends XmlForm
   {
     /***
      * This section was added for store the current used template.
-   */
+    */
     $tmp_var = explode('/', $template);
     if( is_array($tmp_var) ){
       $tmp_var = $tmp_var[sizeof($tmp_var)-1];
