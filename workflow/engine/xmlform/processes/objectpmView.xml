@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="pbjectpmView" width="100%" mode="view">
+<dynaForm name="pbjectpmView" width="100%" mode="">
 
 <thetitle type="title">
   <en>Process Properties</en>
@@ -7,41 +7,41 @@
 
 <uid type="hidden"/>
 
-<title type="text">
+<title type="text" mode="view">
   <en>Title</en>
 </title>
 
-<version type="text">
+<version type="text" mode="view">
   <en>Version</en>
 </version>
 
-<pm_version type="text">
+<pm_version type="text" mode="view">
   <en>P.M. rev. required</en>
 </pm_version>
 
-<category type="text">
+<category type="text" mode="view">
   <en>Category</en>
 </category>
 
 
 
-<rating type="text">
+<rating type="text" mode="view">
   <en>Rating</en>
 </rating>
 
-<downloads type="text">
+<downloads type="text" mode="view">
   <en>Downloads</en>
 </downloads>
 
-<subscriptions type="text">
+<subscriptions type="text" mode="view">
   <en>Subscriptions</en>
 </subscriptions>
 
-<username type="text" colWidth="60">
+<username type="text" colWidth="60" mode="view">
   <en>Author</en>
 </username>
 
-<privacy type="dropdown">
+<privacy type="dropdown" mode="view">
   <en>Privacy
   <option name="FREE">Free Download</option>
   <option name="PUBLIC">Public</option>
@@ -50,15 +50,15 @@
   </en>
 </privacy>
 
-<createDate type="text">
+<createDate type="text" mode="view">
   <en>Create Date</en>
 </createDate>
 
-<updateDate type="text">
+<updateDate type="text" mode="view">
   <en>Update Date</en>
 </updateDate>
 
-<description type="text" enableHtml="1">
+<description type="text" enableHtml="1" mode="view">
   <en>Description</en>
 </description>
 
@@ -66,7 +66,7 @@
   <en>Install Steps</en>
 </subinstallSteps>
 
-<installSteps type="text" enableHtml="1">
+<installSteps type="text" enableHtml="1" mode="view">
   <en/>
 </installSteps>
 
@@ -74,7 +74,7 @@
 
 <link_href type="private"/>
 
-<link type="link" value="@#link_label" link="@#link_href" enableHtml="1">
+<link type="link" value="@#link_label" link="@#link_href">
 <en></en></link>
 
 <js type="javascript"><![CDATA[
