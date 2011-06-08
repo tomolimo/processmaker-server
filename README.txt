@@ -35,9 +35,11 @@ http://www.processmaker.com/
 -----------------------------
 |* Requirements for Server *|
 -----------------------------
+ProcessMaker 2.0 and later requires:
+
 * Linux or UNIX or Windows (XP, Vista, 7, Server 2003, Server 2008)  
 
-* MySQL 5.1.37 or greater
+* MySQL 5.1.6 or greater
 
 * Apache 2.2.3 or greater, with the following modules:
   * Deflate
@@ -80,82 +82,117 @@ increase the max_post_size and upload_max_filesize to larger than the default
   max_post_size = 2M 
   upload_max_filesize = 2M
 
-After editing php.ini, restart the Apache server for the new configuration to 
-take effect
+After editing the "php.ini" file, restart the Apache server for the new 
+configuration to take effect.
 
 -------------------------
 |* MySQL Configuration *|
 -------------------------
-In MySQL, give a user superuser privileges to create and update the databases 
-used by ProcessMaker. Either create a new user for this purpose or use an 
-existing user.
+The MySQL "root" user should already have all the necessary privileges to setup
+the ProcessMaker databases. If planning on using a MySQL user other than "root"
+to set up the ProcessMaker databases, grant a MySQL user superuser privileges 
+to create and update databases.
 
-Login to MySQL.
- mysql -u root -p
-Enter the root password for MySQL. If you haven't yet set a root password for 
-MySQL, set one for better security:
- mysqladmin -u root password '''''PASSWORD'''''
+Login to MySQL:
+  mysql -u root -p 
+Enter the root password for MySQL.
+
+Once in MySQL, give the user which will be running ProcessMaker superuser 
+privileges to create create and modify MySQL databases:
+mysql> grant all on *.* to 'USER'@'localhost' identified by 'PASSWORD' with grant option;
+
+Replace USER with the name of your MySQL user and PASSWORD with the password 
+for that user. (If that user doesn't already exist, he/she will be 
+automatically created with the above grant command. If you are running 
+ProcessMaker on a different server than your MySQL server, then replace 
+localhost with the domain name or IP address of the server where ProcessMaker 
+is located.
+
+Exit MySQL:
+mysql> exit;
+
 If you have forgotten the root password, see these instructions to reset it:
  http://dev.mysql.com/doc/refman/5.1/en/resetting-permissions.html
 
-If unable to log into MySQL because there is no socket, then MySQL needs to be 
+If unable to log into MySQL because there is no socket, then MySQL needs to be
 started as a service.
-
-Once in MySQL, give the user who will be running ProcessMaker superuser 
-privileges to create create and modify MySQL databases:
- grant all on *.* to 'USER'@'localhost' identified by 'PASSWORD' with grant option;
-
-Replace 'USER' with the name of your MySQL user and 'PASSWORD' with the password
-for that user. (If that user doesn't already exist, he/she will be automatically
-created with the above grant command. To avoid creating a new user, use 'root' 
-as the user and the root's password.) If you are running ProcessMaker on a 
-different server than your MySQL server, then replace 'localhost' with the 
-domain name or IP address of the server where ProcessMaker is located.
- 
-Finally, exit MySQL: 
- mysql> exit;
 
 -------------------------------
 |* ProcessMaker Installation *|
 -------------------------------
-1. Download the latest ProcessMaker tarball from:
- http://sourceforge.net/projects/processmaker/files
+1. Go to http://sourceforge.net/projects/processmaker/files and download a 
+recent tarball of ProcessMaker, which should be named "processmaker-2.X-X.tar.gz"
 
-2. Move the pmos-X.X-XXX.tar.gz file which was downloaded to the directory in 
-your server where the ProcessMaker application will be stored. For example, 
-"c:\Program Files\" in Windows or "/opt/" in Linux.
+The versions are numbered according to the pattern MAJOR.MINOR-REVISION, such 
+as "2.0-8". Beta versions will have the word "beta" appended to the version 
+number.
 
-The code files are in .tar.gz format and can be extracted using most compression 
-tools, like the tar command in Linux/UNIX or WinRAR or 7-Zip in Windows.
+2. Move the "processmaker-X.X-X.tar.gz" file which was downloaded to the 
+directory in your server where the ProcessMaker application will be stored.
+
+ProcessMaker can be installed in any directory which is not publicly 
+accessible to the internet (so do NOT install it in "/var/www" in Linux/UNIX).  
+
+In Linux/UNIX, it is generally installed in the "/opt" directory, since it is an 
+optional program which doesn't come from the standard repositories. 
+
+In Windows XP and Server 2003, it is generally installed in the 
+"C:\Program Files" directory.
+
+In Windows Vista, 7, and Server 2008, it is generally installed in the local
+directory of a user, such as "C:/Users/X/processmaker", due to the new security 
+restrictions which do not allow Apache to write to the C:/Program Files 
+directory.
+ 
+3. The code files are in .tar.gz format and can be extracted using most 
+compression tools, like the "tar" command in Linux/UNIX or WinRAR or 7-Zip in 
+Windows.
+
  Linux/UNIX:
-   tar -xvzf pmos-X.X-XXXX.tar.gz /opt/
+   tar -xvzf processmaker-X.X-X.tar.gz /opt/
 
- MS WINDOWS:
-   Use WinRAR or 7-Zip to extract the file '''<tt>pmos-X.X-XXXX.tar.gz</tt>''' 
-   in C:\Program Files\
+ MS Windows:
+   Use WinRAR or 7-Zip to extract the file processmaker-X.X-X.tar.gz
 
 This will create a new "processmaker" directory, containing all the ProcessMaker 
-files and directories.
+files and directories, which should have the following contents:
 
-3. Then, make the following subdirectories writable to the user running Apache: 
+ gulliver     processmaker      rbac        shared
+ LICENSE.txt  processmaker.bat  README.txt  workflow
+
+
+4. Then, make the following subdirectories writable to the user running Apache:
+ 
  Linux/UNIX:
-   chmod 770 /opt/processmaker/shared
-   cd /opt/processmaker/workflow/engine/
-   chmod 770 config content/languages plugins xmlform js/labels
-   chown -R apache-user:apache-user /opt/processmaker
+   Issue the following commands:
+     chmod 770 /opt/processmaker/shared
+     cd /opt/processmaker/workflow/engine/
+     chmod 770 config content/languages plugins xmlform js/labels
+   
+   Then change the owner of the ProcessMaker files to Apache:
+     chown -R apache-user:apache-user /opt/processmaker
    
    Replace "apache-user", with the user running Apache in your distribution.
-   In RedHat/CentOS/Fedora: 
-      chown -R apache:apache /opt/processmaker 
-    In Debian/Ubuntu:
-      chown -R www-data:www-data /opt/processmaker
-    In SUSE/OpenSUSE: 
-      chown -R chown wwwrun:www -R /opt/processmaker
+     In RedHat/CentOS/Fedora: 
+       chown -R apache:apache /opt/processmaker 
+     In Debian/Ubuntu:
+       chown -R www-data:www-data /opt/processmaker
+     In SUSE/OpenSUSE: 
+       chown -R chown wwwrun:www -R /opt/processmaker
 
+ MS Windows:
+   Make the following subdirectories writable:
+     <INSTALL-DIRECTORY>\processmaker\shared
+     <INSTALL-DIRECTORY>\processmaker\workflow\engine\config 
+     <INSTALL-DIRECTORY>\processmaker\workflow\engine\content\languages 
+     <INSTALL-DIRECTORY>\processmaker\workflow\engine\plugins 
+     <INSTALL-DIRECTORY>\processmaker\workflow\engine\xmlform 
+     <INSTALL-DIRECTORY>\processmaker\workflow\engine\js\labels
+     
 --------------------------
 |* Apache Configuration *|
 --------------------------
-1. Edit the file "<PROCESSMAKER-DIRECTORY>/etc/pmos.conf" with a plain
+1. Edit the file "<INSTALL-DIRECTORY>/processmaker/etc/pmos.conf" with a plain
 text editor (such as Notepad or Notepad++ in Windows or vim, nano or gedit in 
 Linux/UNIX).
 
@@ -189,20 +226,22 @@ Modify the following virtual host definition to match your environment:
   </VirtualHost>
 --------------------------------------------------------------------
 
-Replace your_ip_address with the IP number or domain name of the server running 
-ProcessMaker. If only planning on running and accessing ProcessMaker on your 
-local machine, then use the IP address "127.0.0.1". If using ProcessMaker on a 
-machine whose IP address might change (such as a machine whose IP address is 
-assigned with DHCP), then use "*", which represents any IP address. If not using 
-the standard port 80, then it is necessary to also specify the port number.
+Replace "your_ip_address" with the IP number or domain name of the server 
+running ProcessMaker. If only planning on running and accessing ProcessMaker on
+your local machine, then use the IP address "127.0.0.1". If using ProcessMaker 
+on a machine whose IP address might change (such as a machine whose IP address 
+is assigned with DHCP), then use "*", which represents any IP address. If not 
+using the standard port 80, then it is necessary to also specify the port 
+number.
 
-If your DNS or /etc/hosts has a defined domain for ProcessMaker, then use that 
-domain for your_processmaker_domain. Otherwise, use the same IP address for your_processmaker_domain as was used for your_ip_address.
+If your DNS or "hosts" file has a defined domain for ProcessMaker, then use 
+that domain for "your_processmaker_domain". Otherwise, use the same IP address 
+for "your_processmaker_domain" as was used for "your_ip_address".
 
-If ProcessMaker is installed in a location other than /opt/processmaker/, then 
+If ProcessMaker is installed in a location other than "/opt/processmaker", then
 edit the paths to match where Processmaker is installed on your system.
 
-For example, if running ProcessMaker on a Windows server at address 
+For example, if running ProcessMaker on a Windows XP server at address 
 192.168.1.100 on port 8080 with a domain at processmaker.mycompany.com:
 ------------------------------------------------------------------------
   NameVirtualHost 192.168.1.100:8080
@@ -215,22 +254,52 @@ For example, if running ProcessMaker on a Windows server at address
     ...
 ------------------------------------------------------------------------
 
-Note: It is also possible to define the virtual host for ProcessMaker directly 
-in the Apache configuration by inserting the above VirtualHost definition in the 
-general Apache configuration file, generally named "httpd.conf".
+For example, if running ProcessMaker on a Linux server at address 
+server1.example.com with a domain at pm.example.com:
+------------------------------------------------------------------------
+  NameVirtualHost server1.example.com
+  #processmaker virtual host
+  <VirtualHost server1.example.com >
+    ServerName "pm.example.com"
+    DocumentRoot /opt/processmaker/workflow/public_html
+    DirectoryIndex index.html index.php
+    <Directory  "/opt/processmaker/workflow/public_html">
+    ...
+------------------------------------------------------------------------
 
-Then, copy the pmos.conf file to the following directory, where it will 
+For example, if ProcessMaker is installed in the "/home/fred" directory on your
+local machine at port 8080 with an dynamic IP assigned by DHCP:
+------------------------------------------------------------------------
+  NameVirtualHost *:8080
+  #processmaker virtual host
+  <VirtualHost *:8080 >
+    ServerName "*"
+    DocumentRoot /home/fred/processmaker/workflow/public_html
+    DirectoryIndex index.html index.php
+    <Directory  "/home/fred/processmaker/workflow/public_html">
+    ...
+--------------------------------------------------------------------------
+
+Note: It is also possible to define the virtual host for ProcessMaker directly 
+in the Apache configuration by inserting the above VirtualHost definition in 
+the Apache configuration file, which is generally named "httpd.conf".
+
+Then, copy the "pmos.conf" file to the following directory, where it will 
 automatically be loaded by the Apache web server:
 
     Generic Linux/UNIX: 
-       /etc/httpd/conf.d/pmos.conf 
+       /etc/httpd/conf.d/pmos.conf
+ 
     Debian/Ubuntu: 
-       /etc/apache2/sites-available/ 
-       Then issue the command: a2ensite pmos.conf 
+       /etc/apache2/sites-available/
+ 
+       Then issue the command to enable the site: 
+          a2ensite pmos.conf
+ 
     WINDOWS: 
        C:\wamp\bin\apache\apache2.2.8\conf\extra\pmos.conf 
 
-If using Windows, add the following line to the httpd.conf file, so that the 
+If using Windows, add the following line to the "httpd.conf" file, so that the 
 ProcessMaker virtual configuration can proceed:
 
   Include "C:\wamp\bin\apache\apache2.2.8\conf\extra\pmos.conf"
@@ -250,12 +319,13 @@ site available
 --------------------------------
 1. Open your web browser and direct it to the IP address (and port) or domain 
 name where ProcessMaker is installed:
- http://ip-address
-If installed on the same machine, then use: 
- http://localhost 
+ http://IP-ADDRESS
+
+For example, if installed on the local machine at port 8080, then use: 
+ http://localhost:8080 
    
 The web browser should be redirected to the address:
- http://ip-address/sys/en/green/login
+ http://IP-ADDRESS/sys/en/green/login
 
 2. The installation configuration page should appear to setup ProcessMaker. 
 (If the default Apache page appears, then disable it and restart Apache.)
@@ -284,7 +354,7 @@ inside ProcessMaker. To login with a different workspace, language or skin, see:
 If the ProcessMaker configuration screen appears the next time you try to login, 
 press CTRL+F5 to clear your web browser's cache.
  
-'''Note:''' It is a good idea to reset the administrator's password to something 
+Note: It is a good idea to reset the administrator's password to something 
 more secure in the future before using ProcessMaker in production.
 
 
@@ -295,4 +365,4 @@ ProcessMaker - Automate your Workflow
 Copyright (C) 2002-2011 Colosa
 http://www.processmaker.com/
 
-Last Update: 2011-02-22, amosbatto AT colosa DOT com
+Last Update: 2011-04-11, amosbatto AT colosa DOT com
