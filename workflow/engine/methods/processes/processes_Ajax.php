@@ -335,7 +335,7 @@ try {
 	  	switch ($aFields['privacy']) {
 	  	  case 'FREE':
 	  	    $aFields['link_label'] = G::LoadTranslation('ID_DOWNLOAD');
-	  	    $aFields['link_href']  = '../processes/downloadPML?id=' . $oData->pro_uid;
+	  	    $aFields['link_href']  = '<A href="../processes/downloadPML?id='.$oData->pro_uid.'">'.G::LoadTranslation('ID_DOWNLOAD').'</A>';
 	  	  break;
 	  	  case 'PUBLIC':
 	  	    require_once 'classes/model/Configuration.php';
@@ -362,16 +362,16 @@ try {
             }
             if ($bExists) {
 	  	        $aFields['link_label'] = G::LoadTranslation('ID_DOWNLOAD');
-	  	        $aFields['link_href']  = '../processes/downloadPML?id=' . $oData->pro_uid . '&s=' . $sessionId;
+	  	        $aFields['link_href']  = '<A href="../processes/downloadPML?id='.$oData->pro_uid . '&s=' . $sessionId.'">'.G::LoadTranslation('ID_DOWNLOAD').'</A>';
 	  	      }
 	  	      else {
 	  	        $aFields['link_label'] = G::LoadTranslation('ID_NEED_REGISTER');
-	  	        $aFields['link_href']  = "javascript:registerPML('" . $oData->pro_uid . "');";
+	  	        $aFields['link_href']  = '<A href=javascript:registerPML("' . $oData->pro_uid . '");>'.G::LoadTranslation('ID_NEED_REGISTER').'</A>';
 	  	      }
 	  	    }
 	  	    else {
 	  	      $aFields['link_label'] = G::LoadTranslation('ID_NEED_REGISTER');
-	  	      $aFields['link_href']  = "javascript:registerPML('" . $oData->pro_uid . "');";
+	  	      $aFields['link_href']  = '<A href=javascript:registerPML("' . $oData->pro_uid . '");>'.G::LoadTranslation('ID_NEED_REGISTER').'</A>';
 	  	    }
 	  	  break;
 	  	}
