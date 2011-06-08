@@ -771,7 +771,8 @@ function G_Text( form, element, name, type )
       if(!pat.test(this.element.value))
       {
         if(this.required=="0"&&this.element.value=="") {
-          this.element.className=this.element.className.split(" ")[0]+" FormFieldContent";        
+          this.element.className="module_app_input___gray";
+          return;
         }
         else {        
           this.element.className=this.element.className.split(" ")[0]+" FormFieldInvalid";        
