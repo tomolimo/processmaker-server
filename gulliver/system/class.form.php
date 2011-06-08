@@ -75,7 +75,7 @@ class Form extends XmlForm
       }
     }
   }
-  
+
   /**
    * Function Form
    * @author David S. Callizaya S. <davidsantos@colosa.com>
@@ -118,7 +118,7 @@ class Form extends XmlForm
     }
     $this->template = PATH_CORE . 'templates/'.$this->type.'.html';
   }
-  
+
   /**
    * Function printTemplate
    * @author David S. Callizaya S. <davidsantos@colosa.com>
@@ -150,7 +150,7 @@ class Form extends XmlForm
     }
     return $o->template;
   }
-  
+
   /**
    * Function render
    * @author David S. Callizaya S. <davidsantos@colosa.com>
@@ -261,7 +261,7 @@ class Form extends XmlForm
         $this->fieldContentWidth = (int)($nWidth - $nLabelWidth);
     }
   }
-  
+
   /**
    * Function getFields
    * @author David S. Callizaya S. <davidsantos@colosa.com>
@@ -275,7 +275,7 @@ class Form extends XmlForm
     $o = new xmlformTemplate($this, $template);
     return $o->getFields( $this, $therow );
   }
-  
+
   /**
    * Function that validates the values retrieved in $_POST
    * @author David S. Callizaya S. <davidsantos@colosa.com>
@@ -286,7 +286,7 @@ class Form extends XmlForm
   {
     return $_POST['form']=$this->validateArray($_POST['form']);
   }
-  
+
   /**
    * Function that validates the values retrieved in an Array:
    *   ex $_POST['form']
@@ -299,11 +299,11 @@ class Form extends XmlForm
   {
     $values = array();
     foreach($this->fields as $k => $v) {
-      
+
       if (($v->type != 'submit')) {
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
-            
+
             switch($v->type){
               case 'radiogroup':
                 $values[$k] = $newValues[$k];
@@ -319,9 +319,9 @@ class Form extends XmlForm
                     if (trim($value) == '') {
                       continue;
                     }
-                    
+
                     $values[$k] .= ($i != 0 ? '|': '') . $value;
-                    
+
                     if (isset($v->options[$value])){
                       $values["{$k}_label"] .= ($i != 0 ? '|': '') . $v->options[$value];
                     } else {
@@ -330,7 +330,7 @@ class Form extends XmlForm
                       $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
                       $stmt = $con->prepareStatement($query);
                       $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-                      
+
                       while ($rs->next()) {
                         list($rowId, $rowContent) = $rs->getRow();
 
@@ -341,16 +341,16 @@ class Form extends XmlForm
                       }
                     }
                   }
-                  $newValues[$k] = $values["{$k}_label"];
+                  $newValues["{$k}_label"] = isset($values["{$k}_label"]) ? $values["{$k}_label"] : '';
                 } else {
                   $values[$k] = $newValues[$k];
-                  $values["{$k}_label"] = $newValues["{$k}_label"];
+                  $values["{$k}_label"] = isset($newValues["{$k}_label"]) ? $newValues["{$k}_label"] : '';
                 }
                 break;
 
               case 'dropdown':
                 $values[$k] = $newValues[$k];
-                
+
                 if (isset($v->options[$newValues[$k]])){
                   $values["{$k}_label"] = $newValues["{$k}_label"] = $v->options[$newValues[$k]];
                 } else {
@@ -375,11 +375,11 @@ class Form extends XmlForm
                     $i=0;
                     $values[$k][$j] = $this->fields[$k]->maskValue( $newValues[$k][$j], $this );
                     foreach($item as $kk => $vv){
-                      
+
                       //we need to know which fields are dropdowns
                       if($this->fields[$k]->fields[$kk]->type == 'dropdown') {
                         $values[$k][$j] = $newValues[$k][$j];
-                        
+
                         if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
                           if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
                             $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
@@ -391,7 +391,7 @@ class Form extends XmlForm
                             while ($rs->next()){
                               // from the query executed we only need certain elements
                               list($rowId, $rowContent) = $rs->getRow();
-                              
+
                               if ($vv==$rowId){
                                 $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk. '_label'] = $rowContent;
                                 break;
@@ -411,7 +411,7 @@ class Form extends XmlForm
                   }
                 }
                 break;
-              
+
               default:
                 if ($this->fields[$k]->validateValue($newValues[$k], $this ))
                 $values[$k] = $this->fields[$k]->maskValue( $newValues[$k], $this );
@@ -444,7 +444,7 @@ class Form extends XmlForm
     }
     return $values;
   }
-  
+
   /**
    * Function that return the valid fields to replace
    * @author Julio Cesar Laura Avendao?=o <juliocesar@colosa.com>
