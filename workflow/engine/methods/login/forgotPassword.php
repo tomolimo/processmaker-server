@@ -23,5 +23,5 @@
  *
  */
   $G_PUBLISH = new Publisher ();
-  $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPassword', '', $aFields, SYS_URI . 'login/retrivePassword.php');
+  $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPassword', '', array(), 'retrivePassword.php');
   G::RenderPage ( "publish" );
