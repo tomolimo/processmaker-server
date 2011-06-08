@@ -1894,7 +1894,7 @@ var validateForm = function(sRequiredFields) {
             invalid_fields.push(aRequiredFields[i].label);
             vtext1.failed();
           } else {
-            vtext1.passedsed();
+            vtext1.passed();
           }
           break;
         case 'text':
