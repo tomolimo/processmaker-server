@@ -117,7 +117,8 @@ try {
 				$tri_Button = "<input type='button' name='INSERT_VARIABLE' value='@@' onclick='showDynaformsFormVars($sNameTag ,   \"../controls/varsAjax\" ,   \"$sProUid\" ,   \"@@\");return;' >";
 				$template->assign ( 'ADD_TRI_VARIABLE', $tri_Button );
 //				$template->assign ( 'ADD_TRI_VALUE', str_replace ( "'", "", str_replace ( '"', '', $paramDefaultValue ) ) );
-				$template->assign ( 'ADD_TRI_VALUE',  $_GET[trim( str_replace( "$", "", $paramName ) )] );
+        $paramValue = $_GET[trim( str_replace( "$", "", $paramName ) )];
+        $template->assign ( 'ADD_TRI_VALUE', str_replace("\'", "&apos;", $paramValue) );
 				$fieldDescription = ($paramDescription!="")?$paramDescription . "<br>":"";
 				$fieldDescription .= $paramDefaultValue != "" ? $paramDefaultValue . " | " . $paramType : G::LoadTranslation ( "ID_REQUIRED_FIELD" ) . " | " . $paramType;
 				$template->assign ( 'ADD_TRI_DESCRIPTION', $fieldDescription );

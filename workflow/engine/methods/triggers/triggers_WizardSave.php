@@ -64,7 +64,8 @@ foreach ( $aInfoFunction as $k => $v ) {
 			if ((strstr ( $aDataTriggers [$sOptionTrigger], "@@" ))) {
 				$option = trim($aDataTriggers [$sOptionTrigger]);
 			} else {
-				$option = "'" . trim($aDataTriggers [$sOptionTrigger]) . "'";
+        $aDataTriggers [$sOptionTrigger] = str_replace("'", "\'", $aDataTriggers [$sOptionTrigger]);
+        $option = "'" . trim($aDataTriggers [$sOptionTrigger]) . "'";
 			}
 		} else {
 			$option = "''";
