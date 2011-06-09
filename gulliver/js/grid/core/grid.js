@@ -270,6 +270,16 @@ var G_Grid = function(oForm, sGridName){
                       }
                       //Create new 'a' to trigger DatePicker
                       var a2 = document.createElement('a');
+                      
+                        if( a2.style.setAttribute ) {
+                          var styleText = "position:relative;top:0px;left:-19px;";
+                          a2.style.setAttribute("cssText", styleText );
+                        }
+                        else {
+                          var styleText = "position:relative;top:0px;left:-22px;";
+                          a2.setAttribute("style", styleText );
+                        }
+                        
                       a2.id = datePickerTriggerId;
                       a2.innerHTML = img2;
                       oNewRow.getElementsByTagName('td')[i].appendChild(a2);

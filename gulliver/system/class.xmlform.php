@@ -3356,7 +3356,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         } else {
             $isRequired = '0';
         }
-          $html = '<input class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities ( $v, ENT_COMPAT, 'utf-8' );
+          $html = '<input '.$this->NSRequiredValue().' class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities ( $v, ENT_COMPAT, 'utf-8' );
         } else {
           $id   = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
           $html = $this->__draw_widget ( $id, $v, $owner );
@@ -3554,7 +3554,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
         
         if ( $this->editable != "0") {
-          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'" required="' . $isRequired . '"/>'
+          $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'" required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'
@@ -3563,7 +3563,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 . '</a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
         } else {   
-          $html = '<input id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" required="' . $isRequired . '"/>'
+          $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'
