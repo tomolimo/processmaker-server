@@ -2016,7 +2016,7 @@ class XmlForm_Field_Link extends XmlForm_Field {
     } else {
       $html  = "";
       $html .= '<span id="form['. $this->name . ']">';
-      $html .= $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' );
+      $html .= $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
       $html .= '</span>';    
     }
 
