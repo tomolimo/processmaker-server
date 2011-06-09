@@ -417,6 +417,12 @@ function G_Text( form, element, name, type )
       attributes.mask=attributes.mask.replace('%Y','yyyy');                        
       me.mask=attributes.mask;   
     } 
+    
+     if(me.mask=='yyyy-mm-dd  %H:%M:%S')
+      me.mask = 'yyyy-mm-dd  mm:mm:mm';
+    if(me.mask=='yyyy-mm-dd %H:%M')
+      me.mask = 'yyyy-mm-dd  mm:mm';
+  
     if (me.mask !=='' ) {
       if ((keyCode < 48 || keyCode > 57) && (keyCode != 8 && keyCode != 0 && keyCode != 46)) return false;
       if((keyCode===118 || keyCode===86) && event.ctrlKey) return false;
