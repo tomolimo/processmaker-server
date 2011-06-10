@@ -1159,7 +1159,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
     $formVariableKeyValue = '';
     G::LoadClass('case');
     $oApp= new Cases();
-    if ($oApp->loadCase($_SESSION['APPLICATION'])!=null){
+    if ($_SESSION['APPLICATION'] != null && $oApp->loadCase($_SESSION['APPLICATION'])!=null){
       $aFields = $oApp->loadCase($_SESSION['APPLICATION']);
       if(isset($aFields['APP_DATA'][$this->name . '_label'])){
           $formVariableValue    = $aFields['APP_DATA'][$this->name . '_label'];
@@ -2564,6 +2564,8 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
    */
   function render($value = NULL, $owner = NULL, $rowId = '', $onlyValue = false, $row = -1, $therow = -1)
   {
+    $displayStyle = '';
+    
     //Returns value from a PMTable when it is exists. 
     if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
@@ -2584,9 +2586,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
     if ($this->renderMode == '') $this->renderMode = $this->mode;
     
     if (!$onlyValue){ //Render Field if not defined onlyValue
-      if ($this->renderMode == 'edit') { //EDIT MODE
-        $displayStyle = '';
-      } else {
+      if ($this->renderMode != 'edit') { //EDIT MODE
         $displayStyle = 'display:none;';
       }
       $readOnlyField = ($this->readonly == 1 || $this->readonly == '1') ? 'disabled' : '';
@@ -4159,11 +4159,11 @@ class XmlForm
           }
           else {
             $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
-              if ($xmlNode [$k]->attributes ['validate'] == "Email" && $isEditMode && $this->mode != 'view') {
+              if (isset($xmlNode[$k]->attributes['validate']) && $xmlNode[$k]->attributes ['validate'] == "Email" && $isEditMode && $this->mode !=
+'view') {
                 $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => trim ( $field->validate ),'required' => trim ( $field->required ) );
               }
           }
-          
 
         }        
       }
