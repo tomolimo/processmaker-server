@@ -565,7 +565,7 @@ Ext.onReady ( function() {
 
   // ComboBox creation processValues
   var resultTpl = new Ext.XTemplate(
-      '<tpl for="."><div class="x-combo-list-item" style="white-space:normal !important;">',
+      '<tpl for="."><div class="x-combo-list-item" style="white-space:normal !important;word-wrap: break-word;">',
           '<span> {APP_PRO_TITLE}</span>',
       '</div></tpl>'
   );
