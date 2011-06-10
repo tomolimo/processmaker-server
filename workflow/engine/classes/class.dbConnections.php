@@ -395,5 +395,57 @@ class dbConnections
     }
     return $aRet;
   }
-
+  
+  /**
+   * Function encryptThepassw
+   * @author krlos Pacha C. <carlos@colosa.com>
+   * @access public
+   * @param string proUid
+   * @return void
+   */
+  public function encryptThepassw($proUid){
+    $oDBSource   = new DbSource();
+  
+    $c = new Criteria();
+    $c->clearSelectColumns();
+    $c->addSelectColumn(DbSourcePeer::DBS_UID);
+    $c->addSelectColumn(DbSourcePeer::DBS_DATABASE_NAME);    
+    $c->addSelectColumn(DbSourcePeer::DBS_PASSWORD);
+    $c->add(DbSourcePeer::PRO_UID, $proUid);
+    $result = DbSourcePeer::doSelectRS($c);
+    $result->next();
+    $row = $result->getRow();
+    while ($row = $result->getRow()) {
+     if($row[2]!=''){
+      $aPass = explode('_', $row[2]);
+      if(count($aPass)==1) {
+       $passEncrypt = G::encrypt($row[2], $row[1]);
+       $passEncrypt.="_2NnV3ujj3w";
+       $c2 = new Criteria('workflow');
+       $c2->add(DbSourcePeer::DBS_PASSWORD, $passEncrypt);
+       $c3 = new Criteria('workflow');
+       $c3->add(DbSourcePeer::DBS_UID, $row[0]);
+       BasePeer::doUpdate($c3, $c2, Propel::getConnection('workflow'));
+      }
+     }
+      $result->next();
+    }
+   return 1;
+  }
+  /**
+   * Function getPassWithoutEncrypt
+   * @author krlos Pacha C. <carlos@colosa.com>
+   * @access public
+   * @param string passw
+   * @return string
+   */
+  public function getPassWithoutEncrypt($aInfoCon){
+   if($aInfoCon['DBS_PASSWORD']!=''){
+    $aPassw =explode('_',$aInfoCon['DBS_PASSWORD']);
+    $passw = $aPassw[0];
+    if(sizeof($aPassw)>1)
+      $passw = ($passw == 'none') ? "": G::decrypt($passw,$aInfoCon['DBS_DATABASE_NAME']);
+   }
+  return $passw;
+  }
 }

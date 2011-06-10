@@ -102,7 +102,10 @@ switch ( $action ){
 		$dbServices = $dbs->getDbServicesAvailables();
 		$dbService = $dbs->getEncondeList();
 		
-
+              //we are updating the passwords with encrupt info
+               $dbs->encryptThepassw($_SESSION['PROCESS']);
+              //end updating
+  
 		$rows[] = array('uid' => 'char', 'name' => 'char');
 
 		foreach($dbServices as $srv) {
@@ -134,7 +137,8 @@ switch ( $action ){
 		if ($aFields['DBS_PORT'] == '0') {
 		  $aFields['DBS_PORT'] = '';
 		}
-
+               $aFields['DBS_PASSWORD']=$dbs->getPassWithoutEncrypt($aFields['DBS_PASSWORD']);
+               $aFields['DBS_PASSWORD']=($aFields['DBS_PASSWORD'] == 'none') ? "": G::decrypt($aFields['DBS_PASSWORD'], $aFields['DBS_DATABASE_NAME']);
 		$G_PUBLISH->AddContent('xmlform', 'xmlform', 'dbConnections/dbConnections_Edit', '', $aFields);
 		G::RenderPage('publish', 'raw');
 		break;
@@ -150,7 +154,7 @@ switch ( $action ){
 			'DBS_SERVER' => $_POST['server'],
 			'DBS_DATABASE_NAME' => $_POST['db_name'],
 			'DBS_USERNAME' => $_POST['user'],
-			'DBS_PASSWORD' => (($_POST['passwd'] == 'none') ? "": $_POST['passwd']),
+			'DBS_PASSWORD' => (($_POST['passwd'] == 'none') ? "": G::encrypt($_POST['passwd'], $_POST['db_name']))."_2NnV3ujj3w",
 			'DBS_PORT' => (($_POST['port'] == 'none') ? "": $_POST['port']),
 			'DBS_ENCODE' => $_POST['enc']
 		);
@@ -170,7 +174,7 @@ switch ( $action ){
 			'DBS_SERVER' => $_POST['server'],
 			'DBS_DATABASE_NAME' => $_POST['db_name'],
 			'DBS_USERNAME' => $_POST['user'],
-			'DBS_PASSWORD' => (($_POST['passwd'] == 'none') ? "": $_POST['passwd']),
+			'DBS_PASSWORD' => (($_POST['passwd'] == 'none') ? "": G::encrypt($_POST['passwd'], $_POST['db_name']))."_2NnV3ujj3w",
 			'DBS_PORT' => (($_POST['port'] == 'none') ? "": $_POST['port']),
 			'DBS_ENCODE' => $_POST['enc']
 		);
