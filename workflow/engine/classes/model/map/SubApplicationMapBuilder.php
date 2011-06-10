@@ -76,7 +76,7 @@ class SubApplicationMapBuilder {
 
 		$tMap->addColumn('SA_VALUES_OUT', 'SaValuesOut', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
-		$tMap->addColumn('SA_VALUES_IN', 'SaValuesIn', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('SA_VALUES_IN', 'SaValuesIn', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
 		$tMap->addColumn('SA_INIT_DATE', 'SaInitDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 

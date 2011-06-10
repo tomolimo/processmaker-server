@@ -1948,7 +1948,7 @@
     <column name="DEL_THREAD_PARENT" type="INTEGER" required="true" primaryKey="true" default="0"/>
     <column name="SA_STATUS" type="VARCHAR" size="32" required="true" default=""/>
     <column name="SA_VALUES_OUT" type="LONGVARCHAR" required="true"/>
-    <column name="SA_VALUES_IN" type="LONGVARCHAR" required="true"/>
+    <column name="SA_VALUES_IN" type="LONGVARCHAR" required="false"/>
     <column name="SA_INIT_DATE" type="TIMESTAMP" required="false"/>
     <column name="SA_FINISH_DATE" type="TIMESTAMP" required="false"/>
     <validator column="SA_STATUS">
