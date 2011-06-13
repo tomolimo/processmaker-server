@@ -255,9 +255,15 @@ NewPMTableRow = function(){
 
 //Load PM Table Edition Row Form
 EditPMTableRow = function(){
-	iGrid = Ext.getCmp('infoGrid');
-	rowsSelected = iGrid.getSelectionModel().getSelections();
-   	location.href = 'additionalTablesDataEdit?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+RetrieveRowsID(rowsSelected);
+  iGrid = Ext.getCmp('infoGrid');
+  rowsSelected = iGrid.getSelectionModel().getSelections();
+  var aRowsSeleted = (RetrieveRowsID(rowsSelected)).split(",") ;
+  var aTablesPKF   = (TABLES.PKF).split(","); ;
+  var sParam = '';
+  for(var i=0;i<aTablesPKF.length; i++){
+    sParam += '&' + aTablesPKF[i] + '=' + aRowsSeleted[i];
+  }
+  location.href = 'additionalTablesDataEdit?sUID='+TABLES.UID+sParam;
 };
 
 //Confirm PM Table Row Deletion Tasks
@@ -267,8 +273,14 @@ DeletePMTableRow = function(){
 	Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_ROW'),
 	        function(btn, text){
 	            if (btn=="yes"){
-	            	location.href = 'additionalTablesDataDelete?sUID='+TABLES.UID+'&'+TABLES.PKF+'='+RetrieveRowsID(rowsSelected);
-	            }
+                var aRowsSeleted = (RetrieveRowsID(rowsSelected)).split(",") ;
+                var aTablesPKF   = (TABLES.PKF).split(","); ;
+                var sParam = '';
+                for(var i=0;i<aTablesPKF.length; i++){
+                  sParam += '&' + aTablesPKF[i] + '=' + aRowsSeleted[i];
+                }
+                location.href = 'additionalTablesDataDelete?sUID='+TABLES.UID+sParam;
+              }
 	});
 };
 
@@ -285,9 +297,14 @@ BackPMList = function(){
 //Gets UIDs from a array of rows
 RetrieveRowsID = function(rows){
 	var arrAux = new Array();
-	for(var c=0; c<rows.length; c++){
-		arrAux[c] = rows[c].get(TABLES.PKF);
-	}
+  var arrPKF = new Array();
+  arrPKF = TABLES.PKF.split(',');
+  if(rows.length>0){
+    var c = 0;
+    for(var i=0; i<arrPKF.length; i++){
+      arrAux[i] = rows[c].get(arrPKF[i]);
+    }
+  }
 	return arrAux.join(',');
 };
 

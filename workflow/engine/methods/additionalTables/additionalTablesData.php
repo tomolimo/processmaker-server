@@ -40,18 +40,20 @@ $c = new Configurations();
 $configPage = $c->getConfiguration('additionalTablesData', 'pageSize','',$_SESSION['USER_LOGGED']);
 $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-$arrNames = Array();
+$arrNames   = Array();
 $arrDescrip = Array();
+$arrPKF     = Array();
 $c = 0;
 $xPKF = "";
 foreach ($fields as $field){
-	$c++;
-	$arrNames[] = $field['FLD_NAME'];
-	$arrDescrip[] = $field['FLD_DESCRIPTION'];
-	if ($field['FLD_KEY']=='1'){
-		$xPKF = $field['FLD_NAME'];
-	}
+  $c++;
+  $arrNames[]   = $field['FLD_NAME'];
+  $arrDescrip[] = $field['FLD_DESCRIPTION'];
+  if ($field['FLD_KEY']=='1'){
+    $arrPKF[] = $field['FLD_NAME'];
+  }
 }
+$xPKF = implode(',', $arrPKF);
 
 
 //$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
