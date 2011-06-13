@@ -4155,13 +4155,13 @@ class XmlForm
           $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
           
           if ($xmlNode [$k]->attributes ['required'] == 1 && $isEditMode && $this->mode != 'view') {
-            $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => trim ( $field->validate ),'required' => trim ( $field->required ) );          
+            $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => isset($field->validate)?trim ( $field->validate ):"",'required' => trim ( $field->required ) );
           }
           else {
             $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
               if (isset($xmlNode[$k]->attributes['validate']) && $xmlNode[$k]->attributes ['validate'] == "Email" && $isEditMode && $this->mode !=
 'view') {
-                $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => trim ( $field->validate ),'required' => trim ( $field->required ) );
+                $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => isset($field->validate)?trim ( $field->validate ):"",'required' => trim ( $field->required ) );
               }
           }
 
