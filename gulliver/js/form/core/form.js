@@ -1307,7 +1307,8 @@ function G()
     var result = [];
     var subMasks=mask.split(';');
     for(var r=0; r<subMasks.length; r++) {
-      if (direction == 'normal')
+      typedate = mask.indexOf("#");  //if typedate=='0' is current, else typedate=='-1' is date      
+      if ((direction == 'normal')&&(typedate=='0'))
         result[r]=__toMask(num, subMasks[r], cursor);
       else 
         result[r]=_ApplyMask(num, subMasks[r], cursor, direction);
