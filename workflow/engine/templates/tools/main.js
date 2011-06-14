@@ -116,7 +116,7 @@ Ext.onReady(function(){
       ' To ',//TRANSLATIONS.ID_TO,
       dateTo,
       new Ext.Button ({
-        text: TRANSLATIONS.ID_FILTER_BY_DELEGATED_DATE,
+        text: 'Filter By',
         handler: function(){
           store.setBaseParam('dateFrom', dateFrom.getValue());
           store.setBaseParam('dateTo', dateTo.getValue());
@@ -362,7 +362,7 @@ function removeLabel()
       'Delete the selected translations?',
       function(btn, text){
         if ( btn == 'yes' ){
-          Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
+          Ext.MessageBox.show({ msg:'Deleting elements...', wait:true,waitConfig: {interval:200} });
           Ext.Ajax.request({
             url: 'ajaxListener',
             success: function(response) {
@@ -380,7 +380,7 @@ function removeLabel()
       }
     );
   } else {
-    PMExt.error('ERROR', TRANSLATIONS.ID_NO_SELECTION_WARNING);
+    PMExt.error('ERROR', 'Select a item from list please');
   }
   
 }

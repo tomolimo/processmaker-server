@@ -1,5 +1,5 @@
 <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
-<iframe name="adminFrame" id="adminFrame" src ="main_init" width="99%" height="200" frameborder="0">
+<iframe name="adminFrame" id="adminFrame" src ="main_init" width="99%" height="768" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>
 </body>
