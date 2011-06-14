@@ -456,13 +456,13 @@ function G_Text( form, element, name, type )
             break;
           case "Alpha":
             if (keyCode==8) return true;
-            patron =/[A-Za-z\sÃƒÂ¡ÃƒÂ©ÃƒÂ­ÃƒÂ³ÃƒÂºÃƒÂ¤ÃƒÂ«ÃƒÂ¯ÃƒÂ¶ÃƒÂ¼ÃƒÂ±ÃƒÂ§Ãƒâ€¡Ãƒâ€˜Ãƒï¿½Ãƒâ€°Ãƒï¿½Ãƒâ€œÃƒÅ¡Ãƒâ€žÃƒâ€¹Ãƒï¿½Ãƒâ€“ÃƒÅ“]/;  
+            patron =/[A-Za-z\s?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????]/;  
             te = String.fromCharCode(keyCode);
             return patron.test(te);
             break;
           case "AlphaNum":
             if (keyCode==8) return true;
-            patron =/[A-Za-z0-9\sÃƒÂ¡ÃƒÂ©ÃƒÂ­ÃƒÂ³ÃƒÂºÃƒÂ¤ÃƒÂ«ÃƒÂ¯ÃƒÂ¶ÃƒÂ¼ÃƒÂ±ÃƒÂ§Ãƒâ€¡Ãƒâ€˜Ãƒï¿½Ãƒâ€°Ãƒï¿½Ãƒâ€œÃƒÅ¡Ãƒâ€žÃƒâ€¹Ãƒï¿½Ãƒâ€“ÃƒÅ“]/;
+            patron =/[A-Za-z0-9\s?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????]/;
             te = String.fromCharCode(keyCode);
             return patron.test(te);
             break;
@@ -773,10 +773,11 @@ function G_Text( form, element, name, type )
         
     if(this.validate=="Email")
     {
-      var pat=/^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+      var pat=/^[\w\_\-\.????????????????]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
       if(!pat.test(this.element.value))
       {
-        if(this.required=="0"&&this.element.value=="") {
+        //old|if(this.required=="0"&&this.element.value=="") {
+        if(this.element.value=="") {
           this.element.className="module_app_input___gray";
           return;
         }
@@ -1891,201 +1892,282 @@ var validateForm = function(sRequiredFields) {
   var sMessage = '';
   var invalid_fields = Array();
   
-  for (var i = 0; i < aRequiredFields.length; i++) {
-    aRequiredFields[i].label=(aRequiredFields[i].label=='')?aRequiredFields[i].name:aRequiredFields[i].label;
-    if (!notValidateThisFields.inArray(aRequiredFields[i].name)) {
-      switch(aRequiredFields[i].type) {
-        case 'suggest':
-          var vtext1 = new input(getField(aRequiredFields[i].name+'_suggest'));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext1.failed();
-          } else {
-            vtext1.passed();
-          }
-          break;
-        case 'text':
+  var fielEmailInvalid = Array();
+  
+      for (var i = 0; i < aRequiredFields.length; i++) {
+        aRequiredFields[i].label=(aRequiredFields[i].label=='')?aRequiredFields[i].name:aRequiredFields[i].label;
         
-          var vtext = new input(getField(aRequiredFields[i].name));
+        if (!notValidateThisFields.inArray(aRequiredFields[i].name)) {
           
-          if(getField(aRequiredFields[i].name).value==''){
-            if(aRequiredFields[i].validate=="Email"&&aRequiredFields[i].required=='0'){
-              vtext.normal();
-              return true;
-            }
-            else {
-              invalid_fields.push(aRequiredFields[i].label);
-              vtext.failed();                        
-            }
-
-          } else {
-          
-            if(aRequiredFields[i].validate=="Email") {
-              var email = getField(aRequiredFields[i].name);              
-              //var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-              var filter = /^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
-                  if (!filter.test(email.value)&&email.value!="") {                  
-                    invalid_fields.push(aRequiredFields[i].label);                                        
+          if (typeof aRequiredFields[i].required != 'undefined'){
+            required = aRequiredFields[i].required;
+          }
+          else {
+            required = 1;
+          }
+            
+          if (typeof aRequiredFields[i].validate != 'undefined') {
+            validate = aRequiredFields[i].validate;
+          }
+          else {
+            validate = '';
+          }
+    
+          if(required == 1)
+          {
+            switch(aRequiredFields[i].type) {
+              case 'suggest':
+                var vtext1 = new input(getField(aRequiredFields[i].name+'_suggest'));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vtext1.failed();
+                } else {
+                  vtext1.passed();
+                }
+              break;
+              case 'text':
+                var vtext = new input(getField(aRequiredFields[i].name));
+                  if(getField(aRequiredFields[i].name).value=='') {
+                    invalid_fields.push(aRequiredFields[i].label);
                     vtext.failed();
-                    email.focus();                                        
                   }
                   else {
-                    vtext.passed();                  
+                    vtext.passed();
                   }
+              break;
+                
+              case 'dropdown':
+                var vtext = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vtext.failed();
+                } else {
+                  vtext.passed();
+                }
+                break;
+                
+              case 'textarea':
+                
+                var vtext = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vtext.failed();
+                } else {
+                  vtext.passed();
+                }
+               
+              break;
+                
+              case 'password':
+                var vpass = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vpass.failed();
+                } else {
+                  vpass.passed();
+                }
+              break;
+                
+              case 'currency':
+                var vcurr = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vcurr.failed();
+                } else {
+                  vcurr.passed();
+                }
+              break;
+                
+              case 'percentage':
+                var vper = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vper.failed();
+                } else {
+                  vper.passed();
+                }
+              break;
+                
+              case 'yesno':
+                var vtext = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vtext.failed();
+                } else {
+                  vtext.passed();
+                }
+              break;
+                
+              case 'date':
+                var vtext = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vtext.failed();
+                } else {
+                  vtext.passed();
+                }
+              break;
+                
+              case 'file':
+                var vtext = new input(getField(aRequiredFields[i].name));
+                if(getField(aRequiredFields[i].name).value==''){
+                  invalid_fields.push(aRequiredFields[i].label);
+                  vtext.failed();
+                } else {
+                  vtext.passed();
+                }
+              break;
+                
+              case 'listbox':
+                var oAux = getField(aRequiredFields[i].name);
+                var bOneSelected = false;
+                for (var j = 0; j < oAux.options.length; j++) {
+                  if (oAux.options[j].selected) {
+                    bOneSelected = true;
+                    j = oAux.options.length;
+                  }
+                }
+                if(bOneSelected == false)
+                  invalid_fields.push(aRequiredFields[i].label);
+              break;
+                
+              case 'radiogroup':
+                var x=aRequiredFields[i].name;
+                var oAux = document.getElementsByName('form['+ x +']');
+                var bOneChecked = false;
+                for (var k = 0; k < oAux.length; k++) {
+                  var r = oAux[k];
+                  if (r.checked) {
+                    bOneChecked = true;
+                    k = oAux.length;
+                  }
+                }
+                
+                if(bOneChecked == false)
+                  invalid_fields.push(aRequiredFields[i].label);
+                
+              break;
+                
+              case 'checkgroup':
+                var bOneChecked = false;
+                var aAux = document.getElementsByName('form[' + aRequiredFields[i].name + '][]');
+                for (var k = 0; k < aAux.length; k++) {
+                  if (aAux[k].checked) {
+                    bOneChecked = true;
+                    k = aAux.length;
+                  }
+                }
+                if(!bOneChecked) {
+                  invalid_fields.push(aRequiredFields[i].label);
+                }
+                
+              break;
             }
-            else {
-              vtext.passed();            
-            }
-
+          }          
+          
+          if(validate != '') {
+            //validate_fields
+              switch(aRequiredFields[i].type) {               
+                case 'suggest':
+                break;
+                
+                case 'text':
+                
+                  if(validate=="Email") { 
+                    var vtext = new input(getField(aRequiredFields[i].name)); 
+                      if(getField(aRequiredFields[i].name).value!='') {
+                        var email = getField(aRequiredFields[i].name);              
+                        //var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                        var filter = /^[\w\_\-\.????????????????]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+                          if (!filter.test(email.value)&&email.value!="") {                  
+                            fielEmailInvalid.push(aRequiredFields[i].label);                                        
+                            vtext.failed();
+                            email.focus();                                        
+                          }
+                          else {
+                            vtext.passed();                  
+                          }        
+                      } 
+                  }
+                  break;
+                  
+                case 'dropdown':
+                break;
+                  
+                case 'textarea':                 
+                break;
+                  
+                case 'password':
+                break;
+                  
+                case 'currency':
+                break;
+                  
+                case 'percentage':
+                break;
+                  
+                case 'yesno':
+                break;
+                  
+                case 'date':
+                break;
+                  
+                case 'file':
+                break;
+                  
+                case 'listbox':
+                break;
+                  
+                case 'radiogroup':
+                break;
+                  
+                case 'checkgroup':                  
+                break;
+              }              
           }
-          break;
-          
-        case 'dropdown':
-          var vtext = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext.failed();
-          } else {
-            vtext.passed();
-          }
-          break;
-          
-        case 'textarea':
-          
-          var vtext = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext.failed();
-          } else {
-            vtext.passed();
-          }
-          
-          break;
-          
-        case 'password':
-          var vpass = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vpass.failed();
-          } else {
-            vpass.passed();
-          }
-          break;
-          
-        case 'currency':
-          var vcurr = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vcurr.failed();
-          } else {
-            vcurr.passed();
-          }
-          break;
-          
-        case 'percentage':
-          var vper = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vper.failed();
-          } else {
-            vper.passed();
-          }
-          break;
-          
-        case 'yesno':
-          var vtext = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext.failed();
-          } else {
-            vtext.passed();
-          }
-          break;
-          
-        case 'date':
-          var vtext = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext.failed();
-          } else {
-            vtext.passed();
-          }
-          break;
-          
-        case 'file':
-          var vtext = new input(getField(aRequiredFields[i].name));
-          if(getField(aRequiredFields[i].name).value==''){
-            invalid_fields.push(aRequiredFields[i].label);
-            vtext.failed();
-          } else {
-            vtext.passed();
-          }
-          break;
-          
-        case 'listbox':
-          var oAux = getField(aRequiredFields[i].name);
-          var bOneSelected = false;
-          for (var j = 0; j < oAux.options.length; j++) {
-            if (oAux.options[j].selected) {
-              bOneSelected = true;
-              j = oAux.options.length;
-            }
-          }
-          if(bOneSelected == false)
-            invalid_fields.push(aRequiredFields[i].label);
-          break;
-          
-        case 'radiogroup':
-          var x=aRequiredFields[i].name;
-          var oAux = document.getElementsByName('form['+ x +']');
-          var bOneChecked = false;
-          for (var k = 0; k < oAux.length; k++) {
-            var r = oAux[k];
-            if (r.checked) {
-              bOneChecked = true;
-              k = oAux.length;
-            }
-          }
-          
-          if(bOneChecked == false)
-            invalid_fields.push(aRequiredFields[i].label);
-          
-          break;
-          
-        case 'checkgroup':
-          var bOneChecked = false;
-          var aAux = document.getElementsByName('form[' + aRequiredFields[i].name + '][]');
-          for (var k = 0; k < aAux.length; k++) {
-            if (aAux[k].checked) {
-              bOneChecked = true;
-              k = aAux.length;
-            }
-          }
-          if(!bOneChecked) {
-            invalid_fields.push(aRequiredFields[i].label);
-          }
-          break;
+        }
       }
-    }
-  }
   // call added by gustavo - cruz, gustavo-at-colosa.com validate grid forms
   invalid_fields = validateGridForms(invalid_fields);
   
-  if (invalid_fields.length > 0) {
+  if (invalid_fields.length > 0 ||fielEmailInvalid.length> 0) {
     //alert(G_STRINGS.ID_REQUIRED_FIELDS + ": \n\n" + sMessage);
-    
+   
+   
+   
+    // loop for invalid_fields    
     for(j=0; j<invalid_fields.length; j++){
       sMessage += (j > 0)? ', ': '';
       sMessage += invalid_fields[j];
     }
+    
+    // Loop for invalid_emails
+    var emailInvalidMessage = "";
+    for(j=0; j<fielEmailInvalid.length; j++){
+      emailInvalidMessage += (j > 0)? ', ': '';
+      emailInvalidMessage += fielEmailInvalid[j];
+    }
+    
     
     /* new leimnud.module.app.alert().make({
             label:G_STRINGS.ID_REQUIRED_FIELDS + ": <br/><br/>[ " + sMessage + " ]",
             width:450,
             height:140 + (parseInt(invalid_fields.length/10)*10)
         });*/
+        
+    //!create systemMessaggeInvalid of field invalids
+    var systemMessaggeInvalid = "";
     
-    alert(G_STRINGS.ID_REQUIRED_FIELDS + ": \n \n [ " + sMessage + " ]");
+      if(invalid_fields.length > 0) {
+        systemMessaggeInvalid += "\n \n"+G_STRINGS.ID_REQUIRED_FIELDS + ": \n \n [ " + sMessage + " ]";      
+      }
+
+      if(fielEmailInvalid.length > 0) {
+        systemMessaggeInvalid += "\n \n" +  G_STRINGS.ID_VALIDATED_FIELDS + ": \n \n [ " + emailInvalidMessage + " ]";
+      }      
+    
+    
+    alert(systemMessaggeInvalid);
     return false;
   }
   else {

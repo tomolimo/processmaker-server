@@ -4149,20 +4149,29 @@ class XmlForm
           $field->language = $this->language;
           $this->fields [$field->name] = $field;
         }
-
-        if (isset ( $xmlNode [$k]->attributes ['required'] )) {
+			
+        if (isset($xmlNode [$k]->attributes ['required'] ) || isset($xmlNode [$k]->attributes ['validate'] )) {
           // the fields or xml nodes with a required attribute are put in an array that is passed to the view file
           $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
           
-          if ($xmlNode [$k]->attributes ['required'] == 1 && $isEditMode && $this->mode != 'view') {
-            $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => isset($field->validate)?trim ( $field->validate ):"",'required' => trim ( $field->required ) );
-          }
-          else {
-            $isEditMode = isset($xmlNode[$k]->attributes['mode']) && $xmlNode[$k]->attributes['mode'] == 'view' ? false: true;
-              if (isset($xmlNode[$k]->attributes['validate']) && $xmlNode[$k]->attributes ['validate'] == "Email" && $isEditMode && $this->mode !=
-'view') {
-                $this->requiredFields [] = array ('name' => $field->name, 'type' => $xmlNode [$k]->attributes ['type'], 'label' => trim ( $field->label ), 'validate' => isset($field->validate)?trim ( $field->validate ):"",'required' => trim ( $field->required ) );
-              }
+          if ($isEditMode && $this->mode != 'view') {
+          
+            $validateValue = "";
+            if(isset($xmlNode[$k]->attributes['validate'])) {            
+              $validateValue = $xmlNode[$k]->attributes['validate'];
+            }
+            $requiredValue = "0";
+            if(isset($xmlNode[$k]->attributes['required'])) {
+              $requiredValue = $xmlNode[$k]->attributes['required'] == 1 ? '1': '0';
+            }          
+            
+            $this->requiredFields [] = array (
+              'name' => $field->name,
+              'type' => $xmlNode [$k]->attributes ['type'],
+              'label' => trim ( $field->label ),                
+              'validate' => $validateValue,
+              'required' => $requiredValue
+            );          
           }
 
         }        
