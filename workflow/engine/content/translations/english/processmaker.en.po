@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch master) 2.0.8-278-g48ab235\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.30.rc3\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-06-06 10:57:23\n"
+"PO-Revision-Date: 2011-06-14 16:22:15\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -592,8 +592,8 @@ msgstr "Please enter comments!"
 # TRANSLATION
 # LABEL/ID_PLEASE_SELECT_FILE
 #: LABEL/ID_PLEASE_SELECT_FILE
-msgid "Please select the file to attach!"
-msgstr "Please select the file to attach!"
+msgid "Please select a file"
+msgstr "Please select a file"
 
 # TRANSLATION
 # LABEL/ID_PROPERTIES
@@ -10009,6 +10009,72 @@ msgstr "is not registered!"
 msgid "The \"Email Notifications\" is not enabled, please contact to your System Administrator."
 msgstr "The \"Email Notifications\" is not enabled, please contact to your System Administrator."
 
+# TRANSLATION
+# LABEL/ID_EMAIL_ENTER_VALID
+#: LABEL/ID_EMAIL_ENTER_VALID
+msgid "Please enter a valid email address."
+msgstr "Please enter a valid email address."
+
+# TRANSLATION
+# LABEL/ID_PROFILE
+#: LABEL/ID_PROFILE
+msgid "Profile"
+msgstr "Profile"
+
+# TRANSLATION
+# LABEL/ID_PLEASE_SELECT_PHOTO
+#: LABEL/ID_PLEASE_SELECT_PHOTO
+msgid "Please select a photo"
+msgstr "Please select a photo"
+
+# TRANSLATION
+# LABEL/ID_RESUME
+#: LABEL/ID_RESUME
+msgid "[LABEL/ID_RESUME] Résumé"
+msgstr "Résumé"
+
+# TRANSLATION
+# LABEL/ID_USER_ID
+#: LABEL/ID_USER_ID
+msgid "User ID (*)"
+msgstr "User ID (*)"
+
+# TRANSLATION
+# LABEL/ID_PHONE
+#: LABEL/ID_PHONE
+msgid "Phone"
+msgstr "Phone"
+
+# TRANSLATION
+# LABEL/ID_NEW_PASSWORD
+#: LABEL/ID_NEW_PASSWORD
+msgid "New Password"
+msgstr "New Password"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_PASSWORD
+#: LABEL/ID_CONFIRM_PASSWORD
+msgid "Confirm Password"
+msgstr "Confirm Password"
+
+# TRANSLATION
+# LABEL/ID_PASSWORDS_DONT_MATCH
+#: LABEL/ID_PASSWORDS_DONT_MATCH
+msgid "The password fields don't match."
+msgstr "The password fields don't match."
+
+# TRANSLATION
+# JAVASCRIPT/ID_VALIDATED_FIELDS
+#: JAVASCRIPT/ID_VALIDATED_FIELDS
+msgid "The following fields have invalid values"
+msgstr "The following fields have invalid values"
+
+# TRANSLATION
+# LABEL/ID_VALIDATED_FIELDS
+#: LABEL/ID_VALIDATED_FIELDS
+msgid "[LABEL/ID_VALIDATED_FIELDS] The following fields have invalid values"
+msgstr "The following fields have invalid values"
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -16192,59 +16258,59 @@ msgstr "Options Mask"
 # dynaforms/datemask.xml?option1
 # dynaforms/datemask.xml
 #: subtitle - option1
-msgid "%a — abbreviated weekday name\n"
-"<br> %A — full weekday name\n"
-"<br> %b — abbreviated month name\n"
-"<br> %B — full month name\n"
-"<br> %C — the century number\n"
-"<br> %d — the day of the month (range 01 to 31)\n"
-"<br> %e — the day of the month (range 1 to 31)\n"
-"<br> %H — hour, range 00 to 23 (24h format)\n"
-"<br> %I — hour, range 01 to 12 (12h format)\n"
-"<br> %j — day of the year (range 001 to 366)\n"
-"<br> %k — hour, range 0 to 23 (24h format)\n"
-"<br> %l — hour, range 1 to 12 (12h format)\n"
-"<br> %m — month, range 01 to 12\n"
-"<br> %o — month, range 1 to 12\n"
-"<br> %M — minute, range 00 to 59\n"
-"<br> %n — a newline character\n"
-"<br> %p — PM or AM\n"
-"<br> %P — pm or am\n"
-"<br> %s — UNIX time (number of seconds since 1970-01-01)\n"
-"<br> %S — seconds, range 00 to 59\n"
-"<br> %t — a tab character\n"
-"<br> %W — week number\n"
-"<br> %u — the day of the week (range 1 to 7, 1 = MON)\n"
-"<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
-"<br> %y — year without the century (range 00 to 99)\n"
-"<br> %Y — year with the century\n"
+msgid "%a — abbreviated weekday namen\n"
+"<br> %A — full weekday namen\n"
+"<br> %b — abbreviated month namen\n"
+"<br> %B — full month namen\n"
+"<br> %C — the century numbern\n"
+"<br> %d — the day of the month (range 01 to 31)n\n"
+"<br> %e — the day of the month (range 1 to 31)n\n"
+"<br> %H — hour, range 00 to 23 (24h format)n\n"
+"<br> %I — hour, range 01 to 12 (12h format)n\n"
+"<br> %j — day of the year (range 001 to 366)n\n"
+"<br> %k — hour, range 0 to 23 (24h format)n\n"
+"<br> %l — hour, range 1 to 12 (12h format)n\n"
+"<br> %m — month, range 01 to 12n\n"
+"<br> %o — month, range 1 to 12n\n"
+"<br> %M — minute, range 00 to 59n\n"
+"<br> %n — a newline charactern\n"
+"<br> %p — PM or AMn\n"
+"<br> %P — pm or amn\n"
+"<br> %s — UNIX time (number of seconds since 1970-01-01)n\n"
+"<br> %S — seconds, range 00 to 59n\n"
+"<br> %t — a tab charactern\n"
+"<br> %W — week numbern\n"
+"<br> %u — the day of the week (range 1 to 7, 1 = MON)n\n"
+"<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
+"<br> %y — year without the century (range 00 to 99)n\n"
+"<br> %Y — year with the centuryn\n"
 "<br> %% — a literal '%' character"
-msgstr "%a — abbreviated weekday name\n"
-"<br> %A — full weekday name\n"
-"<br> %b — abbreviated month name\n"
-"<br> %B — full month name\n"
-"<br> %C — the century number\n"
-"<br> %d — the day of the month (range 01 to 31)\n"
-"<br> %e — the day of the month (range 1 to 31)\n"
-"<br> %H — hour, range 00 to 23 (24h format)\n"
-"<br> %I — hour, range 01 to 12 (12h format)\n"
-"<br> %j — day of the year (range 001 to 366)\n"
-"<br> %k — hour, range 0 to 23 (24h format)\n"
-"<br> %l — hour, range 1 to 12 (12h format)\n"
-"<br> %m — month, range 01 to 12\n"
-"<br> %o — month, range 1 to 12\n"
-"<br> %M — minute, range 00 to 59\n"
-"<br> %n — a newline character\n"
-"<br> %p — PM or AM\n"
-"<br> %P — pm or am\n"
-"<br> %s — UNIX time (number of seconds since 1970-01-01)\n"
-"<br> %S — seconds, range 00 to 59\n"
-"<br> %t — a tab character\n"
-"<br> %W — week number\n"
-"<br> %u — the day of the week (range 1 to 7, 1 = MON)\n"
-"<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
-"<br> %y — year without the century (range 00 to 99)\n"
-"<br> %Y — year with the century\n"
+msgstr "%a — abbreviated weekday namen\n"
+"<br> %A — full weekday namen\n"
+"<br> %b — abbreviated month namen\n"
+"<br> %B — full month namen\n"
+"<br> %C — the century numbern\n"
+"<br> %d — the day of the month (range 01 to 31)n\n"
+"<br> %e — the day of the month (range 1 to 31)n\n"
+"<br> %H — hour, range 00 to 23 (24h format)n\n"
+"<br> %I — hour, range 01 to 12 (12h format)n\n"
+"<br> %j — day of the year (range 001 to 366)n\n"
+"<br> %k — hour, range 0 to 23 (24h format)n\n"
+"<br> %l — hour, range 1 to 12 (12h format)n\n"
+"<br> %m — month, range 01 to 12n\n"
+"<br> %o — month, range 1 to 12n\n"
+"<br> %M — minute, range 00 to 59n\n"
+"<br> %n — a newline charactern\n"
+"<br> %p — PM or AMn\n"
+"<br> %P — pm or amn\n"
+"<br> %s — UNIX time (number of seconds since 1970-01-01)n\n"
+"<br> %S — seconds, range 00 to 59n\n"
+"<br> %t — a tab charactern\n"
+"<br> %W — week numbern\n"
+"<br> %u — the day of the week (range 1 to 7, 1 = MON)n\n"
+"<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
+"<br> %y — year without the century (range 00 to 99)n\n"
+"<br> %Y — year with the centuryn\n"
 "<br> %% — a literal '%' character"
 
 # dynaforms/dynaform_Fields.xml?XMLNODE_NAME
@@ -19066,6 +19132,12 @@ msgstr "Email"
 #: submit - BSUBMIT
 msgid "Send Request"
 msgstr "Send Request"
+
+# login/forgotPassword.xml?BCANCEL
+# login/forgotPassword.xml
+#: button - BCANCEL
+msgid "[login/forgotPassword.xml?BCANCEL] Cancel"
+msgstr "Cancel"
 
 # login/login.xml?TITLE
 # login/login.xml
@@ -27320,7 +27392,7 @@ msgstr "Param Value"
 # users/myInfo.xml?TITLEADD
 # users/myInfo.xml
 #: title - TITLEADD
-msgid "Profile"
+msgid "[users/myInfo.xml?TITLEADD] Profile"
 msgstr "Profile"
 
 # users/myInfo.xml?USR_PHOTO
@@ -27404,7 +27476,7 @@ msgstr "Location"
 # users/myInfo.xml?USR_PHONE
 # users/myInfo.xml
 #: text - USR_PHONE
-msgid "Phone"
+msgid "[users/myInfo.xml?USR_PHONE] Phone"
 msgstr "Phone"
 
 # users/myInfo.xml?USR_POSITION
@@ -27470,13 +27542,13 @@ msgstr "Change Password"
 # users/myInfo.xml?USR_NEW_PASS
 # users/myInfo.xml
 #: password - USR_NEW_PASS
-msgid "New Password"
+msgid "[users/myInfo.xml?USR_NEW_PASS] New Password"
 msgstr "New Password"
 
 # users/myInfo.xml?USR_CNF_PASS
 # users/myInfo.xml
 #: password - USR_CNF_PASS
-msgid "Confirm Password"
+msgid "[users/myInfo.xml?USR_CNF_PASS] Confirm Password"
 msgstr "Confirm Password"
 
 # users/myInfo.xml?TITLEPREF
@@ -28196,7 +28268,7 @@ msgstr "Last Name"
 # users/users_Edit.xml?USR_USERNAME
 # users/users_Edit.xml
 #: text - USR_USERNAME
-msgid "User ID (*)"
+msgid "[users/users_Edit.xml?USR_USERNAME] User ID (*)"
 msgstr "User ID (*)"
 
 # users/users_Edit.xml?USR_EMAIL
@@ -29888,8 +29960,8 @@ msgstr "Relative Start and End Dates"
 # dynaforms/fields/date.xml?PMED_AFTERBEFORE_DESC
 # dynaforms/fields/date.xml
 #: subtitle - PMED_AFTERBEFORE_DESC
-msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
-msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
 
 # dynaforms/fields/date.xml?PME_BEFOREDATE
 # dynaforms/fields/date.xml
