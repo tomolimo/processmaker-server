@@ -25,7 +25,7 @@
   <en>Workspace Administrator</en>
 </WS>
 
-<NW_USERNAME type="text" size="30" maxlength="32" validate="Email" defaultValue="admin" style="width:100%;">
+<NW_USERNAME type="text" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
   <en>Username:</en>
 </NW_USERNAME>
 <NW_PASSWORD type="password" size="30" maxlength="20" validate="Any" defaultValue="admin" style="width:100%;">

@@ -84,7 +84,7 @@ else
     break;
   }
 	$G_PUBLISH = new Publisher;
-	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', '/sys/en/green/install/newSite');
+	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', 'newSite');
 	
 	if( isset($_GET['type']) )
 	  G::RenderPage( "publishBlank", "blank");
