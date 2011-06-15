@@ -3009,8 +3009,9 @@ class XmlForm_Field_Grid extends XmlForm_Field
    */
    
   function render($values, $owner = NULL){
-    $arrayKeys = array_keys ( $this->fields );
-    $emptyRow  = array ();
+    $arrayKeys  = array_keys ( $this->fields );
+    $emptyRow   = array ();
+    $fieldsSize = 0;
     foreach ( $arrayKeys as $key ){
       if (isset($this->fields[$key]->defaultValue)){
         $emptyValue = $this->fields[$key]->defaultValue;
@@ -3023,8 +3024,15 @@ class XmlForm_Field_Grid extends XmlForm_Field
       
         $emptyValue = '';
       }
+      $size = $this->fields[$key]->size;
+      if(!isset($size)) $size = 15;
+      $fieldsSize +=  $size;
       $emptyRow [$key] = array ($emptyValue);
     }
+    if($fieldsSize>100)
+      $owner->width = '100%';
+    else
+      $owner->width = $fieldsSize . 'em';
     return $this->renderGrid ( $emptyRow, $owner );
     
     
