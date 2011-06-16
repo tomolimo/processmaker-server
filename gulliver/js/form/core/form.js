@@ -414,15 +414,12 @@ function G_Text( form, element, name, type )
       attributes.mask=attributes.mask.replace('%d','dd');  
       attributes.mask=attributes.mask.replace('%m','mm');
       attributes.mask=attributes.mask.replace('%y','yy');
-      attributes.mask=attributes.mask.replace('%Y','yyyy');                        
+      attributes.mask=attributes.mask.replace('%Y','yyyy');  
+      attributes.mask=attributes.mask.replace('%H','mm');
+      attributes.mask=attributes.mask.replace('%M','mm');
+      attributes.mask=attributes.mask.replace('%S','mm');                       
       me.mask=attributes.mask;   
     } 
-    
-     if(me.mask=='yyyy-mm-dd  %H:%M:%S')
-      me.mask = 'yyyy-mm-dd  mm:mm:mm';
-    if(me.mask=='yyyy-mm-dd %H:%M')
-      me.mask = 'yyyy-mm-dd  mm:mm';
-  
     if (me.mask !=='' ) {
       if ((keyCode < 48 || keyCode > 57) && (keyCode != 8 && keyCode != 0 && keyCode != 46)) return false;
       if((keyCode===118 || keyCode===86) && event.ctrlKey) return false;
