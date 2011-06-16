@@ -1159,7 +1159,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
     $formVariableKeyValue = '';
     G::LoadClass('case');
     $oApp= new Cases();
-    if ($_SESSION['APPLICATION'] != null && $oApp->loadCase($_SESSION['APPLICATION'])!=null){
+    if (isset($_SESSION['APPLICATION']) && ($_SESSION['APPLICATION'] != null && $oApp->loadCase($_SESSION['APPLICATION'])!=null) ) {
       $aFields = $oApp->loadCase($_SESSION['APPLICATION']);
       if(isset($aFields['APP_DATA'][$this->name . '_label'])){
           $formVariableValue    = $aFields['APP_DATA'][$this->name . '_label'];
@@ -1207,7 +1207,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
         $depValues = '';
         $i = 1;
-        if($aResult) {
+        if(isset($aResult) && $aResult ) {
           $sResult     = '"' . implode('","', $aResult) . '"';
           $aResultKeys = array_keys($aResult);
           $sResultKeys = str_rot13(base64_encode(implode('|', $aResultKeys)));
