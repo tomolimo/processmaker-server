@@ -22,21 +22,53 @@ if( isset($request) ){
 
       try{
         $sData = base64_decode(str_rot13($_GET['hash']));
-        list($SQL, $DB_UID) = explode('@', $sData);
-        //fixed: improving the statement sql by krlos
-        $sSql=substr($SQL, 6, strlen($SQL));
-        $pattern = "/\bfrom\b/i";
-        $replacement = 'FROM';
-        $sSql = preg_replace($pattern, $replacement, $sSql);
-        $aSql = explode("FROM", $sSql);
-        
-        $afieldSql = explode(",",$aSql[0]);  
+        list($SQL, $DB_UID) = explode('@|', $sData);
+        // Remplace values for dependent fields
+        $aDependentFieldsKeys  = explode("|", base64_decode(str_rot13($_GET['dependentFieldsKeys'])));
+        $aDependentFieldsValue = explode("|", $_GET['dependentFieldsValue']);
+        if($aDependentFieldsKeys){
+          $SQL = str_replace($aDependentFieldsKeys, $aDependentFieldsValue, $SQL);
+        }
+        if (1===preg_match('/^\s*SELECT\s+([\w\W]+?)(?:\s+FROM\s+`?([^`]+?)`?)(?:\s+WHERE\s+([\w\W]+?))?(?:\s+GROUP\s+BY\s+([\w\W]+?))?(?:\s+ORDER\s+BY\s+([\w\W]+?))?(?:\s+BETWEEN\s+([\w\W]+?)\s+AND\s+([\w\W]+?))?(?:\s+LIMIT\s+(\d+)\s*,\s*(\d+))?\s*$/im', $SQL, $matches)) {
+          $sqlColumns   = $matches[1];
+          $sqlFrom      = isset($matches[2])?$matches[2]:'';
+          $sqlWhere     = isset($matches[3])?$matches[3]:'';
+          $sqlGroupBy   = isset($matches[4])?$matches[4]:'';
+          $sqlOrderBy   = isset($matches[5])?$matches[5]:'';
+          $sqlLowLimit  = isset($matches[8])?$matches[8]:'';
+          $sqlHighLimit = isset($matches[9])?$matches[9]:'';
+          // New SQL String
+          $SQL = "SELECT " . $sqlColumns . " FROM " . $sqlFrom;
+          $aFieldSelect = explode(",", $sqlColumns);
+          $sFieldSel = (count($aFieldSelect)>1 ) ? $aFieldSelect[1] : $aFieldSelect[0];
+          if( strlen(trim($sqlWhere))>0) {
+            $SQL .= " WHERE " . $sqlWhere . " AND " . $sFieldSel . " LIKE '". $_GET['input']."%'";
+          } else {
+            $SQL .= " WHERE " . $sFieldSel . " LIKE '". $_GET['input']."%'";
+          }
+          if( strlen(trim($sqlGroupBy))>0) {
+            $SQL .= " GROUP BY " . $sqlGroupBy;
+          }
+          if( strlen(trim($sqlOrderBy))>0) {
+            $SQL .= " ORDER BY " . $sqlOrderBy;
+          }
+        } else {
+          //fixed: improving the statement sql by krlos
+          $sSql=substr($SQL, 6, strlen($SQL));
+          $pattern = "/\bfrom\b/i";
+          $replacement = 'FROM';
+          $sSql = preg_replace($pattern, $replacement, $sSql);
+          $aSql = explode("FROM", $sSql);
 
-        if(count($afieldSql)>1)
-          $SQL .= " where $afieldSql[1] like '". $_GET['input']."%'";
-        else
-          $SQL .= " where $afieldSql[0] like '". $_GET['input']."%'";
-        //add fixed
+          $afieldSql = explode(",",$aSql[0]);
+
+          if(count($afieldSql)>1)
+            $SQL .= " where $afieldSql[1] like '". $_GET['input']."%'";
+          else
+            $SQL .= " where $afieldSql[0] like '". $_GET['input']."%'";
+          //add fixed
+        }
+
         $aRows = Array();
         try {
             $con = Propel::getConnection($DB_UID);
@@ -110,8 +142,9 @@ if( isset($request) ){
             header("Content-Type: application/json");
             echo "{\"status\":0,  \"results\": [";
             $arr = array();
+            $aReplace = array("(\r\n)", "(\n\r)", "(\n)", "(\r)");
             for ($i=0;$i<count($aResults);$i++) {
-                $arr[] = "{\"id\": \"".$aResults[$i]['id']."\", \"value\": \"".$aResults[$i]['value']."\", \"info\": \"".$aResults[$i]['info']."\"}";
+              $arr[] = "{\"id\": \"".$aResults[$i]['id']."\", \"value\": \"". preg_replace($aReplace, "", $aResults[$i]['value']) ."\", \"info\": \"".$aResults[$i]['info']."\"}";		
             }
             echo implode(", ", $arr);
             echo "]}";

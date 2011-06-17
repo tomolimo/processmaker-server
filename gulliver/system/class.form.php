@@ -310,6 +310,11 @@ class Form extends XmlForm
                 $values["{$k}_label"] = $newValues["{$k}_label"] = $v->options[$newValues[$k]];
                 break;
 
+              case 'suggest':
+                $values[$k] = $newValues[$k];
+                $values["{$k}_label"] = $newValues["{$k}_label"];
+                break;
+
               case 'checkgroup':
               case 'listbox':
                 if ( is_array($newValues[$k]) ) {

@@ -475,6 +475,7 @@ _b.AutoSuggest.prototype.setHighlightedValue = function ()
 		 * @autor Erik Amaru Ortiz <erik@colosa.com>
 		 * This fix when a item on suggestion list have html wntities sent by json like &amp; 
 		 */
+    if(this.aSug[ this.iHigh-1 ])
 		this.sInp = this.fld.value = html_entity_decode(this.aSug[ this.iHigh-1 ].value);;
 		//
 		
@@ -498,6 +499,7 @@ _b.AutoSuggest.prototype.setHighlightedValue2 = function ()
 {
 	if (this.iHigh)
 	{
+    if(this.aSug[ this.iHigh-1 ])
 		this.sInp = this.fld.value = html_entity_decode(this.aSug[ this.iHigh-1 ].value);
 		
 		// move cursor to end of input (safari)

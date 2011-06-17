@@ -716,7 +716,7 @@ class XmlForm_Field {
    * Prepares NS Required Value
    * @author Enrique Ponce de Leon <enrique@colosa.com>
    * @param boolean optional (true = always show, false = show only if not empty)
-   * @return string
+   * @return string 
    */
   
   function NSGridLabel($show = false){
@@ -1242,10 +1242,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
         return $str;
       }
-    } elseif ($this->mode === 'view') {
-      return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" onkeypress="' . htmlentities ( $onkeypress, ENT_COMPAT, 'utf-8' ) . '"/>' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
     } else {
-      return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
+      return $this->htmlentities ( $formVariableValue, ENT_COMPAT, 'utf-8' );
     }
   }
   /**
