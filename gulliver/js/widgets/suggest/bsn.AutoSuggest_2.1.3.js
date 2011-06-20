@@ -527,7 +527,7 @@ _b.AutoSuggest.prototype.resetTimeout = function()
 {
 	clearTimeout(this.toID);
 	var pointer = this;
-	this.toID = setTimeout(function () { pointer.clearSuggestions() }, 10);  // was modifiend,.. its original value was 1000 by 10  <-erik notes->
+	this.toID = setTimeout(function () { pointer.clearSuggestions() }, 500);  // was modifiend,.. its original value was 1000 by 10  <-erik notes->
 };
 
 _b.AutoSuggest.prototype.clearSuggestions = function ()
