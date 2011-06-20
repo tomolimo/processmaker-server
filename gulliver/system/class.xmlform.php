@@ -2133,7 +2133,10 @@ class XmlForm_Field_Link extends XmlForm_Field {
     $value   = G::replaceDataField ( $this->value, $owner->values );
     $label   = G::replaceDataField ( $this->label, $owner->values );
     $aLabel  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
-    return '<a class="tableOption" href=\'' . $link . '\'' . (($this->onclick) ? ' onclick="' . $onclick . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $aLabel . '</a>';
+    if(isset($aLabel) && strlen($aLabel)>0)
+      return '<a class="tableOption" href=\'' . $link . '\'' . (($this->onclick) ? ' onclick="' . $onclick . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $aLabel . '</a>';
+    else
+      return '';
   }
 }
 
