@@ -57,7 +57,6 @@ if(isset($_POST['form']['NW_TITLE']))
 	),($action==='create')?true:false);
 	$result['result']['admin']['password']=($pass===$pass1)?true:false;
 	$result['result']['action']=$action;
-	//print_r($inst);
 	$json	= new Services_JSON();
 	/*$ec;
 	$ec->created=($new)?true:false;
@@ -83,12 +82,7 @@ else
     break;
   }
 	$G_PUBLISH = new Publisher;
-	/*$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', 'newSite');
-	
-	if( isset($_GET['type']) )
-	  G::RenderPage( "publishBlank", "blank");
-	else
-	  G::RenderPage( "publish" );*/
+
 	 G::LoadClass('configuration');
   $c = new Configurations();
   $configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
