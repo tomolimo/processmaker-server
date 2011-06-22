@@ -23,7 +23,6 @@
  *
  */
 
-
 if(isset($_POST['form']['NW_TITLE']))
 {
 	$action = (isset($_POST['form']['ACTION']))?trim($_POST['form']['ACTION']):'test';
@@ -84,13 +83,24 @@ else
     break;
   }
 	$G_PUBLISH = new Publisher;
-	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', 'newSite');
+	/*$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/newSite', '', '', 'newSite');
 	
 	if( isset($_GET['type']) )
 	  G::RenderPage( "publishBlank", "blank");
 	else
-	  G::RenderPage( "publish" );
-	
+	  G::RenderPage( "publish" );*/
+	 G::LoadClass('configuration');
+  $c = new Configurations();
+  $configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
+  $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
+  $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addExtJsScript('setup/newSite', false);    //adding a javascript file .js
+  $oHeadPublisher->addContent('setup/newSite'); //adding a html file  .html.
+//  $oHeadPublisher->assign('CONFIG', $Config);
+//  $oHeadPublisher->assign('FORMATS',$c->getFormats());
+
+  G::RenderPage('publish', 'extJs');
 	
 }
 ?>
