@@ -17,7 +17,7 @@ Ext.onReady(function(){
               'render': function(c) {
                 c.getEl().on('keyup', function() {
                   namews=formNewSite.getForm().findField('NW_TITLE').getValue();
-                  formNewSite.getForm().findField('AO_DB_WF').setValue('ws_'+namews);
+                  formNewSite.getForm().findField('AO_DB_WF').setValue('wf_'+namews);
                   formNewSite.getForm().findField('AO_DB_RB').setValue('rb_'+namews);
                   formNewSite.getForm().findField('AO_DB_RP').setValue('rp_'+namews);
                 }, c);
