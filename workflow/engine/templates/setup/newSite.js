@@ -37,7 +37,7 @@ Ext.onReady(function(){
         id: 'AO_DB_WF',				
         fieldLabel: 'Workflow Database', 
         xtype:'textfield',
-        value:'ws_sample',
+        value:'wf_sample',
         width: 200,
         autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
         allowBlank: false
