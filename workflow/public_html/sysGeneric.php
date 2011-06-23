@@ -525,7 +525,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
 
 //****** define and send Headers for all pages *******************
   if ( ! defined('EXECUTE_BY_CRON') ) {
-    header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
+    header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d')-1,date('Y') ) ) . " GMT");
     header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
     header("Cache-Control: no-store, no-cache, must-revalidate");
     header("Cache-Control: post-check=0, pre-check=0", false);
