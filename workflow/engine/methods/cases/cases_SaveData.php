@@ -132,7 +132,8 @@ foreach ( $_POST ['form'] as $sField => $sAux ) {
 }
 // saving the data ina pm table in case that is a new record
 if (!empty($newValues)){
-  $oAdditionalTables->saveDataInTable ( $oForm->fields [$oForm->fields [$sField]->pmconnection]->pmtable, $newValues);
+  if(!$oAdditionalTables->saveDataInTable ( $oForm->fields [$oForm->fields [$sField]->pmconnection]->pmtable, $newValues))
+    $oAdditionalTables->updateDataInTable( $oForm->fields [$oForm->fields [$sField]->pmconnection]->pmtable, $newValues);
 }
 //save data
 $aData = array ();
