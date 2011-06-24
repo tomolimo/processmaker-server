@@ -856,6 +856,8 @@ Ext.onReady ( function() {
   }
 
   function enableDisableMenuOption(){
+  
+  
     var rows = grid.getSelectionModel().getSelections();
     switch(action){
       case 'todo':
@@ -923,11 +925,139 @@ Ext.onReady ( function() {
 
   });
 
+  
+  
+  reassingCaseToUser = function()
+  {
+    var APP_UID = optionMenuReassignGlobal.APP_UID;
+    var DEL_INDEX = optionMenuReassignGlobal.DEL_INDEX;
+   
+    var rowSelected = Ext.getCmp('reassignGrid').getSelectionModel().getSelected();
+    if( rowSelected ) {
+      PMExt.confirm(_('ID_CONFIRM'), _('ID_REASSIGN_CONFIRM'), function(){
+        Ext.Ajax.request({
+          url : 'casesList_Ajax' , 
+          params : {actionAjax : 'reassignCase', USR_UID: rowSelected.data.USR_UID, APP_UID: APP_UID, DEL_INDEX:DEL_INDEX},
+          success: function ( result, request ) {
+            var data = Ext.util.JSON.decode(result.responseText); 
+            if( data.status == 0 ) {
+              parent.notify('', data.msg);
+              location.href = 'casesListExtJs';
+            } else {
+              alert(data.msg);
+            }
+          },
+          failure: function ( result, request) {
+            Ext.MessageBox.alert('Failed', result.responseText); 
+          }
+        });
+      });
+    }          
+  }
   //optionMenuPause.setMinValue('2010-11-04');
+  var optionMenuReassignGlobal = {};
+  optionMenuReassignGlobal.APP_UID = "";
+  optionMenuReassignGlobal.DEL_INDEX = "";
+  
   optionMenuReassign = new Ext.Action({
     text: TRANSLATIONS.ID_REASSIGN,
     iconCls: 'ICON_CASES_TO_REASSIGN',
-    handler: function(){}
+    handler: function() {
+    
+    var casesGrid_ = Ext.getCmp('casesGrid');    
+    var rowSelected = casesGrid_.getSelectionModel().getSelected();
+    var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
+    var rowSelectedIndex = casesGrid_.getSelectionModel().lastActive;
+    var rowSelectedJsonArray = rowAllJsonArray[rowSelectedIndex];
+    
+    var TAS_UID = rowSelectedJsonArray.TAS_UID;
+    var USR_UID = rowSelectedJsonArray.USR_UID;
+    
+    var APP_UID = rowSelectedJsonArray.APP_UID;
+    var DEL_INDEX = rowSelectedJsonArray.DEL_INDEX;
+    
+    optionMenuReassignGlobal.APP_UID = APP_UID;
+    optionMenuReassignGlobal.DEL_INDEX = DEL_INDEX;    
+      if( rowSelected ){
+        var store = new Ext.data.Store( {
+          autoLoad: true,
+          proxy : new Ext.data.HttpProxy({
+            url: 'casesList_Ajax?actionAjax=getUsersToReassign&TAS_UID='+TAS_UID
+          }),
+          reader : new Ext.data.JsonReader( {
+            root: 'data',
+            fields : [
+              {name : 'USR_UID'},
+              {name : 'PRO_USERNAME'},
+              {name : 'USR_FIRSTNAME'},
+              {name : 'PRO_LASTNAME'}
+            ]
+          })
+        });
+        
+        var grid = new Ext.grid.GridPanel( {
+          id: 'reassignGrid',
+          height:300,
+          width:'300',
+          title : '',
+          stateful : true,
+          stateId : 'grid',
+          enableColumnResize: true,
+          enableHdMenu: true,
+          frame:false,
+          cls : 'grid_with_checkbox',
+          columnLines: true,
+    
+          viewConfig: {
+            forceFit:true
+          },
+          
+          cm: new Ext.grid.ColumnModel({
+            defaults: {
+                width: 200,
+                sortable: true
+            },    
+            columns: [
+              {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+              {header: _('ID_FIRSTNAME'), dataIndex: 'USR_FIRSTNAME', width: 300},
+              {header: _('ID_LASTNAME'), dataIndex: 'USR_LASTNAME', width: 300}
+            ]
+          }),
+    
+          store: store,
+    
+          tbar:[
+            {
+              text:_('ID_REASSIGN'),
+              iconCls: 'ICON_CASES_TO_REASSIGN',
+              handler: function(){
+                //Actions.reassignCase
+                 reassingCaseToUser();
+              }
+            }
+          ],
+          listeners: {
+            //rowdblclick: openCase,
+            render: function(){
+              this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
+              this.ownerCt.doLayout();
+            }
+          }
+        });
+        
+        var win = new Ext.Window({
+          title: '',
+          width: 450,
+          height: 280,
+          layout:'fit',
+          autoScroll:true,
+          modal: true,
+          maximizable: false,
+          items: [grid]
+        });
+        win.show();            
+      }
+    }
   });
   optionMenuDelete = new Ext.Action({
     text: TRANSLATIONS.ID_DELETE,
@@ -945,16 +1075,15 @@ Ext.onReady ( function() {
     case 'todo':
       menuItems = [optionMenuOpen, optionMenuPause];
 
-      if( ___p34315105.search('R') > 0 )
+      if( ___p34315105.search('R') != -1 )
         menuItems.push(optionMenuReassign);
-      if( ___p34315105.search('C') > 0 )
-        menuItems.push(optionMenuCancel);
+
 
       break;
 
       case 'draft':
       menuItems = [optionMenuOpen, optionMenuPause];
-      if( ___p34315105.search('R') > 0 )
+      if( ___p34315105.search('R') != -1 )
         menuItems.push(optionMenuReassign);
       menuItems.push(optionMenuDelete);
 

@@ -107,7 +107,6 @@
   $cnt = '';
   $menuPerms = '';
   $menuPerms = $menuPerms . ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1) ? 'R': ''; //can reassign case
-  $menuPerms = $menuPerms . ($cnt == 1) ? 'C': ''; //can cancel case
 
   $oHeadPublisher->assign( '___p34315105',   $menuPerms); // user menu permissions
 
