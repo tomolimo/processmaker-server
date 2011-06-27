@@ -586,6 +586,13 @@ function G_Text( form, element, name, type )
       newValueR = G.toMask(oNewValue.result, me.mask, oNewValue.cursor );
       me.element.value=newValueR.result;
       me.setSelectionRange(oNewValue.cursor - 1, oNewValue.cursor - 1);
+      if (me.element.fireEvent){
+        me.element.fireEvent("onchange");
+      }else{
+        var evObj = document.createEvent('HTMLEvents');
+        evObj.initEvent( 'change', true, true );
+        me.element.dispatchEvent(evObj);
+      }
       return false;
     }
     if (event.keyCode === 46){
@@ -593,6 +600,13 @@ function G_Text( form, element, name, type )
       newValueR = G.toMask(oNewValue.result, me.mask, oNewValue.cursor );
       me.element.value=newValueR.result;
       me.setSelectionRange(oNewValue.cursor, oNewValue.cursor);
+      if (me.element.fireEvent){
+        me.element.fireEvent("onchange");
+      }else{
+        var evObj = document.createEvent('HTMLEvents');
+        evObj.initEvent( 'change', true, true );
+        me.element.dispatchEvent(evObj);
+      }
       return false;
     }
     me.prev=me.element.value;
