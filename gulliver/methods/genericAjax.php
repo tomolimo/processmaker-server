@@ -21,6 +21,9 @@ if( isset($request) ){
     case 'suggest':
 
       try{
+	  if(isset($_GET["inputEnconde64"])) {
+	    $_GET['input'] = base64_decode($_GET['input']);		
+          }	  
         $sData = base64_decode(str_rot13($_GET['hash']));
         list($SQL, $DB_UID) = explode('@|', $sData);
         // Remplace values for dependent fields
@@ -30,6 +33,8 @@ if( isset($request) ){
           $SQL = str_replace($aDependentFieldsKeys, $aDependentFieldsValue, $SQL);
         }
         if (1===preg_match('/^\s*SELECT\s+([\w\W]+?)(?:\s+FROM\s+`?([^`]+?)`?)(?:\s+WHERE\s+([\w\W]+?))?(?:\s+GROUP\s+BY\s+([\w\W]+?))?(?:\s+ORDER\s+BY\s+([\w\W]+?))?(?:\s+BETWEEN\s+([\w\W]+?)\s+AND\s+([\w\W]+?))?(?:\s+LIMIT\s+(\d+)\s*,\s*(\d+))?\s*$/im', $SQL, $matches)) {
+		
+		
           $sqlColumns   = $matches[1];
           $sqlFrom      = isset($matches[2])?$matches[2]:'';
           $sqlWhere     = isset($matches[3])?$matches[3]:'';
@@ -144,7 +149,7 @@ if( isset($request) ){
             $arr = array();
             $aReplace = array("(\r\n)", "(\n\r)", "(\n)", "(\r)");
             for ($i=0;$i<count($aResults);$i++) {
-              $arr[] = "{\"id\": \"".$aResults[$i]['id']."\", \"value\": \"". preg_replace($aReplace, "", $aResults[$i]['value']) ."\", \"info\": \"".$aResults[$i]['info']."\"}";		
+              $arr[] = "{\"id\": \"".$aResults[$i]['id']."\", \"value\": \"". html_entity_decode(preg_replace($aReplace, "", $aResults[$i]['value']))."\", \"info\": \"".$aResults[$i]['info']."\"}";		
             }
             echo implode(", ", $arr);
             echo "]}";

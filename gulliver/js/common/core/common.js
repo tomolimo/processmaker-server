@@ -1342,7 +1342,69 @@ function htmlentities (string, quote_style) {
 
     return tmp_str;
 }
-
+function utf8_encode (argString) {
+  var utftext = "",
+  start, end, stringl = 0;
+  var string = argString;
+  start = end = 0;
+  stringl = string.length;
+    for (var n = 0; n < stringl; n++) {
+      var c1 = string.charCodeAt(n);
+      var enc = null;
+	if (c1 < 128) {
+	  end++;
+	}
+	else if (c1 > 127 && c1 < 2048) {
+	  enc = String.fromCharCode((c1 >> 6) | 192) + String.fromCharCode((c1 & 63) | 128);
+	}
+	else {
+	  enc = String.fromCharCode((c1 >> 12) | 224) + String.fromCharCode(((c1 >> 6) & 63) | 128) + String.fromCharCode((c1 & 63) | 128);
+	}            
+	if (enc !== null) {
+	    if (end > start) {
+	      utftext += string.slice(start, end);
+	    }
+	  utftext += enc;
+	  start = end = n + 1;
+	}
+    } 
+    if (end > start) {
+      utftext += string.slice(start, stringl);
+    }
+  return utftext;
+} 
+function base64_encode (data) {
+  var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+  ac = 0,
+  enc = "",
+  tmp_arr = [];        
+    if (!data) {
+      return data;
+    } 
+  data = utf8_encode(data + '');      
+    do { 
+      o1 = data.charCodeAt(i++);
+      o2 = data.charCodeAt(i++);
+      o3 = data.charCodeAt(i++); 
+      bits = o1 << 16 | o2 << 8 | o3;   
+      h1 = bits >> 18 & 0x3f;
+      h2 = bits >> 12 & 0x3f;
+      h3 = bits >> 6 & 0x3f;
+      h4 = bits & 0x3f;  
+      tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+    } while (i < data.length); 
+  enc = tmp_arr.join(''); 
+    switch (data.length % 3) {
+      case 1:
+	enc = enc.slice(0, -2) + '==';
+      break;
+      case 2:
+	enc = enc.slice(0, -1) + '=';
+      break;
+    } 
+  return enc;
+}
 function get_html_translation_table (table, quote_style) {
     //example 1: get_html_translation_table('HTML_SPECIALCHARS');
     //returns 1: {'"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;'}

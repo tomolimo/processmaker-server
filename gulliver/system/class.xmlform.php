@@ -1223,8 +1223,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
           $sResultKeys = '';
           $depValues = '+';
         }
-
-        $sOptions  = 'script: function (input) { return "'.$this->ajaxServer.'?request=suggest&json=true&limit='.$this->maxresults.'&hash='.$hash.'&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="'.$depValues.'"&input=" + getField(\''. $this->name .'_label\').value; },';
+        
+        $sOptions  = 'script: function (input) {var inputValue = base64_encode(getField(\''. $this->name .'_label\').value); return "'.$this->ajaxServer.'?request=suggest&json=true&limit='.$this->maxresults.'&hash='.$hash.'&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="'.$depValues.'"&input="+inputValue+"&inputEnconde64=enable"; },';
         $sOptions .= 'json: true,';
         $sOptions .= 'limit: '.$this->maxresults.',';
         // $sOptions .= 'varname: "input",';
