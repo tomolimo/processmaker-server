@@ -84,7 +84,7 @@ class SubProcessMapBuilder {
 
 		$tMap->addColumn('SP_VARIABLES_OUT', 'SpVariablesOut', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
-		$tMap->addColumn('SP_VARIABLES_IN', 'SpVariablesIn', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('SP_VARIABLES_IN', 'SpVariablesIn', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
 		$tMap->addColumn('SP_GRID_IN', 'SpGridIn', 'string', CreoleTypes::VARCHAR, true, 50);
 

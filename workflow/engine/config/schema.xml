@@ -1891,7 +1891,7 @@
     <column name="SP_SYNCHRONOUS_TYPE" type="VARCHAR" size="20" required="true" default=""/>
     <column name="SP_SYNCHRONOUS_WAIT" type="INTEGER" required="true" default="0"/>
     <column name="SP_VARIABLES_OUT" type="LONGVARCHAR" required="true"/>
-    <column name="SP_VARIABLES_IN" type="LONGVARCHAR" required="true"/>
+    <column name="SP_VARIABLES_IN" type="LONGVARCHAR" required="false"/>
     <column name="SP_GRID_IN" type="VARCHAR" size="50" required="true" default=""/>
     <validator column="SP_TYPE">
       <rule name="validValues" value="SIMPLE|MULTIPLE" message="Please select a valid value for SP_TYPE."/>
