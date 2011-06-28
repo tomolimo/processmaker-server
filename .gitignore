@@ -6,3 +6,7 @@ workflow/engine/content/languages/translations.environments
 workflow/engine/js/labels/
 workflow/public_html/files/
 .nfs*
+.buildpath
+.project
+.settings
+
