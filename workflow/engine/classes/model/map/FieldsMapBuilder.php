@@ -88,6 +88,12 @@ class FieldsMapBuilder {
 
 		$tMap->addColumn('FLD_FOREIGN_KEY_TABLE', 'FldForeignKeyTable', 'string', CreoleTypes::VARCHAR, true, 32);
 
+		$tMap->addColumn('FLD_DYN_NAME', 'FldDynName', 'string', CreoleTypes::VARCHAR, false, 128);
+
+		$tMap->addColumn('FLD_DYN_UID', 'FldDynUid', 'string', CreoleTypes::VARCHAR, false, 128);
+
+		$tMap->addColumn('FLD_FILTER', 'FldFilter', 'int', CreoleTypes::TINYINT, false, null);
+
 	} // doBuild()
 
 } // FieldsMapBuilder

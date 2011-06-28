@@ -70,23 +70,29 @@ class AdditionalTablesMapBuilder {
 
 		$tMap->addColumn('ADD_TAB_CLASS_NAME', 'AddTabClassName', 'string', CreoleTypes::VARCHAR, true, 100);
 
-		$tMap->addColumn('ADD_TAB_DESCRIPTION', 'AddTabDescription', 'string', CreoleTypes::LONGVARCHAR, true, null);
+		$tMap->addColumn('ADD_TAB_DESCRIPTION', 'AddTabDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-		$tMap->addColumn('ADD_TAB_SDW_LOG_INSERT', 'AddTabSdwLogInsert', 'int', CreoleTypes::TINYINT, true, null);
+		$tMap->addColumn('ADD_TAB_SDW_LOG_INSERT', 'AddTabSdwLogInsert', 'int', CreoleTypes::TINYINT, false, null);
 
-		$tMap->addColumn('ADD_TAB_SDW_LOG_UPDATE', 'AddTabSdwLogUpdate', 'int', CreoleTypes::TINYINT, true, null);
+		$tMap->addColumn('ADD_TAB_SDW_LOG_UPDATE', 'AddTabSdwLogUpdate', 'int', CreoleTypes::TINYINT, false, null);
 
-		$tMap->addColumn('ADD_TAB_SDW_LOG_DELETE', 'AddTabSdwLogDelete', 'int', CreoleTypes::TINYINT, true, null);
+		$tMap->addColumn('ADD_TAB_SDW_LOG_DELETE', 'AddTabSdwLogDelete', 'int', CreoleTypes::TINYINT, false, null);
 
-		$tMap->addColumn('ADD_TAB_SDW_LOG_SELECT', 'AddTabSdwLogSelect', 'int', CreoleTypes::TINYINT, true, null);
+		$tMap->addColumn('ADD_TAB_SDW_LOG_SELECT', 'AddTabSdwLogSelect', 'int', CreoleTypes::TINYINT, false, null);
 
-		$tMap->addColumn('ADD_TAB_SDW_MAX_LENGTH', 'AddTabSdwMaxLength', 'int', CreoleTypes::INTEGER, true, null);
+		$tMap->addColumn('ADD_TAB_SDW_MAX_LENGTH', 'AddTabSdwMaxLength', 'int', CreoleTypes::INTEGER, false, null);
 
-		$tMap->addColumn('ADD_TAB_SDW_AUTO_DELETE', 'AddTabSdwAutoDelete', 'int', CreoleTypes::TINYINT, true, null);
+		$tMap->addColumn('ADD_TAB_SDW_AUTO_DELETE', 'AddTabSdwAutoDelete', 'int', CreoleTypes::TINYINT, false, null);
 
-		$tMap->addColumn('ADD_TAB_PLG_UID', 'AddTabPlgUid', 'string', CreoleTypes::VARCHAR, true, 32);
+		$tMap->addColumn('ADD_TAB_PLG_UID', 'AddTabPlgUid', 'string', CreoleTypes::VARCHAR, false, 32);
 
 		$tMap->addColumn('DBS_UID', 'DbsUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
+		$tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
+		$tMap->addColumn('ADD_TAB_TYPE', 'AddTabType', 'string', CreoleTypes::VARCHAR, false, 32);
+
+		$tMap->addColumn('ADD_TAB_GRID', 'AddTabGrid', 'string', CreoleTypes::VARCHAR, false, 256);
 
 	} // doBuild()
 

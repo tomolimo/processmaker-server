@@ -15,29 +15,37 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  * <juliocesar@colosa.com, julces2000@gmail.com>
- * 
+ *
  * @package    workflow.engine.classes.model
  */
 class AdditionalTables extends BaseAdditionalTables {
-  private $aDef = array('mysql' => array('TEXT' => 'TEXT',
-                                         'CHAR'   => 'CHAR',
-                                         'VARCHAR'   => 'VARCHAR',
-                                         'INT'   => 'INT',
-                                         'FLOAT' => 'FLOAT',
-                                         'DATE'   => 'DATE'),
-                      'pgsql' => array('TEXT' => 'TEXT',
-                                       'CHAR'   => 'CHAR',
-                                       'VARCHAR'   => 'VARCHAR',
-                                       'INT'   => 'INTEGER',
-                                       'FLOAT' => 'REAL',
-                                       'DATE'   => 'DATE'),
-                      'mssql' => array('TEXT' => 'TEXT',
-                                       'CHAR'   => 'NCHAR',
-                                       'VARCHAR'   => 'NVARCHAR',
-                                       'INT'   => 'INTEGER',
-                                       'FLOAT' => 'FLOAT',
-                                       'DATE'   => 'CHAR (19)') 
-                      );
+  private $aDef = array(
+    'mysql' => array(
+      'TEXT' => 'TEXT',
+      'CHAR'   => 'CHAR',
+      'VARCHAR'   => 'VARCHAR',
+      'INT'   => 'INT',
+      'FLOAT' => 'FLOAT',
+      'DATE'   => 'DATE'
+    ),
+    'pgsql' => array(
+      'TEXT' => 'TEXT',
+      'CHAR'   => 'CHAR',
+      'VARCHAR'   => 'VARCHAR',
+      'INT'   => 'INTEGER',
+      'FLOAT' => 'REAL',
+      'DATE'   => 'DATE'
+    ),
+    'mssql' => array(
+      'TEXT' => 'TEXT',
+      'CHAR'   => 'NCHAR',
+      'VARCHAR'   => 'NVARCHAR',
+      'INT'   => 'INTEGER',
+      'FLOAT' => 'FLOAT',
+      'DATE'   => 'CHAR (19)'
+    )
+  );
+
   /**
    * Function load
    * access public
@@ -61,6 +69,8 @@ class AdditionalTables extends BaseAdditionalTables {
           $oCriteria->addSelectColumn(FieldsPeer::FLD_KEY);
           $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY);
           $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY_TABLE);
+          $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_NAME);
+          $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_UID);
           $oCriteria->add(FieldsPeer::ADD_TAB_UID, $sUID);
           $oCriteria->addAscendingOrderByColumn(FieldsPeer::FLD_INDEX);
           $oDataset = FieldsPeer::doSelectRS($oCriteria);
@@ -86,55 +96,58 @@ class AdditionalTables extends BaseAdditionalTables {
     }
   }
 
-public function loadByName($name) {
+  public function loadByName($name) {
     try {
-          $oCriteria = new Criteria('workflow');
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_CLASS_NAME);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_PLG_UID);
-          $oCriteria->addSelectColumn(AdditionalTablesPeer::DBS_UID);
-          $oCriteria->add(AdditionalTablesPeer::ADD_TAB_NAME, $name, Criteria::LIKE);
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_CLASS_NAME);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_PLG_UID);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::DBS_UID);
+      $oCriteria->add(AdditionalTablesPeer::ADD_TAB_NAME, $name, Criteria::LIKE);
 
-          $oDataset = FieldsPeer::doSelectRS($oCriteria);
-          $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset = FieldsPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-          $aRows = Array();
-          while( $oDataset->next() ){
-            $aRows[] = $oDataset->getRow();
-          }
+      $aRows = Array();
+      while( $oDataset->next() ){
+        $aRows[] = $oDataset->getRow();
+      }
 
-          return (sizeof($aRows) > 0)? $aRows: false;
+      return (sizeof($aRows) > 0)? $aRows: false;
     }
     catch (Exception $oError) {
       throw($oError);
     }
   }
 
-  function create($aData, $aFields = array()) {
-    if (!isset($aData['ADD_TAB_UID'])) {
+  /**
+   * Create & Update function
+   */
+  function create($aData, $aFields = array())
+  {
+    if (!isset($aData['ADD_TAB_UID']) || (isset($aData['ADD_TAB_UID']) && $aData['ADD_TAB_UID'] == '')) {
       $aData['ADD_TAB_UID'] = G::generateUniqueID();
     }
-    else {
-      if ($aData['ADD_TAB_UID'] == '') {
-        $aData['ADD_TAB_UID'] = G::generateUniqueID();
-      }
-    }
+
     $oConnection = Propel::getConnection(AdditionalTablesPeer::DATABASE_NAME);
+
     try {
       $oAdditionalTables = new AdditionalTables();
       $oAdditionalTables->fromArray($aData, BasePeer::TYPE_FIELDNAME);
+
       if ($oAdditionalTables->validate()) {
         $oConnection->begin();
         $iResult = $oAdditionalTables->save();
         $oConnection->commit();
+        /****DEPRECATED
         require_once 'classes/model/ShadowTable.php';
         $oShadowTable = new ShadowTable();
         $oShadowTable->create(array('ADD_TAB_UID' => $aData['ADD_TAB_UID'],
@@ -143,9 +156,9 @@ public function loadByName($name) {
                                     'USR_UID'     => (isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : ''),
                                     'APP_UID'     => '',
                                     'SHD_DATE'    => date('Y-m-d H:i:s')));
+        */
         return $aData['ADD_TAB_UID'];
-      }
-      else {
+      } else {
         $sMessage = '';
         $aValidationFailures = $oAdditionalTables->getValidationFailures();
         foreach($aValidationFailures as $oValidationFailure) {
@@ -170,6 +183,7 @@ public function loadByName($name) {
           $oConnection->begin();
           $iResult = $oAdditionalTables->save();
           $oConnection->commit();
+          /*** DEPRECATED
           require_once 'classes/model/ShadowTable.php';
           $oShadowTable = new ShadowTable();
           $oShadowTable->create(array('ADD_TAB_UID' => $aData['ADD_TAB_UID'],
@@ -178,7 +192,7 @@ public function loadByName($name) {
                                       'USR_UID'     => (isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : ''),
                                       'APP_UID'     => '',
                                       'SHD_DATE'    => date('Y-m-d H:i:s')));
-          return $iResult;
+          return $iResult;*/
         }
         else {
           $sMessage = '';
@@ -216,12 +230,14 @@ public function loadByName($name) {
         }
         else {
           $oShadowTable = new ShadowTable();
-          $oShadowTable->create(array('ADD_TAB_UID' => $sUID,
-                                      'SHD_ACTION'  => 'DROP',
-                                      'SHD_DETAILS' => '',
-                                      'USR_UID'     => (isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : ''),
-                                      'APP_UID'     => '',
-                                      'SHD_DATE'    => date('Y-m-d H:i:s')));
+          $oShadowTable->create(array(
+            'ADD_TAB_UID' => $sUID,
+            'SHD_ACTION'  => 'DROP',
+            'SHD_DETAILS' => '',
+            'USR_UID'     => (isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : ''),
+            'APP_UID'     => '',
+            'SHD_DATE'    => date('Y-m-d H:i:s'))
+          );
         }
         return $iResult;
       }
@@ -235,18 +251,63 @@ public function loadByName($name) {
     }
   }
 
-  function createTable($sTableName, $sConnection = 'wf', $aFields = array()) {
+  function createTable($sTableName, $sConnection = '', $aFields = array()) {
     $sTableName = $sTableName;
-    if ($sConnection == '') {
-      $sConnection = 'wf';
+    if ($sConnection == '' || $sConnection == 'wf') {
+      $sConnection = 'workflow';
     }
-    $sDBName = 'DB' . ($sConnection != 'wf' ? '_' . strtoupper($sConnection) : '') . '_NAME';
-    $sDBHost = 'DB' . ($sConnection != 'wf' ? '_' . strtoupper($sConnection) : '') . '_HOST';
-    $sDBUser = 'DB' . ($sConnection != 'wf' ? '_' . strtoupper($sConnection) : '') . '_USER';
-    $sDBPass = 'DB' . ($sConnection != 'wf' ? '_' . strtoupper($sConnection) : '') . '_PASS';
+
     try {
       switch (DB_ADAPTER) {
         case 'mysql':
+
+          // trying to get a connection, if it doesn't exist Propel::getConnection() throws an exception
+          $con = Propel::getConnection($sConnection);
+          $stmt = $con->createStatement();
+
+          $sQuery = 'CREATE TABLE IF NOT EXISTS `' . $sTableName . '` (';
+          $aPKs   = array();
+          foreach ($aFields as $aField) {
+            $aField['sFieldName'] = strtoupper($aField['sFieldName']);
+            switch ($aField['sType']) {
+              case 'VARCHAR':
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '',";
+              break;
+              case 'TEXT':
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " ,"; // " DEFAULT '',";
+              break;
+              case 'DATE':
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " ,"; // " DEFAULT '0000-00-00',";
+              break;
+              case 'INT':
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . ' ' . ($aField['bAI'] ? 'AUTO_INCREMENT' : "DEFAULT '0'") . ',';
+                if ($aField['bAI']) {
+                  if (!in_array('`' . $aField['sFieldName'] . '`', $aPKs)) {
+                    $aPKs[] = '`' . $aField['sFieldName'] . '`';
+                  }
+                }
+              break;
+              case 'FLOAT':
+                $sQuery .= '`' . $aField['sFieldName'] . '` ' . $aField['sType'] . '(' . $aField['iSize'] . ')' . " " . ($aField['bNull'] ? 'NULL' : 'NOT NULL') . " DEFAULT '0',";
+              break;
+            }
+            if ($aField['bPrimaryKey'] == 1) {
+              if (!in_array('`' . $aField['sFieldName'] . '`', $aPKs)) {
+                $aPKs[] = '`' . $aField['sFieldName'] . '`';
+              }
+            }
+          }
+          $sQuery  = substr($sQuery, 0, -1);
+          if (!empty($aPKs)) {
+            $sQuery .= ',PRIMARY KEY (' . implode(',', $aPKs) . ')';
+          }
+          $sQuery .= ') DEFAULT CHARSET=utf8;';
+
+          $rs = $stmt->executeQuery('DROP TABLE IF EXISTS `' . $sTableName . '`');
+          $rs = $stmt->executeQuery($sQuery);
+        break;
+
+        case 'mysql2':
           eval('$oConnection = @mysql_connect(' . $sDBHost . ', ' . $sDBUser . ', ' . $sDBPass . ');');
           if (!$oConnection) {
             throw new Exception('Cannot connect to the server!');
@@ -292,24 +353,24 @@ public function loadByName($name) {
           }
           $sQuery .= ') DEFAULT CHARSET=utf8;';
           if (!@mysql_query($sQuery)) {
-            throw new Exception('Cannot create the table "' . $sTableName . '"!');
+            throw new Exception('Cannot create the table "' . $sTableName . '"! ' . mysql_error() . ' SQL: ' . $sQuery);
           }
         break;
         case 'mssql':
           $sDBAdapter = DB_ADAPTER;
           $sDBUser    = DB_USER;
           $sDBPass    = DB_PASS;
-          $sDBHost    = DB_HOST; // substr(DB_HOST, 0, strpos(DB_HOST,':')); 
+          $sDBHost    = DB_HOST; // substr(DB_HOST, 0, strpos(DB_HOST,':'));
           $sDBName    = DB_NAME;
-          
+
           $sDBHost = substr($sDBHost, 0, strpos($sDBHost,':'));
-          
+
           $dsn        = $sDBAdapter . '://' . $sDBUser . ':' . $sDBPass . '@' . $sDBHost . '/' . $sDBName;
-          
-          
+
+
           $db =& DB::Connect( $dsn);
-          if (PEAR::isError($db)) { die($db->getMessage()); }         
-          
+          if (PEAR::isError($db)) { die($db->getMessage()); }
+
           $sQuery = 'CREATE TABLE ' . $sTableName . ' (';
           $aPKs   = array();
           foreach ($aFields as $aField) {
@@ -351,10 +412,10 @@ public function loadByName($name) {
           if (!$res) {
             throw new Exception('Cannot create the table "' . $sTableName . '"!');
           }
-          
+
         break;
-     
-      
+
+
       }
     }
     catch (Exception $oError) {
@@ -374,7 +435,7 @@ public function loadByName($name) {
         if (!isset($aOldFields[$aNewField['FLD_UID']])) {
           $aFieldsToAdd[] = $aNewField;
         }
-        if (($aNewField['FLD_KEY'] == 'on') || ($aNewField['FLD_AUTO_INCREMENT'] == 'on')) {
+        if ($aNewField['FLD_KEY'] == 1 || $aNewField['FLD_KEY'] == 'on' || $aNewField['FLD_AUTO_INCREMENT'] == 'on') {
           if (!in_array($aNewField['FLD_NAME'], $aKeys)) {
             $aKeys[] = $aNewField['FLD_NAME'];
           }
@@ -420,30 +481,40 @@ public function loadByName($name) {
       foreach ($aFieldsToAdd as $aFieldToAdd) {
         switch ($aFieldToAdd['FLD_TYPE']) {
           case 'VARCHAR':
-            $aData = array('Type'    => 'VARCHAR(' . $aFieldToAdd['FLD_SIZE'] . ')',
-                           'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '');
+            $aData = array(
+              'Type'    => 'VARCHAR(' . $aFieldToAdd['FLD_SIZE'] . ')',
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => ''
+            );
           break;
           case 'TEXT':
-            $aData = array('Type'    => 'TEXT',
-                           'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '');
+            $aData = array(
+              'Type'    => 'TEXT',
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => ''
+            );
           break;
           case 'DATE':
-            $aData = array('Type'    => 'DATE', 'Null' => 'YES');
-                          // 'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
-                          // 'Default' => 'NULL'); // '0000-00-00');
+            $aData = array(
+              'Type'    => 'DATE', 'Null' => 'YES'
+            );
+              // 'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              // 'Default' => 'NULL'); // '0000-00-00');
           break;
           case 'INT':
-            $aData = array('Type'    => 'INT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
-                           'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '0',
-                           'AI'      => ($aFieldToAdd['FLD_AUTO_INCREMENT'] == 'on' ? 1 : 0));
+            $aData = array(
+              'Type'    => 'INT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => '0',
+              'AI'      => ($aFieldToAdd['FLD_AUTO_INCREMENT'] == 'on' ? 1 : 0)
+            );
           break;
           case 'FLOAT':
-            $aData = array('Type'    => 'FLOAT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
-                           'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '0');
+            $aData = array(
+              'Type'    => 'FLOAT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => '0'
+            );
           break;
         }
         //echo $oDataBase->generateAddColumnSQL($sTableName, $aFieldToAdd['FLD_NAME'], $aData);
@@ -457,30 +528,40 @@ public function loadByName($name) {
       foreach ($aFieldsToAlter as $aFieldToAlter) {
         switch ($aFieldToAlter['FLD_TYPE']) {
           case 'VARCHAR':
-            $aData = array('Type'    => 'VARCHAR(' . $aFieldToAlter['FLD_SIZE'] . ')',
-                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '');
+            $aData = array(
+              'Type'    => 'VARCHAR(' . $aFieldToAlter['FLD_SIZE'] . ')',
+              'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => ''
+            );
           break;
           case 'TEXT':
-            $aData = array('Type'    => 'TEXT',
-                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '');
+            $aData = array(
+              'Type'    => 'TEXT',
+              'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => ''
+            );
           break;
           case 'DATE':
-            $aData = array('Type'    => 'DATE', 'Null' => 'YES');
-//                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
-//                           'Default' => 'NULL'); // '0000-00-00');
+            $aData = array(
+              'Type'    => 'DATE', 'Null' => 'YES'
+            );
+            //'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
+            //'Default' => 'NULL'); // '0000-00-00');
           break;
           case 'INT':
-            $aData = array('Type'    => 'INT(' . (int)$aFieldToAlter['FLD_SIZE'] . ')',
-                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '0',
-                           'AI'      => ($aFieldToAlter['FLD_AUTO_INCREMENT'] == 'on' ? 1 : 0));
+            $aData = array(
+              'Type'    => 'INT(' . (int)$aFieldToAlter['FLD_SIZE'] . ')',
+              'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => '0',
+              'AI'      => ($aFieldToAlter['FLD_AUTO_INCREMENT'] == 'on' ? 1 : 0)
+            );
           break;
           case 'FLOAT':
-            $aData = array('Type'    => 'FLOAT(' . (int)$aFieldToAlter['FLD_SIZE'] . ')',
-                           'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
-                           'Default' => '0');
+            $aData = array(
+              'Type'    => 'FLOAT(' . (int)$aFieldToAlter['FLD_SIZE'] . ')',
+              'Null'    => ($aFieldToAlter['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Default' => '0'
+            );
           break;
         }
         $oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD'])));
@@ -500,16 +581,20 @@ public function loadByName($name) {
                     'FLD_NULL'           => '',
                     'FLD_AUTO_INCREMENT' => 'on');
       array_unshift($aFields, $aUID);*/
-      $aTypes = array('VARCHAR' => 'string',
-                      'TEXT'    => 'string',
-                      'DATE'    => 'int',
-                      'INT'     => 'int',
-                      'FLOAT'   => 'double');
-      $aCreoleTypes = array('VARCHAR' => 'VARCHAR',
-                            'TEXT'    => 'LONGVARCHAR',
-                            'DATE'    => 'TIMESTAMP',
-                            'INT'     => 'INTEGER',
-                            'FLOAT'   => 'DOUBLE');
+      $aTypes = array(
+        'VARCHAR' => 'string',
+        'TEXT'    => 'string',
+        'DATE'    => 'int',
+        'INT'     => 'int',
+        'FLOAT'   => 'double'
+      );
+      $aCreoleTypes = array(
+        'VARCHAR' => 'VARCHAR',
+        'TEXT'    => 'LONGVARCHAR',
+        'DATE'    => 'TIMESTAMP',
+        'INT'     => 'INTEGER',
+        'FLOAT'   => 'DOUBLE'
+      );
       if ($sClassName == '') {
         $sClassName = $this->getPHPName($sTableName);
       }
@@ -541,18 +626,19 @@ public function loadByName($name) {
       $aNotPKs  = array();
       $i        = 0;
       foreach($aFields as $iKey => $aField) {
-      	$aField['FLD_NAME'] = strtoupper($aField['FLD_NAME']); 
+      	$aField['FLD_NAME'] = strtoupper($aField['FLD_NAME']);
       	if ($aField['FLD_TYPE']=='DATE') $aField['FLD_NULL'] = '';
-        $aColumn    = array('name'        => $aField['FLD_NAME'],
-                            'phpName'     => $this->getPHPName($aField['FLD_NAME']),
-                            'type'        => $aTypes[$aField['FLD_TYPE']],
-                            'creoleType'  => $aCreoleTypes[$aField['FLD_TYPE']],
-                            'notNull'     => ($aField['FLD_NULL'] == 'on' ? 'true' : 'false'),
-                            'size'        => (($aField['FLD_TYPE'] == 'VARCHAR') || ($aField['FLD_TYPE'] == 'INT') || ($aField['FLD_TYPE'] == 'FLOAT') ? $aField['FLD_SIZE'] : 'null'),
-                            'var'         => strtolower($aField['FLD_NAME']),
-                            'attribute'   => (($aField['FLD_TYPE'] == 'VARCHAR') || ($aField['FLD_TYPE'] == 'TEXT') || ($aField['FLD_TYPE'] == 'DATE') ? '$' . strtolower($aField['FLD_NAME']) . " = ''" : '$' . strtolower($aField['FLD_NAME']) . ' = 0'),
-                            'index'       => $i,
-                            );
+        $aColumn    = array(
+          'name'        => $aField['FLD_NAME'],
+          'phpName'     => $this->getPHPName($aField['FLD_NAME']),
+          'type'        => $aTypes[$aField['FLD_TYPE']],
+          'creoleType'  => $aCreoleTypes[$aField['FLD_TYPE']],
+          'notNull'     => ($aField['FLD_NULL'] == 'on' ? 'true' : 'false'),
+          'size'        => (($aField['FLD_TYPE'] == 'VARCHAR') || ($aField['FLD_TYPE'] == 'INT') || ($aField['FLD_TYPE'] == 'FLOAT') ? $aField['FLD_SIZE'] : 'null'),
+          'var'         => strtolower($aField['FLD_NAME']),
+          'attribute'   => (($aField['FLD_TYPE'] == 'VARCHAR') || ($aField['FLD_TYPE'] == 'TEXT') || ($aField['FLD_TYPE'] == 'DATE') ? '$' . strtolower($aField['FLD_NAME']) . " = ''" : '$' . strtolower($aField['FLD_NAME']) . ' = 0'),
+          'index'       => $i,
+        );
         if ($aField['FLD_TYPE'] == 'DATE') {
           $aColumn['getFunction'] = '/**
    * Get the [optionally formatted] [' . $aColumn['var'] . '] column value.
@@ -874,7 +960,7 @@ public function loadByName($name) {
     }
     return implode('', $aAux);
   }
-  
+
   function deleteMultiple($arrUID){
   	$arrUIDs = explode(",",$arrUID);
   	foreach ($arrUIDs as $UID){
@@ -884,16 +970,30 @@ public function loadByName($name) {
 
   function deleteAll($sUID) {
     try {
+      //deleting pm table
       $aData = $this->load($sUID);
       $this->remove($sUID);
+
+      //deleting fields
       require_once 'classes/model/Fields.php';
       $oCriteria = new Criteria('workflow');
       $oCriteria->add(FieldsPeer::ADD_TAB_UID, $sUID);
       FieldsPeer::doDelete($oCriteria);
-      G::LoadSystem('database_' . strtolower(DB_ADAPTER));
-      $oDataBase = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
-      $oDataBase->iFetchType = MYSQL_NUM;
-      $oDataBase->executeQuery($oDataBase->generateDropTableSQL($aData['ADD_TAB_NAME']));
+
+      //deleting table
+      if ( isset($aData['DBS_UID']) && $aData['DBS_UID'] != 'wf' && $aData['DBS_UID'] != '') {
+        $con = Propel::getConnection($aData['DBS_UID']);
+        $stmt = $con->createStatement();
+        $stmt->executeQuery('DROP TABLE '.$aData['ADD_TAB_NAME']);
+      } else {
+        G::LoadSystem('database_' . strtolower(DB_ADAPTER));
+        $oDataBase = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $oDataBase->iFetchType = MYSQL_NUM;
+        $oDataBase->executeQuery($oDataBase->generateDropTableSQL($aData['ADD_TAB_NAME']));
+      }
+
+
+      //deleting clases
       $sClassName = $this->getPHPName($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $aData['ADD_TAB_NAME']);
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
       @unlink($sPath . $sClassName . '.php');
@@ -950,13 +1050,13 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
             '<xtitle type="title">
              <en><![CDATA[<center><b>' . G::LoadTranslation("ID_TABLE") . ': '.$aData['ADD_TAB_NAME'].'</b></center>]]></en>
              </xtitle>';
-      
+
       //$sXml .= '<PM_UNIQUE_ID type="private" showInTable="0" />' . "\n";
       foreach ($aData['FIELDS'] as $aField) {
-        
+
         $fZise = $aField['FLD_SIZE'] > (1024/sizeof($aData['FIELDS'])) ? $aField['FLD_SIZE']: 1024/sizeof($aData['FIELDS']);
-        
-        
+
+
         $sXml .= '<' . $aField['FLD_NAME'] . ' type="text" colWidth="'.$fZise.'px" titleAlign="left" align="left">' . "\n";
         $sXml .= '<' . SYS_LANG . '>' . ($aField['FLD_DESCRIPTION'] != '' ? $aField['FLD_DESCRIPTION'] : $aField['FLD_NAME']) . '</' . SYS_LANG . '>' . "\n";
         $sXml .= '</' . $aField['FLD_NAME'] . '>' . "\n";
@@ -981,12 +1081,12 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
       $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
 
-      if (file_exists ($sPath . $sClassName . '.php') ) { 
-        require_once $sPath . $sClassName . '.php';      
+      if (file_exists ($sPath . $sClassName . '.php') ) {
+        require_once $sPath . $sClassName . '.php';
       } else {
       	return null;
-      } 
-      
+      }
+
       $sClassPeerName = $sClassName . 'Peer';
       $oCriteria = new Criteria('workflow');
       //eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
@@ -1022,12 +1122,12 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
       $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
 
-      if (file_exists ($sPath . $sClassName . '.php') ) { 
-        return $sClassName;      
+      if (file_exists ($sPath . $sClassName . '.php') ) {
+        return $sClassName;
       } else {
       	return '';
       }
-       
+
     } catch (Exception $oError) {
       throw($oError);
     }
@@ -1047,7 +1147,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
           case 'VARCHAR':
             if( intVal($aField['FLD_SIZE'])  <= 100){
               $vCharType = 'text';
-              $vCharAtt = 'size="' . $aField['FLD_SIZE'] . '" maxlength="' . $aField['FLD_SIZE'] . '" validate="Any"'; 
+              $vCharAtt = 'size="' . $aField['FLD_SIZE'] . '" maxlength="' . $aField['FLD_SIZE'] . '" validate="Any"';
             } else {
               $vCharType = 'textarea';
               $vCharAtt = 'rows="3" cols="90"';
@@ -1190,7 +1290,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       throw($oError);
     }
   }
-  
+
   function deleteDataInTable($sUID, $aKeys) {
     try {
       $aData  = $this->load($sUID, true);
@@ -1226,5 +1326,554 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     catch (Exception $oError) {
       throw($oError);
     }
+  }
+
+
+  /**
+   * Populate Report Table
+   */
+  public function populateReportTable($sTableName, $sConnection = 'rp', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '')
+  {
+
+    $con = Propel::getConnection($sConnection);
+    $stmt = $con->createStatement();
+    if ($sType == 'GRID') {
+      $aAux  = explode('-', $sGrid);
+      $sGrid = $aAux[0];
+    }
+
+    try {
+      switch (DB_ADAPTER) {
+        case 'mysql':
+          //select cases for this Process, ordered by APP_NUMBER
+          $oCriteria = new Criteria('workflow');
+          $oCriteria->add(ApplicationPeer::PRO_UID, $sProcessUid);
+          $oCriteria->addAscendingOrderByColumn(ApplicationPeer::APP_NUMBER);
+          $oDataset = ApplicationPeer::doSelectRS($oCriteria);
+          $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+          $oDataset->next();
+          while ($aRow = $oDataset->getRow()) {
+            $aData = unserialize($aRow['APP_DATA']);
+
+            //delete previous record from this report table ( previous records in case this is a grid )
+            $deleteSql = 'DELETE FROM `' . $sTableName . "` WHERE APP_UID = '" . $aRow['APP_UID'] . "'";
+            $rsDel = $stmt->executeQuery( $deleteSql );
+            if ($sType == 'NORMAL') {
+              $sQuery  = 'INSERT INTO `' . $sTableName . '` (';
+              $sQuery .= '`APP_UID`,`APP_NUMBER`';
+
+              foreach ($aFields as $aField) {
+                if ($aField['FLD_NAME'] != 'APP_UID' && $aField['FLD_NAME'] != 'APP_NUMBER' && $aField['FLD_NAME'] != 'ROW')
+                  $sQuery .= ',`' . $aField['FLD_NAME'] . '`';
+              }
+
+              $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'];
+              foreach ($aFields as $aField) {
+                if ($aField['FLD_NAME'] == 'APP_UID' || $aField['FLD_NAME'] == 'APP_NUMBER' || $aField['FLD_NAME'] == 'ROW') continue;
+
+                switch ($aField['FLD_TYPE']) {
+                  case 'INT':
+                  case 'FLOAT':
+                    $sQuery .= ',' . (isset($aData[$aField['FLD_DYN_NAME']]) ? (float)str_replace(',', '', $aData[$aField['FLD_DYN_NAME']]) : '0');
+                    break;
+                  case 'VARCHAR':
+                  case 'TEXT':
+                    if (!isset($aData[$aField['FLD_NAME']])) {
+                      $aData[$aField['FLD_NAME']] = '';
+                    }
+                    $sQuery .= ",'" . (isset($aData[$aField['FLD_DYN_NAME']]) ? mysql_real_escape_string($aData[$aField['FLD_DYN_NAME']]) : '') . "'";
+                    break;
+                  case 'DATE':
+                    $value = (isset($aData[$aField['FLD_DYN_NAME']]) && trim($aData[$aField['FLD_DYN_NAME']])) != '' ? "'" . $aData[$aField['FLD_DYN_NAME']] . "'" : 'NULL';
+                    $sQuery .= "," . $value;
+                    break;
+                }
+              }
+              $sQuery .= ')';
+
+              $rs = $stmt->executeQuery( $sQuery );
+            }
+            else {
+              if (isset($aData[$sGrid])) {
+                foreach ($aData[$sGrid] as $iRow => $aGridRow) {
+                  $sQuery  = 'INSERT INTO `' . $sTableName . '` (';
+                  $sQuery .= '`APP_UID`,`APP_NUMBER`,`ROW`';
+
+                  foreach ($aFields as $aField) {
+                    if ($aField['FLD_NAME'] != 'APP_UID' && $aField['FLD_NAME'] != 'APP_NUMBER' && $aField['FLD_NAME'] != 'ROW')
+                    $sQuery .= ',`' . $aField['FLD_NAME'] . '`';
+                  }
+
+                  $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'] . ',' . $iRow;
+                  foreach ($aFields as $aField) {
+                    if ($aField['FLD_NAME'] != 'APP_UID' || $aField['FLD_NAME'] != 'APP_NUMBER' || $aField['FLD_NAME'] != 'ROW') continue;
+
+                    switch ($aField['FLD_TYPE']) {
+                      case 'INT':
+                      case 'FLOAT':
+                        $sQuery .= ',' . (isset($aGridRow[$aField['FLD_NAME']]) ? (float)str_replace(',', '', $aGridRow[$aField['FLD_NAME']]) : '0');
+                        break;
+                      case 'VARCHAR':
+                      case 'TEXT':
+                        if (!isset($aGridRow[$aField['FLD_NAME']])) {
+                          $aGridRow[$aField['FLD_NAME']] = '';
+                        }
+                        $sQuery .= ",'" . (isset($aGridRow[$aField['FLD_NAME']]) ? mysql_real_escape_string($aGridRow[$aField['FLD_NAME']]) : '') . "'";
+                        break;
+                      case 'DATE':
+                        $value = (isset($aGridRow[$aField['FLD_NAME']]) && trim($aGridRow[$aField['FLD_NAME']])) != '' ? "'" . $aGridRow[$aField['FLD_NAME']] . "'" : 'NULL';
+                        $sQuery .= "," . $value;
+                        break;
+                    }
+                  }
+                  $sQuery .= ')';
+                  $rs = $stmt->executeQuery( $sQuery );
+                }
+              }
+            }
+            $oDataset->next();
+          }
+          break;
+
+          /**
+            * For SQLServer code
+            */
+          case 'mssql':
+            $oCriteria = new Criteria('workflow');
+            $oCriteria->add(ApplicationPeer::PRO_UID, $sProcessUid);
+            $oCriteria->addAscendingOrderByColumn(ApplicationPeer::APP_NUMBER);
+            $oDataset = ApplicationPeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $oDataset->next();
+            while ($aRow = $oDataset->getRow()) {
+              $aData = unserialize($aRow['APP_DATA']);
+              mysql_query('DELETE FROM [' . $sTableName . "] WHERE APP_UID = '" . $aRow['APP_UID'] . "'");
+              if ($sType == 'NORMAL') {
+                $sQuery  = 'INSERT INTO [' . $sTableName . '] (';
+                $sQuery .= '[APP_UID],[APP_NUMBER]';
+                foreach ($aFields as $aField) {
+                  $sQuery .= ',[' . $aField['sFieldName'] . ']';
+                }
+                $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'];
+                foreach ($aFields as $aField) {
+                  switch ($aField['sType']) {
+                    case 'number':
+                      $sQuery .= ',' . (isset($aData[$aField['sFieldName']]) ? (float)str_replace(',', '', $aData[$aField['sFieldName']]) : '0');
+                    break;
+                    case 'char':
+                    case 'text':
+                      if (!isset($aData[$aField['sFieldName']])) {
+                        $aData[$aField['sFieldName']] = '';
+                      }
+                      $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? mysql_real_escape_string($aData[$aField['sFieldName']]) : '') . "'";
+                    break;
+                    case 'date':
+                      $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? $aData[$aField['sFieldName']] : '') . "'";
+                    break;
+                  }
+                }
+                $sQuery .= ')';
+                $rs = $stmt->executeQuery( $sQuery );
+              }
+              else {
+                if (isset($aData[$sGrid])) {
+                  foreach ($aData[$sGrid] as $iRow => $aGridRow) {
+                    $sQuery  = 'INSERT INTO [' . $sTableName . '] (';
+                    $sQuery .= '`APP_UID`,`APP_NUMBER`,`ROW`';
+                    foreach ($aFields as $aField) {
+                      $sQuery .= ',[' . $aField['sFieldName'] . ']';
+                    }
+                    $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'] . ',' . $iRow;
+                    foreach ($aFields as $aField) {
+                      switch ($aField['sType']) {
+                        case 'number':
+                          $sQuery .= ',' . (isset($aGridRow[$aField['sFieldName']]) ? (float)str_replace(',', '', $aGridRow[$aField['sFieldName']]) : '0');
+                        break;
+                        case 'char':
+                        case 'text':
+                          if (!isset($aGridRow[$aField['sFieldName']])) {
+                            $aGridRow[$aField['sFieldName']] = '';
+                          }
+                          $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
+                        break;
+                        case 'date':
+                          $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? $aGridRow[$aField['sFieldName']] : '') . "'";
+                        break;
+                      }
+                    }
+                    $sQuery .= ')';
+                    $rs = $stmt->executeQuery( $sQuery );
+                  }
+                }
+              }
+              $oDataset->next();
+            }
+          break;
+
+      }
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
+
+
+  public function updateReportTables($sProcessUid, $sApplicationUid, $iApplicationNumber, $aFields)
+  {
+  try {
+
+    //get all Active Report Tables
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(AdditionalTablesPeer::PRO_UID, $sProcessUid);
+    //$oCriteria->add(AdditionalTablesPeer::REP_TAB_STATUS, 'ACTIVE');
+    $oDataset = AdditionalTablesPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aVars = array();
+
+    while ($aRow = $oDataset->getRow()) {
+      //$aRow['REP_TAB_NAME'] = $this->sPrefix . $aRow['REP_TAB_NAME'];
+
+      $con = Propel::getConnection($aRow['DBS_UID']);
+      $stmt = $con->createStatement();
+      switch (DB_ADAPTER) {
+
+        case 'mysql':
+          $aTableFields = $this->getTableVars($aRow['ADD_TAB_UID'], true);
+
+          if ($aRow['ADD_TAB_TYPE'] == 'NORMAL') {
+            $sqlExists = "SELECT * FROM `" . $aRow['ADD_TAB_NAME'] . "` WHERE APP_UID = '" . $sApplicationUid . "'";
+            $rsExists  = $stmt->executeQuery( $sqlExists, ResultSet::FETCHMODE_ASSOC);
+            $rsExists->next();
+            $aRow2 = $rsExists->getRow();
+
+            if ( is_array( $aRow2) ) {
+              $sQuery  = 'UPDATE `' . $aRow['ADD_TAB_NAME'] . '` SET ';
+              foreach ($aTableFields as $aField) {
+
+                if ($aField['sFieldName'] == 'APP_UID' || $aField['sFieldName'] == 'APP_NUMBER' || $aField['sFieldName'] == 'ROW') continue;
+                $sQuery .= '`' . $aField['sFieldName'] . '` = ';
+
+                switch ($aField['sType']) {
+                  case 'FLOAT':
+                  case 'INT':
+                    $sQuery .= (isset($aFields[$aField['sFieldDynName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldDynName']]) : '0') . ',';
+                  break;
+                  case 'VARCHAR':
+                  case 'TEXT':
+                    if (!isset($aFields[$aField['sFieldDynName']])) {
+                      $aFields[$aField['sFieldDynName']] = '';
+                    }
+                    $sQuery .= "'" . (isset($aFields[$aField['sFieldDynName']]) ? mysql_real_escape_string($aFields[$aField['sFieldDynName']]) : '') . "',";
+                  break;
+                  case 'DATE':
+                    $mysqlDate = (isset($aFields[$aField['sFieldDynName']]) ? $aFields[$aField['sFieldDynName']] : '') ;
+                    if ($mysqlDate!='') {
+                      $mysqlDate = str_replace('/', '-', $mysqlDate);
+                      $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
+                    }
+                    $sQuery .= "'" . $mysqlDate . "',";
+                  break;
+                }
+              }
+              $sQuery  = substr($sQuery, 0, -1);
+              $sQuery .= " WHERE APP_UID = '" . $sApplicationUid . "'";
+            }
+            else {
+              $sQuery  = 'INSERT INTO `' . $aRow['ADD_TAB_NAME'] . '` (';
+              $sQuery .= '`APP_UID`,`APP_NUMBER`';
+              foreach ($aTableFields as $aField) {
+                if ($aField['sFieldName'] != 'APP_UID' && $aField['sFieldName'] != 'APP_NUMBER' && $aField['sFieldName'] != 'ROW')
+                  $sQuery .= ',`' . $aField['sFieldName'] . '`';
+              }
+              $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber;
+              foreach ($aTableFields as $aField) {
+                if ($aField['sFieldName'] == 'APP_UID' || $aField['sFieldName'] == 'APP_NUMBER' || $aField['sFieldName'] == 'ROW') continue;
+
+                switch ($aField['sType']) {
+                  case 'FLOAT':
+                  case 'INT':
+                    $sQuery .= ',' . (isset($aFields[$aField['sFieldDynName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldDynName']]) : '0');
+                    break;
+                  case 'VARCHAR':
+                  case 'TEXT':
+                    if (!isset($aFields[$aField['sFieldDynName']])) {
+                      $aFields[$aField['sFieldDynName']] = '';
+                    }
+                    $sQuery .= ",'" . (isset($aFields[$aField['sFieldDynName']]) ? mysql_real_escape_string($aFields[$aField['sFieldDynName']]) : '') . "'";
+                    break;
+                  case 'DATE':
+                    $mysqlDate = ( isset($aFields[$aField['sFieldDynName']]) ? $aFields[$aField['sFieldDynName']] : '' );
+                    if ($mysqlDate!='') {
+                      $mysqlDate = str_replace( '/', '-', $mysqlDate );
+                      $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
+                    }
+                    $sQuery .= ",'" . $mysqlDate  . "'";
+                    break;
+                }
+              }
+              $sQuery .= ')';
+            }
+
+            $rs = $stmt->executeQuery( $sQuery );
+          }
+          else {
+            //remove old rows from database
+            $sqlDelete = 'DELETE FROM `' . $aRow['ADD_TAB_NAME'] . "` WHERE APP_UID = '" . $sApplicationUid . "'";
+            $rsDelete  = $stmt->executeQuery( $sqlDelete );
+
+            $aAux = explode('-', $aRow['ADD_TAB_GRID']);
+            if (isset($aFields[$aAux[0]])) {
+              foreach ($aFields[$aAux[0]] as $iRow => $aGridRow) {
+                $sQuery  = 'INSERT INTO `' . $aRow['ADD_TAB_NAME'] . '` (';
+                $sQuery .= '`APP_UID`,`APP_NUMBER`,`ROW`';
+                foreach ($aTableFields as $aField) {
+                  if ($aField['sFieldName'] != 'APP_UID' && $aField['sFieldName'] != 'APP_NUMBER' && $aField['sFieldName'] != 'ROW')
+                    $sQuery .= ',`' . $aField['sFieldName'] . '`';
+                }
+                $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber . ',' . $iRow;
+                foreach ($aTableFields as $aField) {
+                  if ($aField['sFieldName'] == 'APP_UID' || $aField['sFieldName'] == 'APP_NUMBER' || $aField['sFieldName'] == 'ROW') continue;
+
+                  switch ($aField['sType']) {
+                    case 'FLOAT':
+                    case 'INT':
+                      $sQuery .= ',' . (isset($aGridRow[$aField['sFieldDynName']]) ? (float)str_replace(',', '', $aGridRow[$aField['sFieldDynName']]) : '0');
+                      break;
+                    case 'VARCHAR':
+                    case 'TEXT':
+                      if (!isset($aGridRow[$aField['sFieldDynName']])) {
+                        $aGridRow[$aField['sFieldDynName']] = '';
+                      }
+                      $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldDynName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldDynName']]) : '') . "'";
+                      break;
+                    case 'DATE':
+                      $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldDynName']]) ? $aGridRow[$aField['sFieldDynName']] : '') . "'";
+                      break;
+                  }
+                }
+                $sQuery .= ')';
+                $rs =$stmt->executeQuery( $sQuery );
+              }
+            }
+          }
+          break;
+
+         /**
+          * For SQLServer code
+          */
+          case 'mssql':
+            $aTableFields = $this->getTableVars($aRow['REP_TAB_UID'], true);
+            if ($aRow['REP_TAB_TYPE'] == 'NORMAL') {
+              $oDataset2 = mssql_query("SELECT * FROM [" . $aRow['REP_TAB_NAME'] . "] WHERE APP_UID = '" . $sApplicationUid . "'");
+              if ($aRow2 = mssql_fetch_row($oDataset2)) {
+                $sQuery  = 'UPDATE [' . $aRow['REP_TAB_NAME'] . '] SET ';
+                foreach ($aTableFields as $aField) {
+                  $sQuery .= '[' . $aField['sFieldName'] . '] = ';
+                  switch ($aField['sType']) {
+                    case 'number':
+                      $sQuery .= (isset($aFields[$aField['sFieldName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldName']]) : '0') . ',';
+                    break;
+                    case 'char':
+                    case 'text':
+                      if (!isset($aFields[$aField['sFieldName']])) {
+                        $aFields[$aField['sFieldName']] = '';
+                      }
+                      $sQuery .= "'" . (isset($aFields[$aField['sFieldName']]) ? mysql_real_escape_string($aFields[$aField['sFieldName']]) : '') . "',";
+                    break;
+                    case 'date':
+                      $sQuery .= "'" . (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') . "',";
+                    break;
+                  }
+                }
+                $sQuery  = substr($sQuery, 0, -1);
+                $sQuery .= " WHERE APP_UID = '" . $sApplicationUid . "'";
+              }
+              else {
+                $sQuery  = 'INSERT INTO [' . $aRow['REP_TAB_NAME'] . '] (';
+                $sQuery .= '[APP_UID],[APP_NUMBER]';
+                foreach ($aTableFields as $aField) {
+                  $sQuery .= ',[' . $aField['sFieldName'] . ']';
+                }
+                $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber;
+                foreach ($aTableFields as $aField) {
+                  switch ($aField['sType']) {
+                    case 'number':
+                      $sQuery .= ',' . (isset($aFields[$aField['sFieldName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldName']]) : '0');
+                    break;
+                    case 'char':
+                    case 'text':
+                      if (!isset($aFields[$aField['sFieldName']])) {
+                        $aFields[$aField['sFieldName']] = '';
+                      }
+                      $sQuery .= ",'" . (isset($aFields[$aField['sFieldName']]) ? mysql_real_escape_string($aFields[$aField['sFieldName']]) : '') . "'";
+                    break;
+                    case 'date':
+                      $sQuery .= ",'" . (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') . "'";
+                    break;
+                  }
+                }
+                $sQuery .= ')';
+              }
+              $rs = $stmt->executeQuery( $sQuery );
+            }
+            else {
+              mysql_query('DELETE FROM [' . $aRow['REP_TAB_NAME'] . "] WHERE APP_UID = '" . $sApplicationUid . "'");
+              $aAux = explode('-', $aRow['REP_TAB_GRID']);
+              if (isset($aFields[$aAux[0]])) {
+                foreach ($aFields[$aAux[0]] as $iRow => $aGridRow) {
+                  $sQuery  = 'INSERT INTO [' . $aRow['REP_TAB_NAME'] . '] (';
+                  $sQuery .= '[APP_UID],[APP_NUMBER],[ROW]';
+                  foreach ($aTableFields as $aField) {
+                    $sQuery .= ',[' . $aField['sFieldName'] . ']';
+                  }
+                  $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber . ',' . $iRow;
+                  foreach ($aTableFields as $aField) {
+                    switch ($aField['sType']) {
+                      case 'number':
+                        $sQuery .= ',' . (isset($aGridRow[$aField['sFieldName']]) ? (float)str_replace(',', '', $aGridRow[$aField['sFieldName']]) : '0');
+                      break;
+                      case 'char':
+                      case 'text':
+                        if (!isset($aGridRow[$aField['sFieldName']])) {
+                          $aGridRow[$aField['sFieldName']] = '';
+                        }
+                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
+                      break;
+                      case 'date':
+                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? $aGridRow[$aField['sFieldName']] : '') . "'";
+                      break;
+                    }
+                  }
+                  $sQuery .= ')';
+                  $rs =$stmt->executeQuery( $sQuery );
+                }
+              }
+            }
+          break;
+
+      }
+      $oDataset->next();
+    }
+  }
+  catch (Exception $oError) {
+    throw($oError);
+  }
+  }
+
+  public function getTableVars($uid, $bWhitType = false)
+  {
+    require_once 'classes/model/Fields.php';
+    try {
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn(FieldsPeer::ADD_TAB_UID);
+      $oCriteria->addSelectColumn(FieldsPeer::FLD_NAME);
+      $oCriteria->addSelectColumn(FieldsPeer::FLD_TYPE);
+      $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_NAME);
+      $oCriteria->add(FieldsPeer::ADD_TAB_UID, $uid);
+      $oDataset = ReportVarPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      $aVars = array();
+      $aImportedVars = array();//This array will help to control if the variable already exist
+      while ($aRow = $oDataset->getRow()) {
+            if ($bWhitType) {
+                if (!in_array($aRow['FLD_NAME'], $aImportedVars)) {
+                  $aImportedVars[]=$aRow['FLD_NAME'];
+                  $aVars[] = array('sFieldName' => $aRow['FLD_NAME'], 'sFieldDynName' => $aRow['FLD_DYN_NAME'], 'sType' => $aRow['FLD_TYPE']);
+                }
+            }else {
+              $aVars[] = $aRow['FLD_NAME'];
+            }
+        $oDataset->next();
+      }
+      return $aVars;
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+
+  public function getAll($start = 0, $limit = 20, $filter = '', $process = null)
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TYPE);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::PRO_UID);
+
+    if (isset($process)) {
+      foreach ($process as $key => $pro_uid) {
+        if ($key == 'equal')
+          $oCriteria->add(AdditionalTablesPeer::PRO_UID, $pro_uid, Criteria::EQUAL);
+        else
+          $oCriteria->add(AdditionalTablesPeer::PRO_UID, $pro_uid, Criteria::NOT_EQUAL);
+      }
+    }
+
+    if ($filter != '' && is_string($filter)) {
+      $oCriteria->add(
+        $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%'.$filter.'%',Criteria::LIKE)->addOr(
+        $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_DESCRIPTION, '%'.$filter.'%',Criteria::LIKE))
+      );
+    }
+
+    $criteriaCount = clone $oCriteria;
+    $count = AdditionalTablesPeer::doCount($criteriaCount);
+
+    $oCriteria->setLimit($limit);
+    $oCriteria->setOffset($start);
+
+    $oDataset = AdditionalTablesPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    $addTables = Array();
+    while( $oDataset->next() ) {
+      $row = $oDataset->getRow();
+      $row['PRO_TITLE'] = $row['PRO_DESCRIPTION'] = '';
+      $addTables[] = $row;
+      if ($row['PRO_UID'] != '') {
+        $proUids[] = $row['PRO_UID'];
+      }
+    }
+
+    //process details will have the info about the processes
+    $procDetails = Array();
+
+    if (count($proUids) > 0) {
+      //now get the labels for all process, using an array of Uids,
+      $c = new Criteria('workflow');
+      //$c->add ( ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL );
+      $c->add(ContentPeer::CON_LANG, defined('SYS_LANG')? SYS_LANG: 'en', Criteria::EQUAL);
+      $c->add(ContentPeer::CON_ID, $proUids, Criteria::IN);
+
+      $dt = ContentPeer::doSelectRS ($c);
+      $dt->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+      while ($dt->next()) {
+        $row = $dt->getRow();
+        $procDetails[$row['CON_ID']][$row['CON_CATEGORY']] = $row['CON_VALUE'];
+      }
+
+      foreach ($addTables as $i => $addTable) {
+        if (isset($procDetails[$addTable['PRO_UID']]['PRO_TITLE']))
+          $addTables[$i]['PRO_TITLE'] = $procDetails[$addTable['PRO_UID']]['PRO_TITLE'];
+
+        if (isset($procDetails[$addTable['PRO_UID']]['PRO_DESCRIPTION']))
+          $addTables[$i]['PRO_DESCRIPTION'] = $procDetails[$addTable['PRO_UID']]['PRO_DESCRIPTION'];
+      }
+    }
+
+    // // fltering by proces title
+    // if(isset($filter['process'])) {
+    //    foreach ($addTables as $i => $addTable) {
+    //     if (strpos($addTable['PRO_TITLE'], $filter['process']) === false)
+    //       unset($addTables[$i]);
+    //   }
+    // }
+
+    return array('rows'=>$addTables, 'count'=>$count);
   }
 } // AdditionalTables

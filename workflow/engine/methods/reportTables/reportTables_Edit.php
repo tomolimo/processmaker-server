@@ -68,5 +68,5 @@ $_SESSION['_DBArray'] = $_DBArray;
 $aFields['LANG'] = SYS_LANG;
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'reportTables/reportTables_Edit', '', $aFields, '../reportTables/reportTables_Save');
-G::RenderPage('publish', 'raw');
+G::RenderPage('publish', 'blank');
 ?>

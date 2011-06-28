@@ -867,8 +867,12 @@ class Cases {
       $TAS_UID   = isset($Fields['TAS_UID']) ? $Fields['TAS_UID'] : '';
       
       G::LoadClass('reportTables');
+      require_once 'classes/model/AdditionalTables.php';
       $oReportTables = new ReportTables();
+      $addtionalTables = new additionalTables();
+      
       $oReportTables->updateTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
+      $addtionalTables->updateReportTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
 
       //now update the priority in appdelegation table, using the defined variable in task
       if (trim($DEL_INDEX) != '' && trim($TAS_UID) != '') {

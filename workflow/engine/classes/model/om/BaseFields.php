@@ -111,6 +111,27 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	 */
 	protected $fld_foreign_key_table = '';
 
+
+	/**
+	 * The value for the fld_dyn_name field.
+	 * @var        string
+	 */
+	protected $fld_dyn_name = '';
+
+
+	/**
+	 * The value for the fld_dyn_uid field.
+	 * @var        string
+	 */
+	protected $fld_dyn_uid = '';
+
+
+	/**
+	 * The value for the fld_filter field.
+	 * @var        int
+	 */
+	protected $fld_filter = 0;
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -255,6 +276,39 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	{
 
 		return $this->fld_foreign_key_table;
+	}
+
+	/**
+	 * Get the [fld_dyn_name] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getFldDynName()
+	{
+
+		return $this->fld_dyn_name;
+	}
+
+	/**
+	 * Get the [fld_dyn_uid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getFldDynUid()
+	{
+
+		return $this->fld_dyn_uid;
+	}
+
+	/**
+	 * Get the [fld_filter] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getFldFilter()
+	{
+
+		return $this->fld_filter;
 	}
 
 	/**
@@ -522,6 +576,72 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	} // setFldForeignKeyTable()
 
 	/**
+	 * Set the value of [fld_dyn_name] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setFldDynName($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->fld_dyn_name !== $v || $v === '') {
+			$this->fld_dyn_name = $v;
+			$this->modifiedColumns[] = FieldsPeer::FLD_DYN_NAME;
+		}
+
+	} // setFldDynName()
+
+	/**
+	 * Set the value of [fld_dyn_uid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setFldDynUid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->fld_dyn_uid !== $v || $v === '') {
+			$this->fld_dyn_uid = $v;
+			$this->modifiedColumns[] = FieldsPeer::FLD_DYN_UID;
+		}
+
+	} // setFldDynUid()
+
+	/**
+	 * Set the value of [fld_filter] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setFldFilter($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->fld_filter !== $v || $v === 0) {
+			$this->fld_filter = $v;
+			$this->modifiedColumns[] = FieldsPeer::FLD_FILTER;
+		}
+
+	} // setFldFilter()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -562,12 +682,18 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 
 			$this->fld_foreign_key_table = $rs->getString($startcol + 11);
 
+			$this->fld_dyn_name = $rs->getString($startcol + 12);
+
+			$this->fld_dyn_uid = $rs->getString($startcol + 13);
+
+			$this->fld_filter = $rs->getInt($startcol + 14);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 12; // 12 = FieldsPeer::NUM_COLUMNS - FieldsPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 15; // 15 = FieldsPeer::NUM_COLUMNS - FieldsPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Fields object", $e);
@@ -806,6 +932,15 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			case 11:
 				return $this->getFldForeignKeyTable();
 				break;
+			case 12:
+				return $this->getFldDynName();
+				break;
+			case 13:
+				return $this->getFldDynUid();
+				break;
+			case 14:
+				return $this->getFldFilter();
+				break;
 			default:
 				return null;
 				break;
@@ -838,6 +973,9 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			$keys[9] => $this->getFldKey(),
 			$keys[10] => $this->getFldForeignKey(),
 			$keys[11] => $this->getFldForeignKeyTable(),
+			$keys[12] => $this->getFldDynName(),
+			$keys[13] => $this->getFldDynUid(),
+			$keys[14] => $this->getFldFilter(),
 		);
 		return $result;
 	}
@@ -905,6 +1043,15 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			case 11:
 				$this->setFldForeignKeyTable($value);
 				break;
+			case 12:
+				$this->setFldDynName($value);
+				break;
+			case 13:
+				$this->setFldDynUid($value);
+				break;
+			case 14:
+				$this->setFldFilter($value);
+				break;
 		} // switch()
 	}
 
@@ -940,6 +1087,9 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[9], $arr)) $this->setFldKey($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setFldForeignKey($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setFldForeignKeyTable($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setFldDynName($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setFldDynUid($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setFldFilter($arr[$keys[14]]);
 	}
 
 	/**
@@ -963,6 +1113,9 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(FieldsPeer::FLD_KEY)) $criteria->add(FieldsPeer::FLD_KEY, $this->fld_key);
 		if ($this->isColumnModified(FieldsPeer::FLD_FOREIGN_KEY)) $criteria->add(FieldsPeer::FLD_FOREIGN_KEY, $this->fld_foreign_key);
 		if ($this->isColumnModified(FieldsPeer::FLD_FOREIGN_KEY_TABLE)) $criteria->add(FieldsPeer::FLD_FOREIGN_KEY_TABLE, $this->fld_foreign_key_table);
+		if ($this->isColumnModified(FieldsPeer::FLD_DYN_NAME)) $criteria->add(FieldsPeer::FLD_DYN_NAME, $this->fld_dyn_name);
+		if ($this->isColumnModified(FieldsPeer::FLD_DYN_UID)) $criteria->add(FieldsPeer::FLD_DYN_UID, $this->fld_dyn_uid);
+		if ($this->isColumnModified(FieldsPeer::FLD_FILTER)) $criteria->add(FieldsPeer::FLD_FILTER, $this->fld_filter);
 
 		return $criteria;
 	}
@@ -1038,6 +1191,12 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 		$copyObj->setFldForeignKey($this->fld_foreign_key);
 
 		$copyObj->setFldForeignKeyTable($this->fld_foreign_key_table);
+
+		$copyObj->setFldDynName($this->fld_dyn_name);
+
+		$copyObj->setFldDynUid($this->fld_dyn_uid);
+
+		$copyObj->setFldFilter($this->fld_filter);
 
 
 		$copyObj->setNew(true);

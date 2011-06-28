@@ -250,9 +250,9 @@ class Process extends BaseProcess {
 //        $this->pro_title = $aFields['PRO_TITLE'];
 //        $this->pro_description = $aFields['PRO_DESCRIPTION'];
 
-        
+
         $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
-        
+
         $c = new Criteria();
         $c->clearSelectColumns();
         $c->addSelectColumn(ContentPeer::CON_CATEGORY);
@@ -297,16 +297,16 @@ class Process extends BaseProcess {
           $oPro->setProParent ( $oPro->getProUid() );
           $oPro->save();
         }
-        
+
         //Get category Name, by default No category
-        $aFields['PRO_CATEGORY_LABEL']=G::LoadTranslation("ID_PROCESS_NO_CATEGORY");        
-        if($aFields['PRO_CATEGORY']!=""){        	
-        	$oProCat = ProcessCategoryPeer::retrieveByPk( $aFields['PRO_CATEGORY'] );        	
+        $aFields['PRO_CATEGORY_LABEL']=G::LoadTranslation("ID_PROCESS_NO_CATEGORY");
+        if($aFields['PRO_CATEGORY']!=""){
+        	$oProCat = ProcessCategoryPeer::retrieveByPk( $aFields['PRO_CATEGORY'] );
         	if (is_object ($oProCat) && get_class ($oProCat) == 'ProcessCategory' ) {
         	$aFields['PRO_CATEGORY_LABEL']=$oProCat->getCategoryName();
         	}
-        }        
-        
+        }
+
         return $aFields;
       }
       else {
@@ -319,10 +319,62 @@ class Process extends BaseProcess {
   }
 
 
-  function getAll($getAllLang=false) {
+  function getAll() {
+
+    $oCriteria  = new Criteria('workflow');
+
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_UID         );
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_PARENT      );
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_STATUS      );
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_CATEGORY    );
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_CREATE_DATE );
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_CREATE_USER );
+    $oCriteria->addSelectColumn(ProcessPeer::PRO_DEBUG       );
+
+    $oCriteria->add(ProcessPeer::PRO_UID, '', Criteria::NOT_EQUAL);
+    $oCriteria->add(ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL);
+
+    //execute the query
+    $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $processes = Array();
+    $uids=array();
+    while( $oDataset->next() ) {
+      $processes[] = $oDataset->getRow();
+      $uids[]      = $processes[sizeof($processes)-1]['PRO_UID'];
+    }
+    //process details will have the info about the processes
+    $processesDetails = Array();
+
+    //now get the labels for all process, using an array of Uids,
     $c = new Criteria('workflow');
-    
-    
+    //$c->add ( ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL );
+    $c->add ( ContentPeer::CON_LANG, defined('SYS_LANG')?SYS_LANG:'en', Criteria::EQUAL );
+    $c->add ( ContentPeer::CON_ID, $uids, Criteria::IN );
+
+    $dt = ContentPeer::doSelectRS ($c);
+    $dt->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    while( $dt->next() ) {
+      $row = $dt->getRow();
+      $processesDetails[$row['CON_ID']] [$row['CON_CATEGORY']] = $row['CON_VALUE'];
+    }
+
+    G::loadClass('configuration');
+    $oConf = new Configurations;
+    $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
+
+    foreach( $processes as $i=>$process ) {
+      $processes[$i]['PRO_TITLE'] = $processes[$i]['PRO_DESCRIPTION'] = '';
+
+      if (isset($processesDetails[$process['PRO_UID']]['PRO_TITLE']))
+        $processes[$i]['PRO_TITLE'] = $processesDetails[$process['PRO_UID']]['PRO_TITLE'];
+
+      if (isset($processesDetails[$process['PRO_UID']]))
+        $processes[$i]['PRO_DESCRIPTION'] = $processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION'];
+    }
+
+    return $processes;
   }
 
   /**
@@ -457,7 +509,7 @@ class Process extends BaseProcess {
     $oPro = ProcessPeer::retrieveByPk( $ProUid );
     return (is_object ($oPro) && get_class ($oPro) == 'Process' );
   }
-  
+
   public function existsByProTitle($PRO_TITLE)
   {
     $oCriteria = new Criteria('workflow');
@@ -469,10 +521,10 @@ class Process extends BaseProcess {
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     $aRow = $oDataset->getRow();
-    
+
     return $aRow['PROCESS'] ? true : false;
   }
-  
+
   //new functions
   function getAllProcessesCount(){
     $c = $this->tmpCriteria;
@@ -497,67 +549,61 @@ class Process extends BaseProcess {
     $aProcesses = Array();
     $categories = Array();
     $oCriteria  = new Criteria('workflow');
-    
-    //$oCriteria->addSelectColumn(ProcessPeer::TABLE_NAME . '.*');
+
     $oCriteria->addSelectColumn(ProcessPeer::PRO_UID         );
     $oCriteria->addSelectColumn(ProcessPeer::PRO_PARENT      );
     $oCriteria->addSelectColumn(ProcessPeer::PRO_STATUS      );
     $oCriteria->addSelectColumn(ProcessPeer::PRO_CATEGORY    );
-    //$oCriteria->addSelectColumn(ProcessPeer::PRO_SUB_CATEGORY);
     $oCriteria->addSelectColumn(ProcessPeer::PRO_CREATE_DATE );
     $oCriteria->addSelectColumn(ProcessPeer::PRO_CREATE_USER );
     $oCriteria->addSelectColumn(ProcessPeer::PRO_DEBUG       );
 
-    //$oCriteria->addSelectColumn(UsersPeer::TABLE_NAME . '.*');
     $oCriteria->addSelectColumn(UsersPeer::USR_UID       );
     $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME  );
     $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME );
     $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME  );
 
-    //$oCriteria->addSelectColumn(ProcessCategoryPeer::TABLE_NAME . '.*');
     $oCriteria->addSelectColumn(ProcessCategoryPeer::CATEGORY_UID  );
     $oCriteria->addSelectColumn(ProcessCategoryPeer::CATEGORY_NAME  );
-    
+
     $oCriteria->add(ProcessPeer::PRO_UID, '', Criteria::NOT_EQUAL);
     $oCriteria->add(ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL);
-    
+
     if( isset($category) )
       $oCriteria->add(ProcessPeer::PRO_CATEGORY, $category, Criteria::EQUAL);
 
     $oCriteria->addJoin(ProcessPeer::PRO_CREATE_USER, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
     $oCriteria->addJoin(ProcessPeer::PRO_CATEGORY, ProcessCategoryPeer::CATEGORY_UID, Criteria::LEFT_JOIN);
-    //$oCriteria->addDescendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
 
-    $this->tmpCriteria = clone $oCriteria;    
-    
+    $this->tmpCriteria = clone $oCriteria;
+
     if($start != '')
       $oCriteria->setOffset($start);
     if($limit != '' && !isset($category) && !isset($processName))
       $oCriteria->setLimit($limit);
-    
+
     //execute a query to obtain numbers, how many cases there are by process
     $casesCnt = $this->getCasesCountInAllProcesses();
 
-    //execute the query    
-    
+    //execute the query
     $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $processes = Array();
     $uids=array();
     while( $oDataset->next() ) {
       $processes[] = $oDataset->getRow();
-      $uids[] = $processes[sizeof($processes)-1]['PRO_UID'];
+      $uids[]      = $processes[sizeof($processes)-1]['PRO_UID'];
     }
 
     //process details will have the info about the processes
     $processesDetails = Array();
 
-    //now get the labels for all process, using an array of Uids, 
+    //now get the labels for all process, using an array of Uids,
     $c = new Criteria('workflow');
     //$c->add ( ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL );
     $c->add ( ContentPeer::CON_LANG, defined('SYS_LANG')?SYS_LANG:'en', Criteria::EQUAL );
     $c->add ( ContentPeer::CON_ID, $uids, Criteria::IN );
-    
+
     $dt = ContentPeer::doSelectRS ($c);
     $dt->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
@@ -577,11 +623,11 @@ class Process extends BaseProcess {
       // verify if the title is already set on the current language
       if ( trim($proTitle) == '') {
         // if not, then load the record to generate content for current language
-        $proData = $this->load($process['PRO_UID']);
-        $proTitle = $proData['PRO_TITLE'];
+        $proData   = $this->load($process['PRO_UID']);
+        $proTitle  = $proData['PRO_TITLE'];
         $proDescription = $proData['PRO_DESCRIPTION'];
       }
-      
+
       //filtering by $processName
       if( isset($processName) && $processName != '' && stripos($proTitle, $processName) === false){
         continue;
@@ -597,13 +643,12 @@ class Process extends BaseProcess {
       //get user format from configuration
       $userOwner = isset($oConf->aConfig['format'])? $oConf->aConfig['format']: '';
       $creationDateMask = isset($oConf->aConfig['dateFormat'])? $oConf->aConfig['dateFormat']: '';
-
-      if( $userOwner != '' ){
-        $userOwner = str_replace('@userName',  $process['USR_USERNAME'], $userOwner);
+      if( $userOwner != '' ) {
+        $userOwner = str_replace('@userName',  $process['USR_USERNAME'],  $userOwner);
         $userOwner = str_replace('@firstName', $process['USR_FIRSTNAME'], $userOwner);
-        $userOwner = str_replace('@lastName',  $process['USR_LASTNAME'], $userOwner);
+        $userOwner = str_replace('@lastName',  $process['USR_LASTNAME'],  $userOwner);
         if ( $userOwner == " ( )" ) $userOwner = '-';
-      } 
+      }
       else {
         $userOwner = $process['USR_FIRSTNAME'].' '.$process['USR_LASTNAME'];
       }
@@ -611,11 +656,11 @@ class Process extends BaseProcess {
       //get date format from configuration
       if( $creationDateMask != '' ){
         list($date, $time) = explode(' ', $process['PRO_CREATE_DATE']);
-        list($y, $m, $d) = explode('-', $date);
-        list($h, $i, $s) = explode(':', $time);
+        list($y, $m, $d)   = explode('-', $date);
+        list($h, $i, $s)   = explode(':', $time);
 
         $process['PRO_CREATE_DATE'] = date($creationDateMask, mktime($h, $i, $s, $m, $d, $y));
-      } 
+      }
 
       $process['PRO_CATEGORY_LABEL']    = trim($process['PRO_CATEGORY']) != ''? $process['CATEGORY_NAME']: G::LoadTranslation('ID_PROCESS_NO_CATEGORY');
       $process['PRO_TITLE']             = $proTitle;
@@ -624,18 +669,18 @@ class Process extends BaseProcess {
       $process['PRO_DEBUG_LABEL']       = ($process['PRO_DEBUG']=="1")? G::LoadTranslation('ID_ON'): G::LoadTranslation('ID_OFF');
       $process['PRO_STATUS_LABEL']      = $process ['PRO_STATUS'] == 'ACTIVE'? G::LoadTranslation ('ID_ACTIVE'): G::LoadTranslation('ID_INACTIVE');
       $process['PRO_CREATE_USER_LABEL'] = $userOwner;
-      $process['CASES_COUNT_TO_DO']     = (isset($casesCnt[$process['PRO_UID']]['TO_DO'])? $casesCnt[$process['PRO_UID']]['TO_DO']: 0);
+      $process['CASES_COUNT_TO_DO']     = (isset($casesCnt[$process['PRO_UID']]['TO_DO'])?     $casesCnt[$process['PRO_UID']]['TO_DO']:     0);
       $process['CASES_COUNT_COMPLETED'] = (isset($casesCnt[$process['PRO_UID']]['COMPLETED'])? $casesCnt[$process['PRO_UID']]['COMPLETED']: 0);
-      $process['CASES_COUNT_DRAFT']     = (isset($casesCnt[$process['PRO_UID']]['DRAFT'])? $casesCnt[$process['PRO_UID']]['DRAFT']: 0);
+      $process['CASES_COUNT_DRAFT']     = (isset($casesCnt[$process['PRO_UID']]['DRAFT'])?     $casesCnt[$process['PRO_UID']]['DRAFT']:     0);
       $process['CASES_COUNT_CANCELLED'] = (isset($casesCnt[$process['PRO_UID']]['CANCELLED'])? $casesCnt[$process['PRO_UID']]['CANCELLED']: 0);
       $process['CASES_COUNT']           = $casesCountTotal;
-      
+
       unset( $process['PRO_CREATE_USER']);
 
       $aProcesses[] = $process;
-      
+
     }
-    
+
     usort($aProcesses, 'ordProcessByProTitle');
     return $aProcesses;
   }
@@ -663,11 +708,11 @@ class Process extends BaseProcess {
     }
     return $aProcesses;
   }
-  
+
   function getAllProcessesByCategory(){
   	$oCriteria = new Criteria('workflow');
   	$oCriteria->addSelectColumn(ProcessPeer::PRO_CATEGORY);
-  	$oCriteria->addSelectColumn('COUNT(*) AS CNT'); 
+  	$oCriteria->addSelectColumn('COUNT(*) AS CNT');
   	$oCriteria->addGroupByColumn(ProcessPeer::PRO_CATEGORY);
   	$oDataSet = ProcessPeer::doSelectRS($oCriteria);
   	$oDataSet->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -678,20 +723,20 @@ class Process extends BaseProcess {
   	}
   	return $aProc;
   }
-  
+
 } // Process
 
 function ordProcessByProTitle($a, $b){
-   
+
   if ($a['PRO_TITLE']>$b['PRO_TITLE']) {
     return 1;
   } elseif ($a['PRO_TITLE']<$b['PRO_TITLE']) {
     return -1;
   } else {
-    return 0; 
+    return 0;
   }
-  
-  
-   
+
+
+
 }
 

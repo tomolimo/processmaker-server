@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" menu="reportTables/reportTables_Options" width="100%" rowsPerPage="10">
-
+<!--<dynaForm sqlConnection="" width="100%" rowsPerPage="10">-->
 <REP_TAB_UID type="hidden" showInTable="0"/>
 
 <REP_TAB_TITLE type="text" colWidth="350" titleAlign="left" align="left">
@@ -24,4 +24,4 @@ function pagedTableFilter(form) {
 }
 </JSFILTER>
 
-</dynaForm> 
+</dynaForm>

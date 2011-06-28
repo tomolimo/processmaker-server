@@ -19,8 +19,13 @@ var processmap=function(){
       buildingBlocks:{
         injector:function(lanzado)
         {
-          Wx = (lanzado=='dynaforms' || lanzado=='triggers' || lanzado=='outputs' ) ?600 : 500;
+          Wx = (lanzado=='dynaforms' || lanzado=='triggers' || lanzado=='outputs') ?600 : 500;
           Hx = 460;
+
+          if(lanzado=='reportTables'){
+            Wx = 800;
+            Hx = 600;
+          }
 
           var bbk = {
             dynaforms:1,
@@ -75,7 +80,7 @@ var processmap=function(){
                   this.buildLoading=false;
                 }.extend(this);
                 r.make();
-                
+
                 processmapOutputsPanel = panel;
               }.extend(this),
               inputs:function()
@@ -132,7 +137,7 @@ var processmap=function(){
                 }.extend(this);
                 r.make();
               }.extend(this),
-              reportTables:function(){
+              reportTables2:function(){
                 var panel = this.panels.buildingBlocks;
                 panel.addContentTitle(G_STRINGS.ID_PROCESSMAP_REPORT_TABLES);
                 panel.clearContent();
@@ -149,6 +154,18 @@ var processmap=function(){
                   this.buildLoading=false;
                 }.extend(this);
                 r.make();
+              }.extend(this),
+              reportTables:function(){
+                var panel = this.panels.buildingBlocks;
+                panel.addContentTitle(G_STRINGS.ID_PROCESSMAP_REPORT_TABLES);
+                panel.clearContent();
+                var iframe=document.createElement('iframe');
+                iframe.setAttribute('id','reportTablesIframe');
+                iframe.src = '../reportTables/main?PRO_UID=' + this.options.uid;
+                iframe.style.border='0px';
+                iframe.style.width='786px';
+                iframe.style.height='564px';
+                panel.addContent(iframe);
               }.extend(this),
               dynaforms:function(){
                 var panel = this.panels.buildingBlocks;
@@ -712,7 +729,7 @@ var processmap=function(){
              }.extend(this,panel);
              r.make();
              }.extend(this)},
-*/             
+*/
              {image:"/images/event_messageThrow.png",text:"intermediate message event",launch:function(event){
                this.tmp.eventsPanel = panel =new leimnud.module.panel();
              panel.options={
@@ -1186,7 +1203,7 @@ var processmap=function(){
 
 /**
  * Reviewed by recharge in the process design
- * 
+ *
  */
 /*
          if(task.statusIcons){
@@ -1348,9 +1365,9 @@ var processmap=function(){
               };
             panel.events = {
               remove: function() {
-              
+
                 }.extend(this)
-            };  
+            };
             panel.make();
           }.extend(this,index)},
           {image:"/images/users.png",text:G_STRINGS.ID_PROCESSMAP_USERS_AND_GROUPS,launch:function(event,index){
@@ -1368,9 +1385,9 @@ var processmap=function(){
             };
             panel.events = { //neyek
               remove: function() {
-              
+
                 }.extend(this)
-            };  
+            };
             panel.make();
             panel.loader.show();
             var r;
@@ -1506,7 +1523,7 @@ var processmap=function(){
 
             this.tmp.propertiesPanel = panel =new leimnud.module.panel();
             var data = this.data.db.task[index];
-            
+
             panel.options={
               limit:true,
               size:{w:600,h:430},
@@ -1526,7 +1543,7 @@ var processmap=function(){
                 modal:true
               }
             };
-            
+
             panel.tab={
               width :170,
               optWidth:160,
@@ -1567,12 +1584,12 @@ var processmap=function(){
                     content : this.parent.closure({instance:this,method:iForm,args:[panel,index,taskOptions[i].id]}),
                     noClear : true
                 };
-                panel.tab.options.push(anElement);  
+                panel.tab.options.push(anElement);
               }
             };
             this.loadExtendedProperties();
             panel.make();
-            
+
           },args:index})}
           ]:
           [
@@ -2265,7 +2282,7 @@ processmap.prototype={
     {
       var h = this.parent.dom.element("pm_header");
       var m = this.parent.dom.element("pm_menu");
-      var s = this.parent.dom.element("pm_submenu"); 
+      var s = this.parent.dom.element("pm_submenu");
       var sep = this.parent.dom.element("pm_separator");
       sep.className = "pm_separatorOff___"+this.options.theme;
       this.menuRolled=false;

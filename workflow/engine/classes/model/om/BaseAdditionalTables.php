@@ -60,21 +60,21 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	 * The value for the add_tab_sdw_log_insert field.
 	 * @var        int
 	 */
-	protected $add_tab_sdw_log_insert = 1;
+	protected $add_tab_sdw_log_insert = 0;
 
 
 	/**
 	 * The value for the add_tab_sdw_log_update field.
 	 * @var        int
 	 */
-	protected $add_tab_sdw_log_update = 1;
+	protected $add_tab_sdw_log_update = 0;
 
 
 	/**
 	 * The value for the add_tab_sdw_log_delete field.
 	 * @var        int
 	 */
-	protected $add_tab_sdw_log_delete = 1;
+	protected $add_tab_sdw_log_delete = 0;
 
 
 	/**
@@ -88,7 +88,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	 * The value for the add_tab_sdw_max_length field.
 	 * @var        int
 	 */
-	protected $add_tab_sdw_max_length = -1;
+	protected $add_tab_sdw_max_length = 0;
 
 
 	/**
@@ -109,7 +109,28 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	 * The value for the dbs_uid field.
 	 * @var        string
 	 */
-	protected $dbs_uid = '0';
+	protected $dbs_uid = '';
+
+
+	/**
+	 * The value for the pro_uid field.
+	 * @var        string
+	 */
+	protected $pro_uid = '';
+
+
+	/**
+	 * The value for the add_tab_type field.
+	 * @var        string
+	 */
+	protected $add_tab_type = '';
+
+
+	/**
+	 * The value for the add_tab_grid field.
+	 * @var        string
+	 */
+	protected $add_tab_grid = '';
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -258,6 +279,39 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Get the [pro_uid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getProUid()
+	{
+
+		return $this->pro_uid;
+	}
+
+	/**
+	 * Get the [add_tab_type] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getAddTabType()
+	{
+
+		return $this->add_tab_type;
+	}
+
+	/**
+	 * Get the [add_tab_grid] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getAddTabGrid()
+	{
+
+		return $this->add_tab_grid;
+	}
+
+	/**
 	 * Set the value of [add_tab_uid] column.
 	 * 
 	 * @param      string $v new value
@@ -360,7 +414,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$v = (int) $v;
 		}
 
-		if ($this->add_tab_sdw_log_insert !== $v || $v === 1) {
+		if ($this->add_tab_sdw_log_insert !== $v || $v === 0) {
 			$this->add_tab_sdw_log_insert = $v;
 			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT;
 		}
@@ -382,7 +436,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$v = (int) $v;
 		}
 
-		if ($this->add_tab_sdw_log_update !== $v || $v === 1) {
+		if ($this->add_tab_sdw_log_update !== $v || $v === 0) {
 			$this->add_tab_sdw_log_update = $v;
 			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE;
 		}
@@ -404,7 +458,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$v = (int) $v;
 		}
 
-		if ($this->add_tab_sdw_log_delete !== $v || $v === 1) {
+		if ($this->add_tab_sdw_log_delete !== $v || $v === 0) {
 			$this->add_tab_sdw_log_delete = $v;
 			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE;
 		}
@@ -448,7 +502,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$v = (int) $v;
 		}
 
-		if ($this->add_tab_sdw_max_length !== $v || $v === -1) {
+		if ($this->add_tab_sdw_max_length !== $v || $v === 0) {
 			$this->add_tab_sdw_max_length = $v;
 			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH;
 		}
@@ -514,12 +568,78 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->dbs_uid !== $v || $v === '0') {
+		if ($this->dbs_uid !== $v || $v === '') {
 			$this->dbs_uid = $v;
 			$this->modifiedColumns[] = AdditionalTablesPeer::DBS_UID;
 		}
 
 	} // setDbsUid()
+
+	/**
+	 * Set the value of [pro_uid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setProUid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->pro_uid !== $v || $v === '') {
+			$this->pro_uid = $v;
+			$this->modifiedColumns[] = AdditionalTablesPeer::PRO_UID;
+		}
+
+	} // setProUid()
+
+	/**
+	 * Set the value of [add_tab_type] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setAddTabType($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->add_tab_type !== $v || $v === '') {
+			$this->add_tab_type = $v;
+			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_TYPE;
+		}
+
+	} // setAddTabType()
+
+	/**
+	 * Set the value of [add_tab_grid] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setAddTabGrid($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->add_tab_grid !== $v || $v === '') {
+			$this->add_tab_grid = $v;
+			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_GRID;
+		}
+
+	} // setAddTabGrid()
 
 	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
@@ -562,12 +682,18 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 
 			$this->dbs_uid = $rs->getString($startcol + 11);
 
+			$this->pro_uid = $rs->getString($startcol + 12);
+
+			$this->add_tab_type = $rs->getString($startcol + 13);
+
+			$this->add_tab_grid = $rs->getString($startcol + 14);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 12; // 12 = AdditionalTablesPeer::NUM_COLUMNS - AdditionalTablesPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 15; // 15 = AdditionalTablesPeer::NUM_COLUMNS - AdditionalTablesPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating AdditionalTables object", $e);
@@ -806,6 +932,15 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			case 11:
 				return $this->getDbsUid();
 				break;
+			case 12:
+				return $this->getProUid();
+				break;
+			case 13:
+				return $this->getAddTabType();
+				break;
+			case 14:
+				return $this->getAddTabGrid();
+				break;
 			default:
 				return null;
 				break;
@@ -838,6 +973,9 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$keys[9] => $this->getAddTabSdwAutoDelete(),
 			$keys[10] => $this->getAddTabPlgUid(),
 			$keys[11] => $this->getDbsUid(),
+			$keys[12] => $this->getProUid(),
+			$keys[13] => $this->getAddTabType(),
+			$keys[14] => $this->getAddTabGrid(),
 		);
 		return $result;
 	}
@@ -905,6 +1043,15 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			case 11:
 				$this->setDbsUid($value);
 				break;
+			case 12:
+				$this->setProUid($value);
+				break;
+			case 13:
+				$this->setAddTabType($value);
+				break;
+			case 14:
+				$this->setAddTabGrid($value);
+				break;
 		} // switch()
 	}
 
@@ -940,6 +1087,9 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[9], $arr)) $this->setAddTabSdwAutoDelete($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setAddTabPlgUid($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setDbsUid($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setProUid($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setAddTabType($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setAddTabGrid($arr[$keys[14]]);
 	}
 
 	/**
@@ -963,6 +1113,9 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE)) $criteria->add(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE, $this->add_tab_sdw_auto_delete);
 		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_PLG_UID)) $criteria->add(AdditionalTablesPeer::ADD_TAB_PLG_UID, $this->add_tab_plg_uid);
 		if ($this->isColumnModified(AdditionalTablesPeer::DBS_UID)) $criteria->add(AdditionalTablesPeer::DBS_UID, $this->dbs_uid);
+		if ($this->isColumnModified(AdditionalTablesPeer::PRO_UID)) $criteria->add(AdditionalTablesPeer::PRO_UID, $this->pro_uid);
+		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_TYPE)) $criteria->add(AdditionalTablesPeer::ADD_TAB_TYPE, $this->add_tab_type);
+		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_GRID)) $criteria->add(AdditionalTablesPeer::ADD_TAB_GRID, $this->add_tab_grid);
 
 		return $criteria;
 	}
@@ -1038,6 +1191,12 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 		$copyObj->setAddTabPlgUid($this->add_tab_plg_uid);
 
 		$copyObj->setDbsUid($this->dbs_uid);
+
+		$copyObj->setProUid($this->pro_uid);
+
+		$copyObj->setAddTabType($this->add_tab_type);
+
+		$copyObj->setAddTabGrid($this->add_tab_grid);
 
 
 		$copyObj->setNew(true);

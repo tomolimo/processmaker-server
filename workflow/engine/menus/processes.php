@@ -43,6 +43,7 @@ $G_TMP_MENU->AddIdRawOption('TRIGGERS',     '', G::LoadTranslation('ID_TRIGGERS'
 //$G_TMP_MENU->AddIdRawOption('MESSAGES',     '', G::LoadTranslation('ID_MESSAGES'),"/images/mail.gif",'Pm.data.render.buildingBlocks.injector(\'messages\'); return false;');
 G::LoadClass('reportTables');
 if (ReportTables::tableExist()) {
+  //DEPRECATED $G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '', G::LoadTranslation('ID_REPORT_TABLESOLD'),"",'Pm.data.render.buildingBlocks.injector(\'reportTables2\'); return false;','','ss_sprite ss_table');
   $G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '', G::LoadTranslation('ID_REPORT_TABLES'),"",'Pm.data.render.buildingBlocks.injector(\'reportTables\'); return false;','','ss_sprite ss_table');
 }
 $G_TMP_MENU->AddIdRawOption('DB_CONNECTIONS', '', G::LoadTranslation('ID_DB_CONNECTIONS'),"",'showDbConnectionsList(Pm.options.uid); return false;','','ss_sprite ss_database_connect');

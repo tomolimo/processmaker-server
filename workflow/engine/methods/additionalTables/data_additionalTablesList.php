@@ -37,6 +37,7 @@ $oCriteria = new Criteria('workflow');
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
+$oCriteria->add(AdditionalTablesPeer::PRO_UID, '', Criteria::EQUAL);
 if ($filter!=''){
 	$oCriteria->add(
 	  $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%'.$filter.'%',Criteria::LIKE)->addOr(
@@ -54,6 +55,7 @@ $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
 $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
 $oCriteria->add(AdditionalTablesPeer::ADD_TAB_UID, '', Criteria::NOT_EQUAL);
+$oCriteria->add(AdditionalTablesPeer::PRO_UID, '', Criteria::EQUAL);
 if ($filter!=''){
 	$oCriteria->add(
 	  $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%'.$filter.'%',Criteria::LIKE)->addOr(

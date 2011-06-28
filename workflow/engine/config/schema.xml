@@ -2035,15 +2035,18 @@
     <column name="ADD_TAB_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
     <column name="ADD_TAB_NAME" type="VARCHAR" size="60" required="true" default=""/>
     <column name="ADD_TAB_CLASS_NAME" type="VARCHAR" size="100" required="true" default=""/>
-    <column name="ADD_TAB_DESCRIPTION" type="LONGVARCHAR" required="true"/>
-    <column name="ADD_TAB_SDW_LOG_INSERT" type="TINYINT" required="true" default="1"/>
-    <column name="ADD_TAB_SDW_LOG_UPDATE" type="TINYINT" required="true" default="1"/>
-    <column name="ADD_TAB_SDW_LOG_DELETE" type="TINYINT" required="true" default="1"/>
-    <column name="ADD_TAB_SDW_LOG_SELECT" type="TINYINT" required="true" default="0"/>
-    <column name="ADD_TAB_SDW_MAX_LENGTH" type="INTEGER" required="true" default="-1"/>
-    <column name="ADD_TAB_SDW_AUTO_DELETE" type="TINYINT" required="true" default="0"/>
-    <column name="ADD_TAB_PLG_UID" type="VARCHAR" size="32" required="true" default=""/>
-    <column name="DBS_UID" type="VARCHAR" size="32" required="false" default="0"/>
+    <column name="ADD_TAB_DESCRIPTION" type="LONGVARCHAR" required="false"/>
+    <column name="ADD_TAB_SDW_LOG_INSERT" type="TINYINT" required="false" default="0"/>
+    <column name="ADD_TAB_SDW_LOG_UPDATE" type="TINYINT" required="false" default="0"/>
+    <column name="ADD_TAB_SDW_LOG_DELETE" type="TINYINT" required="false" default="0"/>
+    <column name="ADD_TAB_SDW_LOG_SELECT" type="TINYINT" required="false" default="0"/>
+    <column name="ADD_TAB_SDW_MAX_LENGTH" type="INTEGER" required="false" default="0"/>
+    <column name="ADD_TAB_SDW_AUTO_DELETE" type="TINYINT" required="false" default="0"/>
+    <column name="ADD_TAB_PLG_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="DBS_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="ADD_TAB_TYPE" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="ADD_TAB_GRID" type="VARCHAR" size="256" required="false" default=""/>
   </table>
   <table name="FIELDS">
     <vendor type="mysql">
@@ -2078,6 +2081,9 @@
     <column name="FLD_KEY" type="TINYINT" required="true" default="0"/>
     <column name="FLD_FOREIGN_KEY" type="TINYINT" required="true" default="0"/>
     <column name="FLD_FOREIGN_KEY_TABLE" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="FLD_DYN_NAME" type="VARCHAR" size="128" required="false" default=""/>
+    <column name="FLD_DYN_UID" type="VARCHAR" size="128" required="false" default=""/>
+    <column name="FLD_FILTER" type="TINYINT" required="false" default="0"/>
   </table>
   <table name="SHADOW_TABLE">
     <vendor type="mysql">

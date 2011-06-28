@@ -32,7 +32,7 @@ SELECT * FROM processFields
   <en>Fields</en>
 </FIELDS>
 
-<BTN_CANCEL type="button" onclick="cancel();">
+<BTN_CANCEL type="button" onclick="history.back();">
   <en>Cancel</en>
 </BTN_CANCEL>
 
@@ -89,6 +89,73 @@ function cancel(){
     currentPopupWindow.remove();
 }
 
+//////
 
+function reportTablesSave(form)
+{
+  var bContinue = true;
+  if (getField('REP_TAB_TITLE').value == '') {
+    bContinue = false;
+  }
+  if (getField('REP_TAB_NAME').value == '') {
+    bContinue = false;
+  }
+  var j = 0;
+  if (getField('REP_TAB_TYPE').value == 'NORMAL') {
+    var i;
+    var oAux = getField('FIELDS');
+    var iMax = oAux.length;
+    for (i = 0; i < oAux.length; i++) {
+      if (oAux.options[i].selected) {
+        j++;
+      }
+    }
+    if ((j < 1) || (j > 80)) {
+      bContinue = false;
+    }
+  }
+  else {
+    if (getField('REP_TAB_GRID').value == '') {
+      bContinue = false;
+    }
+  }
+  if (bContinue) {
+    ajax_post(form.action, form, 'POST');
+    //currentPopupWindow.remove();
+    //@#PAGED_TABLE_ID.refresh();
+    history.back();
+  }
+  else {
+    if (getField('REP_TAB_TYPE').value == 'NORMAL') {
+      if (j == 0) {
+        new leimnud.module.app.alert().make({
+          label:'@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)'
+        });
+      }
+      else {
+        new leimnud.module.app.alert().make({
+          label:'@G::LoadTranslation(ID_PLEASE_SELECT_MAX_X_FIELDS)'
+        });
+      }
+    }
+    else {
+      new leimnud.module.app.alert().make({
+        label:'@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)'
+      });
+    }
+  }
+}
+
+function reportTablesDelete(sUID)
+{
+  new leimnud.module.app.confirm().make({
+    label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_REPORT_TABLE)',
+    action:function()
+    {
+      ajax_function('@G::encryptlink(@#reportTablesDelete)', '', 'REP_TAB_UID=' + sUID, 'POST');
+      //@#PAGED_TABLE_ID.refresh();
+    }.extend(this)
+  });
+}
 ]]></JS>
 </dynaForm> 

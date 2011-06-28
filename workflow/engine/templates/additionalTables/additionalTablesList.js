@@ -33,13 +33,13 @@ var expander;
 var cmodel;
 var infoGrid;
 var viewport;
-var smodel; 
+var smodel;
 
 var rowsSelected;
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
-    
+
     pageSize = parseInt(CONFIG.pageSize);
 
     newButton = new Ext.Action({
@@ -61,14 +61,14 @@ Ext.onReady(function(){
       	handler: DeletePMTable,
     	disabled: true
     });
-    
+
     importButton = new Ext.Action({
     	text: _('ID_IMPORT'),
     	iconCls: 'silk-add',
     	icon: '/images/import.gif',
     	handler: ImportPMTable
     });
-    
+
     exportButton = new Ext.Action({
     	text: _('ID_EXPORT'),
     	iconCls: 'silk-add',
@@ -76,24 +76,24 @@ Ext.onReady(function(){
     	handler: ExportPMTable,
     	disabled: true
     });
-    
+
     dataButton = new Ext.Action({
-    	text: _('ID_DATA'),
+    	text: '&nbsp;' + _('ID_DATA'),
     	iconCls: 'silk-add',
-    	icon: '/images/cases-draft.png',
+    	icon: '/images/icon-pmtables.png',
     	handler: PMTableData,
     	disabled: true
     });
-    
+
     searchButton = new Ext.Action({
     	text: _('ID_SEARCH'),
     	handler: DoSearch
     });
-    
+
     contextMenu = new Ext.menu.Menu({
     	items: [editButton, deleteButton,'-',dataButton,'-',exportButton]
     });
-    
+
     searchText = new Ext.form.TextField ({
         id: 'searchTxt',
         ctCls:'pm_search_text_field',
@@ -112,19 +112,19 @@ Ext.onReady(function(){
           		 }
         }
     });
-    
+
     clearTextButton = new Ext.Action({
     	text: 'X',
     	ctCls:'pm_search_x_button',
     	handler: GridByDefault
     });
-    
+
     storePageSize = new Ext.data.SimpleStore({
         fields: ['size'],
          data: [['20'],['30'],['40'],['50'],['100']],
          autoLoad: true
       });
-        
+
       comboPageSize = new Ext.form.ComboBox({
         typeAhead     : false,
         mode          : 'local',
@@ -142,7 +142,7 @@ Ext.onReady(function(){
           }
         }
       });
-        
+
       comboPageSize.setValue(pageSize);
 
 
@@ -160,7 +160,7 @@ Ext.onReady(function(){
     		    ]
     	})
     });
-    
+
     smodel = new Ext.grid.CheckboxSelectionModel({
     	listeners:{
     		selectionchange: function(sm){
@@ -188,7 +188,7 @@ Ext.onReady(function(){
     		}
     	}
     });
-    
+
     cmodel = new Ext.grid.ColumnModel({
         defaults: {
             width: 50,
@@ -201,7 +201,7 @@ Ext.onReady(function(){
             {header: _('ID_DESCRIPTION'), dataIndex: 'ADD_TAB_DESCRIPTION', width: 400, hidden:false, align:'left'}
         ]
     });
-    
+
     bbarpaging = new Ext.PagingToolbar({
         pageSize: pageSize,
         store: store,
@@ -230,7 +230,7 @@ Ext.onReady(function(){
     	store: store,
     	cm: cmodel,
     	sm: smodel,
-    	tbar:[newButton,'-', editButton, deleteButton,'-', dataButton,'-' , importButton, exportButton,{xtype: 'tbfill'},searchText,clearTextButton,searchButton],
+    	tbar:[newButton, '-', editButton, deleteButton,'-', dataButton,'-' , importButton, exportButton,{xtype: 'tbfill'},searchText,clearTextButton,searchButton],
     	bbar: bbarpaging,
     	listeners: {
     		rowdblclick: PMTableData,
@@ -243,15 +243,15 @@ Ext.onReady(function(){
     		groupTextTpl: '{text}'
     	})
     });
-    
-    infoGrid.on('rowcontextmenu', 
+
+    infoGrid.on('rowcontextmenu',
     		function (grid, rowIndex, evt) {
         		var sm = grid.getSelectionModel();
         		sm.selectRow(rowIndex, sm.isSelected(rowIndex));
     		},
     		this
     );
-    
+
     infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
     infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
 
@@ -287,6 +287,10 @@ DoNothing = function(){};
 //Load New PM Table Forms
 NewPMTable = function(){
 	location.href = 'additionalTablesNew';
+};
+
+newReportTable = function(){
+  location.href = '../reportTables/new';
 };
 
 //Load PM Table Edition Forms
@@ -345,7 +349,7 @@ UpdatePageConfig = function(pageSize){
 
 //Do Search Function
 DoSearch = function(){
-   infoGrid.store.load({params: {textFilter: searchText.getValue()}});	
+   infoGrid.store.load({params: {textFilter: searchText.getValue()}});
 };
 
 //Load Grid By Default
