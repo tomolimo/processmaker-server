@@ -244,9 +244,9 @@ function database_upgrade($command, $args) {
   $checkOnly = (strcmp($command, "check") == 0);
   foreach ($workspaces as $workspace) {
     if ($checkOnly)
-      print_r("Checking database in ".pakeColor::colorize($workspace->name, "INFO")." ");
+      print_r("Checking database in ".pakeColor::colorize($workspace->name, "INFO")."\n");
     else
-      print_r("Upgrading database in ".pakeColor::colorize($workspace->name, "INFO")." ");
+      print_r("Upgrading database in ".pakeColor::colorize($workspace->name, "INFO")."\n");
     try {
       $changes = $workspace->upgradeDatabase($checkOnly);
       if ($changes != false) {
@@ -263,7 +263,7 @@ function database_upgrade($command, $args) {
         echo "> OK\n";
       }
     } catch (Exception $e) {
-      echo "> Error: ".error($e->getMessage()) . "\n";
+      echo "> Error: ".CLI::error($e->getMessage()) . "\n";
     }
   }
 }
