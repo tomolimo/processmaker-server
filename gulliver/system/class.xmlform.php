@@ -3025,7 +3025,7 @@ class XmlForm_Field_Grid extends XmlForm_Field
       
         $emptyValue = '';
       }
-//      if(isset($this->fields[$key]->size))
+      if(isset($this->fields[$key]->size))
         $size = $this->fields[$key]->size;
       if(!isset($size)) $size = 15;
       $fieldsSize +=  $size;
