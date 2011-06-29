@@ -132,6 +132,13 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	 */
 	protected $add_tab_grid = '';
 
+
+	/**
+	 * The value for the add_tab_tag field.
+	 * @var        string
+	 */
+	protected $add_tab_tag = '';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -309,6 +316,17 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	{
 
 		return $this->add_tab_grid;
+	}
+
+	/**
+	 * Get the [add_tab_tag] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getAddTabTag()
+	{
+
+		return $this->add_tab_tag;
 	}
 
 	/**
@@ -642,6 +660,28 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 	} // setAddTabGrid()
 
 	/**
+	 * Set the value of [add_tab_tag] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setAddTabTag($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->add_tab_tag !== $v || $v === '') {
+			$this->add_tab_tag = $v;
+			$this->modifiedColumns[] = AdditionalTablesPeer::ADD_TAB_TAG;
+		}
+
+	} // setAddTabTag()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -688,12 +728,14 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 
 			$this->add_tab_grid = $rs->getString($startcol + 14);
 
+			$this->add_tab_tag = $rs->getString($startcol + 15);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 15; // 15 = AdditionalTablesPeer::NUM_COLUMNS - AdditionalTablesPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 16; // 16 = AdditionalTablesPeer::NUM_COLUMNS - AdditionalTablesPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating AdditionalTables object", $e);
@@ -941,6 +983,9 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			case 14:
 				return $this->getAddTabGrid();
 				break;
+			case 15:
+				return $this->getAddTabTag();
+				break;
 			default:
 				return null;
 				break;
@@ -976,6 +1021,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			$keys[12] => $this->getProUid(),
 			$keys[13] => $this->getAddTabType(),
 			$keys[14] => $this->getAddTabGrid(),
+			$keys[15] => $this->getAddTabTag(),
 		);
 		return $result;
 	}
@@ -1052,6 +1098,9 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 			case 14:
 				$this->setAddTabGrid($value);
 				break;
+			case 15:
+				$this->setAddTabTag($value);
+				break;
 		} // switch()
 	}
 
@@ -1090,6 +1139,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[12], $arr)) $this->setProUid($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setAddTabType($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setAddTabGrid($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setAddTabTag($arr[$keys[15]]);
 	}
 
 	/**
@@ -1116,6 +1166,7 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(AdditionalTablesPeer::PRO_UID)) $criteria->add(AdditionalTablesPeer::PRO_UID, $this->pro_uid);
 		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_TYPE)) $criteria->add(AdditionalTablesPeer::ADD_TAB_TYPE, $this->add_tab_type);
 		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_GRID)) $criteria->add(AdditionalTablesPeer::ADD_TAB_GRID, $this->add_tab_grid);
+		if ($this->isColumnModified(AdditionalTablesPeer::ADD_TAB_TAG)) $criteria->add(AdditionalTablesPeer::ADD_TAB_TAG, $this->add_tab_tag);
 
 		return $criteria;
 	}
@@ -1197,6 +1248,8 @@ abstract class BaseAdditionalTables extends BaseObject  implements Persistent {
 		$copyObj->setAddTabType($this->add_tab_type);
 
 		$copyObj->setAddTabGrid($this->add_tab_grid);
+
+		$copyObj->setAddTabTag($this->add_tab_tag);
 
 
 		$copyObj->setNew(true);

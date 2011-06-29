@@ -132,13 +132,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	 */
 	protected $fld_filter = 0;
 
-
-	/**
-	 * The value for the add_tab_tag field.
-	 * @var        string
-	 */
-	protected $add_tab_tag = '';
-
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -316,17 +309,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	{
 
 		return $this->fld_filter;
-	}
-
-	/**
-	 * Get the [add_tab_tag] column value.
-	 * 
-	 * @return     string
-	 */
-	public function getAddTabTag()
-	{
-
-		return $this->add_tab_tag;
 	}
 
 	/**
@@ -660,28 +642,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	} // setFldFilter()
 
 	/**
-	 * Set the value of [add_tab_tag] column.
-	 * 
-	 * @param      string $v new value
-	 * @return     void
-	 */
-	public function setAddTabTag($v)
-	{
-
-		// Since the native PHP type for this column is string,
-		// we will cast the input to a string (if it is not).
-		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
-		}
-
-		if ($this->add_tab_tag !== $v || $v === '') {
-			$this->add_tab_tag = $v;
-			$this->modifiedColumns[] = FieldsPeer::ADD_TAB_TAG;
-		}
-
-	} // setAddTabTag()
-
-	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -728,14 +688,12 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 
 			$this->fld_filter = $rs->getInt($startcol + 14);
 
-			$this->add_tab_tag = $rs->getString($startcol + 15);
-
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 16; // 16 = FieldsPeer::NUM_COLUMNS - FieldsPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 15; // 15 = FieldsPeer::NUM_COLUMNS - FieldsPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Fields object", $e);
@@ -983,9 +941,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			case 14:
 				return $this->getFldFilter();
 				break;
-			case 15:
-				return $this->getAddTabTag();
-				break;
 			default:
 				return null;
 				break;
@@ -1021,7 +976,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			$keys[12] => $this->getFldDynName(),
 			$keys[13] => $this->getFldDynUid(),
 			$keys[14] => $this->getFldFilter(),
-			$keys[15] => $this->getAddTabTag(),
 		);
 		return $result;
 	}
@@ -1098,9 +1052,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			case 14:
 				$this->setFldFilter($value);
 				break;
-			case 15:
-				$this->setAddTabTag($value);
-				break;
 		} // switch()
 	}
 
@@ -1139,7 +1090,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[12], $arr)) $this->setFldDynName($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setFldDynUid($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setFldFilter($arr[$keys[14]]);
-		if (array_key_exists($keys[15], $arr)) $this->setAddTabTag($arr[$keys[15]]);
 	}
 
 	/**
@@ -1166,7 +1116,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(FieldsPeer::FLD_DYN_NAME)) $criteria->add(FieldsPeer::FLD_DYN_NAME, $this->fld_dyn_name);
 		if ($this->isColumnModified(FieldsPeer::FLD_DYN_UID)) $criteria->add(FieldsPeer::FLD_DYN_UID, $this->fld_dyn_uid);
 		if ($this->isColumnModified(FieldsPeer::FLD_FILTER)) $criteria->add(FieldsPeer::FLD_FILTER, $this->fld_filter);
-		if ($this->isColumnModified(FieldsPeer::ADD_TAB_TAG)) $criteria->add(FieldsPeer::ADD_TAB_TAG, $this->add_tab_tag);
 
 		return $criteria;
 	}
@@ -1248,8 +1197,6 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 		$copyObj->setFldDynUid($this->fld_dyn_uid);
 
 		$copyObj->setFldFilter($this->fld_filter);
-
-		$copyObj->setAddTabTag($this->add_tab_tag);
 
 
 		$copyObj->setNew(true);

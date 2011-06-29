@@ -2047,6 +2047,7 @@
     <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
     <column name="ADD_TAB_TYPE" type="VARCHAR" size="32" required="false" default=""/>
     <column name="ADD_TAB_GRID" type="VARCHAR" size="256" required="false" default=""/>
+    <column name="ADD_TAB_TAG" type="VARCHAR" size="256" required="false" default=""/>
   </table>
   <table name="FIELDS">
     <vendor type="mysql">
@@ -2084,7 +2085,6 @@
     <column name="FLD_DYN_NAME" type="VARCHAR" size="128" required="false" default=""/>
     <column name="FLD_DYN_UID" type="VARCHAR" size="128" required="false" default=""/>
     <column name="FLD_FILTER" type="TINYINT" required="false" default="0"/>
-    <column name="ADD_TAB_TAG" type="VARCHAR" size="256" required="false" default=""/>
   </table>
   <table name="SHADOW_TABLE">
     <vendor type="mysql">

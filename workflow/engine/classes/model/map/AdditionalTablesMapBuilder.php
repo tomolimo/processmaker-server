@@ -94,6 +94,8 @@ class AdditionalTablesMapBuilder {
 
 		$tMap->addColumn('ADD_TAB_GRID', 'AddTabGrid', 'string', CreoleTypes::VARCHAR, false, 256);
 
+		$tMap->addColumn('ADD_TAB_TAG', 'AddTabTag', 'string', CreoleTypes::VARCHAR, false, 256);
+
 	} // doBuild()
 
 } // AdditionalTablesMapBuilder

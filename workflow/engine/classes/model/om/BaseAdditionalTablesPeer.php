@@ -24,7 +24,7 @@ abstract class BaseAdditionalTablesPeer {
 	const CLASS_DEFAULT = 'classes.model.AdditionalTables';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 15;
+	const NUM_COLUMNS = 16;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -75,6 +75,9 @@ abstract class BaseAdditionalTablesPeer {
 	/** the column name for the ADD_TAB_GRID field */
 	const ADD_TAB_GRID = 'ADDITIONAL_TABLES.ADD_TAB_GRID';
 
+	/** the column name for the ADD_TAB_TAG field */
+	const ADD_TAB_TAG = 'ADDITIONAL_TABLES.ADD_TAB_TAG';
+
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
 
@@ -86,10 +89,10 @@ abstract class BaseAdditionalTablesPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('AddTabUid', 'AddTabName', 'AddTabClassName', 'AddTabDescription', 'AddTabSdwLogInsert', 'AddTabSdwLogUpdate', 'AddTabSdwLogDelete', 'AddTabSdwLogSelect', 'AddTabSdwMaxLength', 'AddTabSdwAutoDelete', 'AddTabPlgUid', 'DbsUid', 'ProUid', 'AddTabType', 'AddTabGrid', ),
-		BasePeer::TYPE_COLNAME => array (AdditionalTablesPeer::ADD_TAB_UID, AdditionalTablesPeer::ADD_TAB_NAME, AdditionalTablesPeer::ADD_TAB_CLASS_NAME, AdditionalTablesPeer::ADD_TAB_DESCRIPTION, AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT, AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE, AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE, AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT, AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH, AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE, AdditionalTablesPeer::ADD_TAB_PLG_UID, AdditionalTablesPeer::DBS_UID, AdditionalTablesPeer::PRO_UID, AdditionalTablesPeer::ADD_TAB_TYPE, AdditionalTablesPeer::ADD_TAB_GRID, ),
-		BasePeer::TYPE_FIELDNAME => array ('ADD_TAB_UID', 'ADD_TAB_NAME', 'ADD_TAB_CLASS_NAME', 'ADD_TAB_DESCRIPTION', 'ADD_TAB_SDW_LOG_INSERT', 'ADD_TAB_SDW_LOG_UPDATE', 'ADD_TAB_SDW_LOG_DELETE', 'ADD_TAB_SDW_LOG_SELECT', 'ADD_TAB_SDW_MAX_LENGTH', 'ADD_TAB_SDW_AUTO_DELETE', 'ADD_TAB_PLG_UID', 'DBS_UID', 'PRO_UID', 'ADD_TAB_TYPE', 'ADD_TAB_GRID', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('AddTabUid', 'AddTabName', 'AddTabClassName', 'AddTabDescription', 'AddTabSdwLogInsert', 'AddTabSdwLogUpdate', 'AddTabSdwLogDelete', 'AddTabSdwLogSelect', 'AddTabSdwMaxLength', 'AddTabSdwAutoDelete', 'AddTabPlgUid', 'DbsUid', 'ProUid', 'AddTabType', 'AddTabGrid', 'AddTabTag', ),
+		BasePeer::TYPE_COLNAME => array (AdditionalTablesPeer::ADD_TAB_UID, AdditionalTablesPeer::ADD_TAB_NAME, AdditionalTablesPeer::ADD_TAB_CLASS_NAME, AdditionalTablesPeer::ADD_TAB_DESCRIPTION, AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT, AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE, AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE, AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT, AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH, AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE, AdditionalTablesPeer::ADD_TAB_PLG_UID, AdditionalTablesPeer::DBS_UID, AdditionalTablesPeer::PRO_UID, AdditionalTablesPeer::ADD_TAB_TYPE, AdditionalTablesPeer::ADD_TAB_GRID, AdditionalTablesPeer::ADD_TAB_TAG, ),
+		BasePeer::TYPE_FIELDNAME => array ('ADD_TAB_UID', 'ADD_TAB_NAME', 'ADD_TAB_CLASS_NAME', 'ADD_TAB_DESCRIPTION', 'ADD_TAB_SDW_LOG_INSERT', 'ADD_TAB_SDW_LOG_UPDATE', 'ADD_TAB_SDW_LOG_DELETE', 'ADD_TAB_SDW_LOG_SELECT', 'ADD_TAB_SDW_MAX_LENGTH', 'ADD_TAB_SDW_AUTO_DELETE', 'ADD_TAB_PLG_UID', 'DBS_UID', 'PRO_UID', 'ADD_TAB_TYPE', 'ADD_TAB_GRID', 'ADD_TAB_TAG', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
 	/**
@@ -99,10 +102,10 @@ abstract class BaseAdditionalTablesPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('AddTabUid' => 0, 'AddTabName' => 1, 'AddTabClassName' => 2, 'AddTabDescription' => 3, 'AddTabSdwLogInsert' => 4, 'AddTabSdwLogUpdate' => 5, 'AddTabSdwLogDelete' => 6, 'AddTabSdwLogSelect' => 7, 'AddTabSdwMaxLength' => 8, 'AddTabSdwAutoDelete' => 9, 'AddTabPlgUid' => 10, 'DbsUid' => 11, 'ProUid' => 12, 'AddTabType' => 13, 'AddTabGrid' => 14, ),
-		BasePeer::TYPE_COLNAME => array (AdditionalTablesPeer::ADD_TAB_UID => 0, AdditionalTablesPeer::ADD_TAB_NAME => 1, AdditionalTablesPeer::ADD_TAB_CLASS_NAME => 2, AdditionalTablesPeer::ADD_TAB_DESCRIPTION => 3, AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT => 4, AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE => 5, AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE => 6, AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT => 7, AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH => 8, AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE => 9, AdditionalTablesPeer::ADD_TAB_PLG_UID => 10, AdditionalTablesPeer::DBS_UID => 11, AdditionalTablesPeer::PRO_UID => 12, AdditionalTablesPeer::ADD_TAB_TYPE => 13, AdditionalTablesPeer::ADD_TAB_GRID => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('ADD_TAB_UID' => 0, 'ADD_TAB_NAME' => 1, 'ADD_TAB_CLASS_NAME' => 2, 'ADD_TAB_DESCRIPTION' => 3, 'ADD_TAB_SDW_LOG_INSERT' => 4, 'ADD_TAB_SDW_LOG_UPDATE' => 5, 'ADD_TAB_SDW_LOG_DELETE' => 6, 'ADD_TAB_SDW_LOG_SELECT' => 7, 'ADD_TAB_SDW_MAX_LENGTH' => 8, 'ADD_TAB_SDW_AUTO_DELETE' => 9, 'ADD_TAB_PLG_UID' => 10, 'DBS_UID' => 11, 'PRO_UID' => 12, 'ADD_TAB_TYPE' => 13, 'ADD_TAB_GRID' => 14, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('AddTabUid' => 0, 'AddTabName' => 1, 'AddTabClassName' => 2, 'AddTabDescription' => 3, 'AddTabSdwLogInsert' => 4, 'AddTabSdwLogUpdate' => 5, 'AddTabSdwLogDelete' => 6, 'AddTabSdwLogSelect' => 7, 'AddTabSdwMaxLength' => 8, 'AddTabSdwAutoDelete' => 9, 'AddTabPlgUid' => 10, 'DbsUid' => 11, 'ProUid' => 12, 'AddTabType' => 13, 'AddTabGrid' => 14, 'AddTabTag' => 15, ),
+		BasePeer::TYPE_COLNAME => array (AdditionalTablesPeer::ADD_TAB_UID => 0, AdditionalTablesPeer::ADD_TAB_NAME => 1, AdditionalTablesPeer::ADD_TAB_CLASS_NAME => 2, AdditionalTablesPeer::ADD_TAB_DESCRIPTION => 3, AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT => 4, AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE => 5, AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE => 6, AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT => 7, AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH => 8, AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE => 9, AdditionalTablesPeer::ADD_TAB_PLG_UID => 10, AdditionalTablesPeer::DBS_UID => 11, AdditionalTablesPeer::PRO_UID => 12, AdditionalTablesPeer::ADD_TAB_TYPE => 13, AdditionalTablesPeer::ADD_TAB_GRID => 14, AdditionalTablesPeer::ADD_TAB_TAG => 15, ),
+		BasePeer::TYPE_FIELDNAME => array ('ADD_TAB_UID' => 0, 'ADD_TAB_NAME' => 1, 'ADD_TAB_CLASS_NAME' => 2, 'ADD_TAB_DESCRIPTION' => 3, 'ADD_TAB_SDW_LOG_INSERT' => 4, 'ADD_TAB_SDW_LOG_UPDATE' => 5, 'ADD_TAB_SDW_LOG_DELETE' => 6, 'ADD_TAB_SDW_LOG_SELECT' => 7, 'ADD_TAB_SDW_MAX_LENGTH' => 8, 'ADD_TAB_SDW_AUTO_DELETE' => 9, 'ADD_TAB_PLG_UID' => 10, 'DBS_UID' => 11, 'PRO_UID' => 12, 'ADD_TAB_TYPE' => 13, 'ADD_TAB_GRID' => 14, 'ADD_TAB_TAG' => 15, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
 	/**
@@ -232,6 +235,8 @@ abstract class BaseAdditionalTablesPeer {
 		$criteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TYPE);
 
 		$criteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_GRID);
+
+		$criteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TAG);
 
 	}
 

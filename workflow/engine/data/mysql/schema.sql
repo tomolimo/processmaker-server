@@ -948,6 +948,7 @@ CREATE TABLE `ADDITIONAL_TABLES`
 	`PRO_UID` VARCHAR(32) default '',
 	`ADD_TAB_TYPE` VARCHAR(32) default '',
 	`ADD_TAB_GRID` VARCHAR(256) default '',
+	`ADD_TAB_TAG` VARCHAR(256) default '',
 	PRIMARY KEY (`ADD_TAB_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
@@ -974,7 +975,6 @@ CREATE TABLE `FIELDS`
 	`FLD_DYN_NAME` VARCHAR(128) default '',
 	`FLD_DYN_UID` VARCHAR(128) default '',
 	`FLD_FILTER` TINYINT default 0,
-	`ADD_TAB_TAG` VARCHAR(256) default '',
 	PRIMARY KEY (`FLD_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
