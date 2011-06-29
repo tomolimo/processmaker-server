@@ -83,7 +83,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   define('DB_XMLDB_TYPE','myxml');
 
   if (isset($_POST['form']['PME_XMLNODE_VALUE'])){
-    $_POST['form']['PME_XMLNODE_VALUE'] = str_replace("'", "\"" , $_POST['form']['PME_XMLNODE_VALUE']);
+    $_POST['form']['PME_XMLNODE_VALUE'] = str_replace("'", "''" , $_POST['form']['PME_XMLNODE_VALUE']);
   }
 
   if (file_exists( PATH_XMLFORM . 'dynaforms/fields/' . $type . '.xml')) {
