@@ -431,11 +431,6 @@ class AdditionalTables extends BaseAdditionalTables {
       $aFieldsToAdd    = array();
       $aFieldsToDelete = array();
       $aFieldsToAlter  = array();
-      // echo 'oldfields';
-      // print_R($aOldFields);
-      // echo 'newfields';
-      // print_R($aNewFields);
-      
 
       foreach ($aNewFields as $aNewField) {
       	$aNewField['FLD_NAME'] = strtoupper($aNewField['FLD_NAME']);
@@ -450,19 +445,13 @@ class AdditionalTables extends BaseAdditionalTables {
         }
        
       }
-      // echo '$aKeys';
-      // print_R($aKeys);
 
-      // echo '$aFieldsToAdd';
-      // print_R($aFieldsToAdd);
       foreach ($aOldFields as $aOldField) {
       	$aOldField['FLD_NAME'] = strtoupper($aOldField['FLD_NAME']);
         if (!isset($aNewFields[$aOldField['FLD_UID']])) {
           $aFieldsToDelete[] = $aOldField;
         }
       }
-      // echo '$aFieldsToDelete';
-      // print_R($aFieldsToDelete);
       
 
       foreach ($aNewFields as $aNewField) {
@@ -491,9 +480,7 @@ class AdditionalTables extends BaseAdditionalTables {
             $aFieldsToAlter[] = $aNewField;
           }
         }
-      }
-      // echo '$aFieldsToAlter';
-      // print_R($aFieldsToAlter);      
+      }     
 
       G::LoadSystem('database_' . strtolower(DB_ADAPTER));
       $oDataBase = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -503,9 +490,7 @@ class AdditionalTables extends BaseAdditionalTables {
       $con = Propel::getConnection($sConnection);
       $stmt = $con->createStatement();
       $sQuery = $oDataBase->generateDropPrimaryKeysSQL($sTableName);
-      // echo "drop pk->";
-      // var_dump($sQuery);
-      // echo "\n";
+
       $rs = $stmt->executeQuery($sQuery);
 
       foreach ($aFieldsToAdd as $aFieldToAdd) {
@@ -547,29 +532,20 @@ class AdditionalTables extends BaseAdditionalTables {
             );
           break;
         }
-        //echo $oDataBase->generateAddColumnSQL($sTableName, $aFieldToAdd['FLD_NAME'], $aData);
+               
         //$oDataBase->executeQuery($oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData));
         $sQuery = $oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData);
-        // echo "add col->";
-        // var_dump($sQuery);
-        // echo "\n";
         $rs = $stmt->executeQuery($sQuery);
         
       }
       foreach ($aFieldsToDelete as $aFieldToDelete) {
         //$oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME'])));
         $sQuery = $oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME']));
-        // echo 'drop col->';
-        // var_dump($sQuery);
-        // echo "\n";
         $rs = $stmt->executeQuery($sQuery);
       }
       
       //$oDataBase->executeQuery($oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys));
       $sQuery = $oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys);
-      // echo 'generate add PK->';
-      // var_dump($sQuery);
-      // echo "\n";
       $rs = $stmt->executeQuery($sQuery);
       
       foreach ($aFieldsToAlter as $aFieldToAlter) {
@@ -614,9 +590,6 @@ class AdditionalTables extends BaseAdditionalTables {
         //$oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD'])));
 
         $sQuery = $oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD']));
-        // echo 'alter->';
-        // var_dump($sQuery);
-        // echo "\n";
         $rs = $stmt->executeQuery($sQuery);
       }
     }
