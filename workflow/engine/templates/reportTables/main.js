@@ -37,6 +37,7 @@ var viewport;
 var smodel;
 
 var rowsSelected;
+var externalOption;
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
@@ -100,13 +101,26 @@ Ext.onReady(function(){
       handler: DoSearch
     });
 
+    
+
+    var contextMenuItems = new Array();
+    contextMenuItems.push(editButton);  
+    contextMenuItems.push(deleteButton);
+    if (_PLUGIN_SIMPLEREPORTS !== false) {
+      
+      externalOption = new Ext.Action({
+        text:'',
+        handler: function() {
+          updateTag('plugin@simplereport');
+        },
+        disabled: false
+      });
+
+      contextMenuItems.push(externalOption);
+    }
+
     contextMenu = new Ext.menu.Menu({
-      items: [
-      editButton,
-      deleteButton
-      //dataButton,'-',
-      //exportButton
-      ]
+      items: contextMenuItems
     });
 
     searchText = new Ext.form.TextField ({
@@ -169,16 +183,22 @@ Ext.onReady(function(){
     cmodelColumns = new Array();
     
     cmodelColumns.push({id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false});
+    cmodelColumns.push({dataIndex: 'ADD_TAB_TAG', hidden:true, hideable:false});
     cmodelColumns.push({header: _('ID_NAME'), dataIndex: 'ADD_TAB_NAME', width: 300, align:'left', renderer: function(v,p,r){
       return r.get('TYPE') == 'CLASSIC'? v + '&nbsp<span style="font-size:9px; color:green">(old version)</font>' : v;
     }});
-    cmodelColumns.push({header: _('ID_DESCRIPTION'), dataIndex: 'ADD_TAB_DESCRIPTION', width: 400, hidden:false, align:'left'});
+    cmodelColumns.push({header: _('ID_DESCRIPTION'), dataIndex: 'ADD_TAB_DESCRIPTION', width: 400, hidden:false, align:'left', renderer: function(v,p,r){
+      if (r.get('ADD_TAB_TAG')) {
+        tag = r.get('ADD_TAB_TAG').replace('plugin@', '');
+        tag = tag.charAt(0).toUpperCase() + tag.slice(1);
+      } 
+      return r.get('ADD_TAB_TAG') ? '<span style="font-size:9px; color:green">'+tag+':</span> '+ v : v;
+    }});
     if (PRO_UID === false) {
       cmodelColumns.push({header: _('ID_PROCESS'), dataIndex: 'PRO_TITLE', width: 300, align:'left'});     
     }
     
     cmodelColumns.push({header: _('ID_TYPE'), dataIndex: 'ADD_TAB_TYPE', width: 400, hidden:true, align:'left'});
-    cmodelColumns.push({header: _('ID_TYPE'), dataIndex: 'ADD_TAB_TYPE', width: 150, hidden:false, align:'left'});
     
     cmodel = new Ext.grid.ColumnModel({
       defaults: {
@@ -201,7 +221,8 @@ Ext.onReady(function(){
           {name : 'ADD_TAB_DESCRIPTION'},
           {name : 'PRO_TITLE'},
           {name : 'TYPE'},
-          {name : 'ADD_TAB_TYPE'}
+          {name : 'ADD_TAB_TYPE'},
+          {name : 'ADD_TAB_TAG'}
         ]
       })
     });
@@ -337,6 +358,13 @@ Ext.onReady(function(){
         function (grid, rowIndex, evt) {
             var sm = grid.getSelectionModel();
             sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+
+            var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+            tag = rowsSelected[0].get('ADD_TAB_TAG');
+            text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
+            if (externalOption) {
+              externalOption.setText(text);
+            }
         },
         this
     );
@@ -490,3 +518,23 @@ GridByDefault1 = function(){
   Ext.getCmp('PROCESS').setValue('');
   infoGrid.store.load();
 };
+
+function updateTag(value)
+{
+  var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+
+  Ext.Ajax.request({
+    url: 'reportTables_Ajax',
+    params: {
+      action: 'updateTag',
+      ADD_TAB_UID: rowsSelected[0].get('ADD_TAB_UID'),
+      value: rowsSelected[0].get('ADD_TAB_TAG') ? '': value
+    },
+    success: function(resp){
+      Ext.getCmp('infoGrid').store.reload();
+    },
+    failure: function(obj, resp){
+      Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
+    }
+  });
+}

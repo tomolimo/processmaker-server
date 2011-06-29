@@ -23,17 +23,6 @@
  *
  */
 
-  /*$proUid = $_GET['PRO_UID'];
-  $oHeadPublisher =& headPublisher::getSingleton();
-
-  $oHeadPublisher->addExtJsScript('reportTables/main', true );    //adding a javascript file .js
-  $oHeadPublisher->addContent('reportTables/main'); //adding a html file  .html.
-
-
-  $oHeadPublisher->assign('PRO_UID', $proUid);
-
-  G::RenderPage('publish', 'extJs');*/
-
 global $RBAC;
 $RBAC->requirePermissions('PM_SETUP_ADVANCE');
 $G_PUBLISH = new Publisher;
@@ -45,8 +34,24 @@ $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] :
 
 $oHeadPublisher =& headPublisher::getSingleton();
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
-$oHeadPublisher->addExtJsScript('reportTables/main', true);    //adding a javascript file .js
+$repTabPluginPermissions = false;
+global $G_TMP_MENU;
+$oMenu = new Menu();
+$oMenu->load('setup');
+
+$simpleREportsPlugin = false;
+foreach( $oMenu->Options as $i=>$option) {
+  if ($oMenu->Types[$i] == 'private' && $oMenu->Id[$i] == 'PLUGIN_REPTAB_PERMISSIONS') {
+    $simpleREportsPlugin = array();
+    $simpleREportsPlugin['label'] = $oMenu->Labels[$i];
+    $simpleREportsPlugin['fn'] = $oMenu->Options[$i];
+    break;
+  }
+}
+
+$oHeadPublisher->assign('_PLUGIN_SIMPLEREPORTS', $simpleREportsPlugin);
+
+$oHeadPublisher->addExtJsScript('reportTables/main', true); //adding a javascript file .js
 $oHeadPublisher->addContent('reportTables/main'); //adding a html file  .html.
 $oHeadPublisher->assign('FORMATS',$c->getFormats());
 $oHeadPublisher->assign('CONFIG', $Config);

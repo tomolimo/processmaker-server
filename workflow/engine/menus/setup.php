@@ -60,3 +60,7 @@ $G_TMP_MENU->AddIdRawOption('GROUPS', '../groups/groups', G::LoadTranslation('ID
 $G_TMP_MENU->AddIdRawOption('DEPARTAMENTS', '../departments/departments', G::LoadTranslation('ID_DEPARTMENTS_USERS'), '', '', 'users');
 $G_TMP_MENU->AddIdRawOption('ROLES', '../roles/roles_List', G::LoadTranslation('ID_ROLES'), '', '', 'users');
 $G_TMP_MENU->AddIdRawOption('AUTHSOURCES', '../authSources/authSources_List', G::LoadTranslation('ID_AUTH_SOURCES'), '', '', 'users');
+
+
+
+$G_TMP_MENU->AddIdRawOption('PLUGIN_REPTAB_PERMISSIONS', 'myFunc()', 'Permissions', '', '', 'private');

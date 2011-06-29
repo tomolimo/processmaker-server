@@ -24,7 +24,7 @@ abstract class BaseFieldsPeer {
 	const CLASS_DEFAULT = 'classes.model.Fields';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 15;
+	const NUM_COLUMNS = 16;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -75,6 +75,9 @@ abstract class BaseFieldsPeer {
 	/** the column name for the FLD_FILTER field */
 	const FLD_FILTER = 'FIELDS.FLD_FILTER';
 
+	/** the column name for the ADD_TAB_TAG field */
+	const ADD_TAB_TAG = 'FIELDS.ADD_TAB_TAG';
+
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
 
@@ -86,10 +89,10 @@ abstract class BaseFieldsPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('FldUid', 'AddTabUid', 'FldIndex', 'FldName', 'FldDescription', 'FldType', 'FldSize', 'FldNull', 'FldAutoIncrement', 'FldKey', 'FldForeignKey', 'FldForeignKeyTable', 'FldDynName', 'FldDynUid', 'FldFilter', ),
-		BasePeer::TYPE_COLNAME => array (FieldsPeer::FLD_UID, FieldsPeer::ADD_TAB_UID, FieldsPeer::FLD_INDEX, FieldsPeer::FLD_NAME, FieldsPeer::FLD_DESCRIPTION, FieldsPeer::FLD_TYPE, FieldsPeer::FLD_SIZE, FieldsPeer::FLD_NULL, FieldsPeer::FLD_AUTO_INCREMENT, FieldsPeer::FLD_KEY, FieldsPeer::FLD_FOREIGN_KEY, FieldsPeer::FLD_FOREIGN_KEY_TABLE, FieldsPeer::FLD_DYN_NAME, FieldsPeer::FLD_DYN_UID, FieldsPeer::FLD_FILTER, ),
-		BasePeer::TYPE_FIELDNAME => array ('FLD_UID', 'ADD_TAB_UID', 'FLD_INDEX', 'FLD_NAME', 'FLD_DESCRIPTION', 'FLD_TYPE', 'FLD_SIZE', 'FLD_NULL', 'FLD_AUTO_INCREMENT', 'FLD_KEY', 'FLD_FOREIGN_KEY', 'FLD_FOREIGN_KEY_TABLE', 'FLD_DYN_NAME', 'FLD_DYN_UID', 'FLD_FILTER', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('FldUid', 'AddTabUid', 'FldIndex', 'FldName', 'FldDescription', 'FldType', 'FldSize', 'FldNull', 'FldAutoIncrement', 'FldKey', 'FldForeignKey', 'FldForeignKeyTable', 'FldDynName', 'FldDynUid', 'FldFilter', 'AddTabTag', ),
+		BasePeer::TYPE_COLNAME => array (FieldsPeer::FLD_UID, FieldsPeer::ADD_TAB_UID, FieldsPeer::FLD_INDEX, FieldsPeer::FLD_NAME, FieldsPeer::FLD_DESCRIPTION, FieldsPeer::FLD_TYPE, FieldsPeer::FLD_SIZE, FieldsPeer::FLD_NULL, FieldsPeer::FLD_AUTO_INCREMENT, FieldsPeer::FLD_KEY, FieldsPeer::FLD_FOREIGN_KEY, FieldsPeer::FLD_FOREIGN_KEY_TABLE, FieldsPeer::FLD_DYN_NAME, FieldsPeer::FLD_DYN_UID, FieldsPeer::FLD_FILTER, FieldsPeer::ADD_TAB_TAG, ),
+		BasePeer::TYPE_FIELDNAME => array ('FLD_UID', 'ADD_TAB_UID', 'FLD_INDEX', 'FLD_NAME', 'FLD_DESCRIPTION', 'FLD_TYPE', 'FLD_SIZE', 'FLD_NULL', 'FLD_AUTO_INCREMENT', 'FLD_KEY', 'FLD_FOREIGN_KEY', 'FLD_FOREIGN_KEY_TABLE', 'FLD_DYN_NAME', 'FLD_DYN_UID', 'FLD_FILTER', 'ADD_TAB_TAG', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
 	/**
@@ -99,10 +102,10 @@ abstract class BaseFieldsPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('FldUid' => 0, 'AddTabUid' => 1, 'FldIndex' => 2, 'FldName' => 3, 'FldDescription' => 4, 'FldType' => 5, 'FldSize' => 6, 'FldNull' => 7, 'FldAutoIncrement' => 8, 'FldKey' => 9, 'FldForeignKey' => 10, 'FldForeignKeyTable' => 11, 'FldDynName' => 12, 'FldDynUid' => 13, 'FldFilter' => 14, ),
-		BasePeer::TYPE_COLNAME => array (FieldsPeer::FLD_UID => 0, FieldsPeer::ADD_TAB_UID => 1, FieldsPeer::FLD_INDEX => 2, FieldsPeer::FLD_NAME => 3, FieldsPeer::FLD_DESCRIPTION => 4, FieldsPeer::FLD_TYPE => 5, FieldsPeer::FLD_SIZE => 6, FieldsPeer::FLD_NULL => 7, FieldsPeer::FLD_AUTO_INCREMENT => 8, FieldsPeer::FLD_KEY => 9, FieldsPeer::FLD_FOREIGN_KEY => 10, FieldsPeer::FLD_FOREIGN_KEY_TABLE => 11, FieldsPeer::FLD_DYN_NAME => 12, FieldsPeer::FLD_DYN_UID => 13, FieldsPeer::FLD_FILTER => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('FLD_UID' => 0, 'ADD_TAB_UID' => 1, 'FLD_INDEX' => 2, 'FLD_NAME' => 3, 'FLD_DESCRIPTION' => 4, 'FLD_TYPE' => 5, 'FLD_SIZE' => 6, 'FLD_NULL' => 7, 'FLD_AUTO_INCREMENT' => 8, 'FLD_KEY' => 9, 'FLD_FOREIGN_KEY' => 10, 'FLD_FOREIGN_KEY_TABLE' => 11, 'FLD_DYN_NAME' => 12, 'FLD_DYN_UID' => 13, 'FLD_FILTER' => 14, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('FldUid' => 0, 'AddTabUid' => 1, 'FldIndex' => 2, 'FldName' => 3, 'FldDescription' => 4, 'FldType' => 5, 'FldSize' => 6, 'FldNull' => 7, 'FldAutoIncrement' => 8, 'FldKey' => 9, 'FldForeignKey' => 10, 'FldForeignKeyTable' => 11, 'FldDynName' => 12, 'FldDynUid' => 13, 'FldFilter' => 14, 'AddTabTag' => 15, ),
+		BasePeer::TYPE_COLNAME => array (FieldsPeer::FLD_UID => 0, FieldsPeer::ADD_TAB_UID => 1, FieldsPeer::FLD_INDEX => 2, FieldsPeer::FLD_NAME => 3, FieldsPeer::FLD_DESCRIPTION => 4, FieldsPeer::FLD_TYPE => 5, FieldsPeer::FLD_SIZE => 6, FieldsPeer::FLD_NULL => 7, FieldsPeer::FLD_AUTO_INCREMENT => 8, FieldsPeer::FLD_KEY => 9, FieldsPeer::FLD_FOREIGN_KEY => 10, FieldsPeer::FLD_FOREIGN_KEY_TABLE => 11, FieldsPeer::FLD_DYN_NAME => 12, FieldsPeer::FLD_DYN_UID => 13, FieldsPeer::FLD_FILTER => 14, FieldsPeer::ADD_TAB_TAG => 15, ),
+		BasePeer::TYPE_FIELDNAME => array ('FLD_UID' => 0, 'ADD_TAB_UID' => 1, 'FLD_INDEX' => 2, 'FLD_NAME' => 3, 'FLD_DESCRIPTION' => 4, 'FLD_TYPE' => 5, 'FLD_SIZE' => 6, 'FLD_NULL' => 7, 'FLD_AUTO_INCREMENT' => 8, 'FLD_KEY' => 9, 'FLD_FOREIGN_KEY' => 10, 'FLD_FOREIGN_KEY_TABLE' => 11, 'FLD_DYN_NAME' => 12, 'FLD_DYN_UID' => 13, 'FLD_FILTER' => 14, 'ADD_TAB_TAG' => 15, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
 	/**
@@ -232,6 +235,8 @@ abstract class BaseFieldsPeer {
 		$criteria->addSelectColumn(FieldsPeer::FLD_DYN_UID);
 
 		$criteria->addSelectColumn(FieldsPeer::FLD_FILTER);
+
+		$criteria->addSelectColumn(FieldsPeer::ADD_TAB_TAG);
 
 	}
 

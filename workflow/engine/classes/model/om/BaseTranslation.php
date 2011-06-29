@@ -53,7 +53,7 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 	 * The value for the trn_value field.
 	 * @var        string
 	 */
-	protected $trn_value = '';
+	protected $trn_value;
 
 
 	/**
@@ -232,7 +232,7 @@ abstract class BaseTranslation extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->trn_value !== $v || $v === '') {
+		if ($this->trn_value !== $v) {
 			$this->trn_value = $v;
 			$this->modifiedColumns[] = TranslationPeer::TRN_VALUE;
 		}

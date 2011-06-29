@@ -156,43 +156,6 @@ switch($action) {
         // verify if exists.
         $aNameTable = $oAdditionalTables->loadByName($data['REP_TAB_NAME']);
 
-        $columns = $data['columns'];
-        //setting default columns
-        $defaultColumns = array();
-        $application = new stdClass(); //APPLICATION KEY
-        $application->field_name  = 'APP_UID';
-        $application->field_label = 'APP_UID';
-        $application->field_type  = 'VARCHAR';
-        $application->field_size  = 32;
-        $application->field_dyn   = '';
-        $application->field_key   = 1;
-        $application->field_null  = 0;
-        array_push($defaultColumns, $application);
-
-        $application = new stdClass(); //APP_NUMBER
-        $application->field_name  = 'APP_NUMBER';
-        $application->field_label = 'APP_NUMBER';
-        $application->field_type  = 'INT';
-        $application->field_size  = 11;
-        $application->field_dyn   = '';
-        $application->field_key   = 1;
-        $application->field_null  = 0;
-        array_push($defaultColumns, $application);
-
-        //if it is a grid report table
-        if ($data['REP_TAB_TYPE'] == 'GRID') { //GRID INDEX
-          $gridIndex = new stdClass();
-          $gridIndex->field_name  = 'ROW';
-          $gridIndex->field_label = 'ROW';
-          $gridIndex->field_type  = 'INT';
-          $gridIndex->field_size  = '11';
-          $gridIndex->field_dyn   = '';
-          $gridIndex->field_null  = 0;
-          array_push($defaultColumns, $gridIndex);
-        }
-
-        $columns = array_merge($defaultColumns, $columns);
-
         $repTabClassName = to_camel_case($data['REP_TAB_NAME']);
 
         $repTabData = array(
@@ -207,7 +170,48 @@ switch($action) {
           'ADD_TAB_GRID'        => $data['REP_TAB_GRID']
         );
 
+        $columns = $data['columns'];
+         
         if ($data['REP_TAB_UID'] == '') { //new report table
+          //setting default columns
+          $defaultColumns = array();
+          $application = new stdClass(); //APPLICATION KEY
+          $application->field_name  = 'APP_UID';
+          $application->field_label = 'APP_UID';
+          $application->field_type  = 'VARCHAR';
+          $application->field_size  = 32;
+          $application->field_dyn   = '';
+          $application->field_key   = 1;
+          $application->field_null  = 0;
+          $application->field_filter  = false;
+          array_push($defaultColumns, $application);
+
+          $application = new stdClass(); //APP_NUMBER
+          $application->field_name  = 'APP_NUMBER';
+          $application->field_label = 'APP_NUMBER';
+          $application->field_type  = 'INT';
+          $application->field_size  = 11;
+          $application->field_dyn   = '';
+          $application->field_key   = 1;
+          $application->field_null  =0;
+          $application->field_filter  = false;
+          array_push($defaultColumns, $application);
+
+          //if it is a grid report table
+          if ($data['REP_TAB_TYPE'] == 'GRID') { //GRID INDEX
+            $gridIndex = new stdClass();
+            $gridIndex->field_name  = 'ROW';
+            $gridIndex->field_label = 'ROW';
+            $gridIndex->field_type  = 'INT';
+            $gridIndex->field_size  = '11';
+            $gridIndex->field_dyn   = '';
+            $gridIndex->field_null  = 0;
+            $gridIndex->field_filter = false;
+            array_push($defaultColumns, $gridIndex);
+          }
+          
+          $columns = array_merge($defaultColumns, $columns);
+
 
           /** validations **/
           if(is_array($aNameTable)) {
@@ -230,20 +234,21 @@ switch($action) {
           //removing old data fields references
           $oCriteria = new Criteria('workflow');
           $oCriteria->add(FieldsPeer::ADD_TAB_UID, $data['REP_TAB_UID']);
-          $oCriteria->add(FieldsPeer::FLD_NAME, 'APP_UID', Criteria::NOT_EQUAL);
-          $oCriteria->add(FieldsPeer::FLD_NAME, 'ROW', Criteria::NOT_EQUAL);
+          //$oCriteria->add(FieldsPeer::FLD_NAME, 'APP_UID', Criteria::NOT_EQUAL);
+          //$oCriteria->add(FieldsPeer::FLD_NAME, 'ROW', Criteria::NOT_EQUAL);
           FieldsPeer::doDelete($oCriteria);
 
           //getting old fieldnames
           $oldFields = array();
           foreach ($addTabBeforeData['FIELDS'] as $field) {
-            if ($field['FLD_NAME'] == 'APP_UID' || $field['FLD_NAME'] == 'ROW') continue;
+            //if ($field['FLD_NAME'] == 'APP_UID' || $field['FLD_NAME'] == 'ROW') continue;
             $oldFields[$field['FLD_UID']] = $field;
           }
         }
 
-        $aFields   = array();
-        $fieldsList   = array();
+        $aFields    = array();
+        $fieldsList = array();
+        $editFieldsList = array();
 
         foreach ($columns as $i => $column) {
           $field = array(
@@ -254,28 +259,30 @@ switch($action) {
             'FLD_DESCRIPTION'       => $column->field_label,
             'FLD_TYPE'              => $column->field_type,
             'FLD_SIZE'              => $column->field_size,
-            'FLD_NULL'              => isset($column->field_null) ? $column->field_null : 1,
+            'FLD_NULL'              => (isset($column->field_null) ? $column->field_null : 1),
             'FLD_AUTO_INCREMENT'    => 0,
-            'FLD_KEY'               => isset($column->field_key) ? $column->field_key : 0,
+            'FLD_KEY'               => (isset($column->field_key) ? $column->field_key : 0),
             'FLD_FOREIGN_KEY'       => 0,
             'FLD_FOREIGN_KEY_TABLE' => '',
             'FLD_DYN_NAME'          => $column->field_dyn,
             'FLD_DYN_UID'           => $column->field_uid,
-            'FLD_FILTER'           => (isset($column->field_filter)? 1 : 0)
+            'FLD_FILTER'            => (isset($column->field_filter) && $column->field_filter ? 1 : 0)
           );
 
           $fieldUid = $oFields->create($field);
-          array_push($fieldsList, $field);
+          $fieldsList[] = $field;
+
           if($data['REP_TAB_UID'] == '') { //new
             $aFields[] = array(
               'sType'       => $column->field_type,
               'iSize'       => $column->field_size,
               'sFieldName'  => $column->field_name,
-              'bNull'       => isset($column->field_null) ? $defaultColumns[1]->field_null : 1,
+              'bNull'       => (isset($column->field_null) ? $column->field_null : 1),
               'bAI'         => 0,
-              'bPrimaryKey' => isset($column->field_key) ? $defaultColumns[1]->field_key : 0
+              'bPrimaryKey' => (isset($column->field_key) ? $column->field_key : 0)
             );
           } else { //editing
+            $field['FLD_UID'] = $fieldUid;
             $aFields[$fieldUid] = $field;
           }
         }
@@ -368,6 +375,18 @@ switch($action) {
       echo G::json_encode($addTab);
       break;
 
+    case 'updateTag':
+      require_once 'classes/model/AdditionalTables.php';
+      $oAdditionalTables = new AdditionalTables();
+      $uid = $_REQUEST['ADD_TAB_UID'];
+      $value = $_REQUEST['value'];
+
+      $repTabData = array(
+        'ADD_TAB_UID' => $uid,        
+        'ADD_TAB_TAG' => $value
+      );
+      $oAdditionalTables->update($repTabData);
+      break;
 }
 
 

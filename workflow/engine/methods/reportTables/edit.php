@@ -5,7 +5,6 @@ $table = false;
 $oHeadPublisher =& headPublisher::getSingleton();
 
 $oHeadPublisher->addExtJsScript('reportTables/edit', true );
-$oHeadPublisher->addContent('reportTables/edit');
 $oHeadPublisher->assign('ADD_TAB_UID', $id);
 
 if ($id) { // if is a edit request
@@ -20,10 +19,10 @@ if ($id) { // if is a edit request
 
   // list the case fields
   foreach ($table['FIELDS'] as $i=>$field) {
-    if ($field['FLD_NAME'] == 'APP_UID' || $field['FLD_NAME'] == 'APP_NUMBER' || $field['FLD_NAME'] == 'ROW') {
+    /*if ($field['FLD_NAME'] == 'APP_UID' || $field['FLD_NAME'] == 'APP_NUMBER' || $field['FLD_NAME'] == 'ROW') {
       unset($table['FIELDS'][$i]);
       continue;
-    }
+    }*/
     array_push($tableFields, $field['FLD_DYN_NAME']);
   }
 
@@ -62,6 +61,7 @@ $repTabPluginPermissions = false;
 global $G_TMP_MENU;
 $oMenu = new Menu();
 $oMenu->load('setup');
+
 foreach( $oMenu->Options as $i=>$option) {
   if ($oMenu->Types[$i] == 'private' && $oMenu->Id[$i] == 'PLUGIN_REPTAB_PERMISSIONS') {
     $repTabPluginPermissions = array();

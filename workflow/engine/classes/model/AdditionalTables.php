@@ -71,6 +71,7 @@ class AdditionalTables extends BaseAdditionalTables {
           $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY_TABLE);
           $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_NAME);
           $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_UID);
+          $oCriteria->addSelectColumn(FieldsPeer::FLD_FILTER);
           $oCriteria->add(FieldsPeer::ADD_TAB_UID, $sUID);
           $oCriteria->addAscendingOrderByColumn(FieldsPeer::FLD_INDEX);
           $oDataset = FieldsPeer::doSelectRS($oCriteria);
@@ -430,23 +431,40 @@ class AdditionalTables extends BaseAdditionalTables {
       $aFieldsToAdd    = array();
       $aFieldsToDelete = array();
       $aFieldsToAlter  = array();
+      // echo 'oldfields';
+      // print_R($aOldFields);
+      // echo 'newfields';
+      // print_R($aNewFields);
+      
+
       foreach ($aNewFields as $aNewField) {
       	$aNewField['FLD_NAME'] = strtoupper($aNewField['FLD_NAME']);
         if (!isset($aOldFields[$aNewField['FLD_UID']])) {
           $aFieldsToAdd[] = $aNewField;
         }
-        if ($aNewField['FLD_KEY'] == 1 || $aNewField['FLD_KEY'] == 'on' || $aNewField['FLD_AUTO_INCREMENT'] == 'on') {
+        
+        if ($aNewField['FLD_KEY'] == 1 || $aNewField['FLD_KEY'] === 'on' || $aNewField['FLD_AUTO_INCREMENT'] === 'on') {
           if (!in_array($aNewField['FLD_NAME'], $aKeys)) {
             $aKeys[] = $aNewField['FLD_NAME'];
           }
         }
+       
       }
+      // echo '$aKeys';
+      // print_R($aKeys);
+
+      // echo '$aFieldsToAdd';
+      // print_R($aFieldsToAdd);
       foreach ($aOldFields as $aOldField) {
       	$aOldField['FLD_NAME'] = strtoupper($aOldField['FLD_NAME']);
         if (!isset($aNewFields[$aOldField['FLD_UID']])) {
           $aFieldsToDelete[] = $aOldField;
         }
       }
+      // echo '$aFieldsToDelete';
+      // print_R($aFieldsToDelete);
+      
+
       foreach ($aNewFields as $aNewField) {
         if (isset($aOldFields[$aNewField['FLD_UID']])) {
           $bEqual = true;
@@ -474,23 +492,35 @@ class AdditionalTables extends BaseAdditionalTables {
           }
         }
       }
+      // echo '$aFieldsToAlter';
+      // print_R($aFieldsToAlter);      
+
       G::LoadSystem('database_' . strtolower(DB_ADAPTER));
       $oDataBase = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
       $oDataBase->iFetchType = MYSQL_NUM;
-      $oDataBase->executeQuery($oDataBase->generateDropPrimaryKeysSQL($sTableName));
+      
+      //$oDataBase->executeQuery($oDataBase->generateDropPrimaryKeysSQL($sTableName));
+      $con = Propel::getConnection($sConnection);
+      $stmt = $con->createStatement();
+      $sQuery = $oDataBase->generateDropPrimaryKeysSQL($sTableName);
+      // echo "drop pk->";
+      // var_dump($sQuery);
+      // echo "\n";
+      $rs = $stmt->executeQuery($sQuery);
+
       foreach ($aFieldsToAdd as $aFieldToAdd) {
         switch ($aFieldToAdd['FLD_TYPE']) {
           case 'VARCHAR':
             $aData = array(
               'Type'    => 'VARCHAR(' . $aFieldToAdd['FLD_SIZE'] . ')',
-              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 1 || $aFieldToAdd['FLD_NULL'] === 'on' ? 'YES' : ''),
               'Default' => ''
             );
           break;
           case 'TEXT':
             $aData = array(
               'Type'    => 'TEXT',
-              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 1 || $aFieldToAdd['FLD_NULL'] === 'on' ? 'YES' : ''),
               'Default' => ''
             );
           break;
@@ -504,27 +534,44 @@ class AdditionalTables extends BaseAdditionalTables {
           case 'INT':
             $aData = array(
               'Type'    => 'INT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
-              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 1 || $aFieldToAdd['FLD_NULL'] === 'on' ? 'YES' : ''),
               'Default' => '0',
-              'AI'      => ($aFieldToAdd['FLD_AUTO_INCREMENT'] == 'on' ? 1 : 0)
+              'AI'      => ($aFieldToAdd['FLD_AUTO_INCREMENT'] == 1 || $aFieldToAdd['FLD_AUTO_INCREMENT'] === 'on' ? 1 : 0)
             );
           break;
           case 'FLOAT':
             $aData = array(
               'Type'    => 'FLOAT(' . (int)$aFieldToAdd['FLD_SIZE'] . ')',
-              'Null'    => ($aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
+              'Null'    => ($aFieldToAdd['FLD_NULL'] == 1 || $aFieldToAdd['FLD_NULL'] == 'on' ? 'YES' : ''),
               'Default' => '0'
             );
           break;
         }
         //echo $oDataBase->generateAddColumnSQL($sTableName, $aFieldToAdd['FLD_NAME'], $aData);
-        $oDataBase->executeQuery($oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData));
+        //$oDataBase->executeQuery($oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData));
+        $sQuery = $oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData);
+        // echo "add col->";
+        // var_dump($sQuery);
+        // echo "\n";
+        $rs = $stmt->executeQuery($sQuery);
+        
       }
       foreach ($aFieldsToDelete as $aFieldToDelete) {
-        $oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME'])));
+        //$oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME'])));
+        $sQuery = $oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME']));
+        // echo 'drop col->';
+        // var_dump($sQuery);
+        // echo "\n";
+        $rs = $stmt->executeQuery($sQuery);
       }
-      //die;
-      $oDataBase->executeQuery($oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys));
+      
+      //$oDataBase->executeQuery($oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys));
+      $sQuery = $oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys);
+      // echo 'generate add PK->';
+      // var_dump($sQuery);
+      // echo "\n";
+      $rs = $stmt->executeQuery($sQuery);
+      
       foreach ($aFieldsToAlter as $aFieldToAlter) {
         switch ($aFieldToAlter['FLD_TYPE']) {
           case 'VARCHAR':
@@ -564,7 +611,13 @@ class AdditionalTables extends BaseAdditionalTables {
             );
           break;
         }
-        $oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD'])));
+        //$oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD'])));
+
+        $sQuery = $oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD']));
+        // echo 'alter->';
+        // var_dump($sQuery);
+        // echo "\n";
+        $rs = $stmt->executeQuery($sQuery);
       }
     }
     catch (Exception $oError) {
@@ -1802,6 +1855,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TYPE);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TAG);
     $oCriteria->addSelectColumn(AdditionalTablesPeer::PRO_UID);
 
     if (isset($process)) {

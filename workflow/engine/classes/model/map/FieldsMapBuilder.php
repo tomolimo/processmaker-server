@@ -94,6 +94,8 @@ class FieldsMapBuilder {
 
 		$tMap->addColumn('FLD_FILTER', 'FldFilter', 'int', CreoleTypes::TINYINT, false, null);
 
+		$tMap->addColumn('ADD_TAB_TAG', 'AddTabTag', 'string', CreoleTypes::VARCHAR, false, 256);
+
 	} // doBuild()
 
 } // FieldsMapBuilder

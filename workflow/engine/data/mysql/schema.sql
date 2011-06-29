@@ -974,6 +974,7 @@ CREATE TABLE `FIELDS`
 	`FLD_DYN_NAME` VARCHAR(128) default '',
 	`FLD_DYN_UID` VARCHAR(128) default '',
 	`FLD_FILTER` TINYINT default 0,
+	`ADD_TAB_TAG` VARCHAR(256) default '',
 	PRIMARY KEY (`FLD_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
