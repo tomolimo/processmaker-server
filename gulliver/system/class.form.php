@@ -318,7 +318,7 @@ class Form extends XmlForm
               case 'checkgroup':
               case 'listbox':
                 if ( is_array($newValues[$k]) ) {
-                  $values[$k] = '';
+                  $values[$k] = $values["{$k}_label"] = '';
                   foreach ($newValues[$k] as $i => $value) {
                     //if $value is empty continue with the next loop, because this is a not selected/checked item
                     if (trim($value) == '') {
