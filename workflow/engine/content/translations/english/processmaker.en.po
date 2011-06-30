@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.30.rc3\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.30.rc10-2-g32c0316\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-06-14 16:22:15\n"
+"PO-Revision-Date: 2011-06-30 10:18:48\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -10074,6 +10074,72 @@ msgstr "The following fields have invalid values"
 #: LABEL/ID_VALIDATED_FIELDS
 msgid "[LABEL/ID_VALIDATED_FIELDS] The following fields have invalid values"
 msgstr "The following fields have invalid values"
+
+# TRANSLATION
+# LABEL/ID_CHANGE_PASSWORD
+#: LABEL/ID_CHANGE_PASSWORD
+msgid "Change Password"
+msgstr "Change Password"
+
+# TRANSLATION
+# LABEL/ID_DEFAULT_MAIN_MENU_OPTION
+#: LABEL/ID_DEFAULT_MAIN_MENU_OPTION
+msgid "Default Main Menu Option"
+msgstr "Default Main Menu Option"
+
+# TRANSLATION
+# LABEL/ID_DEFAULT_CASES_MENU_OPTION
+#: LABEL/ID_DEFAULT_CASES_MENU_OPTION
+msgid "Default Cases Menu option"
+msgstr "Default Cases Menu option"
+
+# TRANSLATION
+# LABEL/ID_INFORMATION_WAS_STORED_SUCCESSFULLY
+#: LABEL/ID_INFORMATION_WAS_STORED_SUCCESSFULLY
+msgid "information was stored successfully"
+msgstr "information was stored successfully"
+
+# TRANSLATION
+# LABEL/ID_PREFERENCES
+#: LABEL/ID_PREFERENCES
+msgid "Preferences"
+msgstr "Preferences"
+
+# TRANSLATION
+# LABEL/ID_PERSONAL_INFORMATION
+#: LABEL/ID_PERSONAL_INFORMATION
+msgid "Personal information"
+msgstr "Personal information"
+
+# TRANSLATION
+# LABEL/NEW_SITE_SUCCESS
+#: LABEL/NEW_SITE_SUCCESS
+msgid "[LABEL/NEW_SITE_SUCCESS] Your new site was successfully created with  name:"
+msgstr "Your new site was successfully created with  name:"
+
+# TRANSLATION
+# LABEL/NEW_SITE_SUCCESS_CONFIRMNOTE
+#: LABEL/NEW_SITE_SUCCESS_CONFIRMNOTE
+msgid "[LABEL/NEW_SITE_SUCCESS_CONFIRMNOTE] Note.- If you open the new site your  current session will be closed."
+msgstr "Note.- If you open the new site your  current session will be closed."
+
+# TRANSLATION
+# LABEL/NEW_SITE_SUCCESS_CONFIRM
+#: LABEL/NEW_SITE_SUCCESS_CONFIRM
+msgid "[LABEL/NEW_SITE_SUCCESS_CONFIRM] Do you want open the new site?"
+msgstr "Do you want open the new site?"
+
+# TRANSLATION
+# LABEL/NEW_SITE_NOT_AVAILABLE
+#: LABEL/NEW_SITE_NOT_AVAILABLE
+msgid "This site is not available"
+msgstr "This site is not available"
+
+# TRANSLATION
+# LABEL/NEW_SITE_CONFIRM_TO_CREATE
+#: LABEL/NEW_SITE_CONFIRM_TO_CREATE
+msgid "Are you sure to create this site?"
+msgstr "Are you sure to create this site?"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -27536,7 +27602,7 @@ msgstr "Department"
 # users/myInfo.xml?TITLECHP
 # users/myInfo.xml
 #: title - TITLECHP
-msgid "Change Password"
+msgid "[users/myInfo.xml?TITLECHP] Change Password"
 msgstr "Change Password"
 
 # users/myInfo.xml?USR_NEW_PASS
@@ -27554,13 +27620,13 @@ msgstr "Confirm Password"
 # users/myInfo.xml?TITLEPREF
 # users/myInfo.xml
 #: title - TITLEPREF
-msgid "Preferences"
+msgid "[users/myInfo.xml?TITLEPREF] Preferences"
 msgstr "Preferences"
 
 # users/myInfo.xml?PREF_DEFAULT_MENUSELECTED
 # users/myInfo.xml
 #: dropdown - PREF_DEFAULT_MENUSELECTED
-msgid "Default Main Menu Option"
+msgid "[users/myInfo.xml?PREF_DEFAULT_MENUSELECTED] Default Main Menu Option"
 msgstr "Default Main Menu Option"
 
 # users/myInfo.xml?PREF_DEFAULT_CASES_MENUSELECTED
@@ -31180,6 +31246,18 @@ msgstr "Behaviour"
 #: checkbox - PME_REQUIRED
 msgid "[dynaforms/fields/suggest.xml?PME_REQUIRED] Required"
 msgstr "Required"
+
+# dynaforms/fields/suggest.xml?PME_DEPENDENTFIELDS
+# dynaforms/fields/suggest.xml
+#: listbox - PME_DEPENDENTFIELDS
+msgid "[dynaforms/fields/suggest.xml?PME_DEPENDENTFIELDS] Dependent Fields"
+msgstr "Dependent Fields"
+
+# dynaforms/fields/suggest.xml?PME_DEPENDENTFIELDS-
+# dynaforms/fields/suggest.xml
+#: listbox - PME_DEPENDENTFIELDS -
+msgid "[dynaforms/fields/suggest.xml?PME_DEPENDENTFIELDS-]"
+msgstr "(none)"
 
 # dynaforms/fields/suggest.xml?PME_DEFAULTVALUE
 # dynaforms/fields/suggest.xml
