@@ -53,7 +53,8 @@ class WebResource
     if (isset($post['function'])&&$post['function']!='') {
       /*Call a function*/
       header('Content-Type: text/json');
-      $parameters=G::json_decode((urldecode($post['parameters'])));
+      //$parameters=G::json_decode((urldecode($post['parameters']))); //for %AC
+      $parameters=G::json_decode(($post['parameters']));
       $paramsRef=array();
       foreach($parameters as $key => $value)
       {
