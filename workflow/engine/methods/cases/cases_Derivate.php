@@ -111,7 +111,11 @@ try {
 	$oUser     = new Users();
 	$aUser     = $oUser->load($_SESSION['USER_LOGGED']);
 	$sFromName = '"' . $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . '"';
-	$oCase->sendNotifications($_SESSION['TASK'], $_POST['form']['TASKS'], $appFields['APP_DATA'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $sFromName);
+	try {
+	  $oCase->sendNotifications($_SESSION['TASK'], $_POST['form']['TASKS'], $appFields['APP_DATA'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $sFromName);
+	} catch(Exception $e){
+	  G::SendTemporalMessage(G::loadTranslation('ID_NOTIFICATION_ERROR').' - '. $e->getMessage(), 'warning', 'string', null, '100%');
+	}
 	// Send notifications - End
 	
 	// Events - Start

@@ -4135,97 +4135,107 @@ class Cases {
           $aConfiguration = array();
         }
       }
-      if (isset($aConfiguration['MESS_ENABLED']) && $aConfiguration['MESS_ENABLED'] == '1') {
-        //Send derivation notification - Start
-        $oTask = new Task();
-        $aTaskInfo = $oTask->load($sCurrentTask);
-        if ($aTaskInfo['TAS_SEND_LAST_EMAIL'] == 'TRUE') {
-          if ($sFrom == '') {
-            $sFrom = '"ProcessMaker"';
-          }
-          if (($aConfiguration['MESS_ENGINE'] != 'MAIL') && ($aConfiguration['MESS_ACCOUNT'] != '')) {
-            $sFrom .= ' <' . $aConfiguration['MESS_ACCOUNT'] . '>';
-          } else {
-            if (($aConfiguration['MESS_ENGINE'] == 'MAIL')) {
-              $sFrom .= ' <info@' . gethostbyaddr('127.0.0.1') . '>';
+      
+      if (!isset($aConfiguration['MESS_ENABLED']) || $aConfiguration['MESS_ENABLED'] != '1') {
+        return false;
+      }
+      
+      //Send derivation notification - Start
+      $oTask = new Task();
+      $aTaskInfo = $oTask->load($sCurrentTask);
+      
+      if ($aTaskInfo['TAS_SEND_LAST_EMAIL'] != 'TRUE') {
+        return false;
+      }
+      
+      if ($sFrom == '') {
+        $sFrom = '"ProcessMaker"';
+      }
+      
+      if (($aConfiguration['MESS_ENGINE'] != 'MAIL') && ($aConfiguration['MESS_ACCOUNT'] != '')) {
+        $sFrom .= ' <' . $aConfiguration['MESS_ACCOUNT'] . '>';
+      } else {
+        if (($aConfiguration['MESS_ENGINE'] == 'MAIL')) {
+          $sFrom .= ' <info@' . gethostbyaddr('127.0.0.1') . '>';
+        } else {
+          if ($aConfiguration['MESS_SERVER'] != '') {
+            if (($sAux = @gethostbyaddr($aConfiguration['MESS_SERVER']))) {
+              $sFrom .= ' <info@' . $sAux . '>';
             } else {
-              if ($aConfiguration['MESS_SERVER'] != '') {
-                if (($sAux = @gethostbyaddr($aConfiguration['MESS_SERVER']))) {
-                  $sFrom .= ' <info@' . $sAux . '>';
-                } else {
-                  $sFrom .= ' <info@' . $aConfiguration['MESS_SERVER'] . '>';
-                }
-              } else {
-                $sFrom .= ' <info@processmaker.com>';
-              }
+              $sFrom .= ' <info@' . $aConfiguration['MESS_SERVER'] . '>';
             }
-          }
-          
-          if (isset($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE']) && $aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'] != '') {
-            $sSubject = G::replaceDataField($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'], $aFields);
           } else {
-            $sSubject = G::LoadTranslation('ID_MESSAGE_SUBJECT_DERIVATION');
-          }
-
-          //erik: new behaviour for messages
-          G::loadClass('configuration');
-          $oConf = new Configurations;
-          $oConf->loadConfig($x, 'TAS_EXTRA_PROPERTIES', $aTaskInfo['TAS_UID'], '', '');
-          $conf = $oConf->aConfig;
-          
-          if( isset($conf['TAS_DEF_MESSAGE_TYPE']) && isset($conf['TAS_DEF_MESSAGE_TEMPLATE']) 
-            && $conf['TAS_DEF_MESSAGE_TYPE'] == 'template' && $conf['TAS_DEF_MESSAGE_TEMPLATE'] != '') {
-
-            $pathEmail = PATH_DATA_SITE . 'mailTemplates' . PATH_SEP . $aTaskInfo['PRO_UID'] . PATH_SEP;
-            $fileTemplate = $pathEmail . $conf['TAS_DEF_MESSAGE_TEMPLATE'];
-
-            if ( ! file_exists ( $fileTemplate ) ) {
-              throw new Exception("Template file '$fileTemplate' does not exist.");
-            }
-            
-            $sBody = G::replaceDataField(file_get_contents($fileTemplate), $aFields);
-          } else {
-            $sBody = nl2br(G::replaceDataField($aTaskInfo['TAS_DEF_MESSAGE'], $aFields));
-          }
-            
-
-          G::LoadClass('spool');
-          $oUser = new Users();
-          foreach ($aTasks as $aTask) {
-            if (isset($aTask['USR_UID'])) {
-              $aUser = $oUser->load($aTask['USR_UID']);
-              $sTo = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
-              $oSpool = new spoolRun();
-              $oSpool->setConfig(array('MESS_ENGINE' => $aConfiguration['MESS_ENGINE'],
-                  'MESS_SERVER'   => $aConfiguration['MESS_SERVER'],
-                  'MESS_PORT'     => $aConfiguration['MESS_PORT'],
-                  'MESS_ACCOUNT'  => $aConfiguration['MESS_ACCOUNT'],
-                  'MESS_PASSWORD' => $aConfiguration['MESS_PASSWORD'],
-                  'SMTPAuth'      => $aConfiguration['MESS_RAUTH'] == '1' ? true : false,
-                  'SMTPSecure'    => isset($aConfiguration['SMTPSecure']) ? $aConfiguration['SMTPSecure'] : ''
-              ));
-              $oSpool->create(array('msg_uid' => '',
-                  'app_uid' => $sApplicationUID,
-                  'del_index' => $iDelegation,
-                  'app_msg_type' => 'DERIVATION',
-                  'app_msg_subject' => $sSubject,
-                  'app_msg_from' => $sFrom,
-                  'app_msg_to' => $sTo,
-                  'app_msg_body' => $sBody,
-                  'app_msg_cc' => '',
-                  'app_msg_bcc' => '',
-                  'app_msg_attach' => '',
-                  'app_msg_template' => '',
-                  'app_msg_status' => 'pending'
-              ));
-              if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
-                $oSpool->sendMail();
-              }
-            }
+            $sFrom .= ' <info@processmaker.com>';
           }
         }
-        //Send derivation notification - End
       }
+      
+      if (isset($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE']) && $aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'] != '') {
+        $sSubject = G::replaceDataField($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'], $aFields);
+      } else {
+        $sSubject = G::LoadTranslation('ID_MESSAGE_SUBJECT_DERIVATION');
+      }
+
+      //erik: new behaviour for messages
+      G::loadClass('configuration');
+      $oConf = new Configurations;
+      $oConf->loadConfig($x, 'TAS_EXTRA_PROPERTIES', $aTaskInfo['TAS_UID'], '', '');
+      $conf = $oConf->aConfig;
+      
+      if( isset($conf['TAS_DEF_MESSAGE_TYPE']) && isset($conf['TAS_DEF_MESSAGE_TEMPLATE']) 
+        && $conf['TAS_DEF_MESSAGE_TYPE'] == 'template' && $conf['TAS_DEF_MESSAGE_TEMPLATE'] != '') {
+
+        $pathEmail = PATH_DATA_SITE . 'mailTemplates' . PATH_SEP . $aTaskInfo['PRO_UID'] . PATH_SEP;
+        $fileTemplate = $pathEmail . $conf['TAS_DEF_MESSAGE_TEMPLATE'];
+
+        if ( ! file_exists ( $fileTemplate ) ) {
+          throw new Exception("Template file '$fileTemplate' does not exist.");
+        }
+        
+        $sBody = G::replaceDataField(file_get_contents($fileTemplate), $aFields);
+      } else {
+        $sBody = nl2br(G::replaceDataField($aTaskInfo['TAS_DEF_MESSAGE'], $aFields));
+      }
+
+      G::LoadClass('spool');
+      $oUser = new Users();
+      foreach ($aTasks as $aTask) {
+        if (isset($aTask['USR_UID'])) {
+          $aUser = $oUser->load($aTask['USR_UID']);
+          
+          $sTo = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
+          
+          $oSpool = new spoolRun();
+          $oSpool->setConfig(array('MESS_ENGINE' => $aConfiguration['MESS_ENGINE'],
+              'MESS_SERVER'   => $aConfiguration['MESS_SERVER'],
+              'MESS_PORT'     => $aConfiguration['MESS_PORT'],
+              'MESS_ACCOUNT'  => $aConfiguration['MESS_ACCOUNT'],
+              'MESS_PASSWORD' => $aConfiguration['MESS_PASSWORD'],
+              'SMTPAuth'      => $aConfiguration['MESS_RAUTH'] == '1' ? true : false,
+              'SMTPSecure'    => isset($aConfiguration['SMTPSecure']) ? $aConfiguration['SMTPSecure'] : ''
+          ));
+          $oSpool->create(array('msg_uid' => '',
+              'app_uid' => $sApplicationUID,
+              'del_index' => $iDelegation,
+              'app_msg_type' => 'DERIVATION',
+              'app_msg_subject' => $sSubject,
+              'app_msg_from' => $sFrom,
+              'app_msg_to' => $sTo,
+              'app_msg_body' => $sBody,
+              'app_msg_cc' => '',
+              'app_msg_bcc' => '',
+              'app_msg_attach' => '',
+              'app_msg_template' => '',
+              'app_msg_status' => 'pending'
+          ));
+          if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
+            $oSpool->sendMail();
+          }
+        }
+      }
+    
+      //Send derivation notification - End
+      
     } catch (Exception $oException) {
       throw $oException;
     }
