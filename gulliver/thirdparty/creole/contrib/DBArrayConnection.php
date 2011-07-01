@@ -19,8 +19,8 @@ class DBArrayPreparedStatement extends PreparedStatementCommon implements Prepar
   }
 
   private function prepareStatement($sql) {
-    krumo($sql);
-    return $str;
+    
+  return $sql;
   }
 
 }
@@ -193,7 +193,7 @@ class DBArrayConnection implements Connection {
    */
   public function prepareStatement($dataSql) {
     $this->dataSql = $dataSql;
-    return new DBArrayPreparedStatement($this, $dataSql['sql']);
+    return new DBArrayPreparedStatement($this, $this->dataSql);
   }
 
   /**
@@ -242,6 +242,7 @@ class DBArrayConnection implements Connection {
       return;
     }
     $sql = array();
+    $sql['selectClause'][0] = isset($matches[1]) ? $matches[1] : '';//Include selectClause. By JHL
     $sql['fromClause'][0] = isset($matches[2]) ? $matches[2] : '';
     $sql['whereClause'][0] = isset($matches[3]) ? $matches[3] : '';
     $sql['limit'] = 0;
@@ -253,8 +254,8 @@ class DBArrayConnection implements Connection {
    * @see Connection::executeQuery()
    */
   public function executeQuery($sql, $fetchmode = null) {
-    if (!is_array($sql) && strlen($sql) > 0) {
-      $sql = $this->parseSqlString($sql);
+    if (!is_array($sql) && strlen($sql) > 1) {
+      $this->dataSql=$sql = $this->parseSqlString($sql);
     }
     $resultSet = new DBArrayResultSet($this, $sql, $fetchmode);
     $tableName = $sql['fromClause'][0];
@@ -270,7 +271,7 @@ class DBArrayConnection implements Connection {
       if ($key == 0)
         continue;
       $flag = 1;
-      if (isset($sql['whereClause']))
+      if (isset($sql['whereClause'])){//If there is no where then return the row
         foreach ($sql['whereClause'] as $keyClause => $valClause) {
           if (isset($valClause) && $flag == 1) {
             //$toEval =  "\$flag = ( " . ($valClause != '' ? str_replace('=', '==', $valClause): '1') . ') ?1 :0;' ;
@@ -298,14 +299,14 @@ class DBArrayConnection implements Connection {
 
             eval($toEval);
           }
+        }}else{
+
         }
 
       if ($flag) {
         $resultRow[] = $row;
       }
     }
-
-
     if ($this->dataSql['selectClause'][0] == 'COUNT(*)') {
       $rows[] = array('1' => 'integer');
       if (isset($resultRow) && is_array($resultRow))

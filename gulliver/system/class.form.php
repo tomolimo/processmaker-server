@@ -296,10 +296,9 @@ class Form extends XmlForm
    * @return array
    */
   function validateArray($newValues)
-  {
+  {    
     $values = array();
     foreach($this->fields as $k => $v) {
-
       if (($v->type != 'submit')) {
         if ($v->type != 'file') {
           if ( array_key_exists($k,$newValues) ) {
@@ -333,17 +332,19 @@ class Form extends XmlForm
                       $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
                       //we do the query to the external connection and we've got the label
                       $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
+                      
                       $stmt = $con->prepareStatement($query);
                       $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
 
                       while ($rs->next()) {
-                        list($rowId, $rowContent) = $rs->getRow();
-
+                        list($rowId, $rowContent) = array_values($rs->getRow());//This to be sure that the array is numeric. Some cases when is DBArray result it returns an associative. By JHL
+                        
                         if ($value == $rowId){
                           $values["{$k}_label"] .= ($i != 0 ? '|': '') . $rowContent;
                           break;
                         }
                       }
+                      //die;
                     }
                   }
                   $newValues["{$k}_label"] = isset($values["{$k}_label"]) ? $values["{$k}_label"] : '';
