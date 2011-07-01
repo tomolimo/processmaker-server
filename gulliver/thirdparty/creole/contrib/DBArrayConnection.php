@@ -245,6 +245,10 @@ class DBArrayConnection implements Connection {
     $sql['selectClause'][0] = isset($matches[1]) ? $matches[1] : '';//Include selectClause. By JHL
     $sql['fromClause'][0] = isset($matches[2]) ? $matches[2] : '';
     $sql['whereClause'][0] = isset($matches[3]) ? $matches[3] : '';
+    $sql['groupByClause'][0] = isset($matches[4]) ? $matches[4] : '';
+    $sql['orderByClause'][0] = isset($matches[5]) ? $matches[5] : '';
+    
+
     $sql['limit'] = 0;
     $sql['offset'] = 0;
     return $sql;
