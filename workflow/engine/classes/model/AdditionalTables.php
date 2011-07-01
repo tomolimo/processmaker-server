@@ -425,6 +425,9 @@ class AdditionalTables extends BaseAdditionalTables {
   }
 
   function updateTable($sTableName, $sConnection = 'wf', $aNewFields = array(), $aOldFields = array()) {
+    if ($sConnection == '' || $sConnection == 'wf') {
+      $sConnection = 'workflow';
+    }
     try {
       //$aKeys           = array('PM_UNIQUE_ID');
       $aKeys           = array();
