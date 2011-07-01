@@ -572,7 +572,7 @@ class PMPlugin {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields );
   }
-/**
+  /**
   * With this function we can register a Dashboard Page for Cases Dashboard
   * @param string $sPage
   * @return void
@@ -580,5 +580,27 @@ class PMPlugin {
   function registerTaskExtendedProperty( $sPage, $sName, $sIcon="") {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->registerTaskExtendedProperty ( $this->sNamespace, $sPage, $sName, $sIcon );
+  }
+
+  /**
+   * Register a plugin javascript to run with core js script at same runtime
+   * @param string $coreJsFile
+   * @param array/string $pluginJsFile
+   * @return void
+   */
+  function registerJavascript($sCoreJsFile, $pluginJsFile) {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $oPluginRegistry->registerJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
+  }
+
+  /**
+   * Unregister a plugin javascript
+   * @param string $coreJsFile
+   * @param array/string $pluginJsFile
+   * @return void
+   */
+  function unregisterJavascript($sCoreJsFile, $pluginJsFile) {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    $oPluginRegistry->unregisterJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
   }
 }

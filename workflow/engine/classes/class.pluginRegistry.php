@@ -90,6 +90,11 @@ class PMPluginRegistry {
   private $_aCaseSchedulerPlugin = array();
   private $_aTaskExtendedProperties = array();
 
+  /**
+   * Registry a plugin javascript to include with js core at same runtime
+   */
+  private $_aJavascripts = array();
+
   static private $instance = NULL;
 
   /**
@@ -228,7 +233,7 @@ class PMPluginRegistry {
    *
    * @param unknown_type $sNamespace
    */
-  function disablePlugin($sNamespace )
+  function disablePlugin($sNamespace)
   {
     $found = false;
     foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
@@ -305,7 +310,8 @@ class PMPluginRegistry {
       unset ( $this->_aTaskExtendedProperties[ $key ] );
     }
     
-    
+    //unregistering javascripts from this plugin
+    $this->unregisterJavascripts($sNamespace);
   }
 
   /**
@@ -535,6 +541,108 @@ class PMPluginRegistry {
    */
   function getRegisteredCss() {
     return  $this->_aCSSStyleSheets;
+  }
+
+  /**
+   * Register a plugin javascript to run with core js script at same runtime
+   *
+   * @param string $sNamespace
+   * @param string $coreJsFile
+   * @param array/string $pluginJsFile
+   */
+  function registerJavascript($sNamespace, $sCoreJsFile, $pluginJsFile) {
+
+    foreach ($this->_aJavascripts as $i=>$js) {
+      if ($sCoreJsFile == $js->sCoreJsFile && $sNamespace == $js->sNamespace) {
+        if (is_string($pluginJsFile)) {
+          if (!in_array($pluginJsFile, $this->_aJavascripts[$i]->pluginJsFile)) {
+            $this->_aJavascripts[$i]->pluginJsFile[] = $pluginJsFile; 
+          }
+        } else if (is_array($pluginJsFile)) {
+          $this->_aJavascripts[$i]->pluginJsFile = array_unique(array_merge($pluginJsFile, $this->_aJavascripts[$i]->pluginJsFile));
+        } else {
+          throw new Exception('Invalid third param, $pluginJsFile should be a string or array - '. gettype($pluginJsFile). ' given.');
+        }
+        return $this->_aJavascripts[$i];
+      }
+    }
+  
+    $js = new StdClass();
+    $js->sNamespace   = $sNamespace;
+    $js->sCoreJsFile  = $sCoreJsFile;
+    $js->pluginJsFile = Array();
+
+    if (is_string($pluginJsFile)) {
+      $js->pluginJsFile[] = $pluginJsFile;
+    } else if (is_array($pluginJsFile)){
+      $js->pluginJsFile = array_merge($js->pluginJsFile, $pluginJsFile);
+    } else {
+      throw new Exception('Invalid third param, $pluginJsFile should be a string or array - '. gettype($pluginJsFile). ' given.');
+    }
+
+    $this->_aJavascripts[] = $js;
+  }
+
+  /**
+   * return all plugin javascripts
+   *
+   * @return array
+   */
+  function getRegisteredJavascript() {
+    return  $this->_aJavascripts;
+  }
+
+
+  /**
+   * return all plugin javascripts
+   * @param string $sCoreJsFile
+   * @param string $sNamespace
+   * @return array
+   */
+  function getRegisteredJavascriptBy($sCoreJsFile, $sNamespace='') {
+    $scripts = array();
+
+    if ($sNamespace == '') {
+      foreach ($this->_aJavascripts as $i=>$js) {
+        if ($sCoreJsFile == $js->sCoreJsFile) {
+          $scripts = array_merge($scripts, $this->_aJavascripts[$i]->pluginJsFile);
+        }
+      }
+    } else {
+      foreach ($this->_aJavascripts as $i=>$js) {
+        if ($sCoreJsFile == $js->sCoreJsFile && $sNamespace == $js->sNamespace) {
+          $scripts = array_merge($scripts, $this->_aJavascripts[$i]->pluginJsFile);
+        }
+      }  
+    }
+    return $scripts;
+  }
+
+
+  /**
+   * return all dashboard pages
+   * @param string $sNamespace
+   * @param string $sCoreJsFile
+   * @return array
+   */
+  function unregisterJavascripts($sNamespace, $sCoreJsFile='') {
+    if ($sCoreJsFile == '') { // if $sCoreJsFile=='' unregister all js from this namespace
+      foreach ($this->_aJavascripts as $i=>$js) {
+        if ($sNamespace == $js->sNamespace) {
+          unset($this->_aJavascripts[$i]);
+        }
+      }
+      // Re-index when all js were unregistered
+      $this->_aJavascripts = array_values($this->_aJavascripts);
+    } else {
+      foreach ($this->_aJavascripts as $i=>$js) {
+        if ($sCoreJsFile == $js->sCoreJsFile && $sNamespace == $js->sNamespace) {
+          unset($this->_aJavascripts[$i]);
+          // Re-index for each js that was unregistered
+          $this->_aJavascripts = array_values($this->_aJavascripts);
+        }
+      }
+    }
   }
 
 

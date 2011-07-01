@@ -409,7 +409,11 @@ class headPublisher {
    * later, when we use the includeExtJs function, all the files in this array will be included in the output
    * if the second argument is true, the file will not be minified, this is useful for debug purposes.
    *
+   * Feature added - <erik@colosa.com>
+   * - Hook to find javascript registered from plugins and load them
+   *
    * @author Fernando Ontiveros <fernando@colosa.com>
+   * @author Erik Amaru Ortiz <erik@colosa.com>
    * @access public
    * @return string
    */
@@ -456,6 +460,45 @@ class headPublisher {
         file_put_contents ( $cacheFilename, $content );
       }
     }
+
+    //hook for registered javascripts from plugins
+    $oPluginRegistry = & PMPluginRegistry::getSingleton();
+    $pluginJavascripts = $oPluginRegistry->getRegisteredJavascriptBy($filename);
+    if (count($pluginJavascripts) > 0) {
+      if ($debug) {
+        foreach ($pluginJavascripts as $pluginJsFile) {
+          if (substr($pluginJsFile, -3) != '.js') {
+            $pluginJsFile .= '.js';
+          }
+
+          if (file_exists(PATH_PLUGINS . $pluginJsFile)) {
+            $jsPluginCacheName = str_replace ( '/', '_', str_replace('.js', '', $pluginJsFile) );
+            $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $jsPluginCacheName;
+            file_put_contents ( $cacheFilename, file_get_contents ( PATH_PLUGINS . $pluginJsFile ) ); 
+          }
+        }
+      }
+      else {
+        foreach ($pluginJavascripts as $pluginJsFile) {
+          if (substr($pluginJsFile, -3) !== '.js') {
+            $pluginJsFile .= '.js';
+          }
+          if (file_exists(PATH_PLUGINS . $pluginJsFile)) {
+            $mtime = filemtime ( PATH_PLUGINS . $pluginJsFile );
+            $jsPluginCacheName = md5 ( $mtime . $pluginJsFile );
+            $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $jsPluginCacheName . '.js';
+            
+            if (! file_exists ( $cacheFilename )) {
+              require_once (PATH_THIRDPARTY . 'jsmin/jsmin.php');
+              $content = JSMin::minify ( file_get_contents ( PATH_PLUGINS . $pluginJsFile ) );
+              file_put_contents ( $cacheFilename, $content );
+            }
+          }
+        }
+      }
+      $this->extJsScript [] = '/extjs/' . $jsPluginCacheName;  
+    }
+    //end hook for registered javascripts from plugins
     
     $this->extJsScript [] = '/extjs/' . $cacheName;
   }
