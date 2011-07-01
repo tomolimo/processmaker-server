@@ -176,6 +176,9 @@ switch($action) {
           //setting default columns
           $defaultColumns = array();
           $application = new stdClass(); //APPLICATION KEY
+          $application->uid = '';
+          $application->field_dyn   = '';
+          $application->field_uid   = '';
           $application->field_name  = 'APP_UID';
           $application->field_label = 'APP_UID';
           $application->field_type  = 'VARCHAR';
@@ -187,6 +190,9 @@ switch($action) {
           array_push($defaultColumns, $application);
 
           $application = new stdClass(); //APP_NUMBER
+          $application->uid = '';
+          $application->field_dyn   = '';
+          $application->field_uid   = '';
           $application->field_name  = 'APP_NUMBER';
           $application->field_label = 'APP_NUMBER';
           $application->field_type  = 'INT';
@@ -200,6 +206,9 @@ switch($action) {
           //if it is a grid report table
           if ($data['REP_TAB_TYPE'] == 'GRID') { //GRID INDEX
             $gridIndex = new stdClass();
+            $gridIndex->uid = '';
+            $gridIndex->field_dyn   = '';
+            $gridIndex->field_uid   = '';
             $gridIndex->field_name  = 'ROW';
             $gridIndex->field_label = 'ROW';
             $gridIndex->field_type  = 'INT';
