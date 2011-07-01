@@ -33,6 +33,15 @@ new Ext.KeyMap(document,
    ]
 );
 
+var waitLoading = {};
+waitLoading.show = function() {
+  var mask = Ext.getBody().mask(_("ID_SAVING"), 'x-mask-loading', false);
+  mask.setStyle('z-index', Ext.WindowMgr.zseed + 1000);
+};
+waitLoading.hide = function() {
+  Ext.getBody().unmask();
+};    
+
 var treePanel;
 var rootNode;
 var w;
@@ -279,13 +288,16 @@ NewSubDepartment = function(){
 CloseWindow = function(){
   Ext.getCmp('w').hide();
 };
-
-SaveNewDepartment = function(){ 
+SaveNewDepartment = function(){
+  waitLoading.show();      
   var dep_node = Ext.getCmp('treePanel').getSelectionModel().getSelectedNode();
   if (dep_node) dep_node.unselect();
   var dep_name = newForm.getForm().findField('dep_name').getValue();
-  dep_name = dep_name.trim();
-  if (dep_name=='') return;
+  dep_name = dep_name.trim();      
+  if (dep_name==''){
+    waitLoading.hide();        
+    return;
+  }       
   var dep_parent = newForm.getForm().findField('parent').getValue();
   Ext.Ajax.request({
     url: 'departments_Ajax',
@@ -297,6 +309,7 @@ SaveNewDepartment = function(){
           url: 'departments_Ajax',
           params: {action: 'saveDepartment', name: dep_name, parent: dep_parent},
           success: function(r,o){
+            waitLoading.hide();
             var xtree = Ext.getCmp('treePanel');
             treePanel.getLoader().load(rootNode);
             newSubButton.disable();
@@ -308,14 +321,17 @@ SaveNewDepartment = function(){
             PMExt.notify(_('ID_DEPARTMENTS'), _('ID_DEPARTMENT_SUCCESS_NEW'));
           }, 
           failure: function(r,o){
+            waitLoading.hide();
             DoNothing();
           }
         });
       }else{
+        waitLoading.hide();
         PMExt.error(_('ID_DEPARTMENTS'), _('ID_DEPARTMENT_EXISTS')); 
       }
     },
     failure: function(resp, opt){
+      waitLoading.hide();
       DoNothing();
     }
   });
