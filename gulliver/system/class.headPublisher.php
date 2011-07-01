@@ -465,6 +465,7 @@ class headPublisher {
     $oPluginRegistry = & PMPluginRegistry::getSingleton();
     $pluginJavascripts = $oPluginRegistry->getRegisteredJavascriptBy($filename);
     if (count($pluginJavascripts) > 0) {
+      $jsPluginCacheName = '';
       if ($debug) {
         foreach ($pluginJavascripts as $pluginJsFile) {
           if (substr($pluginJsFile, -3) != '.js') {
@@ -496,7 +497,9 @@ class headPublisher {
           }
         }
       }
-      $this->extJsScript [] = '/extjs/' . $jsPluginCacheName;  
+      if ($jsPluginCacheName != '') {
+        $this->extJsScript [] = '/extjs/' . $jsPluginCacheName;  
+      }
     }
     //end hook for registered javascripts from plugins
     
