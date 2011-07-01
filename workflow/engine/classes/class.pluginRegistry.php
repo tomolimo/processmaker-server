@@ -594,7 +594,7 @@ class PMPluginRegistry {
 
 
   /**
-   * return all plugin javascripts
+   * return all plugin javascripts given a core js file, from all namespaces or a single namespace
    * @param string $sCoreJsFile
    * @param string $sNamespace
    * @return array
@@ -620,7 +620,7 @@ class PMPluginRegistry {
 
 
   /**
-   * return all dashboard pages
+   * unregister all javascripts from a namespace or a js core file given
    * @param string $sNamespace
    * @param string $sCoreJsFile
    * @return array
