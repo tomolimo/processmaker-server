@@ -605,7 +605,7 @@ Ext.onReady(function(){
 
     listeners:{
       select: function(){
-	      comboDbConnections.getStore().reload({params:{PRO_UID : Ext.getCmp('PROCESS').getValue()}});
+              comboDbConnections.getStore().reload({params:{PRO_UID : Ext.getCmp('PROCESS').getValue()}});
         if (Ext.getCmp('REP_TAB_TYPE').getValue() == 'GRID') {
           gridsListStore.reload({params:{PRO_UID : Ext.getCmp('PROCESS').getValue()}});
         } else {
@@ -699,8 +699,8 @@ Ext.onReady(function(){
       }, {
         text:'Cancel',
         handler: function() {
-    	    history.back();
-      	}
+            history.back();
+        }
     }]
   });
 
@@ -736,6 +736,10 @@ Ext.onReady(function(){
   DDLoadFields();
 
 });
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1165,7 +1169,7 @@ function loadTableRowsFromArray(records)
       field_size : records[i].FLD_SIZE,
       field_key  : records[i].FLD_KEY,
       field_null  : records[i].FLD_NULL,
-      field_filter: records[i].FLD_FILTER == '1' ? true : false,
+      field_filter: records[i].FLD_FILTER == '1' ? true : false
     });
 
     store.add(row);
@@ -1179,7 +1183,7 @@ function loadAvFieldsFromArray(records)
   for(i=0; i<records.length; i++) {
     var row = new PMRow({
       FIELD_UID: records[i].FIELD_UID,
-      FIELD_NAME: records[i].FIELD_NAME,
+      FIELD_NAME: records[i].FIELD_NAME
     });
 
     availableGrid.getStore().add(row);
