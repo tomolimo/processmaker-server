@@ -51,13 +51,24 @@ class soapNtlm {
    * @return unknown
    */
   public function stream_open($path, $mode, $options, $opened_path) {
-    //echo "[NTLMStream::stream_open] $path , mode=$mode \n";
+    echo "[NTLMStream::stream_open] $path , mode=$mode \n";
+
+    $authPath=explode("|",  urldecode($path));
+    G::pr($authPath);
+    $path=$authPath[0];
+    G::pr($path);
+    $authO=explode(":",$authPath[1]);
+    G::pr($authO);
+
+
     $this->path = $path;
+    $this->user=$authO[0];
+    $this->password=$authO[1];
     $this->mode = $mode;
     $this->options = $options;
     $this->opened_path = $opened_path;
 
-    $this->createBuffer($path);
+    $this->createBuffer($this->path);
 
     return true;
   }
@@ -67,7 +78,7 @@ class soapNtlm {
    *
    */
   public function stream_close() {
-    //echo "[NTLMStream::stream_close] \n";
+    echo "[NTLMStream::stream_close] \n";
     curl_close($this->ch);
   }
 
@@ -78,7 +89,7 @@ class soapNtlm {
    * @return content from pos to count
    */
   public function stream_read($count) {
-    //echo "[NTLMStream::stream_read] $count \n";
+    echo "[NTLMStream::stream_read] $count \n";
     if (strlen($this->buffer) == 0) {
       return false;
     }
@@ -97,7 +108,7 @@ class soapNtlm {
    * @return content from pos to count
    */
   public function stream_write($data) {
-    //echo "[NTLMStream::stream_write] \n";
+    echo "[NTLMStream::stream_write] \n";
     if (strlen($this->buffer) == 0) {
       return false;
     }
@@ -109,7 +120,7 @@ class soapNtlm {
    * @return true if eof else false
    */
   public function stream_eof() {
-    //echo "[NTLMStream::stream_eof] ";
+    echo "[NTLMStream::stream_eof] ";
     if ($this->pos > strlen($this->buffer)) {
       echo "true \n";
       return true;
@@ -131,7 +142,7 @@ class soapNtlm {
    * Flush stream data
    */
   public function stream_flush() {
-    //echo "[NTLMStream::stream_flush] \n";
+    echo "[NTLMStream::stream_flush] \n";
     $this->buffer = null;
     $this->pos = null;
   }
@@ -142,7 +153,7 @@ class soapNtlm {
    * @return array stat information
    */
   public function stream_stat() {
-    //echo "[NTLMStream::stream_stat] \n";
+    echo "[NTLMStream::stream_stat] \n";
 
     $this->createBuffer($this->path);
     $stat = array(
@@ -158,8 +169,16 @@ class soapNtlm {
    * @return array stat information
    */
   public function url_stat($path, $flags) {
-    //echo "[NTLMStream::url_stat] \n";
-    $this->createBuffer($path);
+    echo "[NTLMStream::url_stat] -> $path \n";
+    $authPath=explode("|",  urldecode($path));
+    G::pr($authPath);
+    $path=$authPath[0];
+    G::pr($path);
+    $authO=explode(":",$authPath[1]);
+    G::pr($authO);
+    $this->user=$authO[0];
+    $this->password=$authO[1];
+    $this->createBuffer($this->path);
     $stat = array(
         'size' => strlen($this->buffer),
     );
@@ -177,15 +196,16 @@ class soapNtlm {
       return;
     }
 
-    //echo "[NTLMStream::createBuffer] create buffer from : $path\n";
-    $this->ch = curl_init($path);
+    echo "[NTLMStream::createBuffer] create buffer from : $path \n";
+    $this->ch = curl_init($this->path);
     curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($this->ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
     curl_setopt($this->ch, CURLOPT_USERPWD, $this->user . ':' . $this->password);
+G::pr($this->ch);
     echo $this->buffer = curl_exec($this->ch);
 
-    //echo "[NTLMStream::createBuffer] buffer size : " . strlen($this->buffer) . "bytes\n";
+    echo "[NTLMStream::createBuffer] buffer size : " . strlen($this->buffer) . "bytes\n";
     $this->pos = 0;
   }
 
@@ -229,6 +249,12 @@ class PMServiceNTLMSoapClient extends NTLMSoapClient {
 
   protected $user;
   protected $password;
+
+  function setAuth($auth){
+    $authInfo=explode(":",$auth);
+    $this->user=$authInfo[0];
+    $this->password=$authInfo[1];
+  }
 
 }
 
