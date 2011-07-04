@@ -200,6 +200,7 @@ Ext.onReady(function(){
         //defaults: Ext.apply({}, Ext.isGecko? {style:{position:'absolute'},hideMode:'visibility'}:false),
         
         items:[{
+          id: 'casesTab',
           title: _('ID_CASE') +' ' + _APP_NUM,
           frameConfig:{name:'openCaseFrame', id:'openCaseFrame'},
           defaultSrc : uri,
