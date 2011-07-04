@@ -974,8 +974,22 @@
 
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('$sStatus');");
-
+  $oHeadPublisher->addScriptCode("
+    if (typeof parent != 'undefined') {
+      parent.showCaseNavigatorPanel('$sStatus');
+    }
+  ");
+  //we are setting the title with variables here
+  $findme   = '#';
+  $pos = strpos($sTitleCase, $findme);
+  if ($pos === false && $pos==0) {
+      $oHeadPublisher->addScriptCode("
+    if (typeof parent != 'undefined') {
+      parent.Ext.getCmp('casesTab').setTitle('$sTitleCase');
+    }
+  ");
+  }
+  
   G::RenderPage('publish', 'blank');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){
