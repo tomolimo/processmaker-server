@@ -440,12 +440,13 @@ class dbConnections
    * @return string
    */
   public function getPassWithoutEncrypt($aInfoCon){
-   if($aInfoCon['DBS_PASSWORD']!=''){
-    $aPassw =explode('_',$aInfoCon['DBS_PASSWORD']);
-    $passw = $aPassw[0];
-    if(sizeof($aPassw)>1)
-      $passw = ($passw == 'none') ? "": G::decrypt($passw,$aInfoCon['DBS_DATABASE_NAME']);
+    $passw='';
+    if($aInfoCon['DBS_PASSWORD']!=''){
+     $aPassw =explode('_',$aInfoCon['DBS_PASSWORD']);
+     $passw = $aPassw[0];
+     if(sizeof($aPassw)>1)
+       $passw = ($passw == 'none') ? "": G::decrypt($passw,$aInfoCon['DBS_DATABASE_NAME']);
+    }
+   return $passw;
    }
-  return $passw;
-  }
 }
