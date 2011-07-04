@@ -19,7 +19,7 @@
 /**
  * Sharepoint Triggers that allow ProcessMaker to perform common DWS actions
  * @class pmTrSharepoint
- * @name Sharepoint DWS Triggers
+ * @name Sharepoint DWS Triggers v. 0.1
  * @icon /images/triggers/sharepoint.gif
  * @className class.pmTrSharepoint.pmFunctions.php
  */
@@ -43,7 +43,7 @@
  *
  */
 function createDWS($sharepointServer, $auth, $name="", $users="", $title="", $documents="", $result="") {
-  print "Trigger: createDWS";
+  //print "Trigger: createDWS";
   require_once(PATH_CORE. 'classes' . PATH_SEP.'triggers' . PATH_SEP . 'class.pmTrSharepoint.php');
   $pmTrSharepoint = new pmTrSharepointClass($sharepointServer, $auth);
   $beforeResult = $pmTrSharepoint->createDWS($name, $users, $title, $documents);
