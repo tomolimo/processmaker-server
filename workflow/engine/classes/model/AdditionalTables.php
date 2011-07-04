@@ -493,9 +493,11 @@ class AdditionalTables extends BaseAdditionalTables {
       $con = Propel::getConnection($sConnection);
       $stmt = $con->createStatement();
       $sQuery = $oDataBase->generateDropPrimaryKeysSQL($sTableName);
-
-      $rs = $stmt->executeQuery($sQuery);
-
+      try {
+        $rs = $stmt->executeQuery($sQuery);
+      } catch(PDOException $oException ) {
+        throw $oException;
+      }
       foreach ($aFieldsToAdd as $aFieldToAdd) {
         switch ($aFieldToAdd['FLD_TYPE']) {
           case 'VARCHAR':
