@@ -51,7 +51,7 @@ Ext.onReady(function(){
     });
 
     newReportTableButton = new Ext.Action({
-        text: 'New',
+        text: _("ID_NEW"),
         //iconCls: 'button_menu_ext ss_sprite ss_add',
         icon: '/images/addc.png',
         handler: newReportTable
@@ -281,10 +281,10 @@ Ext.onReady(function(){
 
     processComboBox = new Ext.form.ComboBox({
       id: 'PROCESS',
-      fieldLabel : 'Process',
+      fieldLabel : 'Process1',
       hiddenName : 'PRO_UID',
       store : processStore,
-      emptyText: 'Select a process',
+      emptyText: _("ID_EMPTY_PROCESSES"),
       valueField : 'PRO_UID',
       displayField : 'PRO_TITLE',
 
@@ -310,7 +310,7 @@ Ext.onReady(function(){
       //dataButton,'-' ,
     tbar.push({xtype: 'tbfill'})
     if (PRO_UID === false) {
-      tbar.push('process');
+      tbar.push(_("ID_PROCESS"));
       tbar.push(processComboBox);
       tbar.push(clearTextButton1);
     }
@@ -450,7 +450,7 @@ DeletePMTable = function(){
             result = Ext.util.JSON.decode(resp.responseText);
             if (result.success) {
             iGrid.getStore().reload();
-            PMExt.notify('DELETION SUCCESSFULLY', 'All records was deleted successfully!');
+            PMExt.notify(_("ID_DELETION_SUCCESSFULLY"), _("ID_ALL_RECORDS_DELETED_SUCESSFULLY"));
             } else {
             Ext.Msg.alert( _('ID_ERROR'), result.msg);
             }
