@@ -550,7 +550,7 @@ class Log
             PEAR_LOG_DEBUG   => 'debug'
         );
 
-        return $levels[$priority];
+        return (isset($priority) && $priority != '')? $levels[$priority]: '';
     }
 
     /**
