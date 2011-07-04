@@ -102,14 +102,14 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	 * The value for the sch_last_state field.
 	 * @var        string
 	 */
-	protected $sch_last_state;
+	protected $sch_last_state = '';
 
 
 	/**
 	 * The value for the usr_uid field.
 	 * @var        string
 	 */
-	protected $usr_uid;
+	protected $usr_uid = '';
 
 
 	/**
@@ -137,7 +137,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	 * The value for the sch_days_perform_task field.
 	 * @var        string
 	 */
-	protected $sch_days_perform_task;
+	protected $sch_days_perform_task = '';
 
 
 	/**
@@ -158,7 +158,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	 * The value for the sch_start_day field.
 	 * @var        string
 	 */
-	protected $sch_start_day;
+	protected $sch_start_day = '';
 
 
 	/**
@@ -179,14 +179,14 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 	 * The value for the sch_repeat_every field.
 	 * @var        string
 	 */
-	protected $sch_repeat_every;
+	protected $sch_repeat_every = '';
 
 
 	/**
 	 * The value for the sch_repeat_until field.
 	 * @var        string
 	 */
-	protected $sch_repeat_until;
+	protected $sch_repeat_until = '';
 
 
 	/**
@@ -830,7 +830,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->sch_last_state !== $v) {
+		if ($this->sch_last_state !== $v || $v === '') {
 			$this->sch_last_state = $v;
 			$this->modifiedColumns[] = CaseSchedulerPeer::SCH_LAST_STATE;
 		}
@@ -852,7 +852,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->usr_uid !== $v) {
+		if ($this->usr_uid !== $v || $v === '') {
 			$this->usr_uid = $v;
 			$this->modifiedColumns[] = CaseSchedulerPeer::USR_UID;
 		}
@@ -944,7 +944,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->sch_days_perform_task !== $v) {
+		if ($this->sch_days_perform_task !== $v || $v === '') {
 			$this->sch_days_perform_task = $v;
 			$this->modifiedColumns[] = CaseSchedulerPeer::SCH_DAYS_PERFORM_TASK;
 		}
@@ -1010,7 +1010,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->sch_start_day !== $v) {
+		if ($this->sch_start_day !== $v || $v === '') {
 			$this->sch_start_day = $v;
 			$this->modifiedColumns[] = CaseSchedulerPeer::SCH_START_DAY;
 		}
@@ -1078,7 +1078,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->sch_repeat_every !== $v) {
+		if ($this->sch_repeat_every !== $v || $v === '') {
 			$this->sch_repeat_every = $v;
 			$this->modifiedColumns[] = CaseSchedulerPeer::SCH_REPEAT_EVERY;
 		}
@@ -1100,7 +1100,7 @@ abstract class BaseCaseScheduler extends BaseObject  implements Persistent {
 			$v = (string) $v; 
 		}
 
-		if ($this->sch_repeat_until !== $v) {
+		if ($this->sch_repeat_until !== $v || $v === '') {
 			$this->sch_repeat_until = $v;
 			$this->modifiedColumns[] = CaseSchedulerPeer::SCH_REPEAT_UNTIL;
 		}

@@ -2563,19 +2563,19 @@
     <column name="SCH_TIME_NEXT_RUN" type="TIMESTAMP" required="true"/>
     <column name="SCH_LAST_RUN_TIME" type="TIMESTAMP" required="false"/>
     <column name="SCH_STATE" type="VARCHAR" size="15" required="true" default="ACTIVE"/>
-    <column name="SCH_LAST_STATE" type="VARCHAR" size="60" required="true"/>
-    <column name="USR_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="SCH_LAST_STATE" type="VARCHAR" size="60" required="true" default="" />
+    <column name="USR_UID" type="VARCHAR" size="32" required="true" default="" />
     <column name="SCH_OPTION" type="TINYINT" required="true" default="0"/>
     <column name="SCH_START_TIME" type="TIMESTAMP" required="true"/>
     <column name="SCH_START_DATE" type="TIMESTAMP" required="true"/>
-    <column name="SCH_DAYS_PERFORM_TASK" type="CHAR" size="5" required="true"/>
+    <column name="SCH_DAYS_PERFORM_TASK" type="CHAR" size="5" required="true" default="" />
     <column name="SCH_EVERY_DAYS" type="TINYINT" required="false" default="0"/>
     <column name="SCH_WEEK_DAYS" type="CHAR" size="14" required="true" default="0|0|0|0|0|0|0"/>
-    <column name="SCH_START_DAY" type="CHAR" size="6" required="true"/>
+    <column name="SCH_START_DAY" type="CHAR" size="6" required="true" default="" />
     <column name="SCH_MONTHS" type="CHAR" size="24" required="true" default="0|0|0|0|0|0|0|0|0|0|0|0"/>
     <column name="SCH_END_DATE" type="TIMESTAMP" required="false"/>
-    <column name="SCH_REPEAT_EVERY" type="VARCHAR" size="15" required="true"/>
-    <column name="SCH_REPEAT_UNTIL" type="VARCHAR" size="15" required="true"/>
+    <column name="SCH_REPEAT_EVERY" type="VARCHAR" size="15" required="true" default="" />
+    <column name="SCH_REPEAT_UNTIL" type="VARCHAR" size="15" required="true" default="" />
     <column name="SCH_REPEAT_STOP_IF_RUNNING" type="TINYINT" required="false" default="0"/>
     <column name="CASE_SH_PLUGIN_UID" type="VARCHAR" size="100" required="false"/>
   </table>

@@ -82,7 +82,10 @@ try {
   $sMonths = '';
   $sStartDay = '';
   $nSW = 0;
-
+  $aData['SCH_START_DAY']         = '';
+  $aData['SCH_REPEAT_EVERY']      = '';
+  $aData['SCH_REPEAT_UNTIL']      = '';
+  $aData['SCH_DAYS_PERFORM_TASK'] = '';
   switch($sOption){
     case '1' : 	// Option 1
       $sValue = $_POST['form']['SCH_DAYS_PERFORM_TASK'];
