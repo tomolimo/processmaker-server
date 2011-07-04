@@ -64,7 +64,7 @@ Ext.onReady(function(){
         hidden:true,
         hideable:false
       }, {
-        header : 'Dynaform Fields',
+        header : _("ID_DYNAFORM_FIELDS"),
         dataIndex : 'FIELD_NAME',
         sortable : true,
         align:'left'
@@ -151,7 +151,7 @@ Ext.onReady(function(){
       },
       {
           id: 'field_dyn',
-          header: 'Dynaform Field',
+          header: _("ID_DYNAFORM_FIELD"),
           dataIndex: 'field_dyn',
           width: 220,
           // use shorthand alias defined above
@@ -162,7 +162,7 @@ Ext.onReady(function(){
           }
       }, {
           id: 'field_name',
-          header: 'Field Name',
+          header: _("ID_FIELD_NAME"),
           dataIndex: 'field_name',
           width: 220,
           editor: {
@@ -179,7 +179,7 @@ Ext.onReady(function(){
           }
       }, {
           id: 'field_label',
-          header: 'Field Label',
+          header: _("ID_FIELD_LABEL"),
           dataIndex: 'field_label',
           width: 220,
           editor:{
@@ -188,7 +188,7 @@ Ext.onReady(function(){
           }
       }, {
           id: 'field_type',
-          header: 'Type',
+          header: _("ID_TYPE"),
           dataIndex: 'field_type',
           width: 130,
           editor: new fm.ComboBox({
@@ -201,13 +201,13 @@ Ext.onReady(function(){
               valueField:'type_id',
               store: new Ext.data.SimpleStore({
                   fields: ['type_id', 'type'],
-                  data : [['VARCHAR','VARCHAR'],['TEXT','TEXT'],['DATE','DATE'],['INT','INT'],['FLOAT','FLOAT']],
+                  data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
                   sortInfo: {field:'type_id', direction:'ASC'}
               })
           })
       }, {
           id: 'field_size',
-          header: 'Size',
+          header: _("ID_SIZE"),
           dataIndex: 'field_size',
           width: 70,
           align: 'right',
@@ -257,7 +257,7 @@ Ext.onReady(function(){
   });
   //row editor for table columns grid
   var editor = new Ext.ux.grid.RowEditor({
-      saveText: 'Update'
+      saveText: _("ID_UPDATE")
   });
 
   editor.on({
@@ -287,7 +287,7 @@ Ext.onReady(function(){
     plugins: [editor, checkColumn],
     tbar: [
       {
-        text: 'Add custom column',
+        text: _("ID_ADD_CUSTOM_COLUMN"),
         handler: function() {
           var PMRow = assignedGrid.getStore().recordType;
           //var meta = mapPMFieldType(records[i].data['FIELD_UID']);
@@ -394,7 +394,7 @@ Ext.onReady(function(){
 
   var types = new Ext.data.SimpleStore({
     fields: ['REP_TAB_TYPE', 'type'],
-    data : [['NORMAL','Global'],['GRID','Grid']]
+    data : [['NORMAL',_("ID_GLOBAL")],['GRID',_("ID_GRID")]]
   });
 
   comboReport = new Ext.form.ComboBox({
@@ -462,7 +462,7 @@ Ext.onReady(function(){
 
   comboDbConnections = new Ext.form.ComboBox({
     id: 'REP_TAB_CONNECTION',
-    fieldLabel : 'DB Connection',
+    fieldLabel : _("ID_DB_CONNECTION"),
     hiddenName : 'DBS_UID',
     store : dbConnectionsStore,
     //value: 'rp',
@@ -509,7 +509,7 @@ Ext.onReady(function(){
     fieldLabel : 'Grid',
     hiddenName : 'FIELD_UID',
     store : gridsListStore,
-    emptyText: 'Select a grid',
+    emptyText: _("ID_SELECT_GRID"),
     //hidden:true,
     //hideLabel: true,
     //value: 'rp',
@@ -588,10 +588,10 @@ Ext.onReady(function(){
 
   processComboBox = new Ext.form.ComboBox({
     id: 'PROCESS',
-    fieldLabel : 'Process',
+    fieldLabel : _("ID_CASESLIST_APP_PRO_TITLE"),
     hiddenName : 'PRO_UID',
     store : processStore,
-    emptyText: 'Select a process',
+    emptyText: _("ID_EMPTY_PROCESSES"),
     valueField : 'PRO_UID',
     displayField : 'PRO_TITLE',
 
@@ -634,9 +634,9 @@ Ext.onReady(function(){
 
   items.push({
     id: 'REP_TAB_NAME',
-    fieldLabel: 'Table Name',
+    fieldLabel: _("ID_TABLE_NAME"),
     xtype:'textfield',
-    emptyText: 'Set a Table Name',
+    emptyText: _("ID_SET_A_TABLE_NAME"),
     width: 250,
     stripCharsRe: /(\W+)/g,
     style:'text-transform: uppercase',
@@ -648,9 +648,9 @@ Ext.onReady(function(){
   });
   items.push({
     id: 'REP_TAB_DSC',
-    fieldLabel: 'Description',
+    fieldLabel: _("ID_DESCRIPTION"),
     xtype:'textarea',
-    emptyText: 'Set a Table Description',
+    emptyText: _("ID_SET_TABLE_DESCRIPTION"),
     width: 250,
     height: 40,
     allowBlank: true
@@ -662,7 +662,7 @@ Ext.onReady(function(){
   });
   items.push({
     xtype: 'compositefield',
-    fieldLabel: 'Type',
+    fieldLabel: _("ID_TYPE"),
     msgTarget : 'side',
     anchor    : '-20',
     defaults  : {flex: 1 },
@@ -694,10 +694,10 @@ Ext.onReady(function(){
   southPanel = new Ext.FormPanel({
     region: 'south',
     buttons:[ {
-        text: TABLE === false ? 'Create' : 'Update',
+        text: TABLE === false ? _("ID_CREATE") : _("ID_UPDATE"),
         handler: createReportTable
       }, {
-        text:'Cancel',
+        text:_("ID_CANCEL"),
         handler: function() {
             history.back();
         }
