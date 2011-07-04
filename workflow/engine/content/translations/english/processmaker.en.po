@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.30.rc10-2-g32c0316\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.30.rc12-9-gdac83c0\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-06-30 10:18:48\n"
+"PO-Revision-Date: 2011-07-04 12:38:01\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -10141,6 +10141,108 @@ msgstr "This site is not available"
 msgid "Are you sure to create this site?"
 msgstr "Are you sure to create this site?"
 
+# TRANSLATION
+# LABEL/ID_SAVING
+#: LABEL/ID_SAVING
+msgid "Saving..."
+msgstr "Saving..."
+
+# TRANSLATION
+# LABEL/ID_SET_A_TABLE_NAME
+#: LABEL/ID_SET_A_TABLE_NAME
+msgid "Set a Table Name"
+msgstr "Set a Table Name"
+
+# TRANSLATION
+# LABEL/ID_SET_TABLE_DESCRIPTION
+#: LABEL/ID_SET_TABLE_DESCRIPTION
+msgid "Set a Table Description"
+msgstr "Set a Table Description"
+
+# TRANSLATION
+# LABEL/ID_SELECT_GRID
+#: LABEL/ID_SELECT_GRID
+msgid "Select a grid"
+msgstr "Select a grid"
+
+# TRANSLATION
+# LABEL/ID_GLOBAL
+#: LABEL/ID_GLOBAL
+msgid "Global"
+msgstr "Global"
+
+# TRANSLATION
+# LABEL/ID_DB_CONNECTION
+#: LABEL/ID_DB_CONNECTION
+msgid "DB Connection"
+msgstr "DB Connection"
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_FIELDS
+#: LABEL/ID_DYNAFORM_FIELDS
+msgid "Dynaform Fields"
+msgstr "Dynaform Fields"
+
+# TRANSLATION
+# LABEL/ID_FIELD_LABEL
+#: LABEL/ID_FIELD_LABEL
+msgid "Field Label"
+msgstr "Field Label"
+
+# TRANSLATION
+# LABEL/ID_ADD_CUSTOM_COLUMN
+#: LABEL/ID_ADD_CUSTOM_COLUMN
+msgid "Add Custom Column"
+msgstr "Add Custom Column"
+
+# TRANSLATION
+# LABEL/ID_VARCHAR
+#: LABEL/ID_VARCHAR
+msgid "VARCHAR"
+msgstr "VARCHAR"
+
+# TRANSLATION
+# LABEL/ID_TEXT
+#: LABEL/ID_TEXT
+msgid "TEXT"
+msgstr "TEXT"
+
+# TRANSLATION
+# LABEL/ID_DATE
+#: LABEL/ID_DATE
+msgid "DATE"
+msgstr "DATE"
+
+# TRANSLATION
+# LABEL/ID_INT
+#: LABEL/ID_INT
+msgid "INT"
+msgstr "INT"
+
+# TRANSLATION
+# LABEL/ID_FLOAT
+#: LABEL/ID_FLOAT
+msgid "FLOAT"
+msgstr "FLOAT"
+
+# TRANSLATION
+# LABEL/ID_UPDATE
+#: LABEL/ID_UPDATE
+msgid "Update"
+msgstr "Update"
+
+# TRANSLATION
+# LABEL/ID_ALL_RECORDS_DELETED_SUCESSFULLY
+#: LABEL/ID_ALL_RECORDS_DELETED_SUCESSFULLY
+msgid "All records was deleted successfully!"
+msgstr "All records was deleted successfully!"
+
+# TRANSLATION
+# LABEL/ID_DELETION_SUCCESSFULLY
+#: LABEL/ID_DELETION_SUCCESSFULLY
+msgid "DELETION SUCCESSFULLY"
+msgstr "DELETION SUCCESSFULLY"
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -10312,7 +10414,7 @@ msgstr "Field Name"
 # additionalTables/additionalTablesFields.xml?FLD_DESCRIPTION
 # additionalTables/additionalTablesFields.xml
 #: text - FLD_DESCRIPTION
-msgid "Field Label"
+msgid "[additionalTables/additionalTablesFields.xml?FLD_DESCRIPTION] Field Label"
 msgstr "Field Label"
 
 # additionalTables/additionalTablesFields.xml?FLD_TYPE
@@ -13174,7 +13276,7 @@ msgstr "TO"
 # cases/cases_MessagesView.xml?APP_MSG_DATE
 # cases/cases_MessagesView.xml
 #: text - APP_MSG_DATE
-msgid "DATE"
+msgid "[cases/cases_MessagesView.xml?APP_MSG_DATE] DATE"
 msgstr "DATE"
 
 # cases/cases_MessagesView.xml?APP_MSG_BODY
@@ -13990,7 +14092,7 @@ msgstr "Start a case based on following registered Plugin."
 # cases/cases_Scheduler_Edit.xml?UPDATE
 # cases/cases_Scheduler_Edit.xml
 #: submit - UPDATE
-msgid "Update"
+msgid "[cases/cases_Scheduler_Edit.xml?UPDATE] Update"
 msgstr "Update"
 
 # cases/cases_Scheduler_List.xml?SCH_NAME
@@ -16324,59 +16426,59 @@ msgstr "Options Mask"
 # dynaforms/datemask.xml?option1
 # dynaforms/datemask.xml
 #: subtitle - option1
-msgid "%a — abbreviated weekday namen\n"
-"<br> %A — full weekday namen\n"
-"<br> %b — abbreviated month namen\n"
-"<br> %B — full month namen\n"
-"<br> %C — the century numbern\n"
-"<br> %d — the day of the month (range 01 to 31)n\n"
-"<br> %e — the day of the month (range 1 to 31)n\n"
-"<br> %H — hour, range 00 to 23 (24h format)n\n"
-"<br> %I — hour, range 01 to 12 (12h format)n\n"
-"<br> %j — day of the year (range 001 to 366)n\n"
-"<br> %k — hour, range 0 to 23 (24h format)n\n"
-"<br> %l — hour, range 1 to 12 (12h format)n\n"
-"<br> %m — month, range 01 to 12n\n"
-"<br> %o — month, range 1 to 12n\n"
-"<br> %M — minute, range 00 to 59n\n"
-"<br> %n — a newline charactern\n"
-"<br> %p — PM or AMn\n"
-"<br> %P — pm or amn\n"
-"<br> %s — UNIX time (number of seconds since 1970-01-01)n\n"
-"<br> %S — seconds, range 00 to 59n\n"
-"<br> %t — a tab charactern\n"
-"<br> %W — week numbern\n"
-"<br> %u — the day of the week (range 1 to 7, 1 = MON)n\n"
-"<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
-"<br> %y — year without the century (range 00 to 99)n\n"
-"<br> %Y — year with the centuryn\n"
+msgid "%a — abbreviated weekday name\n"
+"<br> %A — full weekday name\n"
+"<br> %b — abbreviated month name\n"
+"<br> %B — full month name\n"
+"<br> %C — the century number\n"
+"<br> %d — the day of the month (range 01 to 31)\n"
+"<br> %e — the day of the month (range 1 to 31)\n"
+"<br> %H — hour, range 00 to 23 (24h format)\n"
+"<br> %I — hour, range 01 to 12 (12h format)\n"
+"<br> %j — day of the year (range 001 to 366)\n"
+"<br> %k — hour, range 0 to 23 (24h format)\n"
+"<br> %l — hour, range 1 to 12 (12h format)\n"
+"<br> %m — month, range 01 to 12\n"
+"<br> %o — month, range 1 to 12\n"
+"<br> %M — minute, range 00 to 59\n"
+"<br> %n — a newline character\n"
+"<br> %p — PM or AM\n"
+"<br> %P — pm or am\n"
+"<br> %s — UNIX time (number of seconds since 1970-01-01)\n"
+"<br> %S — seconds, range 00 to 59\n"
+"<br> %t — a tab character\n"
+"<br> %W — week number\n"
+"<br> %u — the day of the week (range 1 to 7, 1 = MON)\n"
+"<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
+"<br> %y — year without the century (range 00 to 99)\n"
+"<br> %Y — year with the century\n"
 "<br> %% — a literal '%' character"
-msgstr "%a — abbreviated weekday namen\n"
-"<br> %A — full weekday namen\n"
-"<br> %b — abbreviated month namen\n"
-"<br> %B — full month namen\n"
-"<br> %C — the century numbern\n"
-"<br> %d — the day of the month (range 01 to 31)n\n"
-"<br> %e — the day of the month (range 1 to 31)n\n"
-"<br> %H — hour, range 00 to 23 (24h format)n\n"
-"<br> %I — hour, range 01 to 12 (12h format)n\n"
-"<br> %j — day of the year (range 001 to 366)n\n"
-"<br> %k — hour, range 0 to 23 (24h format)n\n"
-"<br> %l — hour, range 1 to 12 (12h format)n\n"
-"<br> %m — month, range 01 to 12n\n"
-"<br> %o — month, range 1 to 12n\n"
-"<br> %M — minute, range 00 to 59n\n"
-"<br> %n — a newline charactern\n"
-"<br> %p — PM or AMn\n"
-"<br> %P — pm or amn\n"
-"<br> %s — UNIX time (number of seconds since 1970-01-01)n\n"
-"<br> %S — seconds, range 00 to 59n\n"
-"<br> %t — a tab charactern\n"
-"<br> %W — week numbern\n"
-"<br> %u — the day of the week (range 1 to 7, 1 = MON)n\n"
-"<br> %w — the day of the week (range 0 to 6, 0 = SUN)n\n"
-"<br> %y — year without the century (range 00 to 99)n\n"
-"<br> %Y — year with the centuryn\n"
+msgstr "%a — abbreviated weekday name\n"
+"<br> %A — full weekday name\n"
+"<br> %b — abbreviated month name\n"
+"<br> %B — full month name\n"
+"<br> %C — the century number\n"
+"<br> %d — the day of the month (range 01 to 31)\n"
+"<br> %e — the day of the month (range 1 to 31)\n"
+"<br> %H — hour, range 00 to 23 (24h format)\n"
+"<br> %I — hour, range 01 to 12 (12h format)\n"
+"<br> %j — day of the year (range 001 to 366)\n"
+"<br> %k — hour, range 0 to 23 (24h format)\n"
+"<br> %l — hour, range 1 to 12 (12h format)\n"
+"<br> %m — month, range 01 to 12\n"
+"<br> %o — month, range 1 to 12\n"
+"<br> %M — minute, range 00 to 59\n"
+"<br> %n — a newline character\n"
+"<br> %p — PM or AM\n"
+"<br> %P — pm or am\n"
+"<br> %s — UNIX time (number of seconds since 1970-01-01)\n"
+"<br> %S — seconds, range 00 to 59\n"
+"<br> %t — a tab character\n"
+"<br> %W — week number\n"
+"<br> %u — the day of the week (range 1 to 7, 1 = MON)\n"
+"<br> %w — the day of the week (range 0 to 6, 0 = SUN)\n"
+"<br> %y — year without the century (range 00 to 99)\n"
+"<br> %Y — year with the century\n"
 "<br> %% — a literal '%' character"
 
 # dynaforms/dynaform_Fields.xml?XMLNODE_NAME
@@ -30026,8 +30128,8 @@ msgstr "Relative Start and End Dates"
 # dynaforms/fields/date.xml?PMED_AFTERBEFORE_DESC
 # dynaforms/fields/date.xml
 #: subtitle - PMED_AFTERBEFORE_DESC
-msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
-msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
 
 # dynaforms/fields/date.xml?PME_BEFOREDATE
 # dynaforms/fields/date.xml
