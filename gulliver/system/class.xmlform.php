@@ -1854,6 +1854,26 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText {
     if (isset ( $afterDate ) && $afterDate != '') {
       if ($this->isvalidBeforeFormat ( $afterDate ))
         $endDate = $this->calculateBeforeFormat ( $afterDate, + 1 );
+         if($endDate){
+        $sign='1';
+        $date=$afterDate;
+        $part1 = $sign * substr ( $date, 0, strlen ( $date ) - 1 );
+        $part2 = substr ( $date, strlen ( $date ) - 1 );
+        switch ($part2) {
+          case 'd' :
+            $res = date ( 'Y-m-d', mktime ( 0, 0, 0, date ( 'm' ), date ( 'd' ) + $part1, date ( 'Y' ) ) );
+          break;
+          case 'm' :
+            $res = date ( 'Y-m-d', mktime ( 0, 0, 0, date ( 'm' ) + $part1, date ( 'd' ) - 1, date ( 'Y' ) ) );
+          break;
+          case 'y' :
+            $res = (intVal(date ( 'Y' )) + $part1) . '-' . date ( 'm' ) . '-' . date ( 'd' );
+          break;
+         }
+
+        $endDate=$res;
+
+        }
     }
 
     if (isset ( $this->maxlength ) && is_numeric ( $this->maxlength ) && $this->maxlength >= 1900 && $this->maxlength <= 2100) {
