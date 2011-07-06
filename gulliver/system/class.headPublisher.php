@@ -461,6 +461,9 @@ class headPublisher {
       }
     }
 
+
+    $this->extJsScript [] = '/extjs/' . $cacheName;
+
     //hook for registered javascripts from plugins
     $oPluginRegistry = & PMPluginRegistry::getSingleton();
     $pluginJavascripts = $oPluginRegistry->getRegisteredJavascriptBy($filename);
@@ -474,7 +477,7 @@ class headPublisher {
 
           if (file_exists(PATH_PLUGINS . $pluginJsFile)) {
             $jsPluginCacheName = str_replace ( '/', '_', str_replace('.js', '', $pluginJsFile) );
-            $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $jsPluginCacheName;
+            $cacheFilename = PATH_C . 'ExtJs' . PATH_SEP . $jsPluginCacheName.".js";
             file_put_contents ( $cacheFilename, file_get_contents ( PATH_PLUGINS . $pluginJsFile ) ); 
           }
         }
@@ -503,7 +506,6 @@ class headPublisher {
     }
     //end hook for registered javascripts from plugins
     
-    $this->extJsScript [] = '/extjs/' . $cacheName;
   }
   
   /**
