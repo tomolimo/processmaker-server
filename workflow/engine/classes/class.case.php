@@ -3091,7 +3091,8 @@ class Cases {
       $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, array('INPUT', 'ATTACHED'), CRITERIA::IN);
       $oCriteria->add(AppDocumentPeer::APP_DOC_STATUS, array('ACTIVE'), Criteria::IN);
       //$oCriteria->add($oCriteria->getNewCriterion(AppDocumentPeer::APP_DOC_UID, $aObjectPermissions['INPUT_DOCUMENTS'], Criteria::IN)->addOr($oCriteria->getNewCriterion(AppDocumentPeer::USR_UID, array($sUserUID,'-1'), Criteria::IN)));
-      $oCriteria->addAscendingOrderByColumn(AppDocumentPeer::APP_DOC_INDEX);
+      $oCriteria->addAscendingOrderByColumn(AppDocumentPeer::APP_DOC_UID);
+
       $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
@@ -3155,13 +3156,14 @@ class Cases {
 
         $oDataset->next();
       }
+      
       global $_DBArray;
       $_DBArray['inputDocuments'] = $aInputDocuments;
       $_SESSION['_DBArray'] = $_DBArray;
-      G::LoadClass('ArrayPeer');
+      G::LoadClass('ArrayPeer'); 
       $oCriteria = new Criteria('dbarray');
       $oCriteria->setDBArrayTable('inputDocuments');
-      $oCriteria->addAscendingOrderByColumn(AppDocumentPeer::APP_DOC_INDEX);
+     // $oCriteria->addAscendingOrderByColumn(AppDocumentPeer::APP_DOC_CREATE_DATE);
       return $oCriteria;
     } catch (exception $oException) {
       throw $oException;
