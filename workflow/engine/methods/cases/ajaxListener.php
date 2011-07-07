@@ -105,16 +105,16 @@ class Ajax
     $caseSteps = $step->getAllCaseSteps($PRO_UID, $TAS_UID, $APP_UID);
 
     //g::pr($caseSteps);
-
-    //getting the case record
-    $caseData = $case->loadCase($APP_UID);
-
     //getting externals steps
     $oPluginRegistry = &PMPluginRegistry::getSingleton();
     $externalSteps   = $oPluginRegistry->getSteps();
+    //getting the case record
+    if($APP_UID){
+     $caseData = $case->loadCase($APP_UID);
+     $pmScript = new PMScript();
+     $pmScript->setFields($caseData['APP_DATA']);
+    }
 
-    $pmScript = new PMScript();
-    $pmScript->setFields($caseData['APP_DATA']);
     $externalStepCount = 0;
 
     foreach ($caseSteps as $caseStep) {
