@@ -15,7 +15,7 @@ include_once '{pathClasses}/' . SYS_SYS . '/classes/{className}.php';
 abstract class Base{className}Peer {
 
 	/** the default database name for this class */
-	const DATABASE_NAME = 'workflow';
+	const DATABASE_NAME = '{connection}';
 
 	/** the table name for this class */
 	const TABLE_NAME = '{tableName}';

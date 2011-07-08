@@ -97,6 +97,7 @@ class HttpProxyController {
             
             $result->exception->class = get_class($e);
             $result->exception->code = $e->getCode();
+            $result->exception->trace = $e->getTraceAsString();
         }
         print G::json_encode($result);
     }

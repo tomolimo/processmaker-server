@@ -253,7 +253,7 @@ class AdditionalTables extends BaseAdditionalTables {
   }
 
   function createTable($sTableName, $sConnection = '', $aFields = array()) {
-    $sTableName = $sTableName;
+    
     if ($sConnection == '' || $sConnection == 'wf') {
       $sConnection = 'workflow';
     }
@@ -425,6 +425,8 @@ class AdditionalTables extends BaseAdditionalTables {
   }
 
   function updateTable($sTableName, $sConnection = 'wf', $aNewFields = array(), $aOldFields = array()) {
+    $debug=false;
+
     if ($sConnection == '' || $sConnection == 'wf') {
       $sConnection = 'workflow';
     }
@@ -455,11 +457,25 @@ class AdditionalTables extends BaseAdditionalTables {
           $aFieldsToDelete[] = $aOldField;
         }
       }
-      
 
+      if ($debug) {
+        echo 'new';
+        print_r($aNewFields);
+        echo 'old';
+        print_r($aOldFields);
+        echo 'to add';
+        print_r($aFieldsToAdd);
+        echo 'keys';
+        print_r($aKeys);
+        echo 'to delete';
+        print_r($aFieldsToDelete);
+      }
+      
       foreach ($aNewFields as $aNewField) {
         if (isset($aOldFields[$aNewField['FLD_UID']])) {
+          $aOldField = $aOldFields[$aNewField['FLD_UID']];
           $bEqual = true;
+
           if (trim($aNewField['FLD_NAME']) != trim($aOldField['FLD_NAME'])) {
             $bEqual = false;
           }
@@ -483,7 +499,12 @@ class AdditionalTables extends BaseAdditionalTables {
             $aFieldsToAlter[] = $aNewField;
           }
         }
-      }     
+        
+      }
+
+      if ($debug) {
+        echo 'to alter'; print_r($aFieldsToAlter);
+      }
 
       G::LoadSystem('database_' . strtolower(DB_ADAPTER));
       $oDataBase = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -492,12 +513,28 @@ class AdditionalTables extends BaseAdditionalTables {
       //$oDataBase->executeQuery($oDataBase->generateDropPrimaryKeysSQL($sTableName));
       $con = Propel::getConnection($sConnection);
       $stmt = $con->createStatement();
+     
       $sQuery = $oDataBase->generateDropPrimaryKeysSQL($sTableName);
+      if ($debug) {
+        echo 'sql drop pk';
+        var_dump($sQuery);
+      }
       try {
         $rs = $stmt->executeQuery($sQuery);
       } catch(PDOException $oException ) {
         throw $oException;
       }
+
+      foreach ($aFieldsToDelete as $aFieldToDelete) {
+        //$oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME'])));
+        $sQuery = $oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME']));
+        if ($debug) {
+          echo 'sql drop field';
+          var_dump($sQuery);
+        }
+        $rs = $stmt->executeQuery($sQuery);
+      }
+
       foreach ($aFieldsToAdd as $aFieldToAdd) {
         switch ($aFieldToAdd['FLD_TYPE']) {
           case 'VARCHAR':
@@ -540,17 +577,19 @@ class AdditionalTables extends BaseAdditionalTables {
                
         //$oDataBase->executeQuery($oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData));
         $sQuery = $oDataBase->generateAddColumnSQL($sTableName, strtoupper($aFieldToAdd['FLD_NAME']), $aData);
-        $rs = $stmt->executeQuery($sQuery);
-        
-      }
-      foreach ($aFieldsToDelete as $aFieldToDelete) {
-        //$oDataBase->executeQuery($oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME'])));
-        $sQuery = $oDataBase->generateDropColumnSQL($sTableName, strtoupper($aFieldToDelete['FLD_NAME']));
+        if ($debug) {
+          echo 'sql add';
+          var_dump($sQuery);
+        }
         $rs = $stmt->executeQuery($sQuery);
       }
       
       //$oDataBase->executeQuery($oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys));
       $sQuery = $oDataBase->generateAddPrimaryKeysSQL($sTableName, $aKeys);
+      if ($debug) {
+        echo 'sql gen pk';
+        var_dump($sQuery);
+      }
       $rs = $stmt->executeQuery($sQuery);
       
       foreach ($aFieldsToAlter as $aFieldToAlter) {
@@ -595,6 +634,10 @@ class AdditionalTables extends BaseAdditionalTables {
         //$oDataBase->executeQuery($oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD'])));
 
         $sQuery = $oDataBase->generateChangeColumnSQL($sTableName, strtoupper($aFieldToAlter['FLD_NAME']), $aData, strtoupper($aFieldToAlter['FLD_NAME_OLD']));
+        if ($debug) {
+          echo 'sql alter';
+          var_dump($sQuery);
+        }
         $rs = $stmt->executeQuery($sQuery);
       }
     }
@@ -603,7 +646,7 @@ class AdditionalTables extends BaseAdditionalTables {
     }
   }
 
-  function createPropelClasses($sTableName, $sClassName, $aFields, $sAddTabUid) {
+  function createPropelClasses($sTableName, $sClassName, $aFields, $sAddTabUid, $connection='workflow') {
     try {
       /*$aUID = array('FLD_NAME'           => 'PM_UNIQUE_ID',
                     'FLD_TYPE'           => 'INT',
@@ -632,14 +675,19 @@ class AdditionalTables extends BaseAdditionalTables {
 
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
       if (!file_exists($sPath)) {
-        G::mk_dir($sPath);
+         G::mk_dir($sPath);
+      }
+      if (!file_exists($sPath . 'map')) {
         G::mk_dir($sPath . 'map');
-        G::mk_dir($sPath . 'om');
+      }
+      if (!file_exists($sPath . 'om')) {
+         G::mk_dir($sPath . 'om');
       }
       $aData = array();
       $aData['pathClasses']    = substr(PATH_DB, 0, -1);
       $aData['tableName']      = $sTableName;
       $aData['className']      = $sClassName;
+      $aData['connection']     = $connection;
       $aData['GUID']           = $sAddTabUid;
       $aData['firstColumn']    = strtoupper($aFields[1]['FLD_NAME']);
       $aData['totalColumns']   = count($aFields);
@@ -770,13 +818,13 @@ class AdditionalTables extends BaseAdditionalTables {
           break;
         }
         $aColumns[] = $aColumn;
-        if ($aField['FLD_KEY'] == 'on') {
+        if ($aField['FLD_KEY'] == 1 || $aField['FLD_KEY'] === 'on') {
           $aPKs[] = $aColumn;
         }
         else {
           $aNotPKs[] = $aColumn;
         }
-        if ($aField['FLD_AUTO_INCREMENT'] == 'on') {
+        if ($aField['FLD_AUTO_INCREMENT'] == 1 || $aField['FLD_AUTO_INCREMENT'] === 'on') {
           $aData['useIdGenerator'] = 'true';
         }
         $i++;
@@ -1027,11 +1075,12 @@ class AdditionalTables extends BaseAdditionalTables {
       //deleting clases
       $sClassName = $this->getPHPName($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $aData['ADD_TAB_NAME']);
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+      
       @unlink($sPath . $sClassName . '.php');
       @unlink($sPath . $sClassName . 'Peer.php');
-      @unlink($sPath . PATH_SEP . 'map' . PATH_SEP . $sClassName . 'MapBuilder.php');
-      @unlink($sPath . PATH_SEP . 'om' . PATH_SEP . 'Base' . $sClassName . '.php');
-      @unlink($sPath . PATH_SEP . 'om' . PATH_SEP . 'Base' . $sClassName . 'Peer.php');
+      @unlink($sPath . 'map' . PATH_SEP . $sClassName . 'MapBuilder.php');
+      @unlink($sPath . 'om' . PATH_SEP . 'Base' . $sClassName . '.php');
+      @unlink($sPath . 'om' . PATH_SEP . 'Base' . $sClassName . 'Peer.php');
     }
     catch (Exception $oError) {
       throw($oError);
@@ -1119,7 +1168,10 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       }
 
       $sClassPeerName = $sClassName . 'Peer';
-      $oCriteria = new Criteria('workflow');
+      $con = Propel::getConnection($aData['DBS_UID']);
+      $oCriteria = new Criteria($aData['DBS_UID']);
+      var_dump($aData['DBS_UID']);
+      print_r($oCriteria);
       //eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
       eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
       foreach ($aData['FIELDS'] as $aField) {
@@ -1145,6 +1197,47 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     catch (Exception $oError) {
       throw($oError);
     }
+  }
+
+  function getAllData($sUID, $start=NULL, $limit=NULL)
+  {
+    $aData = $this->load($sUID, true);
+    $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+    $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
+
+    if (file_exists ($sPath . $sClassName . '.php') ) {
+      require_once $sPath . $sClassName . '.php';
+    } else {
+      return null;
+    }
+
+    $sClassPeerName = $sClassName . 'Peer';
+    $con = Propel::getConnection($aData['DBS_UID']);
+    $oCriteria = new Criteria($aData['DBS_UID']);
+    
+    eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
+    foreach ($aData['FIELDS'] as $aField) {
+      eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+    }
+
+    $oCriteriaCount = clone $oCriteria;
+    $count = $sClassPeerName::doCount($oCriteria);
+
+    if (isset($limit)) {
+      $oCriteria->setLimit($limit);
+    }
+    if (isset($start)) {
+      $oCriteria->setOffset($start);
+    }
+    $rs = $sClassPeerName::doSelectRS($oCriteria);
+    $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+
+    $rows = Array();
+    while ($rs->next()) {
+      $rows[] = $rs->getRow();
+    }
+    
+    return array('rows' => $rows, 'count' => $count);
   }
 
   function checkClassNotExist($sUID) {
@@ -1366,6 +1459,8 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
   public function populateReportTable($sTableName, $sConnection = 'rp', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '')
   {
 
+    require_once "classes/model/Application.php";
+    
     $con = Propel::getConnection($sConnection);
     $stmt = $con->createStatement();
     if ($sType == 'GRID') {
@@ -1862,6 +1957,8 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
     $addTables = Array();
+    $proUids   = Array();
+
     while( $oDataset->next() ) {
       $row = $oDataset->getRow();
       $row['PRO_TITLE'] = $row['PRO_DESCRIPTION'] = '';

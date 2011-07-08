@@ -5,7 +5,7 @@ include_once PATH_THIRDPARTY . 'creole/CreoleTypes.php';
 
 
 /**
- * This class adds structure of '{tableName}' table to 'workflow' DatabaseMap object.
+ * This class adds structure of '{tableName}' table to '{connection}' DatabaseMap object.
  *
  *
  *
@@ -57,7 +57,7 @@ class {className}MapBuilder {
 	 */
 	public function doBuild()
 	{
-		$this->dbMap = Propel::getDatabaseMap('workflow');
+		$this->dbMap = Propel::getDatabaseMap('{connection}');
 
 		$tMap = $this->dbMap->addTable('{tableName}');
 

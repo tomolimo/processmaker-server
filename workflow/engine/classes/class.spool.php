@@ -363,7 +363,7 @@ class spoolRun {
           /**
            * Posible Options for SMTPSecure are: "", "ssl" or "tls"
            */
-          if (preg_match('/^(ssl|tls)$/', $this->config['SMTPSecure'])) {
+          if (isset($this->config['SMTPSecure']) && preg_match('/^(ssl|tls)$/', $this->config['SMTPSecure'])) {
             $oPHPMailer->SMTPSecure = $this->config['SMTPSecure'];
           }
           

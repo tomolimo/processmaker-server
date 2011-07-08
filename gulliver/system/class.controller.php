@@ -21,6 +21,8 @@ class Controller
     private $headPublisher;
 
     public $ExtVar = Array();
+
+    public $controllerClass = '';
     
     public function __construct()
     {
@@ -97,7 +99,15 @@ class Controller
             $this->$name($this->__request__);
             
         } catch (Exception $e) {
-            new PMException($e->getMessage(), 1);
+          $template = new TemplatePower(PATH_TEMPLATE . 'controller.exception.tpl');
+          $template->prepare();
+          $template->assign('controller', get_called_class());
+          $template->assign('message', $e->getMessage());
+          $template->assign('file',    $e->getFile());
+          $template->assign('line',    $e->getLine());
+          $template->assign('trace',   $e->getTraceAsString());
+
+          echo $template->getOutputContent();
         }
     }
     

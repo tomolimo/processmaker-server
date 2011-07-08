@@ -1,45 +1,31 @@
 /**
- * Report tables Edit
+ * Report tables New/Edit
  * @author Erik A. O. <erik@colosa.com>
  */
 
-var win;
+//grids define
+var availableGrid;
 
-var store;
-var storeP;
-var storeA;
-var cmodelP;
-var smodelA;
-var smodelP;
-var availableGrid = {};
-var assignedGridGlobal=new Array();
-var MembersPanel;
-var viewport;
+var assignedGrid;
+var editor; // row editor for assignedGrid 
+var store;  // store for assignedGrid
+
+//buttons define
 var assignButton;
 var assignAllButton;
 var removeButton;
 var removeAllButton;
-var backButton;
-var store;
-var REP_TAB_TITLE;
-var REP_TAB_NAME;
-var REP_TAB_TYPE;
-var REP_TAB_CONNECTION;
-var reportGrid;
-var reportTablesGlobal = {};
-reportTablesGlobal.REP_TAB_UID = "";
-reportTablesGlobal.REP_TAB_UID_EDIT = "";
-reportTablesGlobal.REP_TAB_TITTLE = "";
-var oo;
-
+var tmp1 = new Array();
+//main
 Ext.onReady(function(){
 
   var fm = Ext.form;
   var fieldsCount = 0;
+
   // store for available fields grid
   storeA = new Ext.data.GroupingStore( {
     proxy : new Ext.data.HttpProxy({
-      url: 'reportTables_Ajax'
+      url: '../pmTablesProxy/availableFieldsReportTables'
     }),
     reader : new Ext.data.JsonReader( {
       root: 'processFields',
@@ -85,27 +71,27 @@ Ext.onReady(function(){
   });
   //grid for table columns grid
   availableGrid = new Ext.grid.GridPanel({
-    layout: 'fit',
-    region: 'center',
-    id: 'availableGrid',
-    ddGroup         : 'assignedGridDDGroup',
-    enableDragDrop  : true,
-    stripeRows      : true,
-    autoWidth       : true,
-    stripeRows      : true,
-    height          : 100,
-    width           : 200,
-    stateful        : true,
-    stateId         : 'grid',
-    enableColumnResize : true,
-    enableHdMenu  : true,
-    frame      : false,
+    layout         : 'fit',
+    region         : 'center',
+    id             : 'availableGrid',
+    ddGroup        : 'assignedGridDDGroup',
+    enableDragDrop : true,
+    stripeRows     : true,
+    autoWidth      : true,
+    stripeRows     : true,
+    height         : 100,
+    width          : 200,
+    stateful       : true,
+    stateId        : 'grid',
+    enableHdMenu   : false,
     columnLines    : false,
-    viewConfig    : {forceFit:true},
-    cm: cmodelA,
-    sm: smodelA,
-    store: storeA,
-    listeners: {rowdblclick: AssignFieldsAction}
+    viewConfig     : {forceFit:true},
+    cm             : cmodelA,
+    sm             : smodelA,
+    store          : storeA,
+    listeners      : {
+      rowdblclick: AssignFieldsAction
+    }
   });
 
   //selecion model for table columns grid
@@ -170,10 +156,13 @@ Ext.onReady(function(){
             allowBlank: true,
             style:'text-transform: uppercase',
             listeners:{
-              specialkey: function(f,e){
+              /*specialkey: function(f,e){
                 if(e.getKey()==e.ENTER){
-                  this.setValue(this.getValue().toUpperCase())
+                  this.setValue(this.getValue().toUpperCase());
                 }
+              }*/
+              change: function(f,e){
+                this.setValue(this.getValue().toUpperCase());
               }
             }
           }
@@ -190,7 +179,7 @@ Ext.onReady(function(){
           id: 'field_type',
           header: _("ID_TYPE"),
           dataIndex: 'field_type',
-          width: 130,
+          width: 75,
           editor: new fm.ComboBox({
               typeAhead: true,
               triggerAction: 'all',
@@ -256,7 +245,7 @@ Ext.onReady(function(){
       ]
   });
   //row editor for table columns grid
-  var editor = new Ext.ux.grid.RowEditor({
+  editor = new Ext.ux.grid.RowEditor({
       saveText: _("ID_UPDATE")
   });
 
@@ -275,43 +264,55 @@ Ext.onReady(function(){
   //table columns grid
   assignedGrid = new Ext.grid.GridPanel({
     //title: 'Columns',
-    region: 'center',
-    id: 'assignedGrid',
-    ddGroup         : 'availableGridDDGroup',
-    enableDragDrop  : true,
-    enableColumnResize : true,
-    viewConfig    : {forceFit:true},
-    cm: cm,
-    sm: sm,
-    store: store,
-    plugins: [editor, checkColumn],
-    tbar: [
-      {
-        text: _("ID_ADD_CUSTOM_COLUMN"),
-        handler: function() {
-          var PMRow = assignedGrid.getStore().recordType;
-          //var meta = mapPMFieldType(records[i].data['FIELD_UID']);
-          var row = new PMRow({
-            uid  : '',
-            field_uid  : '',
-            field_dyn  : '',
-            field_name  : '',
-            field_label : '',
-            field_type  : '',
-            field_size  : '',
-            field_key   : 0,
-            field_null  : 1
-          });
+    region         : 'center',
+    id             : 'assignedGrid',
+    ddGroup        : 'availableGridDDGroup',
+    enableDragDrop : true,
+    viewConfig     : {forceFit: true},
+    cm             : cm,
+    sm             : sm,
+    store          : store,
+    plugins        : [editor, checkColumn],
+    tbar           : [{
+      icon: '/images/addcolumn.jpg',
+      text: _("ID_ADD_CUSTOM_COLUMN"),
+      handler: addColumn
+    }],
+    listeners: {
+      render: function(grid) {
+        var ddrow = new Ext.dd.DropTarget(grid.getView().mainBody, {
+          ddGroup: 'availableGridDDGroup',
+          copy: false,
+            notifyDrop: function(dd, e, data) {
+            var ds = grid.store;
+            var sm = grid.getSelectionModel();
+            var rows = sm.getSelections();
+            if (dd.getDragData(e)) {
+              var cindex = dd.getDragData(e).rowIndex;
+              //skipping primary keys, we can't reorder
+              if (store.data.items[cindex].data.field_key)
+                return;
 
-          //store.add(row);
-          editor.stopEditing();
-          store.insert(0, row);
-          assignedGrid.getView().refresh();
-          assignedGrid.getSelectionModel().selectRow(0);
-          editor.startEditing(0);
-        }
+              if (typeof(cindex) != "undefined") {
+                for(var i = 0; i < rows.length; i++) {
+                  //skipping primary keys, we can't reorder
+                  if (rows[i].data.field_key ) 
+                    continue;
+
+                  var srcIndex = ds.indexOfId(rows[i].id);
+                  ds.remove(ds.getById(rows[i].id));
+                  if (i > 0 && cindex < srcIndex) {
+                    cindex++;
+                  }
+                  ds.insert(cindex, rows[i]);
+                }
+                sm.selectRecords(rows);
+              }
+            }
+          }
+        });
       }
-    ]
+    }
   });
 
   assignedGrid.getSelectionModel().on('selectionchange', function(sm){
@@ -430,11 +431,10 @@ Ext.onReady(function(){
   dbConnectionsStore = new Ext.data.Store({
     //autoLoad: true,
     proxy : new Ext.data.HttpProxy({
-      url: 'reportTables_Ajax',
+      url: '../pmTablesProxy/getDbConnectionsList',
       method : 'POST'
     }),
     baseParams : {
-      action: 'getDbConnectionsList',
       PRO_UID : ''
     },
     reader : new Ext.data.JsonReader( {
@@ -476,11 +476,10 @@ Ext.onReady(function(){
   gridsListStore = new Ext.data.Store({
     //autoLoad: true,
     proxy : new Ext.data.HttpProxy({
-      url: 'reportTables_Ajax',
+      url: '../pmTablesProxy/availableFieldsReportTables',
       method : 'POST'
     }),
     baseParams : {
-      action: 'availableFieldsReportTables',
       PRO_UID : '',
       TYPE: 'GRID'
     },
@@ -538,7 +537,7 @@ Ext.onReady(function(){
   processStore = new Ext.data.Store( {
     autoLoad: true,
     proxy : new Ext.data.HttpProxy({
-      url: '../reportTables/reportTables_Ajax',
+      url: '../pmTablesProxy/getProcessList',
       method : 'POST'
     }),
     baseParams : {
@@ -700,7 +699,7 @@ Ext.onReady(function(){
         text:_("ID_CANCEL"),
         handler: function() {
           proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
-          location.href = '../reportTables/main' + proParam; //history.back();
+          location.href = '../pmTables' + proParam; //history.back();
         }
     }]
   });
@@ -758,6 +757,8 @@ function createReportTable()
   var allRows = assignedGrid.getStore();
   var columns = new Array();
 
+  var hasSomePrimaryKey = false;
+
   //validate columns count
   if(allRows.getCount() == 0) {
     PMExt.error(_('ID_ERROR'), 'Set columns for this Report Table please.');
@@ -766,42 +767,56 @@ function createReportTable()
 
   for (var r=0; r < allRows.getCount(); r++) {
     row = allRows.getAt(r);
-    //row.data['FIELD_FILTER'] = typeof(row.data['FIELD_FILTER']) != 'undefined' && row.data['FIELD_FILTER'] ? true : false;
 
+    // validate that fieldname is not empty
     if(row.data['field_name'].trim() == '') {
       PMExt.error(_('ID_ERROR'), 'Field Name for "'+row.data['field_dyn']+'" is required.');
       return false;
     }
 
-    if((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_name'] == '') {
-      PMExt.error(_('ID_ERROR'), 'Field size for "'+row.data['field_type']+'": '+row.data['field_name']+'" please.');
+    if(row.data['field_label'].trim() == '') {
+      PMExt.error(_('ID_ERROR'), 'Field Label for all columns is required.');
       return false;
+    }
+
+    // validate field size for varchar & int column types
+    if(row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') {
+      PMExt.error(_('ID_ERROR'), 'Set a field size for '+row.data['field_name']+' ('+row.data['field_type']+') please.');
+      return false;
+    }
+
+    if (row.data['field_key']) {
+      hasSomePrimaryKey = true;
     }
 
     columns.push(row.data);
   }
 
+  if (!hasSomePrimaryKey) {
+    PMExt.error(_('ID_ERROR'), 'You need set one column at least as Primary Key.');
+    return;
+  }
+
   Ext.Ajax.request({
-    url: 'reportTables_Ajax',
+    url: '../pmTablesProxy/save',
     params: {
-      action: 'save',
-      REP_TAB_UID: TABLE !== false ? TABLE.ADD_TAB_UID : '',
+      REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue(),
       REP_TAB_NAME  : Ext.getCmp('REP_TAB_NAME').getValue(),
-      REP_TAB_DSC : Ext.getCmp('REP_TAB_DSC').getValue(),
+      REP_TAB_DSC   : Ext.getCmp('REP_TAB_DSC').getValue(),
       REP_TAB_CONNECTION : Ext.getCmp('REP_TAB_CONNECTION').getValue(),
       REP_TAB_TYPE  : Ext.getCmp('REP_TAB_TYPE').getValue(),
-      REP_TAB_GRID: Ext.getCmp('REP_TAB_TYPE').getValue()=='GRID'? Ext.getCmp('REP_TAB_GRID').getValue(): '',
-      columns: Ext.util.JSON.encode(columns)
+      REP_TAB_GRID  : Ext.getCmp('REP_TAB_TYPE').getValue()=='GRID'? Ext.getCmp('REP_TAB_GRID').getValue(): '',
+      columns       : Ext.util.JSON.encode(columns)
     },
     success: function(resp){
       result = Ext.util.JSON.decode(resp.responseText);
 
       if (result.success) {
         proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
-        location.href = '../reportTables/main' + proParam; //history.back();
+        location.href = '../pmTables' + proParam; //history.back();
       } else {
-        Ext.Msg.alert( _('ID_ERROR'), result.msg);
+        Ext.Msg.alert( _('ID_ERROR'), result.msg+'\n'+result.trace);
       }
     },
     failure: function(obj, resp){
@@ -810,6 +825,30 @@ function createReportTable()
   });
 }
 //end createReportTable
+
+//add custon column for assignedGrid
+function addColumn()
+{
+  var PMRow = assignedGrid.getStore().recordType;
+  var row = new PMRow({
+    uid  : '',
+    field_uid  : '',
+    field_dyn  : '',
+    field_name  : '',
+    field_label : '',
+    field_type  : '',
+    field_size  : '',
+    field_key   : 0,
+    field_null  : 1
+  });
+  length = assignedGrid.getStore().data.length;
+  
+  editor.stopEditing();
+  store.insert(length, row);
+  assignedGrid.getView().refresh();
+  assignedGrid.getSelectionModel().selectRow(length);
+  editor.startEditing(length);
+}
 
 ////ASSIGNBUTON FUNCTIONALITY
 AssignFieldsAction = function(){
@@ -911,93 +950,6 @@ RemoveAllFieldsAction = function(){
   }
 };
 
-  //ASSIGN BUTON FUNCTIONALITY
-saveReportTables = function(){
-  var fields = Ext.getCmp('fieldsGrid');
-  var allRows = fields.getStore();
-  var arrUID = new Array();
-  var arrDYNAFORM = new Array();
-  var arrNAME = new Array();
-  var arrTYPE = new Array();
-  var arrSIZE = new Array();
-  var arrFILTER = new Array();
-  var data = new Array();
-
-  for (var r=0; r < allRows.getCount(); r++) {
-    row = allRows.getAt(r);
-    row.data['FIELD_FILTER'] = typeof(row.data['FIELD_FILTER']) != 'undefined' && row.data['FIELD_FILTER'] ? true : false;
-
-    if(row.data['FIELD_NAME'].trim() == '') {
-      PMExt.error(_('ID_ERROR'), 'Set a Phisical Field Name for "'+row.data['FIELD_DYNAFORM']+'" dynaform field please.');
-      return false;
-    }
-
-    if((row.data['FIELD_TYPE'] == 'VARCHAR' || row.data['FIELD_TYPE'] == 'INT') && row.data['FIELD_SIZE'] == '') {
-      PMExt.error(_('ID_ERROR'), 'Set a field size for "'+row.data['FIELD_TYPE']+'": '+row.data['FIELD_NAME']+'" please.');
-      return false;
-    }
-
-    data.push(row.data);
-  }
-
-
-  if (REP_TAB_TYPE=='NORMAL'){
-    Ext.Ajax.request({
-      url: 'reportTables_Ajax',
-      params: {
-        action: 'SaveChagedFieds',
-        REP_TAB_TITLE : REP_TAB_TITLE,
-        PRO_UID       : PRO_UID,
-        REP_TAB_NAME  : REP_TAB_NAME,
-        REP_TAB_TYPE  : REP_TAB_TYPE,
-        REP_TAB_CONNECTION : REP_TAB_CONNECTION,
-        REP_TAB_UID: reportTablesGlobal.REP_TAB_UID_EDIT,
-        data: Ext.util.JSON.encode(data)
-      },
-      success: function(obj, resp){
-        PMExt.notify('DONE', 'Report table saved Successfully');
-        Ext.getCmp('reportTableGrid').getStore().reload();
-        Ext.getCmp('newRepTab').close();
-        Ext.getCmp('winEditFields').close();
-      },
-      failure: function(obj, resp){
-        Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
-      }
-    });
-  } else { //then is a grid type
-      Ext.Ajax.request({
-      url: 'reportTables_Ajax',
-      params: { action: 'SaveChagedFieds',
-
-                PRO_UID:PRO_UID,
-                REP_TAB_TITLE:REP_TAB_TITLE,
-                REP_TAB_NAME:REP_TAB_NAME,
-                REP_TAB_TYPE:REP_TAB_TYPE,
-                REP_TAB_UID: reportTablesGlobal.REP_TAB_UID,
-                UIDS: arrUID.join(','),
-                REP_TAB_GRID: arrUID.join(','),
-                DYNAFORMS:arrDYNAFORM.join(','),
-                NAMES:arrNAME.join(','),
-                TYPES:arrTYPE.join(','),
-                SIZES:arrSIZE.join(','),
-                FILTERS:arrFILTER.join(',')
-
-              },
-      success: function(obj, resp){
-            win.close();
-            Ext.getCmp('reportTableGrid').getStore().reload();
-
-
-            },
-      failure: function(obj, resp){
-            Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
-            //viewport.getEl().unmask();
-      }
-    });
-  }
-
-};
-
 //INITIAL FIELDS GRIDS
 loadFieldNormal = function(){
   Ext.getCmp('availableGrid').store.removeAll();
@@ -1041,58 +993,7 @@ FailureFields = function(){
   Ext.Msg.alert(_('ID_GROUPS'), _('ID_MSG_AJAX_FAILURE'));
 };
 
-
-//ASSIGN FIELDS TO REPORT TABLE
-SaveFieldsReportTable = function(arr_avail, function_success, function_failure){
-  var sw_response;
-  //Ext.MessageBox.show({ msg: 'Match Fields', wait:true,waitConfig: {interval:200} });
-  lmask = new Ext.LoadMask(Ext.getBody(),{msg:'Processing...'});
-  lmask.show();
-
-  Ext.Ajax.request({
-    url: 'reportTables_Ajax',
-    params: {
-      action: 'assignFieldsToReportTable',
-      REP_TAB_UID: reportTablesGlobal.REP_TAB_UID,
-      FIELDS: arr_avail.join(',')
-    },
-    success: function(){
-      function_success();
-      //Ext.MessageBox.hide();
-      lmask.hide();
-    },
-    failure: function(){
-      function_failure();
-      //viewport.getEl().unmask();
-    }
-  });
-};
-
-//REMOVE GROUPS FROM A USER
-DeleteFieldsReportTable = function(arr_asign, function_success, function_failure){
-  var sw_response;
-  Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
-
-  Ext.Ajax.request({
-    url: 'reportTables_Ajax',
-    params: {action: 'deleteFieldsToReportTable',
-            REP_TAB_UID: reportTablesGlobal.REP_TAB_UID,
-            FIELDS: arr_asign.join(','),
-            TYPE: Ext.getCmp('REP_TAB_TYPE').getValue(),
-            GRID_UID: Ext.getCmp('REP_TAB_TYPE').getValue()=='GRID'? Ext.getCmp('REP_TAB_GRID').getValue() : ''
-    },
-    success: function(){
-      function_success();
-      Ext.MessageBox.hide();
-    },
-    failure: function(){
-      function_failure();
-     // viewport.getEl().unmask();
-    }
-  });
-};
-
-
+// drag & drop handler
 var DDLoadFields = function(){
   var availableGridDropTargetEl = availableGrid.getView().scroller.dom;
   var availableGridDropTarget = new Ext.dd.DropTarget(availableGridDropTargetEl, {
@@ -1102,15 +1003,20 @@ var DDLoadFields = function(){
       var records =  ddSource.dragData.selections;
       var PMRow = availableGrid.getStore().recordType;
 
-      for (i=0; i < records.length; i++){
-        if (records[i].data['field_dyn'] != '' && records[i].data['field_name'] != 'APP_UID' && records[i].data['field_name'] != 'APP_NUMBER' && records[i].data['field_name'] != 'ROW') {
+      for (i=0; i < records.length; i++) {
+        if (records[i].data['field_dyn'] != '') {
           var row = new PMRow({
             FIELD_UID: records[i].data['field_uid'],
             FIELD_NAME: records[i].data['field_dyn']
           });
           availableGrid.getStore().add(row);
-        } else if (records[i].data['field_dyn'] != '') {
-          records[i] = null;
+        } else {
+          if ( records[i].data['field_name'] == 'APP_UID' 
+            || records[i].data['field_name'] == 'APP_NUMBER'
+            || records[i].data['field_name'] == 'ROW') 
+          {
+            records[i] = null;
+          }
         }
       }
 

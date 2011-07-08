@@ -78,7 +78,7 @@ Ext.onReady(function(){
 	
 	contextMenu = new Ext.menu.Menu({
     	items: [editButton, deleteButton]
-    });
+  });
 	
 	//This loop loads columns and fields to store and column model
 	for (var c=0; c<NAMES.length; c++){
