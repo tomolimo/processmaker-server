@@ -1,5 +1,5 @@
 /**
- * Report tables Edit
+ * PM tables Edit
  * @author Erik A. O. <erik@colosa.com>
  */
 
@@ -25,7 +25,7 @@ Ext.onReady(function(){
   // store for available fields grid
   storeA = new Ext.data.GroupingStore( {
     proxy : new Ext.data.HttpProxy({
-      url: '../pmTablesProxy/availableFieldsReportTables'
+      url: '../pmTablesProxy/getDynafields'
     }),
     reader : new Ext.data.JsonReader( {
       root: 'processFields',
@@ -100,8 +100,20 @@ Ext.onReady(function(){
     listeners:{
       selectionchange: function(sm){
           switch(sm.getCount()){
-            case 0: Ext.getCmp('removeButton').disable(); break;
-            default: Ext.getCmp('removeButton').enable(); break;
+            case 0: 
+              //Ext.getCmp('removeButton').disable();
+              Ext.getCmp('editColumn').disable();
+              Ext.getCmp('removeColumn').disable();
+              break;
+            case 1:
+              Ext.getCmp('editColumn').enable();
+              Ext.getCmp('removeColumn').enable();
+              break;
+            default:
+              //Ext.getCmp('removeButton').enable(); 
+              Ext.getCmp('editColumn').disable();
+              Ext.getCmp('removeColumn').enable();
+              break;
           }
         }
     }
@@ -290,9 +302,21 @@ Ext.onReady(function(){
     plugins: [editor, checkColumn],
     tbar: [
       {
-        icon: '/images/addcolumn.jpg',
-        text: _("ID_ADD_COLUMN"),
+        icon: '/images/add-row-after.png',
+        text: _("ID_ADD_FIELD"),
         handler: addColumn
+      },  {
+        id: 'editColumn',
+        icon: '/images/edit-row.png',
+        text: _("ID_EDIT_FIELD"),
+        disabled: true,
+        handler: editColumn
+      }, {
+        id: 'removeColumn',
+        icon: '/images/delete-row.png',
+        text: _("ID_REMOVE_FIELD"),
+        disabled: true,
+        handler: removeColumn
       }
     ],
     listeners: {
@@ -524,7 +548,7 @@ Ext.onReady(function(){
     region     : 'north',
     labelWidth : 120,
     labelAlign :'right',
-    title      : 'New Report Table',
+    title      : 'New PM Table',
     bodyStyle  :'padding:10px',
     frame      : true,
     height     : 120,
@@ -541,16 +565,18 @@ Ext.onReady(function(){
 
   southPanel = new Ext.FormPanel({
     region: 'south',
-    buttons:[ {
+    buttons:[ 
+      {
         text: TABLE === false ? _("ID_CREATE") : _("ID_UPDATE"),
         handler: createReportTable
       }, {
         text:_("ID_CANCEL"),
         handler: function() {
           proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
-          //location.href = '../pmTables' + proParam; //history.back();
+          location.href = '../pmTables' + proParam; //history.back();
         }
-    }]
+      }
+    ]
   });
 
   var viewport = new Ext.Viewport({
@@ -608,8 +634,13 @@ function createReportTable()
       return false;
     }
 
+    if (row.data['field_type'] == '') {
+      PMExt.error(_('ID_ERROR'), 'Set a field type for <b>'+row.data['field_name']+'</b> please.');
+      return false;
+    }
+
     // validate field size for varchar & int column types
-    if(row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') {
+    if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_size'] == '') {
       PMExt.error(_('ID_ERROR'), 'Set a field size for '+row.data['field_name']+' ('+row.data['field_type']+') please.');
       return false;
     }
@@ -676,6 +707,24 @@ function addColumn() {
   assignedGrid.getView().refresh();
   assignedGrid.getSelectionModel().selectRow(length);
   editor.startEditing(length);
+}
+
+function editColumn()
+{
+  var row = Ext.getCmp('assignedGrid').getSelectionModel().getSelected();
+  var selIndex = store.indexOfId(row.id);
+  editor.stopEditing();
+  assignedGrid.getView().refresh();
+  assignedGrid.getSelectionModel().selectRow(selIndex);
+  editor.startEditing(selIndex);
+}
+
+function removeColumn()
+{
+  PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_REMOVE_FIELD'), function(){
+    var records = Ext.getCmp('assignedGrid').getSelectionModel().getSelections();
+    Ext.each(records, Ext.getCmp('assignedGrid').store.remove, Ext.getCmp('assignedGrid').store);
+  });
 }
 
 

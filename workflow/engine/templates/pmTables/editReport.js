@@ -25,7 +25,7 @@ Ext.onReady(function(){
   // store for available fields grid
   storeA = new Ext.data.GroupingStore( {
     proxy : new Ext.data.HttpProxy({
-      url: '../pmTablesProxy/availableFieldsReportTables'
+      url: '../pmTablesProxy/getDynafields'
     }),
     reader : new Ext.data.JsonReader( {
       root: 'processFields',
@@ -100,8 +100,21 @@ Ext.onReady(function(){
     listeners:{
       selectionchange: function(sm){
           switch(sm.getCount()){
-            case 0: Ext.getCmp('removeButton').disable(); break;
-            default: Ext.getCmp('removeButton').enable(); break;
+            case 0: 
+              Ext.getCmp('removeButton').disable(); 
+              Ext.getCmp('removeColumn').disable();
+              break;
+            case 1:
+              var record = Ext.getCmp('assignedGrid').getSelectionModel().getSelected();
+              
+              if (record.data.field_dyn == '' && record.data.field_name != 'APP_UID' && record.data.field_name != 'APP_NUMBER' && record.data.field_name != 'ROW') {
+                Ext.getCmp('removeColumn').enable();
+              }
+              break;
+            default: 
+              Ext.getCmp('removeButton').enable();
+              Ext.getCmp('removeColumn').disable();
+              break;
           }
         }
     }
@@ -273,11 +286,19 @@ Ext.onReady(function(){
     sm             : sm,
     store          : store,
     plugins        : [editor, checkColumn],
-    tbar           : [{
-      icon: '/images/addcolumn.jpg',
-      text: _("ID_ADD_CUSTOM_COLUMN"),
-      handler: addColumn
-    }],
+    tbar           : [
+      {
+        icon: '/images/add-row-after.png',
+        text: _("ID_ADD_FIELD"),
+        handler: addColumn
+      },  {
+        id: 'removeColumn',
+        icon: '/images/delete-row.png',
+        text: _("ID_REMOVE_FIELD"),
+        disabled: true,
+        handler: removeColumn
+      }
+    ],
     listeners: {
       render: function(grid) {
         var ddrow = new Ext.dd.DropTarget(grid.getView().mainBody, {
@@ -780,7 +801,7 @@ function createReportTable()
     }
 
     // validate field size for varchar & int column types
-    if(row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') {
+    if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_size'] == '') {
       PMExt.error(_('ID_ERROR'), 'Set a field size for '+row.data['field_name']+' ('+row.data['field_type']+') please.');
       return false;
     }
@@ -790,11 +811,6 @@ function createReportTable()
     }
 
     columns.push(row.data);
-  }
-
-  if (!hasSomePrimaryKey) {
-    PMExt.error(_('ID_ERROR'), 'You need set one column at least as Primary Key.');
-    return;
   }
 
   Ext.Ajax.request({
@@ -848,6 +864,14 @@ function addColumn()
   assignedGrid.getView().refresh();
   assignedGrid.getSelectionModel().selectRow(length);
   editor.startEditing(length);
+}
+
+function removeColumn()
+{
+  PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_REMOVE_FIELD'), function(){
+    var records = Ext.getCmp('assignedGrid').getSelectionModel().getSelections();
+    Ext.each(records, Ext.getCmp('assignedGrid').store.remove, Ext.getCmp('assignedGrid').store);
+  });
 }
 
 ////ASSIGNBUTON FUNCTIONALITY
@@ -955,7 +979,7 @@ loadFieldNormal = function(){
   Ext.getCmp('availableGrid').store.removeAll();
   Ext.getCmp('availableGrid').store.load({
     params: {
-      action: "availableFieldsReportTables",
+      action: "getDynafields",
       PRO_UID: PRO_UID !== false ? PRO_UID : Ext.getCmp('PROCESS').getValue()
     }
   });
@@ -968,7 +992,7 @@ loadFieldsGrids = function(){
 
   available.store.load({
     params: {
-      action: "availableFieldsReportTables",
+      action: "getDynafields",
       PRO_UID: PRO_UID !== false ? PRO_UID : Ext.getCmp('PROCESS').getValue(),
       TYPE: 'GRID',
       GRID_UID: Ext.getCmp('REP_TAB_GRID').getValue()

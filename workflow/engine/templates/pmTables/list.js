@@ -36,31 +36,40 @@ Ext.onReady(function(){
 
     pageSize = parseInt(CONFIG.pageSize);
 
+    var newMenuOptions = [
+      {
+        text: 'New Table',
+        handler: newPMTable
+      }, {
+        text: 'New Report Table',
+        handler: NewReportTable
+      }
+    ];
+
+    if (PRO_UID !== false) {
+      newMenuOptions.push({
+        text: 'New Report Table (Old Version)',
+        handler: NewReportTableOld
+      });
+    }
+
     newButton = new Ext.Action({
       text: _('ID_NEW'),
-      iconCls: 'button_menu_ext ss_sprite ss_add',
+      icon: '/images/add-table.png',
       
-      menu: [
-        {
-          text: 'New Table',
-          handler: newPMTable
-        }, {
-          text: 'New Report Table',
-          handler: NewReportTable
-        }
-      ]
+      menu: newMenuOptions
     });
 
     editButton = new Ext.Action({
       text: _('ID_EDIT'),
-      icon: '/images/icon-edit.png',
+      icon: '/images/edit-table.png',
       handler: EditPMTable,
       disabled: true
     });
 
     deleteButton = new Ext.Action({
       text: _('ID_DELETE'),
-      iconCls: 'button_menu_ext ss_sprite  ss_delete',
+      icon: '/images/delete-table.png',
       handler: DeletePMTable,
       disabled: true
     });
@@ -148,10 +157,11 @@ Ext.onReady(function(){
 
       comboPageSize.setValue(pageSize);
 
+    
 
     store = new Ext.data.GroupingStore( {
       proxy : new Ext.data.HttpProxy({
-        url: 'pmTablesProxy/getList'
+        url: 'pmTablesProxy/getList' + (PRO_UID? '?pro_uid='+PRO_UID: '')
       }),
       reader : new Ext.data.JsonReader( {
         root: 'rows',
@@ -315,12 +325,17 @@ DoNothing = function(){};
 
 //Load New PM Table Forms
 NewReportTable = function(){
-  //location.href = 'additionalTablesNew';
-
   if(PRO_UID !== false)
     location.href = 'pmTables/edit?PRO_UID='+PRO_UID+'&tableType=report';
   else
     location.href = 'pmTables/edit?tableType=report';
+};
+
+NewReportTableOld = function(){
+  //location.href = 'reportTables/edit?PRO_UID='+PRO_UID+'&tableType=report';
+  //parent.reportTables2();
+  //parent.Pm.data.render.buildingBlocks.injector('reportTables2');
+  location.href = 'reportTables/reportTables_Edit?PRO_UID='+PRO_UID;
 };
 
 newPMTable = function(){
@@ -336,7 +351,7 @@ EditPMTable = function(){
       location.href = 'pmTables/edit?id='+row.data.ADD_TAB_UID+'&tableType=' + tableType + proParam;
     }
     else { //edit old report table
-      location.href = '../reportTables/reportTables_Edit?REP_TAB_UID='+row.data.ADD_TAB_UID
+      location.href = 'reportTables/reportTables_Edit?REP_TAB_UID='+row.data.ADD_TAB_UID
     }
 };
 

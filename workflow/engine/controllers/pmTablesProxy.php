@@ -1,31 +1,72 @@
 <?php
-require_once 'classes/model/AdditionalTables.php';
+/**
+ * pmTablesProxy
+ * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
+ * @inherits HttpProxyController
+ * @access public
+ */
 
-//G::LoadClass('processMap');
+require_once 'classes/model/AdditionalTables.php';
 
 class pmTablesProxy extends HttpProxyController
 {
-  public function getList($params)
+
+  /**
+   * get pmtables list
+   * @param string $httpData->start
+   * @param string $httpData->limit
+   * @param string $httpData->textFilter
+   */
+  public function getList($httpData)
   {
     G::LoadClass('configuration');
+    G::LoadClass('processMap');
     $configurations = new Configurations();
+    $processMap = new processMap();
     
     // setting parameters
     $config     = $configurations->getConfiguration('additionalTablesList', 'pageSize','',$_SESSION['USER_LOGGED']);
     $env        = $configurations->getConfiguration('ENVIRONMENT_SETTINGS', '');
     $limit_size = isset($config->pageSize) ? $config['pageSize'] : 20;
-    $start      = isset($params->start) ? $params->start : 0;
-    $limit      = isset($params->limit) ? $params->limit : $limit_size;
-    $filter     = isset($params->textFilter) ? $params->textFilter : '';
-    $pro_uid    = isset($params->pro_uid) ? $params->pro_uid : null;
+    $start      = isset($httpData->start) ? $httpData->start : 0;
+    $limit      = isset($httpData->limit) ? $httpData->limit : $limit_size;
+    $filter     = isset($httpData->textFilter) ? $httpData->textFilter : '';
+    $pro_uid    = isset($httpData->pro_uid) ? $httpData->pro_uid : null;
 
-    //$process = $pro_uid == '' ? array('not_equal'=>$pro_uid) : array('equal'=>$pro_uid);
-    $process = null;
-    $addTables = AdditionalTables::getAll($start, $limit, $filter, $process);
+    if ($pro_uid !== null) {
+      $process = $pro_uid == '' ? array('not_equal'=>$pro_uid) : array('equal'=>$pro_uid);
+      $addTables = AdditionalTables::getAll($start, $limit, $filter, $process);
+      
+      $c = $processMap->getReportTablesCriteria($pro_uid);
+      $oDataset = RoutePeer::doSelectRS($c);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $reportTablesOldList = array();
+      while($oDataset->next()) {
+        $reportTablesOldList[] = $oDataset->getRow();
+      }
+      $addTables['count'] += count($reportTablesOldList);
+      
+      foreach ($reportTablesOldList as $i => $oldRepTab) {
+        $addTables['rows'][] = array(
+          'ADD_TAB_UID' => $oldRepTab['REP_TAB_UID'],
+          'PRO_UID' => $oldRepTab['PRO_UID'],
+          'ADD_TAB_DESCRIPTION' => $oldRepTab['REP_TAB_TITLE'],
+          'ADD_TAB_NAME' => $oldRepTab['REP_TAB_NAME'],
+          'ADD_TAB_TYPE' => $oldRepTab['REP_TAB_TYPE'],
+          'TYPE' => 'CLASSIC' 
+        );
+      }
+    } 
+    else {
+      $addTables = AdditionalTables::getAll($start, $limit, $filter);
+    }
 
     return $addTables;
   }
 
+  /**
+   * get processesList   
+   */
   public function getProcessList()
   {
     require_once 'classes/model/Process.php';
@@ -34,6 +75,9 @@ class pmTablesProxy extends HttpProxyController
     return $process->getAll();
   }
 
+  /**
+   * get database connection list
+   */
   public function getDbConnectionsList()
   {
     G::LoadClass ( 'dbConnections');
@@ -50,23 +94,26 @@ class pmTablesProxy extends HttpProxyController
     return $dbConnections;
   }
 
-  public function availableFieldsReportTables($params)
+  /**
+   * get dynaform fields
+   * @param string $httpData->PRO_UID
+   * @param string $httpData->TYPE
+   * @param string $httpData->GRID_UID
+   */
+  public function getDynafields($httpData)
   {
     G::LoadClass('reportTables');
-    //G::LoadClass('xmlfield_InputPM');
 
     $aFields['FIELDS'] = array();
-    $aFields['PRO_UID'] = $_POST['PRO_UID'];
+    $aFields['PRO_UID'] = $httpData->PRO_UID;
 
-    if(isset($_POST['TYPE']) && $_POST['TYPE'] == 'GRID') {
+    if(isset($httpData->TYPE) && $httpData->TYPE == 'GRID') {
       $aProcessGridFields = Array();
-      if (isset($_POST['GRID_UID'])) {
+      if (isset($httpData->GRID_UID)) {
         global $G_FORM;
-        list($gridName, $gridId) = explode('-', $_POST['GRID_UID']);
+        list($gridName, $gridId) = explode('-', $httpData->GRID_UID);
 
-       // $G_FORM = new Form($_POST['PRO_UID'] . '/' . $gridId, PATH_DYNAFORM, SYS_LANG, false);
-        //$gridFields = $G_FORM->getVars(false);
-        $gridFields = getGridDynafields($_POST['PRO_UID'], $gridId);
+        $gridFields = $this->_getGridDynafields($httpData->PRO_UID, $gridId);
 
         foreach ($gridFields as $gfield) {
           $aProcessGridFields[] = array(
@@ -75,7 +122,7 @@ class pmTablesProxy extends HttpProxyController
           );
         }
       } else {
-        $gridFields = getGridFields($aFields['PRO_UID']);
+        $gridFields = $this->_getGridFields($aFields['PRO_UID']);
 
         foreach ($gridFields as $gfield) {
           $aProcessGridFields[]  = array(
@@ -88,8 +135,7 @@ class pmTablesProxy extends HttpProxyController
 
     } else {
       $aProcessFields = Array();
-      //$dynFields = getDynaformsVars($aFields['PRO_UID'], false);
-      $dynFields = getDynafields($aFields['PRO_UID']);
+      $dynFields = $this->_getDynafields($aFields['PRO_UID']);
 
       foreach ($dynFields as $dfield) {
         $aProcessFields[]  = array(
@@ -103,6 +149,9 @@ class pmTablesProxy extends HttpProxyController
     return $resultList;
   }
 
+  /**
+   * save pm table
+   */
   public function save()
   {
     require_once 'classes/model/AdditionalTables.php';
@@ -253,10 +302,14 @@ class pmTablesProxy extends HttpProxyController
     return $result;
   }
   
+  /**
+   * delete pm table
+   * @param string $httpData->rows
+   */
   public function delete($httpData) 
   {
     G::LoadClass('reportTables');
-    $rows = G::json_decode($_REQUEST['rows']);
+    $rows = G::json_decode($httpData->rows);
     $rp = new reportTables();
     $at = new AdditionalTables();
     
@@ -276,8 +329,14 @@ class pmTablesProxy extends HttpProxyController
     
     return $result;
   }
-  
-  public function getData($httpData)
+
+  /**
+   * get pm tables data
+   * @param string $httpData->id
+   * @param string $httpData->start
+   * @param string $httpData->limit
+   */
+  public function dataView($httpData)
   {
     require_once 'classes/model/AdditionalTables.php';
 
@@ -285,17 +344,100 @@ class pmTablesProxy extends HttpProxyController
     $co = new Configurations();
     $config = $co->getConfiguration('additionalTablesData', 'pageSize','',$_SESSION['USER_LOGGED']);
     $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
-    $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
-    $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
+    $start   = isset($httpData->start)  ? $httpData->start : 0;
+    $limit   = isset($httpData->limit)  ? $httpData->limit : $limit_size; 
 
     $oAdditionalTables = new AdditionalTables();
+    $table = $oAdditionalTables->load($httpData->id, true);
     $result = $oAdditionalTables->getAllData($httpData->id, $start, $limit);
+    
+    $keys = array();
+    foreach ($table['FIELDS'] as $field) {
+      if ($field['FLD_KEY'] == '1') {
+        $keys[] = $field['FLD_NAME'];
+      }
+    }
+
+    foreach ($result['rows'] as $i => $row) {
+      $indexes = array();
+      foreach ($keys as $key) {
+        $indexes[] = $row[$key];
+      }
+
+      $result['rows'][$i]['__index__'] = implode('-', $indexes);
+    }
 
     return $result;
   }
 
+  /**
+   * create pm tables record
+   * @param string $httpData->id
+   * @param string $httpData->start
+   * @param string $httpData->limit
+   */
+  public function dataCreate($httpData)
+  {
+    require_once 'classes/model/AdditionalTables.php';
+    $oAdditionalTables = new AdditionalTables();
+    $table = $oAdditionalTables->load($httpData->id, true);
+    $className = $table['ADD_TAB_CLASS_NAME'];
+    $sClassPeerName = $className . 'Peer';
+    
+    $rows = G::json_decode($httpData->rows);
+    if (is_array($rows)) {
+      
+    }
+    else { //then is object 
+      
+    }
+    print_R($row);
+    //$sClassPeerName::retrieveByPk();
+  }
 
-  // protected functions
+  /**
+   * update pm tables record
+   * @param string $httpData->id
+   * @param string $httpData->start
+   * @param string $httpData->limit
+   */
+  public function dataUpdate($httpData)
+  {
+    require_once 'classes/model/AdditionalTables.php';
+    $oAdditionalTables = new AdditionalTables();
+    $table = $oAdditionalTables->load($httpData->id, true);
+    $className = $table['ADD_TAB_CLASS_NAME'];
+    $slassPeerName = $className . 'Peer';
+    
+    $rows = G::json_decode($httpData->rows);
+    print_R($rows);
+    if (is_array($rows)) {
+      
+    }
+    else { //then is object 
+      $keys = explode('-', $rows->__index__);
+      foreach ($keys as $key) {
+        $params .= is_numeric($key) ? $key : "'$key'";
+      }
+
+      $obj = null;
+      var_dump('$obj = $classPeerName::retrieveByPk('.implode(',', $params).')');
+      eval('$obj = $classPeerName::retrieveByPk('.implode(',', $params).')');
+      var_dump($obj);
+    }
+    
+    //$sClassPeerName::retrieveByPk();
+  }
+
+
+  /**
+   * - protected functions (non callable from controller outside) -
+   */
+
+  /**
+   * Get report table default columns
+   * @param $type
+   */
   protected function _getReportTableDefaultColumns($type='NORMAL')
   {
     $defaultColumns = array();
@@ -346,27 +488,13 @@ class pmTablesProxy extends HttpProxyController
 
     return $defaultColumns;
   }
-}
 
-
-///
-/**
-   * Translates a string with underscores into camel case (e.g. first_name -> firstName)
-   * @param    string   $str                     String in underscore format
-   * @param    bool     $capitalise_first_char   If true, capitalise the first char in $str
-   * @return   string                              $str translated into camel caps
+  /**
+   * Get all dynaform fields from a process (without grid fields)
+   * @param $proUid
+   * @param $type [values:xmlform/grid]
    */
-  function to_camel_case($str, $capitalise_first_char = true) {
-    if($capitalise_first_char) {
-      $str[0] = strtoupper($str[0]);
-    }
-    $func = create_function('$c', 'return strtoupper($c[1]);');
-    return preg_replace_callback('/_([a-z])/', $func, $str);
-  }
-
-
-  
-  function getDynafields($proUid, $type = 'xmlform')
+  function _getDynafields($proUid, $type = 'xmlform')
   {
     require_once 'classes/model/Dynaform.php';
     $fields = array();
@@ -409,7 +537,12 @@ class pmTablesProxy extends HttpProxyController
     return $fields;
   }
 
-  function getGridDynafields($proUid, $gridId)
+  /**
+   * Get all dynaform grid fields from a process
+   * @param $proUid
+   * @param $gridId 
+   */
+  function _getGridDynafields($proUid, $gridId)
   {
     $fields = array();
     $fieldsNames = array();
@@ -437,7 +570,11 @@ class pmTablesProxy extends HttpProxyController
     return $fields;
   }
   
-  function getGridFields($proUid)
+  /**
+   * Get all dynaform fields inside all grids from a process
+   * @param $proUid
+   */
+  function _getGridFields($proUid)
   {
     $aFields = array();
     $aFieldsNames = array();
@@ -464,49 +601,6 @@ class pmTablesProxy extends HttpProxyController
     }
     return $aFields;
   }
-  
-  function getAllFields($filepath, $includeTypes=array(), $excludeTypes=array())
-  {
-    $G_FORM  = new Form($filepath, PATH_DYNAFORM, SYS_LANG);
-    $fields = array();
-    $fieldsNames = array();
-    $labelFieldsTypeList = array('dropdown', 'checkbox', 'radiogroup', 'yesno');
-        
-    if ($G_FORM->type == 'xmlform' || $G_FORM->type == '') {
+}
+ 
 
-      foreach($G_FORM->fields as $fieldName => $fieldNode) {
-        if (!in_array($fieldNode->type, $excludeTypes)) {
-          continue;
-        }
-
-        if (count($includeTypes) > 0) {
-          if (in_array($fieldNode->type, $includeTypes) && !in_array($fieldName, $fieldsNames)) {
-            $fields[] = array('name' => $fieldName, 'type' => $fieldNode->type, 'label'=> $fieldNode->label);
-            $fieldsNames[] = $fieldName;
-            
-            if (in_array($fieldNode->type, $labelFieldsTypeList) && !in_array($fieldName.'_label', $fieldsNames)) {
-              $fields[] = array('name' => $fieldName . '_label', 'type' => $fieldNode->type, 'label'=>$fieldNode->label . '_label');
-              $fieldsNames[] = $fieldName;
-            }
-          }
-          continue;
-        }
-
-        if (!in_array($fieldName, $fieldsNames)) {
-          
-          $fields[] = array('name' => $fieldName, 'type' => $fieldNode->type, 'label'=> $fieldNode->label);
-          $fieldsNames[] = $fieldName;
-          
-          if (in_array($fieldNode->type, $labelFieldsTypeList) && !in_array($fieldName.'_label', $fieldsNames)) {
-            $fields[] = array('name' => $fieldName . '_label', 'type' => $fieldNode->type, 'label'=>$fieldNode->label . '_label');
-            $fieldsNames[] = $fieldName;
-          }
-        }
-      }
-    }
-   
-    return $fields; 
-  }
-  
-  
-  

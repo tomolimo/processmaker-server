@@ -689,7 +689,7 @@ class AdditionalTables extends BaseAdditionalTables {
       $aData['className']      = $sClassName;
       $aData['connection']     = $connection;
       $aData['GUID']           = $sAddTabUid;
-      $aData['firstColumn']    = strtoupper($aFields[1]['FLD_NAME']);
+      $aData['firstColumn']    = strtoupper($aFields[0]['FLD_NAME']);
       $aData['totalColumns']   = count($aFields);
       $aData['useIdGenerator'] = 'false';
       $oTP1  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'Table.tpl');
@@ -1170,8 +1170,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       $sClassPeerName = $sClassName . 'Peer';
       $con = Propel::getConnection($aData['DBS_UID']);
       $oCriteria = new Criteria($aData['DBS_UID']);
-      var_dump($aData['DBS_UID']);
-      print_r($oCriteria);
+      
       //eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
       eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
       foreach ($aData['FIELDS'] as $aField) {
@@ -1221,7 +1220,8 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     }
 
     $oCriteriaCount = clone $oCriteria;
-    $count = $sClassPeerName::doCount($oCriteria);
+    //$count = $sClassPeerName::doCount($oCriteria);
+    eval('$count = '.$sClassPeerName.'::doCount($oCriteria);');
 
     if (isset($limit)) {
       $oCriteria->setLimit($limit);
@@ -1229,7 +1229,8 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     if (isset($start)) {
       $oCriteria->setOffset($start);
     }
-    $rs = $sClassPeerName::doSelectRS($oCriteria);
+    //$rs = $sClassPeerName::doSelectRS($oCriteria);
+    eval('$rs = '.$sClassPeerName.'::doSelectRS($oCriteria);');
     $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
 
     $rows = Array();

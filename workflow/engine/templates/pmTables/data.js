@@ -1,3 +1,7 @@
+/**
+ * Handle PMtables Data
+ * @author Erik A. O. <erik@colosa.com>
+ */
 
 var newButton;
 var editButton;
@@ -43,7 +47,7 @@ Ext.onReady(function(){
   
   backButton = new Ext.Action({
     text: _('ID_BACK'),
-    iconCls: 'button_menu_ext ss_sprite ss_arrow_redo',
+    icon: '/images/back-icon.png',
     handler: BackPMList
   });
   
@@ -54,6 +58,15 @@ Ext.onReady(function(){
   //This loop loads columns and fields to store and column model
   _columns = new Array();
   _fields  = new Array();
+  _idProperty = '__index__';
+
+ //default generated id
+  _columns.push({
+    id: _idProperty,
+    hidden: true
+  });
+
+  _fields.push({name: _idProperty});
   
   if (tableDef.FIELDS.length !== 0) {
     for (i in tableDef.FIELDS) {
@@ -61,10 +74,18 @@ Ext.onReady(function(){
         id: tableDef.FIELDS[i].FLD_NAME,
         header: tableDef.FIELDS[i].FLD_DESCRIPTION,
         dataIndex: tableDef.FIELDS[i].FLD_NAME,
-        width: 40
+        width: 40,
+        editor:{
+          xtype: 'textfield',
+          allowBlank: true
+        }
       });
       
       _fields.push({name: tableDef.FIELDS[i].FLD_NAME});
+
+      if(_idProperty == '' && tableDef.FIELDS[i].FLD_KEY) {
+        _idProperty = tableDef.FIELDS[i].FLD_NAME;
+      }
     }
   }
   
@@ -89,18 +110,50 @@ Ext.onReady(function(){
 //        }
 //      }
 //    });
+
+   //row editor for table columns grid
+  editor = new Ext.ux.grid.RowEditor({
+      saveText: _("ID_UPDATE")
+  });
+
+  var proxy = new Ext.data.HttpProxy({
+    //url: '../pmTablesProxy/getData?id=' + tableDef.ADD_TAB_UID
+    api: {
+      read   : '../pmTablesProxy/dataView?id=' + tableDef.ADD_TAB_UID,
+      create : '../pmTablesProxy/dataCreate?id=' + tableDef.ADD_TAB_UID,
+      update : '../pmTablesProxy/dataUpdate?id=' + tableDef.ADD_TAB_UID,
+      destroy: '../pmTablesProxy/dataDestroy?id=' + tableDef.ADD_TAB_UID
+    },
+    baseParams : {id: tableDef.ADD_TAB_UID},
+  })
+
+  // The new DataWriter component.
+  var writer = new Ext.data.JsonWriter({
+      encode: true,
+      writeAllFields: false
+  });
+
+  var reader = new Ext.data.JsonReader({
+    root       : 'rows',
+    idProperty : 'id',
+    fields     : _fields,
+    idProperty : _idProperty,
+    totalProperty: 'count'
+  })
   
   store = new Ext.data.GroupingStore({
-    proxy : new Ext.data.HttpProxy({
-      url: '../pmTablesProxy/getData?id=' + tableDef.ADD_TAB_UID
-    }),
-    reader : new Ext.data.JsonReader({
-      root: 'rows',
-      totalProperty: 'count',
-      fields : _fields
-    })
+    proxy : proxy,
+    reader : reader,
+    writer : writer, // <-- plug a DataWriter into the store just as you would a Reader
+    autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
-  
+
+  // load the store immeditately
+  //store.load();
+
+  //store.on('update', store._update, store);
+
+
   cmodel = new Ext.grid.ColumnModel({
     defaults: {
         width: 50,
@@ -110,30 +163,30 @@ Ext.onReady(function(){
   });
   
   storePageSize = new Ext.data.SimpleStore({
-        fields: ['size'],
-         data: [['20'],['30'],['40'],['50'],['100']],
-         autoLoad: true
-      });
-        
-      comboPageSize = new Ext.form.ComboBox({
-        typeAhead     : false,
-        mode          : 'local',
-        triggerAction : 'all',
-        store: storePageSize,
-        valueField: 'size',
-        displayField: 'size',
-        width: 50,
-        editable: false,
-        listeners:{
-          select: function(c,d,i){
-            UpdatePageConfig(d.data['size']);
-            bbarpaging.pageSize = parseInt(d.data['size']);
-            bbarpaging.moveFirst();
-          }
-        }
-      });
-        
-      comboPageSize.setValue(pageSize);
+    fields: ['size'],
+     data: [['20'],['30'],['40'],['50'],['100']],
+     autoLoad: true
+  });
+    
+  comboPageSize = new Ext.form.ComboBox({
+    typeAhead     : false,
+    mode          : 'local',
+    triggerAction : 'all',
+    store: storePageSize,
+    valueField: 'size',
+    displayField: 'size',
+    width: 50,
+    editable: false,
+    listeners:{
+      select: function(c,d,i){
+        UpdatePageConfig(d.data['size']);
+        bbarpaging.pageSize = parseInt(d.data['size']);
+        bbarpaging.moveFirst();
+      }
+    }
+  });
+    
+  comboPageSize.setValue(pageSize);
   
   bbarpaging = new Ext.PagingToolbar({
     pageSize: pageSize,
@@ -163,14 +216,15 @@ Ext.onReady(function(){
     },
     store: store,
     cm: cmodel,
+    plugins: [editor],
     //sm: smodel,
     tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
     bbar: bbarpaging,
     listeners: {
-      rowdblclick: EditPMTableRow,
+      //rowdblclick: EditPMTableRow,
       render: function(){
           this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING_GRID')});
-        }
+      }
     },
     view: new Ext.grid.GroupingView({
       forceFit:true,
@@ -261,7 +315,8 @@ ImportPMTableCSV = function(){
 
 //Load PM Table List
 BackPMList = function(){
-  location.href = 'additionalTablesList';
+  //location.href = 'additionalTablesList';
+  history.back();
 };
 
 //Gets UIDs from a array of rows

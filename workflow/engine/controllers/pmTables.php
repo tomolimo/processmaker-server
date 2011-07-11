@@ -1,9 +1,22 @@
 <?php
+/**
+ * pmTables controller
+ * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
+ * @inherits Controller
+ * @access public
+ */
 
 class pmTables extends Controller
 {
-  public $debug = true;
+  /**
+   * @param boolean debug
+   */
+  public $debug = FALSE;
   
+  /**
+   * getting default list
+   * @param string $httpData->PRO_UID (opional)
+   */
   public function index($httpData)
   {
     global $RBAC;
@@ -26,11 +39,18 @@ class pmTables extends Controller
     G::RenderPage('publish', 'extJs');
   }
 
+  /**
+   * edit pmtable
+   * @param string $httpData->id
+   */
   public function edit($httpData)
   {
-    $addTabUid = isset($_GET['id']) ? $_GET['id'] : false;
+    require_once PATH_CONTROLLERS . 'pmTablesProxy.php';
+    $addTabUid = isset($httpData->id) ? $httpData->id : false;
     $table = false;
     $repTabPluginPermissions = false;
+    $additionalTables = new AdditionalTables();
+    $additionalTables = new AdditionalTables();
 
     if ($addTabUid !== false) { // if is a edit request
       require_once 'classes/model/AdditionalTables.php';
@@ -38,7 +58,6 @@ class pmTables extends Controller
       $tableFields = array();
       $fieldsList = array();
       
-      $additionalTables = new AdditionalTables();
       $table = $additionalTables->load($addTabUid, true);
 
       // list the case fields
@@ -52,7 +71,7 @@ class pmTables extends Controller
       //list dynaform fields
       switch ($table['ADD_TAB_TYPE']) {
         case 'NORMAL':
-          $fields = $this->_getDynafields($table['PRO_UID']);
+          $fields = pmTablesProxy::_getDynafields($table['PRO_UID']);
 
           foreach ($fields as $field) {
             //select to not assigned fields for available grid
@@ -73,7 +92,7 @@ class pmTables extends Controller
           // $G_FORM = new Form($table['PRO_UID'] . '/' . $gridId, PATH_DYNAFORM, SYS_LANG, false);
           // $gridFields = $G_FORM->getVars(false);
           $fieldsList = array();
-          $gridFields = $this->_getGridDynafields($table['PRO_UID'], $gridId);
+          $gridFields = pmTablesProxy::_getGridDynafields($table['PRO_UID'], $gridId);
           foreach ($gridFields as $gfield) {
             if (!in_array($gfield['name'], $tableFields)) {
               $fieldsList[] = array(
@@ -105,6 +124,10 @@ class pmTables extends Controller
     G::RenderPage('publish', 'extJs');
   }
   
+  /**
+   * show pmTable data list
+   * @param string $httpData->id
+   */
   function data($httpData) 
   {
     require_once 'classes/model/AdditionalTables.php';
@@ -118,9 +141,14 @@ class pmTables extends Controller
   } 
    
 
-  /**
-   * protected functions
+   /**
+   * - protected functions (non-callable from controller outside) -
    */
+  
+  /**
+   * Get simple report plugin definition
+   * @param $type
+   */ 
   protected function _getSimpleReportPluginDef()
   {
     global $G_TMP_MENU;
@@ -138,105 +166,6 @@ class pmTables extends Controller
     }
 
     return $repTabPluginPermissions;
-  }
-
-  protected function _getDynafields($proUid, $type = 'xmlform')
-  {
-    require_once 'classes/model/Dynaform.php';
-    $fields = array();
-    $fieldsNames = array();
-    
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(DynaformPeer::DYN_FILENAME);
-    $oCriteria->add(DynaformPeer::PRO_UID, $proUid);
-    $oCriteria->add(DynaformPeer::DYN_TYPE, $type);
-    $oDataset = DynaformPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-  
-    $excludeFieldsList = array('title', 'subtitle', 'link', 'file', 'button', 'reset', 'submit',
-                              'listbox', 'checkgroup', 'grid', 'javascript');
-    
-    $labelFieldsTypeList = array('dropdown', 'checkbox', 'radiogroup', 'yesno');
-  
-    while ($aRow = $oDataset->getRow()) {
-      if (file_exists(PATH_DYNAFORM . PATH_SEP . $aRow['DYN_FILENAME'] . '.xml')) {
-        $G_FORM  = new Form($aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG);
-        
-        if ($G_FORM->type == 'xmlform' || $G_FORM->type == '') {
-          foreach($G_FORM->fields as $fieldName => $fieldNode) {
-            if (!in_array($fieldNode->type, $excludeFieldsList) && !in_array($fieldName, $fieldsNames)) {
-              $fields[] = array('name' => $fieldName, 'type' => $fieldNode->type, 'label'=> $fieldNode->label);
-              $fieldsNames[] = $fieldName;
-              
-              if (in_array($fieldNode->type, $labelFieldsTypeList) && !in_array($fieldName.'_label', $fieldsNames)) {
-                $fields[] = array('name' => $fieldName . '_label', 'type' => $fieldNode->type, 'label'=>$fieldNode->label . '_label');
-                $fieldsNames[] = $fieldName;
-              }
-            }
-          }
-        }
-      }
-      $oDataset->next();
-    }
-    
-    return $fields;
-  }
-
-  protected function _getGridDynafields($proUid, $gridId)
-  {
-    $fields = array();
-    $fieldsNames = array();
-    $excludeFieldsList = array('title', 'subtitle', 'link', 'file', 'button', 'reset', 'submit',
-                              'listbox', 'checkgroup', 'grid', 'javascript');
-    
-    $labelFieldsTypeList = array('dropdown', 'checkbox', 'radiogroup', 'yesno');
-
-    $G_FORM = new Form($proUid . '/' . $gridId, PATH_DYNAFORM, SYS_LANG, false);
-    
-    if ($G_FORM->type == 'grid') {
-      foreach($G_FORM->fields as $fieldName => $fieldNode) {
-        if (!in_array($fieldNode->type, $excludeFieldsList) && !in_array($fieldName, $fieldsNames)) {
-          $fields[] = array('name' => $fieldName, 'type' => $fieldNode->type, 'label'=> $fieldNode->label);
-          $fieldsNames[] = $fieldName;
-          
-          if (in_array($fieldNode->type, $labelFieldsTypeList) && !in_array($fieldName.'_label', $fieldsNames)) {
-            $fields[] = array('name' => $fieldName . '_label', 'type' => $fieldNode->type, 'label'=>$fieldNode->label . '_label');
-            $fieldsNames[] = $fieldName;
-          }
-        }
-      }
-    }
-    
-    return $fields;
-  }
-  
-  protected function _getGridFields($proUid)
-  {
-    $aFields = array();
-    $aFieldsNames = array();
-    require_once 'classes/model/Dynaform.php';
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(DynaformPeer::DYN_FILENAME);
-    $oCriteria->add(DynaformPeer::PRO_UID, $proUid);
-    $oDataset = DynaformPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    while ($aRow = $oDataset->getRow()) {
-      $G_FORM  = new Form($aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG);
-      if ($G_FORM->type == 'xmlform') {
-        foreach($G_FORM->fields as $k => $v) {
-          if ($v->type == 'grid') {
-            if (!in_array($k, $aFieldsNames)) {
-              $aFields[] = array('name' => $k, 'xmlform' => str_replace($proUid . '/', '', $v->xmlGrid));
-              $aFieldsNames[] = $k;
-            }
-          }
-        }
-      }
-      $oDataset->next();
-    }
-    return $aFields;
   }
 
 }
