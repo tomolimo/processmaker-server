@@ -5,7 +5,8 @@
 <PREVIOUS_STEP_LABEL type="private"/>
 <PREVIOUS_ACTION type="private"/>
 <NEXT_ACTION type="private"/>
-<MNUP type="print" colWidth="20" title="" value='' colAlign="left" link="../cases/cases_PrintView" width="800" height="600" left="0" top="0" resizable="1">
+<PRINT_PREVIEW_ACTION type="private" defaultValue="../cases/cases_PrintView"/>
+<MNUP type="print" colWidth="20" title="" value='' colAlign="left" link="@#PRINT_PREVIEW_ACTION" width="800" height="600" left="0" top="0" resizable="1">
   <en>Print form</en>
 </MNUP>
 

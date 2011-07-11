@@ -40,50 +40,54 @@
     $_DBArray = array();
   }
 
-	$G_MAIN_MENU            = 'caseTracker';
+  $G_MAIN_MENU            = 'caseTracker';
   $G_ID_MENU_SELECTED     = 'DYNADOC';
   global $G_PUBLISH;
 
   switch ($_GET['CTO_TYPE_OBJ'])
-	 {
-	 	case 'DYNAFORM':
-			G::LoadClass('case');
-			$oCase = new Cases();
-			$Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
-			$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
-			$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
-			$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
-			$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
-			$G_PUBLISH = new Publisher;
-			$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS']. '/' . $_GET['CTO_UID_OBJ'], '', $Fields['APP_DATA'],'','','view');
-			G::RenderPage('publish');
-		break;
-
-		case 'INPUT_DOCUMENT':
-			G::LoadClass('case');
-			$oCase = new Cases();
-			$c = $oCase->getAllUploadedDocumentsCriteriaTracker($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_GET['CTO_UID_OBJ']);
-
-			$oHeadPublisher =& headPublisher::getSingleton();
-      $oHeadPublisher->addScriptFile('/jscore/tracker/tracker.js');
-
-			$G_PUBLISH = new Publisher;
-			$G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_Inputdocs', $c);
-		  G::RenderPage('publish');
-		break;
-
-		case 'OUTPUT_DOCUMENT':
+  {
+    case 'DYNAFORM':
       G::LoadClass('case');
-		  $oCase = new Cases();
-		  $c = $oCase->getAllGeneratedDocumentsCriteriaTracker($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_GET['CTO_UID_OBJ']);
+      $oCase  = new Cases();
+      $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL']  = '';
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL']      = '';
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP']            = '#';
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION']          = 'alert("Sample"); return false;';
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PRINT_PREVIEW']        = '#';
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PRINT_PREVIEW_ACTION'] = 'tracker_PrintView?CTO_UID_OBJ=' . $_GET['CTO_UID_OBJ'] . '&CTO_TYPE_OBJ=PRINT_PREVIEW';
+      $_SESSION['CTO_UID_OBJ'] =  $_GET['CTO_UID_OBJ'];
 
-		  $oHeadPublisher =& headPublisher::getSingleton();
+      $G_PUBLISH = new Publisher;
+      $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS']. '/' . $_GET['CTO_UID_OBJ'], '', $Fields['APP_DATA'],'','','view');
+      G::RenderPage('publish');
+    break;
+
+    case 'INPUT_DOCUMENT':
+      G::LoadClass('case');
+      $oCase = new Cases();
+      $c = $oCase->getAllUploadedDocumentsCriteriaTracker($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_GET['CTO_UID_OBJ']);
+
+      $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptFile('/jscore/tracker/tracker.js');
 
-		  $G_PUBLISH = new Publisher();
-		  $G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_Outputdocs', $c);
-		  G::RenderPage('publish');
-		break;
-	 }
+      $G_PUBLISH = new Publisher;
+      $G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_Inputdocs', $c);
+      G::RenderPage('publish');
+    break;
+
+    case 'OUTPUT_DOCUMENT':
+      G::LoadClass('case');
+      $oCase = new Cases();
+      $c = $oCase->getAllGeneratedDocumentsCriteriaTracker($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_GET['CTO_UID_OBJ']);
+
+      $oHeadPublisher =& headPublisher::getSingleton();
+      $oHeadPublisher->addScriptFile('/jscore/tracker/tracker.js');
+
+      $G_PUBLISH = new Publisher();
+      $G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_Outputdocs', $c);
+      G::RenderPage('publish');
+    break;
+  }
 
 ?>
