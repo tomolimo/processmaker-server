@@ -28,10 +28,14 @@
   * @date Jan 3th, 2010
   */
 
+  if (!isset($_GET['APP_UID']) || !isset($_GET['DEL_INDEX'])) {
+    throw new Exception("Application ID or Delegation Index is missing!. The System can't open the case.");
+  }
+
   G::LoadClass("configuration");
   G::LoadClass("case");
   $oCase = new Cases();
-  $conf = new Configurations;
+  $conf  = new Configurations;
   
   $oHeadPublisher =& headPublisher::getSingleton(); 
   $oHeadPublisher->usingExtJs('ux/miframe');
@@ -42,26 +46,23 @@
     $uri .= ($uri == '')? "$k=$v": "&$k=$v";
   }
   
-  $appNum = '';
-  if( isset($_GET['APP_UID']) && isset($_GET['DEL_INDEX'])) {
-    $case = $oCase->loadCase($_GET['APP_UID'], $_GET['DEL_INDEX']);
-    $appNum = $case['APP_TITLE'];
-  }
+  $case   = $oCase->loadCase($_GET['APP_UID'], $_GET['DEL_INDEX']);
 
   if (!isset($_GET['to_revise'])){
     $script = 'cases_Open?';
-  } else {
+  }
+  else {
     $script = 'cases_OpenToRevise?';
     $delIndex = $_GET['DEL_INDEX'];
     $appUid   = $_GET['APP_UID'];
-    $oHeadPublisher->assign( 'treeToReviseTitle',   G::loadtranslation('ID_STEP_LIST'));
+    $oHeadPublisher->assign('treeToReviseTitle', G::loadtranslation('ID_STEP_LIST'));
     $casesPanelUrl = 'casesToReviseTreeContent?APP_UID='.$appUid.'&DEL_INDEX='.$delIndex;
-    $oHeadPublisher->assign( 'casesPanelUrl',   $casesPanelUrl); //translations
+    $oHeadPublisher->assign('casesPanelUrl', $casesPanelUrl); //translations
     echo "<div id='toReviseTree'></div>";
   }
 
   $oHeadPublisher->assign('uri', $script . $uri);
-  $oHeadPublisher->assign('_APP_NUM', $appNum);
+  $oHeadPublisher->assign('_APP_NUM', '#: ' . $case['APP_NUMBER']);
   $oHeadPublisher->assign('_ENV_CURRENT_DATE', $conf->getSystemDate(date('Y-m-d')));
   $oHeadPublisher->assign('_ENV_CURRENT_DATE_NO_FORMAT', date('Y-m-d'));
 
