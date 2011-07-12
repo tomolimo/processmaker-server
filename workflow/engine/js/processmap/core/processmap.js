@@ -161,7 +161,7 @@ var processmap=function(){
                 panel.clearContent();
                 var iframe=document.createElement('iframe');
                 iframe.setAttribute('id','reportTablesIframe');
-                iframe.src = '../reportTables/main?PRO_UID=' + this.options.uid;
+                iframe.src = '../pmTables?PRO_UID=' + this.options.uid;
                 iframe.style.border='0px';
                 iframe.style.width='786px';
                 iframe.style.height='564px';

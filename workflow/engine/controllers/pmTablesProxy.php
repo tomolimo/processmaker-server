@@ -134,7 +134,7 @@ class pmTablesProxy extends HttpProxyController
           );
         }
       }
-      $resultList['processFields'] = $aProcessGridFields;
+      $resultList = $aProcessGridFields;
 
     } else {
       $aProcessFields = Array();
@@ -146,10 +146,12 @@ class pmTablesProxy extends HttpProxyController
           'FIELD_NAME' => $dfield['name']
         );
       }
-      $resultList['processFields'] = $aProcessFields;
+      $resultList = $aProcessFields;
     }
+    
+    sort($resultList);
 
-    return $resultList;
+    return array('processFields'=>$resultList);
   }
 
   /**

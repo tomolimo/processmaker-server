@@ -38,15 +38,18 @@ Ext.onReady(function(){
 
     pageSize = parseInt(CONFIG.pageSize);
 
-    var newMenuOptions = [
-      {
+    var newMenuOptions = new Array();
+    if (PRO_UID == false) {
+      newMenuOptions.push({
         text: 'New Table',
         handler: newPMTable
-      }, {
-        text: 'New Report Table',
-        handler: NewReportTable
-      }
-    ];
+      });
+    }
+    
+    newMenuOptions.push({
+      text: 'New Report Table',
+      handler: NewReportTable
+    });
 
     if (PRO_UID !== false) {
       newMenuOptions.push({

@@ -84,6 +84,7 @@ class pmTables extends Controller
               );
             }
           }
+          sort($fieldsList);
           $this->setJSVar('avFieldsList', $fieldsList);
           $repTabPluginPermissions = $this->_getSimpleReportPluginDef();
           $this->setJSVar('_plugin_permissions', $repTabPluginPermissions);
@@ -103,7 +104,7 @@ class pmTables extends Controller
               );
             }
           }
-
+          sort($fieldsList);
           $this->setJSVar('avFieldsList', $fieldsList);
           $repTabPluginPermissions = $this->_getSimpleReportPluginDef();
           break;
@@ -188,4 +189,5 @@ class pmTables extends Controller
   }
 
 }
+
 
