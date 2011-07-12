@@ -607,7 +607,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    */
   function set_xmlcode($A,$xmlcode) 
   {
-    $xmlcode = str_replace('%2B', '+', $xmlcode) ;
+    $xmlcode = urldecode($xmlcode) ;
     $file    = G::decrypt( $A , URL_KEY );
     $xmlcode = str_replace('&nbsp;', ' ', trim($xmlcode));
     $fp      = fopen(PATH_DYNAFORM  . $file . '.xml', 'w');
@@ -652,7 +652,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    */
   function set_javascript($A,$fieldName,$sCode)
   {
-    $sCode = str_replace('%2B', '+', $sCode) ;
+    $sCode = urldecode($sCode) ;
     try {
       $sCode = rtrim($sCode);
       $file  = G::decrypt( $A , URL_KEY );
