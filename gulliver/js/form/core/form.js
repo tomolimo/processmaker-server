@@ -783,8 +783,9 @@ function G_Text( form, element, name, type )
     me.putFormatNumber(keyPressed);
         
     if(this.validate=="Email")
-    {
-      var pat=/^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+    {      
+      //var pat=/^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+      var pat=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       if(!pat.test(this.element.value))
       {
         //old|if(this.required=="0"&&this.element.value=="") {
@@ -2089,7 +2090,8 @@ var validateForm = function(sRequiredFields) {
                       if(getField(aRequiredFields[i].name).value!='') {
                         var email = getField(aRequiredFields[i].name);              
                         //var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                        var filter = /^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+                        //var filter = /^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+                        var filter =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
                           if (!filter.test(email.value)&&email.value!="") {                  
                             fielEmailInvalid.push(aRequiredFields[i].label);                                        
                             vtext.failed();
