@@ -18,7 +18,7 @@ class Controller
      */
     private $__request__;
     
-    private $headPublisher;
+    protected $headPublisher;
 
     public $ExtVar = Array();
 

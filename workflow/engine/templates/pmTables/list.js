@@ -13,6 +13,8 @@ var viewport;
 var smodel;
 
 var rowsSelected;
+var importOption;
+var externalOption;
 
 Ext.onReady(function(){
     ///Keyboard Events
@@ -74,6 +76,13 @@ Ext.onReady(function(){
       disabled: true
     });
 
+    // importButton = new Ext.Action({
+    //   text: _('ID_IMPORT'),
+    //   iconCls: 'silk-add',
+    //   icon: '/images/import.gif',
+    //   handler: importOption
+    // });
+
     importButton = new Ext.Action({
       text: _('ID_IMPORT'),
       iconCls: 'silk-add',
@@ -102,9 +111,34 @@ Ext.onReady(function(){
       handler: DoSearch
     });
 
+    // contextMenu = new Ext.menu.Menu({
+    //   items: [editButton, deleteButton,'-',dataButton,'-',exportButton]
+    // });
+
+    var contextMenuItems = new Array();
+    contextMenuItems.push(editButton);  
+    contextMenuItems.push(deleteButton);
+    contextMenuItems.push('-');
+    contextMenuItems.push(dataButton);
+    contextMenuItems.push(exportButton);
+
+    if (_PLUGIN_SIMPLEREPORTS !== false) {
+      
+      externalOption = new Ext.Action({
+        text:'',
+        handler: function() {
+          updateTag('plugin@simplereport');
+        },
+        disabled: false
+      });
+
+      contextMenuItems.push(externalOption);
+    }
+
     contextMenu = new Ext.menu.Menu({
-      items: [editButton, deleteButton,'-',dataButton,'-',exportButton]
+      items: contextMenuItems
     });
+
 
     searchText = new Ext.form.TextField ({
         id: 'searchTxt',
@@ -132,30 +166,30 @@ Ext.onReady(function(){
     });
 
     storePageSize = new Ext.data.SimpleStore({
-        fields: ['size'],
-         data: [['20'],['30'],['40'],['50'],['100']],
-         autoLoad: true
-      });
+      fields: ['size'],
+       data: [['20'],['30'],['40'],['50'],['100']],
+       autoLoad: true
+    });
 
-      comboPageSize = new Ext.form.ComboBox({
-        typeAhead     : false,
-        mode          : 'local',
-        triggerAction : 'all',
-        store: storePageSize,
-        valueField: 'size',
-        displayField: 'size',
-        width: 50,
-        editable: false,
-        listeners:{
-          select: function(c,d,i){
-            UpdatePageConfig(d.data['size']);
-            bbarpaging.pageSize = parseInt(d.data['size']);
-            bbarpaging.moveFirst();
-          }
+    comboPageSize = new Ext.form.ComboBox({
+      typeAhead     : false,
+      mode          : 'local',
+      triggerAction : 'all',
+      store: storePageSize,
+      valueField: 'size',
+      displayField: 'size',
+      width: 50,
+      editable: false,
+      listeners:{
+        select: function(c,d,i){
+          UpdatePageConfig(d.data['size']);
+          bbarpaging.pageSize = parseInt(d.data['size']);
+          bbarpaging.moveFirst();
         }
-      });
+      }
+    });
 
-      comboPageSize.setValue(pageSize);
+    comboPageSize.setValue(pageSize);
 
     
 
@@ -217,13 +251,16 @@ Ext.onReady(function(){
       if (r.get('ADD_TAB_TAG')) {
         tag = r.get('ADD_TAB_TAG').replace('plugin@', '');
         tag = tag.charAt(0).toUpperCase() + tag.slice(1);
+        switch(tag.toLowerCase()){
+          case 'simplereport': tag = 'Simple Report'; break;
+        }
       } 
       return r.get('ADD_TAB_TAG') ? '<span style="font-size:9px; color:green">'+tag+':</span> '+ v : v;
     }});
     
     cmodelColumns.push({header: 'Table Type', dataIndex: 'PRO_UID', width: 120, align:'left', renderer: function(v,p,r){
-      color = r.get('PRO_UID') ? 'green' : 'blue';
-      value = r.get('PRO_UID') ? 'Table' : 'Report';
+      color = r.get('PRO_UID') ? 'blue' : 'green';
+      value = r.get('PRO_UID') ? 'Report' : 'Table';
       return '<span style="color:'+color+'">'+value+'</span> ';
     }});
 
@@ -287,6 +324,18 @@ Ext.onReady(function(){
         function (grid, rowIndex, evt) {
             var sm = grid.getSelectionModel();
             sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+
+            var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+            tag = rowsSelected[0].get('ADD_TAB_TAG');
+            text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
+            if (externalOption) {
+              externalOption.setText(text);
+              if (rowsSelected[0].get('PRO_UID')) {
+                externalOption.setDisabled(false);
+              } else {
+                externalOption.setDisabled(true);
+              }
+            }
         },
         this
     );
@@ -303,6 +352,7 @@ Ext.onReady(function(){
          infoGrid
       ]
     });
+  
 });
 
 //Funtion Handles Context Menu Opening
@@ -392,14 +442,104 @@ DeletePMTable = function() {
 
 //Load Import PM Table Form
 ImportPMTable = function(){
-  location.href = 'additionalTablesToImport';
-};
+      
+  var w = new Ext.Window({
+    title: '',
+    width: 420,
+    height: 160,
+    modal: true,
+    autoScroll: false,
+    maximizable: false,
+    resizable: false,
+    items: [
+      new Ext.FormPanel({
+        /*renderTo: 'form-panel',*/
+        id:'uploader',
+        fileUpload: true,
+        width: 400,
+        frame: true,
+        title: 'Import PM Table',
+        autoHeight: false,
+        bodyStyle: 'padding: 10px 10px 0 10px;',
+        labelWidth: 50,
+        defaults: {
+            anchor: '90%',
+            allowBlank: false,
+            msgTarget: 'side'
+        },
+        items: [{
+            xtype: 'fileuploadfield',
+            id: 'form-file',
+            emptyText: 'Select a .pmt file',
+            fieldLabel: _('ID_FILE'),
+            name: 'form[FILENAME]',
+            buttonText: '',
+            buttonCfg: {
+                iconCls: 'upload-icon'
+            }
+        }, {
+          xtype: 'checkbox',
+          fieldLabel: '',
+          boxLabel: 'Overwrite if exists?',
+          name: 'form[OVERWRITE]'
+        }],
+        buttons: [{
+            text: _('ID_UPLOAD'),
+            handler: function(){
+              var uploader = Ext.getCmp('uploader');
+
+              if(uploader.getForm().isValid()){
+                uploader.getForm().submit({
+                  url: 'pmTablesProxy/import',
+                  waitMsg: 'Uploading file...',
+                  success: function(o, resp){
+                    w.close();
+                    infoGrid.store.reload();
+
+                    PMExt.notify('IMPORT RESULT', resp.result.message);
+                  },
+                  failure: function(o, resp){
+                    w.close();
+                    //alert('ERROR "'+resp.result.msg+'"');
+                    Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
+                    Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
+                    Ext.MessageBox.ERROR});
+                    //setTimeout(function(){Ext.MessageBox.hide(); }, 2000);
+                  }
+                });
+              }
+            }
+        }/*,{
+            text: 'Reset',
+            handler: function(){
+              uploader = Ext.getCmp('uploader');
+              uploader.getForm().reset();
+            }
+        }*/,{
+            text: TRANSLATIONS.ID_CANCEL,
+            handler: function(){
+              w.close();
+            }
+        }]
+      })
+    ]/*,
+    listeners:{
+      show:function() {
+        this.loadMask = new Ext.LoadMask(this.body, {
+          msg:'Loading. Please wait...'
+        });
+      }
+    }*/
+  });
+  w.show();
+}
 
 //Load Export PM Tables Form
 ExportPMTable = function(){
   iGrid = Ext.getCmp('infoGrid');
   rowsSelected = iGrid.getSelectionModel().getSelections();
-  location.href = 'additionalTablesToExport?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
+  //location.href = 'additionalTablesToExport?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
+  location.href = 'pmTables/export?id='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
 };
 
 //Load PM TAble Data
@@ -435,3 +575,23 @@ GridByDefault = function(){
   searchText.reset();
   infoGrid.store.load();
 };
+
+function updateTag(value)
+{
+  var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+
+  Ext.Ajax.request({
+    url: 'pmTablesProxy/updateTag',
+    params: {
+      ADD_TAB_UID: rowsSelected[0].get('ADD_TAB_UID'),
+      value: rowsSelected[0].get('ADD_TAB_TAG') ? '': value
+    },
+    success: function(resp){
+      Ext.getCmp('infoGrid').store.reload();
+    },
+    failure: function(obj, resp){
+      Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
+    }
+  });
+}
+

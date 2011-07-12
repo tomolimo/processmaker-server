@@ -42,10 +42,10 @@ if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
 $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'settings' );
 
 if ($RBAC->userCanAccess('PM_SETUP') == 1) {
-  $G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'settings');
-  $G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '../reportTables/main', 'Report Tables', 'icon-tables.png','', 'settings');
+  //$G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'settings');
+  //$G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '../reportTables/main', 'Report Tables', 'icon-tables.png','', 'settings');
 
-  $G_TMP_MENU->AddIdRawOption('PM_TABLES', '../pmTables', 'PM Tables 2', 'icon-tables.png','', 'settings');
+  $G_TMP_MENU->AddIdRawOption('PM_TABLES', '../pmTables', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'settings');
 }
 
 $G_TMP_MENU->AddIdRawOption('WEBSERVICES', 'webServices', G::LoadTranslation('ID_WEB_SERVICES'), 'icon-webservices.png', '', 'settings');
@@ -62,3 +62,4 @@ $G_TMP_MENU->AddIdRawOption('GROUPS', '../groups/groups', G::LoadTranslation('ID
 $G_TMP_MENU->AddIdRawOption('DEPARTAMENTS', '../departments/departments', G::LoadTranslation('ID_DEPARTMENTS_USERS'), '', '', 'users');
 $G_TMP_MENU->AddIdRawOption('ROLES', '../roles/roles_List', G::LoadTranslation('ID_ROLES'), '', '', 'users');
 $G_TMP_MENU->AddIdRawOption('AUTHSOURCES', '../authSources/authSources_List', G::LoadTranslation('ID_AUTH_SOURCES'), '', '', 'users');
+

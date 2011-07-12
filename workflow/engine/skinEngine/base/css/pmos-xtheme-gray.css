@@ -686,6 +686,12 @@ antes funcionaba.
 	background-image:url( /images/icons_silk/sprites.png) !important;
 	background-position:0 -5815px !important;
 }
+.ICON_PM_TABLES{
+  /*ss_database_table*/
+  background-image:url( /images/icons_silk/sprites.png) !important;
+  background-position:0 -5815px !important;
+}
+
 
 .ICON_LANGUAGES{
 	/*ss_text_dropcaps*/

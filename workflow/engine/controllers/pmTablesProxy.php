@@ -188,7 +188,7 @@ class pmTablesProxy extends HttpProxyController
         'ADD_TAB_CLASS_NAME'  => $repTabClassName,
         'ADD_TAB_DESCRIPTION' => $data['REP_TAB_DSC'],
         'ADD_TAB_PLG_UID'     => '',
-        'DBS_UID'             => $data['REP_TAB_CONNECTION'],
+        'DBS_UID'             => ($data['REP_TAB_CONNECTION'] ? $data['REP_TAB_CONNECTION'] : 'workflow'),
         'PRO_UID'             => $data['PRO_UID'],
         'ADD_TAB_TYPE'        => $data['REP_TAB_TYPE'],
         'ADD_TAB_GRID'        => $data['REP_TAB_GRID']
@@ -425,8 +425,6 @@ class pmTablesProxy extends HttpProxyController
   /**
    * update pm tables record
    * @param string $httpData->id
-   * @param string $httpData->start
-   * @param string $httpData->limit
    */
   public function dataUpdate($httpData)
   {
@@ -458,6 +456,10 @@ class pmTablesProxy extends HttpProxyController
     $this->message = $result ? 'Updated Successfully' : 'Error Updating record';
   }
 
+  /**
+   * remove a pm tables record
+   * @param string $httpData->id
+   */
   public function dataDestroy($httpData)
   {
     require_once 'classes/model/AdditionalTables.php';
@@ -477,6 +479,217 @@ class pmTablesProxy extends HttpProxyController
     $this->message = $this->success ? 'Deleted Successfully' : 'Error Deleting record';
   }
 
+
+  /**
+   * import a pm table
+   * @param string $httpData->id
+   */
+  public function import($httpData)
+  {
+    require_once 'classes/model/AdditionalTables.php';
+
+    try {
+      
+      $overWrite = isset($_POST['form']['OVERWRITE'])? true: false;
+
+      //save the file
+      if ($_FILES['form']['error']['FILENAME'] == 0) {
+        $PUBLIC_ROOT_PATH = PATH_DATA.'sites'.PATH_SEP.SYS_SYS.PATH_SEP.'public'.PATH_SEP;
+        
+        $filename = $_FILES['form']['name']['FILENAME'];
+        $tempName = $_FILES['form']['tmp_name']['FILENAME'];
+        G::uploadFile($tempName, $PUBLIC_ROOT_PATH, $filename );
+        
+        $fileContent = file_get_contents($PUBLIC_ROOT_PATH.$filename);
+        
+        if(strpos($fileContent, '-----== ProcessMaker Open Source Private Tables ==-----') !== false){
+          $oMap = new aTablesMap();
+          
+        $fp     = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
+        $fsData   = intval(fread($fp, 9));    //reading the metadata
+        $sType    = fread($fp, $fsData);    //reading string $oData
+            
+        require_once 'classes/model/AdditionalTables.php';
+        $oAdditionalTables = new AdditionalTables();
+        require_once 'classes/model/Fields.php';
+        $oFields = new Fields();
+              
+          while ( !feof($fp) ) {
+              switch($sType){
+                case '@META':
+                  $fsData   = intval(fread($fp, 9));
+                  $METADATA = fread($fp, $fsData);
+                  //print_r($METADATA);
+                  break;
+                case '@SCHEMA':
+                  
+                  $fsUid    = intval(fread($fp, 9));
+                  $uid      = fread($fp, $fsUid);
+                  
+                  $fsData   = intval(fread($fp, 9));
+                  $schema   = fread($fp, $fsData);
+                  $contentSchema = unserialize($schema);
+                  //print_r($contentSchema);
+                  
+                  if($overWrite){
+                    $aTable = new additionalTables();
+                    try{
+                      $tRecord = $aTable->load($uid);
+                      $aTable->deleteAll($uid);
+                    } catch(Exception $e){
+                      $tRecord = $aTable->loadByName($contentSchema['ADD_TAB_NAME']);
+                      if($tRecord[0]){
+                        $aTable->deleteAll($tRecord[0]['ADD_TAB_UID']);
+                      }
+                    }
+                  } else {
+                    #verify if exists some table with the same name
+                    $aTable = new additionalTables();
+                    $tRecord = $aTable->loadByName("{$contentSchema['ADD_TAB_NAME']}%");
+                    
+                    if($tRecord){
+                      $tNameOld = $contentSchema['ADD_TAB_NAME'];
+                      $contentSchema['ADD_TAB_NAME'] =  "{$contentSchema['ADD_TAB_NAME']}".sizeof($tRecord);
+                      $contentSchema['ADD_TAB_CLASS_NAME'] =  "{$contentSchema['ADD_TAB_CLASS_NAME']}".sizeof($tRecord);
+                      $oMap->addRoute($tNameOld, $contentSchema['ADD_TAB_NAME']); 
+                    }
+                    
+                  }
+
+                  $sAddTabUid = $oAdditionalTables->create(
+                    array(
+                      'ADD_TAB_NAME'        => $contentSchema['ADD_TAB_NAME'],
+                                'ADD_TAB_CLASS_NAME'      => $contentSchema['ADD_TAB_CLASS_NAME'],
+                                'ADD_TAB_DESCRIPTION'     => $contentSchema['ADD_TAB_DESCRIPTION'],
+                                'ADD_TAB_SDW_LOG_INSERT'  => $contentSchema['ADD_TAB_SDW_LOG_INSERT'],
+                                'ADD_TAB_SDW_LOG_UPDATE'  => $contentSchema['ADD_TAB_SDW_LOG_UPDATE'],
+                                'ADD_TAB_SDW_LOG_DELETE'  => $contentSchema['ADD_TAB_SDW_LOG_DELETE'],
+                                'ADD_TAB_SDW_LOG_SELECT'  => $contentSchema['ADD_TAB_SDW_LOG_SELECT'],
+                                'ADD_TAB_SDW_MAX_LENGTH'  => $contentSchema['ADD_TAB_SDW_MAX_LENGTH'],
+                                'ADD_TAB_SDW_AUTO_DELETE' => $contentSchema['ADD_TAB_SDW_AUTO_DELETE'],
+                      'ADD_TAB_PLG_UID'         => $contentSchema['ADD_TAB_PLG_UID']
+                  ), 
+                  $contentSchema['FIELDS']
+              );
+              
+              
+              $aFields   = array();
+              foreach( $contentSchema['FIELDS'] as $iRow => $aRow ){
+                unset($aRow['FLD_UID']);
+                $aRow['ADD_TAB_UID'] = $sAddTabUid;
+                  $oFields->create($aRow);
+    //              print_R($aRow); die;
+                  $aFields[] = array(
+                     'sType'       => $contentSchema['FIELDS'][$iRow]['FLD_TYPE'],
+                             'iSize'       => $contentSchema['FIELDS'][$iRow]['FLD_SIZE'],
+                             'sFieldName'  => $contentSchema['FIELDS'][$iRow]['FLD_NAME'],
+                             'bNull'       => $contentSchema['FIELDS'][$iRow]['FLD_NULL'],
+                             'bAI'         => $contentSchema['FIELDS'][$iRow]['FLD_AUTO_INCREMENT'],
+                             'bPrimaryKey' => $contentSchema['FIELDS'][$iRow]['FLD_KEY']
+                  );
+              }
+              $oAdditionalTables->createTable($contentSchema['ADD_TAB_NAME'], 'wf', $aFields);          
+
+              for($i=1; $i <= count($contentSchema['FIELDS']); $i++){
+                $contentSchema['FIELDS'][$i]['FLD_NULL'] = $contentSchema['FIELDS'][$i]['FLD_NULL'] == '1' ? 'on' : '';
+                            $contentSchema['FIELDS'][$i]['FLD_AUTO_INCREMENT'] = $contentSchema['FIELDS'][$i]['FLD_AUTO_INCREMENT'] == '1' ? 'on' : '';
+                            $contentSchema['FIELDS'][$i]['FLD_KEY'] = $contentSchema['FIELDS'][$i]['FLD_KEY'] == '1' ? 'on' : '';
+                            $contentSchema['FIELDS'][$i]['FLD_FOREIGN_KEY'] = $contentSchema['FIELDS'][$i]['FLD_FOREIGN_KEY'] == '1' ? 'on' : '';
+              } 
+              
+              $oAdditionalTables->createPropelClasses($contentSchema['ADD_TAB_NAME'], $contentSchema['ADD_TAB_CLASS_NAME'], $contentSchema['FIELDS'], $sAddTabUid);
+                  
+                  break;
+                case '@DATA':
+                  $fstName   = intval(fread($fp, 9));
+                  $tName     = fread($fp, $fstName);
+                  $fsData      = intval(fread($fp, 9));
+                  $contentData = unserialize(fread($fp, $fsData));
+                  
+                  $tName = $oMap->route($tName); 
+                          
+              $oAdditionalTables = new AdditionalTables();
+                  $tRecord = $oAdditionalTables->loadByName($tName);
+                  
+                  if($tRecord){
+                foreach($contentData as $data){
+                  unset($data['DUMMY']);
+                  $oAdditionalTables->saveDataInTable($tRecord[0]['ADD_TAB_UID'], $data);
+                }
+                  }
+                  break;
+              }
+              $fsData = intval(fread($fp, 9));
+              if($fsData > 0){    
+                $sType  = fread($fp, $fsData);
+              } else {
+                break;
+              }  
+            }
+            
+            $this->success = true;
+            $this->message = 'File Imported "'.$filename.'" Successfully';
+            
+        } else {
+          $this->success = false;
+          $this->message = 'INVALID_FILE';
+        }
+          
+      }
+    } catch(Exception $e){
+      $this->success = false;
+      $this->message = $e->getMessage();
+    }
+  }
+
+  
+  public function exportList()
+  {
+    require_once 'classes/model/AdditionalTables.php';
+
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_UID);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
+    $oCriteria->addSelectColumn("'".G::LoadTranslation('ID_ACTION_EXPORT')."' as 'CH_SCHEMA'");
+    $oCriteria->addSelectColumn("'".G::LoadTranslation('ID_ACTION_EXPORT')."' as 'CH_DATA'");
+
+    $uids = explode(',',$_GET['id']);
+
+    foreach ($uids as $UID){
+      if (!isset($CC)){
+           $CC = $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_UID, $UID ,Criteria::EQUAL);
+      }else{
+         $CC->addOr($oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_UID, $UID ,Criteria::EQUAL));
+      }
+    }
+    $oCriteria->add($CC);
+    $oCriteria->addAnd($oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_UID, '', Criteria::NOT_EQUAL));
+
+    $oDataset = AdditionalTablesPeer::doSelectRS ( $oCriteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+
+    $addTables = Array();
+    while( $oDataset->next() ) {
+        $addTables[] = $oDataset->getRow();
+    }
+
+    return $addTables;
+  }
+
+  public function updateTag($httpData)
+  {
+    require_once 'classes/model/AdditionalTables.php';
+    $oAdditionalTables = new AdditionalTables();
+    $uid   = $_REQUEST['ADD_TAB_UID'];
+    $value = $_REQUEST['value'];
+
+    $repTabData = array(
+      'ADD_TAB_UID' => $uid,
+      'ADD_TAB_TAG' => $value
+    );
+    $oAdditionalTables->update($repTabData);
+  }
 
   /**
    * - protected functions (non callable from controller outside) -
@@ -708,3 +921,19 @@ class pmTablesProxy extends HttpProxyController
 }
  
 
+class aTablesMap{
+  var $aMap;
+  
+  function route($uid){
+    if( isset($this->aMap[$uid]) ){
+      return $this->aMap[$uid];
+    } else {
+      return $uid;
+    }
+  }
+  
+  function addRoute($item, $equal){
+    $this->aMap[$item] = $equal;
+  }
+  
+}

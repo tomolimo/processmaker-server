@@ -689,7 +689,8 @@ class AdditionalTables extends BaseAdditionalTables {
       $aData['className']      = $sClassName;
       $aData['connection']     = $connection;
       $aData['GUID']           = $sAddTabUid;
-      $aData['firstColumn']    = strtoupper($aFields[0]['FLD_NAME']);
+      
+      $aData['firstColumn']    = isset($aFields[0])? strtoupper($aFields[0]['FLD_NAME']) : strtoupper($aFields[1]['FLD_NAME']);
       $aData['totalColumns']   = count($aFields);
       $aData['useIdGenerator'] = 'false';
       $oTP1  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'Table.tpl');
@@ -1201,6 +1202,7 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
   function getAllData($sUID, $start=NULL, $limit=NULL)
   {
     $aData = $this->load($sUID, true);
+    $aData['DBS_UID'] = $aData['DBS_UID'] ? $aData['DBS_UID'] : 'workflow';
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
     $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
 

@@ -35,6 +35,8 @@ class pmTables extends Controller
     $this->setJSVar('CONFIG', $Config);
     $this->setJSVar('PRO_UID', isset($_GET['PRO_UID'])? $_GET['PRO_UID'] : false);
 
+    $this->setJSVar('_PLUGIN_SIMPLEREPORTS', $this->_getSimpleReportPluginDef());
+
     //render content
     G::RenderPage('publish', 'extJs');
   }
@@ -117,7 +119,9 @@ class pmTables extends Controller
     $this->includeExtJS('pmTables/' . $jsFile, $this->debug);
 
     //fix for backware compatibility
-    $table['DBS_UID'] = $table['DBS_UID'] == null || $table['DBS_UID'] == '' ? 'workflow': $table['DBS_UID'];
+    if ($table) {
+      $table['DBS_UID'] = $table['DBS_UID'] == null || $table['DBS_UID'] == '' ? 'workflow': $table['DBS_UID'];
+    }
 
     $this->setJSVar('ADD_TAB_UID', $addTabUid);
     $this->setJSVar('PRO_UID', isset($_GET['PRO_UID'])? $_GET['PRO_UID'] : false);
@@ -142,6 +146,18 @@ class pmTables extends Controller
     //g::pr($tableDef['FIELDS']);
     G::RenderPage('publish', 'extJs');
   } 
+
+  function export($httpData)
+  {
+    $this->includeExtJS('pmTables/export', $this->debug);    //adding a javascript file .js
+    $this->setView('pmTables/export'); //adding a html file  .html.
+
+    $toSend = Array();
+    $toSend['UID_LIST'] = $httpData->id;
+
+    $this->setJSVar('EXPORT_TABLES', $toSend);
+    G::RenderPage('publish', 'extJs');
+  }
    
 
    /**
