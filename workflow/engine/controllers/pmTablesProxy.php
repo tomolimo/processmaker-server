@@ -243,11 +243,11 @@ class pmTablesProxy extends HttpProxyController
 
       foreach ($columns as $i => $column) {
         //new feature, to reorder the columns
-        if (isset($oldFields[$column->uid])) { // the the field alreaday exists
-          if ($oldFields[$column->uid]['FLD_INDEX'] != $i) { // if its index has changed
-            $column->uid = ''; //set as new field,
-          }
-        }
+        // if (isset($oldFields[$column->uid])) { // the the field alreaday exists
+        //   if ($oldFields[$column->uid]['FLD_INDEX'] != $i) { // if its index has changed
+        //     $column->uid = ''; //set as new field,
+        //   }
+        // }
 
         $field = array(
           'FLD_UID'               => $column->uid,
