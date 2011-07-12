@@ -116,6 +116,9 @@ class pmTables extends Controller
     
     $this->includeExtJS('pmTables/' . $jsFile, $this->debug);
 
+    //fix for backware compatibility
+    $table['DBS_UID'] = $table['DBS_UID'] == null || $table['DBS_UID'] == '' ? 'workflow': $table['DBS_UID'];
+
     $this->setJSVar('ADD_TAB_UID', $addTabUid);
     $this->setJSVar('PRO_UID', isset($_GET['PRO_UID'])? $_GET['PRO_UID'] : false);
     $this->setJSVar('TABLE', $table);

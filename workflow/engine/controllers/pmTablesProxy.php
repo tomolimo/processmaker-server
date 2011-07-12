@@ -11,6 +11,9 @@ require_once 'classes/model/AdditionalTables.php';
 class pmTablesProxy extends HttpProxyController
 {
 
+  protected $className;
+  protected $classPeerName;
+
   /**
    * get pmtables list
    * @param string $httpData->start
@@ -381,18 +384,42 @@ class pmTablesProxy extends HttpProxyController
     require_once 'classes/model/AdditionalTables.php';
     $oAdditionalTables = new AdditionalTables();
     $table = $oAdditionalTables->load($httpData->id, true);
-    $className = $table['ADD_TAB_CLASS_NAME'];
-    $sClassPeerName = $className . 'Peer';
-    
+    $this->className = $table['ADD_TAB_CLASS_NAME'];
+    $this->classPeerName = $this->className . 'Peer';
+    $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+
+    if (!file_exists ($sPath . $this->className . '.php') ) {
+      throw new Exception("ERROR: $className class file doesn't exit!");
+    }
+
+    require_once $sPath . $this->className . '.php';
     $rows = G::json_decode($httpData->rows);
+    eval('$obj = new ' .$this->className. '();');
     if (is_array($rows)) {
-      
+      foreach ($rows as $row) {
+        foreach ($row as $key => $value) {
+          $action = 'set' . AdditionalTables::getPHPName($key);
+          $res = $obj->$action($value);
+        }
+        $this->success = $res ? true: false;
+      }
+    } 
+    else {
+      foreach ($rows as $key => $value) {
+        $action = 'set' . AdditionalTables::getPHPName($key);
+        $obj->$action($value);
+      }
+      if ($obj->save() >0) {
+        $this->success = true;
+      } 
+      else {
+        $this->success = false;
+      }
     }
-    else { //then is object 
-      
-    }
-    print_R($row);
-    //$sClassPeerName::retrieveByPk();
+
+    
+
+    $this->message = $this->success ? 'Saved Successfully' : 'Error Updating record';
   }
 
   /**
@@ -406,33 +433,110 @@ class pmTablesProxy extends HttpProxyController
     require_once 'classes/model/AdditionalTables.php';
     $oAdditionalTables = new AdditionalTables();
     $table = $oAdditionalTables->load($httpData->id, true);
-    $className = $table['ADD_TAB_CLASS_NAME'];
-    $slassPeerName = $className . 'Peer';
-    
+    $this->className = $table['ADD_TAB_CLASS_NAME'];
+    $this->classPeerName = $this->className . 'Peer';
+    $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+
+    if (!file_exists ($sPath . $this->className . '.php') ) {
+      throw new Exception("ERROR: $className class file doesn't exit!");
+    }
+
+    require_once $sPath . $this->className . '.php';
+
     $rows = G::json_decode($httpData->rows);
-    print_R($rows);
+    
     if (is_array($rows)) {
-      
+      foreach($rows as $row) {
+        $result = $this->_dataUpdate($row);
+      }
     }
     else { //then is object 
-      $keys = explode('-', $rows->__index__);
-      foreach ($keys as $key) {
-        $params .= is_numeric($key) ? $key : "'$key'";
-      }
-
-      $obj = null;
-      var_dump('$obj = $classPeerName::retrieveByPk('.implode(',', $params).')');
-      eval('$obj = $classPeerName::retrieveByPk('.implode(',', $params).')');
-      var_dump($obj);
+      $result = $this->_dataUpdate($rows);
     }
     
-    //$sClassPeerName::retrieveByPk();
+    $this->success = $result;
+    $this->message = $result ? 'Updated Successfully' : 'Error Updating record';
+  }
+
+  public function dataDestroy($httpData)
+  {
+    require_once 'classes/model/AdditionalTables.php';
+    $oAdditionalTables = new AdditionalTables();
+    $table = $oAdditionalTables->load($httpData->id, true);
+    $this->className = $table['ADD_TAB_CLASS_NAME'];
+    $this->classPeerName = $this->className . 'Peer';
+    $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+
+    if (!file_exists ($sPath . $this->className . '.php') ) {
+      throw new Exception("ERROR: $className class file doesn't exit!");
+    }
+
+    require_once $sPath . $this->className . '.php';
+    
+    $this->success = $this->_dataDestroy($httpData->rows);
+    $this->message = $this->success ? 'Deleted Successfully' : 'Error Deleting record';
   }
 
 
   /**
    * - protected functions (non callable from controller outside) -
    */
+
+   /**
+   * Update data from a addTable record
+   * @param $row
+   */
+  function _dataUpdate($row)
+  {
+    $keys = explode('-', $row->__index__);
+    unset($row->__index__);
+    $params = array();
+    foreach ($keys as $key) {
+      $params[] = is_numeric($key) ? $key : "'$key'";
+    }
+
+    $obj = null;
+    eval('$obj = '.$this->classPeerName.'::retrieveByPk('.implode(',', $params).');');
+    
+    if (is_object($obj)) {
+      foreach ($row as $key => $value) {
+        $action = 'set' . AdditionalTables::getPHPName($key);
+        $obj->$action($value);
+      }
+      $obj->save();
+      return true;
+    } else {
+      return false;
+      $this->success = false;
+      $this->message = 'Update Failed';
+    }
+  }
+
+  /**
+   * Update data from a addTable record
+   * @param $row
+   */
+  function _dataDestroy($row)
+  {
+    $row = str_replace('"', '', $row);
+    $keys = explode('-', $row);
+    $params = array();
+    foreach ($keys as $key) {
+      $params[] = is_numeric($key) ? $key : "'$key'";
+    }
+
+    $obj = null;  
+    eval('$obj = '.$this->classPeerName.'::retrieveByPk('.implode(',', $params).');');
+    
+    if (is_object($obj)) {
+      $obj->delete();
+      return true;
+    } else {
+      return false;
+      $this->success = false;
+      $this->message = 'Update Failed';
+    }
+  }
 
   /**
    * Get report table default columns

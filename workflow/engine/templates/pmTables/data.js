@@ -13,6 +13,7 @@ var store;
 var cmodel;
 var smodel;
 var infoGrid;
+var _fields;
 
 Ext.onReady(function(){
   
@@ -89,27 +90,27 @@ Ext.onReady(function(){
     }
   }
   
-//  smodel = new Ext.grid.CheckboxSelectionModel({
-//      listeners:{
-//        selectionchange: function(sm){
-//          var count_rows = sm.getCount();
-//          switch(count_rows){
-//          case 0:
-//            editButton.disable();
-//            deleteButton.disable();
-//            break;
-//          case 1:
-//            editButton.enable();
-//            deleteButton.enable();
-//            break;
-//          default:
-//            editButton.disable();
-//          deleteButton.disable();
-//            break;
-//          }
-//        }
-//      }
-//    });
+ smodel = new Ext.grid.CheckboxSelectionModel({
+     listeners:{
+       selectionchange: function(sm){
+         var count_rows = sm.getCount();
+         switch(count_rows){
+         case 0:
+           editButton.disable();
+           deleteButton.disable();
+           break;
+         case 1:
+           editButton.enable();
+           deleteButton.enable();
+           break;
+         default:
+           editButton.disable();
+           //deleteButton.disable();
+           break;
+         }
+       }
+     }
+   });
 
    //row editor for table columns grid
   editor = new Ext.ux.grid.RowEditor({
@@ -146,6 +147,10 @@ Ext.onReady(function(){
     reader : reader,
     writer : writer, // <-- plug a DataWriter into the store just as you would a Reader
     autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
+  });
+
+  Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
+    PMExt.notify('UPDATE', 'the record was updated successfully.');
   });
 
   // load the store immeditately
@@ -217,7 +222,7 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     plugins: [editor],
-    //sm: smodel,
+    sm: smodel,
     tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
     bbar: bbarpaging,
     listeners: {
@@ -273,8 +278,24 @@ capitalize = function(s){
 DoNothing = function(){};
 
 //Load New PM Table Row Forms
+var props = function(){};
+
 NewPMTableRow = function(){
-  location.href = 'additionalTablesDataNew?sUID=' + TABLES.UID;
+  var PMRow = infoGrid.getStore().recordType;
+  //var meta = mapPMFieldType(records[i].data['FIELD_UID']);
+  
+  for(i=0; i<_fields.length; i++) {
+    props.prototype[_fields[i].name] = '';
+  }
+
+  var row = new PMRow(new props);
+  length = infoGrid.getStore().data.length;
+  
+  editor.stopEditing();
+  store.insert(length, row);
+  infoGrid.getView().refresh();
+  infoGrid.getSelectionModel().selectRow(length);
+  editor.startEditing(length);
 };
 
 //Load PM Table Edition Row Form
@@ -292,20 +313,12 @@ EditPMTableRow = function(){
 
 //Confirm PM Table Row Deletion Tasks
 DeletePMTableRow = function(){
-  iGrid = Ext.getCmp('infoGrid');
-  rowsSelected = iGrid.getSelectionModel().getSelections();
-  Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_ROW'),
-          function(btn, text){
-              if (btn=="yes"){
-                var aRowsSeleted = (RetrieveRowsID(rowsSelected)).split(",") ;
-                var aTablesPKF   = (TABLES.PKF).split(","); ;
-                var sParam = '';
-                for(var i=0;i<aTablesPKF.length; i++){
-                  sParam += '&' + aTablesPKF[i] + '=' + aRowsSeleted[i];
-                }
-                location.href = 'additionalTablesDataDelete?sUID='+TABLES.UID+sParam;
-              }
+  
+  PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_REMOVE_FIELD'), function(){
+    var records = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+    Ext.each(records, Ext.getCmp('infoGrid').store.remove, Ext.getCmp('infoGrid').store);
   });
+
 };
 
 //Load Import PM Table From CSV Source

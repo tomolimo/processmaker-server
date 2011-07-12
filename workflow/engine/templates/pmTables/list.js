@@ -222,8 +222,8 @@ Ext.onReady(function(){
     }});
     
     cmodelColumns.push({header: 'Table Type', dataIndex: 'PRO_UID', width: 120, align:'left', renderer: function(v,p,r){
-      color = r.get('PRO_UID') == '' ? 'green' : 'blue';
-      value = r.get('PRO_UID') == '' ? 'Table' : 'Report';
+      color = r.get('PRO_UID') ? 'green' : 'blue';
+      value = r.get('PRO_UID') ? 'Table' : 'Report';
       return '<span style="color:'+color+'">'+value+'</span> ';
     }});
 
@@ -346,7 +346,7 @@ EditPMTable = function(){
     var row   = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
     
     if (row.data.TYPE != 'CLASSIC') {
-      tableType = row.data.PRO_UID !== '' ? 'report' : 'table';
+      tableType = row.data.PRO_UID ? 'report' : 'table';
       proParam = PRO_UID !== false ? '&PRO_UID='+PRO_UID : '';
       location.href = 'pmTables/edit?id='+row.data.ADD_TAB_UID+'&tableType=' + tableType + proParam;
     }
