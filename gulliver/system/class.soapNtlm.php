@@ -41,6 +41,16 @@ class soapNtlm {
   private $buffer;
   private $pos;
 
+  public function getuser()
+  {
+      return "";
+  }
+
+  public function getpassword()
+  {
+      return "";
+  }
+
   /**
    * Open the stream
    *
@@ -181,12 +191,12 @@ class soapNtlm {
     }
 
     //echo "[NTLMStream::createBuffer] create buffer from : $path <br>";
-    $this->ch = curl_init($this->path);
+    $this->ch = curl_init($path);
     curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($this->ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
-    curl_setopt($this->ch, CURLOPT_USERPWD, $this->options['auth']);
-
+    //curl_setopt($this->ch, CURLOPT_USERPWD, $this->options['auth']); // Hugo's code
+    curl_setopt($this->ch, CURLOPT_USERPWD, $this->getuser().':'.$this->getpassword());// Ankit's code
     echo $this->buffer = curl_exec($this->ch);
 
     //echo "[NTLMStream::createBuffer] buffer size : " . strlen($this->buffer) . "bytes<br>";
@@ -217,7 +227,8 @@ class NTLMSoapClient extends SoapClient {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
     curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
-    curl_setopt($ch, CURLOPT_USERPWD, $this->options['auth']);
+    //curl_setopt($ch, CURLOPT_USERPWD, $this->options['auth']); //Hugo's Code
+    curl_setopt($ch, CURLOPT_USERPWD, $this->user.':'.$this->password); //Ankit's Code
     $response = curl_exec($ch);
 
     return $response;
@@ -230,21 +241,36 @@ class NTLMSoapClient extends SoapClient {
 }
 
 class PMServiceNTLMSoapClient extends NTLMSoapClient {
-
   protected $user;
   protected $password;
 
-  function setAuth($auth){
+  function setAuthClient($auth){
     $authInfo=explode(":",$auth);
     $this->user=$authInfo[0];
     $this->password=$authInfo[1];
   }
-
 }
 
 class PMServiceProviderNTLMStream extends soapNtlm {
 
-  protected $user;
-  protected $password;
+   protected static $user ;
+   protected static $password;
+
+
+  public function getuser()
+  {
+      return self::$user;
+  }
+
+  public function getpassword()
+  {
+      return self::$password;
+  }
+
+ static function setAuthStream($auth){
+    $authInfo=explode(":",$auth);
+    self::$user=$authInfo[0];
+    self::$password=$authInfo[1];
+ }
 
 }

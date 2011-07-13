@@ -164,7 +164,7 @@ function getDWSData($sharepointServer, $auth, $newFileName, $dwsname, $lastUpdat
   $pmTrSharepoint = new pmTrSharepointClass($sharepointServer, $auth);
   $resultDWSData = $pmTrSharepoint->getDWSData($newFileName, $dwsname, $lastUpdate);
 if($resultDWSData)
-        return $newResult;
+        return $resultDWSData;
   else
         return "There was some error while getting the DWS Data";
 }
@@ -191,15 +191,15 @@ function getDWSMetaData($sharepointServer, $auth, $newFileName, $dwsname, $id) {
   require_once(PATH_CORE. 'classes' . PATH_SEP.'triggers' . PATH_SEP . 'class.pmTrSharepoint.php');
   $pmTrSharepoint = new pmTrSharepointClass($sharepointServer, $auth);
   $result = $pmTrSharepoint->getDWSMetaData($newFileName, $dwsname, $id);
-  $newResult = $result->GetDwsMetaDataResult;
-  if(isset($newResult))
+  //$newResult = $result->GetDwsMetaDataResult;
+  if(isset($result))
                   {
-                        return "Document workspace Meta-data found";
+                        return $result;
                   }
             else
-                    {
-                        return "Document workspace Meta-data not found";
-                    }
+                  {
+                       return "Document workspace Meta-data not found";
+                  }
 
 }
 

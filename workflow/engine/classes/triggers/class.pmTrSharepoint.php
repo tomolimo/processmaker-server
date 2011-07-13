@@ -12,6 +12,7 @@ class wscaller {
   private $soapObj;
   private $client;
   private $auth;
+  private $clientStream;
 
   function setAuthUser($auth) {
     //print "<br>- auth Setup";
@@ -29,9 +30,13 @@ class wscaller {
       // we unregister the current HTTP wrapper
       stream_wrapper_unregister('http');
       // we register the new HTTP wrapper
+      //$client = new PMServiceProviderNTLMStream($this->auth);
+      PMServiceProviderNTLMStream::setAuthStream($this->auth);
       stream_wrapper_register('http', 'PMServiceProviderNTLMStream') or die("Failed to register protocol");
-      $this->client = new PMServiceNTLMSoapClient($this->wsdlurl, array('trace' => 1, 'auth' => $this->auth));
-      $this->client->setAuth($this->auth);
+
+//     $this->client = new PMServiceNTLMSoapClient($this->wsdlurl, array('trace' => 1, 'auth' => $this->auth));// Hugo's code
+      $this->client = new PMServiceNTLMSoapClient($this->wsdlurl, array('trace' => 1)); // Ankit's Code
+      $this->client->setAuthClient($this->auth);
       return true;
     } catch (Exception $e) {
       echo $e;
@@ -78,7 +83,7 @@ class FieldInformationCollection {
 
 }
 
-class pmTrSharepointClass extends PMPlugin {
+class pmTrSharepointClass{
 
   function __construct($server, $auth) {
     set_include_path(
@@ -124,15 +129,13 @@ class pmTrSharepointClass extends PMPlugin {
     $url = $this->server . "/" . $dwsname . "/_vti_bin/Dws.asmx?WSDL";
     $this->dwsObj->setwsdlurl($url);
 
-    if ($this->dwsObj->loadSOAPClient()) {
+    $this->dwsObj->loadSOAPClient();
       $paramArray = null;
       $methodName = 'DeleteDws';
       $result = $this->dwsObj->callWsMethod($methodName, $paramArray = null);
       var_dump($result);
       return $result;
-    } else {
-      return "Please Enter a proper Dws";
-    }
+
   }
 
   function createFolderDWS($dwsname, $dwsFolderName) {
@@ -208,7 +211,8 @@ class pmTrSharepointClass extends PMPlugin {
 
   function uploadDocumentDWS($dwsname, $folderName, $sourceUrl, $filename) {
     //print "<br>- Method createDWS";
-    $this->dwsObj->setwsdlurl($this->server . $dwsName . "/_vti_bin/Copy.asmx?WSDL");
+      $url = $this->server ."/". $dwsname . "/_vti_bin/Copy.asmx?WSDL";
+    $this->dwsObj->setwsdlurl($url);
     $this->dwsObj->loadSOAPClient();
 
     $destUrlObj = new DestinationUrlCollection();
@@ -228,7 +232,7 @@ class pmTrSharepointClass extends PMPlugin {
     $filep = fopen($imgfile, "r");
     $fileLength = filesize($imgfile);
     $content = fread($filep, $fileLength);
-    $content = base64_encode($content);
+    //$content = base64_encode($content);
 
     $paramArray = array('SourceUrl' => $imgfile, 'DestinationUrls' => $destUrlObj, 'Fields' => $fieldInfoCollObj, 'Stream' => $content);
     $methodName = 'CopyIntoItems';
@@ -255,8 +259,15 @@ class pmTrSharepointClass extends PMPlugin {
     $methodName = 'GetDwsMetaData';
 
     $result = $this->dwsObj->callWsMethod($methodName, $paramArray);
-    var_dump($result);
-    return $result;
+    $sResult = $result->GetDwsMetaDataResult;
+    $errorReturn = strpos($sResult, "Error");
+    if(isset($sResult) &&   !$errorReturn)
+    {
+        $serializeResult = serialize($sResult); // serializing the Array for Returning.
+        var_dump($serializeResult);
+        return $serializeResult;
+    }
+    else return $sResult;
   }
 
   function getDWSDocumentVersions($newFileName, $dwsname) {
@@ -291,7 +302,19 @@ class pmTrSharepointClass extends PMPlugin {
       $sResult = $result->DeleteVersionResult->any;
       $xmlNew = simplexml_load_string($sResult); // used to parse string to xml
       $xmlArray = @json_decode(@json_encode($xmlNew), 1); // used to convert Objects to array
-      $version[] = $xmlArray['result']['@attributes']['version'];
+      $versionCount = count($xmlArray['result']);
+
+      if($versionCount>1)
+      {
+          for($i=0;$i<$versionCount;$i++)
+          {
+            $version[] = $xmlArray['result'][$i]['@attributes']['version'];
+          }
+      }
+      else{
+        $version[] = $xmlArray['result']['@attributes']['version'];
+      }
+
       $serializeResult = serialize($version); // serializing the Array for Returning.
       var_dump($serializeResult);
       return $serializeResult;
@@ -376,14 +399,15 @@ class pmTrSharepointClass extends PMPlugin {
     $result = $this->dwsObj->callWsMethod($methodName, $paramArray);
     $newResult = $result->Stream;
 
-    $latestResult = base64_decode($newResult);
+    //$latestResult = base64_decode($newResult);
 
     /**
      * In the Below line of code, we are coping the files at our local Directory using the php file methods.
      * */
     $imgfile = $fileLocation . "/" . $fileName;
     $filep = fopen($imgfile, 'w');
-    $content = fwrite($filep, $latestResult);
+    //$content = fwrite($filep, $latestResult);
+    $content = fwrite($filep, $newResult);
     return $content;
   }
 
@@ -400,6 +424,10 @@ class pmTrSharepointClass extends PMPlugin {
       $actualResult = substr($newResult, $newResultPos);
       return $actualResult;
     }
+    else{
+            $actualResult = substr($newResult,$urlStartPos);
+            return $actualResult;
+        }
   }
 
 }
