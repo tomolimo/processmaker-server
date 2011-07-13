@@ -13,6 +13,7 @@ class pmTablesProxy extends HttpProxyController
 
   protected $className;
   protected $classPeerName;
+  protected $dynUid;
 
   /**
    * get pmtables list
@@ -109,49 +110,68 @@ class pmTablesProxy extends HttpProxyController
 
     $aFields['FIELDS'] = array();
     $aFields['PRO_UID'] = $httpData->PRO_UID;
+    $dynFields = array();
 
     if(isset($httpData->TYPE) && $httpData->TYPE == 'GRID') {
       $aProcessGridFields = Array();
       if (isset($httpData->GRID_UID)) {
-        global $G_FORM;
         list($gridName, $gridId) = explode('-', $httpData->GRID_UID);
+        $this->dynUid = $gridId;
 
-        $gridFields = $this->_getGridDynafields($httpData->PRO_UID, $gridId);
-
-        foreach ($gridFields as $gfield) {
-          $aProcessGridFields[] = array(
-            'FIELD_UID' => $gfield['name'] . '-' . $gfield['type'],
-            'FIELD_NAME' => $gfield['name']
-          );
+        $httpData->textFilter = isset($httpData->textFilter) ? $httpData->textFilter : null;
+        $dynFields = $this->_getDynafields($aFields['PRO_UID'], 'grid', $httpData->start, $httpData->limit, $httpData->textFilter);
+      } 
+      else {
+        if (isset($_SESSION['_cache_pmtables'])) {
+          unset($_SESSION['_cache_pmtables']);
         }
-      } else {
         $gridFields = $this->_getGridFields($aFields['PRO_UID']);
 
         foreach ($gridFields as $gfield) {
-          $aProcessGridFields[]  = array(
+          $dynFields[]  = array(
             'FIELD_UID'  => $gfield['name'] . '-' . $gfield['xmlform'],
             'FIELD_NAME' => $gfield['name']
           );
         }
       }
-      $resultList = $aProcessGridFields;
 
-    } else {
-      $aProcessFields = Array();
-      $dynFields = $this->_getDynafields($aFields['PRO_UID']);
-
-      foreach ($dynFields as $dfield) {
-        $aProcessFields[]  = array(
-          'FIELD_UID'  => $dfield['name'] . '-' . $dfield['type'],
-          'FIELD_NAME' => $dfield['name']
-        );
-      }
-      $resultList = $aProcessFields;
+    }
+    else {
+      $httpData->textFilter = isset($httpData->textFilter) ? $httpData->textFilter : null;
+      $dynFields = $this->_getDynafields($aFields['PRO_UID'], 'xmlform', $httpData->start, $httpData->limit, $httpData->textFilter);
     }
     
-    sort($resultList);
+    return $dynFields;
+  }
 
-    return array('processFields'=>$resultList);
+  public function updateAvDynafields($httpData)
+  {
+    $indexes = explode(',', $httpData->indexes);
+    $fields = array();
+    $httpData->isset = $httpData->isset=='true'? true: false;
+    
+    if (isset($_SESSION['_cache_pmtables']) && $_SESSION['_cache_pmtables']['pro_uid']== $httpData->PRO_UID) {
+      foreach ($indexes as $i) {
+        if (is_numeric($i)) {
+          if (isset($_SESSION['_cache_pmtables']['rows'][$i])) {  
+            $_SESSION['_cache_pmtables']['rows'][$i]['_isset'] = $httpData->isset;
+            if ($httpData->isset) {
+              $_SESSION['_cache_pmtables']['count']++;
+            } else { 
+              $_SESSION['_cache_pmtables']['count']--;
+            }
+
+            $fields[] = $_SESSION['_cache_pmtables']['rows'][$i]['FIELD_NAME'];
+          }
+          } else {
+            
+            $index = $_SESSION['_cache_pmtables']['indexes'][$i];
+            $_SESSION['_cache_pmtables']['rows'][$index]['_isset'] = $httpData->isset;
+          }
+      }
+    }
+
+    return $fields;
   }
 
   /**
@@ -813,7 +833,7 @@ class pmTablesProxy extends HttpProxyController
    * @param $proUid
    * @param $type [values:xmlform/grid]
    */
-  function _getDynafields($proUid, $type = 'xmlform')
+  function _getDynafields2($proUid, $type = 'xmlform')
   {
     require_once 'classes/model/Dynaform.php';
     $fields = array();
@@ -856,6 +876,122 @@ class pmTablesProxy extends HttpProxyController
     return $fields;
   }
 
+  function _getDynafields($proUid, $type = 'xmlform', $start=null, $limit=null, $filter=null)
+  {
+    $cache = 1;
+    if (!isset($_SESSION['_cache_pmtables']) || (isset($_SESSION['_cache_pmtables']) && $_SESSION['_cache_pmtables']['pro_uid'] != $proUid)) {
+      require_once 'classes/model/Dynaform.php';
+      $cache = 0;
+      $fields = array();
+      $fieldsNames = array();
+      
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn(DynaformPeer::DYN_FILENAME);
+      $oCriteria->add(DynaformPeer::PRO_UID, $proUid);
+      $oCriteria->add(DynaformPeer::DYN_TYPE, $type);
+      
+
+      if (isset($this->dynUid)) {
+        $oCriteria->add(DynaformPeer::DYN_UID, $this->dynUid);
+      }
+
+      $oDataset = DynaformPeer::doSelectRS($oCriteria);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+    
+      $excludeFieldsList = array('title', 'subtitle', 'link', 'file', 'button', 'reset', 'submit',
+                                'listbox', 'checkgroup', 'grid', 'javascript');
+      
+      $labelFieldsTypeList = array('dropdown', 'radiogroup');
+      G::loadSystem('dynaformhandler');
+      $index = 0;
+
+      while ($aRow = $oDataset->getRow()) {
+        if (file_exists(PATH_DYNAFORM . PATH_SEP . $aRow['DYN_FILENAME'] . '.xml')) {
+          $dynaformHandler = new dynaformHandler(PATH_DYNAFORM . $aRow['DYN_FILENAME']. '.xml');
+          $nodeFieldsList = $dynaformHandler->getFields();
+          
+          foreach($nodeFieldsList as $node) {
+            $arrayNode = $dynaformHandler->getArray($node);
+            $fieldName = $arrayNode['__nodeName__'];
+            $fieldType = $arrayNode['type'];
+
+            if (!in_array($fieldType, $excludeFieldsList) && !in_array($fieldName, $fieldsNames)) {
+              $fields[] = array(
+                'FIELD_UID'  => $fieldName . '-' . $fieldType,
+                'FIELD_NAME' => $fieldName,
+                '_index' => $index++,
+                '_isset' => true
+              );
+              $fieldsNames[] = $fieldName;
+              
+              if (in_array($fieldType, $labelFieldsTypeList) && !in_array($fieldName . '_label', $fieldsNames)) {
+                $fields[] = array(
+                  'FIELD_UID'  => $fieldName . '_label' . '-' . $fieldType,
+                  'FIELD_NAME' => $fieldName . '_label',
+                  '_index' => $index++,
+                  '_isset' => true
+                );
+                $fieldsNames[] = $fieldName;
+              }
+            }
+          }
+          
+        }
+        $oDataset->next();
+      }
+
+      sort($fields);
+
+       // if is a editing
+      $fieldsEdit = array();
+      if (isset($_SESSION['ADD_TAB_UID'])) {
+        require_once 'classes/model/AdditionalTables.php';
+        
+        $additionalTables = new AdditionalTables();
+        $table = $additionalTables->load($_SESSION['ADD_TAB_UID'], true);
+
+        foreach ($table['FIELDS'] as $i=>$field) {
+          array_push($fieldsEdit, $field['FLD_DYN_NAME']);
+        }
+      }//end editing
+
+      foreach($fields as $i => $field) {
+        $fields[$i]['_index'] = $i;
+        $indexes[$field['FIELD_NAME']] = $i;
+        
+        if(in_array($field['FIELD_NAME'], $fieldsEdit)) {
+          $fields[$i]['_isset'] = false;
+        }
+      }
+
+      $_SESSION['_cache_pmtables']['pro_uid'] = $proUid;
+      $_SESSION['_cache_pmtables']['rows']    = $fields;
+      $_SESSION['_cache_pmtables']['count']   = count($fields);
+      $_SESSION['_cache_pmtables']['indexes'] = $indexes;
+    } //end reload
+
+    $fields = array();
+    $tmp = array();
+
+    foreach ($_SESSION['_cache_pmtables']['rows'] as $i => $row) {
+      if (isset($filter) && $filter != '') {
+        if ($row['_isset'] && stripos($row['FIELD_NAME'], $filter) !== false) {
+          $tmp[] = $row;
+        } 
+      }
+      else {
+        if ($row['_isset']) {
+          $tmp[] = $row;
+        } 
+      }
+    }
+
+    $fields = array_slice($tmp, $start, $limit);
+    
+    return array('cache'=>$cache, 'count'=>count($tmp), 'rows'=>$fields);
+  }
+
   /**
    * Get all dynaform grid fields from a process
    * @param $proUid
@@ -895,27 +1031,38 @@ class pmTablesProxy extends HttpProxyController
    */
   function _getGridFields($proUid)
   {
+    require_once 'classes/model/Dynaform.php';
+    G::loadSystem('dynaformhandler');
     $aFields = array();
     $aFieldsNames = array();
-    require_once 'classes/model/Dynaform.php';
+    
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(DynaformPeer::DYN_FILENAME);
     $oCriteria->add(DynaformPeer::PRO_UID, $proUid);
+    $oCriteria->add(DynaformPeer::DYN_TYPE, 'xmlform');
     $oDataset = DynaformPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
+
     while ($aRow = $oDataset->getRow()) {
-      $G_FORM  = new Form($aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG);
-      if ($G_FORM->type == 'xmlform') {
-        foreach($G_FORM->fields as $k => $v) {
-          if ($v->type == 'grid') {
-            if (!in_array($k, $aFieldsNames)) {
-              $aFields[] = array('name' => $k, 'xmlform' => str_replace($proUid . '/', '', $v->xmlGrid));
-              $aFieldsNames[] = $k;
-            }
+      //$G_FORM  = new Form($aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG);
+      $dynaformHandler = new dynaformHandler(PATH_DYNAFORM . $aRow['DYN_FILENAME']. '.xml');
+      $nodeFieldsList = $dynaformHandler->getFields();
+
+      foreach($nodeFieldsList as $node) {
+        $arrayNode = $dynaformHandler->getArray($node);
+        $fieldName = $arrayNode['__nodeName__'];
+        $fieldType = $arrayNode['type'];
+
+        if ($fieldType == 'grid') {
+
+          if (!in_array($fieldName, $aFieldsNames)) {
+            $aFields[] = array('name' => $fieldName, 'xmlform' => str_replace($proUid . '/', '', $arrayNode['xmlgrid']));
+            $aFieldsNames[] = $fieldName;
           }
         }
       }
+    
       $oDataset->next();
     }
     return $aFields;

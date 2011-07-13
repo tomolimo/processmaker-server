@@ -2,6 +2,7 @@ var PROCESSMAP_STEP_EDIT = false;
 var PROCESSMAP_USER_EDIT = false;
 
 var processmapOutputsPanel;
+var _client = getClientWindowSize();
 
 var processmap=function(){
   this.data={
@@ -23,8 +24,8 @@ var processmap=function(){
           Hx = 460;
 
           if(lanzado=='reportTables'){
-            Wx = 800;
-            Hx = 600;
+            Wx = _client.width-20; //900;
+            Hx = _client.height-15; //600;
           }
 
           var bbk = {
@@ -163,8 +164,8 @@ var processmap=function(){
                 iframe.setAttribute('id','reportTablesIframe');
                 iframe.src = '../pmTables?PRO_UID=' + this.options.uid;
                 iframe.style.border='0px';
-                iframe.style.width='786px';
-                iframe.style.height='564px';
+                iframe.style.width=_client.width-36;//'886px';
+                iframe.style.height=_client.height-60;//'564px';
                 panel.addContent(iframe);
               }.extend(this),
               dynaforms:function(){

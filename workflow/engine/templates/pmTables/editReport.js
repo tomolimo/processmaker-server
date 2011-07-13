@@ -16,9 +16,12 @@ var assignAllButton;
 var removeButton;
 var removeAllButton;
 var tmp1 = new Array();
+var pageSize = 50;
+var mainMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+var bbarpaging;
 //main
 Ext.onReady(function(){
-
+  mainMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
   var fm = Ext.form;
   var fieldsCount = 0;
 
@@ -28,15 +31,31 @@ Ext.onReady(function(){
       url: '../pmTablesProxy/getDynafields'
     }),
     reader : new Ext.data.JsonReader( {
-      root: 'processFields',
-      fields : [{name : 'FIELD_UID'}, {name : 'FIELD_NAME'}]
+      root: 'rows',
+      totalProperty: 'count',
+      fields : [
+        {name : 'FIELD_UID'}, 
+        {name : 'FIELD_NAME'},
+        {name : '_index'},
+        {name : '_isset'}
+      ]
     }),
     listeners: {
       load: function() {
-
+        Ext.getCmp('availableGrid').store.sort();
+        storeA.setBaseParam('PRO_UID', (PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue()));
+        mainMask.hide();
+        assignedGrid._setTitle();
       }
-    }
+    },
+    baseParams: {
+      PRO_UID: ''
+    },
+    remoteSort: false
   });
+
+  storeA.setDefaultSort('FIELD_NAME', 'asc');
+
   //column model for available fields grid
   cmodelA = new Ext.grid.ColumnModel({
     defaults: {
@@ -47,6 +66,14 @@ Ext.onReady(function(){
       {
         id:'FIELD_UID',
         dataIndex: 'FIELD_UID',
+        hidden:true,
+        hideable:false
+      }, {
+        dataIndex:'_index',
+        hidden:true,
+        hideable:false
+      }, {
+        dataIndex:'_isset',
         hidden:true,
         hideable:false
       }, {
@@ -69,6 +96,43 @@ Ext.onReady(function(){
         }
     }
   });
+
+
+  storePageSize = new Ext.data.SimpleStore({
+    fields: ['size'],
+     data: [['20'],['30'],['40'],['50'],['100']],
+     autoLoad: true
+  });
+
+  comboPageSize = new Ext.form.ComboBox({
+    typeAhead     : false,
+    mode          : 'local',
+    triggerAction : 'all',
+    store: storePageSize,
+    valueField: 'size',
+    displayField: 'size',
+    width: 50,
+    editable: false,
+    listeners:{
+      select: function(c,d,i){
+        //UpdatePageConfig(d.data['size']);
+        bbarpaging.pageSize = parseInt(d.data['size']);
+        bbarpaging.moveFirst();
+      }
+    }
+  });
+
+  comboPageSize.setValue(pageSize);
+
+  bbarpaging = new Ext.PagingToolbar({
+      pageSize: pageSize,
+      store: storeA,
+      displayInfo: true,
+      displayMsg: '{0} - {1} of {2}',
+      emptyMsg: 'No records'/*,
+      items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]*/
+  });
+
   //grid for table columns grid
   availableGrid = new Ext.grid.GridPanel({
     layout         : 'fit',
@@ -80,7 +144,7 @@ Ext.onReady(function(){
     autoWidth      : true,
     stripeRows     : true,
     height         : 100,
-    width          : 200,
+    width          : '25%',
     stateful       : true,
     stateId        : 'grid',
     enableHdMenu   : false,
@@ -89,10 +153,49 @@ Ext.onReady(function(){
     cm             : cmodelA,
     sm             : smodelA,
     store          : storeA,
+    //loadMask: {message:'Loading...'},
     listeners      : {
       rowdblclick: AssignFieldsAction
-    }
+    },
+    tbar: [
+      '->',
+      {
+          xtype: 'textfield',
+          id: 'searchTxt',
+          ctCls:'pm_search_text_field',
+          allowBlank: true,
+          width: 150,
+          emptyText: _('ID_ENTER_SEARCH_TERM'),
+          listeners: {
+            specialkey: function(f,e){
+              if (e.getKey() == e.ENTER) {
+                filterAvFields();
+              }
+            }
+          }
+      }, 
+      {
+        text: 'X',
+        ctCls:'pm_search_x_button',
+        handler: function(){
+          Ext.getCmp('searchTxt').setValue('');
+          filterAvFields();
+        }
+      }, {
+        text: 'Filter',
+        handler: function(){
+          filterAvFields();
+        }
+      }
+    ],
+    bbar: bbarpaging
   });
+
+  var filterAvFields = function() {
+    //availableGrid.store.load({params: {textFilter: Ext.getCmp('searchTxt').getValue()}});
+    //storeA.setParam('textFilter', Ext.getCmp('searchTxt').getValue());
+    storeA.reload({params: {textFilter: Ext.getCmp('searchTxt').getValue(), start: bbarpaging.cursor, limit: pageSize}});
+  }
 
   //selecion model for table columns grid
   sm = new Ext.grid.RowSelectionModel({
@@ -106,8 +209,9 @@ Ext.onReady(function(){
               break;
             case 1:
               var record = Ext.getCmp('assignedGrid').getSelectionModel().getSelected();
-              
-              if (record.data.field_dyn == '' && record.data.field_name != 'APP_UID' && record.data.field_name != 'APP_NUMBER' && record.data.field_name != 'ROW') {
+              Ext.getCmp('removeButton').enable();
+
+              if (record.data.field_dyn != '' && record.data.field_name != 'APP_UID' && record.data.field_name != 'APP_NUMBER' && record.data.field_name != 'ROW') {
                 Ext.getCmp('removeColumn').enable();
               }
               break;
@@ -132,7 +236,15 @@ Ext.onReady(function(){
         id: 'uid',
         dataIndex: 'uid',
         hidden: true
-      },
+      }, 
+      {        
+        dataIndex: '_index',
+        hidden: true
+      }, 
+      {
+        dataIndex: '_isset',
+        hidden: true
+      }, 
       {
           id: 'field_uid',
           dataIndex: 'field_uid',
@@ -247,6 +359,8 @@ Ext.onReady(function(){
   store = new Ext.data.ArrayStore({
       fields: [
           {name: 'uid', type: 'string'},
+          {name: '_index'},
+          {name: '_isset'},
           {name: 'field_uid', type: 'string'},
           {name: 'field_key', type: 'string'},
           {name: 'field_name', type: 'string'},
@@ -276,7 +390,7 @@ Ext.onReady(function(){
 
   //table columns grid
   assignedGrid = new Ext.grid.GridPanel({
-    //title: 'Columns',
+    title: 'New Report Table',
     region         : 'center',
     id             : 'assignedGrid',
     ddGroup        : 'availableGridDDGroup',
@@ -286,6 +400,7 @@ Ext.onReady(function(){
     sm             : sm,
     store          : store,
     plugins        : [editor, checkColumn],
+    loadMask: {message:'Loading...'},
     tbar           : [
       {
         icon: '/images/add-row-after.png',
@@ -333,6 +448,9 @@ Ext.onReady(function(){
           }
         });
       }
+    },
+    _setTitle: function() {
+      this.setTitle('Report Table: ' + Ext.getCmp('REP_TAB_NAME').getValue() + ' ('+store.getCount()+' columns)');
     }
   });
 
@@ -497,7 +615,7 @@ Ext.onReady(function(){
   gridsListStore = new Ext.data.Store({
     //autoLoad: true,
     proxy : new Ext.data.HttpProxy({
-      url: '../pmTablesProxy/availableFieldsReportTables',
+      url: '../pmTablesProxy/getDynafields',
       method : 'POST'
     }),
     baseParams : {
@@ -505,7 +623,7 @@ Ext.onReady(function(){
       TYPE: 'GRID'
     },
     reader : new Ext.data.JsonReader( {
-      root : 'processFields',
+      //root : 'processFields',
       fields : [{name : 'FIELD_UID'}, {name : 'FIELD_NAME'}]
     }),
     listeners: {
@@ -595,9 +713,11 @@ Ext.onReady(function(){
           comboDbConnections.getStore().reload({params:{PRO_UID : Ext.getCmp('PROCESS').getValue()}});
 
           // loading available fields
-          //if (TABLE.ADD_TAB_TYPE == 'NORMAL') {
-            loadAvFieldsFromArray(avFieldsList);
-          //}
+          //loadAvFieldsFromArray(avFieldsList);
+          if (TABLE.ADD_TAB_TYPE == 'GRID') 
+            loadFieldsGrids();
+          else 
+            loadFieldNormal();
 
           // loading table fields
           loadTableRowsFromArray(TABLE.FIELDS);
@@ -662,7 +782,8 @@ Ext.onReady(function(){
     style:'text-transform: uppercase',
     listeners:{
       change: function(){
-        this.setValue(this.getValue().toUpperCase())
+        this.setValue(this.getValue().toUpperCase());
+        assignedGrid._setTitle();
       }
     }
   });
@@ -746,7 +867,8 @@ Ext.onReady(function(){
     } 
     
     if (TABLE === false) {
-      loadFieldNormal();
+      if(TABLE.ADD_TAB_TYPE != 'GRID')
+        loadFieldNormal();
     } //else if(typeof avFieldsList != 'undefined')
       //loadAvFieldsFromArray(avFieldsList);
     
@@ -845,6 +967,10 @@ function createReportTable()
 //add custon column for assignedGrid
 function addColumn()
 {
+  if (!verifyTableLimit()) {
+    return false;
+  }
+
   var PMRow = assignedGrid.getStore().recordType;
   var row = new PMRow({
     uid  : '',
@@ -877,100 +1003,45 @@ function removeColumn()
 ////ASSIGNBUTON FUNCTIONALITY
 AssignFieldsAction = function(){
   records = Ext.getCmp('availableGrid').getSelectionModel().getSelections();
-
-  for(i=0; i < records.length; i++){
-    var PMRow = assignedGrid.getStore().recordType;
-    var meta = mapPMFieldType(records[i].data['FIELD_UID']);
-    var row = new PMRow({
-      uid  : '',
-      field_uid  : records[i].data['FIELD_UID'],
-      field_dyn  : records[i].data['FIELD_NAME'],
-      field_name  : records[i].data['FIELD_NAME'].toUpperCase(),
-      field_label : records[i].data['FIELD_NAME'].toUpperCase(),
-      field_type  : meta.type,
-      field_size  : meta.size,
-      field_key   : 0,
-      field_null  : 1
-    });
-
-    store.add(row);
-  }
-
-  //remove from source grid
-  Ext.each(records, Ext.getCmp('availableGrid').store.remove, Ext.getCmp('availableGrid').store);
+  setReportFields(records);
 };
+
 //RemoveButton Functionality
 RemoveFieldsAction = function(){
-
   records = Ext.getCmp('assignedGrid').getSelectionModel().getSelections();
-  var PMRow = availableGrid.getStore().recordType;
-  for(i=0; i < records.length; i++){
-    if (records[i].data['field_dyn'] != '' && records[i].data['field_name'] != 'APP_UID' && records[i].data['field_name'] != 'APP_NUMBER' && records[i].data['field_name'] != 'ROW') {
-      var row = new PMRow({
-        FIELD_UID  : records[i].data['field_uid'],
-        FIELD_NAME  : records[i].data['field_dyn']
-      });
-      availableGrid.getStore().add(row);
-    } else {
-      records[i] = null;
-    }
-  }
   //remove from source grid
-  Ext.each(records, Ext.getCmp('assignedGrid').store.remove, Ext.getCmp('assignedGrid').store);
+  unsetReportFields(records);
 };
 
 //AssignALLButton Functionality
 AssignAllFieldsAction = function(){
-  var available = Ext.getCmp('availableGrid');
-  var allRows = available.getStore();
-  var arrAux = new Array();
-  records = new Array()
+  var avStore = Ext.getCmp('availableGrid').getStore();
+  var records = new Array();
 
-  if (allRows.getCount() > 0){
-    var PMRow = assignedGrid.getStore().recordType;
-    for (i=0; i < allRows.getCount(); i++){
-      records[i] = allRows.getAt(i);
-      var meta = mapPMFieldType(records[i].data['FIELD_UID']);
-      var row = new PMRow({
-        uid   : '',
-        field_uid   : records[i].data['FIELD_UID'],
-        field_dyn   : records[i].data['FIELD_NAME'],
-        field_name  : records[i].data['FIELD_NAME'].toUpperCase(),
-        field_label : records[i].data['FIELD_NAME'].toUpperCase(),
-        field_type  : meta.type,
-        field_size  : meta.size,
-        field_key   : 0,
-        field_null  : 1
-      });
-
-      store.add(row);
+  if (avStore.getCount() > 0){
+    for (i=0; i < avStore.getCount(); i++){
+      records[i] = avStore.getAt(i);
     }
-    //remove from source grid
-    Ext.each(records, Ext.getCmp('availableGrid').store.remove, Ext.getCmp('availableGrid').store);
+    setReportFields(records);
   }
-
 };
 
 //RevomeALLButton Functionality
 RemoveAllFieldsAction = function(){
+  
+  if (store.getCount() > 100) {
+    PMExt.info('Notice', 'This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid. <br/><br/>Please perform this action with manual selection only.');
+    return ;
+  }
+  
   var allRows = Ext.getCmp('assignedGrid').getStore();
   var records = new Array();
   if (allRows.getCount() > 0) {
-    var PMRow = availableGrid.getStore().recordType;
     for (var i=0; i < allRows.getCount(); i++){
       records[i] = allRows.getAt(i);
-      if (records[i].data['field_dyn'] != '' && records[i].data['field_name'] != 'APP_UID' && records[i].data['field_name'] != 'APP_NUMBER' && records[i].data['field_name'] != 'ROW') {
-        var row = new PMRow({
-          FIELD_UID  : records[i].data['field_uid'],
-          FIELD_NAME  : records[i].data['field_dyn']
-        });
-        availableGrid.getStore().add(row);
-      } else {
-        records[i] = null;
-      }
     }
     //remove from source grid
-    Ext.each(records, Ext.getCmp('assignedGrid').store.remove, Ext.getCmp('assignedGrid').store);
+    unsetReportFields(records);
   }
 };
 
@@ -980,7 +1051,9 @@ loadFieldNormal = function(){
   Ext.getCmp('availableGrid').store.load({
     params: {
       action: "getDynafields",
-      PRO_UID: PRO_UID !== false ? PRO_UID : Ext.getCmp('PROCESS').getValue()
+      PRO_UID: PRO_UID !== false ? PRO_UID : Ext.getCmp('PROCESS').getValue(),
+      start: 0,
+      limit: pageSize
     }
   });
   Ext.getCmp('assignedGrid').store.removeAll();
@@ -995,7 +1068,9 @@ loadFieldsGrids = function(){
       action: "getDynafields",
       PRO_UID: PRO_UID !== false ? PRO_UID : Ext.getCmp('PROCESS').getValue(),
       TYPE: 'GRID',
-      GRID_UID: Ext.getCmp('REP_TAB_GRID').getValue()
+      GRID_UID: Ext.getCmp('REP_TAB_GRID').getValue(),
+      start: 0,
+      limit: pageSize
     }
   });
 
@@ -1023,28 +1098,8 @@ var DDLoadFields = function(){
   var availableGridDropTarget = new Ext.dd.DropTarget(availableGridDropTargetEl, {
     ddGroup    : 'availableGridDDGroup',
     notifyDrop : function(ddSource, e, data){
-
       var records =  ddSource.dragData.selections;
-      var PMRow = availableGrid.getStore().recordType;
-
-      for (i=0; i < records.length; i++) {
-        if (records[i].data['field_dyn'] != '') {
-          var row = new PMRow({
-            FIELD_UID: records[i].data['field_uid'],
-            FIELD_NAME: records[i].data['field_dyn']
-          });
-          availableGrid.getStore().add(row);
-        } else {
-          if ( records[i].data['field_name'] == 'APP_UID' 
-            || records[i].data['field_name'] == 'APP_NUMBER'
-            || records[i].data['field_name'] == 'ROW') 
-          {
-            records[i] = null;
-          }
-        }
-      }
-
-      Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+      unsetReportFields(records);
       return true;
     }
   });
@@ -1054,36 +1109,103 @@ var DDLoadFields = function(){
   var assignedGridDropTarget = new Ext.dd.DropTarget(assignedGridDropTargetEl, {
     ddGroup    : 'assignedGridDDGroup',
     notifyDrop : function(ddSource, e, data){
-
-      var records =  ddSource.dragData.selections;
-      var PMRow = assignedGrid.getStore().recordType;
-
       //add on target grid
-      for (i=0; i < records.length; i++){
-        //arrAux[r] = records[r].data['FIELD_UID'];
-        var meta = mapPMFieldType(records[i].data['FIELD_UID']);
-        var row = new PMRow({
-          uid  : '',
-          field_uid  : records[i].data['FIELD_UID'],
-          field_dyn  : records[i].data['FIELD_NAME'],
-          field_name  : records[i].data['FIELD_NAME'].toUpperCase(),
-          field_label : records[i].data['FIELD_NAME'].toUpperCase(),
-          field_type  : meta.type,
-          field_size  : meta.size,
-          field_key   : 0,
-          field_null  : 1
-        });
-
-        store.add(row);
-      }
-      //remove from source grid
-      Ext.each(records, availableGrid.store.remove, availableGrid.store);
-
+      setReportFields(ddSource.dragData.selections)
       return true;
     }
   });
   //sw_func_groups = true;
 };
+
+function setReportFields(records) {
+  mainMask.show();
+
+  var PMRow = assignedGrid.getStore().recordType;
+  var indexes = new Array();
+
+  for (i=0; i < records.length; i++) {
+    if (!verifyTableLimit()) {
+      return false;
+    }
+
+    var meta = mapPMFieldType(records[i].data['FIELD_UID']);
+    var row = new PMRow({
+      uid  : '',
+      field_uid  : records[i].data['FIELD_UID'],
+      field_dyn  : records[i].data['FIELD_NAME'],
+      field_name  : records[i].data['FIELD_NAME'].toUpperCase(),
+      field_label : records[i].data['FIELD_NAME'].toUpperCase(),
+      field_type  : meta.type,
+      field_size  : meta.size,
+      field_key   : 0,
+      field_null  : 1,
+      _index      : records[i].data['_index'] ? records[i].data['_index'] : records[i].data['FIELD_DYN']
+    });
+
+    store.add(row);
+    indexes.push(records[i].data['_index']);
+  }
+
+  //remove from source grid
+  Ext.each(records, availableGrid.store.remove, availableGrid.store);
+
+  //update on server
+  Ext.Ajax.request({
+    url: '../pmTablesProxy/updateAvDynafields',
+    params: {
+      PRO_UID : PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue(),
+      indexes : indexes.join(','),
+      isset   : false
+    },
+    success: function(resp){
+      result = Ext.util.JSON.decode(resp.responseText);
+      availableGrid.store.reload();
+    }
+  });
+}
+
+function unsetReportFields(records) {
+  mainMask.show();
+
+  var PMRow = availableGrid.getStore().recordType;
+  var indexes = new Array();
+
+  for (i=0; i < records.length; i++) {
+    if (records[i].data['field_dyn'] != '') {
+      var row = new PMRow({
+        FIELD_UID: records[i].data['field_uid'],
+        FIELD_NAME: records[i].data['field_dyn']
+      });
+      availableGrid.getStore().add(row);
+      ix = records[i].data['_index'] != '' ? records[i].data['_index'] : records[i].data['field_dyn']
+      indexes.push(ix);
+    } else {
+      if ( records[i].data['field_name'] == 'APP_UID' 
+        || records[i].data['field_name'] == 'APP_NUMBER'
+        || records[i].data['field_name'] == 'ROW') 
+      {
+        records[i] = null;
+      }
+    }
+  }
+
+  Ext.each(records, assignedGrid.store.remove, assignedGrid.store);
+
+  //update on server
+  Ext.Ajax.request({
+    url: '../pmTablesProxy/updateAvDynafields',
+    params: {
+      PRO_UID : PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue(),
+      indexes : indexes.join(','),
+      isset   : true
+    },
+    success: function(resp){
+      result = Ext.util.JSON.decode(resp.responseText);
+      availableGrid.store.reload();
+    }
+  });
+}
+
 
 function loadTableRowsFromArray(records)
 {
@@ -1101,7 +1223,8 @@ function loadTableRowsFromArray(records)
       field_size : records[i].FLD_SIZE,
       field_key  : records[i].FLD_KEY,
       field_null  : records[i].FLD_NULL,
-      field_filter: records[i].FLD_FILTER == '1' ? true : false
+      field_filter: records[i].FLD_FILTER == '1' ? true : false,
+      _index : ''
     });
 
     store.add(row);
@@ -1183,3 +1306,15 @@ Ext.override(Ext.form.TextField, {
         return value;
     }
 });
+
+
+function verifyTableLimit()
+{
+  if( store.getCount() >= 255 ) {
+    mainMask.hide();
+    PMExt.info('Notice', 'The maximun limit of columns for a database table is 255, you already have them defined!');
+    assignedGrid._setTitle();
+    return false;
+  }
+  return true;
+}

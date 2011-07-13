@@ -37,6 +37,14 @@ class pmTables extends Controller
 
     $this->setJSVar('_PLUGIN_SIMPLEREPORTS', $this->_getSimpleReportPluginDef());
 
+    if (isset($_SESSION['_cache_pmtables'])) {
+      unset($_SESSION['_cache_pmtables']);
+    }
+
+    if (isset($_SESSION['ADD_TAB_UID'])) {
+      unset($_SESSION['ADD_TAB_UID']);
+    }
+
     //render content
     G::RenderPage('publish', 'extJs');
   }
@@ -52,65 +60,20 @@ class pmTables extends Controller
     $table = false;
     $repTabPluginPermissions = false;
     $additionalTables = new AdditionalTables();
-    $additionalTables = new AdditionalTables();
 
     if ($addTabUid !== false) { // if is a edit request
-      require_once 'classes/model/AdditionalTables.php';
-      require_once 'classes/model/Fields.php';
+      require_once 'classes/model/AdditionalTables.php';      
       $tableFields = array();
       $fieldsList = array();
       
       $table = $additionalTables->load($addTabUid, true);
-
-      // list the case fields
-      foreach ($table['FIELDS'] as $i=>$field) {
-        $table['FIELDS'][$i]['FLD_KEY']    = $field['FLD_KEY'] == '1' ? TRUE: FALSE;
-        $table['FIELDS'][$i]['FLD_NULL']   = $field['FLD_NULL'] == '1' ? TRUE: FALSE;
-        $table['FIELDS'][$i]['FLD_FILTER'] = $field['FLD_FILTER'] == '1' ? TRUE: FALSE;
-        array_push($tableFields, $field['FLD_DYN_NAME']);
-      }
+      $_SESSION['ADD_TAB_UID'] = $addTabUid;
 
       //list dynaform fields
       switch ($table['ADD_TAB_TYPE']) {
         case 'NORMAL':
-          $fields = pmTablesProxy::_getDynafields($table['PRO_UID']);
-
-          foreach ($fields as $field) {
-            //select to not assigned fields for available grid
-            if (!in_array($field['name'], $tableFields)) {
-              $fieldsList[] = array(
-                'FIELD_UID'  => $field['name'] . '-' . $field['type'],
-                'FIELD_NAME' => $field['name']
-              );
-            }
-          }
-          sort($fieldsList);
-          $this->setJSVar('avFieldsList', $fieldsList);
-          $repTabPluginPermissions = $this->_getSimpleReportPluginDef();
-          $this->setJSVar('_plugin_permissions', $repTabPluginPermissions);
-          break;
-          
         case 'GRID':
-          list($gridName, $gridId) = explode('-', $table['ADD_TAB_GRID']);
-          // $G_FORM = new Form($table['PRO_UID'] . '/' . $gridId, PATH_DYNAFORM, SYS_LANG, false);
-          // $gridFields = $G_FORM->getVars(false);
-          $fieldsList = array();
-          $gridFields = pmTablesProxy::_getGridDynafields($table['PRO_UID'], $gridId);
-          foreach ($gridFields as $gfield) {
-            if (!in_array($gfield['name'], $tableFields)) {
-              $fieldsList[] = array(
-                'FIELD_UID' => $gfield['name'] . '-' . $gfield['type'],
-                'FIELD_NAME' => $gfield['name']
-              );
-            }
-          }
-          sort($fieldsList);
-          $this->setJSVar('avFieldsList', $fieldsList);
           $repTabPluginPermissions = $this->_getSimpleReportPluginDef();
-          break;
-          
-        default:
-          
           break;
       }
     }

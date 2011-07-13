@@ -330,6 +330,9 @@ class Form extends XmlForm
                       $values["{$k}_label"] .= ($i != 0 ? '|': '') . $v->options[$value];
                     } else {
                       $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
+                      if(trim($query) == '') {
+                      	continue;
+                      }
                       //we do the query to the external connection and we've got the label
                       $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
                       
@@ -361,6 +364,9 @@ class Form extends XmlForm
                   $values["{$k}_label"] = $newValues["{$k}_label"] = $v->options[$newValues[$k]];
                 } else {
                   $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
+                  if(trim($query) == '') {
+                  	continue;
+                  }
                   //we do the query to the external connection and we've got the label
                   $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");
                   $stmt = $con->prepareStatement($query);
