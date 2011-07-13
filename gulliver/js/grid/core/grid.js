@@ -15,6 +15,10 @@ var G_Grid = function(oForm, sGridName){
   
   this.allDependentFields = ''; //Stores all dependent fields
   
+  this.countRows = function(){
+    return this.aElements.length / this.aFields.length;
+  };
+  
   this.getObjectName = function(Name){
     var arr = Name.split('][');
     var aux = arr.pop();
@@ -207,13 +211,14 @@ var G_Grid = function(oForm, sGridName){
   };
   
   this.addGridRow = function() {
-    var i, aObjects, aDatePicker;
+    var i, aObjects;
     var defaultValue = '';
-    var gridType = '';
+    var n,a,x;
     var oRow = document.getElementById('firstRow_' + this.sGridName);
     var aCells = oRow.getElementsByTagName('td');
     var oNewRow = this.oGrid.insertRow(this.oGrid.rows.length - 1);
     var currentRow = this.oGrid.rows.length - 2;
+    var newID, attributes, img2, gridType;
     
     oNewRow.onmouseover=function(){
       highlightRow(this, '#D9E8FF');
@@ -233,8 +238,8 @@ var G_Grid = function(oForm, sGridName){
           oNewRow.getElementsByTagName('td')[i].innerHTML = oNewRow.getElementsByTagName('td')[i].innerHTML.replace(/\[1\]/g, '\[' + currentRow + '\]');
           break;
         default:
-          eNodeName = aCells[i].innerHTML.substring(aCells[i].innerHTML.indexOf('<')+1, aCells[i].innerHTML.indexOf(' '));
-        eNodeName = eNodeName.toLowerCase();
+          var eNodeName = aCells[i].innerHTML.substring(aCells[i].innerHTML.indexOf('<')+1, aCells[i].innerHTML.indexOf(' '));
+          eNodeName = eNodeName.toLowerCase();
         switch(eNodeName){
           case 'input':
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
@@ -254,14 +259,14 @@ var G_Grid = function(oForm, sGridName){
                     tags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('a');
                     if (tags.length == 2){ //DATEPICKER
                       //Copy Images
-                      img1 = tags[0].innerHTML;
+                      //img1 = tags[0].innerHTML;
                       img2 = tags[1].innerHTML;
                       //Create new trigger name
                       var datePickerTriggerId = tags[1].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
                       //Remove 'a' tag for date picker trigger 
                       oNewRow.getElementsByTagName('td')[i].removeChild(tags[1]);
                       //Capture Script and remove
-                      scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+                      var scriptTags = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
                       oNewRow.getElementsByTagName('td')[i].removeChild(scriptTags[0]);
                       //Create 'a' to remove Date
                       if (tags[0].onclick){
@@ -288,9 +293,9 @@ var G_Grid = function(oForm, sGridName){
                       aObjects[n].value = defaultValue;
                     }else{
                       if (_BROWSER.name == 'msie' && aObjects.length==1){ //Clone new input element if browser is IE
-                        oNewOBJ = this.cloneInput(aObjects[n]);
+                        var oNewOBJ = this.cloneInput(aObjects[n]);
                         oNewOBJ.value = defaultValue;
-                        parentGG = aObjects[n].parentNode;
+                        var parentGG = aObjects[n].parentNode;
                         parentGG.removeChild(aObjects[n]);
                         parentGG.appendChild(oNewOBJ);
                       }else{
@@ -354,7 +359,7 @@ var G_Grid = function(oForm, sGridName){
               }
               
               attributes = elementAttributesNS(aObjects[0], 'pm');
-              var MyAtt = attributes;
+              //var MyAtt = attributes;
               if (attributes.defaultvalue != '' && typeof attributes.defaultvalue != 'undefined'){
                 defaultValue = attributes.defaultvalue;
                 //Set '' for Default Value when dropdown has dependent fields.
@@ -367,10 +372,10 @@ var G_Grid = function(oForm, sGridName){
               }else{
                 gridType = '';
               }
-              aDependents = this.allDependentFields.split(',');
+              var aDependents = this.allDependentFields.split(',');
               sObject = this.getObjectName(newID);
               //Check if dropdow is dependent
-              sw = false;
+              var sw = false;
               for (x=0; x < aDependents.length; x++){
                 if (aDependents[x] == sObject) sw = true;
               }
@@ -438,7 +443,7 @@ var G_Grid = function(oForm, sGridName){
                 }
                 //TODO: Implement Default Value and Dependent Fields Trigger for grid dropdowns
               }
-              parentSelect = aObjects[0].parentNode;
+              var parentSelect = aObjects[0].parentNode;
               parentSelect.removeChild(aObjects[0]);
               parentSelect.appendChild(oNewSelect);
             }
@@ -474,6 +479,7 @@ var G_Grid = function(oForm, sGridName){
       this.assignFormulas(this.aFormulas, 'change', currentRow);
     }
     //Recalculate functions if are declared
+    var oAux;
     if (this.aFunctions.length > 0) {
       for (i = 0; i < this.aFunctions.length; i++) {
         oAux = document.getElementById('form[' + this.sGridName + '][' + currentRow + '][' + this.aFunctions[i].sFieldName + ']');
@@ -492,8 +498,9 @@ var G_Grid = function(oForm, sGridName){
     //Fire Update Dependent Fields for any item with dependentfields and not included in dependencie
     var xIsDependentOf = [];
     var exist = false;
+    var m;
     for (i=0; i < this.aFields.length; i++){
-      oAux = this.getElementByName(currentRow, this.aFields[i].sFieldName);
+      var oAux = this.getElementByName(currentRow, this.aFields[i].sFieldName);
       if (typeof oAux !== 'undefined' && oAux != null)
         if (typeof oAux.dependentFields !== 'undefined'){
           if (oAux.dependentFields.length > 0){
@@ -518,7 +525,7 @@ var G_Grid = function(oForm, sGridName){
   ///////////////////////////////////////////////////////////////////////////////////////////////
   this.deleteGridRow = function(sRow, bWithoutConfirm){
     if (typeof bWithoutConfirm == 'undefined') bWithoutConfirm = false;
-    var i, iRow, iRowAux, oAux, ooAux;
+    //var i, iRow, iRowAux, oAux, ooAux;
     if (this.oGrid.rows.length == 3) {
       new leimnud.module.app.alert().make( {
         label : G_STRINGS.ID_MSG_NODELETE_GRID_ITEM
@@ -526,7 +533,7 @@ var G_Grid = function(oForm, sGridName){
       return false;
     }
     if (bWithoutConfirm){
-      this.deleteRowWC(this,sRow).extend(this);
+      this.deleteRowWC(this,sRow);
     }else{
       new leimnud.module.app.confirm().make( {
         label : G_STRINGS.ID_MSG_DELETE_GRID_ITEM,
