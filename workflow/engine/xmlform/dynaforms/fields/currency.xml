@@ -34,7 +34,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Validate<option name="Int">Integer</option><option name="Real">Real Number</option></en>
 </PME_VALIDATE>
 
-<PME_MASK type="text" maxlength="50" size="50" defaultvalue="###,###,###,###;###,###,###,###.## $">
+<PME_MASK type="text" maxlength="50" size="50" defaultvalue="###,###,###,###.##">
   <en>Mask</en>
 </PME_MASK>
 <PME_REQUIRED type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
