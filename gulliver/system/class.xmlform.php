@@ -3089,7 +3089,10 @@ class XmlForm_Field_Grid extends XmlForm_Field
     if ($therow != -1){
       //Check if values arrary is complete to can flip.
       $xValues = array();
-      $aRow = $values[$therow];
+      if (isset($values[$therow]))
+        $aRow = $values[$therow];
+      else
+        $aRow = array();
       for ($c=1; $c <= $therow; $c++){
         if ($c == $therow){
           $xValues[$therow] = $aRow;
