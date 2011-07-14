@@ -5394,4 +5394,39 @@ class Cases {
     
     return $rows;
   }
+  /*
+   * this function gets all users that already participated in a case
+   *
+   * @name getUsersParticipatedInCase
+   * @param string $sAppUid
+   * @return array (criteria+array)
+   */
+
+  function getUsersParticipatedInCase($sAppUid) {
+    $c = new Criteria('workflow');
+    $c->addSelectColumn(AppDelegationPeer::APP_UID);
+    $c->addSelectColumn(AppDelegationPeer::USR_UID);
+    
+    $c->addSelectColumn(UsersPeer::USR_USERNAME);
+    $c->addSelectColumn(UsersPeer::USR_EMAIL);
+
+    $c->add(AppDelegationPeer::APP_UID, $sAppUid, CRITERIA::EQUAL);
+
+    $c->addJoin(AppDelegationPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+    
+
+    $rs = AppDelegationPeer::doSelectRS($c);
+    
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    $rows=array();
+    $rs->next();
+    while ($row = $rs->getRow()){
+      $rows[$row['USR_UID']]=$row;
+      $rs->next();
+    }
+    $response['criteria']=$c;
+    $response['array']=$rows;
+    return $response;
+  }
 }

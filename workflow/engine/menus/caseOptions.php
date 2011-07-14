@@ -36,6 +36,7 @@ if ((($sStatus == 'DRAFT') || ($sStatus == 'TO_DO')) && ($_SESSION['TASK'] != -1
 } else {
   $G_TMP_MENU->AddIdOption('INFO'  , G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
 }
+$G_TMP_MENU->AddIdOption('NOTES'  , G::LoadTranslation('ID_NOTES'), 'javascript:showNotes();', 'absolute');
 
 
 

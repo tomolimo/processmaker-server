@@ -527,6 +527,7 @@ antes funcionaba.
 .ICON_STEPS {
   background-image:url(/images/steps.png) !important;
 }
+
 .ICON_ASSIGN_TASK {
   background-image:url(/images/flechav1A.png) !important;
 }
@@ -680,7 +681,11 @@ antes funcionaba.
 	width:15px !important;
 	height:15px !important;
 }
-
+.ICON_CASES_NOTES {
+  /*ss_comment*/
+  background-image:url( /images/icons_silk/sprites.png) !important;
+  background-position:0 -4501px !important
+}
 .ICON_ADDITIONAL_TABLES{
 	/*ss_database_table*/
 	background-image:url( /images/icons_silk/sprites.png) !important;
@@ -886,4 +891,27 @@ antes funcionaba.
 .errorTip .x-tip-body ul{
     list-style-type:disc;
     margin-left:15px;
+}
+.note-item {
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    padding:3px 3px 3px 3px;
+    border:1px solid #fff;
+    border-bottom:1px solid #eeeeee;
+    white-space:normal;
+    color:#555;
+}
+.note-item h3 {
+    display:block;
+    font:inherit;
+    font-weight:bold;
+    color:#222;
+}
+
+.note-item h3 span {
+    float: right;
+    font-weight:normal;
+    margin:0 0 5px 5px;
+    width:50px;
+    display:block;
+    clear:none;
 }

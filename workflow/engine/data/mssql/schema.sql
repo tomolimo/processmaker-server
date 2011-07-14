@@ -46,12 +46,12 @@ CREATE TABLE [APPLICATION]
 	[APP_INIT_DATE] CHAR(19)  NOT NULL,
 	[APP_FINISH_DATE] CHAR(19)  NOT NULL,
 	[APP_UPDATE_DATE] CHAR(19)  NOT NULL,
-	[APP_DATA] VARCHAR(MAX) NULL,
-	[APP_PIN] VARCHAR(32) default '' NULL,
+	[APP_DATA] NVARCHAR(MAX)  NOT NULL,
+	[APP_PIN] VARCHAR(32) default '' NOT NULL,
 	CONSTRAINT APPLICATION_PK PRIMARY KEY ([APP_UID])
 );
 
-CREATE INDEX [indexApp] ON [APPLICATION] ([PRO_UID],[APP_UID]);
+CREATE INDEX [indexApp] ON [APPLICATION] ([PRO_UID],[APP_STATUS],[APP_UID]);
 
 /* ---------------------------------------------------------------------- */
 /* APP_DELEGATION											*/
@@ -103,11 +103,11 @@ CREATE TABLE [APP_DELEGATION]
 	[DEL_DURATION] FLOAT default 0 NULL,
 	[DEL_QUEUE_DURATION] FLOAT default 0 NULL,
 	[DEL_DELAY_DURATION] FLOAT default 0 NULL,
-	[DEL_STARTED] INT default 0 NULL,
+	[DEL_STARTED] TINYINT default 0 NULL,
 	[DEL_FINISHED] TINYINT default 0 NULL,
 	[DEL_DELAYED] TINYINT default 0 NULL,
-	[DEL_DATA] TEXT  NOT NULL,
-	[APP_OVERDUE_PERCENTAGE] FLOAT  NULL,
+	[DEL_DATA] NVARCHAR(MAX)  NOT NULL,
+	[APP_OVERDUE_PERCENTAGE] FLOAT default 0 NOT NULL,
 	CONSTRAINT APP_DELEGATION_PK PRIMARY KEY ([APP_UID],[DEL_INDEX])
 );
 
@@ -155,7 +155,7 @@ CREATE TABLE [APP_DOCUMENT]
 	[APP_DOC_INDEX] INT  NOT NULL,
 	[FOLDER_UID] VARCHAR(32) default '' NULL,
 	[APP_DOC_PLUGIN] VARCHAR(150) default '' NULL,
-	[APP_DOC_TAGS] TEXT  NULL,
+	[APP_DOC_TAGS] NVARCHAR(MAX)  NULL,
 	[APP_DOC_STATUS] VARCHAR(32) default 'ACTIVE' NOT NULL,
 	[APP_DOC_STATUS_DATE] CHAR(19)  NULL,
 	CONSTRAINT APP_DOCUMENT_PK PRIMARY KEY ([APP_DOC_UID],[DOC_VERSION])
@@ -201,14 +201,14 @@ CREATE TABLE [APP_MESSAGE]
 	[APP_MSG_TYPE] VARCHAR(100) default '' NOT NULL,
 	[APP_MSG_SUBJECT] VARCHAR(150) default '' NOT NULL,
 	[APP_MSG_FROM] VARCHAR(100) default '' NOT NULL,
-	[APP_MSG_TO] TEXT  NOT NULL,
-	[APP_MSG_BODY] TEXT  NOT NULL,
+	[APP_MSG_TO] NVARCHAR(MAX)  NOT NULL,
+	[APP_MSG_BODY] NVARCHAR(MAX)  NOT NULL,
 	[APP_MSG_DATE] CHAR(19)  NOT NULL,
-	[APP_MSG_CC] TEXT  NULL,
-	[APP_MSG_BCC] TEXT  NULL,
-	[APP_MSG_TEMPLATE] TEXT  NULL,
+	[APP_MSG_CC] NVARCHAR(MAX)  NULL,
+	[APP_MSG_BCC] NVARCHAR(MAX)  NULL,
+	[APP_MSG_TEMPLATE] NVARCHAR(MAX)  NULL,
 	[APP_MSG_STATUS] VARCHAR(20)  NULL,
-	[APP_MSG_ATTACH] TEXT  NULL,
+	[APP_MSG_ATTACH] NVARCHAR(MAX)  NULL,
 	[APP_MSG_SEND_DATE] CHAR(19)  NOT NULL,
 	CONSTRAINT APP_MESSAGE_PK PRIMARY KEY ([APP_MSG_UID])
 );
@@ -287,7 +287,7 @@ CREATE TABLE [CONFIGURATION]
 (
 	[CFG_UID] VARCHAR(32) default '' NOT NULL,
 	[OBJ_UID] VARCHAR(128) default '' NOT NULL,
-	[CFG_VALUE] VARCHAR(MAX)  NOT NULL,
+	[CFG_VALUE] NVARCHAR(MAX)  NOT NULL,
 	[PRO_UID] VARCHAR(32) default '' NOT NULL,
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[APP_UID] VARCHAR(32) default '' NOT NULL,
@@ -331,11 +331,11 @@ CREATE TABLE [CONTENT]
 	[CON_PARENT] VARCHAR(32) default '' NOT NULL,
 	[CON_ID] VARCHAR(100) default '' NOT NULL,
 	[CON_LANG] VARCHAR(10) default '' NOT NULL,
-	[CON_VALUE] VARCHAR(MAX) NULL,
+	[CON_VALUE] NVARCHAR(MAX)  NOT NULL,
 	CONSTRAINT CONTENT_PK PRIMARY KEY ([CON_CATEGORY],[CON_PARENT],[CON_ID],[CON_LANG])
 );
 
-CREATE INDEX [indexUid] ON [CONTENT] ([CON_ID]);
+CREATE INDEX [indexUid] ON [CONTENT] ([CON_ID],[CON_CATEGORY],[CON_LANG]);
 
 /* ---------------------------------------------------------------------- */
 /* DEPARTMENT											*/
@@ -578,8 +578,8 @@ CREATE TABLE [INPUT_DOCUMENT]
 	[INP_DOC_ORIGINAL] VARCHAR(20) default 'COPY' NOT NULL,
 	[INP_DOC_PUBLISHED] VARCHAR(20) default 'PRIVATE' NOT NULL,
 	[INP_DOC_VERSIONING] TINYINT default 0 NOT NULL,
-	[INP_DOC_DESTINATION_PATH] TEXT  NULL,
-	[INP_DOC_TAGS] TEXT  NULL,
+	[INP_DOC_DESTINATION_PATH] NVARCHAR(MAX)  NULL,
+	[INP_DOC_TAGS] NVARCHAR(MAX)  NULL,
 	CONSTRAINT INPUT_DOCUMENT_PK PRIMARY KEY ([INP_DOC_UID])
 );
 
@@ -821,18 +821,18 @@ CREATE TABLE [OUTPUT_DOCUMENT]
 	[OUT_DOC_UID] VARCHAR(32) default '' NOT NULL,
 	[PRO_UID] VARCHAR(32) default '' NOT NULL,
 	[OUT_DOC_LANDSCAPE] TINYINT default 0 NOT NULL,
-  [OUT_DOC_MEDIA]     VARCHAR(50) NULL,
-  [OUT_DOC_LEFT_MARGIN] 	INT NULL,
-  [OUT_DOC_RIGHT_MARGIN] 	INT NULL,
-  [OUT_DOC_TOP_MARGIN] 	  INT NULL,
-  [OUT_DOC_BOTTOM_MARGIN] INT NULL,
+	[OUT_DOC_MEDIA] VARCHAR(10) default 'Letter' NOT NULL,
+	[OUT_DOC_LEFT_MARGIN] INT default 30 NULL,
+	[OUT_DOC_RIGHT_MARGIN] INT default 15 NULL,
+	[OUT_DOC_TOP_MARGIN] INT default 15 NULL,
+	[OUT_DOC_BOTTOM_MARGIN] INT default 15 NULL,
 	[OUT_DOC_GENERATE] VARCHAR(10) default 'BOTH' NOT NULL,
 	[OUT_DOC_TYPE] VARCHAR(32) default 'HTML' NOT NULL,
 	[OUT_DOC_CURRENT_REVISION] INT default 0 NULL,
-	[OUT_DOC_FIELD_MAPPING] VARCHAR(MAX) NULL,
+	[OUT_DOC_FIELD_MAPPING] NVARCHAR(MAX)  NULL,
 	[OUT_DOC_VERSIONING] TINYINT default 0 NOT NULL,
-	[OUT_DOC_DESTINATION_PATH] TEXT  NULL,
-	[OUT_DOC_TAGS] TEXT  NULL,
+	[OUT_DOC_DESTINATION_PATH] NVARCHAR(MAX)  NULL,
+	[OUT_DOC_TAGS] NVARCHAR(MAX)  NULL,
 	CONSTRAINT OUTPUT_DOCUMENT_PK PRIMARY KEY ([OUT_DOC_UID])
 );
 
@@ -1064,10 +1064,10 @@ CREATE TABLE [ROUTE]
 	[ROU_SEND_EMAIL] VARCHAR(20) default 'TRUE' NOT NULL,
 	[ROU_SOURCEANCHOR] INT default 1 NULL,
 	[ROU_TARGETANCHOR] INT default 0 NULL,
-  [ROU_EVN_UID] 	  VARCHAR(32) NULL,
-  [ROU_TO_PORT]     INT NULL,
-  [ROU_FROM_PORT]   INT NULL,
-  [GAT_UID] VARCHAR(32) NULL,
+	[ROU_TO_PORT] INT default 1 NOT NULL,
+	[ROU_FROM_PORT] INT default 2 NOT NULL,
+	[ROU_EVN_UID] VARCHAR(32) default '' NOT NULL,
+	[GAT_UID] VARCHAR(32) default '' NOT NULL,
 	CONSTRAINT ROUTE_PK PRIMARY KEY ([ROU_UID])
 );
 
@@ -1109,7 +1109,7 @@ CREATE TABLE [STEP]
 	[TAS_UID] VARCHAR(32) default '0' NOT NULL,
 	[STEP_TYPE_OBJ] VARCHAR(20) default 'DYNAFORM' NOT NULL,
 	[STEP_UID_OBJ] VARCHAR(32) default '0' NOT NULL,
-	[STEP_CONDITION] TEXT  NOT NULL,
+	[STEP_CONDITION] NVARCHAR(MAX)  NOT NULL,
 	[STEP_POSITION] INT default 0 NOT NULL,
 	[STEP_MODE] VARCHAR(10) default 'EDIT' NULL,
 	CONSTRAINT STEP_PK PRIMARY KEY ([STEP_UID])
@@ -1195,8 +1195,9 @@ CREATE TABLE [SWIMLANES_ELEMENTS]
 	[SWI_TYPE] VARCHAR(20) default 'LINE' NOT NULL,
 	[SWI_X] INT default 0 NOT NULL,
 	[SWI_Y] INT default 0 NOT NULL,
-  [SWI_WIDTH]   INT NULL, 
-  [SWI_HEIGHT] 	INT NULL,
+	[SWI_WIDTH] INT default 0 NOT NULL,
+	[SWI_HEIGHT] INT default 0 NOT NULL,
+	[SWI_NEXT_UID] VARCHAR(32) default '' NULL,
 	CONSTRAINT SWIMLANES_ELEMENTS_PK PRIMARY KEY ([SWI_UID])
 );
 
@@ -1268,11 +1269,11 @@ CREATE TABLE [TASK]
 	[TAS_DERIVATION] VARCHAR(100) default 'NORMAL' NOT NULL,
 	[TAS_POSX] INT default 0 NOT NULL,
 	[TAS_POSY] INT default 0 NOT NULL,
+	[TAS_WIDTH] INT default 110 NOT NULL,
+	[TAS_HEIGHT] INT default 60 NOT NULL,
 	[TAS_COLOR] VARCHAR(32) default '' NOT NULL,
-  [TAS_WIDTH]     INT NULL,
-  [TAS_HEIGHT]    INT NULL,
-  [TAS_EVN_UID]   VARCHAR(32) NULL,
-  [TAS_BOUNDARY]  VARCHAR(32) NULL,
+	[TAS_EVN_UID] VARCHAR(32) default '' NOT NULL,
+	[TAS_BOUNDARY] VARCHAR(32) default '' NOT NULL,
 	CONSTRAINT TASK_PK PRIMARY KEY ([TAS_UID])
 );
 
@@ -1352,7 +1353,8 @@ CREATE TABLE [TRANSLATION]
 	[TRN_CATEGORY] VARCHAR(100) default '' NOT NULL,
 	[TRN_ID] VARCHAR(100) default '' NOT NULL,
 	[TRN_LANG] VARCHAR(10) default 'en' NOT NULL,
-	[TRN_VALUE] VARCHAR(200) default '' NOT NULL,
+	[TRN_VALUE] NVARCHAR(MAX)  NOT NULL,
+	[TRN_UPDATE_DATE] CHAR(19)  NULL,
 	CONSTRAINT TRANSLATION_PK PRIMARY KEY ([TRN_CATEGORY],[TRN_ID],[TRN_LANG])
 );
 
@@ -1392,8 +1394,8 @@ CREATE TABLE [TRIGGERS]
 	[TRI_UID] VARCHAR(32) default '' NOT NULL,
 	[PRO_UID] VARCHAR(32) default '' NOT NULL,
 	[TRI_TYPE] VARCHAR(20) default 'SCRIPT' NOT NULL,
-	[TRI_WEBBOT] TEXT  NOT NULL,
-	[TRI_PARAM] TEXT  NULL,
+	[TRI_WEBBOT] NVARCHAR(MAX)  NOT NULL,
+	[TRI_PARAM] NVARCHAR(MAX)  NULL,
 	CONSTRAINT TRIGGERS_PK PRIMARY KEY ([TRI_UID])
 );
 
@@ -1549,8 +1551,6 @@ CREATE TABLE [APP_DELAY]
 	CONSTRAINT APP_DELAY_PK PRIMARY KEY ([APP_DELAY_UID])
 );
 
-CREATE INDEX [indexAppUid] ON [APP_DELAY] ([APP_UID],[APP_DEL_INDEX],[APP_DELAY_UID]);
-
 CREATE INDEX [indexAppDelay] ON [APP_DELAY] ([PRO_UID],[APP_UID],[APP_THREAD_INDEX],[APP_DEL_INDEX],[APP_NEXT_TASK],[APP_DELEGATION_USER],[APP_DISABLE_ACTION_USER]);
 
 /* ---------------------------------------------------------------------- */
@@ -1680,7 +1680,7 @@ CREATE TABLE [DB_SOURCE]
 	[DBS_PASSWORD] VARCHAR(32) default '' NULL,
 	[DBS_PORT] INT default 0 NULL,
 	[DBS_ENCODE] VARCHAR(32) default '' NULL,
-	CONSTRAINT DB_SOURCE_PK PRIMARY KEY ([DBS_UID])
+	CONSTRAINT DB_SOURCE_PK PRIMARY KEY ([DBS_UID],[PRO_UID])
 );
 
 CREATE INDEX [indexDBSource] ON [DB_SOURCE] ([PRO_UID]);
@@ -1854,7 +1854,7 @@ CREATE TABLE [CASE_TRACKER_OBJECT]
 	[PRO_UID] VARCHAR(32) default '0' NOT NULL,
 	[CTO_TYPE_OBJ] VARCHAR(20) default 'DYNAFORM' NOT NULL,
 	[CTO_UID_OBJ] VARCHAR(32) default '0' NOT NULL,
-	[CTO_CONDITION] TEXT  NOT NULL,
+	[CTO_CONDITION] NVARCHAR(MAX)  NOT NULL,
 	[CTO_POSITION] INT default 0 NOT NULL,
 	CONSTRAINT CASE_TRACKER_OBJECT_PK PRIMARY KEY ([CTO_UID])
 );
@@ -1944,8 +1944,8 @@ CREATE TABLE [SUB_PROCESS]
 	[SP_SYNCHRONOUS] INT default 0 NOT NULL,
 	[SP_SYNCHRONOUS_TYPE] VARCHAR(20) default '' NOT NULL,
 	[SP_SYNCHRONOUS_WAIT] INT default 0 NOT NULL,
-	[SP_VARIABLES_OUT] TEXT  NOT NULL,
-	[SP_VARIABLES_IN] TEXT  NOT NULL,
+	[SP_VARIABLES_OUT] NVARCHAR(MAX)  NOT NULL,
+	[SP_VARIABLES_IN] NVARCHAR(MAX)  NULL,
 	[SP_GRID_IN] VARCHAR(50) default '' NOT NULL,
 	CONSTRAINT SUB_PROCESS_PK PRIMARY KEY ([SP_UID])
 );
@@ -1990,8 +1990,8 @@ CREATE TABLE [SUB_APPLICATION]
 	[DEL_INDEX_PARENT] INT default 0 NOT NULL,
 	[DEL_THREAD_PARENT] INT default 0 NOT NULL,
 	[SA_STATUS] VARCHAR(32) default '' NOT NULL,
-	[SA_VALUES_OUT] TEXT  NOT NULL,
-	[SA_VALUES_IN] TEXT  NOT NULL,
+	[SA_VALUES_OUT] NVARCHAR(MAX)  NOT NULL,
+	[SA_VALUES_IN] NVARCHAR(MAX)  NULL,
 	[SA_INIT_DATE] CHAR(19)  NULL,
 	[SA_FINISH_DATE] CHAR(19)  NULL,
 	CONSTRAINT SUB_APPLICATION_PK PRIMARY KEY ([APP_UID],[APP_PARENT],[DEL_INDEX_PARENT],[DEL_THREAD_PARENT])
@@ -2077,7 +2077,7 @@ CREATE TABLE [USERS_PROPERTIES]
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[USR_LAST_UPDATE_DATE] CHAR(19)  NULL,
 	[USR_LOGGED_NEXT_TIME] INT default 0 NULL,
-	[USR_PASSWORD_HISTORY] TEXT  NULL,
+	[USR_PASSWORD_HISTORY] NVARCHAR(MAX)  NULL,
 	CONSTRAINT USERS_PROPERTIES_PK PRIMARY KEY ([USR_UID])
 );
 
@@ -2117,15 +2117,19 @@ CREATE TABLE [ADDITIONAL_TABLES]
 	[ADD_TAB_UID] VARCHAR(32) default '' NOT NULL,
 	[ADD_TAB_NAME] VARCHAR(60) default '' NOT NULL,
 	[ADD_TAB_CLASS_NAME] VARCHAR(100) default '' NOT NULL,
-	[ADD_TAB_DESCRIPTION] TEXT  NOT NULL,
-	[ADD_TAB_SDW_LOG_INSERT] TINYINT default 1 NOT NULL,
-	[ADD_TAB_SDW_LOG_UPDATE] TINYINT default 1 NOT NULL,
-	[ADD_TAB_SDW_LOG_DELETE] TINYINT default 1 NOT NULL,
-	[ADD_TAB_SDW_LOG_SELECT] TINYINT default 0 NOT NULL,
-	[ADD_TAB_SDW_MAX_LENGTH] INT default -1 NOT NULL,
-	[ADD_TAB_SDW_AUTO_DELETE] TINYINT default 0 NOT NULL,
-	[ADD_TAB_PLG_UID] VARCHAR(32) default '' NOT NULL,
-	[DBS_UID] VARCHAR(32) default '0' NULL,
+	[ADD_TAB_DESCRIPTION] NVARCHAR(MAX)  NULL,
+	[ADD_TAB_SDW_LOG_INSERT] TINYINT default 0 NULL,
+	[ADD_TAB_SDW_LOG_UPDATE] TINYINT default 0 NULL,
+	[ADD_TAB_SDW_LOG_DELETE] TINYINT default 0 NULL,
+	[ADD_TAB_SDW_LOG_SELECT] TINYINT default 0 NULL,
+	[ADD_TAB_SDW_MAX_LENGTH] INT default 0 NULL,
+	[ADD_TAB_SDW_AUTO_DELETE] TINYINT default 0 NULL,
+	[ADD_TAB_PLG_UID] VARCHAR(32) default '' NULL,
+	[DBS_UID] VARCHAR(32) default '' NULL,
+	[PRO_UID] VARCHAR(32) default '' NULL,
+	[ADD_TAB_TYPE] VARCHAR(32) default '' NULL,
+	[ADD_TAB_GRID] VARCHAR(256) default '' NULL,
+	[ADD_TAB_TAG] VARCHAR(256) default '' NULL,
 	CONSTRAINT ADDITIONAL_TABLES_PK PRIMARY KEY ([ADD_TAB_UID])
 );
 
@@ -2166,7 +2170,7 @@ CREATE TABLE [FIELDS]
 	[ADD_TAB_UID] VARCHAR(32) default '' NOT NULL,
 	[FLD_INDEX] INT default 1 NOT NULL,
 	[FLD_NAME] VARCHAR(60) default '' NOT NULL,
-	[FLD_DESCRIPTION] TEXT  NOT NULL,
+	[FLD_DESCRIPTION] NVARCHAR(MAX)  NOT NULL,
 	[FLD_TYPE] VARCHAR(10) default '' NOT NULL,
 	[FLD_SIZE] INT default 1 NOT NULL,
 	[FLD_NULL] TINYINT default 1 NOT NULL,
@@ -2174,6 +2178,9 @@ CREATE TABLE [FIELDS]
 	[FLD_KEY] TINYINT default 0 NOT NULL,
 	[FLD_FOREIGN_KEY] TINYINT default 0 NOT NULL,
 	[FLD_FOREIGN_KEY_TABLE] VARCHAR(32) default '' NOT NULL,
+	[FLD_DYN_NAME] VARCHAR(128) default '' NULL,
+	[FLD_DYN_UID] VARCHAR(128) default '' NULL,
+	[FLD_FILTER] TINYINT default 0 NULL,
 	CONSTRAINT FIELDS_PK PRIMARY KEY ([FLD_UID])
 );
 
@@ -2213,7 +2220,7 @@ CREATE TABLE [SHADOW_TABLE]
 	[SHD_UID] VARCHAR(32) default '' NOT NULL,
 	[ADD_TAB_UID] VARCHAR(32) default '' NOT NULL,
 	[SHD_ACTION] VARCHAR(10) default '' NOT NULL,
-	[SHD_DETAILS] TEXT  NOT NULL,
+	[SHD_DETAILS] NVARCHAR(MAX)  NOT NULL,
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[APP_UID] VARCHAR(32) default '' NOT NULL,
 	[SHD_DATE] CHAR(19)  NULL,
@@ -2267,63 +2274,24 @@ CREATE TABLE [EVENT]
 	[EVN_WHEN] FLOAT default 0 NOT NULL,
 	[EVN_MAX_ATTEMPTS] TINYINT default 3 NOT NULL,
 	[EVN_ACTION] VARCHAR(50) default '' NOT NULL,
-	[EVN_CONDITIONS] TEXT  NULL,
-	[EVN_ACTION_PARAMETERS] TEXT  NULL,
+	[EVN_CONDITIONS] NVARCHAR(MAX)  NULL,
+	[EVN_ACTION_PARAMETERS] NVARCHAR(MAX)  NULL,
 	[TRI_UID] VARCHAR(32) default '' NULL,
-  [EVN_POSX]      INT NULL,
-  [EVN_POSY]      INT NULL,
-  [EVN_TYPE]      VARCHAR(32) NULL,
-  [TAS_EVN_UID]   VARCHAR(32) NULL,
+	[EVN_POSX] INT default 0 NOT NULL,
+	[EVN_POSY] INT default 0 NOT NULL,
+	[EVN_TYPE] VARCHAR(32) default '' NULL,
+	[TAS_EVN_UID] VARCHAR(32) default '' NULL,
 	CONSTRAINT EVENT_PK PRIMARY KEY ([EVN_UID])
 );
 
 CREATE INDEX [indexEventTable] ON [EVENT] ([EVN_UID]);
 
-
 /* ---------------------------------------------------------------------- */
 /* GATEWAY											*/
 /* ---------------------------------------------------------------------- */
+
+
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'GATEWAY')
-BEGIN
-	 DECLARE @reftable_50_1 nvarchar(60), @constraintname_50_1 nvarchar(60)
-	 DECLARE refcursor CURSOR FOR
-	 select reftables.name tablename, cons.name constraintname
-	  from sysobjects tables,
-		   sysobjects reftables,
-		   sysobjects cons,
-		   sysreferences ref
-	   where tables.id = ref.rkeyid
-		 and cons.id = ref.constid
-		 and reftables.id = ref.fkeyid
-		 and tables.name = 'GATEWAY'
-	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_50_1, @constraintname_50_1
-	 while @@FETCH_STATUS = 0
-	 BEGIN
-	   exec ('alter table '+@reftable_50_1+' drop constraint '+@constraintname_50_1)
-	   FETCH NEXT from refcursor into @reftable_50_1, @constraintname_50_1
-	 END
-	 CLOSE refcursor
-	 DEALLOCATE refcursor
-	 DROP TABLE [EVENT]
-END
-
-CREATE TABLE [GATEWAY]
-(
-	[GAT_UID] VARCHAR(32) default '' NOT NULL,
-	[PRO_UID] VARCHAR(32) default '' NOT NULL,
-	[GAT_X] INTEGER default 0 NOT NULL,
-	[GAT_Y] INTEGER default 0 NOT NULL,
-	CONSTRAINT GATEWAY_PK PRIMARY KEY ([GAT_UID])
-) ;
-
-
-/* ---------------------------------------------------------------------- */
-/* APP_EVENT											*/
-/* ---------------------------------------------------------------------- */
-
-
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_EVENT')
 BEGIN
 	 DECLARE @reftable_51 nvarchar(60), @constraintname_51 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -2335,13 +2303,56 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'APP_EVENT'
+		 and tables.name = 'GATEWAY'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_51, @constraintname_51
 	 while @@FETCH_STATUS = 0
 	 BEGIN
 	   exec ('alter table '+@reftable_51+' drop constraint '+@constraintname_51)
 	   FETCH NEXT from refcursor into @reftable_51, @constraintname_51
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [GATEWAY]
+END
+
+
+CREATE TABLE [GATEWAY]
+(
+	[GAT_UID] VARCHAR(32) default '' NOT NULL,
+	[PRO_UID] VARCHAR(32) default '' NOT NULL,
+	[TAS_UID] VARCHAR(32) default '' NOT NULL,
+	[GAT_NEXT_TASK] VARCHAR(32) default '' NOT NULL,
+	[GAT_X] INT default 0 NOT NULL,
+	[GAT_Y] INT default 0 NOT NULL,
+	[GAT_TYPE] VARCHAR(32) default '' NOT NULL,
+	CONSTRAINT GATEWAY_PK PRIMARY KEY ([GAT_UID])
+);
+
+/* ---------------------------------------------------------------------- */
+/* APP_EVENT											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_EVENT')
+BEGIN
+	 DECLARE @reftable_52 nvarchar(60), @constraintname_52 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'APP_EVENT'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_52, @constraintname_52
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_52+' drop constraint '+@constraintname_52)
+	   FETCH NEXT from refcursor into @reftable_52, @constraintname_52
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2368,7 +2379,7 @@ CREATE TABLE [APP_EVENT]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_CACHE_VIEW')
 BEGIN
-	 DECLARE @reftable_52 nvarchar(60), @constraintname_52 nvarchar(60)
+	 DECLARE @reftable_53 nvarchar(60), @constraintname_53 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2380,11 +2391,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'APP_CACHE_VIEW'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_52, @constraintname_52
+	 FETCH NEXT from refcursor into @reftable_53, @constraintname_53
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_52+' drop constraint '+@constraintname_52)
-	   FETCH NEXT from refcursor into @reftable_52, @constraintname_52
+	   exec ('alter table '+@reftable_53+' drop constraint '+@constraintname_53)
+	   FETCH NEXT from refcursor into @reftable_53, @constraintname_53
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2399,27 +2410,27 @@ CREATE TABLE [APP_CACHE_VIEW]
 	[APP_NUMBER] INT default 0 NOT NULL,
 	[APP_STATUS] VARCHAR(32) default '' NOT NULL,
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
-	[PREVIOUS_USR_UID] VARCHAR(32) default '' NOT NULL,
+	[PREVIOUS_USR_UID] VARCHAR(32) default '' NULL,
 	[TAS_UID] VARCHAR(32) default '' NOT NULL,
 	[PRO_UID] VARCHAR(32) default '' NOT NULL,
 	[DEL_DELEGATE_DATE] CHAR(19)  NOT NULL,
 	[DEL_INIT_DATE] CHAR(19)  NULL,
 	[DEL_TASK_DUE_DATE] CHAR(19)  NULL,
 	[DEL_FINISH_DATE] CHAR(19)  NULL,
-	[DEL_THREAD_STATUS] VARCHAR(32) default 'OPEN' NOT NULL,
-	[APP_THREAD_STATUS] VARCHAR(32) default 'OPEN' NOT NULL,
+	[DEL_THREAD_STATUS] VARCHAR(32) default 'OPEN' NULL,
+	[APP_THREAD_STATUS] VARCHAR(32) default 'OPEN' NULL,
 	[APP_TITLE] VARCHAR(255) default '' NOT NULL,
 	[APP_PRO_TITLE] VARCHAR(255) default '' NOT NULL,
 	[APP_TAS_TITLE] VARCHAR(255) default '' NOT NULL,
-	[APP_CURRENT_USER] VARCHAR(128) default '' NOT NULL,
-	[APP_DEL_PREVIOUS_USER] VARCHAR(128) default '' NOT NULL,
+	[APP_CURRENT_USER] VARCHAR(128) default '' NULL,
+	[APP_DEL_PREVIOUS_USER] VARCHAR(128) default '' NULL,
 	[DEL_PRIORITY] VARCHAR(32) default '3' NOT NULL,
 	[DEL_DURATION] FLOAT default 0 NULL,
 	[DEL_QUEUE_DURATION] FLOAT default 0 NULL,
 	[DEL_DELAY_DURATION] FLOAT default 0 NULL,
-	[DEL_STARTED] TINYINT default 0 NULL,
-	[DEL_FINISHED] TINYINT default 0 NULL,
-	[DEL_DELAYED] TINYINT default 0 NULL,
+	[DEL_STARTED] TINYINT default 0 NOT NULL,
+	[DEL_FINISHED] TINYINT default 0 NOT NULL,
+	[DEL_DELAYED] TINYINT default 0 NOT NULL,
 	[APP_CREATE_DATE] CHAR(19)  NOT NULL,
 	[APP_FINISH_DATE] CHAR(19)  NULL,
 	[APP_UPDATE_DATE] CHAR(19)  NOT NULL,
@@ -2429,7 +2440,7 @@ CREATE TABLE [APP_CACHE_VIEW]
 
 CREATE INDEX [indexAppNumber] ON [APP_CACHE_VIEW] ([APP_NUMBER]);
 
-CREATE INDEX [indexAppUser] ON [APP_CACHE_VIEW] ([USR_UID],[PRO_UID]);
+CREATE INDEX [indexAppUser] ON [APP_CACHE_VIEW] ([USR_UID],[APP_STATUS]);
 
 /* ---------------------------------------------------------------------- */
 /* DIM_TIME_DELEGATE											*/
@@ -2438,7 +2449,7 @@ CREATE INDEX [indexAppUser] ON [APP_CACHE_VIEW] ([USR_UID],[PRO_UID]);
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'DIM_TIME_DELEGATE')
 BEGIN
-	 DECLARE @reftable_53 nvarchar(60), @constraintname_53 nvarchar(60)
+	 DECLARE @reftable_54 nvarchar(60), @constraintname_54 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2450,11 +2461,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'DIM_TIME_DELEGATE'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_53, @constraintname_53
+	 FETCH NEXT from refcursor into @reftable_54, @constraintname_54
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_53+' drop constraint '+@constraintname_53)
-	   FETCH NEXT from refcursor into @reftable_53, @constraintname_53
+	   exec ('alter table '+@reftable_54+' drop constraint '+@constraintname_54)
+	   FETCH NEXT from refcursor into @reftable_54, @constraintname_54
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2482,7 +2493,7 @@ CREATE TABLE [DIM_TIME_DELEGATE]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'DIM_TIME_COMPLETE')
 BEGIN
-	 DECLARE @reftable_54 nvarchar(60), @constraintname_54 nvarchar(60)
+	 DECLARE @reftable_55 nvarchar(60), @constraintname_55 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2494,11 +2505,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'DIM_TIME_COMPLETE'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_54, @constraintname_54
+	 FETCH NEXT from refcursor into @reftable_55, @constraintname_55
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_54+' drop constraint '+@constraintname_54)
-	   FETCH NEXT from refcursor into @reftable_54, @constraintname_54
+	   exec ('alter table '+@reftable_55+' drop constraint '+@constraintname_55)
+	   FETCH NEXT from refcursor into @reftable_55, @constraintname_55
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2526,7 +2537,7 @@ CREATE TABLE [DIM_TIME_COMPLETE]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_HISTORY')
 BEGIN
-	 DECLARE @reftable_55 nvarchar(60), @constraintname_55 nvarchar(60)
+	 DECLARE @reftable_56 nvarchar(60), @constraintname_56 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2538,11 +2549,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'APP_HISTORY'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_55, @constraintname_55
+	 FETCH NEXT from refcursor into @reftable_56, @constraintname_56
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_55+' drop constraint '+@constraintname_55)
-	   FETCH NEXT from refcursor into @reftable_55, @constraintname_55
+	   exec ('alter table '+@reftable_56+' drop constraint '+@constraintname_56)
+	   FETCH NEXT from refcursor into @reftable_56, @constraintname_56
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2560,7 +2571,7 @@ CREATE TABLE [APP_HISTORY]
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[APP_STATUS] VARCHAR(100) default '' NOT NULL,
 	[HISTORY_DATE] CHAR(19)  NULL,
-	[HISTORY_DATA] TEXT  NOT NULL
+	[HISTORY_DATA] NVARCHAR(MAX)  NOT NULL
 );
 
 CREATE INDEX [indexAppHistory] ON [APP_HISTORY] ([APP_UID],[TAS_UID],[USR_UID]);
@@ -2572,7 +2583,7 @@ CREATE INDEX [indexAppHistory] ON [APP_HISTORY] ([APP_UID],[TAS_UID],[USR_UID]);
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_FOLDER')
 BEGIN
-	 DECLARE @reftable_56 nvarchar(60), @constraintname_56 nvarchar(60)
+	 DECLARE @reftable_57 nvarchar(60), @constraintname_57 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2584,11 +2595,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'APP_FOLDER'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_56, @constraintname_56
+	 FETCH NEXT from refcursor into @reftable_57, @constraintname_57
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_56+' drop constraint '+@constraintname_56)
-	   FETCH NEXT from refcursor into @reftable_56, @constraintname_56
+	   exec ('alter table '+@reftable_57+' drop constraint '+@constraintname_57)
+	   FETCH NEXT from refcursor into @reftable_57, @constraintname_57
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2600,7 +2611,7 @@ CREATE TABLE [APP_FOLDER]
 (
 	[FOLDER_UID] VARCHAR(32) default '' NOT NULL,
 	[FOLDER_PARENT_UID] VARCHAR(32) default '' NOT NULL,
-	[FOLDER_NAME] VARCHAR(MAX)  NULL,
+	[FOLDER_NAME] NVARCHAR(MAX)  NOT NULL,
 	[FOLDER_CREATE_DATE] CHAR(19)  NOT NULL,
 	[FOLDER_UPDATE_DATE] CHAR(19)  NOT NULL,
 	CONSTRAINT APP_FOLDER_PK PRIMARY KEY ([FOLDER_UID])
@@ -2613,7 +2624,7 @@ CREATE TABLE [APP_FOLDER]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'FIELD_CONDITION')
 BEGIN
-	 DECLARE @reftable_57 nvarchar(60), @constraintname_57 nvarchar(60)
+	 DECLARE @reftable_58 nvarchar(60), @constraintname_58 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2625,11 +2636,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'FIELD_CONDITION'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_57, @constraintname_57
+	 FETCH NEXT from refcursor into @reftable_58, @constraintname_58
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_57+' drop constraint '+@constraintname_57)
-	   FETCH NEXT from refcursor into @reftable_57, @constraintname_57
+	   exec ('alter table '+@reftable_58+' drop constraint '+@constraintname_58)
+	   FETCH NEXT from refcursor into @reftable_58, @constraintname_58
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2641,10 +2652,10 @@ CREATE TABLE [FIELD_CONDITION]
 (
 	[FCD_UID] VARCHAR(32) default '' NOT NULL,
 	[FCD_FUNCTION] VARCHAR(50)  NOT NULL,
-	[FCD_FIELDS] TEXT  NOT NULL,
-	[FCD_CONDITION] TEXT  NOT NULL,
-	[FCD_EVENTS] TEXT  NOT NULL,
-	[FCD_EVENT_OWNERS] TEXT  NOT NULL,
+	[FCD_FIELDS] NVARCHAR(MAX)  NULL,
+	[FCD_CONDITION] NVARCHAR(MAX)  NULL,
+	[FCD_EVENTS] NVARCHAR(MAX)  NULL,
+	[FCD_EVENT_OWNERS] NVARCHAR(MAX)  NULL,
 	[FCD_STATUS] VARCHAR(10)  NULL,
 	[FCD_DYN_UID] VARCHAR(32)  NOT NULL,
 	CONSTRAINT FIELD_CONDITION_PK PRIMARY KEY ([FCD_UID])
@@ -2657,7 +2668,7 @@ CREATE TABLE [FIELD_CONDITION]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'LOG_CASES_SCHEDULER')
 BEGIN
-	 DECLARE @reftable_58 nvarchar(60), @constraintname_58 nvarchar(60)
+	 DECLARE @reftable_59 nvarchar(60), @constraintname_59 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2669,11 +2680,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'LOG_CASES_SCHEDULER'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_58, @constraintname_58
+	 FETCH NEXT from refcursor into @reftable_59, @constraintname_59
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_58+' drop constraint '+@constraintname_58)
-	   FETCH NEXT from refcursor into @reftable_58, @constraintname_58
+	   exec ('alter table '+@reftable_59+' drop constraint '+@constraintname_59)
+	   FETCH NEXT from refcursor into @reftable_59, @constraintname_59
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2691,8 +2702,8 @@ CREATE TABLE [LOG_CASES_SCHEDULER]
 	[EXEC_HOUR] VARCHAR(32) default '12:00' NOT NULL,
 	[RESULT] VARCHAR(32) default 'SUCCESS' NOT NULL,
 	[SCH_UID] VARCHAR(32) default 'OPEN' NOT NULL,
-	[WS_CREATE_CASE_STATUS] TEXT  NOT NULL,
-	[WS_ROUTE_CASE_STATUS] TEXT  NOT NULL,
+	[WS_CREATE_CASE_STATUS] NVARCHAR(MAX)  NOT NULL,
+	[WS_ROUTE_CASE_STATUS] NVARCHAR(MAX)  NOT NULL,
 	CONSTRAINT LOG_CASES_SCHEDULER_PK PRIMARY KEY ([LOG_CASE_UID])
 );
 
@@ -2703,7 +2714,7 @@ CREATE TABLE [LOG_CASES_SCHEDULER]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'CASE_SCHEDULER')
 BEGIN
-	 DECLARE @reftable_59 nvarchar(60), @constraintname_59 nvarchar(60)
+	 DECLARE @reftable_60 nvarchar(60), @constraintname_60 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2715,11 +2726,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'CASE_SCHEDULER'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_59, @constraintname_59
+	 FETCH NEXT from refcursor into @reftable_60, @constraintname_60
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_59+' drop constraint '+@constraintname_59)
-	   FETCH NEXT from refcursor into @reftable_59, @constraintname_59
+	   exec ('alter table '+@reftable_60+' drop constraint '+@constraintname_60)
+	   FETCH NEXT from refcursor into @reftable_60, @constraintname_60
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2739,21 +2750,21 @@ CREATE TABLE [CASE_SCHEDULER]
 	[SCH_TIME_NEXT_RUN] CHAR(19)  NOT NULL,
 	[SCH_LAST_RUN_TIME] CHAR(19)  NULL,
 	[SCH_STATE] VARCHAR(15) default 'ACTIVE' NOT NULL,
-	[SCH_LAST_STATE] VARCHAR(60)  NOT NULL,
-	[USR_UID] VARCHAR(32)  NOT NULL,
+	[SCH_LAST_STATE] VARCHAR(60) default '' NOT NULL,
+	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[SCH_OPTION] TINYINT default 0 NOT NULL,
 	[SCH_START_TIME] CHAR(19)  NOT NULL,
 	[SCH_START_DATE] CHAR(19)  NOT NULL,
-	[SCH_DAYS_PERFORM_TASK] CHAR(5)  NOT NULL,
+	[SCH_DAYS_PERFORM_TASK] CHAR(5) default '' NOT NULL,
 	[SCH_EVERY_DAYS] TINYINT default 0 NULL,
 	[SCH_WEEK_DAYS] CHAR(14) default '0|0|0|0|0|0|0' NOT NULL,
-	[SCH_START_DAY] CHAR(6)  NOT NULL,
+	[SCH_START_DAY] CHAR(6) default '' NOT NULL,
 	[SCH_MONTHS] CHAR(24) default '0|0|0|0|0|0|0|0|0|0|0|0' NOT NULL,
 	[SCH_END_DATE] CHAR(19)  NULL,
-	[SCH_REPEAT_EVERY] VARCHAR(15)  NOT NULL,
-	[SCH_REPEAT_UNTIL] VARCHAR(15)  NOT NULL,
+	[SCH_REPEAT_EVERY] VARCHAR(15) default '' NOT NULL,
+	[SCH_REPEAT_UNTIL] VARCHAR(15) default '' NOT NULL,
 	[SCH_REPEAT_STOP_IF_RUNNING] TINYINT default 0 NULL,
-  [CASE_SH_PLUGIN_UID]  VARCHAR(100),
+	[CASE_SH_PLUGIN_UID] VARCHAR(100)  NULL,
 	CONSTRAINT CASE_SCHEDULER_PK PRIMARY KEY ([SCH_UID])
 );
 
@@ -2764,7 +2775,7 @@ CREATE TABLE [CASE_SCHEDULER]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'CALENDAR_DEFINITION')
 BEGIN
-	 DECLARE @reftable_60 nvarchar(60), @constraintname_60 nvarchar(60)
+	 DECLARE @reftable_61 nvarchar(60), @constraintname_61 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2776,11 +2787,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'CALENDAR_DEFINITION'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_60, @constraintname_60
+	 FETCH NEXT from refcursor into @reftable_61, @constraintname_61
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_60+' drop constraint '+@constraintname_60)
-	   FETCH NEXT from refcursor into @reftable_60, @constraintname_60
+	   exec ('alter table '+@reftable_61+' drop constraint '+@constraintname_61)
+	   FETCH NEXT from refcursor into @reftable_61, @constraintname_61
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2795,7 +2806,7 @@ CREATE TABLE [CALENDAR_DEFINITION]
 	[CALENDAR_CREATE_DATE] CHAR(19)  NOT NULL,
 	[CALENDAR_UPDATE_DATE] CHAR(19)  NULL,
 	[CALENDAR_WORK_DAYS] VARCHAR(100) default '' NOT NULL,
-	[CALENDAR_DESCRIPTION] TEXT  NOT NULL,
+	[CALENDAR_DESCRIPTION] NVARCHAR(MAX)  NOT NULL,
 	[CALENDAR_STATUS] VARCHAR(8) default 'ACTIVE' NOT NULL,
 	CONSTRAINT CALENDAR_DEFINITION_PK PRIMARY KEY ([CALENDAR_UID])
 );
@@ -2807,7 +2818,7 @@ CREATE TABLE [CALENDAR_DEFINITION]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'CALENDAR_BUSINESS_HOURS')
 BEGIN
-	 DECLARE @reftable_61 nvarchar(60), @constraintname_61 nvarchar(60)
+	 DECLARE @reftable_62 nvarchar(60), @constraintname_62 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2819,11 +2830,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'CALENDAR_BUSINESS_HOURS'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_61, @constraintname_61
+	 FETCH NEXT from refcursor into @reftable_62, @constraintname_62
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_61+' drop constraint '+@constraintname_61)
-	   FETCH NEXT from refcursor into @reftable_61, @constraintname_61
+	   exec ('alter table '+@reftable_62+' drop constraint '+@constraintname_62)
+	   FETCH NEXT from refcursor into @reftable_62, @constraintname_62
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2847,7 +2858,7 @@ CREATE TABLE [CALENDAR_BUSINESS_HOURS]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'CALENDAR_HOLIDAYS')
 BEGIN
-	 DECLARE @reftable_62 nvarchar(60), @constraintname_62 nvarchar(60)
+	 DECLARE @reftable_63 nvarchar(60), @constraintname_63 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2859,11 +2870,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'CALENDAR_HOLIDAYS'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_62, @constraintname_62
+	 FETCH NEXT from refcursor into @reftable_63, @constraintname_63
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_62+' drop constraint '+@constraintname_62)
-	   FETCH NEXT from refcursor into @reftable_62, @constraintname_62
+	   exec ('alter table '+@reftable_63+' drop constraint '+@constraintname_63)
+	   FETCH NEXT from refcursor into @reftable_63, @constraintname_63
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2887,7 +2898,7 @@ CREATE TABLE [CALENDAR_HOLIDAYS]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'CALENDAR_ASSIGNMENTS')
 BEGIN
-	 DECLARE @reftable_63 nvarchar(60), @constraintname_63 nvarchar(60)
+	 DECLARE @reftable_64 nvarchar(60), @constraintname_64 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2899,11 +2910,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'CALENDAR_ASSIGNMENTS'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_63, @constraintname_63
+	 FETCH NEXT from refcursor into @reftable_64, @constraintname_64
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_63+' drop constraint '+@constraintname_63)
-	   FETCH NEXT from refcursor into @reftable_63, @constraintname_63
+	   exec ('alter table '+@reftable_64+' drop constraint '+@constraintname_64)
+	   FETCH NEXT from refcursor into @reftable_64, @constraintname_64
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2926,7 +2937,7 @@ CREATE TABLE [CALENDAR_ASSIGNMENTS]
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'PROCESS_CATEGORY')
 BEGIN
-	 DECLARE @reftable_64 nvarchar(60), @constraintname_64 nvarchar(60)
+	 DECLARE @reftable_65 nvarchar(60), @constraintname_65 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
 	 select reftables.name tablename, cons.name constraintname
 	  from sysobjects tables,
@@ -2938,11 +2949,11 @@ BEGIN
 		 and reftables.id = ref.fkeyid
 		 and tables.name = 'PROCESS_CATEGORY'
 	 OPEN refcursor
-	 FETCH NEXT from refcursor into @reftable_64, @constraintname_64
+	 FETCH NEXT from refcursor into @reftable_65, @constraintname_65
 	 while @@FETCH_STATUS = 0
 	 BEGIN
-	   exec ('alter table '+@reftable_64+' drop constraint '+@constraintname_64)
-	   FETCH NEXT from refcursor into @reftable_64, @constraintname_64
+	   exec ('alter table '+@reftable_65+' drop constraint '+@constraintname_65)
+	   FETCH NEXT from refcursor into @reftable_65, @constraintname_65
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
@@ -2957,4 +2968,49 @@ CREATE TABLE [PROCESS_CATEGORY]
 	[CATEGORY_NAME] VARCHAR(100) default '' NOT NULL,
 	[CATEGORY_ICON] VARCHAR(100) default '' NULL,
 	CONSTRAINT PROCESS_CATEGORY_PK PRIMARY KEY ([CATEGORY_UID])
+);
+
+/* ---------------------------------------------------------------------- */
+/* APP_NOTES											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_NOTES')
+BEGIN
+	 DECLARE @reftable_66 nvarchar(60), @constraintname_66 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'APP_NOTES'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_66, @constraintname_66
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_66+' drop constraint '+@constraintname_66)
+	   FETCH NEXT from refcursor into @reftable_66, @constraintname_66
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [APP_NOTES]
+END
+
+
+CREATE TABLE [APP_NOTES]
+(
+	[APP_UID] VARCHAR(32) default '' NOT NULL,
+	[USR_UID] VARCHAR(32) default '' NOT NULL,
+	[NOTE_DATE] CHAR(19)  NOT NULL,
+	[NOTE_CONTENT] NVARCHAR(MAX)  NOT NULL,
+	[NOTE_TYPE] VARCHAR(32) default 'USER' NOT NULL,
+	[NOTE_AVAILABILITY] VARCHAR(32) default 'PUBLIC' NOT NULL,
+	[NOTE_ORIGIN_OBJ] VARCHAR(32) default '' NULL,
+	[NOTE_AFFECTED_OBJ1] VARCHAR(32) default '' NULL,
+	[NOTE_AFFECTED_OBJ2] VARCHAR(32) default '' NOT NULL,
+	[NOTE_RECIPIENTS] NVARCHAR(MAX)  NULL
 );

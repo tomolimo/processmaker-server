@@ -2717,4 +2717,36 @@
     <column name="CATEGORY_NAME" type="VARCHAR" size="100" required="true" default=""/>
     <column name="CATEGORY_ICON" type="VARCHAR" size="100" default=""/>
   </table>
+  <table name="APP_NOTES">
+    <vendor type="mysql">
+      <parameter name="Name" value="APP_NOTES"/>
+      <parameter name="Engine" value="MyISAM"/>engi 
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Rows" value="129"/>
+      <parameter name="Avg_row_length" value="115"/>
+      <parameter name="Data_length" value="14860"/>
+      <parameter name="Max_data_length" value="281474976710655"/>
+      <parameter name="Index_length" value="5120"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Create_time" value="2007-12-06 07:22:27"/>
+      <parameter name="Update_time" value="2007-12-09 14:08:22"/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="Application Notes"/>
+    </vendor>
+    <column name="APP_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="NOTE_DATE" type="TIMESTAMP" required="true"/>
+    <column name="NOTE_CONTENT" type="LONGVARCHAR" required="true"/>
+    <column name="NOTE_TYPE" type="VARCHAR" size="32" required="true" default="USER"/>
+    <column name="NOTE_AVAILABILITY" type="VARCHAR" size="32" required="true" default="PUBLIC"/>
+    <column name="NOTE_ORIGIN_OBJ" type="VARCHAR" size="32"  default=""/>
+    <column name="NOTE_AFFECTED_OBJ1" type="VARCHAR" size="32"  default=""/>
+    <column name="NOTE_AFFECTED_OBJ2" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="NOTE_RECIPIENTS" type="LONGVARCHAR" />
+  </table>
 </database>

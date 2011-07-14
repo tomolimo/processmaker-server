@@ -9,9 +9,9 @@ var _ENV_CURRENT_DATE;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
-  
+
   showCaseNavigatorPanel = function(app_status) {
-    
+
     if (typeof(treeToReviseTitle) != 'undefined'){
       var treeToRevise = new Ext.tree.TreePanel({
         title: treeToReviseTitle,
@@ -59,20 +59,23 @@ Ext.onReady(function(){
       return false;
     else
       caseMenuOpen = true;
-    
-    //get the menu 
+
+    //get the menu
     Ext.Ajax.request({
-      url : 'ajaxListener', 
+      url : 'ajaxListener',
       params : {action : 'getCaseMenu', app_status:app_status},
-      success: function ( result, request ) { 
-        var data = Ext.util.JSON.decode(result.responseText); 
+      success: function ( result, request ) {
+        var data = Ext.util.JSON.decode(result.responseText);
         for(i=0; i<data.length; i++) {
           switch(data[i].id) {
             case 'STEPS':
               Ext.getCmp('casesStepTree').root.reload();
               Ext.getCmp('stepsMenu').show();
               break;
-              
+            case 'NOTES':
+              Ext.getCmp('caseNotes').show();
+              break;
+
             case 'INFO':
               //filling information menu
               var informationMenu = Ext.getCmp('informationMenu');
@@ -85,8 +88,8 @@ Ext.onReady(function(){
                 menuSelectedTitle[data[i].options[j].fn] = data[i].options[j].text;
               }
               informationMenu.show();
-              break; 
-              
+              break;
+
             case 'ACTIONS':
               var actionMenu = Ext.getCmp('actionMenu');
               actionMenu.menu.removeAll();
@@ -99,7 +102,7 @@ Ext.onReady(function(){
               }
               actionMenu.show();
               break;
-            
+
             // custom menus from plugins or others
             default:
               var navPanel = Ext.getCmp('navPanel');
@@ -111,34 +114,34 @@ Ext.onReady(function(){
                 handler: function(){
                   eval(this._action);
                 },
-                _action: data[i].action.replace('javascript:', '').replace(';', '')                
+                _action: data[i].action.replace('javascript:', '').replace(';', '')
               });
-              
+
               tb.add(menu);
           }
         }
       },
-      failure: function ( result, request) { 
-        Ext.MessageBox.alert('Failed', result.responseText); 
+      failure: function ( result, request) {
+        Ext.MessageBox.alert('Failed', result.responseText);
       }
     });
   }
-  
+
   hideCaseNavigatorPanel = function(){
     Ext.getCmp('stepsMenu').pressed = false;
     caseMenuOpen = false;
-    
+
     Ext.getCmp('navPanelWest').hide();
-    Ext.getCmp('navPanelWest').ownerCt.doLayout(); 
-    
+    Ext.getCmp('navPanelWest').ownerCt.doLayout();
+
   }
- 
+
   function togglePreview(btn, pressed){
     var preview = Ext.getCmp('navPanelWest');
     preview[pressed ? 'show' : 'hide']();
     Ext.getCmp('navPanel').ownerCt.doLayout();
   }
-  
+
   var casesStepTree = new Ext.tree.TreePanel({
     id: 'casesStepTree',
     autoWidth: true,
@@ -158,14 +161,14 @@ Ext.onReady(function(){
       },
       click: function(tp) {
         if( tp.attributes.url ){
-         
+
           document.getElementById('openCaseFrame').src = tp.attributes.url;
-          
+
         }
       }
     }
   })
-  
+
   var navPanelWest = {
     id: 'navPanelWest',
     region: 'west',
@@ -178,7 +181,7 @@ Ext.onReady(function(){
     margins: '0 0 0 0',
     items:[casesStepTree]
   }
-  
+
   var fnChangeStatus  =function(){
     alert('loaded');
   }
@@ -196,9 +199,9 @@ Ext.onReady(function(){
         defaults:{autoScroll: true},
         defaultType:"iframepanel",
         activeTab: 0,
-        
+
         //defaults: Ext.apply({}, Ext.isGecko? {style:{position:'absolute'},hideMode:'visibility'}:false),
-        
+
         items:[{
           id: 'casesTab',
           title: _('ID_CASE') +' ' + _APP_NUM,
@@ -207,12 +210,12 @@ Ext.onReady(function(){
           loadMask:{msg:'Loading...'},
           bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
           width:screenWidth
-          
+
           }
         ],
         listeners: {
           render : function(panel){
-            Ext.each([this.el, this[this.collapseEl]] , 
+            Ext.each([this.el, this[this.collapseEl]] ,
             function( elm ) {
               elm.setVisibilityMode(Ext.Element.VISIBILITY).originalDisplay ='visible';
             });
@@ -245,32 +248,51 @@ Ext.onReady(function(){
       id: 'actionMenu',
       text: _('ID_ACTIONS'),
       menu: []
-    }]    
+    }, {
+    id: 'caseNotes',
+    pressed: false,
+    enableToggle:true,
+    text: '&nbsp;&nbsp;'+_('ID_CASES_NOTES'),
+    iconCls: 'ICON_CASES_NOTES',
+    tooltip: {
+      title: _('ID_CASES_NOTES'),
+      text:_('ID_SHOW_CASES_NOTES')
+    },
+    toggleHandler:function(btn, pressed){
+      if(pressed){
+        openCaseNotesWindow();
+      }else{
+        closeCaseNotesWindow();
+      }
+    }
+
+  }]
   }
-  
+
   var viewport = new Ext.Viewport({
       layout: 'border',
       items: [navPanel]
-  }); 
+  });
 
 
   Ext.getCmp('stepsMenu').hide();
+  Ext.getCmp('caseNotes').hide();
   Ext.getCmp('informationMenu').hide();
   //Ext.getCmp('actionMenu').hide();
-    
+
   hideCaseNavigatorPanel();
 
   // Actions methods
-  
+
   Actions.processMap = function()
   {
     Actions.tabFrame('processMap');
   }
-  
+
   Actions.processInformation = function()
   {
     Ext.Ajax.request({
-      url : 'ajaxListener' , 
+      url : 'ajaxListener' ,
       params : {action : 'getProcessInformation'},
       success: function ( result, request ) {
         var data = Ext.util.JSON.decode(result.responseText);
@@ -279,13 +301,13 @@ Ext.onReady(function(){
           xtype : 'fieldset',
           autoHeight  : true,
           defaults    : {
-            width : 170, 
+            width : 170,
             xtype:'label',
             labelStyle : 'padding: 0px;',
             style: 'font-weight: bold'
           },
           items       : [
-            {fieldLabel: 'Title', text: data.PRO_TITLE}, 
+            {fieldLabel: 'Title', text: data.PRO_TITLE},
             {fieldLabel: 'Description', text: data.PRO_DESCRIPTION},
             {fieldLabel: 'Category', text: data.PRO_CATEGORY_LABEL},
             {fieldLabel: 'Author', text: data.PRO_AUTHOR},
@@ -319,8 +341,8 @@ Ext.onReady(function(){
         });
         win.show();
       },
-      failure: function ( result, request) { 
-        Ext.MessageBox.alert('Failed', result.responseText); 
+      failure: function ( result, request) {
+        Ext.MessageBox.alert('Failed', result.responseText);
       }
     });
   }
@@ -328,22 +350,22 @@ Ext.onReady(function(){
   Actions.taskInformation = function()
   {
     Ext.Ajax.request({
-      url : 'ajaxListener' , 
+      url : 'ajaxListener' ,
       params : {action : 'getTaskInformation'},
-      success: function ( result, request ) { 
-        var data = Ext.util.JSON.decode(result.responseText); 
-    
+      success: function ( result, request ) {
+        var data = Ext.util.JSON.decode(result.responseText);
+
         fieldset = {
           xtype : 'fieldset',
           autoHeight  : true,
-          defaults    : { 
-            width : 170, 
+          defaults    : {
+            width : 170,
             xtype:'label',
             labelStyle : 'padding: 0px;',
             style: 'font-weight: bold'
           },
           items       : [
-            {fieldLabel: 'Title', text: data.TAS_TITLE}, 
+            {fieldLabel: 'Title', text: data.TAS_TITLE},
             {fieldLabel: 'Description', text: data.TAS_DESCRIPTION},
             {fieldLabel: 'Init Date', text: data.INIT_DATE},
             {fieldLabel: 'Due Date', text: data.DUE_DATE},
@@ -351,7 +373,7 @@ Ext.onReady(function(){
             {fieldLabel: 'Duration', text: data.DURATION}
           ]
         }
-    
+
         var frm = new Ext.FormPanel( {
           labelAlign : 'right',
           bodyStyle : 'padding:5px 5px 0',
@@ -363,9 +385,9 @@ Ext.onReady(function(){
             handler : function() {
               win.close();
             }
-          }]   
+          }]
         });
-    
+
         var win = new Ext.Window({
           title: '',
           width: 450,
@@ -378,54 +400,54 @@ Ext.onReady(function(){
         });
         win.show();
       },
-      failure: function ( result, request) { 
-        Ext.MessageBox.alert('Failed', result.responseText); 
+      failure: function ( result, request) {
+        Ext.MessageBox.alert('Failed', result.responseText);
       }
     });
   }
-  
+
   Actions.caseHistory = function()
   {
     Actions.tabFrame('caseHistory');
   }
-  
+
   Actions.messageHistory = function()
   {
     Actions.tabFrame('messageHistory');
   }
-  
+
   Actions.dynaformHistory = function()
   {
     Actions.tabFrame('dynaformHistory');
   }
-  
+
   Actions.uploadedDocuments = function()
   {
     Actions.tabFrame('uploadedDocuments');
   }
-  
+
   Actions.generatedDocuments = function()
   {
     Actions.tabFrame('generatedDocuments');
   }
-  
+
   Actions.cancelCase = function()
   {
     PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_CANCEL_CASE'), function(){
       Ext.Ajax.request({
-        url : 'ajaxListener' , 
+        url : 'ajaxListener' ,
         params : {action : 'cancelCase'},
         success: function ( result, request ) {
           parent.notify('', 'The case ' + parent._CASE_TITLE + ' was cancelled!');
           location.href = 'casesListExtJs';
         },
         failure: function ( result, request) {
-          Ext.MessageBox.alert('Failed', result.responseText); 
+          Ext.MessageBox.alert('Failed', result.responseText);
         }
       });
     });
   }
-  
+
   Actions.getUsersToReassign = function()
   {
     var store = new Ext.data.Store( {
@@ -443,7 +465,7 @@ Ext.onReady(function(){
         ]
       })
     });
-    
+
     var grid = new Ext.grid.GridPanel( {
       id: 'reassignGrid',
       height:300,
@@ -460,12 +482,12 @@ Ext.onReady(function(){
       viewConfig: {
         forceFit:true
       },
-      
+
       cm: new Ext.grid.ColumnModel({
         defaults: {
             width: 200,
             sortable: true
-        },    
+        },
         columns: [
           {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
           {header: _('ID_FIRSTNAME'), dataIndex: 'USR_FIRSTNAME', width: 300},
@@ -490,7 +512,7 @@ Ext.onReady(function(){
         }
       }
     });
-    
+
     var win = new Ext.Window({
       title: '',
       width: 450,
@@ -503,17 +525,17 @@ Ext.onReady(function(){
     });
     win.show();
   }
-  
+
   Actions.reassignCase = function()
   {
     var rowSelected = Ext.getCmp('reassignGrid').getSelectionModel().getSelected();
     if( rowSelected ) {
       PMExt.confirm(_('ID_CONFIRM'), _('ID_REASSIGN_CONFIRM'), function(){
         Ext.Ajax.request({
-          url : 'ajaxListener' , 
+          url : 'ajaxListener' ,
           params : {action : 'reassignCase', USR_UID: rowSelected.data.USR_UID},
           success: function ( result, request ) {
-            var data = Ext.util.JSON.decode(result.responseText); 
+            var data = Ext.util.JSON.decode(result.responseText);
             if( data.status == 0 ) {
               parent.notify('', data.msg);
               location.href = 'casesListExtJs';
@@ -522,13 +544,13 @@ Ext.onReady(function(){
             }
           },
           failure: function ( result, request) {
-            Ext.MessageBox.alert('Failed', result.responseText); 
+            Ext.MessageBox.alert('Failed', result.responseText);
           }
         });
       });
-    }          
+    }
   }
-  
+
   Actions.setUnpauseCaseDate = function()
   {
     curDate = _ENV_CURRENT_DATE_NO_FORMAT.split('-');
@@ -536,7 +558,7 @@ Ext.onReady(function(){
     nDay = '' + (parseInt(curDate[2])+1);
     nDay = nDay.length == 1 ? '0' + nDay : nDay;
     filterDate += nDay;
-    
+
     var fieldset = {
       xtype : 'fieldset',
       autoHeight  : true,
@@ -547,7 +569,7 @@ Ext.onReady(function(){
         style: 'font-weight: bold'
       },
       items : [
-        {fieldLabel: 'Case', text: parent._CASE_TITLE}, 
+        {fieldLabel: 'Case', text: parent._CASE_TITLE},
         {fieldLabel: 'Pause Date', text: _ENV_CURRENT_DATE},
         new Ext.form.DateField({
           id: 	'unpauseDate',
@@ -570,7 +592,7 @@ Ext.onReady(function(){
             win.close();
           }
         }
-      ]   
+      ]
     }
 
     var frm = new Ext.FormPanel( {
@@ -580,8 +602,8 @@ Ext.onReady(function(){
       width : 250,
       items : [fieldset]
     });
-    
-    
+
+
     var win = new Ext.Window({
       title: 'Pause Case',
       width: 340,
@@ -594,21 +616,21 @@ Ext.onReady(function(){
     });
     win.show();
   }
-  
+
   Actions.pauseCase = function()
   {
-    
+
     var unpauseDate = Ext.getCmp('unpauseDate').getValue();
     if( unpauseDate == '') {
       //Ext.getCmp('submitPauseCase').setDisabled(true);
       return;
-    } else 
+    } else
       //Ext.getCmp('submitPauseCase').enable();
 
     unpauseDate = unpauseDate.format('Y-m-d');
-    
+
     Ext.getCmp('unpauseFrm').getForm().submit({
-      url:'ajaxListener?action=pauseCase&unpauseDate=' + unpauseDate, 
+      url:'ajaxListener?action=pauseCase&unpauseDate=' + unpauseDate,
       waitMsg:'Pausing Case '+parent._CASE_TITLE+'...',
       timeout : 36000,
       success : function(res, req) {
@@ -618,7 +640,7 @@ Ext.onReady(function(){
         } else {
           PMExt.error(_('ID_ERROR'), req.result.msg);
         }
-      } 
+      }
     });
   }
 
@@ -627,13 +649,13 @@ Ext.onReady(function(){
     PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_UNPAUSE_CASE'), function(){
       var loadMask = new Ext.LoadMask(document.body, {msg:'Unpausing case...'});
       loadMask.show();
-      
+
       Ext.Ajax.request({
         url : 'ajaxListener' ,
         params : {action : 'unpauseCase'},
         success: function ( result, request ) {
           loadMask.hide();
-          var data = Ext.util.JSON.decode(result.responseText); 
+          var data = Ext.util.JSON.decode(result.responseText);
           if( data.success ) {
             parent.PMExt.notify(_('ID_UNPAUSE_ACTION'), data.msg);
             location.href = 'casesListExtJs';
@@ -657,7 +679,7 @@ Ext.onReady(function(){
         url : '../adhocUserProxy/deleteCase',
         success: function ( result, request ) {
           loadMask.hide();
-          var data = Ext.util.JSON.decode(result.responseText); 
+          var data = Ext.util.JSON.decode(result.responseText);
           if( data.success ) {
             parent.PMExt.notify(_('ID_DELETE_ACTION'), data.msg);
             location.href = 'casesListExtJs';
@@ -682,7 +704,7 @@ Ext.onReady(function(){
         params : {action : 'reactivateCase'},
         success: function ( result, request ) {
           loadMask.hide();
-          var data = Ext.util.JSON.decode(result.responseText); 
+          var data = Ext.util.JSON.decode(result.responseText);
           if( data.success ) {
             parent.PMExt.notify(_('ID_REACTIVATE_ACTION'), data.msg);
             location.href = 'casesListExtJs';
@@ -696,7 +718,7 @@ Ext.onReady(function(){
       });
     });
   }
-  
+
   //
   Actions.tabFrame = function(name)
   {
@@ -704,7 +726,7 @@ Ext.onReady(function(){
     var uri = 'ajaxListener?action=' + name;
     var TabPanel = Ext.getCmp('caseTabPanel');
     var tab = TabPanel.getItem(tabId);
-    
+
     if( tab ) {
       TabPanel.setActiveTab(tabId);
     } else {
@@ -719,12 +741,12 @@ Ext.onReady(function(){
         autoScroll: true,
         bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'}
       }).show();
-      
+
       TabPanel.doLayout();
     }
   }
-  
-  
+
+
 });
 
 	/*-----added by krlos------------*/
@@ -745,16 +767,16 @@ Ext.onReady(function(){
       ]
     })
     });
-		
+
     cmk = new Ext.grid.ColumnModel({
      defaults: {
       width: 40,
       sortable: true
-      },    
+      },
      columns: [
       { id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
       { header : "First Name", dataIndex : 'USR_FIRSTNAME', sortable : true, width: 130, align:'center'},
-      { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }		      
+      { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }
      ]
     });
 
@@ -779,8 +801,8 @@ Ext.onReady(function(){
      stateId : 'grid',
      enableColumnResize: true,
      enableHdMenu: true,
-     frame:false,          
-     columnLines: true,      
+     frame:false,
+     columnLines: true,
      viewConfig: {
       forceFit:true
      },
@@ -796,11 +818,11 @@ Ext.onReady(function(){
     var w = new Ext.Window({
      title: _('ID_ADHOC_ASSIGNMENT'),
      width: 500,
-     height: 240,       
+     height: 240,
      resizable: false,
      items: [ adHocUserGrid ],
      id: 'w'
-    });    
+    });
     adHocUserGrid.store.load();
 		w.show();
 
@@ -817,7 +839,7 @@ Ext.onReady(function(){
         loadMask.hide();
         var data = Ext.util.JSON.decode(result.responseText);
         if( data.success ) {
-         CloseWindow();		          
+         CloseWindow();
          location.href = 'casesListExtJs';
         } else {
          PMExt.error(_('ID_ERROR'), data.msg);
@@ -828,7 +850,7 @@ Ext.onReady(function(){
        }
       });
      });
-    }   
+    }
   }
   CloseWindow = function(){
    Ext.getCmp('w').hide();
@@ -846,10 +868,10 @@ Date.prototype.dateToString = function(character) {
     switch (character) {
     case "Y":
         return this.getFullYear();
-    
+
     case "d":
         return this.getDate();
-        
+
     case "m":
         return this.getMonth();
     // snip a bunch of lines

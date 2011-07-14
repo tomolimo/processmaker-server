@@ -39,6 +39,7 @@
   
   $oHeadPublisher =& headPublisher::getSingleton(); 
   $oHeadPublisher->usingExtJs('ux/miframe');
+  $oHeadPublisher->addExtJsScript('cases/caseNotes', true);
   $oHeadPublisher->addExtJsScript('cases/open', true);
   
   $uri = '';

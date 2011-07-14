@@ -22,8 +22,19 @@ var storeReassignCases;
 var grid;
 var textJump;
 
-/** */
 
+/** */
+function caseNotes(){
+  var rowModel = grid.getSelectionModel().getSelected();
+  if(rowModel){
+    var appUid   = rowModel.data.APP_UID;
+    var delIndex = rowModel.data.DEL_INDEX;
+    var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
+    openCaseNotesWindow(appUid,true);
+  }else{
+    msgBox('Information', TRANSLATIONS.ID_SELECT_ONE_AT_LEAST);
+  }
+}
 function openCase(){
 
     var rowModel = grid.getSelectionModel().getSelected();
@@ -284,6 +295,11 @@ Ext.onReady ( function() {
     return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
   }
 
+  function renderNote(val,p,r) {
+    appUid="'"+r.data['APP_UID']+"'";
+    return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow('+appUid+',true)">';
+  }
+
   function showField (value,p,r) {
     if ( r.data['DEL_INIT_DATE'] )
       return String.format("{0}", value );
@@ -299,6 +315,7 @@ Ext.onReady ( function() {
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
+    if( c.dataIndex == 'CASE_NOTES_COUNT')   c.renderer = renderNote;
   }
 
 	//adding the hidden field DEL_INIT_DATE
@@ -954,6 +971,38 @@ Ext.onReady ( function() {
       });
     }          
   }
+  optionMenuNotes = new Ext.Action({
+    text: _('ID_CASES_NOTES'),
+    iconCls: 'ICON_CASES_NOTES',
+    handler: caseNotes
+  });
+  reassingCaseToUser = function()
+  {
+    var APP_UID = optionMenuReassignGlobal.APP_UID;
+    var DEL_INDEX = optionMenuReassignGlobal.DEL_INDEX;
+   
+    var rowSelected = Ext.getCmp('reassignGrid').getSelectionModel().getSelected();
+    if( rowSelected ) {
+      PMExt.confirm(_('ID_CONFIRM'), _('ID_REASSIGN_CONFIRM'), function(){
+        Ext.Ajax.request({
+          url : 'casesList_Ajax' , 
+          params : {actionAjax : 'reassignCase', USR_UID: rowSelected.data.USR_UID, APP_UID: APP_UID, DEL_INDEX:DEL_INDEX},
+          success: function ( result, request ) {
+            var data = Ext.util.JSON.decode(result.responseText); 
+            if( data.status == 0 ) {
+              parent.notify('', data.msg);
+              location.href = 'casesListExtJs';
+            } else {
+              alert(data.msg);
+            }
+          },
+          failure: function ( result, request) {
+            Ext.MessageBox.alert('Failed', result.responseText); 
+          }
+        });
+      });
+    }          
+  }
   //optionMenuPause.setMinValue('2010-11-04');
   var optionMenuReassignGlobal = {};
   optionMenuReassignGlobal.APP_UID = "";
@@ -1073,7 +1122,7 @@ Ext.onReady ( function() {
 
   switch(action){
     case 'todo':
-      menuItems = [optionMenuOpen, optionMenuPause];
+      menuItems = [optionMenuOpen, optionMenuPause,optionMenuNotes];
 
       if( ___p34315105.search('R') != -1 )
         menuItems.push(optionMenuReassign);
@@ -1082,7 +1131,7 @@ Ext.onReady ( function() {
       break;
 
       case 'draft':
-      menuItems = [optionMenuOpen, optionMenuPause];
+      menuItems = [optionMenuOpen, optionMenuPause,optionMenuNotes];
       if( ___p34315105.search('R') != -1 )
         menuItems.push(optionMenuReassign);
       menuItems.push(optionMenuDelete);
@@ -1090,11 +1139,11 @@ Ext.onReady ( function() {
       break;
 
     case 'paused':
-      menuItems = [optionMenuUnpause];
+      menuItems = [optionMenuUnpause,optionMenuNotes];
       break;
 
     default:
-      menuItems = []
+      menuItems = [optionMenuNotes]
   }
 
   var messageContextMenu = new Ext.menu.Menu({
@@ -1321,6 +1370,7 @@ Ext.onReady ( function() {
     items: itemToolbar
   });
 
+  
   // create the editor grid
   grid = new Ext.grid.GridPanel({
     region: 'center',
