@@ -1873,7 +1873,7 @@ function executeEvent(id, ev){
  * @By Erik
  */
 function getClientWindowSize() {
-  var wSize = [0, 0];
+  var wSize = [1024, 768];
   if (typeof window.innerWidth != 'undefined'){
 	wSize = [
       window.innerWidth,
@@ -1885,10 +1885,13 @@ function getClientWindowSize() {
       document.documentElement.clientHeight
     ];
   } else {
+     var body = document.getElementsByTagName('body');
+     if(typeof body != 'undefined' && typeof body[0] != 'undefined' && typeof body[0].clientWidth != 'undefined') {
 	wSize = [
-      document.getElementsByTagName('body')[0].clientWidth,
-      document.getElementsByTagName('body')[0].clientHeight
-    ];
+          document.getElementsByTagName('body')[0].clientWidth,
+          document.getElementsByTagName('body')[0].clientHeight
+        ];
+     }
   }
   return {width:wSize[0], height:wSize[1]};
 }
