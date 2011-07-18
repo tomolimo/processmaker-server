@@ -544,7 +544,6 @@ class pmTablesProxy extends HttpProxyController
                   //print_r($METADATA);
                   break;
                 case '@SCHEMA':
-                  
                   $fsUid    = intval(fread($fp, 9));
                   $uid      = fread($fp, $fsUid);
                   
@@ -580,46 +579,56 @@ class pmTablesProxy extends HttpProxyController
 
                   $sAddTabUid = $oAdditionalTables->create(
                     array(
-                      'ADD_TAB_NAME'        => $contentSchema['ADD_TAB_NAME'],
-                                'ADD_TAB_CLASS_NAME'      => $contentSchema['ADD_TAB_CLASS_NAME'],
-                                'ADD_TAB_DESCRIPTION'     => $contentSchema['ADD_TAB_DESCRIPTION'],
-                                'ADD_TAB_SDW_LOG_INSERT'  => $contentSchema['ADD_TAB_SDW_LOG_INSERT'],
-                                'ADD_TAB_SDW_LOG_UPDATE'  => $contentSchema['ADD_TAB_SDW_LOG_UPDATE'],
-                                'ADD_TAB_SDW_LOG_DELETE'  => $contentSchema['ADD_TAB_SDW_LOG_DELETE'],
-                                'ADD_TAB_SDW_LOG_SELECT'  => $contentSchema['ADD_TAB_SDW_LOG_SELECT'],
-                                'ADD_TAB_SDW_MAX_LENGTH'  => $contentSchema['ADD_TAB_SDW_MAX_LENGTH'],
-                                'ADD_TAB_SDW_AUTO_DELETE' => $contentSchema['ADD_TAB_SDW_AUTO_DELETE'],
-                      'ADD_TAB_PLG_UID'         => $contentSchema['ADD_TAB_PLG_UID']
-                  ), 
-                  $contentSchema['FIELDS']
-              );
-              
-              
-              $aFields   = array();
-              foreach( $contentSchema['FIELDS'] as $iRow => $aRow ){
-                unset($aRow['FLD_UID']);
-                $aRow['ADD_TAB_UID'] = $sAddTabUid;
-                  $oFields->create($aRow);
-    //              print_R($aRow); die;
-                  $aFields[] = array(
-                     'sType'       => $contentSchema['FIELDS'][$iRow]['FLD_TYPE'],
-                             'iSize'       => $contentSchema['FIELDS'][$iRow]['FLD_SIZE'],
-                             'sFieldName'  => $contentSchema['FIELDS'][$iRow]['FLD_NAME'],
-                             'bNull'       => $contentSchema['FIELDS'][$iRow]['FLD_NULL'],
-                             'bAI'         => $contentSchema['FIELDS'][$iRow]['FLD_AUTO_INCREMENT'],
-                             'bPrimaryKey' => $contentSchema['FIELDS'][$iRow]['FLD_KEY']
+                      'ADD_TAB_UID'             => $contentSchema['ADD_TAB_UID'],
+                      'ADD_TAB_NAME'            => $contentSchema['ADD_TAB_NAME'],
+                      'ADD_TAB_CLASS_NAME'      => $contentSchema['ADD_TAB_CLASS_NAME'],
+                      'ADD_TAB_DESCRIPTION'     => $contentSchema['ADD_TAB_DESCRIPTION'],
+                      'ADD_TAB_SDW_LOG_INSERT'  => $contentSchema['ADD_TAB_SDW_LOG_INSERT'],
+                      'ADD_TAB_SDW_LOG_UPDATE'  => $contentSchema['ADD_TAB_SDW_LOG_UPDATE'],
+                      'ADD_TAB_SDW_LOG_DELETE'  => $contentSchema['ADD_TAB_SDW_LOG_DELETE'],
+                      'ADD_TAB_SDW_LOG_SELECT'  => $contentSchema['ADD_TAB_SDW_LOG_SELECT'],
+                      'ADD_TAB_SDW_MAX_LENGTH'  => $contentSchema['ADD_TAB_SDW_MAX_LENGTH'],
+                      'ADD_TAB_SDW_AUTO_DELETE' => $contentSchema['ADD_TAB_SDW_AUTO_DELETE'],
+                      'ADD_TAB_PLG_UID'         => $contentSchema['ADD_TAB_PLG_UID'],
+                      'DBS_UID'                 => $contentSchema['DBS_UID'],
+                      'PRO_UID'                 => $contentSchema['PRO_UID'],
+                      'ADD_TAB_TYPE'            => $contentSchema['ADD_TAB_TYPE'],
+                      'ADD_TAB_GRID'            => $contentSchema['ADD_TAB_GRID'],
+                      'ADD_TAB_TAG'             => $contentSchema['ADD_TAB_TAG'],
+                    ),
+                    $contentSchema['FIELDS']
                   );
-              }
-              $oAdditionalTables->createTable($contentSchema['ADD_TAB_NAME'], 'wf', $aFields);          
-
-              for($i=1; $i <= count($contentSchema['FIELDS']); $i++){
-                $contentSchema['FIELDS'][$i]['FLD_NULL'] = $contentSchema['FIELDS'][$i]['FLD_NULL'] == '1' ? 'on' : '';
-                            $contentSchema['FIELDS'][$i]['FLD_AUTO_INCREMENT'] = $contentSchema['FIELDS'][$i]['FLD_AUTO_INCREMENT'] == '1' ? 'on' : '';
-                            $contentSchema['FIELDS'][$i]['FLD_KEY'] = $contentSchema['FIELDS'][$i]['FLD_KEY'] == '1' ? 'on' : '';
-                            $contentSchema['FIELDS'][$i]['FLD_FOREIGN_KEY'] = $contentSchema['FIELDS'][$i]['FLD_FOREIGN_KEY'] == '1' ? 'on' : '';
-              } 
               
-              $oAdditionalTables->createPropelClasses($contentSchema['ADD_TAB_NAME'], $contentSchema['ADD_TAB_CLASS_NAME'], $contentSchema['FIELDS'], $sAddTabUid);
+              
+                  $aFields   = array();
+                  foreach( $contentSchema['FIELDS'] as $iRow => $aRow ){
+                    unset($aRow['FLD_UID']);
+                    $aRow['ADD_TAB_UID'] = $sAddTabUid;
+                    $oFields->create($aRow);
+                    $aFields[] = array(
+                      'sType'       => $contentSchema['FIELDS'][$iRow]['FLD_TYPE'],
+                      'iSize'       => $contentSchema['FIELDS'][$iRow]['FLD_SIZE'],
+                      'sFieldName'  => $contentSchema['FIELDS'][$iRow]['FLD_NAME'],
+                      'bNull'       => $contentSchema['FIELDS'][$iRow]['FLD_NULL'],
+                      'bAI'         => $contentSchema['FIELDS'][$iRow]['FLD_AUTO_INCREMENT'],
+                      'bPrimaryKey' => $contentSchema['FIELDS'][$iRow]['FLD_KEY']
+                    );
+                  }
+                  $oAdditionalTables->createTable($contentSchema['ADD_TAB_NAME'], 'wf', $aFields);
+
+                  for($i=1; $i <= count($contentSchema['FIELDS']); $i++){
+                    $contentSchema['FIELDS'][$i]['FLD_NULL'] = $contentSchema['FIELDS'][$i]['FLD_NULL'] == '1' ? 'on' : '';
+                    $contentSchema['FIELDS'][$i]['FLD_AUTO_INCREMENT'] = $contentSchema['FIELDS'][$i]['FLD_AUTO_INCREMENT'] == '1' ? 'on' : '';
+                    $contentSchema['FIELDS'][$i]['FLD_KEY'] = $contentSchema['FIELDS'][$i]['FLD_KEY'] == '1' ? 'on' : '';
+                    $contentSchema['FIELDS'][$i]['FLD_FOREIGN_KEY'] = $contentSchema['FIELDS'][$i]['FLD_FOREIGN_KEY'] == '1' ? 'on' : '';
+                  }
+              
+                  $oAdditionalTables->createPropelClasses($contentSchema['ADD_TAB_NAME'], $contentSchema['ADD_TAB_CLASS_NAME'], $contentSchema['FIELDS'], $sAddTabUid);
+
+                  $isReportTable = $contentSchema['PRO_UID'] != '' ? true : false;
+                  if ($isReportTable) {
+                    $oAdditionalTables->populateReportTable($contentSchema['ADD_TAB_NAME'], $contentSchema['ADD_TAB_CONNECTION'], $contentSchema['ADD_TAB_TYPE'], $contentSchema['FIELDS'], $contentSchema['ADD_UID'], $contentSchema['ADD_TAB_GRID']);
+                  }
                   
                   break;
                 case '@DATA':
