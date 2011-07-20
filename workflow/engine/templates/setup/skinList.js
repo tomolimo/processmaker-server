@@ -417,6 +417,10 @@ exportSkin = function(){
 }
 
 
+//Open New Calendar
+NewCalendarAction = function(){
+  location.href = 'calendarEdit';
+};
 
 //Load Grid By Default
 GridByDefault = function(){
