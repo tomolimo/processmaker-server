@@ -319,7 +319,13 @@ Ext.onReady(function(){
     }, searchText,clearTextButton,searchButton],
     bbar: bbarpaging,
     listeners: {
-      rowdblclick: DoNothing
+      rowdblclick: function(grid, n,e){
+        rowSelected = infoGrid.getSelectionModel().getSelected();        
+        if((rowSelected.data.SKIN_FOLDER_ID)&&((rowSelected.data.SKIN_FOLDER_ID!=""))){
+          viewport.getEl().mask(_('ID_SKIN_SWITCHING'));
+          changeSkin(rowSelected.data.SKIN_FOLDER_ID,SYS_SKIN);
+        }
+      }
     },
     view: new Ext.grid.GroupingView({
       forceFit:true,
@@ -411,10 +417,6 @@ exportSkin = function(){
 }
 
 
-//Open New Calendar
-NewCalendarAction = function(){
-  location.href = 'calendarEdit';
-};
 
 //Load Grid By Default
 GridByDefault = function(){
@@ -523,3 +525,8 @@ UpdatePageConfig = function(pageSize){
     }
   });
 };
+function changeSkin(newSkin,currentSkin){
+  currentLocation=top.location.href;
+  newLocation = currentLocation.replace("/"+currentSkin+"/","/"+newSkin+"/");
+  top.location.href=newLocation;
+}

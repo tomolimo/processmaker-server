@@ -45,6 +45,7 @@ $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('setup/skinList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('setup/skinList'); //adding a html file  .html.
 $oHeadPublisher->assign('CONFIG', $Config);
+$oHeadPublisher->assign('SYS_SKIN', SYS_SKIN);
 
 $oHeadPublisher->assign('FORMATS',$c->getFormats());
 
