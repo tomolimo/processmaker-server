@@ -122,6 +122,8 @@
     $processes[] = array ( '', G::LoadTranslation('ID_ALL_PROCESS') );
   
 //get the list based in the action provided
+
+  // G::pr($action);die;
     switch ( $action ) {
       case 'draft' :
            $cProcess      = $oAppCache->getDraftListCriteria($userUid); //fast enough
@@ -161,7 +163,7 @@
            
            return $processes;  
            break;
-      case 'selfservice' :
+      case 'unassigned' :
            $cProcess      = $oAppCache->getUnassignedListCriteria($userUid);
            break;
       case 'paused' :
