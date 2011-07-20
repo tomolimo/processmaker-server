@@ -95,15 +95,7 @@ function exportSkin($skinToExport) {
     $tar->_compress = false;
 
     addTarFolder($tar, $skinFolder, PATH_CUSTOM_SKINS);
-    //  $aFiles = $tar->listContent();
-
-
-    /*
-
-     */
-
-
-
+    
     $response['success'] = true;
     $response['message'] = $skinTar;
 

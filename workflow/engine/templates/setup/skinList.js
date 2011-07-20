@@ -221,7 +221,7 @@ Ext.onReady(function(){
     {
       header: _('ID_NAME'),
       dataIndex: 'SKIN_NAME',
-      width: 100,
+      width: 80,
       align:'left'
     },
 
@@ -233,16 +233,16 @@ Ext.onReady(function(){
     },
 
     {
-      header: _('ID_OWNER'),
+      header: _('ID_AUTHOR'),
       dataIndex: 'SKIN_AUTHOR',
-      width: 69,
-      align:'center'
+      width: 80,
+      align:'left'
     },
 
     {
       header: _('ID_CREATE'),
       dataIndex: 'SKIN_CREATEDATE',
-      width: 69,
+      width: 50,
       align:'center',
       renderer: showdate
     },
@@ -250,7 +250,7 @@ Ext.onReady(function(){
     {
       header: _('ID_UPDATE_DATE'),
       dataIndex: 'SKIN_MODIFIEDDATE',
-      width: 69,
+      width: 50,
       align:'center',
       renderer: showdate
     }
