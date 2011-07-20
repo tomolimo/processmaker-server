@@ -5,44 +5,44 @@
 
 //Keyboard Events
 new Ext.KeyMap(document, [
-                          {
-                            key: Ext.EventObject.F5,
-                            fn: function(keycode, e) {
-                              if (! e.ctrlKey) {
-                                if (Ext.isIE) {
-                                  // IE6 doesn't allow cancellation of the F5 key, so trick it into
-                                  // thinking some other key was pressed (backspace in this case)
-                                  e.browserEvent.keyCode = 8;
-                                }
-                                e.stopEvent();
-                                document.location = document.location;
-                              }else{
-                                Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
-                              }
-                            }
-                          }
-                          ,
-                          {
-                            key: Ext.EventObject.DELETE,
-                            fn: function(k,e){
-                              iGrid = Ext.getCmp('infoGrid');
-                              rowSelected = iGrid.getSelectionModel().getSelected();
-                              if (rowSelected){
-                                DeleteButtonAction();
-                              }
-                            }
-                          },
-                          {
-                            key: Ext.EventObject.F2,
-                            fn: function(k,e){
-                              iGrid = Ext.getCmp('infoGrid');
-                              rowSelected = iGrid.getSelectionModel().getSelected();
-                              if (rowSelected){
-                                EditCalendarAction();
-                              }
-                            }
-                          }
-                          ]);
+{
+  key: Ext.EventObject.F5,
+  fn: function(keycode, e) {
+    if (! e.ctrlKey) {
+      if (Ext.isIE) {
+        // IE6 doesn't allow cancellation of the F5 key, so trick it into
+        // thinking some other key was pressed (backspace in this case)
+        e.browserEvent.keyCode = 8;
+      }
+      e.stopEvent();
+      document.location = document.location;
+    }else{
+      Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+    }
+  }
+}
+,
+{
+  key: Ext.EventObject.DELETE,
+  fn: function(k,e){
+    iGrid = Ext.getCmp('infoGrid');
+    rowSelected = iGrid.getSelectionModel().getSelected();
+    if (rowSelected){
+      DeleteButtonAction();
+    }
+  }
+},
+{
+  key: Ext.EventObject.F2,
+  fn: function(k,e){
+    iGrid = Ext.getCmp('infoGrid');
+    rowSelected = iGrid.getSelectionModel().getSelected();
+    if (rowSelected){
+      EditCalendarAction();
+    }
+  }
+}
+]);
 
 var store;
 var cmodel;
@@ -107,7 +107,7 @@ Ext.onReady(function(){
   exportButton = new Ext.Action({
     text: _('ID_EXPORT'),
     iconCls: 'button_menu_ext ss_sprite ss_basket_go',
-    //handler: CopyButtonAction,
+    handler: exportSkin,
     disabled: true
   });
   searchButton = new Ext.Action({
@@ -149,9 +149,12 @@ Ext.onReady(function(){
     singleSelect: true,
     listeners:{
       rowselect: function(sm){
-        //exportButton.enable();
-        exportButton.disable();
-        rowSelected = infoGrid.getSelectionModel().getSelected();    			
+        rowSelected = infoGrid.getSelectionModel().getSelected();
+        if((rowSelected.data.SKIN_FOLDER_ID)&&((rowSelected.data.SKIN_FOLDER_ID!="classic"))){
+          exportButton.enable();
+        }else{
+          exportButton.disable();
+        }
       },
       rowdeselect: function(sm){
         exportButton.disable();
@@ -167,14 +170,38 @@ Ext.onReady(function(){
       root: 'skins',
       totalProperty: 'total_skins',
       fields : [
-                {name : 'SKIN_ID'},
-                {name : 'SKIN_NAME'},
-                {name : 'SKIN_DESCRIPTION'},
-                {name : 'SKIN_AUTHOR'},
-                {name : 'SKIN_CREATEDATE'},
-                {name : 'SKIN_MODIFIEDDATE'},
-                {name : 'SKIN_STATUS'}
-                ]
+      {
+        name : 'SKIN_ID'
+      },
+
+      {
+        name : 'SKIN_FOLDER_ID'
+      },
+
+      {
+        name : 'SKIN_NAME'
+      },
+
+      {
+        name : 'SKIN_DESCRIPTION'
+      },
+
+      {
+        name : 'SKIN_AUTHOR'
+      },
+
+      {
+        name : 'SKIN_CREATEDATE'
+      },
+
+      {
+        name : 'SKIN_MODIFIEDDATE'
+      },
+
+      {
+        name : 'SKIN_STATUS'
+      }
+      ]
     })
   });
   
@@ -184,14 +211,51 @@ Ext.onReady(function(){
       sortable: true
     },
     columns: [
-              {id:'SKIN_UID', dataIndex: 'SKIN_UID', hidden:true, hideable:false},
-              {header: _('ID_NAME'), dataIndex: 'SKIN_NAME', width: 100, align:'left'},
-              {header: _('ID_DESCRIPTION'), dataIndex: 'SKIN_DESCRIPTION', width: 200, align:'left'},            
-              {header: _('ID_OWNER'), dataIndex: 'SKIN_AUTHOR', width: 69, align:'center'},
-              {header: _('ID_CREATE'), dataIndex: 'SKIN_CREATEDATE', width: 69, align:'center', renderer: showdate},
-              {header: _('ID_UPDATE_DATE'), dataIndex: 'SKIN_MODIFIEDDATE', width: 69, align:'center', renderer: showdate}
-              //{header: _('ID_STATUS'), dataIndex: 'SKIN_STATUS', width: 130, align:'center', renderer: render_status},
-              ]
+    {
+      id:'SKIN_UID',
+      dataIndex: 'SKIN_UID',
+      hidden:true,
+      hideable:false
+    },
+
+    {
+      header: _('ID_NAME'),
+      dataIndex: 'SKIN_NAME',
+      width: 100,
+      align:'left'
+    },
+
+    {
+      header: _('ID_DESCRIPTION'),
+      dataIndex: 'SKIN_DESCRIPTION',
+      width: 200,
+      align:'left'
+    },
+
+    {
+      header: _('ID_OWNER'),
+      dataIndex: 'SKIN_AUTHOR',
+      width: 69,
+      align:'center'
+    },
+
+    {
+      header: _('ID_CREATE'),
+      dataIndex: 'SKIN_CREATEDATE',
+      width: 69,
+      align:'center',
+      renderer: showdate
+    },
+
+    {
+      header: _('ID_UPDATE_DATE'),
+      dataIndex: 'SKIN_MODIFIEDDATE',
+      width: 69,
+      align:'center',
+      renderer: showdate
+    }
+    //{header: _('ID_STATUS'), dataIndex: 'SKIN_STATUS', width: 130, align:'center', renderer: render_status},
+    ]
   });
   
   storePageSize = new Ext.data.SimpleStore({
@@ -226,7 +290,7 @@ Ext.onReady(function(){
     displayInfo: true,
     displayMsg: _('ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE') + '&nbsp; &nbsp; ',
     emptyMsg: _('ID_GRID_PAGE_NO_SKIN_MESSAGE')//,
-    //items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
+  //items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
   });
   
   
@@ -250,7 +314,9 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    tbar: [newButton, '-', importButton,exportButton, {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
+    tbar: [newButton, '-', importButton,exportButton, {
+      xtype: 'tbfill'
+    }, searchText,clearTextButton,searchButton],
     bbar: bbarpaging,
     listeners: {
       rowdblclick: DoNothing
@@ -262,14 +328,16 @@ Ext.onReady(function(){
   });
   
   infoGrid.on('rowcontextmenu', 
-      function (grid, rowIndex, evt) {
-    var sm = grid.getSelectionModel();
-    sm.selectRow(rowIndex, sm.isSelected(rowIndex));
-  },
-  this
-  );
+    function (grid, rowIndex, evt) {
+      var sm = grid.getSelectionModel();
+      sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+    },
+    this
+    );
   
-  infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
+  infoGrid.on('contextmenu', function(evt){
+    evt.preventDefault();
+  }, this);
   infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
   infoGrid.store.load();
   
@@ -277,10 +345,11 @@ Ext.onReady(function(){
     layout: 'fit',
     autoScroll: false,
     items: [
-            infoGrid
-            ]
+    infoGrid
+    ]
   });
 });
+
 
 //Function format dates
 showdate = function (value){
@@ -297,6 +366,51 @@ onMessageContextMenu = function (grid, rowIndex, e) {
 //Do Nothing Function
 DoNothing = function(){};
 
+exportSkin = function(){
+  viewport.getEl().mask(_('ID_SKIN_EXPORTING'));
+  rowSelected = infoGrid.getSelectionModel().getSelected();
+  if((rowSelected.data.SKIN_FOLDER_ID)&&((rowSelected.data.SKIN_FOLDER_ID!="classic"))){
+    Ext.Ajax.request({
+      url: 'skin_Ajax',
+      params: {
+        action: 'exportSkin',
+        SKIN_FOLDER_ID: rowSelected.data.SKIN_FOLDER_ID
+        },
+      success: function(r,o){
+        viewport.getEl().unmask();
+        var resp = Ext.util.JSON.decode(r.responseText);
+        if (resp.success){                    
+          try {
+            Ext.destroy(Ext.get('downloadIframe'));
+          }
+          catch(e) {}
+          Ext.DomHelper.append(document.body, {
+            tag: 'iframe',
+            id:'downloadIframe',
+            frameBorder: 0,
+            width: 0,
+            height: 0,
+            css: 'display:none;visibility:hidden;height:0px;',
+            src: 'skin_Ajax?action=streamSkin&file='+resp.message
+          });
+          viewport.getEl().unmask();
+        }else{
+          viewport.getEl().unmask();
+          Ext.Msg.alert('Alert', resp.message);
+        //PMExt.error(_('ID_SKINS'),_('ID_MSG_CANNOT_EXPORT_SKIN'));
+        }
+      },
+      failure: function(r,o){
+        viewport.getEl().unmask();
+        PMExt.error(_('ID_SKINS'),_('ID_MSG_CANNOT_EXPORT_SKIN'));
+      }
+    });
+  }else{
+    PMExt.error(_('ID_SKINS'),_('ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN'));
+  }
+}
+
+
 //Open New Calendar
 NewCalendarAction = function(){
   location.href = 'calendarEdit';
@@ -310,7 +424,11 @@ GridByDefault = function(){
 
 //Do Search Function
 DoSearch = function(){
-  infoGrid.store.load({params: {textFilter: searchText.getValue()}});	
+  infoGrid.store.load({
+    params: {
+      textFilter: searchText.getValue()
+      }
+    });
 };
 
 //Edit Calendar Action
@@ -327,33 +445,39 @@ DeleteButtonAction = function(){
   viewport.getEl().mask(_('ID_PROCESSING'));
   Ext.Ajax.request({
     url: 'calendar_Ajax',
-    params: {action: 'canDeleteCalendar', CAL_UID: rowSelected.data.CALENDAR_UID},
+    params: {
+      action: 'canDeleteCalendar',
+      CAL_UID: rowSelected.data.CALENDAR_UID
+      },
     success: function(r,o){
       viewport.getEl().unmask();
       var resp = Ext.util.JSON.decode(r.responseText);
       if (resp.success){
         Ext.Msg.confirm(_('ID_CONFIRM'),_('ID_CONFIRM_DELETE_CALENDAR'),
-            function(btn, text){
-          if (btn=='yes'){
-            viewport.getEl().mask(_('ID_PROCESSING'));
-            Ext.Ajax.request({
-              url: 'calendar_Ajax',
-              params: {action: 'deleteCalendar', CAL_UID: rowSelected.data.CALENDAR_UID},
-              success: function(r,o){
-                viewport.getEl().unmask();
-                editButton.disable();
-                deleteButton.disable();
-                copyButton.disable();
-                DoSearch();
-                PMExt.notify(_('ID_CALENDARS'),_('ID_CALENDAR_SUCCESS_DELETE'));
-              },
-              failure: function(r,o){
-                viewport.getEl().unmask();
-              }
-            });	
+          function(btn, text){
+            if (btn=='yes'){
+              viewport.getEl().mask(_('ID_PROCESSING'));
+              Ext.Ajax.request({
+                url: 'calendar_Ajax',
+                params: {
+                  action: 'deleteCalendar',
+                  CAL_UID: rowSelected.data.CALENDAR_UID
+                  },
+                success: function(r,o){
+                  viewport.getEl().unmask();
+                  editButton.disable();
+                  deleteButton.disable();
+                  copyButton.disable();
+                  DoSearch();
+                  PMExt.notify(_('ID_CALENDARS'),_('ID_CALENDAR_SUCCESS_DELETE'));
+                },
+                failure: function(r,o){
+                  viewport.getEl().unmask();
+                }
+              });
+            }
           }
-        }		
-        );
+          );
       }else{
         PMExt.error(_('ID_CALENDARS'),_('ID_MSG_CANNOT_DELETE_CALENDAR')); 
       }	
@@ -367,9 +491,17 @@ DeleteButtonAction = function(){
 //Render Status
 render_status = function(v){
   switch(v){
-    case 'ACTIVE': return '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
-    case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
-    case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
+    case 'ACTIVE':
+      return '<font color="green">' + _('ID_ACTIVE') + '</font>';
+      break;
+    case 'INACTIVE':
+      return '<font color="red">' + _('ID_INACTIVE') + '</font>';
+      ;
+      break;
+    case 'VACATION':
+      return '<font color="blue">' + _('ID_VACATION') + '</font>';
+      ;
+      break;
   }
 };
 
@@ -385,6 +517,9 @@ CopyButtonAction = function(){
 UpdatePageConfig = function(pageSize){
   Ext.Ajax.request({
     url: 'calendar_Ajax',
-    params: {action:'updatePageSize', size: pageSize}
+    params: {
+      action:'updatePageSize',
+      size: pageSize
+    }
   });
 };

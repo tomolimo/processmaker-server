@@ -1247,6 +1247,8 @@ $output = $outputHeader.$output;
             return;
           }
           break;
+        case 'tar':
+          G::sendHeaders ( $filename , 'application/x-tar', $download, $downloadFileName ); break;
         default :
           //throw new Exception ( "Unknown type of file '$file'. " );
           G::sendHeaders ( $filename , 'application/octet-stream', $download, $downloadFileName ); break;
