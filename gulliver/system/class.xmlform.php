@@ -4201,7 +4201,7 @@ class XmlForm
             $this->requiredFields [] = array (
               'name' => $field->name,
               'type' => $xmlNode [$k]->attributes ['type'],
-              'label' => trim ( $field->label ),                
+              'label' => addslashes(trim ( $field->label )),                
               'validate' => $validateValue,
               'required' => $requiredValue
             );          
