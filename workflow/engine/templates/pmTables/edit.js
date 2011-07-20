@@ -700,13 +700,13 @@ function addColumn() {
     field_key   : 0,
     field_null  : 1
   });
-  length = assignedGrid.getStore().data.length;
+  var len = assignedGrid.getStore().data.length;
   
   editor.stopEditing();
-  store.insert(length, row);
+  store.insert(len, row);
   assignedGrid.getView().refresh();
-  assignedGrid.getSelectionModel().selectRow(length);
-  editor.startEditing(length);
+  assignedGrid.getSelectionModel().selectRow(len);
+  editor.startEditing(len);
 }
 
 function editColumn()
