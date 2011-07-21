@@ -570,6 +570,7 @@ class pmTablesProxy extends HttpProxyController
                     
                     if($tRecord){
                       $tNameOld = $contentSchema['ADD_TAB_NAME'];
+                      $contentSchema['ADD_TAB_UID']  = G::generateUniqueID();
                       $contentSchema['ADD_TAB_NAME'] =  "{$contentSchema['ADD_TAB_NAME']}".sizeof($tRecord);
                       $contentSchema['ADD_TAB_CLASS_NAME'] =  "{$contentSchema['ADD_TAB_CLASS_NAME']}".sizeof($tRecord);
                       $oMap->addRoute($tNameOld, $contentSchema['ADD_TAB_NAME']); 
@@ -627,7 +628,7 @@ class pmTablesProxy extends HttpProxyController
 
                   $isReportTable = $contentSchema['PRO_UID'] != '' ? true : false;
                   if ($isReportTable) {
-                    $oAdditionalTables->populateReportTable($contentSchema['ADD_TAB_NAME'], $contentSchema['ADD_TAB_CONNECTION'], $contentSchema['ADD_TAB_TYPE'], $contentSchema['FIELDS'], $contentSchema['ADD_UID'], $contentSchema['ADD_TAB_GRID']);
+                    $oAdditionalTables->populateReportTable($contentSchema['ADD_TAB_NAME'], $contentSchema['DBS_UID'], $contentSchema['ADD_TAB_TYPE'], $contentSchema['FIELDS'], $contentSchema['PRO_UID'], $contentSchema['ADD_TAB_GRID']);
                   }
                   
                   break;
