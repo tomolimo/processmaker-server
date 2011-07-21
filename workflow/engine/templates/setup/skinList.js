@@ -101,8 +101,8 @@ Ext.onReady(function(){
   importButton = new Ext.Action({
     text: _('ID_IMPORT'),
     iconCls: 'button_menu_ext ss_sprite ss_basket_put',
-    //handler: CopyButtonAction,
-    disabled: true
+    handler: importSkin,
+    disabled: false
   });
   exportButton = new Ext.Action({
     text: _('ID_EXPORT'),
@@ -371,7 +371,120 @@ onMessageContextMenu = function (grid, rowIndex, e) {
 
 //Do Nothing Function
 DoNothing = function(){};
+importSkin = function(){
+  importDialog = new Ext.Window( {
+    id: "importDialog",
+    title:_('ID_UPLOAD'),
+    autoCreate: true,
+    modal:true,
+    width:400,
+    autoHeight:true,
+    shadow:true,
+    minWidth:100,
+    minHeight:50,
+    proxyDrag: true,
+    resizable: true,
+    keys: {
+      key: 27,
+      fn  : function(){
+        importDialog.hide();
+      }
+    },
+    items:[
+    {
+      xtype:'form',
+      autoScroll:true,
+      autoHeight:true,
+      id:"uploadform",
+      fileUpload:true,
+      labelWidth:90,
+      url:'skin_Ajax',
+      tooltip:"Max File Size <strong>XXX MB</strong><br />Max Post Size<strong>XXX MB</strong><br />",
+      frame:false,
+      items:[
+      {
+        xtype:"displayfield",
+        value:"Max File Size <strong>XXX MB</strong><br />Max Post Size<strong>XXX MB</strong><br />"
+      },
+      {
+        xtype:"fileuploadfield",
+        fieldLabel:"File ",
+        id:"uploadedFile",
+        name:"uploadedFile",
+        width:100,
+        buttonOnly:false
+      },
+      {
+        xtype:"checkbox",
+        fieldLabel:"Overwrite",
+        name:"overwrite_files",
+        checked:true
+      }
+      ],
+      buttons:[
+      {
+        text:_('ID_SAVE'),
+        handler: function() {
+          //statusBarMessage( _('ID_UPLOADING_FILE'), true, true );
+          importDialog.getEl().mask(_('ID_SKIN_IMPORTING'));
+          form = Ext.getCmp("uploadform").getForm();
 
+          //Ext.getCmp("uploadform").getForm().submit();
+          //console.log(form);
+          //console.log(form.url);
+          Ext.getCmp("uploadform").getForm().submit({
+            //reset: true,
+            reset: false,
+            success: function(form, action) {
+
+              store.reload();
+                     
+              Ext.getCmp("importDialog").destroy();
+            },
+            failure: function(form, action) {
+              Ext.getCmp("importDialog").destroy();
+
+              if( !action.result ) {
+                Ext.MessageBox.alert("error", _('ID_ERROR'));
+                return;
+                }
+              Ext.MessageBox.alert("error", action.result.error);
+                     
+            },
+            scope: Ext.getCmp("uploadform"),
+            // add some vars to the request, similar to hidden fields
+            params: {
+              option: "standardupload",
+              action: "importSkin",
+              requestType: "xmlhttprequest",
+              confirm: "true"
+            }
+          });
+        }
+      },
+      {
+        text:_('ID_CANCEL'),
+        handler: function() {
+          Ext.getCmp("importDialog").destroy();
+        }
+      }
+      ]
+    }
+    ]
+
+  });
+ // importDialog.doLayout();
+  
+  // recalculate
+  // Window size
+  //importDialog.syncSize();
+  // center the window
+  //importDialog.center();
+  importDialog.on( 'hide', function() {
+    importDialog.destroy(true);
+  } );
+  importDialog.show();
+};
 exportSkin = function(){
   viewport.getEl().mask(_('ID_SKIN_EXPORTING'));
   rowSelected = infoGrid.getSelectionModel().getSelected();
@@ -381,7 +494,7 @@ exportSkin = function(){
       params: {
         action: 'exportSkin',
         SKIN_FOLDER_ID: rowSelected.data.SKIN_FOLDER_ID
-        },
+      },
       success: function(r,o){
         viewport.getEl().unmask();
         var resp = Ext.util.JSON.decode(r.responseText);
@@ -433,8 +546,8 @@ DoSearch = function(){
   infoGrid.store.load({
     params: {
       textFilter: searchText.getValue()
-      }
-    });
+    }
+  });
 };
 
 //Edit Calendar Action
@@ -454,7 +567,7 @@ DeleteButtonAction = function(){
     params: {
       action: 'canDeleteCalendar',
       CAL_UID: rowSelected.data.CALENDAR_UID
-      },
+    },
     success: function(r,o){
       viewport.getEl().unmask();
       var resp = Ext.util.JSON.decode(r.responseText);
@@ -468,7 +581,7 @@ DeleteButtonAction = function(){
                 params: {
                   action: 'deleteCalendar',
                   CAL_UID: rowSelected.data.CALENDAR_UID
-                  },
+                },
                 success: function(r,o){
                   viewport.getEl().unmask();
                   editButton.disable();

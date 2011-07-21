@@ -1,13 +1,13 @@
 <?php
 
 if (!isset($_REQUEST ['action'])) {
-  $res ['success'] = 'failure';
+  $res ['success'] = false;
   $res ['message'] = 'You may request an action';
   print G::json_encode($res);
   die ();
 }
 if (!function_exists($_REQUEST ['action'])) {
-  $res ['success'] = 'failure';
+  $res ['success'] = false;
   $res ['message'] = 'The requested action doesn\'t exists';
   print G::json_encode($res);
   die ();
@@ -61,6 +61,100 @@ function createSkin($baseSkin='classic') {
 
 }
 
+function importSkin() {
+  try {
+    if (!isset($_FILES['uploadedFile'])) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_REQUIRED')) );
+    }
+    $uploadedInstances = count($_FILES['uploadedFile']['name']);
+    $sw_error = false;
+    $sw_error_exists = isset($_FILES['uploadedFile']['error']);
+    $emptyInstances = 0;
+    $quequeUpload = array();
+    // upload files & check for errors
+
+    $tmp = $_FILES['uploadedFile']['tmp_name'];
+    $items = stripslashes($_FILES['uploadedFile']['name']);
+    if ($sw_error_exists)
+      $up_err = $_FILES['uploadedFile']['error'];
+    else
+      $up_err= ( file_exists($tmp) ? 0 : 4);
+
+
+    if ($items == "" || $up_err == 4) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_REQUIRED')) );
+    }
+    if ($up_err == 1 || $up_err == 2) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_SIZE_ERROR')) );
+      //$errors[$i]='miscfilesize';
+    }
+    if ($up_err == 3) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_PART_ERROR')) );
+      //$errors[$i]='miscfilepart';
+    }
+    if (!@is_uploaded_file($tmp)) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_NOT_UPLOADED')) );
+      //$errors[$i]='uploadfile';
+    }
+    $fileInfo = pathinfo($items);
+    $validType = array('tar', 'gz');
+
+    if (!in_array($fileInfo['extension'], $validType)) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_TYPE_ERROR')) );
+//$errors[$i]='wrongtype';
+    }
+
+
+    $filename = $items;
+    $tempPath = PATH_CUSTOM_SKINS . '.tmp' . PATH_SEP;
+    G::verifyPath($tempPath, true);
+    $tempName = $tmp;
+    G::uploadFile($tempName, $tempPath, $filename);
+    G::LoadThirdParty('pear/Archive', 'Tar');
+    $tar = new Archive_Tar($tempPath . $filename);
+    $aFiles = $tar->listContent();
+    $swConfigFile = false;
+
+    foreach ($aFiles as $key => $val) {
+      if (basename($val['filename']) == 'config.xml') {
+        $skinName = dirname($val['filename']);
+        $skinArray = explode("/", $skinName);
+        if (count($skinArray) == 1) {
+          $swConfigFile = true;
+        }
+      }
+    }
+
+    if (!$swConfigFile) {
+      @unlink(PATH_CUSTOM_SKINS . '.tmp' . PATH_SEP . $filename);
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_CONFIGURATION_MISSING')) );
+    }
+
+    if (is_dir(PATH_CUSTOM_SKINS . $skinName)) {
+      if ((isset($_REQUEST['overwrite_files'])) && ($_REQUEST['overwrite_files'] == 'on')) {
+        G::rm_dir(PATH_CUSTOM_SKINS . $skinName, false);
+      } else {
+        throw ( new Exception(G::LoadTranslation('ID_SKIN_ALREADY_EXISTS')) );
+      }
+    }
+    $res = $tar->extract(PATH_CUSTOM_SKINS);
+    if (!$res) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_ERROR_EXTRACTING')) );
+    }
+//Delete Temporal
+    @unlink(PATH_CUSTOM_SKINS . '.tmp' . PATH_SEP . $filename);
+
+    $response['success'] = true;
+    $response['message'] = G::LoadTranslation('ID_SKIN_SUCCESSFUL_IMPORTED');
+    print_r(G::json_encode($response));
+  } catch (Exception $e) {
+    $response['success'] = false;
+    $response['message'] = $e->getMessage();
+    $response['error'] = $e->getMessage();
+    print_r(G::json_encode($response));
+  }
+}
+
 function exportSkin($skinToExport) {
   try {
     if (!isset($_REQUEST['SKIN_FOLDER_ID'])) {
@@ -95,7 +189,7 @@ function exportSkin($skinToExport) {
     $tar->_compress = false;
 
     addTarFolder($tar, $skinFolder, PATH_CUSTOM_SKINS);
-    
+
     $response['success'] = true;
     $response['message'] = $skinTar;
 
