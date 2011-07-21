@@ -1,169 +1,165 @@
-var store;
-var cmodel;
-var smodel;
-var infoGrid;
-var viewport;
 
-var cancelButton;
-var exportButton;
+var checkColumn;
 
-var w;
+var Export = function() {
+  return {
+    //config objects
+    windowConfig : {},
+    targetGridConfig : {},
 
-Ext.onReady(function(){
-  Ext.QuickTips.init();
-  
-  var reader = new Ext.data.ArrayReader({}, [{name: 'action'}]);
+    // defining components
+    targetGrid : {},
+    window : {},
+    // init
+    init : function() {
+      Ext.form.Field.prototype.msgTarget = 'side';
+      Ext.QuickTips.init();
+      
+      this.configure();
 
-  var comboStore = new Ext.data.Store({
-    reader: reader,
-    data: Ext.grid.dummyData
-  });
-    
-  exportButton = new Ext.Action({
-    text: _('ID_EXPORT'),
-    iconCls: 'silk-add',
-    icon: '/images/export.png',
-    handler: ExportPMTables
-  });
-  
-  cancelButton = new Ext.Action({
-    text: _('ID_BACK'),
-        icon: '/images/back-icon.png',
-    handler: CancelExport
-  });
-  
-  store = new Ext.data.GroupingStore( {
-      proxy : new Ext.data.HttpProxy({
-        url: '../pmTablesProxy/exportList?id='+EXPORT_TABLES.UID_LIST
-      }),
-      reader : new Ext.data.JsonReader( {
-        root: '',
-        fields : [
-            {name : 'ADD_TAB_UID'},
-            {name : 'ADD_TAB_NAME'},
-            {name : 'ADD_TAB_DESCRIPTION'},
-            {name : 'CH_SCHEMA'},
-            {name : 'CH_DATA'}
-        ]
-      })
-    });
-  
-  var action_edit = new Ext.form.ComboBox({
-    typeAhead: true,
-    triggerAction: 'all',
-    mode: 'local',
-    store: comboStore,
-    displayField: 'action',
-    valueField: 'action'
-  });
-  
-  cmodel = new Ext.grid.ColumnModel({
-        defaults: {
-            width: 10,
-            sortable: true
-        },
-        columns: [
-            new Ext.grid.RowNumberer(),
-            //smodel,
-            {id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false},
-            {header: _('ID_NAME'), dataIndex: 'ADD_TAB_NAME', width: 20, align:'left'},
-            {header: _('ID_DESCRIPTION'), dataIndex: 'ADD_TAB_DESCRIPTION', width: 50, hidden:false, align:'left'},//,
-            {header: _('ID_SCHEMA'), dataIndex: 'CH_SCHEMA', hidden: false, width: 20, editor: action_edit, align: 'center'},            
-            {header: 'DATA', dataIndex: 'CH_DATA', hidden: false, width: 20, editor: action_edit, align: 'center'}
-        ]
-    });
-  
-  infoGrid = new Ext.grid.EditorGridPanel({
-    store: store,
-        cm: cmodel,
-        width: 600,
-        height: 300,
-        title: _('ID_ADDITIONAL_TABLES') + ': ' +_('ID_TITLE_EXPORT_TOOL'),
-        frame: false,
-        clicksToEdit: 1,
-        id: 'infoGrid',
-
-      sm: new Ext.grid.RowSelectionModel({singleSelect: false}),
-      tbar:[exportButton, {xtype: 'tbfill'} ,cancelButton],//'-', editButton, deleteButton,'-', dataButton,{xtype: 'tbfill'} , importButton, exportButton],
-      view: new Ext.grid.GroupingView({
-        forceFit:true,
-        groupTextTpl: '{text}'
-      })
-    });
-
-    infoGrid.store.load();
-    
-    viewport = new Ext.Viewport({
-      layout: 'fit',
-      autoScroll: false,
-      items: [
-         infoGrid
-      ]
-    });
-  
-});
-
-//Cancels Export View
-CancelExport = function(){
-  history.back();
-};
-
-//Export Schema/Data from PM Tables
-ExportPMTables = function(){
-  iGrid = Ext.getCmp('infoGrid');
-  var storeExport = iGrid.getStore();
-  var UIDs = new Array();
-  var SCHs = new Array();
-  var DATs = new Array();
-    for (var r=0; r<storeExport.getCount(); r++){
-      row = storeExport.getAt(r);
-      UIDs[r] = row.data['ADD_TAB_UID'];
-      if (row.data['CH_SCHEMA']==_('ID_ACTION_EXPORT')){
-        SCHs[r] = row.data['ADD_TAB_UID'];
-      }else{
-        SCHs[r] = 0;
-      }
-      if (row.data['CH_DATA']==_('ID_ACTION_EXPORT')){
-        DATs[r] = row.data['ADD_TAB_UID'];
-      }else{
-        DATs[r] = 0;
-      }  
+      this.targetGrid = new Ext.grid.EditorGridPanel(this.targetGridConfig);
+      this.window = new Ext.Window(this.windowConfig);
+      this.window.add(this.targetGrid);
     }
-    Ext.Ajax.request({
-         url: '../additionalTables/additionalTablesAjax',
-         success: SuccessExport,
-         failure: DoNothing,
-         params: { action: 'doExport',  tables: UIDs.join(','), schema: SCHs.join(','), data: DATs.join(',') }
-    });
-};
+  }
+}();
 
-//Response Export Handler
-SuccessExport = function(response, opts){
-  w = new Ext.Window({
-    height: 350, 
-    width: 670,
-    resizable: false,
-      html: response.responseText,
-      autoscroll: false,
-    title: _('ID_TITLE_EXPORT_RESULT'),
-    closable: true,
-    buttons: [{
-      text: _('ID_CLOSE'),
-//      iconCls: 'silk-add',
-      handler: CloseExport
-    }]
+
+Export.configure = function()
+{
+  /**
+   * TARGET GRID CONFIG
+   */
+  this.targetGridConfig = {
+    id    : 'targetGrid',
+    title : 'To Export tables',
+    region: 'east',
+    width : 450,
+    split : true,
+    clicksToEdit: 2,
+    columnLines: true
+  };
+
+  this.targetGridConfig.store = new Ext.data.ArrayStore({
+      fields: [
+        {name : 'ADD_TAB_UID'},
+        {name : 'ADD_TAB_NAME'},
+        {name : '_TYPE'},
+        {name : '_SCHEMA'},
+        {name : '_DATA'}
+      ]
   });
-  w.show();
-}; 
-
-//Close Export Dialog
-CloseExport = function(){
-  w.close();
-};
 
 
-//Do Nothing Function
-DoNothing = function(){};
+  schemaColumn = new Ext.grid.CheckColumn({
+    header: 'Schema',
+    dataIndex: '_SCHEMA',
+    width: 55,
+    checked: true
+  });
 
-Ext.grid.dummyData = [['Export'],['Ignore']];
+  dataColumn = new Ext.grid.CheckColumn({
+    header: 'Data',
+    dataIndex: '_DATA',
+    width: 55
+  });
+
+
+  this.targetGridConfig.cm = new Ext.grid.ColumnModel({
+    defaults: {
+      sortable: true
+    },
+    columns: [
+      new Ext.grid.RowNumberer(),
+      {id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false},
+      {header: _('ID_TABLE'), dataIndex: 'ADD_TAB_NAME', width: 300},
+      {header: _('ID_TYPE'), dataIndex: '_TYPE', width:70},
+      schemaColumn,
+      dataColumn
+    ]
+  });
+
+  this.targetGridConfig.plugins = [schemaColumn, dataColumn];
+
+  /** 
+   * WINDOW CONFIG
+   */
+  this.windowConfig = {
+    title: '',
+    layout: 'fit',
+    width: 550,
+    height: 400,
+    modal: true,
+    autoScroll: true,
+    maximizable: true,
+    closeAction: 'hide',
+    maximizable : false,
+    items: [],
+    listeners:{
+      show:function() {
+        this.loadMask = new Ext.LoadMask(this.body, { msg:'Loading. Please wait...' });
+      }
+    }
+  }
+
+  this.windowConfig.buttons = [{
+    text: 'Export',
+    handler: Export.submit
+  },{
+    text: 'Cancel',
+    handler: function(){
+      Export.window.hide();
+    }
+  }]
+
+} //end configure
+
+Export.submit = function()
+{
+
+  var rows = Export.targetGrid.getStore();
+  var rowsData = new Array();
+
+  for (i=0; i < rows.getCount(); i++) {
+    row = rows.getAt(i);
+    if ( row.data._SCHEMA == false && row.data._DATA == false) {
+      PMExt.info('INFO', 'From each table you should select Schema/Data to export at least one.');
+      return false;
+    }
+    rowsData.push(row.data);
+  }
+  
+  Ext.Msg.show({
+    title : '', //TRANSLATIONS.ID_TITLE_START_CASE, //'Start Case',
+    msg : 'Processing...',
+    wait: true,
+    waitConfig: {interval:500}
+  });
+  
+
+  Ext.Ajax.request({
+    url: 'pmTablesProxy/export',
+    params: {
+      rows : Ext.util.JSON.encode(rowsData)
+    },
+    success: function(resp){
+      Ext.Msg.hide();
+      Export.window.hide();
+      result = Ext.util.JSON.decode(resp.responseText);
+
+      if (result.success) {
+        location.href = result.link;
+      } else {
+        PMExt.error(_('ID_ERROR', result.message));
+      }
+    },
+    failure: function(obj, resp){
+      Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
+    }
+  });
+
+}
+
+Ext.onReady(Export.init, Export, true);
+
 

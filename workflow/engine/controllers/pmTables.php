@@ -28,6 +28,7 @@ class pmTables extends Controller
     $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
     $this->includeExtJS('pmTables/list', $this->debug);
+    $this->includeExtJS('pmTables/export', $this->debug);
     $this->setView('pmTables/list');
     
     //assigning js variables
@@ -121,6 +122,16 @@ class pmTables extends Controller
 
     $this->setJSVar('EXPORT_TABLES', $toSend);
     G::RenderPage('publish', 'extJs');
+  }
+
+  public function streamExported($httpData)
+  {
+    $PUBLIC_ROOT_PATH = PATH_DATA.'sites'.PATH_SEP.SYS_SYS.PATH_SEP.'public'.PATH_SEP;
+    $sFileName = $httpData->f;
+    
+    $realPath = $PUBLIC_ROOT_PATH . $sFileName;
+    G::streamFile ( $realPath, true );
+    unlink($realPath);
   }
    
 

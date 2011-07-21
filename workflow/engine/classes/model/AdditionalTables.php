@@ -1061,15 +1061,17 @@ class AdditionalTables extends BaseAdditionalTables {
       FieldsPeer::doDelete($oCriteria);
 
       //deleting table
-      if ( isset($aData['DBS_UID']) && $aData['DBS_UID'] != 'wf' && $aData['DBS_UID'] != '') {
-        $con = Propel::getConnection($aData['DBS_UID']);
-        $stmt = $con->createStatement();
-        $stmt->executeQuery('DROP TABLE '.$aData['ADD_TAB_NAME']);
-      } else {
+      if ($aData['DBS_UID'] == 'wf' || $aData['DBS_UID'] == 'workflow' || $aData['DBS_UID'] == '' || $aData['DBS_UID'] == '0' || !$aData['DBS_UID']) {
         G::LoadSystem('database_' . strtolower(DB_ADAPTER));
         $oDataBase = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
         $oDataBase->iFetchType = MYSQL_NUM;
         $oDataBase->executeQuery($oDataBase->generateDropTableSQL($aData['ADD_TAB_NAME']));
+      } else {
+        $con = Propel::getConnection($aData['DBS_UID']);
+        if (is_object($con)) {
+          $stmt = $con->createStatement();
+          $stmt->executeQuery('DROP TABLE '.$aData['ADD_TAB_NAME']);
+        }
       }
 
 
@@ -1216,9 +1218,12 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
     $con = Propel::getConnection($aData['DBS_UID']);
     $oCriteria = new Criteria($aData['DBS_UID']);
     
-    eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
+    //eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
     foreach ($aData['FIELDS'] as $aField) {
       eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+      if ($aField['FLD_KEY'] == '1') {
+        eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+      }
     }
 
     $oCriteriaCount = clone $oCriteria;

@@ -114,7 +114,16 @@ Ext.onReady(function(){
 
    //row editor for table columns grid
   editor = new Ext.ux.grid.RowEditor({
-      saveText: _("ID_UPDATE")
+      saveText: _("ID_UPDATE"),
+      listeners: {
+	    afteredit: {
+	      fn:function(rowEditor, obj, data, rowIndex ){            	  
+		    if (data.phantom === true) {
+			  store.reload(); // only if it is an insert 
+	    	}
+	      }
+	    }
+      }
   });
 
   var proxy = new Ext.data.HttpProxy({
@@ -142,16 +151,16 @@ Ext.onReady(function(){
     totalProperty: 'count'
   })
   
-  store = new Ext.data.GroupingStore({
+  store = new Ext.data.Store({
     proxy : proxy,
     reader : reader,
     writer : writer, // <-- plug a DataWriter into the store just as you would a Reader
     autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
 
-  Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
+  /*Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
     PMExt.notify('UPDATE', 'the record was updated successfully.');
-  });
+  });*/
 
   // load the store immeditately
   //store.load();
@@ -225,16 +234,12 @@ Ext.onReady(function(){
     sm: smodel,
     tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
     bbar: bbarpaging,
-    listeners: {
+    /*listeners: {
       //rowdblclick: EditPMTableRow,
       render: function(){
           this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING_GRID')});
       }
-    },
-    view: new Ext.grid.GroupingView({
-      forceFit:true,
-      groupTextTpl: '{text}'
-    })
+    },*/
   });
   
   infoGrid.on('rowcontextmenu', 

@@ -245,6 +245,7 @@ Ext.onReady(function(){
     });
 
     cmodelColumns = new Array();
+    cmodelColumns.push(new Ext.grid.CheckboxSelectionModel());
     cmodelColumns.push({id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false});
     cmodelColumns.push({dataIndex: 'ADD_TAB_TAG', hidden:true, hideable:false});
     cmodelColumns.push({header: _('ID_NAME'), dataIndex: 'ADD_TAB_NAME', width: 300, align:'left', renderer: function(v,p,r){
@@ -539,6 +540,23 @@ ImportPMTable = function(){
 
 //Load Export PM Tables Form
 ExportPMTable = function(){
+  var rows = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+  var toExportRows = new Array();
+  
+  for(var i=0; i<rows.length; i++){
+    toExportRows.push([
+      rows[i].get('ADD_TAB_UID'),
+      rows[i].get('ADD_TAB_NAME'),
+      (rows[i].get('PRO_UID') == ''? 'Table': 'Report'),
+      true,
+      false
+    ]);
+  }
+
+  Export.targetGrid.store.loadData(toExportRows);
+
+  Export.window.show();
+  return;
   iGrid = Ext.getCmp('infoGrid');
   rowsSelected = iGrid.getSelectionModel().getSelections();
   //location.href = 'additionalTablesToExport?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();

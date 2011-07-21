@@ -403,6 +403,8 @@ class pmTablesProxy extends HttpProxyController
    */
   public function dataCreate($httpData)
   {
+    $rows = G::json_decode($httpData->rows);
+    
     require_once 'classes/model/AdditionalTables.php';
     $oAdditionalTables = new AdditionalTables();
     $table = $oAdditionalTables->load($httpData->id, true);
@@ -415,33 +417,63 @@ class pmTablesProxy extends HttpProxyController
     }
 
     require_once $sPath . $this->className . '.php';
-    $rows = G::json_decode($httpData->rows);
-    eval('$obj = new ' .$this->className. '();');
-    if (is_array($rows)) {
-      foreach ($rows as $row) {
+    $toSave = false;
+    
+    if (is_array($rows)) { //multiple
+      $c = $cs = 0;
+      foreach ($rows as $i => $row) {
+        $fieldsCount = 0;
+        eval('$obj = new ' .$this->className. '();');
         foreach ($row as $key => $value) {
           $action = 'set' . AdditionalTables::getPHPName($key);
-          $res = $obj->$action($value);
+          $obj->$action($value);
+          $fieldsCount++;
+          $toSave = true;
         }
-        $this->success = $res ? true: false;
+        if ($fieldsCount != 0) {
+          $c++;
+          if ($obj->save() > 0) {
+            $cs++;
+          }
+        }
+      }
+      
+      if ($toSave) {
+        $result->success = $cs == $c ? true: false;
+        $result->message = 'Saved #' . $c . ' records successfully';
+      } 
+      else {
+        $result->success = false;
+        $result->message = 'Nothing to do';
       }
     } 
-    else {
+    else { //single
+      eval('$obj = new ' .$this->className. '();');
       foreach ($rows as $key => $value) {
         $action = 'set' . AdditionalTables::getPHPName($key);
         $obj->$action($value);
+        $toSave = true;
       }
-      if ($obj->save() >0) {
-        $this->success = true;
-      } 
+      if ($toSave) {
+        if ($obj->save() > 0) {
+          $rows->__index__ = 5;
+          $result->success = true;
+          $result->message = 'Record saved successfully';
+          $result->data = (array) $rows;
+        } 
+        else {
+          $result->success = false;
+          $result->message = 'Error Updating records';
+        }
+      }
       else {
-        $this->success = false;
+        $result->success = true;
+        $result->data = array('__index__'=>1132);
+        $result->message = 'Nothing to do';
       }
     }
-
     
-
-    $this->message = $this->success ? 'Saved Successfully' : 'Error Updating record';
+    return $result;
   }
 
   /**
@@ -509,9 +541,7 @@ class pmTablesProxy extends HttpProxyController
   public function import($httpData)
   {
     require_once 'classes/model/AdditionalTables.php';
-
     try {
-      
       $overWrite = isset($_POST['form']['OVERWRITE'])? true: false;
 
       //save the file
@@ -524,8 +554,14 @@ class pmTablesProxy extends HttpProxyController
         
         $fileContent = file_get_contents($PUBLIC_ROOT_PATH.$filename);
         
-        if(strpos($fileContent, '-----== ProcessMaker Open Source Private Tables ==-----') !== false){
-          $oMap = new aTablesMap();
+        if(strpos($fileContent, '-----== ProcessMaker Open Source Private Tables ==-----') === false) {
+          $this->success = false;
+          $this->message = 'INVALID_FILE';
+          exit(0);
+        }
+        
+        
+        $oMap = new aTablesMap();
           
         $fp     = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
         $fsData   = intval(fread($fp, 9));    //reading the metadata
@@ -541,7 +577,6 @@ class pmTablesProxy extends HttpProxyController
                 case '@META':
                   $fsData   = intval(fread($fp, 9));
                   $METADATA = fread($fp, $fsData);
-                  //print_r($METADATA);
                   break;
                 case '@SCHEMA':
                   $fsUid    = intval(fread($fp, 9));
@@ -550,7 +585,7 @@ class pmTablesProxy extends HttpProxyController
                   $fsData   = intval(fread($fp, 9));
                   $schema   = fread($fp, $fsData);
                   $contentSchema = unserialize($schema);
-                  //print_r($contentSchema);
+                  //var_dump($overWrite); print_r($contentSchema); continue;
                   
                   if($overWrite){
                     $aTable = new additionalTables();
@@ -577,7 +612,12 @@ class pmTablesProxy extends HttpProxyController
                     }
                     
                   }
-
+                  
+                  // validating invalid bds_uid in old tables definition -> mapped to workflow 
+                  if (!$contentSchema['DBS_UID'] || $contentSchema['DBS_UID'] == '0') {
+                    $contentSchema['DBS_UID'] = 'workflow';
+                  }
+                  
                   $sAddTabUid = $oAdditionalTables->create(
                     array(
                       'ADD_TAB_UID'             => $contentSchema['ADD_TAB_UID'],
@@ -635,19 +675,25 @@ class pmTablesProxy extends HttpProxyController
                 case '@DATA':
                   $fstName   = intval(fread($fp, 9));
                   $tName     = fread($fp, $fstName);
-                  $fsData      = intval(fread($fp, 9));
-                  $contentData = unserialize(fread($fp, $fsData));
+                  $fsData    = intval(fread($fp, 9));
                   
-                  $tName = $oMap->route($tName); 
-                          
-              $oAdditionalTables = new AdditionalTables();
-                  $tRecord = $oAdditionalTables->loadByName($tName);
-                  
-                  if($tRecord){
-                foreach($contentData as $data){
-                  unset($data['DUMMY']);
-                  $oAdditionalTables->saveDataInTable($tRecord[0]['ADD_TAB_UID'], $data);
-                }
+                  if ($fsData > 0) {
+                    $data = fread($fp, $fsData);
+                    $contentData = unserialize($data);
+                    
+                    //var_dump($data); print_r($contentData); continue;
+                    
+                    $tName = $oMap->route($tName); 
+                            
+                    $oAdditionalTables = new AdditionalTables();
+                    $tRecord = $oAdditionalTables->loadByName($tName);
+                    
+                    if($tRecord){
+                      foreach($contentData as $data){
+                        unset($data['DUMMY']);
+                        $oAdditionalTables->saveDataInTable($tRecord[0]['ADD_TAB_UID'], $data);
+                      }
+                    }
                   }
                   break;
               }
@@ -662,10 +708,7 @@ class pmTablesProxy extends HttpProxyController
             $this->success = true;
             $this->message = 'File Imported "'.$filename.'" Successfully';
             
-        } else {
-          $this->success = false;
-          $this->message = 'INVALID_FILE';
-        }
+        
           
       }
     } catch(Exception $e){
@@ -674,6 +717,139 @@ class pmTablesProxy extends HttpProxyController
     }
   }
 
+  /**
+   * Export PM tables
+   * @author: Erik Amaru Ortiz <aortiz.erik@gmail.com>
+   */
+  public function export($httpData)
+  {
+    require_once 'classes/model/AdditionalTables.php';
+
+    $tablesToExport = json_decode($httpData->rows);
+      
+    try{
+      G::LoadCLass('net');
+      $net = new NET(G::getIpAddress());
+      
+      G::LoadClass("system");
+    
+      $META = " \n-----== ProcessMaker Open Source Private Tables ==-----\n".
+              " @Ver: 1.0 Oct-2009\n".
+              " @Processmaker version: ".System::getVersion()."\n".
+              " -------------------------------------------------------\n".
+              " @Export Date: ".date("l jS \of F Y h:i:s A")."\n".
+              " @Server address: ".getenv('SERVER_NAME')." (".getenv('SERVER_ADDR').")\n".
+              " @Client address: ".$net->hostname."\n".
+              " @Workspace: ".SYS_SYS."\n".
+              " @Export trace back:\n\n";
+    
+      $EXPORT_TRACEBACK = Array();
+      $c = 0;
+      foreach ($tablesToExport as $table) {
+        $at = new additionalTables();
+        $tableData = $at->getAllData($table->ADD_TAB_UID);
+        $rows  = $tableData['rows'];
+        $count = $tableData['count'];
+        
+        array_push($EXPORT_TRACEBACK, Array(
+          'uid'      => $table->ADD_TAB_UID,
+          'name'     => $table->ADD_TAB_NAME,
+          'num_regs' => $tableData['count'],
+          'schema'   => $table->_SCHEMA ? 'yes': 'no',
+          'data'     => $table->_DATA ? 'yes': 'no'
+        ));
+      }
+        
+      $sTrace = "TABLE UID                        TABLE NAME\tREGS\tSCHEMA\tDATA\n";
+
+      foreach($EXPORT_TRACEBACK as $row){
+        $sTrace .= "{$row['uid']}\t{$row['name']}\t\t{$row['num_regs']}\t{$row['schema']}\t{$row['data']}\n";
+      }
+      
+      $META .= $sTrace;
+      
+      ///////////////EXPORT PROCESS
+      $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
+
+      $filenameOnly = strtolower('SYS-'.SYS_SYS."_".date("Y-m-d").'_'.date("Hi").".pmt");
+
+      $filename = $PUBLIC_ROOT_PATH . $filenameOnly;
+      $fp = fopen( $filename, "wb");
+
+      $bytesSaved = 0;
+      $bufferType    = '@META';
+      $fsData        = sprintf("%09d", strlen($META));
+      $fsbufferType  = sprintf("%09d", strlen($bufferType));
+      $bytesSaved    += fwrite($fp, $fsbufferType);  //writing the size of $oData
+      $bytesSaved    += fwrite($fp, $bufferType); //writing the $oData
+      $bytesSaved    += fwrite($fp, $fsData);  //writing the size of $oData
+      $bytesSaved    += fwrite($fp, $META); //writing the $oData
+        
+      foreach($tablesToExport as $table){
+          
+        if ($table->_SCHEMA) {
+          $oAdditionalTables = new AdditionalTables();
+          $aData = $oAdditionalTables->load($table->ADD_TAB_UID, true);
+      
+          $bufferType   = '@SCHEMA';
+          $SDATA        = serialize($aData);
+          $fsUid        = sprintf("%09d", strlen($table->ADD_TAB_UID));
+          $fsData       = sprintf("%09d", strlen ($SDATA));
+          $fsbufferType = sprintf("%09d", strlen($bufferType));
+          
+          $bytesSaved  += fwrite($fp, $fsbufferType);  //writing the size of $oData
+          $bytesSaved  += fwrite($fp, $bufferType); //writing the $oData
+          $bytesSaved  += fwrite($fp, $fsUid );  //writing the size of xml file
+          $bytesSaved  += fwrite($fp, $table->ADD_TAB_UID);  //writing the xmlfile
+          $bytesSaved  += fwrite($fp, $fsData);  //writing the size of xml file
+          $bytesSaved  += fwrite($fp, $SDATA);    //writing the xmlfile
+        }
+          
+        if ($table->_DATA) {
+          //export data
+          $oAdditionalTables = new additionalTables();
+          $tableData = $oAdditionalTables->getAllData($table->ADD_TAB_UID);
+          
+          $SDATA      = serialize($tableData['rows']);
+          $bufferType   = '@DATA';
+          
+          $fsbufferType = sprintf("%09d", strlen($bufferType));
+          $fsTableName  = sprintf("%09d", strlen($table->ADD_TAB_NAME));
+          $fsData       = sprintf("%09d", strlen ($SDATA));
+          
+          $bytesSaved  += fwrite($fp, $fsbufferType);  //writing type size
+          $bytesSaved  += fwrite($fp, $bufferType); //writing type
+          $bytesSaved  += fwrite($fp, $fsTableName );  //writing the size of xml file
+          $bytesSaved  += fwrite($fp, $table->ADD_TAB_NAME);    //writing the xmlfile
+          $bytesSaved  += fwrite($fp, $fsData);  //writing the size of xml file
+          $bytesSaved  += fwrite($fp, $SDATA);    //writing the xmlfile
+        }
+      }
+         
+      fclose ($fp);
+      
+      $filenameLink = "pmTables/streamExported?f=$filenameOnly";
+      $size         = round(($bytesSaved/1024), 2)." Kb";
+      $meta         = "<pre>".$META."</pre>";
+      $filename     = $filenameOnly;
+      $link         = $filenameLink;
+      
+      // $G_PUBLISH = new Publisher();
+      // $G_PUBLISH->AddContent('xmlform', 'xmlform', 'additionalTables/doExport', '', $aFields, '');
+      // G::RenderPage('publish', 'raw');
+
+      $result->success  = true;
+      $result->filename = $filenameOnly;
+      $result->link     = $link;
+      $result->message  = "Generated file: $filenameOnly, size: $size";
+    } 
+    catch (Exception $e) {
+      $result->success = false;
+      $result->message = $e->getMessage();
+    }
+
+    return $result;
+  }
   
   public function exportList()
   {
