@@ -14,10 +14,13 @@ var cmodel;
 var smodel;
 var infoGrid;
 var _fields;
+var isReport;
 
 Ext.onReady(function(){
   
   pageSize = 20; //parseInt(CONFIG.pageSize);
+  
+  isReport = tableDef.PRO_UID ? true : false;
   
   newButton = new Ext.Action({
     text: _('ID_ADD_ROW'),
@@ -100,7 +103,9 @@ Ext.onReady(function(){
            deleteButton.disable();
            break;
          case 1:
-           editButton.enable();
+           if (!isReport) {
+             editButton.enable();
+           }
            deleteButton.enable();
            break;
          default:
@@ -112,19 +117,21 @@ Ext.onReady(function(){
      }
    });
 
-   //row editor for table columns grid
-  editor = new Ext.ux.grid.RowEditor({
+  //row editor for table columns grid
+  if (!isReport) {
+    editor = new Ext.ux.grid.RowEditor({
       saveText: _("ID_UPDATE"),
       listeners: {
-	    afteredit: {
-	      fn:function(rowEditor, obj, data, rowIndex ){            	  
-		    if (data.phantom === true) {
-			  store.reload(); // only if it is an insert 
-	    	}
-	      }
-	    }
+  	    afteredit: {
+  	      fn:function(rowEditor, obj, data, rowIndex ){            	  
+    		    if (data.phantom === true) {
+    			  store.reload(); // only if it is an insert 
+    	    	}
+  	      }
+  	    }
       }
-  });
+    });
+  }
 
   var proxy = new Ext.data.HttpProxy({
     //url: '../pmTablesProxy/getData?id=' + tableDef.ADD_TAB_UID
@@ -157,16 +164,6 @@ Ext.onReady(function(){
     writer : writer, // <-- plug a DataWriter into the store just as you would a Reader
     autoSave: true // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
   });
-
-  /*Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
-    PMExt.notify('UPDATE', 'the record was updated successfully.');
-  });*/
-
-  // load the store immeditately
-  //store.load();
-
-  //store.on('update', store._update, store);
-
 
   cmodel = new Ext.grid.ColumnModel({
     defaults: {
@@ -211,8 +208,7 @@ Ext.onReady(function(){
     items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
   });
   
-    
-  infoGrid = new Ext.grid.GridPanel({
+  infoGridConfig = {
     region: 'center',
     layout: 'fit',
     id: 'infoGrid',
@@ -230,17 +226,17 @@ Ext.onReady(function(){
     },
     store: store,
     cm: cmodel,
-    plugins: [editor],
     sm: smodel,
     tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
-    bbar: bbarpaging,
-    /*listeners: {
-      //rowdblclick: EditPMTableRow,
-      render: function(){
-          this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING_GRID')});
-      }
-    },*/
-  });
+    bbar: bbarpaging
+  }
+  
+  if (!isReport) {
+    infoGridConfig.plugins = new Array();
+    infoGridConfig.plugins.push(editor);
+  }
+  
+  infoGrid = new Ext.grid.GridPanel(infoGridConfig);
   
   infoGrid.on('rowcontextmenu', 
         function (grid, rowIndex, evt) {
