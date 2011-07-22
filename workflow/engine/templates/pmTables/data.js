@@ -141,7 +141,7 @@ Ext.onReady(function(){
       update : '../pmTablesProxy/dataUpdate?id=' + tableDef.ADD_TAB_UID,
       destroy: '../pmTablesProxy/dataDestroy?id=' + tableDef.ADD_TAB_UID
     },
-    baseParams : {id: tableDef.ADD_TAB_UID},
+    baseParams : {id: tableDef.ADD_TAB_UID}
   })
 
   // The new DataWriter component.
