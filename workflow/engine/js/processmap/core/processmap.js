@@ -158,7 +158,7 @@ var processmap=function(){
               }.extend(this),
               reportTables:function(){
                 var panel = this.panels.buildingBlocks;
-                panel.addContentTitle(G_STRINGS.ID_PROCESSMAP_REPORT_TABLES);
+                panel.addContentTitle('');
                 panel.clearContent();
                 var iframe=document.createElement('iframe');
                 iframe.setAttribute('id','reportTablesIframe');

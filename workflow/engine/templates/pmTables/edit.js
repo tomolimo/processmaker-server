@@ -208,7 +208,7 @@ Ext.onReady(function(){
           })
       }, {
         xtype: 'booleancolumn',
-        header: 'Null',
+        header: _('ID_NULL'),
         dataIndex: 'field_null',
         align: 'center',
         width: 50,
@@ -219,10 +219,10 @@ Ext.onReady(function(){
         }
       }, {
         xtype: 'booleancolumn',
-        header: 'Primary Key',
+        header: _('ID_PRIMARY_KEY'),
         dataIndex: 'field_key',
         align: 'center',
-        width: 50,
+        width: 80,
         trueText: 'Yes',
         falseText: 'No',
         editor: {

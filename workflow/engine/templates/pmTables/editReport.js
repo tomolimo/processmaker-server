@@ -144,7 +144,7 @@ Ext.onReady(function(){
     autoWidth      : true,
     stripeRows     : true,
     height         : 100,
-    width          : '25%',
+    width          : 290,
     stateful       : true,
     stateId        : 'grid',
     enableHdMenu   : false,
@@ -158,13 +158,12 @@ Ext.onReady(function(){
       rowdblclick: AssignFieldsAction
     },
     tbar: [
-      '->',
       {
           xtype: 'textfield',
           id: 'searchTxt',
           ctCls:'pm_search_text_field',
           allowBlank: true,
-          width: 150,
+          width: 220,
           emptyText: _('ID_ENTER_SEARCH_TERM'),
           listeners: {
             specialkey: function(f,e){
@@ -452,10 +451,6 @@ Ext.onReady(function(){
     _setTitle: function() {
       this.setTitle('Report Table: ' + Ext.getCmp('REP_TAB_NAME').getValue() + ' ('+store.getCount()+' columns)');
     }
-  });
-
-  assignedGrid.getSelectionModel().on('selectionchange', function(sm){
-      //alert('s');
   });
 
   // (vertical) selection buttons
@@ -755,19 +750,6 @@ Ext.onReady(function(){
     }
   });
 
-  var tbar = new Array();
-  //if (_plugin_permissions !== false) {
-  if (TABLE !== false && TABLE.ADD_TAB_TAG == 'plugin@simplereport') {
-    tbar = [
-      {
-        text: _plugin_permissions.label,
-        handler: function(){
-          setTimeout(_plugin_permissions.fn, 0);
-        }
-      }
-    ]
-  }
-
   var items = new Array();
   if (PRO_UID === false)
     items.push(processComboBox);
@@ -812,7 +794,7 @@ Ext.onReady(function(){
   items.push(comboDbConnections);
 
 
-  var frmDetails = new Ext.FormPanel({
+  var frmDetailsConfig = {
     id:'frmDetails',
     region: 'north',
     labelWidth: 120,
@@ -827,10 +809,19 @@ Ext.onReady(function(){
       msgTarget: 'side',
       align:'center'
     },
-    items: items,
-    tbar: tbar
-  });
-
+    items: items
+  }
+  
+  if (TABLE !== false && TABLE.ADD_TAB_TAG == 'plugin@simplereport') {
+    frmDetailsConfig.tbar = [{
+      text: _plugin_permissions.label,
+      handler: function(){
+        setTimeout(_plugin_permissions.fn, 0);
+      }
+    }]
+  }
+  
+  var frmDetails = new Ext.FormPanel(frmDetailsConfig);
 
   southPanel = new Ext.FormPanel({
     region: 'south',
@@ -869,10 +860,7 @@ Ext.onReady(function(){
     if (TABLE === false) {
       if(TABLE.ADD_TAB_TYPE != 'GRID')
         loadFieldNormal();
-    } //else if(typeof avFieldsList != 'undefined')
-      //loadAvFieldsFromArray(avFieldsList);
-    
-  } else {
+    }
     
   }
 

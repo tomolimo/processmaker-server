@@ -41,19 +41,19 @@ Ext.onReady(function(){
     var newMenuOptions = new Array();
     if (PRO_UID == false) {
       newMenuOptions.push({
-        text: 'New Table',
+        text: _('ID_NEW_PMATBLE'),
         handler: newPMTable
       });
     }
     
     newMenuOptions.push({
-      text: 'New Report Table',
+      text: _('ID_NEW_REPORT_TABLE'),
       handler: NewReportTable
     });
 
     if (PRO_UID !== false) {
       newMenuOptions.push({
-        text: 'New Report Table (Old Version)',
+        text: _('ID_NEW_REPORT_TABLE_OLD'),
         handler: NewReportTableOld
       });
     }
@@ -61,7 +61,6 @@ Ext.onReady(function(){
     newButton = new Ext.Action({
       text: _('ID_NEW'),
       icon: '/images/add-table.png',
-      
       menu: newMenuOptions
     });
 
@@ -78,13 +77,6 @@ Ext.onReady(function(){
       handler: DeletePMTable,
       disabled: true
     });
-
-    // importButton = new Ext.Action({
-    //   text: _('ID_IMPORT'),
-    //   iconCls: 'silk-add',
-    //   icon: '/images/import.gif',
-    //   handler: importOption
-    // });
 
     importButton = new Ext.Action({
       text: _('ID_IMPORT'),
@@ -114,10 +106,6 @@ Ext.onReady(function(){
       handler: DoSearch
     });
 
-    // contextMenu = new Ext.menu.Menu({
-    //   items: [editButton, deleteButton,'-',dataButton,'-',exportButton]
-    // });
-
     var contextMenuItems = new Array();
     contextMenuItems.push(editButton);  
     contextMenuItems.push(deleteButton);
@@ -142,7 +130,6 @@ Ext.onReady(function(){
       items: contextMenuItems
     });
 
-
     searchText = new Ext.form.TextField ({
         id: 'searchTxt',
         ctCls:'pm_search_text_field',
@@ -156,9 +143,9 @@ Ext.onReady(function(){
             }
           },
           focus: function(f,e) {
-                  var row = infoGrid.getSelectionModel().getSelected();
-                  infoGrid.getSelectionModel().deselectRow(infoGrid.getStore().indexOf(row));
-               }
+            var row = infoGrid.getSelectionModel().getSelected();
+            infoGrid.getSelectionModel().deselectRow(infoGrid.getStore().indexOf(row));
+          }
         }
     });
 
@@ -193,8 +180,6 @@ Ext.onReady(function(){
     });
 
     comboPageSize.setValue(pageSize);
-
-    
 
     store = new Ext.data.GroupingStore( {
       proxy : new Ext.data.HttpProxy({
@@ -264,7 +249,7 @@ Ext.onReady(function(){
     
     cmodelColumns.push({header: 'Table Type', dataIndex: 'PRO_UID', width: 120, align:'left', renderer: function(v,p,r){
       color = r.get('PRO_UID') ? 'blue' : 'green';
-      value = r.get('PRO_UID') ? 'Report' : 'Table';
+      value = r.get('PRO_UID') ? _('ID_REPORT_TABLE') : _('ID_PMTABLE');
       return '<span style="color:'+color+'">'+value+'</span> ';
     }});
 
@@ -547,7 +532,7 @@ ExportPMTable = function(){
     toExportRows.push([
       rows[i].get('ADD_TAB_UID'),
       rows[i].get('ADD_TAB_NAME'),
-      (rows[i].get('PRO_UID') == ''? 'Table': 'Report'),
+      (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
       true,
       false
     ]);
@@ -557,6 +542,7 @@ ExportPMTable = function(){
 
   Export.window.show();
   return;
+  
   iGrid = Ext.getCmp('infoGrid');
   rowsSelected = iGrid.getSelectionModel().getSelections();
   //location.href = 'additionalTablesToExport?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();

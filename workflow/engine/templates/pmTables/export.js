@@ -1,5 +1,8 @@
-
-var checkColumn;
+/**
+ * Export PM Tables
+ * developed on date 2011-07-20 
+ * @author Erik Amaru Ortiz <erik@colosa.com>
+ */
 
 var Export = function() {
   return {
@@ -10,6 +13,7 @@ var Export = function() {
     // defining components
     targetGrid : {},
     window : {},
+    
     // init
     init : function() {
       Ext.form.Field.prototype.msgTarget = 'side';
@@ -24,7 +28,9 @@ var Export = function() {
   }
 }();
 
-
+/**
+ * CONFIGURE ROUTINES
+ */
 Export.configure = function()
 {
   /**
@@ -32,7 +38,7 @@ Export.configure = function()
    */
   this.targetGridConfig = {
     id    : 'targetGrid',
-    title : 'To Export tables',
+    title : _('ID_TABLES_TO_EXPORT'),
     region: 'east',
     width : 450,
     split : true,
@@ -50,16 +56,15 @@ Export.configure = function()
       ]
   });
 
-
   schemaColumn = new Ext.grid.CheckColumn({
-    header: 'Schema',
+    header: _('ID_SCHEMA'),
     dataIndex: '_SCHEMA',
     width: 55,
     checked: true
   });
 
   dataColumn = new Ext.grid.CheckColumn({
-    header: 'Data',
+    header: _('ID_DATA'),
     dataIndex: '_DATA',
     width: 55
   });
@@ -72,8 +77,8 @@ Export.configure = function()
     columns: [
       new Ext.grid.RowNumberer(),
       {id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false},
-      {header: _('ID_TABLE'), dataIndex: 'ADD_TAB_NAME', width: 300},
-      {header: _('ID_TYPE'), dataIndex: '_TYPE', width:70},
+      {header: _('ID_PMTABLE'), dataIndex: 'ADD_TAB_NAME', width: 300},
+      {header: _('ID_TYPE'), dataIndex: '_TYPE', width:100},
       schemaColumn,
       dataColumn
     ]
@@ -87,19 +92,14 @@ Export.configure = function()
   this.windowConfig = {
     title: '',
     layout: 'fit',
-    width: 550,
+    width: 570,
     height: 400,
     modal: true,
     autoScroll: true,
     maximizable: true,
     closeAction: 'hide',
     maximizable : false,
-    items: [],
-    listeners:{
-      show:function() {
-        this.loadMask = new Ext.LoadMask(this.body, { msg:'Loading. Please wait...' });
-      }
-    }
+    items: []
   }
 
   this.windowConfig.buttons = [{
@@ -114,24 +114,26 @@ Export.configure = function()
 
 } //end configure
 
+/**
+ * EXPORT ROUTINE
+ */
 Export.submit = function()
 {
-
   var rows = Export.targetGrid.getStore();
   var rowsData = new Array();
 
   for (i=0; i < rows.getCount(); i++) {
     row = rows.getAt(i);
     if ( row.data._SCHEMA == false && row.data._DATA == false) {
-      PMExt.info('INFO', 'From each table you should select Schema/Data to export at least one.');
+      PMExt.info(_('ID_INFO'), _('ID_PMTABLES_NOTICE_EXPORT'));
       return false;
     }
     rowsData.push(row.data);
   }
   
   Ext.Msg.show({
-    title : '', //TRANSLATIONS.ID_TITLE_START_CASE, //'Start Case',
-    msg : 'Processing...',
+    title : '',
+    msg : _('ID_PROCESSING'),
     wait: true,
     waitConfig: {interval:500}
   });
