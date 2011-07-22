@@ -655,7 +655,7 @@ class pmTablesProxy extends HttpProxyController
                       'bPrimaryKey' => $contentSchema['FIELDS'][$iRow]['FLD_KEY']
                     );
                   }
-                  $oAdditionalTables->createTable($contentSchema['ADD_TAB_NAME'], 'wf', $aFields);
+                  $oAdditionalTables->createTable($contentSchema['ADD_TAB_NAME'], $contentSchema['DBS_UID'], $aFields);
 
                   for($i=1; $i <= count($contentSchema['FIELDS']); $i++){
                     $contentSchema['FIELDS'][$i]['FLD_NULL'] = $contentSchema['FIELDS'][$i]['FLD_NULL'] == '1' ? 'on' : '';

@@ -1317,7 +1317,9 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
       $aData = $this->load($sUID, true);
       $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
       $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
-      $oConnection = Propel::getConnection(FieldsPeer::DATABASE_NAME);
+      // $oConnection = Propel::getConnection(FieldsPeer::DATABASE_NAME);
+      $oConnection = Propel::getConnection($aData['DBS_UID']);
+      $stmt = $oConnection->createStatement();
       require_once $sPath . $sClassName . '.php';
       $sKeys = '';
       foreach ($aData['FIELDS'] as $aField) {
@@ -1328,11 +1330,16 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
         }
       }
       $sKeys = substr($sKeys, 0, -1);
-      eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK(' . $sKeys . ');');
-      if (is_null($oClass)) {
+      $sqlExists = "SELECT COUNT(" . $aField['FLD_NAME'] . ") AS NRO_REGS FROM `" . $aData['ADD_TAB_NAME'] . "` ";
+      $rsExists  = $stmt->executeQuery( $sqlExists, ResultSet::FETCHMODE_ASSOC);
+      $rsExists->next();
+      $aRow2 = $rsExists->getRow();
+
+      if ( $aRow2['NRO_REGS'] !='0' ) {
         $oClass = new $sClassName;
         foreach ($aFields as $sKey => $sValue) {
-          eval('$oClass->set' . $this->getPHPName($sKey) . '($aFields["' . $sKey . '"]);');
+          if(!preg_match("/\(?\)/", $sKey))
+            eval('$oClass->set' . $this->getPHPName($sKey) . '($aFields["' . $sKey . '"]);');
         }
         if ($oClass->validate()) {
           $oConnection->begin();
@@ -1484,6 +1491,8 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
         G::LoadSystem($sDataBase);
         $oDataBase = new database();
         $sDataBase = $sConnection;
+        if($sDataBase == 'rp')
+          $sDataBase = DB_REPORT_NAME;
         if($sDataBase == 'workflow')
           $sDataBase = DB_NAME;
         $tableExists = $oDataBase->tableExists($sTableName, $sDataBase);
