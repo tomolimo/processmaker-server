@@ -227,7 +227,8 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
+    //tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
+    tbar:[newButton,'-',editButton, deleteButton,'-',{xtype: 'tbfill' }, backButton],
     bbar: bbarpaging
   }
   
