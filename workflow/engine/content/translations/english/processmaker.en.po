@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.30.rc12-9-gdac83c0\n"
+"Project-Id-Version: ProcessMaker (Branch master) 2.0.8-464-ge20c8e9\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-07-04 12:38:01\n"
+"PO-Revision-Date: 2011-07-25 12:02:37\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -82,14 +82,14 @@ msgstr "Users"
 # TRANSLATION
 # LABEL/ID_CASES
 #: LABEL/ID_CASES
-msgid "[LABEL/ID_CASES] Cases"
-msgstr "Cases"
+msgid "HOME"
+msgstr "HOME"
 
 # TRANSLATION
 # LABEL/ID_APPLICATIONS
 #: LABEL/ID_APPLICATIONS
-msgid "Processes"
-msgstr "Processes"
+msgid "DESIGNER"
+msgstr "DESIGNER"
 
 # TRANSLATION
 # LABEL/ID_RULES_AND_USER_GROUPS
@@ -592,8 +592,8 @@ msgstr "Please enter comments!"
 # TRANSLATION
 # LABEL/ID_PLEASE_SELECT_FILE
 #: LABEL/ID_PLEASE_SELECT_FILE
-msgid "Please select a file"
-msgstr "Please select a file"
+msgid "Please select the file to attach!"
+msgstr "Please select the file to attach!"
 
 # TRANSLATION
 # LABEL/ID_PROPERTIES
@@ -688,8 +688,8 @@ msgstr "Edit process"
 # TRANSLATION
 # JAVASCRIPT/curriculum
 #: JAVASCRIPT/curriculum
-msgid "Résumé"
-msgstr "Résumé"
+msgid "Resume"
+msgstr "Resume"
 
 # TRANSLATION
 # JAVASCRIPT/ID_OPEN_SEARCH
@@ -1354,8 +1354,8 @@ msgstr "Are you sure you want to cancel this case?"
 # TRANSLATION
 # LABEL/ID_SETUP
 #: LABEL/ID_SETUP
-msgid "Admin"
-msgstr "Admin"
+msgid "ADMIN"
+msgstr "ADMIN"
 
 # TRANSLATION
 # LABEL/ID_PREVIOUS_STEP
@@ -4288,14 +4288,14 @@ msgstr "Self Service"
 # TRANSLATION
 # LABEL/ID_PROCESSES
 #: LABEL/ID_PROCESSES
-msgid "[LABEL/ID_PROCESSES] Processes"
+msgid "Processes"
 msgstr "Processes"
 
 # TRANSLATION
 # LABEL/ID_ENTER_SEARCH_TERM
 #: LABEL/ID_ENTER_SEARCH_TERM
-msgid "Enter search term"
-msgstr "Enter search term"
+msgid "enter search term"
+msgstr "enter search term"
 
 # TRANSLATION
 # LABEL/ID_DETAILS
@@ -4894,8 +4894,8 @@ msgstr "selected field"
 # TRANSLATION
 # LABEL/ID_AVAILABLE_FIELDS
 #: LABEL/ID_AVAILABLE_FIELDS
-msgid "AVAILABLE FIELDS"
-msgstr "AVAILABLE FIELDS"
+msgid "Available Fields"
+msgstr "Available Fields"
 
 # TRANSLATION
 # LABEL/ID_CASES_LIST_FIELDS
@@ -8428,8 +8428,8 @@ msgstr "Test User"
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_VALIDATION
 #: LABEL/ID_PROCESSMAKER_VALIDATION
-msgid "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
-msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgid "Please insert a valid processmaker user name and password, in order to assign the case to their respective owner."
+msgstr "Please insert a valid processmaker user name and password, in order to assign the case to their respective owner."
 
 # TRANSLATION
 # LABEL/ID_VALID_CREDENTIALS
@@ -9268,8 +9268,8 @@ msgstr "<<"
 # TRANSLATION
 # LABEL/ID_UPDATE_DATE
 #: LABEL/ID_UPDATE_DATE
-msgid "[LABEL/ID_UPDATE_DATE] Update Date"
-msgstr "Update Date"
+msgid "Update"
+msgstr "Update"
 
 # TRANSLATION
 # LABEL/ID_NEW_CASE_SCHEDULER
@@ -9502,8 +9502,8 @@ msgstr "Select a process file"
 # TRANSLATION
 # LABEL/ID_IMPORT_PROCESS
 #: LABEL/ID_IMPORT_PROCESS
-msgid "Import process"
-msgstr "Import process"
+msgid "Import Process"
+msgstr "Import Process"
 
 # TRANSLATION
 # LABEL/ID_UPLOADING_PROCESS_FILE
@@ -10030,8 +10030,8 @@ msgstr "Please select a photo"
 # TRANSLATION
 # LABEL/ID_RESUME
 #: LABEL/ID_RESUME
-msgid "[LABEL/ID_RESUME] Résumé"
-msgstr "Résumé"
+msgid "RÃ©sumÃ©"
+msgstr "RÃ©sumÃ©"
 
 # TRANSLATION
 # LABEL/ID_USER_ID
@@ -10228,7 +10228,7 @@ msgstr "FLOAT"
 # TRANSLATION
 # LABEL/ID_UPDATE
 #: LABEL/ID_UPDATE
-msgid "Update"
+msgid "[LABEL/ID_UPDATE] Update"
 msgstr "Update"
 
 # TRANSLATION
@@ -10242,6 +10242,138 @@ msgstr "All records was deleted successfully!"
 #: LABEL/ID_DELETION_SUCCESSFULLY
 msgid "DELETION SUCCESSFULLY"
 msgstr "DELETION SUCCESSFULLY"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTES
+#: LABEL/ID_CASES_NOTES
+msgid "Case Notes"
+msgstr "Case Notes"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTES_POST
+#: LABEL/ID_CASES_NOTES_POST
+msgid "Post a Note"
+msgstr "Post a Note"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTE_POSTING
+#: LABEL/ID_CASES_NOTE_POSTING
+msgid "Posting a Note"
+msgstr "Posting a Note"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTE_POST_ERROR
+#: LABEL/ID_CASES_NOTE_POST_ERROR
+msgid "Post Error"
+msgstr "Post Error"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTE_POST_FAILED
+#: LABEL/ID_CASES_NOTE_POST_FAILED
+msgid "There is a server error"
+msgstr "There is a server error"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTE_POST_SUCCESS
+#: LABEL/ID_CASES_NOTE_POST_SUCCESS
+msgid "Note successfully posted"
+msgstr "Note successfully posted"
+
+# TRANSLATION
+# LABEL/ID_CASE_NOTES_EMPTY
+#: LABEL/ID_CASE_NOTES_EMPTY
+msgid "No notes to Display"
+msgstr "No notes to Display"
+
+# TRANSLATION
+# LABEL/ID_CASE_NOTES_LOADING
+#: LABEL/ID_CASE_NOTES_LOADING
+msgid "Loading Notes..."
+msgstr "Loading Notes..."
+
+# TRANSLATION
+# LABEL/ID_CASE_NOTES_MORE
+#: LABEL/ID_CASE_NOTES_MORE
+msgid "Show more notes"
+msgstr "Show more notes"
+
+# TRANSLATION
+# LABEL/ID_NOTES_READY
+#: LABEL/ID_NOTES_READY
+msgid "Ready"
+msgstr "Ready"
+
+# TRANSLATION
+# LABEL/ID_SUBMIT_NOTE
+#: LABEL/ID_SUBMIT_NOTE
+msgid "[LABEL/ID_SUBMIT_NOTE] Post a Note"
+msgstr "Post a Note"
+
+# TRANSLATION
+# LABEL/ID_BUTTON
+#: LABEL/ID_BUTTON
+msgid "Button"
+msgstr "Button"
+
+# TRANSLATION
+# LABEL/ID_SPLIT_BUTTON
+#: LABEL/ID_SPLIT_BUTTON
+msgid "Split Button"
+msgstr "Split Button"
+
+# TRANSLATION
+# LABEL/ID_WESTPANEL
+#: LABEL/ID_WESTPANEL
+msgid "westPanel"
+msgstr "westPanel"
+
+# TRANSLATION
+# LABEL/ID_SOUTHPANEL
+#: LABEL/ID_SOUTHPANEL
+msgid "southPanel"
+msgstr "southPanel"
+
+# TRANSLATION
+# LABEL/ID_EASTPANEL
+#: LABEL/ID_EASTPANEL
+msgid "eastPanel"
+msgstr "eastPanel"
+
+# TRANSLATION
+# LABEL/ID_VIEW_EDIT_PROFILE
+#: LABEL/ID_VIEW_EDIT_PROFILE
+msgid "View/Edit Profile"
+msgstr "View/Edit Profile"
+
+# TRANSLATION
+# LABEL/ID_FULL_TEXT_SEARCH
+#: LABEL/ID_FULL_TEXT_SEARCH
+msgid "Full Text Search"
+msgstr "Full Text Search"
+
+# TRANSLATION
+# LABEL/ID_VALIDATION_ERRORS
+#: LABEL/ID_VALIDATION_ERRORS
+msgid "validation Errors"
+msgstr "validation Errors"
+
+# TRANSLATION
+# LABEL/ID_SERVER_PROBLEM
+#: LABEL/ID_SERVER_PROBLEM
+msgid "Server Problem :"
+msgstr "Server Problem :"
+
+# TRANSLATION
+# LABEL/ID_SELECT_WORKSPACE
+#: LABEL/ID_SELECT_WORKSPACE
+msgid "Select a workspace"
+msgstr "Select a workspace"
+
+# TRANSLATION
+# LABEL/ID_EXIT_EDITOR
+#: LABEL/ID_EXIT_EDITOR
+msgid "Exit Editor"
+msgstr "Exit Editor"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -13678,7 +13810,7 @@ msgstr "General Information"
 # cases/cases_Scheduler_Edit.xml?PROPERTIES_INF
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - PROPERTIES_INF
-msgid "[cases/cases_Scheduler_Edit.xml?PROPERTIES_INF] Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgid "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
 msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
 
 # cases/cases_Scheduler_Edit.xml?SCH_USER_NAME
@@ -17912,7 +18044,7 @@ msgstr "Subtitle"
 # dynaforms/fields_Toolbar.xml?button
 # dynaforms/fields_Toolbar.xml
 #: toolButton - button
-msgid "Button"
+msgid "[dynaforms/fields_Toolbar.xml?button] Button"
 msgstr "Button"
 
 # dynaforms/fields_Toolbar.xml?submit
@@ -21260,7 +21392,7 @@ msgstr "Upload"
 # processes/processes_Import.xml?TITLE1
 # processes/processes_Import.xml
 #: title - TITLE1
-msgid "Import Process"
+msgid "[processes/processes_Import.xml?TITLE1] Import Process"
 msgstr "Import Process"
 
 # processes/processes_Import.xml?PROCESS_FILENAME
@@ -27572,7 +27704,7 @@ msgstr "Photo"
 # users/myInfo.xml?USR_RESUME
 # users/myInfo.xml
 #: file - USR_RESUME
-msgid "Resume"
+msgid "[users/myInfo.xml?USR_RESUME] Resume"
 msgstr "Resume"
 
 # users/myInfo.xml?TITLE9689
@@ -28808,7 +28940,7 @@ msgstr "Photo"
 # users/users_EditRT.xml?USR_RESUME
 # users/users_EditRT.xml
 #: file - USR_RESUME
-msgid "[users/users_EditRT.xml?USR_RESUME] Résumé"
+msgid "Résumé"
 msgstr "Résumé"
 
 # users/users_EditRT.xml?TITLE1
