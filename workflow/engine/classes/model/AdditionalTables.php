@@ -1330,27 +1330,15 @@ var additionalTablesDataDelete = function(sUID, sKeys) {
         }
       }
       $sKeys = substr($sKeys, 0, -1);
-      $sqlExists = "SELECT COUNT(" . $aField['FLD_NAME'] . ") AS NRO_REGS FROM `" . $aData['ADD_TAB_NAME'] . "` ";
-      $rsExists  = $stmt->executeQuery( $sqlExists, ResultSet::FETCHMODE_ASSOC);
-      $rsExists->next();
-      $aRow2 = $rsExists->getRow();
-
-      if ( $aRow2['NRO_REGS'] !='0' ) {
-        $oClass = new $sClassName;
-        foreach ($aFields as $sKey => $sValue) {
-          if(!preg_match("/\(?\)/", $sKey))
-            eval('$oClass->set' . $this->getPHPName($sKey) . '($aFields["' . $sKey . '"]);');
-        }
-        if ($oClass->validate()) {
-          $oConnection->begin();
-          $iResult = $oClass->save();
-          $oConnection->commit();
-        }
-        return true;
+      $oClass = new $sClassName;
+      foreach ($aFields as $sKey => $sValue) {
+        if(!preg_match("/\(?\)/", $sKey))
+          eval('$oClass->set' . $this->getPHPName($sKey) . '($aFields["' . $sKey . '"]);');
       }
-      else {
-        return false;
+      if ($oClass->validate()) {
+        $iResult = $oClass->save();
       }
+      return true;
     }
     catch (Exception $oError) {
       throw($oError);
