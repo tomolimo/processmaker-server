@@ -632,10 +632,10 @@ class pmTablesProxy extends HttpProxyController
                       'ADD_TAB_SDW_AUTO_DELETE' => $contentSchema['ADD_TAB_SDW_AUTO_DELETE'],
                       'ADD_TAB_PLG_UID'         => $contentSchema['ADD_TAB_PLG_UID'],
                       'DBS_UID'                 => $contentSchema['DBS_UID'],
-                      'PRO_UID'                 => $contentSchema['PRO_UID'],
-                      'ADD_TAB_TYPE'            => $contentSchema['ADD_TAB_TYPE'],
-                      'ADD_TAB_GRID'            => $contentSchema['ADD_TAB_GRID'],
-                      'ADD_TAB_TAG'             => $contentSchema['ADD_TAB_TAG'],
+                      'PRO_UID'                 => isset($contentSchema['PRO_UID'])? $contentSchema['PRO_UID']: '',
+                      'ADD_TAB_TYPE'            => isset($contentSchema['ADD_TAB_TYPE'])? $contentSchema['ADD_TAB_TYPE']: '',
+                      'ADD_TAB_GRID'            => isset($contentSchema['ADD_TAB_GRID'])? $contentSchema['ADD_TAB_GRID']: '',
+                      'ADD_TAB_TAG'             => isset($contentSchema['ADD_TAB_TAG'])? $contentSchema['ADD_TAB_TAG']: '',
                     ),
                     $contentSchema['FIELDS']
                   );
@@ -666,7 +666,7 @@ class pmTablesProxy extends HttpProxyController
               
                   $oAdditionalTables->createPropelClasses($contentSchema['ADD_TAB_NAME'], $contentSchema['ADD_TAB_CLASS_NAME'], $contentSchema['FIELDS'], $sAddTabUid);
 
-                  $isReportTable = $contentSchema['PRO_UID'] != '' ? true : false;
+                  $isReportTable = (isset($contentSchema['PRO_UID']) && $contentSchema['PRO_UID'] != '') ? true : false;
                   if ($isReportTable) {
                     $oAdditionalTables->populateReportTable($contentSchema['ADD_TAB_NAME'], $contentSchema['DBS_UID'], $contentSchema['ADD_TAB_TYPE'], $contentSchema['FIELDS'], $contentSchema['PRO_UID'], $contentSchema['ADD_TAB_GRID']);
                   }
