@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch master) 2.0.8-464-ge20c8e9\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.31.rc4-3-gecc0530\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-07-25 12:02:37\n"
+"PO-Revision-Date: 2011-07-25 18:30:48\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -8596,8 +8596,8 @@ msgstr "No rows to display"
 # TRANSLATION
 # LABEL/ID_SCHEMA
 #: LABEL/ID_SCHEMA
-msgid "SCHEMA"
-msgstr "SCHEMA"
+msgid "Schema"
+msgstr "Schema"
 
 # TRANSLATION
 # JAVASCRIPT/ID_DELETE_TABLE_COLLECTION
@@ -10030,8 +10030,8 @@ msgstr "Please select a photo"
 # TRANSLATION
 # LABEL/ID_RESUME
 #: LABEL/ID_RESUME
-msgid "RÃ©sumÃ©"
-msgstr "RÃ©sumÃ©"
+msgid "Résumé"
+msgstr "Résumé"
 
 # TRANSLATION
 # LABEL/ID_USER_ID
@@ -10375,6 +10375,48 @@ msgstr "Select a workspace"
 msgid "Exit Editor"
 msgstr "Exit Editor"
 
+# TRANSLATION
+# LABEL/ID_PMTABLES
+#: LABEL/ID_PMTABLES
+msgid "[LABEL/ID_PMTABLES] PM Tables"
+msgstr "PM Tables"
+
+# TRANSLATION
+# LABEL/ID_NEW_PMATBLE
+#: LABEL/ID_NEW_PMATBLE
+msgid "[LABEL/ID_NEW_PMATBLE] New PM Table"
+msgstr "New PM Table"
+
+# TRANSLATION
+# LABEL/ID_NEW_REPORT_TABLE_OLD
+#: LABEL/ID_NEW_REPORT_TABLE_OLD
+msgid "New Report Table (Old Version)"
+msgstr "New Report Table (Old Version)"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE
+#: LABEL/ID_PMTABLE
+msgid "[LABEL/ID_PMTABLE] PM Table"
+msgstr "PM Table"
+
+# TRANSLATION
+# LABEL/ID_NULL
+#: LABEL/ID_NULL
+msgid "Null"
+msgstr "Null"
+
+# TRANSLATION
+# LABEL/ID_TABLES_TO_EXPORT
+#: LABEL/ID_TABLES_TO_EXPORT
+msgid "Tables To Export"
+msgstr "Tables To Export"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_NOTICE_EXPORT
+#: LABEL/ID_PMTABLES_NOTICE_EXPORT
+msgid "From each table you should select Schema/Data to export at least one."
+msgstr "From each table you should select Schema/Data to export at least one."
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -10594,7 +10636,7 @@ msgstr "Size"
 # additionalTables/additionalTablesFields.xml?FLD_NULL
 # additionalTables/additionalTablesFields.xml
 #: checkbox - FLD_NULL
-msgid "Null"
+msgid "[additionalTables/additionalTablesFields.xml?FLD_NULL] Null"
 msgstr "Null"
 
 # additionalTables/additionalTablesFields.xml?FLD_KEY
@@ -28940,7 +28982,7 @@ msgstr "Photo"
 # users/users_EditRT.xml?USR_RESUME
 # users/users_EditRT.xml
 #: file - USR_RESUME
-msgid "Résumé"
+msgid "[users/users_EditRT.xml?USR_RESUME] Résumé"
 msgstr "Résumé"
 
 # users/users_EditRT.xml?TITLE1
