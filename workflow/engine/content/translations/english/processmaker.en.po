@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.31.rc4-3-gecc0530\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-07-25 18:30:48\n"
+"PO-Revision-Date: 2011-07-26 17:15:49\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -10416,6 +10416,144 @@ msgstr "Tables To Export"
 #: LABEL/ID_PMTABLES_NOTICE_EXPORT
 msgid "From each table you should select Schema/Data to export at least one."
 msgstr "From each table you should select Schema/Data to export at least one."
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_SKIN
+#: LABEL/ID_CONFIRM_DELETE_SKIN
+msgid "Do you want to delete selected skin?"
+msgstr "Do you want to delete selected skin?"
+
+# TRANSLATION
+# LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
+#: LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
+msgid "A note has added to a case"
+msgstr "A note has added to a case"
+
+# TRANSLATION
+# LABEL/ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN
+#: LABEL/ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN
+msgid "Default skin can't be exported. Instead create new one based on default"
+msgstr "Default skin can't be exported. Instead create new one based on default"
+
+# TRANSLATION
+# LABEL/ID_MSG_CANNOT_EXPORT_SKIN
+#: LABEL/ID_MSG_CANNOT_EXPORT_SKIN
+msgid "Can't export skin. Server Error"
+msgstr "Can't export skin. Server Error"
+
+# TRANSLATION
+# LABEL/ID_NEW_SKIN
+#: LABEL/ID_NEW_SKIN
+msgid "New Skin"
+msgstr "New Skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_ALREADY_EXISTS
+#: LABEL/ID_SKIN_ALREADY_EXISTS
+msgid "Skin already exists"
+msgstr "Skin already exists"
+
+# TRANSLATION
+# LABEL/ID_SKIN_BASE
+#: LABEL/ID_SKIN_BASE
+msgid "Base skin"
+msgstr "Base skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_CONFIGURATION_MISSING
+#: LABEL/ID_SKIN_CONFIGURATION_MISSING
+msgid "Missing skin configuration file"
+msgstr "Missing skin configuration file"
+
+# TRANSLATION
+# LABEL/ID_SKIN_CREATING
+#: LABEL/ID_SKIN_CREATING
+msgid "Generating Skin"
+msgstr "Generating Skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_DOESNT_EXIST
+#: LABEL/ID_SKIN_DOESNT_EXIST
+msgid "Skin doesn't exists"
+msgstr "Skin doesn't exists"
+
+# TRANSLATION
+# LABEL/ID_SKIN_ERROR_EXTRACTING
+#: LABEL/ID_SKIN_ERROR_EXTRACTING
+msgid "Error extracting skin"
+msgstr "Error extracting skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_EXPORTING
+#: LABEL/ID_SKIN_EXPORTING
+msgid "Exporting Skin"
+msgstr "Exporting Skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_FILE_REQUIRED
+#: LABEL/ID_SKIN_FILE_REQUIRED
+msgid "Skin file required"
+msgstr "Skin file required"
+
+# TRANSLATION
+# LABEL/ID_SKIN_FOLDER
+#: LABEL/ID_SKIN_FOLDER
+msgid "Folder name"
+msgstr "Folder name"
+
+# TRANSLATION
+# LABEL/ID_SKIN_FOLDER_NOT_DELETEABLE
+#: LABEL/ID_SKIN_FOLDER_NOT_DELETEABLE
+msgid "Can't delete default skin"
+msgstr "Can't delete default skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_FOLDER_PERMISSIONS
+#: LABEL/ID_SKIN_FOLDER_PERMISSIONS
+msgid "Not enough permissions in Skin Folder"
+msgstr "Not enough permissions in Skin Folder"
+
+# TRANSLATION
+# LABEL/ID_SKIN_FOLDER_REQUIRED
+#: LABEL/ID_SKIN_FOLDER_REQUIRED
+msgid "Skin folder name is required"
+msgstr "Skin folder name is required"
+
+# TRANSLATION
+# LABEL/ID_SKIN_IMPORTING
+#: LABEL/ID_SKIN_IMPORTING
+msgid "Importing Skin"
+msgstr "Importing Skin"
+
+# TRANSLATION
+# LABEL/ID_SKIN_NAME_REQUIRED
+#: LABEL/ID_SKIN_NAME_REQUIRED
+msgid "Skin Name is required"
+msgstr "Skin Name is required"
+
+# TRANSLATION
+# LABEL/ID_SKIN_SUCCESS_CREATE
+#: LABEL/ID_SKIN_SUCCESS_CREATE
+msgid "Skin successfully created"
+msgstr "Skin successfully created"
+
+# TRANSLATION
+# LABEL/ID_SKIN_SUCCESS_DELETE
+#: LABEL/ID_SKIN_SUCCESS_DELETE
+msgid "Skin successfully deleted"
+msgstr "Skin successfully deleted"
+
+# TRANSLATION
+# LABEL/ID_SKIN_SUCCESS_IMPORTED
+#: LABEL/ID_SKIN_SUCCESS_IMPORTED
+msgid "Skin successfully imported"
+msgstr "Skin successfully imported"
+
+# TRANSLATION
+# LABEL/ID_SKIN_SWITCHING
+#: LABEL/ID_SKIN_SWITCHING
+msgid "Switching Skin"
+msgstr "Switching Skin"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -24026,7 +24164,7 @@ msgstr "New"
 # setup/skinsNew.xml?TITLE1
 # setup/skinsNew.xml
 #: title - TITLE1
-msgid "New Skin"
+msgid "[setup/skinsNew.xml?TITLE1] New Skin"
 msgstr "New Skin"
 
 # setup/skinsNew.xml?NAME
