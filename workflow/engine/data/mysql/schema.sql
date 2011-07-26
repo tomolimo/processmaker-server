@@ -1333,5 +1333,25 @@ CREATE TABLE `PROCESS_CATEGORY`
 	`CATEGORY_ICON` VARCHAR(100) default '',
 	PRIMARY KEY (`CATEGORY_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Calendar Holidays';
+#-----------------------------------------------------------------------------
+#-- APP_NOTES
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `APP_NOTES`;
+
+
+CREATE TABLE `APP_NOTES`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`NOTE_DATE` DATETIME  NOT NULL,
+	`NOTE_CONTENT` MEDIUMTEXT  NOT NULL,
+	`NOTE_TYPE` VARCHAR(32) default 'USER' NOT NULL,
+	`NOTE_AVAILABILITY` VARCHAR(32) default 'PUBLIC' NOT NULL,
+	`NOTE_ORIGIN_OBJ` VARCHAR(32) default '',
+	`NOTE_AFFECTED_OBJ1` VARCHAR(32) default '',
+	`NOTE_AFFECTED_OBJ2` VARCHAR(32) default '' NOT NULL,
+	`NOTE_RECIPIENTS` MEDIUMTEXT
+)ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Application Notes';
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
