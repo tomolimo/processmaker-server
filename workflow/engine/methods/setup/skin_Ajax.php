@@ -2,21 +2,31 @@
 
 if (!isset($_REQUEST ['action'])) {
   $res ['success'] = false;
-  $res ['message'] = 'You may request an action';
+  $res ['error']=$res ['message'] = 'You may request an action';
+
   print G::json_encode($res);
   die ();
 }
 if (!function_exists($_REQUEST ['action'])) {
   $res ['success'] = false;
-  $res ['message'] = 'The requested action doesn\'t exists';
+  $res ['error']=$res ['message'] = 'The requested action doesn\'t exists';
+
+  print G::json_encode($res);
+  die ();
+}
+$restrictedFunctions=array('copy_skin_folder','addTarFolder');
+if (in_array($_REQUEST ['action'],$restrictedFunctions)) {
+  $res ['success'] = false;
+  $res ['error']=$res ['message'] = 'The requested action doesn\'t exists *';
   print G::json_encode($res);
   die ();
 }
 
+
 $functionName = $_REQUEST ['action'];
 $functionParams = isset($_REQUEST ['params']) ? $_REQUEST ['params'] : array();
 
-$functionName($functionParams);
+$functionName();
 
 function updatePageSize() {
   G::LoadClass('configuration');
@@ -45,20 +55,99 @@ function skinList() {
       $folderId = "classic";
     $xmlConfiguration = file_get_contents($configInformation);
     $xmlConfigurationObj = G::xmlParser($xmlConfiguration);
-    $skinInformationArray = $skinFilesArray = $xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['information']['__CONTENT__'];
+    if (isset($xmlConfigurationObj->result['skinConfiguration'])) {
+      $skinInformationArray = $skinFilesArray = $xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['information']['__CONTENT__'];
 
-    $res = array();
-    $res['SKIN_FOLDER_ID'] = strtolower($folderId);
-    foreach ($skinInformationArray as $keyInfo => $infoValue) {
-      $res['SKIN_' . strtoupper($keyInfo)] = $infoValue['__VALUE__'];
+
+      $menuOption = array();
+
+      $res = array();
+      $res['SKIN_FOLDER_ID'] = strtolower($folderId);
+      foreach ($skinInformationArray as $keyInfo => $infoValue) {
+        $res['SKIN_' . strtoupper($keyInfo)] = $infoValue['__VALUE__'];
+      }
+      $skinListArray['skins'][] = $res;
+      $skinMenuArray[] = $menuOption;
     }
-    $skinListArray['skins'][] = $res;
   }
-  print_r(G::json_encode($skinListArray));
+  $skinListArray['currentSkin'] = SYS_SKIN;
+  if ((isset($_REQUEST['type'])) && ($_REQUEST['type'] == "menu")) {
+    print_r(G::json_encode($skinMenuArray));
+  } else {
+    print_r(G::json_encode($skinListArray));
+  }
 }
 
-function createSkin($baseSkin='classic') {
+function newSkin($baseSkin='classic') {
+//G::pr($_REQUEST);
+  $skinBase = $baseSkin != "" ? strtolower($baseSkin) : 'classic';
+  if ((isset($_REQUEST['skinBase'])) && ($_REQUEST['skinBase'] != "")) {
+    $skinBase = strtolower($_REQUEST['skinBase']);
+  }
 
+
+  try {
+    if (!(isset($_REQUEST['skinName']))) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_NAME_REQUIRED')) );
+    }
+    if (!(isset($_REQUEST['skinFolder']))) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FOLDER_REQUIRED')) );
+    }
+    //Should validate skin folder name here
+    //if....
+
+
+
+    $skinName = $_REQUEST['skinName'];
+    $skinFolder = $_REQUEST['skinFolder'];
+    $skinDescription = isset($_REQUEST['skinDescription']) ? $_REQUEST['skinDescription'] : '';
+    $skinAuthor = isset($_REQUEST['skinAuthor']) ? $_REQUEST['skinAuthor'] : 'ProcessMaker Team';
+
+    if (is_dir(PATH_CUSTOM_SKINS . $skinFolder)) {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_ALREADY_EXISTS')) );
+    }
+    if (strtolower($skinFolder) == 'classic') {
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_ALREADY_EXISTS')) );
+    }
+
+    //All validations OK then create skin
+    switch ($skinBase) {
+      case 'classic': //Special Copy of this dir + xmlreplace
+        //$configurationFile = G::ExpandPath("skinEngine") . 'base' . PATH_SEP . 'config.xml';
+        copy_skin_folder(G::ExpandPath("skinEngine") . 'base' . PATH_SEP, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml","baseCss"));
+        $pathBase=G::ExpandPath("skinEngine") . 'base' . PATH_SEP;
+        break;
+      default: //Commmon copy/paste of a folder + xmlrepalce
+        copy_skin_folder(PATH_CUSTOM_SKINS . $skinBase, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml"));
+        $pathBase=PATH_CUSTOM_SKINS.$skinBase;
+        break;
+    }
+    //ReBuild config file
+    //TODO: Improve this pre_replace lines
+    $configFileOriginal = $pathBase .  PATH_SEP . 'config.xml';
+    $configFileFinal = PATH_CUSTOM_SKINS . $skinFolder . PATH_SEP . 'config.xml';
+    $xmlConfiguration = file_get_contents($configFileOriginal);
+    $xmlConfiguration = preg_replace('/(<id>)(.+?)(<\/id>)/i', '<id>' . G::generateUniqueID() . '</id><!-- $2 -->', $xmlConfiguration);
+    $xmlConfiguration = preg_replace("/(<name>)(.+?)(<\/name>)/i", "<name>" . $skinName . "</name><!-- $2 -->", $xmlConfiguration);
+    $xmlConfiguration = preg_replace("/(<description>)(.+?)(<\/description>)/i", "<description>" . $skinDescription . "</description><!-- $2 -->", $xmlConfiguration);
+    $xmlConfiguration = preg_replace("/(<author>)(.+?)(<\/author>)/i", "<author>" . $skinAuthor . "</author><!-- $2 -->", $xmlConfiguration);
+    $xmlConfiguration = preg_replace("/(<createDate>)(.+?)(<\/createDate>)/i", "<createDate>" . date("Y-m-d") . "</createDate><!-- $2 -->", $xmlConfiguration);
+    $xmlConfiguration = preg_replace("/(<modifiedDate>)(.+?)(<\/modifiedDate>)/i", "<modifiedDate>" . date("Y-m-d H:i:s") . "</modifiedDate><!-- $2 -->", $xmlConfiguration);
+    file_put_contents($configFileFinal, $xmlConfiguration);
+
+
+
+
+
+    $response['success'] = true;
+    $response['message'] = G::LoadTranslation('ID_SKIN_SUCCESS_CREATE');
+    print_r(G::json_encode($response));
+  } catch (Exception $e) {
+    $response['success'] = false;
+    $response['message'] = $e->getMessage();
+    $response['error'] = $e->getMessage();
+    print_r(G::json_encode($response));
+  }
 }
 
 function importSkin() {
@@ -85,22 +174,22 @@ function importSkin() {
       throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_REQUIRED')) );
     }
     if ($up_err == 1 || $up_err == 2) {
-      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_SIZE_ERROR')) );
+      throw ( new Exception(G::LoadTranslation('ID_FILE_TOO_BIG')) );
       //$errors[$i]='miscfilesize';
     }
     if ($up_err == 3) {
-      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_PART_ERROR')) );
+      throw ( new Exception(G::LoadTranslation('ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR')) );
       //$errors[$i]='miscfilepart';
     }
     if (!@is_uploaded_file($tmp)) {
-      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_NOT_UPLOADED')) );
+      throw ( new Exception(G::LoadTranslation('ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR')) );
       //$errors[$i]='uploadfile';
     }
     $fileInfo = pathinfo($items);
     $validType = array('tar', 'gz');
 
     if (!in_array($fileInfo['extension'], $validType)) {
-      throw ( new Exception(G::LoadTranslation('ID_SKIN_FILE_TYPE_ERROR')) );
+      throw ( new Exception(G::LoadTranslation('ID_FILE_UPLOAD_INCORRECT_EXTENSION')) );
 //$errors[$i]='wrongtype';
     }
 
@@ -155,15 +244,13 @@ function importSkin() {
   }
 }
 
-function exportSkin($skinToExport) {
+function exportSkin($skinToExport="") {
   try {
     if (!isset($_REQUEST['SKIN_FOLDER_ID'])) {
-      throw ( new Exception(G::LoadTranslation('ID_SKIN_NAME_REUIRED')) );
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_NAME_REQUIRED')) );
     }
 
     $skinName = $_REQUEST['SKIN_FOLDER_ID'];
-
-    $customSkins = glob(PATH_CUSTOM_SKINS . "*/config.xml");
 
     $skinFolderBase = PATH_CUSTOM_SKINS . $skinName;
     $skinFolder = $skinFolderBase . PATH_SEP;
@@ -172,7 +259,7 @@ function exportSkin($skinToExport) {
       throw ( new Exception(G::LoadTranslation('ID_SKIN_DOESNT_EXIST')) );
     }
     if (!file_exists($skinFolder . "config.xml")) {
-      throw ( new Exception(G::LoadTranslation('ID_SKIN_CONFIGFILE_DOESNT_EXIST')) );
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_CONFIGURATION_MISSING')) );
     }
 
     if (file_exists($skinTar)) {
@@ -201,7 +288,28 @@ function exportSkin($skinToExport) {
     print_r(G::json_encode($response));
   }
 }
-
+function deleteSkin(){
+  try{
+    if(!(isset($_REQUEST['SKIN_FOLDER_ID']))){
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FOLDER_REQUIRED')) );
+    }
+    if(($_REQUEST['SKIN_FOLDER_ID'])=="classic"){
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_FOLDER_NOT_DELETEABLE')) );
+    }
+    $folderId=$_REQUEST['SKIN_FOLDER_ID'];
+    if(!is_dir(PATH_CUSTOM_SKINS.$folderId)){
+      throw ( new Exception(G::LoadTranslation('ID_SKIN_NOT_EXISTS')) );
+    }
+    //Delete
+    G::rm_dir(PATH_CUSTOM_SKINS.$folderId);
+    $response['success'] = true;
+    $response['message'] = "$folderId deleted";
+  } catch (Exception $e) {
+    $response['success'] = false;
+    $response['error']=$response['message'] = $e->getMessage();
+    print_r(G::json_encode($response));
+  }
+}
 function streamSkin() {
   $skinTar = $_REQUEST['file'];
   $bDownload = true;
@@ -226,5 +334,31 @@ function addTarFolder($tar, $pathBase, $pluginHome) {
       }
     }
     closedir($handle);
+  }
+}
+
+function copy_skin_folder($path, $dest, $exclude=array()) {
+  $defaultExcluded=array(".","..");
+  $excludedItems=array_merge($defaultExcluded,$exclude);
+  if (is_dir($path)) {
+    @mkdir($dest);
+    $objects = scandir($path);
+    if (sizeof($objects) > 0) {
+      foreach ($objects as $file) {
+        if(in_array($file,$excludedItems))
+          continue;
+        // go on
+        if (is_dir($path . PATH_SEP . $file)) {
+          copy_skin_folder($path . PATH_SEP . $file, $dest . PATH_SEP . $file,$exclude);
+        } else {
+          copy($path . PATH_SEP . $file, $dest . PATH_SEP . $file);
+        }
+      }
+    }
+    return true;
+  } elseif (is_file($path)) {
+    return copy($path, $dest);
+  } else {
+    return false;
   }
 }

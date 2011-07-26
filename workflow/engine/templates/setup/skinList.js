@@ -17,7 +17,7 @@ new Ext.KeyMap(document, [
       e.stopEvent();
       document.location = document.location;
     }else{
-      Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+      //Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
     }
   }
 }
@@ -27,19 +27,19 @@ new Ext.KeyMap(document, [
   fn: function(k,e){
     iGrid = Ext.getCmp('infoGrid');
     rowSelected = iGrid.getSelectionModel().getSelected();
-    if (rowSelected){
-      DeleteButtonAction();
+    if (rowSelected && !deleteButton.isDisabled()){
+      deleteSkin();
     }
   }
 },
 {
   key: Ext.EventObject.F2,
   fn: function(k,e){
-    iGrid = Ext.getCmp('infoGrid');
-    rowSelected = iGrid.getSelectionModel().getSelected();
-    if (rowSelected){
-      EditCalendarAction();
-    }
+    //iGrid = Ext.getCmp('infoGrid');
+    //rowSelected = iGrid.getSelectionModel().getSelected();
+    //if (rowSelected){
+      
+    //}
   }
 }
 ]);
@@ -49,13 +49,9 @@ var cmodel;
 var infoGrid;
 var viewport;
 var smodel;
-
 var newButton;
-var editButton;
 var deleteButton;
-var copyButton;
 var searchButton;
-
 var searchText;
 var contextMenu;
 var pageSize;
@@ -70,53 +66,40 @@ Ext.onReady(function(){
   newButton = new Ext.Action({
     text: _('ID_NEW'),
     iconCls: 'button_menu_ext ss_sprite  ss_add',
-    disabled: true,
-    handler: NewCalendarAction
+    disabled: false,
+    handler: newSkin
   });
   
-  editButton = new Ext.Action({
-    text: _('ID_EDIT'),
-    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
-    handler: EditCalendarAction,
-    hidden: true,
-    disabled: true	
-  });
   
   deleteButton = new Ext.Action({
     text: _('ID_DELETE'),
     iconCls: 'button_menu_ext ss_sprite  ss_delete',
-    handler: DeleteButtonAction,
-    hidden: true,
+    handler: deleteSkin,
     disabled: true
   });
   
-  copyButton = new Ext.Action({
-    text: _('ID_COPY'),
-    iconCls: 'button_menu_ext ss_sprite ss_calendar_add',
-    handler: CopyButtonAction,
-    hidden: true,
-    disabled: true
-  });
   
   importButton = new Ext.Action({
     text: _('ID_IMPORT'),
-    iconCls: 'button_menu_ext ss_sprite ss_basket_put',
+    iconCls: 'button_menu_ext ss_sprite ss_building_add',
     handler: importSkin,
     disabled: false
   });
+
   exportButton = new Ext.Action({
     text: _('ID_EXPORT'),
-    iconCls: 'button_menu_ext ss_sprite ss_basket_go',
+    iconCls: 'button_menu_ext ss_sprite ss_building_go',
     handler: exportSkin,
     disabled: true
   });
+  
   searchButton = new Ext.Action({
     text: _('ID_SEARCH'),
     handler: DoSearch
   });
   
   contextMenu = new Ext.menu.Menu({
-    items: [exportButton]
+    items: [exportButton,deleteButton]
   });
   
   searchText = new Ext.form.TextField ({
@@ -152,14 +135,32 @@ Ext.onReady(function(){
         rowSelected = infoGrid.getSelectionModel().getSelected();
         if((rowSelected.data.SKIN_FOLDER_ID)&&((rowSelected.data.SKIN_FOLDER_ID!="classic"))){
           exportButton.enable();
+          deleteButton.enable();
         }else{
           exportButton.disable();
+          deleteButton.disable();
         }
       },
       rowdeselect: function(sm){
         exportButton.disable();
+        deleteButton.disable();
       }
     }
+  });
+
+  storeSkins  = new Ext.data.JsonStore({
+    root: 'skins',
+    totalProperty: 'totalCount',
+    idProperty: 'SKIN_FOLDER_ID',
+    autoLoad  : false,
+    remoteSort: false,
+    fields: [
+    'SKIN_FOLDER_ID',
+    'SKIN_NAME'
+    ],
+    proxy: new Ext.data.HttpProxy({
+      url: 'skin_Ajax?action=skinList'
+    })
   });
   
   store = new Ext.data.GroupingStore( {
@@ -254,7 +255,7 @@ Ext.onReady(function(){
       align:'center',
       renderer: showdate
     }
-    //{header: _('ID_STATUS'), dataIndex: 'SKIN_STATUS', width: 130, align:'center', renderer: render_status},
+    
     ]
   });
   
@@ -314,7 +315,7 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    tbar: [newButton, '-', importButton,exportButton, {
+    tbar: [newButton, '-', importButton,exportButton,'-',deleteButton, {
       xtype: 'tbfill'
     }, searchText,clearTextButton,searchButton],
     bbar: bbarpaging,
@@ -371,6 +372,155 @@ onMessageContextMenu = function (grid, rowIndex, e) {
 
 //Do Nothing Function
 DoNothing = function(){};
+
+newSkin = function(){
+  newDialog = new Ext.Window( {
+    id: "newDialog",
+    title:_('ID_NEW_SKIN'),
+    autoCreate: true,
+    modal:true,
+    width:400,
+    autoHeight:true,
+    shadow:true,
+    minWidth:100,
+    minHeight:50,
+    proxyDrag: true,
+    resizable: true,
+    keys: {
+      key: 27,
+      fn  : function(){
+        newDialog.hide();
+      }
+    },
+    items:[
+    {
+      xtype:'form',
+      autoScroll:true,
+      autoHeight:true,
+      id:"newform",
+      fileUpload:true,
+      labelWidth:100,
+      url:'skin_Ajax',      
+      frame:false,
+      items:[
+      {
+        xtype:'textfield',
+        id:'skinName',
+        allowBlank: false,
+        width:200,
+        emptyText: _('ID_SKIN_NAME_REQUIRED'),
+        fieldLabel:_('ID_NAME'),
+        enableKeyEvents:true,
+        vtype:'alphanum',
+        listeners: {
+          keyup:function(a,b,c){
+            
+            Ext.getCmp('newform').getForm().findField('skinFolder').setValue(a.getValue().toLowerCase());
+          }
+             
+        }
+      },
+      {
+        xtype:'textfield',
+        emptyText: _('ID_SKIN_FOLDER_REQUIRED'),
+        id:'skinFolder',
+        fieldLabel:_('ID_SKIN_FOLDER'),
+        width:200,
+        vtype:'alphanum',
+        autoCreate: {
+          tag: 'input',
+          type: 'text',
+          size: '20',
+          autocomplete: 'off',
+          maxlength: '10'
+        }
+      },
+      {
+        xtype:'textarea',
+        id:'skinDescription',
+        fieldLabel:_('ID_DESCRIPTION'),
+        width:200
+      },
+      {
+        xtype:'textfield',
+        id:'skinAuthor',
+        emptyText :'ProcessMaker Team',
+        value :'ProcessMaker Team',
+        allowBlank: false,
+        width:200,
+        fieldLabel:_('ID_AUTHOR')
+      },
+      new Ext.form.ComboBox({
+        id:'skinBase',
+        fieldLabel : _('ID_SKIN_BASE'),
+        editable : false,
+        store: storeSkins,
+        valueField    :'SKIN_FOLDER_ID',
+        displayField  :'SKIN_NAME',
+        submitValue:true,
+        typeAhead     : false,
+        triggerAction : 'all',
+        allowBlank: false,
+        selectOnFocus:true,
+        width:200
+      })
+      ],
+      buttons:[
+      {
+        text:_('ID_SAVE'),
+        handler: function() {
+          //statusBarMessage( _('ID_UPLOADING_FILE'), true, true );
+          newDialog.getEl().mask(_('ID_SKIN_CREATING'));
+          form = Ext.getCmp("newform").getForm();
+
+          //Ext.getCmp("uploadform").getForm().submit();
+          //console.log(form);
+          //console.log(form.url);
+          Ext.getCmp("newform").getForm().submit({
+            //reset: true,
+            reset: false,
+            success: function(form, action) {
+
+              store.reload();
+
+              Ext.getCmp("newDialog").destroy();
+              PMExt.notify(_('ID_SKINS'),_('ID_SKIN_SUCCESS_CREATE'));
+            },
+            failure: function(form, action) {
+              Ext.getCmp("newDialog").destroy();
+
+              if( !action.result ) {
+                Ext.MessageBox.alert("error", _('ID_ERROR'));
+                return;
+              }
+              Ext.MessageBox.alert("error", action.result.error);
+
+            },
+            scope: Ext.getCmp("newform"),
+            // add some vars to the request, similar to hidden fields
+            params: {             
+              action: "newSkin",
+              requestType: "xmlhttprequest"
+            }
+          });
+        }
+      },
+      {
+        text:_('ID_CANCEL'),
+        handler: function() {
+          Ext.getCmp("newDialog").destroy();
+        }
+      }
+      ]
+    }
+    ]
+
+  });
+  newDialog.on( 'hide', function() {
+    newDialog.destroy(true);
+  } );
+  newDialog.show();
+}
 importSkin = function(){
   importDialog = new Ext.Window( {
     id: "importDialog",
@@ -399,19 +549,19 @@ importSkin = function(){
       fileUpload:true,
       labelWidth:90,
       url:'skin_Ajax',
-      tooltip:"Max File Size <strong>XXX MB</strong><br />Max Post Size<strong>XXX MB</strong><br />",
+      //tooltip:"Max File Size <strong>XXX MB</strong><br />Max Post Size<strong>XXX MB</strong><br />",
       frame:false,
       items:[
-      {
-        xtype:"displayfield",
-        value:"Max File Size <strong>XXX MB</strong><br />Max Post Size<strong>XXX MB</strong><br />"
-      },
+      //{
+      //  xtype:"displayfield",
+      //  value:"Max File Size <strong>XXX MB</strong><br />Max Post Size<strong>XXX MB</strong><br />"
+      //},
       {
         xtype:"fileuploadfield",
         fieldLabel:"File ",
         id:"uploadedFile",
         name:"uploadedFile",
-        width:100,
+        width:190,
         buttonOnly:false
       },
       {
@@ -440,6 +590,7 @@ importSkin = function(){
               store.reload();
                      
               Ext.getCmp("importDialog").destroy();
+              PMExt.notify(_('ID_SKINS'),_('ID_SKIN_SUCCESS_IMPORTED'));
             },
             failure: function(form, action) {
               Ext.getCmp("importDialog").destroy();
@@ -447,7 +598,7 @@ importSkin = function(){
               if( !action.result ) {
                 Ext.MessageBox.alert("error", _('ID_ERROR'));
                 return;
-                }
+              }
               Ext.MessageBox.alert("error", action.result.error);
                      
             },
@@ -473,7 +624,7 @@ importSkin = function(){
     ]
 
   });
- // importDialog.doLayout();
+  // importDialog.doLayout();
   
   // recalculate
   // Window size
@@ -530,10 +681,6 @@ exportSkin = function(){
 }
 
 
-//Open New Calendar
-NewCalendarAction = function(){
-  location.href = 'calendarEdit';
-};
 
 //Load Grid By Default
 GridByDefault = function(){
@@ -550,45 +697,25 @@ DoSearch = function(){
   });
 };
 
-//Edit Calendar Action
-EditCalendarAction = function(){
-  rowSelected = infoGrid.getSelectionModel().getSelected();
-  if (rowSelected){
-    location.href = 'calendarEdit?id=' + rowSelected.data.CALENDAR_UID;
-  }
-};
 
-//Delete Button Action
-DeleteButtonAction = function(){
-  rowSelected = infoGrid.getSelectionModel().getSelected();
-  viewport.getEl().mask(_('ID_PROCESSING'));
-  Ext.Ajax.request({
-    url: 'calendar_Ajax',
-    params: {
-      action: 'canDeleteCalendar',
-      CAL_UID: rowSelected.data.CALENDAR_UID
-    },
-    success: function(r,o){
-      viewport.getEl().unmask();
-      var resp = Ext.util.JSON.decode(r.responseText);
-      if (resp.success){
-        Ext.Msg.confirm(_('ID_CONFIRM'),_('ID_CONFIRM_DELETE_CALENDAR'),
+
+deleteSkin = function(){
+  Ext.Msg.confirm(_('ID_CONFIRM'),_('ID_CONFIRM_DELETE_SKIN'),
           function(btn, text){
             if (btn=='yes'){
               viewport.getEl().mask(_('ID_PROCESSING'));
               Ext.Ajax.request({
-                url: 'calendar_Ajax',
+                url: 'skin_Ajax',
                 params: {
-                  action: 'deleteCalendar',
-                  CAL_UID: rowSelected.data.CALENDAR_UID
+                  action: 'deleteSkin',
+                  SKIN_FOLDER_ID: rowSelected.data.SKIN_FOLDER_ID
                 },
                 success: function(r,o){
                   viewport.getEl().unmask();
-                  editButton.disable();
                   deleteButton.disable();
-                  copyButton.disable();
-                  DoSearch();
-                  PMExt.notify(_('ID_CALENDARS'),_('ID_CALENDAR_SUCCESS_DELETE'));
+
+                  store.reload();
+                  PMExt.notify(_('ID_SKINS'),_('ID_SKIN_SUCCESS_DELETE'));
                 },
                 failure: function(r,o){
                   viewport.getEl().unmask();
@@ -597,40 +724,9 @@ DeleteButtonAction = function(){
             }
           }
           );
-      }else{
-        PMExt.error(_('ID_CALENDARS'),_('ID_MSG_CANNOT_DELETE_CALENDAR')); 
-      }	
-    },
-    failure: function(r,o){
-      viewport.getEl().unmask();
-    }
-  });
-};
+}
 
-//Render Status
-render_status = function(v){
-  switch(v){
-    case 'ACTIVE':
-      return '<font color="green">' + _('ID_ACTIVE') + '</font>';
-      break;
-    case 'INACTIVE':
-      return '<font color="red">' + _('ID_INACTIVE') + '</font>';
-      ;
-      break;
-    case 'VACATION':
-      return '<font color="blue">' + _('ID_VACATION') + '</font>';
-      ;
-      break;
-  }
-};
 
-//Members Button Action
-CopyButtonAction = function(){
-  rowSelected = infoGrid.getSelectionModel().getSelected();
-  if (rowSelected){
-    location.href = 'calendarEdit?cp=1&id=' + rowSelected.data.CALENDAR_UID;
-  }
-};
 
 //Update Page Size Configuration
 UpdatePageConfig = function(pageSize){
@@ -642,6 +738,7 @@ UpdatePageConfig = function(pageSize){
     }
   });
 };
+
 function changeSkin(newSkin,currentSkin){
   currentLocation=top.location.href;
   newLocation = currentLocation.replace("/"+currentSkin+"/","/"+newSkin+"/");
