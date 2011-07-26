@@ -157,7 +157,7 @@ class AppNotes extends BaseAppNotes {
       $oCase = new Cases ();
       $aFields = $oCase->loadCase( $appUid );
       $configNoteNotification['subject']= G::LoadTranslation('ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION')." @#APP_TITLE ";
-      $configNoteNotification['body']   = G::LoadTranslation('ID_CASE') . ": @$APP_TITLE<br />" . G::LoadTranslation('ID_AUTHOR').": $authorName<br /><br />$noteContent";
+      $configNoteNotification['body']   = G::LoadTranslation('ID_CASE') . ": @#APP_TITLE<br />" . G::LoadTranslation('ID_AUTHOR').": $authorName<br /><br />$noteContent";
 
       if ($sFrom == '') {
         $sFrom = '"ProcessMaker"';

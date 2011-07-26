@@ -254,7 +254,7 @@ function sendTestMail() {
     'MESS_ACCOUNT'  => $_POST['MESS_ACCOUNT'],
     'MESS_PASSWORD' => $_POST['MESS_PASSWORD'],
     'SMTPAuth'      => $_POST['SMTPAuth'],
-    'SMTPSecure'    => $_POST['SMTPSecure']
+    'SMTPSecure'    => isset($_POST['SMTPSecure'])?$_POST['SMTPSecure']:'none'
   ));
 
   $oSpool->create(array(
