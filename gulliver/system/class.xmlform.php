@@ -2177,18 +2177,19 @@ class XmlForm_Field_File extends XmlForm_Field {
    * @return string
    */
   function render($value = NULL) {
-    $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
-
-    $html = '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\'/>';
-
+    if($this->mode == 'view'){
+      $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
+      $html =  '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'text\' value=\'' . $value . '\'/>';       
+    }else{ 
+      $html = '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\'/>';
+    }
     if( isset($this->input) && $this->input != ''){
       require_once 'classes/model/InputDocument.php';
       $oiDoc = new InputDocument;
       $aDoc  = $oiDoc->load($this->input);
       $aDoc['INP_DOC_TITLE'] = isset($aDoc['INP_DOC_TITLE'])? $aDoc['INP_DOC_TITLE']: '';
       $html .= '<label><img src="/images/inputdocument.gif" width="22px" width="22px"/><font size="1">('.trim($aDoc['INP_DOC_TITLE']).')</font></label>';
-    }
-
+    }	 
     $html .= $this->renderHint();
     return $html;
   }
