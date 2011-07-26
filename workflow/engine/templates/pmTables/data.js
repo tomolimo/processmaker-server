@@ -360,9 +360,9 @@ ImportPMTableCSV = function(){
         },
         items: [{
             xtype: 'fileuploadfield',
-            id: 'form-file',
+            id: 'csv-file',
             emptyText: 'Select a file',
-            fieldLabel: 'CSV File', // _('ID_FILE'),
+            fieldLabel: 'CSV File', 
             name: 'form[CSV_FILE]',
             buttonText: '',
             buttonCfg: {
@@ -370,6 +370,7 @@ ImportPMTableCSV = function(){
             }
         }, {
           xtype: 'combo',
+          id: 'csv-delimiter',
           fieldLabel: 'Delimited by',
           hiddenName: 'form[CSV_DELIMITER]',
           mode: 'local',
@@ -389,25 +390,41 @@ ImportPMTableCSV = function(){
         buttons: [{
             text: _('ID_UPLOAD'),
             handler: function(){
-              var uploader  = Ext.getCmp('uploader');
+              var filePath = Ext.getCmp('csv-file').getValue();
+              var fileType = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+              if(fileType =='csv' ){
+                var uploader  = Ext.getCmp('uploader');
 
-              if(uploader.getForm().isValid()){
-                uploader.getForm().submit({
-                  url: '../pmTablesProxy/importCSV',
-                  waitMsg: 'Uploading file...',
-                  success: function(o, resp){
-                    w.close();
-                    infoGrid.store.reload();
+                if(uploader.getForm().isValid()){
+                  uploader.getForm().submit({
+                    url: '../pmTablesProxy/importCSV',
+                    waitMsg: 'Uploading file...',
+                    success: function(o, resp){
+                      w.close();
+                      infoGrid.store.reload();
 
-                    PMExt.notify('IMPORT RESULT', resp.result.message);
-                  },
-                  failure: function(o, resp){
-                    w.close();
-                    Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
-                    Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
-                    Ext.MessageBox.ERROR});
-                  }
-                });
+                      PMExt.notify('IMPORT RESULT', resp.result.message);
+                    },
+                    failure: function(o, resp){
+                      w.close();
+                      Ext.MessageBox.show({title: '', 
+                                            msg:     resp.result.message,
+                                            buttons: Ext.MessageBox.OK, 
+                                            animEl:  'mb9', 
+                                            fn:      function(){}, 
+                                            icon:    Ext.MessageBox.ERROR
+                                          });
+                    }
+                  });
+                }
+              } else {
+                Ext.MessageBox.show({ title:   '', 
+                                      msg:     _('ID_INVALID_EXTENSION') + ' ' + fileType,
+                                      buttons: Ext.MessageBox.OK,
+                                      animEl:  'mb9', 
+                                      fn:      function(){},
+                                      icon:    Ext.MessageBox.ERROR
+                                    });
               }
             }
         },{

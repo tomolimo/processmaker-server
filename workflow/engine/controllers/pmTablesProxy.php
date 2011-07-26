@@ -549,6 +549,11 @@ class pmTablesProxy extends HttpProxyController
         $i = 1;
         $swHead = false;
         while (($aAux = fgetcsv($oFile, 4096, $_POST['form']['CSV_DELIMITER'])) !== false) {
+          if(count($aAdditionalTables['FIELDS']) != count($aAux)){
+            $this->success = false;
+            $this->message = 'INVALID_FILE';
+            return 0;
+          }
           if($i == 1) {
             $j = 0;
             foreach ($aAdditionalTables['FIELDS'] as $aField) {
@@ -566,32 +571,33 @@ class pmTablesProxy extends HttpProxyController
             }
             try {
               if (!$oAdditionalTables->saveDataInTable($_POST['form']['ADD_TAB_UID'], $aData)) {
-                $sErrorMessages .= G::LoadTranslation('ID_DUPLICATE_ENTRY_PRIMARY_KEY') . ', ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '<br />';
+                $sErrorMessages .= G::LoadTranslation('ID_DUPLICATE_ENTRY_PRIMARY_KEY') . ', ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
               }
             }
             catch (Exception $oError) {
-              $sErrorMessages .= G::LoadTranslation('ID_ERROR_INSERT_LINE') . ': ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '<br />';
+              $sErrorMessages .= G::LoadTranslation('ID_ERROR_INSERT_LINE') . ': ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
             }
           } else  {
             $swHead = false;
           } 
           $i++;
-        }
+        } 
         fclose($oFile);
       }
       if ($sErrorMessages != '') {
         $this->success = false;
         $this->message = $sErrorMessages;        
+      } else {
+        $this->success = true;
+        $this->message = 'File Imported "'.$filename.'" Successfully';
       }
-      $this->success = true;
-      $this->message = 'File Imported "'.$filename.'" Successfully';
     }
     else {
       $sMessage = G::LoadTranslation('ID_UPLOAD_VALID_CSV_FILE');
       $this->success = false;
       $this->message = $sMessage;
 
-    }    
+    }
   }  
   
   /**
