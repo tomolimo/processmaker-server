@@ -484,42 +484,37 @@ class Form extends XmlForm
     return $aFields;
   }
 
-   /**
+  /**
    * Function that verify the required fields without a correct value
    * @author Erik Amaru Ortiz <erik@colosa.com>
    * @access public
-   * @param array $values
-   * @param array $aNoRequiredByJS
+   * @param array $dataFields
+   * @param array $noRequired
    * @return array/false
    */
-  function validateRequiredFields($values, $aNoRequiredByJS = array())
+  function validateRequiredFields($dataFields, $noRequired = array())
   {
-    $rFields = Array();
-    $missingFields = Array();
-    foreach ($this->fields as $o) {
-      if (is_object($o) && property_exists(get_class($o), 'required')) {
-        if( $o->required == 1) {
-          if (!in_array($o->name, $aNoRequiredByJS)) {
-            array_push($rFields, $o->name);
-          }
+    $requiredFields     = array();
+    $notPassedFields    = array();
+    $skippedFieldsTypes = array('javascript', 'checkbox', 'yesno', 'submit', 'button', 'title', 'subtitle',
+                                'button', 'submit', 'reset', 'hidden', 'link');
+    
+    foreach ($this->fields as $field) {
+      if (is_object($field) && isset($field->required) && $field->required) {
+        if (!in_array($field->type, $skippedFieldsTypes)) {
+          array_push($requiredFields, $field->name);
         }
       }
     }
 
-    foreach($rFields as $field){
-      #we verify if the requiered field is in array values,. t
-      if (array_key_exists($field, $values)) {
-        if( $values[$field] == "") {
-          array_push($missingFields, $field);
-        }
-      } else {
-        array_push($missingFields, $field);
+    foreach($dataFields as $dataFieldName => $dataField) {
+      //verify if the requiered field is in $requiredFields array
+      if (in_array($dataFieldName, $requiredFields) && !in_array($dataFieldName, $noRequired) && trim($dataField) == '') {
+        $notPassedFields[] = $dataFieldName;
       }
     }
-    if(sizeof($missingFields) != 0) {
-      return $missingFields;
-    } else {
-      return false;
-    }
+
+    return count($notPassedFields) > 0 ? $notPassedFields : false;
   }
+
 }
