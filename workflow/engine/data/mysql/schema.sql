@@ -1351,7 +1351,9 @@ CREATE TABLE `APP_NOTES`
 	`NOTE_ORIGIN_OBJ` VARCHAR(32) default '',
 	`NOTE_AFFECTED_OBJ1` VARCHAR(32) default '',
 	`NOTE_AFFECTED_OBJ2` VARCHAR(32) default '' NOT NULL,
-	`NOTE_RECIPIENTS` MEDIUMTEXT
+	`NOTE_RECIPIENTS` MEDIUMTEXT,
+	KEY `indexAppNotesDate`(`APP_UID`, `NOTE_DATE`),
+	KEY `indexAppNotesUser`(`APP_UID`, `USR_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Application Notes';
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

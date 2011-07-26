@@ -2720,7 +2720,7 @@
   <table name="APP_NOTES">
     <vendor type="mysql">
       <parameter name="Name" value="APP_NOTES"/>
-      <parameter name="Engine" value="MyISAM"/>engi 
+      <parameter name="Engine" value="MyISAM"/> 
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="129"/>
@@ -2748,5 +2748,25 @@
     <column name="NOTE_AFFECTED_OBJ1" type="VARCHAR" size="32"  default=""/>
     <column name="NOTE_AFFECTED_OBJ2" type="VARCHAR" size="32" required="true" default=""/>
     <column name="NOTE_RECIPIENTS" type="LONGVARCHAR" />
+  <index name="indexAppNotesDate">
+      <index-column name="APP_UID"/>
+      <index-column name="NOTE_DATE"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APP_NOTES"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexAppNotesDate"/>
+        <parameter name="Seq_in_index" value="1"/>
+      </vendor>
+    </index>
+    <index name="indexAppNotesUser">
+      <index-column name="APP_UID"/>
+      <index-column name="USR_UID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APP_NOTES"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexAppNotesUser"/>
+        <parameter name="Seq_in_index" value="1"/>
+      </vendor>
+    </index>
   </table>
 </database>

@@ -149,14 +149,15 @@ class AppNotes extends BaseAppNotes {
         return false;
       }
 
+      $oUser = new Users();
+      $aUser = $oUser->load($usrUid);
+      $authorName   = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
+
       G::LoadClass('case');
       $oCase = new Cases ();
-	  $aFields = $oCase->loadCase( $appUid );
-      
-      $configNoteNotification['subject']=G::LoadTranslation('ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION')." @@APP_TITLE ";
-      $configNoteNotification['body']=G::LoadTranslation('ID_CASE').": @@APP_TITLE<br />".G::LoadTranslation('ID_AUTHOR').": @@USR_USRNAME<br /><br />$noteContent";
-
-
+      $aFields = $oCase->loadCase( $appUid );
+      $configNoteNotification['subject']= G::LoadTranslation('ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION')." @#APP_TITLE ";
+      $configNoteNotification['body']   = G::LoadTranslation('ID_CASE') . ": @$APP_TITLE<br />" . G::LoadTranslation('ID_AUTHOR').": $authorName<br /><br />$noteContent";
 
       if ($sFrom == '') {
         $sFrom = '"ProcessMaker"';
