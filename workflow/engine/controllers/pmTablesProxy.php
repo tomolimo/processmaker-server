@@ -533,7 +533,67 @@ class pmTablesProxy extends HttpProxyController
     $this->message = $this->success ? 'Deleted Successfully' : 'Error Deleting record';
   }
 
+  /**
+   * import a CSV to pm tables record
+   * @param string $httpData->id
+   */
+  public function importCSV($httpData)
+  {
+    if (preg_match('/[\x00-\x08\x0b-\x0c\x0e\x1f]/', file_get_contents($_FILES['form']['tmp_name']['CSV_FILE'])) === 0) {
+      $filename = $_FILES['form']['name']['CSV_FILE'];
+      if ($oFile = fopen($_FILES['form']['tmp_name']['CSV_FILE'], 'r')) {
+        require_once 'classes/model/AdditionalTables.php';
+        $oAdditionalTables = new AdditionalTables();
+        $aAdditionalTables = $oAdditionalTables->load($_POST['form']['ADD_TAB_UID'], true);
+        $sErrorMessages    = '';
+        $i = 1;
+        $swHead = false;
+        while (($aAux = fgetcsv($oFile, 4096, $_POST['form']['CSV_DELIMITER'])) !== false) {
+          if($i == 1) {
+            $j = 0;
+            foreach ($aAdditionalTables['FIELDS'] as $aField) {
+              if($aField['FLD_NAME'] === $aAux[$j]) $swHead = true;
+              $j++;
+            }
+          }
 
+          if ($swHead == false) {
+            $aData = array();
+            $j     = 0;
+            foreach ($aAdditionalTables['FIELDS'] as $aField) {
+              $aData[$aField['FLD_NAME']] = (isset($aAux[$j]) ? $aAux[$j] : '');
+              $j++;
+            }
+            try {
+              if (!$oAdditionalTables->saveDataInTable($_POST['form']['ADD_TAB_UID'], $aData)) {
+                $sErrorMessages .= G::LoadTranslation('ID_DUPLICATE_ENTRY_PRIMARY_KEY') . ', ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '<br />';
+              }
+            }
+            catch (Exception $oError) {
+              $sErrorMessages .= G::LoadTranslation('ID_ERROR_INSERT_LINE') . ': ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '<br />';
+            }
+          } else  {
+            $swHead = false;
+          } 
+          $i++;
+        }
+        fclose($oFile);
+      }
+      if ($sErrorMessages != '') {
+        $this->success = false;
+        $this->message = $sErrorMessages;        
+      }
+      $this->success = true;
+      $this->message = 'File Imported "'.$filename.'" Successfully';
+    }
+    else {
+      $sMessage = G::LoadTranslation('ID_UPLOAD_VALID_CSV_FILE');
+      $this->success = false;
+      $this->message = $sMessage;
+
+    }    
+  }  
+  
   /**
    * import a pm table
    * @param string $httpData->id

@@ -227,8 +227,8 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    //tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill' }, backButton],
-    tbar:[newButton,'-',editButton, deleteButton,'-',{xtype: 'tbfill' }, backButton],
+    tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill'}, backButton],
+    // tbar:[newButton,'-',editButton, deleteButton,'-',{xtype: 'tbfill' }, backButton],
     bbar: bbarpaging
   }
   
@@ -324,9 +324,104 @@ DeletePMTableRow = function(){
 };
 
 //Load Import PM Table From CSV Source
+//ImportPMTableCSV = function(){
+//  location.href = 'additionalTablesDataImportForm?sUID=' + TABLES.UID;
+//};
+
 ImportPMTableCSV = function(){
-  location.href = 'additionalTablesDataImportForm?sUID=' + TABLES.UID;
-};
+      
+  var comboDelimiter = new Ext.data.SimpleStore({
+                          fields: ['id', 'value'],
+                          data:   [[';', 'SemiColon (;)'], 
+                                   [',', 'Comma (,)']]
+                       });      
+  var w = new Ext.Window({
+    title: '',
+    width: 440,
+    height: 180,
+    modal: true,
+    autoScroll: false,
+    maximizable: false,
+    resizable: false,
+    items: [
+      new Ext.FormPanel({
+        id:'uploader',
+        fileUpload: true,
+        width: 420,
+        frame: true,
+        title: 'Import Data from CSV file',
+        autoHeight: false,
+        bodyStyle: 'padding: 10px 10px 0 10px;',
+        labelWidth: 80,
+        defaults: {
+            anchor: '90%',
+            allowBlank: false,
+            msgTarget: 'side'
+        },
+        items: [{
+            xtype: 'fileuploadfield',
+            id: 'form-file',
+            emptyText: 'Select a file',
+            fieldLabel: 'CSV File', // _('ID_FILE'),
+            name: 'form[CSV_FILE]',
+            buttonText: '',
+            buttonCfg: {
+                iconCls: 'upload-icon'
+            }
+        }, {
+          xtype: 'combo',
+          fieldLabel: 'Delimited by',
+          hiddenName: 'form[CSV_DELIMITER]',
+          mode: 'local',
+          store: comboDelimiter,
+          displayField: 'value', 
+          valueField: 'id',
+          allowBlank: false, 
+          triggerAction: 'all',
+          emptyText: _('ID_SELECT'),
+          selectOnFocus:true
+          
+        },{
+          xtype: 'hidden',
+          name: 'form[ADD_TAB_UID]',
+          value: tableDef.ADD_TAB_UID
+        }],
+        buttons: [{
+            text: _('ID_UPLOAD'),
+            handler: function(){
+              var uploader  = Ext.getCmp('uploader');
+
+              if(uploader.getForm().isValid()){
+                uploader.getForm().submit({
+                  url: '../pmTablesProxy/importCSV',
+                  waitMsg: 'Uploading file...',
+                  success: function(o, resp){
+                    w.close();
+                    infoGrid.store.reload();
+
+                    PMExt.notify('IMPORT RESULT', resp.result.message);
+                  },
+                  failure: function(o, resp){
+                    w.close();
+                    Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
+                    Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
+                    Ext.MessageBox.ERROR});
+                  }
+                });
+              }
+            }
+        },{
+            text: TRANSLATIONS.ID_CANCEL,
+            handler: function(){
+              w.close();
+            }
+        }]
+      })
+    ]
+    
+  });
+  w.show();
+}
 
 //Load PM Table List
 BackPMList = function(){
