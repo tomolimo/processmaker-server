@@ -4884,6 +4884,52 @@ SELECT 'LABEL','ID_NULL','en','Null','2011-07-22'
 SELECT 'LABEL','ID_TABLES_TO_EXPORT','en','Tables To Export','2011-07-22' 
   UNION ALL
 SELECT 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should select Schema/Data to export at least one.','2011-07-22' 
+  UNION ALL
+SELECT 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has added to a case','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_SKIN','en','Can''t export skin. Server Error','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_NEW_SKIN','en','New Skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_ALREADY_EXISTS','en','Skin already exists','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_BASE','en','Base skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_CONFIGURATION_MISSING','en','Missing skin configuration file','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_CREATING','en','Generating Skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_DOESNT_EXIST','en','Skin doesn''t exists','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_ERROR_EXTRACTING','en','Error extracting skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_EXPORTING','en','Exporting Skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_FILE_REQUIRED','en','Skin file required','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_FOLDER','en','Folder name','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_FOLDER_NOT_DELETEABLE','en','Can''t delete default skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_FOLDER_PERMISSIONS','en','Not enough permissions in Skin Folder','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_FOLDER_REQUIRED','en','Skin folder name is required','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_IMPORTING','en','Importing Skin','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_NAME_REQUIRED','en','Skin Name is required','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_SUCCESS_CREATE','en','Skin successfully created','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_SUCCESS_DELETE','en','Skin successfully deleted','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_SUCCESS_IMPORTED','en','Skin successfully imported','2011-07-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SKIN_SWITCHING','en','Switching Skin','2011-07-26' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
