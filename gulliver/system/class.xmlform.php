@@ -1557,11 +1557,12 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
         $html .= $this->htmlentities($v, ENT_COMPAT, 'utf-8');
         $html .= '</textarea>';
       }else{  //VIEW MODE
+        $html .= '<pre>' . $this->htmlentities($v, ENT_COMPAT, 'utf-8') . '</pre>';
         $html .= '<textarea readOnly ';
         $html .= 'id="form['.$owner->name.']['.$r.']['.$this->name.']" ';
         $html .= 'name="form['.$owner->name.']['.$r.']['.$this->name.']" ';
         $html .= 'wrap="hard" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
-        $html .= 'style="border:0px;backgroud-color:inherit;'.$this->style.'" wrap="'.$this->htmlentities($this->wrap, ENT_QUOTES, 'UTF-8').'" ';
+        $html .= 'style="display:none;'.$this->style.'" wrap="'.$this->htmlentities($this->wrap, ENT_QUOTES, 'UTF-8').'" ';
         $html .= 'class="FormTextArea" >';
         $html .= $this->htmlentities($v, ENT_COMPAT, 'utf-8');
         $html .= '</textarea>';
@@ -2111,9 +2112,16 @@ class XmlForm_Field_Link extends XmlForm_Field {
     $target  = G::replaceDataField ( $this->target, $owner->values );
     $value   = G::replaceDataField ( $this->value, $owner->values );
     $label   = G::replaceDataField ( $this->label, $owner->values );
-    $html    = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']"' . (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
-
-    $html .= $this->renderHint();
+    if ($this->mode == 'edit'){
+      $html  = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']"' . (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
+      $html .= $this->renderHint();
+    } else {
+      $html  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
+      $html .= '<input ';
+      $html .= 'id="form['.$this->name.']" ';
+      $html .= 'name="form['.$this->name.']" ';
+      $html .= 'type="hidden" value="' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '" />';
+    }
     return $html;
   }
 
@@ -2133,7 +2141,15 @@ class XmlForm_Field_Link extends XmlForm_Field {
       $target    = G::replaceDataField ( $this->target, $_aData_ );
       $value     = G::replaceDataField ( $this->value, $_aData_ );
       $label     = G::replaceDataField ( $this->label, $_aData_ );
-      $html      = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"' . (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
+      if ($this->mode == 'edit'){
+        $html      = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"' . (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
+      } else {
+        $html  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
+        $html .= '<input ';
+        $html .= 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
+        $html .= 'name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
+        $html .= 'type="hidden" value="' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '" />';
+      }  
       $result [] = $html;
       $r ++;
     }
@@ -2331,15 +2347,15 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
       return $res;
     } elseif ($this->mode === 'view') { 
       if ($this->labelOnRight) { 
-        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled><span class='FormCheck'>" . $this->label . '</span></input>';
+        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled ><span class='FormCheck'>" . $this->label . '</span></input>';
       } else {       	      
-      $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}'. 'disabled'/>";
+        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' disabled/>";
       }
-      if($this->hint){
-           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
-                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
-                </a>';
-      }
+//      if($this->hint){
+//           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
+//                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
+//                </a>';
+//      }
       return $html;
     }
   }
@@ -2418,7 +2434,7 @@ class XmlForm_Field_Button extends XmlForm_Field
       $re = "<input style=\"{$this->style}\" class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='button' value=\"{$label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
       return $re;
     } elseif ($this->mode === 'view') {
-      return "<input style=\"{$this->style}\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='button' value=\"{$label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+      return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='button' value=\"{$label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
     } else {
       return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
     }
@@ -2444,7 +2460,15 @@ class XmlForm_Field_Reset extends XmlForm_Field
     $onclick = G::replaceDataField ( $this->onclick, $owner->values );
     $mode    = ($this->mode == 'view') ? ' disabled="disabled"' : '';
     //return '<input name="'.$this->name.'" type ="reset" value="'.$this->label.'"/>';
-    return "<input style=\"{$this->style}\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+//    return "<input style=\"{$this->style}\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+    if ($this->mode === 'edit') {
+      return "<input style=\"{$this->style}\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+    } elseif ($this->mode === 'view') {
+      return "<input style=\"{$this->style};display:none\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+    } else {
+      return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
+    }
+    
   }
 }
 /**
@@ -2469,7 +2493,7 @@ class XmlForm_Field_Submit extends XmlForm_Field {
       //        return '<input id="form['.$this->name.']" name="form['.$this->name.']" type=\'submit\' value=\''. $this->label .'\' disabled/>';
       return "<input style=\"{$this->style}\" class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
     } elseif ($this->mode === 'view') {
-      return "<input style=\"{$this->style}\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+      return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
     } else {
       return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
     }
