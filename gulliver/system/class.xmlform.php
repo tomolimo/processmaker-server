@@ -2345,10 +2345,10 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
 
       //      $res = "<input id='form[" . $this->name . "]' value='" . $this->name . "' name='form[" .$this->name . "]' type='checkbox' $checked $readOnly >" . $this->label ;
       return $res;
-    } elseif ($this->mode === 'view') { 
-      if ($this->labelOnRight) { 
+    } elseif ($this->mode === 'view') {
+      if ($this->labelOnRight) {
         $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled ><span class='FormCheck'>" . $this->label . '</span></input>';
-      } else {       	      
+      } else {
         $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' disabled/>";
       }
 //      if($this->hint){
@@ -2493,7 +2493,14 @@ class XmlForm_Field_Submit extends XmlForm_Field {
       //        return '<input id="form['.$this->name.']" name="form['.$this->name.']" type=\'submit\' value=\''. $this->label .'\' disabled/>';
       return "<input style=\"{$this->style}\" class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
     } elseif ($this->mode === 'view') {
-      return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+      // return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+      $sLinkNextStep = 'window.open("' . $owner->fields['__DYNAFORM_OPTIONS']->xmlMenu->values['NEXT_STEP'] . '", "_self");';
+      $html  = '<input style="' . $this->style . '" class="module_app_button___gray '. $this->className . '" id="form['. $this->name .']" name="form['. $this->name .']" type="button" value="' . G::LoadTranslation('ID_CONTINUE') . '"  onclick="' . htmlentities ( $sLinkNextStep, ENT_COMPAT, 'utf-8' ) . '" />';
+      $html .= '<input ';
+      $html .= 'id="form['. $this->name . ']" ';
+      $html .= 'name="form[' . $this->name . ']" ';
+      $html .= 'type="hidden" value="'. $this->htmlentities ( $this->label, ENT_QUOTES, 'utf-8' ) .'" />';
+      return $html;
     } else {
       return $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
     }
