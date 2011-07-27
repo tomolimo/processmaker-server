@@ -905,11 +905,10 @@ function loadTableRowsFromArray(records)
       field_label: records[i].FLD_DESCRIPTION,
       field_type : records[i].FLD_TYPE,
       field_size : records[i].FLD_SIZE,
-      field_key  : records[i].FLD_KEY,
-      field_null  : records[i].FLD_NULL,
+      field_key  : records[i].FLD_KEY == '1' ? true : false,
+      field_null  : records[i].FLD_NULL  == '1' ? true : false,
       field_filter: records[i].FLD_FILTER == '1' ? true : false
     });
-
     store.add(row);
   }
 }
