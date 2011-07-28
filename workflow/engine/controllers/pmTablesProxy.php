@@ -551,7 +551,7 @@ class pmTablesProxy extends HttpProxyController
         while (($aAux = fgetcsv($oFile, 4096, $_POST['form']['CSV_DELIMITER'])) !== false) {
           if(count($aAdditionalTables['FIELDS']) != count($aAux)){
             $this->success = false;
-            $this->message = 'INVALID_FILE';
+            $this->message = G::LoadTranslation('INVALID_FILE');
             return 0;
           }
           if($i == 1) {
