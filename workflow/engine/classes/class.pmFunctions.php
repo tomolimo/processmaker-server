@@ -1092,7 +1092,9 @@ function PMFGenerateOutputDocument($outputID) {
   $oOutputDocument = new OutputDocument();
   $aOD = $oOutputDocument->load($outputID);
   $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
-  $_GET['UID']=($aOD['OUT_DOC_VERSIONING'])?$_GET['UID']:$aOD['OUT_DOC_UID'];
+  // The $_GET['UID'] variable is used when a process executes.
+  //  $_GET['UID']=($aOD['OUT_DOC_VERSIONING'])?$_GET['UID']:$aOD['OUT_DOC_UID'];
+  $sUID = ($aOD['OUT_DOC_VERSIONING'])?$_GET['UID']:$aOD['OUT_DOC_UID'];
   $sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
   require_once 'classes/model/AppFolder.php';
   require_once 'classes/model/AppDocument.php';
@@ -1107,12 +1109,12 @@ function PMFGenerateOutputDocument($outputID) {
   //Get last Document Version and apply versioning if is enabled
 
   $oAppDocument= new AppDocument();
-  $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
+  $lastDocVersion=$oAppDocument->getLastDocVersion($sUID, $_SESSION['APPLICATION']);
 
   $oCriteria = new Criteria('workflow');
   $oCriteria->add(AppDocumentPeer::APP_UID,      $_SESSION['APPLICATION']);
   //$oCriteria->add(AppDocumentPeer::DEL_INDEX,    $_SESSION['INDEX']);
-  $oCriteria->add(AppDocumentPeer::DOC_UID,      $_GET['UID']);
+  $oCriteria->add(AppDocumentPeer::DOC_UID,      $sUID);
   $oCriteria->add(AppDocumentPeer::DOC_VERSION,      $lastDocVersion);
   $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
   $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
