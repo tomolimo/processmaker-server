@@ -799,7 +799,7 @@ Ext.onReady(function(){
     region: 'north',
     labelWidth: 120,
     labelAlign:'right',
-    title: 'New Report Table',
+    title: ADD_TAB_UID ? _('ID_REPORT_TABLE') : _('ID_NEW_REPORT_TABLE'),
     bodyStyle:'padding:10px',
     waitMsgTarget : true,
     frame: true,

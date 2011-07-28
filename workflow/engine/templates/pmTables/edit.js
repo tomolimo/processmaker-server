@@ -548,7 +548,7 @@ Ext.onReady(function(){
     region     : 'north',
     labelWidth : 120,
     labelAlign :'right',
-    title      : 'New PM Table',
+    title      : ADD_TAB_UID ? _('ID_PMTABLE') : _('ID_NEW_PMTABLE'),
     bodyStyle  :'padding:10px',
     frame      : true,
     height     : 120,

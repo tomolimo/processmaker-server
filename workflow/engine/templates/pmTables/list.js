@@ -41,7 +41,7 @@ Ext.onReady(function(){
     var newMenuOptions = new Array();
     if (PRO_UID == false) {
       newMenuOptions.push({
-        text: _('ID_NEW_PMATBLE'),
+        text: _('ID_NEW_PMTABLE'),
         handler: newPMTable
       });
     }
