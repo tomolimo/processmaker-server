@@ -3145,7 +3145,6 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_SELECT_WORKSPACE','en','Select a workspace','2011-07-18') ,
 ( 'LABEL','ID_EXIT_EDITOR','en','Exit Editor','2011-07-18') ,
 ( 'LABEL','ID_PMTABLES','en','PM Tables','2011-07-22') ,
-( 'LABEL','ID_NEW_PMATBLE','en','New PM Table','2011-07-22') ,
 ( 'LABEL','ID_NEW_REPORT_TABLE_OLD','en','New Report Table (Old Version)','2011-07-22') ,
 ( 'LABEL','ID_PMTABLE','en','PM Table','2011-07-22') ,
 ( 'LABEL','ID_NULL','en','Null','2011-07-22') ,
@@ -3173,7 +3172,10 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_SKIN_SUCCESS_CREATE','en','Skin successfully created','2011-07-26') ,
 ( 'LABEL','ID_SKIN_SUCCESS_DELETE','en','Skin successfully deleted','2011-07-26') ,
 ( 'LABEL','ID_SKIN_SUCCESS_IMPORTED','en','Skin successfully imported','2011-07-26') ,
-( 'LABEL','ID_SKIN_SWITCHING','en','Switching Skin','2011-07-26') ;
+( 'LABEL','ID_SKIN_SWITCHING','en','Switching Skin','2011-07-26') ,
+( 'LABEL','ID_CONFIRM_REMOVE_FIELD','en','Do you really want remove this field?','2011-07-27') ,
+( 'LABEL','ID_INVALID_EXTENSION','en','Invalid file extension!','2011-07-28') ,
+( 'LABEL','ID_NEW_PMTABLE','en','New PM Table','2011-07-28') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

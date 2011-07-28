@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.31.rc4-3-gecc0530\n"
+"Project-Id-Version: ProcessMaker (Branch master) 2.x-dev-14-g78f2dfd\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-07-26 17:15:49\n"
+"PO-Revision-Date: 2011-07-28 10:27:52\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -10382,12 +10382,6 @@ msgid "[LABEL/ID_PMTABLES] PM Tables"
 msgstr "PM Tables"
 
 # TRANSLATION
-# LABEL/ID_NEW_PMATBLE
-#: LABEL/ID_NEW_PMATBLE
-msgid "[LABEL/ID_NEW_PMATBLE] New PM Table"
-msgstr "New PM Table"
-
-# TRANSLATION
 # LABEL/ID_NEW_REPORT_TABLE_OLD
 #: LABEL/ID_NEW_REPORT_TABLE_OLD
 msgid "New Report Table (Old Version)"
@@ -10554,6 +10548,24 @@ msgstr "Skin successfully imported"
 #: LABEL/ID_SKIN_SWITCHING
 msgid "Switching Skin"
 msgstr "Switching Skin"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_REMOVE_FIELD
+#: LABEL/ID_CONFIRM_REMOVE_FIELD
+msgid "Do you really want remove this field?"
+msgstr "Do you really want remove this field?"
+
+# TRANSLATION
+# LABEL/ID_INVALID_EXTENSION
+#: LABEL/ID_INVALID_EXTENSION
+msgid "Invalid file extension!"
+msgstr "Invalid file extension!"
+
+# TRANSLATION
+# LABEL/ID_NEW_PMTABLE
+#: LABEL/ID_NEW_PMTABLE
+msgid "[LABEL/ID_NEW_PMTABLE] New PM Table"
+msgstr "New PM Table"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
