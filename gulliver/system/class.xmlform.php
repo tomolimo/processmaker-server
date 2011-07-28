@@ -2195,7 +2195,8 @@ class XmlForm_Field_File extends XmlForm_Field {
   function render($value = NULL) {
     $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
     if($this->mode == 'view'){
-      $html =  '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'text\' value=\'' . $value . '\'/>';       
+      $displayStyle = 'display:none;';
+      $html = $value.'<input class="module_app_input___gray_file" ' . $mode .'style='.$displayStyle .' id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\' />';   
     }else{ 
       $html = '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\'/>';
     }
