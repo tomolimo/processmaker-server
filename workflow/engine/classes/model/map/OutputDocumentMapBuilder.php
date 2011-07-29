@@ -94,6 +94,14 @@ class OutputDocumentMapBuilder {
 
 		$tMap->addColumn('OUT_DOC_TAGS', 'OutDocTags', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
+		$tMap->addColumn('OUT_DOC_PDF_SECURITY_ENABLED', 'OutDocPdfSecurityEnabled', 'int', CreoleTypes::TINYINT, false, null);
+
+		$tMap->addColumn('OUT_DOC_PDF_SECURITY_OPEN_PASSWORD', 'OutDocPdfSecurityOpenPassword', 'string', CreoleTypes::VARCHAR, false, 32);
+
+		$tMap->addColumn('OUT_DOC_PDF_SECURITY_OWNER_PASSWORD', 'OutDocPdfSecurityOwnerPassword', 'string', CreoleTypes::VARCHAR, false, 32);
+
+		$tMap->addColumn('OUT_DOC_PDF_SECURITY_PERMISSIONS', 'OutDocPdfSecurityPermissions', 'string', CreoleTypes::VARCHAR, false, 150);
+
 		$tMap->addValidator('OUT_DOC_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Output Document UID can be no larger than 32 in size');
 
 		$tMap->addValidator('OUT_DOC_UID', 'required', 'propel.validator.RequiredValidator', '', 'Output Document UID is required.');

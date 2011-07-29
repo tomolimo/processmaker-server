@@ -618,6 +618,20 @@ class OutputDocument extends BaseOutputDocument {
        $g_media->set_landscape($GLOBALS['g_config']['landscape']);
        $g_media->set_margins($GLOBALS['g_config']['margins']);
        $g_media->set_pixels($GLOBALS['g_config']['pagewidth']);
+       
+       
+       if(isset($GLOBALS['g_config']['pdfSecurity'])){
+         if (isset($GLOBALS['g_config']['pdfSecurity']['openPassword']) && $GLOBALS['g_config']['pdfSecurity']['openPassword'] != "") {
+    $GLOBALS['g_config']['pdfSecurity']['openPassword'] = G::decrypt($GLOBALS['g_config']['pdfSecurity']['openPassword'], $sUID);
+         }
+               if (isset($GLOBALS['g_config']['pdfSecurity']['ownerPassword']) && $GLOBALS['g_config']['pdfSecurity']['ownerPassword'] != "") {
+    $GLOBALS['g_config']['pdfSecurity']['ownerPassword'] = G::decrypt($GLOBALS['g_config']['pdfSecurity']['ownerPassword'], $sUID);
+  }
+  $g_media->set_security($GLOBALS['g_config']['pdfSecurity']);
+  
+        require_once(HTML2PS_DIR . 'pdf.fpdf.encryption.php');
+       }
+       
        $pipeline = new Pipeline();
        if (extension_loaded('curl'))
        {

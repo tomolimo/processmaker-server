@@ -541,7 +541,7 @@ abstract class BaseAppNotes extends BaseObject  implements Persistent {
 			throw $e;
 		}
 	}
- 
+
 	/**
 	 * Stores the object in the database.  If the object is new,
 	 * it inserts it; otherwise an update is performed.  This method
@@ -572,44 +572,7 @@ abstract class BaseAppNotes extends BaseObject  implements Persistent {
 			throw $e;
 		}
 	}
-	
-	/**
-    * @todo This function must be moved to Propel Generator in the correct syntax.
-    */
-	
-	
-	public function createFromArray($aData, $con = null, $sw=true)
-	{
-	  if ($con === null) {
-		$con = Propel::getConnection(AppNotesPeer::DATABASE_NAME);
-	  }
-	  if ($sw) $con->begin();
-	  try {
-        $this->fromArray ( $aData, BasePeer::TYPE_FIELDNAME );
-        if ($this->validate ()) {
-          $result = $this->save ($con, $sw);
-        } else {
-          if ($sw) $con->rollback ();
-          $e = new Exception ( "Failed Validation in class " . get_class ( $this ) . "." );
-          $e->aValidationFailures = $this->getValidationFailures ();
-          throw ($e);
-        }
-        if ($sw) $con->commit ();
-        return $result;
-      } catch ( Exception $e ) {
-        if ($sw) $con->rollback ();
-        throw ($e);
-      }
-	}
-	
-	/**
-    * @todo This function must be moved to Propel Generator in the correct syntax.
-    */
-	public function updateFromArray($aData, $con = null, $sw = true)
-	{
-	  return 0;
-	}
-	
+
 	/**
 	 * Stores the object in the database.
 	 *

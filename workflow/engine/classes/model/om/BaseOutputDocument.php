@@ -132,6 +132,34 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 	 */
 	protected $out_doc_tags;
 
+
+	/**
+	 * The value for the out_doc_pdf_security_enabled field.
+	 * @var        int
+	 */
+	protected $out_doc_pdf_security_enabled = 0;
+
+
+	/**
+	 * The value for the out_doc_pdf_security_open_password field.
+	 * @var        string
+	 */
+	protected $out_doc_pdf_security_open_password = '';
+
+
+	/**
+	 * The value for the out_doc_pdf_security_owner_password field.
+	 * @var        string
+	 */
+	protected $out_doc_pdf_security_owner_password = '';
+
+
+	/**
+	 * The value for the out_doc_pdf_security_permissions field.
+	 * @var        string
+	 */
+	protected $out_doc_pdf_security_permissions = '';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -309,6 +337,50 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 	{
 
 		return $this->out_doc_tags;
+	}
+
+	/**
+	 * Get the [out_doc_pdf_security_enabled] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getOutDocPdfSecurityEnabled()
+	{
+
+		return $this->out_doc_pdf_security_enabled;
+	}
+
+	/**
+	 * Get the [out_doc_pdf_security_open_password] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getOutDocPdfSecurityOpenPassword()
+	{
+
+		return $this->out_doc_pdf_security_open_password;
+	}
+
+	/**
+	 * Get the [out_doc_pdf_security_owner_password] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getOutDocPdfSecurityOwnerPassword()
+	{
+
+		return $this->out_doc_pdf_security_owner_password;
+	}
+
+	/**
+	 * Get the [out_doc_pdf_security_permissions] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getOutDocPdfSecurityPermissions()
+	{
+
+		return $this->out_doc_pdf_security_permissions;
 	}
 
 	/**
@@ -642,6 +714,94 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 	} // setOutDocTags()
 
 	/**
+	 * Set the value of [out_doc_pdf_security_enabled] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     void
+	 */
+	public function setOutDocPdfSecurityEnabled($v)
+	{
+
+		// Since the native PHP type for this column is integer,
+		// we will cast the input value to an int (if it is not).
+		if ($v !== null && !is_int($v) && is_numeric($v)) {
+			$v = (int) $v;
+		}
+
+		if ($this->out_doc_pdf_security_enabled !== $v || $v === 0) {
+			$this->out_doc_pdf_security_enabled = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_PDF_SECURITY_ENABLED;
+		}
+
+	} // setOutDocPdfSecurityEnabled()
+
+	/**
+	 * Set the value of [out_doc_pdf_security_open_password] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setOutDocPdfSecurityOpenPassword($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->out_doc_pdf_security_open_password !== $v || $v === '') {
+			$this->out_doc_pdf_security_open_password = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OPEN_PASSWORD;
+		}
+
+	} // setOutDocPdfSecurityOpenPassword()
+
+	/**
+	 * Set the value of [out_doc_pdf_security_owner_password] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setOutDocPdfSecurityOwnerPassword($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->out_doc_pdf_security_owner_password !== $v || $v === '') {
+			$this->out_doc_pdf_security_owner_password = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OWNER_PASSWORD;
+		}
+
+	} // setOutDocPdfSecurityOwnerPassword()
+
+	/**
+	 * Set the value of [out_doc_pdf_security_permissions] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setOutDocPdfSecurityPermissions($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->out_doc_pdf_security_permissions !== $v || $v === '') {
+			$this->out_doc_pdf_security_permissions = $v;
+			$this->modifiedColumns[] = OutputDocumentPeer::OUT_DOC_PDF_SECURITY_PERMISSIONS;
+		}
+
+	} // setOutDocPdfSecurityPermissions()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -688,12 +848,20 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 
 			$this->out_doc_tags = $rs->getString($startcol + 14);
 
+			$this->out_doc_pdf_security_enabled = $rs->getInt($startcol + 15);
+
+			$this->out_doc_pdf_security_open_password = $rs->getString($startcol + 16);
+
+			$this->out_doc_pdf_security_owner_password = $rs->getString($startcol + 17);
+
+			$this->out_doc_pdf_security_permissions = $rs->getString($startcol + 18);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 15; // 15 = OutputDocumentPeer::NUM_COLUMNS - OutputDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 19; // 19 = OutputDocumentPeer::NUM_COLUMNS - OutputDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating OutputDocument object", $e);
@@ -941,6 +1109,18 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 			case 14:
 				return $this->getOutDocTags();
 				break;
+			case 15:
+				return $this->getOutDocPdfSecurityEnabled();
+				break;
+			case 16:
+				return $this->getOutDocPdfSecurityOpenPassword();
+				break;
+			case 17:
+				return $this->getOutDocPdfSecurityOwnerPassword();
+				break;
+			case 18:
+				return $this->getOutDocPdfSecurityPermissions();
+				break;
 			default:
 				return null;
 				break;
@@ -976,6 +1156,10 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 			$keys[12] => $this->getOutDocVersioning(),
 			$keys[13] => $this->getOutDocDestinationPath(),
 			$keys[14] => $this->getOutDocTags(),
+			$keys[15] => $this->getOutDocPdfSecurityEnabled(),
+			$keys[16] => $this->getOutDocPdfSecurityOpenPassword(),
+			$keys[17] => $this->getOutDocPdfSecurityOwnerPassword(),
+			$keys[18] => $this->getOutDocPdfSecurityPermissions(),
 		);
 		return $result;
 	}
@@ -1052,6 +1236,18 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 			case 14:
 				$this->setOutDocTags($value);
 				break;
+			case 15:
+				$this->setOutDocPdfSecurityEnabled($value);
+				break;
+			case 16:
+				$this->setOutDocPdfSecurityOpenPassword($value);
+				break;
+			case 17:
+				$this->setOutDocPdfSecurityOwnerPassword($value);
+				break;
+			case 18:
+				$this->setOutDocPdfSecurityPermissions($value);
+				break;
 		} // switch()
 	}
 
@@ -1090,6 +1286,10 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[12], $arr)) $this->setOutDocVersioning($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setOutDocDestinationPath($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setOutDocTags($arr[$keys[14]]);
+		if (array_key_exists($keys[15], $arr)) $this->setOutDocPdfSecurityEnabled($arr[$keys[15]]);
+		if (array_key_exists($keys[16], $arr)) $this->setOutDocPdfSecurityOpenPassword($arr[$keys[16]]);
+		if (array_key_exists($keys[17], $arr)) $this->setOutDocPdfSecurityOwnerPassword($arr[$keys[17]]);
+		if (array_key_exists($keys[18], $arr)) $this->setOutDocPdfSecurityPermissions($arr[$keys[18]]);
 	}
 
 	/**
@@ -1116,6 +1316,10 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_VERSIONING)) $criteria->add(OutputDocumentPeer::OUT_DOC_VERSIONING, $this->out_doc_versioning);
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_DESTINATION_PATH)) $criteria->add(OutputDocumentPeer::OUT_DOC_DESTINATION_PATH, $this->out_doc_destination_path);
 		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_TAGS)) $criteria->add(OutputDocumentPeer::OUT_DOC_TAGS, $this->out_doc_tags);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_ENABLED)) $criteria->add(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_ENABLED, $this->out_doc_pdf_security_enabled);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OPEN_PASSWORD)) $criteria->add(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OPEN_PASSWORD, $this->out_doc_pdf_security_open_password);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OWNER_PASSWORD)) $criteria->add(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OWNER_PASSWORD, $this->out_doc_pdf_security_owner_password);
+		if ($this->isColumnModified(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_PERMISSIONS)) $criteria->add(OutputDocumentPeer::OUT_DOC_PDF_SECURITY_PERMISSIONS, $this->out_doc_pdf_security_permissions);
 
 		return $criteria;
 	}
@@ -1197,6 +1401,14 @@ abstract class BaseOutputDocument extends BaseObject  implements Persistent {
 		$copyObj->setOutDocDestinationPath($this->out_doc_destination_path);
 
 		$copyObj->setOutDocTags($this->out_doc_tags);
+
+		$copyObj->setOutDocPdfSecurityEnabled($this->out_doc_pdf_security_enabled);
+
+		$copyObj->setOutDocPdfSecurityOpenPassword($this->out_doc_pdf_security_open_password);
+
+		$copyObj->setOutDocPdfSecurityOwnerPassword($this->out_doc_pdf_security_owner_password);
+
+		$copyObj->setOutDocPdfSecurityPermissions($this->out_doc_pdf_security_permissions);
 
 
 		$copyObj->setNew(true);

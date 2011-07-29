@@ -59,16 +59,16 @@
 </OUT_DOC_MEDIA>
 
 <OUT_DOC_LEFT_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Left Margin</en>  
+  <en>Left</en>  
 </OUT_DOC_LEFT_MARGIN>
 <OUT_DOC_RIGHT_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Right Margin</en> 
+  <en>Right</en> 
 </OUT_DOC_RIGHT_MARGIN>
 <OUT_DOC_TOP_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Top Margin</en> 
+  <en>Top</en> 
 </OUT_DOC_TOP_MARGIN>
 <OUT_DOC_BOTTOM_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Bottom Margin</en>
+  <en>Bottom</en>
 </OUT_DOC_BOTTOM_MARGIN>
 <OUT_DOC_DESTINATION_PATH type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Path">
   <en>Destination Path</en>
@@ -76,6 +76,26 @@
 <OUT_DOC_TAGS type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Tag">
   <en>Tags</en>
 </OUT_DOC_TAGS>
+
+<OUT_DOC_PDF_SECURITY_ENABLED type="dropdown">
+  <en>PDF Security<option name="0">Disabled</option><option name="1">Enabled</option></en>
+</OUT_DOC_PDF_SECURITY_ENABLED>
+
+<OUT_DOC_PDF_SECURITY_OPEN_PASSWORD type="password"  >
+  <en>Open Password</en>
+</OUT_DOC_PDF_SECURITY_OPEN_PASSWORD>
+<OUT_DOC_PDF_SECURITY_OWNER_PASSWORD type="password" >
+  <en>Owner Password</en>
+</OUT_DOC_PDF_SECURITY_OWNER_PASSWORD>
+<OUT_DOC_PDF_SECURITY_PERMISSIONS type="listbox" mode="edit" options="Array">
+  <en>Allowed Permissions
+  <option name='print'>Print</option><!--print-->
+    <option name='modify'>Modify</option><!--print-->
+    <option name='copy'>Copy</option><!--print-->
+    <option name='annot-forms'>Forms</option><!--print-->
+  </en>
+</OUT_DOC_PDF_SECURITY_PERMISSIONS>
+
 
 <BTN_CANCEL type="button" onclick="cancel();">
   <en>Cancel</en>
@@ -171,6 +191,37 @@ var verifyTitle = function(oForm)
 function cancel(){
     currentPopupWindow.remove();
 }
+
+function showPdfSecuritySwitch(){
+if ((getField('OUT_DOC_GENERATE').value == 'PDF')||(getField('OUT_DOC_GENERATE').value == 'BOTH')) {
+    showRow('OUT_DOC_PDF_SECURITY_ENABLED');
+  }
+  else {
+    hideRow('OUT_DOC_PDF_SECURITY_ENABLED');
+    getField('OUT_DOC_PDF_SECURITY_ENABLED').value=0;
+  }
+  togglePDFSecurity();
+}
+function togglePDFSecurity(){
+if ((getField('OUT_DOC_PDF_SECURITY_ENABLED').value == '0')) {
+    hideRow('PDF_SECURITY_SETTINGS');
+  }
+  else {
+    showRow('PDF_SECURITY_SETTINGS');
+  }
+}
+
+leimnud.event.add(getField('OUT_DOC_GENERATE'), 'change', function() {
+  showPdfSecuritySwitch();
+});
+ 
+
+  leimnud.event.add(getField('OUT_DOC_PDF_SECURITY_ENABLED'), 'change', function() {
+  togglePDFSecurity();
+});
+
+showPdfSecuritySwitch();
+togglePDFSecurity();
 
 ]]></JS>
 </dynaForm>  

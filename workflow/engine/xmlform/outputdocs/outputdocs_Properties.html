@@ -1,106 +1,142 @@
 <form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  
 
- <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
-		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-		<div class="content" style="">
-	  <table width="99%">
-      <tbody><tr>
-        <td valign="top">
-        <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
-        <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
-           <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                  <tbody><tr style="display: none;">
-              <td colspan="2">{$form.PRO_UID}</td>
-             </tr>
-                                              <tr style="display: none;">
-              <td colspan="2">{$form.OUT_DOC_UID}</td>
-             </tr>
-                                               <tr>
-              <td class="FormTitle" colspan="2" align="">{$form.TITLE}</td>
-             </tr>
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$OUT_DOC_TITLE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TITLE} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_TITLE}</td> 
-              </tr>
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$OUT_DOC_FILENAME}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_FILENAME} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_FILENAME}</td> 
-              </tr>
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_DESCRIPTION}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_DESCRIPTION} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_DESCRIPTION}</td> 
-              </tr>
-              <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_LANDSCAPE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_LANDSCAPE} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_LANDSCAPE}</td> 
-              </tr>
-              <tr>
+  <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
+    <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+    <div class="content" style="">
+      <table width="99%">
+        <tbody><tr>
+            <td valign="top">
+              <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
+              <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tbody><tr style="display: none;">
+                    <td colspan="2">{$form.PRO_UID}</td>
+                  </tr>
+                  <tr style="display: none;">
+                    <td colspan="2">{$form.OUT_DOC_UID}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormTitle" colspan="2" align="">{$form.TITLE}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$OUT_DOC_TITLE}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TITLE} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_TITLE}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$OUT_DOC_FILENAME}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_FILENAME} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_FILENAME}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_DESCRIPTION}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_DESCRIPTION} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_DESCRIPTION}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_MEDIA}/ {$OUT_DOC_LANDSCAPE}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_LANDSCAPE} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_MEDIA}&nbsp;{$form.OUT_DOC_LANDSCAPE} </td>
+                  </tr>
+                  <!--<tr>
 	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_MEDIA}</td>
-	              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
-	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_MEDIA}</td> 
-              </tr>
-              <tr>
-	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_LEFT_MARGIN}</td>
-	              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
-	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_LEFT_MARGIN}</td> 
-              </tr>
-              <tr>
-	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_RIGHT_MARGIN}</td>
-	              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
-	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_RIGHT_MARGIN}</td> 
-              </tr>
-              <tr>
-	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_TOP_MARGIN}</td>
-	              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
-	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_TOP_MARGIN}</td> 
-              </tr>
-              <tr>
-	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_BOTTOM_MARGIN}</td>
-	              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
-	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_BOTTOM_MARGIN}</td> 
-              </tr>
-              
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_GENERATE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_GENERATE} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_GENERATE}</td> 
-              </tr>
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_VERSIONING}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_VERSIONING} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_VERSIONING}</td> 
-              </tr>
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_DESTINATION_PATH}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_DESTINATION_PATH} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_DESTINATION_PATH}</td> 
-              </tr>
-                                                <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_TAGS}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_TAGS}</td> 
-              </tr>
-                                               <tr>
-              <td class="FormButton" colspan="2" align="center"></td>
-             </tr>
-                                               <tr>
-              <td class="FormButton" colspan="2" align="center"><br/> {$form.ACCEPT} &nbsp; {$form.BTN_CANCEL} </td>
-             </tr>
-                                                                   </tbody></table>
-        </td>
-      </tr>
-    </tbody></table>
-    		</div>
-<div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>	
 
-		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_MEDIA}</td> 
+                  </tr>
+                  -->
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                      <fieldset>
+                        <legend>Margin</legend>
+                        {$OUT_DOC_LEFT_MARGIN}&nbsp;{$form.OUT_DOC_LEFT_MARGIN}&nbsp;&nbsp;&nbsp;&nbsp;{$OUT_DOC_RIGHT_MARGIN}&nbsp;&nbsp;&nbsp;{$form.OUT_DOC_RIGHT_MARGIN}<br />
+                        {$OUT_DOC_TOP_MARGIN}&nbsp;{$form.OUT_DOC_TOP_MARGIN}&nbsp;&nbsp;&nbsp;&nbsp;{$OUT_DOC_BOTTOM_MARGIN}&nbsp;{$form.OUT_DOC_BOTTOM_MARGIN}<br />
+                      </fieldset>
+                    </td>
+
+                  </tr>
+                  <!--             <tr>
+	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_LEFT_MARGIN}</td>
+
+	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_LEFT_MARGIN}</td> 
+                               </tr>
+                               <tr>
+	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_RIGHT_MARGIN}</td>
+
+	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_RIGHT_MARGIN}</td> 
+                               </tr>
+                               <tr>
+	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_TOP_MARGIN}</td>
+
+	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_TOP_MARGIN}</td> 
+                               </tr>
+                               <tr>
+	              <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_BOTTOM_MARGIN}</td>
+
+	              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_BOTTOM_MARGIN}</td> 
+                               </tr>
+                  -->
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_GENERATE}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_GENERATE} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_GENERATE}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_PDF_SECURITY_ENABLED}</td>
+                    
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_PDF_SECURITY_ENABLED}</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                      <fieldset id="form[PDF_SECURITY_SETTINGS]">
+                        <legend></legend>
+                        <table>
+                          <tr><td>
+                              {$OUT_DOC_PDF_SECURITY_OPEN_PASSWORD} &nbsp;{$form.OUT_DOC_PDF_SECURITY_OPEN_PASSWORD}
+                            </td><td rowspan="2">{$OUT_DOC_PDF_SECURITY_PERMISSIONS}<br />{$form.OUT_DOC_PDF_SECURITY_PERMISSIONS}</td></tr>
+                          <tr><td>
+                              {$OUT_DOC_PDF_SECURITY_OWNER_PASSWORD}&nbsp;{$form.OUT_DOC_PDF_SECURITY_OWNER_PASSWORD}
+                              {$form.test}
+                            </td><td></td></tr>
+                        </table>
+
+                      </fieldset>
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_VERSIONING}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_VERSIONING} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_VERSIONING}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_DESTINATION_PATH}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_DESTINATION_PATH} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_DESTINATION_PATH}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormLabel" width="{$form_labelWidth}">{$OUT_DOC_TAGS}</td>
+                    <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.OUT_DOC_TAGS} </td>  //-->
+                    <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.OUT_DOC_TAGS}</td>
+                  </tr>
+                  <tr>
+                    <td class="FormButton" colspan="2" align="center"></td>
+                  </tr>
+                  <tr>
+                    <td class="FormButton" colspan="2" align="center"><br/> {$form.ACCEPT} &nbsp; {$form.BTN_CANCEL} </td>
+                  </tr>
+                </tbody></table>
+            </td>
+          </tr>
+        </tbody></table>
+    </div>
+    <div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>
+
+    <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
   </div>
-                              <script type="text/javascript">
+  <script type="text/javascript">
     {$form.JS}
   </script>
-  
+
 </form>	

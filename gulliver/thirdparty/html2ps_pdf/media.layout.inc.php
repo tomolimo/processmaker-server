@@ -15,6 +15,7 @@ class Media {
   var $size;
   var $pixels;
   var $is_landscape;
+  var $security;
 
   function width()  { 
     return $this->is_landscape ? $this->size['height'] : $this->size['width'] ;
@@ -32,6 +33,20 @@ class Media {
     return $this->height() - $this->margins['bottom'] - $this->margins['top'];
   }
 
+  function getSecurityOpenPassword(){
+    return $this->security['openPassword'];
+  }
+  function getSecurityOwnerPassword(){
+    return $this->security['ownerPassword'];
+  }
+  function getSecurityPermissions(){
+    $permissions=explode("|",$this->security['permissions']);
+    foreach($permissions as $key => $permName){
+      if($permName=="") unset($permissions[$key]);
+    }
+    return $this->security['permissions'];
+  }
+
   function set_landscape($state) {
     $this->is_landscape = (bool)$state;
   }
@@ -43,6 +58,10 @@ class Media {
 
   function set_pixels($pixels) {
     $this->pixels = $pixels;
+  }
+
+  function set_security($security) {
+    $this->security = $security;
   }
  
   // TODO: validity checking

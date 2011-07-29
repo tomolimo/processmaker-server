@@ -429,10 +429,13 @@
                 	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
 
                 $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
-                $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN'],);
+                $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN']);
+                if($aOD['OUT_DOC_PDF_SECURITY_ENABLED']=='1'){
+                  $aProperties['pdfSecurity']=array('openPassword'=>$aOD['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'],'ownerPassword'=>$aOD['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'],'permissions'=>$aOD['OUT_DOC_PDF_SECURITY_PERMISSIONS']);
+                }                
                 $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
-                   //$sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
-                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
+                   $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
+                   //$sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
                 break;
             case 'JRXML' :
                 //creating the xml with the application data;
