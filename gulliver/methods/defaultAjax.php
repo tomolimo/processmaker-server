@@ -72,6 +72,28 @@
       unset($newValues[$sKey]->$aKeys[0]);
     }
   }
+  
+  //Next Lines re-build newValues array to send multiple dependent fields merged by row into a grid.
+  if (sizeof($newValues)>1 && isset($_POST['grid'])){
+    $fieldBase = array();
+    foreach ($newValues as $key => $values){
+      for ($r2=1; $r2 <= $_POST['row']; $r2++){
+        foreach ($values as $class => $value){
+          if ($class = $_POST['grid']){
+            $value = (array) $value;
+            $arrayK = $value[$r2];
+            foreach ($arrayK as $key2 => $val) {
+              $fieldBase[$r2][$key2] = $val[$key2];
+            }
+          }
+        }
+      }
+    }
+    $newValues = array();
+    //$fieldBase = (array) $fieldBase;
+    $newValues[0]->$_POST['grid'] = $fieldBase;
+  }
+  
   //Resolve dependencies
   //Returns an array ($dependentFields) with the names of the fields
   //that depends of fields passed through AJAX ($_GET/$_POST)
