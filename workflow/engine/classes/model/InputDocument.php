@@ -244,6 +244,10 @@ class InputDocument extends BaseInputDocument {
     if ($this->inp_doc_title !== $sValue || $sValue === '') {
       try {
         $this->inp_doc_title = $sValue;
+
+        //verify the content for base language
+        Content::copyContentOnBaseLanguageIfNotExists('INP_DOC_TITLE', $this->getInpDocUid(), $this->inp_doc_title);
+
         $iResult = Content::addContent('INP_DOC_TITLE', '', $this->getInpDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->inp_doc_title);
       }
       catch (Exception $oError) {
@@ -284,6 +288,10 @@ class InputDocument extends BaseInputDocument {
     if ($this->inp_doc_description !== $sValue || $sValue === '') {
       try {
         $this->inp_doc_description = $sValue;
+
+        //verify the content for base language
+        Content::copyContentOnBaseLanguageIfNotExists('INP_DOC_DESCRIPTION', $this->getInpDocUid(), $this->inp_doc_description);
+        
         $iResult = Content::addContent('INP_DOC_DESCRIPTION', '', $this->getInpDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->inp_doc_description);
       }
       catch (Exception $oError) {

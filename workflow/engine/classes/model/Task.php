@@ -73,6 +73,10 @@ class Task extends BaseTask {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tas_title !== $v || $v==="") {
       $this->tas_title = $v;
+        
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_TITLE', $this->getTasUid(), $this->tas_title);
+      
       $res = Content::addContent( 'TAS_TITLE', '', $this->getTasUid(), $lang, $this->tas_title );
       return $res;
     }
@@ -111,6 +115,10 @@ class Task extends BaseTask {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tas_description !== $v || $v==="") {
       $this->tas_description = $v;
+      
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_DESCRIPTION', $this->getTasUid(), $this->tas_description);
+      
       $res = Content::addContent( 'TAS_DESCRIPTION', '', $this->getTasUid(), $lang, $this->tas_description );
       return $res;
     }
@@ -149,6 +157,10 @@ class Task extends BaseTask {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tas_def_title !== $v || $v==="") {
       $this->tas_def_title = $v;
+      
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_DEF_TITLE', $this->getTasUid(), $this->tas_def_title);
+      
       $res = Content::addContent( 'TAS_DEF_TITLE', '', $this->getTasUid(), $lang, $this->tas_def_title );
       return $res;
     }
@@ -187,6 +199,10 @@ class Task extends BaseTask {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tas_def_description !== $v || $v==="") {
       $this->tas_def_description = $v;
+      
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_DEF_DESCRIPTION', $this->getTasUid(), $this->tas_def_description);
+      
       $res = Content::addContent( 'TAS_DEF_DESCRIPTION', '', $this->getTasUid(), $lang, $this->tas_def_description );
       return $res;
     }
@@ -225,6 +241,10 @@ class Task extends BaseTask {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tas_def_proc_code !== $v || $v==="") {
       $this->tas_def_proc_code = $v;
+      
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_DEF_PROC_CODE', $this->getTasUid(), $this->tas_def_proc_code);
+      
       $res = Content::addContent( 'TAS_DEF_PROC_CODE', '', $this->getTasUid(), $lang, $this->tas_def_proc_code );
       return $res;
     }
@@ -264,6 +284,10 @@ class Task extends BaseTask {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tas_def_message !== $v || $v==="") {
       $this->tas_def_message = $v;
+      
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_DEF_MESSAGE', $this->getTasUid(), $this->tas_def_message);
+      
       $res = Content::addContent( 'TAS_DEF_MESSAGE', '', $this->getTasUid(), $lang, $this->tas_def_message );
       return $res;
     }
@@ -307,6 +331,10 @@ class Task extends BaseTask {
     
     if ($this->tas_def_subject_message !== $v || $v==="") {
       $this->tas_def_subject_message = $v;
+      
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('TAS_DEF_SUBJECT_MESSAGE', $this->getTasUid(), $this->tas_def_subject_message);
+      
       $res = Content::addContent( 'TAS_DEF_SUBJECT_MESSAGE', '', $this->getTasUid(), $lang, $this->tas_def_subject_message ); 
     
       return $res;

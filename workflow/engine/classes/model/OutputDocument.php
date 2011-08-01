@@ -290,6 +290,10 @@ class OutputDocument extends BaseOutputDocument {
     if ($this->out_doc_title !== $sValue || $sValue === '') {
       try {
         $this->out_doc_title = $sValue;
+        
+        //verify the content for base language
+        Content::copyContentOnBaseLanguageIfNotExists('OUT_DOC_TITLE', $this->getOutDocUid(), $this->out_doc_title);
+
         $iResult = Content::addContent('OUT_DOC_TITLE', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_title);
       }
       catch (Exception $oError) {
@@ -330,6 +334,10 @@ class OutputDocument extends BaseOutputDocument {
     if ($this->out_doc_description !== $sValue || $sValue === '') {
       try {
         $this->out_doc_description = $sValue;
+        
+        //verify the content for base language
+        Content::copyContentOnBaseLanguageIfNotExists('OUT_DOC_DESCRIPTION', $this->getOutDocUid(), $this->out_doc_description);
+
         $iResult = Content::addContent('OUT_DOC_DESCRIPTION', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_description);
       }
       catch (Exception $oError) {

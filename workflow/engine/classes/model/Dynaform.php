@@ -81,6 +81,10 @@ class Dynaform extends BaseDynaform {
     if ($this->dyn_title !== $v || $v === '') {
       $this->dyn_title = $v;
       $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('DYN_TITLE', $this->getDynUid(), $this->dyn_title);
+
       $res = Content::addContent( 'DYN_TITLE', '', $this->getDynUid(), $lang, $this->dyn_title );
     }
 
@@ -126,6 +130,10 @@ class Dynaform extends BaseDynaform {
     if ($this->dyn_description !== $v || $v === '') {
       $this->dyn_description = $v;
       $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('DYN_DESCRIPTION', $this->getDynUid(), $this->dyn_description);
+      
       $res = Content::addContent( 'DYN_DESCRIPTION', '', $this->getDynUid(), $lang, $this->dyn_description );
     }
 

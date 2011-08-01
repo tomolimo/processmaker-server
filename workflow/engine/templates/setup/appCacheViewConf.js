@@ -1,14 +1,9 @@
 Ext.onReady(function() {
 
   Ext.QuickTips.init();
-
   // turn on validation errors beside the field globally
   Ext.form.Field.prototype.msgTarget = 'side';
-
   var bd = Ext.getBody();
-
-  // bd.createChild({tag: 'h2', html: 'Form 2 - Adding fieldsets'});
-
 
   // Store
   var store = new Ext.data.Store( {
@@ -61,72 +56,8 @@ Ext.onReady(function() {
       url : '',
       frame : true,
       title : ' ',
-      bodyStyle : 'padding:5px 5px 0',
       width : 400,
-      items : [ ]
-    });
-    
-    var fieldset;
-    
-    var cmbLanguages = new Ext.form.ComboBox({
-      fieldLabel : TRANSLATIONS.ID_CACHE_LANGUAGE, // 'Language'
-      hiddenName : 'lang',
-      store : new Ext.data.Store( {
-        proxy : new Ext.data.HttpProxy( {
-          url : 'appCacheViewAjax',
-          method : 'POST'
-        }),
-        baseParams : {request : 'getLangList'},
-        reader : new Ext.data.JsonReader( {
-          root : 'rows',
-          fields : [ {name : 'LAN_ID'}, {name : 'LAN_NAME'} ]
-        })
-      }),
-      valueField     : 'LAN_ID',
-      displayField   : 'LAN_NAME',
-      //triggerAction  : 'all',
-      emptyText      : 'Select',
-      selectOnFocus  : true,
-      editable       : false,
-      allowBlank     : false
-    })
-    
-    var txtUser = {
-      id   : 'txtUser',
-      xtype: 'textfield',
-      fieldLabel: TRANSLATIONS.ID_CACHE_USER, // 'User',
-      disabled: false,
-      name: 'user',
-      value: ''
-    };
-
-    var txtHost = {
-      id   : 'txtHost',
-      xtype: 'textfield',
-      fieldLabel: TRANSLATIONS.ID_CACHE_HOST, // 'Host',
-      disabled: false,
-      name: 'host',
-      value: ''
-    };
-    
-    var txtPasswd = {
-      id   : 'txtPasswd',
-      inputType: 'password',
-      xtype:'textfield',
-      fieldLabel: TRANSLATIONS.ID_CACHE_PASSWORD, // 'Password',
-      disabled: false,
-      hidden: false,
-      value: ''
-    }
-    
-    fieldset = {
-      xtype : 'fieldset',
-      title : TRANSLATIONS.ID_CACHE_SUBTITLE_REBUILD, // 'Rebuild Workflow Application Cache',
-      collapsible : false,
-      autoHeight  : true,
-      defaults    : { width : 170 },
-      defaultType : 'textfield',
-      items   : [cmbLanguages],
+      items : [ ],
       buttons : [{
         text : TRANSLATIONS.ID_CACHE_BTN_BUILD, // 'Build Cache',
         handler : function() {
@@ -149,14 +80,42 @@ Ext.onReady(function() {
             timeout : 1000*60*30 //30 mins
           });
         }
-      }]      
-    } 
+      }]  
+    });
     
+    var txtUser = {
+      id   : 'txtUser',
+      xtype: 'textfield',
+      fieldLabel: TRANSLATIONS.ID_CACHE_USER, // 'User',
+      disabled: false,
+      name: 'user',
+      allowBlank: false
+    };
+
+    var txtHost = {
+      id   : 'txtHost',
+      xtype: 'textfield',
+      fieldLabel: TRANSLATIONS.ID_CACHE_HOST, // 'Host',
+      disabled: false,
+      name: 'host',
+      allowBlank: false
+    };
+    
+    var txtPasswd = {
+      id   : 'txtPasswd',
+      inputType: 'password',
+      xtype:'textfield',
+      fieldLabel: TRANSLATIONS.ID_CACHE_PASSWORD, // 'Password',
+      disabled: false,
+      hidden: false,
+      value: ''
+    }
     
     fieldsetRoot = {
       xtype : 'fieldset',
       title : TRANSLATIONS.ID_CACHE_SUBTITLE_SETUP_DB, // 'Setup MySql Root Password',
-      collapsible : false,
+      collapsible : true,
+      collapsed: true,
       autoHeight  : true,
       defaults    : { width : 170 },
       defaultType : 'textfield',
@@ -164,6 +123,10 @@ Ext.onReady(function() {
       buttons : [{
         text : TRANSLATIONS.ID_CACHE_BTN_SETUP_PASSWRD, // 'Setup Password',
         handler : function() {
+          if (!fsf.getForm().isValid()) {
+            return;
+          }
+  
           Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
           Ext.Ajax.request({
             url: 'appCacheViewAjax',
@@ -185,13 +148,8 @@ Ext.onReady(function() {
       }]      
     }
 
-    fsf.add(fieldset);
     fsf.add(fieldsetRoot);
     fsf.render(document.getElementById('main-panel'));
-
-    //set the current language
-    cmbLanguages.store.on('load',function(){ cmbLanguages.setValue ( currentLang ) });
-    cmbLanguages.store.load();
 
     //store.load(); instead call standard proxy we are calling ajax request, because we need to catch any error 
     Ext.Ajax.request({

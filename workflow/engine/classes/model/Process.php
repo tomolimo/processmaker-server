@@ -80,7 +80,11 @@ class Process extends BaseProcess {
 
     if ($this->pro_title !== $v || $v === '') {
       $this->pro_title = $v;
-        $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+      $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('PRO_TITLE', $this->getProUid(), $this->pro_title);
+
       $res = Content::addContent( 'PRO_TITLE', '', $this->getProUid(), $lang, $this->pro_title );
     }
 
@@ -126,6 +130,10 @@ class Process extends BaseProcess {
     if ($this->pro_description !== $v || $v === '') {
       $this->pro_description = $v;
       $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
+
+      //verify the content for base language
+      Content::copyContentOnBaseLanguageIfNotExists('PRO_DESCRIPTION', $this->getProUid(), $this->pro_description);
+      
       $res = Content::addContent( 'PRO_DESCRIPTION', '', $this->getProUid(), $lang, $this->pro_description );
     }
 
@@ -137,7 +145,7 @@ class Process extends BaseProcess {
    * @param      array $aData  Fields with :
    *                   $aData['PRO_UID'] the process id
    *                   $aData['USR_UID'] the userid
-                       $aData['PRO_CATEGORY'] the id category
+   *                   $aData['PRO_CATEGORY'] the id category
    * @return     void
    */
 

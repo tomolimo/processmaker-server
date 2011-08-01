@@ -224,6 +224,10 @@ function swimlanesElementsExists ( $sSwiEleUid ) {
     if ($this->swi_text !== $sValue || $sValue === '') {
       try {
         $this->swi_text = $sValue;
+
+        //verify the content for base language
+        Content::copyContentOnBaseLanguageIfNotExists('SWI_TEXT', $this->getSwiUid(), $this->swi_text);
+
         $iResult = Content::addContent('SWI_TEXT', '', $this->getSwiUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->swi_text);
       }
       catch (Exception $oError) {

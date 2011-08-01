@@ -155,7 +155,7 @@ try {
 }
 catch ( Exception $e ){
 	$aMessage = array();
-	$aMessage['MESSAGE'] = $e->getMessage();
+	$aMessage['MESSAGE'] = $e->getMessage() . '<br>'.$e->getTraceAsString();
 	$G_PUBLISH = new Publisher;
 	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
   G::RenderPage( 'publish', 'blank');

@@ -128,7 +128,9 @@
       G::LoadClass('configuration');
       $conf = new Configurations;
       
-      $lang = $_POST['lang'];
+      //DEPRECATED $lang = $_POST['lang'];
+      //there is no more support for other languages that english
+      $lang = 'en';
 
       try {        
         //setup the appcacheview object, and the path for the sql files

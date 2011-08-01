@@ -325,4 +325,21 @@ class Content extends BaseContent {
   	}
   	return $aRoles;
   }
+  
+  /**
+   * Verify the if content on teh current language exists for the base language 'english
+   * if not copy for it.
+   * 
+   * @autor Erik Amaru Ortiz <erik@colosa.com>
+   * @param $category
+   * @param $id
+   * @param $value
+   */
+  function copyContentOnBaseLanguageIfNotExists($category, $id, $value)
+  {
+    $con = ContentPeer::retrieveByPk($category, '', $id, 'en');
+    if ($con === null) {      
+      Content::addContent($category, '', $id, 'en', $value);
+    }
+  }
 } // Content
