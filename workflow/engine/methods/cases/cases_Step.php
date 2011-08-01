@@ -532,8 +532,8 @@
                     $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
                     if($uploadReturn){//Only delete if the file was saved correctly
                         $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
-                      	$oAppDocument1 = new AppDocument();
-                        $oAppDocument1->update($aFields);
+                      	//$oAppDocument = new AppDocument();
+                        //$oAppDocument->update($aFields);
                     	unlink ( $pathOutput . $sFilename. '.pdf' );
                   	}
 
