@@ -35,13 +35,11 @@ $startingTime =  array_sum(explode(' ',microtime()));
   }
 
 //******** defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/' **************************
-  if ( PHP_OS == 'WINNT' && !strpos ( $_SERVER['DOCUMENT_ROOT'], '/' ) )
-   define('PATH_SEP','\\');
-  else
-   define('PATH_SEP', '/');
+  define('PATH_SEP', '/');
 
 //***************** Defining the Home Directory *********************************
-  $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
+  $realdocuroot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+  $docuroot = explode ( PATH_SEP , $realdocuroot );
   array_pop($docuroot);
   $pathhome = implode( PATH_SEP, $docuroot )  . PATH_SEP;
 
