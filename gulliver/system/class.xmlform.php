@@ -1058,6 +1058,7 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
         $html .= '<input ';
         $html .= 'id="form['.$owner->name.']['.$r.']['.$this->name.']" ';
         $html .= 'name="form['.$owner->name.']['.$r.']['.$this->name.']" ';
+        $html .= $this->NSDefaultValue().' ';
         $html .= 'type="hidden" value="'.$this->htmlentities($v, ENT_QUOTES, 'utf-8').'" />';
       }
       

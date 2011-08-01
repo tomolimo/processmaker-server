@@ -356,6 +356,9 @@ var G_Grid = function(oForm, sGridName){
                 if (aAttributes[a].name.indexOf('pm:') != -1){
                   oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
                 }
+                if (aAttributes[a].name == 'disabled'){
+                  oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
+                }
               }
               
               attributes = elementAttributesNS(aObjects[0], 'pm');
