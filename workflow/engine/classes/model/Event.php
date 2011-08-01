@@ -709,7 +709,8 @@ class Event extends BaseEvent {
       $oCriteria->addSelectColumn(EventPeer::EVN_ACTION_PARAMETERS);
       $oCriteria->addSelectColumn(EventPeer::TRI_UID);
 
-      $oCriteria->add(EventPeer::EVN_STATUS, 'ACTIVE' );
+      $oCriteria->add(EventPeer::EVN_STATUS, 'ACTIVE');
+      $oCriteria->add(EventPeer::EVN_ACTION, '', Criteria::NOT_EQUAL);
       foreach($aFilers as $sFilter=>$sValue){
         switch($sFilter){
           case 'TAS_UID':

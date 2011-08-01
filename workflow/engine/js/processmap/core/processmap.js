@@ -731,69 +731,105 @@ var processmap=function(){
              r.make();
              }.extend(this)},
 */
-             {image:"/images/event_messageThrow.png",text:"intermediate message event",launch:function(event){
-               this.tmp.eventsPanel = panel =new leimnud.module.panel();
-             panel.options={
-              limit :true,
-              size :{w:700,h:380},
-              position:{x:50,y:50,center:true},
-              title :G_STRINGS.ID_EVENT_MESSAGE,
-              theme :this.options.theme,
-              control :{close:true,resize:false},fx:{modal:true},
-              statusBar:false,
-              fx :{shadow:true,modal:true}
-             };
-             panel.make();
-             panel.loader.show();
-             var r = new leimnud.module.rpc.xmlhttp({
-              url:this.options.dataServer,
-              args:"action=events&data="+{
-               pro_uid :this.options.uid,
-                       type:"message"
-              }.toJSONString()
-             });
-             r.callback=function(rpc,panel)
-             {
-              panel.loader.hide();
-              var scs = rpc.xmlhttp.responseText.extractScript();
-              panel.addContent(rpc.xmlhttp.responseText);
-              scs.evalScript();
-              //Pm.objeto.innerHTML="asdasd";
-             }.extend(this,panel);
-             r.make();
-            }.extend(this)},
-             {image:"/images/event_timer.png",text:"intermediate timer event ",launch:function(event){
-               this.tmp.eventsPanel = panel =new leimnud.module.panel();
-             panel.options={
-              limit :true,
-              size :{w:700,h:380},
-              position:{x:50,y:50,center:true},
-              title :G_STRINGS.ID_EVENT_MULTIPLE,
-              theme :this.options.theme,
-              control :{close:true,resize:false},fx:{modal:true},
-              statusBar:false,
-              fx :{shadow:true,modal:true}
-             };
-             panel.make();
-             panel.loader.show();
-             var r = new leimnud.module.rpc.xmlhttp({
-              url:this.options.dataServer,
-              args:"action=events&data="+{
-               pro_uid :this.options.uid,
-                       type:"multiple"
-              }.toJSONString()
-             });
-             r.callback=function(rpc,panel)
-             {
-              panel.loader.hide();
-              var scs = rpc.xmlhttp.responseText.extractScript();
-              panel.addContent(rpc.xmlhttp.responseText);
-              scs.evalScript();
-              //Pm.objeto.innerHTML="asdasd";
-             }.extend(this,panel);
-             r.make();
+            {
+              image:"/images/event_messageThrow.png",text:"intermediate message event",launch:function(event){
+              this.tmp.eventsPanel = panel =new leimnud.module.panel();
+              panel.options={
+                limit :true,
+                size :{w:700,h:380},
+                position:{x:50,y:50,center:true},
+                title :G_STRINGS.ID_EVENT_MESSAGE,
+                theme :this.options.theme,
+                control :{close:true,resize:false},fx:{modal:true},
+                statusBar:false,
+                fx :{shadow:true,modal:true}
+              };
+              panel.make();
+              panel.loader.show();
+              var r = new leimnud.module.rpc.xmlhttp({
+                url:this.options.dataServer,
+                args:"action=events&data="+{
+                  pro_uid :this.options.uid,
+                  type:"message"
+                }.toJSONString()
+              });
+              r.callback=function(rpc,panel)
+              {
+                panel.loader.hide();
+                var scs = rpc.xmlhttp.responseText.extractScript();
+                panel.addContent(rpc.xmlhttp.responseText);
+                scs.evalScript();
+                //Pm.objeto.innerHTML="asdasd";
+              }.extend(this,panel);
+              r.make();
+              }.extend(this)
+            },
+            {
+              image:"/images/event_conditional.png",text:"conditional message event",launch:function(event){
+              this.tmp.eventsPanel = panel =new leimnud.module.panel();
+              panel.options={
+                limit :true,
+                size :{w:700,h:380},
+                position:{x:50,y:50,center:true},
+                title :G_STRINGS.ID_EVENT_MESSAGE,
+                theme :this.options.theme,
+                control :{close:true,resize:false},fx:{modal:true},
+                statusBar:false,
+                fx :{shadow:true,modal:true}
+              };
+              panel.make();
+              panel.loader.show();
+              var r = new leimnud.module.rpc.xmlhttp({
+                url:this.options.dataServer,
+                args:"action=events&data="+{
+                  pro_uid :this.options.uid,
+                  type:"conditional"
+                }.toJSONString()
+              });
+              r.callback=function(rpc,panel)
+              {
+                panel.loader.hide();
+                var scs = rpc.xmlhttp.responseText.extractScript();
+                panel.addContent(rpc.xmlhttp.responseText);
+                scs.evalScript();
+                //Pm.objeto.innerHTML="asdasd";
+              }.extend(this,panel);
+              r.make();
+              }.extend(this)
+            },
+            {
+              image:"/images/event_timer.png",text:"intermediate timer event ",launch:function(event){
+              this.tmp.eventsPanel = panel =new leimnud.module.panel();
+              panel.options={
+                limit :true,
+                size :{w:700,h:380},
+                position:{x:50,y:50,center:true},
+                title :G_STRINGS.ID_EVENT_MULTIPLE,
+                theme :this.options.theme,
+                control :{close:true,resize:false},fx:{modal:true},
+                statusBar:false,
+                fx :{shadow:true,modal:true}
+              };
+              panel.make();
+              panel.loader.show();
+              var r = new leimnud.module.rpc.xmlhttp({
+                url:this.options.dataServer,
+                args:"action=events&data="+{
+                  pro_uid :this.options.uid,
+                  type:"multiple"
+                }.toJSONString()
+              });
+              r.callback=function(rpc,panel)
+              {
+                panel.loader.hide();
+                var scs = rpc.xmlhttp.responseText.extractScript();
+                panel.addContent(rpc.xmlhttp.responseText);
+                scs.evalScript();
+                //Pm.objeto.innerHTML="asdasd";
+                }.extend(this,panel);
+                r.make();
             }.extend(this)}
-   ]}
+          ]}
 
           ]
         });
@@ -2663,4 +2699,9 @@ function showLogCaseSchedulerList(PRO_UID)
       scs.evalScript();
     }.extend(this);
   oRPC.make();
+}
+
+function exitEditor()
+{
+  location.href = '../processes/mainInit';
 }
