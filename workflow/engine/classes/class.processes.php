@@ -758,29 +758,35 @@ class Processes {
         $oData->steps[$key]['STEP_UID_OBJ'] = $newGuid;
       }
     }
-    foreach ( $oData->caseTrackerObject as $key => $val ) {
-      if ( $val['CTO_TYPE_OBJ'] == 'DYNAFORM' ) {
-        $newGuid = $map[ $val['CTO_UID_OBJ'] ];
-        $oData->steps[$key]['CTO_UID_OBJ'] = $newGuid;
-      }
-    }
-    foreach ( $oData->objectPermissions as $key => $val ) {
-      if ( $val['OP_OBJ_TYPE'] == 'DYNAFORM' ) {
-        if(isset($map[ $val['OP_OBJ_UID'] ])){
-            $newGuid = $map[ $val['OP_OBJ_UID'] ];
-            $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+    if ( isset($oData->caseTrackerObject ) && is_array($oData->caseTrackerObject) ) {
+      foreach ( $oData->caseTrackerObject as $key => $val ) {
+        if ( $val['CTO_TYPE_OBJ'] == 'DYNAFORM' ) {
+          $newGuid = $map[ $val['CTO_UID_OBJ'] ];
+          $oData->steps[$key]['CTO_UID_OBJ'] = $newGuid;
         }
       }
     }
-    foreach ( $oData->stepSupervisor as $key => $val ) {
-      if ( $val['STEP_TYPE_OBJ'] == 'DYNAFORM' ) {
-        $newGuid = $map[ $val['STEP_UID_OBJ'] ];
-        $oData->stepSupervisor[$key]['STEP_UID_OBJ'] = $newGuid;
+    if ( isset($oData->objectPermissions ) && is_array($oData->objectPermissions) ) {
+      foreach ( $oData->objectPermissions as $key => $val ) {
+        if ( $val['OP_OBJ_TYPE'] == 'DYNAFORM' ) {
+          if(isset($map[ $val['OP_OBJ_UID'] ])){
+              $newGuid = $map[ $val['OP_OBJ_UID'] ];
+              $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+          }
+        }
       }
     }
-    foreach ( $oData->dynaformFiles as $key => $val ) {
-      $newGuid = $map[ $key ];
-      $oData->dynaformFiles[$key] = $newGuid;
+    if ( isset($oData->stepSupervisor ) && is_array($oData->stepSupervisor) ) {
+      foreach ( $oData->stepSupervisor as $key => $val ) {
+        if ( $val['STEP_TYPE_OBJ'] == 'DYNAFORM' ) {
+          $newGuid = $map[ $val['STEP_UID_OBJ'] ];
+          $oData->stepSupervisor[$key]['STEP_UID_OBJ'] = $newGuid;
+        }
+      }
+      foreach ( $oData->dynaformFiles as $key => $val ) {
+        $newGuid = $map[ $key ];
+        $oData->dynaformFiles[$key] = $newGuid;
+      }
     }
     if(isset($oData->gridFiles)){
       foreach ( $oData->gridFiles as $key => $val ) {
@@ -788,9 +794,11 @@ class Processes {
         $oData->gridFiles[$key] = $newGuid;
       }
     }
-    foreach( $oData->fieldCondition as  $key => $val ){
-        $newGuid = $map[ $val['FCD_DYN_UID'] ];
-        $oData->fieldCondition[$key]['FCD_DYN_UID'] = $newGuid;
+    if ( isset($oData->fieldCondition ) && is_array($oData->fieldCondition) ) {
+      foreach( $oData->fieldCondition as  $key => $val ){
+          $newGuid = $map[ $val['FCD_DYN_UID'] ];
+          $oData->fieldCondition[$key]['FCD_DYN_UID'] = $newGuid;
+      }
     }
 
   }
@@ -1342,24 +1350,30 @@ class Processes {
           }
       }
     }
-    foreach ( $oData->caseTrackerObject as $key => $val ) {
-      if ( $val['CTO_TYPE_OBJ'] == 'INPUT_DOCUMENT' ) {
-        $newGuid = $map[ $val['CTO_UID_OBJ'] ];
-        $oData->steps[$key]['CTO_UID_OBJ'] = $newGuid;
+    if ( isset($oData->caseTrackerObject ) && is_array($oData->caseTrackerObject) ) {
+      foreach ( $oData->caseTrackerObject as $key => $val ) {
+        if ( $val['CTO_TYPE_OBJ'] == 'INPUT_DOCUMENT' ) {
+          $newGuid = $map[ $val['CTO_UID_OBJ'] ];
+          $oData->steps[$key]['CTO_UID_OBJ'] = $newGuid;
+        }
       }
     }
-    foreach ( $oData->objectPermissions as $key => $val ) {
-      if ( $val['OP_OBJ_TYPE'] == 'INPUT_DOCUMENT' ) {
-          if(isset($map[ $val['OP_OBJ_UID'] ])){
-            $newGuid = $map[ $val['OP_OBJ_UID'] ];
-            $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
-          }
+    if ( isset($oData->objectPermissions ) && is_array($oData->objectPermissions) ) {
+      foreach ( $oData->objectPermissions as $key => $val ) {
+        if ( $val['OP_OBJ_TYPE'] == 'INPUT_DOCUMENT' ) {
+            if(isset($map[ $val['OP_OBJ_UID'] ])){
+              $newGuid = $map[ $val['OP_OBJ_UID'] ];
+              $oData->objectPermissions[$key]['OP_OBJ_UID'] = $newGuid;
+            }
+        }
       }
     }
-    foreach ( $oData->stepSupervisor as $key => $val ) {
-      if ( $val['STEP_TYPE_OBJ'] == 'INPUT_DOCUMENT' ) {
-        $newGuid = $map[ $val['STEP_UID_OBJ'] ];
-        $oData->stepSupervisor[$key]['STEP_UID_OBJ'] = $newGuid;
+    if ( isset($oData->stepSupervisor ) && is_array($oData->stepSupervisor) ) {
+      foreach ( $oData->stepSupervisor as $key => $val ) {
+        if ( $val['STEP_TYPE_OBJ'] == 'INPUT_DOCUMENT' ) {
+          $newGuid = $map[ $val['STEP_UID_OBJ'] ];
+          $oData->stepSupervisor[$key]['STEP_UID_OBJ'] = $newGuid;
+        }
       }
     }
   }
