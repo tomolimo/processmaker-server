@@ -324,7 +324,7 @@
 					//END: If there is a Break Step registered from Plugin
 
 
-          $sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
+          $sFilenameOriginal=$sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
           require_once 'classes/model/AppFolder.php';
           require_once 'classes/model/AppDocument.php';
 
@@ -521,8 +521,8 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilename . '.pdf',
-                                  $sFilename. '.pdf',
+                                  $pathOutput . $sFilenameOriginal . '.pdf',
+                                  $sFilenameOriginal. '.pdf',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
                                   );
@@ -542,8 +542,8 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilename . '.doc',
-                                  $sFilename. '.doc',
+                                  $pathOutput . $sFilenameOriginal . '.doc',
+                                  $sFilenameOriginal. '.doc',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
                                   );
@@ -560,8 +560,8 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilename . '.pdf',
-                                  $sFilename. '.pdf',
+                                  $pathOutput . $sFilenameOriginal . '.pdf',
+                                  $sFilenameOriginal. '.pdf',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
                                   );
@@ -578,8 +578,8 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilename . '.doc',
-                                  $sFilename. '.doc',
+                                  $pathOutput . $sFilenameOriginal . '.doc',
+                                  $sFilenameOriginal. '.doc',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
                                   );
