@@ -79,7 +79,7 @@
     foreach ($newValues as $key => $values){
       for ($r2=1; $r2 <= $_POST['row']; $r2++){
         foreach ($values as $class => $value){
-          if ($class = $_POST['grid']){
+          if ($class == $_POST['grid']){
             $value = (array) $value;
             $arrayK = $value[$r2];
             foreach ($arrayK as $key2 => $val) {
