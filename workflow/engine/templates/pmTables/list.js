@@ -531,22 +531,16 @@ ExportPMTable = function(){
   for(var i=0; i<rows.length; i++){
     toExportRows.push([
       rows[i].get('ADD_TAB_UID'),
+      rows[i].get('PRO_UID'),
       rows[i].get('ADD_TAB_NAME'),
       (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
       true,
-      false
+      (rows[i].get('PRO_UID') ? false : true) 
     ]);
   }
 
   Export.targetGrid.store.loadData(toExportRows);
-
   Export.window.show();
-  return;
-  
-  iGrid = Ext.getCmp('infoGrid');
-  rowsSelected = iGrid.getSelectionModel().getSelections();
-  //location.href = 'additionalTablesToExport?sUID='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
-  location.href = 'pmTables/export?id='+RetrieveRowsID(rowsSelected)+'&rand='+Math.random();
 };
 
 //Load PM TAble Data

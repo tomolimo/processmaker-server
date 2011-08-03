@@ -49,6 +49,7 @@ Export.configure = function()
   this.targetGridConfig.store = new Ext.data.ArrayStore({
       fields: [
         {name : 'ADD_TAB_UID'},
+        {name : 'PRO_UID'},
         {name : 'ADD_TAB_NAME'},
         {name : '_TYPE'},
         {name : '_SCHEMA'},
@@ -56,17 +57,29 @@ Export.configure = function()
       ]
   });
 
-  schemaColumn = new Ext.grid.CheckColumn({
+  schemaColumn = new Ext.ux.grid.CheckColumn({
     header: _('ID_SCHEMA'),
     dataIndex: '_SCHEMA',
-    width: 55,
-    checked: true
+    width: 55
   });
 
-  dataColumn = new Ext.grid.CheckColumn({
+  dataColumn = new Ext.ux.grid.CheckColumn({
     header: _('ID_DATA'),
     dataIndex: '_DATA',
-    width: 55
+    width: 55,
+    onMouseDown: function(e, t) {
+      if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+        e.stopEvent();
+        var index = Export.targetGrid.getView().findRowIndex(t);
+        var record = Export.targetGrid.store.getAt(index);
+        
+        if(record.data['PRO_UID']) {
+          PMExt.info(_('ID_INFO'), _('ID_REPORT_TABLES_DATA_EXPORT_NOT_ALLOWED'));
+          return false;
+        } else 
+          record.set(this.dataIndex, !record.data[this.dataIndex]);
+      }
+    }
   });
 
 
@@ -77,6 +90,7 @@ Export.configure = function()
     columns: [
       new Ext.grid.RowNumberer(),
       {id:'ADD_TAB_UID', dataIndex: 'ADD_TAB_UID', hidden:true, hideable:false},
+      {id:'PRO_UID', dataIndex: 'PRO_UID', hidden:true, hideable:false},
       {header: _('ID_PMTABLE'), dataIndex: 'ADD_TAB_NAME', width: 300},
       {header: _('ID_TYPE'), dataIndex: '_TYPE', width:100},
       schemaColumn,
@@ -165,3 +179,34 @@ Export.submit = function()
 Ext.onReady(Export.init, Export, true);
 
 
+Ext.namespace("Ext.ux.grid");
+Ext.ux.grid.CheckColumn = function(config){
+    Ext.apply(this, config);
+    if(!this.id){
+        this.id = Ext.id();
+    }
+    this.renderer = this.renderer.createDelegate(this);
+};
+Ext.ux.grid.CheckColumn.prototype ={
+    init : function(grid){
+        this.grid = grid;
+        this.grid.on('render', function(){
+            var view = this.grid.getView();
+            view.mainBody.on('mousedown', this.onMouseDown, this);
+        }, this);
+    },
+
+    onMouseDown : function(e, t){
+        if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+            e.stopEvent();
+            var index = this.grid.getView().findRowIndex(t);
+            var record = this.grid.store.getAt(index);
+            record.set(this.dataIndex, !record.data[this.dataIndex]);
+        }
+    },
+
+    renderer : function(v, p, record){
+        p.css += ' x-grid3-check-col-td'; 
+        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+    }
+};
