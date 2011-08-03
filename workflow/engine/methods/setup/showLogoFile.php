@@ -24,6 +24,7 @@
  */
 //  if (($RBAC_Response = $RBAC->userCanAccess("PM_CASES"))!=1) return $RBAC_Response;
 
+  $idDecode64= base64_decode($_GET['id']);
 
 	$ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
 //it was added to show the logo into management plugin add by krlos
@@ -32,13 +33,15 @@
   }
 //end add
 	$dir=PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
-	$imagen = $dir .PATH_SEP.G::decrypt($_GET['id'],'imagen');
+	$imagen = $dir .PATH_SEP.$idDecode64;
+
 
   if (is_file($imagen))
 	{
     showLogo($imagen);
 
-	}else{
+	}
+  else {
 
   $newDir = PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos"; 
   $dir = PATH_HOME . "public_html/files/logos";
@@ -48,8 +51,8 @@
   }
   //this function does copy all logos from public_html/files/logos to /shared/site/yourSite/files/logos
   //cpyMoreLogos($dir,$newDir);
-  $newDir .= PATH_SEP.G::decrypt($_GET['id'],'imagen');
-  $dir    .= PATH_SEP.G::decrypt($_GET['id'],'imagen');
+  $newDir .= PATH_SEP.$idDecode64;
+  $dir    .= PATH_SEP.$idDecode64;
   copy($dir,$newDir);
   showLogo($newDir);
   die;

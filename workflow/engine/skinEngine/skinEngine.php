@@ -475,15 +475,14 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
                     $sWspaceSelect = trim($aFotoSelect['WORKSPACE_LOGO_NAME']);
                 }
             }
-
             if (class_exists('PMPluginRegistry')) {
                 $oPluginRegistry = &PMPluginRegistry::getSingleton();
                 if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect,SYS_SYS)) ){
                     $sCompanyLogo = $oPluginRegistry->getCompanyLogo($sFotoSelect);
-                    $sCompanyLogo= "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".G::encrypt($sCompanyLogo,"imagen");
+                    $sCompanyLogo= "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".base64_encode($sCompanyLogo);
                 }
                 else {
-                    $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
+                  $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
                 }
             }
             else {

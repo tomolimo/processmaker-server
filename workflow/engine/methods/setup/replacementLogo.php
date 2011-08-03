@@ -37,21 +37,23 @@ try {//ini_set('display_errors','1');
   	  die;
   	break;
   }
-  function changeNamelogo($snameLogo){
-   $snameLogo = strtolower($snameLogo);
-   //replace special characteres and others
-   $buscar = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'Ã¡', 'Ã©', 'Ã­', 'Ã³', 'Ãº', 'ä', 'ë', 'ï', 'ö', 'ü', 'Ã¤', 'Ã«', 'Ã¯', 'Ã¶', 'Ã¼', 'Ã', 'Ã‰', 'Ã', 'Ã“', 'Ãš', 'Ã„', 'Ã‹', 'Ã', 'Ã–', 'Ãœ', 'Ã±');
-   $repl = array('a', 'e', 'i', 'o', 'u', 'n', 'a',  'e',  'i',  'o',  'u',  'a', 'e', 'i', 'o', 'u', 'a',  'e',  'i',  'o',  'u',  'a',  'e',  'i',  'o',  'u',  'a',  'e',  'i',  'o',  'u',  'n');
-   $snameLogo = str_replace($buscar, $repl, $snameLogo);
-   // add some caracteres
-   $lookforit = array(' ', '&', '\r\n', '\n', '+', '_');
-   $snameLogo = str_replace($lookforit, '-', $snameLogo);
-   // removing and replace others special characteres
-   $lookforit = array('/[^a-z0-9\-<>]/', '/[\-]+/', '/<[^>]*>/');
-   $repl = array('.', '-', '.');
-   $snameLogo = preg_replace ($lookforit, $repl, $snameLogo);
-   return ($snameLogo);
-  }
+    function changeNamelogo($snameLogo){
+     $snameLogo = ereg_replace("[áàâãª]","a",$snameLogo);
+     $snameLogo = ereg_replace("[ÁÀÂÃ]","A",$snameLogo);
+     $snameLogo = ereg_replace("[ÍÌÎ]","I",$snameLogo);
+     $snameLogo = ereg_replace("[íìî]","i",$snameLogo);
+     $snameLogo = ereg_replace("[éèê]","e",$snameLogo);
+     $snameLogo = ereg_replace("[ÉÈÊ]","E",$snameLogo);
+     $snameLogo = ereg_replace("[óòôõº]","o",$snameLogo);
+     $snameLogo = ereg_replace("[ÓÒÔÕ]","O",$snameLogo);
+     $snameLogo = ereg_replace("[úùû]","u",$snameLogo);
+     $snameLogo = ereg_replace("[ÚÙÛ]","U",$snameLogo);
+     $snameLogo = str_replace("ç","c",$snameLogo);
+     $snameLogo = str_replace("Ç","C",$snameLogo);
+     $snameLogo = str_replace("[ñ]","n",$snameLogo);
+     $snameLogo = str_replace("[Ñ]","N",$snameLogo);
+    return ($snameLogo);
+    }
 
   $sfunction =$_GET['function'];
   switch($sfunction){
@@ -87,8 +89,6 @@ try {//ini_set('display_errors','1');
    	  
    	  
    	  G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
-   	  //header('location: uplogo.php');
-   	  //G::header('location: uplogo');
     break;             
 
    }
