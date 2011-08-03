@@ -791,7 +791,7 @@ class pmTablesProxy extends HttpProxyController
   {
     require_once 'classes/model/AdditionalTables.php';
 
-    $tablesToExport = json_decode($httpData->rows);
+    $tablesToExport = json_decode(stripslashes($httpData->rows));
       
     try{
       G::LoadCLass('net');
