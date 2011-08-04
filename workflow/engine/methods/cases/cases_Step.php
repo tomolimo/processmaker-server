@@ -521,7 +521,7 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilenameOriginal . '.pdf',
+                                  $pathOutput . $sFilename . '.pdf',
                                   $sFilenameOriginal. '.pdf',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
@@ -542,7 +542,7 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilenameOriginal . '.doc',
+                                  $pathOutput . $sFilename . '.doc',
                                   $sFilenameOriginal. '.doc',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
@@ -560,7 +560,7 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilenameOriginal . '.pdf',
+                                  $pathOutput . $sFilename . '.pdf',
                                   $sFilenameOriginal. '.pdf',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
@@ -578,7 +578,7 @@
                     $documentData = new uploadDocumentData (
                                   $_SESSION['APPLICATION'],
                                   $_SESSION['USER_LOGGED'],
-                                  $pathOutput . $sFilenameOriginal . '.doc',
+                                  $pathOutput . $sFilename . '.doc',
                                   $sFilenameOriginal. '.doc',
                                   $sDocUID,
                                   $oAppDocument->getDocVersion()
