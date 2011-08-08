@@ -137,7 +137,7 @@ class spoolRun {
       $this->status = strtolower($aData['app_msg_status']);
     }
     
-    $this->setData($sUID, $aData['app_msg_subject'], $aData['app_msg_from'], $aData['app_msg_to'], $aData['app_msg_body'], $aData['app_msg_date'], $aData['app_msg_cc'], $aData['app_msg_bcc'], $aData['app_msg_template']);
+    $this->setData($sUID, $aData['app_msg_subject'], $aData['app_msg_from'], $aData['app_msg_to'], $aData['app_msg_body'], $aData['app_msg_date'], $aData['app_msg_cc'], $aData['app_msg_bcc'], $aData['app_msg_template'], $aData['app_msg_attach']);
   }
   
   /**
@@ -154,7 +154,7 @@ class spoolRun {
    * @param string $sAppMsgUid, $sSubject, $sFrom, $sTo, $sBody, $sDate, $sCC, $sBCC, $sTemplate
    * @return none
    */
-  public function setData($sAppMsgUid, $sSubject, $sFrom, $sTo, $sBody, $sDate = '', $sCC = '', $sBCC = '', $sTemplate = '') {
+  public function setData($sAppMsgUid, $sSubject, $sFrom, $sTo, $sBody, $sDate = '', $sCC = '', $sBCC = '', $sTemplate = '', $sAttachment = '') {
     $this->spool_id = $sAppMsgUid;
     $this->fileData['subject'] = $sSubject;
     $this->fileData['from'] = $sFrom;
@@ -164,7 +164,7 @@ class spoolRun {
     $this->fileData['cc'] = $sCC;
     $this->fileData['bcc'] = $sBCC;
     $this->fileData['template'] = $sTemplate;
-    $this->fileData['attachments'] = array ();
+    $this->fileData['attachments'] = ($sAttachment)? $sAttachment:array();
     
     if( $this->config['MESS_ENGINE'] == 'OPENMAIL' ) {
       if( $this->config['MESS_SERVER'] != '' ) {
@@ -332,7 +332,8 @@ class spoolRun {
           $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);
           $oPHPMailer->Subject = utf8_decode($this->fileData['subject']);
           $oPHPMailer->Body = utf8_decode($this->fileData['body']);
-          
+          if($this->fileData['attachments'])
+           $oPHPMailer->AddAttachment($this->fileData['attachments']);          
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
             if( strpos($sEmail, '<') !== false ) {
               preg_match($this->longMailEreg, $sEmail, $matches);
@@ -375,7 +376,8 @@ class spoolRun {
           $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);
           $oPHPMailer->Subject = utf8_decode($this->fileData['subject']);
           $oPHPMailer->Body = utf8_decode($this->fileData['body']);
-          
+          if($this->fileData['attachments'])
+           $oPHPMailer->AddAttachment($this->fileData['attachments']);          
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
             $evalMail = strpos($sEmail, '<');
             

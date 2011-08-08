@@ -768,10 +768,11 @@ function getEmailConfiguration () {
  *
  */
 //@param array | $aFields=array() | An associative array optional | Optional parameter. An associative array where the keys are the variable name and the values are the variable's value. 
-function PMFSendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $aFields = array()) {
+function PMFSendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $aFields = array(), $sAttachment) {
+
   G::LoadClass('wsBase');
   $ws = new wsBase ();
-  $result = $ws->sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $aFields);
+  $result = $ws->sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $aFields, $sAttachment);
 
   if ( $result->status_code == 0) {
     return 1;
@@ -779,7 +780,6 @@ function PMFSendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplat
     return 0;
   }
 }
-
 /**
  * @method
  *
