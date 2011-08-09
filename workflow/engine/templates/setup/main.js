@@ -73,12 +73,12 @@ var main = function(){
         activeTab: 0,
         enableTabScroll: true,
         stateId:'admin-tabpanel',
-        stateEvents:['tabchange'],
+        stateEvents:['tabchange'],/*
         getState:function() {
           return {
             activeTab:this.items.indexOf(this.getActiveTab())
           };
-        },
+        },*/
         items: items
       }),
       {
