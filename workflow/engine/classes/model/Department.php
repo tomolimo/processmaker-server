@@ -335,7 +335,7 @@ protected $depo_title = '';
     if (is_object($oUser) && get_class ($oUser) == 'Users' ) {
       $oDept = DepartmentPeer::retrieveByPk( $depParent );
       $oUser->setUsrReportsTo( '' ); //by default no manager
-      if (is_object($oUser) && get_class ($oDept) == 'Department' ) {
+      if (is_object($oDept) && get_class ($oDept) == 'Department' ) {
         $managerParentId = $oDept->getDepManager( );
         if ( trim($managerParentId) != '' ) {
           $oUser->setUsrReportsTo( $managerParentId );
