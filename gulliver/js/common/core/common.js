@@ -1227,22 +1227,63 @@ var radios = document.getElementById('form[' + field + ']');
 	}
 }
 
-function validDate(TheField, Required) {
-	TheYear  = getField(TheField + '][YEAR');
-	TheMonth = getField(TheField + '][MONTH');
-	TheDay   = getField(TheField + '][DAY');
-	if (!TheYear || !TheMonth || !TheDay)
-	  return false;
-	if (Required)
-	  if ((TheYear.value == 0) || (TheMonth.value == 0) || (TheDay.value == 0))
-	    return false;
-	if (TheMonth.value == 2)
-	  if (TheDay.value > 29)
-	    return false;
-	if ((TheMonth.value == 4) || (TheMonth.value == 6) || (TheMonth.value == 9) || (TheMonth.value == 11))
-	  if (TheDay.value > 30)
-	    return false;
-	return true;
+/* @author Alvaro Campos Sanchez
+ */
+function validDate(TheField, Required) {  
+
+     var date = TheField.split("-");
+     var date1 = date[0];
+     var date2 = date[1];
+     var date3 = date[2];
+     var TheDay,TheMonth,TheYear;
+     
+     if ((date1.length==4)&&(!TheYear))
+      TheYear = date1;
+     if (date1.length==2)
+       if ((date1>0)&&(date1<=12)&&(!TheMonth)) 
+         TheMonth = date1;
+       else 
+         if ((date1>0)&&(date1<=31)&&(!TheDay)) 
+           TheDay = date1;
+         else
+           TheYear = date1;
+       
+     if ((date2.length==4)&&(!TheYear))
+       TheYear = date2;
+     if (date2.length==2)
+       if ((date2>0)&&(date2<=12)&&(!TheMonth)) 
+         TheMonth = date2;
+       else 
+         if ((date2>0)&&(date2<=31)&&(!TheDay)) 
+           TheDay = date2;
+         else
+           TheYear = date2;  
+    
+     if((date3.length==4)&&(!TheYear))
+       TheYear = date3;
+     if (date3.length==2)
+       if ((date3>0)&&(date3<=12)&&(!TheMonth)) 
+         TheMonth = date3;
+       else 
+         if ((date3>0)&&(date3<=31)&&(!TheDay)) 
+           TheDay = date3;
+         else
+           TheYear = date3;   
+       
+     if (!TheYear || !TheMonth || !TheDay)
+       return false;
+     if ((Required)||(Required=='true'))
+       if ((TheYear == 0) || (TheMonth == 0) || (TheDay == 0))
+         return false;
+     if (TheMonth == 02)
+       if (TheDay > 29)
+         return false;
+     if ((TheMonth != 02)&&(TheMonth < 13)&&(TheMonth > 0))
+       if (TheDay > 30)
+         return false;
+ 
+ return true;
+   
 }
 
 /* @author David S. Callizaya S.
@@ -1917,7 +1958,6 @@ function removeValue(id){
 }
 
 function datePicker4(obj, id, mask, startDate, endDate, showTIme){  
-  //alert('->'+id);
   if(showTIme=='false')
   showTIme=false;
   	Calendar.setup({
