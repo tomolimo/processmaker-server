@@ -77,10 +77,12 @@
                                                         {/foreach}
                                                     {/if}
                                                     {if $data.NEXT_TASK.TAS_NEXT eq ''}
+                                                       {if $data.NEXT_TASK.USR_UID neq ''}
                                                         <tr>
                                                             <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
                                                              <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
                                                         </tr>
+                                                        {/if}
                                                     {/if}
                                                     {if $data.NEXT_TASK.TAS_TRANSFER_FLY eq 'true'}
                                                        <tr>
