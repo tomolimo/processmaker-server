@@ -41,6 +41,11 @@ function updatePageSize() {
 }
 
 function skinList() {
+  //Create Skins custom folder if it doesn't exists
+  if(!is_dir(PATH_CUSTOM_SKINS)){
+    G::verifyPath(PATH_CUSTOM_SKINS, true);
+  }
+
   //Get Skin Config files
   $skinListArray = array();
   $customSkins = glob(PATH_CUSTOM_SKINS . "*/config.xml");
