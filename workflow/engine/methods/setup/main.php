@@ -23,7 +23,7 @@
  *
  */
 
-$RBAC->requirePermissions('PM_SETUP');
+$RBAC->requirePermissions('PM_SETUP', 'PM_USERS');
 
 $G_MAIN_MENU            = 'processmaker';
 $G_ID_MENU_SELECTED     = 'SETUP';

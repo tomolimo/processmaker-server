@@ -23,7 +23,7 @@
  *
  */
 
-  $RBAC->requirePermissions('PM_SETUP');
+  $RBAC->requirePermissions('PM_SETUP', 'PM_USERS');
 
   $oHeadPublisher =& headPublisher::getSingleton();
 

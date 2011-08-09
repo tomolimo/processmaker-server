@@ -50,10 +50,9 @@ if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
   $G_TMP_MENU->AddIdRawOption('REPORTS', 'reports/reportsList');
 }*/
 
-if ($RBAC->userCanAccess('PM_SETUP') == 1 ) {
+if ($RBAC->userCanAccess('PM_SETUP') == 1 || $RBAC->userCanAccess('PM_USERS') == 1) {
   $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/main', G::LoadTranslation('ID_SETUP'));
 }
-
 
 if( file_exists(PATH_CORE . 'menus/plugin.php') ) {
   require_once(PATH_CORE . 'menus/plugin.php');

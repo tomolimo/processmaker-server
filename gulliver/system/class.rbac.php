@@ -996,13 +996,15 @@ class RBAC
     $numPerms = func_num_args();
     $permissions = func_get_args();
     
+    $access = -1;
+
     if ( $numPerms == 1 ){
       $access = $this->userCanAccess($permissions[0]);
     } else if ( $numPerms > 0 ){
       foreach ($permissions as $perm) {
         $access = $this->userCanAccess($perm);
-        if( $access != 1 ) {
-          $access = -1;
+        if( $access == 1 ) {
+          $access = 1;
           break;
         }
       }

@@ -24,42 +24,53 @@
  */
 global $G_TMP_MENU;
 global $RBAC;
-  
-//settings options
-$G_TMP_MENU->AddIdRawOption('LOGO', 'uplogo', G::LoadTranslation('ID_LOGO'), 'icon-pmlogo.png', '', 'settings');
-$G_TMP_MENU->AddIdRawOption('EMAILS','emails', G::LoadTranslation('ID_EMAIL'), 'icon-email-settings.png', '', 'settings');
-$G_TMP_MENU->AddIdRawOption('CALENDAR', 'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'settings' );
-//if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
-//  $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'settings');
-$G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'settings');  
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+
+if ($RBAC->userCanAccess('PM_SETUP') == 1 ) {
+  //settings options
+  $G_TMP_MENU->AddIdRawOption('LOGO', 'uplogo', G::LoadTranslation('ID_LOGO'), 'icon-pmlogo.png', '', 'settings');
+  $G_TMP_MENU->AddIdRawOption('EMAILS','emails', G::LoadTranslation('ID_EMAIL'), 'icon-email-settings.png', '', 'settings');
+  $G_TMP_MENU->AddIdRawOption('CALENDAR', 'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'settings' );
+  //if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+  //  $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'settings');
+  $G_TMP_MENU->AddIdRawOption('PROCESS_CATEGORY', '../processCategory/processCategoryList', G::LoadTranslation('ID_PROCESS_CATEGORY'), "rules.png",'', 'settings');  
+}
+
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
   $G_TMP_MENU->AddIdRawOption('LANGUAGES', 'languages',   G::LoadTranslation('ID_LANGUAGES'), 'icon-language.png', '', 'settings');  
-$G_TMP_MENU->AddIdRawOption('SKINS', 'skinsList', G::LoadTranslation('ID_SKINS'), 'icon-skins.png', '', 'settings');
-$G_TMP_MENU->AddIdRawOption('HEARTBEAT', 'processHeartBeatConfig', G::LoadTranslation('ID_HEARTBEAT_CONFIG'), "heartBeat.jpg",'', 'settings');
-$G_TMP_MENU->AddIdRawOption('ENVIRONMENT_SETTINGS', 'environmentSettings', G::LoadTranslation('ID_ENVIRONMENT_SETTINGS'), "",'', 'settings');
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
+}
+
+if ($RBAC->userCanAccess('PM_SETUP') == 1 ) {
+  $G_TMP_MENU->AddIdRawOption('SKINS', 'skinsList', G::LoadTranslation('ID_SKINS'), 'icon-skins.png', '', 'settings');
+  $G_TMP_MENU->AddIdRawOption('HEARTBEAT', 'processHeartBeatConfig', G::LoadTranslation('ID_HEARTBEAT_CONFIG'), "heartBeat.jpg",'', 'settings');
+  $G_TMP_MENU->AddIdRawOption('ENVIRONMENT_SETTINGS', 'environmentSettings', G::LoadTranslation('ID_ENVIRONMENT_SETTINGS'), "",'', 'settings');
+}
+
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
   $G_TMP_MENU->AddIdRawOption('APPCACHEVIEW_SETUP', '../setup/appCacheViewConf', G::LoadTranslation('ID_APPCACHE_SETUP'), "",'', 'settings');
-$G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'settings' );
+}
 
 if ($RBAC->userCanAccess('PM_SETUP') == 1) {
+  $G_TMP_MENU->AddIdRawOption('CLEAR_CACHE', 'clearCompiled', G::LoadTranslation('ID_CLEAR_CACHE'), 'icon-rebuild-clean.png', "", 'settings' );
   //$G_TMP_MENU->AddIdRawOption('ADDITIONAL_TABLES', '../additionalTables/additionalTablesList', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'settings');
   //$G_TMP_MENU->AddIdRawOption('REPORT_TABLES', '../reportTables/main', 'Report Tables', 'icon-tables.png','', 'settings');
 
   $G_TMP_MENU->AddIdRawOption('PM_TABLES', '../pmTables', G::LoadTranslation('ID_ADDITIONAL_TABLES'), 'icon-tables.png','', 'settings');
+
+  $G_TMP_MENU->AddIdRawOption('WEBSERVICES', 'webServices', G::LoadTranslation('ID_WEB_SERVICES'), 'icon-webservices.png', '', 'settings');
+  $G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_LOG_CASE_SCHEDULER'), "icon-logs-list.png",'', 'settings');
+  $G_TMP_MENU->AddIdRawOption('LOGIN', 'loginSettings', G::LoadTranslation('LOGIN'), "",'', 'settings');
+}
+//tools options
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
+  $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsMain', 'Plugins Manager', 'icon-plugins.png', '', 'plugins');
 }
 
-$G_TMP_MENU->AddIdRawOption('WEBSERVICES', 'webServices', G::LoadTranslation('ID_WEB_SERVICES'), 'icon-webservices.png', '', 'settings');
-$G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_LOG_CASE_SCHEDULER'), "icon-logs-list.png",'', 'settings');
-$G_TMP_MENU->AddIdRawOption('LOGIN', 'loginSettings', G::LoadTranslation('LOGIN'), "",'', 'settings');
-
-//tools options
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
-  $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsMain', 'Plugins Manager', 'icon-plugins.png', '', 'plugins');
-
 //users options
-$G_TMP_MENU->AddIdRawOption('USERS', '../users/users_List', G::LoadTranslation('ID_USERS_LIST'), 'icon-webservices.png', '', 'users');
-$G_TMP_MENU->AddIdRawOption('GROUPS', '../groups/groups', G::LoadTranslation('ID_GROUP_USERS'), '', '', 'users');
-$G_TMP_MENU->AddIdRawOption('DEPARTAMENTS', '../departments/departments', G::LoadTranslation('ID_DEPARTMENTS_USERS'), '', '', 'users');
-$G_TMP_MENU->AddIdRawOption('ROLES', '../roles/roles_List', G::LoadTranslation('ID_ROLES'), '', '', 'users');
-$G_TMP_MENU->AddIdRawOption('AUTHSOURCES', '../authSources/authSources_List', G::LoadTranslation('ID_AUTH_SOURCES'), '', '', 'users');
+if ($RBAC->userCanAccess('PM_SETUP') == 1 || $RBAC->userCanAccess('PM_USERS') == 1) {
+  $G_TMP_MENU->AddIdRawOption('USERS', '../users/users_List', G::LoadTranslation('ID_USERS_LIST'), 'icon-webservices.png', '', 'users');
 
+  $G_TMP_MENU->AddIdRawOption('GROUPS', '../groups/groups', G::LoadTranslation('ID_GROUP_USERS'), '', '', 'users');
+  $G_TMP_MENU->AddIdRawOption('DEPARTAMENTS', '../departments/departments', G::LoadTranslation('ID_DEPARTMENTS_USERS'), '', '', 'users');
+  $G_TMP_MENU->AddIdRawOption('ROLES', '../roles/roles_List', G::LoadTranslation('ID_ROLES'), '', '', 'users');
+  $G_TMP_MENU->AddIdRawOption('AUTHSOURCES', '../authSources/authSources_List', G::LoadTranslation('ID_AUTH_SOURCES'), '', '', 'users');
+}
