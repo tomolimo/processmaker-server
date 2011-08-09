@@ -291,13 +291,13 @@ NewPMTableRow = function(){
   }
 
   var row = new PMRow(new props);
-  length = infoGrid.getStore().data.length;
+  len = infoGrid.getStore().data.length;
   
   editor.stopEditing();
-  store.insert(length, row);
+  store.insert(len, row);
   infoGrid.getView().refresh();
-  infoGrid.getSelectionModel().selectRow(length);
-  editor.startEditing(length);
+  infoGrid.getSelectionModel().selectRow(len);
+  editor.startEditing(len);
 };
 
 //Load PM Table Edition Row Form

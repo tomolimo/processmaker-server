@@ -280,10 +280,12 @@ Ext.onReady(function(){
     },
     afteredit: function(roweditor, rowIndex) {
       row = assignedGrid.getSelectionModel().getSelected();
+      //if a column was set as PK so can't be null
       if (row.get('field_key') == true) {
         row.data.field_null = false;
-        row.commit();
+        
       }
+      row.commit();
     }
   });
 
@@ -616,44 +618,50 @@ function createReportTable()
 
   //validate columns count
   if(allRows.getCount() == 0) {
-    PMExt.error(_('ID_ERROR'), 'Set columns for this Report Table please.');
+    PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT7'));
     return false;
   }
+  var fieldsNames = new Array();
 
-  for (var r=0; r < allRows.getCount(); r++) {
-    row = allRows.getAt(r);
+  for (var i = 0; i < allRows.getCount(); i++) {
+    row = allRows.getAt(i);
+
+    if (in_array(row.data['field_name'], fieldsNames)) {
+      PMExt.error(_('ID_ERROR'),_('ID_PMTABLES_ALERT1') + ' <b>' + row.data['field_name']+'</b>');
+      return false;
+    }
 
     // validate that fieldname is not empty
     if(row.data['field_name'].trim() == '') {
-      PMExt.error(_('ID_ERROR'), 'Field Name for all columns is required.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT2'));
       return false;
     }
 
     if(row.data['field_label'].trim() == '') {
-      PMExt.error(_('ID_ERROR'), 'Field Label for all columns is required.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT3'));
       return false;
     }
 
     if (row.data['field_type'] == '') {
-      PMExt.error(_('ID_ERROR'), 'Set a field type for <b>'+row.data['field_name']+'</b> please.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT4') + ' <b>'+row.data['field_name']+'</b>');
       return false;
     }
 
     // validate field size for varchar & int column types
     if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_size'] == '') {
-      PMExt.error(_('ID_ERROR'), 'Set a field size for '+row.data['field_name']+' ('+row.data['field_type']+') please.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT5')+' '+row.data['field_name']+' ('+row.data['field_type']+').');
       return false;
     }
 
     if (row.data['field_key']) {
       hasSomePrimaryKey = true;
     }
-
+    fieldsNames.push(row.data['field_name']);
     columns.push(row.data);
   }
 
   if (!hasSomePrimaryKey) {
-    PMExt.error(_('ID_ERROR'), 'You need set one column at least as Primary Key.');
+    PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT6'));
     return;
   }
 
@@ -911,4 +919,12 @@ function loadTableRowsFromArray(records)
     });
     store.add(row);
   }
+}
+
+
+function in_array(needle, haystack) {
+  for(var i in haystack) {
+      if(haystack[i] == needle) return true;
+  }
+  return false;
 }

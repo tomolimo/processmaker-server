@@ -892,27 +892,33 @@ function createReportTable()
 
   //validate columns count
   if(allRows.getCount() == 0) {
-    PMExt.error(_('ID_ERROR'), 'Set columns for this Report Table please.');
+    PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT7'));
     return false;
   }
+  var fieldsNames = new Array();
 
   for (var r=0; r < allRows.getCount(); r++) {
     row = allRows.getAt(r);
 
+    if (in_array(row.data['field_name'], fieldsNames)) {
+      PMExt.error(_('ID_ERROR'),_('ID_PMTABLES_ALERT1') + ' <b>' + row.data['field_name']+'</b>');
+      return false;
+    }
+
     // validate that fieldname is not empty
     if(row.data['field_name'].trim() == '') {
-      PMExt.error(_('ID_ERROR'), 'Field Name for "'+row.data['field_dyn']+'" is required.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT2'));
       return false;
     }
 
     if(row.data['field_label'].trim() == '') {
-      PMExt.error(_('ID_ERROR'), 'Field Label for all columns is required.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT3'));
       return false;
     }
 
     // validate field size for varchar & int column types
     if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_size'] == '') {
-      PMExt.error(_('ID_ERROR'), 'Set a field size for '+row.data['field_name']+' ('+row.data['field_type']+') please.');
+      PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT5')+' '+row.data['field_name']+' ('+row.data['field_type']+').');
       return false;
     }
 
@@ -1305,4 +1311,11 @@ function verifyTableLimit()
     return false;
   }
   return true;
+}
+
+function in_array(needle, haystack) {
+  for(var i in haystack) {
+      if(haystack[i] == needle) return true;
+  }
+  return false;
 }

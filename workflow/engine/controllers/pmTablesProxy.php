@@ -334,7 +334,7 @@ class pmTablesProxy extends HttpProxyController
   public function delete($httpData) 
   {
     G::LoadClass('reportTables');
-    $rows = G::json_decode($httpData->rows);
+    $rows = G::json_decode(stripslashes($httpData->rows));
     $rp = new reportTables();
     $at = new AdditionalTables();
     
@@ -403,7 +403,7 @@ class pmTablesProxy extends HttpProxyController
    */
   public function dataCreate($httpData)
   {
-    $rows = G::json_decode($httpData->rows);
+    $rows = G::json_decode(stripslashes($httpData->rows));
     
     require_once 'classes/model/AdditionalTables.php';
     $oAdditionalTables = new AdditionalTables();
@@ -495,7 +495,7 @@ class pmTablesProxy extends HttpProxyController
 
     require_once $sPath . $this->className . '.php';
 
-    $rows = G::json_decode($httpData->rows);
+    $rows = G::json_decode(stripslashes($httpData->rows));
     
     if (is_array($rows)) {
       foreach($rows as $row) {
@@ -791,8 +791,8 @@ class pmTablesProxy extends HttpProxyController
   {
     require_once 'classes/model/AdditionalTables.php';
 
-    $tablesToExport = json_decode(stripslashes($httpData->rows));
-      
+    $tablesToExport = G::json_decode(stripslashes($httpData->rows));
+          
     try{
       G::LoadCLass('net');
       $net = new NET(G::getIpAddress());
