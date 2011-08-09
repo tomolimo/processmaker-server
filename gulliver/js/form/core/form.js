@@ -1767,7 +1767,8 @@ var getControlsInTheRow = function(oRow) {
       if (aAux2) {
         for (j = 0; j < aAux2.length; j++) {
           sFieldName = aAux2[j].id.replace('form[', '');
-          sFieldName = sFieldName.replace(']', '');
+          //sFieldName = sFieldName.replace(']', '');
+          sFieldName = sFieldName.replace(/]$/, '');
           aAux1.push(sFieldName);
         }
       }
