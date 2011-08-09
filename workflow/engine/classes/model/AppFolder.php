@@ -42,7 +42,7 @@ class AppFolder extends BaseAppFolder {
     $oDataset->next ();
     if ($aRow = $oDataset->getRow ()) {//Folder exist, then return the ID
       $response['success']=false;
-      $response['message']=$response['error']="Can't create folder <br /> A folder with same name already exists. <br /> $folderParent$folderName";
+      $response['message']=$response['error']="Can't create folder <br /> A folder with same name already exists. <br /> $folderName";
       $response['folderUID']=$aRow ['FOLDER_UID'];
       //return ($aRow ['FOLDER_UID']);
       return ($response);
@@ -58,7 +58,7 @@ class AppFolder extends BaseAppFolder {
         // we save it, since we get no validation errors, or do whatever else you like.
         $res = $tr->save ();
         $response['success']=true;
-        $response['message']=$response['error']="Folder successfully created. <br /> $folderParent$folderName";
+        $response['message']="Folder successfully created. <br /> $folderName";
         $response['folderUID']=$folderUID;
         return ($response);
         //return $folderUID;
@@ -127,7 +127,7 @@ class AppFolder extends BaseAppFolder {
    * @param string(32) $folderID
    * @return multitype:
    */
-  function getFolderList($folderID) {
+  function getFolderList($folderID, $limit=0, $start=0) {
     $Criteria = new Criteria ( 'workflow' );
     $Criteria->clearSelectColumns ()->clearOrderByColumns ();
 
@@ -141,15 +141,23 @@ class AppFolder extends BaseAppFolder {
 
     $Criteria->addAscendingOrderByColumn ( AppFolderPeer::FOLDER_NAME );
 
+  $response['totalFoldersCount'] = AppFolderPeer::doCount($Criteria);
+  $response['folders'] = array();
+
+if($limit != 0){
+
+  $Criteria->setLimit($limit);
+  $Criteria->setOffset($start);
+}
     $rs = appFolderPeer::doSelectRS ( $Criteria );
     $rs->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $rs->next ();
     $folderResult = array ();
     while ( is_array ( $row = $rs->getRow () ) ) {
-      $folderResult [] = $row;
+      $response['folders'] [] = $row;
       $rs->next ();
     }
-    return ($folderResult);
+    return ($response);
   }
   /**
    * @param string(32) $folderUid
@@ -190,7 +198,7 @@ class AppFolder extends BaseAppFolder {
     return $folderArray;
   }
 
-  function getFolderContent($folderID, $docIdFilter = array(), $keyword = NULL, $searchType = NULL) {
+  function getFolderContent($folderID, $docIdFilter = array(), $keyword = NULL, $searchType = NULL, $limit=0, $start=0) {
     require_once ("classes/model/AppDocument.php");
     require_once ("classes/model/InputDocument.php");
     require_once ("classes/model/OutputDocument.php");
@@ -213,11 +221,18 @@ class AppFolder extends BaseAppFolder {
 
     $oCase->verifyTable ();
 
-    $oCriteria->setOffset(0);
-    $oCriteria->setLimit(150);
 
     $oCriteria->addAscendingOrderByColumn ( AppDocumentPeer::APP_DOC_INDEX );
     $oCriteria->addDescendingOrderByColumn ( AppDocumentPeer::DOC_VERSION );
+
+
+  $response['totalDocumentsCount'] = AppDocumentPeer::doCount($oCriteria);
+  $response['documents'] = array();
+
+
+
+  $oCriteria->setLimit($limit);
+  $oCriteria->setOffset($start);
 
     $rs = AppDocumentPeer::doSelectRS ( $oCriteria );
     $rs->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
@@ -238,15 +253,15 @@ class AppFolder extends BaseAppFolder {
           if ((in_array ( $row ['APP_DOC_UID'], $completeInfo ['INPUT_DOCUMENTS'] )) || (in_array ( $row ['APP_DOC_UID'], $completeInfo ['OUTPUT_DOCUMENTS'] )) || (in_array ( $completeInfo ['USR_UID'], array ($_SESSION ['USER_LOGGED'], '-1' ) ))) {
             if (count ( $docIdFilter ) > 0) {
               if (in_array ( $row ['APP_DOC_UID'], $docIdFilter )) {
-                $filesResult [] = $completeInfo;
+                $response['documents'][] = $completeInfo;
               }
             } elseif ($lastVersion == $row ['DOC_VERSION']) { //Only Last Document version
               if ($searchType == "ALL") {// If search in name of docs is active then filter
                 if ((stripos ( $completeInfo ['APP_DOC_FILENAME'], $keyword ) !== false) || (stripos ( $completeInfo ['APP_DOC_TAGS'], $keyword ) !== false)) {
-                  $filesResult [] = $completeInfo;
+                  $response['documents'][] = $completeInfo;
                 }
               } else {//No search filter active
-                $filesResult [] = $completeInfo;
+                $response['documents'][] = $completeInfo;
               }
             }
 
@@ -255,7 +270,7 @@ class AppFolder extends BaseAppFolder {
       }
       $rs->next ();
     }
-    return ($filesResult);
+    return ($response);
   }
   function getCompleteDocumentInfo($appUid, $appDocUid, $docVersion, $docUid, $usrId) {
     require_once ("classes/model/AppDocument.php");

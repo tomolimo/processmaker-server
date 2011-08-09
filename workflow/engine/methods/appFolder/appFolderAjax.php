@@ -1,13 +1,13 @@
 <?php
 
 if (! isset ( $_REQUEST ['action'] )) {
-    $res ['success'] = 'failure';
+    $res ['success'] = false;
     $res ['message'] = 'You may request an action';
     print G::json_encode ( $res);
     die ();
 }
 if (! function_exists ( $_REQUEST ['action'] )) {
-    $res ['success'] = 'failure';
+    $res ['success'] = false;
     $res ['message'] = 'The requested action doesn\'t exists';
     print G::json_encode ( $res );
     die ();
@@ -18,7 +18,27 @@ $functionParams = isset ( $_REQUEST ['params'] ) ? $_REQUEST ['params'] : array 
 
 $functionName ( $functionParams );
 
+function getExtJSParams() {
+  $validParams = array('callback' => '', 'dir' => 'DESC', 'sort' => '', 'start' => 0, 'limit' => 25, 'filter' => '', 'search' => '', 'action' => '', 'xaction' => '', 'data' => '', 'status' => '', 'query' => '', 'fields' => "");
+  $result = array();
+  foreach ($validParams as $paramName => $paramDefault) {
+    $result[$paramName] = isset($_REQUEST[$paramName]) ? $_REQUEST[$paramName] : isset($_REQUEST[$paramName]) ? $_REQUEST[$paramName] : $paramDefault;
+  }
+  return $result;
+}
+
+function sendJsonResultGeneric($response, $callback) {
+  header("Content-Type: application/json");
+  $finalResponse = json_encode($response);
+  if ($callback != '') {
+    print $callback . "($finalResponse);";
+  } else {
+    print $finalResponse;
+  }
+}
+
 function expandNode(){
+  extract(getExtJSParams());
     require_once ("classes/model/AppFolder.php");
 
     $oPMFolder = new AppFolder ( );
@@ -28,13 +48,26 @@ function expandNode(){
     if($_POST ['node']=="") $_POST ['node'] ="/";
     if($_POST ['node']=="root") $_POST ['node'] ="/";
     if(!(isset($_POST['sendWhat']))) $_POST['sendWhat']="both";
+    $totalItems=0;
+    $totalFolders=0;
+    $totalDocuments=0;
     if(($_POST['sendWhat']=="dirs")||($_POST['sendWhat']=="both")){
-        $folderList = $oPMFolder->getFolderList ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
+        $folderListObj = $oPMFolder->getFolderList ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder, $limit, $start );
+        //G::pr($folderListObj);
+        $folderList=$folderListObj['folders'];
+        $totalFolders=$folderListObj['totalFoldersCount'];
+        $totalItems+=count($folderList);
+
         //G::pr($folderList);
     }
     if(($_POST['sendWhat']=="files")||($_POST['sendWhat']=="both")){
-        $folderContent = $oPMFolder->getFolderContent ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder );
-        //G::pr($folderContent);
+        $folderContentObj = $oPMFolder->getFolderContent ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder, array(), NULL, NULL, $limit, $start );
+        //G::pr($folderContentObj);
+        $folderContent=$folderContentObj['documents'];
+        $totalDocuments=$folderContentObj['totalDocumentsCount'];
+        $totalItems+=count($folderContent);
+
+//G::pr($folderContent);
     }
     //G::pr($folderContent);
     $processListTree=array();
@@ -162,7 +195,7 @@ function expandNode(){
             $tempTree ['appDocPlugin'] = $obj['APP_DOC_PLUGIN'];
             $tempTree ['appDocTags'] = $obj['APP_DOC_TAGS'];
             $tempTree ['appDocTitle'] = $obj['APP_DOC_TITLE'];
-            $tempTree ['appDocComment'] = $obj['APP_DOC_COMMENT'];
+            $tempTree ['appDocComment'] = $tempTree ['qtip'] = $obj['APP_DOC_COMMENT'];
             $tempTree ['appDocFileName'] = $obj['APP_DOC_FILENAME'];
             if(isset($obj['APP_NUMBER'])){
                 $tempTree ['appLabel'] = sprintf("%s '%s' (%s)",$obj['APP_NUMBER'],$obj['APP_TITLE'],$obj['STATUS']);
@@ -243,7 +276,8 @@ function expandNode(){
         }
     }
     if((isset($_POST['option']))&&($_POST['option']=="gridDocuments")){
-        $processListTreeTemp['totalCount']=count($processListTree);
+        $processListTreeTemp['totalCount']=$totalFolders+$totalDocuments;//count($processListTree);
+
         $processListTreeTemp['items']=$processListTree;
         $processListTree = $processListTreeTemp;
     }
@@ -1028,6 +1062,7 @@ function newFolder(){
     $oPMFolder = new AppFolder ( );
     //G::pr($_POST);
     if($_POST ['dir']=="") $_POST ['dir']="/";
+    if($_POST ['dir']=="root") $_POST ['dir']="/";
     $folderStructure = $oPMFolder->getFolderStructure ( $_POST ['dir'] );
     //G::pr($folderStructure);
     $folderPath = $folderStructure ['PATH'];
@@ -1206,8 +1241,10 @@ function getMime($fileName){
     $return['icon']="/images/documents/extension/document.png";
     if(count($fileNameA)>1){
         $extension=$fileNameA[count($fileNameA)-1];
-        $return['description']=G::LoadTranslation("MIME_DES_".strtoupper($extension));
-        $return['icon']="/images/documents/extension/".strtolower($extension).".png";
+        if(file_exists(PATH_HTML."images/documents/extension/".strtolower($extension).".png")){
+          $return['description']=G::LoadTranslation("MIME_DES_".strtoupper($extension));
+          $return['icon']="/images/documents/extension/".strtolower($extension).".png";
+        }
     }
     return $return;
 }
