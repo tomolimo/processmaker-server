@@ -422,10 +422,9 @@ Ext.onReady(function(){
   });
 
   //TABS PANEL
-  tabsPanel = new Ext.TabPanel({
+  tabsPanelConfig =  {
     region: 'center',
     activeTab: USERS.CURRENT_TAB,
-    items:[SummaryPanel,GroupsPanel,AuthenticationPanel],
     listeners:{
       beforetabchange: function(p,t,c){
         switch(t.title){
@@ -470,7 +469,15 @@ Ext.onReady(function(){
         }
       }
     }
-  });
+  }
+  tabsPanelConfig.items = new Array();
+  tabsPanelConfig.items.push(SummaryPanel);
+  tabsPanelConfig.items.push(GroupsPanel);
+  if (typeof hasAuthPerm != 'undefined' && hasAuthPerm) {
+    tabsPanelConfig.items.push(AuthenticationPanel);
+  }
+
+  tabsPanel = new Ext.TabPanel(tabsPanelConfig);
 
   //LOAD ALL PANELS
   viewport = new Ext.Viewport({
