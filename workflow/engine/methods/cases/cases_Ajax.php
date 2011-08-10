@@ -49,7 +49,8 @@ if(isset($_POST['showWindow'])) {
 if(! isset($_POST['action'])) {
 	$_POST['action'] = '';
 }
-switch($_POST['action']) {
+
+switch(($_POST['action'])?$_POST['action']:$_REQUEST['action']) {
 	case 'steps':
 		global $G_PUBLISH;
 		$G_PUBLISH = new Publisher();
@@ -546,9 +547,9 @@ switch($_POST['action']) {
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
 		$_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
-		if(!isset($_SESSION['CURRENT_DYN_UID'])) $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID'];
-		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
-		G::RenderPage('publish', 'raw');
+		if(!isset($_SESSION['CURRENT_DYN_UID'])) $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID']?$_POST['DYN_UID']:$_REQUEST['DYN_UID'];
+		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_REQUEST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
+		G::RenderPage('publish', 'blank');
 		break;
 	case 'showDynaformHistory':
 		$G_PUBLISH = new Publisher();
