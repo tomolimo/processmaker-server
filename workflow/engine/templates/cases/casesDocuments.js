@@ -707,7 +707,7 @@ datastore = new Ext.data.Store({
   ])),
 
   // turn on remote sorting
-  remoteSort : true
+  remoteSort : false
 });
 datastore.paramNames["dir"] = "direction";
 datastore.paramNames["sort"] = "order";
@@ -1057,6 +1057,8 @@ var cm = new Ext.grid.ColumnModel([{
   dataIndex : 'name',
   width : 200,
   renderer : renderFileName,
+  sortable:true,
+  groupable:true,
   editor : new Ext.form.TextField({
     allowBlank : false
   }),
@@ -1076,6 +1078,8 @@ var cm = new Ext.grid.ColumnModel([{
   header : TRANSLATIONS.ID_OWNER,
   dataIndex : 'owner',
   width : 100,
+  sortable:true,
+  groupable:true,
   renderer: renderFullName
 // sortable : false
 }, {
@@ -1089,18 +1093,24 @@ var cm = new Ext.grid.ColumnModel([{
   header : TRANSLATIONS.ID_TYPE,
   dataIndex : 'type',
   width : 100,
+  sortable:true,
+  groupable:true,
   // align : 'right',
   renderer : renderType
 }, {
   header : TRANSLATIONS.ID_PROCESS,
   dataIndex : 'proTitle',
-  width : 150// ,
+  width : 150,
+  sortable:true,
+  groupable:true
 // align : 'right'
 // renderer : renderType
 }, {
   header : TRANSLATIONS.ID_CASE,
   dataIndex : 'appLabel',
-  width : 150// ,
+  width : 150,
+  sortable:true,
+  groupable:true
 // align : 'right'
 // renderer : renderType
 },{
