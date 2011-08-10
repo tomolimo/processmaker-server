@@ -77,6 +77,7 @@ try {
     $res = $tar->extract ( $path );
     $sContent = file_get_contents($path . PATH_SEP . $pluginFile);
     $sContent = str_ireplace($sAux, $sAux . '_', $sContent);
+    $sContent = str_ireplace('PATH_PLUGINS', "'".$path."'", $sContent);
     $sContent = str_ireplace('$oPluginRegistry =& PMPluginRegistry::getSingleton();', '', $sContent);
     $sContent = str_ireplace('$oPluginRegistry->registerPlugin(\'' . $sClassName . '\', __FILE__);', '', $sContent);
     //header('Content-Type: text/plain');var_dump($sClassName, $sContent);die;
