@@ -278,7 +278,7 @@ class pmTablesProxy extends HttpProxyController
           'FLD_TYPE'              => $column->field_type,
           'FLD_SIZE'              => $column->field_size,
           'FLD_NULL'              => (isset($column->field_null) && $column->field_null ? 1 : 0),
-          'FLD_AUTO_INCREMENT'    => 0,
+          'FLD_AUTO_INCREMENT'    => (isset($column->field_bai) && $column->field_bai ? 1 : 0),
           'FLD_KEY'               => (isset($column->field_key) && $column->field_key ? 1 : 0),
           'FLD_FOREIGN_KEY'       => 0,
           'FLD_FOREIGN_KEY_TABLE' => '',
@@ -296,7 +296,7 @@ class pmTablesProxy extends HttpProxyController
             'iSize'       => $column->field_size,
             'sFieldName'  => $column->field_name,
             'bNull'       => (isset($column->field_null) ? $column->field_null : 1),
-            'bAI'         => 0,
+            'bAI'         => (isset($column->field_bai) ? $column->field_bai : 0),
             'bPrimaryKey' => (isset($column->field_key) ? $column->field_key : 0)
           );
         } else { //editing
@@ -306,13 +306,12 @@ class pmTablesProxy extends HttpProxyController
       }
       if ($data['REP_TAB_UID'] == '') { //create a new report table
         $oAdditionalTables->createTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $aFields);
+        
       } else { //editing
         //print_R($aFields);
         $oAdditionalTables->updateTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $aFields, $oldFields);
       }
-
       $oAdditionalTables->createPropelClasses($data['REP_TAB_NAME'], '', $fieldsList, $addTabUid, $data['REP_TAB_CONNECTION']);
-
       if ($isReportTable) {
         $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $data['REP_TAB_TYPE'], $fieldsList, $data['PRO_UID'], $data['REP_TAB_GRID']);
       }

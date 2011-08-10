@@ -327,7 +327,20 @@ Ext.onReady(function(){
           editor: new fm.NumberField({
             allowBlank: true
           })
+      }, {
+        xtype: 'booleancolumn',
+        header: _('ID_AUTO_INCREMENT'),
+        dataIndex: 'field_bai',
+        align: 'center',
+        width: 50,
+        trueText: 'Yes',
+        falseText: 'No',
+        editor: {
+            xtype: 'checkbox'
+        }
       }
+      
+      
   ];
 
   //if permissions plugin is enabled
@@ -367,6 +380,7 @@ Ext.onReady(function(){
           {name: 'field_type'},
           {name: 'field_size', type: 'float'},
           {name: 'field_null', type: 'float'},
+          {name: 'field_bai', type: 'float'},
           {name: 'field_filter', type: 'string'}
       ]
   });
@@ -1217,6 +1231,7 @@ function loadTableRowsFromArray(records)
       field_size : records[i].FLD_SIZE,
       field_key  : records[i].FLD_KEY,
       field_null  : records[i].FLD_NULL,
+      field_bai  : records[i].FLD_AUTO_INCREMENT  == '1' ? true : false,
       field_filter: records[i].FLD_FILTER == '1' ? true : false,
       _index : ''
     });
