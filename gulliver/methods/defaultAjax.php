@@ -83,7 +83,7 @@
             $value = (array) $value;
             $arrayK = $value[$r2];
             foreach ($arrayK as $key2 => $val) {
-              $fieldBase[$r2][$key2] = $val[$key2];
+              $fieldBase[$r2][$key2] = isset($val[$key2])? $val[$key2] : '';
             }
           }
         }
