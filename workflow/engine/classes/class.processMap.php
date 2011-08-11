@@ -2312,6 +2312,8 @@ class processMap {
 //      echo $sql;
 //      var_dump($aRow);
 //      die();
+
+  
       if (is_array($aRow)) {
         $aFields ['ROU_TYPE'] = $aRow ['ROU_TYPE'];
         $aFields ['ROU_TYPE_OLD'] = $aRow ['ROU_TYPE'];
@@ -2392,8 +2394,12 @@ class processMap {
                $aFields['ROUTE_COUNT'] =  count($routeData);
                $sXmlform = 'patterns_Discriminator';
             break;
+            default:
+              throw new Exception(G::loadTranslation('ID_INVALID_ROU_TYPE_DEFINITION_ON_ROUTE_TABLE'));
+            break;
         }
       }
+      
       $aFields ['action'] = 'savePattern';
       $aFields ['LANG'] = SYS_LANG;
       $aFields ['PROCESS'] = $sProcessUID;
@@ -2404,7 +2410,13 @@ class processMap {
       G::RenderPage('publish', 'raw');
       return true;
     } catch (Exception $oError) {
-      throw ($oError);
+      global $G_PUBLISH;
+      $G_PUBLISH = new Publisher();
+      $aMessage = array();
+      $aMessage['MESSAGE'] = $oError->getMessage();
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
+      G::RenderPage( 'publish','blank');
+      die;       
     }
   }
 
