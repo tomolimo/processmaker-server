@@ -7,7 +7,7 @@
   <en>Login into ProcessMaker Library</en>
 </TITLE>
 
-<PML_USER type="text" size="25" maxlength="50" validate="Email" required="1">
+<PML_USER type="text" size="25" maxlength="50" validate="Any" required="1">
   <en>Username (or Live Workspace)</en>
 </PML_USER>
 
