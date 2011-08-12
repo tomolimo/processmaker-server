@@ -393,11 +393,16 @@ function WSLogin($user, $pass, $endpoint='') {
 
   if($result->status_code == 0) {
     if($endpoint != '') {
-      $_SESSION['WS_END_POINT'] = $endpoint;
+      if(isset($_SESSION['WS_SESSION_ID']))      
+        $_SESSION['WS_END_POINT'] = $endpoint;
     }
-    return $_SESSION['WS_SESSION_ID'] = $result->message;
+    if(isset($_SESSION['WS_SESSION_ID']))
+      return $_SESSION['WS_SESSION_ID'] = $result->message;
+    else 
+      return $result->message;
   } else {
-    unset($_SESSION['WS_SESSION_ID']);
+    if(isset($_SESSION['WS_SESSION_ID']))
+      unset($_SESSION['WS_SESSION_ID']);
     $wp = (trim($pass) != "")?'YES':'NO';
     throw new Exception("WSAccess denied! for user $user with password $wp");
   }
@@ -1084,99 +1089,114 @@ function PMFUserList() #its test was successfull
  * @return none | $none | None | None
  *
  */
-function PMFGenerateOutputDocument($outputID) {
+function PMFGenerateOutputDocument($outputID, $sApplication = null, $index = null, $sUserLogged = null) {
 
+  
+  if(!$sApplication){
+    $sApplication = $_SESSION['APPLICATION'];
+  }
+  if(!$index){
+    $index = $_SESSION['INDEX'];
+  }
+  if(!$sUserLogged){
+    $sUserLogged = $_SESSION['USER_LOGGED'];
+  }
+  
+  G::LoadClass('case');
   $oCase = new Cases();
-  $oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], '', 'cases_List');
+  $oCase->thisIsTheCurrentUser($sApplication, $index, $sUserLogged, '', 'cases_List');
 
+  
+//  require_once 'classes/model/OutputDocument.php';	
   $oOutputDocument = new OutputDocument();
   $aOD = $oOutputDocument->load($outputID);
-  $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
+  $Fields = $oCase->loadCase( $sApplication );
   // The $_GET['UID'] variable is used when a process executes.
   //  $_GET['UID']=($aOD['OUT_DOC_VERSIONING'])?$_GET['UID']:$aOD['OUT_DOC_UID'];
   $sUID = ($aOD['OUT_DOC_VERSIONING'])?$_GET['UID']:$aOD['OUT_DOC_UID'];
   $sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
   require_once 'classes/model/AppFolder.php';
   require_once 'classes/model/AppDocument.php';
-
+  
   //Get the Custom Folder ID (create if necessary)
   $oFolder=new AppFolder();
   //$aOD['OUT_DOC_DESTINATION_PATH'] = ($aOD['OUT_DOC_DESTINATION_PATH']=='')?PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP:$aOD['OUT_DOC_DESTINATION_PATH'];
-  $folderId=$oFolder->createFromPath($aOD['OUT_DOC_DESTINATION_PATH']);
+  $folderId=$oFolder->createFromPath($aOD['OUT_DOC_DESTINATION_PATH'], $sApplication);
   //Tags
-  $fileTags=$oFolder->parseTags($aOD['OUT_DOC_TAGS']);
+  $fileTags=$oFolder->parseTags($aOD['OUT_DOC_TAGS'], $sApplication);
 
   //Get last Document Version and apply versioning if is enabled
-
+  
   $oAppDocument= new AppDocument();
-  $lastDocVersion=$oAppDocument->getLastDocVersion($sUID, $_SESSION['APPLICATION']);
+  $lastDocVersion=$oAppDocument->getLastDocVersion($sUID, $sApplication);
 
   $oCriteria = new Criteria('workflow');
-  $oCriteria->add(AppDocumentPeer::APP_UID,      $_SESSION['APPLICATION']);
-  //$oCriteria->add(AppDocumentPeer::DEL_INDEX,    $_SESSION['INDEX']);
+  $oCriteria->add(AppDocumentPeer::APP_UID,      $sApplication);
+  //$oCriteria->add(AppDocumentPeer::DEL_INDEX,    $index);
   $oCriteria->add(AppDocumentPeer::DOC_UID,      $sUID);
   $oCriteria->add(AppDocumentPeer::DOC_VERSION,      $lastDocVersion);
   $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
   $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
   $oDataset->next();
+
   if(($aOD['OUT_DOC_VERSIONING'])&&($lastDocVersion!=0)){//Create new Version of current output
-  $lastDocVersion++;
-  if ($aRow = $oDataset->getRow()) {
-      $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
-                       'APP_UID'             => $_SESSION['APPLICATION'],
-                       'DEL_INDEX'           => $_SESSION['INDEX'],
-                       'DOC_UID'             => $outputID,
-                       'DOC_VERSION'         => $lastDocVersion+1,
-                       'USR_UID'             => $_SESSION['USER_LOGGED'],
-                       'APP_DOC_TYPE'        => 'OUTPUT',
-                       'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
-                       'APP_DOC_FILENAME'    => $sFilename,
-                       'FOLDER_UID'          => $folderId,
-                       'APP_DOC_TAGS'        => $fileTags);
-      $oAppDocument = new AppDocument();
-      $oAppDocument->create($aFields);
-      $sDocUID = $aRow['APP_DOC_UID'];
-  }
+    $lastDocVersion++;
+    if ($aRow = $oDataset->getRow()) {
+        $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
+                         'APP_UID'             => $sApplication,
+                         'DEL_INDEX'           => $index,
+                         'DOC_UID'             => $outputID,
+                         'DOC_VERSION'         => $lastDocVersion+1,
+                         'USR_UID'             => $sUserLogged,
+                         'APP_DOC_TYPE'        => 'OUTPUT',
+                         'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                         'APP_DOC_FILENAME'    => $sFilename,
+                         'FOLDER_UID'          => $folderId,
+                         'APP_DOC_TAGS'        => $fileTags);
+        $oAppDocument = new AppDocument();
+        $oAppDocument->create($aFields);
+        $sDocUID = $aRow['APP_DOC_UID'];
+    }
   }else{//No versioning so Update a current Output or Create new if no exist
-  if ($aRow = $oDataset->getRow()) { //Update
-      $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
-                       'APP_UID'             => $_SESSION['APPLICATION'],
-                       'DEL_INDEX'           => $_SESSION['INDEX'],
-                       'DOC_UID'             => $outputID,
-                       'DOC_VERSION'         => $lastDocVersion,
-                       'USR_UID'             => $_SESSION['USER_LOGGED'],
-                       'APP_DOC_TYPE'        => 'OUTPUT',
-                       'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
-                       'APP_DOC_FILENAME'    => $sFilename,
-                       'FOLDER_UID'          => $folderId,
-                       'APP_DOC_TAGS'        => $fileTags);
-      $oAppDocument = new AppDocument();
-      $oAppDocument->update($aFields);
-      $sDocUID = $aRow['APP_DOC_UID'];
-   }else{ 
-   //we are creating the appdocument row
-   //create
-      if($lastDocVersion==0) $lastDocVersion++;
-      $aFields = array('APP_UID'             => $_SESSION['APPLICATION'],
-                   'DEL_INDEX'           => $_SESSION['INDEX'],
-                   'DOC_UID'             => $outputID,
-                   'DOC_VERSION'         => $lastDocVersion,
-                   'USR_UID'             => $_SESSION['USER_LOGGED'],
-                   'APP_DOC_TYPE'        => 'OUTPUT',
-                   'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
-                   'APP_DOC_FILENAME'    => $sFilename,
-                   'FOLDER_UID'          => $folderId,
-                   'APP_DOC_TAGS'        => $fileTags);
-      $oAppDocument = new AppDocument();
-      $aFields['APP_DOC_UID']=$sDocUID = $oAppDocument->create($aFields);
-  }
+    if ($aRow = $oDataset->getRow()) { //Update
+        $aFields = array('APP_DOC_UID'         => $aRow['APP_DOC_UID'],
+                         'APP_UID'             => $sApplication,
+                         'DEL_INDEX'           => $index,
+                         'DOC_UID'             => $outputID,
+                         'DOC_VERSION'         => $lastDocVersion,
+                         'USR_UID'             => $sUserLogged,
+                         'APP_DOC_TYPE'        => 'OUTPUT',
+                         'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                         'APP_DOC_FILENAME'    => $sFilename,
+                         'FOLDER_UID'          => $folderId,
+                         'APP_DOC_TAGS'        => $fileTags);
+        $oAppDocument = new AppDocument();
+        $oAppDocument->update($aFields);
+        $sDocUID = $aRow['APP_DOC_UID'];
+     }else{ 
+     //we are creating the appdocument row
+     //create
+        if($lastDocVersion==0) $lastDocVersion++;
+        $aFields = array('APP_UID'             => $sApplication,
+                     'DEL_INDEX'           => $index,
+                     'DOC_UID'             => $outputID,
+                     'DOC_VERSION'         => $lastDocVersion,
+                     'USR_UID'             => $sUserLogged,
+                     'APP_DOC_TYPE'        => 'OUTPUT',
+                     'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                     'APP_DOC_FILENAME'    => $sFilename,
+                     'FOLDER_UID'          => $folderId,
+                     'APP_DOC_TAGS'        => $fileTags);
+        $oAppDocument = new AppDocument();
+        $aFields['APP_DOC_UID']=$sDocUID = $oAppDocument->create($aFields);
+    }
   }
   $sFilename = $aFields['APP_DOC_UID']. "_".$lastDocVersion;
 
-  $pathOutput = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP . 'outdocs'. PATH_SEP ;//G::pr($sFilename);die;
+  $pathOutput = PATH_DOCUMENT . $sApplication . PATH_SEP . 'outdocs'. PATH_SEP ;//G::pr($sFilename);die;
   G::mk_dir ( $pathOutput );
-
+  
       $aProperties = array();                
 
       if(!isset($aOD['OUT_DOC_MEDIA']))
@@ -1195,6 +1215,7 @@ function PMFGenerateOutputDocument($outputID) {
       $oOutputDocument->generate( $outputID, $Fields['APP_DATA'], $pathOutput, $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
 
   //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
+//   G::LoadClass('plugin');
   $oPluginRegistry =& PMPluginRegistry::getSingleton();
   if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
     $triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
@@ -1203,15 +1224,15 @@ function PMFGenerateOutputDocument($outputID) {
     $oAppDocument1 = new AppDocument();
     $oAppDocument1->update($aFields);
 
-    $sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
+    $sPathName = PATH_DOCUMENT . $sApplication . PATH_SEP;
 
-    $oData['APP_UID']   = $_SESSION['APPLICATION'];
+    $oData['APP_UID']   = $sApplication;
     $oData['ATTACHMENT_FOLDER'] = true;
     switch($aOD['OUT_DOC_GENERATE']){
     case "BOTH":
       $documentData = new uploadDocumentData (
-                    $_SESSION['APPLICATION'],
-                    $_SESSION['USER_LOGGED'],
+                    $sApplication,
+                    $sUserLogged,
                     $pathOutput . $sFilename . '.pdf',
                     $sFilename. '.pdf',
                     $sDocUID,
@@ -1228,8 +1249,8 @@ function PMFGenerateOutputDocument($outputID) {
 
 
       $documentData = new uploadDocumentData (
-                    $_SESSION['APPLICATION'],
-                    $_SESSION['USER_LOGGED'],
+                    $sApplication,
+                    $sUserLogged,
                     $pathOutput . $sFilename . '.doc',
                     $sFilename. '.doc',
                     $sDocUID,
@@ -1246,8 +1267,8 @@ function PMFGenerateOutputDocument($outputID) {
     break;
     case "PDF":
       $documentData = new uploadDocumentData (
-                    $_SESSION['APPLICATION'],
-                    $_SESSION['USER_LOGGED'],
+                    $sApplication,
+                    $sUserLogged,
                     $pathOutput . $sFilename . '.pdf',
                     $sFilename. '.pdf',
                     $sDocUID,
@@ -1264,8 +1285,8 @@ function PMFGenerateOutputDocument($outputID) {
     break;
     case "DOC":
       $documentData = new uploadDocumentData (
-                    $_SESSION['APPLICATION'],
-                    $_SESSION['USER_LOGGED'],
+                    $sApplication,
+                    $sUserLogged,
                     $pathOutput . $sFilename . '.doc',
                     $sFilename. '.doc',
                     $sDocUID,
@@ -1283,7 +1304,7 @@ function PMFGenerateOutputDocument($outputID) {
 
   }
 
-} 
+}
 /**
  * @method
  *
@@ -1431,10 +1452,13 @@ function PMFSendVariables($caseId, $variables) {
  * @return int | $result | Result of Derivate case | Returns 1 if new case was derivated (routed) successfully; otherwise, returns 0 if an error occurred.
  *
  */
-function PMFDerivateCase($caseId, $delIndex, $bExecuteTriggersBeforeAssignment = false) {
+function PMFDerivateCase($caseId, $delIndex, $bExecuteTriggersBeforeAssignment = false, $sUserLogged = null) {
+  if(!$sUserLogged) {
+    $sUserLogged = $_SESSION['USER_LOGGED'];
+  }
   G::LoadClass('wsBase');
   $ws = new wsBase ();
-  $result = $ws->derivateCase($_SESSION['USER_LOGGED'], $caseId, $delIndex, $bExecuteTriggersBeforeAssignment);//var_dump($result);die;
+  $result = $ws->derivateCase($sUserLogged, $caseId, $delIndex, $bExecuteTriggersBeforeAssignment);//var_dump($result);die;
   if (isset($result->status_code)) {
     return $result->status_code;
   }
