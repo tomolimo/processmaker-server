@@ -459,9 +459,9 @@ Ext.onReady(function(){
         root: 'data',
         fields : [
           {name : 'USR_UID'},
-          {name : 'PRO_USERNAME'},
+          {name : 'USR_USERNAME'},
           {name : 'USR_FIRSTNAME'},
-          {name : 'PRO_LASTNAME'}
+          {name : 'USR_LASTNAME'}
         ]
       })
     });
@@ -490,8 +490,9 @@ Ext.onReady(function(){
         },
         columns: [
           {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
+          {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME',  width: 300},
           {header: _('ID_FIRSTNAME'), dataIndex: 'USR_FIRSTNAME', width: 300},
-          {header: _('ID_LASTNAME'), dataIndex: 'USR_LASTNAME', width: 300}
+          {header: _('ID_LASTNAME'),  dataIndex: 'USR_LASTNAME',  width: 300}
         ]
       }),
 
