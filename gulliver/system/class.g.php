@@ -2778,12 +2778,12 @@ $output = $outputHeader.$output;
     if ( defined('SYS_SKIN' )) $sysCon['SYS_SKIN'] = SYS_SKIN;
     if ( defined('SYS_SYS' ) ) $sysCon['SYS_SYS']  = SYS_SYS;
 
-    if (isset($_SESSION['APPLICATION']) ) $sysCon['APPLICATION'] = $_SESSION['APPLICATION'];
-    if (isset($_SESSION['PROCESS'])     ) $sysCon['PROCESS']     = $_SESSION['PROCESS'];
-    if (isset($_SESSION['TASK'])        ) $sysCon['TASK']        = $_SESSION['TASK'];
-    if (isset($_SESSION['INDEX'])       ) $sysCon['INDEX']       = $_SESSION['INDEX'];
-    if (isset($_SESSION['USER_LOGGED']) ) $sysCon['USER_LOGGED'] = $_SESSION['USER_LOGGED'];
-    if (isset($_SESSION['USR_USERNAME'])) $sysCon['USR_USERNAME']= $_SESSION['USR_USERNAME'];
+    $sysCon['APPLICATION'] = (isset($_SESSION['APPLICATION'])  )? $_SESSION['APPLICATION'] :'';
+    $sysCon['PROCESS']     = (isset($_SESSION['PROCESS'])      )? $_SESSION['PROCESS']     :'';
+    $sysCon['TASK']        =  (isset($_SESSION['TASK'])        )? $_SESSION['TASK']        :'';
+    $sysCon['INDEX']       = (isset($_SESSION['INDEX'])        )? $_SESSION['INDEX']       :'';
+    $sysCon['USER_LOGGED'] = (isset($_SESSION['USER_LOGGED'])  )? $_SESSION['USER_LOGGED'] :'';
+    $sysCon['USR_USERNAME']=  (isset($_SESSION['USR_USERNAME']))? $_SESSION['USR_USERNAME']:'';
     
     ################################################################################################
     # Added for compatibility betweek aplication called from web Entry that uses just WS functions

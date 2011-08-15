@@ -40,41 +40,44 @@ $aType = $_POST['type'];
 
 $aRows[0] = Array (
   'fieldname' => 'char',
-  'variable' => 'char',
-  'type' => 'type',
-  'label' => 'char'
+  'variable'  => 'char',
+  'type'      => 'type',
+  'label'     => 'char'
 );
 foreach ( $aFields as $aField ) {
   switch ($aType){
       case "system":
         if($aField['sType']=="system"){
             $aRows[] = Array (
-            'fieldname' => $_POST['sFieldName'],
-            'variable' => $_POST['sSymbol'] . $aField['sName'],
-            'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_POST['sFieldName'].'\',\''.$_POST['sSymbol'] . $aField['sName'].'\');">'.$_POST['sSymbol'] . $aField['sName'].'</a></div>',
-            'type' => $aField['sType'],
-            'label' => $aField['sLabel']
+            'fieldname'      => $_POST['sFieldName'],
+            'variable'       => $_POST['sSymbol'] . $aField['sName'],
+            'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.
+                                 $_POST['sFieldName'].'\',\''.$_POST['sSymbol'] . $aField['sName'].'\');">'.$_POST['sSymbol'] . $aField['sName'].'</a></div>',
+            'type'           => $aField['sType'],
+            'label'          => $aField['sLabel']
             );
         }
       break;
       case "process":
         if($aField['sType']!="system"){
             $aRows[] = Array (
-            'fieldname' => $_POST['sFieldName'],
-            'variable' => $_POST['sSymbol'] . $aField['sName'],
-            'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_POST['sFieldName'].'\',\''.$_POST['sSymbol'] . $aField['sName'].'\');">'.$_POST['sSymbol'] . $aField['sName'].'</a></div>',
-            'type' => $aField['sType'],
-            'label' => $aField['sLabel']
+            'fieldname'      => $_POST['sFieldName'],
+            'variable'       => $_POST['sSymbol'] . $aField['sName'],
+            'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.
+                                 $_POST['sFieldName'].'\',\''.$_POST['sSymbol'] . $aField['sName'].'\');">'.$_POST['sSymbol'] . $aField['sName'].'</a></div>',
+            'type'           => $aField['sType'],
+            'label'          => $aField['sLabel']
             );
         }
       break;
       default:
         $aRows[] = Array (
-        'fieldname' => $_POST['sFieldName'],
-        'variable' => $_POST['sSymbol'] . $aField['sName'],
-        'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_POST['sFieldName'].'\',\''.$_POST['sSymbol'] . $aField['sName'].'\');">'.$_POST['sSymbol'] . $aField['sName'].'</a></div>',
-        'type' => $aField['sType'],
-        'label' => $aField['sLabel']
+        'fieldname'      => $_POST['sFieldName'],
+        'variable'       => $_POST['sSymbol'] . $aField['sName'],
+        'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\''.$_POST['sFieldName'].'\',\''
+                             .$_POST['sSymbol'] . $aField['sName'].'\');">'.$_POST['sSymbol'] . $aField['sName'].'</a></div>',
+        'type'           => $aField['sType'],
+        'label'          => $aField['sLabel']
         );
       break;
   }
@@ -83,9 +86,12 @@ foreach ( $aFields as $aField ) {
 // Use and make a load translation variable call to the titles of the tabs
 $cssTabs = "<div id=\"".strtolower($_POST['type'])."\">
                 <ul id=\"tabnav\">
-                    <li class=\"all\"><a href=\"#\" onclick=\"changeVariables('all','".$_POST['sProcess']."','".$_POST['sFieldName']."','".$_POST['sSymbol']."','processVariablesContent');\">All variables</a></li>
-                    <li class=\"system\"><a href=\"#\" onclick=\"changeVariables('system','".$_POST['sProcess']."','".$_POST['sFieldName']."','".$_POST['sSymbol']."','processVariablesContent');\">System</a></li>
-                    <li class=\"process\"><a href=\"#\" onclick=\"changeVariables('process','".$_POST['sProcess']."','".$_POST['sFieldName']."','".$_POST['sSymbol']."','processVariablesContent');\">Process</a></li>
+                    <li class=\"all\"><a href=\"#\" onclick=\"changeVariables('all','".$_POST['sProcess']."','"
+                    .$_POST['sFieldName']."','".$_POST['sSymbol']."','processVariablesContent');\">All variables</a></li>
+                    <li class=\"system\"><a href=\"#\" onclick=\"changeVariables('system','".$_POST['sProcess']."','"
+                    .$_POST['sFieldName']."','".$_POST['sSymbol']."','processVariablesContent');\">System</a></li>
+                    <li class=\"process\"><a href=\"#\" onclick=\"changeVariables('process','".$_POST['sProcess']."','"
+                    .$_POST['sFieldName']."','".$_POST['sSymbol']."','processVariablesContent');\">Process</a></li>
                 </ul>
             </div>
             ";
@@ -101,7 +107,7 @@ G::LoadClass('ArrayPeer');
 $oCriteria = new Criteria('dbarray');
 $oCriteria->setDBArrayTable('dynavars');
 
-$aFields = array ();
+$aFields   = array ();
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent('propeltable', 'paged-table', 'triggers/dynavars', $oCriteria);
 G::RenderPage('publish', 'raw');
