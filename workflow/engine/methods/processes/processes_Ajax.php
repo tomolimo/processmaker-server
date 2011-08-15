@@ -456,44 +456,44 @@ try {
     break;
     case 'saveFile':
     	global $G_PUBLISH;
-	  	$G_PUBLISH = new Publisher();
+	    $G_PUBLISH = new Publisher();
       $sDir = "";
       if(isset($_REQUEST['MAIN_DIRECTORY']))
         $sDir = $_REQUEST['MAIN_DIRECTORY'];
+        
       switch($sDir){
         case 'mailTemplates' : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
-                break;
+        break;
         case 'public' : $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
-                break;
+        break;
         default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
-                break;
+        break;
       }
-      header("Content-Type: text/html; charset=utf-8");
+      
       $fp = fopen($sDirectory, 'w');
-	  	$content = stripslashes($_REQUEST['fcontent']);
-	  	$content = str_replace("@amp@", "&", $content);
+      $content = stripslashes($_REQUEST['fcontent']);
+      $content = str_replace("@amp@", "&", $content);
       $content = base64_decode($content);      
-
-	  	fwrite($fp, $content);
-	  	fclose($fp);
-	  	echo 'saved: '. $sDirectory;
+      fwrite($fp, $content);
+      fclose($fp);
+      echo 'saved: '. $sDirectory;
     break;
     case 'events':
       $oProcessMap->eventsList($oData->pro_uid, $oData->type);
     break;
 /*
 	case 'saveFile':
-    	global $G_PUBLISH;
-	  	$G_PUBLISH = new Publisher();
-	  	$sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+    global $G_PUBLISH;
+    $G_PUBLISH = new Publisher();
+    $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
 
-	  	$fp = fopen($sDirectory, 'w');
-	  	$content = stripslashes($_REQUEST['fcontent']);
-	  	$content = str_replace("@amp@", "&", $content);
-	  	fwrite($fp, $content);
-	  	fclose($fp);
-	  	echo 'saved: '. $sDirectory;
-    break;
+    $fp = fopen($sDirectory, 'w');
+    $content = stripslashes($_REQUEST['fcontent']);
+    $content = str_replace("@amp@", "&", $content);
+    fwrite($fp, $content);
+    fclose($fp);
+    echo 'saved: '. $sDirectory;
+  break;
 */
     case 'emptyFileOptions':
     	global $G_PUBLISH;

@@ -97,22 +97,17 @@ if( typofile[typofile.length-1].toLowerCase() != 'txt' && typofile[typofile.leng
 
 function saveFile(pro_uid, fileName){
   var fc64 = base64_encode(getField('fcontent').value);
-	fc64 = fc64.replace(/&amp;/g, "@amp@");
-	fc64 = fc64.replace(/\+/g, '%2B');
-  
-	fc = getField('fcontent').value;
-	fc = escape(fc);
-	fc = fc.replace(/&amp;/g, "@amp@");
-	fc = fc.replace(/\+/g, '%2B');
+  fc64 = fc64.replace(/&amp;/g, "@amp@");
+  fc64 = fc64.replace(/\+/g, '%2B');
 	var oRPC = new leimnud.module.rpc.xmlhttp({
-	  	url : 'processes_Ajax',
-	  	args: 'action=saveFile&filename='+fileName+'&pro_uid='+pro_uid+'&MAIN_DIRECTORY='+CURRENT_MAIN_DIRECTORY+'&fcontent='+fc64
-  	});
-  	oPanel.loader.show();
-  	oRPC.callback = function(rpc) {
-	  	oPanel.remove();
-  	}.extend(this);
-	oRPC.make();
+    url : 'processes_Ajax',
+	  args: 'action=saveFile&filename='+fileName+'&pro_uid='+pro_uid+'&MAIN_DIRECTORY='+CURRENT_MAIN_DIRECTORY+'&fcontent='+fc64
+ 	});
+  oPanel.loader.show();
+  oRPC.callback = function(rpc) {
+	  oPanel.remove();
+  }.extend(this);
+  oRPC.make();
 }
 
 var showCreateEmptyOptionsPanel;
