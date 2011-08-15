@@ -367,15 +367,25 @@ class spoolRun {
           if (isset($this->config['SMTPSecure']) && preg_match('/^(ssl|tls)$/', $this->config['SMTPSecure'])) {
             $oPHPMailer->SMTPSecure = $this->config['SMTPSecure'];
           }
-          
+          $oPHPMailer->CharSet = "UTF-8";
+          $oPHPMailer->Encoding = "8bit";
           $oPHPMailer->Host = $this->config['MESS_SERVER'];
           $oPHPMailer->Port = $this->config['MESS_PORT'];
           $oPHPMailer->Username = $this->config['MESS_ACCOUNT'];
           $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
           $oPHPMailer->From = $this->fileData['from_email'];
-          $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);
-          $oPHPMailer->Subject = utf8_decode($this->fileData['subject']);
-          $oPHPMailer->Body = utf8_decode($this->fileData['body']);
+          $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);          
+          $msSubject = $this->fileData['subject'];
+            if(!(mb_detect_encoding($msSubject, "UTF-8") == "UTF-8")) {
+              $msSubject = utf8_encode($msSubject);
+            }
+          $oPHPMailer->Subject = $msSubject;          
+          $msBody = $this->fileData['body'];
+            if(!(mb_detect_encoding($msBody, "UTF-8") == "UTF-8")) {
+              $msBody = utf8_encode($msBody);
+            }            
+          $oPHPMailer->Body = $msBody;
+          
           if($this->fileData['attachments'])
            $oPHPMailer->AddAttachment($this->fileData['attachments']);          
           foreach( $this->fileData['envelope_to'] as $sEmail ) {

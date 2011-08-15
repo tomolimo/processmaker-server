@@ -468,9 +468,12 @@ try {
         default : $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
                 break;
       }
-	  	$fp = fopen($sDirectory, 'w');
+      header("Content-Type: text/html; charset=utf-8");
+      $fp = fopen($sDirectory, 'w');
 	  	$content = stripslashes($_REQUEST['fcontent']);
 	  	$content = str_replace("@amp@", "&", $content);
+      $content = base64_decode($content);      
+
 	  	fwrite($fp, $content);
 	  	fclose($fp);
 	  	echo 'saved: '. $sDirectory;
