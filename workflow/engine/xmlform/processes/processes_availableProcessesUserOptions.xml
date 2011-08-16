@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<dynaForm
+  type="xmlmenu"
+>
+<PAGED_TABLE_ID type="private"/>
+<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+
+</dynaForm> 
