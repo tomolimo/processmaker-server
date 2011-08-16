@@ -1646,10 +1646,13 @@ function setCaseTrackerCode($sApplicationUID, $sCode, $sPIN = '') {
  *
  */
 function jumping ( $caseId, $delIndex ) {
-  $x = $this->PMFDerivateCase($caseId, $delIndex);
-  if($x==0)
+  try {
+    $x = PMFDerivateCase($caseId, $delIndex);
+    if($x==0)
+      G::SendTemporalMessage('ID_NOT_DERIVATED', 'error', 'labels');
+  } catch (Exception $oException) {
     G::SendTemporalMessage('ID_NOT_DERIVATED', 'error', 'labels');
-
+  }
   G::header('Location: cases_List');
 }
 /**
