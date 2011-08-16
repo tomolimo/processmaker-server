@@ -75,7 +75,7 @@ try {
       if ($aRow1['OUTPUTS']
         )$flag = false;
     }
-    print $flag;
+    //print $flag;
   } else {
     //default:
 
@@ -91,26 +91,23 @@ try {
       $aData = $_POST;         //For Extjs (Since we are not using form in ExtJS)
 
 
-    $oForm = new Form('outputdocs/outputdocs_Properties', PATH_XMLFORM);
-    $aData = $oForm->validatePost();
-
-    if(isset($aData['OUT_DOC_PDF_SECURITY_ENABLED'])&&$aData['OUT_DOC_PDF_SECURITY_ENABLED']=="0"){
-      $aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD']="";
-      $aData['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD']="";
-      $aData['OUT_DOC_PDF_SECURITY_PERMISSIONS']="";
+    if(isset($aData['OUT_DOC_TITLE']) && $aData['OUT_DOC_TITLE']!=''){
+      $oForm = new Form('outputdocs/outputdocs_Properties', PATH_XMLFORM);
+      $aData = $oForm->validatePost();
+      if(isset($aData['OUT_DOC_PDF_SECURITY_ENABLED'])&&$aData['OUT_DOC_PDF_SECURITY_ENABLED']=="0"){
+        $aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD']  ="";
+        $aData['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'] ="";
+        $aData['OUT_DOC_PDF_SECURITY_PERMISSIONS']    ="";
+      }
+      if(isset($aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'])&&$aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD']!=""){
+        $aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD']  = G::encrypt($aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'],$aData['OUT_DOC_UID']);
+        $aData['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'] = G::encrypt($aData['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'],$aData['OUT_DOC_UID']);
+      }
     }
-
-    if(isset($aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'])&&$aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD']!=""){
-      $aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD']=G::encrypt($aData['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'],$aData['OUT_DOC_UID']);
-      $aData['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD']=G::encrypt($aData['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'],$aData['OUT_DOC_UID']);
-    }
-
-
     if ($aData['OUT_DOC_UID'] == '') {
 
       if ((isset($aData['OUT_DOC_TYPE'])) && ( $aData['OUT_DOC_TYPE'] == 'JRXML' )) {
         $dynaformUid = $aData['DYN_UID'];
-
         $outDocUid = $oOutputDocument->create($aData);
         G::LoadClass('javaBridgePM');
         $jbpm = new JavaBridgePM ();
