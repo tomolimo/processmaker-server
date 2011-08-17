@@ -332,8 +332,11 @@ class spoolRun {
           $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);
           $oPHPMailer->Subject = utf8_decode($this->fileData['subject']);
           $oPHPMailer->Body = utf8_decode($this->fileData['body']);
-          if($this->fileData['attachments'])
-           $oPHPMailer->AddAttachment($this->fileData['attachments']);          
+          if(is_array($this->fileData['attachments'])){
+            foreach($this->fileData['attachments'] as $key => $fileAttach){
+              $oPHPMailer->AddAttachment($fileAttach);
+            }
+          }
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
             if( strpos($sEmail, '<') !== false ) {
               preg_match($this->longMailEreg, $sEmail, $matches);
