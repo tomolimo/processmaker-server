@@ -240,9 +240,12 @@ Ext.onReady(function(){
         treePanel1 = Ext.getCmp('tree-panel')
         if(treePanel1)
           node = treePanel1.getNodeById(_nodeId);
-        if(node)
+        if(node) {
           node.select();
-        
+          if (_nodeId == 'CASES_START_CASE') {
+            updateCasesTree();
+          }
+        }
       }
   });
 
