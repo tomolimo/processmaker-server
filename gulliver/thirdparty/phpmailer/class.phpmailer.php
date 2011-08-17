@@ -1359,7 +1359,7 @@ class PHPMailer {
         4 => $type,
         5 => false,  // isStringAttachment
         6 => 'attachment',
-        7 => 0
+        7 => count($this->attachment)
       );
 
     } catch (phpmailerException $e) {

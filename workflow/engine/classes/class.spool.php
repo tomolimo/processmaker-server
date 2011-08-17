@@ -386,8 +386,11 @@ class spoolRun {
           }            
           $oPHPMailer->Body = $msBody;
           
-          if($this->fileData['attachments'])
-            $oPHPMailer->AddAttachment($this->fileData['attachments']);
+          if(is_array($this->fileData['attachments'])){
+            foreach($this->fileData['attachments'] as $key => $fileAttach){
+              $oPHPMailer->AddAttachment($fileAttach);
+            }
+          }
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
             $evalMail = strpos($sEmail, '<');            
             if( strpos($sEmail, '<') !== false ) {

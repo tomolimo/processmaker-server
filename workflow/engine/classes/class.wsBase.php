@@ -596,7 +596,7 @@ class wsBase
   * @param $appFields = null 
   * @return $result will return an object
   */
-  public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $sAttachment ) {
+  public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $sAttachment = null ) {
     try {
       $aSetup = getEmailConfiguration();
 
