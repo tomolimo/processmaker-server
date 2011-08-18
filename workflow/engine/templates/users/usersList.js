@@ -276,7 +276,7 @@ Ext.onReady(function(){
       {header: _('ID_DEPARTMENT'), dataIndex: 'DEP_TITLE', width: 150, hidden:true, align:'left'},
       {header: _('ID_LAST_LOGIN'), dataIndex: 'LAST_LOGIN', width: 108, hidden:false, align:'center', renderer: render_lastlogin},
       {header: _('ID_AUTHENTICATION_SOURCE'), dataIndex: 'USR_AUTH_SOURCE', width: 108, hidden: true, align: 'left'},
-      {header: _('ID_CASES'), dataIndex: 'TOTAL_CASES', width: 45, hidden:false, align:'right', sortable: true ,sortType: 'asInt'},
+      {header: _('ID_CASES_NUM'), dataIndex: 'TOTAL_CASES', width: 45, hidden:false, align:'right', sortable: true ,sortType: 'asInt'},
       {header: _('ID_DUE_DATE'), dataIndex: 'USR_DUE_DATE', width: 108, hidden:false, align:'center', renderer: render_duedate}
     ]
   });
