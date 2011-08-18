@@ -137,8 +137,8 @@ switch ( $action ){
 		if ($aFields['DBS_PORT'] == '0') {
 		  $aFields['DBS_PORT'] = '';
 		}
-               $aFields['DBS_PASSWORD']=$dbs->getPassWithoutEncrypt($aFields['DBS_PASSWORD']);
-               $aFields['DBS_PASSWORD']=($aFields['DBS_PASSWORD'] == 'none') ? "": G::decrypt($aFields['DBS_PASSWORD'], $aFields['DBS_DATABASE_NAME']);
+               $aFields['DBS_PASSWORD']=$dbs->getPassWithoutEncrypt($aFields);
+               $aFields['DBS_PASSWORD']=($aFields['DBS_PASSWORD'] == 'none') ? "": $aFields['DBS_PASSWORD'];
 		$G_PUBLISH->AddContent('xmlform', 'xmlform', 'dbConnections/dbConnections_Edit', '', $aFields);
 		G::RenderPage('publish', 'raw');
 		break;
