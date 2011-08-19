@@ -518,7 +518,7 @@ class Form extends XmlForm
     return count($notPassedFields) > 0 ? $notPassedFields : false;
   }
   
-  function validateFields($_POST) {
+  function validateFields($dataFields) {
     $values = array();
     $excludeTypes = array('submit', 'file');
     
@@ -526,12 +526,12 @@ class Form extends XmlForm
       if (!in_array($v->type, $excludeTypes)) {
         switch($v->type) {
           case 'checkbox':
-            $_POST[$v->name] = isset($_POST[$v->name])? $_POST[$v->name] : $v->falseValue;
+            $data[$v->name] = isset($data[$v->name])? $data[$v->name] : $v->falseValue;
             break;
           default:
         }
       }
     }
-    return $_POST;
+    return $data;
   }
 }
