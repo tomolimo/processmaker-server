@@ -2661,6 +2661,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
       $html .= '>';
       $findValue = '';
       $firstValue = '';
+      $cont=0;
       foreach ($this->option as $optValue => $optName ){
         settype($optValue,'string');
         $html .= '<option value="'.$optValue.'" '.(($optValue === $value)? 'selected="selected"' : '').'>'.$optName.'</option>';
@@ -2669,6 +2670,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
           $displayLabel = $optName;
         }
         if ($firstValue == '') $firstValue = $optValue;
+        $cont++;
       }
       foreach ($this->sqlOption as $optValue => $optName ){
         settype($optValue,'string');
@@ -2686,7 +2688,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field {
         $html .= 'name="form' . $rowId . '[' . $this->name . ']" ';
         $html .= 'value="'.(($findValue != '') ? $findValue : $firstValue).'" />';
       }
-      $this->selectedValue = ($findValue != '') ? $findValue : $firstValue;
+      $this->selectedValue = ($findValue != '') ? $findValue : ($cont==0)? $firstValue : '';
     
     }else{ //Render Field showing only value;
       foreach ($this->option as $optValue => $optName) {
