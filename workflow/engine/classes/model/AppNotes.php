@@ -67,18 +67,6 @@ class AppNotes extends BaseAppNotes {
 
 
   function postNewNote($appUid, $usrUid, $noteContent, $notify=true, $noteAvalibility="PUBLIC", $noteRecipients="", $noteType="USER", $noteDate="now") {
-    
-    if($noteRecipients==""){
-      $noteRecipientsA=array();
-      G::LoadClass('case');
-      $oCase = new Cases ();
-
-      $p=$oCase->getUsersParticipatedInCase($appUid);
-      foreach($p['array'] as $key => $userParticipated){
-        $noteRecipientsA[]=$key;
-      }
-      $noteRecipients=implode(",",$noteRecipientsA);
-    }
 
     $this->setAppUid($appUid);
     $this->setUsrUid($usrUid);
@@ -112,9 +100,18 @@ class AppNotes extends BaseAppNotes {
       $response['message'] = 'Saved...';
     }
 
-    
-    
-    if($notify){
+    if ($notify) {
+      if ($noteRecipients == "") {
+        $noteRecipientsA = array();
+        G::LoadClass('case');
+        $oCase = new Cases ();
+
+        $p = $oCase->getUsersParticipatedInCase($appUid);
+        foreach($p['array'] as $key => $userParticipated){
+          $noteRecipientsA[]=$key;
+        }
+        $noteRecipients = implode(",", $noteRecipientsA);
+      }
 
       $this->sendNoteNotification($appUid, $usrUid, $noteContent, $noteRecipients);
     }
@@ -122,7 +119,7 @@ class AppNotes extends BaseAppNotes {
     return $response;
   }
 
-  private function sendNoteNotification($appUid, $usrUid, $noteContent, $noteRecipients, $sFrom="") {
+  public function sendNoteNotification($appUid, $usrUid, $noteContent, $noteRecipients, $sFrom="") {
     try {
       require_once ('classes/model/Configuration.php');
       $oConfiguration = new Configuration();

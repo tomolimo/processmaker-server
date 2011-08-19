@@ -18,7 +18,7 @@ class HttpProxyController {
      */
     private $__request__;
     
-    
+    private $sendResponse = true;
     /**
      * Magic setter method
      * 
@@ -99,7 +99,10 @@ class HttpProxyController {
             $result->exception->code = $e->getCode();
             $result->exception->trace = $e->getTraceAsString();
         }
-        print G::json_encode($result);
+
+        if ($this->sendResponse) {
+            print G::json_encode($result);
+        }
     }
     
     /**
@@ -114,5 +117,15 @@ class HttpProxyController {
                 $this->__request__->$var['key'] = $var['value'];   
         } else 
             $this->__request__ = $data;
+    }
+
+    /**
+     * Send response to client
+     * 
+     * @param boolean $val
+     */
+    public function setSendResponse($val)
+    {
+        $this->sendResponse = $val;
     }
 }

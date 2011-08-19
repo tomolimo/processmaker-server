@@ -5,14 +5,13 @@ function closeCaseNotesWindow(){
 }
 
 function openCaseNotesWindow(appUid,modalSw){
-  
   if(!appUid) appUid="";
 
   var startRecord=0;
   var loadSize=10;
 
   var storeNotes = new Ext.data.JsonStore({
-    url : 'caseNotesAjax.php?action=getNotesList&appUid='+appUid,
+    url : '../caseProxy/getNotesList?appUid='+appUid,
     root: 'notes',
     totalProperty: 'totalCount',
     fields: ['USR_USERNAME','NOTE_DATE','NOTE_CONTENT'],
@@ -108,7 +107,6 @@ function openCaseNotesWindow(appUid,modalSw){
   }]
   });
 
-
 var caseNotesWindow;
 caseNotesWindow = new Ext.Window({
   title: _('ID_CASES_NOTES'), //Title of the Window
@@ -117,7 +115,7 @@ caseNotesWindow = new Ext.Window({
   resizable: true, //Resize of the Window, if false - it cannot be resized
   closable: true, //Hide close button of the Window
   modal: modalSw, //When modal:true it make the window modal and mask everything behind it when displayed
-  iconCls: 'ICON_CASES_NOTES',
+  //iconCls: 'ICON_CASES_NOTES',
   autoCreate: true,
   height:400,
   shadow:true,
@@ -144,11 +142,11 @@ caseNotesWindow = new Ext.Window({
   new Ext.ux.StatusBar({
     defaultText : _('ID_NOTES_READY'),
     id : 'notesStatusPanel',
-    defaultIconCls: 'ICON_CASES_NOTES',
+    //defaultIconCls: 'ICON_CASES_NOTES',
 
     // values to set initially:
     text: _('ID_NOTES_READY'),
-    iconCls: 'ready-icon',
+    //iconCls: 'ready-icon',
     statusAlign: 'left',
 
     // any standard Toolbar items:
@@ -163,29 +161,34 @@ caseNotesWindow = new Ext.Window({
     name:'caseNoteText',
     hideLabel: true,
     blankText:_('ID_CASES_NOTES_POST'),
-    //anchor:'95%',
     anchor: '100% -53',
     width:200,
-    //autoWidth:true,
     grow:true,
     selectOnFocus:true,
     maxLenght:150,
-    //preventMark:true,
-    allowBlank:false
-  //multiline:true
-  },' ',{
-    text:'&nbsp;&nbsp;'+_('ID_SUBMIT_NOTE'),
-    iconCls: 'ICON_CASES_NOTES',
-    handler:function() {
+    allowBlank:true
+  },
+  ' ',
+  {
+    cls: 'x-toolbar1',
+    text: _('ID_SUBMIT_NOTE'),
+    iconCls: 'x-pm-startcase-btn',
+    scale: 'large',
+    stype:'button',
+    iconAlign: 'top',
+    handler: function(){
       var noteText = Ext.getCmp('caseNoteText').getValue();
-      if(noteText=="") return false;
+  
+      if (noteText == "") {
+        return false;
+      }
+
       Ext.getCmp('caseNoteText').focus();
       Ext.getCmp('caseNoteText').reset();
       statusBarMessage( _('ID_CASES_NOTE_POSTING'), true);
       Ext.Ajax.request({
-        url : 'caseNotesAjax' ,
+        url : '../caseProxy/postNote' ,
         params : {
-          action : 'postNote',
           appUid:appUid,
           noteText:noteText
         },
@@ -205,7 +208,6 @@ caseNotesWindow = new Ext.Window({
           Ext.MessageBox.alert(_('ID_CASES_NOTE_POST_FAILED'), result.responseText);
         }
       });
-
     }
   }],
   listeners:{
@@ -241,15 +243,16 @@ function statusBarMessage( msg, isLoading, success ) {
     if( success ) {
       statusBar.setStatus({
         text: '' + msg,
-        iconCls: 'success',
+        //iconCls: 'success',
         clear: true
       });
     } else {
       statusBar.setStatus({
         text: 'Error: ' + msg,
-        iconCls: 'error',
+        //iconCls: 'error',
         clear: true
       });
     }
   }
 }
+
