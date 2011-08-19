@@ -518,7 +518,7 @@ class Form extends XmlForm
     return count($notPassedFields) > 0 ? $notPassedFields : false;
   }
   
-  function validateFields($dataFields) {
+  function validateFields($data) {
     $values = array();
     $excludeTypes = array('submit', 'file');
     
@@ -533,5 +533,5 @@ class Form extends XmlForm
       }
     }
     return $data;
-  }
+  } 
 }
