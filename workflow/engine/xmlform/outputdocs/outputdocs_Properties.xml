@@ -174,7 +174,7 @@ var verifyTitle = function(oForm)
 	  var proUid = getField('PRO_UID').value;
 	  var OutPutID = getField('OUT_DOC_UID').value;
 	  if(OutPutID==''){
-		  reqName=ajax_function(oForm.action,'lookForNameOutput','NAMEOUTPUT='+encodeURIComponent(nameOutPut)+'&proUid='+encodeURIComponent(proUid),'POST') ;
+		  reqName=ajax_function('../outputdocs/outputdocs_Ajax','lookForNameOutput','NAMEOUTPUT='+encodeURIComponent(nameOutPut)+'&proUid='+encodeURIComponent(proUid),'POST') ;      
 		  if(reqName){
 			 outputdocsPropertiesSave(oForm);
 	    } else {

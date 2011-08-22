@@ -2,6 +2,11 @@
     
 $action = isset($POST['action'])? $POST['action']: isset($_GET['action'])? $_GET['action']: '';
 
+// Function call from ajax_function for calling to lookForNameOutput.
+if($action=='') {
+  $action = isset($_POST['function'])?$_POST['function']:'';
+}
+
 switch($action){
   case 'setTemplateFile':
     //print_r($_FILES);
@@ -40,5 +45,39 @@ switch($action){
       
       echo $aFields['OUT_DOC_TEMPLATE'];
     }
+  break;
+
+  case 'lookForNameOutput':
+    require_once('classes/model/Content.php');
+    require_once ( "classes/model/OutputDocument.php" );
+
+    $snameInput = urldecode($_POST['NAMEOUTPUT']);
+    $sPRO_UID = urldecode($_POST['proUid']);
+
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(OutputDocumentPeer::OUT_DOC_UID);
+    $oCriteria->add(OutputDocumentPeer::PRO_UID, $sPRO_UID);
+    $oDataset = OutputDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $flag = true;
+    while ($oDataset->next() && $flag) {
+      $aRow = $oDataset->getRow();
+
+      $oCriteria1 = new Criteria('workflow');
+      $oCriteria1->addSelectColumn('COUNT(*) AS OUTPUTS');
+      $oCriteria1->add(ContentPeer::CON_CATEGORY, 'OUT_DOC_TITLE');
+      $oCriteria1->add(ContentPeer::CON_ID, $aRow['OUT_DOC_UID']);
+      $oCriteria1->add(ContentPeer::CON_VALUE, $snameInput);
+      $oCriteria1->add(ContentPeer::CON_LANG, SYS_LANG);
+      $oDataset1 = ContentPeer::doSelectRS($oCriteria1);
+      $oDataset1->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset1->next();
+      $aRow1 = $oDataset1->getRow();
+
+      if ($aRow1['OUTPUTS'])
+        $flag = false;
+    }
+    echo $flag;
+    // G::json_encode($flag);
   break;
 }
