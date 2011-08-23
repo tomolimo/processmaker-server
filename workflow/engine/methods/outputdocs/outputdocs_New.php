@@ -49,6 +49,9 @@ try {
   
   
   $enabledJavaBridge = false;
+
+  /**
+  * Temporally Disabled, because we are not using JRXML output doc type by now
   G::LoadClass ('javaBridgePM');
   if ( class_exists ( 'javaBridgePM' ) ) {
     $JBPM = new JavaBridgePM();
@@ -62,7 +65,7 @@ try {
     //$util->setInputPath( JAVATEST_PATH );
     //$util->setOutputPath( JAVATEST_PATH );
   }
-  
+  */
   
   
   G::LoadClass('xmlfield_InputPM');
