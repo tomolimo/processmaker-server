@@ -67,7 +67,7 @@ try {
               $template->assign ('LOGO_HEIGHT'     , "80" );
               $template->assign ('LOG0_SIZE'       , "15.36");
               $template->assign ('LOG0_DELETE'     , "onclick ='changeLogo(\"  \");return false;'");
-              $template->assign ('LOG0_CHECK'     , "/images/favicon.ico");
+              $template->assign ('LOG0_CHECK'     , "/images/faviconpm.png");
               
               $i++;
             }
