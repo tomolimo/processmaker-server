@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.31.rc6-16-g1350839\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.32.rc4-3-gbb5e90a\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-07-28 16:18:42\n"
+"PO-Revision-Date: 2011-08-23 16:28:53\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -5548,8 +5548,8 @@ msgstr "Open in a popup"
 # TRANSLATION
 # JAVASCRIPT/ID_DYNAFORM_ASSIGN
 #: JAVASCRIPT/ID_DYNAFORM_ASSIGN
-msgid "You can not delete this dynaform. This is  assigned in some step."
-msgstr "You can not delete this dynaform. This is  assigned in some step."
+msgid "You cannot delete this Dynaform while it is assigned to a step."
+msgstr "You cannot delete this Dynaform while it is assigned to a step."
 
 # TRANSLATION
 # JAVASCRIPT/ID_REQ_TITLE
@@ -10306,8 +10306,8 @@ msgstr "Ready"
 # TRANSLATION
 # LABEL/ID_SUBMIT_NOTE
 #: LABEL/ID_SUBMIT_NOTE
-msgid "[LABEL/ID_SUBMIT_NOTE] Post a Note"
-msgstr "Post a Note"
+msgid "Post Note"
+msgstr "Post Note"
 
 # TRANSLATION
 # LABEL/ID_BUTTON
@@ -10572,6 +10572,258 @@ msgstr "Invalid file extension!"
 #: LABEL/ID_NEW_PMTABLE
 msgid "[LABEL/ID_NEW_PMTABLE] New PM Table"
 msgstr "New PM Table"
+
+# TRANSLATION
+# LABEL/ID_APPLY_AS_MAIN_LOGO
+#: LABEL/ID_APPLY_AS_MAIN_LOGO
+msgid "Apply as main logo"
+msgstr "Apply as main logo"
+
+# TRANSLATION
+# LABEL/ID_YOU_ARE_NOT_CAN_SELECT_PHOTO
+#: LABEL/ID_YOU_ARE_NOT_CAN_SELECT_PHOTO
+msgid "You are not can select more one photo"
+msgstr "You are not can select more one photo"
+
+# TRANSLATION
+# LABEL/ID_SELECT_AN_IMAGE
+#: LABEL/ID_SELECT_AN_IMAGE
+msgid "Please select an image"
+msgstr "Please select an image"
+
+# TRANSLATION
+# LABEL/PHOTO_GALLERY
+#: LABEL/PHOTO_GALLERY
+msgid "Photo gallery"
+msgstr "Photo gallery"
+
+# TRANSLATION
+# LABEL/ID_IMAGES_SELECTED
+#: LABEL/ID_IMAGES_SELECTED
+msgid "images selected"
+msgstr "images selected"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_IMAGE
+#: LABEL/ID_UPLOAD_IMAGE
+msgid "Upload image"
+msgstr "Upload image"
+
+# TRANSLATION
+# LABEL/ID_SELECT_FILE
+#: LABEL/ID_SELECT_FILE
+msgid "Select a file"
+msgstr "Select a file"
+
+# TRANSLATION
+# LABEL/ID_IMAGE
+#: LABEL/ID_IMAGE
+msgid "Image"
+msgstr "Image"
+
+# TRANSLATION
+# LABEL/ID_YOUR_IMAGE_HAS_BEEN_SUCCESSFULLY
+#: LABEL/ID_YOUR_IMAGE_HAS_BEEN_SUCCESSFULLY
+msgid "Your image has been successfully uploaded"
+msgstr "Your image has been successfully uploaded"
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPLOADING_IMAGE_TYPE
+#: LABEL/ID_ERROR_UPLOADING_IMAGE_TYPE
+msgid "Error uploading image, wrong file type"
+msgstr "Error uploading image, wrong file type"
+
+# TRANSLATION
+# LABEL/ID_UPLOADING_IMAGE_WRONG_SIZE
+#: LABEL/ID_UPLOADING_IMAGE_WRONG_SIZE
+msgid "Error uploading image, wrong file size"
+msgstr "Error uploading image, wrong file size"
+
+# TRANSLATION
+# LABEL/ID_SUCCESS
+#: LABEL/ID_SUCCESS
+msgid "Success"
+msgstr "Success"
+
+# TRANSLATION
+# LABEL/IMAGE_DETAIL
+#: LABEL/IMAGE_DETAIL
+msgid "Image detail"
+msgstr "Image detail"
+
+# TRANSLATION
+# LABEL/ID_SELECTED
+#: LABEL/ID_SELECTED
+msgid "selected"
+msgstr "selected"
+
+# TRANSLATION
+# LABEL/ID_REPORT_TABLES_DATA_EXPORT_NOT_ALLOWED
+#: LABEL/ID_REPORT_TABLES_DATA_EXPORT_NOT_ALLOWED
+msgid "Data export for Report Tables is not allowed!"
+msgstr "Data export for Report Tables is not allowed!"
+
+# TRANSLATION
+# LABEL/ID_FORGOT_PASSWORD
+#: LABEL/ID_FORGOT_PASSWORD
+msgid "Forgot Password"
+msgstr "Forgot Password"
+
+# TRANSLATION
+# LABEL/ID_FORGOT_PASSWORD_Q
+#: LABEL/ID_FORGOT_PASSWORD_Q
+msgid "Forgot Password?"
+msgstr "Forgot Password?"
+
+# TRANSLATION
+# LABEL/ID_SEND
+#: LABEL/ID_SEND
+msgid "Send"
+msgstr "Send"
+
+# TRANSLATION
+# LABEL/ID_EMAIL_DOES_NOT_MATCH_FOR_USER
+#: LABEL/ID_EMAIL_DOES_NOT_MATCH_FOR_USER
+msgid "The email doesn't match for user:"
+msgstr "The email doesn't match for user:"
+
+# TRANSLATION
+# LABEL/ID_PASSWORD_CHANGED_SUCCESSFULLY
+#: LABEL/ID_PASSWORD_CHANGED_SUCCESSFULLY
+msgid "Your password has been successfully changed to"
+msgstr "Your password has been successfully changed to"
+
+# TRANSLATION
+# LABEL/ID_PROCESSMAKER_FORGOT_PASSWORD_SERVICE
+#: LABEL/ID_PROCESSMAKER_FORGOT_PASSWORD_SERVICE
+msgid "ProcessMaker Forgot Password Service"
+msgstr "ProcessMaker Forgot Password Service"
+
+# TRANSLATION
+# LABEL/ID_PROCESSMAKER_SLOGAN1
+#: LABEL/ID_PROCESSMAKER_SLOGAN1
+msgid "This Business Process is Powered By ProcessMaker"
+msgstr "This Business Process is Powered By ProcessMaker"
+
+# TRANSLATION
+# LABEL/ID_VISIT
+#: LABEL/ID_VISIT
+msgid "Visit"
+msgstr "Visit"
+
+# TRANSLATION
+# LABEL/ID_APPLY
+#: LABEL/ID_APPLY
+msgid "Apply"
+msgstr "Apply"
+
+# TRANSLATION
+# LABEL/ID_RESTORE_DEFAULT
+#: LABEL/ID_RESTORE_DEFAULT
+msgid "Restore default"
+msgstr "Restore default"
+
+# TRANSLATION
+# LABEL/ID_NO_IMAGES_TO_DISPLAY
+#: LABEL/ID_NO_IMAGES_TO_DISPLAY
+msgid "No images to display"
+msgstr "No images to display"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT1
+#: LABEL/ID_PMTABLES_ALERT1
+msgid "You can't repeat a column name, please rename:"
+msgstr "You can't repeat a column name, please rename:"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT2
+#: LABEL/ID_PMTABLES_ALERT2
+msgid "Field Name for all columns is required."
+msgstr "Field Name for all columns is required."
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT3
+#: LABEL/ID_PMTABLES_ALERT3
+msgid "Field Label for all columns is required."
+msgstr "Field Label for all columns is required."
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT4
+#: LABEL/ID_PMTABLES_ALERT4
+msgid "Please set a field type for"
+msgstr "Please set a field type for"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT5
+#: LABEL/ID_PMTABLES_ALERT5
+msgid "Please set a field size for:"
+msgstr "Please set a field size for:"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT6
+#: LABEL/ID_PMTABLES_ALERT6
+msgid "You need set one column at least as Primary Key."
+msgstr "You need set one column at least as Primary Key."
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_ALERT7
+#: LABEL/ID_PMTABLES_ALERT7
+msgid "Set columns for this Report Table please."
+msgstr "Set columns for this Report Table please."
+
+# TRANSLATION
+# LABEL/ID_AUTO_INCREMENT
+#: LABEL/ID_AUTO_INCREMENT
+msgid "Auto Increment"
+msgstr "Auto Increment"
+
+# TRANSLATION
+# LABEL/ID_CAPS_LOCK_IS_ON
+#: LABEL/ID_CAPS_LOCK_IS_ON
+msgid "Caps Lock is On"
+msgstr "Caps Lock is On"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_VIRTUAL_KEYBOARD
+#: LABEL/ID_ENABLE_VIRTUAL_KEYBOARD
+msgid "Enable Virtual Keyboard"
+msgstr "Enable Virtual Keyboard"
+
+# TRANSLATION
+# LABEL/ID_DEFAULT_LANGUAGE
+#: LABEL/ID_DEFAULT_LANGUAGE
+msgid "Default Language"
+msgstr "Default Language"
+
+# TRANSLATION
+# LABEL/ID_CAPS_LOCK_ALERT2
+#: LABEL/ID_CAPS_LOCK_ALERT2
+msgid "You should press Caps Lock to turn it off before entering your password."
+msgstr "You should press Caps Lock to turn it off before entering your password."
+
+# TRANSLATION
+# LABEL/ID_CAPS_LOCK_ALERT1
+#: LABEL/ID_CAPS_LOCK_ALERT1
+msgid "Having Caps Lock on may cause you to enter your password incorrectly."
+msgstr "Having Caps Lock on may cause you to enter your password incorrectly."
+
+# TRANSLATION
+# LABEL/ID_SYSTEM_INFO
+#: LABEL/ID_SYSTEM_INFO
+msgid "System information"
+msgstr "System information"
+
+# TRANSLATION
+# LABEL/ID_SHOW_CASES_NOTES
+#: LABEL/ID_SHOW_CASES_NOTES
+msgid "Show Case Notes"
+msgstr "Show Case Notes"
+
+# TRANSLATION
+# JAVASCRIPT/ID_CASES_NUM
+#: JAVASCRIPT/ID_CASES_NUM
+msgid "# Cases"
+msgstr "# Cases"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -17618,7 +17870,7 @@ msgstr "Show print dynaform button"
 # dynaforms/dynaforms_Properties.xml?PME_PROP_APPLY
 # dynaforms/dynaforms_Properties.xml
 #: button - PME_PROP_APPLY
-msgid "Apply"
+msgid "[dynaforms/dynaforms_Properties.xml?PME_PROP_APPLY] Apply"
 msgstr "Apply"
 
 # dynaforms/dynaforms_Properties.xml?PME_PROP_REVERT
@@ -19670,7 +19922,7 @@ msgstr "Login"
 # login/login.xml?FORGOT_PASWORD_LINK
 # login/login.xml
 #: link - FORGOT_PASWORD_LINK
-msgid "Forgot Password"
+msgid "[login/login.xml?FORGOT_PASWORD_LINK] Forgot Password"
 msgstr "Forgot Password"
 
 # login/newSite.xml?NEW_WORKSPACE
@@ -20552,26 +20804,26 @@ msgstr "Screenshot1024"
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_LEFT_MARGIN
 # outputdocs/outputdocs_Properties.xml
 #: text - OUT_DOC_LEFT_MARGIN
-msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_LEFT_MARGIN] Left Margin"
-msgstr "Left Margin"
+msgid "Left"
+msgstr "Left"
 
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_RIGHT_MARGIN
 # outputdocs/outputdocs_Properties.xml
 #: text - OUT_DOC_RIGHT_MARGIN
-msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_RIGHT_MARGIN] Right Margin"
-msgstr "Right Margin"
+msgid "Right"
+msgstr "Right"
 
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_TOP_MARGIN
 # outputdocs/outputdocs_Properties.xml
 #: text - OUT_DOC_TOP_MARGIN
-msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_TOP_MARGIN] Top Margin"
-msgstr "Top Margin"
+msgid "Top"
+msgstr "Top"
 
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_BOTTOM_MARGIN
 # outputdocs/outputdocs_Properties.xml
 #: text - OUT_DOC_BOTTOM_MARGIN
-msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_BOTTOM_MARGIN] Bottom Margin"
-msgstr "Bottom Margin"
+msgid "Bottom"
+msgstr "Bottom"
 
 # outputdocs/outputdocs_Properties.xml?OUT_DOC_DESTINATION_PATH
 # outputdocs/outputdocs_Properties.xml
@@ -20584,6 +20836,66 @@ msgstr "Destination Path"
 #: textpm - OUT_DOC_TAGS
 msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_TAGS] Tags"
 msgstr "Tags"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_ENABLED
+# outputdocs/outputdocs_Properties.xml
+#: dropdown - OUT_DOC_PDF_SECURITY_ENABLED
+msgid "PDF Security"
+msgstr "PDF Security"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_ENABLED-0
+# outputdocs/outputdocs_Properties.xml
+#: dropdown - OUT_DOC_PDF_SECURITY_ENABLED - 0
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_ENABLED-0]"
+msgstr "Disabled"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_ENABLED-1
+# outputdocs/outputdocs_Properties.xml
+#: dropdown - OUT_DOC_PDF_SECURITY_ENABLED - 1
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_ENABLED-1]"
+msgstr "Enabled"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_OPEN_PASSWORD
+# outputdocs/outputdocs_Properties.xml
+#: password - OUT_DOC_PDF_SECURITY_OPEN_PASSWORD
+msgid "Open Password"
+msgstr "Open Password"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_OWNER_PASSWORD
+# outputdocs/outputdocs_Properties.xml
+#: password - OUT_DOC_PDF_SECURITY_OWNER_PASSWORD
+msgid "Owner Password"
+msgstr "Owner Password"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS
+# outputdocs/outputdocs_Properties.xml
+#: listbox - OUT_DOC_PDF_SECURITY_PERMISSIONS
+msgid "Allowed Permissions"
+msgstr "Allowed Permissions"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-print
+# outputdocs/outputdocs_Properties.xml
+#: listbox - OUT_DOC_PDF_SECURITY_PERMISSIONS - print
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-print]"
+msgstr "Print"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-modify
+# outputdocs/outputdocs_Properties.xml
+#: listbox - OUT_DOC_PDF_SECURITY_PERMISSIONS - modify
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-modify]"
+msgstr "Modify"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-copy
+# outputdocs/outputdocs_Properties.xml
+#: listbox - OUT_DOC_PDF_SECURITY_PERMISSIONS - copy
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-copy]"
+msgstr "Copy"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-annot-forms
+# outputdocs/outputdocs_Properties.xml
+#: listbox - OUT_DOC_PDF_SECURITY_PERMISSIONS - annot-forms
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-annot-forms]"
+msgstr "Forms"
 
 # outputdocs/outputdocs_Properties.xml?BTN_CANCEL
 # outputdocs/outputdocs_Properties.xml
