@@ -2350,10 +2350,13 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
       return $res;
     } elseif ($this->mode === 'view') {
       if ($this->labelOnRight) {
-        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled ><span class='FormCheck'>" . $this->label . '</span></input>';
+        $html = '';
+        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled >
+                 <span class='FormCheck'>" . $this->label . '</span></input>';
       } else {
         $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' disabled/>";
       }
+      $html .="<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='hidden' />";
 //      if($this->hint){
 //           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
 //                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
