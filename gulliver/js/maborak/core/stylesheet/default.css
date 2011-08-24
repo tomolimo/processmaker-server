@@ -1150,6 +1150,16 @@ INPUT {
 	color	:#333333;
 	font	:normal 8pt sans-serif;
 }
+.module_app_input___gray_readOnly
+{
+	padding:1px;
+	border:1px solid #AAA;
+	padding-left:3px;
+	background: #EBEBE4;/*#FFFFFF url(../images/input_back.gif) repeat-x;*/
+	background-position:0px 0px;
+	color	:#333333;
+	font	:normal 8pt sans-serif;
+}
 .module_app_inputHover___gray
 {
 	border:1px solid #AAA;

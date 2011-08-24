@@ -1010,7 +1010,10 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
       $html .= 'type="hidden" value="'.$this->htmlentities($value, ENT_QUOTES, 'utf-8').'" />';
     }
     
-    $html .= $this->renderHint();    
+    $html .= $this->renderHint();  
+    if (($this->readOnly == 1)&&($this->renderMode == 'edit'))    
+      $html = str_replace("class=\"module_app_input___gray\"","class=\"module_app_input___gray_readOnly\"",$html);
+ 
     return $html;
   }
 
