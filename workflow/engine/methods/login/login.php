@@ -36,19 +36,19 @@
   if (! isset ( $_SESSION ['G_MESSAGE_TYPE'] )) {
     $_SESSION ['G_MESSAGE_TYPE'] = '';
   }
-  
+
   $msg = $_SESSION ['G_MESSAGE'];
   $msgType = $_SESSION ['G_MESSAGE_TYPE'];
-  
+
   if (! isset ( $_SESSION ['FAILED_LOGINS'] )) {
     $_SESSION ['FAILED_LOGINS'] = 0;
   }
   $sFailedLogins = $_SESSION ['FAILED_LOGINS'];
-  
+
   require_once 'classes/model/LoginLog.php';
-  
+
   $aFields ['LOGIN_VERIFY_MSG'] = G::loadTranslation ( 'LOGIN_VERIFY_MSG' );
-  
+
   if ( isset ($_SESSION ['USER_LOGGED']) ) {
   //close the session, if the current session_id was used in PM.
     $oCriteria = new Criteria ( 'workflow' );
@@ -81,7 +81,19 @@
   @session_destroy ();
   session_start ();
   session_regenerate_id ();
-  
+
+  // Execute SSO trigger - Start
+  $pluginRegistry =& PMPluginRegistry::getSingleton();
+  if (defined('PM_SINGLE_SIGN_ON')) {
+    if ($pluginRegistry->existsTrigger(PM_SINGLE_SIGN_ON)) {
+      if ($pluginRegistry->executeTriggers(PM_SINGLE_SIGN_ON, null)) {
+        require_once 'authentication.php';
+        die();
+      }
+    }
+  }
+  // Execute SSO trigger - End
+
   if (strlen ( $msg ) > 0) {
     $_SESSION ['G_MESSAGE'] = $msg;
   }
@@ -89,11 +101,11 @@
     $_SESSION ['G_MESSAGE_TYPE'] = $msgType;
   }
   $_SESSION ['FAILED_LOGINS'] = $sFailedLogins;
-  
+
   //translation
   $Translations = G::getModel("Translation");
   $translationsTable = $Translations->getTranslationEnvironments();
-  
+
   $availableLangArray = array ();
   $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
   foreach ( $translationsTable as $locale ) {
@@ -102,22 +114,22 @@
       $row['LANG_NAME'] = $locale['LANGUAGE'] . ' (' . (ucwords(strtolower($locale['COUNTRY']))) . ')';
     else
       $row['LANG_NAME'] = $locale['LANGUAGE'];
-  
+
     $availableLangArray [] = $row;
   }
   global $_DBArray;
   $_DBArray ['langOptions'] = $availableLangArray;
-  
+
   $G_PUBLISH = new Publisher ( );
   $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/login', '', $aFields, SYS_URI . 'login/authentication.php' );
   G::LoadClass ( 'serverConfiguration' );
-  
+
   //get the serverconf singleton, and check if we can send the heartbeat
   $oServerConf = & serverConf::getSingleton ();
-  
+
   $sflag = $oServerConf->getHeartbeatProperty('HB_OPTION','HEART_BEAT_CONF');
   $sflag = (trim($sflag)!='')?$sflag:'1';
-  
+
   //get date of next beat
   $nextBeatDate = $oServerConf->getHeartbeatProperty('HB_NEXT_BEAT_DATE','HEART_BEAT_CONF');
   $sflag = 1;
@@ -129,7 +141,7 @@
   }
   else
     $oHeadPublisher->addScriptCode( 'var flagHeartBeat = 0; ');
-  
+
   //check if we show the panel with the getting started info
 
   require_once 'classes/model/Configuration.php';
@@ -141,18 +153,18 @@
   $oCriteria->add ( ConfigurationPeer::PRO_UID, '' );
   $oCriteria->add ( ConfigurationPeer::USR_UID, '' );
   $oCriteria->add ( ConfigurationPeer::APP_UID, '' );
-  $flagGettingStarted =  ConfigurationPeer::doCount ( $oCriteria );  
+  $flagGettingStarted =  ConfigurationPeer::doCount ( $oCriteria );
   if( $flagGettingStarted == 0 ) {
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
   }
   else
     $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 0; ');
-    
+
   G::loadClass('configuration');
   $oConf = new Configurations;
   $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
-  
+
   $flagForgotPassword = isset($oConf->aConfig['login_enableForgotPassword'])? $oConf->aConfig['login_enableForgotPassword']: 'off';
   $oHeadPublisher->addScriptCode("var flagForgotPassword = '$flagForgotPassword';");
-  
+
   G::RenderPage ( "publish" );

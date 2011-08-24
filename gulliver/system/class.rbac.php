@@ -1,7 +1,7 @@
 <?php
 /**
  * class.rbac.php
- * @package gulliver.system 
+ * @package gulliver.system
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
@@ -64,6 +64,8 @@ class RBAC
   var $aRbacPlugins = array();
   var $sSystem = '';
 
+  var $singleSignOn = false;
+
   static private $instance = NULL;
 
   private function __construct() {
@@ -74,7 +76,7 @@ class RBAC
   *
   * @access public
   * @return object
-  */  
+  */
   function &getSingleton() {
     if (self::$instance == NULL) {
       self::$instance = new RBAC();
@@ -87,7 +89,7 @@ class RBAC
   *
   * @access public
   * @return object
-  */ 
+  */
   function initRBAC () {
    if ( is_null($this->userObj ) ) {
      require_once ( "classes/model/RbacUsers.php" );
@@ -170,13 +172,13 @@ class RBAC
     $this->aUserInfo[ $sSystem ]['SYS_UID'] = $fieldsSystem['SYS_UID'];
     $this->aUserInfo[ $sSystem ]['ROLE'] = $fieldsRoles;
     $this->aUserInfo[ $sSystem ]['PERMISSIONS'] = $fieldsPermissions;
-  
+
     if ( $pathData != null && $sid != null ) {
        G::mk_dir ( $pathData );
       file_put_contents( $filePath, serialize ( $this->aUserInfo ) );
     }
   }
-  
+
   /**
   * verification the register automatic
   *
@@ -187,8 +189,8 @@ class RBAC
   * @return $res
   */
   function checkAutomaticRegister( $strUser, $strPass) {
-    $result = -1; //default return value, 
-    
+    $result = -1; //default return value,
+
     foreach ( $this->aRbacPlugins as $sClassName) {
       $plugin =  new $sClassName();
       if ( method_exists($plugin, 'automaticRegister' ) ) {
@@ -223,7 +225,7 @@ class RBAC
   *
   *
   * @access public
-  * @param  string $sAuthType  
+  * @param  string $sAuthType
   * @param  string $sAuthSource
   * @param  string $aUserFields
   * @param  string $sAuthUserDn
@@ -243,7 +245,7 @@ class RBAC
     //check if the user's due date is valid
     if ( $aUserFields['USR_DUE_DATE']  < date('Y-m-d') )
       return -4;  //due date
-      
+
     foreach ( $this->aRbacPlugins as $sClassName) {
       if ( strtolower($sClassName) == strtolower($sAuthType) ) {
         $plugin =  new $sClassName();
@@ -502,7 +504,7 @@ class RBAC
 //  }
 
   /**
-  * create permission 
+  * create permission
   *
   *
   * @access public
@@ -549,11 +551,11 @@ class RBAC
 
   * @param  string $systemCode
   * @return $this->rolesObj->getAllRoles
-  */  
+  */
   function getAllRoles ( $systemCode = 'PROCESSMAKER') {
       return $this->rolesObj->getAllRoles($systemCode);
   }
-  
+
 /**
   * getting all roles by filter
   *
@@ -561,7 +563,7 @@ class RBAC
   * @access public
   * @param  string $filter
   * @return $this->rolesObj->getAllRolesFilter
-  */  
+  */
   function getAllRolesFilter ($start,$limit,$filter) {
       return $this->rolesObj->getAllRolesFilter($start,$limit,$filter);
   }
@@ -574,7 +576,7 @@ class RBAC
 
   * @param  string $systemCode
   * @return $this->rolesObj->listAllPermissions
-  */ 
+  */
   function listAllPermissions ( $systemCode = 'PROCESSMAKER') {
       return $this->rolesObj->listAllPermissions($systemCode);
   }
@@ -587,11 +589,11 @@ class RBAC
 
   * @param  array $aData
   * @return $this->rolesObj->createRole
-  */ 
+  */
   function createRole($aData) {
     return $this->rolesObj->createRole($aData);
   }
-  
+
   /**
   * this function removes a role
   *
@@ -600,11 +602,11 @@ class RBAC
 
   * @param  string $ROL_UID
   * @return $this->rolesObj->removeRole
-  */ 
+  */
   function removeRole($ROL_UID){
     return $this->rolesObj->removeRole($ROL_UID);
   }
-  
+
   /**
   * this function checks a new role
   *
@@ -617,7 +619,7 @@ class RBAC
   function verifyNewRole($code){
   return $this->rolesObj->verifyNewRole($code);
   }
-  
+
   /**
   * this function updates a role
   *
@@ -630,7 +632,7 @@ class RBAC
   function updateRole($fields){
   return $this->rolesObj->updateRole($fields);
   }
-  
+
   /**
   * this function loads by ID
   *
@@ -643,7 +645,7 @@ class RBAC
   function loadById($ROL_UID){
   return $this->rolesObj->loadById($ROL_UID);
   }
-  
+
   /**
   * this function gets the user's roles
   *
@@ -656,33 +658,33 @@ class RBAC
   function getRoleUsers($ROL_UID,$filter=''){
   return $this->rolesObj->getRoleUsers($ROL_UID,$filter);
   }
-  
+
 /**
   * this function gets the number of users by roles
   *
   *
   * @access public
   * @author: Enrique Ponce de Leon <enrique@colosa.com>
-  * 
+  *
   * @return $this->rolesObj->getAllUsersByRole
   */
   function getAllUsersByRole(){
     return $this->rolesObj->getAllUsersByRole();
   }
-  
+
 /**
   * this function gets the number of users by department
   *
   *
   * @access public
   * @author: Enrique Ponce de Leon <enrique@colosa.com>
-  * 
+  *
   * @return $this->rolesObj->getAllUsersByRole
   */
   function getAllUsersByDepartment(){
     return $this->rolesObj->getAllUsersByDepartment();
   }
-  
+
   /**
   * this function gets roles code
   *
@@ -695,7 +697,7 @@ class RBAC
   function getRoleCode($ROL_UID){
   return $this->rolesObj->getRoleCode($ROL_UID);
   }
-  
+
   /**
   * this function removes role from an user
   *
@@ -709,7 +711,7 @@ class RBAC
   function deleteUserRole($ROL_UID, $USR_UID){
   return $this->rolesObj->deleteUserRole($ROL_UID, $USR_UID);
   }
-  
+
   /**
   * this function gets all user
   *
@@ -722,7 +724,7 @@ class RBAC
   function getAllUsers($ROL_UID, $filter=''){
   return $this->rolesObj->getAllUsers($ROL_UID,$filter);
   }
-  
+
   /**
   * this function assigns role an user
   *
@@ -735,7 +737,7 @@ class RBAC
   function assignUserToRole($aData){
   return $this->rolesObj->assignUserToRole($aData);
   }
- 
+
   /**
   * this function gets role permission
   *
@@ -748,7 +750,7 @@ class RBAC
   function getRolePermissions($ROL_UID, $filter=''){
   return $this->rolesObj->getRolePermissions($ROL_UID,$filter);
   }
-  
+
   /**
   * this function gets all permissions
   *
@@ -759,10 +761,10 @@ class RBAC
   * @param  string $PER_SYSTEM
   * @return $this->rolesObj->getAllPermissions
   */
-  function getAllPermissions($ROL_UID,$PER_SYSTEM="",$filter=''){      
+  function getAllPermissions($ROL_UID,$PER_SYSTEM="",$filter=''){
       return $this->rolesObj->getAllPermissions($ROL_UID,$PER_SYSTEM,$filter);
   }
-  
+
   /**
   * this function assigns permissions and role
   *
@@ -775,7 +777,7 @@ class RBAC
   function  assignPermissionRole($sData){
   return $this->rolesObj->assignPermissionRole($sData);
   }
-  
+
   /**
   * this function assigns permissions to a role
   *
@@ -804,7 +806,7 @@ class RBAC
   function  deletePermissionRole($ROL_UID, $PER_UID){
   return $this->rolesObj->deletePermissionRole($ROL_UID, $PER_UID);
   }
-  
+
   /**
   * this function counts number of user without role
   *
@@ -846,18 +848,18 @@ class RBAC
 
   /**
   * this function gets all authentication source
-  * Authentication Sources 
+  * Authentication Sources
   *
   * @access public
 
   * @param  void
   * @return $this->authSourcesObj->getAllAuthSources()
   */
-  
+
   function getAllAuthSources() {
     return $this->authSourcesObj->getAllAuthSources();
   }
-  
+
 /**
   * this function gets all authentication source
   * Authentication Sources By User
@@ -867,14 +869,14 @@ class RBAC
   * @param  void
   * @return $this->authSourcesObj->getAllAuthSources()
   */
-  
+
   function getAllAuthSourcesByUser() {
     return $this->authSourcesObj->getAllAuthSourcesByUser();
   }
-  
+
 /**
   * this function gets all authentication source
-  * Authentication Sources based at parameters 
+  * Authentication Sources based at parameters
   *
   * @access public
   * @author Enrique Ponce de Leon <enrique@colosa.com>
@@ -883,14 +885,14 @@ class RBAC
   * @param  string $filter value to search or filter select
   * @return $this->authSourcesObj->getAuthenticationSources()
   */
-  
+
   function getAuthenticationSources($start,$limit,$filter='') {
     return $this->authSourcesObj->getAuthenticationSources($start,$limit,$filter);
   }
 
   /**
   * this function gets all authentication source
-  * Authentication Sources 
+  * Authentication Sources
   *
   * @access public
 
@@ -903,7 +905,7 @@ class RBAC
 
   /**
   * this function creates an authentication source
-  * Authentication Sources 
+  * Authentication Sources
   *
   * @access public
 
@@ -917,7 +919,7 @@ class RBAC
 
   /**
   * this function updates an authentication source
-  * Authentication Sources 
+  * Authentication Sources
   *
   * @access public
 
@@ -930,7 +932,7 @@ class RBAC
 
   /**
   * this function removes an authentication source
-  * Authentication Sources 
+  * Authentication Sources
   *
   * @access public
 
@@ -940,7 +942,7 @@ class RBAC
   function removeAuthSource($sUID) {
     $this->authSourcesObj->remove($sUID);
   }
-  
+
   /**
   * this function gets all users by authentication source
   *
@@ -949,11 +951,11 @@ class RBAC
   * @param  void
   * @return $this->userObj->getAllUsersByAuthSource()
   */
-  
+
   function getAllUsersByAuthSource(){
   	return $this->userObj->getAllUsersByAuthSource();
   }
-  
+
   /**
   * this function gets all users by authentication source
   *
@@ -962,14 +964,14 @@ class RBAC
   * @param  void
   * @return $this->userObj->getAllUsersByAuthSource()
   */
-  
+
   function getListUsersByAuthSource($aSource){
   	return $this->userObj->getListUsersByAuthSource($aSource);
   }
 
   /**
   * this function searchs users
-  * 
+  *
   *
   * @access public
 
@@ -995,7 +997,7 @@ class RBAC
   function requirePermissions($permissions){
     $numPerms = func_num_args();
     $permissions = func_get_args();
-    
+
     $access = -1;
 
     if ( $numPerms == 1 ){
@@ -1012,7 +1014,7 @@ class RBAC
       throw new Exception('function requirePermissions() ->ERROR: Parameters missing!');
     }
 
-   
+
     if( $access == 1 )
       return true;
     else {
