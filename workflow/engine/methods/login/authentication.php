@@ -26,6 +26,13 @@
 try {
 
   if (!$RBAC->singleSignOn) {
+
+    if (!isset($_POST['form']) ) {
+      G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error');
+      G::header('Location: login');
+      die();
+    }
+
     $frm = $_POST['form'];
     $usr = '';
     $pwd = '';
