@@ -546,7 +546,10 @@ switch(($_POST['action'])?$_POST['action']:$_REQUEST['action']) {
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
 		$Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
-		$_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
+    if(isset($_POST['DYN_UID']))
+      $_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
+    else 
+      $_SESSION['DYN_UID_PRINT'] = $_REQUEST['DYN_UID'];
 		if(!isset($_SESSION['CURRENT_DYN_UID'])) $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID']?$_POST['DYN_UID']:$_REQUEST['DYN_UID'];
 		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_REQUEST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
 		G::RenderPage('publish', 'blank');
